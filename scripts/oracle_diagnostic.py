@@ -138,16 +138,46 @@ def main() -> int:
               f"{'[' + ' '.join(f'{v:.2f}' for v in frac) + ']':>34} {sv:>7.1f}%")
 
     # ---- 2. what is the headroom worth? -------------------------------
-    print(f"\nHEADROOM: oracle vs the best UNIFORM depth at the same dB budget")
-    print(f"  {'budget':>7} {'uniform':>18} {'oracle':>10} {'gain':>8}")
-    for tau in (0.1, 0.3, 0.5, 1.0, 2.0):
-        mean_db = db.mean(dim=0)
-        elig = [k for k in range(K) if mean_db[k] <= tau]
-        best_u = 100 * (1 - costs[min(elig)].item()) if elig else 0.0
+    # Compare at MATCHED ACHIEVED QUALITY, not at a matched constraint.
+    #
+    # The first version of this compared the oracle under a per-tile constraint
+    # ("every tile within tau") against uniform under a mean constraint ("the
+    # average is within tau"), and unsurprisingly made routing look worse than
+    # uniform at loose budgets. That is impossible on the merits — the oracle can
+    # always imitate a uniform choice — and it was purely an artefact of the two
+    # sides solving different problems.
+    #
+    # So: sweep tau to trace the oracle's (achieved mean dB, saving) curve, take
+    # the uniform curve as the K discrete points (mean_db[k], 1-cost[k]), and
+    # read the uniform curve at the oracle's achieved dB by linear interpolation.
+    # The gap between them at equal quality is what routing actually buys, and it
+    # is the number that decides whether the mechanism earns its complexity.
+    mean_db = db.mean(dim=0)
+    uni = sorted((mean_db[k].item(), 100 * (1 - costs[k].item())) for k in range(K))
+
+    def uniform_saving_at(target_db: float) -> float:
+        """Saving of the best uniform depth achieving `target_db` mean penalty."""
+        if target_db <= uni[0][0]:
+            return uni[0][1]
+        if target_db >= uni[-1][0]:
+            return uni[-1][1]
+        for (d0, s0), (d1, s1) in zip(uni, uni[1:]):
+            if d0 <= target_db <= d1:
+                t = 0.0 if d1 == d0 else (target_db - d0) / (d1 - d0)
+                return s0 + t * (s1 - s0)
+        return uni[-1][1]
+
+    print(f"\nHEADROOM: routing vs a uniformly shallower decoder, at EQUAL quality")
+    print(f"  {'tau':>6} {'achieved dB':>12} {'oracle':>9} {'uniform':>9} {'gain':>9}")
+    for tau in (0.05, 0.1, 0.2, 0.3, 0.5, 1.0, 2.0):
         ok = db <= tau
         ok[:, -1] = True
-        sv = 100 * (1 - costs[ok.float().argmax(dim=1)].mean().item())
-        print(f"  {tau:>6.1f}dB {best_u:>17.1f}% {sv:>9.1f}% {sv - best_u:>+7.1f}pp")
+        choice = ok.float().argmax(dim=1)
+        got_db = db.gather(1, choice[:, None]).mean().item()
+        sv = 100 * (1 - costs[choice].mean().item())
+        u = uniform_saving_at(got_db)
+        print(f"  {tau:>6.2f} {got_db:>11.3f}  {sv:>8.1f}% {u:>8.1f}% {sv - u:>+8.1f}pp")
+    print("  (gain > 0 means per-tile routing beats any single depth at that quality)")
 
     # ---- 3. can the signals see it? -----------------------------------
     print(f"\nSIGNALS vs oracle choice (tau=0.5): Pearson r")

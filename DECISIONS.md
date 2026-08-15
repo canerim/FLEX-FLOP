@@ -752,3 +752,108 @@ Bu yanlış: daralan aralık **iki zıt** şey olabilir.
 
 Ayıran tek şey **çıpanın mutlak kalitesi**. Teşhis artık ikisine birden bakıyor
 ve baseline'la kıyaslıyor.
+
+---
+
+## 15. Oracle teşhisi — "router bozuk" sanılan şeyin gerçek sebebi
+
+### 15.1 Belirti
+
+Frontier sweep her β'da 6144 patch'in **tamamını tek çıkışa** yolladı; β sadece
+hangi çıkış olduğunu değiştirdi. Sabit bir fonksiyon — yönlendirme değil.
+ClassSR'ın tüm önermesi patch'lerin farklı zorlukta olması; router ayrım
+yapmıyorsa düz bir sığ decoder da aynı işi görürdü.
+
+### 15.2 Doğru teşhis: oracle'a bak, router'ı suçlama
+
+`scripts/oracle_diagnostic.py` üç soruyu sırayla soruyor:
+1. **Oracle değişiyor mu?** (patch başına, tam decode'a τ dB içinde kalan en ucuz
+   çıkış) — sabitse içerikte uyarlanacak bir şey yok, hiçbir router yardım edemez.
+2. **Headroom ne kadar değerli?** oracle vs **aynı kalitedeki** en iyi tek derinlik.
+3. **Sinyaller görebiliyor mu?** her sinyalin oracle seçimiyle korelasyonu.
+
+**ckpt_epo0 sonucu:**
+```
+çıkış 4 (en sığ alternatif):  +5.198 dB ± 2.014
+oracle, τ ≤ 1.0 dB:            patch'lerin %100'ü çıkış 5
+headroom:                       +0.0 puan
+```
+Hiçbir dB bütçesi 5.2 dB'yi karşılamıyor → **oracle'ın kendisi sabit**. Router
+suçsuz. Sinyaller de suçsuz — gerçek varyans taşıyorlar (s1 std=243, s4 std=18);
+sabit olan **hedef**.
+
+**Sebep beklenen ve geçici:** epoch 0'da warmup α'yı 0'da tutuyor, sığ çıkışlar
+hiç gradyan almıyor, adapter'ları sıfır-init'te duruyor.
+
+**Maliyeti:** o checkpoint'te frontier ölçmek ~1 saat GPU'ya mal oldu ve
+sıfırlardan oluşan bir tablo üretti. Artık sweep bu 1 dakikalık teşhise bağlı.
+
+### 15.3 ❗ Karşılaştırma hatam — ve düzeltmesi
+
+İlk "HEADROOM" tablosu 0.5 dB'de routing'i uniform'dan **kötü** (−2.5pp)
+gösteriyordu. Bu **matematiksel olarak imkânsız**: oracle en kötü ihtimalle
+uniform'u taklit edebilir.
+
+**Hata elma-armut karşılaştırmasıydı:**
+- uniform tarafı: "**ortalama** dB ≤ τ" kısıtı
+- oracle tarafı: "**her patch** ≤ τ" kısıtı
+
+Oracle daha zor bir problem çözüyordu, o yüzden daha az tasarruf ediyor
+görünüyordu.
+
+**Düzeltme:** τ süpürülerek oracle'ın (**ulaşılan** ortalama dB, tasarruf) eğrisi
+çiziliyor; uniform eğrisi K ayrık noktadan (mean_db[k], 1−cost[k]) lineer
+interpolasyonla **aynı ulaşılan dB'de** okunuyor. Aradaki fark routing'in
+gerçekten ne kazandırdığı.
+
+**Neden bu proje için en kritik ölçüm:** "routing düz sığ bir decoder'ı yeniyor
+mu" sorusunun tek dürüst cevabı bu. Yenmiyorsa tüm mekanizma gereksiz karmaşa.
+
+### 15.4 İlk olumlu sonuç (e1, epoch 1, j=2, 128px)
+
+Patch başına dB cezası:
+
+| çıkış | tasarruf | ceza |
+|---:|---:|---:|
+| 0 | %73.6 | +0.705 ± 0.402 |
+| 1 | %58.7 | +0.435 ± 0.327 |
+| 2 | %43.8 | +0.313 ± 0.256 |
+| 3 | %28.9 | +0.167 ± 0.137 |
+| 4 | %14.0 | +0.085 ± 0.065 |
+
+**Eşit kalitede routing vs uniform:**
+
+| ulaşılan dB | oracle | uniform | kazanç |
+|---:|---:|---:|---:|
+| 0.039 | %18.7 | %6.2 | **+12.6 puan** |
+| 0.121 | %33.4 | %19.8 | **+13.6 puan** |
+| 0.195 | %42.6 | %31.1 | **+11.5 puan** |
+| 0.342 | %55.5 | %46.2 | **+9.3 puan** |
+| 0.582 | %69.1 | %66.6 | +2.4 puan |
+| 0.701 | %73.3 | %73.2 | +0.1 puan |
+
+Patch başına yönlendirme aynı kalitede hiçbir tek derinliğin ulaşamadığı
+tasarrufu veriyor, 0.12 dB civarında **+13.6 puan** tepe yapıyor. Ve bu 105
+epoch'un **birincisinde**.
+
+### 15.5 ❗ Açık sorun: sinyaller oracle'ı göremiyor
+
+τ=0.5'te sinyal–oracle korelasyonları:
+
+| sinyal | r |
+|---|---:|
+| s1 rate-surrogate | +0.095 |
+| s2 sparsity | −0.084 |
+| s3 gradient | +0.006 |
+| s4 spatial-var | +0.080 |
+
+Hepsi ~0.1'in altında. **Headroom gerçek ama router onu göremiyor.** Oracle bir
+üst sınır; router bu sinyallerle o sınıra yaklaşamaz.
+
+Bu sıradaki iş. Muhtemel yönler (henüz denenmedi, ölçülecek):
+- sinyaller latent'ten hesaplanıyor ama oracle **rekonstrüksiyon** hatasına
+  bakıyor; aradaki bağ dolaylı olabilir
+- öğrenilmiş bir sinyal çıkarıcı (birkaç bin parametrelik küçük conv) latent'ten
+  doğrudan zorluk kestirebilir — router bütçesi decode'un %0.009'u, yani yer var
+- oracle'ı doğrudan taklit eden bir denetimli kayıp (FLEX'in yaptığı), ClassSR'ın
+  dolaylı yumuşak-karışım gradyanı yerine
