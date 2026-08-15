@@ -588,3 +588,35 @@ Kullanıcı saatlerce başında olmayacağı için üç işi döngüye alan bir 
 | `git push` | **engellendi** | otomatik mod dışa açık işlemi bloke etti. 4 commit hazır, `origin` = `canerim/FLEX-FLOP` |
 | 46 GB `train_0.tar.gz` | **saklandı, silinmedi** | silmek geri alınamaz ve yeniden indirme gerektirir — kullanıcı büyük indirmeyi açıkça yasakladı. 4.2 TB boş diskte %1, riski sıfır. Çıkarılmış veri (`dcvc_train/`) eğitimde kullanılıyor |
 | Open Images subset 1, 2 | **alınmadı** | recipe 0,1,2 diyor; elimizde 0 var (154,723 kullanılabilir görüntü). `/mnt/data_local/datasets` bu makinede yok — doğru makine öğrenilince oradan alınabilir |
+
+---
+
+## 14. β aralığı eğitim aşamasıyla ölçeklenmeli — ilk gerçek checkpoint'te bulundu
+
+Zinciri e3'ün `ckpt_epo0.pth.tar`'ında doğrularken router **tamamen çöktü**:
+`exit_share_hard: [0, 0, 0, 0, 0, 256]`, kazanç %0.
+
+Terimler:
+```
+w_image·l_image = 50 × 1.226 = 61.3
+β      ·l_comp  = 25 × 0.989 = 24.7      ← kalite 2.5× ağır basıyor
+w_avg  ·l_a     =  6 × 1.569 =  9.4      ← itiyor ama yetmiyor
+```
+
+**Bu bir hata değil.** Epoch 0'da çıkışlar arasında 8.5 dB fark var; sığ çıkışın
+MSE'si en derinin ~7 katı. Sığ yönlendirmek gerçekten o kadar kötü ve router
+doğru karar veriyor.
+
+**Sorun benim β aralığımdaydı.** β'nın karşılaştırıldığı büyüklük
+`w_image × (sığ çıkış ne kadar kötü)` ve bu ikinci çarpan **eğitim boyunca
+değişiyor**:
+- Eğitim başı: fark büyük (Δoran ~3-7) → anlamlı takas için β **yüzlerde**
+- Eğitim sonu: çıkışlar yakınsıyor, Δoran küçülüyor → ilginç bölge **küçük β**'da
+
+Sabit `0/25/100` aralığı erken checkpoint'lerde her noktada aynı önemsiz sonucu
+(%0 kazanç) verirdi — yani hiçbir şey ölçmezdi.
+
+**Düzeltme:** dört mertebeye yayılan log-aralıklı süpürme: `0, 25, 100, 400,
+1600, 6400`. Her iki rejimi de kapsıyor. Eski aralıkla başlamış olan süpürme
+öldürüldü (GPU'yu boşa yakmasın), marker atılmadığı için autopilot yeni
+aralıkla tekrarlayacak.
