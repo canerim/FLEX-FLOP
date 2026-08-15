@@ -92,6 +92,28 @@ class FlexUFConfig:
     is halo'd when `full_frame_head` is False.
     """
 
+    trunk_halo: int = 0
+    """Halo carried through the PER-TILE TRUNK, in latent px. Default 0 = none.
+
+    This is separate from `latent_halo` (which the router reads) on purpose,
+    because the two have wildly different prices.
+
+    A haloed tile computes ((F + 2h) / F)^2 times the pixels it keeps. At F=16
+    feature px and h=2 latent px (4 feature px) that is 2.25x — and applied to
+    the per-tile trunk, which is the expensive part, it does not just erode the
+    saving, it inverts it. Measured directly by
+    `tests/test_cost_matches_reality.py`: with the trunk halo on, decoding every
+    tile at the DEEPEST exit cost **1.745x a plain full decode**. Paying 74%
+    extra to save nothing.
+
+    The seam is dealt with where it is affordable instead: the head runs
+    full-frame over the stitched canvas (FLEX: the head carries ~75% of the
+    patch-independence penalty), and the exit adapters — being 1x1, with no
+    receptive field — add none of their own.
+
+    Set > 0 only to measure what the trunk halo buys, never as a default.
+    """
+
     adapter_kind: str = "conv1x1"
     """Which adapter sits between an early exit and the shared head.
 

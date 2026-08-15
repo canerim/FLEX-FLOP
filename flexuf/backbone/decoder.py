@@ -73,6 +73,7 @@ from src.layers.layers import (  # noqa: E402
 
 from ..config import (  # noqa: E402
     LATENT_CH,
+    UPSAMPLE_FACTOR,
     PRESHUFFLE_CH,
     SHUFFLE_FACTOR,
     TRUNK_CH,
@@ -305,12 +306,13 @@ class MultiExitIntraDecoder(nn.Module):
           6. head                       full-frame  (heals the remaining seam)
         """
         cfg = self.cfg
-        K, j, Fp, halo = (
-            cfg.num_exits,
-            cfg.split_depth,
-            cfg.feature_patch,
-            cfg.feature_halo,
-        )
+        # The trunk halo is its own knob and defaults to ZERO. Carrying the
+        # router's halo through the per-tile trunk multiplies that work by
+        # ((F+2h)/F)^2 = 2.25x at the default geometry, which measured 1.745x the
+        # cost of a plain full decode even with every tile at the deepest exit.
+        # The seam is handled by the full-frame head instead.
+        K, j, Fp = cfg.num_exits, cfg.split_depth, cfg.feature_patch
+        halo = cfg.trunk_halo * UPSAMPLE_FACTOR
 
         # ---- 1. shared stem ------------------------------------------------
         feat = self.upsample(y_hat)
@@ -321,7 +323,10 @@ class MultiExitIntraDecoder(nn.Module):
             return self._apply_head(self._at_exit(feat, K - 1), quant_step)
 
         # ---- 2. patchify ---------------------------------------------------
-        tiles, nh, nw = patchify_with_halo(feat, Fp, halo)
+        if halo > 0:
+            tiles, nh, nw = patchify_with_halo(feat, Fp, halo)
+        else:
+            tiles, nh, nw = patchify(feat, Fp)
         n_tiles = tiles.shape[0]
 
         if exit_map is None:
@@ -351,7 +356,8 @@ class MultiExitIntraDecoder(nn.Module):
                 active = active[keep]
 
         # ---- 5. drop halo, stitch ------------------------------------------
-        stitched = unpatchify(crop_halo(canvas, halo), nh, nw, batch=feat.shape[0])
+        stitched = unpatchify(crop_halo(canvas, halo) if halo > 0 else canvas,
+                              nh, nw, batch=feat.shape[0])
 
         # ---- 6. head -------------------------------------------------------
         if cfg.full_frame_head:

@@ -1173,3 +1173,102 @@ harcıyordu.
 
 Düzeltme: `min_exit=j` ile split'in altındaki logit'ler maskelendi. Denge terimi
 artık gerçekten farklı olan çıkışlar üzerinde çalışıyor.
+
+---
+
+## 20. ❗❗ İki hata daha — ve routing'in şu an kaybettiği bulgusu
+
+### 20.1 Kontrolün kendisi eksikti
+
+§19'daki dersi kalıcılaştırmak için `tests/test_cost_matches_reality.py` yazıldı:
+gerçek decode'u koştur, hook'la gerçek MAC say, maliyet modelinin tahminiyle
+karşılaştır. Anında ateşledi ve **çok daha büyük** bir hata buldu.
+
+### 20.2 Hata: trunk halo'su koda hiç uygulanmamıştı — ama koddaydı
+
+`forward()` içinde `patchify_with_halo(feat, Fp, halo)` vardı, yani per-tile
+trunk blokları 16px yerine **24px** tile'larda çalışıyordu: (24/16)² = **2.25×**.
+
+Ölçüm: `j=2, hepsi en derin çıkışta → tam decode'un 1.745 katı`.
+Yani hiçbir şey kazanmadan %74 fazla ödüyorduk.
+
+Bu tam olarak §4.3'te ölçüp "asla yapmayacağız" dediğim şey. Kararı doğru
+vermiştim — halo router'a (bedava) ve head'e (ucuz), trunk'a değil — ama
+**decoder'a uygulamamıştım**. Maliyet modeli `halo_scope="head"` varsayıyordu,
+kod `trunk` yapıyordu. İki taraf sessizce ayrışmıştı.
+
+**Düzeltme:** `trunk_halo` ayrı bir knob oldu, varsayılan **0**. Router halo'su
+(`latent_halo=2`) dokunulmadı — o gerçekten bedava. Dikiş full-frame head ile
+hallediliyor.
+
+Düzeltme sonrası kontrol: maliyet modeli gerçekle **%0.13 içinde** uyuşuyor,
+10 senaryonun hepsinde. `j=2 all deepest: ölçülen 1.000, model 1.000`.
+
+### 20.3 ❗ Asıl bulgu: routing şu an uniform'u YENMİYOR
+
+Trunk halo'su kaldırılınca PSNR gerçek değerine oturdu. Aynı decode yolundan,
+aynı metrikle, 96 ayrık doğrulama görüntüsünde (e1, epoch 2):
+
+| konfigürasyon | tasarruf | kayıp |
+|---|---:|---:|
+| **uniform k=2** | **%43.79** | **0.1787 dB** |
+| uniform k=3 | %28.88 | 0.2137 dB |
+| uniform k=4 | %13.98 | 0.1006 dB |
+| uniform k=5 | %0.00 | 0.0432 dB |
+| routed β=0 | %32.77 | 0.2809 dB |
+| routed β=30 | %39.06 | 0.3257 dB |
+
+**Düz sığ decoder her iki eksende de kazanıyor.** Router'ın kattığı değer negatif.
+
+**Neden önceki analiz tersini söylüyordu:** oracle teşhisi `forward_all_exits`
+kullanıyordu — tam kare decode, **dikiş yok**. Gerçek yol per-tile çalışıyor ve
+dikiş cezası ödüyor. O ceza hangi çıkışı seçtiğinden **bağımsız**, yani tüm
+çıkışlara aynı sabit maliyeti ekliyor. Çıkışlar birbirine 0.3 dB içinde sıkışmış
+durumdayken (epoch 2, spread +0.3..+0.7) yönlendirilecek fark kalmıyor ve en
+ucuzunu her yerde almak daha iyi oluyor.
+
+Bu tam olarak oracle teşhisine koyduğum kontrolün amacıydı:
+*"routing uniform'u yenmiyorsa dürüst sonuç, düz daha sığ bir decoder yeterdi."*
+Düzgün ölçünce yenmiyor.
+
+**Sınır:** epoch 2/105. Çıkışlar ayrıştıkça değişebilir — ama şu anki veriyle
+routing'in değer kattığı iddia edilemez.
+
+### 20.4 Şu ana kadar üç kez düzeltilen manşet sayı
+
+| aşama | iddia | neden yanlıştı |
+|---|---|---|
+| ilk | %42.65 @ 0.189 dB | maliyet modeli grup j'yi faturalamıyordu |
+| clamp düzeltmesi | %33.58 @ 0.189 dB | PSNR trunk halo'suyla ölçülmüştü |
+| **halo düzeltmesi** | **%32.77 @ 0.281 dB** | — |
+| **doğru kıyas** | **uniform k=2 daha iyi: %43.79 @ 0.179 dB** | — |
+
+Üçünde de hata **iyimser** yöndeydi. İyimser sayı sorgulanmıyor; kontrol
+yazılana kadar hiçbiri yakalanmadı.
+
+---
+
+## 21. Ana DCVC-UF'e göre kıyas — engelli
+
+Kullanıcı haklı olarak "kıyas ana DCVC-UF'e göre olmalı" dedi. Bunun için
+Microsoft'un yayınladığı checkpoint gerekiyor.
+
+**İndirilemiyor.** Üç yol denendi, hepsi başarısız:
+- doğrudan `curl` → HTTP 403
+- `api.onedrive.com/v1.0/shares/u!<b64>` → `unauthenticated`
+- `graph.microsoft.com/v1.0/shares` → `InvalidAuthenticationToken`
+
+Link `migratedtospo=true` ile SharePoint Online'a taşınmış; anonim API erişimi
+kapalı. Tarayıcı etkileşimi zorunlu.
+
+**Kullanıcının yapması gereken:** OneDrive linkinden `cvpr2026_image.pth.tar`
+indirip `~/DCVC/checkpoints/` içine koymak.
+
+**Geldiğinde açılan iki şey:**
+1. **Warm-start** — `warmstart.py` hazır ve test edilmiş (143 tensörlük eşleme,
+   bit-exact doğrulandı, ters eşleme bijeksiyon testi geçiyor). FLEX'in
+   yaklaşımı buydu ve sıfırdan eğitimin çöktüğü yerde çalışmıştı.
+2. **Mutlak kıyas** — "DCVC-UF'e göre %X FLOP, Y dB" denebilir.
+
+Warm-start §20.3'teki sorunu da çözebilir: yakınsamış bir modelde çıkışlar arası
+fark gerçek olur, yönlendirilecek bir şey doğar.
