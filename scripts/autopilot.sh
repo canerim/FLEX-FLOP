@@ -93,6 +93,19 @@ PY
             [ -e "$ck" ] || continue
             marker="$dir/.frontier_done_$(basename "$ck" .pth.tar)"
             [ -e "$marker" ] && continue
+            # Cheap gate before an expensive sweep. A frontier sweep is ~1 h of
+            # GPU time on a card that is also training; measuring one on a
+            # checkpoint whose oracle is constant yields a table of zeros. That
+            # is exactly what ckpt_epo0 produced: the shallowest alternative was
+            # 5.2 dB worse, so no dB budget could ever pick it. The diagnostic
+            # costs ~1 min and exits non-zero when there is nothing to route.
+            if ! "$ROOT/.venv/bin/python" "$ROOT/scripts/oracle_diagnostic.py" \
+                    --ckpt "$ck" --device "${GPU[$tag]}" --batches 6 \
+                    > "$dir/oracle_$(basename "$ck" .pth.tar).log" 2>&1; then
+                log "$tag: $(basename "$ck") has no routing headroom yet — sweep skipped"
+                touch "$marker"
+                continue
+            fi
             log "$tag: measuring frontier on $(basename "$ck")"
             bash "$ROOT/scripts/sweep_frontier.sh" "$ck" "${GPU[$tag]}" 800 0 10 30 100 300 1000 3000 \
                 >> "$dir/frontier.log" 2>&1

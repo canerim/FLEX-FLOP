@@ -1,0 +1,185 @@
+"""Is there any content adaptivity to exploit, and can the signals see it?
+
+The frontier sweep produced routers that send *every* tile to the same exit,
+changing only which exit as beta moves. That is a constant function, not
+routing, and it invalidates the premise the project rests on — ClassSR works
+because sub-images differ in difficulty. So before tuning the router, establish
+whether the thing it is meant to find exists at all.
+
+Three questions, in the order that makes the answer diagnostic:
+
+  1. **Does the ORACLE vary?** For each tile, the cheapest exit whose distortion
+     stays within `tau` of the full decode. If the oracle itself is constant,
+     there is no adaptivity in the content at this checkpoint and no router
+     could help — the honest conclusion would be that a uniformly shallower
+     decoder is the right answer. If the oracle varies a lot, the headroom is
+     real and any failure is the router's.
+
+  2. **How much is that headroom worth?** Oracle saving at a given dB budget,
+     against the best uniform-depth choice at the same budget. This is the
+     ceiling on what routing can buy, and if it is small the whole mechanism is
+     not worth its complexity.
+
+  3. **Can the signals see it?** Correlation between each router input and the
+     oracle's choice. A signal uncorrelated with the oracle cannot drive it, and
+     four uncorrelated signals explain a constant router precisely.
+
+    python scripts/oracle_diagnostic.py --ckpt runs/e3_j2_p64/ckpt_epo0.pth.tar --device 7
+"""
+
+from __future__ import annotations
+
+import argparse
+import json
+import sys
+from pathlib import Path
+
+import torch
+from torch.utils.data import DataLoader, SequentialSampler
+
+DCVC_ROOT = Path.home() / "DCVC"
+sys.path.insert(0, str(DCVC_ROOT))
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+
+from src.datasets.image_dataset import ImageFolder  # noqa: E402
+from src.utils.common import get_training_lambdas  # noqa: E402
+
+from flexuf.config import QP_LEVELS, FlexUFConfig  # noqa: E402
+from flexuf.cost import exit_costs  # noqa: E402
+from flexuf.model import FlexUFIntra  # noqa: E402
+from flexuf.router.router import latent_tiles_with_halo, tile_signals  # noqa: E402
+
+
+@torch.no_grad()
+def collect(net, loader, cfg, device, qp_val, max_batches):
+    """Per-tile MSE at every exit, plus the router's view of each tile."""
+    mses, sigs = [], []
+    for i, batch in enumerate(loader):
+        if i >= max_batches:
+            break
+        x = batch[0].to(device)
+        B = x.shape[0]
+        qp = torch.full((B,), qp_val, dtype=torch.int32, device=device)
+
+        out = net.forward_all_exits(x, qp)
+        rgb_p = cfg.rgb_patch
+        H, W = x.shape[-2:]
+        nh, nw = H // rgb_p, W // rgb_p
+        per_exit = []
+        for x_hat in out["x_hats"]:
+            err = (x_hat - x) ** 2
+            t = (err.mean(1)
+                 .view(B, nh, rgb_p, nw, rgb_p)
+                 .permute(0, 1, 3, 2, 4)
+                 .reshape(B * nh * nw, rgb_p * rgb_p)
+                 .mean(1))
+            per_exit.append(t)
+        mses.append(torch.stack(per_exit, dim=1).cpu())
+
+        y_hat, _ = net.latent_of(x, qp)
+        sigs.append(tile_signals(latent_tiles_with_halo(y_hat, cfg)).cpu())
+    return torch.cat(mses), torch.cat(sigs)
+
+
+def main() -> int:
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--ckpt", required=True)
+    ap.add_argument("--dataset", default="/data10/shareddata/openimages/dcvc_train")
+    ap.add_argument("--qp", type=int, default=63)
+    ap.add_argument("--crop", type=int, default=512)
+    ap.add_argument("--batches", type=int, default=12)
+    ap.add_argument("--batch_size", type=int, default=4)
+    ap.add_argument("--device", default="0")
+    a = ap.parse_args()
+
+    import os
+    os.environ.setdefault("CUDA_VISIBLE_DEVICES", a.device)
+    device = "cuda:0" if torch.cuda.is_available() else "cpu"
+
+    ck = torch.load(a.ckpt, map_location="cpu", weights_only=False)
+    cfg = FlexUFConfig(**ck["config"]) if "config" in ck else FlexUFConfig()
+    net = FlexUFIntra(cfg).to(device).eval()
+    net.load_state_dict(ck.get("state_dict", ck.get("net")))
+
+    ds = ImageFolder(a.dataset, a.crop, a.crop, QP_LEVELS,
+                     get_training_lambdas([10.0, 2048.0], QP_LEVELS))
+    val = Path(a.dataset) / "description_val.json"
+    if val.exists():
+        ds.dataset = json.loads(val.read_text())
+        ds.dataset_length = len(ds.dataset)
+    loader = DataLoader(ds, batch_size=a.batch_size, num_workers=4,
+                        sampler=SequentialSampler(ds))
+
+    mses, sigs = collect(net, loader, cfg, device, a.qp, a.batches)
+    K = mses.shape[1]
+    costs = exit_costs(cfg, "head")
+    print(f"\ncheckpoint : {a.ckpt}")
+    print(f"tiles      : {mses.shape[0]}   exits: {K}   qp: {a.qp}   tile {cfg.rgb_patch}px")
+
+    # ---- 1. does the oracle vary? -------------------------------------
+    # dB penalty of each exit, per tile, against that tile's own full decode.
+    db = 10 * torch.log10(mses / mses[:, -1:].clamp_min(1e-12))
+    print(f"\nper-tile dB penalty by exit (mean +- std across tiles):")
+    for k in range(K):
+        print(f"  exit {k}: {db[:, k].mean():+7.3f} +- {db[:, k].std():5.3f}"
+              f"   (saving {100 * (1 - costs[k].item()):5.1f}%)")
+
+    print(f"\nORACLE: cheapest exit within tau dB of the full decode")
+    print(f"  {'tau':>6} {'distinct':>9} {'share over exits':>34} {'saving':>8}")
+    for tau in (0.1, 0.3, 0.5, 1.0, 2.0):
+        ok = db <= tau                       # [T, K]
+        ok[:, -1] = True                     # the deepest always qualifies
+        choice = ok.float().argmax(dim=1)    # first (cheapest) qualifying exit
+        share = torch.bincount(choice, minlength=K)
+        frac = (share.float() / share.sum()).tolist()
+        distinct = int((share > 0).sum())
+        sv = 100 * (1 - costs[choice].mean().item())
+        print(f"  {tau:>6.1f} {distinct:>9} "
+              f"{'[' + ' '.join(f'{v:.2f}' for v in frac) + ']':>34} {sv:>7.1f}%")
+
+    # ---- 2. what is the headroom worth? -------------------------------
+    print(f"\nHEADROOM: oracle vs the best UNIFORM depth at the same dB budget")
+    print(f"  {'budget':>7} {'uniform':>18} {'oracle':>10} {'gain':>8}")
+    for tau in (0.1, 0.3, 0.5, 1.0, 2.0):
+        mean_db = db.mean(dim=0)
+        elig = [k for k in range(K) if mean_db[k] <= tau]
+        best_u = 100 * (1 - costs[min(elig)].item()) if elig else 0.0
+        ok = db <= tau
+        ok[:, -1] = True
+        sv = 100 * (1 - costs[ok.float().argmax(dim=1)].mean().item())
+        print(f"  {tau:>6.1f}dB {best_u:>17.1f}% {sv:>9.1f}% {sv - best_u:>+7.1f}pp")
+
+    # ---- 3. can the signals see it? -----------------------------------
+    print(f"\nSIGNALS vs oracle choice (tau=0.5): Pearson r")
+    ok = db <= 0.5
+    ok[:, -1] = True
+    choice = ok.float().argmax(dim=1).float()
+    names = ["s1 rate-surrogate", "s2 sparsity", "s3 gradient", "s4 spatial-var"]
+    for i, nm in enumerate(names):
+        s = sigs[:, i]
+        if s.std() < 1e-9 or choice.std() < 1e-9:
+            print(f"  {nm:<20} r = n/a (constant)   [std {s.std():.3e}]")
+            continue
+        r = torch.corrcoef(torch.stack([s, choice]))[0, 1].item()
+        print(f"  {nm:<20} r = {r:+.3f}   [range {s.min():.3g} .. {s.max():.3g}]")
+
+    # Exit code is the point of this script when it runs unattended: it gates
+    # the frontier sweep, which costs about an hour of GPU time on a card that
+    # is also training. Measuring a frontier on a checkpoint with no headroom
+    # produces a table of zeros and teaches nothing.
+    if choice.std() < 1e-9:
+        print("\n  => VERDICT: no headroom. The ORACLE is constant, so no router")
+        print("     could help here and a uniformly shallower decoder would be the")
+        print("     honest answer. Expected before the auxiliary losses switch on:")
+        print("     with alpha=0 the shallow exits are never trained, so their")
+        print("     adapters sit at zero-init and their features were never shaped")
+        print("     for the head. Re-check once alpha has ramped.")
+        return 1
+    print(f"\n  => VERDICT: headroom exists (oracle std {choice.std():.3f} exits).")
+    print("     A constant router would now be the router's failure, not the")
+    print("     content's, and the frontier is worth measuring.")
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
