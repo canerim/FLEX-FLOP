@@ -328,3 +328,116 @@ bırakıldı.
 **GPU disiplini doğrulandı:** `nvidia-smi` compute-apps listesinde bana ait
 **hiçbir process yok**; dolu GPU'lar root/cankan/an_li'ye ait. Sadece GPU 4'te
 saniyelik smoke test'ler koştu.
+
+---
+
+## 6. Mimari karar — nereye, ne koyuyoruz
+
+### 6.1 Merdiven yerleşimi
+
+`IntraDecoder.dec_1[1..12]` (12 DepthConvBlock, hepsi 384→384) K=6 gruba
+bölünür, b = 12/6 = 2 blok/grup. Her grubun sonuna sıfır-init adapter.
+`dec_1[0]` (upsample) ve `dec_2` (head) hep çalışır.
+
+**Neden K=6:** FLEX bu ekseni süpürmüş ve serbest bir knob **olmadığını**
+bulmuş — K=3 ve K=12 çöküyor, router patch'lerin ≥%97'sini tek-iki çıkışa
+yığıyor. K=6 onun çalışma noktası, UF'te de trunk aynı 12 blok.
+
+### 6.2 ClassSR yapısı
+
+```
+ortak gövde (grup 0..j-1, full-frame)     ← ClassSR'ın paylaşılan girişi
+        ↓
+patch'lere böl (128×128 RGB)              ← ClassSR'ın alt-görüntüleri
+        ↓
+per-tile merdiven (grup j..K-1)           ← ClassSR'ın farklı kapasiteli dalları
+        ↓
+1×1 adapter → paylaşılan head → RGB
+```
+
+**ClassSR'a göre kazancımız:** onun 3 dalı 3 ayrı ağ (3× parametre). Bizim
+dallarımız tek decoder'ın önekleri — ek parametre yok, ve **en derin dal
+değiştirilmemiş codec'in kendisi** (bit-exact doğrulandı).
+
+### 6.3 Patch 128×128 seçimi
+
+| p (latent) | RGB tile | 256-crop'ta tile | 512-crop'ta tile | 1080p'de tile |
+|---:|---:|---:|---:|---:|
+| 4 | 64px | 16 | 64 | ~480 |
+| **8** | **128px** | **4** | **16** | **~120** |
+
+**Neden 128:**
+1. Boundary Law: ceza dikiş yoğunluğuyla, yani `1/kenar` ile ölçekleniyor.
+   FLEX ölçümü: 128px'te **0.856 dB**, 64px'te **2.484 dB** — 128 aynı fikir
+   için üçte bir distorsiyon ödüyor.
+2. Microsoft 256 (0-89. epoch) ve 512 (90+) crop'ta eğitiyor. 128 ikisini de
+   tam bölüyor, artık kalmıyor.
+3. Halo amortismanı: overhead `((F+2h)/F)²`. F=16'da h=4 → 1.56×; F=8'de 2.25×.
+   Büyük tile halo'yu ucuzlatıyor.
+4. 1080p'de ~120 tile — yönlendirme çözünürlüğü hâlâ fazlasıyla yeterli.
+
+E3 deneyi 64'e geri sürüyor ki bu takas **varsayılmasın, ölçülsün**.
+
+---
+
+## 7. Üç deney — her biri E1'den TEK değişkende ayrılıyor
+
+| | GPU | j | tile | halo | adapter | ne test ediyor |
+|---|---:|---:|---|---|---|---|
+| **E1** | 4 | 2 | 128px | 2 lat | 1×1 | ana konfigürasyon, en geniş yönlendirilebilir aralık |
+| **E2** | 6 | 4 | 128px | 2 lat | 1×1 | **split derinliği ekseni** |
+| **E3** | 7 | 2 | 64px | 2 lat | 1×1 | **tile boyutu ekseni** (Boundary Law testi) |
+
+**Neden tam olarak bu üçü:** her biri E1'den tek değişkende farklı, yani her
+karşılaştırma temiz bir ablation — iki değişken aynı anda değişseydi sonucu
+hangisinin ürettiğini söyleyemezdik.
+
+**Hipotezler (önceden yazıldı, sonuca göre değiştirilmeyecek):**
+- E1: 8 blok per-tile koşuyor; 1×1 adapter'lar dikişi yeterince emerse
+  ölçülen tavan %58.7 kazanç. Risk: dikiş hasarı adapter kapasitesini aşar.
+- E2: sadece 4 blok per-tile → çok daha az sınır hasarı, ama tavan %28.9.
+  Beklenti: daha iyi dB, daha az kazanç. j ekseninin şeklini verir.
+- E3: Boundary Law 64px'in 128px'in ~2 katı dB'ye mal olacağını söylüyor,
+  karşılığında 4× yönlendirme çözünürlüğü. Beklenti: 128 frontier'da kazanır.
+
+**Neden 3 bağımsız tek-GPU koşusu, DDP değil:** tek konfigürasyonun 3× hızlı
+koşması tek soru cevaplar; 3 koşu üç soru cevaplar ve bu üç eksen UF üzerinde
+hiç ölçülmemiş. Her koşu `CUDA_VISIBLE_DEVICES` ile sabitlendi.
+
+**GPU disiplini:** sadece 4, 6, 7. GPU 3 %0 utilization gösteriyor ama 44 GB'ı
+`an_li`'ye ait — boş *görünen* GPU boş GPU değil.
+
+---
+
+## 8. Recipe sadakati — satır satır
+
+| bileşen | Microsoft `train_image.py` | FLEX-UF | aynı mı |
+|---|---|---|---|
+| lr programı | satır 22-32, 105 epoch | birebir kopya | ✅ |
+| epoch dağılımı | 45+25+20+5+4+4+2+1 | aynı | ✅ |
+| lr | 2e-4→5e-5→1e-5→2e-4→5e-5→1e-5→1e-6 | aynı | ✅ |
+| crop | 256 (0-89), 512 (90+) | aynı | ✅ |
+| optimizer | `AdamW(lr=1e-4)` | aynı | ✅ |
+| batch | 16 | aynı | ✅ |
+| grad clip | `clip_grad_norm_(0.1)`, NaN'da batch atla | aynı | ✅ |
+| λ | 10→2048, 64 QP'ye log-aralıklı | aynı | ✅ |
+| QP örnekleme | örnek başına uniform(0,63) | aynı | ✅ |
+| veri | Open Images | Open Images subset 0 | ⚠️ subset 0,1,2 yerine 0 |
+| kayıp | `λ·mse + bpp` | Eq(6-7), ağırlık-normalize | ⚠️ kasıtlı |
+| PyTorch | cu130 | cu124 | ⚠️ zorunlu (driver 535) |
+
+Üç sapmanın hepsi gerekçeli ve §0.2 / §3.3 / §5'te kayıtlı.
+
+---
+
+## 9. Sıfır-tolerans kontrolleri — hepsi geçti
+
+| kontrol | sonuç | neden kritik |
+|---|---|---|
+| warm-start round-trip: en derin çıkış = stok UF | `max|Δ| = 0.0` | değilse merdiven UF'in yeniden ifadesi değil, "tam decode'a fark" metriği port hatasını ölçer |
+| eğitilmemiş adapter'lar = identity (6 çıkışın hepsinde) | `max|Δ| = 0.0` | sıfır-init garantisi; warm-start gerçek bir başlangıç noktası mı |
+| j=K hibrit yol = tam decode | `max|Δ| = 0.0` | patchify/canvas/unpatchify/head kablolaması doğru mu |
+| patchify → unpatchify | `max|Δ| = 0.0` | ölçtüğümüz dikişler reshape hatası değil |
+
+Ölçülen model boyutu: toplam **42,918,528** parametre, adapter'lar **739,200**
+(%1.72).
