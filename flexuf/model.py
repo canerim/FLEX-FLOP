@@ -160,12 +160,53 @@ class FlexUFIntra(DMCI):
             per_img = []
             for i in range(x.shape[0]):
                 em = torch.full((n_tiles,), k, dtype=torch.long, device=x.device)
-                per_img.append(self.dec(y_hat[i:i + 1], curr_q_dec, exit_map=em))
+                # curr_q_dec carries one row per image; slicing it matters,
+                # because [1,C,H,W] * [B,C,1,1] silently broadcasts the single
+                # decoded image back up to batch B.
+                per_img.append(self.dec(y_hat[i:i + 1], curr_q_dec[i:i + 1],
+                                        exit_map=em))
             x_hats.append(torch.cat(per_img, dim=0))
 
         mses = [self.get_mse(x, xh) for xh in x_hats]
         bpp, bits_y, bits_z = self._rate(aux, qp, pixel_num)
         return {"x_hats": x_hats, "mses": mses, "bpp": bpp,
+                "bits_y": bits_y, "bits_z": bits_z}
+
+    def forward_random_depth(self, x: torch.Tensor, qp):
+        """One patched decode per step, with a fresh random exit per tile.
+
+        This is FLEX-FLOP's Stage A objective, and it is both cheaper and more
+        faithful than decoding every exit separately:
+
+            ch_p ~ U{j..K-1}, i.i.d., resampled every step
+            L = || decode(y_hat, ch) - x ||^2
+
+        Cheaper because it is ONE decode instead of K. More faithful because
+        deployment never decodes a frame at a single uniform depth — it decodes a
+        MIXED-depth frame, where a tile at exit 2 sits next to one at exit 5 and
+        the head has to stitch across that discontinuity too. Decoding each exit
+        uniformly trains a condition that never occurs; random per-tile depth
+        trains the one that always does.
+
+        Returns the same shape of dict as the other two, with `mses` holding the
+        single mixed-depth reconstruction so the caller's loss code is unchanged.
+        """
+        _, _, H, W = x.size()
+        y_hat, curr_q_dec, aux = self._encode_to_latent(x, qp)
+        K, j = self.cfg.num_exits, self.cfg.split_depth
+        n_tiles = ((y_hat.shape[2] * 2) // self.cfg.feature_patch) * \
+                  ((y_hat.shape[3] * 2) // self.cfg.feature_patch)
+
+        # One batched call, not one per image. `forward()` already patchifies a
+        # batch into b*nh*nw tiles and unpatchifies with `batch=`, so the whole
+        # batch decodes together; looping cost 4.9x full-frame training where
+        # batching costs far less, and Stage A's wall-clock is what decides when
+        # results exist.
+        em = torch.randint(j, K, (x.shape[0] * n_tiles,), device=x.device)
+        x_hat = self.dec(y_hat, curr_q_dec, exit_map=em)
+
+        bpp, bits_y, bits_z = self._rate(aux, qp, H * W)
+        return {"x_hats": [x_hat], "mses": [self.get_mse(x, x_hat)], "bpp": bpp,
                 "bits_y": bits_y, "bits_z": bits_z}
 
     # -- deployed forward ----------------------------------------------------

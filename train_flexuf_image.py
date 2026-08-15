@@ -161,9 +161,16 @@ def train_one_epoch(net, loader, optimizer, epoch, cfg, args, device, logf):
         batch = [t.to(device, non_blocking=True) for t in batch]
         x, qp, lambdas = batch[0], batch[-2], batch[-1]
 
-        out = (net.forward_all_exits_patched(x, qp) if args.train_patched
-               else net.forward_all_exits(x, qp))
-        ld = multi_exit_rd_loss(out["mses"], out["bpp"], lambdas, w)
+        if args.train_patched:
+            # FLEX Stage A: one patched decode with a fresh random depth per
+            # tile. Trains the mixed-depth frame that deployment actually
+            # produces, at the cost of a single decode rather than K.
+            out = net.forward_random_depth(x, qp)
+            w_step = torch.ones(1, device=device)
+        else:
+            out = net.forward_all_exits(x, qp)
+            w_step = w
+        ld = multi_exit_rd_loss(out["mses"], out["bpp"], lambdas, w_step)
 
         optimizer.zero_grad(set_to_none=True)
         ld["loss"].backward()
