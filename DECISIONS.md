@@ -1345,3 +1345,34 @@ aritmetik-kodlanmış uzunluk değil (rANS derlendi ama `rd_curve.py`'ye
 bağlanmadı). Ve karşılaştırmamızda oran **iki eğride de aynı** — aynı encoder,
 aynı bitstream — dolayısıyla tahmini/gerçek ayrımı eğriler arasındaki dikey
 farkı etkilemiyor, ikisini birlikte yatay kaydırıyor.
+
+---
+
+## 23. Adapter'ların gerekliliği ölçüldü
+
+Warm-start merdiveni monoton (§22.2) ama **adapter'lar sıfır-init'te**, yani
+erken çıkışlar telafisiz. Bu haldeyken β=30 ile router eğitildi:
+
+```
+step 0    exit_share [0,0,81,0,33,14]   tasarruf %31.32  kayıp 1.92 dB
+step 100  exit_share [0,0, 0,0, 0,128]  tasarruf %0      kayıp 0.00 dB
+step 200  exit_share [0,0, 0,0, 0,128]  tasarruf %0      kayıp 0.00 dB
+```
+
+Router her patch'i en derin çıkışa yolluyor — ve **doğru yapıyor**:
+
+çıkış 5 → çıkış 4 geçişi 2.57 dB maliyetli. Normalize görüntü teriminde
+`ratio = 10^0.257 = 1.81`, yani `w_image × (1.81−1) = 50 × 0.81 = 40.5` ceza.
+Karşılığında `β × Δcost = 30 × 0.14 = 4.2` kazanç. 40.5 ≫ 4.2.
+
+**Sonuç:** telafisiz erken çıkışlar 2.5–6 dB pahalı, hiçbir makul β bunu
+karşılamaz. Adapter'lar süs değil, mekanizmanın çalışması için zorunlu —
+FLEX'in +0.51..+0.90 dB'lik adapter kazancı tam bu boşluğu kapatıyor.
+
+**§20.3'ün açık sorusu** ("monoton merdivende routing uniform'u yener mi")
+eğitilmiş adapter'ları bekliyor. Stage A bitince ölçülecek.
+
+**Yan not — tekrarlayan hata:** `pkill -f "rt_ws"` deseni kendi kabuk komutumu
+da eşleştirip onu öldürdü, bu yüzden bu kayıt ilk seferde yazılamadı. Aynı
+sınıf hata `resume_autopilot.sh`'te de çıkmıştı ve orada desen sabitlenerek
+(`^bash /path/...`) çözülmüştü. `pkill -f` her zaman sabitlenmeli.
