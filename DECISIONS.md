@@ -1272,3 +1272,76 @@ indirip `~/DCVC/checkpoints/` içine koymak.
 
 Warm-start §20.3'teki sorunu da çözebilir: yakınsamış bir modelde çıkışlar arası
 fark gerçek olur, yönlendirilecek bir şey doğar.
+
+---
+
+## 22. Warm-start geldi — ve monotonluk sorunu çözüldü
+
+### 22.1 Transfer ve kontroller
+
+```
+398 tensör, 42,179,328 parametre  (ilk gün ölçtüğüm stok DMCI sayısıyla birebir)
+stok DMCI'ye temiz yükleniyor      (eksik 0, fazla 0)
+transfer: 398 tensör, 10 adapter tensörü sıfır-init'te (tasarım gereği)
+
+CONTROL en derin çıkış vs yayınlanmış UF : max|diff| = 0.0
+CONTROL her çıkış vs kesilmiş UF          : max|diff| = 0.0
+```
+
+### 22.2 Merdiven artık monoton — §20.3'ün cevabı
+
+Sıfırdan eğitim (e1, epoch 2) vs warm-start, aynı ölçüm, aynı yol:
+
+| çıkış | tasarruf | **sıfırdan** | **warm-start** |
+|---:|---:|---:|---:|
+| 2 | %43.79 | 0.1787 dB | 6.2736 dB |
+| 3 | %28.88 | **0.2137 dB ✗** | 4.9893 dB ✓ |
+| 4 | %13.98 | 0.1006 dB | 2.5705 dB ✓ |
+| 5 | %0 | 0.0432 dB | 0.7076 dB ✓ |
+
+Sıfırdan eğitimde çıkış 3, çıkış 2'den **15 puan fazla hesap harcayıp daha kötü**
+sonuç veriyordu — routing'in sömüreceği takas yoktu. Warm-start'ta her adımda
+daha derin kesinlikle daha iyi. **Sıralama artık öğrenilen bir şey değil,
+inşaen garanti.**
+
+### 22.3 Kayıpların büyük olması beklenen
+
+Warm-start sütunundaki değerler (çıkış 2'de 6.27 dB) büyük çünkü **adapter'lar
+henüz eğitilmedi** — sıfır-init'te, yani identity. Merdiven şu an "stok UF'in
+k. derinlikte kesilmiş hali", telafisi olmayan. Stage A tam olarak bunu
+kapatmak için koşuyor; FLEX de bu noktadan başlayıp +0.51..+0.90 dB kazanmıştı.
+
+### 22.4 Dikiş cezası modelin keskinliğiyle büyüyor
+
+En derin çıkışta (hiç erken çıkış yok, sadece patch'e bölme):
+
+| model | tam decode PSNR | dikiş cezası |
+|---|---:|---:|
+| sıfırdan, epoch 2 | ~31.3 dB | 0.043 dB |
+| **yayınlanmış** | **35.64 dB** | **0.708 dB** |
+
+Keskin bir model dikişten daha çok zarar görüyor — mutlak MSE farkı büyüyor.
+Bu, patch boyutu (E3 ekseni) ve j (E2 ekseni) kararlarını yakınsamış modelde
+yeniden ölçmeyi gerektiriyor; sıfırdan modelde alınan ölçümler taşınmaz.
+
+### 22.5 Boru hattı doğrulaması — referans figürle örtüşme
+
+`rd_curve.py`, yayınlanmış ağırlıklar, dense decoder, 48 ayrık görüntü:
+
+| QP | bpp | PSNR (6:1:1) |
+|---:|---:|---:|
+| 0 | 0.196 | 30.35 |
+| 32 | 0.325 | 36.35 |
+| **63** | **0.829** | **41.86** |
+
+Kullanıcının referans figüründe QP63 ≈ **0.83 bpp / ~41.7 dB**. Encode, entropi
+modeli, decode ve 6:1:1 ağırlıklandırma birlikte doğrulanmış oldu.
+
+Düşük QP'de ayrışma test setinden: referans **CTC Image**, bizimki Open Images'ın
+ayrık dilimi.
+
+**Kaydedilen iki sınır:** oran burada entropi modelinin **tahmini**, gerçek
+aritmetik-kodlanmış uzunluk değil (rANS derlendi ama `rd_curve.py`'ye
+bağlanmadı). Ve karşılaştırmamızda oran **iki eğride de aynı** — aynı encoder,
+aynı bitstream — dolayısıyla tahmini/gerçek ayrımı eğriler arasındaki dikey
+farkı etkilemiyor, ikisini birlikte yatay kaydırıyor.
