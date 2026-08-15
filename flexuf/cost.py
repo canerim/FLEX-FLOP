@@ -72,6 +72,24 @@ def adapter_vs_block(kind: str = "conv1x1") -> float:
     return ADAPTER_MACPX[kind] / _BLOCK_MACPX
 
 
+# The seam-repair pass runs once, full-frame, on the stitched canvas.
+#   depthwise 3x3 : 9C
+#   pointwise 1x1 : C^2
+# expressed as a share of the whole decode via the trunk's per-block share.
+SEAM_REPAIR_MACPX = {"none": 0.0, "depthwise": 9 * _C, "full": 9 * _C + _C**2}
+
+
+def seam_repair_share(kind: str) -> float:
+    """Seam repair as a fraction of the full decode.
+
+    Charged explicitly rather than left inside the tolerance of the cost control.
+    Measured at +1.1% by tests/test_cost_matches_reality.py, which is what the
+    arithmetic predicts — and a systematic under-charge is exactly how the
+    earlier saving figures came out inflated.
+    """
+    return (SEAM_REPAIR_MACPX[kind] / _BLOCK_MACPX) * (SHARE_TRUNK / N_TRUNK_BLOCKS)
+
+
 def halo_multiplier(cfg: FlexUFConfig, n_blocks: int, scope: str) -> float:
     """Cost multiplier the halo imposes on `n_blocks` of per-tile trunk work.
 
@@ -143,6 +161,7 @@ def exit_costs(
             + shared_blocks * per_block
             + tiled_blocks * per_block * mult
             + SHARE_HEAD * head_halo_multiplier(cfg)
+            + seam_repair_share(cfg.seam_repair)
         )
         if k_run < K - 1:
             c += adapter * (mult if halo_scope != "head" else 1.0)
@@ -168,7 +187,7 @@ def frame_relative_cost(
     adapter = adapter_vs_block(cfg.adapter_kind) * per_block
 
     stem = SHARE_UPSAMPLE + (j * b) * per_block
-    head = SHARE_HEAD * head_halo_multiplier(cfg)
+    head = SHARE_HEAD * head_halo_multiplier(cfg) + seam_repair_share(cfg.seam_repair)
 
     suffix = []
     for k in range(K):

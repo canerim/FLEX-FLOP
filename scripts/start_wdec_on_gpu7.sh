@@ -33,6 +33,7 @@ CUDA_VISIBLE_DEVICES=7 setsid nohup "$ROOT/.venv/bin/python" \
     --lambdas 10 2048 --batch_size 16 -n 6 -e 6 \
     --num_exits 6 --split_depth 2 --latent_patch 8 --latent_halo 2 \
     --adapter_kind conv1x1 --aux_weight 1.0 --aux_schedule constant \
+    --seam_repair full \
     --device 0 --tag wdec_j2_p128 \
     >> "$ROOT/runs/wdec_j2_p128/stdout.log" 2>&1 < /dev/null &
 sleep 20

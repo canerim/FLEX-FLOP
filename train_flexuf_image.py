@@ -104,6 +104,8 @@ def parse_args(argv):
     p.add_argument("--latent_patch", type=int, default=8, help="p; 8 -> 128x128 RGB")
     p.add_argument("--latent_halo", type=int, default=2, help="h, in latent px")
     p.add_argument("--adapter_kind", choices=["conv1x1", "ffn"], default="conv1x1")
+    p.add_argument("--seam_repair", choices=["none", "depthwise", "full"], default="full",
+                   help="full-frame pass after stitching that heals tile borders")
     p.add_argument("--aux_weight", type=float, default=1.0, help="alpha_i of Eq.(6)")
     p.add_argument("--aux_schedule", choices=["constant", "warmup"], default="constant")
     p.add_argument("--device", type=str, default="0")
@@ -131,6 +133,7 @@ def build_cfg(args) -> FlexUFConfig:
         latent_patch=args.latent_patch,
         latent_halo=args.latent_halo,
         adapter_kind=args.adapter_kind,
+        seam_repair=args.seam_repair,
         aux_weight=args.aux_weight,
         aux_schedule=args.aux_schedule,
     )
@@ -312,7 +315,7 @@ def main(argv):
         optimizer = torch.optim.AdamW(trainable, lr=1e-4)
     elif args.freeze_backbone:
         for name, prm in net.named_parameters():
-            prm.requires_grad = ".adapters." in name
+            prm.requires_grad = ".adapters." in name or ".seam_repair." in name
         trainable = [p_ for p_ in net.parameters() if p_.requires_grad]
         n_tr = sum(p_.numel() for p_ in trainable)
         n_all = sum(p_.numel() for p_ in net.parameters())

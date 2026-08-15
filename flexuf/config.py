@@ -149,6 +149,24 @@ class FlexUFConfig:
     "zeros" reproduces the stock behaviour, for measuring what this is worth.
     """
 
+    seam_repair: str = "full"
+    """A cheap full-frame pass after stitching, to heal the tile borders.
+
+    "none"       — off, the stock behaviour
+    "depthwise"  — 3x3 depthwise only, ~0.025% of the decode
+    "full"       — 3x3 depthwise + 1x1, ~1.09% of the decode
+
+    Why here and not in the trunk: the seam is a spatial artefact and repairing
+    it needs a 3x3 that can see ACROSS a tile boundary. Inside the per-tile trunk
+    no kernel ever can — that is what the halo would have bought, at 2.25x on the
+    expensive part, which inverted the saving entirely. After unpatchify the
+    canvas is whole again, so one pass there gets the same reach for a fixed ~1%.
+
+    Against a per-tile trunk block at 7.45% of the decode, "full" is an eighth of
+    one block. Zero-initialised, so it is exactly the identity until trained and
+    cannot make anything worse.
+    """
+
     adapter_kind: str = "conv1x1"
     """Which adapter sits between an early exit and the shared head.
 

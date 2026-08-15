@@ -107,10 +107,13 @@ def load_into_ladder(model, ckpt: Mapping, *, strict_report: bool = True):
     remapped, unknown = remap_decoder_state(src, model.cfg.blocks_per_exit)
     missing, unexpected = model.load_state_dict(remapped, strict=False)
 
-    # Everything still missing must be an adapter — those are new by design and
-    # already zero-initialised. Anything else means the remap dropped a real
-    # tensor, which would silently degrade the decoder.
-    non_adapter_missing = [k for k in missing if not k.startswith("adapters.")]
+    # Everything still missing must be one of the modules that did not exist in
+    # stock UF — the exit adapters and the seam-repair block. Both are
+    # zero-initialised, so a fresh model is exactly the released decoder until
+    # they are trained. Anything else means the remap dropped a real tensor,
+    # which would silently degrade the decoder.
+    NEW_MODULES = ("adapters.", "seam_repair.")
+    non_adapter_missing = [k for k in missing if not k.startswith(NEW_MODULES)]
     if strict_report:
         if non_adapter_missing:
             raise RuntimeError(

@@ -132,6 +132,49 @@ class FFNAdapter(nn.Module):
         return x + self.pw_out(self.act(self.pw_in(x)))
 
 
+class SeamRepair(nn.Module):
+    """A cheap full-frame pass that exists only to heal tile borders.
+
+    Placed after unpatchify and before the head, where the canvas is whole again
+    and the seams are visible as a grid — the error maps in results/samples show
+    the deepest-exit error IS that grid and almost nothing else. Repairing it
+    there costs one pass over the canvas instead of a multiplier on every
+    per-tile block, which is what made the trunk halo unaffordable at 2.25x.
+
+        Repair(f) = f + PW_{C->C}( WSiLU( DW3x3(f) ) ),   PW zero-initialised
+
+    Zero-init keeps it exactly the identity until trained, so adding it cannot
+    make anything worse and the bit-exactness control still passes.
+
+    Cost, at C=384 and the feature grid being 1/64 of the RGB pixel count:
+
+        depthwise 3x3   9C   =   3,456 MAC/feature-px  =  0.025% of the decode
+        pointwise 1x1   C^2  = 147,456                 =  1.06%
+        ------------------------------------------------------------------
+        total                                            ~1.09%
+
+    Against a per-tile trunk block at 7.45% of the decode, that is an eighth of
+    one block spent full-frame. `depthwise_only` drops the pointwise for the
+    0.025% version, which has spatial reach but no channel mixing — the seam is a
+    spatial artefact, so that may be enough, and the two are separate config
+    values precisely so the question gets measured rather than argued.
+    """
+
+    def __init__(self, channels: int = TRUNK_CH, depthwise_only: bool = False):
+        super().__init__()
+        self.dw = nn.Conv2d(channels, channels, 3, padding=1, groups=channels,
+                            padding_mode="replicate")
+        self.act = WSiLU()
+        self.pw = None if depthwise_only else nn.Conv2d(channels, channels, 1)
+        last = self.dw if depthwise_only else self.pw
+        nn.init.zeros_(last.weight)
+        nn.init.zeros_(last.bias)
+
+    def forward(self, x: torch.Tensor) -> torch.Tensor:
+        h = self.act(self.dw(x))
+        return x + (h if self.pw is None else self.pw(h))
+
+
 def build_adapter(cfg: FlexUFConfig) -> nn.Module:
     if cfg.adapter_kind == "conv1x1":
         return Conv1x1Adapter(TRUNK_CH)
@@ -231,6 +274,10 @@ class MultiExitIntraDecoder(nn.Module):
         # makes it bit-exact stock UF.
         self.adapters = nn.ModuleList(build_adapter(self.cfg) for _ in range(K - 1))
         self.head = DepthConvBlock(TRUNK_CH, PRESHUFFLE_CH)
+        self.seam_repair = (
+            SeamRepair(TRUNK_CH, self.cfg.seam_repair == "depthwise")
+            if self.cfg.seam_repair != "none" else None
+        )
 
     # -- tile-border padding -------------------------------------------------
     def _set_tile_padding(self, mode: str, first_group: int):
@@ -386,6 +433,12 @@ class MultiExitIntraDecoder(nn.Module):
         # ---- 5. drop halo, stitch ------------------------------------------
         stitched = unpatchify(crop_halo(canvas, halo) if halo > 0 else canvas,
                               nh, nw, batch=feat.shape[0])
+
+        # ---- 5b. heal the seams, full-frame ---------------------------------
+        # Only meaningful here: the canvas is whole, so a 3x3 finally sees across
+        # a tile boundary instead of into padding.
+        if self.seam_repair is not None:
+            stitched = self.seam_repair(stitched)
 
         # ---- 6. head -------------------------------------------------------
         if cfg.full_frame_head:
