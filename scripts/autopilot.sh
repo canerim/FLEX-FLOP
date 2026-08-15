@@ -60,10 +60,17 @@ import json, sys
 rows=[json.loads(l) for l in open(sys.argv[1]) if l.strip()]
 if rows:
     r=rows[-1]
-    flag = "OK" if r['spread_dB']>0.5 else "COLLAPSE-RISK"
+    sp=r['spread_dB']; deep=r['psnr_per_exit'][-1]
+    # Same two-axis judgement as status.sh: a small spread is only bad if the
+    # deepest exit is also bad. Shallow exits catching a GOOD deepest exit is
+    # the result we are after, not a failure.
+    if deep < 20:   flag = "ANCHOR-WEAK"
+    elif sp < 0.05: flag = "EXITS-INDISTINGUISHABLE"
+    elif sp < 2.0:  flag = "GOOD"
+    else:           flag = "OK"
     print(f"  {sys.argv[2]:<12} ep{r['epoch']:<3} step{r['step']:<6} "
           f"loss {r['loss']:8.4f} bpp {r['bpp']:.4f} "
-          f"deepest {r['psnr_per_exit'][-1]:6.2f}dB spread {r['spread_dB']:+.2f} {flag}")
+          f"deepest {deep:6.2f}dB spread {sp:+.2f} {flag}")
 PY
         fi
 
