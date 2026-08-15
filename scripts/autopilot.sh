@@ -37,6 +37,20 @@ declare -A EPOCHS=( [e1_j2_p128]=105 [e2_j4_p128]=105 [e3_j2_p64]=105 [baseline_
 
 log () { echo "[$(date '+%F %T')] $*" >> "$LOG"; }
 
+
+# --- why the body lives in a function -------------------------------------
+# bash reads a script INCREMENTALLY, by byte offset, while it runs. Editing a
+# long-running script in place makes the interpreter resume at a stale offset in
+# the new file and execute whatever now sits there. Not theoretical: editing
+# add_subsets.sh mid-flight made it jump into its restart section early,
+# rebuilding description.json from a partial dataset and restarting all four
+# training runs while a tar extraction was still going. Wrapping everything in
+# main() and calling it on the last line forces bash to parse the whole file
+# before running a single command, so an edit can never take effect halfway.
+# (The body is deliberately NOT re-indented: heredoc terminators must sit at
+# column 0.)
+
+main () {
 log "autopilot started"
 
 while true; do
@@ -48,6 +62,26 @@ while true; do
             if [ -f "$dir/ckpt.pth.tar" ]; then
                 log "$tag: finished (final ckpt present)"
             else
+                # Take an exclusive lock around the relaunch.
+                #
+                # Without it there is a window: add_subsets.sh kills every run,
+                # and if the watchdog's liveness check lands in the gap before
+                # add_subsets relaunches them, BOTH launch — two processes with
+                # the same --save_dir, interleaving writes to the same
+                # status_latest.pth.tar. That happened, and it produced two main
+                # processes each for the baseline and e3. A corrupted checkpoint
+                # would not have announced itself.
+                exec 9>"$ROOT/.relaunch.lock"
+                if ! flock -n 9; then
+                    log "$tag: looks dead but another process holds the relaunch lock — skipping"
+                    exec 9>&-
+                    continue
+                fi
+                if pgrep -f "train_flexuf_image.py.*--tag $tag" > /dev/null; then
+                    log "$tag: came back on its own while waiting for the lock"
+                    flock -u 9; exec 9>&-
+                    continue
+                fi
                 log "$tag: DIED — restarting on GPU ${GPU[$tag]} (resumes from last epoch)"
                 CUDA_VISIBLE_DEVICES="${GPU[$tag]}" nohup "$ROOT/.venv/bin/python" \
                     "$ROOT/train_flexuf_image.py" \
@@ -57,6 +91,7 @@ while true; do
                     --aux_weight 1.0 --aux_schedule warmup --device 0 --tag "$tag" \
                     >> "$dir/stdout.log" 2>&1 &
                 sleep 10
+                flock -u 9; exec 9>&-
             fi
         fi
 
@@ -141,3 +176,6 @@ PY
     done
     sleep 300   # 5 minutes
 done
+}
+
+main "$@"
