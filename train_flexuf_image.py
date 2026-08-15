@@ -115,6 +115,9 @@ def parse_args(argv):
     p.add_argument("--freeze_backbone", action="store_true",
                    help="train ONLY the exit adapters, leaving every inherited "
                         "tensor untouched")
+    p.add_argument("--freeze_encoder", action="store_true",
+                   help="freeze the encoder, hyperprior and entropy model; train "
+                        "the WHOLE decoder (trunk, head and adapters)")
     return p.parse_args(argv)
 
 
@@ -249,7 +252,31 @@ def main(argv):
     # from-scratch runs produced. So the trainable set is ~739k parameters out of
     # 42.9M, and one pass costs hours rather than the ~37 days a full-recipe run
     # of this size takes.
-    if args.freeze_backbone:
+    # Freeze only the analysis side: the encoder, hyperprior and entropy model
+    # stay exactly Microsoft's, so the latent and therefore the bitstream and the
+    # bpp are identical to the release. The entire decoder — all 143 inherited
+    # tensors plus the 10 adapters — is then free to reorganise itself around the
+    # multi-exit structure.
+    #
+    # This sits between the two modes we already had. --freeze_backbone trains
+    # 739k adapter parameters and leaves the decoder unable to adapt at all;
+    # training everything trains the encoder too, which changes the latent and
+    # makes the result incomparable to real DCVC-UF (measured: our q_scale table
+    # came out 6.45x the release's, and qp63 landed at 0.783 bpp against 0.829).
+    # Here the rate axis is pinned to the release while the decoder gets full
+    # freedom.
+    if args.freeze_encoder:
+        for name, prm in net.named_parameters():
+            prm.requires_grad = name.startswith("dec.")
+        trainable = [p_ for p_ in net.parameters() if p_.requires_grad]
+        n_tr = sum(p_.numel() for p_ in trainable)
+        n_all = sum(p_.numel() for p_ in net.parameters())
+        n_enc = n_all - n_tr
+        print(f"frozen encoder: training the decoder, {n_tr:,} / {n_all:,} params "
+              f"({100*n_tr/n_all:.2f}%); {n_enc:,} analysis-side params frozen "
+              f"at the release values", flush=True)
+        optimizer = torch.optim.AdamW(trainable, lr=1e-4)
+    elif args.freeze_backbone:
         for name, prm in net.named_parameters():
             prm.requires_grad = ".adapters." in name
         trainable = [p_ for p_ in net.parameters() if p_.requires_grad]

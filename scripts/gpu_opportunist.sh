@@ -53,6 +53,14 @@ QUEUE=(
   # instead of 42.9M.
   #
   # Axes still one-variable-at-a-time against the j=2 / 128px reference.
+  # Requested: freeze the encoder, train ONLY the decoder, on Microsoft's recipe.
+  # The analysis side stays exactly the release, so the latent, the bitstream and
+  # the bpp are identical to real DCVC-UF and the rate axis is pinned. The whole
+  # decoder (14,971,008 params, 34.9% of the model) is then free to reorganise
+  # around the multi-exit structure, rather than only the 739k adapters.
+  # DEC marks it so the launcher swaps --freeze_backbone for --freeze_encoder.
+  "wdec_j2_p128|DEC|--adapter_kind conv1x1 --num_exits 6 --split_depth 2 --latent_patch 8"
+  "wdec_j4_p256|DEC|--adapter_kind conv1x1 --num_exits 6 --split_depth 4 --latent_patch 16"
   "w_j4_p256|--adapter_kind conv1x1 --num_exits 6 --split_depth 4 --latent_patch 16"
   "w_j4_p128|--adapter_kind conv1x1 --num_exits 6 --split_depth 4 --latent_patch 8"
   "w_j2_p256|--adapter_kind conv1x1 --num_exits 6 --split_depth 2 --latent_patch 16"
@@ -111,15 +119,20 @@ while [ ${#QUEUE[@]} -gt 0 ]; do
         fi
         entry="${QUEUE[0]}"
         tag="${entry%%|*}"
-        args="${entry#*|}"
+        rest="${entry#*|}"
+        if [ "${rest%%|*}" = "DEC" ]; then
+            FREEZE="--freeze_encoder"; args="${rest#DEC|}"; epochs=6
+        else
+            FREEZE="--freeze_backbone"; args="$rest"; epochs=3
+        fi
         log "GPU $g free — launching $tag ($args)"
         mkdir -p "$ROOT/runs/$tag"
         CUDA_VISIBLE_DEVICES="$g" setsid nohup "$ROOT/.venv/bin/python" \
             "$ROOT/train_flexuf_image.py" \
             --train_dataset "$DATA" --save_dir "$ROOT/runs/$tag" \
             --pretrain "$ROOT/runs/warmstart/ckpt_warmstart.pth.tar" \
-            --freeze_backbone \
-            --lambdas 10 2048 --batch_size 16 -n 8 -e 3 \
+            $FREEZE \
+            --lambdas 10 2048 --batch_size 16 -n 8 -e "$epochs" \
             $args --latent_halo 2 \
             --aux_weight 1.0 --aux_schedule constant \
             --device 0 --tag "$tag" \
