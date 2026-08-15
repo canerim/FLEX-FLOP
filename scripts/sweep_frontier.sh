@@ -2,37 +2,40 @@
 # Trace the compute/quality frontier for one trained decoder.
 #
 # One router is trained per beta, and each becomes one point on the curve. beta
-# is the only thing that changes between points -- same decoder, same data,
-# same everything else -- so the curve is a property of the decoder rather than
-# of the tuning.
+# is the only thing that differs between points -- same decoder, same data, same
+# everything else -- so the curve is a property of the decoder, not of tuning.
 #
 #   beta = 0      router only cares about quality, parks every tile on the
-#                 deepest exit: ~0% saving, ~0 dB loss. Trivial end.
-#   beta large    compute dominates, everything goes shallow: large saving,
-#                 large dB loss. Other trivial end.
-#   in between    the interesting region, and the point of the whole project.
+#                 deepest exit: ~0% saving. The trivial end -- and useful, since
+#                 the dB it still loses there is the pure patch-boundary cost.
+#   beta large    compute dominates, everything goes shallow.
+#   in between    the interesting region.
+#
+# The useful beta range depends on how FLAT the ladder is at this checkpoint,
+# and that changes by two orders of magnitude over training: at ckpt_epo0 the
+# ladder spans 10.4 dB and nothing moves below beta ~ 550, while by epoch 1 the
+# spread is 0.6 dB and the balance point is beta ~ 10. Hence a wide log sweep.
+#
+# Resumable and idempotent, deliberately
+# --------------------------------------
+# A sweep is a sequence of independent router trainings that together take the
+# better part of an hour, on a GPU shared with a run that must not be disturbed.
+# Anything can interrupt it: a restart of the supervising process, a reboot, a
+# kill. The first version truncated frontier.tsv on every start, so an
+# interruption threw completed betas away and left an EMPTY table sitting next
+# to four finished eval.json files. Work that is done must survive. So a beta
+# whose eval.json already exists is skipped, and the table is rebuilt at the end
+# from whatever eval.json files are present rather than appended to as we go.
 #
 # Usage:  bash scripts/sweep_frontier.sh <decoder-ckpt> [gpu] [steps] [betas...]
 set -u
 
 CKPT=${1:?usage: sweep_frontier.sh <decoder-ckpt> [gpu] [steps] [betas...]}
 GPU=${2:-4}
-STEPS=${3:-1500}
+STEPS=${3:-1000}
 shift 3 2>/dev/null || shift $#
 BETAS=("$@")
-# Log-spaced over four decades, deliberately wide.
-#
-# beta has to be compared against w_image * (how much worse a shallow exit is),
-# and that second factor MOVES DURING TRAINING. Measured on the epoch-0
-# checkpoint of e3: exits were 8.5 dB apart, L_image for a shallow exit was ~7x
-# the deepest, so w_image*dL ~ 150 while beta*dC at beta=25 was only ~11 --
-# every tile went to the deepest exit and the sweep reported 0% saving at every
-# beta. Not a bug: at epoch 0 routing shallow really is that bad. But a sweep
-# that returns the same trivial point everywhere measures nothing.
-#
-# Late in training the exits converge, dL shrinks, and the interesting region
-# moves down to small beta. So the range must span both regimes.
-[ ${#BETAS[@]} -eq 0 ] && BETAS=(0 25 100 400 1600 6400)
+[ ${#BETAS[@]} -eq 0 ] && BETAS=(0 10 30 100 300 1000 3000)
 
 ROOT="$HOME/FLEX-UF"
 PY="$ROOT/.venv/bin/python"
@@ -40,31 +43,30 @@ DATA="${FLEXUF_DATA:-/data10/shareddata/openimages/dcvc_train}"
 OUT="$(dirname "$CKPT")/frontier_$(basename "$CKPT" .pth.tar)"
 mkdir -p "$OUT"
 SUM="$OUT/frontier.tsv"
-printf 'beta\tsaving_pct\tpsnr_loss_dB\texit_share\n' > "$SUM"
 
 echo "frontier sweep: $CKPT on GPU $GPU, betas ${BETAS[*]}, $STEPS steps each"
 
 for beta in "${BETAS[@]}"; do
-    dir="$OUT/beta_${beta}"; mkdir -p "$dir"
+    dir="$OUT/beta_${beta}"
+    mkdir -p "$dir"
+    if [ -s "$dir/eval.json" ]; then
+        echo "  beta=$beta already measured, skipping"
+        continue
+    fi
     CUDA_VISIBLE_DEVICES="$GPU" "$PY" "$ROOT/train_router.py" \
         --ckpt "$CKPT" --train_dataset "$DATA" --save_dir "$dir" \
         --steps "$STEPS" --batch_size 8 --crop 512 -n 4 \
-        --beta "$beta" --device 0 > "$dir/train.log" 2>&1 || { echo "  beta=$beta router FAILED"; continue; }
+        --beta "$beta" --device 0 > "$dir/train.log" 2>&1 \
+        || { echo "  beta=$beta router FAILED"; continue; }
 
     CUDA_VISIBLE_DEVICES="$GPU" "$PY" "$ROOT/evaluate.py" \
         --ckpt "$CKPT" --dataset "$DATA" --router "$dir/router.pth.tar" \
         --n_frames 96 --crop 512 --batch_size 2 --qps 63 --device 0 \
-        --out "$dir/eval.json" > "$dir/eval.log" 2>&1 || { echo "  beta=$beta eval FAILED"; continue; }
-
-    "$PY" - "$dir/eval.json" "$beta" "$SUM" <<'PY'
-import json, sys
-d = json.load(open(sys.argv[1])); beta = sys.argv[2]
-r = d["results"]["63"]["routed"]
-line = f"{beta}\t{r['saving_pct']}\t{r['psnr_loss_dB']}\t{r['exit_share']}"
-open(sys.argv[3], "a").write(line + "\n")
-print(f"  beta={beta:>4}  saving {r['saving_pct']:6.2f}%   "
-      f"PSNR loss {r['psnr_loss_dB']:+.4f} dB   share {r['exit_share']}")
-PY
+        --out "$dir/eval.json" > "$dir/eval.log" 2>&1 \
+        || { echo "  beta=$beta eval FAILED"; continue; }
+    echo "  beta=$beta measured"
 done
+
+# Rebuild the table from every eval.json present, sorted by beta.
+"$PY" "$ROOT/scripts/collect_frontier.py" "$OUT" "$SUM"
 echo "frontier -> $SUM"
-cat "$SUM"
