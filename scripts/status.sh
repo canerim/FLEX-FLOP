@@ -38,9 +38,25 @@ print(f"  epoch {r['epoch']:>3}  step {r['step']:>6}  "
 print(f"  loss {r['loss']:10.4f}   bpp {r['bpp']:.4f}   grad {r.get('grad_norm',0):.4f}"
       f"   skipped {r.get('skipped',0)}")
 print(f"  PSNR/exit  {r['psnr_per_exit']}")
-sp = r['spread_dB']
-flag = "OK" if sp > 0.5 else ("!! COLLAPSE RISK" if sp < 0.15 else "watch")
-print(f"  spread     {sp:+.3f} dB   <- {flag}")
+sp = r['spread_dB']; deep = r['psnr_per_exit'][-1]; shal = r['psnr_per_exit'][0]
+# Spread alone is the WRONG diagnostic, and reading it that way was a mistake.
+# A shrinking gap can mean two opposite things:
+#   - every exit converging to the same MEDIOCRE quality: the FLEX from-scratch
+#     failure, nothing worth routing, and the anchor is bad too;
+#   - the shallow exits catching UP to a good deepest exit: exactly the result
+#     the project wants, because then a tile can leave after 2 of 12 blocks for
+#     almost no dB.
+# Only the deepest exit's absolute quality separates them, so judge on both.
+if deep < 20:
+    flag = "!! ANCHOR WEAK - deepest exit too poor to be a reference"
+elif sp < 0.05:
+    flag = "!! exits indistinguishable - check adapters are actually training"
+elif sp < 2.0:
+    flag = f"GOOD - shallow exit within {sp:.2f} dB of full decode"
+else:
+    flag = "OK - ladder differentiated"
+print(f"  spread     {sp:+.3f} dB  (deepest {deep:.2f} / shallowest {shal:.2f})")
+print(f"             {flag}")
 if len(rows) > 8:
     first = rows[max(0,len(rows)-40)]
     print(f"  trend      loss {first['loss']:.4f} -> {r['loss']:.4f}   "

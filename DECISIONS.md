@@ -620,3 +620,54 @@ Sabit `0/25/100` aralığı erken checkpoint'lerde her noktada aynı önemsiz so
 1600, 6400`. Her iki rejimi de kapsıyor. Eski aralıkla başlamış olan süpürme
 öldürüldü (GPU'yu boşa yakmasın), marker atılmadığı için autopilot yeni
 aralıkla tekrarlayacak.
+
+---
+
+## 15. Teşhis eksenini yanlış kurmuşum — ve altından ilk gerçek sonuç çıktı
+
+`status.sh` daralan spread'i "COLLAPSE RISK" diye işaretliyordu. Epoch 1'de
+e3'te olan şey:
+
+```
+ep0 step9600  spread +7.601   deepest 25.84   shallowest 18.24
+ep1 step0     spread +7.059   deepest 25.16   shallowest 18.10
+ep1 step200   spread +1.368   deepest 27.47   shallowest 26.10   ← +8 dB, 200 adımda
+ep1 step400   spread +1.333   deepest 27.59   shallowest 26.26
+```
+
+Daralma **çöküş değil**: en derin çıkış düşmedi, **sığ çıkış fırladı**.
+
+**Neden:** epoch 0 boyunca warmup α=0 olduğu için sığ çıkışların adapter'ları
+hiç gradyan almadı — sıfır-init'te, yani identity'de durdular. Epoch 1'de α=0.1
+olunca eğitilmeye başladılar, ve gövde zaten iyi olduğu için çok hızlı yakaladılar.
+
+**Teşhisin hatası:** spread tek başına yanlış eksen. Daralan bir aralık iki zıt
+şey anlamına gelebilir:
+- tüm çıkışlar aynı **vasat** kaliteye yakınsıyor → FLEX'in sıfırdan eğitim
+  çöküşü, yönlendirilecek bir şey yok, çıpa da bozuk;
+- sığ çıkışlar **iyi** bir en-derin çıkışı yakalıyor → projenin tam istediği şey.
+
+İkisini ayıran tek şey en derin çıkışın **mutlak** kalitesi. Teşhis artık her iki
+eksene birden bakıyor.
+
+### İlk gerçek sinyal (epoch 1 — erken, kesin değil)
+
+| koşu | sığ | derin | fark | exit 0'ın kazancı |
+|---|---:|---:|---:|---:|
+| e1 (j=2, 128px) | 24.82 | 25.69 | **0.87 dB** | %58.7 |
+| e2 (j=4, 128px) | 24.58 | 25.46 | **0.88 dB** | %28.9 |
+| e3 (j=2, 64px) | 25.93 | 26.48 | **0.55 dB** | %58.7 |
+
+**Ne söylüyor:** bir patch 12 bloktan sadece 2'sinden sonra çıkıp ~0.9 dB
+kaybediyor, ve bu decoder hesabının %58.7'sini kurtarıyor.
+
+**Ne söylemiyor — abartmamak için:**
+1. 105 epoch'un **1'indeyiz**. Mutlak PSNR (~25-26 dB) hâlâ düşük. Model
+   olgunlaştıkça en derin çıkışın önde açması beklenir (fazla kapasite = daha
+   yüksek tavan), yani fark **büyüyebilir**.
+2. Bu sayılar **tam-kare, tek-derinlik** ölçümleri. Patch'e bölmenin dikiş
+   cezası bunlara **dahil değil**. Gerçek frontier, dikişli yönlendirilmiş
+   decode ile ölçülecek — `evaluate.py`'nin işi bu.
+3. Yönlendirme henüz devrede değil. Eğer tüm çıkışlar eşit iyi kalırsa router'ın
+   yapacak bir şeyi olmaz — o zaman katkı "yönlendirme" değil "eğitilmiş
+   adapter'lı erken çıkış" olur. Bu da güçlü bir sonuç, ama farklı bir iddia.
