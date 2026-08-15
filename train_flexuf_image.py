@@ -188,8 +188,22 @@ def train_one_epoch(net, loader, optimizer, epoch, cfg, args, device, logf):
 
         if i % args.log_every == 0:
             with torch.no_grad():
-                psnrs = [psnr_from_mse(m.mean()).item() for m in out["mses"]]
-                rd = per_exit_rd(out["mses"], out["bpp"], lambdas).tolist()
+                if args.train_patched:
+                    # forward_random_depth returns ONE mixed-depth reconstruction,
+                    # so it carries no per-exit breakdown — and that breakdown is
+                    # the health signal: a ladder collapsing shows up as the
+                    # per-exit PSNRs converging on each other long before the
+                    # loss notices. Cheap to recover: one extra full-frame pass
+                    # every log_every steps, which at 200 is a fraction of a
+                    # percent of training time.
+                    diag = net.forward_all_exits(x, qp)
+                    psnrs = [psnr_from_mse(m.mean()).item() for m in diag["mses"]]
+                    rd = per_exit_rd(diag["mses"], diag["bpp"], lambdas).tolist()
+                    mixed = psnr_from_mse(out["mses"][0].mean()).item()
+                else:
+                    psnrs = [psnr_from_mse(m.mean()).item() for m in out["mses"]]
+                    rd = per_exit_rd(out["mses"], out["bpp"], lambdas).tolist()
+                    mixed = None
             t1 = time.time()
             seen = i * args.batch_size
             rec = {
@@ -207,6 +221,15 @@ def train_one_epoch(net, loader, optimizer, epoch, cfg, args, device, logf):
                 "psnr_per_exit": [round(v, 3) for v in psnrs],
                 "spread_dB": round(psnrs[-1] - psnrs[0], 3),
                 "rd_per_exit": [round(v, 5) for v in rd],
+                # PSNR of the mixed-depth decode actually being optimised, next
+                # to the per-exit numbers measured full-frame.
+                #
+                # The gap between them is NOT the seam cost — the mixed decode
+                # samples random exits, so it carries depth cost too, and lands
+                # near the average of the exits it drew. Pure seam cost is
+                # measured separately, by decoding with every tile at the deepest
+                # exit (scripts/per_qp_saving.py): 0.063 dB at qp0, 0.140 at qp63.
+                "psnr_mixed_patched": None if mixed is None else round(mixed, 3),
                 "grad_norm": round(total_norm, 5),
                 "skipped": n_skipped,
                 "sec": round(t1 - t0, 1),
