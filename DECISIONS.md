@@ -1061,3 +1061,52 @@ headroom'un anlamlı bir kısmını gerçekten alıyor.
 **Uyarı:** 200 adımlık bir router ve hareket halindeki bir checkpoint — ön
 sonuç. Ama mekanizma artık çalışıyor; önceki durumda hiçbir β değeri
 yönlendirme üretmiyordu.
+
+---
+
+## 18. İlk gerçek frontier noktası — router oracle'a ulaştı
+
+Aynı ağırlıklar (`probe_ep2`, e1'in epoch-2 anlık kopyası), aynı 512 görüntülük
+**ayrık** doğrulama seti, qp=63:
+
+| | tasarruf | kayıp |
+|---|---:|---:|
+| **Router (ölçülen, β=0)** | **%42.65** | **0.1894 dB** |
+| Oracle (üst sınır, τ=0.30) | %42.5 | 0.196 dB |
+| En iyi tek derinlik (uniform) | %31.9 | 0.196 dB |
+
+`exit_share = [312, 622, 171, 110, 1, 320]` — altı çıkışın hepsi kullanımda.
+Kontrol: en derin çıkış vs stok UF `max|Δ| = 0.0`.
+
+**Router oracle'a ulaşmış durumda** — mevcut headroom'un neredeyse tamamını
+alıyor ve aynı kalitede hiçbir tek derinliğin veremediği **+10.7 puan** fazla
+tasarruf sağlıyor.
+
+### 18.1 β=0'da neden tasarruf var?
+
+Karmaşıklık terimi kapalıyken (β=0) tasarruf **ClassSR'ın Eq (4)
+Average-Loss'undan** geliyor: `w_avg=6` ile dengeli dağılım baskısı, tek başına
+router'ı tüm çıkışları kullanmaya zorluyor. Yani ClassSR'ın "dejenere çözümü
+engelle" terimi burada aynı zamanda **tasarrufun kaynağı**.
+
+β büyüdükçe eğrinin daha derin tarafına gidilecek; süpürme devam ediyor.
+
+### 18.2 Sayının güvenilirliği
+
+| önlem | durum |
+|---|---|
+| ayrık doğrulama seti (512 görüntü, eğitimden çıkarılmış) | ✅ |
+| bit-exact çıpa kontrolü (`max|Δ| = 0.0`) | ✅ |
+| paylaşılan gövde amortize edilmiş | ✅ |
+| adapter maliyeti ücretlendirilmiş | ✅ |
+| halo maliyeti ücretlendirilmiş | ✅ |
+| eşleşmiş kalitede uniform karşılaştırması | ✅ |
+
+### 18.3 Sınırlar — açıkça
+
+- **105 epoch'un 2.'si.** Model olgunlaşmadı; sayılar değişecek.
+- **Tek QP (63).** Çok-oranlı süpürme yapılmadı.
+- **600 adımlık router.** Daha uzun eğitim daha iyi olabilir.
+- **Tek deney (e1).** e2/e3 ile karşılaştırma (j ve tile boyutu eksenleri) henüz yok.
+- **Baseline karşılaştırması eksik.** Ortak eğitimin çıpaya maliyeti hâlâ ölçülmedi
+  (baseline epoch 0'da). Bu olmadan "0.19 dB kayıp" mutlak değil, göreli bir sayı.
