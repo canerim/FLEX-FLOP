@@ -68,12 +68,19 @@ PY
         fi
 
         # ---- 3. frontier on any unmeasured checkpoint --------------------
+        # The right beta depends on how FLAT the ladder is, and that changes as
+        # training proceeds -- so a short fixed list measures nothing useful.
+        # Measured: at ckpt_epo0 the ladder spans 10.4 dB, so moving a tile one
+        # exit shallower costs 50*1.56 = 78 in the image term against beta*0.14
+        # in the complexity term; nothing moves below beta ~ 550. By epoch 1 the
+        # spread is 0.6 dB and the balance point is beta ~ 10. Log-spacing
+        # 0..3000 covers both regimes with points in the interesting middle.
         for ck in "$dir"/ckpt_epo*.pth.tar; do
             [ -e "$ck" ] || continue
             marker="$dir/.frontier_done_$(basename "$ck" .pth.tar)"
             [ -e "$marker" ] && continue
             log "$tag: measuring frontier on $(basename "$ck")"
-            bash "$ROOT/scripts/sweep_frontier.sh" "$ck" "${GPU[$tag]}" 800 0 100 400 1600 6400 \
+            bash "$ROOT/scripts/sweep_frontier.sh" "$ck" "${GPU[$tag]}" 800 0 10 30 100 300 1000 3000 \
                 >> "$dir/frontier.log" 2>&1
             touch "$marker"
             log "$tag: frontier done -> $dir/frontier_$(basename "$ck" .pth.tar)/frontier.tsv"
