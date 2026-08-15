@@ -70,7 +70,7 @@ launch () {
         --latent_halo "$halo" \
         --adapter_kind "$adapter" \
         --aux_weight 1.0 \
-        --aux_schedule constant \
+        --aux_schedule warmup \
         --device 0 \
         --tag "$tag" \
         > "$dir/stdout.log" 2>&1 &

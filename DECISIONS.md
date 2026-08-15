@@ -441,3 +441,73 @@ hiç ölçülmemiş. Her koşu `CUDA_VISIBLE_DEVICES` ile sabitlendi.
 
 Ölçülen model boyutu: toplam **42,918,528** parametre, adapter'lar **739,200**
 (%1.72).
+
+---
+
+## 10. ❗ Kuru koşuda yakalanan yapısal sorun — merdiven ters dönüyordu
+
+Gerçek eğitim scriptini 48 sentetik görüntüyle 2 epoch koşturdum (`--aux_schedule
+constant`, α=1). Kayıp düzgün düştü (12584 → 143), bpp düştü (15.4 → 5.2),
+PSNR yükseldi. Ama:
+
+```
+psnr_per_exit: [8.095, 8.186, 8.121, 7.925, 7.512, 6.637]
+                 ↑ en sığ                        ↑ en derin
+spread_dB: -1.458   (negatif!)
+```
+
+**En derin çıkış en kötü.** Merdiven ters.
+
+**Neden oluyor:** Eq(6)'da α=1 alınca tüm çıkışlar eşit ağırlıklı, yani hedef
+fonksiyon "tüm çıkışların ortalama MSE'si". Bu, en derin çıkışın **en iyi olması
+için hiçbir baskı üretmiyor**. Rastgele init'te her ek blok sinyali bozuyor, ve
+eşit ağırlık bu sıralamayı düzeltmeye zorlamıyor.
+
+**Neden FLEX'te bu sorun yoktu:** orada backbone donuk ve warm-start'lıydı;
+en derin çıkış **tanımı gereği** gerçek DCVC-RT decoder'ıydı (bit-exact). Sıfırdan
+eğitimde böyle bir garanti yok. Bu, "0'dan eğit" talebinin getirdiği yeni risk.
+
+**Neden kritik:** en derin çıkış bizim **kalite çıpamız**. Tüm frontier
+"tam decode'a göre kaç dB kaybettik" olarak ölçülüyor. Çıpa en iyi değilse
+"kayıp" negatif çıkar ve ölçüm anlamsızlaşır.
+
+**Çözüm — makalenin kendi yapısında zaten var:**
+Eq (6) `L + Σᵢ αᵢLᵢ` — L (son çıkış) ağırlığı **1**, yardımcılar αᵢ. Yani
+makale zaten son çıkışa ayrıcalık veriyor; α=1 alarak bunu ben düzlemiştim.
+
+`aux_schedule=warmup` ile α, 10 epoch boyunca 0 → 1 rampalanıyor:
+- epoch 0: ağırlıklar `[0,0,0,0,0,1]` → **sadece tam derinlik eğitilir**,
+  model önce iyi bir codec olur, çıpa kurulur
+- epoch 1-9: α = 0.1 … 0.9 → sığ çıkışlar kademeli yukarı çekilir
+- epoch 10+: α = 1 → tam ortak eğitim, ama derin çıkışın önden aldığı fark korunur
+
+**Karar: üç deneyin üçü de `--aux_schedule warmup` ile yeniden başlatıldı.**
+Koşular 2 dakikalıktı, maliyeti yok; aynı hatayı 40 epoch sonra fark etmek
+günlere mal olurdu.
+
+**Not:** Bu 48 sentetik görüntüde 2 epoch'luk bir gözlem — tek başına kanıt
+değil. Ama risk yapısal (eşit ağırlık ⇒ sıralama garantisi yok), düzeltme ucuz,
+ve `spread_dB` her koşuda loglanıyor. `scripts/status.sh` bunu **COLLAPSE RISK**
+olarak işaretliyor: spread > 0.5 dB → OK, < 0.15 dB → alarm.
+
+---
+
+## 11. Eğitim başladı (2026-08-15 16:40)
+
+Veri: `/data10/shareddata/openimages/dcvc_train` — Open Images train subset 0,
+kısa kenarı ≥512 filtresinden geçen **154,723 görüntü**.
+
+**Neden min-side 512 filtresi:** `ImageFolder.__getitem__` crop'tan küçük
+görüntüleri **sıfırla padliyor** (`image_dataset.py:33-48`). Sıfır padding gerçek
+görüntü değil; codec'e siyah kenar rekonstrüksiyonu öğretir. Recipe 90. epoch'tan
+sonra 512×512 crop'a geçtiği için, kısa kenarı 512'nin altındaki her görüntü o
+aşamada padding üretirdi.
+
+| koşu | GPU | j | tile | halo | adapter | α programı |
+|---|---:|---:|---|---|---|---|
+| e1_j2_p128 | 4 | 2 | 128px | 2 lat | 1×1 | warmup |
+| e2_j4_p128 | 6 | 4 | 128px | 2 lat | 1×1 | warmup |
+| e3_j2_p64 | 7 | 2 | 64px | 2 lat | 1×1 | warmup |
+
+Her koşu ~12.6 GB GPU belleği kullanıyor (48 GB kartlarda rahat).
+GPU 0/1/2/3/5'e dokunulmadı.
