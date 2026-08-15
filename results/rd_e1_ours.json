@@ -1,0 +1,51 @@
+{
+  "config": {
+    "num_exits": 6,
+    "split_depth": 2,
+    "latent_patch": 8,
+    "latent_halo": 2,
+    "trunk_halo": 0,
+    "adapter_kind": "conv1x1",
+    "adapter_expand": 4,
+    "full_frame_head": true,
+    "aux_weight": 1.0,
+    "aux_schedule": "constant",
+    "aux_warmup_epochs": 10,
+    "qp": 63
+  },
+  "ckpt": "/tmp/claude-1038/-home-can-karsal/c272c1f9-90e5-4a52-8d35-d2ae8135b95e/scratchpad/e1_now.pth.tar",
+  "router": null,
+  "dense": [
+    {
+      "qp": 0,
+      "bpp": 0.2213224619626999,
+      "psnr_611": 30.041555896401405,
+      "saving_pct": 0.0
+    },
+    {
+      "qp": 16,
+      "bpp": 0.28106418158859015,
+      "psnr_611": 32.98651081323624,
+      "saving_pct": 0.0
+    },
+    {
+      "qp": 32,
+      "bpp": 0.38026365265250206,
+      "psnr_611": 36.0392989218235,
+      "saving_pct": 0.0
+    },
+    {
+      "qp": 48,
+      "bpp": 0.5866257678717375,
+      "psnr_611": 38.07800418138504,
+      "saving_pct": 0.0
+    },
+    {
+      "qp": 63,
+      "bpp": 0.7826720401644707,
+      "psnr_611": 39.91525682806969,
+      "saving_pct": 0.0
+    }
+  ],
+  "routed": []
+}
