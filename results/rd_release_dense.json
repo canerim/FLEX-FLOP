@@ -1,0 +1,75 @@
+{
+  "config": {
+    "num_exits": 6,
+    "split_depth": 2,
+    "latent_patch": 8,
+    "latent_halo": 2,
+    "trunk_halo": 0,
+    "adapter_kind": "conv1x1",
+    "adapter_expand": 4,
+    "full_frame_head": true,
+    "aux_weight": 1.0,
+    "aux_schedule": "constant",
+    "aux_warmup_epochs": 10,
+    "qp": 63
+  },
+  "ckpt": "runs/warmstart/ckpt_warmstart.pth.tar",
+  "router": null,
+  "dense": [
+    {
+      "qp": 0,
+      "bpp": 0.19593056477606297,
+      "psnr_611": 30.348505189021427,
+      "saving_pct": 0.0
+    },
+    {
+      "qp": 8,
+      "bpp": 0.21168453060090542,
+      "psnr_611": 31.929221789042156,
+      "saving_pct": 0.0
+    },
+    {
+      "qp": 16,
+      "bpp": 0.2419527086118857,
+      "psnr_611": 33.30994685490926,
+      "saving_pct": 0.0
+    },
+    {
+      "qp": 24,
+      "bpp": 0.2738412705560525,
+      "psnr_611": 34.728351493676506,
+      "saving_pct": 0.0
+    },
+    {
+      "qp": 32,
+      "bpp": 0.32457463381191093,
+      "psnr_611": 36.34520022074381,
+      "saving_pct": 0.0
+    },
+    {
+      "qp": 40,
+      "bpp": 0.4061992336064577,
+      "psnr_611": 37.64841949939728,
+      "saving_pct": 0.0
+    },
+    {
+      "qp": 48,
+      "bpp": 0.5207653890053431,
+      "psnr_611": 39.00918559233347,
+      "saving_pct": 0.0
+    },
+    {
+      "qp": 56,
+      "bpp": 0.6277837703625361,
+      "psnr_611": 40.72456936041514,
+      "saving_pct": 0.0
+    },
+    {
+      "qp": 63,
+      "bpp": 0.8286960981786251,
+      "psnr_611": 41.85697199900945,
+      "saving_pct": 0.0
+    }
+  ],
+  "routed": []
+}
