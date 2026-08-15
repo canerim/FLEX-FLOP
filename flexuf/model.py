@@ -130,6 +130,44 @@ class FlexUFIntra(DMCI):
             "bits_z": bits_z,
         }
 
+    def forward_all_exits_patched(self, x: torch.Tensor, qp, generator=None):
+        """Every exit's reconstruction, decoded through the DEPLOYED patched path.
+
+        The difference from `forward_all_exits` is the whole point. That one runs
+        full-frame, so no tile border is ever convolved against a missing
+        neighbour and the adapters are trained on a signal that has no seams in
+        it — while at inference every tile is decoded separately and the seams
+        are there. Measured on this model, the seam alone costs 0.063 dB at qp0
+        and 0.140 dB at qp63 with no early exit taken at all, which at qp63 is
+        80% of what the shallowest exit gives up in total.
+
+        FLEX-FLOP's finding was that closing this train/deploy gap is worth
+        +0.51..+0.90 dB, and that bolting a full-frame head onto adapters trained
+        the other way LOSES 0.14..0.24 dB — the sign of the effect flips. Train
+        through the decode path you deploy.
+
+        Costs nothing at inference: the adapters are the same 1x1 convolutions,
+        they have simply learned what the border actually looks like.
+        """
+        _, _, H, W = x.size()
+        pixel_num = H * W
+        y_hat, curr_q_dec, aux = self._encode_to_latent(x, qp)
+
+        n_tiles = ((y_hat.shape[2] * 2) // self.cfg.feature_patch) * \
+                  ((y_hat.shape[3] * 2) // self.cfg.feature_patch)
+        x_hats = []
+        for k in range(self.cfg.num_exits):
+            per_img = []
+            for i in range(x.shape[0]):
+                em = torch.full((n_tiles,), k, dtype=torch.long, device=x.device)
+                per_img.append(self.dec(y_hat[i:i + 1], curr_q_dec, exit_map=em))
+            x_hats.append(torch.cat(per_img, dim=0))
+
+        mses = [self.get_mse(x, xh) for xh in x_hats]
+        bpp, bits_y, bits_z = self._rate(aux, qp, pixel_num)
+        return {"x_hats": x_hats, "mses": mses, "bpp": bpp,
+                "bits_y": bits_y, "bits_z": bits_z}
+
     # -- deployed forward ----------------------------------------------------
     @torch.no_grad()
     def forward_routed(self, x: torch.Tensor, qp, exit_map: torch.Tensor):

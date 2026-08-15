@@ -115,6 +115,9 @@ def parse_args(argv):
     p.add_argument("--freeze_backbone", action="store_true",
                    help="train ONLY the exit adapters, leaving every inherited "
                         "tensor untouched")
+    p.add_argument("--train_patched", action="store_true",
+                   help="train through the DEPLOYED patched decode so the adapters "
+                        "learn to compensate the tile seams (FLEX: +0.51..+0.90 dB)")
     p.add_argument("--freeze_encoder", action="store_true",
                    help="freeze the encoder, hyperprior and entropy model; train "
                         "the WHOLE decoder (trunk, head and adapters)")
@@ -158,7 +161,8 @@ def train_one_epoch(net, loader, optimizer, epoch, cfg, args, device, logf):
         batch = [t.to(device, non_blocking=True) for t in batch]
         x, qp, lambdas = batch[0], batch[-2], batch[-1]
 
-        out = net.forward_all_exits(x, qp)
+        out = (net.forward_all_exits_patched(x, qp) if args.train_patched
+               else net.forward_all_exits(x, qp))
         ld = multi_exit_rd_loss(out["mses"], out["bpp"], lambdas, w)
 
         optimizer.zero_grad(set_to_none=True)

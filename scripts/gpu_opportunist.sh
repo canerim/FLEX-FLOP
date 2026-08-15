@@ -131,7 +131,7 @@ while [ ${#QUEUE[@]} -gt 0 ]; do
             "$ROOT/train_flexuf_image.py" \
             --train_dataset "$DATA" --save_dir "$ROOT/runs/$tag" \
             --pretrain "$ROOT/runs/warmstart/ckpt_warmstart.pth.tar" \
-            $FREEZE \
+            $FREEZE --train_patched \
             --lambdas 10 2048 --batch_size 16 -n 8 -e "$epochs" \
             $args --latent_halo 2 \
             --aux_weight 1.0 --aux_schedule constant \
