@@ -932,3 +932,77 @@ stok DMCI, aynı recipe, aynı veri, aynı tohum düzeni.
 o *tam decode* düz UF kadar iyi mi? Çok çıkışlı eğitim çıpaya bir bedel
 ödetiyorsa, tüm frontier düşmüş bir referansa göre çizilmiş olur. Baseline bu
 soruyu cevaplayan tek şey.
+
+---
+
+## 16. ❗ Kendi hatam: çalışan bir bash script'ini düzenlemek
+
+### 16.1 Ne yaptım
+
+`add_subsets.sh` çalışırken (subset 2'yi indirip extract ederken) dosyayı
+düzenledim — baseline'ın restart sonrası yeniden başlatılmasını eklemek için.
+
+### 16.2 Neden bozdu
+
+**bash script'leri artımlı okur, bayt konumuyla.** Yorumlayıcı dosyada bir
+offset tutar ve komut çalıştıkça ilerler. Dosyayı yerinde düzenlemek, o offset'i
+yeni dosyada **bambaşka bir yere** denk getirir; bash oradan devam eder.
+
+Sonuç: script restart bölümüne erken sıçradı. `description.json`'ı **kısmi**
+veri setiyle (subset 0+1, 269,478) yeniden kurdu ve dört koşuyu da restart etti,
+oysa train_2 hâlâ extract oluyordu.
+
+### 16.3 İkinci hasar: yarış durumu
+
+`add_subsets.sh` restart yaparken tüm koşuları `pkill` ediyor. Autopilot'un
+watchdog'u tam o boşlukta liveness kontrolü yaptı, koşuları ölü gördü ve
+**kendi kopyalarını** başlattı. Sonuç: baseline ve e3 için **ikişer ana
+process**, aynı `--save_dir`'e, aynı `status_latest.pth.tar`'a yazıyor.
+
+Bozuk bir checkpoint kendini duyurmaz. Bu sessizce ilerleyip günler sonra
+anlamsız sonuçlar olarak ortaya çıkabilirdi.
+
+### 16.4 Maliyet
+
+- Dört koşunun yarım kalan epoch'ları (~1 saat, 4 GPU)
+- Baseline **sıfırdan** başladı: epoch 0'ı hiç bitirmemişti, dolayısıyla
+  `status_latest.pth.tar`'ı yoktu — devam edecek bir şey yok. ~1.5 saat kayıp.
+- Kaybedilmeyen: kod, veri, tamamlanmış checkpoint'ler.
+
+### 16.5 Düzeltmeler
+
+1. **Kopyalar öldürüldü.** Her koşu için tek ana process doğrulandı — parent'ı
+   başka bir eğitim process'i olmayanları sayarak (dataloader worker'ları aynı
+   komut satırını paylaştığı için naif `pgrep -c` yanıltıyor).
+
+2. **`flock` koruması.** Autopilot artık yeniden başlatma bölümünü özel bir
+   kilitle sarıyor, ve kilidi aldıktan **sonra** bir kez daha canlılık kontrolü
+   yapıyor. İki başlatıcı arasındaki pencere kapandı.
+
+3. **`main () { ... }; main "$@"` kalıbı.** Autopilot'un gövdesi artık bir
+   fonksiyonda. Bash tek bir komut çalıştırmadan önce dosyanın **tamamını**
+   ayrıştırmak zorunda, dolayısıyla bir düzenleme asla yarı yolda etkili olamaz.
+   *(Gövde bilinçli olarak girintilenmedi: heredoc sonlandırıcıları sütun 0'da
+   olmak zorunda — ilk denemede tam bu yüzden script bozuldu.)*
+
+4. **`resume_autopilot.sh`.** Çalışan `add_subsets.sh` düzenlenemeyeceği için —
+   sorunu yaratan şey tam olarak buydu — autopilot o bir tur boyunca bekletildi.
+   Desen **sabitlenmiş** (`^bash /path/add_subsets.sh`): sabitlenmemiş
+   `pgrep -f "bash .*add_subsets.sh"` bu durumu incelemek için kullanılan
+   kabuk komutlarını da eşleştirip sonsuza kadar beklerdi.
+
+### 16.6 Sonuç — nihai durum doğru
+
+`add_subsets.sh` fazladan bir restart turuna rağmen doğru bitirdi:
+
+```
+description.json  379,614 eğitim görüntüsü   (subset 0+1+2 — recipe'nin tam spec'i)
+description_val.json  512 ayrık doğrulama
+diskte              384,795 jpg
+train_*.tar.gz      doğrulanmış extraction sonrası silindi
+dört koşu da        son epoch'larından devam etti
+```
+
+**Alınan ders:** çalışan bir script asla yerinde düzenlenmez. Düzenlenecekse ya
+önce durdurulur, ya yeni bir dosyaya yazılıp atomik olarak `mv` edilir, ya da
+gövdesi baştan bir fonksiyona sarılır.
