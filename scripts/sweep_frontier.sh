@@ -20,7 +20,19 @@ GPU=${2:-4}
 STEPS=${3:-1500}
 shift 3 2>/dev/null || shift $#
 BETAS=("$@")
-[ ${#BETAS[@]} -eq 0 ] && BETAS=(0 10 25 50 100)
+# Log-spaced over four decades, deliberately wide.
+#
+# beta has to be compared against w_image * (how much worse a shallow exit is),
+# and that second factor MOVES DURING TRAINING. Measured on the epoch-0
+# checkpoint of e3: exits were 8.5 dB apart, L_image for a shallow exit was ~7x
+# the deepest, so w_image*dL ~ 150 while beta*dC at beta=25 was only ~11 --
+# every tile went to the deepest exit and the sweep reported 0% saving at every
+# beta. Not a bug: at epoch 0 routing shallow really is that bad. But a sweep
+# that returns the same trivial point everywhere measures nothing.
+#
+# Late in training the exits converge, dL shrinks, and the interesting region
+# moves down to small beta. So the range must span both regimes.
+[ ${#BETAS[@]} -eq 0 ] && BETAS=(0 25 100 400 1600 6400)
 
 ROOT="$HOME/FLEX-UF"
 PY="$ROOT/.venv/bin/python"

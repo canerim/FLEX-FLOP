@@ -73,12 +73,12 @@ PY
             marker="$dir/.frontier_done_$(basename "$ck" .pth.tar)"
             [ -e "$marker" ] && continue
             log "$tag: measuring frontier on $(basename "$ck")"
-            bash "$ROOT/scripts/sweep_frontier.sh" "$ck" "${GPU[$tag]}" 1000 0 25 100 \
+            bash "$ROOT/scripts/sweep_frontier.sh" "$ck" "${GPU[$tag]}" 800 0 100 400 1600 6400 \
                 >> "$dir/frontier.log" 2>&1
             touch "$marker"
             log "$tag: frontier done -> $dir/frontier_$(basename "$ck" .pth.tar)/frontier.tsv"
             tail -5 "$dir/frontier_$(basename "$ck" .pth.tar)/frontier.tsv" >> "$LOG" 2>/dev/null
         done
     done
-    sleep 600   # 10 minutes, as asked
+    sleep 300   # 5 minutes
 done
