@@ -1006,3 +1006,58 @@ dört koşu da        son epoch'larından devam etti
 **Alınan ders:** çalışan bir script asla yerinde düzenlenmez. Düzenlenecekse ya
 önce durdurulur, ya yeni bir dosyaya yazılıp atomik olarak `mv` edilir, ya da
 gövdesi baştan bir fonksiyona sarılır.
+
+---
+
+## 17. Router'ın körlüğü çözüldü — sinyaller gövdeden okunuyor
+
+### 17.1 Sorun (§15.5'ten)
+
+Headroom gerçekti (eşit kalitede +13.6 puan) ama router'ın dört elle yapılmış
+sinyali oracle ile |r| < 0.1 korele idi. Girdileri göremediği bir şeyi router
+sömüremez.
+
+### 17.2 Aday arama — `scripts/signal_search.py`
+
+Elle sinyal uydurmak yerine **codec'in kendi makinesinden** okumayı denedim.
+Ölçüm (e1, epoch 1, τ=0.3 dB, 384 tile, oracle seçimine karşı):
+
+| sinyal | r | Spearman | maliyet |
+|---|---:|---:|---|
+| **stem_max** | **+0.440** | +0.412 | bedava |
+| scales_max | +0.336 | +0.333 | bedava |
+| stem_energy | +0.319 | +0.314 | bedava |
+| stem_std | +0.317 | +0.316 | bedava |
+| y_energy | +0.310 | +0.300 | bedava |
+| s1 rate-surrogate (eski) | +0.206 | +0.238 | — |
+| s3 gradient (eski) | +0.111 | +0.107 | — |
+| s2 sparsity (eski) | −0.103 | +0.101 | — |
+
+### 17.3 Neden gövde sinyalleri daha iyi — ve neden bedava
+
+**Daha iyi, çünkü yapısal:** oracle "decoder bu tile'a ne yapıyor" sorusudur.
+Gövde çıktısı decoder'ın **kendi ara durumu**; ham latent ise ondan bir dönüşüm
+uzakta. Bir soruyu, cevabına bir adım daha yakın bir yerden sormak.
+
+**Bedava, çünkü zaten hesaplanıyor:** j-split altında açılış upsample'ı ve grup
+0..j−1 **her tile için tam kare** çalışıyor — çıkış nerede olursa olsun.
+Yönlendirme kararının verilmesi gereken anda gövde zaten bellekte. `scales_hat`
+de entropi decode'unun çıktısı, o da her koşulda hesaplanıyor. Router yolu
+%0.009'da kalıyor.
+
+### 17.4 Sonuç — router ilk kez yönlendiriyor
+
+200 adımlık router, e1'in epoch-1 checkpoint'i, β=25:
+
+```
+önce (latent sinyalleri):  exit_share [0, 0, 0, 0, 0, 6144]   ← sabit fonksiyon
+sonra (gövde sinyalleri):  exit_share [13, 16, 9, 2, 12, 12]  ← altı çıkış da kullanımda
+                           tasarruf %36.28   kayıp 0.1625 dB
+```
+
+Aynı kalitede uniform decoder ~%20 veriyor (§15.4 tablosu). Router artık
+headroom'un anlamlı bir kısmını gerçekten alıyor.
+
+**Uyarı:** 200 adımlık bir router ve hareket halindeki bir checkpoint — ön
+sonuç. Ama mekanizma artık çalışıyor; önceki durumda hiçbir β değeri
+yönlendirme üretmiyordu.

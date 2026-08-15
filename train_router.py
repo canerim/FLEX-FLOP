@@ -60,9 +60,9 @@ from flexuf.cost import exit_costs, saving  # noqa: E402
 from flexuf.model import FlexUFIntra  # noqa: E402
 from flexuf.router.losses import router_objective  # noqa: E402
 from flexuf.router.router import (  # noqa: E402
+    N_STEM_SIGNALS,
     ExitRouter,
-    latent_tiles_with_halo,
-    tile_signals,
+    stem_signals,
 )
 
 
@@ -132,10 +132,20 @@ def per_tile_mse(net, x, qp, cfg):
         per_exit.append(t)
     mses = torch.stack(per_exit, dim=1)              # [P, K]
 
-    y_hat, _ = net.latent_of(x, qp)
-    tiles = latent_tiles_with_halo(y_hat, cfg)
+    # Signals come from the SHARED STEM, not the raw latent: measured about
+    # twice as predictive of the oracle (stem_max r=+0.440 vs the best latent
+    # statistic at +0.206), and free, because under a j-split the stem runs
+    # full-frame for every tile anyway. See scripts/signal_search.py.
+    y_hat, _, aux = net._encode_to_latent(x, qp)
+    scales = aux["scales_hat"]
+    if scales.shape[1] != y_hat.shape[1]:
+        scales = scales[:, : y_hat.shape[1]]
+    stem = net.dec.upsample(y_hat)
+    for g in range(cfg.split_depth):
+        stem = net.dec.groups[g](stem)
+    sig = stem_signals(stem, y_hat, scales, cfg)
     qp_t = qp.long().repeat_interleave(nh * nw)
-    return mses, tiles, qp_t
+    return mses, sig, qp_t
 
 
 def main(argv):
@@ -154,7 +164,7 @@ def main(argv):
     for p in net.parameters():
         p.requires_grad_(False)
 
-    router = ExitRouter(cfg.num_exits).to(device)
+    router = ExitRouter(cfg.num_exits, n_signals=N_STEM_SIGNALS).to(device)
     opt = torch.optim.Adam(router.parameters(), lr=args.lr)
     costs = exit_costs(cfg, halo_scope="head").to(device)
 
@@ -180,9 +190,7 @@ def main(argv):
     t0 = time.time()
     for step, batch in enumerate(loader):
         x, qp = batch[0].to(device), batch[-2].to(device)
-        mses, tiles, qp_t = per_tile_mse(net, x, qp, cfg)
-
-        sig = tile_signals(tiles)
+        mses, sig, qp_t = per_tile_mse(net, x, qp, cfg)
         probs = router.probabilities(sig, qp_t)
         obj = router_objective(
             mses, probs, costs,

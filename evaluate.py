@@ -57,7 +57,7 @@ from flexuf.cost import exit_costs, saving  # noqa: E402
 from flexuf.losses import psnr_from_mse  # noqa: E402
 from flexuf.backbone.warmstart import remap_ladder_to_stock  # noqa: E402
 from flexuf.model import FlexUFIntra  # noqa: E402
-from flexuf.router.router import ExitRouter, latent_tiles_with_halo, tile_signals  # noqa: E402
+from flexuf.router.router import N_STEM_SIGNALS, ExitRouter, stem_signals  # noqa: E402
 
 
 @torch.no_grad()
@@ -112,11 +112,17 @@ def evaluate(net, router, loader, cfg, device, qp_list):
             acc_bpp += out["bpp"].double().sum().cpu().item()
 
             if router is not None:
-                y_hat, _ = net.latent_of(x, qp)
-                tiles = latent_tiles_with_halo(y_hat, cfg)
-                nt = tiles.shape[0] // B
+                y_hat, _, aux = net._encode_to_latent(x, qp)
+                sc = aux["scales_hat"]
+                if sc.shape[1] != y_hat.shape[1]:
+                    sc = sc[:, : y_hat.shape[1]]
+                st = net.dec.upsample(y_hat)
+                for g in range(cfg.split_depth):
+                    st = net.dec.groups[g](st)
+                sig = stem_signals(st, y_hat, sc, cfg)
+                nt = sig.shape[0] // B
                 qp_t = qp.long().repeat_interleave(nt)
-                em = router.assign(tile_signals(tiles), qp_t)
+                em = router.assign(sig, qp_t)
                 share += torch.bincount(em, minlength=K).cpu()
 
                 # decode each frame with its own tile map
@@ -187,7 +193,7 @@ def main(argv):
     router = None
     if a.router:
         rk = torch.load(a.router, map_location="cpu", weights_only=False)
-        router = ExitRouter(cfg.num_exits).to(device).eval()
+        router = ExitRouter(cfg.num_exits, n_signals=N_STEM_SIGNALS).to(device).eval()
         router.load_state_dict(rk["router"])
 
     ds = ImageFolder(a.dataset, a.crop, a.crop, QP_LEVELS,
