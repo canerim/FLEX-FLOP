@@ -71,7 +71,12 @@ if rows:
     # Same two-axis judgement as status.sh: a small spread is only bad if the
     # deepest exit is also bad. Shallow exits catching a GOOD deepest exit is
     # the result we are after, not a failure.
-    if deep < 20:   flag = "ANCHOR-WEAK"
+    if len(r['psnr_per_exit']) == 1:
+        # The single-exit baseline has no ladder to differentiate; spread is 0
+        # by construction. It exists to answer a different question: does adding
+        # exits cost the anchor anything versus plain UF trained identically?
+        flag = "BASELINE"
+    elif deep < 20: flag = "ANCHOR-WEAK"
     elif sp < 0.05: flag = "EXITS-INDISTINGUISHABLE"
     elif sp < 2.0:  flag = "GOOD"
     else:           flag = "OK"
@@ -106,9 +111,29 @@ PY
                 touch "$marker"
                 continue
             fi
-            log "$tag: measuring frontier on $(basename "$ck")"
-            bash "$ROOT/scripts/sweep_frontier.sh" "$ck" "${GPU[$tag]}" 800 0 10 30 100 300 1000 3000 \
-                >> "$dir/frontier.log" 2>&1
+            # Gate the expensive sweep on a cheap diagnostic.
+            #
+            # The sweep trains seven routers (7 x 800 steps); the oracle
+            # diagnostic is a single pass. And the sweep is pointless whenever
+            # the oracle is constant: if no per-tile assignment beats a uniform
+            # depth at equal quality, every router it trains collapses onto one
+            # exit and it reports the same trivial point seven times. Measured on
+            # e3's epoch-0 checkpoint: exit 0 cost +12.09 dB per tile, the oracle
+            # put 100% of tiles on the deepest exit, headroom 0.0pp at every tau.
+            # So diagnose first, and sweep only when there is something to find.
+            log "$tag: oracle diagnostic on $(basename "$ck")"
+            diag="$dir/oracle_$(basename "$ck" .pth.tar).txt"
+            "$ROOT/.venv/bin/python" "$ROOT/scripts/oracle_diagnostic.py" \
+                --ckpt "$ck" --device "${GPU[$tag]}" --batches 8 > "$diag" 2>&1
+            grep -E "VERDICT" "$diag" >> "$LOG" 2>/dev/null
+
+            if grep -q "VERDICT: headroom exists" "$diag" 2>/dev/null; then
+                log "$tag: headroom found -> measuring frontier"
+                bash "$ROOT/scripts/sweep_frontier.sh" "$ck" "${GPU[$tag]}" 800 0 10 30 100 300 1000 3000 \
+                    >> "$dir/frontier.log" 2>&1
+            else
+                log "$tag: no headroom at this checkpoint, skipping the sweep"
+            fi
             touch "$marker"
             log "$tag: frontier done -> $dir/frontier_$(basename "$ck" .pth.tar)/frontier.tsv"
             tail -5 "$dir/frontier_$(basename "$ck" .pth.tar)/frontier.tsv" >> "$LOG" 2>/dev/null

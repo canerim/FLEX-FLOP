@@ -857,3 +857,78 @@ Bu sıradaki iş. Muhtemel yönler (henüz denenmedi, ölçülecek):
   doğrudan zorluk kestirebilir — router bütçesi decode'un %0.009'u, yani yer var
 - oracle'ı doğrudan taklit eden bir denetimli kayıp (FLEX'in yaptığı), ClassSR'ın
   dolaylı yumuşak-karışım gradyanı yerine
+
+---
+
+## 16. Değerlendirme eğitim verisi üzerindeydi — held-out ayrım kuruldu
+
+`evaluate.py` `description.json`'ın ilk N görüntüsünü alıyordu; o liste eğitim
+listesiydi. Yani her rapor edilecek PSNR modelin zaten oturttuğu veriden
+ölçülecekti. Bir codec için bu bir sınıflandırıcı kadar yıkıcı değil
+(ezberlenecek etiket yok), ama **"X dB'de %Y hesap tasarrufu" bir genelleme
+iddiası** ve eğitim verisinden ölçülen bir sayı onu taşıyamaz. FLEX de tam bu
+yüzden sabit 192 kareyi ayırıp asla listeler arası kıyas yapmamıştı.
+
+`prepare_openimages.py` artık deterministik bir dilim ayırıyor (sıralı listenin
+her 400.'sü, 512 görüntü) ve **eğitim listesinden çıkarıyor**. Deterministik
+olması şart: üç deney ve baseline aynı seti görsün, ve subset 1-2 eklenince set
+değişmesin diye. Rastgele bölme bu kıyaslanabilirliği bozardı.
+Doğrulandı: eğitim 269,478 / held-out 512 / **çakışma 0**.
+
+### 16.1 Yan bulgu: ilk dataset listesi eksikmiş
+
+Yeniden tarama **273,228** dosya buldu, ilk tarama **156,541**. İlk
+`description.json`, extraction tamamlanmadan yazılmış. Yani üç koşu da mevcut
+verinin **%57'siyle** eğitiliyormuş.
+
+Diskteki gerçek durum doğrulandı (273,228 jpg, 82 GB açılmış, 45.9 GiB arşivden).
+Koşular durdurulup checkpoint'lerinden yeniden başlatıldı; artık 269,478 görüntü
+görüyorlar. Maliyet: kısmi epoch kaybı (~3 saat / 7 gün). Daha fazla veriyle ve
+temiz bir genelleme iddiasıyla devam etmek buna değer.
+
+---
+
+## 17. ❗ Asıl soru soruldu: yönlendirilecek bir şey var mı?
+
+Frontier süpürmesi **her patch'i aynı çıkışa yollayan** router'lar üretiyordu —
+β değişince sadece hangi çıkış olduğu değişiyordu. Bu yönlendirme değil, **sabit
+fonksiyon**. Ve projenin dayandığı önermeyi geçersiz kılar: ClassSR çalışıyor
+çünkü alt-görüntüler zorlukta farklılaşıyor.
+
+`scripts/oracle_diagnostic.py` bunu üç soruyla sınıyor: (1) oracle'ın kendisi
+değişiyor mu, (2) headroom kaç puan, (3) sinyaller oracle'ı görebiliyor mu.
+
+**e3'ün epoch-0 checkpoint'inde sonuç (2048 patch, qp63):**
+
+| exit | patch başına ceza | kazanç |
+|---:|---:|---:|
+| 0 | **+12.088 dB** ± 2.10 | %73.6 |
+| 2 | +10.081 dB ± 1.95 | %43.8 |
+| 4 | +5.799 dB ± 1.82 | %14.0 |
+| 5 | 0.000 | %0 |
+
+Oracle her τ'da **sabit**: patch'lerin %100'ü en derin çıkışta. Headroom her
+τ'da **+0.0pp**. Sinyaller oracle ile korelasyonsuz — çünkü korelasyon
+kurulacak bir varyasyon yok.
+
+**Verdict: bu checkpoint'te headroom yok** — ve teşhis nedenini de söylüyor:
+epoch 0'da α=0 olduğu için sığ çıkışlar hiç eğitilmedi, adapter'ları sıfır-init'te
+durdu, özellikleri head için hiç şekillenmedi. α rampalandıktan sonra tekrar
+bakılmalı. Eğitim logları bunu destekliyor: epoch 1-2'de sığ çıkış 0.8 dB'ye
+kadar yaklaştı.
+
+**Autopilot'a kapı eklendi:** önce ucuz teşhis (tek geçiş), sadece
+"headroom exists" çıkarsa pahalı süpürme (7 router × 800 adım). Oracle sabitken
+süpürme yedi kez aynı önemsiz noktayı rapor ederdi — GPU'yu boşa yakar.
+
+---
+
+## 18. Tek çıkışlı baseline eklendi
+
+`runs/baseline_singleexit` — K=1, adapter yok, **42,179,328 parametre** = birebir
+stok DMCI, aynı recipe, aynı veri, aynı tohum düzeni.
+
+**Neden gerekli:** "sığ çıkış tam decode'un 0.9 dB'si içinde" demek yetmiyor;
+o *tam decode* düz UF kadar iyi mi? Çok çıkışlı eğitim çıpaya bir bedel
+ödetiyorsa, tüm frontier düşmüş bir referansa göre çizilmiş olur. Baseline bu
+soruyu cevaplayan tek şey.
