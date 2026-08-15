@@ -1376,3 +1376,94 @@ eğitilmiş adapter'ları bekliyor. Stage A bitince ölçülecek.
 da eşleştirip onu öldürdü, bu yüzden bu kayıt ilk seferde yazılamadı. Aynı
 sınıf hata `resume_autopilot.sh`'te de çıkmıştı ve orada desen sabitlenerek
 (`^bash /path/...`) çözülmüştü. `pkill -f` her zaman sabitlenmeli.
+
+---
+
+## 24. Dikiş azaltma — üç mekanizma, hepsi ölçüldü
+
+Hata haritaları (§ `results/samples`) en derin çıkışta hatanın **sadece tile
+sınırlarından oluşan bir ızgara** olduğunu gösterdi. qp63'te en sığ çıkışın
+toplam kaybının %80'i buradan geliyor. Yani baskın terim derinlik değil, artefakt.
+
+### 24.1 Patch'li yoldan eğitim — çıkarımda bedava
+
+**Sorun:** eğitim `forward_all_exits` çağırıyordu, o da **tam kare** decode ediyor.
+Hiçbir tile sınırı eksik komşuya karşı konvolve edilmiyordu. Adapter'lar dikişsiz
+bir sinyale uyduruluyor, sonra çıkarımda dikişli bir dünyaya sokuluyordu.
+
+**Çözüm:** FLEX'in Stage A hedefi — adım başına **tek** decode, patch başına
+**rastgele** çıkış:
+```
+ch_p ~ U{j..K-1}, her adımda yeniden çekilir
+L = || decode(ŷ, ch) − x ||²
+```
+Neden rastgele: deployment kareyi hiçbir zaman tek derinlikte decode etmiyor,
+**karışık derinlikli** bir kare üretiyor — çıkış 2'deki patch, çıkış 5'tekinin
+yanında duruyor ve head o süreksizliği de birleştiriyor. Her çıkışı ayrı ayrı
+uniform decode etmek hiç oluşmayan bir durumu eğitiyordu.
+
+Ölçülen maliyet: tam kare 1.0×, her çıkış ayrı patch'li **9.0×**, rastgele
+derinlik tek decode **2.12×**. (İlk implementasyonum görüntü başına döngü
+yapıyordu ve 4.9× idi; decoder zaten batch'i işliyor, tek çağrıya inince 2.12×.)
+
+### 24.2 Replicate dolgu — %0 maliyet
+
+DepthConvBlock'taki tek uzamsal operatör 3×3 depthwise, ve j-split altında tile
+sınırında ötesi yok. Stok dolgu **sıfır** — komşunun gerçek değeri için kötü bir
+tahmin. Kenar değerini kopyalamak bedava ve gerçeğe çok daha yakın.
+
+Ölçüm (referans her zaman **stok UF tam kare decode**):
+
+| qp | zeros | replicate | kazanç |
+|---:|---:|---:|---:|
+| 0 | 0.1306 | 0.1333 | −0.003 dB |
+| 32 | 0.3521 | 0.2960 | +0.056 dB |
+| 63 | 0.8727 | **0.6315** | **+0.241 dB** |
+
+Yüksek oranda dikişin %28'i siliniyor, düşük oranda gürültü içinde. Sadece
+per-tile bölümde uygulanıp geri alınıyor, yani `forward_full` bit-exact kalıyor.
+
+**❗ Bu ölçümde hata yaptım ve düzelttim.** İlk versiyonu replicate'i **tüm**
+bloklara uygulamıştı — referans tam kare decode de kaymıştı. İki tarafı birden
+kaydırınca aradaki fark küçülüyor ve iyileşme şişiyor: "+0.794 dB" çıkmıştı,
+gerçeği +0.241. **Referans her zaman stok UF olmalı.** Bu, §19'daki maliyet
+modeli hatasıyla aynı sınıf: iyimser bir sayı ve onu kontrol etmeye zorlayan
+hiçbir şey yok.
+
+### 24.3 Dikiş onarım modülü — %0.95 maliyet
+
+```
+Repair(f) = f + PW_{C→C}( WSiLU( DW3×3(f) ) ),   PW sıfır-init
+```
+
+`unpatchify`'dan sonra, head'den önce, **tam karede**.
+
+**Neden orada:** dikiş uzamsal bir artefakt ve düzeltmek için tile sınırının
+**karşısını görebilen** bir 3×3 gerekiyor. Per-tile trunk'ın içinde hiçbir kernel
+bunu yapamaz — halo'nun satın alacağı şey buydu ve pahalı kısımda 2.25× maliyetle
+kazancı tersine çeviriyordu. Canvas birleştikten sonra tek geçiş aynı erişimi
+sabit ~%1'e veriyor.
+
+| varyant | maliyet |
+|---|---:|
+| sadece depthwise | %0.022 |
+| depthwise + 1×1 | **%0.951** |
+| (kıyas: bir per-tile trunk bloğu) | %7.45 |
+
+Sıfır-init, yani eğitilene kadar tam identity — hiçbir şeyi kötüleştiremez.
+
+**Maliyet modeline eklendi.** Kontrol +%1.1 ölçmüştü, model %0 diyordu ve %3
+toleransta geçiyordu. Sistematik eksik faturalama §19'daki şişik sayıların tam
+sebebiydi; şimdi faturalanıyor ve kontrol %0.25'e kadar uyuşuyor.
+
+### 24.4 Halo'nun yeni rolü — decode'da yok
+
+| yer | halo | gerekçe |
+|---|---|---|
+| per-tile trunk | **0** | 2.25× maliyet, kazancı tersine çeviriyor (§20.2) |
+| head | yok | zaten tam karede çalışıyor |
+| adapter'lar | yok | 1×1, alıcı alanı yok |
+| **router girdisi** | **4 latent px** | maliyeti %0.009 — bedava, ve tile istatistiklerini sınır artefaktından temiz tutuyor |
+
+Yani halo artık bir kalite parametresi değil; tek işlevi router'ın temiz veri
+görmesi. Dikiş, yukarıdaki üç mekanizmayla ele alınıyor.
