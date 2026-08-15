@@ -1110,3 +1110,66 @@ engelle" terimi burada aynı zamanda **tasarrufun kaynağı**.
 - **Tek deney (e1).** e2/e3 ile karşılaştırma (j ve tile boyutu eksenleri) henüz yok.
 - **Baseline karşılaştırması eksik.** Ortak eğitimin çıpaya maliyeti hâlâ ölçülmedi
   (baseline epoch 0'da). Bu olmadan "0.19 dB kayıp" mutlak değil, göreli bir sayı.
+
+---
+
+## 19. ❗ Muhasebe hatası — raporladığım tasarruf sayıları şişikti
+
+### 19.1 İmkânsızlığı kovalamak
+
+Frontier probe'da router 0.278 dB'de %56.36 verdi. Ama Lagrange-optimal üst
+sınır aynı kalitede daha azını gösteriyordu. **Router üst sınırı aşamaz** —
+demek ki bir taraf yanlıştı.
+
+İki hata birden çıktı.
+
+### 19.2 Hata 1: yanlış üst sınır
+
+İlk "oracle"ım τ-eşikliydi: *her patch τ dB içinde kalsın*. Bu bir **kısıt
+sağlayıcı**, (ortalama dB, tasarruf) düzleminin Pareto sınırı değil — bir
+patch'in biraz daha ileri gitmesi başka yerde çok hesap kazandıracaksa bile
+reddediyor.
+
+**Gerçek sınır:** her patch için bağımsız olarak `mse_k + λ·cost_k`'yı
+minimize eden k'yı seç, λ'yı süpür. Patch'ler bağımsız ve maliyet toplanabilir
+olduğu için bu süpürme **tam Pareto sınırını** çiziyor. Eklendi.
+
+### 19.3 Hata 2 — asıl olan: maliyet modeli decoder'la uyuşmuyordu
+
+`forward()` içinde `exit_map.clamp(min=j)` var: j=2'de bir patch **en erken
+grup 2'yi çalıştırdıktan sonra** çıkabiliyor.
+
+Ama maliyet modeli `k_eff = max(k, j-1)` kullanıyordu — çıkış 0 veya 1 atanan
+patch'i "split'te çıkmış" sayıp **grup j'nin maliyetini hiç yazmıyordu**.
+
+Router β=100'de tüm patch'lere çıkış 0 verdi. Fatura: %58.70 tasarruf.
+Gerçek: %43.79. **Hiç çalıştırılmayan bir decode için indirim yazılmış.**
+
+Düzeltme: maliyet modeli decoder'ın clamp'ini birebir uyguluyor
+(`k_run = max(k, j)`).
+
+### 19.4 Düzeltilmiş frontier (e1, epoch 2)
+
+| β | raporlanmış | **doğru** | kayıp |
+|---:|---:|---:|---:|
+| 0 | %42.65 | **%33.58** | 0.1894 dB |
+| 10 | %45.84 | **%37.55** | 0.2240 dB |
+| 30 | %56.36 | **%42.24** | 0.2777 dB |
+| 100 | %58.70 | **%43.79** | 0.2893 dB |
+
+j=2'de gerçek tavan **%43.79**.
+
+**Ders:** maliyet modeli ile çalıştırılan kod ayrı yerlerde yaşıyorsa
+ayrışırlar, ve ayrıştıklarında hata **her zaman** iyimser yönde olur — çünkü
+iyimser sayı sorgulanmaz. Kontroller mimari eşdeğerliği doğruluyordu
+(`max|Δ|=0`) ama *maliyet* eşdeğerliğini doğrulayan bir kontrol yoktu.
+
+### 19.5 Ortaya çıkan tasarım kusuru: ulaşılamaz çıkışlar
+
+j=2'de çıkış 0, 1, 2 **özdeş** — üçü de grup 2'ye kadar çalışıyor. Router'ın 6
+çıktısı vardı ama 3'ü aynı şeyi ifade ediyordu, ve ClassSR'ın Average-Loss'u
+(üniform dağılıma iten terim) kütlenin üçte birini **var olmayan ayrımlara**
+harcıyordu.
+
+Düzeltme: `min_exit=j` ile split'in altındaki logit'ler maskelendi. Denge terimi
+artık gerçekten farklı olan çıkışlar üzerinde çalışıyor.

@@ -167,6 +167,29 @@ def main() -> int:
                 return s0 + t * (s1 - s0)
         return uni[-1][1]
 
+    # The TRUE upper bound is the Lagrangian-optimal per-tile allocation.
+    #
+    # The tau-thresholded oracle above ("cheapest exit whose penalty is within
+    # tau") is a heuristic, not the Pareto frontier of (mean dB, saving). It is
+    # a *constraint* satisfier: it refuses any tile above tau even when letting
+    # one tile go slightly further would buy a lot of compute elsewhere. A
+    # router minimising a Lagrangian is not bound by that and can legitimately
+    # beat it — which is exactly what happened, the measured router landing at
+    # 56.36% / 0.278 dB against the tau-oracle's 55.9% / 0.351 dB. Reporting the
+    # tau-oracle as "the upper bound" would have been wrong.
+    #
+    # The real bound: for each tile independently choose k minimising
+    # mse_k + lam * cost_k, and sweep lam. Because the tiles are independent and
+    # the cost is additive, that sweep traces the exact Pareto frontier.
+    print(f"\nTRUE UPPER BOUND: Lagrangian-optimal per-tile allocation")
+    print(f"  {'lambda':>10} {'mean dB':>9} {'saving':>9}")
+    c = costs.to(mses.device)
+    for lam in (0.0, 1e-5, 3e-5, 1e-4, 3e-4, 1e-3, 3e-3, 1e-2, 3e-2, 1e-1):
+        k = (mses + lam * c[None, :]).argmin(dim=1)
+        got = db.gather(1, k[:, None]).mean().item()
+        sv = 100 * (1 - c[k].mean().item())
+        print(f"  {lam:>10.0e} {got:>9.3f} {sv:>8.1f}%")
+
     print(f"\nHEADROOM: routing vs a uniformly shallower decoder, at EQUAL quality")
     print(f"  {'tau':>6} {'achieved dB':>12} {'oracle':>9} {'uniform':>9} {'gain':>9}")
     for tau in (0.05, 0.1, 0.2, 0.3, 0.5, 1.0, 2.0):

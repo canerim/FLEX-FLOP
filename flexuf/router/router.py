@@ -102,9 +102,19 @@ class ExitRouter(nn.Module):
     show up in the cost accounting it is supposed to be optimising.
     """
 
-    def __init__(self, num_exits: int, n_signals: int = 4, hidden: int = 32):
+    def __init__(self, num_exits: int, n_signals: int = 4, hidden: int = 32,
+                 min_exit: int = 0):
         super().__init__()
         self.num_exits = num_exits
+        # Exits below the split are unreachable: forward() does
+        # exit_map.clamp(min=j), so a tile "assigned" exit 0 under j=2 still runs
+        # group 2 and costs exactly what exit 2 costs. Leaving those logits live
+        # gives the router three identical options and lets ClassSR's
+        # Average-Loss — which pushes probability mass toward a UNIFORM spread —
+        # spend a third of that mass on distinctions that do not exist. Masking
+        # them makes the balance term operate over the exits that are really
+        # different.
+        self.min_exit = min_exit
         # +1 input for the normalised QP: the same tile needs more decode at high
         # rate than at low rate, because the patch penalty grows with rate
         # (1.02 dB at qp30 vs 2.48 dB at qp63, FLEX measurement).
@@ -122,7 +132,11 @@ class ExitRouter(nn.Module):
         q = qp.reshape(-1, 1).float() / 63.0
         if q.shape[0] != signals.shape[0]:
             q = q.expand(signals.shape[0], 1)
-        return self.mlp(self.norm(torch.cat([signals, q], dim=1)))
+        logits = self.mlp(self.norm(torch.cat([signals, q], dim=1)))
+        if self.min_exit > 0:
+            logits = logits.clone()
+            logits[:, : self.min_exit] = float("-inf")
+        return logits
 
     def probabilities(self, signals, qp, tau: float = 1.0) -> torch.Tensor:
         return F.softmax(self.forward(signals, qp) / tau, dim=1)

@@ -164,7 +164,7 @@ def main(argv):
     for p in net.parameters():
         p.requires_grad_(False)
 
-    router = ExitRouter(cfg.num_exits, n_signals=N_STEM_SIGNALS).to(device)
+    router = ExitRouter(cfg.num_exits, n_signals=N_STEM_SIGNALS, min_exit=cfg.split_depth).to(device)
     opt = torch.optim.Adam(router.parameters(), lr=args.lr)
     costs = exit_costs(cfg, halo_scope="head").to(device)
 

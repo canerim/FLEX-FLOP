@@ -123,7 +123,18 @@ def exit_costs(
 
     costs = []
     for k in range(K):
-        blocks_run = (k + 1) * b
+        # Charge what the DECODER actually runs. forward() does
+        # exit_map.clamp(min=j), so a tile nominally assigned an exit shallower
+        # than j still runs group j before leaving. The cost model must apply the
+        # same clamp or it bills for a decode that never happens.
+        #
+        # This was wrong: k_eff = max(k, j-1) let an exit below j be charged as
+        # "left at the split", omitting group j entirely. At j=2 a router that
+        # assigned exit 0 to every tile was billed 58.70% saved when the real
+        # figure is 42.9% — and that inflated number is what made the router
+        # appear to beat the Lagrangian Pareto bound, which is impossible.
+        k_run = max(k, j) if j < K else k
+        blocks_run = (k_run + 1) * b
         shared_blocks = min(blocks_run, j * b)
         tiled_blocks = blocks_run - shared_blocks
         mult = halo_multiplier(cfg, tiled_blocks, halo_scope)
@@ -133,7 +144,7 @@ def exit_costs(
             + tiled_blocks * per_block * mult
             + SHARE_HEAD * head_halo_multiplier(cfg)
         )
-        if k < K - 1:
+        if k_run < K - 1:
             c += adapter * (mult if halo_scope != "head" else 1.0)
         costs.append(c)
     return torch.tensor(costs, dtype=torch.float32)
@@ -161,7 +172,8 @@ def frame_relative_cost(
 
     suffix = []
     for k in range(K):
-        k_eff = max(k, j - 1)
+        # Same clamp as forward(): a tile cannot leave before group j has run.
+        k_eff = max(k, j) if j < K else k
         tiled_blocks = max((k_eff + 1) * b - j * b, 0)
         mult = halo_multiplier(cfg, tiled_blocks, halo_scope)
         c = tiled_blocks * per_block * mult

@@ -193,7 +193,7 @@ def main(argv):
     router = None
     if a.router:
         rk = torch.load(a.router, map_location="cpu", weights_only=False)
-        router = ExitRouter(cfg.num_exits, n_signals=N_STEM_SIGNALS).to(device).eval()
+        router = ExitRouter(cfg.num_exits, n_signals=N_STEM_SIGNALS, min_exit=cfg.split_depth).to(device).eval()
         router.load_state_dict(rk["router"])
 
     ds = ImageFolder(a.dataset, a.crop, a.crop, QP_LEVELS,
