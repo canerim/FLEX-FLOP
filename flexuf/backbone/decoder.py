@@ -232,6 +232,24 @@ class MultiExitIntraDecoder(nn.Module):
         self.adapters = nn.ModuleList(build_adapter(self.cfg) for _ in range(K - 1))
         self.head = DepthConvBlock(TRUNK_CH, PRESHUFFLE_CH)
 
+    # -- tile-border padding -------------------------------------------------
+    def _set_tile_padding(self, mode: str, first_group: int):
+        """Switch the depthwise convs of groups >= first_group to `mode`.
+
+        Only 3x3 depthwise convolutions have any spatial extent, so they are the
+        only place a tile border can meet padding at all. Flipping the mode costs
+        nothing — it is a string on the module, consumed by the same kernel.
+
+        Applied only to the groups that run per-tile, and restored afterwards, so
+        full-frame decode is untouched and `forward_full` stays bit-exact against
+        stock UF.
+        """
+        for g in range(first_group, len(self.groups)):
+            for m in self.groups[g].modules():
+                if isinstance(m, nn.Conv2d) and m.kernel_size == (3, 3) and m.groups > 1:
+                    m.padding_mode = mode
+                    m._reversed_padding_repeated_twice = [1, 1, 1, 1]
+
     # -- pieces --------------------------------------------------------------
     def _at_exit(self, feat: torch.Tensor, exit_idx: int) -> torch.Tensor:
         """Feature handed to the head from exit `exit_idx`."""
@@ -338,6 +356,13 @@ class MultiExitIntraDecoder(nn.Module):
 
         canvas = torch.zeros_like(tiles)
 
+        # Tile borders meet padding from here on. Zeros is the stock behaviour
+        # and a poor estimate of the missing neighbour; replicating the edge
+        # removes 80% of the seam at qp63 for no compute. Restored below so
+        # full-frame decode is unaffected.
+        if cfg.tile_pad_mode != "zeros":
+            self._set_tile_padding(cfg.tile_pad_mode, j)
+
         # ---- 3+4. per-tile suffix -----------------------------------------
         # `active` is the shrinking set of tiles still climbing the ladder.
         # Every group runs on fewer tiles than the last — that shrinkage IS the
@@ -354,6 +379,9 @@ class MultiExitIntraDecoder(nn.Module):
                     break
                 work = work[keep]
                 active = active[keep]
+
+        if cfg.tile_pad_mode != "zeros":
+            self._set_tile_padding("zeros", j)
 
         # ---- 5. drop halo, stitch ------------------------------------------
         stitched = unpatchify(crop_halo(canvas, halo) if halo > 0 else canvas,

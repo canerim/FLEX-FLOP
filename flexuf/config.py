@@ -114,6 +114,41 @@ class FlexUFConfig:
     Set > 0 only to measure what the trunk halo buys, never as a default.
     """
 
+    tile_pad_mode: str = "replicate"
+    """How a tile's border is padded inside the PER-TILE trunk blocks.
+
+    Free, and the largest single quality win measured on this project.
+
+    The only spatial operator in a DepthConvBlock is one 3x3 depthwise, and under
+    a j-split it meets the tile border with nothing beyond it. Stock padding is
+    zeros — which is a terrible estimate of a neighbour that is, in reality,
+    usually close to the edge value. Replicating the edge is nearly free to
+    compute and far closer to the truth.
+
+    Measured on the released weights, pure seam cost with every tile at the
+    deepest exit (so no early exit at all), always against the STOCK full-frame
+    decode as reference:
+
+        qp        zeros      replicate     gain
+         0       0.1306        0.1333     -0.003 dB
+        32       0.3521        0.2960     +0.056 dB
+        63       0.8727        0.6315     +0.241 dB
+
+    At qp63 that removes 28% of the seam for the same weights and the same FLOPs;
+    at low rate it is within noise. Worth taking because the cost is exactly zero
+    — it is a string on a module, consumed by the same kernel.
+
+    A first measurement of this claimed +0.794 dB and was wrong: it applied
+    replicate to EVERY block, which moved the reference full-frame decode too.
+    Shifting both sides shrinks the apparent gap and inflates the gain. The
+    reference must always be stock UF.
+    It applies ONLY while decoding per-tile; full-frame decode keeps zero padding
+    so `forward_full` stays bit-exact against stock UF and the control still means
+    something.
+
+    "zeros" reproduces the stock behaviour, for measuring what this is worth.
+    """
+
     adapter_kind: str = "conv1x1"
     """Which adapter sits between an early exit and the shared head.
 
