@@ -671,3 +671,84 @@ kaybediyor, ve bu decoder hesabının %58.7'sini kurtarıyor.
 3. Yönlendirme henüz devrede değil. Eğer tüm çıkışlar eşit iyi kalırsa router'ın
    yapacak bir şeyi olmaz — o zaman katkı "yönlendirme" değil "eğitilmiş
    adapter'lı erken çıkış" olur. Bu da güçlü bir sonuç, ama farklı bir iddia.
+
+---
+
+## 14. İlk ölçülen sonuçlar (epoch 0 checkpoint)
+
+### 14.1 Saf patch'e-bölme maliyeti izole edildi — 0.143 dB
+
+Frontier sweep'in **β=0** kolu beklendiği gibi her patch'i en derin çıkışa
+yolladı (%0 tasarruf). Ama PSNR kaybı sıfır değil: **+0.143 dB**.
+
+Bu fark tasarruftan bağımsız — tamamen **j=2 split'in dikiş cezası**. Yani
+patch'lere bölmenin, hiçbir şey kazanmadan, ödediğimiz sabit bedeli.
+
+| | 64px tile'da ceza |
+|---|---:|
+| FLEX ölçümü, iyileştirmesiz (halo yok, per-patch head) | **2.484 dB** |
+| FLEX, 1px feature halo + full-frame head | ~0.054 dB |
+| **FLEX-UF, 2 latent px halo + full-frame head** | **0.143 dB** |
+
+Dikişin **%94'ü** siliniyor. §4.3'teki karar — halo'yu trunk'a değil router'a
+(bedava) ve head'e (ucuz) koymak — burada karşılığını veriyor: FLOP kazancı
+duruyor *ve* dikiş neredeyse yok.
+
+### 14.2 Referans eğrisi (e3, j=2, 64px, ckpt_epo0)
+
+Kontrol: en derin çıkış vs stok UF `max|Δ| = 0.0` ✅ — sayılar güvenilir.
+
+| çıkış | tasarruf | PSNR | tam decode'a fark |
+|---:|---:|---:|---:|
+| 5 | %0.0 | 28.43 | — |
+| 4 | %14.0 | 24.35 | −4.09 |
+| 3 | %28.9 | 21.81 | −6.62 |
+| 2 | %43.8 | 20.18 | −8.25 |
+| 1 | %58.7 | 18.98 | −9.45 |
+| 0 | %73.6 | 18.07 | −10.36 |
+
+Epoch 0'da merdiven çok ayrışık (10.4 dB aralık) — çünkü α=0 idi, sığ çıkışlar
+hiç eğitilmemişti. Epoch 1'de α=0.1 ile aralık 0.7 dB'ye indi. Yani sonraki
+checkpoint'lerde erken çıkışlar **çok daha ucuza** gelecek; bu eğri iyileşecek.
+
+### 14.3 Baseline eklendi — çünkü frontier tek başına yanıltıcı olabilir
+
+**Sorun:** frontier "bizim en derin çıkışımıza göre kaç dB kaybettik" ölçüyor.
+Ortak eğitim (Eq 6, α>0) en derin çıkışın kalitesini düşürüyorsa, frontier harika
+görünür ama mutlak kalite kötü olur. Klasik tuzak.
+
+**Çözüm:** `--num_exits 1 --split_depth 1` ile aynı kod yolundan bir baseline.
+K=1'de model tam olarak stok `IntraDecoder`, kayıp tam olarak `λ·mse + bpp`.
+Ölçülen parametre sayısı **42,179,328 / 0 adapter** — en başta ölçtüğüm stok
+`DMCI` sayısıyla birebir aynı. Yani tek değişken izole: çok-çıkışlı hedef.
+
+(Microsoft'un kendi `train_image.py`'ı Python 3.12 f-string sözdizimi kullandığı
+için 3.10'da koşmuyor; kendi scriptim K=1 ile aynı işi görüyor ve daha temiz bir
+ablation veriyor.)
+
+**Epoch 0 karşılaştırması** (eşleşmiş adımlar):
+
+| adım | baseline K=1 | e1 | e2 | e3 |
+|---:|---:|---:|---:|---:|
+| 200 | 16.35 | 16.29 | 14.88 | 16.49 |
+| 400 | 16.72 | 18.19 | 19.82 | 18.01 |
+| 600 | 19.42 | 19.06 | 19.31 | 18.95 |
+| 800 | 20.98 | 19.50 | 22.55 | 19.59 |
+
+Gürültü içinde aynı — ve bu **beklenen**: epoch 0'da α=0, yani çok-çıkışlı
+koşular da sadece en derin çıkışı eğitiyor. Eşleşmeleri warmup'ın doğru
+çalıştığının kanıtı, henüz ortak eğitimin maliyeti hakkında bir şey söylemiyor.
+Asıl test epoch 1-5.
+
+### 14.4 Teşhis düzeltildi — spread tek başına yanlış gösterge
+
+`status.sh` başlangıçta daralan spread'i "COLLAPSE RISK" diye işaretliyordu.
+Bu yanlış: daralan aralık **iki zıt** şey olabilir.
+- tüm çıkışlar aynı **vasat** kaliteye çöküyor → FLEX'in sıfırdan eğitim
+  başarısızlığı, yönlendirilecek bir şey yok, çıpa da kötü
+- sığ çıkışlar **iyi** bir en-derin-çıkışa yetişiyor → projenin tam istediği
+  sonuç, çünkü o zaman bir patch 12 bloktan 4'ünü çalıştırıp neredeyse hiç dB
+  kaybetmiyor
+
+Ayıran tek şey **çıpanın mutlak kalitesi**. Teşhis artık ikisine birden bakıyor
+ve baseline'la kıyaslıyor.
