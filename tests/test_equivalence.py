@@ -45,7 +45,10 @@ from flexuf.backbone.decoder import (  # noqa: E402
     patchify,
     unpatchify,
 )
-from flexuf.backbone.warmstart import load_into_ladder  # noqa: E402
+from flexuf.backbone.warmstart import (  # noqa: E402
+    load_into_ladder,
+    remap_ladder_to_stock,
+)
 from flexuf.config import LATENT_CH, TRUNK_CH, FlexUFConfig  # noqa: E402
 from flexuf.cost import exit_costs, saving  # noqa: E402
 
@@ -139,6 +142,34 @@ def test_mixed_depth_runs_and_is_cheaper():
     print(f"  mixed-depth decode runs            saving {100*s_mix:.1f}% vs {100*s_deep:.1f}%")
 
 
+def test_key_remap_is_a_bijection():
+    """ladder -> stock -> ladder must return exactly the original tensors.
+
+    The evaluation control loads a ladder's weights into a stock IntraDecoder to
+    compare them. If that remap silently drops or misplaces tensors, the control
+    compares against a partly-random network and either screams or — worse —
+    is "fixed" by loosening its tolerance. So the round-trip is asserted here.
+    """
+    from flexuf.backbone.warmstart import remap_decoder_state
+
+    cfg = FlexUFConfig()
+    stock = IntraDecoder()
+    original = stock.state_dict()
+
+    fwd, unknown = remap_decoder_state(original, cfg.blocks_per_exit)
+    assert not unknown, f"forward remap did not understand: {unknown[:5]}"
+    back = remap_ladder_to_stock(fwd, cfg.blocks_per_exit)
+
+    assert set(back) == set(original), (
+        f"round-trip changed the key set: "
+        f"missing {sorted(set(original) - set(back))[:3]}, "
+        f"extra {sorted(set(back) - set(original))[:3]}"
+    )
+    worst = max((back[k] - original[k]).abs().max().item() for k in original)
+    assert worst == 0.0, f"round-trip altered tensors: {worst}"
+    print(f"  key remap round-trip ({len(original)} tensors)  max|diff| = {worst}")
+
+
 def test_cost_model_is_monotone():
     """Deeper exits must cost more, and the deepest must cost exactly 1.0."""
     cfg = FlexUFConfig(split_depth=6)  # j=K: no tiling, so C_{K-1} is the full decode
@@ -156,6 +187,7 @@ if __name__ == "__main__":
     test_untrained_adapters_are_identity()
     test_j_equals_K_reproduces_full_decode()
     test_forward_all_exits_matches_forward_full()
+    test_key_remap_is_a_bijection()
     print("\nbehavioural checks:")
     test_mixed_depth_runs_and_is_cheaper()
     test_cost_model_is_monotone()

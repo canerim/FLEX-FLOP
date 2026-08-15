@@ -55,19 +55,33 @@ from src.utils.common import get_training_lambdas  # noqa: E402
 from flexuf.config import QP_LEVELS, FlexUFConfig  # noqa: E402
 from flexuf.cost import exit_costs, saving  # noqa: E402
 from flexuf.losses import psnr_from_mse  # noqa: E402
+from flexuf.backbone.warmstart import remap_ladder_to_stock  # noqa: E402
 from flexuf.model import FlexUFIntra  # noqa: E402
 from flexuf.router.router import ExitRouter, latent_tiles_with_halo, tile_signals  # noqa: E402
 
 
 @torch.no_grad()
 def control_bit_exact(net, cfg, device) -> float:
-    """The deepest exit must equal stock UF exactly. Returns max|Δ|."""
+    """The deepest exit must equal a stock UF decoder holding the same weights.
+
+    Returns max|Δ|, which must be exactly 0.0.
+
+    The ladder and stock `IntraDecoder` use disjoint key names, so the ladder's
+    tensors are mapped back through `remap_ladder_to_stock` before loading. Doing
+    it with a bare `strict=False` would match nothing, leave the stock model at
+    random init, and turn this control into theatre.
+    """
     stock = IntraDecoder().to(device).eval()
-    stock.load_state_dict(
-        {k[len("dec.") :]: v for k, v in net.state_dict().items() if k.startswith("dec.")
-         and not k.startswith("dec.adapters")},
-        strict=False,
-    )
+    ladder_state = {
+        k[len("dec.") :]: v for k, v in net.state_dict().items() if k.startswith("dec.")
+    }
+    mapped = remap_ladder_to_stock(ladder_state, cfg.blocks_per_exit)
+    missing, unexpected = stock.load_state_dict(mapped, strict=False)
+    if missing or unexpected:
+        raise RuntimeError(
+            f"control remap incomplete: {len(missing)} missing, "
+            f"{len(unexpected)} unexpected — e.g. {list(missing)[:3]} {list(unexpected)[:3]}"
+        )
     y = torch.randn(1, 256, 32, 32, device=device)
     q = torch.rand(1, 384, 1, 1, device=device) + 0.5
     return (stock(y, q) - net.dec.forward_full(y, q)).abs().max().item()

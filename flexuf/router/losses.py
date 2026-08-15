@@ -117,6 +117,7 @@ def router_objective(
     w_avg: float = 6.0,
     beta: float = 0.0,
     target_share: Optional[torch.Tensor] = None,
+    normalize_image: bool = True,
 ) -> dict:
     """Eq. (2) with the complexity term added.
 
@@ -128,8 +129,34 @@ def router_objective(
         costs:         [K]    — measured relative cost of each exit.
 
     Defaults w1=2000, w2=1, w3=6 are ClassSR's own values (Sec. 3.6).
+
+    Why `normalize_image` defaults to True
+    --------------------------------------
+    ClassSR tuned those weights against *its* image loss, an L1 norm on SR
+    outputs. Ours is MSE on the shifted-YCbCr tensor, a different scale, and the
+    imbalance that creates is not subtle. Measured on an untrained checkpoint:
+
+        w1*L_image  = 2000 * 4.9  ~ 9800
+        w3*L_a      =    6 * 0.15 ~    0.9
+        beta*L_comp =    1 * 0.62 ~    0.62
+
+    Four orders of magnitude, so Class-Loss and Average-Loss do nothing at all
+    and the router collapses onto whichever exit currently has the lowest MSE.
+    At a *converged* model the imbalance disappears by itself (MSE ~1e-3 makes
+    w1*L_image ~2, comparable to the rest) -- but routers here are trained
+    against intermediate checkpoints of varying quality, so a weighting that is
+    only correct at convergence is a trap.
+
+    Dividing by the deepest exit's MSE makes L_image a dimensionless ratio: 1.0
+    means "as good as decoding in full", 1.2 means "20% more error than full
+    decode". That is comparable across checkpoints, across QPs and across the
+    three experiments, and ClassSR's *relative* weights transfer intact.
     """
-    l_image = (probs * mses_per_exit).sum(dim=1).mean()
+    if normalize_image:
+        ref = mses_per_exit[:, -1:].detach().clamp_min(1e-10)
+        l_image = (probs * (mses_per_exit / ref)).sum(dim=1).mean()
+    else:
+        l_image = (probs * mses_per_exit).sum(dim=1).mean()
     l_c = class_loss(probs)
     l_a = average_loss(probs, target_share)
     l_comp = complexity_loss(probs, costs)

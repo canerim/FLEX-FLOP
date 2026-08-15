@@ -141,3 +141,34 @@ def verify_bit_exact(ladder, stock, y_hat: torch.Tensor, quant_step: torch.Tenso
     ref = stock(y_hat, quant_step)
     got = ladder.forward_full(y_hat, quant_step, exit_idx=None)
     return (ref - got).abs().max().item()
+
+
+def remap_ladder_to_stock(
+    src: Mapping[str, torch.Tensor], blocks_per_exit: int
+) -> Dict[str, torch.Tensor]:
+    """Inverse of :func:`remap_decoder_state` — ladder keys back to stock UF keys.
+
+    Needed by the evaluation control. Without it, loading a ladder state_dict into
+    a stock `IntraDecoder` with `strict=False` silently matches *nothing* (the two
+    use disjoint key names), leaving the stock model at its random init. The
+    bit-exactness check would then compare a trained decoder against noise and
+    report a huge difference, or — worse, if someone "fixed" it by loosening the
+    tolerance — pass without ever having compared anything.
+
+    Adapter tensors have no stock counterpart and are dropped: that is correct,
+    because the control is precisely "the deepest exit takes no adapter".
+    """
+    out: Dict[str, torch.Tensor] = {}
+    for key, tensor in src.items():
+        if key.startswith("adapters."):
+            continue
+        if key.startswith("upsample."):
+            out[f"dec_1.0.{key[len('upsample.'):]}"] = tensor
+        elif key.startswith("groups."):
+            rest = key[len("groups."):]
+            g_str, i_str, tail = rest.split(".", 2)
+            idx = int(g_str) * blocks_per_exit + int(i_str) + 1
+            out[f"dec_1.{idx}.{tail}"] = tensor
+        elif key.startswith("head."):
+            out[f"dec_2.{key[len('head.'):]}"] = tensor
+    return out

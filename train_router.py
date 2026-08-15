@@ -76,11 +76,24 @@ def parse_args(argv):
     p.add_argument("--crop", type=int, default=512)
     p.add_argument("--lr", type=float, default=1e-3)
     p.add_argument("-n", "--num_workers", type=int, default=8)
-    # ClassSR Eq.(2) weights
-    p.add_argument("--w_image", type=float, default=2000.0)
+    # ClassSR Eq.(2) weights, rebalanced for the normalised image loss.
+    #
+    # ClassSR uses w1:w2:w3 = 2000:1:6 against an L1 loss of order 0.02-0.05, so
+    # its image term sits ~50-100x above the two regularisers. That ratio is the
+    # intent: reconstruction is primary, Class-Loss and Average-Loss only shape
+    # the distribution. Our L_image is normalised to a ratio near 1.0, so
+    # reproducing the same 50-100x separation means w_image ~= 50, not 2000.
+    # Passing --no_normalize_image restores ClassSR's literal numbers.
+    p.add_argument("--w_image", type=float, default=50.0)
     p.add_argument("--w_class", type=float, default=1.0)
     p.add_argument("--w_avg", type=float, default=6.0)
-    p.add_argument("--beta", type=float, default=1.0, help="complexity weight; sweep this")
+    p.add_argument("--no_normalize_image", action="store_true",
+                   help="use raw MSE in L_image instead of the ratio to the deepest exit")
+    # beta is THE frontier knob. At beta=0 the router only cares about quality
+    # and parks everything on the deepest exit; as beta grows it buys compute
+    # savings at the cost of dB. One router is trained per beta and each becomes
+    # one point on the reported frontier.
+    p.add_argument("--beta", type=float, default=25.0, help="complexity weight; SWEEP THIS")
     p.add_argument("--device", type=str, default="0")
     p.add_argument("--log_every", type=int, default=50)
     return p.parse_args(argv)
@@ -175,6 +188,7 @@ def main(argv):
             mses, probs, costs,
             w_image=args.w_image, w_class=args.w_class,
             w_avg=args.w_avg, beta=args.beta,
+            normalize_image=not args.no_normalize_image,
         )
 
         opt.zero_grad(set_to_none=True)
