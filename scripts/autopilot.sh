@@ -21,12 +21,19 @@ ROOT="$HOME/FLEX-UF"
 RUNS="$ROOT/runs"
 LOG="$ROOT/autopilot.log"
 DATA=/data10/shareddata/openimages/dcvc_train
-declare -A GPU=( [e1_j2_p128]=4 [e2_j4_p128]=6 [e3_j2_p64]=7 )
+# The baseline is watchdogged alongside the experiments. It is K=1 — structurally
+# stock DMCI — and exists to answer whether the multi-exit objective costs the
+# deepest exit any quality. Without it the frontier is unfalsifiable: "dB lost
+# vs our own deepest exit" looks excellent even if that exit has been degraded.
+# So if it dies unnoticed, the three experiments lose their interpretation.
+declare -A GPU=( [e1_j2_p128]=4 [e2_j4_p128]=6 [e3_j2_p64]=7 [baseline_singleexit]=6 )
 declare -A ARGS=(
-  [e1_j2_p128]="--split_depth 2 --latent_patch 8"
-  [e2_j4_p128]="--split_depth 4 --latent_patch 8"
-  [e3_j2_p64]="--split_depth 2 --latent_patch 4"
+  [e1_j2_p128]="--num_exits 6 --split_depth 2 --latent_patch 8"
+  [e2_j4_p128]="--num_exits 6 --split_depth 4 --latent_patch 8"
+  [e3_j2_p64]="--num_exits 6 --split_depth 2 --latent_patch 4"
+  [baseline_singleexit]="--num_exits 1 --split_depth 1 --latent_patch 8"
 )
+declare -A EPOCHS=( [e1_j2_p128]=105 [e2_j4_p128]=105 [e3_j2_p64]=105 [baseline_singleexit]=6 )
 
 log () { echo "[$(date '+%F %T')] $*" >> "$LOG"; }
 
@@ -45,7 +52,7 @@ while true; do
                 CUDA_VISIBLE_DEVICES="${GPU[$tag]}" nohup "$ROOT/.venv/bin/python" \
                     "$ROOT/train_flexuf_image.py" \
                     --train_dataset "$DATA" --save_dir "$dir" --lambdas 10 2048 \
-                    --batch_size 16 -n 8 -e 105 --num_exits 6 ${ARGS[$tag]} \
+                    --batch_size 16 -n 8 -e "${EPOCHS[$tag]}" ${ARGS[$tag]} \
                     --latent_halo 2 --adapter_kind conv1x1 \
                     --aux_weight 1.0 --aux_schedule warmup --device 0 --tag "$tag" \
                     >> "$dir/stdout.log" 2>&1 &

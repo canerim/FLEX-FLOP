@@ -42,7 +42,20 @@ log "rebuilding description.json over the full tree"
 "$ROOT/.venv/bin/python" "$ROOT/scripts/prepare_openimages.py" --dest "$DEST" --min-side 512 \
     2>&1 | tail -12 | tee -a "$LOG"
 
-log "restarting the three runs so they pick up the enlarged dataset"
+log "restarting so every run picks up the enlarged dataset"
+# NOTE: this pkill hits the K=1 baseline too, and launch_experiments.sh only
+# knows about e1/e2/e3 — so the baseline has to be relaunched explicitly or it
+# dies here and the anchor comparison is silently lost.
 pkill -f "train_flexuf_image.py" ; sleep 8
 FLEXUF_DATA="$DEST" bash "$ROOT/scripts/launch_experiments.sh" 2>&1 | tee -a "$LOG"
-log "done — runs resumed from their last epoch on the full subset 0+1+2"
+
+log "relaunching the K=1 baseline (shares GPU 6 with e2, by design)"
+CUDA_VISIBLE_DEVICES=6 setsid nohup "$ROOT/.venv/bin/python" \
+    "$ROOT/train_flexuf_image.py" \
+    --train_dataset "$DEST" --save_dir "$ROOT/runs/baseline_singleexit" \
+    --lambdas 10 2048 --batch_size 16 -n 4 -e 6 \
+    --num_exits 1 --split_depth 1 --latent_patch 8 --latent_halo 2 \
+    --device 0 --tag baseline_singleexit \
+    >> "$ROOT/runs/baseline_singleexit/stdout.log" 2>&1 < /dev/null &
+sleep 5
+log "done — all four runs resumed from their last epoch on subsets 0+1+2"
