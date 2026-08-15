@@ -17,11 +17,23 @@ ROOT="$HOME/FLEX-UF"
 LOG="$ROOT/autopilot.log"
 log () { echo "[$(date '+%F %T')] wdec-gpu7: $*" >> "$LOG"; }
 
+# Wait for Stage A AND for the chain that follows it.
+#
+# Both want GPU 7 the moment Stage A ends: finish_warmstart_chain runs the router
+# sweep and the RD curve there, and this run would train there too — on a card
+# that already carries e3. Three jobs on one GPU makes all three slow and the
+# deliverable late. So this waits for the chain to produce its result first, then
+# takes the card.
 log "waiting for Stage A (warmstart_adapters) to finish"
 while pgrep -f "train_flexuf_image.py.*--tag warmstart_adapters" > /dev/null; do
     sleep 120
 done
-log "Stage A finished; starting encoder-frozen decoder training on GPU 7"
+log "Stage A finished; waiting for the router sweep + RD curve to clear GPU 7"
+sleep 60
+while pgrep -f "train_router.py|rd_curve.py" > /dev/null; do
+    sleep 120
+done
+log "chain finished; starting encoder-frozen decoder training on GPU 7"
 
 mkdir -p "$ROOT/runs/wdec_j2_p128"
 CUDA_VISIBLE_DEVICES=7 setsid nohup "$ROOT/.venv/bin/python" \
