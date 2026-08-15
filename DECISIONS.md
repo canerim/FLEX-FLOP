@@ -511,3 +511,80 @@ aşamada padding üretirdi.
 
 Her koşu ~12.6 GB GPU belleği kullanıyor (48 GB kartlarda rahat).
 GPU 0/1/2/3/5'e dokunulmadı.
+
+---
+
+## 12. Boru hatlarını çalıştırınca çıkan üç sorun
+
+Router ve değerlendirme hatlarını gerçek veriyle koşturmak — güvenmek yerine —
+üç şey ortaya çıkardı. Üçü de eğitim koşarken, sonuç üretmeden önce düzeltildi.
+
+### 12.1 Router kaybının ölçeği tutmuyordu
+
+ClassSR'ın `w1:w2:w3 = 2000:1:6` ağırlıkları **kendi** görüntü kaybına göre
+ayarlanmış — mertebesi 0.02-0.05 olan bir L1 normu. Bizimki YCbCr-0.5 üzerinde
+MSE, bambaşka bir ölçek. Eğitilmemiş bir checkpoint'te ölçtüm:
+
+```
+w1·L_image  = 2000 × 4.9  ≈ 9800
+w3·L_a      =    6 × 0.15 ≈    0.9
+β ·L_comp   =    1 × 0.62 ≈    0.62
+```
+
+**Dört mertebe fark.** Yani Class-Loss ve Average-Loss hiçbir şey yapmıyor,
+router en düşük MSE'li çıkışa çöküyor. Log bunu doğruladı:
+`exit_share_hard: [32, 0, 0, 0, 0, 0]` — 32 patch'in hepsi tek çıkışta.
+
+**Neden yakalamak önemliydi:** yakınsamış bir modelde bu dengesizlik kendiliğinden
+kayboluyor (MSE ~1e-3 olunca `w1·L_image ≈ 2`, diğerleriyle kıyaslanabilir).
+Yani sorun **sadece ara checkpoint'lerde** görünür — ve biz router'ları tam olarak
+ara checkpoint'lerde eğiteceğiz. Sadece yakınsamada doğru olan bir ağırlıklandırma
+tuzaktır.
+
+**Çözüm:** `L_image` en derin çıkışın MSE'sine bölünüyor → boyutsuz bir **oran**
+oluyor. 1.0 = "tam decode kadar iyi", 1.2 = "tam decode'dan %20 fazla hata".
+Checkpoint'ler, QP'ler ve üç deney arasında kıyaslanabilir. `w_image = 50` ile
+ClassSR'ın *göreli* dengesi korunuyor (görüntü terimi diğerlerinin ~50-100 katı —
+onun kasıtlı tasarımı).
+
+Düzeltme sonrası ölçüm: `w_image·l_image = 16.7` vs `β·l_comp = 15.7` — frontier
+için gereken takas tam da bu.
+
+### 12.2 Değerlendirmedeki bit-exact kontrolü sahteydi
+
+`evaluate.py`'deki kontrol, merdiven anahtarlarını (`upsample.*`, `groups.*`,
+`head.*`) stok `IntraDecoder`'a (`dec_1.*`, `dec_2.*`) `strict=False` ile
+yüklüyordu. İki isim uzayı **tamamen ayrık** — yani hiçbir tensör eşleşmiyor,
+stok model rastgele init'te kalıyor, ve kontrol eğitilmiş decoder'ı gürültüyle
+karşılaştırıyordu.
+
+**Neden en kötü tür hata:** ya devasa bir fark basıp paniğe yol açardı, ya da —
+daha kötüsü — biri toleransı gevşeterek "düzeltir" ve kontrol hiçbir şey
+karşılaştırmadan sonsuza kadar geçerdi. FLEX'in kuralı: *başarısız olamayan bir
+kontrol, kontrol değildir.*
+
+**Çözüm:** `remap_ladder_to_stock()` ters eşlemesi yazıldı; kontrol eşleme
+eksikse `RuntimeError` atıyor; ve 143 tensörün tamamı üzerinde
+ladder→stock→ladder **bijeksiyon testi** eklendi (`max|Δ| = 0.0`).
+
+### 12.3 Autopilot
+
+Kullanıcı saatlerce başında olmayacağı için üç işi döngüye alan bir süreç:
+1. **Watchdog** — ölen koşuyu yeniden başlatır. `train_flexuf_image.py`
+   `status_latest.pth.tar`'dan devam ettiği için maliyet en fazla o anki epoch.
+2. **Sağlık** — 10 dakikada bir `autopilot.log`'a satır yazar, kimse bakmazken
+   ne olduğunun kaydı kalsın diye.
+3. **Frontier** — her yeni `ckpt_epo*.pth.tar` için otomatik ölçüm yapar.
+   **Neden:** fikrin çalışıp çalışmadığını öğrenmek için 7 gün beklemek 7 günü
+   çöpe atmak olurdu. Sweep ~15 dk, checkpoint aralığı ~5.7 saat — çekişme
+   gerçek ama küçük, erken cevap çok daha değerli.
+
+---
+
+## 13. Bekleyen / kullanıcı kararına bırakılan
+
+| konu | durum | gerekçe |
+|---|---|---|
+| `git push` | **engellendi** | otomatik mod dışa açık işlemi bloke etti. 4 commit hazır, `origin` = `canerim/FLEX-FLOP` |
+| 46 GB `train_0.tar.gz` | **saklandı, silinmedi** | silmek geri alınamaz ve yeniden indirme gerektirir — kullanıcı büyük indirmeyi açıkça yasakladı. 4.2 TB boş diskte %1, riski sıfır. Çıkarılmış veri (`dcvc_train/`) eğitimde kullanılıyor |
+| Open Images subset 1, 2 | **alınmadı** | recipe 0,1,2 diyor; elimizde 0 var (154,723 kullanılabilir görüntü). `/mnt/data_local/datasets` bu makinede yok — doğru makine öğrenilince oradan alınabilir |
