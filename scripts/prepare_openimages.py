@@ -109,15 +109,42 @@ def build_description(root: Path, min_side: int, out: Path) -> dict:
                       flush=True)
 
     kept.sort()
-    out.write_text(json.dumps(kept))
+
+    # Hold out a fixed validation slice, and take it OUT of the training list.
+    #
+    # Why this matters: the recipe hands all of Open Images to training, so
+    # without this every PSNR we report is measured on images the model has
+    # already fitted. For a codec that is less catastrophic than for a
+    # classifier — there are no labels to memorise — but "compute saved at X dB"
+    # is still a generalisation claim, and a number measured on training data
+    # cannot support it. FLEX kept a fixed 192-frame set aside for exactly this
+    # reason and never compared across frame lists.
+    #
+    # The slice is deterministic (every VAL_STRIDE-th file of a sorted list), so
+    # it is identical across the three experiments and the baseline, and stays
+    # identical when subsets 1 and 2 enlarge the pool. Comparability across runs
+    # is the whole point; a random split would break it.
+    VAL_STRIDE = 400
+    val = kept[::VAL_STRIDE][:512]
+    val_set = set(val)
+    train = [k for k in kept if k not in val_set]
+
+    out.write_text(json.dumps(train))
+    val_path = out.parent / "description_val.json"
+    val_path.write_text(json.dumps(val))
+
     stats = {
         "scanned": n,
         "kept": len(kept),
+        "train": len(train),
+        "val_heldout": len(val),
+        "val_stride": VAL_STRIDE,
         "dropped_too_small": too_small,
         "dropped_broken": broken,
         "min_side": min_side,
         "seconds": round(time.time() - t0, 1),
         "description_json": str(out),
+        "description_val_json": str(val_path),
     }
     print(json.dumps(stats, indent=2))
     return stats

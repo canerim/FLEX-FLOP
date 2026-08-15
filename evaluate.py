@@ -166,6 +166,9 @@ def main(argv):
     ap.add_argument("--qps", type=int, nargs="+", default=[30, 42, 48, 54, 63])
     ap.add_argument("--device", default="0")
     ap.add_argument("--out", default=None)
+    ap.add_argument("--val_list", default="description_val.json",
+                    help="filename of the held-out list inside --dataset; pass "
+                         "'description.json' to evaluate on training data instead")
     a = ap.parse_args(argv)
 
     import os
@@ -189,6 +192,16 @@ def main(argv):
 
     ds = ImageFolder(a.dataset, a.crop, a.crop, QP_LEVELS,
                      get_training_lambdas([10.0, 2048.0], QP_LEVELS))
+    # Swap in the held-out list. ImageFolder hardcodes description.json, so the
+    # override happens here rather than by subclassing it — the file list is the
+    # only thing that differs, and every crop/augment path stays identical to
+    # training, which is what keeps the numbers comparable.
+    val_path = Path(a.dataset) / a.val_list
+    if val_path.exists():
+        ds.dataset = json.loads(val_path.read_text())
+        print(f"evaluating on HELD-OUT set: {val_path} ({len(ds.dataset)} images)")
+    else:
+        print(f"WARNING: {val_path} missing — evaluating on TRAINING data")
     ds.dataset = ds.dataset[: a.n_frames]
     ds.dataset_length = len(ds.dataset)
     loader = DataLoader(ds, batch_size=a.batch_size, num_workers=4,
