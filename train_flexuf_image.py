@@ -109,6 +109,12 @@ def parse_args(argv):
     p.add_argument("--device", type=str, default="0")
     p.add_argument("--log_every", type=int, default=200)
     p.add_argument("--tag", type=str, default="", help="experiment label for logs")
+    p.add_argument("--pretrain", type=str, default=None,
+                   help="warm-start checkpoint to initialise from (e.g. the ladder "
+                        "built from Microsoft's release)")
+    p.add_argument("--freeze_backbone", action="store_true",
+                   help="train ONLY the exit adapters, leaving every inherited "
+                        "tensor untouched")
     return p.parse_args(argv)
 
 
@@ -157,8 +163,9 @@ def train_one_epoch(net, loader, optimizer, epoch, cfg, args, device, logf):
 
         # Microsoft's exact guard: clip to 0.1, and drop the batch on a
         # non-finite norm rather than letting it poison the weights.
+        clip_params = [p_ for p_ in net.parameters() if p_.requires_grad]
         total_norm = clip_grad_norm_(
-            net.parameters(), max_norm=0.1, error_if_nonfinite=False
+            clip_params, max_norm=0.1, error_if_nonfinite=False
         ).item()
         if math.isnan(total_norm) or math.isinf(total_norm):
             n_skipped += 1
@@ -226,7 +233,33 @@ def main(argv):
     )
 
     net = FlexUFIntra(cfg).to(device)
-    optimizer = torch.optim.AdamW(net.parameters(), lr=1e-4)
+
+    if args.pretrain:
+        pre = torch.load(args.pretrain, map_location="cpu", weights_only=False)
+        net.load_state_dict(pre.get("state_dict", pre.get("net")), strict=False)
+        print(f"warm-started from {args.pretrain}", flush=True)
+
+    # Stage A of FLEX's recipe: freeze everything inherited, train only the
+    # adapters.
+    #
+    # Those inherited tensors are 99.66% of decoder MACs and every 1x1 in it, and
+    # they are what makes the deepest exit bit-exact the reference codec. Training
+    # them would throw away the warm start the whole approach depends on — and the
+    # warm start is precisely what fixes the non-monotonic ladder that the
+    # from-scratch runs produced. So the trainable set is ~739k parameters out of
+    # 42.9M, and one pass costs hours rather than the ~37 days a full-recipe run
+    # of this size takes.
+    if args.freeze_backbone:
+        for name, prm in net.named_parameters():
+            prm.requires_grad = ".adapters." in name
+        trainable = [p_ for p_ in net.parameters() if p_.requires_grad]
+        n_tr = sum(p_.numel() for p_ in trainable)
+        n_all = sum(p_.numel() for p_ in net.parameters())
+        print(f"frozen backbone: training {n_tr:,} / {n_all:,} params "
+              f"({100*n_tr/n_all:.2f}%)", flush=True)
+        optimizer = torch.optim.AdamW(trainable, lr=1e-4)
+    else:
+        optimizer = torch.optim.AdamW(net.parameters(), lr=1e-4)
 
     begin_epoch = 0
     ckpt_path = Path(args.save_dir) / "status_latest.pth.tar"
