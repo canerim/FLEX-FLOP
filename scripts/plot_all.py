@@ -65,9 +65,12 @@ style(a, "1 · Oracle tavani", "Kusursuz router ne verirdi. Ust sinir, basari de
 
 # ---- 2. seam penalty ------------------------------------------------------
 a = fig.add_subplot(gs[0, 1])
-MODES = ["zeros", "replicate", "linear", "arls"]
-P128 = [1.1670, 0.2125, 0.5021, 0.1785]
-P256 = [0.5477, 0.1070, 0.2638, 0.0879]
+# canvas coupling is measured at 0.0000 at every QP and both tile sizes -- not
+# rounded to zero, exactly zero, because the depthwise on the assembled canvas IS
+# the one the full-frame decoder runs.
+MODES = ["zeros", "replicate", "linear", "arls", "coupling"]
+P128 = [1.1670, 0.2125, 0.5021, 0.1785, 0.0]
+P256 = [0.5477, 0.1070, 0.2638, 0.0879, 0.0]
 xs = range(len(MODES)); w = 0.38
 a.bar([x - w/2 - 0.012 for x in xs], P128, w, color=S1, label="128px tile", zorder=3)
 a.bar([x + w/2 + 0.012 for x in xs], P256, w, color=S3, label="256px tile", zorder=3)
@@ -75,12 +78,15 @@ for x, v in zip(xs, P128):
     a.text(x - w/2 - 0.012, v + 0.03, f"{v:.2f}", ha="center", color=INK2, fontsize=7.5)
 for x, v in zip(xs, P256):
     a.text(x + w/2 + 0.012, v + 0.03, f"{v:.2f}", ha="center", color=INK2, fontsize=7.5)
-a.set_xticks(list(xs)); a.set_xticklabels(MODES)
+a.annotate("dikis yok\n(tam kare ile birebir)", xy=(4, 0.02), xytext=(3.15, 0.55),
+           color=S3, fontsize=8, ha="center",
+           arrowprops=dict(arrowstyle="->", color=S3, lw=1.4))
+a.set_xticks(list(xs)); a.set_xticklabels(MODES, fontsize=7.5)
 a.set_ylabel("saf dikis cezasi, qp63 (dB)", color=INK2, fontsize=9)
 a.set_ylim(0, 1.32)
 a.legend(fontsize=8.5, frameon=False)
 style(a, "2 · Dikis: dolgu semasi x tile boyutu",
-      "CTC native. arls en iyi ama +%10.7 decode suresi — reddedildi.")
+      "CTC native, tek derinlik. Coupling +%4.0 saat icin dikisin TAMAMI.")
 
 # ---- 3. MAC vs wall clock -------------------------------------------------
 a = fig.add_subplot(gs[0, 2])
@@ -118,7 +124,7 @@ style(a, "4 · Anchor kaymasi — bulunan hata",
 a = fig.add_subplot(gs[1, 1:])
 alive = hb.live_runs()
 COL = {"WD-j2/128": S1, "GRID-j2/128": S3, "GRID-j2/256": S4,
-       "DISTILL-j2/256": S2, "WD-j4/256": S5}
+       "DISTILL-j2/256": S2, "HEADS-ONLY": S5}
 for tag in sorted(alive):
     f = Path("runs") / tag / "train_log.jsonl"
     if not f.exists():
