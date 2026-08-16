@@ -40,6 +40,7 @@ SHORT = {
     "e3_j2_p64": "e3", "e4_ffn_adapter": "e4ffn",
     "wdec_j2_p128": "WD-j2/128", "wdec_j4_p256": "WD-j4/256",
     "wdec_j2_p128_arls": "ARLS-j2/128", "wdec_j2_p128_arls_grid": "GRID-j2/128",
+    "wdec_j2_p256_arls_grid": "GRID-j2/256",
 }
 
 

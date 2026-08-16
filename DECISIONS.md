@@ -1892,3 +1892,56 @@ paylaşımı değil **ZOMBIE = alive − expected** olacak — yani "öldü sand
 kartı hâlâ tutan koşu", ki fiilen olan tam olarak buydu ve yanlış pozitifi yok.
 Monitöre bağlamadan önce gerçeğe karşı çalıştırıp yedi koşunun yedisini de doğru
 saydığını gördüm.
+
+---
+
+## 36. Denenmemiş en iyi konfigürasyon: j=2 + 256px tile
+
+Deneyler j'yi ve tile boyutunu birlikte değiştirdiği için bir hücre boş kalmıştı:
+
+|  | 128px tile | 256px tile |
+|---|---|---|
+| j=2 (tavan %74.5) | WD-j2/128, GRID-j2/128 | **boş** |
+| j=4 (tavan %14) | — | WD-j4/256 |
+
+Saf dikiş cezası, arls ile, CTC native (küçük iyi):
+
+| konfig | qp0 | qp32 | qp63 | tavan |
+|---|---|---|---|---|
+| j2 / 128px | 0.1125 | 0.1533 | 0.1785 | %74.5 |
+| **j2 / 256px** | **0.0518** | **0.0707** | **0.0879** | **%74.5** |
+| j4 / 256px | ~0.054 | — | — | %14 |
+
+Tile kenarı iki katına çıkınca dikiş yarıya indi — Boundary Law'un (ceza ∝
+1/tile-kenarı) doğrudan doğrulaması, ve bu sefer varsayım değil ölçüm.
+
+**j2/256 diğer ikisini de domine ediyor:** j4/256 ile aynı dikişe sahip ama
+tavanı 5 katı; j2/128 ile aynı tavana sahip ama dikişi yarısı. Ve **her QP'de
+0.1 dB'nin altında** — kullanıcının −0.1 dB hedefi, dikiş için, adapter'lar hiç
+çalışmadan zaten sağlanmış durumda. Kalan bütçenin tamamı derinlik kaybına
+harcanabilir, ki asıl mesele oydu.
+
+Tek bedeli yönlendirme çözünürlüğü: 1080p'de 40 tile (128px'te 135). Router için
+fazlasıyla yeterli.
+
+**Yer açmak için e3 rafa kaldırıldı** (`runs/e3_j2_p64`, `status_latest.pth.tar`
+ve `ckpt_epo0.pth.tar` duruyor, resume edilebilir). Gerekçe: 64px tile her
+konfigürasyonun en kötü dikişine sahip (Boundary Law 128px'in iki katını
+söylüyor), üstüne sıfırdan eğitim anchor'ı gerçek DCVC-UF'in 1.49 dB altında
+tutuyor, ve 34 gün kalmıştı. Çalışanlar arasında kullanılabilir sonuç üretme
+ihtimali en düşük olan oydu. Bunu kullanıcı e3 için ayrıca istemedi — e1/e2
+arasından seçmemi istemişti — o yüzden açıkça yazıyorum: **bu benim kararım**,
+ve tek komutla geri alınır.
+
+**Ortaya çıkan tasarım temiz:**
+
+| koşu | dolgu | onarım | ne yalıtıyor |
+|---|---|---|---|
+| WD-j2/128 | replicate | full | kontrol |
+| GRID-j2/128 | arls | grid | dolgu + ızgara kapısı |
+| GRID-j2/256 | arls | grid | tile boyutu (üsttekine karşı) |
+| WD-j4/256 | replicate | full | j (tavan/dikiş dengesi) |
+
+`--min_crop 512`: 256px tile 256px crop'a tek tile olarak sığar ve dikiş hiç
+oluşmaz — j4/256 deneyinde bir kez düşülen tuzak. 512 crop 4 tile veriyor.
+Bellek için batch 16 yerine 8.
