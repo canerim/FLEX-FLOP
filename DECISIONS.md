@@ -2109,3 +2109,40 @@ adapter'larca telafi edilmesi gerekiyor. Hâlâ mümkün — j2/256'da saf diki�
 qp32'de 0.071 dB olduğu için −0.1 dB bütçesinin çoğu derinliğe kalıyor, ve Stage A
 adapter'ları daha önce +2.235 dB'ye kadar getirmişti — ama "rahat" değil, "tam
 sınırda". İki gün sonra değil şimdi söylenmesi gereken bir şey.
+
+---
+
+## 40. Pohpohlayıcı noktayı seçmeyi engelleyen kodun kendisi onu seçiyordu
+
+`scripts/finish_run.sh`'e CTC geçişi için router seçen bir parça yazmıştım ve
+yanına şunu not düşmüştüm: *"pohpohlayıcı noktayı sessizce seçmek bir frontier'ı
+yalana çevirmenin yoludur"*. Kod tam olarak onu yapıyordu.
+
+Seçici `dpsnr` ve `router` sütunlarını okuyordu. `collect_frontier.py` ise
+`beta / qp / saving_pct / psnr_loss_dB / exit_share / control_max_diff` yazıyor.
+Yani:
+
+- `dpsnr` yok → `.get(...,0.0)` → her satır için `abs(0.0) <= 0.1` **doğru**
+  → dB filtresi hiçbir şeyi elemiyor,
+- seçim "en yüksek tasarruf, maliyeti ne olursa olsun"a çöküyor,
+- `router` yok → yol boş → CTC hiç koşmuyor, "router yok" diye kafa karıştırıcı
+  bir mesaj basılıyor.
+
+Sessizce yanlış sayı üretmedi (yol boş kaldığı için hiç koşmadı), ama üretmesi
+an meselesiydi: `frontier.tsv` bir gün `router` sütunu kazansa, filtre hâlâ ölü
+olduğu için bütçeyi aşan bir nokta seçilip CTC'ye gönderilirdi.
+
+**Düzeltmeler:**
+
+1. Sütun adları artık **iddia ediliyor**; eksikse `FRONTIER-SCHEMA-DEGISTI`
+   basıp çıkıyor. Eksik anahtarın 0.0'a düşmesi bu hatanın mekanizmasıydı.
+2. Doğru sütun `psnr_loss_dB`.
+3. **Beta başına en KÖTÜ qp ile toplama.** tsv satırları (beta, qp) çifti; bir
+   beta bir router demek ve o router bütçeyi tüm QP aralığında sağlamalı, en
+   elverişli QP'sinde değil. Satır bazında filtrelemek, tek bir QP'de 0.1 dB'nin
+   altına düşen bir router'ı "bütçe içinde" ilan ederdi.
+4. Hiçbir beta bütçeye girmiyorsa, sessizce en iyisini seçmek yerine
+   `NONE-IN-BUDGET` diye söylüyor.
+
+Ders: bir tehlikeye karşı yorum yazmak o tehlikeyi önlemez. Sütun adları
+doğrulanabilirdi ve doğrulanmamıştı.

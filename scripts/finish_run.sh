@@ -32,22 +32,51 @@ SWEEP="$DIR/frontier_$(basename "$CK" .pth.tar)"
 # about. The router picked is the one nearest the project's target -- the most
 # saving that still costs under 0.1 dB -- and the choice is PRINTED, because
 # silently picking the flattering point is how a frontier becomes a lie.
-BEST=$("$ROOT/.venv/bin/python" - "$SWEEP/frontier.tsv" <<'PY'
+BEST=$("$ROOT/.venv/bin/python" - "$SWEEP" <<'PY'
+# Pick the router for the CTC pass from the frontier table.
+#
+# The first version of this read columns named 'dpsnr' and 'router'. Neither
+# exists -- collect_frontier.py writes beta/qp/saving_pct/psnr_loss_dB/
+# exit_share/control_max_diff -- so the dB filter passed EVERY row (missing key
+# -> 0.0 -> "within budget") and the pick degenerated to "most saving, any
+# cost". Exactly the failure the comment below warns about, written into the
+# code that was supposed to prevent it. Column names are now asserted.
 import sys, csv, pathlib
-p = pathlib.Path(sys.argv[1])
-if not p.exists(): raise SystemExit
-rows = [r for r in csv.DictReader(p.open(), delimiter='\t')]
-def f(r, k, d=0.0):
-    try: return float(r.get(k, d))
-    except Exception: return d
-ok = [r for r in rows if abs(f(r, 'dpsnr')) <= 0.1]
-pick = max(ok or rows, key=lambda r: f(r, 'saving_pct'))
-print(pick.get('router', ''), f"{f(pick,'saving_pct'):.1f}", f"{f(pick,'dpsnr'):+.3f}")
+sweep = pathlib.Path(sys.argv[1])
+tsv = sweep / "frontier.tsv"
+if not tsv.exists(): raise SystemExit
+rows = list(csv.DictReader(tsv.open(), delimiter="\t"))
+if not rows: raise SystemExit
+need = {"beta", "qp", "saving_pct", "psnr_loss_dB"}
+missing = need - set(rows[0])
+if missing:
+    print(f"FRONTIER-SCHEMA-DEGISTI:{sorted(missing)}", file=sys.stderr)
+    raise SystemExit
+
+# One beta is one router; it must satisfy the budget across the WHOLE QP range,
+# not at its most favourable QP. So aggregate per beta by its WORST qp.
+per = {}
+for r in rows:
+    try:
+        b, sv, db = r["beta"], float(r["saving_pct"]), float(r["psnr_loss_dB"])
+    except (ValueError, KeyError):
+        continue
+    cur = per.get(b)
+    per[b] = (min(cur[0], sv), max(cur[1], db)) if cur else (sv, db)
+
+ok = {b: v for b, v in per.items() if v[1] <= 0.1}
+if not ok:
+    b, (sv, db) = min(per.items(), key=lambda kv: kv[1][1])
+    print(f"NONE-IN-BUDGET beta={b} en_iyi_kayip={db:.3f}dB tasarruf={sv:.1f}%", file=sys.stderr)
+else:
+    b, (sv, db) = max(ok.items(), key=lambda kv: kv[1][0])
+ck = sweep / f"beta_{b}" / "router.pth.tar"
+print(ck if ck.exists() else "", f"{sv:.1f}", f"{db:.3f}")
 PY
 )
 set -- $BEST
 if [ -n "${1:-}" ] && [ -f "${1:-}" ]; then
-    echo "  secilen router: $1  (%$2 tasarruf, $3 dB) — 0.1 dB altindaki en yuksek tasarruf"
+    echo "  secilen router: $1  (%$2 tasarruf, en kotu qp kaybi $3 dB) — butce icindeki en yuksek tasarruf"
     "$ROOT/.venv/bin/python" "$ROOT/ctc_intra.py" --ckpt "$CK" --router "$1" \
         --qps 0 16 32 48 63 --frames 2 --device "cuda:$GPU" \
         --out "$DIR/ctc_intra.json" 2>&1 | tail -20
