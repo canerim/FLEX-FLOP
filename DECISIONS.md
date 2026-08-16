@@ -2260,3 +2260,59 @@ birden götürdü, bir kez oldu.
 DCVC-UF tek model, 64 QP seviyesi (`q_scale_enc/dec` qp ile indeksleniyor).
 Eğitim her görüntüye rastgele qp örneklüyor, router da qp-koşullu
 (`router.assign(sig, qp)`). qp0/32/63 tablolarının hepsi **aynı modelden**.
+
+---
+
+## 42. Router: vekil hedefi bırakıp doğrudan oracle'a olan mesafeyi minimize etmek
+
+Kullanıcı "router'a yeni bir şey dene, loss'u değiştirebilirsin, oracle'a
+yaklaşman lazım" dedi. Mevcut hedefin neden yaklaşamadığı yapısal.
+
+**Sorun.** Oracle her tile için `k* = argmin_k(mse_k + λ·C_k)` seçiyor. Router'ın
+işi bunu sinyallerden üretmek. ClassSR'ın Eq.(2)'si bu işi *ifade etmiyor*:
+beklenen bozulmayı minimize ediyor, sonra eğitimdeki yumuşak karışım ile
+çıkarımdaki argmax arasındaki uyumsuzluğu **onarmak için** Class-Loss ekliyor, ve
+çökmeyi engellemek için Average-Loss ekliyor. Üç vekil, üç ağırlık, ve hiçbiri
+karşısında ölçüldüğümüz büyüklük değil.
+
+**Çözüm — beklenen pişmanlık.** Ölçüldüğümüz büyüklüğün adı var:
+
+    L = Σᵢ Pᵢ · [ (mseᵢ + λ·Cᵢ) − min_k (mse_k + λ·C_k) ]
+
+Her terim negatif olamaz; **tam olarak** P bütün kütlesini k*'a koyduğunda sıfır;
+ve **değeri** router'ın oracle'a karşı ödediği fazla Lagrange maliyeti. Yani hem
+doğru hedef hem doğru ilerleme ölçüsü: "0.004" demek "oracle'ın 0.004 üstünde"
+demek, üstelik frontier'ın kendi biriminde. λ'yı süpürmek frontier'ı β'nın
+yaptığı gibi tarıyor, ama her nokta artık üç vekilin dengesi değil, iyi tanımlı
+bir problem.
+
+**Class-Loss atıldı, çünkü yamaladığı uyumsuzluk kaynağında yok ediliyor.**
+`hard=True` ile ileri geçiş Gumbel-Softmax straight-through örneği kullanıyor:
+eğitim de çıkarım gibi karar veriyor — tek çıkış, seçilmiş — gradyan yine yumuşak
+olasılıklardan akıyor. Bu, uzamsal-uyarlanabilir çıkarımda ayrık kapılar için
+standart çözüm (Verelst & Tuytelaars, CVPR 2020, arXiv:1912.03203) ve oradaki
+yapı — her uzamsal birim için hesaplama harcanıp harcanmayacağını seçen küçük bir
+kapı — bizimkinin aynısı.
+
+**Average-Loss korundu ama varsayılan KAPALI.** ClassSR'ın ihtiyacı var çünkü
+onun dalları ayrı ağlar ve kullanılmayan dal hiç gradyan almıyor. Bizim
+çıkışlarımız yapı gereği ağırlık paylaşıyor ve router eğitimi sırasında decoder
+donuk, yani kullanılmayan bir çıkış hiçbir şeyi bozmuyor; kullanımı zorlamak,
+hedefin "yanlış" dediği çıkışlara tile göndermek olurdu. Yine de `w_avg > 0` ile
+açılabiliyor, çünkü bu gerekçe inanılmak yerine kontrol edilmeli.
+
+**Kontroller (sentetik, kapalı formda doğrulanabilir):**
+
+    kusursuz router  regret = 0.000e+00   oracle_agree = 1.000
+    kotu router      regret = 2.087e-01   oracle_agree = 0.000
+    gradyan logitlere ulasiyor |g|max = 1.638e-03
+
+**İlk gerçek koşu** (warm-start checkpoint'i, 100 adım, yalnızca makinenin
+çalıştığını göstermek için — adapter'lar hâlâ sıfır-başlatmalı, mutlak sayılar
+anlamlı değil): `oracle_agree` 0.297 → 0.438 (rastgele 0.25 olurdu), regret
+0.084 → 0.061.
+
+**`oracle_agree` raporlanıyor ama optimize EDİLMİYOR**, ve bu bilinçli: iki
+neredeyse eşit çıkış arasında bölünen bir router az pişmanlık öder ama seçimi
+yanlış yapar, yani kayıp düşerken bu metrik takılabilir. İkisi birlikte
+loglanıyor, hiçbirine tek başına güvenilmiyor.

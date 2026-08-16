@@ -49,6 +49,7 @@ from __future__ import annotations
 from typing import Optional
 
 import torch
+import torch.nn.functional as F
 
 
 def class_loss(probs: torch.Tensor) -> torch.Tensor:
@@ -170,3 +171,90 @@ def router_objective(
         "l_comp": l_comp.detach(),
         "exit_share": probs.mean(dim=0).detach(),
     }
+
+
+def regret_objective(
+    mses_per_exit: torch.Tensor,
+    logits: torch.Tensor,
+    costs: torch.Tensor,
+    *,
+    lam: float,
+    tau: float = 1.0,
+    hard: bool = True,
+    w_avg: float = 0.0,
+) -> dict:
+    """Minimise the gap to the oracle directly, instead of a surrogate for it.
+
+    The oracle this project measures against is not a soft blend. For each tile it
+    takes
+
+        k* = argmin_k ( mse_k + lam * C_k )
+
+    and the router's whole job is to reproduce that choice from signals. ClassSR's
+    Eq. (2) does not state that job: it minimises an expected distortion, then adds
+    a Class-Loss whose purpose is to *repair* the mismatch between the soft blend
+    used in training and the argmax used at inference, and an Average-Loss to stop
+    the result collapsing. Three terms and three weights, none of which is the
+    quantity we actually care about.
+
+    The quantity we care about has a name -- expected regret:
+
+        L = sum_i P_i * [ (mse_i + lam*C_i) - min_k (mse_k + lam*C_k) ]
+
+    Every term is non-negative, it is zero exactly when P puts all its mass on k*,
+    and its VALUE is the excess Lagrangian cost the router is paying against the
+    oracle. So it is not only the right objective, it is also the right progress
+    metric: "0.004" means "0.004 above the oracle", in the units of the frontier.
+    Sweeping `lam` traces the frontier the same way beta did, but each point is now
+    a well-posed problem rather than a balance of three surrogates.
+
+    Class-Loss is dropped because the mismatch it patches is removed at the source:
+    with `hard=True` the forward pass uses a Gumbel-Softmax straight-through sample,
+    so training decides exactly as inference does -- one exit, chosen -- while
+    gradients still flow through the soft probabilities. This is the standard fix
+    for discrete gating in spatially adaptive inference (Verelst & Tuytelaars,
+    "Dynamic Convolutions: Exploiting Spatial Sparsity for Faster Inference",
+    CVPR 2020, arXiv:1912.03203), and the structure there -- a small gate choosing
+    per spatial unit whether to spend compute -- is ours exactly.
+
+    Average-Loss is kept but OFF by default. ClassSR needs it because its branches
+    are separate networks that receive no gradient when unused. Our exits share
+    weights by construction and the decoder is frozen here, so an unused exit
+    degrades nothing; forcing usage would mean deliberately routing tiles to exits
+    the objective says are wrong. It stays available (`w_avg > 0`) because that
+    argument should be checked rather than believed.
+
+    Args:
+        mses_per_exit: [P, K] tile MSE at each exit, from the frozen decoder.
+        logits:        [P, K] raw router outputs (NOT probabilities).
+        costs:         [K]    measured relative cost of each exit.
+        lam:           the Lagrange multiplier; sweep it to trace the frontier.
+    """
+    lagrangian = mses_per_exit + lam * costs[None, :]        # [P, K]
+    best, k_star = lagrangian.min(dim=1)                     # [P]
+
+    if hard:
+        probs = F.gumbel_softmax(logits, tau=tau, hard=True, dim=1)
+    else:
+        probs = F.softmax(logits / tau, dim=1)
+
+    regret = (probs * (lagrangian - best[:, None])).sum(1)
+    # Scale-free: divided by the oracle's own cost, so the number means "fraction
+    # above the oracle" and is comparable across QPs, checkpoints and lam.
+    loss = (regret / best.clamp_min(1e-12)).mean()
+
+    share = probs.mean(0)
+    out = {"loss": loss, "l_regret": loss, "exit_share": share.detach(),
+           "oracle_choice": k_star.detach(), "probs": probs.detach()}
+    if w_avg > 0:
+        uniform = torch.full_like(share, 1.0 / share.numel())
+        out["l_avg"] = ((share - uniform) ** 2).sum()
+        out["loss"] = out["loss"] + w_avg * out["l_avg"]
+
+    # Reported, never optimised: what fraction of tiles the router places exactly
+    # where the oracle would. The loss can fall while this stalls -- a router that
+    # hedges between two near-equal exits pays little regret and gets the choice
+    # wrong -- so both are logged and neither is trusted alone.
+    with torch.no_grad():
+        out["oracle_agree"] = (probs.argmax(1) == k_star).float().mean()
+    return out

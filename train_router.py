@@ -58,7 +58,7 @@ from src.utils.common import create_folder, get_training_lambdas  # noqa: E402
 from flexuf.config import QP_LEVELS, FlexUFConfig  # noqa: E402
 from flexuf.cost import exit_costs, saving  # noqa: E402
 from flexuf.model import FlexUFIntra, load_flexuf_state  # noqa: E402
-from flexuf.router.losses import router_objective  # noqa: E402
+from flexuf.router.losses import regret_objective, router_objective  # noqa: E402
 from flexuf.router.router import (  # noqa: E402
     N_STEM_SIGNALS,
     ExitRouter,
@@ -94,6 +94,26 @@ def parse_args(argv):
     # savings at the cost of dB. One router is trained per beta and each becomes
     # one point on the reported frontier.
     p.add_argument("--beta", type=float, default=25.0, help="complexity weight; SWEEP THIS")
+    p.add_argument("--objective", choices=["classsr", "regret"], default="classsr",
+                   help="'classsr' is Eq.(2) plus our complexity term: an expected "
+                        "distortion, a Class-Loss to repair the soft/argmax "
+                        "mismatch, and an Average-Loss to stop collapse -- three "
+                        "surrogates, none of them the quantity we measure against. "
+                        "'regret' minimises the gap to the oracle directly, which "
+                        "is zero exactly when the router picks argmin(mse + lam*C), "
+                        "and whose VALUE is the excess cost being paid.")
+    p.add_argument("--lam", type=float, default=None,
+                   help="Lagrange multiplier for --objective regret; sweep it to "
+                        "trace the frontier the way beta does. Defaults to beta so "
+                        "one sweep script drives both.")
+    p.add_argument("--gumbel_tau", type=float, default=1.0,
+                   help="Gumbel-Softmax temperature. hard=True straight-through, so "
+                        "training decides exactly as inference does -- one exit, "
+                        "chosen -- while gradients flow through the soft path.")
+    p.add_argument("--soft", action="store_true",
+                   help="regret with a plain softmax instead of the hard "
+                        "straight-through sample, to measure what the hard "
+                        "decision is worth rather than assume it.")
     p.add_argument("--device", type=str, default="0")
     p.add_argument("--log_every", type=int, default=50)
     return p.parse_args(argv)
@@ -191,8 +211,17 @@ def main(argv):
     for step, batch in enumerate(loader):
         x, qp = batch[0].to(device), batch[-2].to(device)
         mses, sig, qp_t = per_tile_mse(net, x, qp, cfg)
-        probs = router.probabilities(sig, qp_t)
-        obj = router_objective(
+        if args.objective == "regret":
+            logits = router(sig, qp_t)
+            obj = regret_objective(
+                mses, logits, costs,
+                lam=(args.lam if args.lam is not None else args.beta),
+                tau=args.gumbel_tau, hard=not args.soft, w_avg=0.0)
+            probs = obj["probs"]
+        else:
+            probs = router.probabilities(sig, qp_t)
+        if args.objective == "classsr":
+          obj = router_objective(
             mses, probs, costs,
             w_image=args.w_image, w_class=args.w_class,
             w_avg=args.w_avg, beta=args.beta,
@@ -214,10 +243,12 @@ def main(argv):
             rec = {
                 "step": step,
                 "loss": round(obj["loss"].item(), 4),
-                "l_image": round(obj["l_image"].item(), 8),
-                "l_class": round(obj["l_class"].item(), 4),
-                "l_avg": round(obj["l_avg"].item(), 4),
-                "l_comp": round(obj["l_comp"].item(), 4),
+                # Only the terms this objective actually has. The regret run has
+                # one term, and logging zeros for the ClassSR terms would make the
+                # two look like the same experiment in the same table.
+                **{k: round(obj[k].item(), 8) for k in
+                   ("l_image", "l_class", "l_avg", "l_comp", "l_regret",
+                    "oracle_agree") if k in obj},
                 "exit_share_soft": [round(v, 3) for v in obj["exit_share"].tolist()],
                 "exit_share_hard": torch.bincount(hard, minlength=cfg.num_exits).tolist(),
                 # The two numbers the whole project is about:
