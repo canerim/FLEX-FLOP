@@ -2316,3 +2316,101 @@ anlamlı değil): `oracle_agree` 0.297 → 0.438 (rastgele 0.25 olurdu), regret
 neredeyse eşit çıkış arasında bölünen bir router az pişmanlık öder ama seçimi
 yanlış yapar, yani kayıp düşerken bu metrik takılabilir. İkisi birlikte
 loglanıyor, hiçbirine tek başına güvenilmiyor.
+
+---
+
+## 43. Canvas-coupled tiling — dikişi onarmak yerine oluşmasını engellemek
+
+Ve bu, bölüm 11'deki kendi kararımı çürütüyor.
+
+**Çürütülen karar.** Trunk halo'yu "tam decode'un 1.745 katı" diye reddetmiştim.
+O ölçüm halo'yu **bütün bloğa** uyguluyordu, yani halodan hiçbir fayda görmeyen
+%99.666'ya da (P+2h)²/P² çarpanını ödüyordu. Yanlış şeyi halolamışım.
+
+**Gözlem.** `DepthConvBlock` = 1×1 → WSiLU → **3×3 depthwise** → 1×1, sonra
+1×1 → act → 1×1. C=384'te 1,035,648 MAC/px'in yalnızca **3,456'sı** depthwise:
+**%0.334**. Diğer her operatör pointwise ve komşusunun ne tuttuğunu hiç
+umursamıyor. Yani trunk'ın tam olarak %0.334'ü dikişin **tüm** sebebi.
+
+| tile | tüm bloğa halo | sadece depthwise |
+|---|---|---|
+| 128px | +%26.6 blok | **+%0.066 decode** |
+| 256px | +%12.9 blok | **+%0.032 decode** |
+
+GridSeamRepair %0.951'e mal oluyordu — bu 14-30 kat ucuz.
+
+**Uygulama** (`flexuf/backbone/coupling.py`): her tile'ın depthwise-öncesi
+aktivasyonu tek bir paylaşılan canvas'ta yaşıyor; her depthwise o canvas üzerinde
+çalışıyor, yani tile'ın kenarı komşusunun **gerçek** değerini okuyor. Çıkmış
+tile'lar son aktivasyonlarını yerinde bırakıp bedavaya bağlam olmaya devam
+ediyor.
+
+**Ölçüm 1 — aynı derinlikte dikiş var olmayı bırakıyor:**
+
+    128px, 16 tile, hepsi ayni derinlikte:  tam kare − parcali  max|diff| = 0.0
+    256px,  4 tile, hepsi ayni derinlikte:  tam kare − parcali  max|diff| = 0.0
+
+Yaklaşık değil, birebir — birleştirilmiş canvas üzerindeki depthwise, zaten
+tam-kare decoder'ın çalıştıracağı depthwise'ın kendisi.
+
+| konfig | qp0 | qp32 | qp63 |
+|---|---|---|---|
+| 128px replicate | 0.1462 | 0.2299 | 0.3663 |
+| 128px **coupling** | **0.0000** | **0.0000** | **0.0000** |
+| 256px replicate | 0.0767 | 0.1296 | 0.2320 |
+| 256px **coupling** | **0.0000** | **0.0000** | **0.0000** |
+
+**Ölçüm 2 — ama karışık derinlikte DAHA KÖTÜ, ve bunu saklamıyorum:**
+
+| konfig | qp0 | qp32 | qp63 |
+|---|---|---|---|
+| 128px replicate | 1.5305 | 2.3521 | 3.8408 |
+| 128px coupling | 1.6522 | 2.4669 | 3.9774 |
+| 256px replicate | 1.4115 | 2.1815 | 3.6411 |
+| 256px coupling | 1.4667 | 2.2337 | 3.7001 |
+
+Sebep yapısal: derin bir blok, sığ komşusunun **altı blok önceki** özelliğini
+okuyor ve o özellik onun için dağıtım dışı. Replicate ise tile'ın kendi kenarını
+kopyaladığı için istatistik tutarlı kalıyor. (Bu satırlardaki mutlak değerler
+derinlik kaybını da içeriyor; karşılaştırılabilir olan iki satır arasındaki
+**fark**, çünkü çıkış haritası ve tohum aynı.)
+
+Uyarı: ölçüm warm-start checkpoint'inde, yani sığ çıkışlar ham kesilmiş UF —
+derinlikler arası uyumsuzluğun mümkün olan **en kötü** hali.
+
+**Ölçüm 3 — saat maliyeti, MAC'ten büyük (arls dersi tekrar):**
+
+    128px  replicate 228.8 ms  ->  coupling 241.2 ms  (+5.4%)
+    256px  replicate 254.4 ms  ->  coupling 263.4 ms  (+3.5%)
+
+MAC +%0.03, saat +%3.5. Fark eager PyTorch'un unpatch/patch yeniden şekillendirme
+ve tam-canvas depthwise ek yükü. Yine de takas arls'inkinin tersi: %3.5 karşılığı
+qp63'te 0.232 dB'nin **tamamı**, ve routing'in hiçbir derinlikte veremeyeceği bir
+şey — tam kare kalitesi.
+
+**Hipotez ve deney.** Karışık derinlikteki kayıp, çıkışların özellik
+dağılımlarının uyuşmamasından geliyor. Ladder distillation (bölüm 42) tam olarak
+onları birbirine benzetmek için yazılmıştı. `runs/coupled_j2_p256` ikisini
+birlikte koşuyor: ikincinin birinciyi düzeltip düzeltmediği deneyin sorusu.
+
+---
+
+## 44. HEADS-ONLY — anchor'ı kayıpla değil, YAPIYLA garanti etmek
+
+Bütün gün en derin çıkışı gerçek DCVC-UF'te tutmaya çalıştık: önce fark ettik
+kaydığını, sonra `--anchor_weight` ile bir kayıp terimiyle bağladık. Ama kayıp
+terimi bir *baskı*, garanti değil.
+
+`runs/heads_only_j2_p256`: `--freeze_backbone`. Gövdenin tek bir tensörü
+optimizer'da değil — **3,848,704 / 46,028,032 parametre (%8.36)** eğitiliyor, o
+da yalnızca exit head'leri. En derin çıkış yayınlanmış decoder'ın ta kendisi
+olmaya **yapısal olarak** mahkûm; kaymak için değişebilecek bir ağırlık yok.
+`--anchor_weight` bu koşuda anlamsız olduğu için verilmedi.
+
+Karşılığında head'ler büyüdü: her çıkışta `FFNAdapter`, yani atlanan blokların
+gerçekten içerdiği expand/activate/contract dizisinin aynısı. Başka hiçbir şey
+kapasite için yarışmadığından bunu karşılayabiliyor.
+
+Bu koşu aynı zamanda bir üst-sınır ölçümü: **gövdeye hiç dokunmadan** ne kadar
+gidilebiliyor. Eğer buradaki sonuç gövdeyi de eğiten koşulara yakınsa, gövdeyi
+eğitmenin riski (kayma) getirisini karşılamıyor demektir.

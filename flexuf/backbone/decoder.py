@@ -535,8 +535,16 @@ class MultiExitIntraDecoder(nn.Module):
         # removes 75% of the seam at qp63 for no compute, and a per-channel AR(1)
         # fit ("arls", arXiv:2502.12300) removes 81%. Restored below so
         # full-frame decode is unaffected.
-        undo_pad = None
-        if cfg.tile_pad_mode != "zeros":
+        # Canvas coupling replaces tile padding entirely: with the real
+        # neighbour available there is nothing left to invent, so a padding mode
+        # would be dead code sitting in the hot loop.
+        undo_pad = undo_cpl = None
+        if cfg.tile_coupling:
+            from .coupling import CanvasCoupler, install
+            cpl = CanvasCoupler()
+            cpl.begin(tiles, nh, nw, feat.shape[0])
+            undo_cpl = install(self.groups, j, cpl)
+        elif cfg.tile_pad_mode != "zeros":
             undo_pad = self._set_tile_padding(cfg.tile_pad_mode, j)
 
         # ---- 3+4. per-tile suffix -----------------------------------------
@@ -546,6 +554,10 @@ class MultiExitIntraDecoder(nn.Module):
         active = torch.arange(n_tiles, device=tiles.device)
         work = tiles
         for g in range(j, K):
+            if undo_cpl is not None:
+                # The wrapped convolutions need to know which canvas slots the
+                # tensor they are handed belongs to; it shrinks as tiles exit.
+                cpl.active = active
             work = self.groups[g](work)
             leaving = exit_map[active] == g
             if leaving.any():
@@ -556,6 +568,8 @@ class MultiExitIntraDecoder(nn.Module):
                 work = work[keep]
                 active = active[keep]
 
+        if undo_cpl is not None:
+            undo_cpl(); cpl.end()
         if undo_pad is not None:
             undo_pad()
         elif cfg.tile_pad_mode != "zeros":

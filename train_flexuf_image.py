@@ -136,6 +136,21 @@ def parse_args(argv):
                         "over replicate, which buys 1.34 trunk blocks of budget for "
                         "very little; 'learned' keeps its per-channel adaptivity at "
                         "replicate's cost, starting at exactly replicate.")
+    p.add_argument("--tile_coupling", action="store_true",
+                   help="let each per-tile 3x3 depthwise read its REAL neighbours "
+                        "from a shared canvas instead of inventing them. The "
+                        "depthwise is 0.334% of a DepthConvBlock and the only "
+                        "operator with any spatial extent, so this costs +0.066% "
+                        "of the decode at 128px tiles and +0.032% at 256px, "
+                        "against GridSeamRepair's 0.951%. Where neighbouring tiles "
+                        "share a depth the result is BIT-EXACT the full-frame "
+                        "decode -- measured max|diff| = 0.0, the seam does not "
+                        "shrink, it stops existing. Where they differ it is "
+                        "currently 0.12 dB WORSE than replicate on an untrained "
+                        "ladder, because a deep block reads a neighbour's "
+                        "six-blocks-shallower feature; --distill_weight is the "
+                        "term that makes those features compatible, so the two "
+                        "belong together.")
     p.add_argument("--distill_weight", type=float, default=0.0,
                    help="weight on ladder distillation: each exit's adapter is "
                         "trained to reproduce a DEEPER exit's feature, not just to "
@@ -199,6 +214,7 @@ def build_cfg(args) -> FlexUFConfig:
         aux_weight=args.aux_weight,
         aux_schedule=args.aux_schedule,
         tile_pad_mode=args.tile_pad,
+        tile_coupling=args.tile_coupling,
     )
 
 

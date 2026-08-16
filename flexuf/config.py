@@ -114,6 +114,15 @@ class FlexUFConfig:
     Set > 0 only to measure what the trunk halo buys, never as a default.
     """
 
+    tile_coupling: bool = False
+    """Let each per-tile depthwise read its real neighbours from a shared canvas.
+
+    Only the 3x3 depthwise has any spatial extent -- 0.334% of a DepthConvBlock --
+    so this costs +0.066% of the decode at 128px tiles and +0.032% at 256px,
+    against GridSeamRepair's 0.951%. When neighbouring tiles are at the same
+    depth the result is BIT-EXACT the full-frame decode; see backbone/coupling.py.
+    """
+
     tile_pad_mode: str = "replicate"
     """How a tile's border is padded inside the PER-TILE trunk blocks.
 
