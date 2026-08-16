@@ -2564,3 +2564,63 @@ eğiten kollar farklı çıkmazsa hedefin kendisi yeniden konuşulmalı.
 
 Ders, bugün üçüncü kez aynı: **bir referansa göre ölçülen her sayı, o referansın
 doğruluğu kadar doğrudur.** arls'te birim, cost modelinde adapter, burada anchor.
+
+---
+
+## 47. 0.3 dB bütçesi hedefi kurtarıyor — ve tabloyu çıkarırken iki hata daha
+
+Kullanıcı "0.1 dB zaten düşük, bir de 0.3 dB limiti koy" dedi. `scripts/budget_table.py`
+τ'yu tarayıp **ulaşılan** kayıp bütçenin altında kalan en yüksek tasarrufu
+raporluyor — "%22.2 @ 0.320 dB" bir "0.3 dB'de ne kadar?" sorusunun cevabı
+değildir.
+
+Oracle (kusursuz router), CTC, `heads_only_j2_p256/ckpt_epo0`:
+
+| qp | ≤0.05 | ≤0.1 | ≤0.2 | **≤0.3** | ≤0.5 | ≤1.0 dB |
+|---|---|---|---|---|---|---|
+| 0 | 14.2% | 22.4% | 32.3% | **38.9%** | 42.4% | 42.5% |
+| 16 | 9.8% | 17.7% | 28.5% | **35.8%** | 42.2% | 42.5% |
+| 32 | 8.3% | 13.9% | 23.8% | **30.9%** | 39.8% | 42.3% |
+| 48 | 6.6% | 10.7% | 19.0% | **25.4%** | 35.3% | 42.3% |
+| 63 | 5.2% | 8.4% | 15.5% | **21.1%** | 29.8% | 41.5% |
+
+0.1 → 0.3 dB geçişi tasarrufu **~1.7 kat** artırıyor ve %30-40 hedefini qp0-32
+aralığında karşılıyor.
+
+### İki hata, ikisi de tabloyu uydurmuş olurdu
+
+**1. Bisection ayrık sıçramada yanlış tarafa düşüyordu.** Dört kullanılabilir
+çıkış ve birkaç yüz tile ile ulaşılan dB sıçramalarla hareket ediyor; bisection
+süreksizliğe yakınsayıp **yanlış tarafını** raporluyordu — "≤0.1 dB" sütunu
+0.22 dB gösteriyordu. Izgara taraması + `ulaşılan <= bütçe` filtresi bunu
+yapamaz, çünkü kısıt **raporlanan sayının kendisi** üzerinde kontrol ediliyor.
+
+**2. Oracle eşiği yanlış paydayı kullanıyordu.** `M <= deep_mean * 10^(τ/10)`,
+yani her tile kendi en derin hatasıyla değil **kare ortalamasıyla**
+karşılaştırılıyordu. Sonuç: kolay tile'lar her eşikte geçiyor, zor tile'lar
+hiçbirinde — tablo "%0, sonra uçurum, sonra %25" merdiveni veriyordu. Bu içeriğin
+değil paydanın özelliğiydi. Doğrusu `M <= M[:, -1:] * 10^(τ/10)`.
+
+Ayrıca ilk ızgara logaritmikti ve 0-1 dB aralığına yalnızca **altı** nokta
+düşürüyordu, üstelik alt ucu **negatif τ** üretiyordu — sessizce "her tile en
+derin çıkışa" demek, ve tabloyu bulguymuş gibi görünen sıfırlarla doldurmak.
+
+### Görsel rapor
+
+`scripts/plot_checkpoint.py` → `results/checkpoint_report.png`. Eğri ve çubukların
+yanında **resimler** de var, çünkü tasarruf sayısı yönlendirmenin yapı bulup
+bulmadığını gösteremez. Beauty / qp32: dense 38.32 → yönlendirilmiş 38.25 dB
+(**−0.071**), tasarruf **%37.7**, ve çıkış haritası rastgele değil — yüz ve saç
+derin çıkışlara, düz arka plan en sığa.
+
+(Resimler ilk denemede macenta-yeşil çıktı: YCbCr düzlemlerini RGB sanıp
+çiziyordum. Decoder'da bir hata gibi görünüyordu, oysa çizimde.)
+
+### Doyma sorusu
+
+HEADS-ONLY 53.651 / 759.216 adım = planın **%7.1'i**. Doymuyor: en sığ çıkış
+23.42 → 23.93, en derin 27.89 → 28.69. **Ama spread de büyüyor** (+4.46 → +4.76),
+yani en derin çıkış sığ olandan daha hızlı iyileşiyor — istediğimizin tersi.
+`--freeze_backbone`'un beklenen kısıtı: gövde sığ çıkışlara hizmet edecek şekilde
+yeniden düzenlenemiyor. DISTILL kolunda spread +1.2 ve ters yönde; karşılaştırma
+o kolun checkpoint'inde kesinleşecek.
