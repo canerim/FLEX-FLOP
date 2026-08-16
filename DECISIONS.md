@@ -1467,3 +1467,33 @@ sebebiydi; şimdi faturalanıyor ve kontrol %0.25'e kadar uyuşuyor.
 
 Yani halo artık bir kalite parametresi değil; tek işlevi router'ın temiz veri
 görmesi. Dikiş, yukarıdaki üç mekanizmayla ele alınıyor.
+
+---
+
+## 25. Çıpa ölçümü — ortak eğitim gerçekten maliyetli
+
+§14.3'te "frontier tek başına yanıltıcı olabilir" diye baseline eklemiştim.
+Baseline epoch 0'ı bitirince eşleşmiş karşılaştırma yapıldı: aynı recipe, aynı
+veri, aynı epoch — tek fark çok-çıkışlı hedef.
+
+| QP | baseline (K=1) | e1 (K=6) |
+|---:|---|---|
+| 0 | 0.228 bpp, **30.47 dB** | 0.290 bpp, 29.77 dB |
+| 32 | 0.379 bpp, **35.73 dB** | 0.475 bpp, 34.62 dB |
+| 63 | 0.719 bpp, **38.39 dB** | 0.689 bpp, 36.67 dB |
+
+Eşit bpp'de (0.689): baseline ~38.16, e1 36.67 → **1.49 dB fark**.
+qp0'da e1 hem daha fazla bit harcıyor hem daha az kalite veriyor.
+
+**Sonuç:** Eq(6) tüm çıkışları eşit ağırlıkla optimize edince en derin çıkışın
+kalitesi sığ çıkışlar uğruna feda ediliyor. Ve o çıkış kalite çıpamız — tüm
+frontier ona göre ölçülüyor.
+
+Bu, sıfırdan-eğitim kolunun neden gerçek UF ile kıyaslanabilir sonuç üretemediğinin
+ikinci sebebi. Birincisi encoder'ın da eğitilmesiydi (latent kayması, §20.5);
+ikincisi bu.
+
+**Warm-start yolunda ikisi de yapısal olarak imkânsız:** encoder donuk (latent
+birebir aynı) ve backbone donuk (çıpa bit-exact yayınlanmış UF). Eğitilen tek şey
+adapter'lar ve dikiş onarımı — ikisi de sıfır-init, yani en kötü ihtimalle
+hiçbir şey değiştirmiyorlar.

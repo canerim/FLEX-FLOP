@@ -1,0 +1,41 @@
+{
+  "config": {
+    "num_exits": 6,
+    "split_depth": 2,
+    "latent_patch": 8,
+    "latent_halo": 2,
+    "trunk_halo": 0,
+    "tile_pad_mode": "replicate",
+    "seam_repair": "full",
+    "adapter_kind": "conv1x1",
+    "adapter_expand": 4,
+    "full_frame_head": true,
+    "aux_weight": 1.0,
+    "aux_schedule": "warmup",
+    "aux_warmup_epochs": 10,
+    "qp": 63
+  },
+  "ckpt": "runs/e1_j2_p128/ckpt_epo0.pth.tar",
+  "router": null,
+  "dense": [
+    {
+      "qp": 0,
+      "bpp": 0.29000451664129895,
+      "psnr_611": 29.771618525187176,
+      "saving_pct": 0.0
+    },
+    {
+      "qp": 32,
+      "bpp": 0.47499773154656094,
+      "psnr_611": 34.621979196866356,
+      "saving_pct": 0.0
+    },
+    {
+      "qp": 63,
+      "bpp": 0.6891034742196401,
+      "psnr_611": 36.67179652055105,
+      "saving_pct": 0.0
+    }
+  ],
+  "routed": []
+}
