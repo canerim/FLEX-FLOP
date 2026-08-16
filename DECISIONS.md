@@ -1545,3 +1545,52 @@ negatif tasarruf, düzelmesi gereken ilk şey.
 | Stage A'nın kalan 2 epoch'u | adapter'lar + dikiş onarımı tam eğitilir |
 | GPU 7'de encoder-frozen / decoder-trained | decoder'ın **tamamı** (14.97M param) çok-çıkışlı yapıya uyum sağlar; şu an sadece 739k adapter'la sınırlı |
 | j=4 / 256px varyantı | ölçülen tek konfigürasyon ki dikiş tabanı 0.1 dB'nin altında (0.054) |
+
+---
+
+## 27. Stage A tamamlandı — adapter'lar 2.2 dB'ye kadar kazandırdı
+
+3 epoch, patch'li yoldan, donmuş backbone. qp63, 32 ayrık görüntü:
+
+| çıkış | tasarruf | eğitim öncesi | eğitim sonrası | kazanç |
+|---:|---:|---:|---:|---:|
+| 2 | %42.8 | 6.2736 dB | **4.0385** | +2.235 |
+| 3 | %27.9 | 4.9893 | **3.2133** | +1.776 |
+| 4 | %13.0 | 2.5705 | **1.7940** | +0.777 |
+| 5 | −%0.95 | 0.7076 | **0.6214** | +0.086 |
+
+Merdiven monoton kaldı. FLEX'in adapter kazancı +0.51..+0.90 dB idi; burada sığ
+çıkışlarda 2.2 dB'ye çıkıyor — çünkü başlangıç noktası daha kötüydü (telafisiz
+erken çıkışlar).
+
+**Ama hedef hâlâ uzak.** En ucuz çıkış 4.04 dB, en pahalısı 0.62 dB. Bu, §20.2'de
+ölçülen yapısal kısıtın doğrulanması: **j=2 / 128px'te dikiş tabanı 0.837 dB**,
+yani hiçbir adapter eğitimi 0.1 dB'ye indiremez. Konfigürasyon değişmeden hedef
+ulaşılamaz.
+
+Hedefe ulaşabilecek tek ölçülen konfigürasyon **j=4 / 256px** (taban 0.054 dB,
+tavan %14 tasarruf) — kuyrukta.
+
+Not: bu checkpoint `seam_repair` eklenmeden önce başlatıldığı için o modül
+identity, ama maliyet modelinde faturalanıyor — çıkış 5'teki −%0.95 tasarruf
+bundan. Dürüst rakam: ödeyip karşılığını almıyoruz.
+
+---
+
+## 28. Encoder-frozen / decoder-trained koşusu başladı
+
+Kullanıcının istediği yapılandırma, GPU 7'de:
+
+```
+DONMUŞ    27,947,520 param  — encoder + hyperprior + entropi (Microsoft'un)
+EĞİTİLEN  14,971,008 param  — decoder'ın TAMAMI: gövde + head + adapter + onarım
+```
+
+Latent, bitstream ve bpp gerçek DCVC-UF ile birebir aynı → oran ekseni sabit,
+ölçülen her fark decoder'a ait. Patch'li yoldan, replicate dolgu ve dikiş onarımı
+aktif.
+
+**Neden bu Stage A'dan daha umut verici:** Stage A sadece 739k adapter
+eğitebiliyordu, yani decoder gövdesi çok-çıkışlı yapıya hiç uyum sağlayamıyordu —
+sadece çıkış noktalarına yama atılıyordu. Burada 14.97M parametre serbest, gövde
+kendini erken çıkışa uygun şekilde yeniden düzenleyebilir.
