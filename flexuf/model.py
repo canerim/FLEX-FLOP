@@ -243,7 +243,7 @@ def load_flexuf_state(net, ck, *, where: str = "") -> None:
     """
     sd = ck.get("state_dict", ck.get("net", ck))
     missing, unexpected = net.load_state_dict(sd, strict=False)
-    NEW = ("dec.adapters.", "dec.seam_repair.")
+    NEW = ("dec.adapters.", "dec.seam_repair.", "dec.pad_coef")
     unexplained = [k for k in missing if not k.startswith(NEW)]
     if unexplained or unexpected:
         raise RuntimeError(

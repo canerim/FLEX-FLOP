@@ -108,11 +108,16 @@ def load_into_ladder(model, ckpt: Mapping, *, strict_report: bool = True):
     missing, unexpected = model.load_state_dict(remapped, strict=False)
 
     # Everything still missing must be one of the modules that did not exist in
-    # stock UF — the exit adapters and the seam-repair block. Both are
-    # zero-initialised, so a fresh model is exactly the released decoder until
-    # they are trained. Anything else means the remap dropped a real tensor,
-    # which would silently degrade the decoder.
-    NEW_MODULES = ("adapters.", "seam_repair.")
+    # stock UF — the exit adapters, the seam-repair block, and the per-channel
+    # border coefficient. Each is initialised to its own identity (zeros for the
+    # first two, ones for pad_coef, which makes it exactly replicate), so a fresh
+    # model is the released decoder until they are trained. Anything else means
+    # the remap dropped a real tensor, which would silently degrade the decoder.
+    #
+    # This list is a whitelist on purpose: it caught pad_coef the moment it was
+    # added, which is what it is for. Extending it is a deliberate act, not a
+    # workaround.
+    NEW_MODULES = ("adapters.", "seam_repair.", "pad_coef")
     non_adapter_missing = [k for k in missing if not k.startswith(NEW_MODULES)]
     if strict_report:
         if non_adapter_missing:

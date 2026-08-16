@@ -1978,3 +1978,85 @@ yeniden başlatmak, **aynı isim altında sessizce farklı bir deney** üretirdi
 Not: `declare -A GPU=(...)` `main()`'in dışında olduğu için çalışan örneğin
 belleğinde zaten çözülmüştü — dosyayı düzenlemek yetmezdi, süreci yeniden
 başlatmak gerekti.
+
+---
+
+## 38. DÜZELTME: arls bedava değil — kazancı ölçüp faturayı ölçmemiştim
+
+Bölüm 31'de arls'i varsayılan yaptım ve "parametresiz, bedava" dedim. Paperın
+kendi uyarısını (*"moderate increase in time cost"*) aktarmıştım ama **ölçmemiştim.**
+Bu, erken tasarruf rakamlarını şişiren hatanın aynı sınıfı: kazanç ölçülüyor,
+fatura ölçülmüyor.
+
+**Gecikme, 1080p tam decode, deepest exit:**
+
+| mod | j2/128px | j2/256px |
+|---|---|---|
+| zeros | 383.7 ms | 436.0 ms |
+| replicate | 384.0 (+0.1%) | 430.4 (−1.3%) |
+| linear | 409.5 (+6.7%) | 442.5 (+1.5%) |
+| arls | **423.3 (+10.3%)** | **471.2 (+8.1%)** |
+
+**Ayırt edici ölçüm — bu benim sarmalayıcımın mı, AR uydurmasının mı maliyeti:**
+
+    native cudnn zeros dolgu    440.5 ms   (referans)
+    sarmalayici + zeros         440.1 ms    -0.1%   <- sarmalayici bedava
+    sarmalayici + replicate     429.1 ms    -2.6%
+    sarmalayici + arls          487.8 ms   +10.7%   <- fatura gerçekten AR uydurması
+
+MAC sayısı bunu **yakalayamazdı**: AR uydurması tile ve blok başına iki
+indirgeme, MAC olarak ihmal edilebilir. Maliyet kernel launch ve bellek bandı.
+
+**Değerlendirme.** arls, replicate'e göre qp63'te +0.034 dB alıyor, karşılığında
+decode'un %10.7'sini harcıyor. Cost modelinde bir trunk bloğu %7.45 → %10.7 ≈
+**1.34 blok**. Yönlendirme o bütçeyi 0.034 dB'den çok daha iyi harcar.
+
+### Kurtarma denemesi 1 — sabit küçültme (başarısız)
+
+arls'in katsayısı korelasyon 1'de replicate'e, 0'da zeros'a indirgeniyor. Sabit
+bir a bunun çoğunu yakalarsa uydurma boşuna ödeniyor demekti. `shrink<a>` modu,
+maliyeti tam replicate kadar. 10 CTC karesi, j=2/128px:
+
+| mod | qp0 | qp32 | qp63 |
+|---|---|---|---|
+| replicate | 0.1288 | 0.1771 | 0.2160 |
+| shrink0.95 | 0.1228 | 0.1774 | 0.2138 |
+| shrink0.9 | 0.1249 | 0.1852 | 0.2185 |
+| shrink0.8 | 0.1356 | 0.2009 | 0.2279 |
+| arls | **0.1082** | **0.1473** | **0.1797** |
+
+Sabit katsayı arls'in kazancının **hiçbirini** yakalamıyor; 0.95 replicate'e
+oturuyor, altındaki her şey daha kötü. Kazanç katsayının **uyarlanabilirliğinde**.
+
+### Kurtarma denemesi 2 — öğrenilen kanal-başı katsayı (çalışıyor ama yine ucuz değil)
+
+arls kanal VE tile başına uyarlanıyor. `learned` modu kanal-başı yarısını
+tutuyor: `pad = a_c · kenar`, a_c eğitilen 384 skaler, 1.0 ile başlatılıyor
+(yani **tam olarak replicate**). Doğrulandı:
+
+    learned(a=1) == replicate     max|diff| = 0.0
+    pad_coef gradyani             384/384 kanala ulasiyor
+    gecikme  replicate 372.7 | learned 397.7 (+6.7%) | arls 422.3 (+13.3%)
+
+Ucuz değil. **Eager PyTorch'ta her özel dolgu %5-13 arası maliyetli**, çünkü
+`F.pad`'in replicate'i füzyonlu tek kernel, diğer her şey fazladan bir bellek
+geçişi. %6.7 ≈ 0.9 trunk bloğu; 0.034 dB için hâlâ kötü.
+
+### Karar
+
+`tile_pad_mode` varsayılanı **`replicate`**. `arls`, `learned`, `shrink*`
+ölçülmüş maliyetleriyle birlikte kodda ve belgede kalıyor — bulgu korunuyor,
+seçim açık. Bir üretim CUDA kernel'inde AR dolgusu konvolüsyona füzyonlanabilir
+ve hikâye değişebilir; ama **ölçtüğümü raporluyorum, mümkün olabileceği düşünülen
+şeyi değil.**
+
+**İki GRID koşusu replicate ile yeniden başlatıldı** (`wdec_j2_p128_grid` GPU4,
+`wdec_j2_p256_grid` GPU7). Yan fayda: deney tasarımı da temizlendi — GRID artık
+(replicate + grid), WD-j2/128 ise (replicate + full), yani aralarında **tek
+değişken** var: ızgara kapısı. arls+grid iken iki değişken vardı.
+
+Ayrıca `wrap_tile_padding` artık zaten sarmalanmış bir konvolüsyonu sarmalamayı
+reddediyor: iç içe geçtiğinde hata `conv2d`'nin içinden
+`'PaddedDepthwise' object has no attribute 'weight'` diye çıkıyordu — sebebinden
+çok uzakta. Ve `pad_coef`, warm-start'ın bilinen-yeni tensör beyaz listesine
+eklendi; liste onu **eklendiği anda yakaladı**, zaten bunun içindi.

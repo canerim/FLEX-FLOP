@@ -328,6 +328,10 @@ class MultiExitIntraDecoder(nn.Module):
         # makes it bit-exact stock UF.
         self.adapters = nn.ModuleList(build_adapter(self.cfg) for _ in range(K - 1))
         self.head = DepthConvBlock(TRUNK_CH, PRESHUFFLE_CH)
+        # One shared per-channel border coefficient, only when it is used.
+        # Initialised to 1.0, which makes "learned" start as exactly replicate.
+        if self.cfg.tile_pad_mode == "learned":
+            self.pad_coef = nn.Parameter(torch.ones(TRUNK_CH))
         if self.cfg.seam_repair == "none":
             self.seam_repair = None
         elif self.cfg.seam_repair == "grid":
@@ -353,9 +357,10 @@ class MultiExitIntraDecoder(nn.Module):
         wrapper returns an undo closure, which the caller must run; a plain mode
         returns None because restoring it is a second string assignment.
         """
-        if mode in ("linear", "arls"):
+        if mode in ("linear", "arls", "learned") or mode.startswith("shrink"):
             from .padding import wrap_tile_padding
-            return wrap_tile_padding(self.groups, first_group, mode)
+            return wrap_tile_padding(self.groups, first_group, mode,
+                                     getattr(self, "pad_coef", None))
 
         for g in range(first_group, len(self.groups)):
             for m in self.groups[g].modules():
