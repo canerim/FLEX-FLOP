@@ -51,7 +51,7 @@ from flexuf.router.router import STEM_NAMES, stem_signals  # noqa: E402
 
 
 @torch.no_grad()
-def collect(net, loader, cfg, device, qp_val, max_batches):
+def collect(net, loader, cfg, device, qp_val, max_batches, ref_net=None):
     """Per-tile MSE at every exit, plus the router's view of each tile."""
     mses, sigs = [], []
     for i, batch in enumerate(loader):
@@ -62,6 +62,13 @@ def collect(net, loader, cfg, device, qp_val, max_batches):
         qp = torch.full((B,), qp_val, dtype=torch.int32, device=device)
 
         out = net.forward_all_exits(x, qp)
+        if ref_net is not None:
+            # Released DCVC-UF on the SAME latent. --freeze_encoder keeps the
+            # analysis side untouched, so the latent is identical and the gap is
+            # the synthesis alone.
+            with torch.no_grad():
+                y_r, q_r, _ = net._encode_to_latent(x, qp)
+                out["x_hats"] = list(out["x_hats"]) + [ref_net.dec.forward_full(y_r, q_r)]
         rgb_p = cfg.rgb_patch
         H, W = x.shape[-2:]
         nh, nw = H // rgb_p, W // rgb_p
@@ -100,6 +107,10 @@ def main() -> int:
     ap.add_argument("--crop", type=int, default=512)
     ap.add_argument("--batches", type=int, default=12)
     ap.add_argument("--batch_size", type=int, default=4)
+    ap.add_argument("--vs_stock", action="store_true",
+                    help="measure dB against the RELEASED DCVC-UF decoder rather "
+                         "than against our own deepest exit, so anchor drift is "
+                         "inside the number instead of hidden behind it")
     ap.add_argument("--device", default="0")
     a = ap.parse_args()
 
@@ -121,7 +132,17 @@ def main() -> int:
     loader = DataLoader(ds, batch_size=a.batch_size, num_workers=4,
                         sampler=SequentialSampler(ds))
 
-    mses, sigs = collect(net, loader, cfg, device, a.qp, a.batches)
+    ref_net = None
+    if a.vs_stock:
+        base = torch.load("runs/warmstart/ckpt_warmstart.pth.tar",
+                          map_location="cpu", weights_only=False)
+        ref_net = FlexUFIntra(cfg).to(device).eval()
+        load_flexuf_state(ref_net, base)
+
+    mses, sigs = collect(net, loader, cfg, device, a.qp, a.batches, ref_net)
+    if ref_net is not None:
+        # Last column is the reference; split it off so `mses` stays K wide.
+        ref_mse, mses = mses[:, -1:], mses[:, :-1]
     K = mses.shape[1]
     costs = exit_costs(cfg, "head")
     print(f"\ncheckpoint : {a.ckpt}")
@@ -129,7 +150,14 @@ def main() -> int:
 
     # ---- 1. does the oracle vary? -------------------------------------
     # dB penalty of each exit, per tile, against that tile's own full decode.
-    db = 10 * torch.log10(mses / mses[:, -1:].clamp_min(1e-12))
+    # Reference: our own deepest exit by default, the RELEASED decoder with
+    # --vs_stock. The distinction is not cosmetic. Training the whole decoder
+    # moves the deepest exit away from the release (measured: -0.20 dB at qp32
+    # after one epoch), so "x% at 0.1 dB" against our own exit can be "x% at
+    # 0.30 dB" against the codec a reviewer compares us to. Only the second
+    # number is a claim about DCVC-UF.
+    ref = ref_mse if ref_net is not None else mses[:, -1:]
+    db = 10 * torch.log10(mses / ref.clamp_min(1e-12))
     print(f"\nper-tile dB penalty by exit (mean +- std across tiles):")
     for k in range(K):
         print(f"  exit {k}: {db[:, k].mean():+7.3f} +- {db[:, k].std():5.3f}"

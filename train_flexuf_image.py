@@ -68,7 +68,7 @@ from flexuf.losses import (  # noqa: E402
     per_exit_rd,
     psnr_from_mse,
 )
-from flexuf.model import FlexUFIntra  # noqa: E402
+from flexuf.model import FlexUFIntra, load_flexuf_state  # noqa: E402
 
 
 def get_training_strategy():
@@ -135,6 +135,32 @@ def parse_args(argv):
                         "over replicate, which buys 1.34 trunk blocks of budget for "
                         "very little; 'learned' keeps its per-channel adaptivity at "
                         "replicate's cost, starting at exactly replicate.")
+    p.add_argument("--epoch_offset", type=int, default=0,
+                   help="where in Microsoft's 105-epoch schedule to START. 0 is "
+                        "correct from scratch and WRONG for a warm start: 2e-4 is "
+                        "the from-scratch initial lr, and --pretrain hands us the "
+                        "OUTPUT of epoch 105, so applying epoch-0's lr kicks a "
+                        "converged decoder off its optimum. Measured: the deepest "
+                        "exit fell 0.15/0.20/0.26 dB below released DCVC-UF at "
+                        "qp0/32/63 after ONE epoch. 69 puts us in the 1e-5 @ 256px "
+                        "fine-tune regime -- the same recipe, read at the right place.")
+    p.add_argument("--new_lr_scale", type=float, default=1.0,
+                   help="lr multiplier for modules that did NOT exist in stock UF "
+                        "(adapters, seam repair, pad_coef). They are zero-init and "
+                        "must learn from nothing, so the fine-tune lr that protects "
+                        "the inherited trunk is far too small for them. One lr "
+                        "cannot serve both; this is the standard warm-start split.")
+    p.add_argument("--anchor_weight", type=float, default=0.0,
+                   help="pin the deepest exit to the RELEASED decoder's output "
+                        "with this weight (0 = off). Measured need: training the "
+                        "whole decoder drifts the deepest exit 0.20 dB (CTC) to "
+                        "0.38 dB (OpenImages, qp32) below the release after ONE "
+                        "epoch. Every saving figure is quoted 'at x dB vs "
+                        "DCVC-UF', so that drift is spent before a single tile "
+                        "exits early -- it alone exceeds a 0.1 dB budget. "
+                        "Freezing the trunk removes the drift but leaves a 1x1 "
+                        "adapter to replace six DepthConvBlocks; this keeps the "
+                        "trunk trainable and pins only the deep end.")
     p.add_argument("--freeze_encoder", action="store_true",
                    help="freeze the encoder, hyperprior and entropy model; train "
                         "the WHOLE decoder (trunk, head and adapters)")
@@ -155,11 +181,37 @@ def build_cfg(args) -> FlexUFConfig:
     )
 
 
-def train_one_epoch(net, loader, optimizer, epoch, cfg, args, device, logf):
+def _param_groups(net, new_lr_scale):
+    """Split trainable tensors into inherited and new-since-stock-UF.
+
+    The two need different learning rates for opposite reasons: the inherited
+    decoder is already converged and any large step moves it off the optimum
+    (measured: 0.20 dB of anchor drift at qp32 in one epoch at lr 2e-4), while
+    the adapters and seam repair are zero-initialised and learn nothing at the lr
+    that keeps the trunk still. Running both at one lr means picking which of the
+    two failures to accept.
+    """
+    NEW_PREFIXES = (".adapters.", ".seam_repair.", "pad_coef")
+    inherited, fresh = [], []
+    for name, prm in net.named_parameters():
+        if not prm.requires_grad:
+            continue
+        (fresh if any(k in name for k in NEW_PREFIXES) else inherited).append(prm)
+    groups = [{"params": inherited, "lr_scale": 1.0}]
+    if fresh:
+        groups.append({"params": fresh, "lr_scale": new_lr_scale})
+    print(f"param groups: {sum(p.numel() for p in inherited):,} inherited "
+          f"(lr x1), {sum(p.numel() for p in fresh):,} new (lr x{new_lr_scale})",
+          flush=True)
+    return groups
+
+
+def train_one_epoch(net, loader, optimizer, epoch, cfg, args, device, logf,
+                    anchor_net=None):
     strategy = get_training_strategy()
     net.train()
 
-    idx = min(len(strategy) - 1, epoch)
+    idx = min(len(strategy) - 1, epoch + args.epoch_offset)
     _, lr, patch_w, patch_h = strategy[idx]
     # The recipe trains at 256x256 until epoch 90. With a 256px tile that is a
     # single tile per crop — no borders, no seams — so patched training would be
@@ -169,8 +221,10 @@ def train_one_epoch(net, loader, optimizer, epoch, cfg, args, device, logf):
     if args.min_crop:
         patch_w = max(patch_w, args.min_crop)
         patch_h = max(patch_h, args.min_crop)
+    # Two groups: inherited weights at the schedule's lr, new zero-init modules
+    # at a multiple of it. `lr_scale` is set where the optimiser is built.
     for g in optimizer.param_groups:
-        g["lr"] = lr
+        g["lr"] = lr * g.get("lr_scale", 1.0)
     loader.dataset.set_patch_size(patch_w, patch_h)
 
     w = exit_weights(
@@ -198,6 +252,30 @@ def train_one_epoch(net, loader, optimizer, epoch, cfg, args, device, logf):
             out = net.forward_all_exits(x, qp)
             w_step = w
         ld = multi_exit_rd_loss(out["mses"], out["bpp"], lambdas, w_step)
+
+        # Anchor: hold the deepest exit on the released decoder's output.
+        #
+        # Not a regulariser for its own sake. The project's claim is "x% cheaper
+        # at y dB versus DCVC-UF", and y is only that if our deepest exit still
+        # IS DCVC-UF. It starts bit-exact (warm start) and drifts, because the
+        # mixed-depth objective gives the deepest exit a quarter of the gradient
+        # while the shared trunk is pulled toward the shallow exits.
+        #
+        # Distilled against the frozen decoder's OUTPUT rather than the source
+        # image: matching the release is the requirement, and the release is not
+        # the source. A term that pushed the deepest exit toward the image would
+        # be asking it to beat DCVC-UF, which is a different project.
+        anchor_mse = None
+        if anchor_net is not None:
+            with torch.no_grad():
+                y_a, q_a, _ = net._encode_to_latent(x, qp)
+                ref = anchor_net.dec.forward_full(y_a, q_a)
+            deep = net.dec.forward_full(*net._encode_to_latent(x, qp)[:2])
+            anchor_mse = ((deep - ref) ** 2).mean()
+            # Scaled by the same lambda the reconstruction term carries, so the
+            # weight means "how much is a dB of anchor drift worth relative to a
+            # dB of reconstruction error" and does not have to be retuned per QP.
+            ld["loss"] = ld["loss"] + args.anchor_weight * lambdas.mean() * anchor_mse
 
         optimizer.zero_grad(set_to_none=True)
         ld["loss"].backward()
@@ -241,6 +319,7 @@ def train_one_epoch(net, loader, optimizer, epoch, cfg, args, device, logf):
                 "lr": lr,
                 "patch": patch_w,
                 "loss": ld["loss"].item(),
+                "anchor_mse": (anchor_mse.item() if anchor_mse is not None else None),
                 "bpp": ld["bpp"].item(),
                 # The ladder's shape. A healthy run has these monotonically
                 # increasing; all-equal means the exits have collapsed, which is
@@ -326,6 +405,20 @@ def main(argv):
     # came out 6.45x the release's, and qp63 landed at 0.783 bpp against 0.829).
     # Here the rate axis is pinned to the release while the decoder gets full
     # freedom.
+    anchor_net = None
+    if args.anchor_weight > 0:
+        if not args.pretrain:
+            raise SystemExit("--anchor_weight needs --pretrain: the anchor IS the "
+                             "released decoder, and without a warm start there is "
+                             "nothing to pin to.")
+        anchor_net = FlexUFIntra(cfg).to(device).eval()
+        load_flexuf_state(anchor_net, torch.load(args.pretrain, map_location="cpu",
+                                                 weights_only=False))
+        for prm in anchor_net.parameters():
+            prm.requires_grad = False
+        print(f"anchor: deepest exit pinned to {args.pretrain} "
+              f"with weight {args.anchor_weight}", flush=True)
+
     if args.freeze_encoder:
         for name, prm in net.named_parameters():
             prm.requires_grad = name.startswith("dec.")
@@ -336,7 +429,7 @@ def main(argv):
         print(f"frozen encoder: training the decoder, {n_tr:,} / {n_all:,} params "
               f"({100*n_tr/n_all:.2f}%); {n_enc:,} analysis-side params frozen "
               f"at the release values", flush=True)
-        optimizer = torch.optim.AdamW(trainable, lr=1e-4)
+        optimizer = torch.optim.AdamW(_param_groups(net, args.new_lr_scale), lr=1e-4)
     elif args.freeze_backbone:
         for name, prm in net.named_parameters():
             prm.requires_grad = ".adapters." in name or ".seam_repair." in name
@@ -345,7 +438,7 @@ def main(argv):
         n_all = sum(p_.numel() for p_ in net.parameters())
         print(f"frozen backbone: training {n_tr:,} / {n_all:,} params "
               f"({100*n_tr/n_all:.2f}%)", flush=True)
-        optimizer = torch.optim.AdamW(trainable, lr=1e-4)
+        optimizer = torch.optim.AdamW(_param_groups(net, args.new_lr_scale), lr=1e-4)
     else:
         optimizer = torch.optim.AdamW(net.parameters(), lr=1e-4)
 
@@ -379,7 +472,8 @@ def main(argv):
     logf = open(Path(args.save_dir) / "train_log.jsonl", "a")
     try:
         for epoch in range(begin_epoch, args.epochs):
-            train_one_epoch(net, loader, optimizer, epoch, cfg, args, device, logf)
+            train_one_epoch(net, loader, optimizer, epoch, cfg, args, device, logf,
+                            anchor_net)
             torch.save(
                 {"net": net.state_dict(), "opt": optimizer.state_dict(), "epoch": epoch},
                 ckpt_path,

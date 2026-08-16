@@ -2196,3 +2196,67 @@ araştırmayı çözülmüş bir probleme geri gönderirdi. Gerçek sinyalleri r
 şekilde düzeltildi, ve `STEM_NAMES` sinyalleri üreten fonksiyonun yanına kondu:
 etiketlediği şeyden ayrı yaşayan bir isim listesi sessizce kayar, ve yanlış
 etiketli bir korelasyon hiç korelasyon olmamasından kötüdür.
+
+---
+
+## 41. En derin çıkış gerçek DCVC-UF'ten kaymış — recipe'yi yanlış noktadan uyguluyordum
+
+Kullanıcı doğru soruyu sordu: "kusursuz bir router ile gerçek DCVC-UF'e göre %37
+tasarruf 0.1 dB ile, doğru mu?" Cevap **hayır**, ve sebebi ölçülebilir.
+
+Oracle'ın %37'si (bölüm 40) **bizim kendi en derin çıkışımıza** karşı. O çıkış
+warm-start'ta bit-exact stok UF'ti, ama eğitim onu taşıyabilir.
+`scripts/anchor_drift.py` — donuk encoder olduğu için latent birebir aynı
+(`max|diff| = 0.0` ile doğrulandı), tek fark sentez:
+
+| qp | stok DCVC-UF | bizim en derin | kayma |
+|---|---|---|---|
+| 0 | 33.252 | 33.100 | **−0.153** |
+| 32 | 38.981 | 38.781 | **−0.201** |
+| 63 | 43.827 | 43.564 | **−0.263** |
+
+**Tek epoch'ta.** Yani gerçek DCVC-UF'e karşı iddia %37 @ 0.1 dB değil,
+%37 @ ~0.29 dB. Manşet dört kat yanlış olurdu.
+
+### Sebep: recipe doğru, uygulandığı nokta yanlış
+
+`get_training_strategy()` birebir kopyalanmıştı — ama **epoch 0'dan** okunuyordu:
+
+    [0,   2e-4, 256] × 45   <- koşularımız burada
+    ...
+    [69,  1e-5, 256] × 20
+    [90,  2e-4, 512] × 5 ... [103, 1e-6, 512]
+
+2e-4 **sıfırdan eğitimin başlangıç** lr'si. Ama `--pretrain` bize bu tablonun
+**105. epoch'unun çıktısını** veriyor. Yakınsamış bir modele başlangıç lr'si
+uygulamak onu optimumundan tekmeler — kayma tam olarak bu. Microsoft'un recipe'sine
+uymak, onu *doğru yerinden* okumak demek.
+
+### Üstelik önlemi zaten yazmıştım ve kapalı bırakmıştım
+
+`--anchor_weight`, en derin çıkışı yayınlanmış decoder'a MSE ile bağlıyor
+(`loss += w · λ̄ · ||deep − released||²`). Varsayılanı 0.0 ve hiçbir koşuda
+verilmemiş. Kullanılmayan yolda ölü bir hata da birikmişti: `load_flexuf_state`
+import edilmemişti, ilk kez açtığımda `NameError` ile patladı. **Varsayılan olarak
+kapalı bir güvenlik mekanizması, olmayan bir mekanizmadır.**
+
+### Düzeltme — dört warm-start koşusu yeniden başlatıldı
+
+| ayar | değer | neden |
+|---|---|---|
+| `--epoch_offset 75` | lr 1e-5 @ 256px | recipe'nin ince ayar rejimi; devam eden eğitimin doğru yeri |
+| `--new_lr_scale 20` | adapter'lar 2e-4 | sıfır-başlatmalı modüller yakınsamış gövdeyi koruyan lr'de hiçbir şey öğrenemez; tek lr ikisine birden hizmet edemez |
+| `--anchor_weight 1.0` | — | en derin çıkış yayınlanmış decoder'a bağlı |
+
+Başlangıçta `anchor_mse = 0.0` — yani pin tam yerinde. Eski koşular
+`*.drifted` olarak saklandı, silinmedi.
+
+Ayrıca `scripts/launch_wdec.sh`: `setsid` ile başlatılıyor. `nohup` yalnızca
+SIGHUP'ı engelliyor; süreç grubunu öldüren bir denetleyici shell dört koşuyu
+birden götürdü, bir kez oldu.
+
+### Yan cevap: kalite noktası başına ayrı eğitim gerekmiyor
+
+DCVC-UF tek model, 64 QP seviyesi (`q_scale_enc/dec` qp ile indeksleniyor).
+Eğitim her görüntüye rastgele qp örneklüyor, router da qp-koşullu
+(`router.assign(sig, qp)`). qp0/32/63 tablolarının hepsi **aynı modelden**.
