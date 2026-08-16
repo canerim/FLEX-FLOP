@@ -110,8 +110,14 @@ def sweep(net, router, loader, cfg, device, qps, mode: str):
                 sig = stem_signals(stem, y_hat, sc, cfg)
                 nt = sig.shape[0] // B
                 em = router.assign(sig, qp.long().repeat_interleave(nt))
+                # q_dec carries one row per image. Passing the whole thing to a
+                # single-image decode makes [1,C,H,W] * [B,C,1,1] broadcast the
+                # result back up to batch B, and cat then yields B*B. The same
+                # mistake was fixed in model.py; it survived here because nothing
+                # tied the two call sites together.
                 x_hat = torch.cat([
-                    net.dec(y_hat[i:i + 1], q_dec, exit_map=em[i * nt:(i + 1) * nt])
+                    net.dec(y_hat[i:i + 1], q_dec[i:i + 1],
+                            exit_map=em[i * nt:(i + 1) * nt])
                     for i in range(B)
                 ])
                 sv = sum(saving(em[i * nt:(i + 1) * nt], cfg, "head") for i in range(B)) / B

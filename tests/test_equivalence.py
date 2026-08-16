@@ -171,12 +171,26 @@ def test_key_remap_is_a_bijection():
 
 
 def test_cost_model_is_monotone():
-    """Deeper exits must cost more, and the deepest must cost exactly 1.0."""
-    cfg = FlexUFConfig(split_depth=6)  # j=K: no tiling, so C_{K-1} is the full decode
+    """Deeper exits cost more, and the deepest costs a plain decode plus the repair.
+
+    Not exactly 1.0: the seam-repair pass runs even when every tile takes the
+    deepest exit, so the routed path genuinely costs a full decode PLUS the
+    repair. Asserting 1.0 would be asserting that a module we deliberately added
+    is free. The check is against the arithmetic, so it stays honest if the
+    repair's cost changes.
+    """
+    from flexuf.cost import seam_repair_share
+
+    cfg = FlexUFConfig(split_depth=6)  # j=K: no tiling
     c = exit_costs(cfg, "head").tolist()
     assert all(c[i] < c[i + 1] for i in range(len(c) - 1)), f"not monotone: {c}"
-    assert abs(c[-1] - 1.0) < 1e-6, f"deepest exit should cost 1.0, got {c[-1]}"
-    print(f"  cost model monotone, C_max = {c[-1]:.6f}")
+    expected = 1.0 + seam_repair_share(cfg.seam_repair)
+    assert abs(c[-1] - expected) < 1e-6, (
+        f"deepest exit should cost {expected:.6f} "
+        f"(full decode + {cfg.seam_repair} seam repair), got {c[-1]:.6f}"
+    )
+    print(f"  cost model monotone, C_max = {c[-1]:.6f} "
+          f"(= 1.0 + {100*seam_repair_share(cfg.seam_repair):.3f}% repair)")
 
 
 if __name__ == "__main__":

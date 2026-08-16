@@ -370,6 +370,20 @@ class MultiExitIntraDecoder(nn.Module):
           5. crop halo, unpatchify      reshape
           6. head                       full-frame  (heals the remaining seam)
         """
+        # Catch the broadcast trap at the door rather than in each caller.
+        #
+        # quant_step carries one row per image. Handing a batch-B quant_step to a
+        # single-image decode makes [1,C,H,W] * [B,C,1,1] broadcast the result
+        # silently back up to batch B — no error, just a wrong-shaped answer that
+        # surfaces somewhere unrelated. It has now happened twice, in model.py
+        # and in rd_curve.py, because nothing tied the call sites together.
+        if quant_step.dim() == 4 and quant_step.shape[0] not in (1, y_hat.shape[0]):
+            raise ValueError(
+                f"quant_step batch {quant_step.shape[0]} does not match latent "
+                f"batch {y_hat.shape[0]}; slice it per image "
+                f"(quant_step[i:i+1]) when decoding one image at a time"
+            )
+
         cfg = self.cfg
         # The trunk halo is its own knob and defaults to ZERO. Carrying the
         # router's halo through the per-tile trunk multiplies that work by
