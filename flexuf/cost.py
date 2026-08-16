@@ -76,7 +76,12 @@ def adapter_vs_block(kind: str = "conv1x1") -> float:
 #   depthwise 3x3 : 9C
 #   pointwise 1x1 : C^2
 # expressed as a share of the whole decode via the trunk's per-block share.
-SEAM_REPAIR_MACPX = {"none": 0.0, "depthwise": 9 * _C, "full": 9 * _C + _C**2}
+SEAM_REPAIR_MACPX = {"none": 0.0, "depthwise": 9 * _C, "full": 9 * _C + _C**2,
+    # The grid gate is 256 scalars and one elementwise multiply on the
+    # canvas — below the resolution of this model, so it is billed as "full"
+    # rather than pretended to be free.
+    "grid": 9 * _C + _C**2,
+}
 
 
 def seam_repair_share(kind: str) -> float:

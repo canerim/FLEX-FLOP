@@ -175,6 +175,60 @@ class SeamRepair(nn.Module):
         return x + (h if self.pw is None else self.pw(h))
 
 
+class GridSeamRepair(nn.Module):
+    """Seam repair that is TOLD where the seams are instead of having to find them.
+
+    The motivation is a defect in the plain `SeamRepair`: it is a translation-
+    invariant 3x3 applied over the whole canvas, so it must infer from content
+    alone which pixels sit on a tile boundary — and it must apply the same
+    correction to the 77% of pixels that are clean interior, where any correction
+    at all is damage. It is asked to solve a harder problem than the one we have.
+
+    But the tile grid is not unknown. It is fixed, regular, and known exactly at
+    both training and inference: `unpatchify` lays tiles down on a P x P lattice
+    starting at the origin. So the correction is gated by a learned map indexed by
+    position WITHIN a tile:
+
+        Repair(f) = f + G[i mod P, j mod P] . PW( WSiLU( DW3x3(f) ) )
+
+    G is P x P = 256 scalars shared across all 384 channels — 0.0007% of the
+    decoder's parameters, and no MAC cost beyond one broadcast multiply. It lets
+    the module apply a strong correction on the boundary ring and switch itself
+    off in the interior, which is what the error maps say is needed.
+
+    Initialisation carries the prior rather than discarding it: G starts at
+    exp(-d/tau) with d the distance in feature pixels to the nearest tile edge, so
+    at step 0 the gate is already concentrated on the seam and training refines it
+    instead of discovering it. `pw` is still zero-initialised, so the whole module
+    is exactly the identity at step 0 and the bit-exactness control still holds —
+    G's initialisation shapes the first gradients, not the first output.
+    """
+
+    def __init__(self, channels: int = TRUNK_CH, patch: int = 16, tau: float = 2.0):
+        super().__init__()
+        self.patch = patch
+        self.dw = nn.Conv2d(channels, channels, 3, padding=1, groups=channels,
+                            padding_mode="replicate")
+        self.act = WSiLU()
+        self.pw = nn.Conv2d(channels, channels, 1)
+        nn.init.zeros_(self.pw.weight)
+        nn.init.zeros_(self.pw.bias)
+
+        idx = torch.arange(patch)
+        d = torch.minimum(idx, patch - 1 - idx).float()          # dist to edge, 1-D
+        d2 = torch.minimum(d[:, None], d[None, :])               # 2-D: nearest edge
+        self.gate = nn.Parameter(torch.exp(-d2 / tau)[None, None])
+
+    def forward(self, x: torch.Tensor) -> torch.Tensor:
+        h = self.pw(self.act(self.dw(x)))
+        H, W = x.shape[-2:]
+        P = self.patch
+        # Canvas is padded to whole tiles upstream, so this tiles exactly; the
+        # slice is belt-and-braces for any caller that pads differently.
+        g = self.gate.repeat(1, 1, -(-H // P), -(-W // P))[:, :, :H, :W]
+        return x + g * h
+
+
 def build_adapter(cfg: FlexUFConfig) -> nn.Module:
     if cfg.adapter_kind == "conv1x1":
         return Conv1x1Adapter(TRUNK_CH)
@@ -274,10 +328,13 @@ class MultiExitIntraDecoder(nn.Module):
         # makes it bit-exact stock UF.
         self.adapters = nn.ModuleList(build_adapter(self.cfg) for _ in range(K - 1))
         self.head = DepthConvBlock(TRUNK_CH, PRESHUFFLE_CH)
-        self.seam_repair = (
-            SeamRepair(TRUNK_CH, self.cfg.seam_repair == "depthwise")
-            if self.cfg.seam_repair != "none" else None
-        )
+        if self.cfg.seam_repair == "none":
+            self.seam_repair = None
+        elif self.cfg.seam_repair == "grid":
+            self.seam_repair = GridSeamRepair(TRUNK_CH, self.cfg.feature_patch)
+        else:
+            self.seam_repair = SeamRepair(TRUNK_CH,
+                                          self.cfg.seam_repair == "depthwise")
 
     # -- tile-border padding -------------------------------------------------
     def _set_tile_padding(self, mode: str, first_group: int):

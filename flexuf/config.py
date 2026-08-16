@@ -155,6 +155,10 @@ class FlexUFConfig:
     "none"       — off, the stock behaviour
     "depthwise"  — 3x3 depthwise only, ~0.025% of the decode
     "full"       — 3x3 depthwise + 1x1, ~1.09% of the decode
+    "grid"       — "full" plus a P x P gate indexed by position WITHIN a tile,
+                   so the module is told where the seams are instead of having to
+                   infer them, and can switch itself off over clean interior.
+                   256 extra scalars and one broadcast multiply: the same ~1.09%.
 
     Why here and not in the trunk: the seam is a spatial artefact and repairing
     it needs a 3x3 that can see ACROSS a tile boundary. Inside the per-tile trunk

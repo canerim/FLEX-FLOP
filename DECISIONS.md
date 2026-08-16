@@ -1787,3 +1787,68 @@ j=2'nin tavanı %74.5. Hedef %30-40 tasarruf bu tavanın yarısından azı, yani
 adapter'ların telafi etmesi gereken şey dikiş değil derinlik kaybı — ve Stage A
 adapter'larının daha önce +2.235 dB'ye kadar getirdiği ölçülmüştü. Hedef
 ulaşılabilir görünüyor; koşu bunu doğrulayacak ya da çürütecek.
+
+---
+
+## 33. arls gerçek CTC'de de kazanıyor — ve dikiş orada crop'takinden daha kötü
+
+İlk ablasyon 512x512 OpenImages crop'unda, 16 tile ile yapılmıştı. Dağıtım
+koşulu bu değil: 1080p kare, tile katına hizalandığında 15x9 = 135 tile. Piksel
+başına sınır oranı aynı ama içerik aynı değil — video kareleri, OpenImages
+crop'unun taşımadığı geniş düz alanlar ve uzun düz kenarlar içeriyor. Crop
+sonucunun aktarılacağını varsaymak, daha önce replicate hatasını üreten türden
+bir varsayımdı; o yüzden ölçtüm.
+
+Saf dikiş cezası, dB — j=2, 128px tile, CTC native (UVG 4 + HEVC_E 3, 18 kare):
+
+| mod | qp0 | qp32 | qp63 |
+|---|---|---|---|
+| zeros | 0.2271 | 0.4993 | 1.1670 |
+| replicate | 0.1339 | 0.1830 | 0.2125 |
+| linear | 0.3841 | 0.4741 | 0.5021 |
+| **arls** | **0.1125** | **0.1533** | **0.1785** |
+
+**zeros gerçek içerikte çok daha kötü** (qp63'te 1.167 vs crop'ta 0.840): düz
+alanlarda sıfır dolgu felaket, çünkü uydurduğu komşu gerçek komşudan maksimum
+uzakta. replicate ve arls ise neredeyse aynı kalıyor — ikisi de içerikten
+türediği için içerik değiştiğinde birlikte uyum sağlıyorlar. `linear` yine kötü,
+bu sefer qp0'da zeros'un 1.7 katı. Sıralama iki farklı veri kümesinde aynı çıktı.
+
+---
+
+## 34. GridSeamRepair — modüle dikişin NEREDE olduğunu söylemek
+
+**Tespit ettiğim kusur.** Mevcut `SeamRepair` tüm canvas üzerinde öteleme-değişmez
+bir 3x3. Yani hangi pikselin tile sınırında olduğunu yalnızca içerikten çıkarmak
+zorunda, ve aynı düzeltmeyi pikselin %77'sini oluşturan temiz iç bölgeye de
+uyguluyor — orada herhangi bir düzeltme zarardan başka bir şey değil. Modüle
+elimizdekinden daha zor bir problem çözdürüyorduk.
+
+**Oysa ızgara bilinmiyor değil.** `unpatchify` tile'ları orijinden başlayan
+düzenli bir P x P kafese diziyor; konum hem eğitimde hem çıkarımda tam olarak
+biliniyor. Düzeltmeyi tile İÇİNDEKİ konuma göre indekslenen öğrenilmiş bir kapı
+ile geçirdim:
+
+    Repair(f) = f + G[i mod P, j mod P] · PW( WSiLU( DW3x3(f) ) )
+
+G, 384 kanalın tamamında paylaşılan P x P = **256 skaler**. Decoder
+parametrelerinin %0.0007'si, ve bir broadcast çarpımı dışında MAC maliyeti yok —
+cost modelinde `full` ile aynı %0.951 olarak faturalandırıldı, bedavaymış gibi
+davranılmadı.
+
+**Başlangıç bilgiyi atmıyor, taşıyor.** G, d = tile kenarına feature-piksel
+uzaklığı olmak üzere exp(−d/τ) ile başlatılıyor: ölçülen değerler kenarda 1.000,
+bir içeride 0.607, merkezde 0.030. Yani adım 0'da kapı zaten dikişin üzerinde
+yoğunlaşmış; eğitim onu keşfetmek yerine rafine ediyor. `pw` hâlâ sıfır
+başlatmalı, dolayısıyla modül adım 0'da tam olarak birim — **`grid` ile de
+deepest exit == stok UF, max|diff| = 0.0**. G'nin başlatması ilk çıktıyı değil
+ilk gradyanı şekillendiriyor.
+
+**Koşu.** `runs/wdec_j2_p128_arls_grid`, GPU4, `--tile_pad arls --seam_repair
+grid`, donuk encoder, 16 epoch. Bir önceki arls koşusunu (2 saatlik) durdurdum:
+ızgara kapısı yapısal bir iyileştirme ve 2 saatten fazla değer.
+
+**Kontrol grubu var:** GPU7'deki `wdec_j2_p128` aynı konfigürasyonu
+replicate + düz `full` onarım ile koşuyor. arls'in payı zaten sıfır-başlatmada
+ayrı ayrı ölçüldüğü için (bölüm 31 ve 33), iki koşunun farkı ızgara kapısına
+atfedilebilir.

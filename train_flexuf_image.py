@@ -104,7 +104,7 @@ def parse_args(argv):
     p.add_argument("--latent_patch", type=int, default=8, help="p; 8 -> 128x128 RGB")
     p.add_argument("--latent_halo", type=int, default=2, help="h, in latent px")
     p.add_argument("--adapter_kind", choices=["conv1x1", "ffn"], default="conv1x1")
-    p.add_argument("--seam_repair", choices=["none", "depthwise", "full"], default="full",
+    p.add_argument("--seam_repair", choices=["none", "depthwise", "full", "grid"], default="full",
                    help="full-frame pass after stitching that heals tile borders")
     p.add_argument("--min_crop", type=int, default=0,
                    help="floor on the recipe's crop size. Needed when the tile is "
