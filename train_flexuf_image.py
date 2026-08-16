@@ -383,6 +383,14 @@ def train_one_epoch(net, loader, optimizer, epoch, cfg, args, device, logf,
                 "loss": ld["loss"].item(),
                 "anchor_mse": (anchor_mse.item() if anchor_mse is not None else None),
                 "distill": (distill.item() if distill is not None else None),
+                # The primary diagnostic for a jointly trained router: WHERE it
+                # sent the tiles. A constant router -- everything to one exit --
+                # is the known failure mode and is invisible in the loss, which
+                # falls perfectly well while the routing degenerates.
+                **({"exit_hist": torch.bincount(
+                        out["exit_idx"], minlength=cfg.num_exits).tolist(),
+                    "exp_cost": round(out["cost"].item(), 4)}
+                   if "exit_idx" in out else {}),
                 "bpp": ld["bpp"].item(),
                 # The ladder's shape. A healthy run has these monotonically
                 # increasing; all-equal means the exits have collapsed, which is

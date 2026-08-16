@@ -86,16 +86,23 @@ def main():
             continue
         r = rows[-1]
         nm, deep = SHORT.get(tag, tag[:11]), r["psnr_per_exit"][-1]
+        # Age of the last log line. Without it, a slow run that has not yet
+        # reached its 200-step logging interval is indistinguishable from a
+        # stalled one -- four runs showed identical step numbers on consecutive
+        # ticks and looked frozen while every GPU sat at 100%.
+        import time as _t
+        age = int(_t.time() - f.stat().st_mtime)
+        stale = f" STALE:{age}s" if age > 900 else ""
         if len(r["psnr_per_exit"]) == 1:
-            parts.append(f"{nm} ep{r['epoch']} s{r['step']} {deep:.1f}")
+            parts.append(f"{nm} ep{r['epoch']} s{r['step']}({age}s) {deep:.1f}")
             continue
         # Spread alone is the wrong diagnostic: a small gap means either "nothing
         # to route" or "shallow exits caught up", and only the anchor separates
         # them. Both are flagged, neither assumed.
         note = ("!ANCHOR-WEAK" if deep < 20
                 else "!EXITS-IDENTICAL" if r["spread_dB"] < 0.05 else "")
-        parts.append(f"{nm} ep{r['epoch']} s{r['step']} d{deep:.1f} "
-                     f"spr{r['spread_dB']:+.1f}{note}")
+        parts.append(f"{nm} ep{r['epoch']} s{r['step']}({age}s) d{deep:.1f} "
+                     f"spr{r['spread_dB']:+.1f}{note}{stale}")
 
     exp_file = ROOT / "runs" / ".expected_live"
     expected = [l.strip() for l in exp_file.read_text().splitlines() if l.strip()] \

@@ -2469,3 +2469,47 @@ sıfır-başlatmalı adapter'larla. dB kayıpları projenin 0.1 dB bütçesinin 
 kötü olabileceğinin üst sınırı; tahmin değil. Eğitilmiş merdiven üzerinde
 tekrarlanacak, ve sıfır-başlatmalı bir merdiverde ölçülen ayrışabilirliğin
 eğitilmişinkiyle aynı olması için hiçbir sebep yok.
+
+---
+
+## 46. HEADS-ONLY sonucu: anchor yapıyla garantilendi, ama tavan çöktü
+
+İlk gerçek checkpoint `runs/heads_only_j2_p256/ckpt_epo0.pth.tar` (gövde tamamen
+donuk, yalnızca exit head'leri eğitildi, FFN adapter). Değerlendirme
+checkpoint düşer düşmez kendiliğinden çalıştı.
+
+**Anchor — bütün günün açık sorusu, kapandı:**
+
+    qp    stok UF   bizim en derin   kayma
+     0    33.260    33.260          +0.000
+    32    38.984    38.984          +0.000
+    63    43.828    43.828          +0.000
+
+**Tam sıfır.** Gövdeyi dondurmanın vaadi buydu: en derin çıkış yayınlanmış
+DCVC-UF'in *kendisi*, kaymak için optimizer'da tek bir tensör yok. Bütün gün bir
+kayıp terimiyle *baskı* uyguluyorduk; bu **garanti**. (Karşılaştırma: aynı ölçüm
+düzeltme öncesi tek epoch'ta −0.153/−0.201/−0.263 dB veriyordu.)
+
+**Ama oracle tavanı, 0.1 dB bütçesinde:**
+
+| qp | oracle tasarrufu | tek-derinlik |
+|---|---|---|
+| 0 | %11.5 | %4.7 |
+| 32 | **%0.4** | −%0.7 |
+| 63 | −%1.0 | −%1.0 |
+
+Gövdesi de eğitilen epoch-0 checkpoint'inde aynı ölçüm qp32'de **%37.0**
+vermişti. Burada %0.4.
+
+**Sebep, ve beklenmesi gerekirdi:** gövde donuk olduğu için sığ çıkışlar
+iyileşemiyor. Exit head'leri tek başına altı bloğun kaybını kapatamıyor — FFN
+adapter 5C²/px iken atlanan altı blok 6×8C². Üç mertebe fark.
+
+**Sonuç — bu bir üst sınır ölçümüydü ve cevabı olumsuz.** "Gövdeye hiç dokunmadan
+ne kadar gidilebilir?" sorusunun cevabı: neredeyse hiç. Yani gövdeyi eğitmek
+**zorunlu**, ve anchor yapıyla değil kayıp terimiyle korunmak zorunda. İyi haber:
+o terim çalışıyor — diğer dört koşuda 53-55 dB sadakat ölçüldü.
+
+Koşu kapatılmadı. Negatif sonuç da sonuçtur, ve bu tavanın nerede olduğunu tek
+başına söyleyen ölçüm odur; ileride "gövdeyi eğitmesek olmaz mıydı" sorusu
+sorulduğunda cevabı burada duruyor.
