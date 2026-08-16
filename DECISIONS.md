@@ -2624,3 +2624,51 @@ yani en derin çıkış sığ olandan daha hızlı iyileşiyor — istediğimizi
 `--freeze_backbone`'un beklenen kısıtı: gövde sığ çıkışlara hizmet edecek şekilde
 yeniden düzenlenemiyor. DISTILL kolunda spread +1.2 ve ters yönde; karşılaştırma
 o kolun checkpoint'inde kesinleşecek.
+
+---
+
+## 47. İlk dürüst tablo: hedefe ulaşılmıyor, en büyük tek engel anchor kayması
+
+`runs/wdec_j2_p128_grid/ckpt_epo0.pth.tar` — gövdesi eğitilen, anchor kayıp
+terimiyle tutulan ilk checkpoint. Değerlendirme kendiliğinden çalıştı.
+
+**Anchor kayması — düzeltme işe yaradı ama yetmedi:**
+
+| qp | düzeltme öncesi | şimdi | HEADS-ONLY (gövde donuk) |
+|---|---|---|---|
+| 0 | −0.153 | **−0.025** | 0.000 |
+| 32 | −0.201 | **−0.051** | 0.000 |
+| 63 | −0.263 | **−0.074** | 0.000 |
+
+3.5 kat iyileşme. Ama qp63'te 0.074 dB, projenin **0.1 dB bütçesinin %74'ü** —
+daha routing başlamadan harcanmış durumda.
+
+**Oracle tavanı, ve gerçek DCVC-UF'e karşı dürüst hesap:**
+
+| qp | oracle | bize göre dB | +kayma | gerçek UF'e göre |
+|---|---|---|---|---|
+| 0 | %27.3 | 0.082 | 0.025 | **0.107 dB** |
+| 32 | %17.2 | 0.097 | 0.051 | **0.148 dB** |
+| 63 | %6.6 | 0.059 | 0.074 | **0.133 dB** |
+
+Hedef %30-40 @ 0.1 dB. Ulaşılan: %27 @ 0.107 (qp0), %17 (qp32), %7 (qp63).
+**Ulaşılmıyor.**
+
+**Ama gövdeyi eğitmenin değeri doğrulandı:** aynı ölçüm HEADS-ONLY'de (gövde
+donuk) qp0'da %11.5 veriyordu, burada %27.3 — iki katından fazla. Bölüm 46'nın
+"gövdeyi eğitmek zorunlu" tespiti sayıyla desteklendi.
+
+**Ve yönlendirmenin kendi katkısı, eşit kalitede tek-derinlik decoder'a karşı:**
++16.1 / +13.4 / +5.6 puan (qp0/32/63). İçeriğe uyarlanma gerçekten kazandırıyor;
+bu, projenin premisinin en temiz doğrulaması, çünkü karşılaştırma eşit kalitede
+yapılıyor.
+
+**Üç sınırlama, saklamadan:** bu tek epoch; 128px tile (dikişi 256px'in iki
+katı); ve daha önce raporladığım %37'lik oracle farklı bir konfigürasyondan
+(epoch_offset öncesi j2/128) geliyordu — ikisi karşılaştırılamaz, temiz olan bu
+tablo.
+
+**Sıradaki adım, ölçüme dayalı:** anchor kayması en somut engel ve
+`--anchor_weight` doğrudan onu hedefliyor. Ama ağırlığı artırmak sığ çıkışların
+serbestliğini kısar, yani kaymayı azaltırken tavanı da düşürebilir. Bu bir takas
+ve **varsayılmayacak, ölçülecek**.
