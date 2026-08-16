@@ -1945,3 +1945,36 @@ ve tek komutla geri alınır.
 `--min_crop 512`: 256px tile 256px crop'a tek tile olarak sığar ve dikiş hiç
 oluşmaz — j4/256 deneyinde bir kez düşülen tuzak. 512 crop 4 tile veriyor.
 Bellek için batch 16 yerine 8.
+
+---
+
+## 37. Watchdog rafa kaldırılan deneyleri diriltmeye çalışıyordu
+
+`scripts/autopilot.sh`'in watchdog'u "kasten durduruldu" ile "çöktü"yü ayırt
+edemiyor. e1 ve e3'ü rafa kaldırdıktan sonra **17 ardışık döngü** boyunca onları
+geri koymaya çalışmış:
+
+    [09:26:29] e1_j2_p128: DIED — restarting on GPU 4
+    [09:36:50] e3_j2_p64:  DIED — restarting on GPU 7
+    ... (5 dakikada bir, 17 kez)
+
+Hedef kartlar tam olarak yerlerine geçen koşuların kartları: e1 → GPU4 (GRID-j2/128),
+e3 → GPU7 (GRID-j2/256). Yeniden başlatmalar bir sebeple tutmamış, ama her an
+tutabilirdi — ve tuttuğunda sonuç bölüm 35'teki arızanın aynısı olurdu: iki koşu
+tek kartta, ikisi de yarı hızda, dışarıdan hiçbir şey yanlış görünmeden.
+
+**Emekliye ayrılmış bir deneyi dolu bir karta geri koyan watchdog, watchdog
+olmamasından kötüdür.**
+
+**Düzeltme.** İzleme listesi yalnızca bu script'in *doğru* yeniden başlatabildiği
+koşulara indirildi: `e2_j4_p128` ve `baseline_singleexit`.
+
+`wdec_*` / `*_arls_grid` koşuları da bilerek listeye alınmadı: `--pretrain`,
+`--freeze_encoder`, `--train_patched`, `--tile_pad`, `--seam_repair` argümanlarına
+ihtiyaç duyuyorlar ve script'in `ARGS` tablosunda bunların hiçbiri yok. Buradan
+yeniden başlatmak, **aynı isim altında sessizce farklı bir deney** üretirdi. Onlar
+`scripts/heartbeat.py`'nin DEAD alarmıyla izleniyor ve elle başlatılıyor.
+
+Not: `declare -A GPU=(...)` `main()`'in dışında olduğu için çalışan örneğin
+belleğinde zaten çözülmüştü — dosyayı düzenlemek yetmezdi, süreci yeniden
+başlatmak gerekti.

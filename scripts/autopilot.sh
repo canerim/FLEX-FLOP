@@ -26,14 +26,26 @@ DATA=/data10/shareddata/openimages/dcvc_train
 # deepest exit any quality. Without it the frontier is unfalsifiable: "dB lost
 # vs our own deepest exit" looks excellent even if that exit has been degraded.
 # So if it dies unnoticed, the three experiments lose their interpretation.
-declare -A GPU=( [e1_j2_p128]=4 [e2_j4_p128]=6 [e3_j2_p64]=7 [baseline_singleexit]=6 )
+# WATCHLIST — only runs this script knows how to relaunch CORRECTLY.
+#
+# e1_j2_p128 and e3_j2_p64 were removed after being deliberately shelved: the
+# watchdog cannot tell "stopped on purpose" from "crashed", so it spent 17
+# consecutive cycles trying to put them back — e1 onto GPU4 and e3 onto GPU7,
+# which is exactly where their replacements now run. A watchdog that resurrects
+# a retired experiment onto an occupied card is worse than no watchdog: both
+# runs then share the card at half speed and nothing looks wrong from outside.
+#
+# The wdec_* / *_arls_grid runs are NOT listed either, and that is deliberate.
+# They need --pretrain, --freeze_encoder, --train_patched, --tile_pad and
+# --seam_repair, none of which this script's ARGS table carries; relaunching one
+# from here would silently produce a DIFFERENT experiment under the same name.
+# They are watched by scripts/heartbeat.py's DEAD alarm and restarted by hand.
+declare -A GPU=( [e2_j4_p128]=6 [baseline_singleexit]=6 )
 declare -A ARGS=(
-  [e1_j2_p128]="--num_exits 6 --split_depth 2 --latent_patch 8"
   [e2_j4_p128]="--num_exits 6 --split_depth 4 --latent_patch 8"
-  [e3_j2_p64]="--num_exits 6 --split_depth 2 --latent_patch 4"
   [baseline_singleexit]="--num_exits 1 --split_depth 1 --latent_patch 8"
 )
-declare -A EPOCHS=( [e1_j2_p128]=105 [e2_j4_p128]=105 [e3_j2_p64]=105 [baseline_singleexit]=6 )
+declare -A EPOCHS=( [e2_j4_p128]=105 [baseline_singleexit]=6 )
 
 log () { echo "[$(date '+%F %T')] $*" >> "$LOG"; }
 
