@@ -2414,3 +2414,58 @@ kapasite için yarışmadığından bunu karşılayabiliyor.
 Bu koşu aynı zamanda bir üst-sınır ölçümü: **gövdeye hiç dokunmadan** ne kadar
 gidilebiliyor. Eğer buradaki sonuç gövdeyi de eğiten koşulara yakınsa, gövdeyi
 eğitmenin riski (kayma) getirisini karşılamıyor demektir.
+
+---
+
+## 45. Router kör — ve zengin temsil kurtarmıyor (hipotezim yanlıştı)
+
+İlk regret sweep'i **sabit** router üretti: λ=0.0002'de bütün tile'lar en derin
+çıkışa, λ=0.002'de hepsi en sığa. Arada karışım yok. Sebebini aradım.
+
+**Sinyal korelasyonları** (warm-start ckpt, qp32, düzeltilmiş tanı scripti — daha
+önce eski elle yapılmış sinyalleri raporluyordu):
+
+    stem_max +0.034 | stem_energy +0.071 | stem_std +0.077
+    scales_max -0.097 | scales_mean -0.117 | y_energy +0.047
+
+Hiçbiri |r| = 0.12'yi geçmiyor. Oysa **oracle değişiyor** (std 0.348 çıkış),
+yani içerikte ayrışacak şey var, kayıp sinyal tarafında. (Not: daha önce
+"stem_max r=+0.440" demiştim; o eski bir ölçümdü, bu checkpoint'te geçerli değil.)
+
+**Hipotezim:** darboğaz. Tile başına 6 skaler, 384 kanallı 32×32 bir tile'ı
+tarif etmeye yetmiyor. Stem zaten hesaplanmış, havuzlamak bedava.
+
+**Ölçüm çürüttü.** `scripts/signal_probe.py`, doğrusal probe, %70 fit / **%30
+ayrılmış**:
+
+| λ | oracle dağılımı | 6 skaler | 768 havuz | taban |
+|---|---|---|---|---|
+| 3e−4 | [0,1,33,40,320,246] | **0.719** | 0.609 | 0.500 |
+| 1e−3 | [0,1,400,27,184,28] | 0.672 | 0.740 | 0.625 |
+| 3e−3 | [0,1,609,0,30,0] | 0.938 | 0.969 | 0.952 |
+
+768 boyutlu temsil ilgilendiğimiz noktada 6 skalerden **daha kötü**. Darboğaz
+değilmiş.
+
+**Ve script'in ilk hâli tam tersini söylüyordu.** Ayrılmış küme olmadan 768 havuz
+her λ'da **1.000** veriyordu — 160 tile'a karşı 769 özellik, probe ezberliyordu.
+Bu kadar temiz bir sayıya inanmadan önce şüphelenmek gerekiyordu; şüphelendim.
+
+**İsabet teslimat değil, asıl soru yanlış tile'ın NEREYE gittiği.** Aynı ayrılmış
+tile'larda gerçekleşen (tasarruf, dB):
+
+| λ | oracle | probe (6 skaler) |
+|---|---|---|
+| 3e−4 | 10.9% / +0.431 dB | 8.6% / +0.360 dB |
+| 1e−3 | 31.7% / +2.123 dB | 37.8% / **+3.379 dB** |
+| 3e−3 | 41.9% / +3.728 dB | 43.8% / +4.395 dB |
+
+Probe frontier'ın **üstünde değil, dışında**: daha çok tasarruf edip orantısız
+daha çok kaybediyor. Yanlış seçtiği tile'lar komşu çıkışa değil uzağa gidiyor.
+
+**Bu sayılara ne kadar anlam yüklenmeli.** Ölçüm warm-start checkpoint'inde,
+sıfır-başlatmalı adapter'larla. dB kayıpları projenin 0.1 dB bütçesinin **4 ila
+37 katı** — yani ilgilendiğimiz rejimin tamamen dışında. Bu, işlerin ne kadar
+kötü olabileceğinin üst sınırı; tahmin değil. Eğitilmiş merdiven üzerinde
+tekrarlanacak, ve sıfır-başlatmalı bir merdiverde ölçülen ayrışabilirliğin
+eğitilmişinkiyle aynı olması için hiçbir sebep yok.

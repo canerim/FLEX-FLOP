@@ -37,14 +37,22 @@ shift 3 2>/dev/null || shift $#
 BETAS=("$@")
 [ ${#BETAS[@]} -eq 0 ] && BETAS=(0 10 30 100 300 1000 3000)
 
+# Which router objective the sweep trains. FLEXUF_OBJ=regret switches to the
+# expected-regret loss, where the swept value is the Lagrange multiplier rather
+# than ClassSR's complexity weight -- same role, different scale, so the two
+# sweeps must not share an output directory or the frontier would mix points
+# from two different objectives on one curve.
+OBJ="${FLEXUF_OBJ:-classsr}"
+
 ROOT="$HOME/FLEX-UF"
 PY="$ROOT/.venv/bin/python"
 DATA="${FLEXUF_DATA:-/data10/shareddata/openimages/dcvc_train}"
 OUT="$(dirname "$CKPT")/frontier_$(basename "$CKPT" .pth.tar)"
+[ "$OBJ" != "classsr" ] && OUT="${OUT}_${OBJ}"
 mkdir -p "$OUT"
 SUM="$OUT/frontier.tsv"
 
-echo "frontier sweep: $CKPT on GPU $GPU, betas ${BETAS[*]}, $STEPS steps each"
+echo "frontier sweep [$OBJ]: $CKPT on GPU $GPU, values ${BETAS[*]}, $STEPS steps each"
 
 for beta in "${BETAS[@]}"; do
     dir="$OUT/beta_${beta}"
@@ -56,7 +64,8 @@ for beta in "${BETAS[@]}"; do
     CUDA_VISIBLE_DEVICES="$GPU" "$PY" "$ROOT/train_router.py" \
         --ckpt "$CKPT" --train_dataset "$DATA" --save_dir "$dir" \
         --steps "$STEPS" --batch_size 8 --crop 512 -n 4 \
-        --beta "$beta" --device 0 > "$dir/train.log" 2>&1 \
+        --objective "$OBJ" --beta "$beta" --lam "$beta" --device 0 \
+        > "$dir/train.log" 2>&1 \
         || { echo "  beta=$beta router FAILED"; continue; }
 
     CUDA_VISIBLE_DEVICES="$GPU" "$PY" "$ROOT/evaluate.py" \
