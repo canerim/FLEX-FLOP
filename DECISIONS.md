@@ -2060,3 +2060,52 @@ reddediyor: iç içe geçtiğinde hata `conv2d`'nin içinden
 `'PaddedDepthwise' object has no attribute 'weight'` diye çıkıyordu — sebebinden
 çok uzakta. Ve `pad_coef`, warm-start'ın bilinen-yeni tensör beyaz listesine
 eklendi; liste onu **eklendiği anda yakaladı**, zaten bunun içindi.
+
+---
+
+## 39. Manşet yüzde saatte de gerçek — ve j=2'nin tavanını yanlış söylemişim
+
+arls'te yakaladığım hatanın (kazancı bir birimde ölç, faturayı başka birimde öde)
+aynısını **manşetin kendisinde** aradım. Rapor ettiğimiz tasarruf `flexuf/cost.py`
+üzerinden MAC sayıyor. MAC bir makale için doğru birim, bir vaat için yanlış
+birim: MAC'lerinin %40'ını atlayıp yalnızca %15 hızlanan bir decoder, kullanıcının
+hissedebileceği hiçbir şeyin %40'ını kazanmamıştır.
+
+`scripts/saving_is_real.py`: 1080p bir kareyi her tile aynı çıkışta olacak şekilde
+decode et, ölçülen süre oranını `exit_costs()` ile karşılaştır.
+
+| çıkış | MAC | saat (128px) | saat (256px) |
+|---|---|---|---|
+| 2 | 43.4% | 43.6% | 42.5% |
+| 3 | 28.6% | 28.8% | 28.3% |
+| 4 | 13.8% | 14.9% | 14.3% |
+| 5 | 0.0% | 0.5% | 0.5% |
+
+**±1% içinde.** Manşet dürüst. (Bu, replicate'e dönmüş olmanın da bir sonucu:
+arls ile bu tablo her satırda ~10 puan bozulurdu.)
+
+### Ama tabloyu yaparken kendi hatamı buldum
+
+Kullanıcıya "j=2'nin tavanı %74.5" dedim ve "%30-40 hedefi tavanın yarısından
+azı" diye ekledim. **İkisi de yanlış.** %74.5, decode'un tile başına koşan payı;
+ulaşılabilir tasarruf değil.
+
+Doğru aritmetik: j'de gruplar 0..j−1 (blok 0..2j−1) her zaman koşar. En erken
+izin verilen çıkış grup j, yani blok 0..2j+1 koşar ve 10−2j blok atlanır:
+
+| j | atlanan blok | maks tasarruf |
+|---|---|---|
+| 1 | 8 | %59.6 |
+| 2 | 6 | **%44.7** (onarım sonrası %43.4) |
+| 3 | 4 | %29.8 |
+| 4 | 2 | %14.9 |
+
+j=4 için daha önce söylediğim %14 doğruymuş; j=2 için %74.5 değil **%43.4**.
+Hem cost modeli hem saat bunu doğruluyor.
+
+**Sonucu önemli:** kullanıcının %30-40 hedefi tavanın yarısı değil, **%70-92'si**.
+Tile'ların çoğunun en sığ izinli çıkışa (grup 2) gitmesi ve derinlik kaybının
+adapter'larca telafi edilmesi gerekiyor. Hâlâ mümkün — j2/256'da saf dikiş
+qp32'de 0.071 dB olduğu için −0.1 dB bütçesinin çoğu derinliğe kalıyor, ve Stage A
+adapter'ları daha önce +2.235 dB'ye kadar getirmişti — ama "rahat" değil, "tam
+sınırda". İki gün sonra değil şimdi söylenmesi gereken bir şey.
