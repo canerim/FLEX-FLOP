@@ -125,6 +125,13 @@ def parse_args(argv):
     p.add_argument("--train_patched", action="store_true",
                    help="train through the DEPLOYED patched decode so the adapters "
                         "learn to compensate the tile seams (FLEX: +0.51..+0.90 dB)")
+    p.add_argument("--tile_pad", default="arls",
+                   choices=["zeros", "replicate", "linear", "arls"],
+                   help="how a per-tile block invents the missing neighbour at a "
+                        "tile border. Measured pure seam penalty at qp63, j=2/128px: "
+                        "zeros 0.840 dB, replicate 0.209, linear 0.522, arls 0.163 "
+                        "(per-channel AR(1) least squares, arXiv:2502.12300). "
+                        "All four are parameter-free, so this is a free choice.")
     p.add_argument("--freeze_encoder", action="store_true",
                    help="freeze the encoder, hyperprior and entropy model; train "
                         "the WHOLE decoder (trunk, head and adapters)")
@@ -141,6 +148,7 @@ def build_cfg(args) -> FlexUFConfig:
         seam_repair=args.seam_repair,
         aux_weight=args.aux_weight,
         aux_schedule=args.aux_schedule,
+        tile_pad_mode=args.tile_pad,
     )
 
 

@@ -114,7 +114,7 @@ class FlexUFConfig:
     Set > 0 only to measure what the trunk halo buys, never as a default.
     """
 
-    tile_pad_mode: str = "replicate"
+    tile_pad_mode: str = "arls"
     """How a tile's border is padded inside the PER-TILE trunk blocks.
 
     Free, and the largest single quality win measured on this project.

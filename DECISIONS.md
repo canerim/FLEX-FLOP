@@ -1688,3 +1688,102 @@ iki eğrinin farklı crop'larda ölçülmesi). İkisi de aynı kökten: `ImageFo
 eğitim için tasarlanmış ve rastgele; değerlendirme onu olduğu gibi kullanıyordu.
 Kontroller bunu yakalayamazdı — hepsi tek bir ölçümün iç tutarlılığına bakıyor,
 hiçbiri *iki ölçümün karşılaştırılabilir olduğunu* doğrulamıyordu.
+
+---
+
+## 31. Dikiş için paper aradım, buldum, uyguladım — ve ölçüm paperın kendi uyarısını doğruladı
+
+**Aranan:** tiled CNN inference'ta tile sınırındaki padding'in yarattığı hatayı
+çözen güncel bir yöntem. Bulunan: Kaseva et al., *"Per-channel autoregressive
+linear prediction padding in tiled CNN processing of 2D spatial data"*
+(arXiv:2502.12300).
+
+**Yöntem:** tile'ın kenarının ötesindeki bilinmeyen komşuyu sıfırla ya da kenarı
+kopyalayarak uydurmak yerine, her kanal için tile'ın kendi içinden en küçük
+kareler ile bir AR modeli fit edip padding'i o modelin beklenen değerinden
+üretmek.
+
+**Paperın kendi sonucu — atlamadım, aynen aktarıyorum:** hatayı sıfır/replicate'e
+göre yalnızca *"slightly reduced"*, karşılığında *"moderate increase in time
+cost"*, ve yazarlar çıktıyı birkaç piksel kırpmanın muhtemelen daha iyi olduğunu
+söylüyor. Yani paperı bulmuş olmam uygulamak için yeterli sebep değildi. Ama
+**padding parametresizdir** — eğitim gerektirmeden, mevcut warm-start
+checkpoint'i üzerinde doğrudan ölçülebilir. Replicate'i ölçtüğüm gibi ölçtüm.
+
+**Uygulama notu.** PyTorch Conv2d yalnızca zeros/reflect/replicate/circular
+kabul eder, bu yüzden yeni şemalar `flexuf/backbone/padding.py` içinde
+konvolüsyonu sarmalayarak kuruldu: elle pad, sonra `padding=0` ile konvolve.
+Sadece 3x3 depthwise'lar sarmalandı, çünkü bir DepthConvBlock'ta uzamsal uzanımı
+olan tek operatör odur (9C MAC/px, bloğun 8C²+9C'sinin %0.3'ü) — bir sınırın
+padding ile karşılaşabileceği tek yer.
+
+**Kontrol (önce bu):** `zeros` ile sarmalanmış decoder, sarmalanmamış decoder ile
+`max|diff| = 0.0`. Bu geçmeseydi ölçtüğüm şey padding değil wrapper'ın hatası
+olurdu.
+
+**Ölçüm.** Saf dikiş cezası, dB — j=2, 128px tile, referans daima stok UF tam
+kare decode, deterministik crop, 32 held-out görüntü. Küçük iyi.
+
+| mod | qp0 | qp32 | qp63 | zeros'a göre |
+|---|---|---|---|---|
+| zeros | 0.1222 | 0.2855 | 0.8399 | — |
+| replicate | 0.0883 | 0.1320 | 0.2093 | +0.034 / +0.153 / +0.631 |
+| linear | 0.2294 | 0.3434 | 0.5223 | −0.107 / −0.058 / +0.318 |
+| **arls** | **0.0710** | **0.1039** | **0.1625** | **+0.051 / +0.182 / +0.677** |
+
+**Okunuşu.**
+
+1. **arls her üç QP'de de kazandı** ve qp63'te dikişin %81'ini siliyor
+   (replicate %75). Replicate'in üzerine ek kazanç +0.047 dB — paperın dediği
+   gibi *slight*, ama tutarlı ve bedava. Parametre yok, eğitim yok.
+2. **`linear` (birinci derece ekstrapolasyon) replicate'ten KÖTÜ.** Düşük QP'de
+   zeros'tan bile kötü (0.229 vs 0.122). Yerel eğimi dışarı uzatmak, kenarda
+   gradyan büyükse aşırı sapıyor. Bunu ölçmeseydim "lineer tahmin daha akıllı,
+   elbette daha iyidir" diye varsayacaktım. Değil.
+3. arls'in replicate'e üstünlüğü QP arttıkça büyüyor (+0.017 → +0.047), çünkü
+   yüksek QP'de latent daha zengin ve kanal-içi korelasyon replicate'in örtük
+   varsaydığı "korelasyon = 1"den daha bilgilendirici hale geliyor.
+
+arls'in tam olarak bu davranışı göstermesi tesadüf değil: fit edilen katsayı
+a = <x_t, x_{t+1}> / <x_{t+1}, x_{t+1}> olduğundan, kanal mükemmel korelasyonlu
+ise replicate'e, korelasyonsuz ise zeros'a indirgeniyor. Yani arls iki ucuz
+şemanın *ölçülmüş* interpolasyonu — bu yüzden ikisinden de kötü olamıyor, ve
+tablo bunu doğruluyor.
+
+**Karar:** `tile_pad_mode` varsayılanı `replicate` → **`arls`**. Zero-tolerance
+kontrollerinin tamamı yeni varsayılanla da geçiyor.
+
+---
+
+## 32. e1 rafa kaldırıldı, yerine arls deneyi (kullanıcı talimatı)
+
+**Neden e1, e2 değil.** Yeni deney j=2 / 128px / donuk encoder. e1 tam olarak
+j2_p128'di, yani yeni koşu e1'in sorduğu soruyu daha sağlam cevaplıyor (deepest
+exit bit-exact DCVC-UF, e1'de ise anchor 1.49 dB aşağıda). e2 (j4/128) hâlâ ayrı
+bir konfigürasyon sorusu, o yüzden ona dokunmadım.
+
+**Geri alınabilir:** `runs/e1_j2_p128/` içinde `ckpt_epo5.pth.tar` ve tam log
+duruyor; `--pretrain` ile kaldığı yerden devam ettirilebilir. İptali ancak bunu
+doğruladıktan sonra yaptım.
+
+**Yeni koşu — `runs/wdec_j2_p128_arls`, GPU4.** Kullanıcının hedefi "%30-40
+tasarruf, −0.1 dB, dikiş hatasını dramatik düşür" olduğu için bu koşu bütün
+dikiş önlemlerini üst üste bindiriyor:
+
+| önlem | ne yapıyor | maliyet |
+|---|---|---|
+| `--tile_pad arls` | sınırdaki komşuyu AR(1) ile tahmin | 0 |
+| `--seam_repair full` | birleştirilmiş canvas üzerinde eğitilebilir tam-kare onarım | %0.95 |
+| `--train_patched` | decoder'ı *dağıtılan* patch'li yol üzerinden eğit, dikişi telafi etmeyi öğrensin | 0 |
+| `full_frame_head` | son upsample dikişi görerek çalışsın | 0 |
+| `latent_halo 2` | router'a sınır bağlamı | 0 (yalnız router) |
+
+`--freeze_encoder`: encoder, hyperprior ve entropy modeli donuk → latent ve
+bitstream stok UF ile birebir aynı, bpp karşılaştırması yapı gereği geçerli.
+16 epoch ≈ 2.3 gün.
+
+**Beklenti, ölçülmüş sayılardan:** arls ile saf dikiş tabanı qp32'de 0.104 dB.
+j=2'nin tavanı %74.5. Hedef %30-40 tasarruf bu tavanın yarısından azı, yani
+adapter'ların telafi etmesi gereken şey dikiş değil derinlik kaybı — ve Stage A
+adapter'larının daha önce +2.235 dB'ye kadar getirdiği ölçülmüştü. Hedef
+ulaşılabilir görünüyor; koşu bunu doğrulayacak ya da çürütecek.

@@ -290,12 +290,22 @@ class MultiExitIntraDecoder(nn.Module):
         Applied only to the groups that run per-tile, and restored afterwards, so
         full-frame decode is untouched and `forward_full` stays bit-exact against
         stock UF.
+
+        `linear` and `arls` are not PyTorch padding modes, so they are installed
+        by wrapping the convolution instead (see backbone/padding.py). The
+        wrapper returns an undo closure, which the caller must run; a plain mode
+        returns None because restoring it is a second string assignment.
         """
+        if mode in ("linear", "arls"):
+            from .padding import wrap_tile_padding
+            return wrap_tile_padding(self.groups, first_group, mode)
+
         for g in range(first_group, len(self.groups)):
             for m in self.groups[g].modules():
                 if isinstance(m, nn.Conv2d) and m.kernel_size == (3, 3) and m.groups > 1:
                     m.padding_mode = mode
                     m._reversed_padding_repeated_twice = [1, 1, 1, 1]
+        return None
 
     # -- pieces --------------------------------------------------------------
     def _at_exit(self, feat: torch.Tensor, exit_idx: int) -> torch.Tensor:
@@ -419,10 +429,12 @@ class MultiExitIntraDecoder(nn.Module):
 
         # Tile borders meet padding from here on. Zeros is the stock behaviour
         # and a poor estimate of the missing neighbour; replicating the edge
-        # removes 80% of the seam at qp63 for no compute. Restored below so
+        # removes 75% of the seam at qp63 for no compute, and a per-channel AR(1)
+        # fit ("arls", arXiv:2502.12300) removes 81%. Restored below so
         # full-frame decode is unaffected.
+        undo_pad = None
         if cfg.tile_pad_mode != "zeros":
-            self._set_tile_padding(cfg.tile_pad_mode, j)
+            undo_pad = self._set_tile_padding(cfg.tile_pad_mode, j)
 
         # ---- 3+4. per-tile suffix -----------------------------------------
         # `active` is the shrinking set of tiles still climbing the ladder.
@@ -441,7 +453,9 @@ class MultiExitIntraDecoder(nn.Module):
                 work = work[keep]
                 active = active[keep]
 
-        if cfg.tile_pad_mode != "zeros":
+        if undo_pad is not None:
+            undo_pad()
+        elif cfg.tile_pad_mode != "zeros":
             self._set_tile_padding("zeros", j)
 
         # ---- 5. drop halo, stitch ------------------------------------------
