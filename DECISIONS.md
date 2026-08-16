@@ -1852,3 +1852,28 @@ grid`, donuk encoder, 16 epoch. Bir önceki arls koşusunu (2 saatlik) durdurdum
 replicate + düz `full` onarım ile koşuyor. arls'in payı zaten sıfır-başlatmada
 ayrı ayrı ölçüldüğü için (bölüm 31 ve 33), iki koşunun farkı ızgara kapısına
 atfedilebilir.
+
+---
+
+## 35. Bir kill sarmalayıcıyı vurdu, trainer'ı değil — ve iki koşu aynı GPU'yu paylaştı
+
+`nohup ... &` sonrası `$!` 1822822 verdi, ama gerçek python trainer 1822825'ti.
+`kill 1822822` sarmalayıcıyı öldürdü, eğitim devam etti. Yerine yeni koşuyu
+GPU4'e başlattığımda, eski koşu hâlâ o kartı tutuyordu: iki eğitim aynı GPU'da,
+ikisi de yarı hızda.
+
+**Nasıl yakalandı:** monitör. Yeni koşuyu başlattıktan sonra hem `ARLS-j2/128
+s6000` (öldürdüğümü sandığım) hem `wdec_j2_p s200` satırları göründü, ve ARLS'in
+adım sayısı kill'den SONRA artmıştı. Log tabanlı bir monitör bunu göremezdi —
+ölü bir koşunun son satırı da aynen orada durur. Canlılığı `/proc`'tan okuma
+kararı (bölüm 34 öncesi) bu yüzden işe yaradı.
+
+**Yanlış ders:** "`$!` yerine şunu kullan". Doğru ders: **öldürdüğünü, kartın
+boşaldığını görerek doğrula.** `nvidia-smi -i 4 --query-compute-apps` iki pid
+gösteriyordu; tek bakışta belli.
+
+**Kalıcı önlem.** Monitöre GPU çakışma alarmı eklendi: her eğitim pid'i koşu
+etiketine eşleniyor, aynı GPU'da iki farklı etiket varsa
+`*** GPU PAYLASIMI: GPU4=A+B ***` basılıyor. Bu, sessizce herkesi yavaşlatan ve
+dışarıdan hiçbir şey yanlış değilmiş gibi görünen bir arıza — tam da monitörün
+yakalaması gereken tür.
