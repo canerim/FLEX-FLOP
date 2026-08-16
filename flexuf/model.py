@@ -34,7 +34,7 @@ if str(DCVC_ROOT) not in sys.path:
 from src.models.image_model import DMCI  # noqa: E402
 
 from .backbone.decoder import MultiExitIntraDecoder  # noqa: E402
-from .config import FlexUFConfig  # noqa: E402
+from .config import TRUNK_CH, FlexUFConfig  # noqa: E402
 
 
 class FlexUFIntra(DMCI):
@@ -57,6 +57,13 @@ class FlexUFIntra(DMCI):
         # not get caught by DMCI's _initialize_weights(), which would overwrite
         # the deliberate zero-init on the adapters.
         self.dec = MultiExitIntraDecoder(self.cfg)
+        # Built unconditionally but tiny (8,726 params, 0.044% of the decode's
+        # MACs): carrying it always keeps one state_dict shape for every run, so
+        # a checkpoint from a jointly trained model loads into an evaluation
+        # script that does not use it, and vice versa.
+        from .router.head import StemRouterHead
+        self.router_head = StemRouterHead(TRUNK_CH, self.cfg.num_exits,
+                                          min_exit=self.cfg.split_depth)
         self._zero_init_adapters()
 
     def _zero_init_adapters(self):
@@ -209,6 +216,58 @@ class FlexUFIntra(DMCI):
         return {"x_hats": [x_hat], "mses": [self.get_mse(x, x_hat)], "bpp": bpp,
                 "bits_y": bits_y, "bits_z": bits_z}
 
+    def forward_joint(self, x, qp, tau: float = 1.0, beta: float = 0.0):
+        """Router and decoder trained together, end to end.
+
+        Why this is worth the risk it carries
+        -------------------------------------
+        The router was measured blind: none of six hand-made stem statistics
+        correlates past |r| = 0.12 with the oracle's choice, and widening the
+        description to 768 pooled channels made it WORSE at the operating point
+        that matters. Both attempts asked the same question -- which fixed
+        function of a fixed stem predicts the right exit -- and the stem was never
+        built to answer it. Training them together removes the assumption: the
+        stem can become something worth routing on.
+
+        The risk is the one FLEX-FLOP hit: a router trained against a moving
+        decoder goes stale, stops feeding some exit, that exit stops improving,
+        and the ladder collapses to two live branches. What prevents it here is
+        structural rather than hopeful -- the per-exit auxiliary loss supervises
+        EVERY exit on every step regardless of where the router sent anything, so
+        an unused exit still receives gradient. The collapse needs a starved exit
+        and there isn't one.
+
+        Gradient reaches the discrete choice by straight-through: the chosen
+        tile's output is scaled by p/p.detach(), which is 1 in the forward pass,
+        so the reconstruction is untouched and the RD loss can still push on the
+        logits. The compute term needs no trick -- sum_k P_k C_k is differentiable
+        as it stands.
+        """
+        from .router.head import gumbel_exits
+
+        _, _, H, W = x.size()
+        y_hat, q_dec, aux = self._encode_to_latent(x, qp)
+        cfg = self.cfg
+
+        stem = self.dec.upsample(y_hat)
+        for g in range(cfg.split_depth):
+            stem = self.dec.groups[g](stem)
+        logits = self.router_head(stem, qp, cfg.feature_patch)
+        idx, p_sel = gumbel_exits(logits, tau=tau, hard=True)
+        gate = p_sel / p_sel.detach()
+
+        x_hat = self.dec(y_hat, q_dec, exit_map=idx, tile_gate=gate)
+        bpp, bits_y, bits_z = self._rate(aux, qp, H * W)
+
+        from .cost import exit_costs
+        C = exit_costs(cfg, "head").to(logits.device)
+        probs = torch.softmax(logits, dim=1)
+        cost = (probs * C[None, :]).sum(1).mean()
+
+        return {"x_hats": [x_hat], "mses": [self.get_mse(x, x_hat)], "bpp": bpp,
+                "bits_y": bits_y, "bits_z": bits_z,
+                "cost": cost, "exit_idx": idx.detach(), "logits": logits}
+
     # -- deployed forward ----------------------------------------------------
     @torch.no_grad()
     def forward_routed(self, x: torch.Tensor, qp, exit_map: torch.Tensor):
@@ -243,7 +302,7 @@ def load_flexuf_state(net, ck, *, where: str = "") -> None:
     """
     sd = ck.get("state_dict", ck.get("net", ck))
     missing, unexpected = net.load_state_dict(sd, strict=False)
-    NEW = ("dec.adapters.", "dec.seam_repair.", "dec.pad_coef")
+    NEW = ("dec.adapters.", "dec.seam_repair.", "dec.pad_coef", "router_head.")
     unexplained = [k for k in missing if not k.startswith(NEW)]
     # Unexpected keys under the same prefixes are tolerated for one specific
     # reason: adapter_kind changes the adapter MODULE, so a checkpoint written

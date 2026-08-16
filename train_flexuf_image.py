@@ -136,6 +136,19 @@ def parse_args(argv):
                         "over replicate, which buys 1.34 trunk blocks of budget for "
                         "very little; 'learned' keeps its per-channel adaptivity at "
                         "replicate's cost, starting at exactly replicate.")
+    p.add_argument("--joint_router", action="store_true",
+                   help="train a LEARNED router head jointly with the decoder. "
+                        "The hand-made signals were measured blind (|r| <= 0.12 "
+                        "against the oracle's choice) and widening them made it "
+                        "worse, so both attempts were asking which fixed function "
+                        "of a fixed stem predicts the right exit. This lets the "
+                        "stem become routable instead. Costs 0.044% of the decode "
+                        "-- a 1x1 of 384->16 on the stem, which sits at 1/64 of "
+                        "the pixel count; GridSeamRepair is 0.951% for scale.")
+    p.add_argument("--router_beta", type=float, default=1.0,
+                   help="weight on the differentiable compute term sum_k P_k C_k. "
+                        "Sweep it to trace the frontier; 0 means quality only.")
+    p.add_argument("--gumbel_tau", type=float, default=1.0)
     p.add_argument("--tile_coupling", action="store_true",
                    help="let each per-tile 3x3 depthwise read its REAL neighbours "
                         "from a shared canvas instead of inventing them. The "
@@ -228,7 +241,7 @@ def _param_groups(net, new_lr_scale):
     that keeps the trunk still. Running both at one lr means picking which of the
     two failures to accept.
     """
-    NEW_PREFIXES = (".adapters.", ".seam_repair.", "pad_coef")
+    NEW_PREFIXES = (".adapters.", ".seam_repair.", "pad_coef", "router_head.")
     inherited, fresh = [], []
     for name, prm in net.named_parameters():
         if not prm.requires_grad:
@@ -283,7 +296,9 @@ def train_one_epoch(net, loader, optimizer, epoch, cfg, args, device, logf,
             # FLEX Stage A: one patched decode with a fresh random depth per
             # tile. Trains the mixed-depth frame that deployment actually
             # produces, at the cost of a single decode rather than K.
-            out = net.forward_random_depth(x, qp)
+            out = (net.forward_joint(x, qp, tau=args.gumbel_tau,
+                                     beta=args.router_beta)
+                   if args.joint_router else net.forward_random_depth(x, qp))
             w_step = torch.ones(1, device=device)
         else:
             out = net.forward_all_exits(x, qp)
@@ -468,8 +483,12 @@ def main(argv):
               f"with weight {args.anchor_weight}", flush=True)
 
     if args.freeze_encoder:
+        # The router head lives beside the decoder, not inside it, so a plain
+        # "dec." prefix test froze it -- it would have sat at its initialisation
+        # for the whole run while the log happily reported training. Caught by
+        # the trainable-parameter count not moving when the head was added.
         for name, prm in net.named_parameters():
-            prm.requires_grad = name.startswith("dec.")
+            prm.requires_grad = name.startswith(("dec.", "router_head."))
         trainable = [p_ for p_ in net.parameters() if p_.requires_grad]
         n_tr = sum(p_.numel() for p_ in trainable)
         n_all = sum(p_.numel() for p_ in net.parameters())
@@ -480,7 +499,8 @@ def main(argv):
         optimizer = torch.optim.AdamW(_param_groups(net, args.new_lr_scale), lr=1e-4)
     elif args.freeze_backbone:
         for name, prm in net.named_parameters():
-            prm.requires_grad = ".adapters." in name or ".seam_repair." in name
+            prm.requires_grad = (".adapters." in name or ".seam_repair." in name
+                                 or name.startswith("router_head."))
         trainable = [p_ for p_ in net.parameters() if p_.requires_grad]
         n_tr = sum(p_.numel() for p_ in trainable)
         n_all = sum(p_.numel() for p_ in net.parameters())

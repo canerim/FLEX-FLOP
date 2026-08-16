@@ -68,8 +68,24 @@ ADAPTER_MACPX = {
 }
 
 
-def adapter_vs_block(kind: str = "conv1x1") -> float:
-    return ADAPTER_MACPX[kind] / _BLOCK_MACPX
+def adapter_vs_block(kind: str = "conv1x1", exit_idx: int = 0,
+                     cfg=None) -> float:
+    """Adapter cost at `exit_idx`, as a fraction of one DepthConvBlock.
+
+    Per-exit rather than a single number because "scaled" deliberately gives
+    different exits different adapters: the ones standing in for four or more
+    skipped blocks get the FFN, the rest the 1x1. Billing them all at one rate
+    would either overcharge the deep exits or -- worse, and in our favour --
+    undercharge the shallow ones, which are exactly the exits a saving figure
+    leans on.
+    """
+    if kind != "scaled":
+        return ADAPTER_MACPX[kind] / _BLOCK_MACPX
+    from .config import FlexUFConfig
+    cfg = cfg or FlexUFConfig()
+    skipped = (cfg.num_exits - 1 - exit_idx) * cfg.blocks_per_exit
+    k = "ffn" if skipped >= 4 else "conv1x1"
+    return ADAPTER_MACPX[k] / _BLOCK_MACPX
 
 
 # The seam-repair pass runs once, full-frame, on the stitched canvas.
@@ -142,7 +158,6 @@ def exit_costs(
     cfg = cfg or FlexUFConfig()
     b, j, K = cfg.blocks_per_exit, cfg.split_depth, cfg.num_exits
     per_block = SHARE_TRUNK / N_TRUNK_BLOCKS
-    adapter = adapter_vs_block(cfg.adapter_kind) * per_block
 
     costs = []
     for k in range(K):
@@ -156,6 +171,10 @@ def exit_costs(
         # assigned exit 0 to every tile was billed 58.70% saved when the real
         # figure is 42.9% — and that inflated number is what made the router
         # appear to beat the Lagrangian Pareto bound, which is impossible.
+        # The deepest exit takes the raw feature -- that is what makes it
+        # bit-exact stock UF -- so it carries no adapter at all.
+        adapter = (0.0 if k == K - 1 else
+                   adapter_vs_block(cfg.adapter_kind, k, cfg) * per_block)
         k_run = max(k, j) if j < K else k
         blocks_run = (k_run + 1) * b
         shared_blocks = min(blocks_run, j * b)
@@ -189,7 +208,6 @@ def frame_relative_cost(
     cfg = cfg or FlexUFConfig()
     b, j, K = cfg.blocks_per_exit, cfg.split_depth, cfg.num_exits
     per_block = SHARE_TRUNK / N_TRUNK_BLOCKS
-    adapter = adapter_vs_block(cfg.adapter_kind) * per_block
 
     stem = SHARE_UPSAMPLE + (j * b) * per_block
     head = SHARE_HEAD * head_halo_multiplier(cfg) + seam_repair_share(cfg.seam_repair)
@@ -202,6 +220,7 @@ def frame_relative_cost(
         mult = halo_multiplier(cfg, tiled_blocks, halo_scope)
         c = tiled_blocks * per_block * mult
         if k_eff < K - 1:
+            adapter = adapter_vs_block(cfg.adapter_kind, k, cfg) * per_block
             c += adapter * (mult if halo_scope != "head" else 1.0)
         suffix.append(c)
 

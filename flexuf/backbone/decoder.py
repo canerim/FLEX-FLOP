@@ -466,6 +466,7 @@ class MultiExitIntraDecoder(nn.Module):
         y_hat: torch.Tensor,
         quant_step: torch.Tensor,
         exit_map: Optional[torch.Tensor] = None,
+        tile_gate: Optional[torch.Tensor] = None,
     ) -> torch.Tensor:
         """Depth-adaptive decode: shared full-frame stem, per-tile suffix.
 
@@ -561,7 +562,14 @@ class MultiExitIntraDecoder(nn.Module):
             work = self.groups[g](work)
             leaving = exit_map[active] == g
             if leaving.any():
-                canvas[active[leaving]] = self._at_exit(work[leaving], g)
+                out_g = self._at_exit(work[leaving], g)
+                if tile_gate is not None:
+                    # Straight-through handle for a jointly trained router. The
+                    # gate is p/p.detach(), numerically 1, so the reconstruction
+                    # is bit-identical -- but the RD loss can now push on the
+                    # router's logits, which a bare argmax would block.
+                    out_g = out_g * tile_gate[active[leaving]].view(-1, 1, 1, 1)
+                canvas[active[leaving]] = out_g
                 keep = ~leaving
                 if not keep.any():
                     break

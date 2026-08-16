@@ -44,6 +44,7 @@ SHORT = {
     "wdec_j2_p256_distill": "DISTILL-j2/256",
     "heads_only_j2_p256": "HEADS-ONLY",
     "coupled_j2_p256": "COUPLED",
+    "joint_j2_p256": "JOINT-ROUTER",
     "wdec_j2_p256_dist_deepest": "D-deepest",
     "wdec_j2_p256_dist_plain": "D-plain1x1",
     "wdec_j2_p256_dist_fullrep": "D-fullrep",
