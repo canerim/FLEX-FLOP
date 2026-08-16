@@ -254,3 +254,52 @@ def load_flexuf_state(net, ck, *, where: str = "") -> None:
         print(f"{where}{len(missing)} tensors absent from the checkpoint and left "
               f"at zero-init (identity): {sorted({k.split('.')[1] for k in missing})}",
               flush=True)
+
+
+class DeterministicCrop:
+    """Wrap ImageFolder so evaluation always sees the same pixels.
+
+    ImageFolder picks the crop position with random.randint and the horizontal
+    flip with random.choice — correct for training, wrong for measurement. Two
+    evaluation runs of the SAME model drew different crops and reported 29.54 and
+    30.58 dB at qp0: a swing of roughly 1 dB, larger than most of the effects
+    this project is trying to measure.
+
+    Centre crop, no flip. Absolute numbers then become comparable across runs,
+    across checkpoints, and against a published figure.
+    """
+
+    def __init__(self, folder):
+        self.f = folder
+
+    def __len__(self):
+        return len(self.f)
+
+    def set_patch_size(self, w, h):
+        self.f.set_patch_size(w, h)
+
+    def __getitem__(self, i):
+        import random
+        import numpy as np
+        import torch as _t
+        from PIL import Image
+        from src.utils.transforms import rgb2ycbcr_np
+
+        ff = self.f
+        img = Image.open(_os.path.join(ff.root_folder_path, ff.dataset[i])).convert("RGB")
+        w, h = img.size
+        ph, pw = ff.patch_h, ff.patch_w
+        arr = np.array(img).astype(np.uint8)
+        arr = np.pad(arr, ((max(0, ph - h) // 2, max(0, ph - h) - max(0, ph - h) // 2),
+                           (max(0, pw - w) // 2, max(0, pw - w) - max(0, pw - w) // 2),
+                           (0, 0)), mode="constant")
+        H, W = arr.shape[:2]
+        top, left = (H - ph) // 2, (W - pw) // 2          # centre, not random
+        arr = arr[top:top + ph, left:left + pw, :]        # no flip
+        arr = rgb2ycbcr_np(arr.astype(np.float32) / 255.0) - 0.5
+        x = _t.as_tensor(arr, dtype=_t.float32).permute(2, 0, 1).contiguous()
+        qp = _t.tensor(0, dtype=_t.int32)                 # caller overrides
+        return [x, qp, _t.tensor(float(ff.lambdas[0]), dtype=_t.float32)]
+
+
+import os as _os

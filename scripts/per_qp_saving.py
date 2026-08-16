@@ -23,7 +23,7 @@ from src.utils.common import get_training_lambdas             # noqa: E402
 from flexuf.config import QP_LEVELS, FlexUFConfig             # noqa: E402
 from flexuf.cost import saving                                # noqa: E402
 from flexuf.losses import psnr_from_mse                       # noqa: E402
-from flexuf.model import FlexUFIntra, load_flexuf_state                          # noqa: E402
+from flexuf.model import DeterministicCrop, FlexUFIntra, load_flexuf_state                          # noqa: E402
 
 
 @torch.no_grad()
@@ -53,6 +53,8 @@ def main() -> int:
     if v.exists():
         ds.dataset = json.loads(v.read_text())[: a.frames]
         ds.dataset_length = len(ds.dataset)
+    # Deterministic: measurement must not depend on which crop was drawn.
+    ds = DeterministicCrop(ds)
     ld = DataLoader(ds, batch_size=2, num_workers=3, sampler=SequentialSampler(ds))
     nt = (a.crop // cfg.rgb_patch) ** 2
     exits = list(range(cfg.split_depth, cfg.num_exits))

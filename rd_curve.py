@@ -44,7 +44,7 @@ from src.utils.common import get_training_lambdas  # noqa: E402
 
 from flexuf.config import QP_LEVELS, FlexUFConfig  # noqa: E402
 from flexuf.cost import saving  # noqa: E402
-from flexuf.model import FlexUFIntra, load_flexuf_state  # noqa: E402
+from flexuf.model import DeterministicCrop, FlexUFIntra, load_flexuf_state  # noqa: E402
 from flexuf.router.router import N_STEM_SIGNALS, ExitRouter, stem_signals  # noqa: E402
 
 
@@ -190,6 +190,8 @@ def main(argv):
         ds.dataset = json.loads(v.read_text())[: a.frames]
         ds.dataset_length = len(ds.dataset)
         print(f"held-out set: {len(ds.dataset)} images")
+    # Deterministic: measurement must not depend on which crop was drawn.
+    ds = DeterministicCrop(ds)
     loader = DataLoader(ds, batch_size=a.batch_size, num_workers=4,
                         sampler=SequentialSampler(ds))
 

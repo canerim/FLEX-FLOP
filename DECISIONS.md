@@ -1638,3 +1638,53 @@ eşdeğerlik ve maliyet-gerçeklik uyumunu doğruluyor, ama *iki ölçümün ayn
 üzerinde yapıldığını* doğrulayan bir şey yoktu. Grafikteki tutarsızlık insan
 gözüne çarptı. Aynı bitstream'i paylaşması gereken iki eğrinin bpp'si artık
 `rd_curve.py` içinde inşaen tek bir yerden geliyor, yani ayrışması mümkün değil.
+
+---
+
+## 30. ❗ Değerlendirme rastgele crop çekiyordu — mutlak sayılar ~1 dB oynuyordu
+
+**Kullanıcı gözlemi:** "dense decoder QP0 için 30'un biraz altında olmalı, QP63
+için 42'nin çok az altında; doğru ölçtüğünden emin misin?"
+
+**Doğrulandı.** Aynı model, aynı formül, iki ayrı ölçüm:
+
+| ölçüm | QP0 | QP63 |
+|---|---:|---:|
+| A | 29.54 | 41.47 |
+| B (rd_curve) | 30.58 | 41.97 |
+
+**~1 dB salınım** — ölçmeye çalıştığımız etkilerin çoğundan büyük.
+
+**Sebep:** `ImageFolder.__getitem__` crop konumunu `random.randint`, yatay
+çevirmeyi `random.choice` ile seçiyor. Eğitim için doğru, **ölçüm için yanlış**.
+Her değerlendirme farklı pikselleri görüyordu.
+
+**Düzeltme:** `DeterministicCrop` — merkez crop, çevirme yok. Doğrulandı: aynı
+komut iki kez, PSNR birebir aynı (31.17 / 37.05 / 42.72).
+
+### 30.1 Formül doğruydu
+
+Şüphelendiğim şey kroma altörneklemeydi; kontrol ettim:
+
+| qp | Y | U 4:4:4 | V 4:4:4 | 6:1:1 (4:4:4) | 6:1:1 (4:2:0) |
+|---:|---:|---:|---:|---:|---:|
+| 0 | 26.54 | 37.87 | 39.27 | 29.54 | 29.67 |
+| 63 | 39.97 | 45.43 | 46.52 | 41.47 | 41.82 |
+
+`rgb2ycbcr_np` üç düzlemi de [0,1]'e koyuyor, dataset −0.5 kaydırıyor, aralık
+1.0 → `10·log10(1/mse)` doğru. 4:4:4 ile 4:2:0 arasındaki fark 0.13–0.35 dB;
+kayda değer ama 1 dB'lik salınımı açıklamıyor. Sorun crop rastgeleliğiydi.
+
+### 30.2 Test seti farkı — mutlak kıyas için kapatılması gereken açık
+
+Kullanıcının beklediği değerler **CTC Image** setinden. Bizimki Open Images'ın
+ayrık dilimi. Deterministik merkez crop'la bizim set: QP0 31.17, QP63 42.72.
+Mutlak kıyas için CTC gerekiyor; şu an yok.
+
+### 30.3 Ders
+
+Bu, kullanıcının grafikten yakaladığı **ikinci** ölçüm hatası (birincisi §29:
+iki eğrinin farklı crop'larda ölçülmesi). İkisi de aynı kökten: `ImageFolder`
+eğitim için tasarlanmış ve rastgele; değerlendirme onu olduğu gibi kullanıyordu.
+Kontroller bunu yakalayamazdı — hepsi tek bir ölçümün iç tutarlılığına bakıyor,
+hiçbiri *iki ölçümün karşılaştırılabilir olduğunu* doğrulamıyordu.
