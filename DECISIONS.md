@@ -2785,3 +2785,48 @@ qp0'da %74.3, ortalama %86.3). Ve ölçüm şunu da söylüyor: **uyum hedeflenm
 gereken metrik olmayabilir** — router zaten oracle'ın tasarrufunun %99'unu,
 maliyetinin %100.4'üne alıyor, ve kalan uyuşmazlığın bedeli 0.002. %95 uyum bunu
 kayda değer iyileştirmeyebilir. Yine de istenen o, ve qp0 (%74) açık zayıf halka.
+
+---
+
+## 49. "%95 uyum" hedefi kendi kendini sabote edebilir — ölçüm tuzağı ve korumasi
+
+Kullanıcı router'ın oracle ile **en az %95** uyuşmasını istedi. λ süpürmesi bunu
+verdi. Ama vermesi bir şey ifade etmiyor, ve sebebini tabloyla göstermek gerekiyor.
+
+**qp0, oracle'ın en çeşitli olduğu QP:**
+
+| λ | uyum | tasarruf | oracle | oracle entropi (bit) |
+|---|---|---|---|---|
+| 1e−4 | 0.743 | %36.1 | %34.6 | **1.207** |
+| 1.2e−4 | 0.801 | %37.9 | %36.5 | 1.053 |
+| 1.5e−4 | 0.842 | %39.6 | %38.6 | 0.837 |
+| 2e−4 | 0.873 | %41.4 | %40.9 | 0.547 |
+| 3e−4 | **0.952** | %42.9 | %42.6 | **0.268** |
+
+Uyum ile oracle entropisi **mükemmel ters orantılı**. λ=3e−4'te %95.2 elde ediliyor
+— ama entropi 1.207'den 0.268'e düşmüş: oracle artık neredeyse karar vermiyor,
+router da onunla uyuşmak için karar vermiyor. Tasarruf %42.9, j=2'nin mutlak
+tavanı olan %43.4'ün bir tık altı, yani "neredeyse bütün tile'lar en sığ çıkışa".
+
+**Sabit router, sabit oracle ile %100 uyuşur. Ortada yönlendirme yoktur.**
+
+Bu v1'de de olmuştu: λ=3e−3'te `oracle_agree 1.000`, dağılım `[0,0,100,0,0,0]`.
+Dağılıma bakmasaydım zafer ilan edecektim.
+
+**Koruma.** `scripts/eval_router2.py` artık her satırda oracle'ın kendi çıkış
+dağılımının entropisini basıyor ve 0.15 bitin altında
+`<- ORACLE SABIT, uyum anlamsiz` diye işaretliyor. Bir metrik, kendisini
+anlamsızlaştıran koşulu yanında taşımadan raporlanmamalı.
+
+**Ve bu, önceki bir paradoksu çözüyor.** qp0'da uyumun en düşük (%74), qp32/63'te
+en yüksek (%91.3) olması router'ın qp0'da kötü olması değil: qp0'da oracle
+entropisi 1.207, qp32/63'te 0.37-0.48. Düşük uyum **zor problem** işareti.
+
+**Dürüst sonuç:** anlamlı yönlendirmenin olduğu rejimde (entropi ≥ 1 bit) uyum
+**%74-80**. Kullanıcının istediği %95'e ancak yönlendirmeyi kapatarak ulaşılıyor,
+ve öyle raporlamak teknik olarak doğru pratik olarak yanıltıcı olurdu.
+
+**Bir düzeltme daha:** "1.2e−4 ile 1.5e−4 arasında uyum düzleşiyor" demiştim; o
+eğitim-içi ayrılmış ölçümdü (batch başına 48 tile, gürültülü). CTC üzerindeki
+gerçek değerlendirme düzleşme göstermiyor, monoton artıyor. Eğitim-içi metriğe
+dayanıp sonuç çıkarmak hataydı.

@@ -56,11 +56,17 @@ for s in seqs:
         for i in range(x.shape[0]):
             frames.append(x[i:i+1])
 print(f"  lam={lam:g}, {len(frames)} CTC karesi, {cfg.rgb_patch}px tile\n")
-print(f"  {'qp':>4}{'uyum':>8}{'maliyet-agirlikli':>19}{'gerceklesen regret':>20}"
-      f"{'tasarruf':>10}{'oracle tasarruf':>17}")
+# Entropy of the ORACLE's own exit distribution, in bits. This is the guard
+# against a result that looks perfect and means nothing: as lambda rises the
+# oracle itself collapses onto one exit, and a constant router agrees with a
+# constant oracle 100% of the time while doing no routing at all. v1 hit exactly
+# that (agreement 1.000, distribution [0,0,100,0,0,0]) and it would have been
+# reported as success. Entropy near zero says "there was nothing to decide".
+print(f"  {'qp':>4}{'uyum':>8}{'mal-agir':>10}{'regret':>10}"
+      f"{'tasarruf':>10}{'oracle':>9}{'oracle entropi':>16}{'':>3}")
 with torch.no_grad():
     for qp_v in a.qps:
-        A = W = Rg = SV = SVo = n = 0.0
+        A = W = Rg = SV = SVo = ENT = n = 0.0
         for x in frames:
             x = x.to(dev); _, _, H, Wd = x.shape; P = cfg.rgb_patch
             ph, pw = (-H) % P, (-Wd) % P
@@ -86,8 +92,13 @@ with torch.no_grad():
             Rg += ((lag.gather(1, k[:, None]).squeeze(1) - best) / best).mean().item()
             SV += (1 - cost[k].mean() / cost[-1]).item()
             SVo += (1 - cost[ks].mean() / cost[-1]).item()
+            pk = torch.bincount(ks, minlength=cfg.num_exits).float()
+            pk = pk / pk.sum()
+            ENT += -(pk * (pk.clamp_min(1e-12)).log2()).sum().item()
             n += 1
-        print(f"  {qp_v:>4}{A/n:>8.3f}{W/n:>19.3f}{Rg/n:>20.5f}"
-              f"{100*SV/n:>9.1f}%{100*SVo/n:>16.1f}%")
-print("\n  maliyet-agirlikli uyum: kil payi tile'lardaki uyusmazlik ucuz sayilir,")
-print("  onemli tile'lardaki pahali. Ikisi ayrilmadan %86 tek basina yorumlanamaz.")
+        e = ENT / n
+        flag = "  <- ORACLE SABIT, uyum anlamsiz" if e < 0.15 else ""
+        print(f"  {qp_v:>4}{A/n:>8.3f}{W/n:>10.3f}{Rg/n:>10.5f}"
+              f"{100*SV/n:>9.1f}%{100*SVo/n:>8.1f}%{e:>16.3f}{flag}")
+print("\n  oracle entropi: oracle'in kendi cikis dagiliminin entropisi (bit).")
+print("  0'a yakinsa oracle da sabittir ve %100 uyum yonlendirme DEGIL demektir.")
