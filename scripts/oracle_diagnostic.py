@@ -47,7 +47,7 @@ from src.utils.common import get_training_lambdas  # noqa: E402
 from flexuf.config import QP_LEVELS, FlexUFConfig  # noqa: E402
 from flexuf.cost import exit_costs  # noqa: E402
 from flexuf.model import FlexUFIntra, load_flexuf_state  # noqa: E402
-from flexuf.router.router import latent_tiles_with_halo, tile_signals  # noqa: E402
+from flexuf.router.router import STEM_NAMES, stem_signals  # noqa: E402
 
 
 @torch.no_grad()
@@ -76,8 +76,19 @@ def collect(net, loader, cfg, device, qp_val, max_batches):
             per_exit.append(t)
         mses.append(torch.stack(per_exit, dim=1).cpu())
 
-        y_hat, _ = net.latent_of(x, qp)
-        sigs.append(tile_signals(latent_tiles_with_halo(y_hat, cfg)).cpu())
+        # The signals the ROUTER actually reads, not the hand-made latent
+        # statistics this script was first written against. Reporting the old
+        # ones was worse than reporting nothing: it said "the signals cannot see
+        # the oracle" about signals no longer in use, which would have sent the
+        # investigation back to a problem already solved.
+        y_hat, q_dec, aux = net._encode_to_latent(x, qp)
+        stem = net.dec.upsample(y_hat)
+        for g in range(cfg.split_depth):
+            stem = net.dec.groups[g](stem)
+        sc = aux["scales_hat"]
+        if sc.shape[1] != y_hat.shape[1]:
+            sc = sc[:, : y_hat.shape[1]]
+        sigs.append(stem_signals(stem, y_hat, sc, cfg).cpu())
     return torch.cat(mses), torch.cat(sigs)
 
 
@@ -207,7 +218,7 @@ def main() -> int:
     ok = db <= 0.5
     ok[:, -1] = True
     choice = ok.float().argmax(dim=1).float()
-    names = ["s1 rate-surrogate", "s2 sparsity", "s3 gradient", "s4 spatial-var"]
+    names = STEM_NAMES
     for i, nm in enumerate(names):
         s = sigs[:, i]
         if s.std() < 1e-9 or choice.std() < 1e-9:

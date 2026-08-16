@@ -235,4 +235,10 @@ def stem_signals(
     ], dim=1)
 
 
+# Names in the same order stem_signals stacks them. Kept here rather than in the
+# diagnostic that prints them: a name list living apart from the signals it
+# labels drifts silently, and a mislabelled correlation is worse than none.
+STEM_NAMES = ["stem_max", "stem_energy", "stem_std",
+              "scales_max", "scales_mean", "y_energy"]
+
 N_STEM_SIGNALS = 6

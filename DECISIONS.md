@@ -2146,3 +2146,53 @@ olduğu için bütçeyi aşan bir nokta seçilip CTC'ye gönderilirdi.
 
 Ders: bir tehlikeye karşı yorum yazmak o tehlikeyi önlemez. Sütun adları
 doğrulanabilirdi ve doğrulanmamıştı.
+
+---
+
+## 40. Oracle: hedef ulaşılabilir, ama yönlendirmenin değeri QP ile artıyor
+
+Router'ı beklemeden, bu decoder'la **herhangi bir** router'ın ulaşabileceği üst
+sınırı ölçtüm (`scripts/oracle_diagnostic.py`, WD-j2/128 epoch-0 checkpoint'i).
+−0.1 dB bütçesine denk gelen satırlar:
+
+| QP | ulaşılan dB | oracle tasarruf | tek-derinlik | fark |
+|---|---|---|---|---|
+| 0 | 0.101 | **42.3%** | 42.2% | +0.2pp |
+| 32 | 0.091 | **37.0%** | 30.2% | +6.8pp |
+| 63 | 0.102 | **29.3%** | 15.6% | +13.7pp |
+
+**Hedef (%30-40, −0.1 dB) qp0 ve qp32'de karşılanıyor, qp63'te kıl payı altında** —
+ve bu yalnızca **bir epoch** eğitim almış checkpoint.
+
+### Beklemediğim bulgu: qp0'da yönlendirme hiçbir şey katmıyor
+
+0.1 dB bütçesinde qp0'da tek tip sığ decoder da %42.2 veriyor; oracle'ın %42.3'ü
+yanında fark +0.2pp. Yani **düşük kalite hedefinde içeriğe uyarlanmaya gerek yok**,
+uniformca sığ bir decoder aynı işi görüyor. Yönlendirme parasını yüksek kalitede
+kazanıyor: qp63'te +13.7pp, qp32'de +6.8pp.
+
+Bu, projenin hikâyesini değiştiriyor ve dürüst olan bu: FLEX-UF'in katkısı
+"her yerde daha iyi" değil, "**yüksek kalitede, tek bir derinliğin veremediğini
+verir**". qp0'da tavanın zaten tek derinlikle alınabildiğini söylememek, sonucu
+olduğundan geniş göstermek olurdu.
+
+(Daha sıkı bütçelerde qp0'da da fark var — tau=0.1'de oracle %36.0'a karşı
+uniform %11.8, +24.2pp. Karşılaştırma **eşit ulaşılan dB'de** yapılmalı, tau'da
+değil; tau bir eşik, sonuç değil.)
+
+### Ve bu bir üst sınır, başarı değil
+
+Oracle her tile'ın doğru çıkışını bilerek seçiyor. Gerçek router bunu sinyallerden
+bulmak zorunda. Açık soru: bu %37'nin ne kadarı yakalanabiliyor. Dönen frontier
+taraması tam olarak onu ölçüyor.
+
+### Tanı scriptinin kendisi yanıltıcıydı
+
+`oracle_diagnostic.py` sinyal korelasyonlarını **router'ın artık kullanmadığı**
+eski elle yapılmış latent istatistikleri üzerinden basıyordu (en iyisi r = −0.202).
+Router bölüm 20'den beri stem sinyallerini kullanıyor. Hiç basmamaktan kötüydü:
+"sinyaller oracle'ı göremiyor" diyordu — kullanılmayan sinyaller hakkında — ve
+araştırmayı çözülmüş bir probleme geri gönderirdi. Gerçek sinyalleri raporlayacak
+şekilde düzeltildi, ve `STEM_NAMES` sinyalleri üreten fonksiyonun yanına kondu:
+etiketlediği şeyden ayrı yaşayan bir isim listesi sessizce kayar, ve yanlış
+etiketli bir korelasyon hiç korelasyon olmamasından kötüdür.
