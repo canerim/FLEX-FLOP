@@ -1497,3 +1497,51 @@ ikincisi bu.
 birebir aynı) ve backbone donuk (çıpa bit-exact yayınlanmış UF). Eğitilen tek şey
 adapter'lar ve dikiş onarımı — ikisi de sıfır-init, yani en kötü ihtimalle
 hiçbir şey değiştirmiyorlar.
+
+---
+
+## 26. İlk tam RD eğrisi — gerçek DCVC-UF referansına karşı
+
+`results/rd_deliverable.png`, `results/rd_warmstart.json`
+
+Warm-start Stage A epoch 0'ın adapter'ları, β=30 router, 48 ayrık görüntü.
+Encoder donmuş → **latent, bitstream ve bpp gerçek DCVC-UF ile birebir aynı**,
+dolayısıyla eğriler arasındaki dikey fark tamamen decoder'a ait.
+
+| qp | bpp | dense | routed | ΔPSNR | tasarruf |
+|---:|---:|---:|---:|---:|---:|
+| 0 | 0.194 | 30.37 | 29.81 | −0.554 | **%24.9** |
+| 8 | 0.214 | 31.75 | 31.27 | −0.476 | %20.8 |
+| 16 | 0.234 | 33.53 | 32.77 | −0.764 | %15.7 |
+| 24 | 0.278 | 34.61 | 34.15 | −0.457 | %9.2 |
+| 32 | 0.340 | 36.05 | 35.78 | **−0.270** | %4.1 |
+| 40 | 0.397 | 37.77 | 37.15 | −0.611 | %1.2 |
+| 48 | 0.489 | 39.30 | 38.79 | −0.504 | −%0.1 |
+| 56 | 0.630 | 40.79 | 40.32 | −0.470 | −%0.7 |
+| 63 | 0.752 | 42.20 | 41.60 | −0.601 | **−%0.8** |
+
+### 26.1 Router orana göre kendi kendine uyarlanıyor
+
+QP0'da %24.9, QP63'te sıfır. Kimse söylemedi — düşük oranda latent seyrek,
+erken çıkış ucuz; yüksek oranda yoğun, pahalı. Router bunu gövde sinyallerinden
+buluyor. §17'deki sinyal değişikliğinin karşılığı bu.
+
+### 26.2 Ama hedef tutmuyor, ve yüksek oranda tasarruf negatif
+
+- dB kaybı 0.27–0.76, **0.1 dB hedefinin 3–8 katı**
+- qp48 ve üstünde tasarruf **negatif**: router her patch'i en derin çıkışa
+  yolluyor ama dikiş onarımı %0.95 faturalanıyor → net maliyet tam decode'dan
+  yüksek
+
+İkincisi doğrudan açıklanabilir: **dikiş onarımı hiç eğitilmedi.** Stage A
+3 epoch'un 1'ini bitirdi; adapter'lar üçte bir eğitilmiş, onarım modülü sıfır-init
+(identity). Yani şu an bedelini ödüyoruz, karşılığını almıyoruz. Yüksek orandaki
+negatif tasarruf, düzelmesi gereken ilk şey.
+
+### 26.3 Ne bekleniyor
+
+| bekleyen | neden önemli |
+|---|---|
+| Stage A'nın kalan 2 epoch'u | adapter'lar + dikiş onarımı tam eğitilir |
+| GPU 7'de encoder-frozen / decoder-trained | decoder'ın **tamamı** (14.97M param) çok-çıkışlı yapıya uyum sağlar; şu an sadece 739k adapter'la sınırlı |
+| j=4 / 256px varyantı | ölçülen tek konfigürasyon ki dikiş tabanı 0.1 dB'nin altında (0.054) |
