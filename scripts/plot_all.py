@@ -45,10 +45,14 @@ fig.text(0.055, 0.925, "Icerige uyarlanan erken cikis, DCVC-UF intra decoder. "
 
 # ---- 1. oracle headroom: the headline ------------------------------------
 a = fig.add_subplot(gs[0, 0])
-ORACLE = {  # achieved dB -> saving %, from scripts/oracle_diagnostic.py
-    "qp 0":  ([-0.006, 0.013, 0.044, 0.061, 0.101, 0.244], [30.8, 36.0, 40.3, 41.5, 42.3, 42.6]),
-    "qp 32": ([0.018, 0.047, 0.091, 0.118, 0.152, 0.231], [21.7, 30.3, 37.0, 39.5, 41.4, 42.3]),
-    "qp 63": ([0.011, 0.044, 0.102, 0.158, 0.224, 0.308], [12.1, 20.7, 29.3, 34.2, 38.2, 41.3]),
+# From the FIRST properly-anchored checkpoint (wdec_j2_p128_grid epoch 0). The
+# earlier, higher curve came from a pre-epoch_offset run whose deepest exit had
+# drifted 0.2 dB from released DCVC-UF, so its "dB lost" was measured against a
+# degraded reference. Not comparable; replaced rather than shown alongside.
+ORACLE = {
+    "qp 0":  ([0.002, 0.027, 0.082, 0.137, 0.227, 0.392], [12.5, 19.2, 27.3, 32.4, 37.2, 41.0]),
+    "qp 32": ([0.007, 0.036, 0.097, 0.167, 0.279, 0.474], [2.6, 8.7, 17.2, 23.1, 29.8, 36.8]),
+    "qp 63": ([0.001, 0.010, 0.059, 0.135, 0.263, 0.562], [-0.5, 1.3, 6.6, 12.0, 19.2, 28.9]),
 }
 for (nm, (xs, ys)), c in zip(ORACLE.items(), (S1, S2, S3)):
     a.plot(xs, ys, color=c, lw=2, marker="o", ms=5, label=nm, zorder=3,
@@ -61,7 +65,8 @@ a.set_xlim(-0.02, 0.34); a.set_ylim(0, 46)
 a.set_xlabel("kaybedilen PSNR (dB)", color=INK2, fontsize=9)
 a.set_ylabel("tasarruf (%)", color=INK2, fontsize=9)
 a.legend(fontsize=8.5, frameon=False, loc="lower right")
-style(a, "1 · Oracle tavani", "Kusursuz router ne verirdi. Ust sinir, basari degil.")
+style(a, "1 · Oracle tavani (dogru anchor'li ilk ckpt)",
+      "Kusursuz router ne verirdi. Ust sinir, basari degil.")
 
 # ---- 2. seam penalty ------------------------------------------------------
 a = fig.add_subplot(gs[0, 1])
@@ -107,24 +112,28 @@ style(a, "3 · Mansetteki yuzde saatte gercek mi",
 # ---- 4. anchor drift ------------------------------------------------------
 a = fig.add_subplot(gs[1, 0])
 QPS = ["qp 0", "qp 32", "qp 63"]
-DRIFT = [-0.153, -0.201, -0.263]
-xs = range(len(QPS))
-a.bar(list(xs), DRIFT, 0.5, color=S2, zorder=3)
-for x, v in zip(xs, DRIFT):
-    a.text(x, v - 0.014, f"{v:+.3f}", ha="center", va="top", color=INK2, fontsize=8.5)
+BEFORE = [-0.153, -0.201, -0.263]
+AFTER = [-0.025, -0.051, -0.074]
+xs = range(len(QPS)); wb = 0.36
+a.bar([x - wb/2 - 0.012 for x in xs], BEFORE, wb, color=S2, label="recipe epoch 0'dan", zorder=3)
+a.bar([x + wb/2 + 0.012 for x in xs], AFTER, wb, color=S4, label="epoch_offset 75 + anchor", zorder=3)
+for x, v in zip(xs, BEFORE):
+    a.text(x - wb/2 - 0.012, v - 0.012, f"{v:+.3f}", ha="center", va="top", color=INK2, fontsize=7.5)
+for x, v in zip(xs, AFTER):
+    a.text(x + wb/2 + 0.012, v - 0.012, f"{v:+.3f}", ha="center", va="top", color=INK2, fontsize=7.5)
+a.legend(fontsize=8, frameon=False, loc="lower left")
 a.axhline(0, color=S3, lw=2.2, zorder=4)
 a.text(2.42, 0.006, "duzeltilmis hedef: 0", color=S3, fontsize=8.2, ha="right", va="bottom")
 a.set_xticks(list(xs)); a.set_xticklabels(QPS)
 a.set_ylabel("gercek DCVC-UF'e gore (dB)", color=INK2, fontsize=9)
 a.set_ylim(-0.32, 0.045)
-style(a, "4 · Anchor kaymasi — bulunan hata",
-      "Recipe epoch 0'dan okunuyordu. Tek epochta bu kadar dustu.")
+style(a, "4 · Anchor kaymasi — hata ve duzeltmesi",
+      "3.5x azaldi ama sifirlanmadi. qp63'te kalan 0.074 dB, butcenin %74'u.")
 
 # ---- 5. live training -----------------------------------------------------
 a = fig.add_subplot(gs[1, 1:])
 alive = hb.live_runs()
-COL = {"WD-j2/128": S1, "GRID-j2/128": S3, "GRID-j2/256": S4,
-       "DISTILL-j2/256": S2, "HEADS-ONLY": S5}
+COL = {"BEST": S2, "CONTROL": S1}
 for tag in sorted(alive):
     f = Path("runs") / tag / "train_log.jsonl"
     if not f.exists():
@@ -147,9 +156,9 @@ a.set_ylabel("ladder spread (dB)", color=INK2, fontsize=9)
 lo, hi = a.get_xlim()
 a.set_xlim(0, hi + 0.14 * (hi - lo))
 a.legend(fontsize=8.5, frameon=False, ncol=3, loc="upper right")
-style(a, "5 · Canli kosular — ladder ayrisiyor mu",
-      "Bugun hepsi anchor duzeltmesiyle yeniden basladi, o yuzden adim ekseni. "
-      "Spread tek basina yanlis tani: anchor ile birlikte okunmali (panel 4).")
+style(a, "5 · Iki kosu: BEST vs CONTROL",
+      "Yedi koldan ikiye indirildi: kazanan parcalarin hepsi BEST'te, CONTROL "
+      "hicbiri. Spread tek basina yanlis tani; anchor ile okunmali (panel 4).")
 
 fig.savefig("results/all_experiments.png", dpi=135, facecolor=SURFACE)
 print("wrote results/all_experiments.png")
