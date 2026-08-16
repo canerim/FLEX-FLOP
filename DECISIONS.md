@@ -1872,8 +1872,23 @@ kararı (bölüm 34 öncesi) bu yüzden işe yaradı.
 boşaldığını görerek doğrula.** `nvidia-smi -i 4 --query-compute-apps` iki pid
 gösteriyordu; tek bakışta belli.
 
-**Kalıcı önlem.** Monitöre GPU çakışma alarmı eklendi: her eğitim pid'i koşu
-etiketine eşleniyor, aynı GPU'da iki farklı etiket varsa
-`*** GPU PAYLASIMI: GPU4=A+B ***` basılıyor. Bu, sessizce herkesi yavaşlatan ve
-dışarıdan hiçbir şey yanlış değilmiş gibi görünen bir arıza — tam da monitörün
-yakalaması gereken tür.
+**Kalıcı önlem — ve önlemin kendisi iki kez yanlıştı.** İlk denemede GPU çakışma
+alarmı ekledim; ilk tetiklemede iki hata birden verdi:
+
+1. `*** DEAD: WD-j4/256, GRID-j2/128 ***` — ikisi de gayet iyi çalışıyordu.
+   Sebep: kendi shell'lerimi eşlememek için filtreyi `/train_flexuf_image.py`
+   diye baştaki eğik çizgiyle sabitlemiştim, bu da **göreli yolla** başlatılan
+   her koşuyu görünmez yaptı. Temiz görünen bir filtre, iki yanlış alarm üretti.
+2. `*** GPU PAYLASIMI: GPU6=BASE+e2 ***` — ama GPU başına iki koşu **kasıtlı**.
+   Alarm, normal olan şeye alarm veriyordu.
+3. Bonus: `ckpt_warm` diye olmayan bir koşu belirdi, çünkü `runs/` altındaki her
+   yolu koşu adı sayıyordum — `--pretrain .../runs/warmstart/ckpt_warmstart.pth.tar`
+   de oraya düşüyor.
+
+Doğru tespit `scripts/heartbeat.py` içine, gerekçeleriyle yazıldı: prosesin
+argv0'ı gerçekten python olacak ve argümanlarından biri `train_flexuf_image.py`
+ile bitecek; koşunun kimliği **`--save_dir`** argümanı olacak; ve alarm GPU
+paylaşımı değil **ZOMBIE = alive − expected** olacak — yani "öldü sandığım ama
+kartı hâlâ tutan koşu", ki fiilen olan tam olarak buydu ve yanlış pozitifi yok.
+Monitöre bağlamadan önce gerçeğe karşı çalıştırıp yedi koşunun yedisini de doğru
+saydığını gördüm.
