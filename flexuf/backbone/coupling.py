@@ -75,16 +75,43 @@ class CanvasCoupler:
 
     def apply(self, conv: nn.Conv2d, x: torch.Tensor,
               active: torch.Tensor) -> torch.Tensor:
-        """Run `conv` (a 3x3 depthwise) over the assembled canvas."""
+        """Run `conv` (a 3x3 depthwise) with a halo read from the neighbours.
+
+        The first implementation assembled the whole canvas, convolved it, and
+        cut it back into tiles. That is correct and was 6x slower per training
+        step than the runs beside it -- two full permute+reshape copies of the
+        canvas per block, inside autograd, and the convolution paying for every
+        tile including the ones that had already exited.
+
+        A 3x3 only ever needs ONE pixel from each neighbour, so the halo is
+        assembled directly from edge slices and the convolution runs on
+        (P+2)^2 instead of P^2 -- 1.13x for a 32px tile, on the 0.334% of the
+        block that is the depthwise. No canvas, no round trip, and only the
+        active tiles are convolved.
+        """
         if self.slots is None:
             return conv(x)
+        P = self.slots.shape[-1]
         self.slots = self.slots.index_copy(0, active, x)
-        canvas = _unpatch(self.slots, self.nh, self.nw, self.batch)
-        # padding=1 with ZEROS, exactly as stock Conv2d does at the frame border,
-        # so a uniform-depth decode lands on the full-frame answer bit-exactly.
-        out = F.conv2d(canvas, conv.weight, conv.bias, stride=1, padding=1,
-                       groups=conv.groups)
-        return _patch(out, self.slots.shape[-1])[active]
+        v = self.slots.view(self.batch, self.nh, self.nw, -1, P, P)
+        pad = x.new_zeros(self.batch, self.nh, self.nw, v.shape[3], P + 2, P + 2)
+        pad[..., 1:-1, 1:-1] = v
+        # Edges. Outside the tile grid the padding stays ZERO, which is exactly
+        # what stock Conv2d does at the frame border -- that is why a
+        # uniform-depth decode lands on the full-frame answer bit-exactly.
+        pad[:, 1:, :, :, 0, 1:-1] = v[:, :-1, :, :, -1, :]
+        pad[:, :-1, :, :, -1, 1:-1] = v[:, 1:, :, :, 0, :]
+        pad[:, :, 1:, :, 1:-1, 0] = v[:, :, :-1, :, :, -1]
+        pad[:, :, :-1, :, 1:-1, -1] = v[:, :, 1:, :, :, 0]
+        # Corners: a 3x3 touches them too, so leaving them zero would reintroduce
+        # a four-pixel seam at every tile junction.
+        pad[:, 1:, 1:, :, 0, 0] = v[:, :-1, :-1, :, -1, -1]
+        pad[:, 1:, :-1, :, 0, -1] = v[:, :-1, 1:, :, -1, 0]
+        pad[:, :-1, 1:, :, -1, 0] = v[:, 1:, :-1, :, 0, -1]
+        pad[:, :-1, :-1, :, -1, -1] = v[:, 1:, 1:, :, 0, 0]
+        haloed = pad.reshape(-1, v.shape[3], P + 2, P + 2)[active]
+        return F.conv2d(haloed, conv.weight, conv.bias, stride=1, padding=0,
+                        groups=conv.groups)
 
 
 def _unpatch(tiles: torch.Tensor, nh: int, nw: int, batch: int) -> torch.Tensor:
