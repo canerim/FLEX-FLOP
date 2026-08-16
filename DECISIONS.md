@@ -2869,3 +2869,53 @@ yolu öne çıkardı —
 
 Kullanıcının istediği %95'e ulaşılmadı ve artık **sebebi biliniyor**, tahmin
 edilmiyor.
+
+---
+
+## 51. Çözüm mimaride değil protokolde: çıkış haritasını İLET, tahmin etme
+
+Bölüm 50 "daha uzun eğit" yolunu eledi: CE 0.5 → 0.0935 inerken qp0 uyumu
+0.743 → 0.741, regret beş ondalıkta aynı. Eğitim verisine dört kat iyi uyup test
+davranışının hiç değişmemesi **eksik bilginin** imzasıdır.
+
+**Eksiklik yapısal.** Oracle `argmin(mse_k + λ·C_k)` seçiyor ve `mse_k`
+**kaynağa** karşı hata. Decoder kaynağı asla görmüyor. Router'dan girdisinde
+olmayan bir şeyi çıkarması isteniyordu; hiçbir mimari bunu düzeltmez.
+
+**Ama encoder kaynağı görüyor.** Ve video kodlamada mod kararları zaten iletilir:
+HEVC ve VVC blok bölümlemesini, tahmin modunu, dönüşüm ağacını gönderir; decoder
+tahmin etmez. Burada alışılmadık olan, decoder tarafında tahmin etmeye
+çalışmaktı — konvansiyonel olan değil.
+
+**Ölçüm** (`scripts/signalled_curve.py`, gerçek DCVC-UF referanslı, CTC, harita
+maliyeti bpp'ye DAHİL):
+
+| qp | tasarruf | dB | bpp artışı | harita |
+|---|---|---|---|---|
+| 0 | %24.2 | 0.0776 | 0.000139 | 229 bit |
+| 16 | %21.2 | 0.0841 | 0.000141 | 232 bit |
+| 32 | %15.7 | 0.0880 | 0.000130 | 217 bit |
+| 48 | %11.0 | 0.0878 | 0.000120 | 198 bit |
+| 63 | %8.6 | 0.0904 | 0.000105 | 173 bit |
+
+Oracle üst sınırının **1-2 puan içinde** (26.0/19.4/16.5/13.4/9.6). Fark
+haritanın faturasından ve 0.1 dB kısıtının o fatura dahil sağlanmasından geliyor.
+
+**Harita entropi kodlu faturalanıyor**, 2-bit en kötü hâliyle değil: dağılım
+tekdüze olmaktan uzak ve gerçek bir codec en kötü hâli göndermez. Kendi maliyetini
+abartmak da eksik göstermek kadar yanlıştır.
+
+**Router ile karşılaştırma, qp32:**
+
+    tahmin eden router   %24.8 tasarruf,  0.367 dB   <- frontier'in DISINDA
+    sinyalli sistem      %15.7 tasarruf,  0.088 dB   <- butcenin ICINDE
+
+Router daha çok tasarruf ediyor gibi görünüp dört kat fazla kalite ödüyor.
+
+**Kullanıcının %95 uyum hedefi bu tasarımda konu dışı kalıyor** — uyum tanım
+gereği %100. Saatlerdir kovalanan metrik, doğru soruyu sorunca ortadan kalktı.
+
+**İki uygulama hatası da not:** işi bir kez shell zaman aşımı öldürdü (setsid ile
+çözüldü) ve tamponlanmış stdout bunu yirmi dakika gizledi (`python -u`). Ayrıca
+λ süpürmesi her adımda `forward_all_exits`'i yeniden hesaplıyordu — tile hataları
+λ'dan bağımsız, yani 25 katı boşa iş; önbelleğe alındı.
