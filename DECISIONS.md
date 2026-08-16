@@ -2513,3 +2513,54 @@ o terim çalışıyor — diğer dört koşuda 53-55 dB sadakat ölçüldü.
 Koşu kapatılmadı. Negatif sonuç da sonuçtur, ve bu tavanın nerede olduğunu tek
 başına söyleyen ölçüm odur; ileride "gövdeyi eğitmesek olmaz mıydı" sorusu
 sorulduğunda cevabı burada duruyor.
+
+---
+
+## 46. DÜZELTME: %37'lik oracle tavanı kaymış anchor'ın ürünüymüş
+
+İlk eğitilmiş checkpoint (`heads_only_j2_p256/ckpt_epo0`) iki şeyi birden ölçtü.
+
+**İyi olan — anchor artık tam olarak sıfır kaymış.** CTC, 10 kare, aynı encoder
+aynı latent (`max|diff| = 0.0` ile doğrulandı):
+
+| qp | stok UF | bizim en derin | kayma |
+|---|---|---|---|
+| 0 | 33.260 | 33.260 | **+0.000** |
+| 32 | 38.984 | 38.984 | **+0.000** |
+| 63 | 43.828 | 43.828 | **+0.000** |
+
+Sabah aynı ölçüm −0.153 / −0.201 / −0.263 veriyordu. Fark `--freeze_backbone`:
+gövdenin tek bir tensörü optimizer'da değil, yani sapma bir kayıp terimiyle
+*bastırılmıyor*, **yapısal olarak imkânsız**.
+
+**Kötü olan — temiz anchor'la oracle tavanı çöktü.** −0.1 dB bütçesinde:
+
+| | kaymış anchor (sabah) | temiz anchor (şimdi) |
+|---|---|---|
+| qp0 | %42.3 @ 0.101 dB | **%11.5 @ 0.049 dB** |
+| qp32 | %37.0 @ 0.091 dB | **%5.3 @ 0.058 dB** |
+| qp63 | %29.3 @ 0.102 dB | **~%0** |
+
+**Mekanizma.** Oracle'ın referansı kendi en derin çıkışımız. O çıkış 0.20 dB
+*daha kötüyken*, sığ çıkışlarla arasındaki fark küçük görünüyordu — erken çıkış
+ucuzmuş gibi. Anchor yerine oturunca erken çıkışın gerçek bedeli ortaya çıktı.
+Yani sabahki tablo **kendi bozulmuş modelimize karşı** ölçülmüştü.
+
+Kullanıcı tam bunu sormuştu ("gerçek UF'ye yakınsadığımız tek sonuç pre-trained
+ile yaptığımız mıydı") ve ölçüm onu doğruladı.
+
+**Karşılaştırmanın adil olmayan yanı, saklamadan.** Bu checkpoint HEADS-ONLY:
+gövde tamamen donuk, sadece exit head'leri eğitiliyor — tasarım gereği **en
+kısıtlı** konfigürasyon, çünkü gövde sığ çıkışlara hizmet edecek şekilde yeniden
+düzenlenemiyor. Sabahki kol gövdeyi de eğitiyordu ve 128px tile'daydı. Gerçek
+sayı ikisinin arasında; gövdeyi eğiten kolların checkpoint'leri ayıracak.
+
+**Ayakta kalan.** Yönlendirmenin kendisi hâlâ kazandırıyor: 0.1 dB'de oracle
+%11.5'e karşı tek tip sığ decoder %4.7 — **2.4 kat**. Daha geniş bütçelerde fark
+qp32'de +12.4pp, qp63'te +15.0pp. ClassSR'ın dayandığı iddia veride mevcut.
+
+**Ayakta kalmayan.** %30-40 hedefi bu konfigürasyonda ulaşılabilir değil. Gövdeyi
+eğiten kollar farklı çıkmazsa hedefin kendisi yeniden konuşulmalı.
+
+Ders, bugün üçüncü kez aynı: **bir referansa göre ölçülen her sayı, o referansın
+doğruluğu kadar doğrudur.** arls'te birim, cost modelinde adapter, burada anchor.
