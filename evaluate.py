@@ -56,7 +56,7 @@ from flexuf.config import QP_LEVELS, FlexUFConfig  # noqa: E402
 from flexuf.cost import exit_costs, saving  # noqa: E402
 from flexuf.losses import psnr_from_mse  # noqa: E402
 from flexuf.backbone.warmstart import remap_ladder_to_stock  # noqa: E402
-from flexuf.model import FlexUFIntra  # noqa: E402
+from flexuf.model import FlexUFIntra, load_flexuf_state  # noqa: E402
 from flexuf.router.router import N_STEM_SIGNALS, ExitRouter, stem_signals  # noqa: E402
 
 
@@ -185,7 +185,7 @@ def main(argv):
     ck = torch.load(a.ckpt, map_location="cpu", weights_only=False)
     cfg = FlexUFConfig(**ck["config"]) if "config" in ck else FlexUFConfig()
     net = FlexUFIntra(cfg).to(device).eval()
-    net.load_state_dict(ck.get("state_dict", ck.get("net")))
+    load_flexuf_state(net, ck)
 
     err = control_bit_exact(net, cfg, device)
     print(f"CONTROL deepest exit vs stock UF: max|diff| = {err}", flush=True)

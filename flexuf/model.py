@@ -230,3 +230,27 @@ def _quant(z):
     from src.layers.layers import QuantFunc
 
     return QuantFunc.apply(z)
+
+
+def load_flexuf_state(net, ck, *, where: str = "") -> None:
+    """Load a FlexUF checkpoint, tolerating modules that did not exist when it was saved.
+
+    The adapters and the seam-repair block are zero-initialised, so a checkpoint
+    written before either existed is still a valid starting point — the missing
+    tensors mean "identity", which is exactly what a fresh one holds. Refusing to
+    load would be wrong; loading silently would hide a real mismatch. So the two
+    known-new prefixes are allowed and anything else raises.
+    """
+    sd = ck.get("state_dict", ck.get("net", ck))
+    missing, unexpected = net.load_state_dict(sd, strict=False)
+    NEW = ("dec.adapters.", "dec.seam_repair.")
+    unexplained = [k for k in missing if not k.startswith(NEW)]
+    if unexplained or unexpected:
+        raise RuntimeError(
+            f"{where}checkpoint does not match the model: "
+            f"missing {unexplained[:4]} unexpected {list(unexpected)[:4]}"
+        )
+    if missing:
+        print(f"{where}{len(missing)} tensors absent from the checkpoint and left "
+              f"at zero-init (identity): {sorted({k.split('.')[1] for k in missing})}",
+              flush=True)

@@ -57,7 +57,7 @@ from src.utils.common import create_folder, get_training_lambdas  # noqa: E402
 
 from flexuf.config import QP_LEVELS, FlexUFConfig  # noqa: E402
 from flexuf.cost import exit_costs, saving  # noqa: E402
-from flexuf.model import FlexUFIntra  # noqa: E402
+from flexuf.model import FlexUFIntra, load_flexuf_state  # noqa: E402
 from flexuf.router.losses import router_objective  # noqa: E402
 from flexuf.router.router import (  # noqa: E402
     N_STEM_SIGNALS,
@@ -159,7 +159,7 @@ def main(argv):
     ck = torch.load(args.ckpt, map_location="cpu", weights_only=False)
     cfg = FlexUFConfig(**ck["config"]) if "config" in ck else FlexUFConfig()
     net = FlexUFIntra(cfg).to(device)
-    net.load_state_dict(ck.get("state_dict", ck.get("net")))
+    load_flexuf_state(net, ck)
     net.eval()
     for p in net.parameters():
         p.requires_grad_(False)

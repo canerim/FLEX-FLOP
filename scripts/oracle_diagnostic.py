@@ -46,7 +46,7 @@ from src.utils.common import get_training_lambdas  # noqa: E402
 
 from flexuf.config import QP_LEVELS, FlexUFConfig  # noqa: E402
 from flexuf.cost import exit_costs  # noqa: E402
-from flexuf.model import FlexUFIntra  # noqa: E402
+from flexuf.model import FlexUFIntra, load_flexuf_state  # noqa: E402
 from flexuf.router.router import latent_tiles_with_halo, tile_signals  # noqa: E402
 
 
@@ -99,7 +99,7 @@ def main() -> int:
     ck = torch.load(a.ckpt, map_location="cpu", weights_only=False)
     cfg = FlexUFConfig(**ck["config"]) if "config" in ck else FlexUFConfig()
     net = FlexUFIntra(cfg).to(device).eval()
-    net.load_state_dict(ck.get("state_dict", ck.get("net")))
+    load_flexuf_state(net, ck)
 
     ds = ImageFolder(a.dataset, a.crop, a.crop, QP_LEVELS,
                      get_training_lambdas([10.0, 2048.0], QP_LEVELS))
