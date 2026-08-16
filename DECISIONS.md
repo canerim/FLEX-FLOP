@@ -2719,3 +2719,69 @@ geçiyor, ama fark ham tablodaki kadar büyük değil.
 **Sıradaki tasarım sorusu** ikisinin arasında: gövdeyi eğit ama anchor ağırlığını
 yükselt. `--anchor_weight` süpürülmesi gereken bir parametre olarak ortaya çıktı;
 şu ana kadar tek değerde (1.0) sabitti ve hiç sorgulanmadı.
+
+---
+
+## 48. Router v2: literatür üç kusur gösterdi, uyum 0.56 → 0.86
+
+**v1 neden kördü.** Altı elle yapılmış sinyalden hiçbiri oracle seçimiyle |r|>0.12
+korele değildi; 768 boyutlu havuzlanmış temsil daha da kötüydü (bölüm 45). İki
+deneme de aynı soruyu soruyordu: *sabit* bir stem'in *hangi sabit fonksiyonu*
+doğru çıkışı verir. Stem hiç o soruyu cevaplamak için kurulmamıştı.
+
+**Literatürden üç düzeltme:**
+
+1. **Entropy modelinin ölçekleri girdiye alındı.** En yüksek korelasyonlu iki
+   sinyal `scales_mean` (−0.117) ve `scales_max` (−0.097) idi — decode sırasında
+   hesaplanıp atılıyorlardı. Latent de öyle. Router'a, tile başına zorluk
+   tahmininin ta kendisi olan büyüklük verilmemişti.
+2. **Kapasite doğru yere taşındı.** MLP tile başına TEK vektöre uygulanıyor
+   (1080p'de 40 tane), yani genişliği bedava; 1×1 ise piksel başına ve tek
+   maliyetli parça. v1 ikisini de dar tutup ihtiyatın bedelini iki kez ödemişti.
+   v2: stem 1×1 384→48 + latent/scales 1×1 512→32, sonra 256 genişlikte iki
+   katmanlı MLP. **144K parametre, %0.162 MAC** (dikiş onarımının altıda biri).
+3. **Hedef doğrudanlaştı.** Beklenen pişmanlık minimize edilecek doğru şey ama
+   *uyum* istenen şey, ve regret ona ancak sonuçlar üzerinden ulaşıyor. Oracle
+   etiketine çapraz entropi doğrudan sinyali veriyor — her tile **kararın
+   maliyetiyle** ağırlıklı, ki kapasite önemli yerlere gitsin.
+
+**Çökme kontrolü yardımcı kayıpla değil bias ile** (Loss-Free Balancing, 2024):
+büyük yardımcı kayıplar hedefe girişim gradyanı sokuyor. Bias karardan ÖNCE
+uygulanıyor ve **oracle'ın kendi dağılımına** doğru itiliyor, tekdüzeye değil —
+MoE'de uzmanlar birbirinin yerine geçer, bizde geçmez; yüksek λ'da oracle
+gerçekten herkesi tek çıkışa yolluyor ve orada yayılmayı zorlamak hata yaptırmak
+olurdu.
+
+**Sonuç, ayrılmış tile'larda** (her batch'in yarısı eğitilir, yarısı ölçülür —
+144K parametreyle in-sample sayı istenen yere tırmanır ve hiçbir şey ifade etmez):
+
+    v1 (regret, elle yapilmis sinyaller)   0.562
+    v2 (CE + scales + kapasite + bias)     0.863
+
+Ve çökme yok: dağılım baştan sona dört çıkışa yayılı. v1 λ≥3e−4'te
+`[0,0,100,0,0,0]`'a çökmüştü.
+
+### Öngörümü ölçüm çürüttü
+
+"%86'nın bir kısmı kıl payı tile'larda kasıtlı kayıtsızlıktır, maliyet-ağırlıklı
+uyum daha yüksek çıkar" dedim. **Çıkmadı.** CTC üzerinde:
+
+| qp | uyum | maliyet-ağırlıklı | gerçekleşen regret | tasarruf | oracle |
+|---|---|---|---|---|---|
+| 0 | 0.743 | 0.721 | 0.00366 | %36.1 | %34.6 |
+| 32 | 0.913 | 0.889 | 0.00184 | %40.8 | %41.3 |
+| 63 | 0.913 | 0.890 | 0.00367 | %40.7 | %41.8 |
+
+Maliyet-ağırlıklı uyum her QP'de ham uyumun **altında** — router yanlışlarını
+ucuz yerlerde değil, **kararın önemli olduğu** yerlerde yapıyor. Tahminimin tersi.
+
+**Ama üçüncü sütun asıl olan ve o iyi:** gerçekleşen regret 0.002-0.004, yani
+oracle'ın ödediğinin %0.2-0.4 üstü. Tasarruf oracle'a neredeyse eşit (qp32:
+%40.8 vs %41.3). Çelişki yok, açıklama var: router farklı seçtiğinde çoğunlukla
+**komşu** çıkışı seçiyor ve komşular birbirine yakın.
+
+**Dürüst sonuç:** kullanıcının istediği %95 uyuma ulaşılmadı (qp32/63'te %91.3,
+qp0'da %74.3, ortalama %86.3). Ve ölçüm şunu da söylüyor: **uyum hedeflenmesi
+gereken metrik olmayabilir** — router zaten oracle'ın tasarrufunun %99'unu,
+maliyetinin %100.4'üne alıyor, ve kalan uyuşmazlığın bedeli 0.002. %95 uyum bunu
+kayda değer iyileştirmeyebilir. Yine de istenen o, ve qp0 (%74) açık zayıf halka.
