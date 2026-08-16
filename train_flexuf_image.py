@@ -106,6 +106,11 @@ def parse_args(argv):
     p.add_argument("--adapter_kind", choices=["conv1x1", "ffn"], default="conv1x1")
     p.add_argument("--seam_repair", choices=["none", "depthwise", "full"], default="full",
                    help="full-frame pass after stitching that heals tile borders")
+    p.add_argument("--min_crop", type=int, default=0,
+                   help="floor on the recipe's crop size. Needed when the tile is "
+                        "as large as the crop: a 256px tile in a 256px crop is ONE "
+                        "tile, so no seam exists and --train_patched trains "
+                        "nothing it will face at inference")
     p.add_argument("--aux_weight", type=float, default=1.0, help="alpha_i of Eq.(6)")
     p.add_argument("--aux_schedule", choices=["constant", "warmup"], default="constant")
     p.add_argument("--device", type=str, default="0")
@@ -145,6 +150,14 @@ def train_one_epoch(net, loader, optimizer, epoch, cfg, args, device, logf):
 
     idx = min(len(strategy) - 1, epoch)
     _, lr, patch_w, patch_h = strategy[idx]
+    # The recipe trains at 256x256 until epoch 90. With a 256px tile that is a
+    # single tile per crop — no borders, no seams — so patched training would be
+    # identical to full-frame and the configuration would never see the artefact
+    # it exists to handle. Raising the floor costs 4x the pixels per step and is
+    # the only way the experiment means anything.
+    if args.min_crop:
+        patch_w = max(patch_w, args.min_crop)
+        patch_h = max(patch_h, args.min_crop)
     for g in optimizer.param_groups:
         g["lr"] = lr
     loader.dataset.set_patch_size(patch_w, patch_h)
