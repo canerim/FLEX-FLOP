@@ -63,6 +63,7 @@ from src.utils.common import create_folder, get_training_lambdas  # noqa: E402
 
 from flexuf.config import QP_LEVELS, FlexUFConfig  # noqa: E402
 from flexuf.losses import (  # noqa: E402
+    ladder_distill_loss,
     exit_weights,
     multi_exit_rd_loss,
     per_exit_rd,
@@ -103,7 +104,7 @@ def parse_args(argv):
     p.add_argument("--split_depth", type=int, default=2, help="j")
     p.add_argument("--latent_patch", type=int, default=8, help="p; 8 -> 128x128 RGB")
     p.add_argument("--latent_halo", type=int, default=2, help="h, in latent px")
-    p.add_argument("--adapter_kind", choices=["conv1x1", "ffn"], default="conv1x1")
+    p.add_argument("--adapter_kind", choices=["conv1x1", "ffn", "scaled"], default="conv1x1")
     p.add_argument("--seam_repair", choices=["none", "depthwise", "full", "grid"], default="full",
                    help="full-frame pass after stitching that heals tile borders")
     p.add_argument("--min_crop", type=int, default=0,
@@ -135,6 +136,26 @@ def parse_args(argv):
                         "over replicate, which buys 1.34 trunk blocks of budget for "
                         "very little; 'learned' keeps its per-channel adaptivity at "
                         "replicate's cost, starting at exactly replicate.")
+    p.add_argument("--distill_weight", type=float, default=0.0,
+                   help="weight on ladder distillation: each exit's adapter is "
+                        "trained to reproduce a DEEPER exit's feature, not just to "
+                        "make good pixels. The multi-exit literature is consistent "
+                        "that distilling from deep exits to shallow ones is what "
+                        "makes shallow exits usable (Zhang et al., 'Be Your Own "
+                        "Teacher', ICCV 2019; ERDE, arXiv:2510.04856). Here the "
+                        "target is 384-channel and dense rather than 3-channel RGB, "
+                        "so it carries far more signal per step -- and it is exactly "
+                        "the quantity the shared head consumes.")
+    p.add_argument("--distill_teacher", choices=["deepest", "adjacent"],
+                   default="adjacent",
+                   help="whose feature each exit imitates. 'deepest' is the obvious "
+                        "choice and the one the FITEE 2024 survey of multi-exit "
+                        "self-distillation reports as harmful for the SHALLOWEST "
+                        "exits: too large a student-teacher gap degrades them. "
+                        "'adjacent' has exit k imitate exit k+1, so each adapter "
+                        "closes one group's worth of gap and the chain carries the "
+                        "rest -- which also matches our structure, where a shallow "
+                        "exit is literally a prefix of a deep one.")
     p.add_argument("--epoch_offset", type=int, default=0,
                    help="where in Microsoft's 105-epoch schedule to START. 0 is "
                         "correct from scratch and WRONG for a warm start: 2e-4 is "
@@ -277,6 +298,16 @@ def train_one_epoch(net, loader, optimizer, epoch, cfg, args, device, logf,
             # dB of reconstruction error" and does not have to be retuned per QP.
             ld["loss"] = ld["loss"] + args.anchor_weight * lambdas.mean() * anchor_mse
 
+        # Ladder distillation: supervise the adapters in FEATURE space, where
+        # their job is actually stated, instead of only through the head's
+        # 3-channel output. One extra trunk pass, tapped at every exit.
+        distill = None
+        if args.distill_weight > 0:
+            y_d, _, _ = net._encode_to_latent(x, qp)
+            distill = ladder_distill_loss(net.dec.exit_features(y_d),
+                                          args.distill_teacher)
+            ld["loss"] = ld["loss"] + args.distill_weight * distill
+
         optimizer.zero_grad(set_to_none=True)
         ld["loss"].backward()
 
@@ -320,6 +351,7 @@ def train_one_epoch(net, loader, optimizer, epoch, cfg, args, device, logf,
                 "patch": patch_w,
                 "loss": ld["loss"].item(),
                 "anchor_mse": (anchor_mse.item() if anchor_mse is not None else None),
+                "distill": (distill.item() if distill is not None else None),
                 "bpp": ld["bpp"].item(),
                 # The ladder's shape. A healthy run has these monotonically
                 # increasing; all-equal means the exits have collapsed, which is

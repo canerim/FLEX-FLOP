@@ -245,11 +245,23 @@ def load_flexuf_state(net, ck, *, where: str = "") -> None:
     missing, unexpected = net.load_state_dict(sd, strict=False)
     NEW = ("dec.adapters.", "dec.seam_repair.", "dec.pad_coef")
     unexplained = [k for k in missing if not k.startswith(NEW)]
-    if unexplained or unexpected:
+    # Unexpected keys under the same prefixes are tolerated for one specific
+    # reason: adapter_kind changes the adapter MODULE, so a checkpoint written
+    # with conv1x1 adapters carries `dec.adapters.0.conv.*` that an FFN or scaled
+    # ladder has no slot for. Both sides are zero-initialised identities, so
+    # neither the leftover nor the fresh one carries information -- dropping them
+    # is exact, not lossy. Anything outside these prefixes still raises, which is
+    # what stops a genuinely mismatched checkpoint loading quietly.
+    unexplained_extra = [k for k in unexpected if not k.startswith(NEW)]
+    if unexplained or unexplained_extra:
         raise RuntimeError(
             f"{where}checkpoint does not match the model: "
-            f"missing {unexplained[:4]} unexpected {list(unexpected)[:4]}"
+            f"missing {unexplained[:4]} unexpected {unexplained_extra[:4]}"
         )
+    if unexpected:
+        print(f"{where}{len(unexpected)} adapter tensors in the checkpoint have no "
+              f"slot in this ladder (adapter_kind differs); both are zero-init "
+              f"identities, so nothing is lost", flush=True)
     if missing:
         print(f"{where}{len(missing)} tensors absent from the checkpoint and left "
               f"at zero-init (identity): {sorted({k.split('.')[1] for k in missing})}",

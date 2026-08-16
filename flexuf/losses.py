@@ -139,3 +139,39 @@ def psnr_from_mse(mse: torch.Tensor) -> torch.Tensor:
     so PSNR = 10*log10(1/mse) with no extra peak term.
     """
     return 10.0 * torch.log10(1.0 / mse.clamp_min(1e-10))
+
+
+def ladder_distill_loss(feats, teacher: str = "adjacent"):
+    """Each exit's adapted feature should look like a deeper exit's.
+
+    Why this is worth a term of its own
+    -----------------------------------
+    The adapters are currently supervised only through pixels: a 3-channel target,
+    at the far end of a head that mixes 384 channels down to 192 and then shuffles
+    them by 8. That is a long, lossy path for a gradient to travel, and the entire
+    job of an adapter is stated much more directly in feature space: *produce what
+    the skipped blocks would have produced*, because the head downstream is fixed
+    and was fitted to exactly that.
+
+    The multi-exit self-distillation literature reaches the same place from the
+    classification side -- distil the deep exit into the shallow ones -- and adds
+    a caveat this implementation takes seriously: too large a student-teacher gap
+    HURTS the shallowest exits (FITEE 2024, "Multi-exit self-distillation with
+    appropriate teachers"). Hence `adjacent`, where exit k imitates exit k+1 and
+    the chain carries the rest. That also happens to match our structure exactly:
+    a shallow exit is literally a prefix of a deep one, so consecutive exits are
+    one group apart by construction rather than by choice.
+
+    Normalised by the teacher's own variance so the weight means the same thing at
+    every exit and every QP; an unnormalised version would silently weight
+    high-energy features more, which is the opposite of what is wanted -- the hard
+    tiles are not the bright ones.
+    """
+    total, n = 0.0, 0
+    K = len(feats)
+    for k in range(K - 1):
+        t = feats[K - 1] if teacher == "deepest" else feats[k + 1]
+        t = t.detach()
+        total = total + ((feats[k] - t) ** 2).mean() / t.var().clamp_min(1e-8)
+        n += 1
+    return total / max(n, 1)

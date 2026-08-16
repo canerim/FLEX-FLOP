@@ -172,6 +172,13 @@ class FlexUFConfig:
     """
 
     adapter_kind: str = "conv1x1"
+    """"conv1x1" | "ffn" | "scaled".
+
+    "scaled" matches each adapter's capacity to the gap it bridges: with K=6 and
+    b=2, exit 2 stands in for six skipped blocks and exit 4 for two, yet the
+    uniform choice hands both the same 1x1. See build_adapter for the arithmetic
+    and the cost this trades away.
+    """
     """Which adapter sits between an early exit and the shared head.
 
     "conv1x1"  — a single trainable 1x1 convolution, residual, zero-initialised.
@@ -245,7 +252,7 @@ class FlexUFConfig:
             )
         if not 0 <= self.split_depth <= self.num_exits:
             raise ValueError(f"split_depth={self.split_depth} must satisfy 0 <= j <= K")
-        if self.adapter_kind not in ("conv1x1", "ffn"):
+        if self.adapter_kind not in ("conv1x1", "ffn", "scaled"):
             raise ValueError(f"unknown adapter_kind {self.adapter_kind!r}")
 
     @property

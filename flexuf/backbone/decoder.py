@@ -229,7 +229,28 @@ class GridSeamRepair(nn.Module):
         return x + g * h
 
 
-def build_adapter(cfg: FlexUFConfig) -> nn.Module:
+def build_adapter(cfg: FlexUFConfig, exit_idx: int = 0) -> nn.Module:
+    """Adapter for exit `exit_idx`, with capacity matched to the gap it bridges.
+
+    The uniform choice we started with gives exit 2 and exit 4 the same single
+    1x1, but they are not doing the same job: with K=6 and b=2, exit 2 must stand
+    in for SIX skipped DepthConvBlocks and exit 4 for only two. Asking one 1x1
+    (C^2 MAC/px) to replace 6 x 8C^2 is a three-order-of-magnitude mismatch, and
+    the ladder's shape says so -- the shallow exits are where the dB is lost.
+
+    "scaled" therefore gives the exits that skip the most an FFNAdapter (5C^2/px,
+    i.e. 0.63 of a block) and the ones that skip least the plain 1x1 (C^2, 0.125
+    of a block). The bill is real and charged: an exit-2 tile then saves 6 blocks
+    minus 0.63, not 6. Whether that trade is worth it is the experiment.
+
+    Everything stays POINTWISE either way, so no adapter adds receptive field and
+    none of them touches the tile-boundary penalty.
+    """
+    if cfg.adapter_kind == "scaled":
+        # blocks this exit skips, out of the trunk's total
+        skipped = (cfg.num_exits - 1 - exit_idx) * cfg.blocks_per_exit
+        return (FFNAdapter(TRUNK_CH, cfg.adapter_expand) if skipped >= 4
+                else Conv1x1Adapter(TRUNK_CH))
     if cfg.adapter_kind == "conv1x1":
         return Conv1x1Adapter(TRUNK_CH)
     return FFNAdapter(TRUNK_CH, cfg.adapter_expand)
@@ -326,7 +347,7 @@ class MultiExitIntraDecoder(nn.Module):
         )
         # K-1 adapters: the deepest exit takes the raw feature, which is what
         # makes it bit-exact stock UF.
-        self.adapters = nn.ModuleList(build_adapter(self.cfg) for _ in range(K - 1))
+        self.adapters = nn.ModuleList(build_adapter(self.cfg, k) for k in range(K - 1))
         self.head = DepthConvBlock(TRUNK_CH, PRESHUFFLE_CH)
         # One shared per-channel border coefficient, only when it is used.
         # Initialised to 1.0, which makes "learned" start as exactly replicate.
@@ -418,6 +439,26 @@ class MultiExitIntraDecoder(nn.Module):
             feat = self.groups[g](feat)
             outs.append(self._apply_head(self._at_exit(feat, g), quant_step))
         return outs
+
+    def exit_features(self, y_hat: torch.Tensor) -> list[torch.Tensor]:
+        """The feature each exit hands the head, AFTER its adapter, for all exits.
+
+        Separate from `forward_all_exits` because distillation needs the feature,
+        not the pixels. The head is a fixed map from feature to RGB, so matching
+        the deeper feature is a strictly stronger constraint than matching the
+        pixels it produces -- 384 dense channels of target instead of 3 -- and it
+        is exactly the quantity the shared head was trained to consume.
+
+        One trunk pass, taps at each exit. quant_step is not applied: it is a
+        per-channel scalar the head multiplies in, identical for every exit, so
+        including it would only rescale both sides of the same comparison.
+        """
+        feat = self.upsample(y_hat)
+        feats = []
+        for g in range(self.cfg.num_exits):
+            feat = self.groups[g](feat)
+            feats.append(self._at_exit(feat, g))
+        return feats
 
     # -- the deployed hybrid decode -----------------------------------------
     def forward(
