@@ -2830,3 +2830,42 @@ ve öyle raporlamak teknik olarak doğru pratik olarak yanıltıcı olurdu.
 eğitim-içi ayrılmış ölçümdü (batch başına 48 tile, gürültülü). CTC üzerindeki
 gerçek değerlendirme düzleşme göstermiyor, monoton artıyor. Eğitim-içi metriğe
 dayanıp sonuç çıkarmak hataydı.
+
+---
+
+## 50. Uzun eğitim qp0'ı kıpırdatmadı — sınır optimizasyonda değil
+
+Bölüm 49'da "%74 uyum kapasite sınırı mı, yarım kalmış eğitim mi" diye sordum.
+CE 3000 adımda hâlâ düşüyordu, yani ikisi de mümkündü. Dört kat adımla ölçtüm.
+
+**Eğitim gerçekten ilerledi:** CE 0.5 → **0.0935**, regret 0.0026 → 0.00111.
+
+**Ama CTC'de qp0 kıpırdamadı:**
+
+| | qp0 uyum | qp0 regret | qp32 uyum | qp32 regret |
+|---|---|---|---|---|
+| 3.000 adım | 0.743 | 0.00366 | 0.913 | 0.00184 |
+| 12.000 adım | **0.741** | **0.00366** | 0.934 | 0.00106 |
+
+qp0'da uyum 0.743 → 0.741, regret **birebir aynı**. Model eğitim verisinde dört
+kat daha iyi uyuyor ve test performansı sabit — sınır optimizasyonda değil.
+
+qp32'de küçük kazanç var (0.913 → 0.934) ama orada oracle entropisi zaten 0.477;
+problem kolay olduğu için kolay kazanç.
+
+**Sonuç: qp0 — oracle'ın 1.207 bit ile gerçekten dağıttığı, yönlendirmenin asıl
+anlamlı olduğu yer — router'ın GÖRDÜĞÜ bilgiyle çözülemiyor.** Stem ve latent,
+tile'ın hangi çıkışta ne kadar kaybedeceğini yeterince kestirmiyor.
+
+Bu bilgili bir başarısızlık: "daha uzun eğit" yolu elendi, ve elenmesi iki mimari
+yolu öne çıkardı —
+
+1. **Stem'in kendisi yönlendirilebilir hale gelsin.** BEST koşusu tam olarak bunu
+   deniyor: router'a sabit bir temsili okutmak yerine temsili router'ın işine göre
+   şekillendirmek. Bu, bölüm 45'te "sabit bir stem'in hangi sabit fonksiyonu"
+   sorusunun yanlış soru olduğu tespitinin doğal devamı.
+2. **Router'a daha fazla derinlik göster** — ilk per-tile bloğun çıktısı da
+   girdiye girsin. Maliyeti var, ölçülebilir.
+
+Kullanıcının istediği %95'e ulaşılmadı ve artık **sebebi biliniyor**, tahmin
+edilmiyor.
