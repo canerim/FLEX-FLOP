@@ -42,6 +42,9 @@ SHORT = {
     "wdec_j2_p128_arls": "ARLS-j2/128", "wdec_j2_p128_grid": "GRID-j2/128",
     "wdec_j2_p256_grid": "GRID-j2/256",
     "wdec_j2_p256_distill": "DISTILL-j2/256",
+    "wdec_j2_p256_dist_deepest": "D-deepest",
+    "wdec_j2_p256_dist_plain": "D-plain1x1",
+    "wdec_j2_p256_dist_fullrep": "D-fullrep",
     
 }
 
