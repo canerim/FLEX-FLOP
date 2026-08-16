@@ -1594,3 +1594,47 @@ aktif.
 eğitebiliyordu, yani decoder gövdesi çok-çıkışlı yapıya hiç uyum sağlayamıyordu —
 sadece çıkış noktalarına yama atılıyordu. Burada 14.97M parametre serbest, gövde
 kendini erken çıkışa uygun şekilde yeniden düzenleyebilir.
+
+---
+
+## 29. ❗ Kullanıcı grafikten bir ölçüm hatası yakaladı
+
+**Gözlem:** "QP16'nın orta noktası farklı, ikisinde bpp aynı noktadaymış gibi
+görünmüyor."
+
+**Doğrulandı — 9 noktanın 9'unda da bpp farklıydı:**
+
+| qp | dense bpp | routed bpp | fark |
+|---:|---:|---:|---:|
+| 16 | 0.23423 | 0.23882 | **+0.00459** |
+| 40 | 0.39705 | 0.41073 | +0.01368 |
+| 48 | 0.48870 | 0.50326 | +0.01456 |
+
+İki eğri **aynı bitstream'i** okuyor; aralarında bpp farkı olması imkânsız.
+
+**Sebep:** `ImageFolder.__getitem__` crop konumunu `random.randint`, yatay
+çevirmeyi `random.choice` ile seçiyor. `sweep()` iki kez çağrılıyordu — bir
+dense, bir routed — ve her çağrı veriyi baştan dolaşıp **farklı rastgele
+crop'lar** üretiyordu. Dense eğrisi A görüntülerinde, routed eğrisi B
+görüntülerinde ölçülmüştü. Eğriler arasındaki dikey fark decoder'a değil,
+kısmen crop varyansına aitti.
+
+**Düzeltme:** `sweep_both()` — her iki decoder **aynı batch içinde** koşuyor.
+Aynı görüntü, aynı latent, aynı bitler, sadece synthesis farklı. bpp artık
+inşaen özdeş (doğrulandı: 0/9 fark).
+
+**Etkisi — gürültü iyimser yöndeydi:**
+
+| | kirli | temiz |
+|---|---:|---:|
+| QP0 | −0.554 dB / %24.9 | −0.603 dB / %24.7 |
+| QP32 | −0.270 dB / %4.1 | −0.339 dB / %3.7 |
+| QP63 | −0.601 dB / −%0.8 | −0.625 dB / −%0.7 |
+
+Beşinci kez: hata iyimser yöndeydi.
+
+**Ders:** bu hatayı hiçbir kontrolüm yakalamamıştı — kontroller bit-exact
+eşdeğerlik ve maliyet-gerçeklik uyumunu doğruluyor, ama *iki ölçümün aynı veri
+üzerinde yapıldığını* doğrulayan bir şey yoktu. Grafikteki tutarsızlık insan
+gözüne çarptı. Aynı bitstream'i paylaşması gereken iki eğrinin bpp'si artık
+`rd_curve.py` içinde inşaen tek bir yerden geliyor, yani ayrışması mümkün değil.

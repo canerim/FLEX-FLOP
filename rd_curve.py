@@ -83,11 +83,24 @@ def real_bpp(net, y_hat_res, scales, z, qp, pixel_num) -> float:
 
 
 @torch.no_grad()
-def sweep(net, router, loader, cfg, device, qps, mode: str):
-    """One RD point per QP for one decoder configuration."""
-    rows = []
+def sweep_both(net, router, loader, cfg, device, qps):
+    """Both decoders, in ONE pass over the data, per QP.
+
+    Not two passes. `ImageFolder.__getitem__` picks the crop position with
+    random.randint and the horizontal flip with random.choice, so iterating the
+    loader twice yields DIFFERENT crops — the dense curve would be measured on
+    one set of images and the routed curve on another. Measured that way, the bpp
+    disagreed at all nine QPs (worst +0.0046 at qp16) even though both decoders
+    read the identical bitstream by construction, and the vertical gap between
+    the curves carried crop variance rather than only the decoder.
+
+    Decoding both ways inside the same batch makes the bpp identical by
+    construction and the comparison exact: same image, same latent, same bits,
+    only the synthesis differs.
+    """
+    dense_rows, routed_rows = [], []
     for qp_val in qps:
-        acc_psnr, acc_bpp, acc_sv, n = 0.0, 0.0, 0.0, 0
+        acc = dict(dense_psnr=0.0, routed_psnr=0.0, bpp=0.0, sv=0.0, n=0)
         for batch in loader:
             x = batch[0].to(device)
             B = x.shape[0]
@@ -97,10 +110,11 @@ def sweep(net, router, loader, cfg, device, qps, mode: str):
             y_hat, q_dec, aux = net._encode_to_latent(x, qp)
             bpp, _, _ = net._rate(aux, qp, H * W)
 
-            if mode == "dense":
-                x_hat = net.dec.forward_full(y_hat, q_dec)
-                sv = 0.0
-            else:
+            # dense
+            acc["dense_psnr"] += psnr_611(x, net.dec.forward_full(y_hat, q_dec)) * B
+
+            # routed, same latent
+            if router is not None:
                 stem = net.dec.upsample(y_hat)
                 for g in range(cfg.split_depth):
                     stem = net.dec.groups[g](stem)
@@ -110,33 +124,33 @@ def sweep(net, router, loader, cfg, device, qps, mode: str):
                 sig = stem_signals(stem, y_hat, sc, cfg)
                 nt = sig.shape[0] // B
                 em = router.assign(sig, qp.long().repeat_interleave(nt))
-                # q_dec carries one row per image. Passing the whole thing to a
-                # single-image decode makes [1,C,H,W] * [B,C,1,1] broadcast the
-                # result back up to batch B, and cat then yields B*B. The same
-                # mistake was fixed in model.py; it survived here because nothing
-                # tied the two call sites together.
                 x_hat = torch.cat([
                     net.dec(y_hat[i:i + 1], q_dec[i:i + 1],
                             exit_map=em[i * nt:(i + 1) * nt])
                     for i in range(B)
                 ])
-                sv = sum(saving(em[i * nt:(i + 1) * nt], cfg, "head") for i in range(B)) / B
+                acc["routed_psnr"] += psnr_611(x, x_hat) * B
+                acc["sv"] += sum(saving(em[i * nt:(i + 1) * nt], cfg, "head")
+                                 for i in range(B))
 
-            acc_psnr += psnr_611(x, x_hat) * B
-            acc_bpp += bpp.sum().item()
-            acc_sv += sv * B
-            n += B
+            acc["bpp"] += bpp.sum().item()
+            acc["n"] += B
 
-        rows.append({
-            "qp": qp_val,
-            "bpp": acc_bpp / n,
-            "psnr_611": acc_psnr / n,
-            "saving_pct": 100 * acc_sv / n,
-        })
-        print(f"  {mode:<6} qp {qp_val:>2}  bpp {rows[-1]['bpp']:.4f}  "
-              f"psnr {rows[-1]['psnr_611']:.2f}  saved {rows[-1]['saving_pct']:.1f}%",
-              flush=True)
-    return rows
+        n = acc["n"]
+        dense_rows.append({"qp": qp_val, "bpp": acc["bpp"] / n,
+                           "psnr_611": acc["dense_psnr"] / n, "saving_pct": 0.0})
+        if router is not None:
+            routed_rows.append({"qp": qp_val, "bpp": acc["bpp"] / n,
+                                "psnr_611": acc["routed_psnr"] / n,
+                                "saving_pct": 100 * acc["sv"] / n})
+        d = dense_rows[-1]
+        line = (f"  qp {qp_val:>2}  bpp {d['bpp']:.4f}  dense {d['psnr_611']:.2f}")
+        if router is not None:
+            r = routed_rows[-1]
+            line += (f"  routed {r['psnr_611']:.2f}  "
+                     f"({r['psnr_611'] - d['psnr_611']:+.3f} dB, {r['saving_pct']:.1f}% saved)")
+        print(line, flush=True)
+    return dense_rows, routed_rows
 
 
 def main(argv):
@@ -179,9 +193,8 @@ def main(argv):
     loader = DataLoader(ds, batch_size=a.batch_size, num_workers=4,
                         sampler=SequentialSampler(ds))
 
-    print(f"\nRD sweep over qps {a.qps}\n")
-    dense = sweep(net, None, loader, cfg, device, a.qps, "dense")
-    routed = sweep(net, router, loader, cfg, device, a.qps, "routed") if router else []
+    print(f"\nRD sweep over qps {a.qps}  (both decoders per batch)\n")
+    dense, routed = sweep_both(net, router, loader, cfg, device, a.qps)
 
     Path(a.out).parent.mkdir(parents=True, exist_ok=True)
     Path(a.out).write_text(json.dumps(
