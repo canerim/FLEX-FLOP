@@ -8,15 +8,24 @@
 set -u
 DST=/data10/shareddata/test_sequences/YUV/UVG
 mkdir -p "$DST" && cd "$DST"
-for S in Beauty Bosphorus HoneyBee Jockey ReadySteadyGo ShakeNDry YachtRide; do
-    F="${S}_1920x1080_120fps_420_8bit_YUV"
-    [ -f "$F.yuv" ] && { echo "[skip] $F.yuv var"; continue; }
+# Ultra Video Group publishes the fourth sequence as "ReadySetGo"; DCVC's
+# test_cfg (following the JVET convention) calls the same sequence
+# "ReadySteadyGo". Downloaded under the site's name, stored under the config's,
+# so test_cfg matches without editing Microsoft's file. Left as a visible pair
+# rather than a silent rename because two names for one sequence is exactly the
+# kind of thing that later looks like a missing measurement.
+for S in Beauty Bosphorus HoneyBee Jockey ReadySetGo:ReadySteadyGo ShakeNDry YachtRide; do
+    SRC="${S%%:*}"; DST="${S##*:}"
+    F="${SRC}_1920x1080_120fps_420_8bit_YUV"
+    G="${DST}_1920x1080_120fps_420_8bit_YUV"
+    [ -f "$G.yuv" ] && { echo "[skip] $G.yuv var"; continue; }
     echo "[get ] $F"
     curl -L -C - --limit-rate 40M --retry 5 --retry-delay 10 \
          -o "${F}_RAW.7z" "https://ultravideo.fi/video/${F}_RAW.7z" || { echo "[FAIL] $F"; continue; }
     echo "[unz ] $F"
     ~/FLEX-UF/.venv/bin/python -c "
 import py7zr,sys; py7zr.SevenZipFile('${F}_RAW.7z','r').extractall('.')" && rm -f "${F}_RAW.7z"
-    ls -la "$F.yuv" 2>/dev/null || echo "[WARN] $F.yuv cikmadi"
+    [ "$F" != "$G" ] && [ -f "$F.yuv" ] && mv "$F.yuv" "$G.yuv"
+    ls -la "$G.yuv" 2>/dev/null || echo "[WARN] $G.yuv cikmadi"
 done
 echo "[done] $(ls -1 *.yuv 2>/dev/null | wc -l)/7 sekans, $(du -sh . | cut -f1)"

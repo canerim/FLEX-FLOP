@@ -142,6 +142,53 @@ def test_mixed_depth_runs_and_is_cheaper():
     print(f"  mixed-depth decode runs            saving {100*s_mix:.1f}% vs {100*s_deep:.1f}%")
 
 
+@torch.no_grad()
+def test_every_seam_repair_is_identity_at_init():
+    """Adding a seam-repair module must not change a single sample at step 0.
+
+    This is what makes "add a repair pass" a safe change rather than a gamble:
+    whatever the module does after training, before training it does nothing, so
+    the bit-exactness control against stock UF still holds and any measured
+    change is attributable to training rather than to the module's presence.
+
+    `grid` needs the check most. Its gate is initialised to a NON-zero border
+    prior (1.0 on the edge, 0.03 in the middle), so the identity property rests
+    entirely on `pw` still being zero-initialised. If someone later "fixes" that
+    zero-init, this test is what says so.
+    """
+    for kind in ("none", "depthwise", "full", "grid"):
+        cfg = FlexUFConfig(seam_repair=kind, split_depth=2, latent_patch=8)
+        stock, ladder, y, q = _fixtures(cfg)
+        err = (stock(y, q) - ladder.forward_full(y, q)).abs().max().item()
+        assert err == 0.0, f"seam_repair={kind}: not identity at init: {err}"
+        n_tiles = (LAT_H * 2 // cfg.feature_patch) * (LAT_W * 2 // cfg.feature_patch)
+        em = torch.full((n_tiles,), cfg.num_exits - 1, device=DEVICE)
+        assert torch.isfinite(ladder(y, q, exit_map=em)).all(), f"{kind}: non-finite"
+        print(f"  seam_repair={kind:<9} identity at init   max|diff| = {err}")
+
+
+def test_grid_gate_is_concentrated_on_the_border():
+    """The grid gate's prior must actually favour the tile border.
+
+    Asserted rather than eyeballed because the whole justification for the module
+    is that it can switch itself off over clean interior. If the distance
+    transform were ever inverted, the module would apply its strongest correction
+    exactly where no correction is wanted, and nothing else in the suite would
+    notice -- training would simply be slower and the result worse.
+    """
+    from flexuf.backbone.decoder import GridSeamRepair
+
+    P = 16
+    g = GridSeamRepair(TRUNK_CH, P).gate[0, 0]
+    edge = g[0].mean().item()
+    centre = g[P // 2, P // 2].item()
+    assert edge > 0.9, f"gate should be ~1 on the tile edge, got {edge:.3f}"
+    assert centre < 0.1 * edge, f"gate should be small in the interior, got {centre:.3f}"
+    ring = torch.stack([g[0].mean(), g[1].mean(), g[2].mean(), g[3].mean()])
+    assert (ring[:-1] > ring[1:]).all(), f"gate not monotone inward: {ring.tolist()}"
+    print(f"  grid gate  edge {edge:.3f} -> centre {centre:.4f}, monotone inward")
+
+
 def test_key_remap_is_a_bijection():
     """ladder -> stock -> ladder must return exactly the original tensors.
 
@@ -201,8 +248,10 @@ if __name__ == "__main__":
     test_untrained_adapters_are_identity()
     test_j_equals_K_reproduces_full_decode()
     test_forward_all_exits_matches_forward_full()
+    test_every_seam_repair_is_identity_at_init()
     test_key_remap_is_a_bijection()
     print("\nbehavioural checks:")
     test_mixed_depth_runs_and_is_cheaper()
+    test_grid_gate_is_concentrated_on_the_border()
     test_cost_model_is_monotone()
     print("\nall controls passed\n")
