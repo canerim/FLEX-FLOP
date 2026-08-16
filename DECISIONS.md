@@ -2672,3 +2672,50 @@ tablo.
 `--anchor_weight` doğrudan onu hedefliyor. Ama ağırlığı artırmak sığ çıkışların
 serbestliğini kısar, yani kaymayı azaltırken tavanı da düşürebilir. Bu bir takas
 ve **varsayılmayacak, ölçülecek**.
+
+---
+
+## 48. Gövdeyi eğitmek tavanı 1.6-2.2 kat yükseltiyor — ve anchor'ın bedeli ölçüldü
+
+İkinci checkpoint (`wdec_j2_p128_grid/ckpt_epo0`) "donuk gövde mi kısıtlıyor,
+yoksa hedef mi ulaşılmaz" sorusunu ayırdı. Aynı script, aynı CTC verisi, aynı
+metrik — bu şart, çünkü ilk karşılaştırmam farkında olmadan OpenImages crop'u ile
+CTC'yi yan yana koyuyordu.
+
+**Oracle tavanı** (kusursuz router):
+
+| qp | ≤0.1 dB GRID | ≤0.1 dB HEADS-ONLY | ≤0.3 dB GRID | ≤0.3 dB HEADS-ONLY |
+|---|---|---|---|---|
+| 0 | **28.2%** | 22.4% | **42.0%** | 38.9% |
+| 16 | **26.2%** | 17.7% | **39.7%** | 35.8% |
+| 32 | **22.8%** | 13.9% | **35.5%** | 30.9% |
+| 48 | **20.1%** | 10.7% | **31.8%** | 25.4% |
+| 63 | **18.1%** | 8.4% | **28.2%** | 21.1% |
+
+Gövdeyi eğitmek her QP'de kazandırıyor, ve fark QP arttıkça büyüyor: qp32'de
+1.6 kat, qp63'te **2.2 kat**. Donuk gövdenin beklenen kısıtı gerçekmiş — adapter
+tek başına, gövdenin sığ çıkışlara hizmet edecek şekilde yeniden düzenlenmesinin
+yerini tutmuyor.
+
+**0.3 dB bütçesinde %28-42**, yani hedef tek epoch sonrası (planın %6'sı)
+karşılanıyor.
+
+### Bedeli: anchor kayması
+
+| kol | qp0 | qp32 | qp63 |
+|---|---|---|---|
+| düzeltmesiz (bölüm 41) | −0.153 | −0.201 | −0.263 |
+| **GRID** (`--anchor_weight 1.0`) | **−0.025** | **−0.051** | **−0.074** |
+| **HEADS-ONLY** (`--freeze_backbone`) | **0.000** | **0.000** | **0.000** |
+
+**Kayıp terimi kaymayı 3.5 kat azaltıyor ama sıfırlamıyor. Dondurmak
+sıfırlıyor.** Bir kayıp terimi *baskıdır*, dondurmak *garantidir* — ve artık
+ikisinin de sayısı var.
+
+Sonucu okurken bu düzeltilmeli: GRID'in qp32'deki %22.8'i, gerçek DCVC-UF'ten
+0.051 dB aşağıda bir referansa göre. Gerçek maliyet ~0.15 dB. Hâlâ HEADS-ONLY'yi
+geçiyor, ama fark ham tablodaki kadar büyük değil.
+
+**Sıradaki tasarım sorusu** ikisinin arasında: gövdeyi eğit ama anchor ağırlığını
+yükselt. `--anchor_weight` süpürülmesi gereken bir parametre olarak ortaya çıktı;
+şu ana kadar tek değerde (1.0) sabitti ve hiç sorgulanmadı.
