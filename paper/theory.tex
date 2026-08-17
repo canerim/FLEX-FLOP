@@ -171,7 +171,7 @@ statement about a shape that is an artefact of vertex spacing.
 
 We instantiate Definition~\ref{def:setup} on the intra decoder of a
 42.2M-parameter learned image codec (DCVC-UF), split into $K=6$ exits over 12
-residual blocks with $j=2$, on $128\times128$ tiles, evaluated on the $40$ CTC
+residual blocks with $j=2$, on $256\times256$ tiles, evaluated on the $40$ CTC
 sequences available without JVET credentials (UVG, MCL-JCV, HEVC class~E;
 classes B, C and D are not measured). Decibels here pool every tile of every
 frame into a single MSE, which is the form matching the Lagrangian
@@ -185,15 +185,15 @@ MAC audit and agree with wall-clock to within $1\%$.
 
 \begin{table}[h]\centering\small
 \caption{Per-exit distortion, in dB below the released decoder. The penalty for
-leaving early grows $4.3\times$ from the lowest to the highest rate.}
+leaving early grows $3.3\times$ from the lowest to the highest rate.}
 \label{tab:exits}
 \begin{tabular}{lrrrrr}
 \toprule
 QP & exit 2 & exit 3 & exit 4 & exit 5 & bpp \\
 \midrule
-0  & 0.3093 & 0.1229 & 0.0558 & 0.0214 & 0.1920 \\
-32 & 0.6480 & 0.3151 & 0.0997 & 0.0439 & 0.2619 \\
-63 & 1.3176 & 0.6706 & 0.1521 & 0.0598 & 0.5026 \\
+0  & 0.1672 & 0.0547 & 0.0321 & 0.0028 & 0.2226 \\
+32 & 0.3245 & 0.0985 & 0.0547 & 0.0142 & 0.2966 \\
+63 & 0.5592 & 0.1443 & 0.0713 & 0.0286 & 0.5466 \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -209,11 +209,11 @@ $\Delta$ vanishes, exactly as the equality condition predicts.}
 \toprule
 QP & $\lambda{=}10^{-5}$ & $3{\times}10^{-5}$ & $10^{-4}$ & $3{\times}10^{-4}$\\
 \midrule
-0  & 0.35\% & 0.91\% & 1.53\% & 0.62\% \\
-16 & 0.62\% & 1.70\% & 2.31\% & 0.75\% \\
-32 & 0.98\% & 2.84\% & 2.96\% & 0.98\% \\
-48 & 1.38\% & 4.84\% & 3.76\% & 1.17\% \\
-63 & 1.93\% & \textbf{6.86\%} & 4.60\% & 1.32\% \\
+0  & 0.30\% & 0.39\% & 0.45\% & 0.03\% \\
+16 & 0.65\% & 0.74\% & 0.38\% & 0.01\% \\
+32 & 0.62\% & 1.41\% & 0.37\% & 0.00\% \\
+48 & 0.62\% & 2.00\% & 0.30\% & 0.00\% \\
+63 & 0.68\% & \textbf{2.09\%} & 0.27\% & 0.00\% \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -228,9 +228,9 @@ Proposition~\ref{prop:logconvex} and verified in Table~\ref{tab:logconvex}.}
 \toprule
 QP & $10\!\to\!15$ & $15\!\to\!20$ & $20\!\to\!25$ & $25\!\to\!30$ \\
 \midrule
-0  & 0.0062 & 0.0109 & 0.0173 & 0.0250 \\
-32 & 0.0111 & 0.0187 & 0.0288 & 0.0422 \\
-63 & 0.0197 & 0.0308 & 0.0475 & 0.0746 \\
+0  & 0.0048 & 0.0080 & 0.0113 & 0.0168 \\
+32 & 0.0074 & 0.0117 & 0.0177 & 0.0273 \\
+63 & 0.0110 & 0.0181 & 0.0284 & 0.0461 \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -240,7 +240,19 @@ adaptivity is not constant: it is smallest exactly where a uniformly shallower
 decoder would already do (low rate, Table~\ref{tab:exits} left column) and
 largest where the deep blocks are doing real work (high rate). A method
 evaluated only at low rate would understate its own contribution by a factor of
-seven.
+five.
+
+The magnitudes here are smaller than on the weaker checkpoint this table was
+first computed from, where $\Delta/J$ ran $0.91\%$ to $6.86\%$ instead of
+$0.39\%$ to $2.09\%$, and that direction is not accidental. By
+Theorem~\ref{thm:gain}, $\Delta$ vanishes exactly when every tile prefers the
+same exit. Improving the shallow exits --- exit~2's penalty at $\mathrm{qp}\,0$
+fell from $0.3093$ to $0.1672$\,dB --- compresses the differences between exits,
+so more tiles agree on the argmin and the measured value of adaptivity falls.
+Adaptivity is worth less on a better ladder, while the ladder saves more: the
+same checkpoint moves the compute saved at $0.1$\,dB from $28.3\%$ to $34.7\%$
+at $\mathrm{qp}\,0$. $\Delta$ prices routing against a fixed ladder and must be
+read against the ladder it was measured on.
 
 
 \begin{table}[h]\centering\small
@@ -259,11 +271,11 @@ the discrete test has no such failure mode and no fitted degree to choose.}
 \toprule
 QP & frontier points & condition holds & margin \\
 \midrule
-0  & 19 & 100.0\% & 0.0020 \\
-16 & 19 & 100.0\% & 0.0040 \\
-32 & 19 & 100.0\% & 0.0075 \\
-48 & 18 & 100.0\% & 0.0134 \\
-63 & 18 & 100.0\% & 0.0205 \\
+0  & 16 & 100.0\% & 0.0024 \\
+16 & 14 & 100.0\% & 0.0050 \\
+32 & 13 & 100.0\% & 0.0088 \\
+48 & 13 & 100.0\% & 0.0145 \\
+63 & 13 & 100.0\% & 0.0230 \\
 \bottomrule
 \end{tabular}
 \end{table}

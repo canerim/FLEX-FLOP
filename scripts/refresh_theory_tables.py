@@ -9,13 +9,16 @@ paper.
 But a writer that only refreshed the numbers would be *worse* than retyping,
 because the captions and the surrounding prose make claims ABOUT those numbers:
 
-    Table 1  "grows 4.3x from the lowest to the highest rate"
+    Table 1  "grows 3.3x from the lowest to the highest rate"
     Table 2  "rises monotonically with rate"
     Table 4  "holds everywhere, with a margin that grows tenfold"
-    body     "would understate its own contribution by a factor of seven"
+    body     "would understate its own contribution by a factor of five"
 
-The 10-to-40 sequence move already exercised this: it moved 3.4x to 4.3x and
-six to seven, and both were caught here rather than shipped.
+Twice exercised for real. The 10-to-40 sequence move took 3.4x to 4.3x and six
+to seven; moving the tables from the baseline checkpoint to BEST took them back
+to 3.3x and five, because BEST's better shallow exits compress the gaps between
+exits and so shrink the measured value of adaptivity. Every one of those four
+numbers would have shipped stale without this check.
 
 Silently updating the numbers under a claim that no longer holds is the exact
 failure this is meant to prevent. So every such claim is re-derived from the
@@ -79,8 +82,8 @@ def main(argv):
 
     ratio = wq[63]["db_per_exit"][2] / wq[0]["db_per_exit"][2]
     note.append(f"Table 1: exit-2 penalty grows {ratio:.1f}x from qp0 to qp63")
-    if abs(ratio - 4.3) > 0.15:
-        warn.append(f"caption says 'grows 4.3x'; measured {ratio:.2f}x")
+    if abs(ratio - 3.3) > 0.15:
+        warn.append(f"caption says 'grows 3.3x'; measured {ratio:.2f}x")
 
     # ---- Table 2: adaptivity gain, monotonicity, and "a factor of six" -----
     tc = load("theory_check.json")
@@ -105,8 +108,8 @@ def main(argv):
                     "no longer does")
     factor = peak[-1] / peak[0] if peak[0] else float("inf")
     note.append(f"body: low-rate understatement factor {factor:.1f}x")
-    if abs(factor - 7) > 1.0:
-        warn.append(f"body says 'a factor of seven'; measured {factor:.1f}x")
+    if abs(factor - 5) > 1.0:
+        warn.append(f"body says 'a factor of five'; measured {factor:.1f}x")
 
     # ---- Table 4: log-convexity, "everywhere", "margin grows with rate" ----
     lc = load("logconvexity.json")
