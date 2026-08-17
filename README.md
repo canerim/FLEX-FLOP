@@ -200,7 +200,8 @@ downstream if it drifts:
 
 | control | result |
 |---|---|
-| warm-start round-trip: deepest exit vs stock UF | `max|Δ| = 0.0` |
+| **deepest exit vs Microsoft's released decoder**, through their own `DMCI.forward_one_frame`, both warm starts (K=6 and K=12), qp 0/32/63 | `max|Δ| = 0.0` |
+| warm-start round-trip: deepest exit vs stock UF, on tensors | `max|Δ| = 0.0` |
 | encoder/hyperprior/entropy model identical to the release | `max|Δ| = 0.0` |
 | untrained adapters are the identity at all 6 exits | `max|Δ| = 0.0` |
 | j=K hybrid path vs full decode (patchify/stitch/head wiring) | `max|Δ| = 0.0` |
@@ -233,6 +234,9 @@ scripts/
   target_gap.py        what is left to reach the target, split into drift and exits
 tests/
   test_equivalence.py  the zero-tolerance controls
+  test_reference_is_the_release.py
+                       every saving is quoted against DCVC-UF; this proves the
+                       reference IS DCVC-UF, on outputs not on a key remap
 train_flexuf_image.py  Microsoft's recipe, multi-exit objective
 DECISIONS.md           every step and why it was taken
 ```
