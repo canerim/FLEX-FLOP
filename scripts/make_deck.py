@@ -84,6 +84,27 @@ def exit2_rate_factor():
     return r[63]["db_per_exit"][2] / r[0]["db_per_exit"][2]
 
 
+def collapse_line():
+    """What a second epoch did to the run without distillation or scaled adapters.
+
+    The anchor ladder shows the target is unreachable without the anchor. This
+    shows the rest of the additions are not an accelerant either: without them,
+    more training moves the ladder the wrong way, and it does so monotonically
+    in depth -- the deepest exit holds while every shallower one degrades, more
+    the shallower it is."""
+    a_, b_ = load("why_qp_CONTROL_ep0.json"), load("why_qp_CONTROL_ep1.json")
+    if not (a_ and b_):
+        return None
+    A = {r["qp"]: r["db_per_exit"] for r in a_["rows"]}
+    B = {r["qp"]: r["db_per_exit"] for r in b_["rows"]}
+    q = 63 if 63 in A and 63 in B else sorted(set(A) & set(B))[-1]
+    d = [B[q][k] - A[q][k] for k in (2, 3, 4, 5)]
+    return (f"CONTROL over its SECOND epoch, per-exit dB vs the release at "
+            f"qp{q} (below): saving at 0.1 dB fell 14.1% → 4.7% at qp0. More "
+            f"training without the additions moves the ladder the wrong way, and "
+            f"the damage grows the shallower the exit")
+
+
 def ladder_line():
     """The three runs that share an architecture, ordered by what they carry.
 
@@ -377,20 +398,17 @@ slide_fig("We start AT DCVC-UF, not near it", "nf_warmstart.png", [
 ], size=12)
 
 # 5 -------------------------------------------------------------------- training
-slide_fig("Training: the recipe, checked not claimed", "nf_schedule.png", [
+slide_fig("Training: the recipe, checked not claimed", "nf_collapse.png", [
  (0, "scripts/verify_recipe.py compares each item against ~/DCVC/train_image.py "
      "and exits non-zero on a mismatch", True),
- (1, "8 schedule rows character for character · 106 entries", False),
- (1, "AdamW 1e-4 · clip_grad_norm 0.1 · non-finite batch skipped", False),
- (1, "ImageFolder + get_training_lambdas · 64 QP levels", False),
- (1, "encoder identical over 74 tensors · 255 shared tensors, no shape change", False),
+
  (0, anchor_line() or "anchor comparison pending VERBATIM's measurement", True),
  (1, ladder_line() or "three-run comparison pending", False),
- (0, "Deliberate additions, listed rather than hidden:", True),
- (1, "--epoch_offset (read the schedule where a warm start actually is)", False),
- (1, "--anchor_weight, --new_lr_scale, --freeze_encoder", False),
- (0, "VERBATIM run: their final phase (epochs 90–104, 512px, lr 2e-4→1e-6) with "
-     "NONE of those additions, effective batch 16 by accumulation", True),
+ (1, collapse_line() or "second-epoch comparison pending", False),
+ (0, "Deliberate additions, listed rather than hidden: --epoch_offset, "
+     "--anchor_weight, --new_lr_scale, --freeze_encoder", True),
+ (0, "VERBATIM is their recipe with NONE of them, effective batch 16 by "
+     "accumulation — the control both rows above are measured against", True),
 ], size=11)
 
 # 6 ------------------------------------------------------------------- anchor

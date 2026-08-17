@@ -481,3 +481,34 @@ if th2 and ps2:
     ns.panel(ax[0], "a"); ns.panel(ax[1], "b")
     fig.tight_layout()
     save(fig, "nf_heterogeneity.png")
+
+# What a second epoch did to the run without distillation or scaled adapters.
+c0, c1 = J("why_qp_CONTROL_ep0.json"), J("why_qp_CONTROL_ep1.json")
+if c0 and c1:
+    A = {r["qp"]: r["db_per_exit"] for r in c0["rows"]}
+    B = {r["qp"]: r["db_per_exit"] for r in c1["rows"]}
+    qs = sorted(set(A) & set(B))
+    fig, ax = plt.subplots(1, len(qs), figsize=(ns.W2, 1.9), sharey=True)
+    ax = np.atleast_1d(ax)
+    ks = [2, 3, 4, 5]
+    for a_, q in zip(ax, qs):
+        x = np.arange(len(ks))
+        w = .36
+        a_.bar(x - w / 2, [A[q][k] for k in ks], w, color=ns.INK2,
+               label="after epoch 0")
+        a_.bar(x + w / 2, [B[q][k] for k in ks], w, color=ns.VERM,
+               label="after epoch 1")
+        a_.set_xticks(x)
+        a_.set_xticklabels([f"exit {k}" if k < 5 else "deepest" for k in ks],
+                           fontsize=5.5)
+        a_.set_title(f"qp {q}", fontsize=6, color=ns.INK2, loc="left")
+        a_.grid(axis="y", visible=False)
+    ax[0].set_ylabel("dB below released DCVC-UF")
+    ax[0].legend(loc="upper right", fontsize=5.5)
+    # The point is the SHAPE: the deepest bar pair is level, every shallower
+    # pair opens up, and it opens wider the shallower it is.
+    fig.suptitle("CONTROL, no distillation or scaled adapters: a second epoch "
+                 "degrades every exit except the deepest",
+                 fontsize=6, color=ns.INK2, x=0.005, ha="left")
+    fig.tight_layout(rect=(0, 0, 1, .93))
+    save(fig, "nf_collapse.png")
