@@ -3274,3 +3274,54 @@ Not: `ckpt_step`'in üzerine yazılması bugün ikinci kez maliyet çıkardı (i
 iki dosyanın aynı yolu gösterip farklı ağırlıkları ölçmesi). Ara checkpoint'leri
 adıma göre adlandırmak bunu çözerdi ama koşan deneye dokunmak gerekir; sonraki
 tura not.
+
+## 56. Tahmin çürüdü: VERBATIM iyileşti, "eklentisizlik bozar" açıklaması düştü
+
+55a'da VERBATIM'in CONTROL'den **daha sert** çökmesini bekliyordum, çünkü ondan
+da çıplak: anchor yok, seam repair yok. Ölçüm tersini verdi.
+
+Epoch 0 → epoch 1, çıkış başına dB (negatif = sürüme daha yakın):
+
+| qp | koşu | exit 2 | exit 3 | exit 4 | exit 5 |
+|---|---|---|---|---|---|
+| 0 | VERBATIM | −0.025 | −0.011 | −0.023 | −0.026 |
+| 0 | CONTROL | +0.290 | +0.258 | +0.123 | +0.002 |
+| 63 | VERBATIM | −0.055 | −0.056 | −0.049 | −0.044 |
+| 63 | CONTROL | +0.664 | +0.572 | +0.201 | −0.013 |
+
+VERBATIM'in bütün çıkışları iyileşti, üstelik yaklaşık **tekdüze** — derinlikle
+monoton hasar yok. Yazdığım yanlışlayıcı birebir gerçekleşti.
+
+**"Eklentiler olmadan daha fazla eğitim merdiveni bozar" açıklamasını geri
+çekiyorum.** Eklentisi daha az olan koşu bozulmadı.
+
+### Geriye kalan: CONTROL'e özgü ne var
+
+| | CONTROL | VERBATIM |
+|---|---|---|
+| schedule konumu | 75 → lr 1e−5, crop 256 | 90 → lr 2e−4, crop 512 |
+| `--min_crop` | 512 (crop'u 512'ye zorluyor) | yok |
+| `--new_lr_scale` | **20** | yok |
+| `--anchor_weight` | 1.0 | yok |
+| `--seam_repair` | grid | none |
+| `--grad_accum` | 1 (efektif batch 8) | 2 (efektif batch 16) |
+
+En güçlü aday `--new_lr_scale 20`: CONTROL'de adaptörler ve seam repair kapısı
+temel lr'nin **yirmi katıyla** eğitiliyor. Epoch 1'de temel lr 1e−5, yani yeni
+parametreler 2e−4 görüyor — VERBATIM'in bütün ağı için kullandığı lr kadar, ama
+yalnızca yeni parametrelerde ve daha küçük batch ile.
+
+Ama bu bir **hipotez**, ve bugün mekanizma hipotezlerinde üç kez yanıldım. Test
+etmenin yolu tek bayrak değiştiren bir koşu; koşan deneye dokunmadan yapılamaz,
+dolayısıyla sonraki tura.
+
+### Ne kurulmuş durumda
+
+- CONTROL'ün sığ çıkışları epoch 1'de bozuldu (iki değerlendirme kümesinde,
+  ölçülmüş)
+- VERBATIM'inkiler bozulmadı, iyileşti (ölçülmüş)
+- Sebep "eklentisizlik" **değil** (çürütüldü)
+- Sebep bilinmiyor; adaylar yukarıda
+
+BEST'in epoch 1'i (~12 saat) üçüncü veri noktasını verecek: eklentilerin
+tamamını ve `new_lr_scale 20`'yi birlikte taşıyor.
