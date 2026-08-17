@@ -55,7 +55,28 @@ while true; do
   # A step snapshot, when the run writes them, is newer than any epoch file and
   # needs no promotion -- it already carries its own config.
   NEW=""
-  if [ -f "$D/ckpt_step.pth.tar" ] && \
+  # Rate limit on MID-EPOCH snapshots only.
+  #
+  # BEST128 and FINE12 each write one every 4000 steps, about every 1.2 h, and
+  # the chain is now six stages taking 20-25 min -- so between them they were
+  # asking for roughly two thirds of the single evaluation card, which VERBATIM
+  # shares and has already slowed 60% for. Epoch checkpoints are never skipped:
+  # they are the real measurement points and arrive every 13-21 h anyway.
+  #
+  # Done here rather than by raising --ckpt_every, which would mean restarting
+  # two healthy runs and losing their progress.
+  MIN_GAP=${MIN_GAP:-10800}
+  SKIP=0
+  if [ -f "$D/.evaluated_step" ]; then
+    AGE=$(( $(date +%s) - $(stat -c %Y "$D/.evaluated_step") ))
+    [ "$AGE" -lt "$MIN_GAP" ] && SKIP=1
+  fi
+  if [ -f "$D/ckpt_step.pth.tar" ] && [ "$SKIP" = "1" ] && \
+     [ "$D/ckpt_step.pth.tar" -nt "$D/.evaluated_step" ]; then
+    echo "$(date '+%F %T') $TAG: snapshot ready but last evaluation was ${AGE}s "\
+         "ago (<${MIN_GAP}s); skipping to leave the card free"
+  fi
+  if [ -f "$D/ckpt_step.pth.tar" ] && [ "$SKIP" = "0" ] && \
      [ ! -f "$D/.evaluated_step" -o "$D/ckpt_step.pth.tar" -nt "$D/.evaluated_step" ]; then
     NEW="$D/ckpt_step.pth.tar"; MARK="$D/.evaluated_step"
   elif ./.venv/bin/python scripts/promote_ckpt.py "$D" >/dev/null 2>&1; then

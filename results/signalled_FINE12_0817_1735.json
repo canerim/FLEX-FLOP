@@ -1,7 +1,7 @@
 {
-  "ckpt": "runs/VERBATIM/ckpt_eval.pth.tar",
+  "ckpt": "runs/FINE12/ckpt_step.pth.tar",
   "ckpt_epoch": 0,
-  "ckpt_step": null,
+  "ckpt_step": 12000,
   "frames_per_seq": 1,
   "n_sequences": 40,
   "measured": [
@@ -64,38 +64,48 @@
   "rows": [
     {
       "qp": 0,
-      "saving_pct": 13.723432868719101,
-      "db_vs_uf": 0.1364713220857084,
-      "bpp_added": 5.212474518806248e-05,
-      "map_bits": 101.69408881664276
+      "saving_pct": 30.932758450508118,
+      "db_vs_uf": 0.09996638060547411,
+      "bpp_added": 0.00022992536339356932,
+      "map_bits": 450.8348967432976,
+      "floor_db": -0.0006670875918644015,
+      "budget_reachable": true
     },
     {
       "qp": 16,
-      "saving_pct": 11.399107724428177,
-      "db_vs_uf": 0.14852898996323347,
-      "bpp_added": 5.0038861498498235e-05,
-      "map_bits": 98.0405231565237
+      "saving_pct": 27.708585262298584,
+      "db_vs_uf": 0.09999969289638103,
+      "bpp_added": 0.00021955812962173865,
+      "map_bits": 431.3204012811184,
+      "floor_db": 0.008684322089538909,
+      "budget_reachable": true
     },
     {
       "qp": 32,
-      "saving_pct": 7.657139897346497,
-      "db_vs_uf": 0.15614912742748857,
-      "bpp_added": 4.662179065987548e-05,
-      "map_bits": 91.47820527851582
+      "saving_pct": 22.775178998708725,
+      "db_vs_uf": 0.09999604276381432,
+      "bpp_added": 0.00021103918213931914,
+      "map_bits": 415.16728211939335,
+      "floor_db": 0.021337547281291336,
+      "budget_reachable": true
     },
     {
       "qp": 48,
-      "saving_pct": 5.343634337186813,
-      "db_vs_uf": 0.18898963727988302,
-      "bpp_added": 4.331186549942134e-05,
-      "map_bits": 84.98020991683006
+      "saving_pct": 19.67171922326088,
+      "db_vs_uf": 0.09999595424160361,
+      "bpp_added": 0.00019912527870339408,
+      "map_bits": 393.0439792983234,
+      "floor_db": 0.037374921349692156,
+      "budget_reachable": true
     },
     {
       "qp": 63,
-      "saving_pct": 4.960031360387802,
-      "db_vs_uf": 0.2230676599778235,
-      "bpp_added": 4.18834954199818e-05,
-      "map_bits": 82.0840647816658
+      "saving_pct": 15.76108917593956,
+      "db_vs_uf": 0.09999931366182864,
+      "bpp_added": 0.00018568324013526933,
+      "map_bits": 366.10466708242893,
+      "floor_db": 0.05355094182305038,
+      "budget_reachable": true
     }
   ]
 }
