@@ -317,12 +317,28 @@ if pc2:
         cand = [r for r in pc2["rows"] if r["qp"] == q
                 and r.get("db_vs_uf_per_frame", r["db_vs_uf"]) <= 0.105]
         rows.append(max(cand, key=lambda r: r["saving_pct"]))
+    # Exits 0, 1 and 2 cost the SAME under j=2 -- the first j groups run
+    # full-frame for every tile, so the cost vector is 0.5716 three times over.
+    # argmin therefore breaks the tie arbitrarily and scatters the cheapest
+    # allocation across three indices. Plotting index 2 alone showed 29.5% where
+    # 33.8% of tiles were actually at that operating point, and the bars summed
+    # to 95%.
+    import sys as _sys
+    _sys.path.insert(0, str(R))
+    from flexuf.config import FlexUFConfig as _C
+    from flexuf.cost import exit_costs as _ec
+    _cfg = _C(**json.loads((R / "results" / CURVE).read_text()).get("config", {})) \
+        if False else None
     cols = [ns.BLUE, ns.SKY, ns.GREEN, ns.YELLOW, ns.ORANGE, ns.VERM]
     bot = np.zeros(len(qps))
     x = np.arange(len(qps))
+    _merged = [0, 1, 2]
     for k in range(2, 6):
-        v = np.array([100 * r["hist"][k] / sum(r["hist"]) for r in rows])
-        a.bar(x, v, .62, bottom=bot, color=cols[k], label=f"exit {k}",
+        idx = _merged if k == 2 else [k]
+        v = np.array([100 * sum(r["hist"][i] for i in idx) / sum(r["hist"])
+                      for r in rows])
+        a.bar(x, v, .62, bottom=bot, color=cols[k],
+              label="exit 2 (cheapest)" if k == 2 else f"exit {k}",
               edgecolor="white", linewidth=.4)
         for xi, (b_, v_) in enumerate(zip(bot, v)):
             if v_ > 6:
@@ -335,8 +351,8 @@ if pc2:
     a.set_ylabel("Share of tiles (%)"); a.set_ylim(0, 100)
     a.grid(axis="y", visible=False)
     a.legend(loc="upper center", bbox_to_anchor=(.5, -.13), ncol=4, frameon=False)
-    a.set_title("Shallowest exit saturates at low rate, starves at high rate",
-                fontsize=6, color=ns.INK2, loc="left")
+    a.set_title("Exit 3 carries the allocation; the cheapest exit collapses with "
+                "rate", fontsize=6, color=ns.INK2, loc="left")
     save(fig, "nf_usage.png")
 
 # The trade-off in two integrated numbers, plus what the anchor is worth.

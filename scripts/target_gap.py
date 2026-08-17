@@ -129,9 +129,11 @@ def main(argv):
               f"the anchor alone,")
         print(f"  and tightening it clears the target. At high rate drift is a "
               f"quarter to a third")
-        print(f"  and the rest is shallow-exit quality -- which is what the "
-              f"exit histogram said:")
-        print(f"  10% of tiles could afford exit 2 at qp63 against 34% at qp0.")
+        print(f"  and the rest is shallow-exit quality. Which exit binds is a "
+              f"question for the")
+        print(f"  histogram in results/, not for a sentence here: it was exit 2 "
+              f"on the baseline")
+        print(f"  and is exit 3 on BEST, and hard-coding either goes stale.")
 
     (ROOT / a.out).write_text(json.dumps(out, indent=2))
     print(f"\n  wrote {a.out}")
