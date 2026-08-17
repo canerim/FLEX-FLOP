@@ -12,6 +12,16 @@
 # per-epoch resume file plus meta.json -- verified bit-identical to the numbered
 # checkpoint (419 tensors, max|diff| = 0.0) -- so every epoch becomes readable.
 #
+# One test set, not two
+# ---------------------
+# Mid-epoch snapshots used a 10-sequence subset while epoch checkpoints got all
+# 40, because a full evaluation took over half an hour and would have kept the
+# card busy permanently. signalled_curve was then found doing 25x the work it
+# needed to -- its lambda sweep re-decoded every frame for every lambda -- and a
+# full run now takes minutes. The subset is dropped: two tiers meant two kinds
+# of number in the same log, and the cheaper one existed only to work around a
+# bug.
+#
 # One evaluation at a time, machine-wide
 # --------------------------------------
 # Five watchers sharing one card would collide, and an OOM here would look like
@@ -28,12 +38,12 @@ LOCK=/tmp/flexuf_eval.lock
 while true; do
   # A step snapshot, when the run writes them, is newer than any epoch file and
   # needs no promotion -- it already carries its own config.
-  NEW=""; SCOPE=""
+  NEW=""
   if [ -f "$D/ckpt_step.pth.tar" ] && \
      [ ! -f "$D/.evaluated_step" -o "$D/ckpt_step.pth.tar" -nt "$D/.evaluated_step" ]; then
-    NEW="$D/ckpt_step.pth.tar"; MARK="$D/.evaluated_step"; SCOPE="--max_seqs 10"
+    NEW="$D/ckpt_step.pth.tar"; MARK="$D/.evaluated_step"
   elif ./.venv/bin/python scripts/promote_ckpt.py "$D" >/dev/null 2>&1; then
-    NEW="$D/ckpt_eval.pth.tar"; MARK="$D/.evaluated_epoch"; SCOPE=""
+    NEW="$D/ckpt_eval.pth.tar"; MARK="$D/.evaluated_epoch"
   fi
 
   if [ -n "$NEW" ]; then
@@ -62,7 +72,7 @@ print(f\"epoch {c.get('epoch')} step {c.get('step','-')}\")" 2>/dev/null)
       # cost inside the bitrate.
       echo; echo "--- 3. SIGNALLED system, referenced to released DCVC-UF ---"
       CUDA_VISIBLE_DEVICES="$GPU" ./.venv/bin/python -u scripts/signalled_curve.py \
-        --ckpt "$NEW" --device cuda:0 $SCOPE \
+        --ckpt "$NEW" --device cuda:0 \
         --out "results/signalled_${TAG}_$(date +%m%d_%H%M).json" 2>&1 | tail -9
       touch "$MARK"
     ) 9>"$LOCK"

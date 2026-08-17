@@ -82,6 +82,24 @@ def target_line():
     return f"The 30% target is cleared by {out[0]}, and by {out[1]}"
 
 
+def spread_ratio(qp=63):
+    """Best-to-worst sequence ratio at a 0.1 dB budget.
+
+    The theory says the value of adaptivity comes from tiles disagreeing about
+    which exit they want. This is the same disagreement one level up, between
+    whole sequences, and it grows with rate the same way -- 6.7x against the
+    tile-level gain's 7.5x. Consistent; two different quantities agreeing on
+    five points is not confirmation, and the slide says 'same mechanism', not
+    'confirms'."""
+    ps = load("per_sequence.json")
+    if not ps:
+        return float("nan")
+    for r in ps["rows"]:
+        if r["qp"] == qp:
+            return r["max"] / r["min"]
+    return float("nan")
+
+
 def bd_line():
     """The trade-off as two integrated numbers rather than two sampled points.
 
@@ -306,7 +324,7 @@ slide_fig("Router: predicting failed, signalling works", "nf_router.png", [
 
 # 12 ---------------------------------------------------------- theory + status
 d = {q: th[str(q)]["delta"]["3e-05"] for q in (0, 32, 63)} if th else None
-slide_fig("Theory, and where we are", "nf_theory.png", [
+slide_fig("Theory, and where we are", "nf_heterogeneity.png", [
  (0, "Cost is additive over tiles and MSE is a mean over tiles → both affine in "
      "the assignment", True),
  (1, "fixed proportions reach exactly the convex hull of the K exit points", False),
@@ -316,8 +334,12 @@ slide_fig("Theory, and where we are", "nf_theory.png", [
  (0, f"Measured: Δ/J rises {100*d[0]['delta']/d[0]['J_oracle']:.2f}% → "
      f"{100*d[63]['delta']/d[63]['J_oracle']:.2f}% with rate"
      if d else "Measured: Δ/J rises with rate", True),
+ (0, f"Same mechanism one level up: at 0.1 dB the best CTC sequence saves "
+     f"{spread_ratio():.1f}× what the worst does at qp63, against "
+     f"{spread_ratio(0):.1f}× at qp0 — the mean is not what a clip gets", True),
  (0, "Open, and stated as open:", True),
- (1, "0.1 dB target not met; 0.3 dB comfortably met", False),
+ (1, target_line() + " — asserted as 'comfortably met at 0.3 dB' until the "
+     "dB convention was corrected, which is why it is computed here", False),
  (1, "256px tiles: seam halves but saving drops — isolated to the CHECKPOINT, "
      "not the tile size (tile effect 0.4–1.5 pts, weight effect 12.4)", False),
  (1, "HEVC classes B/C/D behind JVET credentials, reported as NOT MEASURED", False),
