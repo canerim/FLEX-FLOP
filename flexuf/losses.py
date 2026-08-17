@@ -73,6 +73,21 @@ def exit_weights(
     MSDNet's finding that equal weights "work well in practice"; use it as the
     default and treat warmup as the mitigation if differentiation fails.
     """
+    # Observation for a future run, NOT acted on here.
+    #
+    # Every exit gets the same weight, and under a j-split the first j+1 exits
+    # all cost the same: exit_costs is 0.5716 three times over for K=6, j=2,
+    # because groups 0..j-1 run full-frame for every tile whatever the
+    # assignment. Exit 2 dominates 0 and 1 on average -- 0.167 dB below the
+    # release at qp0 against 0.409 and 0.606 -- so a third of the auxiliary
+    # loss's exit weight trains exits that can never save more compute than
+    # exit 2 and are usually worse.
+    #
+    # Not obviously waste: on roughly an eighth of the tiles that take the
+    # cheapest cost, exit 0 or 1 genuinely reconstructs better than exit 2, and
+    # that choice is free because the three share a cost. So the question is
+    # whether their weight should be reduced rather than removed, and it is a
+    # question for an experiment, not for an edit to a running one.
     w = torch.ones(num_exits, dtype=torch.float32, device=device)
     a = aux_weight
     if schedule == "warmup" and warmup_epochs > 0:
