@@ -74,6 +74,21 @@ print(f\"epoch {c.get('epoch')} step {c.get('step','-')}\")" 2>/dev/null)
       CUDA_VISIBLE_DEVICES="$GPU" ./.venv/bin/python -u scripts/signalled_curve.py \
         --ckpt "$NEW" --device cuda:0 \
         --out "results/signalled_${TAG}_$(date +%m%d_%H%M).json" 2>&1 | tail -9
+
+      # 4. The trade-off integrated over the curve rather than read at one
+      # budget. A saving quoted at 0.1 dB is one sample of a frontier, and this
+      # project has already been bitten by that: the grid-readout rule made a
+      # test-set comparison look twice as large as it was. BD-saving and
+      # BD-quality summarise the whole curve over stated intervals.
+      #
+      # Affordable only because signalled_curve's 25x-redundant sweep was
+      # fixed; before that a single checkpoint took over half an hour.
+      echo; echo "--- 4. frontier and the integrated trade-off ---"
+      CURVE="results/curve_${TAG}.json"
+      CUDA_VISIBLE_DEVICES="$GPU" ./.venv/bin/python -u scripts/paper_curve.py \
+        --ckpt "$NEW" --device cuda:0 --out "$CURVE" 2>&1 | tail -8
+      ./.venv/bin/python scripts/bd_saving.py --curve "$CURVE" \
+        --out "results/bd_${TAG}.json" 2>&1 | tail -10
       touch "$MARK"
     ) 9>"$LOCK"
   fi
