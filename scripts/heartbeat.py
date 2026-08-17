@@ -113,15 +113,31 @@ def main():
         if hist:
             fid = 10 * _m.log10(1.0 / hist[-1])
         fnote = ""
-        if len(hist) >= 8:
-            # Compare the recent half against the earlier half rather than
-            # consecutive points: single batches are noisy enough that any two
-            # adjacent values can fall.
-            h = len(hist) // 2
-            old = sum(10 * _m.log10(1.0 / v) for v in hist[:h]) / h
-            new = sum(10 * _m.log10(1.0 / v) for v in hist[h:]) / (len(hist) - h)
-            if new < old - 1.0:
-                fnote = f"!ANCHOR-FALLING({old:.1f}->{new:.1f})"
+        if len(hist) >= 12:
+            # Halves, not consecutive points: single batches are noisy enough
+            # that any two adjacent values can fall.
+            #
+            # And the threshold is a t statistic, not a fixed dB. It was 1.0 dB,
+            # which fired on RECIPE512 at t = -1.77 -- comfortably inside the
+            # noise, since these traces have sd ~1.6 dB over 25 points. With six
+            # runs tested every five minutes that is roughly 70 tests an hour,
+            # so a threshold anyone would call marginal produces several false
+            # alarms an hour and trains the reader to ignore the alarm.
+            #
+            # t < -3 is deliberately conservative. Consecutive log lines are
+            # autocorrelated -- adjacent batches share model state -- so the
+            # effective sample size is below 25 and the nominal p-value
+            # understates the false-alarm rate.
+            d = [10 * _m.log10(1.0 / v) for v in hist]
+            h = len(d) // 2
+            a_, b_ = d[:h], d[h:]
+            ma, mb = sum(a_) / len(a_), sum(b_) / len(b_)
+            va = sum((x - ma) ** 2 for x in a_) / max(1, len(a_) - 1)
+            vb = sum((x - mb) ** 2 for x in b_) / max(1, len(b_) - 1)
+            se = _m.sqrt(va / len(a_) + vb / len(b_)) or 1e-9
+            t = (mb - ma) / se
+            if t < -3.0:
+                fnote = f"!ANCHOR-FALLING({ma:.1f}->{mb:.1f},t={t:.1f})"
         # Spread alone is the wrong diagnostic: a small gap means either "nothing
         # to route" or "shallow exits caught up", and only the anchor separates
         # them. Both are flagged, neither assumed.
