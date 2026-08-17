@@ -40,18 +40,62 @@ b.set_title("Within a block", loc="left", pad=3)
 save(fig, "nf_macs.png")
 
 # warm start
-w = J("why_qp.json"); r0 = [x for x in w["rows"] if x["qp"] == 0][0]
+#
+# This must come from the WARM START, not from a trained checkpoint. The axis
+# says "no training" and the slide's whole claim is that the ladder begins at
+# the released decoder -- so plotting a trained run's per-exit dB here was
+# mislabelled, and it had been since the figure was written. Switching why_qp
+# to BEST made the numbers further from the truth rather than introducing the
+# error.
+w = J("why_qp_warmstart.json") or J("why_qp.json")
+if not J("why_qp_warmstart.json"):
+    print("  WARNING: nf_warmstart falls back to a TRAINED checkpoint; the "
+          "'no training' label is then wrong. Run scripts/why_qp.py on "
+          "runs/warmstart/ckpt_warmstart.pth.tar --out results/why_qp_warmstart.json")
+r0 = [x for x in w["rows"] if x["qp"] == 0][0]
 fig, a = plt.subplots(figsize=(ns.W15, 1.5))
+# What training has to close, alongside where it starts. The warm start's
+# deepest exit is the release exactly; its exit 2 is 2.80 dB behind, and BEST
+# brings that to 0.167 -- a 17-fold reduction. Showing the start alone
+# understated what training does; showing a trained run and labelling it "no
+# training", which this figure did, understated it by nine times.
 lab = ["deepest exit\n(step 0)", "exit 4", "exit 3", "exit 2"]
 val = [0.0] + [-r0["db_per_exit"][k] for k in (4, 3, 2)]
-a.barh(range(4), val, .55, color=[ns.GREEN] + [ns.INK2] * 3)
+_bt = J("why_qp.json")
+_tr = None
+if _bt and J("why_qp_warmstart.json"):
+    _t0 = [x for x in _bt["rows"] if x["qp"] == 0][0]
+    _tr = [0.0] + [-_t0["db_per_exit"][k] for k in (4, 3, 2)]
+h = .34
+# No label= on these: matplotlib takes the FIRST colour of a per-bar list for
+# the legend swatch, which made both entries green when the bars are grey and
+# blue. Explicit handles below.
+a.barh([i - h / 2 for i in range(4)], val, h, color=[ns.GREEN] + [ns.INK2] * 3)
+if _tr:
+    a.barh([i + h / 2 for i in range(4)], _tr, h,
+           color=[ns.GREEN] + [ns.BLUE] * 3)
 for i, v in enumerate(val):
-    a.text(v - .006 if v else .004, i, "max|diff| = 0.0" if v == 0 else f"{v:.4f} dB",
-           va="center", ha="right" if v else "left", fontsize=6,
+    # The zero bar has no length, so its annotation goes to the RIGHT of the
+    # axis origin where the row is, not floating at the top of the panel.
+    a.text(v - .05 if v else .06, i - h / 2 if v else i,
+           "max|diff| = 0.0" if v == 0 else f"{v:.3f}",
+           va="center", ha="right" if v else "left", fontsize=5.5,
            color=ns.GREEN if v == 0 else ns.INK2,
            fontweight="bold" if v == 0 else "normal")
+if _tr:
+    for i, v in enumerate(_tr):
+        if v:
+            a.text(v - .04, i + h / 2, f"{v:.3f}", va="center", ha="right",
+                   fontsize=5.5, color=ns.BLUE)
 a.set_yticks(range(4)); a.set_yticklabels(lab); a.invert_yaxis()
-a.set_xlim(-.42, .12); a.set_xlabel("dB below released DCVC-UF (qp 0, no training)")
+a.set_xlim(-3.35, .75)
+a.set_xlabel("dB below released DCVC-UF (qp 0)")
+from matplotlib.patches import Patch
+a.legend(handles=[Patch(facecolor=ns.INK2, label="warm start, no training"),
+                  Patch(facecolor=ns.BLUE, label="BEST, one epoch")],
+         # y is inverted, so "lower right" is the exit-2 row -- where the bars
+         # are. The empty space is the deepest-exit row on the left.
+         loc="upper left", fontsize=5.5, framealpha=.9)
 a.grid(axis="y", visible=False)
 save(fig, "nf_warmstart.png")
 
