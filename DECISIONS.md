@@ -3180,3 +3180,36 @@ değilse, "eklentisizlik merdiveni çökertir" açıklaması bu haliyle yetersiz
 ve CONTROL'deki düşüş başka bir sebebe bağlanmalıdır.
 
 Tahmin ölçümden ÖNCE yazıldı. Sonradan kurulan açıklama sınama değildir.
+
+### 55b. Mekanizma iddiam bir adım fazlaydı — spread çöküşü görmüyor
+
+55'te "merdiven en derin çıkışa doğru çöküyor" dedim, ki bu yardımcı kaybın
+derin çıkışı kayırdığını ima ediyor. Ölçüm bunu **desteklemiyor**.
+
+CONTROL'ün epoch 1'inde eğitim-batch spread'i yükselmedi: −0.11 dB/epoch
+(t = −0.6, anlamsız), anchor'ı da düz (t = −0.2). Yardımcı kayıp derin çıkışı
+sığ olanların pahasına kayırıyor olsaydı spread yükselirdi.
+
+Ama aynı epoch'ta çıkışlar **CTC karelerinde** ciddi biçimde bozuldu (qp63'te
+exit 2: +0.664 dB). Yani bozulma eğitim dağılımında görünmüyor, değerlendirme
+dağılımında görünüyor.
+
+Eğitim 512px OpenImages kırpmaları, değerlendirme 1080p CTC kareleri. Bu tabloya
+uyan açıklama **sığ çıkışların eğitim dağılımına aşırı uyum sağlaması** — derin
+çıkışın onları ezmesi değil.
+
+Ölçülen olgu değişmedi: CONTROL'ün çıkışları CTC'de kötüleşti ve gerileme
+derinlikle monoton. Değişen, sebebine dair söylediğim şey. 55'teki "ağ,
+karşılayamayacağı yardımcı baskı taşımayan tek çıktıyı iyileştiriyor" cümlesi
+veriden bir adım öteye geçmişti.
+
+### Yan sonuç: kurmayı düşündüğüm alarm ölü
+
+Çöküşü oluşurken yakalamak için "spread yükselirken anchor sabit" alarmı
+kuracaktım. Kalibre etmek için çöküşün gerçekleştiğini bildiğim epoch'a baktım
+ve spread hiç kıpırdamamış. Alarm yanlış şeyi ölçecekti. Kurmadan önce kalibre
+etmek, kurduktan sonra güvenmekten iyi.
+
+Eğitim-içi sinyalle çöküşü yakalamak istiyorsak, eğitim dağılımında değil
+**tutulan bir doğrulama kümesinde** çıkış-başına kalite ölçmek gerekir. Bu bir
+deney kararı, koşan deneye yapılacak bir ekleme değil.
