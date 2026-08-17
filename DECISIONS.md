@@ -3049,7 +3049,7 @@ oldu (ilki: arls'in dB kazancını maliyetsiz sanmak). Bir iyileştirmenin
 Sunumun 12. slaydındaki "larger tiles cut the seam but also the adaptivity"
 cümlesi de bu yüzden yanlış ve düzeltildi.
 
-## 54. Hedef karşılandı — ve oraya giden yol on altı ölçüm hatasından geçti
+## 54. Hedef karşılandı — ve oraya giden yol on üç ölçüm hatasından geçti
 
 BEST bir tam epoch sonunda 0.1 dB'de **%34.7 / 31.4 / 27.4 / 24.3 / 21.5**
 veriyor (qp 0…63, 40 CTC sekansı, kare-başına dB, harita maliyeti bitrate'in
@@ -3071,7 +3071,9 @@ erken çıkmadan kaymaya harcanıyor.
 ### Ölçüm tarafında bulunanlar
 
 Sayıların doğru olduğuna güvenmeden önce şunlar düzeltildi. Her biri rapor
-edilen bir rakamı değiştirecek türdendi:
+edilen bir rakamı değiştirecek türdendi. (Sayıyı gün boyunca farklı yerlerde
+farklı verdim — 13'ten 16'ya. Doğrusu aşağıdaki liste; sunum/figür tarafındaki
+düzeltmeler ayrı ve buraya dahil değil.)
 
 1. **λ ızgara okuması** — "bütçe altındaki en iyi örnek" kuralı taramanın
    nereye örnek koyduğuna bağlı. Gönderilen sistemi 3.1 puana kadar eksik
