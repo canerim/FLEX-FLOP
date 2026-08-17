@@ -28,19 +28,43 @@ import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
-COMBOS = [(0.057, 0.20), (0.057, 0.25), (0.057, 0.30), (0.057, 0.40),
-          (0.08, 0.30), (0.10, 0.30), (0.10, 0.25)]
+
+
+def combos(curve: str, convention: str):
+    """Intervals to test, derived from the frontier rather than hard-coded.
+
+    They were hard-coded first, chosen around the pooled floors. Switching to
+    the per-frame convention raised every floor and four of the seven became
+    unspannable, so the sweep silently shrank to three intervals -- the script
+    said so, but a robustness check that quietly tests half of what it used to
+    is not much of a check. The lower limits are anchored to the largest floor
+    now, so the sweep is the same shape whichever convention is asked for.
+    """
+    d = json.loads((ROOT / curve).read_text())
+    key = ("db_vs_uf_per_frame" if convention == "per_frame" else "db_vs_uf")
+    floors = []
+    for qp in sorted({r["qp"] for r in d["rows"]}):
+        floors.append(min(r.get(key, r["db_vs_uf"]) for r in d["rows"]
+                          if r["qp"] == qp))
+    base = round(max(floors) + 5e-4, 3)
+    return [(base, hi) for hi in (0.20, 0.25, 0.30, 0.40)] + \
+           [(round(base + d_, 3), 0.30) for d_ in (0.02, 0.04)] + \
+           [(round(base + 0.04, 3), 0.25)]
 
 
 def main():
-    print("  BD-saving under different integration intervals\n")
+    conv = sys.argv[1] if len(sys.argv) > 1 else "per_frame"
+    COMBOS = combos("results/paper_curve_grid128.json", conv)
+    print(f"  BD-saving under different integration intervals "
+          f"({conv} convention)\n")
     print(f"  {'dB interval':>18}{'mean':>10}{'qp0':>9}{'qp63':>9}"
           f"{'qp0 - qp63':>13}")
     out = []
     for lo, hi in COMBOS:
         r = subprocess.run(
             [str(ROOT / ".venv/bin/python"), str(ROOT / "scripts/bd_saving.py"),
-             "--db_lo", str(lo), "--db_hi", str(hi), "--out", "/tmp/bd_tmp.json"],
+             "--db_lo", str(lo), "--db_hi", str(hi), "--convention", conv,
+             "--out", "/tmp/bd_tmp.json"],
             capture_output=True, text=True, cwd=ROOT)
         if r.returncode != 0:
             print(f"  [{lo:.3f},{hi:.3f}]  failed")
@@ -68,7 +92,7 @@ def main():
               f"The level depends on the")
         print(f"  interval; the conclusion does not.")
         (ROOT / "results/bd_sensitivity.json").write_text(
-            json.dumps({"rows": out}, indent=2))
+            json.dumps({"convention": conv, "rows": out}, indent=2))
         print("\n  wrote results/bd_sensitivity.json")
     return 0
 
