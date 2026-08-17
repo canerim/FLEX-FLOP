@@ -144,8 +144,13 @@ with torch.no_grad():
             R = tl(ref.dec.forward_full(y, q)).mean()
             cache.append((M, R, H * W))
 
-        best = None
-        for lam in [0.0] + [10 ** e for e in torch.linspace(-6, -2.5, 24).tolist()]:
+        # dB is averaged PER FRAME, then over frames -- the convention
+        # test_video.py uses and the one every published DCVC-UF number follows.
+        # paper_curve pools all tiles into one MSE instead, which is the natural
+        # form for the Lagrangian the theory is about. The two differ; the
+        # difference is measured in scripts/db_convention.py rather than left
+        # for a reader to discover by comparing two tables.
+        def at_lam(lam):
             SV = DB = EXTRA = MB = n = 0.0
             for M, R, npx in cache:
                 # The ENCODER's decision: it has the source, so this is exact.
@@ -155,9 +160,27 @@ with torch.no_grad():
                 DB += (10 * torch.log10(M.gather(1, k[:, None]).squeeze(1).mean() / R)).item()
                 EXTRA += mb / npx                     # bpp added by the map
                 MB += mb; n += 1
-            sv, db, extra = 100 * SV / n, DB / n, EXTRA / n
-            if db <= 0.1 and (best is None or sv > best[0]):
-                best = (sv, db, extra, MB / n)
+            return 100 * SV / n, DB / n, EXTRA / n, MB / n
+
+        # Bisection on lambda, as in paper_curve. Reading the best sample of a
+        # 25-point grid under the budget left this number short of what the
+        # system reaches: the grid's closest point at qp0 sat at 0.0975 dB, and
+        # the saving between there and 0.1 is not small. Both dB and saving
+        # increase with lambda, so bisection is valid, and with the per-frame
+        # work cached each step costs one argmin.
+        TARGET = 0.1
+        best = None
+        if at_lam(1.0)[1] >= TARGET:
+            lo, hi = 0.0, 1.0
+            for _ in range(60):
+                mid = 0.5 * (lo + hi)
+                if at_lam(mid)[1] <= TARGET:
+                    lo = mid
+                else:
+                    hi = mid
+            best = at_lam(lo)
+        else:                       # budget above what the ladder can spend
+            best = at_lam(1.0)
         if best:
             sv, db, extra, mb = best
             rows.append({"qp": qp_v, "saving_pct": sv, "db_vs_uf": db,

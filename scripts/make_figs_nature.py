@@ -337,3 +337,46 @@ if ps:
     a.set_title("One dot per CTC sequence; bar is the median, whisker the IQR; "
                 "red is best/worst", fontsize=6, color=ns.INK2, loc="left")
     save(fig, "nf_content.png")
+
+# Heterogeneity, at two granularities. Same claim, two independent measurements:
+# the theory says the value of adaptivity comes from tiles disagreeing about
+# which exit they want, and that disagreement should grow with rate. Panel a is
+# that quantity. Panel b is the consequence one level up -- whole sequences
+# pulling apart at the same operating point.
+th2 = J("theory_check.json")
+ps2 = J("per_sequence.json")
+if th2 and ps2:
+    fig, ax = plt.subplots(1, 2, figsize=(ns.W2, 2.0))
+    qs = [r["qp"] for r in ps2["rows"]]
+
+    for c, lam, nm in ((ns.BLUE, "3e-05", "λ = 3×10⁻⁵"),
+                       (ns.ORANGE, "1e-05", "λ = 10⁻⁵"),
+                       (ns.GREEN, "1e-04", "λ = 10⁻⁴")):
+        v = [100 * th2[str(q)]["delta"][lam]["delta"]
+             / th2[str(q)]["delta"][lam]["J_oracle"] for q in qs]
+        ax[0].plot(range(len(qs)), v, marker="o", ms=3.5, color=c, lw=1.0, label=nm)
+    ax[0].set_ylabel("Adaptivity gain Δ/J (%)")
+    ax[0].legend(loc="upper left")
+    ax[0].set_title("Tiles: value of routing at all", fontsize=6, color=ns.INK2,
+                    loc="left")
+
+    for i, r in enumerate(ps2["rows"]):
+        v = np.array([q["saving_pct"] for q in r["per_sequence"]])
+        off = (np.arange(len(v)) % 9 - 4) / 22.0
+        ax[1].scatter(np.full_like(v, i) + off, v, s=2.0, color=ns.SKY,
+                      linewidths=0, alpha=.85, zorder=2)
+        ax[1].plot([i - .34, i + .34], [r["median"]] * 2, color=ns.BLUE, lw=1.3,
+                   zorder=3)
+        ax[1].plot([i, i], [r["p25"], r["p75"]], color=ns.BLUE, lw=.7, zorder=3)
+        ax[1].annotate(f"{r['max'] / r['min']:.1f}×", (i, 46.5), fontsize=5.5,
+                       color=ns.VERM, ha="center")
+    ax[1].set_ylabel("Compute saved at 0.10 dB (%)")
+    ax[1].set_ylim(0, 51)
+    ax[1].set_title("Sequences: what a single clip gets (red = best/worst)",
+                    fontsize=6, color=ns.INK2, loc="left")
+
+    for a_ in ax:
+        a_.set_xticks(range(len(qs))); a_.set_xticklabels([f"qp {q}" for q in qs])
+    ns.panel(ax[0], "a"); ns.panel(ax[1], "b")
+    fig.tight_layout()
+    save(fig, "nf_heterogeneity.png")

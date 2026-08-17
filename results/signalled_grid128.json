@@ -1,40 +1,99 @@
 {
   "ckpt": "runs/wdec_j2_p128_grid/ckpt_epo0.pth.tar",
+  "frames_per_seq": 2,
+  "n_sequences": 40,
+  "measured": [
+    "Beauty_1920x1080_120fps_420_8bit_YUV.yuv",
+    "Bosphorus_1920x1080_120fps_420_8bit_YUV.yuv",
+    "HoneyBee_1920x1080_120fps_420_8bit_YUV.yuv",
+    "Jockey_1920x1080_120fps_420_8bit_YUV.yuv",
+    "ReadySteadyGo_1920x1080_120fps_420_8bit_YUV.yuv",
+    "ShakeNDry_1920x1080_120fps_420_8bit_YUV.yuv",
+    "YachtRide_1920x1080_120fps_420_8bit_YUV.yuv",
+    "videoSRC01_1920x1080_30.yuv",
+    "videoSRC02_1920x1080_30.yuv",
+    "videoSRC03_1920x1080_30.yuv",
+    "videoSRC04_1920x1080_30.yuv",
+    "videoSRC05_1920x1080_25.yuv",
+    "videoSRC06_1920x1080_25.yuv",
+    "videoSRC07_1920x1080_25.yuv",
+    "videoSRC08_1920x1080_25.yuv",
+    "videoSRC09_1920x1080_25.yuv",
+    "videoSRC10_1920x1080_30.yuv",
+    "videoSRC11_1920x1080_30.yuv",
+    "videoSRC12_1920x1080_30.yuv",
+    "videoSRC13_1920x1080_30.yuv",
+    "videoSRC14_1920x1080_30.yuv",
+    "videoSRC15_1920x1080_30.yuv",
+    "videoSRC16_1920x1080_30.yuv",
+    "videoSRC17_1920x1080_24.yuv",
+    "videoSRC18_1920x1080_25.yuv",
+    "videoSRC19_1920x1080_30.yuv",
+    "videoSRC20_1920x1080_25.yuv",
+    "videoSRC21_1920x1080_24.yuv",
+    "videoSRC22_1920x1080_24.yuv",
+    "videoSRC23_1920x1080_24.yuv",
+    "videoSRC24_1920x1080_24.yuv",
+    "videoSRC25_1920x1080_24.yuv",
+    "videoSRC26_1920x1080_30.yuv",
+    "videoSRC27_1920x1080_30.yuv",
+    "videoSRC28_1920x1080_30.yuv",
+    "videoSRC29_1920x1080_24.yuv",
+    "videoSRC30_1920x1080_30.yuv",
+    "FourPeople_1280x720_60.yuv",
+    "Johnny_1280x720_60.yuv",
+    "KristenAndSara_1280x720_60.yuv"
+  ],
+  "not_measured": [
+    "BQTerrace_1920x1080_60.yuv",
+    "BasketballDrive_1920x1080_50.yuv",
+    "Cactus_1920x1080_50.yuv",
+    "Kimono1_1920x1080_24.yuv",
+    "ParkScene_1920x1080_24.yuv",
+    "BQMall_832x480_60.yuv",
+    "BasketballDrill_832x480_50.yuv",
+    "PartyScene_832x480_50.yuv",
+    "RaceHorses_832x480_30.yuv",
+    "BasketballPass_416x240_50.yuv",
+    "BlowingBubbles_416x240_50.yuv",
+    "BQSquare_416x240_60.yuv",
+    "RaceHorses_416x240_30.yuv"
+  ],
   "rows": [
     {
       "qp": 0,
-      "saving_pct": 24.1734778881073,
-      "db_vs_uf": 0.0775655822828412,
-      "bpp_added": 0.00013911968830076078,
-      "map_bits": 228.7294864654541
+      "saving_pct": 27.7086790651083,
+      "db_vs_uf": 0.09752247314609122,
+      "bpp_added": 0.00012329433244842757,
+      "map_bits": 240.7258529663086
     },
     {
       "qp": 16,
-      "saving_pct": 21.1892768740654,
-      "db_vs_uf": 0.0841332545503974,
-      "bpp_added": 0.00014134779180124127,
-      "map_bits": 232.37954744696617
+      "saving_pct": 21.672180593013763,
+      "db_vs_uf": 0.07924231703073019,
+      "bpp_added": 0.00012860461623791637,
+      "map_bits": 252.08050486072898
     },
     {
       "qp": 32,
-      "saving_pct": 15.694502592086792,
-      "db_vs_uf": 0.0880146561190486,
-      "bpp_added": 0.00013026878194607517,
-      "map_bits": 216.67117702960968
+      "saving_pct": 16.33079893887043,
+      "db_vs_uf": 0.08386912943096832,
+      "bpp_added": 0.00012541297375045596,
+      "map_bits": 247.38167471252382
     },
     {
       "qp": 48,
-      "saving_pct": 11.038918495178223,
-      "db_vs_uf": 0.0878406761214137,
-      "bpp_added": 0.00011952737865848813,
-      "map_bits": 198.0072071403265
+      "saving_pct": 11.940439194440842,
+      "db_vs_uf": 0.08720998072531075,
+      "bpp_added": 0.00011435782862396015,
+      "map_bits": 226.6678562834859
     },
     {
       "qp": 63,
-      "saving_pct": 8.580919206142426,
-      "db_vs_uf": 0.09035320393741131,
-      "bpp_added": 0.00010496966371580061,
-      "map_bits": 172.77085132151842
+      "saving_pct": 10.032664015889168,
+      "db_vs_uf": 0.09545475750928745,
+      "bpp_added": 0.00010806279960821419,
+      "map_bits": 213.89296938478947
     }
   ]
 }
