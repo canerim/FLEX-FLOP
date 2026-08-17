@@ -1,0 +1,99 @@
+{
+  "ckpt": "runs/FINE12/ckpt_step.pth.tar",
+  "frames_per_seq": 2,
+  "n_sequences": 10,
+  "measured": [
+    "Beauty_1920x1080_120fps_420_8bit_YUV.yuv",
+    "Bosphorus_1920x1080_120fps_420_8bit_YUV.yuv",
+    "HoneyBee_1920x1080_120fps_420_8bit_YUV.yuv",
+    "Jockey_1920x1080_120fps_420_8bit_YUV.yuv",
+    "ReadySteadyGo_1920x1080_120fps_420_8bit_YUV.yuv",
+    "ShakeNDry_1920x1080_120fps_420_8bit_YUV.yuv",
+    "YachtRide_1920x1080_120fps_420_8bit_YUV.yuv",
+    "videoSRC01_1920x1080_30.yuv",
+    "videoSRC02_1920x1080_30.yuv",
+    "videoSRC03_1920x1080_30.yuv"
+  ],
+  "not_measured": [
+    "BQTerrace_1920x1080_60.yuv",
+    "BasketballDrive_1920x1080_50.yuv",
+    "Cactus_1920x1080_50.yuv",
+    "Kimono1_1920x1080_24.yuv",
+    "ParkScene_1920x1080_24.yuv",
+    "BQMall_832x480_60.yuv",
+    "BasketballDrill_832x480_50.yuv",
+    "PartyScene_832x480_50.yuv",
+    "RaceHorses_832x480_30.yuv",
+    "BasketballPass_416x240_50.yuv",
+    "BlowingBubbles_416x240_50.yuv",
+    "BQSquare_416x240_60.yuv",
+    "RaceHorses_416x240_30.yuv",
+    "videoSRC04_1920x1080_30.yuv",
+    "videoSRC05_1920x1080_25.yuv",
+    "videoSRC06_1920x1080_25.yuv",
+    "videoSRC07_1920x1080_25.yuv",
+    "videoSRC08_1920x1080_25.yuv",
+    "videoSRC09_1920x1080_25.yuv",
+    "videoSRC10_1920x1080_30.yuv",
+    "videoSRC11_1920x1080_30.yuv",
+    "videoSRC12_1920x1080_30.yuv",
+    "videoSRC13_1920x1080_30.yuv",
+    "videoSRC14_1920x1080_30.yuv",
+    "videoSRC15_1920x1080_30.yuv",
+    "videoSRC16_1920x1080_30.yuv",
+    "videoSRC17_1920x1080_24.yuv",
+    "videoSRC18_1920x1080_25.yuv",
+    "videoSRC19_1920x1080_30.yuv",
+    "videoSRC20_1920x1080_25.yuv",
+    "videoSRC21_1920x1080_24.yuv",
+    "videoSRC22_1920x1080_24.yuv",
+    "videoSRC23_1920x1080_24.yuv",
+    "videoSRC24_1920x1080_24.yuv",
+    "videoSRC25_1920x1080_24.yuv",
+    "videoSRC26_1920x1080_30.yuv",
+    "videoSRC27_1920x1080_30.yuv",
+    "videoSRC28_1920x1080_30.yuv",
+    "videoSRC29_1920x1080_24.yuv",
+    "videoSRC30_1920x1080_30.yuv",
+    "FourPeople_1280x720_60.yuv",
+    "Johnny_1280x720_60.yuv",
+    "KristenAndSara_1280x720_60.yuv"
+  ],
+  "rows": [
+    {
+      "qp": 0,
+      "saving_pct": 26.192900240421295,
+      "db_vs_uf": 0.09999181143939495,
+      "bpp_added": 0.00021907413382669564,
+      "map_bits": 454.2721239030361
+    },
+    {
+      "qp": 16,
+      "saving_pct": 22.874750792980194,
+      "db_vs_uf": 0.0999951645731926,
+      "bpp_added": 0.0002146513915741471,
+      "map_bits": 445.1011255681515
+    },
+    {
+      "qp": 32,
+      "saving_pct": 19.84644889831543,
+      "db_vs_uf": 0.0999939177185297,
+      "bpp_added": 0.00020709229249472695,
+      "map_bits": 429.4265777170658
+    },
+    {
+      "qp": 48,
+      "saving_pct": 17.05221801996231,
+      "db_vs_uf": 0.09997904635965824,
+      "bpp_added": 0.00019263137563097258,
+      "map_bits": 399.4404205083847
+    },
+    {
+      "qp": 63,
+      "saving_pct": 12.801152169704437,
+      "db_vs_uf": 0.09999491730704904,
+      "bpp_added": 0.00017689123734642098,
+      "map_bits": 366.8016697615385
+    }
+  ]
+}
