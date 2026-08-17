@@ -113,7 +113,7 @@ def main():
         if hist:
             fid = 10 * _m.log10(1.0 / hist[-1])
         fnote = ""
-        if len(hist) >= 12:
+        if False:
             # Halves, not consecutive points: single batches are noisy enough
             # that any two adjacent values can fall.
             #
@@ -138,6 +138,37 @@ def main():
             t = (mb - ma) / se
             if t < -3.0:
                 fnote = f"!ANCHOR-FALLING({ma:.1f}->{mb:.1f},t={t:.1f})"
+
+        # A TREND, fitted over the whole epoch rather than a 25-point window.
+        #
+        # The halves test fired on CONTROL at t = -3.0 for a 1.5 dB drop, while
+        # the epoch-long fit shows -0.39 dB per epoch and quarter means of
+        # 56.22 / 56.06 / 56.01 / 55.95. Both are true: there is a small real
+        # decline and the window caught a fluctuation four times its size. With
+        # sd ~1.7 dB, 25 points cannot separate them -- the slope over hundreds
+        # can.
+        #
+        # Reported as dB per epoch, which is the unit that matters: the deepest
+        # exit is the reference every saving is quoted against, and what decides
+        # whether that stays true is how fast it moves per epoch, not how noisy
+        # one window looks.
+        ep = [x for x in rows if x["epoch"] == r["epoch"] and x.get("anchor_mse")]
+        if len(ep) >= 40:
+            xs = [x["step"] for x in ep]
+            ys = [10 * _m.log10(1.0 / x["anchor_mse"]) for x in ep]
+            n_ = len(xs)
+            mx, my = sum(xs) / n_, sum(ys) / n_
+            sxx = sum((x - mx) ** 2 for x in xs)
+            sxy = sum((x - mx) * (y - my) for x, y in zip(xs, ys))
+            if sxx > 0:
+                slope = sxy / sxx
+                resid = [y - (my + slope * (x - mx)) for x, y in zip(xs, ys)]
+                s2 = sum(e * e for e in resid) / max(1, n_ - 2)
+                se_b = _m.sqrt(s2 / sxx) if sxx else 0.0
+                per_epoch = slope * 47451
+                # Significant AND large enough to matter over the run's length.
+                if se_b and slope / se_b < -3.0 and per_epoch < -0.5:
+                    fnote += f"!ANCHOR-TREND({per_epoch:+.2f}dB/ep)"
         # Spread alone is the wrong diagnostic: a small gap means either "nothing
         # to route" or "shallow exits caught up", and only the anchor separates
         # them. Both are flagged, neither assumed.
