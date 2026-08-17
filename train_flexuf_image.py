@@ -116,6 +116,8 @@ def parse_args(argv):
     p.add_argument("--aux_schedule", choices=["constant", "warmup"], default="constant")
     p.add_argument("--device", type=str, default="0")
     p.add_argument("--log_every", type=int, default=200)
+    p.add_argument("--ckpt_every", type=int, default=0,
+                   help="steps between mid-epoch weight snapshots (0 = epoch end only)")
     p.add_argument("--tag", type=str, default="", help="experiment label for logs")
     p.add_argument("--pretrain", type=str, default=None,
                    help="warm-start checkpoint to initialise from (e.g. the ladder "
@@ -434,6 +436,25 @@ def train_one_epoch(net, loader, optimizer, epoch, cfg, args, device, logf,
             logf.write(json.dumps(rec) + "\n")
             logf.flush()
             t0 = t1
+
+        # Mid-epoch snapshot, for measurement rather than for resume.
+        #
+        # An epoch here is 47451 steps -- 10 to 19 hours depending on the crop --
+        # and the epoch-end save is the only one. So a run that has been training
+        # all day still cannot be EVALUATED, which is the thing that matters when
+        # a configuration is new and might simply be broken: FINE12 changes K from
+        # 6 to 12, and waiting a full epoch to find that out wastes the day.
+        #
+        # Weights only, no optimiser state: this is not a resume point (resuming
+        # mid-epoch would need the sampler position too, which is not worth the
+        # fragility). Written to a temp file and renamed, because the evaluation
+        # scripts poll for this file and would otherwise read a half-written one.
+        if args.ckpt_every and i and i % args.ckpt_every == 0:
+            snap = Path(args.save_dir) / "ckpt_step.pth.tar"
+            tmp = snap.with_suffix(".tmp")
+            torch.save({"state_dict": net.state_dict(), "config": cfg.__dict__,
+                        "epoch": epoch, "step": i}, tmp)
+            tmp.replace(snap)
 
 
 def main(argv):

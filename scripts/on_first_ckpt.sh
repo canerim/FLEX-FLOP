@@ -14,8 +14,13 @@ cd "$HOME/FLEX-UF"
 TAG=${1:?usage: on_first_ckpt.sh <run_tag> [gpu]}
 GPU=${2:-4}
 D="runs/$TAG"
-until ls "$D"/ckpt_epo*.pth.tar >/dev/null 2>&1; do sleep 120; done
-CK=$(ls -t "$D"/ckpt_epo*.pth.tar | head -1)
+# Either kind of checkpoint will do. The epoch checkpoint is the real one, but an
+# epoch is 47451 steps and the mid-epoch snapshot (--ckpt_every) carries the same
+# state_dict and config -- enough for every measurement below, none of which
+# touches the optimiser. Waiting for the epoch boundary would mean a new
+# configuration goes ~10 h unmeasured.
+until ls "$D"/ckpt_epo*.pth.tar "$D"/ckpt_step.pth.tar >/dev/null 2>&1; do sleep 120; done
+CK=$(ls -t "$D"/ckpt_epo*.pth.tar "$D"/ckpt_step.pth.tar 2>/dev/null | head -1)
 echo "=== $TAG -> $(basename "$CK") @ $(date '+%F %T') ==="
 
 echo; echo "--- 1. anchor: hala gercek DCVC-UF mi? ---"
