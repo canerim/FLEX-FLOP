@@ -84,6 +84,40 @@ def exit2_rate_factor():
     return r[63]["db_per_exit"][2] / r[0]["db_per_exit"][2]
 
 
+def ladder_line():
+    """The three runs that share an architecture, ordered by what they carry.
+
+    VERBATIM, CONTROL and BEST are K=6, j=2, 256px tiles, same warm start, one
+    epoch each. They differ in the additions, and the anchor weight is the one
+    that moves monotonically across them: 0, 1, 10. Reading the saving at a
+    fixed budget across the three is the closest this project gets to an
+    attribution -- with the caveat, stated on the slide, that CONTROL to BEST
+    changes four things at once, so no single ingredient owns that step."""
+    import glob as _g
+    files = {"VERBATIM": R / "results/signalled_VERBATIM_fixed.json"}
+    for t in ("CONTROL", "BEST"):
+        c = sorted(_g.glob(str(R / f"results/signalled_{t}_*.json")))
+        if c:
+            files[t] = Path(c[-1])
+    if len(files) < 3:
+        return None
+    out = []
+    for t, w in (("VERBATIM", "0"), ("CONTROL", "1"), ("BEST", "10")):
+        if t not in files or not files[t].exists():
+            return None
+        d = json.loads(files[t].read_text())
+        rr = sorted(d["rows"], key=lambda r: r["qp"])
+        if all(r.get("budget_reachable") is False for r in rr):
+            out.append(f"anchor {w}: unreachable at every rate")
+        else:
+            out.append(f"anchor {w}: " + "/".join(
+                f"{r['saving_pct']:.0f}" for r in rr) + "%")
+    return ("Saving at 0.1 dB across the three runs that share an architecture — "
+            + "; ".join(out)
+            + ". CONTROL→BEST changes four things at once, so that step is the "
+              "bundle, not the anchor alone")
+
+
 def anchor_line():
     """What the anchor term is worth, measured on two runs that differ by it.
 
@@ -351,6 +385,7 @@ slide_fig("Training: the recipe, checked not claimed", "nf_schedule.png", [
  (1, "ImageFolder + get_training_lambdas · 64 QP levels", False),
  (1, "encoder identical over 74 tensors · 255 shared tensors, no shape change", False),
  (0, anchor_line() or "anchor comparison pending VERBATIM's measurement", True),
+ (1, ladder_line() or "three-run comparison pending", False),
  (0, "Deliberate additions, listed rather than hidden:", True),
  (1, "--epoch_offset (read the schedule where a warm start actually is)", False),
  (1, "--anchor_weight, --new_lr_scale, --freeze_encoder", False),
