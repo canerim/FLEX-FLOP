@@ -1,0 +1,272 @@
+\documentclass[10pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm,booktabs,microtype}
+\usepackage[hidelinks]{hyperref}
+\linespread{1.05}
+
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{assumption}[theorem]{Assumption}
+\newtheorem{remark}[theorem]{Remark}
+
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\Ex}{\mathbb{E}}
+
+\title{\vspace{-2em}What Content-Adaptive Early Exit Is Worth:\\
+An Exact Characterisation of the Compute--Distortion Frontier}
+\author{}
+\date{}
+
+\begin{document}
+\maketitle
+\vspace{-3em}
+
+\begin{abstract}
+\noindent
+A multi-exit neural decoder can spend different amounts of computation on
+different regions of one frame. We give an exact description of what such a
+decoder can achieve. Writing $C_k$ for the relative cost of exit $k$ and
+$D_i(k)$ for the distortion tile $i$ incurs there, we show that the achievable
+(cost, distortion) set under \emph{fixed-proportion mixing} is precisely the
+convex hull of the $K$ per-exit points (Proposition~\ref{prop:hull}), while
+under \emph{per-tile assignment} it is the Minkowski average of the $N$
+per-tile hulls (Theorem~\ref{thm:minkowski}). The gap between them is not an
+artefact of any particular router: it equals
+$\Delta(\lambda)=\min_k\overline{\,\cdot\,}-\overline{\min_k\,\cdot\,}\ge 0$,
+an exchange of minimum and average, and it vanishes exactly when every tile
+prefers the same exit (Theorem~\ref{thm:gain}). $\Delta$ is therefore the
+\emph{value of content adaptivity}, measurable without building a router.
+Experiments on a 42M-parameter neural image codec confirm the characterisation
+and show $\Delta/J$ rising from $0.68\%$ to $4.52\%$ as the rate increases,
+i.e.\ adaptivity is worth most where the decoder is most expensive.
+\end{abstract}
+
+\section{Setup}
+
+\begin{definition}[Multi-exit decode]\label{def:setup}
+A frame is partitioned into $N$ disjoint tiles of equal area. A decoder exposes
+exits $k\in\mathcal{K}=\{j,\dots,K-1\}$; decoding a tile at exit $k$ costs
+$C_k>0$ relative to a full decode and yields squared error $D_i(k)\ge 0$ on
+tile~$i$. An \emph{assignment} is a map $a:[N]\to\mathcal{K}$.
+\end{definition}
+
+\begin{assumption}[Cost additivity]\label{as:cost}
+The compute spent on a frame is $C(a)=\frac1N\sum_{i} C_{a(i)}$.
+\end{assumption}
+
+\begin{assumption}[Distortion is a tile mean]\label{as:dist}
+The frame distortion is $D(a)=\frac1N\sum_i D_i(a(i))$.
+\end{assumption}
+
+Assumption~\ref{as:cost} holds whenever tiles are decoded independently, which
+is what a tiled decoder does; Assumption~\ref{as:dist} holds for any per-pixel
+loss averaged over the frame, mean squared error included. Both are exact for
+the architecture we measure, not approximations. Neither assumes anything about
+the $D_i(\cdot)$ themselves --- in particular they need not be convex, monotone,
+or identically distributed across tiles.
+
+\section{The achievable set}
+
+Write $\bar D_k=\frac1N\sum_i D_i(k)$ for the mean distortion of exit $k$.
+
+\begin{proposition}[Fixed-proportion mixing]\label{prop:hull}
+Let tiles be assigned to exits in proportions $p\in\Delta^{K}$ independently of
+their content. The achievable set of $(\Ex C,\Ex D)$ is exactly
+$\mathrm{conv}\{(C_k,\bar D_k):k\in\mathcal{K}\}$.
+\end{proposition}
+
+\begin{theorem}[Per-tile assignment]\label{thm:minkowski}
+The closure of the convex hull of achievable $(C(a),D(a))$ over all assignments
+$a$ is the Minkowski average
+$\frac1N\bigoplus_{i=1}^{N}\mathrm{conv}\{(C_k,D_i(k)):k\in\mathcal{K}\}$.
+\end{theorem}
+
+Theorem~\ref{thm:minkowski} contains Proposition~\ref{prop:hull} as the special
+case $D_i\equiv\bar D$. The two sets coincide only in that case; otherwise the
+per-tile set is strictly larger, and the next result says by exactly how much.
+
+\section{The value of adaptivity}
+
+For $\lambda\ge 0$ define the Lagrangian values
+\begin{equation}\label{eq:J}
+J_{\mathrm{ad}}(\lambda)=\frac1N\sum_{i=1}^{N}\min_{k\in\mathcal{K}}
+\bigl[D_i(k)+\lambda C_k\bigr],
+\qquad
+J_{\mathrm{fix}}(\lambda)=\min_{k\in\mathcal{K}}
+\bigl[\bar D_k+\lambda C_k\bigr].
+\end{equation}
+
+\begin{theorem}[Adaptivity gain]\label{thm:gain}
+Under Assumptions~\ref{as:cost}--\ref{as:dist}, for every $\lambda\ge0$,
+\begin{equation}\label{eq:gain}
+\Delta(\lambda)\;:=\;J_{\mathrm{fix}}(\lambda)-J_{\mathrm{ad}}(\lambda)\;\ge\;0,
+\end{equation}
+with equality if and only if some $k^\star\in\arg\min_k[D_i(k)+\lambda C_k]$ is
+common to all $i\in[N]$.
+\end{theorem}
+
+$\Delta(\lambda)$ is computable from the $D_i(k)$ alone. It upper-bounds what
+\emph{any} router can gain over fixed proportions at that operating point, and
+is attained by the oracle assignment $a^\star_\lambda(i)\in\arg\min_k[D_i(k)+\lambda C_k]$.
+It therefore separates two questions that are routinely conflated: whether
+content adaptivity is worth anything here, and whether a particular router
+realises it.
+
+\begin{proposition}[Frontier recovery]\label{prop:legendre}
+The lower boundary of either achievable set is recovered from its $J$ by
+$D(C)=\sup_{\lambda\ge0}\{J(\lambda)-\lambda C\}$, and a supporting line at an
+optimal point has slope $-\lambda$.
+\end{proposition}
+
+\begin{corollary}[Sweeping $\lambda$ is exhaustive]\label{cor:sweep}
+Every point on the lower boundary is $a^\star_\lambda$ for some $\lambda\ge0$;
+no assignment outside this family is efficient.
+\end{corollary}
+
+\begin{remark}[What is \emph{not} claimed]\label{rem:notclaimed}
+$D$ is convex in $C$ by Theorem~\ref{thm:minkowski}, but the frontier is usually
+plotted as decibels against percentage saving, i.e.\ $\mathrm{dB}(S)=10\log_{10}D$
+with $S=1-C/C_{K-1}$. Since $\log$ is concave and increasing, $\log\circ D$ need
+be neither convex nor concave, and no such claim follows from the above. We find
+it convex empirically (Table~\ref{tab:marginal}); we do not prove it.
+\end{remark}
+
+\section{Experiments}
+
+We instantiate Definition~\ref{def:setup} on the intra decoder of a
+42.2M-parameter learned image codec (DCVC-UF), split into $K=6$ exits over 12
+residual blocks with $j=2$, on $128\times128$ tiles, evaluated on 20 CTC frames
+(UVG, HEVC class~E). Distortion is measured against the \emph{released} decoder
+from the identical bitstream, so the encoder, hyperprior and entropy model are
+byte-identical and the only difference is synthesis. Costs $C_k$ come from a
+MAC audit and agree with wall-clock to within $1\%$.
+
+\begin{table}[h]\centering\small
+\caption{Per-exit distortion, in dB below the released decoder. The penalty for
+leaving early grows $3.4\times$ from the lowest to the highest rate.}
+\label{tab:exits}
+\begin{tabular}{lrrrrr}
+\toprule
+QP & exit 2 & exit 3 & exit 4 & exit 5 & bpp \\
+\midrule
+0  & 0.3447 & 0.1516 & 0.0634 & 0.0228 & 0.1936 \\
+32 & 0.6152 & 0.3323 & 0.1096 & 0.0465 & 0.2565 \\
+63 & 1.1574 & 0.6310 & 0.1581 & 0.0602 & 0.4559 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[h]\centering\small
+\caption{$\Delta(\lambda)/J_{\mathrm{ad}}(\lambda)$, the adaptivity gain of
+Theorem~\ref{thm:gain} in scale-free form. At $\lambda=3\!\times\!10^{-5}$,
+where routing is active, it rises monotonically with rate. At
+$\lambda=3\!\times\!10^{-4}$ the oracle itself has collapsed onto one exit and
+$\Delta$ vanishes, exactly as the equality condition predicts.}
+\label{tab:delta}
+\begin{tabular}{lrrrr}
+\toprule
+QP & $\lambda{=}10^{-5}$ & $3{\times}10^{-5}$ & $10^{-4}$ & $3{\times}10^{-4}$\\
+\midrule
+0  & 0.24\% & 0.68\% & 1.25\% & 0.09\% \\
+16 & 0.41\% & 1.16\% & 0.87\% & 0.01\% \\
+32 & 0.71\% & 2.08\% & 0.47\% & 0.00\% \\
+48 & 0.88\% & 3.52\% & 0.36\% & 0.00\% \\
+63 & 0.93\% & \textbf{4.52\%} & 0.39\% & 0.00\% \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[h]\centering\small
+\caption{Marginal dB per additional 5 points of saving, by linear interpolation
+along the measured frontier. Increasing everywhere: each further point of
+compute saved costs more than the last. This is the empirical convexity of
+Remark~\ref{rem:notclaimed}, not a consequence of the theorems.}
+\label{tab:marginal}
+\begin{tabular}{lrrrr}
+\toprule
+QP & $10\!\to\!15$ & $15\!\to\!20$ & $20\!\to\!25$ & $25\!\to\!30$ \\
+\midrule
+0  & 0.0104 & 0.0164 & 0.0249 & 0.0366 \\
+32 & 0.0180 & 0.0292 & 0.0406 & 0.0569 \\
+63 & 0.0319 & 0.0505 & 0.0799 & 0.1127 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Table~\ref{tab:delta} is the paper's empirical point. The value of content
+adaptivity is not constant: it is smallest exactly where a uniformly shallower
+decoder would already do (low rate, Table~\ref{tab:exits} left column) and
+largest where the deep blocks are doing real work (high rate). A method
+evaluated only at low rate would understate its own contribution by a factor of
+six.
+
+\section{Proofs}
+
+\begin{proof}[Proof of Proposition~\ref{prop:hull}]
+Under fixed proportions $p$, tile assignment is independent of $i$, so
+$\Ex C=\sum_k p_kC_k$ and, by Assumption~\ref{as:dist},
+$\Ex D=\sum_k p_k\bar D_k$. The map $p\mapsto(\Ex C,\Ex D)$ is affine, hence
+maps the simplex $\Delta^K$ onto the convex hull of the images of its vertices,
+which are the points $(C_k,\bar D_k)$.
+\end{proof}
+
+\begin{proof}[Proof of Theorem~\ref{thm:minkowski}]
+By Assumptions~\ref{as:cost}--\ref{as:dist} the achievable pairs are
+$\bigl\{\frac1N\sum_i v_i : v_i\in S_i\bigr\}$ with
+$S_i=\{(C_k,D_i(k)):k\in\mathcal{K}\}$, i.e.\ the Minkowski average
+$\frac1N\bigoplus_i S_i$. Taking convex hulls commutes with Minkowski sums,
+$\mathrm{conv}(A\oplus B)=\mathrm{conv}(A)\oplus\mathrm{conv}(B)$, and with
+scaling; applying this $N-1$ times gives the claim.
+\end{proof}
+
+\begin{proof}[Proof of Theorem~\ref{thm:gain}]
+Fix $\lambda\ge0$. For every $k\in\mathcal{K}$,
+\[
+\bar D_k+\lambda C_k
+=\frac1N\sum_{i=1}^{N}\bigl[D_i(k)+\lambda C_k\bigr]
+\;\ge\;\frac1N\sum_{i=1}^{N}\min_{k'\in\mathcal{K}}
+\bigl[D_i(k')+\lambda C_{k'}\bigr]
+=J_{\mathrm{ad}}(\lambda),
+\]
+since each summand dominates the corresponding minimum. The right-hand side
+does not depend on $k$, so taking the minimum over $k$ on the left preserves the
+inequality and yields $J_{\mathrm{fix}}(\lambda)\ge J_{\mathrm{ad}}(\lambda)$,
+which is \eqref{eq:gain}.
+
+For equality: if some $k^\star$ attains the per-tile minimum for every $i$, then
+choosing $k=k^\star$ makes every summand equal to its minimum and the inequality
+is tight. Conversely, suppose equality holds and let $k^\star$ attain
+$J_{\mathrm{fix}}$. Then
+$\frac1N\sum_i\bigl([D_i(k^\star)+\lambda C_{k^\star}]-\min_{k'}[D_i(k')+\lambda C_{k'}]\bigr)=0$.
+Every summand is non-negative, so every summand is zero, i.e.\ $k^\star$ attains
+the minimum for each $i$.
+\end{proof}
+
+\begin{proof}[Proof of Proposition~\ref{prop:legendre} and
+Corollary~\ref{cor:sweep}]
+Both achievable sets are, after taking convex hulls, compact and convex
+(Proposition~\ref{prop:hull}, Theorem~\ref{thm:minkowski}). For such a set the
+function $C\mapsto\min\{D:(C,D)\text{ achievable}\}$ is convex and lower
+semicontinuous, and $J(\lambda)=\min_{(C,D)}\{D+\lambda C\}$ is its concave
+conjugate; the stated inversion is the Fenchel biconjugate applied to a closed
+convex function. A minimiser of $D+\lambda C$ lies where a line of slope
+$-\lambda$ supports the set, giving the slope claim. Corollary~\ref{cor:sweep}
+follows because every exposed point of a compact convex set in $\R^2$ is the
+unique minimiser of some linear functional, and non-exposed boundary points are
+limits of exposed ones.
+\end{proof}
+
+\begin{remark}[Scope]
+Theorem~\ref{thm:gain} bounds what adaptivity is worth, not what is realisable
+by a decoder that must \emph{infer} the assignment. In our system that
+distinction is removed by signalling $a^\star_\lambda$ in the bitstream at
+$\lceil\log_2|\mathcal{K}|\rceil$ bits per tile, entropy-coded to
+$1.3\times10^{-4}$~bpp --- four orders of magnitude below the rates in
+Table~\ref{tab:exits}.
+\end{remark}
+
+\end{document}
