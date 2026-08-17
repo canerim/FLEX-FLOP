@@ -201,7 +201,11 @@ if sg and pc:
     fig, a = plt.subplots(figsize=(ns.W15, 2.0))
     sgm = {r["qp"]: r for r in sg["rows"]}
     for c, q in zip(ns.SERIES, sorted(sgm)):
-        pts = sorted([(r["db_vs_uf"], r["saving_pct"]) for r in pc if r["qp"] == q])
+        # Per-frame, to match the signalled markers plotted on the same axes.
+        # These were pooled, which put two conventions on one plot and moved
+        # the oracle bound 0.023-0.033 dB left of where the markers live.
+        pts = sorted([(r.get("db_vs_uf_per_frame", r["db_vs_uf"]),
+                       r["saving_pct"]) for r in pc if r["qp"] == q])
         pts = [p for p in pts if -.02 <= p[0] <= .30]
         a.plot([p[0] for p in pts], [p[1] for p in pts], color=c, lw=.8,
                ls=(0, (4, 2)), alpha=.85)
@@ -241,7 +245,8 @@ if pc2:
     qps = [0, 16, 32, 48, 63]
     rows = []
     for q in qps:
-        cand = [r for r in pc2["rows"] if r["qp"] == q and r["db_vs_uf"] <= 0.105]
+        cand = [r for r in pc2["rows"] if r["qp"] == q
+                and r.get("db_vs_uf_per_frame", r["db_vs_uf"]) <= 0.105]
         rows.append(max(cand, key=lambda r: r["saving_pct"]))
     cols = [ns.BLUE, ns.SKY, ns.GREEN, ns.YELLOW, ns.ORANGE, ns.VERM]
     bot = np.zeros(len(qps))
