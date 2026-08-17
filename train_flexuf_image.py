@@ -136,6 +136,15 @@ def parse_args(argv):
                         "over replicate, which buys 1.34 trunk blocks of budget for "
                         "very little; 'learned' keeps its per-channel adaptivity at "
                         "replicate's cost, starting at exactly replicate.")
+    p.add_argument("--grad_accum", type=int, default=1,
+                   help="micro-batches to accumulate before stepping. The recipe "
+                        "specifies batch 16; Microsoft reach it across GPUs "
+                        "(get_dataloader divides batch_size by world_size), and "
+                        "on one card at 512x512 it does not fit. Accumulating "
+                        "keeps the EFFECTIVE batch at the recipe's value instead "
+                        "of quietly training at half of it. Gradients are clipped "
+                        "after accumulation, so the 0.1 norm bound applies to the "
+                        "same quantity it does in train_image.py.")
     p.add_argument("--joint_router", action="store_true",
                    help="train a LEARNED router head jointly with the decoder. "
                         "The hand-made signals were measured blind (|r| <= 0.12 "
@@ -288,6 +297,7 @@ def train_one_epoch(net, loader, optimizer, epoch, cfg, args, device, logf,
 
     t0 = time.time()
     n_skipped = 0
+    total_norm = float("nan")
     for i, batch in enumerate(loader):
         batch = [t.to(device, non_blocking=True) for t in batch]
         x, qp, lambdas = batch[0], batch[-2], batch[-1]
@@ -339,19 +349,28 @@ def train_one_epoch(net, loader, optimizer, epoch, cfg, args, device, logf,
                                           args.distill_teacher)
             ld["loss"] = ld["loss"] + args.distill_weight * distill
 
-        optimizer.zero_grad(set_to_none=True)
-        ld["loss"].backward()
+        # Accumulate, then step. zero_grad only at the start of an accumulation
+        # window, and the loss is scaled so the accumulated gradient equals the
+        # one a single large batch would produce. `total_norm` carries the last
+        # clipped norm forward, because a log line can fall on a micro-batch
+        # where no clip happened and reporting a stale number is better than
+        # reporting none -- but it must never read as a fresh measurement, so it
+        # starts at nan and only a real clip replaces it.
+        if i % args.grad_accum == 0:
+            optimizer.zero_grad(set_to_none=True)
+        (ld["loss"] / args.grad_accum).backward()
 
         # Microsoft's exact guard: clip to 0.1, and drop the batch on a
         # non-finite norm rather than letting it poison the weights.
-        clip_params = [p_ for p_ in net.parameters() if p_.requires_grad]
-        total_norm = clip_grad_norm_(
-            clip_params, max_norm=0.1, error_if_nonfinite=False
-        ).item()
-        if math.isnan(total_norm) or math.isinf(total_norm):
-            n_skipped += 1
-            continue
-        optimizer.step()
+        if (i + 1) % args.grad_accum == 0:
+            clip_params = [p_ for p_ in net.parameters() if p_.requires_grad]
+            total_norm = clip_grad_norm_(
+                clip_params, max_norm=0.1, error_if_nonfinite=False
+            ).item()
+            if math.isnan(total_norm) or math.isinf(total_norm):
+                n_skipped += 1
+                continue
+            optimizer.step()
 
         if i % args.log_every == 0:
             with torch.no_grad():
