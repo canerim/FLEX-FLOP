@@ -58,3 +58,12 @@ characterisation.
 Distortion is always measured against the **released** decoder decoding the
 **identical** bitstream: encoder, hyperprior and entropy model are byte-identical
 (`max|diff| = 0`, asserted), so the only difference is synthesis.
+
+Two decibels exist and the tables use one of them. Pooling every tile of every
+frame into a single MSE matches the Lagrangian `J = D + λC` the theory is
+written about; averaging a per-frame decibel is what `~/DCVC/test_video.py`
+computes, and therefore what a published DCVC-UF number means. On an identical
+assignment they differ by 0.023–0.033 dB — a quarter to a third of a 0.1 dB
+budget, with pooling always the flattering one (`scripts/db_convention.py`).
+The tables pool; anything quoted against published results does not. Both are
+stored in every curve JSON as `db_vs_uf` and `db_vs_uf_per_frame`.

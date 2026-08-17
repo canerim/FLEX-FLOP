@@ -173,8 +173,13 @@ We instantiate Definition~\ref{def:setup} on the intra decoder of a
 42.2M-parameter learned image codec (DCVC-UF), split into $K=6$ exits over 12
 residual blocks with $j=2$, on $128\times128$ tiles, evaluated on the $40$ CTC
 sequences available without JVET credentials (UVG, MCL-JCV, HEVC class~E;
-classes B, C and D are not measured). Distortion is measured against the
-\emph{released} decoder from the identical bitstream, so the encoder, hyperprior and entropy model are
+classes B, C and D are not measured). Decibels here pool every tile of every
+frame into a single MSE, which is the form matching the Lagrangian
+$J=D+\lambda C$ of Definition~\ref{def:setup}; the codec convention of averaging
+a per-frame decibel reads $0.023$--$0.033$\,dB higher on an identical
+assignment, so figures quoted against published DCVC-UF results use that one
+instead. Distortion is measured against the \emph{released} decoder from the
+identical bitstream, so the encoder, hyperprior and entropy model are
 byte-identical and the only difference is synthesis. Costs $C_k$ come from a
 MAC audit and agree with wall-clock to within $1\%$.
 
