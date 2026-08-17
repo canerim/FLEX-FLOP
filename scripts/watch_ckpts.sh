@@ -96,7 +96,7 @@ print(f\"epoch {c.get('epoch')} step {c.get('step','-')}\")" 2>/dev/null)
       # every saving figure below is measured against the wrong reference.
       echo; echo "--- 1. anchor: still bit-comparable to released DCVC-UF? ---"
       ./.venv/bin/python scripts/anchor_drift.py --ckpt "$NEW" \
-        --device "cuda:$GPU" 2>&1 | tail -8
+        --device "cuda:$GPU" --out "results/anchor_${TAG}.json" 2>&1 | tail -9
 
       echo; echo "--- 2. oracle ceiling (assumes a perfect router) ---"
       for q in 0 32 63; do

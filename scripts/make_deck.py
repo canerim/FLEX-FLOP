@@ -37,6 +37,8 @@ SIGNALLED = "signalled_BEST_0817_1542.json"
 BASE_SIGNALLED = "signalled_grid128.json"
 BD = "bd_BEST.json"
 GAP = "target_gap_BEST.json"
+ANCHOR = "anchor_BEST.json"
+ANCHOR_BASE = "anchor_VERBATIM.json"
 
 why = load("why_qp.json")
 pc = load(CURVE) or load(BASE_CURVE)
@@ -80,6 +82,34 @@ def exit2_rate_factor():
         return float("nan")
     r = {x["qp"]: x for x in w["rows"]}
     return r[63]["db_per_exit"][2] / r[0]["db_per_exit"][2]
+
+
+def anchor_line():
+    """What the anchor term is worth, measured on two runs that differ by it.
+
+    VERBATIM is Microsoft's recipe applied to the ladder with NONE of the
+    additions -- same K, same j, same 256px tiles, same warm start. If its
+    deepest exit has drifted further from the release than the entire 0.1 dB
+    budget, then no allocation of exits can meet the budget, and the anchor term
+    is a precondition rather than an improvement. That is the cleanest
+    attribution available here, since the tile size is held fixed."""
+    a_, v_ = load(ANCHOR), load(ANCHOR_BASE)
+    if not (a_ and v_):
+        return None
+    A = {r["qp"]: r["drift_db"] for r in a_["rows"]}
+    V = {r["qp"]: r["drift_db"] for r in v_["rows"]}
+    qs = sorted(set(A) & set(V))
+    if not qs:
+        return None
+    worst_v = min(V[q] for q in qs)
+    return (f"Deepest exit vs the release, same tiles and same warm start: BEST "
+            + " / ".join(f"{A[q]:+.3f}" for q in qs)
+            + " dB against VERBATIM's "
+            + " / ".join(f"{V[q]:+.3f}" for q in qs)
+            + f" dB at qp{'/'.join(map(str, qs))}. VERBATIM's drift alone is "
+              f"{abs(worst_v) / 0.1:.1f}× the 0.1 dB budget, so the target is "
+              f"unreachable there at any saving — the anchor term is a "
+              f"precondition, not a refinement")
 
 
 def budget_line(db):
@@ -320,6 +350,7 @@ slide_fig("Training: the recipe, checked not claimed", "nf_schedule.png", [
  (1, "AdamW 1e-4 · clip_grad_norm 0.1 · non-finite batch skipped", False),
  (1, "ImageFolder + get_training_lambdas · 64 QP levels", False),
  (1, "encoder identical over 74 tensors · 255 shared tensors, no shape change", False),
+ (0, anchor_line() or "anchor comparison pending VERBATIM's measurement", True),
  (0, "Deliberate additions, listed rather than hidden:", True),
  (1, "--epoch_offset (read the schedule where a warm start actually is)", False),
  (1, "--anchor_weight, --new_lr_scale, --freeze_encoder", False),

@@ -27,6 +27,10 @@ ap.add_argument("--ckpt", required=True)
 ap.add_argument("--qps", type=int, nargs="+", default=[0, 32, 63])
 ap.add_argument("--frames", type=int, default=1)
 ap.add_argument("--device", default="cuda:4")
+ap.add_argument("--out", default=None,
+                help="write the drift to JSON as well as printing it. The deck "
+                     "quotes this number and had no file to read it from, so it "
+                     "was being retyped -- the surest way to let it go stale.")
 ap.add_argument("--ref", default=None,
                 help="reference checkpoint. Default: the warm start matching "
                      "this checkpoint's K, since the file's key layout depends "
@@ -58,6 +62,7 @@ for s in seqs:
         frames.append((s["cls"], x[0:1], pl[0]))
 print(f"\n  {len(frames)} CTC karesi\n")
 print(f"  {'qp':>4}{'stok UF':>10}{'bizim en derin':>16}{'kayma':>9}")
+_rows = []
 for qp_v in a.qps:
     ds = do = 0.0
     with torch.no_grad():
@@ -71,3 +76,12 @@ for qp_v in a.qps:
             do += C.psnr_611_420(ours.dec.forward_full(y, q)[:, :, :H, :W], pl)
     n = len(frames)
     print(f"  {qp_v:>4}{ds/n:>10.3f}{do/n:>16.3f}{do/n - ds/n:>+9.3f}", flush=True)
+    _rows.append({"qp": qp_v, "stock_psnr": ds / n, "ours_psnr": do / n,
+                  "drift_db": do / n - ds / n})
+
+if a.out:
+    import json as _json
+    from pathlib import Path as _Path
+    _Path(a.out).write_text(_json.dumps(
+        {"ckpt": a.ckpt, "n_frames": len(frames), "rows": _rows}, indent=2))
+    print(f"\n  wrote {a.out}")
