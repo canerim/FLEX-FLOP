@@ -126,14 +126,18 @@ qps = sorted({r["qp"] for r in pc})
 # off the grid put the two 1.5 points apart on the SAME slide -- the text said
 # 33% at 0.1 dB where the panel showed 29%, purely because the sweep had no
 # sample sitting on the budget.
-def _front(q):
+def _front(q, key="db_vs_uf_per_frame"):
+    # Per-frame decibels: the convention published DCVC-UF numbers use. See
+    # scripts/db_convention.py -- pooling reads a quarter to a third of a
+    # 0.1 dB budget lower on an identical allocation.
     best = {}
     for r in pc:
         if r["qp"] != q:
             continue
         k = round(r["saving_pct"], 6)
-        if k not in best or r["db_vs_uf"] < best[k]:
-            best[k] = r["db_vs_uf"]
+        v = r.get(key, r["db_vs_uf"])
+        if k not in best or v < best[k]:
+            best[k] = v
     pts = sorted(best.items())
     return [p[0] for p in pts], [p[1] for p in pts]
 

@@ -36,8 +36,13 @@ def sv_at(qp, db):
     points when the true gap was 4.6 -- the old curve had a sample exactly at
     0.1 dB and the new one did not.
     """
-    pts = sorted((r["db_vs_uf"], r["saving_pct"]) for r in pc["rows"]
-                 if r["qp"] == qp)
+    # The per-frame decibel, which is what ~/DCVC/test_video.py computes and
+    # therefore what every published DCVC-UF number means. The pooled
+    # alternative -- every tile of every frame in one MSE -- reads 0.023-0.033
+    # dB lower on an identical allocation, a quarter to a third of a 0.1 dB
+    # budget, and would flatter every saving on this deck.
+    pts = sorted((r.get("db_vs_uf_per_frame", r["db_vs_uf"]), r["saving_pct"])
+                 for r in pc["rows"] if r["qp"] == qp)
     for (d0, s0), (d1, s1) in zip(pts, pts[1:]):
         if d0 <= db <= d1:
             w = (db - d0) / (d1 - d0) if d1 > d0 else 0.0
@@ -271,6 +276,9 @@ slide_fig("Cost, checked in the right unit", "nf_cost.png", [
 s = slide_fig("Results vs the released decoder", "nf_results.png", [
  (0, f"At 0.3 dB: {sv_at(0,0.3):.0f}% (qp0) · {sv_at(32,0.3):.0f}% (qp32) · "
      f"{sv_at(63,0.3):.0f}% (qp63)", True),
+ (1, "dB is the per-frame average test_video.py computes — the convention every "
+     "published DCVC-UF number uses. Pooling all tiles into one MSE reads "
+     "0.023–0.033 dB lower on the same allocation and would flatter these", False),
  (0, f"At 0.1 dB: {sv_at(0,0.1):.0f}% · {sv_at(32,0.1):.0f}% · {sv_at(63,0.1):.0f}%"
      "", False),
  (0, target_line(), False),
