@@ -46,6 +46,12 @@ ap.add_argument("--ckpt", required=True)
 ap.add_argument("--ref", default="runs/warmstart/ckpt_warmstart.pth.tar")
 ap.add_argument("--qps", type=int, nargs="+", default=[0, 16, 32, 48, 63])
 ap.add_argument("--frames", type=int, default=2)
+ap.add_argument("--latent_patch", type=int, default=None,
+                help="override the tile size the checkpoint was trained at. The "
+                     "ladder is structurally tile-size agnostic -- adapters are "
+                     "1x1 and the split is a reshape -- so the same weights can "
+                     "be evaluated at either size, which is the only way to "
+                     "separate 'larger tiles' from 'a different training run'.")
 ap.add_argument("--device", default="cuda:4")
 ap.add_argument("--out", default="results/signalled_curve.json")
 a = ap.parse_args()
@@ -53,6 +59,8 @@ dev = a.device
 
 ck = torch.load(a.ckpt, map_location="cpu", weights_only=False)
 cfg = FlexUFConfig(**ck["config"]) if "config" in ck else FlexUFConfig()
+if a.latent_patch:
+    cfg = FlexUFConfig(**{**cfg.__dict__, "latent_patch": a.latent_patch})
 net = FlexUFIntra(cfg).to(dev).eval(); load_flexuf_state(net, ck)
 ref = FlexUFIntra(cfg).to(dev).eval()
 load_flexuf_state(ref, torch.load(a.ref, map_location="cpu", weights_only=False))
