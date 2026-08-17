@@ -40,15 +40,16 @@ load_flexuf_state(ref, torch.load(a.ref, map_location="cpu", weights_only=False)
 cost = exit_costs(cfg, "head").to(dev)
 
 seqs, _ = C.discover([])
-frames = []
+frames, measured = [], []
 for s in seqs:
     x, pl = C.read_frames(s["path"], s["w"], s["h"], a.frames, 1)
     if x is not None:
         for i in range(x.shape[0]):
             frames.append(x[i:i+1])
+        measured.append(s["name"])
 
 K = cfg.num_exits
-print(f"  {len(frames)} CTC karesi, {cfg.rgb_patch}px tile\n")
+print(f"  {len(frames)} CTC karesi from {len(measured)} sequences, {cfg.rgb_patch}px tile\n")
 print(f"  cikis basina, YAYINLANMIS DCVC-UF'e gore dB kaybi (tum tile'lar o cikista)\n")
 print(f"  {'qp':>4}" + "".join(f"{'cikis '+str(k):>11}" for k in range(cfg.split_depth, K))
       + f"{'bpp':>9}")
@@ -72,6 +73,12 @@ with torch.no_grad():
         print(f"  {qp_v:>4}" + "".join(f"{db[k]:>11.4f}" for k in range(cfg.split_depth, K))
               + f"{bp/n:>9.4f}")
 
-Path(a.out).write_text(json.dumps({"cost": cost.tolist(), "rows": rows}, indent=2))
+# Provenance travels with the number: three of the paper's four tables are
+# drawn from this file, and without the checkpoint and the sequence list a
+# reader cannot tell which model or which test set produced them.
+Path(a.out).write_text(json.dumps(
+    {"ckpt": a.ckpt, "ref": a.ref, "frames_per_seq": a.frames,
+     "n_sequences": len(measured), "measured": measured,
+     "cost": cost.tolist(), "rows": rows}, indent=2))
 print(f"\n  cost/cikis: " + "  ".join(f"C{k}={cost[k]:.4f}" for k in range(cfg.split_depth, K)))
 print(f"  wrote {a.out}")

@@ -24,7 +24,8 @@ from flexuf.cost import exit_costs
 from flexuf.model import FlexUFIntra, load_flexuf_state
 
 dev = "cuda:0"
-ck = torch.load("runs/wdec_j2_p128_grid/ckpt_epo0.pth.tar", map_location="cpu", weights_only=False)
+CKPT = "runs/wdec_j2_p128_grid/ckpt_epo0.pth.tar"
+ck = torch.load(CKPT, map_location="cpu", weights_only=False)
 cfg = FlexUFConfig(**ck["config"]) if "config" in ck else FlexUFConfig()
 net = FlexUFIntra(cfg).to(dev).eval(); load_flexuf_state(net, ck)
 ref = FlexUFIntra(cfg).to(dev).eval()
@@ -34,15 +35,16 @@ C = exit_costs(cfg, "head").to(dev)
 J = cfg.split_depth
 
 seqs, _ = C_.discover([])
-frames = []
+frames, measured = [], []
 for s in seqs:
     x, pl = C_.read_frames(s["path"], s["w"], s["h"], 2, 1)
     if x is not None:
         for i in range(x.shape[0]):
             frames.append(x[i:i+1])
+        measured.append(s["name"])
 
 out = {}
-print(f"  {len(frames)} CTC karesi\n")
+print(f"  {len(frames)} CTC karesi from {len(measured)} sequences\n")
 print("  1) Delta(lambda) = J_blind - J_oracle  (Lagrange biriminde, MSE olcegi)")
 print(f"  {'qp':>4}" + "".join(f"{('l='+f'{l:.0e}'):>13}" for l in (1e-5, 3e-5, 1e-4, 3e-4)))
 with torch.no_grad():
@@ -90,5 +92,9 @@ for qp_v in (0, 16, 32, 48, 63):
     d = [db_at(qp_v, s) for s in (10, 15, 20, 25, 30)]
     print(f"  {qp_v:>4}" + "".join(f"{d[i+1]-d[i]:>10.4f}" for i in range(4)))
 
+# See why_qp.py: the table this feeds is meaningless without knowing which
+# model and which sequences it was measured on.
+out["_provenance"] = {"ckpt": CKPT, "n_sequences": len(measured),
+                      "measured": measured}
 Path("results/theory_check.json").write_text(json.dumps(out, indent=2))
 print("\n  wrote results/theory_check.json")
