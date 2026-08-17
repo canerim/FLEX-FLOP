@@ -65,13 +65,18 @@ assert worst == 0.0, f"encoders differ by {worst}; the latent is not shared"
 print(f"  encoder ayni       max|diff| = {worst}")
 
 cost = exit_costs(cfg, "head").to(dev)
-seqs, _ = C.discover([])
-frames = []
+seqs, missing = C.discover([])
+frames, measured = [], []
 for s in seqs:
     x, pl = C.read_frames(s["path"], s["w"], s["h"], a.frames, 1)
     if x is not None:
         frames.append((x[0:1], pl[0]))
-print(f"  {len(frames)} CTC karesi, {cfg.rgb_patch}px tile\n")
+        measured.append(s["name"])
+# The test set has to travel with the number. It grew from 10 sequences to 40
+# when MCL-JCV finished downloading, and two JSONs written either side of that
+# are indistinguishable by content while their numbers are not comparable.
+print(f"  {len(frames)} CTC karesi from {len(measured)} sequences "
+      f"({len(missing)} not on disk), {cfg.rgb_patch}px tile\n")
 
 LAMBDAS = [0.0] + [10 ** e for e in torch.linspace(-6, -1.5, 22).tolist()]
 rows = []
@@ -117,5 +122,8 @@ with torch.no_grad():
             print(f"  {qp_v:>4}{'—':>10}{b['db_vs_uf']:>19.4f}  (0.1 dB'ye hic ulasilamiyor)")
 
 Path(a.out).parent.mkdir(exist_ok=True)
-Path(a.out).write_text(json.dumps({"ckpt": a.ckpt, "ref": a.ref, "rows": rows}, indent=2))
+Path(a.out).write_text(json.dumps(
+    {"ckpt": a.ckpt, "ref": a.ref, "frames_per_seq": a.frames,
+     "n_sequences": len(measured), "measured": measured,
+     "not_measured": [m["name"] for m in missing], "rows": rows}, indent=2))
 print(f"\n  wrote {a.out}")

@@ -28,12 +28,12 @@ LOCK=/tmp/flexuf_eval.lock
 while true; do
   # A step snapshot, when the run writes them, is newer than any epoch file and
   # needs no promotion -- it already carries its own config.
-  NEW=""
+  NEW=""; SCOPE=""
   if [ -f "$D/ckpt_step.pth.tar" ] && \
      [ ! -f "$D/.evaluated_step" -o "$D/ckpt_step.pth.tar" -nt "$D/.evaluated_step" ]; then
-    NEW="$D/ckpt_step.pth.tar"; MARK="$D/.evaluated_step"
+    NEW="$D/ckpt_step.pth.tar"; MARK="$D/.evaluated_step"; SCOPE="--max_seqs 10"
   elif ./.venv/bin/python scripts/promote_ckpt.py "$D" >/dev/null 2>&1; then
-    NEW="$D/ckpt_eval.pth.tar"; MARK="$D/.evaluated_epoch"
+    NEW="$D/ckpt_eval.pth.tar"; MARK="$D/.evaluated_epoch"; SCOPE=""
   fi
 
   if [ -n "$NEW" ]; then
@@ -62,7 +62,7 @@ print(f\"epoch {c.get('epoch')} step {c.get('step','-')}\")" 2>/dev/null)
       # cost inside the bitrate.
       echo; echo "--- 3. SIGNALLED system, referenced to released DCVC-UF ---"
       CUDA_VISIBLE_DEVICES="$GPU" ./.venv/bin/python -u scripts/signalled_curve.py \
-        --ckpt "$NEW" --device cuda:0 \
+        --ckpt "$NEW" --device cuda:0 $SCOPE \
         --out "results/signalled_${TAG}_$(date +%m%d_%H%M).json" 2>&1 | tail -9
       touch "$MARK"
     ) 9>"$LOCK"

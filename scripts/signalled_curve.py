@@ -46,6 +46,15 @@ ap.add_argument("--ckpt", required=True)
 ap.add_argument("--ref", default="runs/warmstart/ckpt_warmstart.pth.tar")
 ap.add_argument("--qps", type=int, nargs="+", default=[0, 16, 32, 48, 63])
 ap.add_argument("--frames", type=int, default=2)
+ap.add_argument("--max_seqs", type=int, default=0,
+                help="cap the test set (0 = all present). The mid-epoch health "
+                     "check runs often -- every ~1.2 h per run once --ckpt_every "
+                     "is on -- and the full set is 40 sequences since MCL-JCV "
+                     "landed, which would keep the evaluation card permanently "
+                     "busy competing with a training run on the same GPU. The "
+                     "subset is deterministic (first N by discovery order) and "
+                     "the JSON records exactly which sequences it was, so a "
+                     "health check can never be mistaken for the headline.")
 ap.add_argument("--latent_patch", type=int, default=None,
                 help="override the tile size the checkpoint was trained at, to "
                      "separate 'larger tiles' from 'a different training run'. "
@@ -75,14 +84,21 @@ sa, sb = net.enc.state_dict(), ref.enc.state_dict()
 assert max((sa[k] - sb[k]).abs().max().item() for k in sa) == 0.0
 cost = exit_costs(cfg, "head").to(dev)
 
-seqs, _ = C.discover([])
-frames = []
+seqs, missing = C.discover([])
+if a.max_seqs:
+    missing = missing + [{"name": s["name"]} for s in seqs[a.max_seqs:]]
+    seqs = seqs[:a.max_seqs]
+frames, measured = [], []
 for s in seqs:
     x, pl = C.read_frames(s["path"], s["w"], s["h"], a.frames, 1)
     if x is not None:
         for i in range(x.shape[0]):
             frames.append((x[i:i+1], pl[i]))
-print(f"  encoder ayni, {len(frames)} CTC karesi, {cfg.rgb_patch}px tile\n")
+        measured.append(s["name"])
+# See paper_curve.py: the test set must be recorded with the result, because it
+# changed size mid-experiment and the JSON is otherwise silent about it.
+print(f"  encoder ayni, {len(frames)} CTC karesi from {len(measured)} sequences "
+      f"({len(missing)} not on disk), {cfg.rgb_patch}px tile\n")
 
 def map_bits(k, K):
     """Entropy of the exit map in bits -- what an ideal entropy coder would spend.
@@ -137,5 +153,8 @@ with torch.no_grad():
             print(f"  {qp_v:>4}{'—':>10}{'0.1 dB ulasilamiyor':>16}")
 
 Path(a.out).parent.mkdir(exist_ok=True)
-Path(a.out).write_text(json.dumps({"ckpt": a.ckpt, "rows": rows}, indent=2))
+Path(a.out).write_text(json.dumps(
+    {"ckpt": a.ckpt, "frames_per_seq": a.frames,
+     "n_sequences": len(measured), "measured": measured,
+     "not_measured": [m["name"] for m in missing], "rows": rows}, indent=2))
 print(f"\n  wrote {a.out}")
