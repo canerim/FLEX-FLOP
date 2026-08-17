@@ -121,12 +121,29 @@ save(fig, "nf_cost.png")
 # results: two cuts
 pc = J("paper_curve_grid128.json")["rows"]
 qps = sorted({r["qp"] for r in pc})
+# Both cuts interpolate along the frontier rather than picking the nearest
+# sweep sample. The deck's bullets already interpolate, and reading the figure
+# off the grid put the two 1.5 points apart on the SAME slide -- the text said
+# 33% at 0.1 dB where the panel showed 29%, purely because the sweep had no
+# sample sitting on the budget.
+def _front(q):
+    best = {}
+    for r in pc:
+        if r["qp"] != q:
+            continue
+        k = round(r["saving_pct"], 6)
+        if k not in best or r["db_vs_uf"] < best[k]:
+            best[k] = r["db_vs_uf"]
+    pts = sorted(best.items())
+    return [p[0] for p in pts], [p[1] for p in pts]
+
 def db_at(q, s):
-    c = [r for r in pc if r["qp"] == q and r["saving_pct"] >= s]
-    return min(c, key=lambda r: r["db_vs_uf"])["db_vs_uf"] if c else np.nan
+    S, D = _front(q)
+    return float(np.interp(s, S, D, left=np.nan, right=np.nan))
+
 def sv_at(q, d):
-    c = [r for r in pc if r["qp"] == q and r["db_vs_uf"] <= d]
-    return max(c, key=lambda r: r["saving_pct"])["saving_pct"] if c else np.nan
+    S, D = _front(q)
+    return float(np.interp(d, D, S, left=np.nan, right=np.nan))
 fig, (a, b) = plt.subplots(1, 2, figsize=(ns.W2, 2.0))
 for c, s in zip([ns.BLUE, ns.GREEN, ns.ORANGE], (15, 20, 30)):
     a.plot(qps, [db_at(q, s) for q in qps], color=c, marker="o", label=f"{s}% saved")
@@ -138,7 +155,9 @@ ns.panel(a, "a"); a.set_title("Fixed saving → quality cost", loc="left", pad=3
 for c, d in zip([ns.PURPLE, ns.VERM, ns.BLUE], (0.1, 0.2, 0.3)):
     b.plot(qps, [sv_at(q, d) for q in qps], color=c, marker="s", label=f"{d} dB budget")
 b.set_xticks(qps); b.set_xlabel("QP"); b.set_ylabel("Compute saved (%)")
-b.set_ylim(0, 46); b.legend(loc="upper right")
+# Lower left: with the curves interpolated they now run high across the whole
+# axis, and an upper-right legend sits on the 0.3 dB line.
+b.set_ylim(0, 46); b.legend(loc="lower left")
 ns.panel(b, "b"); b.set_title("Fixed budget → saving", loc="left", pad=3)
 save(fig, "nf_results.png")
 

@@ -50,16 +50,56 @@ def exit2_rate_factor():
 
     Typed into a bullet as '3.4x' until the test set grew to 40 sequences and
     it became 4.3x. Derived now, so it cannot go stale again."""
-    w = J("why_qp.json")
+    w = load("why_qp.json")
     if not w:
         return float("nan")
     r = {x["qp"]: x for x in w["rows"]}
     return r[63]["db_per_exit"][2] / r[0]["db_per_exit"][2]
 
 
+def target_line():
+    """Where the 30-40% goal is actually met, derived rather than asserted.
+
+    The bullet used to say the target was met at 0.3 dB and not at 0.1. On the
+    40-sequence frontier qp0 reaches 33% at 0.1 dB, so that sentence became
+    false the moment the test set grew. Stating which rates clear 30% at which
+    budget cannot go stale the same way."""
+    TARGET = 30.0
+    out = []
+    for db in (0.1, 0.3):
+        ok = [qp for qp in (0, 16, 32, 48, 63) if sv_at(qp, db) >= TARGET]
+        if not ok:
+            out.append(f"no rate at {db:.1f} dB")
+        elif len(ok) == 5:
+            out.append(f"every rate at {db:.1f} dB")
+        else:
+            out.append(f"qp {'/'.join(map(str, ok))} at {db:.1f} dB")
+    return f"The 30% target is cleared by {out[0]}, and by {out[1]}"
+
+
+def bd_line():
+    """The trade-off as two integrated numbers rather than two sampled points.
+
+    Added because every headline here was a reading at one dB budget, and a
+    claim resting on one sample of a curve turned out to be fragile: the
+    grid-readout rule made one test-set comparison look twice as large as it
+    was. BD-saving and BD-quality integrate the measured frontier over stated
+    intervals, so neither depends on where the sweep placed a sample."""
+    bd = load("bd_saving.json")
+    if not bd:
+        return "integrated trade-off not computed"
+    lo, hi = bd["db_interval"]
+    slo, shi = bd["saving_interval"]
+    per = " · ".join(f"{r['qp']}: {r['bd_saving_pct']:.0f}%" for r in bd["rows"])
+    return (f"BD-saving {bd['mean_bd_saving_pct']:.1f}% over dB in "
+            f"[{lo:.2f}, {hi:.2f}] (qp {per}); BD-quality "
+            f"{bd['mean_bd_quality_db']:.3f} dB over saving in "
+            f"[{slo:.0f}%, {shi:.0f}%]")
+
+
 def signalled_line():
     """The shipped system's saving per QP, from the file that measured it."""
-    sg = J("signalled_grid128.json")
+    sg = load("signalled_grid128.json")
     if not sg:
         return "signalled measurement not present"
     rows = sorted(sg["rows"], key=lambda r: r["qp"])
@@ -232,10 +272,13 @@ s = slide_fig("Results vs the released decoder", "nf_results.png", [
  (0, f"At 0.3 dB: {sv_at(0,0.3):.0f}% (qp0) · {sv_at(32,0.3):.0f}% (qp32) · "
      f"{sv_at(63,0.3):.0f}% (qp63)", True),
  (0, f"At 0.1 dB: {sv_at(0,0.1):.0f}% · {sv_at(32,0.1):.0f}% · {sv_at(63,0.1):.0f}%"
-     "  — the 30–40% target is met at 0.3 dB, not at 0.1", False),
+     "", False),
+ (0, target_line(), False),
  (0, "Saving falls with rate because early exit costs more there: the exit-2 "
      f"penalty grows {exit2_rate_factor():.1f}× from qp0 to qp63 as the latent "
      "carries more detail", False),
+ (0, "Integrated over the curve, not read at one point:", True),
+ (1, bd_line(), False),
 ], size=13)
 
 # 11 ------------------------------------------------------------------ router
