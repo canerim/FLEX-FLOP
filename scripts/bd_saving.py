@@ -53,7 +53,7 @@ trapezoid = getattr(np, "trapezoid", np.trapz)
 ROOT = Path(__file__).resolve().parent.parent
 
 
-def frontier(rows, qp):
+def frontier(rows, qp, key="db_vs_uf_per_frame"):
     """The measured (saving, dB) points at one QP, deduplicated and sorted.
 
     Kept as the upper-left staircase: for each saving the SMALLEST dB attained.
@@ -65,8 +65,9 @@ def frontier(rows, qp):
         if r["qp"] != qp:
             continue
         s = round(r["saving_pct"], 6)
-        if s not in best or r["db_vs_uf"] < best[s]:
-            best[s] = r["db_vs_uf"]
+        v = r.get(key, r["db_vs_uf"])
+        if s not in best or v < best[s]:
+            best[s] = v
     pts = sorted(best.items())
     return np.array([p[0] for p in pts]), np.array([p[1] for p in pts])
 
@@ -91,6 +92,16 @@ def bd_quality(S, dB, lo, hi, n=2001):
 def main(argv):
     ap = argparse.ArgumentParser()
     ap.add_argument("--curve", default="results/paper_curve_grid128.json")
+    ap.add_argument("--convention", choices=["per_frame", "pooled"],
+                    default="per_frame",
+                    help="which decibel to integrate against. 'per_frame' is "
+                         "what ~/DCVC/test_video.py computes and so what every "
+                         "published DCVC-UF number means; 'pooled' puts every "
+                         "tile into one MSE, the natural form for the "
+                         "Lagrangian the theory is about. On an identical "
+                         "allocation they differ by a quarter to a third of a "
+                         "0.1 dB budget, pooled always the flattering one, so "
+                         "the default is the one a reader will compare against.")
     ap.add_argument("--db_lo", type=float, default=None,
                     help="lower dB limit. Default: the largest floor across the "
                          "compared rates. The frontier cannot reach 0 dB -- with "
@@ -109,7 +120,13 @@ def main(argv):
     rows = d["rows"]
     qps = sorted({r["qp"] for r in rows})
 
-    floors = [frontier(rows, q)[1].min() for q in qps]
+    key = ("db_vs_uf_per_frame" if a.convention == "per_frame" else "db_vs_uf")
+    if a.convention == "per_frame" and "db_vs_uf_per_frame" not in rows[0]:
+        raise SystemExit(
+            f"{a.curve} predates the per-frame convention; regenerate it with "
+            f"the current paper_curve.py, or pass --convention pooled and say "
+            f"so wherever the number is quoted")
+    floors = [frontier(rows, q, key)[1].min() for q in qps]
     if a.db_lo is None:
         # Round up so the printed interval is a clean number that every
         # frontier genuinely spans.
@@ -119,7 +136,8 @@ def main(argv):
 
     print(f"  frontier: {a.curve}")
     print(f"  test set: {d.get('n_sequences', '?')} CTC sequences, "
-          f"checkpoint {d.get('ckpt', '?')}\n")
+          f"checkpoint {d.get('ckpt', '?')}")
+    print(f"  dB convention: {a.convention}\n")
     # Three decimals, not two: the auto-derived lower limit is the largest
     # per-rate floor rounded up to the nearest 0.001 (0.057 here), and printing
     # it as 0.06 reported an interval that was not the one integrated over.
@@ -130,12 +148,12 @@ def main(argv):
     print(f"  {'qp':>4}{'BD-saving':>12}{'BD-quality':>13}{'floor dB':>11}"
           f"{'no-drift gain':>15}")
 
-    out = {"curve": a.curve, "n_sequences": d.get("n_sequences"),
-           "ckpt": d.get("ckpt"),
+    out = {"curve": a.curve, "convention": a.convention,
+           "n_sequences": d.get("n_sequences"), "ckpt": d.get("ckpt"),
            "db_interval": [a.db_lo, a.db_hi],
            "saving_interval": [a.sv_lo, a.sv_hi], "rows": []}
     for qp, floor in zip(qps, floors):
-        S, dB = frontier(rows, qp)
+        S, dB = frontier(rows, qp, key)
         bs = bd_saving(S, dB, a.db_lo, a.db_hi)
         bq = bd_quality(S, dB, a.sv_lo, a.sv_hi)
 

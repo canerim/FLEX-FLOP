@@ -40,10 +40,13 @@ import ctc_intra as C
 from flexuf.config import FlexUFConfig
 from flexuf.cost import exit_costs
 from flexuf.model import FlexUFIntra, load_flexuf_state
+from flexuf.reference import reference_for
 
 ap = argparse.ArgumentParser()
 ap.add_argument("--ckpt", required=True)
-ap.add_argument("--ref", default="runs/warmstart/ckpt_warmstart.pth.tar")
+ap.add_argument("--ref", default=None,
+                help="reference checkpoint. Default: the warm start matching "
+                     "this checkpoint's K")
 ap.add_argument("--qps", type=int, nargs="+", default=[0, 16, 32, 48, 63])
 ap.add_argument("--frames", type=int, default=2)
 ap.add_argument("--max_seqs", type=int, default=0,
@@ -79,7 +82,8 @@ if a.seam_repair: ov["seam_repair"] = a.seam_repair
 if ov: cfg = FlexUFConfig(**{**cfg.__dict__, **ov})
 net = FlexUFIntra(cfg).to(dev).eval(); load_flexuf_state(net, ck)
 ref = FlexUFIntra(cfg).to(dev).eval()
-load_flexuf_state(ref, torch.load(a.ref, map_location="cpu", weights_only=False))
+load_flexuf_state(ref, torch.load(reference_for(cfg, a.ref),
+                                 map_location="cpu", weights_only=False))
 sa, sb = net.enc.state_dict(), ref.enc.state_dict()
 assert max((sa[k] - sb[k]).abs().max().item() for k in sa) == 0.0
 cost = exit_costs(cfg, "head").to(dev)

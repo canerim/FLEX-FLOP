@@ -39,12 +39,15 @@ import ctc_intra as C
 from flexuf.config import FlexUFConfig
 from flexuf.cost import exit_costs
 from flexuf.model import FlexUFIntra, load_flexuf_state
+from flexuf.reference import reference_for
 
 ap = argparse.ArgumentParser()
 ap.add_argument("--ckpt", required=True)
-ap.add_argument("--ref", default="runs/warmstart/ckpt_warmstart.pth.tar",
+ap.add_argument("--ref", default=None,
                 help="the released decoder, warm-started into ladder form; its "
-                     "deepest exit is bit-exact DCVC-UF (asserted in tests)")
+                     "deepest exit is bit-exact DCVC-UF (asserted in tests). "
+                     "Default: the file matching this checkpoint's K, since the "
+                     "key layout depends on how the 12 blocks are grouped")
 ap.add_argument("--qps", type=int, nargs="+", default=[0, 16, 32, 48, 63])
 ap.add_argument("--frames", type=int, default=1)
 ap.add_argument("--device", default="cuda:4")
@@ -56,7 +59,8 @@ ck = torch.load(a.ckpt, map_location="cpu", weights_only=False)
 cfg = FlexUFConfig(**ck["config"]) if "config" in ck else FlexUFConfig()
 net = FlexUFIntra(cfg).to(dev).eval(); load_flexuf_state(net, ck)
 ref = FlexUFIntra(cfg).to(dev).eval()
-load_flexuf_state(ref, torch.load(a.ref, map_location="cpu", weights_only=False))
+load_flexuf_state(ref, torch.load(reference_for(cfg, a.ref),
+                                 map_location="cpu", weights_only=False))
 
 # The comparison is only the one claimed if the latents are identical.
 sa, sb = net.enc.state_dict(), ref.enc.state_dict()
@@ -106,14 +110,31 @@ with torch.no_grad():
         M = torch.cat(per_exit)          # [tiles, K] our exits
         R = torch.cat(ref_mse)           # [tiles]    released DCVC-UF
         SEQ = torch.cat(tile_seq)        # [tiles]    which sequence each came from
+        # One frame per sequence is read, so SEQ groups frames as well.
+        groups = [g for g in ((SEQ == i) for i in range(len(measured)))
+                  if bool(g.any())]
+
         best = None
         for lam in LAMBDAS:
             k = (M + lam * cost[None, :]).argmin(1)
             mse = M.gather(1, k[:, None]).squeeze(1).mean()
-            # dB below the RELEASED decoder, on the same tiles.
+            # Two decibels on every sweep point, not just the operating points.
+            #
+            # `db_vs_uf` pools every tile of every frame into one MSE, the
+            # natural form for the Lagrangian the theory is about.
+            # `db_vs_uf_per_frame` averages a per-frame decibel, which is what
+            # ~/DCVC/test_video.py does and so what published DCVC-UF numbers
+            # mean. They differ by 0.023-0.033 dB on an identical allocation --
+            # a quarter to a third of a 0.1 dB budget, with pooling always the
+            # flattering one. BD-saving integrates these rows, so it could not
+            # be quoted in the codec convention until both were here.
             db = 10 * torch.log10(mse / R.mean())
+            dbf = torch.stack([
+                10 * torch.log10(M[g].gather(1, k[g][:, None]).squeeze(1).mean()
+                                 / R[g].mean()) for g in groups]).mean()
             sv = 100 * (1 - cost[k].mean() / cost[-1])
             rows.append({"qp": qp_v, "lam": lam, "db_vs_uf": db.item(),
+                         "db_vs_uf_per_frame": dbf.item(),
                          "saving_pct": sv.item(),
                          "hist": torch.bincount(k, minlength=cfg.num_exits).tolist()})
             if db.item() <= 0.1 and (best is None or sv.item() > best["saving_pct"]):
@@ -135,12 +156,6 @@ with torch.no_grad():
         # The allocation is discrete, so a target is not exactly attainable. The
         # invariant kept is the one that matters for a claim: dB never EXCEEDS
         # the budget, and the saving reported is the largest achievable under it.
-        # This script reads exactly one frame per sequence, so SEQ indexes
-        # frames as well as sequences, and the per-frame convention is a
-        # grouped reduction over it.
-        groups = [(SEQ == i) for i in range(len(measured))]
-        groups = [g for g in groups if bool(g.any())]
-
         def at_lam(lam):
             """(pooled dB, per-frame dB, saving, assignment) at one lambda.
 
@@ -211,7 +226,8 @@ with torch.no_grad():
 
 Path(a.out).parent.mkdir(exist_ok=True)
 Path(a.out).write_text(json.dumps(
-    {"ckpt": a.ckpt, "ref": a.ref, "frames_per_seq": a.frames,
+    {"ckpt": a.ckpt, "ref": reference_for(cfg, a.ref),
+     "frames_per_seq": a.frames,
      "n_sequences": len(measured), "measured": measured,
      "not_measured": [m["name"] for m in missing],
      "rows": rows, "op_points": op_rows}, indent=2))

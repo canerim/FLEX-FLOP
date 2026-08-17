@@ -20,18 +20,24 @@ sys.path.insert(0, str(Path.home() / "DCVC"))
 import ctc_intra as C
 from flexuf.config import FlexUFConfig
 from flexuf.model import FlexUFIntra, load_flexuf_state
+from flexuf.reference import reference_for
 
 ap = argparse.ArgumentParser()
 ap.add_argument("--ckpt", required=True)
 ap.add_argument("--qps", type=int, nargs="+", default=[0, 32, 63])
 ap.add_argument("--frames", type=int, default=1)
 ap.add_argument("--device", default="cuda:4")
+ap.add_argument("--ref", default=None,
+                help="reference checkpoint. Default: the warm start matching "
+                     "this checkpoint's K, since the file's key layout depends "
+                     "on how the 12 blocks are grouped into exits")
 a = ap.parse_args()
 
 dev = a.device
-base = torch.load("runs/warmstart/ckpt_warmstart.pth.tar", map_location="cpu", weights_only=False)
 ck = torch.load(a.ckpt, map_location="cpu", weights_only=False)
 cfg = FlexUFConfig(**ck["config"]) if "config" in ck else FlexUFConfig()
+base = torch.load(reference_for(cfg, a.ref), map_location="cpu",
+                  weights_only=False)
 
 stock = FlexUFIntra(cfg).to(dev).eval(); load_flexuf_state(stock, base)
 ours = FlexUFIntra(cfg).to(dev).eval(); load_flexuf_state(ours, ck)
