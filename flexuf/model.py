@@ -216,6 +216,43 @@ class FlexUFIntra(DMCI):
         return {"x_hats": [x_hat], "mses": [self.get_mse(x, x_hat)], "bpp": bpp,
                 "bits_y": bits_y, "bits_z": bits_z}
 
+    def forward(self, x, qp, *, mode: str = "random_depth", tau: float = 1.0,
+                beta: float = 0.0, anchor_net=None, want_distill: bool = False,
+                distill_teacher: str = "adjacent"):
+        """The single entry point every training step goes through.
+
+        Exists for DistributedDataParallel. DDP installs its gradient-reduction
+        machinery in `forward()`: it marks which parameters took part, rebuilds
+        its buckets, and arms the autograd hooks that trigger the allreduce.
+        Calling `net.forward_random_depth(...)` or `net.dec.forward_full(...)`
+        directly walks straight past all of that, and the failure is silent --
+        each rank keeps its own gradients, the loss curve looks perfectly normal,
+        and the run is quietly training two different models on half the data
+        each. So every quantity a training step needs is produced HERE, in one
+        call, and the trainer never reaches into the model again.
+        """
+        if mode == "joint":
+            out = self.forward_joint(x, qp, tau=tau, beta=beta)
+        elif mode == "all_exits":
+            out = self.forward_all_exits(x, qp)
+        else:
+            out = self.forward_random_depth(x, qp)
+
+        # The anchor and the distillation term both need their own passes, and
+        # both touch parameters DDP must know about, so they belong inside this
+        # forward rather than beside it.
+        if anchor_net is not None:
+            y_a, q_a, _ = self._encode_to_latent(x, qp)
+            with torch.no_grad():
+                ref = anchor_net.dec.forward_full(y_a, q_a)
+            out["anchor_mse"] = ((self.dec.forward_full(y_a, q_a) - ref) ** 2).mean()
+        if want_distill:
+            y_d, _, _ = self._encode_to_latent(x, qp)
+            from .losses import ladder_distill_loss
+            out["distill"] = ladder_distill_loss(self.dec.exit_features(y_d),
+                                                 distill_teacher)
+        return out
+
     def forward_joint(self, x, qp, tau: float = 1.0, beta: float = 0.0):
         """Router and decoder trained together, end to end.
 

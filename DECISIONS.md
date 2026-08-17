@@ -2919,3 +2919,76 @@ gereği %100. Saatlerdir kovalanan metrik, doğru soruyu sorunca ortadan kalktı
 çözüldü) ve tamponlanmış stdout bunu yirmi dakika gizledi (`python -u`). Ayrıca
 λ süpürmesi her adımda `forward_all_exits`'i yeniden hesaplıyordu — tile hataları
 λ'dan bağımsız, yani 25 katı boşa iş; önbelleğe alındı.
+
+---
+
+## 52. Neden qp0'da yüksek qp63'te düşük — ve frontier'ın kapalı formu
+
+**Mekanizma, ölçülmüş.** Her çıkışın yayınlanmış DCVC-UF'e göre dB kaybı (bütün
+tile'lar o çıkışta, CTC):
+
+| qp | çıkış 2 | çıkış 3 | çıkış 4 | çıkış 5 | bpp |
+|---|---|---|---|---|---|
+| 0 | 0.345 | 0.152 | 0.063 | 0.023 | 0.194 |
+| 16 | 0.435 | 0.218 | 0.082 | 0.033 | 0.216 |
+| 32 | 0.615 | 0.332 | 0.110 | 0.047 | 0.257 |
+| 48 | 0.864 | 0.482 | 0.139 | 0.057 | 0.328 |
+| 63 | **1.157** | 0.631 | 0.158 | 0.060 | 0.456 |
+
+Erken çıkmanın bedeli QP ile **3.4 kat** büyüyor. Sebep bpp sütununda: qp63'te
+latent 2.4 kat daha fazla bilgi taşıyor ve derin bloklar tam olarak o bilgiyi
+detaya çeviren şey. qp0'da latent kaba, fazladan blokların yapacak işi az.
+
+### Frontier'ın kapalı formu — türetildi, sonra test edildi
+
+Tile'ların p_k oranı çıkış k'ya atansın, Σp_k = 1. O zaman
+
+    C(p) = Σ p_k C_k        (maliyet tile'lar üzerinde toplanır)
+    D(p) = Σ p_k D_k        (MSE tile'lar üzerinde ortalamadır)
+
+**İkisi de p'de doğrusal.** Dolayısıyla ulaşılabilir (maliyet, bozulma) kümesi,
+K noktanın **tam olarak konveks zarfıdır**; verimli frontier onun sol-alt
+zarfıdır. İki sonuç deney gerektirmeden çıkar:
+
+1. **Bitişik köşeler arasında frontier (maliyet, MSE) düzleminde DÜZ bir
+   doğrudur** — karışım, eğrilik değil. (tasarruf, dB) düzleminde eğri
+   görünmesinin tek sebebi dB'nin MSE'nin logaritması olması.
+2. **Lagrange çarpanı eğimin kendisidir:** optimumda aktif köşeler
+   λ = −(D_k − D_k')/(C_k − C_k') sağlar. λ süpürmenin zarfı taraması bundandır.
+
+Yani tekdüze-karışım frontier'ı QP başına **2K sayıyla tamamen belirlenir.**
+
+### Test: tahmin vs ölçülen tile-başına oracle
+
+| qp | tasarruf | tahmin dB | ölçülen dB | oracle kazancı |
+|---|---|---|---|---|
+| 0 | %20 | 0.1004 | 0.0793 | +0.021 |
+| 32 | %20 | 0.2038 | 0.1222 | +0.082 |
+| 63 | %20 | 0.3615 | 0.2638 | +0.098 |
+| 63 | %30 | 0.6833 | 0.4214 | **+0.262** |
+
+Kazanç her yerde pozitif ve **bu hata değil** — Jensen. Tahmin tile'ları sabit
+oranlarda **körlemesine** karıştırıyor, gerçek oracle **tile başına** seçiyor.
+Fark tam olarak içeriğe uyarlanmanın değeri, yani projenin premisinin ölçüsü. Ve
+QP ile büyüyor: qp0'da +0.02, qp63'te +0.26 dB.
+
+### İki kesit (`results/two_views.png`)
+
+Tasarruf sabit → dB maliyeti:
+
+| qp | %15 | %20 | %30 |
+|---|---|---|---|
+| 0 | 0.046 | 0.079 | 0.131 |
+| 32 | 0.079 | 0.122 | 0.292 |
+| 63 | 0.158 | 0.264 | 0.421 |
+
+dB sabit → tasarruf:
+
+| qp | 0.1 dB | 0.2 dB | 0.3 dB |
+|---|---|---|---|
+| 0 | %26.0 | %32.5 | %41.5 |
+| 32 | %16.5 | %29.4 | %35.4 |
+| 63 | %9.6 | %19.6 | %26.3 |
+
+0.3 dB bütçesinde qp63'te bile **%26.3**, qp0'da **%41.5** — yani hedef bandı
+0.1 dB'de değil ama 0.3 dB'de rahatça karşılanıyor.
