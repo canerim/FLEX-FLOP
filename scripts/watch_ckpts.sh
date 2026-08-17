@@ -156,12 +156,31 @@ print(f\"epoch {c.get('epoch')} step {c.get('step','-')}\")" 2>/dev/null)
       # out. A better decoder shortening the interval is not a defect: a
       # frontier reaching 42.5% saving for 0.197 dB is a shorter curve, and the
       # part they share is the only comparison available.
+      # Recompute EVERY curve's BD, not just this run's.
+      #
+      # The interval is derived from all curves present, so it moves as runs are
+      # added -- CONTROL got [0.064, 0.196] where the earlier four had
+      # [0.066, 0.196], leaving five files that were each internally sound and
+      # not quite comparable. bd_saving is arithmetic on JSON with no GPU in it,
+      # so redoing all of them costs a second and keeps the set in step.
       read -r LO HI < <(./.venv/bin/python scripts/common_interval.py 2>/dev/null \
         | sed -n 's/.*--db_lo \([0-9.]*\) --db_hi \([0-9.]*\).*/\1 \2/p')
-      echo "  BD interval common to every measured curve: [${LO:-0.064}, ${HI:-0.196}]"
-      ./.venv/bin/python scripts/bd_saving.py --curve "$CURVE" \
-        --db_lo "${LO:-0.064}" --db_hi "${HI:-0.196}" \
-        --out "results/bd_${TAG}.json" 2>&1 | tail -10
+      if [ -z "${LO:-}" ]; then
+        echo "  the measured curves share no dB interval — BD comparison skipped."
+        echo "  (that is a result, not a failure: a run whose floor sits above"
+        echo "   another's ceiling cannot be compared by integral. Quote per-rate"
+        echo "   points for it instead.)"
+      else
+        echo "  BD interval common to every measured curve: [$LO, $HI]"
+        for C in results/curve_*.json results/paper_curve_grid128.json; do
+          [ -f "$C" ] || continue
+          B="results/bd_$(basename "$C" .json | sed 's/^curve_//;s/^paper_curve_grid128$/saving/').json"
+          ./.venv/bin/python scripts/bd_saving.py --curve "$C" \
+            --db_lo "$LO" --db_hi "$HI" --out "$B" >/dev/null 2>&1
+        done
+        ./.venv/bin/python scripts/bd_saving.py --curve "$CURVE" \
+          --db_lo "$LO" --db_hi "$HI" --out "results/bd_${TAG}.json" 2>&1 | tail -10
+      fi
 
       # 5. Do the two paths still agree? They reach the same quantity through
       # different code, so a disagreement means one of them has a bug -- which
