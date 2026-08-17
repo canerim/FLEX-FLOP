@@ -16,10 +16,20 @@ Neither is wrong. Quoting both in one document without saying they differ would
 be, so the size of the difference is measured here rather than left for a
 reader to find by comparing two tables.
 
-They coincide only when the per-frame ratio MSE_f/R_f is constant across frames;
-the gap is driven by how much that ratio varies with content, which is exactly
-the heterogeneity the rest of this project is about -- so it is expected to
-grow with rate.
+They coincide only when the per-frame ratio MSE_f/R_f is constant across frames,
+so the gap is driven by how much that ratio varies with content.
+
+Measured on an identical allocation the gap is 0.0233 to 0.0331 dB -- a quarter
+to a third of the 0.1 dB budget, not a rounding detail, and it accounts for the
+whole 5.4-point disagreement between the two scripts. Pooling always reports
+the SMALLER dB, so it flatters: under it more saving can be bought before the
+budget is spent.
+
+It was written here first that the gap should GROW with rate, on the argument
+that heterogeneity does. The measurement says the opposite -- 0.0331 dB at qp0
+falling to 0.0233 at qp63 -- so that argument was wrong. The saving spread
+across sequences does grow with rate, but this gap is set by the variance of
+the per-frame MSE ratio, which is a different quantity.
 
     python scripts/db_convention.py --ckpt <checkpoint>
 """

@@ -135,18 +135,41 @@ with torch.no_grad():
         # The allocation is discrete, so a target is not exactly attainable. The
         # invariant kept is the one that matters for a claim: dB never EXCEEDS
         # the budget, and the saving reported is the largest achievable under it.
+        # This script reads exactly one frame per sequence, so SEQ indexes
+        # frames as well as sequences, and the per-frame convention is a
+        # grouped reduction over it.
+        groups = [(SEQ == i) for i in range(len(measured))]
+        groups = [g for g in groups if bool(g.any())]
+
         def at_lam(lam):
+            """(pooled dB, per-frame dB, saving, assignment) at one lambda.
+
+            Two decibels, because the two are not the same number and both are
+            quoted somewhere. Pooling every tile into one MSE is the natural
+            form for the Lagrangian the theory is about; averaging a per-frame
+            decibel is what ~/DCVC/test_video.py does, so it is what published
+            DCVC-UF numbers mean. Measured on an identical allocation the two
+            differ by 0.023-0.033 dB -- a quarter to a third of the 0.1 dB
+            budget -- with pooling always the flattering one. Reporting only
+            one of them silently picks a side.
+            """
             k = (M + lam * cost[None, :]).argmin(1)
             mse = M.gather(1, k[:, None]).squeeze(1).mean()
-            return (10 * torch.log10(mse / R.mean()).item(),
+            pooled = 10 * torch.log10(mse / R.mean()).item()
+            per_frame = torch.stack([
+                10 * torch.log10(M[g].gather(1, k[g][:, None]).squeeze(1).mean()
+                                 / R[g].mean()) for g in groups]).mean().item()
+            return (pooled, per_frame,
                     100 * (1 - cost[k].mean() / cost[-1]).item(), k)
 
         ops = []
         for target in (0.05, 0.10, 0.15, 0.20, 0.25, 0.30, 0.50):
             lo, hi = 0.0, 1.0
             if at_lam(hi)[0] < target:       # budget above the ceiling
-                ops.append({"target_db": target, "db_vs_uf": at_lam(hi)[0],
-                            "saving_pct": at_lam(hi)[1], "saturated": True})
+                p_, f_, s_, _ = at_lam(hi)
+                ops.append({"target_db": target, "db_vs_uf": p_,
+                            "db_vs_uf_per_frame": f_,
+                            "saving_pct": s_, "saturated": True})
                 continue
             for _ in range(60):
                 mid = 0.5 * (lo + hi)
@@ -154,7 +177,7 @@ with torch.no_grad():
                     lo = mid
                 else:
                     hi = mid
-            db_o, sv_o, k_o = at_lam(lo)
+            db_o, dbf_o, sv_o, k_o = at_lam(lo)
             # Per-sequence breakdown at the SAME lambda.
             #
             # The headline is an average over 40 sequences, and an average hides
@@ -175,6 +198,7 @@ with torch.no_grad():
                     "db_vs_uf": (10 * torch.log10(mse_s / R[sel].mean())).item(),
                     "saving_pct": (100 * (1 - cost[ks].mean() / cost[-1])).item()})
             ops.append({"target_db": target, "lam": lo, "db_vs_uf": db_o,
+                        "db_vs_uf_per_frame": dbf_o,
                         "saving_pct": sv_o, "saturated": False,
                         "hist": torch.bincount(k_o, minlength=cfg.num_exits).tolist(),
                         "per_sequence": per_seq})
