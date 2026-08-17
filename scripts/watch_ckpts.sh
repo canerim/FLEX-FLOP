@@ -71,9 +71,15 @@ print(f\"epoch {c.get('epoch')} step {c.get('step','-')}\")" 2>/dev/null)
       # The deliverable: the system as it would ship, with the exit map's own
       # cost inside the bitrate.
       echo; echo "--- 3. SIGNALLED system, referenced to released DCVC-UF ---"
+      SIG="results/signalled_${TAG}_$(date +%m%d_%H%M).json"
+      # --frames 1 to match paper_curve below and the pinned reference
+      # measurement. Their defaults differ (2 against 1), which would have put
+      # a different frame count in each file -- exactly the mismatch that took
+      # an afternoon to find when the two paths disagreed by 5.4 points, and
+      # crosscheck_paths.py would rightly refuse to compare them.
       CUDA_VISIBLE_DEVICES="$GPU" ./.venv/bin/python -u scripts/signalled_curve.py \
-        --ckpt "$NEW" --device cuda:0 \
-        --out "results/signalled_${TAG}_$(date +%m%d_%H%M).json" 2>&1 | tail -9
+        --ckpt "$NEW" --device cuda:0 --frames 1 \
+        --out "$SIG" 2>&1 | tail -9
 
       # 4. The trade-off integrated over the curve rather than read at one
       # budget. A saving quoted at 0.1 dB is one sample of a frontier, and this
@@ -89,6 +95,17 @@ print(f\"epoch {c.get('epoch')} step {c.get('step','-')}\")" 2>/dev/null)
         --ckpt "$NEW" --device cuda:0 --out "$CURVE" 2>&1 | tail -8
       ./.venv/bin/python scripts/bd_saving.py --curve "$CURVE" \
         --out "results/bd_${TAG}.json" 2>&1 | tail -10
+
+      # 5. Do the two paths still agree? They reach the same quantity through
+      # different code, so a disagreement means one of them has a bug -- which
+      # is the only check available that neither carries one the other lacks.
+      echo; echo "--- 5. cross-check: two paths, one number ---"
+      ./.venv/bin/python scripts/crosscheck_paths.py --curve "$CURVE" \
+        --signalled "$SIG" 2>&1 | tail -10
+
+      echo; echo "--- 6. distance to the 30% target ---"
+      ./.venv/bin/python scripts/target_gap.py --curve "$CURVE" \
+        --out "results/target_gap_${TAG}.json" 2>&1 | tail -12
       touch "$MARK"
     ) 9>"$LOCK"
   fi
