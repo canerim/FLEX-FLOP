@@ -4,7 +4,7 @@
   "n_sequences": 40,
   "ckpt": "runs/FINE12/ckpt_step.pth.tar",
   "db_interval": [
-    0.066,
+    0.064,
     0.196
   ],
   "saving_interval": [
@@ -14,48 +14,48 @@
   "rows": [
     {
       "qp": 0,
-      "bd_saving_pct": 29.254565679807083,
-      "bd_quality_db": 0.05812687355529724,
-      "floor_db": 0.002278388710692525,
-      "bd_saving_pct_zero_drift": 29.47427676667644,
+      "bd_saving_pct": 33.628885052047096,
+      "bd_quality_db": 0.037495455894600696,
+      "floor_db": -0.0006670876173302531,
+      "bd_saving_pct_zero_drift": 33.56190778561645,
       "n_points": 19
     },
     {
       "qp": 16,
-      "bd_saving_pct": 26.535643609515667,
-      "bd_quality_db": 0.0787663536704818,
-      "floor_db": 0.011098755523562431,
-      "bd_saving_pct_zero_drift": 27.60220129391818,
+      "bd_saving_pct": 30.444693804881084,
+      "bd_quality_db": 0.05609741146932103,
+      "floor_db": 0.008684322237968445,
+      "bd_saving_pct_zero_drift": 31.325251590508923,
       "n_points": 19
     },
     {
       "qp": 32,
-      "bd_saving_pct": 21.899652803382516,
-      "bd_quality_db": 0.11773105247766376,
-      "floor_db": 0.026991097256541252,
-      "bd_saving_pct_zero_drift": 24.539874890709953,
-      "n_points": 19
+      "bd_saving_pct": 25.883332640640727,
+      "bd_quality_db": 0.08664903862642376,
+      "floor_db": 0.02133754827082157,
+      "bd_saving_pct_zero_drift": 28.12649945620165,
+      "n_points": 18
     },
     {
       "qp": 48,
-      "bd_saving_pct": 19.114461585300592,
-      "bd_quality_db": 0.14185781180014084,
-      "floor_db": 0.0445929653942585,
-      "bd_saving_pct_zero_drift": 23.907494582409278,
-      "n_points": 19
+      "bd_saving_pct": 23.266703009259707,
+      "bd_quality_db": 0.10754139948912704,
+      "floor_db": 0.03737492114305496,
+      "bd_saving_pct_zero_drift": 27.555941056862324,
+      "n_points": 18
     },
     {
       "qp": 63,
-      "bd_saving_pct": 14.832487649557011,
-      "bd_quality_db": 0.17634337594179397,
-      "floor_db": 0.06504976004362106,
-      "bd_saving_pct_zero_drift": 22.443243303969677,
-      "n_points": 19
+      "bd_saving_pct": 19.515752324804165,
+      "bd_quality_db": 0.13460059711241784,
+      "floor_db": 0.05355094000697136,
+      "bd_saving_pct_zero_drift": 25.966876763816458,
+      "n_points": 18
     }
   ],
-  "mean_bd_saving_pct": 22.32736226551257,
-  "mean_bd_quality_db": 0.11456509348907554,
-  "no_drift_gain_pts": 3.2660559020241324,
+  "mean_bd_saving_pct": 26.54787336632656,
+  "mean_bd_quality_db": 0.08447678051837806,
+  "no_drift_gain_pts": 2.7594219642746047,
   "no_drift_gain_rates": [
     0,
     16,

@@ -4,7 +4,7 @@
   "n_sequences": 40,
   "ckpt": "runs/wdec_j2_p128_grid/ckpt_epo0.pth.tar",
   "db_interval": [
-    0.066,
+    0.064,
     0.196
   ],
   "saving_interval": [
@@ -14,48 +14,48 @@
   "rows": [
     {
       "qp": 0,
-      "bd_saving_pct": 31.195247925254545,
+      "bd_saving_pct": 31.07552779122745,
       "bd_quality_db": 0.05412232358302268,
       "floor_db": 0.01507618185132742,
-      "bd_saving_pct_zero_drift": 32.70052089645829,
+      "bd_saving_pct_zero_drift": 32.59089210649672,
       "n_points": 19
     },
     {
       "qp": 16,
-      "bd_saving_pct": 28.14828083265779,
+      "bd_saving_pct": 28.015513560825653,
       "bd_quality_db": 0.0746947476405347,
       "floor_db": 0.025664765387773514,
-      "bd_saving_pct_zero_drift": 30.82440789043764,
+      "bd_saving_pct_zero_drift": 30.7172534502013,
       "n_points": 19
     },
     {
       "qp": 32,
-      "bd_saving_pct": 22.157478145634144,
+      "bd_saving_pct": 22.01005687473049,
       "bd_quality_db": 0.11701204788335398,
       "floor_db": 0.0426018200814724,
-      "bd_saving_pct_zero_drift": 26.4968851802761,
+      "bd_saving_pct_zero_drift": 26.398720315287576,
       "n_points": 19
     },
     {
       "qp": 48,
-      "bd_saving_pct": 17.90640381349246,
+      "bd_saving_pct": 17.72956932171622,
       "bd_quality_db": 0.15272249662692272,
       "floor_db": 0.055993445217609406,
-      "bd_saving_pct_zero_drift": 23.870708424691426,
+      "bd_saving_pct_zero_drift": 23.776585185205995,
       "n_points": 19
     },
     {
       "qp": 63,
-      "bd_saving_pct": 14.39237737110036,
+      "bd_saving_pct": 14.196146588218738,
       "bd_quality_db": 0.1888392042813125,
       "floor_db": 0.06365589052438736,
-      "bd_saving_pct_zero_drift": 21.255229213125684,
+      "bd_saving_pct_zero_drift": 21.162454828092503,
       "n_points": 19
     }
   ],
-  "mean_bd_saving_pct": 22.75995761762786,
+  "mean_bd_saving_pct": 22.605362827343708,
   "mean_bd_quality_db": 0.11747816400302931,
-  "no_drift_gain_pts": 4.269592703369969,
+  "no_drift_gain_pts": 4.323818349713108,
   "no_drift_gain_rates": [
     0,
     16,
