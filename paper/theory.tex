@@ -127,13 +127,45 @@ Every point on the lower boundary is $a^\star_\lambda$ for some $\lambda\ge0$;
 no assignment outside this family is efficient.
 \end{corollary}
 
-\begin{remark}[What is \emph{not} claimed]\label{rem:notclaimed}
-$D$ is convex in $C$ by Theorem~\ref{thm:minkowski}, but the frontier is usually
-plotted as decibels against percentage saving, i.e.\ $\mathrm{dB}(S)=10\log_{10}D$
-with $S=1-C/C_{K-1}$. Since $\log$ is concave and increasing, $\log\circ D$ need
-be neither convex nor concave, and no such claim follows from the above. We find
-it convex empirically (Table~\ref{tab:marginal}); we do not prove it.
-\end{remark}
+Corollary~\ref{cor:sweep} is the discrete-set bit-allocation argument of Shoham
+and Gersho \cite{shoham1988}, here with compute in place of rate; we restate it
+because Theorem~\ref{thm:gain} is what it licenses, not the other way round.
+
+\subsection{Convexity in the units the frontier is plotted in}
+
+Theorem~\ref{thm:minkowski} gives $D$ convex in $C$. The frontier is almost
+always \emph{plotted} as decibels against percentage saving,
+$\mathrm{dB}(S)=10\log_{10}D$ with $S=1-C/C_{K-1}$, and convexity there is a
+strictly different statement: $\log$ is concave and increasing, so $\log\circ D$
+inherits neither property. The next result says exactly what is required.
+
+\begin{proposition}[Convexity in $(S,\mathrm{dB})$]\label{prop:logconvex}
+Let $D$ be twice differentiable along the frontier. Then $\mathrm{dB}(S)$ is
+convex if and only if $D$ is \emph{log-convex} in $C$,
+\begin{equation}\label{eq:logconvex}
+D\,D''\;\ge\;(D')^2 .
+\end{equation}
+Equivalently, writing $\lambda(C)=-D'(C)$ for the multiplier of
+Proposition~\ref{prop:legendre},
+\begin{equation}\label{eq:lambda-form}
+\frac{d}{dC}\Bigl(\frac{1}{\lambda}\Bigr)\;\ge\;\frac{1}{D},
+\end{equation}
+i.e.\ distortion must fall at least exponentially in compute.
+\end{proposition}
+
+Condition~\eqref{eq:logconvex} is a property of the decoder, not a consequence
+of Theorems~\ref{thm:minkowski}--\ref{thm:gain}: a convex $D$ can fail it. It is
+also directly checkable, and we check it (Table~\ref{tab:logconvex}) rather than
+assume it. Two remarks make the differentiability hypothesis benign. Under
+fixed-proportion mixing the hull has only $|\mathcal{K}|$ vertices and $D$ is
+piecewise linear, so $\mathrm{dB}$ is piecewise \emph{concave} with upward
+derivative jumps at vertices --- neither convex nor concave, and the apparent
+shape depends entirely on where one samples. Under per-tile assignment
+(Theorem~\ref{thm:minkowski}) the hull is a Minkowski average of $N$ hulls and
+carries up to $N(|\mathcal{K}|-1)$ vertices, $\sim\!400$ for a 1080p frame at
+$128$px tiles, so it is smooth at any scale one plots. The two cases are
+genuinely different and conflating them is how one arrives at a confident
+statement about a shape that is an artefact of vertex spacing.
 
 \section{Experiments}
 
@@ -204,6 +236,27 @@ largest where the deep blocks are doing real work (high rate). A method
 evaluated only at low rate would understate its own contribution by a factor of
 six.
 
+
+\begin{table}[h]\centering\small
+\caption{Test of condition~\eqref{eq:logconvex} along the measured per-tile
+frontier: fraction of the frontier on which $(\ln D)''\ge0$, and the smallest
+value attained. The condition holds everywhere, with a margin that grows with
+rate, so $\mathrm{dB}(S)$ is convex here --- by Proposition~\ref{prop:logconvex}
+and measurement, not by assumption.}
+\label{tab:logconvex}
+\begin{tabular}{lrrr}
+\toprule
+QP & frontier points & condition holds & $\min(\ln D)''$ \\
+\midrule
+0  & 15 & 100\% & 0.2805 \\
+16 & 14 & 100\% & 0.3062 \\
+32 & 13 & 100\% & 0.4757 \\
+48 & 12 & 100\% & 0.6474 \\
+63 & 12 & 100\% & 0.7888 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
 \section{Proofs}
 
 \begin{proof}[Proof of Proposition~\ref{prop:hull}]
@@ -260,6 +313,23 @@ unique minimiser of some linear functional, and non-exposed boundary points are
 limits of exposed ones.
 \end{proof}
 
+\begin{proof}[Proof of Proposition~\ref{prop:logconvex}]
+$\mathrm{dB}(S)=\frac{10}{\ln 10}\ln D(C(S))$ with $C(S)=(1-S)C_{K-1}$ affine in
+$S$, and convexity is preserved under affine reparametrisation, so
+$\mathrm{dB}$ is convex in $S$ iff $\ln D$ is convex in $C$. Differentiating
+twice,
+\[
+(\ln D)'' \;=\; \frac{D''}{D}-\Bigl(\frac{D'}{D}\Bigr)^2
+\;=\;\frac{D\,D''-(D')^2}{D^2},
+\]
+and $D>0$, so $(\ln D)''\ge0$ iff $D D''\ge (D')^2$, which is
+\eqref{eq:logconvex}. For \eqref{eq:lambda-form}, substitute $D'=-\lambda$ and
+$D''=-\lambda'$ to get $-\lambda' D\ge\lambda^2$; dividing by $\lambda^2>0$ gives
+$-\lambda'/\lambda^2\ge 1/D$, and $-\lambda'/\lambda^2=\frac{d}{dC}(1/\lambda)$.
+Finally, $\ln D$ convex with $D$ decreasing means $\ln D$ falls no more slowly
+than linearly in $C$, i.e.\ $D$ decays at least exponentially.
+\end{proof}
+
 \begin{remark}[Scope]
 Theorem~\ref{thm:gain} bounds what adaptivity is worth, not what is realisable
 by a decoder that must \emph{infer} the assignment. In our system that
@@ -268,5 +338,11 @@ $\lceil\log_2|\mathcal{K}|\rceil$ bits per tile, entropy-coded to
 $1.3\times10^{-4}$~bpp --- four orders of magnitude below the rates in
 Table~\ref{tab:exits}.
 \end{remark}
+
+\begin{thebibliography}{1}\small
+\bibitem{shoham1988} Y.~Shoham and A.~Gersho. Efficient bit allocation for an
+arbitrary set of quantizers. \emph{IEEE Trans.\ Acoustics, Speech and Signal
+Processing}, 36(9):1445--1453, 1988.
+\end{thebibliography}
 
 \end{document}
