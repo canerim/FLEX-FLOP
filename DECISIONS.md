@@ -3250,3 +3250,27 @@ boyunca çıkış-başına ölçüm gerekir, ki bu bir deney kararı.
 İki kez düzelttim: önce olguyu mekanizmayla karıştırdım, sonra yanlış mekanizmayı
 seçtim. Kalan ifade en dar olanı ve ölçümle birebir örtüşen: **bozulma gerçek,
 derinlikle monoton, ve eğitim dağılımına özgü değil.**
+
+### 55d. Eksik kontrol, ve ne zaman gelecek
+
+Bulgu şu an tek taraflı: bozulmayı eklentileri **taşımayan** bir koşuda ölçtüm
+(CONTROL, epoch 0 → 1, iki değerlendirme kümesinde). Aynı ölçümü eklentileri
+**taşıyan** bir koşuda yapamadım.
+
+Sebebi mekanik: BEST128 ve FINE12 ara checkpoint yazıyor ama `ckpt_step.pth.tar`
+her seferinde üzerine yazılıyor, dolayısıyla 8 000 ve 16 000 adımlardaki halleri
+artık diskte yok. BEST'in ise henüz tek epoch checkpoint'i var.
+
+BEST epoch 1'i bitirdiğinde (~15 saat) `ckpt_epo0` korunmuş olarak duruyor ve
+epoch 1 `status_latest`'ten terfi edecek — yani **aynı öncesi/sonrası** ölçümü
+BEST'te yapılabilecek. Beklenen: bozulma yok ya da çok daha küçük, çünkü
+sinyalli ölçümü zaten iyileşiyor (BEST128 8 000 → 16 000 arasında qp32–63'te
++0.8 ile +1.2 puan).
+
+O ölçüm gelene kadar kurulan şey "eklentisiz koşu bozuluyor"dur, "eklentiler
+bozulmayı önlüyor" değil. İkisi arasındaki fark, kontrolün varlığıdır.
+
+Not: `ckpt_step`'in üzerine yazılması bugün ikinci kez maliyet çıkardı (ilki:
+iki dosyanın aynı yolu gösterip farklı ağırlıkları ölçmesi). Ara checkpoint'leri
+adıma göre adlandırmak bunu çözerdi ama koşan deneye dokunmak gerekir; sonraki
+tura not.
