@@ -41,6 +41,18 @@ case "${1:-list}" in
       disown
     done
     sleep 3; pids ;;
-  restart) "$0" stop; sleep 2; "$0" start ;;
+  restart)
+    # A watcher killed mid-evaluation leaves its `( flock 9 ... )` subshell
+    # running, reparented to init. It finishes its work correctly, but it still
+    # holds the lock, so anything queued behind it waits -- and the restarted
+    # watcher may queue a second evaluation of the same checkpoint behind it.
+    # Warn rather than kill: interrupting a measurement halfway is worse than
+    # letting it finish.
+    if fuser /tmp/flexuf_eval.lock >/dev/null 2>&1; then
+      echo "note: an evaluation holds the lock and will be orphaned by this"
+      echo "      restart. It completes on its own; check with"
+      echo "      'fuser -v /tmp/flexuf_eval.lock' before queueing more work."
+    fi
+    "$0" stop; sleep 2; "$0" start ;;
   *) echo "usage: watchers.sh [list|start|stop|restart]"; exit 1 ;;
 esac
