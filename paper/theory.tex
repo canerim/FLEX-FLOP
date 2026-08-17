@@ -109,7 +109,7 @@ with equality if and only if some $k^\star\in\arg\min_k[D_i(k)+\lambda C_k]$ is
 common to all $i\in[N]$.
 \end{theorem}
 
-$\Delta(\lambda)$ is computable from the $D_i(k)$ alone. It upper-bounds what
+The quantities in \eqref{eq:J} depend only on the $D_i(k)$, so $\Delta(\lambda)$ is computable without building a router. It upper-bounds what
 \emph{any} router can gain over fixed proportions at that operating point, and
 is attained by the oracle assignment $a^\star_\lambda(i)\in\arg\min_k[D_i(k)+\lambda C_k]$.
 It therefore separates two questions that are routinely conflated: whether
@@ -215,8 +215,8 @@ QP & $\lambda{=}10^{-5}$ & $3{\times}10^{-5}$ & $10^{-4}$ & $3{\times}10^{-4}$\\
 \begin{table}[h]\centering\small
 \caption{Marginal dB per additional 5 points of saving, by linear interpolation
 along the measured frontier. Increasing everywhere: each further point of
-compute saved costs more than the last. This is the empirical convexity of
-Remark~\ref{rem:notclaimed}, not a consequence of the theorems.}
+compute saved costs more than the last, which is the convexity characterised in
+Proposition~\ref{prop:logconvex} and verified in Table~\ref{tab:logconvex}.}
 \label{tab:marginal}
 \begin{tabular}{lrrrr}
 \toprule
@@ -229,7 +229,7 @@ QP & $10\!\to\!15$ & $15\!\to\!20$ & $20\!\to\!25$ & $25\!\to\!30$ \\
 \end{tabular}
 \end{table}
 
-Table~\ref{tab:delta} is the paper's empirical point. The value of content
+Table~\ref{tab:marginal} shows the frontier's shape and Table~\ref{tab:delta} is the paper's empirical point. The value of content
 adaptivity is not constant: it is smallest exactly where a uniformly shallower
 decoder would already do (low rate, Table~\ref{tab:exits} left column) and
 largest where the deep blocks are doing real work (high rate). A method
