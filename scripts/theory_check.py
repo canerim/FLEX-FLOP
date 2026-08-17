@@ -24,7 +24,18 @@ from flexuf.cost import exit_costs
 from flexuf.model import FlexUFIntra, load_flexuf_state
 
 dev = "cuda:0"
-CKPT = "runs/wdec_j2_p128_grid/ckpt_epo0.pth.tar"
+# Which checkpoint the paper's Table 2 illustrates. An argument, because the
+# paper should be able to illustrate the system the project reports without a
+# source edit -- and because the curve, why_qp and this must all move together:
+# Tables 1, 2 and 4 draw on them, and mixing checkpoints across tables would be
+# worse than leaving all three on an older one.
+import argparse
+_ap = argparse.ArgumentParser()
+_ap.add_argument("--ckpt", default="runs/wdec_j2_p128_grid/ckpt_epo0.pth.tar")
+_ap.add_argument("--curve", default="results/paper_curve_grid128.json")
+_ap.add_argument("--out", default="results/theory_check.json")
+_a = _ap.parse_args()
+CKPT = _a.ckpt
 ck = torch.load(CKPT, map_location="cpu", weights_only=False)
 cfg = FlexUFConfig(**ck["config"]) if "config" in ck else FlexUFConfig()
 net = FlexUFIntra(cfg).to(dev).eval(); load_flexuf_state(net, ck)
@@ -83,7 +94,7 @@ for qp_v, d in out.items():
         for l in (1e-5, 3e-5, 1e-4, 3e-4)))
 
 print("\n  3) Icbukeylik: ayni segmentte marjinal dB / ek %5 tasarruf DUSMELI")
-rows = json.load(open("results/paper_curve_grid128.json"))["rows"]
+rows = json.load(open(_a.curve))["rows"]
 def db_at(qp, s):
     c = [r for r in rows if r["qp"] == qp and r["saving_pct"] >= s]
     return min(c, key=lambda r: r["db_vs_uf"])["db_vs_uf"] if c else float("nan")
@@ -96,5 +107,5 @@ for qp_v in (0, 16, 32, 48, 63):
 # model and which sequences it was measured on.
 out["_provenance"] = {"ckpt": CKPT, "n_sequences": len(measured),
                       "measured": measured}
-Path("results/theory_check.json").write_text(json.dumps(out, indent=2))
+Path(_a.out).write_text(json.dumps(out, indent=2))
 print("\n  wrote results/theory_check.json")

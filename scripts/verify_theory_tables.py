@@ -60,6 +60,12 @@ def close(a: float, b: float, tol: float = 5e-4) -> bool:
 
 
 def main() -> int:
+    import argparse
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--curve", default="paper_curve_grid128.json",
+                    help="frontier Table 3 was drawn from; must match the "
+                         "checkpoint why_qp.json and theory_check.json used")
+    a = ap.parse_args()
     bad: list[str] = []
 
     def check(where, printed, actual, tol=5e-4):
@@ -111,7 +117,7 @@ def main() -> int:
     # readout, so it is recomputed here from the same curve the table was drawn
     # from -- otherwise this script would only be checking that a number equals
     # itself.
-    pc = load("paper_curve_grid128.json")["rows"]
+    pc = load(a.curve)["rows"]
     for row in rows_of("tab:marginal"):
         qp = int(row[0])
         pts = sorted((r["saving_pct"], r["db_vs_uf"]) for r in pc if r["qp"] == qp)

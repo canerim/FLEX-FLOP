@@ -49,7 +49,12 @@ import json
 
 import numpy as np
 
-rows = json.load(open("results/paper_curve_grid128.json"))["rows"]
+import argparse
+_ap = argparse.ArgumentParser()
+_ap.add_argument("--curve", default="results/paper_curve_grid128.json")
+_ap.add_argument("--out", default="results/logconvexity.json")
+_a = _ap.parse_args()
+rows = json.load(open(_a.curve))["rows"]
 
 print("  dB(S) convex  <=>  D log-convex  <=>  secant slopes non-decreasing\n")
 print(f"  {'qp':>4}{'pts':>6}{'holds':>9}{'margin':>11}{'quartic':>10}"
@@ -81,7 +86,7 @@ for qp in (0, 16, 32, 48, 63):
     print(f"  {qp:>4}{len(S):>6}{frac:>8.1f}%{step.min():>11.4f}{quart:>9.1f}%"
           f"   {f'{first:.0f}% saving' if first else 'none'}")
 
-json.dump(out, open("results/logconvexity.json", "w"), indent=2)
+json.dump(out, open(_a.out, "w"), indent=2)
 print("\n  margin = smallest increase in secant slope; >= 0 is the condition.")
 print("  quartic = the old degree-4 fit, kept as a second opinion. It is")
 print("  untrustworthy near the 43.4% ceiling, where the frontier is nearly")

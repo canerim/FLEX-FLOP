@@ -57,6 +57,9 @@ def splice(src: str, label: str, body: str) -> str:
 
 def main(argv):
     ap = argparse.ArgumentParser()
+    ap.add_argument("--curve", default="paper_curve_grid128.json",
+                    help="frontier feeding Table 3; must be the same checkpoint "
+                         "as why_qp.json and theory_check.json")
     ap.add_argument("--check", action="store_true",
                     help="report claim status without touching the file")
     a = ap.parse_args(argv)
@@ -127,7 +130,7 @@ def main(argv):
                     f"{worst[-1] / worst[0]:.1f}x")
 
     # ---- Table 3: marginal dB per +5 points, interpolated ------------------
-    pc = load("paper_curve_grid128.json")["rows"]
+    pc = load(a.curve)["rows"]
     rows = []
     for qp in (0, 32, 63):
         pts = sorted((r["saving_pct"], r["db_vs_uf"]) for r in pc if r["qp"] == qp)
