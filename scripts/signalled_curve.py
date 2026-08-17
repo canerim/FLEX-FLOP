@@ -111,6 +111,16 @@ def map_bits(k, K):
     coder with a per-frame histogram spends its entropy. Reported this way rather
     than as the 2-bit worst case because the worst case is not what a codec
     would ship, and overstating our own cost is as wrong as understating it.
+
+    One overstatement remains, deliberately. Under j=2 the exits 0, 1 and 2 all
+    cost the same -- the first j groups run full-frame for every tile -- so a
+    real codec would signal four symbols, not six, and argmin scatters the
+    cheapest allocation across three indices that this entropy counts
+    separately. Measured, that inflates the map by at most 7 bits per frame at
+    qp0 and by 0 at qp63, against 218-266 bits total. Left as it is: the number
+    is then an upper bound on a cost already four orders of magnitude below the
+    frame, and a bound in the safe direction is worth more than 3% of a
+    negligible quantity.
     """
     p = torch.bincount(k, minlength=K).float()
     p = p / p.sum()
