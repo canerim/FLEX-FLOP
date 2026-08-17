@@ -17,10 +17,20 @@ environments, so the printed numbers move whenever an assumption is added.
 | *Adaptivity gain* | their gap is `min-of-average − average-of-min ≥ 0`, zero iff every tile prefers the same exit |
 | *Frontier recovery* | the frontier is the Fenchel conjugate of the Lagrangian value; a λ-sweep is exhaustive |
 | *Convexity in (S, dB)* | convex **iff** `D·D'' ≥ (D')²`, i.e. iff distortion falls at least exponentially in compute |
+| *The frontier has a floor* | if the deepest exit drifts `δ` from the reference, the whole achievable set shifts up by `δ` and a budget below it is unreachable at every assignment |
 
 *Adaptivity gain* is the point. `Δ(λ)` depends only on the per-tile distortions, so the
 value of content adaptivity can be measured before any router exists — which
 separates *is adaptivity worth anything here* from *does this router realise it*.
+
+*The frontier has a floor* is the one that changes what a number means. Every
+table is quoted "dB below the released decoder", and the derivation assumes the
+deepest exit reproduces it — which nothing enforces, because the exits are
+trained. Measured: the same ladder under the released recipe with no term tying
+the deepest exit to the reference drifts `0.146`–`0.217` dB in one epoch,
+against `0.003`–`0.033` with one. The first exceeds a 0.1 dB budget outright.
+Reporting a saving without the floor states where a curve sits on an axis whose
+origin has moved.
 
 *Convexity in (S, dB)* is an equivalence, not an assertion: it does **not**
 follow from the two hull results, because `dB` is a logarithm of `D` and the
