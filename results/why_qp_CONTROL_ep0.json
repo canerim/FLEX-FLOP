@@ -1,0 +1,94 @@
+{
+  "ckpt": "runs/CONTROL/ckpt_epo0.pth.tar",
+  "ref": "runs/warmstart/ckpt_warmstart.pth.tar",
+  "frames_per_seq": 2,
+  "n_sequences": 40,
+  "measured": [
+    "Beauty_1920x1080_120fps_420_8bit_YUV.yuv",
+    "Bosphorus_1920x1080_120fps_420_8bit_YUV.yuv",
+    "HoneyBee_1920x1080_120fps_420_8bit_YUV.yuv",
+    "Jockey_1920x1080_120fps_420_8bit_YUV.yuv",
+    "ReadySteadyGo_1920x1080_120fps_420_8bit_YUV.yuv",
+    "ShakeNDry_1920x1080_120fps_420_8bit_YUV.yuv",
+    "YachtRide_1920x1080_120fps_420_8bit_YUV.yuv",
+    "videoSRC01_1920x1080_30.yuv",
+    "videoSRC02_1920x1080_30.yuv",
+    "videoSRC03_1920x1080_30.yuv",
+    "videoSRC04_1920x1080_30.yuv",
+    "videoSRC05_1920x1080_25.yuv",
+    "videoSRC06_1920x1080_25.yuv",
+    "videoSRC07_1920x1080_25.yuv",
+    "videoSRC08_1920x1080_25.yuv",
+    "videoSRC09_1920x1080_25.yuv",
+    "videoSRC10_1920x1080_30.yuv",
+    "videoSRC11_1920x1080_30.yuv",
+    "videoSRC12_1920x1080_30.yuv",
+    "videoSRC13_1920x1080_30.yuv",
+    "videoSRC14_1920x1080_30.yuv",
+    "videoSRC15_1920x1080_30.yuv",
+    "videoSRC16_1920x1080_30.yuv",
+    "videoSRC17_1920x1080_24.yuv",
+    "videoSRC18_1920x1080_25.yuv",
+    "videoSRC19_1920x1080_30.yuv",
+    "videoSRC20_1920x1080_25.yuv",
+    "videoSRC21_1920x1080_24.yuv",
+    "videoSRC22_1920x1080_24.yuv",
+    "videoSRC23_1920x1080_24.yuv",
+    "videoSRC24_1920x1080_24.yuv",
+    "videoSRC25_1920x1080_24.yuv",
+    "videoSRC26_1920x1080_30.yuv",
+    "videoSRC27_1920x1080_30.yuv",
+    "videoSRC28_1920x1080_30.yuv",
+    "videoSRC29_1920x1080_24.yuv",
+    "videoSRC30_1920x1080_30.yuv",
+    "FourPeople_1280x720_60.yuv",
+    "Johnny_1280x720_60.yuv",
+    "KristenAndSara_1280x720_60.yuv"
+  ],
+  "cost": [
+    0.571596622467041,
+    0.571596622467041,
+    0.571596622467041,
+    0.72066330909729,
+    0.8697299361228943,
+    1.009507179260254
+  ],
+  "rows": [
+    {
+      "qp": 0,
+      "db_per_exit": [
+        3.774625778198242,
+        3.146214008331299,
+        0.5159707069396973,
+        0.2679904103279114,
+        0.07125817984342575,
+        0.0143966656178236
+      ],
+      "bpp": 0.22257189601659774
+    },
+    {
+      "qp": 32,
+      "db_per_exit": [
+        5.242142677307129,
+        4.437919616699219,
+        0.9614871740341187,
+        0.5189285278320312,
+        0.1217513382434845,
+        0.036119766533374786
+      ],
+      "bpp": 0.296670369617641
+    },
+    {
+      "qp": 63,
+      "db_per_exit": [
+        7.209427833557129,
+        6.362901210784912,
+        1.728532075881958,
+        0.9539672136306763,
+        0.19673368334770203,
+        0.05462644621729851
+      ],
+      "bpp": 0.5465213008224964
+    }
+  ]
+}
