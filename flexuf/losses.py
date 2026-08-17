@@ -83,6 +83,12 @@ def exit_weights(
     # loss's exit weight trains exits that can never save more compute than
     # exit 2 and are usually worse.
     #
+    # The fraction is a property of the j-split, not of K: K=6/j=2 has 2 of 6
+    # dominated and K=12/j=4 has 4 of 12, both a third. So a finer ladder does
+    # not waste proportionally more -- FINE12 buys 8 distinct operating points
+    # against BEST's 4 at the same overhead, which is what it was built to do.
+    # (I expected the opposite and checked before writing it down.)
+    #
     # Not obviously waste: on roughly an eighth of the tiles that take the
     # cheapest cost, exit 0 or 1 genuinely reconstructs better than exit 2, and
     # that choice is free because the three share a cost. So the question is
