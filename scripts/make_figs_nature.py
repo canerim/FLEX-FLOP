@@ -204,3 +204,40 @@ if sg and pc:
         Line2D([], [], color=ns.VERM, marker="X", ls="", ms=5, label="predicting router"),
     ], loc="upper left")
     save(fig, "nf_router.png")
+
+# Where the tiles actually exit, and why lowering the split depth is the wrong
+# lever. The ceiling (all tiles at the shallowest exit) is set by j: 43.4% at
+# j=2, 58.1% at j=1, 72.9% at j=0. Raising it only helps if the shallowest exit
+# is ALREADY saturated -- and it is, at low rate, where 34% of tiles take it.
+# At qp 63 only 10% can afford it and the mass sits at exits 4-5, so an even
+# cheaper exit would be selected by almost nobody. The gap at high rate is
+# shallow-exit QUALITY, not the number of exits below.
+pc2 = J("paper_curve_grid128.json")
+if pc2:
+    fig, a = plt.subplots(figsize=(ns.W15, 1.9))
+    qps = [0, 16, 32, 48, 63]
+    rows = []
+    for q in qps:
+        cand = [r for r in pc2["rows"] if r["qp"] == q and r["db_vs_uf"] <= 0.105]
+        rows.append(max(cand, key=lambda r: r["saving_pct"]))
+    cols = [ns.BLUE, ns.SKY, ns.GREEN, ns.YELLOW, ns.ORANGE, ns.VERM]
+    bot = np.zeros(len(qps))
+    x = np.arange(len(qps))
+    for k in range(2, 6):
+        v = np.array([100 * r["hist"][k] / sum(r["hist"]) for r in rows])
+        a.bar(x, v, .62, bottom=bot, color=cols[k], label=f"exit {k}",
+              edgecolor="white", linewidth=.4)
+        for xi, (b_, v_) in enumerate(zip(bot, v)):
+            if v_ > 6:
+                # Okabe-Ito yellow is the only light swatch here; the other
+                # three need white text to stay legible.
+                a.text(xi, b_ + v_ / 2, f"{v_:.0f}", ha="center", va="center",
+                       fontsize=5.5, color=ns.INK if k == 3 else "white")
+        bot += v
+    a.set_xticks(x); a.set_xticklabels([f"qp {q}" for q in qps])
+    a.set_ylabel("Share of tiles (%)"); a.set_ylim(0, 100)
+    a.grid(axis="y", visible=False)
+    a.legend(loc="upper center", bbox_to_anchor=(.5, -.13), ncol=4, frameon=False)
+    a.set_title("Shallowest exit saturates at low rate, starves at high rate",
+                fontsize=6, color=ns.INK2, loc="left")
+    save(fig, "nf_usage.png")
