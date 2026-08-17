@@ -241,3 +241,53 @@ if pc2:
     a.set_title("Shallowest exit saturates at low rate, starves at high rate",
                 fontsize=6, color=ns.INK2, loc="left")
     save(fig, "nf_usage.png")
+
+# The trade-off in two integrated numbers, plus what the anchor is worth.
+bd = J("bd_saving.json")
+if bd:
+    fig, ax = plt.subplots(1, 2, figsize=(ns.W2, 2.0))
+    rs = bd["rows"]
+    x = np.arange(len(rs))
+    lab = [f"qp {r['qp']}" for r in rs]
+    got = [r["bd_saving_pct"] for r in rs]
+    extra = [(r["bd_saving_pct_zero_drift"] - r["bd_saving_pct"])
+             if r["bd_saving_pct_zero_drift"] is not None else 0.0 for r in rs]
+
+    ax[0].bar(x, got, .62, color=ns.BLUE, label="measured")
+    ax[0].bar(x, extra, .62, bottom=got, color="none", edgecolor=ns.BLUE,
+              hatch="////", linewidth=.5, label="if the deepest exit did not drift")
+    for xi, (g, e) in enumerate(zip(got, extra)):
+        ax[0].text(xi, g / 2, f"{g:.0f}", ha="center", va="center", fontsize=5.5,
+                   color="white")
+        if e:
+            ax[0].text(xi, g + e + 1.0, f"+{e:.1f}", ha="center", fontsize=5,
+                       color=ns.BLUE)
+    lo, hi = bd["db_interval"]
+    ax[0].set_ylabel("BD-saving (%)")
+    ax[0].set_ylim(0, 48)
+    ax[0].legend(loc="upper right", fontsize=5.5)
+    ax[0].grid(axis="y", visible=False)
+
+    ax[1].plot(x, [r["bd_quality_db"] for r in rs], marker="o", ms=4,
+               color=ns.VERM, lw=1.0)
+    for xi, r in enumerate(rs):
+        ax[1].annotate(f"{r['bd_quality_db']:.3f}", (xi, r["bd_quality_db"]),
+                       fontsize=5.5, color=ns.VERM, textcoords="offset points",
+                       xytext=(0, 6), ha="center")
+    slo, shi = bd["saving_interval"]
+    ax[1].set_ylabel("BD-quality (dB)")
+    ax[1].set_ylim(0, .17)
+
+    for a_ in ax:
+        a_.set_xticks(x); a_.set_xticklabels(lab)
+    ns.panel(ax[0], "a"); ns.panel(ax[1], "b")
+    # Intervals belong in the titles: a BD number without the interval it was
+    # integrated over is not a number, and the y-label is not wide enough to
+    # carry it without colliding with the panel letter.
+    ax[0].set_title(f"What a budget buys — mean saving over dB in "
+                    f"[{lo:.2f}, {hi:.2f}]", fontsize=6, color=ns.INK2, loc="left")
+    ax[1].set_title(f"What a saving costs — mean dB over saving in "
+                    f"[{slo:.0f}%, {shi:.0f}%]", fontsize=6, color=ns.INK2,
+                    loc="left")
+    fig.tight_layout()
+    save(fig, "nf_tradeoff.png")
