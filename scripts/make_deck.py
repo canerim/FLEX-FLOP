@@ -82,6 +82,30 @@ def target_line():
     return f"The 30% target is cleared by {out[0]}, and by {out[1]}"
 
 
+def gap_line():
+    """Where the remaining distance to the 30% target actually lies.
+
+    Quoting the saving at 0.1 dB says how much we get; reading the frontier the
+    other way says how much more it would take, in the units the target is
+    written in. The split into drift and everything else is what decides which
+    knob to turn: at qp0 the floor is the WHOLE overspend, so tightening the
+    anchor clears the target on its own."""
+    g = load("target_gap.json")
+    if not g:
+        return "target gap not computed"
+    ok = [r for r in g["rows"] if r.get("reachable")]
+    if not ok:
+        return "the 30% target is not reachable at any rate on this checkpoint"
+    lo, hi = ok[0], ok[-1]
+    return (f"30% costs {lo['db_for_target']:.3f} dB at qp{lo['qp']} "
+            f"({lo['overspend_db']:+.3f} over budget, "
+            f"{lo['floor_share_pct']:.0f}% of it the anchor's floor) and "
+            f"{hi['db_for_target']:.3f} dB at qp{hi['qp']} "
+            f"({hi['db_for_target'] / g['budget_db']:.1f}× the budget, "
+            f"{hi['floor_share_pct']:.0f}% floor) — low rate is a drift "
+            f"problem, high rate an exit-quality one")
+
+
 def spread_ratio(qp=63):
     """Best-to-worst sequence ratio at a 0.1 dB budget.
 
@@ -181,12 +205,18 @@ def slide_fig(title, img, items, top=None, height=None, size=13, top_txt=None):
     bullets(s, items, size)
     p = R / "results" / img
     if p.exists():
-        avail_h = 7.5 - top - 0.45          # leave the footer rule clear
-        pic = s.shapes.add_picture(str(p), Inches(0.45), Inches(top),
-                                   height=Inches(max(0.8, avail_h)))
-        if pic.width > Inches(9.1):
-            sc = Inches(9.1) / pic.width
-            pic.width, pic.height = int(pic.width * sc), int(pic.height * sc)
+        # Fit to BOTH limits and take whichever binds, rather than setting the
+        # height and hoping the width lands.
+        #
+        # These figures are Nature double-column, 183mm wide against roughly
+        # 50mm tall, so on a text-heavy slide the height limit was cutting them
+        # to about 60% of the available width and leaving the rest of the row
+        # empty -- a figure too small to read while the slide had room for it.
+        avail_h = max(0.8, 7.5 - top - 0.45)   # leave the footer rule clear
+        avail_w = 9.1
+        pic = s.shapes.add_picture(str(p), Inches(0.45), Inches(top))
+        sc = min(Inches(avail_w) / pic.width, Inches(avail_h) / pic.height)
+        pic.width, pic.height = int(pic.width * sc), int(pic.height * sc)
         pic.left = int((prs.slide_width - pic.width) / 2)
     return s
 
@@ -327,24 +357,20 @@ d = {q: th[str(q)]["delta"]["3e-05"] for q in (0, 32, 63)} if th else None
 slide_fig("Theory, and where we are", "nf_heterogeneity.png", [
  (0, "Cost is additive over tiles and MSE is a mean over tiles → both affine in "
      "the assignment", True),
- (1, "fixed proportions reach exactly the convex hull of the K exit points", False),
- (1, "per-tile assignment reaches the Minkowski average of the N tile hulls", False),
+ (1, "fixed proportions reach the convex hull of the K exit points; per-tile "
+     "assignment reaches the Minkowski average of the N tile hulls", False),
  (1, "their gap is min-of-average − average-of-min ≥ 0, zero iff every tile "
      "prefers the same exit — this IS the value of adaptivity", False),
  (0, f"Measured: Δ/J rises {100*d[0]['delta']/d[0]['J_oracle']:.2f}% → "
      f"{100*d[63]['delta']/d[63]['J_oracle']:.2f}% with rate"
      if d else "Measured: Δ/J rises with rate", True),
- (0, f"Same mechanism one level up: at 0.1 dB the best CTC sequence saves "
-     f"{spread_ratio():.1f}× what the worst does at qp63, against "
-     f"{spread_ratio(0):.1f}× at qp0 — the mean is not what a clip gets", True),
- (0, "Open, and stated as open:", True),
- (1, target_line() + " — asserted as 'comfortably met at 0.3 dB' until the "
-     "dB convention was corrected, which is why it is computed here", False),
- (1, "256px tiles: seam halves but saving drops — isolated to the CHECKPOINT, "
-     "not the tile size (tile effect 0.4–1.5 pts, weight effect 12.4)", False),
- (1, "HEVC classes B/C/D behind JVET credentials, reported as NOT MEASURED", False),
- (0, "6 runs training on 6 GPUs: BEST, BEST128 (tile isolated), CONTROL, "
-     "FINE12 (one exit per block), RECIPE512, VERBATIM", False),
+ (0, f"Same mechanism one level up: best/worst CTC sequence is "
+     f"{spread_ratio():.1f}× at qp63 vs {spread_ratio(0):.1f}× at qp0 — "
+     f"the mean is not what a clip gets", True),
+ (0, "What is left, in the target's own units:", True),
+ (1, gap_line(), False),
+ (0, "Open: " + target_line() + "; HEVC B/C/D behind JVET credentials, "
+     "reported as NOT MEASURED; 6 runs training on 6 GPUs", True),
 ], size=11)
 
 out = R / "paper" / "FLEX-UF_LMT.pptx"
