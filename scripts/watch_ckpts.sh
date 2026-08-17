@@ -93,7 +93,22 @@ print(f\"epoch {c.get('epoch')} step {c.get('step','-')}\")" 2>/dev/null)
       CURVE="results/curve_${TAG}.json"
       CUDA_VISIBLE_DEVICES="$GPU" ./.venv/bin/python -u scripts/paper_curve.py \
         --ckpt "$NEW" --device cuda:0 --out "$CURVE" 2>&1 | tail -8
+      # The interval is PINNED, not derived.
+      #
+      # bd_saving's default lower limit is the largest per-rate floor of the
+      # curve it is given. That makes each checkpoint's number internally
+      # sound and mutually incomparable: BEST128's tighter anchor put its floor
+      # at 0.033 where the reference sits at 0.064, so the two were integrated
+      # over different intervals and BEST128 looked 1.1 points WORSE. Over the
+      # same interval it is 0.6 points better. The mistake is the one this
+      # script's own docstring warns about between rates, made between
+      # checkpoints instead.
+      #
+      # 0.064 is the reference checkpoint's largest floor. A checkpoint whose
+      # own floor exceeds it will report n/a for that rate rather than quietly
+      # integrating a shorter span.
       ./.venv/bin/python scripts/bd_saving.py --curve "$CURVE" \
+        --db_lo 0.064 --db_hi 0.30 \
         --out "results/bd_${TAG}.json" 2>&1 | tail -10
 
       # 5. Do the two paths still agree? They reach the same quantity through

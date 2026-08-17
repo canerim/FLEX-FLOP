@@ -1,0 +1,53 @@
+{
+  "curve": "results/curve_BEST128.json",
+  "ckpt": "runs/BEST128/ckpt_step.pth.tar",
+  "target_pct": 30.0,
+  "budget_db": 0.1,
+  "rows": [
+    {
+      "qp": 0,
+      "saved_at_budget": 28.289394573487314,
+      "db_for_target": 0.116739725571722,
+      "overspend_db": 0.016739725571722,
+      "floor_db": 0.0018096521962434053,
+      "floor_share_pct": 10.810524870852158,
+      "reachable": true
+    },
+    {
+      "qp": 16,
+      "saved_at_budget": 24.87456520145715,
+      "db_for_target": 0.14882755166500936,
+      "overspend_db": 0.04882755166500935,
+      "floor_db": 0.010130039416253567,
+      "floor_share_pct": 20.74656432858362,
+      "reachable": true
+    },
+    {
+      "qp": 32,
+      "saved_at_budget": 20.379975236623764,
+      "db_for_target": 0.2080564167465502,
+      "overspend_db": 0.1080564167465502,
+      "floor_db": 0.019773274660110474,
+      "floor_share_pct": 18.299028651384326,
+      "reachable": true
+    },
+    {
+      "qp": 48,
+      "saved_at_budget": 16.987448597027274,
+      "db_for_target": 0.25267595250658925,
+      "overspend_db": 0.15267595250658925,
+      "floor_db": 0.02811528742313385,
+      "floor_share_pct": 18.415007053530868,
+      "reachable": true
+    },
+    {
+      "qp": 63,
+      "saved_at_budget": 13.78739846862432,
+      "db_for_target": 0.3242941936569092,
+      "overspend_db": 0.2242941936569092,
+      "floor_db": 0.03290952369570732,
+      "floor_share_pct": 14.672481333175863,
+      "reachable": true
+    }
+  ]
+}
