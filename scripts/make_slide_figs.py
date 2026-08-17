@@ -17,6 +17,9 @@ import torch.nn.functional as F
 import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+import naturestyle as ns
+ns.apply()
 from matplotlib.patches import Rectangle
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
@@ -27,8 +30,8 @@ from flexuf.config import FlexUFConfig
 from flexuf.cost import exit_costs
 from flexuf.model import FlexUFIntra, load_flexuf_state
 
-SUR, INK, INK2, INK3 = "#ffffff", "#0b0b0b", "#52514e", "#8a8985"
-TUM = "#0065BD"
+SUR, INK, INK2, INK3 = "#ffffff", "#000000", "#4d4d4d", "#4d4d4d"
+TUM = ns.BLUE
 dev = "cuda:0"   # index within CUDA_VISIBLE_DEVICES, not the physical card
 
 ck = torch.load("runs/CONTROL/ckpt_epo0.pth.tar", map_location="cpu", weights_only=False)
@@ -66,63 +69,63 @@ def rgb(t, r, c, n=384):
 
 R0, C0 = 380, 900
 ks = [2, 3, 4, 5]
-fig, ax = plt.subplots(2, len(ks) + 1, figsize=(15, 6.4), facecolor=SUR)
+fig, ax = plt.subplots(2, len(ks) + 1, figsize=(ns.W2, 3.1), facecolor=SUR)
 ref_c = rgb(full, R0, C0)
-ax[0][0].imshow(ref_c); ax[0][0].set_title("yayinlanmis DCVC-UF", color=TUM, fontsize=11)
+ax[0][0].imshow(ref_c); ax[0][0].set_title("Released DCVC-UF", color=TUM, fontsize=7)
 ax[1][0].axis("off")
-ax[1][0].text(0.5, 0.5, "hata haritalari\n(x25 guclendirilmis)", ha="center", va="center",
-              color=INK2, fontsize=10, transform=ax[1][0].transAxes)
+ax[1][0].text(0.5, 0.5, "Error maps\n(amplified ×25)", ha="center", va="center",
+              color=INK2, fontsize=7, transform=ax[1][0].transAxes)
 for j, k in enumerate(ks, start=1):
     c = rgb(outs[k], R0, C0)
     e = np.abs(c - ref_c).mean(-1)
     ax[0][j].imshow(c)
     sv = 100 * (1 - cost[k] / cost[-1]).item()
     d = 10 * torch.log10(((outs[k] - xp) ** 2).mean() / ((full - xp) ** 2).mean())
-    ax[0][j].set_title(f"cikis {k}\n%{sv:.0f} tasarruf, {d.item():+.3f} dB",
-                       color=INK, fontsize=10)
+    ax[0][j].set_title(f"Exit {k}\n{sv:.0f}% saved, {d.item():+.3f} dB",
+                       color=INK, fontsize=7)
     ax[1][j].imshow(np.clip(e * 25, 0, 1), cmap="inferno", vmin=0, vmax=1)
 for a in ax.ravel():
     a.set_xticks([]); a.set_yticks([])
 for a in ax[1][1:]:
     a.set_xticks([]); a.set_yticks([])
-fig.suptitle("Bosphorus 1080p, qp32 — ayni bitstream, farkli cikislar",
-             color=INK, fontsize=12.5, x=0.02, ha="left")
+fig.suptitle("Bosphorus 1080p, qp 32 — identical bitstream, different exits",
+             color=INK, fontsize=8, x=0.02, ha="left")
 fig.tight_layout(rect=[0, 0, 1, 0.94])
-fig.savefig("results/fig_exits.png", dpi=140, facecolor=SUR)
-print("wrote results/fig_exits.png")
+fig.savefig("results/nf_exits.png", dpi=300, facecolor=SUR, bbox_inches="tight")
+print("wrote results/nf_exits.png")
 
 # ---- architecture, drawn to measured MAC shares -------------------------
-fig, a = plt.subplots(figsize=(13.5, 3.5), facecolor=SUR)
+fig, a = plt.subplots(figsize=(ns.W2, 1.75), facecolor=SUR)
 a.set_xlim(0, 1); a.set_ylim(0, 1); a.axis("off")
 UP, TR, HD = 0.0816, 0.8944, 0.0240
 x0 = 0.04; w_up = 0.10
-a.add_patch(Rectangle((x0, .42), w_up, .28, fc="#cfe3f5", ec=TUM, lw=1.4))
-a.text(x0 + w_up/2, .56, "upsample", ha="center", va="center", fontsize=9)
-a.text(x0 + w_up/2, .36, f"{100*UP:.1f}%", ha="center", fontsize=8.5, color=INK3)
+a.add_patch(Rectangle((x0, .42), w_up, .28, fc="#cfe3f5", ec=TUM, lw=.6))
+a.text(x0 + w_up/2, .56, "upsample", ha="center", va="center", fontsize=6)
+a.text(x0 + w_up/2, .36, f"{100*UP:.1f}%", ha="center", fontsize=5.5, color=INK3)
 bw = 0.052; gap = .004; xb = x0 + w_up + .03
 for b in range(12):
     shared = b < 4
     a.add_patch(Rectangle((xb + b*(bw+gap), .42), bw, .28,
-                          fc="#cfe3f5" if shared else "#ffe6cc",
-                          ec=TUM if shared else "#d97b28", lw=1.3))
-    a.text(xb + b*(bw+gap) + bw/2, .56, str(b), ha="center", va="center", fontsize=7.5)
+                          fc="#cfe3f5" if shared else "#fce3c8",
+                          ec=TUM if shared else ns.ORANGE, lw=.6))
+    a.text(xb + b*(bw+gap) + bw/2, .56, str(b), ha="center", va="center", fontsize=5.5)
     if b in (5, 7, 9, 11):
         a.annotate("", xy=(xb + b*(bw+gap) + bw/2, .30), xytext=(xb + b*(bw+gap) + bw/2, .42),
-                   arrowprops=dict(arrowstyle="->", color="#c0392b", lw=1.6))
+                   arrowprops=dict(arrowstyle="->", color=ns.VERM, lw=.8))
         k = {5: 2, 7: 3, 9: 4, 11: 5}[b]
-        a.text(xb + b*(bw+gap) + bw/2, .245, f"cikis {k}", ha="center", fontsize=8, color="#c0392b")
+        a.text(xb + b*(bw+gap) + bw/2, .245, f"exit {k}", ha="center", fontsize=6, color=ns.VERM)
         a.text(xb + b*(bw+gap) + bw/2, .17,
-               f"%{100*(1-cost[k]/cost[-1]).item():.0f}", ha="center", fontsize=8, color=INK3)
+               f"{100*(1-cost[k]/cost[-1]).item():.0f}%", ha="center", fontsize=5.5, color=INK3)
 xh = xb + 12*(bw+gap) + .02
-a.add_patch(Rectangle((xh, .42), .07, .28, fc="#cfe3f5", ec=TUM, lw=1.4))
-a.text(xh + .035, .56, "head", ha="center", va="center", fontsize=9)
-a.text(xh + .035, .36, f"{100*HD:.1f}%", ha="center", fontsize=8.5, color=INK3)
-a.text(x0, .84, "tam kare (dikis yok)", color=TUM, fontsize=9.5)
-a.text(xb + 4*(bw+gap), .84, "tile basina — atlanabilen kisim, decode'un %89.4'u",
-       color="#d97b28", fontsize=9.5)
-a.plot([xb + 4*(bw+gap) - gap/2]*2, [.38, .78], color=INK3, ls="--", lw=1.2)
-a.text(xb + 4*(bw+gap) - gap/2, .05, "j = 2 bolunme noktasi", ha="center",
-       fontsize=8.5, color=INK3)
+a.add_patch(Rectangle((xh, .42), .07, .28, fc="#cfe3f5", ec=TUM, lw=.6))
+a.text(xh + .035, .56, "head", ha="center", va="center", fontsize=6)
+a.text(xh + .035, .36, f"{100*HD:.1f}%", ha="center", fontsize=5.5, color=INK3)
+a.text(x0, .84, "full-frame — no seams", color=TUM, fontsize=6)
+a.text(xb + 4*(bw+gap), .84, "per tile — the skippable part, 89.4% of the decode",
+       color=ns.ORANGE, fontsize=6)
+a.plot([xb + 4*(bw+gap) - gap/2]*2, [.38, .78], color=INK3, ls="--", lw=.6)
+a.text(xb + 4*(bw+gap) - gap/2, .05, "j = 2 split point", ha="center",
+       fontsize=6, color=INK3)
 fig.tight_layout()
-fig.savefig("results/fig_arch.png", dpi=140, facecolor=SUR)
-print("wrote results/fig_arch.png")
+fig.savefig("results/nf_arch.png", dpi=300, facecolor=SUR, bbox_inches="tight")
+print("wrote results/nf_arch.png")

@@ -95,7 +95,7 @@ s.placeholders[1].text = ("Decoder compute saved at a measured cost in quality\n
                           "Chair of Media Technology · TUM")
 
 # 2 -------------------------------------------------------------- the problem
-slide_fig("Problem and goal", "fig_macs.png", [
+slide_fig("Problem and goal", "nf_macs.png", [
  (0, "DCVC-UF's intra decoder: 453.5 GMAC per 1080p frame", True),
  (1, "12 identical DepthConvBlocks = 89.4% of it", False),
  (1, "every patch pays the same, however easy it is", False),
@@ -107,14 +107,14 @@ slide_fig("Problem and goal", "fig_macs.png", [
 ], size=13)
 
 # 3 --------------------------------------------------------------- architecture
-slide_fig("Architecture: a ladder of exits", "fig_arch.png", [
+slide_fig("Architecture: a ladder of exits", "nf_arch.png", [
  (0, "Shared stem runs full-frame → no seams; the rest runs per tile", True),
  (0, "Each exit has a zero-initialised 1×1 adapter, then the shared head", False),
  (0, "Pointwise on purpose: a 1×1 adds no receptive field, so no seam cost", False),
 ])
 
 # 4 ------------------------------------------------------------- the warm start
-slide_fig("We start AT DCVC-UF, not near it", "fig_warmstart.png", [
+slide_fig("We start AT DCVC-UF, not near it", "nf_warmstart.png", [
  (0, "The released weights are re-expressed in ladder form by a key remap", True),
  (1, "dec_1.0→upsample, dec_1.n→groups.g.i, dec_2→head", False),
  (1, "the remap is a bijection over 143 tensors (asserted in tests)", False),
@@ -128,7 +128,7 @@ slide_fig("We start AT DCVC-UF, not near it", "fig_warmstart.png", [
 ], size=12)
 
 # 5 -------------------------------------------------------------------- training
-slide_fig("Training: the recipe, checked not claimed", "fig_schedule.png", [
+slide_fig("Training: the recipe, checked not claimed", "nf_schedule.png", [
  (0, "scripts/verify_recipe.py compares each item against ~/DCVC/train_image.py "
      "and exits non-zero on a mismatch", True),
  (1, "8 schedule rows character for character · 106 entries", False),
@@ -144,7 +144,7 @@ slide_fig("Training: the recipe, checked not claimed", "fig_schedule.png", [
 
 # 6 ------------------------------------------------------------------- anchor
 slide_fig("The anchor, and a ×4 error caught",
-          "fig_anchor.png", [
+          "nf_anchor.png", [
  (0, "Reading the schedule from epoch 0 applied the from-scratch lr to a "
      "converged model", True),
  (1, "deepest exit fell 0.153 / 0.201 / 0.263 dB in ONE epoch (qp0/32/63)", False),
@@ -154,14 +154,14 @@ slide_fig("The anchor, and a ×4 error caught",
 ], size=13)
 
 # 7 ---------------------------------------------------------------- example
-slide_fig("What an exit costs, on one frame", "fig_exits.png", [
+slide_fig("What an exit costs, on one frame", "nf_exits.png", [
  (0, "Bosphorus 1080p, qp32, identical bitstream at every exit", True),
  (0, "Error maps ×25: the damage is structured, concentrated on detail and "
      "on tile borders — which is what the seam work targets", False),
 ], size=13)
 
 # 8 --------------------------------------------------------------------- seam
-slide_fig("The seam, and how it was removed", "fig_seam.png", [
+slide_fig("The seam, and how it was removed", "nf_seam.png", [
  (0, "A tile decoded alone meets its border with invented values", True),
  (0, "Pure seam penalty at qp63, CTC, no early exit taken:", True),
  (1, "zeros 1.167 dB · replicate 0.213 · arls 0.179 · 256px halves each", False),
@@ -176,7 +176,7 @@ slide_fig("The seam, and how it was removed", "fig_seam.png", [
 ], size=11)
 
 # 9 ------------------------------------------------------------------ honesty
-slide_fig("Cost, checked in the right unit", "fig_cost.png", [
+slide_fig("Cost, checked in the right unit", "nf_cost.png", [
  (0, "The headline is a percentage; it comes from a MAC model", True),
  (0, "MACs are right for a paper and wrong for a promise, so wall-clock was "
      "measured on a 1080p decode:", True),
@@ -189,7 +189,7 @@ slide_fig("Cost, checked in the right unit", "fig_cost.png", [
 ], size=12)
 
 # 10 ------------------------------------------------------------------ results
-s = slide_fig("Results vs the released decoder", "two_views.png", [
+s = slide_fig("Results vs the released decoder", "nf_results.png", [
  (0, f"At 0.3 dB: {sv_at(0,0.3):.0f}% (qp0) · {sv_at(32,0.3):.0f}% (qp32) · "
      f"{sv_at(63,0.3):.0f}% (qp63)", True),
  (0, f"At 0.1 dB: {sv_at(0,0.1):.0f}% · {sv_at(32,0.1):.0f}% · {sv_at(63,0.1):.0f}%"
@@ -199,7 +199,7 @@ s = slide_fig("Results vs the released decoder", "two_views.png", [
 ], size=13)
 
 # 11 ------------------------------------------------------------------ router
-slide_fig("Router: predicting failed, signalling works", "final_curve.png", [
+slide_fig("Router: predicting failed, signalling works", "nf_router.png", [
  (0, "A learned router could not reach the oracle, and 12k steps showed why", True),
  (1, "CE 0.5→0.09 while qp0 agreement moved 0.743→0.741, regret unchanged", False),
  (1, "fitting the training data 4× better and behaving identically on test "
@@ -216,7 +216,7 @@ slide_fig("Router: predicting failed, signalling works", "final_curve.png", [
 
 # 12 ---------------------------------------------------------- theory + status
 d = {q: th[str(q)]["delta"]["3e-05"] for q in (0, 32, 63)} if th else None
-slide_fig("Theory, and where we are", "fig_theory.png", [
+slide_fig("Theory, and where we are", "nf_theory.png", [
  (0, "Cost is additive over tiles and MSE is a mean over tiles → both affine in "
      "the assignment", True),
  (1, "fixed proportions reach exactly the convex hull of the K exit points", False),
@@ -231,7 +231,8 @@ slide_fig("Theory, and where we are", "fig_theory.png", [
  (1, "256px tiles: seam halves but saving drops — isolated to the CHECKPOINT, "
      "not the tile size (tile effect 0.4–1.5 pts, weight effect 12.4)", False),
  (1, "HEVC classes B/C/D behind JVET credentials, reported as NOT MEASURED", False),
- (0, "4 runs training (BEST, CONTROL, RECIPE512, VERBATIM) on 4 GPUs", False),
+ (0, "6 runs training on 6 GPUs: BEST, BEST128 (tile isolated), CONTROL, "
+     "FINE12 (one exit per block), RECIPE512, VERBATIM", False),
 ], size=11)
 
 out = R / "paper" / "FLEX-UF_LMT.pptx"

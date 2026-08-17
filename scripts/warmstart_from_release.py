@@ -67,8 +67,20 @@ def main() -> int:
     print("  loads cleanly into stock DMCI")
 
     # ---- 2. transfer into the ladder ------------------------------------
-    cfg = FlexUFConfig(split_depth=2, latent_patch=8, latent_halo=2,
-                       adapter_kind="conv1x1")
+    # K decides the key layout: with K=6 a group holds two blocks and the keys
+    # are groups.g.{0,1}; with K=12 one block and groups.g.0. A checkpoint built
+    # for one K therefore cannot load into the other, which is why K is an
+    # argument rather than a constant.
+    import os
+    K = int(os.environ.get("FLEXUF_K", "6"))
+    J = int(os.environ.get("FLEXUF_J", "2"))
+    # seam_repair="none": the warm start is the RELEASE re-expressed, and the
+    # release has no seam-repair module. Runs that want one add it with their own
+    # flag, and load_flexuf_state tolerates its absence because it is zero-init,
+    # i.e. the identity. Building it in here would make the completeness check
+    # report the release as incomplete, which it is not.
+    cfg = FlexUFConfig(num_exits=K, split_depth=J, latent_patch=8, latent_halo=2,
+                       adapter_kind="conv1x1", seam_repair="none")
     net = FlexUFIntra(cfg)
 
     non_dec = {k: v for k, v in sd.items() if not k.startswith("dec.")}
@@ -81,7 +93,12 @@ def main() -> int:
     full = dict(non_dec)
     full.update({f"dec.{k}": v for k, v in remapped.items()})
     miss, unexp = net.load_state_dict(full, strict=False)
-    bad = [k for k in miss if "adapters" not in k]
+    # Modules that did not exist in the release are expected to be missing and
+    # are zero-initialised, i.e. the identity. Anything ELSE missing means the
+    # remap dropped a real tensor and must fail loudly -- that is the whole point
+    # of this check, so the list is a whitelist and stays short.
+    NEW = ("adapters", "seam_repair", "pad_coef", "router_head")
+    bad = [k for k in miss if not any(n in k for n in NEW)]
     if bad or unexp:
         print(f"  FATAL: transfer incomplete — missing {bad[:4]} unexpected {list(unexp)[:4]}")
         return 1
@@ -113,7 +130,8 @@ def main() -> int:
         return 1
 
     OUT.mkdir(parents=True, exist_ok=True)
-    path = OUT / "ckpt_warmstart.pth.tar"
+    path = OUT / (f"ckpt_warmstart_K{cfg.num_exits}.pth.tar"
+                  if cfg.num_exits != 6 else "ckpt_warmstart.pth.tar")
     torch.save({"state_dict": net.state_dict(), "config": cfg.__dict__,
                 "provenance": "microsoft cvpr2026_image.pth.tar, ladder remap"}, path)
     (OUT / "warmstart_report.json").write_text(json.dumps({
