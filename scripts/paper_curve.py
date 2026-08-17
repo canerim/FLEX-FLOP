@@ -70,7 +70,7 @@ frames, measured = [], []
 for s in seqs:
     x, pl = C.read_frames(s["path"], s["w"], s["h"], a.frames, 1)
     if x is not None:
-        frames.append((x[0:1], pl[0]))
+        frames.append((x[0:1], pl[0], len(measured)))
         measured.append(s["name"])
 # The test set has to travel with the number. It grew from 10 sequences to 40
 # when MCL-JCV finished downloading, and two JSONs written either side of that
@@ -85,8 +85,8 @@ with torch.no_grad():
     for qp_v in a.qps:
         # Per-tile MSE at every exit, and the reference's own per-tile MSE, all
         # from the same latent.
-        per_exit, ref_mse, npx = [], [], 0
-        for x, pl in frames:
+        per_exit, ref_mse, tile_seq, npx = [], [], [], 0
+        for x, pl, seq_i in frames:
             x = x.to(dev); _, _, H, W = x.shape
             P = cfg.rgb_patch
             ph, pw = (-H) % P, (-W) % P
@@ -101,8 +101,11 @@ with torch.no_grad():
             outs = net.dec.forward_all_exits(y, q)
             per_exit.append(torch.stack([tiles(o) for o in outs], 1))
             ref_mse.append(tiles(ref.dec.forward_full(y, q)))
+            tile_seq.append(torch.full((nh * nw,), seq_i, dtype=torch.long,
+                                       device=dev))
         M = torch.cat(per_exit)          # [tiles, K] our exits
         R = torch.cat(ref_mse)           # [tiles]    released DCVC-UF
+        SEQ = torch.cat(tile_seq)        # [tiles]    which sequence each came from
         best = None
         for lam in LAMBDAS:
             k = (M + lam * cost[None, :]).argmin(1)
@@ -152,9 +155,29 @@ with torch.no_grad():
                 else:
                     hi = mid
             db_o, sv_o, k_o = at_lam(lo)
+            # Per-sequence breakdown at the SAME lambda.
+            #
+            # The headline is an average over 40 sequences, and an average hides
+            # the question a deployment actually asks: is this saving uniform,
+            # or does it come from a few easy clips? The allocation is global --
+            # one lambda prices compute for every tile -- so each sequence's own
+            # saving and dB at that lambda are read out directly, and their
+            # spread is the answer.
+            per_seq = []
+            for i, nm in enumerate(measured):
+                sel = SEQ == i
+                if not bool(sel.any()):
+                    continue
+                ks = k_o[sel]
+                mse_s = M[sel].gather(1, ks[:, None]).squeeze(1).mean()
+                per_seq.append({
+                    "seq": nm,
+                    "db_vs_uf": (10 * torch.log10(mse_s / R[sel].mean())).item(),
+                    "saving_pct": (100 * (1 - cost[ks].mean() / cost[-1])).item()})
             ops.append({"target_db": target, "lam": lo, "db_vs_uf": db_o,
                         "saving_pct": sv_o, "saturated": False,
-                        "hist": torch.bincount(k_o, minlength=cfg.num_exits).tolist()})
+                        "hist": torch.bincount(k_o, minlength=cfg.num_exits).tolist(),
+                        "per_sequence": per_seq})
         op_rows.extend({"qp": qp_v, **o} for o in ops)
         if best:
             print(f"  {qp_v:>4}{best['saving_pct']:>9.1f}%{best['db_vs_uf']:>19.4f}")
