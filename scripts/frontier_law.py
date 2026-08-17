@@ -12,11 +12,15 @@ linear least squares on log(dB - f) against log S.
 
 What is NOT claimed
 -------------------
-This is a per-rate fit, not a law. The exponent falls from 4.10 at qp0 to 2.28
-at qp63, so the frontier is not self-similar across rate and no single curve
-describes all five. Three fitted forms were compared and the power law won
-clearly, but winning a comparison of three guesses is not evidence of a
-mechanism.
+This is a per-rate fit, not a law. On BEST the exponent runs 3.07 at qp0 down to
+2.18 at qp32 and back to 2.35 at qp63 -- not even monotone -- so the frontier is
+not self-similar across rate and no single curve describes all five. Three
+fitted forms were compared and the power law won clearly, but winning a
+comparison of three guesses is not evidence of a mechanism.
+
+The exponents also move with the checkpoint: on the earlier baseline they ran
+4.10 to 2.28 monotonically. Anything read out of b beyond "greater than one" is
+a property of the decoder measured, not of early exit.
 
 Nor is a relation between the fitted parameters claimed. b and log a move
 together, and with five rates almost any pair of monotone quantities will, so
@@ -31,9 +35,14 @@ rested on a quartic fit that turned out to be producing the answer itself, so a
 second, independent route to the same conclusion is not decorative.
 
 Practically: three numbers per rate reproduce the frontier to within the fit
-error, so an operating point can be chosen without re-running the sweep -- with
-the caveat that the fit is worst at qp0 (R^2 0.964), where the curve is most
-strongly bent.
+error (R^2 0.977-0.996 on BEST), so an operating point can be chosen without
+re-running the sweep.
+
+One number to read carefully: BEST's floor at qp0 is -0.0024 dB, i.e. its
+deepest exit is very slightly BETTER than the released decoder on these frames.
+That is not a contradiction -- the ladder is trained, and the anchor term pulls
+it towards the release rather than pinning it -- but it is within the noise of a
+40-frame average and should not be quoted as an improvement.
 """
 
 from __future__ import annotations
@@ -54,8 +63,11 @@ def frontier(rows, qp):
         if r["qp"] != qp:
             continue
         s = round(r["saving_pct"], 6)
-        if s not in best or r["db_vs_uf"] < best[s]:
-            best[s] = r["db_vs_uf"]
+        # Per-frame decibels, the convention published DCVC-UF numbers use and
+        # the one every other script here settled on.
+        v = r.get("db_vs_uf_per_frame", r["db_vs_uf"])
+        if s not in best or v < best[s]:
+            best[s] = v
     p = sorted(best.items())
     return np.array([x[0] for x in p]), np.array([x[1] for x in p])
 
