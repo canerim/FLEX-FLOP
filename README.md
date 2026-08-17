@@ -7,9 +7,16 @@ by letting each spatial tile leave the decoder at the depth its content actually
 needs instead of paying the full 12-block trunk everywhere.
 
 This is the successor to [FLEX-FLOP](https://github.com/circuitmaster/Flex-Flop),
-which established the idea on DCVC-RT. Here it is rebuilt on UF and, unlike the
-predecessor, **trained from scratch on Microsoft's own recipe** rather than
-warm-started from a released checkpoint.
+which established the idea on DCVC-RT. Here it is rebuilt on UF and **warm-started
+from the released checkpoint**, then trained on Microsoft's own recipe.
+
+That direction was reversed by measurement. Training from scratch was tried and
+abandoned: after six epochs the deepest exit still sat 1.49 dB below the release
+and was not closing, and every saving here is quoted *against* the release, so a
+deepest exit that does not reproduce it spends the whole quality budget before a
+single tile exits early. The warm start makes the deepest exit bit-exact
+(`max|Δ| = 0.0`, asserted), which turns "does the ladder work" into a question
+that can be answered in one epoch instead of a hundred.
 
 Every design decision, with its reasoning and the measurement behind it, is in
 [DECISIONS.md](DECISIONS.md).
@@ -146,6 +153,46 @@ One forced deviation: the README's `cu130` PyTorch cannot run on this machine's
 535 driver (CUDA 13 needs r580+), so `cu124` is used. Training is pure PyTorch,
 so this affects nothing but the bitstream extensions.
 
+## Where it stands
+
+BEST, after one epoch, on the 40 CTC sequences reachable without JVET
+credentials (UVG, MCL-JCV, HEVC class E; classes B/C/D are **not measured**).
+Decibels are the per-frame average `~/DCVC/test_video.py` computes, which is
+what a published DCVC-UF number means; the exit map's entropy-coded cost is
+inside the bitrate.
+
+| qp | compute saved at 0.1 dB |
+|---:|---:|
+| 0 | **34.7%** |
+| 16 | **31.4%** |
+| 32 | 27.4% |
+| 48 | 24.3% |
+| 63 | 21.5% |
+
+The project's target — 30–40% saved at ≤0.1 dB — is met at qp0 and qp16.
+Integrated over the frontier rather than read at one budget, BD-saving is
+**30.8%** over dB ∈ [0.064, 0.196]. The deepest exit sits 0.003 / 0.016 / 0.033 dB
+below the release at qp 0/32/63 with the encoder byte-identical.
+
+Why it works, measured on three runs sharing an architecture, tile size and warm
+start:
+
+| anchor weight | saving at 0.1 dB |
+|---|---|
+| 0 (Microsoft's recipe unchanged) | **unreachable at every rate** — drift alone is 0.146–0.217 dB |
+| 1 | 14 / 12 / 9 / 7 / 5 % |
+| 10 (+ scaled adapters, distillation, joint router) | 35 / 31 / 27 / 24 / 22 % |
+
+Two independent measurement paths (`scripts/paper_curve.py`, pooling tiles and
+allocating globally; `scripts/signalled_curve.py`, per-frame with the map billed)
+agree to 0.20 points. `scripts/crosscheck_paths.py` keeps that checked and
+refuses to compare files describing different checkpoints, sequence counts or
+frame counts.
+
+Regenerate everything with `scripts/compare_runs.py`, which prints which
+checkpoint each row came from — the numbers above are not comparable to rows at a
+different training step, and the table says so.
+
 ## Controls
 
 Asserted with zero tolerance, because each one silently invalidates everything
@@ -154,6 +201,7 @@ downstream if it drifts:
 | control | result |
 |---|---|
 | warm-start round-trip: deepest exit vs stock UF | `max|Δ| = 0.0` |
+| encoder/hyperprior/entropy model identical to the release | `max|Δ| = 0.0` |
 | untrained adapters are the identity at all 6 exits | `max|Δ| = 0.0` |
 | j=K hybrid path vs full decode (patchify/stitch/head wiring) | `max|Δ| = 0.0` |
 | patchify → unpatchify round-trip | `max|Δ| = 0.0` |
@@ -176,8 +224,13 @@ scripts/
   mac_audit.py         measures where the decoder's compute actually goes
   prepare_openimages.py  tarball -> description.json the recipe expects
   pipeline.sh          download -> extract -> prepare -> launch, autonomous
-  launch_experiments.sh  the three runs, pinned to GPUs 4/6/7
-  status.sh            one-screen health, incl. the exit-collapse diagnostic
+  watch_ckpts.sh       six-stage evaluation, fired per checkpoint
+  watchers.sh          start/stop/list the per-run watchers safely
+  compare_runs.py      every measurement side by side, with its provenance
+  crosscheck_paths.py  the two measurement paths, checked against each other
+  common_interval.py   the dB interval curves actually share
+  db_convention.py     how much the pooled/per-frame choice moves a number
+  target_gap.py        what is left to reach the target, split into drift and exits
 tests/
   test_equivalence.py  the zero-tolerance controls
 train_flexuf_image.py  Microsoft's recipe, multi-exit objective
