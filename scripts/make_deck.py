@@ -353,9 +353,14 @@ slide_fig("The seam, and how it was removed", "nf_seam.png", [
 slide_fig("Cost, checked in the right unit", "nf_cost.png", [
  (0, "The headline is a percentage; it comes from a MAC model", True),
  (0, "MACs are right for a paper and wrong for a promise, so wall-clock was "
-     "measured on a 1080p decode:", True),
+     "measured on a 1080p decode — on the 128px ladder, which is where the "
+     "timing was taken:", True),
  (1, "exit 2: 43.4% (MAC) vs 43.6% (clock)", False),
  (1, "exit 3: 28.6% vs 28.8% · exit 4: 13.8% vs 14.9%", False),
+ (1, "BEST uses 256px tiles, where the MAC ceiling is 42.5% rather than 43.4% — "
+     "the grid seam repair scales with the tile, so the exit costs shift "
+     "slightly. The agreement being checked here is the model's, not this "
+     "checkpoint's.", False),
  (0, "Agreement within ±1 point at every exit", True),
  (0, "The same question caught arls: benefit in dB, bill in milliseconds", False),
  (0, "And the cost model itself is checked against the executed decode "

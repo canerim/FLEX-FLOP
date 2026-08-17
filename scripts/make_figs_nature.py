@@ -258,7 +258,7 @@ if sg and pc:
     save(fig, "nf_router.png")
 
 # Where the tiles actually exit, and why lowering the split depth is the wrong
-# lever. The ceiling (all tiles at the shallowest exit) is set by j: 43.4% at
+# lever. The ceiling (all tiles at the shallowest exit) is set by j: ~43% at
 # j=2, 58.1% at j=1, 72.9% at j=0. Raising it only helps if the shallowest exit
 # is ALREADY saturated -- and it is, at low rate, where 34% of tiles take it.
 # At qp 63 only 10% can afford it and the mass sits at exits 4-5, so an even

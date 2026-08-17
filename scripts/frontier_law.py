@@ -66,7 +66,8 @@ def main(argv):
     ap.add_argument("--out", default="results/frontier_law.json")
     ap.add_argument("--s_min", type=float, default=2.0)
     ap.add_argument("--s_max", type=float, default=42.9,
-                    help="drop the saturated tail: at the 43.4%% ceiling every "
+                    help="drop the saturated tail: at the ceiling (42-43%%, "
+                         "depending on tile size) every "
                          "tile is already at the shallowest exit, successive "
                          "lambdas buy nothing, and the points pile up at one "
                          "saving with rising dB -- a vertical segment, which no "

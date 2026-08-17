@@ -21,7 +21,8 @@ How it is tested, and the artefact that made the first answer wrong
 This originally fitted a degree-4 polynomial to ln D against S and asked where
 its second derivative was non-negative. On 10 sequences that reported 100% at
 every rate. On 40 it reported 69-78%, with every violation between 39% saving
-and the 43.4% ceiling.
+and the ceiling, which is 43.4% for a 128px ladder and 42.5% for a 256px one --
+the tile size shifts the grid seam-repair cost and so the exit costs slightly.
 
 The violations were the fit, not the frontier. As saving approaches the ceiling
 -- every tile at the shallowest exit -- no further compute can be bought at any
@@ -89,6 +90,7 @@ for qp in (0, 16, 32, 48, 63):
 json.dump(out, open(_a.out, "w"), indent=2)
 print("\n  margin = smallest increase in secant slope; >= 0 is the condition.")
 print("  quartic = the old degree-4 fit, kept as a second opinion. It is")
-print("  untrustworthy near the 43.4% ceiling, where the frontier is nearly")
+print(f"  untrustworthy near the ceiling ({max(r['saving_pct'] for r in rows):.1f}% "
+      f"here), where the frontier is nearly")
 print("  vertical and a quartic overshoots -- that artefact, not the decoder,")
 print("  produced the 69-78% figures this script reported before.")
