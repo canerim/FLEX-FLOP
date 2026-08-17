@@ -7,20 +7,23 @@ theorem naming the assumptions it uses, every proof given.
 
 ## Results
 
+Referred to by name, not number: `amsthm` shares one counter across
+environments, so the printed numbers move whenever an assumption is added.
+
 | | statement |
 |---|---|
-| **Prop. 2** | Fixed-proportion mixing achieves exactly the convex hull of the `K` per-exit points |
-| **Thm. 3** | Per-tile assignment achieves the Minkowski average of the `N` per-tile hulls |
-| **Thm. 4** | Their gap is `min-of-average − average-of-min ≥ 0`, zero iff every tile prefers the same exit |
-| **Prop. 5, Cor. 6** | The frontier is the Fenchel conjugate of the Lagrangian value; a λ-sweep is exhaustive |
-| **Prop. 7** | `dB(S)` is convex **iff** `D·D'' ≥ (D')²`, i.e. iff distortion falls at least exponentially in compute |
+| *Fixed-proportion mixing* | achieves exactly the convex hull of the `K` per-exit points |
+| *Per-tile assignment* | achieves the Minkowski average of the `N` per-tile hulls |
+| *Adaptivity gain* | their gap is `min-of-average − average-of-min ≥ 0`, zero iff every tile prefers the same exit |
+| *Frontier recovery* | the frontier is the Fenchel conjugate of the Lagrangian value; a λ-sweep is exhaustive |
+| *Convexity in (S, dB)* | convex **iff** `D·D'' ≥ (D')²`, i.e. iff distortion falls at least exponentially in compute |
 
-Theorem 4 is the point. `Δ(λ)` depends only on the per-tile distortions, so the
+*Adaptivity gain* is the point. `Δ(λ)` depends only on the per-tile distortions, so the
 value of content adaptivity can be measured before any router exists — which
 separates *is adaptivity worth anything here* from *does this router realise it*.
 
-Proposition 7 is an equivalence, not an assertion: convexity in `(saving, dB)`
-does **not** follow from Theorems 3–4, because `dB` is a logarithm of `D` and the
+*Convexity in (S, dB)* is an equivalence, not an assertion: it does **not**
+follow from the two hull results, because `dB` is a logarithm of `D` and the
 log of a convex function need be neither convex nor concave. The condition is
 then tested (Table 4) rather than assumed.
 
@@ -39,7 +42,7 @@ they were measured.
 
 ## Scope
 
-Theorem 4 bounds what adaptivity is *worth*, not what a decoder that must
+*Adaptivity gain* bounds what adaptivity is *worth*, not what a decoder that must
 **infer** the assignment can realise. In this system that gap is closed by
 signalling the assignment at `1.3e-4` bpp — four orders of magnitude below the
 frame rate — so the oracle is attained rather than approached. That is
