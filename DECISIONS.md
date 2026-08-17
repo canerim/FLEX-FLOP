@@ -3048,3 +3048,73 @@ oldu (ilki: arls'in dB kazancını maliyetsiz sanmak). Bir iyileştirmenin
 
 Sunumun 12. slaydındaki "larger tiles cut the seam but also the adaptivity"
 cümlesi de bu yüzden yanlış ve düzeltildi.
+
+## 54. Hedef karşılandı — ve oraya giden yol on altı ölçüm hatasından geçti
+
+BEST bir tam epoch sonunda 0.1 dB'de **%34.7 / 31.4 / 27.4 / 24.3 / 21.5**
+veriyor (qp 0…63, 40 CTC sekansı, kare-başına dB, harita maliyeti bitrate'in
+içinde). **%30 hedefi qp0 ve qp16'da tutuyor.** Integre BD-saving %30.8,
+anchor kayması −0.003 / −0.016 / −0.033 dB.
+
+Neden çalıştığı üç koşuyla ölçüldü — aynı K=6/j=2/256px, aynı warm start,
+birer epoch, yalnızca eklentiler farklı:
+
+| anchor_weight | 0.1 dB'de tasarruf |
+|---|---|
+| 0 (tarif olduğu gibi) | **hiçbir oranda ulaşılamaz** — kayma tek başına 0.146–0.217 dB |
+| 1 | 14 / 12 / 9 / 7 / 5 % |
+| 10 + ölçekli adaptör + distilasyon + ortak router | 35 / 31 / 27 / 24 / 22 % |
+
+Anchor terimi bir iyileştirme değil, **ön koşul**: onsuz bütçe, tek bir tile
+erken çıkmadan kaymaya harcanıyor.
+
+### Ölçüm tarafında bulunanlar
+
+Sayıların doğru olduğuna güvenmeden önce şunlar düzeltildi. Her biri rapor
+edilen bir rakamı değiştirecek türdendi:
+
+1. **λ ızgara okuması** — "bütçe altındaki en iyi örnek" kuralı taramanın
+   nereye örnek koyduğuna bağlı. Gönderilen sistemi 3.1 puana kadar eksik
+   gösteriyordu; bisection'a geçildi.
+2. **dB konvansiyonu** — iki betik aynı ismi farklı şey için kullanıyordu
+   (havuzlanmış vs kare-başına). Fark bütçenin ¼–⅓'ü ve aralarındaki 5.4
+   puanın tamamını açıklıyor. Kodek konvansiyonu manşet oldu, ikisi de JSON'da.
+3. **Kare sayısı** — biri 1 biri 2 kare kullanıyordu; olmayan bir düşük-bitrate
+   gerilemesi rapor ettirmişti.
+4. **BD aralığı, iki yönde** — eğri başına türetmek checkpoint'leri
+   kıyaslanamaz yaptı; sabitlemek BEST'in ucundan taştı ve üç oranın
+   ortalamasını beşle kıyaslattı. `common_interval.py` ikisini de çözüyor.
+5. **`np.interp` kırpması** — sınırın dışındaki bütçe için taban değerini
+   döndürüyordu.
+6. **Korumanın kendi unpack hatası** — `(tasarruf, dB)` sırasını ters açtım,
+   her oranı "ulaşılamaz" ilan ediyordu. Çıktıyı okuyarak yakalandı: "13.7 dB"
+   hiçbir şeyin desibeli değil.
+7. **Kuartik uydurma** — konveksliğin eğrinin %30'unda bozulduğunu söylüyordu;
+   artefaktmış. Sekant testi (uydurmasız) her yerde %100 veriyor.
+8. **K'ya sabit referans** — K=12 koşusu ölçülemiyordu.
+9. **25 kat gereksiz hesap** — λ döngüsü kare döngüsünün dışındaydı.
+10. **Alarm, iki kez** — önce saf gürültüde (|t|≈1.6), sonra küçük bir eğilimin
+    üstündeki dalgalanmada. Artık epoch boyunca eğim uyduruyor.
+11. **"Eğitim yok" etiketli figür** eğitilmiş checkpoint gösteriyordu — hem de
+    başından beri. Warm start'ın gerçek sayıları 9 kat farklı (exit 2: 2.796 dB).
+12. **`ckpt_step.pth.tar` üzerine yazılıyor** — iki dosya aynı yolu gösterip
+    saatlerce farklı ağırlıkları ölçebiliyordu. En sinsi olanı: bütün ara
+    kontroller geçiyordu, yalnızca iki bağımsız yolun çeliştirilmesiyle çıktı.
+13. **Maliyeti eşit çıkışlar** — j=2 altında exit 0/1/2 aynı maliyette,
+    histogram yalnızca birini sayıyordu (%29.5 yerine %33.8).
+
+### Geri aldığım dört sonuç
+
+- BEST128'in düşük-bitrate gerilemesi — kare uyuşmazlığıydı, gerileme yok.
+- FINE12'nin anchor'ında kayma — gürültülü izden üç nokta seçmişim.
+- BD tablosunda FINE12'nin BEST128'i geçmesi — 12 000 adımı 8 000'e karşı.
+- Konvansiyon farkının oranla büyüyeceği tahminim — küçülüyor.
+
+### Sıradaki tura not
+
+Bağlayıcı kısıt yer değiştirdi: baz çizgide exit 2'ydi, BEST'te exit 3 (her
+oranda tile'ların ~yarısı orada, en ucuz çıkışın payı %34'ten %2'ye çöküyor).
+Ayrıca yardımcı kaybın üçte biri, j-bölünmesi yüzünden exit 2'den fazla tasarruf
+edemeyecek çıkışlara gidiyor — ama tile'ların sekizde birinde o çıkışlar
+gerçekten daha iyi olduğu için kaldırmak değil azaltmak sorusu. İkisi de deney
+sorusu; koşan deneye dokunulmadı.
