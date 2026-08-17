@@ -29,16 +29,25 @@ from src.utils.transforms import ycbcr2rgb
 from flexuf.config import FlexUFConfig
 from flexuf.cost import exit_costs
 from flexuf.model import FlexUFIntra, load_flexuf_state
+from flexuf.reference import reference_for
 
 SUR, INK, INK2, INK3 = "#ffffff", "#000000", "#4d4d4d", "#4d4d4d"
 TUM = ns.BLUE
 dev = "cuda:0"   # index within CUDA_VISIBLE_DEVICES, not the physical card
 
-ck = torch.load("runs/CONTROL/ckpt_epo0.pth.tar", map_location="cpu", weights_only=False)
+# Which checkpoint the example frame illustrates. An argument, because the deck
+# reports BEST and a figure drawn from CONTROL puts a different model's error
+# maps next to BEST's numbers -- the per-exit dB labels on the frame would not
+# match anything else on the deck.
+import argparse
+_ap = argparse.ArgumentParser()
+_ap.add_argument("--ckpt", default="runs/BEST/ckpt_eval.pth.tar")
+_a, _ = _ap.parse_known_args()
+ck = torch.load(_a.ckpt, map_location="cpu", weights_only=False)
 cfg = FlexUFConfig(**ck["config"]) if "config" in ck else FlexUFConfig()
 net = FlexUFIntra(cfg).to(dev).eval(); load_flexuf_state(net, ck)
 ref = FlexUFIntra(cfg).to(dev).eval()
-load_flexuf_state(ref, torch.load("runs/warmstart/ckpt_warmstart.pth.tar",
+load_flexuf_state(ref, torch.load(reference_for(cfg),
                                   map_location="cpu", weights_only=False))
 cost = exit_costs(cfg, "head").to(dev)
 

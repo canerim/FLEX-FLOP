@@ -36,6 +36,7 @@ BASE_CURVE = "paper_curve_grid128.json"
 SIGNALLED = "signalled_BEST_0817_1542.json"
 BASE_SIGNALLED = "signalled_grid128.json"
 BD = "bd_BEST.json"
+GAP = "target_gap_BEST.json"
 
 why = load("why_qp.json")
 pc = load(CURVE) or load(BASE_CURVE)
@@ -130,20 +131,30 @@ def gap_line():
     written in. The split into drift and everything else is what decides which
     knob to turn: at qp0 the floor is the WHOLE overspend, so tightening the
     anchor clears the target on its own."""
-    g = load("target_gap.json")
+    g = load(GAP) or load("target_gap.json")
     if not g:
         return "target gap not computed"
     ok = [r for r in g["rows"] if r.get("reachable")]
     if not ok:
         return "the 30% target is not reachable at any rate on this checkpoint"
-    lo, hi = ok[0], ok[-1]
-    return (f"30% costs {lo['db_for_target']:.3f} dB at qp{lo['qp']} "
-            f"({lo['overspend_db']:+.3f} over budget, "
-            f"{lo['floor_share_pct']:.0f}% of it the anchor's floor) and "
-            f"{hi['db_for_target']:.3f} dB at qp{hi['qp']} "
-            f"({hi['db_for_target'] / g['budget_db']:.1f}× the budget, "
-            f"{hi['floor_share_pct']:.0f}% floor) — low rate is a drift "
-            f"problem, high rate an exit-quality one")
+    met = [r for r in ok if r["overspend_db"] <= 0]
+    miss = [r for r in ok if r["overspend_db"] > 0]
+    parts = []
+    if met:
+        # floor_share_pct is None where the target is met: there is no overspend
+        # to apportion. Formatting it tripped the build once BEST started
+        # clearing the target, which is the pleasanter way to find a bug.
+        parts.append(f"met at qp{'/'.join(str(r['qp']) for r in met)} — 30% "
+                     f"costs at most {max(r['db_for_target'] for r in met):.3f} dB")
+    if miss:
+        w = miss[-1]
+        parts.append(f"still short at qp{'/'.join(str(r['qp']) for r in miss)}; "
+                     f"the furthest is qp{w['qp']}, needing "
+                     f"{w['db_for_target']:.3f} dB "
+                     f"({w['db_for_target'] / g['budget_db']:.1f}× the budget, "
+                     f"{w['floor_share_pct']:.0f}% of the excess being the "
+                     f"anchor's floor and the rest exit quality)")
+    return "30% target: " + "; ".join(parts)
 
 
 def spread_ratio(qp=63):

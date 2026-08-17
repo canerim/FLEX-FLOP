@@ -14,48 +14,48 @@
   "rows": [
     {
       "qp": 0,
-      "bd_saving_pct": 31.01354324385412,
-      "bd_quality_db": 0.05190176338836681,
-      "floor_db": 0.0018096521962434053,
-      "bd_saving_pct_zero_drift": 31.195157298304572,
+      "bd_saving_pct": 34.13265368447267,
+      "bd_quality_db": 0.03701487970997196,
+      "floor_db": -0.005089398007839918,
+      "bd_saving_pct_zero_drift": 33.60083749567598,
       "n_points": 17
     },
     {
       "qp": 16,
-      "bd_saving_pct": 27.922942878744596,
-      "bd_quality_db": 0.07178428568650037,
-      "floor_db": 0.010130039416253567,
-      "bd_saving_pct_zero_drift": 28.940983785255106,
-      "n_points": 17
+      "bd_saving_pct": 30.087233344508007,
+      "bd_quality_db": 0.060263804584338054,
+      "floor_db": 0.004923948552459478,
+      "bd_saving_pct_zero_drift": 30.6040241581564,
+      "n_points": 16
     },
     {
       "qp": 32,
-      "bd_saving_pct": 23.265524727171563,
-      "bd_quality_db": 0.105878971968107,
-      "floor_db": 0.019773274660110474,
-      "bd_saving_pct_zero_drift": 25.208802125860007,
+      "bd_saving_pct": 23.498617282262607,
+      "bd_quality_db": 0.10414280490257222,
+      "floor_db": 0.012561248615384102,
+      "bd_saving_pct_zero_drift": 24.88912010594506,
       "n_points": 16
     },
     {
       "qp": 48,
-      "bd_saving_pct": 19.9833340736277,
-      "bd_quality_db": 0.1356413789358764,
-      "floor_db": 0.02811528742313385,
-      "bd_saving_pct_zero_drift": 22.81454806974226,
+      "bd_saving_pct": 19.13925099217652,
+      "bd_quality_db": 0.14497647542929112,
+      "floor_db": 0.017742237076163292,
+      "bd_saving_pct_zero_drift": 20.87559584041812,
       "n_points": 16
     },
     {
       "qp": 63,
-      "bd_saving_pct": 16.620059011175933,
-      "bd_quality_db": 0.17590122666146585,
-      "floor_db": 0.03290952369570732,
-      "bd_saving_pct_zero_drift": 19.668747998254872,
+      "bd_saving_pct": 14.385119367605146,
+      "bd_quality_db": 0.21744157835522443,
+      "floor_db": 0.02123209647834301,
+      "bd_saving_pct_zero_drift": 16.099928047977745,
       "n_points": 16
     }
   ],
-  "mean_bd_saving_pct": 23.761080786914782,
-  "mean_bd_quality_db": 0.10822152532806331,
-  "no_drift_gain_pts": 1.8045670685685813,
+  "mean_bd_saving_pct": 24.248574934204992,
+  "mean_bd_quality_db": 0.11276790859627957,
+  "no_drift_gain_pts": 0.965326195429671,
   "no_drift_gain_rates": [
     0,
     16,
