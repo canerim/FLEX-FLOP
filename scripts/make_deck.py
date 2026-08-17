@@ -28,8 +28,47 @@ lc = load("logconvexity.json")
 th = load("theory_check.json")
 
 def sv_at(qp, db):
-    c = [r for r in pc["rows"] if r["qp"] == qp and r["db_vs_uf"] <= db]
-    return max(c, key=lambda r: r["saving_pct"])["saving_pct"] if c else float("nan")
+    """Saving at a dB budget, INTERPOLATED along the frontier.
+
+    Reading off the last grid point below the budget looked equivalent and is
+    not: the answer then depends on where the lambda sweep happens to have put
+    a sample. Comparing two frontiers that way made qp16 appear to gain 9.7
+    points when the true gap was 4.6 -- the old curve had a sample exactly at
+    0.1 dB and the new one did not.
+    """
+    pts = sorted((r["db_vs_uf"], r["saving_pct"]) for r in pc["rows"]
+                 if r["qp"] == qp)
+    for (d0, s0), (d1, s1) in zip(pts, pts[1:]):
+        if d0 <= db <= d1:
+            w = (db - d0) / (d1 - d0) if d1 > d0 else 0.0
+            return s0 + w * (s1 - s0)
+    return float("nan")
+
+
+def exit2_rate_factor():
+    """How much more exit 2 costs at the top rate than at the bottom.
+
+    Typed into a bullet as '3.4x' until the test set grew to 40 sequences and
+    it became 4.3x. Derived now, so it cannot go stale again."""
+    w = J("why_qp.json")
+    if not w:
+        return float("nan")
+    r = {x["qp"]: x for x in w["rows"]}
+    return r[63]["db_per_exit"][2] / r[0]["db_per_exit"][2]
+
+
+def signalled_line():
+    """The shipped system's saving per QP, from the file that measured it."""
+    sg = J("signalled_grid128.json")
+    if not sg:
+        return "signalled measurement not present"
+    rows = sorted(sg["rows"], key=lambda r: r["qp"])
+    nums = " / ".join(f"{r['saving_pct']:.1f}" for r in rows)
+    worst = max(r["db_vs_uf"] for r in rows)
+    n = sg.get("n_sequences")
+    return (f"measured with the map's cost INSIDE the bitrate: {nums}% at "
+            f"qp{rows[0]['qp']}\u2026{rows[-1]['qp']}, all under "
+            f"{worst:.2f} dB" + (f" ({n} CTC sequences)" if n else ""))
 
 prs = Presentation(TPL)
 for i in range(len(prs.slides) - 1, -1, -1):
@@ -195,7 +234,8 @@ s = slide_fig("Results vs the released decoder", "nf_results.png", [
  (0, f"At 0.1 dB: {sv_at(0,0.1):.0f}% · {sv_at(32,0.1):.0f}% · {sv_at(63,0.1):.0f}%"
      "  — the 30–40% target is met at 0.3 dB, not at 0.1", False),
  (0, "Saving falls with rate because early exit costs more there: the exit-2 "
-     "penalty grows 3.4× from qp0 to qp63 as the latent carries more detail", False),
+     f"penalty grows {exit2_rate_factor():.1f}× from qp0 to qp63 as the latent "
+     "carries more detail", False),
 ], size=13)
 
 # 11 ------------------------------------------------------------------ router
@@ -209,8 +249,7 @@ slide_fig("Router: predicting failed, signalling works", "nf_router.png", [
  (0, "But the encoder does — and in video coding mode decisions are signalled, "
      "not inferred (HEVC/VVC send partitioning and prediction mode)", True),
  (1, "exit map costs 1.3e-4 bpp entropy-coded — 4 orders below the frame", False),
- (1, "measured with the map's cost INSIDE the bitrate: 24.2 / 21.2 / 15.7 / "
-     "11.0 / 8.6% at qp0…63, all under 0.1 dB", False),
+ (1, signalled_line(), False),
  (0, "Agreement with the oracle becomes 100% by construction", True),
 ], size=11)
 
