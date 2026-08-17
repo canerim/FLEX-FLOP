@@ -1,0 +1,53 @@
+{
+  "curve": "results/paper_curve_grid128.json",
+  "ckpt": "runs/wdec_j2_p128_grid/ckpt_epo0.pth.tar",
+  "target_pct": 30.0,
+  "budget_db": 0.1,
+  "rows": [
+    {
+      "qp": 0,
+      "saved_at_budget": 28.3344592781918,
+      "db_for_target": 0.11443349126305473,
+      "overspend_db": 0.014433491263054724,
+      "floor_db": 0.01507618185132742,
+      "floor_share_pct": 104.45277290545624,
+      "reachable": true
+    },
+    {
+      "qp": 16,
+      "saved_at_budget": 24.938472056417183,
+      "db_for_target": 0.14325929983125257,
+      "overspend_db": 0.04325929983125257,
+      "floor_db": 0.025664765387773514,
+      "floor_share_pct": 59.32774105888804,
+      "reachable": true
+    },
+    {
+      "qp": 32,
+      "saved_at_budget": 18.866150917870893,
+      "db_for_target": 0.2163878339152163,
+      "overspend_db": 0.11638783391521629,
+      "floor_db": 0.0426018200814724,
+      "floor_share_pct": 36.60332755441265,
+      "reachable": true
+    },
+    {
+      "qp": 48,
+      "saved_at_budget": 14.483772969922242,
+      "db_for_target": 0.26771970176082616,
+      "overspend_db": 0.16771970176082615,
+      "floor_db": 0.055993445217609406,
+      "floor_share_pct": 33.38513283159656,
+      "reachable": true
+    },
+    {
+      "qp": 63,
+      "saved_at_budget": 10.830340216126515,
+      "db_for_target": 0.33411758754648535,
+      "overspend_db": 0.23411758754648535,
+      "floor_db": 0.06365589052438736,
+      "floor_share_pct": 27.189708894359818,
+      "reachable": true
+    }
+  ]
+}
