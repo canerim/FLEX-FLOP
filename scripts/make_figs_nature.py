@@ -310,3 +310,30 @@ if bd:
                     loc="left")
     fig.tight_layout()
     save(fig, "nf_tradeoff.png")
+
+# Content dependence: the mean is not what a clip gets.
+ps = J("per_sequence.json")
+if ps:
+    fig, a = plt.subplots(figsize=(ns.W15, 2.0))
+    rows = ps["rows"]
+    xs = np.arange(len(rows))
+    for i, r in enumerate(rows):
+        v = np.array([q["saving_pct"] for q in r["per_sequence"]])
+        # Jittered strip, deterministic: index-derived offsets, since the run
+        # must reproduce and Math.random-style jitter would not.
+        off = (np.arange(len(v)) % 9 - 4) / 22.0
+        a.scatter(np.full_like(v, i) + off, v, s=2.5, color=ns.SKY,
+                  linewidths=0, alpha=.85, zorder=2)
+        a.plot([i - .34, i + .34], [r["median"]] * 2, color=ns.BLUE, lw=1.4,
+               zorder=3)
+        a.plot([i, i], [r["p25"], r["p75"]], color=ns.BLUE, lw=.7, zorder=3)
+        a.annotate(f"{r['max'] / r['min']:.1f}×", (i, 46), fontsize=5.5,
+                   color=ns.VERM, ha="center")
+    a.set_xticks(xs); a.set_xticklabels([f"qp {r['qp']}" for r in rows])
+    a.set_ylabel("Compute saved at 0.10 dB (%)")
+    a.set_ylim(0, 50)
+    # "best/worst" belongs in the title: as a standalone label it landed on the
+    # first ratio it was meant to explain.
+    a.set_title("One dot per CTC sequence; bar is the median, whisker the IQR; "
+                "red is best/worst", fontsize=6, color=ns.INK2, loc="left")
+    save(fig, "nf_content.png")
