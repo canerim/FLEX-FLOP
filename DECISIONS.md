@@ -3120,3 +3120,46 @@ Ayrıca yardımcı kaybın üçte biri, j-bölünmesi yüzünden exit 2'den fazl
 edemeyecek çıkışlara gidiyor — ama tile'ların sekizde birinde o çıkışlar
 gerçekten daha iyi olduğu için kaldırmak değil azaltmak sorusu. İkisi de deney
 sorusu; koşan deneye dokunulmadı.
+
+## 55. Daha fazla eğitim CONTROL'ü bozdu — merdiven en derin çıkışa doğru çöküyor
+
+CONTROL ikinci epoch'unu bitirdi ve 0.1 dB'de tasarrufu **%14.1'den %4.7'ye**
+düştü (qp0; her oranda düşüş). Sebebi aramak zorunda kalmadım çünkü epoch 0
+checkpoint'i hâlâ diskteydi — çıkarım yerine **doğrudan ölçüm** yapabildim.
+
+Elenenler: anchor kayması neredeyse sabit (−0.023/−0.035/−0.053, öncekiler
+−0.015/−0.037/−0.058), taban bütçenin rahatça altında (0.014–0.058 dB), ölçüm
+kurulumu aynı.
+
+Çıkış başına dB, epoch 0 → epoch 1:
+
+| qp | exit 2 | exit 3 | exit 4 | exit 5 (en derin) |
+|---|---|---|---|---|
+| 0 | +0.290 | +0.258 | +0.123 | +0.002 |
+| 32 | +0.478 | +0.393 | +0.163 | −0.004 |
+| 63 | +0.664 | +0.572 | +0.201 | −0.013 |
+
+**En derin çıkış yerinde durdu, hatta yüksek oranlarda iyileşti; her sığ çıkış
+kötüleşti; ve gerileme derinlikle monoton.** Ağ, karşılayamayacağı yardımcı
+baskı taşımayan tek çıktıyı, karşılayabileceklerinin pahasına iyileştiriyor.
+
+Merdiven distilasyonu ve ölçekli adaptörler tam olarak bunu önlemek için var ve
+CONTROL'de ikisi de yok. İkisini de taşıyan BEST128 aynı aralıkta ters yöne
+gitti: 8 000 → 16 000 adımda qp32–63'te +0.8 ile +1.2 puan.
+
+### Pratik sonuç
+
+*"CONTROL'e daha fazla epoch verirsek BEST'e yaklaşır"* **yanlış**. Daha fazla
+eğitim onu uzaklaştırıyor. Eklentiler bir hızlandırıcı değil; merdiveni
+eğitmenin bir merdivene yakınsamasını sağlayan şey.
+
+Bu, 54. bölümdeki anchor merdivenini tamamlıyor: anchor'sız hedef **baştan**
+erişilemez (VERBATIM), eklentisiz ise **zamanla** erişilemez hale geliyor
+(CONTROL).
+
+### Çekince
+
+Tek koşu, tek epoch sınırı, ve CONTROL BEST'ten dört şeyde farklı. Çöküşün
+eklentiler olmadan **gerçekleştiğini** kuruyor, hangi eklentinin onu önlediğini
+değil. Ayrıca `--aux_weight`'in j-bölünmesi altında hâkim çıkışlara giden
+üçte birlik payı (bkz. `flexuf/losses.py`) bu tabloda ayrıca incelenmedi.
