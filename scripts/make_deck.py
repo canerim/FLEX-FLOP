@@ -85,13 +85,13 @@ def exit2_rate_factor():
 
 
 def collapse_line():
-    """What a second epoch did to the run without distillation or scaled adapters.
+    """What a second epoch did to CONTROL, and what it did not do to VERBATIM.
 
-    The anchor ladder shows the target is unreachable without the anchor. This
-    shows the rest of the additions are not an accelerant either: without them,
-    more training moves the ladder the wrong way, and it does so monotonically
-    in depth -- the deepest exit holds while every shallower one degrades, more
-    the shallower it is."""
+    I first read this as "without the additions, more training breaks the
+    ladder". VERBATIM refutes that: it carries even fewer additions -- no anchor,
+    no seam repair -- and every one of its exits IMPROVED over the same
+    boundary. So the fact is CONTROL's, not the additions', and the cause is
+    open. The slide says that rather than the tidier story."""
     a_, b_ = load("why_qp_CONTROL_ep0.json"), load("why_qp_CONTROL_ep1.json")
     if not (a_ and b_):
         return None
@@ -100,9 +100,10 @@ def collapse_line():
     q = 63 if 63 in A and 63 in B else sorted(set(A) & set(B))[-1]
     d = [B[q][k] - A[q][k] for k in (2, 3, 4, 5)]
     return (f"CONTROL over its SECOND epoch, per-exit dB vs the release at "
-            f"qp{q} (below): saving at 0.1 dB fell 14.1% → 4.7% at qp0. More "
-            f"training without the additions moves the ladder the wrong way, and "
-            f"the damage grows the shallower the exit")
+            f"qp{q} (below): saving at 0.1 dB fell 14.1% → 4.7% at qp0, damage "
+            f"growing the shallower the exit. VERBATIM, which carries even less, "
+            f"IMPROVED over the same boundary — so this is CONTROL's, not "
+            f"'training without the additions', and the cause is still open")
 
 
 def ladder_line():

@@ -507,8 +507,11 @@ if c0 and c1:
     ax[0].legend(loc="upper right", fontsize=5.5)
     # The point is the SHAPE: the deepest bar pair is level, every shallower
     # pair opens up, and it opens wider the shallower it is.
-    fig.suptitle("CONTROL, no distillation or scaled adapters: a second epoch "
-                 "degrades every exit except the deepest",
+    # Title states the observation, not a cause. The obvious reading -- that
+    # the missing additions are responsible -- was tested against VERBATIM,
+    # which carries fewer of them and improved instead.
+    fig.suptitle("CONTROL: a second epoch degrades every exit except the "
+                 "deepest. VERBATIM, with fewer additions, improved — cause open",
                  fontsize=6, color=ns.INK2, x=0.005, ha="left")
     fig.tight_layout(rect=(0, 0, 1, .93))
     save(fig, "nf_collapse.png")
