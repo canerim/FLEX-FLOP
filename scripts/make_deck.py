@@ -53,16 +53,35 @@ def slide_text(title, items, size=15):
     bullets(s, items, size)
     return s
 
-def slide_fig(title, img, items, top=3.05, height=3.9, size=13):
+def slide_fig(title, img, items, top=None, height=None, size=13, top_txt=None):
     """Bullets on top, figure below -- the figure is the evidence, not decoration."""
     s = prs.slides.add_slide(prs.slide_layouts[1])
     s.shapes.title.text = title
+    # Place the figure just under the text instead of at a hand-set offset:
+    # count wrapped lines at the given size and convert to inches. Hand-set tops
+    # left visible gaps on half the slides and nearly collided on the rest.
+    def _lines(txt, sz):
+        per = int(96 * 11.0 / max(sz, 1))          # chars per line at this size
+        return max(1, -(-len(txt) // per))
+    n_lines = sum(_lines(t, size - 2 * lvl) for lvl, t, _ in items)
+    txt_h = 0.30 + n_lines * (size + 7) / 72.0
+    top = 1.55 + txt_h + 0.18
+    top_txt = txt_h
     ph = s.placeholders[1]
-    ph.top, ph.height = Inches(1.35), Inches(1.6)
+    # All four, not just top/height. Setting a subset makes python-pptx
+    # materialise a partial <a:xfrm> whose missing values become ZERO rather
+    # than being inherited from the layout, so the box ends up 0 wide and the
+    # text vanishes -- while every geometry check that looks only at top and
+    # height still reports it fine.
+    lay = prs.slide_layouts[1].placeholders[1]
+    ph.left, ph.width = lay.left, lay.width
+    ph.top, ph.height = Inches(1.55), Inches(top_txt)
     bullets(s, items, size)
     p = R / "results" / img
     if p.exists():
-        pic = s.shapes.add_picture(str(p), Inches(0.45), Inches(top), height=Inches(height))
+        avail_h = 7.5 - top - 0.45          # leave the footer rule clear
+        pic = s.shapes.add_picture(str(p), Inches(0.45), Inches(top),
+                                   height=Inches(max(0.8, avail_h)))
         if pic.width > Inches(9.1):
             sc = Inches(9.1) / pic.width
             pic.width, pic.height = int(pic.width * sc), int(pic.height * sc)
@@ -85,17 +104,17 @@ slide_fig("Problem and goal", "fig_macs.png", [
  (0, "Constraint that shapes everything: the reference is the RELEASED model", True),
  (1, "encoder, hyperprior, entropy model frozen → identical bitstream", False),
  (1, "so any measured difference is the decoder alone", False),
-], top=4.55, height=2.35, size=13)
+], size=13)
 
 # 3 --------------------------------------------------------------- architecture
-slide_fig("Architecture: a ladder of exits over the trunk", "fig_arch.png", [
+slide_fig("Architecture: a ladder of exits", "fig_arch.png", [
  (0, "Shared stem runs full-frame → no seams; the rest runs per tile", True),
  (0, "Each exit has a zero-initialised 1×1 adapter, then the shared head", False),
  (0, "Pointwise on purpose: a 1×1 adds no receptive field, so no seam cost", False),
-], top=3.3, height=2.4)
+])
 
 # 4 ------------------------------------------------------------- the warm start
-slide_fig("We do not converge to DCVC-UF — we start at it", "fig_warmstart.png", [
+slide_fig("We start AT DCVC-UF, not near it", "fig_warmstart.png", [
  (0, "The released weights are re-expressed in ladder form by a key remap", True),
  (1, "dec_1.0→upsample, dec_1.n→groups.g.i, dec_2→head", False),
  (1, "the remap is a bijection over 143 tensors (asserted in tests)", False),
@@ -106,10 +125,10 @@ slide_fig("We do not converge to DCVC-UF — we start at it", "fig_warmstart.png
      "exits and (b) not damage the deepest one.", True),
  (0, "From-scratch runs were abandoned for exactly this: after 6 epochs their "
      "anchor sat 1.49 dB below the release and was not closing.", False),
-], top=4.75, height=2.15, size=12)
+], size=12)
 
 # 5 -------------------------------------------------------------------- training
-slide_fig("Training — Microsoft's recipe, checked rather than claimed", "fig_schedule.png", [
+slide_fig("Training: the recipe, checked not claimed", "fig_schedule.png", [
  (0, "scripts/verify_recipe.py compares each item against ~/DCVC/train_image.py "
      "and exits non-zero on a mismatch", True),
  (1, "8 schedule rows character for character · 106 entries", False),
@@ -121,10 +140,10 @@ slide_fig("Training — Microsoft's recipe, checked rather than claimed", "fig_s
  (1, "--anchor_weight, --new_lr_scale, --freeze_encoder", False),
  (0, "VERBATIM run: their final phase (epochs 90–104, 512px, lr 2e-4→1e-6) with "
      "NONE of those additions, effective batch 16 by accumulation", True),
-], top=4.85, height=2.1, size=11)
+], size=11)
 
 # 6 ------------------------------------------------------------------- anchor
-slide_fig("The anchor: a bug that would have inflated everything ×4",
+slide_fig("The anchor, and a ×4 error caught",
           "fig_anchor.png", [
  (0, "Reading the schedule from epoch 0 applied the from-scratch lr to a "
      "converged model", True),
@@ -132,14 +151,14 @@ slide_fig("The anchor: a bug that would have inflated everything ×4",
  (1, "fixed to 0.025 / 0.051 / 0.074 by --epoch_offset 75 + --anchor_weight", False),
  (0, "Freezing the backbone gives exactly 0.000 — but collapses the ceiling from "
      "27.3% to 11.5%, so training the trunk is mandatory", True),
-], top=3.5, height=3.3, size=13)
+], size=13)
 
 # 7 ---------------------------------------------------------------- example
-slide_fig("What an exit actually costs, on one frame", "fig_exits.png", [
+slide_fig("What an exit costs, on one frame", "fig_exits.png", [
  (0, "Bosphorus 1080p, qp32, identical bitstream at every exit", True),
  (0, "Error maps ×25: the damage is structured, concentrated on detail and "
      "on tile borders — which is what the seam work targets", False),
-], top=3.15, height=3.5, size=13)
+], size=13)
 
 # 8 --------------------------------------------------------------------- seam
 slide_fig("The seam, and how it was removed", "fig_seam.png", [
@@ -154,10 +173,10 @@ slide_fig("The seam, and how it was removed", "fig_seam.png", [
      "whole block, which was the wrong thing to halo", False),
  (1, "at uniform depth: full-frame vs tiled → max|diff| = 0.0", False),
  (0, "The seam does not shrink. It stops existing.", True),
-], top=4.85, height=2.1, size=11)
+], size=11)
 
 # 9 ------------------------------------------------------------------ honesty
-slide_fig("Cost accounting, checked in the unit that matters", "fig_cost.png", [
+slide_fig("Cost, checked in the right unit", "fig_cost.png", [
  (0, "The headline is a percentage; it comes from a MAC model", True),
  (0, "MACs are right for a paper and wrong for a promise, so wall-clock was "
      "measured on a 1080p decode:", True),
@@ -167,20 +186,20 @@ slide_fig("Cost accounting, checked in the unit that matters", "fig_cost.png", [
  (0, "The same question caught arls: benefit in dB, bill in milliseconds", False),
  (0, "And the cost model itself is checked against the executed decode "
      "(tests/test_cost_matches_reality.py)", False),
-], top=4.55, height=2.35, size=12)
+], size=12)
 
 # 10 ------------------------------------------------------------------ results
-s = slide_fig("Results — against the released decoder, on CTC", "two_views.png", [
+s = slide_fig("Results vs the released decoder", "two_views.png", [
  (0, f"At 0.3 dB: {sv_at(0,0.3):.0f}% (qp0) · {sv_at(32,0.3):.0f}% (qp32) · "
      f"{sv_at(63,0.3):.0f}% (qp63)", True),
  (0, f"At 0.1 dB: {sv_at(0,0.1):.0f}% · {sv_at(32,0.1):.0f}% · {sv_at(63,0.1):.0f}%"
      "  — the 30–40% target is met at 0.3 dB, not at 0.1", False),
  (0, "Saving falls with rate because early exit costs more there: the exit-2 "
      "penalty grows 3.4× from qp0 to qp63 as the latent carries more detail", False),
-], top=3.5, height=3.3, size=13)
+], size=13)
 
 # 11 ------------------------------------------------------------------ router
-slide_fig("The router: predicting failed, signalling works", "final_curve.png", [
+slide_fig("Router: predicting failed, signalling works", "final_curve.png", [
  (0, "A learned router could not reach the oracle, and 12k steps showed why", True),
  (1, "CE 0.5→0.09 while qp0 agreement moved 0.743→0.741, regret unchanged", False),
  (1, "fitting the training data 4× better and behaving identically on test "
@@ -193,7 +212,7 @@ slide_fig("The router: predicting failed, signalling works", "final_curve.png", 
  (1, "measured with the map's cost INSIDE the bitrate: 24.2 / 21.2 / 15.7 / "
      "11.0 / 8.6% at qp0…63, all under 0.1 dB", False),
  (0, "Agreement with the oracle becomes 100% by construction", True),
-], top=4.85, height=2.1, size=11)
+], size=11)
 
 # 12 ---------------------------------------------------------- theory + status
 d = {q: th[str(q)]["delta"]["3e-05"] for q in (0, 32, 63)} if th else None
@@ -212,7 +231,7 @@ slide_fig("Theory, and where we are", "fig_theory.png", [
  (1, "larger tiles cut the seam but also the adaptivity — being isolated now", False),
  (1, "HEVC classes B/C/D behind JVET credentials, reported as NOT MEASURED", False),
  (0, "4 runs training (BEST, CONTROL, RECIPE512, VERBATIM) on 4 GPUs", False),
-], top=4.9, height=2.05, size=11)
+], size=11)
 
 out = R / "paper" / "FLEX-UF_LMT.pptx"
 prs.save(str(out))

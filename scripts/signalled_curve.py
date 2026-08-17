@@ -47,11 +47,16 @@ ap.add_argument("--ref", default="runs/warmstart/ckpt_warmstart.pth.tar")
 ap.add_argument("--qps", type=int, nargs="+", default=[0, 16, 32, 48, 63])
 ap.add_argument("--frames", type=int, default=2)
 ap.add_argument("--latent_patch", type=int, default=None,
-                help="override the tile size the checkpoint was trained at. The "
-                     "ladder is structurally tile-size agnostic -- adapters are "
-                     "1x1 and the split is a reshape -- so the same weights can "
-                     "be evaluated at either size, which is the only way to "
-                     "separate 'larger tiles' from 'a different training run'.")
+                help="override the tile size the checkpoint was trained at, to "
+                     "separate 'larger tiles' from 'a different training run'. "
+                     "Most of the ladder permits this -- adapters are 1x1 and the "
+                     "split is a reshape -- but GridSeamRepair does NOT: its gate "
+                     "is P x P, indexed by position within a tile, so it is tied "
+                     "to the size it was trained at. Pass --seam_repair none on "
+                     "both sides of such a comparison.")
+ap.add_argument("--seam_repair", default=None,
+                help="override the seam-repair module, e.g. 'none' when changing "
+                     "tile size (see --latent_patch).")
 ap.add_argument("--device", default="cuda:4")
 ap.add_argument("--out", default="results/signalled_curve.json")
 a = ap.parse_args()
@@ -59,8 +64,10 @@ dev = a.device
 
 ck = torch.load(a.ckpt, map_location="cpu", weights_only=False)
 cfg = FlexUFConfig(**ck["config"]) if "config" in ck else FlexUFConfig()
-if a.latent_patch:
-    cfg = FlexUFConfig(**{**cfg.__dict__, "latent_patch": a.latent_patch})
+ov = {}
+if a.latent_patch: ov["latent_patch"] = a.latent_patch
+if a.seam_repair: ov["seam_repair"] = a.seam_repair
+if ov: cfg = FlexUFConfig(**{**cfg.__dict__, **ov})
 net = FlexUFIntra(cfg).to(dev).eval(); load_flexuf_state(net, ck)
 ref = FlexUFIntra(cfg).to(dev).eval()
 load_flexuf_state(ref, torch.load(a.ref, map_location="cpu", weights_only=False))
