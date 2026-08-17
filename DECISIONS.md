@@ -3213,3 +3213,40 @@ etmek, kurduktan sonra güvenmekten iyi.
 Eğitim-içi sinyalle çöküşü yakalamak istiyorsak, eğitim dağılımında değil
 **tutulan bir doğrulama kümesinde** çıkış-başına kalite ölçmek gerekir. Bu bir
 deney kararı, koşan deneye yapılacak bir ekleme değil.
+
+### 55c. Düzeltmemin düzeltmesi: bozulma tutulan veride de var, aşırı-uyum değil
+
+55b'de "sığ çıkışlar eğitim dağılımına aşırı uyum sağlıyor" dedim, gerekçem
+eğitim-batch spread'inin kıpırdamamasıydı. **Yanlış.**
+
+Eğitim dağılımından hiç görülmemiş 512 görüntüde (description_val.json, eğitimle
+sıfır örtüşme) CONTROL'ün epoch 0 → 1 değişimi:
+
+| qp | küme | exit 2 | exit 3 | exit 4 | exit 5 |
+|---|---|---|---|---|---|
+| 0 | tutulan | +0.146 | +0.116 | +0.049 | −0.001 |
+| 0 | CTC | +0.290 | +0.258 | +0.123 | +0.002 |
+| 63 | tutulan | +0.513 | +0.544 | +0.215 | −0.016 |
+| 63 | CTC | +0.664 | +0.572 | +0.201 | −0.013 |
+
+Aynı şekil, aynı monotonluk, aynı işaret. Yani **ezberleme değil**: sığ çıkışlar
+kendi eğitim dağılımının görülmemiş örneklerinde de geriliyor.
+
+CTC'deki bozulma daha büyük (qp0'da iki kat), qp63'te ikisi eşitleniyor. Yani
+fotoğraftan videoya transfer bir **bileşen**, ana etki değil.
+
+Kalan soru: eğitim-batch spread'i bunu neden görmüyor? Muhtemel sebep o
+istatistiğin 64 QP'nin rastgele karışımı üzerinden ortalanması — etki QP'ye göre
+değişiyor (qp0'da 0.15, qp63'te 0.51) ve karışım onu seyreltiyor. Yani spread'in
+kıpırdamaması mekanizmaya karşı kanıt değil, o istatistiğin duyarsızlığı.
+
+### Ne kurulmuş oluyor
+
+Eklentiler olmadan daha fazla eğitim sığ çıkışları **genel olarak** bozuyor.
+Mekanizmaya dair 55'teki ifademi ("ağ derin çıkışı diğerlerinin pahasına
+iyileştiriyor") hâlâ kanıtlamış değilim — bunun için tutulan kümede eğitim
+boyunca çıkış-başına ölçüm gerekir, ki bu bir deney kararı.
+
+İki kez düzelttim: önce olguyu mekanizmayla karıştırdım, sonra yanlış mekanizmayı
+seçtim. Kalan ifade en dar olanı ve ölçümle birebir örtüşen: **bozulma gerçek,
+derinlikle monoton, ve eğitim dağılımına özgü değil.**
