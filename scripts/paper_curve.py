@@ -79,7 +79,7 @@ print(f"  {len(frames)} CTC karesi from {len(measured)} sequences "
       f"({len(missing)} not on disk), {cfg.rgb_patch}px tile\n")
 
 LAMBDAS = [0.0] + [10 ** e for e in torch.linspace(-6, -1.5, 22).tolist()]
-rows = []
+rows, op_rows = [], []
 print(f"  {'qp':>4}{'tasarruf':>10}{'gercek UF alti dB':>20}")
 with torch.no_grad():
     for qp_v in a.qps:
@@ -115,6 +115,47 @@ with torch.no_grad():
                          "hist": torch.bincount(k, minlength=cfg.num_exits).tolist()})
             if db.item() <= 0.1 and (best is None or sv.item() > best["saving_pct"]):
                 best = rows[-1]
+
+        # Exact operating points, by bisection on lambda.
+        #
+        # Quoting "saving at 0.1 dB" off a 23-point log sweep meant interpolating
+        # between whatever samples happened to bracket the budget, and the answer
+        # then depended on the sweep rather than the decoder: comparing two
+        # frontiers that way made qp16 look 9.7 points better when the true gap
+        # was 4.6, purely because one curve had a sample sitting on 0.1 dB.
+        #
+        # Both dB and saving increase with lambda -- a larger lambda prices
+        # compute higher, so tiles move to shallower exits -- so bisection is
+        # valid. It costs nothing: M and R are already computed, and each step is
+        # one argmin over a [tiles, K] tensor.
+        #
+        # The allocation is discrete, so a target is not exactly attainable. The
+        # invariant kept is the one that matters for a claim: dB never EXCEEDS
+        # the budget, and the saving reported is the largest achievable under it.
+        def at_lam(lam):
+            k = (M + lam * cost[None, :]).argmin(1)
+            mse = M.gather(1, k[:, None]).squeeze(1).mean()
+            return (10 * torch.log10(mse / R.mean()).item(),
+                    100 * (1 - cost[k].mean() / cost[-1]).item(), k)
+
+        ops = []
+        for target in (0.05, 0.10, 0.15, 0.20, 0.25, 0.30, 0.50):
+            lo, hi = 0.0, 1.0
+            if at_lam(hi)[0] < target:       # budget above the ceiling
+                ops.append({"target_db": target, "db_vs_uf": at_lam(hi)[0],
+                            "saving_pct": at_lam(hi)[1], "saturated": True})
+                continue
+            for _ in range(60):
+                mid = 0.5 * (lo + hi)
+                if at_lam(mid)[0] <= target:
+                    lo = mid
+                else:
+                    hi = mid
+            db_o, sv_o, k_o = at_lam(lo)
+            ops.append({"target_db": target, "lam": lo, "db_vs_uf": db_o,
+                        "saving_pct": sv_o, "saturated": False,
+                        "hist": torch.bincount(k_o, minlength=cfg.num_exits).tolist()})
+        op_rows.extend({"qp": qp_v, **o} for o in ops)
         if best:
             print(f"  {qp_v:>4}{best['saving_pct']:>9.1f}%{best['db_vs_uf']:>19.4f}")
         else:
@@ -125,5 +166,6 @@ Path(a.out).parent.mkdir(exist_ok=True)
 Path(a.out).write_text(json.dumps(
     {"ckpt": a.ckpt, "ref": a.ref, "frames_per_seq": a.frames,
      "n_sequences": len(measured), "measured": measured,
-     "not_measured": [m["name"] for m in missing], "rows": rows}, indent=2))
+     "not_measured": [m["name"] for m in missing],
+     "rows": rows, "op_points": op_rows}, indent=2))
 print(f"\n  wrote {a.out}")
