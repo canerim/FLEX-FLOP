@@ -237,6 +237,12 @@ with torch.no_grad():
 Path(a.out).parent.mkdir(exist_ok=True)
 Path(a.out).write_text(json.dumps(
     {"ckpt": a.ckpt, "ref": reference_for(cfg, a.ref),
+     # WHICH snapshot, not just which path. ckpt_step.pth.tar is overwritten
+     # every --ckpt_every steps, so the path is stable while the weights are
+     # not: two files naming it can be hours of training apart, and nothing in
+     # them said so. That let a comparison of curve_BEST128 against
+     # curve_FINE12 silently weigh different amounts of training.
+     "ckpt_epoch": ck.get("epoch"), "ckpt_step": ck.get("step"),
      "frames_per_seq": a.frames,
      "n_sequences": len(measured), "measured": measured,
      "not_measured": [m["name"] for m in missing],

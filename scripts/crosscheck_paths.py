@@ -53,10 +53,27 @@ def main(argv):
 
     # Comparing two files says nothing unless they describe the same experiment.
     problems = []
-    for field in ("ckpt", "n_sequences", "frames_per_seq"):
+    # ckpt_epoch/ckpt_step included: the path alone is not identity, because
+    # ckpt_step.pth.tar is overwritten as training proceeds.
+    stale = []
+    for field in ("ckpt", "ckpt_epoch", "ckpt_step", "n_sequences",
+                  "frames_per_seq"):
+        # A file written before a field existed has None there. That is not a
+        # mismatch, it is an unknown -- and an unknown checkpoint identity is
+        # worth saying out loud, because the whole reason ckpt_epoch/ckpt_step
+        # were added is that ckpt_step.pth.tar is overwritten as training runs,
+        # so two files naming the same path can be hours apart.
+        if field.startswith("ckpt_") and (pc.get(field) is None
+                                          or sg.get(field) is None):
+            stale.append(field)
+            continue
         if pc.get(field) != sg.get(field):
             problems.append(f"{field}: curve {pc.get(field)!r} vs signalled "
                             f"{sg.get(field)!r}")
+    if stale:
+        print(f"  note: {', '.join(stale)} absent from one of these files, so "
+              f"they cannot be confirmed to describe the same snapshot. "
+              f"Regenerate to be sure.")
     if problems:
         print("  the two files are not describing the same measurement:")
         for p in problems:
