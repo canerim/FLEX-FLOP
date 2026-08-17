@@ -319,10 +319,17 @@ if pc2:
         rows.append(max(cand, key=lambda r: r["saving_pct"]))
     # Exits 0, 1 and 2 cost the SAME under j=2 -- the first j groups run
     # full-frame for every tile, so the cost vector is 0.5716 three times over.
-    # argmin therefore breaks the tie arbitrarily and scatters the cheapest
-    # allocation across three indices. Plotting index 2 alone showed 29.5% where
-    # 33.8% of tiles were actually at that operating point, and the bars summed
-    # to 95%.
+    # argmin therefore scatters the cheapest allocation across three indices.
+    # Plotting index 2 alone showed 29.5% where 33.8% of tiles were actually at
+    # that operating point, and the bars summed to 95%.
+    #
+    # The scatter is not a tie-break artefact: argmin returns 0 or 1 only when
+    # that exit's MSE is strictly lower than exit 2's on that tile. On average
+    # exit 2 is far better (0.167 dB against 0.409 and 0.606 at qp0), but for
+    # about an eighth of the tiles that take the cheapest cost, a SHALLOWER exit
+    # reconstructs better. The adapters are trained per exit, so the ladder is
+    # monotone in the mean and not tile by tile. It costs nothing -- the three
+    # share a cost, and the allocation simply takes whichever wins.
     import sys as _sys
     _sys.path.insert(0, str(R))
     from flexuf.config import FlexUFConfig as _C
