@@ -66,7 +66,19 @@ def main(argv):
     for qp in sorted({r["qp"] for r in d["rows"]}):
         S, D = frontier(d["rows"], qp)
         floor = float(D.min())
-        got = float(np.interp(a.budget, D, S))
+        # np.interp CLAMPS outside the data range, so a budget below the floor
+        # silently returned the floor's saving. VERBATIM's floor is 0.1365 dB
+        # and this reported "13.8% saved at 0.10 dB" for it. Third instance of
+        # the same class today: a budget outside the frontier is not a number to
+        # be produced, it is a question with no answer.
+        got = float(np.interp(a.budget, D, S, left=np.nan, right=np.nan))
+        if got != got:
+            print(f"  {qp:>4}   floor is {floor:.4f} dB — the {a.budget:.2f} dB "
+                  f"budget is below it, so no allocation meets it")
+            out["rows"].append({"qp": qp, "saved_at_budget": None,
+                                "budget_reachable": False, "floor_db": floor,
+                                "db_for_target": None, "reachable": False})
+            continue
         if S.max() < a.target:
             print(f"  {qp:>4}{got:>16.1f}%   target unreachable: the ceiling is "
                   f"{S.max():.1f}%")

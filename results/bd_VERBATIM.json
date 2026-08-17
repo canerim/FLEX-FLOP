@@ -1,0 +1,56 @@
+{
+  "curve": "results/curve_VERBATIM.json",
+  "convention": "per_frame",
+  "n_sequences": 40,
+  "ckpt": "runs/VERBATIM/ckpt_eval.pth.tar",
+  "db_interval": [
+    0.064,
+    0.196
+  ],
+  "saving_interval": [
+    10.0,
+    30.0
+  ],
+  "rows": [
+    {
+      "qp": 0,
+      "bd_saving_pct": null,
+      "bd_quality_db": null,
+      "floor_db": 0.13647131621837616,
+      "bd_saving_pct_zero_drift": null,
+      "n_points": 14
+    },
+    {
+      "qp": 16,
+      "bd_saving_pct": null,
+      "bd_quality_db": null,
+      "floor_db": 0.14852899312973022,
+      "bd_saving_pct_zero_drift": null,
+      "n_points": 13
+    },
+    {
+      "qp": 32,
+      "bd_saving_pct": null,
+      "bd_quality_db": 0.1675206868616644,
+      "floor_db": 0.15614913403987885,
+      "bd_saving_pct_zero_drift": null,
+      "n_points": 13
+    },
+    {
+      "qp": 48,
+      "bd_saving_pct": null,
+      "bd_quality_db": 0.20507013159331616,
+      "floor_db": 0.18898963928222656,
+      "bd_saving_pct_zero_drift": null,
+      "n_points": 12
+    },
+    {
+      "qp": 63,
+      "bd_saving_pct": null,
+      "bd_quality_db": 0.24192258909988693,
+      "floor_db": 0.22306767106056213,
+      "bd_saving_pct_zero_drift": null,
+      "n_points": 12
+    }
+  ]
+}

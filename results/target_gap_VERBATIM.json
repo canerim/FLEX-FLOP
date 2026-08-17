@@ -1,0 +1,48 @@
+{
+  "curve": "results/curve_VERBATIM.json",
+  "ckpt": "runs/VERBATIM/ckpt_eval.pth.tar",
+  "target_pct": 30.0,
+  "budget_db": 0.1,
+  "rows": [
+    {
+      "qp": 0,
+      "saved_at_budget": null,
+      "budget_reachable": false,
+      "floor_db": 0.13647131621837616,
+      "db_for_target": null,
+      "reachable": false
+    },
+    {
+      "qp": 16,
+      "saved_at_budget": null,
+      "budget_reachable": false,
+      "floor_db": 0.14852899312973022,
+      "db_for_target": null,
+      "reachable": false
+    },
+    {
+      "qp": 32,
+      "saved_at_budget": null,
+      "budget_reachable": false,
+      "floor_db": 0.15614913403987885,
+      "db_for_target": null,
+      "reachable": false
+    },
+    {
+      "qp": 48,
+      "saved_at_budget": null,
+      "budget_reachable": false,
+      "floor_db": 0.18898963928222656,
+      "db_for_target": null,
+      "reachable": false
+    },
+    {
+      "qp": 63,
+      "saved_at_budget": null,
+      "budget_reachable": false,
+      "floor_db": 0.22306767106056213,
+      "db_for_target": null,
+      "reachable": false
+    }
+  ]
+}
