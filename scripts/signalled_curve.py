@@ -184,7 +184,12 @@ with torch.no_grad():
         # reported as though it were the answer. VERBATIM hit exactly that: its
         # deepest exit sits 0.1365 dB below the release at qp0, and the table
         # would have said "13.7% saved" in a column headed 0.1 dB.
-        floor_db, floor_sv, _, _ = at_lam(0.0)
+        # at_lam returns (saving, dB, bpp_added, map_bits) -- saving FIRST.
+        # Unpacking it as (db, sv, ...) put the saving into floor_db, so the
+        # test read "13.72 > 0.1" and declared every rate unreachable, VERBATIM's
+        # correctly and any healthy run's wrongly. The guard against reporting a
+        # number at the wrong dB was itself reporting a number at the wrong dB.
+        floor_sv, floor_db, _, _ = at_lam(0.0)
         if floor_db > TARGET:
             print(f"  {qp_v:>4}{'—':>10}{'floor ' + format(floor_db, '.4f') + ' dB':>16}"
                   f"{'exceeds the budget':>25}")
