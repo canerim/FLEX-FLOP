@@ -1678,6 +1678,7 @@
       "target_db": 0.05,
       "lam": 3.7081334085086425e-05,
       "db_vs_uf": 0.04998080898076296,
+      "db_vs_uf_per_frame": 0.07587750256061554,
       "saving_pct": 25.021588802337646,
       "saturated": false,
       "hist": [
@@ -1896,6 +1897,7 @@
       "target_db": 0.1,
       "lam": 7.615701542817988e-05,
       "db_vs_uf": 0.09998847730457783,
+      "db_vs_uf_per_frame": 0.1489580124616623,
       "saving_pct": 33.48996043205261,
       "saturated": false,
       "hist": [
@@ -2114,6 +2116,7 @@
       "target_db": 0.15,
       "lam": 0.0001261868383153333,
       "db_vs_uf": 0.14999656938016415,
+      "db_vs_uf_per_frame": 0.21211032569408417,
       "saving_pct": 38.187599182128906,
       "saturated": false,
       "hist": [
@@ -2332,6 +2335,7 @@
       "target_db": 0.2,
       "lam": 0.00021241368813207286,
       "db_vs_uf": 0.1999436691403389,
+      "db_vs_uf_per_frame": 0.2676863670349121,
       "saving_pct": 41.06864333152771,
       "saturated": false,
       "hist": [
@@ -2550,6 +2554,7 @@
       "target_db": 0.25,
       "lam": 0.000419098898419179,
       "db_vs_uf": 0.249958336353302,
+      "db_vs_uf_per_frame": 0.31543469429016113,
       "saving_pct": 42.705243825912476,
       "saturated": false,
       "hist": [
@@ -2768,6 +2773,7 @@
       "target_db": 0.3,
       "lam": 0.001954510691575705,
       "db_vs_uf": 0.29960261657834053,
+      "db_vs_uf_per_frame": 0.3548012971878052,
       "saving_pct": 43.35582256317139,
       "saturated": false,
       "hist": [
@@ -2985,6 +2991,7 @@
       "qp": 0,
       "target_db": 0.5,
       "db_vs_uf": 0.3051733411848545,
+      "db_vs_uf_per_frame": 0.3579435348510742,
       "saving_pct": 43.378645181655884,
       "saturated": true
     },
@@ -2993,6 +3000,7 @@
       "target_db": 0.05,
       "lam": 1.5066846117406385e-05,
       "db_vs_uf": 0.04999206867069006,
+      "db_vs_uf_per_frame": 0.07279632240533829,
       "saving_pct": 21.00924253463745,
       "saturated": false,
       "hist": [
@@ -3211,6 +3219,7 @@
       "target_db": 0.1,
       "lam": 3.6445277146412124e-05,
       "db_vs_uf": 0.09999910369515419,
+      "db_vs_uf_per_frame": 0.1486663818359375,
       "saving_pct": 30.669814348220825,
       "saturated": false,
       "hist": [
@@ -3429,6 +3438,7 @@
       "target_db": 0.15,
       "lam": 6.079388003854547e-05,
       "db_vs_uf": 0.14996605925261974,
+      "db_vs_uf_per_frame": 0.21198026835918427,
       "saving_pct": 35.65533757209778,
       "saturated": false,
       "hist": [
@@ -3647,6 +3657,7 @@
       "target_db": 0.2,
       "lam": 9.303544720751233e-05,
       "db_vs_uf": 0.19996494054794312,
+      "db_vs_uf_per_frame": 0.26680126786231995,
       "saving_pct": 38.840121030807495,
       "saturated": false,
       "hist": [
@@ -3865,6 +3876,7 @@
       "target_db": 0.25,
       "lam": 0.00014167429617373186,
       "db_vs_uf": 0.2499597892165184,
+      "db_vs_uf_per_frame": 0.31258952617645264,
       "saving_pct": 40.97180962562561,
       "saturated": false,
       "hist": [
@@ -4083,6 +4095,7 @@
       "target_db": 0.3,
       "lam": 0.00023500089446315542,
       "db_vs_uf": 0.2999529615044594,
+      "db_vs_uf_per_frame": 0.35648655891418457,
       "saving_pct": 42.33145713806152,
       "saturated": false,
       "hist": [
@@ -4300,6 +4313,7 @@
       "qp": 16,
       "target_db": 0.5,
       "db_vs_uf": 0.41667845100164413,
+      "db_vs_uf_per_frame": 0.4401986300945282,
       "saving_pct": 43.378645181655884,
       "saturated": true
     },
@@ -4308,6 +4322,7 @@
       "target_db": 0.05,
       "lam": 4.719122216555703e-06,
       "db_vs_uf": 0.04999155178666115,
+      "db_vs_uf_per_frame": 0.05989152938127518,
       "saving_pct": 11.260157823562622,
       "saturated": false,
       "hist": [
@@ -4526,6 +4541,7 @@
       "target_db": 0.1,
       "lam": 1.5568605704173975e-05,
       "db_vs_uf": 0.09998847730457783,
+      "db_vs_uf_per_frame": 0.14325478672981262,
       "saving_pct": 24.283891916275024,
       "saturated": false,
       "hist": [
@@ -4744,6 +4760,7 @@
       "target_db": 0.15,
       "lam": 2.622856391098962e-05,
       "db_vs_uf": 0.14999606646597385,
+      "db_vs_uf_per_frame": 0.21930678188800812,
       "saving_pct": 30.409079790115356,
       "saturated": false,
       "hist": [
@@ -4962,6 +4979,7 @@
       "target_db": 0.2,
       "lam": 3.9172760807559825e-05,
       "db_vs_uf": 0.19996989518404007,
+      "db_vs_uf_per_frame": 0.2857184410095215,
       "saving_pct": 34.308332204818726,
       "saturated": false,
       "hist": [
@@ -5180,6 +5198,7 @@
       "target_db": 0.25,
       "lam": 5.501009763975162e-05,
       "db_vs_uf": 0.24996712803840637,
+      "db_vs_uf_per_frame": 0.34292373061180115,
       "saving_pct": 37.0608389377594,
       "saturated": false,
       "hist": [
@@ -5398,6 +5417,7 @@
       "target_db": 0.3,
       "lam": 7.406022268696601e-05,
       "db_vs_uf": 0.29992202296853065,
+      "db_vs_uf_per_frame": 0.39763352274894714,
       "saving_pct": 39.0796422958374,
       "saturated": false,
       "hist": [
@@ -5616,6 +5636,7 @@
       "target_db": 0.5,
       "lam": 0.0004096342163393274,
       "db_vs_uf": 0.4999940097332001,
+      "db_vs_uf_per_frame": 0.5736922025680542,
       "saving_pct": 42.98487901687622,
       "saturated": false,
       "hist": [
@@ -5834,6 +5855,7 @@
       "target_db": 0.05,
       "lam": 5.906889839479845e-07,
       "db_vs_uf": 0.04999974276870489,
+      "db_vs_uf_per_frame": 0.05652126297354698,
       "saving_pct": 2.0456254482269287,
       "saturated": false,
       "hist": [
@@ -6052,6 +6074,7 @@
       "target_db": 0.1,
       "lam": 8.538586826033721e-06,
       "db_vs_uf": 0.09999910369515419,
+      "db_vs_uf_per_frame": 0.14353612065315247,
       "saving_pct": 20.296984910964966,
       "saturated": false,
       "hist": [
@@ -6270,6 +6293,7 @@
       "target_db": 0.15,
       "lam": 1.4592659226764226e-05,
       "db_vs_uf": 0.14999006874859333,
+      "db_vs_uf_per_frame": 0.21890543401241302,
       "saving_pct": 26.759833097457886,
       "saturated": false,
       "hist": [
@@ -6488,6 +6512,7 @@
       "target_db": 0.2,
       "lam": 2.1387452761700843e-05,
       "db_vs_uf": 0.19993923604488373,
+      "db_vs_uf_per_frame": 0.2827874720096588,
       "saving_pct": 30.92237114906311,
       "saturated": false,
       "hist": [
@@ -6706,6 +6731,7 @@
       "target_db": 0.25,
       "lam": 2.960863730550045e-05,
       "db_vs_uf": 0.24994464591145515,
+      "db_vs_uf_per_frame": 0.33783388137817383,
       "saving_pct": 33.87124538421631,
       "saturated": false,
       "hist": [
@@ -6924,6 +6950,7 @@
       "target_db": 0.3,
       "lam": 3.8705498809576966e-05,
       "db_vs_uf": 0.2999616228044033,
+      "db_vs_uf_per_frame": 0.39187461137771606,
       "saving_pct": 36.089980602264404,
       "saturated": false,
       "hist": [
@@ -7142,6 +7169,7 @@
       "target_db": 0.5,
       "lam": 0.00010047658361145295,
       "db_vs_uf": 0.4998703673481941,
+      "db_vs_uf_per_frame": 0.6127930879592896,
       "saving_pct": 41.16048812866211,
       "saturated": false,
       "hist": [
@@ -7360,6 +7388,7 @@
       "target_db": 0.05,
       "lam": 0.0,
       "db_vs_uf": 0.05666329525411129,
+      "db_vs_uf_per_frame": 0.06365589052438736,
       "saving_pct": 0.5836188793182373,
       "saturated": false,
       "hist": [
@@ -7578,6 +7607,7 @@
       "target_db": 0.1,
       "lam": 5.147019010109943e-06,
       "db_vs_uf": 0.09998594410717487,
+      "db_vs_uf_per_frame": 0.1400052160024643,
       "saving_pct": 16.479283571243286,
       "saturated": false,
       "hist": [
@@ -7796,6 +7826,7 @@
       "target_db": 0.15,
       "lam": 9.14184738576209e-06,
       "db_vs_uf": 0.14999957755208015,
+      "db_vs_uf_per_frame": 0.21345114707946777,
       "saving_pct": 23.197972774505615,
       "saturated": false,
       "hist": [
@@ -8014,6 +8045,7 @@
       "target_db": 0.2,
       "lam": 1.3691922049473802e-05,
       "db_vs_uf": 0.1999664306640625,
+      "db_vs_uf_per_frame": 0.27962857484817505,
       "saving_pct": 27.381759881973267,
       "saturated": false,
       "hist": [
@@ -8232,6 +8264,7 @@
       "target_db": 0.25,
       "lam": 1.861151849880116e-05,
       "db_vs_uf": 0.2499040588736534,
+      "db_vs_uf_per_frame": 0.340356707572937,
       "saving_pct": 30.361688137054443,
       "saturated": false,
       "hist": [
@@ -8450,6 +8483,7 @@
       "target_db": 0.3,
       "lam": 2.364408919674956e-05,
       "db_vs_uf": 0.2999567985534668,
+      "db_vs_uf_per_frame": 0.39638158679008484,
       "saving_pct": 32.65194296836853,
       "saturated": false,
       "hist": [
@@ -8668,6 +8702,7 @@
       "target_db": 0.5,
       "lam": 5.072747990197881e-05,
       "db_vs_uf": 0.49988511949777603,
+      "db_vs_uf_per_frame": 0.6067901253700256,
       "saving_pct": 38.3661150932312,
       "saturated": false,
       "hist": [
