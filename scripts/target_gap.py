@@ -78,7 +78,9 @@ def main(argv):
         over = need - a.budget
         # The floor is spent before any saving is bought, so it is the part of
         # the overspend that early exit cannot be blamed for -- and cannot fix.
-        share = 100 * floor / over if over > 0 else float("nan")
+        # Meaningless when the target is already met: there is no overspend to
+        # apportion. Printed as "met" rather than nan%, which read like a bug.
+        share = 100 * floor / over if over > 0 else None
         out["rows"].append({"qp": qp, "saved_at_budget": got,
                             "db_for_target": need, "overspend_db": over,
                             "floor_db": floor, "floor_share_pct": share,
@@ -86,21 +88,31 @@ def main(argv):
         # Above 100% the floor EXCEEDS the whole overspend: the gap at that
         # rate is drift and nothing else, and a decoder whose deepest exit
         # matched the released one would clear the target outright.
-        mark = f"{share:>14.0f}%" + ("*" if share > 100 else " ")
+        if share is None:
+            mark = f"{'met':>15}"
+        else:
+            mark = f"{share:>14.0f}%" + ("*" if share > 100 else " ")
         print(f"  {qp:>4}{got:>16.1f}%{need:>15.4f}{over:>+12.4f}{mark}")
 
     print("\n  * floor exceeds the whole overspend: at that rate the gap IS "
           "the drift.")
     ok = [r for r in out["rows"] if r.get("reachable")]
+    met = [r for r in ok if r["overspend_db"] <= 0]
+    if met:
+        print(f"\n  target MET at qp" + "/".join(str(r["qp"]) for r in met)
+              + f" -- {a.target:.0f}% costs at most "
+              + f"{max(r['db_for_target'] for r in met):.4f} dB there.")
     if ok:
         worst = max(ok, key=lambda r: r["overspend_db"])
         best = min(ok, key=lambda r: r["overspend_db"])
-        print(f"\n  closest at qp{best['qp']}: {best['overspend_db']:+.4f} dB "
-              f"over budget, essentially met.")
+        print(f"  closest at qp{best['qp']}: {best['overspend_db']:+.4f} dB "
+              f"against budget.")
         print(f"  furthest at qp{worst['qp']}: needs "
               f"{worst['db_for_target']:.3f} dB, "
               f"{worst['db_for_target'] / a.budget:.1f}x the budget, of which "
-              f"{worst['floor_share_pct']:.0f}% is the anchor's floor.")
+              + (f"{worst['floor_share_pct']:.0f}% is the anchor's floor."
+                 if worst.get("floor_share_pct") is not None else
+                 "and the target is met there too."))
         print(f"  So the two ends need different work. At low rate the gap is "
               f"the anchor alone,")
         print(f"  and tightening it clears the target. At high rate drift is a "

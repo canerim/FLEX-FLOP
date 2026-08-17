@@ -1,0 +1,66 @@
+{
+  "curve": "results/curve_BEST.json",
+  "convention": "per_frame",
+  "n_sequences": 40,
+  "ckpt": "runs/BEST/ckpt_eval.pth.tar",
+  "db_interval": [
+    0.066,
+    0.196
+  ],
+  "saving_interval": [
+    10.0,
+    30.0
+  ],
+  "rows": [
+    {
+      "qp": 0,
+      "bd_saving_pct": 37.56553189162664,
+      "bd_quality_db": 0.02492899378231028,
+      "floor_db": -0.0024473301600664854,
+      "bd_saving_pct_zero_drift": 37.336063895540285,
+      "n_points": 16
+    },
+    {
+      "qp": 16,
+      "bd_saving_pct": 34.54113233504692,
+      "bd_quality_db": 0.04345302168259022,
+      "floor_db": 0.006730805616825819,
+      "bd_saving_pct_zero_drift": 35.26366408825585,
+      "n_points": 15
+    },
+    {
+      "qp": 32,
+      "bd_saving_pct": 30.766606908910212,
+      "bd_quality_db": 0.06118623829776919,
+      "floor_db": 0.014918722212314606,
+      "bd_saving_pct_zero_drift": 32.35300250095306,
+      "n_points": 14
+    },
+    {
+      "qp": 48,
+      "bd_saving_pct": 27.559022528990837,
+      "bd_quality_db": 0.07987458401957445,
+      "floor_db": 0.022351399064064026,
+      "bd_saving_pct_zero_drift": 29.98560326335903,
+      "n_points": 14
+    },
+    {
+      "qp": 63,
+      "bd_saving_pct": 24.36734771764217,
+      "bd_quality_db": 0.09990872787158898,
+      "floor_db": 0.02956770732998848,
+      "bd_saving_pct_zero_drift": 27.246666116680025,
+      "n_points": 14
+    }
+  ],
+  "mean_bd_saving_pct": 30.959928276443357,
+  "mean_bd_quality_db": 0.061870313130766616,
+  "no_drift_gain_pts": 1.4770716965142952,
+  "no_drift_gain_rates": [
+    0,
+    16,
+    32,
+    48,
+    63
+  ]
+}

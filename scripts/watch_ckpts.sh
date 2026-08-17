@@ -120,11 +120,26 @@ print(f\"epoch {c.get('epoch')} step {c.get('step','-')}\")" 2>/dev/null)
       # script's own docstring warns about between rates, made between
       # checkpoints instead.
       #
-      # 0.064 is the reference checkpoint's largest floor. A checkpoint whose
-      # own floor exceeds it will report n/a for that rate rather than quietly
-      # integrating a shorter span.
+      # And it is computed from every curve present, not fixed by hand.
+      #
+      # Fixing it at the baseline's [0.064, 0.30] broke the opposite way from
+      # deriving it per curve. BEST's exits are good enough that its whole qp0
+      # frontier spans only 0.197 dB -- its shallowest exit costs that much,
+      # against the baseline's 0.309 -- so 0.30 ran off the end of the curve,
+      # bd_saving returned n/a for qp0 and qp16, and the mean silently became a
+      # mean over THREE rates compared against the baseline's five. The same
+      # error as before, one level up.
+      #
+      # common_interval.py takes the largest floor and the smallest maximum over
+      # every (curve, rate) present, so each curve spans it and no rate drops
+      # out. A better decoder shortening the interval is not a defect: a
+      # frontier reaching 42.5% saving for 0.197 dB is a shorter curve, and the
+      # part they share is the only comparison available.
+      read -r LO HI < <(./.venv/bin/python scripts/common_interval.py 2>/dev/null \
+        | sed -n 's/.*--db_lo \([0-9.]*\) --db_hi \([0-9.]*\).*/\1 \2/p')
+      echo "  BD interval common to every measured curve: [${LO:-0.064}, ${HI:-0.196}]"
       ./.venv/bin/python scripts/bd_saving.py --curve "$CURVE" \
-        --db_lo 0.064 --db_hi 0.30 \
+        --db_lo "${LO:-0.064}" --db_hi "${HI:-0.196}" \
         --out "results/bd_${TAG}.json" 2>&1 | tail -10
 
       # 5. Do the two paths still agree? They reach the same quantity through

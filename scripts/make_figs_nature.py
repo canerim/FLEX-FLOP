@@ -119,7 +119,24 @@ a.set_ylabel("Compute saved (%)"); a.legend()
 save(fig, "nf_cost.png")
 
 # results: two cuts
-pc = J("paper_curve_grid128.json")["rows"]
+# Which measurement is the headline
+# --------------------------------
+# BEST is the configuration this deck reports, and as of its first full epoch it
+# is measured: 34.7% saved at qp0 under 0.1 dB against the reference's 28.3%,
+# with the tightest anchor of any run. So the headline curve is BEST's and the
+# earlier `*_grid128` files are the BASELINE, kept for comparison rather than
+# quoted as the result.
+#
+# Named here rather than threaded through, so the two scripts that draw from it
+# cannot drift onto different runs -- which is how a slide ended up with its
+# text and its own figure 1.5 points apart earlier today.
+CURVE = "curve_BEST.json"
+BASE_CURVE = "paper_curve_grid128.json"
+SIGNALLED = "signalled_BEST_0817_1542.json"
+BASE_SIGNALLED = "signalled_grid128.json"
+
+_c = J(CURVE) or J(BASE_CURVE)
+pc = _c["rows"]
 qps = sorted({r["qp"] for r in pc})
 # Both cuts interpolate along the frontier rather than picking the nearest
 # sweep sample. The deck's bullets already interpolate, and reading the figure
@@ -196,7 +213,7 @@ if all(iso.values()):
 print("done")
 
 # router: three ways to choose the exit
-sg = J("signalled_grid128.json")
+sg = J(SIGNALLED) or J(BASE_SIGNALLED)
 if sg and pc:
     fig, a = plt.subplots(figsize=(ns.W15, 2.0))
     sgm = {r["qp"]: r for r in sg["rows"]}
@@ -239,7 +256,7 @@ if sg and pc:
 # At qp 63 only 10% can afford it and the mass sits at exits 4-5, so an even
 # cheaper exit would be selected by almost nobody. The gap at high rate is
 # shallow-exit QUALITY, not the number of exits below.
-pc2 = J("paper_curve_grid128.json")
+pc2 = _c
 if pc2:
     fig, a = plt.subplots(figsize=(ns.W15, 1.9))
     qps = [0, 16, 32, 48, 63]

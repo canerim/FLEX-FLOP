@@ -20,9 +20,27 @@ def load(p):
     f = R / "results" / p
     return json.loads(f.read_text()) if f.exists() else None
 
+# Which measurement is the headline
+# --------------------------------
+# BEST is the configuration this deck reports, and as of its first full epoch it
+# is measured: 34.7% saved at qp0 under 0.1 dB against the reference's 28.3%,
+# with the tightest anchor of any run. So the headline curve is BEST's and the
+# earlier `*_grid128` files are the BASELINE, kept for comparison rather than
+# quoted as the result.
+#
+# Named here rather than threaded through, so the two scripts that draw from it
+# cannot drift onto different runs -- which is how a slide ended up with its
+# text and its own figure 1.5 points apart earlier today.
+CURVE = "curve_BEST.json"
+BASE_CURVE = "paper_curve_grid128.json"
+SIGNALLED = "signalled_BEST_0817_1542.json"
+BASE_SIGNALLED = "signalled_grid128.json"
+
 why = load("why_qp.json")
-pc = load("paper_curve_grid128.json")
-sg = load("signalled_grid128.json")
+pc = load(CURVE) or load(BASE_CURVE)
+sg = load(SIGNALLED) or load(BASE_SIGNALLED)
+pc_base = load(BASE_CURVE)
+sg_base = load(BASE_SIGNALLED)
 s256 = load("signalled_control256.json")
 lc = load("logconvexity.json")
 th = load("theory_check.json")
@@ -146,16 +164,18 @@ def bd_line():
 
 def signalled_line():
     """The shipped system's saving per QP, from the file that measured it."""
-    sg = load("signalled_grid128.json")
     if not sg:
         return "signalled measurement not present"
     rows = sorted(sg["rows"], key=lambda r: r["qp"])
+    base = {r["qp"]: r["saving_pct"] for r in (sg_base or {"rows": []})["rows"]}
     nums = " / ".join(f"{r['saving_pct']:.1f}" for r in rows)
+    vs = ("" if not base else "  (baseline " +
+          " / ".join(f"{base.get(r['qp'], float('nan')):.1f}" for r in rows) + ")")
     worst = max(r["db_vs_uf"] for r in rows)
     n = sg.get("n_sequences")
     return (f"measured with the map's cost INSIDE the bitrate: {nums}% at "
             f"qp{rows[0]['qp']}\u2026{rows[-1]['qp']}, all under "
-            f"{worst:.2f} dB" + (f" ({n} CTC sequences)" if n else ""))
+            f"{worst:.2f} dB" + vs + (f" ({n} CTC sequences)" if n else ""))
 
 prs = Presentation(TPL)
 for i in range(len(prs.slides) - 1, -1, -1):
