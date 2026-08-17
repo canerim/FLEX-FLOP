@@ -208,6 +208,20 @@ print(f\"epoch {c.get('epoch')} step {c.get('step','-')}\")" 2>/dev/null)
       ./.venv/bin/python scripts/crosscheck_paths.py --curve "$CURVE" \
         --signalled "$SIG" 2>&1 | tail -10
 
+      # 7 is placed before 6 in cost, not importance: it is a minute of work
+      # and it is the measurement that settles a question the others cannot.
+      #
+      # CONTROL's shallow exits degraded over its second epoch on CTC AND on
+      # held-out OpenImages, so it is not a distribution artefact. Whether the
+      # additions PREVENT that is the missing control, and answering it needs
+      # per-exit quality on held-out data tracked through training -- which is
+      # this, collected per checkpoint from now on rather than reconstructed
+      # afterwards from whatever checkpoints happen to survive.
+      echo; echo "--- 7. per-exit quality on HELD-OUT OpenImages ---"
+      CUDA_VISIBLE_DEVICES="$GPU" ./.venv/bin/python -u scripts/why_qp_val.py \
+        --ckpt "$NEW" --device cuda:0 \
+        --out "results/val_${TAG}_$(date +%m%d_%H%M).json" 2>&1 | tail -7
+
       echo; echo "--- 6. distance to the 30% target ---"
       ./.venv/bin/python scripts/target_gap.py --curve "$CURVE" \
         --out "results/target_gap_${TAG}.json" 2>&1 | tail -12
