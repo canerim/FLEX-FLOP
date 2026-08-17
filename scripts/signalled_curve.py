@@ -117,29 +117,43 @@ rows = []
 print(f"  {'qp':>4}{'tasarruf':>10}{'dB (gercek UF)':>16}{'bpp artisi':>12}{'harita biti':>13}")
 with torch.no_grad():
     for qp_v in a.qps:
+        # Everything a frame contributes that does NOT depend on lambda, cached
+        # once per QP.
+        #
+        # This loop used to sit INSIDE the lambda sweep, so all 25 lambdas
+        # re-encoded and re-decoded all 80 frames: 25x the work for identical
+        # numbers, because the per-tile MSEs, the reference and the bitrate are
+        # all functions of the latent alone. Only the argmin, the exit map and
+        # the aggregates move with lambda, and those are tensor ops on a
+        # [tiles, K] table. Measured at 40 sequences the old form took over half
+        # an hour per checkpoint, which also meant every training run queued
+        # behind it.
+        cache = []
+        for x, pl in frames:
+            x = x.to(dev); _, _, H, W = x.shape; P = cfg.rgb_patch
+            ph, pw = (-H) % P, (-W) % P
+            xp = F.pad(x, (0, pw, 0, ph), mode="replicate") if (ph or pw) else x
+            qp = torch.full((1,), qp_v, dtype=torch.int32, device=dev)
+            y, q, aux = net._encode_to_latent(xp, qp)
+            nh, nw = (H + ph) // P, (W + pw) // P
+            def tl(img):
+                e = ((img - xp) ** 2).mean(1)
+                return (e.view(1, nh, P, nw, P).permute(0, 1, 3, 2, 4)
+                         .reshape(nh * nw, P * P).mean(1))
+            M = torch.stack([tl(o) for o in net.dec.forward_all_exits(y, q)], 1)
+            R = tl(ref.dec.forward_full(y, q)).mean()
+            cache.append((M, R, H * W))
+
         best = None
         for lam in [0.0] + [10 ** e for e in torch.linspace(-6, -2.5, 24).tolist()]:
             SV = DB = EXTRA = MB = n = 0.0
-            for x, pl in frames:
-                x = x.to(dev); _, _, H, W = x.shape; P = cfg.rgb_patch
-                ph, pw = (-H) % P, (-W) % P
-                xp = F.pad(x, (0, pw, 0, ph), mode="replicate") if (ph or pw) else x
-                qp = torch.full((1,), qp_v, dtype=torch.int32, device=dev)
-                y, q, aux = net._encode_to_latent(xp, qp)
-                bpp, _, _ = net._rate(aux, qp, H * W)
-                nh, nw = (H + ph) // P, (W + pw) // P
-                def tl(img):
-                    e = ((img - xp) ** 2).mean(1)
-                    return (e.view(1, nh, P, nw, P).permute(0, 1, 3, 2, 4)
-                             .reshape(nh * nw, P * P).mean(1))
-                M = torch.stack([tl(o) for o in net.dec.forward_all_exits(y, q)], 1)
-                R = tl(ref.dec.forward_full(y, q)).mean()
+            for M, R, npx in cache:
                 # The ENCODER's decision: it has the source, so this is exact.
                 k = (M + lam * cost[None, :]).argmin(1)
                 mb = map_bits(k, cfg.num_exits)
                 SV += (1 - cost[k].mean() / cost[-1]).item()
                 DB += (10 * torch.log10(M.gather(1, k[:, None]).squeeze(1).mean() / R)).item()
-                EXTRA += mb / (H * W)                 # bpp added by the map
+                EXTRA += mb / npx                     # bpp added by the map
                 MB += mb; n += 1
             sv, db, extra = 100 * SV / n, DB / n, EXTRA / n
             if db <= 0.1 and (best is None or sv > best[0]):
