@@ -2,18 +2,20 @@
 
 Why this is not just a convenience
 ----------------------------------
-The CTC test set is about to grow from 10 sequences to 40 (MCL-JCV), and
-`why_qp.py` and `theory_check.py` both measure on it, so Tables 1 and 2 will
-change. Retyping 62 numbers by hand is how a transcription error gets into a
+The CTC test set grew from 10 sequences to 40 (MCL-JCV), and `why_qp.py` and
+`theory_check.py` both measure on it, so Tables 1 and 2 moved. Retyping 62 numbers by hand is how a transcription error gets into a
 paper.
 
 But a writer that only refreshed the numbers would be *worse* than retyping,
 because the captions and the surrounding prose make claims ABOUT those numbers:
 
-    Table 1  "grows 3.4x from the lowest to the highest rate"
+    Table 1  "grows 4.3x from the lowest to the highest rate"
     Table 2  "rises monotonically with rate"
-    Table 4  "holds everywhere, with a margin that grows with rate"
-    body     "would understate its own contribution by a factor of six"
+    Table 4  "holds everywhere, with a margin that grows tenfold"
+    body     "would understate its own contribution by a factor of seven"
+
+The 10-to-40 sequence move already exercised this: it moved 3.4x to 4.3x and
+six to seven, and both were caught here rather than shipped.
 
 Silently updating the numbers under a claim that no longer holds is the exact
 failure this is meant to prevent. So every such claim is re-derived from the
@@ -74,8 +76,8 @@ def main(argv):
 
     ratio = wq[63]["db_per_exit"][2] / wq[0]["db_per_exit"][2]
     note.append(f"Table 1: exit-2 penalty grows {ratio:.1f}x from qp0 to qp63")
-    if abs(ratio - 3.4) > 0.15:
-        warn.append(f"caption says 'grows 3.4x'; measured {ratio:.2f}x")
+    if abs(ratio - 4.3) > 0.15:
+        warn.append(f"caption says 'grows 4.3x'; measured {ratio:.2f}x")
 
     # ---- Table 2: adaptivity gain, monotonicity, and "a factor of six" -----
     tc = load("theory_check.json")
@@ -100,8 +102,8 @@ def main(argv):
                     "no longer does")
     factor = peak[-1] / peak[0] if peak[0] else float("inf")
     note.append(f"body: low-rate understatement factor {factor:.1f}x")
-    if abs(factor - 6) > 1.0:
-        warn.append(f"body says 'a factor of six'; measured {factor:.1f}x")
+    if abs(factor - 7) > 1.0:
+        warn.append(f"body says 'a factor of seven'; measured {factor:.1f}x")
 
     # ---- Table 4: log-convexity, "everywhere", "margin grows with rate" ----
     lc = load("logconvexity.json")
@@ -109,7 +111,7 @@ def main(argv):
     for qp in qps:
         r = lc[str(qp)]
         worst.append(r["worst"])
-        rows.append(f"{qp:<2} & {r['n']} & {r['frac_ok']:.0f}\\% & {r['worst']:.4f} \\\\")
+        rows.append(f"{qp:<2} & {r['n']} & {r['frac_ok']:.1f}\\% & {r['worst']:.4f} \\\\")
     src = splice(src, "tab:logconvex", "\n".join(rows))
 
     if any(lc[str(q)]["frac_ok"] < 100 for q in qps):
@@ -120,6 +122,9 @@ def main(argv):
     if not all(x < y for x, y in zip(worst, worst[1:])):
         warn.append("caption says the margin 'grows with rate'; it no longer "
                     "increases monotonically")
+    if worst[-1] / worst[0] < 8 or worst[-1] / worst[0] > 12:
+        warn.append(f"caption says the margin grows 'tenfold'; measured "
+                    f"{worst[-1] / worst[0]:.1f}x")
 
     # ---- Table 3: marginal dB per +5 points, interpolated ------------------
     pc = load("paper_curve_grid128.json")["rows"]
