@@ -195,7 +195,12 @@ with torch.no_grad():
 
 Path(a.out).parent.mkdir(exist_ok=True)
 Path(a.out).write_text(json.dumps(
-    {"ckpt": a.ckpt, "frames_per_seq": a.frames,
+    {"ckpt": a.ckpt,
+     # Which checkpoint this is, not which step the run has since reached.
+     # compare_runs.py was reading the run's CURRENT step and labelling a
+     # step-4000 measurement as 6,800.
+     "ckpt_epoch": ck.get("epoch"), "ckpt_step": ck.get("step"),
+     "frames_per_seq": a.frames,
      "n_sequences": len(measured), "measured": measured,
      "not_measured": [m["name"] for m in missing], "rows": rows}, indent=2))
 print(f"\n  wrote {a.out}")
