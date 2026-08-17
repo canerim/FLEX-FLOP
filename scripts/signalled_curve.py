@@ -174,6 +174,24 @@ with torch.no_grad():
         # work cached each step costs one argmin.
         TARGET = 0.1
         best = None
+        # The FLOOR first. At lambda = 0 nothing is charged for compute, so every
+        # tile takes its lowest-MSE exit -- that is the least distortion this
+        # ladder can produce, and if it already exceeds the budget then no
+        # allocation meets the budget and there is nothing to report.
+        #
+        # Without this check the bisection's invariant (at_lam(lo) <= TARGET) is
+        # never established, lo stays at 0.0, and the lambda-0 point gets
+        # reported as though it were the answer. VERBATIM hit exactly that: its
+        # deepest exit sits 0.1365 dB below the release at qp0, and the table
+        # would have said "13.7% saved" in a column headed 0.1 dB.
+        floor_db, floor_sv, _, _ = at_lam(0.0)
+        if floor_db > TARGET:
+            print(f"  {qp_v:>4}{'—':>10}{'floor ' + format(floor_db, '.4f') + ' dB':>16}"
+                  f"{'exceeds the budget':>25}")
+            rows.append({"qp": qp_v, "saving_pct": None, "db_vs_uf": None,
+                         "floor_db": floor_db, "budget_db": TARGET,
+                         "budget_reachable": False})
+            continue
         if at_lam(1.0)[1] >= TARGET:
             lo, hi = 0.0, 1.0
             for _ in range(60):
@@ -188,7 +206,8 @@ with torch.no_grad():
         if best:
             sv, db, extra, mb = best
             rows.append({"qp": qp_v, "saving_pct": sv, "db_vs_uf": db,
-                         "bpp_added": extra, "map_bits": mb})
+                         "bpp_added": extra, "map_bits": mb,
+                         "floor_db": floor_db, "budget_reachable": True})
             print(f"  {qp_v:>4}{sv:>9.1f}%{db:>16.4f}{extra:>12.6f}{mb:>13.0f}")
         else:
             print(f"  {qp_v:>4}{'—':>10}{'0.1 dB ulasilamiyor':>16}")

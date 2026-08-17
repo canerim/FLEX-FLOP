@@ -180,6 +180,16 @@ with torch.no_grad():
         ops = []
         for target in (0.05, 0.10, 0.15, 0.20, 0.25, 0.30, 0.50):
             lo, hi = 0.0, 1.0
+            # Budget below the FLOOR: at lambda = 0 every tile takes its
+            # lowest-MSE exit, so that is the least distortion available. If it
+            # exceeds the budget, no allocation meets the budget -- and without
+            # this the bisection reports the lambda-0 point as if it did.
+            if at_lam(0.0)[0] > target:
+                p0, f0, s0, _ = at_lam(0.0)
+                ops.append({"target_db": target, "db_vs_uf": p0,
+                            "db_vs_uf_per_frame": f0, "saving_pct": None,
+                            "floor_db": p0, "budget_reachable": False})
+                continue
             if at_lam(hi)[0] < target:       # budget above the ceiling
                 p_, f_, s_, _ = at_lam(hi)
                 ops.append({"target_db": target, "db_vs_uf": p_,
