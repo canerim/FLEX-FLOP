@@ -3163,3 +3163,20 @@ Tek koşu, tek epoch sınırı, ve CONTROL BEST'ten dört şeyde farklı. Çök�
 eklentiler olmadan **gerçekleştiğini** kuruyor, hangi eklentinin onu önlediğini
 değil. Ayrıca `--aux_weight`'in j-bölünmesi altında hâkim çıkışlara giden
 üçte birlik payı (bkz. `flexuf/losses.py`) bu tabloda ayrıca incelenmedi.
+
+### 55a. Önceden kaydedilmiş tahmin: VERBATIM daha sert çökmeli
+
+VERBATIM de epoch 1'de (~2 saat sonra biter) ve **hiçbir eklentisi yok** —
+anchor yok, distilasyon yok, ölçekli adaptör yok, seam repair yok. CONTROL en
+azından anchor'ı 1.0'da ve grid seam repair taşıyor.
+
+Çöküş açıklaması doğruysa VERBATIM'de aynı şekli **daha büyük** görmeliyiz:
+en derin çıkış yerinde ya da iyileşiyor, sığ çıkışlar geriliyor, gerileme
+derinlikle monoton, ve büyüklük CONTROL'ün qp63'teki +0.664 / +0.572 / +0.201
+değerlerinden fazla.
+
+Yanlışlanması: VERBATIM'in sığ çıkışları iyileşirse ya da gerileme monoton
+değilse, "eklentisizlik merdiveni çökertir" açıklaması bu haliyle yetersizdir
+ve CONTROL'deki düşüş başka bir sebebe bağlanmalıdır.
+
+Tahmin ölçümden ÖNCE yazıldı. Sonradan kurulan açıklama sınama değildir.
