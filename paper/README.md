@@ -36,9 +36,15 @@ then tested (Table 4) rather than assumed.
 | 3 — marginal dB per +5% | `scripts/paper_curve.py` | `results/paper_curve_grid128.json` |
 | 4 — log-convexity test | `scripts/logconvex_check.py` | `results/logconvexity.json` |
 
-Every figure in the tables is checked against these files programmatically
-before commit. Four decimals throughout, because that is the precision at which
-they were measured.
+`python scripts/verify_theory_tables.py` re-checks all 62 table entries against
+those files and exits non-zero on any mismatch. It parses each table out of the
+`.tex` by its `\label`, so renaming or deleting a table fails loudly instead of
+passing on nothing; and Table 3, which is an interpolation along the frontier
+rather than a direct readout, is recomputed from the curve rather than compared
+against itself.
+
+Four decimals throughout, because that is the precision at which they were
+measured.
 
 ## Scope
 
