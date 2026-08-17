@@ -98,13 +98,38 @@ def main():
         if len(r["psnr_per_exit"]) == 1:
             parts.append(f"{nm} ep{r['epoch']} s{r['step']}({age}s) {deep:.1f}")
             continue
+        # Fidelity to the frozen released decoder, on the SAME batch, as
+        # 10*log10(1/anchor_mse). This is the number that had to be here.
+        #
+        # `deep` is the deepest exit's absolute PSNR and swings 7 dB with batch
+        # content, so it cannot show drift. anchor_mse divides that content out.
+        # FINE12 was found degrading -- 58.6 dB at step 1k falling to 54.7 by
+        # 4k while every other run rose -- only because it was gone looking for
+        # by hand. A trend in the one quantity every saving number is measured
+        # against should not depend on someone thinking to check.
+        import math as _m
+        fid = None
+        hist = [x.get("anchor_mse") for x in rows[-25:] if x.get("anchor_mse")]
+        if hist:
+            fid = 10 * _m.log10(1.0 / hist[-1])
+        fnote = ""
+        if len(hist) >= 8:
+            # Compare the recent half against the earlier half rather than
+            # consecutive points: single batches are noisy enough that any two
+            # adjacent values can fall.
+            h = len(hist) // 2
+            old = sum(10 * _m.log10(1.0 / v) for v in hist[:h]) / h
+            new = sum(10 * _m.log10(1.0 / v) for v in hist[h:]) / (len(hist) - h)
+            if new < old - 1.0:
+                fnote = f"!ANCHOR-FALLING({old:.1f}->{new:.1f})"
         # Spread alone is the wrong diagnostic: a small gap means either "nothing
         # to route" or "shallow exits caught up", and only the anchor separates
         # them. Both are flagged, neither assumed.
         note = ("!ANCHOR-WEAK" if deep < 20
                 else "!EXITS-IDENTICAL" if r["spread_dB"] < 0.05 else "")
-        parts.append(f"{nm} ep{r['epoch']} s{r['step']}({age}s) d{deep:.1f} "
-                     f"spr{r['spread_dB']:+.1f}{note}{stale}")
+        fstr = f" fid{fid:.1f}" if fid is not None else ""
+        parts.append(f"{nm} ep{r['epoch']} s{r['step']}({age}s)"
+                     f"{fstr} spr{r['spread_dB']:+.1f}{note}{fnote}{stale}")
 
     exp_file = ROOT / "runs" / ".expected_live"
     expected = [l.strip() for l in exp_file.read_text().splitlines() if l.strip()] \
