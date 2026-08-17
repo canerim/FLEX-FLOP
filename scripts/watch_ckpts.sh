@@ -51,6 +51,25 @@ POLL=${3:-900}
 D="runs/$TAG"
 LOCK=/tmp/flexuf_eval.lock
 
+# Check at STARTUP that this run's reference exists.
+#
+# FINE12's first evaluation failed two of three checks because the reference was
+# hard-coded to the K=6 warm start and it trains a K=12 ladder. The failure was
+# correct -- load_flexuf_state refuses a mismatched reference rather than
+# measuring against the wrong decoder -- but it surfaced hours later, at the
+# first checkpoint, after the run had already spent that time. Resolving it now
+# turns a delayed surprise into an immediate one.
+if [ -f "$D/meta.json" ]; then
+  ./.venv/bin/python - "$D/meta.json" <<'PYEOF' || echo "  $TAG: reference check failed; its evaluations will not run until this is fixed"
+import json, sys
+sys.path.insert(0, ".")
+from flexuf.config import FlexUFConfig
+from flexuf.reference import reference_for
+cfg = FlexUFConfig(**json.load(open(sys.argv[1]))["config"])
+print(f"  reference: {reference_for(cfg)}")
+PYEOF
+fi
+
 while true; do
   # A step snapshot, when the run writes them, is newer than any epoch file and
   # needs no promotion -- it already carries its own config.
