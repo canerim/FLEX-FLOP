@@ -304,7 +304,7 @@ if bd:
     # integrated over is not a number, and the y-label is not wide enough to
     # carry it without colliding with the panel letter.
     ax[0].set_title(f"What a budget buys — mean saving over dB in "
-                    f"[{lo:.2f}, {hi:.2f}]", fontsize=6, color=ns.INK2, loc="left")
+                    f"[{lo:.3f}, {hi:.3f}]", fontsize=6, color=ns.INK2, loc="left")
     ax[1].set_title(f"What a saving costs — mean dB over saving in "
                     f"[{slo:.0f}%, {shi:.0f}%]", fontsize=6, color=ns.INK2,
                     loc="left")

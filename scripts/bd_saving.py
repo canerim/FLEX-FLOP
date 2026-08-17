@@ -120,8 +120,11 @@ def main(argv):
     print(f"  frontier: {a.curve}")
     print(f"  test set: {d.get('n_sequences', '?')} CTC sequences, "
           f"checkpoint {d.get('ckpt', '?')}\n")
+    # Three decimals, not two: the auto-derived lower limit is the largest
+    # per-rate floor rounded up to the nearest 0.001 (0.057 here), and printing
+    # it as 0.06 reported an interval that was not the one integrated over.
     print(f"  BD-saving  = mean compute saved over dB in "
-          f"[{a.db_lo:.2f}, {a.db_hi:.2f}]")
+          f"[{a.db_lo:.3f}, {a.db_hi:.3f}]")
     print(f"  BD-quality = mean dB paid over saving in "
           f"[{a.sv_lo:.0f}%, {a.sv_hi:.0f}%]\n")
     print(f"  {'qp':>4}{'BD-saving':>12}{'BD-quality':>13}{'floor dB':>11}"
@@ -183,7 +186,7 @@ def main(argv):
                   f"points of BD-saving, averaged over qp"
                   + "/".join(str(r["qp"]) for r in both)
                   + f" ({len(ok) - len(both)} rate(s) not measurable: shifting "
-                    f"the curve down puts its top below {a.db_hi:.2f} dB)")
+                    f"the curve down puts its top below {a.db_hi:.3f} dB)")
 
     (ROOT / a.out).write_text(json.dumps(out, indent=2))
     print(f"\n  wrote {a.out}")

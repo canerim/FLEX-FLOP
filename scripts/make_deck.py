@@ -92,7 +92,7 @@ def bd_line():
     slo, shi = bd["saving_interval"]
     per = " · ".join(f"{r['qp']}: {r['bd_saving_pct']:.0f}%" for r in bd["rows"])
     return (f"BD-saving {bd['mean_bd_saving_pct']:.1f}% over dB in "
-            f"[{lo:.2f}, {hi:.2f}] (qp {per}); BD-quality "
+            f"[{lo:.3f}, {hi:.3f}] (qp {per}); BD-quality "
             f"{bd['mean_bd_quality_db']:.3f} dB over saving in "
             f"[{slo:.0f}%, {shi:.0f}%]")
 
