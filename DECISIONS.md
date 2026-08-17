@@ -2992,3 +2992,59 @@ dB sabit → tasarruf:
 
 0.3 dB bütçesinde qp63'te bile **%26.3**, qp0'da **%41.5** — yani hedef bandı
 0.1 dB'de değil ama 0.3 dB'de rahatça karşılanıyor.
+
+---
+
+## 53. 256px tavsiyem yanlıştı — ve sebebi tile boyutu değil
+
+Bölüm 36'da "j2/256 diğer konfigürasyonları domine ediyor" demiştim, dikiş
+ölçümüne dayanarak (256px dikişi yarıya indiriyor: qp63'te 0.0879 vs 0.1785).
+Sinyalli sistem 256px checkpoint'inde ölçülünce **yarı yarıya kötü** çıktı.
+
+İlk açıklamam: "büyük tile heterojenliği ortalıyor, uyarlanma kazancı düşüyor."
+Makul geliyordu ve teorimle de uyumluydu (Δ heterojenlikten geliyor). **Ölçüm
+çürüttü.**
+
+### 2×2 yalıtım — aynı ağırlık, iki tile boyutu
+
+Dikiş onarımı iki tarafta da kapalı, çünkü `GridSeamRepair`'in kapısı P×P ve
+checkpoint'i tile boyutuna kilitliyor (bunu da bu ölçüm sırasında keşfettim;
+"merdiven tile-boyutundan bağımsız" demiştim, ızgara kapısı için değilmiş).
+
+Tasarruf, ≤0.1 dB, yayınlanmış DCVC-UF referanslı, qp0/32/63:
+
+| | 128px tile | 256px tile |
+|---|---|---|
+| **128px ağırlık** | 24.4 / 15.8 / 8.7 | 24.0 / 14.3 / 7.5 |
+| **256px ağırlık** | 17.2 / 10.0 / 6.3 | 11.6 / 9.9 / 5.1 |
+
+- **tile etkisi** (128px ağırlıkla, A→B): −0.4 / −1.5 / −1.2 puan
+- **ağırlık etkisi** (256px tile'da, B→C): −12.4 / −4.4 / −2.4 puan
+
+Ağırlık etkisi qp0'da tile etkisinin **on katı**. Açıklamam yanlıştı.
+
+(C kolu, daha önce CONTROL için ayrı ölçtüğüm 11.4/9.8/5.0 ile uyuşuyor —
+bağımsız tutarlılık kontrolü.)
+
+### Tanı: fark sığ çıkışlarda, ve anchor tersine dönüyor
+
+Çıkış-başına dB kaybı, qp0, `scripts/why_qp.py` her iki checkpoint'te:
+
+| checkpoint | çıkış 2 | çıkış 3 | çıkış 4 | çıkış 5 (anchor) |
+|---|---|---|---|---|
+| 128px eğitilen | **0.3447** | **0.1516** | **0.0634** | 0.0228 |
+| 256px eğitilen | 0.5725 | 0.2953 | 0.0809 | **0.0165** |
+
+256px koşusu **anchor'ı daha iyi korumuş** ama **sığ çıkışları belirgin kötü**.
+Tasarruf tamamen sığ çıkışlardan geldiği için fark buradan geliyor.
+
+### Çıkarılacak ders
+
+Dikiş ölçümü doğruydu; 256px dikişi gerçekten yarıya indiriyor. Ama bu
+checkpoint'te **bağlayıcı kısıt dikiş değil, sığ çıkış kalitesi**. Darboğaz
+olmayan bir şeyi iyileştirip sonucu iyileşmiş saymak, bu projede ikinci kez
+oldu (ilki: arls'in dB kazancını maliyetsiz sanmak). Bir iyileştirmenin
+**hangi kısıtı** gevşettiğini sormadan konfigürasyon seçmemek gerekiyor.
+
+Sunumun 12. slaydındaki "larger tiles cut the seam but also the adaptivity"
+cümlesi de bu yüzden yanlış ve düzeltildi.

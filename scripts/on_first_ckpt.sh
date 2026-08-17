@@ -27,3 +27,12 @@ for q in 0 32 63; do
     --crop 512 --batches 8 --batch_size 4 --device "$GPU" 2>&1 \
     | sed -n '/HEADROOM/,/gain > 0/p' | sed "s/^/  qp$q  /" | head -10
 done
+
+# 3. The deliverable itself. The oracle above is an upper bound; this is the
+# system as it would ship -- the encoder computes the exit map and signals it,
+# with the map's own cost inside the bitrate. Run here so the number exists the
+# moment the checkpoint does, rather than waiting for someone to notice.
+echo; echo "--- 3. SINYALLI sistem (calisan), gercek DCVC-UF referansli ---"
+CUDA_VISIBLE_DEVICES="$GPU" ./.venv/bin/python -u scripts/signalled_curve.py \
+  --ckpt "$CK" --device cuda:0 \
+  --out "$D/signalled_$(basename "$CK" .pth.tar).json" 2>&1 | tail -9

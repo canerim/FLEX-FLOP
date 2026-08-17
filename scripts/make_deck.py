@@ -228,7 +228,8 @@ slide_fig("Theory, and where we are", "fig_theory.png", [
      if d else "Measured: Δ/J rises with rate", True),
  (0, "Open, and stated as open:", True),
  (1, "0.1 dB target not met; 0.3 dB comfortably met", False),
- (1, "larger tiles cut the seam but also the adaptivity — being isolated now", False),
+ (1, "256px tiles: seam halves but saving drops — isolated to the CHECKPOINT, "
+     "not the tile size (tile effect 0.4–1.5 pts, weight effect 12.4)", False),
  (1, "HEVC classes B/C/D behind JVET credentials, reported as NOT MEASURED", False),
  (0, "4 runs training (BEST, CONTROL, RECIPE512, VERBATIM) on 4 GPUs", False),
 ], size=11)
