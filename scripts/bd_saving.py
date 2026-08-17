@@ -150,6 +150,11 @@ def main(argv):
 
     out = {"curve": a.curve, "convention": a.convention,
            "n_sequences": d.get("n_sequences"), "ckpt": d.get("ckpt"),
+           # Carried through so any table built from bd_*.json can show WHICH
+           # snapshot each row is. ckpt_step.pth.tar is overwritten as training
+           # proceeds, so two rows naming the same path were compared at 8,000
+           # and 12,000 steps once, and nothing in the numbers said so.
+           "ckpt_epoch": d.get("ckpt_epoch"), "ckpt_step": d.get("ckpt_step"),
            "db_interval": [a.db_lo, a.db_hi],
            "saving_interval": [a.sv_lo, a.sv_hi], "rows": []}
     for qp, floor in zip(qps, floors):

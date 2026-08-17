@@ -95,9 +95,15 @@ def main(argv):
     for tag in sorted(ok):
         d = ok[tag][1]
         row = {r["qp"]: r for r in d["rows"]}
-        cells = "".join(
-            f"{row[q]['saving_pct']:>7.1f}%" if q in row else f"{'-':>8}"
-            for q in qps)
+        # A rate can be present but have no number: budget_reachable is False
+        # when the frontier's floor is above the budget, which is VERBATIM at
+        # every rate. That is a result, printed as such.
+        def _cell(q):
+            if q not in row:
+                return f"{'-':>8}"
+            v = row[q].get("saving_pct")
+            return f"{'n/a':>8}" if v is None else f"{v:>7.1f}%"
+        cells = "".join(_cell(q) for q in qps)
         print(f"  {tag:<18}{steps_of(d):>10}  {config_of(tag):<24}{cells}")
 
     if odd:
@@ -107,9 +113,47 @@ def main(argv):
             print(f"    {tag}: {d.get('n_sequences')} sequences, "
                   f"{d.get('frames_per_seq')} frame(s) -- the table is "
                   f"{main_key[0]}/{main_key[1]}")
+    # BD numbers, with the snapshot each was taken at.
+    #
+    # A table of these once compared BEST128 at 8,000 steps against FINE12 at
+    # 12,000 without saying so, because ckpt_step.pth.tar is overwritten and
+    # nothing recorded which write was measured. The step column exists so that
+    # cannot happen silently again; rows at different steps are not comparable
+    # to each other however close their numbers look.
+    import glob as _g
+    bds = {}
+    for f in _g.glob(str(RESULTS / "bd_*.json")):
+        n = Path(f).stem[3:]
+        if n in ("sensitivity", "saving_pooled"):
+            continue
+        try:
+            bds[n] = json.loads(Path(f).read_text())
+        except Exception:
+            pass
+    if bds:
+        print(f"\n  {'run':<18}{'ckpt step':>10}{'interval':>16}"
+              f"{'BD-saving':>12}")
+        ivs = set()
+        for n, d in sorted(bds.items()):
+            e, st = d.get("ckpt_epoch"), d.get("ckpt_step")
+            step = ("?" if e is None else
+                    f"{(e + 1) * 47451:,}" if st is None else
+                    f"{e * 47451 + st:,}")
+            iv = d.get("db_interval")
+            ivs.add(tuple(iv) if iv else None)
+            m = d.get("mean_bd_saving_pct")
+            iv_s = ("[%.3f, %.3f]" % tuple(iv)) if iv else "?"
+            m_s = f"{m:>11.2f}%" if m is not None else f"{'n/a':>12}"
+            print(f"  {n:<18}{step:>10}{iv_s:>16}{m_s}")
+        if len(ivs) > 1:
+            print("\n  ROWS ARE ON DIFFERENT INTERVALS and cannot be compared. "
+                  "Recompute them all\n  with scripts/common_interval.py's "
+                  "output before reading anything into the gaps.")
+
     print("\n  Differences in the numbers are attributable only as far as the "
           "configs differ")
-    print("  by one thing. Read the config column before reading the savings.")
+    print("  by one thing. Read the config and step columns before reading the "
+          "savings.")
     return 0
 
 
