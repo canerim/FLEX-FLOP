@@ -362,6 +362,26 @@ $1.3\times10^{-4}$~bpp --- four orders of magnitude below the rates in
 Table~\ref{tab:exits}.
 \end{remark}
 
+\begin{remark}[The frontier has a floor, and it is not free]
+Every quantity here is measured against a fixed reference decoder, and the
+deepest exit is assumed to reproduce it. Nothing in the derivation enforces
+that: the exits are trained, and if the deepest one drifts by $\delta$ then the
+whole achievable set shifts up by $\delta$ before any compute is saved. A
+budget below $\delta$ is then unreachable at every assignment --- not because
+routing fails, but because $\mathcal{A}$ does not intersect the constraint.
+
+This is not hypothetical. Training the same ladder under the released recipe
+with no term tying the deepest exit to the reference leaves
+$\delta = 0.146$--$0.217$~dB after one epoch, against $0.003$--$0.033$~dB with
+one, over $\mathrm{qp}\,0$ to $63$ on the same $40$ sequences and the same
+$256\times256$ tiles. The first exceeds a $0.1$~dB budget outright: its frontier
+spans $[0.223, 0.231]$~dB and does not overlap the second's range at all, so the
+two cannot even be compared by an integral over a shared interval.
+
+The floor therefore belongs to the setup rather than to the method. Reporting a
+saving without it states where a curve sits on an axis whose origin has moved.
+\end{remark}
+
 \begin{thebibliography}{1}\small
 \bibitem{shoham1988} Y.~Shoham and A.~Gersho. Efficient bit allocation for an
 arbitrary set of quantizers. \emph{IEEE Trans.\ Acoustics, Speech and Signal
