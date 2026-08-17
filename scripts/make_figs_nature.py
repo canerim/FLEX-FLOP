@@ -173,8 +173,16 @@ a.text(63, .105, "0.1 dB", ha="right", fontsize=5.5, color=ns.INK2)
 a.set_xticks(qps); a.set_xlabel("QP (low = low bitrate)")
 a.set_ylabel("dB below released DCVC-UF"); a.legend(loc="upper left")
 ns.panel(a, "a"); a.set_title("Fixed saving → quality cost", loc="left", pad=3)
-for c, d in zip([ns.PURPLE, ns.VERM, ns.BLUE], (0.1, 0.2, 0.3)):
-    b.plot(qps, [sv_at(q, d) for q in qps], color=c, marker="s", label=f"{d} dB budget")
+# Budgets every rate's frontier actually spans, computed rather than fixed.
+#
+# 0.1/0.2/0.3 dB was fine for the baseline. BEST's whole qp0 frontier spans
+# 0.197 dB, so its 0.3 dB point does not exist and the curve simply started at
+# qp16 -- which looks like lost data rather than a curve running off the end.
+_top = min(max(_front(q)[1]) for q in qps)
+_budgets = [round(x, 3) for x in (0.05, _top / 2, _top * 0.95)]
+for c, d in zip([ns.PURPLE, ns.VERM, ns.BLUE], _budgets):
+    b.plot(qps, [sv_at(q, d) for q in qps], color=c, marker="s",
+           label=f"{d:.2f} dB budget")
 b.set_xticks(qps); b.set_xlabel("QP"); b.set_ylabel("Compute saved (%)")
 # Lower left: with the curves interpolated they now run high across the whole
 # axis, and an upper-right legend sits on the 0.3 dB line.

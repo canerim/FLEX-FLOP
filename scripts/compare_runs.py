@@ -50,7 +50,12 @@ def steps_of(d: dict) -> str:
     e, st = d.get("ckpt_epoch"), d.get("ckpt_step")
     if e is None:
         return "?"
-    return f"{e * 47451 + (st or 0):,}"
+    # An epoch checkpoint carries no step, because it is written when the epoch
+    # ENDS. Treating the missing value as 0 labelled BEST's completed first
+    # epoch as "0 steps" -- it is 47,451. A step snapshot has both.
+    if st is None:
+        return f"{(e + 1) * 47451:,}"
+    return f"{e * 47451 + st:,}"
 
 
 def main(argv):

@@ -35,6 +35,7 @@ CURVE = "curve_BEST.json"
 BASE_CURVE = "paper_curve_grid128.json"
 SIGNALLED = "signalled_BEST_0817_1542.json"
 BASE_SIGNALLED = "signalled_grid128.json"
+BD = "bd_BEST.json"
 
 why = load("why_qp.json")
 pc = load(CURVE) or load(BASE_CURVE)
@@ -78,6 +79,27 @@ def exit2_rate_factor():
         return float("nan")
     r = {x["qp"]: x for x in w["rows"]}
     return r[63]["db_per_exit"][2] / r[0]["db_per_exit"][2]
+
+
+def budget_line(db):
+    """Saving at a dB budget, per rate, saying where the frontier ends first.
+
+    BEST's exits are good enough that its whole qp0 frontier spans 0.197 dB, so
+    asking what 0.3 dB buys there has no answer -- the ceiling is reached long
+    before. That printed as "nan%". A rate whose frontier ends inside the budget
+    is reported with its ceiling and what the ceiling cost, which is the more
+    useful fact anyway."""
+    out = []
+    for qp in (0, 32, 63):
+        v = sv_at(qp, db)
+        if v == v:
+            out.append(f"{v:.0f}% (qp{qp})")
+        else:
+            pts = sorted((r.get("db_vs_uf_per_frame", r["db_vs_uf"]),
+                          r["saving_pct"]) for r in pc["rows"] if r["qp"] == qp)
+            out.append(f"ceiling {pts[-1][1]:.0f}% already at "
+                       f"{pts[-1][0]:.2f} dB (qp{qp})")
+    return f"At {db:.1f} dB: " + " · ".join(out)
 
 
 def target_line():
@@ -150,7 +172,7 @@ def bd_line():
     grid-readout rule made one test-set comparison look twice as large as it
     was. BD-saving and BD-quality integrate the measured frontier over stated
     intervals, so neither depends on where the sweep placed a sample."""
-    bd = load("bd_saving.json")
+    bd = load(BD) or load("bd_saving.json")
     if not bd:
         return "integrated trade-off not computed"
     lo, hi = bd["db_interval"]
@@ -342,8 +364,7 @@ slide_fig("Cost, checked in the right unit", "nf_cost.png", [
 
 # 10 ------------------------------------------------------------------ results
 s = slide_fig("Results vs the released decoder", "nf_results.png", [
- (0, f"At 0.3 dB: {sv_at(0,0.3):.0f}% (qp0) · {sv_at(32,0.3):.0f}% (qp32) · "
-     f"{sv_at(63,0.3):.0f}% (qp63)", True),
+ (0, budget_line(0.3), True),
  (1, "dB is the per-frame average test_video.py computes — the convention every "
      "published DCVC-UF number uses. Pooling all tiles into one MSE reads "
      "0.023–0.033 dB lower on the same allocation and would flatter these", False),
