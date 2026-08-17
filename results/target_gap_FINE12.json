@@ -1,0 +1,53 @@
+{
+  "curve": "results/curve_FINE12.json",
+  "ckpt": "runs/FINE12/ckpt_step.pth.tar",
+  "target_pct": 30.0,
+  "budget_db": 0.1,
+  "rows": [
+    {
+      "qp": 0,
+      "saved_at_budget": 26.61421725843551,
+      "db_for_target": 0.13648165898438844,
+      "overspend_db": 0.03648165898438843,
+      "floor_db": 0.002278388710692525,
+      "floor_share_pct": 6.24529907389221,
+      "reachable": true
+    },
+    {
+      "qp": 16,
+      "saved_at_budget": 23.6141546102027,
+      "db_for_target": 0.16779732388056828,
+      "overspend_db": 0.06779732388056828,
+      "floor_db": 0.011098755523562431,
+      "floor_share_pct": 16.370492061182226,
+      "reachable": true
+    },
+    {
+      "qp": 32,
+      "saved_at_budget": 19.061188891677844,
+      "db_for_target": 0.2250898043651225,
+      "overspend_db": 0.1250898043651225,
+      "floor_db": 0.026991097256541252,
+      "floor_share_pct": 21.577375864908543,
+      "reachable": true
+    },
+    {
+      "qp": 48,
+      "saved_at_budget": 15.661318562254184,
+      "db_for_target": 0.24841561257492206,
+      "overspend_db": 0.14841561257492206,
+      "floor_db": 0.0445929653942585,
+      "floor_share_pct": 30.04600703429864,
+      "reachable": true
+    },
+    {
+      "qp": 63,
+      "saved_at_budget": 11.163106430207465,
+      "db_for_target": 0.2972927625233597,
+      "overspend_db": 0.19729276252335967,
+      "floor_db": 0.06504976004362106,
+      "floor_share_pct": 32.97118414869329,
+      "reachable": true
+    }
+  ]
+}

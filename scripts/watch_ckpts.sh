@@ -22,6 +22,22 @@
 # of number in the same log, and the cheaper one existed only to work around a
 # bug.
 #
+# Which card, and what it costs
+# -----------------------------
+# Evaluations share GPU2 with VERBATIM, and that is not free: VERBATIM's step
+# time went from 0.377 s to 0.601 s once the chain started running regularly, a
+# 60% slowdown taking its epoch from 5.0 h to 7.9 h.
+#
+# It is still the deliberate choice. Every card on this machine is occupied --
+# six of ours and two other people's -- so the evaluation has to sit on top of
+# some run, and VERBATIM has the most slack by a wide margin: even slowed it is
+# the fastest of the six, against BEST's 21 h epoch. Putting the chain on GPU7
+# would tax CONTROL at 1.0 s/step instead, for no gain.
+#
+# If this needs revisiting, the lever is --ckpt_every on the two runs that write
+# step snapshots, not the size of the test set: a smaller test set was tried and
+# removed, because two tiers of measurement meant two kinds of number.
+#
 # One evaluation at a time, machine-wide
 # --------------------------------------
 # Five watchers sharing one card would collide, and an OOM here would look like
