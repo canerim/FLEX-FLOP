@@ -1,15 +1,33 @@
-# The seam artefact: what it is, and what actually removes it
+# The seam artefact: what went wrong, and what fixed it
 
-Cutting a frame into tiles is what makes early exit possible — an easy tile can
-skip most of the network only if it is decoded on its own. That choice creates
-one problem, and this document is the whole of it: the cause, the four things
-tried, the two kept, the two rejected, and the measurement that says the
-solution works.
+## The bargain, and the bill
 
-Every number here is measured on 40 CTC sequences with **early exit switched
-off** — every tile at full depth, so the only difference from a full-frame
-decode is the tiling itself. That isolation matters: it means nothing below is
-contaminated by the exit ladder.
+Early exit needs tiles. A frame decoded as one piece pays whatever its hardest
+region demands; cut it into tiles and an easy tile can leave the network early.
+That is the whole idea, and it is not optional — without tiles there is nothing
+to route.
+
+The bill arrived immediately, and it was larger than the entire budget.
+
+![the problem](figures/seam_problem.png)
+
+Above is a 1080p frame decoded twice from the **same bitstream**, with the same
+weights, at full depth everywhere. No tile exits early; nothing about the ladder
+is switched on. The only difference is that the right-hand decode was done tile
+by tile. Everything bright in the error map is the tiling and nothing else.
+
+The grid is not subtle. It is the tile lattice, drawn onto the picture by the
+decoder itself, and at qp 63 it costs **0.5477 dB** — five times the 0.1 dB
+budget this project works to. Before a single tile has saved a single MAC, the
+method has already spent five times what it is allowed to.
+
+That is the problem. The rest of this document is how it went from 0.55 dB to
+0.11, why the two decisive steps were free, why the clever fix was rejected, and
+why the module that costs something is on the wrong side of its own test.
+
+Every number below is measured with **early exit switched off** — every tile at
+full depth — so the tiling is the only difference from a full-frame decode and
+nothing here is contaminated by the ladder.
 
 ## 1. Where it comes from
 
@@ -33,7 +51,7 @@ is 1×1, and a 1×1 has no neighbours to miss:
 
 That single fact shapes the rest of the design. It is why the exit adapters are
 1×1 on purpose — they add capacity without adding a receptive field, so they
-cost no seam — and it is why canvas coupling (§5) is affordable at all.
+cost no seam — and it is why canvas coupling (§7) is affordable at all.
 
 ### The damage propagates inward
 
@@ -61,15 +79,17 @@ split depth `j`.
 
 ## 2. How bad it was
 
-Pure seam penalty, 256 px tiles, no early exit, dB above the released decoder:
+The picture above, as a number. Pure seam penalty, 256 px tiles, dB above the
+released decoder:
 
 | padding | qp 0 | qp 32 | qp 63 |
 |---|---|---|---|
 | zeros (stock behaviour) | 0.1005 | 0.2162 | **0.5477** |
 
-The budget this project works to is **0.1 dB**. At qp 63 the tiling alone spends
-five times it, before a single tile exits early. Without a fix there is no
-experiment.
+Note that it worsens with rate. At low rate the reconstruction is smooth and a
+wrong neighbour costs little; at high rate the latent carries detail, the border
+pixels have somewhere to fall, and the same mistake costs five times as much.
+Which means the artefact is worst exactly where the method already struggles.
 
 ## 3. Padding is an estimator, and that is the useful way to see it
 
