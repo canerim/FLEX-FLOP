@@ -700,11 +700,15 @@ slide_fig("Who decides", "ab_decision.png", [
 # 18 ----------------------------------------------- the claim this overturned
 slide_fig("A claim overturned", "ab_budgets.png", [
  (0, "Earlier claim: prediction fails, signalling works", True),
- (1, "router trained JOINTLY with a moving decoder → collapsed, agreement "
-     "0.000 at qp 63", False),
- (0, "Retrained against the FROZEN decoder: 0.848 agreement, budget met at "
-     "every rate", True),
- (1, "⇒ the limit was the training target, not the information", False),
+ (1, "that was ONE router — BEST's, trained jointly with a moving decoder — "
+     "not routing as such. Agreement 0.000 at qp 63, 239 of 240 tiles to one "
+     "exit", False),
+ (0, "Routing works. Three routers, three outcomes:", True),
+ (1, "BEST, joint          collapsed to a qp-dependent constant", False),
+ (1, "FINE12, joint        did NOT collapse · budget met, β ≈ −0.01", False),
+ (1, "retrained on FROZEN  0.848–0.923 agreement · budget met at every rate", False),
+ (1, "⇒ the limit was the training target, not the information — and joint "
+     "training does not always break it, which is itself unexplained", False),
  (0, "Cost of not signalling ·  0.1 dB 1.35–3.96 pts  ·  0.3 dB 0.16–0.95  ·  "
      "0.5 dB 0.16–1.23", True),
  (1, "at the ceiling the gap is 0.16 = the router's own 0.163%", False),

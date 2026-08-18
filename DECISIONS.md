@@ -4251,3 +4251,28 @@ beşte biri.
 
 Belgelerde tavanı hep "mimari sınır" diye yazmıştım ama maliyet-sınırı /
 ulaşılabilir-nokta ayrımını öne çıkarmamışım. 03 ve 04 düzeltildi.
+
+---
+
+## 80 — "Router çöktü" fazla genel bir ifadeydi
+
+Kullanıcı sordu: router çalışıyor mu, neden çöküş diyorsun. Haklı — iki ayrı
+router'ı tek isimle anlatmışım.
+
+Üç router, üç sonuç, hepsi ölçülmüş:
+
+| router | sonuç |
+|---|---|
+| BEST, ortak eğitilmiş | qp'ye bağlı sabite çöktü, qp63'te uyum 0.000 |
+| FINE12, ortak eğitilmiş | **çökmedi** — beş hızda da bütçeye ulaşıyor, β ≈ −0.01 |
+| donuk kod çözücüye karşı yeniden eğitilmiş | uyum 0.848–0.923, beş hızda da bütçede |
+
+Yani **routing çalışıyor.** Çöken şey BEST'in içindeki belirli bir router.
+Ve ortak eğitim de otomatik olarak öldürücü değil — FINE12 aynı şeyi yapıyor
+ve sağ kalıyor.
+
+BEST'inki neden çöktü de FINE12'ninki çökmedi: **açık.** İkisi K, j, karo boyutu
+ve adaptör tipinde farklı, yani karşılaştırma hiçbir şeyi izole etmiyor.
+
+Sunumdaki "A claim overturned" slaytı ve docs/04 düzeltildi: artık üç sonucu
+yan yana veriyor, "router çöker" değil.

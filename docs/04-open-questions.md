@@ -96,12 +96,19 @@ tiles to exit 4 and the oracle sends all 240 to exit 2. So the zero-added-bits
 configuration — bitstream byte-identical to a stock stream, decoder decides for
 itself — currently does not work at all.
 
-This is a training failure rather than a limit on the information available. The
-router reads the stem, and a dedicated router trained against a *frozen* decoder,
-with loss-free load balancing toward the oracle's exit mix, reached 0.86–0.93
-agreement on an earlier checkpoint. Joint training with a decoder that is itself
-moving appears to be what collapses it — the risk the model's own docstring names
-("a router trained against a moving target").
+This is a training failure rather than a limit on the information available, and
+it is specific to **that** router rather than to routing. Three routers, three
+outcomes, all measured:
+
+| router | outcome |
+|---|---|
+| BEST, trained jointly | collapsed to a qp-dependent constant, agreement 0.000 at qp 63 |
+| FINE12, trained jointly | **did not collapse** — budget met at every rate, β ≈ −0.01 |
+| retrained against a FROZEN decoder | 0.848–0.923 held-out agreement, budget met at every rate |
+
+So joint training is not automatically fatal: FINE12 does it and survives. Why
+BEST's collapsed and FINE12's did not is open — they differ in K, j, tile size
+and adapter kind, so the comparison isolates nothing.
 
 **Answered.** A `StemRouterHeadV2` retrained against BEST's *frozen* decoder
 reaches 0.848 held-out agreement and hits the budget at every rate: 30.07% saved
