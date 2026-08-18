@@ -117,7 +117,7 @@ class FlexUFConfig:
     tile_coupling: bool = False
     """Let each per-tile depthwise read its real neighbours from a shared canvas.
 
-    Only the 3x3 depthwise has any spatial extent -- 0.334% of a DepthConvBlock --
+    Only the 3x3 depthwise has any spatial extent -- 0.29% of a DepthConvBlock --
     so this costs +0.066% of the decode at 128px tiles and +0.032% at 256px,
     against GridSeamRepair's 0.951%. When neighbouring tiles are at the same
     depth the result is BIT-EXACT the full-frame decode; see backbone/coupling.py.

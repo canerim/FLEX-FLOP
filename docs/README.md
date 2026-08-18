@@ -47,6 +47,7 @@ training and none has reached the four-epoch selection point.
 | [02 — Architecture and accounting](02-architecture.md) | The exit ladder, what the router costs, and exactly how "compute saved" is computed |
 | [03 — Results](03-results.md) | Rate–quality curves, the trade-off between dB given up and compute saved, training and convergence |
 | [04 — Open questions](04-open-questions.md) | What is not yet explained, and the measurement that would settle it — including a router that has collapsed to a constant |
+| [07 — The seam artefact](07-seam.md) | Where tiling damage comes from, the four fixes tried, the two kept, and what the repair module is actually worth |
 | [06 — What this needs for CVPR](06-cvpr-plan.md) | An honest gap analysis: the two measurements that can still change what the paper claims, and the order to make them in |
 | [05 — A versus B](05-decision-ab.md) | Encoder search against decoder prediction, compared on every axis: bits, compute on each side, optimality, deployability, and where the gap really comes from |
 
