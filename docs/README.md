@@ -41,13 +41,19 @@ training and none has reached the four-epoch selection point.
 
 ## The documents
 
-**Start here:** [08 — FLEX-UF end to end](08-system.md) is the single document
+**Start here:** [09 — Results and status](09-report.md) is the compiled report —
+what was built, what it delivers, what it cost, and which numbers were wrong and
+why. It regenerates from `results/` (`scripts/make_report.py`), so it cannot
+drift from the measurements.
+
+[08 — FLEX-UF end to end](08-system.md) is the single document
 that covers the whole system — the data path, the exit adapters' internals, the
 seam and how it is handled, both routing configurations, and how training works.
 The others go deeper on one topic each.
 
 | | |
 |---|---|
+| [09 — Results and status](09-report.md) | The compiled report: headline numbers, the operating-point structure, the seam, A vs B, and every correction that moved a number |
 | [08 — The system, end to end](08-system.md) | Everything in one place, with diagrams: pipeline, adapter internals, seam repair, A vs B, the training objective |
 | [01 — Experiment plan](01-experiment-plan.md) | The question, the protocol, the six runs, how the winner gets picked, what happens next |
 | [02 — Architecture and accounting](02-architecture.md) | The exit ladder, what the router costs, and exactly how "compute saved" is computed |

@@ -150,16 +150,18 @@ implemented, measured, and dropped.
 From §1 the damage scales with the perimeter, so doubling the tile side should
 roughly halve it. It does:
 
+Both columns re-measured against a clean reference on the same 40 sequences:
+
 | mode, qp 63 | 128 px | 256 px | ratio |
 |---|---|---|---|
-| zeros | 1.1670 | 0.6768 | ×0.58 |
-| replicate | 0.2125 | 0.2179 | — |
+| zeros | 1.2489 | 0.6768 | ×0.54 |
+| replicate | 0.3725 | 0.2179 | ×0.59 |
+| arls | 0.3322 | 0.1972 | ×0.59 |
 
-The 128 px column has **not** been re-measured against a clean reference yet — it
-carries the same bug — so only the `zeros` row is comparable, and even that
-crosses two different sequence sets (9 then, 40 now). The re-measurement is
-queued. What the perimeter argument predicts is ×0.50; what the one clean pair
-gives is ×0.58 across a changed test set.
+The perimeter argument predicts ×0.50 and the measurement gives ×0.54–0.59, so
+the scaling is slightly weaker than pure perimeter — expected, since the
+contaminated *area* `1 − ((F−2b)/F)²` is 0.750 at F = 32 and 1.000 at F = 16, and
+neither is a thin border.
 
 This costs **nothing in compute** — a tiled decode's MAC count does not depend
 on the tile size at all. What it costs is *routing granularity*: 40 tiles per
