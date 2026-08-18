@@ -77,6 +77,26 @@ def timeit_interleaved(fns: dict, warmup: int, iters: int) -> dict:
     return {k: statistics.median(v) for k, v in ts.items()}
 
 
+def _content(H, W, dev):
+    """A deterministic non-uniform image.
+
+    `torch.zeros` was used here and in the sorted-execution prototype, which made
+    every tile identical -- so a check that reordering tiles changes nothing
+    could not fail, and every tile presented the encoder with the same trivial
+    content. Smooth gradients plus a coarse texture give the entropy model
+    something to do and the tiles something to differ about, without depending on
+    a file being present.
+    """
+    g = torch.Generator(device="cpu").manual_seed(0)
+    yy = torch.linspace(0, 1, H).view(1, 1, H, 1)
+    xx = torch.linspace(0, 1, W).view(1, 1, 1, W)
+    base = (yy * xx).expand(1, 3, H, W).clone()
+    tex = torch.rand(1, 3, H // 16, W // 16, generator=g)
+    tex = torch.nn.functional.interpolate(tex, size=(H, W), mode="bilinear",
+                                          align_corners=False)
+    return (0.6 * base + 0.4 * tex - 0.5).to(dev)
+
+
 def main(argv):
     ap = argparse.ArgumentParser()
     ap.add_argument("--ckpt", default="runs/BEST/ckpt_eval.pth.tar")
@@ -92,6 +112,11 @@ def main(argv):
                          "tiling overhead is the same at every budget, so a "
                          "looser budget amortises it over a larger saving -- "
                          "which is a claim worth measuring, not assuming.")
+    ap.add_argument("--sorted_tiles", action="store_true",
+                   help="time the sorted per-tile loop as a fourth variant. The "
+                        "arithmetic is identical (tests/test_sorted_tiles.py); "
+                        "what changes is one device-to-host synchronisation per "
+                        "group boundary becoming one for the whole loop.")
     ap.add_argument("--out", default="results/latency_BEST.json")
     ap.add_argument("--note", default="",
                     help="recorded with the result; use it to say what else was "
@@ -127,10 +152,14 @@ def main(argv):
 
     rows = []
     print(f"  {'qp':>4}{'stock':>10}{'deep':>10}{'routed':>10}"
-          f"{'overhead':>11}{'realised':>11}{'predicted':>11}")
+          f"{'overhead':>11}{'realised':>11}{'predicted':>11}"
+          + (f"{'sorted':>11}" if a.sorted_tiles else ""))
     with torch.no_grad():
         for qp_v in a.qps:
-            x = torch.zeros(1, 3, H, W, device=dev)
+            # Real content, not zeros. With a constant image every tile carries
+            # the same latent, so anything that reorders tiles is trivially
+            # exact and any data-dependent kernel choice is unrepresentative.
+            x = _content(H, W, dev)
             qp = torch.full((1,), qp_v, dtype=torch.int32, device=dev)
             y, q, _ = net._encode_to_latent(x, qp)
 
@@ -145,22 +174,41 @@ def main(argv):
             deep = torch.full((n_tiles,), cfg.num_exits - 1,
                               dtype=torch.long, device=dev)
 
-            t = timeit_interleaved({
+            variants = {
                 "stock": lambda: ref.dec.forward_full(y, q),
                 "deep": lambda: net.dec(y, q, exit_map=deep),
-                "routed": lambda: net.dec(y, q, exit_map=em)},
-                a.warmup, a.iters)
+                "routed": lambda: net.dec(y, q, exit_map=em)}
+            if a.sorted_tiles:
+                cfg_s = FlexUFConfig(**{**cfg.__dict__, "sorted_tiles": True})
+                cfg_m = FlexUFConfig(**{**cfg.__dict__, "sorted_tiles": False})
+
+                def _routed_sorted():
+                    net.dec.cfg = cfg_s
+                    try:
+                        return net.dec(y, q, exit_map=em)
+                    finally:
+                        net.dec.cfg = cfg_m
+                variants["routed_sorted"] = _routed_sorted
+            t = timeit_interleaved(variants, a.warmup, a.iters)
             t_stock, t_deep, t_route = t["stock"], t["deep"], t["routed"]
+            t_sort = t.get("routed_sorted")
 
             predicted = 100 * (1 - frame_relative_cost(em.cpu(), cfg, "head"))
             realised = 100 * (1 - t_route / t_stock)
             overhead = 100 * (t_deep / t_stock - 1)
-            rows.append({"qp": qp_v, "ms_stock": t_stock, "ms_deep": t_deep,
-                         "ms_routed": t_route, "overhead_pct": overhead,
-                         "realised_saving_pct": realised,
-                         "predicted_saving_pct": predicted, "hist": h})
-            print(f"  {qp_v:>4}{t_stock:>9.2f}ms{t_deep:>9.2f}ms{t_route:>9.2f}ms"
-                  f"{overhead:>10.1f}%{realised:>10.1f}%{predicted:>10.1f}%")
+            row = {"qp": qp_v, "ms_stock": t_stock, "ms_deep": t_deep,
+                   "ms_routed": t_route, "overhead_pct": overhead,
+                   "realised_saving_pct": realised,
+                   "predicted_saving_pct": predicted, "hist": h}
+            line = (f"  {qp_v:>4}{t_stock:>9.2f}ms{t_deep:>9.2f}ms"
+                    f"{t_route:>9.2f}ms{overhead:>10.1f}%{realised:>10.1f}%"
+                    f"{predicted:>10.1f}%")
+            if t_sort is not None:
+                row["ms_routed_sorted"] = t_sort
+                row["realised_saving_sorted_pct"] = 100 * (1 - t_sort / t_stock)
+                line += f"{100*(1-t_sort/t_stock):>10.1f}%"
+            rows.append(row)
+            print(line)
 
     print("\n  overhead = what the tiling machinery costs before routing saves")
     print("  anything (every tile at the deepest exit, same arithmetic as stock)")

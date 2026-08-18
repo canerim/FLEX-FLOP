@@ -1,0 +1,109 @@
+{
+  "ckpt": "runs/VERBATIM/ckpt_eval.pth.tar",
+  "ckpt_epoch": 4,
+  "ckpt_step": null,
+  "budgets": [
+    0.1
+  ],
+  "frames_per_seq": 1,
+  "n_sequences": 40,
+  "measured": [
+    "Beauty_1920x1080_120fps_420_8bit_YUV.yuv",
+    "Bosphorus_1920x1080_120fps_420_8bit_YUV.yuv",
+    "HoneyBee_1920x1080_120fps_420_8bit_YUV.yuv",
+    "Jockey_1920x1080_120fps_420_8bit_YUV.yuv",
+    "ReadySteadyGo_1920x1080_120fps_420_8bit_YUV.yuv",
+    "ShakeNDry_1920x1080_120fps_420_8bit_YUV.yuv",
+    "YachtRide_1920x1080_120fps_420_8bit_YUV.yuv",
+    "videoSRC01_1920x1080_30.yuv",
+    "videoSRC02_1920x1080_30.yuv",
+    "videoSRC03_1920x1080_30.yuv",
+    "videoSRC04_1920x1080_30.yuv",
+    "videoSRC05_1920x1080_25.yuv",
+    "videoSRC06_1920x1080_25.yuv",
+    "videoSRC07_1920x1080_25.yuv",
+    "videoSRC08_1920x1080_25.yuv",
+    "videoSRC09_1920x1080_25.yuv",
+    "videoSRC10_1920x1080_30.yuv",
+    "videoSRC11_1920x1080_30.yuv",
+    "videoSRC12_1920x1080_30.yuv",
+    "videoSRC13_1920x1080_30.yuv",
+    "videoSRC14_1920x1080_30.yuv",
+    "videoSRC15_1920x1080_30.yuv",
+    "videoSRC16_1920x1080_30.yuv",
+    "videoSRC17_1920x1080_24.yuv",
+    "videoSRC18_1920x1080_25.yuv",
+    "videoSRC19_1920x1080_30.yuv",
+    "videoSRC20_1920x1080_25.yuv",
+    "videoSRC21_1920x1080_24.yuv",
+    "videoSRC22_1920x1080_24.yuv",
+    "videoSRC23_1920x1080_24.yuv",
+    "videoSRC24_1920x1080_24.yuv",
+    "videoSRC25_1920x1080_24.yuv",
+    "videoSRC26_1920x1080_30.yuv",
+    "videoSRC27_1920x1080_30.yuv",
+    "videoSRC28_1920x1080_30.yuv",
+    "videoSRC29_1920x1080_24.yuv",
+    "videoSRC30_1920x1080_30.yuv",
+    "FourPeople_1280x720_60.yuv",
+    "Johnny_1280x720_60.yuv",
+    "KristenAndSara_1280x720_60.yuv"
+  ],
+  "not_measured": [
+    "BQTerrace_1920x1080_60.yuv",
+    "BasketballDrive_1920x1080_50.yuv",
+    "Cactus_1920x1080_50.yuv",
+    "Kimono1_1920x1080_24.yuv",
+    "ParkScene_1920x1080_24.yuv",
+    "BQMall_832x480_60.yuv",
+    "BasketballDrill_832x480_50.yuv",
+    "PartyScene_832x480_50.yuv",
+    "RaceHorses_832x480_30.yuv",
+    "BasketballPass_416x240_50.yuv",
+    "BlowingBubbles_416x240_50.yuv",
+    "BQSquare_416x240_60.yuv",
+    "RaceHorses_416x240_30.yuv"
+  ],
+  "rows": [
+    {
+      "qp": 0,
+      "saving_pct": null,
+      "db_vs_uf": null,
+      "floor_db": 0.10055406889878213,
+      "budget_db": 0.1,
+      "budget_reachable": false
+    },
+    {
+      "qp": 16,
+      "saving_pct": null,
+      "db_vs_uf": null,
+      "floor_db": 0.11601997800171375,
+      "budget_db": 0.1,
+      "budget_reachable": false
+    },
+    {
+      "qp": 32,
+      "saving_pct": null,
+      "db_vs_uf": null,
+      "floor_db": 0.1325243465602398,
+      "budget_db": 0.1,
+      "budget_reachable": false
+    },
+    {
+      "qp": 48,
+      "saving_pct": null,
+      "db_vs_uf": null,
+      "floor_db": 0.13910003213677555,
+      "budget_db": 0.1,
+      "budget_reachable": false
+    },
+    {
+      "qp": 63,
+      "saving_pct": null,
+      "db_vs_uf": null,
+      "floor_db": 0.159878864325583,
+      "budget_db": 0.1,
+      "budget_reachable": false
+    }
+  ]
+}

@@ -223,6 +223,37 @@ class FlexUFConfig:
     flips. Train through the decode path you deploy.
     """
 
+    sorted_tiles: bool = False
+    """Run the per-tile group loop over tiles SORTED by exit depth.
+
+    Pure bookkeeping: the same tiles run through the same groups and the output
+    is bit-identical (`tests/test_sorted_tiles.py`, `max|diff| = 0.0`). What
+    changes is how the loop finds "the tiles still active at group g".
+
+    Today that is a boolean mask, a gather of the survivors and a scatter of the
+    finished, at every group boundary. Boolean indexing has to know how many
+    elements survive, which forces a device-to-host synchronisation -- four
+    groups, four syncs. `latency_profile.py` measured 36.4 ms of that against
+    77.5 ms of actual convolution: 32% of the loop, and none of it appears in
+    the MAC model, which is most of why the measured speedup trails the
+    arithmetic one by 2-3x.
+
+    Sorted DESCENDING by exit, "still active at group g" becomes a contiguous
+    PREFIX. Each group is then a slice (a view, no copy), the boundaries come
+    from one cumulative count instead of a mask per group, and the finished
+    tiles are written back through the inverse permutation in a single scatter.
+
+    Default False, deliberately. Six training runs import this module and a
+    crash-restart would pick up the change mid-experiment; bit-identical is not
+    the same as risk-free when the risk is a silent gradient bug in a run that
+    has been going for two days. Evaluation and latency paths set it explicitly.
+    The default flips once the runs reach their selection point.
+
+    Not compatible with `tile_coupling`: the coupler indexes canvas slots by
+    original tile id, and reconciling that with the permutation has not been
+    measured. Asserted rather than silently ignored.
+    """
+
     # -- the joint multi-exit objective (Scardapane et al. 2020, Eq. 6-7) ----
     aux_weight: float = 1.0
     """alpha_i in Eq. (6) — the weight on each auxiliary (early) exit's loss.

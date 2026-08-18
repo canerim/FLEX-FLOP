@@ -460,6 +460,61 @@ class MultiExitIntraDecoder(nn.Module):
             feats.append(self._at_exit(feat, g))
         return feats
 
+    def _suffix_sorted(self, tiles, exit_map, canvas, quant_step, tile_gate,
+                       undo_pad, halo, nh, nw, batch):
+        """The per-tile suffix with the tiles ordered by depth. Bit-identical.
+
+        Sorted DESCENDING, "still active at group g" is a contiguous prefix, so
+        every group is a slice instead of a masked gather and the finished tiles
+        are a slice instead of a masked scatter. `bounds` is one cumulative count
+        read once, against one device-to-host synchronisation per group in the
+        masked form.
+
+        The permutation is carried, not hidden: `tile_gate` is indexed by
+        ORIGINAL tile id and so is the canvas that `unpatchify` expects, so both
+        go through `order` / `inv` explicitly.
+        """
+        cfg = self.cfg
+        K, j = cfg.num_exits, cfg.split_depth
+        n = tiles.shape[0]
+        order = torch.argsort(exit_map, descending=True, stable=True)
+        inv = torch.empty_like(order)
+        inv[order] = torch.arange(n, device=order.device)
+        em_sorted = exit_map[order]
+        # One host read for the whole loop: how many tiles survive each group.
+        bounds = (em_sorted[None, :] > torch.arange(
+            j, K, device=order.device)[:, None]).sum(1).tolist()
+
+        work = tiles[order]
+        out = torch.empty_like(canvas)
+        lo = n
+        for idx, g in enumerate(range(j, K)):
+            work = self.groups[g](work)
+            hi = bounds[idx]
+            if hi < lo:
+                seg = self._at_exit(work[hi:lo], g)
+                if tile_gate is not None:
+                    seg = seg * tile_gate[order[hi:lo]].view(-1, 1, 1, 1)
+                out[hi:lo] = seg
+                work = work[:hi]           # a view; no gather
+                lo = hi
+            if hi == 0:
+                break
+        canvas = out[inv]
+
+        if undo_pad is not None:
+            undo_pad()
+        elif cfg.tile_pad_mode != "zeros":
+            self._set_tile_padding("zeros", j)
+
+        stitched = unpatchify(crop_halo(canvas, halo) if halo > 0 else canvas,
+                              nh, nw, batch=batch)
+        if self.seam_repair is not None:
+            stitched = self.seam_repair(stitched)
+        if cfg.full_frame_head:
+            return self._apply_head(stitched, quant_step)
+        return self._head_per_tile(stitched, quant_step, nh, nw)
+
     # -- the deployed hybrid decode -----------------------------------------
     def forward(
         self,
@@ -552,6 +607,14 @@ class MultiExitIntraDecoder(nn.Module):
         # `active` is the shrinking set of tiles still climbing the ladder.
         # Every group runs on fewer tiles than the last — that shrinkage IS the
         # saving.
+        if cfg.sorted_tiles:
+            assert not cfg.tile_coupling, (
+                "sorted_tiles and tile_coupling are not compatible: the coupler "
+                "indexes canvas slots by original tile id"
+            )
+            return self._suffix_sorted(tiles, exit_map, canvas, quant_step,
+                                       tile_gate, undo_pad, halo, nh, nw,
+                                       feat.shape[0])
         active = torch.arange(n_tiles, device=tiles.device)
         work = tiles
         for g in range(j, K):
