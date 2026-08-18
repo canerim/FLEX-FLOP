@@ -304,8 +304,17 @@ with $\lambda$ found by bisection so the frame lands on the quality budget.
 Both quantities in~(\ref{eq:lagrangian}) are available \emph{to the encoder},
 which holds the source. This gives configuration~\textbf{A}: the encoder searches
 and transmits the map, which entropy-codes to $\sim$\MapBits\ bits per 1080p
-frame, or \MapOverheadLow\% of a typical bitrate. It costs the encoder about one
-extra decode and costs the decoder nothing.
+frame, or \MapOverheadLow\% of a typical bitrate, and costs the decoder nothing.
+
+What it costs the \emph{encoder} depends on how the table is built, and the
+difference is larger than it looks. Measured at 1080p against one tiled decode as
+the unit: the deployed table, $K$ tiled decodes, is $4.6\times$; the full-frame
+table of Section~\ref{sec:method} is $1.4\times$. The full-frame table is the one
+Section~5 shows must not be used to \emph{report} quality --- but it can be used
+to \emph{rank}. Using it for the argmin and the deployed path only to check the
+budget, the two searches agree on $85\%$ of tiles and land within $0.4$ points of
+saving of each other ($19.0\%$ against $18.6\%$, both under budget). So the exact
+search costs $4.6$ decodes and a practical encoder need not pay it.
 
 The decoder cannot evaluate~(\ref{eq:lagrangian}): $D_{t,k}$ is the error against
 a source it never sees. This is not a hard estimation problem, it is a missing
