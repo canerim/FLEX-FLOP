@@ -241,11 +241,8 @@ def adapters():
     arrow(a, 0.10, 0.881, 0.10, 0.2625, style="-")
     arrow(a, 0.10, 0.2625, 0.20, 0.2625)
     a.text(0.51, 0.135, f"$2C^2$ = {2*C**2:,} MAC/px", fontsize=6.5, ha="center")
-    a.text(0.51, 0.065, "the same operator sequence as the FFN inside a\n"
-           "DepthConvBlock — the 74.8% of every block an exit gives up",
-           fontsize=5.2, ha="center", color=ns.INK2, linespacing=1.5)
-    a.text(0.51, -0.03, "Used by exits 0–3 — they skip 4 blocks or more",
-           fontsize=5.5, ha="center", color=ns.VERM)
+
+    a.text(0.51, 0.055, "exits 0–3", fontsize=6, ha="center", color=ns.VERM)
     ns.panel(a, "b", dx=-0.02, dy=1.13)
 
     # ---- c: capacity matched to the gap ------------------------------------
@@ -266,15 +263,13 @@ def adapters():
             a.text(k, sk + 0.22, "FFN" if sk >= 4 else "1×1", fontsize=5.5,
                    ha="center", color=ns.VERM if reach[k] else "#999999")
     a.axvspan(-0.6, j - 0.5, color="#f5f5f5", zorder=0)
-    a.text(0.5, 11.4, f"unreachable — the map is clamped to k ≥ j = {j},\n"
-           "so exits 0, 1 and 2 all cost the same", fontsize=5,
-           ha="center", color="#888888", linespacing=1.5)
+    a.text(0.5, 11.6, f"unreachable (k < j = {j})", fontsize=5,
+           ha="center", color="#888888")
     a.set_xlabel("exit k"); a.set_ylabel("in units of one DepthConvBlock")
     a.set_xticks(ks); a.set_xlim(-0.6, K - 0.4); a.set_ylim(0, 13.5)
     a.legend(loc="center right", fontsize=5)
-    a.set_title("Capacity matched to the gap — and charged for it:\n"
-                "an exit-2 tile saves 6 blocks minus 0.25, not 6",
-                fontsize=6, color=ns.INK2, loc="left")
+    a.set_title("Capacity against the gap", fontsize=6, color=ns.INK2,
+                loc="left")
     ns.panel(a, "c", dx=-0.22, dy=1.13)
 
     fig.tight_layout()
@@ -326,8 +321,6 @@ def seam_module():
     arrow(a, 0.07, 0.2125, 0.16, 0.2125)
     a.text(0.51, 0.075, "0.95% of the decode  ·  0.0007% of the parameters",
            fontsize=5.4, ha="center")
-    a.text(0.51, 0.0, "applied ONCE to the whole frame, never per tile",
-           fontsize=5.4, ha="center", color=ns.VERM)
     ns.panel(a, "a", dx=-0.02, dy=1.16)
 
     # ---- b: the trained gate ----------------------------------------------
@@ -336,14 +329,9 @@ def seam_module():
         im = a.imshow(G, cmap="magma")
         cb = fig.colorbar(im, ax=a, fraction=0.046, pad=0.03)
         cb.ax.tick_params(labelsize=5)
-        a.set_title("The gate G, read out of the checkpoint\n"
-                    f"{G.max():.2f} on the boundary ring, {G.min():.3f} in the "
-                    "interior", fontsize=6, color=ns.INK2, loc="left")
-        a.text(cfg.feature_patch / 2, cfg.feature_patch / 2,
-               f"the interior never reaches zero:\n{G.min():.3f} × 94% of the "
-               "pixels\nis the leak panel c measures",
-               fontsize=5, ha="center", va="center", color="white",
-               linespacing=1.6)
+        a.set_title(f"Gate G   ring {G.max():.2f}, interior {G.min():.3f}",
+                    fontsize=6, color=ns.INK2, loc="left")
+
     a.set_xlabel("j mod P"); a.set_ylabel("i mod P"); a.grid(False)
     ns.panel(a, "b", dx=-0.22, dy=1.16)
 
@@ -363,10 +351,7 @@ def seam_module():
     a.set_ylim(-0.33, 0.10)
     a.set_xlabel("distance from the nearest tile boundary (px)")
     a.set_ylabel("change in MSE with repair ON (%)")
-    a.set_title("Helps on the ring, hurts everywhere else.\n"
-                "Even a perfect gate could earn only ≈0.0008 dB,\n"
-                "against the 0.95% of decode it costs.",
-                fontsize=6, color=ns.INK2, loc="left")
+    a.set_title("Where it acts", fontsize=6, color=ns.INK2, loc="left")
     ns.panel(a, "c", dx=-0.26, dy=1.16)
 
     fig.tight_layout()
