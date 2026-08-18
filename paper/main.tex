@@ -330,14 +330,26 @@ decode was tiled. The error map is the tile lattice and nothing else.}
 A $3\times3$ depthwise at feature position $(i,j)$ computes
 $\sum_{u,v} w_{u,v}\, f_{i+u,\,j+v}$. Decoded full frame those neighbours exist;
 decoded per tile they do not, and the kernel is handed whatever the padding rule
-invents. Each convolution extends the contaminated region by one ring, so with
-$b$ per-tile blocks on a tile of side $F$ the corrupted fraction is
+invents. Each convolution extends the contaminated region by one ring, so with $b$
+per-tile blocks on a tile of side $F$ the fraction of the tile within reach of an
+invented value is $1 - ((F-2b)/F)^2$, which is $0.750$ at our shipped $F{=}32$,
+$b{=}8$: not a thin border but a structured error across most of the tile
+(Fig.~\ref{fig:seamproblem}).
+
+That fraction says which pixels are affected, not how badly, and it is not what
+governs the penalty. Sweeping the split depth --- which sweeps $b$ from 12 to 0,
+with $b{=}0$ as an exact zero-seam control --- gives
 \begin{equation}
-1 - \left(\frac{F-2b}{F}\right)^{2},
+\text{seam} \;\propto\; b^{\alpha}, \qquad \alpha \approx 2,
 \label{eq:contam}
 \end{equation}
-which is $0.750$ at our shipped $F{=}32$, $b{=}8$. This is not a thin border: it
-is a structured error across most of the tile (Fig.~\ref{fig:seamproblem}).
+$\alpha = 2.38$ at $q0$ falling to $1.93$ at $q63$, $r = 0.98$--$0.995$ in
+log--log. Fitted with one free scale the area fraction is wrong by $160$--$264\%$
+where the power law is wrong by $12$--$22\%$. The exponent has a reading: the
+count of contaminated pixels grows like perimeter times depth, $\propto b$, and
+the error accumulated in each grows with how many convolutions reached it, again
+$\propto b$. The area law saturates once every pixel is touched; the penalty does
+not, and that is where it fails.
 
 \subsection{Padding is an estimator}
 

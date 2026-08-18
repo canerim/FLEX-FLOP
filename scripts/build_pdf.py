@@ -377,9 +377,21 @@ def content(colw, fullw):
         r"full frame those neighbours exist; decoded per tile they do not, and "
         r"the kernel is handed whatever the padding rule invents. Each "
         r"convolution extends the contaminated region by one ring, so with b "
-        r"per-tile blocks on a tile of side F the corrupted fraction is "
-        r"1 − ((F−2b)/F)², which is 0.750 at the shipped F=32, b=8. This is not "
-        r"a thin border: it is a structured error across most of the tile.")
+        r"per-tile blocks on a tile of side F the fraction of the tile within "
+        r"reach of an invented value is 1 − ((F−2b)/F)², which is 0.750 at the "
+        r"shipped F=32, b=8: not a thin border but a structured error across "
+        r"most of the tile.")
+    par(r"That fraction says which pixels are affected, not how badly, and it "
+        r"is not what governs the penalty. Sweeping the split depth sweeps b "
+        r"from 12 to 0, with b=0 as an exact zero-seam control, and the measured "
+        r"seam follows a power law: <b>seam ∝ b<super>α</super></b> with α = "
+        r"2.38, 2.22 and 1.93 at q0, q32 and q63, r = 0.98–0.995 in log-log. "
+        r"Fitted with one free scale the area fraction is wrong by 160–264% "
+        r"where the power law is wrong by 12–22%. The exponent near two has a "
+        r"reading: the count of contaminated pixels grows like perimeter times "
+        r"depth, and the error accumulated in each grows with how many "
+        r"convolutions reached it. The area law saturates once every pixel is "
+        r"touched; the penalty does not.")
     h2("4.1 Padding is an estimator")
     par(r"The useful way to see border padding is as an <i>estimator</i> of the "
         r"unseen neighbour, whose error is the seam. Table 1 measures four, "

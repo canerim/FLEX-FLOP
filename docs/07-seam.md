@@ -66,6 +66,17 @@ At the shipped setting — `F = 32` feature pixels (256 RGB), `b = 8` per-tile
 blocks — that is **0.750**: three quarters of the tile is within reach of at
 least one invented value.
 
+> **That fraction says which pixels are affected, not how badly, and it does not
+> predict the penalty.** Sweeping the split depth sweeps `b` from 12 to 0, and
+> the measured seam follows `b^α` with α = 2.38 / 2.22 / 1.93 at qp 0 / 32 / 63
+> (r = 0.98–0.995 in log–log). Fitted with one free scale the area fraction is
+> wrong by 160–264%; the power law by 12–22%. The reason is that the area
+> saturates — at b = 12 nearly every pixel is already contaminated — while the
+> penalty keeps climbing, because the error accumulated in each pixel grows with
+> how many convolutions reached it. `scripts/seam_vs_split.py`,
+> `scripts/contamination_law.py`. The b = 0 control measures exactly 0.0000 dB at
+> all three rates.
+
 > The small-`b` approximation `≈ 4b/F` appears in some earlier notes. It is not
 > valid here: at b = 8, F = 32 it gives 1.000 against the exact 0.750. Use the
 > exact form.

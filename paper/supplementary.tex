@@ -47,10 +47,45 @@ against $1.745\times$ for a halo carried through the whole block, which an
 earlier iteration of this work measured and rejected --- correctly about the
 number and wrongly about the target.
 
-\paragraph{Contamination is areal, not linear.} With $b$ per-tile blocks on a
-tile of side $F$ feature pixels the corrupted fraction is
-$1 - ((F-2b)/F)^2$. At our $F=32$, $b=8$ this is $0.750$. The small-$b$
-approximation $4b/F$ gives $1.000$ here and should not be used.
+\paragraph{The seam grows quadratically in per-tile depth, and the area law does
+not describe it.} Sweeping the split depth $j$ sweeps the number of per-tile
+blocks $b = (K-j)\,b_{\mathrm{exit}}$ from 12 to 0, and the pure seam penalty
+follows (untrained warm start, every tile at full depth, 12 sequences):
+
+\begin{center}
+\begin{tabular}{rrrrr}
+\toprule
+$b$ & area $1-(\frac{F-2b}{F})^2$ & $q0$ & $q32$ & $q63$ \\
+\midrule
+12 & 0.938 & 0.175 & 0.314 & 0.606 \\
+10 & 0.859 & 0.100 & 0.149 & 0.234 \\
+ 8 & 0.750 & 0.065 & 0.107 & 0.194 \\
+ 6 & 0.609 & 0.032 & 0.053 & 0.089 \\
+ 4 & 0.438 & 0.009 & 0.018 & 0.038 \\
+ 2 & 0.234 & 0.003 & 0.006 & 0.017 \\
+ 0 & 0.000 & \textbf{0.000} & \textbf{0.000} & \textbf{0.000} \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+The $b=0$ row is the control and it is exactly zero at all three rates, so the
+measurement is of the seam and nothing else.
+
+The area fraction is a poor predictor: fitted with one free scale it is wrong by
+160--264\% on average. It counts whether a pixel is \emph{reached} by the border
+and not how far the border propagates into it, and it saturates --- at $b=12$
+almost every pixel is already contaminated, yet the penalty keeps rising
+steeply. A power law fits well at every rate,
+\begin{equation}
+\text{seam} \;\propto\; b^{\alpha}, \qquad
+\alpha = 2.38,\, 2.22,\, 1.93 \text{ at } q0,\, q32,\, q63,
+\end{equation}
+with $r = 0.98$--$0.995$ in log--log and $12$--$22\%$ mean relative error. The
+exponent near two has a reading: the number of contaminated pixels grows like the
+perimeter times the depth, $\propto b$, and the error accumulated in each of them
+grows with the number of convolutions that reached it, also $\propto b$. Once
+every pixel is contaminated only the second factor is left, which is exactly
+where the area law stops being able to say anything.
 
 \paragraph{The repair module's ceiling.} Splitting per-pixel squared error by
 distance from the nearest tile boundary at $q63$, with repair on against off and

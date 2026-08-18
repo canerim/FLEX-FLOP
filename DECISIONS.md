@@ -4414,3 +4414,49 @@ Fixed and reported: `signalled_curve.py`, `paper_curve.py`, `router_curve.py`,
 `routed_curve.py`, `eval_router2.py`, `db_convention.py`, `train_router2.py`,
 `exit_map_figure.py`, `quant_sweep.py`, and the new `static_baseline.py` and
 `saturation.py`.
+
+## 85. The area law does not predict the seam. It grows as b squared.
+
+The contamination fraction `1 - ((F-2b)/F)^2` has been quoted throughout this
+project as the reason split depth matters. It is a correct statement about which
+pixels are within reach of an invented value, and it is a bad predictor of the
+penalty.
+
+Sweeping the split depth j sweeps the per-tile block count b, untrained warm
+start, every tile at full depth, 12 sequences:
+
+| b | area fraction | qp 0 | qp 32 | qp 63 |
+|---|---|---|---|---|
+| 12 | 0.938 | 0.1748 | 0.3138 | 0.6057 |
+| 10 | 0.859 | 0.0997 | 0.1490 | 0.2340 |
+| 8 | 0.750 | 0.0649 | 0.1068 | 0.1944 |
+| 6 | 0.609 | 0.0324 | 0.0527 | 0.0894 |
+| 4 | 0.438 | 0.0088 | 0.0181 | 0.0382 |
+| 2 | 0.234 | 0.0026 | 0.0056 | 0.0165 |
+| 0 | 0.000 | **0.0000** | **0.0000** | **0.0000** |
+
+The b = 0 row is the control and it is exactly zero at all three rates, which is
+what licenses reading the rest as seam and nothing else.
+
+Fitted with one free scale, the area fraction is wrong by 160-264% on average.
+A power law is wrong by 12-22%:
+
+    seam ~ b^alpha,  alpha = 2.38 / 2.22 / 1.93 at qp 0 / 32 / 63,
+    r = 0.995 / 0.994 / 0.979 in log-log
+
+The area fraction fails because it saturates. At b = 12 nearly every pixel is
+already contaminated and the fraction can rise no further, while the penalty
+still climbs by 3.5x from b = 8 to b = 12. What the fraction cannot express is
+that a pixel reached by twelve convolutions is far more damaged than one reached
+by two.
+
+The exponent near two has a reading, and it is the one to state: contaminated
+pixels grow like perimeter times depth, proportional to b, and the error
+accumulated in each grows with how many convolutions reached it, again
+proportional to b. Their product is b^2. The drift from 2.38 to 1.93 with rate is
+not explained and is not claimed to be.
+
+Corrected in paper/main.tex, paper/supplementary.tex, docs/07-seam.md and
+scripts/build_pdf.py. The fraction is kept where it is used correctly -- as the
+statement of which pixels are affected -- and is no longer used to predict how
+much.
