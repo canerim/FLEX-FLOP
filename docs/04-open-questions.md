@@ -154,8 +154,13 @@ weights low rate more heavily.
 FINE12 (`K=12, j=4`) and BEST (`K=6, j=2`) share a 4-block full-frame stem, but
 FINE12's architectural ceiling is 50.3% against BEST's 41.9%: with K = 12 there
 is one block per exit, so its shallowest usable exit runs 5 of 12 blocks where
-BEST's runs 6. Both ceilings are cost bounds, not reachable points — every tile
-at the shallowest exit costs far more dB than any budget allows.
+BEST's runs 6.
+
+Both ceilings ARE reachable, contrary to what this file said before: BEST hits
+41.9% at 0.167 dB at qp 0, rising to 0.586 dB at qp 63 (`curve_BEST.json`). That
+is what makes the finer ladder interesting rather than academic — once a budget
+is loose enough to saturate K = 6, the only way to spend more is a rung that does
+not exist there.
 
 The promise is untaken so far: the measured means are 27.18% (BEST) and 26.93%
 (FINE12), i.e. the 8.4-point ceiling advantage has produced no measured

@@ -82,9 +82,22 @@ Two consequences that are easy to get wrong:
   own 1.0095 instead inflates every headline by 0.62–0.75 points and hides the
   seam-repair tax inside the figure that is supposed to be net of it.
 
-The **architectural ceiling** is `100·(1 − c_j)` = **41.9%** for this ladder. It
-is a bound on cost, not a reachable operating point: every tile at the shallowest
-rung costs far more dB than any budget allows.
+The **architectural ceiling** is `100·(1 − c_j)` = **41.9%** for this ladder —
+every tile at the shallowest usable rung.
+
+> **Correction.** This document and `04-open-questions.md` previously called the
+> ceiling "a bound on cost, not a reachable operating point". That is wrong, and
+> the measurement that shows it was already in `curve_BEST.json`. The ceiling is
+> reached, and at low rate it is reached cheaply:
+>
+> | qp | 0 | 16 | 32 | 48 | 63 |
+> |---|---|---|---|---|---|
+> | dB at which 41.9% is reached | **0.167** | 0.225 | 0.336 | 0.442 | 0.586 |
+>
+> So at qp 0 a 0.2 dB budget already buys everything this ladder has, and past
+> that point a looser budget buys nothing at all — which is exactly what the
+> saturation at 41.91% in the 0.3 and 0.5 dB columns of §8 is. Going further
+> needs a shallower rung, not a larger budget. FINE12 exists for that reason.
 
 ---
 
@@ -176,9 +189,30 @@ the trunk learn to live with replicate's residual. No module removes as much
 seam as simply training the ladder with the seam present.
 
 Panel b of the figure is the part that matters for reading every other result:
-the floor is charged **inside** the 0.1 dB budget, and at qp 63 it consumes
-**58%** of it before a single tile has exited early. That is the mechanism behind
-savings falling from 34% at qp 0 to 21% at qp 63.
+the floor is charged **inside** the 0.1 dB budget, and it consumes 40% of it at
+qp 0 rising to **58%** at qp 63, before a single tile has exited early.
+
+That is not a bookkeeping remark — it is the largest single thing standing
+between this method and a better number. Treating the floor as a rigid offset on
+the distortion axis, a budget of 0.1 dB with a floor of `f` behaves like a budget
+of `0.1 + f` with no seam at all:
+
+| qp | 0 | 16 | 32 | 48 | 63 |
+|---|---|---|---|---|---|
+| floor (dB) | 0.0398 | 0.0472 | 0.0537 | 0.0555 | 0.0583 |
+| saved at 0.1 dB | 37.11% | 33.04% | 28.00% | 24.99% | 21.54% |
+| saved at 0.1 dB + floor | 40.61% | 38.17% | 33.34% | 30.42% | 26.60% |
+| **what stitching costs** | **3.5 pts** | **5.1** | **5.3** | **5.4** | **5.1** |
+
+Roughly five points of compute saving, at every rate above the lowest, are spent
+on making tiled decoding look like full-frame decoding. Canvas coupling (§5.5)
+removes that cause for +0.032% of decode — which is why it is the single
+experiment most worth running next.
+
+*(Two caveats. The rigid-offset assumption is an approximation: the seam degrades
+the intermediate exits too, not only the floor. And under routing, coupling
+cannot zero the floor entirely, because tiles that chose different depths still
+meet — so five points is what is at stake, not what is guaranteed.)*
 
 ### 5.3 Padding is an estimator
 
