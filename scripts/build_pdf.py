@@ -363,7 +363,7 @@ def content(colw, fullw):
     par(r"DCVC-RT [33] argues that operational rather than computational "
         r"complexity is the speed bottleneck for neural codecs, evidenced by "
         r"channel reductions that yield linear rather than quadratic speedups. "
-        r"Section 5.6 is a sharp instance of that claim inside one loop: a 20% "
+        r"Section 5.7 is a sharp instance of that claim inside one loop: a 20% "
         r"reduction in operations produced a 10.9% <i>slow-down</i> until the "
         r"loop was reordered, with the arithmetic untouched.")
 
