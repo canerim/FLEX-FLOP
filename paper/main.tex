@@ -698,14 +698,36 @@ it is 8 tiles and $23.6\%$; at $416{\times}240$ it is 2 tiles and $16.5\%$. At
 high rate the small resolutions collapse to \SmallResHigh\% against
 \BigResHigh\% for 1080p.
 
-The cause is granularity, not content: with two tiles per frame there is almost
-no allocation to make, and the Lagrangian degenerates towards a uniform choice.
-The fix is not more compute but a tile size chosen relative to the frame --- the
-tiling penalty scales with the tile perimeter (Table~\ref{tab:tilesize}) and the
-MAC count does not depend on tile size at all, so the trade is between seam and
-granularity and it should be resolved per resolution. We report the single
-$256$\,px setting used throughout, and note that a resolution-adaptive tile size
-is the obvious extension.
+The natural explanation is granularity: with two tiles per frame there is almost
+no allocation to make and the Lagrangian degenerates towards a uniform choice.
+The natural fix follows --- a tile size chosen relative to the frame, since the
+MAC count does not depend on tile size at all and only the seam does.
+
+\textbf{We tested that fix and it mostly does not work.} Comparing the $256$\,px
+configuration against a $128$\,px one at $q0$, which multiplies the tile count by
+$3.4$:
+
+\begin{center}\small
+\begin{tabular}{lrrr}
+\toprule
+class & 256\,px & 128\,px & $\Delta$ \\
+\midrule
+MCL-JCV (1080p) & 36.3 & 34.3 & $-2.0$ \\
+HEVC B (1080p) & 33.8 & 32.1 & $-1.7$ \\
+HEVC C ($832{\times}480$) & 20.9 & 17.6 & $-3.3$ \\
+HEVC D ($416{\times}240$) & 11.3 & \textbf{13.7} & $\mathbf{+2.4}$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+Smaller tiles help only at the smallest resolution, where the count goes from two
+to eight, and cost between $1.7$ and $3.3$ points everywhere else --- including
+at $832{\times}480$, where the count rises from $8$ to $28$ and the saving still
+falls. Beyond a modest number of tiles the extra seam buys more than the extra
+granularity is worth. The comparison confounds tile size with training, since the
+two are different runs, so we report it as indicative; but the direction is
+consistent and it is enough to say that a resolution-adaptive tile size is not
+the easy win the granularity argument suggests.
 
 \subsection{The working range of a quality budget}
 \label{sec:operating}

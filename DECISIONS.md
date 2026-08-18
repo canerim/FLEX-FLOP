@@ -4522,3 +4522,34 @@ distribution shift, and a run trained with coupling could reverse it. But the
 tension above is structural rather than a training artefact, so the burden is now
 on that run to show otherwise -- and until it exists the paper cannot claim the
 gain. Section 4.4 and the limitations section are corrected accordingly.
+
+## 87. Smaller tiles do not fix the low-resolution collapse
+
+The per-class result said the method is governed by tile count: 40 tiles at
+1080p gives 36% at q0, 8 tiles at 832x480 gives 21%, 2 tiles at 416x240 gives
+11%. The obvious remedy is a smaller tile, and the paper said so.
+
+Measured at q0, 0.1 dB, RECIPE512 (256 px) against BEST128 (128 px), which
+multiplies the tile count by 3.4:
+
+| class | tiles @256 | 256 px | tiles @128 | 128 px | delta |
+|---|---|---|---|---|---|
+| MCL-JCV 1080p | 40 | 36.30% | 135 | 34.33% | -1.97 |
+| UVG 1080p | 40 | 33.14% | 135 | 32.94% | -0.20 |
+| HEVC_B 1080p | 40 | 33.80% | 135 | 32.13% | -1.67 |
+| HEVC_E 720p | 15 | 32.14% | 60 | 32.59% | +0.45 |
+| HEVC_C 832x480 | 8 | 20.92% | 28 | 17.59% | -3.33 |
+| HEVC_D 416x240 | 2 | 11.28% | 8 | **13.67%** | **+2.39** |
+
+Smaller tiles help only where the count was 2. At 832x480 the count goes from 8
+to 28 and the saving FALLS by 3.3 points: beyond a modest number of tiles the
+extra seam costs more than the extra granularity is worth. That is consistent
+with the b^2 law -- halving the tile side doubles the seam at fixed depth -- and
+it means the granularity argument, which is correct as far as it goes, does not
+license the remedy it suggests.
+
+Confound, stated: BEST128 is a different training run at a different epoch, so
+this is tile size and training together. The direction is consistent across six
+classes and two rates, which is enough to withdraw the claim that a
+resolution-adaptive tile size is an easy win, and not enough to quantify what a
+matched-training comparison would give.
