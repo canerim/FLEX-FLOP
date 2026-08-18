@@ -414,6 +414,19 @@ def content(colw, fullw):
         r"it. Zero-initialising the last layer makes every adapter the identity "
         r"at step zero, so the deepest exit is bit-exactly the released decoder "
         r"before training begins.")
+    tbl("adapters_ablation",
+        r"<b>Table 2. What the adapters are worth.</b> dB below the release with "
+        r"every tile at that exit, with the trained adapters and with each set "
+        r"back to the identity it was initialised to. † the deepest exit has no "
+        r"adapter by construction and is the control.")
+    par(r"Zeroing them measures what they learned, since the identity is exactly "
+        r"what they were initialised to. Without adapters the shallowest exit "
+        r"costs \AdapterNoneHigh dB at q63 — forty-four times the budget — "
+        r"and the adapter buys \AdapterGainHigh dB back. The gain grows with "
+        r"rate and with the number of blocks the exit skips, which is the design "
+        r"rationale measured rather than argued, and the deepest exit moves by "
+        r"exactly zero. The adapters are not a refinement of the ladder; without "
+        r"them it has no usable rung.")
     h2("3.4 Allocation")
     par(r"Given per-tile distortions D(t,k) and costs c_k, the allocation "
         r"minimising distortion at a compute budget is the Lagrangian "

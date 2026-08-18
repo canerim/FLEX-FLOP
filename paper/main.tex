@@ -301,6 +301,24 @@ Zero-initialising the last layer makes every adapter exactly the identity at ste
 zero, so the deepest exit is bit-exactly the released decoder before training
 begins and every shallow exit starts from ``the decoder as it is''.
 
+\begin{table}[t]
+\centering
+\resizebox{\columnwidth}{!}{\input{tables/adapters_ablation}}
+\caption{\textbf{What the adapters are worth.} dB below the release with every
+tile at that exit, with the trained adapters and with each set back to the
+identity it was initialised to. $^{\dagger}$ the deepest exit has no adapter by
+construction and is the control.}
+\label{tab:adapters}
+\end{table}
+
+Zeroing them measures what they learned, since the identity is exactly what they
+were initialised to (Table~\ref{tab:adapters}). Without adapters the shallowest
+exit costs \AdapterNoneHigh$\dB$ at $q63$ --- forty-four times the budget --- and
+the adapter buys \AdapterGainHigh$\dB$ back. The gain grows with rate and with
+the number of blocks the exit skips, which is the design rationale measured
+rather than argued, and the deepest exit moves by exactly zero. The adapters are
+not a refinement of the ladder; without them it has no usable rung.
+
 \subsection{Allocation}
 \label{sec:alloc}
 

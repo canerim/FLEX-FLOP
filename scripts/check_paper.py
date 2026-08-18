@@ -100,6 +100,17 @@ if d:
         got = r63["random"]["db"] - r63["rate_rank"]["db"]
         claim("rate-rank recovers %", 75, 100 * got / gapv, 2)
 
+# ---- adapters ---------------------------------------------------------------
+d = J("adapter_ablation.json")
+if d:
+    r63 = next((r for r in d["rows"] if r["qp"] == 63), None)
+    if r63:
+        claim("adapters: exit 2 without, q63", 4.40, r63["all_off"]["2"], 0.01)
+        claim("adapters: exit 2 gain, q63", 4.10,
+              r63["all_off"]["2"] - r63["trained"]["2"], 0.01)
+        claim("adapters: deepest exit control", 0.0,
+              r63["all_off"]["5"] - r63["trained"]["5"], 1e-9)
+
 # ---- per class --------------------------------------------------------------
 d = J("per_class_RECIPE512.json")
 e = J("per_class_BEST128.json")

@@ -308,6 +308,33 @@ if d and lat:
     mac("IntraGmac", f"{INTRA_GMAC:.1f}")
     mac("GmacAtBudget", f"{INTRA_GMAC*(1-mean01/100):.0f}")
 
+# --------------------------------------------------------- adapter ablation
+print("adapter ablation")
+d, _ = pick("adapter_ablation.json")
+if d:
+    qs = [r["qp"] for r in d["rows"]]
+    exits = sorted(int(e) for e in d["rows"][0]["trained"])
+    lines = [r"\begin{tabular}{l" + "rr" * len(qs) + "}", r"\toprule",
+             r"& " + " & ".join(f"\\multicolumn{{2}}{{c}}{{$q{q}$}}" for q in qs)
+             + r" \\",
+             r"Exit & " + " & ".join(["with & without"] * len(qs)) + r" \\",
+             r"\midrule"]
+    for e in exits:
+        cells = []
+        for r in d["rows"]:
+            t, o = r["trained"][str(e)], r["all_off"][str(e)]
+            cells += [f"{t:.3f}", f"{o:.3f}"]
+        tag = r" $^{\dagger}$" if e == exits[-1] else ""
+        lines.append(f"{e}{tag} & " + " & ".join(cells) + r" \\")
+    lines += [r"\bottomrule", r"\end{tabular}"]
+    w("adapters_ablation.tex", "\n".join(lines))
+    r63 = next((r for r in d["rows"] if r["qp"] == 63), d["rows"][-1])
+    e0 = str(exits[0])
+    mac("AdapterGainHigh", f"{r63['all_off'][e0] - r63['trained'][e0]:.2f}")
+    mac("AdapterNoneHigh", f"{r63['all_off'][e0]:.2f}")
+    r0 = d["rows"][0]
+    mac("AdapterGainLow", f"{r0['all_off'][e0] - r0['trained'][e0]:.2f}")
+
 # ------------------------------------------------------------- positioning
 print("positioning")
 INTRA_GMAC_ = 453.5
