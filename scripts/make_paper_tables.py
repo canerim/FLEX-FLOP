@@ -154,10 +154,10 @@ if d:
 
 # -------------------------------------------------------------- run compare
 print("run comparison")
-CFG = {"RECIPE512": ("$K{=}6$, $j{=}2$, 256\\,px", 41.91),
-       "BEST": ("$K{=}6$, $j{=}2$, 256\\,px", 41.91),
-       "BEST128": ("$K{=}6$, $j{=}2$, 128\\,px", 41.91),
-       "FINE12": ("$K{=}12$, $j{=}4$, 128\\,px", 50.29)}
+CFG = {"RECIPE512": ("K6 j2 256px", 41.91),
+       "BEST": ("K6 j2 256px", 41.91),
+       "BEST128": ("K6 j2 128px", 41.91),
+       "FINE12": ("K12 j4 128px", 50.29)}
 rows = []
 for tag in ("RECIPE512", "BEST", "BEST128", "FINE12"):
     d, _ = pick(f"signalled_{tag}_ctc53.json", f"signalled_{tag}_b135.json")

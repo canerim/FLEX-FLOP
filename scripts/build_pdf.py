@@ -821,16 +821,28 @@ def content(colw, fullw):
     par(r"Learned decoders spend a constant amount of computation on a "
         r"non-constant world. An early-exit ladder over the tiles of a frame "
         r"recovers a substantial fraction of it — \MainLowRate% to "
-        r"\MainHighRate% of decoder MACs for a 0.1 dB budget — without "
-        r"touching the encoder or the coded payload.")
-    par(r"The two lessons we would carry to any spatially adaptive decoder are "
-        r"the ones that were not about early exit. Tiling is expensive, its "
-        r"cost is dominated by a single 3×3 that is 0.29% of the arithmetic, "
-        r"and the remedies that work are geometric rather than learned. And a "
-        r"quality budget is only a control variable inside a measurable window: "
-        r"below the floor it admits nothing, above saturation it buys nothing, "
-        r"and reporting a saving without stating where in that window it sits "
-        r"leaves the most useful part of the result out.")
+        r"\MainHighRate% of decoder MACs for a 0.1 dB budget, at a BD-Rate cost "
+        r"of 0.88% — without touching the encoder or the coded payload.")
+    par(r"Three lessons we would carry to any spatially adaptive decoder, none "
+        r"of them about early exit. <b>Tiling is the dominant cost and it is "
+        r"governed by depth.</b> Its entire cause is a single 3×3 that is 0.29% "
+        r"of the arithmetic, the penalty grows as the square of how many such "
+        r"convolutions run per tile, and the corrupted-area fraction that is "
+        r"usually quoted predicts it badly. <b>The exact remedy is in tension "
+        r"with the thing it enables.</b> Giving each convolution its real "
+        r"neighbour is bit-identical at uniform depth and collapses the "
+        r"allocation under routing, because routing is the deliberate violation "
+        r"of the condition that makes it exact — a trap that any method "
+        r"combining spatial adaptivity with tiled inference will walk into. "
+        r"<b>A quality budget is only a control variable inside a measurable "
+        r"window.</b> Below the floor it admits nothing, above saturation it "
+        r"buys nothing, and reporting a saving without saying where in that "
+        r"window it sits leaves out the most useful part of the result.")
+    par(r"And two cautions about measuring any of this. A saving in operations "
+        r"is not a saving in time: ours was negative until the loop was "
+        r"reordered. And a learned router should be compared against a free one "
+        r"— ranking tiles by the bits already spent on them recovers three "
+        r"quarters of what the oracle's ranking is worth.")
     return F
 
 

@@ -925,17 +925,34 @@ trunk with a shared head --- but that is an argument, not a measurement.
 \section{Conclusion}
 
 Learned decoders spend a constant amount of computation on a non-constant world.
-We showed that an early-exit ladder over the tiles of a frame recovers a
-substantial fraction of it --- \MainLowRate\% to \MainHighRate\% of decoder MACs
-for a $0.1\dB$ budget --- without touching the encoder or the coded payload.
+An early-exit ladder over the tiles of a frame recovers a substantial fraction of
+it --- \MainLowRate\% to \MainHighRate\% of decoder MACs for a $0.1\dB$ budget,
+at a BD-Rate cost of $0.88\%$ --- without touching the encoder or the coded
+payload.
 
-The two lessons we would carry to any spatially adaptive decoder are the ones
-that were not about early exit. Tiling is expensive, its cost is dominated by a
-single $3\times3$ that is $0.29\%$ of the arithmetic, and the remedies that work
-are geometric rather than learned. And a quality budget is only a control
-variable inside a measurable window: below the floor it admits nothing, above
-saturation it buys nothing, and reporting a saving without stating where in that
-window it sits leaves the most useful part of the result out.
+Three lessons we would carry to any spatially adaptive decoder, none of them
+about early exit.
+
+\textbf{Tiling is the dominant cost and it is governed by depth.} Its entire
+cause is a single $3\times3$ that is $0.29\%$ of the arithmetic; the penalty
+grows as the square of how many such convolutions run per tile; and the
+corrupted-area fraction usually quoted predicts it badly.
+
+\textbf{The exact remedy is in tension with the thing it enables.} Giving each
+convolution its real neighbour is bit-identical at uniform depth and collapses
+the allocation under routing, because routing is the deliberate violation of the
+condition that makes it exact. Any method combining spatial adaptivity with tiled
+inference will walk into this.
+
+\textbf{A quality budget is only a control variable inside a measurable window.}
+Below the floor it admits nothing, above saturation it buys nothing, and
+reporting a saving without saying where in that window it sits leaves out the
+most useful part of the result.
+
+And two cautions about measuring any of it. A saving in operations is not a
+saving in time --- ours was negative until the loop was reordered. And a learned
+router should be compared against a free one: ranking tiles by the bits already
+spent on them recovers three quarters of what the oracle's ranking is worth.
 
 {\small
 \bibliographystyle{ieee_fullname}
