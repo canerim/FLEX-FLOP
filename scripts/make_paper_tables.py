@@ -69,7 +69,9 @@ print("operating structure")
 d, _ = pick("saturation_RECIPE512_ctc53.json", "saturation_RECIPE512.json")
 if d:
     S = {r["qp"]: r for r in d["rows"]}
-    qs = sorted(S)
+    # Five rates, not the nine measured: a nine-column table does not fit a
+    # two-column page, and the figure carries the full sweep anyway.
+    qs = [q for q in QPS if q in S] or sorted(S)
     lines = [r"\begin{tabular}{l" + "r" * len(qs) + "}", r"\toprule",
              r"$q$ & " + " & ".join(str(q) for q in qs) + r" \\", r"\midrule",
              r"Floor $D_{\min}$ & " +
@@ -196,50 +198,80 @@ if rows:
         if tag == "RECIPE512":
             mac("CoarseHalfDb", f"{m.get(0.5,(0,0))[0]:.1f}")
 
+# ------------------------------------------------------------- static baseline
+print("static baseline")
+d, _ = pick("static_RECIPE512_b01.json")
+if d:
+    B = d["budget_db"]
+    lines = [r"\begin{tabular}{llrr}", r"\toprule",
+             r"$q$ & Allocation & $\Delta$PSNR (dB) & MACs saved (\%) \\",
+             r"\midrule"]
+    means = {"static": [], "oracle": []}
+    for row in d["rows"]:
+        q, first = row["qp"], True
+        for u in row["uniform"]:
+            dag = "" if u["db"] <= B else r"$^{\dagger}$"
+            lines.append((f"{q}" if first else "") +
+                         f" & uniform, exit {u['exit']}{dag} & {u['db']:.3f} & "
+                         f"{u['saving']:.1f} \\\\")
+            first = False
+        lines.append(f" & random (matched mix) & {row['random']['db']:.3f} & "
+                     f"{row['random']['saving']:.1f} \\\\")
+        rr = row.get("rate_rank")
+        if rr:
+            lines.append(f" & rate-ranked (free) & {rr['db']:.3f} & "
+                         f"{rr['saving']:.1f} \\\\")
+        o = row["oracle"]
+        lines.append(f" & \\textbf{{oracle}} & \\textbf{{{o['db']:.3f}}} & "
+                     f"\\textbf{{{o['saving']:.1f}}} \\\\")
+        lines.append(r"\midrule")
+        bs = row.get("best_static")
+        means["static"].append(bs["saving"] if bs else 0.0)
+        means["oracle"].append(o["saving"])
+    lines[-1] = r"\bottomrule"
+    lines.append(r"\end{tabular}")
+    w("static.tex", "\n".join(lines))
+    mac("BestStaticMean", f"{sum(means['static'])/len(means['static']):.1f}")
+    r0 = d["rows"][-1]
+    if r0.get("rate_rank"):
+        mac("RateRankDb", f"{r0['rate_rank']['db']:.3f}")
+        mac("RandomDb", f"{r0['random']['db']:.3f}")
+        mac("OracleDb", f"{r0['oracle']['db']:.3f}")
+        gap = r0["random"]["db"] - r0["oracle"]["db"]
+        got = r0["random"]["db"] - r0["rate_rank"]["db"]
+        mac("RateRankRecovers", f"{100*got/gap:.0f}")
+
 # ---------------------------------------------------------- per resolution
-print("per dataset")
-d, _ = pick("curve_RECIPE512_ctc53.json")
-if d and d.get("op_points"):
-    import sys as _s
-    _s.path.insert(0, str(Path.home() / "DCVC")); _s.path.insert(0, str(R))
-    import ctc_intra as _C
-    seqs, _m = _C.discover([])
-    FAM = {x["name"]: x["cls"] for x in seqs}
-    RESO = {"UVG": "1920$\\times$1080", "MCL-JCV": "1920$\\times$1080",
-           "HEVC\\_B": "1920$\\times$1080", "HEVC\\_E": "1280$\\times$720",
-           "HEVC\\_C": "832$\\times$480", "HEVC\\_D": "416$\\times$240"}
-    TILES = {"1920$\\times$1080": 40, "1280$\\times$720": 18,
-             "832$\\times$480": 8, "416$\\times$240": 2}
-    D = 1.0095
-    per, realised = {}, {}
-    for q in (0, 63):
-        ops = [o for o in d["op_points"]
-               if o["qp"] == q and o.get("per_sequence")]
-        if not ops:
-            continue
-        o = min(ops, key=lambda o: abs(o.get("target_db", 9) - 0.1))
-        realised[q] = o.get("db_vs_uf_per_frame")
-        for sq in o["per_sequence"]:
-            per.setdefault(FAM.get(sq["seq"], "?"), {}).setdefault(q, []).append(
-                100 - (100 - sq["saving_pct"]) * D)
-    order = ["UVG", "MCL-JCV", "HEVC_B", "HEVC_E", "HEVC_C", "HEVC_D"]
-    if per:
-        lines = [r"\begin{tabular}{llrrr}", r"\toprule",
-                 r"Class & Resolution & Tiles & $q0$ & $q63$ \\", r"\midrule"]
-        for f in order:
-            if f not in per:
+print("per class")
+d, _ = pick("per_class_RECIPE512.json")
+if d:
+    ORDER = ["MCL-JCV", "UVG", "HEVC_B", "HEVC_E", "HEVC_C", "HEVC_D"]
+    at = {}
+    for r in d["rows"]:
+        if abs(r["budget_db"] - 0.1) < 1e-9:
+            at[r["qp"]] = r["per_class"]
+    qs = sorted(at)
+    if at:
+        lines = [r"\begin{tabular}{llrr" + "r" * len(qs) + "}", r"\toprule",
+                 r"Class & Resolution & Tiles & $n$ & " +
+                 " & ".join(f"$q{q}$" for q in qs) + r" \\", r"\midrule"]
+        for c in ORDER:
+            if c not in at[qs[0]]:
                 continue
-            esc = f.replace("_", r"\_")
-            res = RESO.get(esc, "--")
-            a = sum(per[f].get(0, [0])) / max(1, len(per[f].get(0, [1])))
-            b = sum(per[f].get(63, [0])) / max(1, len(per[f].get(63, [1])))
-            lines.append(f"{esc} & {res} & {TILES.get(res,'--')} & "
-                         f"{a:.1f} & {b:.1f} \\\\")
-        mac("SmallResHigh", f"{sum(per['HEVC_D'].get(63,[0]))/max(1,len(per['HEVC_D'].get(63,[1]))):.1f}")
-        mac("BigResHigh", f"{sum(per['MCL-JCV'].get(63,[0]))/max(1,len(per['MCL-JCV'].get(63,[1]))):.1f}")
-        mac("PerClassDb", f"{realised.get(63, 0):.3f}")
+            v = at[qs[0]][c]
+            lines.append(f"{c.replace('_', chr(92)+'_')} & {v['res']} & "
+                         f"{v['tiles']} & {v['n']} & " +
+                         " & ".join(f"{at[q][c]['saving']:.1f}" for q in qs) +
+                         r" \\")
         lines += [r"\bottomrule", r"\end{tabular}"]
         w("perclass.tex", "\n".join(lines))
+        lo = at[qs[0]]
+        mac("SmallResLow", f"{lo['HEVC_D']['saving']:.1f}")
+        mac("BigResLow", f"{lo['MCL-JCV']['saving']:.1f}")
+        mac("MidResLow", f"{lo['HEVC_C']['saving']:.1f}")
+        hi = at[qs[-1]]
+        mac("SmallResHigh", f"{hi['HEVC_D']['saving']:.1f}")
+        mac("BigResHigh", f"{hi['MCL-JCV']['saving']:.1f}")
 
 # ------------------------------------------------------------- complexity
 print("complexity")
@@ -256,7 +288,7 @@ if d and lat:
     mean01 = sum(r01[q]["saving_pct_vs_release"] for q in QPS if q in r01) / \
         len([q for q in QPS if q in r01])
     rows = [
-        ("Released DCVC-UF~\\cite{dcvcuf}", INTRA_GMAC, 100.0,
+        ("Released DCVC-UF", INTRA_GMAC, 100.0,
          L[lq]["ms_stock"], 0.0),
         ("FLEX-UF, all tiles deepest", INTRA_GMAC * 1.0095, 100.95,
          L[lq]["ms_deep"], None),
