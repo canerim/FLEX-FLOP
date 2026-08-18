@@ -58,9 +58,20 @@ INTER_GMAC = 167.0          # implied by Table 3's 170 GMAC average for LD
 QPS = [0, 16, 32, 48, 63]
 
 
-def J(name):
-    p = ROOT / "results" / name
-    return json.loads(p.read_text()) if p.exists() else None
+def J(*names):
+    """First of `names` that exists.
+
+    Called with several candidates so a corrected re-measurement supersedes an
+    older file without every call site being edited. The measurement that
+    forced this: results taken before flexuf/eval.py landed were computed on a
+    full-frame per-exit table and the tiling penalty cancelled out of them, so
+    the old files must never be picked when a newer one is present.
+    """
+    for name in names:
+        p = ROOT / "results" / name
+        if p.exists():
+            return json.loads(p.read_text())
+    return None
 
 
 def deepest_cost(tag="BEST"):
@@ -97,7 +108,7 @@ def bd_rate(r1, p1, r2, p2) -> float:
 
 
 def main():
-    anc = J("anchor_BEST_5qp.json")
+    anc = J("anchor_RECIPE512_ctc53.json", "anchor_BEST_5qp.json")
     why = J("why_qp.json")
     if not (anc and why):
         raise SystemExit("need results/anchor_BEST_5qp.json and why_qp.json")
@@ -105,17 +116,23 @@ def main():
     bpp = {r["qp"]: r["bpp"] for r in why["rows"]}
     D = deepest_cost("BEST")
 
-    # Every configuration we have measured, at every budget it was measured at.
+    # Every configuration measured, at every budget. Each entry is a list of
+    # candidate files, newest first: a --budgets run stores all three budgets in
+    # one file, older runs stored one budget each.
     CONFIGS = [
-        ("A signalled", "signalled_BEST_0817_1542.json", 0.1),
-        ("A signalled", "signalled_BEST_b03.json", 0.3),
-        ("A signalled", "signalled_BEST_b05.json", 0.5),
-        ("B router lam1.3e-5", "router_BEST_v2.json", 0.1),
-        ("B router lam4.1e-6", "router_BEST_v2_lowlam.json", 0.1),
-        ("B router lam1.3e-5", "router_BEST_b03_lam1.3e-5.json", 0.3),
-        ("B router lam4.1e-6", "router_BEST_b03_lam4.1e-6.json", 0.3),
-        ("B router lam1.3e-5", "router_BEST_b05_lam1.3e-5.json", 0.5),
-        ("B router lam4.1e-6", "router_BEST_b05_lam4.1e-6.json", 0.5),
+        ("A signalled", ["signalled_RECIPE512_ctc53.json",
+                         "signalled_RECIPE512_b135.json",
+                         "signalled_BEST_0817_1542.json"], 0.1),
+        ("A signalled", ["signalled_RECIPE512_ctc53.json",
+                         "signalled_RECIPE512_b135.json",
+                         "signalled_BEST_b03.json"], 0.3),
+        ("A signalled", ["signalled_RECIPE512_ctc53.json",
+                         "signalled_RECIPE512_b135.json",
+                         "signalled_BEST_b05.json"], 0.5),
+        ("B router lam1.3e-5", ["router_RECIPE512_lam1.3e-5.json",
+                                "router_BEST_v2.json"], 0.1),
+        ("B router lam4.1e-6", ["router_RECIPE512_lam4.1e-6.json",
+                                "router_BEST_v2_lowlam.json"], 0.1),
     ]
 
     print("=" * 78)
@@ -125,12 +142,20 @@ def main():
     print(f"\n  {'configuration':<22}{'budget':>8}{'BD-Rate':>10}"
           f"{'mean saving':>13}{'bits added':>12}")
     rows_for_fig = []
-    for label, fname, budget in CONFIGS:
-        d = J(fname)
+    for label, fnames, budget in CONFIGS:
+        d = J(*fnames)
         if not d:
-            print(f"  {label:<22}{budget:>8.2f}   (not measured yet: {fname})")
+            print(f"  {label:<22}{budget:>8.2f}   (not measured yet: {fnames[0]})")
             continue
-        got = {r["qp"]: r for r in d["rows"] if r.get("saving_pct") is not None}
+        # A multi-budget file holds every budget; filter to the one asked for.
+        rs = [r for r in d["rows"] if r.get("saving_pct") is not None
+              and (r.get("budget_db") is None
+                   or abs(r["budget_db"] - budget) < 1e-9)]
+        if not rs:
+            print(f"  {label:<22}{budget:>8.2f}   (budget absent from "
+                  f"{fnames[0]})")
+            continue
+        got = {r["qp"]: r for r in rs}
         qs = [q for q in QPS if q in got and q in rel_psnr and q in bpp]
         if len(qs) < 4:
             print(f"  {label:<22}{budget:>8.2f}   (only {len(qs)} rates)")

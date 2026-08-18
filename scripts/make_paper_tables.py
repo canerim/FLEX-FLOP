@@ -176,6 +176,37 @@ if rows:
     lines += [r"\bottomrule", r"\end{tabular}"]
     w("runs.tex", "\n".join(lines))
 
+# ------------------------------------------------------------- static baseline
+print("static baseline")
+d, _ = pick("static_RECIPE512_b01.json")
+if d:
+    lines = [r"\begin{tabular}{llrr}", r"\toprule",
+             r"$q$ & Allocation & $\Delta$PSNR (dB) & MACs saved (\%) \\",
+             r"\midrule"]
+    for row in d["rows"]:
+        q = row["qp"]
+        first = True
+        for u in row["uniform"]:
+            fits = u["db"] <= d["budget_db"]
+            lab = f"uniform, exit {u['exit']}" + ("" if fits else r"$^{\dagger}$")
+            lines.append((f"{q}" if first else "") + f" & {lab} & "
+                         f"{u['db']:.3f} & {u['saving']:.1f} \\\\")
+            first = False
+        lines.append(f" & random (matched mix) & {row['random']['db']:.3f} & "
+                     f"{row['random']['saving']:.1f} \\\\")
+        lines.append(f" & \\textbf{{oracle}} & \\textbf{{{row['oracle']['db']:.3f}}} & "
+                     f"\\textbf{{{row['oracle']['saving']:.1f}}} \\\\")
+        lines.append(r"\midrule")
+    lines[-1] = r"\bottomrule"
+    lines.append(r"\end{tabular}")
+    w("static.tex", "\n".join(lines))
+    n_over = sum(1 for r_ in d["rows"] if r_["best_static"] is None)
+    mac("StaticInfeasibleRates", str(n_over))
+    mac("StaticTotalRates", str(len(d["rows"])))
+    r0 = d["rows"][0]
+    mac("RandomLowRate", f"{r0['random']['saving']:.1f}")
+    mac("RandomLowDb", f"{r0['random']['db']:.3f}")
+
 # ------------------------------------------------------------------ macros
 w("macros.tex", "\n".join(f"\\newcommand{{\\{k}}}{{{v}}}"
                           for k, v in sorted(MACROS.items())))

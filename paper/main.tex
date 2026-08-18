@@ -473,6 +473,44 @@ Table~\ref{tab:main} is the headline. At $0.1\dB$ the method saves
 reconstructions carry detail the shallow exits cannot reproduce, the floor rises
 with rate (Fig.~\ref{fig:seamqp}b), and both push the same way.
 
+\subsection{Is per-tile adaptivity necessary?}
+\label{sec:necessary}
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\columnwidth]{figures/exit_map.png}
+\caption{\textbf{Where the decoder spends.} (a) the assignment overlaid on the
+frame, (b) the exit index per tile, (c) the quality each tile gives up, against
+its \emph{own} full-depth reference. Water and sky leave at the shallowest rung;
+the boat and the shoreline run deep.}
+\label{fig:exitmap}
+\end{figure}
+
+\begin{table}[t]
+\centering
+\resizebox{\columnwidth}{!}{\input{tables/static}}
+\caption{\textbf{Adaptivity against two controls} at the $0.1\dB$ budget.
+$^{\dagger}$ marks uniform depths whose distortion exceeds the budget, so they
+are not admissible allocations at all. ``Random'' draws each frame's map from the
+oracle's own exit histogram and shuffles it across tiles: same average cost, same
+mix of depths, none of the content dependence.}
+\label{tab:static}
+\end{table}
+
+The obvious alternative to routing tiles is not to route them --- run every tile
+at the same shallower exit and accept the loss. Table~\ref{tab:static} shows why
+that is not an option here. The ladder's rungs are coarse relative to the budget:
+one rung down from full depth already spends more than $0.1\dB$ at every rate,
+so \emph{no uniform depth is admissible}. Adaptivity is not an improvement on the
+static choice, it is what creates an operating point where the static choice has
+none.
+
+The random control separates two effects that are easy to conflate. Given the
+oracle's exit histogram --- the same mix of depths, so the same average cost ---
+but assigned to tiles at random, the quality collapses. What the allocation buys
+is not that some tiles run shallower; it is knowing \emph{which} ones can.
+Fig.~\ref{fig:exitmap} shows the assignment it arrives at.
+
 \subsection{The working range of a quality budget}
 \label{sec:operating}
 

@@ -36,7 +36,7 @@ B1, B2 = fine["budgets"][0], fine["budgets"][-1]
 lo, hi = at(B1), at(B2)
 qp = np.array(sorted(lo), float)
 
-fig, ax = plt.subplots(1, 3, figsize=(ns.W2, 2.7))
+fig, ax = plt.subplots(1, 3, figsize=(ns.W2, 2.8))
 
 # ---- a: saving against rate at both budgets --------------------------------
 a = ax[0]
@@ -77,14 +77,16 @@ b.axhline(B1, color=ns.BLUE, lw=1.0, ls=(0, (4, 2)))
 b.text(qp[-1], B1 + 0.006, f"{B1:.2f} dB", fontsize=5, color=ns.BLUE, ha="right")
 b.axhline(B2, color=ns.ORANGE, lw=0.8, ls=(0, (1, 2)))
 b.text(qp[0] + 1, B2 + 0.006, f"{B2:.4f} dB", fontsize=5, color=ns.ORANGE)
-b.text(32, 0.355, "more dB buys nothing", fontsize=5.2, ha="center", color="#666666")
+b.text(48, 0.372, "more dB buys nothing", fontsize=5.2, ha="center",
+       color="#666666")
 b.text(32, 0.020, "infeasible", fontsize=5.2, ha="center", color=ns.VERM)
 b.set_xlabel("qp"); b.set_ylabel("quality budget, dB below the release")
 b.set_xlim(qp[0], qp[-1]); b.set_ylim(0, 0.40)
-b.legend(loc="upper left", fontsize=5)
-b.set_title("Only one budget lands on the ceiling at qp 0 alone:\n"
-            f"[{SATD[qp[0]]:.4f}, {SATD[qp[1]]:.4f}) dB — a {1000*(SATD[qp[1]]-SATD[qp[0]]):.0f} "
-            "millibel window", fontsize=6, color=ns.INK2, loc="left")
+b.legend(loc="upper left", fontsize=5, bbox_to_anchor=(0.0, 0.93))
+b.set_title(f"Only [{SATD[qp[0]]:.4f}, {SATD[qp[1]]:.4f}) dB lands on the "
+            f"ceiling at qp 0\nalone — a "
+            f"{1000*(SATD[qp[1]]-SATD[qp[0]]):.0f} millibel window",
+            fontsize=6, color=ns.INK2, loc="left")
 ns.panel(b, "b", dx=-0.22)
 
 # ---- c: what the extra dB is worth --------------------------------------
@@ -97,8 +99,8 @@ for x, g in zip(qp, gain):
 c.set_xlabel("qp")
 c.set_ylabel(f"extra saving from {B1:.2f} → {B2:.4f} dB (pts)")
 c.set_xlim(qp[0] - 4, qp[-1] + 4)
-c.set_title("Loosening the budget by 0.08 dB is worth most at LOW rate,\n"
-            "because that is where the ceiling is within reach at all",
+c.set_title("Loosening the budget is worth MOST at high rate: the ceiling is\n"
+            "already close at low rate, and far away at high rate",
             fontsize=6, color=ns.INK2, loc="left")
 ns.panel(c, "c", dx=-0.24)
 

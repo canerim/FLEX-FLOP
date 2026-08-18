@@ -15,7 +15,21 @@ at matched compute, on the deployed decode path:
               this and the oracle is what knowing WHICH tile is easy is worth,
               separated from the gain of merely running some tiles shallower.
 
+  RATE-RANK   the same histogram again, but assigned by a free decoder-side
+              signal instead of at random: the number of bits the entropy model
+              spent on each tile. A tile that cost more bits carries more
+              detail, so it is the one that should run deep. This is the
+              cheapest possible router -- zero parameters, zero training, and
+              the decoder has the number before the trunk starts -- and it is
+              the natural analogue of the confidence rule that early-exit
+              classifiers use, which is likewise read off the network's own
+              output rather than learned.
+
   ORACLE      argmin_k [ D(t,k) + lambda c_k ], lambda bisected to the budget.
+
+Because RANDOM, RATE-RANK and ORACLE share a histogram they share an average
+cost exactly, so the three differ only in WHICH tile got which depth. That makes
+the comparison a measurement of ranking quality and nothing else.
 
 Reported against the released decoder's full-frame decode of the same latent, so
 the tiling penalty is charged to every row.
@@ -76,13 +90,23 @@ with torch.no_grad():
             xp = F.pad(x, (0, pw, 0, ph), mode="replicate") if (ph or pw) else x
             qp = torch.full((1,), qp_v, dtype=torch.int32, device=dev)
             y, q, _ = net._encode_to_latent(xp, qp)
+            # Bits per tile, from the entropy model, as a free difficulty
+            # proxy. bits_y is [1,C,h,w] over the latent grid; a tile of P RGB
+            # pixels is P/16 latent positions.
+            _, _, aux = net._encode_to_latent(xp, qp)
+            bits = net.get_y_bits(net.add_noise(aux["y_res"]),
+                                  aux["scales_hat"]).sum(1, keepdim=True)
+            L = P // 16
+            nh_, nw_ = bits.shape[-2] // L, bits.shape[-1] // L
+            tb = (bits.view(1, 1, nh_, L, nw_, L).permute(0, 1, 2, 4, 3, 5)
+                      .reshape(nh_ * nw_, L * L).sum(1))
             cache.append((tiled_exit_mses(net.dec, y, q, xp, cfg),
-                          reference_frame_mse(ref.dec, y, q, xp), y, q, xp))
+                          reference_frame_mse(ref.dec, y, q, xp), y, q, xp, tb))
 
         def db_of(maps):
             return sum((10 * torch.log10(
                 true_frame_mse(net.dec, y_, q_, xp_, m) / R)).item()
-                for m, (_, R, y_, q_, xp_) in zip(maps, cache)) / len(cache)
+                for m, (_, R, y_, q_, xp_, _tb) in zip(maps, cache)) / len(cache)
 
         def sv_of(maps):
             return 100 * sum((1 - cost[m].mean()).item() for m in maps) / len(maps)
@@ -118,6 +142,20 @@ with torch.no_grad():
             rmaps.append(m[perm])
         rnd = {"db": db_of(rmaps), "saving": sv_of(rmaps)}
 
+        # ---- RATE-RANK: same histogram, ordered by bits per tile -------
+        # Sorting the oracle's own multiset of depths onto the tiles by
+        # descending bit cost. Deepest to the most expensive tile.
+        hmaps = []
+        for m, (_M, _R, _y, _q, _xp, tb) in zip(omaps, cache):
+            depths = torch.sort(m, descending=True).values      # the multiset
+            rank = torch.argsort(tb, descending=True)           # hardest first
+            out = torch.empty_like(m)
+            out[rank] = depths
+            hmaps.append(out)
+        heur = {"db": db_of(hmaps), "saving": sv_of(hmaps),
+                "agreement": sum((h == o).float().mean().item()
+                                 for h, o in zip(hmaps, omaps)) / len(omaps)}
+
         # The static row a reviewer cares about: the shallowest UNIFORM depth
         # whose distortion still fits the budget. If none does, adaptivity is
         # not an improvement on the static option -- it is the only option.
@@ -125,16 +163,20 @@ with torch.no_grad():
         best_static = max(feasible, key=lambda u: u["saving"]) if feasible else None
 
         rows.append({"qp": qp_v, "uniform": uni, "oracle": oracle,
-                     "random": rnd, "best_static": best_static})
+                     "random": rnd, "rate_rank": heur,
+                     "best_static": best_static})
         print(f"  qp {qp_v}")
         for u in uni:
             mark = "  <- fits the budget" if u["db"] <= a.budget else ""
             print(f"    uniform exit {u['exit']}   {u['db']:8.4f} dB"
                   f"   {u['saving']:6.2f}%{mark}")
-        print(f"    RANDOM   (oracle histogram, shuffled)"
-              f"   {rnd['db']:8.4f} dB   {rnd['saving']:6.2f}%")
-        print(f"    ORACLE   at the budget            "
-              f"   {oracle['db']:8.4f} dB   {oracle['saving']:6.2f}%")
+        print(f"    RANDOM     (same histogram, shuffled)"
+              f" {rnd['db']:8.4f} dB   {rnd['saving']:6.2f}%")
+        print(f"    RATE-RANK  (same histogram, by bits) "
+              f" {heur['db']:8.4f} dB   {heur['saving']:6.2f}%"
+              f"   agree {heur['agreement']:.3f}")
+        print(f"    ORACLE     at the budget            "
+              f" {oracle['db']:8.4f} dB   {oracle['saving']:6.2f}%")
         if best_static:
             print(f"    -> best static saving {best_static['saving']:.2f}%, "
                   f"adaptive {oracle['saving']:.2f}%")
