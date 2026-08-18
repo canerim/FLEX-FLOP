@@ -548,6 +548,12 @@ def content(colw, fullw):
         r"exit costs 1.0095 of it, and using that as the denominator would "
         r"flatter every result by 0.6–0.8 points.")
     h2("5.1 Main result")
+    figure("qualitative.png",
+           r"<b>Figure 6. What the saving looks like.</b> The same bitstream "
+           r"decoded by the released decoder and by ours at the 0.1 dB operating "
+           r"point, 30.5% fewer multiply-accumulates. The crop is the tile that "
+           r"gave up the most quality, chosen automatically, so this is the "
+           r"method's worst case on this frame rather than a flattering one.")
     tbl("main_results",
         r"<b>Table 3. Decoder MACs saved</b> (%) against the released decoder, "
         r"per quality index and budget, configuration A. The 0.3 and 0.5 dB "
