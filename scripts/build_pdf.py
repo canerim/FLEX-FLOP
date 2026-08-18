@@ -121,7 +121,22 @@ def tex_table(name, width):
     return t
 
 
+_FIGN = [0]
+_TABN = [0]
+
+
+def _autonum(cap, counter, word):
+    """Replace a hand-written 'Figure N.' with the running count.
+
+    The numbers were typed into the captions and drifted the moment a figure was
+    inserted in the middle -- which happened twice tonight.
+    """
+    counter[0] += 1
+    return re.sub(rf"{word}\s+\d+\.", f"{word} {counter[0]}.", cap, count=1)
+
+
 def fig(name, width, cap, maxh=None):
+    cap = _autonum(cap, _FIGN, "Figure")
     """Figure + caption, scaled to `width` and, if given, capped at `maxh`.
 
     The cap matters for the teaser: the pipeline diagram is 7.2 x 4.3 inches, so
@@ -159,7 +174,8 @@ def content(colw, fullw):
 
     def tbl(name, cap):
         A(KeepTogether([tex_table(name, colw), Spacer(1, 3),
-                        Paragraph(sub(cap), CAP), Spacer(1, 6)]))
+                        Paragraph(sub(_autonum(cap, _TABN, "Table")), CAP),
+                        Spacer(1, 6)]))
 
     def figure(name, cap):
         for f in fig(name, colw, cap):
