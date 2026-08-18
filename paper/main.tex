@@ -510,19 +510,27 @@ mix of depths, none of the content dependence.}
 \label{tab:static}
 \end{table}
 
-The obvious alternative to routing tiles is not to route them --- run every tile
-at the same shallower exit and accept the loss. Table~\ref{tab:static} shows why
-that is not an option here. The ladder's rungs are coarse relative to the budget:
-one rung down from full depth already spends more than $0.1\dB$ at every rate,
-so \emph{no uniform depth is admissible}. Adaptivity is not an improvement on the
-static choice, it is what creates an operating point where the static choice has
-none.
+The obvious alternative to routing tiles is not to route them: run every tile at
+the same shallower exit and accept the loss. Table~\ref{tab:static} puts that
+option, and two stronger controls, at matched compute.
 
-The random control separates two effects that are easy to conflate. Given the
-oracle's exit histogram --- the same mix of depths, so the same average cost ---
-but assigned to tiles at random, the quality collapses. What the allocation buys
-is not that some tiles run shallower; it is knowing \emph{which} ones can.
-Fig.~\ref{fig:exitmap} shows the assignment it arrives at.
+The uniform rows show how coarse the ladder is relative to the budget. A rung is
+worth several hundredths of a decibel, the budget is one tenth, and the exits
+that a uniform assignment could reach at $0.1\dB$ are the deep ones that save
+almost nothing.
+
+The two shuffled rows separate effects that are easy to conflate. Given the
+oracle's own exit histogram --- the same mix of depths, hence the same average
+cost --- but assigned to tiles at random, quality collapses: what the allocation
+buys is not that some tiles run shallower, it is knowing \emph{which} ones can.
+The rate-ranked row keeps that histogram and orders it by a signal the decoder
+already holds, the bits the entropy model spent on each tile. It is the cheapest
+conceivable router --- no parameters, no training --- and it is the natural
+analogue of the confidence rules used by early-exit
+classifiers~\cite{branchynet,msdnet}, which likewise read a signal off the
+network's own output. How much of the oracle's advantage it recovers is a direct
+measure of how much a learned router is buying.
+Fig.~\ref{fig:exitmap} shows the assignment the oracle arrives at.
 
 \subsection{The working range of a quality budget}
 \label{sec:operating}

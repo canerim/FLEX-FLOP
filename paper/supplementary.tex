@@ -1,0 +1,136 @@
+% Supplementary material. Compiles standalone; same style resolution as main.tex.
+\documentclass[10pt,twocolumn,letterpaper]{article}
+\IfFileExists{cvpr.sty}{\usepackage{cvpr}}{\usepackage{cvpr_fallback}}
+\usepackage{amsmath,amssymb}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage[colorlinks,linkcolor=blue!60!black,citecolor=blue!60!black]{hyperref}
+\input{tables/macros}
+\newcommand{\dB}{\,dB}
+
+\title{Where to Stop: Tile-Adaptive Early Exit in a Learned Image Decoder\\
+       \large Supplementary Material}
+\author{Anonymous CVPR submission\\ Paper ID ****}
+
+\begin{document}
+\maketitle
+
+\section{Architecture details}
+
+\paragraph{Costs.} With $K$ exits over $N{=}12$ trunk blocks and split depth $j$,
+the cost of exit $k$ in units of one released decode is
+\begin{equation}
+c_k = s_{\mathrm{up}} + s_{\mathrm{trunk}}\frac{(k{+}1)b}{N}
+      + s_{\mathrm{head}} + a_k + r,
+\end{equation}
+where $b = N/K$ blocks per exit, $s_{\mathrm{up}} = 0.0816$,
+$s_{\mathrm{trunk}} = 0.8944$, $s_{\mathrm{head}} = 0.0240$ are the measured
+shares of the released decoder, $a_k$ is the adapter's share and $r$ the
+seam-repair module's $0.0095$. Only the trunk term depends on $k$: the stem and
+head run for every tile at every depth, which is why the ceiling
+$100(1-c_j)$ is well below $100$ however shallow the ladder gets.
+
+\paragraph{Adapters.} $\mathrm{Ad}(f) = f + Wf$ with $W\in\mathbb{R}^{C\times C}$
+zero-initialised costs $C^2$ MAC/px, one eighth of a block's $8C^2 + 9C$. The
+FFN variant, $\mathrm{Ad}(f)=f+\mathrm{PW}(\mathrm{WSiLUChunkAdd}
+(\mathrm{PW}_{C\to 4C}(f)))$, costs $2C^2$. Assignment is by the number of blocks
+the exit skips: FFN at four or more, the $1\times1$ otherwise.
+
+\section{The tiling penalty in detail}
+
+\paragraph{Why only the depthwise matters.} A \texttt{DepthConvBlock} at $C=384$
+costs $8C^2 + 9C = 1{,}183{,}104$ MAC/px, of which the $3\times3$ depthwise is
+$9C = 3{,}456$ --- $0.29\%$. Every other operator is $1\times1$ and has no
+neighbours to miss. This is why the exact remedy is affordable: haloing or
+coupling only the depthwise costs $+0.032\%$ of the decode at $256$\,px tiles,
+against $1.745\times$ for a halo carried through the whole block, which an
+earlier iteration of this work measured and rejected --- correctly about the
+number and wrongly about the target.
+
+\paragraph{Contamination is areal, not linear.} With $b$ per-tile blocks on a
+tile of side $F$ feature pixels the corrupted fraction is
+$1 - ((F-2b)/F)^2$. At our $F=32$, $b=8$ this is $0.750$. The small-$b$
+approximation $4b/F$ gives $1.000$ here and should not be used.
+
+\paragraph{The repair module's ceiling.} Splitting per-pixel squared error by
+distance from the nearest tile boundary at $q63$, with repair on against off and
+the same exit map:
+
+\begin{center}
+\begin{tabular}{lrrr}
+\toprule
+Band (px) & Share & OFF & Change \\
+\midrule
+0--4    & 6.2\%  & $4.7\times10^{-5}$ & $-0.27\%$ \\
+4--16   & 17.3\% & $4.4\times10^{-5}$ & $+0.05\%$ \\
+16--64  & 51.6\% & $4.3\times10^{-5}$ & $+0.04\%$ \\
+64--128 & 25.0\% & $4.1\times10^{-5}$ & $+0.04\%$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+The error is $15\%$ higher on the boundary band than in the interior and falls
+monotonically with distance, so the artefact is real and local. But the gate
+leaks: the module gains only in the first band. Taking the boundary gain and
+assuming a perfect gate elsewhere bounds what it could ever earn at
+$0.062 \times 4.7\!\times\!10^{-5} \times 0.0027 / 4.30\!\times\!10^{-5}
+\approx 1.8\times10^{-4}$ of the frame's error, i.e. $\approx 0.0008\dB$, for
+$0.95\%$ of the decode.
+
+\section{Reproducibility}
+
+\paragraph{Frozen encoder.} Every evaluation asserts
+$\max|\theta^{\mathrm{enc}}_{\mathrm{ours}} - \theta^{\mathrm{enc}}_{\mathrm{rel}}| = 0$
+before measuring. Without it the comparison is not on the same latent and the
+claim of an unchanged bitstream is unverified.
+
+\paragraph{Warm-start equivalence.} At initialisation the deepest exit
+reproduces the released decoder bit-exactly at $q0/32/63$, because every
+inherited weight is copied and every new module's last layer is zero.
+
+\paragraph{Sorted execution.} The reordering of
+Section~5 is bit-identical on CUDA under a random exit map and random content.
+It is \emph{not} bit-identical on CPU, and the reason is not the algorithm: a
+plain \texttt{DepthConvBlock} is already order-dependent at batch size 13 there,
+by about $10^{-7}$, while exact at 4, 9, 16 and 40, because oneDNN selects a
+different blocking. A test that compared the two paths on a decode of an
+all-zero image would pass vacuously --- every tile carries the same latent, so
+any permutation is trivially exact --- and ours therefore uses random content.
+
+\paragraph{Two decibel conventions.} Pooling every tile of every frame into one
+MSE and averaging a per-frame decibel differ by $0.023$--$0.033\dB$ on an
+identical allocation, a quarter to a third of the working budget, with pooling
+always the flattering one. We report per-frame, which is what the reference
+implementation of the baseline computes.
+
+\paragraph{Two quality metrics.} An RGB MSE ratio and the $6{:}1{:}1$-weighted
+YUV 4:2:0 PSNR the baseline reports agree within $0.003\dB$ on identical
+decodes across the whole rate range; we verified this rather than assuming it.
+
+\section{Negative and withdrawn results}
+
+We list these because they cost real time and are not otherwise recoverable from
+the paper.
+
+\begin{itemize}\itemsep2pt
+\item \textbf{First-order border extrapolation.} Continuing the local gradient
+      past a tile boundary is $1.8\times$ worse than a zeroth-order hold at
+      $q63$ (\SeamLinearHigh$\dB$ against \SeamReplHigh). Amplifying boundary
+      noise costs more than the trend recovers.
+\item \textbf{Fitted AR(1) padding}~\cite{arls}. The best estimator we measured,
+      and rejected: $0.02\dB$ for $10.7\%$ of decode wall-clock.
+\item \textbf{Learned seam repair.} Bounded above at $\approx 0.0008\dB$ for
+      $0.95\%$ of decode, even with a perfect gate.
+\item \textbf{Jointly training the router with the decoder.} In one
+      configuration the router collapsed to a rate-dependent constant with zero
+      agreement with the oracle; in another it did not. Training the router
+      against a frozen decoder is reliable and is what we report.
+\item \textbf{A halo through the per-tile trunk.} $1.745\times$ the cost of a
+      full decode --- more than routing saves.
+\end{itemize}
+
+{\small
+\bibliographystyle{ieee_fullname}
+\bibliography{refs}
+}
+\end{document}
