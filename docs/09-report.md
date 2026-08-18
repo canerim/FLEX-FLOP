@@ -18,34 +18,52 @@ Full mechanism, with diagrams: [08 — the system end to end](08-system.md).
 
 ## 2. Headline results
 
-**RECIPE512**, 40 CTC sequences, at the 0.1 dB budget: **33.2% of decoder MACs saved at the lowest rate, falling to 18.8% at the highest**, with the bitstream carrying a ~89 bit exit map per frame (0.011% of a typical bitrate).
+**RECIPE512**, 53 CTC sequences, at the 0.1 dB budget: **32.3% of decoder MACs saved at the lowest rate, falling to 16.8% at the highest**, with the bitstream carrying a ~79 bit exit map per frame (0.021% of a typical bitrate).
 
 ![headline](figures/headline_RECIPE512.png)
 
 Compute saved against the released decoder, per rate and per budget. Every dB is what a decoder **delivers**, verified by decoding the chosen exit map — see §7.
 
-**RECIPE512** — checkpoint epoch 0, 40 sequences
+**RECIPE512** — checkpoint epoch 0, 53 sequences
 
 | budget | qp 0 | qp 16 | qp 32 | qp 48 | qp 63 | mean |
 |---|---|---|---|---|---|---|
-| **0.10 dB** | 33.18% | 29.48% | 24.44% | 21.36% | 18.78% | 25.45 |
-| **0.30 dB** | 41.91% | 41.91% | 41.91% | 41.84% | 40.68% | 41.65 |
+| **0.10 dB** | 32.35% | 27.55% | 22.52% | 19.77% | 16.81% | 23.80 |
+| **0.30 dB** | 41.91% | 41.91% | 41.91% | 40.64% | 38.40% | 40.95 |
 | **0.50 dB** | 41.91% | 41.91% | 41.91% | 41.91% | 41.91% | 41.91 |
 
-**BEST** — checkpoint epoch 1, 40 sequences
+**BEST** — checkpoint epoch 1, 53 sequences
 
 | budget | qp 0 | qp 16 | qp 32 | qp 48 | qp 63 | mean |
 |---|---|---|---|---|---|---|
-| **0.10 dB** | 34.64% | 28.95% | 23.99% | 21.74% | 18.83% | 25.63 |
-| **0.30 dB** | 41.91% | 41.91% | 40.68% | 37.85% | 34.21% | 39.31 |
-| **0.50 dB** | 41.91% | 41.91% | 41.91% | 41.91% | 40.54% | 41.64 |
+| **0.10 dB** | 34.02% | 27.67% | 22.29% | 19.75% | 17.19% | 24.19 |
+| **0.30 dB** | 41.91% | 41.91% | 39.71% | 36.34% | 32.42% | 38.46 |
+| **0.50 dB** | 41.91% | 41.91% | 41.91% | 41.91% | 38.94% | 41.32 |
+
+**FINE12** — checkpoint epoch 1, 53 sequences
+
+| budget | qp 0 | qp 16 | qp 32 | qp 48 | qp 63 | mean |
+|---|---|---|---|---|---|---|
+| **0.10 dB** | 28.65% | 22.60% | 15.72% | 8.96% | — | 18.98 |
+| **0.30 dB** | 46.94% | 44.29% | 41.42% | 39.68% | 37.84% | 42.03 |
+| **0.50 dB** | 50.29% | 50.29% | 49.00% | 47.58% | 45.97% | 48.63 |
+
+**BEST128** — checkpoint epoch 1, 53 sequences
+
+| budget | qp 0 | qp 16 | qp 32 | qp 48 | qp 63 | mean |
+|---|---|---|---|---|---|---|
+| **0.10 dB** | 30.47% | 24.56% | 17.73% | 13.47% | 10.05% | 19.25 |
+| **0.30 dB** | 41.91% | 41.91% | 38.85% | 33.25% | 27.29% | 36.64 |
+| **0.50 dB** | 41.91% | 41.91% | 41.91% | 40.90% | 36.23% | 40.57 |
 
 ### Runs compared at 0.1 dB
 
 | run | ckpt | qp 0 | qp 16 | qp 32 | qp 48 | qp 63 | mean |
 |---|---|---|---|---|---|---|---|
-| RECIPE512 | ep 0 | 33.18 | 29.48 | 24.44 | 21.36 | 18.78 | **25.45** |
-| BEST | ep 1 | 34.64 | 28.95 | 23.99 | 21.74 | 18.83 | **25.63** |
+| RECIPE512 | ep 0 | 32.35 | 27.55 | 22.52 | 19.77 | 16.81 | **23.80** |
+| BEST | ep 1 | 34.02 | 27.67 | 22.29 | 19.75 | 17.19 | **24.19** |
+| FINE12 | ep 1 | 28.65 | 22.60 | 15.72 | 8.96 | — | **18.98** |
+| BEST128 | ep 1 | 30.47 | 24.56 | 17.73 | 13.47 | 10.05 | **19.25** |
 
 ## 3. Where a quality budget does anything at all
 
@@ -128,7 +146,67 @@ Even with a **perfect** gate — zero correction in the interior, the ring gain 
 
 ## 4b. Is per-tile adaptivity necessary?
 
-*Being measured — `scripts/static_baseline.py`. Three allocations at matched compute: every tile at the same exit (what a statically shallower decoder would give), the oracle's own exit histogram shuffled across tiles at random, the same histogram ordered by the bits the entropy model spent per tile, and the oracle. Sharing a histogram means the last three share an average cost exactly, so what separates them is ranking quality and nothing else.*
+The first question a reviewer asks. Three controls at matched compute, 53 sequences, 0.1 dB budget:
+
+**qp 0**
+
+| allocation | dB | saved | fits the budget |
+|---|---|---|---|
+| uniform, exit 2 | 0.1791 | 41.9% | **no** |
+| uniform, exit 3 | 0.0932 | 27.0% | yes |
+| uniform, exit 4 | 0.0589 | 13.0% | yes |
+| uniform, exit 5 | 0.0361 | -1.0% | yes |
+| random (oracle histogram, shuffled) | 0.1251 | 32.4% | — |
+| rate-ranked (agree 0.79) | 0.1069 | 32.4% | — |
+| **oracle** | **0.1000** | **32.4%** | — |
+
+**qp 16**
+
+| allocation | dB | saved | fits the budget |
+|---|---|---|---|
+| uniform, exit 2 | 0.2194 | 41.9% | **no** |
+| uniform, exit 3 | 0.1181 | 27.0% | **no** |
+| uniform, exit 4 | 0.0755 | 13.0% | yes |
+| uniform, exit 5 | 0.0452 | -1.0% | yes |
+| random (oracle histogram, shuffled) | 0.1327 | 27.5% | — |
+| rate-ranked (agree 0.78) | 0.1059 | 27.5% | — |
+| **oracle** | **0.0999** | **27.5%** | — |
+
+**qp 32**
+
+| allocation | dB | saved | fits the budget |
+|---|---|---|---|
+| uniform, exit 2 | 0.2819 | 41.9% | **no** |
+| uniform, exit 3 | 0.1472 | 27.0% | **no** |
+| uniform, exit 4 | 0.0897 | 13.0% | yes |
+| uniform, exit 5 | 0.0543 | -1.0% | yes |
+| random (oracle histogram, shuffled) | 0.1408 | 22.5% | — |
+| rate-ranked (agree 0.76) | 0.1072 | 22.5% | — |
+| **oracle** | **0.0999** | **22.5%** | — |
+
+**qp 48**
+
+| allocation | dB | saved | fits the budget |
+|---|---|---|---|
+| uniform, exit 2 | 0.3330 | 41.9% | **no** |
+| uniform, exit 3 | 0.1757 | 27.0% | **no** |
+| uniform, exit 4 | 0.1030 | 13.0% | **no** |
+| uniform, exit 5 | 0.0622 | -1.0% | yes |
+| random (oracle histogram, shuffled) | 0.1454 | 19.7% | — |
+| rate-ranked (agree 0.75) | 0.1063 | 19.7% | — |
+| **oracle** | **0.0996** | **19.7%** | — |
+
+**qp 63**
+
+| allocation | dB | saved | fits the budget |
+|---|---|---|---|
+| uniform, exit 2 | 0.3955 | 41.9% | **no** |
+| uniform, exit 3 | 0.2057 | 27.0% | **no** |
+| uniform, exit 4 | 0.1156 | 13.0% | **no** |
+| uniform, exit 5 | 0.0716 | -1.0% | yes |
+| random (oracle histogram, shuffled) | 0.1406 | 16.7% | — |
+| rate-ranked (agree 0.68) | 0.1098 | 16.7% | — |
+| **oracle** | **0.0995** | **16.7%** | — |
 
 ## 5. Who decides where each tile exits
 

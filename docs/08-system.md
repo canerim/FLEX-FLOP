@@ -206,8 +206,8 @@ of `0.1 + f` with no seam at all:
 
 Roughly five points of compute saving, at every rate above the lowest, are spent
 on making tiled decoding look like full-frame decoding. Canvas coupling (§5.5)
-removes that cause for +0.032% of decode — which is why it is the single
-experiment most worth running next.
+removes most of that cause for +0.032% of decode — and, measured, collapses the
+routed saving, so the five points are not currently collectable.
 
 *(Two caveats. The rigid-offset assumption is an approximation: the seam degrades
 the intermediate exits too, not only the floor. And under routing, coupling
@@ -301,7 +301,7 @@ One caveat keeps this from being a verdict: the module was trained jointly, so
 switching it off at inference is not the same as training without it. The clean
 test is a run with `seam_repair=none`, and none of the six live runs is that.
 
-### 5.5 Canvas coupling — implemented, measured, not used
+### 5.5 Canvas coupling — exact, and it destroys the routing
 
 If the cause is a 3×3 meeting invented values, the complete fix is to give it the
 real neighbour, and only for the 3×3 — the 0.29% of the block that needs it.
@@ -313,10 +313,32 @@ real neighbour, and only for the 3×3 — the 0.29% of the block that needs it.
 - under routing, what remains is only the boundary between tiles that chose
   *different* depths — where the neighbour is real, merely shallower.
 
-**But `tile_coupling = False` in all six runs.** Every number in this repository
-uses replicate padding plus grid repair. Coupling is an available option and not
-what these results describe. On the evidence in §5.4 the next configuration
-should be `tile_coupling=True, seam_repair=none`.
+**But `tile_coupling = False` in all six runs**, and there is now a reason
+beyond inertia. Measured on the trained decoder with coupling switched on at
+inference (`scripts/coupling_ablation.py`, 16 CTC frames):
+
+| qp | floor, padded | floor, coupled | routed saving, padded | routed saving, coupled |
+|---|---|---|---|---|
+| 0 | 0.0358 | **0.0031** | 33.44% | 31.94% |
+| 32 | 0.0484 | **0.0144** | 25.94% | **4.15%** |
+| 63 | 0.0564 | **0.0300** | 19.25% | **0.40%** |
+
+Coupling removes 47–91% of the floor and **destroys the allocation**. The
+exactness claim survives once it is isolated — as shipped the coupled decode
+differs from full-frame by 1.13e-2, which is the *repair module*, not the
+coupling; with repair off it is exactly **0.000e+00** against replicate's
+6.06e-2.
+
+The reason is the condition in the exactness statement. Coupling is exact when
+every tile is at the **same** depth, and routing is the deliberate violation of
+that condition. Replicate padding makes a tile wholly independent of its
+neighbours, which is what lets the allocation give adjacent tiles any depths at
+all; coupling makes a tile depend on neighbours that ran a different number of
+blocks, and the trained weights have never seen that.
+
+Caveat: trained with padding, so a run trained *with* coupling could reverse it.
+The tension is structural rather than a training artefact, so the burden is on
+that run.
 
 ---
 
@@ -505,9 +527,12 @@ matter most:
    and it has produced no measured advantage yet.
 3. **Does the gain continue past four epochs?** Still climbing at every
    checkpoint with more than one measurement.
-4. **Seam repair versus canvas coupling.** §5.4 says the module cannot pay for
-   itself and §5.5 says the alternative is thirty times cheaper and exact. The
-   experiment that settles it has not been run.
+4. **A decoder trained with canvas coupling.** §5.5 shows coupling removes most
+   of the floor and destroys the allocation when switched on at inference, on a
+   model trained with padding. Whether training with it recovers both at once is
+   the open question, and the tension — routing puts neighbouring tiles at
+   different depths, which is exactly the condition coupling's exactness
+   assumes away — may be structural.
 
 A note on how to read all of this: five mechanism claims in this project have
 been asserted and then refuted by their own follow-up measurement. The pattern is
