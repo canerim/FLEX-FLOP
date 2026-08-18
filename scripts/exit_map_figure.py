@@ -63,6 +63,7 @@ def main(argv):
     from src.utils.transforms import ycbcr2rgb
     from flexuf.config import FlexUFConfig
     from flexuf.cost import exit_costs
+    from flexuf.eval import per_tile_mse, tiled_exit_mses
     from flexuf.model import FlexUFIntra, load_flexuf_state
     from flexuf.reference import reference_for
 
@@ -90,15 +91,15 @@ def main(argv):
 
     with torch.no_grad():
         y, q, _ = net._encode_to_latent(xp, qp)
-        outs = net.dec.forward_all_exits(y, q)
         full = ref.dec.forward_full(y, q)
 
         def per_tile(img):
-            e = ((img - xp) ** 2).mean(1)
-            return (e.view(1, nh, P, nw, P).permute(0, 1, 3, 2, 4)
-                     .reshape(nh * nw, P * P).mean(1))
+            return per_tile_mse(img, xp, nh, nw, P)
 
-        M = torch.stack([per_tile(o) for o in outs], 1)     # [tiles, K]
+        # DEPLOYED path -- one tiled decode per exit. forward_all_exits runs
+        # full frame and would cancel the tiling penalty out of every number on
+        # this figure (flexuf/eval.py).
+        M = tiled_exit_mses(net.dec, y, q, xp, cfg)         # [tiles, K]
         Rt = per_tile(full)          # each tile's OWN reference error
         Rm = Rt.mean()               # frame-level reference, for the dB budget
 

@@ -117,7 +117,7 @@ def main(argv):
     if not imgs:
         raise SystemExit("no usable validation images")
 
-    K = cfg.num_exits
+    K, P = cfg.num_exits, cfg.rgb_patch
     rows = []
     print(f"  {len(imgs)} held-out images at {a.crop}px, {cfg.rgb_patch}px tile\n")
     print(f"  {'bits':>5}{'BOPs vs fp32':>14}{'qp':>5}"
@@ -147,8 +147,18 @@ def main(argv):
                 for x in imgs:
                     qp = torch.full((1,), qp_v, dtype=torch.int32, device=dev)
                     y, q, _ = net._encode_to_latent(x, qp)
-                    for i, o in enumerate(net.dec.forward_all_exits(y, q)):
-                        se[i] += ((o - x) ** 2).mean()
+                    # DEPLOYED path: one tiled decode per exit. The full-frame
+                    # forward_all_exits cancels the tiling penalty against a
+                    # full-frame reference (flexuf/eval.py), and quantisation
+                    # interacts with tile borders -- a border already fed
+                    # invented values is where a coarser weight grid shows up
+                    # first -- so measuring it full frame would understate
+                    # exactly the effect being looked for.
+                    nt = (x.shape[-2] // P) * (x.shape[-1] // P)
+                    for i in range(K):
+                        em = torch.full((nt,), max(i, cfg.split_depth),
+                                        dtype=torch.long, device=dev)
+                        se[i] += ((net.dec(y, q, exit_map=em) - x) ** 2).mean()
                     sr += ((ref.dec.forward_full(y, q) - x) ** 2).mean()
                 db = (10 * torch.log10(se / sr)).tolist()
                 rows.append({"bits": bits, "qp": qp_v, "db_per_exit": db,

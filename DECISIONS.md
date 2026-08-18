@@ -4391,3 +4391,26 @@ Cost: K tiled decodes per frame instead of one trunk pass -- minutes, not hours.
 Everything measured with a real tiled decode was already right and does not
 move: the seam tables (`ctc_seam_ablation.py`, `seam_vs_qp.py`), the floor, the
 saturation points, the spatial repair measurement, the latency work.
+
+## 84. Which scripts still measure on the full-frame path
+
+`flexuf/eval.py` fixed the evaluation scripts whose numbers are reported. These
+still call `dec.forward_all_exits` and are therefore still measuring a decoder
+nobody ships. None of them produces a headline number; all are listed so the
+next person does not have to grep for them.
+
+    budget_table.py       signal_probe.py     plot_checkpoint.py
+    make_slide_figs.py    oracle_diagnostic.py  per_qp_saving.py
+    signal_search.py      theory_check.py     why_qp.py / why_qp_val.py
+    train_router_head.py  ladder_health.py
+
+`why_qp.py` is a special case and is fine: it reports BITRATE, which is a
+function of the latent alone and identical on both paths.
+
+`train_router_head.py` trains the V1 router head; V2 (`train_router2.py`) is
+fixed and is what the reported configuration B uses.
+
+Fixed and reported: `signalled_curve.py`, `paper_curve.py`, `router_curve.py`,
+`routed_curve.py`, `eval_router2.py`, `db_convention.py`, `train_router2.py`,
+`exit_map_figure.py`, `quant_sweep.py`, and the new `static_baseline.py` and
+`saturation.py`.
