@@ -10,6 +10,7 @@ from pathlib import Path
 from pptx import Presentation
 from pptx.util import Inches, Pt
 from pptx.dml.color import RGBColor
+from pptx.enum.text import PP_ALIGN
 
 R = Path("/home/can_karsal/FLEX-UF")
 import sys as _sys
@@ -414,6 +415,60 @@ def slide_fig(title, img, items, top=None, height=None, size=13, top_txt=None):
         pic.left = int((prs.slide_width - pic.width) / 2)
     return s
 
+# --------------------------------------------------------------- equations
+from formula import eq as _eq  # noqa: E402
+
+
+def slide_eq(title, blocks, size=13):
+    """A slide whose argument IS the mathematics.
+
+    `blocks` mixes (level, text, bold) tuples with ("EQ", tex) pairs. Text lines
+    set the context in one line each; the equations are rendered by mathtext and
+    placed as images, because a formula typed into a text box is a transcription
+    of a formula, not one.
+    """
+    sl = prs.slides.add_slide(prs.slide_layouts[1])
+    sl.shapes.title.text = title
+    ph = sl.placeholders[1]
+    lay = prs.slide_layouts[1].placeholders[1]
+    ph.left, ph.width = lay.left, lay.width
+
+    y = 1.45
+    for b in blocks:
+        if b[0] == "EQ":
+            img = _eq(b[1], size=int(b[2]) if len(b) > 2 else 22)
+            pic = sl.shapes.add_picture(str(img), Inches(0.9), Inches(y))
+            sc = min(Inches(8.2) / pic.width, Inches(0.85) / pic.height)
+            pic.width, pic.height = int(pic.width * sc), int(pic.height * sc)
+            pic.left = int((prs.slide_width - pic.width) / 2)
+            y += pic.height / 914400 + 0.16
+        else:
+            lvl, txt, bold = b
+            tb = sl.shapes.add_textbox(Inches(0.55 + 0.35 * lvl), Inches(y),
+                                       Inches(9.0 - 0.35 * lvl), Inches(0.34))
+            f = tb.text_frame
+            f.word_wrap = True
+            f.margin_top = f.margin_bottom = 0
+            para = f.paragraphs[0]
+            # Textboxes inherit the layout's alignment; without this the prose
+            # sits right-aligned and reads as a caption drifting away from the
+            # equation it explains.
+            para.alignment = PP_ALIGN.LEFT
+            r = para.add_run()
+            r.text = txt
+            r.font.size = Pt(size - 2 * lvl)
+            r.font.bold = bold
+            if bold:
+                r.font.color.rgb = TUM
+            else:
+                r.font.color.rgb = GREY
+            n = max(1, -(-len(txt) // int(96 * 11.0 / max(size - 2 * lvl, 1))))
+            y += n * (size + 6) / 72.0 + 0.07
+    # the placeholder is unused on these slides; empty it so no ghost bullet
+    ph.text_frame.clear()
+    ph.top, ph.height = Inches(7.3), Inches(0.1)
+    return sl
+
 # 1 ------------------------------------------------------------------ title
 s = prs.slides.add_slide(prs.slide_layouts[0])
 s.shapes.title.text = "FLEX-UF: Content-Adaptive Early Exit for DCVC-UF"
@@ -583,6 +638,52 @@ s = slide_fig("Against the released decoder", "nf_results.png", [
  (0, target_line(), True),
  (0, ceiling_line(), True),
  (0, bd_line(), True),
+], size=12)
+
+# 16a ------------------------------------------------ the allocation problem
+slide_eq("The allocation problem", [
+ (0, "N tiles, K exits.  D[t,k] = distortion of tile t at exit k.  C_k = its cost.", True),
+ ("EQ", r"\min_{k_1\ldots k_N}\;\frac{1}{N}\sum_{t=1}^{N} D[t,k_t]"
+        r"\qquad \mathrm{s.t.}\qquad \frac{1}{N}\sum_{t=1}^{N} C_{k_t}\;\leq\;B", 21),
+ (0, "Lagrangian relaxation decouples it — every tile solves independently:", True),
+ ("EQ", r"k_t^{\star}(\lambda)\;=\;\arg\min_{k}\;\{\,D[t,k]\;+\;\lambda\,C_k\,\}", 23),
+ (1, "sweeping λ traces the lower convex hull of the achievable (cost, distortion) set", False),
+ (1, "λ is found by BISECTION on the realised dB, so a 0.1 dB budget is exactly 0.1", False),
+ (0, "Both configurations solve this. They differ only in where D[t,k] comes from.", True),
+], size=13)
+
+# 16b ----------------------------------------------------- the two decisions
+slide_eq("Two ways to obtain the decision", [
+ (0, "A · the encoder holds the source, so D[t,k] is measured, and k* is exact", True),
+ ("EQ", r"D[t,k]\;=\;\|\,\hat{x}_k[t]-x[t]\,\|_2^2"
+        r"\qquad\Rightarrow\qquad k_t=k_t^{\star}(\lambda)", 21),
+ (1, "the answer is then transmitted: H(k) · N + 8K bits ≈ 94 bit/frame", False),
+ (0, "B · the decoder never sees x, so D[t,k] does not exist. It predicts instead.", True),
+ ("EQ", r"z_t\;=\;\mathrm{MLP}([\;\mu_t,\;\sigma_t,\;"
+        r"\rho_t,\;\frac{qp}{63}\;])", 21),
+ (1, "μ, σ : mean and std over tile t of a learned 384→48 view of the stem", False),
+ (1, "ρ : a 512→32 view of the latent ŷ concatenated with the entropy scales σ̂", False),
+ ("EQ", r"\hat{k}_t\;=\;\arg\max_{k}\;\{\,"
+        r"\log\mathrm{softmax}(z_t)_k\;-\;\beta\,C_k\,\}", 23),
+ (0, "β plays λ's role, but trades log-likelihood against cost, not distortion "
+     "against cost", True),
+], size=12)
+
+# 16c ---------------------------------------------------- training the router
+slide_eq("Training the router, and why it collapsed", [
+ (0, "Target is the oracle's choice, weighted by what the decision is worth:", True),
+ ("EQ", r"\mathcal{L}\;=\;\mathrm{CE}_w(z_t,\,k_t^{\star})\;+\;"
+        r"\alpha\;\mathbb{E}_t[\,L(t,\hat{k}_t)-L(t,k_t^{\star})\,],"
+        r"\qquad L(t,k)=D[t,k]+\lambda C_k", 19),
+ (1, "agreement on ties is worth nothing; the regret term says so", False),
+ (0, "Collapse control without an auxiliary loss (arXiv:2408.15664):", True),
+ ("EQ", r"z_t\;\leftarrow\;z_t+b,\qquad "
+        r"b\;\leftarrow\;b+\eta\,(\pi^{\star}-\hat{\pi})", 21),
+ (1, "b is a buffer, nudged by usage — no interference gradient enters ℒ", False),
+ (1, "balanced toward the ORACLE's mix π*, not uniform: exits are not "
+     "interchangeable experts", False),
+ (0, "Trained JOINTLY with the decoder → collapsed to a constant, agreement "
+     "0.000 at qp63.  Against the FROZEN decoder → 0.848.", True),
 ], size=12)
 
 # 17 ------------------------------------------------- A vs B, the design choice
