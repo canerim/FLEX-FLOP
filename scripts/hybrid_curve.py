@@ -184,9 +184,50 @@ def main(argv):
                     n += 1
                 return t / n
 
+            def db_oracle(lam):
+                t = n = 0.0
+                for M, R, lp, *_ in cache:
+                    k = (M + lam * cost[None, :]).argmin(1)
+                    t += (10 * torch.log10(
+                        M.gather(1, k[:, None]).squeeze(1).mean() / R)).item()
+                    n += 1
+                return t / n
+
             LAM_HI = 1.0
             betaB = bisect(db_router, -2.0e4, 2.0e4, TARGET)
-            print(f"  qp {qp_v}:  beta_B {betaB:.4g}")
+            lamA = bisect(db_oracle, 0.0, LAM_HI, TARGET)
+
+            # --- how the regret is distributed over tiles ------------------
+            # At a FIXED lam the hybrid objective is exactly separable, so
+            # overriding a set S of tiles removes exactly the sum of their
+            # regrets. The recovered fraction as a function of |S| is therefore
+            # the Lorenz curve of the regret distribution, and its curvature --
+            # the Gini coefficient -- says in one number whether a small
+            # signalling budget can do most of the work. This is the fixed-lam
+            # prediction; the measured sweep below re-bisects lam at every rho,
+            # so the two agree only to the extent that re-tuning is a second
+            # order effect.
+            reg = []
+            for M, R, lp, *_ in cache:
+                L = M + lamA * cost[None, :]
+                ko = L.argmin(1)
+                kr = (lp - betaB * cost[None, :]).argmax(1)
+                reg.append((L.gather(1, kr[:, None])
+                            - L.gather(1, ko[:, None])).squeeze(1))
+            reg = torch.cat(reg).sort(descending=True).values
+            tot = float(reg.sum())
+            cum = torch.cumsum(reg, 0) / (tot if tot > 0 else 1.0)
+            nt = reg.numel()
+            lorenz = {f"{r:g}": float(cum[max(0, min(nt - 1,
+                                                     int(round(r * nt)) - 1))])
+                      for r in a.rhos if r > 0}
+            # Gini of a non-negative vector sorted descending
+            i = torch.arange(1, nt + 1, device=reg.device, dtype=reg.dtype)
+            gini = float((2 * (i * reg.flip(0)).sum() / (nt * reg.sum())
+                          - (nt + 1) / nt)) if tot > 0 else 0.0
+            print(f"  qp {qp_v}:  beta_B {betaB:.4g}   lam_A {lamA:.4g}   "
+                  f"Gini(regret) {gini:.3f}   "
+                  + "  ".join(f"L({k})={v:.3f}" for k, v in lorenz.items()))
 
             def choose(M, lp, lam, rho):
                 """Hybrid exit map and the number of overridden tiles."""
@@ -257,6 +298,8 @@ def main(argv):
                              "tiles_per_frame": N,
                              "overridden_per_frame": ov / n,
                              "pays_router": pays_router,
+                             "lorenz_at_rho": lorenz.get(f"{rho:g}"),
+                             "gini_regret": gini,
                              "budget_reachable": True})
                 print(f"      rho {rho:<5} saved {100*SVR/n:>6.2f}%  "
                       f"@ {td:>7.4f} dB   {bits:>6.1f} bits/frame")
