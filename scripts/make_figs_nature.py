@@ -14,6 +14,41 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 import naturestyle as ns
 ns.apply()
 R = Path(__file__).resolve().parents[1]
+# ---------------------------------------------------------------- denominator
+def _D():
+    """Our deepest exit's cost in stock decodes -- 1.0095, not 1.0.
+
+    Curves divide their saving by this, which answers "what does early exiting
+    save against our own full-depth path". Every caption in this deck says
+    "against the released decoder", whose denominator is exactly 1. The two
+    differ by 0.6-0.75 points, and a figure showing one while the text quotes
+    the other is the kind of inconsistency a reader is right to distrust.
+    """
+    import json as _j
+    from flexuf.config import FlexUFConfig
+    from flexuf.cost import exit_costs
+    cfg = FlexUFConfig(**_j.loads((R / "runs/BEST/meta.json").read_text())["config"])
+    return float(exit_costs(cfg, "head")[-1])
+
+
+_DEEP = None
+
+
+def sv(row_or_value):
+    """Saving against the RELEASE, from a row dict or a bare percentage."""
+    global _DEEP
+    if _DEEP is None:
+        _DEEP = _D()
+    if isinstance(row_or_value, dict):
+        v = row_or_value.get("saving_pct_vs_release")
+        if v is not None:
+            return v
+        v = row_or_value.get("saving_pct")
+    else:
+        v = row_or_value
+    return None if v is None else 100.0 - (100.0 - v) * _DEEP
+
+
 def J(p):
     f = R / "results" / p
     return json.loads(f.read_text()) if f.exists() else None
@@ -195,7 +230,7 @@ def _front(q, key="db_vs_uf_per_frame"):
     for r in pc:
         if r["qp"] != q:
             continue
-        k = round(r["saving_pct"], 6)
+        k = round(sv(r), 6)
         v = r.get(key, r["db_vs_uf"])
         if k not in best or v < best[k]:
             best[k] = v
@@ -256,7 +291,7 @@ if all(iso.values()):
              ("D_256w_128t", "256 px weights\n128 px tiles"), ("C_256w_256t", "256 px weights\n256 px tiles")]
     xs = np.arange(4); w_ = .26
     for off, q, c in ((-w_-.01, 0, ns.BLUE), (0, 32, ns.ORANGE), (w_+.01, 63, ns.GREEN)):
-        y = [next(r["saving_pct"] for r in iso[k]["rows"] if r["qp"] == q) for k, _ in order]
+        y = [next(sv(r) for r in iso[k]["rows"] if r["qp"] == q) for k, _ in order]
         a.bar(xs + off, y, w_, color=c, label=f"qp {q}")
         for x, v in zip(xs + off, y): a.text(x, v + .5, f"{v:.1f}", ha="center", fontsize=5.5, color=ns.INK2)
     a.set_xticks(xs); a.set_xticklabels([l for _, l in order]); a.set_ylim(0, 30)
@@ -274,13 +309,13 @@ if sg and pc:
         # These were pooled, which put two conventions on one plot and moved
         # the oracle bound 0.023-0.033 dB left of where the markers live.
         pts = sorted([(r.get("db_vs_uf_per_frame", r["db_vs_uf"]),
-                       r["saving_pct"]) for r in pc if r["qp"] == q])
+                       sv(r)) for r in pc if r["qp"] == q])
         pts = [p for p in pts if -.02 <= p[0] <= .30]
         a.plot([p[0] for p in pts], [p[1] for p in pts], color=c, lw=.8,
                ls=(0, (4, 2)), alpha=.85)
-        a.plot(sgm[q]["db_vs_uf"], sgm[q]["saving_pct"], marker="o", ms=4.5, color=c,
+        a.plot(sgm[q]["db_vs_uf"], sv(sgm[q]), marker="o", ms=4.5, color=c,
                markeredgecolor="white", markeredgewidth=.6)
-        a.annotate(f"qp {q}", (sgm[q]["db_vs_uf"], sgm[q]["saving_pct"]), fontsize=5.5,
+        a.annotate(f"qp {q}", (sgm[q]["db_vs_uf"], sv(sgm[q])), fontsize=5.5,
                    color=c, textcoords="offset points", xytext=(5, -2))
     a.plot(0.367, 24.8, marker="X", ms=6, color=ns.VERM, markeredgecolor="white",
            markeredgewidth=.6)
@@ -316,7 +351,7 @@ if pc2:
     for q in qps:
         cand = [r for r in pc2["rows"] if r["qp"] == q
                 and r.get("db_vs_uf_per_frame", r["db_vs_uf"]) <= 0.105]
-        rows.append(max(cand, key=lambda r: r["saving_pct"]))
+        rows.append(max(cand, key=lambda r: sv(r)))
     # Exits 0, 1 and 2 cost the SAME under j=2 -- the first j groups run
     # full-frame for every tile, so the cost vector is 0.5716 three times over.
     # argmin therefore scatters the cheapest allocation across three indices.
@@ -369,8 +404,8 @@ if bd:
     rs = bd["rows"]
     x = np.arange(len(rs))
     lab = [f"qp {r['qp']}" for r in rs]
-    got = [r["bd_saving_pct"] for r in rs]
-    extra = [(r["bd_saving_pct_zero_drift"] - r["bd_saving_pct"])
+    got = [sv(r["bd_saving_pct"]) for r in rs]
+    extra = [(sv(r["bd_saving_pct_zero_drift"]) - sv(r["bd_saving_pct"]))
              if r["bd_saving_pct_zero_drift"] is not None else 0.0 for r in rs]
 
     ax[0].bar(x, got, .62, color=ns.BLUE, label="measured")
@@ -419,7 +454,7 @@ if ps:
     rows = ps["rows"]
     xs = np.arange(len(rows))
     for i, r in enumerate(rows):
-        v = np.array([q["saving_pct"] for q in r["per_sequence"]])
+        v = np.array([sv(q) for q in r["per_sequence"]])
         # Jittered strip, deterministic: index-derived offsets, since the run
         # must reproduce and Math.random-style jitter would not.
         off = (np.arange(len(v)) % 9 - 4) / 22.0
@@ -462,7 +497,7 @@ if th2 and ps2:
                     loc="left")
 
     for i, r in enumerate(ps2["rows"]):
-        v = np.array([q["saving_pct"] for q in r["per_sequence"]])
+        v = np.array([sv(q) for q in r["per_sequence"]])
         off = (np.arange(len(v)) % 9 - 4) / 22.0
         ax[1].scatter(np.full_like(v, i) + off, v, s=2.0, color=ns.SKY,
                       linewidths=0, alpha=.85, zorder=2)

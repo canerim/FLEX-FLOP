@@ -107,11 +107,9 @@ def collapse_line():
     e0 = svr_row("signalled_CONTROL_0817_1813.json", 0)
     e1 = svr_row("signalled_CONTROL_0817_2047.json", 0)
     got = (f"{e0:.1f}% -> {e1:.1f}%" if e0 and e1 else "measured, see results/")
-    return (f"CONTROL over its SECOND epoch, per-exit dB vs the release at "
-            f"qp{q} (below): saving at 0.1 dB fell {got} at qp0, damage growing "
-            f"the shallower the exit. VERBATIM, which carries even less, "
-            f"IMPROVED over the same boundary — so this is CONTROL's, not "
-            f"'training without the additions', and the cause is still open")
+    return (f"CONTROL, 2nd epoch:  saving at qp0 {got}  ·  damage grows the "
+            f"shallower the exit  ·  VERBATIM improved over the same boundary "
+            f"→ cause unknown")
 
 
 def ladder_line():
@@ -142,10 +140,8 @@ def ladder_line():
         else:
             out.append(f"anchor {w}: " + "/".join(
                 f"{r['saving_pct']:.0f}" for r in rr) + "%")
-    return ("Saving at 0.1 dB across the three runs that share an architecture — "
-            + "; ".join(out)
-            + ". CONTROL→BEST changes four things at once, so that step is the "
-              "bundle, not the anchor alone")
+    return ("Saving at 0.1 dB, same architecture:  " + "  ·  ".join(out)
+            + "   (CONTROL→BEST moves four flags, so it is the bundle)")
 
 
 def anchor_line():
@@ -165,15 +161,11 @@ def anchor_line():
     qs = sorted(set(A) & set(V))
     if not qs:
         return None
-    worst_v = min(V[q] for q in qs)
-    return (f"Deepest exit vs the release, same tiles and same warm start: BEST "
+    return ("Deepest-exit drift vs release   BEST  "
             + " / ".join(f"{A[q]:+.3f}" for q in qs)
-            + " dB against VERBATIM's "
+            + "   ·   VERBATIM (no anchor)  "
             + " / ".join(f"{V[q]:+.3f}" for q in qs)
-            + f" dB at qp{'/'.join(map(str, qs))}. VERBATIM's drift alone is "
-              f"{abs(worst_v) / 0.1:.1f}× the 0.1 dB budget, so the target is "
-              f"unreachable there at any saving — the anchor term is a "
-              f"precondition, not a refinement")
+            + f"   at qp {'/'.join(str(q) for q in qs)}")
 
 
 def budget_line(db):
@@ -425,413 +417,276 @@ def slide_fig(title, img, items, top=None, height=None, size=13, top_txt=None):
 # 1 ------------------------------------------------------------------ title
 s = prs.slides.add_slide(prs.slide_layouts[0])
 s.shapes.title.text = "FLEX-UF: Content-Adaptive Early Exit for DCVC-UF"
-s.placeholders[1].text = ("Decoder compute saved at a measured cost in quality\n"
+s.placeholders[1].text = ("Decode compute spent where the content needs it\n"
                           "Chair of Media Technology · TUM")
 
 # 2 -------------------------------------------------------------- the problem
-slide_fig("Problem and goal", "nf_macs.png", [
- (0, "DCVC-UF's intra decoder: 453.5 GMAC per 1080p frame", True),
- (1, "12 identical DepthConvBlocks = 89.4% of it", False),
- (1, "every patch pays the same, however easy it is", False),
- (0, "Goal: spend less compute where the content allows", True),
- (1, "target set with the group: 30–40% saved at ≤0.1 dB", False),
- (0, "Constraint that shapes everything: the reference is the RELEASED model", True),
- (1, "encoder, hyperprior, entropy model frozen → identical bitstream", False),
- (1, "so any measured difference is the decoder alone", False),
+slide_fig("Uniform compute, non-uniform content", "nf_macs.png", [
+ (0, "DCVC-UF intra decoder · 453.5 GMAC / 1080p frame", True),
+ (1, "upsample 8.2%  ·  12 DepthConvBlocks 89.4%  ·  head 2.4%", False),
+ (0, "Target · 30–40% saved at ≤ 0.1 dB", True),
+ (0, "Constraint · encoder, hyperprior, entropy model frozen", True),
+ (1, "coded payload bit-identical → the decoder is the only variable", False),
 ], size=13)
 
 # 3 --------------------------------------------------------------- architecture
-slide_fig("Architecture: a ladder of exits", "nf_arch.png", [
- (0, "Shared stem runs full-frame → no seams; the rest runs per tile", True),
- (0, "Each exit has a zero-initialised 1×1 adapter, then the shared head", False),
- (0, "Pointwise on purpose: a 1×1 adds no receptive field, so no seam cost", False),
-])
+slide_fig("A ladder of exits over the trunk", "nf_arch.png", [
+ (0, "K exits over 12 blocks, split depth j", True),
+ (1, "groups 0…j−1  full-frame  ·  groups j…K−1  per tile", False),
+ (1, "shipped:  K = 6,  j = 2,  256 px tiles", False),
+ (0, "Per-tile cost  C_k  (units of one stock decode)", True),
+ (1, "0.581  0.581  0.581  0.730  0.870  1.010", False),
+ (1, "exits 0,1 end inside the stem → C₀ = C₁ = C₂ · 6 rungs, 4 prices", False),
+], size=13)
 
-# 3b -------------------------------------------------- what it actually does
-slide_fig("What the router actually does, on a frame", "exit_map.png", [
- (0, "Bosphorus, qp32, the real Lagrangian assignment at the 0.1 dB budget — "
-     "40 tiles of 256px, 33.4% saved at 0.098 dB", True),
- (0, "The boat takes exit 4 (13% saved). The water and the sky take exit 2 "
-     "(42%). The shoreline band in between takes exit 3.", True),
- (0, "This is the whole idea in one picture: the frame is not uniformly hard, "
-     "and a decoder that spends uniformly is overpaying on most of it", True),
- (1, "panel c is the dB each tile pays against ITS OWN reference error, not "
-     "against the frame mean — dividing by the mean makes easy tiles read as "
-     "better than the release, which no exit can be", False),
- (0, "Closest relative in the literature is ClassSR, which routes patches to "
-     "differently sized SR branches. The difference: it picks a network per "
-     "patch for a fixed cost target; we pick a DEPTH per tile inside one "
-     "network, for a fixed quality target, and the bitstream never changes.", True),
-], size=11)
+# 4 -------------------------------------------------- what it does, on a frame
+slide_fig("The assignment, on a frame", "exit_map.png", [
+ (0, "Bosphorus · qp 32 · λ* bisected to 0.1 dB · 40 tiles", True),
+ (0, "boat → exit 4   water, sky → exit 2   shoreline → exit 3", True),
+ (1, "33.4% saved at 0.098 dB", False),
+ (1, "(c) dB vs each tile's OWN reference, not the frame mean", False),
+], size=13)
 
-# 4 ------------------------------------------------------------- the warm start
-slide_fig("We start AT DCVC-UF, not near it", "nf_warmstart.png", [
- (0, "The released weights are re-expressed in ladder form by a key remap", True),
- (1, "dec_1.0→upsample, dec_1.n→groups.g.i, dec_2→head", False),
- (1, "the remap is a bijection over 143 tensors (asserted in tests)", False),
- (0, "Adapters and seam repair are zero-init, i.e. the identity", False),
- (0, "So at step 0, with no training at all:", True),
- (1, "released DCVC-UF vs our deepest exit → max|diff| = 0.0", False),
- (0, "Training does not have to reach DCVC-UF. It has to (a) lift the shallow "
-     "exits and (b) not damage the deepest one.", True),
- (0, "From-scratch runs were abandoned for exactly this: after 6 epochs their "
-     "anchor sat 1.49 dB below the release and was not closing.", False),
-], size=12)
+# 5 ------------------------------------------------------------- the warm start
+slide_fig("The reference IS the released decoder", "nf_warmstart.png", [
+ (0, "Released weights re-expressed in ladder form · bijection over 143 tensors", True),
+ (0, "Adapters and seam repair zero-init ⇒ identity at step 0", True),
+ (0, "max | x̂_release − x̂_ours |  =  0.0     at qp 0 / 32 / 63", True),
+ (1, "through Microsoft's own DMCI class and forward_one_frame", False),
+ (0, "So training must (a) lift shallow exits, (b) not damage the deepest", True),
+], size=13)
 
-# 5 -------------------------------------------------------------------- training
-slide_fig("Training: the recipe, checked not claimed", "nf_collapse.png", [
- (0, "scripts/verify_recipe.py compares each item against ~/DCVC/train_image.py "
-     "and exits non-zero on a mismatch", True),
-
- (0, anchor_line() or "anchor comparison pending VERBATIM's measurement", True),
+# 6 -------------------------------------------------------------------- training
+slide_fig("Recipe, checked against theirs", "nf_collapse.png", [
+ (0, "verify_recipe.py diffs each item against ~/DCVC/train_image.py", True),
+ (0, anchor_line() or "anchor comparison pending", True),
  (1, ladder_line() or "three-run comparison pending", False),
  (1, collapse_line() or "second-epoch comparison pending", False),
- (0, "Deliberate additions, listed rather than hidden: --epoch_offset, "
-     "--anchor_weight, --new_lr_scale, --freeze_encoder", True),
- (0, "VERBATIM is their recipe with NONE of them, effective batch 16 by "
-     "accumulation — the control both rows above are measured against", True),
+ (0, "Additions, listed: --epoch_offset · --anchor_weight · --new_lr_scale · "
+     "--freeze_encoder", True),
 ], size=11)
 
-# 5b ------------------------------------------------------- how training went
-slide_fig("How training actually went", "training_BEST.png", [
- (0, "The loss is flat from about step 5,000 and stays flat through the epoch. "
-     "It would be easy to call that converged. It is not:", True),
- (1, "loss = lambda*MSE + bpp, and a random 256px crop's bitrate swings twofold "
-     "between consecutive batches. corr(loss, batch bpp) = 0.97 — the curve is "
-     "mostly reporting what the dataloader handed the model", False),
- (0, "Panel b: the exits stay ordered and about 1 dB apart on the training "
-     "batch — the ladder is healthy, nothing has collapsed onto its neighbour", True),
- (0, "Panel c is the measurement that does answer it: compute saved on the SAME "
-     "fixed CTC frames, one point per checkpoint. Still climbing at 20-24k "
-     "steps (BEST128 11.2 to 12.6%, FINE12 15.0 to 16.8% at qp63)", True),
- (0, "So the stopping signal is the held-out measurement, not the loss — and "
-     "every number in this deck is one checkpoint of a run that has not "
-     "finished", True),
- (0, "One epoch is 47,451 steps at batch 8; six runs share the machine, so an "
-     "epoch costs 6-22 h wall-clock", False),
-], size=11)
+# 7 ------------------------------------------------------- how training went
+slide_fig("The loss is not the convergence signal", "training_BEST.png", [
+ (0, "L = λ·MSE + bpp   ·   corr(L, batch bpp) = 0.97", True),
+ (1, "flat from step ~5,000; a 256 px crop's bitrate swings 2× per batch", False),
+ (0, "(b) exits stay ordered, ~1 dB apart → ladder healthy", True),
+ (0, "(c) saving on FIXED CTC frames, still rising at 20–24k steps", True),
+ (1, "BEST128 11.2 → 12.6%   FINE12 15.0 → 16.8%   (qp 63)", False),
+ (0, "1 epoch = 47,451 steps · every number here is one checkpoint", True),
+], size=12)
 
-# 6 ------------------------------------------------------------------- anchor
-slide_fig("The anchor, and a ×4 error caught",
-          "nf_anchor.png", [
- (0, "Reading the schedule from epoch 0 applied the from-scratch lr to a "
-     "converged model", True),
- (1, "deepest exit fell 0.153 / 0.201 / 0.263 dB in ONE epoch (qp0/32/63)", False),
- (1, "fixed to 0.025 / 0.051 / 0.074 by --epoch_offset 75 + --anchor_weight", False),
- (0, "Freezing the backbone gives exactly 0.000 — but collapses the ceiling from "
-     "27.3% to 11.5%, so training the trunk is mandatory", True),
+# 8 ------------------------------------------------------------------- anchor
+slide_fig("Schedule position, and a ×4 error", "nf_anchor.png", [
+ (0, "Reading the schedule from epoch 0 applies from-scratch lr to a converged "
+     "model", True),
+ (1, "deepest exit fell 0.153 / 0.201 / 0.263 dB in one epoch", False),
+ (1, "→ 0.025 / 0.051 / 0.074 with --epoch_offset 75 + --anchor_weight", False),
+ (0, "Freezing the trunk gives 0.000 drift — and collapses the ceiling "
+     "27.3% → 11.5%", True),
 ], size=13)
 
-# 7 ---------------------------------------------------------------- example
-slide_fig("What an exit costs, on one frame", "nf_exits.png", [
- (0, "Bosphorus 1080p, qp32, identical bitstream at every exit", True),
- (0, "Error maps ×25: the damage is structured, concentrated on detail and "
-     "on tile borders — which is what the seam work targets", False),
+# 9 ---------------------------------------------------------------- example
+slide_fig("One frame, four exits", "nf_exits.png", [
+ (0, "Bosphorus 1080p · qp 32 · identical bitstream at every exit", True),
+ (0, "Error ×25 · damage is structured: detail and tile borders", True),
 ], size=13)
 
-# 8 --------------------------------------------------------------------- seam
-slide_fig("The seam artefact, and what actually removed it", "nf_seam.png", [
- (0, "A tile decoded alone meets its border with invented values. Measured "
-     "PURE — no early exit, every tile at full depth, so tiling is the only "
-     "difference from a full-frame decode:", True),
- (1, "256px tiles, qp0/32/63 — zeros: 0.100 / 0.216 / 0.548 dB. At qp63 that "
-     "is five times the entire 0.1 dB budget, before a single tile exits early", False),
- (0, "Three things fixed it, in order of contribution:", True),
- (1, "TILE SIZE — 256px instead of 128 halves it (1.167 -> 0.548 at qp63): the "
-     "seam is a perimeter effect", False),
- (1, "REPLICATE padding instead of zeros — 0.548 -> 0.107 dB, an 80% cut for "
-     "zero compute. 'linear' extrapolation was also tried and is WORSE (0.264), "
-     "so a cleverer guess is not automatically a better one", False),
- (1, "GRID SEAM REPAIR — the tile lattice is known exactly, so the correction "
-     "is gated by a learned P×P map indexed by position within a tile: "
-     "f + G[i mod P, j mod P]·PW(WSiLU(DW3x3(f))). 256 scalars, 0.0007% of the "
-     "decoder's parameters, initialised at exp(-d/tau) so the gate starts on "
-     "the seam. Costs 0.95% of the decode", False),
- (0, "A plain 3×3 would have to INFER which pixels are on a boundary, and would "
-     "apply its correction to the 77% that are clean interior — where any "
-     "correction is damage. Telling it the grid is the whole idea.", True),
- (0, "arls (arXiv:2502.12300) is better still — 0.088 vs 0.107 at qp63 — and was "
-     "REJECTED: +10.7% of decode wall-clock for +0.019 dB", True),
- (0, "Canvas coupling gives the 3×3 its real neighbour and reaches max|diff| = "
-     "0.0 against full-frame for +0.03%. It is implemented and measured, but "
-     "tile_coupling=False in every run here — so it is an option, not what "
-     "these results use.", True),
-], size=10)
+# 10 ------------------------------------------------ seam 1/5, the mechanism
+slide_text("Seam 1/5 · where it comes from", [
+ (0, "3×3 depthwise at (i, j):", True),
+ (1, "y[i,j]  =  Σ_{u,v ∈ {−1,0,1}}  w[u,v] · f[i+u, j+v]", False),
+ (0, "Per tile, f[i+u, j+v] outside the tile does not exist → padding invents it", True),
+ (1, "only the 3×3 depthwise has spatial extent; everything else is 1×1", False),
+ (1, "⇒ exit adapters are 1×1 on purpose: no receptive field, no seam", False),
+ (0, "Contamination grows one ring per layer. b per-tile layers, tile side F:", True),
+ (1, "corrupted fraction  =  1 − ((F − 2b) / F)²   ≈   4b / F", False),
+ (1, "F = 32,  b = 8   →   1 − (16/32)²  =  75% of the tile", False),
+ (0, "Not a line of bad pixels — the error propagates inward", True),
+ (0, "Scales with tile PERIMETER, and with split depth j", True),
+], size=13)
 
-# 10a --------------------------------------------- seam, formally: the cause
-slide_text("The seam artefact, formally  (1/5): where it comes from", [
- (0, "A 3x3 depthwise convolution at feature position (i,j) computes", True),
- (1, "y[i,j] = sum_{u,v in {-1,0,1}} w[u,v] . f[i+u, j+v]", False),
- (0, "Decoded full-frame, f[i+u,j+v] are the neighbour's real features. Decoded "
-     "per tile, positions outside the tile do not exist and the kernel is fed "
-     "whatever the padding rule invents.", True),
- (0, "Only the 3x3 DEPTHWISE has spatial extent. Everything else in a "
-     "DepthConvBlock is 1x1, and a 1x1 has no neighbours to miss — which is why "
-     "the exit adapters are 1x1 on purpose: they add no seam.", True),
- (0, "The affected region is a ring one pixel wide per convolution. With b "
-     "depthwise layers running per tile, the ring is b pixels deep, so for a "
-     "tile of side F the corrupted fraction is", True),
- (1, "1 - ((F - 2b)/F)^2  ~=  4b/F   for b << F", False),
- (1, "F = 32 feature px (256 RGB), b = 8 per-tile blocks -> ~ 1 - (16/32)^2 = "
-     "75% of the tile is within reach of at least one contaminated value", False),
- (0, "So this is NOT a thin line of bad pixels. The error PROPAGATES inward one "
-     "ring per layer, which is why the error maps show structure across the "
-     "whole tile and not only at the border.", True),
- (0, "Two consequences that shaped every later decision: the damage scales with "
-     "the tile PERIMETER, and it scales with how many layers run per tile — "
-     "i.e. with the split depth j.", True),
-], size=11)
+# 11 -------------------------------------------------- seam 2/5, the padding
+slide_text("Seam 2/5 · padding is an estimator", [
+ (0, "Border column x[0], unseen neighbour x[−1]:", True),
+ (1, "zeros        x̂[−1] = 0", False),
+ (1, "replicate    x̂[−1] = x[0]                         zeroth-order hold", False),
+ (1, "linear       x̂[−1] = 2·x[0] − x[1]                first-order", False),
+ (1, "arls         x̂[−1] = a·x[0],  a fitted per channel   AR(1)", False),
+ (0, "Pure seam penalty · CTC · 256 px · full depth · dB above the release", True),
+ (1, "                qp 0      qp 32     qp 63", False),
+ (1, "zeros         0.1005    0.2162    0.5477", False),
+ (1, "replicate     0.0616    0.0854    0.1070", False),
+ (1, "linear        0.1793    0.2315    0.2638", False),
+ (1, "arls          0.0518    0.0707    0.0879", False),
+ (0, "linear > replicate: extrapolating a gradient amplifies boundary noise", True),
+ (0, "arls wins on dB, REJECTED on cost · +10.7% wall-clock for 0.019 dB", True),
+], size=12)
 
-# 10b -------------------------------------------- seam, formally: the padding
-slide_text("The seam artefact, formally  (2/5): padding is an estimator", [
- (0, "Padding is not a formatting detail. It is an ESTIMATOR of the neighbour "
-     "the tile cannot see, and the seam penalty is that estimator's error.", True),
- (0, "For a border column x[0] with true neighbour x[-1]:", True),
- (1, "zeros      x_hat[-1] = 0                     — assumes the signal is "
-     "centred at zero, which after the -0.5 shift is grey", False),
- (1, "replicate  x_hat[-1] = x[0]                  — assumes local constancy, "
-     "i.e. a zeroth-order hold", False),
- (1, "linear     x_hat[-1] = 2.x[0] - x[1]         — first-order extrapolation", False),
- (1, "arls       x_hat[-1] = a.x[0], a fitted per channel by least squares — "
-     "an AR(1) model (arXiv:2502.12300)", False),
- (0, "Measured on CTC, 256px tiles, PURE seam (no early exit, full depth, so "
-     "tiling is the only difference from full-frame). dB above the release:", True),
- (1, "                qp0      qp32     qp63", False),
- (1, "zeros         0.1005   0.2162   0.5477", False),
- (1, "replicate     0.0616   0.0854   0.1070", False),
- (1, "linear        0.1793   0.2315   0.2638", False),
- (1, "arls          0.0518   0.0707   0.0879", False),
- (0, "The lesson is in the LINEAR row: a higher-order estimator is WORSE than a "
-     "zeroth-order one. Extrapolating a gradient past a boundary amplifies "
-     "whatever noise sits on it; assuming constancy does not.", True),
- (0, "arls wins on quality and was REJECTED on cost: +10.7% of decode "
-     "wall-clock for 0.019 dB. The whole budget is 0.1 dB and the whole saving "
-     "is ~30% — that trade does not close.", True),
-], size=10)
+# 12 ------------------------------------------------- seam 3/5, the tile size
+slide_text("Seam 3/5 · the perimeter law", [
+ (0, "Prediction  4b/F  ⇒  doubling F halves the penalty", True),
+ (1, "zeros      qp 63:   128 px 1.1670  →  256 px 0.5477     ×0.47", False),
+ (1, "replicate  qp 63:   128 px 0.2125  →  256 px 0.1070     ×0.50", False),
+ (0, "Free in compute — a tiled decode's MAC count is independent of F", True),
+ (0, "Paid in routing granularity · 40 tiles/frame at 256 px vs 160 at 128", True),
+ (0, "Halo, same law:  tile F with halo h computes ((F+2h)/F)² pixels", True),
+ (1, "F = 16, h = 4  →  2.25×        F = 32, h = 4  →  1.56×", False),
+ (1, "⇒ halo on the HEAD only (2.40% of MACs); on the trunk it exceeds the "
+     "saving", False),
+], size=13)
 
-# 10c ------------------------------------------- seam, formally: the tile size
-slide_text("The seam artefact, formally  (3/5): why 256 and not 128", [
- (0, "From (1/5), corrupted fraction ~ 4b/F. Doubling the tile side halves it, "
-     "and the measurement follows the law:", True),
- (1, "zeros,     qp63:   128px 1.1670 dB  ->  256px 0.5477 dB   (x0.47)", False),
- (1, "replicate, qp63:   128px 0.2125 dB  ->  256px 0.1070 dB   (x0.50)", False),
- (0, "So tile size was the single largest lever, and it costs nothing in "
-     "compute — the MAC count of a tiled decode does not depend on the tile "
-     "size at all.", True),
- (0, "What it does cost is ROUTING GRANULARITY: 40 tiles per 1080p frame at "
-     "256px against 160 at 128px. Fewer, larger tiles means content that is "
-     "locally easy gets averaged in with content that is not.", True),
- (0, "The halo argument points the same way. A tile of side F carried with halo "
-     "h computes ((F+2h)/F)^2 as many pixels:", True),
- (1, "F=16, h=4  ->  2.25x     F=32, h=4  ->  1.56x", False),
- (0, "Which is why the halo is carried on the HEAD only (2.40% of MACs) and not "
-     "on the trunk. Applying 2.25x to the per-tile trunk would consume more "
-     "than routing saves — the arithmetic simply does not close.", True),
- (0, "BEST128 exists to measure the granularity side of this trade rather than "
-     "argue it. Both are still training.", True),
-], size=10)
+# 13 --------------------------------------------------- seam 4/5, the repair
+slide_text("Seam 4/5 · repair told where to look", [
+ (0, "A translation-invariant 3×3 must INFER the boundary from content", True),
+ (1, "and corrects the ~25% clean interior, where any correction is damage", False),
+ (0, "But the lattice is known — unpatchify lays tiles on a fixed P×P grid", True),
+ (0, "Repair(f)  =  f  +  G[i mod P, j mod P] · PW( WSiLU( DW3×3(f) ) )", True),
+ (1, "G :  P × P = 256 scalars, shared over all 384 channels", False),
+ (1, "     0.0007% of decoder parameters, no MAC beyond a broadcast multiply", False),
+ (1, "G₀ = exp(−d / τ),  d = distance to nearest tile edge", False),
+ (1, "     ⇒ the gate starts on the seam; training refines, not discovers", False),
+ (1, "PW zero-init ⇒ module starts as identity ⇒ warm start stays bit-exact", False),
+ (0, "Cost 0.95% of the decode — charged inside every saving, incl. the deepest "
+     "exit (C_{K−1} = 1.0095, not 1.0)", True),
+], size=12)
 
-# 10d ------------------------------------------ seam, formally: the repair
-slide_text("The seam artefact, formally  (4/5): repair that is told where to look", [
- (0, "A translation-invariant 3x3 applied to the stitched canvas has to INFER "
-     "which pixels sit on a boundary, from content alone — and it applies the "
-     "same correction to the ~25% that are clean interior, where any correction "
-     "is damage. It is being asked a harder question than the one we have.", True),
- (0, "But the grid is not unknown. unpatchify lays tiles on a fixed P x P "
-     "lattice from the origin, at training and at inference alike. So gate the "
-     "correction by position WITHIN a tile:", True),
- (1, "Repair(f) = f + G[i mod P, j mod P] . PW( WSiLU( DW3x3(f) ) )", False),
- (0, "G is P x P = 256 scalars, shared across all 384 channels", True),
- (1, "0.0007% of the decoder's parameters, and no MAC beyond one broadcast "
-     "multiply", False),
- (1, "initialised at G = exp(-d/tau), d = distance in feature pixels to the "
-     "nearest tile edge — so at step 0 the gate already sits on the seam and "
-     "training refines it instead of discovering it", False),
- (1, "PW is zero-initialised, so the whole module starts as the identity and "
-     "the warm start stays bit-exact against released DCVC-UF", False),
- (0, "Total cost 0.95% of the decode — and it is charged inside every saving in "
-     "this deck, including the deepest exit, which is why our full-depth path "
-     "costs 1.0095 stock decodes rather than 1.0.", True),
-], size=10)
-
-# 10e -------------------------------- seam: the pixels, and an honest verdict
-slide_fig("The seam artefact  (5/5): at pixel scale, and what repair is worth",
+# 14 --------------------------------------- seam 5/5, the pixels and the verdict
+slide_fig("Seam 5/5 · at pixel scale, and what repair is worth",
           "seam_patches.png", [
- (0, "Bosphorus qp63, 192px window straddling a tile boundary (dashed). Every "
-     "tile at FULL depth, so early exit contributes nothing — this is the "
-     "tiling artefact alone. Error maps vs the full-frame decode of the SAME "
-     "latent, amplified x40.", True),
- (0, "Zeros shows the seam as a bright ridge AND structured error across the "
-     "tile interior — the inward propagation from (1/5). Replicate removes most "
-     "of both.", True),
- (0, "An uncomfortable measurement, 8 sequences at qp63, repair ON vs OFF on "
-     "the same latents and the same exit maps:", True),
- (1, "all tiles at full depth:  0.0672 -> 0.0750 dB   repair makes it WORSE", False),
- (1, "routed at 0.1 dB:         0.1259 -> 0.1239 dB   repair helps by 0.002", False),
- (0, "So grid repair earns 0.002 dB for 0.95% of the decode, and it RAISES the "
-     "floor — the same floor that already consumes 30% of the budget at qp63. "
-     "By the cost-per-dB rule that rejected arls, this module is on the wrong "
-     "side of its own test.", True),
- (1, "caveat: it was trained jointly, so switching it off at inference is not "
-     "the same as training without it. The clean test is a run with "
-     "seam_repair=none at 256px, which is not one of the six.", False),
-], size=10)
+ (0, "192 px across a tile boundary · qp 63 · full depth · error ×40", True),
+ (0, "Repair ON vs OFF, 8 sequences:   full depth 0.0672 → 0.0750 (worse)   ·   "
+     "routed 0.1259 → 0.1239", True),
+ (0, "0.0020 dB/point of decode  ·  arls was rejected at 0.0018", True),
+ (1, "trained jointly ⇒ an inference ablation is not the clean test", False),
+], size=12)
 
-# 9 ------------------------------------------------------------------ honesty
+# 15 ------------------------------------------------------------------ honesty
 slide_fig("MACs are not milliseconds", "latency.png", [
- (0, "Every saving in this project is a MAC count. The field measures FPS.", True),
- (0, "Measured end to end, 1920x1088, interleaved, median of 40:", True),
+ (0, "1920×1088 · interleaved · median of 40", True),
  (1, latency_line(0.1) or "0.1 dB pending", False),
  (1, latency_line(0.3) or "0.3 dB pending", False),
  (1, latency_line(0.5) or "0.5 dB pending", False),
- (0, "The MAC model is accurate at UNIFORM depth (agrees within 1 point per "
-     "exit) and optimistic under ROUTED execution. The difference is exactly "
-     "the machinery routing needs.", True),
- (0, "Profiled: the per-group bookkeeping — mask, gather, scatter, and the "
-     "device-host sync each forces — is 36.4 ms against the groups' own "
-     "77.5 ms of convolution, 32% of the loop, invisible to the MAC model", True),
- (0, "Recoverable, not a hardware limit: sorting tiles by exit depth once makes "
-     "the active set a contiguous prefix. Prototyped, bit-identical output, "
-     "23-37% of the group loop returned", True),
-], size=11)
-
-# 10 ------------------------------------------------------------------ results
-s = slide_fig("Results vs the released decoder", "nf_results.png", [
- (0, budget_line(0.3), True),
- (1, "dB is the per-frame average test_video.py computes — the convention every "
-     "published DCVC-UF number uses. Pooling all tiles into one MSE reads "
-     "0.023-0.033 dB lower on the same allocation and would flatter these", False),
- (0, f"At 0.1 dB, against the RELEASE: {svr_row('signalled_BEST_0817_1542.json',0):.1f}% "
-     f"/ {svr_row('signalled_BEST_0817_1542.json',32):.1f}% "
-     f"/ {svr_row('signalled_BEST_0817_1542.json',63):.1f}% (qp0/32/63)", True),
- (1, "these are 0.6-0.75 points below what earlier decks showed: savings were "
-     "divided by our own deepest exit (1.0095 stock decodes) instead of by the "
-     "release's 1.0, which quietly took the seam-repair tax back out", False),
- (0, target_line(), False),
- (0, ceiling_line(), True),
- (0, "Integrated over the curve, not read at one point:", True),
- (1, bd_line(), False),
+ (0, "Gap  =  tiling overhead 3.7–6.5%  +  per-group bookkeeping", True),
+ (1, "mask + gather + scatter + one device↔host sync per group", False),
+ (1, "36.4 ms vs 77.5 ms of convolution  =  32% of the loop", False),
+ (0, "Recoverable · sort by exit depth once → 23–37% back, bit-identical", True),
 ], size=12)
 
-# 11 ------------------------------------------------- A vs B, the design choice
-slide_fig("Who decides: encoder search or decoder prediction", "ab_decision.png", [
- (0, "A — the encoder has the source, so it decodes every tile at every exit, "
-     "measures the true error, and signals the answer: ~94 bits/frame, "
-     "0.008-0.020% of the bitrate", True),
- (0, "B — the decoder cannot see the source, so it predicts what A would have "
-     "chosen from the stem, the latent and the entropy scales. Nothing is sent; "
-     "the file is byte-identical to a stock stream", True),
- (0, "At 0.1 dB, same checkpoint and same frames:", True),
- (1, ab_line(0) or "qp0 pending", False),
- (1, ab_line(32) or "qp32 pending", False),
- (1, ab_line(63) or "qp63 pending", False),
- (0, "Compute is asymmetric: A costs the ENCODER ~1.21 extra decodes per frame "
-     "and the decoder nothing; B costs the decoder 0.163% and the encoder "
-     "nothing. For VOD A is cheaper in total; for live the ranking inverts", True),
-], size=11)
+# 16 ------------------------------------------------------------------ results
+s = slide_fig("Against the released decoder", "nf_results.png", [
+ (0, f"At 0.1 dB · {svr_row('signalled_BEST_0817_1542.json',0):.1f}% · "
+     f"{svr_row('signalled_BEST_0817_1542.json',32):.1f}% · "
+     f"{svr_row('signalled_BEST_0817_1542.json',63):.1f}%   (qp 0 / 32 / 63)", True),
+ (1, "÷ RELEASE (1.0), not our deepest exit (1.0095) — earlier decks read "
+     "0.6–0.75 pts higher", False),
+ (0, target_line(), True),
+ (0, ceiling_line(), True),
+ (0, bd_line(), True),
+], size=12)
 
-# 12 ------------------------------------------- the earlier router claim, undone
-slide_fig("A claim this work overturned", "ab_budgets.png", [
- (0, "The previous deck said: prediction failed, signalling works. That was "
-     "measured on a router trained JOINTLY with a moving decoder.", True),
- (1, "BEST's joint router collapsed to a qp-dependent constant — agreement "
-     "with the oracle 0.000 at qp63, 239 of 240 tiles sent to one exit", False),
- (0, "Retrained against the FROZEN decoder, same architecture and same "
-     "information: 0.848 held-out agreement, and the zero-bit configuration "
-     "works at every rate", True),
- (0, "So the limit was the training target, not the information", True),
- (0, "And the cost of not signalling depends on how tight the budget is:", True),
- (1, "0.1 dB: 1.35-3.96 points · 0.3 dB: 0.16-0.95 · 0.5 dB: 0.16-1.23", False),
- (1, "at the ceiling the gap is exactly 0.16 — the router's own 0.163% of "
-     "compute, and nothing else left to explain", False),
- (0, "Value of seeing the source frame is largest where the budget is tightest", True),
-], size=11)
+# 17 ------------------------------------------------- A vs B, the design choice
+slide_fig("Who decides", "ab_decision.png", [
+ (0, "A   argmin_k ( MSE[t,k] + λ·C_k )   ~94 bit/frame = 0.008–0.020% of rate", True),
+ (0, "B   argmax_k ( log softmax(z)_k − β·C_k )   nothing sent, file "
+     "byte-identical", True),
+ (1, ab_line(0) or "", False),
+ (1, ab_line(32) or "", False),
+ (1, ab_line(63) or "", False),
+ (0, "Asymmetric ·  A: +1.21 decodes at the ENCODER  ·  B: +0.163% at the decoder", True),
+], size=12)
 
-# 13 -------------------------------------------------------- against the field
-slide_fig("What a unit of speed costs, against the field", "paper_rdc.png", [
- (0, "BD-Rate is the cost; MACs saved is the benefit. Both measured on the "
-     "released intra decoder, YUV420 PSNR, 40 CTC sequences", True),
- (1, "0.1 dB: 0.88% BD-Rate for 27.6% of MACs · 0.3 dB: 2.51% for 39.5% · "
-     "0.5 dB: 3.36% for 41.7%", False),
- (0, "Expressed per unit of real speedup, the price is FLAT: 6.2 / 6.6 / 6.5 "
-     "BD-Rate points across the three budgets — an exchange rate, not a "
-     "cherry-picked operating point", True),
- (0, "DCVC-UF ships two model sizes, and the line between them is what this "
-     "field currently pays for speed: HT-L to HT-S gives up 10.6 BD-Rate "
-     "points for 1.66x, i.e. 16.1 points per unit", True),
- (0, "Adaptive depth buys speed about 2.4x more cheaply than shrinking the "
-     "model — a first answer to 'why not just train a smaller decoder', taken "
-     "from a table already in print", True),
- (1, "their pair is whole-video and ours is intra-only, so this calibrates the "
-     "exchange rate rather than being a head-to-head; our own static baseline "
-     "at matched depth is still owed", False),
-], size=11)
+# 18 ----------------------------------------------- the claim this overturned
+slide_fig("A claim overturned", "ab_budgets.png", [
+ (0, "Earlier claim: prediction fails, signalling works", True),
+ (1, "router trained JOINTLY with a moving decoder → collapsed, agreement "
+     "0.000 at qp 63", False),
+ (0, "Retrained against the FROZEN decoder: 0.848 agreement, budget met at "
+     "every rate", True),
+ (1, "⇒ the limit was the training target, not the information", False),
+ (0, "Cost of not signalling ·  0.1 dB 1.35–3.96 pts  ·  0.3 dB 0.16–0.95  ·  "
+     "0.5 dB 0.16–1.23", True),
+ (1, "at the ceiling the gap is 0.16 = the router's own 0.163%", False),
+], size=12)
 
-# 14 --------------------------------------------------------- related work
-slide_text("Related work, and where we sit", [
- (0, "Early exit / dynamic depth: BranchyNet, MSDNet, SkipNet, and the "
-     "confidence- and entropy-based exit criteria surveyed in the dynamic "
-     "networks literature", True),
- (1, "all decide from the network's own output; ours decides per SPATIAL TILE "
-     "for a fixed output, which is a different question", False),
- (0, "Xie et al., 'Exploring the Rate-Distortion-Complexity Optimization in "
-     "Neural Image Compression' (arXiv:2305.07678)", True),
- (1, "closest prior art to our configuration B: an adaptive spatial mask "
-     "decoded from side information, no explicit overhead", False),
- (1, "but it adapts the ENTROPY model's spatial dependencies; we adapt the "
-     "SYNTHESIS depth. Different part of the decoder, composable in principle", False),
- (0, "'Spatial competition for low-complexity learned image compression' "
-     "(arXiv:2605.13243)", True),
- (1, "transmits a per-region mode map at 1.8e-4 bpp; ours is 4.5e-5, four "
-     "times cheaper, but they select between CODECS for rate and we select "
-     "DEPTH for compute", False),
- (0, "Loss-free load balancing (arXiv:2408.15664) is used directly: the router "
-     "is balanced toward the ORACLE's exit mix, not toward uniform, because "
-     "our exits are not interchangeable experts", True),
-], size=11)
+# 19 -------------------------------------------------------- against the field
+slide_fig("The price of speed", "paper_rdc.png", [
+ (0, "BD-Rate = cost · MACs saved = benefit · released intra decoder, YUV420", True),
+ (1, "0.1 dB  0.88% / 27.6%    0.3 dB  2.51% / 39.5%    0.5 dB  3.36% / 41.7%", False),
+ (0, "Per unit of REAL speedup:  6.2 · 6.6 · 6.5  BD-Rate points", True),
+ (1, "flat across the range — an exchange rate, not a chosen operating point", False),
+ (0, "DCVC-UF HT-L → HT-S:  10.6 points for 1.66×  =  16.1 points per unit", True),
+ (0, "⇒ adaptive depth buys speed 2.4× cheaper than shrinking the model", True),
+ (1, "their pair is whole-video, ours intra-only → a calibration, not a "
+     "head-to-head", False),
+], size=12)
 
-# 15 ---------------------------------------------------------- quantisation
-slide_text("Quantisation: a second lever, and what it does to the ladder", [
- (0, "Early exit removes MACs; quantisation makes the rest cheaper. Same "
-     "budget, so they can be priced against each other", True),
- (0, "Weight-only, per-channel, no calibration — deliberately the weakest form, "
-     "so the numbers bound quantisation from below", True),
- (0, "The question is not whether it costs quality but whether it costs the "
-     "SHALLOW exits more. It does not — the prediction was wrong:", True),
- (1, "at 8 bits the degradation is uniform (qp63: exit 2 +0.108 dB, deepest "
-     "+0.111); at 6 and 4 bits the DEEPEST exits suffer most", False),
- (1, "reason: the deepest exit starts near-perfect and has no headroom to "
-     "absorb a noise floor; a shallow exit's error is already dominated by the "
-     "blocks it skipped", False),
- (0, "What matters for the ladder is the SPREAD between exits, which is what "
-     "routing exploits:", True),
- (1, "qp63: 2.864 dB (fp32) -> 2.876 (8 bit) -> 2.224 (6 bit) -> 1.398 (4 bit)", False),
- (0, "8-bit weights compose cleanly at 16x fewer BOPs; 6 bits and below erode "
-     "the ladder itself", True),
-], size=11)
+# 20 --------------------------------------------------------- related work
+slide_text("Related work", [
+ (0, "Early exit / dynamic depth · BranchyNet, MSDNet, SkipNet", True),
+ (1, "decide from the network's own output; ours decides per SPATIAL TILE for "
+     "a fixed output", False),
+ (0, "ClassSR", True),
+ (1, "routes patches to differently sized SR branches for a cost target", False),
+ (1, "ours: a DEPTH inside one network, for a quality target, bitstream fixed", False),
+ (0, "Xie et al. · RDC optimisation in neural image compression · 2305.07678", True),
+ (1, "adaptive spatial mask decoded from side information — closest to our B", False),
+ (1, "adapts the ENTROPY model's dependencies; we adapt SYNTHESIS depth", False),
+ (0, "Spatial competition · 2605.13243", True),
+ (1, "per-region mode map at 1.8e-4 bpp (ours 4.5e-5) — selects CODECS for "
+     "rate, not depth for compute", False),
+ (0, "Loss-free load balancing · 2408.15664 · used directly", True),
+ (1, "balanced toward the ORACLE's exit mix, not uniform — exits are not "
+     "interchangeable experts", False),
+], size=12)
 
-# 16 ---------------------------------------------------------- theory + status
+# 21 ---------------------------------------------------------- quantisation
+slide_text("Quantisation · a second, orthogonal lever", [
+ (0, "Weight-only · per-channel · no calibration · decoder only (encoder would "
+     "change the bitstream)", True),
+ (0, "Prediction registered: shallow exits suffer more. FALSIFIED.", True),
+ (1, "qp 63, 8 bit:  exit 2 +0.108 dB   deepest +0.111 dB   ratio 0.97", False),
+ (1, "6 and 4 bit: the DEEPEST exits suffer most", False),
+ (0, "Mechanism · the deepest exit starts at 0.073 dB and has no headroom to "
+     "absorb a noise floor; a shallow exit's error already dominates", True),
+ (0, "What matters is the SPREAD — that is what routing exploits", True),
+ (1, "qp 63:   fp32 2.864   →   8 bit 2.876   →   6 bit 2.224   →   4 bit 1.398", False),
+ (1, "BOPs:    1.000        →   0.062        →   0.035        →   0.016", False),
+ (0, "8 bit composes cleanly at 16× fewer BOPs · ≤6 bit erodes the ladder", True),
+ (1, "caveat: 8 bit still raises the floor 0.073 → 0.184 dB at qp 63", False),
+], size=12)
+
+# 22 ---------------------------------------------------------- theory
 d = {q: th[str(q)]["delta"]["3e-05"] for q in (0, 32, 63)} if th else None
-slide_fig("Theory, and what is still owed", "nf_heterogeneity.png", [
- (0, "Cost is additive over tiles and MSE is a mean over tiles, so both are "
-     "affine in the assignment", True),
- (1, "fixed proportions reach the convex hull of the K exit points; per-tile "
-     "assignment reaches the Minkowski average of the N tile hulls", False),
- (1, "their gap is min-of-average minus average-of-min, zero iff every tile "
-     "prefers the same exit — this IS the value of adaptivity", False),
- (0, f"Measured: delta/J rises {100*d[0]['delta']/d[0]['J_oracle']:.2f}% to "
-     f"{100*d[63]['delta']/d[63]['J_oracle']:.2f}% with rate"
-     if d else "Measured: delta/J rises with rate", True),
- (0, "Still owed before this is a paper:", True),
- (1, "a static decoder truncated to the depth we average (6.95 blocks of 12 at "
-     "qp0, 8.78 at qp63) — the experiment that decides whether adaptivity is "
-     "the contribution", False),
- (1, "all six runs to 4 epochs; every number here is one checkpoint at one epoch "
-     "and the measured saving is still climbing", False),
- (1, "HEVC B/C/D, 13 of 53 sequences, reported as NOT MEASURED", False),
- (1, "end-to-end confirmation of the sorted-tile execution, once the runs free "
-     "the decoder", False),
-], size=10)
+slide_fig("Why per-tile beats any fixed mix", "nf_heterogeneity.png", [
+ (0, "Cost additive over tiles, MSE a mean over tiles ⇒ both affine in the "
+     "assignment", True),
+ (1, "fixed proportions → convex hull of the K exit points", False),
+ (1, "per-tile assignment → Minkowski average of the N tile hulls", False),
+ (0, "Gap  =  min-of-average  −  average-of-min  ≥  0", True),
+ (1, "zero iff every tile prefers the same exit — this IS the value of "
+     "adaptivity", False),
+ (0, f"Measured Δ/J:  {100*d[0]['delta']/d[0]['J_oracle']:.2f}%  →  "
+     f"{100*d[63]['delta']/d[63]['J_oracle']:.2f}%  with rate"
+     if d else "Measured Δ/J rises with rate", True),
+ (0, f"Same mechanism per sequence · best/worst CTC clip {spread_ratio():.1f}× "
+     f"at qp 63 vs {spread_ratio(0):.1f}× at qp 0", True),
+], size=12)
+
+# 23 ---------------------------------------------------------- what is owed
+slide_text("What is still owed", [
+ (0, "A static decoder truncated to the depth we average", True),
+ (1, "6.95 of 12 blocks at qp 0 · 8.78 at qp 63", False),
+ (1, "decides whether adaptivity is the contribution", False),
+ (0, "All six runs to 4 epochs", True),
+ (1, "every number here is one checkpoint; the saving is still climbing", False),
+ (0, "HEVC B / C / D · 13 of 53 sequences · reported as NOT MEASURED", True),
+ (0, "Sorted-tile execution, end to end", True),
+ (1, "prototyped and bit-identical; not landed while six runs import the "
+     "decoder", False),
+ (0, "Wall-clock on an idle card · these ratios were taken at 100% utilisation", True),
+ (0, "Open · CONTROL degrades over its second epoch and the cause is unknown", True),
+], size=13)
 
 out = R / "paper" / "FLEX-UF_LMT.pptx"
 prs.save(str(out))

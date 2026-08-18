@@ -124,7 +124,12 @@ for b in range(12):
         k = {5: 2, 7: 3, 9: 4, 11: 5}[b]
         a.text(xb + b*(bw+gap) + bw/2, .245, f"exit {k}", ha="center", fontsize=6, color=ns.VERM)
         a.text(xb + b*(bw+gap) + bw/2, .17,
-               f"{100*(1-cost[k]/cost[-1]).item():.0f}%", ha="center", fontsize=5.5, color=INK3)
+               # Against the RELEASE (denominator 1.0), not against our own
+               # deepest exit (1.0095). Dividing by cost[-1] printed the deepest
+               # exit as "0%" saved, which hides the seam-repair tax at exactly
+               # the point where the figure is making a claim about cost.
+               f"{100*(1-cost[k]).item():+.1f}%", ha="center", fontsize=5.5,
+               color=INK3)
 xh = xb + 12*(bw+gap) + .02
 a.add_patch(Rectangle((xh, .42), .07, .28, fc="#cfe3f5", ec=TUM, lw=.6))
 a.text(xh + .035, .56, "head", ha="center", va="center", fontsize=6)
