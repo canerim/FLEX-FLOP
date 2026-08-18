@@ -1,0 +1,19 @@
+% A stand-in for the official CVPR style, so this compiles anywhere.
+% Replace with cvpr.sty from the CVPR author kit before submission; main.tex
+% picks that up automatically when it is present.
+\ProvidesPackage{cvpr_fallback}
+\RequirePackage[margin=0.75in,top=1in,bottom=1in]{geometry}
+\RequirePackage{times}
+\setlength{\columnsep}{0.31in}
+\RequirePackage{fancyhdr}
+\pagestyle{empty}
+\renewcommand{\baselinestretch}{0.98}
+\makeatletter
+\renewcommand{\@maketitle}{%
+  \newpage \null \vskip 2em%
+  \begin{center}%
+    {\Large\bf \@title \par}\vskip 1.2em%
+    {\large \@author \par}%
+  \end{center}\par \vskip 1.5em}
+\makeatother
+\newcommand{\cvprfinalcopy}{}
