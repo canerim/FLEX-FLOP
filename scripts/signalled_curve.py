@@ -70,6 +70,14 @@ ap.add_argument("--seam_repair", default=None,
                 help="override the seam-repair module, e.g. 'none' when changing "
                      "tile size (see --latent_patch).")
 ap.add_argument("--device", default="cuda:4")
+ap.add_argument("--budgets", type=float, nargs="+", default=None,
+                help="evaluate several quality budgets in ONE pass. Everything "
+                     "expensive -- encoding, decoding all K exits, the reference "
+                     "-- depends only on the latent, so it is cached per QP and "
+                     "shared; only the bisection repeats, and each of its steps "
+                     "is one argmin on a [tiles, K] table. Three budgets this "
+                     "way cost what one used to. Rows carry `budget_db`, so a "
+                     "reader must filter on it.")
 ap.add_argument("--budget", type=float, default=0.1,
                 help="quality budget in dB below the release. 0.1 is the "
                      "project target; larger budgets buy more compute but "
@@ -77,7 +85,8 @@ ap.add_argument("--budget", type=float, default=0.1,
                      "where the frontier is steepest.")
 ap.add_argument("--out", default="results/signalled_curve.json")
 a = ap.parse_args()
-TARGET = a.budget
+TARGETS = sorted(a.budgets) if a.budgets else [a.budget]
+TARGET = TARGETS[0]
 dev = a.device
 
 ck = torch.load(a.ckpt, map_location="cpu", weights_only=False)
@@ -134,7 +143,10 @@ def map_bits(k, K):
     return H * k.numel() + K * 8   # payload + a small per-frame histogram
 
 rows = []
-print(f"  {'qp':>4}{'tasarruf':>10}{'dB (gercek UF)':>16}{'bpp artisi':>12}{'harita biti':>13}")
+print(f"  {'qp':>4}{'butce':>7}{'tasarruf':>10}{'dB (gercek UF)':>16}"
+      f"{'bpp artisi':>12}{'harita biti':>13}")
+print("  tasarruf = saving_pct_vs_release: payda YAYINLANMIS decoder'in 1.0'i, "
+      "bizim en derin exitimizin 1.0095'i degil\n")
 with torch.no_grad():
     for qp_v in a.qps:
         # Everything a frame contributes that does NOT depend on lambda, cached
@@ -201,54 +213,57 @@ with torch.no_grad():
         # re-assigned here, inside the per-QP loop: with --budget wired up but
         # this line left in place, every run would have reported 0.1 dB results
         # in a file named for 0.3 or 0.5, and nothing downstream could tell.
-        best = None
         # The FLOOR first. At lambda = 0 nothing is charged for compute, so every
         # tile takes its lowest-MSE exit -- that is the least distortion this
         # ladder can produce, and if it already exceeds the budget then no
         # allocation meets the budget and there is nothing to report.
         #
-        # Without this check the bisection's invariant (at_lam(lo) <= TARGET) is
+        # Without this check the bisection's invariant (at_lam(lo) <= target) is
         # never established, lo stays at 0.0, and the lambda-0 point gets
         # reported as though it were the answer. VERBATIM hit exactly that: its
         # deepest exit sits 0.1365 dB below the release at qp0, and the table
         # would have said "13.7% saved" in a column headed 0.1 dB.
-        # at_lam returns (saving, dB, bpp_added, map_bits) -- saving FIRST.
-        # Unpacking it as (db, sv, ...) put the saving into floor_db, so the
-        # test read "13.72 > 0.1" and declared every rate unreachable, VERBATIM's
-        # correctly and any healthy run's wrongly. The guard against reporting a
-        # number at the wrong dB was itself reporting a number at the wrong dB.
+        # at_lam returns (saving, dB, bpp_added, map_bits, saving_vs_release) --
+        # saving FIRST. Unpacking it as (db, sv, ...) put the saving into
+        # floor_db, so the test read "13.72 > 0.1" and declared every rate
+        # unreachable, VERBATIM's correctly and any healthy run's wrongly. The
+        # guard against reporting a number at the wrong dB was itself reporting
+        # a number at the wrong dB.
         floor_sv, floor_db, _, _, _ = at_lam(0.0)
-        if floor_db > TARGET:
-            print(f"  {qp_v:>4}{'—':>10}{'floor ' + format(floor_db, '.4f') + ' dB':>16}"
-                  f"{'exceeds the budget':>25}")
-            rows.append({"qp": qp_v, "saving_pct": None, "db_vs_uf": None,
-                         "floor_db": floor_db, "budget_db": TARGET,
-                         "budget_reachable": False})
-            continue
-        if at_lam(1.0)[1] >= TARGET:
-            lo, hi = 0.0, 1.0
-            for _ in range(60):
-                mid = 0.5 * (lo + hi)
-                if at_lam(mid)[1] <= TARGET:
-                    lo = mid
-                else:
-                    hi = mid
-            best = at_lam(lo)
-        else:                       # budget above what the ladder can spend
-            best = at_lam(1.0)
-        if best:
+        for target in TARGETS:
+            if floor_db > target:
+                print(f"  {qp_v:>4}{target:>7.2f}{'—':>10}"
+                      f"{'floor ' + format(floor_db, '.4f') + ' dB':>18}"
+                      f"{'exceeds the budget':>22}")
+                rows.append({"qp": qp_v, "saving_pct": None, "db_vs_uf": None,
+                             "floor_db": floor_db, "budget_db": target,
+                             "budget_reachable": False})
+                continue
+            # Both dB and saving increase with lambda, so bisection is valid,
+            # and with the per-frame work cached each step costs one argmin.
+            if at_lam(1.0)[1] >= target:
+                lo, hi = 0.0, 1.0
+                for _ in range(60):
+                    mid = 0.5 * (lo + hi)
+                    if at_lam(mid)[1] <= target:
+                        lo = mid
+                    else:
+                        hi = mid
+                best = at_lam(lo)
+            else:                   # budget above what the ladder can spend
+                best = at_lam(1.0)
             sv, db, extra, mb, svr = best
             rows.append({"qp": qp_v, "saving_pct": sv, "db_vs_uf": db,
                          # Kept side by side: saving_pct is what every stored
                          # result and every comparison already uses, svr is
-                         # what the claim actually means.
+                         # what the claim actually means -- the release is 1.0,
+                         # our deepest exit is 1.0095.
                          "saving_pct_vs_release": svr,
                          "bpp_added": extra, "map_bits": mb,
-                         "floor_db": floor_db, "budget_db": TARGET,
+                         "floor_db": floor_db, "budget_db": target,
                          "budget_reachable": True})
-            print(f"  {qp_v:>4}{sv:>9.1f}%{db:>16.4f}{extra:>12.6f}{mb:>13.0f}")
-        else:
-            print(f"  {qp_v:>4}{'—':>10}{'0.1 dB ulasilamiyor':>16}")
+            print(f"  {qp_v:>4}{target:>7.2f}{svr:>9.2f}%{db:>16.4f}"
+                  f"{extra:>12.6f}{mb:>13.0f}")
 
 Path(a.out).parent.mkdir(exist_ok=True)
 Path(a.out).write_text(json.dumps(
@@ -257,7 +272,7 @@ Path(a.out).write_text(json.dumps(
      # compare_runs.py was reading the run's CURRENT step and labelling a
      # step-4000 measurement as 6,800.
      "ckpt_epoch": ck.get("epoch"), "ckpt_step": ck.get("step"),
-     "frames_per_seq": a.frames,
+     "budgets": TARGETS, "frames_per_seq": a.frames,
      "n_sequences": len(measured), "measured": measured,
      "not_measured": [m["name"] for m in missing], "rows": rows}, indent=2))
 print(f"\n  wrote {a.out}")

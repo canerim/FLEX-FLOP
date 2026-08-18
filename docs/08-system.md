@@ -257,10 +257,11 @@ dB per point; grid repair is at 0.0020 dB per point at best.[^arls] **It is on t
 side of the rule that rejected arls, and tightening the gate cannot save it,
 because there is almost nothing left to win.**
 
-[^arls]: The 0.019 dB comes from the padding table, which is being re-measured
-    after the reference bug in §5.3. The re-measurement can only move `arls`'s
-    advantage over replicate; it cannot move grid repair's own 0.0008 dB ceiling,
-    which was measured directly and against a clean reference.
+[^arls]: Re-measured after the reference bug in §5.3: `arls` beats replicate by
+    0.0207 dB at qp 63 on all 40 sequences, against 0.0191 before, i.e. 0.0019 dB
+    per point of decode either way. The rejection stands unchanged, and so does
+    grid repair's own 0.0008 dB ceiling, which was measured directly against a
+    clean reference.
 
 One caveat keeps this from being a verdict: the module was trained jointly, so
 switching it off at inference is not the same as training without it. The clean

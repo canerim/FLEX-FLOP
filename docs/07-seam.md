@@ -17,12 +17,12 @@ is switched on. The only difference is that the right-hand decode was done tile
 by tile. Everything bright in the error map is the tiling and nothing else.
 
 The grid is not subtle. It is the tile lattice, drawn onto the picture by the
-decoder itself, and at qp 63 it costs **0.5477 dB** — five times the 0.1 dB
-budget this project works to. Before a single tile has saved a single MAC, the
+decoder itself, and at qp 63 it costs **0.6768 dB** — nearly seven times the
+0.1 dB budget this project works to. Before a single tile has saved a single MAC, the
 method has already spent five times what it is allowed to.
 
-That is the problem. The rest of this document is how it went from 0.55 dB to
-0.11, why the two decisive steps were free, why the clever fix was rejected, and
+That is the problem. The rest of this document is how it went from 0.68 dB to
+0.06, why the two decisive steps were free, why the clever fix was rejected, and
 why the module that costs something is on the wrong side of its own test.
 
 Every number below is measured with **early exit switched off** — every tile at
@@ -84,7 +84,7 @@ released decoder:
 
 | padding | qp 0 | qp 32 | qp 63 |
 |---|---|---|---|
-| zeros (stock behaviour) | 0.1005 | 0.2162 | **0.5477** |
+| zeros (stock behaviour) | 0.1264 | 0.2866 | **0.6768** |
 
 Note that it worsens with rate. At low rate the reconstruction is smooth and a
 wrong neighbour costs little; at high rate the latent carries detail, the border
@@ -104,14 +104,34 @@ cannot see, and the seam penalty is that estimator's error. For a border column
 | linear | `2·x[0] − x[1]` | a locally linear signal: first-order extrapolation |
 | arls | `a·x[0]`, `a` fitted per channel by least squares | an AR(1) process (arXiv:2502.12300) |
 
-Measured, 256 px tiles:
+Measured, 256 px tiles, 40 CTC sequences, 80 frames:
 
 | mode | qp 0 | qp 32 | qp 63 |
 |---|---|---|---|
-| zeros | 0.1005 | 0.2162 | 0.5477 |
-| **replicate** | **0.0616** | **0.0854** | **0.1070** |
-| linear | 0.1793 | 0.2315 | 0.2638 |
-| arls | 0.0518 | 0.0707 | 0.0879 |
+| zeros | 0.1264 | 0.2866 | 0.6768 |
+| **replicate** | **0.0707** | **0.1234** | **0.2179** |
+| linear | 0.1980 | 0.2857 | 0.3836 |
+| arls | 0.0611 | 0.1074 | 0.1972 |
+
+> **These numbers changed on 18 August, and the earlier ones were wrong.** This
+> script installed the padding wrapper on the decoder's trunk groups and then
+> computed its reference with `forward_full`, which runs those same modules — so
+> the full-frame baseline was padded with the mode under test as well. On one
+> 1080p frame at qp 63 that moved the reference by −0.186 dB and deflated the
+> measured seam from 0.265 to 0.079. Every non-`zeros` row was affected;
+> `zeros` was not, because wrapping with zeros is a no-op. That is exactly why
+> the bug survived review: the one row that could be cross-checked against a
+> second implementation was the one row that was already right. The fix is a
+> separate, never-wrapped model for the reference. The table above is the
+> re-measurement, now on all 40 sequences rather than the 10 that were on disk
+> when the original was taken, and `scripts/seam_vs_qp.py` reproduces it
+> independently (0.0687 / 0.1208 / 0.2161 for replicate at one frame per
+> sequence).
+>
+> **Every conclusion below survived the correction.** `linear` is still worse
+> than doing nothing clever — by more than before. `arls` still wins on quality
+> and still loses on cost: its margin over replicate at qp 63 is 0.0207 dB
+> against 0.0191 before, i.e. 0.0019 dB per point of decode either way.
 
 **The `linear` row is the one to read twice.** A higher-order estimator is
 *worse* — 2.5× worse than replicate at qp 63, and worse than doing nothing
@@ -120,8 +140,8 @@ sits on that boundary; assuming constancy does not. Guessing harder is not the
 same as guessing better.
 
 **`arls` wins on quality and was rejected on cost.** It is the best estimator
-here — 0.0879 against replicate's 0.1070 at qp 63 — and it costs **+10.7% of
-decode wall-clock**. That is 0.019 dB for 10.7% of the decode, when the entire
+here — 0.1972 against replicate's 0.2179 at qp 63 — and it costs **+10.7% of
+decode wall-clock**. That is 0.021 dB for 10.7% of the decode, when the entire
 budget is 0.1 dB and the entire saving is ~30%. The trade does not close. It was
 implemented, measured, and dropped.
 
@@ -132,8 +152,14 @@ roughly halve it. It does:
 
 | mode, qp 63 | 128 px | 256 px | ratio |
 |---|---|---|---|
-| zeros | 1.1670 | 0.5477 | ×0.47 |
-| replicate | 0.2125 | 0.1070 | ×0.50 |
+| zeros | 1.1670 | 0.6768 | ×0.58 |
+| replicate | 0.2125 | 0.2179 | — |
+
+The 128 px column has **not** been re-measured against a clean reference yet — it
+carries the same bug — so only the `zeros` row is comparable, and even that
+crosses two different sequence sets (9 then, 40 now). The re-measurement is
+queued. What the perimeter argument predicts is ×0.50; what the one clean pair
+gives is ×0.58 across a changed test set.
 
 This costs **nothing in compute** — a tiled decode's MAC count does not depend
 on the tile size at all. What it costs is *routing granularity*: 40 tiles per
@@ -231,11 +257,16 @@ deck blurred.
 | step | qp 63 seam penalty | cost |
 |---|---|---|
 | stock behaviour: 128 px tiles, zeros | 1.1670 dB | — |
-| → 256 px tiles | 0.5477 | free |
-| → replicate padding | **0.1070** | free |
-| → grid seam repair | marginal (§6) | 0.95% |
+| → 256 px tiles | 0.6768 | free |
+| → replicate padding | **0.2179** | free |
+| → training the ladder with the seam present | **0.0583** | free |
+| → grid seam repair | ≈0.0008 dB at best (§6) | 0.95% |
 
-From five times the budget to inside it, and the two decisive steps cost nothing.
+From eleven times the budget to well inside it — and every step that mattered
+cost nothing. The largest single factor is the one that is easiest to overlook:
+**training**. Replicate leaves 0.218 dB and the trained ladder leaves 0.058, so
+more than two thirds of what replicate could not fix was absorbed by the weights
+learning to live with it. No module in this document removes as much.
 
 ## 9. How we know it works
 
