@@ -41,6 +41,20 @@ training and none has reached the four-epoch selection point.
 
 ## The documents
 
+**The paper.** `paper/FLEX-UF.pdf` is the CVPR submission, built from
+`paper/main.tex` and from tables that regenerate out of `results/`.
+`paper/FLEX-UF-router.pdf` is a standalone explainer for how the exit map is
+chosen on each side. Both rebuild with:
+
+```bash
+python scripts/make_paper_tables.py   # tables and macros from results/
+python scripts/paper_figures.py       # figures into paper/figures/
+python scripts/build_pdf.py           # the paper
+python scripts/build_router_pdf.py    # the router explainer
+python scripts/check_paper.py         # the numbers typed into the prose
+python scripts/verify_theory.py       # the six structural propositions
+```
+
 **Start here:** [09 — Results and status](09-report.md) is the compiled report —
 what was built, what it delivers, what it cost, and which numbers were wrong and
 why. It regenerates from `results/` (`scripts/make_report.py`), so it cannot
