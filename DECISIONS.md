@@ -4209,3 +4209,45 @@ seçim kuralını bozar) ama beklenti bu.
 
 CONTROL karşı örnek olarak duruyor: −0.073 puan/1k, üç checkpoint boyunca
 monoton düşüş. Yavaşlamıyor, kötüleşiyor.
+
+---
+
+## 79 — Tavan bir MALİYET sınırı, ulaşılabilir bir nokta değil
+
+Kullanıcı FINE12'nin %50.3'lük tavanına takıldı ve haklıydı: sayı doğru ama
+"%50 tasarruf" diye okununca yanlış.
+
+Aritmetik doğrulandı, kalem kalem:
+
+```
+FINE12, exit 4 (12 blokun 5'i)
+  upsample            0.0816
+  4 paylaşılan blok   0.2981
+  1 karo bloğu        0.0745
+  head                0.0240
+  adaptör             0.0093
+  seam repair         0.0095
+  ------------------- 0.4971  ->  %50.3
+```
+
+**Ama o çıkışta kalite yok.** BEST'in exit 2'si 12 blokun 6'sını çalıştırıyor ve
+qp63'te 0.559 dB kaybettiriyor — bütçenin beş katı. FINE12'nin exit 4'ü ondan da
+sığ. Tavana ulaşmak *bütün* karoların orada olması demek, ve hiçbir dB bütçesi
+buna izin vermiyor.
+
+Tavanın söylediği şey: **merdiven en fazla oraya kadar gidebilir.** Eğitim seni
+oraya doğru iter, asla geçiremez.
+
+### Ve vaat henüz tahsil edilmemiş
+
+| | tavan | 0.1 dB'de ölçülen ortalama |
+|---|---|---|
+| BEST | %41.9 | %27.18 |
+| FINE12 | %50.3 | %26.93 |
+
+8.4 puanlık tavan avantajı **sıfır ölçülen avantaja** dönüşmüş. 4 epoch
+öngörüleri de %38.0 ve %39.6 — yani fark orada da 1.6 puan, tavan farkının
+beşte biri.
+
+Belgelerde tavanı hep "mimari sınır" diye yazmıştım ama maliyet-sınırı /
+ulaşılabilir-nokta ayrımını öne çıkarmamışım. 03 ve 04 düzeltildi.

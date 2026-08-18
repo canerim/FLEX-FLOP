@@ -96,8 +96,13 @@ denominator correction, marginally after it. At qp 63 reaching 30% costs
 floor lies below the target; the shortfall is a matter of price, not of
 possibility.
 
-**There is also a ceiling, and it is architectural.** The most the ladder can
-ever save, at any quality, is **41.9%** — every tile at exit 2, the shallowest
+**There is also a ceiling, and it is architectural.** It is a bound on COST,
+not an achievable operating point: reaching it means every tile at the
+shallowest usable exit, which at qp 63 costs 0.559 dB — five times the budget.
+No dB budget permits it. What it says is where the ladder *stops*, and training
+can approach it but never pass it.
+
+The most the ladder can ever save, at any quality, is **41.9%** — every tile at exit 2, the shallowest
 exit that is not dominated. It is identical at all five rates because it is set
 by the split depth: the stem (4 blocks, full-frame), the head and seam repair
 are never skippable. Training moves the operating point along the curve toward

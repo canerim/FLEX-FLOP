@@ -145,8 +145,14 @@ weights low rate more heavily.
 ## 5. Is `K=6, j=2` the right ladder, given FINE12's higher ceiling?
 
 FINE12 (`K=12, j=4`) and BEST (`K=6, j=2`) share a 4-block full-frame stem, but
-FINE12's architectural ceiling is 50.3% against BEST's 41.9% — finer granularity
-lets a tile stop one block after the stem instead of two. FINE12 is behind on measured saving today (16.76% vs 20.80% at qp 63) and has
+FINE12's architectural ceiling is 50.3% against BEST's 41.9%: with K = 12 there
+is one block per exit, so its shallowest usable exit runs 5 of 12 blocks where
+BEST's runs 6. Both ceilings are cost bounds, not reachable points — every tile
+at the shallowest exit costs far more dB than any budget allows.
+
+The promise is untaken so far: the measured means are 27.18% (BEST) and 26.93%
+(FINE12), i.e. the 8.4-point ceiling advantage has produced no measured
+advantage at all. FINE12 is behind on measured saving today (16.76% vs 20.80% at qp 63) and has
 had less than half the training.
 
 **A prediction here is currently unsupported.** The finer ladder was expected to
