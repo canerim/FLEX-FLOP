@@ -285,7 +285,41 @@ def content(colw, fullw):
         r"it is the norm in standardised video coding: HEVC [9] and VVC [21] "
         r"transmit partitioning, prediction mode and transform tree. We "
         r"evaluate both and treat the signalled variant as the conventional "
-        r"design.")
+        r"design. The nearest neighbour in compression is spatial competition "
+        r"[27], which selects among several codecs per region and signals a mode "
+        r"map: the structure of the side information is ours, the axis is not "
+        r"— they select which network at fixed complexity for a rate gain, "
+        r"we select how much of one network at fixed rate for compute.")
+    h2("Allocating a budget over units.")
+    par(r"The construction we use is not new and should not be presented as "
+        r"such. Shoham and Gersho [28] showed that for a finite set of per-unit "
+        r"operating points a Lagrangian sweep decouples the allocation across "
+        r"units and traces exactly the lower convex hull of the achievable set; "
+        r"Ortega and Ramchandran [29] made it standard practice in image and "
+        r"video coding. What we add is the structure this particular operating "
+        r"set has — a floor below which no allocation is feasible, a "
+        r"saturation point above which none improves, and a measurement of what "
+        r"the convex-hull restriction costs. The same relaxation has resurfaced "
+        r"for test-time compute in language models [30], with per-instance "
+        r"decoupling and a binary search on the multiplier: the identical "
+        r"structure in a domain with no rate axis.")
+    h2("Tile boundaries.")
+    par(r"Every method that processes an image in independently-computed tiles "
+        r"meets the same artefact, and the remedies in the literature are "
+        r"overlap and averaging, local padding from neighbouring patches [31], "
+        r"training with overlaps [32], and fitted extrapolation [11]. Local "
+        r"padding is closest to the exact remedy of Section 4.4, and the "
+        r"difference is accounting: it pads every convolutional layer and does "
+        r"not report the cost, while we pad only the 0.29% of each block that "
+        r"has any spatial extent — which is what makes the exact fix cost "
+        r"0.032% of the decode rather than a multiplier on all of it.")
+    h2("Where the time goes.")
+    par(r"DCVC-RT [33] argues that operational rather than computational "
+        r"complexity is the speed bottleneck for neural codecs, evidenced by "
+        r"channel reductions that yield linear rather than quadratic speedups. "
+        r"Section 5.6 is a sharp instance of that claim inside one loop: a 20% "
+        r"reduction in operations produced a 10.9% <i>slow-down</i> until the "
+        r"loop was reordered, with the arithmetic untouched.")
 
     # ---- 3 method --------------------------------------------------------
     h1("3. Method")

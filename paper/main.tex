@@ -169,8 +169,42 @@ runs where} varies.
 \paragraph{Signalling versus prediction.} That a decoder is \emph{told} a mode
 decision rather than inferring it is the norm in standardised video coding: HEVC
 \cite{hevc} and VVC~\cite{vvc} transmit partitioning, prediction mode and
-transform tree. We evaluate both, and treat the signalled variant as the
-conventional design rather than the exotic one.
+transform tree. We evaluate both and treat the signalled variant as the
+conventional design.
+
+\paragraph{Allocating a budget over units.} The construction we use is not new
+and should not be presented as such. Shoham and Gersho~\cite{shoham1988} showed
+that for a finite set of per-unit operating points, a Lagrangian sweep decouples
+the allocation across units and traces exactly the lower convex hull of the
+achievable set; Ortega and Ramchandran~\cite{ortega1998} made it standard
+practice in image and video coding. What we add is the structure this particular
+operating set has: a floor below which no allocation is feasible, a saturation
+point above which none improves, and a measurement of what the convex-hull
+restriction costs (Section~\ref{sec:operating}). The same relaxation has
+resurfaced for test-time compute in language models~\cite{ctca}, with per-instance
+decoupling and a binary search on the multiplier --- the identical structure in a
+domain with no rate axis, which we read as evidence that the floor/saturation
+characterisation is worth stating generally.
+
+\paragraph{Tile boundaries.} Every method that processes an image in
+independently-computed tiles meets the same artefact, and the remedies in the
+literature are overlap and averaging, local padding from neighbouring
+patches~\cite{localpadding}, training with overlaps~\cite{overlaptrain}, and
+fitted extrapolation~\cite{arls}. Local padding is the closest to the exact
+remedy we describe in Section~\ref{sec:coupling}, and the difference is
+accounting: it pads every convolutional layer and does not report the cost, while
+we pad only the $0.29\%$ of each block that has any spatial extent, which is what
+makes the exact fix cost $0.032\%$ of the decode rather than a multiplier on all
+of it. To our knowledge the estimator view of the padding rule, the measured
+ordering of four estimators, and the dependence of the penalty on per-tile depth
+(Section~\ref{sec:seam}) have not been reported.
+
+\paragraph{Where the time goes.} DCVC-RT~\cite{dcvcrt} argues that operational
+rather than computational complexity is the speed bottleneck for neural codecs,
+evidenced by channel reductions that yield linear rather than quadratic speedups.
+Section~\ref{sec:wallclock} is a sharp instance of that claim inside one loop: a
+$20\%$ reduction in operations produced a $10.9\%$ \emph{slow-down} until the
+loop was reordered, with the arithmetic untouched.
 
 % =========================================================== method
 \section{Method}
