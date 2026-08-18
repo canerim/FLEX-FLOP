@@ -731,6 +731,41 @@ prediction gap is real at a tight budget and vanishes at a loose one, because
 once the budget saturates both configurations send every tile to the same rung
 and the only remaining difference is the predictor's own $0.163\%$ of decode.
 
+\subsection{Does the map have to be recomputed?}
+\label{sec:transfer}
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\columnwidth]{figures/map_transfer.png}
+\caption{\textbf{Reusing an exit map.} Solid is the transferred map, dashed the
+one recomputed in place. \textbf{a}, \textbf{b}: reuse across frames of the same
+sequence. \textbf{c}: reuse across quality index; the entry is the delivered
+distortion against a $0.1\dB$ budget.}
+\label{fig:transfer}
+\end{figure}
+
+Configuration A costs the encoder about one extra decode per frame. Whether that
+matters depends on how often the map has to be recomputed, which nobody has
+checked.
+
+\textbf{Across time it barely has to be.} Taking frame 0's map and applying it
+eight frames later costs $0.005\dB$ at $q0$ --- five percent of the budget --- and
+no saving at all: $33.05\%$ transferred against $32.66$--$33.15\%$ recomputed. The
+allocation is a property of where the content is hard, and that moves slowly. A
+codec would search once per group of pictures rather than once per frame, and
+divide the encoder cost by the group length.
+
+\textbf{Across rate it very much does}, and the direction matters. The map found
+at $q0$ applied at $q63$ delivers $0.190\dB$ against a $0.1\dB$ budget: it claims
+the low-rate saving of $33.05\%$ while spending nearly twice the quality it is
+allowed. The reverse is safe but wasteful --- the $q63$ map applied at $q0$
+delivers $0.075\dB$ and only $19.8\%$ where $33.1\%$ was available. Shallow exits
+are cheap in quality at low rate and expensive at high rate, so a map is
+calibrated to the rate it was found at and reusing it upward silently breaks the
+quality guarantee.
+
+The practical reading: search once per rate, reuse across frames.
+
 \subsection{Complexity and wall-clock}
 \label{sec:wallclock}
 

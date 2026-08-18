@@ -25,6 +25,7 @@ WANTED = [
     "exit_map.png",           # per-tile exit map on a real frame
     "perclass.png",           # saving by test class vs tile count
     "contamination.png",      # seam against per-tile depth
+    "map_transfer.png",       # reusing a map across time and rate
     "latency.png",
 ]
 

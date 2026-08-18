@@ -685,7 +685,32 @@ def content(colw, fullw):
         r"at a loose one, because once the budget saturates both configurations "
         r"send every tile to the same rung and the only remaining difference is "
         r"the predictor's own 0.163% of decode.")
-    h2("5.6 Complexity and wall-clock")
+    h2("5.6 Does the map have to be recomputed?")
+    figure("map_transfer.png",
+           r"<b>Figure 10. Reusing an exit map.</b> Solid is the transferred "
+           r"map, dashed the one recomputed in place. <b>a</b>, <b>b</b>: reuse "
+           r"across frames of the same sequence. <b>c</b>: reuse across quality "
+           r"index; the entry is the delivered distortion against a 0.1 dB "
+           r"budget.")
+    par(r"Configuration A costs the encoder about one extra decode per frame. "
+        r"Whether that matters depends on how often the map has to be "
+        r"recomputed, which nobody has checked.")
+    par(r"<b>Across time it barely has to be.</b> Frame 0's map applied eight "
+        r"frames later costs 0.005 dB at q0 — five percent of the budget — "
+        r"and no saving at all: 33.05% transferred against 32.66–33.15% "
+        r"recomputed. The allocation is a property of where the content is hard, "
+        r"and that moves slowly. A codec would search once per group of pictures "
+        r"and divide the encoder cost by the group length.")
+    par(r"<b>Across rate it very much does</b>, and the direction matters. The "
+        r"map found at q0 applied at q63 delivers 0.190 dB against a 0.1 dB "
+        r"budget: it claims the low-rate saving of 33.05% while spending nearly "
+        r"twice the quality it is allowed. The reverse is safe but wasteful "
+        r"— the q63 map at q0 delivers 0.075 dB and only 19.8% where 33.1% "
+        r"was available. Shallow exits are cheap in quality at low rate and "
+        r"expensive at high rate, so a map is calibrated to the rate it was found "
+        r"at, and reusing it upward silently breaks the quality guarantee. Search "
+        r"once per rate, reuse across frames.")
+    h2("5.7 Complexity and wall-clock")
     tbl("latency",
         r"<b>Table 8. Wall-clock</b>, 1080p, median of 40 interleaved "
         r"iterations, at the 0.1 dB operating point. ``MACs'' is what the "
@@ -710,7 +735,7 @@ def content(colw, fullw):
     par(r"We report this because the negative result is the more useful half: a "
         r"paper reporting only MACs would have claimed a speedup that the same "
         r"code, run as written, did not deliver.")
-    h2("5.7 The right ladder depends on the budget")
+    h2("5.8 The right ladder depends on the budget")
     tbl("runs",
         r"<b>Table 9. Ladder configurations</b>, mean saving (%) over the five "
         r"rates, same test set and protocol. * one rate is infeasible at that "
