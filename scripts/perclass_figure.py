@@ -43,7 +43,7 @@ for c in ORDER:
 a.set_xlabel("qp"); a.set_ylabel("decoder MACs saved (%)")
 a.legend(loc="lower left", fontsize=4.8, ncol=2, columnspacing=0.8)
 a.set_ylim(0, 42)
-a.set_title("At a 0.1 dB budget set globally over all 53 sequences",
+a.set_title("0.1 dB, global operating point",
             fontsize=6, color=ns.INK2, loc="left")
 ns.panel(a, "a")
 
@@ -66,8 +66,7 @@ b.set_xscale("log"); b.set_xticks([2, 8, 15, 40])
 b.get_xaxis().set_major_formatter(matplotlib.ticker.ScalarFormatter())
 b.set_xlabel("tiles per frame at 256 px"); b.set_ylabel("MACs saved (%)")
 b.legend(loc="lower right", fontsize=5)
-b.set_title("Tile count predicts the saving; content barely moves it —\n"
-            "the three 1080p classes sit within 3 points of each other",
+b.set_title("Saving against tile count",
             fontsize=6, color=ns.INK2, loc="left")
 ns.panel(b, "b", dx=-0.22)
 
@@ -86,8 +85,7 @@ c_.set_yticks(range(len(names)))
 c_.set_yticklabels([c.replace("_", " ") for c in names], fontsize=5.5)
 c_.set_xlabel("dB spent at the global operating point")
 c_.set_xlim(0, max(db) * 1.45)
-c_.set_title("Small frames spend LESS quality and get\nless back: fewer tiles, "
-             "fewer choices", fontsize=6, color=ns.INK2, loc="left")
+c_.set_title("dB spent per class", fontsize=6, color=ns.INK2, loc="left")
 ns.panel(c_, "c", dx=-0.30)
 
 fig.tight_layout()

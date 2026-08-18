@@ -49,27 +49,26 @@ fig, ax = plt.subplots(1, 3, figsize=(ns.W2, 2.8))
 # ---- a: saving against rate at both budgets --------------------------------
 a = ax[0]
 a.axhline(CEIL, color=ns.INK, lw=0.8, ls=(0, (4, 2)))
-a.text(qp[0] + 1, CEIL + 0.5, f"architectural ceiling  {CEIL:.2f}%", fontsize=5,
-       color=ns.INK)
+
 y2 = [hi[q]["saving_pct_vs_release"] for q in qp]
 y1 = [lo[q]["saving_pct_vs_release"] for q in qp]
 a.fill_between(qp, y1, y2, color=ns.ORANGE, alpha=0.13, lw=0)
 a.plot(qp, y2, marker="o", color=ns.ORANGE, lw=1.3,
        label=f"{B2:.4f} dB — where qp 0 saturates")
 a.plot(qp, y1, marker="s", color=ns.BLUE, lw=1.3, label=f"{B1:.2f} dB — the target")
-a.annotate(f"{y2[0]:.2f}%", (qp[0], y2[0]), fontsize=5.5, color=ns.ORANGE,
-           textcoords="offset points", xytext=(3, 5))
-a.annotate(f"{y1[0]:.2f}%", (qp[0], y1[0]), fontsize=5.5, color=ns.BLUE,
-           textcoords="offset points", xytext=(3, -9))
-a.annotate(f"{y1[-1]:.2f}%", (qp[-1], y1[-1]), fontsize=5.5, color=ns.BLUE,
+a.annotate(f"{y2[0]:.1f}", (qp[0], y2[0]), fontsize=5.5, color=ns.ORANGE,
+           textcoords="offset points", xytext=(4, -9))
+a.annotate(f"{y1[0]:.1f}", (qp[0], y1[0]), fontsize=5.5, color=ns.BLUE,
+           textcoords="offset points", xytext=(4, -9))
+a.annotate(f"{y1[-1]:.1f}", (qp[-1], y1[-1]), fontsize=5.5, color=ns.BLUE,
            textcoords="offset points", xytext=(-3, -9), ha="right")
-a.annotate(f"{y2[-1]:.2f}%", (qp[-1], y2[-1]), fontsize=5.5, color=ns.ORANGE,
+a.annotate(f"{y2[-1]:.1f}", (qp[-1], y2[-1]), fontsize=5.5, color=ns.ORANGE,
            textcoords="offset points", xytext=(-3, 5), ha="right")
 a.set_xlabel("qp   (0 = lowest rate  →  63 = highest)")
 a.set_ylabel("decoder MACs saved vs the release (%)")
 a.set_xlim(qp[0], qp[-1]); a.set_ylim(0, CEIL * 1.18)
 a.legend(loc="lower left", fontsize=5)
-a.set_title(f"{TAG}, {fine['n_sequences']} CTC sequences, deployed decode",
+a.set_title(f"{fine['n_sequences']} CTC sequences",
             fontsize=6, color=ns.INK2, loc="left")
 ns.panel(a, "a")
 
@@ -85,15 +84,12 @@ b.axhline(B1, color=ns.BLUE, lw=1.0, ls=(0, (4, 2)))
 b.text(qp[-1], B1 + 0.006, f"{B1:.2f} dB", fontsize=5, color=ns.BLUE, ha="right")
 b.axhline(B2, color=ns.ORANGE, lw=0.8, ls=(0, (1, 2)))
 b.text(qp[0] + 1, B2 + 0.006, f"{B2:.4f} dB", fontsize=5, color=ns.ORANGE)
-b.text(48, 0.372, "more dB buys nothing", fontsize=5.2, ha="center",
-       color="#666666")
-b.text(32, 0.020, "infeasible", fontsize=5.2, ha="center", color=ns.VERM)
+
+
 b.set_xlabel("qp"); b.set_ylabel("quality budget, dB below the release")
 b.set_xlim(qp[0], qp[-1]); b.set_ylim(0, 0.40)
 b.legend(loc="upper left", fontsize=5, bbox_to_anchor=(0.0, 0.93))
-b.set_title(f"Only [{SATD[qp[0]]:.4f}, {SATD[qp[1]]:.4f}) dB lands on the "
-            f"ceiling at qp 0\nalone — a "
-            f"{1000*(SATD[qp[1]]-SATD[qp[0]]):.0f} millibel window",
+b.set_title("Floor, saturation, and the two budgets",
             fontsize=6, color=ns.INK2, loc="left")
 ns.panel(b, "b", dx=-0.22)
 
@@ -107,8 +103,7 @@ for x, g in zip(qp, gain):
 c.set_xlabel("qp")
 c.set_ylabel(f"extra saving from {B1:.2f} → {B2:.4f} dB (pts)")
 c.set_xlim(qp[0] - 4, qp[-1] + 4)
-c.set_title("Loosening the budget is worth MOST at high rate: the ceiling is\n"
-            "already close at low rate, and far away at high rate",
+c.set_title("Extra saving from the looser budget",
             fontsize=6, color=ns.INK2, loc="left")
 ns.panel(c, "c", dx=-0.24)
 

@@ -49,23 +49,19 @@ a.plot(qp, flo, marker="^", color=ns.GREEN, lw=1.2,
 a.plot(qp, sat, marker="o", color=ns.BLUE, lw=1.2,
        label=f"saturation — every tile at exit {d['exit_j']}")
 a.axhline(0.1, color=ns.INK, lw=0.8, ls=(0, (4, 2)))
-a.text(qp[-1], 0.104, "the 0.1 dB budget this project works to", fontsize=5,
-       color=ns.INK, ha="right")
+
 a.annotate(f"{sat[0]:.3f} dB", (qp[0], sat[0]), fontsize=5.5, color=ns.BLUE,
            textcoords="offset points", xytext=(3, 5))
 a.annotate(f"{sat[-1]:.3f} dB", (qp[-1], sat[-1]), fontsize=5.5, color=ns.BLUE,
            textcoords="offset points", xytext=(-4, 5), ha="right")
-a.text(31, 0.385, "nothing left to buy — the budget is being thrown away",
-       fontsize=5.2, ha="center", color="#666666")
-a.text(31, (flo[4] + sat[4]) / 2 + 0.01, "where a budget buys compute",
-       fontsize=5.2, ha="center", color="#1a6b52")
-a.text(31, 0.014, "infeasible — tiling alone already costs this much",
-       fontsize=5.2, ha="center", color=ns.VERM)
+
+
+
 a.set_ylim(0, 0.42); a.set_xlim(qp[0], qp[-1])
 a.set_xlabel("qp   (0 = lowest rate  →  63 = highest)")
 a.set_ylabel("quality budget, dB below the release")
 a.legend(loc="center left", fontsize=5, bbox_to_anchor=(0.02, 0.62))
-a.set_title(f"{TAG}: the working range of a quality budget",
+a.set_title("Working range of a budget",
             fontsize=6, color=ns.INK2, loc="left")
 ns.panel(a, "a")
 

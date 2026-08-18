@@ -33,7 +33,7 @@ fig, ax = plt.subplots(1, 2, figsize=(ns.W2, 2.5))
 # ---- a: the penalty curves -------------------------------------------------
 ax[0].axhspan(0, BUDGET, color=ns.BLUE, alpha=0.07, lw=0)
 ax[0].axhline(BUDGET, color=ns.BLUE, lw=0.8, ls=(0, (4, 2)))
-ax[0].text(1, BUDGET * 1.08, "0.1 dB budget", fontsize=5, color=ns.BLUE)
+ax[0].text(1, BUDGET * 1.08, "0.1 dB", fontsize=5, color=ns.BLUE)
 ax[0].plot(qp, zer, marker="o", ms=3.5, lw=1.2, color=ns.VERM,
            label="zeros padding — stock behaviour")
 ax[0].plot(qp, rep, marker="s", ms=3.5, lw=1.2, color=ns.ORANGE,
@@ -44,8 +44,7 @@ ax[0].set_yscale("log")
 ax[0].set_xlabel("qp   (0 = lowest rate  →  63 = highest)")
 ax[0].set_ylabel("dB below the release  (log)")
 ax[0].legend(loc="upper left", fontsize=5)
-ax[0].set_title("Pure tiling penalty: every tile at full depth, "
-                "no early exit anywhere", fontsize=6, color=ns.INK2, loc="left")
+ax[0].set_title("Tiling penalty, no early exit", fontsize=6, color=ns.INK2, loc="left")
 for x, y in ((qp[0], zer[0]), (qp[-1], zer[-1]), (qp[-1], rep[-1]),
              (qp[-1], tra[-1])):
     ax[0].annotate(f"{y:.3f}", (x, y), fontsize=5, color=ns.INK2,
@@ -67,7 +66,7 @@ ax[1].set_xlabel("qp")
 ax[1].set_ylabel("dB of the 0.1 dB budget")
 ax[1].set_ylim(0, BUDGET * 1.25)
 ax[1].legend(loc="upper left", fontsize=5)
-ax[1].set_title("Labels: share of the budget gone before any tile exits early",
+ax[1].set_title("Budget consumed by the floor",
                 fontsize=6, color=ns.INK2, loc="left")
 ns.panel(ax[1], "b", dx=-0.18)
 
