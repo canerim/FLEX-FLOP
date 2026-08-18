@@ -311,32 +311,42 @@ if d and lat:
 # ------------------------------------------------------------------ A vs B
 print("A versus B")
 sa, _ = pick("signalled_RECIPE512_ctc53.json")
-sb, _ = pick("router_RECIPE512_b01.json")
-if sa and sb:
-    A = {r["qp"]: r["saving_pct_vs_release"] for r in sa["rows"]
-         if abs(r["budget_db"] - 0.1) < 1e-9 and r.get("budget_reachable")}
-    B = {r["qp"]: r.get("saving_pct_vs_release") for r in sb["rows"]
-         if r.get("budget_reachable")}
-    qs = [q for q in QPS if q in A and B.get(q) is not None]
+b1, _ = pick("router_RECIPE512_b01.json")
+b3, _ = pick("router_RECIPE512_b03.json")
+if sa and b1:
+    def Aat(bud):
+        return {r["qp"]: r["saving_pct_vs_release"] for r in sa["rows"]
+                if abs(r["budget_db"] - bud) < 1e-9 and r.get("budget_reachable")}
+
+    def Bat(d_):
+        return {r["qp"]: r.get("saving_pct_vs_release") for r in (d_ or {}).get("rows", [])
+                if r.get("budget_reachable")}
+    A1, B1 = Aat(0.1), Bat(b1)
+    A3, B3 = Aat(0.3), Bat(b3)
+    qs = [q for q in QPS if q in A1 and B1.get(q) is not None]
     if qs:
-        lines = [r"\begin{tabular}{l" + "r" * len(qs) + "}", r"\toprule",
-                 r"Configuration & " + " & ".join(f"$q{q}$" for q in qs) + r" \\",
-                 r"\midrule",
-                 r"\textbf{A} signalled & " +
-                 " & ".join(f"{A[q]:.1f}" for q in qs) + r" \\",
-                 r"\textbf{B} predicted & " +
-                 " & ".join(f"{B[q]:.1f}" for q in qs) + r" \\",
-                 r"\midrule",
-                 r"gap & " + " & ".join(f"{A[q]-B[q]:.1f}" for q in qs) + r" \\",
-                 r"$|\beta|$ & " +
-                 " & ".join(f"{abs(next(r['beta'] for r in sb['rows'] if r['qp']==q)):.0f}"
-                            for q in qs) + r" \\",
-                 r"\bottomrule", r"\end{tabular}"]
+        both = b3 is not None and all(q in A3 and B3.get(q) is not None for q in qs)
+        head = (r"& \multicolumn{3}{c}{0.1\,dB}" +
+                (r" & \multicolumn{3}{c}{0.3\,dB}" if both else "") + r" \\")
+        sub_ = (r"$q$ & A & B & gap" + (r" & A & B & gap" if both else "") + r" \\")
+        lines = [r"\begin{tabular}{l" + "rrr" * (2 if both else 1) + "}",
+                 r"\toprule", head, sub_, r"\midrule"]
+        for q in qs:
+            row = [f"{q}", f"{A1[q]:.1f}", f"{B1[q]:.1f}",
+                   f"\\textbf{{{A1[q]-B1[q]:.1f}}}"]
+            if both:
+                row += [f"{A3[q]:.1f}", f"{B3[q]:.1f}",
+                        f"\\textbf{{{A3[q]-B3[q]:.1f}}}"]
+            lines.append(" & ".join(row) + r" \\")
+        lines += [r"\bottomrule", r"\end{tabular}"]
         w("ab.tex", "\n".join(lines))
-        mac("GapLow", f"{A[qs[0]]-B[qs[0]]:.1f}")
-        mac("GapHigh", f"{A[qs[-1]]-B[qs[-1]]:.1f}")
-        mac("BLow", f"{B[qs[0]]:.1f}")
-        mac("BHigh", f"{B[qs[-1]]:.1f}")
+        mac("GapLow", f"{A1[qs[0]]-B1[qs[0]]:.1f}")
+        mac("GapHigh", f"{A1[qs[-1]]-B1[qs[-1]]:.1f}")
+        mac("BLow", f"{B1[qs[0]]:.1f}")
+        mac("BHigh", f"{B1[qs[-1]]:.1f}")
+        if both:
+            mac("GapLooseLow", f"{A3[qs[0]]-B3[qs[0]]:.1f}")
+            mac("GapLooseHigh", f"{A3[qs[-1]]-B3[qs[-1]]:.1f}")
 
 # --------------------------------------------------------- adapter ablation
 print("adapter ablation")

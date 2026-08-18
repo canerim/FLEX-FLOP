@@ -768,10 +768,9 @@ def content(colw, fullw):
            r"and signals nothing. The gap collapses to the router's own compute "
            r"once the budget is loose enough that both saturate.")
     tbl("ab",
-        r"<b>Table 7. Signalled against predicted</b> at 0.1 dB, same checkpoint "
-        r"and test set, with the router trained against the deployed oracle at a "
-        r"single λ. |β| is the tilt the bisection needed to move that router to "
-        r"the rate's operating point.")
+        r"<b>Table 7. Signalled against predicted</b> at two budgets, same "
+        r"checkpoint and test set, with one router trained against the deployed "
+        r"oracle at a single λ.")
     par(r"Configuration A is exact by construction and costs bits; B is "
         r"approximate and costs none. The comparison splits in two.")
     par(r"At the rates near the λ the router was trained at, <b>prediction is "
@@ -787,6 +786,14 @@ def content(colw, fullw):
         r"rates, and a 144K head per rate is 0.3% of the model each. We report "
         r"the single-router number because it is the honest one for a system "
         r"that trains once, and note that it understates what B can do.")
+    par(r"Loosening the budget closes it from the other side. At 0.3 dB the gap "
+        r"is \GapLooseLow points at the three lowest rates — exactly the "
+        r"router's own 0.163% of decode, i.e. its <i>prediction</i> is then free "
+        r"— and at most \GapLooseHigh at the highest. Once the budget "
+        r"saturates the ladder both configurations send every tile to the same "
+        r"rung and nothing is left to predict wrongly. Configuration B is "
+        r"expensive in exactly one regime: a tight budget at a rate far from the "
+        r"router's training point.")
     h2("5.6 Does the map have to be recomputed?")
     figure("map_transfer.png",
            r"<b>Figure 10. Reusing an exit map.</b> Solid is the transferred "

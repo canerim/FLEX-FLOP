@@ -859,10 +859,9 @@ enough that both saturate.}
 \begin{table}[t]
 \centering
 \resizebox{\columnwidth}{!}{\input{tables/ab}}
-\caption{\textbf{Signalled against predicted} at $0.1\dB$, same checkpoint and
-test set, with the router trained against the deployed oracle at a single
-$\lambda$. $|\beta|$ is the tilt the bisection needed to move that router to the
-rate's operating point.}
+\caption{\textbf{Signalled against predicted} at two budgets, same checkpoint and
+test set, with one router trained against the deployed oracle at a single
+$\lambda$.}
 \label{tab:ab}
 \end{table}
 
@@ -882,8 +881,17 @@ a router per operating point, which is what a deployment would have anyway: one
 set of weights serves all rates, and a $144$K head per rate is $0.3\%$ of the
 model each.
 
-We report the single-router number because it is the honest one for a system that
-trains once, and we note that it understates what B can do.
+Loosening the budget closes it from the other side. At $0.3\dB$ the gap is
+\GapLooseLow\ points at the three lowest rates --- which is exactly the router's
+own $0.163\%$ of decode, i.e.\ its \emph{prediction} is then free --- and at most
+\GapLooseHigh\ at the highest. Once the budget saturates the ladder both
+configurations send every tile to the same rung, and nothing is left to predict
+wrongly.
+
+So configuration~B is expensive in exactly one regime: a tight budget at a rate
+far from the router's training point. We report the single-router number because
+it is the honest one for a system that trains once, and note that it understates
+what B can do.
 
 \subsection{Does the map have to be recomputed?}
 \label{sec:transfer}
