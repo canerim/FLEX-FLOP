@@ -351,6 +351,18 @@ the error accumulated in each grows with how many convolutions reached it, again
 $\propto b$. The area law saturates once every pixel is touched; the penalty does
 not, and that is where it fails.
 
+\begin{figure}[t]
+\centering
+\includegraphics[width=\columnwidth]{figures/contamination.png}
+\caption{\textbf{The seam against per-tile depth.} Sweeping the split depth
+sweeps $b$; $b{=}0$ is an exact control and measures $0.0000\dB$ at all three
+rates. \textbf{a}, the measurement with the fitted power law. \textbf{b},
+both models against $q63$ with one free scale each. \textbf{c}, mean relative
+error. The area fraction saturates once every pixel is contaminated; the penalty
+does not.}
+\label{fig:contam}
+\end{figure}
+
 \subsection{Padding is an estimator}
 
 The useful way to see border padding is as an \emph{estimator} of the unseen

@@ -392,6 +392,13 @@ def content(colw, fullw):
         r"depth, and the error accumulated in each grows with how many "
         r"convolutions reached it. The area law saturates once every pixel is "
         r"touched; the penalty does not.")
+    figure("contamination.png",
+           r"<b>Figure 4. The seam against per-tile depth.</b> Sweeping the "
+           r"split depth sweeps b; b=0 is an exact control and measures 0.0000 "
+           r"dB at all three rates. <b>a</b>, the measurement with the fitted "
+           r"power law. <b>b</b>, both models against q63 with one free scale "
+           r"each. <b>c</b>, mean relative error. The area fraction saturates "
+           r"once every pixel is contaminated; the penalty does not.")
     h2("4.1 Padding is an estimator")
     par(r"The useful way to see border padding is as an <i>estimator</i> of the "
         r"unseen neighbour, whose error is the seam. Table 1 measures four, "

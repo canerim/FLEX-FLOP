@@ -23,6 +23,7 @@ WANTED = [
     "training_scheme.png",    # objective and recipe
     "exit_map.png",           # per-tile exit map on a real frame
     "perclass.png",           # saving by test class vs tile count
+    "contamination.png",      # seam against per-tile depth
     "latency.png",
 ]
 
