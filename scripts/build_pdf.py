@@ -318,9 +318,28 @@ def content(colw, fullw):
     par(r"SlimCAE [22] and slimmable video codecs [23] expose several widths of "
         r"one model; the choice is per stream and changes the encoder, so the "
         r"bitstream is not interchangeable. DCVC-FM [13] and DCVC-UF [14] "
-        r"reduce cost architecturally, for every frame equally. Our axis is "
-        r"orthogonal: model fixed, bitstream fixed, only <i>how much of the "
-        r"decoder runs where</i> varies.")
+        r"reduce cost architecturally, for every frame equally. "
+        r"Rate–distortion–complexity has since become an explicit third axis: "
+        r"Gao et al. [35] tune spatial context usage to trade decode cost "
+        r"against rate, Ho et al. [36] survey where conditional residual coding "
+        r"sits on that surface, and Zhang and Gao [37] route <i>whole frames</i> "
+        r"to one of several jointly-trained coding paths. All of these vary the "
+        r"model, and all change what the encoder emits. Our axis is orthogonal: "
+        r"model fixed, bitstream fixed, only <i>how much of the decoder runs "
+        r"where</i> varies.")
+    h2("The closest neighbour.")
+    par(r"Blard et al. [27] also partition an image into regions, also choose "
+        r"per region by a rate–distortion cost computed at the encoder, and "
+        r"also transmit a mode map — the skeleton of our configuration A. Two "
+        r"things differ. Their regions choose among several <i>separately "
+        r"trained</i> codecs, so the decoder must hold all of them and its "
+        r"complexity is that of one codec regardless of the choice; the map "
+        r"buys rate, not compute. Ours choose a prefix length of a single "
+        r"trunk, so the weights are shared by construction and the map buys "
+        r"compute at fixed rate. And because their alternatives are unrelated "
+        r"networks, no decoder-side predictor could stand in for the encoder's "
+        r"search, whereas the nesting that makes our exits prefixes of one "
+        r"another is exactly what makes configuration B possible at all.")
     h2("Signalling versus prediction.")
     par(r"That a decoder is <i>told</i> a mode decision rather than inferring "
         r"it is the norm in standardised video coding: HEVC [9] and VVC [21] "
@@ -947,6 +966,17 @@ REFS = [
  "A. Kuznetsova et al. The Open Images Dataset V4. IJCV, 2020.",
  "A. Mercat et al. UVG dataset: 50/120fps 4K sequences for video codec analysis. ACM MMSys, 2020.",
  "H. Wang et al. MCL-JCV: a JND-based H.264/AVC video quality assessment dataset. ICIP, 2016.",
+ "T. Blard et al. Spatial competition for low-complexity learned image compression. arXiv:2605.13243, 2026.",
+ "Y. Shoham, A. Gersho. Efficient bit allocation for an arbitrary set of quantizers. IEEE TASSP, 1988.",
+ "A. Ortega, K. Ramchandran. Rate-distortion methods for image and video compression. IEEE SPM, 1998.",
+ "Adaptive test-time compute allocation for reasoning LLMs via constrained policy optimization. arXiv:2604.14853, 2026.",
+ "H. A. Alhaija et al. Local padding in patch-based GANs for seamless infinite-sized texture synthesis. arXiv:2309.02340, 2023.",
+ "C. Innamorati et al. Overlap training to mitigate inconsistencies caused by image tiling in CNNs. arXiv:1812.02203, 2018.",
+ "Z. Jia et al. Towards practical real-time neural video compression. CVPR, 2025.",
+ "B. A. Hasan et al. Adaptive inference: theoretical limits and unexplored opportunities. arXiv:2402.04359, 2024.",
+ "Y. Gao et al. Exploring the rate-distortion-complexity optimization in neural image compression. CVIU, 2024.",
+ "Y.-H. Ho et al. On the rate-distortion-complexity trade-offs of neural video coding. arXiv:2410.03898, 2024.",
+ "C. Zhang, W. Gao. Learned rate control for frame-level adaptive neural video compression via dynamic neural network. arXiv:2508.20709, 2025.",
 ]
 
 

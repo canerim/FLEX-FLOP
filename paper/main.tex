@@ -176,9 +176,27 @@ matches the encoder that produced the stream.}
 and slimmable video codecs~\cite{slimvc} expose several widths of one model.
 The choice is per stream and it changes the encoder, so the bitstream is not
 interchangeable. DCVC-FM~\cite{dcvcfm} and DCVC-UF~\cite{dcvcuf} reduce cost
-architecturally, for every frame equally. Our axis is orthogonal to both: the
-model is fixed, the bitstream is fixed, and only \emph{how much of the decoder
-runs where} varies.
+architecturally, for every frame equally. Rate--distortion--complexity has since
+become an explicit third axis: Gao~\etal~\cite{gao2024rdc} tune spatial context
+usage to trade decode cost against rate, Ho~\etal~\cite{ho2024rdctradeoffs}
+survey where conditional residual coding sits on that surface, and
+Zhang and Gao~\cite{zhang2025raterouting} route \emph{whole frames} to one of
+several jointly-trained coding paths, spending less computation on cheaper
+frames. All of these vary the model, and all of them change what the encoder
+emits. Our axis is orthogonal: the model is fixed, the bitstream is fixed, and
+only \emph{how much of the decoder runs where} varies.
+
+\paragraph{The closest neighbour.} Blard~\etal~\cite{spatialcompetition} also
+partition an image into regions, also choose per region by a rate--distortion
+cost computed at the encoder, and also transmit a mode map --- the skeleton of
+our configuration A. Two things differ. Their regions choose among several
+\emph{separately trained} codecs, so the decoder must hold all of them and its
+complexity is that of one codec regardless of the choice; the map buys rate, not
+compute. Ours choose a prefix length of a single trunk, so the weights are shared
+by construction and the map buys compute at fixed rate. And because their
+alternatives are unrelated networks, no decoder-side predictor could stand in for
+the encoder's search, whereas the nesting that makes our exits prefixes of one
+another is exactly what makes configuration B possible at all.
 
 \paragraph{Signalling versus prediction.} That a decoder is \emph{told} a mode
 decision rather than inferring it is the norm in standardised video coding: HEVC

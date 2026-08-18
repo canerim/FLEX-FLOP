@@ -132,10 +132,11 @@ def main():
         ("A signalled", ["signalled_RECIPE512_ctc53.json",
                          "signalled_RECIPE512_b135.json",
                          "signalled_BEST_b05.json"], 0.5),
-        ("B router lam1.3e-5", ["router_RECIPE512_lam1.3e-5.json",
-                                "router_BEST_v2.json"], 0.1),
-        ("B router lam4.1e-6", ["router_RECIPE512_lam4.1e-6.json",
-                                "router_BEST_v2_lowlam.json"], 0.1),
+        ("B router", ["router_RECIPE512_b01.json",
+                      "router_RECIPE512_lam1.3e-5.json",
+                      "router_BEST_v2.json"], 0.1),
+        ("B router", ["router_RECIPE512_b03.json"], 0.3),
+        ("B router", ["router_RECIPE512_b05.json"], 0.5),
     ]
 
     print("=" * 78)
@@ -250,7 +251,8 @@ def main():
     print(f"  {'released DCVC-UF intra decoder':<34}{INTRA_GMAC:>17.1f}G"
           f"{tot/1e6:>9.1f}M")
     a = J("signalled_RECIPE512_ctc53.json", "signalled_BEST_0817_1542.json")
-    b = J("router_RECIPE512_lam4.1e-6.json", "router_BEST_v2_lowlam.json")
+    b = J("router_RECIPE512_b01.json", "router_RECIPE512_lam1.3e-5.json",
+          "router_BEST_v2.json")
     for lab, d in (("FLEX-UF A, signalled, 0.1 dB", a),
                    ("FLEX-UF B, router, 0.1 dB", b)):
         if not d:
@@ -286,20 +288,26 @@ def figures(rows, rel_psnr, bpp, D):
     fig, ax = plt.subplots(1, 3, figsize=(ns.W2, 2.3))
     lo = [q for q in qs if rel_psnr[q] <= 39]
     hi = [q for q in qs if rel_psnr[q] >= 39]
+
+    def short(l):
+        return l.replace("B router", "B").replace("A signalled", "A")
+
+    BCOL = {0.1: ns.VERM, 0.3: ns.ORANGE, 0.5: ns.GREEN}
     for a_, sel, title in ((ax[0], qs, "All rates"),
                            (ax[1], lo, "Lower quality range"),
                            (ax[2], hi, "Higher quality range")):
         a_.plot([bpp[q] for q in sel], [rel_psnr[q] for q in sel],
                 marker="o", ms=4, color=ns.INK, lw=1.3,
                 label="released DCVC-UF intra")
-        for c, (label, budget, bd, sv, qq, rr, pp) in zip(
-                [ns.BLUE, ns.ORANGE, ns.GREEN, ns.VERM, ns.PURPLE], rows):
+        for label, budget, bd, sv, qq, rr, pp in rows:
             idx = [i for i, q in enumerate(qq) if q in sel]
             if not idx:
                 continue
-            a_.plot([rr[i] for i in idx], [pp[i] for i in idx], marker="s",
-                    ms=3, lw=1.0, color=c,
-                    label=f"{label} @ {budget:g} dB  ({sv:.0f}% saved)")
+            isA = label.startswith("A")
+            a_.plot([rr[i] for i in idx], [pp[i] for i in idx],
+                    marker="o" if isA else "s", ms=3, lw=1.0,
+                    ls="-" if isA else (0, (3, 1.5)), color=BCOL[budget],
+                    label=f"{short(label)} @ {budget:g} dB  ({sv:.0f}% saved)")
         a_.set_xlabel("bpp")
         a_.set_title(title, fontsize=6, color=ns.INK2, loc="left")
     ax[0].set_ylabel("PSNR (dB), YUV420")
@@ -313,14 +321,11 @@ def figures(rows, rel_psnr, bpp, D):
     print(f"  docs/figures/paper_rd.png")
 
     # --- the trade-off the DCVC-UF paper is organised around -------------
-    def short(l):
-        return l.replace("B router ", "B ").replace("lam", "λ=")
 
     fig, ax = plt.subplots(1, 2, figsize=(ns.W2, 2.4))
-    for c, (label, budget, bd, sv, qq, rr, pp) in zip(
-            [ns.BLUE, ns.ORANGE, ns.GREEN, ns.VERM, ns.PURPLE], rows):
-        m = "o" if label.startswith("A") else "s"
-        ax[0].scatter(bd, sv, s=38, color=c, marker=m, zorder=3,
+    for label, budget, bd, sv, qq, rr, pp in rows:
+        ax[0].scatter(bd, sv, s=38, color=BCOL[budget], zorder=3,
+                      marker="o" if label.startswith("A") else "s",
                       label=f"{short(label)} @ {budget:g} dB")
     ax[0].scatter(0, 0, s=38, color=ns.INK, marker="*", zorder=3,
                   label="released decoder")
@@ -332,13 +337,10 @@ def figures(rows, rel_psnr, bpp, D):
     ns.panel(ax[0], "a")
 
     # MACs/frame, the paper's Table 3 column, drawn
-    # Two routers differ only by their training lambda, so "B 0.1dB" twice
-    # labels two different systems identically.
     labels = ["released"] + [f"{short(l)}, {b:g} dB" for l, b, *_ in rows]
     macs = [INTRA_GMAC] + [INTRA_GMAC * (1 - sv / 100)
                            for _, _, _, sv, *_ in rows]
-    cols = [ns.INK] + [ns.BLUE, ns.ORANGE, ns.GREEN, ns.VERM,
-                       ns.PURPLE][:len(rows)]
+    cols = [ns.INK] + [BCOL[b] for _, b, *_ in rows]
     ax[1].barh(range(len(macs)), macs, color=cols, height=0.6)
     for i, m in enumerate(macs):
         ax[1].text(m + 6, i, f"{m:.0f}G", va="center", fontsize=5,
