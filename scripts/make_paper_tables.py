@@ -62,6 +62,8 @@ if d:
     mac("MainMean", f"{sum(r01[q]['saving_pct_vs_release'] for q in QPS)/len(QPS):.1f}")
     mac("NumSeq", str(d["n_sequences"]))
     mac("MapBits", f"{r01[0]['map_bits']:.0f}")
+    mac("RouterParams", "144\\,K")
+    mac("RouterCostPct", "0.163")
     mac("MapOverheadLow", f"{100*r01[0]['bpp_added']/0.40:.3f}")
 
 # --------------------------------------------------------- operating structure

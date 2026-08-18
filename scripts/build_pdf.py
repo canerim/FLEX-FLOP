@@ -763,10 +763,15 @@ def content(colw, fullw):
         r"nothing else, a window \SatWindowMb millibels wide.")
     h2("5.5 Signalled versus predicted allocation")
     figure("router_ab.png",
-           r"<b>Figure 9. Who decides.</b> A signals the oracle map at "
-           r"~\MapBits bits/frame; B predicts it from decoder-side data only "
-           r"and signals nothing. The gap collapses to the router's own compute "
-           r"once the budget is loose enough that both saturate.")
+           r"<b>Figure 9. Who decides.</b> <b>(a)</b> A holds the source, so it "
+           r"can decode all K exits per tile and pick the true minimiser; it "
+           r"signals the map at ~\MapBits bits/frame. B never sees the source "
+           r"— a \RouterParams-parameter head reads ŷ, the entropy scales and "
+           r"qp — and signals nothing. <b>(b)</b> Saving at 0.1 dB; shading is "
+           r"what a bit-exact bitstream costs. <b>(c)</b> That cost is "
+           r"rate-dependent and budget-dependent: it collapses to the router's "
+           r"own \RouterCostPct% of a decode once the budget is loose enough "
+           r"that both saturate.")
     tbl("ab",
         r"<b>Table 7. Signalled against predicted</b> at two budgets, same "
         r"checkpoint and test set, with one router trained against the deployed "

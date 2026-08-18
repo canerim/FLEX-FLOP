@@ -849,10 +849,14 @@ $[\SatLow, \SatWindowHi)\dB$ saturate the lowest rate and nothing else, a window
 \begin{figure}[t]
 \centering
 \includegraphics[width=\columnwidth]{figures/router_ab.png}
-\caption{\textbf{Who decides.} A signals the oracle map at
-$\sim$\MapBits\ bits/frame; B predicts it from decoder-side data only and signals
-nothing. The gap collapses to the router's own compute once the budget is loose
-enough that both saturate.}
+\caption{\textbf{Who decides.} \textbf{(a)} A holds the source, so it can
+decode all $K$ exits per tile and pick the true minimiser; it signals the map at
+$\sim$\MapBits\ bits/frame. B never sees the source --- a \RouterParams-parameter
+head reads $\hat{y}$, the entropy scales and qp --- and signals nothing.
+\textbf{(b)} Saving at 0.1\,dB; shading is what a bit-exact bitstream costs.
+\textbf{(c)} That cost is rate-dependent and budget-dependent: it collapses to
+the router's own \RouterCostPct\,\% of a decode once the budget is loose enough
+that both saturate.}
 \label{fig:ab}
 \end{figure}
 

@@ -68,9 +68,13 @@ def tiled_exit_mses(dec, y_hat: torch.Tensor, quant_step: torch.Tensor,
     exit that does not exist.
     """
     P = cfg.rgb_patch
-    H, W = target.shape[-2:]
+    B, (H, W) = target.shape[0], target.shape[-2:]
     nh, nw = H // P, W // P
-    n_tiles = nh * nw
+    # The decoder's exit_map is indexed over the whole batch's tiles, not one
+    # image's: patchify flattens [B, C, H, W] to [B*nh*nw, C, P, P]. Sizing this
+    # as nh*nw works for the single-frame evaluation paths and fails loudly the
+    # moment a caller passes a batch, which is what training does.
+    n_tiles = B * nh * nw
     cols = []
     for k in range(cfg.num_exits):
         em = torch.full((n_tiles,), max(k, cfg.split_depth),

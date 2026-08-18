@@ -474,97 +474,96 @@ def training():
 # =====================================================  5. router A versus B
 def router_ab():
     """The two ways the exit map can be produced, and what the difference costs."""
-    def rows(f, key="saving_pct_vs_release"):
+    def rows(f, key="saving_pct_vs_release", budget=None):
         d = json.load(open(R / "results" / f))
-        return {r["qp"]: r[key] for r in d["rows"]}, d
+        rs = [r for r in d["rows"] if r.get("budget_reachable", True)
+              and (budget is None or r.get("budget_db") is None
+                   or abs(r["budget_db"] - budget) < 1e-9)]
+        return {r["qp"]: r[key] for r in rs if r.get(key) is not None}, d
 
-    A, dA = rows("signalled_BEST_0817_1542.json")
-    Ba, dB = rows("router_BEST_v2.json")            # router trained at lam 1.3e-5
-    Bb, _ = rows("router_BEST_v2_lowlam.json")      # ...and at lam 4.1e-6
-    A3, _ = rows("signalled_BEST_b03.json")
-    A5, _ = rows("signalled_BEST_b05.json")
-    # B at each budget takes the better of the two trained routers, which is the
-    # honest "best available" -- one is trained at the low-rate lambda and one at
-    # the high-rate lambda, and a deployment would pick per operating point.
-    B3a, _ = rows("router_BEST_b03_lam1.3e-5.json")
-    B3b, _ = rows("router_BEST_b03_lam4.1e-6.json")
-    B5a, _ = rows("router_BEST_b05_lam1.3e-5.json")
-    B5b, _ = rows("router_BEST_b05_lam4.1e-6.json")
-    B = {q: max(Ba[q], Bb[q]) for q in Ba}
-    B3 = {q: max(B3a[q], B3b[q]) for q in B3a}
-    B5 = {q: max(B5a[q], B5b[q]) for q in B5a}
-    qps = sorted(A)
+    # RECIPE512 on the deployed path, one router trained at a single lambda.
+    # The older BEST files are on the full-frame table (flexuf/eval.py) and must
+    # not be mixed in.
+    sig, dA = rows("signalled_RECIPE512_ctc53.json", key="saving_pct_vs_release",
+                   budget=0.1)
+    A, _ = rows("signalled_RECIPE512_ctc53.json", budget=0.1)
+    A3, _ = rows("signalled_RECIPE512_ctc53.json", budget=0.3)
+    A5, _ = rows("signalled_RECIPE512_ctc53.json", budget=0.5)
+    B, dB = rows("router_RECIPE512_b01.json")
+    B3, _ = rows("router_RECIPE512_b03.json")
+    B5 = {}
+    Ba = B
+    qps = sorted(q for q in A if q in B)
 
-    fig = plt.figure(figsize=(ns.W2, 2.9))
-    gs = fig.add_gridspec(1, 3, width_ratios=[1.25, 1, 1])
+    fig = plt.figure(figsize=(ns.W2, 2.7))
+    gs = fig.add_gridspec(1, 3, width_ratios=[1.35, 1, 1])
 
     # ---- a: who sees what --------------------------------------------------
     a = fig.add_subplot(gs[0]); blank(a)
-    a.add_patch(Rectangle((0.0, 0.53), 1.0, 0.42, facecolor="#fdf4f9",
-                          edgecolor=ns.PURPLE, lw=0.7))
-    a.text(0.025, 0.905, "A · the ENCODER decides, and signals the map",
-           fontsize=6, weight="bold", color=ns.PURPLE)
-    a.text(0.025, 0.845,
-           "It holds the source frame, so for every tile it can decode all\n"
-           "K exits and measure the true error of each. Its choice is not a\n"
-           "prediction — it is the optimum:",
-           fontsize=5.2, va="top", linespacing=1.6)
-    a.text(0.09, 0.655, r"$k^{*}(t)=\arg\min_k\;[\,\mathrm{MSE}(t,k)"
-           r"+\lambda\,c_k\,]$", fontsize=6.8, va="center")
-    a.text(0.025, 0.585, "λ is bisected once per frame until the frame lands on "
-           "the budget.", fontsize=5.2, va="center", color=ns.INK2)
 
-    a.add_patch(Rectangle((0.0, 0.015), 1.0, 0.475, facecolor="#eef6fb",
-                          edgecolor=ns.BLUE, lw=0.7))
-    a.text(0.025, 0.448, "B · the DECODER decides, and nothing is signalled",
-           fontsize=6, weight="bold", color=ns.BLUE)
-    a.text(0.025, 0.393,
-           "It never sees the source, so the true MSE is not merely hard to\n"
-           "estimate — it is absent from the input. A 144 K head reads the\n"
-           "stem map, ŷ, the entropy-model scales and qp, and scores exits:",
-           fontsize=5.2, va="top", linespacing=1.6)
-    a.text(0.06, 0.183, r"$\hat{k}(t)=\arg\max_k\;[\,\log\mathrm{softmax}"
-           r"(z_t)_k-\beta\,c_k\,]$", fontsize=6.8, va="center")
-    a.text(0.025, 0.112, "β plays λ's role and is bisected the same way. The head "
-           "itself\ncosts 0.163% of a decode, charged inside every B number.",
-           fontsize=5.2, va="top", color=ns.INK2, linespacing=1.6)
-    ns.panel(a, "a", dx=-0.02, dy=1.10)
+    def chip(x, y, w, h, txt, fc, ec, fs=5.4, bold=False):
+        a.add_patch(FancyBboxPatch((x, y), w, h, boxstyle="round,pad=0.006",
+                                   facecolor=fc, edgecolor=ec, lw=0.7))
+        a.text(x + w / 2, y + h / 2, txt, ha="center", va="center", fontsize=fs,
+               color=ec if bold else ns.INK, weight="bold" if bold else "normal")
+
+    def arrow(x0, y, x1, c=ns.INK2):
+        a.annotate("", (x1, y), (x0, y), arrowprops=dict(
+            arrowstyle="-|>", lw=0.7, color=c, mutation_scale=6))
+
+    for y0, tag, col, fc in ((0.56, "A", ns.PURPLE, "#fdf4f9"),
+                             (0.06, "B", ns.BLUE, "#eef6fb")):
+        a.add_patch(Rectangle((0.0, y0), 1.0, 0.38, facecolor=fc,
+                              edgecolor=col, lw=0.7))
+        a.text(0.02, y0 + 0.335, tag, fontsize=7, weight="bold", color=col)
+
+    # A row
+    y = 0.80
+    chip(0.07, y - 0.045, 0.15, 0.09, "source", "#ffffff", ns.PURPLE)
+    chip(0.07, y - 0.155, 0.15, 0.09, "$\\hat{y}$", "#ffffff", ns.PURPLE)
+    arrow(0.23, y - 0.055, 0.31, ns.PURPLE)
+    chip(0.32, y - 0.155, 0.26, 0.20, "decode\nall $K$", "#ffffff", ns.PURPLE)
+    arrow(0.59, y - 0.055, 0.66, ns.PURPLE)
+    chip(0.67, y - 0.155, 0.28, 0.20, "map\n+ 3 b/tile", "#ffffff", ns.PURPLE)
+    a.text(0.5, 0.585, r"$k^{*}=\arg\min_k\,[\,\mathrm{MSE}_k+\lambda c_k]$",
+           fontsize=6.2, ha="center", va="center", color=ns.PURPLE)
+
+    # B row
+    y = 0.30
+    chip(0.07, y - 0.045, 0.15, 0.09, "$\\hat{y}$", "#ffffff", ns.BLUE)
+    chip(0.07, y - 0.155, 0.15, 0.09, "qp, $\\sigma$", "#ffffff", ns.BLUE)
+    arrow(0.23, y - 0.055, 0.31, ns.BLUE)
+    chip(0.32, y - 0.155, 0.26, 0.20, "head\n144 K", "#ffffff", ns.BLUE)
+    arrow(0.59, y - 0.055, 0.66, ns.BLUE)
+    chip(0.67, y - 0.155, 0.28, 0.20, "map\n+ 0 b/tile", "#ffffff", ns.BLUE)
+    a.text(0.5, 0.085, r"$\hat{k}=\arg\max_k\,[\,\log p_k-\beta c_k]$",
+           fontsize=6.2, ha="center", va="center", color=ns.BLUE)
+    ns.panel(a, "a", dx=-0.02, dy=1.06)
 
     # ---- b: measured saving vs rate ---------------------------------------
     a = fig.add_subplot(gs[1])
     ya = [A[q] for q in qps]; yb = [B[q] for q in qps]
     a.fill_between(qps, yb, ya, color=ns.VERM, alpha=0.13, lw=0)
-    a.plot(qps, ya, marker="o", color=ns.PURPLE, label="A — signalled (oracle)")
-    a.plot(qps, yb, marker="s", color=ns.BLUE, label="B — predicted, 0 bits")
-    a.plot(qps, [Ba[q] for q in qps], color=ns.SKY, lw=0.7, ls=(0, (3, 2)),
-           label="B, single router for all rates")
+    a.plot(qps, ya, marker="o", color=ns.PURPLE, label="A  signalled")
+    a.plot(qps, yb, marker="s", color=ns.BLUE, label="B  predicted")
     for q in qps:
         a.annotate(f"{A[q]-B[q]:.1f}", (q, (A[q] + B[q]) / 2), fontsize=5,
                    color=ns.VERM, ha="center", va="center")
-    a.set_xlabel("qp"); a.set_ylabel("compute saved at 0.1 dB (%)")
-    a.legend(loc="lower left", fontsize=5)
-    a.set_title(f"Same checkpoint, same {dA['n_sequences']} sequences.\n"
-                "Shaded: what an unchanged bitstream costs.",
-                fontsize=6, color=ns.INK2, loc="left")
-    ns.panel(a, "b", dx=-0.24)
+    a.set_xlabel("qp"); a.set_ylabel("saved at 0.1 dB (%)")
+    a.legend(loc="lower left", fontsize=5.4)
+    ns.panel(a, "b", dx=-0.26)
 
     # ---- c: the gap shrinks as the budget grows ---------------------------
     a = fig.add_subplot(gs[2])
-    for (Ax, Bx), c, lab in (((A, B), ns.VERM, "0.1 dB budget"),
-                             ((A3, B3), ns.ORANGE, "0.3 dB"),
-                             ((A5, B5), ns.GREEN, "0.5 dB")):
-        a.plot(qps, [Ax[q] - Bx[q] for q in qps], marker="o", color=c, label=lab)
+    for (Ax, Bx), c, lab in (((A, B), ns.VERM, "0.1 dB"),
+                             ((A3, B3), ns.ORANGE, "0.3 dB")):
+        qq = [q for q in qps if q in Ax and q in Bx]
+        a.plot(qq, [Ax[q] - Bx[q] for q in qq], marker="o", color=c, label=lab)
     a.axhline(0.163, color=ns.INK2, lw=0.7, ls=(0, (3, 2)))
-    a.text(qps[0], 0.30, "0.163% — the router's own compute", fontsize=5,
-           color=ns.INK2)
-    a.set_xlabel("qp"); a.set_ylabel("A − B  (percentage points)")
-    a.legend(loc="upper left", fontsize=5)
-    a.set_title("Every line is the best available router. Give the ladder\\n"
-                "more room and the gap collapses to\n"
-                "exactly the router's own cost — prediction is only\n"
-                "expensive when the budget is tight.",
-                fontsize=6, color=ns.INK2, loc="left")
-    ns.panel(a, "c", dx=-0.24)
+    a.text(qps[0], 0.55, "router cost", fontsize=5, color=ns.INK2)
+    a.set_xlabel("qp"); a.set_ylabel("A $-$ B  (points)")
+    a.legend(loc="upper left", fontsize=5.4)
+    ns.panel(a, "c", dx=-0.26)
 
     fig.tight_layout()
     save(fig, "router_ab.png")
