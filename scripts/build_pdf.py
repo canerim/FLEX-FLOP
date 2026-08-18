@@ -721,7 +721,7 @@ def content(colw, fullw):
         r"vertices, a budget between two of them is not attainable. We measured "
         r"what that costs by enumerating the <i>exact</i> Pareto set with "
         r"dynamic programming over tiles — feasible because the cost alphabet "
-        r"has four symbols: the sweep reaches 93 allocations against a Pareto "
+        r"has four symbols: the sweep reaches 92 allocations against a Pareto "
         r"set of 635, and convexity costs at most 0.05 saving points. The "
         r"standard construction is essentially optimal here.")
     par(r"Two numbers bound what any budget can do. The <b>floor</b> is the "

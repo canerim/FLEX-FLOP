@@ -1,55 +1,128 @@
-"""Does the paper reference anything that does not exist?
+"""Verify the numbers written into the paper's PROSE against results/.
 
-LaTeX fails loudly on a missing \\input and silently on a missing macro -- an
-undefined \\MainLowRate typesets as nothing at all, so a number quietly vanishes
-from a sentence that still reads like a sentence. This checks both, plus figures
-and citation keys, without needing a LaTeX installation.
+Tables and macros regenerate from the measurements and cannot drift. Prose
+cannot: every sentence of the form "falls from 25.9% to 4.2%" is a number typed
+by hand, and this project has shipped three of those wrong. This checks the
+claims that a reader would act on, and exits non-zero if any has moved.
+
+Add a claim here whenever one is written into the text.
 """
-import re
-import sys
+import json, re, sys
 from pathlib import Path
 
-R = Path(__file__).resolve().parents[1] / "paper"
-SRC = [R / "main.tex", R / "supplementary.tex"]
+R = Path(__file__).resolve().parents[1]
 
-BUILTIN = set("""dB note cvprfinalcopy item textbf emph cite ref label input
-includegraphics caption begin end section subsection paragraph maketitle title
-author documentclass usepackage bibliographystyle bibliography small large Large
-centering toprule midrule bottomrule cmidrule multicolumn columnwidth textwidth
-resizebox itemsep times arg min max log mathrm sum frac lVert rVert sg hat bmod
-approx dagger etal IfFileExists newcommand textcolor vskip par null newpage quad
-left right geq leq in mathbb theta lambda beta alpha Delta dots ProvidesPackage
-RequirePackage""".split())
 
-macros = set(re.findall(r"\\newcommand\{\\(\w+)\}",
-                        (R / "tables" / "macros.tex").read_text()))
-bibkeys = set(re.findall(r"@\w+\{([^,]+),", (R / "refs.bib").read_text()))
+def J(name):
+    p = R / "results" / name
+    return json.load(open(p)) if p.exists() else None
 
-bad = []
-for f in SRC:
-    if not f.exists():
-        continue
-    t = f.read_text()
-    for u in set(re.findall(r"\\([A-Z]\w+)", t)):
-        if u not in macros and u not in BUILTIN and not u.startswith(("I", "P")):
-            bad.append(f"{f.name}: undefined command \\{u}")
-    for fig in set(re.findall(r"figures/([\w.]+)", t)):
-        if not (R / "figures" / fig).exists():
-            bad.append(f"{f.name}: missing figure {fig}")
-    for tab in set(re.findall(r"\\input\{tables/(\w+)\}", t)):
-        if not (R / "tables" / f"{tab}.tex").exists():
-            bad.append(f"{f.name}: missing table tables/{tab}.tex")
-    for key in set(k for grp in re.findall(r"\\cite\{([^}]+)\}", t)
-                   for k in grp.split(",")):
-        if key.strip() not in bibkeys:
-            bad.append(f"{f.name}: undefined citation {key.strip()}")
-    for lab in set(re.findall(r"\\ref\{([^}]+)\}", t)):
-        if f"\\label{{{lab}}}" not in t:
-            bad.append(f"{f.name}: dangling reference {lab}")
 
-if bad:
-    print("\n".join("  " + b for b in sorted(set(bad))))
-    print(f"\n  {len(set(bad))} problem(s)")
-    sys.exit(1)
-print(f"  paper is self-consistent: {len(macros)} macros, "
-      f"{len(bibkeys)} bib entries, all figures and tables present")
+CLAIMS = []
+
+
+def claim(label, expected, actual, tol=0.06):
+    ok = actual is not None and abs(expected - actual) <= tol
+    CLAIMS.append((ok, label, expected, actual, tol))
+
+
+# ---- coupling ---------------------------------------------------------------
+d = J("coupling_ablation.json")
+if d:
+    by = {r["qp"]: r for r in d["rows"]}
+    for qp, pad, cpl in ((0, 33.44, 31.94), (32, 25.94, 4.15), (63, 19.25, 0.40)):
+        if qp in by:
+            claim(f"coupling q{qp} padded saving", pad, by[qp]["padded"]["saving"])
+            claim(f"coupling q{qp} coupled saving", cpl,
+                  by[qp]["coupled"]["saving"])
+    for qp, pad, cpl in ((0, 0.0358, 0.0031), (63, 0.0564, 0.0300)):
+        if qp in by:
+            claim(f"coupling q{qp} floor padded", pad,
+                  by[qp]["padded"]["floor_db"], 0.0006)
+            claim(f"coupling q{qp} floor coupled", cpl,
+                  by[qp]["coupled"]["floor_db"], 0.0006)
+
+# ---- contamination ----------------------------------------------------------
+d = J("contamination_law.json")
+if d:
+    import numpy as np
+    b = np.array(d["b"])
+    for q, exp in (("0", 2.38), ("32", 2.22), ("63", 1.93)):
+        if q in d["seam_db"]:
+            y = np.array(d["seam_db"][q])
+            a = np.polyfit(np.log(b), np.log(y), 1)[0]
+            claim(f"contamination exponent q{q}", exp, float(a), 0.02)
+
+# ---- hull -------------------------------------------------------------------
+d = J("hull_gap.json")
+if d:
+    claim("hull: swept allocations", 92, d["n_hull_allocations"], 0)
+    claim("hull: Pareto points", 635, d["n_pareto"], 1)
+    claim("hull: worst gap (pts)", 0.05,
+          max(abs(r["gap_pts"]) for r in d["rows"]), 0.005)
+
+# ---- map transfer -----------------------------------------------------------
+d = J("map_transfer.json")
+if d:
+    rt = {(r["from"], r["to"]): r for r in d["rows"] if r["kind"] == "rate"}
+    if (0, 63) in rt:
+        claim("transfer q0->q63 delivered dB", 0.190, rt[(0, 63)]["transfer_db"],
+              0.002)
+        claim("transfer q0->q63 saving", 33.05, rt[(0, 63)]["transfer_saving"])
+    if (63, 0) in rt:
+        claim("transfer q63->q0 delivered dB", 0.075, rt[(63, 0)]["transfer_db"],
+              0.002)
+        claim("transfer q63->q0 saving", 19.84, rt[(63, 0)]["transfer_saving"])
+
+# ---- encoder cost -----------------------------------------------------------
+d = J("encoder_cost.json")
+if d:
+    claim("encoder: deployed table x decode", 4.6, d["x_deployed"], 0.25)
+    claim("encoder: full-frame table x decode", 1.4, d["x_full_frame"], 0.1)
+    claim("encoder: map agreement", 85, 100 * d["approx"]["agreement"], 2)
+
+# ---- static baseline --------------------------------------------------------
+d = J("static_RECIPE512_b01.json")
+if d:
+    rows = {r["qp"]: r for r in d["rows"]}
+    if 0 in rows:
+        u3 = next((u for u in rows[0]["uniform"] if u["exit"] == 3), None)
+        if u3:
+            claim("static: uniform exit 3 at q0", 27.0, u3["saving"], 0.1)
+    best = [r["best_static"]["saving"] if r["best_static"] else 0.0
+            for r in d["rows"]]
+    claim("static: best static mean", 10.2, sum(best) / len(best), 0.1)
+    r63 = rows.get(63)
+    if r63 and r63.get("rate_rank"):
+        claim("rate-rank q63 dB", 0.110, r63["rate_rank"]["db"], 0.002)
+        claim("random q63 dB", 0.141, r63["random"]["db"], 0.002)
+        gapv = r63["random"]["db"] - r63["oracle"]["db"]
+        got = r63["random"]["db"] - r63["rate_rank"]["db"]
+        claim("rate-rank recovers %", 75, 100 * got / gapv, 2)
+
+# ---- per class --------------------------------------------------------------
+d = J("per_class_RECIPE512.json")
+e = J("per_class_BEST128.json")
+if d:
+    r0 = next((r for r in d["rows"]
+               if r["qp"] == 0 and abs(r["budget_db"] - 0.1) < 1e-9), None)
+    if r0:
+        for c, exp in (("MCL-JCV", 36.3), ("HEVC_D", 11.3), ("HEVC_C", 20.9)):
+            if c in r0["per_class"]:
+                claim(f"per-class q0 {c}", exp, r0["per_class"][c]["saving"], 0.1)
+    if e:
+        e0 = next((r for r in e["rows"]
+                   if r["qp"] == 0 and abs(r["budget_db"] - 0.1) < 1e-9), None)
+        if e0:
+            for c, exp in (("MCL-JCV", 34.3), ("HEVC_D", 13.7)):
+                if c in e0["per_class"]:
+                    claim(f"128px q0 {c}", exp, e0["per_class"][c]["saving"], 0.1)
+
+bad = [c for c in CLAIMS if not c[0]]
+w = max(len(c[1]) for c in CLAIMS) if CLAIMS else 10
+for ok, label, exp, act, tol in CLAIMS:
+    a = f"{act:.4f}" if isinstance(act, float) else str(act)
+    print(f"  [{'ok ' if ok else 'BAD'}] {label:<{w}}  paper {exp:>8}   "
+          f"measured {a:>9}")
+print(f"\n  {len(CLAIMS)-len(bad)}/{len(CLAIMS)} prose claims match the data")
+sys.exit(1 if bad else 0)
