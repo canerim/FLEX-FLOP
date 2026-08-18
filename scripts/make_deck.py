@@ -641,20 +641,19 @@ slide_text("Related work", [
 ], size=12)
 
 # 21 ---------------------------------------------------------- quantisation
-slide_text("Quantisation · a second, orthogonal lever", [
- (0, "Weight-only · per-channel · no calibration · decoder only (encoder would "
-     "change the bitstream)", True),
- (0, "Prediction registered: shallow exits suffer more. FALSIFIED.", True),
- (1, "qp 63, 8 bit:  exit 2 +0.108 dB   deepest +0.111 dB   ratio 0.97", False),
- (1, "6 and 4 bit: the DEEPEST exits suffer most", False),
- (0, "Mechanism · the deepest exit starts at 0.073 dB and has no headroom to "
-     "absorb a noise floor; a shallow exit's error already dominates", True),
- (0, "What matters is the SPREAD — that is what routing exploits", True),
- (1, "qp 63:   fp32 2.864   →   8 bit 2.876   →   6 bit 2.224   →   4 bit 1.398", False),
- (1, "BOPs:    1.000        →   0.062        →   0.035        →   0.016", False),
- (0, "8 bit composes cleanly at 16× fewer BOPs · ≤6 bit erodes the ladder", True),
+slide_fig("Quantisation · a second, orthogonal lever", "quant.png", [
+ (0, "Weight-only · per-channel · no calibration · decoder only", True),
+ (0, "Registered prediction — shallow exits suffer more — FALSIFIED", True),
+ (1, "qp 63, 8 bit: exit 2 +0.108 dB, deepest +0.111 dB, ratio 0.97", False),
+ (1, "the deepest starts at 0.073 dB and has no headroom for a noise floor", False),
+ (0, "What matters is the SPREAD — the only thing a router can act on", True),
+ (1, "qp 63   fp32 2.864 → 8 b 2.876 → 6 b 2.224 → 4 b 1.398   ·   BOPs "
+     "1.000 → 0.062 → 0.035 → 0.016", False),
+ (1, "qp 0    0.704 → 0.712 → 0.791 → 0.837   — flat to rising, no collapse", False),
+ (0, "8 bit composes cleanly at 16× fewer BOPs · the collapse is a HIGH-RATE "
+     "effect, not a general one", True),
  (1, "caveat: 8 bit still raises the floor 0.073 → 0.184 dB at qp 63", False),
-], size=12)
+], size=11)
 
 # 22 ---------------------------------------------------------- theory
 d = {q: th[str(q)]["delta"]["3e-05"] for q in (0, 32, 63)} if th else None
