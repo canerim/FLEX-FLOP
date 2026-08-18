@@ -36,6 +36,7 @@ sys.path.insert(0, str(Path.home() / "DCVC"))
 import ctc_intra as C
 from flexuf.config import FlexUFConfig
 from flexuf.cost import exit_costs
+from flexuf.eval import tiled_exit_mses
 from flexuf.model import FlexUFIntra, load_flexuf_state
 
 ap = argparse.ArgumentParser()
@@ -88,7 +89,8 @@ with torch.no_grad():
                 e = ((img - xp) ** 2).mean(1)
                 return (e.view(1, nh, P, nw, P).permute(0, 1, 3, 2, 4)
                          .reshape(nh * nw, P * P).mean(1))
-            F_ME.append(torch.stack([tl(o) for o in net.dec.forward_all_exits(y, q)], 1))
+            # DEPLOYED path -- see flexuf/eval.py.
+            F_ME.append(tiled_exit_mses(net.dec, y, q, xp, cfg))
             F_RE.append(tl(ref.dec.forward_full(y, q)).mean())
 
         # A REAL router's decisions: from the stem, before the deep blocks.

@@ -4345,3 +4345,49 @@ enough there to win. Decision: `seam_repair=none` plus `tile_coupling=True`
 The joint-training caveat still applies -- switching the module off at inference
 is not the same as training without it -- but it now bounds a quantity that is
 too small to matter either way.
+
+## 83. The reported dB was a full-frame number. The tiling penalty was never in it.
+
+`dec.forward_all_exits` runs the trunk FULL FRAME and taps each exit. That is
+correct for training -- one trunk pass, K heads, gradient to every exit -- and it
+is what every evaluation script in this repository used to build its per-tile,
+per-exit distortion table. The reference is the release's full-frame decode. So
+both sides of the ratio were full-frame, the seam cancelled, and the reported dB
+described a decoder nobody ships.
+
+Measured on RECIPE512, 8 CTC frames, every tile at the same exit:
+
+| qp | exit | full-frame dB | deployed dB | missing |
+|---|---|---|---|---|
+| 0 | 5 (deepest) | 0.0040 | 0.0385 | **+0.0345** |
+| 0 | 2 (shallowest) | 0.1845 | 0.1939 | +0.0094 |
+| 32 | 5 | 0.0120 | 0.0506 | +0.0387 |
+| 63 | 5 | 0.0252 | 0.0615 | +0.0362 |
+| 63 | 2 | 0.3002 | 0.3080 | +0.0078 |
+
+It is not a constant offset. It is four times larger at the deepest exit than at
+the shallowest, because eight blocks have run per tile there against two -- so it
+scales with exactly the quantity the Lagrangian is optimising. An operating point
+labelled 0.1 dB was delivering roughly 0.12-0.13.
+
+How it survived: three separate checks pointed at the reference and found it
+correct. `ref.dec.forward_full` IS the right reference -- the release is
+full-frame and the dB is quoted against it. The bug was one line further up, on
+our own side, in a function whose name says "all exits" and not "full frame".
+`model.forward_all_exits_patched` exists precisely to be the tiled counterpart
+and its docstring spells the distinction out; no evaluation script used it.
+
+Fix: `flexuf/eval.py`. `tiled_exit_mses` builds the table with one tiled decode
+per exit, on the deployed path; `true_frame_mse` decodes the actual mixed map
+once, because the table still measures each tile with its neighbours at the same
+depth. The curve scripts now bisect on the cheap table and then correct against a
+real decode, so the dB they print is what a decoder delivers. It also removes a
+second, smaller error: the old table had distinct values for exits 0 and 1, which
+`decoder.forward` clamps away, so an argmin could select an exit that does not
+exist.
+
+Cost: K tiled decodes per frame instead of one trunk pass -- minutes, not hours.
+
+Everything measured with a real tiled decode was already right and does not
+move: the seam tables (`ctc_seam_ablation.py`, `seam_vs_qp.py`), the floor, the
+saturation points, the spatial repair measurement, the latency work.

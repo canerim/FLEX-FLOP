@@ -51,7 +51,9 @@ sys.path.insert(0, str(Path.home() / "DCVC"))
 
 import ctc_intra as C  # noqa: E402
 from flexuf.config import FlexUFConfig  # noqa: E402
-from flexuf.cost import exit_costs  # noqa: E402
+from flexuf.cost import exit_costs
+from flexuf.eval import (reference_frame_mse, tiled_exit_mses,
+                         true_frame_mse)  # noqa: E402
 from flexuf.model import FlexUFIntra, load_flexuf_state  # noqa: E402
 from flexuf.reference import reference_for  # noqa: E402
 
@@ -195,15 +197,12 @@ def main(argv):
                 xp = F.pad(x, (0, pw, 0, ph), mode="replicate") if (ph or pw) else x
                 qp = torch.full((1,), qp_v, dtype=torch.int32, device=dev)
                 y, q, aux = net._encode_to_latent(xp, qp)
-                nh, nw = (H + ph) // P, (W + pw) // P
-
-                def tl(img):
-                    e = ((img - xp) ** 2).mean(1)
-                    return (e.view(1, nh, P, nw, P).permute(0, 1, 3, 2, 4)
-                              .reshape(nh * nw, P * P).mean(1))
-
-                M = torch.stack([tl(o) for o in net.dec.forward_all_exits(y, q)], 1)
-                R = tl(ref.dec.forward_full(y, q)).mean()
+                # DEPLOYED path, one tiled decode per exit. The previous form
+                # used dec.forward_all_exits, which runs full frame, so the
+                # tiling penalty cancelled against the full-frame reference and
+                # never appeared in the reported dB (flexuf/eval.py).
+                M = tiled_exit_mses(net.dec, y, q, xp, cfg)
+                R = reference_frame_mse(ref.dec, y, q, xp)
                 # What the decoder can see: the stem it has already computed,
                 # and (for V2) the latent and the entropy model's scales, both
                 # of which it has decoded before the trunk runs. Still zero
@@ -227,11 +226,11 @@ def main(argv):
                                            (stem, qp, cfg.feature_patch), px))
                     print(f"  router costs {100*rshare:.4f}% of the decode; "
                           f"charged against every saving below\n")
-                cache.append((M, R, lp))
+                cache.append((M, R, lp, y, q, xp))
 
             def at_beta(beta):
                 SV = SVR = DB = n = 0.0
-                for M, R, lp in cache:
+                for M, R, lp, _y, _q, _xp in cache:
                     k = (lp - beta * cost[None, :]).argmax(1)
                     # rshare is added to the cost, i.e. subtracted from the
                     # saving: the decoder pays for the router here.
@@ -242,13 +241,28 @@ def main(argv):
                     n += 1
                 return 100 * SV / n, DB / n, 100 * SVR / n
 
+            def true_db(beta):
+                """What a decode of the router's actual map delivers.
+
+                The table measures each tile with its neighbours at the same
+                exit; a routed frame is mixed. One real decode per frame settles
+                it, which is affordable outside the bisection but not inside.
+                """
+                tot = 0.0
+                for M, R, lp, y_, q_, xp_ in cache:
+                    k = (lp - beta * cost[None, :]).argmax(1).clamp(
+                        min=cfg.split_depth)
+                    tot += (10 * torch.log10(
+                        true_frame_mse(net.dec, y_, q_, xp_, k) / R)).item()
+                return tot / len(cache)
+
             if a.at_lam is not None:
                 # Same lambda for both, so nothing here depends on the tilt or
                 # on which budget was chosen. Whatever separates them is the
                 # router failing to predict what the search would have picked.
                 lam = a.at_lam
                 SO = SR = DO = DR = AG = RG = n = 0.0
-                for M, R, lp in cache:
+                for M, R, lp, y_, q_, xp_ in cache:
                     ko = (M + lam * cost[None, :]).argmin(1)
                     kr = lp.argmax(1)
                     SO += (1 - cost[ko].mean()).item()
@@ -278,26 +292,44 @@ def main(argv):
             # -50 did not reach the all-deepest allocation: a confident head
             # has log-probability gaps of hundreds, and the masked exits sit at
             # -1e4, so the tilt has to be able to outweigh those.
-            lo, hi = -2.0e4, 2.0e4
-            if at_beta(lo)[1] > TARGET:      # even the deepest choice overshoots
-                sv, db, svr = at_beta(lo)
+            LO, HI = -2.0e4, 2.0e4
+            if true_db(LO) > TARGET:         # even the deepest choice overshoots
+                sv, db, svr = at_beta(LO)
                 rows.append({"qp": qp_v, "saving_pct": None,
-                             "floor_db": db, "budget_reachable": False})
-                print(f"  {qp_v:>4}{'—':>10}{'—':>12}{db:>10.4f}"
+                             "floor_db": true_db(LO), "budget_reachable": False})
+                print(f"  {qp_v:>4}{'—':>10}{'—':>12}{true_db(LO):>10.4f}"
                       f"{'floor > budget':>16}")
                 continue
-            for _ in range(60):
-                mid = 0.5 * (lo + hi)
-                if at_beta(mid)[1] <= TARGET:
-                    lo = mid
-                else:
-                    hi = mid
-            sv, db, svr = at_beta(lo)
+
+            def bisect_to(t):
+                lo, hi = LO, HI
+                if at_beta(hi)[1] <= t:
+                    return hi
+                for _ in range(60):
+                    mid = 0.5 * (lo + hi)
+                    if at_beta(mid)[1] <= t:
+                        lo = mid
+                    else:
+                        hi = mid
+                return lo
+
+            # Bisect on the cheap table, then correct against a real decode of
+            # the router's actual map. Same two-level scheme as
+            # signalled_curve.py, and for the same reason.
+            inner, beta, td = TARGET, None, None
+            for _ in range(6):
+                beta = bisect_to(inner)
+                td = true_db(beta)
+                if abs(td - TARGET) < 5e-4:
+                    break
+                inner = inner + (TARGET - td)
+            sv, db_table, svr = at_beta(beta)
             rows.append({"qp": qp_v, "saving_pct": sv,
-                         "saving_pct_vs_release": svr, "db_vs_uf": db,
-                         "beta": lo, "bpp_added": 0.0, "map_bits": 0,
+                         "saving_pct_vs_release": svr, "db_vs_uf": td,
+                         "db_vs_uf_table": db_table,
+                         "beta": beta, "bpp_added": 0.0, "map_bits": 0,
                          "budget_reachable": True})
-            print(f"  {qp_v:>4}{sv:>9.2f}%{svr:>11.2f}%{db:>10.4f}{lo:>10.3f}")
+            print(f"  {qp_v:>4}{sv:>9.2f}%{svr:>11.2f}%{td:>10.4f}{beta:>10.3f}")
 
     (ROOT / a.out).write_text(json.dumps(
         {"ckpt": a.ckpt, "ckpt_epoch": ck.get("epoch"), "ckpt_step": ck.get("step"),

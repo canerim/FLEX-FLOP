@@ -50,7 +50,8 @@ sys.path.insert(0, str(Path.home() / "DCVC"))
 
 import ctc_intra as C  # noqa: E402
 from flexuf.config import FlexUFConfig  # noqa: E402
-from flexuf.cost import exit_costs  # noqa: E402
+from flexuf.cost import exit_costs
+from flexuf.eval import tiled_exit_mses  # noqa: E402
 from flexuf.model import FlexUFIntra, load_flexuf_state  # noqa: E402
 
 
@@ -105,7 +106,8 @@ def main(argv):
                     return (e.view(1, nh, P, nw, P).permute(0, 1, 3, 2, 4)
                              .reshape(nh * nw, P * P).mean(1))
 
-                M = torch.stack([tl(o) for o in net.dec.forward_all_exits(y, q)], 1)
+                # DEPLOYED path -- see flexuf/eval.py.
+                M = tiled_exit_mses(net.dec, y, q, xp, cfg)
                 R = tl(ref.dec.forward_full(y, q))
                 per_frame.append((M, R))
 

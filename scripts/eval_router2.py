@@ -27,6 +27,7 @@ sys.path.insert(0, str(Path.home() / "DCVC"))
 import ctc_intra as C
 from flexuf.config import FlexUFConfig
 from flexuf.cost import exit_costs
+from flexuf.eval import tiled_exit_mses
 from flexuf.model import FlexUFIntra, load_flexuf_state
 from flexuf.router.head2 import StemRouterHeadV2
 
@@ -74,10 +75,10 @@ with torch.no_grad():
             qp = torch.full((1,), qp_v, dtype=torch.int32, device=dev)
             y, q, aux = net._encode_to_latent(xp, qp)
             nh, nw = (H + ph) // P, (Wd + pw) // P
-            M = torch.stack([
-                (((o - xp) ** 2).mean(1).view(1, nh, P, nw, P)
-                 .permute(0, 1, 3, 2, 4).reshape(nh * nw, P * P).mean(1))
-                for o in net.dec.forward_all_exits(y, q)], 1)
+            # DEPLOYED path -- see flexuf/eval.py. The agreement this script
+            # reports is agreement with the oracle for the decoder that ships,
+            # not for a full-frame one.
+            M = tiled_exit_mses(net.dec, y, q, xp, cfg)
             stem = net.dec.upsample(y)
             for g in range(cfg.split_depth):
                 stem = net.dec.groups[g](stem)

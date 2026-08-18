@@ -39,6 +39,8 @@ sys.path.insert(0, str(Path.home() / "DCVC"))
 import ctc_intra as C
 from flexuf.config import FlexUFConfig
 from flexuf.cost import exit_costs
+from flexuf.eval import (per_tile_mse, reference_frame_mse, tiled_exit_mses,
+                         true_frame_mse)
 from flexuf.model import FlexUFIntra, load_flexuf_state
 from flexuf.reference import reference_for
 
@@ -167,14 +169,13 @@ with torch.no_grad():
             xp = F.pad(x, (0, pw, 0, ph), mode="replicate") if (ph or pw) else x
             qp = torch.full((1,), qp_v, dtype=torch.int32, device=dev)
             y, q, aux = net._encode_to_latent(xp, qp)
-            nh, nw = (H + ph) // P, (W + pw) // P
-            def tl(img):
-                e = ((img - xp) ** 2).mean(1)
-                return (e.view(1, nh, P, nw, P).permute(0, 1, 3, 2, 4)
-                         .reshape(nh * nw, P * P).mean(1))
-            M = torch.stack([tl(o) for o in net.dec.forward_all_exits(y, q)], 1)
-            R = tl(ref.dec.forward_full(y, q)).mean()
-            cache.append((M, R, H * W))
+            # The per-exit table is built on the DEPLOYED path -- one tiled
+            # decode per exit -- not with dec.forward_all_exits, which runs full
+            # frame and cancels the tiling penalty out of the reported dB. See
+            # flexuf/eval.py for the measurement that forced this change.
+            M = tiled_exit_mses(net.dec, y, q, xp, cfg)
+            R = reference_frame_mse(ref.dec, y, q, xp)
+            cache.append((M, R, H * W, y, q, xp))
 
         # dB is averaged PER FRAME, then over frames -- the convention
         # test_video.py uses and the one every published DCVC-UF number follows.
@@ -184,7 +185,7 @@ with torch.no_grad():
         # for a reader to discover by comparing two tables.
         def at_lam(lam):
             SV = SVR = DB = EXTRA = MB = n = 0.0
-            for M, R, npx in cache:
+            for M, R, npx, _y, _q, _xp in cache:
                 # The ENCODER's decision: it has the source, so this is exact.
                 k = (M + lam * cost[None, :]).argmin(1)
                 mb = map_bits(k, cfg.num_exits)
@@ -203,33 +204,56 @@ with torch.no_grad():
                 MB += mb; n += 1
             return 100 * SV / n, DB / n, EXTRA / n, MB / n, 100 * SVR / n
 
-        # Bisection on lambda, as in paper_curve. Reading the best sample of a
-        # 25-point grid under the budget left this number short of what the
-        # system reaches: the grid's closest point at qp0 sat at 0.0975 dB, and
-        # the saving between there and 0.1 is not small. Both dB and saving
-        # increase with lambda, so bisection is valid, and with the per-frame
-        # work cached each step costs one argmin.
-        # TARGET is set once from --budget at module scope. It used to be
-        # re-assigned here, inside the per-QP loop: with --budget wired up but
-        # this line left in place, every run would have reported 0.1 dB results
-        # in a file named for 0.3 or 0.5, and nothing downstream could tell.
-        # The FLOOR first. At lambda = 0 nothing is charged for compute, so every
-        # tile takes its lowest-MSE exit -- that is the least distortion this
-        # ladder can produce, and if it already exceeds the budget then no
-        # allocation meets the budget and there is nothing to report.
+        def true_db(lam):
+            """The dB an actual decode delivers at this lambda.
+
+            The table above measures each tile with every OTHER tile at the same
+            exit. A routed frame is mixed, so a tile's border sees whatever depth
+            its neighbour chose, and only a real decode of the real map settles
+            it. One decode per frame, so this is affordable outside the
+            bisection but not inside it.
+            """
+            tot = 0.0
+            for M, R, _npx, y_, q_, xp_ in cache:
+                k = (M + lam * cost[None, :]).argmin(1).clamp(min=cfg.split_depth)
+                mse = true_frame_mse(net.dec, y_, q_, xp_, k)
+                tot += (10 * torch.log10(mse / R)).item()
+            return tot / len(cache)
+
+        # Bisection on lambda. Reading the best sample of a 25-point grid under
+        # the budget left this number short of what the system reaches: the
+        # grid's closest point at qp0 sat at 0.0975 dB, and the saving between
+        # there and 0.1 is not small. Both dB and saving increase with lambda,
+        # so bisection is valid.
         #
-        # Without this check the bisection's invariant (at_lam(lo) <= target) is
-        # never established, lo stays at 0.0, and the lambda-0 point gets
-        # reported as though it were the answer. VERBATIM hit exactly that: its
-        # deepest exit sits 0.1365 dB below the release at qp0, and the table
-        # would have said "13.7% saved" in a column headed 0.1 dB.
-        # at_lam returns (saving, dB, bpp_added, map_bits, saving_vs_release) --
-        # saving FIRST. Unpacking it as (db, sv, ...) put the saving into
-        # floor_db, so the test read "13.72 > 0.1" and declared every rate
-        # unreachable, VERBATIM's correctly and any healthy run's wrongly. The
-        # guard against reporting a number at the wrong dB was itself reporting
-        # a number at the wrong dB.
-        floor_sv, floor_db, _, _, _ = at_lam(0.0)
+        # TARGETS is set once from --budget/--budgets at module scope. The
+        # target used to be re-assigned inside this loop: with --budget wired up
+        # but that line left in place, every run reported 0.1 dB results in a
+        # file named for 0.3 or 0.5, and nothing downstream could tell.
+        #
+        # The FLOOR first, on the deployed path. At lambda = 0 nothing is
+        # charged for compute, so every tile takes its lowest-MSE exit -- the
+        # least distortion this ladder can produce. If that already exceeds the
+        # budget, no allocation meets it and there is nothing to report.
+        #
+        # Measured with a real decode, not with the table: the floor is exactly
+        # where the tiling penalty is largest, because every tile is running its
+        # full per-tile depth.
+        floor_db = true_db(0.0)
+
+        def bisect_to(t):
+            """Largest lambda whose TABLE dB stays under t. 60 halvings."""
+            if at_lam(1.0)[1] < t:
+                return 1.0
+            lo, hi = 0.0, 1.0
+            for _ in range(60):
+                mid = 0.5 * (lo + hi)
+                if at_lam(mid)[1] <= t:
+                    lo = mid
+                else:
+                    hi = mid
+            return lo
+
         for target in TARGETS:
             if floor_db > target:
                 print(f"  {qp_v:>4}{target:>7.2f}{'—':>10}"
@@ -239,30 +263,33 @@ with torch.no_grad():
                              "floor_db": floor_db, "budget_db": target,
                              "budget_reachable": False})
                 continue
-            # Both dB and saving increase with lambda, so bisection is valid,
-            # and with the per-frame work cached each step costs one argmin.
-            if at_lam(1.0)[1] >= target:
-                lo, hi = 0.0, 1.0
-                for _ in range(60):
-                    mid = 0.5 * (lo + hi)
-                    if at_lam(mid)[1] <= target:
-                        lo = mid
-                    else:
-                        hi = mid
-                best = at_lam(lo)
-            else:                   # budget above what the ladder can spend
-                best = at_lam(1.0)
-            sv, db, extra, mb, svr = best
-            rows.append({"qp": qp_v, "saving_pct": sv, "db_vs_uf": db,
-                         # Kept side by side: saving_pct is what every stored
-                         # result and every comparison already uses, svr is
-                         # what the claim actually means -- the release is 1.0,
-                         # our deepest exit is 1.0095.
+
+            # Bisect on the cheap table, then correct with a real decode. The
+            # table measures each tile with its neighbours at the SAME exit; a
+            # routed frame is mixed, so the two differ by a small, nearly
+            # constant residual. Shifting the proxy target by that residual and
+            # re-bisecting converges in two or three passes, and each pass costs
+            # one decode per frame rather than one per bisection step.
+            inner, lam, td = target, None, None
+            for _ in range(6):
+                lam = bisect_to(inner)
+                td = true_db(lam)
+                if abs(td - target) < 5e-4:
+                    break
+                inner = max(1e-4, min(1.0, inner + (target - td)))
+            sv, _db_table, extra, mb, svr = at_lam(lam)
+            rows.append({"qp": qp_v, "saving_pct": sv,
+                         # db_vs_uf is now what a decoder DELIVERS, from one
+                         # real decode of the chosen map. db_vs_uf_table is the
+                         # uniform-exit table's estimate, kept so the residual
+                         # between them stays visible instead of being an
+                         # unexamined modelling assumption.
+                         "db_vs_uf": td, "db_vs_uf_table": _db_table,
                          "saving_pct_vs_release": svr,
-                         "bpp_added": extra, "map_bits": mb,
+                         "lam": lam, "bpp_added": extra, "map_bits": mb,
                          "floor_db": floor_db, "budget_db": target,
                          "budget_reachable": True})
-            print(f"  {qp_v:>4}{target:>7.2f}{svr:>9.2f}%{db:>16.4f}"
+            print(f"  {qp_v:>4}{target:>7.2f}{svr:>9.2f}%{td:>16.4f}"
                   f"{extra:>12.6f}{mb:>13.0f}")
 
 Path(a.out).parent.mkdir(exist_ok=True)

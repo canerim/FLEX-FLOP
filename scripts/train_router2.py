@@ -26,6 +26,7 @@ from src.datasets.image_dataset import ImageFolder
 from src.utils.common import get_training_lambdas
 from flexuf.config import QP_LEVELS, FlexUFConfig
 from flexuf.cost import exit_costs
+from flexuf.eval import tiled_exit_mses
 from flexuf.model import FlexUFIntra, load_flexuf_state
 from flexuf.router.head2 import StemRouterHeadV2, oracle_ce_loss
 from flexuf.router.losses import regret_objective
@@ -70,10 +71,12 @@ while step < a.steps:
         with torch.no_grad():
             y, q, aux = net._encode_to_latent(x, qp)
             nh, nw = x.shape[-2] // P, x.shape[-1] // P
-            M = torch.stack([
-                (((o - x) ** 2).mean(1).view(B, nh, P, nw, P)
-                 .permute(0, 1, 3, 2, 4).reshape(B * nh * nw, P * P).mean(1))
-                for o in net.dec.forward_all_exits(y, q)], 1)
+            # The oracle the router imitates must be the oracle for the DEPLOYED
+            # decode. dec.forward_all_exits runs full frame, so a router trained
+            # against it learns to predict the best exit for a decoder that is
+            # not the one running at inference -- and the error is not uniform
+            # across exits, it grows with how many blocks ran per tile.
+            M = tiled_exit_mses(net.dec, y, q, x, cfg)
             stem = net.dec.upsample(y)
             for g in range(cfg.split_depth):
                 stem = net.dec.groups[g](stem)
