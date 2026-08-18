@@ -142,7 +142,33 @@ implementation of the baseline computes.
 YUV 4:2:0 PSNR the baseline reports agree within $0.003\dB$ on identical
 decodes across the whole rate range; we verified this rather than assuming it.
 
-\section{Negative and withdrawn results}
+\section{Claims this work made and then measured}
+
+Four statements that appeared in earlier drafts of this work, and what the
+experiment said. They are collected because the pattern matters more than any one
+of them: each was plausible, argued from a mechanism, and wrong in a way only a
+measurement could show.
+
+\begin{itemize}\itemsep3pt
+\item \textbf{``The corrupted-area fraction explains why split depth matters.''}
+      It predicts the seam with $160$--$264\%$ error. The penalty follows $b^2$,
+      which fits to $12$--$22\%$, because the area saturates once every pixel is
+      contaminated and the damage does not.
+\item \textbf{``Canvas coupling is the clearest remaining gain, worth
+      $3.5$--$5$ points.''} It removes $47$--$91\%$ of the floor and collapses the
+      routed saving --- $25.9\%$ to $4.2\%$ at $q32$, $19.3\%$ to $0.4\%$ at
+      $q63$. Coupling is exact at uniform depth and routing is the deliberate
+      violation of that condition.
+\item \textbf{``A tile size chosen per resolution is the obvious extension.''}
+      $128$\,px tiles help only at $416{\times}240$ ($+2.4$ points) and cost
+      $1.7$--$3.3$ points elsewhere, including at $832{\times}480$ where the tile
+      count rises from 8 to 28 and the saving still falls.
+\item \textbf{``Configuration A costs the encoder about $1.21$ decodes.''} The
+      exact search costs $4.6$. The $1.21$ figure was the full-frame table, which
+      may be used to rank but not to report.
+\end{itemize}
+
+\section{Negative results}
 
 We list these because they cost real time and are not otherwise recoverable from
 the paper.
@@ -162,6 +188,29 @@ the paper.
       against a frozen decoder is reliable and is what we report.
 \item \textbf{A halo through the per-tile trunk.} $1.745\times$ the cost of a
       full decode --- more than routing saves.
+\item \textbf{A single router across all rates.} It reaches within $1.7$ points
+      of the oracle near the $\lambda$ it was trained at and falls $13.3$ points
+      behind at the far end, tracking the tilt $|\beta|$ the bisection applies to
+      move it. A router per operating point, not a better architecture.
+\end{itemize}
+
+\section{Things that were not running}
+
+Two checks this work cites were not executing, and both were found by running
+them rather than by reading them.
+
+\begin{itemize}\itemsep2pt
+\item The bit-exactness test for the warm start declared \texttt{qp} as a bare
+      parameter with no \texttt{parametrize}, so \texttt{pytest} looked for a
+      fixture of that name and errored at setup. It has been cited by name for
+      the claim that the deepest exit reproduces the released decoder exactly.
+      Parametrised over three rates and every warm start on disk: six cases,
+      all exact.
+\item The equality check for the sorted per-tile loop compared the two paths on a
+      decode of \texttt{torch.zeros}, where every tile carries the same latent
+      and any permutation is trivially exact. On random content with a mixed exit
+      map the result is still bit-identical on CUDA, but the original check could
+      not have failed.
 \end{itemize}
 
 {\small
