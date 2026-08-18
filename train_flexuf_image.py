@@ -97,6 +97,24 @@ def parse_args(argv):
     p.add_argument("-e", "--epochs", type=int, default=105)
     p.add_argument("--lambdas", type=float, nargs="+", default=[10.0, 2048.0])
     p.add_argument("-n", "--num_workers", type=int, default=8)
+    p.add_argument("--steps_per_epoch", type=int, default=0,
+                   help="cap the optimiser steps in one epoch (0 = a full pass "
+                        "over the dataset). Microsoft's schedule is indexed by "
+                        "EPOCH -- 45 at lr 2e-4, then 25 at 5e-5, and so on -- "
+                        "and a full pass over 379,614 OpenImages at batch 16 "
+                        "with 512px crops takes far longer than any experiment "
+                        "budget here, so the schedule's later stages were never "
+                        "reached by any run: the six live ones are at epoch 0-4 "
+                        "after two days. Capping the steps keeps the SHAPE of "
+                        "the schedule -- the same learning rates in the same "
+                        "order for the same number of epochs -- while fitting "
+                        "the wall-clock available. The sampler is reshuffled "
+                        "every epoch, so consecutive epochs see different "
+                        "images and the run still covers the dataset; it simply "
+                        "covers it across epochs rather than within one. "
+                        "Counted in OPTIMISER steps, so it means the same thing "
+                        "whether the effective batch is reached in one "
+                        "micro-batch or several.")
     p.add_argument("--save_dir", type=str, required=True)
     p.add_argument("--train_dataset", type=str, required=True)
     # -- FLEX-UF's arguments ------------------------------------------------
@@ -195,6 +213,20 @@ def parse_args(argv):
                         "closes one group's worth of gap and the chain carries the "
                         "rest -- which also matches our structure, where a shallow "
                         "exit is literally a prefix of a deep one.")
+    p.add_argument("--compress_schedule", action="store_true",
+                   help="spread Microsoft's 105-entry schedule over --epochs "
+                        "instead of indexing it one-for-one. The recipe is 45 "
+                        "epochs at 2e-4, 25 at 5e-5, 20 at 1e-5, then four "
+                        "short 512px stages ending at 1e-6. Running only its "
+                        "first block leaves the model at the highest learning "
+                        "rate it ever sees -- never annealed, and an unannealed "
+                        "model is reliably worse than the same budget spent "
+                        "with a decay. This maps epoch e to strategy index "
+                        "round(e * 105 / epochs), so a shorter run still "
+                        "traverses the whole shape: the same rates in the same "
+                        "order and the same proportions, ending at 1e-6. Off by "
+                        "default, so verbatim indexing is what you get unless "
+                        "you ask for this.")
     p.add_argument("--epoch_offset", type=int, default=0,
                    help="where in Microsoft's 105-epoch schedule to START. 0 is "
                         "correct from scratch and WRONG for a warm start: 2e-4 is "
@@ -278,7 +310,12 @@ def train_one_epoch(net, loader, optimizer, epoch, cfg, args, device, logf,
     strategy = get_training_strategy()
     net.train()
 
-    idx = min(len(strategy) - 1, epoch + args.epoch_offset)
+    if args.compress_schedule and args.epochs > 0:
+        idx = min(len(strategy) - 1,
+                  int(round((epoch + args.epoch_offset) * len(strategy)
+                            / args.epochs)))
+    else:
+        idx = min(len(strategy) - 1, epoch + args.epoch_offset)
     _, lr, patch_w, patch_h = strategy[idx]
     # The recipe trains at 256x256 until epoch 90. With a 256px tile that is a
     # single tile per crop — no borders, no seams — so patched training would be
@@ -307,6 +344,12 @@ def train_one_epoch(net, loader, optimizer, epoch, cfg, args, device, logf,
     n_skipped = 0
     total_norm = float("nan")
     for i, batch in enumerate(loader):
+        # A capped epoch stops here. Placed before the work rather than after
+        # it so the cap is exact: `--steps_per_epoch 1500` performs 1500
+        # optimiser steps, not 1500 plus whatever the loader had prefetched.
+        if args.steps_per_epoch and i >= args.steps_per_epoch * max(
+                1, args.grad_accum):
+            break
         batch = [t.to(device, non_blocking=True) for t in batch]
         x, qp, lambdas = batch[0], batch[-2], batch[-1]
 
