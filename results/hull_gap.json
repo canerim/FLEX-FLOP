@@ -1,0 +1,52 @@
+{
+  "seq": "Bosphorus_1920x1080_120fps_420_8bit_YUV.yuv",
+  "qp": 32,
+  "n_tiles": 40,
+  "n_hull_allocations": 92,
+  "n_pareto": 635,
+  "note": "hull = reachable by some lambda; pareto = best at that budget whether or not any lambda reaches it",
+  "rows": [
+    {
+      "budget_db": 0.05,
+      "hull_saving": 12.397788912057873,
+      "pareto_saving": 12.420750000000002,
+      "gap_pts": 0.0229610879421287
+    },
+    {
+      "budget_db": 0.08,
+      "hull_saving": 25.44329985976219,
+      "pareto_saving": 25.488500000000002,
+      "gap_pts": 0.04520014023781016
+    },
+    {
+      "budget_db": 0.1,
+      "hull_saving": 30.47484397888184,
+      "pareto_saving": 30.49575,
+      "gap_pts": 0.020906021118161533
+    },
+    {
+      "budget_db": 0.12,
+      "hull_saving": 33.78239691257476,
+      "pareto_saving": 33.8035,
+      "gap_pts": 0.021103087425238698
+    },
+    {
+      "budget_db": 0.15,
+      "hull_saving": 37.439392805099494,
+      "pareto_saving": 37.46050000000001,
+      "gap_pts": 0.021107194900515935
+    },
+    {
+      "budget_db": 0.18,
+      "hull_saving": 40.048059821128845,
+      "pareto_saving": 40.04624999999999,
+      "gap_pts": -0.0018098211288517518
+    },
+    {
+      "budget_db": 0.2,
+      "hull_saving": 41.16605997085572,
+      "pareto_saving": 41.164500000000004,
+      "gap_pts": -0.0015599708557161307
+    }
+  ]
+}
