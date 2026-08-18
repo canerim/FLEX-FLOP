@@ -701,6 +701,29 @@ def content(colw, fullw):
         r"<b>Table 7. Floor and saturation</b>, dB below the released decoder. "
         r"The floor is what tiling costs with no early exit at all; saturation "
         r"is where every tile reaches exit j and the ceiling is attained.")
+    figure("theory.png",
+           r"<b>Figure 9. The structure of the allocation</b>, on one frame. "
+           r"<b>a</b>, compute and distortion are monotone in the multiplier. "
+           r"<b>b</b>, the frontier between the floor (green) and saturation "
+           r"(orange); shaded regions are infeasible and wasted. <b>c</b>, what "
+           r"the Lagrangian reaches against the exact Pareto set, enumerated by "
+           r"dynamic programming — the two curves are indistinguishable.")
+    par(r"The construction has enough structure to state as propositions, and we "
+        r"verify each numerically rather than asserting it "
+        r"(scripts/verify_theory.py, six of six): the allocation decouples per "
+        r"tile; compute is non-increasing and distortion non-decreasing in λ; "
+        r"the sweep traces the lower convex hull and cannot reach an interior "
+        r"point; λ=0 attains the least distortion the ladder can produce; beyond "
+        r"a finite λ, computable in closed form, the allocation is the constant "
+        r"map to exit j at cost exactly c_j; and the ceiling is a function of "
+        r"the split depth alone.")
+    par(r"The third has a practical edge. Because the sweep reaches only hull "
+        r"vertices, a budget between two of them is not attainable. We measured "
+        r"what that costs by enumerating the <i>exact</i> Pareto set with "
+        r"dynamic programming over tiles — feasible because the cost alphabet "
+        r"has four symbols: the sweep reaches 93 allocations against a Pareto "
+        r"set of 635, and convexity costs at most 0.05 saving points. The "
+        r"standard construction is essentially optimal here.")
     par(r"Two numbers bound what any budget can do. The <b>floor</b> is the "
         r"distortion of a tiled decode with every tile at full depth — pure "
         r"tiling penalty, \FloorLow dB at q0 rising to \FloorHigh dB at q63. "

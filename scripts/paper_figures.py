@@ -27,6 +27,7 @@ WANTED = [
     "contamination.png",      # seam against per-tile depth
     "map_transfer.png",       # reusing a map across time and rate
     "rd_spread.png",          # rate-quality plane and per-sequence spread
+    "theory.png",             # the structure of the allocation
     "latency.png",
 ]
 
