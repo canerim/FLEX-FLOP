@@ -308,6 +308,38 @@ if d and lat:
     mac("IntraGmac", f"{INTRA_GMAC:.1f}")
     mac("GmacAtBudget", f"{INTRA_GMAC*(1-mean01/100):.0f}")
 
+# ------------------------------------------------------------- positioning
+print("positioning")
+INTRA_GMAC_ = 453.5
+PX = 1920 * 1080
+d, _ = pick("signalled_RECIPE512_ctc53.json")
+if d:
+    by = {r["qp"]: r for r in d["rows"]
+          if abs(r["budget_db"] - 0.1) < 1e-9 and r.get("budget_reachable")}
+    mean01 = sum(by[q]["saving_pct_vs_release"] for q in QPS if q in by) / \
+        len([q for q in QPS if q in by])
+    ours_kmac = INTRA_GMAC_ * (1 - mean01 / 100) * 1e9 / PX / 1e3
+    rel_kmac = INTRA_GMAC_ * 1e9 / PX / 1e3
+    rows = [
+        ("SlimCAE~\\cite{slimcae}", "width", "per stream", "yes"),
+        ("Slimmable video~\\cite{slimvc}", "width", "per stream", "yes"),
+        ("EVC~\\cite{evc}", "mask / pruning", "per model", "yes"),
+        ("Spatial competition~\\cite{spatialcompetition}", "which codec",
+         "per region", "yes"),
+        ("DCVC-RT~\\cite{dcvcrt}", "architecture", "fixed", "yes"),
+        ("\\textbf{FLEX-UF}", "\\textbf{decoder depth}",
+         "\\textbf{per region}", "\\textbf{no}"),
+    ]
+    lines = [r"\begin{tabular}{llll}", r"\toprule",
+             r"Method & What varies & Granularity & New bitstream \\",
+             r"\midrule"]
+    for a_, b_, c_, e_ in rows:
+        lines.append(f"{a_} & {b_} & {c_} & {e_} \\\\")
+    lines += [r"\bottomrule", r"\end{tabular}"]
+    w("positioning.tex", "\n".join(lines))
+    mac("OursKMacPx", f"{ours_kmac:.0f}")
+    mac("RelKMacPx", f"{rel_kmac:.0f}")
+
 # ------------------------------------------------------------------ macros
 w("macros.tex", "\n".join(f"\\newcommand{{\\{k}}}{{{v}}}"
                           for k, v in sorted(MACROS.items())))

@@ -308,6 +308,12 @@ def content(colw, fullw):
         r"problem, though the cost of tile borders is rarely quantified. The "
         r"closest prior work on the border itself is the per-channel AR(1) "
         r"padding of Kaseva et al. [11], which we implement and evaluate.")
+    tbl("positioning",
+        r"<b>Table 1. Where this sits.</b> Complexity control in learned "
+        r"compression varies the model; we vary how much of a fixed model runs "
+        r"where. The last column is what makes the difference operational: every "
+        r"other row requires a decoder that matches the encoder that produced "
+        r"the stream.")
     h2("Complexity control in learned compression.")
     par(r"SlimCAE [22] and slimmable video codecs [23] expose several widths of "
         r"one model; the choice is per stream and changes the encoder, so the "

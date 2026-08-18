@@ -162,6 +162,16 @@ measured ordering (Section~\ref{sec:seam}) is new; the closest prior work is the
 per-channel AR(1) padding of Kaseva~\etal~\cite{arls}, which we implement and
 evaluate.
 
+\begin{table}[t]
+\centering
+\resizebox{\columnwidth}{!}{\input{tables/positioning}}
+\caption{\textbf{Where this sits.} Complexity control in learned compression
+varies the model; we vary how much of a fixed model runs where. The last column
+is what makes the difference operational: every other row requires a decoder that
+matches the encoder that produced the stream.}
+\label{tab:positioning}
+\end{table}
+
 \paragraph{Complexity control in learned compression.} SlimCAE~\cite{slimcae}
 and slimmable video codecs~\cite{slimvc} expose several widths of one model.
 The choice is per stream and it changes the encoder, so the bitstream is not
