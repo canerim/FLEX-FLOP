@@ -22,7 +22,15 @@ import naturestyle as ns
 ns.apply()
 
 TAG = sys.argv[1] if len(sys.argv) > 1 else "RECIPE512"
-d = json.load(open(R / f"results/saturation_{TAG}.json"))
+def _pick(*names):
+    for n in names:
+        if (R / "results" / n).exists():
+            print(f"  reading {n}")
+            return json.load(open(R / "results" / n))
+    raise SystemExit(f"none of {names} exists")
+
+
+d = _pick(f"saturation_{TAG}_ctc53.json", f"saturation_{TAG}.json")
 rows = d["rows"]
 qp = np.array([r["qp"] for r in rows], float)
 sat = np.array([r["saturation_db"] for r in rows])

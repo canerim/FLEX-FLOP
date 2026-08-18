@@ -207,6 +207,41 @@ if d:
     mac("RandomLowRate", f"{r0['random']['saving']:.1f}")
     mac("RandomLowDb", f"{r0['random']['db']:.3f}")
 
+# ------------------------------------------------------------- complexity
+print("complexity")
+INTRA_GMAC = 453.5          # DMCI at 1080p, scripts/mac_audit.py
+d, _ = pick("signalled_RECIPE512_ctc53.json", "signalled_RECIPE512_b135.json")
+lat, _ = pick("latency_RECIPE512_sorted.json")
+if d and lat:
+    by = {b: {r["qp"]: r for r in d["rows"]
+              if abs(r["budget_db"] - b) < 1e-9 and r.get("budget_reachable")}
+          for b in d["budgets"]}
+    L = {r["qp"]: r for r in lat["rows"]}
+    lq = sorted(L)[0]
+    r01 = by[0.1]
+    mean01 = sum(r01[q]["saving_pct_vs_release"] for q in QPS if q in r01) / \
+        len([q for q in QPS if q in r01])
+    rows = [
+        ("Released DCVC-UF~\\cite{dcvcuf}", INTRA_GMAC, 100.0,
+         L[lq]["ms_stock"], 0.0),
+        ("FLEX-UF, all tiles deepest", INTRA_GMAC * 1.0095, 100.95,
+         L[lq]["ms_deep"], None),
+        (f"FLEX-UF, {0.1:.1f}\\,dB budget",
+         INTRA_GMAC * (1 - mean01 / 100), 100 - mean01,
+         L[lq].get("ms_routed_sorted", L[lq]["ms_routed"]), None),
+        ("FLEX-UF, architectural ceiling",
+         INTRA_GMAC * (1 - 41.9114 / 100), 100 - 41.9114, None, None),
+    ]
+    lines = [r"\begin{tabular}{lrrr}", r"\toprule",
+             r"Decoder & GMAC & \% of release & ms \\", r"\midrule"]
+    for name, gm, pc, ms, _ in rows:
+        lines.append(f"{name} & {gm:.0f} & {pc:.1f} & "
+                     + (f"{ms:.0f}" if ms else "--") + r" \\")
+    lines += [r"\bottomrule", r"\end{tabular}"]
+    w("complexity.tex", "\n".join(lines))
+    mac("IntraGmac", f"{INTRA_GMAC:.1f}")
+    mac("GmacAtBudget", f"{INTRA_GMAC*(1-mean01/100):.0f}")
+
 # ------------------------------------------------------------------ macros
 w("macros.tex", "\n".join(f"\\newcommand{{\\{k}}}{{{v}}}"
                           for k, v in sorted(MACROS.items())))

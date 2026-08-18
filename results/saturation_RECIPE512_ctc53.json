@@ -1,0 +1,65 @@
+{
+  "ckpt": "runs/RECIPE512/ckpt_eval.pth.tar",
+  "ckpt_epoch": 0,
+  "ceiling_pct": 41.91139340400696,
+  "exit_j": 2,
+  "cost_j": 0.5808860659599304,
+  "n_frames": 53,
+  "note": "saturation_db = every tile at exit j; any budget at or above it reaches the ceiling, any budget below it does not",
+  "rows": [
+    {
+      "qp": 0,
+      "saturation_db": 0.17913864257763018,
+      "floor_db": 0.03606705714614605,
+      "saving_pct_vs_release": 41.91139340400696
+    },
+    {
+      "qp": 8,
+      "saturation_db": 0.19448017223544842,
+      "floor_db": 0.04015886639508436,
+      "saving_pct_vs_release": 41.91139340400696
+    },
+    {
+      "qp": 16,
+      "saturation_db": 0.21938385153716466,
+      "floor_db": 0.04524077130657322,
+      "saving_pct_vs_release": 41.91139340400696
+    },
+    {
+      "qp": 24,
+      "saturation_db": 0.25135549055939577,
+      "floor_db": 0.05033574325366402,
+      "saving_pct_vs_release": 41.91139340400696
+    },
+    {
+      "qp": 32,
+      "saturation_db": 0.28190643185714503,
+      "floor_db": 0.05429050696240562,
+      "saving_pct_vs_release": 41.91139340400696
+    },
+    {
+      "qp": 40,
+      "saturation_db": 0.30491188140410297,
+      "floor_db": 0.058629018140359306,
+      "saving_pct_vs_release": 41.91139340400696
+    },
+    {
+      "qp": 48,
+      "saturation_db": 0.3329586906815475,
+      "floor_db": 0.06223638876745442,
+      "saving_pct_vs_release": 41.91139340400696
+    },
+    {
+      "qp": 56,
+      "saturation_db": 0.365305484746987,
+      "floor_db": 0.0664810160754846,
+      "saving_pct_vs_release": 41.91139340400696
+    },
+    {
+      "qp": 63,
+      "saturation_db": 0.3955302557574128,
+      "floor_db": 0.07158995953933248,
+      "saving_pct_vs_release": 41.91139340400696
+    }
+  ]
+}

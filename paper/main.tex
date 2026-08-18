@@ -448,6 +448,19 @@ quality indices, so a single set of weights serves the whole rate range.
 Evaluation is on the \NumSeq\ sequences of the common test set --- UVG~\cite{uvg},
 MCL-JCV~\cite{mcljcv} and HEVC classes B, C, D and E --- one intra frame each.
 
+\paragraph{Measurement protocol.} Two details of the protocol change the numbers
+enough to be worth stating. First, the per-tile distortion table
+$D_{t,k}$ must be built on the \emph{deployed} decode path --- one tiled decode
+per exit --- and not by tapping the exits of a single full-frame forward pass.
+The latter is the natural implementation and is correct for training, but with a
+full-frame reference on the other side of the ratio the tiling penalty cancels
+and the reported quality is that of a decoder nobody ships. On our model the
+difference is $+0.035\dB$ at the deepest exit and $+0.008\dB$ at the shallowest;
+it is not a constant offset, it grows with how many blocks ran per tile, so it
+cannot be corrected after the fact. Second, after the allocation is chosen we
+decode that \emph{mixed} map once and report the distortion it actually
+produces.
+
 \paragraph{Reporting conventions.} Every dB is measured against the
 \emph{released} decoder's full-frame decode of the \emph{same} latent, and our
 side is the deployed tiled decode, so the tiling penalty is inside every number.
@@ -569,6 +582,16 @@ and the only remaining difference is the predictor's own $0.163\%$ of decode.
 
 \subsection{Complexity and wall-clock}
 \label{sec:wallclock}
+
+\begin{table}[t]
+\centering
+\input{tables/complexity}
+\caption{\textbf{Decoder complexity} at 1080p. Our deepest exit costs slightly
+more than the release because it still pays the seam-repair module; that
+$1.0095$, not $1.0$, is what every saving in this paper is \emph{not} divided by.
+Wall-clock is the sorted loop of Section~\ref{sec:wallclock}.}
+\label{tab:complexity}
+\end{table}
 
 \begin{table}[t]
 \centering

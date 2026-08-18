@@ -22,8 +22,16 @@ import naturestyle as ns
 ns.apply()
 
 TAG = sys.argv[1] if len(sys.argv) > 1 else "RECIPE512"
-fine = json.load(open(R / f"results/signalled_{TAG}_fine.json"))
-sat = json.load(open(R / f"results/saturation_{TAG}.json"))
+def _pick(*names):
+    for n in names:
+        if (R / "results" / n).exists():
+            print(f"  reading {n}")
+            return json.load(open(R / "results" / n))
+    raise SystemExit(f"none of {names} exists")
+
+
+fine = _pick(f"signalled_{TAG}_fine_ctc53.json", f"signalled_{TAG}_fine.json")
+sat = _pick(f"saturation_{TAG}_ctc53.json", f"saturation_{TAG}.json")
 CEIL = sat["ceiling_pct"]
 SATD = {r["qp"]: r["saturation_db"] for r in sat["rows"]}
 FLOOR = {r["qp"]: r["floor_db"] for r in sat["rows"]}
