@@ -134,7 +134,7 @@ def parse_args(argv):
                         "tile border. Measured pure seam penalty at qp63, j=2/128px: "
                         "zeros 0.840 dB, replicate 0.209, linear 0.522, arls 0.163 "
                         "(per-channel AR(1) least squares, arXiv:2502.12300). "
-                        "But arls costs +10.7% of decode wall-clock for +0.034 dB "
+                        "But arls costs +10.7%% of decode wall-clock for +0.034 dB "
                         "over replicate, which buys 1.34 trunk blocks of budget for "
                         "very little; 'learned' keeps its per-channel adaptivity at "
                         "replicate's cost, starting at exactly replicate.")
@@ -153,9 +153,9 @@ def parse_args(argv):
                         "against the oracle's choice) and widening them made it "
                         "worse, so both attempts were asking which fixed function "
                         "of a fixed stem predicts the right exit. This lets the "
-                        "stem become routable instead. Costs 0.044% of the decode "
+                        "stem become routable instead. Costs 0.044%% of the decode "
                         "-- a 1x1 of 384->16 on the stem, which sits at 1/64 of "
-                        "the pixel count; GridSeamRepair is 0.951% for scale.")
+                        "the pixel count; GridSeamRepair is 0.951%% for scale.")
     p.add_argument("--router_beta", type=float, default=1.0,
                    help="weight on the differentiable compute term sum_k P_k C_k. "
                         "Sweep it to trace the frontier; 0 means quality only.")
@@ -163,10 +163,10 @@ def parse_args(argv):
     p.add_argument("--tile_coupling", action="store_true",
                    help="let each per-tile 3x3 depthwise read its REAL neighbours "
                         "from a shared canvas instead of inventing them. The "
-                        "depthwise is 0.334% of a DepthConvBlock and the only "
-                        "operator with any spatial extent, so this costs +0.066% "
-                        "of the decode at 128px tiles and +0.032% at 256px, "
-                        "against GridSeamRepair's 0.951%. Where neighbouring tiles "
+                        "depthwise is 0.334%% of a DepthConvBlock and the only "
+                        "operator with any spatial extent, so this costs +0.066%% "
+                        "of the decode at 128px tiles and +0.032%% at 256px, "
+                        "against GridSeamRepair's 0.951%%. Where neighbouring tiles "
                         "share a depth the result is BIT-EXACT the full-frame "
                         "decode -- measured max|diff| = 0.0, the seam does not "
                         "shrink, it stops existing. Where they differ it is "
@@ -221,6 +221,12 @@ def parse_args(argv):
                         "Freezing the trunk removes the drift but leaves a 1x1 "
                         "adapter to replace six DepthConvBlocks; this keeps the "
                         "trunk trainable and pins only the deep end.")
+    p.add_argument("--anchor_per_sample", action="store_true",
+                   help="scale the anchor by each sample's OWN lambda instead "
+                        "of the batch mean. The batch mean makes the anchor 39x "
+                        "too strong at qp0 and 5x too weak at qp63, which is "
+                        "backwards: the drift is 10x larger at qp63. Off by "
+                        "default so running jobs are unaffected by a restart.")
     p.add_argument("--freeze_encoder", action="store_true",
                    help="freeze the encoder, hyperprior and entropy model; train "
                         "the WHOLE decoder (trunk, head and adapters)")
@@ -336,10 +342,28 @@ def train_one_epoch(net, loader, optimizer, epoch, cfg, args, device, logf,
                 ref = anchor_net.dec.forward_full(y_a, q_a)
             deep = net.dec.forward_full(*net._encode_to_latent(x, qp)[:2])
             anchor_mse = ((deep - ref) ** 2).mean()
-            # Scaled by the same lambda the reconstruction term carries, so the
-            # weight means "how much is a dB of anchor drift worth relative to a
-            # dB of reconstruction error" and does not have to be retuned per QP.
-            ld["loss"] = ld["loss"] + args.anchor_weight * lambdas.mean() * anchor_mse
+            # The stated intent is "scaled by the same lambda the reconstruction
+            # term carries, so the weight does not have to be retuned per QP".
+            # `lambdas.mean()` does not do that. lambdas runs 10 (qp0) to 2048
+            # (qp63) and the batch mean is ~393, so relative to the RD term the
+            # anchor is 39x STRONGER at qp0 and 5x WEAKER at qp63 -- while the
+            # drift it exists to prevent is ten times larger at qp63 (0.003 dB
+            # against 0.029). It is backwards exactly where it matters.
+            #
+            # Measured stakes: the anchor drift IS the frontier's floor, and at
+            # qp63 that floor eats 30% of the 0.1 dB budget. Removing it is
+            # worth 3.28 points of saving there (results/curve_BEST.json, read
+            # at 0.1 dB against 0.1 dB + floor).
+            #
+            # Off by default. Six runs share this file, and a crash-restart
+            # would otherwise pick the change up mid-experiment and silently
+            # change what they are measuring.
+            if args.anchor_per_sample:
+                per = ((deep - ref) ** 2).mean(dim=tuple(range(1, deep.dim())))
+                anchor_term = (lambdas.reshape(-1) * per).mean()
+            else:
+                anchor_term = lambdas.mean() * anchor_mse
+            ld["loss"] = ld["loss"] + args.anchor_weight * anchor_term
 
         # Ladder distillation: supervise the adapters in FEATURE space, where
         # their job is actually stated, instead of only through the head's

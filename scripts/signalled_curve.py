@@ -70,8 +70,14 @@ ap.add_argument("--seam_repair", default=None,
                 help="override the seam-repair module, e.g. 'none' when changing "
                      "tile size (see --latent_patch).")
 ap.add_argument("--device", default="cuda:4")
+ap.add_argument("--budget", type=float, default=0.1,
+                help="quality budget in dB below the release. 0.1 is the "
+                     "project target; larger budgets buy more compute but "
+                     "saturate at the ladder's ceiling, first at low rate "
+                     "where the frontier is steepest.")
 ap.add_argument("--out", default="results/signalled_curve.json")
 a = ap.parse_args()
+TARGET = a.budget
 dev = a.device
 
 ck = torch.load(a.ckpt, map_location="cpu", weights_only=False)
@@ -165,16 +171,25 @@ with torch.no_grad():
         # difference is measured in scripts/db_convention.py rather than left
         # for a reader to discover by comparing two tables.
         def at_lam(lam):
-            SV = DB = EXTRA = MB = n = 0.0
+            SV = SVR = DB = EXTRA = MB = n = 0.0
             for M, R, npx in cache:
                 # The ENCODER's decision: it has the source, so this is exact.
                 k = (M + lam * cost[None, :]).argmin(1)
                 mb = map_bits(k, cfg.num_exits)
                 SV += (1 - cost[k].mean() / cost[-1]).item()
+                # cost[-1] is OUR ladder at full depth, 1.0095 stock decodes:
+                # the deepest exit pays seam repair and the released decoder
+                # does not. Dividing by it answers "what does early exiting
+                # save against our own full-depth path", while every claim
+                # around this number says "against the released DCVC-UF
+                # decoder" -- and drops the seam-repair tax out of the figure
+                # it is supposed to be net of. Costs are already in units of
+                # one stock decode, so the release denominator is exactly 1.
+                SVR += (1 - cost[k].mean()).item()
                 DB += (10 * torch.log10(M.gather(1, k[:, None]).squeeze(1).mean() / R)).item()
                 EXTRA += mb / npx                     # bpp added by the map
                 MB += mb; n += 1
-            return 100 * SV / n, DB / n, EXTRA / n, MB / n
+            return 100 * SV / n, DB / n, EXTRA / n, MB / n, 100 * SVR / n
 
         # Bisection on lambda, as in paper_curve. Reading the best sample of a
         # 25-point grid under the budget left this number short of what the
@@ -182,7 +197,10 @@ with torch.no_grad():
         # the saving between there and 0.1 is not small. Both dB and saving
         # increase with lambda, so bisection is valid, and with the per-frame
         # work cached each step costs one argmin.
-        TARGET = 0.1
+        # TARGET is set once from --budget at module scope. It used to be
+        # re-assigned here, inside the per-QP loop: with --budget wired up but
+        # this line left in place, every run would have reported 0.1 dB results
+        # in a file named for 0.3 or 0.5, and nothing downstream could tell.
         best = None
         # The FLOOR first. At lambda = 0 nothing is charged for compute, so every
         # tile takes its lowest-MSE exit -- that is the least distortion this
@@ -199,7 +217,7 @@ with torch.no_grad():
         # test read "13.72 > 0.1" and declared every rate unreachable, VERBATIM's
         # correctly and any healthy run's wrongly. The guard against reporting a
         # number at the wrong dB was itself reporting a number at the wrong dB.
-        floor_sv, floor_db, _, _ = at_lam(0.0)
+        floor_sv, floor_db, _, _, _ = at_lam(0.0)
         if floor_db > TARGET:
             print(f"  {qp_v:>4}{'—':>10}{'floor ' + format(floor_db, '.4f') + ' dB':>16}"
                   f"{'exceeds the budget':>25}")
@@ -219,10 +237,15 @@ with torch.no_grad():
         else:                       # budget above what the ladder can spend
             best = at_lam(1.0)
         if best:
-            sv, db, extra, mb = best
+            sv, db, extra, mb, svr = best
             rows.append({"qp": qp_v, "saving_pct": sv, "db_vs_uf": db,
+                         # Kept side by side: saving_pct is what every stored
+                         # result and every comparison already uses, svr is
+                         # what the claim actually means.
+                         "saving_pct_vs_release": svr,
                          "bpp_added": extra, "map_bits": mb,
-                         "floor_db": floor_db, "budget_reachable": True})
+                         "floor_db": floor_db, "budget_db": TARGET,
+                         "budget_reachable": True})
             print(f"  {qp_v:>4}{sv:>9.1f}%{db:>16.4f}{extra:>12.6f}{mb:>13.0f}")
         else:
             print(f"  {qp_v:>4}{'—':>10}{'0.1 dB ulasilamiyor':>16}")

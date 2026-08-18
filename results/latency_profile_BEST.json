@@ -1,0 +1,53 @@
+{
+  "ckpt": "runs/BEST/ckpt_eval.pth.tar",
+  "qp": 32,
+  "budget_db": 0.3,
+  "n_tiles": 40,
+  "hist": [
+    3,
+    15,
+    1454,
+    53,
+    0,
+    0
+  ],
+  "device": "NVIDIA RTX A6000",
+  "stages": [
+    {
+      "stage": "stem (upsample + groups 0..j-1)",
+      "ms": 108.57011032104492
+    },
+    {
+      "stage": "patchify",
+      "ms": 0.19148799777030945
+    },
+    {
+      "stage": "group 2  (40 tiles)",
+      "ms": 41.47404670715332
+    },
+    {
+      "stage": "group 3  (2 tiles)",
+      "ms": 0.8606559932231903
+    },
+    {
+      "stage": "group 4  (1 tiles)",
+      "ms": 0.47206398844718933
+    },
+    {
+      "stage": "group 5  (1 tiles)",
+      "ms": 0.47206398844718933
+    },
+    {
+      "stage": "unpatchify",
+      "ms": 0.1884160041809082
+    },
+    {
+      "stage": "seam repair (384ch, full-frame)",
+      "ms": 2.0500481128692627
+    },
+    {
+      "stage": "head",
+      "ms": 11.702271938323975
+    }
+  ]
+}

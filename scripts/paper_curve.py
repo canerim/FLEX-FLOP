@@ -133,9 +133,18 @@ with torch.no_grad():
                 10 * torch.log10(M[g].gather(1, k[g][:, None]).squeeze(1).mean()
                                  / R[g].mean()) for g in groups]).mean()
             sv = 100 * (1 - cost[k].mean() / cost[-1])
+            # cost[-1] is OUR ladder at full depth (1.0095 stock decodes: the
+            # deepest exit pays seam repair, the release does not), so `sv`
+            # measures early exiting against our own full-depth path. Every
+            # claim built on it says "against the released DCVC-UF decoder",
+            # which needs denominator 1 -- costs are already in units of one
+            # stock decode. Kept side by side rather than swapped, because
+            # every stored curve and every BD comparison uses saving_pct.
+            svr = 100 * (1 - cost[k].mean())
             rows.append({"qp": qp_v, "lam": lam, "db_vs_uf": db.item(),
                          "db_vs_uf_per_frame": dbf.item(),
                          "saving_pct": sv.item(),
+                         "saving_pct_vs_release": svr.item(),
                          "hist": torch.bincount(k, minlength=cfg.num_exits).tolist()})
             if db.item() <= 0.1 and (best is None or sv.item() > best["saving_pct"]):
                 best = rows[-1]
@@ -221,7 +230,8 @@ with torch.no_grad():
                 per_seq.append({
                     "seq": nm,
                     "db_vs_uf": (10 * torch.log10(mse_s / R[sel].mean())).item(),
-                    "saving_pct": (100 * (1 - cost[ks].mean() / cost[-1])).item()})
+                    "saving_pct": (100 * (1 - cost[ks].mean() / cost[-1])).item(),
+                    "saving_pct_vs_release": (100 * (1 - cost[ks].mean())).item()})
             ops.append({"target_db": target, "lam": lo, "db_vs_uf": db_o,
                         "db_vs_uf_per_frame": dbf_o,
                         "saving_pct": sv_o, "saturated": False,

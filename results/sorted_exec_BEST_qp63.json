@@ -1,0 +1,36 @@
+{
+  "ckpt": "runs/BEST/ckpt_eval.pth.tar",
+  "qp": 63,
+  "n_tiles": 40,
+  "device": "NVIDIA RTX A6000",
+  "rows": [
+    {
+      "budget_db": 0.1,
+      "ms_current": 131.26041412353516,
+      "ms_sorted": 101.74412536621094,
+      "identical": true,
+      "hist": [
+        0,
+        1,
+        115,
+        885,
+        340,
+        184
+      ]
+    },
+    {
+      "budget_db": 0.3,
+      "ms_current": 84.81024169921875,
+      "ms_sorted": 60.85427284240723,
+      "identical": true,
+      "hist": [
+        0,
+        1,
+        945,
+        544,
+        24,
+        11
+      ]
+    }
+  ]
+}

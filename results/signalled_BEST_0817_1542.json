@@ -67,35 +67,45 @@
       "saving_pct": 34.65706363320351,
       "db_vs_uf": 0.09999621277675033,
       "bpp_added": 4.8201611679820586e-05,
-      "map_bits": 93.79140301048756
+      "map_bits": 93.79140301048756,
+      "saving_pct_vs_release": 34.03583662377301
     },
     {
       "qp": 16,
       "saving_pct": 31.351040303707123,
       "db_vs_uf": 0.09998576862271875,
       "bpp_added": 4.991650625734222e-05,
-      "map_bits": 96.8117052167654
+      "map_bits": 96.8117052167654,
+      "saving_pct_vs_release": 30.69838233784452
     },
     {
       "qp": 32,
       "saving_pct": 27.445574551820755,
       "db_vs_uf": 0.09999401671811939,
       "bpp_added": 4.842591358069905e-05,
-      "map_bits": 93.85779505968094
+      "map_bits": 93.85779505968094,
+      "saving_pct_vs_release": 26.755786622960187
     },
     {
       "qp": 48,
       "saving_pct": 24.342842549085617,
       "db_vs_uf": 0.09999491469934582,
       "bpp_added": 4.926470479673568e-05,
-      "map_bits": 95.40417815744877
+      "map_bits": 95.40417815744877,
+      "saving_pct_vs_release": 23.62355639087852
     },
     {
       "qp": 63,
       "saving_pct": 21.54931128025055,
       "db_vs_uf": 0.09984670339617878,
       "bpp_added": 4.661844763401781e-05,
-      "map_bits": 90.08958008885384
+      "map_bits": 90.08958008885384,
+      "saving_pct_vs_release": 20.803466519501512
     }
-  ]
+  ],
+  "saving_denominator": {
+    "reported_saving_pct_divides_by": "our deepest exit",
+    "deepest_exit_cost_in_stock_decodes": 1.009507179260254,
+    "saving_pct_vs_release_divides_by": "the released decoder (1.0)"
+  }
 }

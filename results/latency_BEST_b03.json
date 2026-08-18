@@ -1,0 +1,71 @@
+{
+  "ckpt": "runs/BEST/ckpt_eval.pth.tar",
+  "resolution": [
+    1920,
+    1088
+  ],
+  "padded": [
+    2048,
+    1280
+  ],
+  "tile_px": 256,
+  "device": "NVIDIA RTX A6000",
+  "budget_db": 0.3,
+  "warmup": 10,
+  "iters": 40,
+  "interleaved": true,
+  "note": "GPU2 100%% shared with VERBATIM; ratios only",
+  "rows": [
+    {
+      "qp": 0,
+      "ms_stock": 302.5148010253906,
+      "ms_deep": 312.43170166015625,
+      "ms_routed": 193.2943344116211,
+      "overhead_pct": 3.2781538626049933,
+      "realised_saving_pct": 36.10417283503509,
+      "predicted_saving_pct": 41.91139349560194,
+      "hist": [
+        80,
+        22,
+        1423,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "qp": 32,
+      "ms_stock": 295.6318664550781,
+      "ms_deep": 314.03009033203125,
+      "ms_routed": 219.34796905517578,
+      "overhead_pct": 6.223356127864776,
+      "realised_saving_pct": 25.80367885053212,
+      "predicted_saving_pct": 40.46717295269423,
+      "hist": [
+        3,
+        15,
+        1454,
+        53,
+        0,
+        0
+      ]
+    },
+    {
+      "qp": 63,
+      "ms_stock": 293.4947509765625,
+      "ms_deep": 315.50148010253906,
+      "ms_routed": 232.50994873046875,
+      "overhead_pct": 7.498167872765116,
+      "realised_saving_pct": 20.77883915919293,
+      "predicted_saving_pct": 35.97194859604292,
+      "hist": [
+        0,
+        1,
+        945,
+        544,
+        24,
+        11
+      ]
+    }
+  ]
+}

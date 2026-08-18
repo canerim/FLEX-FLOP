@@ -1,0 +1,70 @@
+{
+  "ckpt": "runs/BEST/ckpt_eval.pth.tar",
+  "resolution": [
+    1920,
+    1088
+  ],
+  "padded": [
+    2048,
+    1280
+  ],
+  "tile_px": 256,
+  "device": "NVIDIA RTX A6000",
+  "warmup": 10,
+  "iters": 40,
+  "interleaved": true,
+  "note": "GPU2 at 100%% shared with VERBATIM training; absolute ms are not representative of an idle card",
+  "rows": [
+    {
+      "qp": 0,
+      "ms_stock": 303.6390380859375,
+      "ms_deep": 314.8651580810547,
+      "ms_routed": 244.59519958496094,
+      "overhead_pct": 3.6971925829708097,
+      "realised_saving_pct": 19.445404277781197,
+      "predicted_saving_pct": 34.9003956637805,
+      "hist": [
+        76,
+        17,
+        827,
+        527,
+        33,
+        45
+      ]
+    },
+    {
+      "qp": 32,
+      "ms_stock": 295.68968200683594,
+      "ms_deep": 314.7141571044922,
+      "ms_routed": 261.24391174316406,
+      "overhead_pct": 6.43393268528607,
+      "realised_saving_pct": 11.64929734101291,
+      "predicted_saving_pct": 26.561297567886644,
+      "hist": [
+        2,
+        14,
+        432,
+        785,
+        107,
+        185
+      ]
+    },
+    {
+      "qp": 63,
+      "ms_stock": 295.9462432861328,
+      "ms_deep": 315.2342987060547,
+      "ms_routed": 276.4288024902344,
+      "overhead_pct": 6.51741857093735,
+      "realised_saving_pct": 6.594927706863363,
+      "predicted_saving_pct": 21.48330369810515,
+      "hist": [
+        0,
+        1,
+        115,
+        885,
+        340,
+        184
+      ]
+    }
+  ]
+}

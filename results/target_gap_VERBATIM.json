@@ -6,17 +6,18 @@
   "rows": [
     {
       "qp": 0,
-      "saved_at_budget": null,
-      "budget_reachable": false,
-      "floor_db": 0.13647131621837616,
-      "db_for_target": null,
-      "reachable": false
+      "saved_at_budget": 30.702631659847434,
+      "db_for_target": 0.09873503813790369,
+      "overspend_db": -0.0012649618620963199,
+      "floor_db": 0.08474545180797577,
+      "floor_share_pct": null,
+      "reachable": true
     },
     {
       "qp": 16,
       "saved_at_budget": null,
       "budget_reachable": false,
-      "floor_db": 0.14852899312973022,
+      "floor_db": 0.10753760486841202,
       "db_for_target": null,
       "reachable": false
     },
@@ -24,7 +25,7 @@
       "qp": 32,
       "saved_at_budget": null,
       "budget_reachable": false,
-      "floor_db": 0.15614913403987885,
+      "floor_db": 0.12409058958292007,
       "db_for_target": null,
       "reachable": false
     },
@@ -32,7 +33,7 @@
       "qp": 48,
       "saved_at_budget": null,
       "budget_reachable": false,
-      "floor_db": 0.18898963928222656,
+      "floor_db": 0.14428837597370148,
       "db_for_target": null,
       "reachable": false
     },
@@ -40,7 +41,7 @@
       "qp": 63,
       "saved_at_budget": null,
       "budget_reachable": false,
-      "floor_db": 0.22306767106056213,
+      "floor_db": 0.1674579530954361,
       "db_for_target": null,
       "reachable": false
     }

@@ -3325,3 +3325,798 @@ dolayısıyla sonraki tura.
 
 BEST'in epoch 1'i (~12 saat) üçüncü veri noktasını verecek: eklentilerin
 tamamını ve `new_lr_scale 20`'yi birlikte taşıyor.
+
+---
+
+## 57 — `docs/` yazıldı; yazarken üç ölçüm hatası çıktı
+
+Kullanıcı deney planı, model topolojisi, kalite/dB grafiği ve loss grafiği
+istedi. `docs/` altında beş İngilizce belge ve dört figür üretildi
+(`scripts/make_docs_figs.py`, `scripts/snapshot_runs.py`).
+
+Bir sistemi baştan anlatmak, onu tarif eden sayıları tek tek doğrulamayı
+gerektirdi. Üçü yanlış çıktı — hepsi de mevcut figürlerde ve anlatımda aylardır
+duruyordu:
+
+1. **Adaptör tipi.** Topoloji figürü her çıkışın altına "1×1 adapter" yazıyordu.
+   BEST `--adapter_kind scaled` kullanıyor: çıkış 0–3'te **FFN** (739,200
+   parametre), çıkış 4'te 1×1 (147,840), çıkış 5'te hiç yok. Yani beş
+   adaptörün dördü yanlış etiketlenmişti, ve yanlış yönde — FFN, 1×1'in iki
+   katı maliyetli (bir `DepthConvBlock`'un 0.249'u vs 0.125'i). Figür artık
+   etiketi kurulmuş modelden okuyor, uydurmuyor.
+
+2. **Sinyalleşme maliyeti.** Figür "1.2e-4 bpp" diyordu. Ölçülen `map_bits`
+   94 bit/kare; 1920×1080'de bu **4.5e-5 bpp**. 1.2e-4, 1280×720'nin rakamı.
+   İki buçuk kat abartılmış, ama her iki değer de bitstream'in yanında
+   önemsiz olduğu için sonucu değiştirmiyor.
+
+3. **argv ayrıştırıcısı tek tireli bayrakları yutuyordu.** `snapshot_runs.py`
+   yalnızca `--` üzerinden bölünce VERBATIM'in `epoch_offset`'i "90 -e 15",
+   `batch_size`'ı "8 -n 8 -e 16" olarak okundu. Figür var olmayan bir schedule
+   pozisyonu yazdıracaktı. Düzeltince VERBATIM'in `--grad_accum 2` ile
+   **efektif batch 16** kullandığı da ortaya çıktı — diğerlerinin iki katı, ve
+   54/55 serisindeki CONTROL-VERBATIM farkları listesine giren yeni bir madde.
+
+Ayrıca `run_tree` figüründe bir string-replace sessizce eşleşmemiş, kod
+fallback değerle çalışmış ve **altı koşunun altısını da K=6 warm start'a
+bağlamış** gibi görünen bir çizim üretmişti — FINE12 K=12'den geliyor, ve iki
+ayrı remap tam olarak bu karışıklığı önlemek için var. Fallback makul bir
+görüntü ürettiği için hata sessizdi; yalnızca çizilen PNG'ye bakınca görüldü.
+
+### Düzeltme: `--new_lr_scale 20` hipotezi hakkında
+
+54/55'te "CONTROL'ün bozulmasının en güçlü adayı `--new_lr_scale 20`" dendi.
+Bu tur canlı argv'ler dondurulunca **BEST'in de `--new_lr_scale 20` kullandığı**
+görüldü. Bu hipotezi çürütmüyor — BEST henüz epoch 1'i bitirmedi — ama BEST'in
+epoch 1'inin ne test ettiğini değiştiriyor: tek bayrak değil, "20× lr + güçlü
+anchor (10.0)" birleşimi. BEST bozulursa güçlü anchor kurtarmıyor demektir;
+bozulmazsa 20× lr tek başına yetmiyor ve zayıf anchor (1.0) şüpheli hale gelir.
+Hiçbiri tek bayraklı bir ablation'ın yerini tutmaz.
+
+### Loss platosu sorusu
+
+Kullanıcı "1 epoch sonunda plato oluşuyor mu" diye sordu. Cevap: **loss ~5,000
+adımda düzleşiyor, ama loss yanlış soruyu ölçüyor.** `corr(loss, batch bpp) =
+0.97` — loss `λ·MSE + bpp` ve rastgele kırpımın bitrate'i ardışık batch'ler
+arasında iki kat oynuyor. Sabit CTC karelerindeki tasarruf ise hâlâ tırmanıyor
+(BEST128 8k→20k: 12.07→13.38%; FINE12 12k→24k: 15.76→17.55%). Figürdeki panel c
+bu yüzden eklendi: loss eğrisinin cevaplayamadığı soruyu cevaplıyor.
+
+---
+
+## 58 — Tasarrufun paydası yanlıştı: her manşet sayı 0.6–0.75 puan iyimser
+
+`docs/` için "sabit tasarruf hedefi kaç dB'ye mal olur" tablosunu çıkarırken her
+qp'de tavanın tam **%42.5** olduğunu gördüm. Bu mimari bir tavan (bütün tile'lar
+exit 2'de), ama sayı tuhaftı: exit 2'nin maliyeti 0.5809, yani stok kod
+çözücüye göre tasarruf 1 − 0.5809 = **%41.91** olmalı. %42.46 çıkması paydanın
+1.0 değil **1.0095** olduğu anlamına geliyordu.
+
+Öyleymiş. `paper_curve.py` ve `signalled_curve.py` ikisi de
+
+    saving = 1 - cost[k].mean() / cost[-1]
+
+hesaplıyor, ve `cost[-1]` **bizim merdivenimizin tam derinliği**: deepest exit
+`seam_repair="grid"` ödüyor, stok kod çözücü ödemiyor. Yani raporlanan sayı
+"erken çıkış, kendi tam-derinlik yolumuza göre ne kazandırıyor" sorusunu
+cevaplıyordu; etrafındaki her cümle ise "yayınlanmış DCVC-UF'ye göre" diyordu.
+İkisi aynı şey değil ve fark hep bizim lehimize.
+
+Bağımsız doğrulama: `flexuf/cost.py::saving()` zaten payda 1.0 kullanıyor.
+Eğrideki bir satırın histogramından kareyi `frame_relative_cost` ile baştan
+fiyatladım — X = 0.651298 stok decode. Payda 1.0 → %34.87; payda 1.0095 →
+%35.48; eğrinin yazdığı değer %35.48. Kod tabanında iki normalizör varmış ve
+raporlama yolu okşayıcı olanı seçmiş.
+
+Düzeltmeden sonra (`scripts/renormalise_saving.py`, saklı eğriler üzerinde tam
+cebir, GPU gerekmiyor):
+
+| qp | 0 | 16 | 32 | 48 | 63 |
+|---|---|---|---|---|---|
+| eski | 34.66% | 31.35% | 27.45% | 24.34% | 21.55% |
+| yeni | 34.04% | 30.70% | 26.76% | 23.62% | 20.80% |
+
+Ve tam da "hesaba katılmıştır" dediğim seam-repair vergisini paydadan çıkarıyordu.
+
+### İki sonuç
+
+- **Aynı koşunun checkpoint'leri arasındaki sıralama etkilenmiyor** — dönüşüm
+  afin ve monoton.
+- **Koşular arası sıralama etkileniyor.** VERBATIM `seam_repair="none"` ile
+  çalışıyor, yani paydası zaten 1.0; sayıları hiç oynamıyor. Diğer beş koşu
+  0.6–0.9 puan kaybediyor. Yani düzeltilmemiş karşılaştırma seam-repair'li
+  koşuları kayırıyordu — **tam da 57'deki CONTROL vs VERBATIM sorusunda**.
+
+`saving_pct` alanına dokunmadım (bütün saklı sonuçlar ve BD karşılaştırmaları
+onu kullanıyor); iki üretici de yanına `saving_pct_vs_release` yazıyor artık.
+
+## 59 — "byte-identical bitstream" iddiası fazla güçlüydü
+
+Kullanıcı "router işini nasıl çözdün, encoder'a dokunmadın dimi" diye sordu.
+Encoder'a dokunulmadı — altı koşu da `--freeze_encoder`, ve üç değerlendirme
+scripti her çalışmada `max|enc diff| == 0.0` iddia ediyor, yani varsayılmıyor,
+kanıtlanıyor.
+
+Ama soruyu cevaplarken belgelerde iki ayrı iddiayı birbirine karıştırdığımı
+gördüm. Encoder donuk olduğu için **kodlanmış yük** stok DCVC-UF ile bit-aynı.
+Dosyanın kendisi ise gönderilen konfigürasyonda bit-aynı **değil**: signalled
+sistemde encoder exit haritasını yolluyor, kare başına ~94 bit — bitrate'in
+%0.008–0.020'si (qp0'da 94/461,493; qp63'te 90/1,133,348). Ölçülüyor ve
+`bpp_added` olarak kaydediliyor, ama "byte-identical" demek yanlıştı.
+
+Doğrusu iki konfigürasyon:
+
+| | dosya | decoder maliyeti |
+|---|---|---|
+| decoder-tarafı router | byte-identical | +%0.044 |
+| signalled harita (manşet sayılar) | yük aynı, +94 bit/kare | 0 |
+
+Her iki durumda da stok kod çözücü yükü okuyabiliyor; FLEX-UF kod çözücüye stok
+akış verilirse harita yok, kendi router'ına ya da tam derinliğe düşüyor.
+
+---
+
+## 60 — BEST'in router'ı çökmüş: sabit bir politika, qp63'te oracle ile uyum 0.000
+
+Kullanıcı "bit rate hiç değişmesin de deneyelim" dedi. Sıfır ek bit demek,
+kararı encoder'ın yollaması yerine kod çözücünün kendi router'ıyla vermesi
+demek. Bu konfigürasyon hiç ölçülmemişti — `paper_curve` oracle'ı,
+`signalled_curve` encoder'ı kullanıyor, router'la eğri çıkaran araç yoktu.
+`scripts/router_curve.py` yazıldı.
+
+İlk çalıştırmada qp0'da bütçeye hiç oturmadı. Teşhis:
+
+| qp | router (240 tile) | oracle | uyum |
+|---|---|---|---|
+| 0 | 240 → exit 2 | çoğu exit 2 | 0.838 |
+| 32 | 210 → exit 3 | 238 → exit 2 | 0.125 |
+| 63 | 239 → exit 4 | 240 → exit 2 | **0.000** |
+
+Ortalama güven 0.9646–0.9998. Router **içeriğe hiç bakmıyor**; qp'den ibaret bir
+kural öğrenmiş ("qp yükseldikçe derin çıkış"), yani oracle'ın koşullu değil
+marjinal dağılımını. qp0'daki 0.838 uyum bunun aksi delili değil: orada oracle da
+neredeyse her şeyi exit 2'ye yolluyor, sabit bir politika onunla kendiliğinden
+uyuşuyor.
+
+Sonucu keskin: sabit politika bir eğri değil tek nokta, dolayısıyla bisection
+edilecek bütçe yok. qp0'da ulaşılabilen iki tahsis var — %41.9 / 0.234 dB
+(bütçenin iki katı) ve %−1.0 / 0.003 dB (hepsi en derin çıkışta; −%1.0 seam
+repair vergisi). Arada hiçbir şey yok.
+
+Yani **94 bit bir kolaylık değil, içerik uyarlamasının tamamını taşıyor**, ve
+02'deki "encoder işbirliği yapmazsa decoder-tarafı router devreye girer" cümlesi
+bu checkpoint için yanlıştı. Belgelerden çıkarıldı.
+
+Bunun bilgi-kuramsal bir sınır olmadığını düşünmek için sebep var: aynı projede
+donuk kod çözücüye karşı, oracle'ın kendi çıkış karışımına doğru kayıpsız
+yük-dengelemeli eğitilen v2 başlığı eski bir checkpoint'te 0.86–0.93 uyum almıştı
+(`results/router2_*.log`). Çöken şey **ortak eğitim** — model.py'nin kendi
+docstring'inin uyardığı "hareketli hedefe karşı eğitilen router" riski.
+
+BEST'in donuk kod çözücüsüne karşı v2 başlığı (144,024 param) λ=1.3e-5'te 3000
+adım eğitiliyor. λ qp ile bir mertebe değişiyor (4.9e-5 → 4.1e-6), o yüzden
+geometrik ortada eğitilip her qp'de beta eğimiyle bütçeye oturtulacak.
+
+Ölçülecek: sıfır ek bitle 0.1 dB'de ne kadar tasarruf, ve signalled
+konfigürasyonun ne kadar gerisinde. O fark **değişmeyen bitstream'in bedeli**.
+
+---
+
+## 61 — Tavan mimari ve `j`'ye bağlı; FINE12'ninki BEST'ten 7.5 puan yüksek
+
+Trade-off'u ters yönden ("şu kadar tasarruf kaç dB'ye mal olur") çıkarırken her
+qp'de aynı tavana çarpıldığı görüldü: **%41.9**. Bu, bütün karoların exit 2'de
+olduğu tahsis — baskılanmamış en sığ çıkış. Her hızda aynı olması eğitimden
+değil **split'ten** geliyor: gövde (4 blok, tam kare), head ve seam repair hiçbir
+zaman atlanamıyor.
+
+Tavanın merdivene bağımlılığı (saf aritmetik):
+
+| K | j | gövde bloğu | exit j'de çalışan blok | tavan |
+|---|---|---|---|---|
+| 6 | 1 | 2 | 4 | %56.8 |
+| **6** | **2** | **4** | **6** | **%41.9** ← BEST |
+| 6 | 3 | 6 | 8 | %27.0 |
+| 12 | 4 | 4 | 5 | **%49.4** ← FINE12 |
+| 12 | 5 | 5 | 6 | %41.9 |
+
+BEST ile FINE12 satırları iki kez okunmalı: **gövdeleri aynı (4 blok), FINE12'nin
+tavanı 7.5 puan yüksek.** Paylaşılan hesapta hiçbir fark yok; fark tanelilikte.
+K=12'de her blokta bir çıkış var, karo gövdeden bir blok sonra çıkabiliyor;
+K=6'da çıkışlar iki blokta bir, ilk durak iki blok sonra, ve her karo
+ihtiyacı olmayabilecek bir blok için ödüyor.
+
+FINE12 bugün ölçülen tasarrufta geride (qp63'te %16.76'ya karşı %20.80) ama 1.38
+epoch'a karşı 0.58 epoch görmüş ve 7.5 puan uzaktaki bir tavanı hedefliyor.
+Bu, onu şimdi tercih etmek için değil, **dört epoch'a kadar koşturmadan sonuç
+çıkarmamak için** bir sebep. Seçim kriteri değişmiyor.
+
+---
+
+## 62 — Sıfır ek bit çalışıyor: değişmeyen bitstream'in bedeli 3.3–6.5 puan
+
+Kullanıcı "encoder'da arama yerine decoder'da tahmin deneyini de yapalım, ikisini
+de tut, kâğıtta karşılaştıracağım" dedi. Yapıldı.
+
+`StemRouterHeadV2` (144,024 param), BEST'in **donuk** kod çözücüsüne karşı
+λ=1.3e-5'te 3000 adım eğitildi; tutulan veride oracle uyumu **0.848** (BEST'in
+ortak eğitilmiş başlığı qp63'te 0.000 veriyordu). Aynı checkpoint, aynı 40 kare,
+aynı 0.1 dB bütçe, ikisi de yayınlanmış kod çözücüye göre:
+
+| qp | A: encoder araması, harita sinyalli | B: decoder tahmini, hiçbir şey yollanmıyor | fark |
+|---|---|---|---|
+| 0 | 34.04% | **30.07%** | −3.96 |
+| 16 | 30.70% | 27.44% | −3.26 |
+| 32 | 26.76% | 22.66% | −4.09 |
+| 48 | 23.62% | 19.35% | −4.27 |
+| 63 | 20.80% | 14.31% | −6.49 |
+
+B, router'ın kendi hesabı (%0.163) düşülmüş hâli — `exit_costs()` router'ı
+içermiyor, ve onu dışarıda bırakmak 58'deki payda hatasının aynısı olurdu.
+
+**qp0'da B = %30.07: hedef, dosyaya tek bit eklemeden tutuluyor.**
+
+Farkın üst sınır olduğunu söyleyen iki sebep:
+
+1. Router tek λ'da eğitildi; 0.1 dB'ye oturan λ qp0'da 4.9e-5, qp63'te 4.1e-6.
+   Değerlendirme eğimi bunu telafi etmek zorunda kalıyor ve β +12.2'den
+   −30.7'ye savruluyor. Farkın hız ile büyümesi (3.3 → 6.5) bunun izi.
+2. λ router'a girdi değil, qp girdi. λ'yı koşullamak ya da çalışma noktası başına
+   bir router eğitmek bu kaybı kaldırırdı. Koşan deneyi değiştirmemek için
+   yapılmadı.
+
+Yani 6.49 puanın hepsi "kaynak kareyi görememenin bedeli" değil; bir kısmı
+kapatılabilir bir eğitim eksiği.
+
+### İki yol da korunuyor
+
+- A: `scripts/signalled_curve.py` → `results/signalled_*.json` (19 dosya,
+  davranışı değişmedi)
+- B: `scripts/router_curve.py` → `results/router_*.json`
+
+`watch_ckpts.sh`'a `3b` aşaması eklendi: bundan sonraki her checkpoint ikisini de
+**eşleşmiş çift** olarak ölçüyor, böylece kâğıttaki karşılaştırma checkpoint'ler
+arası değil aynı checkpoint üzerinde. Zincirdeki B, checkpoint'in kendi
+başlığını kullanıyor (çöküşün sürüp sürmediğini izlemek için); donuk kod
+çözücüye karşı yeniden eğitim ayrı ve kasıtlı bir deney, yarım saat sürdüğü için
+zincirden çalıştırılmıyor.
+
+---
+
+## 63 — A-B farkının çoğu tahmin hatası değil, çalışma noktası uyumsuzluğu
+
+62'de sıfır-bit konfigürasyonunun 0.1 dB'de 3.3–6.5 puan geride kaldığı ölçüldü
+ve bunu "üst sınır" diye raporladım. Ayrıştırdım.
+
+`router_curve.py --at_lam` eklendi: bisection ve eğim devre dışı, oracle ile
+router aynı λ'da. Sonra router'ın düştüğü dB'de oracle cephesinin ne verdiğine
+bakıldı — yani **eşit kalitede** karşılaştırma, tek fark kararın kendisi.
+
+| qp | uyum | eşit kalitede tahmin kaybı | 0.1 dB'deki fark | \|β\| |
+|---|---|---|---|---|
+| 0 | 0.554 | **7.23** | 3.96 | 12.2 |
+| 16 | 0.622 | 3.64 | 3.26 | 3.0 |
+| 32 | 0.731 | 2.08 | 4.09 | 12.5 |
+| 48 | 0.830 | 0.95 | 4.27 | 23.1 |
+| 63 | 0.861 | **0.80** | **6.49** | 30.7 |
+
+**İki bileşen zıt yönlerde gidiyor.** Tahmin kaybı hızla neredeyse on kat
+düşüyor; bütçedeki fark yükseliyor. Dolayısıyla qp63'teki 6.49 puan router'ın
+tahmin edememesi değil — orada en iyi tahmini yapıyor (%86 uyum, eşit kalitede
+0.8 puan kayıp).
+
+Bütçedeki fark |β| ile gidiyor: 3.0→3.26, 12.5→4.09, 23.1→4.27, 30.7→6.49.
+Mekanizma: β büyüdükçe maliyet terimi logitleri bastırıyor, tahsis "herkes aynı
+çıkışa" doğru dejenere oluyor, ve router'ın tek katkısı olan içerik sıralaması
+tam da bu yüzden atılıyor.
+
+Bu bir sınır değil, düzeltilebilir bir eksik gösteriyor: λ router'a girdi değil,
+yalnızca qp girdi. λ'yı koşullamak ya da çalışma noktası başına bir router
+eğitmek yüksek hızdaki farkın çoğunu geri kazandırmalı.
+
+### Toplamsal değil
+
+Bu iki sayı **bileşenlere ayrılıp toplanamaz** — farklı çalışma noktalarında
+ölçülüyorlar. qp0'da tahmin kaybının (7.23) bütçedeki farktan (3.96) büyük
+olması çelişki değil: router'ın eğitildiği nokta 0.0605 dB'de, cephenin 0.1
+dB'den çok daha dik olduğu yerde. Toplamsal bir ayrıştırma gibi sunmak yanlış
+olurdu.
+
+### 63a — Ön kayıtlı tahmin (ölçümden ÖNCE yazıldı)
+
+63'teki mekanizma iddiası şu: qp63'teki 6.49 puanlık fark tahmin hatası değil,
+router'ı eğitildiği λ'dan (1.3e-5) bütçenin λ'sına (4.1e-6) sürüklemenin bedeli.
+
+Bunu yanlışlayacak deney: λ=4.1e-6'da ikinci bir router eğit, aynı protokolle
+ölç. İddia doğruysa qp63'te |β| küçülmeli ve fark belirgin biçimde daralmalı.
+
+**Tahmin: qp63'te fark 6.49 puandan 3 puanın altına iner.**
+
+Yanlışlanma koşulu: fark 5 puanın üstünde kalırsa mekanizma açıklaması yanlıştır
+ve 63'teki yorum geri çekilecek. Bu projede mekanizma hipotezlerinde dört kez
+yanıldım; tahmini önceden yazmanın sebebi bu.
+
+### 63b — Tahminin keskinleştirilmesi (yine ölçümden ÖNCE)
+
+Eğitim sırasında router'ın dağılımı en derin çıkışa yakınsıyor gibi görününce
+"hedef dejenere, test geçersiz" diye düşündüm. **Yanlış.** curve_BEST'in
+histogramları λ=4.4e-6'da gerçek yayılma gösteriyor (qp0'da en derin %62 ama
+exit 3'te 291, exit 4'te 220 karo; qp63'te en derin yalnızca %12). CE'nin düşük
+olmasından hedefin trivial olduğunu çıkarmak aceleciydi; 24 karoluk tek bir
+batch'in argmax histogramına fazla anlam yükledim.
+
+Ama veri tahmini keskinleştiriyor. λ=4.4e-6'nın düştüğü dB:
+
+| qp | 0 | 16 | 32 | 48 | 63 |
+|---|---|---|---|---|---|
+| dB | 0.0005 | 0.0175 | 0.0414 | 0.0719 | **0.1055** |
+
+Yani yeni router **qp63 için tam bütçede** eğitiliyor, qp0 için çok derinde —
+ilk router'ın (λ=1.3e-5, qp32'de doğru) tam aynası. Mekanizma iddiası doğruysa:
+
+- **qp63'te fark 3 puanın altına iner** (63a'daki asıl tahmin, değişmedi)
+- **qp0'da fark kötüleşir** — 3.96'nın üstüne çıkar, çünkü bu sefer sürüklenen
+  uç orası
+
+İkincisi bir bonus kontrol: mekanizma "eğitim noktasından uzaklık" ise, iki
+router'ın hataları qp ekseninde zıt yönlerde eğilmeli. İkisi de aynı yönde
+çıkarsa açıklama yanlıştır.
+
+### 63c — SONUÇ: tahmin doğrulandı, ama |beta| yeterli istatistik değil
+
+λ=4.1e-6'da eğitilen ikinci router (tutulan-veri uyumu 0.923) ölçüldü.
+
+| qp | A | B λ=1.3e-5 (fark) | B λ=4.1e-6 (fark) | en iyi |
+|---|---|---|---|---|
+| 0 | 34.04% | 30.07% (3.96) | 28.53% (**5.51**) | 3.96 |
+| 16 | 30.70% | 27.44% (3.26) | 26.87% (3.82) | 3.26 |
+| 32 | 26.76% | 22.66% (4.09) | 23.93% (2.82) | 2.82 |
+| 48 | 23.62% | 19.35% (4.27) | 22.27% (1.35) | 1.35 |
+| 63 | 20.80% | 14.31% (6.49) | **19.30% (1.50)** | 1.50 |
+
+- 63a: qp63'te fark 3'ün altına iner → **6.49 → 1.50, doğrulandı**
+- 63b: qp0'da fark kötüleşir → **3.96 → 5.51, doğrulandı**
+
+|β| qp63'te 30.7 → 4.2. Mekanizma açıklaması testi geçti; 57'de dört kez
+yanıldığım mekanizma hipotezlerinin aksine bu tutuyor.
+
+**Ama iddiamı zayıflatmam gerekiyor.** 63'te farkın |β| ile "neredeyse birebir"
+gittiğini yazmıştım. On noktayı birlikte alınca korelasyon yalnızca **0.663**,
+ve ikinci router monotonluğu bozuyor: |β|=13.4'te fark 1.35, |β|=16.0'da 5.51.
+Aynı |β|'da çok farklı farklar var. Yani |β| yeterli bir istatistik değil,
+"eğitim noktasından uzaklık"ın kaba bir vekili. Verinin desteklediği ifade
+şudur: **router'ı çalışma noktasının λ'sında eğitmek önemli, ve en çok
+uyumsuzluğun büyük olduğu yerde önemli.** Tek değişkenli bir yasa gibi sunmak
+fazla olurdu.
+
+### Kâğıt için asıl sonuç
+
+Hız başına uygun router seçilince değişmeyen bitstream'in bedeli **3.3–6.5 değil,
+1.35–3.96 puan**. Beş hız için beş router 5 x 144,024 = 720,120 parametre, yani
+45.4M'lik modelin %1.6'sı — dağıtım açısından ihmal edilebilir. Her hızın kendi
+λ'sında eğitilmiş beş router muhtemelen qp0/16'da da daha iyisini verir; iki
+router'lı zarf bunun alt sınırı.
+
+---
+
+## 64 — Düzeltme: FINE12'nin tavanı %49.4 değil %50.3
+
+61'de tavan tablosunu BEST'in konfigürasyonunu alıp K ve j'yi değiştirerek
+hesapladım. FINE12 ayrıca `latent_patch 8` ve `conv1x1` adaptör kullanıyor;
+ikisi de halo ve adaptör kalemlerini değiştiriyor. Her koşunun **kendi**
+meta.json'undan hesaplayınca:
+
+| koşu | K | j | latent_patch | adaptör | tavan |
+|---|---|---|---|---|---|
+| BEST | 6 | 2 | 16 | scaled | %41.9 |
+| BEST128 | 6 | 2 | 8 | scaled | %41.9 |
+| FINE12 | 12 | 4 | 8 | conv1x1 | **%50.3** |
+
+Fark 7.5 değil **8.4 puan**. 61'deki tablo hatalı; belgeler düzeltildi. Hata
+sınıfı tanıdık: bir koşunun sayısını başka bir koşunun konfigürasyonuyla
+üretmek (bkz. 54'teki referans karışıklığı).
+
+## 65 — "İnce merdiven yüksek qp'yi düzeltir" tahmini şu an DESTEKLENMİYOR
+
+61'de ince merdivenin yüksek hızda avantajlı olacağını savundum: qp63'te K=6'nın
+basamakları bütçeyi kuşatıyor (%41.9 çok yıkıcı, %27.0 karşılanabilir) ve K=12
+aradaki %34.5'i sunuyor. Mevcut veriyle test ettim — profilin **düzleşmesi**
+gerekirdi:
+
+| koşu | tavan | qp0 | qp63 | qp63/qp0 |
+|---|---|---|---|---|
+| BEST | %41.9 | 34.04 | 20.80 | **0.611** |
+| FINE12 | %50.3 | 32.20 | 16.76 | **0.521** |
+| BEST128 | %41.9 | 33.87 | 12.56 | 0.371 |
+
+FINE12'nin profili daha düz değil, **daha dik**. Yani tahmin şu an desteklenmiyor.
+
+Ama sonuç çıkarılamaz: FINE12 0.58 epoch görmüş, BEST 1.38. Eğitim süresi ile
+karışık, ve az eğitilmiş sığ çıkışlar en çok yüksek qp'de zarar verir — yani
+gözlenen diklik eksik eğitimin de imzası olabilir. Dört epoch'ta tekrar
+bakılacak. Şimdilik 61'deki iddia "ölçülmemiş beklenti" olarak işaretlendi.
+
+---
+
+## 66 — Quantization: tahmin ÇÜRÜDÜ, mekanizma tam tersi
+
+Plana yazarken şu tahmini kaydetmiştim: kuantizasyon gürültüsü ile erken çıkış
+toplamsal-altıdır, çünkü sığ çıkışın ek bir bozulmayı soğuracak kapasitesi daha
+azdır; somut olarak qp63 ve 8 bitte exit 2'nin bozulması en derin çıkışınkini
+iki kattan fazla aşmalı.
+
+**Ölçüm:** exit 2 = 0.1076 dB, en derin = 0.1113 dB, oran **0.97**. Çürüdü.
+
+fp32'ye göre eklenen dB (ağırlık-yalnız, per-channel, kalibrasyonsuz PTQ,
+32 tutulan OpenImages, `scripts/quant_sweep.py`):
+
+| bit | qp | exit 0 | exit 2 | exit 5 | açıklık (e0−e5) |
+|---|---|---|---|---|---|
+| fp32 | 63 | — | — | — | 2.864 |
+| 8 | 63 | 0.124 | 0.108 | 0.111 | 2.876 |
+| 6 | 63 | 1.472 | 1.946 | 2.112 | 2.224 |
+| 4 | 63 | 6.358 | 7.117 | 7.824 | 1.398 |
+
+Mekanizma tahminimin tersi: kuantizasyon **derin** çıkışlara daha çok zarar
+veriyor. En derin çıkış neredeyse kusursuz başlıyor (qp63'te 0.073 dB) ve
+eklenen gürültü tabanını soğuracak payı yok; sığ çıkışın hatası zaten attığı
+bloklardan geliyor, gürültü onun yanında küçük kalıyor.
+
+### Merdiven için asıl sonuç
+
+Bit azaldıkça **çıkışlar birbirine yakınsıyor**. qp63'te açıklık 2.864 → 2.224 →
+1.398. Routing'in sömürdüğü şey tam olarak bu açıklık; o daralınca yönlendirecek
+bir fark kalmıyor. 4 bitte altı çıkışın hepsi 1.4 dB içinde.
+
+- **8 bit** neredeyse bedava (qp0'da ≤0.013 dB) ve açıklığı **koruyor** (2.876 vs
+  2.864) — iki kaldıraç temiz biçimde birleşiyor. BOPs 0.062×.
+- **6 bit ve altı** merdivenin kendisini aşındırıyor; kuantizasyon gürültüsü
+  çıkışlar arası farkı bastırıyor.
+
+Bir uyarı: yüksek hızda 8 bit bile tabanı büyütüyor (qp63'te en derin çıkış
+0.073 → 0.184, 2.5 kat). Taban zaten bütçenin %30'unu yiyordu (63); 8 bit onu
+daha da büyütür. Yani "8 bit bedava" ifadesi **çıkışlar arası açıklık** için
+doğru, **taban** için değil.
+
+Bu ölçüm OpenImages 512px üzerinde; CTC'deki taban rakamlarıyla (0.0296 dB)
+doğrudan karşılaştırılamaz, yalnızca göreli ifadeler taşınır.
+
+---
+
+## 67 — Anchor'ın λ ölçeklemesi kodun kendi amacına aykırıydı; bayrak arkasına alındı
+
+Yüksek qp'de neden az tasarruf olduğunu ayrıştırırken tabanın bütçenin %30'unu
+yediği ölçüldü (qp63'te 0.0296 dB / 0.1 dB). Taban = en derin çıkışın yayınlanmış
+kod çözücüden sapması, yani anchor teriminin engellemek için var olduğu şey.
+Tabanı sıfırlamak qp63'te **3.28 puan** getirir (curve_BEST'ten, 0.1 dB ile
+0.1+taban okunarak).
+
+Anchor terimine bakınca:
+
+    ld["loss"] += args.anchor_weight * lambdas.mean() * anchor_mse
+
+Yorumu şöyle diyor: "reconstruction teriminin taşıdığı **aynı** λ ile ölçeklenir,
+dolayısıyla QP başına yeniden ayarlanması gerekmez." `lambdas.mean()` bunu
+yapmıyor — batch ortalaması. λ qp0'da 10, qp63'te 2048, ortalama ~393:
+
+| qp | λ | anchor/RD oranı | drift |
+|---|---|---|---|
+| 0 | 10 | **39.3×** | 0.003 dB |
+| 63 | 2048 | **0.19×** | 0.029 dB |
+
+Anchor, driftin on kat büyük olduğu yerde beş kat zayıf. 207 kat ters, ve tam
+olarak kodun kendi yorumunun engellemeyi vaat ettiği şey.
+
+### Uygulanmadı, bayrak arkasına alındı
+
+`--anchor_per_sample`, varsayılan kapalı. Sebep: altı koşu aynı dosyayı
+kullanıyor ve biri çökme sonrası yeniden başlarsa değişikliği sessizce yutar —
+ölçtükleri şey deney ortasında değişirdi. Yeni bir koşu **başlatılmadı** da:
+yedinci iş altı koşunun hepsini yavaşlatırdı.
+
+## 68 — `--help` zaten kırıkmış
+
+Bayrağı doğrulamak için `--help` çalıştırdım ve çöktü. Benim düzenlemem
+öncesinde de çöküyormuş: yardım metinlerindeki kaçırılmamış `%` işaretlerini
+(`"+0.066% of the decode"` vb.) argparse format belirteci sanıyor ve
+`TypeError: %o format` veriyor. Yedi satırda `%%` olarak kaçırıldı; davranış
+değişmedi, yalnızca `--help` artık çalışıyor.
+
+Küçük ama kayda değer: bir eğitim scriptinin `--help`'i çalışmıyorsa
+bayraklarını okumanın tek yolu kaynağı okumak, ve bu oturumda argv'nin tek
+kayıt yeri olmasının ne kadar pahalıya patladığını (57, 58) zaten gördük.
+
+---
+
+## 69 — MAC tasarrufu duvar saatine dönüşmüyor: 2–3 kat abartı
+
+CVPR planındaki en yüksek riskli satır ölçüldü (`scripts/latency.py`,
+1920×1088, 40 serpiştirilmiş yineleme, medyan):
+
+| qp | stock | hepsi-derin | yönlendirilmiş | ek yük | **gerçekleşen** | öngörülen |
+|---|---|---|---|---|---|---|
+| 0 | 303.6 ms | 314.9 | 244.6 | %3.7 | **%19.4** | %34.9 |
+| 32 | 295.7 | 314.7 | 261.2 | %6.4 | **%11.6** | %26.6 |
+| 63 | 296.0 | 315.2 | 276.4 | %6.5 | **%6.6** | %21.5 |
+
+Ayrışma: sabit **%3.7–6.5 ek yük** (bütün karolar en derin çıkışta, yani stock
+ile birebir aynı aritmetik — karolama makinesinin bedeli), artı kalan **8–12
+puan** düşen aritmetik yoğunluk (bir grup 1500 yerine 300 karo üzerinde koşunca
+GPU doymuyor).
+
+### Yöntem hatası, yakalandı ve düzeltildi
+
+İlk sürüm 40 stock, sonra 40 deep, sonra 40 routed ölçtü. Kart %100 dolu ve
+üzerinde VERBATIM eğitiliyor; bloklar arası yük kayması doğrudan orana yansırdı
+— ki oran bu scriptin ürettiği tek şey. Serpiştirilmiş hâlde yeniden ölçüldü:
+cevaplar bir puandan az oynadı, yani çekişme kayması açıklama değilmiş. Bulgu
+gerçek.
+
+### Mutlak sayılar alıntılanamaz
+
+453 GMAC boş bir A6000'de ~12 ms sürmeli; 300 ms ölçtük. Kart dolu, fp32,
+channels_last yok, torch.compile yok, CUDA graph yok. Bu koşullar dağıtımı
+temsil etmiyor ve mutlak latency makaleye konamaz. Ölçülen şey **oran**.
+
+### Makalenin çerçevesi değişti
+
+Soyut "%27 daha hızlı" diyemez. "%27 daha az MAC, bu uygulamada %6–19 daha
+hızlı" diyebilir — ve aradaki fark kendi başına bir sonuç: içerik-uyarlamalı
+derinlik MAC cinsinden söylemesi kolay, GPU'da tahsil etmesi zor. Bunu erken
+ölçmenin sebebi tam olarak buydu; soyut yazıldıktan sonra öğrenilseydi makale
+yanlış iddiayla gidecekti.
+
+---
+
+## 70 — Gevşek bütçe daha iyi makale; ve "neden küçük decoder" sorusunun ilk cevabı
+
+0.3 dB'de latency yeniden ölçüldü. Gerçekleşen tasarruf öngörülene çok daha
+yakın: qp0'da oran 0.56 → **0.86**, qp63'te 0.31 → 0.58.
+
+| bütçe | BD-Rate | MAC | duvar saati | hızlanma |
+|---|---|---|---|---|
+| 0.1 dB | %0.88 | %27.2 | %6.6–19.4 | 1.14× |
+| 0.3 dB | **%2.51** | %39.8 | **%20.8–36.1** | **1.38×** |
+| 0.5 dB | %3.36 | %41.7 | ölçülmedi | |
+
+Sebep iki katlı ve aynı yöne çalışıyor: gevşek bütçede karolar en sığ çıkışa
+yığılıyor, derin gruplar çok az karo üzerinde koşuyor (yani tasarruf "çok küçük
+grup" yerine "işi tamamen atlamak"tan geliyor), ve sabit ek yük iki katı
+tasarrufa yayılıyor.
+
+### DCVC-UF'nin kendi tablosu "neden küçük decoder" sorusunu kısmen cevaplıyor
+
+Makale iki model boyutu yayınlıyor, ve aralarındaki takas alanın hız için ne
+ödediğinin bedava bir kalibrasyonu:
+
+| | verilen BD-Rate | alınan hız | birim hız başına puan |
+|---|---|---|---|
+| DCVC-UF HT-L → HT-S | 10.6 | 1.66× | **16.1** |
+| FLEX-UF @ 0.3 dB | 2.51 | 1.38× | **6.6** |
+
+Uyarlanabilir derinlik, modeli küçültmekten **~2.4 kat daha ucuza** hız satın
+alıyor.
+
+İki uyarı: onların çifti tüm video, bizimki yalnızca intra — paydalar farklı,
+yani bu bir kalibrasyon, kafa kafaya karşılaştırma değil. Ve HT-S, HT-L'den
+yalnızca derinlikte değil genişlik ve blok sayısında da farklı. Kendi statik
+baseline'ımız (plan §2) hâlâ gerekli. Ama hakemin sorusuna cevabın lehimize
+olduğuna dair güçlü bir işaret, ve zaten basılı bir tablodan bedavaya geldi.
+
+---
+
+## 71 — Hızın fiyatı sabit: birim hızlanma başına ~6.5 BD-Rate puanı
+
+Üç bütçede de latency ölçüldü:
+
+| bütçe | BD-Rate | MAC | duvar saati | hızlanma | puan/birim |
+|---|---|---|---|---|---|
+| 0.1 dB | %0.88 | %27.6 | %12.6 | 1.14× | **6.2** |
+| 0.3 dB | %2.51 | %39.5 | %27.6 | 1.38× | **6.6** |
+| 0.5 dB | %3.36 | %41.7 | %34.0 | 1.51× | **6.5** |
+
+**Fiyat bütün aralıkta sabit.** Bu, tek bir çalışma noktasından daha iyi bir
+sonuç: yöntemin kiraz toplamakla suçlanabilecek bir tatlı noktası yok, bir
+döviz kuru var. Uygulama hangi noktayı istiyorsa onu seçer.
+
+DCVC-UF'nin kendi HT-L → HT-S takası 16.1 puan/birim. Yani uyarlanabilir
+derinlik hızı **2.4 kat ucuza** alıyor, ve bunu tek bir elverişli noktada değil
+sabit oranda yapıyor.
+
+### Ek yük için nokta tahmini vermiyorum
+
+Dokuz ölçümde %1.5–8.2, medyan %6.2. İki ~300 ms ölçümün küçük farkı ve kart
+%100 dolu; nokta tahmini sahte hassasiyet olurdu. Aralık raporlanıyor.
+
+### Belgelerdeki bütün MAC iddialarına uyarı eklendi
+
+README, 03 ve 05'te başta duruyor: bunlar MAC, duvar saati değil, ve MAC
+tasarrufunu hızlanma diye alıntılamayın. Altı belge boyunca bu ayrım yoktu.
+
+---
+
+## 72 — "Düşen aritmetik yoğunluk" GERİ ÇEKİLDİ; gerçek sebep grup arası muhasebe
+
+69'da duvar saati farkını "sabit ek yük + düşen aritmetik yoğunluk" diye
+ayırdım ve bunu belgelere de yazdım. İkinci yarısı **ölçülmeden ilan edilmişti**
+ve yanlış çıktı.
+
+`scripts/latency_profile.py`, qp32, 40 karo:
+
+| aşama | 0.1 dB | 0.3 dB | MAC modeli |
+|---|---|---|---|
+| gövde (upsample + grup 0–1) | 106.86 ms (%53.6) | 108.57 (%65.4) | %38 |
+| patchify | 0.19 (%0.1) | 0.19 (%0.1) | — |
+| unpatchify | 0.19 (%0.1) | 0.19 (%0.1) | — |
+| seam repair | 2.05 (%1.0) | 2.05 (%1.2) | %0.95 |
+| head | 11.67 (%5.9) | 11.70 (%7.1) | **%2.4** |
+
+Karo başına grup maliyeti (0.1 dB): grup 2 → 1.03, grup 3 → 0.93, grup 4 → 0.73,
+grup 5 → 0.94 ms/karo. **Düz, hatta küçük kümelerde daha iyi** — muhtemelen L2'ye
+sığdıkları için. Yani aritmetik yoğunluk düşmüyor; iddiam desteklenmiyor.
+
+### Gerçek sebep, ölçülmüş
+
+Aşamaların toplamı 199.34 ms, uçtan uca 261.24 ms. ~62 ms hiçbir aşamada yok.
+Ayrı ölçüldü:
+
+| | ms |
+|---|---|
+| grup döngüsü, yalnızca konvolüsyonlar | 77.50 |
+| grup döngüsü, yalnızca muhasebe (konvolüsyonsuz) | **36.43** |
+| ikisi birlikte | 113.34 |
+
+**Muhasebe grup döngüsünün %32.1'i.** Her grup sınırında boolean maske
+(`em[active] > g`), gather (`active[keep]`, `work[keep]`) ve canvas scatter var;
+boolean indeksleme kaç eleman hayatta kalacağını bilmek zorunda olduğu için
+cihaz→ana bilgisayar senkronizasyonu zorluyor. Dört grup, dört senkron.
+
+### Bu iyi haber
+
+Kurtarılabilir bir kayıp. Çözüm: karoları çıkış derinliğine göre **bir kez**
+sırala, sonra her grupta boolean maske yerine bitişik dilim al. Senkronlar ve
+gather'lar gider. Yani plandaki "kernel çağrı yükünü düşür" maddesi tahmin
+değil, hedefi ölçülmüş bir mühendislik işi.
+
+### Ve bir örüntü
+
+Bu oturumda mekanizma iddialarında **dördüncü kez** yanıldım (57'deki üç, artı
+bu). Örüntü net: sayıyı ölçüp mekanizmayı tahmin etmek. Ölçüm doğru çıkıyor,
+açıklama çıkmıyor. Sayıyı raporlarken mekanizmayı ayrı ölçmeden yazmamalıyım.
+
+---
+
+## 73 — Muhasebe kaybı kurtarılabilir: karoları bir kez sırala, %23–37 geri gelsin
+
+72'de grup döngüsünün %32'sinin muhasebe olduğu ölçüldü. Önerdiğim çözüm test
+edildi (`scripts/sorted_exec.py`, ayrı bir kıyaslama — `decoder.py` altı canlı
+koşu tarafından import ediliyor, düzenlenmiyor):
+
+Karoları çıkış derinliğine göre **azalan** sırala. O zaman "grup g'de hâlâ aktif
+olan karolar" bitişik bir **önek** olur; her grup gather değil dilim alır; dilim
+sınırları tek bir kümülatif sayımdan gelir (grup başına senkron yerine döngü
+başına bir tane); biten karolar sonda tek bir scatter ile ters permütasyondan
+yazılır.
+
+| bütçe | mevcut | sıralı | kazanç | çıktılar aynı mı |
+|---|---|---|---|---|
+| 0.1 dB | 114.44 ms | **87.64** | **%23.4** | evet, bit-aynı |
+| 0.3 dB | 77.10 ms | **48.86** | **%36.6** | evet, bit-aynı |
+
+Aritmetik birebir aynı — aynı karolar aynı gruplardan geçiyor. `torch.allclose`
+atol=rtol=0 ile doğrulandı; hızlanma uydurma değil.
+
+### Uçtan uca izdüşüm (ölçüm değil, izdüşüm)
+
+qp32'de grup döngüsü kazancını ölçülmüş uçtan uca süreye uygulayınca:
+
+| bütçe | şimdi | izdüşüm | MAC modeli |
+|---|---|---|---|
+| 0.1 dB | %11.6 | **%20.7** | %26.6 |
+| 0.3 dB | %25.8 | **%35.4** | %40.5 |
+
+gerçekleşen/öngörülen oranı 0.44 → 0.78 ve 0.64 → 0.87.
+
+İzdüşüm, çünkü uçtan uca ölçmek `decoder.py`'ı düzenlemeyi gerektiriyor ve altı
+koşu onu import ediyor; çökme sonrası yeniden başlayan bir koşu değişikliği
+deney ortasında yutardı. Koşular bittiğinde ya da ayrı bir kopyada ölçülecek.
+
+Bu, CVPR planındaki "kernel çağrı yükünü düşür" maddesini tahminden ölçülmüş
+bir mühendislik katkısına çeviriyor.
+
+### 73a — Kazanç bütün hızlarda tutuyor; değişimi açıklayamıyorum
+
+| qp | 0.1 dB | 0.3 dB |
+|---|---|---|
+| 0 | %31.3 | %12.7 |
+| 32 | %23.4 | %36.6 |
+| 63 | %22.5 | %28.2 |
+
+Hepsi bit-aynı çıktı veriyor. Ama %12.7–36.6 aralığı geniş ve **sebebini
+bilmiyorum**. Bariz hipotez — kazanç, hâlâ karo geçiren grup sınırı sayısıyla
+gider — bu altı noktada 0.32 korelasyon veriyor, yani desteklenmiyor. İddia
+etmeden önce baktım; etseydim bu oturumda beşinci yanlış mekanizma olacaktı.
+
+Kurulmuş olan: kazanç var, her yerde pozitif, ve aritmetiği değiştirmiyor.
+Kurulmamış olan: neden 12.7 ile 36.6 arasında oynadığı. Boş bir kartta ve daha
+çok noktada ölçülmeli.
+
+### 73b — Sıralı yürütme kod çözücüye ALINMADI, bilerek
+
+Kazanç ölçüldü (%12.7–36.6, bit-aynı), ama `decoder.py`'daki gerçek döngü
+kıyaslamadan üç noktada farklı ve her biri permütasyon üzerinden yeniden
+indekslenmek zorunda:
+
+- `self._at_exit(work[leaving], g)` → bitişik dilim `work[hi:lo]`. Kolay kısım.
+- `tile_gate[active[leaving]]` → straight-through router kapısı **orijinal karo
+  kimliğiyle** indeksleniyor, sıralı konumla değil; `order[hi:lo]` gerekiyor.
+  Bunu yanlış yapmak router'ın gradyanını sessizce bozar ama rekonstrüksiyon
+  bit-aynı kalır — yani piksel eşitliği testi yakalamaz.
+- `--tile_coupling` altında `cpl.active = active`. En temiz hamle sıralı yolu
+  `not cfg.tile_coupling` ile sınırlamak.
+
+Altı canlı koşu bu dosyayı import ediyor. İnce bir indeksleme hatası eğitimi
+sessizce bozar ve günler sonra fark edilir. Uzun bir oturumun sonunda, ölçülmüş
+bir kazancı almak için alınacak risk değil. Koşular bittiğinde, varsayılanı
+kapalı bayrak arkasında, hem piksel hem gradyan testiyle alınacak.
+
+---
+
+## 74 — Zincire eklediğim aşama hiç çalışmayacaktı
+
+62'de `watch_ckpts.sh`'a `3b` (router yolu) aşamasını ekledim ve "bundan sonraki
+her checkpoint ikisini birden ölçecek" dedim. Yerinde doğrulamayı bugün yaptım:
+**hiç çalışmamış, ve çalışmayacaktı da.**
+
+Watcher'lar 22:05'te başlamış, dosyayı 00:24'te düzenledim. Bash `while true;
+do ... done` gövdesini çalıştırmadan önce tamamen parse ediyor; çalışan süreç
+diskteki yeni sürümü görmüyor. Altı watcher da eski gövdeyi koşturmaya devam
+ediyordu.
+
+Lock boşken yeniden başlatıldı (watcher'lar yalnızca yokluyor, eğitmiyor —
+yeniden başlatmak hiçbir koşuyu etkilemiyor). Yeni süreçler 3665407–3665412.
+
+Ders: uzun ömürlü bir bash döngüsüne yaptığın düzenleme, süreci yeniden
+başlatmadan yürürlüğe girmez. Ve "ekledim, artık çalışıyor" demek, çalıştığını
+görmekle aynı şey değil — bu oturumda `--help`'in kırık olması da aynı sınıftan
+bir varsayımdı.
+
+---
+
+## 75 — 3b yerinde doğrulandı; ve anchor terimsiz taban bütçeyi tamamen yiyor
+
+74'te watcher'ları yeniden başlattım. İlk gerçek testler geldi.
+
+### 3b çalışıyor
+
+`results/router_FINE12_0818_0458.json` — zincirin ürettiği ilk router sonucu.
+Beş hızda da bütçeye ulaşıyor, sıfır ek bitle %9.2–14.4 (FINE12'nin kendi
+ortak-eğitilmiş başlığıyla). Yani 62'de eklediğim, 74'te yürürlüğe soktuğum
+aşama yerinde çalışıyor ve kâğıt için istediğiniz eşleşmiş çiftler birikmeye
+başladı.
+
+Yan bulgu: FINE12'nin β'sı −0.008…−0.021, yani router'ı **çökmemiş** — BEST'inki
+qp63'te oracle uyumu 0.000 veriyordu (60). Demek ki çöküş ortak eğitimin
+kaçınılmaz sonucu değil; K, j ya da adaptör tipi de rol oynuyor olabilir. Dört
+epoch'ta bakılacak.
+
+### Düzeltme: VERBATIM sürüklenmiyor, iyileşiyor
+
+İlk okumamda "VERBATIM'in en derin çıkışı kötü sürüklenmiş" dedim. Veri bunu
+desteklemiyor:
+
+| VERBATIM (anchor YOK) | qp0 | qp32 | qp63 |
+|---|---|---|---|
+| epoch 0 | +0.1365 | +0.1561 | +0.2231 |
+| epoch 2 | +0.0847 | +0.1241 | +0.1675 |
+
+Taban **düşüyor**. Doğru ifade: anchor terimi olmadan en derin çıkış üç epoch
+sonra bile yayınlanmış kod çözücüden 0.17 dB uzakta, ve bu 0.1 dB bütçesini
+beş hızın dördünde ulaşılmaz kılıyor (qp16'dan itibaren "floor exceeds the
+budget").
+
+BEST (`--anchor_weight 10`) qp63'te +0.0296. **5.7 kat küçük.**
+
+Bu, "taban qp63'te bütçenin %30'unu yiyor" bulgusunun (E1, 67) diğer ucu:
+anchor'sız taban bütçenin **%167'si** oluyor. Anchor terimi gerçek iş yapıyor,
+ve 67'deki λ ölçekleme düzeltmesinin neden önemli olduğunu da güçlendiriyor.

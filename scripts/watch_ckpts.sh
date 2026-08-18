@@ -137,6 +137,25 @@ print(f\"epoch {c.get('epoch')} step {c.get('step','-')}\")" 2>/dev/null)
         --ckpt "$NEW" --device cuda:0 --frames 1 \
         --out "$SIG" 2>&1 | tail -9
 
+      # 3b. The SAME checkpoint, the SAME frames, the SAME budget -- decided by
+      # the decoder instead of transmitted. Stage 3 sends a ~94-bit exit map
+      # (0.008-0.020% of the bitrate); this sends nothing and pays 0.044% of the
+      # decode to run the router head instead. The two are the paper's A/B, so
+      # they have to be measured as a matched pair on every checkpoint rather
+      # than compared across checkpoints later.
+      #
+      # This uses the checkpoint's OWN jointly-trained head, which in BEST has
+      # collapsed to a qp-dependent constant (DECISIONS 60). That is the point
+      # of running it every time: whether the collapse persists, worsens or
+      # recovers over training is not otherwise visible. A head retrained
+      # against the frozen decoder is a separate, deliberate experiment and is
+      # not run from here -- it costs half an hour and would block the chain.
+      echo; echo "--- 3b. ROUTER system, zero added bits ---"
+      RTR="results/router_${TAG}_$(date +%m%d_%H%M).json"
+      CUDA_VISIBLE_DEVICES="$GPU" ./.venv/bin/python -u scripts/router_curve.py \
+        --ckpt "$NEW" --device cuda:0 --frames 1 \
+        --out "$RTR" 2>&1 | tail -9 || echo "  (router stage failed; chain continues)"
+
       # 4. The trade-off integrated over the curve rather than read at one
       # budget. A saving quoted at 0.1 dB is one sample of a frontier, and this
       # project has already been bitten by that: the grid-readout rule made a
