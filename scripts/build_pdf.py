@@ -586,6 +586,17 @@ def content(colw, fullw):
         r"slightly more than the release because it still pays the seam-repair "
         r"module; that 1.0095, not 1.0, is what every saving here is "
         r"<i>not</i> divided by.")
+    figure("rd_spread.png",
+           r"<b>Figure 7. The plane a codec is read on, and the spread behind "
+           r"the mean.</b> <b>a</b>, operating points against the released "
+           r"curve. <b>b</b>, the same with the quality axis expanded; labels "
+           r"are compute saved. <b>c</b>, per sequence at a matched point near "
+           r"0.1 dB; one dot per sequence, bar is the median.")
+    par(r"Panel c is the distribution the headline averages over, and it is "
+        r"wide. At q0 the median sequence saves 38.6% with an interquartile "
+        r"range of 32.0–41.5, while the worst saves −1.0% — the "
+        r"low-resolution sequences of Section 5.3, where two tiles leave nothing "
+        r"to allocate. Reporting the mean alone would hide both ends.")
     h2("5.2 Is per-tile adaptivity necessary?")
     figure("exit_map.png",
            r"<b>Figure 6. Where the decoder spends.</b> (a) the assignment "

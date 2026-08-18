@@ -26,6 +26,7 @@ WANTED = [
     "perclass.png",           # saving by test class vs tile count
     "contamination.png",      # seam against per-tile depth
     "map_transfer.png",       # reusing a map across time and rate
+    "rd_spread.png",          # rate-quality plane and per-sequence spread
     "latency.png",
 ]
 

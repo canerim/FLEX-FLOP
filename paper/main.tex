@@ -592,6 +592,23 @@ Table~\ref{tab:main} is the headline. At $0.1\dB$ the method saves
 reconstructions carry detail the shallow exits cannot reproduce, the floor rises
 with rate (Fig.~\ref{fig:seamqp}b), and both push the same way.
 
+\begin{figure}[t]
+\centering
+\includegraphics[width=\columnwidth]{figures/rd_spread.png}
+\caption{\textbf{The plane a codec is read on, and the spread behind the mean.}
+\textbf{a}, operating points against the released curve. \textbf{b}, the same
+with the quality axis expanded; labels are compute saved. \textbf{c}, per
+sequence at a matched point near $0.1\dB$; one dot per sequence, bar is the
+median.}
+\label{fig:rd}
+\end{figure}
+
+Figure~\ref{fig:rd}c is the distribution the headline averages over, and it is
+wide. At $q0$ the median sequence saves $38.6\%$ with an interquartile range of
+$32.0$--$41.5$, while the worst saves $-1.0\%$ --- the low-resolution sequences of
+Section~\ref{sec:resolution}, where two tiles leave nothing to allocate. Reporting
+the mean alone would hide both ends.
+
 \subsection{Is per-tile adaptivity necessary?}
 \label{sec:necessary}
 
