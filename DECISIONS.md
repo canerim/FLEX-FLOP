@@ -4120,3 +4120,53 @@ BEST (`--anchor_weight 10`) qp63'te +0.0296. **5.7 kat küçük.**
 Bu, "taban qp63'te bütçenin %30'unu yiyor" bulgusunun (E1, 67) diğer ucu:
 anchor'sız taban bütçenin **%167'si** oluyor. Anchor terimi gerçek iş yapıyor,
 ve 67'deki λ ölçekleme düzeltmesinin neden önemli olduğunu da güçlendiriyor.
+
+---
+
+## 76 — Grid seam repair kendi testinin yanlış tarafında
+
+Sunuma teknik seam slaytlarını yazarken piksel ölçeğinde bir figür ürettim
+(`scripts/seam_patches.py`) ve grid repair'in beklenenden kötü davrandığını
+gördüm. Tahmin etmek yerine ölçtüm — 8 dizi, qp63, aynı latent, aynı exit
+haritası, repair AÇIK vs KAPALI:
+
+| rejim | KAPALI | AÇIK | fark |
+|---|---|---|---|
+| bütün karolar tam derinlikte | 0.0672 | 0.0750 | **+0.0078 (kötü)** |
+| 0.1 dB'de yönlendirilmiş | 0.1259 | 0.1239 | −0.0019 (iyi) |
+
+Yani modül yönlendirilmiş rejimde **0.002 dB** kazandırıyor ve decode'un
+**%0.95'ine** mal oluyor. Ayrıca tam derinlikte kötüleştirdiği için **tabanı
+büyütüyor** — ki taban qp63'te bütçenin %30'unu zaten yiyor (67).
+
+Kıyas kendi projemizden: `arls` %10.7 için 0.019 dB kazandırıyordu ve
+reddedilmişti. Birim başına: arls 0.0018 dB/puan, grid repair 0.0020 dB/puan.
+Neredeyse aynı. **Aynı kurala göre grid repair de reddedilmeliydi.**
+
+Uyarı, slayta da yazıldı: modül ortak eğitildi, yani çıkarımda kapatmak onsuz
+eğitmekle aynı şey değil. Temiz test 256px'te `seam_repair=none` ile bir koşu,
+ve altı koşunun hiçbiri o değil. VERBATIM `none` kullanıyor ama başka altı
+bayrakta da farklı.
+
+Sıradaki deney listesine giriyor, ve E1 (anchor'ın λ ölçeklemesi) ile aynı yere
+bakıyor: ikisi de tabanı küçültmeye çalışıyor, ve taban yüksek hızda bütçenin
+en büyük tek kalemi.
+
+## 77 — Sunum: 23 slayt, tamamı İngilizce, seam'e beş slayt
+
+Kullanıcı ClassSR tarzı bir çıkış haritası, formüllerle teknik anlatım ve
+git'e push istedi.
+
+- `scripts/exit_map_figure.py` — Bosphorus qp32'de gerçek Lagrange tahsisi:
+  tekne exit 4, su ve gökyüzü exit 2, %33.4 tasarruf 0.098 dB'de. Yazarken bir
+  ölçüm hatası yakalandı: karo başına dB'yi kare ortalamasına bölüyordum, o
+  yüzden kolay karolar −6 dB okuyordu ("yayınlanmış kod çözücüden iyi", ki
+  hiçbir çıkış olamaz). Her karo kendi referansına bölünüyor artık.
+- `scripts/seam_patches.py` — karo sınırında 192px pencere, üç dolgu modu,
+  ×40 hata haritaları.
+- Slayt 11–15: seam'in türevi (`1 − ((F−2b)/F)² ≈ 4b/F`, %75 kirlenme),
+  dolgunun bir kestirimci olduğu, perimeter yasası, GridSeamRepair'in denklemi.
+
+Ayrıca 10. slayttaki "seam var olmayı bırakıyor" cümlesi düzeltildi: o canvas
+coupling'i anlatıyor ve `tile_coupling=False` altı koşunun altısında da. Ölçülmüş
+bir seçenek, ama bu sonuçların kullandığı şey değil.
