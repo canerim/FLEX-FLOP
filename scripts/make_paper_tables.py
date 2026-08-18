@@ -152,60 +152,94 @@ if d:
 
 # -------------------------------------------------------------- run compare
 print("run comparison")
+CFG = {"RECIPE512": ("$K{=}6$, $j{=}2$, 256\\,px", 41.91),
+       "BEST": ("$K{=}6$, $j{=}2$, 256\\,px", 41.91),
+       "BEST128": ("$K{=}6$, $j{=}2$, 128\\,px", 41.91),
+       "FINE12": ("$K{=}12$, $j{=}4$, 128\\,px", 50.29)}
 rows = []
-for tag in ("RECIPE512", "BEST", "FINE12", "BEST128"):
+for tag in ("RECIPE512", "BEST", "BEST128", "FINE12"):
     d, _ = pick(f"signalled_{tag}_ctc53.json", f"signalled_{tag}_b135.json")
     if not d:
         continue
-    r = {x["qp"]: x for x in d["rows"]
-         if abs(x["budget_db"] - 0.1) < 1e-9 and x.get("budget_reachable")}
-    if not r:
-        continue
-    vs = [r[q]["saving_pct_vs_release"] for q in QPS if q in r]
-    rows.append((tag, d.get("ckpt_epoch"), r, sum(vs) / len(vs)))
+    means = {}
+    for b in d["budgets"]:
+        r = {x["qp"]: x for x in d["rows"]
+             if abs(x["budget_db"] - b) < 1e-9 and x.get("budget_reachable")}
+        vs = [r[q]["saving_pct_vs_release"] for q in QPS if q in r]
+        means[b] = (sum(vs) / len(vs), len(vs)) if vs else (None, 0)
+    rows.append((tag, d.get("ckpt_epoch"), means))
 if rows:
-    lines = [r"\begin{tabular}{llrrrrrr}", r"\toprule",
-             r"Config & Ep. & " + " & ".join(f"$q{q}$" for q in QPS) +
-             r" & mean \\", r"\midrule"]
-    best = max(rows, key=lambda t: t[3])[0]
-    for tag, ep, r, mn in rows:
-        m = f"\\textbf{{{mn:.1f}}}" if tag == best else f"{mn:.1f}"
-        lines.append(f"{tag} & {ep} & " +
-                     " & ".join(f"{r[q]['saving_pct_vs_release']:.1f}" if q in r
-                                else "--" for q in QPS) + f" & {m} \\\\")
+    buds = sorted({b for _, _, m in rows for b in m})
+    lines = [r"\begin{tabular}{llr" + "r" * len(buds) + "}", r"\toprule",
+             r"Ladder & Config & Ceiling & " +
+             " & ".join(f"{b:.1f}\\,dB" for b in buds) + r" \\",
+             r"\midrule"]
+    best_at = {b: max((m[b][0] or -1) for _, _, m in rows) for b in buds}
+    for tag, ep, m in rows:
+        cfgs, ceil = CFG.get(tag, ("--", 0))
+        cells = []
+        for b in buds:
+            v, n = m.get(b, (None, 0))
+            if v is None:
+                cells.append("--")
+            else:
+                t = f"{v:.1f}" + ("" if n == len(QPS) else r"$^{\ast}$")
+                cells.append(f"\\textbf{{{t}}}" if abs(v - best_at[b]) < 1e-9 else t)
+        lines.append(f"{tag} & {cfgs} & {ceil:.1f} & " + " & ".join(cells) +
+                     r" \\")
     lines += [r"\bottomrule", r"\end{tabular}"]
     w("runs.tex", "\n".join(lines))
+    fm = dict(rows).get if False else None
+    for tag, ep, m in rows:
+        if tag == "FINE12":
+            mac("FineHalfDb", f"{m.get(0.5,(0,0))[0]:.1f}")
+        if tag == "RECIPE512":
+            mac("CoarseHalfDb", f"{m.get(0.5,(0,0))[0]:.1f}")
 
-# ------------------------------------------------------------- static baseline
-print("static baseline")
-d, _ = pick("static_RECIPE512_b01.json")
-if d:
-    lines = [r"\begin{tabular}{llrr}", r"\toprule",
-             r"$q$ & Allocation & $\Delta$PSNR (dB) & MACs saved (\%) \\",
-             r"\midrule"]
-    for row in d["rows"]:
-        q = row["qp"]
-        first = True
-        for u in row["uniform"]:
-            fits = u["db"] <= d["budget_db"]
-            lab = f"uniform, exit {u['exit']}" + ("" if fits else r"$^{\dagger}$")
-            lines.append((f"{q}" if first else "") + f" & {lab} & "
-                         f"{u['db']:.3f} & {u['saving']:.1f} \\\\")
-            first = False
-        lines.append(f" & random (matched mix) & {row['random']['db']:.3f} & "
-                     f"{row['random']['saving']:.1f} \\\\")
-        lines.append(f" & \\textbf{{oracle}} & \\textbf{{{row['oracle']['db']:.3f}}} & "
-                     f"\\textbf{{{row['oracle']['saving']:.1f}}} \\\\")
-        lines.append(r"\midrule")
-    lines[-1] = r"\bottomrule"
-    lines.append(r"\end{tabular}")
-    w("static.tex", "\n".join(lines))
-    n_over = sum(1 for r_ in d["rows"] if r_["best_static"] is None)
-    mac("StaticInfeasibleRates", str(n_over))
-    mac("StaticTotalRates", str(len(d["rows"])))
-    r0 = d["rows"][0]
-    mac("RandomLowRate", f"{r0['random']['saving']:.1f}")
-    mac("RandomLowDb", f"{r0['random']['db']:.3f}")
+# ---------------------------------------------------------- per resolution
+print("per dataset")
+d, _ = pick("curve_RECIPE512_ctc53.json")
+if d and d.get("op_points"):
+    import sys as _s
+    _s.path.insert(0, str(Path.home() / "DCVC")); _s.path.insert(0, str(R))
+    import ctc_intra as _C
+    seqs, _m = _C.discover([])
+    FAM = {x["name"]: x["cls"] for x in seqs}
+    RESO = {"UVG": "1920$\\times$1080", "MCL-JCV": "1920$\\times$1080",
+           "HEVC\\_B": "1920$\\times$1080", "HEVC\\_E": "1280$\\times$720",
+           "HEVC\\_C": "832$\\times$480", "HEVC\\_D": "416$\\times$240"}
+    TILES = {"1920$\\times$1080": 40, "1280$\\times$720": 18,
+             "832$\\times$480": 8, "416$\\times$240": 2}
+    D = 1.0095
+    per, realised = {}, {}
+    for q in (0, 63):
+        ops = [o for o in d["op_points"]
+               if o["qp"] == q and o.get("per_sequence")]
+        if not ops:
+            continue
+        o = min(ops, key=lambda o: abs(o.get("target_db", 9) - 0.1))
+        realised[q] = o.get("db_vs_uf_per_frame")
+        for sq in o["per_sequence"]:
+            per.setdefault(FAM.get(sq["seq"], "?"), {}).setdefault(q, []).append(
+                100 - (100 - sq["saving_pct"]) * D)
+    order = ["UVG", "MCL-JCV", "HEVC_B", "HEVC_E", "HEVC_C", "HEVC_D"]
+    if per:
+        lines = [r"\begin{tabular}{llrrr}", r"\toprule",
+                 r"Class & Resolution & Tiles & $q0$ & $q63$ \\", r"\midrule"]
+        for f in order:
+            if f not in per:
+                continue
+            esc = f.replace("_", r"\_")
+            res = RESO.get(esc, "--")
+            a = sum(per[f].get(0, [0])) / max(1, len(per[f].get(0, [1])))
+            b = sum(per[f].get(63, [0])) / max(1, len(per[f].get(63, [1])))
+            lines.append(f"{esc} & {res} & {TILES.get(res,'--')} & "
+                         f"{a:.1f} & {b:.1f} \\\\")
+        mac("SmallResHigh", f"{sum(per['HEVC_D'].get(63,[0]))/max(1,len(per['HEVC_D'].get(63,[1]))):.1f}")
+        mac("BigResHigh", f"{sum(per['MCL-JCV'].get(63,[0]))/max(1,len(per['MCL-JCV'].get(63,[1]))):.1f}")
+        mac("PerClassDb", f"{realised.get(63, 0):.3f}")
+        lines += [r"\bottomrule", r"\end{tabular}"]
+        w("perclass.tex", "\n".join(lines))
 
 # ------------------------------------------------------------- complexity
 print("complexity")

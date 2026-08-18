@@ -20,8 +20,14 @@ def load(name):
 
 
 def budget_rows(tag):
-    """{budget: {qp: row}} for a --budgets run, or None."""
-    d = load(f"signalled_{tag}_b135.json")
+    """{budget: {qp: row}} for a --budgets run, or None.
+
+    Prefers the full 53-sequence file. The 40-sequence results were taken before
+    HEVC classes B, C and D were on disk and are superseded, not merely older:
+    C and D are 832x480 and 416x240, eight and two tiles per frame against forty
+    at 1080p, so the routing granularity is different there.
+    """
+    d = load(f"signalled_{tag}_ctc53.json") or load(f"signalled_{tag}_b135.json")
     if not d:
         return None, None
     out = {}
@@ -142,7 +148,7 @@ if len(have) > 1:
 # --------------------------------------------------- 3. operating structure
 w("## 3. Where a quality budget does anything at all")
 w("")
-sat = load("saturation_RECIPE512.json")
+sat = load("saturation_RECIPE512_ctc53.json") or load("saturation_RECIPE512.json")
 if sat:
     S = {r["qp"]: r for r in sat["rows"]}
     qs = sorted(S)
@@ -275,6 +281,42 @@ w("Even with a **perfect** gate — zero correction in the interior, the ring ga
   "run.**")
 w("")
 
+# ------------------------------------------------------ 4b. is adaptivity needed
+w("## 4b. Is per-tile adaptivity necessary?")
+w("")
+sb = load("static_RECIPE512_b01.json")
+if sb:
+    w("The first question a reviewer asks. Three controls at matched compute, "
+      f"{sb['n_sequences']} sequences, {sb['budget_db']} dB budget:")
+    w("")
+    for row in sb["rows"]:
+        w(f"**qp {row['qp']}**")
+        w("")
+        rows = [[f"uniform, exit {u['exit']}", f"{u['db']:.4f}",
+                 f"{u['saving']:.1f}%",
+                 "yes" if u["db"] <= sb["budget_db"] else "**no**"]
+                for u in row["uniform"]]
+        rows.append(["random (oracle histogram, shuffled)",
+                     f"{row['random']['db']:.4f}",
+                     f"{row['random']['saving']:.1f}%", "—"])
+        if row.get("rate_rank"):
+            rows.append([f"rate-ranked (agree {row['rate_rank']['agreement']:.2f})",
+                         f"{row['rate_rank']['db']:.4f}",
+                         f"{row['rate_rank']['saving']:.1f}%", "—"])
+        rows.append(["**oracle**", f"**{row['oracle']['db']:.4f}**",
+                     f"**{row['oracle']['saving']:.1f}%**", "—"])
+        w(table(["allocation", "dB", "saved", "fits the budget"], rows))
+        w("")
+else:
+    w("*Being measured — `scripts/static_baseline.py`. Three allocations at "
+      "matched compute: every tile at the same exit (what a statically shallower "
+      "decoder would give), the oracle's own exit histogram shuffled across tiles "
+      "at random, the same histogram ordered by the bits the entropy model spent "
+      "per tile, and the oracle. Sharing a histogram means the last three share "
+      "an average cost exactly, so what separates them is ranking quality and "
+      "nothing else.*")
+    w("")
+
 # -------------------------------------------------------------------- 5. A/B
 w("## 5. Who decides where each tile exits")
 w("")
@@ -336,15 +378,42 @@ w("Within one block, at C = 384, the 3×3 depthwise is `9C` = 3,456 MAC/px "
   "shapes the design: it is why the seam exists, why the adapters are pointwise "
   "on purpose, and why canvas coupling is affordable.")
 w("")
-w("![latency](figures/latency.png)")
-w("")
-w("The MAC model **overstates the wall-clock gain by 2–3×**. Profiling puts the "
-  "cause in per-group bookkeeping — 32% of the per-tile loop — and a sorted-tile "
-  "execution prototype recovers 23–37% of it, verified bit-identical "
-  "(`torch.allclose(atol=0, rtol=0)`). It has not been landed in `decoder.py` "
-  "because `tile_gate` is indexed by original tile id and a pixel test would not "
-  "catch a gradient bug.")
-w("")
+lat = load("latency_RECIPE512_sorted.json")
+if lat:
+    w("Measured, 1080p, median of 40 interleaved iterations:")
+    w("")
+    hdr = ["qp", "released (ms)", "routed, masked", "routed, sorted",
+           "saved, masked", "saved, sorted", "saved, MACs"]
+    rows = []
+    for r in lat["rows"]:
+        rows.append([str(r["qp"]), f"{r['ms_stock']:.0f}",
+                     f"{r['ms_routed']:.0f}",
+                     f"{r.get('ms_routed_sorted', float('nan')):.0f}",
+                     f"{r['realised_saving_pct']:+.1f}%",
+                     f"**{r.get('realised_saving_sorted_pct', float('nan')):+.1f}%**",
+                     f"{r['predicted_saving_pct']:.1f}%"])
+    w(table(hdr, rows))
+    w("")
+    w("Two things to read here. **The obvious implementation is slower than the "
+      "dense decoder** at all but the lowest rate — a boolean mask, a gather of "
+      "the survivors and a scatter of the finished, at every group boundary, "
+      "forces a device-to-host synchronisation each time, and `latency_profile` "
+      "attributes 32% of the per-tile loop to it. **Sorting the tiles once by "
+      "depth removes it**: each group becomes a slice instead of a gather, the "
+      "boundaries come from one cumulative count, and the output is bit-identical "
+      "on CUDA (`tests/test_sorted_tiles.py`). The saving goes from "
+      f"{lat['rows'][0]['realised_saving_pct']:.1f}% to "
+      f"{lat['rows'][0].get('realised_saving_sorted_pct', 0):.1f}% at qp 0 "
+      f"against a {lat['rows'][0]['predicted_saving_pct']:.1f}% arithmetic "
+      "prediction.")
+    w("")
+    w("Tiling itself costs "
+      f"{lat['rows'][0]['overhead_pct']:.1f}% before anything exits early — the "
+      "per-tile loop is a less efficient shape for the same arithmetic.")
+    w("")
+else:
+    w("![latency](figures/latency.png)")
+    w("")
 w("Translated into the currency a codec paper uses, the price of speed is flat "
   "at **≈6.5 BD-Rate points per unit of speedup**, which is 2.4× cheaper than "
   "DCVC-UF's own model-size trade.")

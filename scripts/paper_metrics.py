@@ -17,7 +17,10 @@ directly comparable to the paper's own table, where DCVC-UF (LD) is -9.5% and
 
 What this script CANNOT produce
 -------------------------------
-* **HEVC B, C and D.** Those 13 sequences are not on this server. UVG (7),
+* **HEVC B, C and D** were absent when this script was written and are now on
+  disk, so the set is the full 53. The per-dataset breakdown below reads whatever
+  the result file recorded, which is how a partial set could never be mistaken
+  for a complete one. UVG (7),
   MCL-JCV (30) and HEVC E (3) are, and are reported per dataset.
 * **FPS.** The paper measures wall-clock decoding speed. This project measures
   MACs. A tiled early-exit decoder with per-tile depths has real scheduling
@@ -180,16 +183,25 @@ def main():
 
     # ---- per dataset, the paper's grouping ------------------------------
     print("\n" + "=" * 78)
-    print("Per dataset. HEVC B/C/D are not on this server (13 sequences).")
+    print("Per dataset, as recorded in the result file.")
     print("=" * 78)
-    pc = J("curve_BEST.json")
+    pc = J("curve_RECIPE512_ctc53.json", "curve_BEST.json")
     if pc and pc.get("op_points"):
+        # Read the class from DCVC's own test config rather than guessing from
+        # the filename. The guessing version silently mislabelled every HEVC B
+        # sequence as UVG the moment classes B, C and D landed on disk -- both
+        # are 1920x1080 -- and reported "UVG, n=20".
+        def _families():
+            import sys as _s
+            _s.path.insert(0, str(Path.home() / "DCVC"))
+            _s.path.insert(0, str(ROOT))
+            import ctc_intra as _C
+            seqs, _ = _C.discover([])
+            return {x["name"]: x["cls"] for x in seqs}
+        FAM = _families()
+
         def fam(n):
-            if n.startswith("videoSRC"):
-                return "MCL-JCV"
-            if "1280x720" in n:
-                return "HEVC E"
-            return "UVG"
+            return FAM.get(n, "unknown")
         # the operating point closest to the 0.1 dB budget, per qp
         # The op_points are a coarse grid and their target_db is in the POOLED
         # convention, so the one nearest 0.1 actually lands at ~0.14 dB
@@ -209,7 +221,7 @@ def main():
                     100 - (100 - s["saving_pct"]) * D)
         print(f"\n  saving by dataset, at the nearest measured operating point\n")
         print(f"  {'dataset':<10}{'n':>4}" + "".join(f"{q:>9}" for q in QPS))
-        for f in ("UVG", "MCL-JCV", "HEVC E"):
+        for f in ("UVG", "MCL-JCV", "HEVC_B", "HEVC_C", "HEVC_D", "HEVC_E"):
             if f not in by:
                 continue
             n = len(next(iter(by[f].values())))
@@ -237,8 +249,8 @@ def main():
     print(f"\n  {'model':<34}{'intra MACs/frame':>18}{'params':>10}")
     print(f"  {'released DCVC-UF intra decoder':<34}{INTRA_GMAC:>17.1f}G"
           f"{tot/1e6:>9.1f}M")
-    a = J("signalled_BEST_0817_1542.json")
-    b = J("router_BEST_v2_lowlam.json")
+    a = J("signalled_RECIPE512_ctc53.json", "signalled_BEST_0817_1542.json")
+    b = J("router_RECIPE512_lam4.1e-6.json", "router_BEST_v2_lowlam.json")
     for lab, d in (("FLEX-UF A, signalled, 0.1 dB", a),
                    ("FLEX-UF B, router, 0.1 dB", b)):
         if not d:
@@ -348,7 +360,8 @@ def figures(rows, rel_psnr, bpp, D):
 
 if __name__ == "__main__":
     rows = main()
-    anc, why = J("anchor_BEST_5qp.json"), J("why_qp.json")
+    anc, why = (J("anchor_RECIPE512_ctc53.json", "anchor_BEST_5qp.json"),
+                J("why_qp.json"))
     print()
     figures(rows, {r["qp"]: r["stock_psnr"] for r in anc["rows"]},
             {r["qp"]: r["bpp"] for r in why["rows"]}, deepest_cost("BEST"))

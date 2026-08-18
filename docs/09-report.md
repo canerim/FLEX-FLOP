@@ -32,26 +32,41 @@ Compute saved against the released decoder, per rate and per budget. Every dB is
 | **0.30 dB** | 41.91% | 41.91% | 41.91% | 41.84% | 40.68% | 41.65 |
 | **0.50 dB** | 41.91% | 41.91% | 41.91% | 41.91% | 41.91% | 41.91 |
 
+**BEST** — checkpoint epoch 1, 40 sequences
+
+| budget | qp 0 | qp 16 | qp 32 | qp 48 | qp 63 | mean |
+|---|---|---|---|---|---|---|
+| **0.10 dB** | 34.64% | 28.95% | 23.99% | 21.74% | 18.83% | 25.63 |
+| **0.30 dB** | 41.91% | 41.91% | 40.68% | 37.85% | 34.21% | 39.31 |
+| **0.50 dB** | 41.91% | 41.91% | 41.91% | 41.91% | 40.54% | 41.64 |
+
+### Runs compared at 0.1 dB
+
+| run | ckpt | qp 0 | qp 16 | qp 32 | qp 48 | qp 63 | mean |
+|---|---|---|---|---|---|---|---|
+| RECIPE512 | ep 0 | 33.18 | 29.48 | 24.44 | 21.36 | 18.78 | **25.45** |
+| BEST | ep 1 | 34.64 | 28.95 | 23.99 | 21.74 | 18.83 | **25.63** |
+
 ## 3. Where a quality budget does anything at all
 
 For every rate there are three regions, and only the middle one is a design choice.
 
 | qp | 0 | 8 | 16 | 24 | 32 | 40 | 48 | 56 | 63 |
 |---|---|---|---|---|---|---|---|---|---|
-| **floor** (dB) | 0.0388 | 0.0427 | 0.0473 | 0.0526 | 0.0557 | 0.0584 | 0.0608 | 0.0631 | 0.0659 |
-| **saturation** (dB) | 0.1818 | 0.1908 | 0.2129 | 0.2395 | 0.2687 | 0.2846 | 0.3048 | 0.3281 | 0.3483 |
-| usable band (dB) | 0.1430 | 0.1481 | 0.1656 | 0.1869 | 0.2130 | 0.2262 | 0.2440 | 0.2650 | 0.2824 |
+| **floor** (dB) | 0.0361 | 0.0402 | 0.0452 | 0.0503 | 0.0543 | 0.0586 | 0.0622 | 0.0665 | 0.0716 |
+| **saturation** (dB) | 0.1791 | 0.1945 | 0.2194 | 0.2514 | 0.2819 | 0.3049 | 0.3330 | 0.3653 | 0.3955 |
+| usable band (dB) | 0.1431 | 0.1543 | 0.1741 | 0.2010 | 0.2276 | 0.2463 | 0.2707 | 0.2988 | 0.3239 |
 
 - **Below the floor** no allocation meets the budget: tiling alone already costs that much, with every tile at full depth.
 - **Above saturation** every tile is already on the cheapest rung the split permits, saving is pinned at the architectural ceiling **41.91%**, and more dB buys nothing.
 
 ![the working range of a budget](figures/saturation_RECIPE512.png)
 
-The 0.1 dB budget this project works to uses 43% of the available band at qp 0 and only 12% at qp 63 — the ladder has more to offer at high rate than the budget lets it give.
+The 0.1 dB budget this project works to uses 45% of the available band at qp 0 and only 9% at qp 63 — the ladder has more to offer at high rate than the budget lets it give.
 
 ### The one budget that saturates qp 0 and nothing else
 
-Any budget in **[0.1818, 0.1908) dB** puts qp 0 exactly on the ceiling while qp 8 and above stay below it — a window 9.0 millibels wide. Against the coarser {0, 16, …} grid the window is [0.1818, 0.2129). **0.185 dB** sits comfortably inside both.
+Any budget in **[0.1791, 0.1945) dB** puts qp 0 exactly on the ceiling while qp 8 and above stay below it — a window 15.3 millibels wide. Against the coarser {0, 16, …} grid the window is [0.1791, 0.2194). **0.185 dB** sits comfortably inside both.
 
 This is a property of *this checkpoint*, not a constant: the saturation point is the quality of exit 2, and exit 2 improves with training. The ceiling itself does not move — `100·(1 − c_j)` is pure arithmetic on the cost model.
 
@@ -111,6 +126,10 @@ The one learned component, gated by position within a tile. The trained gate did
 
 Even with a **perfect** gate — zero correction in the interior, the ring gain unchanged — the ceiling on what it could earn is `0.062 × 0.000047 × 0.0027 / 4.30e-5 ≈ 0.0008 dB`, against the 0.95% of decode it costs. `arls` was rejected at 0.0019 dB per point of decode; this is at best 0.0008 dB for 0.95 points. **Decision: `seam_repair=none` plus `tile_coupling=True` on the next run.**
 
+## 4b. Is per-tile adaptivity necessary?
+
+*Being measured — `scripts/static_baseline.py`. Three allocations at matched compute: every tile at the same exit (what a statically shallower decoder would give), the oracle's own exit histogram shuffled across tiles at random, the same histogram ordered by the bits the entropy model spent per tile, and the oracle. Sharing a histogram means the last three share an average cost exactly, so what separates them is ranking quality and nothing else.*
+
 ## 5. Who decides where each tile exits
 
 ![A versus B](figures/router_ab.png)
@@ -131,9 +150,17 @@ Even with a **perfect** gate — zero correction in the interior, the ring gain 
 
 Within one block, at C = 384, the 3×3 depthwise is `9C` = 3,456 MAC/px against the block's `8C² + 9C` = 1,183,104 — **0.29%**. That single number shapes the design: it is why the seam exists, why the adapters are pointwise on purpose, and why canvas coupling is affordable.
 
-![latency](figures/latency.png)
+Measured, 1080p, median of 40 interleaved iterations:
 
-The MAC model **overstates the wall-clock gain by 2–3×**. Profiling puts the cause in per-group bookkeeping — 32% of the per-tile loop — and a sorted-tile execution prototype recovers 23–37% of it, verified bit-identical (`torch.allclose(atol=0, rtol=0)`). It has not been landed in `decoder.py` because `tile_gate` is indexed by original tile id and a pixel test would not catch a gradient bug.
+| qp | released (ms) | routed, masked | routed, sorted | saved, masked | saved, sorted | saved, MACs |
+|---|---|---|---|---|---|---|
+| 0 | 274 | 247 | 196 | +9.9% | **+28.5%** | 35.3% |
+| 32 | 401 | 403 | 314 | -0.4% | **+21.8%** | 28.0% |
+| 63 | 512 | 568 | 438 | -10.9% | **+14.4%** | 20.1% |
+
+Two things to read here. **The obvious implementation is slower than the dense decoder** at all but the lowest rate — a boolean mask, a gather of the survivors and a scatter of the finished, at every group boundary, forces a device-to-host synchronisation each time, and `latency_profile` attributes 32% of the per-tile loop to it. **Sorting the tiles once by depth removes it**: each group becomes a slice instead of a gather, the boundaries come from one cumulative count, and the output is bit-identical on CUDA (`tests/test_sorted_tiles.py`). The saving goes from 9.9% to 28.5% at qp 0 against a 35.3% arithmetic prediction.
+
+Tiling itself costs 8.5% before anything exits early — the per-tile loop is a less efficient shape for the same arithmetic.
 
 Translated into the currency a codec paper uses, the price of speed is flat at **≈6.5 BD-Rate points per unit of speedup**, which is 2.4× cheaper than DCVC-UF's own model-size trade.
 

@@ -514,23 +514,60 @@ The obvious alternative to routing tiles is not to route them: run every tile at
 the same shallower exit and accept the loss. Table~\ref{tab:static} puts that
 option, and two stronger controls, at matched compute.
 
-The uniform rows show how coarse the ladder is relative to the budget. A rung is
-worth several hundredths of a decibel, the budget is one tenth, and the exits
-that a uniform assignment could reach at $0.1\dB$ are the deep ones that save
-almost nothing.
+The uniform rows answer it directly, and the answer sharpens with rate. At the
+lowest rate a static decoder can reach exit 3 within the budget and save
+$27.0\%$, against the oracle's \MainLowRate\%. At $q48$ and $q63$ the only
+uniform depth that fits is the deepest one, which \emph{costs} $0.95\%$ rather
+than saving anything --- so there the choice is not between $17\%$ and something
+smaller, it is between $17\%$ and nothing. Averaged over rates the best static
+allocation saves $10.2\%$ where the adaptive one saves \MainMean\%.
 
 The two shuffled rows separate effects that are easy to conflate. Given the
 oracle's own exit histogram --- the same mix of depths, hence the same average
 cost --- but assigned to tiles at random, quality collapses: what the allocation
 buys is not that some tiles run shallower, it is knowing \emph{which} ones can.
 The rate-ranked row keeps that histogram and orders it by a signal the decoder
-already holds, the bits the entropy model spent on each tile. It is the cheapest
-conceivable router --- no parameters, no training --- and it is the natural
-analogue of the confidence rules used by early-exit
-classifiers~\cite{branchynet,msdnet}, which likewise read a signal off the
-network's own output. How much of the oracle's advantage it recovers is a direct
-measure of how much a learned router is buying.
+already holds: the bits the entropy model spent on each tile. It is the cheapest
+conceivable router --- no parameters, no training, and the number is available
+before the trunk starts --- and it is the natural analogue of the confidence
+rules used by early-exit classifiers~\cite{branchynet,msdnet}, which likewise
+read a signal off the network's own output.
+
+It recovers most of the gap. At $q63$, random costs $0.141\dB$ and the oracle
+$0.100\dB$ at identical compute; rate-ranking costs $0.110\dB$, i.e.\ $75\%$ of
+the oracle's advantage over chance, at $0.68$--$0.79$ agreement with the oracle's
+map. A learned router therefore has to beat a free baseline that is already three
+quarters of the way there --- a comparison we would not have made without this
+control, and one we suggest any adaptive-inference paper should report.
 Fig.~\ref{fig:exitmap} shows the assignment the oracle arrives at.
+
+\subsection{Resolution, and the granularity of a tile}
+\label{sec:resolution}
+
+\begin{table}[t]
+\centering
+\input{tables/perclass}
+\caption{\textbf{Saving by test class} (\%), at a matched operating point near
+$0.1\dB$. ``Tiles'' is how many $256$\,px tiles a frame of that resolution
+contains. The method is a function of tile count far more than of content.}
+\label{tab:perclass}
+\end{table}
+
+Completing the test set exposed a dependence the 1080p-only subset had hidden.
+Table~\ref{tab:perclass} groups the saving by class. At 1080p, where a frame is
+40 tiles, the method saves $36$--$39\%$ at the lowest rate. At $832{\times}480$
+it is 8 tiles and $23.6\%$; at $416{\times}240$ it is 2 tiles and $16.5\%$. At
+high rate the small resolutions collapse to \SmallResHigh\% against
+\BigResHigh\% for 1080p.
+
+The cause is granularity, not content: with two tiles per frame there is almost
+no allocation to make, and the Lagrangian degenerates towards a uniform choice.
+The fix is not more compute but a tile size chosen relative to the frame --- the
+tiling penalty scales with the tile perimeter (Table~\ref{tab:tilesize}) and the
+MAC count does not depend on tile size at all, so the trade is between seam and
+granularity and it should be resolved per resolution. We report the single
+$256$\,px setting used throughout, and note that a resolution-adaptive tile size
+is the obvious extension.
 
 \subsection{The working range of a quality budget}
 \label{sec:operating}
@@ -632,14 +669,38 @@ We report this because the negative result is the more useful half: a paper that
 reports only MACs would have claimed a speedup that the same code, run as
 written, did not deliver.
 
-\subsection{Configurations}
+\subsection{The right ladder depends on the budget}
+\label{sec:ladder}
 
 \begin{table}[t]
 \centering
 \resizebox{\columnwidth}{!}{\input{tables/runs}}
-\caption{\textbf{Ladder configurations} at $0.1\dB$, same test set and protocol.}
+\caption{\textbf{Ladder configurations}, mean saving (\%) over the five rates,
+same test set and protocol. ``Ceiling'' is Eq.~(\ref{eq:ceiling}).
+$^{\ast}$ one rate is infeasible at that budget --- the ladder's floor exceeds
+it --- so the mean is over the remaining four.}
 \label{tab:runs}
 \end{table}
+
+Section~\ref{sec:operating} argued that once a budget saturates a ladder the
+only way to spend more is a rung that does not exist. Table~\ref{tab:runs}
+measures it. A finer ladder ($K{=}12$, $j{=}4$) has a ceiling of $50.3\%$
+against $41.9\%$, and the two orderings cross between $0.1$ and $0.3\dB$:
+
+\begin{itemize}\itemsep1pt
+\item At $0.1\dB$ the coarse ladder wins, and the fine one cannot even reach the
+      budget at the highest rate. Splitting later ($j{=}4$ against $j{=}2$) puts
+      twice as many blocks in the per-tile section, which by
+      Eq.~(\ref{eq:contam}) raises the floor.
+\item At $0.5\dB$ the fine ladder wins by $6.7$ points, \FineHalfDb\% against
+      \CoarseHalfDb\%, because the coarse one has been pinned at its ceiling
+      since $0.3\dB$ and has nothing left to give.
+\end{itemize}
+
+So the ladder is not a hyperparameter to be tuned once. It is a function of the
+operating point, and the floor--saturation window of
+Section~\ref{sec:operating} is what tells you which side of the crossover you are
+on.
 
 % =========================================================== limitations
 \section{Limitations}

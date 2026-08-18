@@ -6,47 +6,47 @@
   "rows": [
     {
       "qp": 0,
-      "saved_at_budget": 38.86091482168601,
-      "db_for_target": 0.03926138387341638,
-      "overspend_db": -0.06073861612658363,
-      "floor_db": -0.00998126994818449,
+      "saved_at_budget": 33.26342458981031,
+      "db_for_target": 0.08324229487045137,
+      "overspend_db": -0.016757705129548633,
+      "floor_db": 0.0437699593603611,
       "floor_share_pct": null,
       "reachable": true
     },
     {
       "qp": 16,
-      "saved_at_budget": 34.82069256636692,
-      "db_for_target": 0.06505388104813987,
-      "overspend_db": -0.03494611895186013,
-      "floor_db": -0.0009243186796084046,
-      "floor_share_pct": null,
+      "saved_at_budget": 27.91993074067146,
+      "db_for_target": 0.1101597096943262,
+      "overspend_db": 0.010159709694326197,
+      "floor_db": 0.054623521864414215,
+      "floor_share_pct": 537.6484516572292,
       "reachable": true
     },
     {
       "qp": 32,
-      "saved_at_budget": 27.659203499519606,
-      "db_for_target": 0.11905044629176113,
-      "overspend_db": 0.019050446291761128,
-      "floor_db": 0.008070086129009724,
-      "floor_share_pct": 42.36166442200279,
+      "saved_at_budget": 20.93350373294731,
+      "db_for_target": 0.14812066106366473,
+      "overspend_db": 0.04812066106366472,
+      "floor_db": 0.06331890821456909,
+      "floor_share_pct": 131.5836208708703,
       "reachable": true
     },
     {
       "qp": 48,
-      "saved_at_budget": 22.55840201515236,
-      "db_for_target": 0.17465213598263302,
-      "overspend_db": 0.07465213598263301,
-      "floor_db": 0.012651852332055569,
-      "floor_share_pct": 16.947743243406833,
+      "saved_at_budget": 16.102250725142554,
+      "db_for_target": 0.2006995947553388,
+      "overspend_db": 0.1006995947553388,
+      "floor_db": 0.06301520764827728,
+      "floor_share_pct": 62.577419304794574,
       "reachable": true
     },
     {
       "qp": 63,
-      "saved_at_budget": 17.349458156046893,
-      "db_for_target": 0.2571599661106833,
-      "overspend_db": 0.1571599661106833,
-      "floor_db": 0.015837786719202995,
-      "floor_share_pct": 10.077494358868016,
+      "saved_at_budget": 12.1183237462173,
+      "db_for_target": 0.2860146858332627,
+      "overspend_db": 0.18601468583326272,
+      "floor_db": 0.06313864886760712,
+      "floor_share_pct": 33.942830150627174,
       "reachable": true
     }
   ]
