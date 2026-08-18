@@ -87,8 +87,7 @@ def pipeline():
     # --- encoder, frozen ----------------------------------------------------
     ax.add_patch(Rectangle((0.015, 0.855), 0.335, 0.115, facecolor="#f2f2f2",
                            edgecolor="#bbbbbb", lw=0.6))
-    ax.text(0.0175, 0.985, "FROZEN  —  every weight bit-identical to released "
-            "DCVC-UF, verified each run", fontsize=FSS, color=ns.INK2)
+    ax.text(0.0175, 0.985, "FROZEN", fontsize=FSS, color=ns.INK2)
     two(ax_ := None or 0.03, 0.878, 0.095, 0.068, "encoder", "$g_a$", fc_="#e8e8e8")
     two(0.145, 0.878, 0.095, 0.068, "hyperprior", "entropy model", fc_="#e8e8e8")
     two(0.26, 0.878, 0.075, 0.068, "bitstream", "ŷ, scales", fc_="#e8e8e8")
@@ -108,8 +107,7 @@ def pipeline():
     two(0.40, 0.700, 0.095, 0.070, "patchify", f"{cfg.rgb_patch}px tiles",
         fc_="#fff3d9")
     arrow(ax, 0.37, 0.735, 0.40, 0.735)
-    ax.text(0.4475, 0.678, "0 FLOP — and where the seam is born",
-            fontsize=FSS, color=ns.VERM, ha="center")
+    ax.text(0.4475, 0.678, "0 FLOP", fontsize=FSS, color=ns.VERM, ha="center")
 
     # --- the ladder ---------------------------------------------------------
     x0, wg, gap = 0.575, 0.088, 0.017
@@ -129,7 +127,7 @@ def pipeline():
         two(x, 0.520, wg, 0.090, f"exit {g}", lab, f"cost {COST[g]:.3f}×",
             fc_="#fdeadb", ec=ns.ORANGE)
     arrow(ax, 0.495, 0.735, x0, 0.735)
-    ax.text(0.985, 0.492, "cost = fraction of one released decode",
+    ax.text(0.985, 0.492, "cost: fraction of one released decode",
             fontsize=FSS, color=ns.INK2, ha="right")
 
     # --- the exit map, and who produces it ----------------------------------
@@ -157,25 +155,20 @@ def pipeline():
                            edgecolor=ns.PURPLE, lw=0.7))
     ax.text(0.032, 0.252, "A  ·  the encoder searches, then signals the map",
             fontsize=6, color=ns.PURPLE, weight="bold")
-    ax.text(0.032, 0.215,
-            "sees the SOURCE, so it computes the oracle exactly\n"
-            "     k*(t) = argmin$_k$ [ MSE(t,k) + λ·cost(k) ]\n"
-            "sends ≈94 bit/frame — 0.008–0.020% of the bitrate\n"
-            "costs the ENCODER ≈1.21 decodes; the decoder is simply told\n"
-            "needs one new bitstream field, so both ends must agree",
-            fontsize=FSS, va="top", linespacing=1.75)
+    ax.text(0.243, 0.155, "k*(t) = argmin$_k$ [ MSE(t,k) + λ·c$_k$ ]",
+            fontsize=6.2, ha="center")
+    ax.text(0.243, 0.085, "≈94 bit/frame", fontsize=FSS, ha="center",
+            color=ns.INK2)
 
     ax.add_patch(Rectangle((0.53, 0.035), 0.455, 0.245, facecolor="#eef6fb",
                            edgecolor=ns.BLUE, lw=0.7))
     ax.text(0.547, 0.252, "B  ·  the decoder predicts it, nothing is signalled",
             fontsize=6, color=ns.BLUE, weight="bold")
-    ax.text(0.547, 0.215,
-            "sees only decoder-side data — stem map, ŷ, scales, qp\n"
-            "     k̂(t) = argmax$_k$ [ log softmax(z$_t$)$_k$ − β·cost(k) ]\n"
-            "sends nothing — the file stays byte-identical to a stock stream\n"
-            "costs the DECODER 0.163%, charged inside every saving reported\n"
-            "deployable by a decoder vendor alone",
-            fontsize=FSS, va="top", linespacing=1.75)
+    ax.text(0.757, 0.155,
+            "k̂(t) = argmax$_k$ [ log softmax(z$_t$)$_k$ − β·c$_k$ ]",
+            fontsize=6.2, ha="center")
+    ax.text(0.757, 0.085, "0 bits, 0.163% of a decode", fontsize=FSS,
+            ha="center", color=ns.INK2)
 
     arrow(ax, 0.243, 0.280, 0.243, 0.565, color=ns.PURPLE, ls=(0, (3, 2)),
           style="-")
@@ -184,9 +177,7 @@ def pipeline():
     arrow(ax, 0.757, 0.330, 0.470, 0.330, color=ns.BLUE, ls=(0, (3, 2)), style="-")
     arrow(ax, 0.470, 0.330, 0.470, 0.520, color=ns.BLUE, ls=(0, (3, 2)))
 
-    ax.text(0.0, 1.02, "FLEX-UF end to end.  Grey is frozen and never touched · "
-            "blue is inherited from DCVC-UF and fine-tuned · orange and green are new.",
-            fontsize=6.2, color=ns.INK2)
+
     save(fig, "sys_pipeline.png")
 
 
