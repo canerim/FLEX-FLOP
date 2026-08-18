@@ -266,18 +266,27 @@ def content(colw, fullw):
         r"\BandUseLow% of that window at the lowest rate and \BandUseHigh% at "
         r"the highest.")
     h2("Contributions.")
-    par(r"(i) A tile-adaptive early-exit ladder for a learned image decoder "
-        r"that leaves the encoder and coded payload untouched, saving "
-        r"\MainLowRate% to \MainHighRate% of decoder MACs for 0.1 dB on the "
-        r"full CTC set. (ii) The floor/saturation characterisation of a quality "
-        r"budget, with both ends measured, and the observation that the "
-        r"architectural ceiling is reachable at low rate. (iii) A quantitative "
-        r"account of the tiling penalty, including two negative results. "
-        r"(iv) Two allocation regimes — an encoder-side search signalling "
-        r"a ~\MapBits-bit map, and a decoder-side predictor signalling nothing "
-        r"— with bits and compute charged on both sides. (v) A wall-clock "
-        r"result: the obvious implementation is slower than the dense decoder, "
-        r"and a bit-identical reordering recovers \WallSorted%.")
+    par(r"<b>(i)</b> A tile-adaptive early-exit ladder for a learned image "
+        r"decoder that leaves the encoder and the coded payload untouched, "
+        r"saving \MainLowRate% to \MainHighRate% of decoder MACs for 0.1 dB on "
+        r"the full CTC set at a BD-Rate cost of 0.88%. "
+        r"<b>(ii)</b> The floor/saturation characterisation of a quality budget, "
+        r"both ends in closed form, with six structural propositions verified "
+        r"numerically and a measurement of what the Lagrangian's convex-hull "
+        r"restriction costs (at most 0.05 saving points). "
+        r"<b>(iii)</b> A quantitative account of the tiling penalty: the b² law "
+        r"and the failure of the area law, the measured ordering of four border "
+        r"estimators, and two remedies rejected on their own numbers. "
+        r"<b>(iv)</b> Two allocation regimes with bits and compute charged on "
+        r"both sides, plus a free zero-parameter baseline that recovers 75% of "
+        r"the oracle's advantage over chance — a control we suggest any "
+        r"adaptive-inference paper should report. "
+        r"<b>(v)</b> A wall-clock result: the obvious implementation is slower "
+        r"than the dense decoder, and a bit-identical reordering recovers "
+        r"\WallSorted%. "
+        r"<b>(vi)</b> Two properties of the allocation that bear on deployment "
+        r"— it is governed by tile count rather than content, and it "
+        r"transfers across frames but not across rates.")
 
     # ---- 2 related -------------------------------------------------------
     h1("2. Related work")
@@ -853,7 +862,7 @@ def build(out="paper/FLEX-UF.pdf"):
     # page 1 is two columns, which needs an explicit NextPageTemplate -- without
     # it reportlab keeps using the first template and every page gets a
     # full-width band across the top.
-    top_banner = 5.05 * inch
+    top_banner = 4.45 * inch
 
     doc = BaseDocTemplate(str(R / out), pagesize=letter,
                           leftMargin=M, rightMargin=M,
@@ -901,7 +910,7 @@ def build(out="paper/FLEX-UF.pdf"):
                   "****", AUTH),
     ]
     story += fig("sys_pipeline.png", PW - 2 * M, banner_cap,
-                 maxh=2.95 * inch)
+                 maxh=2.60 * inch)
     story += [NextPageTemplate("rest"), FrameBreak()]
     story += content(colw, PW - 2 * M)
     story.append(Paragraph("References", H1))
