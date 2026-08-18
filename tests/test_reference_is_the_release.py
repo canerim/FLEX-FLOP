@@ -21,6 +21,7 @@ from __future__ import annotations
 import sys
 from pathlib import Path
 
+import pytest
 import torch
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -36,7 +37,13 @@ WARMSTARTS = sorted((ROOT / "runs" / "warmstart").glob("ckpt_warmstart*.pth.tar"
 WARMSTART = ROOT / "runs" / "warmstart" / "ckpt_warmstart.pth.tar"
 
 
-def test_deepest_exit_is_the_released_decoder(qp, warmstart=None):
+# The paper cites this test by name for the bit-exactness of the warm start, and
+# it was not running: `qp` was a bare parameter with no parametrize, so pytest
+# looked for a fixture of that name and errored at setup. Every rate the paper
+# quotes is checked here.
+@pytest.mark.parametrize("qp", [0, 32, 63])
+@pytest.mark.parametrize("warmstart", WARMSTARTS or [None])
+def test_deepest_exit_is_the_released_decoder(qp, warmstart):
     from src.models.image_model import DMCI
     from flexuf.config import FlexUFConfig
     from flexuf.model import FlexUFIntra, load_flexuf_state
