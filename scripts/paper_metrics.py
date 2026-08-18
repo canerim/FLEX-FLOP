@@ -331,9 +331,8 @@ def figures(rows, rel_psnr, bpp, D):
                   label="released decoder")
     ax[0].set_xlabel("BD-Rate cost (%), lower is better")
     ax[0].set_ylabel("intra decode MACs saved (%)")
-    ax[0].legend(loc="lower right", fontsize=4.6, frameon=False)
-    ax[0].set_title("What the compute costs in rate", fontsize=6,
-                    color=ns.INK2, loc="left")
+    ax[0].legend(loc="upper left", fontsize=5.0, frameon=False,
+                 handletextpad=0.4, labelspacing=0.28)
     ns.panel(ax[0], "a")
 
     # MACs/frame, the paper's Table 3 column, drawn
@@ -350,8 +349,6 @@ def figures(rows, rel_psnr, bpp, D):
     ax[1].invert_yaxis()
     ax[1].set_xlabel("intra decode GMAC per 1080p frame")
     ax[1].set_xlim(0, INTRA_GMAC * 1.18)
-    ax[1].set_title("Complexity, the paper's Table 3 column", fontsize=6,
-                    color=ns.INK2, loc="left")
     ns.panel(ax[1], "b", dx=-0.30)
     fig.tight_layout(w_pad=2.0)
     fig.savefig(OUT / "paper_rdc.png", dpi=300, bbox_inches="tight",
