@@ -4170,3 +4170,42 @@ git'e push istedi.
 Ayrıca 10. slayttaki "seam var olmayı bırakıyor" cümlesi düzeltildi: o canvas
 coupling'i anlatıyor ve `tile_coupling=False` altı koşunun altısında da. Ölçülmüş
 bir seçenek, ama bu sonuçların kullandığı şey değil.
+
+---
+
+## 78 — Dört epoch'un doğru durak olup olmadığı ilk kez ölçüldü
+
+Seçim noktası 4 epoch olarak takvim gerekçesiyle seçilmişti, hiçbir şeyin
+yakınsadığı gözlendiği için değil. Artık koşu başına birkaç checkpoint var,
+bakılabilir (`scripts/convergence.py`, GPU gerekmiyor — saklı ölçümler).
+
+Beş hızın ortalaması, 0.1 dB'de, release paydasıyla:
+
+| koşu | 47k'da | yarım-yarım eğim | zaman sabiti | 4 epoch öngörüsü | tavan |
+|---|---|---|---|---|---|
+| BEST128 | %27.1 | +0.180 → +0.151 | 106k adım | **%38.0** | %41.9 |
+| FINE12 | %27.4 | +0.145 → +0.094 | 189k adım | **%39.6** | %50.3 |
+
+**İkisi de yavaşlıyor** — ikinci yarının eğimi birincinin altında. Bu, üstel
+uyumun anlamlı olmasının ön koşulu; yavaşlama olmasaydı "asimptot" diye
+çizilen şey kılık değiştirmiş bir ekstrapolasyon olurdu.
+
+Tavan **sabitlenerek** uyduruldu (`C = 1 − C_j`), çünkü merdiven onu aşamaz;
+serbest C ile uydurmak maliyet modelinin zaten bildiği bir tavanı veriye
+uydurmak olurdu.
+
+### Sonuç: 4 epoch makul, ama sayı 4 kat ekstrapolasyon
+
+İkisi de tavanının ~%80–90'ına varıyor. Yani 4 epoch keyfi bir sayı değilmiş.
+Ama uyum 7 ve 5 noktaya iki parametre, ve verinin **4 katı** ötesine
+uzatılıyor. Hata çubuğu yok. Rapor edilirken bu söylenecek.
+
+### Ve şu an ki manşet muhtemelen kazanan değil
+
+Belgelerdeki 34.0 / 20.8, BEST'in epoch 0'ından. BEST128 ve FINE12'nin 4
+epoch öngörüleri %38–40 — yani nihai sayılar bugünkü manşetin belirgin
+üstünde çıkacak. Manşeti değiştirmiyorum (koşular bitmeden kazanan ilan etmek
+seçim kuralını bozar) ama beklenti bu.
+
+CONTROL karşı örnek olarak duruyor: −0.073 puan/1k, üç checkpoint boyunca
+monoton düşüş. Yavaşlamıyor, kötüleşiyor.
