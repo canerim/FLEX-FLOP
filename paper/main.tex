@@ -190,6 +190,17 @@ decoupling and a binary search on the multiplier --- the identical structure in 
 domain with no rate axis, which we read as evidence that the floor/saturation
 characterisation is worth stating generally.
 
+\paragraph{How much is there to gain?} Bounding what adaptive inference could
+achieve is itself a line of work. Hasan~\etal~\cite{adaptivelimits} derive an
+oracle bound on efficiency at fixed accuracy, given per-model resource and
+accuracy, and report $43$--$121\times$ on ImageNet and $7$--$81\times$ on
+HellaSwag. Their bound has a ceiling and no floor, because the largest model in
+their family attains the reference accuracy by definition. Spatial adaptivity
+introduces one: cutting a frame into tiles costs quality even when every tile
+runs to full depth, so the reference is unreachable at \emph{any} compute and
+the feasible set of budgets is an interval rather than a ray. That interval, and
+both of its ends, is what Section~\ref{sec:operating} characterises.
+
 \paragraph{Tile boundaries.} Every method that processes an image in
 independently-computed tiles meets the same artefact, and the remedies in the
 literature are overlap and averaging, local padding from neighbouring

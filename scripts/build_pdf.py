@@ -338,6 +338,17 @@ def content(colw, fullw):
         r"for test-time compute in language models [30], with per-instance "
         r"decoupling and a binary search on the multiplier: the identical "
         r"structure in a domain with no rate axis.")
+    h2("How much is there to gain?")
+    par(r"Bounding what adaptive inference could achieve is itself a line of "
+        r"work. Hasan et al. [34] derive an oracle bound on efficiency at fixed "
+        r"accuracy from per-model resource and accuracy, and report 43–121× on "
+        r"ImageNet and 7–81× on HellaSwag. Their bound has a ceiling and no "
+        r"floor, because the largest model in their family attains the reference "
+        r"accuracy by definition. Spatial adaptivity introduces one: cutting a "
+        r"frame into tiles costs quality even when every tile runs to full "
+        r"depth, so the reference is unreachable at <i>any</i> compute and the "
+        r"feasible set of budgets is an interval rather than a ray. That "
+        r"interval, and both of its ends, is what Section 5.4 characterises.")
     h2("Tile boundaries.")
     par(r"Every method that processes an image in independently-computed tiles "
         r"meets the same artefact, and the remedies in the literature are "
