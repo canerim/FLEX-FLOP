@@ -308,6 +308,36 @@ if d and lat:
     mac("IntraGmac", f"{INTRA_GMAC:.1f}")
     mac("GmacAtBudget", f"{INTRA_GMAC*(1-mean01/100):.0f}")
 
+# ------------------------------------------------------------------ A vs B
+print("A versus B")
+sa, _ = pick("signalled_RECIPE512_ctc53.json")
+sb, _ = pick("router_RECIPE512_b01.json")
+if sa and sb:
+    A = {r["qp"]: r["saving_pct_vs_release"] for r in sa["rows"]
+         if abs(r["budget_db"] - 0.1) < 1e-9 and r.get("budget_reachable")}
+    B = {r["qp"]: r.get("saving_pct_vs_release") for r in sb["rows"]
+         if r.get("budget_reachable")}
+    qs = [q for q in QPS if q in A and B.get(q) is not None]
+    if qs:
+        lines = [r"\begin{tabular}{l" + "r" * len(qs) + "}", r"\toprule",
+                 r"Configuration & " + " & ".join(f"$q{q}$" for q in qs) + r" \\",
+                 r"\midrule",
+                 r"\textbf{A} signalled & " +
+                 " & ".join(f"{A[q]:.1f}" for q in qs) + r" \\",
+                 r"\textbf{B} predicted & " +
+                 " & ".join(f"{B[q]:.1f}" for q in qs) + r" \\",
+                 r"\midrule",
+                 r"gap & " + " & ".join(f"{A[q]-B[q]:.1f}" for q in qs) + r" \\",
+                 r"$|\beta|$ & " +
+                 " & ".join(f"{abs(next(r['beta'] for r in sb['rows'] if r['qp']==q)):.0f}"
+                            for q in qs) + r" \\",
+                 r"\bottomrule", r"\end{tabular}"]
+        w("ab.tex", "\n".join(lines))
+        mac("GapLow", f"{A[qs[0]]-B[qs[0]]:.1f}")
+        mac("GapHigh", f"{A[qs[-1]]-B[qs[-1]]:.1f}")
+        mac("BLow", f"{B[qs[0]]:.1f}")
+        mac("BHigh", f"{B[qs[-1]]:.1f}")
+
 # --------------------------------------------------------- adapter ablation
 print("adapter ablation")
 d, _ = pick("adapter_ablation.json")

@@ -846,11 +846,34 @@ enough that both saturate.}
 \label{fig:ab}
 \end{figure}
 
+\begin{table}[t]
+\centering
+\resizebox{\columnwidth}{!}{\input{tables/ab}}
+\caption{\textbf{Signalled against predicted} at $0.1\dB$, same checkpoint and
+test set, with the router trained against the deployed oracle at a single
+$\lambda$. $|\beta|$ is the tilt the bisection needed to move that router to the
+rate's operating point.}
+\label{tab:ab}
+\end{table}
+
 Configuration~A is exact by construction and costs bits; configuration~B is
-approximate and costs none. The comparison is not a wash in either direction: the
-prediction gap is real at a tight budget and vanishes at a loose one, because
-once the budget saturates both configurations send every tile to the same rung
-and the only remaining difference is the predictor's own $0.163\%$ of decode.
+approximate and costs none. Table~\ref{tab:ab} is the comparison, and it splits
+in two.
+
+At the rates near the $\lambda$ the router was trained at, \textbf{prediction is
+nearly free}: \BLow\% against $32.3\%$ at $q0$ and $25.9$ against $27.6$ at
+$q16$, a gap of \GapLow\ points for zero added bits and a byte-identical file.
+
+Away from it the gap grows to \GapHigh\ points, and it tracks $|\beta|$ --- the
+tilt the bisection has to apply to drag a router trained at one operating point
+to another. A large tilt lets the cost term dominate the logits and discards the
+content ranking the router learned. The remedy is not a better architecture but
+a router per operating point, which is what a deployment would have anyway: one
+set of weights serves all rates, and a $144$K head per rate is $0.3\%$ of the
+model each.
+
+We report the single-router number because it is the honest one for a system that
+trains once, and we note that it understates what B can do.
 
 \subsection{Does the map have to be recomputed?}
 \label{sec:transfer}

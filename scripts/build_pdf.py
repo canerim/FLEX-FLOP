@@ -762,12 +762,26 @@ def content(colw, fullw):
            r"~\MapBits bits/frame; B predicts it from decoder-side data only "
            r"and signals nothing. The gap collapses to the router's own compute "
            r"once the budget is loose enough that both saturate.")
+    tbl("ab",
+        r"<b>Table 7. Signalled against predicted</b> at 0.1 dB, same checkpoint "
+        r"and test set, with the router trained against the deployed oracle at a "
+        r"single λ. |β| is the tilt the bisection needed to move that router to "
+        r"the rate's operating point.")
     par(r"Configuration A is exact by construction and costs bits; B is "
-        r"approximate and costs none. The comparison is not a wash in either "
-        r"direction: the prediction gap is real at a tight budget and vanishes "
-        r"at a loose one, because once the budget saturates both configurations "
-        r"send every tile to the same rung and the only remaining difference is "
-        r"the predictor's own 0.163% of decode.")
+        r"approximate and costs none. The comparison splits in two.")
+    par(r"At the rates near the λ the router was trained at, <b>prediction is "
+        r"nearly free</b>: \BLow% against 32.3% at q0 and 25.9 against 27.6 at "
+        r"q16 — a gap of \GapLow points for zero added bits and a "
+        r"byte-identical file.")
+    par(r"Away from it the gap grows to \GapHigh points, and it tracks |β|, the "
+        r"tilt the bisection has to apply to drag a router trained at one "
+        r"operating point to another. A large tilt lets the cost term dominate "
+        r"the logits and discards the content ranking the router learned. The "
+        r"remedy is not a better architecture but a router per operating point, "
+        r"which a deployment would have anyway: one set of weights serves all "
+        r"rates, and a 144K head per rate is 0.3% of the model each. We report "
+        r"the single-router number because it is the honest one for a system "
+        r"that trains once, and note that it understates what B can do.")
     h2("5.6 Does the map have to be recomputed?")
     figure("map_transfer.png",
            r"<b>Figure 10. Reusing an exit map.</b> Solid is the transferred "
