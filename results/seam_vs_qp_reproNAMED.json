@@ -1,0 +1,43 @@
+{
+  "ckpt": "runs/BEST/ckpt_eval.pth.tar",
+  "ref": "/home/can_karsal/FLEX-UF/runs/warmstart/ckpt_warmstart.pth.tar",
+  "n_frames": 20,
+  "tile_px": 256,
+  "split_depth": 2,
+  "metric": "psnr_611_420, per-frame mean, dB BELOW the release",
+  "sequences": [
+    "Beauty_1920x1080_120fps_420_8bit_YUV.yuv",
+    "Bosphorus_1920x1080_120fps_420_8bit_YUV.yuv",
+    "HoneyBee_1920x1080_120fps_420_8bit_YUV.yuv",
+    "Jockey_1920x1080_120fps_420_8bit_YUV.yuv",
+    "ReadySteadyGo_1920x1080_120fps_420_8bit_YUV.yuv",
+    "ShakeNDry_1920x1080_120fps_420_8bit_YUV.yuv",
+    "YachtRide_1920x1080_120fps_420_8bit_YUV.yuv",
+    "FourPeople_1280x720_60.yuv",
+    "Johnny_1280x720_60.yuv",
+    "KristenAndSara_1280x720_60.yuv"
+  ],
+  "rows": [
+    {
+      "qp": 0,
+      "zeros": 0.10805404074683586,
+      "replicate": 0.0795730655640778,
+      "trained": 0.04587723884490362,
+      "trained_rgb": 0.0441616770811379
+    },
+    {
+      "qp": 32,
+      "zeros": 0.24339340757304342,
+      "replicate": 0.13265527405863722,
+      "trained": 0.05721686939605135,
+      "trained_rgb": 0.05904315928928554
+    },
+    {
+      "qp": 63,
+      "zeros": 0.6180091766587609,
+      "replicate": 0.23659700205902007,
+      "trained": 0.061499282162952085,
+      "trained_rgb": 0.0627259926404804
+    }
+  ]
+}

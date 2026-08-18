@@ -10,6 +10,25 @@ earlier, so it gets measured instead.
 
 Reference is always the stock full-frame decode of the SAME latent, so what is
 isolated is the seam and nothing else.
+
+The reference must be decoded by an UNWRAPPED model
+---------------------------------------------------
+An earlier version of this script installed the padding wrapper and then called
+`forward_full` for the reference. The wrapper rewrites every 3x3 depthwise in
+groups[j:], and `forward_full` runs those same modules -- so the reference was
+decoded with the mode under test applied at the FRAME border.
+
+That is not a detail. The released decoder was trained with zeros padding, so
+forcing replicate at the image boundary is off-distribution and costs it real
+quality: measured on Johnny 720p at qp 63, the reference drops 44.661 -> 44.427,
+i.e. 0.234 dB. The seam penalty is reported as `reference - tiled`, so degrading
+the reference UNDERSTATES the seam by exactly that much -- and only for the
+non-zeros modes, because for `zeros` the wrapper reproduces the default. Every
+padding scheme was therefore being flattered against a handicapped baseline
+while `zeros` was measured against a clean one.
+
+The reference is now decoded by a separate, never-wrapped instance of the same
+weights, so all four modes are compared against one identical baseline.
 """
 import argparse, json, sys
 from pathlib import Path
@@ -28,16 +47,29 @@ ap.add_argument("--qps", type=int, nargs="+", default=[0, 32, 63])
 ap.add_argument("--frames", type=int, default=2)
 ap.add_argument("--patch", type=int, default=8)      # 8 latent -> 128px RGB
 ap.add_argument("--split", type=int, default=2)
+ap.add_argument("--modes", nargs="+",
+                default=["zeros", "replicate", "linear", "arls"])
+ap.add_argument("--seqs", nargs="*", default=None,
+                help="select sequences by name, so a stored table can be "
+                     "re-measured on exactly the set it was measured on")
+ap.add_argument("--out", default=None)
 ap.add_argument("--device", default="cuda:6")
 a = ap.parse_args()
 
 seqs, missing = C.discover([])
+if a.seqs:
+    want = set(a.seqs)
+    seqs = [s for s in seqs if s["name"] in want]
+    assert {s["name"] for s in seqs} == want, "some named sequences are not on disk"
 print(f"{len(seqs)} sekans olculuyor, {len(missing)} yok\n")
 ck = torch.load(a.ckpt, map_location="cpu", weights_only=False)
 cfg = FlexUFConfig(split_depth=a.split, latent_patch=a.patch, tile_pad_mode="zeros",
                    seam_repair="none")
 net = FlexUFIntra(cfg).to(a.device).eval()
 load_flexuf_state(net, ck)
+# Same weights, never wrapped: the baseline every mode is measured against.
+ref = FlexUFIntra(cfg).to(a.device).eval()
+load_flexuf_state(ref, ck)
 
 frames = []
 for s in seqs:
@@ -52,7 +84,7 @@ print(f"{len(frames)} kare\n")
 print(f"SAF DIKIS CEZASI, dB — j={a.split}, {a.patch*16}px tile, CTC native res\n")
 print(f"  {'mod':<11}" + ''.join(f"{'qp'+str(q):>9}" for q in a.qps))
 res = {}
-for mode in ("zeros", "replicate", "linear", "arls"):
+for mode in a.modes:
     undo = wrap_tile_padding(net.dec.groups, cfg.split_depth, mode)
     row = []
     with torch.no_grad():
@@ -68,16 +100,16 @@ for mode in ("zeros", "replicate", "linear", "arls"):
                 y_hat, q_dec, _ = net._encode_to_latent(xp, qp)
                 nt = ((H + ph) // cfg.rgb_patch) * ((W + pw) // cfg.rgb_patch)
                 em = torch.full((nt,), cfg.num_exits - 1, device=a.device)
-                d = C.psnr_611_420(net.dec.forward_full(y_hat, q_dec)[:, :, :H, :W], pl)
+                d = C.psnr_611_420(ref.dec.forward_full(y_hat, q_dec)[:, :, :H, :W], pl)
                 r = C.psnr_611_420(net.dec(y_hat, q_dec, exit_map=em)[:, :, :H, :W], pl)
                 gap += d - r
             row.append(gap / len(frames))
     undo(); res[mode] = row
-    extra = "" if mode == "zeros" else "   " + ' '.join(
+    extra = "" if mode == "zeros" or "zeros" not in res else "   " + ' '.join(
         f"{res['zeros'][i]-row[i]:+7.3f}" for i in range(len(a.qps)))
     print(f"  {mode:<11}" + ''.join(f"{v:>9.4f}" for v in row) + extra, flush=True)
 
 Path("results").mkdir(exist_ok=True)
 json.dump({"qps": a.qps, "patch": a.patch*16, "split": a.split,
            "sequences": [s["name"] for s in seqs], "res": res},
-          open(f"results/ctc_seam_p{a.patch*16}.json", "w"), indent=2)
+          open(a.out or f"results/ctc_seam_p{a.patch*16}.json", "w"), indent=2)

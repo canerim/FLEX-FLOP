@@ -4276,3 +4276,72 @@ ve adaptör tipinde farklı, yani karşılaştırma hiçbir şeyi izole etmiyor.
 
 Sunumdaki "A claim overturned" slaytı ve docs/04 düzeltildi: artık üç sonucu
 yan yana veriyor, "router çöker" değil.
+
+## 81. The padding ablation was measured against a handicapped reference
+
+`ctc_seam_ablation.py` installed the padding wrapper on `dec.groups[j:]` and
+then called `forward_full` for the reference. `forward_full` runs those same
+modules, so the reference full-frame decode was itself padded with the mode
+under test -- at the FRAME border.
+
+The released decoder was trained with zeros padding. Forcing replicate at the
+image boundary is off-distribution and costs it real quality: on Johnny 720p at
+qp 63 the reference fell 44.6611 -> 44.4273, i.e. **0.234 dB**. The seam is
+reported as `reference - tiled`, so a degraded reference UNDERSTATES it -- and
+only for the non-zeros modes, since for `zeros` the wrapper reproduces the
+default. `zeros` was measured against a clean baseline and every alternative
+against a handicapped one.
+
+Corrected, 256 px, qp 63, replicate:
+
+| | published | corrected |
+|---|---|---|
+| 10 sequences (the old test set) | 0.1070 | 0.2366 |
+| 40 sequences (current) | — | **0.2161** |
+
+Two independent code paths now agree to four decimals on the 3-sequence probe
+(0.3162 from `seam_vs_qp.py`, 0.3162 from the fixed `ctc_seam_ablation.py`),
+which is how the fix was verified rather than assumed.
+
+**What survives.** replicate still removes 67% of the seam at qp 63 (0.6523 ->
+0.2161 on 40 sequences) and still costs nothing, so the design decision stands.
+What does not survive is the *size* of the published margin, and the `linear` /
+`arls` rows are affected too -- both are being re-measured against the clean
+reference before anything is claimed about their ranking.
+
+**A design consequence, not yet implemented.** replicate helps at internal tile
+borders and *hurts* at the frame border, where the release expects zeros. Tiles
+on the image edge are identifiable at zero cost, so the right rule is replicate
+inside, zeros on the frame boundary. That is a free improvement this ablation
+was previously hiding.
+
+## 82. Grid seam repair: the spatial measurement, and a ceiling
+
+Error by distance from the nearest tile boundary, qp 63, routed at 0.1 dB, 6
+sequences, repair OFF vs ON with the same exit map:
+
+| band (px) | share | OFF | ON | change |
+|---|---|---|---|---|
+| 0-4 | 6.2% | 0.000047 | 0.000047 | **-0.27%** |
+| 4-16 | 17.3% | 0.000044 | 0.000044 | +0.05% |
+| 16-64 | 51.6% | 0.000043 | 0.000043 | +0.04% |
+| 64-128 | 25.0% | 0.000041 | 0.000041 | +0.04% |
+
+The seam is real and local -- the boundary band carries 15% more error than the
+interior, falling monotonically with distance. But the gate leaks: the module
+gains only in the 0-4 band and loses slightly across the other 94% of pixels.
+
+The ceiling this implies settles the module. With a PERFECT gate -- zero
+correction in the interior, the boundary gain unchanged -- the most it could
+earn is
+
+    0.062 x 0.000047 x 0.0027 / 4.30e-5 = 1.8e-4  ->  ~0.0008 dB
+
+against 0.95% of decode. `arls` was rejected at 0.019 dB for 10.7%; this is 24x
+worse per point. Tightening the gate cannot rescue it, because there is not
+enough there to win. Decision: `seam_repair=none` plus `tile_coupling=True`
+(0.032% of decode, removes the cause) on the next run.
+
+The joint-training caveat still applies -- switching the module off at inference
+is not the same as training without it -- but it now bounds a quantity that is
+too small to matter either way.

@@ -1,0 +1,33 @@
+{
+  "qps": [
+    0,
+    32,
+    63
+  ],
+  "patch": 256,
+  "split": 2,
+  "sequences": [
+    "Beauty_1920x1080_120fps_420_8bit_YUV.yuv",
+    "Bosphorus_1920x1080_120fps_420_8bit_YUV.yuv",
+    "HoneyBee_1920x1080_120fps_420_8bit_YUV.yuv",
+    "Jockey_1920x1080_120fps_420_8bit_YUV.yuv",
+    "ReadySteadyGo_1920x1080_120fps_420_8bit_YUV.yuv",
+    "ShakeNDry_1920x1080_120fps_420_8bit_YUV.yuv",
+    "YachtRide_1920x1080_120fps_420_8bit_YUV.yuv",
+    "FourPeople_1280x720_60.yuv",
+    "Johnny_1280x720_60.yuv",
+    "KristenAndSara_1280x720_60.yuv"
+  ],
+  "res": {
+    "zeros": [
+      0.10805404074683586,
+      0.24339340757304342,
+      0.6180091766587609
+    ],
+    "replicate": [
+      0.06453170575367277,
+      0.08966092310196458,
+      0.1104313719511989
+    ]
+  }
+}

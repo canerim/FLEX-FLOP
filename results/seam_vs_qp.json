@@ -1,0 +1,115 @@
+{
+  "ckpt": "runs/BEST/ckpt_eval.pth.tar",
+  "ref": "/home/can_karsal/FLEX-UF/runs/warmstart/ckpt_warmstart.pth.tar",
+  "n_frames": 40,
+  "tile_px": 256,
+  "split_depth": 2,
+  "metric": "psnr_611_420, per-frame mean, dB BELOW the release",
+  "sequences": [
+    "Beauty_1920x1080_120fps_420_8bit_YUV.yuv",
+    "Bosphorus_1920x1080_120fps_420_8bit_YUV.yuv",
+    "HoneyBee_1920x1080_120fps_420_8bit_YUV.yuv",
+    "Jockey_1920x1080_120fps_420_8bit_YUV.yuv",
+    "ReadySteadyGo_1920x1080_120fps_420_8bit_YUV.yuv",
+    "ShakeNDry_1920x1080_120fps_420_8bit_YUV.yuv",
+    "YachtRide_1920x1080_120fps_420_8bit_YUV.yuv",
+    "videoSRC01_1920x1080_30.yuv",
+    "videoSRC02_1920x1080_30.yuv",
+    "videoSRC03_1920x1080_30.yuv",
+    "videoSRC04_1920x1080_30.yuv",
+    "videoSRC05_1920x1080_25.yuv",
+    "videoSRC06_1920x1080_25.yuv",
+    "videoSRC07_1920x1080_25.yuv",
+    "videoSRC08_1920x1080_25.yuv",
+    "videoSRC09_1920x1080_25.yuv",
+    "videoSRC10_1920x1080_30.yuv",
+    "videoSRC11_1920x1080_30.yuv",
+    "videoSRC12_1920x1080_30.yuv",
+    "videoSRC13_1920x1080_30.yuv",
+    "videoSRC14_1920x1080_30.yuv",
+    "videoSRC15_1920x1080_30.yuv",
+    "videoSRC16_1920x1080_30.yuv",
+    "videoSRC17_1920x1080_24.yuv",
+    "videoSRC18_1920x1080_25.yuv",
+    "videoSRC19_1920x1080_30.yuv",
+    "videoSRC20_1920x1080_25.yuv",
+    "videoSRC21_1920x1080_24.yuv",
+    "videoSRC22_1920x1080_24.yuv",
+    "videoSRC23_1920x1080_24.yuv",
+    "videoSRC24_1920x1080_24.yuv",
+    "videoSRC25_1920x1080_24.yuv",
+    "videoSRC26_1920x1080_30.yuv",
+    "videoSRC27_1920x1080_30.yuv",
+    "videoSRC28_1920x1080_30.yuv",
+    "videoSRC29_1920x1080_24.yuv",
+    "videoSRC30_1920x1080_30.yuv",
+    "FourPeople_1280x720_60.yuv",
+    "Johnny_1280x720_60.yuv",
+    "KristenAndSara_1280x720_60.yuv"
+  ],
+  "rows": [
+    {
+      "qp": 0,
+      "zeros": 0.1219420340410566,
+      "replicate": 0.06867728775335316,
+      "trained": 0.03982682364504493,
+      "trained_rgb": 0.038063688995316626
+    },
+    {
+      "qp": 8,
+      "zeros": 0.15352515406694903,
+      "replicate": 0.08142543354012428,
+      "trained": 0.04314280624952049,
+      "trained_rgb": 0.04057910817791708
+    },
+    {
+      "qp": 16,
+      "zeros": 0.18362161753025097,
+      "replicate": 0.09272490200472827,
+      "trained": 0.047249624401671395,
+      "trained_rgb": 0.04457023524446413
+    },
+    {
+      "qp": 24,
+      "zeros": 0.22993890381689158,
+      "replicate": 0.10517271198820914,
+      "trained": 0.05172326378958312,
+      "trained_rgb": 0.049803601682651785
+    },
+    {
+      "qp": 32,
+      "zeros": 0.2784200060807757,
+      "replicate": 0.1208329154757564,
+      "trained": 0.05373645728030816,
+      "trained_rgb": 0.052949192887172106
+    },
+    {
+      "qp": 40,
+      "zeros": 0.34488176967212586,
+      "replicate": 0.13857090829359908,
+      "trained": 0.0549148512406731,
+      "trained_rgb": 0.05453491333755665
+    },
+    {
+      "qp": 48,
+      "zeros": 0.4257955962626367,
+      "replicate": 0.15959070646031143,
+      "trained": 0.05552625800358406,
+      "trained_rgb": 0.055548261047806594
+    },
+    {
+      "qp": 56,
+      "zeros": 0.5359286340688925,
+      "replicate": 0.18535911933884855,
+      "trained": 0.05699248725370332,
+      "trained_rgb": 0.05714025623165071
+    },
+    {
+      "qp": 63,
+      "zeros": 0.6522936798821473,
+      "replicate": 0.21611678231197437,
+      "trained": 0.05834756027994566,
+      "trained_rgb": 0.05800255136564374
+    }
+  ]
+}
