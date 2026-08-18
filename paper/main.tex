@@ -301,6 +301,16 @@ Zero-initialising the last layer makes every adapter exactly the identity at ste
 zero, so the deepest exit is bit-exactly the released decoder before training
 begins and every shallow exit starts from ``the decoder as it is''.
 
+\begin{figure}[t]
+\centering
+\includegraphics[width=\columnwidth]{figures/adapter_gain.png}
+\caption{\textbf{What the adapters are worth.} \textbf{a}, each exit with and
+without its adapter. \textbf{b}, the dB the adapter recovers. \textbf{c}, the
+same against the number of blocks the exit skips --- the design rationale,
+measured.}
+\label{fig:adaptergain}
+\end{figure}
+
 \begin{table}[t]
 \centering
 \resizebox{\columnwidth}{!}{\input{tables/adapters_ablation}}

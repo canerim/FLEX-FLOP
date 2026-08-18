@@ -15,6 +15,7 @@ WANTED = [
     "sys_pipeline.png",       # fig 1, the method
     "qualitative.png",        # what the saving looks like
     "adapters.png",           # exit adapters
+    "adapter_gain.png",       # what the adapters are worth
     "seam_problem.png",       # the tiling artefact at frame scale
     "seam_module.png",        # grid seam repair and where it acts
     "seam_vs_qp.png",         # seam against rate

@@ -414,6 +414,11 @@ def content(colw, fullw):
         r"it. Zero-initialising the last layer makes every adapter the identity "
         r"at step zero, so the deepest exit is bit-exactly the released decoder "
         r"before training begins.")
+    figure("adapter_gain.png",
+           r"<b>Figure 3. What the adapters are worth.</b> <b>a</b>, each exit "
+           r"with and without its adapter. <b>b</b>, the dB the adapter "
+           r"recovers. <b>c</b>, the same against the number of blocks the exit "
+           r"skips — the design rationale, measured.")
     tbl("adapters_ablation",
         r"<b>Table 2. What the adapters are worth.</b> dB below the release with "
         r"every tile at that exit, with the trained adapters and with each set "
