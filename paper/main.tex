@@ -33,29 +33,33 @@
 A learned image decoder spends the same computation on every frame regardless of
 what the frame contains. We add an early-exit ladder to the intra decoder of
 DCVC-UF~\cite{dcvcuf}, cut each frame into tiles, and let every tile leave the
-trunk at whichever of $K$ exits is deep enough for that tile. The encoder is
-never touched and the coded payload is unchanged, so the method deploys against
-existing bitstreams.
+trunk at whichever of $K$ exits is deep enough for it. The encoder is frozen and
+the coded payload is unchanged, so the method deploys against existing
+bitstreams. On the full \NumSeq-sequence common test set a $0.1\dB$ budget buys
+\MainLowRate\% of the decoder's multiply--accumulates at the lowest rate and
+\MainHighRate\% at the highest, for a BD-Rate cost of $0.88\%$.
 
-On the full \NumSeq-sequence HEVC/UVG/MCL-JCV common test set, a
-$0.1\dB$ quality budget buys \MainLowRate\% of the decoder's multiply--accumulates
-at the lowest rate and \MainHighRate\% at the highest.
+Four findings are worth more than the headline. \textbf{(i)}~A quality budget
+only buys compute inside a bounded window: below a \emph{floor} set by tiling no
+allocation is feasible, above a \emph{saturation} point every tile already sits
+on the cheapest rung, and the working budget uses \BandUseLow\% of that window at
+the lowest rate and \BandUseHigh\% at the highest. Both ends are in closed form,
+and six structural propositions are verified numerically rather than asserted.
+\textbf{(ii)}~Tiling is expensive and its cost is governed by depth, not area:
+the seam grows as $b^2$ in the number of per-tile convolutions, where the
+corrupted-area fraction usually quoted is wrong by $160$--$264\%$.
+\textbf{(iii)}~The exact remedy --- give each convolution its real neighbour ---
+is bit-identical at uniform depth and \emph{destroys} the allocation under
+routing, because routing is the deliberate violation of the condition that makes
+it exact. \textbf{(iv)}~A $20\%$ reduction in operations made the decoder
+$10.9\%$ \emph{slower} until the per-tile loop was reordered; the reordering is
+bit-identical and recovers \WallSorted\% against a \WallPredicted\% arithmetic
+prediction.
 
-Two findings shape the design and, we argue, any spatially adaptive decoder.
-First, tiling is not free: a $3\times3$ convolution at a tile border meets padding
-instead of a neighbour, and on this decoder that costs \SeamZerosHigh$\dB$ at
-$q63$ with the stock padding rule --- several times the entire quality budget,
-spent before a single tile has exited early. We show that the two remedies that
-work cost nothing (tile size and the choice of border estimator), that a
-higher-order estimator is \emph{worse} than a zeroth-order one, and that a
-learned repair module cannot pay for itself. Second, a quality budget only buys
-compute inside a bounded window: below a \emph{floor} set by tiling no allocation
-is feasible, and above a \emph{saturation} point every tile already sits on the
-cheapest rung and further quality buys nothing. We measure both ends at every
-rate. Finally we show that a naive implementation of the ladder is
-\emph{slower} than the dense decoder despite doing 28\% fewer operations, and
-that a bit-identical reordering of the per-tile loop recovers \WallSorted\% of
-wall-clock time against a \WallPredicted\% arithmetic prediction.
+We also find that the method is governed by tile count far more than by content
+--- three 1080p classes of very different material agree within three points
+while a $416{\times}240$ class saves a third as much --- and that an exit map
+transfers across frames almost perfectly but not across rates.
 \end{abstract}
 
 % =========================================================== introduction
