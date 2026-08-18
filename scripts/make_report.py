@@ -317,6 +317,32 @@ else:
       "nothing else.*")
     w("")
 
+# ---------------------------------------------------------------- transfer
+w("## 4b. Does the exit map have to be recomputed?")
+w("")
+mt = load("map_transfer.json")
+if mt:
+    rt = {(r["from"], r["to"]): r for r in mt["rows"] if r["kind"] == "rate"}
+    tt = [r for r in mt["rows"] if r["kind"] == "time" and r["qp"] == 0]
+    w("**Across frames, barely.** Frame 0's map applied eight frames later at "
+      "qp 0 costs 0.005 dB — five percent of the budget — and no saving at "
+      "all. A codec would search once per group of pictures.")
+    w("")
+    if rt:
+        qs = sorted({k[0] for k in rt})
+        w("**Across rates, very much so, and the direction matters.** Delivered "
+          "dB against a 0.1 dB budget:")
+        w("")
+        w(table(["map from \\ applied at"] + [f"qp {q}" for q in qs],
+                [[f"**qp {a_}**"] +
+                 [f"{rt[(a_, b_)]['transfer_db']:.3f}" if (a_, b_) in rt else "—"
+                  for b_ in qs] for a_ in qs]))
+        w("")
+        w("Upward the map claims the low-rate saving while spending nearly twice "
+          "the quality it is allowed. Downward it is safe and wasteful. Search "
+          "once per rate, reuse across frames.")
+        w("")
+
 # -------------------------------------------------------------------- 5. A/B
 w("## 5. Who decides where each tile exits")
 w("")

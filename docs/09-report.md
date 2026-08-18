@@ -208,6 +208,20 @@ The first question a reviewer asks. Three controls at matched compute, 53 sequen
 | rate-ranked (agree 0.68) | 0.1098 | 16.7% | — |
 | **oracle** | **0.0995** | **16.7%** | — |
 
+## 4b. Does the exit map have to be recomputed?
+
+**Across frames, barely.** Frame 0's map applied eight frames later at qp 0 costs 0.005 dB — five percent of the budget — and no saving at all. A codec would search once per group of pictures.
+
+**Across rates, very much so, and the direction matters.** Delivered dB against a 0.1 dB budget:
+
+| map from \ applied at | qp 0 | qp 32 | qp 63 |
+|---|---|---|---|
+| **qp 0** | 0.100 | 0.142 | 0.190 |
+| **qp 32** | 0.091 | 0.094 | 0.130 |
+| **qp 63** | 0.075 | 0.091 | 0.095 |
+
+Upward the map claims the low-rate saving while spending nearly twice the quality it is allowed. Downward it is safe and wasteful. Search once per rate, reuse across frames.
+
 ## 5. Who decides where each tile exits
 
 ![A versus B](figures/router_ab.png)
