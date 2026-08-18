@@ -491,14 +491,32 @@ def content(colw, fullw):
         r"0.0019 dB per point of decode; this is worse by an order of "
         r"magnitude. Tightening the gate cannot rescue it, because there is "
         r"almost nothing left to win.")
-    h2("4.4 Removing the cause instead")
-    par(r"Because only 0.29% of each block has spatial extent, the exact fix "
-        r"— give the 3×3 its real neighbour from a shared canvas — costs "
-        r"+0.032% of the decode, thirty times less than the repair module, and "
-        r"makes a tiled decode bit-identical to a full-frame one at uniform "
-        r"depth. We report it as an available option; the results here use "
-        r"replicate padding, and closing this gap is the clearest remaining "
-        r"gain.")
+    h2("4.4 Removing the cause, and why it does not help")
+    par(r"Because only 0.29% of each block has spatial extent, the exact fix is "
+        r"affordable: give the 3×3 its real neighbour from a shared canvas, for "
+        r"+0.032% of the decode. And it is exact — at uniform depth a coupled "
+        r"tiled decode is bit-identical to a full-frame one, once the comparison "
+        r"is not confounded by the repair module, which runs on the stitched "
+        r"canvas and has no full-frame counterpart. Measured: 1.13e-2 with the "
+        r"repair on, <b>exactly 0</b> with it off, against 6.06e-2 for replicate "
+        r"padding.")
+    par(r"It also removes most of the floor. Switched on at inference the floor "
+        r"falls from 0.036 to 0.003 dB at q0 and from 0.056 to 0.030 at q63, "
+        r"i.e. 91% and 47% of the tiling penalty.")
+    par(r"<b>And it destroys the allocation.</b> At the same 0.1 dB budget the "
+        r"saving falls from 25.9% to 4.2% at q32 and from 19.3% to 0.4% at q63.")
+    par(r"The reason is the condition in the exactness statement. Coupling is "
+        r"exact when every tile is at the <i>same</i> depth, and routing is the "
+        r"deliberate violation of that condition. With replicate padding a tile "
+        r"is entirely independent of its neighbours, so the allocation may give "
+        r"adjacent tiles any depths it likes; coupling makes a tile depend on "
+        r"its neighbours, and under routing those neighbours ran a different "
+        r"number of blocks. A shallow tile reading a deep neighbour's activation "
+        r"is a configuration the weights have never seen, and that mismatch "
+        r"costs far more than the seam it removed. We report it because the "
+        r"natural reading of an exactness result — adopt the exact fix — is "
+        r"the wrong one here, and the tension is a property of the combination "
+        r"that any spatially adaptive decoder inherits.")
 
     # ---- 5 experiments ---------------------------------------------------
     h1("5. Experiments")
@@ -691,11 +709,13 @@ def content(colw, fullw):
 
     # ---- 6 limitations ---------------------------------------------------
     h1("6. Limitations")
-    par(r"<b>The seam is reduced, not removed.</b> Section 4.4 describes an "
-        r"exact remedy costing 0.032% of the decode which these results do not "
-        r"use. Treating the floor as a rigid offset, closing it is worth "
-        r"roughly 3.5 points of saving at the lowest rate and 5 points at every "
-        r"higher one — the largest identified gain remaining.")
+    par(r"<b>The seam is reduced, and the exact remedy is not usable as it "
+        r"stands.</b> Canvas coupling removes 47–91% of the floor and is "
+        r"bit-exact at uniform depth, yet collapses the routed saving because "
+        r"routing puts neighbouring tiles at different depths. Whether a decoder "
+        r"trained with coupling recovers both at once is open, and it is the "
+        r"experiment we would run next. Until it exists the floor is a cost this "
+        r"method pays.")
     par(r"<b>Intra frames only.</b> This is the image path of a video codec. "
         r"Extending the ladder to inter frames raises a question this paper "
         r"does not answer: an exit map propagates through the reference chain, "

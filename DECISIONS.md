@@ -4460,3 +4460,65 @@ Corrected in paper/main.tex, paper/supplementary.tex, docs/07-seam.md and
 scripts/build_pdf.py. The fraction is kept where it is used correctly -- as the
 statement of which pixels are affected -- and is no longer used to predict how
 much.
+
+## 86. Canvas coupling is exact at uniform depth and destroys the routing
+
+The paper's largest claimed remaining gain was Section 4.4: coupling costs
++0.032% of the decode, makes a tiled decode bit-identical to a full-frame one,
+and closing the floor it removes is "worth roughly 3.5 points at the lowest rate
+and 5 points at every higher one". Two of those three statements survive
+measurement and the conclusion does not.
+
+**Exactness: confirmed, after isolating it.** Measured on RECIPE512 as shipped,
+a coupled tiled decode differs from a full-frame decode by 1.13e-2 -- not zero.
+That is not coupling failing. GridSeamRepair runs on the stitched canvas and has
+no counterpart in the full-frame path, so the two decodes differ by a MODULE.
+With it off:
+
+| configuration | max\|tiled - full\| at uniform depth |
+|---|---|
+| coupling ON, seam repair ON (as shipped) | 1.131e-02 |
+| coupling ON, seam repair OFF | **0.000e+00** |
+| coupling OFF, seam repair OFF (replicate) | 6.055e-02 |
+
+**The floor: coupling removes most of it.** 16 CTC frames, every tile at full
+depth, coupling switched on at inference only:
+
+| qp | floor padded | floor coupled | removed |
+|---|---|---|---|
+| 0 | 0.0358 | 0.0031 | 91% |
+| 32 | 0.0484 | 0.0144 | 70% |
+| 63 | 0.0564 | 0.0300 | 47% |
+
+**The routing: coupling destroys it.** Same model, same frames, bisected to the
+same 0.1 dB budget:
+
+| qp | saving, padded | saving, coupled |
+|---|---|---|
+| 0 | 33.44% | 31.94% |
+| 32 | 25.94% | **4.15%** |
+| 63 | 19.25% | **0.40%** |
+
+So the projection of "+5 points" is wrong in sign at every rate above the lowest,
+and catastrophically so at high rate.
+
+The mechanism is in coupling's own docstring, which anticipated it and assumed it
+was small: "what remains is only the boundary between tiles that chose DIFFERENT
+depths". With replicate padding a tile is completely independent -- its output
+does not depend on its neighbours at all -- and routing is therefore free to give
+adjacent tiles any depths it likes. Coupling makes each tile depend on its
+neighbours' features, and under routing those neighbours ran a different number
+of blocks. A shallow tile reading a deep neighbour's activation is a
+configuration the trained weights have never seen, and the resulting error is far
+larger than the seam that was removed.
+
+Coupling is exact when every tile is at the same depth. Routing is the
+deliberate violation of that condition. The two are in tension by construction,
+not by accident.
+
+**Caveat, and it is the one that keeps this from being final.** This model was
+trained with replicate padding, so switching to coupling at inference is a
+distribution shift, and a run trained with coupling could reverse it. But the
+tension above is structural rather than a training artefact, so the burden is now
+on that run to show otherwise -- and until it exists the paper cannot claim the
+gain. Section 4.4 and the limitations section are corrected accordingly.

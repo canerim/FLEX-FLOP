@@ -260,10 +260,34 @@ the 0.29% of the block that needs it.
 
 The seam does not shrink under it; it stops existing.
 
-**But `tile_coupling = False` in all six runs.** Every result in this repository
-uses replicate padding plus grid repair, not coupling. It is an available option
-and not what these numbers describe — a distinction an earlier version of the
-deck blurred.
+**But `tile_coupling = False` in all six runs**, and now there is a reason
+beyond inertia.
+
+Measured on the trained RECIPE512 with coupling switched on at inference
+(`scripts/coupling_ablation.py`, 16 CTC frames):
+
+| qp | floor, padded | floor, coupled | routed saving, padded | routed saving, coupled |
+|---|---|---|---|---|
+| 0 | 0.0358 | **0.0031** | 33.44% | 31.94% |
+| 32 | 0.0484 | **0.0144** | 25.94% | **4.15%** |
+| 63 | 0.0564 | **0.0300** | 19.25% | **0.40%** |
+
+Coupling removes 47–91% of the floor and **destroys the allocation**. The
+exactness claim survives and was worth isolating — as shipped the coupled decode
+differs from full-frame by 1.13e-2, which is the *repair module*, not the
+coupling; with repair off it is exactly **0.000e+00** against replicate's
+6.06e-2.
+
+The reason is the condition in the exactness statement, which §7 stated and
+underweighted. Coupling is exact when every tile is at the **same** depth, and
+routing is the deliberate violation of that condition. Replicate padding makes a
+tile wholly independent of its neighbours, so the allocation may give adjacent
+tiles any depths at all; coupling makes a tile depend on neighbours that ran a
+different number of blocks, and the trained weights have never seen that.
+
+Caveat: this model was trained with padding, so a run trained *with* coupling
+could reverse it. The tension is structural rather than a training artefact, so
+the burden is on that run.
 
 ## 8. Where it ended up
 

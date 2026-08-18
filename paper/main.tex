@@ -486,15 +486,52 @@ for $0.95\%$ of the decode. We rejected AR(1) padding at $0.0019\dB$ per point o
 decode; this is worse by an order of magnitude. Tightening the gate cannot rescue
 it, because there is almost nothing left to win.
 
-\subsection{Removing the cause instead}
+\subsection{Removing the cause, and why it does not help}
 \label{sec:coupling}
 
-Because only $0.29\%$ of each block has spatial extent, the exact fix --- give the
-$3\times3$ its real neighbour from a shared canvas --- costs $+0.032\%$ of the
-decode, thirty times less than the repair module, and makes a tiled decode
-bit-identical to a full-frame one at uniform depth. We report it as an available
-option; the results in this paper use replicate padding, and closing this gap is
-the clearest remaining gain (Section~\ref{sec:limits}).
+Because only $0.29\%$ of each block has spatial extent, the exact fix is
+affordable: give the $3\times3$ its real neighbour from a shared canvas, for
+$+0.032\%$ of the decode --- thirty times less than the repair module. And it is
+exact. At uniform depth a coupled tiled decode is bit-identical to a full-frame
+one, once the comparison is not confounded by the repair module, which runs on the
+stitched canvas and has no full-frame counterpart:
+
+\begin{center}\small
+\begin{tabular}{lr}
+\toprule
+at uniform depth & $\max|\text{tiled}-\text{full}|$ \\
+\midrule
+coupling, repair on (as shipped) & $1.13\times10^{-2}$ \\
+coupling, repair off & $\mathbf{0}$ \\
+replicate padding, repair off & $6.06\times10^{-2}$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+It also removes most of the floor: switched on at inference, the floor falls from
+$0.036$ to $0.003\dB$ at $q0$ and from $0.056$ to $0.030$ at $q63$, i.e.\ $91\%$
+and $47\%$ of the tiling penalty.
+
+\textbf{And it destroys the allocation.} At the same $0.1\dB$ budget the saving
+falls from $25.9\%$ to $4.2\%$ at $q32$ and from $19.3\%$ to $0.4\%$ at $q63$.
+
+The reason is structural rather than incidental, and it is the condition in the
+exactness statement. Coupling is exact when every tile is at the \emph{same}
+depth --- and routing is the deliberate violation of that condition. With
+replicate padding a tile is entirely independent of its neighbours, so the
+allocation is free to give adjacent tiles any depths it likes. Coupling makes a
+tile depend on its neighbours' features, and under routing those neighbours ran a
+different number of blocks; a shallow tile reading a deep neighbour's activation
+is a configuration the weights have never seen, and that mismatch costs far more
+than the seam it removed.
+
+We report this because the natural reading of the exactness result --- that the
+exact fix should simply be adopted --- is the wrong one, and because the tension
+between coupling and routing is a property of the combination that any
+spatially-adaptive decoder will inherit. The caveat that keeps it from being
+final is the same one that applies to the repair module: this model was trained
+with padding, and a run trained \emph{with} coupling could reverse the result.
+The burden is on that run.
 
 % =========================================================== experiments
 \section{Experiments}
@@ -764,11 +801,12 @@ on.
 \section{Limitations}
 \label{sec:limits}
 
-\paragraph{The seam is not yet removed, only reduced.} Section~\ref{sec:coupling}
-describes an exact remedy costing $0.032\%$ of the decode which these results do
-not use. Treating the floor as a rigid offset, closing it is worth roughly $3.5$
-points of saving at the lowest rate and $5$ points at every higher one --- the
-largest identified gain remaining.
+\paragraph{The seam is reduced, and the exact remedy is not usable as it stands.}
+Section~\ref{sec:coupling} shows that canvas coupling removes $47$--$91\%$ of the
+floor and is bit-exact at uniform depth, yet collapses the routed saving because
+routing puts neighbouring tiles at different depths. Whether a decoder trained
+with coupling recovers both at once is open, and it is the experiment we would
+run next. Until it exists, the floor is a cost this method pays.
 
 \paragraph{Intra frames only.} This is the image path of a video codec. Extending
 the ladder to inter frames raises a question this paper does not answer: an exit
