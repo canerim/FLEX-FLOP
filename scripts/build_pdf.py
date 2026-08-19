@@ -589,7 +589,8 @@ def content(colw, fullw):
            r"once every pixel is contaminated; the penalty does not.")
     h2("4.1 Padding is an estimator")
     par(r"The useful way to see border padding is as an <i>estimator</i> of the "
-        r"unseen neighbour, whose error is the seam. Table 1 measures four, "
+        r"unseen neighbour, whose error is the seam. The table below measures "
+        r"four, "
         r"with early exit switched off so tiling is the only difference from a "
         r"full-frame decode.")
     tbl("padding",
@@ -612,8 +613,9 @@ def content(colw, fullw):
            r"present. Right: the floor is charged <i>inside</i> the quality "
            r"budget and consumes a growing share of it.")
     par(r"Tile size is free — a tiled decode's MAC count does not depend on "
-        r"it at all — and the damage scales with the tile perimeter (Table "
-        r"2). What it costs instead is routing granularity: 40 tiles per 1080p "
+        r"it at all — and the damage scales with the tile perimeter, as the "
+        r"table below shows. What it costs instead is routing granularity: 40 "
+        r"tiles per 1080p "
         r"frame at 256 px against 160 at 128 px.")
     tbl("tilesize",
         r"<b>Table 2. Tile size</b>, dB at q63. Doubling the side roughly "
