@@ -373,15 +373,29 @@ Same checkpoint, same 40 sequences, at the 0.1 dB budget:
 
 | qp | 0 | 16 | 32 | 48 | 63 |
 |---|---|---|---|---|---|
-| **A** signalled | 34.04% | 30.70% | 26.76% | 23.62% | 20.80% |
-| **B** best available router | 30.07% | 27.44% | 23.93% | 22.27% | 19.30% |
-| gap | 3.96 | 3.26 | 2.82 | 1.35 | 1.50 |
+| **A** signalled | 32.35% | 27.55% | 22.52% | 19.77% | 16.81% |
+| **B** router, 0 bits | 27.18% | 23.27% | 19.40% | 16.06% | 12.94% |
+| gap | 5.17 | 4.28 | 3.11 | 3.71 | 3.87 |
+| **bits**, 0 params | 29.87% | 24.62% | 19.91% | 15.42% | 12.10% |
 
-And the gap depends strongly on how tight the budget is — panel c. At 0.3 dB it
-falls to 0.16–0.95 points, and at 0.5 dB it is **exactly 0.16 at every rate below
-qp 63**, which is precisely the router's own 0.163% of compute. When the ladder
-has room, prediction is free; the price of an unchanged bitstream is paid only
-when the budget is tight.
+The gap is roughly flat, 3.1 to 5.2 points, with its minimum at qp 32.
+It tracks |β|, the tilt the bisection applies to move the router off the
+single λ it was trained at: β is 137, 89, 9, −40, −50 across the five rates,
+and the minimum gap sits where the tilt is essentially zero.
+
+Wherever the budget saturates the ladder the gap collapses to the router's
+own 0.163% of compute — both configurations then send every tile to the
+cheapest rung. Where it does not saturate, a looser budget *widens* the gap:
+at 0.3 dB it is 0.2 points at the three lowest rates and 4.4 and 7.9 at the
+two highest.
+
+> These numbers changed on 2026-08-19. The head suppresses exits below the
+> split depth by assigning −1e4, its own logits had drifted to that scale,
+> and the suppressed entries were therefore the *largest* in every row — so
+> a large share of every allocation went to the cheapest rung for a reason
+> unrelated to the tile. The mask is now −inf ([DECISIONS 89](../DECISIONS.md)).
+> The earlier row read 30.07 / 27.44 / 23.93 / 22.27 / 19.30, on the
+> full-frame distortion table and against BEST.
 
 ### How the router is trained, and how it fails
 
