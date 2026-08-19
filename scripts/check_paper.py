@@ -146,6 +146,28 @@ if hy and hyr:
     best = max(Tr.items(), key=lambda t: t[1])
     claim("C: best measured saving", 33.0, best[1], 0.1)
 
+# ---- the contamination law ------------------------------------------------
+cl = J("contamination_law.json")
+if cl:
+    import numpy as _np
+    _b = _np.array(cl["b"])
+    errs = {"area": [], "b2": [], "fit": []}
+    for q, y in cl["seam_db"].items():
+        y = _np.array(y)
+        for k, m in (("area", _np.array(cl["area_model"])),
+                     ("b2", (_b / _b.max()) ** 2)):
+            sc = (m @ y) / (m @ m)
+            errs[k].append(100 * _np.mean(_np.abs(sc * m - y) / y))
+        A_ = _np.vstack([_np.log(_b), _np.ones_like(_b)]).T
+        al, c0 = _np.linalg.lstsq(A_, _np.log(y), rcond=None)[0]
+        errs["fit"].append(100 * _np.mean(_np.abs(_np.exp(c0) * _b ** al - y) / y))
+    claim("contamination: area error, worst", 264, max(errs["area"]), 1)
+    claim("contamination: area error, best", 160, min(errs["area"]), 1)
+    claim("contamination: fitted power, worst", 22, max(errs["fit"]), 1)
+    claim("contamination: fitted power, best", 12, min(errs["fit"]), 1)
+    claim("contamination: fixed square, worst", 38, max(errs["b2"]), 1)
+    claim("contamination: fixed square, best", 31, min(errs["b2"]), 1)
+
 # ---- blend ----------------------------------------------------------------
 cb = J("combined_RECIPE512_b01.json")
 if cb:

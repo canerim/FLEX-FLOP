@@ -43,16 +43,24 @@ ax[1].legend(fontsize=5.5, loc="upper left")
 ns.panel(ax[1], "b", dx=-0.24)
 
 # c: relative error of each model, all rates
-w = 0.35
+# Three models, not two: the area fraction, a fixed square, and a power with the
+# exponent fitted. The fitted exponent is what the paper's "roughly the square"
+# claim rests on -- a FIXED square is a good deal worse than it, and saying so is
+# the difference between a law and a slogan.
+w = 0.27
 for i, q in enumerate(qps):
     y = np.array(d["seam_db"][q])
     errs = []
     for m in (np.array(d["area_model"]), (b / b.max()) ** 2):
         s = (m @ y) / (m @ m)
         errs.append(100 * np.mean(np.abs(s * m - y) / y))
-    ax[2].bar(i - w / 2, errs[0], w, color=ns.GREEN)
-    ax[2].bar(i + w / 2, errs[1], w, color=ns.PURPLE)
-    for xx, e in ((i - w / 2, errs[0]), (i + w / 2, errs[1])):
+    A_ = np.vstack([np.log(b), np.ones_like(b)]).T
+    al, c0 = np.linalg.lstsq(A_, np.log(y), rcond=None)[0]
+    errs.append(100 * np.mean(np.abs(np.exp(c0) * b ** al - y) / y))
+    ax[2].bar(i - w, errs[0], w, color=ns.GREEN)
+    ax[2].bar(i, errs[1], w, color=ns.PURPLE)
+    ax[2].bar(i + w, errs[2], w, color=ns.ORANGE)
+    for xx, e in ((i - w, errs[0]), (i, errs[1]), (i + w, errs[2])):
         ax[2].annotate(f"{e:.0f}", (xx, e), fontsize=5.5, ha="center",
                        va="bottom", textcoords="offset points", xytext=(0, 1.5))
 ax[2].set_xticks(range(len(qps))); ax[2].set_xticklabels([f"q{q}" for q in qps])
@@ -60,6 +68,7 @@ ax[2].set_ylabel("mean relative error (%)")
 ax[2].set_ylim(0, 310)
 ax[2].bar(0, 0, color=ns.GREEN, label="area")
 ax[2].bar(0, 0, color=ns.PURPLE, label="$b^2$")
+ax[2].bar(0, 0, color=ns.ORANGE, label=r"$b^{\alpha}$, $\alpha$ fitted")
 ax[2].legend(fontsize=5.5, loc="upper right")
 ns.panel(ax[2], "c", dx=-0.26)
 

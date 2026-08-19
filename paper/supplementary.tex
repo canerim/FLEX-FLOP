@@ -164,9 +164,13 @@ measurement could show.
 
 \begin{itemize}\itemsep3pt
 \item \textbf{``The corrupted-area fraction explains why split depth matters.''}
-      It predicts the seam with $160$--$264\%$ error. The penalty follows $b^2$,
-      which fits to $12$--$22\%$, because the area saturates once every pixel is
-      contaminated and the damage does not.
+      It predicts the seam with $160$--$264\%$ error, because the area
+      saturates once every pixel is contaminated and the damage does not. What
+      replaces it is a power law in $b$ with the exponent \emph{fitted} ---
+      $2.38$, $2.22$, $1.93$ at $q0$, $q32$, $q63$ --- which fits to
+      $12$--$22\%$. A fixed square, which earlier drafts quoted as though it
+      were the same thing, fits to $31$--$38\%$: better than the area by a
+      factor of five and worse than the fitted exponent by a factor of two.
 \item \textbf{``Canvas coupling is the clearest remaining gain, worth
       $3.5$--$5$ points.''} It removes $47$--$91\%$ of the floor and collapses the
       routed saving --- \CoupPaddedMid\% to \CoupCoupledMid\% at $q32$,

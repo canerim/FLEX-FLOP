@@ -47,8 +47,9 @@ the lowest rate and \BandUseHigh\% at the highest. Both ends are in closed form,
 and seven structural propositions are verified numerically rather than
 asserted.
 \textbf{(ii)}~Tiling is expensive and its cost is governed by depth, not area:
-the seam grows as $b^2$ in the number of per-tile convolutions, where the
-corrupted-area fraction usually quoted is wrong by $160$--$264\%$.
+the seam follows a power law in the number of per-tile convolutions with a
+fitted exponent near two, where the corrupted-area fraction usually quoted is
+wrong by $160$--$264\%$.
 \textbf{(iii)}~The exact remedy --- give each convolution its real neighbour ---
 is bit-identical at uniform depth and \emph{destroys} the allocation under
 routing, because routing is the deliberate violation of the condition that makes
@@ -499,7 +500,9 @@ with $b{=}0$ as an exact zero-seam control --- gives
 \end{equation}
 $\alpha = 2.38$ at $q0$ falling to $1.93$ at $q63$, $r = 0.98$--$0.995$ in
 log--log. Fitted with one free scale the area fraction is wrong by $160$--$264\%$
-where the power law is wrong by $12$--$22\%$. The exponent has a reading: the
+where the power law is wrong by $12$--$22\%$. Fixing the exponent at exactly two
+costs a factor of two, $31$--$38\%$ --- the square is the right shape and not
+quite the right law. The exponent has a reading: the
 count of contaminated pixels grows like perimeter times depth, $\propto b$, and
 the error accumulated in each grows with how many convolutions reached it, again
 $\propto b$. The area law saturates once every pixel is touched; the penalty does
