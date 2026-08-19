@@ -361,6 +361,20 @@ def content(colw, fullw):
         r"map: the structure of the side information is ours, the axis is not "
         r"— they select which network at fixed complexity for a rate gain, "
         r"we select how much of one network at fixed rate for compute.")
+    h2("Deferring to an oracle under a budget.")
+    par(r"Configuration C, where a predictor decides most cases and a small "
+        r"budget of the hardest ones is handed to something exact, is the shape "
+        r"of selective prediction [38] and learning to defer [39, 40], and of "
+        r"the budgeted variant of the latter [41]. Two things differ and both "
+        r"make our case easier. The expert here is the encoder's own search, so "
+        r"it is exact, always available, and costs nothing at test time — what "
+        r"is scarce is not the expert's attention but the <i>bits</i> needed to "
+        r"say what it decided. And the selection rule is not learned: because "
+        r"the objective is separable over tiles, the optimal set of size s at a "
+        r"fixed multiplier is exactly the s largest regrets, which the encoder "
+        r"can compute. The open question in that literature — who to defer, and "
+        r"how to learn it — has a closed form here, and what remains is the "
+        r"question we measure, which is how concentrated the regret is.")
     h2("Allocating a budget over units.")
     par(r"The construction we use is not new and should not be presented as "
         r"such. Shoham and Gersho [28] showed that for a finite set of per-unit "
@@ -1040,6 +1054,10 @@ REFS = [
  "Y. Gao et al. Exploring the rate-distortion-complexity optimization in neural image compression. CVIU, 2024.",
  "Y.-H. Ho et al. On the rate-distortion-complexity trade-offs of neural video coding. arXiv:2410.03898, 2024.",
  "C. Zhang, W. Gao. Learned rate control for frame-level adaptive neural video compression via dynamic neural network. arXiv:2508.20709, 2025.",
+ "Y. Geifman, R. El-Yaniv. Selective classification for deep neural networks. NeurIPS, 2017.",
+ "D. Madras et al. Predict responsibly: improving fairness and accuracy by learning to defer. NeurIPS, 2018.",
+ "H. Mozannar, D. Sontag. Consistent estimators for learning to defer to an expert. ICML, 2020.",
+ "G. DeSalvo et al. Budgeted multiple-expert deferral. arXiv:2510.26706, 2025.",
 ]
 
 

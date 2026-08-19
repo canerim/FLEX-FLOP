@@ -204,6 +204,20 @@ decision rather than inferring it is the norm in standardised video coding: HEVC
 transform tree. We evaluate both and treat the signalled variant as the
 conventional design.
 
+\paragraph{Deferring to an oracle under a budget.} Configuration~C, where a
+predictor decides most cases and a small budget of the hardest ones is handed to
+something exact, is the shape of selective prediction~\cite{geifman2017selective}
+and learning to defer~\cite{madras2018l2d,mozannar2020consistent}, and of the
+budgeted variant of the latter~\cite{desalvo2025budgeted}. Two things differ and
+both make our case easier. The expert here is the encoder's own search, so it is
+exact, always available, and costs nothing at test time --- what is scarce is not
+the expert's attention but the \emph{bits} needed to say what it decided. And the
+selection rule is not learned: because the objective is separable over tiles, the
+optimal set of size $s$ at a fixed multiplier is exactly the $s$ largest regrets,
+which the encoder can compute. The open question in that literature --- who to
+defer, and how to learn it --- has a closed form here, and what remains is the
+question we measure, which is how concentrated the regret is.
+
 \paragraph{Allocating a budget over units.} The construction we use is not new
 and should not be presented as such. Shoham and Gersho~\cite{shoham1988} showed
 that for a finite set of per-unit operating points, a Lagrangian sweep decouples

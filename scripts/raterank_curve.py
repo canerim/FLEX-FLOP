@@ -125,31 +125,52 @@ def main(argv):
                               reference_frame_mse(ref.dec, y, q, xp),
                               y, q, xp, b, name))
 
-            # phi, leave-one-sequence-out. Least squares through the origin:
-            # phi_k = sum_t b_t D(t,k) / sum_t b_t^2.
-            num = torch.zeros(K, device=dev, dtype=torch.float64)
-            den = torch.zeros((), device=dev, dtype=torch.float64)
-            per_seq = {}
-            for M, _R, _y, _q, _xp, b, name in cache:
-                n_ = (b[:, None].double() * M.double()).sum(0)
-                d_ = (b.double() ** 2).sum()
-                num += n_; den += d_
-                if name not in per_seq:
-                    per_seq[name] = [torch.zeros(K, device=dev,
-                                                 dtype=torch.float64),
-                                     torch.zeros((), device=dev,
-                                                 dtype=torch.float64)]
-                per_seq[name][0] += n_; per_seq[name][1] += d_
+            # A rank-1 model in LOG space, fitted leave-one-sequence-out.
+            #
+            #     log D(t,k)  ~  u(t) + log phi_k,    u(t) = alpha*log b(t) + c
+            #
+            # phi_k is the exit profile (K constants) and u(t) is the tile's
+            # difficulty, predicted from its bit count alone. The first version
+            # of this script assumed D ~ b * phi_k -- difficulty proportional to
+            # bits -- and it is wrong: alpha comes out NEGATIVE. A tile the
+            # entropy coder spent bits on is a tile whose latent already
+            # describes it, so a shallow decoder reconstructs it well; a cheap
+            # tile is one the decoder has to invent, and inventing takes depth.
+            # Fitting the exponent rather than assuming it is what lets the
+            # surrogate discover that.
+            lb = torch.cat([c[5].log() for c in cache]).double()
+            LM = torch.cat([c[0][:, j:].clamp_min(1e-12).log().double()
+                            for c in cache])
+            sid = torch.cat([torch.full((c[0].shape[0],), i, device=dev)
+                             for i, c in enumerate(cache)])
+            u_all = LM.mean(1)
 
-            def phi_for(name):
-                n_, d_ = num - per_seq[name][0], den - per_seq[name][1]
-                return (n_ / d_.clamp_min(1e-30)).float()
+            def fit(mask):
+                x, y = lb[mask], u_all[mask]
+                xm, ym = x.mean(), y.mean()
+                al = ((x - xm) * (y - ym)).sum() / ((x - xm) ** 2).sum().clamp_min(1e-30)
+                cc = ym - al * xm
+                lphi = (LM[mask] - (al * x + cc)[:, None]).mean(0)
+                return float(al), float(cc), lphi.float()
+
+            alpha_all, c_all, lphi_all = fit(torch.ones_like(sid, dtype=torch.bool))
+            fits = {}
+            for i, cc_ in enumerate(cache):
+                name = cc_[6]
+                if name not in fits:
+                    fits[name] = fit(sid != i) if len(cache) > 1 else (
+                        alpha_all, c_all, lphi_all)
+
+            def surrogate(b, name):
+                al, c0, lphi = fits[name]
+                return torch.exp(al * b.log() + c0)[:, None] * torch.exp(lphi)[None, :]
 
             def maps_at(lam):
                 out = []
                 for M, _R, _y, _q, _xp, b, name in cache:
-                    S = b[:, None] * phi_for(name)[None, :]
-                    out.append((S + lam * cost[None, :]).argmin(1).clamp(min=j))
+                    S = surrogate(b, name)
+                    k = (S + lam * cost[None, j:]).argmin(1) + j
+                    out.append(k)
                 return out
 
             def db_of(maps):
@@ -197,18 +218,29 @@ def main(argv):
                         for m, o in zip(maps, om)) / len(maps)
             rho = sum(spearman(c[5], -o.float())
                       for c, o in zip(cache, om)) / len(cache)
+            # What actually decides a tile is not its distortion LEVEL but the
+            # SPREAD across the ladder: how much depth buys. A rank-1 model in
+            # the level cannot see that, so measure whether bits carry it.
+            rho_lvl = sum(spearman(c[5], c[0][:, j:].mean(1))
+                          for c in cache) / len(cache)
+            rho_spr = sum(spearman(c[5], c[0][:, j] - c[0][:, -1])
+                          for c in cache) / len(cache)
 
             rows.append({"qp": qp_v, "lam": lo,
                          "saving_pct_vs_release": sv_of(maps),
                          "db_vs_uf": db_of(maps),
                          "oracle_saving_pct_vs_release": sv_of(om),
                          "agreement": agree, "spearman_bits_vs_exit": rho,
-                         "phi": phi_for(measured[0]).tolist(),
+                         "spearman_bits_vs_level": rho_lvl,
+                         "spearman_bits_vs_spread": rho_spr,
+                         "alpha": alpha_all, "phi": torch.exp(lphi_all).tolist(),
                          "bpp_added": 0.0, "map_bits": 0,
                          "budget_reachable": True})
             print(f"  qp {qp_v:>3}  rate-rank {sv_of(maps):>6.2f}% @ "
                   f"{db_of(maps):.4f} dB   oracle {sv_of(om):>6.2f}%   "
-                  f"agree {agree:.3f}   spearman {rho:+.3f}")
+                  f"agree {agree:.3f}   spearman {rho:+.3f}   "
+                  f"alpha {alpha_all:+.2f}   rho(level) {rho_lvl:+.2f}   "
+                  f"rho(spread) {rho_spr:+.2f}")
 
     out = {"ckpt": a.ckpt, "budget_db": a.budget,
            "decision": "decoder-side rate-rank surrogate, no parameters",
