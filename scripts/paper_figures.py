@@ -33,6 +33,7 @@ WANTED = [
     "hybrid.png",             # partial signalling: A and B are one scale
     "raterank.png",           # the parameter-free control
     "blend.png",              # do the two decoder-side signals differ?
+    "tradeoff.png",           # the whole budget-to-saving curve
 ]
 
 missing = []
