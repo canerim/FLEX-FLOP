@@ -196,6 +196,18 @@ if rt:
     claim("retrain: best gain (pts)", 3.1, max(ds.values()), 0.1)
     claim("retrain: worst loss (pts)", 3.4, -min(ds.values()), 0.1)
 
+# ---- what the retrain does to the regret distribution ----------------------
+hv3 = J("hybrid_v3_b01.json")
+if hy and hv3:
+    def _g(d):
+        return {r["qp"]: r["gini_regret"] for r in d["rows"]
+                if r.get("gini_regret") is not None}
+    G2, G3 = _g(hy), _g(hv3)
+    common = [q for q in G2 if q in G3]
+    if common:
+        claim("gini: rates where the retrain concentrates regret", 4,
+              sum(1 for q in common if G3[q] > G2[q]), 0)
+
 # ---- blend ----------------------------------------------------------------
 cb = J("combined_RECIPE512_b01.json")
 if cb:

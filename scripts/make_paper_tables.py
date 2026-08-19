@@ -592,6 +592,21 @@ if rt:
     mac("RetrainGainQp", str(min(ds, key=lambda q: -ds[q])))
     mac("RetrainLossQp", str(min(ds, key=lambda q: ds[q])))
 
+# what a better predictor does to the regret distribution
+hv3, _ = pick("hybrid_v3_b01.json")
+if hy and hv3:
+    def _g(d):
+        return {r["qp"]: r["gini_regret"] for r in d["rows"]
+                if r.get("gini_regret") is not None}
+    G2, G3 = _g(hy), _g(hv3)
+    common = [q for q in G2 if q in G3]
+    if common:
+        up = [q for q in common if G3[q] > G2[q]]
+        mac("GiniRetrainUpN", str(len(up)))
+        mac("GiniRetrainOfN", str(len(common)))
+        mac("GiniRetrainLo", f"{min(G3[q] for q in common):.2f}")
+        mac("GiniRetrainHi", f"{max(G3[q] for q in common):.2f}")
+
 # ------------------------------------------------------------------- blend
 print("blend")
 cb, _ = pick("combined_RECIPE512_b01.json")

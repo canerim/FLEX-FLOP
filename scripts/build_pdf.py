@@ -1110,6 +1110,17 @@ def content(colw, fullw):
         r"\HybridLooseRecLo–\HybridLooseRecHi% of it. The rule is the same one "
         r"the allocation follows everywhere: spend the bits where the ladder "
         r"still has somewhere to go.")
+    par(r"<b>A better predictor concentrates its regret, which is what the "
+        r"Gini was for.</b> Rebuilding C on the retrained head of §5.5 raises "
+        r"the Gini of the per-tile regret at \GiniRetrainUpN of "
+        r"\GiniRetrainOfN rates, to \GiniRetrainLo–\GiniRetrainHi: its "
+        r"mistakes are rarer and larger. The consequence is visible in the same "
+        r"table — C converges on A faster from a better base and has less left "
+        r"to recover, and the half-beats-all effect disappears at q0, because a "
+        r"base close to A leaves little for the extra multiplier to exploit. "
+        r"The Lorenz reading is therefore a diagnostic rather than a "
+        r"decoration: it says what <i>kind</i> of predictor one has, not just "
+        r"how good.")
     par(r"<b>Which predictor should C be built on?</b> Either — and the answer "
         r"follows the same split as §5.6. Running the identical override rule "
         r"over the parameter-free surrogate instead of the head is worth up to "

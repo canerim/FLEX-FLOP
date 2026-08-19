@@ -1227,6 +1227,16 @@ lowest rates are saturated and there is nothing for a partial map to buy. At
 allocation follows everywhere: spend the bits where the ladder still has
 somewhere to go.
 
+\textbf{A better predictor concentrates its regret, which is what the Gini was
+for.} Rebuilding C on the retrained head of Section~\ref{sec:ab} raises the
+Gini of the per-tile regret at \GiniRetrainUpN\ of \GiniRetrainOfN\ rates, to
+\GiniRetrainLo--\GiniRetrainHi: its mistakes are rarer and larger. The
+consequence is visible in the same table --- C converges on A faster from a
+better base and has less left to recover, and the half-beats-all effect
+disappears at $q0$, because a base close to A leaves little for the extra
+multiplier to exploit. The Lorenz reading is therefore a diagnostic rather than
+a decoration: it says what \emph{kind} of predictor one has, not just how good.
+
 \textbf{Which predictor should C be built on?} Either --- and the answer follows
 the same split as Section~\ref{sec:raterank}. Running the identical override
 rule over the parameter-free surrogate instead of the head is worth up to
