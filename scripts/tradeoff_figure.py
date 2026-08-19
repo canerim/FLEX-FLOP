@@ -62,6 +62,41 @@ def main(src="results/signalled_RECIPE512_grid.json",
     ax[1].set_xlim(0, 1)
     for i, l in enumerate("ab"):
         ns.panel(ax[i], l, dx=-0.22)
+    # How much of the rate dependence is the band, and how much is left over?
+    # At a matched decibel the five rates are far apart; at a matched POSITION
+    # in their own band they should coincide if the floor and the saturation
+    # point are the whole story.
+    import numpy as _np
+    cur = {}
+    for q in qps:
+        rs = sorted([r for r in rows if r["qp"] == q],
+                    key=lambda r: r["budget_db"])
+        if q not in band:
+            continue
+        f, sa = band[q]
+        u = _np.array([(r["budget_db"] - f) / (sa - f) for r in rs])
+        yv = _np.array([r["saving_pct_vs_release"] for r in rs])
+        m = (u >= 0) & (u <= 1.0001)
+        cur[q] = (u[m], yv[m])
+    stats = {}
+    if len(cur) > 1:
+        g = _np.linspace(0.05, 0.95, 19)
+        Y = _np.array([_np.interp(g, *cur[q]) for q in cur])
+        sp = Y.max(0) - Y.min(0)
+        raw = [r["saving_pct_vs_release"] for r in rows
+               if abs(r["budget_db"] - 0.1) < 1e-9]
+        stats = {"band_spread_max": float(sp.max()),
+                 "band_spread_mean": float(sp.mean()),
+                 "band_spread_max_excl_edge": float(sp[1:].max()),
+                 "raw_spread_at_tenth_db": float(max(raw) - min(raw)),
+                 "n_rates": len(cur)}
+        json.dump(stats, open(R / "results/band_collapse.json", "w"), indent=2)
+        print(f"  at a matched dB the rates spread by "
+              f"{stats['raw_spread_at_tenth_db']:.1f} points; at a matched "
+              f"position in their own band, {stats['band_spread_mean']:.1f} on "
+              f"average and {stats['band_spread_max_excl_edge']:.1f} at worst")
+        print("  -> results/band_collapse.json")
+
     fig.tight_layout(w_pad=1.6)
     fig.savefig(R / out, dpi=300, bbox_inches="tight", facecolor="white")
     print(f"  -> {out}")

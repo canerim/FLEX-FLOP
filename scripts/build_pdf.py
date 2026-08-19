@@ -215,8 +215,11 @@ def content(colw, fullw):
         r"tiling no allocation is feasible, above a saturation point every tile "
         r"already sits on the cheapest rung, and the working budget uses "
         r"\BandUseLow% of that window at the lowest rate and \BandUseHigh% at "
-        r"the highest. Both ends are in closed form and we verify seven structural "
-        r"propositions numerically. <b>(ii)</b> Tiling is expensive and its cost "
+        r"the highest. Both ends are in closed form, we verify seven structural "
+        r"propositions numerically, and the window turns out to be almost all "
+        r"of the rate dependence: five rates \BandRawSpread points apart at a "
+        r"matched decibel collapse to \BandSpreadMean once the budget is "
+        r"measured in units of each rate's own band. <b>(ii)</b> Tiling is expensive and its cost "
         r"is governed by depth, not area: the seam follows a power law in the "
         r"number of per-tile convolutions with a fitted exponent near two, "
         r"where the corrupted-area fraction usually quoted is wrong by "
@@ -859,6 +862,21 @@ def content(colw, fullw):
         r"rather than a looser budget. It also identifies a narrow regime: "
         r"budgets in [\SatLow, \SatWindowHi) dB saturate the lowest rate and "
         r"nothing else, a window \SatWindowMb millibels wide.")
+    figure("budget_band.png",
+           r"<b>Figure 9. The band is the rate dependence.</b> <b>a</b> Saving "
+           r"against the budget, with each rate's floor and saturation point "
+           r"ticked. <b>b</b> The same with the budget axis rescaled onto each "
+           r"rate's own band. Five curves become one.")
+    par(r"<b>And the window is almost all of the rate dependence.</b> At a "
+        r"matched decibel the five rates are \BandRawSpread points apart. "
+        r"Rescale the budget axis onto each rate's own band — floor at 0, "
+        r"saturation at 1 — and they collapse onto a single curve, "
+        r"\BandSpreadMean points apart on average and \BandSpreadMax at worst. "
+        r"So the answer to ``how much does a 0.1 dB budget buy at this rate'' "
+        r"is, to within a couple of points, ``where does 0.1 dB sit in this "
+        r"rate's band''. Both ends are in closed form and cheap to measure; "
+        r"what they leave over is small enough that a deployment could "
+        r"calibrate the two and read the rest off one curve.")
     figure("tradeoff.png",
            r"<b>Figure 9. The trade-off, whole.</b> <b>a</b> What a budget buys, "
            r"per rate; the ceiling is \Ceiling% and q0 reaches it at "

@@ -44,8 +44,10 @@ only buys compute inside a bounded window: below a \emph{floor} set by tiling no
 allocation is feasible, above a \emph{saturation} point every tile already sits
 on the cheapest rung, and the working budget uses \BandUseLow\% of that window at
 the lowest rate and \BandUseHigh\% at the highest. Both ends are in closed form,
-and seven structural propositions are verified numerically rather than
-asserted.
+seven structural propositions are verified numerically rather than asserted, and
+the window turns out to be almost all of the rate dependence: five rates
+\BandRawSpread\ points apart at a matched decibel collapse to
+\BandSpreadMean\ once the budget is measured in units of each rate's own band.
 \textbf{(ii)}~Tiling is expensive and its cost is governed by depth, not area:
 the seam follows a power law in the number of per-tile convolutions with a
 fitted exponent near two, where the corrupted-area fraction usually quoted is
@@ -924,6 +926,26 @@ which is an argument for a finer ladder rather than a looser budget. It also
 identifies a narrow regime: budgets in
 $[\SatLow, \SatWindowHi)\dB$ saturate the lowest rate and nothing else, a window
 \SatWindowMb\ millibels wide.
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\columnwidth]{figures/budget_band.png}
+\caption{\textbf{The band is the rate dependence.} \textbf{a} Saving against the
+budget, with each rate's floor and saturation point ticked. \textbf{b} The same
+with the budget axis rescaled onto each rate's own band. Five curves become one.}
+\label{fig:band}
+\end{figure}
+
+\textbf{And the window is almost all of the rate dependence.} At a matched
+decibel the five rates are \BandRawSpread\ points apart. Rescale the budget axis
+onto each rate's own band --- floor at $0$, saturation at $1$ --- and they
+collapse onto a single curve, \BandSpreadMean\ points apart on average and
+\BandSpreadMax\ at worst (Fig.~\ref{fig:band}). So the answer to ``how much does
+a $0.1\dB$ budget buy at this rate'' is, to within a couple of points, ``where
+does $0.1\dB$ sit in this rate's band''. The floor and the saturation point are
+both in closed form and both cheap to measure; what they leave over is small
+enough that a deployment could calibrate the two ends and read the rest off one
+curve.
 
 \begin{figure}[t]
 \centering

@@ -563,6 +563,13 @@ if hy and hyr:
         if a1:
             mac("CBestOverA", f"{best[1] - a1:.2f}")
 
+# does the trade-off collapse once each rate's own band is divided out?
+bc, _ = pick("band_collapse.json")
+if bc:
+    mac("BandRawSpread", f"{bc['raw_spread_at_tenth_db']:.1f}")
+    mac("BandSpreadMean", f"{bc['band_spread_mean']:.1f}")
+    mac("BandSpreadMax", f"{bc['band_spread_max_excl_edge']:.1f}")
+
 # ------------------------------------------------------------------- blend
 print("blend")
 cb, _ = pick("combined_RECIPE512_b01.json")

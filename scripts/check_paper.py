@@ -168,6 +168,14 @@ if cl:
     claim("contamination: fixed square, worst", 38, max(errs["b2"]), 1)
     claim("contamination: fixed square, best", 31, min(errs["b2"]), 1)
 
+# ---- the band collapse ----------------------------------------------------
+bc = J("band_collapse.json")
+if bc:
+    claim("band: raw spread at 0.1 dB", 15.5, bc["raw_spread_at_tenth_db"], 0.2)
+    claim("band: spread after rescaling, mean", 1.7, bc["band_spread_mean"], 0.2)
+    claim("band: spread after rescaling, worst", 2.2,
+          bc["band_spread_max_excl_edge"], 0.2)
+
 # ---- blend ----------------------------------------------------------------
 cb = J("combined_RECIPE512_b01.json")
 if cb:
