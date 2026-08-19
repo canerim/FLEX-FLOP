@@ -24,25 +24,30 @@ signalled oracle. That is the paper.
 
 ### 1. Wall-clock decoding latency — MEASURED, and it is the problem I expected
 
-`scripts/latency.py`, 1920×1088, 40 interleaved iterations, median:
+`scripts/latency.py`, 1920×1088 padded to 2048×1280, 40 interleaved
+iterations, median, device pinned:
 
-| qp | stock | all-deepest | routed | overhead | **realised** | predicted (MAC) |
-|---|---|---|---|---|---|---|
-| 0 | 303.6 ms | 314.9 ms | 244.6 ms | 3.7% | **19.4%** | 34.9% |
-| 32 | 295.7 | 314.7 | 261.2 | 6.4% | **11.6%** | 26.6% |
-| 63 | 296.0 | 315.2 | 276.4 | 6.5% | **6.6%** | 21.5% |
+| qp | stock | all-deepest | routed | sorted | overhead | **realised** | predicted (MAC) |
+|---|---|---|---|---|---|---|---|
+| 0 | 110.6 ms | 114.5 | 79.7 | 78.4 | 3.6% | **29.1%** | 35.3% |
+| 32 | 110.6 ms | 114.7 | 87.1 | 85.8 | 3.6% | **22.4%** | 28.0% |
+| 63 | 110.8 ms | 114.8 | 94.9 | 93.6 | 3.6% | **15.6%** | 20.1% |
 
-**The MAC model overstates the wall-clock saving by about 2× at low rate and 3×
-at high rate.** The gap splits in two:
+**Operations are an optimistic bound, by about a fifth, and the optimism grows
+with the saving.** The gap splits in two:
 
-- a fixed **overhead floor of 3.7–6.5%** — what the tiling machinery costs with
+- a fixed **overhead floor of 3.6%** — what the tiling machinery costs with
   every tile at the deepest exit, i.e. running exactly the stock arithmetic;
-- the remaining **8–12 points**, which profiling attributes to the **inter-group
-  bookkeeping**: the boolean mask, gather and scatter run at every group
-  boundary cost 36.4 ms against the groups' own 77.5 ms of convolution — 32% of
-  the loop — and force a device-to-host sync each time. It is invisible to the
-  MAC model and, unlike a hardware limit, it is recoverable: sort the tiles by
-  exit depth once and take contiguous slices instead of masking per group.
+- the rest, the **inter-group bookkeeping**: the boolean mask, gather and
+  scatter run at every group boundary and force a device-to-host sync each
+  time. Invisible to the MAC model and, unlike a hardware limit, partly
+  recoverable: sorting the tiles by exit depth once and taking contiguous
+  slices returns 1.2 points, bit-identically.
+
+  (Every number in this section was re-measured after `torch.cuda.Event` was
+  found to be timing the wrong device. The earlier table — stock at 303/296/296
+  ms and a realised saving of 19.4/11.6/6.6% — was that bug, and so was the
+  claim that the MAC model overstates by 2–3×.)
 
   (An earlier draft attributed this to falling arithmetic intensity. Measured
   per-tile group cost is flat or improving as the active set shrinks — 1.03,

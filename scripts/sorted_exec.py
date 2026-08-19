@@ -1,8 +1,7 @@
 """Can the per-group bookkeeping be removed by sorting the tiles once?
 
-`scripts/latency_profile.py` found that the group loop spends 36.4 ms on
-bookkeeping against 77.5 ms of convolution -- 32% of the loop -- and none of it
-appears in the MAC model. The cause is structural: at every group boundary the
+The routed decode realises less wall-clock than its arithmetic predicts, and
+none of the difference appears in the MAC model. Part of it is structural: at every group boundary the
 decoder computes a boolean mask, gathers the surviving tiles and scatters the
 finished ones, and boolean indexing has to know how many elements survive, which
 forces a device-to-host synchronisation. Four groups, four syncs.

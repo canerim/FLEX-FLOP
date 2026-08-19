@@ -624,7 +624,7 @@ slide_fig("MACs are not milliseconds", "latency.png", [
  (1, latency_line(0.5) or "0.5 dB pending", False),
  (0, "Gap  =  tiling overhead 3.7–6.5%  +  per-group bookkeeping", True),
  (1, "mask + gather + scatter + one device↔host sync per group", False),
- (1, "36.4 ms vs 77.5 ms of convolution  =  32% of the loop", False),
+ (1, "27.9% realised vs 35.3% predicted  =  a fifth lost to bookkeeping", False),
  (0, "Recoverable · sort by exit depth once → 23–37% back, bit-identical", True),
 ], size=12)
 

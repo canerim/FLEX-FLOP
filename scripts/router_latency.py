@@ -1,8 +1,8 @@
 """Does the router's 0.163% of MACs cost 0.163% of the time?
 
 Section 5.8 of the paper is an argument that operations and wall-clock are
-different currencies: a 20% cut in operations made the decoder 10.9% SLOWER
-until the loop was reordered. Every configuration-B number in this work charges
+different currencies: a 35.3% cut in operations buys 29.1% of the time, and the
+shortfall grows with the cut. Every configuration-B number in this work charges
 the router at its MAC share. If that argument is right, the MAC share is the
 wrong price.
 
