@@ -17,7 +17,23 @@ sys.path.insert(0, str(ROOT / "scripts"))
 
 from hybrid_curve import h2, hybrid_map  # noqa: E402
 
-K, T = 6, 40
+
+def test_router_columns_are_only_the_exits_that_exist():
+    """A regression guard for the mask that stopped being a mask.
+
+    The head emits K logits and suppresses the first j by assigning -1e4, which
+    is not a suppression once its own logits reach that scale. hybrid_map is
+    handed only the K-j columns that correspond to real exits, so column c is
+    exit c+j and nothing can select an exit below the split depth.
+    """
+    M, lp = tables(0)
+    assert lp.shape[1] == K - J
+    for lam in (0.0, 1e-5):
+        for rho in (0.0, 0.3, 1.0):
+            k, _ = hybrid_map(M, lp, COST, 12.5, lam, rho, J)
+            assert int(k.min()) >= J
+
+K, T, J = 6, 40, 2
 COST = torch.tensor([0.5809, 0.5809, 0.5809, 0.7300, 0.8697, 1.0095])
 
 
@@ -28,7 +44,7 @@ def tables(seed=0):
     base = torch.rand(T, 1, generator=g) * 1e-4 + 1e-5
     drop = torch.rand(T, K, generator=g).sort(dim=1, descending=True).values
     M = base * drop
-    lp = torch.log_softmax(torch.randn(T, K, generator=g) * 3, dim=1)
+    lp = torch.log_softmax(torch.randn(T, K - J, generator=g) * 3, dim=1)
     return M, lp
 
 
@@ -37,10 +53,10 @@ def tables(seed=0):
 def test_endpoints_are_exact(seed, lam):
     M, lp = tables(seed)
     beta = 12.5
-    k0, s0 = hybrid_map(M, lp, COST, beta, lam, 0.0)
-    k1, s1 = hybrid_map(M, lp, COST, beta, lam, 1.0)
+    k0, s0 = hybrid_map(M, lp, COST, beta, lam, 0.0, J)
+    k1, s1 = hybrid_map(M, lp, COST, beta, lam, 1.0, J)
     assert s0 == 0 and s1 == T
-    assert torch.equal(k0, (lp - beta * COST[None, :]).argmax(1))
+    assert torch.equal(k0, (lp - beta * COST[None, J:]).argmax(1) + J)
     assert torch.equal(k1, (M + lam * COST[None, :]).argmin(1))
 
 
@@ -48,9 +64,9 @@ def test_endpoints_are_exact(seed, lam):
 def test_overridden_set_is_the_largest_regrets(rho):
     M, lp = tables(3)
     lam, beta = 1e-5, 12.5
-    k, s = hybrid_map(M, lp, COST, beta, lam, rho)
+    k, s = hybrid_map(M, lp, COST, beta, lam, rho, J)
     assert s == round(rho * T)
-    kr = (lp - beta * COST[None, :]).argmax(1)
+    kr = (lp - beta * COST[None, J:]).argmax(1) + J
     ko = (M + lam * COST[None, :]).argmin(1)
     L = M + lam * COST[None, :]
     regret = (L.gather(1, kr[:, None]) - L.gather(1, ko[:, None])).squeeze(1)
@@ -74,7 +90,7 @@ def test_recovery_is_monotone_in_rho():
     L = M + lam * COST[None, :]
     prev = None
     for rho in (0.0, 0.05, 0.1, 0.25, 0.5, 0.75, 1.0):
-        k, _ = hybrid_map(M, lp, COST, beta, lam, rho)
+        k, _ = hybrid_map(M, lp, COST, beta, lam, rho, J)
         obj = L.gather(1, k[:, None]).mean().item()
         if prev is not None:
             assert obj <= prev + 1e-12

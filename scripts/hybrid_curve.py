@@ -63,14 +63,19 @@ from flexuf.reference import reference_for  # noqa: E402
 from router_curve import router_share  # noqa: E402
 
 
-def hybrid_map(M, lp, cost, beta, lam, rho):
+def hybrid_map(M, lp, cost, beta, lam, rho, j=0):
     """The exit map for configuration C, and how many tiles were overridden.
 
     Router choice everywhere except the `rho` fraction of tiles with the largest
     Lagrangian regret, which take the oracle's. rho=0 is pure B and rho=1 is
     pure A; both are exact, not approached.
+
+    `lp` covers only the exits that exist, k = j..K-1, so its column c is exit
+    c+j. `M` and `cost` are full-length. The head nominally masks the missing
+    exits by assigning -1e4, which stops being a mask once its own logits reach
+    that scale -- see router_curve.py -- so they are sliced off instead.
     """
-    kr = (lp - beta * cost[None, :]).argmax(1)
+    kr = (lp - beta * cost[None, j:]).argmax(1) + j
     n = M.shape[0]
     s = int(round(rho * n))
     if s <= 0:
@@ -160,8 +165,13 @@ def main(argv):
                 stem = net.dec.upsample(y)
                 for g in range(cfg.split_depth):
                     stem = net.dec.groups[g](stem)
-                lp = F.log_softmax(head2(stem, y, aux["scales_hat"], qp,
-                                         cfg.feature_patch, cfg.latent_patch), 1)
+                # Exits below the split depth do not exist. The head nominally
+                # masks them by assigning -1e4, which is not a mask when the
+                # head's own logits have drifted to that scale -- see
+                # router_curve.py. Slice them off instead.
+                lg = head2(stem, y, aux["scales_hat"], qp,
+                           cfg.feature_patch, cfg.latent_patch)[:, j:]
+                lp = F.log_softmax(lg, 1)
                 if rshare == 0.0:
                     px = xp.shape[-1] * xp.shape[-2]
                     rshare = router_share(head2, (stem, y, aux["scales_hat"], qp,
@@ -201,7 +211,7 @@ def main(argv):
             def db_router(beta):
                 t = n = 0.0
                 for M, R, lp, *_ in cache:
-                    k = (lp - beta * cost[None, :]).argmax(1)
+                    k = (lp - beta * cost[None, j:]).argmax(1) + j
                     t += (10 * torch.log10(
                         M.gather(1, k[:, None]).squeeze(1).mean() / R)).item()
                     n += 1
@@ -234,7 +244,7 @@ def main(argv):
             for M, R, lp, *_ in cache:
                 L = M + lamA * cost[None, :]
                 ko = L.argmin(1)
-                kr = (lp - betaB * cost[None, :]).argmax(1)
+                kr = (lp - betaB * cost[None, j:]).argmax(1) + j
                 reg.append((L.gather(1, kr[:, None])
                             - L.gather(1, ko[:, None])).squeeze(1))
             reg = torch.cat(reg).sort(descending=True).values
@@ -253,7 +263,7 @@ def main(argv):
                   + "  ".join(f"L({k})={v:.3f}" for k, v in lorenz.items()))
 
             def choose(M, lp, lam, rho):
-                return hybrid_map(M, lp, cost, betaB, lam, rho)
+                return hybrid_map(M, lp, cost, betaB, lam, rho, j)
 
             for rho in a.rhos:
                 pays_router = rho < 1.0
