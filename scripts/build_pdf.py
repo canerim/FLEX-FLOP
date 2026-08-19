@@ -951,8 +951,10 @@ def content(colw, fullw):
         r"answer.</b> At 0.3 dB it reaches the architectural ceiling exactly at "
         r"the \RateRankLooseCeil lowest rates, is within 0.2 points of the "
         r"oracle at q48, and gives up \RateRankLoose% against the oracle's "
-        r"\SigLooseHigh% at q63 — better than the trained head at every rate, "
-        r"because the head is charged for itself and this is not. Once the "
+        r"\SigLooseHigh% at q63 — better than the trained head at every rate, by "
+        r"up to \RateRankLooseAheadBy points. The head is charged for itself "
+        r"and this is not, and at a loose budget its ordering has less left to "
+        r"contribute. Once the "
         r"budget saturates the ladder there is little ordering left to get "
         r"right, and the free rule gets it.")
     par(r"<b>What it cannot do</b> is see anything beyond that ordering. A "

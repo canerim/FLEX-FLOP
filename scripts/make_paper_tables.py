@@ -591,6 +591,14 @@ rr, _ = pick("raterank_RECIPE512_b01.json")
 rr3, _ = pick("raterank_RECIPE512_b03.json")
 if rr3:
     rs3 = [r for r in rr3["rows"] if r.get("budget_reachable")]
+    b3_, _ = pick("router_RECIPE512_b03_fixed.json", "router_RECIPE512_b03.json")
+    if rs3 and b3_:
+        B3v = {r["qp"]: r["saving_pct_vs_release"] for r in b3_["rows"]
+               if r.get("budget_reachable")}
+        marg = [r["saving_pct_vs_release"] - B3v[r["qp"]] for r in rs3
+                if r["qp"] in B3v]
+        if marg:
+            mac("RateRankLooseAheadBy", f"{max(marg):.1f}")
     if rs3:
         mac("RateRankLoose", f"{rs3[-1]['saving_pct_vs_release']:.1f}")
         mac("RateRankLooseCeil",

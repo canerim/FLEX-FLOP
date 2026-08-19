@@ -471,10 +471,9 @@ if rr:
                      f"{r['spearman_bits_vs_spread']:+.2f}"])
     w(table(["qp", "rate-rank", "B router", "A oracle", "ρ(bits, spread)"], rows))
     w("")
-    w("**It beats the trained router above qp 32**, by up to 8.6 points, and "
-      "loses below it by at most 1.2. The router was trained at one λ and its "
-      "ordering degrades as the bisection tilts it away; a bit count has no "
-      "such attachment to an operating point. It does this while agreeing with "
+    w("**It matches the trained head to within a point either way** — ahead at "
+      "the three lowest rates by up to 2.7 points, behind at the two highest by "
+      "at most 0.8. It does this while agreeing with "
       "the oracle on only 0.30–0.45 of tiles against the router's 0.718 — "
       "agreement weights a tile where two exits are within a hair the same as "
       "one that carries most of the frame's error. What the rule gets right is "
@@ -496,8 +495,10 @@ if rr:
         w(table(["qp", "rate-rank", "B router", "A oracle"], rows3))
         w("")
         w("It reaches the architectural ceiling exactly at the three lowest "
-          "rates and beats the trained head at every one, because the head is "
-          "charged for its own arithmetic and this is not charged for anything.")
+          "rates and beats the trained head at every rate, by up to 6.8 points. "
+          "The head is charged for its own arithmetic and this is not charged "
+          "for anything, and at a loose budget its ordering has less left to "
+          "contribute.")
         w("")
     w("What it cannot do is see past that ordering. A rank-1 model in the level "
       "gives every tile the same relative profile over exits, so the bit count "

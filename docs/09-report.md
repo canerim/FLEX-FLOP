@@ -273,7 +273,7 @@ The entropy model has already produced a per-tile number that is free and availa
 | 48 | 15.42 | 16.06 | 19.77 | +0.72 |
 | 63 | 12.10 | 12.94 | 16.77 | +0.68 |
 
-**It beats the trained router above qp 32**, by up to 8.6 points, and loses below it by at most 1.2. The router was trained at one λ and its ordering degrades as the bisection tilts it away; a bit count has no such attachment to an operating point. It does this while agreeing with the oracle on only 0.30–0.45 of tiles against the router's 0.718 — agreement weights a tile where two exits are within a hair the same as one that carries most of the frame's error. What the rule gets right is the ordering that matters: bits correlate with how much a tile stands to gain from depth at ρ = 0.62–0.72 at every rate.
+**It matches the trained head to within a point either way** — ahead at the three lowest rates by up to 2.7 points, behind at the two highest by at most 0.8. It does this while agreeing with the oracle on only 0.30–0.45 of tiles against the router's 0.718 — agreement weights a tile where two exits are within a hair the same as one that carries most of the frame's error. What the rule gets right is the ordering that matters: bits correlate with how much a tile stands to gain from depth at ρ = 0.62–0.72 at every rate.
 
 At the looser **0.3 dB** budget it stops being a baseline:
 
@@ -285,7 +285,7 @@ At the looser **0.3 dB** budget it stops being a baseline:
 | 48 | 40.48 | 36.19 | 40.64 |
 | 63 | 37.30 | 30.52 | 38.40 |
 
-It reaches the architectural ceiling exactly at the three lowest rates and beats the trained head at every one, because the head is charged for its own arithmetic and this is not charged for anything.
+It reaches the architectural ceiling exactly at the three lowest rates and beats the trained head at every rate, by up to 6.8 points. The head is charged for its own arithmetic and this is not charged for anything, and at a loose budget its ordering has less left to contribute.
 
 What it cannot do is see past that ordering. A rank-1 model in the level gives every tile the same relative profile over exits, so the bit count only decides where on the ladder a tile falls, never the shape of its trade-off. That is the part a learned head should be earning its parameters on.
 
