@@ -4553,3 +4553,52 @@ this is tile size and training together. The direction is consistent across six
 classes and two rates, which is enough to withdraw the claim that a
 resolution-adaptive tile size is an easy win, and not enough to quantify what a
 matched-training comparison would give.
+
+## 88. Every wall-clock number was timed on the wrong device
+
+`torch.cuda.Event` is created on the process's **current** device, not on the
+device the tensors live on. `torch.cuda.synchronize()` with no argument syncs
+the current device. Both are silent when they are wrong: they return numbers.
+
+`scripts/latency.py` defaults to `cuda:0` but was run with `--device cuda:2`
+(the run notes say so). `scripts/encoder_cost.py` defaults to `cuda:7`.
+`scripts/latency_profile.py` and `scripts/sorted_exec.py` had the same shape.
+Every timing in this project was taken that way.
+
+Re-measured with `torch.cuda.set_device(a.device)` first, RECIPE512:
+
+| quantity | before | after |
+|---|---|---|
+| released decode, q0 | 274 ms | 111 ms |
+| released decode, q32 | 401 ms | 111 ms |
+| released decode, q63 | 512 ms | 111 ms |
+| tiling overhead | 8.5% | 3.6% |
+| routed, masked loop, q0 | 9.9% | 27.9% |
+| routed, sorted loop, q0 | 28.5% | 29.1% |
+| stem share of decode | 107 ms | 41 ms |
+| encoder deployed table | 4.59x | 4.52x |
+
+The tell was in the table the whole time. `forward_full` is a fixed synthesis
+network; its arithmetic does not depend on the quality index, so it cannot take
+1.9x longer at q63 than at q0. It does not: it takes 111 ms at all three rates.
+Nobody looked, because the numbers were plausible in isolation and the ratios
+were the thing being read.
+
+Ratios of two long kernels mostly survive the bug -- which is why the encoder
+cost barely moved and why this lived so long. Short kernels do not: the router
+head measured 0.002 ms against a true 0.57 ms, a factor of ~300, and that is
+what made it visible.
+
+**What it costs the paper.** Finding (iv) claimed a 20% reduction in operations
+made the decoder 10.9% *slower* until the loop was reordered. That did not
+happen. The unsorted loop already realises 27.9% against a 35.3% prediction and
+sorting adds 1.2 points. The claim is now the weaker true one: operations are an
+optimistic bound, four fifths of the predicted saving arrives, and the optimism
+grows with how much of the frame exits early (15.6% against 20.1% at q63).
+
+**What was added so it cannot recur.** `tests/test_timing_device.py` asserts
+that every script using `torch.cuda.Event`, or a bare `torch.cuda.synchronize()`,
+also calls `torch.cuda.set_device`. It found two scripts beyond the two already
+known. It also guards itself: if the pattern stops matching anything, a case
+fails rather than the suite passing vacuously -- the failure mode of the two
+entries already in the supplementary's "things that were not running".
