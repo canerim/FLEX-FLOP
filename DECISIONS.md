@@ -4602,3 +4602,63 @@ also calls `torch.cuda.set_device`. It found two scripts beyond the two already
 known. It also guards itself: if the pattern stops matching anything, a case
 fails rather than the suite passing vacuously -- the failure mode of the two
 entries already in the supplementary's "things that were not running".
+
+## 89. The router's exit mask stopped being a mask
+
+`StemRouterHeadV2` (and `StemRouterHead`) suppress exits below the split depth
+with
+
+```python
+logits[:, : self.min_exit] = -1e4
+```
+
+That is a mask only while the head's own logits are much larger than -1e4. This
+head's are not. A raw row, RECIPE512's router at q63:
+
+```
+[-10000.0, -10000.0, -10044.5, -10003.8, -10011.1, -10018.7]
+```
+
+The head's genuine outputs are the last four minus a common offset of about
+-10000, and nothing in the training objective penalises a common offset --
+cross-entropy and the regret term are both shift-invariant, so one drifted in.
+The two "masked" entries are therefore the **largest** in the row. After
+`log_softmax` they hold essentially all the mass, `argmax` picks one, and
+`clamp(min=j)` turns it into exit `j`, the cheapest real exit.
+
+So a large fraction of every configuration-B allocation has been going to the
+cheapest rung for a reason unrelated to the tile.
+
+**It is visible in the allocations.** q63, six sequences, 0.1 dB:
+
+| decision rule | histogram | saving |
+|---|---|---|
+| `argmax` over all K, then clamp | {2: 49, 5: 191} | 7.98% |
+| `argmax` over k >= j only | {3: 110, 4: 28, 5: 102} | 13.49% |
+
+The broken form collapses onto a single confidence threshold and produces a
+two-level allocation, which is a poor point on the RD curve however the
+multiplier is bisected. It is not a bisection failure -- dB is monotone in beta
+and the bisection lands correctly; the family it searches is simply degenerate.
+
+**Fixed at the decision site**, not in the head. `flexuf/router/head.py` and
+`head2.py` are imported by live training runs and a crash-restart would pick up
+the edit mid-experiment. `scripts/router_curve.py` and `scripts/hybrid_curve.py`
+now slice `lg[:, j:]` before the softmax, which is what a correct mask would
+have produced. `tests/test_hybrid_map.py` asserts no selected exit is below the
+split depth. The head's own mask should become scale-relative
+(`logits.max() - 1e4`, or `-inf`) when nothing is training.
+
+**It probably also explains the router's 0.718 agreement.** Training pushed the
+real exits up against a suppression term sitting above them, so the head spent
+capacity fighting its own mask. A retrain with a correct mask is the obvious
+next experiment and has not been run.
+
+**How it was found.** A blended rule at w=1 -- the same head, the same frames --
+beat configuration B by seven points at q63. The first hypothesis was that a
+single global beta over-tilts frames the head is confident about, so the
+log-probabilities need per-frame normalisation. That was measured
+(`results/router_RECIPE512_b01_pfs.json`) and is worth 0.25-0.47 points, not
+seven. The hypothesis was wrong and the flag it added is kept only because it is
+free. What actually differed between the two code paths was that the blend
+sliced the logits and configuration B did not.
