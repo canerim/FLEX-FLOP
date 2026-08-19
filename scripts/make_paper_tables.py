@@ -402,10 +402,34 @@ if hy:
         c_ = cell(qhi, r_)
         if c_:
             mac(f"HybridBits{rt}", f"{c_['map_bits']:.0f}")
-    g = next((r.get("gini_regret") for r in rows_
-              if r["qp"] == qhi and r.get("gini_regret") is not None), None)
-    if g is not None:
-        mac("GiniHigh", f"{g:.3f}")
+    lo_, _ = pick("hybrid_lorenz_b01.json")
+    if lo_:
+        lrows = [r for r in lo_["rows"] if r.get("budget_reachable")]
+
+        def gini(q):
+            return next((r["gini_regret"] for r in lrows
+                         if r["qp"] == q and r.get("gini_regret") is not None),
+                        None)
+        for tag, q in (("Low", qlo), ("High", qhi)):
+            g = gini(q)
+            if g is not None:
+                mac(f"Gini{tag}", f"{g:.2f}")
+        gs = [gini(q) for q in qs if gini(q) is not None]
+        if gs:
+            mac("GiniMin", f"{min(gs):.2f}")
+            mac("GiniMax", f"{max(gs):.2f}")
+        # how tight the Lorenz bound is: measured recovery over the bound
+        ratios = []
+        for r in lrows:
+            if r.get("lorenz_at_rho") in (None, 0):
+                continue
+            m = recov(r["qp"], r["rho"])
+            if m is None:
+                continue
+            ratios.append(m / (100 * r["lorenz_at_rho"]))
+        if ratios:
+            mac("LorenzTightMin", f"{100*min(ratios):.0f}")
+            mac("LorenzTightMax", f"{100*min(1.0, max(ratios)):.0f}")
 
 # ------------------------------------------------------------- rate rank
 print("rate rank")

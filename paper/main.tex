@@ -924,7 +924,8 @@ what B can do.
 \caption{\textbf{Partial signalling.} \textbf{a} Saving against the bits spent
 on the map; the left end of each line is B and the right end is A.
 \textbf{b} The same, normalised: what fraction of the A--B gap a given fraction
-of the map recovers. Dashed is proportional recovery.}
+of the map recovers; dashed is proportional recovery. \textbf{c} The same
+against the Lorenz bound on it; dashed is equality.}
 \label{fig:hybrid}
 \end{figure}
 
@@ -962,15 +963,19 @@ the same fifth of the map --- \HybridBitsFifth\ bits against
 half recovers \HybridRecoverHalfHigh\%. Recovery is concave everywhere, so the
 first bits spent are always the most useful ones.
 
-\textbf{Why it is concave, and by how much.} At a fixed $\lambda$ the objective
-is separable, so overriding a set removes \emph{exactly} the sum of that set's
-regrets. The recovery curve is therefore the Lorenz curve of the per-tile regret
-distribution, and its curvature is that distribution's Gini coefficient ---
-which is the sense in which the shape of Figure~\ref{fig:hybrid}b is not an
-empirical finding but a restatement of how concentrated the router's mistakes
-are. Measured at $q63$ it is \GiniHigh: the worst tenth of tiles carries a
-quarter of the regret. A sharper elbow would need a router whose errors are
-rarer and larger, not one that is merely more accurate on average.
+\textbf{Why it is concave, and what bounds it.} At a fixed $\lambda$ the
+objective is separable, so overriding a set removes \emph{exactly} the sum of
+that set's regrets: the recovery of the \emph{objective} is the Lorenz curve of
+the per-tile regret distribution, and its curvature is that distribution's Gini
+coefficient, \GiniMin--\GiniMax\ across rates. What the table reports is not
+objective but saving at a fixed distortion, and returning to the budget means
+re-bisecting $\lambda$, which converts the recovered distortion into compute at
+the local exchange rate rather than one for one. The Lorenz curve is therefore
+an upper bound, and the measurement says so: every point in
+Figure~\ref{fig:hybrid}c lies on or below the diagonal, reaching
+\LorenzTightMin--\LorenzTightMax\% of the bound. The concentration of the
+router's mistakes is what makes partial signalling worth doing; the re-tuning is
+what stops it from being free.
 
 Configuration C is what we would ship where a small map is tolerable and a large
 one is not. It also reframes the A--B gap: it is not the price of prediction,

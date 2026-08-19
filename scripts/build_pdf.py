@@ -33,6 +33,9 @@ if mt.exists():
         MACROS[m.group(1)] = m.group(2)
 
 
+UNEXPANDED = set()
+
+
 def sub(t):
     """Expand \Macro and the handful of TeX-isms the text uses."""
     for k in sorted(MACROS, key=len, reverse=True):
@@ -42,6 +45,8 @@ def sub(t):
           .replace(r"\textbf{", "<b>").replace(r"\approx", "≈")
           .replace("---", "\u2014").replace("--", "\u2013")
           .replace(r"\lambda", "λ").replace(r"\beta", "β")
+          .replace(r"\Delta", "Δ").replace(r"\rho", "ρ")
+          .replace(r"\kappa", "κ").replace(r"\alpha", "α")
           .replace("``", "\u201c").replace("''", "\u201d"))
     # close the braces opened by emph/textbf, in order
     out, depth = [], []
@@ -54,7 +59,13 @@ def sub(t):
             out.append(depth.pop()); i += 1
         else:
             out.append(t[i]); i += 1
-    return "".join(out)
+    r = "".join(out)
+    # An unexpanded \Macro means make_paper_tables did not emit it -- usually
+    # because the result file it reads is missing. Silently printing the
+    # backslash into the PDF is worse than saying so.
+    for m in re.finditer(r"\\([A-Z][A-Za-z]+)", r):
+        UNEXPANDED.add(m.group(1))
+    return r
 
 
 # ---------------------------------------------------------------- styles
@@ -834,8 +845,8 @@ def content(colw, fullw):
            r"<b>Figure 10. Partial signalling.</b> <b>a</b> Saving against the "
            r"bits spent on the map; the left end of each line is B and the right "
            r"end is A. <b>b</b> The same, normalised: what fraction of the A–B "
-           r"gap a given fraction of the map recovers. Dashed is proportional "
-           r"recovery.")
+           r"gap a given fraction of the map recovers. <b>c</b> The same "
+           r"against the Lorenz bound on it. Dashed is equality.")
     tbl("hybrid",
         r"<b>Table 8. Configuration C</b> at 0.1 dB. Columns are the fraction of "
         r"tiles the encoder overrides; the two end columns reproduce B and A to "
@@ -852,17 +863,20 @@ def content(colw, fullw):
         r"the full map — recovers \HybridRecoverFifthHigh%, and half recovers "
         r"\HybridRecoverHalfHigh%. Recovery is concave everywhere, so the first "
         r"bits spent are always the most useful ones.")
-    par(r"<b>Why it is concave, and by how much.</b> At a fixed λ the objective "
-        r"is separable, so overriding a set removes <i>exactly</i> the sum of "
-        r"that set's regrets. The recovery curve is therefore the Lorenz curve "
-        r"of the per-tile regret distribution, and its curvature is that "
-        r"distribution's Gini coefficient — which is the sense in which the "
-        r"shape of the recovery curve is not an empirical finding but a "
-        r"restatement of "
-        r"how concentrated the router's mistakes are. Measured at q63 it is "
-        r"\GiniHigh: the worst tenth of tiles carries a quarter of the regret. "
-        r"A sharper elbow would need a router whose errors are rarer and "
-        r"larger, not one that is merely more accurate on average.")
+    par(r"<b>Why it is concave, and what bounds it.</b> At a fixed λ the "
+        r"objective is separable, so overriding a set removes <i>exactly</i> "
+        r"the sum of that set's regrets: the recovery of the <i>objective</i> "
+        r"is the Lorenz curve of the per-tile regret distribution, and its "
+        r"curvature is that distribution's Gini coefficient, "
+        r"\GiniMin–\GiniMax across rates. What the table reports is not "
+        r"objective but saving at a fixed distortion, and returning to the "
+        r"budget means re-bisecting λ, which converts the recovered distortion "
+        r"into compute at the local exchange rate rather than one for one. The "
+        r"Lorenz curve is therefore an upper bound, and the measurement says "
+        r"so: every point in panel c lies on or below the diagonal, reaching "
+        r"\LorenzTightMin–\LorenzTightMax% of the bound. The concentration of "
+        r"the router's mistakes is what makes partial signalling worth doing; "
+        r"the re-tuning is what stops it from being free.")
     par(r"Configuration C is what we would ship where a small map is tolerable "
         r"and a large one is not. It also reframes the A–B gap: it is not the "
         r"price of prediction, it is the price of <i>silence</i>, and silence "
@@ -1093,6 +1107,9 @@ def build(out="paper/FLEX-UF.pdf"):
         story.append(Paragraph(f"[{i}] {r}",
                                S("ref", fontSize=7.2, leading=8.4, spaceAfter=2)))
     doc.build(story)
+    if UNEXPANDED:
+        print("  UNEXPANDED MACROS (run make_paper_tables.py): "
+              + ", ".join(sorted(UNEXPANDED)))
     print(f"  -> {out}")
 
 
