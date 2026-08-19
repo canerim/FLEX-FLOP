@@ -34,7 +34,7 @@ ref = d["ref_mse"]
 NK = D.shape[1]
 
 # ---- the Lagrangian sweep: every allocation any lambda can produce ----------
-lams = np.concatenate([[0.0], np.geomspace(1e-9, 1e-1, 4000)])
+lams = np.concatenate([[0.0], np.geomspace(1e-10, 1e-1, 6000)])
 seen, hull = set(), []
 for lam in lams:
     k = np.argmin(D + lam * cost[None, :], axis=1)

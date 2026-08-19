@@ -57,7 +57,7 @@ check("P1 decoupling",
       f"assignments never lower")
 
 # ---- P2 ---------------------------------------------------------------------
-lams = np.concatenate([[0.0], np.geomspace(1e-10, 1e-1, 3000)])
+lams = np.concatenate([[0.0], np.geomspace(1e-10, 1e-1, 6000)])
 Cs, Ds = zip(*[CD(alloc(l)) for l in lams])
 Cs, Ds = np.array(Cs), np.array(Ds)
 check("P2 monotonicity",

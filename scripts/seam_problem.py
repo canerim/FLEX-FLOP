@@ -79,28 +79,25 @@ gs = fig.add_gridspec(2, 3, width_ratios=[1.35, 1.35, 1.0], hspace=0.12, wspace=
 ZR, ZC, ZS = 384, 640, 320          # a window on a grid crossing
 
 a0 = fig.add_subplot(gs[:, 0]); a0.imshow(ref_img)
-a0.set_title("Decoded full-frame — no tiling", fontsize=6.5, color=ns.INK, loc="left")
+a0.set_title("full frame", fontsize=6.5, color=ns.INK, loc="left")
 a0.add_patch(Rectangle((ZC, ZR), ZS, ZS, ec="#00e5ff", fc="none", lw=0.9))
 
 a1 = fig.add_subplot(gs[:, 1])
 a1.imshow(np.clip(err * a.amp, 0, 1), cmap="inferno", vmin=0, vmax=1)
-a1.set_title(f"|error| from tiling alone, ×{a.amp:.0f}  ·  every tile at FULL "
-             f"depth  ·  {db.item():+.3f} dB", fontsize=6.5, color=ns.VERM, loc="left")
+a1.set_title(f"|error| ×{a.amp:.0f}   {db.item():+.3f} dB", fontsize=6.5,
+             color=ns.VERM, loc="left")
 a1.add_patch(Rectangle((ZC, ZR), ZS, ZS, ec="#00e5ff", fc="none", lw=0.9))
 
 a2 = fig.add_subplot(gs[0, 2])
 a2.imshow(ref_img[ZR:ZR+ZS, ZC:ZC+ZS])
-a2.set_title("zoom · reference", fontsize=6, color=ns.INK, loc="left")
+a2.set_title("zoom", fontsize=6, color=ns.INK, loc="left")
 a3 = fig.add_subplot(gs[1, 2])
 a3.imshow(np.clip(err[ZR:ZR+ZS, ZC:ZC+ZS] * a.amp, 0, 1), cmap="inferno",
           vmin=0, vmax=1)
-a3.set_title("zoom · the error", fontsize=6, color=ns.VERM, loc="left")
+a3.set_title("zoom", fontsize=6, color=ns.VERM, loc="left")
 for A in (a0, a1, a2, a3):
     A.set_xticks([]); A.set_yticks([])
-fig.suptitle(f"{s['name'].split('_')[0]} 1080p, qp {a.qp}, stock zero padding — "
-             f"the bitstream is identical, only the decode is tiled",
-             fontsize=6.5, color=ns.INK2, x=0.005, ha="left")
-fig.tight_layout(rect=[0, 0, 1, 0.95])
+fig.tight_layout()
 for o in (R / a.out, R / "results/seam_problem.png"):
     fig.savefig(o, dpi=300, bbox_inches="tight", facecolor="white")
 print(f"  {P}px tiles, {(H+ph)//P}x{(W+pw)//P} grid   penalty {db.item():+.4f} dB")

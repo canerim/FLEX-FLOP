@@ -31,7 +31,6 @@ ax[0].axhline(B, color=ns.INK, lw=0.8, ls=(0, (4, 2)))
 ax[0].set_xlabel("frames since the map was computed")
 ax[0].set_ylabel("delivered dB")
 ax[0].legend(fontsize=5.5, loc="upper left")
-ax[0].set_title("Reuse across time", fontsize=6, color=ns.INK2, loc="left")
 ns.panel(ax[0], "a")
 
 # b: saving when reused across frames
@@ -43,7 +42,6 @@ for q in qps:
                "--", lw=0.8, color=COL[q], alpha=0.6)
 ax[1].set_xlabel("frames since the map was computed")
 ax[1].set_ylabel("MACs saved (%)")
-ax[1].set_title("Reuse across time", fontsize=6, color=ns.INK2, loc="left")
 ns.panel(ax[1], "b", dx=-0.24)
 
 # c: the rate transfer matrix, as delivered dB
@@ -64,7 +62,6 @@ ax[2].set_xlabel("applied at"); ax[2].set_ylabel("map computed at")
 ax[2].grid(False)
 cb = fig.colorbar(im, ax=ax[2], fraction=0.046, pad=0.03)
 cb.ax.tick_params(labelsize=5); cb.set_label("delivered dB", fontsize=5.5)
-ax[2].set_title("Reuse across rate", fontsize=6, color=ns.INK2, loc="left")
 ns.panel(ax[2], "c", dx=-0.28)
 
 fig.tight_layout()

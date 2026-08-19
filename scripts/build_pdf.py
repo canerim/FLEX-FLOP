@@ -493,7 +493,8 @@ def content(colw, fullw):
     figure("seam_problem.png",
            r"<b>Figure 3. The artefact, before anything is done about it.</b> "
            r"One frame decoded twice from the <i>same</i> bitstream with the "
-           r"same weights, every tile at full depth — no early exit "
+           r"same weights, every tile at full depth, stock zero padding "
+           r"— no early exit "
            r"anywhere. The only difference is that the right-hand decode was "
            r"tiled. The error map is the tile lattice and nothing else.")
     par(r"A 3×3 depthwise computes a weighted sum over its neighbours. Decoded "
@@ -764,7 +765,7 @@ def content(colw, fullw):
         r"vertices, a budget between two of them is not attainable. We measured "
         r"what that costs by enumerating the <i>exact</i> Pareto set with "
         r"dynamic programming over tiles — feasible because the cost alphabet "
-        r"has four symbols: the sweep reaches 92 allocations against a Pareto "
+        r"has four symbols: the sweep reaches 95 allocations against a Pareto "
         r"set of 635, and convexity costs at most 0.05 saving points. The "
         r"standard construction is essentially optimal here.")
     par(r"Two numbers bound what any budget can do. The <b>floor</b> is the "
@@ -818,7 +819,55 @@ def content(colw, fullw):
         r"rung and nothing is left to predict wrongly. Configuration B is "
         r"expensive in exactly one regime: a tight budget at a rate far from the "
         r"router's training point.")
-    h2("5.6 Does the map have to be recomputed?")
+    h2("5.6 Signalling only what the router gets wrong")
+    par(r"A and B are the two ends of a single scale, not two designs. The "
+        r"encoder can run the decoder's router — it reads only decoded data — "
+        r"so it knows, tile by tile, where the prediction will be wrong. "
+        r"Nothing forces it to correct all of them.")
+    par(r"Configuration C signals a fraction ρ of the tiles and leaves the rest "
+        r"to the router. The overrides are chosen by Lagrangian regret, which is "
+        r"exactly what the objective loses on that tile by staying silent; β is "
+        r"held at B's value and λ is bisected over the overrides to land back on "
+        r"the budget. The map costs an entropy-coded mask, N·H₂(ρ) bits, plus 3 "
+        r"per override.")
+    figure("hybrid.png",
+           r"<b>Figure 10. Partial signalling.</b> <b>a</b> Saving against the "
+           r"bits spent on the map; the left end of each line is B and the right "
+           r"end is A. <b>b</b> The same, normalised: what fraction of the A–B "
+           r"gap a given fraction of the map recovers. Dashed is proportional "
+           r"recovery.")
+    tbl("hybrid",
+        r"<b>Table 8. Configuration C</b> at 0.1 dB. Columns are the fraction of "
+        r"tiles the encoder overrides; the two end columns reproduce B and A to "
+        r"within 0.1 points, which is the check that the interpolation is real.")
+    par(r"<b>The two ends check out.</b> At ρ=0 the measurement reproduces "
+        r"configuration B to the second decimal at every rate, and at ρ=1 it "
+        r"reproduces A. Neither is imposed — both fall out of the same code "
+        r"path — so the columns between them are measuring something real.")
+    par(r"<b>Most of the gap is cheap.</b> At q0, overriding a tenth of the "
+        r"tiles for \HybridBitsTenth bits per frame recovers "
+        r"\HybridRecoverTenthLow% of the gap; a fifth recovers "
+        r"\HybridRecoverFifthLow%. At q63, where the gap is widest, the same "
+        r"fifth of the map — \HybridBitsFifth bits against \HybridBitsFull for "
+        r"the full map — recovers \HybridRecoverFifthHigh%, and half recovers "
+        r"\HybridRecoverHalfHigh%. Recovery is concave everywhere, so the first "
+        r"bits spent are always the most useful ones.")
+    par(r"<b>Why it is concave, and by how much.</b> At a fixed λ the objective "
+        r"is separable, so overriding a set removes <i>exactly</i> the sum of "
+        r"that set's regrets. The recovery curve is therefore the Lorenz curve "
+        r"of the per-tile regret distribution, and its curvature is that "
+        r"distribution's Gini coefficient — which is the sense in which the "
+        r"shape of the recovery curve is not an empirical finding but a "
+        r"restatement of "
+        r"how concentrated the router's mistakes are. Measured at q63 it is "
+        r"\GiniHigh: the worst tenth of tiles carries a quarter of the regret. "
+        r"A sharper elbow would need a router whose errors are rarer and "
+        r"larger, not one that is merely more accurate on average.")
+    par(r"Configuration C is what we would ship where a small map is tolerable "
+        r"and a large one is not. It also reframes the A–B gap: it is not the "
+        r"price of prediction, it is the price of <i>silence</i>, and silence "
+        r"is priced per tile.")
+    h2("5.7 Does the map have to be recomputed?")
     figure("map_transfer.png",
            r"<b>Figure 10. Reusing an exit map.</b> Solid is the transferred "
            r"map, dashed the one recomputed in place. <b>a</b>, <b>b</b>: reuse "
@@ -843,7 +892,7 @@ def content(colw, fullw):
         r"expensive at high rate, so a map is calibrated to the rate it was found "
         r"at, and reusing it upward silently breaks the quality guarantee. Search "
         r"once per rate, reuse across frames.")
-    h2("5.7 Complexity and wall-clock")
+    h2("5.8 Complexity and wall-clock")
     tbl("latency",
         r"<b>Table 8. Wall-clock</b>, 1080p, median of 40 interleaved "
         r"iterations, at the 0.1 dB operating point. ``MACs'' is what the "
@@ -868,14 +917,14 @@ def content(colw, fullw):
     par(r"We report this because the negative result is the more useful half: a "
         r"paper reporting only MACs would have claimed a speedup that the same "
         r"code, run as written, did not deliver.")
-    h2("5.8 The right ladder depends on the budget")
+    h2("5.9 The right ladder depends on the budget")
     tbl("runs",
         r"<b>Table 9. Ladder configurations</b>, mean saving (%) over the five "
         r"rates, same test set and protocol. * one rate is infeasible at that "
         r"budget — the ladder's floor exceeds it — so the mean is over "
         r"the remaining four.")
     par(r"Section 5.4 argued that once a budget saturates a ladder the only way "
-        r"to spend more is a rung that does not exist. Table 9 measures it. A "
+        r"to spend more is a rung that does not exist. The table measures it. A "
         r"finer ladder (K=12, j=4) has a ceiling of 50.3% against 41.9%, and "
         r"the orderings cross between 0.1 and 0.3 dB. At 0.1 dB the coarse "
         r"ladder wins, and the fine one cannot even reach the budget at the "

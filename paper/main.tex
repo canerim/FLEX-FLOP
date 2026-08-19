@@ -436,7 +436,7 @@ The sign of the effect flips.
 \includegraphics[width=\columnwidth]{figures/seam_problem.png}
 \caption{\textbf{The artefact, before anything is done about it.} One frame
 decoded twice from the \emph{same} bitstream with the same weights, every tile at
-full depth --- no early exit anywhere. The only difference is that the right-hand
+full depth, stock zero padding --- no early exit anywhere. The only difference is that the right-hand
 decode was tiled. The error map is the tile lattice and nothing else.}
 \label{fig:seamproblem}
 \end{figure}
@@ -842,7 +842,7 @@ The third of those is the one with a practical edge. Because the sweep reaches
 only hull vertices, a budget falling between two of them is not attainable. We
 measured what that costs by enumerating the \emph{exact} Pareto set with dynamic
 programming over tiles --- feasible because the cost alphabet has four symbols
---- and comparing: the sweep reaches 92 allocations against a Pareto set of 635,
+--- and comparing: the sweep reaches 95 allocations against a Pareto set of 635,
 and the loss from convexity is at most $0.05$ saving points
 (Fig.~\ref{fig:theory}c). The standard construction is essentially optimal here.
 
@@ -914,6 +914,67 @@ So configuration~B is expensive in exactly one regime: a tight budget at a rate
 far from the router's training point. We report the single-router number because
 it is the honest one for a system that trains once, and note that it understates
 what B can do.
+
+\subsection{Signalling only what the router gets wrong}
+\label{sec:hybrid}
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\columnwidth]{figures/hybrid.png}
+\caption{\textbf{Partial signalling.} \textbf{a} Saving against the bits spent
+on the map; the left end of each line is B and the right end is A.
+\textbf{b} The same, normalised: what fraction of the A--B gap a given fraction
+of the map recovers. Dashed is proportional recovery.}
+\label{fig:hybrid}
+\end{figure}
+
+\begin{table}[t]
+\centering
+\resizebox{\columnwidth}{!}{\input{tables/hybrid}}
+\caption{\textbf{Configuration C} at $0.1\dB$. Columns are the fraction of tiles
+the encoder overrides; the two end columns reproduce B and A to within
+$0.1$ points, which is the check that the interpolation is real.}
+\label{tab:hybrid}
+\end{table}
+
+A and B are the two ends of a single scale, not two designs. The encoder can
+run the decoder's router --- it reads only decoded data --- so it knows, tile by
+tile, where the prediction will be wrong. Nothing forces it to correct all of
+them.
+
+Configuration C signals a fraction $\rho$ of the tiles and leaves the rest to
+the router. The overrides are chosen by Lagrangian regret,
+$\Delta(t)=L_\lambda(t,\hat{k})-L_\lambda(t,k^{*})$, which is exactly what the
+objective loses on that tile by staying silent; $\beta$ is held at B's value and
+$\lambda$ is bisected over the overrides to land back on the budget. The map
+costs an entropy-coded mask, $N H_2(\rho)$ bits, plus $3$ per override.
+
+\textbf{The two ends check out.} At $\rho=0$ the measurement reproduces
+configuration~B to the second decimal at every rate, and at $\rho=1$ it
+reproduces~A. Neither is imposed --- both fall out of the same code path --- so
+the columns between them are measuring something real.
+
+\textbf{Most of the gap is cheap.} At $q0$, overriding a tenth of the tiles for
+\HybridBitsTenth\ bits per frame recovers \HybridRecoverTenthLow\% of the gap;
+a fifth recovers \HybridRecoverFifthLow\%. At $q63$, where the gap is widest,
+the same fifth of the map --- \HybridBitsFifth\ bits against
+\HybridBitsFull\ for the full map --- recovers \HybridRecoverFifthHigh\%, and
+half recovers \HybridRecoverHalfHigh\%. Recovery is concave everywhere, so the
+first bits spent are always the most useful ones.
+
+\textbf{Why it is concave, and by how much.} At a fixed $\lambda$ the objective
+is separable, so overriding a set removes \emph{exactly} the sum of that set's
+regrets. The recovery curve is therefore the Lorenz curve of the per-tile regret
+distribution, and its curvature is that distribution's Gini coefficient ---
+which is the sense in which the shape of Figure~\ref{fig:hybrid}b is not an
+empirical finding but a restatement of how concentrated the router's mistakes
+are. Measured at $q63$ it is \GiniHigh: the worst tenth of tiles carries a
+quarter of the regret. A sharper elbow would need a router whose errors are
+rarer and larger, not one that is merely more accurate on average.
+
+Configuration C is what we would ship where a small map is tolerable and a large
+one is not. It also reframes the A--B gap: it is not the price of prediction,
+it is the price of \emph{silence}, and silence is priced per tile.
 
 \subsection{Does the map have to be recomputed?}
 \label{sec:transfer}

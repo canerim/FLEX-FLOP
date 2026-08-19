@@ -350,6 +350,83 @@ if sa and b1:
             mac("GapLooseLow", f"{A3[qs[0]]-B3[qs[0]]:.1f}")
             mac("GapLooseHigh", f"{A3[qs[-1]]-B3[qs[-1]]:.1f}")
 
+# ------------------------------------------------------------------ hybrid C
+print("hybrid C")
+hy, _ = pick("hybrid_RECIPE512_b01.json")
+if hy:
+    rows_ = [r for r in hy["rows"] if r.get("budget_reachable")]
+    qs = [q for q in QPS if any(r["qp"] == q for r in rows_)]
+    rhos = sorted({r["rho"] for r in rows_})
+    show = [r for r in rhos if r in (0.0, 0.05, 0.1, 0.2, 0.5, 1.0)] or rhos
+
+    def cell(q, r_):
+        for r in rows_:
+            if r["qp"] == q and abs(r["rho"] - r_) < 1e-9:
+                return r
+        return None
+
+    lines = [r"\begin{tabular}{l" + "r" * len(show) + "}", r"\toprule",
+             r"$q$ & " + " & ".join(
+                 ("B" if r_ == 0 else "A" if r_ == 1 else f"{100*r_:.0f}\\%")
+                 for r_ in show) + r" \\",
+             r"bits/frame & " + " & ".join(
+                 f"{(cell(qs[0], r_) or {}).get('map_bits', 0):.0f}"
+                 for r_ in show) + r" \\", r"\midrule"]
+    for q in qs:
+        vals = [cell(q, r_) for r_ in show]
+        lines.append(f"{q} & " + " & ".join(
+            f"{v['saving_pct_vs_release']:.1f}" if v else "---"
+            for v in vals) + r" \\")
+    lines += [r"\bottomrule", r"\end{tabular}"]
+    w("hybrid.tex", "\n".join(lines))
+    def recov(q, r_):
+        b0, bx, ba = cell(q, 0.0), cell(q, r_), cell(q, 1.0)
+        if not (b0 and bx and ba):
+            return None
+        span = ba["saving_pct_vs_release"] - b0["saving_pct_vs_release"]
+        if span <= 1e-9:
+            return None
+        return 100 * (bx["saving_pct_vs_release"]
+                      - b0["saving_pct_vs_release"]) / span
+
+    qlo, qhi = qs[0], qs[-1]
+    for tag, q in (("Low", qlo), ("High", qhi)):
+        for rt, r_ in (("Tenth", 0.1), ("Fifth", 0.2), ("Half", 0.5)):
+            v = recov(q, r_)
+            if v is not None:
+                mac(f"HybridRecover{rt}{tag}", f"{v:.0f}")
+            c_ = cell(q, r_)
+            if c_ and tag == "High":
+                mac(f"HybridSave{rt}High", f"{c_['saving_pct_vs_release']:.1f}")
+    for rt, r_ in (("Tenth", 0.1), ("Fifth", 0.2), ("Full", 1.0)):
+        c_ = cell(qhi, r_)
+        if c_:
+            mac(f"HybridBits{rt}", f"{c_['map_bits']:.0f}")
+    g = next((r.get("gini_regret") for r in rows_
+              if r["qp"] == qhi and r.get("gini_regret") is not None), None)
+    if g is not None:
+        mac("GiniHigh", f"{g:.3f}")
+
+# ------------------------------------------------------------- rate rank
+print("rate rank")
+rr, _ = pick("raterank_RECIPE512_b01.json")
+if rr:
+    rs = [r for r in rr["rows"] if r.get("budget_reachable")]
+    lines = [r"\begin{tabular}{lrrrr}", r"\toprule",
+             r"$q$ & rate-rank & B router & A signalled & Spearman \\",
+             r"\midrule"]
+    for r in rs:
+        b = (B1 or {}).get(r["qp"])
+        lines.append(f"{r['qp']} & {r['saving_pct_vs_release']:.1f} & "
+                     + (f"{b:.1f}" if b is not None else "---")
+                     + f" & {r['oracle_saving_pct_vs_release']:.1f} & "
+                     f"{r['spearman_bits_vs_exit']:+.2f} \\\\")
+    lines += [r"\bottomrule", r"\end{tabular}"]
+    w("raterank.tex", "\n".join(lines))
+    if rs:
+        mac("RateRankLow", f"{rs[0]['saving_pct_vs_release']:.1f}")
+        mac("RateRankHigh", f"{rs[-1]['saving_pct_vs_release']:.1f}")
+
 # --------------------------------------------------------- adapter ablation
 print("adapter ablation")
 d, _ = pick("adapter_ablation.json")

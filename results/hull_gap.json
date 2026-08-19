@@ -2,7 +2,7 @@
   "seq": "Bosphorus_1920x1080_120fps_420_8bit_YUV.yuv",
   "qp": 32,
   "n_tiles": 40,
-  "n_hull_allocations": 92,
+  "n_hull_allocations": 95,
   "n_pareto": 635,
   "note": "hull = reachable by some lambda; pareto = best at that budget whether or not any lambda reaches it",
   "rows": [

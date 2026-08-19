@@ -56,7 +56,7 @@ if d:
 # ---- hull -------------------------------------------------------------------
 d = J("hull_gap.json")
 if d:
-    claim("hull: swept allocations", 92, d["n_hull_allocations"], 0)
+    claim("hull: swept allocations", 95, d["n_hull_allocations"], 0)
     claim("hull: Pareto points", 635, d["n_pareto"], 1)
     claim("hull: worst gap (pts)", 0.05,
           max(abs(r["gap_pts"]) for r in d["rows"]), 0.005)
