@@ -1,5 +1,21 @@
 # A versus B: who decides which exit each tile takes
 
+> **The numbers below are superseded.** Everything on this page was measured on
+> the full-frame distortion table, before `flexuf/eval.py` moved evaluation onto
+> the deployed path, and against BEST rather than RECIPE512. The corrected
+> figures are in [09 — report §5](09-report.md) and in the paper: the gap at
+> 0.1 dB is **1.7 points at q0 rising to 13.3 at q63**, not 3.96–6.49, and at
+> 0.5 dB it is 0.16 at every rate — exactly the router's own compute.
+>
+> Three things have also been added since: a partial-signalling configuration
+> that interpolates A and B, a parameter-free rule that beats the trained head
+> above q32, and a wall-clock measurement of the head itself (0.50% of a decode,
+> three times its MAC share).
+>
+> The *reasoning* on this page still holds and is why it is kept: the gap tracks
+> |β|, the tilt the bisection has to apply to drag a router from its training
+> operating point, and that diagnosis survived the re-measurement.
+
 The exit ladder is the same in both. The decoder is the same checkpoint. The only
 thing that differs is **where the exit assignment comes from**, and that one
 choice changes the bitstream, the compute budget on each side, and whether the
