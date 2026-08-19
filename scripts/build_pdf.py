@@ -109,6 +109,10 @@ def tex_table(name, width):
         # brace-stripping below turned "SlimCAE~\cite{slimcae}" into
         # "SlimCAE~citeslimcae" in the positioning table.
         line = re.sub(r"~?\\cite\{[^}]*\}", "", line)
+        # \mathrm{sat} and friends: keep the text, drop the wrapper. Without
+        # this the brace-stripping below prints "D_mathrmsat".
+        line = re.sub(r"\\(?:mathrm|mathbf|text|textrm)\{([^}]*)\}",
+                      r"\1", line)
         cells = [sub(c.strip()) for c in line.split("&")]
         cells = [re.sub(r"\$([^$]*)\$", r"\1", c) for c in cells]
         cells = [c.replace(r"\_", "_").replace("{", "").replace("}", "")
