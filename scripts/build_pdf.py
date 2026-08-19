@@ -1047,6 +1047,13 @@ def content(colw, fullw):
         r"objective but saving at fixed distortion, and returning to the budget "
         r"means re-bisecting λ — which is also what lets the two-multiplier "
         r"allocations above escape the bound.")
+    par(r"<b>At the loose budget it matters where the gap is.</b> At 0.3 dB the "
+        r"three lowest rates are saturated and there is nothing for a partial "
+        r"map to buy. At \HybridLooseQps, where the gap is \GapLooseHigh "
+        r"points, half the map recovers "
+        r"\HybridLooseRecLo–\HybridLooseRecHi% of it. The rule is the same one "
+        r"the allocation follows everywhere: spend the bits where the ladder "
+        r"still has somewhere to go.")
     par(r"Configuration C is what we would ship where a small map is tolerable "
         r"and a large one is not. It also reframes the A–B gap: it is not the "
         r"price of prediction, it is the price of <i>silence</i>, and silence "

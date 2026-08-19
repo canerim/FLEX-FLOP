@@ -1158,6 +1158,13 @@ not objective but saving at fixed distortion, and returning to the budget means
 re-bisecting $\lambda$ --- which is also what lets the two-multiplier
 allocations above escape the bound.
 
+\textbf{At the loose budget it matters where the gap is.} At $0.3\dB$ the three
+lowest rates are saturated and there is nothing for a partial map to buy. At
+\HybridLooseQps, where the gap is \GapLooseHigh\ points, half the map recovers
+\HybridLooseRecLo--\HybridLooseRecHi\% of it. The rule is the same one the
+allocation follows everywhere: spend the bits where the ladder still has
+somewhere to go.
+
 Configuration C is what we would ship where a small map is tolerable and a large
 one is not. It also reframes the A--B gap: it is not the price of prediction,
 it is the price of \emph{silence}, and silence is priced per tile.

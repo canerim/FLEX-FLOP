@@ -524,6 +524,26 @@ if cp:
     mac("CoupFloorDropLo", f"{min(drops):.0f}")
     mac("CoupFloorDropHi", f"{max(drops):.0f}")
 
+# hybrid at the loose budget: where the gap is large, how cheaply it closes
+hy3, _ = pick("hybrid_RECIPE512_b03_fixed.json")
+if hy3:
+    r3 = [r for r in hy3["rows"] if r.get("budget_reachable")]
+
+    def _c3(q, rho):
+        return next((r["saving_pct_vs_release"] for r in r3
+                     if r["qp"] == q and abs(r["rho"] - rho) < 1e-9), None)
+    qs3 = sorted({r["qp"] for r in r3})
+    rec = []
+    for q in qs3:
+        b0, bh, ba = _c3(q, 0.0), _c3(q, 0.5), _c3(q, 1.0)
+        if None in (b0, bh, ba) or ba - b0 < 0.5:
+            continue                      # saturated: no gap to recover
+        rec.append((q, 100 * (bh - b0) / (ba - b0)))
+    if rec:
+        mac("HybridLooseRecLo", f"{min(v for _, v in rec):.0f}")
+        mac("HybridLooseRecHi", f"{max(v for _, v in rec):.0f}")
+        mac("HybridLooseQps", " and ".join(f"$q{q}$" for q, _ in rec))
+
 # ------------------------------------------------------------------- blend
 print("blend")
 cb, _ = pick("combined_RECIPE512_b01.json")

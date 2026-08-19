@@ -110,6 +110,25 @@ if hy and b1f and sg:
     dbs = [abs(r["db_vs_uf"] - 0.1) for r in rws]
     claim("hybrid: worst |dB - budget|", 0.0, max(dbs), 1e-3)
 
+# ---- hybrid at the loose budget -------------------------------------------
+hy3 = J("hybrid_RECIPE512_b03_fixed.json")
+if hy3:
+    r3 = [r for r in hy3["rows"] if r.get("budget_reachable")]
+
+    def _c3(q, rho):
+        return next((r["saving_pct_vs_release"] for r in r3
+                     if r["qp"] == q and abs(r["rho"] - rho) < 1e-9), None)
+    rec = []
+    for q in sorted({r["qp"] for r in r3}):
+        b0, bh, ba = _c3(q, 0.0), _c3(q, 0.5), _c3(q, 1.0)
+        if None in (b0, bh, ba) or ba - b0 < 0.5:
+            continue
+        rec.append(100 * (bh - b0) / (ba - b0))
+    if rec:
+        claim("hybrid 0.3 dB: unsaturated rates", 2, len(rec), 0)
+        claim("hybrid 0.3 dB: half-map recovery, low", 68, min(rec), 1.0)
+        claim("hybrid 0.3 dB: half-map recovery, high", 91, max(rec), 1.0)
+
 # ---- blend ----------------------------------------------------------------
 cb = J("combined_RECIPE512_b01.json")
 if cb:
