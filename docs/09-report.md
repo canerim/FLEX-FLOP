@@ -237,6 +237,7 @@ Upward the map claims the low-rate saving while spending nearly twice the qualit
 | **A** signalled, 0.3 dB | 41.91 | 41.91 | 41.91 | 40.64 | 38.40 |
 | **B** router, 0.3 dB | 41.75 | 41.75 | 41.75 | 36.19 | 30.52 |
 | **A** signalled, 0.5 dB | 41.91 | 41.91 | 41.91 | 41.91 | 41.91 |
+| **B** router, 0.5 dB | 41.75 | 41.75 | 41.75 | 41.75 | 41.75 |
 
 One router, trained once at λ=1.3e-5 against the *deployed* oracle. The gap tracks |β|, the tilt the bisection applies to move the router off its training operating point: β is 137, 89, 9, −40, −50 across the five rates and the gap is 5.2, 4.3, 3.1, 3.7, 3.9, with the minimum at qp 32 where the tilt is essentially zero. Wherever the budget saturates the ladder the gap collapses to the router's own 0.163% of decode, because both configurations then send every tile to the cheapest rung.
 
