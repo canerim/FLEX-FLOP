@@ -12,6 +12,8 @@ P5  saturation      beyond a finite lambda the allocation is the constant map to
                     exit j, at cost exactly c_j
 P6  ceiling         the maximum saving is 100(1 - c_j), a function of the split
                     depth alone -- not of content, rate, or training
+P7  granularity     consecutive hull points differ by at most one tile moving one
+                    rung, so the convexity loss shrinks as 1/T
 """
 import json, sys
 from pathlib import Path
@@ -129,5 +131,39 @@ check("P6 ceiling",
       f"across {len(cls_ceils)} class/rate cells at a saturating budget the "
       f"spread is {spread:.2e} points")
 
-print(f"\n  {sum(ok)}/{len(ok)} propositions verified")
+# ---- P7 ---------------------------------------------------------------------
+# P3 measures what the convex-hull restriction costs. P7 says why it is small
+# and what would make it smaller. The reachable cost levels are a lattice, and
+# the lattice spacing is set by how much cost changes when the multiplier
+# crosses a switching point: m tiles move one rung each, so
+#
+#     spacing  <=  m * max_k (c_{k+1} - c_k) / T
+#
+# saving points, and the convexity loss cannot exceed the largest spacing --
+# a budget that falls between two levels is served by the lower one. m is 1 in
+# the generic case where no two tiles switch at the same multiplier; here it is
+# not 1, because tiles with identical rows switch together. Either way the
+# bound falls as 1/T: halve the tile side and four times as many tiles each
+# carry a quarter of the step. Nothing in it depends on content or rate.
+rung = float(np.max(np.diff(cost_full[j:])))
+allocs = [alloc(l) for l in lams]
+m = max((int((a != b).sum()) for a, b in zip(allocs, allocs[1:])), default=1)
+bound = 100 * m * rung / T
+levels = np.unique(np.round([CD(a)[0] for a in allocs], 12))
+steps = 100 * np.diff(np.sort(levels))
+check("P7 granularity",
+      float(steps.max()) <= bound + 1e-9 and maxgap <= steps.max() + 1e-9,
+      f"at most m={m} tiles switch together, so the lattice spacing is bounded "
+      f"by {bound:.3f} saving points and measures {steps.max():.3f}; the P3 "
+      f"loss is {maxgap:.3f}, under it. The bound is m*max_k(c_k+1-c_k)/T and "
+      f"falls as 1/T")
+
+json.dump({"seq": d["seq"], "qp": d["qp"], "T": T, "j": j,
+           "max_rung": rung, "m_simultaneous": m,
+           "lattice_bound_pts": bound, "lattice_spacing_pts": float(steps.max()),
+           "hull_loss_pts": float(maxgap), "n_propositions": len(ok),
+           "n_passed": int(sum(ok))},
+          open(R / "results/theory_checks.json", "w"), indent=2)
+print(f"\n  {sum(ok)}/{len(ok)} propositions verified   "
+      f"-> results/theory_checks.json")
 sys.exit(0 if all(ok) else 1)

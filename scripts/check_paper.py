@@ -53,6 +53,14 @@ if d:
             a = np.polyfit(np.log(b), np.log(y), 1)[0]
             claim(f"contamination exponent q{q}", exp, float(a), 0.02)
 
+# ---- theory ---------------------------------------------------------------
+t = J("theory_checks.json")
+if t:
+    claim("theory: propositions passed", 7, t["n_passed"], 0)
+    claim("theory: tiles that switch together", 2, t["m_simultaneous"], 0)
+    claim("theory: lattice bound (pts)", 0.745, t["lattice_bound_pts"], 3)
+    claim("theory: measured spacing (pts)", 0.745, t["lattice_spacing_pts"], 3)
+
 # ---- hull -------------------------------------------------------------------
 d = J("hull_gap.json")
 if d:

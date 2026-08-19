@@ -44,7 +44,8 @@ only buys compute inside a bounded window: below a \emph{floor} set by tiling no
 allocation is feasible, above a \emph{saturation} point every tile already sits
 on the cheapest rung, and the working budget uses \BandUseLow\% of that window at
 the lowest rate and \BandUseHigh\% at the highest. Both ends are in closed form,
-and six structural propositions are verified numerically rather than asserted.
+and seven structural propositions are verified numerically rather than
+asserted.
 \textbf{(ii)}~Tiling is expensive and its cost is governed by depth, not area:
 the seam grows as $b^2$ in the number of per-tile convolutions, where the
 corrupted-area fraction usually quoted is wrong by $160$--$264\%$.
@@ -850,7 +851,7 @@ enumerated by dynamic programming --- the two curves are indistinguishable.}
 
 The construction has enough structure to state as propositions, and we verify
 each numerically rather than asserting it (\texttt{scripts/verify\_theory.py},
-six of six). The allocation decouples per tile; compute is non-increasing and
+seven of seven). The allocation decouples per tile; compute is non-increasing and
 distortion non-decreasing in $\lambda$; the sweep traces the lower convex hull
 and therefore cannot reach an interior point of the achievable set;
 $\lambda{=}0$ attains the least distortion the ladder can produce; beyond a
@@ -866,6 +867,19 @@ programming over tiles --- feasible because the cost alphabet has four symbols
 --- and comparing: the sweep reaches 95 allocations against a Pareto set of 635,
 and the loss from convexity is at most $0.05$ saving points
 (Fig.~\ref{fig:theory}c). The standard construction is essentially optimal here.
+
+It is worth saying \emph{why} that loss is small, because the reason is
+structural and says what would make it smaller. The reachable costs form a
+lattice whose spacing is set by how much the mean cost moves when the multiplier
+crosses a switching point: $m$ tiles each move one rung, so the spacing is at
+most $m\max_k(c_{k+1}-c_k)/T$ saving points, and the convexity loss cannot
+exceed the largest spacing, because a budget between two levels is served by the
+lower one. Here $m{=}2$ --- tiles with identical rows switch together --- and
+the bound is $0.745$ points, which the measured spacing attains exactly. Nothing
+in the expression depends on content or rate, and it falls as $1/T$: halving the
+tile side puts four times as many tiles on the lattice, each carrying a quarter
+of the step. Fine granularity is what makes the Lagrangian relaxation lossless
+in practice, not any property of the images.
 
 Two numbers bound what any budget can do (Table~\ref{tab:operating}). The
 \textbf{floor} $D_{\min}$ is the distortion of a tiled decode with every tile at
