@@ -544,6 +544,25 @@ if hy3:
         mac("HybridLooseRecHi", f"{max(v for _, v in rec):.0f}")
         mac("HybridLooseQps", " and ".join(f"$q{q}$" for q, _ in rec))
 
+# which predictor should configuration C be built on
+hyr, _ = pick("hybrid_raterank_b01.json")
+if hy and hyr:
+    def _t(d):
+        return {(r["qp"], round(r["rho"], 4)): r["saving_pct_vs_release"]
+                for r in d["rows"] if r.get("budget_reachable")}
+    Th, Tr = _t(hy), _t(hyr)
+    both = [(k, Tr[k] - Th[k]) for k in Th if k in Tr and k[1] < 1.0]
+    if both:
+        mac("CPredBitsAhead", f"{max(v for _, v in both):.1f}")
+        mac("CPredHeadAhead", f"{-min(v for _, v in both):.1f}")
+        best = max(((k, v) for k, v in Tr.items()), key=lambda t: t[1])
+        mac("CBestSave", f"{best[1]:.1f}")
+        mac("CBestQp", str(best[0][0]))
+        mac("CBestRho", f"{100*best[0][1]:.0f}")
+        a1 = Th.get((best[0][0], 1.0))
+        if a1:
+            mac("CBestOverA", f"{best[1] - a1:.2f}")
+
 # ------------------------------------------------------------------- blend
 print("blend")
 cb, _ = pick("combined_RECIPE512_b01.json")

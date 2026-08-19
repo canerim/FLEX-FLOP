@@ -1054,6 +1054,16 @@ def content(colw, fullw):
         r"\HybridLooseRecLo–\HybridLooseRecHi% of it. The rule is the same one "
         r"the allocation follows everywhere: spend the bits where the ladder "
         r"still has somewhere to go.")
+    par(r"<b>Which predictor should C be built on?</b> Either — and the answer "
+        r"follows the same split as §5.6. Running the identical override rule "
+        r"over the parameter-free surrogate instead of the head is worth up to "
+        r"\CPredBitsAhead points at the lowest rate and costs up to "
+        r"\CPredHeadAhead at the highest. Both converge on A at ρ=1 to the "
+        r"second decimal at every rate, which is the third independent check "
+        r"that the two code paths agree. The best single operating point we "
+        r"measured is the free predictor with half the map signalled: "
+        r"\CBestSave% at q\CBestQp, \CBestOverA points <i>above</i> full "
+        r"signalling, with no learned component anywhere in the decoder.")
     par(r"Configuration C is what we would ship where a small map is tolerable "
         r"and a large one is not. It also reframes the A–B gap: it is not the "
         r"price of prediction, it is the price of <i>silence</i>, and silence "

@@ -129,6 +129,23 @@ if hy3:
         claim("hybrid 0.3 dB: half-map recovery, low", 68, min(rec), 1.0)
         claim("hybrid 0.3 dB: half-map recovery, high", 91, max(rec), 1.0)
 
+# ---- which predictor C is built on ----------------------------------------
+hyr = J("hybrid_raterank_b01.json")
+if hy and hyr:
+    def _t(d):
+        return {(r["qp"], round(r["rho"], 4)): r["saving_pct_vs_release"]
+                for r in d["rows"] if r.get("budget_reachable")}
+    Th, Tr = _t(hy), _t(hyr)
+    ends = [abs(Tr[k] - Th[k]) for k in Th if k in Tr and k[1] == 1.0]
+    if ends:
+        claim("C: both predictors meet A at rho=1", 0.0, max(ends), 0.02)
+    mid = [(Tr[k] - Th[k]) for k in Th if k in Tr and k[1] < 1.0]
+    if mid:
+        claim("C: bits predictor's best margin", 2.6, max(mid), 0.1)
+        claim("C: head predictor's best margin", 1.1, -min(mid), 0.1)
+    best = max(Tr.items(), key=lambda t: t[1])
+    claim("C: best measured saving", 33.0, best[1], 0.1)
+
 # ---- blend ----------------------------------------------------------------
 cb = J("combined_RECIPE512_b01.json")
 if cb:

@@ -1165,6 +1165,16 @@ lowest rates are saturated and there is nothing for a partial map to buy. At
 allocation follows everywhere: spend the bits where the ladder still has
 somewhere to go.
 
+\textbf{Which predictor should C be built on?} Either --- and the answer follows
+the same split as Section~\ref{sec:raterank}. Running the identical override
+rule over the parameter-free surrogate instead of the head is worth up to
+\CPredBitsAhead\ points at the lowest rate and costs up to \CPredHeadAhead\ at
+the highest. Both converge on A at $\rho{=}1$ to the second decimal at every
+rate, which is the third independent check that the two code paths agree. The
+best single operating point we measured is the free predictor with half the map
+signalled: \CBestSave\% at $q\CBestQp$, \CBestOverA\ points \emph{above} full
+signalling, with no learned component anywhere in the decoder.
+
 Configuration C is what we would ship where a small map is tolerable and a large
 one is not. It also reframes the A--B gap: it is not the price of prediction,
 it is the price of \emph{silence}, and silence is priced per tile.
