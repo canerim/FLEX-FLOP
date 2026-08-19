@@ -193,8 +193,17 @@ if sat:
           "couple of points, *where does 0.1 dB sit in this rate's band*. Both "
           "ends of the band are in closed form and cheap to measure, and what "
           "they leave over is small enough that a deployment could calibrate "
-          "the two and read the rest off a single curve. Nine budgets from 0.05 "
-          "to 0.5 dB, 53 sequences (`results/signalled_RECIPE512_grid.json`).")
+          "the two and read the rest off a single curve.")
+        w("")
+        w(f"That curve is a one-parameter power law: "
+          f"**saving ≈ C·u^{bc['power_exponent']:.2f}**, with C the "
+          f"architectural ceiling {bc['ceiling_pct']:.2f}% and u the position "
+          f"in the band, fitted in log space over all five rates — R² = "
+          f"{bc['power_r2']:.3f}, worst residual {bc['power_max_err']:.1f} "
+          f"points over {bc['power_n']} points. So the whole rate-dependent "
+          f"trade-off reduces to three numbers per rate, two of them closed "
+          f"form. Nine budgets from 0.05 to 0.5 dB, 53 sequences "
+          f"(`results/signalled_RECIPE512_grid.json`).")
         w("")
     w("### The one budget that saturates qp 0 and nothing else")
     w("")

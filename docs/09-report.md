@@ -88,7 +88,9 @@ The 0.1 dB budget this project works to uses 45% of the available band at qp 0 a
 
 At a matched decibel the five rates are **15.5 points** apart. Rescale the budget axis onto each rate's own band — floor at 0, saturation at 1 — and the five curves collapse onto one: **1.7 points** apart on average and 2.2 at worst.
 
-So *how much does a 0.1 dB budget buy at this rate* is, to within a couple of points, *where does 0.1 dB sit in this rate's band*. Both ends of the band are in closed form and cheap to measure, and what they leave over is small enough that a deployment could calibrate the two and read the rest off a single curve. Nine budgets from 0.05 to 0.5 dB, 53 sequences (`results/signalled_RECIPE512_grid.json`).
+So *how much does a 0.1 dB budget buy at this rate* is, to within a couple of points, *where does 0.1 dB sit in this rate's band*. Both ends of the band are in closed form and cheap to measure, and what they leave over is small enough that a deployment could calibrate the two and read the rest off a single curve.
+
+That curve is a one-parameter power law: **saving ≈ C·u^0.38**, with C the architectural ceiling 41.91% and u the position in the band, fitted in log space over all five rates — R² = 0.989, worst residual 2.0 points over 26 points. So the whole rate-dependent trade-off reduces to three numbers per rate, two of them closed form. Nine budgets from 0.05 to 0.5 dB, 53 sequences (`results/signalled_RECIPE512_grid.json`).
 
 ### The one budget that saturates qp 0 and nothing else
 
