@@ -271,13 +271,13 @@ Measured, 1080p, median of 40 interleaved iterations:
 
 | qp | released (ms) | routed, masked | routed, sorted | saved, masked | saved, sorted | saved, MACs |
 |---|---|---|---|---|---|---|
-| 0 | 274 | 247 | 196 | +9.9% | **+28.5%** | 35.3% |
-| 32 | 401 | 403 | 314 | -0.4% | **+21.8%** | 28.0% |
-| 63 | 512 | 568 | 438 | -10.9% | **+14.4%** | 20.1% |
+| 0 | 111 | 80 | 78 | +27.9% | **+29.1%** | 35.3% |
+| 32 | 111 | 87 | 86 | +21.3% | **+22.4%** | 28.0% |
+| 63 | 111 | 95 | 94 | +14.4% | **+15.6%** | 20.1% |
 
-Two things to read here. **The obvious implementation is slower than the dense decoder** at all but the lowest rate — a boolean mask, a gather of the survivors and a scatter of the finished, at every group boundary, forces a device-to-host synchronisation each time, and `latency_profile` attributes 32% of the per-tile loop to it. **Sorting the tiles once by depth removes it**: each group becomes a slice instead of a gather, the boundaries come from one cumulative count, and the output is bit-identical on CUDA (`tests/test_sorted_tiles.py`). The saving goes from 9.9% to 28.5% at qp 0 against a 35.3% arithmetic prediction.
+Two things to read here. **Operations over-predict the saving, and the over-prediction is proportional.** 29.1% of wall-clock arrives against a 35.3% arithmetic prediction at qp 0, and 15.6% against 20.1% at qp 63. The missing part is the 3.6% tiling overhead plus the bookkeeping of a shrinking active set, neither of which is in a MAC count. **Sorting the tiles once by depth recovers a fifth of it**: each group becomes a slice instead of a gather, the boundaries come from one cumulative count, and the output is bit-identical on CUDA (`tests/test_sorted_tiles.py`). The saving goes from 27.9% to 29.1% at qp 0.
 
-Tiling itself costs 8.5% before anything exits early — the per-tile loop is a less efficient shape for the same arithmetic.
+Tiling itself costs 3.6% before anything exits early — the per-tile loop is a less efficient shape for the same arithmetic.
 
 Translated into the currency a codec paper uses, the price of speed is flat at **≈6.5 BD-Rate points per unit of speedup**, which is 2.4× cheaper than DCVC-UF's own model-size trade.
 

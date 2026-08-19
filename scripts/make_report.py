@@ -483,18 +483,21 @@ if lat:
                      f"{r['predicted_saving_pct']:.1f}%"])
     w(table(hdr, rows))
     w("")
-    w("Two things to read here. **The obvious implementation is slower than the "
-      "dense decoder** at all but the lowest rate — a boolean mask, a gather of "
-      "the survivors and a scatter of the finished, at every group boundary, "
-      "forces a device-to-host synchronisation each time, and `latency_profile` "
-      "attributes 32% of the per-tile loop to it. **Sorting the tiles once by "
-      "depth removes it**: each group becomes a slice instead of a gather, the "
-      "boundaries come from one cumulative count, and the output is bit-identical "
-      "on CUDA (`tests/test_sorted_tiles.py`). The saving goes from "
-      f"{lat['rows'][0]['realised_saving_pct']:.1f}% to "
-      f"{lat['rows'][0].get('realised_saving_sorted_pct', 0):.1f}% at qp 0 "
-      f"against a {lat['rows'][0]['predicted_saving_pct']:.1f}% arithmetic "
-      "prediction.")
+    r0 = lat["rows"][0]
+    rh = lat["rows"][-1]
+    w("Two things to read here. **Operations over-predict the saving, and the "
+      "over-prediction is proportional.** "
+      f"{r0.get('realised_saving_sorted_pct', 0):.1f}% of wall-clock arrives "
+      f"against a {r0['predicted_saving_pct']:.1f}% arithmetic prediction at "
+      f"qp 0, and {rh.get('realised_saving_sorted_pct', 0):.1f}% against "
+      f"{rh['predicted_saving_pct']:.1f}% at qp 63. The missing part is the "
+      f"{r0['overhead_pct']:.1f}% tiling overhead plus the bookkeeping of a "
+      "shrinking active set, neither of which is in a MAC count. **Sorting the "
+      "tiles once by depth recovers a fifth of it**: each group becomes a slice "
+      "instead of a gather, the boundaries come from one cumulative count, and "
+      "the output is bit-identical on CUDA (`tests/test_sorted_tiles.py`). The "
+      f"saving goes from {r0['realised_saving_pct']:.1f}% to "
+      f"{r0.get('realised_saving_sorted_pct', 0):.1f}% at qp 0.")
     w("")
     w("Tiling itself costs "
       f"{lat['rows'][0]['overhead_pct']:.1f}% before anything exits early — the "

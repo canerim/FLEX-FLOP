@@ -52,10 +52,11 @@ corrupted-area fraction usually quoted is wrong by $160$--$264\%$.
 \textbf{(iii)}~The exact remedy --- give each convolution its real neighbour ---
 is bit-identical at uniform depth and \emph{destroys} the allocation under
 routing, because routing is the deliberate violation of the condition that makes
-it exact. \textbf{(iv)}~A $20\%$ reduction in operations made the decoder
-$10.9\%$ \emph{slower} until the per-tile loop was reordered; the reordering is
-bit-identical and recovers \WallSorted\% against a \WallPredicted\% arithmetic
-prediction.
+it exact. \textbf{(iv)}~Operations are an \emph{optimistic} bound on this method and the
+optimism grows with the saving: \WallSorted\% of wall-clock arrives against a
+\WallPredicted\% arithmetic prediction at the lowest rate, \WallHighMeasured\%
+against \WallHighPredicted\% at the highest. Sorting the tiles once by exit
+depth is bit-identical and recovers a fifth of the shortfall.
 
 Signalling the exit map costs \MapBits\ bits per frame; predicting it at the
 decoder costs none and gives up \GapLow--\GapHigh\ points. The two are ends of
@@ -140,9 +141,9 @@ at high rate.
 \item Two allocation regimes --- an encoder-side search that signals a
       $\sim$\MapBits-bit map per frame, and a decoder-side predictor that signals
       nothing --- with the bits and the compute charged on both sides.
-\item A wall-clock result: the obvious implementation of a shrinking per-tile
-      loop is \emph{slower} than the dense decoder, and a bit-identical
-      reordering recovers \WallSorted\% against a \WallPredicted\% prediction.
+\item A wall-clock result: operations over-predict the saving by about a fifth,
+      and a bit-identical reordering of the per-tile loop recovers a fifth of
+      that --- \WallSorted\% realised against a \WallPredicted\% prediction.
 \end{enumerate}
 
 % =========================================================== related work
@@ -267,9 +268,10 @@ ordering of four estimators, and the dependence of the penalty on per-tile depth
 \paragraph{Where the time goes.} DCVC-RT~\cite{dcvcrt} argues that operational
 rather than computational complexity is the speed bottleneck for neural codecs,
 evidenced by channel reductions that yield linear rather than quadratic speedups.
-Section~\ref{sec:wallclock} is a sharp instance of that claim inside one loop: a
-$20\%$ reduction in operations produced a $10.9\%$ \emph{slow-down} until the
-loop was reordered, with the arithmetic untouched.
+Section~\ref{sec:wallclock} is an instance of that claim inside one loop:
+\WallPredicted\% of operations removed buys \WallSorted\% of time, and
+\WallSortedGain\ points of the difference come back from reordering the loop with
+the arithmetic untouched.
 
 % =========================================================== method
 \section{Method}
@@ -1074,22 +1076,26 @@ Section~\ref{sec:wallclock}.}
 \label{tab:latency}
 \end{table}
 
-A saving in multiply--accumulates is not a saving in time, and here the gap was
-initially total. Tiling itself costs \TilingOverhead\% before anything exits
-early, and the obvious implementation of a shrinking active set --- a boolean
-mask, a gather of survivors and a scatter of the finished, at every group
-boundary --- forces a device-to-host synchronisation per boundary. Profiling
-attributes $32\%$ of the per-tile loop to that bookkeeping. Measured end to end,
-the routed decoder was \emph{slower} than the dense one at high rate despite
-doing $20\%$ fewer operations.
+A saving in multiply--accumulates is not a saving in time. Tiling itself costs
+\TilingOverhead\% before anything exits early --- the deepest-exit tiled decode
+against the released full-frame one, same arithmetic, same weights --- and the
+routed decode realises \WallMasked\% at $q0$ against the \WallPredicted\% its
+operations predict. Four fifths of the predicted saving arrives; the missing
+fifth is the tiling overhead plus the bookkeeping of a shrinking active set,
+which a MAC count cannot see. The shortfall is proportional rather than
+constant: \WallHighMeasured\% realised against \WallHighPredicted\% at $q63$.
 
-Sorting the tiles once by exit depth removes it. Descending, ``still active at
-group $g$'' becomes a contiguous prefix: each group is a slice rather than a
-gather, the boundaries come from one cumulative count rather than a mask per
-group, and the finished tiles return through the inverse permutation in a single
-scatter. The arithmetic is unchanged and the output is bit-identical on GPU. The
-saving at $q0$ goes from \WallMasked\% to \WallSorted\% against a
-\WallPredicted\% arithmetic prediction (Table~\ref{tab:latency}).
+Sorting the tiles once by exit depth recovers part of it. The obvious
+implementation of a shrinking active set --- a boolean mask, a gather of
+survivors and a scatter of the finished, at every group boundary --- forces a
+device-to-host synchronisation per boundary. Descending by exit depth, ``still
+active at group $g$'' becomes a contiguous prefix instead: each group is a slice
+rather than a gather, the boundaries come from one cumulative count rather than
+a mask per group, and the finished tiles return through the inverse permutation
+in a single scatter. The arithmetic is unchanged and the output is bit-identical
+on GPU. The saving at $q0$ goes from \WallMasked\% to \WallSorted\%
+(Table~\ref{tab:latency}) --- \WallSortedGain\ points, a fifth of the shortfall,
+for a change that touches no arithmetic.
 
 The same lesson applies to our own accounting. Every configuration~B number in
 this paper charges the router at its share of the decoder's
@@ -1104,9 +1110,11 @@ than at operations, every B number in this paper would fall by a further
 convention the rest of the literature reports in, and record the correction
 here rather than letting it sit unstated.
 
-We report this because the negative result is the more useful half: a paper that
-reports only MACs would have claimed a speedup that the same code, run as
-written, did not deliver.
+We report the shortfall because a paper that quotes only operations would
+report \WallPredicted\% where the same code, run as written, delivers
+\WallSorted\%. The direction is the one that matters: operations are an
+\emph{optimistic} bound on this method, and the optimism grows with how much of
+the frame exits early.
 
 \subsection{The right ladder depends on the budget}
 \label{sec:ladder}

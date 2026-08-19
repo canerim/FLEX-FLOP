@@ -159,6 +159,12 @@ if d:
         mac("WallSorted", f"{r0['realised_saving_sorted_pct']:.1f}")
         mac("WallPredicted", f"{r0['predicted_saving_pct']:.1f}")
         mac("TilingOverhead", f"{r0['overhead_pct']:.1f}")
+        mac("WallSortedGain",
+            f"{r0['realised_saving_sorted_pct'] - r0['realised_saving_pct']:.1f}")
+        rhi = d["rows"][-1]
+        mac("WallHighMeasured",
+            f"{rhi.get('realised_saving_sorted_pct', rhi['realised_saving_pct']):.1f}")
+        mac("WallHighPredicted", f"{rhi['predicted_saving_pct']:.1f}")
 
 # -------------------------------------------------------------- run compare
 print("run comparison")

@@ -232,12 +232,21 @@ were found by running them rather than by reading them.
       \texttt{torch.cuda.Event}, which is created on the process's \emph{current}
       device rather than on the device the tensors live on. The timing runs used
       a non-default GPU, so the events and the work were on different cards.
-      This does not raise: it returns numbers. On a re-measurement of the same
-      configuration the error was $-29\%$ on a full decode and a factor of
-      several hundred on a short kernel, which is why it survived --- the long
-      timings looked plausible. The scripts now set the device explicitly and
-      the wall-clock numbers in the main paper are the corrected ones. Anything
-      timing a non-default GPU should be assumed to have had this bug.
+      This does not raise: it returns numbers. The tell, in hindsight, was that
+      the released decoder appeared to take $274$, $401$ and $512$\,ms at $q0$,
+      $q32$ and $q63$ --- a fixed-architecture synthesis network whose
+      arithmetic does not depend on the quality index cannot get slower with
+      it. Re-measured with the device pinned it is $111$\,ms at all three. The
+      corrections are not small and one of them reverses a claim: the tiling
+      overhead falls from $8.5\%$ to \TilingOverhead\%, and the unsorted
+      per-tile loop, reported as \emph{slower} than the dense decoder at high
+      rate, in fact realises \WallMasked\% at $q0$ --- so sorting the tiles is
+      a $\WallSortedGain$-point improvement on something that already worked
+      rather than a rescue of something that did not. The wall-clock section of
+      the main paper is written against the corrected numbers. Anything in this
+      repository that timed a non-default GPU should be assumed to have had this
+      bug; a source test now asserts that every script using
+      \texttt{torch.cuda.Event} pins the device first, and it found two more.
 \end{itemize}
 
 {\small

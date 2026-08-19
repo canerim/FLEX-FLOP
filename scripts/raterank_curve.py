@@ -183,35 +183,74 @@ def main(argv):
                 return 100 * sum((1 - cost[m].mean()).item()
                                  for m in maps) / len(maps)
 
-            lo, hi = 0.0, 1.0
-            if db_of(maps_at(hi)) <= a.budget:
-                lo = hi
-            elif db_of(maps_at(lo)) > a.budget:
-                rows.append({"qp": qp_v, "budget_reachable": False,
-                             "floor_db": db_of(maps_at(lo))})
-                print(f"  qp {qp_v}: floor {db_of(maps_at(lo)):.4f} > budget")
-                continue
-            else:
-                for _ in range(26):
+            # Bisect on the cheap per-tile TABLE, then correct against a real
+            # decode of the resulting map -- the same two-level scheme as
+            # signalled_curve.py. The first version of this script bisected
+            # directly on true_db, which is 26 real decodes of 53 frames per
+            # step and made a five-rate run take twenty minutes for what the
+            # table settles in seconds.
+            def table_db(lam):
+                t = n = 0.0
+                for (M, R, *_), m in zip(cache, maps_at(lam)):
+                    t += (10 * torch.log10(
+                        M.gather(1, m[:, None]).squeeze(1).mean() / R)).item()
+                    n += 1
+                return t / n
+
+            def bisect(f, lo, hi, tgt):
+                if f(lo) > tgt:
+                    return None
+                if f(hi) <= tgt:
+                    return hi
+                for _ in range(40):
                     mid = 0.5 * (lo + hi)
-                    if db_of(maps_at(mid)) <= a.budget:
+                    if f(mid) <= tgt:
                         lo = mid
                     else:
                         hi = mid
+                return lo
+
+            floor = table_db(0.0)
+            if floor > a.budget:
+                rows.append({"qp": qp_v, "budget_reachable": False,
+                             "floor_db": db_of(maps_at(0.0))})
+                print(f"  qp {qp_v}: floor {floor:.4f} > budget")
+                continue
+            inner, lo = a.budget, 0.0
+            for _ in range(6):
+                v = bisect(table_db, 0.0, 1.0, inner)
+                if v is None:
+                    break
+                lo = v
+                td = db_of(maps_at(lo))
+                if abs(td - a.budget) < 5e-4:
+                    break
+                inner = max(1e-4, inner + (a.budget - td))
             maps = maps_at(lo)
 
             # how well does the surrogate order the tiles at all
-            lamO = None
-            olo, ohi = 0.0, 1.0
-            for _ in range(26):
-                mid = 0.5 * (olo + ohi)
-                om = [(M + mid * cost[None, :]).argmin(1).clamp(min=j)
-                      for M, *_ in cache]
-                if db_of(om) <= a.budget:
-                    olo = mid
-                else:
-                    ohi = mid
-            lamO = olo
+            def o_maps(lam):
+                return [(M + lam * cost[None, :]).argmin(1).clamp(min=j)
+                        for M, *_ in cache]
+
+            def o_table_db(lam):
+                t = n = 0.0
+                for (M, R, *_), m in zip(cache, o_maps(lam)):
+                    t += (10 * torch.log10(
+                        M.gather(1, m[:, None]).squeeze(1).mean() / R)).item()
+                    n += 1
+                return t / n
+
+            inner, lamO = a.budget, 0.0
+            for _ in range(6):
+                v = bisect(o_table_db, 0.0, 1.0, inner)
+                if v is None:
+                    break
+                lamO = v
+                td = db_of(o_maps(lamO))
+                if abs(td - a.budget) < 5e-4:
+                    break
+                inner = max(1e-4, inner + (a.budget - td))
             om = [(M + lamO * cost[None, :]).argmin(1).clamp(min=j)
                   for M, *_ in cache]
             agree = sum((m == o).float().mean().item()

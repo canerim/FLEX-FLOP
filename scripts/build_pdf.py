@@ -219,10 +219,12 @@ def content(colw, fullw):
         r"each convolution its real neighbour — is bit-identical at uniform "
         r"depth and <i>destroys</i> the allocation under routing, because "
         r"routing is the deliberate violation of the condition that makes it "
-        r"exact. <b>(iv)</b> A 20% reduction in operations made the decoder "
-        r"10.9% <i>slower</i> until the per-tile loop was reordered; the "
-        r"reordering is bit-identical and recovers \WallSorted% against a "
-        r"\WallPredicted% arithmetic prediction."
+        r"exact. <b>(iv)</b> Operations are an <i>optimistic</i> bound on this "
+        r"method and the optimism grows with the saving: \WallSorted% of "
+        r"wall-clock arrives against a \WallPredicted% arithmetic prediction "
+        r"at the lowest rate, \WallHighMeasured% against \WallHighPredicted% "
+        r"at the highest. Sorting the tiles once by exit depth is "
+        r"bit-identical and recovers a fifth of the shortfall."
         r"<br/><br/>"
         r"Signalling the exit map costs \MapBits bits per frame; predicting it "
         r"at the decoder costs none and gives up \GapLow–\GapHigh points. The "
@@ -300,9 +302,10 @@ def content(colw, fullw):
         r"both sides, plus a free zero-parameter baseline that recovers 75% of "
         r"the oracle's advantage over chance — a control we suggest any "
         r"adaptive-inference paper should report. "
-        r"<b>(v)</b> A wall-clock result: the obvious implementation is slower "
-        r"than the dense decoder, and a bit-identical reordering recovers "
-        r"\WallSorted%. "
+        r"<b>(v)</b> A wall-clock result: operations over-predict the saving by "
+        r"about a fifth, and a bit-identical reordering of the per-tile loop "
+        r"recovers a fifth of that — \WallSorted% realised against "
+        r"\WallPredicted% predicted. "
         r"<b>(vi)</b> Two properties of the allocation that bear on deployment "
         r"— it is governed by tile count rather than content, and it "
         r"transfers across frames but not across rates.")
@@ -421,9 +424,10 @@ def content(colw, fullw):
     par(r"DCVC-RT [33] argues that operational rather than computational "
         r"complexity is the speed bottleneck for neural codecs, evidenced by "
         r"channel reductions that yield linear rather than quadratic speedups. "
-        r"Section 5.7 is a sharp instance of that claim inside one loop: a 20% "
-        r"reduction in operations produced a 10.9% <i>slow-down</i> until the "
-        r"loop was reordered, with the arithmetic untouched.")
+        r"Section 5.8 is an instance of that claim inside one loop: "
+        r"\WallPredicted% of operations removed buys \WallSorted% of time, and "
+        r"\WallSortedGain points of the difference come back from reordering "
+        r"the loop with the arithmetic untouched.")
 
     # ---- 3 method --------------------------------------------------------
     h1("3. Method")
@@ -947,23 +951,28 @@ def content(colw, fullw):
         r"<b>Table 8. Wall-clock</b>, 1080p, median of 40 interleaved "
         r"iterations, at the 0.1 dB operating point. ``MACs'' is what the "
         r"arithmetic predicts; ``measured'' is the sorted per-tile loop.")
-    par(r"A saving in multiply-accumulates is not a saving in time, and here "
-        r"the gap was initially total. Tiling costs \TilingOverhead% before "
-        r"anything exits early, and the obvious implementation of a shrinking "
-        r"active set — a boolean mask, a gather of survivors and a scatter "
-        r"of the finished at every group boundary — forces a device-to-host "
-        r"synchronisation per boundary. Profiling attributes 32% of the "
-        r"per-tile loop to that bookkeeping. Measured end to end, the routed "
-        r"decoder was <i>slower</i> than the dense one at high rate despite "
-        r"doing 20% fewer operations.")
-    par(r"Sorting the tiles once by exit depth removes it. Descending, ``still "
-        r"active at group g'' becomes a contiguous prefix: each group is a "
-        r"slice rather than a gather, the boundaries come from one cumulative "
-        r"count rather than a mask per group, and the finished tiles return "
-        r"through the inverse permutation in a single scatter. The arithmetic "
-        r"is unchanged and the output is bit-identical on GPU. The saving at q0 "
-        r"goes from \WallMasked% to \WallSorted% against a \WallPredicted% "
-        r"arithmetic prediction.")
+    par(r"A saving in multiply-accumulates is not a saving in time. Tiling "
+        r"itself costs \TilingOverhead% before anything exits early — the "
+        r"deepest-exit tiled decode against the released full-frame one, same "
+        r"arithmetic, same weights — and the routed decode realises "
+        r"\WallMasked% at q0 against the \WallPredicted% its operations "
+        r"predict. Four fifths of the predicted saving arrives; the missing "
+        r"fifth is the tiling overhead plus the bookkeeping of a shrinking "
+        r"active set, which a MAC count cannot see. The shortfall is "
+        r"proportional rather than constant: \WallHighMeasured% realised "
+        r"against \WallHighPredicted% at q63.")
+    par(r"Sorting the tiles once by exit depth recovers part of it. The obvious "
+        r"implementation of a shrinking active set — a boolean mask, a gather "
+        r"of survivors and a scatter of the finished at every group boundary — "
+        r"forces a device-to-host synchronisation per boundary. Descending by "
+        r"exit depth, ``still active at group g'' becomes a contiguous prefix "
+        r"instead: each group is a slice rather than a gather, the boundaries "
+        r"come from one cumulative count rather than a mask per group, and the "
+        r"finished tiles return through the inverse permutation in a single "
+        r"scatter. The arithmetic is unchanged and the output is bit-identical "
+        r"on GPU. The saving at q0 goes from \WallMasked% to \WallSorted% — "
+        r"\WallSortedGain points, a fifth of the shortfall, for a change that "
+        r"touches no arithmetic.")
     par(r"The same lesson applies to our own accounting. Every configuration B "
         r"number in this paper charges the router at its share of the decoder's "
         r"multiply-accumulates, \RouterCostPct%. Timed on the padded 2048×1280 "
@@ -977,9 +986,11 @@ def content(colw, fullw):
         r"\RouterTimeExtra points. We leave them charged at MACs because that "
         r"is the convention the rest of the literature reports in, and record "
         r"the correction here rather than letting it sit unstated.")
-    par(r"We report this because the negative result is the more useful half: a "
-        r"paper reporting only MACs would have claimed a speedup that the same "
-        r"code, run as written, did not deliver.")
+    par(r"We report the shortfall because a paper that quotes only operations "
+        r"would report \WallPredicted% where the same code, run as written, "
+        r"delivers \WallSorted%. The direction is the one that matters: "
+        r"operations are an <i>optimistic</i> bound on this method, and the "
+        r"optimism grows with how much of the frame exits early.")
     h2("5.9 The right ladder depends on the budget")
     tbl("runs",
         r"<b>Table 9. Ladder configurations</b>, mean saving (%) over the five "
