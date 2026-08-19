@@ -4662,3 +4662,38 @@ log-probabilities need per-frame normalisation. That was measured
 seven. The hypothesis was wrong and the flag it added is kept only because it is
 free. What actually differed between the two code paths was that the blend
 sliced the logits and configuration B did not.
+
+## 91. Configuration C at rho=1 does not quite reproduce configuration A
+
+At rho=1 every tile is overridden by the encoder's exact choice, so configuration
+C reduces to configuration A by construction. It was checked that way and the
+check passed at 0.00 for weeks. On the re-measured data, on one checkpoint and
+one cost model, it does not:
+
+| qp | C at rho=1 | A | delivered dB, C | A | difference |
+|---|---|---|---|---|---|
+| 0 | 29.90 | 29.81 | 0.09983 | 0.09997 | +0.09 |
+| 16 | 25.62 | 25.48 | 0.09997 | 0.09996 | +0.14 |
+| 32 | 20.93 | 20.72 | 0.09999 | 0.09998 | +0.21 |
+| 48 | 18.33 | 18.20 | 0.10000 | 0.10000 | +0.13 |
+| 63 | 15.64 | 15.59 | 0.10000 | 0.10001 | +0.04 |
+
+The obvious explanation is bisection noise, and it is wrong. The delivered
+decibels agree to within 0.14 millibels, and around a 0.1 dB budget the saving
+moves about 0.6 points per millibel, so noise of that size buys at most 0.1
+points and at q32 it would have to buy 42 points per millibel. C is finding a
+genuinely cheaper allocation at the same delivered quality.
+
+That should not be possible. Both branches take the argmin of D + lambda c over
+the same per-tile table; at rho=1 the router branch is empty and the two
+searches differ only in how they bisect lambda. Either the two paths are not
+computing the same objective, or one of them is charging differently.
+
+Not yet diagnosed. Recorded rather than absorbed into a tolerance, because every
+discrepancy tonight that looked like noise turned out to be a bug: the exit
+clamp, the FFN adapter at 5C^2 billed as 2, the adapter picked by the exit the
+map names rather than the one that runs, the mask that stopped masking, the
+timing on the wrong device, and the result file chosen by a stale hand-ordered
+list.
+
+The check stays red until it is understood.
