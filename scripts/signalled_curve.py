@@ -41,6 +41,7 @@ from flexuf.config import FlexUFConfig
 from flexuf.cost import exit_costs
 from flexuf.eval import (per_tile_mse, reference_frame_mse, tiled_exit_mses,
                          true_frame_mse)
+from flexuf.measure import measured_saving_pct
 from flexuf.model import FlexUFIntra, load_flexuf_state
 from flexuf.reference import reference_for
 
@@ -278,7 +279,22 @@ with torch.no_grad():
                     break
                 inner = max(1e-4, min(1.0, inner + (target - td)))
             sv, _db_table, extra, mb, svr = at_lam(lam)
+            # The saving REPORTED is counted off the decode that ran, not read
+            # from the arithmetic model. The model is still needed inside the
+            # argmin -- a per-tile price the bisection can evaluate without
+            # decoding every candidate -- but a bookkeeping slip there now
+            # costs a slightly worse allocation, not a wrong headline. Three
+            # such slips reached print before this line existed (DECISIONS 90).
+            msv = mcount = 0.0
+            for M, R, _px, y_, q_, xp_ in cache:
+                k = (M + lam * cost[None, :]).argmin(1).clamp(min=cfg.split_depth)
+                msv += measured_saving_pct(net.dec, ref.dec, y_, q_, k)
+                mcount += 1
+            msv /= max(mcount, 1)
             rows.append({"qp": qp_v, "saving_pct": sv,
+                         # Counted with hooks on the executed forward pass.
+                         "saving_pct_measured": msv,
+                         "model_minus_measured": svr - msv,
                          # db_vs_uf is now what a decoder DELIVERS, from one
                          # real decode of the chosen map. db_vs_uf_table is the
                          # uniform-exit table's estimate, kept so the residual
