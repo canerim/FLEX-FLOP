@@ -5,39 +5,44 @@ is split into a ladder of exits; each 256×256 tile of a frame leaves at whateve
 depth its content needs, so an easy tile pays for a fraction of the network and
 a hard tile pays for all of it. The encoder and the entropy model are frozen, so the coded payload is
 bit-identical to Microsoft's release and a stock decoder can read a FLEX-UF
-stream. The shipped configuration adds one small thing to the file: a ~94-bit
+stream. The shipped configuration adds one small thing to the file: a 79–95 bit
 per-frame exit map, 0.008–0.020% of the bitrate.
 
-**Where it stands today (2026-08-17).** Against the released DCVC-UF decoder, at
-a quality budget of 0.1 dB, on 40 CTC sequences:
+**Where it stands today (2026-08-19).** Against the released DCVC-UF decoder, at
+a quality budget of 0.1 dB, on the full 53-sequence CTC set:
 
 | qp | 0 | 16 | 32 | 48 | 63 |
 |---|---|---|---|---|---|
-| decode **MACs** saved | 34.0% | 30.7% | 26.8% | 23.6% | 20.8% |
+| **A** signalled — decode MACs saved | 32.3% | 27.6% | 22.5% | 19.8% | 16.8% |
+| **B** predicted, zero added bits | 30.6% | 25.9% | 18.1% | 9.1% | 3.5% |
+| **bits**, no parameters and no bits | 29.9% | 24.6% | 19.9% | 15.4% | 12.1% |
 
-> **These are MAC counts, not wall-clock.** Measured end-to-end on a GPU the same
-> allocation runs 6.6–19.4% faster, not 27%: the tiling machinery costs a fixed
-> 3.7–6.5% and the per-group bookkeeping another 32% of the group loop. At a 0.3 dB
-> budget the realised figure rises to 20.8–36.1%. Numbers and method in
+> **These are MAC counts, not wall-clock.** Measured end to end the same
+> allocation runs 29.1% / 22.4% / 15.6% faster at qp 0 / 32 / 63 against a
+> 35.3% / 28.0% / 20.1% arithmetic prediction: the tiling machinery costs a fixed
+> 3.6% and per-group bookkeeping the rest. Operations are an *optimistic* bound
+> and the optimism grows with the saving. Numbers and method in
 > [06 — CVPR plan](06-cvpr-plan.md); do not quote a MAC saving as a speedup.
+>
+> Everything timed before 2026-08-19 was measured with `torch.cuda.Event` on the
+> wrong device and is wrong — see [DECISIONS 88](../DECISIONS.md).
+
+The third row is a control, not a proposal: routing on the bits the entropy
+model already spent per tile needs no parameters, no training and no added bits,
+and it beats the 144 K learned head above qp 32.
 
 Saving is divided by the cost of the released decoder. Results produced before
 2026-08-17 divided by our own ladder at full depth instead and read 0.6–0.75
 points higher; see [03 — Results](03-results.md#the-denominator-and-why-it-moved-every-number).
 
-With the exit map signalled from the encoder (~94 bits/frame, 0.008–0.020% of
-the bitrate). With **nothing signalled at all** — a byte-identical bitstream, the
-decoder predicting its own exits — the same checkpoint gives:
+The A row costs 79–95 bits per frame, 0.008–0.020% of the bitrate; the other two
+cost nothing and leave the file byte-identical. The three are not a ranking of
+designs — A and B are the ends of one scale, and overriding the worst fifth of
+tiles recovers 42–83% of the gap between them for 44 bits per frame.
 
-| qp | 0 | 16 | 32 | 48 | 63 |
-|---|---|---|---|---|---|
-| decode compute saved | 30.1% | 27.4% | 22.7% | 19.4% | 14.3% |
-
-so an unchanged bitstream costs 3.3–6.5 points, and the 30% target is still met
-at the lowest rate.
-
-That is one checkpoint of one run (`BEST`, one epoch). Five more runs are in
-training and none has reached the four-epoch selection point.
+Two configurations, one measurement each, are in
+[09 — report §5](09-report.md); the mechanism is in
+[08 — the system end to end](08-system.md).
 
 ## The documents
 
