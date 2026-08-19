@@ -21,6 +21,7 @@ tables:
 	$(PY) scripts/make_paper_tables.py
 
 paper: tables
+	$(PY) scripts/paper_figures.py
 	$(PY) scripts/build_pdf.py
 	$(PY) scripts/build_router_pdf.py
 	$(PY) scripts/check_paper.py
@@ -36,6 +37,7 @@ figures:
 	$(PY) scripts/system_figs.py
 	$(PY) scripts/hybrid_figure.py
 	$(PY) scripts/raterank_figure.py
+	$(PY) scripts/blend_figure.py
 	$(PY) scripts/saturation_figure.py
 	$(PY) scripts/perclass_figure.py
 	$(PY) scripts/contamination_figure.py

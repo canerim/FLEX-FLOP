@@ -576,7 +576,7 @@ if rr:
     rs = [r for r in rr["rows"] if r.get("budget_reachable")]
     lines = [r"\begin{tabular}{lrrrrr}", r"\toprule",
              r"$q$ & rate-rank & B router & A signalled & "
-             r"$\rho_{\mathrm{depth}}$ & $\rho_{\mathrm{spread}}$ \\",
+             r"$\rho$ depth & $\rho$ spread \\",
              r"\midrule"]
     for r in rs:
         b = (B1 or {}).get(r["qp"])

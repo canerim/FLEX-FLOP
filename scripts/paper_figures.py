@@ -30,6 +30,9 @@ WANTED = [
     "rd_spread.png",          # rate-quality plane and per-sequence spread
     "theory.png",             # the structure of the allocation
     "latency.png",
+    "hybrid.png",             # partial signalling: A and B are one scale
+    "raterank.png",           # the parameter-free control
+    "blend.png",              # do the two decoder-side signals differ?
 ]
 
 missing = []

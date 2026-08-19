@@ -894,7 +894,7 @@ def content(colw, fullw):
         r"system that trains once, and note that it understates what B can do.")
     par(r"An earlier version of this measurement put the gap at 1.7 points at "
         r"q0 rising to 13.3 at q63. That was the exit mask: the head suppresses "
-        r"exits below the split depth by assigning -10⁴, its own logits had "
+        r"exits below the split depth by assigning -1e4, its own logits had "
         r"drifted to that scale, and the suppressed entries were therefore the "
         r"largest in every row — so a large share of every tile went to the "
         r"cheapest rung for a reason unrelated to its content. The mask is now "
@@ -986,7 +986,7 @@ def content(colw, fullw):
         r"to the router. The overrides are chosen by Lagrangian regret, which is "
         r"exactly what the objective loses on that tile by staying silent; β is "
         r"held at B's value and λ is bisected over the overrides to land back on "
-        r"the budget. The map costs an entropy-coded mask, N·H₂(ρ) bits, plus 3 "
+        r"the budget. The map costs an entropy-coded mask, N·H(ρ) bits, H the binary entropy,, plus 3 "
         r"per override.")
     figure("hybrid.png",
            r"<b>Figure 10. Partial signalling.</b> <b>a</b> Saving against the "
