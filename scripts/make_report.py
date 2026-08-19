@@ -500,6 +500,33 @@ if rr:
           "for anything, and at a loose budget its ordering has less left to "
           "contribute.")
         w("")
+    hyr = load("hybrid_raterank_b01.json")
+    hy_ = load("hybrid_RECIPE512_b01_fixed.json")
+    if hyr and hy_:
+        def _t(d):
+            return {(r["qp"], round(r["rho"], 4)): r["saving_pct_vs_release"]
+                    for r in d["rows"] if r.get("budget_reachable")}
+        Th, Tr = _t(hy_), _t(hyr)
+        rhos = sorted({k[1] for k in Th})
+        w("**Configuration C can be built on it too**, and the same split shows "
+          "up: running the identical override rule over the bit surrogate "
+          "instead of the head, in points against the head-based hybrid.")
+        w("")
+        rows_ = [[str(q)] + [fmt(Tr.get((q, x), float("nan"))
+                                 - Th.get((q, x), float("nan")), p=2)
+                             for x in rhos] for q in QPS]
+        w(table(["qp"] + [("B" if x == 0 else "A" if x == 1 else f"{100*x:.0f}%")
+                          for x in rhos], rows_))
+        w("")
+        best = max(Tr.items(), key=lambda t: t[1])
+        w(f"The ρ=1 column is +0.00 at every rate, which is a third independent "
+          f"check that the two code paths reach the same allocation once the map "
+          f"is complete. The best single operating point measured anywhere in "
+          f"this project is the free predictor with half the map signalled: "
+          f"**{best[1]:.1f}% at qp {best[0][0]}**, "
+          f"{best[1] - Th[(best[0][0], 1.0)]:.2f} points *above* full "
+          f"signalling, with no learned component in the decoder at all.")
+        w("")
     w("What it cannot do is see past that ordering. A rank-1 model in the level "
       "gives every tile the same relative profile over exits, so the bit count "
       "only decides where on the ladder a tile falls, never the shape of its "

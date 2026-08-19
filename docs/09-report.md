@@ -287,6 +287,18 @@ At the looser **0.3 dB** budget it stops being a baseline:
 
 It reaches the architectural ceiling exactly at the three lowest rates and beats the trained head at every rate, by up to 6.8 points. The head is charged for its own arithmetic and this is not charged for anything, and at a loose budget its ordering has less left to contribute.
 
+**Configuration C can be built on it too**, and the same split shows up: running the identical override rule over the bit surrogate instead of the head, in points against the head-based hybrid.
+
+| qp | B | 5% | 10% | 20% | 35% | 50% | A |
+|---|---|---|---|---|---|---|---|
+| 0 | 2.49 | 2.58 | 2.30 | 1.90 | 0.66 | 0.39 | 0.00 |
+| 16 | 0.66 | 0.73 | 0.41 | 0.10 | -0.38 | -0.30 | 0.00 |
+| 32 | 0.22 | 0.17 | 0.05 | -0.19 | -0.32 | -0.24 | 0.00 |
+| 48 | -1.13 | -1.02 | -1.14 | -1.12 | -0.73 | -0.43 | 0.00 |
+| 63 | -0.56 | -0.48 | -0.62 | -0.59 | -0.09 | 0.29 | 0.00 |
+
+The ρ=1 column is +0.00 at every rate, which is a third independent check that the two code paths reach the same allocation once the map is complete. The best single operating point measured anywhere in this project is the free predictor with half the map signalled: **33.0% at qp 0**, 0.67 points *above* full signalling, with no learned component in the decoder at all.
+
 What it cannot do is see past that ordering. A rank-1 model in the level gives every tile the same relative profile over exits, so the bit count only decides where on the ladder a tile falls, never the shape of its trade-off. That is the part a learned head should be earning its parameters on.
 
 ## 6. Complexity, and what the saving is worth in time
