@@ -856,10 +856,12 @@ def content(colw, fullw):
            r"signals the map at ~\MapBits bits/frame. B never sees the source "
            r"— a \RouterParams-parameter head reads ŷ, the entropy scales and "
            r"qp — and signals nothing. <b>(b)</b> Saving at 0.1 dB; shading is "
-           r"what a bit-exact bitstream costs. <b>(c)</b> That cost is "
-           r"rate-dependent and budget-dependent: it collapses to the router's "
-           r"own \RouterCostPct% of a decode once the budget is loose enough "
-           r"that both saturate.")
+           r"what a bit-exact bitstream costs. <b>(c)</b> That cost is smallest "
+           r"at q\GapMinQp, where the tilt needed to move the router off its "
+           r"training multiplier is essentially zero, and grows in both "
+           r"directions. At 0.3 dB it collapses to the router's own "
+           r"\RouterCostPct% wherever the budget saturates the ladder, and "
+           r"widens where it does not.")
     tbl("ab",
         r"<b>Table 7. Signalled against predicted</b> at two budgets, same "
         r"checkpoint and test set, with one router trained against the deployed "
