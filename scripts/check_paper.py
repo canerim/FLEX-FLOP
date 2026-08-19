@@ -13,9 +13,13 @@ from pathlib import Path
 R = Path(__file__).resolve().parents[1]
 
 
-def J(name):
-    p = R / "results" / name
-    return json.load(open(p)) if p.exists() else None
+def J(*names):
+    """First of `names` that exists, so a corrected file supersedes an old one."""
+    for name in names:
+        p = R / "results" / name
+        if p.exists():
+            return json.load(open(p))
+    return None
 
 
 CLAIMS = []
@@ -63,7 +67,7 @@ if t:
 
 # ---- rate rank ------------------------------------------------------------
 rr = J("raterank_RECIPE512_b01.json")
-b1 = J("router_RECIPE512_b01.json")
+b1 = J("router_RECIPE512_b01_fixed.json", "router_RECIPE512_b01.json")
 if rr and b1:
     B = {r["qp"]: r["saving_pct_vs_release"] for r in b1["rows"]
          if r.get("budget_reachable")}
@@ -72,14 +76,14 @@ if rr and b1:
             continue
         if r["qp"] == 63:
             claim("rate-rank q63", 12.1, r["saving_pct_vs_release"], 0.1)
-            claim("rate-rank beats B by (q63)", 8.6,
-                  r["saving_pct_vs_release"] - B[r["qp"]], 0.15)
         if r["qp"] == 0:
             claim("rate-rank q0", 29.9, r["saving_pct_vs_release"], 0.1)
-    claim("rate-rank crossover qp", 32,
-          min(r["qp"] for r in rr["rows"]
-              if r.get("budget_reachable") and r["qp"] in B
-              and r["saving_pct_vs_release"] > B[r["qp"]]), 0)
+    d_ = [(r["qp"], r["saving_pct_vs_release"] - B[r["qp"]]) for r in rr["rows"]
+          if r.get("budget_reachable") and r["qp"] in B]
+    claim("rate-rank: rates it wins", 3, sum(1 for _, v in d_ if v > 0), 0)
+    claim("rate-rank: best margin (pts)", 2.7, max(v for _, v in d_), 0.1)
+    claim("rate-rank: worst deficit (pts)", 0.8,
+          max(-v for _, v in d_ if v <= 0), 0.1)
 
 # ---- hull -------------------------------------------------------------------
 d = J("hull_gap.json")

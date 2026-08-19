@@ -66,8 +66,8 @@ one scale rather than two designs: overriding the worst fifth of tiles recovers
 by the Lorenz curve of the per-tile regret. A learned predictor should also be
 made to beat a free one: routing on the bits the entropy model has already spent
 per tile needs no parameters, no training and no bits, and it beats our
-\RouterParams-parameter head by up to \RateRankBeatsBy\ points above
-$q\RateRankBeatsFrom$.
+\RouterParams-parameter head to within \RateRankLosesBy\ points at every rate,
+and beats it at the \RateRankNWins\ lowest.
 
 We also find that the method is governed by tile count far more than by content
 --- three 1080p classes of very different material agree within three points
@@ -151,8 +151,9 @@ at high rate.
 \item A parameter-free control that a learned router has to beat and usually is
       not measured against. Routing on the bits the entropy model already spent
       per tile costs nothing, adds nothing to the stream, and beats our trained
-      head by up to \RateRankBeatsBy\ points above $q\RateRankBeatsFrom$ --- while
-      agreeing with the oracle on fewer tiles than the head does.
+      head to within \RateRankLosesBy\ points at every rate and beats it at the
+      \RateRankNWins\ lowest --- while agreeing with the oracle on fewer tiles
+      than the head does.
 \item A wall-clock result: operations over-predict the saving by about a fifth,
       and a bit-identical reordering of the per-tile loop recovers a fifth of
       that --- \WallSorted\% realised against a \WallPredicted\% prediction.
@@ -783,8 +784,8 @@ quarters of the way there --- a comparison we would not have made without this
 control, and one we suggest any adaptive-inference paper should report. Given
 the oracle's histogram this is a measurement of \emph{ranking} and nothing else;
 Section~\ref{sec:raterank} removes that crutch and turns the same signal into a
-complete routing rule, which beats the trained head above
-$q\RateRankBeatsFrom$. Fig.~\ref{fig:exitmap} shows the assignment the oracle
+complete routing rule, which matches the trained head across the whole rate
+range. Fig.~\ref{fig:exitmap} shows the assignment the oracle
 arrives at.
 
 \subsection{Resolution, and the granularity of a tile}
@@ -947,29 +948,39 @@ Configuration~A is exact by construction and costs bits; configuration~B is
 approximate and costs none. Table~\ref{tab:ab} is the comparison, and it splits
 in two.
 
-At the rates near the $\lambda$ the router was trained at, \textbf{prediction is
-nearly free}: \BLow\% against \MainLowRate\% at $q0$ and the same gap of
-\GapLow\ points at $q16$, for zero added bits and a byte-identical file.
+\textbf{Not signalling costs \GapMin--\GapMax\ points}, roughly flat across
+rate, for zero added bits and a byte-identical file. The gap is smallest at
+$q\GapMinQp$ and grows toward both ends.
 
-Away from it the gap grows to \GapHigh\ points, and it tracks $|\beta|$ --- the
-tilt the bisection has to apply to drag a router trained at one operating point
-to another. A large tilt lets the cost term dominate the logits and discards the
-content ranking the router learned. The remedy is not a better architecture but
-a router per operating point, which is what a deployment would have anyway: one
-set of weights serves all rates, and a $144$K head per rate is $0.3\%$ of the
+\textbf{It tracks $|\beta|$}, the tilt the bisection has to apply to move a
+router trained at one $\lambda$ onto another operating point. At
+$q\BetaMinQp$ the required tilt is $\beta{=}\BetaAtMin$ --- essentially none,
+because that is where the training $\lambda$ lands --- and the gap is at its
+minimum. At $q0$ the tilt is \BetaLow\ and the gap is \GapMax. A large tilt lets
+the cost term dominate the logits and discards the content ranking the router
+learned, in either direction. The remedy is not a better architecture but a
+router per operating point, which a deployment would have anyway: one set of
+weights serves all rates, and a \RouterParams\ head per rate is $0.3\%$ of the
 model each.
 
-Loosening the budget closes it from the other side. At $0.3\dB$ the gap is
-\GapLooseLow\ points at the three lowest rates --- which is exactly the router's
-own \RouterCostPct\% of decode, i.e.\ its \emph{prediction} is then free --- and at
+Loosening the budget closes the gap from the other side. At $0.3\dB$ it is
+\GapLooseLow\ points at the three lowest rates --- exactly the router's own
+\RouterCostPct\% of decode, i.e.\ its \emph{prediction} is then free --- and
 \GapLooseHigh\ at the highest. Once the budget saturates the ladder both
-configurations send every tile to the same rung, and nothing is left to predict
-wrongly.
+configurations send every tile to the same rung and there is nothing left to
+predict wrongly.
 
-So configuration~B is expensive in exactly one regime: a tight budget at a rate
-far from the router's training point. We report the single-router number because
-it is the honest one for a system that trains once, and note that it understates
-what B can do.
+We report the single-router number because it is the honest one for a system
+that trains once, and note that it understates what B can do.
+
+An earlier version of this measurement put the gap at $1.7$ points at $q0$
+rising to $13.3$ at $q63$. That was the exit mask: the head suppresses exits
+below the split depth by assigning $-10^{4}$, its own logits had drifted to that
+scale, and the suppressed entries were therefore the largest in every row ---
+so a large share of every tile went to the cheapest rung for a reason unrelated
+to its content. The mask is now $-\infty$. Fixing it costs $3.5$ points at $q0$,
+where the accident happened to agree with the oracle, and buys $9.4$ at $q63$,
+where it did not.
 
 \subsection{A router with no parameters}
 \label{sec:raterank}
@@ -1008,17 +1019,16 @@ leave-one-sequence-out so no sequence contributes to the profile that routes it,
 and run the same Lagrangian the oracle runs on the surrogate. Nothing is
 signalled, nothing is trained, and the arithmetic is a scalar per tile.
 
-\textbf{It beats the trained router above $q\RateRankBeatsFrom$}, by up to
-\RateRankBeatsBy\ points, and loses to it below by at most \RateRankLosesBy.
-The crossing is not a surprise once the numbers are read the right way: the
-router was trained at one $\lambda$ and its ordering degrades as the bisection
-tilts it away (Section~\ref{sec:ab}), while the bit count carries no such
-attachment to an operating point --- $\rho_{\mathrm{depth}}$ is $0.53$ at four
-of the five rates.
+\textbf{It matches the trained head to within a point either way.} It beats the
+\RouterParams\ router at the \RateRankNWins\ lowest rates, by up to
+\RateRankBeatsBy\ points, and loses at the two highest by at most
+\RateRankLosesBy. That is the whole margin between a parameter-free rule and a
+head that was trained on this decoder against this oracle, and the free rule
+carries none of the head's \RouterCostPct\% of decode.
 
 \textbf{Why it works is not that it agrees with the oracle.} It agrees on
-\RateRankAgreeLo--\RateRankAgreeHi\ of tiles, which is worse than the router's
-$0.718$, and it still saves more at high rate. Agreement counts a disagreement on
+\RateRankAgreeLo--\RateRankAgreeHi\ of tiles, well below the router's $0.718$,
+and still saves more at three of five rates. Agreement counts a disagreement on
 a tile where two exits are within a hair of each other exactly as heavily as one
 where the choice is most of the frame's error, and most tiles are the former.
 What the rule gets right is the ordering that matters: bits correlate with the
@@ -1309,9 +1319,9 @@ And three cautions about measuring any of it. A saving in operations is an
 optimistic bound on a saving in time, and the optimism scales with the saving.
 A learned router should be compared against a free one: routing on the bits
 already spent per tile needs no parameters, no training and no bits, and it beats
-our trained head above $q\RateRankBeatsFrom$ --- while agreeing with the oracle
-on fewer tiles than the head does, which is a warning about the metric as much as
-about the head. And a timing
+our trained head to within \RateRankLosesBy\ points at every rate --- while
+agreeing with the oracle on fewer tiles than the head does, which is a warning
+about the metric as much as about the head. And a timing
 harness will report numbers whether or not it is timing the right device ---
 this one did, for months, and the tell was a decoder that appeared to slow down
 with the quality index.

@@ -364,9 +364,9 @@ w("**B — the decoder predicts it and nothing is signalled.** The decoder never
   "byte-identical to a stock stream and it is deployable by a decoder vendor "
   "alone. The head costs 0.163% of a decode, charged inside every B number.")
 w("")
-bfiles = [("0.1", "router_RECIPE512_b01.json"),
-          ("0.3", "router_RECIPE512_b03.json"),
-          ("0.5", "router_RECIPE512_b05.json")]
+bfiles = [("0.1", "router_RECIPE512_b01_fixed.json"),
+          ("0.3", "router_RECIPE512_b03_fixed.json"),
+          ("0.5", "router_RECIPE512_b05_fixed.json")]
 tabs = {b: load(f) for b, f in bfiles}
 brs, _ = data.get("RECIPE512", (None, None))
 if any(tabs.values()):
@@ -443,7 +443,8 @@ if rr:
       "`log D(t,k) ≈ α·log b(t) + c + log φ_k`, leave-one-sequence-out — turns "
       "it into a routing rule with no learned parameters and no added bits.")
     w("")
-    b1 = load("router_RECIPE512_b01.json")
+    b1 = (load("router_RECIPE512_b01_fixed.json")
+          or load("router_RECIPE512_b01.json"))
     bv = {r["qp"]: r.get("saving_pct_vs_release")
           for r in (b1 or {}).get("rows", [])} if b1 else {}
     rows = []
@@ -468,7 +469,8 @@ if rr:
     w("")
     rr3 = load("raterank_RECIPE512_b03.json")
     if rr3:
-        b3 = load("router_RECIPE512_b03.json")
+        b3 = (load("router_RECIPE512_b03_fixed.json")
+              or load("router_RECIPE512_b03.json"))
         bv3 = {r["qp"]: r.get("saving_pct_vs_release")
                for r in (b3 or {}).get("rows", [])} if b3 else {}
         rows3 = [[str(r["qp"]), fmt(r["saving_pct_vs_release"]),

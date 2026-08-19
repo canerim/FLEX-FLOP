@@ -22,7 +22,10 @@ ns.apply()
 
 def main(out="docs/figures/raterank.png"):
     rr = json.load(open(R / "results/raterank_RECIPE512_b01.json"))
-    b1 = json.load(open(R / "results/router_RECIPE512_b01.json"))
+    p = R / "results/router_RECIPE512_b01_fixed.json"
+    if not p.exists():
+        p = R / "results/router_RECIPE512_b01.json"
+    b1 = json.load(open(p))
     B = {r["qp"]: r["saving_pct_vs_release"] for r in b1["rows"]
          if r.get("budget_reachable")}
     rs = [r for r in rr["rows"] if r.get("budget_reachable")]

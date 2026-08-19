@@ -29,7 +29,8 @@ a quality budget of 0.1 dB, on the full 53-sequence CTC set:
 
 The third row is a control, not a proposal: routing on the bits the entropy
 model already spent per tile needs no parameters, no training and no added bits,
-and it beats the 144 K learned head above qp 32.
+and it matches the 144 K learned head to within a point at every rate,
+beating it at the three lowest.
 
 Saving is divided by the cost of the released decoder. Results produced before
 2026-08-17 divided by our own ladder at full depth instead and read 0.6–0.75

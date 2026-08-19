@@ -236,7 +236,8 @@ def content(colw, fullw):
         r"predictor should also be made to beat a free one: routing on the bits "
         r"the entropy model has already spent per tile needs no parameters, no "
         r"training and no bits, and it beats our \RouterParams-parameter head "
-        r"by up to \RateRankBeatsBy points above q\RateRankBeatsFrom."
+        r"to within \RateRankLosesBy points at every rate, and ahead at the "
+        r"\RateRankNWins lowest."
         r"<br/><br/>"
         r"We also find that the method is governed by tile count far more than "
         r"by content — three 1080p classes of very different material agree "
@@ -309,8 +310,8 @@ def content(colw, fullw):
         r"<b>(v)</b> A parameter-free control that a learned router has to beat "
         r"and usually is not measured against: routing on the bits the entropy "
         r"model already spent per tile costs nothing, adds nothing to the "
-        r"stream, and beats our trained head by up to \RateRankBeatsBy points "
-        r"above q\RateRankBeatsFrom. "
+        r"stream, and matches our trained head to within \RateRankLosesBy points "
+        r"at every rate while beating it at the \RateRankNWins lowest. "
         r"<b>(vi)</b> A wall-clock result: operations over-predict the saving by "
         r"about a fifth, and a bit-identical reordering of the per-tile loop "
         r"recovers a fifth of that — \WallSorted% realised against "
@@ -759,7 +760,7 @@ def content(colw, fullw):
         r"oracle's histogram this is a measurement of <i>ranking</i> and "
         r"nothing else; §5.6 removes that crutch and turns the same signal into "
         r"a complete routing rule, which beats the trained head above "
-        r"q\RateRankBeatsFrom.")
+        r"the whole rate range.")
     h2("5.3 Resolution, and the granularity of a tile")
     figure("perclass.png",
            r"<b>Figure 7. Saving by test class</b> at one global operating "
@@ -865,27 +866,35 @@ def content(colw, fullw):
         r"oracle at a single λ.")
     par(r"Configuration A is exact by construction and costs bits; B is "
         r"approximate and costs none. The comparison splits in two.")
-    par(r"At the rates near the λ the router was trained at, <b>prediction is "
-        r"nearly free</b>: \BLow% against \MainLowRate% at q0 and the same "
-        r"gap of \GapLow points at q16, for zero added bits and a "
-        r"byte-identical file.")
-    par(r"Away from it the gap grows to \GapHigh points, and it tracks |β|, the "
-        r"tilt the bisection has to apply to drag a router trained at one "
-        r"operating point to another. A large tilt lets the cost term dominate "
-        r"the logits and discards the content ranking the router learned. The "
-        r"remedy is not a better architecture but a router per operating point, "
-        r"which a deployment would have anyway: one set of weights serves all "
-        r"rates, and a 144K head per rate is 0.3% of the model each. We report "
-        r"the single-router number because it is the honest one for a system "
-        r"that trains once, and note that it understates what B can do.")
-    par(r"Loosening the budget closes it from the other side. At 0.3 dB the gap "
+    par(r"<b>Not signalling costs \GapMin–\GapMax points</b>, roughly flat "
+        r"across rate, for zero added bits and a byte-identical file. The gap "
+        r"is smallest at q\GapMinQp and grows toward both ends.")
+    par(r"<b>It tracks |β|</b>, the tilt the bisection has to apply to move a "
+        r"router trained at one λ onto another operating point. At q\BetaMinQp "
+        r"the required tilt is β=\BetaAtMin — essentially none, because that "
+        r"is where the training λ lands — and the gap is at its minimum. At q0 "
+        r"the tilt is \BetaLow and the gap is \GapMax. A large tilt lets the "
+        r"cost term dominate the logits and discards the content ranking the "
+        r"router learned, in either direction. The remedy is not a better "
+        r"architecture but a router per operating point, which a deployment "
+        r"would have anyway: one set of weights serves all rates, and a "
+        r"\RouterParams head per rate is 0.3% of the model each.")
+    par(r"Loosening the budget closes the gap from the other side. At 0.3 dB it "
         r"is \GapLooseLow points at the three lowest rates — exactly the "
-        r"router's own 0.163% of decode, i.e. its <i>prediction</i> is then free "
-        r"— and at most \GapLooseHigh at the highest. Once the budget "
+        r"router's own \RouterCostPct% of decode, i.e. its <i>prediction</i> is "
+        r"then free — and \GapLooseHigh at the highest. Once the budget "
         r"saturates the ladder both configurations send every tile to the same "
-        r"rung and nothing is left to predict wrongly. Configuration B is "
-        r"expensive in exactly one regime: a tight budget at a rate far from the "
-        r"router's training point.")
+        r"rung and there is nothing left to predict wrongly.")
+    par(r"We report the single-router number because it is the honest one for a "
+        r"system that trains once, and note that it understates what B can do.")
+    par(r"An earlier version of this measurement put the gap at 1.7 points at "
+        r"q0 rising to 13.3 at q63. That was the exit mask: the head suppresses "
+        r"exits below the split depth by assigning -10⁴, its own logits had "
+        r"drifted to that scale, and the suppressed entries were therefore the "
+        r"largest in every row — so a large share of every tile went to the "
+        r"cheapest rung for a reason unrelated to its content. The mask is now "
+        r"-∞. Fixing it costs 3.5 points at q0, where the accident happened to "
+        r"agree with the oracle, and buys 9.4 at q63, where it did not.")
     h2("5.6 A router with no parameters")
     par(r"Before a \RouterParams head is worth its \RouterCostPct% of the "
         r"decode, it has to beat what the decoder already knows. The entropy "
@@ -912,23 +921,23 @@ def content(colw, fullw):
         r"correlations between a tile's bit count and, respectively, the depth "
         r"the oracle assigns it and the distortion it stands to gain from that "
         r"depth.")
-    par(r"<b>It beats the trained router above q\RateRankBeatsFrom</b>, by up "
-        r"to \RateRankBeatsBy points, and loses to it below by at most "
-        r"\RateRankLosesBy. The crossing is not a surprise once the numbers are "
-        r"read the right way: the router was trained at one λ and its ordering "
-        r"degrades as the bisection tilts it away, while the bit count carries "
-        r"no such attachment to an operating point — ρ_depth is 0.53 at four "
-        r"of the five rates.")
+    par(r"<b>It matches the trained head to within a point either way.</b> It "
+        r"beats the \RouterParams router at the \RateRankNWins lowest rates, "
+        r"by up to \RateRankBeatsBy points, and loses at the two highest by at "
+        r"most \RateRankLosesBy. That is the whole margin between a "
+        r"parameter-free rule and a head that was trained on this decoder "
+        r"against this oracle, and the free rule carries none of the head's "
+        r"\RouterCostPct% of decode.")
     par(r"<b>Why it works is not that it agrees with the oracle.</b> It agrees "
-        r"on \RateRankAgreeLo–\RateRankAgreeHi of tiles, which is worse than "
-        r"the router's 0.718, and it still saves more at high rate. Agreement "
-        r"counts a disagreement on a tile where two exits are within a hair of "
-        r"each other exactly as heavily as one where the choice is most of the "
-        r"frame's error, and most tiles are the former. What the rule gets "
-        r"right is the ordering that matters: bits correlate with the "
-        r"<i>spread</i> across the ladder — how much a tile stands to gain "
-        r"from depth — at ρ_spread = \RateRankSpreadLo–\RateRankSpreadHi at "
-        r"every rate.")
+        r"on \RateRankAgreeLo–\RateRankAgreeHi of tiles, well below the "
+        r"router's 0.718, and still saves more at three of five rates. "
+        r"Agreement counts a disagreement on a tile where two exits are within "
+        r"a hair of each other exactly as heavily as one where the choice is "
+        r"most of the frame's error, and most tiles are the former. What the "
+        r"rule gets right is the ordering that matters: bits correlate with the "
+        r"<i>spread</i> across the ladder — how much a tile stands to gain from "
+        r"depth — at ρ_spread = \RateRankSpreadLo–\RateRankSpreadHi at every "
+        r"rate.")
     par(r"<b>At a looser budget it stops being a baseline and becomes the "
         r"answer.</b> At 0.3 dB it reaches the architectural ceiling exactly at "
         r"the \RateRankLooseCeil lowest rates, is within 0.2 points of the "
@@ -942,7 +951,7 @@ def content(colw, fullw):
         r"profile over exits, so b only decides where on the ladder a tile "
         r"falls, never the shape of its trade-off. That is the ceiling this "
         r"baseline sits at, and it is the part a learned head should be earning "
-        r"its parameters on. Ours does, at low rate, and does not at high rate.")
+        r"its parameters on. Ours earns it at high rate and does not at low.")
     par(r"Per-block bit allocation is a standard quantity in learned "
         r"compression, where it is something to <i>choose</i>: block-level rate "
         r"control sets it so that complex regions get more bits [42]. We read "
@@ -1141,8 +1150,8 @@ def content(colw, fullw):
         r"operations is an optimistic bound on a saving in time, and the "
         r"optimism scales with the saving. A learned router should be compared "
         r"against a free one: routing on the bits already spent per tile needs "
-        r"no parameters, no training and no bits, and it beats our trained head "
-        r"above q\RateRankBeatsFrom — while agreeing with the oracle on fewer "
+        r"no parameters, no training and no bits, and it matches our trained head "
+        r"to within \RateRankLosesBy points at every rate — while agreeing with the oracle on fewer "
         r"tiles than the head does, which is a warning about the metric as much "
         r"as about the head. And a timing harness will "
         r"report numbers whether or not it is timing the right device — this "

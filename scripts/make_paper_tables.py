@@ -329,8 +329,8 @@ if d and lat:
 # ------------------------------------------------------------------ A vs B
 print("A versus B")
 sa, _ = pick("signalled_RECIPE512_ctc53.json")
-b1, _ = pick("router_RECIPE512_b01.json")
-b3, _ = pick("router_RECIPE512_b03.json")
+b1, _ = pick("router_RECIPE512_b01_fixed.json", "router_RECIPE512_b01.json")
+b3, _ = pick("router_RECIPE512_b03_fixed.json", "router_RECIPE512_b03.json")
 if sa and b1:
     def Aat(bud):
         return {r["qp"]: r["saving_pct_vs_release"] for r in sa["rows"]
@@ -362,6 +362,16 @@ if sa and b1:
         mac("GapHigh", f"{A1[qs[-1]]-B1[qs[-1]]:.1f}")
         mac("BLow", f"{B1[qs[0]]:.1f}")
         mac("BHigh", f"{B1[qs[-1]]:.1f}")
+        gaps = {q: A1[q] - B1[q] for q in qs}
+        mac("GapMin", f"{min(gaps.values()):.1f}")
+        mac("GapMax", f"{max(gaps.values()):.1f}")
+        mac("GapMinQp", str(min(gaps, key=gaps.get)))
+        betas = {r["qp"]: r.get("beta") for r in (b1 or {}).get("rows", [])
+                 if r.get("beta") is not None}
+        if betas:
+            mac("BetaMinQp", str(min(betas, key=lambda q: abs(betas[q]))))
+            mac("BetaAtMin", f"{betas[min(betas, key=lambda q: abs(betas[q]))]:.0f}")
+            mac("BetaLow", f"{betas[qs[0]]:.0f}")
         if both:
             mac("SigLooseHigh", f"{A3[qs[-1]]:.1f}")
             mac("SigLooseLow", f"{A3[qs[0]]:.1f}")
@@ -586,11 +596,16 @@ if rr:
         if B1:
             d_ = [(r["qp"], r["saving_pct_vs_release"] - B1[r["qp"]])
                   for r in rs if r["qp"] in B1]
-            if any(v > 0 for _, v in d_):
-                mac("RateRankBeatsFrom", str(min(q for q, v in d_ if v > 0)))
+            win = [q for q, v in d_ if v > 0]
+            if win:
+                mac("RateRankBeatsFrom", str(min(win)))
+                mac("RateRankBeatsUpTo", str(max(win)))
+                mac("RateRankNWins", str(len(win)))
                 mac("RateRankBeatsBy", f"{max(v for _, v in d_):.1f}")
             if any(v <= 0 for _, v in d_):
                 mac("RateRankLosesBy", f"{max(-v for _, v in d_ if v <= 0):.1f}")
+                mac("RateRankLosesFrom",
+                    str(min(q for q, v in d_ if v <= 0)))
         mac("RateRankSpreadLo",
             f"{min(r['spearman_bits_vs_spread'] for r in rs):.2f}")
         mac("RateRankSpreadHi",

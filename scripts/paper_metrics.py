@@ -132,11 +132,14 @@ def main():
         ("A signalled", ["signalled_RECIPE512_ctc53.json",
                          "signalled_RECIPE512_b135.json",
                          "signalled_BEST_b05.json"], 0.5),
-        ("B router", ["router_RECIPE512_b01.json",
+        ("B router", ["router_RECIPE512_b01_fixed.json",
+                      "router_RECIPE512_b01.json",
                       "router_RECIPE512_lam1.3e-5.json",
                       "router_BEST_v2.json"], 0.1),
-        ("B router", ["router_RECIPE512_b03.json"], 0.3),
-        ("B router", ["router_RECIPE512_b05.json"], 0.5),
+        ("B router", ["router_RECIPE512_b03_fixed.json",
+                      "router_RECIPE512_b03.json"], 0.3),
+        ("B router", ["router_RECIPE512_b05_fixed.json",
+                      "router_RECIPE512_b05.json"], 0.5),
     ]
 
     print("=" * 78)
@@ -261,7 +264,7 @@ def main():
     print(f"  {'released DCVC-UF intra decoder':<34}{INTRA_GMAC:>17.1f}G"
           f"{tot/1e6:>9.1f}M")
     a = J("signalled_RECIPE512_ctc53.json", "signalled_BEST_0817_1542.json")
-    b = J("router_RECIPE512_b01.json", "router_RECIPE512_lam1.3e-5.json",
+    b = J("router_RECIPE512_b01_fixed.json", "router_RECIPE512_b01.json",
           "router_BEST_v2.json")
     for lab, d in (("FLEX-UF A, signalled, 0.1 dB", a),
                    ("FLEX-UF B, router, 0.1 dB", b)):

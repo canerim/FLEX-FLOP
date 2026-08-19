@@ -233,11 +233,9 @@ Upward the map claims the low-rate saving while spending nearly twice the qualit
 | configuration | qp 0 | qp 16 | qp 32 | qp 48 | qp 63 |
 |---|---|---|---|---|---|
 | **A** signalled, 0.1 dB | 32.35 | 27.55 | 22.52 | 19.77 | 16.81 |
-| **B** router, 0.1 dB | 30.64 | 25.85 | 18.10 | 9.10 | 3.53 |
+| **B** router, 0.1 dB | 27.18 | 23.27 | 19.40 | 16.06 | 12.94 |
 | **A** signalled, 0.3 dB | 41.91 | 41.91 | 41.91 | 40.64 | 38.40 |
-| **B** router, 0.3 dB | 41.75 | 41.75 | 41.75 | 39.49 | 36.35 |
 | **A** signalled, 0.5 dB | 41.91 | 41.91 | 41.91 | 41.91 | 41.91 |
-| **B** router, 0.5 dB | 41.75 | 41.75 | 41.75 | 41.75 | 41.75 |
 
 One router, trained once at λ=1.3e-5 against the *deployed* oracle (held-out agreement 0.718). The gap is widest where the budget is tight and the rate is far from the router's training point; at 0.5 dB it is 0.16 points at every rate, which is the router's own compute and nothing else — once the budget saturates the ladder there is nothing left to predict wrongly.
 
@@ -265,11 +263,11 @@ The entropy model has already produced a per-tile number that is free and availa
 
 | qp | rate-rank | B router | A oracle | ρ(bits, spread) |
 |---|---|---|---|---|
-| 0 | 29.87 | 30.64 | 32.36 | +0.62 |
-| 16 | 24.62 | 25.85 | 27.56 | +0.66 |
-| 32 | 19.91 | 18.10 | 22.50 | +0.71 |
-| 48 | 15.42 | 9.10 | 19.77 | +0.72 |
-| 63 | 12.10 | 3.53 | 16.77 | +0.68 |
+| 0 | 29.87 | 27.18 | 32.36 | +0.62 |
+| 16 | 24.62 | 23.27 | 27.56 | +0.66 |
+| 32 | 19.91 | 19.40 | 22.50 | +0.71 |
+| 48 | 15.42 | 16.06 | 19.77 | +0.72 |
+| 63 | 12.10 | 12.94 | 16.77 | +0.68 |
 
 **It beats the trained router above qp 32**, by up to 8.6 points, and loses below it by at most 1.2. The router was trained at one λ and its ordering degrades as the bisection tilts it away; a bit count has no such attachment to an operating point. It does this while agreeing with the oracle on only 0.30–0.45 of tiles against the router's 0.718 — agreement weights a tile where two exits are within a hair the same as one that carries most of the frame's error. What the rule gets right is the ordering that matters: bits correlate with how much a tile stands to gain from depth at ρ = 0.62–0.72 at every rate.
 

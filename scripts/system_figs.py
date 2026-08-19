@@ -474,8 +474,12 @@ def training():
 # =====================================================  5. router A versus B
 def router_ab():
     """The two ways the exit map can be produced, and what the difference costs."""
-    def rows(f, key="saving_pct_vs_release", budget=None):
-        d = json.load(open(R / "results" / f))
+    def rows(*names, key="saving_pct_vs_release", budget=None):
+        for f in names:
+            p = R / "results" / f
+            if p.exists():
+                break
+        d = json.load(open(p))
         rs = [r for r in d["rows"] if r.get("budget_reachable", True)
               and (budget is None or r.get("budget_db") is None
                    or abs(r["budget_db"] - budget) < 1e-9)]
@@ -489,8 +493,8 @@ def router_ab():
     A, _ = rows("signalled_RECIPE512_ctc53.json", budget=0.1)
     A3, _ = rows("signalled_RECIPE512_ctc53.json", budget=0.3)
     A5, _ = rows("signalled_RECIPE512_ctc53.json", budget=0.5)
-    B, dB = rows("router_RECIPE512_b01.json")
-    B3, _ = rows("router_RECIPE512_b03.json")
+    B, dB = rows("router_RECIPE512_b01_fixed.json", "router_RECIPE512_b01.json")
+    B3, _ = rows("router_RECIPE512_b03_fixed.json", "router_RECIPE512_b03.json")
     B5 = {}
     Ba = B
     qps = sorted(q for q in A if q in B)
