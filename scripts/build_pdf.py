@@ -374,7 +374,13 @@ def content(colw, fullw):
         # different columns, and three of them did: seam_module, budget_band and
         # hybrid each printed their picture at the foot of the left column and
         # its caption at the head of the right. A column figure is one object.
-        A(KeepTogether(fig(name, colw, cap)))
+        # Capped so a figure and its caption stay small enough to finish the
+        # column they start in. Uncapped, several three-panel figures came to
+        # about a third of a column with their captions, and any one of them
+        # arriving with less than that left would jump to the next column and
+        # strand the text behind it. Page 3 lost 35% of its left column that
+        # way.
+        A(KeepTogether(fig(name, colw, cap, maxh=1.25 * inch)))
 
     # ---- abstract -------------------------------------------------------
     A(Paragraph("<b>Abstract</b>", S("ah", fontName="Times-Bold", fontSize=9.4,
@@ -428,13 +434,6 @@ def content(colw, fullw):
         r"rules out re-training the analysis transform, changing the entropy "
         r"model, or altering the latent. It leaves one place to spend "
         r"adaptivity, the synthesis transform.")
-    figure_wide("dcvcuf_framework.png",
-                r"<b>Figure 2. The decoder we modify.</b> Figure 3 of DCVC-UF "
-                r"[14], reproduced. Everything up to the reconstruction stays "
-                r"frozen in this work: the patch embedding, the chunk encoder, "
-                r"the entropy model and the coded payload. FLEX-UF replaces the "
-                r"frame-specific decoders on the right with a ladder of exits "
-                r"taken per tile.")
     par(r"Our method, FLEX-UF, is an exit ladder over the twelve residual "
         r"blocks of the DCVC-UF intra decoder. The first j blocks run over the "
         r"whole frame. The rest run per tile, over a set of tiles that shrinks "
@@ -1609,7 +1608,11 @@ def build(out="paper/FLEX-UF.pdf"):
     # page 1 is two columns, which needs an explicit NextPageTemplate -- without
     # it reportlab keeps using the first template and every page gets a
     # full-width band across the top.
-    top_banner = 4.45 * inch
+    # Title block plus the baseline figure and its caption. Sized to what it
+    # holds: a band taller than its content leaves both columns of page 1 short,
+    # and a wide figure placed in the flow instead would force a page break and
+    # empty a column outright.
+    top_banner = 4.05 * inch
 
     doc = BaseDocTemplate(str(R / out), pagesize=letter,
                           leftMargin=M, rightMargin=M,
@@ -1656,21 +1659,20 @@ def build(out="paper/FLEX-UF.pdf"):
         PageTemplate(id="rest", frames=[f_l, f_r], onPage=num),
         PageTemplate(id="wide", frames=[f_wide, f_lw, f_rw], onPage=num)])
 
-    banner_cap = ("<b>Figure 1. FLEX-UF end to end.</b> Grey is frozen and "
-                  "never touched; blue is inherited from DCVC-UF and "
-                  "fine-tuned; orange and green are new. The first j block "
-                  "groups run over the whole frame and the rest run per tile "
-                  "on a shrinking active set. The exit map that drives the "
-                  "shrinkage comes either from an encoder-side search (A) or "
-                  "from a decoder-side predictor (B).")
+    banner_cap = ("<b>Figure 1. The decoder we modify.</b> Figure 3 of "
+                  "DCVC-UF [14], reproduced. Everything up to the "
+                  "reconstruction stays frozen in this work: the patch "
+                  "embedding, the chunk encoder, the entropy model and the "
+                  "coded payload. FLEX-UF replaces the frame-specific decoders "
+                  "on the right with a ladder of exits taken per tile.")
     story = [
         Paragraph("Where to Stop:<br/>Tile-Adaptive Early Exit in a Learned "
                   "Image Decoder", TITLE),
         Paragraph("Anonymous CVPR submission &nbsp;&nbsp;·&nbsp;&nbsp; Paper ID "
                   "****", AUTH),
     ]
-    story += fig("sys_pipeline.png", PW - 2 * M, banner_cap,
-                 maxh=2.60 * inch)
+    story += fig("dcvcuf_framework.png", PW - 2 * M, banner_cap,
+                 maxh=2.45 * inch)
     story += [NextPageTemplate("rest"), FrameBreak()]
     story += content(colw, PW - 2 * M)
     story.append(Paragraph("References", H1))

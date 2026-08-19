@@ -269,17 +269,6 @@ the arithmetic untouched.
 \section{Method}
 \label{sec:method}
 
-\begin{figure*}[t]
-\centering
-\includegraphics[width=\textwidth]{figures/sys_pipeline.png}
-\caption{\textbf{FLEX-UF end to end.} Grey is frozen and never touched; blue is
-inherited from DCVC-UF and fine-tuned; orange and green are new. The first $j$
-block groups run over the whole frame and the rest run per tile on a shrinking
-active set. The exit map that drives the shrinkage comes either from an
-encoder-side search (A) or from a decoder-side predictor (B).}
-\label{fig:pipeline}
-\end{figure*}
-
 \subsection{Where the computation is}
 
 The DCVC-UF intra decoder is one upsampling block, twelve \texttt{DepthConvBlock}s
