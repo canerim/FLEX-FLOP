@@ -447,6 +447,30 @@ if hy:
             mac("LorenzTightMin", f"{100*min(ratios):.0f}")
             mac("LorenzTightMax", f"{100*min(1.0, max(ratios)):.0f}")
 
+# ---------------------------------------------------------------- BD-Rate
+print("BD-Rate")
+bdj, _ = pick("bdrate.json")
+if bdj:
+    def _bd(cfg, bud):
+        return next((r["bd_rate_pct"] for r in bdj["rows"]
+                     if r["config"].startswith(cfg)
+                     and abs(r["budget_db"] - bud) < 1e-9), None)
+    for tag, cfg in (("A", "A"), ("B", "B")):
+        for bt, bud in (("Low", 0.1), ("Mid", 0.3), ("High", 0.5)):
+            v = _bd(cfg, bud)
+            if v is not None:
+                mac(f"BdRate{tag}{bt}", f"{v:.2f}")
+    lines = [r"\begin{tabular}{lrrrr}", r"\toprule",
+             r"configuration & budget & BD-Rate (\%) & saved (\%) & bits/frame \\",
+             r"\midrule"]
+    for r in bdj["rows"]:
+        lines.append(f"{r['config']} & {r['budget_db']:.1f}\\,dB & "
+                     f"{r['bd_rate_pct']:.2f} & "
+                     f"{r['saving_pct_vs_release']:.1f} & "
+                     f"{r['map_bits']:.0f} \\\\")
+    lines += [r"\bottomrule", r"\end{tabular}"]
+    w("bdrate.tex", "\n".join(lines))
+
 # ------------------------------------------------------------- rate rank
 print("rate rank")
 rr, _ = pick("raterank_RECIPE512_b01.json")

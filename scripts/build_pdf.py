@@ -204,7 +204,7 @@ def content(colw, fullw):
         r"method deploys against existing bitstreams. On the full "
         r"\NumSeq-sequence common test set a 0.1 dB budget buys \MainLowRate% "
         r"of the decoder's multiply-accumulates at the lowest rate and "
-        r"\MainHighRate% at the highest, for a BD-Rate cost of 0.88%."
+        r"\MainHighRate% at the highest, for a BD-Rate cost of \BdRateALow%."
         r"<br/><br/>"
         r"Four findings are worth more than the headline. <b>(i)</b> A quality "
         r"budget only buys compute inside a bounded window: below a floor set by "
@@ -294,7 +294,7 @@ def content(colw, fullw):
     par(r"<b>(i)</b> A tile-adaptive early-exit ladder for a learned image "
         r"decoder that leaves the encoder and the coded payload untouched, "
         r"saving \MainLowRate% to \MainHighRate% of decoder MACs for 0.1 dB on "
-        r"the full CTC set at a BD-Rate cost of 0.88%. "
+        r"the full CTC set at a BD-Rate cost of \BdRateALow%. "
         r"<b>(ii)</b> The floor/saturation characterisation of a quality budget, "
         r"both ends in closed form, with seven structural propositions verified "
         r"numerically and a measurement of what the Lagrangian's convex-hull "
@@ -697,8 +697,9 @@ def content(colw, fullw):
         r"point a looser budget buys nothing.")
     par(r"At 0.1 dB the method saves \MainLowRate% at the lowest rate and "
         r"\MainHighRate% at the highest, averaging \MainMean%, at a BD-Rate "
-        r"cost of 0.88% — that is, the compute is worth about the same as a "
-        r"0.88% increase in bitrate. The fall with rate is not an artefact of "
+        r"cost of \BdRateALow% — that is, the compute is worth about the same "
+        r"as a \BdRateALow% increase in bitrate. The fall with rate is not an "
+        r"artefact of "
         r"the ladder: high-rate reconstructions carry detail the shallow exits "
         r"cannot reproduce, and the floor rises with rate.")
     tbl("complexity",
@@ -1110,7 +1111,7 @@ def content(colw, fullw):
         r"non-constant world. An early-exit ladder over the tiles of a frame "
         r"recovers a substantial fraction of it — \MainLowRate% to "
         r"\MainHighRate% of decoder MACs for a 0.1 dB budget, at a BD-Rate cost "
-        r"of 0.88% — without touching the encoder or the coded payload.")
+        r"of \BdRateALow% — without touching the encoder or the coded payload.")
     par(r"Three lessons we would carry to any spatially adaptive decoder, none "
         r"of them about early exit. <b>Tiling is the dominant cost and it is "
         r"governed by depth.</b> Its entire cause is a single 3×3 that is 0.29% "

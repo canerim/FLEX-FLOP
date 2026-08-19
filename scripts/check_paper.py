@@ -177,9 +177,24 @@ _tex = re.sub(r"(?<!\\)%.*", "", (R / "paper/main.tex").read_text())
 _pat = re.compile(r"(?<![\\A-Za-z0-9])(\d+(?:\.\d+)?)\s*(?:\\%|\\dB\b|dB\b)")
 typed = {m.group(1) for m in _pat.finditer(_tex)} - ALLOW
 if typed:
+    # A literal that equals a macro's value is almost certainly that macro,
+    # typed out. Say so, because that is the actionable half of the list.
+    mac = {}
+    _mp = R / "paper/tables/macros.tex"
+    if _mp.exists():
+        for m in re.finditer(r"\\newcommand\{\\(\w+)\}\{([^}]*)\}",
+                             _mp.read_text()):
+            mac.setdefault(m.group(2).strip(), m.group(1))
+    hits = sorted(((v, mac[v]) for v in typed if v in mac), key=lambda t: float(t[0]))
+    rest = sorted((v for v in typed if v not in mac), key=float)
     print(f"\n  lint: {len(typed)} numeric literals typed into main.tex rather "
-          f"than expanded from a macro:")
-    print("        " + ", ".join(sorted(typed, key=float)))
+          f"than expanded from a macro")
+    if hits:
+        print(f"        {len(hits)} of them equal an existing macro:")
+        for v, n in hits:
+            print(f"          {v}  ->  \\{n}")
+    if rest:
+        print("        no macro exists for: " + ", ".join(rest))
 
 print(f"\n  {len(CLAIMS)-len(bad)}/{len(CLAIMS)} prose claims match the data")
 # Recorded so make_paper_tables.py can quote the count without running this.

@@ -177,6 +177,16 @@ def main():
         print(f"  {label:<22}{budget:>8.2f}{bd:>9.3f}%{sv:>12.2f}%{mb:>11.0f}")
         rows_for_fig.append((label, budget, bd, sv, qs, rate_ours, ours))
 
+    # Recorded so the paper can expand it as a macro instead of typing it.
+    json.dump({"rows": [{"config": l, "budget_db": b, "bd_rate_pct": bd,
+                         "saving_pct_vs_release": sv, "map_bits": mb}
+                        for (l, b, bd, sv, *_), mb in
+                        zip(rows_for_fig,
+                            [float(np.mean([g.get("map_bits", 0) or 0
+                                            for g in [J(*f)["rows"][0]]]))
+                             for _, f, _ in CONFIGS])]},
+              open(ROOT / "results/bdrate.json", "w"), indent=2)
+
     print(f"\n  For scale, the paper's own Table 1 (BD-Rate vs VTM-17.0 LD):")
     print(f"    DCVC-UF (LD) -9.5%   (HT-S) -31.6%   (HT-L) -42.2%")
     print(f"  Ours is a decode-compute method, so its BD-Rate is the COST of")

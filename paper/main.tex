@@ -37,7 +37,7 @@ trunk at whichever of $K$ exits is deep enough for it. The encoder is frozen and
 the coded payload is unchanged, so the method deploys against existing
 bitstreams. On the full \NumSeq-sequence common test set a $0.1\dB$ budget buys
 \MainLowRate\% of the decoder's multiply--accumulates at the lowest rate and
-\MainHighRate\% at the highest, for a BD-Rate cost of $0.88\%$.
+\MainHighRate\% at the highest, for a BD-Rate cost of \BdRateALow\%.
 
 Four findings are worth more than the headline. \textbf{(i)}~A quality budget
 only buys compute inside a bounded window: below a \emph{floor} set by tiling no
@@ -760,7 +760,7 @@ $27.0\%$, against the oracle's \MainLowRate\%. At $q48$ and $q63$ the only
 uniform depth that fits is the deepest one, which \emph{costs} $0.95\%$ rather
 than saving anything --- so there the choice is not between $17\%$ and something
 smaller, it is between $17\%$ and nothing. Averaged over rates the best static
-allocation saves $10.2\%$ where the adaptive one saves \MainMean\%.
+allocation saves \BestStaticMean\% where the adaptive one saves \MainMean\%.
 
 The two shuffled rows separate effects that are easy to conflate. Given the
 oracle's own exit histogram --- the same mix of depths, hence the same average
@@ -773,8 +773,9 @@ before the trunk starts --- and it is the natural analogue of the confidence
 rules used by early-exit classifiers~\cite{branchynet,msdnet}, which likewise
 read a signal off the network's own output.
 
-It recovers most of the gap. At $q63$, random costs $0.141\dB$ and the oracle
-$0.100\dB$ at identical compute; rate-ranking costs $0.110\dB$, i.e.\ $75\%$ of
+It recovers most of the gap. At $q63$, random costs \RandomDb$\dB$ and the
+oracle $0.100\dB$ at identical compute; rate-ranking costs \RateRankDb$\dB$,
+i.e.\ \RateRankRecovers\% of
 the oracle's advantage over chance, at $0.68$--$0.79$ agreement with the oracle's
 map. A learned router therefore has to beat a free baseline that is already three
 quarters of the way there --- a comparison we would not have made without this
@@ -946,8 +947,8 @@ approximate and costs none. Table~\ref{tab:ab} is the comparison, and it splits
 in two.
 
 At the rates near the $\lambda$ the router was trained at, \textbf{prediction is
-nearly free}: \BLow\% against $32.3\%$ at $q0$ and $25.9$ against $27.6$ at
-$q16$, a gap of \GapLow\ points for zero added bits and a byte-identical file.
+nearly free}: \BLow\% against \MainLowRate\% at $q0$ and the same gap of
+\GapLow\ points at $q16$, for zero added bits and a byte-identical file.
 
 Away from it the gap grows to \GapHigh\ points, and it tracks $|\beta|$ --- the
 tilt the bisection has to apply to drag a router trained at one operating point
@@ -1221,7 +1222,7 @@ it --- so the mean is over the remaining four.}
 Section~\ref{sec:operating} argued that once a budget saturates a ladder the
 only way to spend more is a rung that does not exist. Table~\ref{tab:runs}
 measures it. A finer ladder ($K{=}12$, $j{=}4$) has a ceiling of $50.3\%$
-against $41.9\%$, and the two orderings cross between $0.1$ and $0.3\dB$:
+against \Ceiling\%, and the two orderings cross between $0.1$ and $0.3\dB$:
 
 \begin{itemize}\itemsep1pt
 \item At $0.1\dB$ the coarse ladder wins, and the fine one cannot even reach the
@@ -1268,7 +1269,7 @@ trunk with a shared head --- but that is an argument, not a measurement.
 Learned decoders spend a constant amount of computation on a non-constant world.
 An early-exit ladder over the tiles of a frame recovers a substantial fraction of
 it --- \MainLowRate\% to \MainHighRate\% of decoder MACs for a $0.1\dB$ budget,
-at a BD-Rate cost of $0.88\%$ --- without touching the encoder or the coded
+at a BD-Rate cost of \BdRateALow\% --- without touching the encoder or the coded
 payload.
 
 Three lessons we would carry to any spatially adaptive decoder, none of them
