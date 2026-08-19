@@ -61,8 +61,6 @@ a.set_ylim(0, 0.42); a.set_xlim(qp[0], qp[-1])
 a.set_xlabel("qp   (0 = lowest rate  →  63 = highest)")
 a.set_ylabel("quality budget, dB below the release")
 a.legend(loc="center left", fontsize=5, bbox_to_anchor=(0.02, 0.62))
-a.set_title("Working range of a budget",
-            fontsize=6, color=ns.INK2, loc="left")
 ns.panel(a, "a")
 
 # ---- b: what a budget is worth, and where it stops being worth anything ----
@@ -80,10 +78,6 @@ b2.grid(False)
 for x, u in zip(qp[::2], (100 * used)[::2]):
     b2.annotate(f"{u:.0f}%", (x, u), fontsize=5, color=ns.BLUE,
                 textcoords="offset points", xytext=(0, -9), ha="center")
-b.set_title(f"The band WIDENS with rate — the ladder has more to offer at high\n"
-            f"rate, and 0.1 dB uses less and less of it. Ceiling is {CEIL:.2f}%\n"
-            "throughout the grey region of panel a.",
-            fontsize=6, color=ns.INK2, loc="left")
 ns.panel(b, "b", dx=-0.20)
 
 fig.tight_layout()
