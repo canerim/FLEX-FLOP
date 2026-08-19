@@ -926,6 +926,20 @@ def content(colw, fullw):
         r"right.")
     par(r"We report the single-router number because it is the honest one for a "
         r"system that trains once, and note that it understates what B can do.")
+    par(r"<b>Retraining with a working mask raises agreement and does not "
+        r"simply raise the saving.</b> The head above was trained against a "
+        r"suppression term sitting above its own logits (below). Retrained with "
+        r"the mask fixed, same recipe and same λ, its held-out agreement rises "
+        r"from \RetrainAgreeOld to \RetrainAgreeNew — and the deployed saving "
+        r"moves by +\RetrainGain points at q\RetrainGainQp and "
+        r"−\RetrainLoss at q\RetrainLossQp. It is better where the required "
+        r"tilt is small and worse where it is large, which is the same axis the "
+        r"gap runs along, and it is the second time in this paper that "
+        r"agreement with the oracle has moved opposite to the quantity that "
+        r"matters. We keep the original head for every other measurement so the "
+        r"comparisons stay on one system, and record the retrain as what it is: "
+        r"evidence that the mask cost the head real capacity, and that "
+        r"agreement is not the objective.")
     par(r"An earlier version of this measurement put the gap at 1.7 points at "
         r"q0 rising to 13.3 at q63. That was the exit mask: the head suppresses "
         r"exits below the split depth by assigning -1e4, its own logits had "

@@ -570,6 +570,17 @@ if bc:
     mac("BandSpreadMean", f"{bc['band_spread_mean']:.1f}")
     mac("BandSpreadMax", f"{bc['band_spread_max_excl_edge']:.1f}")
 
+# what a retrain with a working mask does
+rt, _ = pick("router_retrain_compare.json")
+if rt:
+    ds = {int(q): rt["v3"][q] - rt["v2"][q] for q in rt["v2"]}
+    mac("RetrainAgreeOld", f"{rt['heldout_agree_v2']:.3f}")
+    mac("RetrainAgreeNew", f"{rt['heldout_agree_v3']:.3f}")
+    mac("RetrainGain", f"{max(ds.values()):.1f}")
+    mac("RetrainLoss", f"{-min(ds.values()):.1f}")
+    mac("RetrainGainQp", str(min(ds, key=lambda q: -ds[q])))
+    mac("RetrainLossQp", str(min(ds, key=lambda q: ds[q])))
+
 # ------------------------------------------------------------------- blend
 print("blend")
 cb, _ = pick("combined_RECIPE512_b01.json")

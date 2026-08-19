@@ -176,6 +176,15 @@ if bc:
     claim("band: spread after rescaling, worst", 2.2,
           bc["band_spread_max_excl_edge"], 0.2)
 
+# ---- the retrain ----------------------------------------------------------
+rt = J("router_retrain_compare.json")
+if rt:
+    ds = {int(q): rt["v3"][q] - rt["v2"][q] for q in rt["v2"]}
+    claim("retrain: held-out agreement, before", 0.718, rt["heldout_agree_v2"], 1e-3)
+    claim("retrain: held-out agreement, after", 0.808, rt["heldout_agree_v3"], 1e-3)
+    claim("retrain: best gain (pts)", 3.1, max(ds.values()), 0.1)
+    claim("retrain: worst loss (pts)", 3.4, -min(ds.values()), 0.1)
+
 # ---- blend ----------------------------------------------------------------
 cb = J("combined_RECIPE512_b01.json")
 if cb:

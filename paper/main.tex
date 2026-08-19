@@ -1014,6 +1014,20 @@ gives the allocation more room to be wrong in as well as more room to be right.
 We report the single-router number because it is the honest one for a system
 that trains once, and note that it understates what B can do.
 
+\textbf{Retraining with a working mask raises agreement and does not simply
+raise the saving.} The head above was trained against a suppression term sitting
+above its own logits (below). Retrained with the mask fixed, same recipe and same
+$\lambda$, its held-out agreement rises from \RetrainAgreeOld\ to
+\RetrainAgreeNew --- and the deployed saving moves by
+$+\RetrainGain$ points at $q\RetrainGainQp$ and $-\RetrainLoss$ at
+$q\RetrainLossQp$. It is better where the required tilt is small and worse where
+it is large, which is the same axis the gap runs along, and it is the second time
+in this paper that agreement with the oracle has moved opposite to the quantity
+that matters. We keep the original head for every other measurement so the
+comparisons stay on one system, and record the retrain as what it is: evidence
+that the mask cost the head real capacity, and that agreement is not the
+objective.
+
 An earlier version of this measurement put the gap at $1.7$ points at $q0$
 rising to $13.3$ at $q63$. That was the exit mask: the head suppresses exits
 below the split depth by assigning $-10^{4}$, its own logits had drifted to that
