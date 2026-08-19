@@ -778,8 +778,12 @@ $0.100\dB$ at identical compute; rate-ranking costs $0.110\dB$, i.e.\ $75\%$ of
 the oracle's advantage over chance, at $0.68$--$0.79$ agreement with the oracle's
 map. A learned router therefore has to beat a free baseline that is already three
 quarters of the way there --- a comparison we would not have made without this
-control, and one we suggest any adaptive-inference paper should report.
-Fig.~\ref{fig:exitmap} shows the assignment the oracle arrives at.
+control, and one we suggest any adaptive-inference paper should report. Given
+the oracle's histogram this is a measurement of \emph{ranking} and nothing else;
+Section~\ref{sec:raterank} removes that crutch and turns the same signal into a
+complete routing rule, which beats the trained head above
+$q\RateRankBeatsFrom$. Fig.~\ref{fig:exitmap} shows the assignment the oracle
+arrives at.
 
 \subsection{Resolution, and the granularity of a tile}
 \label{sec:resolution}

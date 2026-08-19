@@ -753,7 +753,11 @@ def content(colw, fullw):
         r"agreement with the oracle's map. A learned router therefore has to "
         r"beat a free baseline already three quarters of the way there — a "
         r"comparison we would not have made without this control, and one we "
-        r"suggest any adaptive-inference paper should report.")
+        r"suggest any adaptive-inference paper should report. Given the "
+        r"oracle's histogram this is a measurement of <i>ranking</i> and "
+        r"nothing else; §5.6 removes that crutch and turns the same signal into "
+        r"a complete routing rule, which beats the trained head above "
+        r"q\RateRankBeatsFrom.")
     h2("5.3 Resolution, and the granularity of a tile")
     figure("perclass.png",
            r"<b>Figure 7. Saving by test class</b> at one global operating "
