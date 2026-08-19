@@ -213,8 +213,8 @@ the paper.
 
 \section{Things that were not running}
 
-Two checks this work cites were not executing, and both were found by running
-them rather than by reading them.
+Three checks this work cites were not measuring what they claimed, and all three
+were found by running them rather than by reading them.
 
 \begin{itemize}\itemsep2pt
 \item The bit-exactness test for the warm start declared \texttt{qp} as a bare
@@ -228,6 +228,16 @@ them rather than by reading them.
       and any permutation is trivially exact. On random content with a mixed exit
       map the result is still bit-identical on CUDA, but the original check could
       not have failed.
+\item Every wall-clock measurement in this work was taken with
+      \texttt{torch.cuda.Event}, which is created on the process's \emph{current}
+      device rather than on the device the tensors live on. The timing runs used
+      a non-default GPU, so the events and the work were on different cards.
+      This does not raise: it returns numbers. On a re-measurement of the same
+      configuration the error was $-29\%$ on a full decode and a factor of
+      several hundred on a short kernel, which is why it survived --- the long
+      timings looked plausible. The scripts now set the device explicitly and
+      the wall-clock numbers in the main paper are the corrected ones. Anything
+      timing a non-default GPU should be assumed to have had this bug.
 \end{itemize}
 
 {\small

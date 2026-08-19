@@ -14,15 +14,15 @@
   "warmup": 10,
   "iters": 40,
   "interleaved": true,
-  "note": "sorted-tile loop landed behind cfg.sorted_tiles; real content, not zeros",
+  "note": "re-measured after fixing cross-device cuda.Event timing; GPU7, card shared, ratios only",
   "rows": [
     {
       "qp": 0,
-      "ms_stock": 273.89952087402344,
-      "ms_deep": 297.1427764892578,
-      "ms_routed": 246.8884506225586,
-      "overhead_pct": 8.486051943816575,
-      "realised_saving_pct": 9.861671230848279,
+      "ms_stock": 110.55563354492188,
+      "ms_deep": 114.49945449829102,
+      "ms_routed": 79.74809646606445,
+      "overhead_pct": 3.567272717736869,
+      "realised_saving_pct": 27.86609428305564,
       "predicted_saving_pct": 35.273063274425795,
       "hist": [
         15,
@@ -32,16 +32,16 @@
         35,
         23
       ],
-      "ms_routed_sorted": 195.9029769897461,
-      "realised_saving_sorted_pct": 28.476334546109282
+      "ms_routed_sorted": 78.42918395996094,
+      "realised_saving_sorted_pct": 29.059079627911544
     },
     {
       "qp": 32,
-      "ms_stock": 401.2574768066406,
-      "ms_deep": 443.21229553222656,
-      "ms_routed": 403.04383850097656,
-      "overhead_pct": 10.455834757143556,
-      "realised_saving_pct": -0.4451908805668925,
+      "ms_stock": 110.62630462646484,
+      "ms_deep": 114.65318298339844,
+      "ms_routed": 87.10707092285156,
+      "overhead_pct": 3.640073100634189,
+      "realised_saving_pct": 21.260073526840774,
       "predicted_saving_pct": 28.00551513056212,
       "hist": [
         1,
@@ -51,16 +51,16 @@
         174,
         146
       ],
-      "ms_routed_sorted": 313.7786865234375,
-      "realised_saving_sorted_pct": 21.801161433649174
+      "ms_routed_sorted": 85.83327865600586,
+      "realised_saving_sorted_pct": 22.411510584371285
     },
     {
       "qp": 63,
-      "ms_stock": 511.8730163574219,
-      "ms_deep": 570.8344421386719,
-      "ms_routed": 567.6364135742188,
-      "overhead_pct": 11.518760297393648,
-      "realised_saving_pct": -10.893990391136255,
+      "ms_stock": 110.84390640258789,
+      "ms_deep": 114.80368041992188,
+      "ms_routed": 94.90380859375,
+      "overhead_pct": 3.5723876447948166,
+      "realised_saving_pct": 14.380671275643287,
       "predicted_saving_pct": 20.085536035103136,
       "hist": [
         0,
@@ -70,8 +70,8 @@
         573,
         145
       ],
-      "ms_routed_sorted": 438.0543975830078,
-      "realised_saving_sorted_pct": 14.421275671009248
+      "ms_routed_sorted": 93.56953811645508,
+      "realised_saving_sorted_pct": 15.584409505915342
     }
   ]
 }

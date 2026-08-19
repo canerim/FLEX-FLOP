@@ -42,6 +42,11 @@ ap.add_argument("--seq", default=None,
 ap.add_argument("--device", default="cuda:7")
 ap.add_argument("--out", default="results/encoder_cost.json")
 a = ap.parse_args()
+# torch.cuda.Event is created on the CURRENT device, not on the device the
+# tensors live on, and torch.cuda.synchronize() with no argument syncs the
+# current device. Timing work on another card returns numbers rather than an
+# error, and they are wrong.
+torch.cuda.set_device(a.device)
 dev = a.device
 
 ck = torch.load(a.ckpt, map_location="cpu", weights_only=False)

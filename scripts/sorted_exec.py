@@ -74,6 +74,10 @@ def main(argv):
     ap.add_argument("--device", default="cuda:0")
     ap.add_argument("--out", default="results/sorted_exec_BEST.json")
     a = ap.parse_args(argv)
+    # torch.cuda.Event is created on the CURRENT device and a bare
+    # torch.cuda.synchronize() syncs the current device. Timing work on another
+    # card returns numbers rather than an error, and they are wrong.
+    torch.cuda.set_device(a.device)
 
     dev = a.device
     ck = torch.load(ROOT / a.ckpt, map_location="cpu", weights_only=False)

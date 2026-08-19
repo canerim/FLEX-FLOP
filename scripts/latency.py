@@ -123,6 +123,12 @@ def main(argv):
                          "on the card, because that decides how much the "
                          "numbers mean")
     a = ap.parse_args(argv)
+    # torch.cuda.Event is created on the CURRENT device, not on the device the
+    # tensors live on. Timing work on cuda:N with events on cuda:0 does not
+    # error -- it returns numbers, and they are wrong. Every result this script
+    # wrote before this line was added was measured with --device cuda:2 and
+    # events on cuda:0.
+    torch.cuda.set_device(a.device)
 
     if not torch.cuda.is_available():
         raise SystemExit("needs a GPU")

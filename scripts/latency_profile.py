@@ -69,6 +69,12 @@ def main(argv):
     ap.add_argument("--device", default="cuda:0")
     ap.add_argument("--out", default="results/latency_profile_BEST.json")
     a = ap.parse_args(argv)
+    # torch.cuda.Event is created on the CURRENT device, not on the device the
+    # tensors live on. Timing work on cuda:N with events on cuda:0 does not
+    # error -- it returns numbers, and they are wrong. Every result this script
+    # wrote before this line was added was measured with --device cuda:2 and
+    # events on cuda:0.
+    torch.cuda.set_device(a.device)
 
     dev = a.device
     ck = torch.load(ROOT / a.ckpt, map_location="cpu", weights_only=False)
