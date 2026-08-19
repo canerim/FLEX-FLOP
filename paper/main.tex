@@ -1085,6 +1085,15 @@ the distortion it stands to gain from that depth.}
 
 \begin{table}[t]
 \centering
+\resizebox{\columnwidth}{!}{\input{tables/raterank_best}}
+\caption{\textbf{The same comparison on a second training run} (\texttt{BEST}),
+$0.1\dB$, same test set. Bold where the parameter-free rule beats that run's own
+trained head.}
+\label{tab:raterankbest}
+\end{table}
+
+\begin{table}[t]
+\centering
 \resizebox{\columnwidth}{!}{\input{tables/blend}}
 \caption{\textbf{Blending the two decoder-side signals} at $0.1\dB$, both
 normalised to unit mean, weight $w$ from the bit rule to the head's ordering.
@@ -1136,6 +1145,16 @@ in the level assigns every tile the same relative profile over exits, so $b$ onl
 decides where on the ladder a tile falls, never the shape of its trade-off. That
 is the ceiling this baseline sits at, and it is the part a learned head should be
 earning its parameters on. Ours does, at low rate, and does not at high rate.
+
+\textbf{It replicates, and more strongly, on a second training run.} On
+\texttt{BEST} --- a separate recipe at a different epoch, with its own router
+trained the same way --- the free rule beats the trained head at
+\BestRankWinsN\ of \BestRankOfN\ rates, by up to \BestRankBy\ points, and comes
+within \BestRankToOracle\ points of the \emph{oracle} everywhere
+(Table~\ref{tab:raterankbest}). Whether a learned head is worth its parameters is
+therefore not settled by our head: on one checkpoint it wins narrowly at low rate,
+on another it loses badly at four rates out of five. What does not vary is that
+the free rule is close to the oracle on both.
 
 Per-block bit allocation is a standard quantity in learned compression, where it
 is something to \emph{choose}: block-level rate control sets it so that complex

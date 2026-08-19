@@ -607,6 +607,29 @@ if hy and hv3:
         mac("GiniRetrainLo", f"{min(G3[q] for q in common):.2f}")
         mac("GiniRetrainHi", f"{max(G3[q] for q in common):.2f}")
 
+# does the free rule beat a trained head on a second training run?
+rb, _ = pick("raterank_BEST_compare.json")
+if rb:
+    qs_ = sorted(rb["raterank"], key=int)
+    d_ = [(q, rb["raterank"][q] - rb["router"][q]) for q in qs_
+          if q in rb["router"]]
+    g_ = [(q, rb["a_oracle"][q] - rb["raterank"][q]) for q in qs_]
+    mac("BestRankWinsN", str(sum(1 for _, v in d_ if v > 0)))
+    mac("BestRankOfN", str(len(d_)))
+    mac("BestRankBy", f"{max(v for _, v in d_):.1f}")
+    mac("BestRankToOracle", f"{max(v for _, v in g_):.1f}")
+    lines = [r"\begin{tabular}{lrrr}", r"\toprule",
+             r"$q$ & A signalled & B router & bits, 0 params \\", r"\midrule"]
+    for q in qs_:
+        v = rb["raterank"][q]
+        beats = q in rb["router"] and v > rb["router"][q]
+        lines.append(f"{q} & {rb['a_oracle'][q]:.1f} & "
+                     f"{rb['router'].get(q, float('nan')):.1f} & "
+                     + (f"\\textbf{{{v:.1f}}}" if beats else f"{v:.1f}")
+                     + r" \\")
+    lines += [r"\bottomrule", r"\end{tabular}"]
+    w("raterank_best.tex", "\n".join(lines))
+
 # ------------------------------------------------------------------- blend
 print("blend")
 cb, _ = pick("combined_RECIPE512_b01.json")

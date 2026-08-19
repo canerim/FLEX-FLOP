@@ -208,6 +208,16 @@ if hy and hv3:
         claim("gini: rates where the retrain concentrates regret", 4,
               sum(1 for q in common if G3[q] > G2[q]), 0)
 
+# ---- the free rule on a second training run --------------------------------
+rb = J("raterank_BEST_compare.json")
+if rb:
+    d_ = [rb["raterank"][q] - rb["router"][q] for q in rb["raterank"]
+          if q in rb["router"]]
+    g_ = [rb["a_oracle"][q] - rb["raterank"][q] for q in rb["raterank"]]
+    claim("BEST: rates the free rule wins", 4, sum(1 for v in d_ if v > 0), 0)
+    claim("BEST: best margin over the head", 7.2, max(d_), 0.1)
+    claim("BEST: worst gap to the oracle", 3.1, max(g_), 0.1)
+
 # ---- blend ----------------------------------------------------------------
 cb = J("combined_RECIPE512_b01.json")
 if cb:

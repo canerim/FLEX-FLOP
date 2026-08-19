@@ -535,6 +535,12 @@ def content(colw, fullw):
         r"wrongly, plus loss-free load balancing [16] biased toward the "
         r"oracle's own exit distribution rather than toward uniform.")
     h2("3.5 Training")
+    figure("training_scheme.png",
+           r"<b>Figure 4. Training.</b> One forward pass produces all K "
+           r"reconstructions, so the ladder is trained as one object rather "
+           r"than as K models. The encoder side — 61.5% of the parameters — is "
+           r"frozen, which is what makes the released decoder and ours "
+           r"comparable on the <i>same</i> latent.")
     par(r"All exits are decoded every step and the objective is L = L_RD + "
         r"w_a·L_anchor + w_d·L_distill. L_RD is the released rate-distortion "
         r"loss with MSE averaged over exits. L_anchor pins the deepest exit to "
@@ -1031,6 +1037,20 @@ def content(colw, fullw):
         r"falls, never the shape of its trade-off. That is the ceiling this "
         r"baseline sits at, and it is the part a learned head should be earning "
         r"its parameters on. Ours earns it at high rate and does not at low.")
+    tbl("raterank_best",
+        r"<b>Table 9. The same comparison on a second training run</b> (BEST), "
+        r"0.1 dB, same test set. Bold where the parameter-free rule beats that "
+        r"run's own trained head.")
+    par(r"<b>It replicates, and more strongly, on a second training run.</b> On "
+        r"BEST — a separate recipe at a different epoch, with its own router "
+        r"trained the same way — the free rule beats the trained head at "
+        r"\BestRankWinsN of \BestRankOfN rates, by up to \BestRankBy points, "
+        r"and comes within \BestRankToOracle points of the <i>oracle</i> "
+        r"everywhere. Whether a learned head is worth its parameters is "
+        r"therefore not settled by our head: on one checkpoint it wins narrowly "
+        r"at low rate, on another it loses badly at four rates out of five. "
+        r"What does not vary is that the free rule is close to the oracle on "
+        r"both.")
     par(r"Per-block bit allocation is a standard quantity in learned "
         r"compression, where it is something to <i>choose</i>: block-level rate "
         r"control sets it so that complex regions get more bits [42]. We read "
