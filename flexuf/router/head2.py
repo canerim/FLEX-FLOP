@@ -85,8 +85,24 @@ class StemRouterHeadV2(nn.Module):
         q = (qp.reshape(-1, 1).float() / 63.0).repeat_interleave(n_per, 0)
         logits = self.mlp(torch.cat([a, b, q], dim=1)) + self.bias[None, :]
         if self.min_exit > 0:
+            # -inf, not -1e4. A constant sentinel is a mask only while the
+            # head's own logits stay well above it, and this head's did not:
+            # nothing in a cross-entropy or a regret objective penalises a
+            # common offset, one drifted in during training, and the raw
+            # outputs settled near -10000. A typical row then read
+            #
+            #   [-10000.0, -10000.0, -10044.5, -10003.8, -10011.1, -10018.7]
+            #
+            # where the two "masked" entries are the LARGEST. After softmax
+            # they held nearly all the mass, argmax picked one, and the caller's
+            # clamp turned it into the cheapest real exit -- so a large share of
+            # every configuration-B allocation went to the cheapest rung for a
+            # reason unrelated to the tile (DECISIONS 89).
+            #
+            # -inf cannot drift. The row always has min_exit < num_exits finite
+            # entries, so softmax and cross-entropy stay well defined.
             logits = logits.clone()
-            logits[:, : self.min_exit] = -1e4
+            logits[:, : self.min_exit] = float("-inf")
         return logits
 
     @torch.no_grad()
@@ -104,7 +120,8 @@ class StemRouterHeadV2(nn.Module):
         self.bias -= self.bias.mean()
 
 
-def oracle_ce_loss(logits, mses, costs, lam: float, label_smooth: float = 0.0):
+def oracle_ce_loss(logits, mses, costs, lam: float, label_smooth: float = 0.0,
+                   min_exit: int = 0):
     """Cost-sensitive cross-entropy to the oracle's choice.
 
     Plain CE treats every tile equally, but they are not: for many tiles two
@@ -117,6 +134,13 @@ def oracle_ce_loss(logits, mses, costs, lam: float, label_smooth: float = 0.0):
     """
     lag = mses + lam * costs[None, :]
     best, k = lag.min(dim=1)
+    # Exits below the split depth do not exist: `tiled_exit_mses` fills those
+    # columns with the same decode as exit `min_exit`, and their costs are equal
+    # too, so argmin can land on one of them arbitrarily. Since the mask is now
+    # -inf, a label there would make the cross-entropy infinite. They are
+    # duplicates of `min_exit`, so clamping is exact rather than a repair.
+    if min_exit > 0:
+        k = k.clamp(min=min_exit)
     # How much is at stake on this tile: spread between best and worst option.
     stake = (lag.max(dim=1).values - best)
     w = stake / stake.mean().clamp_min(1e-12)

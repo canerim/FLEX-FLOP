@@ -86,7 +86,8 @@ while step < a.steps:
         n = M.shape[0]; tr = torch.arange(n, device=dev) % 2 == 0
         head.train()
         logits = head(stem, y, sc, qp, cfg.feature_patch, cfg.latent_patch)
-        ce, k_star, _ = oracle_ce_loss(logits[tr], M[tr], cost, a.lam)
+        ce, k_star, _ = oracle_ce_loss(logits[tr], M[tr], cost, a.lam,
+                                       min_exit=cfg.split_depth)
         reg = regret_objective(M[tr], logits[tr], cost, lam=a.lam, hard=True)
         loss = ce + a.alpha * reg["loss"]
         opt.zero_grad(set_to_none=True); loss.backward()
