@@ -1,0 +1,45 @@
+{
+  "video_ld_recon_head": {
+    "0_blocks_plus_1x1_head": {
+      "rf_radius_feature_px": 0,
+      "seam_band_rgb_px_per_edge": 0
+    },
+    "1_blocks_plus_1x1_head": {
+      "rf_radius_feature_px": 1,
+      "seam_band_rgb_px_per_edge": 8
+    },
+    "2_blocks_plus_1x1_head": {
+      "rf_radius_feature_px": 2,
+      "seam_band_rgb_px_per_edge": 16
+    },
+    "3_blocks_plus_1x1_head": {
+      "rf_radius_feature_px": 3,
+      "seam_band_rgb_px_per_edge": 24
+    }
+  },
+  "intra_dec_trunk_plus_head": {
+    "0_blocks_plus_dcb_head": {
+      "rf_radius_feature_px": 1,
+      "seam_band_rgb_px_per_edge": 8
+    },
+    "2_blocks_plus_dcb_head": {
+      "rf_radius_feature_px": 3,
+      "seam_band_rgb_px_per_edge": 24
+    },
+    "4_blocks_plus_dcb_head": {
+      "rf_radius_feature_px": 5,
+      "seam_band_rgb_px_per_edge": 40
+    },
+    "8_blocks_plus_dcb_head": {
+      "rf_radius_feature_px": 9,
+      "seam_band_rgb_px_per_edge": 72
+    },
+    "12_blocks_plus_dcb_head": {
+      "rf_radius_feature_px": 13,
+      "seam_band_rgb_px_per_edge": 104
+    }
+  },
+  "tile_rgb_px": 128,
+  "checkpoint": "/home/can_karsal/DCVC/checkpoints/cvpr2026_video_ld.pth.tar",
+  "checkpoint_epoch": null
+}

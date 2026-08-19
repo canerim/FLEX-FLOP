@@ -1,0 +1,760 @@
+{
+  "what": "resolution-adaptive tile size, spliced from per-class measurements that already exist",
+  "rule": {
+    "UVG": 256,
+    "MCL-JCV": 256,
+    "HEVC_B": 256,
+    "HEVC_E": 256,
+    "HEVC_C": 128,
+    "HEVC_D": 128
+  },
+  "budget_db": 0.1,
+  "db_convention": "per-frame, as computed by scripts/per_class.py: 10log10 of delivered tiled-decode frame MSE over untiled reference frame MSE, averaged over frames, not pooled",
+  "measured_not_modelled": "dB is measured off the delivered decode; saving is the realised exit-cost mean of the assignment the bisection actually chose on the deployed tiled path",
+  "n_sequences": 53,
+  "sequences_per_class": {
+    "MCL-JCV": 30,
+    "UVG": 7,
+    "HEVC_B": 5,
+    "HEVC_E": 3,
+    "HEVC_C": 4,
+    "HEVC_D": 4
+  },
+  "n_frames": 53,
+  "sources": {
+    "uniform_256": {
+      "file": "results/per_class_RECIPE512.json",
+      "path": "runs/RECIPE512/ckpt_PAPER.pth.tar",
+      "epoch": 0,
+      "step": null,
+      "cumulative_step": 47451,
+      "pinned": true,
+      "ckpt_epoch_recorded": 0,
+      "tile_px": 256
+    },
+    "uniform_128": {
+      "file": "results/per_class_BEST128.json",
+      "path": "runs/BEST128/ckpt_step.pth.tar",
+      "epoch": 1,
+      "step": 24000,
+      "cumulative_step": 71451,
+      "pinned": false,
+      "ckpt_epoch_recorded": 1,
+      "tile_px": 128
+    },
+    "uniform_256_epoch1": {
+      "file": "results/per_class_RECIPE512_e1.json",
+      "path": "runs/RECIPE512/ckpt_PIN_e1.pth.tar",
+      "epoch": 1,
+      "step": null,
+      "cumulative_step": 94902,
+      "pinned": true,
+      "ckpt_epoch_recorded": 1,
+      "tile_px": 256
+    }
+  },
+  "per_qp": [
+    {
+      "qp": 0,
+      "budget_db": 0.1,
+      "lam_256": 5.125999450683594e-05,
+      "lam_128": 4.220008850097656e-05,
+      "lam_256_epoch1": 5.173683166503906e-05,
+      "classes": [
+        {
+          "cls": "MCL-JCV",
+          "res": "1920x1080",
+          "n_sequences": 30,
+          "tiles_256": 40,
+          "tiles_128": 135,
+          "adaptive_tile_px": 256,
+          "saving_256_pct": 33.71747752030691,
+          "saving_128_pct": 34.32635426521301,
+          "saving_adaptive_pct": 33.71747752030691,
+          "delta_adaptive_minus_256": 0.0,
+          "delta_128_minus_256": 0.6088767449061052,
+          "db_256": 0.11600327671815952,
+          "db_128": 0.11029418439914783,
+          "db_adaptive": 0.11600327671815952,
+          "saving_256_epoch1_pct": 34.48178907235464,
+          "one_epoch_of_training_pts": 0.7643115520477295,
+          "delta_128_minus_256_epoch1": -0.15543480714162428,
+          "vs_training_bracket": "inside"
+        },
+        {
+          "cls": "UVG",
+          "res": "1920x1080",
+          "n_sequences": 7,
+          "tiles_256": 40,
+          "tiles_128": 135,
+          "adaptive_tile_px": 256,
+          "saving_256_pct": 30.621492862701416,
+          "saving_128_pct": 32.94409343174526,
+          "saving_adaptive_pct": 30.621492862701416,
+          "delta_adaptive_minus_256": 0.0,
+          "delta_128_minus_256": 2.3226005690438427,
+          "db_256": 0.10124666030917849,
+          "db_128": 0.10811153160674232,
+          "db_adaptive": 0.10124666030917849,
+          "saving_256_epoch1_pct": 32.46886134147644,
+          "one_epoch_of_training_pts": 1.8473684787750244,
+          "delta_128_minus_256_epoch1": 0.4752320902688183,
+          "vs_training_bracket": "above"
+        },
+        {
+          "cls": "HEVC_B",
+          "res": "1920x1080",
+          "n_sequences": 5,
+          "tiles_256": 40,
+          "tiles_128": 135,
+          "adaptive_tile_px": 256,
+          "saving_256_pct": 31.10086441040039,
+          "saving_128_pct": 32.128742933273315,
+          "saving_adaptive_pct": 31.10086441040039,
+          "delta_adaptive_minus_256": 0.0,
+          "delta_128_minus_256": 1.0278785228729248,
+          "db_256": 0.08002269715070724,
+          "db_128": 0.07643472403287888,
+          "db_adaptive": 0.08002269715070724,
+          "saving_256_epoch1_pct": 32.15427279472351,
+          "one_epoch_of_training_pts": 1.0534083843231201,
+          "delta_128_minus_256_epoch1": -0.025529861450195312,
+          "vs_training_bracket": "inside"
+        },
+        {
+          "cls": "HEVC_E",
+          "res": "1280x720",
+          "n_sequences": 3,
+          "tiles_256": 15,
+          "tiles_128": 60,
+          "adaptive_tile_px": 256,
+          "saving_256_pct": 29.10226782162984,
+          "saving_128_pct": 32.588714361190796,
+          "saving_adaptive_pct": 29.10226782162984,
+          "delta_adaptive_minus_256": 0.0,
+          "delta_128_minus_256": 3.486446539560955,
+          "db_256": 0.10538756599028905,
+          "db_128": 0.1271337370077769,
+          "db_adaptive": 0.10538756599028905,
+          "saving_256_epoch1_pct": 31.815238793690998,
+          "one_epoch_of_training_pts": 2.7129709720611572,
+          "delta_128_minus_256_epoch1": 0.7734755674997977,
+          "vs_training_bracket": "above"
+        },
+        {
+          "cls": "HEVC_C",
+          "res": "832x480",
+          "n_sequences": 4,
+          "tiles_256": 8,
+          "tiles_128": 28,
+          "adaptive_tile_px": 128,
+          "saving_256_pct": 18.040496110916138,
+          "saving_128_pct": 17.58580356836319,
+          "saving_adaptive_pct": 17.58580356836319,
+          "delta_adaptive_minus_256": -0.454692542552948,
+          "delta_128_minus_256": -0.454692542552948,
+          "db_256": 0.06201276183128357,
+          "db_128": 0.06709883641451597,
+          "db_adaptive": 0.06709883641451597,
+          "saving_256_epoch1_pct": 18.564388155937195,
+          "one_epoch_of_training_pts": 0.5238920450210571,
+          "delta_128_minus_256_epoch1": -0.9785845875740051,
+          "vs_training_bracket": "below"
+        },
+        {
+          "cls": "HEVC_D",
+          "res": "416x240",
+          "n_sequences": 4,
+          "tiles_256": 2,
+          "tiles_128": 8,
+          "adaptive_tile_px": 128,
+          "saving_256_pct": 8.835864067077637,
+          "saving_128_pct": 13.667014241218567,
+          "saving_adaptive_pct": 13.667014241218567,
+          "delta_adaptive_minus_256": 4.83115017414093,
+          "delta_128_minus_256": 4.83115017414093,
+          "db_256": 0.02848207321949303,
+          "db_128": 0.04973675310611725,
+          "db_adaptive": 0.04973675310611725,
+          "saving_256_epoch1_pct": 10.583080351352692,
+          "one_epoch_of_training_pts": 1.747216284275055,
+          "delta_128_minus_256_epoch1": 3.0839338898658752,
+          "vs_training_bracket": "above"
+        }
+      ],
+      "set_mean_saving_pct": {
+        "uniform_256": 29.739459280697805,
+        "uniform_128": 31.015479452205152,
+        "adaptive": 30.069757969874257,
+        "uniform_256_epoch1": 30.840427470657062,
+        "adaptive_vs_epoch1": 30.999321757622486
+      },
+      "set_mean_delta_adaptive_minus_256": 0.3302986891764519,
+      "set_mean_delta_adaptive_minus_256_epoch1": 0.15889428696542396,
+      "class_mean_saving_pct": {
+        "uniform_256": 25.23641046550539,
+        "uniform_128": 27.206787133500693,
+        "adaptive": 25.965820070770054
+      },
+      "class_mean_delta_adaptive_minus_256": 0.7294096052646637,
+      "set_mean_delivered_db": {
+        "uniform_256": 0.09937887637050084,
+        "uniform_128": 0.09993440457531866,
+        "adaptive": 0.10136685783992398
+      },
+      "overall_saving_source_256": 29.739459280697805,
+      "overall_saving_source_128": 31.015479452205152,
+      "overall_saving_source_256_epoch1": 30.840427470657062
+    },
+    {
+      "qp": 32,
+      "budget_db": 0.1,
+      "lam_256": 9.059906005859375e-06,
+      "lam_128": 7.3909759521484375e-06,
+      "lam_256_epoch1": 9.059906005859375e-06,
+      "classes": [
+        {
+          "cls": "MCL-JCV",
+          "res": "1920x1080",
+          "n_sequences": 30,
+          "tiles_256": 40,
+          "tiles_128": 135,
+          "adaptive_tile_px": 256,
+          "saving_256_pct": 26.15345637003581,
+          "saving_128_pct": 20.53581376870473,
+          "saving_adaptive_pct": 26.15345637003581,
+          "delta_adaptive_minus_256": 0.0,
+          "delta_128_minus_256": -5.617642601331077,
+          "db_256": 0.11523342846582334,
+          "db_128": 0.11265803171942632,
+          "db_adaptive": 0.11523342846582334,
+          "saving_256_epoch1_pct": 27.160018881162006,
+          "one_epoch_of_training_pts": 1.006562511126198,
+          "delta_128_minus_256_epoch1": -6.624205112457275,
+          "vs_training_bracket": "below"
+        },
+        {
+          "cls": "UVG",
+          "res": "1920x1080",
+          "n_sequences": 7,
+          "tiles_256": 40,
+          "tiles_128": 135,
+          "adaptive_tile_px": 256,
+          "saving_256_pct": 23.078478234154836,
+          "saving_128_pct": 16.73372302736555,
+          "saving_adaptive_pct": 23.078478234154836,
+          "delta_adaptive_minus_256": 0.0,
+          "delta_128_minus_256": -6.344755206789287,
+          "db_256": 0.09845828371388572,
+          "db_128": 0.0873211074088301,
+          "db_adaptive": 0.09845828371388572,
+          "saving_256_epoch1_pct": 24.795992033822195,
+          "one_epoch_of_training_pts": 1.7175137996673584,
+          "delta_128_minus_256_epoch1": -8.062269006456646,
+          "vs_training_bracket": "below"
+        },
+        {
+          "cls": "HEVC_B",
+          "res": "1920x1080",
+          "n_sequences": 5,
+          "tiles_256": 40,
+          "tiles_128": 135,
+          "adaptive_tile_px": 256,
+          "saving_256_pct": 18.174376487731934,
+          "saving_128_pct": 12.940776348114014,
+          "saving_adaptive_pct": 18.174376487731934,
+          "delta_adaptive_minus_256": 0.0,
+          "delta_128_minus_256": -5.23360013961792,
+          "db_256": 0.07182767540216446,
+          "db_128": 0.07419347614049912,
+          "db_adaptive": 0.07182767540216446,
+          "saving_256_epoch1_pct": 19.231995344161987,
+          "one_epoch_of_training_pts": 1.0576188564300537,
+          "delta_128_minus_256_epoch1": -6.291218996047974,
+          "vs_training_bracket": "below"
+        },
+        {
+          "cls": "HEVC_E",
+          "res": "1280x720",
+          "n_sequences": 3,
+          "tiles_256": 15,
+          "tiles_128": 60,
+          "adaptive_tile_px": 256,
+          "saving_256_pct": 18.415528535842896,
+          "saving_128_pct": 17.338528235753376,
+          "saving_adaptive_pct": 18.415528535842896,
+          "delta_adaptive_minus_256": 0.0,
+          "delta_128_minus_256": -1.0770003000895194,
+          "db_256": 0.11967169990142186,
+          "db_128": 0.12839554250240326,
+          "db_adaptive": 0.11967169990142186,
+          "saving_256_epoch1_pct": 21.39686147371928,
+          "one_epoch_of_training_pts": 2.9813329378763846,
+          "delta_128_minus_256_epoch1": -4.058333237965904,
+          "vs_training_bracket": "below"
+        },
+        {
+          "cls": "HEVC_C",
+          "res": "832x480",
+          "n_sequences": 4,
+          "tiles_256": 8,
+          "tiles_128": 28,
+          "adaptive_tile_px": 128,
+          "saving_256_pct": 1.6701042652130127,
+          "saving_128_pct": 1.1957794427871704,
+          "saving_adaptive_pct": 1.1957794427871704,
+          "delta_adaptive_minus_256": -0.4743248224258423,
+          "delta_128_minus_256": -0.4743248224258423,
+          "db_256": 0.061574848368763924,
+          "db_128": 0.0728734964504838,
+          "db_adaptive": 0.0728734964504838,
+          "saving_256_epoch1_pct": 2.5437116622924805,
+          "one_epoch_of_training_pts": 0.8736073970794678,
+          "delta_128_minus_256_epoch1": -1.34793221950531,
+          "vs_training_bracket": "below"
+        },
+        {
+          "cls": "HEVC_D",
+          "res": "416x240",
+          "n_sequences": 4,
+          "tiles_256": 2,
+          "tiles_128": 8,
+          "adaptive_tile_px": 128,
+          "saving_256_pct": 2.5437131524086,
+          "saving_128_pct": 0.7964968681335449,
+          "saving_adaptive_pct": 0.7964968681335449,
+          "delta_adaptive_minus_256": -1.747216284275055,
+          "delta_128_minus_256": -1.747216284275055,
+          "db_256": 0.046720463782548904,
+          "db_128": 0.06463651265949011,
+          "db_adaptive": 0.06463651265949011,
+          "saving_256_epoch1_pct": 2.5437131524086,
+          "one_epoch_of_training_pts": 0.0,
+          "delta_128_minus_256_epoch1": -1.747216284275055,
+          "vs_training_bracket": "below"
+        }
+      ],
+      "set_mean_saving_pct": {
+        "uniform_256": 20.92692031050628,
+        "uniform_128": 16.18677445177762,
+        "adaptive": 20.75925683075527,
+        "uniform_256_epoch1": 22.05797681268656,
+        "adaptive_vs_epoch1": 21.824380699193703
+      },
+      "set_mean_delta_adaptive_minus_256": -0.1676634797510097,
+      "set_mean_delta_adaptive_minus_256_epoch1": -0.23359611349285814,
+      "class_mean_saving_pct": {
+        "uniform_256": 15.005942840897847,
+        "uniform_128": 11.59018628180973,
+        "adaptive": 14.635685989781031
+      },
+      "class_mean_delta_adaptive_minus_256": -0.3702568511168156,
+      "set_mean_delivered_db": {
+        "uniform_256": 0.09995368991117433,
+        "uniform_128": 0.09994684430366417,
+        "adaptive": 0.10215857270050724
+      },
+      "overall_saving_source_256": 20.92692031050628,
+      "overall_saving_source_128": 16.18677445177762,
+      "overall_saving_source_256_epoch1": 22.05797681268656
+    },
+    {
+      "qp": 63,
+      "budget_db": 0.1,
+      "lam_256": 2.86102294921875e-06,
+      "lam_128": 3.337860107421875e-06,
+      "lam_256_epoch1": 2.86102294921875e-06,
+      "classes": [
+        {
+          "cls": "MCL-JCV",
+          "res": "1920x1080",
+          "n_sequences": 30,
+          "tiles_256": 40,
+          "tiles_128": 135,
+          "adaptive_tile_px": 256,
+          "saving_256_pct": 20.150088667869568,
+          "saving_128_pct": 11.013404130935669,
+          "saving_adaptive_pct": 20.150088667869568,
+          "delta_adaptive_minus_256": 0.0,
+          "delta_128_minus_256": -9.136684536933899,
+          "db_256": 0.10838673071314892,
+          "db_128": 0.10537943945576747,
+          "db_adaptive": 0.10838673071314892,
+          "saving_256_epoch1_pct": 21.32857898871104,
+          "one_epoch_of_training_pts": 1.1784903208414725,
+          "delta_128_minus_256_epoch1": -10.315174857775371,
+          "vs_training_bracket": "below"
+        },
+        {
+          "cls": "UVG",
+          "res": "1920x1080",
+          "n_sequences": 7,
+          "tiles_256": 40,
+          "tiles_128": 135,
+          "adaptive_tile_px": 256,
+          "saving_256_pct": 15.489484582628522,
+          "saving_128_pct": 7.294609716960362,
+          "saving_adaptive_pct": 15.489484582628522,
+          "delta_adaptive_minus_256": 0.0,
+          "delta_128_minus_256": -8.194874865668162,
+          "db_256": 0.09508251984204565,
+          "db_128": 0.07926291919180325,
+          "db_adaptive": 0.09508251984204565,
+          "saving_256_epoch1_pct": 18.290884154183523,
+          "one_epoch_of_training_pts": 2.8013995715550006,
+          "delta_128_minus_256_epoch1": -10.99627443722316,
+          "vs_training_bracket": "below"
+        },
+        {
+          "cls": "HEVC_B",
+          "res": "1920x1080",
+          "n_sequences": 5,
+          "tiles_256": 40,
+          "tiles_128": 135,
+          "adaptive_tile_px": 256,
+          "saving_256_pct": 9.664366245269775,
+          "saving_128_pct": 4.579495191574097,
+          "saving_adaptive_pct": 9.664366245269775,
+          "delta_adaptive_minus_256": 0.0,
+          "delta_128_minus_256": -5.084871053695679,
+          "db_256": 0.06697664856910705,
+          "db_128": 0.06740686744451523,
+          "db_adaptive": 0.06697664856910705,
+          "saving_256_epoch1_pct": 10.489097833633423,
+          "one_epoch_of_training_pts": 0.8247315883636475,
+          "delta_128_minus_256_epoch1": -5.909602642059326,
+          "vs_training_bracket": "below"
+        },
+        {
+          "cls": "HEVC_E",
+          "res": "1280x720",
+          "n_sequences": 3,
+          "tiles_256": 15,
+          "tiles_128": 60,
+          "adaptive_tile_px": 256,
+          "saving_256_pct": 15.474512179692587,
+          "saving_128_pct": 11.095486084620157,
+          "saving_adaptive_pct": 15.474512179692587,
+          "delta_adaptive_minus_256": 0.0,
+          "delta_128_minus_256": -4.37902609507243,
+          "db_256": 0.11844216038783391,
+          "db_128": 0.11032361537218094,
+          "db_adaptive": 0.11844216038783391,
+          "saving_256_epoch1_pct": 19.47026451428731,
+          "one_epoch_of_training_pts": 3.995752334594725,
+          "delta_128_minus_256_epoch1": -8.374778429667154,
+          "vs_training_bracket": "below"
+        },
+        {
+          "cls": "HEVC_C",
+          "res": "832x480",
+          "n_sequences": 4,
+          "tiles_256": 8,
+          "tiles_128": 28,
+          "adaptive_tile_px": 128,
+          "saving_256_pct": 2.5437116622924805,
+          "saving_128_pct": -0.07711350917816162,
+          "saving_adaptive_pct": -0.07711350917816162,
+          "delta_adaptive_minus_256": -2.620825171470642,
+          "delta_128_minus_256": -2.620825171470642,
+          "db_256": 0.0831026672385633,
+          "db_128": 0.08135789819061756,
+          "db_adaptive": 0.08135789819061756,
+          "saving_256_epoch1_pct": 2.5437116622924805,
+          "one_epoch_of_training_pts": 0.0,
+          "delta_128_minus_256_epoch1": -2.620825171470642,
+          "vs_training_bracket": "below"
+        },
+        {
+          "cls": "HEVC_D",
+          "res": "416x240",
+          "n_sequences": 4,
+          "tiles_256": 2,
+          "tiles_128": 8,
+          "adaptive_tile_px": 128,
+          "saving_256_pct": 2.5437131524086,
+          "saving_128_pct": 0.7964968681335449,
+          "saving_adaptive_pct": 0.7964968681335449,
+          "delta_adaptive_minus_256": -1.747216284275055,
+          "delta_128_minus_256": -1.747216284275055,
+          "db_256": 0.08961136359721422,
+          "db_128": 0.09655362740159035,
+          "db_adaptive": 0.09655362740159035,
+          "saving_256_epoch1_pct": 2.5437131524086,
+          "one_epoch_of_training_pts": 0.0,
+          "delta_128_minus_256_epoch1": -1.747216284275055,
+          "vs_training_bracket": "below"
+        }
+      ],
+      "set_mean_saving_pct": {
+        "uniform_256": 15.623096587522975,
+        "uniform_128": 8.311808671591416,
+        "adaptive": 15.29343308142896,
+        "uniform_256_epoch1": 16.964142277555645,
+        "adaptive_vs_epoch1": 16.63447877146163
+      },
+      "set_mean_delta_adaptive_minus_256": -0.32966350609401474,
+      "set_mean_delta_adaptive_minus_256_epoch1": -0.32966350609401474,
+      "class_mean_saving_pct": {
+        "uniform_256": 10.977646081693587,
+        "uniform_128": 5.783729747174278,
+        "adaptive": 10.24963917240264
+      },
+      "class_mean_delta_adaptive_minus_256": -0.7280069092909471,
+      "set_mean_delivered_db": {
+        "uniform_256": 0.0999668944837912,
+        "uniform_128": 0.09614858308912448,
+        "adaptive": 0.1003591582389935
+      },
+      "overall_saving_source_256": 15.623096587522975,
+      "overall_saving_source_128": 8.311808671591416,
+      "overall_saving_source_256_epoch1": 16.964142277555645
+    }
+  ],
+  "summary_over_qps": {
+    "qps": [
+      0,
+      32,
+      63
+    ],
+    "mean_set_mean_delta_adaptive_minus_256": -0.055676098889524184,
+    "mean_set_mean_delta_adaptive_minus_256_epoch1": -0.13478844420714964,
+    "mean_class_mean_delta_adaptive_minus_256": -0.12295138504769969
+  },
+  "confound": {
+    "training_gap_steps": 24000,
+    "training_gap_epochs": 0.5057849149649112,
+    "direction": "favours the 128 px column",
+    "steps_per_epoch": 47451,
+    "epoch_bracket_valid": true,
+    "bracket_low": {
+      "path": "runs/RECIPE512/ckpt_PAPER.pth.tar",
+      "epoch": 0,
+      "step": null,
+      "cumulative_step": 47451,
+      "pinned": true
+    },
+    "bracket_high": {
+      "path": "runs/RECIPE512/ckpt_PIN_e1.pth.tar",
+      "epoch": 1,
+      "step": null,
+      "cumulative_step": 94902,
+      "pinned": true
+    },
+    "bracketed": {
+      "path": "runs/BEST128/ckpt_step.pth.tar",
+      "epoch": 1,
+      "step": 24000,
+      "cumulative_step": 71451,
+      "pinned": false
+    },
+    "best128_trajectory": [
+      {
+        "cumulative_step": 8000,
+        "mean_saving_5_rates": 21.295131981372833,
+        "file": "signalled_BEST128_0817_1626.json"
+      },
+      {
+        "cumulative_step": 16000,
+        "mean_saving_5_rates": 21.639389157295227,
+        "file": "signalled_BEST128_0817_1947.json"
+      },
+      {
+        "cumulative_step": 20000,
+        "mean_saving_5_rates": 23.955864399671555,
+        "file": "signalled_BEST128_0817_2307.json"
+      },
+      {
+        "cumulative_step": 28000,
+        "mean_saving_5_rates": 23.8295758664608,
+        "file": "signalled_BEST128_0818_0225.json"
+      },
+      {
+        "cumulative_step": 36000,
+        "mean_saving_5_rates": 25.82378363609314,
+        "file": "signalled_BEST128_0818_0555.json"
+      },
+      {
+        "cumulative_step": 44000,
+        "mean_saving_5_rates": 26.154260754585266,
+        "file": "signalled_BEST128_0818_0918.json"
+      },
+      {
+        "cumulative_step": 47451,
+        "mean_saving_5_rates": 27.075640112161636,
+        "file": "signalled_BEST128_0818_1040.json"
+      },
+      {
+        "cumulative_step": 51451,
+        "mean_saving_5_rates": 26.821736574172974,
+        "file": "signalled_BEST128_0818_1247.json"
+      },
+      {
+        "cumulative_step": 59451,
+        "mean_saving_5_rates": 27.627951741218567,
+        "file": "signalled_BEST128_0818_1609.json"
+      }
+    ],
+    "best128_slope_pts_per_1k_steps": {
+      "whole_series": 0.12914615429989915,
+      "first_half": 0.1610616708863271,
+      "second_half": 0.07773783833985361,
+      "last_segment": 0.10077689588069916
+    },
+    "training_gap_worth_points": {
+      "low": 1.8657081201564865,
+      "high": 3.8654801012718507
+    },
+    "trajectory_test_set": "40 sequences, 1080p and 720p only, no 832x480 and no 416x240, so it does not constrain the two classes the adaptive rule switches",
+    "iso_2x2": {
+      "cells": {
+        "A_128w_128t": {
+          "ckpt": "runs/wdec_j2_p128_grid/ckpt_epo0.pth.tar",
+          "rows": {
+            "0": [
+              24.40329909324646,
+              0.0775655822828412
+            ],
+            "32": [
+              15.843712985515594,
+              0.0880146561190486
+            ],
+            "63": [
+              8.662499189376831,
+              0.09035320393741131
+            ]
+          }
+        },
+        "B_128w_256t": {
+          "ckpt": "runs/wdec_j2_p128_grid/ckpt_epo0.pth.tar",
+          "rows": {
+            "0": [
+              24.049158096313477,
+              0.09349229428917169
+            ],
+            "32": [
+              14.276602864265442,
+              0.09352711196988821
+            ],
+            "63": [
+              7.483997941017151,
+              0.09476959370076657
+            ]
+          }
+        },
+        "C_256w_256t": {
+          "ckpt": "runs/CONTROL/ckpt_epo0.pth.tar",
+          "rows": {
+            "0": [
+              11.553606390953064,
+              0.06221893187612295
+            ],
+            "32": [
+              9.883393347263336,
+              0.09614223092794419
+            ],
+            "63": [
+              5.052933394908905,
+              0.08633631020784378
+            ]
+          }
+        },
+        "D_256w_128t": {
+          "ckpt": "runs/CONTROL/ckpt_epo0.pth.tar",
+          "rows": {
+            "0": [
+              17.156749069690704,
+              0.09614921659231186
+            ],
+            "32": [
+              10.020938217639923,
+              0.08698424585163593
+            ],
+            "63": [
+              6.281830966472626,
+              0.08623699471354485
+            ]
+          }
+        }
+      },
+      "effects": {
+        "qps": [
+          0,
+          32,
+          63
+        ],
+        "tile_effect_128t_minus_256t_at_matched_weights": {
+          "min": 0.13754487037658691,
+          "max": 5.60314267873764,
+          "mean": 1.678222914536794
+        },
+        "weights_effect_128w_minus_256w_at_matched_tile": {
+          "min": 2.3806682229042053,
+          "max": 12.495551705360413,
+          "mean": 5.794969797134399
+        },
+        "caveat": "20 CTC frames, one signalled operating point per rate rather than a bisection, and the four cells do not deliver the same dB, so these are magnitudes and not a matched-dB comparison"
+      }
+    }
+  },
+  "not_measured": [
+    "a 128 px run trained to the same step as the 256 px run, which is the only thing that would remove the confound rather than bound it",
+    "the signalling cost of a per-resolution tile size, since neither source run encoded a tile-size field",
+    "re-bisection of lambda for the spliced configuration, which needs a per-class lambda sweep that results/ does not hold"
+  ],
+  "epoch_bracket_summary": {
+    "0": {
+      "above": [
+        "UVG",
+        "HEVC_E",
+        "HEVC_D"
+      ],
+      "inside": [
+        "MCL-JCV",
+        "HEVC_B"
+      ],
+      "below": [
+        "HEVC_C"
+      ]
+    },
+    "32": {
+      "above": [],
+      "inside": [],
+      "below": [
+        "MCL-JCV",
+        "UVG",
+        "HEVC_B",
+        "HEVC_E",
+        "HEVC_C",
+        "HEVC_D"
+      ]
+    },
+    "63": {
+      "above": [],
+      "inside": [],
+      "below": [
+        "MCL-JCV",
+        "UVG",
+        "HEVC_B",
+        "HEVC_E",
+        "HEVC_C",
+        "HEVC_D"
+      ]
+    }
+  },
+  "one_epoch_of_training_points_range": {
+    "0": [
+      0.5238920450210571,
+      2.7129709720611572
+    ],
+    "32": [
+      0.0,
+      2.9813329378763846
+    ],
+    "63": [
+      0.0,
+      3.995752334594725
+    ]
+  },
+  "note": "CONFOUND, STATED IN FULL, NOT HIDDEN. The 128 px column is runs/BEST128 and the 256 px column is runs/RECIPE512. Their meta.json differ in exactly two fields, rgb_patch (128 against 256) and latent_patch (8 against 16); recipe, dataset, batch size, exits, split depth, adapter kind and seam repair are identical. What is not matched is training time. The 256 px column is runs/RECIPE512/ckpt_PAPER.pth.tar at epoch 0, 47451 cumulative steps. The 128 px column is runs/BEST128/ckpt_step.pth.tar at epoch 1 step 24000, 71451 cumulative steps. The 128 px side carries 24000 extra steps, 0.51 of an epoch, and the advantage runs in ITS favour, so the mixture is not neutral. HOW MUCH IT COULD MATTER, measured three ways. (1) The bracket, which is the one that settles it: runs/RECIPE512/ckpt_PIN_e1.pth.tar at epoch 1, 94902 cumulative steps, measured by this same script on this same 53-sequence set at this same budget, straddles BEST128's training from above while ckpt_PAPER straddles it from below. Measured per class, one epoch of training is worth 0.52 to 2.71 at qp 0, 0.00 to 2.98 at qp 32, 0.00 to 4.00 at qp 63, in points, where the zero floors at qp 32 and qp 63 are HEVC_C and HEVC_D sitting on the 2.54 per cent saturation point at which every tile has already taken the last exit and no amount of training moves them. A 128 px number landing inside that bracket is a number tile size cannot be credited with; vs_training_bracket records the verdict per class per rate: qp 0: above UVG, HEVC_E, HEVC_D / inside MCL-JCV, HEVC_B / below HEVC_C; qp 32: above none / inside none / below MCL-JCV, UVG, HEVC_B, HEVC_E, HEVC_C, HEVC_D; qp 63: above none / inside none / below MCL-JCV, UVG, HEVC_B, HEVC_E, HEVC_C, HEVC_D. (2) BEST128's own trajectory puts 24000 steps at 1.9 to 3.9 points of mean saving, but that trajectory is on the 40-sequence subset, which holds no 832x480 and no 416x240 material, so it does not constrain the two classes the adaptive rule actually switches. (3) In the iso 2x2, the tile effect at matched weights spans 0.1 to 5.6 points while the weights effect at matched tile spans 2.4 to 12.5, means 1.7 against 5.8, so the weights axis is the larger one by about a factor of three, on a smaller and looser measurement that is not dB-matched across its cells. DOES THE DIRECTION SURVIVE. For the two classes this rule switches, yes, at qp 0 and at both ends of the bracket: HEVC_D 416x240 beats the 256 px run at epoch 0 and at epoch 1, and HEVC_C 832x480 loses to it at epoch 0 and at epoch 1. So the shape, a gain only where the tile count was 2 and a loss at 832x480, is not an artefact of the extra training. At qp 32 and qp 63 the 128 px column sits below the bottom of the bracket on every class, so its losses there survive outright and are if anything understated. What does NOT survive is any reading of this as a matched-training experiment. It is not one. In particular the qp 0 1080p and 720p picture is not the one section 87 reported: against the pinned ckpt_PAPER baseline the 128 px path is level or ahead at 1080p and 720p rather than behind, and only HEVC_C is clearly behind. TWO FURTHER CAVEATS. Each source run bisected lambda once over all 53 sequences, so the spliced adaptive column does not sit on 0.1 dB; its delivered set-mean dB is recorded per qp and must be read with the saving. And the 256 px column in DECISIONS.md section 87 is about 2.7 points higher per class than results/per_class_RECIPE512.json and is not reproducible from any file now in results/, nor from the epoch 1 measurement here, so section 87's deltas and this file's deltas are not the same comparison and should not be quoted together."
+}

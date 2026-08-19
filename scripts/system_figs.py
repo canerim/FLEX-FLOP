@@ -278,84 +278,76 @@ def adapters():
 
 # ===================================================  3. the seam-repair module
 def seam_module():
-    sd = ck.get("model", ck.get("state_dict", ck))
-    gk = [k for k in sd if "seam_repair" in k and "gate" in k]
-    G = sd[gk[0]].detach().float().squeeze().cpu().numpy() if gk else None
+    """What the gate learned, and where the module changes the error.
 
-    fig = plt.figure(figsize=(ns.W2, 2.9))
-    gs = fig.add_gridspec(1, 3, width_ratios=[1.05, 1, 1])
-    BX, BW = 0.16, 0.70
+    Both panels are a quantity against distance from the tile boundary, because
+    that is the only axis the module's claim is about: it is gated by position
+    within a tile, so it is supposed to act on the boundary ring and switch
+    itself off inside. The previous version of this figure spent one panel
+    redrawing the module as a stack of labelled boxes, which is the equation two
+    paragraphs below it, and one panel on the gate as a 32x32 image, in which a
+    one-cell ring reads as a hairline on a black square.
 
-    # ---- a: the module -----------------------------------------------------
-    a = fig.add_subplot(gs[0]); blank(a)
+    The gate is read from a PINNED checkpoint. It used to be read from
+    `runs/BEST/ckpt_eval.pth.tar`, which the watcher rewrites every epoch, so the
+    numbers the caption quoted could not be reproduced a day later.
+    """
+    import seam_spatial as ss
 
-    def stack(y, h, t1, t2, **kw):
-        a.add_patch(FancyBboxPatch((BX, y), BW, h,
-                    boxstyle="round,pad=0,rounding_size=0.02",
-                    facecolor=kw.get("fc_", "white"),
-                    edgecolor=kw.get("ec", ns.INK2), linewidth=0.7))
-        a.text(BX + BW/2, y + h/2 + 0.016, t1, ha="center", va="center", fontsize=6)
-        a.text(BX + BW/2, y + h/2 - 0.019, t2, ha="center", va="center",
-               fontsize=5, color=ns.INK2)
+    GCK = R / "runs/BEST/ckpt_epo0.pth.tar"
+    gck = torch.load(GCK, map_location="cpu", weights_only=False)
+    g = ss.gate_profile(gck)
+    g["checkpoint"], g["epoch"] = str(GCK), int(gck.get("epoch", -1))
+    e = json.loads((R / "results/seam_spatial_published.json").read_text())
 
-    a.text(0.0, 1.03, "GridSeamRepair", fontsize=7, weight="bold")
-    a.text(0.0, 0.955,
-           r"$\mathrm{Rep}(f)=f+G[i\,\mathrm{mod}\,P,\ j\,\mathrm{mod}\,P]"
-           r"\cdot\mathrm{PW}(\mathrm{WSiLU}(\mathrm{DW}_{3\times3}(f)))$",
-           fontsize=5.2)
-    stack(0.815, 0.075, "stitched canvas", "[384, H/8, W/8] — the whole frame",
-          fc_="#fff3d9")
-    arrow(a, 0.51, 0.815, 0.51, 0.740)
-    stack(0.655, 0.085, "3×3 depthwise", "replicate padding", fc_="#e7f6ef",
-          ec=ns.GREEN)
-    arrow(a, 0.51, 0.655, 0.51, 0.580)
-    stack(0.495, 0.085, "WSiLU → 1×1", "zero-init: identity at step 0",
-          fc_="#e7f6ef", ec=ns.GREEN)
-    arrow(a, 0.51, 0.495, 0.51, 0.420)
-    stack(0.335, 0.085, "× G[i mod P, j mod P]",
-          f"{cfg.feature_patch}² = {cfg.feature_patch**2} scalars, shared over "
-          "384 ch", fc_="#e7f6ef", ec=ns.GREEN)
-    arrow(a, 0.51, 0.335, 0.51, 0.260)
-    stack(0.175, 0.075, "⊕  residual add", "then the head")
-    arrow(a, 0.07, 0.8525, 0.07, 0.2125, style="-")
-    arrow(a, 0.07, 0.2125, 0.16, 0.2125)
-    a.text(0.51, 0.075, "0.95% of the decode  ·  0.0007% of the parameters",
-           fontsize=5.4, ha="center")
-    ns.panel(a, "a", dx=-0.02, dy=1.16)
+    fig, ax = plt.subplots(1, 2, figsize=(ns.W2, 2.4))
 
-    # ---- b: the trained gate ----------------------------------------------
-    a = fig.add_subplot(gs[1])
-    if G is not None:
-        im = a.imshow(G, cmap="magma")
-        cb = fig.colorbar(im, ax=a, fraction=0.046, pad=0.03)
-        cb.ax.tick_params(labelsize=5)
-        a.set_title(f"Gate G   ring {G.max():.2f}, interior {G.min():.3f}",
-                    fontsize=6, color=ns.INK2, loc="left")
+    # ---- a: what the gate learned ------------------------------------------
+    a = ax[0]
+    x = g["distance_px"]
+    # The shaded band is the spread across cells at the same distance, which is
+    # where the corner peak lives; the ring is not one number.
+    a.fill_between(x, g["trained_min"], g["trained_max"], color=ns.BLUE,
+                   alpha=0.15, lw=0)
+    a.plot(x, g["trained_mean"], marker="o", ms=2.5, color=ns.BLUE,
+           label="trained")
+    a.plot(x, g["init"], color=ns.INK2, lw=0.8, ls=(0, (3, 2)),
+           label="initialised")
+    a.set_xlim(0, g["tile_px"] / 2)
+    a.set_ylim(0, 1.05)
+    a.set_xlabel("distance from the tile boundary (px)")
+    a.set_ylabel("gate $G$")
+    a.legend(loc="upper right")
 
-    a.set_xlabel("j mod P"); a.set_ylabel("i mod P"); a.grid(False)
-    ns.panel(a, "b", dx=-0.22, dy=1.16)
-
-    # ---- c: where it actually acts -----------------------------------------
-    a = fig.add_subplot(gs[2])
-    bands = ["0–4", "4–16", "16–64", "64–128"]
-    change = [-0.27, 0.05, 0.04, 0.04]          # % change in MSE, repair ON vs OFF
-    share = [6.2, 17.3, 51.6, 25.0]
-    a.bar(range(4), change, width=0.62,
-          color=[ns.GREEN if c < 0 else ns.VERM for c in change])
-    for i, (c, sh) in enumerate(zip(change, share)):
-        a.text(i, c + (0.012 if c > 0 else -0.012), f"{sh:.0f}% of px",
-               fontsize=5, ha="center", color=ns.INK2,
-               va="bottom" if c > 0 else "top")
+    # ---- b: where it changes the error -------------------------------------
+    a = ax[1]
+    share, chg = e["share_pct"], e["change_pct"]
+    left = np.concatenate([[0.0], np.cumsum(share)[:-1]])
+    # Bar width is the share of pixels, so a bar's AREA is what its band
+    # contributes to the frame average. That is the whole argument in one
+    # picture: the win is a sliver and the loss is most of the frame.
+    a.bar(left, chg, width=share, align="edge", lw=0,
+          color=[ns.BLUE if c < 0 else ns.VERM for c in chg])
     a.axhline(0, color=ns.INK, lw=0.6)
-    a.set_xticks(range(4)); a.set_xticklabels(bands)
-    a.set_ylim(-0.33, 0.10)
-    a.set_xlabel("distance from the nearest tile boundary (px)")
-    a.set_ylabel("change in MSE with repair ON (%)")
-    a.set_title("Where it acts", fontsize=6, color=ns.INK2, loc="left")
-    ns.panel(a, "c", dx=-0.26, dy=1.16)
+    a.set_xlim(0, 100)
+    a.set_ylim(-0.30, 0.09)
+    a.set_xticks(left + np.asarray(share) / 2)
+    a.set_xticklabels([f"{b[0]}\u2013{b[1]}" for b in e["bands_px"]])
+    a.set_xlabel("distance from the tile boundary (px)")
+    a.set_ylabel("change in error, repair on (%)")
+    a.grid(False)
+    a.grid(True, axis="y")
 
-    fig.tight_layout()
+    for i, l in enumerate("ab"):
+        ns.panel(ax[i], l, dx=-0.22)
+    fig.tight_layout(w_pad=1.6)
     save(fig, "seam_module.png")
+
+    # Both panels' provenance in one place, so the next person does not have to
+    # work out which checkpoint the picture came from.
+    (R / "results/seam_module.json").write_text(json.dumps(
+        {"figure": "docs/figures/seam_module.png", "gate": g, "effect": e},
+        indent=1))
 
 
 # ==========================================================  4. how it is trained

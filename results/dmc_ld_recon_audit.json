@@ -1,0 +1,73 @@
+{
+  "checkpoint": "/home/can_karsal/DCVC/checkpoints/cvpr2026_video_ld.pth.tar",
+  "checkpoint_sha256": "263172f25e04f3db6fd95487e1895df6f0fc2a5084e6e21d9016934fcdabc799",
+  "checkpoint_epoch": null,
+  "checkpoint_epoch_note": "released weights: the file is a bare state_dict with no epoch, optimizer or step field, so provenance is path plus sha256",
+  "intra_checkpoint": "/home/can_karsal/DCVC/checkpoints/cvpr2026_image.pth.tar",
+  "intra_checkpoint_sha256": "b3b900de23f30e4fc437010ddffe6a5413a56d6cfd97fb6235adbcd2b6973302",
+  "device": "cuda:7",
+  "frame": [
+    1088,
+    1920
+  ],
+  "video_ld": {
+    "decode_side_total_gmac": 150.46530816,
+    "per_module_gmac": {
+      "feature_adaptor_m": 34.37592576,
+      "feature_extractor": 37.6221696,
+      "hyper_decoder": 1.230528,
+      "temporal_prior_encoder": 4.02020352,
+      "y_prior_fusion": 13.87957248,
+      "y_spatial_prior": 5.09915136,
+      "decoder": 30.0601344,
+      "recon_head": 24.17762304
+    },
+    "per_module_share_pct": {
+      "feature_adaptor_m": 22.846413023954824,
+      "feature_extractor": 25.003882994739083,
+      "hyper_decoder": 0.8178150930920873,
+      "temporal_prior_encoder": 2.6718474638187324,
+      "y_prior_fusion": 9.224433625085794,
+      "y_spatial_prior": 3.3889216207750197,
+      "decoder": 19.978116396129675,
+      "recon_head": 16.068569782404783
+    },
+    "recon_path_gmac": 54.23775744,
+    "recon_path_share_pct": 36.04668617853446,
+    "recon_submodule_gmac": {
+      "decoder.up": 1.06954752,
+      "decoder.conv1.0": 11.802624,
+      "decoder.conv1.1": 7.52443392,
+      "decoder.conv1.2": 7.52443392,
+      "decoder.conv2": 2.13909504,
+      "recon_head.conv.0": 7.52443392,
+      "recon_head.conv.1": 7.52443392,
+      "recon_head.conv.2": 7.52443392,
+      "recon_head.head": 1.60432128
+    },
+    "recon_submodule_share_of_decode_pct": {
+      "decoder.up": 0.710826657040889,
+      "decoder.conv1.0": 7.844083227111373,
+      "decoder.conv1.1": 5.000776598947817,
+      "decoder.conv1.2": 5.000776598947817,
+      "decoder.conv2": 1.421653314081778,
+      "recon_head.conv.0": 5.000776598947817,
+      "recon_head.conv.1": 5.000776598947817,
+      "recon_head.conv.2": 5.000776598947817,
+      "recon_head.head": 1.0662399855613336
+    }
+  },
+  "intra": {
+    "decoder_gmac": 453.54037248,
+    "submodule_gmac": {
+      "dec_1.0_upsample": 37.01219328,
+      "dec_1.1-12_trunk": 405.64260864,
+      "dec_2_head": 10.88557056
+    },
+    "submodule_share_pct": {
+      "dec_1.0_upsample": 8.16072736317033,
+      "dec_1.1-12_trunk": 89.43913998701137,
+      "dec_2_head": 2.4001326498182975
+    }
+  }
+}

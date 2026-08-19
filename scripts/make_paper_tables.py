@@ -18,14 +18,42 @@ QPS = [0, 16, 32, 48, 63]
 MACROS = {}
 
 
+# The checkpoint the paper is measured on. Pinned to an immutable name because
+# runs/*/ckpt_eval.pth.tar is overwritten every epoch by scripts/watch_ckpts.sh,
+# so a filename is not a checkpoint.
+PINNED = "ckpt_PAPER.pth.tar"
+
+
 def pick(*names):
-    for n in names:
-        p = RES / n
-        if p.exists():
-            print(f"    using {n}")
-            return json.load(open(p)), n
-    print(f"    MISSING: {names[0]}")
-    return None, None
+    """The best available candidate, by provenance rather than by list order.
+
+    Candidates used to be tried in the order written here, newest first by hand.
+    That ordering went stale: after scripts/remeasure_all.sh rewrote
+    router_RECIPE512_b01.json on the pinned checkpoint, the hand-ordered list
+    still preferred router_RECIPE512_b01_fixed.json from an earlier experiment,
+    so the A-versus-B table and every macro derived from it silently described a
+    decoder measured under the old cost model.
+
+    Prefer, in order: a file measured on the pinned checkpoint, then the most
+    recently written. Hand order only breaks ties.
+    """
+    found = [(n, RES / n) for n in names if (RES / n).exists()]
+    if not found:
+        print(f"    MISSING: {names[0]}")
+        return None, None
+
+    def rank(item):
+        n, p = item
+        try:
+            on_pin = PINNED in (json.load(open(p)).get("ckpt") or "")
+        except Exception:
+            on_pin = False
+        return (0 if on_pin else 1, -p.stat().st_mtime)
+
+    n, p = min(found, key=rank)
+    others = [m for m, _ in found if m != n]
+    print(f"    using {n}" + (f"  (over {', '.join(others)})" if others else ""))
+    return json.load(open(p)), n
 
 
 def w(name, body):

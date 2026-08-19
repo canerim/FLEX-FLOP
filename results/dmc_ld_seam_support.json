@@ -1,0 +1,73 @@
+{
+  "checkpoint": "/home/can_karsal/DCVC/checkpoints/cvpr2026_video_ld.pth.tar",
+  "checkpoint_epoch": null,
+  "note": "released weights, bare state_dict, no epoch field",
+  "tile_rgb_px": 128,
+  "video_ld_recon_head": {
+    "per_tile_blocks_1": {
+      "damaged_px_frac": 0.206787109375,
+      "seam_reach_rgb_px_per_edge": 64,
+      "damaged_col_offsets_in_tile": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        "..."
+      ],
+      "max_abs_diff": 1.963228702545166
+    },
+    "per_tile_blocks_2": {
+      "damaged_px_frac": 0.3896484375,
+      "seam_reach_rgb_px_per_edge": 64,
+      "damaged_col_offsets_in_tile": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        "..."
+      ],
+      "max_abs_diff": 2.3127593994140625
+    },
+    "per_tile_blocks_3": {
+      "damaged_px_frac": 0.548583984375,
+      "seam_reach_rgb_px_per_edge": 64,
+      "damaged_col_offsets_in_tile": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        "..."
+      ],
+      "max_abs_diff": 2.3398942947387695
+    }
+  },
+  "intra_dec": {
+    "per_tile_blocks_2": {
+      "damaged_px_frac": 0.548583984375,
+      "seam_reach_rgb_px_per_edge": 64,
+      "max_abs_diff": 1.9615416526794434
+    },
+    "per_tile_blocks_4": {
+      "damaged_px_frac": 0.794677734375,
+      "seam_reach_rgb_px_per_edge": 64,
+      "max_abs_diff": 1.9107731580734253
+    },
+    "per_tile_blocks_8": {
+      "damaged_px_frac": 0.988037109375,
+      "seam_reach_rgb_px_per_edge": 64,
+      "max_abs_diff": 2.5562968254089355
+    }
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "intra_frame0": {
+    "bpp": 0.1957777440547943,
+    "psnr_y_db": 37.697294844645796
+  },
+  "p_frame1": {
+    "bpp": 0.10623632371425629,
+    "psnr_y_db": 37.815645172870745
+  },
+  "p_frame2": {
+    "bpp": 0.08449392765760422,
+    "psnr_y_db": 37.43417122157036
+  },
+  "p_frame3": {
+    "bpp": 0.09198492020368576,
+    "psnr_y_db": 37.54836890650946
+  },
+  "checkpoint": "/home/can_karsal/DCVC/checkpoints/cvpr2026_video_ld.pth.tar",
+  "checkpoint_epoch": null,
+  "sequence": "/data10/shareddata/test_sequences/YUV/UVG/Beauty_1920x1080_120fps_420_8bit_YUV.yuv",
+  "qp": 32
+}

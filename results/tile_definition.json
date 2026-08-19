@@ -1,0 +1,164 @@
+{
+  "checkpoint": "/home/can_karsal/FLEX-UF/runs/RECIPE512/ckpt_PAPER.pth.tar",
+  "epoch": 0,
+  "config": {
+    "num_exits": 6,
+    "split_depth": 2,
+    "latent_patch": 16,
+    "latent_halo": 2,
+    "trunk_halo": 0,
+    "tile_coupling": false,
+    "tile_pad_mode": "replicate",
+    "seam_repair": "grid",
+    "adapter_kind": "scaled",
+    "adapter_expand": 4,
+    "full_frame_head": true,
+    "aux_weight": 1.0,
+    "aux_schedule": "constant",
+    "aux_warmup_epochs": 10,
+    "qp": 63
+  },
+  "device": "cpu",
+  "rgb_patch": 256,
+  "feature_patch": 32,
+  "latent_patch": 16,
+  "pixels_per_latent": 16,
+  "upsample_factor": 2,
+  "pad_site": "RGB frame, before the encoder (scripts/signalled_curve.py:169-170)",
+  "pad_mode": "replicate, bottom and right only: F.pad(x, (0, pw, 0, ph))",
+  "patchify_pads": "no: it asserts, feature map 40x40 is not divisible by patch 32",
+  "rows": [
+    {
+      "name": "1920x1080",
+      "W": 1920,
+      "H": 1080,
+      "rgb_patch": 256,
+      "feature_patch": 32,
+      "pad_right": 128,
+      "pad_bottom": 200,
+      "padded": [
+        2048,
+        1280
+      ],
+      "latent": [
+        128,
+        80
+      ],
+      "feature_in_patchify": [
+        256,
+        160
+      ],
+      "patch_arg": 32,
+      "nh": 5,
+      "nw": 8,
+      "tiles_measured": 40,
+      "tiles_tensor": 40,
+      "ceil_formula": 40,
+      "floor_formula": 28,
+      "recon": [
+        2048,
+        1280
+      ],
+      "seconds": 17.3
+    },
+    {
+      "name": "1280x720",
+      "W": 1280,
+      "H": 720,
+      "rgb_patch": 256,
+      "feature_patch": 32,
+      "pad_right": 0,
+      "pad_bottom": 48,
+      "padded": [
+        1280,
+        768
+      ],
+      "latent": [
+        80,
+        48
+      ],
+      "feature_in_patchify": [
+        160,
+        96
+      ],
+      "patch_arg": 32,
+      "nh": 3,
+      "nw": 5,
+      "tiles_measured": 15,
+      "tiles_tensor": 15,
+      "ceil_formula": 15,
+      "floor_formula": 10,
+      "recon": [
+        1280,
+        768
+      ],
+      "seconds": 4.3
+    },
+    {
+      "name": "832x480",
+      "W": 832,
+      "H": 480,
+      "rgb_patch": 256,
+      "feature_patch": 32,
+      "pad_right": 192,
+      "pad_bottom": 32,
+      "padded": [
+        1024,
+        512
+      ],
+      "latent": [
+        64,
+        32
+      ],
+      "feature_in_patchify": [
+        128,
+        64
+      ],
+      "patch_arg": 32,
+      "nh": 2,
+      "nw": 4,
+      "tiles_measured": 8,
+      "tiles_tensor": 8,
+      "ceil_formula": 8,
+      "floor_formula": 3,
+      "recon": [
+        1024,
+        512
+      ],
+      "seconds": 3.0
+    },
+    {
+      "name": "416x240",
+      "W": 416,
+      "H": 240,
+      "rgb_patch": 256,
+      "feature_patch": 32,
+      "pad_right": 96,
+      "pad_bottom": 16,
+      "padded": [
+        512,
+        256
+      ],
+      "latent": [
+        32,
+        16
+      ],
+      "feature_in_patchify": [
+        64,
+        32
+      ],
+      "patch_arg": 32,
+      "nh": 1,
+      "nw": 2,
+      "tiles_measured": 2,
+      "tiles_tensor": 2,
+      "ceil_formula": 2,
+      "floor_formula": 0,
+      "recon": [
+        512,
+        256
+      ],
+      "seconds": 0.9
+    }
+  ]
+}

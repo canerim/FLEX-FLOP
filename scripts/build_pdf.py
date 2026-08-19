@@ -24,6 +24,8 @@ from reportlab.platypus import (BaseDocTemplate, Frame, PageTemplate, Image,
                                 PageBreak)
 
 R = Path(__file__).resolve().parents[1]
+# Body frame height, the yardstick for "can this flowable share a column".
+FRAME_H = letter[1] - 1.4 * inch
 PAPER, FIGS, TABLES = R / "paper", R / "paper" / "figures", R / "paper" / "tables"
 
 # ---------------------------------------------------------------- macros
@@ -75,24 +77,36 @@ _EQN = [0]
 _EQ_DIR = R / "docs" / "figures" / "_eq"
 
 
-def _render_math(tex: str, fontsize: int = 11, dpi: int = 600) -> tuple:
+def _render_math(tex: str, fontsize: float = None, dpi: int = 600) -> tuple:
     """LaTeX math -> a tight transparent PNG, and its size in points.
 
     reportlab has no math engine, so display equations were being written as
     bold body text ("k*(t) = argmin_k [ D(t,k) + lambda c_k ]"), which is not
     what an equation looks like in a CVPR paper. matplotlib's mathtext renders
     the same source main.tex uses.
+
+    Two things have to match the page or the equation reads as a pasted-in
+    picture, which is what it was. `stix` is the Times-metric math font; the
+    default `dejavusans` set a sans-serif equation in a Times paper. And the
+    size is the body size -- mathtext points are typographic points and the PNG
+    is placed at its natural size (w/dpi*72), so a fontsize of 11 against 8.6pt
+    body rendered every equation 28% oversized.
     """
     import matplotlib
     matplotlib.use("Agg")
+    matplotlib.rcParams["mathtext.fontset"] = "stix"
     import matplotlib.pyplot as plt
+    if fontsize is None:
+        fontsize = BODY.fontSize
     _EQ_DIR.mkdir(parents=True, exist_ok=True)
     key = re.sub(r"[^a-zA-Z0-9]+", "_", tex)[:60] or "eq"
     out = _EQ_DIR / f"{key}.png"
     fig = plt.figure(figsize=(0.01, 0.01))
     fig.text(0, 0, f"${tex}$", fontsize=fontsize, color="black")
+    # The pad is what separates glyph from crop, and at 600 dpi 0.02in is 1.4pt
+    # of slack on every side that the centring afterwards has to guess at.
     fig.savefig(out, dpi=dpi, transparent=True, bbox_inches="tight",
-                pad_inches=0.02)
+                pad_inches=0.005)
     plt.close(fig)
     from PIL import Image as PILImage
     w, h = PILImage.open(out).size
@@ -109,22 +123,73 @@ def S(name, **kw):
 
 BODY = S("body")
 ABST = S("abst", fontSize=8.4, leading=10.0)
+# Headings are deliberately NOT keepWithNext. It is the right rule in a
+# single-column flow, but here the thing after a heading is usually a figure or
+# a table block of 100-160pt, so gluing them moves both: it took the short
+# columns from 2 to 7 (worst 55.4pt -> 105.1pt), split Table 7 from its caption
+# and still left a heading stranded. Three headings end a column; that is the
+# cheaper defect and it predates this pass.
 H1 = S("h1", fontName="Times-Bold", fontSize=11.5, leading=13,
        spaceBefore=9, spaceAfter=4, alignment=0)
 H2 = S("h2", fontName="Times-Bold", fontSize=9.6, leading=11,
        spaceBefore=7, spaceAfter=3, alignment=0)
-CAP = S("cap", fontSize=7.4, leading=8.8)
+CAP = S("cap", fontSize=7.4, leading=8.8, spaceAfter=6)
+# \abovedisplayskip/\belowdisplayskip: one body size of air on each side.
+DISPLAY_SKIP = BODY.fontSize
 TITLE = S("title", fontName="Times-Bold", fontSize=17, leading=20,
           alignment=TA_CENTER, spaceAfter=6)
 AUTH = S("auth", fontSize=10, leading=12, alignment=TA_CENTER, spaceAfter=12)
 
 
 # ------------------------------------------------------- LaTeX table -> flowable
+CELL_PAD = 3.0   # per side; reportlab's default 6 spent 48pt of a 251pt column
+
+
+def _col_widths(text_rows, ncol, width, fs):
+    """Column widths taken from the text that has to fit in them.
+
+    The old rule handed the first column a flat 34% (28% or 20% for wider
+    tables) and split the rest evenly, which is blind to what is in them. In
+    `static` that gave the q column 73pt of text space for 7pt of digits and
+    left Allocation 43pt for a 66pt label, so all 35 rows wrapped to two lines
+    and the table stood 599.6pt tall in a 691.2pt frame -- tall enough that it
+    could never share a column with anything, which is where page 6's blank
+    half came from. Measured, the whole table needs 208.6pt of the 251.3
+    available and nothing has to wrap at all.
+    """
+    from reportlab.pdfbase.pdfmetrics import stringWidth
+    nat = [1.0] * ncol
+    for r in text_rows:
+        for i, c in enumerate(r[:ncol]):
+            f = "Times-Bold" if "<b>" in c else "Times-Roman"
+            nat[i] = max(nat[i], stringWidth(re.sub(r"<[^>]+>", "", c), f, fs))
+    avail = width - 2 * CELL_PAD * ncol
+    tot = sum(nat)
+    if tot <= avail:
+        # Everything fits unwrapped; spend the slack in proportion so the table
+        # still spans the column instead of huddling on the left.
+        nat = [n + (avail - tot) * n / tot for n in nat]
+    else:
+        # Genuinely too wide. Shrink the roomiest columns towards a floor and
+        # let the longest text wrap, rather than scaling the narrow numeric
+        # columns into one character per line.
+        floor = min(avail / ncol, 2.6 * fs)
+        for _ in range(12):
+            free = [i for i, x in enumerate(nat) if x > floor]
+            if not free or abs(sum(nat) - avail) < 0.01:
+                break
+            fixed = sum(x for i, x in enumerate(nat) if i not in free)
+            k = (avail - fixed) / sum(nat[i] for i in free)
+            for i in free:
+                nat[i] = max(floor, nat[i] * k)
+    return [n + 2 * CELL_PAD for n in nat]
+
+
 def tex_table(name, width):
     p = TABLES / f"{name}.tex"
     if not p.exists():
         return Paragraph(f"<i>[{name} not generated]</i>", CAP)
-    rows, txt = [], p.read_text()
+    text_rows, txt = [], p.read_text()
     for line in txt.splitlines():
         line = line.strip()
         if (not line or line.startswith("\\begin") or line.startswith("\\end")
@@ -149,23 +214,27 @@ def tex_table(name, width):
         cells = [c.replace(r"\_", "_").replace("{", "").replace("}", "")
                  .replace(r"^\ast", "*").replace(r"^\dagger", "†")
                  .replace("\\", "") for c in cells]
-        fs = 7.2 if len(cells) <= 7 else 6.0
-        rows.append([Paragraph(c, S("cell", fontSize=fs, leading=fs * 1.16,
-                                    alignment=0 if i == 0 else 2))
-                     for i, c in enumerate(cells)])
-    if not rows:
+        text_rows.append(cells)
+    if not text_rows:
         return Spacer(1, 1)
-    ncol = max(len(r) for r in rows)
-    rows = [r + [Paragraph("", CAP)] * (ncol - len(r)) for r in rows]
-    first = 0.34 if ncol <= 4 else (0.28 if ncol <= 7 else 0.20)
-    cw = [width * first] + [width * (1 - first) / (ncol - 1)] * (ncol - 1)
-    t = Table(rows, colWidths=cw, hAlign="CENTER")
+    # One size for the whole table. This used to be recomputed per line, so a
+    # short trailing row silently set the font for every row above it.
+    ncol = max(len(r) for r in text_rows)
+    fs = 7.2 if ncol <= 7 else 6.0
+    text_rows = [r + [""] * (ncol - len(r)) for r in text_rows]
+    cw = _col_widths(text_rows, ncol, width, fs)
+    rows = [[Paragraph(c, S("cell", fontSize=fs, leading=fs * 1.16,
+                            alignment=0 if i == 0 else 2))
+             for i, c in enumerate(r)] for r in text_rows]
+    t = Table(rows, colWidths=cw, hAlign="CENTER", repeatRows=1)
     t.setStyle(TableStyle([
         ("LINEABOVE", (0, 0), (-1, 0), 0.8, colors.black),
         ("LINEBELOW", (0, 0), (-1, 0), 0.4, colors.black),
         ("LINEBELOW", (0, -1), (-1, -1), 0.8, colors.black),
         ("TOPPADDING", (0, 0), (-1, -1), 1.6),
         ("BOTTOMPADDING", (0, 0), (-1, -1), 1.6),
+        ("LEFTPADDING", (0, 0), (-1, -1), CELL_PAD),
+        ("RIGHTPADDING", (0, 0), (-1, -1), CELL_PAD),
         ("VALIGN", (0, 0), (-1, -1), "MIDDLE"),
     ]))
     return t
@@ -204,7 +273,8 @@ def fig(name, width, cap, maxh=None):
         iw, ih = maxh * w / h, maxh
     im = Image(str(p), width=iw, height=ih)
     im.hAlign = "CENTER"
-    return [im, Spacer(1, 3), Paragraph(sub(cap), CAP), Spacer(1, 6)]
+    im.spaceBefore = 6
+    return [im, Spacer(1, 3), Paragraph(sub(cap), CAP)]
 
 
 # ---------------------------------------------------------------- the content
@@ -239,282 +309,349 @@ def content(colw, fullw):
         A(Paragraph(t, H2))
 
     def tbl(name, cap):
-        A(KeepTogether([tex_table(name, colw), Spacer(1, 3),
-                        Paragraph(sub(_autonum(cap, _TABN, "Table")), CAP),
-                        Spacer(1, 6)]))
+        t = tex_table(name, colw)
+        t.spaceBefore = 6
+        block = [t, Spacer(1, 3),
+                 Paragraph(sub(_autonum(cap, _TABN, "Table")), CAP)]
+        # KeepTogether is right for a table that can still fit in a column
+        # somebody has already started writing in. Past about half the frame it
+        # cannot, so reportlab pushes it whole to the next frame and strands
+        # everything above it: `static` is 415.9pt of a 691.2pt frame and left
+        # 254.2pt of page 6's left column blank. Over that size let it break
+        # across the column the way a longtable does -- repeatRows=1 on the
+        # table reprints the header on the far side of the break.
+        if t.wrap(colw, FRAME_H)[1] > 0.5 * FRAME_H:
+            for f in block:
+                A(f)
+        else:
+            A(KeepTogether(block))
 
     def eq(tex, tag=True):
-        """A centred display equation with a right-aligned number."""
-        path, w, h = _render_math(tex)
+        """A display equation centred on the column, with a right-aligned number.
+
+        Three cells, not two. The old layout put the equation in a cell of
+        width colw-0.30in and the number in the remainder, so "centred" meant
+        centred on the column minus the number -- every equation sat 10.8pt
+        left of where the eye expects it. An empty cell of the tag's width now
+        balances the tag, which puts the middle cell's centre on the column's.
+        """
         _EQN[0] += 1
+        tagw = 0.34 * inch
+        avail = colw - 2 * tagw
+        path, w, h = _render_math(tex)
+        if w > avail:
+            # Rep(f) renders 308pt wide. In a 230pt cell reportlab centred it
+            # and drew the overhang straight over the margin and the gutter --
+            # measured ink from x=7.9pt to x=311.8pt in a 44.6..295.9 column.
+            h *= avail / w
+            w = avail
         im = Image(path, width=w, height=h)
-        cell = [[im, Paragraph(f"({_EQN[0]})", CAP)]] if tag else [[im, ""]]
-        t = Table(cell, colWidths=[colw - 0.30 * inch, 0.30 * inch])
+        num = (Paragraph(f"({_EQN[0]})", S("eqnum", fontSize=BODY.fontSize,
+                                           leading=BODY.fontSize, alignment=2))
+               if tag else "")
+        t = Table([["", im, num]], colWidths=[tagw, avail, tagw])
         t.setStyle(TableStyle([
-            ("ALIGN", (0, 0), (0, 0), "CENTER"),
-            ("ALIGN", (1, 0), (1, 0), "RIGHT"),
+            ("ALIGN", (1, 0), (1, 0), "CENTER"),
+            ("ALIGN", (2, 0), (2, 0), "RIGHT"),
             ("VALIGN", (0, 0), (-1, -1), "MIDDLE"),
             ("LEFTPADDING", (0, 0), (-1, -1), 0),
             ("RIGHTPADDING", (0, 0), (-1, -1), 0),
-            ("TOPPADDING", (0, 0), (-1, -1), 4),
-            ("BOTTOMPADDING", (0, 0), (-1, -1), 4)]))
+            ("TOPPADDING", (0, 0), (-1, -1), 0),
+            ("BOTTOMPADDING", (0, 0), (-1, -1), 0)]))
+        # LaTeX's \abovedisplayskip is the body size; platypus collapses this
+        # against the preceding paragraph's spaceAfter (max, not sum), so
+        # setting both ends equal is what actually gets equal gaps. The old 4pt
+        # cell padding lost to the paragraph's own 4pt above and won below,
+        # which is why the equations sat closer to the text under them.
+        t.spaceBefore = t.spaceAfter = DISPLAY_SKIP
         A(t)
 
     def figure(name, cap):
-        for f in fig(name, colw, cap):
-            A(f)
+        # As four loose flowables the image and its caption were free to land in
+        # different columns, and three of them did: seam_module, budget_band and
+        # hybrid each printed their picture at the foot of the left column and
+        # its caption at the head of the right. A column figure is one object.
+        A(KeepTogether(fig(name, colw, cap)))
 
     # ---- abstract -------------------------------------------------------
     A(Paragraph("<b>Abstract</b>", S("ah", fontName="Times-Bold", fontSize=9.4,
                                      alignment=TA_CENTER, spaceAfter=4)))
     A(Paragraph(sub(
-        r"A learned image decoder spends the same computation on every frame "
-        r"regardless of what the frame contains. We add an early-exit ladder to "
-        r"the intra decoder of DCVC-UF, cut each frame into tiles, and let every "
+        r"A learned image decoder spends the same computation on every frame, "
+        r"whatever the frame contains. We add an early-exit ladder to the "
+        r"intra decoder of DCVC-UF, cut each frame into tiles, and let every "
         r"tile leave the trunk at whichever of K exits is deep enough for it. "
-        r"The encoder is frozen and the coded payload is unchanged, so the "
-        r"method deploys against existing bitstreams. On the full "
-        r"\NumSeq-sequence common test set a 0.1 dB budget buys \MainLowRate% "
-        r"of the decoder's multiply-accumulates at the lowest rate and "
-        r"\MainHighRate% at the highest, for a BD-Rate cost of \BdRateALow%."
+        r"The encoder stays frozen and the coded payload is unchanged, so the "
+        r"method can be deployed against bitstreams that already exist. On the "
+        r"full \NumSeq-sequence common test set a 0.1 dB budget buys "
+        r"\MainLowRate% of the decoder's multiply-accumulates at the lowest "
+        r"rate and \MainHighRate% at the highest, for a BD-Rate cost of "
+        r"\BdRateALow%."
         r"<br/><br/>"
-        r"Four findings are worth more than the headline. <b>(i)</b> A quality "
-        r"budget only buys compute inside a bounded window: below a floor set by "
-        r"tiling no allocation is feasible, above a saturation point every tile "
-        r"already sits on the cheapest rung, and the working budget uses "
+        r"Four further findings matter more to us than that headline number. "
+        r"<b>(i)</b> A quality budget buys compute only inside a bounded "
+        r"window. Below a <i>floor</i> set by tiling, no allocation is "
+        r"feasible at all; above a <i>saturation</i> point, every tile already "
+        r"sits on the cheapest rung. The budget we work to occupies "
         r"\BandUseLow% of that window at the lowest rate and \BandUseHigh% at "
-        r"the highest. Both ends are in closed form, we verify seven structural "
-        r"propositions numerically, and the window turns out to be almost all "
-        r"of the rate dependence: five rates \BandRawSpread points apart at a "
-        r"matched decibel collapse to \BandSpreadMean once the budget is "
-        r"measured in units of each rate's own band. <b>(ii)</b> Tiling is expensive and its cost "
-        r"is governed by depth, not area: the seam follows a power law in the "
-        r"number of per-tile convolutions with a fitted exponent near two, "
-        r"where the corrupted-area fraction usually quoted is wrong by "
-        r"160–264%. <b>(iii)</b> The exact remedy — give "
-        r"each convolution its real neighbour — is bit-identical at uniform "
-        r"depth and <i>destroys</i> the allocation under routing, because "
-        r"routing is the deliberate violation of the condition that makes it "
-        r"exact. <b>(iv)</b> Operations are an <i>optimistic</i> bound on this "
-        r"method and the optimism grows with the saving: \WallSorted% of "
-        r"wall-clock arrives against a \WallPredicted% arithmetic prediction "
-        r"at the lowest rate, \WallHighMeasured% against \WallHighPredicted% "
-        r"at the highest. Sorting the tiles once by exit depth is "
-        r"bit-identical and recovers a fifth of the shortfall."
+        r"the highest. Both ends are in closed form, and we verify seven "
+        r"structural propositions numerically rather than asserting them. The "
+        r"window also accounts for most of the rate dependence: five rates "
+        r"that lie \BandRawSpread points apart at a matched decibel collapse "
+        r"to \BandSpreadMean once the budget is measured in units of each "
+        r"rate's own band. <b>(ii)</b> Tiling is expensive, and what it costs "
+        r"is set by depth rather than by area. The seam error follows a power "
+        r"law in the number of per-tile convolutions with a fitted exponent "
+        r"near two, and the corrupted-area fraction that is usually quoted is "
+        r"wrong by 160–264%. <b>(iii)</b> The exact remedy is to give each "
+        r"convolution its real neighbour. At uniform depth it is "
+        r"bit-identical; under routing it <i>destroys</i> the allocation, "
+        r"since routing is the deliberate violation of the condition that "
+        r"makes the remedy exact. <b>(iv)</b> Operations are an "
+        r"<i>optimistic</i> bound on what this method saves, and the optimism "
+        r"grows with the saving. At the lowest rate, \WallSorted% of "
+        r"wall-clock arrives against a \WallPredicted% arithmetic prediction; "
+        r"at the highest, \WallHighMeasured% against \WallHighPredicted%. "
+        r"Sorting the tiles once by exit depth is bit-identical and recovers a "
+        r"fifth of the shortfall."
         r"<br/><br/>"
         r"Signalling the exit map costs \MapBits bits per frame; predicting it "
-        r"at the decoder costs none and gives up \GapMin–\GapMax points. The "
-        r"two are ends of one scale rather than two designs: overriding the "
-        r"worst fifth of tiles recovers "
-        r"\HybridRecoverFifthLow–\HybridRecoverFifthHigh% of that gap for "
-        r"\HybridBitsFifth bits, and at \HybridBeatsAN of \HybridBeatsAOf rates "
-        r"half the map <i>beats</i> the whole of it, because the hybrid has two "
-        r"multipliers where the signalled configuration has one. A learned "
-        r"predictor should also be made to beat a free one: routing on the bits "
-        r"the entropy model has already spent per tile needs no parameters, no "
-        r"training and no bits, and it beats our \RouterParams-parameter head "
-        r"to within \RateRankLosesBy points at every rate, and ahead at the "
+        r"at the decoder costs none and gives up \GapMin–\GapMax points. We "
+        r"treat the two as ends of one scale. Overriding the worst fifth of "
+        r"tiles recovers \HybridRecoverFifthLow–\HybridRecoverFifthHigh% of "
+        r"that gap for \HybridBitsFifth bits, and at \HybridBeatsAN of "
+        r"\HybridBeatsAOf rates half the map <i>beats</i> the whole of it, "
+        r"because the hybrid has two multipliers where the signalled "
+        r"configuration has one. A learned predictor should also be made to "
+        r"beat a free one. Routing on the bits the entropy model has already "
+        r"spent per tile is parameter-free, needs no training and adds nothing "
+        r"to the stream, and it beats our \RouterParams-parameter head to "
+        r"within \RateRankLosesBy points at every rate, and beats it at the "
         r"\RateRankNWins lowest."
         r"<br/><br/>"
-        r"We also find that the method is governed by tile count far more than "
-        r"by content — three 1080p classes of very different material agree "
-        r"within three points while a 416×240 class saves a third as much — "
-        r"and that an exit map transfers across frames almost perfectly but not "
-        r"across rates."), ABST))
+        r"We find that tile count governs the method much more closely than "
+        r"content does. Three 1080p classes of very different material agree "
+        r"within three points, while a 416×240 class saves a third as much. An "
+        r"exit map transfers across frames almost perfectly, but not across "
+        r"rates."), ABST))
     A(Spacer(1, 6))
 
     # ---- 1 introduction --------------------------------------------------
     h1("1. Introduction")
     par(r"Learned codecs are compared on rate and distortion, with complexity "
-        r"reported as a single number: so many GMAC per frame, so many "
+        r"given as a single number, so many GMAC per frame or so many "
         r"milliseconds. That number is a constant. A learned decoder runs the "
-        r"same graph on a page of text and on a cloudless sky, and the sky is "
-        r"not harder.")
+        r"same graph on a page of text as on a cloudless sky, although the sky "
+        r"is much the easier picture.")
     par(r"Classification networks abandoned this a decade ago. Early-exit "
-        r"architectures attach classifiers at intermediate depths and stop once "
-        r"the prediction is confident [3, 15, 20]. Super-resolution adopted the "
-        r"idea spatially: ClassSR [12] routes patches to networks of different "
-        r"capacity, APE [1] exits patches at different depths. Learned "
-        r"compression went another way — slimmable autoencoders [22, 23] "
-        r"give one model several complexity levels, but the level is chosen "
-        r"<i>per stream</i>, not per region, and switching it changes the "
-        r"bitstream.")
-    par(r"We ask the spatial-adaptivity question inside a learned decoder under "
-        r"a constraint that makes the answer deployable: <b>the encoder is "
-        r"frozen and the coded payload is unchanged.</b> That rules out "
-        r"retraining the analysis transform, changing the entropy model or "
-        r"altering the latent, and leaves exactly one place to spend adaptivity "
-        r"— the synthesis transform.")
-    par(r"FLEX-UF is an exit ladder over the twelve residual blocks of the "
-        r"DCVC-UF intra decoder. The first j blocks run over the whole frame; "
-        r"the rest run per tile on a shrinking set, and that shrinkage is the "
-        r"saving. Each exit reaches the shared head through a small pointwise "
+        r"architectures attach classifiers at intermediate depths and stop as "
+        r"soon as the prediction is confident [3, 15, 20], and the literature "
+        r"around them is by now mature. Super-resolution adopted the same idea "
+        r"spatially. ClassSR [12] routes image patches to networks of "
+        r"different capacity by difficulty, and APE [1] exits patches at "
+        r"different depths of one network. Learned compression has taken a "
+        r"different route. Slimmable autoencoders [22, 23] give one model "
+        r"several complexity levels, but the level is chosen <i>per stream</i> "
+        r"rather than per region, and switching it changes the bitstream.")
+    par(r"We ask the spatial-adaptivity question inside a learned decoder, "
+        r"under a constraint that makes the answer deployable: <b>the encoder "
+        r"is frozen and the coded payload is unchanged.</b> Whatever we do has "
+        r"to consume the bitstream the released encoder already produces. That "
+        r"rules out re-training the analysis transform, changing the entropy "
+        r"model, or altering the latent. It leaves one place to spend "
+        r"adaptivity, the synthesis transform.")
+    par(r"Our method, FLEX-UF, is an exit ladder over the twelve residual "
+        r"blocks of the DCVC-UF intra decoder. The first j blocks run over the "
+        r"whole frame. The rest run per tile, over a set of tiles that shrinks "
+        r"with depth, and the shrinkage is where the saving comes from. Each "
+        r"exit hands its feature to the shared head through a small pointwise "
         r"adapter, zero-initialised so that at step zero the deepest exit "
         r"reproduces the released decoder bit-exactly.")
-    par(r"Making it work depended less on the ladder than on two things that "
-        r"have little to do with early exit as usually studied.")
-    h2("Tiling has a price, and it is large.")
-    par(r"Spatial adaptivity needs tiles, and the moment a frame becomes tiles "
-        r"every 3×3 convolution at a border reads invented values. The error is "
-        r"\SeamZerosHigh dB at high rate under the stock padding rule — "
-        r"several times the budget, paid before any tile has saved an "
-        r"operation. Section 4 treats padding as an <i>estimator</i> of the "
-        r"unseen neighbour and measures four; the ordering is not the obvious "
-        r"one.")
+    par(r"Getting this to work depended less on the ladder than on two "
+        r"problems that have little to do with early exit as it is usually "
+        r"studied.")
+    h2("Tiling has a large price.")
+    par(r"Spatial adaptivity needs tiles, and once a frame has been cut into "
+        r"tiles, every 3×3 convolution at a tile border reads invented values. "
+        r"Under the stock padding rule the resulting error on this decoder is "
+        r"\SeamZerosHigh dB at high rate. That is several times the entire "
+        r"budget the method works to, and it is paid before any tile has saved "
+        r"a single operation. In Section 4 we treat padding as an "
+        r"<i>estimator</i> of the unseen neighbour and measure four of them. "
+        r"The ordering we get is not the obvious one.")
     h2("A quality budget has a working range.")
-    par(r"Because tiling costs something even when nothing exits early there is "
-        r"a <i>floor</i>: budgets below it admit no allocation. Because the "
-        r"ladder has a shallowest rung there is a <i>saturation</i> point above "
-        r"which more quality buys nothing. The working 0.1 dB budget uses "
-        r"\BandUseLow% of that window at the lowest rate and \BandUseHigh% at "
-        r"the highest.")
+    par(r"Tiling costs something even when nothing exits early, so there is a "
+        r"<i>floor</i>, and budgets below it admit no allocation at all. The "
+        r"ladder also has a shallowest rung, so there is a <i>saturation</i> "
+        r"point above which every tile already sits on that rung and more "
+        r"quality buys nothing. Between the two the budget genuinely trades "
+        r"quality for compute. We measure both ends at every rate in Section "
+        r"5.4, where the working budget uses \BandUseLow% of that window at "
+        r"low rate and \BandUseHigh% at high rate.")
     h2("Contributions.")
     par(r"<b>(i)</b> A tile-adaptive early-exit ladder for a learned image "
-        r"decoder that leaves the encoder and the coded payload untouched, "
-        r"saving \MainLowRate% to \MainHighRate% of decoder MACs for 0.1 dB on "
-        r"the full CTC set at a BD-Rate cost of \BdRateALow%. "
-        r"<b>(ii)</b> The floor/saturation characterisation of a quality budget, "
-        r"both ends in closed form, with seven structural propositions verified "
-        r"numerically and a measurement of what the Lagrangian's convex-hull "
-        r"restriction costs (at most 0.05 saving points). "
-        r"<b>(iii)</b> A quantitative account of the tiling penalty: the b² law "
-        r"and the failure of the area law, the measured ordering of four border "
-        r"estimators, and two remedies rejected on their own numbers. "
-        r"<b>(iv)</b> Two allocation regimes with bits and compute charged on "
-        r"both sides, and the continuum between them: overriding the worst "
-        r"fifth of tiles recovers "
-        r"\HybridRecoverFifthLow–\HybridRecoverFifthHigh% of the gap, and half "
-        r"the map beats a complete one at \HybridBeatsAN of \HybridBeatsAOf "
-        r"rates. "
-        r"<b>(v)</b> A parameter-free control that a learned router has to beat "
-        r"and usually is not measured against: routing on the bits the entropy "
-        r"model already spent per tile costs nothing, adds nothing to the "
-        r"stream, and matches our trained head to within \RateRankLosesBy points "
-        r"at every rate while beating it at the \RateRankNWins lowest. "
-        r"<b>(vi)</b> A wall-clock result: operations over-predict the saving by "
-        r"about a fifth, and a bit-identical reordering of the per-tile loop "
-        r"recovers a fifth of that — \WallSorted% realised against "
-        r"\WallPredicted% predicted. "
-        r"<b>(vii)</b> Two properties of the allocation that bear on deployment "
-        r"— it is governed by tile count rather than content, and it "
-        r"transfers across frames but not across rates.")
+        r"decoder. It leaves the encoder and the coded payload untouched, and "
+        r"it saves \MainLowRate% to \MainHighRate% of decoder MACs for 0.1 dB "
+        r"on the full CTC set, at a BD-Rate cost of \BdRateALow%. "
+        r"<b>(ii)</b> The floor/saturation characterisation of a quality "
+        r"budget, with both ends measured and both in closed form, seven "
+        r"structural propositions verified numerically, and a measurement of "
+        r"what the Lagrangian's convex-hull restriction costs (at most 0.05 "
+        r"saving points). The architectural ceiling turns out to be reachable "
+        r"at low rate, so beyond \SatLow dB at q0 the limit is the ladder "
+        r"rather than the budget. "
+        r"<b>(iii)</b> A quantitative account of the tiling penalty. We "
+        r"measure what it costs and what removes it for free, and we explain "
+        r"why a higher-order border estimator is worse than a zeroth-order one "
+        r"and why a learned repair module is not worth its compute even with a "
+        r"perfect gate. "
+        r"<b>(iv)</b> Two allocation regimes, an encoder-side search that "
+        r"signals a ~\MapBits-bit map per frame and a decoder-side predictor "
+        r"that signals nothing, with the bits and the compute charged on both "
+        r"sides. We also measure the continuum between them. Overriding the "
+        r"worst fifth of tiles recovers "
+        r"\HybridRecoverFifthLow–\HybridRecoverFifthHigh% of the gap, and at "
+        r"\HybridBeatsAN of \HybridBeatsAOf rates half the map beats all of "
+        r"it, because the hybrid has two multipliers where the signalled "
+        r"configuration has one. "
+        r"<b>(v)</b> A parameter-free control that a learned router has to "
+        r"beat, and that such routers are usually not measured against. "
+        r"Routing on the bits the entropy model already spent per tile costs "
+        r"nothing and adds nothing to the stream. It beats our trained head to "
+        r"within \RateRankLosesBy points at every rate and beats it at the "
+        r"\RateRankNWins lowest, while agreeing with the oracle on fewer tiles "
+        r"than the head does. "
+        r"<b>(vi)</b> A wall-clock result. Operations over-predict the saving "
+        r"by about a fifth, and a bit-identical reordering of the per-tile "
+        r"loop recovers a fifth of that. We realise \WallSorted% against a "
+        r"\WallPredicted% prediction. "
+        r"<b>(vii)</b> Two properties of the allocation that bear on "
+        r"deployment: it is governed by tile count rather than by content, and "
+        r"it transfers across frames but not across rates.")
 
     # ---- 2 related -------------------------------------------------------
     h1("2. Related work")
     h2("Early exit.")
-    par(r"BranchyNet [20] and MSDNet [3] established intermediate classifiers "
-        r"with a confidence rule; SDN [15] framed it as mitigating "
-        r"overthinking. Joint training of all exits follows Scardapane et al. "
-        r"[18]; distillation between exits follows Phuong and Lampert [17], "
-        r"with the caveat from [19] that too large a student-teacher gap hurts "
-        r"the shallowest exits — which is why ours is between "
-        r"<i>adjacent</i> exits. All of this exits on a confidence signal "
-        r"computed from the network's own output. A decoder has no such signal: "
-        r"the quantity that would decide is the error against a source it "
-        r"cannot see.")
+    par(r"BranchyNet [20] and MSDNet [3] established the pattern of "
+        r"intermediate classifiers with a confidence rule; SDN [15] framed it "
+        r"as mitigating overthinking. We train all exits jointly, after "
+        r"Scardapane et al. [18], and distil between exits as in Phuong and "
+        r"Lampert [17]. The caveat in [19] is that too large a student-teacher "
+        r"gap hurts the shallowest exits, so our distillation runs between "
+        r"<i>adjacent</i> exits. All of this work exits on a confidence signal "
+        r"computed from the network's own output. A decoder has no such "
+        r"signal. There is no class posterior, and the quantity that would "
+        r"decide is the error against a source the decoder cannot see "
+        r"(Section 3.4).")
     h2("Spatially adaptive inference.")
-    par(r"ClassSR [12] sorts patches into easy/medium/hard; APE [1] exits "
-        r"patches at different depths; Glance-and-Focus [8] spends resolution "
-        r"adaptively. These share our per-region premise and share the tiling "
-        r"problem, though the cost of tile borders is rarely quantified. The "
-        r"closest prior work on the border itself is the per-channel AR(1) "
-        r"padding of Kaseva et al. [11], which we implement and evaluate.")
+    par(r"ClassSR [12] sorts super-resolution patches into easy/medium/hard "
+        r"and runs a different network on each; APE [1] exits patches at "
+        r"different depths; Glance-and-Focus [8] spends resolution adaptively. "
+        r"We share the per-region premise with all three, and we inherit the "
+        r"same tiling problem, though the cost of tile borders is rarely "
+        r"quantified in that line of work. To our knowledge the estimator view "
+        r"of border padding and its measured ordering (Section 4) is new. The "
+        r"closest prior work is the per-channel AR(1) padding of Kaseva et al. "
+        r"[11], which we implement and evaluate.")
     tbl("positioning",
         r"<b>Table 1. Where this sits.</b> Complexity control in learned "
         r"compression varies the model; we vary how much of a fixed model runs "
-        r"where. The last column is what makes the difference operational: every "
-        r"other row requires a decoder that matches the encoder that produced "
-        r"the stream.")
+        r"where. The last column is what makes the difference operational. "
+        r"Every other row requires a decoder that matches the encoder that "
+        r"produced the stream.")
     h2("Complexity control in learned compression.")
-    par(r"SlimCAE [22] and slimmable video codecs [23] expose several widths of "
-        r"one model; the choice is per stream and changes the encoder, so the "
-        r"bitstream is not interchangeable. DCVC-FM [13] and DCVC-UF [14] "
-        r"reduce cost architecturally, for every frame equally. "
-        r"Rate–distortion–complexity has since become an explicit third axis: "
+    par(r"SlimCAE [22] and slimmable video codecs [23] expose several widths "
+        r"of one model. The choice is per stream and it changes the encoder, "
+        r"so the bitstream is not interchangeable. DCVC-FM [13] and DCVC-UF "
+        r"[14] reduce cost architecturally, for every frame equally. "
+        r"Rate–distortion–complexity has since become an explicit third axis. "
         r"Gao et al. [35] tune spatial context usage to trade decode cost "
-        r"against rate, Ho et al. [36] survey where conditional residual coding "
-        r"sits on that surface, and Zhang and Gao [37] route <i>whole frames</i> "
-        r"to one of several jointly-trained coding paths. All of these vary the "
-        r"model, and all change what the encoder emits. Our axis is orthogonal: "
-        r"model fixed, bitstream fixed, only <i>how much of the decoder runs "
-        r"where</i> varies.")
+        r"against rate, Ho et al. [36] survey where conditional residual "
+        r"coding sits on that surface, and Zhang and Gao [37] route <i>whole "
+        r"frames</i> to one of several jointly-trained coding paths, spending "
+        r"less computation on cheaper frames. Every one of these changes the "
+        r"model, and with it what the encoder emits. Our axis is orthogonal. "
+        r"The model and the bitstream are both fixed, and only <i>how much of "
+        r"the decoder runs where</i> varies.")
     h2("The closest neighbour.")
     par(r"Blard et al. [27] also partition an image into regions, also choose "
         r"per region by a rate–distortion cost computed at the encoder, and "
-        r"also transmit a mode map — the skeleton of our configuration A. Two "
-        r"things differ. Their regions choose among several <i>separately "
+        r"also transmit a mode map, which is the skeleton of our configuration "
+        r"A. The differences are in what the regions choose among and in what "
+        r"the map buys. Their regions choose among several <i>separately "
         r"trained</i> codecs, so the decoder must hold all of them and its "
         r"complexity is that of one codec regardless of the choice; the map "
         r"buys rate, not compute. Ours choose a prefix length of a single "
         r"trunk, so the weights are shared by construction and the map buys "
-        r"compute at fixed rate. And because their alternatives are unrelated "
+        r"compute at fixed rate. Because their alternatives are unrelated "
         r"networks, no decoder-side predictor could stand in for the encoder's "
-        r"search, whereas the nesting that makes our exits prefixes of one "
-        r"another is exactly what makes configuration B possible at all.")
+        r"search. The nesting that makes our exits prefixes of one another is "
+        r"exactly what makes configuration B possible at all.")
     h2("Signalling versus prediction.")
-    par(r"That a decoder is <i>told</i> a mode decision rather than inferring "
-        r"it is the norm in standardised video coding: HEVC [9] and VVC [21] "
-        r"transmit partitioning, prediction mode and transform tree. We "
-        r"evaluate both and treat the signalled variant as the conventional "
-        r"design. The nearest neighbour in compression is spatial competition "
-        r"[27], which selects among several codecs per region and signals a mode "
-        r"map: the structure of the side information is ours, the axis is not "
-        r"— they select which network at fixed complexity for a rate gain, "
-        r"we select how much of one network at fixed rate for compute.")
+    par(r"Being <i>told</i> a mode decision rather than inferring it is the "
+        r"norm in standardised video coding. HEVC [9] and VVC [21] transmit "
+        r"partitioning, prediction mode and transform tree. We evaluate both "
+        r"and treat the signalled variant as the conventional design.")
     h2("Deferring to an oracle under a budget.")
     par(r"Configuration C, where a predictor decides most cases and a small "
-        r"budget of the hardest ones is handed to something exact, is the shape "
-        r"of selective prediction [38] and learning to defer [39, 40], and of "
-        r"the budgeted variant of the latter [41]. Two things differ and both "
-        r"make our case easier. The expert here is the encoder's own search, so "
-        r"it is exact, always available, and costs nothing at test time — what "
-        r"is scarce is not the expert's attention but the <i>bits</i> needed to "
-        r"say what it decided. And the selection rule is not learned: because "
-        r"the objective is separable over tiles, the optimal set of size s at a "
-        r"fixed multiplier is exactly the s largest regrets, which the encoder "
-        r"can compute. The open question in that literature — who to defer, and "
-        r"how to learn it — has a closed form here, and what remains is the "
+        r"budget of the hardest ones is handed to something exact, is the "
+        r"shape of selective prediction [38] and learning to defer [39, 40], "
+        r"and of the budgeted variant of the latter [41]. Two things differ, "
+        r"and both make our case easier. The expert here is the encoder's own "
+        r"search, so it is exact and always available at no test-time cost. "
+        r"What is scarce is the <i>bits</i> needed to say what it decided. The "
+        r"selection rule is not learned either. Because the objective is "
+        r"separable over tiles, the optimal set of size s at a fixed "
+        r"multiplier is exactly the s largest regrets, which the encoder can "
+        r"compute. Who to defer and how to learn it is the open question in "
+        r"that literature, and it has a closed form here. What remains is the "
         r"question we measure, which is how concentrated the regret is.")
     h2("Allocating a budget over units.")
-    par(r"The construction we use is not new and should not be presented as "
-        r"such. Shoham and Gersho [28] showed that for a finite set of per-unit "
-        r"operating points a Lagrangian sweep decouples the allocation across "
-        r"units and traces exactly the lower convex hull of the achievable set; "
-        r"Ortega and Ramchandran [29] made it standard practice in image and "
-        r"video coding. What we add is the structure this particular operating "
-        r"set has — a floor below which no allocation is feasible, a "
-        r"saturation point above which none improves, and a measurement of what "
-        r"the convex-hull restriction costs. The same relaxation has resurfaced "
-        r"for test-time compute in language models [30], with per-instance "
-        r"decoupling and a binary search on the multiplier: the identical "
-        r"structure in a domain with no rate axis.")
+    par(r"The construction we use is not new and we do not present it as such. "
+        r"Shoham and Gersho [28] showed that for a finite set of per-unit "
+        r"operating points, a Lagrangian sweep decouples the allocation across "
+        r"units and traces exactly the lower convex hull of the achievable "
+        r"set; Ortega and Ramchandran [29] made it standard practice in image "
+        r"and video coding. What we add is the structure this particular "
+        r"operating set has: a floor below which no allocation is feasible, a "
+        r"saturation point above which none improves, and a measurement of "
+        r"what the convex-hull restriction costs (Section 5.4). The same "
+        r"relaxation has resurfaced for test-time compute in language models "
+        r"[30], with per-instance decoupling and a binary search on the "
+        r"multiplier. That is the identical structure in a domain with no rate "
+        r"axis, and we read it as evidence that the floor/saturation "
+        r"characterisation is worth stating generally.")
     h2("How much is there to gain?")
     par(r"Bounding what adaptive inference could achieve is itself a line of "
-        r"work. Hasan et al. [34] derive an oracle bound on efficiency at fixed "
-        r"accuracy from per-model resource and accuracy, and report 43–121× on "
-        r"ImageNet and 7–81× on HellaSwag. Their bound has a ceiling and no "
-        r"floor, because the largest model in their family attains the reference "
-        r"accuracy by definition. Spatial adaptivity introduces one: cutting a "
-        r"frame into tiles costs quality even when every tile runs to full "
-        r"depth, so the reference is unreachable at <i>any</i> compute and the "
-        r"feasible set of budgets is an interval rather than a ray. That "
-        r"interval, and both of its ends, is what Section 5.4 characterises.")
+        r"work. Hasan et al. [34] derive an oracle bound on efficiency at "
+        r"fixed accuracy, given per-model resource and accuracy, and report "
+        r"43–121× on ImageNet and 7–81× on HellaSwag. Their bound has a "
+        r"ceiling and no floor, because the largest model in their family "
+        r"reaches the reference accuracy by definition. Spatial adaptivity "
+        r"introduces a floor. Cutting a frame into tiles costs quality even "
+        r"when every tile runs to full depth, so the reference is unreachable "
+        r"at <i>any</i> compute and the feasible set of budgets is an interval "
+        r"rather than a ray. Section 5.4 characterises that interval and both "
+        r"of its ends.")
     h2("Tile boundaries.")
     par(r"Every method that processes an image in independently-computed tiles "
-        r"meets the same artefact, and the remedies in the literature are "
-        r"overlap and averaging, local padding from neighbouring patches [31], "
+        r"meets the same artefact. The remedies in the literature are overlap "
+        r"and averaging, local padding from neighbouring patches [31], "
         r"training with overlaps [32], and fitted extrapolation [11]. Local "
-        r"padding is closest to the exact remedy of Section 4.4, and the "
-        r"difference is accounting: it pads every convolutional layer and does "
-        r"not report the cost, while we pad only the 0.29% of each block that "
-        r"has any spatial extent — which is what makes the exact fix cost "
-        r"0.032% of the decode rather than a multiplier on all of it.")
+        r"padding is the closest to the exact remedy we describe in Section "
+        r"4.4, and the difference is accounting. It pads every convolutional "
+        r"layer and does not report the cost. We pad only the 0.29% of each "
+        r"block that has any spatial extent, which is what makes the exact fix "
+        r"cost 0.032% of the decode rather than a multiplier on all of it. To "
+        r"our knowledge the estimator view of the padding rule, the measured "
+        r"ordering of four estimators, and the dependence of the penalty on "
+        r"per-tile depth (Section 4) have not been reported.")
     h2("Where the time goes.")
     par(r"DCVC-RT [33] argues that operational rather than computational "
-        r"complexity is the speed bottleneck for neural codecs, evidenced by "
+        r"complexity is the speed bottleneck for neural codecs, and cites "
         r"channel reductions that yield linear rather than quadratic speedups. "
-        r"Section 5.9 is an instance of that claim inside one loop: "
-        r"\WallPredicted% of operations removed buys \WallSorted% of time, and "
+        r"Section 5.9 is an instance of that claim inside one loop. Removing "
+        r"\WallPredicted% of the operations buys \WallSorted% of the time, and "
         r"\WallSortedGain points of the difference come back from reordering "
         r"the loop with the arithmetic untouched.")
 
@@ -523,137 +660,144 @@ def content(colw, fullw):
     h2("3.1 Where the computation is")
     par(r"The DCVC-UF intra decoder is one upsampling block, twelve "
         r"DepthConvBlocks and a head, costing 453.5 GMAC per 1080p frame. The "
-        r"twelve blocks are 89.4% of it, which is why the ladder is built "
-        r"across them. Inside one block at C=384, the only operator with any "
-        r"spatial extent is a 3×3 depthwise costing 9C against the block's "
-        r"8C²+9C — <b>0.29%.</b> That number recurs throughout: it is why "
-        r"tile borders damage the picture, why our adapters are pointwise on "
-        r"purpose, and why the exact remedy of Section 4.4 is affordable.")
+        r"twelve blocks are 89.4% of that, which is why we build the ladder "
+        r"across them. Inside one block at C=384 channels, the only operator "
+        r"with any spatial extent is a 3×3 depthwise convolution, and it costs "
+        r"9C against the block's 8C²+9C. That is <b>0.29%.</b> We come back to "
+        r"the fraction several times below. Tile borders damage the picture "
+        r"through it, and it is what makes the exact remedy of Section 4.4 "
+        r"affordable at all. It is also why we kept the adapters pointwise.")
     h2("3.2 The exit ladder")
-    par(r"With K exits over the twelve blocks and split depth j, groups 0..j−1 "
-        r"run full frame for every tile and groups j..K−1 run per tile. A tile "
-        r"assigned exit k runs groups j..k and leaves. Writing c_k for the cost "
-        r"of exit k in units of one released decode, a frame with exit map k "
-        r"costs the mean of c over its tiles.")
-    par(r"Two consequences are easy to state wrongly. Exits shallower than j "
-        r"are indistinguishable, so the usable ladder has K−j distinct costs, "
-        r"and the <i>architectural ceiling</i> is S_max = 100(1−c_j)%, attained "
-        r"when every tile takes exit j. For the shipped setting (K=6, j=2, 256 "
-        r"px tiles) S_max = \Ceiling%. Section 5.4 shows this bound is "
-        r"<i>reached</i> at low rate, which makes it an operating point rather "
-        r"than an asymptote.")
+    par(r"With K exits over the twelve blocks and split depth j, groups "
+        r"0..j−1 run full frame for every tile and groups j..K−1 run per tile. "
+        r"A tile assigned exit k runs groups j..k and then leaves. Writing c_k "
+        r"for the cost of exit k in units of one released decode, the cost of "
+        r"a frame with exit map k is the mean of c over its tiles.")
+    par(r"Two consequences follow, and both are easy to state wrongly. Exits "
+        r"shallower than j are indistinguishable from each other, because the "
+        r"first j groups run for every tile regardless, and the usable ladder "
+        r"therefore has K−j distinct costs. The second consequence is the "
+        r"<i>architectural ceiling</i> S_max = 100(1−c_j)%, reached when every "
+        r"tile takes exit j. For our shipped setting (K=6, j=2, 256 px tiles) "
+        r"S_max = \Ceiling%. We show in Section 5.4 that this bound is "
+        r"<i>reached</i> in practice at low rate, so it behaves as an "
+        r"operating point and not as an asymptote.")
     figure("adapters.png",
            r"<b>Figure 2. Inside an exit adapter.</b> Both kinds are entirely "
-           r"pointwise, so no adapter adds receptive field and none contributes "
-           r"any tile-boundary penalty. Capacity is matched to the number of "
-           r"blocks the exit skips, and charged for: an exit-2 tile saves six "
-           r"blocks minus 0.25, not six.")
+           r"pointwise, so no adapter adds receptive field and none of them "
+           r"contributes any tile-boundary penalty. Capacity is matched to the "
+           r"number of blocks the exit skips, and the adapter's own cost is "
+           r"charged against the saving, so an exit-2 tile saves six blocks "
+           r"minus 0.25.")
     h2("3.3 Exit adapters")
-    par(r"An early exit hands the shared head a feature the head was not fitted "
-        r"to; the adapter is the correction. We use a residual 1×1, Ad(f) = f + "
-        r"Wf with W zero-initialised, for exits that skip little, and the "
-        r"pointwise expand/activate/contract pair of the block's own FFN for "
-        r"exits that skip four blocks or more. Both are <i>pointwise by "
-        r"design</i>: a 3×3 inside an adapter would add seam damage precisely "
-        r"at the tiles that took an early exit, the ones least able to afford "
-        r"it. Zero-initialising the last layer makes every adapter the identity "
-        r"at step zero, so the deepest exit is bit-exactly the released decoder "
-        r"before training begins.")
+    par(r"An early exit hands the shared head a feature the head was not "
+        r"fitted to, and the adapter is the correction. For exits that skip "
+        r"little we use a residual 1×1, Ad(f) = f + Wf with W zero-initialised. "
+        r"For exits that skip four blocks or more we use the pointwise "
+        r"expand/activate/contract pair of the block's own FFN. Both are "
+        r"<i>pointwise by design</i>. A 3×3 inside an adapter would add seam "
+        r"damage at the tiles that took an early exit, and those are the tiles "
+        r"least able to afford it. Zero-initialising the last layer makes "
+        r"every adapter exactly the identity at step zero, so the deepest exit "
+        r"is bit-exactly the released decoder before training begins and every "
+        r"shallow exit starts from ``the decoder as it is''.")
     figure("adapter_gain.png",
            r"<b>Figure 3. What the adapters are worth.</b> <b>a</b>, each exit "
            r"with and without its adapter. <b>b</b>, the dB the adapter "
-           r"recovers. <b>c</b>, the same against the number of blocks the exit "
-           r"skips — the design rationale, measured.")
+           r"recovers. <b>c</b>, the same against the number of blocks the "
+           r"exit skips, which is the design rationale measured.")
     tbl("adapters_ablation",
         r"<b>Table 2. What the adapters are worth.</b> dB below the release with "
         r"every tile at that exit, with the trained adapters and with each set "
         r"back to the identity it was initialised to. † the deepest exit has no "
         r"adapter by construction and is the control.")
-    par(r"Zeroing them measures what they learned, since the identity is exactly "
-        r"what they were initialised to. Without adapters the shallowest exit "
-        r"costs \AdapterNoneHigh dB at q63 — forty-four times the budget — "
-        r"and the adapter buys \AdapterGainHigh dB back. The gain grows with "
-        r"rate and with the number of blocks the exit skips, which is the design "
-        r"rationale measured rather than argued, and the deepest exit moves by "
-        r"exactly zero. The adapters are not a refinement of the ladder; without "
-        r"them it has no usable rung.")
+    par(r"Zeroing the adapters measures what they learned, since the identity "
+        r"is exactly what they were initialised to. Without them the "
+        r"shallowest exit costs \AdapterNoneHigh dB at q63, forty-four times "
+        r"the budget, and the adapter buys \AdapterGainHigh dB of that back. "
+        r"We find the gain grows with rate and with the number of blocks the "
+        r"exit skips, so the design rationale here is a measurement rather "
+        r"than an argument, and the deepest exit moves by exactly zero. We "
+        r"would not describe the adapters as a refinement of the ladder, "
+        r"because without them it has no usable rung.")
     h2("3.4 Allocation")
-    par(r"Given per-tile distortions D(t,k) and costs c_k, the allocation "
-        r"minimising distortion at a compute budget is the Lagrangian "
-        r"the Lagrangian")
+    par(r"Given per-tile distortions D(t,k) and costs c_k, the allocation that "
+        r"minimises distortion at a compute budget is the Lagrangian")
     eq(r"k^{*}(t) = \mathrm{arg\,min}_{k}\ \left[\, D(t,k) + \lambda\, c_{k} \,\right]")
-    par(r"with λ bisected so the "
-        r"frame lands on the budget. Both quantities are available <i>to the "
-        r"encoder</i>, which holds the source. This is configuration <b>A</b>: "
-        r"the encoder searches and transmits the map, which entropy-codes to "
-        r"~\MapBits bits per 1080p frame, \MapOverheadLow% of a typical "
-        r"bitrate. It costs the encoder about one extra decode and the decoder "
-        r"nothing.")
-    par(r"The decoder cannot evaluate it: D(t,k) is the error against a source "
-        r"it never sees. This is not a hard estimation problem, it is a missing "
-        r"variable, and no architecture removes it. Configuration <b>B</b> "
-        r"therefore predicts: a 144K-parameter head reads the stem feature, the "
-        r"decoded latent, the entropy model's scales and the quality index, and "
-        r"decides")
+    par(r"with λ found by bisection so the frame lands on the quality budget. "
+        r"Both quantities are available <i>to the encoder</i>, which holds the "
+        r"source. That gives configuration <b>A</b>. The encoder searches and "
+        r"transmits the map, which entropy-codes to ~\MapBits bits per 1080p "
+        r"frame, or \MapOverheadLow% of a typical bitrate. It costs the "
+        r"encoder about one extra decode and the decoder nothing.")
+    par(r"The decoder cannot evaluate it, because D(t,k) is the error against "
+        r"a source it never sees. What is missing is a variable, so no "
+        r"architecture recovers it and no amount of estimation capacity "
+        r"substitutes for it. Configuration <b>B</b> therefore <i>predicts</i>. "
+        r"A 144K-parameter head reads the full-frame stem feature, the decoded "
+        r"latent y-hat, the entropy model's scales and the quality index, "
+        r"emits logits z_t, and decides")
     eq(r"\hat{k}_{t} = \mathrm{arg\,max}_{k}\ \left[\, \log\,\mathrm{softmax}(z_{t})_{k} - \beta\, c_{k} \,\right]")
-    par(r"with β "
-        r"bisected as λ is. Nothing is added to the file. The head is trained "
-        r"against a <i>frozen</i> decoder with a cost-sensitive cross-entropy to "
-        r"the oracle's choice, each tile weighted by the regret of choosing "
-        r"wrongly, plus loss-free load balancing [16] biased toward the "
-        r"oracle's own exit distribution rather than toward uniform.")
+    par(r"with β bisected exactly as λ is. Nothing is added to the file. We "
+        r"train the head against a <i>frozen</i> decoder with a cost-sensitive "
+        r"cross-entropy to the oracle's choice, each tile weighted by the "
+        r"regret of choosing wrongly. Load balancing is loss-free [16], and we "
+        r"bias it toward the oracle's own exit distribution instead of toward "
+        r"uniform. At a high λ the oracle genuinely does send every tile to "
+        r"one exit, and forcing spread there would force mistakes.")
     h2("3.5 Training")
     par(r"All exits are decoded every step and the objective is")
     eq(r"\mathcal{L} = \mathcal{L}_{\mathrm{RD}} + w_{a}\,"
        r"\mathcal{L}_{\mathrm{anchor}} + w_{d}\,\mathcal{L}_{\mathrm{distill}}")
-    par(r"L_RD is the released rate-distortion "
-        r"loss with MSE averaged over exits. L_anchor pins the deepest exit to "
-        r"the released decoder, so the reference every saving is quoted against "
-        r"cannot drift underneath the measurement. L_distill supervises "
-        r"adapters in <i>feature</i> space, exit k imitating exit k+1 — "
-        r"feature space because the head is a fixed map from feature to RGB and "
-        r"matching the deeper feature is the stronger constraint, 384 dense "
-        r"channels of target instead of 3; adjacent rather than deepest for the "
-        r"reason in [19].")
-    par(r"Critically, the adapters are trained <i>through the tiled decode path "
-        r"they are deployed in</i>. Training them full-frame and tiling only at "
+    par(r"where L_RD is the released rate-distortion loss averaged over exits. "
+        r"The anchor term L_anchor pins the deepest exit to the released "
+        r"decoder, so the reference every saving is quoted against cannot "
+        r"drift away underneath the measurement. The distillation term "
+        r"L_distill supervises the adapters in feature space. We work in "
+        r"feature space and not in pixels because the head is a fixed map from "
+        r"feature to RGB, so matching the deeper feature is the stronger "
+        r"constraint, with 384 dense channels of target instead of 3. Each "
+        r"exit imitates its neighbour, exit k following exit k+1, and not the "
+        r"deepest exit, for the reason given in [19].")
+    par(r"We train the adapters <i>through the tiled decode path they are "
+        r"deployed in</i>. Training them full frame and tiling only at "
         r"inference loses 0.14–0.24 dB; training through the deployed path "
-        r"gains 0.51–0.90 dB. The sign of the effect flips.")
+        r"gains 0.51–0.90 dB, so the sign of the effect flips.")
 
     # ---- 4 the seam ------------------------------------------------------
     h1("4. The price of tiles")
     figure("seam_problem.png",
            r"<b>Figure 3. The artefact, before anything is done about it.</b> "
            r"One frame decoded twice from the <i>same</i> bitstream with the "
-           r"same weights, every tile at full depth, stock zero padding "
-           r"— no early exit "
-           r"anywhere. The only difference is that the right-hand decode was "
-           r"tiled. The error map is the tile lattice and nothing else.")
-    par(r"A 3×3 depthwise computes a weighted sum over its neighbours. Decoded "
-        r"full frame those neighbours exist; decoded per tile they do not, and "
-        r"the kernel is handed whatever the padding rule invents. Each "
-        r"convolution extends the contaminated region by one ring, so with b "
-        r"per-tile blocks on a tile of side F the fraction of the tile within "
-        r"reach of an invented value is")
+           r"same weights, every tile at full depth, stock zero padding, and "
+           r"no early exit anywhere. The only difference is that the "
+           r"right-hand decode was tiled. The error map is the tile lattice "
+           r"and nothing else.")
+    par(r"A 3×3 depthwise at feature position (i,j) computes a weighted sum "
+        r"over its neighbours. Decoded full frame, those neighbours exist. "
+        r"Decoded per tile they do not, and the kernel is handed whatever the "
+        r"padding rule invents. Each convolution extends the contaminated "
+        r"region by one ring, so with b per-tile blocks on a tile of side F "
+        r"the fraction of the tile within reach of an invented value is")
     eq(r"1 - \left(\frac{F-2b}{F}\right)^{2}", tag=False)
-    par(r"which is 0.750 at the "
-        r"shipped F=32, b=8: not a thin border but a structured error across "
-        r"most of the tile.")
-    par(r"That fraction says which pixels are affected, not how badly, and it "
-        r"is not what governs the penalty. Sweeping the split depth sweeps b "
-        r"from 12 to 0, with b=0 as an exact zero-seam control, and the measured "
-        r"seam follows a power law")
+    par(r"At our shipped F=32, b=8 that comes to 0.750. Three quarters of the "
+        r"tile is affected, so what we are looking at is a structured error "
+        r"over most of the tile and not a thin border at its edge.")
+    par(r"That fraction tells us which pixels are affected and not how badly, "
+        r"and it turns out to be the wrong predictor of the penalty. We swept "
+        r"the split depth, which sweeps b from 12 to 0 with b=0 as an exact "
+        r"zero-seam control, and measured")
     eq(r"\mathrm{seam} \;\propto\; b^{\alpha}, \qquad \alpha \approx 2")
-    par(r"with α = "
-        r"2.38, 2.22 and 1.93 at q0, q32 and q63, r = 0.98–0.995 in log-log. "
-        r"Fitted with one free scale the area fraction is wrong by 160–264% "
-        r"where the power law is wrong by 12–22%. Fixing the exponent at exactly "
-        r"two costs a factor of two, 31–38% — the square is the right shape and "
-        r"not quite the right law. The exponent near two has a "
-        r"reading: the count of contaminated pixels grows like perimeter times "
-        r"depth, and the error accumulated in each grows with how many "
-        r"convolutions reached it. The area law saturates once every pixel is "
-        r"touched; the penalty does not.")
+    par(r"with α = 2.38 at q0, 2.22 at q32 and 1.93 at q63, and r = 0.98–0.995 "
+        r"in log-log. Fitted with one free scale, the area fraction is wrong "
+        r"by 160–264% where the power law is wrong by 12–22%. Fixing the "
+        r"exponent at exactly two costs a factor of two, 31–38%, so the square "
+        r"is the right shape without being quite the right law. The exponent "
+        r"has a reading. The count of contaminated pixels grows like perimeter "
+        r"times depth, and the error accumulated in each of them grows with "
+        r"how many convolutions reached it. Once every pixel has been touched "
+        r"the area law saturates and the penalty does not, which is where the "
+        r"area law fails as a predictor.")
     figure("contamination.png",
            r"<b>Figure 4. The seam against per-tile depth.</b> Sweeping the "
            r"split depth sweeps b; b=0 is an exact control and measures 0.0000 "
@@ -662,44 +806,46 @@ def content(colw, fullw):
            r"each. <b>c</b>, mean relative error. The area fraction saturates "
            r"once every pixel is contaminated; the penalty does not.")
     h2("4.1 Padding is an estimator")
-    par(r"The useful way to see border padding is as an <i>estimator</i> of the "
-        r"unseen neighbour, whose error is the seam. The table below measures "
-        r"four, "
-        r"with early exit switched off so tiling is the only difference from a "
+    par(r"Border padding is an <i>estimator</i> of the unseen neighbour, and "
+        r"the seam is its error. The table below measures four of them, with "
+        r"early exit switched off so that tiling is the only difference from a "
         r"full-frame decode.")
     tbl("padding",
         r"<b>Table 1. Border estimators</b>, dB below the released decoder on "
-        r"the same latent, 256 px tiles, full CTC. Lower is better.")
-    par(r"Two results deserve emphasis. <b>A higher-order estimator is worse.</b> "
-        r"Extrapolating the local gradient past a boundary amplifies whatever "
-        r"noise sits on it; assuming local constancy does not. Guessing harder "
-        r"is not guessing better, and the gap is large: \SeamLinearHigh dB "
-        r"against \SeamReplHigh dB at q63. <b>The best estimator loses on "
-        r"cost.</b> The per-channel AR(1) fit of [11] reaches \SeamArlsHigh dB, "
-        r"about 0.02 dB better than replication, for 10.7% of decode "
-        r"wall-clock. Against a 0.1 dB budget and a ~24% saving that trade does "
-        r"not close, and we drop it.")
+        r"the same latent, 256 px tiles, full CTC. Lower is better. The "
+        r"zeroth-order hold beats the first-order extrapolation by a wide "
+        r"margin, and the fitted AR(1) wins on quality while costing +10.7% of "
+        r"decode wall-clock.")
+    par(r"<b>A higher-order estimator is worse.</b> Extrapolating the local "
+        r"gradient past a boundary amplifies whatever noise sits on that "
+        r"boundary, and assuming local constancy does not. The gap is wide, "
+        r"\SeamLinearHigh dB against \SeamReplHigh dB at q63. <b>The best "
+        r"estimator loses on cost.</b> The per-channel AR(1) fit of [11] "
+        r"reaches \SeamArlsHigh dB, about 0.02 dB better than replication, and "
+        r"it costs 10.7% of decode wall-clock. Against a 0.1 dB budget and a "
+        r"~24% saving that trade does not close, so we drop it.")
     h2("4.2 What actually removes the seam")
     figure("seam_vs_qp.png",
            r"<b>Figure 4. The tiling penalty across the whole rate range</b>, "
            r"every tile at full depth. The two steps that matter cost nothing, "
            r"and the largest single factor is training the ladder with the seam "
-           r"present. Right: the floor is charged <i>inside</i> the quality "
+           r"present. Panel (b): the floor is charged <i>inside</i> the quality "
            r"budget and consumes a growing share of it.")
-    par(r"Tile size is free — a tiled decode's MAC count does not depend on "
-        r"it at all — and the damage scales with the tile perimeter, as the "
-        r"table below shows. What it costs instead is routing granularity: 40 "
-        r"tiles per 1080p "
-        r"frame at 256 px against 160 at 128 px.")
+    par(r"Tile size is free in arithmetic. A tiled decode's MAC count does not "
+        r"depend on it at all, and the damage scales with the tile perimeter, "
+        r"as the table below shows. What tile size costs is routing "
+        r"granularity, 40 tiles per 1080p frame at 256 px against 160 at "
+        r"128 px.")
     tbl("tilesize",
         r"<b>Table 2. Tile size</b>, dB at q63. Doubling the side roughly "
         r"halves the penalty, as the contamination law predicts, and costs no "
         r"computation.")
-    par(r"The largest factor of all is easiest to overlook. Replicate padding "
-        r"leaves \SeamReplHigh dB at q63 on the untrained ladder; after "
-        r"training the same configuration leaves \FloorHigh dB. More than two "
-        r"thirds of what the estimator could not fix is absorbed by weights "
-        r"learning to live with it. No module in this paper removes as much.")
+    par(r"The largest factor of all is the easiest one to miss. On the "
+        r"untrained ladder, replicate padding leaves \SeamReplHigh dB at q63; "
+        r"after training, the same configuration leaves \FloorHigh dB. So more "
+        r"than two thirds of what the estimator could not fix is absorbed by "
+        r"weights learning to live with it. That single change removes more of "
+        r"the seam than any module in this paper does.")
     h2("4.3 A learned repair module, and why we reject it")
     figure("seam_module.png",
            r"<b>Figure 5. Grid seam repair.</b> A correction gated by position "
@@ -707,156 +853,176 @@ def content(colw, fullw):
            r"gate learns the boundary ring (0.76) but never switches off inside "
            r"(0.145 over 94% of pixels), and the measured effect follows: it "
            r"helps on the ring and hurts everywhere else.")
-    par(r"Since the tile lattice is known exactly at training and inference, a "
-        r"repair can be <i>told</i> where to look rather than having to infer "
+    par(r"The tile lattice is known exactly at training and at inference, so a "
+        r"repair can be <i>told</i> where to look instead of having to infer "
         r"it")
     eq(r"\mathrm{Rep}(f) = f + G[\,i\ \mathrm{mod}\ P,\ j\ \mathrm{mod}\ P\,]"
        r"\cdot \mathrm{PW}\left(\mathrm{WSiLU}(\mathrm{DW}_{3\times3}(f))\right)")
-    par(r"with G a "
-        r"P×P gate shared over channels, initialised at exp(−d/τ). It costs "
-        r"0.95% of the decode.")
-    par(r"It does not earn that. Splitting per-pixel error by distance from the "
-        r"nearest tile boundary, the module gains 0.27% in the 0–4 px band "
-        r"(6.2% of pixels) and loses 0.04–0.05% everywhere else. Even with a "
-        r"<i>perfect</i> gate — zero correction in the interior, the "
-        r"boundary gain unchanged — the ceiling on what it could earn is "
-        r"≈0.0008 dB for 0.95% of the decode. We rejected AR(1) padding at "
-        r"0.0019 dB per point of decode; this is worse by an order of "
-        r"magnitude. Tightening the gate cannot rescue it, because there is "
-        r"almost nothing left to win.")
+    par(r"with G a P×P gate shared over channels and initialised at exp(−d/τ). "
+        r"It costs 0.95% of the decode.")
+    par(r"It does not earn that. Splitting the per-pixel error by distance "
+        r"from the nearest tile boundary, we find the module gains 0.27% in "
+        r"the 0–4 px band, which is 6.2% of pixels, and loses 0.04–0.05% "
+        r"everywhere else. Give it a <i>perfect</i> gate, with zero correction "
+        r"in the interior and the boundary gain unchanged, and the ceiling on "
+        r"what it could earn is ≈0.0008 dB, for 0.95% of the decode. We "
+        r"rejected AR(1) padding at 0.0019 dB per point of decode, and this is "
+        r"worse by an order of magnitude. Tightening the gate cannot rescue "
+        r"it, because there is almost nothing left to win.")
     h2("4.4 Removing the cause, and why it does not help")
-    par(r"Because only 0.29% of each block has spatial extent, the exact fix is "
-        r"affordable: give the 3×3 its real neighbour from a shared canvas, for "
-        r"+0.032% of the decode. And it is exact — at uniform depth a coupled "
-        r"tiled decode is bit-identical to a full-frame one, once the comparison "
-        r"is not confounded by the repair module, which runs on the stitched "
+    par(r"Only 0.29% of each block has spatial extent, so the exact fix is "
+        r"affordable. Give the 3×3 its real neighbour from a shared canvas and "
+        r"the cost is +0.032% of the decode, thirty times less than the repair "
+        r"module. The fix is also exact. At uniform depth a coupled tiled "
+        r"decode is bit-identical to a full-frame one, once the comparison is "
+        r"not confounded by the repair module, which runs on the stitched "
         r"canvas and has no full-frame counterpart. Measured: 1.13e-2 with the "
-        r"repair on, <b>exactly 0</b> with it off, against 6.06e-2 for replicate "
-        r"padding.")
-    par(r"It also removes most of the floor. Switched on at inference the floor "
-        r"falls from 0.036 to 0.003 dB at q0 and from 0.056 to 0.030 at q63, "
-        r"i.e. 91% and 47% of the tiling penalty.")
+        r"repair on, <b>exactly 0</b> with it off, against 6.06e-2 for "
+        r"replicate padding.")
+    par(r"Coupling also removes most of the floor. Switched on at inference, "
+        r"it drops the floor from 0.036 to 0.003 dB at q0 and from 0.056 to "
+        r"0.030 at q63, which is \CoupFloorDropLow% and \CoupFloorDropHigh% of "
+        r"the tiling penalty.")
     par(r"<b>And it destroys the allocation.</b> At the same 0.1 dB budget the "
         r"saving falls from \CoupPaddedMid% to \CoupCoupledMid% at q32 and from "
         r"\CoupPaddedHigh% to \CoupCoupledHigh% at q63.")
-    par(r"The reason is the condition in the exactness statement. Coupling is "
-        r"exact when every tile is at the <i>same</i> depth, and routing is the "
-        r"deliberate violation of that condition. With replicate padding a tile "
-        r"is entirely independent of its neighbours, so the allocation may give "
-        r"adjacent tiles any depths it likes; coupling makes a tile depend on "
-        r"its neighbours, and under routing those neighbours ran a different "
-        r"number of blocks. A shallow tile reading a deep neighbour's activation "
-        r"is a configuration the weights have never seen, and that mismatch "
-        r"costs far more than the seam it removed. We report it because the "
-        r"natural reading of an exactness result — adopt the exact fix — is "
-        r"the wrong one here, and the tension is a property of the combination "
-        r"that any spatially adaptive decoder inherits.")
+    par(r"The reason is structural, and it is written into the condition on "
+        r"the exactness claim. Coupling is exact when every tile is at the "
+        r"<i>same</i> depth, and routing deliberately violates that condition. "
+        r"With replicate padding a tile is entirely independent of its "
+        r"neighbours, so the allocation is free to give adjacent tiles any "
+        r"depths it likes. Coupling makes a tile depend on its neighbours' "
+        r"features, and under routing those neighbours ran a different number "
+        r"of blocks. A shallow tile reading a deep neighbour's activation is a "
+        r"configuration the weights have never seen, and that mismatch costs "
+        r"more than the seam it removed.")
+    par(r"The natural reading of the exactness result is that the exact fix "
+        r"should simply be adopted, and that reading is wrong. We report the "
+        r"negative result for that reason, and because the tension between "
+        r"coupling and routing belongs to the combination itself, so any "
+        r"spatially-adaptive decoder will inherit it. One caveat keeps the "
+        r"finding from being final, the same one that applies to the repair "
+        r"module. This model was trained with padding, and a run trained "
+        r"<i>with</i> coupling could reverse the result. The burden of proof "
+        r"lies with that run.")
 
     # ---- 5 experiments ---------------------------------------------------
     h1("5. Experiments")
     h2("Setup.")
-    par(r"The decoder is fine-tuned on OpenImages 512×512 crops with the "
-        r"encoder frozen (max|Δ| = 0 asserted every run), one λ drawn per "
-        r"sample from a log-spaced range covering all 64 quality indices, so a "
-        r"single set of weights serves the whole rate range. Evaluation is on "
-        r"the \NumSeq sequences of the common test set — UVG, MCL-JCV and "
-        r"HEVC classes B, C, D and E — one intra frame each.")
+    par(r"We fine-tune the decoder on 512×512 crops from OpenImages with the "
+        r"encoder frozen (max|Δ| = 0 is asserted every run). One λ is drawn "
+        r"per sample from a log-spaced range covering all 64 quality indices, "
+        r"so a single set of weights covers the whole rate range. We evaluate "
+        r"on the \NumSeq sequences of the common test set (UVG, MCL-JCV and "
+        r"HEVC classes B, C, D and E), one intra frame each.")
     h2("Measurement protocol.")
-    par(r"Two details change the numbers enough to state. First, the per-tile "
-        r"distortion table must be built on the <i>deployed</i> decode path "
-        r"— one tiled decode per exit — and not by tapping the exits of "
-        r"a single full-frame forward pass. The latter is the natural "
-        r"implementation and correct for training, but with a full-frame "
-        r"reference on the other side of the ratio the tiling penalty cancels "
-        r"and the reported quality belongs to a decoder nobody ships. On our "
-        r"model the difference is +0.035 dB at the deepest exit and +0.008 dB "
-        r"at the shallowest; it grows with how many blocks ran per tile, so it "
-        r"cannot be corrected after the fact. Second, after the allocation is "
-        r"chosen we decode that <i>mixed</i> map once and report the distortion "
-        r"it actually produces.")
+    par(r"Two details of the protocol move the numbers enough that we state "
+        r"them here. The per-tile distortion table has to be built on the "
+        r"<i>deployed</i> decode path, that is, one tiled decode per exit, "
+        r"rather than by tapping the exits of a single full-frame forward "
+        r"pass. Tapping is the natural implementation and it is correct for "
+        r"training. But with a full-frame reference on the other side of the "
+        r"ratio, the tiling penalty cancels, and the quality reported is that "
+        r"of a decoder nobody ships. On our model the gap is +0.035 dB at the "
+        r"deepest exit and +0.008 dB at the shallowest. It is not a constant "
+        r"offset; it grows with how many blocks ran per tile, so we cannot "
+        r"correct for it after the fact. The second detail is that once the "
+        r"allocation is chosen, we decode that <i>mixed</i> map once and "
+        r"report the distortion it actually produces.")
     h2("Reporting conventions.")
     par(r"Every dB is measured against the <i>released</i> decoder's "
         r"full-frame decode of the <i>same</i> latent, and our side is the "
-        r"deployed tiled decode, so the tiling penalty is inside every number. "
-        r"Savings are fractions of the released decoder's cost; our own deepest "
-        r"exit costs 1.0095 of it, and using that as the denominator would "
-        r"flatter every result by 0.6–0.8 points.")
+        r"deployed tiled decode, so the tiling penalty sits inside every "
+        r"number. Savings are fractions of the released decoder's cost. Our "
+        r"own deepest exit costs 1.0095 of it, and using that as the "
+        r"denominator would flatter every result by 0.6–0.8 points.")
     h2("5.1 Main result")
     figure("qualitative.png",
            r"<b>Figure 6. What the saving looks like.</b> The same bitstream "
            r"decoded by the released decoder and by ours at the 0.1 dB operating "
            r"point, 30.5% fewer multiply-accumulates. The crop is the tile that "
-           r"gave up the most quality, chosen automatically, so this is the "
+           r"gave up the most quality, chosen automatically, so it shows the "
            r"method's worst case on this frame rather than a flattering one.")
     tbl("main_results",
         r"<b>Table 3. Decoder MACs saved</b> (%) against the released decoder, "
-        r"per quality index and budget, configuration A. The 0.3 and 0.5 dB "
-        r"rows sit on the architectural ceiling almost everywhere: past that "
-        r"point a looser budget buys nothing.")
-    par(r"At 0.1 dB the method saves \MainLowRate% at the lowest rate and "
-        r"\MainHighRate% at the highest, averaging \MainMean%, at a BD-Rate "
-        r"cost of \BdRateALow% — that is, the compute is worth about the same "
-        r"as a \BdRateALow% increase in bitrate. The fall with rate is not an "
-        r"artefact of "
-        r"the ladder: high-rate reconstructions carry detail the shallow exits "
-        r"cannot reproduce, and the floor rises with rate.")
+        r"per quality index and quality budget, configuration A. The 0.3 and "
+        r"0.5 dB rows sit on the architectural ceiling almost everywhere; past "
+        r"that point a looser budget buys nothing.")
+    par(r"The table carries the headline numbers. At 0.1 dB the method saves "
+        r"\MainLowRate% at the lowest rate and \MainHighRate% at the highest, "
+        r"and \MainMean% on average, at a BD-Rate cost of \BdRateALow%; that "
+        r"is, the compute is worth about the same as a \BdRateALow% increase "
+        r"in bitrate. We do not read the fall with rate as an artefact of the "
+        r"ladder. High-rate reconstructions carry detail the shallow exits "
+        r"cannot reproduce, and the floor rises with rate as well; both "
+        r"effects push the same way.")
     tbl("complexity",
         r"<b>Table 4. Decoder complexity</b> at 1080p. Our deepest exit costs "
         r"slightly more than the release because it still pays the seam-repair "
-        r"module; that 1.0095, not 1.0, is what every saving here is "
-        r"<i>not</i> divided by.")
+        r"module; that 1.0095, not 1.0, is what every saving in this paper is "
+        r"<i>not</i> divided by. Wall-clock is the sorted loop of Section 5.9.")
     figure("rd_spread.png",
            r"<b>Figure 7. The plane a codec is read on, and the spread behind "
            r"the mean.</b> <b>a</b>, operating points against the released "
            r"curve. <b>b</b>, the same with the quality axis expanded; labels "
            r"are compute saved. <b>c</b>, per sequence at a matched point near "
            r"0.1 dB; one dot per sequence, bar is the median.")
-    par(r"Panel c is the distribution the headline averages over, and it is "
-        r"wide. At q0 the median sequence saves 38.6% with an interquartile "
-        r"range of 32.0–41.5, while the worst saves −1.0% — the "
-        r"low-resolution sequences of Section 5.3, where two tiles leave nothing "
-        r"to allocate. Reporting the mean alone would hide both ends.")
+    par(r"Panel c shows the distribution that the headline averages over, and "
+        r"it is wide. At q0 the median sequence saves 38.6%, with an "
+        r"interquartile range of 32.0–41.5, while the worst saves −1.0%. The "
+        r"worst cases are the low-resolution sequences of Section 5.3, where "
+        r"two tiles leave nothing to allocate. Reporting the mean alone would "
+        r"hide both ends.")
     h2("5.2 Is per-tile adaptivity necessary?")
     figure("exit_map.png",
            r"<b>Figure 6. Where the decoder spends.</b> Bosphorus at q32, a "
-           r"0.1 dB budget. (a) the assignment "
-           r"overlaid on the frame, (b) the exit index per tile, (c) the "
-           r"quality each tile gives up against its <i>own</i> full-depth "
-           r"reference. Water and sky leave at the shallowest rung; the boat "
-           r"and shoreline run deep.")
+           r"0.1 dB budget. (a) the assignment overlaid on the frame, (b) the "
+           r"exit index per tile, (c) the quality each tile gives up, against "
+           r"its <i>own</i> full-depth reference. Water and sky leave at the "
+           r"shallowest rung; the boat and the shoreline run deep.")
     tbl("static",
-        r"<b>Table 5. Adaptivity against three controls</b> at 0.1 dB. "
-        r"† marks uniform depths exceeding the budget. Random and rate-ranked "
-        r"draw the oracle's own exit histogram — same average cost, same mix "
-        r"of depths — and differ only in which tile gets which depth.")
-    par(r"The uniform rows answer the obvious alternative, and the answer "
-        r"sharpens with rate. At the lowest rate a static decoder reaches exit "
-        r"3 within the budget and saves 27.0%, against the oracle's "
+        r"<b>Table 5. Adaptivity against two controls</b> at the 0.1 dB budget. "
+        r"† marks uniform depths whose distortion exceeds the budget, so they "
+        r"are not admissible allocations at all. ``Random'' draws each frame's "
+        r"map from the oracle's own exit histogram and shuffles it across "
+        r"tiles, which preserves the average cost and the mix of depths while "
+        r"discarding the content dependence.")
+    par(r"The obvious alternative to routing tiles is to run every tile at the "
+        r"same shallower exit and accept the loss. The table puts that option, "
+        r"together with two stronger controls, at matched compute.")
+    par(r"The uniform rows answer the question directly, and the answer "
+        r"sharpens with rate. At the lowest rate a static decoder can reach "
+        r"exit 3 inside the budget and save 27.0%, against the oracle's "
         r"\MainLowRate%. At q48 and q63 the only uniform depth that fits is "
-        r"the deepest, which <i>costs</i> 0.95% rather than saving anything "
-        r"— so there the choice is not between 17% and less, it is between "
-        r"17% and nothing. Averaged over rates the best static allocation saves "
-        r"10.2% where the adaptive one saves \MainMean%.")
-    par(r"The two shuffled rows separate effects that are easy to conflate. "
-        r"Given the oracle's histogram but assigned at random, quality "
-        r"collapses: what the allocation buys is not that some tiles run "
-        r"shallower, it is knowing <i>which</i> ones can. The rate-ranked row "
-        r"keeps that histogram and orders it by a signal the decoder already "
-        r"holds — the bits the entropy model spent on each tile. It is the "
-        r"cheapest conceivable router, with no parameters and no training, and "
-        r"it is the natural analogue of the confidence rules early-exit "
-        r"classifiers use.")
-    par(r"It recovers most of the gap. At q63, random costs 0.141 dB and the "
-        r"oracle 0.100 dB at identical compute; rate-ranking costs 0.110 dB, "
-        r"i.e. 75% of the oracle's advantage over chance, at 0.68–0.79 "
-        r"agreement with the oracle's map. A learned router therefore has to "
-        r"beat a free baseline already three quarters of the way there — a "
-        r"comparison we would not have made without this control, and one we "
-        r"suggest any adaptive-inference paper should report. Given the "
-        r"oracle's histogram this is a measurement of <i>ranking</i> and "
-        r"nothing else; §5.6 removes that crutch and turns the same signal into "
-        r"a complete routing rule, which beats the trained head above "
-        r"the whole rate range.")
+        r"the deepest one, which <i>costs</i> 0.95% instead of saving "
+        r"anything. At those two rates, then, the comparison is between 17% "
+        r"and nothing at all, not between 17% and something smaller. Averaged "
+        r"over rates, the best static allocation saves \BestStaticMean% where "
+        r"the adaptive one saves \MainMean%.")
+    par(r"The two shuffled rows separate effects that are easy to conflate. We "
+        r"keep the oracle's own exit histogram, so the mix of depths and hence "
+        r"the average cost are unchanged, and assign it to tiles at random. "
+        r"Quality collapses. What the allocation buys is knowing <i>which</i> "
+        r"tiles can afford to run shallower; running some fraction of them "
+        r"shallower is worth nothing by itself. The rate-ranked row keeps the "
+        r"same histogram and orders it by a signal the decoder already holds, "
+        r"namely the bits the entropy model spent on each tile. This is the "
+        r"cheapest router we can think of. It has no parameters and no "
+        r"training, and the number is available before the trunk starts. It is "
+        r"also the natural analogue of the confidence rules used by early-exit "
+        r"classifiers [3, 20], which likewise read a signal off the network's "
+        r"own output.")
+    par(r"It recovers most of the gap. At q63, random costs \RandomDb dB and "
+        r"the oracle 0.100 dB at identical compute, while rate-ranking costs "
+        r"\RateRankDb dB. That is \RateRankRecovers% of the oracle's advantage "
+        r"over chance, at 0.68–0.79 agreement with the oracle's map. A learned "
+        r"router therefore has to beat a free baseline that is already three "
+        r"quarters of the way there. We would not have run that comparison "
+        r"without this control, and we suggest that any adaptive-inference "
+        r"paper report it. Given the oracle's histogram, what we measure here "
+        r"is <i>ranking</i> and nothing else. Section 5.6 removes that crutch "
+        r"and turns the same signal into a complete routing rule, which "
+        r"matches the trained head across the whole rate range.")
     h2("5.3 Resolution, and the granularity of a tile")
     figure("perclass.png",
            r"<b>Figure 7. Saving by test class</b> at one global operating "
@@ -864,26 +1030,38 @@ def content(colw, fullw):
            r"exactly as it would be in deployment; each class is then reported "
            r"at that λ. The ordering follows tile count, not content.")
     tbl("perclass",
-        r"<b>Table 6. Saving by class</b> (%) at a 0.1 dB budget set globally "
-        r"over all 53 sequences. ``Tiles'' is how many 256 px tiles a frame of "
-        r"that resolution contains.")
-    par(r"Completing the test set exposed a dependence the 1080p-only subset "
-        r"had hidden. At 1080p, where a frame is 40 tiles, the method saves "
-        r"\BigResLow% (MCL-JCV), 33.1% (UVG) and 33.8% (HEVC B) at the lowest "
-        r"rate — three classes of very different content within three "
-        r"points of each other. At 832×480 it is 8 tiles and \MidResLow%; at "
-        r"416×240 it is 2 tiles and \SmallResLow%. At q63 the two "
-        r"low-resolution classes fall to \SmallResHigh% against "
-        r"\BigResHigh% for 1080p. The method is a function of tile count far "
-        r"more than of content.")
-    par(r"The cause is granularity: with two tiles per frame there is almost no "
-        r"allocation to make and the Lagrangian degenerates toward a uniform "
-        r"choice. The fix is not more compute but a tile size chosen relative "
-        r"to the frame — the tiling penalty scales with the tile perimeter "
-        r"and the MAC count does not depend on tile size at all, so the trade "
-        r"is between seam and granularity and should be resolved per "
-        r"resolution. We report the single 256 px setting used throughout and "
-        r"note that a resolution-adaptive tile size is the obvious extension.")
+        r"<b>Table 6. Saving by test class</b> (%), at a matched operating "
+        r"point near 0.1 dB. ``Tiles'' is how many 256 px tiles a frame of "
+        r"that resolution contains. The saving tracks tile count much more "
+        r"closely than it tracks content.")
+    par(r"Completing the test set exposed a dependence that the 1080p-only "
+        r"subset had hidden. The table groups the saving by class. At 1080p, "
+        r"where a frame is 40 tiles, we save \BigResLow% (MCL-JCV), 33.1% "
+        r"(UVG) and 33.8% (HEVC B) at the lowest rate, three classes of very "
+        r"different content within three points of each other. At 832×480 a "
+        r"frame is 8 tiles and the saving is \MidResLow%; at 416×240 it is 2 "
+        r"tiles and \SmallResLow%. At high rate the small resolutions collapse "
+        r"to \SmallResHigh% against \BigResHigh% for 1080p.")
+    par(r"The natural explanation is granularity. With two tiles per frame "
+        r"there is almost no allocation left to make, and the Lagrangian "
+        r"degenerates towards a uniform choice. That suggests a fix. Choose "
+        r"the tile size relative to the frame, since the MAC count does not "
+        r"depend on tile size at all and only the seam does.")
+    par(r"<b>We tested that fix and it mostly does not work.</b> We compare "
+        r"the 256 px configuration against a 128 px one at q0, which "
+        r"multiplies the tile count by 3.4. MCL-JCV (1080p) goes from 36.3 to "
+        r"34.3, HEVC B (1080p) from 33.8 to 32.1, HEVC C (832×480) from 20.9 "
+        r"to 17.6, and HEVC D (416×240) from 11.3 to <b>13.7</b>.")
+    par(r"Smaller tiles help only at the smallest resolution, where the count "
+        r"goes from two to eight. Everywhere else they cost between 1.7 and "
+        r"3.3 points, including at 832×480, where the count rises from 8 to 28 "
+        r"and the saving still falls. Beyond a modest number of tiles, the "
+        r"extra seam outweighs the extra granularity. We report the comparison "
+        r"as indicative, since the two configurations come from different "
+        r"training runs and tile size is therefore confounded with training. "
+        r"But the direction is consistent, and it is enough for us to say that "
+        r"a resolution-adaptive tile size is not the easy win the granularity "
+        r"argument suggests.")
     h2("5.4 The working range of a quality budget")
     figure("saturation_RECIPE512.png",
            r"<b>Figure 8. Three regions, and only the middle one is a design "
@@ -901,50 +1079,53 @@ def content(colw, fullw):
            r"<b>b</b>, the frontier between the floor (green) and saturation "
            r"(orange); shaded regions are infeasible and wasted. <b>c</b>, what "
            r"the Lagrangian reaches against the exact Pareto set, enumerated by "
-           r"dynamic programming — the two curves are indistinguishable.")
-    par(r"The construction has enough structure to state as propositions, and we "
-        r"verify each numerically rather than asserting it "
-        r"(scripts/verify_theory.py, seven of seven): the allocation decouples per "
-        r"tile; compute is non-increasing and distortion non-decreasing in λ; "
-        r"the sweep traces the lower convex hull and cannot reach an interior "
-        r"point; λ=0 attains the least distortion the ladder can produce; beyond "
-        r"a finite λ, computable in closed form, the allocation is the constant "
-        r"map to exit j at cost exactly c_j; and the ceiling is a function of "
-        r"the split depth alone.")
-    par(r"The third has a practical edge. Because the sweep reaches only hull "
-        r"vertices, a budget between two of them is not attainable. We measured "
-        r"what that costs by enumerating the <i>exact</i> Pareto set with "
-        r"dynamic programming over tiles — feasible because the cost alphabet "
-        r"has four symbols: the sweep reaches 95 allocations against a Pareto "
-        r"set of 635, and convexity costs at most 0.05 saving points. The "
-        r"standard construction is essentially optimal here.")
-    par(r"It is worth saying <i>why</i> that loss is small, because the reason "
-        r"is structural and says what would make it smaller. The reachable "
-        r"costs form a lattice whose spacing is set by how much the mean cost "
-        r"moves when the multiplier crosses a switching point: m tiles each "
-        r"move one rung, so the spacing is at most m·max(c_k+1 − c_k)/T saving "
-        r"points, and the convexity loss cannot exceed the largest spacing, "
-        r"because a budget between two levels is served by the lower one. Here "
-        r"m=2 — tiles with identical rows switch together — and the bound is "
-        r"0.745 points, which the measured spacing attains exactly. Nothing in "
-        r"the expression depends on content or rate, and it falls as 1/T: "
-        r"halving the tile side puts four times as many tiles on the lattice, "
-        r"each carrying a quarter of the step. Fine granularity is what makes "
-        r"the Lagrangian relaxation lossless in practice, not any property of "
-        r"the images.")
+           r"dynamic programming; the two curves are indistinguishable.")
+    par(r"The construction has enough structure to state as propositions, and "
+        r"we check each one numerically instead of asserting it "
+        r"(scripts/verify_theory.py, seven of seven). The allocation decouples "
+        r"per tile; compute is non-increasing and distortion non-decreasing in "
+        r"λ; the sweep traces the lower convex hull and therefore cannot reach "
+        r"an interior point of the achievable set; λ=0 reaches the least "
+        r"distortion the ladder can produce; beyond a finite λ, computable in "
+        r"closed form, the allocation is the constant map to exit j at cost "
+        r"exactly c_j; and the ceiling is a function of the split depth alone.")
+    par(r"The third of those has a practical edge. The sweep reaches only hull "
+        r"vertices, so a budget that falls between two of them cannot be met "
+        r"exactly. We measured what that costs by enumerating the <i>exact</i> "
+        r"Pareto set with dynamic programming over tiles, which is feasible "
+        r"because the cost alphabet has four symbols. The sweep reaches 95 "
+        r"allocations against a Pareto set of 635, and the loss from convexity "
+        r"is at most 0.05 saving points. For this problem the standard "
+        r"construction is essentially optimal.")
+    par(r"It matters <i>why</i> that loss is small, since the reason is "
+        r"structural and points at what would make it smaller. The reachable "
+        r"costs form a lattice, and its spacing is set by how much the mean "
+        r"cost moves when the multiplier crosses a switching point. If m tiles "
+        r"each move one rung there, the spacing is at most "
+        r"m·max(c_k+1 − c_k)/T saving points. The convexity loss cannot exceed "
+        r"the largest spacing, because a budget between two levels is served "
+        r"by the lower one. Here m=2, since tiles with identical rows switch "
+        r"together, and the bound is 0.745 points; the measured spacing sits "
+        r"exactly on it. Nothing in the expression depends on content or rate, "
+        r"and the bound falls as 1/T: halving the tile side puts four times as "
+        r"many tiles on the lattice, each carrying a quarter of the step. Fine "
+        r"granularity is what makes the Lagrangian relaxation lossless in "
+        r"practice, and no property of the images is doing that work.")
     par(r"Two numbers bound what any budget can do. The <b>floor</b> is the "
-        r"distortion of a tiled decode with every tile at full depth — pure "
-        r"tiling penalty, \FloorLow dB at q0 rising to \FloorHigh dB at q63. "
-        r"A budget below it admits no allocation. The <b>saturation</b> point "
-        r"is the distortion when every tile takes exit j; any budget at or "
-        r"above it attains the ceiling and a larger one attains nothing more.")
-    par(r"A consequence worth stating plainly: at q0 the ceiling is reached at "
-        r"\SatLow dB. The architectural bound is not an asymptote, it is an "
-        r"operating point, and beyond it the limiting factor is the "
-        r"<i>ladder</i>, not the budget — an argument for a finer ladder "
-        r"rather than a looser budget. It also identifies a narrow regime: "
-        r"budgets in [\SatLow, \SatWindowHi) dB saturate the lowest rate and "
-        r"nothing else, a window \SatWindowMb millibels wide.")
+        r"distortion of a tiled decode with every tile at full depth, which is "
+        r"pure tiling penalty: \FloorLow dB at q0, rising to \FloorHigh dB at "
+        r"q63. A budget below it admits no allocation. The <b>saturation</b> "
+        r"point is the distortion when every tile takes exit j; any budget at "
+        r"or above it reaches the ceiling, and a larger one reaches nothing "
+        r"more.")
+    par(r"One consequence of that is worth stating plainly. At q0 the ceiling "
+        r"is reached at \SatLow dB, so the architectural bound behaves as an "
+        r"operating point rather than as an asymptote. Past it, the limiting "
+        r"factor is the <i>ladder</i> and not the budget, which is an argument "
+        r"for a finer ladder before a looser budget. The same two numbers pick "
+        r"out a narrow regime: budgets in [\SatLow, \SatWindowHi) dB saturate "
+        r"the lowest rate and nothing else, a window \SatWindowMb millibels "
+        r"wide.")
     figure("budget_band.png",
            r"<b>Figure 9. The band is the rate dependence.</b> <b>a</b> Saving "
            r"against the budget, with each rate's floor and saturation point "
@@ -953,116 +1134,117 @@ def content(colw, fullw):
            r"power law fitted to all of them.")
     par(r"<b>And the window is almost all of the rate dependence.</b> At a "
         r"matched decibel the five rates are \BandRawSpread points apart. "
-        r"Rescale the budget axis onto each rate's own band — floor at 0, "
-        r"saturation at 1 — and they collapse onto a single curve, "
+        r"Rescale the budget axis onto each rate's own band, with the floor at "
+        r"0 and saturation at 1, and they collapse onto a single curve, "
         r"\BandSpreadMean points apart on average and \BandSpreadMax at worst. "
-        r"So the answer to ``how much does a 0.1 dB budget buy at this rate'' "
-        r"is, to within a couple of points, ``where does 0.1 dB sit in this "
-        r"rate's band''. Both ends are in closed form and cheap to measure; "
-        r"what they leave over is small enough that a deployment could "
-        r"calibrate the two and read the rest off one curve. That curve is a "
-        r"one-parameter power law, saving ≈ C·u^\BandExp with C the "
-        r"architectural ceiling and u the position in the band, fitted in log "
-        r"space over all five rates: R² = \BandR2, worst residual "
-        r"\BandFitErr points.")
-    par(r"<b>It is a property of the ladder, not of this checkpoint.</b> "
-        r"Repeated on a different training run — BEST, a separate recipe at a "
-        r"different epoch — the same thing happens: \BandRawSpreadB points "
-        r"apart at a matched decibel, \BandSpreadMeanB after rescaling, and the "
-        r"collapsed curve is again a power law, R² = \BandRTwoB. The "
-        r"<i>exponent</i> is not universal — \BandExpB there against \BandExp "
-        r"here — so it describes a trained decoder rather than the "
-        r"architecture. What replicates is the collapse: within a checkpoint, "
-        r"the rate dependence of the trade-off is the rate dependence of the "
-        r"band.")
+        r"The answer to ``how much does a 0.1 dB budget buy at this rate'' is "
+        r"therefore, to within a couple of points, ``where does 0.1 dB sit in "
+        r"this rate's band''. The floor and the saturation point are both in "
+        r"closed form and both cheap to measure. What they leave over is small "
+        r"enough that a deployment could calibrate the two ends and read the "
+        r"rest off one curve. That curve is a one-parameter power law, "
+        r"saving ≈ C·u^\BandExp, with C the architectural ceiling and u the "
+        r"position in the band. We fit it in log space over all five rates and "
+        r"get R² = \BandR2, worst residual \BandFitErr points.")
+    par(r"<b>It is a property of the ladder, not of this checkpoint.</b> We "
+        r"repeated the measurement on a different training run, BEST, a "
+        r"separate recipe taken at a different epoch, and the same thing "
+        r"happens. The rates are \BandRawSpreadB points apart at a matched "
+        r"decibel and \BandSpreadMeanB after rescaling, and the collapsed "
+        r"curve is again a power law, R² = \BandRTwoB. The <i>exponent</i> "
+        r"does not carry over: \BandExpB there against \BandExp here, so it "
+        r"describes a trained decoder and not the architecture. What "
+        r"replicates is the collapse. Within a checkpoint, the rate dependence "
+        r"of the trade-off is the rate dependence of the band.")
     figure("tradeoff.png",
            r"<b>Figure 9. The trade-off, whole.</b> <b>a</b> What a budget buys, "
            r"per rate; the ceiling is \Ceiling% and q0 reaches it at "
-           r"\SatLow dB. <b>b</b> The same relation inverted — what a saving "
-           r"target costs. Both are the curve the three budgets reported "
-           r"elsewhere are three points of.")
+           r"\SatLow dB. <b>b</b> The same relation inverted, so it reads as "
+           r"what a saving target costs. The three budgets reported elsewhere "
+           r"are three points on this curve.")
     h2("5.5 Signalled versus predicted allocation")
     figure("router_ab.png",
            r"<b>Figure 9. Who decides.</b> <b>(a)</b> A holds the source, so it "
            r"can decode all K exits per tile and pick the true minimiser; it "
            r"signals the map at ~\MapBits bits/frame. B never sees the source "
-           r"— a \RouterParams-parameter head reads y-hat, the entropy scales and "
-           r"qp — and signals nothing. <b>(b)</b> Saving at 0.1 dB; shading is "
-           r"what a bit-exact bitstream costs. <b>(c)</b> That cost is smallest "
-           r"at q\GapMinQp, where the tilt needed to move the router off its "
-           r"training multiplier is essentially zero, and grows in both "
-           r"directions. At 0.3 dB it collapses to the router's own "
+           r"and signals nothing; its \RouterParams-parameter head reads "
+           r"y-hat, the entropy scales and qp. <b>(b)</b> Saving at 0.1 dB; "
+           r"shading is what a bit-exact bitstream costs. <b>(c)</b> That cost "
+           r"is smallest at q\GapMinQp, where the tilt needed to move the "
+           r"router off its training multiplier is essentially zero, and grows "
+           r"in both directions. At 0.3 dB it collapses to the router's own "
            r"\RouterCostPct% wherever the budget saturates the ladder, and "
            r"widens where it does not.")
     tbl("ab",
         r"<b>Table 7. Signalled against predicted</b> at two budgets, same "
         r"checkpoint and test set, with one router trained against the deployed "
         r"oracle at a single λ.")
-    par(r"Configuration A is exact by construction and costs bits; B is "
-        r"approximate and costs none. The comparison splits in two.")
+    par(r"Configuration A is exact by construction and costs bits; "
+        r"configuration B is approximate and costs none. The table above "
+        r"compares them.")
     par(r"<b>Not signalling costs \GapMin–\GapMax points</b>, roughly flat "
         r"across rate, for zero added bits and a byte-identical file. The gap "
-        r"is smallest at q\GapMinQp and grows toward both ends.")
+        r"is smallest at q\GapMinQp and widens toward both ends of the rate "
+        r"range.")
     par(r"<b>It tracks |β|</b>, the tilt the bisection has to apply to move a "
         r"router trained at one λ onto another operating point. At q\BetaMinQp "
-        r"the required tilt is β=\BetaAtMin — essentially none, because that "
-        r"is where the training λ lands — and the gap is at its minimum. At q0 "
-        r"the tilt is \BetaLow and the gap is \GapMax. A large tilt lets the "
-        r"cost term dominate the logits and discards the content ranking the "
-        r"router learned, in either direction. The remedy is not a better "
-        r"architecture but a router per operating point, which a deployment "
-        r"would have anyway: one set of weights serves all rates, and a "
-        r"\RouterParams head per rate is 0.3% of the model each.")
+        r"the required tilt is β=\BetaAtMin, essentially none, since that is "
+        r"where the training λ lands, and there the gap is at its minimum. At "
+        r"q0 the tilt is \BetaLow and the gap is \GapMax. A large tilt in "
+        r"either direction lets the cost term dominate the logits, which "
+        r"discards the content ranking the router learned. The remedy is a "
+        r"router per operating point, and a deployment would have one anyway: "
+        r"a single set of weights covers all rates, and a \RouterParams head "
+        r"per rate is 0.3% of the model each.")
     par(r"Loosening the budget closes the gap only where the budget saturates "
-        r"the ladder. At 0.3 dB it is \GapLooseLow points at the three lowest "
-        r"rates — exactly the router's own \RouterCostPct% of decode, so its "
-        r"<i>prediction</i> is free there: both configurations send every tile "
-        r"to the cheapest rung and there is nothing left to predict wrongly. At "
-        r"the two highest rates 0.3 dB does not saturate, and the gap "
-        r"<i>widens</i> to \GapLooseHigh points, because a looser budget gives "
-        r"the allocation more room to be wrong in as well as more room to be "
+        r"the ladder. At 0.3 dB the gap is \GapLooseLow points at the three "
+        r"lowest rates. That is exactly the router's own \RouterCostPct% of "
+        r"decode, so its <i>prediction</i> is free there; both configurations "
+        r"send every tile to the cheapest rung, and nothing is left to predict "
+        r"wrongly. At the two highest rates 0.3 dB does not saturate, and the "
+        r"gap <i>widens</i> to \GapLooseHigh points. A looser budget gives the "
+        r"allocation more room to be wrong in as well as more room to be "
         r"right.")
-    par(r"We report the single-router number because it is the honest one for a "
-        r"system that trains once, and note that it understates what B can do.")
+    par(r"For a system that trains once, the single-router number is the "
+        r"honest one, so that is what we report. It understates what B can do.")
     par(r"<b>Retraining with a working mask raises agreement and does not "
         r"simply raise the saving.</b> The head above was trained against a "
-        r"suppression term sitting above its own logits (below). Retrained with "
-        r"the mask fixed, same recipe and same λ, its held-out agreement rises "
-        r"from \RetrainAgreeOld to \RetrainAgreeNew — and the deployed saving "
-        r"moves by +\RetrainGain points at q\RetrainGainQp and "
-        r"−\RetrainLoss at q\RetrainLossQp. It is better where the required "
-        r"tilt is small and worse where it is large, which is the same axis the "
-        r"gap runs along, and it is the second time in this paper that "
-        r"agreement with the oracle has moved opposite to the quantity that "
-        r"matters. We keep the original head for every other measurement so the "
-        r"comparisons stay on one system, and record the retrain as what it is: "
-        r"evidence that the mask cost the head real capacity, and that "
-        r"agreement is not the objective.")
+        r"suppression term sitting above its own logits (below). We retrained "
+        r"it with the mask fixed, same recipe and same λ. Held-out agreement "
+        r"rises from \RetrainAgreeOld to \RetrainAgreeNew, and the deployed "
+        r"saving moves by +\RetrainGain points at q\RetrainGainQp and "
+        r"−\RetrainLoss at q\RetrainLossQp. We find the retrained head ahead "
+        r"where the required tilt is small and behind where it is large, which "
+        r"is the same axis the gap runs along. That is the second time in this "
+        r"paper that agreement with the oracle has moved opposite to the "
+        r"quantity that matters. We keep the original head for every other "
+        r"measurement so the comparisons stay on one system, and we read the "
+        r"retrain as evidence that the mask cost the head real capacity, and "
+        r"that agreement is not the objective.")
     par(r"An earlier version of this measurement put the gap at 1.7 points at "
-        r"q0 rising to 13.3 at q63. That was the exit mask: the head suppresses "
-        r"exits below the split depth by assigning -1e4, its own logits had "
-        r"drifted to that scale, and the suppressed entries were therefore the "
-        r"largest in every row — so a large share of every tile went to the "
+        r"q0, rising to 13.3 at q63. The exit mask was at fault. It suppresses "
+        r"exits below the split depth by assigning -1e4, the head's own logits "
+        r"had drifted to that scale, and the suppressed entries were therefore "
+        r"the largest in every row. A large share of every tile went to the "
         r"cheapest rung for a reason unrelated to its content. The mask is now "
         r"negative infinity. Fixing it costs 3.5 points at q0, where the "
-        r"accident happened to "
-        r"agree with the oracle, and buys 9.4 at q63, where it did not.")
+        r"accident happened to agree with the oracle, and buys 9.4 at q63, "
+        r"where it did not.")
     h2("5.6 A router with no parameters")
     par(r"Before a \RouterParams head is worth its \RouterCostPct% of the "
         r"decode, it has to beat what the decoder already knows. The entropy "
-        r"model has produced a number per tile before the trunk runs and at no "
-        r"cost: how many bits that tile's latents took.")
-    par(r"We turn it into a routing rule with no learned parameters. Model the "
-        r"per-tile distortion as rank-1 in the log domain, "
-        r"in the log domain")
+        r"model has produced one number per tile before the trunk runs, and at "
+        r"no cost: how many bits that tile's latents took.")
+    par(r"We turn it into a routing rule with no learned parameters. We model "
+        r"the per-tile distortion as rank-1 in the log domain")
     eq(r"\log D(t,k) \;\approx\; \alpha \log b(t) + c + \log \varphi_{k}")
-    par(r"where b is the tile's bit "
-        r"count normalised by the frame mean and φ is a K-vector saying what "
-        r"each exit costs on an average tile. Fit (α, c, φ) by least squares, "
-        r"leave-one-sequence-out so no sequence contributes to the profile that "
-        r"routes it, and run the same Lagrangian the oracle runs on the "
-        r"surrogate. Nothing is signalled, nothing is trained, and the "
-        r"arithmetic is a scalar per tile.")
+    par(r"where b is the tile's bit count normalised by the frame mean and φ "
+        r"is a K-vector saying what each exit costs on an average tile. We fit "
+        r"(α, c, φ) by least squares, leave-one-sequence-out, so that no "
+        r"sequence contributes to the profile that routes it. The same "
+        r"Lagrangian the oracle runs is then run on the surrogate. Nothing is "
+        r"signalled and nothing is trained; the arithmetic is one scalar per "
+        r"tile.")
     figure("raterank.png",
            r"<b>Figure 10. The free baseline.</b> <b>a</b> Saving at 0.1 dB; "
            r"shaded where the parameter-free rule beats the trained head. "
@@ -1075,165 +1257,168 @@ def content(colw, fullw):
         r"correlations between a tile's bit count and, respectively, the depth "
         r"the oracle assigns it and the distortion it stands to gain from that "
         r"depth.")
-    par(r"<b>It matches the trained head to within a point either way.</b> It "
-        r"beats the \RouterParams router at the \RateRankNWins lowest rates, "
-        r"by up to \RateRankBeatsBy points, and loses at the two highest by at "
-        r"most \RateRankLosesBy. That is the whole margin between a "
-        r"parameter-free rule and a head that was trained on this decoder "
-        r"against this oracle, and the free rule carries none of the head's "
+    par(r"<b>It matches the trained head to within a point either way.</b> The "
+        r"free rule beats the \RouterParams router at the \RateRankNWins "
+        r"lowest rates, by up to \RateRankBeatsBy points, and loses at the two "
+        r"highest by at most \RateRankLosesBy. A margin that small is the "
+        r"entire return on a head that was trained on this decoder against "
+        r"this oracle, and the free rule carries none of the head's "
         r"\RouterCostPct% of decode.")
     par(r"<b>Why it works is not that it agrees with the oracle.</b> It agrees "
         r"on \RateRankAgreeLo–\RateRankAgreeHi of tiles, well below the "
         r"router's 0.718, and still saves more at three of five rates. "
-        r"Agreement counts a disagreement on a tile where two exits are within "
+        r"Agreement weighs a disagreement on a tile where two exits are within "
         r"a hair of each other exactly as heavily as one where the choice is "
-        r"most of the frame's error, and most tiles are the former. What the "
-        r"rule gets right is the ordering that matters: bits correlate with the "
-        r"<i>spread</i> across the ladder — how much a tile stands to gain from "
-        r"depth — at ρ_spread = \RateRankSpreadLo–\RateRankSpreadHi at every "
-        r"rate.")
+        r"most of the frame's error, and most tiles are the former. The "
+        r"ordering is what the rule gets right. Bits correlate with the "
+        r"<i>spread</i> across the ladder, that is, with how much a tile "
+        r"stands to gain from depth, at "
+        r"ρ_spread = \RateRankSpreadLo–\RateRankSpreadHi at every rate.")
     par(r"<b>At a looser budget it stops being a baseline and becomes the "
-        r"answer.</b> At 0.3 dB it reaches the architectural ceiling exactly at "
-        r"the \RateRankLooseCeil lowest rates, is within 0.2 points of the "
-        r"oracle at q48, and gives up \RateRankLoose% against the oracle's "
-        r"\SigLooseHigh% at q63 — better than the trained head at every rate, by "
-        r"up to \RateRankLooseAheadBy points. The head is charged for itself "
-        r"and this is not, and at a loose budget its ordering has less left to "
-        r"contribute. Once the "
-        r"budget saturates the ladder there is little ordering left to get "
-        r"right, and the free rule gets it. At 0.5 dB it reaches the ceiling at "
-        r"\RateRankHalfDbExact rate and its assignment is <i>identical</i> to "
-        r"the oracle's on every tile.")
+        r"answer.</b> At 0.3 dB the free rule reaches the architectural "
+        r"ceiling exactly at the \RateRankLooseCeil lowest rates, comes within "
+        r"0.2 points of the oracle at q48, and gives up \RateRankLoose% "
+        r"against the oracle's \SigLooseHigh% at q63. That is ahead of the "
+        r"trained head at every rate, by up to \RateRankLooseAheadBy points. "
+        r"The head is charged for itself and the free rule is not. At a loose "
+        r"budget the head's ordering also has less left to contribute, because "
+        r"once the budget saturates the ladder there is little ordering left "
+        r"to get right, and the free rule gets it. At 0.5 dB it reaches the "
+        r"ceiling at \RateRankHalfDbExact rate and its assignment is "
+        r"<i>identical</i> to the oracle's on every tile.")
     par(r"<b>What it cannot do</b> is see anything beyond that ordering. A "
         r"rank-1 model in the level assigns every tile the same relative "
         r"profile over exits, so b only decides where on the ladder a tile "
         r"falls, never the shape of its trade-off. That is the ceiling this "
-        r"baseline sits at, and it is the part a learned head should be earning "
-        r"its parameters on. Ours earns it at high rate and does not at low.")
+        r"baseline sits at, and it is the part a learned head should be "
+        r"earning its parameters on. Ours earns them at low rate and does not "
+        r"earn them at high rate.")
     tbl("raterank_best",
         r"<b>Table 9. The same comparison on a second training run</b> (BEST), "
         r"0.1 dB, same test set. Bold where the parameter-free rule beats that "
         r"run's own trained head.")
-    par(r"<b>It replicates, and more strongly, on a second training run.</b> On "
-        r"BEST — a separate recipe at a different epoch, with its own router "
-        r"trained the same way — the free rule beats the trained head at "
+    par(r"<b>It replicates, and more strongly, on a second training run.</b> "
+        r"BEST is a separate recipe at a different epoch, with its own router "
+        r"trained the same way. There the free rule beats the trained head at "
         r"\BestRankWinsN of \BestRankOfN rates, by up to \BestRankBy points, "
         r"and comes within \BestRankToOracle points of the <i>oracle</i> "
-        r"everywhere. Whether a learned head is worth its parameters is "
-        r"therefore not settled by our head: on one checkpoint it wins narrowly "
-        r"at low rate, on another it loses badly at four rates out of five. "
-        r"What does not vary is that the free rule is close to the oracle on "
-        r"both.")
+        r"everywhere. Our head therefore does not settle whether a learned "
+        r"head is worth its parameters. On one checkpoint it wins narrowly at "
+        r"low rate; on another it loses badly at four rates out of five. The "
+        r"free rule stays close to the oracle on both.")
     par(r"Per-block bit allocation is a standard quantity in learned "
-        r"compression, where it is something to <i>choose</i>: block-level rate "
-        r"control sets it so that complex regions get more bits [42]. We read "
-        r"the same number in the other direction, after the fact and at the "
-        r"decoder, as a statement about how hard a region was — which costs "
-        r"nothing precisely because someone else already paid for it.")
+        r"compression, where it is something to <i>choose</i>; block-level "
+        r"rate control sets it so that complex regions get more bits [42]. We "
+        r"read the same number in the other direction, after the fact and at "
+        r"the decoder, as a statement about how hard a region was. It costs "
+        r"nothing because someone else has already paid for it.")
     tbl("blend",
         r"<b>Table 9. Blending the two decoder-side signals</b> at 0.1 dB, both "
         r"normalised to unit mean, weight w from the bit rule to the head's "
         r"ordering. Bold is the best per rate.")
-    par(r"<b>Are the two signals complementary?</b> Barely. The best blend is "
-        r"w=0 at the three lowest rates and a small head weight at the two "
-        r"highest, worth +2.1 points at q48 and +0.9 at q63. The head reads the "
-        r"entropy model's scales, so it already has most of what the bit count "
-        r"carries; what it adds is confined to the regime where the free rule "
-        r"was losing anyway.")
-    par(r"We report this because a learned component should be measured against "
-        r"the free alternative and rarely is. In adaptive inference the usual "
-        r"controls are a uniform allocation and a random one; both are far "
-        r"weaker than a decoder-side signal that happens to be lying around.")
+    par(r"<b>Are the two signals complementary?</b> Barely. We normalise both "
+        r"surrogates to unit mean and blend them with one weight w, where w=0 "
+        r"is the bit rule and w=1 the head's ordering. The best blend is w=0 "
+        r"at the three lowest rates and a small head weight at the two "
+        r"highest, worth +2.1 points at q48 and +0.9 at q63. The head reads "
+        r"the entropy model's scales, so it already has most of what the bit "
+        r"count carries; what it adds is confined to the regime where the free "
+        r"rule was losing anyway.")
+    par(r"A learned component should be measured against the free alternative, "
+        r"and it rarely is. In adaptive inference the usual controls are a "
+        r"uniform allocation and a random one. Both are much weaker than a "
+        r"decoder-side signal that is already lying around.")
     h2("5.7 Signalling only what the router gets wrong")
-    par(r"A and B are the two ends of a single scale, not two designs. The "
-        r"encoder can run the decoder's router — it reads only decoded data — "
-        r"so it knows, tile by tile, where the prediction will be wrong. "
-        r"Nothing forces it to correct all of them.")
-    par(r"Configuration C signals a fraction ρ of the tiles and leaves the rest "
-        r"to the router. The overrides are chosen by Lagrangian regret, which is "
-        r"exactly what the objective loses on that tile by staying silent; β is "
-        r"held at B's value and λ is bisected over the overrides to land back on "
-        r"the budget. The map costs an entropy-coded mask, N·H(ρ) bits, H the binary entropy,, plus 3 "
-        r"per override.")
+    par(r"A and B are the two ends of one scale. The encoder can run the "
+        r"decoder's router, which reads only decoded data, so the encoder "
+        r"knows tile by tile where the prediction will be wrong. Nothing "
+        r"obliges it to correct every one of them.")
+    par(r"Configuration C signals a fraction ρ of the tiles and leaves the "
+        r"rest to the router. We choose the overrides by Lagrangian regret, "
+        r"which is exactly what the objective loses on that tile by staying "
+        r"silent. We hold β at B's value and bisect λ over the overrides to "
+        r"land back on the budget. The map costs an entropy-coded mask, "
+        r"N·H(ρ) bits with H the binary entropy, plus 3 per override.")
     figure("hybrid.png",
            r"<b>Figure 10. Partial signalling.</b> <b>a</b> Saving against the "
            r"bits spent on the map; the left end of each line is B and the right "
            r"end is A. <b>b</b> The same, normalised: what fraction of the A–B "
-           r"gap a given fraction of the map recovers; above 100% a partial map is "
-           r"beating a complete one. <b>c</b> The same against the fixed-λ "
-           r"Lorenz prediction; dashed is equality, and points above it are "
-           r"allocations a single multiplier cannot reach.")
+           r"gap a given fraction of the map recovers; dashed is proportional "
+           r"recovery, and above 100% a partial map is beating a complete one. "
+           r"<b>c</b> The same against the fixed-λ Lorenz prediction; dashed is "
+           r"equality, and points above it are allocations a single multiplier "
+           r"cannot reach.")
     tbl("hybrid",
         r"<b>Table 8. Configuration C</b> at 0.1 dB. Columns are the fraction of "
         r"tiles the encoder overrides; the two end columns reproduce B and A to "
         r"within 0.1 points, which is the check that the interpolation is real.")
     par(r"<b>The two ends check out.</b> At ρ=0 the measurement reproduces "
         r"configuration B to the second decimal at every rate, and at ρ=1 it "
-        r"reproduces A. Neither is imposed — both fall out of the same code "
-        r"path against independently measured files — so the columns between "
-        r"them measure something real.")
+        r"reproduces A. Neither end is imposed; both fall out of the same code "
+        r"path run against independently measured files, so the columns "
+        r"between them are measuring something real.")
     par(r"<b>Most of the gap is cheap.</b> Overriding a tenth of the tiles for "
         r"\HybridBitsTenth bits per frame recovers "
-        r"\HybridRecoverTenthLow–\HybridRecoverTenthHigh% of the gap and a "
+        r"\HybridRecoverTenthLow–\HybridRecoverTenthHigh% of the gap, and a "
         r"fifth recovers \HybridRecoverFifthLow–\HybridRecoverFifthHigh%. "
         r"Recovery is concave everywhere, so the first bits spent are the most "
         r"useful ones.")
     par(r"<b>And a partial map can beat a complete one.</b> At \HybridBeatsAN "
         r"of \HybridBeatsAOf rates, signalling half the tiles for "
-        r"\HybridBitsHalf bits saves <i>more</i> than signalling all of them — "
-        r"up to \HybridBeatsABy points — at the same distortion. Both land "
-        r"within the bisection's 5e-4 dB tolerance of the budget, and the local "
-        r"exchange rate is about 48 saving points per decibel, so the tolerance "
-        r"is worth 0.02 points against a margin ten to twenty times that. It is "
-        r"not noise, and it is not a better predictor: the hybrid has <i>two</i> "
-        r"multipliers where A has one. The oracle's λ governs the overridden "
-        r"tiles and the router's fixed β the rest, and a two-multiplier "
-        r"allocation reaches points on the distortion–compute plane that a "
-        r"single Lagrangian sweep cannot, for the same reason the sweep misses "
-        r"interior Pareto points at all. Configuration A is optimal among "
-        r"allocations reachable by one multiplier, which is a smaller set than "
-        r"it sounds.")
+        r"\HybridBitsHalf bits saves <i>more</i> than signalling all of them, "
+        r"by up to \HybridBeatsABy points, at the same distortion. Both land "
+        r"within the bisection's 5e-4 dB tolerance of the budget, and the "
+        r"local exchange rate is about 48 saving points per decibel, so the "
+        r"tolerance is worth 0.02 points against a margin ten to twenty times "
+        r"that. The margin is therefore real, and it does not come from a "
+        r"better predictor. The hybrid has <i>two</i> multipliers where A has "
+        r"one: the oracle's λ governs the overridden tiles and the router's "
+        r"fixed β the rest. A two-multiplier allocation reaches points on the "
+        r"distortion–compute plane that a single Lagrangian sweep cannot, for "
+        r"the same reason the sweep misses interior Pareto points at all. "
+        r"Configuration A is optimal among allocations reachable by one "
+        r"multiplier, and that is a smaller set than the word suggests.")
     par(r"<b>Why the recovery is concave, and what bounds it.</b> At a fixed λ "
         r"the objective is separable, so overriding a set removes <i>exactly</i> "
-        r"the sum of that set's regrets: the recovery of the <i>objective</i> "
-        r"is the Lorenz curve of the per-tile regret distribution, and its "
-        r"curvature is that distribution's Gini coefficient, "
-        r"\GiniMin–\GiniMax across rates. What the table reports is not "
-        r"objective but saving at fixed distortion, and returning to the budget "
-        r"means re-bisecting λ — which is also what lets the two-multiplier "
-        r"allocations above escape the bound.")
-    par(r"<b>At the loose budget it matters where the gap is.</b> At 0.3 dB the "
-        r"three lowest rates are saturated and there is nothing for a partial "
-        r"map to buy. At \HybridLooseQps, where the gap is \GapLooseHigh "
-        r"points, half the map recovers "
-        r"\HybridLooseRecLo–\HybridLooseRecHi% of it. The rule is the same one "
-        r"the allocation follows everywhere: spend the bits where the ladder "
-        r"still has somewhere to go.")
+        r"the sum of that set's regrets. The recovery of the <i>objective</i> "
+        r"is then the Lorenz curve of the per-tile regret distribution, and "
+        r"its curvature is that distribution's Gini coefficient, "
+        r"\GiniMin–\GiniMax across rates. What the table reports is saving at "
+        r"fixed distortion, not the objective, and returning to the budget "
+        r"means re-bisecting λ. That re-bisection is also what lets the "
+        r"two-multiplier allocations above escape the bound.")
+    par(r"<b>At the loose budget it matters where the gap is.</b> At 0.3 dB "
+        r"the three lowest rates are saturated, and there is nothing for a "
+        r"partial map to buy. At \HybridLooseQps, where the gap is "
+        r"\GapLooseHigh points, half the map recovers "
+        r"\HybridLooseRecLo–\HybridLooseRecHi% of it. The allocation follows "
+        r"the same rule here as everywhere else, which is to spend the bits "
+        r"where the ladder still has somewhere to go.")
     par(r"<b>A better predictor concentrates its regret, which is what the "
-        r"Gini was for.</b> Rebuilding C on the retrained head of §5.5 raises "
-        r"the Gini of the per-tile regret at \GiniRetrainUpN of "
-        r"\GiniRetrainOfN rates, to \GiniRetrainLo–\GiniRetrainHi: its "
-        r"mistakes are rarer and larger. The consequence is visible in the same "
-        r"table — C converges on A faster from a better base and has less left "
-        r"to recover, and the half-beats-all effect disappears at q0, because a "
+        r"Gini was for.</b> We rebuild C on the retrained head of Section 5.5. "
+        r"The Gini of the per-tile regret rises at \GiniRetrainUpN of "
+        r"\GiniRetrainOfN rates, to \GiniRetrainLo–\GiniRetrainHi. Its "
+        r"mistakes are rarer and larger. The same table shows the consequence. "
+        r"C converges on A faster from a better base and has less left to "
+        r"recover, and the half-beats-all effect disappears at q0, because a "
         r"base close to A leaves little for the extra multiplier to exploit. "
-        r"The Lorenz reading is therefore a diagnostic rather than a "
-        r"decoration: it says what <i>kind</i> of predictor one has, not just "
-        r"how good.")
-    par(r"<b>Which predictor should C be built on?</b> Either — and the answer "
-        r"follows the same split as §5.6. Running the identical override rule "
-        r"over the parameter-free surrogate instead of the head is worth up to "
-        r"\CPredBitsAhead points at the lowest rate and costs up to "
-        r"\CPredHeadAhead at the highest. Both converge on A at ρ=1 to the "
-        r"second decimal at every rate, which is the third independent check "
-        r"that the two code paths agree. The best single operating point we "
-        r"measured is the free predictor with half the map signalled: "
-        r"\CBestSave% at q\CBestQp, \CBestOverA points <i>above</i> full "
-        r"signalling, with no learned component anywhere in the decoder.")
+        r"The Lorenz reading is therefore worth having as a diagnostic and not "
+        r"as a decoration; it reports what <i>kind</i> of predictor one has as "
+        r"well as how good it is.")
+    par(r"<b>Which predictor should C be built on?</b> Either will do, and the "
+        r"answer follows the same split as Section 5.6. Running the identical "
+        r"override rule over the parameter-free surrogate instead of the head "
+        r"is worth up to \CPredBitsAhead points at the lowest rate and costs "
+        r"up to \CPredHeadAhead at the highest. Both converge on A at ρ=1 to "
+        r"the second decimal at every rate, which is the third independent "
+        r"check that the two code paths agree. The best single operating point "
+        r"we measured is the free predictor with half the map signalled, at "
+        r"\CBestSave% at q\CBestQp. That is \CBestOverA points <i>above</i> "
+        r"full signalling, with no learned component anywhere in the decoder.")
     par(r"Configuration C is what we would ship where a small map is tolerable "
-        r"and a large one is not. It also reframes the A–B gap: it is not the "
-        r"price of prediction, it is the price of <i>silence</i>, and silence "
-        r"is priced per tile.")
+        r"and a large one is not. It also reframes the A–B gap. What the gap "
+        r"measures is the price of <i>silence</i>, charged tile by tile, "
+        r"rather than the price of prediction.")
     h2("5.8 Does the map have to be recomputed?")
     figure("map_transfer.png",
            r"<b>Figure 10. Reusing an exit map.</b> Solid is the transferred "
@@ -1242,142 +1427,161 @@ def content(colw, fullw):
            r"index; the entry is the delivered distortion against a 0.1 dB "
            r"budget.")
     par(r"Configuration A costs the encoder about one extra decode per frame. "
-        r"Whether that matters depends on how often the map has to be "
-        r"recomputed, which nobody has checked.")
-    par(r"<b>Across time it barely has to be.</b> Frame 0's map applied eight "
-        r"frames later costs 0.005 dB at q0 — five percent of the budget — "
-        r"and no saving at all: \TransferSaving% transferred against "
-        r"\TransferInPlaceLo–\TransferInPlaceHi% "
-        r"recomputed. The allocation is a property of where the content is hard, "
-        r"and that moves slowly. A codec would search once per group of pictures "
-        r"and divide the encoder cost by the group length.")
-    par(r"<b>Across rate it very much does</b>, and the direction matters. The "
-        r"map found at q0 applied at q63 delivers \TransferCrossDb dB against a 0.1 dB "
-        r"budget: it claims the low-rate saving of \TransferSaving% while spending nearly "
-        r"twice the quality it is allowed. The reverse is safe but wasteful "
-        r"— the q63 map at q0 delivers 0.075 dB and only 19.8% where 33.1% "
-        r"was available. Shallow exits are cheap in quality at low rate and "
-        r"expensive at high rate, so a map is calibrated to the rate it was found "
-        r"at, and reusing it upward silently breaks the quality guarantee. Search "
-        r"once per rate, reuse across frames.")
+        r"How much that matters depends on how often the map has to be "
+        r"recomputed, and we have not seen that measured anywhere.")
+    par(r"<b>Across frames.</b> Reuse is close to free. We take the map found "
+        r"on frame 0 and apply it eight frames later; at q0 the delivered "
+        r"distortion rises by \TransferDbCost dB, five percent of the budget, "
+        r"and the saving does not move at all: \TransferSaving% transferred "
+        r"against \TransferInPlaceLo–\TransferInPlaceHi% recomputed. The "
+        r"allocation is a property of where the content is hard, and that "
+        r"moves slowly. A codec would search once per group of pictures "
+        r"instead of once per frame, and divide the encoder cost by the group "
+        r"length.")
+    par(r"<b>Across rate.</b> Here the map does have to be recomputed, and the "
+        r"direction of the reuse decides how badly. Found at q0 and applied at "
+        r"q63, it delivers \TransferCrossDb dB against a 0.1 dB budget, "
+        r"claiming the low-rate saving of \TransferSaving% while spending "
+        r"nearly twice the quality it is allowed. The reverse is safe but "
+        r"wasteful: the q63 map applied at q0 delivers 0.075 dB and only 19.8% "
+        r"where 33.1% was available. Shallow exits are cheap in quality at low "
+        r"rate and expensive at high rate, so a map is calibrated to the rate "
+        r"it was found at, and reusing one upward breaks the quality guarantee "
+        r"without anything in the decode reporting that it has. An encoder "
+        r"should search once per rate and reuse that search across frames.")
     h2("5.9 Complexity and wall-clock")
     tbl("latency",
         r"<b>Table 8. Wall-clock</b>, 1080p, median of 40 interleaved "
-        r"iterations, at the 0.1 dB operating point. ``MACs'' is what the "
-        r"arithmetic predicts; ``measured'' is the sorted per-tile loop.")
+        r"iterations on one A100-class GPU, at the 0.1 dB operating point. "
+        r"``MACs'' is what the arithmetic predicts; ``measured'' is the sorted "
+        r"per-tile loop.")
     par(r"A saving in multiply-accumulates is not a saving in time. Tiling "
-        r"itself costs \TilingOverhead% before anything exits early — the "
-        r"deepest-exit tiled decode against the released full-frame one, same "
-        r"arithmetic, same weights — and the routed decode realises "
-        r"\WallMasked% at q0 against the \WallPredicted% its operations "
-        r"predict. Four fifths of the predicted saving arrives; the missing "
-        r"fifth is the tiling overhead plus the bookkeeping of a shrinking "
-        r"active set, which a MAC count cannot see. The shortfall is "
-        r"proportional rather than constant: \WallHighMeasured% realised "
-        r"against \WallHighPredicted% at q63.")
-    par(r"Sorting the tiles once by exit depth recovers part of it. The obvious "
-        r"implementation of a shrinking active set — a boolean mask, a gather "
-        r"of survivors and a scatter of the finished at every group boundary — "
-        r"forces a device-to-host synchronisation per boundary. Descending by "
-        r"exit depth, ``still active at group g'' becomes a contiguous prefix "
-        r"instead: each group is a slice rather than a gather, the boundaries "
-        r"come from one cumulative count rather than a mask per group, and the "
-        r"finished tiles return through the inverse permutation in a single "
+        r"costs \TilingOverhead% before anything exits early, measured as the "
+        r"deepest-exit tiled decode against the released full-frame one at the "
+        r"same arithmetic and the same weights. On top of that, the routed "
+        r"decode realises \WallMasked% at q0 where its operations predict "
+        r"\WallPredicted%. Four fifths of the predicted saving arrives. The "
+        r"missing fifth is the tiling overhead together with the bookkeeping "
+        r"of a shrinking active set, and a MAC count sees neither. The "
+        r"shortfall scales with the saving instead of sitting at a fixed "
+        r"offset: at q63 we measure \WallHighMeasured% realised against "
+        r"\WallHighPredicted% predicted.")
+    par(r"Sorting the tiles once by exit depth recovers part of it. The "
+        r"obvious implementation of a shrinking active set keeps a boolean "
+        r"mask, gathers the survivors and scatters the finished at every group "
+        r"boundary, and each of those boundaries forces a device-to-host "
+        r"synchronisation. Order the tiles by descending exit depth and "
+        r"``still active at group g'' becomes a contiguous prefix: each group "
+        r"is then a slice instead of a gather, and one cumulative count "
+        r"supplies every boundary, so no per-group mask is built at all. The "
+        r"finished tiles come back through the inverse permutation in a single "
         r"scatter. The arithmetic is unchanged and the output is bit-identical "
-        r"on GPU. The saving at q0 goes from \WallMasked% to \WallSorted% — "
-        r"\WallSortedGain points, a fifth of the shortfall, for a change that "
-        r"touches no arithmetic.")
-    par(r"The same lesson applies to our own accounting. Every configuration B "
-        r"number in this paper charges the router at its share of the decoder's "
-        r"multiply-accumulates, \RouterCostPct%. Timed on the padded 2048×1280 "
-        r"frame the decoder actually sees, interleaved against a deepest-exit "
-        r"decode so a co-tenant's load lands on both equally, the head costs "
-        r"\RouterTimePct% — \RouterTimeFactor× what its arithmetic predicts, "
-        r"and for the same reason as everything else in this section: a "
+        r"on GPU. At q0 the saving goes from \WallMasked% to \WallSorted%, a "
+        r"gain of \WallSortedGain points, or a fifth of the shortfall, for a "
+        r"change that touches no arithmetic.")
+    par(r"The same gap appears in our own accounting. Every configuration B "
+        r"number in this paper charges the router at its share of the "
+        r"decoder's multiply-accumulates, \RouterCostPct%. We also timed the "
+        r"head directly, on the padded 2048×1280 frame the decoder actually "
+        r"sees, interleaved against a deepest-exit decode so that a "
+        r"co-tenant's load falls on both equally. It costs \RouterTimePct%, "
+        r"which is \RouterTimeFactor× what its arithmetic predicts, and for "
+        r"the same reason as everything else in this section: a "
         r"\RouterParams-parameter head is launch overhead, and a MAC count "
-        r"cannot see a launch. Charged at measured time rather than at "
+        r"cannot see a launch. Charged at measured time instead of at "
         r"operations, every B number in this paper would fall by a further "
         r"\RouterTimeExtra points. We leave them charged at MACs because that "
-        r"is the convention the rest of the literature reports in, and record "
-        r"the correction here rather than letting it sit unstated.")
-    par(r"We report the shortfall because a paper that quotes only operations "
-        r"would report \WallPredicted% where the same code, run as written, "
-        r"delivers \WallSorted%. The direction is the one that matters: "
+        r"is the convention the rest of the literature reports in, and we "
+        r"record the correction here so that it does not sit unstated.")
+    par(r"A paper that quotes only operations would report \WallPredicted% "
+        r"where the same code, run as written, delivers \WallSorted%. That is "
+        r"why we give the shortfall as well. The error runs one way: "
         r"operations are an <i>optimistic</i> bound on this method, and the "
         r"optimism grows with how much of the frame exits early.")
     h2("5.10 The right ladder depends on the budget")
     tbl("runs",
         r"<b>Table 9. Ladder configurations</b>, mean saving (%) over the five "
-        r"rates, same test set and protocol. * one rate is infeasible at that "
-        r"budget — the ladder's floor exceeds it — so the mean is over "
-        r"the remaining four.")
-    par(r"Section 5.4 argued that once a budget saturates a ladder the only way "
-        r"to spend more is a rung that does not exist. The table measures it. A "
-        r"finer ladder (K=12, j=4) has a ceiling of 50.3% against 41.9%, and "
-        r"the orderings cross between 0.1 and 0.3 dB. At 0.1 dB the coarse "
-        r"ladder wins, and the fine one cannot even reach the budget at the "
-        r"highest rate: splitting later puts twice as many blocks in the "
-        r"per-tile section, which raises the floor. At 0.5 dB the fine ladder "
-        r"wins by 6.7 points, \FineHalfDb% against \CoarseHalfDb%, because "
-        r"the coarse one has been pinned at its ceiling since 0.3 dB.")
-    par(r"So the ladder is not a hyperparameter to be tuned once. It is a "
-        r"function of the operating point, and the floor-saturation window is "
-        r"what tells you which side of the crossover you are on.")
+        r"rates, same test set and protocol. ``Ceiling'' is the architectural "
+        r"ceiling. * one rate is infeasible at that budget, because the "
+        r"ladder's floor exceeds it, so the mean is over the remaining four.")
+    par(r"Section 5.4 argued that once a budget saturates a ladder, the only "
+        r"way to spend more is a rung that does not exist. The table measures "
+        r"that. A finer ladder (K=12, j=4) has a ceiling of 50.3% against "
+        r"\Ceiling%, and the two orderings cross somewhere between 0.1 and "
+        r"0.3 dB. At 0.1 dB the coarse ladder wins, and the fine one cannot "
+        r"even reach the budget at the highest rate. Splitting later (j=4 "
+        r"against j=2) puts twice as many blocks in the per-tile section, "
+        r"which by the contamination law raises the floor. At 0.5 dB the fine "
+        r"ladder wins by 6.7 points, \FineHalfDb% against \CoarseHalfDb%, "
+        r"because the coarse one has been pinned at its ceiling since 0.3 dB "
+        r"and has nothing left to spend.")
+    par(r"So the ladder is a choice made at the operating point, not a "
+        r"hyperparameter tuned once and fixed. The floor-saturation window of "
+        r"Section 5.4 tells you which side of the crossover a given budget "
+        r"sits on.")
 
     # ---- 6 limitations ---------------------------------------------------
     h1("6. Limitations")
     par(r"<b>The seam is reduced, and the exact remedy is not usable as it "
-        r"stands.</b> Canvas coupling removes \CoupFloorDropLo–\CoupFloorDropHi% of the floor and is "
-        r"bit-exact at uniform depth, yet collapses the routed saving because "
-        r"routing puts neighbouring tiles at different depths. Whether a decoder "
-        r"trained with coupling recovers both at once is open, and it is the "
-        r"experiment we would run next. Until it exists the floor is a cost this "
-        r"method pays.")
+        r"stands.</b> Canvas coupling removes "
+        r"\CoupFloorDropLo–\CoupFloorDropHi% of the floor and is bit-exact at "
+        r"uniform depth (Section 4.4). It also collapses the routed saving, "
+        r"because routing puts neighbouring tiles at different depths. We do "
+        r"not know whether a decoder trained with coupling can recover both at "
+        r"once, and that is the experiment we would run next. Until someone "
+        r"runs it, the floor is a cost this method pays.")
     par(r"<b>Intra frames only.</b> This is the image path of a video codec. "
-        r"Extending the ladder to inter frames raises a question this paper "
-        r"does not answer: an exit map propagates through the reference chain, "
-        r"so a shallow tile in one frame is a worse reference for the next.")
-    par(r"<b>Training is not converged.</b> The measured saving is still "
-        r"increasing at every checkpoint measured more than once, so these "
-        r"numbers are a lower bound.")
+        r"Extending the ladder to inter frames raises a question we do not "
+        r"answer here, because an exit map propagates through the reference "
+        r"chain and a shallow tile in one frame is a worse reference for the "
+        r"next one.")
+    par(r"<b>Training is not converged.</b> At every checkpoint we have "
+        r"measured more than once, the saving was still going up. We therefore "
+        r"read the numbers reported here as a lower bound on what a converged "
+        r"run would give.")
     par(r"<b>A single decoder.</b> All results are on DCVC-UF's intra decoder. "
-        r"Nothing in the method is specific to it — the ladder needs only a "
-        r"residual trunk with a shared head — but that is an argument, not "
-        r"a measurement.")
+        r"Nothing in the method looks specific to it, since the ladder needs "
+        r"only a residual trunk with a shared head, but we have not measured a "
+        r"second decoder to check.")
 
     # ---- 7 conclusion ----------------------------------------------------
     h1("7. Conclusion")
     par(r"Learned decoders spend a constant amount of computation on a "
         r"non-constant world. An early-exit ladder over the tiles of a frame "
-        r"recovers a substantial fraction of it — \MainLowRate% to "
-        r"\MainHighRate% of decoder MACs for a 0.1 dB budget, at a BD-Rate cost "
-        r"of \BdRateALow% — without touching the encoder or the coded payload.")
-    par(r"Three lessons we would carry to any spatially adaptive decoder, none "
-        r"of them about early exit. <b>Tiling is the dominant cost and it is "
-        r"governed by depth.</b> Its entire cause is a single 3×3 that is 0.29% "
-        r"of the arithmetic, the penalty grows as the square of how many such "
-        r"convolutions run per tile, and the corrupted-area fraction that is "
-        r"usually quoted predicts it badly. <b>The exact remedy is in tension "
-        r"with the thing it enables.</b> Giving each convolution its real "
-        r"neighbour is bit-identical at uniform depth and collapses the "
-        r"allocation under routing, because routing is the deliberate violation "
-        r"of the condition that makes it exact — a trap that any method "
-        r"combining spatial adaptivity with tiled inference will walk into. "
-        r"<b>A quality budget is only a control variable inside a measurable "
-        r"window.</b> Below the floor it admits nothing, above saturation it "
-        r"buys nothing, and reporting a saving without saying where in that "
-        r"window it sits leaves out the most useful part of the result.")
-    par(r"And three cautions about measuring any of this. A saving in "
-        r"operations is an optimistic bound on a saving in time, and the "
-        r"optimism scales with the saving. A learned router should be compared "
-        r"against a free one: routing on the bits already spent per tile needs "
-        r"no parameters, no training and no bits, and it matches our trained head "
-        r"to within \RateRankLosesBy points at every rate — while agreeing with the oracle on fewer "
-        r"tiles than the head does, which is a warning about the metric as much "
-        r"as about the head. And a timing harness will "
-        r"report numbers whether or not it is timing the right device — this "
-        r"one did, for months, and the tell was a decoder that appeared to slow "
-        r"down with the quality index.")
+        r"recovers a large fraction of it. At a 0.1 dB budget we save "
+        r"\MainLowRate% to \MainHighRate% of decoder MACs for a BD-Rate cost "
+        r"of \BdRateALow%, with no change to the encoder and none to the coded "
+        r"payload.")
+    par(r"Three lessons we would carry to any spatially adaptive decoder, and "
+        r"none of them is about early exit.")
+    par(r"<b>Tiling is the dominant cost and it is governed by depth.</b> All "
+        r"of that cost traces back to a single 3×3 that is 0.29% of the "
+        r"arithmetic, and the penalty grows as the square of how many such "
+        r"convolutions run per tile. The corrupted-area fraction usually "
+        r"quoted alongside it predicts that penalty badly.")
+    par(r"<b>The exact remedy is in tension with the thing it enables.</b> "
+        r"Giving each convolution its real neighbour is bit-identical at "
+        r"uniform depth, and under routing it collapses the allocation, "
+        r"because routing is the deliberate violation of the condition that "
+        r"makes it exact. We expect any method that combines spatial "
+        r"adaptivity with tiled inference to walk into this.")
+    par(r"<b>A quality budget is only a control variable inside a measurable "
+        r"window.</b> Below the floor the budget admits nothing at all, and "
+        r"above saturation more of it buys nothing. A saving quoted without "
+        r"saying where in that window it sits has left out the part of the "
+        r"result a reader most needs.")
+    par(r"We would attach three cautions to the measurements themselves. A "
+        r"saving in operations is an optimistic bound on a saving in time, and "
+        r"the optimism scales with the saving. A learned router should be "
+        r"compared against a free one. Routing on the bits already spent per "
+        r"tile needs no parameters and no training, it adds nothing to the "
+        r"stream, and it beats our trained head to within \RateRankLosesBy "
+        r"points at every rate, while agreeing with the oracle on fewer tiles "
+        r"than the head does. We read that as a warning about the metric quite "
+        r"as much as about the head. Finally, a timing harness will report "
+        r"numbers whether or not it is timing the right device. Ours timed the "
+        r"wrong one for months, and what gave it away was a decoder that "
+        r"appeared to slow down with the quality index.")
     return F
 
 
@@ -1483,8 +1687,8 @@ def build(out="paper/FLEX-UF.pdf"):
     banner_cap = ("<b>Figure 1. FLEX-UF end to end.</b> Grey is frozen and "
                   "never touched; blue is inherited from DCVC-UF and "
                   "fine-tuned; orange and green are new. The first j block "
-                  "groups run over the whole frame, the rest run per tile on a "
-                  "shrinking active set, and the exit map that drives the "
+                  "groups run over the whole frame and the rest run per tile "
+                  "on a shrinking active set. The exit map that drives the "
                   "shrinkage comes either from an encoder-side search (A) or "
                   "from a decoder-side predictor (B).")
     story = [

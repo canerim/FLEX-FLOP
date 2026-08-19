@@ -1,0 +1,14 @@
+{
+ "what": "Error by distance from the nearest tile boundary, grid seam repair OFF against ON with the same exit map. This is the table the paper quotes and the figure draws.",
+ "provenance": "Transcribed from DECISIONS.md section 82. Measured with the protocol now held in scripts/seam_spatial.py, on runs/BEST/ckpt_eval.pth.tar, whose epoch was not recorded at the time and which the per-epoch watcher has since overwritten, so the ON column cannot be reproduced from anything now on disk. The OFF column reproduces to four decimals on the pinned runs/BEST/ckpt_epo0.pth.tar (see results/seam_spatial.json), which is what establishes that the protocol is the same one.",
+ "checkpoint": "runs/BEST/ckpt_eval.pth.tar",
+ "epoch": null,
+ "qp": 63,
+ "budget_db": 0.1,
+ "n_sequences": 6,
+ "bands_px": [[0, 4], [4, 16], [16, 64], [64, 128]],
+ "share_pct": [6.2, 17.3, 51.6, 25.0],
+ "mse_off": [4.7e-05, 4.4e-05, 4.3e-05, 4.1e-05],
+ "mse_on": [4.7e-05, 4.4e-05, 4.3e-05, 4.1e-05],
+ "change_pct": [-0.27, 0.05, 0.04, 0.04]
+}
