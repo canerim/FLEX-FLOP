@@ -74,6 +74,16 @@ class StemRouterHead(nn.Module):
             # Exits shallower than the split are not decodable per tile; masking
             # here rather than clamping later keeps the probabilities a real
             # distribution over the choices that exist.
+            #
+            # KNOWN BUG, NOT FIXED HERE. -1e4 is a mask only while this head's
+            # own logits stay well above it. head2.py's did not -- nothing in a
+            # cross-entropy or a regret objective penalises a common offset, one
+            # drifted in, and the raw outputs settled near -10000, at which point
+            # the "mask" became the largest entry in every row (DECISIONS 89).
+            # head2 now uses -inf. This file is imported by live training runs,
+            # and a crash-restart would pick up an edit mid-experiment, so the
+            # change waits until nothing is running. Callers should slice
+            # logits[:, min_exit:] rather than trust this line.
             logits = logits.clone()
             logits[:, : self.min_exit] = -1e4
         return logits
