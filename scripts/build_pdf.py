@@ -230,7 +230,7 @@ def content(colw, fullw):
         r"at the decoder costs none and gives up \GapMin–\GapMax points. The "
         r"two are ends of one scale rather than two designs: overriding the "
         r"worst fifth of tiles recovers "
-        r"\HybridRecoverFifthHigh–\HybridRecoverFifthLow% of that gap for "
+        r"\HybridRecoverFifthLow–\HybridRecoverFifthHigh% of that gap for "
         r"\HybridBitsFifth bits, and at \HybridBeatsAN of \HybridBeatsAOf rates "
         r"half the map <i>beats</i> the whole of it, because the hybrid has two "
         r"multipliers where the signalled configuration has one. A learned "

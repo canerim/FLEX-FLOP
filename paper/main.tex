@@ -61,7 +61,7 @@ depth is bit-identical and recovers a fifth of the shortfall.
 Signalling the exit map costs \MapBits\ bits per frame; predicting it at the
 decoder costs none and gives up \GapMin--\GapMax\ points. The two are ends of
 one scale rather than two designs: overriding the worst fifth of tiles recovers
-\HybridRecoverFifthHigh--\HybridRecoverFifthLow\% of that gap for
+\HybridRecoverFifthLow--\HybridRecoverFifthHigh\% of that gap for
 \HybridBitsFifth\ bits, and at \HybridBeatsAN\ of \HybridBeatsAOf\ rates half
 the map \emph{beats} the whole of it, because the hybrid has two multipliers
 where the signalled configuration has one. A learned predictor should also be
@@ -147,8 +147,10 @@ at high rate.
       $\sim$\MapBits-bit map per frame, and a decoder-side predictor that signals
       nothing --- with the bits and the compute charged on both sides, and the
       continuum between them: overriding the worst fifth of tiles recovers
-      \HybridRecoverFifthHigh--\HybridRecoverFifthLow\% of the gap, bounded above
-      by the Lorenz curve of the per-tile regret.
+      \HybridRecoverFifthLow--\HybridRecoverFifthHigh\% of the gap, and at
+      \HybridBeatsAN\ of \HybridBeatsAOf\ rates half the map beats all of it,
+      because the hybrid has two multipliers where the signalled configuration
+      has one.
 \item A parameter-free control that a learned router has to beat and usually is
       not measured against. Routing on the bits the entropy model already spent
       per tile costs nothing, adds nothing to the stream, and beats our trained
