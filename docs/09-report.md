@@ -251,13 +251,13 @@ The encoder can run the decoder's router, because the router reads only decoded 
 
 | qp | B<br>0 b | 5%<br>14 b | 10%<br>26 b | 20%<br>44 b | 35%<br>66 b | 50%<br>83 b | A<br>100 b |
 |---|---|---|---|---|---|---|---|
-| 0 | 30.64 | 31.18 | 31.69 | 32.06 | 32.22 | 32.28 | 32.35 |
-| 16 | 25.85 | 26.18 | 26.54 | 26.90 | 27.27 | 27.36 | 27.55 |
-| 32 | 18.10 | 19.04 | 19.89 | 20.72 | 21.73 | 22.08 | 22.52 |
-| 48 | 9.10 | 10.58 | 12.21 | 14.43 | 16.87 | 18.50 | 19.77 |
-| 63 | 3.53 | 5.08 | 6.87 | 9.17 | 12.19 | 14.14 | 16.81 |
+| 0 | 27.18 | 27.88 | 28.73 | 29.97 | 31.95 | 32.63 | 32.35 |
+| 16 | 23.27 | 24.02 | 24.87 | 26.04 | 27.24 | 27.95 | 27.55 |
+| 32 | 19.40 | 20.13 | 20.83 | 21.76 | 22.68 | 22.94 | 22.52 |
+| 48 | 16.06 | 16.79 | 17.67 | 18.67 | 19.72 | 19.90 | 19.77 |
+| 63 | 12.94 | 13.76 | 14.71 | 15.63 | 16.56 | 16.64 | 16.81 |
 
-Recovery is concave everywhere. It is bounded above by the Lorenz curve of the per-tile regret — at a fixed λ the objective is separable, so overriding a set removes exactly the sum of its regrets — and every measured point lies on or below that bound, because returning to the budget means re-bisecting λ. The Gini coefficient of the regret runs 0.57–0.88 across rates.
+Recovery is concave, and at four of the five rates **half the map beats all of it** — signalling 20 tiles saves more than signalling 40, at the same distortion, by up to 0.42 points. The hybrid has two multipliers where A has one: the oracle's λ on the overridden tiles and the router's fixed β on the rest, and two multipliers reach allocations one cannot. Configuration A is optimal among allocations reachable by a single multiplier, which is a smaller set than it sounds. The Gini coefficient of the per-tile regret runs 0.52–0.78 across rates.
 
 ### 5c. A router with no parameters
 

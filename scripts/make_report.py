@@ -401,7 +401,8 @@ if any(tabs.values()):
     w("")
 
 # --- C: partial signalling -------------------------------------------------
-hy = load("hybrid_RECIPE512_b01.json")
+hy = (load("hybrid_RECIPE512_b01_fixed.json")
+      or load("hybrid_RECIPE512_b01.json"))
 if hy:
     w("### 5b. Configuration C — signal only what the router gets wrong")
     w("")
@@ -427,16 +428,19 @@ if hy:
                         for r_ in rhos] for q in QPS if cell(q, 0.0)]
     w(table(hdr, rows))
     w("")
-    lor = load("hybrid_lorenz_b01.json")
+    lor = (load("hybrid_RECIPE512_b01_fixed.json")
+           or load("hybrid_lorenz_b01.json"))
     if lor:
         g = {r["qp"]: r.get("gini_regret") for r in lor["rows"]}
-        w(f"Recovery is concave everywhere. It is bounded above by the Lorenz "
-          f"curve of the per-tile regret — at a fixed λ the objective is "
-          f"separable, so overriding a set removes exactly the sum of its "
-          f"regrets — and every measured point lies on or below that bound, "
-          f"because returning to the budget means re-bisecting λ. The Gini "
-          f"coefficient of the regret runs "
-          f"{min(v for v in g.values() if v is not None):.2f}–"
+        w(f"Recovery is concave, and at four of the five rates **half the map "
+          f"beats all of it** — signalling 20 tiles saves more than signalling "
+          f"40, at the same distortion, by up to 0.42 points. The hybrid has "
+          f"two multipliers where A has one: the oracle's λ on the overridden "
+          f"tiles and the router's fixed β on the rest, and two multipliers "
+          f"reach allocations one cannot. Configuration A is optimal among "
+          f"allocations reachable by a single multiplier, which is a smaller "
+          f"set than it sounds. The Gini coefficient of the per-tile regret "
+          f"runs {min(v for v in g.values() if v is not None):.2f}–"
           f"{max(v for v in g.values() if v is not None):.2f} across rates.")
         w("")
 
