@@ -489,6 +489,43 @@ if cp:
     mac("CoupFloorDropLo", f"{min(drops):.0f}")
     mac("CoupFloorDropHi", f"{max(drops):.0f}")
 
+# ------------------------------------------------------------------- blend
+print("blend")
+cb, _ = pick("combined_RECIPE512_b01.json")
+if cb:
+    rws = [r for r in cb["rows"] if r.get("budget_reachable")]
+    ws = sorted({r["gamma"] for r in rws})
+    qs = [q for q in QPS if any(r["qp"] == q for r in rws)]
+
+    def cell(q, w_):
+        return next((r for r in rws
+                     if r["qp"] == q and abs(r["gamma"] - w_) < 1e-9), None)
+
+    lines = [r"\begin{tabular}{l" + "r" * len(ws) + "}", r"\toprule",
+             r"$q$ & " + " & ".join(
+                 ("bits" if w_ == 0 else "head" if w_ == 1 else f"{w_:g}")
+                 for w_ in ws) + r" \\", r"\midrule"]
+    for q in qs:
+        vals = [(cell(q, w_) or {}).get("saving_pct_vs_release") for w_ in ws]
+        best = max((v for v in vals if v is not None), default=None)
+        lines.append(f"{q} & " + " & ".join(
+            "---" if v is None else
+            (f"\\textbf{{{v:.1f}}}" if v == best else f"{v:.1f}")
+            for v in vals) + r" \\")
+    lines += [r"\bottomrule", r"\end{tabular}"]
+    w("blend.tex", "\n".join(lines))
+    for tag, q in (("Low", qs[0]), ("High", qs[-1])):
+        c0, c1 = cell(q, 0.0), cell(q, 1.0)
+        vals = [(w_, cell(q, w_)) for w_ in ws]
+        vals = [(w_, c) for w_, c in vals if c]
+        bw, bc = max(vals, key=lambda t: t[1]["saving_pct_vs_release"])
+        mac(f"Blend{tag}Best", f"{bc['saving_pct_vs_release']:.1f}")
+        mac(f"Blend{tag}BestW", f"{bw:g}")
+        if c1:
+            mac(f"BlendHeadOnly{tag}", f"{c1['saving_pct_vs_release']:.1f}")
+        if c0:
+            mac(f"BlendBitsOnly{tag}", f"{c0['saving_pct_vs_release']:.1f}")
+
 # ---------------------------------------------------------------- BD-Rate
 print("BD-Rate")
 bdj, _ = pick("bdrate.json")
