@@ -1,5 +1,13 @@
 # Results
 
+> **Superseded.** Everything on this page is `runs/BEST`, measured on the
+> full-frame distortion table before `flexuf/eval.py` moved evaluation onto the
+> deployed path. The current numbers — RECIPE512, 53 CTC sequences, the deployed
+> path, and a router whose exit mask works — are in
+> [09 — report](09-report.md) and in `paper/FLEX-UF.pdf`. Kept because the
+> mechanism sections and the denominator discussion are still correct and are
+> referenced from elsewhere.
+
 Everything below is `runs/BEST/ckpt_eval.pth.tar` — one checkpoint, at the end of
 epoch 0. No other run has been measured past its first epoch, and the measured
 saving is still climbing at every checkpoint we have, so these are a floor rather
