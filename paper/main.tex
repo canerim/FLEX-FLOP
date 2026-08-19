@@ -1137,7 +1137,10 @@ everywhere, so the first bits spent are the most useful ones.
 \textbf{And a partial map can beat a complete one.} At \HybridBeatsAN\ of
 \HybridBeatsAOf\ rates, signalling half the tiles for \HybridBitsHalf\ bits
 saves \emph{more} than signalling all of them --- up to \HybridBeatsABy\ points
---- at the same distortion. This is not noise and it is not a better predictor:
+--- at the same distortion. Both land within the bisection's $5\times10^{-4}\dB$
+tolerance of the budget, and the local exchange rate is about $48$ saving points
+per decibel, so the tolerance is worth $0.02$ points against a margin ten to
+twenty times that. It is not noise, and it is not a better predictor:
 the hybrid has \emph{two} multipliers where A has one. The oracle's $\lambda$
 governs the overridden tiles and the router's fixed $\beta$ the rest, and a
 two-multiplier allocation reaches points on the distortion--compute plane that a

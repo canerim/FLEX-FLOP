@@ -106,6 +106,9 @@ if hy and b1f and sg:
     beat = [(_h(q, 0.5) - Av[q]) for q in Av if _h(q, 0.5) is not None]
     claim("hybrid: rates where half beats all", 4, sum(1 for d in beat if d > 0), 0)
     claim("hybrid: best margin over A (pts)", 0.42, max(beat), 0.05)
+    # and the margin is not the bisection tolerance in disguise
+    dbs = [abs(r["db_vs_uf"] - 0.1) for r in rws]
+    claim("hybrid: worst |dB - budget|", 0.0, max(dbs), 1e-3)
 
 # ---- blend ----------------------------------------------------------------
 cb = J("combined_RECIPE512_b01.json")
