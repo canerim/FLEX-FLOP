@@ -681,7 +681,19 @@ w("4. **Does the gain continue past four epochs?** Still climbing at every "
 w("5. **Why is RECIPE512 ahead of BEST?** They differ in three flags — no "
   "`--min_crop 512`, no `--joint_router`, and a different `--epoch_offset` — so "
   "the comparison isolates nothing. The joint router is the leading suspect, "
-  "since BEST's collapsed to a constant and its gradient also pulls the decoder.")
+  "since BEST's collapsed to a constant and its gradient also pulls the decoder. "
+  "That collapse should now be re-read in the light of the mask bug: a head "
+  "whose suppression term sits above its own logits will look collapsed onto "
+  "the cheapest rung whether or not it learned anything.")
+w("")
+w("6. **Does a router trained with a working mask do better?** The head the "
+  "paper reports was trained against a suppression term sitting above its own "
+  "logits, so cross-entropy spent capacity pushing the real exits past two "
+  "columns that should never have competed — its loss started at 1291 and sat "
+  "near 1000; with the mask fixed it starts at 1.38 and reaches 0.2 within 250 "
+  "steps. Its 0.718 held-out agreement was also measured through the same "
+  "broken argmax. A retrain is running; the configuration-B numbers here are "
+  "from the old head, evaluated correctly.")
 w("")
 
 # ---------------------------------------------------------------- 10. repro
