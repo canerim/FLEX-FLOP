@@ -85,6 +85,28 @@ if rr and b1:
     claim("rate-rank: worst deficit (pts)", 0.8,
           max(-v for _, v in d_ if v <= 0), 0.1)
 
+# ---- hybrid C -------------------------------------------------------------
+hy = J("hybrid_RECIPE512_b01_fixed.json", "hybrid_RECIPE512_b01.json")
+b1f = J("router_RECIPE512_b01_fixed.json", "router_RECIPE512_b01.json")
+sg = J("signalled_RECIPE512_ctc53.json")
+if hy and b1f and sg:
+    rws = [r for r in hy["rows"] if r.get("budget_reachable")]
+
+    def _h(q, rho):
+        return next((r["saving_pct_vs_release"] for r in rws
+                     if r["qp"] == q and abs(r["rho"] - rho) < 1e-9), None)
+    Bv = {r["qp"]: r["saving_pct_vs_release"] for r in b1f["rows"]
+          if r.get("budget_reachable")}
+    Av = {r["qp"]: r["saving_pct_vs_release"] for r in sg["rows"]
+          if abs(r["budget_db"] - 0.1) < 1e-9 and r.get("budget_reachable")}
+    ends = [abs(_h(q, 0.0) - Bv[q]) for q in Bv if _h(q, 0.0) is not None]
+    claim("hybrid: rho=0 reproduces B (max |diff|)", 0.0, max(ends), 0.05)
+    ends1 = [abs(_h(q, 1.0) - Av[q]) for q in Av if _h(q, 1.0) is not None]
+    claim("hybrid: rho=1 reproduces A (max |diff|)", 0.0, max(ends1), 0.05)
+    beat = [(_h(q, 0.5) - Av[q]) for q in Av if _h(q, 0.5) is not None]
+    claim("hybrid: rates where half beats all", 4, sum(1 for d in beat if d > 0), 0)
+    claim("hybrid: best margin over A (pts)", 0.42, max(beat), 0.05)
+
 # ---- blend ----------------------------------------------------------------
 cb = J("combined_RECIPE512_b01.json")
 if cb:

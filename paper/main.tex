@@ -62,8 +62,9 @@ Signalling the exit map costs \MapBits\ bits per frame; predicting it at the
 decoder costs none and gives up \GapMin--\GapMax\ points. The two are ends of
 one scale rather than two designs: overriding the worst fifth of tiles recovers
 \HybridRecoverFifthHigh--\HybridRecoverFifthLow\% of that gap for
-\HybridBitsFifth\ bits, and how much any fraction can recover is bounded above
-by the Lorenz curve of the per-tile regret. A learned predictor should also be
+\HybridBitsFifth\ bits, and at \HybridBeatsAN\ of \HybridBeatsAOf\ rates half
+the map \emph{beats} the whole of it, because the hybrid has two multipliers
+where the signalled configuration has one. A learned predictor should also be
 made to beat a free one: routing on the bits the entropy model has already spent
 per tile needs no parameters, no training and no bits, and it beats our
 \RouterParams-parameter head to within \RateRankLosesBy\ points at every rate,
@@ -1090,8 +1091,10 @@ happens to be lying around.
 \caption{\textbf{Partial signalling.} \textbf{a} Saving against the bits spent
 on the map; the left end of each line is B and the right end is A.
 \textbf{b} The same, normalised: what fraction of the A--B gap a given fraction
-of the map recovers; dashed is proportional recovery. \textbf{c} The same
-against the Lorenz bound on it; dashed is equality.}
+of the map recovers; dashed is proportional recovery, and above $100\%$ a
+partial map is beating a complete one. \textbf{c} The same against the
+fixed-$\lambda$ Lorenz prediction; dashed is equality, and points above it are
+allocations a single multiplier cannot reach.}
 \label{fig:hybrid}
 \end{figure}
 
@@ -1116,32 +1119,38 @@ objective loses on that tile by staying silent; $\beta$ is held at B's value and
 $\lambda$ is bisected over the overrides to land back on the budget. The map
 costs an entropy-coded mask, $N H_2(\rho)$ bits, plus $3$ per override.
 
-\textbf{The two ends check out.} At $\rho=0$ the measurement reproduces
-configuration~B to the second decimal at every rate, and at $\rho=1$ it
-reproduces~A. Neither is imposed --- both fall out of the same code path --- so
-the columns between them are measuring something real.
+\textbf{The two ends check out.} At $\rho{=}0$ the measurement reproduces
+configuration~B to the second decimal at every rate, and at $\rho{=}1$ it
+reproduces~A. Neither is imposed --- both fall out of the same code path against
+independently measured files --- so the columns between them measure something
+real.
 
-\textbf{Most of the gap is cheap.} At $q0$, overriding a tenth of the tiles for
-\HybridBitsTenth\ bits per frame recovers \HybridRecoverTenthLow\% of the gap;
-a fifth recovers \HybridRecoverFifthLow\%. At $q63$, where the gap is widest,
-the same fifth of the map --- \HybridBitsFifth\ bits against
-\HybridBitsFull\ for the full map --- recovers \HybridRecoverFifthHigh\%, and
-half recovers \HybridRecoverHalfHigh\%. Recovery is concave everywhere, so the
-first bits spent are always the most useful ones.
+\textbf{Most of the gap is cheap.} Overriding a tenth of the tiles for
+\HybridBitsTenth\ bits per frame recovers
+\HybridRecoverTenthLow--\HybridRecoverTenthHigh\% of the gap and a fifth
+recovers \HybridRecoverFifthLow--\HybridRecoverFifthHigh\%. Recovery is concave
+everywhere, so the first bits spent are the most useful ones.
 
-\textbf{Why it is concave, and what bounds it.} At a fixed $\lambda$ the
-objective is separable, so overriding a set removes \emph{exactly} the sum of
-that set's regrets: the recovery of the \emph{objective} is the Lorenz curve of
-the per-tile regret distribution, and its curvature is that distribution's Gini
-coefficient, \GiniMin--\GiniMax\ across rates. What the table reports is not
-objective but saving at a fixed distortion, and returning to the budget means
-re-bisecting $\lambda$, which converts the recovered distortion into compute at
-the local exchange rate rather than one for one. The Lorenz curve is therefore
-an upper bound, and the measurement says so: every point in
-Figure~\ref{fig:hybrid}c lies on or below the diagonal, reaching
-\LorenzTightMin--\LorenzTightMax\% of the bound. The concentration of the
-router's mistakes is what makes partial signalling worth doing; the re-tuning is
-what stops it from being free.
+\textbf{And a partial map can beat a complete one.} At \HybridBeatsAN\ of
+\HybridBeatsAOf\ rates, signalling half the tiles for \HybridBitsHalf\ bits
+saves \emph{more} than signalling all of them --- up to \HybridBeatsABy\ points
+--- at the same distortion. This is not noise and it is not a better predictor:
+the hybrid has \emph{two} multipliers where A has one. The oracle's $\lambda$
+governs the overridden tiles and the router's fixed $\beta$ the rest, and a
+two-multiplier allocation reaches points on the distortion--compute plane that a
+single Lagrangian sweep cannot, for the same reason the sweep misses interior
+Pareto points at all (Section~\ref{sec:operating}). Configuration~A is optimal
+among allocations reachable by one multiplier, which is a smaller set than it
+sounds.
+
+\textbf{Why the recovery is concave, and what bounds it.} At a fixed $\lambda$
+the objective is separable, so overriding a set removes \emph{exactly} the sum
+of that set's regrets: the recovery of the \emph{objective} is the Lorenz curve
+of the per-tile regret distribution, and its curvature is that distribution's
+Gini coefficient, \GiniMin--\GiniMax\ across rates. What the table reports is
+not objective but saving at fixed distortion, and returning to the budget means
+re-bisecting $\lambda$ --- which is also what lets the two-multiplier
+allocations above escape the bound.
 
 Configuration C is what we would ship where a small map is tolerable and a large
 one is not. It also reframes the A--B gap: it is not the price of prediction,

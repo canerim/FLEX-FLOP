@@ -181,14 +181,18 @@ measurement could show.
       exact search costs $4.6$. The $1.21$ figure was the full-frame table, which
       may be used to rank but not to report.
 \item \textbf{``The recovery curve of partial signalling \emph{is} the Lorenz
-      curve of the per-tile regret.''} It is an upper bound on it, not an
-      identity. Overriding a set removes exactly its regret at a \emph{fixed}
-      multiplier, but the constraint is distortion, and returning to the budget
-      re-bisects $\lambda$ --- which converts recovered distortion into compute
-      at the local exchange rate rather than one for one. Every measured point
-      lies on or below the bound, reaching \LorenzTightMin--\LorenzTightMax\% of
-      it. The claim was made from the separability argument, which is correct,
-      about the wrong quantity.
+      curve of the per-tile regret.''} It is neither an identity nor, as the
+      second version of this claim said, an upper bound. Overriding a set
+      removes exactly its regret at a \emph{fixed} multiplier, but the
+      constraint is distortion, and returning to the budget re-bisects
+      $\lambda$. That re-bisection is not a leak in the bound, it is a
+      different and larger feasible set: the hybrid runs the oracle's $\lambda$
+      on the overridden tiles and the router's fixed $\beta$ on the rest, and
+      two multipliers reach allocations one cannot. Measured, the recovery
+      exceeds the Lorenz prediction wherever that matters, and at
+      \HybridBeatsAN\ of \HybridBeatsAOf\ rates a half map beats a complete one
+      outright. The separability argument was correct about the wrong quantity,
+      twice.
 \end{itemize}
 
 \section{Negative results}

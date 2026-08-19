@@ -491,8 +491,17 @@
     {
       "qp": 63,
       "rho": 0.0,
-      "budget_reachable": false,
-      "floor_db": 0.10000117260189552
+      "lam": 1.0,
+      "beta": -50.28230857849123,
+      "saving_pct_vs_release": 12.941034292837358,
+      "db_vs_uf": 0.10000117260189552,
+      "map_bits": 0.0,
+      "tiles_per_frame": 33.301886792452834,
+      "overridden_per_frame": 0.0,
+      "pays_router": true,
+      "lorenz_at_rho": null,
+      "gini_regret": 0.7792235612869263,
+      "budget_reachable": true
     },
     {
       "qp": 63,
@@ -584,5 +593,6 @@
       "gini_regret": 0.7792235612869263,
       "budget_reachable": true
     }
-  ]
+  ],
+  "note": "qp 63 re-run after the floor tolerance was widened to match the bisection's 5e-4 dB; at that rate the router alone lands exactly on the budget and the rho=0 column was being dropped"
 }

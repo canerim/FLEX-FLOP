@@ -426,10 +426,26 @@ if hy:
             c_ = cell(q, r_)
             if c_ and tag == "High":
                 mac(f"HybridSave{rt}High", f"{c_['saving_pct_vs_release']:.1f}")
-    for rt, r_ in (("Tenth", 0.1), ("Fifth", 0.2), ("Full", 1.0)):
+    for rt, r_ in (("Tenth", 0.1), ("Fifth", 0.2), ("Half", 0.5),
+                   ("Full", 1.0)):
         c_ = cell(qhi, r_)
         if c_:
             mac(f"HybridBits{rt}", f"{c_['map_bits']:.0f}")
+    # Where a partial map BEATS the full one. Two multipliers -- the oracle's
+    # lambda on the overridden tiles, the router's fixed beta on the rest --
+    # reach allocations a single lambda cannot.
+    over = []
+    for q in qs:
+        ca, cb = cell(q, 1.0), cell(q, 0.5)
+        if ca and cb:
+            over.append((q, cb["saving_pct_vs_release"]
+                         - ca["saving_pct_vs_release"]))
+    if over:
+        beat = [d for _, d in over if d > 0]
+        if beat:
+            mac("HybridBeatsAN", str(len(beat)))
+            mac("HybridBeatsAOf", str(len(over)))
+            mac("HybridBeatsABy", f"{max(beat):.2f}")
     # The hybrid file carries its own Lorenz statistics now; the separate
     # lorenz run is only a fallback for files written before that.
     lo_ = hy if any(r.get("gini_regret") is not None for r in rows_) else None
