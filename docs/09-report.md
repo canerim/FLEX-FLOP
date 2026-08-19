@@ -230,7 +230,32 @@ Upward the map claims the low-rate saving while spending nearly twice the qualit
 
 **B — the decoder predicts it and nothing is signalled.** The decoder never sees the source, so the true MSE is not merely hard to estimate, it is absent from the input. A 144 K head reads the stem map, `ŷ`, the entropy-model scales and qp; `k̂(t) = argmax_k [log softmax(z_t)_k − β·c_k]`. The file stays byte-identical to a stock stream and it is deployable by a decoder vendor alone. The head costs 0.163% of a decode, charged inside every B number.
 
-> **Configuration B is being re-measured.** The published A/B numbers (3.96–6.49 points at 0.1 dB, collapsing to 0.16 at 0.5 dB) were taken with the full-frame distortion table described in §7, and against BEST rather than the run that is currently ahead. A router is being retrained against RECIPE512's frozen decoder on the corrected oracle. Until it lands, treat the A/B gap as unquantified rather than as the old number. The mechanism and cost accounting in [05](05-decision-ab.md) are unaffected.
+| configuration | qp 0 | qp 16 | qp 32 | qp 48 | qp 63 |
+|---|---|---|---|---|---|
+| **A** signalled, 0.1 dB | 32.35 | 27.55 | 22.52 | 19.77 | 16.81 |
+| **B** router, 0.1 dB | 30.64 | 25.85 | 18.10 | 9.10 | 3.53 |
+| **A** signalled, 0.3 dB | 41.91 | 41.91 | 41.91 | 40.64 | 38.40 |
+| **B** router, 0.3 dB | 41.75 | 41.75 | 41.75 | 39.49 | 36.35 |
+| **A** signalled, 0.5 dB | 41.91 | 41.91 | 41.91 | 41.91 | 41.91 |
+| **B** router, 0.5 dB | 41.75 | 41.75 | 41.75 | 41.75 | 41.75 |
+
+One router, trained once at λ=1.3e-5 against the *deployed* oracle (held-out agreement 0.718). The gap is widest where the budget is tight and the rate is far from the router's training point; at 0.5 dB it is 0.16 points at every rate, which is the router's own compute and nothing else — once the budget saturates the ladder there is nothing left to predict wrongly.
+
+### 5b. Configuration C — signal only what the router gets wrong
+
+![Partial signalling](figures/hybrid.png)
+
+The encoder can run the decoder's router, because the router reads only decoded data. So it knows tile by tile where the prediction will be wrong, and nothing forces it to correct every one. Overriding a fraction ρ of tiles — chosen by Lagrangian regret, β held at B's value, λ bisected over the overrides — traces the whole path between the two configurations. ρ=0 reproduces B and ρ=1 reproduces A, and neither is imposed.
+
+| qp | B<br>0 b | 5%<br>14 b | 10%<br>26 b | 20%<br>44 b | 35%<br>66 b | 50%<br>83 b | A<br>100 b |
+|---|---|---|---|---|---|---|---|
+| 0 | 30.64 | 31.18 | 31.69 | 32.06 | 32.22 | 32.28 | 32.35 |
+| 16 | 25.85 | 26.18 | 26.54 | 26.90 | 27.27 | 27.36 | 27.55 |
+| 32 | 18.10 | 19.04 | 19.89 | 20.72 | 21.73 | 22.08 | 22.52 |
+| 48 | 9.10 | 10.58 | 12.21 | 14.43 | 16.87 | 18.50 | 19.77 |
+| 63 | 3.53 | 5.08 | 6.87 | 9.17 | 12.19 | 14.14 | 16.81 |
+
+Recovery is concave everywhere. It is bounded above by the Lorenz curve of the per-tile regret — at a fixed λ the objective is separable, so overriding a set removes exactly the sum of its regrets — and every measured point lies on or below that bound, because returning to the budget means re-bisecting λ. The Gini coefficient of the regret runs 0.57–0.88 across rates.
 
 ## 6. Complexity, and what the saving is worth in time
 

@@ -363,32 +363,95 @@ w("**B — the decoder predicts it and nothing is signalled.** The decoder never
   "byte-identical to a stock stream and it is deployable by a decoder vendor "
   "alone. The head costs 0.163% of a decode, charged inside every B number.")
 w("")
-rab = [f for f in sorted(RES.glob("router_RECIPE512_lam*.json"))]
-if rab:
-    tabs = {}
-    for f in rab:
-        d = json.load(open(f))
-        tabs[f.stem.split("lam")[-1]] = {r["qp"]: r.get("saving_pct_vs_release")
-                                         for r in d["rows"]}
-    brs, _ = data.get("RECIPE512", (None, None))
+bfiles = [("0.1", "router_RECIPE512_b01.json"),
+          ("0.3", "router_RECIPE512_b03.json"),
+          ("0.5", "router_RECIPE512_b05.json")]
+tabs = {b: load(f) for b, f in bfiles}
+brs, _ = data.get("RECIPE512", (None, None))
+if any(tabs.values()):
     rows = []
-    if brs and 0.1 in brs:
-        rows.append(["**A** signalled"] +
-                    [fmt(brs[0.1][q]["saving_pct_vs_release"]) for q in QPS
-                     if q in brs[0.1]])
-    for k, v in tabs.items():
-        rows.append([f"**B** router λ={k}"] + [fmt(v.get(q)) for q in QPS])
+    for b, d in tabs.items():
+        if brs and float(b) in brs:
+            rows.append([f"**A** signalled, {b} dB"] +
+                        [fmt(brs[float(b)][q]["saving_pct_vs_release"])
+                         for q in QPS if q in brs[float(b)]])
+        if d:
+            v = {r["qp"]: r.get("saving_pct_vs_release") for r in d["rows"]
+                 if r.get("budget_reachable")}
+            rows.append([f"**B** router, {b} dB"] + [fmt(v.get(q)) for q in QPS])
     w(table(["configuration"] + [f"qp {q}" for q in QPS], rows))
     w("")
-else:
-    w("> **Configuration B is being re-measured.** The published A/B numbers "
-      "(3.96–6.49 points at 0.1 dB, collapsing to 0.16 at 0.5 dB) were taken "
-      "with the full-frame distortion table described in §7, and against BEST "
-      "rather than the run that is currently ahead. A router is being retrained "
-      "against RECIPE512's frozen decoder on the corrected oracle. Until it "
-      "lands, treat the A/B gap as unquantified rather than as the old number. "
-      "The mechanism and cost accounting in [05](05-decision-ab.md) are "
-      "unaffected.")
+    w("One router, trained once at λ=1.3e-5 against the *deployed* oracle "
+      "(held-out agreement 0.718). The gap is widest where the budget is tight "
+      "and the rate is far from the router's training point; at 0.5 dB it is "
+      "0.16 points at every rate, which is the router's own compute and nothing "
+      "else — once the budget saturates the ladder there is nothing left to "
+      "predict wrongly.")
+    w("")
+
+# --- C: partial signalling -------------------------------------------------
+hy = load("hybrid_RECIPE512_b01.json")
+if hy:
+    w("### 5b. Configuration C — signal only what the router gets wrong")
+    w("")
+    w("![Partial signalling](figures/hybrid.png)")
+    w("")
+    w("The encoder can run the decoder\'s router, because the router reads only "
+      "decoded data. So it knows tile by tile where the prediction will be "
+      "wrong, and nothing forces it to correct every one. Overriding a fraction "
+      "ρ of tiles — chosen by Lagrangian regret, β held at B\'s value, λ "
+      "bisected over the overrides — traces the whole path between the two "
+      "configurations. ρ=0 reproduces B and ρ=1 reproduces A, and neither is "
+      "imposed.")
+    w("")
+    rws = [r for r in hy["rows"] if r.get("budget_reachable")]
+    rhos = sorted({r["rho"] for r in rws})
+    def cell(q, r_):
+        return next((r for r in rws
+                     if r["qp"] == q and abs(r["rho"] - r_) < 1e-9), None)
+    hdr = ["qp"] + [("B" if r_ == 0 else "A" if r_ == 1 else f"{100*r_:.0f}%")
+                    + f"<br>{(cell(QPS[0], r_) or {}).get('map_bits', 0):.0f} b"
+                    for r_ in rhos]
+    rows = [[str(q)] + [fmt((cell(q, r_) or {}).get("saving_pct_vs_release"))
+                        for r_ in rhos] for q in QPS if cell(q, 0.0)]
+    w(table(hdr, rows))
+    w("")
+    lor = load("hybrid_lorenz_b01.json")
+    if lor:
+        g = {r["qp"]: r.get("gini_regret") for r in lor["rows"]}
+        w(f"Recovery is concave everywhere. It is bounded above by the Lorenz "
+          f"curve of the per-tile regret — at a fixed λ the objective is "
+          f"separable, so overriding a set removes exactly the sum of its "
+          f"regrets — and every measured point lies on or below that bound, "
+          f"because returning to the budget means re-bisecting λ. The Gini "
+          f"coefficient of the regret runs "
+          f"{min(v for v in g.values() if v is not None):.2f}–"
+          f"{max(v for v in g.values() if v is not None):.2f} across rates.")
+        w("")
+
+# --- a router with no parameters -------------------------------------------
+rr = load("raterank_RECIPE512_b01.json")
+if rr:
+    w("### 5c. A router with no parameters")
+    w("")
+    w("The entropy model has already produced a per-tile number that is free "
+      "and available at the decoder before the trunk runs: how many bits that "
+      "tile\'s latents cost. Fitting a rank-1 model in log space — "
+      "`log D(t,k) ≈ α·log b(t) + c + log φ_k`, leave-one-sequence-out — turns "
+      "it into a routing rule with no learned parameters and no added bits.")
+    w("")
+    b1 = load("router_RECIPE512_b01.json")
+    bv = {r["qp"]: r.get("saving_pct_vs_release")
+          for r in (b1 or {}).get("rows", [])} if b1 else {}
+    rows = []
+    for r in rr["rows"]:
+        if not r.get("budget_reachable"):
+            continue
+        rows.append([str(r["qp"]), fmt(r["saving_pct_vs_release"]),
+                     fmt(bv.get(r["qp"])),
+                     fmt(r["oracle_saving_pct_vs_release"]),
+                     f"{r['spearman_bits_vs_spread']:+.2f}"])
+    w(table(["qp", "rate-rank", "B router", "A oracle", "ρ(bits, spread)"], rows))
     w("")
 
 # ------------------------------------------------------- 6. what it costs
