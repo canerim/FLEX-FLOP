@@ -1201,10 +1201,13 @@ Below the floor it admits nothing, above saturation it buys nothing, and
 reporting a saving without saying where in that window it sits leaves out the
 most useful part of the result.
 
-And two cautions about measuring any of it. A saving in operations is not a
-saving in time --- ours was negative until the loop was reordered. And a learned
-router should be compared against a free one: ranking tiles by the bits already
-spent on them recovers three quarters of what the oracle's ranking is worth.
+And three cautions about measuring any of it. A saving in operations is an
+optimistic bound on a saving in time, and the optimism scales with the saving.
+A learned router should be compared against a free one: ranking tiles by the
+bits already spent on them costs nothing and gets most of the way. And a timing
+harness will report numbers whether or not it is timing the right device ---
+this one did, for months, and the tell was a decoder that appeared to slow down
+with the quality index.
 
 {\small
 \bibliographystyle{ieee_fullname}

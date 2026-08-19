@@ -1053,11 +1053,14 @@ def content(colw, fullw):
         r"window.</b> Below the floor it admits nothing, above saturation it "
         r"buys nothing, and reporting a saving without saying where in that "
         r"window it sits leaves out the most useful part of the result.")
-    par(r"And two cautions about measuring any of this. A saving in operations "
-        r"is not a saving in time: ours was negative until the loop was "
-        r"reordered. And a learned router should be compared against a free one "
-        r"— ranking tiles by the bits already spent on them recovers three "
-        r"quarters of what the oracle's ranking is worth.")
+    par(r"And three cautions about measuring any of this. A saving in "
+        r"operations is an optimistic bound on a saving in time, and the "
+        r"optimism scales with the saving. A learned router should be compared "
+        r"against a free one: ranking tiles by the bits already spent on them "
+        r"costs nothing and gets most of the way. And a timing harness will "
+        r"report numbers whether or not it is timing the right device — this "
+        r"one did, for months, and the tell was a decoder that appeared to slow "
+        r"down with the quality index.")
     return F
 
 
