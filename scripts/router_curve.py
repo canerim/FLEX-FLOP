@@ -115,6 +115,13 @@ def main(argv):
     ap.add_argument("--budget", type=float, default=0.1,
                     help="quality budget in dB below the release; see "
                          "signalled_curve.py --budget.")
+    ap.add_argument("--per_frame_scale", action="store_true",
+                    help="divide each frame's log-probabilities by their own "
+                         "mean magnitude before applying the tilt. The decoder "
+                         "can do this -- it is a statistic of its own logits, "
+                         "not of the source -- and it is what lets ONE global "
+                         "beta serve frames the head is confident about and "
+                         "frames it is not.")
     ap.add_argument("--out", required=True)
     a = ap.parse_args(argv)
 
@@ -216,6 +223,16 @@ def main(argv):
                 else:
                     lg = net.router_head(stem, qp, cfg.feature_patch)
                 lp = F.log_softmax(lg, 1)
+                if a.per_frame_scale:
+                    # The tilt trades log-probability against cost, so its
+                    # meaning depends on how large the log-probabilities are --
+                    # and a 144 K head is far more confident on some frames
+                    # than others. One global beta therefore over-tilts the
+                    # confident frames and under-tilts the rest. Normalising by
+                    # the frame's own mean magnitude removes that, and costs
+                    # nothing: it is a statistic of the decoder's own logits.
+                    m = (-lp[:, cfg.split_depth:]).mean().clamp_min(1e-6)
+                    lp = lp / m
                 if rshare == 0.0:
                     px = xp.shape[-1] * xp.shape[-2]
                     rshare = (router_share(head2, (stem, y, aux["scales_hat"],
