@@ -350,8 +350,8 @@ w("![A versus B](figures/router_ab.png)")
 w("")
 w("**A — the encoder searches and signals the map.** It holds the source, so it "
   "decodes all K exits, measures the true error, and takes the optimum "
-  "`k*(t) = argmin_k [MSE(t,k) + λ·c_k]`, λ bisected per frame to the budget. "
-  "Not an estimate — the oracle. Costs the *encoder* ≈1.21 decodes per frame and "
+  "`k*(t) = argmin_k [MSE(t,k) + λ·c_k]`, with one λ bisected per rate against a real decode of the resulting map. "
+  "Not an estimate — the oracle. The exact search costs the *encoder* 4.5 decodes per frame (1.4 for the full-frame approximation, which agrees on 85% of tiles) and "
   "adds 79–95 bits/frame depending on rate, 0.008–0.020% of the bitrate. "
   "Needs one new bitstream "
   "field, so both ends must agree. This is also the conventional choice: HEVC and "
