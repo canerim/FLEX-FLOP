@@ -21,13 +21,20 @@ import naturestyle as ns  # noqa: E402
 ns.apply()
 
 
-def main(src="results/hybrid_RECIPE512_b01.json",
-         out="docs/figures/hybrid.png",
-         lor="results/hybrid_lorenz_b01.json"):
-    d = json.load(open(R / src))
+def main(src=None, out="docs/figures/hybrid.png", lor=None):
+    def _pick(*names):
+        for n in names:
+            if (R / n).exists():
+                return R / n
+        return R / names[-1]
+    src = src or _pick("results/hybrid_RECIPE512_b01_fixed.json",
+                       "results/hybrid_RECIPE512_b01.json")
+    lor = lor or _pick("results/hybrid_lorenz_b01_fixed.json",
+                       "results/hybrid_lorenz_b01.json")
+    d = json.load(open(src))
     L = {}
-    if (R / lor).exists():
-        for r in json.load(open(R / lor))["rows"]:
+    if Path(lor).exists():
+        for r in json.load(open(lor))["rows"]:
             if r.get("lorenz_at_rho") is not None:
                 L[(r["qp"], round(r["rho"], 6))] = 100 * r["lorenz_at_rho"]
     rows = [r for r in d["rows"] if r.get("budget_reachable")]

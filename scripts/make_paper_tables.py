@@ -380,7 +380,7 @@ if sa and b1:
 
 # ------------------------------------------------------------------ hybrid C
 print("hybrid C")
-hy, _ = pick("hybrid_RECIPE512_b01.json")
+hy, _ = pick("hybrid_RECIPE512_b01_fixed.json", "hybrid_RECIPE512_b01.json")
 if hy:
     rows_ = [r for r in hy["rows"] if r.get("budget_reachable")]
     qs = [q for q in QPS if any(r["qp"] == q for r in rows_)]
@@ -430,7 +430,7 @@ if hy:
         c_ = cell(qhi, r_)
         if c_:
             mac(f"HybridBits{rt}", f"{c_['map_bits']:.0f}")
-    lo_, _ = pick("hybrid_lorenz_b01.json")
+    lo_, _ = pick("hybrid_lorenz_b01_fixed.json", "hybrid_lorenz_b01.json")
     if lo_:
         lrows = [r for r in lo_["rows"] if r.get("budget_reachable")]
 
