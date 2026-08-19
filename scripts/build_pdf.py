@@ -20,7 +20,8 @@ from reportlab.lib.styles import ParagraphStyle
 from reportlab.lib.units import inch
 from reportlab.platypus import (BaseDocTemplate, Frame, PageTemplate, Image,
                                 Paragraph, Spacer, Table, TableStyle,
-                                KeepTogether, FrameBreak, NextPageTemplate)
+                                KeepTogether, FrameBreak, NextPageTemplate,
+                                PageBreak)
 
 R = Path(__file__).resolve().parents[1]
 PAPER, FIGS, TABLES = R / "paper", R / "paper" / "figures", R / "paper" / "tables"
@@ -181,6 +182,22 @@ def content(colw, fullw):
     """(flowables for the two-column body, flowables for the full-width banner)."""
     F = []
     A = F.append
+
+    def figure_wide(name, cap, height=4.45 * inch):
+        """A figure that spans both columns.
+
+        reportlab has no float mechanism, so this switches to a page template
+        whose top frame is full width, emits the figure there, and switches
+        back. It forces a page break -- which is what LaTeX would do with a
+        figure* anyway, and the alternative is a three-panel schematic rendered
+        at 3.2 inches wide, which is what it looked like before.
+        """
+        A(NextPageTemplate("wide"))
+        A(PageBreak())
+        for f in fig(name, fullw, cap, maxh=height):
+            A(f)
+        A(FrameBreak())
+        A(NextPageTemplate("rest"))
 
     def par(t):
         A(Paragraph(sub(t), BODY))
@@ -484,17 +501,17 @@ def content(colw, fullw):
            r"any tile-boundary penalty. Capacity is matched to the number of "
            r"blocks the exit skips, and charged for: an exit-2 tile saves six "
            r"blocks minus 0.25, not six.")
-    figure("pipeline_detail.png",
-           r"<b>Figure 2. Inside the boxes of Figure 1.</b> <b>a</b> Tiling is a "
-           r"reshape and nothing else — no arithmetic, and no information crosses "
-           r"a tile border afterwards, which is the whole cost and the whole "
-           r"benefit. <b>b</b> One exit group is two DepthConvBlocks; the single "
-           r"3×3 depthwise is the only operator with spatial extent, hence the "
-           r"only source of the seam, at 0.29% of the block. <b>c</b> Both "
-           r"adapters are pointwise, residual and zero-initialised, so the ladder "
-           r"starts as the released decoder exactly. The FFN adapter costs 5C², "
-           r"which the cost model billed as 2C² until it was measured against the "
-           r"module.")
+    figure_wide("pipeline_detail.png",
+                r"<b>Figure 2. Inside the boxes of Figure 1.</b> <b>a</b> Tiling is a "
+                r"reshape and nothing else — no arithmetic, and no information crosses "
+                r"a tile border afterwards, which is the whole cost and the whole "
+                r"benefit. <b>b</b> One exit group is two DepthConvBlocks; the single "
+                r"3×3 depthwise is the only operator with spatial extent, hence the "
+                r"only source of the seam, at 0.29% of the block. <b>c</b> Both "
+                r"adapters are pointwise, residual and zero-initialised, so the ladder "
+                r"starts as the released decoder exactly. The FFN adapter costs 5C², "
+                r"which the cost model billed as 2C² until it was measured against the "
+                r"module.")
     h2("3.3 Exit adapters")
     par(r"An early exit hands the shared head a feature the head was not fitted "
         r"to; the adapter is the correction. We use a residual 1×1, Ad(f) = f + "
@@ -1398,9 +1415,19 @@ def build(out="paper/FLEX-UF.pdf"):
         canv.drawCentredString(PW / 2, 0.42 * inch, str(canv.getPageNumber()))
         canv.restoreState()
 
+    wide_band = 4.95 * inch
+    f_wide = Frame(M, PH - 0.7 * inch - wide_band, PW - 2 * M, wide_band,
+                   id="wide", leftPadding=0, rightPadding=0,
+                   topPadding=0, bottomPadding=0)
+    hw = H - wide_band
+    f_lw = Frame(M, 0.7 * inch, colw, hw, id="lw", leftPadding=0,
+                 rightPadding=0, topPadding=0, bottomPadding=0)
+    f_rw = Frame(M + colw + GAP, 0.7 * inch, colw, hw, id="rw", leftPadding=0,
+                 rightPadding=0, topPadding=0, bottomPadding=0)
     doc.addPageTemplates([
         PageTemplate(id="first", frames=[f_ban, f_l1, f_r1], onPage=num),
-        PageTemplate(id="rest", frames=[f_l, f_r], onPage=num)])
+        PageTemplate(id="rest", frames=[f_l, f_r], onPage=num),
+        PageTemplate(id="wide", frames=[f_wide, f_lw, f_rw], onPage=num)])
 
     banner_cap = ("<b>Figure 1. FLEX-UF end to end.</b> Grey is frozen and "
                   "never touched; blue is inherited from DCVC-UF and "
