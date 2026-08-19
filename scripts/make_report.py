@@ -454,6 +454,22 @@ if rr:
                      f"{r['spearman_bits_vs_spread']:+.2f}"])
     w(table(["qp", "rate-rank", "B router", "A oracle", "ρ(bits, spread)"], rows))
     w("")
+    w("**It beats the trained router above qp 32**, by up to 8.6 points, and "
+      "loses below it by at most 1.2. The router was trained at one λ and its "
+      "ordering degrades as the bisection tilts it away; a bit count has no "
+      "such attachment to an operating point. It does this while agreeing with "
+      "the oracle on only 0.30–0.45 of tiles against the router's 0.718 — "
+      "agreement weights a tile where two exits are within a hair the same as "
+      "one that carries most of the frame's error. What the rule gets right is "
+      "the ordering that matters: bits correlate with how much a tile stands to "
+      "gain from depth at ρ = 0.62–0.72 at every rate.")
+    w("")
+    w("What it cannot do is see past that ordering. A rank-1 model in the level "
+      "gives every tile the same relative profile over exits, so the bit count "
+      "only decides where on the ladder a tile falls, never the shape of its "
+      "trade-off. That is the part a learned head should be earning its "
+      "parameters on.")
+    w("")
 
 # ------------------------------------------------------- 6. what it costs
 w("## 6. Complexity, and what the saving is worth in time")

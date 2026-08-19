@@ -452,20 +452,39 @@ print("rate rank")
 rr, _ = pick("raterank_RECIPE512_b01.json")
 if rr:
     rs = [r for r in rr["rows"] if r.get("budget_reachable")]
-    lines = [r"\begin{tabular}{lrrrr}", r"\toprule",
-             r"$q$ & rate-rank & B router & A signalled & Spearman \\",
+    lines = [r"\begin{tabular}{lrrrrr}", r"\toprule",
+             r"$q$ & rate-rank & B router & A signalled & "
+             r"$\rho_{\mathrm{depth}}$ & $\rho_{\mathrm{spread}}$ \\",
              r"\midrule"]
     for r in rs:
         b = (B1 or {}).get(r["qp"])
-        lines.append(f"{r['qp']} & {r['saving_pct_vs_release']:.1f} & "
+        beats = b is not None and r["saving_pct_vs_release"] > b
+        v = (f"\\textbf{{{r['saving_pct_vs_release']:.1f}}}" if beats
+             else f"{r['saving_pct_vs_release']:.1f}")
+        lines.append(f"{r['qp']} & {v} & "
                      + (f"{b:.1f}" if b is not None else "---")
                      + f" & {r['oracle_saving_pct_vs_release']:.1f} & "
-                     f"{r['spearman_bits_vs_exit']:+.2f} \\\\")
+                     f"{-r['spearman_bits_vs_exit']:+.2f} & "
+                     f"{r['spearman_bits_vs_spread']:+.2f} \\\\")
     lines += [r"\bottomrule", r"\end{tabular}"]
     w("raterank.tex", "\n".join(lines))
     if rs:
         mac("RateRankLow", f"{rs[0]['saving_pct_vs_release']:.1f}")
         mac("RateRankHigh", f"{rs[-1]['saving_pct_vs_release']:.1f}")
+        if B1:
+            d_ = [(r["qp"], r["saving_pct_vs_release"] - B1[r["qp"]])
+                  for r in rs if r["qp"] in B1]
+            if any(v > 0 for _, v in d_):
+                mac("RateRankBeatsFrom", str(min(q for q, v in d_ if v > 0)))
+                mac("RateRankBeatsBy", f"{max(v for _, v in d_):.1f}")
+            if any(v <= 0 for _, v in d_):
+                mac("RateRankLosesBy", f"{max(-v for _, v in d_ if v <= 0):.1f}")
+        mac("RateRankSpreadLo",
+            f"{min(r['spearman_bits_vs_spread'] for r in rs):.2f}")
+        mac("RateRankSpreadHi",
+            f"{max(r['spearman_bits_vs_spread'] for r in rs):.2f}")
+        mac("RateRankAgreeLo", f"{min(r['agreement'] for r in rs):.2f}")
+        mac("RateRankAgreeHi", f"{max(r['agreement'] for r in rs):.2f}")
 
 # --------------------------------------------------------- adapter ablation
 print("adapter ablation")

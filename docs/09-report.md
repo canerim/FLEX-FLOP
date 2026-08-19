@@ -257,6 +257,22 @@ The encoder can run the decoder's router, because the router reads only decoded 
 
 Recovery is concave everywhere. It is bounded above by the Lorenz curve of the per-tile regret — at a fixed λ the objective is separable, so overriding a set removes exactly the sum of its regrets — and every measured point lies on or below that bound, because returning to the budget means re-bisecting λ. The Gini coefficient of the regret runs 0.57–0.88 across rates.
 
+### 5c. A router with no parameters
+
+The entropy model has already produced a per-tile number that is free and available at the decoder before the trunk runs: how many bits that tile's latents cost. Fitting a rank-1 model in log space — `log D(t,k) ≈ α·log b(t) + c + log φ_k`, leave-one-sequence-out — turns it into a routing rule with no learned parameters and no added bits.
+
+| qp | rate-rank | B router | A oracle | ρ(bits, spread) |
+|---|---|---|---|---|
+| 0 | 29.87 | 30.64 | 32.36 | +0.62 |
+| 16 | 24.62 | 25.85 | 27.56 | +0.66 |
+| 32 | 19.91 | 18.10 | 22.50 | +0.71 |
+| 48 | 15.42 | 9.10 | 19.77 | +0.72 |
+| 63 | 12.10 | 3.53 | 16.77 | +0.68 |
+
+**It beats the trained router above qp 32**, by up to 8.6 points, and loses below it by at most 1.2. The router was trained at one λ and its ordering degrades as the bisection tilts it away; a bit count has no such attachment to an operating point. It does this while agreeing with the oracle on only 0.30–0.45 of tiles against the router's 0.718 — agreement weights a tile where two exits are within a hair the same as one that carries most of the frame's error. What the rule gets right is the ordering that matters: bits correlate with how much a tile stands to gain from depth at ρ = 0.62–0.72 at every rate.
+
+What it cannot do is see past that ordering. A rank-1 model in the level gives every tile the same relative profile over exits, so the bit count only decides where on the ladder a tile falls, never the shape of its trade-off. That is the part a learned head should be earning its parameters on.
+
 ## 6. Complexity, and what the saving is worth in time
 
 | stage | share of decode MACs |

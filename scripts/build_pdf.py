@@ -424,7 +424,7 @@ def content(colw, fullw):
     par(r"DCVC-RT [33] argues that operational rather than computational "
         r"complexity is the speed bottleneck for neural codecs, evidenced by "
         r"channel reductions that yield linear rather than quadratic speedups. "
-        r"Section 5.8 is an instance of that claim inside one loop: "
+        r"Section 5.9 is an instance of that claim inside one loop: "
         r"\WallPredicted% of operations removed buys \WallSorted% of time, and "
         r"\WallSortedGain points of the difference come back from reordering "
         r"the loop with the arithmetic untouched.")
@@ -871,7 +871,54 @@ def content(colw, fullw):
         r"rung and nothing is left to predict wrongly. Configuration B is "
         r"expensive in exactly one regime: a tight budget at a rate far from the "
         r"router's training point.")
-    h2("5.6 Signalling only what the router gets wrong")
+    h2("5.6 A router with no parameters")
+    par(r"Before a \RouterParams head is worth its \RouterCostPct% of the "
+        r"decode, it has to beat what the decoder already knows. The entropy "
+        r"model has produced a number per tile before the trunk runs and at no "
+        r"cost: how many bits that tile's latents took.")
+    par(r"We turn it into a routing rule with no learned parameters. Model the "
+        r"per-tile distortion as rank-1 in the log domain, "
+        r"log D(t,k) ≈ α·log b(t) + c + log φ_k, where b is the tile's bit "
+        r"count normalised by the frame mean and φ is a K-vector saying what "
+        r"each exit costs on an average tile. Fit (α, c, φ) by least squares, "
+        r"leave-one-sequence-out so no sequence contributes to the profile that "
+        r"routes it, and run the same Lagrangian the oracle runs on the "
+        r"surrogate. Nothing is signalled, nothing is trained, and the "
+        r"arithmetic is a scalar per tile.")
+    tbl("raterank",
+        r"<b>Table 8. The free baseline</b>, 0.1 dB, same test set. Bold where "
+        r"the parameter-free rule beats the trained head. ρ are Spearman "
+        r"correlations between a tile's bit count and, respectively, the depth "
+        r"the oracle assigns it and the distortion it stands to gain from that "
+        r"depth.")
+    par(r"<b>It beats the trained router above q\RateRankBeatsFrom</b>, by up "
+        r"to \RateRankBeatsBy points, and loses to it below by at most "
+        r"\RateRankLosesBy. The crossing is not a surprise once the numbers are "
+        r"read the right way: the router was trained at one λ and its ordering "
+        r"degrades as the bisection tilts it away, while the bit count carries "
+        r"no such attachment to an operating point — ρ_depth is 0.53 at four "
+        r"of the five rates.")
+    par(r"<b>Why it works is not that it agrees with the oracle.</b> It agrees "
+        r"on \RateRankAgreeLo–\RateRankAgreeHi of tiles, which is worse than "
+        r"the router's 0.718, and it still saves more at high rate. Agreement "
+        r"counts a disagreement on a tile where two exits are within a hair of "
+        r"each other exactly as heavily as one where the choice is most of the "
+        r"frame's error, and most tiles are the former. What the rule gets "
+        r"right is the ordering that matters: bits correlate with the "
+        r"<i>spread</i> across the ladder — how much a tile stands to gain "
+        r"from depth — at ρ_spread = \RateRankSpreadLo–\RateRankSpreadHi at "
+        r"every rate.")
+    par(r"<b>What it cannot do</b> is see anything beyond that ordering. A "
+        r"rank-1 model in the level assigns every tile the same relative "
+        r"profile over exits, so b only decides where on the ladder a tile "
+        r"falls, never the shape of its trade-off. That is the ceiling this "
+        r"baseline sits at, and it is the part a learned head should be earning "
+        r"its parameters on. Ours does, at low rate, and does not at high rate.")
+    par(r"We report this because a learned component should be measured against "
+        r"the free alternative and rarely is. In adaptive inference the usual "
+        r"controls are a uniform allocation and a random one; both are far "
+        r"weaker than a decoder-side signal that happens to be lying around.")
+    h2("5.7 Signalling only what the router gets wrong")
     par(r"A and B are the two ends of a single scale, not two designs. The "
         r"encoder can run the decoder's router — it reads only decoded data — "
         r"so it knows, tile by tile, where the prediction will be wrong. "
@@ -922,7 +969,7 @@ def content(colw, fullw):
         r"and a large one is not. It also reframes the A–B gap: it is not the "
         r"price of prediction, it is the price of <i>silence</i>, and silence "
         r"is priced per tile.")
-    h2("5.7 Does the map have to be recomputed?")
+    h2("5.8 Does the map have to be recomputed?")
     figure("map_transfer.png",
            r"<b>Figure 10. Reusing an exit map.</b> Solid is the transferred "
            r"map, dashed the one recomputed in place. <b>a</b>, <b>b</b>: reuse "
@@ -947,7 +994,7 @@ def content(colw, fullw):
         r"expensive at high rate, so a map is calibrated to the rate it was found "
         r"at, and reusing it upward silently breaks the quality guarantee. Search "
         r"once per rate, reuse across frames.")
-    h2("5.8 Complexity and wall-clock")
+    h2("5.9 Complexity and wall-clock")
     tbl("latency",
         r"<b>Table 8. Wall-clock</b>, 1080p, median of 40 interleaved "
         r"iterations, at the 0.1 dB operating point. ``MACs'' is what the "
@@ -992,7 +1039,7 @@ def content(colw, fullw):
         r"delivers \WallSorted%. The direction is the one that matters: "
         r"operations are an <i>optimistic</i> bound on this method, and the "
         r"optimism grows with how much of the frame exits early.")
-    h2("5.9 The right ladder depends on the budget")
+    h2("5.10 The right ladder depends on the budget")
     tbl("runs",
         r"<b>Table 9. Ladder configurations</b>, mean saving (%) over the five "
         r"rates, same test set and protocol. * one rate is infeasible at that "

@@ -953,6 +953,61 @@ far from the router's training point. We report the single-router number because
 it is the honest one for a system that trains once, and note that it understates
 what B can do.
 
+\subsection{A router with no parameters}
+\label{sec:raterank}
+
+\begin{table}[t]
+\centering
+\resizebox{\columnwidth}{!}{\input{tables/raterank}}
+\caption{\textbf{The free baseline}, $0.1\dB$, same test set. Bold where the
+parameter-free rule beats the trained head. $\rho$ are Spearman correlations
+between a tile's bit count and, respectively, the depth the oracle assigns it and
+the distortion it stands to gain from that depth.}
+\label{tab:raterank}
+\end{table}
+
+Before a $\RouterParams$ head is worth its \RouterCostPct\% of the decode, it has
+to beat what the decoder already knows. The entropy model has produced a number
+per tile before the trunk runs and at no cost: how many bits that tile's latents
+took.
+
+We turn it into a routing rule with no learned parameters. Model the per-tile
+distortion as rank-1 in the log domain,
+$\log D(t,k)\approx\alpha\log b(t)+c+\log\varphi_k$, where $b$ is the tile's bit
+count normalised by the frame mean and $\varphi$ is a $K$-vector saying what each
+exit costs on an average tile. Fit $(\alpha,c,\varphi)$ by least squares,
+leave-one-sequence-out so no sequence contributes to the profile that routes it,
+and run the same Lagrangian the oracle runs on the surrogate. Nothing is
+signalled, nothing is trained, and the arithmetic is a scalar per tile.
+
+\textbf{It beats the trained router above $q\RateRankBeatsFrom$}, by up to
+\RateRankBeatsBy\ points, and loses to it below by at most \RateRankLosesBy.
+The crossing is not a surprise once the numbers are read the right way: the
+router was trained at one $\lambda$ and its ordering degrades as the bisection
+tilts it away (Section~\ref{sec:ab}), while the bit count carries no such
+attachment to an operating point --- $\rho_{\mathrm{depth}}$ is $0.53$ at four
+of the five rates.
+
+\textbf{Why it works is not that it agrees with the oracle.} It agrees on
+\RateRankAgreeLo--\RateRankAgreeHi\ of tiles, which is worse than the router's
+$0.718$, and it still saves more at high rate. Agreement counts a disagreement on
+a tile where two exits are within a hair of each other exactly as heavily as one
+where the choice is most of the frame's error, and most tiles are the former.
+What the rule gets right is the ordering that matters: bits correlate with the
+\emph{spread} across the ladder --- how much a tile stands to gain from depth ---
+at $\rho_{\mathrm{spread}}=\RateRankSpreadLo$--\RateRankSpreadHi\ at every rate.
+
+\textbf{What it cannot do} is see anything beyond that ordering. A rank-1 model
+in the level assigns every tile the same relative profile over exits, so $b$ only
+decides where on the ladder a tile falls, never the shape of its trade-off. That
+is the ceiling this baseline sits at, and it is the part a learned head should be
+earning its parameters on. Ours does, at low rate, and does not at high rate.
+
+We report this because a learned component should be measured against the free
+alternative and rarely is. In adaptive inference the usual controls are a uniform
+allocation and a random one; both are far weaker than a decoder-side signal that
+happens to be lying around.
+
 \subsection{Signalling only what the router gets wrong}
 \label{sec:hybrid}
 

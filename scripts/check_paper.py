@@ -61,6 +61,26 @@ if t:
     claim("theory: lattice bound (pts)", 0.745, t["lattice_bound_pts"], 3)
     claim("theory: measured spacing (pts)", 0.745, t["lattice_spacing_pts"], 3)
 
+# ---- rate rank ------------------------------------------------------------
+rr = J("raterank_RECIPE512_b01.json")
+b1 = J("router_RECIPE512_b01.json")
+if rr and b1:
+    B = {r["qp"]: r["saving_pct_vs_release"] for r in b1["rows"]
+         if r.get("budget_reachable")}
+    for r in rr["rows"]:
+        if not r.get("budget_reachable") or r["qp"] not in B:
+            continue
+        if r["qp"] == 63:
+            claim("rate-rank q63", 12.1, r["saving_pct_vs_release"], 0.1)
+            claim("rate-rank beats B by (q63)", 8.6,
+                  r["saving_pct_vs_release"] - B[r["qp"]], 0.15)
+        if r["qp"] == 0:
+            claim("rate-rank q0", 29.9, r["saving_pct_vs_release"], 0.1)
+    claim("rate-rank crossover qp", 32,
+          min(r["qp"] for r in rr["rows"]
+              if r.get("budget_reachable") and r["qp"] in B
+              and r["saving_pct_vs_release"] > B[r["qp"]]), 0)
+
 # ---- hull -------------------------------------------------------------------
 d = J("hull_gap.json")
 if d:
