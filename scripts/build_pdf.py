@@ -227,7 +227,7 @@ def content(colw, fullw):
         r"bit-identical and recovers a fifth of the shortfall."
         r"<br/><br/>"
         r"Signalling the exit map costs \MapBits bits per frame; predicting it "
-        r"at the decoder costs none and gives up \GapLow–\GapHigh points. The "
+        r"at the decoder costs none and gives up \GapMin–\GapMax points. The "
         r"two are ends of one scale rather than two designs: overriding the "
         r"worst fifth of tiles recovers "
         r"\HybridRecoverFifthHigh–\HybridRecoverFifthLow% of that gap for "
