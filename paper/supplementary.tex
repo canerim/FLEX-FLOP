@@ -222,12 +222,14 @@ the paper.
       but only because it places tiles on the ladder by \emph{level}. What
       decides a tile is the \emph{spread} across the ladder, which a rank-1
       model in the level cannot represent, and the two are not the same
-      ordering: bits correlate positively with distortion at every exit and
-      negatively with the depth the oracle assigns.
-\item \textbf{A single router across all rates.} It reaches within $1.7$ points
-      of the oracle near the $\lambda$ it was trained at and falls $13.3$ points
-      behind at the far end, tracking the tilt $|\beta|$ the bisection applies to
-      move it. A router per operating point, not a better architecture.
+      ordering: bits correlate with distortion at every exit and with the
+      depth the oracle assigns, at $\rho\approx0.53$, but a level-only model
+      cannot see which tiles have a steep ladder and which have a flat one.
+\item \textbf{A single router across all rates.} It comes within \GapMin\
+      points of the oracle at $q\GapMinQp$, where the tilt the bisection has to
+      apply is essentially zero because that is where its training $\lambda$
+      lands, and falls to \GapMax\ at the far end. The gap tracks $|\beta|$ in
+      both directions. A router per operating point, not a better architecture.
 \end{itemize}
 
 \section{Things that were not running}
