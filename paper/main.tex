@@ -339,6 +339,21 @@ $j{=}2$, $256$\,px tiles) $S_{\max} = \Ceiling\%$. We show in
 Section~\ref{sec:operating} that this bound is \emph{reached} in practice at low
 rate, which makes it an operating point rather than an asymptote.
 
+\begin{figure*}[t]
+\centering
+\includegraphics[width=\textwidth]{figures/pipeline_detail.png}
+\caption{\textbf{Inside the boxes of Fig.~\ref{fig:pipeline}.} \textbf{a} Tiling
+is a reshape and nothing else --- no arithmetic, and no information crosses a
+tile border afterwards, which is the whole cost and the whole benefit.
+\textbf{b} One exit group is two \texttt{DepthConvBlock}s; the single $3\times3$
+depthwise is the only operator with spatial extent, hence the only source of the
+seam, at $0.29\%$ of the block. \textbf{c} Both adapters are pointwise, residual
+and zero-initialised, so the ladder starts as the released decoder exactly. The
+FFN adapter costs $5C^{2}$, which the cost model billed as $2C^{2}$ until it was
+measured against the module.}
+\label{fig:detail}
+\end{figure*}
+
 \subsection{Exit adapters}
 
 \begin{figure}[t]
@@ -435,16 +450,6 @@ high $\lambda$ the oracle genuinely does send every tile to one exit, and forcin
 spread there would force mistakes.
 
 \subsection{Training}
-
-\begin{figure*}[t]
-\centering
-\includegraphics[width=\textwidth]{figures/training_scheme.png}
-\caption{\textbf{Training.} One forward pass produces all $K$ reconstructions, so
-the ladder is trained as one object rather than as $K$ models. The encoder side
---- $61.5\%$ of the parameters --- is frozen, which is what makes the released
-decoder and ours comparable on the \emph{same} latent.}
-\label{fig:training}
-\end{figure*}
 
 All exits are decoded every step and the objective is
 \begin{equation}

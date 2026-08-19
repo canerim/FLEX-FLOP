@@ -35,6 +35,7 @@ WANTED = [
     "blend.png",              # do the two decoder-side signals differ?
     "tradeoff.png",           # the whole budget-to-saving curve
     "budget_band.png",        # the same, normalised onto each rate's band
+    "pipeline_detail.png",    # what the boxes in Figure 1 contain
 ]
 
 missing = []

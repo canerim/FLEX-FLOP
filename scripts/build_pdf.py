@@ -484,6 +484,17 @@ def content(colw, fullw):
            r"any tile-boundary penalty. Capacity is matched to the number of "
            r"blocks the exit skips, and charged for: an exit-2 tile saves six "
            r"blocks minus 0.25, not six.")
+    figure("pipeline_detail.png",
+           r"<b>Figure 2. Inside the boxes of Figure 1.</b> <b>a</b> Tiling is a "
+           r"reshape and nothing else — no arithmetic, and no information crosses "
+           r"a tile border afterwards, which is the whole cost and the whole "
+           r"benefit. <b>b</b> One exit group is two DepthConvBlocks; the single "
+           r"3×3 depthwise is the only operator with spatial extent, hence the "
+           r"only source of the seam, at 0.29% of the block. <b>c</b> Both "
+           r"adapters are pointwise, residual and zero-initialised, so the ladder "
+           r"starts as the released decoder exactly. The FFN adapter costs 5C², "
+           r"which the cost model billed as 2C² until it was measured against the "
+           r"module.")
     h2("3.3 Exit adapters")
     par(r"An early exit hands the shared head a feature the head was not fitted "
         r"to; the adapter is the correction. We use a residual 1×1, Ad(f) = f + "
@@ -535,12 +546,6 @@ def content(colw, fullw):
         r"wrongly, plus loss-free load balancing [16] biased toward the "
         r"oracle's own exit distribution rather than toward uniform.")
     h2("3.5 Training")
-    figure("training_scheme.png",
-           r"<b>Figure 4. Training.</b> One forward pass produces all K "
-           r"reconstructions, so the ladder is trained as one object rather "
-           r"than as K models. The encoder side — 61.5% of the parameters — is "
-           r"frozen, which is what makes the released decoder and ours "
-           r"comparable on the <i>same</i> latent.")
     par(r"All exits are decoded every step and the objective is L = L_RD + "
         r"w_a·L_anchor + w_d·L_distill. L_RD is the released rate-distortion "
         r"loss with MSE averaged over exits. L_anchor pins the deepest exit to "
