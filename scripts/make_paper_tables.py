@@ -363,6 +363,8 @@ if sa and b1:
         mac("BLow", f"{B1[qs[0]]:.1f}")
         mac("BHigh", f"{B1[qs[-1]]:.1f}")
         if both:
+            mac("SigLooseHigh", f"{A3[qs[-1]]:.1f}")
+            mac("SigLooseLow", f"{A3[qs[0]]:.1f}")
             mac("GapLooseLow", f"{A3[qs[0]]-B3[qs[0]]:.1f}")
             mac("GapLooseHigh", f"{A3[qs[-1]]-B3[qs[-1]]:.1f}")
 
@@ -553,6 +555,13 @@ if bdj:
 # ------------------------------------------------------------- rate rank
 print("rate rank")
 rr, _ = pick("raterank_RECIPE512_b01.json")
+rr3, _ = pick("raterank_RECIPE512_b03.json")
+if rr3:
+    rs3 = [r for r in rr3["rows"] if r.get("budget_reachable")]
+    if rs3:
+        mac("RateRankLoose", f"{rs3[-1]['saving_pct_vs_release']:.1f}")
+        mac("RateRankLooseCeil",
+            f"{sum(1 for r in rs3 if r['saving_pct_vs_release'] > 41.9)}")
 if rr:
     rs = [r for r in rr["rows"] if r.get("budget_reachable")]
     lines = [r"\begin{tabular}{lrrrrr}", r"\toprule",

@@ -929,6 +929,14 @@ def content(colw, fullw):
         r"<i>spread</i> across the ladder — how much a tile stands to gain "
         r"from depth — at ρ_spread = \RateRankSpreadLo–\RateRankSpreadHi at "
         r"every rate.")
+    par(r"<b>At a looser budget it stops being a baseline and becomes the "
+        r"answer.</b> At 0.3 dB it reaches the architectural ceiling exactly at "
+        r"the \RateRankLooseCeil lowest rates, is within 0.2 points of the "
+        r"oracle at q48, and gives up \RateRankLoose% against the oracle's "
+        r"\SigLooseHigh% at q63 — better than the trained head at every rate, "
+        r"because the head is charged for itself and this is not. Once the "
+        r"budget saturates the ladder there is little ordering left to get "
+        r"right, and the free rule gets it.")
     par(r"<b>What it cannot do</b> is see anything beyond that ordering. A "
         r"rank-1 model in the level assigns every tile the same relative "
         r"profile over exits, so b only decides where on the ladder a tile "

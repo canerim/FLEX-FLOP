@@ -1025,6 +1025,14 @@ What the rule gets right is the ordering that matters: bits correlate with the
 \emph{spread} across the ladder --- how much a tile stands to gain from depth ---
 at $\rho_{\mathrm{spread}}=\RateRankSpreadLo$--\RateRankSpreadHi\ at every rate.
 
+\textbf{At a looser budget it stops being a baseline and becomes the answer.}
+At $0.3\dB$ it reaches the architectural ceiling exactly at the
+\RateRankLooseCeil\ lowest rates, is within $0.2$ points of the oracle at $q48$,
+and gives up \RateRankLoose\% against the oracle's \SigLooseHigh\% at $q63$ ---
+better than the trained head at every rate, because the head is charged for
+itself and this is not. Once the budget saturates the ladder there is little
+ordering left to get right, and the free rule gets it.
+
 \textbf{What it cannot do} is see anything beyond that ordering. A rank-1 model
 in the level assigns every tile the same relative profile over exits, so $b$ only
 decides where on the ladder a tile falls, never the shape of its trade-off. That
