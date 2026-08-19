@@ -1,0 +1,159 @@
+{
+  "ckpt": "runs/RECIPE512/ckpt_PAPER.pth.tar",
+  "epoch": 0,
+  "config": {
+    "num_exits": 6,
+    "split_depth": 2,
+    "latent_patch": 16,
+    "latent_halo": 2,
+    "trunk_halo": 0,
+    "tile_coupling": false,
+    "tile_pad_mode": "replicate",
+    "seam_repair": "grid",
+    "adapter_kind": "scaled",
+    "adapter_expand": 4,
+    "full_frame_head": true,
+    "aux_weight": 1.0,
+    "aux_schedule": "constant",
+    "aux_warmup_epochs": 10,
+    "qp": 63
+  },
+  "trunk_channels": 384,
+  "feature_tile": [
+    32,
+    32
+  ],
+  "block": {
+    "mac_per_px": 1035648.0,
+    "in_C_squared": 7.0234375,
+    "footprint_px": 9,
+    "profile": [
+      {
+        "name": "dc.0",
+        "mac_per_px": 147456.0,
+        "out_channels": 384,
+        "kernel": 1,
+        "depthwise": false,
+        "share_of_block": 0.14238042269187987
+      },
+      {
+        "name": "dc.2",
+        "mac_per_px": 3456.0,
+        "out_channels": 384,
+        "kernel": 3,
+        "depthwise": true,
+        "share_of_block": 0.0033370411568409346
+      },
+      {
+        "name": "dc.3",
+        "mac_per_px": 147456.0,
+        "out_channels": 384,
+        "kernel": 1,
+        "depthwise": false,
+        "share_of_block": 0.14238042269187987
+      },
+      {
+        "name": "ffn.0",
+        "mac_per_px": 589824.0,
+        "out_channels": 1536,
+        "kernel": 1,
+        "depthwise": false,
+        "share_of_block": 0.5695216907675195
+      },
+      {
+        "name": "ffn.2",
+        "mac_per_px": 147456.0,
+        "out_channels": 384,
+        "kernel": 1,
+        "depthwise": false,
+        "share_of_block": 0.14238042269187987
+      }
+    ]
+  },
+  "adapters": {
+    "conv1x1": {
+      "mac_per_px": 147456.0,
+      "footprint_px": 1,
+      "profile": [
+        {
+          "name": "conv",
+          "mac_per_px": 147456.0,
+          "out_channels": 384,
+          "kernel": 1,
+          "depthwise": false,
+          "share_of_block": 0.14238042269187987
+        }
+      ],
+      "blocks": 0.14238042269187987,
+      "in_C_squared": 1.0
+    },
+    "ffn": {
+      "mac_per_px": 737280.0,
+      "footprint_px": 1,
+      "profile": [
+        {
+          "name": "pw_in",
+          "mac_per_px": 589824.0,
+          "out_channels": 1536,
+          "kernel": 1,
+          "depthwise": false,
+          "share_of_block": 0.5695216907675195
+        },
+        {
+          "name": "pw_out",
+          "mac_per_px": 147456.0,
+          "out_channels": 384,
+          "kernel": 1,
+          "depthwise": false,
+          "share_of_block": 0.14238042269187987
+        }
+      ],
+      "blocks": 0.7119021134593994,
+      "in_C_squared": 5.0
+    }
+  },
+  "exits": [
+    {
+      "exit": 0,
+      "blocks_skipped": 10,
+      "adapter_kind": "ffn",
+      "adapter_blocks": 0.7119021134593994,
+      "reachable": false
+    },
+    {
+      "exit": 1,
+      "blocks_skipped": 8,
+      "adapter_kind": "ffn",
+      "adapter_blocks": 0.7119021134593994,
+      "reachable": false
+    },
+    {
+      "exit": 2,
+      "blocks_skipped": 6,
+      "adapter_kind": "ffn",
+      "adapter_blocks": 0.7119021134593994,
+      "reachable": true
+    },
+    {
+      "exit": 3,
+      "blocks_skipped": 4,
+      "adapter_kind": "ffn",
+      "adapter_blocks": 0.7119021134593994,
+      "reachable": true
+    },
+    {
+      "exit": 4,
+      "blocks_skipped": 2,
+      "adapter_kind": "conv1x1",
+      "adapter_blocks": 0.14238042269187987,
+      "reachable": true
+    },
+    {
+      "exit": 5,
+      "blocks_skipped": 0,
+      "adapter_kind": null,
+      "adapter_blocks": 0.0,
+      "reachable": true
+    }
+  ]
+}

@@ -40,17 +40,17 @@ the exit skips: FFN at four or more, the $1\times1$ otherwise.
 
 \paragraph{Why only the depthwise matters.} A \texttt{DepthConvBlock} at $C=384$
 costs $8C^2 + 9C = 1{,}183{,}104$ MAC/px, of which the $3\times3$ depthwise is
-$9C = 3{,}456$ --- $0.29\%$. Every other operator is $1\times1$ and has no
+$9C = 3{,}456$, or $0.29\%$. Every other operator is $1\times1$ and has no
 neighbours to miss. This is why the exact remedy is affordable: haloing or
 coupling only the depthwise costs $+0.032\%$ of the decode at $256$\,px tiles,
-against $1.745\times$ for a halo carried through the whole block, which an
-earlier iteration of this work measured and rejected --- correctly about the
-number and wrongly about the target.
+against $1.745\times$ for a halo carried through the whole block. An earlier
+iteration of this work measured that $1.745\times$ correctly and then rejected
+haloing altogether, instead of narrowing it to the one operator that needs it.
 
-\paragraph{The seam grows quadratically in per-tile depth, and the area law does
-not describe it.} Sweeping the split depth $j$ sweeps the number of per-tile
-blocks $b = (K-j)\,b_{\mathrm{exit}}$ from 12 to 0, and the pure seam penalty
-follows (untrained warm start, every tile at full depth, 12 sequences):
+\paragraph{Seam penalty against per-tile depth.} Sweeping the split depth $j$
+sweeps the number of per-tile blocks $b = (K-j)\,b_{\mathrm{exit}}$ from 12 to
+0, and the pure seam penalty follows (untrained warm start, every tile at full
+depth, 12 sequences):
 
 \begin{center}
 \begin{tabular}{rrrrr}
@@ -73,7 +73,7 @@ measurement is of the seam and nothing else.
 
 The area fraction is a poor predictor: fitted with one free scale it is wrong by
 160--264\% on average. It counts whether a pixel is \emph{reached} by the border
-and not how far the border propagates into it, and it saturates --- at $b=12$
+and not how far the border propagates into it, and it saturates: at $b=12$
 almost every pixel is already contaminated, yet the penalty keeps rising
 steeply. A power law fits well at every rate,
 \begin{equation}
@@ -84,8 +84,9 @@ with $r = 0.98$--$0.995$ in log--log and $12$--$22\%$ mean relative error. The
 exponent near two has a reading: the number of contaminated pixels grows like the
 perimeter times the depth, $\propto b$, and the error accumulated in each of them
 grows with the number of convolutions that reached it, also $\propto b$. Once
-every pixel is contaminated only the second factor is left, which is exactly
-where the area law stops being able to say anything.
+every pixel is contaminated the first factor is fixed and only the second keeps
+growing, which is the regime in which the area fraction flattens and the
+measured penalty does not.
 
 \paragraph{The repair module's ceiling.} Splitting per-pixel squared error by
 distance from the nearest tile boundary at $q63$, with repair on against off and
@@ -129,8 +130,8 @@ It is \emph{not} bit-identical on CPU, and the reason is not the algorithm: a
 plain \texttt{DepthConvBlock} is already order-dependent at batch size 13 there,
 by about $10^{-7}$, while exact at 4, 9, 16 and 40, because oneDNN selects a
 different blocking. A test that compared the two paths on a decode of an
-all-zero image would pass vacuously --- every tile carries the same latent, so
-any permutation is trivially exact --- and ours therefore uses random content.
+all-zero image would pass vacuously (every tile carries the same latent, so any
+permutation is trivially exact), and ours therefore uses random content.
 
 \paragraph{Two decibel conventions.} Pooling every tile of every frame into one
 MSE and averaging a per-frame decibel differ by $0.023$--$0.033\dB$ on an
@@ -148,34 +149,33 @@ particular and says nothing about it. Every wall-clock figure here was
 re-measured with the device pinned, and a test asserts that every script using
 CUDA events pins it.
 
-\paragraph{No number in the paper is typed.} Every table and every inline
-figure is generated from \texttt{results/} by one script, expanded as a macro,
-and a second script re-reads \NumClaims\ of them out of the prose and compares
-them against the same files, exiting non-zero on any disagreement. It has caught
-four drifts, one of which was a figure count that changed when a figure was
-inserted in the middle.
+\paragraph{Generated numbers.} No number in the paper is typed. Every table and
+every inline figure is generated from \texttt{results/} by one script, expanded
+as a macro, and a second script re-reads \NumClaims\ of them out of the prose
+and compares them against the same files, exiting non-zero on any disagreement.
+It has caught four drifts, one of which was a figure count that changed when a
+figure was inserted in the middle.
 
 \section{Claims this work made and then measured}
 
 Five statements that appeared in earlier drafts of this work, and what the
-experiment said. They are collected because the pattern matters more than any one
-of them: each was plausible, argued from a mechanism, and wrong in a way only a
-measurement could show.
+experiment said. Each was plausible and argued from a mechanism, and in every
+case it took a measurement rather than a better argument to settle it.
 
 \begin{itemize}\itemsep3pt
 \item \textbf{``The corrupted-area fraction explains why split depth matters.''}
       It predicts the seam with $160$--$264\%$ error, because the area
       saturates once every pixel is contaminated and the damage does not. What
-      replaces it is a power law in $b$ with the exponent \emph{fitted} ---
-      $2.38$, $2.22$, $1.93$ at $q0$, $q32$, $q63$ --- which fits to
+      replaces it is a power law in $b$ with the exponent \emph{fitted}
+      ($2.38$, $2.22$, $1.93$ at $q0$, $q32$, $q63$), which fits to
       $12$--$22\%$. A fixed square, which earlier drafts quoted as though it
       were the same thing, fits to $31$--$38\%$: better than the area by a
       factor of five and worse than the fitted exponent by a factor of two.
 \item \textbf{``Canvas coupling is the clearest remaining gain, worth
       $3.5$--$5$ points.''} It removes $47$--$91\%$ of the floor and collapses the
-      routed saving --- \CoupPaddedMid\% to \CoupCoupledMid\% at $q32$,
+      routed saving: \CoupPaddedMid\% to \CoupCoupledMid\% at $q32$,
       \CoupPaddedHigh\% to \CoupCoupledHigh\% at
-      $q63$. Coupling is exact at uniform depth and routing is the deliberate
+      $q63$. Coupling is exact at uniform depth, and routing is the deliberate
       violation of that condition.
 \item \textbf{``A tile size chosen per resolution is the obvious extension.''}
       $128$\,px tiles help only at $416{\times}240$ ($+2.4$ points) and cost
@@ -189,15 +189,15 @@ measurement could show.
       second version of this claim said, an upper bound. Overriding a set
       removes exactly its regret at a \emph{fixed} multiplier, but the
       constraint is distortion, and returning to the budget re-bisects
-      $\lambda$. That re-bisection is not a leak in the bound, it is a
-      different and larger feasible set: the hybrid runs the oracle's $\lambda$
-      on the overridden tiles and the router's fixed $\beta$ on the rest, and
-      two multipliers reach allocations one cannot. Measured, the recovery
-      exceeds the Lorenz prediction wherever that matters ---
-      \LorenzTightMin--\LorenzTightMax\% of it across the sweep --- and at
-      \HybridBeatsAN\ of \HybridBeatsAOf\ rates a half map beats a complete one
-      outright. The separability argument was correct about the wrong quantity,
-      twice.
+      $\lambda$. What the re-bisection opens up is a larger feasible set: the
+      hybrid runs the oracle's $\lambda$ on the overridden tiles and the
+      router's fixed $\beta$ on the rest, and two multipliers reach allocations
+      one cannot. Measured, the recovery exceeds the Lorenz prediction wherever
+      that matters, reaching \LorenzTightMin--\LorenzTightMax\% of it across
+      the sweep, and at \HybridBeatsAN\ of \HybridBeatsAOf\ rates a half map
+      beats a complete one outright. Both versions of the claim took a
+      separability argument that holds for the objective and applied it to a
+      saving measured at fixed distortion.
 \end{itemize}
 
 \section{Negative results}
@@ -219,12 +219,12 @@ the paper.
       agreement with the oracle; in another it did not. Training the router
       against a frozen decoder is reliable and is what we report.
 \item \textbf{A halo through the per-tile trunk.} $1.745\times$ the cost of a
-      full decode --- more than routing saves.
+      full decode, which is more than routing saves.
 \item \textbf{A rank-1 surrogate for the per-tile distortion.} Modelling
       $\log D(t,k)\approx\alpha\log b(t)+c+\log\varphi_k$ from the tile's bit
-      count gives a routing rule with no learned parameters, and it works ---
-      but only because it places tiles on the ladder by \emph{level}. What
-      decides a tile is the \emph{spread} across the ladder, which a rank-1
+      count gives a routing rule with no learned parameters, and it works, but
+      only because it places tiles on the ladder by \emph{level}. What decides
+      a tile is the \emph{spread} across the ladder, which a rank-1
       model in the level cannot represent, and the two are not the same
       ordering: bits correlate with distortion at every exit and with the
       depth the oracle assigns, at $\rho\approx0.53$, but a level-only model
@@ -233,7 +233,7 @@ the paper.
       points of the oracle at $q\GapMinQp$, where the tilt the bisection has to
       apply is essentially zero because that is where its training $\lambda$
       lands, and falls to \GapMax\ at the far end. The gap tracks $|\beta|$ in
-      both directions. A router per operating point, not a better architecture.
+      both directions. The remedy is a router per operating point.
 \end{itemize}
 
 \section{Things that were not running}
@@ -259,16 +259,16 @@ were found by running them rather than by reading them.
       a non-default GPU, so the events and the work were on different cards.
       This does not raise: it returns numbers. The tell, in hindsight, was that
       the released decoder appeared to take $274$, $401$ and $512$\,ms at $q0$,
-      $q32$ and $q63$ --- a fixed-architecture synthesis network whose
+      $q32$ and $q63$; a fixed-architecture synthesis network whose
       arithmetic does not depend on the quality index cannot get slower with
       it. Re-measured with the device pinned it is $111$\,ms at all three. The
       corrections are not small and one of them reverses a claim: the tiling
       overhead falls from $8.5\%$ to \TilingOverhead\%, and the unsorted
       per-tile loop, reported as \emph{slower} than the dense decoder at high
-      rate, in fact realises \WallMasked\% at $q0$ --- so sorting the tiles is
-      a $\WallSortedGain$-point improvement on something that already worked
-      rather than a rescue of something that did not. The wall-clock section of
-      the main paper is written against the corrected numbers. Anything in this
+      rate, in fact realises \WallMasked\% at $q0$. Sorting the tiles is
+      therefore a $\WallSortedGain$-point improvement on a loop that already
+      worked. The wall-clock section of the main paper is written against the
+      corrected numbers. Anything in this
       repository that timed a non-default GPU should be assumed to have had this
       bug; a source test now asserts that every script using
       \texttt{torch.cuda.Event} pins the device first, and it found two more.
@@ -279,7 +279,7 @@ were found by running them rather than by reading them.
       the raw outputs settled near $-10^{4}$. The two suppressed entries then
       became the \emph{largest} in every row, took nearly all the probability
       mass, and the caller's clamp turned the resulting choice into the cheapest
-      real exit --- so a large share of every configuration-B allocation went to
+      real exit, so a large share of every configuration-B allocation went to
       the cheapest rung for a reason unrelated to the tile. The mask is now
       $-\infty$, which cannot drift, and a test checks the property across six
       logit scales rather than checking the constant.

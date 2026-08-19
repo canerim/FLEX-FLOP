@@ -1,22 +1,7 @@
 {
   "n_claims": 85,
-  "n_passed": 69,
+  "n_passed": 84,
   "failed": [
-    "rate-rank q0",
-    "rate-rank q63",
-    "rate-rank: rates it wins",
-    "rate-rank: best margin (pts)",
-    "rate-rank: worst deficit (pts)",
-    "hybrid: rho=0 reproduces B (max |diff|)",
-    "hybrid: rho=1 reproduces A (max |diff|)",
-    "hybrid: worst |dB - budget|",
-    "C: bits predictor's best margin",
-    "C: head predictor's best margin",
-    "C: best measured saving",
-    "static: uniform exit 3 at q0",
-    "static: best static mean",
-    "per-class q0 MCL-JCV",
-    "per-class q0 HEVC_D",
-    "per-class q0 HEVC_C"
+    "hybrid: rho=1 reproduces A (max |diff|)"
   ]
 }

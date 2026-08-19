@@ -183,96 +183,102 @@ def pipeline():
 
 # ======================================================  2. inside the adapters
 def adapters():
-    C = 384
-    fig, ax = plt.subplots(1, 3, figsize=(ns.W2, 2.7),
-                           gridspec_kw={"width_ratios": [1, 1, 1.1]})
-    for a in ax[:2]:
-        blank(a)
-    BX, BW = 0.20, 0.62
+    """Figure 2: what an exit adapter is made of, and which exit wears which.
 
-    def stack(a, y, h, t1, t2, **kw):
-        a.add_patch(FancyBboxPatch((BX, y), BW, h,
-                    boxstyle="round,pad=0,rounding_size=0.02",
-                    facecolor=kw.get("fc_", "white"),
-                    edgecolor=kw.get("ec", ns.INK2), linewidth=0.7))
-        a.text(BX + BW/2, y + h/2 + 0.016, t1, ha="center", va="center", fontsize=6)
-        a.text(BX + BW/2, y + h/2 - 0.019, t2, ha="center", va="center",
-               fontsize=5, color=ns.INK2)
+    Two facts have to land and both of them are geometric, so both are drawn
+    rather than written. An exit adapter is not a new operator: it is the tail
+    of a DepthConvBlock at the size the block's own tail is, which is why panel
+    a right-aligns the three profiles and why they coincide exactly. And the
+    only convolution anywhere in the block that has spatial reach is the 3x3
+    depthwise, which neither adapter contains, which is why an adapter cannot
+    add a tile-boundary penalty of its own.
 
-    # ---- a: Conv1x1Adapter -------------------------------------------------
+    Every length here is read from results/adapter_cost.json, counted with hooks
+    off the real modules by scripts/adapter_cost.py, because a drawing is where
+    a stale constant survives longest. The version this replaces printed the
+    superseded 2C^2 for the FFN adapter, which flexuf/cost.py had already
+    recorded as wrong once it was counted at 5C^2.
+
+    Drawn at Nature's single-column width because the paper places the figure at
+    column width. Authored double-column it printed at 0.485 scale, which put
+    all 678 characters of its labelling below the 5 pt floor.
+    """
+    d = json.load(open(R / "results/adapter_cost.json"))
+    K_, j_ = d["config"]["num_exits"], d["config"]["split_depth"]
+
+    fig, ax = plt.subplots(1, 2, figsize=(ns.W1, 1.72),
+                           gridspec_kw={"width_ratios": [1.32, 1]})
+
+    # ---- a: an adapter is the tail of the block, at true relative size -----
     a = ax[0]
-    a.text(0.0, 1.0, "Conv1×1Adapter", fontsize=7, weight="bold")
-    a.text(0.0, 0.93, r"$\mathrm{Ad}(f) = f + Wf$,   $W \leftarrow 0$",
-           fontsize=6.5)
-    stack(a, 0.76, 0.082, "feature f", f"[{C}, 32, 32] per tile", fc_="#dceaf7")
-    arrow(a, 0.51, 0.76, 0.51, 0.665)
-    stack(a, 0.575, 0.088, "1×1 convolution", f"{C} → {C},  zero-initialised",
-          fc_="#fdeadb", ec=ns.ORANGE)
-    arrow(a, 0.51, 0.575, 0.51, 0.48)
-    stack(a, 0.39, 0.082, "⊕  residual add", "identity at step 0")
-    arrow(a, 0.10, 0.801, 0.10, 0.431, style="-")
-    arrow(a, 0.10, 0.431, 0.20, 0.431)
-    a.text(0.06, 0.60, "identity path", fontsize=5, color=ns.INK2, rotation=90,
-           va="center")
-    a.text(0.51, 0.29, f"$C^2$ = {C**2:,} MAC/px", fontsize=6.5, ha="center")
-    a.text(0.51, 0.215, "one eighth of a DepthConvBlock", fontsize=5.5,
-           ha="center", color=ns.INK2)
-    a.text(0.51, 0.09, "Used by exit 4 only — it skips 2 blocks,\nso there is "
-           "little to stand in for", fontsize=5.5, ha="center", color=ns.VERM,
-           linespacing=1.5)
-    ns.panel(a, "a", dx=-0.02, dy=1.13)
+    lanes = [("block", d["block"]["profile"], "#c4c4c4"),
+             ("FFN", d["adapters"]["ffn"]["profile"], ns.ORANGE),
+             ("1×1", d["adapters"]["conv1x1"]["profile"], ns.BLUE)]
+    widest = max(r["out_channels"] for r in d["block"]["profile"])
+    for i, (_, prof, colour) in enumerate(lanes):
+        # Right-aligned deliberately. An adapter reproduces the LAST convolutions
+        # of the block, so ending the lanes together lands each adapter exactly
+        # under the segments it stands in for, and the reader sees the match
+        # instead of being told about it.
+        x = 1.0 - sum(r["share_of_block"] for r in prof)
+        for r in prof:
+            w = r["share_of_block"]
+            h = 0.74 * r["out_channels"] / widest
+            if r["depthwise"]:
+                # This one is 0.33% of the block, so at true width it is a
+                # hairline and is drawn as one. Its absence from both adapter
+                # lanes is the entire seam argument.
+                a.plot([x + w / 2] * 2, [-i, -i + h], color=ns.VERM, lw=1.1,
+                       solid_capstyle="butt", zorder=3)
+            else:
+                a.add_patch(Rectangle((x, -i), w, h, facecolor=colour,
+                                      edgecolor="white", lw=0.35))
+            x += w
+    a.plot([], [], color=ns.VERM, lw=1.1, label="3×3")
+    a.legend(loc="lower left", fontsize=5.5, handlelength=0.9,
+             borderpad=0.0, handletextpad=0.4)
+    a.set_xlim(-0.02, 1.02); a.set_ylim(-2.42, 0.86)
+    a.set_xticks([0, 0.5, 1.0]); a.set_xticklabels(["0", "0.5", "1"])
+    a.set_yticks([-i + 0.09 for i in range(len(lanes))])
+    a.set_yticklabels([n for n, _, _ in lanes])
+    a.tick_params(axis="y", length=0)
+    a.spines["left"].set_visible(False)
+    a.set_xlabel("share of one DepthConvBlock")
+    a.grid(False)
+    ns.panel(a, "a", dx=-0.24, dy=1.14)
 
-    # ---- b: FFNAdapter -----------------------------------------------------
-    a = ax[1]
-    a.text(0.0, 1.0, "FFNAdapter", fontsize=7, weight="bold")
-    a.text(0.0, 0.93, r"$\mathrm{Ad}(f)=f+\mathrm{PW}_{C\to C}"
-           r"(\mathrm{WSiLUChunkAdd}(\mathrm{PW}_{C\to 4C}(f)))$", fontsize=5.4)
-    stack(a, 0.845, 0.072, "feature f", f"[{C}, 32, 32] per tile", fc_="#dceaf7")
-    arrow(a, 0.51, 0.845, 0.51, 0.775)
-    stack(a, 0.690, 0.083, "1×1 expand", f"{C} → {4*C}", fc_="#fdeadb", ec=ns.ORANGE)
-    arrow(a, 0.51, 0.690, 0.51, 0.620)
-    stack(a, 0.535, 0.083, "WSiLUChunkAdd", f"{4*C} → {C},  4:1 strided",
-          fc_="#fdeadb", ec=ns.ORANGE)
-    arrow(a, 0.51, 0.535, 0.51, 0.465)
-    stack(a, 0.380, 0.083, "1×1 contract", f"{C} → {C},  zero-initialised",
-          fc_="#fdeadb", ec=ns.ORANGE)
-    arrow(a, 0.51, 0.380, 0.51, 0.310)
-    stack(a, 0.225, 0.075, "⊕  residual add", "identity at step 0")
-    arrow(a, 0.10, 0.881, 0.10, 0.2625, style="-")
-    arrow(a, 0.10, 0.2625, 0.20, 0.2625)
-    a.text(0.51, 0.135, f"$2C^2$ = {2*C**2:,} MAC/px", fontsize=6.5, ha="center")
+    # ---- b: capacity against the gap it stands in for ----------------------
+    b = ax[1]
+    ks = [e["exit"] for e in d["exits"]]
+    face = {"ffn": ns.ORANGE, "conv1x1": ns.BLUE, None: "white"}
+    # Exits shallower than the split depth are unreachable: forward() clamps the
+    # map at j, so no tile ever leaves through them.
+    b.axvspan(-0.55, j_ - 0.5, color="#f2f2f2", zorder=0)
+    # The rule the ladder applies: four skipped blocks or more gets the FFN.
+    b.axhline(4, color=ns.INK2, lw=0.6, ls=(0, (1, 2)), zorder=1)
+    b.plot(ks, [e["blocks_skipped"] for e in d["exits"]], color=ns.INK2,
+           lw=0.7, zorder=2)
+    for e in d["exits"]:
+        # An opaque white disc first, so that a faded marker fades against the
+        # page rather than against the line running underneath it, which turned
+        # the two unreachable exits brown instead of pale.
+        b.plot(e["exit"], e["blocks_skipped"], marker="o", ms=4.2, lw=0,
+               mfc="white", mec="none", zorder=2.5)
+        b.plot(e["exit"], e["blocks_skipped"], marker="o", ms=4.2,
+               mfc=face[e["adapter_kind"]], mec=ns.INK2, mew=0.5, zorder=3,
+               alpha=1.0 if e["reachable"] else 0.3)
+    for kind, lab in (("ffn", "FFN"), ("conv1x1", "1×1"), (None, "none")):
+        b.plot([], [], marker="o", ms=4.2, lw=0, mfc=face[kind], mec=ns.INK2,
+               mew=0.5, label=lab)
+    b.legend(loc="upper right", fontsize=5.5, handlelength=0.8,
+             borderpad=0.0, handletextpad=0.2, labelspacing=0.25)
+    b.set_xticks(ks); b.set_xlim(-0.55, K_ - 0.45); b.set_ylim(-0.9, 11.6)
+    # Blocks come whole, so the ticks are the numbers of blocks that exist.
+    b.set_yticks(range(0, 11, 2))
+    b.set_xlabel("exit $k$"); b.set_ylabel("blocks skipped")
+    ns.panel(b, "b", dx=-0.30, dy=1.14)
 
-    a.text(0.51, 0.055, "exits 0–3", fontsize=6, ha="center", color=ns.VERM)
-    ns.panel(a, "b", dx=-0.02, dy=1.13)
-
-    # ---- c: capacity matched to the gap ------------------------------------
-    a = ax[2]
-    ks = list(range(K))
-    skipped = [(K - 1 - k) * cfg.blocks_per_exit for k in ks]
-    block_mac = 8 * C**2 + 9 * C
-    reach = [k >= j for k in ks]
-    a.bar(ks, skipped, width=0.62,
-          color=[ns.SKY if r else "#e0e0e0" for r in reach],
-          label="blocks the exit skips")
-    ad = [((2*C**2 if sk >= 4 else C**2) / block_mac) if k < K-1 else 0
-          for k, sk in zip(ks, skipped)]
-    a.bar(ks, ad, width=0.62, color=[ns.ORANGE if r else "#bdbdbd" for r in reach],
-          label="its adapter, in the same units")
-    for k, sk in zip(ks, skipped):
-        if k < K - 1:
-            a.text(k, sk + 0.22, "FFN" if sk >= 4 else "1×1", fontsize=5.5,
-                   ha="center", color=ns.VERM if reach[k] else "#999999")
-    a.axvspan(-0.6, j - 0.5, color="#f5f5f5", zorder=0)
-    a.text(0.5, 11.6, f"unreachable (k < j = {j})", fontsize=5,
-           ha="center", color="#888888")
-    a.set_xlabel("exit k"); a.set_ylabel("in units of one DepthConvBlock")
-    a.set_xticks(ks); a.set_xlim(-0.6, K - 0.4); a.set_ylim(0, 13.5)
-    a.legend(loc="center right", fontsize=5)
-    a.set_title("Capacity against the gap", fontsize=6, color=ns.INK2,
-                loc="left")
-    ns.panel(a, "c", dx=-0.22, dy=1.13)
-
-    fig.tight_layout()
+    fig.tight_layout(w_pad=1.8)
     save(fig, "adapters.png")
 
 
@@ -308,7 +314,7 @@ def seam_module():
     # The shaded band is the spread across cells at the same distance, which is
     # where the corner peak lives; the ring is not one number.
     a.fill_between(x, g["trained_min"], g["trained_max"], color=ns.BLUE,
-                   alpha=0.15, lw=0)
+                   alpha=0.22, lw=0)
     a.plot(x, g["trained_mean"], marker="o", ms=2.5, color=ns.BLUE,
            label="trained")
     a.plot(x, g["init"], color=ns.INK2, lw=0.8, ls=(0, (3, 2)),
@@ -326,7 +332,7 @@ def seam_module():
     # Bar width is the share of pixels, so a bar's AREA is what its band
     # contributes to the frame average. That is the whole argument in one
     # picture: the win is a sliver and the loss is most of the frame.
-    a.bar(left, chg, width=share, align="edge", lw=0,
+    a.bar(left, chg, width=share, align="edge", edgecolor="white", lw=0.5,
           color=[ns.BLUE if c < 0 else ns.VERM for c in chg])
     a.axhline(0, color=ns.INK, lw=0.6)
     a.set_xlim(0, 100)
@@ -334,7 +340,7 @@ def seam_module():
     a.set_xticks(left + np.asarray(share) / 2)
     a.set_xticklabels([f"{b[0]}\u2013{b[1]}" for b in e["bands_px"]])
     a.set_xlabel("distance from the tile boundary (px)")
-    a.set_ylabel("change in error, repair on (%)")
+    a.set_ylabel("change in error (%)")
     a.grid(False)
     a.grid(True, axis="y")
 
@@ -566,8 +572,13 @@ def router_ab():
 
 
 if __name__ == "__main__":
-    pipeline()
-    adapters()
-    seam_module()
-    training()
-    router_ab()
+    # Named on the command line, a single figure is redrawn on its own. Four of
+    # the five read runs/BEST/ckpt_eval.pth.tar, which a watcher overwrites
+    # every epoch, so redrawing all five to fix one of them silently rewrites
+    # the other four from a different checkpoint than the one they were
+    # published from.
+    ALL = {"pipeline": pipeline, "adapters": adapters,
+           "seam_module": seam_module, "training": training,
+           "router_ab": router_ab}
+    for name in (sys.argv[1:] or list(ALL)):
+        ALL[name]()

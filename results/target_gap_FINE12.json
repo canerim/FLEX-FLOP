@@ -6,45 +6,45 @@
   "rows": [
     {
       "qp": 0,
-      "saved_at_budget": 32.13984823776222,
-      "db_for_target": 0.09003842372679874,
-      "overspend_db": -0.009961576273201267,
-      "floor_db": 0.04367120936512947,
+      "saved_at_budget": 34.16474802090724,
+      "db_for_target": 0.08111562964056812,
+      "overspend_db": -0.018884370359431885,
+      "floor_db": 0.045131485909223557,
       "floor_share_pct": null,
       "reachable": true
     },
     {
       "qp": 16,
-      "saved_at_budget": 26.471051111855335,
-      "db_for_target": 0.11456786017384973,
-      "overspend_db": 0.014567860173849728,
-      "floor_db": 0.06029370054602623,
-      "floor_share_pct": 413.8816533553597,
+      "saved_at_budget": 28.79999068367632,
+      "db_for_target": 0.10488225857295874,
+      "overspend_db": 0.0048822585729587364,
+      "floor_db": 0.05970118194818497,
+      "floor_share_pct": 1222.818928084855,
       "reachable": true
     },
     {
       "qp": 32,
-      "saved_at_budget": 21.374092508243418,
-      "db_for_target": 0.13305461907651586,
-      "overspend_db": 0.033054619076515857,
-      "floor_db": 0.07520033419132233,
-      "floor_share_pct": 227.50325458976326,
+      "saved_at_budget": 21.458582487488865,
+      "db_for_target": 0.1337183066364227,
+      "overspend_db": 0.033718306636422696,
+      "floor_db": 0.07611165195703506,
+      "floor_share_pct": 225.72797850654473,
       "reachable": true
     },
     {
       "qp": 48,
-      "saved_at_budget": 15.095121509287532,
-      "db_for_target": 0.14898815046780686,
-      "overspend_db": 0.04898815046780686,
-      "floor_db": 0.089553602039814,
-      "floor_share_pct": 182.8066607631272,
+      "saved_at_budget": 15.317260142776727,
+      "db_for_target": 0.1484881008128464,
+      "overspend_db": 0.04848810081284641,
+      "floor_db": 0.08913513273000717,
+      "floor_share_pct": 183.82888014948148,
       "reachable": true
     },
     {
       "qp": 63,
       "saved_at_budget": null,
       "budget_reachable": false,
-      "floor_db": 0.10245634615421295,
+      "floor_db": 0.10099963843822479,
       "db_for_target": null,
       "reachable": false
     }

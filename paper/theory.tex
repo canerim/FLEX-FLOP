@@ -66,7 +66,7 @@ Assumption~\ref{as:cost} holds whenever tiles are decoded independently, which
 is what a tiled decoder does; Assumption~\ref{as:dist} holds for any per-pixel
 loss averaged over the frame, mean squared error included. Both are exact for
 the architecture we measure, not approximations. Neither assumes anything about
-the $D_i(\cdot)$ themselves --- in particular they need not be convex, monotone,
+the $D_i(\cdot)$ themselves; in particular they need not be convex, monotone,
 or identically distributed across tiles.
 
 \section{The achievable set}
@@ -159,7 +159,7 @@ also directly checkable, and we check it (Table~\ref{tab:logconvex}) rather than
 assume it. Two remarks make the differentiability hypothesis benign. Under
 fixed-proportion mixing the hull has only $|\mathcal{K}|$ vertices and $D$ is
 piecewise linear, so $\mathrm{dB}$ is piecewise \emph{concave} with upward
-derivative jumps at vertices --- neither convex nor concave, and the apparent
+derivative jumps at vertices: neither convex nor concave, and the apparent
 shape depends entirely on where one samples. Under per-tile assignment
 (Theorem~\ref{thm:minkowski}) the hull is a Minkowski average of $N$ hulls and
 carries up to $N(|\mathcal{K}|-1)$ vertices, $\sim\!400$ for a 1080p frame at
@@ -246,8 +246,8 @@ The magnitudes here are smaller than on the weaker checkpoint this table was
 first computed from, where $\Delta/J$ ran $0.91\%$ to $6.86\%$ instead of
 $0.39\%$ to $2.09\%$, and that direction is not accidental. By
 Theorem~\ref{thm:gain}, $\Delta$ vanishes exactly when every tile prefers the
-same exit. Improving the shallow exits --- exit~2's penalty at $\mathrm{qp}\,0$
-fell from $0.3093$ to $0.1672$\,dB --- compresses the differences between exits,
+same exit. Improving the shallow exits (exit~2's penalty at $\mathrm{qp}\,0$
+fell from $0.3093$ to $0.1672$\,dB) compresses the differences between exits,
 so more tiles agree on the argmin and the measured value of adaptivity falls.
 Adaptivity is worth less on a better ladder, while the ladder saves more: the
 same checkpoint moves the compute saved at $0.1$\,dB from $28.3\%$ to $34.7\%$
@@ -261,9 +261,9 @@ frontier. Convexity of a sampled curve is tested
 directly, as non-decreasing secant slopes of $\ln D$ against $S$; the margin is
 the smallest increase attained. The condition holds on every point of every
 frontier, and the margin grows tenfold from the lowest rate to the highest, so
-$\mathrm{dB}(S)$ is convex here --- by Proposition~\ref{prop:logconvex} and
-measurement, not by assumption. Fitting a quartic and differentiating it twice
-instead reports $69$--$78\%$, but those violations sit entirely at the
+$\mathrm{dB}(S)$ is convex here, by Proposition~\ref{prop:logconvex} and by
+measurement, rather than by assumption. Fitting a quartic and differentiating
+it twice instead reports $69$--$78\%$, but those violations sit entirely at the
 $42.5\%$ ceiling, where the frontier is near-vertical and a quartic overshoots;
 the discrete test has no such failure mode and no fitted degree to choose.}
 \label{tab:logconvex}
@@ -358,7 +358,7 @@ Theorem~\ref{thm:gain} bounds what adaptivity is worth, not what is realisable
 by a decoder that must \emph{infer} the assignment. In our system that
 distinction is removed by signalling $a^\star_\lambda$ in the bitstream at
 $\lceil\log_2|\mathcal{K}|\rceil$ bits per tile, entropy-coded to
-$1.3\times10^{-4}$~bpp --- four orders of magnitude below the rates in
+$1.3\times10^{-4}$~bpp, four orders of magnitude below the rates in
 Table~\ref{tab:exits}.
 \end{remark}
 
@@ -367,8 +367,8 @@ Every quantity here is measured against a fixed reference decoder, and the
 deepest exit is assumed to reproduce it. Nothing in the derivation enforces
 that: the exits are trained, and if the deepest one drifts by $\delta$ then the
 whole achievable set shifts up by $\delta$ before any compute is saved. A
-budget below $\delta$ is then unreachable at every assignment --- not because
-routing fails, but because $\mathcal{A}$ does not intersect the constraint.
+budget below $\delta$ is then unreachable at every assignment. Routing has not
+failed; $\mathcal{A}$ simply does not intersect the constraint.
 
 This is not hypothetical. Training the same ladder under the released recipe
 with no term tying the deepest exit to the reference leaves

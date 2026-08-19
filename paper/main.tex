@@ -73,8 +73,8 @@ the map \emph{beats} the whole of it, because the hybrid has two multipliers
 where the signalled configuration has one. A learned predictor should also be
 made to beat a free one. Routing on the bits the entropy model has already spent
 per tile is parameter-free, needs no training and adds nothing to the stream,
-and it beats our \RouterParams-parameter head to within \RateRankLosesBy\ points
-at every rate, and beats it at the \RateRankNWins\ lowest.
+and it beats our \RouterParams-parameter head at every one of the
+\RateRankNWins\ rates we measure, by up to \RateRankBeatsBy\ points.
 
 We find that tile count governs the method much more closely than content does.
 Three 1080p classes of very different material agree within three points, while
@@ -147,9 +147,12 @@ where the working budget uses \BandUseLow\% of that window at low rate and
       so beyond \SatLow$\dB$ at $q0$ the limit is the ladder rather than the
       budget.
 \item A quantitative account of the tiling penalty. We measure what it costs and
-      what removes it for free, and we explain why a higher-order border
-      estimator is worse than a zeroth-order one and why a learned repair module
-      is not worth its compute even with a perfect gate.
+      what removes it for free, we establish the $b^{2}$ law it follows in
+      per-tile depth and the failure of the area law that the contaminated
+      fraction would predict, and we measure the ordering of four border
+      estimators. A higher-order estimator turns out to be worse than a
+      zeroth-order one, and a learned repair module is not worth its compute
+      even with a perfect gate.
 \item Two allocation regimes, an encoder-side search that signals a
       $\sim$\MapBits-bit map per frame and a decoder-side predictor that signals
       nothing, with the bits and the compute charged on both sides. We also
@@ -161,9 +164,9 @@ where the working budget uses \BandUseLow\% of that window at low rate and
 \item A parameter-free control that a learned router has to beat, and that such
       routers are usually not measured against. Routing on the bits the entropy
       model already spent per tile costs nothing and adds nothing to the stream.
-      It beats our trained head to within \RateRankLosesBy\ points at every rate
-      and beats it at the \RateRankNWins\ lowest, while agreeing with the oracle
-      on fewer tiles than the head does.
+      It beats our trained head at all \RateRankNWins\ measured rates, by up to
+      \RateRankBeatsBy\ points, while agreeing with the oracle on fewer tiles
+      than the head does.
 \item A wall-clock result. Operations over-predict the saving by about a fifth,
       and a bit-identical reordering of the per-tile loop recovers a fifth of
       that. We realise \WallSorted\% against a \WallPredicted\% prediction.
@@ -350,11 +353,19 @@ rate, so it behaves as an operating point and not as an asymptote.
 \begin{figure}[t]
 \centering
 \includegraphics[width=\columnwidth]{figures/adapters.png}
-\caption{\textbf{Inside an exit adapter.} Both kinds are entirely pointwise, so
-no adapter adds receptive field and none of them contributes any tile-boundary
-penalty. Capacity is matched to the number of blocks the exit skips, and the
-adapter's own cost is charged against the saving, so an exit-2 tile saves six
-blocks minus $0.25$.}
+\caption{\textbf{Inside an exit adapter.} \textbf{a}, one DepthConvBlock and the
+two adapters drawn to scale and aligned at their right-hand ends. Bar length is a
+convolution's share of the block and bar height is the channel width it writes,
+so each adapter is visibly the tail of the block it stands in for: the FFN pair
+at $0.71$ of a block and the single pointwise at $0.14$. The hairline rule inside
+the block is its only $3\times3$, and neither adapter contains one, so no adapter
+adds receptive field and none contributes any tile-boundary penalty.
+\textbf{b}, the blocks each exit skips, coloured by the adapter it wears.
+Capacity is matched to the gap, the rule switching to the FFN at four skipped
+blocks (dotted), and the adapter's own cost is charged against the saving, so an
+exit-2 tile saves six blocks less $0.71$. The faded exits lie below the split
+depth, where no tile can leave. Every length is counted with hooks off the
+modules themselves by \texttt{scripts/adapter\_cost.py}.}
 \label{fig:adapters}
 \end{figure}
 
@@ -585,9 +596,15 @@ module in this paper does.
 \centering
 \includegraphics[width=\columnwidth]{figures/seam_module.png}
 \caption{\textbf{Grid seam repair.} A correction gated by position within a tile,
-applied once to the stitched frame. The trained gate learns the boundary ring
-(0.76) but never switches off inside (0.145 over 94\% of pixels), and the
-measured effect follows: it helps on the ring and hurts everywhere else.}
+applied once to the stitched frame, for $0.95\%$ of the decode. \textbf{a}, the
+gate against distance from the tile boundary, beside the initialisation it
+started from; shading is the spread over cells at the same distance. The trained
+gate keeps the ring, up to $0.76$ at a tile corner, and then flattens onto a
+floor of $0.26$ instead of switching off. \textbf{b}, the change in error
+measured with the repair on, by distance from the nearest tile boundary; bar
+width is the share of pixels, so bar area is what a band contributes to the
+frame. It wins $0.27\%$ on the $6.2\%$ of pixels within $4$\,px of a boundary and
+loses $0.04$ to $0.05\%$ on the $94\%$ beyond it.}
 \label{fig:seammodule}
 \end{figure}
 
@@ -813,10 +830,10 @@ tile count, not content.}
 \begin{table}[t]
 \centering
 \input{tables/perclass}
-\caption{\textbf{Saving by test class} (\%), at a matched operating point near
-$0.1\dB$. ``Tiles'' is how many $256$\,px tiles a frame of that resolution
-contains. The saving tracks tile count much more closely than it tracks
-content.}
+\caption{\textbf{Saving by test class} (\%), at a $0.1\dB$ budget set globally
+over all \NumSeq\ sequences rather than per class. ``Tiles'' is how many
+$256$\,px tiles a frame of that resolution contains. The saving tracks tile
+count much more closely than it tracks content.}
 \label{tab:perclass}
 \end{table}
 
@@ -1113,16 +1130,16 @@ exit costs on an average tile. We fit $(\alpha,c,\varphi)$ by least squares,
 leave-one-sequence-out, so that no sequence contributes to the profile that
 routes it. The same Lagrangian the oracle runs is then run on the surrogate.
 Nothing is signalled and nothing is trained; the arithmetic is one scalar per
-tile. \textbf{It matches the trained head to within a point either way.} The
-free rule beats the \RouterParams\ router at the \RateRankNWins\ lowest rates,
-by up to \RateRankBeatsBy\ points, and loses at the two highest by at most
-\RateRankLosesBy. A margin that small is the entire return on a head that was
-trained on this decoder against this oracle, and the free rule carries none of
-the head's \RouterCostPct\% of decode.
+tile. \textbf{It beats the trained head at every rate.} The free rule is ahead
+of the \RouterParams\ router at all \RateRankNWins\ measured rates, by margins
+that run from half a point at $q48$ to \RateRankBeatsBy\ points at $q0$. A head
+trained on this decoder against this oracle therefore returns nothing over a
+rule with no parameters at all, and it carries \RouterCostPct\% of the decode
+that the free rule does not.
 
 \textbf{Why it works is not that it agrees with the oracle.} It agrees on
 \RateRankAgreeLo--\RateRankAgreeHi\ of tiles, well below the router's $0.718$,
-and still saves more at three of five rates. Agreement weighs a disagreement on
+and still saves more at every rate. Agreement weighs a disagreement on
 a tile where two exits are within a hair of each other exactly as heavily as one
 where the choice is most of the frame's error, and most tiles are the former.
 The ordering is what the rule gets right. Bits correlate with the \emph{spread}
@@ -1130,10 +1147,10 @@ across the ladder, that is, with how much a tile stands to gain from depth, at
 $\rho_{\mathrm{spread}}=\RateRankSpreadLo$--\RateRankSpreadHi\ at every rate.
 
 \textbf{At a looser budget it stops being a baseline and becomes the answer.}
-At $0.3\dB$ the free rule reaches the architectural ceiling exactly at the
-\RateRankLooseCeil\ lowest rates, comes within $0.2$ points of the oracle at
-$q48$, and gives up \RateRankLoose\% against the oracle's \SigLooseHigh\% at
-$q63$. That is ahead of the trained head at every rate, by up to
+At $0.3\dB$ the free rule matches the oracle exactly at the three lowest
+rates, where both reach the same architectural ceiling, comes within $0.2$
+points of it at $q48$, and gives up \RateRankLoose\% against the oracle's
+\SigLooseHigh\% at $q63$. That is ahead of the trained head at every rate, by up to
 \RateRankLooseAheadBy\ points. The head is charged for itself and the free rule
 is not. At a loose budget the head's ordering also has less left to contribute,
 because once the budget saturates the ladder there is little ordering left to
@@ -1142,17 +1159,18 @@ anything beyond that ordering. A rank-1 model in the level assigns every tile th
 same relative profile over exits, so $b$ only decides where on the ladder a tile
 falls, never the shape of its trade-off. That is the ceiling this baseline sits
 at, and it is the part a learned head should be earning its parameters on. Ours
-earns them at low rate and does not earn them at high rate.
+does not earn them at any rate we measured.
 
-\textbf{It replicates, and more strongly, on a second training run.}
+\textbf{It replicates on a second training run.}
 \texttt{BEST} is a separate recipe at a different epoch, with its own router
 trained the same way. There the free rule beats the trained head at
 \BestRankWinsN\ of \BestRankOfN\ rates, by up to \BestRankBy\ points, and comes
 within \BestRankToOracle\ points of the \emph{oracle} everywhere
-(Table~\ref{tab:raterankbest}). Our head therefore does not settle whether a
-learned head is worth its parameters. On one checkpoint it wins narrowly at low
-rate; on another it loses badly at four rates out of five. The free rule stays
-close to the oracle on both.
+(Table~\ref{tab:raterankbest}). The margins there are wider than here, and the
+one rate it concedes is the only rate on either checkpoint where the head
+finishes ahead, by under a point. We do not read that as showing a learned head
+cannot be worth its parameters, only that neither of our training runs produced
+one that is. The free rule stays close to the oracle on both.
 
 Per-block bit allocation is a standard quantity in learned compression, where it
 is something to \emph{choose}; block-level rate control sets it so that complex
@@ -1166,7 +1184,7 @@ and $w{=}1$ the head's ordering. The best blend is $w{=}0$ at the three lowest
 rates and a small head weight at the two highest, worth $+2.1$ points at $q48$
 and $+0.9$ at $q63$ (Table~\ref{tab:blend}). The head reads the entropy model's
 scales, so it already has most of what the bit count carries; what it adds is
-confined to the regime where the free rule was losing anyway.
+confined to $q48$ and $q63$.
 
 A learned component should be measured against the free alternative, and it
 rarely is. In adaptive inference the usual controls are a uniform allocation and
@@ -1466,10 +1484,9 @@ We would attach three cautions to the measurements themselves. A saving in
 operations is an optimistic bound on a saving in time, and the optimism scales
 with the saving. A learned router should be compared against a free one. Routing
 on the bits already spent per tile needs no parameters and no training, it adds
-nothing to the stream, and it beats our trained head to within
-\RateRankLosesBy\ points at every rate, while agreeing with the oracle on fewer
-tiles than the head does. We read that as a warning about the metric quite as
-much as about the head. Finally, a timing harness will report numbers whether or
+nothing to the stream, and it beats our trained head at every rate we measured,
+while agreeing with the oracle on fewer tiles than the head does. We read that
+as a warning about the metric quite as much as about the head. Finally, a timing harness will report numbers whether or
 not it is timing the right device. Ours timed the wrong one for months, and what
 gave it away was a decoder that appeared to slow down with the quality index.
 

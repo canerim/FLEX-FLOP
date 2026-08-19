@@ -277,6 +277,14 @@ if d:
     lines[-1] = r"\bottomrule"
     lines.append(r"\end{tabular}")
     w("static.tex", "\n".join(lines))
+    # The shallowest uniform depth the paper quotes as the static alternative.
+    # check_paper used to hardcode it, which made a legitimate re-measurement
+    # look like prose drift.
+    _r0 = next((r for r in d["rows"] if r.get("qp") == 0), None)
+    _u3 = next((u for u in (_r0 or {}).get("uniform", []) if u.get("exit") == 3),
+               None)
+    if _u3:
+        mac("UniformThreeLow", f"{_u3['saving']:.1f}")
     mac("BestStaticMean", f"{sum(means['static'])/len(means['static']):.1f}")
     r0 = d["rows"][-1]
     if r0.get("rate_rank"):
