@@ -64,7 +64,19 @@ _C = 384
 _BLOCK_MACPX = 8 * _C**2 + 9 * _C
 ADAPTER_MACPX = {
     "conv1x1": _C**2,                 # one 1x1
-    "ffn": 2 * _C**2,                 # PW C->4C then PW C->C, chunk-add in between
+    # PW C->4C (4C^2), WSiLUChunkAdd 4C->C (free), PW C->C (C^2). Five, not two.
+    #
+    # This was 2*_C**2 and it is where the shipped cost table came from. The
+    # docstring in config.py describes an adapter with a REDUCTION r --
+    # PW C->4C/r then PW C/r->C -- which at r=4 would indeed be about 2C^2. The
+    # code does not do that: `hidden = channels * expand` with expand=4, so
+    # pw_in is C->4C and pw_out is C->C. Measured with hooks on the real module,
+    # 5.000 C^2 (tests/test_cost_matches_reality.py, adapter_kind="ffn").
+    #
+    # It mattered because RECIPE512 and BEST run adapter_kind="scaled", which
+    # gives the FFN adapter to every exit skipping four or more blocks -- exits
+    # 0..3, i.e. the cheap end the saving leans on.
+    "ffn": 5 * _C**2,
 }
 
 
@@ -173,9 +185,15 @@ def exit_costs(
         # appear to beat the Lagrangian Pareto bound, which is impossible.
         # The deepest exit takes the raw feature -- that is what makes it
         # bit-exact stock UF -- so it carries no adapter at all.
-        adapter = (0.0 if k == K - 1 else
-                   adapter_vs_block(cfg.adapter_kind, k, cfg) * per_block)
         k_run = max(k, j) if j < K else k
+        # The adapter belongs to the exit that RUNS, not to the one the map
+        # nominally names. forward() clamps to j, so a tile assigned exit 0 at
+        # j=4 leaves through exit 4 and wears exit 4's adapter. Billing it at
+        # exit 0's -- which under "scaled" is the more expensive FFN -- over-
+        # charged by 0.035 of a decode. Same clamp as the block count above,
+        # which was already fixed; the adapter was missed.
+        adapter = (0.0 if k_run == K - 1 else
+                   adapter_vs_block(cfg.adapter_kind, k_run, cfg) * per_block)
         blocks_run = (k_run + 1) * b
         shared_blocks = min(blocks_run, j * b)
         tiled_blocks = blocks_run - shared_blocks
@@ -220,7 +238,8 @@ def frame_relative_cost(
         mult = halo_multiplier(cfg, tiled_blocks, halo_scope)
         c = tiled_blocks * per_block * mult
         if k_eff < K - 1:
-            adapter = adapter_vs_block(cfg.adapter_kind, k, cfg) * per_block
+            # k_eff, not k: the adapter is the one the clamped exit wears.
+            adapter = adapter_vs_block(cfg.adapter_kind, k_eff, cfg) * per_block
             c += adapter * (mult if halo_scope != "head" else 1.0)
         suffix.append(c)
 

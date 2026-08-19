@@ -16,8 +16,11 @@ from pathlib import Path
 import pytest
 
 SCRIPTS = sorted((Path(__file__).resolve().parents[1] / "scripts").glob("*.py"))
+# The call, not the name. make_report.py now *describes* the bug in prose, and
+# a bare-name match flagged it for not calling set_device -- which it has no
+# reason to, since it times nothing.
 USES_EVENT = [p for p in SCRIPTS
-              if re.search(r"torch\.cuda\.Event", p.read_text())]
+              if re.search(r"torch\.cuda\.Event\s*\(", p.read_text())]
 
 
 def test_some_script_actually_times_cuda():
@@ -37,7 +40,9 @@ def test_event_timing_pins_the_device(path):
 
 @pytest.mark.parametrize(
     "path",
-    [p for p in SCRIPTS if "torch.cuda.synchronize()" in p.read_text()],
+    [p for p in SCRIPTS
+     if re.search(r"(?<![\"'])torch\.cuda\.synchronize\(\)", p.read_text())
+     and "torch.cuda.Event(" in p.read_text()],
     ids=lambda p: p.name)
 def test_bare_synchronize_pins_the_device(path):
     """torch.cuda.synchronize() with no argument syncs the current device."""

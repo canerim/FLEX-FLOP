@@ -100,16 +100,27 @@ with torch.no_grad():
             else:
                 lo = hi
             maps = maps_at(lo)
-            per = defaultdict(lambda: {"sv": [], "db": [], "tiles": 0, "res": ""})
+            per = defaultdict(lambda: {"sv": [], "db": [], "tiles": 0, "res": "",
+                                       "hist": [0] * cfg.num_exits})
             for m, (cls, res, nt, _M, R, y_, q_, xp_) in zip(maps, cache):
                 d = per[cls]
                 d["sv"].append(100 * (1 - cost[m].mean()).item())
                 d["db"].append((10 * torch.log10(
                     true_frame_mse(net.dec, y_, q_, xp_, m) / R)).item())
                 d["tiles"], d["res"] = nt, res
+                # Which rung each tile actually took. This is the thing the
+                # saving is an average of, and the average hides whether the
+                # ladder is being used or whether one exit is doing all the
+                # work -- which is exactly what a collapsed router looks like.
+                b = torch.bincount(m, minlength=cfg.num_exits)
+                for k_ in range(cfg.num_exits):
+                    d["hist"][k_] += int(b[k_])
             out = {c: {"saving": sum(v["sv"]) / len(v["sv"]),
                        "db": sum(v["db"]) / len(v["db"]),
-                       "tiles": v["tiles"], "res": v["res"], "n": len(v["sv"])}
+                       "tiles": v["tiles"], "res": v["res"], "n": len(v["sv"]),
+                       "hist": v["hist"],
+                       "exit_share": [100 * h / max(1, sum(v["hist"]))
+                                      for h in v["hist"]]}
                    for c, v in per.items()}
             rows.append({"qp": qp_v, "budget_db": budget, "lam": lo,
                          "overall_db": db_at(maps),
@@ -121,8 +132,12 @@ with torch.no_grad():
                   f"{rows[-1]['overall_saving']:.2f}%)")
             for c in sorted(out, key=lambda c: -out[c]["tiles"]):
                 v = out[c]
+                sh = "  ".join(f"e{k_}:{p_:>4.1f}%"
+                               for k_, p_ in enumerate(v["exit_share"])
+                               if k_ >= j)
                 print(f"      {c:<9} {v['res']:>9}  {v['tiles']:>3} tiles  "
-                      f"n={v['n']:>2}   {v['saving']:>6.2f}%   {v['db']:>7.4f} dB")
+                      f"n={v['n']:>2}   {v['saving']:>6.2f}%   {v['db']:>7.4f} dB"
+                      f"   {sh}")
             print(flush=True)
 
 json.dump({"ckpt": a.ckpt, "ckpt_epoch": ck.get("epoch"),

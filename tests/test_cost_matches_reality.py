@@ -29,6 +29,7 @@ Run:  python tests/test_cost_matches_reality.py
 
 from __future__ import annotations
 
+import os
 import sys
 from pathlib import Path
 
@@ -42,7 +43,8 @@ from flexuf.backbone.decoder import MultiExitIntraDecoder  # noqa: E402
 from flexuf.config import LATENT_CH, TRUNK_CH, FlexUFConfig  # noqa: E402
 from flexuf.cost import frame_relative_cost  # noqa: E402
 
-DEVICE = "cuda:4" if torch.cuda.is_available() else "cpu"
+DEVICE = os.environ.get("FLEXUF_TEST_DEVICE",
+                        "cuda:0" if torch.cuda.is_available() else "cpu")
 # Big enough that the amortised stem is not a rounding error, small enough to be
 # quick: 64x64 latent -> 128x128 feature -> 1024x1024 RGB.
 LAT = 64
@@ -118,23 +120,30 @@ def main() -> int:
     print("does the cost model bill what the decoder runs?")
     bad = []
 
-    for j in (2, 4):
-        cfg = FlexUFConfig(split_depth=j, latent_patch=8, latent_halo=2)
+    # Every adapter kind, not just the default. The shipped runs (RECIPE512,
+    # BEST) use "scaled", and this file passed for a year without ever
+    # constructing one: the FFN adapter was billed at 2C^2 where it costs 5C^2,
+    # so the cheapest exit was priced 0.581 against a measured 0.617. A control
+    # that does not cover the shipped configuration is not a control.
+    for j, kind in [(2, "conv1x1"), (2, "ffn"), (2, "scaled"),
+                    (4, "conv1x1"), (4, "scaled")]:
+        cfg = FlexUFConfig(split_depth=j, latent_patch=8, latent_halo=2,
+                           adapter_kind=kind)
         K = cfg.num_exits
 
         cases = [
-            (f"j={j} all deepest",
+            (f"j={j} {kind} all deepest",
              lambda n, c: torch.full((n,), c.num_exits - 1, dtype=torch.long)),
             # The case that exposed the bug: exits BELOW the split, which the
             # decoder clamps up to j but the model used to bill as if they had
             # left at the split.
-            (f"j={j} all exit 0 (clamped to j)",
+            (f"j={j} {kind} all exit 0 (clamped to j)",
              lambda n, c: torch.zeros(n, dtype=torch.long)),
-            (f"j={j} all at the split",
+            (f"j={j} {kind} all at the split",
              lambda n, c: torch.full((n,), c.split_depth, dtype=torch.long)),
-            (f"j={j} mixed uniform over exits",
+            (f"j={j} {kind} mixed uniform over exits",
              lambda n, c: torch.arange(n, dtype=torch.long) % c.num_exits),
-            (f"j={j} half shallow half deep",
+            (f"j={j} {kind} half shallow half deep",
              lambda n, c: torch.where(torch.arange(n) < n // 2,
                                       torch.tensor(c.split_depth),
                                       torch.tensor(c.num_exits - 1)).long()),
