@@ -1,7 +1,10 @@
 {
   "n_claims": 85,
-  "n_passed": 82,
+  "n_passed": 79,
   "failed": [
+    "hybrid: rho=1 reproduces A (max |diff|)",
+    "hybrid: rates where half beats all",
+    "hybrid: best margin over A (pts)",
     "per-class q0 MCL-JCV",
     "per-class q0 HEVC_D",
     "per-class q0 HEVC_C"

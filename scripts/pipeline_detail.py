@@ -133,45 +133,58 @@ def panel_block(a):
     a.text(0.0, 0.99, "one exit group  =  2 × DepthConvBlock", fontsize=6.5,
            weight="bold", color=BLUE, transform=a.transAxes, va="top")
 
-    y = 0.60
-    chip(a, 0.05, y, 0.10, 0.15, "in", BLUE, sub="384")
-    # dc branch
-    a.text(0.0, y + 0.075, "dc", fontsize=5.4, color=INK2, style="italic",
-           va="center", transform=a.transAxes)
-    chip(a, 0.18, y, 0.13, 0.15, "PW 1×1", BLUE, sub="384 → 384")
-    chip(a, 0.32, y, 0.09, 0.15, "WSiLU", BLUE)
-    chip(a, 0.42, y, 0.15, 0.15, "DW 3×3", VERM, fc="#fdf0ec",
-         sub="groups = 384", bold=True)
-    chip(a, 0.58, y, 0.13, 0.15, "PW 1×1", BLUE, sub="384 → 384")
-    for x in (0.155, 0.313, 0.413, 0.575):
-        arrow(a, x, y + 0.075, x + 0.022, y + 0.075)
-    a.text(0.73, y + 0.075, "⊕", fontsize=9, color=INK2, ha="center",
-           va="center", transform=a.transAxes)
-    arrow(a, 0.715, y + 0.075, 0.725, y + 0.075)
-    _res(a, 0.10, 0.73, y + 0.155, 0.085)
-    a.text(0.465, y - 0.115, "the only operator with any spatial extent —"
-           " 0.29% of the block, and the entire cause of the seam",
-           fontsize=4.8, color=VERM, ha="center", transform=a.transAxes)
+    H = 0.17
+    y = 0.53                                   # dc row
+    y2 = 0.09                                  # ffn row
+    XIN, XOUT = 0.06, 0.845                    # in / out chips
+    JOIN = 0.775                               # the two residual adds
 
-    # ffn branch
-    y2 = 0.22
-    a.text(0.0, y2 + 0.075, "ffn", fontsize=5.4, color=INK2, style="italic",
+    chip(a, XIN, y, 0.075, H, "in", BLUE)
+    a.text(0.0, y + H / 2, "dc", fontsize=5.4, color=INK2, style="italic",
            va="center", transform=a.transAxes)
-    chip(a, 0.15, y2, 0.15, 0.15, "PW 1×1", GREEN, fc="#eef8f4",
-         sub="384 → 1536")
-    chip(a, 0.31, y2, 0.20, 0.15, "WSiLUChunkAdd", GREEN, fc="#eef8f4",
-         sub="4:1  →  384")
-    chip(a, 0.52, y2, 0.15, 0.15, "PW 1×1", GREEN, fc="#eef8f4",
-         sub="384 → 384")
-    for x in (0.125, 0.303, 0.513):
-        arrow(a, x, y2 + 0.075, x + 0.022, y2 + 0.075)
-    a.text(0.73, y2 + 0.075, "⊕", fontsize=9, color=INK2, ha="center",
+    a.text(0.0, y2 + H / 2, "ffn", fontsize=5.4, color=INK2, style="italic",
            va="center", transform=a.transAxes)
-    arrow(a, 0.702, y2 + 0.075, 0.723, y2 + 0.075)
-    chip(a, 0.79, y2, 0.10, 0.15, "out", BLUE, sub="384")
-    arrow(a, 0.745, y2 + 0.075, 0.785, y2 + 0.075)
-    arrow(a, 0.73, y + 0.005, 0.73, y2 + 0.16)
-    a.text(0.41, y2 - 0.10, "74.8% of the block, and entirely pointwise",
+
+    dc = [(0.17, 0.135, "PW 1×1", "384 → 384", BLUE, "#ffffff", False),
+          (0.325, 0.085, "WSiLU", None, BLUE, "#ffffff", False),
+          (0.43, 0.145, "DW 3×3", "groups = 384", VERM, "#fdf0ec", True),
+          (0.595, 0.135, "PW 1×1", "384 → 384", BLUE, "#ffffff", False)]
+    for x, w, t, sb, ec, fc, bd in dc:
+        chip(a, x, y, w, H, t, ec, fc=fc, sub=sb, bold=bd)
+    arrow(a, XIN + 0.075, y + H / 2, 0.17, y + H / 2)
+    for k in range(len(dc) - 1):
+        arrow(a, dc[k][0] + dc[k][1], y + H / 2, dc[k + 1][0], y + H / 2)
+    arrow(a, 0.73, y + H / 2, JOIN - 0.018, y + H / 2)
+    a.text(JOIN, y + H / 2, "⊕", fontsize=9, color=INK2, ha="center",
+           va="center", transform=a.transAxes)
+    _res(a, XIN + 0.037, JOIN, y + H + 0.015, 0.075)
+
+    ffn = [(0.17, 0.185, "PW 1×1", "384 → 1536"),
+           (0.375, 0.205, "WSiLUChunkAdd", "4:1  →  384"),
+           (0.60, 0.13, "PW 1×1", "384 → 384")]
+    for x, w, t, sb in ffn:
+        chip(a, x, y2, w, H, t, GREEN, fc="#eef8f4", sub=sb)
+    arrow(a, 0.115, y2 + H / 2, 0.17, y2 + H / 2)
+    for k in range(len(ffn) - 1):
+        arrow(a, ffn[k][0] + ffn[k][1], y2 + H / 2, ffn[k + 1][0], y2 + H / 2)
+    arrow(a, 0.73, y2 + H / 2, JOIN - 0.018, y2 + H / 2)
+    a.text(JOIN, y2 + H / 2, "⊕", fontsize=9, color=INK2, ha="center",
+           va="center", transform=a.transAxes)
+    _res(a, 0.115, JOIN, y2 + H + 0.015, 0.075)
+
+    # dc output feeds the ffn row, down the left margin so it crosses nothing
+    a.plot([0.115, 0.115], [y + H / 2 - 0.005, y2 + H / 2], color=INK2, lw=0.6,
+           transform=a.transAxes)
+    a.plot([0.115, JOIN], [y + H / 2 - 0.005] * 2, color=INK2, lw=0.6,
+           transform=a.transAxes, zorder=1)
+    chip(a, XOUT, y2, 0.075, H, "out", BLUE)
+    arrow(a, JOIN + 0.018, y2 + H / 2, XOUT, y2 + H / 2)
+
+    a.text(0.43, y - 0.085,
+           "the only operator with spatial extent — 0.29% of the block, "
+           "and the whole cause of the seam",
+           fontsize=4.8, color=VERM, ha="center", transform=a.transAxes)
+    a.text(0.43, y2 - 0.085, "74.8% of the block, and entirely pointwise",
            fontsize=4.8, color=GREEN, ha="center", transform=a.transAxes)
 
 
