@@ -34,14 +34,19 @@ The reportlab build (`scripts/build_pdf.py`, which is what produces
 plus one of references**. CVPR allows eight body pages. This is deliberate for
 now — the document doubles as the project's technical report, and every section
 in it is a measurement someone asked for — but a submission has to lose two
-pages. The cheapest two, in the order we would cut them:
+pages. The cheapest, in the order we would cut them:
 
 1. **§5.6 the free baseline** and **§5.7 partial signalling** → supplementary,
-   leaving one paragraph each in §5.5. Together about a page and a half with
-   their figure and table.
+   leaving one paragraph each in §5.5. Together about two pages with their two
+   figures and two tables. Note that this is where the strongest single result
+   lives (a parameter-free rule that matches a trained head, and a half map that
+   beats a complete one), so cutting it is a positioning decision, not a
+   tidying one.
 2. **§5.8 does the map have to be recomputed** → supplementary. Half a page.
 3. **§5.10 the right ladder depends on the budget** → merge into §5.4, which
    already makes the saturation argument the table illustrates.
+4. One of Figure 9 (the trade-off curve) and Figure 12 (floor/saturation) — they
+   are two views of the same structure and the caption of either can carry both.
 
 What we would not cut: the operating-structure section, the seam sections, or
 the wall-clock section. Those three are the parts a reader cannot reconstruct
