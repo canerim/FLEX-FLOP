@@ -105,6 +105,10 @@ def tex_table(name, width):
         # device and reportlab does its own, so keeping the wrapper would print
         # "multicolumn2cSaved" into the header.
         line = re.sub(r"\\multicolumn\{\d+\}\{[^}]*\}\{([^}]*)\}", r"\1", line)
+        # \cite{key} has no meaning here -- there is no bibtex pass -- and the
+        # brace-stripping below turned "SlimCAE~\cite{slimcae}" into
+        # "SlimCAE~citeslimcae" in the positioning table.
+        line = re.sub(r"~?\\cite\{[^}]*\}", "", line)
         cells = [sub(c.strip()) for c in line.split("&")]
         cells = [re.sub(r"\$([^$]*)\$", r"\1", c) for c in cells]
         cells = [c.replace(r"\_", "_").replace("{", "").replace("}", "")
