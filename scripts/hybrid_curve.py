@@ -288,7 +288,12 @@ def main(argv):
                     return t / len(cache)
 
                 floor = true_db(0.0)
-                if floor > TARGET + 1e-9:
+                # Tolerance matches the bisection's own (5e-4 dB). Without it
+                # a floor that lands ON the budget -- which is exactly what
+                # happens at rho=0 when the router alone just meets it -- is
+                # reported unreachable, and the rho=0 column that anchors the
+                # whole interpolation goes missing.
+                if floor > TARGET + 5e-4:
                     rows.append({"qp": qp_v, "rho": rho, "budget_reachable": False,
                                  "floor_db": floor})
                     print(f"      rho {rho:<5} floor {floor:.4f} dB > budget")

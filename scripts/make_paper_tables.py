@@ -430,7 +430,11 @@ if hy:
         c_ = cell(qhi, r_)
         if c_:
             mac(f"HybridBits{rt}", f"{c_['map_bits']:.0f}")
-    lo_, _ = pick("hybrid_lorenz_b01_fixed.json", "hybrid_lorenz_b01.json")
+    # The hybrid file carries its own Lorenz statistics now; the separate
+    # lorenz run is only a fallback for files written before that.
+    lo_ = hy if any(r.get("gini_regret") is not None for r in rows_) else None
+    if lo_ is None:
+        lo_, _ = pick("hybrid_lorenz_b01_fixed.json", "hybrid_lorenz_b01.json")
     if lo_:
         lrows = [r for r in lo_["rows"] if r.get("budget_reachable")]
 
