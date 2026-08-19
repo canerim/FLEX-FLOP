@@ -476,8 +476,11 @@ if hy:
                 continue
             ratios.append(m / (100 * r["lorenz_at_rho"]))
         if ratios:
+            # No longer clamped at 1: re-bisecting lambda enlarges the
+            # feasible set, so the measured recovery can and does exceed the
+            # fixed-lambda Lorenz prediction.
             mac("LorenzTightMin", f"{100*min(ratios):.0f}")
-            mac("LorenzTightMax", f"{100*min(1.0, max(ratios)):.0f}")
+            mac("LorenzTightMax", f"{100*max(ratios):.0f}")
 
 # --------------------------------------------------------------- transfer
 print("map transfer")
