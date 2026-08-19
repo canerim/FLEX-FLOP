@@ -35,6 +35,7 @@ report:
 # Figures that read only results/ and docs/ -- no GPU, no checkpoints.
 figures:
 	$(PY) scripts/system_figs.py
+	$(PY) scripts/baseline_fig.py
 	$(PY) scripts/pipeline_detail.py
 	$(PY) scripts/hybrid_figure.py
 	$(PY) scripts/raterank_figure.py

@@ -30,56 +30,26 @@
 
 % =========================================================== abstract
 \begin{abstract}
-A learned image decoder spends the same computation on every frame, whatever the
-frame contains. We add an early-exit ladder to the intra decoder of
+A learned image decoder runs the same graph on every frame whatever the frame
+contains. We add an early-exit ladder to the intra decoder of
 DCVC-UF~\cite{dcvcuf}, cut each frame into tiles, and let every tile leave the
-trunk at whichever of $K$ exits is deep enough for it. The encoder stays frozen
-and the coded payload is unchanged, so the method can be deployed against
-bitstreams that already exist. On the full \NumSeq-sequence common test set a
-$0.1\dB$ budget buys \MainLowRate\% of the decoder's multiply--accumulates at
+trunk at whichever of $K$ exits its content needs. The encoder and the entropy
+model stay frozen and the coded payload is unchanged, so the method applies to
+bitstreams that already exist. On the \NumSeq-sequence common test set a
+$0.1\dB$ budget removes \MainLowRate\% of the decoder's multiply--accumulates at
 the lowest rate and \MainHighRate\% at the highest, for a BD-Rate cost of
 \BdRateALow\%.
 
-Four further findings matter more to us than that headline number.
-\textbf{(i)}~A quality budget buys compute only inside a bounded window. Below a
-\emph{floor} set by tiling, no allocation is feasible at all; above a
-\emph{saturation} point, every tile already sits on the cheapest rung. The
-budget we work to occupies \BandUseLow\% of that window at the lowest rate and
-\BandUseHigh\% at the highest. Both ends are in closed form, and we
-verify seven structural propositions numerically rather than asserting them.
-The window also accounts for most of the rate dependence: five rates that lie
-\BandRawSpread\ points apart at a matched decibel collapse to
-\BandSpreadMean\ once the budget is measured in units of each rate's own band.
-\textbf{(ii)}~Tiling is expensive, and what it costs is set by depth rather than
-by area. The seam error follows a power law in the number of per-tile
-convolutions with a fitted exponent near two, and the corrupted-area fraction
-that is usually quoted is wrong by $160$--$264\%$.
-\textbf{(iii)}~The exact remedy is to give each convolution its real
-neighbour. At uniform depth it is bit-identical; under routing it
-\emph{destroys} the allocation, since routing is the deliberate violation of the
-condition that makes the remedy exact. \textbf{(iv)}~Operations are an
-\emph{optimistic} bound on what this method saves, and the optimism grows with
-the saving. At the lowest rate, \WallSorted\% of wall-clock arrives against a
-\WallPredicted\% arithmetic prediction; at the highest, \WallHighMeasured\%
-against \WallHighPredicted\%. Sorting the tiles once by exit depth is
-bit-identical and recovers a fifth of the shortfall.
-
-Signalling the exit map costs \MapBits\ bits per frame; predicting it at the
-decoder costs none and gives up \GapMin--\GapMax\ points. We treat the two as
-ends of one scale. Overriding the worst fifth of tiles recovers
-\HybridRecoverFifthLow--\HybridRecoverFifthHigh\% of that gap for
-\HybridBitsFifth\ bits, and at \HybridBeatsAN\ of \HybridBeatsAOf\ rates half
-the map \emph{beats} the whole of it, because the hybrid has two multipliers
-where the signalled configuration has one. A learned predictor should also be
-made to beat a free one. Routing on the bits the entropy model has already spent
-per tile is parameter-free, needs no training and adds nothing to the stream,
-and it beats our \RouterParams-parameter head at every one of the
-\RateRankNWins\ rates we measure, by up to \RateRankBeatsBy\ points.
-
-We find that tile count governs the method much more closely than content does.
-Three 1080p classes of very different material agree within three points, while
-a $416{\times}240$ class saves a third as much. An exit map transfers across
-frames almost perfectly, but not across rates.
+We also characterise when such a budget does anything at all. Below a floor set
+by tiling no allocation is feasible; above a saturation point every tile already
+sits on the cheapest rung; and measuring the budget in units of that window
+collapses five rate curves, \BandRawSpread\ points apart at a matched decibel,
+to within \BandSpreadMean. Tiling dominates the cost and scales with per-tile
+depth rather than with contaminated area. Finally, a rule with no parameters
+that routes on the bits the entropy model has already spent per tile beats our
+trained \RouterParams-parameter router at every rate by up to
+\RateRankBeatsBy\ points, which we report as a control that work on adaptive
+inference ought to include.
 \end{abstract}
 
 % =========================================================== introduction
@@ -109,7 +79,18 @@ released encoder already produces. That rules out re-training the analysis
 transform, changing the entropy model, or altering the latent. It leaves one
 place to spend adaptivity, the synthesis transform.
 
-Our method, FLEX-UF, is an exit ladder over the twelve residual blocks of the
+\begin{figure}[t]
+\centering
+\includegraphics[width=\columnwidth]{figures/baseline.png}
+\caption{\textbf{The decoder we modify}, redrawn after DCVC-UF~\cite{dcvcuf}.
+Everything left of the reconstruction stays frozen: the analysis transform, the
+entropy model and the coded payload. FLEX-UF replaces the frame-specific
+decoders with a ladder of exits taken per tile.}
+\label{fig:baseline}
+\end{figure}
+
+Our method, FLEX-UF (Fig.~\ref{fig:baseline}), is an exit ladder over the
+twelve residual blocks of the
 DCVC-UF intra decoder. The first $j$ blocks run over the whole frame. The rest
 run per tile, over a set of tiles that shrinks with depth, and the shrinkage is
 where the saving comes from. Each exit hands its feature to the shared head
@@ -139,37 +120,20 @@ where the working budget uses \BandUseLow\% of that window at low rate and
 
 \paragraph{Contributions.}
 \begin{enumerate}\itemsep2pt
-\item A tile-adaptive early-exit ladder for a learned image decoder. It leaves
-      the encoder and the coded payload untouched, and it saves \MainLowRate\%
-      to \MainHighRate\% of decoder MACs for $0.1\dB$ on the full CTC set.
-\item The floor/saturation characterisation of a quality budget, with both ends
-      measured. The architectural ceiling turns out to be reachable at low rate,
-      so beyond \SatLow$\dB$ at $q0$ the limit is the ladder rather than the
-      budget.
-\item A quantitative account of the tiling penalty. We measure what it costs and
-      what removes it for free, we establish the $b^{2}$ law it follows in
-      per-tile depth and the failure of the area law that the contaminated
-      fraction would predict, and we measure the ordering of four border
-      estimators. A higher-order estimator turns out to be worse than a
-      zeroth-order one, and a learned repair module is not worth its compute
-      even with a perfect gate.
-\item Two allocation regimes, an encoder-side search that signals a
-      $\sim$\MapBits-bit map per frame and a decoder-side predictor that signals
-      nothing, with the bits and the compute charged on both sides. We also
-      measure the continuum between them. Overriding the worst fifth of tiles
-      recovers \HybridRecoverFifthLow--\HybridRecoverFifthHigh\% of the gap, and
-      at \HybridBeatsAN\ of \HybridBeatsAOf\ rates half the map beats all of it,
-      because the hybrid has two multipliers where the signalled configuration
-      has one.
-\item A parameter-free control that a learned router has to beat, and that such
-      routers are usually not measured against. Routing on the bits the entropy
-      model already spent per tile costs nothing and adds nothing to the stream.
-      It beats our trained head at all \RateRankNWins\ measured rates, by up to
-      \RateRankBeatsBy\ points, while agreeing with the oracle on fewer tiles
-      than the head does.
-\item A wall-clock result. Operations over-predict the saving by about a fifth,
-      and a bit-identical reordering of the per-tile loop recovers a fifth of
-      that. We realise \WallSorted\% against a \WallPredicted\% prediction.
+\item A tile-adaptive early-exit ladder for a learned image decoder, deployable
+      against existing bitstreams because the encoder and the coded payload are
+      untouched. It saves \MainLowRate\% to \MainHighRate\% of decoder MACs for
+      $0.1\dB$ on the full CTC set, at a BD-Rate cost of \BdRateALow\%.
+\item The operating structure of a quality budget: a floor below which no
+      allocation is feasible, a saturation point above which none improves, both
+      in closed form, and seven propositions verified numerically rather than
+      asserted. Measuring the budget in units of that window accounts for most
+      of the rate dependence, on two independently trained checkpoints.
+\item A parameter-free control that adaptive-inference work is rarely measured
+      against. Routing on the bits the entropy model has already spent per tile
+      costs nothing, adds nothing to the stream, and beats our trained head at
+      every rate, while agreeing with the oracle on fewer tiles than the head
+      does.
 \end{enumerate}
 
 % =========================================================== related work
@@ -1455,11 +1419,10 @@ with a shared head, but we have not measured a second decoder to check.
 % =========================================================== conclusion
 \section{Conclusion}
 
-Learned decoders spend a constant amount of computation on a non-constant world.
-An early-exit ladder over the tiles of a frame recovers a large fraction of it.
-At a $0.1\dB$ budget we save \MainLowRate\% to \MainHighRate\% of decoder MACs
-for a BD-Rate cost of \BdRateALow\%, with no change to the encoder and none to
-the coded payload.
+The intra decoder of DCVC-UF can be run at a depth chosen per tile from what
+that tile contains. At a $0.1\dB$ budget this removes \MainLowRate\% to
+\MainHighRate\% of its multiply--accumulates for a BD-Rate cost of
+\BdRateALow\%, with no change to the encoder and none to the coded payload.
 
 Three lessons we would carry to any spatially adaptive decoder, and none of them
 is about early exit.

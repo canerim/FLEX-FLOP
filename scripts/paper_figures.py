@@ -12,7 +12,8 @@ SRC, DST = R / "docs" / "figures", R / "paper" / "figures"
 DST.mkdir(parents=True, exist_ok=True)
 
 WANTED = [
-    "sys_pipeline.png",       # fig 1, the method
+    "sys_pipeline.png",
+    "baseline.png",           # the decoder we modify, for the introduction       # fig 1, the method
     "qualitative.png",        # what the saving looks like
     "adapters.png",           # exit adapters
     "adapter_gain.png",       # what the adapters are worth
