@@ -176,6 +176,26 @@ if sat:
       f"at qp 63 — the ladder has more to offer at high rate than the budget "
       f"lets it give.")
     w("")
+    bc = load("band_collapse.json")
+    if bc:
+        w("### The band is almost all of the rate dependence")
+        w("")
+        w("![the trade-off, normalised](figures/budget_band.png)")
+        w("")
+        w(f"At a matched decibel the five rates are "
+          f"**{bc['raw_spread_at_tenth_db']:.1f} points** apart. Rescale the "
+          f"budget axis onto each rate's own band — floor at 0, saturation at 1 "
+          f"— and the five curves collapse onto one: "
+          f"**{bc['band_spread_mean']:.1f} points** apart on average and "
+          f"{bc['band_spread_max_excl_edge']:.1f} at worst.")
+        w("")
+        w("So *how much does a 0.1 dB budget buy at this rate* is, to within a "
+          "couple of points, *where does 0.1 dB sit in this rate's band*. Both "
+          "ends of the band are in closed form and cheap to measure, and what "
+          "they leave over is small enough that a deployment could calibrate "
+          "the two and read the rest off a single curve. Nine budgets from 0.05 "
+          "to 0.5 dB, 53 sequences (`results/signalled_RECIPE512_grid.json`).")
+        w("")
     w("### The one budget that saturates qp 0 and nothing else")
     w("")
     w(f"Any budget in **[{S[0]['saturation_db']:.4f}, {S[8]['saturation_db']:.4f}) "

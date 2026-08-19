@@ -82,6 +82,14 @@ For every rate there are three regions, and only the middle one is a design choi
 
 The 0.1 dB budget this project works to uses 45% of the available band at qp 0 and only 9% at qp 63 — the ladder has more to offer at high rate than the budget lets it give.
 
+### The band is almost all of the rate dependence
+
+![the trade-off, normalised](figures/budget_band.png)
+
+At a matched decibel the five rates are **15.5 points** apart. Rescale the budget axis onto each rate's own band — floor at 0, saturation at 1 — and the five curves collapse onto one: **1.7 points** apart on average and 2.2 at worst.
+
+So *how much does a 0.1 dB budget buy at this rate* is, to within a couple of points, *where does 0.1 dB sit in this rate's band*. Both ends of the band are in closed form and cheap to measure, and what they leave over is small enough that a deployment could calibrate the two and read the rest off a single curve. Nine budgets from 0.05 to 0.5 dB, 53 sequences (`results/signalled_RECIPE512_grid.json`).
+
 ### The one budget that saturates qp 0 and nothing else
 
 Any budget in **[0.1791, 0.1945) dB** puts qp 0 exactly on the ceiling while qp 8 and above stay below it — a window 15.3 millibels wide. Against the coarser {0, 16, …} grid the window is [0.1791, 0.2194). **0.185 dB** sits comfortably inside both.
