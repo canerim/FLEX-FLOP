@@ -1119,8 +1119,11 @@ def content(colw, fullw):
     par(r"And three cautions about measuring any of this. A saving in "
         r"operations is an optimistic bound on a saving in time, and the "
         r"optimism scales with the saving. A learned router should be compared "
-        r"against a free one: ranking tiles by the bits already spent on them "
-        r"costs nothing and gets most of the way. And a timing harness will "
+        r"against a free one: routing on the bits already spent per tile needs "
+        r"no parameters, no training and no bits, and it beats our trained head "
+        r"above q\RateRankBeatsFrom — while agreeing with the oracle on fewer "
+        r"tiles than the head does, which is a warning about the metric as much "
+        r"as about the head. And a timing harness will "
         r"report numbers whether or not it is timing the right device — this "
         r"one did, for months, and the tell was a decoder that appeared to slow "
         r"down with the quality index.")
