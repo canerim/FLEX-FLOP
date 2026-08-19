@@ -227,7 +227,7 @@ the paper.
 
 \section{Things that were not running}
 
-Three checks this work cites were not measuring what they claimed, and all three
+Four checks this work cites were not measuring what they claimed, and all four
 were found by running them rather than by reading them.
 
 \begin{itemize}\itemsep2pt
@@ -261,6 +261,17 @@ were found by running them rather than by reading them.
       repository that timed a non-default GPU should be assumed to have had this
       bug; a source test now asserts that every script using
       \texttt{torch.cuda.Event} pins the device first, and it found two more.
+\item The router head suppresses exits below the split depth by assigning them
+      $-10^{4}$. That is a mask only while the head's own logits stay well above
+      it, and this head's did not: nothing in a cross-entropy or a regret
+      objective penalises a common offset, one drifted in during training, and
+      the raw outputs settled near $-10^{4}$. The two suppressed entries then
+      became the \emph{largest} in every row, took nearly all the probability
+      mass, and the caller's clamp turned the resulting choice into the cheapest
+      real exit --- so a large share of every configuration-B allocation went to
+      the cheapest rung for a reason unrelated to the tile. The mask is now
+      $-\infty$, which cannot drift, and a test checks the property across six
+      logit scales rather than checking the constant.
 \end{itemize}
 
 {\small
