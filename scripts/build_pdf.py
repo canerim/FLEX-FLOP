@@ -69,6 +69,36 @@ def sub(t):
     return r
 
 
+
+# --------------------------------------------------------------- equations
+_EQN = [0]
+_EQ_DIR = R / "docs" / "figures" / "_eq"
+
+
+def _render_math(tex: str, fontsize: int = 11, dpi: int = 600) -> tuple:
+    """LaTeX math -> a tight transparent PNG, and its size in points.
+
+    reportlab has no math engine, so display equations were being written as
+    bold body text ("k*(t) = argmin_k [ D(t,k) + lambda c_k ]"), which is not
+    what an equation looks like in a CVPR paper. matplotlib's mathtext renders
+    the same source main.tex uses.
+    """
+    import matplotlib
+    matplotlib.use("Agg")
+    import matplotlib.pyplot as plt
+    _EQ_DIR.mkdir(parents=True, exist_ok=True)
+    key = re.sub(r"[^a-zA-Z0-9]+", "_", tex)[:60] or "eq"
+    out = _EQ_DIR / f"{key}.png"
+    fig = plt.figure(figsize=(0.01, 0.01))
+    fig.text(0, 0, f"${tex}$", fontsize=fontsize, color="black")
+    fig.savefig(out, dpi=dpi, transparent=True, bbox_inches="tight",
+                pad_inches=0.02)
+    plt.close(fig)
+    from PIL import Image as PILImage
+    w, h = PILImage.open(out).size
+    return str(out), w / dpi * 72.0, h / dpi * 72.0
+
+
 # ---------------------------------------------------------------- styles
 def S(name, **kw):
     base = dict(fontName="Times-Roman", fontSize=8.6, leading=10.4,
@@ -212,6 +242,23 @@ def content(colw, fullw):
         A(KeepTogether([tex_table(name, colw), Spacer(1, 3),
                         Paragraph(sub(_autonum(cap, _TABN, "Table")), CAP),
                         Spacer(1, 6)]))
+
+    def eq(tex, tag=True):
+        """A centred display equation with a right-aligned number."""
+        path, w, h = _render_math(tex)
+        _EQN[0] += 1
+        im = Image(path, width=w, height=h)
+        cell = [[im, Paragraph(f"({_EQN[0]})", CAP)]] if tag else [[im, ""]]
+        t = Table(cell, colWidths=[colw - 0.30 * inch, 0.30 * inch])
+        t.setStyle(TableStyle([
+            ("ALIGN", (0, 0), (0, 0), "CENTER"),
+            ("ALIGN", (1, 0), (1, 0), "RIGHT"),
+            ("VALIGN", (0, 0), (-1, -1), "MIDDLE"),
+            ("LEFTPADDING", (0, 0), (-1, -1), 0),
+            ("RIGHTPADDING", (0, 0), (-1, -1), 0),
+            ("TOPPADDING", (0, 0), (-1, -1), 4),
+            ("BOTTOMPADDING", (0, 0), (-1, -1), 4)]))
+        A(t)
 
     def figure(name, cap):
         for f in fig(name, colw, cap):
@@ -533,7 +580,9 @@ def content(colw, fullw):
     h2("3.4 Allocation")
     par(r"Given per-tile distortions D(t,k) and costs c_k, the allocation "
         r"minimising distortion at a compute budget is the Lagrangian "
-        r"<b>k*(t) = argmin_k [ D(t,k) + λ·c_k ]</b>, with λ bisected so the "
+        r"the Lagrangian")
+    eq(r"k^{*}(t) = \mathrm{arg\,min}_{k}\ \left[\, D(t,k) + \lambda\, c_{k} \,\right]")
+    par(r"with λ bisected so the "
         r"frame lands on the budget. Both quantities are available <i>to the "
         r"encoder</i>, which holds the source. This is configuration <b>A</b>: "
         r"the encoder searches and transmits the map, which entropy-codes to "
@@ -545,15 +594,19 @@ def content(colw, fullw):
         r"variable, and no architecture removes it. Configuration <b>B</b> "
         r"therefore predicts: a 144K-parameter head reads the stem feature, the "
         r"decoded latent, the entropy model's scales and the quality index, and "
-        r"decides <b>k(t) = argmax_k [ log softmax(z_t)_k − β·c_k ]</b>, with β "
+        r"decides")
+    eq(r"\hat{k}_{t} = \mathrm{arg\,max}_{k}\ \left[\, \log\,\mathrm{softmax}(z_{t})_{k} - \beta\, c_{k} \,\right]")
+    par(r"with β "
         r"bisected as λ is. Nothing is added to the file. The head is trained "
         r"against a <i>frozen</i> decoder with a cost-sensitive cross-entropy to "
         r"the oracle's choice, each tile weighted by the regret of choosing "
         r"wrongly, plus loss-free load balancing [16] biased toward the "
         r"oracle's own exit distribution rather than toward uniform.")
     h2("3.5 Training")
-    par(r"All exits are decoded every step and the objective is L = L_RD + "
-        r"w_a·L_anchor + w_d·L_distill. L_RD is the released rate-distortion "
+    par(r"All exits are decoded every step and the objective is")
+    eq(r"\mathcal{L} = \mathcal{L}_{\mathrm{RD}} + w_{a}\,"
+       r"\mathcal{L}_{\mathrm{anchor}} + w_{d}\,\mathcal{L}_{\mathrm{distill}}")
+    par(r"L_RD is the released rate-distortion "
         r"loss with MSE averaged over exits. L_anchor pins the deepest exit to "
         r"the released decoder, so the reference every saving is quoted against "
         r"cannot drift underneath the measurement. L_distill supervises "
@@ -581,13 +634,17 @@ def content(colw, fullw):
         r"the kernel is handed whatever the padding rule invents. Each "
         r"convolution extends the contaminated region by one ring, so with b "
         r"per-tile blocks on a tile of side F the fraction of the tile within "
-        r"reach of an invented value is 1 − ((F−2b)/F)², which is 0.750 at the "
+        r"reach of an invented value is")
+    eq(r"1 - \left(\frac{F-2b}{F}\right)^{2}", tag=False)
+    par(r"which is 0.750 at the "
         r"shipped F=32, b=8: not a thin border but a structured error across "
         r"most of the tile.")
     par(r"That fraction says which pixels are affected, not how badly, and it "
         r"is not what governs the penalty. Sweeping the split depth sweeps b "
         r"from 12 to 0, with b=0 as an exact zero-seam control, and the measured "
-        r"seam follows a power law: <b>seam ∝ b<super>α</super></b> with α = "
+        r"seam follows a power law")
+    eq(r"\mathrm{seam} \;\propto\; b^{\alpha}, \qquad \alpha \approx 2")
+    par(r"with α = "
         r"2.38, 2.22 and 1.93 at q0, q32 and q63, r = 0.98–0.995 in log-log. "
         r"Fitted with one free scale the area fraction is wrong by 160–264% "
         r"where the power law is wrong by 12–22%. Fixing the exponent at exactly "
@@ -652,7 +709,10 @@ def content(colw, fullw):
            r"helps on the ring and hurts everywhere else.")
     par(r"Since the tile lattice is known exactly at training and inference, a "
         r"repair can be <i>told</i> where to look rather than having to infer "
-        r"it: Rep(f) = f + G[i mod P, j mod P]·PW(WSiLU(DW3×3(f))), with G a "
+        r"it")
+    eq(r"\mathrm{Rep}(f) = f + G[\,i\ \mathrm{mod}\ P,\ j\ \mathrm{mod}\ P\,]"
+       r"\cdot \mathrm{PW}\left(\mathrm{WSiLU}(\mathrm{DW}_{3\times3}(f))\right)")
+    par(r"with G a "
         r"P×P gate shared over channels, initialised at exp(−d/τ). It costs "
         r"0.95% of the decode.")
     par(r"It does not earn that. Splitting per-pixel error by distance from the "
@@ -994,7 +1054,9 @@ def content(colw, fullw):
         r"cost: how many bits that tile's latents took.")
     par(r"We turn it into a routing rule with no learned parameters. Model the "
         r"per-tile distortion as rank-1 in the log domain, "
-        r"log D(t,k) ≈ α·log b(t) + c + log φ_k, where b is the tile's bit "
+        r"in the log domain")
+    eq(r"\log D(t,k) \;\approx\; \alpha \log b(t) + c + \log \varphi_{k}")
+    par(r"where b is the tile's bit "
         r"count normalised by the frame mean and φ is a K-vector saying what "
         r"each exit costs on an average tile. Fit (α, c, φ) by least squares, "
         r"leave-one-sequence-out so no sequence contributes to the profile that "
