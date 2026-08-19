@@ -94,7 +94,11 @@ while step < a.steps:
         torch.nn.utils.clip_grad_norm_(head.parameters(), 1.0); opt.step(); sched.step()
         with torch.no_grad():
             lag = M + a.lam * cost[None, :]
-            kk = lag.argmin(1)
+            # Columns below the split depth are duplicates of exit j -- same
+            # decode, same cost -- so argmin can land on one arbitrarily. The
+            # head can no longer emit them at all, so an unclamped label would
+            # score every such tile as a disagreement.
+            kk = lag.argmin(1).clamp(min=cfg.split_depth)
             head.rebalance(logits.argmax(1)[tr], torch.bincount(kk, minlength=cfg.num_exits).float() / n)
             ho = (logits.argmax(1)[~tr] == kk[~tr]).float().mean().item()
         hist.append(ho)
