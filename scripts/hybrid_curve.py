@@ -103,6 +103,13 @@ def main(argv):
     ap.add_argument("--ckpt", required=True)
     ap.add_argument("--ref", default=None)
     ap.add_argument("--router2", required=True)
+    ap.add_argument("--predictor", choices=["head", "raterank"], default="head",
+                    help="what plays configuration B's part. 'head' is the "
+                         "trained router; 'raterank' is the parameter-free "
+                         "rank-1 bit surrogate of Section 5.6, which matches it "
+                         "to within a point and costs nothing. The override "
+                         "rule, the bit accounting and the two multipliers are "
+                         "identical either way.")
     ap.add_argument("--qps", type=int, nargs="+", default=[0, 16, 32, 48, 63])
     ap.add_argument("--rhos", type=float, nargs="+",
                     default=[0.0, 0.05, 0.1, 0.2, 0.35, 0.5, 1.0])
@@ -173,13 +180,58 @@ def main(argv):
                 lg = head2(stem, y, aux["scales_hat"], qp,
                            cfg.feature_patch, cfg.latent_patch)[:, j:]
                 lp = F.log_softmax(lg, 1)
+                bits = net.get_y_bits(net.add_noise(aux["y_res"]),
+                                      aux["scales_hat"]).sum(1, keepdim=True)
+                L_ = P // 16
+                nh_, nw_ = bits.shape[-2] // L_, bits.shape[-1] // L_
+                tb = (bits.view(1, 1, nh_, L_, nw_, L_)
+                          .permute(0, 1, 2, 4, 3, 5)
+                          .reshape(nh_ * nw_, L_ * L_).sum(1))
+                bnorm = tb / tb.mean().clamp_min(1e-12)
                 if rshare == 0.0:
                     px = xp.shape[-1] * xp.shape[-2]
                     rshare = router_share(head2, (stem, y, aux["scales_hat"], qp,
                                                   cfg.feature_patch,
                                                   cfg.latent_patch), px)
                     print(f"  router costs {100*rshare:.4f}% of the decode\n")
-                cache.append((M, R, lp, y, q, xp))
+                cache.append((M, R, lp, y, q, xp, bnorm))
+
+            if a.predictor == "raterank":
+                # Replace the head's log-probabilities with a score derived from
+                # the rank-1 bit surrogate of Section 5.6, fitted
+                # leave-one-sequence-out. Everything downstream reads `lp` as
+                # "bigger is better", and -surrogate is exactly that, so the
+                # tilt, the regret ordering and the bisection are unchanged.
+                lb = torch.cat([c[6].log() for c in cache]).double()
+                LM = torch.cat([c[0][:, j:].clamp_min(1e-12).log().double()
+                                for c in cache])
+                sid = torch.cat([torch.full((c[0].shape[0],), i, device=dev)
+                                 for i, c in enumerate(cache)])
+                u = LM.mean(1)
+
+                def _fit(mask):
+                    x_, y_ = lb[mask], u[mask]
+                    xm, ym = x_.mean(), y_.mean()
+                    al = (((x_ - xm) * (y_ - ym)).sum()
+                          / ((x_ - xm) ** 2).sum().clamp_min(1e-30))
+                    cc = ym - al * xm
+                    return (float(al), float(cc),
+                            (LM[mask] - (al * x_ + cc)[:, None]).mean(0).float())
+
+                fits = [_fit(sid != i) for i in range(len(cache))]
+                newc = []
+                for i, c in enumerate(cache):
+                    al, c0, lphi = fits[i]
+                    S = torch.exp((al * c[6].log() + c0)[:, None]
+                                  + lphi[None, :])
+                    # unit mean so beta lives on the same scale as it does for
+                    # the head, which keeps the bisection bracket usable
+                    S = S / S.mean().clamp_min(1e-30)
+                    newc.append((c[0], c[1], -S, c[3], c[4], c[5], c[6]))
+                cache = newc
+                rshare = 0.0        # no parameters, no arithmetic to charge
+                print("  predictor: parameter-free rank-1 bit surrogate, "
+                      "leave-one-sequence-out\n")
 
             # --- the two multipliers -----------------------------------
             # An earlier version tried to tie both branches to one multiplier,
@@ -280,7 +332,7 @@ def main(argv):
 
                 def true_db(lam):
                     t = 0.0
-                    for M, R, lp, y_, q_, xp_ in cache:
+                    for M, R, lp, y_, q_, xp_, _b in cache:
                         k, _ = choose(M, lp, lam, rho)
                         k = k.clamp(min=cfg.split_depth)
                         t += (10 * torch.log10(
