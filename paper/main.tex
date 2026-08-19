@@ -79,15 +79,16 @@ released encoder already produces. That rules out re-training the analysis
 transform, changing the entropy model, or altering the latent. It leaves one
 place to spend adaptivity, the synthesis transform.
 
-\begin{figure}[t]
+\begin{figure*}[t]
 \centering
-\includegraphics[width=\columnwidth]{figures/baseline.png}
-\caption{\textbf{The decoder we modify}, redrawn after DCVC-UF~\cite{dcvcuf}.
-Everything left of the reconstruction stays frozen: the analysis transform, the
-entropy model and the coded payload. FLEX-UF replaces the frame-specific
-decoders with a ladder of exits taken per tile.}
+\includegraphics[width=\textwidth]{figures/dcvcuf_framework.png}
+\caption{\textbf{The decoder we modify.} Figure~3 of DCVC-UF~\cite{dcvcuf},
+reproduced. Everything up to the reconstruction stays frozen in this work: the
+patch embedding, the chunk encoder, the entropy model and the coded payload.
+FLEX-UF replaces the frame-specific decoders on the right with a ladder of exits
+taken per tile.}
 \label{fig:baseline}
-\end{figure}
+\end{figure*}
 
 Our method, FLEX-UF (Fig.~\ref{fig:baseline}), is an exit ladder over the
 twelve residual blocks of the

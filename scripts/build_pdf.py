@@ -278,12 +278,15 @@ def fig(name, width, cap, maxh=None):
 
 
 # ---------------------------------------------------------------- the content
+WIDE_BAND = 2.62 * inch
+
+
 def content(colw, fullw):
     """(flowables for the two-column body, flowables for the full-width banner)."""
     F = []
     A = F.append
 
-    def figure_wide(name, cap, height=4.45 * inch):
+    def figure_wide(name, cap, height=WIDE_BAND - 0.62 * inch):
         """A figure that spans both columns.
 
         reportlab has no float mechanism, so this switches to a page template
@@ -425,12 +428,13 @@ def content(colw, fullw):
         r"rules out re-training the analysis transform, changing the entropy "
         r"model, or altering the latent. It leaves one place to spend "
         r"adaptivity, the synthesis transform.")
-    figure("baseline.png",
-           r"<b>Figure 2. The decoder we modify</b>, redrawn after DCVC-UF [14]. "
-           r"Everything left of the reconstruction stays frozen: the analysis "
-           r"transform, the entropy model and the coded payload. FLEX-UF "
-           r"replaces the frame-specific decoders with a ladder of exits taken "
-           r"per tile.")
+    figure_wide("dcvcuf_framework.png",
+                r"<b>Figure 2. The decoder we modify.</b> Figure 3 of DCVC-UF "
+                r"[14], reproduced. Everything up to the reconstruction stays "
+                r"frozen in this work: the patch embedding, the chunk encoder, "
+                r"the entropy model and the coded payload. FLEX-UF replaces the "
+                r"frame-specific decoders on the right with a ladder of exits "
+                r"taken per tile.")
     par(r"Our method, FLEX-UF, is an exit ladder over the twelve residual "
         r"blocks of the DCVC-UF intra decoder. The first j blocks run over the "
         r"whole frame. The rest run per tile, over a set of tiles that shrinks "
@@ -1635,7 +1639,10 @@ def build(out="paper/FLEX-UF.pdf"):
         canv.drawCentredString(PW / 2, 0.42 * inch, str(canv.getPageNumber()))
         canv.restoreState()
 
-    wide_band = 4.95 * inch
+    # Sized to the one wide figure the paper carries, plus its caption. A band
+    # taller than its content leaves the two columns beneath it short, which is
+    # the defect this template was added to avoid.
+    wide_band = WIDE_BAND
     f_wide = Frame(M, PH - 0.7 * inch - wide_band, PW - 2 * M, wide_band,
                    id="wide", leftPadding=0, rightPadding=0,
                    topPadding=0, bottomPadding=0)
