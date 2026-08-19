@@ -144,4 +144,8 @@ for ok, label, exp, act, tol in CLAIMS:
     print(f"  [{'ok ' if ok else 'BAD'}] {label:<{w}}  paper {exp:>8}   "
           f"measured {a:>9}")
 print(f"\n  {len(CLAIMS)-len(bad)}/{len(CLAIMS)} prose claims match the data")
+# Recorded so make_paper_tables.py can quote the count without running this.
+json.dump({"n_claims": len(CLAIMS), "n_passed": len(CLAIMS) - len(bad),
+           "failed": [c[1] for c in CLAIMS if not c[0]]},
+          open(R / "results/check_paper.json", "w"), indent=2)
 sys.exit(1 if bad else 0)

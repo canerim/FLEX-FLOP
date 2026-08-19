@@ -522,6 +522,12 @@ if d:
     mac("OursKMacPx", f"{ours_kmac:.0f}")
     mac("RelKMacPx", f"{rel_kmac:.0f}")
 
+# how many claims check_paper.py re-reads out of the prose; it records its own
+# count so this file does not have to run it
+_cc, _ = pick("check_paper.json")
+if _cc:
+    mac("NumClaims", str(_cc["n_claims"]))
+
 # ------------------------------------------------------------------ macros
 w("macros.tex", "\n".join(f"\\newcommand{{\\{k}}}{{{v}}}"
                           for k, v in sorted(MACROS.items())))

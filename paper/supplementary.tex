@@ -142,6 +142,19 @@ implementation of the baseline computes.
 YUV 4:2:0 PSNR the baseline reports agree within $0.003\dB$ on identical
 decodes across the whole rate range; we verified this rather than assuming it.
 
+\paragraph{Timing.} \texttt{torch.cuda.Event} is created on the process's
+current device, so a timing harness on a non-default GPU measures nothing in
+particular and says nothing about it. Every wall-clock figure here was
+re-measured with the device pinned, and a test asserts that every script using
+CUDA events pins it.
+
+\paragraph{No number in the paper is typed.} Every table and every inline
+figure is generated from \texttt{results/} by one script, expanded as a macro,
+and a second script re-reads \NumClaims\ of them out of the prose and compares
+them against the same files, exiting non-zero on any disagreement. It has caught
+four drifts, one of which was a figure count that changed when a figure was
+inserted in the middle.
+
 \section{Claims this work made and then measured}
 
 Five statements that appeared in earlier drafts of this work, and what the
