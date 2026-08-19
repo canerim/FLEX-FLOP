@@ -447,6 +447,28 @@ if hy:
             mac("LorenzTightMin", f"{100*min(ratios):.0f}")
             mac("LorenzTightMax", f"{100*min(1.0, max(ratios)):.0f}")
 
+# --------------------------------------------------------------- transfer
+print("map transfer")
+mt, _ = pick("map_transfer.json")
+if mt:
+    tr = [r for r in mt["rows"] if r.get("kind") == "time"]
+    q0 = [r for r in tr if r["qp"] == 0]
+    if q0:
+        far = max(q0, key=lambda r: r["offset"])
+        mac("TransferOffset", str(far["offset"]))
+        mac("TransferDbCost",
+            f"{far['transfer_db'] - q0[0]['in_place_db']:.3f}")
+        mac("TransferSaving", f"{far['transfer_saving']:.2f}")
+        mac("TransferInPlaceLo",
+            f"{min(r['in_place_saving'] for r in q0):.2f}")
+        mac("TransferInPlaceHi",
+            f"{max(r['in_place_saving'] for r in q0):.2f}")
+    rr_ = [r for r in mt["rows"] if r.get("kind") == "rate"]
+    cross = next((r for r in rr_ if r.get("from") == 0 and r.get("to") == 63),
+                 None)
+    if cross:
+        mac("TransferCrossDb", f"{cross['transfer_db']:.3f}")
+
 # --------------------------------------------------------------- coupling
 print("coupling")
 cp, _ = pick("coupling_ablation.json")

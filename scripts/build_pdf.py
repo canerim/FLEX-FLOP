@@ -1008,13 +1008,14 @@ def content(colw, fullw):
         r"recomputed, which nobody has checked.")
     par(r"<b>Across time it barely has to be.</b> Frame 0's map applied eight "
         r"frames later costs 0.005 dB at q0 — five percent of the budget — "
-        r"and no saving at all: 33.05% transferred against 32.66–33.15% "
+        r"and no saving at all: \TransferSaving% transferred against "
+        r"\TransferInPlaceLo–\TransferInPlaceHi% "
         r"recomputed. The allocation is a property of where the content is hard, "
         r"and that moves slowly. A codec would search once per group of pictures "
         r"and divide the encoder cost by the group length.")
     par(r"<b>Across rate it very much does</b>, and the direction matters. The "
-        r"map found at q0 applied at q63 delivers 0.190 dB against a 0.1 dB "
-        r"budget: it claims the low-rate saving of 33.05% while spending nearly "
+        r"map found at q0 applied at q63 delivers \TransferCrossDb dB against a 0.1 dB "
+        r"budget: it claims the low-rate saving of \TransferSaving% while spending nearly "
         r"twice the quality it is allowed. The reverse is safe but wasteful "
         r"— the q63 map at q0 delivers 0.075 dB and only 19.8% where 33.1% "
         r"was available. Shallow exits are cheap in quality at low rate and "

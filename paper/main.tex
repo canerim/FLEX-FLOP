@@ -1127,15 +1127,19 @@ matters depends on how often the map has to be recomputed, which nobody has
 checked.
 
 \textbf{Across time it barely has to be.} Taking frame 0's map and applying it
-eight frames later costs $0.005\dB$ at $q0$ --- five percent of the budget --- and
-no saving at all: $33.05\%$ transferred against $32.66$--$33.15\%$ recomputed. The
+eight frames later costs \TransferDbCost$\dB$ at $q0$ --- five percent of the
+budget --- and
+no saving at all: \TransferSaving\% transferred against
+\TransferInPlaceLo--\TransferInPlaceHi\% recomputed. The
 allocation is a property of where the content is hard, and that moves slowly. A
 codec would search once per group of pictures rather than once per frame, and
 divide the encoder cost by the group length.
 
 \textbf{Across rate it very much does}, and the direction matters. The map found
-at $q0$ applied at $q63$ delivers $0.190\dB$ against a $0.1\dB$ budget: it claims
-the low-rate saving of $33.05\%$ while spending nearly twice the quality it is
+at $q0$ applied at $q63$ delivers \TransferCrossDb$\dB$ against a $0.1\dB$
+budget: it claims
+the low-rate saving of \TransferSaving\% while spending nearly twice the
+quality it is
 allowed. The reverse is safe but wasteful --- the $q63$ map applied at $q0$
 delivers $0.075\dB$ and only $19.8\%$ where $33.1\%$ was available. Shallow exits
 are cheap in quality at low rate and expensive at high rate, so a map is
