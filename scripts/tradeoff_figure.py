@@ -1,13 +1,13 @@
-"""The trade-off itself, on a dense budget grid.
+"""The trade-off normalised onto each rate's own usable band.
 
-Everything else in this paper reports three budgets. This is the curve they are
-three points of: what a quality budget buys, per rate, between the floor and
-saturation.
+`make_docs_figs.py` already draws the raw curve (docs/figures/tradeoff.png) --
+saving against budget, and its inverse. This adds the question that one cannot
+answer: once each rate's floor and saturation point are divided out, is what
+remains the same curve? If it is, the five rates differ only in where their band
+sits, and the operating structure is the whole story.
 
-  a  saving against the budget, one line per rate, with the floor and the
-     saturation point of each marked
-  b  the same normalised onto each rate's own usable band, which collapses the
-     five curves if the structure is the only thing that differs
+  a  saving against the budget, one line per rate, floor and saturation marked
+  b  the same, with the budget axis rescaled to each rate's own band
 """
 from __future__ import annotations
 
@@ -29,7 +29,7 @@ ns.apply()
 
 def main(src="results/signalled_RECIPE512_grid.json",
          sat="results/saturation_RECIPE512_ctc53.json",
-         out="docs/figures/tradeoff.png"):
+         out="docs/figures/budget_band.png"):
     d = json.load(open(R / src))
     rows = [r for r in d["rows"] if r.get("budget_reachable")]
     qps = sorted({r["qp"] for r in rows})

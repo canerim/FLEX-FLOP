@@ -859,6 +859,12 @@ def content(colw, fullw):
         r"rather than a looser budget. It also identifies a narrow regime: "
         r"budgets in [\SatLow, \SatWindowHi) dB saturate the lowest rate and "
         r"nothing else, a window \SatWindowMb millibels wide.")
+    figure("tradeoff.png",
+           r"<b>Figure 9. The trade-off, whole.</b> <b>a</b> What a budget buys, "
+           r"per rate; the ceiling is \Ceiling% and q0 reaches it at "
+           r"\SatLow dB. <b>b</b> The same relation inverted — what a saving "
+           r"target costs. Both are the curve the three budgets reported "
+           r"elsewhere are three points of.")
     h2("5.5 Signalled versus predicted allocation")
     figure("router_ab.png",
            r"<b>Figure 9. Who decides.</b> <b>(a)</b> A holds the source, so it "

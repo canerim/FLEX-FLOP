@@ -38,7 +38,7 @@ figures:
 	$(PY) scripts/hybrid_figure.py
 	$(PY) scripts/raterank_figure.py
 	$(PY) scripts/blend_figure.py
-	$(PY) scripts/tradeoff_figure.py
+	$(PY) scripts/tradeoff_figure.py   # budget_band.png
 	$(PY) scripts/saturation_figure.py
 	$(PY) scripts/perclass_figure.py
 	$(PY) scripts/contamination_figure.py

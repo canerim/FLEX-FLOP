@@ -650,8 +650,6 @@ def tradeoff():
     ax[0].set_ylabel("decode compute saved (%)")
     ax[0].set_xlim(0, 0.30)
     ax[0].legend(loc="lower right", fontsize=5, ncol=2, frameon=False)
-    ax[0].set_title("What a dB budget buys", fontsize=6, color=ns.INK2,
-                    loc="left")
     ns.panel(ax[0], "a")
 
     ax[1].axvline(30, color=ns.INK2, lw=0.7, ls=(0, (3, 2)))
@@ -664,8 +662,6 @@ def tradeoff():
     ax[1].set_ylabel("quality that costs (dB)")
     ax[1].set_xlim(0, CEIL + 1.5)
     ax[1].set_ylim(0, 0.30)
-    ax[1].set_title("What a saving target costs — the curve turns up at the "
-                    "ceiling", fontsize=6, color=ns.INK2, loc="left")
     ns.panel(ax[1], "b", dx=-0.18)
 
     fig.tight_layout(w_pad=2.2)
