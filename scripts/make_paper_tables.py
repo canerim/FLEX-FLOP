@@ -601,6 +601,12 @@ if rr3:
             mac("RateRankLooseAheadBy", f"{max(marg):.1f}")
     if rs3:
         mac("RateRankLoose", f"{rs3[-1]['saving_pct_vs_release']:.1f}")
+rr5, _ = pick("raterank_RECIPE512_b05.json")
+if rr5:
+    rs5 = [r for r in rr5["rows"] if r.get("budget_reachable")]
+    if rs5 and all(abs(r["saving_pct_vs_release"]
+                       - r["oracle_saving_pct_vs_release"]) < 1e-6 for r in rs5):
+        mac("RateRankHalfDbExact", "every")
         mac("RateRankLooseCeil",
             f"{sum(1 for r in rs3 if r['saving_pct_vs_release'] > 41.9)}")
 if rr:

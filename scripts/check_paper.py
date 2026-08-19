@@ -123,6 +123,16 @@ if cb:
         if v is not None and v0 is not None:
             claim(f"blend gain q{q}", exp, v - v0, 0.15)
 
+# ---- rate rank, loose budgets ---------------------------------------------
+rr5 = J("raterank_RECIPE512_b05.json")
+if rr5:
+    rs5 = [r for r in rr5["rows"] if r.get("budget_reachable")]
+    claim("rate-rank 0.5 dB: rates matching the oracle exactly", 5,
+          sum(1 for r in rs5 if abs(r["saving_pct_vs_release"]
+                                    - r["oracle_saving_pct_vs_release"]) < 1e-6), 0)
+    claim("rate-rank 0.5 dB: agreement with the oracle map", 1.0,
+          min(r["agreement"] for r in rs5), 1e-6)
+
 # ---- hull -------------------------------------------------------------------
 d = J("hull_gap.json")
 if d:

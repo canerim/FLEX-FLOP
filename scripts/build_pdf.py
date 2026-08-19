@@ -960,7 +960,9 @@ def content(colw, fullw):
         r"and this is not, and at a loose budget its ordering has less left to "
         r"contribute. Once the "
         r"budget saturates the ladder there is little ordering left to get "
-        r"right, and the free rule gets it.")
+        r"right, and the free rule gets it. At 0.5 dB it reaches the ceiling at "
+        r"\RateRankHalfDbExact rate and its assignment is <i>identical</i> to "
+        r"the oracle's on every tile.")
     par(r"<b>What it cannot do</b> is see anything beyond that ordering. A "
         r"rank-1 model in the level assigns every tile the same relative "
         r"profile over exits, so b only decides where on the ladder a tile "
