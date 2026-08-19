@@ -63,6 +63,29 @@ from flexuf.reference import reference_for  # noqa: E402
 from router_curve import router_share  # noqa: E402
 
 
+def hybrid_map(M, lp, cost, beta, lam, rho):
+    """The exit map for configuration C, and how many tiles were overridden.
+
+    Router choice everywhere except the `rho` fraction of tiles with the largest
+    Lagrangian regret, which take the oracle's. rho=0 is pure B and rho=1 is
+    pure A; both are exact, not approached.
+    """
+    kr = (lp - beta * cost[None, :]).argmax(1)
+    n = M.shape[0]
+    s = int(round(rho * n))
+    if s <= 0:
+        return kr, 0
+    L = M + lam * cost[None, :]
+    ko = L.argmin(1)
+    if s >= n:
+        return ko, n
+    d = (L.gather(1, kr[:, None]) - L.gather(1, ko[:, None])).squeeze(1)
+    idx = d.topk(s).indices
+    k = kr.clone()
+    k[idx] = ko[idx]
+    return k, s
+
+
 def h2(p: float) -> float:
     """Binary entropy in bits. The mask is i.i.d. Bernoulli(rho) to first order."""
     if p <= 0.0 or p >= 1.0:
@@ -230,21 +253,7 @@ def main(argv):
                   + "  ".join(f"L({k})={v:.3f}" for k, v in lorenz.items()))
 
             def choose(M, lp, lam, rho):
-                """Hybrid exit map and the number of overridden tiles."""
-                kr = (lp - betaB * cost[None, :]).argmax(1)
-                n = M.shape[0]
-                s = int(round(rho * n))
-                if s <= 0:
-                    return kr, 0
-                L = M + lam * cost[None, :]
-                ko = L.argmin(1)
-                if s >= n:
-                    return ko, n
-                d = (L.gather(1, kr[:, None]) - L.gather(1, ko[:, None])).squeeze(1)
-                idx = d.topk(s).indices
-                k = kr.clone()
-                k[idx] = ko[idx]
-                return k, s
+                return hybrid_map(M, lp, cost, betaB, lam, rho)
 
             for rho in a.rhos:
                 pays_router = rho < 1.0
