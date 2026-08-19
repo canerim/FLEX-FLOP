@@ -179,6 +179,13 @@ if bc:
         claim("band: power-law exponent", 0.38, bc["power_exponent"], 0.01)
         claim("band: power-law R2", 0.989, bc["power_r2"], 0.002)
         claim("band: power-law worst residual", 2.0, bc["power_max_err"], 0.1)
+    bb = J("band_collapse_BEST.json")
+    if bb:
+        claim("band on BEST: raw spread", 16.9, bb["raw_spread_at_tenth_db"], 0.2)
+        claim("band on BEST: spread after rescaling", 1.6,
+              bb["band_spread_mean"], 0.2)
+        claim("band on BEST: power-law exponent", 0.33, bb["power_exponent"], 0.01)
+        claim("band on BEST: power-law R2", 0.984, bb["power_r2"], 0.002)
 
 # ---- the retrain ----------------------------------------------------------
 rt = J("router_retrain_compare.json")

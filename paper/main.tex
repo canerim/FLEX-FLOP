@@ -951,6 +951,15 @@ $\text{saving} \approx C\,u^{\BandExp}$ with $C$ the architectural ceiling and
 $u$ the position in the band, fitted in log space over all five rates:
 $R^2 = \BandR2$, worst residual \BandFitErr\ points.
 
+\textbf{It is a property of the ladder, not of this checkpoint.} Repeated on a
+different training run --- \texttt{BEST}, a separate recipe at a different epoch
+--- the same thing happens: \BandRawSpreadB\ points apart at a matched decibel,
+\BandSpreadMeanB\ after rescaling, and the collapsed curve is again a power law,
+$R^2 = \BandRTwoB$. The \emph{exponent} is not universal --- \BandExpB\ there
+against \BandExp\ here --- so it describes a trained decoder rather than the
+architecture. What replicates is the collapse: within a checkpoint, the rate
+dependence of the trade-off is the rate dependence of the band.
+
 \begin{figure}[t]
 \centering
 \includegraphics[width=\columnwidth]{figures/tradeoff.png}

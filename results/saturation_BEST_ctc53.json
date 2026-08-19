@@ -1,0 +1,41 @@
+{
+  "ckpt": "runs/BEST/ckpt_eval.pth.tar",
+  "ckpt_epoch": 1,
+  "ceiling_pct": 41.91139340400696,
+  "exit_j": 2,
+  "cost_j": 0.5808860659599304,
+  "n_frames": 53,
+  "note": "saturation_db = every tile at exit j; any budget at or above it reaches the ceiling, any budget below it does not",
+  "rows": [
+    {
+      "qp": 0,
+      "saturation_db": 0.17735886074743182,
+      "floor_db": 0.03533908582450646,
+      "saving_pct_vs_release": 41.91139340400696
+    },
+    {
+      "qp": 16,
+      "saturation_db": 0.24673376372962627,
+      "floor_db": 0.042758897394996206,
+      "saving_pct_vs_release": 41.91139340400696
+    },
+    {
+      "qp": 32,
+      "saturation_db": 0.3690430290715874,
+      "floor_db": 0.05115558829088256,
+      "saving_pct_vs_release": 41.91139340400696
+    },
+    {
+      "qp": 48,
+      "saturation_db": 0.5001353320648085,
+      "floor_db": 0.05612100923504188,
+      "saving_pct_vs_release": 41.91139340400696
+    },
+    {
+      "qp": 63,
+      "saturation_db": 0.6695038605973406,
+      "floor_db": 0.06222721828885798,
+      "saving_pct_vs_release": 41.91139340400696
+    }
+  ]
+}

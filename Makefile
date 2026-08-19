@@ -39,6 +39,9 @@ figures:
 	$(PY) scripts/raterank_figure.py
 	$(PY) scripts/blend_figure.py
 	$(PY) scripts/tradeoff_figure.py   # budget_band.png
+	$(PY) scripts/tradeoff_figure.py results/signalled_BEST_grid.json \
+		results/saturation_BEST_ctc53.json docs/figures/budget_band_BEST.png \
+		results/band_collapse_BEST.json
 	$(PY) scripts/saturation_figure.py
 	$(PY) scripts/perclass_figure.py
 	$(PY) scripts/contamination_figure.py

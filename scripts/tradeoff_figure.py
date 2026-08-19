@@ -29,7 +29,8 @@ ns.apply()
 
 def main(src="results/signalled_RECIPE512_grid.json",
          sat="results/saturation_RECIPE512_ctc53.json",
-         out="docs/figures/budget_band.png"):
+         out="docs/figures/budget_band.png",
+         stats_out="results/band_collapse.json"):
     d = json.load(open(R / src))
     rows = [r for r in d["rows"] if r.get("budget_reachable")]
     qps = sorted({r["qp"] for r in rows})
@@ -89,14 +90,14 @@ def main(src="results/signalled_RECIPE512_grid.json",
                  "band_spread_max_excl_edge": float(sp[1:].max()),
                  "raw_spread_at_tenth_db": float(max(raw) - min(raw)),
                  "n_rates": len(cur)}
-        json.dump(stats, open(R / "results/band_collapse.json", "w"), indent=2)
+        json.dump(stats, open(R / stats_out, "w"), indent=2)
         print(f"  collapsed curve: saving = {C:.2f} * u^{pw:.3f}, "
               f"R2 = {r2:.4f}, max err {stats['power_max_err']:.2f} points")
         print(f"  at a matched dB the rates spread by "
               f"{stats['raw_spread_at_tenth_db']:.1f} points; at a matched "
               f"position in their own band, {stats['band_spread_mean']:.1f} on "
               f"average and {stats['band_spread_max_excl_edge']:.1f} at worst")
-        print("  -> results/band_collapse.json")
+        print(f"  -> {stats_out}")
 
     fig, ax = plt.subplots(1, 2, figsize=(ns.W2, 2.5))
     for c, q in zip(cols, qps):

@@ -882,6 +882,16 @@ def content(colw, fullw):
         r"architectural ceiling and u the position in the band, fitted in log "
         r"space over all five rates: R² = \BandR2, worst residual "
         r"\BandFitErr points.")
+    par(r"<b>It is a property of the ladder, not of this checkpoint.</b> "
+        r"Repeated on a different training run — BEST, a separate recipe at a "
+        r"different epoch — the same thing happens: \BandRawSpreadB points "
+        r"apart at a matched decibel, \BandSpreadMeanB after rescaling, and the "
+        r"collapsed curve is again a power law, R² = \BandRTwoB. The "
+        r"<i>exponent</i> is not universal — \BandExpB there against \BandExp "
+        r"here — so it describes a trained decoder rather than the "
+        r"architecture. What replicates is the collapse: within a checkpoint, "
+        r"the rate dependence of the trade-off is the rate dependence of the "
+        r"band.")
     figure("tradeoff.png",
            r"<b>Figure 9. The trade-off, whole.</b> <b>a</b> What a budget buys, "
            r"per rate; the ceiling is \Ceiling% and q0 reaches it at "
