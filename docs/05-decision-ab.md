@@ -4,13 +4,15 @@
 > the full-frame distortion table, before `flexuf/eval.py` moved evaluation onto
 > the deployed path, and against BEST rather than RECIPE512. The corrected
 > figures are in [09 — report §5](09-report.md) and in the paper: the gap at
-> 0.1 dB is **1.7 points at q0 rising to 13.3 at q63**, not 3.96–6.49, and at
-> 0.5 dB it is 0.16 at every rate — exactly the router's own compute.
+> 0.1 dB is **3.1 to 5.2 points, roughly flat across rate**, not 3.96–6.49. It
+> is smallest at qp 32, where the tilt needed to move the router off its
+> training operating point is essentially zero.
 >
-> Three things have also been added since: a partial-signalling configuration
-> that interpolates A and B, a parameter-free rule that beats the trained head
-> above q32, and a wall-clock measurement of the head itself (0.50% of a decode,
-> three times its MAC share).
+> Four things have also been added since: a partial-signalling configuration
+> that interpolates A and B, a parameter-free rule that matches the trained head
+> to within a point at every rate, a wall-clock measurement of the head itself
+> (0.50% of a decode, three times its MAC share), and a fix to the head's exit
+> mask, which had stopped masking ([DECISIONS 89](../DECISIONS.md)).
 >
 > The *reasoning* on this page still holds and is why it is kept: the gap tracks
 > |β|, the tilt the bisection has to apply to drag a router from its training

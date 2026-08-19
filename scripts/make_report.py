@@ -382,12 +382,22 @@ if any(tabs.values()):
             rows.append([f"**B** router, {b} dB"] + [fmt(v.get(q)) for q in QPS])
     w(table(["configuration"] + [f"qp {q}" for q in QPS], rows))
     w("")
-    w("One router, trained once at λ=1.3e-5 against the *deployed* oracle "
-      "(held-out agreement 0.718). The gap is widest where the budget is tight "
-      "and the rate is far from the router's training point; at 0.5 dB it is "
-      "0.16 points at every rate, which is the router's own compute and nothing "
-      "else — once the budget saturates the ladder there is nothing left to "
-      "predict wrongly.")
+    w("One router, trained once at λ=1.3e-5 against the *deployed* oracle. The "
+      "gap tracks |β|, the tilt the bisection applies to move the router off "
+      "its training operating point: β is 137, 89, 9, −40, −50 across the five "
+      "rates and the gap is 5.2, 4.3, 3.1, 3.7, 3.9, with the minimum at qp 32 "
+      "where the tilt is essentially zero. Wherever the budget saturates the "
+      "ladder the gap collapses to the router's own 0.163% of decode, because "
+      "both configurations then send every tile to the cheapest rung.")
+    w("")
+    w("> These numbers changed on 2026-08-19. The head suppresses exits below "
+      "the split depth by assigning −1e4, its own logits had drifted to that "
+      "scale, and the suppressed entries were therefore the *largest* in every "
+      "row — so a large share of every allocation went to the cheapest rung for "
+      "a reason unrelated to the tile. The mask is now −inf "
+      "([DECISIONS 89](../DECISIONS.md)). Fixing it costs 3.5 points at qp 0, "
+      "where the accident agreed with the oracle, and buys 9.4 at qp 63, where "
+      "it did not.")
     w("")
 
 # --- C: partial signalling -------------------------------------------------

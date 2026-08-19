@@ -235,9 +235,12 @@ Upward the map claims the low-rate saving while spending nearly twice the qualit
 | **A** signalled, 0.1 dB | 32.35 | 27.55 | 22.52 | 19.77 | 16.81 |
 | **B** router, 0.1 dB | 27.18 | 23.27 | 19.40 | 16.06 | 12.94 |
 | **A** signalled, 0.3 dB | 41.91 | 41.91 | 41.91 | 40.64 | 38.40 |
+| **B** router, 0.3 dB | 41.75 | 41.75 | 41.75 | 36.19 | 30.52 |
 | **A** signalled, 0.5 dB | 41.91 | 41.91 | 41.91 | 41.91 | 41.91 |
 
-One router, trained once at λ=1.3e-5 against the *deployed* oracle (held-out agreement 0.718). The gap is widest where the budget is tight and the rate is far from the router's training point; at 0.5 dB it is 0.16 points at every rate, which is the router's own compute and nothing else — once the budget saturates the ladder there is nothing left to predict wrongly.
+One router, trained once at λ=1.3e-5 against the *deployed* oracle. The gap tracks |β|, the tilt the bisection applies to move the router off its training operating point: β is 137, 89, 9, −40, −50 across the five rates and the gap is 5.2, 4.3, 3.1, 3.7, 3.9, with the minimum at qp 32 where the tilt is essentially zero. Wherever the budget saturates the ladder the gap collapses to the router's own 0.163% of decode, because both configurations then send every tile to the cheapest rung.
+
+> These numbers changed on 2026-08-19. The head suppresses exits below the split depth by assigning −1e4, its own logits had drifted to that scale, and the suppressed entries were therefore the *largest* in every row — so a large share of every allocation went to the cheapest rung for a reason unrelated to the tile. The mask is now −inf ([DECISIONS 89](../DECISIONS.md)). Fixing it costs 3.5 points at qp 0, where the accident agreed with the oracle, and buys 9.4 at qp 63, where it did not.
 
 ### 5b. Configuration C — signal only what the router gets wrong
 
@@ -278,8 +281,8 @@ At the looser **0.3 dB** budget it stops being a baseline:
 | 0 | 41.91 | 41.75 | 41.91 |
 | 16 | 41.91 | 41.75 | 41.91 |
 | 32 | 41.91 | 41.75 | 41.91 |
-| 48 | 40.48 | 39.49 | 40.64 |
-| 63 | 37.30 | 36.35 | 38.40 |
+| 48 | 40.48 | 36.19 | 40.64 |
+| 63 | 37.30 | 30.52 | 38.40 |
 
 It reaches the architectural ceiling exactly at the three lowest rates and beats the trained head at every one, because the head is charged for its own arithmetic and this is not charged for anything.
 

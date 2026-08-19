@@ -963,12 +963,13 @@ router per operating point, which a deployment would have anyway: one set of
 weights serves all rates, and a \RouterParams\ head per rate is $0.3\%$ of the
 model each.
 
-Loosening the budget closes the gap from the other side. At $0.3\dB$ it is
-\GapLooseLow\ points at the three lowest rates --- exactly the router's own
-\RouterCostPct\% of decode, i.e.\ its \emph{prediction} is then free --- and
-\GapLooseHigh\ at the highest. Once the budget saturates the ladder both
-configurations send every tile to the same rung and there is nothing left to
-predict wrongly.
+Loosening the budget closes the gap only where the budget saturates the ladder.
+At $0.3\dB$ it is \GapLooseLow\ points at the three lowest rates --- exactly the
+router's own \RouterCostPct\% of decode, so its \emph{prediction} is free there:
+both configurations send every tile to the cheapest rung and there is nothing
+left to predict wrongly. At the two highest rates $0.3\dB$ does not saturate,
+and the gap \emph{widens} to \GapLooseHigh\ points, because a looser budget
+gives the allocation more room to be wrong in as well as more room to be right.
 
 We report the single-router number because it is the honest one for a system
 that trains once, and note that it understates what B can do.

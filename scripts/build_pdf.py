@@ -879,12 +879,15 @@ def content(colw, fullw):
         r"architecture but a router per operating point, which a deployment "
         r"would have anyway: one set of weights serves all rates, and a "
         r"\RouterParams head per rate is 0.3% of the model each.")
-    par(r"Loosening the budget closes the gap from the other side. At 0.3 dB it "
-        r"is \GapLooseLow points at the three lowest rates — exactly the "
-        r"router's own \RouterCostPct% of decode, i.e. its <i>prediction</i> is "
-        r"then free — and \GapLooseHigh at the highest. Once the budget "
-        r"saturates the ladder both configurations send every tile to the same "
-        r"rung and there is nothing left to predict wrongly.")
+    par(r"Loosening the budget closes the gap only where the budget saturates "
+        r"the ladder. At 0.3 dB it is \GapLooseLow points at the three lowest "
+        r"rates — exactly the router's own \RouterCostPct% of decode, so its "
+        r"<i>prediction</i> is free there: both configurations send every tile "
+        r"to the cheapest rung and there is nothing left to predict wrongly. At "
+        r"the two highest rates 0.3 dB does not saturate, and the gap "
+        r"<i>widens</i> to \GapLooseHigh points, because a looser budget gives "
+        r"the allocation more room to be wrong in as well as more room to be "
+        r"right.")
     par(r"We report the single-router number because it is the honest one for a "
         r"system that trains once, and note that it understates what B can do.")
     par(r"An earlier version of this measurement put the gap at 1.7 points at "
