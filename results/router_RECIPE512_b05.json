@@ -1,5 +1,5 @@
 {
-  "ckpt": "runs/RECIPE512/ckpt_eval.pth.tar",
+  "ckpt": "runs/RECIPE512/ckpt_PAPER.pth.tar",
   "ckpt_epoch": 0,
   "ckpt_step": null,
   "decision": "decoder-side router head, nothing signalled",
@@ -74,8 +74,8 @@
   "rows": [
     {
       "qp": 0,
-      "saving_pct": 42.29709472296373,
-      "saving_pct_vs_release": 41.74850549337999,
+      "saving_pct": 39.53650560019151,
+      "saving_pct_vs_release": 38.96166648504869,
       "db_vs_uf": 0.17913864257763018,
       "db_vs_uf_table": 0.1791385199242043,
       "beta": 20000.0,
@@ -85,8 +85,8 @@
     },
     {
       "qp": 16,
-      "saving_pct": 42.29709472296373,
-      "saving_pct_vs_release": 41.74850549337999,
+      "saving_pct": 39.53650560019151,
+      "saving_pct_vs_release": 38.96166648504869,
       "db_vs_uf": 0.21938385153716466,
       "db_vs_uf_table": 0.21938378673117115,
       "beta": 20000.0,
@@ -96,8 +96,8 @@
     },
     {
       "qp": 32,
-      "saving_pct": 42.29709472296373,
-      "saving_pct_vs_release": 41.74850549337999,
+      "saving_pct": 39.53650560019151,
+      "saving_pct_vs_release": 38.96166648504869,
       "db_vs_uf": 0.28190643185714503,
       "db_vs_uf_table": 0.2819062552924426,
       "beta": 20000.0,
@@ -107,8 +107,8 @@
     },
     {
       "qp": 48,
-      "saving_pct": 42.29709472296373,
-      "saving_pct_vs_release": 41.74850549337999,
+      "saving_pct": 39.53650560019151,
+      "saving_pct_vs_release": 38.96166648504869,
       "db_vs_uf": 0.3329586906815475,
       "db_vs_uf_table": 0.33295867845134913,
       "beta": 20000.0,
@@ -118,8 +118,8 @@
     },
     {
       "qp": 63,
-      "saving_pct": 42.29709472296373,
-      "saving_pct_vs_release": 41.74850549337999,
+      "saving_pct": 39.53650560019151,
+      "saving_pct_vs_release": 38.96166648504869,
       "db_vs_uf": 0.3955302557574128,
       "db_vs_uf_table": 0.39553017590968115,
       "beta": 20000.0,
