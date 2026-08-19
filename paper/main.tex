@@ -929,9 +929,11 @@ decode all $K$ exits per tile and pick the true minimiser; it signals the map at
 $\sim$\MapBits\ bits/frame. B never sees the source --- a \RouterParams-parameter
 head reads $\hat{y}$, the entropy scales and qp --- and signals nothing.
 \textbf{(b)} Saving at 0.1\,dB; shading is what a bit-exact bitstream costs.
-\textbf{(c)} That cost is rate-dependent and budget-dependent: it collapses to
-the router's own \RouterCostPct\,\% of a decode once the budget is loose enough
-that both saturate.}
+\textbf{(c)} That cost is smallest at $q\GapMinQp$, where the tilt needed to
+move the router off its training multiplier is essentially zero, and grows in
+both directions. At $0.3\dB$ it collapses to the router's own
+\RouterCostPct\,\% wherever the budget saturates the ladder, and widens where it
+does not.}
 \label{fig:ab}
 \end{figure}
 
