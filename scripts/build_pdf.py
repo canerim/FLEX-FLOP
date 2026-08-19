@@ -866,7 +866,8 @@ def content(colw, fullw):
            r"<b>Figure 9. The band is the rate dependence.</b> <b>a</b> Saving "
            r"against the budget, with each rate's floor and saturation point "
            r"ticked. <b>b</b> The same with the budget axis rescaled onto each "
-           r"rate's own band. Five curves become one.")
+           r"rate's own band. Five curves become one; dashed is the one-parameter "
+           r"power law fitted to all of them.")
     par(r"<b>And the window is almost all of the rate dependence.</b> At a "
         r"matched decibel the five rates are \BandRawSpread points apart. "
         r"Rescale the budget axis onto each rate's own band — floor at 0, "
@@ -876,7 +877,11 @@ def content(colw, fullw):
         r"is, to within a couple of points, ``where does 0.1 dB sit in this "
         r"rate's band''. Both ends are in closed form and cheap to measure; "
         r"what they leave over is small enough that a deployment could "
-        r"calibrate the two and read the rest off one curve.")
+        r"calibrate the two and read the rest off one curve. That curve is a "
+        r"one-parameter power law, saving ≈ C·u^\BandExp with C the "
+        r"architectural ceiling and u the position in the band, fitted in log "
+        r"space over all five rates: R² = \BandR2, worst residual "
+        r"\BandFitErr points.")
     figure("tradeoff.png",
            r"<b>Figure 9. The trade-off, whole.</b> <b>a</b> What a budget buys, "
            r"per rate; the ceiling is \Ceiling% and q0 reaches it at "

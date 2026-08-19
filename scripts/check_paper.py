@@ -175,6 +175,10 @@ if bc:
     claim("band: spread after rescaling, mean", 1.7, bc["band_spread_mean"], 0.2)
     claim("band: spread after rescaling, worst", 2.2,
           bc["band_spread_max_excl_edge"], 0.2)
+    if "power_exponent" in bc:
+        claim("band: power-law exponent", 0.38, bc["power_exponent"], 0.01)
+        claim("band: power-law R2", 0.989, bc["power_r2"], 0.002)
+        claim("band: power-law worst residual", 2.0, bc["power_max_err"], 0.1)
 
 # ---- the retrain ----------------------------------------------------------
 rt = J("router_retrain_compare.json")

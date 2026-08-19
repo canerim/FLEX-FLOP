@@ -569,6 +569,10 @@ if bc:
     mac("BandRawSpread", f"{bc['raw_spread_at_tenth_db']:.1f}")
     mac("BandSpreadMean", f"{bc['band_spread_mean']:.1f}")
     mac("BandSpreadMax", f"{bc['band_spread_max_excl_edge']:.1f}")
+    if "power_exponent" in bc:
+        mac("BandExp", f"{bc['power_exponent']:.2f}")
+        mac("BandR2", f"{bc['power_r2']:.3f}")
+        mac("BandFitErr", f"{bc['power_max_err']:.1f}")
 
 # what a retrain with a working mask does
 rt, _ = pick("router_retrain_compare.json")

@@ -932,7 +932,8 @@ $[\SatLow, \SatWindowHi)\dB$ saturate the lowest rate and nothing else, a window
 \includegraphics[width=\columnwidth]{figures/budget_band.png}
 \caption{\textbf{The band is the rate dependence.} \textbf{a} Saving against the
 budget, with each rate's floor and saturation point ticked. \textbf{b} The same
-with the budget axis rescaled onto each rate's own band. Five curves become one.}
+with the budget axis rescaled onto each rate's own band. Five curves become one; dashed is the one-parameter power law
+fitted to all of them.}
 \label{fig:band}
 \end{figure}
 
@@ -945,7 +946,10 @@ a $0.1\dB$ budget buy at this rate'' is, to within a couple of points, ``where
 does $0.1\dB$ sit in this rate's band''. The floor and the saturation point are
 both in closed form and both cheap to measure; what they leave over is small
 enough that a deployment could calibrate the two ends and read the rest off one
-curve.
+curve. That curve is a one-parameter power law,
+$\text{saving} \approx C\,u^{\BandExp}$ with $C$ the architectural ceiling and
+$u$ the position in the band, fitted in log space over all five rates:
+$R^2 = \BandR2$, worst residual \BandFitErr\ points.
 
 \begin{figure}[t]
 \centering
