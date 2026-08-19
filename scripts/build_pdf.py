@@ -854,7 +854,7 @@ def content(colw, fullw):
            r"<b>Figure 9. Who decides.</b> <b>(a)</b> A holds the source, so it "
            r"can decode all K exits per tile and pick the true minimiser; it "
            r"signals the map at ~\MapBits bits/frame. B never sees the source "
-           r"— a \RouterParams-parameter head reads ŷ, the entropy scales and "
+           r"— a \RouterParams-parameter head reads y-hat, the entropy scales and "
            r"qp — and signals nothing. <b>(b)</b> Saving at 0.1 dB; shading is "
            r"what a bit-exact bitstream costs. <b>(c)</b> That cost is smallest "
            r"at q\GapMinQp, where the tilt needed to move the router off its "
@@ -898,7 +898,8 @@ def content(colw, fullw):
         r"drifted to that scale, and the suppressed entries were therefore the "
         r"largest in every row — so a large share of every tile went to the "
         r"cheapest rung for a reason unrelated to its content. The mask is now "
-        r"-∞. Fixing it costs 3.5 points at q0, where the accident happened to "
+        r"negative infinity. Fixing it costs 3.5 points at q0, where the "
+        r"accident happened to "
         r"agree with the oracle, and buys 9.4 at q63, where it did not.")
     h2("5.6 A router with no parameters")
     par(r"Before a \RouterParams head is worth its \RouterCostPct% of the "
