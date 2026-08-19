@@ -640,7 +640,8 @@ def content(colw, fullw):
         r"falls from 0.036 to 0.003 dB at q0 and from 0.056 to 0.030 at q63, "
         r"i.e. 91% and 47% of the tiling penalty.")
     par(r"<b>And it destroys the allocation.</b> At the same 0.1 dB budget the "
-        r"saving falls from 25.9% to 4.2% at q32 and from 19.3% to 0.4% at q63.")
+        r"saving falls from \CoupPaddedMid% to \CoupCoupledMid% at q32 and from "
+        r"\CoupPaddedHigh% to \CoupCoupledHigh% at q63.")
     par(r"The reason is the condition in the exactness statement. Coupling is "
         r"exact when every tile is at the <i>same</i> depth, and routing is the "
         r"deliberate violation of that condition. With replicate padding a tile "
@@ -865,8 +866,8 @@ def content(colw, fullw):
     par(r"Configuration A is exact by construction and costs bits; B is "
         r"approximate and costs none. The comparison splits in two.")
     par(r"At the rates near the λ the router was trained at, <b>prediction is "
-        r"nearly free</b>: \BLow% against 32.3% at q0 and 25.9 against 27.6 at "
-        r"q16 — a gap of \GapLow points for zero added bits and a "
+        r"nearly free</b>: \BLow% against \MainLowRate% at q0 and the same "
+        r"gap of \GapLow points at q16, for zero added bits and a "
         r"byte-identical file.")
     par(r"Away from it the gap grows to \GapHigh points, and it tracks |β|, the "
         r"tilt the bisection has to apply to drag a router trained at one "
@@ -1087,7 +1088,7 @@ def content(colw, fullw):
     # ---- 6 limitations ---------------------------------------------------
     h1("6. Limitations")
     par(r"<b>The seam is reduced, and the exact remedy is not usable as it "
-        r"stands.</b> Canvas coupling removes 47–91% of the floor and is "
+        r"stands.</b> Canvas coupling removes \CoupFloorDropLo–\CoupFloorDropHi% of the floor and is "
         r"bit-exact at uniform depth, yet collapses the routed saving because "
         r"routing puts neighbouring tiles at different depths. Whether a decoder "
         r"trained with coupling recovers both at once is open, and it is the "

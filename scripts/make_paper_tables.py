@@ -447,6 +447,26 @@ if hy:
             mac("LorenzTightMin", f"{100*min(ratios):.0f}")
             mac("LorenzTightMax", f"{100*min(1.0, max(ratios)):.0f}")
 
+# --------------------------------------------------------------- coupling
+print("coupling")
+cp, _ = pick("coupling_ablation.json")
+if cp:
+    rows_ = cp["rows"]
+    lo, hi = rows_[0], rows_[-1]
+    for tag, r in (("Low", lo), ("High", hi)):
+        mac(f"CoupPadded{tag}", f"{r['padded']['saving']:.1f}")
+        mac(f"CoupCoupled{tag}", f"{r['coupled']['saving']:.1f}")
+        mac(f"CoupFloorDrop{tag}",
+            f"{100*(1 - r['coupled']['floor_db']/r['padded']['floor_db']):.0f}")
+    mid = next((r for r in rows_ if r["qp"] == 32), None)
+    if mid:
+        mac("CoupPaddedMid", f"{mid['padded']['saving']:.1f}")
+        mac("CoupCoupledMid", f"{mid['coupled']['saving']:.1f}")
+    drops = [100*(1 - r['coupled']['floor_db']/r['padded']['floor_db'])
+             for r in rows_]
+    mac("CoupFloorDropLo", f"{min(drops):.0f}")
+    mac("CoupFloorDropHi", f"{max(drops):.0f}")
+
 # ---------------------------------------------------------------- BD-Rate
 print("BD-Rate")
 bdj, _ = pick("bdrate.json")

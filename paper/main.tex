@@ -625,11 +625,12 @@ replicate padding, repair off & $6.06\times10^{-2}$ \\
 \end{center}
 
 It also removes most of the floor: switched on at inference, the floor falls from
-$0.036$ to $0.003\dB$ at $q0$ and from $0.056$ to $0.030$ at $q63$, i.e.\ $91\%$
-and $47\%$ of the tiling penalty.
+$0.036$ to $0.003\dB$ at $q0$ and from $0.056$ to $0.030$ at $q63$, i.e.\ \CoupFloorDropLow\%
+and \CoupFloorDropHigh\% of the tiling penalty.
 
 \textbf{And it destroys the allocation.} At the same $0.1\dB$ budget the saving
-falls from $25.9\%$ to $4.2\%$ at $q32$ and from $19.3\%$ to $0.4\%$ at $q63$.
+falls from \CoupPaddedMid\% to \CoupCoupledMid\% at $q32$ and from
+\CoupPaddedHigh\% to \CoupCoupledHigh\% at $q63$.
 
 The reason is structural rather than incidental, and it is the condition in the
 exactness statement. Coupling is exact when every tile is at the \emph{same}
@@ -1244,7 +1245,8 @@ on.
 \label{sec:limits}
 
 \paragraph{The seam is reduced, and the exact remedy is not usable as it stands.}
-Section~\ref{sec:coupling} shows that canvas coupling removes $47$--$91\%$ of the
+Section~\ref{sec:coupling} shows that canvas coupling removes
+\CoupFloorDropLo--\CoupFloorDropHi\% of the
 floor and is bit-exact at uniform depth, yet collapses the routed saving because
 routing puts neighbouring tiles at different depths. Whether a decoder trained
 with coupling recovers both at once is open, and it is the experiment we would
