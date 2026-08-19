@@ -117,19 +117,39 @@ So an unchanged bitstream costs 3.3–6.5 points, and the 30% target is met at t
 lowest rate with a byte-identical file. Details in
 [03 — Results](03-results.md#two-ways-to-decide-and-what-the-difference-costs).
 
-**Still open: why the gap widens with rate.** Measured at matched quality, the
-router's prediction loss *falls* almost tenfold from qp 0 to qp 63 (7.23 → 0.80
-points, agreement 0.554 → 0.861) while the budgeted gap *rises* (3.96 → 6.49).
-The gap instead tracks |β|, the tilt needed to drag the router from its single
-training λ to the λ that lands on 0.1 dB. The hypothesis is that a large tilt
-lets the cost term dominate the logits and discards the content ranking.
+**Answered, and the question was wrong.** The gap did not widen with rate. It
+appeared to because the head's exit mask had stopped working: exits below the
+split depth are suppressed by assigning −1e4, the head's own logits had drifted
+to that scale, and the suppressed entries were therefore the *largest* in every
+row. `argmax` picked one and the caller's clamp turned it into the cheapest real
+exit, so a large share of every allocation went to the cheapest rung for a
+reason unrelated to the tile — which happens to agree with the oracle at low
+rate, where the oracle wants the cheapest rung anyway, and disagrees violently
+at high rate. Details in [DECISIONS 89](../DECISIONS.md).
 
-A prediction was registered before the test was run (`DECISIONS.md` 63a): a
-router trained at λ = 4.1 × 10⁻⁶, the rate-appropriate value for qp 63, should
-bring the 6.49-point gap **below 3 points**. If it stays above 5, the mechanism
-explanation is wrong and will be withdrawn. Four mechanism hypotheses in this
-project have already been wrong, which is why the prediction is written down
-first.
+With the mask fixed (−inf, which cannot drift):
+
+| qp | 0 | 16 | 32 | 48 | 63 |
+|---|---|---|---|---|---|
+| A signalled | 32.35% | 27.55% | 22.52% | 19.77% | 16.81% |
+| B router | 27.18% | 23.27% | 19.40% | 16.06% | 12.94% |
+| gap | 5.17 | 4.28 | 3.11 | 3.71 | 3.87 |
+| β | 137 | 89 | 9 | −40 | −50 |
+
+The gap is roughly flat and its minimum is at qp 32, where β is essentially
+zero because that is where the training λ = 1.3e−5 lands. **The |β| mechanism
+survives and is now supported in both directions**: the gap grows as the
+bisection has to drag the router away from its training operating point, either
+toward cheaper exits or toward deeper ones. The registered prediction — that a
+router trained at λ = 4.1e−6 would bring the qp 63 gap below 3 points — was
+never tested and is now moot, because the 6.49-point gap it was about does not
+exist. The prescription it implied (a router per operating point) is unchanged
+and better supported.
+
+**Now open instead: does a router trained with a working mask do better?**
+Training pushed the real exits up against a suppression term sitting above them,
+so the head spent capacity fighting its own mask; its 0.718 held-out agreement
+was measured through the same broken argmax. A retrain has not been run.
 
 ## 3. Does the gain continue past four epochs?
 
