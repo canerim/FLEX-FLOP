@@ -435,6 +435,8 @@ rr = load("raterank_RECIPE512_b01.json")
 if rr:
     w("### 5c. A router with no parameters")
     w("")
+    w("![The free baseline](figures/raterank.png)")
+    w("")
     w("The entropy model has already produced a per-tile number that is free "
       "and available at the decoder before the trunk runs: how many bits that "
       "tile\'s latents cost. Fitting a rank-1 model in log space — "

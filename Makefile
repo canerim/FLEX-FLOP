@@ -35,6 +35,7 @@ report:
 figures:
 	$(PY) scripts/system_figs.py
 	$(PY) scripts/hybrid_figure.py
+	$(PY) scripts/raterank_figure.py
 	$(PY) scripts/saturation_figure.py
 	$(PY) scripts/perclass_figure.py
 	$(PY) scripts/contamination_figure.py

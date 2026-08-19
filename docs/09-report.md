@@ -259,6 +259,8 @@ Recovery is concave everywhere. It is bounded above by the Lorenz curve of the p
 
 ### 5c. A router with no parameters
 
+![The free baseline](figures/raterank.png)
+
 The entropy model has already produced a per-tile number that is free and available at the decoder before the trunk runs: how many bits that tile's latents cost. Fitting a rank-1 model in log space — `log D(t,k) ≈ α·log b(t) + c + log φ_k`, leave-one-sequence-out — turns it into a routing rule with no learned parameters and no added bits.
 
 | qp | rate-rank | B router | A oracle | ρ(bits, spread) |

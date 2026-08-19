@@ -894,6 +894,12 @@ def content(colw, fullw):
         r"routes it, and run the same Lagrangian the oracle runs on the "
         r"surrogate. Nothing is signalled, nothing is trained, and the "
         r"arithmetic is a scalar per tile.")
+    figure("raterank.png",
+           r"<b>Figure 10. The free baseline.</b> <b>a</b> Saving at 0.1 dB; "
+           r"shaded where the parameter-free rule beats the trained head. "
+           r"<b>b</b> What a tile's bit count is correlated with, against how "
+           r"often the rule agrees with the oracle outright; dotted is the "
+           r"head's own held-out agreement.")
     tbl("raterank",
         r"<b>Table 8. The free baseline</b>, 0.1 dB, same test set. Bold where "
         r"the parameter-free rule beats the trained head. ρ are Spearman "
