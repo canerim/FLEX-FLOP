@@ -226,7 +226,7 @@ Upward the map claims the low-rate saving while spending nearly twice the qualit
 
 ![A versus B](figures/router_ab.png)
 
-**A — the encoder searches and signals the map.** It holds the source, so it decodes all K exits, measures the true error, and takes the optimum `k*(t) = argmin_k [MSE(t,k) + λ·c_k]`, λ bisected per frame to the budget. Not an estimate — the oracle. Costs the *encoder* ≈1.21 decodes per frame and adds ≈94 bits/frame, 0.008–0.020% of the bitrate. Needs one new bitstream field, so both ends must agree. This is also the conventional choice: HEVC and VVC signal partitioning and mode rather than having the decoder guess.
+**A — the encoder searches and signals the map.** It holds the source, so it decodes all K exits, measures the true error, and takes the optimum `k*(t) = argmin_k [MSE(t,k) + λ·c_k]`, λ bisected per frame to the budget. Not an estimate — the oracle. Costs the *encoder* ≈1.21 decodes per frame and adds 79–95 bits/frame depending on rate, 0.008–0.020% of the bitrate. Needs one new bitstream field, so both ends must agree. This is also the conventional choice: HEVC and VVC signal partitioning and mode rather than having the decoder guess.
 
 **B — the decoder predicts it and nothing is signalled.** The decoder never sees the source, so the true MSE is not merely hard to estimate, it is absent from the input. A 144 K head reads the stem map, `ŷ`, the entropy-model scales and qp; `k̂(t) = argmax_k [log softmax(z_t)_k − β·c_k]`. The file stays byte-identical to a stock stream and it is deployable by a decoder vendor alone. The head costs 0.163% of a decode, charged inside every B number.
 

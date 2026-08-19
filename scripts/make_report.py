@@ -352,7 +352,8 @@ w("**A — the encoder searches and signals the map.** It holds the source, so i
   "decodes all K exits, measures the true error, and takes the optimum "
   "`k*(t) = argmin_k [MSE(t,k) + λ·c_k]`, λ bisected per frame to the budget. "
   "Not an estimate — the oracle. Costs the *encoder* ≈1.21 decodes per frame and "
-  "adds ≈94 bits/frame, 0.008–0.020% of the bitrate. Needs one new bitstream "
+  "adds 79–95 bits/frame depending on rate, 0.008–0.020% of the bitrate. "
+  "Needs one new bitstream "
   "field, so both ends must agree. This is also the conventional choice: HEVC and "
   "VVC signal partitioning and mode rather than having the decoder guess.")
 w("")

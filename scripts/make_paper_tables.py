@@ -61,7 +61,11 @@ if d:
     mac("MainHighRate", f"{r01[63]['saving_pct_vs_release']:.1f}")
     mac("MainMean", f"{sum(r01[q]['saving_pct_vs_release'] for q in QPS)/len(QPS):.1f}")
     mac("NumSeq", str(d["n_sequences"]))
-    mac("MapBits", f"{r01[0]['map_bits']:.0f}")
+    _mb = [r01[q]["map_bits"] for q in QPS
+           if q in r01 and r01[q].get("map_bits")]
+    mac("MapBits", f"{sum(_mb)/len(_mb):.0f}")
+    mac("MapBitsLo", f"{min(_mb):.0f}")
+    mac("MapBitsHi", f"{max(_mb):.0f}")
     mac("RouterParams", "144\\,K")
     mac("RouterCostPct", "0.163")
 rl, _ = pick("router_latency.json")
