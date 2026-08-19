@@ -479,12 +479,22 @@ Three things a reviewer will ask, answered:
 - **Is the deepest exit still DCVC-UF?** Bit-exact at step 0; after training it
   has drifted by −0.003 to −0.024 dB, measured every checkpoint by
   `scripts/anchor_drift.py`.
-- **Does the MAC saving show up as time?** Partly. The MAC model overstates the
-  wall-clock gain by 2–3×; the cause is per-group bookkeeping (32% of the loop),
-  and a sorted-tile execution prototype recovers 23–37% of it, verified
-  bit-identical (`scripts/sorted_exec.py`). It has not been landed in
-  `decoder.py` because `tile_gate` is indexed by original tile id and a pixel test
-  would not catch a gradient bug.
+- **Does the MAC saving show up as time?** Mostly. Operations are an
+  *optimistic* bound: 29.1% of wall-clock arrives against a 35.3% arithmetic
+  prediction at qp 0, and 15.6% against 20.1% at qp 63 — so the optimism grows
+  with how much of the frame exits early. The missing part is the 3.6% tiling
+  overhead plus per-group bookkeeping. Sorting the tiles once by depth recovers
+  1.2 points of it, bit-identically (`tests/test_sorted_tiles.py`), and is
+  landed behind `cfg.sorted_tiles`.
+
+  An earlier version of this answer said the MAC model overstates the gain by
+  2–3× and that the unsorted loop was slower than the dense decoder. That was a
+  measurement bug, not a result: `torch.cuda.Event` is created on the process's
+  current device, the timing runs used a non-default GPU, and cross-device event
+  timing returns numbers rather than an error. The tell was a released decoder
+  that appeared to take 274, 401 and 512 ms at qp 0, 32 and 63 — a fixed
+  synthesis network cannot slow down with the quality index. It takes 111 ms at
+  all three.
 
 ---
 
