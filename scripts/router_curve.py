@@ -283,8 +283,7 @@ def main(argv):
                 tot = 0.0
                 for M, R, lp, y_, q_, xp_ in cache:
                     k = (lp - beta * cost[None, cfg.split_depth:]).argmax(1) \
-                        + cfg.split_depth.clamp(
-                        min=cfg.split_depth)
+                        + cfg.split_depth
                     tot += (10 * torch.log10(
                         true_frame_mse(net.dec, y_, q_, xp_, k) / R)).item()
                 return tot / len(cache)
