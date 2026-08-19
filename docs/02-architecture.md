@@ -141,7 +141,7 @@ in progress.
 
 **In the shipped system the decoder does not run the router at all.** The encoder
 already has the source frame, so it picks the exit assignment there and signals
-it. Measured cost of the map: **94 bits per frame**, which at 1920×1080 is
+it. Measured cost of the map: **79–95 bits per frame**, rising with rate as the exit histogram flattens, which at 1920×1080 is
 4.5 × 10⁻⁵ bpp — against a bitstream of 0.22–0.55 bpp, five to twelve thousand
 times smaller. The decoder-side router is meant to be the fallback when the
 encoder does not cooperate; it is trained jointly in the `BEST`/`BEST128` runs
@@ -173,13 +173,13 @@ and they are not the same claim:
 | | file on disk | decoder-side cost |
 |---|---|---|
 | decoder-side router | **byte-identical** to a stock stream | +0.044% (the router runs) |
-| signalled map (**what the headline numbers measure**) | payload identical, **plus ~94 bits/frame** | 0 (the decoder is told) |
+| signalled map (**what the headline numbers measure**) | payload identical, **plus 79–95 bits/frame** | 0 (the decoder is told) |
 
-The signalled map costs 0.008–0.020% of the bitrate — 94 bits against 461,000 at
+The signalled map costs 0.008–0.020% of the bitrate — 79–95 bits against 461,000 at
 qp 0 and 1,133,000 at qp 63. It is recorded per measurement as `bpp_added` and is
 *not* folded into the compute saving, because bits and MACs are separate axes.
 
-**Those 94 bits are not a convenience — they currently carry all of the content
+**Those bits are not a convenience — they currently carry all of the content
 adaptation.** See below.
 
 #### Why the bitrate changes at all, when the encoder does not
@@ -222,7 +222,7 @@ negligible quantity. At 60 fps the whole map is 5.6 kbit/s.
 
 | | file | decoder cost | decision quality |
 |---|---|---|---|
-| **A. Signalled** — the headline numbers | payload identical, **+94 bits/frame** | none, it is told | exact (oracle) |
+| **A. Signalled** — the headline numbers | payload identical, **+79–95 bits/frame** | none, it is told | exact (oracle) |
 | **B. Decoder-side router** | **byte-identical** | 0.044% (V1) / 0.163% (V2) | collapsed in BEST; being retrained |
 | **C. Stock decoder** | reads either file | — | full depth, no exits |
 

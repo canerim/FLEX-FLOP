@@ -24,7 +24,7 @@ release, so a stock decoder can read a FLEX-UF stream. Any run that unfroze them
 would be measuring a different codec and could not be compared with the release
 at all.
 
-The shipped configuration does add ~94 bits per frame — the exit map, signalled
+The shipped configuration does add 79–95 bits per frame — the exit map, signalled
 from the encoder — which is 0.008–0.020% of the bitrate and is reported
 separately as `bpp_added`. The alternative configuration, where the decoder runs
 its own router, leaves the file byte-identical and costs 0.044% of the decode
