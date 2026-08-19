@@ -150,19 +150,17 @@ def main(argv):
         ax[0].axhline(r * P, color="white", lw=0.35, alpha=0.6)
     for c in range(1, nw):
         ax[0].axvline(c * P, color="white", lw=0.35, alpha=0.6)
-    ax[0].set_title(f"{s['name'].split('_')[0]}, qp {a.qp} — assignment at "
-                    f"{a.budget:g} dB", fontsize=6, color=ns.INK2, loc="left")
+    ax[0].set_title(f"qp {a.qp}", fontsize=6, color=ns.INK2, loc="left")
 
     im = ax[1].imshow(km, cmap=cmap, norm=norm, interpolation="nearest")
     for (r, c), v in np.ndenumerate(km):
         ax[1].text(c, r, str(v), ha="center", va="center", fontsize=4.5,
                    color="white" if v >= K - 2 else ns.INK)
-    ax[1].set_title(f"Exit per tile — {saved:.1f}% saved at {k_sel_db:.3f} dB",
-                    fontsize=6, color=ns.INK2, loc="left")
+    ax[1].set_title(f"{saved:.1f}% saved, {k_sel_db:.3f} dB", fontsize=6,
+                    color=ns.INK2, loc="left")
 
     im2 = ax[2].imshow(pen, cmap="viridis", interpolation="nearest")
-    ax[2].set_title("dB paid, vs each tile's own reference",
-                    fontsize=6, color=ns.INK2, loc="left")
+    ax[2].set_title("dB per tile", fontsize=6, color=ns.INK2, loc="left")
     cb = fig.colorbar(im2, ax=ax[2], fraction=0.046, pad=0.02)
     cb.ax.tick_params(labelsize=4.5)
 

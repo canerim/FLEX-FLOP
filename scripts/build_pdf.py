@@ -710,7 +710,8 @@ def content(colw, fullw):
         r"to allocate. Reporting the mean alone would hide both ends.")
     h2("5.2 Is per-tile adaptivity necessary?")
     figure("exit_map.png",
-           r"<b>Figure 6. Where the decoder spends.</b> (a) the assignment "
+           r"<b>Figure 6. Where the decoder spends.</b> Bosphorus at q32, a "
+           r"0.1 dB budget. (a) the assignment "
            r"overlaid on the frame, (b) the exit index per tile, (c) the "
            r"quality each tile gives up against its <i>own</i> full-depth "
            r"reference. Water and sky leave at the shallowest rung; the boat "
