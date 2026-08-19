@@ -1,0 +1,37 @@
+{
+  "ckpt": "runs/RECIPE512/ckpt_eval.pth.tar",
+  "router2": "runs/RECIPE512/routers2/v2_lam1.3e-5.pth",
+  "params": 144024,
+  "resolution": [
+    1280,
+    2048
+  ],
+  "iters": 40,
+  "device": "NVIDIA RTX A6000",
+  "router_share_pct_macs": 0.16288874189707633,
+  "router_share_pct_time_median": 0.49670904205464134,
+  "time_over_mac_factor": 3.049376134100749,
+  "rows": [
+    {
+      "qp": 0,
+      "decode_ms": 114.29017639160156,
+      "stem_ms": 41.24758338928223,
+      "router_ms": 0.5714400112628937,
+      "router_share_pct_time": 0.49999048851313616
+    },
+    {
+      "qp": 32,
+      "decode_ms": 114.40742492675781,
+      "stem_ms": 41.317888259887695,
+      "router_ms": 0.5682720243930817,
+      "router_share_pct_time": 0.49670904205464134
+    },
+    {
+      "qp": 63,
+      "decode_ms": 114.44326400756836,
+      "stem_ms": 41.3137264251709,
+      "router_ms": 0.5678080022335052,
+      "router_share_pct_time": 0.49614803209034214
+    }
+  ]
+}

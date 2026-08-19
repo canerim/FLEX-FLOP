@@ -964,6 +964,19 @@ def content(colw, fullw):
         r"is unchanged and the output is bit-identical on GPU. The saving at q0 "
         r"goes from \WallMasked% to \WallSorted% against a \WallPredicted% "
         r"arithmetic prediction.")
+    par(r"The same lesson applies to our own accounting. Every configuration B "
+        r"number in this paper charges the router at its share of the decoder's "
+        r"multiply-accumulates, \RouterCostPct%. Timed on the padded 2048×1280 "
+        r"frame the decoder actually sees, interleaved against a deepest-exit "
+        r"decode so a co-tenant's load lands on both equally, the head costs "
+        r"\RouterTimePct% — \RouterTimeFactor× what its arithmetic predicts, "
+        r"and for the same reason as everything else in this section: a "
+        r"\RouterParams-parameter head is launch overhead, and a MAC count "
+        r"cannot see a launch. Charged at measured time rather than at "
+        r"operations, every B number in this paper would fall by a further "
+        r"\RouterTimeExtra points. We leave them charged at MACs because that "
+        r"is the convention the rest of the literature reports in, and record "
+        r"the correction here rather than letting it sit unstated.")
     par(r"We report this because the negative result is the more useful half: a "
         r"paper reporting only MACs would have claimed a speedup that the same "
         r"code, run as written, did not deliver.")

@@ -64,6 +64,12 @@ if d:
     mac("MapBits", f"{r01[0]['map_bits']:.0f}")
     mac("RouterParams", "144\\,K")
     mac("RouterCostPct", "0.163")
+rl, _ = pick("router_latency.json")
+if rl:
+    mac("RouterTimePct", f"{rl['router_share_pct_time_median']:.2f}")
+    mac("RouterTimeFactor", f"{rl['time_over_mac_factor']:.1f}")
+    mac("RouterTimeExtra",
+        f"{rl['router_share_pct_time_median'] - rl['router_share_pct_macs']:.2f}")
     mac("MapOverheadLow", f"{100*r01[0]['bpp_added']/0.40:.3f}")
 
 # --------------------------------------------------------- operating structure

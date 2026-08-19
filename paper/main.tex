@@ -1091,6 +1091,19 @@ scatter. The arithmetic is unchanged and the output is bit-identical on GPU. The
 saving at $q0$ goes from \WallMasked\% to \WallSorted\% against a
 \WallPredicted\% arithmetic prediction (Table~\ref{tab:latency}).
 
+The same lesson applies to our own accounting. Every configuration~B number in
+this paper charges the router at its share of the decoder's
+multiply--accumulates, \RouterCostPct\%. Timed on the padded $2048{\times}1280$
+frame the decoder actually sees, interleaved against a deepest-exit decode so a
+co-tenant's load lands on both equally, the head costs \RouterTimePct\% ---
+\RouterTimeFactor$\times$ what its arithmetic predicts, and for the same reason
+as everything else in this section: a \RouterParams-parameter head is launch
+overhead, and a MAC count cannot see a launch. Charged at measured time rather
+than at operations, every B number in this paper would fall by a further
+\RouterTimeExtra\ points. We leave them charged at MACs because that is the
+convention the rest of the literature reports in, and record the correction
+here rather than letting it sit unstated.
+
 We report this because the negative result is the more useful half: a paper that
 reports only MACs would have claimed a speedup that the same code, run as
 written, did not deliver.
