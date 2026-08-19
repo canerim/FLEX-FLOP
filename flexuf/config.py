@@ -233,10 +233,13 @@ class FlexUFConfig:
     Today that is a boolean mask, a gather of the survivors and a scatter of the
     finished, at every group boundary. Boolean indexing has to know how many
     elements survive, which forces a device-to-host synchronisation -- four
-    groups, four syncs. `latency_profile.py` measured 36.4 ms of that against
-    77.5 ms of actual convolution: 32% of the loop, and none of it appears in
-    the MAC model, which is most of why the measured speedup trails the
-    arithmetic one by 2-3x.
+    groups, four syncs. None of it appears in the MAC model, and it is part of
+    why the measured speedup trails the arithmetic one: 27.9% realised against
+    35.3% predicted at q0 with the mask, 29.1% with the sort.
+
+    The 36.4-against-77.5 ms figure that used to be quoted here, and the "2-3x"
+    that followed from it, were measured with `torch.cuda.Event` on the wrong
+    device (see `tests/test_timing_device.py`). The gap is real and smaller.
 
     Sorted DESCENDING by exit, "still active at group g" becomes a contiguous
     PREFIX. Each group is then a slice (a view, no copy), the boundaries come
