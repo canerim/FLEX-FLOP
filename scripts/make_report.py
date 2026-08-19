@@ -466,6 +466,23 @@ if rr:
       "the ordering that matters: bits correlate with how much a tile stands to "
       "gain from depth at ρ = 0.62–0.72 at every rate.")
     w("")
+    rr3 = load("raterank_RECIPE512_b03.json")
+    if rr3:
+        b3 = load("router_RECIPE512_b03.json")
+        bv3 = {r["qp"]: r.get("saving_pct_vs_release")
+               for r in (b3 or {}).get("rows", [])} if b3 else {}
+        rows3 = [[str(r["qp"]), fmt(r["saving_pct_vs_release"]),
+                  fmt(bv3.get(r["qp"])),
+                  fmt(r["oracle_saving_pct_vs_release"])]
+                 for r in rr3["rows"] if r.get("budget_reachable")]
+        w("At the looser **0.3 dB** budget it stops being a baseline:")
+        w("")
+        w(table(["qp", "rate-rank", "B router", "A oracle"], rows3))
+        w("")
+        w("It reaches the architectural ceiling exactly at the three lowest "
+          "rates and beats the trained head at every one, because the head is "
+          "charged for its own arithmetic and this is not charged for anything.")
+        w("")
     w("What it cannot do is see past that ordering. A rank-1 model in the level "
       "gives every tile the same relative profile over exits, so the bit count "
       "only decides where on the ladder a tile falls, never the shape of its "
