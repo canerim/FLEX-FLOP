@@ -961,6 +961,16 @@ def content(colw, fullw):
         r"the same number in the other direction, after the fact and at the "
         r"decoder, as a statement about how hard a region was — which costs "
         r"nothing precisely because someone else already paid for it.")
+    tbl("blend",
+        r"<b>Table 9. Blending the two decoder-side signals</b> at 0.1 dB, both "
+        r"normalised to unit mean, weight w from the bit rule to the head's "
+        r"ordering. Bold is the best per rate.")
+    par(r"<b>Are the two signals complementary?</b> Barely. The best blend is "
+        r"w=0 at the three lowest rates and a small head weight at the two "
+        r"highest, worth +2.1 points at q48 and +0.9 at q63. The head reads the "
+        r"entropy model's scales, so it already has most of what the bit count "
+        r"carries; what it adds is confined to the regime where the free rule "
+        r"was losing anyway.")
     par(r"We report this because a learned component should be measured against "
         r"the free alternative and rarely is. In adaptive inference the usual "
         r"controls are a uniform allocation and a random one; both are far "

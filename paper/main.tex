@@ -1006,6 +1006,15 @@ the distortion it stands to gain from that depth.}
 \label{tab:raterank}
 \end{table}
 
+\begin{table}[t]
+\centering
+\resizebox{\columnwidth}{!}{\input{tables/blend}}
+\caption{\textbf{Blending the two decoder-side signals} at $0.1\dB$, both
+normalised to unit mean, weight $w$ from the bit rule to the head's ordering.
+Bold is the best per rate.}
+\label{tab:blend}
+\end{table}
+
 Before a $\RouterParams$ head is worth its \RouterCostPct\% of the decode, it has
 to beat what the decoder already knows. The entropy model has produced a number
 per tile before the trunk runs and at no cost: how many bits that tile's latents
@@ -1056,6 +1065,14 @@ regions get more bits~\cite{blockratecontrol}. We read the same number in the
 other direction, after the fact and at the decoder, as a statement about how hard
 a region was --- which costs nothing precisely because someone else already paid
 for it.
+
+\textbf{Are the two signals complementary?} Barely. Normalising both surrogates
+to unit mean and blending them with one weight $w$ --- $w{=}0$ the bit rule,
+$w{=}1$ the head's ordering --- the best blend is $w{=}0$ at the three lowest
+rates and a small head weight at the two highest, worth $+2.1$ points at $q48$
+and $+0.9$ at $q63$ (Table~\ref{tab:blend}). The head reads the entropy model's
+scales, so it already has most of what the bit count carries; what it adds is
+confined to the regime where the free rule was losing anyway.
 
 We report this because a learned component should be measured against the free
 alternative and rarely is. In adaptive inference the usual controls are a uniform

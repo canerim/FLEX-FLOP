@@ -85,6 +85,19 @@ if rr and b1:
     claim("rate-rank: worst deficit (pts)", 0.8,
           max(-v for _, v in d_ if v <= 0), 0.1)
 
+# ---- blend ----------------------------------------------------------------
+cb = J("combined_RECIPE512_b01.json")
+if cb:
+    rws = [r for r in cb["rows"] if r.get("budget_reachable")]
+
+    def _c(q, w):
+        return next((r["saving_pct_vs_release"] for r in rws
+                     if r["qp"] == q and abs(r["gamma"] - w) < 1e-9), None)
+    for q, w, exp in ((48, 0.25, 2.1), (63, 0.1, 0.9)):
+        v, v0 = _c(q, w), _c(q, 0.0)
+        if v is not None and v0 is not None:
+            claim(f"blend gain q{q}", exp, v - v0, 0.15)
+
 # ---- hull -------------------------------------------------------------------
 d = J("hull_gap.json")
 if d:
