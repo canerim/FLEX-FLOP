@@ -222,6 +222,20 @@ def main(argv):
                                cfg.feature_patch, cfg.latent_patch)
                 else:
                     lg = net.router_head(stem, qp, cfg.feature_patch)
+                # The head masks exits below the split depth by ASSIGNING
+                # -1e4, which stops being a mask the moment the head's own
+                # logits reach that scale -- and this one's have: its raw
+                # outputs sit near -10000, so the "mask" is the LARGEST entry
+                # in every row and log_softmax puts almost all the mass on the
+                # two exits that do not exist. argmax then picks one and
+                # clamp(min=j) turns it into the cheapest real exit, for
+                # reasons that have nothing to do with the tile.
+                #
+                # Fixed at the decision site rather than in head2.py, because
+                # the head files are imported by live training runs and a
+                # crash-restart would pick up the edit mid-experiment. Every
+                # rule below reads lg[:, j:] only.
+                lg = lg[:, cfg.split_depth:]
                 lp = F.log_softmax(lg, 1)
                 if a.per_frame_scale:
                     # The tilt trades log-probability against cost, so its
@@ -231,7 +245,7 @@ def main(argv):
                     # confident frames and under-tilts the rest. Normalising by
                     # the frame's own mean magnitude removes that, and costs
                     # nothing: it is a statistic of the decoder's own logits.
-                    m = (-lp[:, cfg.split_depth:]).mean().clamp_min(1e-6)
+                    m = (-lp).mean().clamp_min(1e-6)
                     lp = lp / m
                 if rshare == 0.0:
                     px = xp.shape[-1] * xp.shape[-2]
@@ -248,7 +262,8 @@ def main(argv):
             def at_beta(beta):
                 SV = SVR = DB = n = 0.0
                 for M, R, lp, _y, _q, _xp in cache:
-                    k = (lp - beta * cost[None, :]).argmax(1)
+                    k = (lp - beta * cost[None, cfg.split_depth:]).argmax(1) \
+                        + cfg.split_depth
                     # rshare is added to the cost, i.e. subtracted from the
                     # saving: the decoder pays for the router here.
                     SV += (1 - (cost[k].mean() + rshare) / cost[-1]).item()
@@ -267,7 +282,8 @@ def main(argv):
                 """
                 tot = 0.0
                 for M, R, lp, y_, q_, xp_ in cache:
-                    k = (lp - beta * cost[None, :]).argmax(1).clamp(
+                    k = (lp - beta * cost[None, cfg.split_depth:]).argmax(1) \
+                        + cfg.split_depth.clamp(
                         min=cfg.split_depth)
                     tot += (10 * torch.log10(
                         true_frame_mse(net.dec, y_, q_, xp_, k) / R)).item()
@@ -281,7 +297,7 @@ def main(argv):
                 SO = SR = DO = DR = AG = RG = n = 0.0
                 for M, R, lp, y_, q_, xp_ in cache:
                     ko = (M + lam * cost[None, :]).argmin(1)
-                    kr = lp.argmax(1)
+                    kr = lp.argmax(1) + cfg.split_depth
                     SO += (1 - cost[ko].mean()).item()
                     SR += (1 - cost[kr].mean() - rshare).item()
                     DO += (10 * torch.log10(
