@@ -929,6 +929,12 @@ def content(colw, fullw):
         r"falls, never the shape of its trade-off. That is the ceiling this "
         r"baseline sits at, and it is the part a learned head should be earning "
         r"its parameters on. Ours does, at low rate, and does not at high rate.")
+    par(r"Per-block bit allocation is a standard quantity in learned "
+        r"compression, where it is something to <i>choose</i>: block-level rate "
+        r"control sets it so that complex regions get more bits [42]. We read "
+        r"the same number in the other direction, after the fact and at the "
+        r"decoder, as a statement about how hard a region was — which costs "
+        r"nothing precisely because someone else already paid for it.")
     par(r"We report this because a learned component should be measured against "
         r"the free alternative and rarely is. In adaptive inference the usual "
         r"controls are a uniform allocation and a random one; both are far "
@@ -1173,6 +1179,7 @@ REFS = [
  "D. Madras et al. Predict responsibly: improving fairness and accuracy by learning to defer. NeurIPS, 2018.",
  "H. Mozannar, D. Sontag. Consistent estimators for learning to defer to an expert. ICML, 2020.",
  "G. DeSalvo et al. Budgeted multiple-expert deferral. arXiv:2510.26706, 2025.",
+ "Accelerating block-level rate control for learned image compression. arXiv:2409.01009, 2024.",
 ]
 
 

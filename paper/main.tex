@@ -1025,6 +1025,13 @@ decides where on the ladder a tile falls, never the shape of its trade-off. That
 is the ceiling this baseline sits at, and it is the part a learned head should be
 earning its parameters on. Ours does, at low rate, and does not at high rate.
 
+Per-block bit allocation is a standard quantity in learned compression, where it
+is something to \emph{choose}: block-level rate control sets it so that complex
+regions get more bits~\cite{blockratecontrol}. We read the same number in the
+other direction, after the fact and at the decoder, as a statement about how hard
+a region was --- which costs nothing precisely because someone else already paid
+for it.
+
 We report this because a learned component should be measured against the free
 alternative and rarely is. In adaptive inference the usual controls are a uniform
 allocation and a random one; both are far weaker than a decoder-side signal that
