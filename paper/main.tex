@@ -959,7 +959,7 @@ model each.
 
 Loosening the budget closes it from the other side. At $0.3\dB$ the gap is
 \GapLooseLow\ points at the three lowest rates --- which is exactly the router's
-own $0.163\%$ of decode, i.e.\ its \emph{prediction} is then free --- and at most
+own \RouterCostPct\% of decode, i.e.\ its \emph{prediction} is then free --- and at
 \GapLooseHigh\ at the highest. Once the budget saturates the ladder both
 configurations send every tile to the same rung, and nothing is left to predict
 wrongly.

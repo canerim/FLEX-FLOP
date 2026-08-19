@@ -163,6 +163,24 @@ for ok, label, exp, act, tol in CLAIMS:
     a = f"{act:.4f}" if isinstance(act, float) else str(act)
     print(f"  [{'ok ' if ok else 'BAD'}] {label:<{w}}  paper {exp:>8}   "
           f"measured {a:>9}")
+# ---- lint: numbers typed into the prose rather than expanded from a macro --
+# Not a failure. Some numbers legitimately belong in the text -- a tile size, a
+# count of exits, a year -- and the point is to watch the list shrink rather
+# than to forbid it. What it catches is a measurement retyped by hand, which is
+# how every drift in this project started.
+# Budgets and the qp grid are the axes of every table, not measurements.
+ALLOW = {"0", "1", "2", "3", "4", "6", "8", "12", "16", "32", "40", "53", "64",
+         "100", "105", "128", "240", "256", "416", "480", "512", "720", "832",
+         "1080", "1280", "1920", "2048",
+         "0.1", "0.3", "0.5", "1.0", "0.05", "0.2", "0.4"}
+_tex = re.sub(r"(?<!\\)%.*", "", (R / "paper/main.tex").read_text())
+_pat = re.compile(r"(?<![\\A-Za-z0-9])(\d+(?:\.\d+)?)\s*(?:\\%|\\dB\b|dB\b)")
+typed = {m.group(1) for m in _pat.finditer(_tex)} - ALLOW
+if typed:
+    print(f"\n  lint: {len(typed)} numeric literals typed into main.tex rather "
+          f"than expanded from a macro:")
+    print("        " + ", ".join(sorted(typed, key=float)))
+
 print(f"\n  {len(CLAIMS)-len(bad)}/{len(CLAIMS)} prose claims match the data")
 # Recorded so make_paper_tables.py can quote the count without running this.
 json.dump({"n_claims": len(CLAIMS), "n_passed": len(CLAIMS) - len(bad),
