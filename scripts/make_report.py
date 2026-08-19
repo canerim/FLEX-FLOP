@@ -556,6 +556,25 @@ if rr:
           f"{best[1] - Th[(best[0][0], 1.0)]:.2f} points *above* full "
           f"signalling, with no learned component in the decoder at all.")
         w("")
+    rb = load("raterank_BEST_compare.json")
+    if rb:
+        qs_ = sorted(rb["raterank"], key=int)
+        w("**It replicates, and more strongly, on a second training run.** "
+          "`BEST` is a separate recipe at a different epoch with its own router "
+          "trained the same way:")
+        w("")
+        w(table(["qp", "A signalled", "B router", "bits, 0 params"],
+                [[q, fmt(rb["a_oracle"][q]), fmt(rb["router"].get(q)),
+                  fmt(rb["raterank"][q])] for q in qs_]))
+        w("")
+        w("The free rule beats that run's own trained head at four of five "
+          "rates, by up to 7.2 points, and lands within 3.1 points of the "
+          "*oracle* everywhere — within 1.1 at four rates. So whether a learned "
+          "head earns its parameters is not settled by ours: on RECIPE512 it "
+          "wins narrowly at the three lowest rates, on BEST it loses badly at "
+          "four of five. What does not vary is that the free rule sits close to "
+          "the oracle on both.")
+        w("")
     w("What it cannot do is see past that ordering. A rank-1 model in the level "
       "gives every tile the same relative profile over exits, so the bit count "
       "only decides where on the ladder a tile falls, never the shape of its "

@@ -309,6 +309,18 @@ It reaches the architectural ceiling exactly at the three lowest rates and beats
 
 The ρ=1 column is +0.00 at every rate, which is a third independent check that the two code paths reach the same allocation once the map is complete. The best single operating point measured anywhere in this project is the free predictor with half the map signalled: **33.0% at qp 0**, 0.67 points *above* full signalling, with no learned component in the decoder at all.
 
+**It replicates, and more strongly, on a second training run.** `BEST` is a separate recipe at a different epoch with its own router trained the same way:
+
+| qp | A signalled | B router | bits, 0 params |
+|---|---|---|---|
+| 0 | 34.02 | 31.56 | 30.92 |
+| 16 | 27.67 | 25.07 | 27.14 |
+| 32 | 22.29 | 16.47 | 22.39 |
+| 48 | 19.75 | 13.27 | 19.10 |
+| 63 | 17.19 | 8.99 | 16.16 |
+
+The free rule beats that run's own trained head at four of five rates, by up to 7.2 points, and lands within 3.1 points of the *oracle* everywhere — within 1.1 at four rates. So whether a learned head earns its parameters is not settled by ours: on RECIPE512 it wins narrowly at the three lowest rates, on BEST it loses badly at four of five. What does not vary is that the free rule sits close to the oracle on both.
+
 What it cannot do is see past that ordering. A rank-1 model in the level gives every tile the same relative profile over exits, so the bit count only decides where on the ladder a tile falls, never the shape of its trade-off. That is the part a learned head should be earning its parameters on.
 
 ## 6. Complexity, and what the saving is worth in time
