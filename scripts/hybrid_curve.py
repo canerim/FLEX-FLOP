@@ -133,6 +133,7 @@ def main(argv):
     load_flexuf_state(ref, torch.load(reference_for(cfg, a.ref),
                                       map_location="cpu", weights_only=False))
     cost = exit_costs(cfg, "head").to(dev)
+    j = cfg.split_depth
 
     seqs, _ = C.discover([])
     if a.max_seqs:

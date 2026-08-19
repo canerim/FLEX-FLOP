@@ -1,50 +1,50 @@
 {
   "curve": "results/curve_FINE12.json",
-  "ckpt": "runs/FINE12/ckpt_step.pth.tar",
+  "ckpt": "runs/FINE12/ckpt_eval.pth.tar",
   "target_pct": 30.0,
   "budget_db": 0.1,
   "rows": [
     {
       "qp": 0,
-      "saved_at_budget": 33.20316699948296,
-      "db_for_target": 0.08508119556297995,
-      "overspend_db": -0.014918804437020053,
-      "floor_db": 0.044622186571359634,
+      "saved_at_budget": 32.523780033536525,
+      "db_for_target": 0.08817344471345759,
+      "overspend_db": -0.011826555286542417,
+      "floor_db": 0.048007845878601074,
       "floor_share_pct": null,
       "reachable": true
     },
     {
       "qp": 16,
-      "saved_at_budget": 27.776235414263343,
-      "db_for_target": 0.10897835365464115,
-      "overspend_db": 0.008978353654641141,
-      "floor_db": 0.06254450231790543,
-      "floor_share_pct": 696.6143763514435,
+      "saved_at_budget": 26.775991019596095,
+      "db_for_target": 0.11321222630454825,
+      "overspend_db": 0.013212226304548241,
+      "floor_db": 0.06405000388622284,
+      "floor_share_pct": 484.7782834613872,
       "reachable": true
     },
     {
       "qp": 32,
-      "saved_at_budget": 19.116885689332758,
-      "db_for_target": 0.14103172344200116,
-      "overspend_db": 0.04103172344200115,
-      "floor_db": 0.08241157233715057,
-      "floor_share_pct": 200.84843000475072,
+      "saved_at_budget": 19.57014909607065,
+      "db_for_target": 0.1399716298272775,
+      "overspend_db": 0.039971629827277505,
+      "floor_db": 0.0809403583407402,
+      "floor_share_pct": 202.4945159616803,
       "reachable": true
     },
     {
       "qp": 48,
-      "saved_at_budget": 11.794336264988937,
-      "db_for_target": 0.15517441956532993,
-      "overspend_db": 0.055174419565329924,
-      "floor_db": 0.0942707359790802,
-      "floor_share_pct": 170.8594974297062,
+      "saved_at_budget": 11.590650857466942,
+      "db_for_target": 0.15641701609607492,
+      "overspend_db": 0.05641701609607491,
+      "floor_db": 0.09454097598791122,
+      "floor_share_pct": 167.57528584445765,
       "reachable": true
     },
     {
       "qp": 63,
       "saved_at_budget": null,
       "budget_reachable": false,
-      "floor_db": 0.1077115535736084,
+      "floor_db": 0.10667888075113297,
       "db_for_target": null,
       "reachable": false
     }
