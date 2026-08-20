@@ -665,8 +665,11 @@ def content(k):
            "records its own epoch. Savings are hook-counted where the file "
            f"carries a hook count and modelled where it does not, which "
            f"applies to the two epoch-1 rows and makes them optimistic by "
-           f"about {model_offset:.1f} points against the rest; every "
-           f"difference read off this table is several times that.")
+           f"about {model_offset:.1f} points against the rest. A difference "
+           f"between two rows that agree about the convention carries none "
+           f"of that offset, and the two comparisons this section draws "
+           f"conclusions from, epoch 0 against epoch 2 and RECIPE512 against "
+           f"BEST at epoch 2, are both of that kind.")
 
     k.par(
         f"One reading of these files was nearly published and was wrong, and "
@@ -776,20 +779,28 @@ def content(k):
         "VERBATIM, no anchor term": k.J("anchor_VERBATIM.json"),
     }
     rows = [["run", "q0", "q32", "q63", "frames"]]
+    drifts = {}
     for lab, d in A.items():
         m = {r["qp"]: abs(r["drift_db"]) for r in d["rows"]}
+        drifts[lab] = m
         rows.append([lab] + [_f(m[q], 4) if q in m else "-"
                              for q in (0, 32, 63)] + [str(d["n_frames"])])
+    vb = drifts["VERBATIM, no anchor term"]
+    pn = drifts["RECIPE512, pinned"]
+    fn = drifts["FINE12"]
     k.rows(rows,
            "<b>How far the deepest exit has moved from the released "
            "decoder</b>, in decibels, one checkpoint per run. The deepest "
            "exit is supposed to be the released decoder and the training "
            "objective carries a term that holds it there. The term does real "
-           "work: the run without it is five to seven times further away and "
-           "its floor exceeds the headline budget outright. The term does not "
-           "hold it exactly, and what it leaves behind grows with rate, "
-           "reaching about a third of a 0.1 dB budget at q63 on the pinned "
-           "checkpoint and nearly two thirds on the twelve-exit run.")
+           f"work: the run trained without it sits {vb[0]:.3f} to "
+           f"{vb[63]:.3f} dB away, more than the whole headline budget at "
+           f"every rate before a single tile has exited early. The term does "
+           f"not hold it exactly, and what it leaves behind grows with rate: "
+           f"{100 * pn[63] / 0.1:.0f}% of a 0.1 dB budget at q63 on the "
+           f"pinned checkpoint and {100 * fn[63] / 0.1:.0f}% on the "
+           f"twelve-exit run, whose floor exceeds that budget outright at "
+           f"the highest rate.")
     k.note("results/supp_anchor_PAPER.json on " + PINNED + "; "
            "results/anchor_RECIPE512.json, results/anchor_BEST.json, "
            "results/anchor_BEST128.json, results/anchor_FINE12.json and "
@@ -836,9 +847,9 @@ def content(k):
     k.bullets([
         f"<b>The reported checkpoint is early.</b> Table {t_epoch} says a "
         "later checkpoint of the same run saves more at every rate. Nothing "
-        "in this document is measured on one, because the pinned checkpoint "
-        "is what \\NumClaims checked claims, every table and every figure "
-        "rest on, and moving it means remeasuring all of them. What a later "
+        "in this document is measured on one, because \\NumClaims checked "
+        "claims, every table and every figure rest on the pinned checkpoint, "
+        "and moving it means remeasuring all of them. What a later "
         "checkpoint would change is the size of the headline and the anchor "
         "drift beneath it, in opposite directions.",
 

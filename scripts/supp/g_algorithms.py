@@ -2,9 +2,9 @@
 
 Section G of the supplement. The other sections say what was measured and what
 it means; this one says how each move is carried out, in the files that carry
-it out. Five procedures hold the system up -- the encoder-side search for an
+it out. Five procedures hold the system up: the encoder-side search for an
 allocation, the decoder-side prediction of one, the hybrid that mixes them, the
-coding of the map, and one training step -- and each gets an algorithm box
+coding of the map, and one training step. Each gets an algorithm box
 written at the level of the calls the code makes and the shapes they return.
 After them comes a table of the operations themselves, with the file and the
 function for each, and then the places where the obvious implementation is
@@ -349,7 +349,8 @@ def content(k):
         IND + "bisectTo(u): lo, hi = −2e4, 2e4; 60 times: mid = (lo + hi) / "
         "2;",
         IND + IND + "<b>if</b> tableDb(mid) ≤ u <b>then</b> lo = mid "
-        "<b>else</b> hi = mid",
+        "<b>else</b> hi = mid" + _c("Table " + str(box_search) + "'s, "
+        "with k from line 7"),
         IND + "then the same outer correction as Table " + str(box_search),
     ], "Routing at the decoder, as flexuf/beta.py and "
        "scripts/router_curve.py run it. Take from it lines 4 and 7, which are "
@@ -413,7 +414,7 @@ def content(k):
         "function of the signalled fraction is the Lorenz curve of the regret "
         "distribution, which is the object C.7 works with.")
 
-    box_hyb = _box(k, [
+    _box(k, [
         "<b>input</b> M [T, K], lp [T, K−j], tilt beta, multiplier lam, "
         "fraction rho",
         "&nbsp;1&nbsp; kr = (lp − beta · c[j:]).argmax(1) + j"
@@ -485,12 +486,28 @@ def content(k):
 
     k.par(
         "The exit map is the one thing configuration A adds to the "
-        "bitstream, and it is charged before any saving is computed. The "
-        "coder is four lines: count the symbols with a bincount of length K, "
-        "normalise to a distribution, take its entropy in bits, and multiply "
-        "by the number of tiles. To that is added one byte per symbol for the "
-        "per-frame histogram the decoder needs in order to read the payload "
-        "at all, so the total is H times T plus 8K bits.")
+        "bitstream, and it is charged before any saving is computed. What is "
+        "charged is an entropy and a fixed side cost, in four lines.")
+
+    _box(k, [
+        "<b>input</b> exit map k of length T, symbol count K",
+        "&nbsp;1&nbsp; p = bincount(k, minlength = K) / T"
+        + _c("the frame's own histogram"),
+        "&nbsp;2&nbsp; H = − sum over symbols of p log<sub>2</sub> p"
+        + _c("bits per tile"),
+        "&nbsp;3&nbsp; bits = H · T + 8K"
+        + _c("payload, then the histogram"),
+        "&nbsp;4&nbsp; bpp = bpp + bits / pixels"
+        + _c("before any saving is computed"),
+        "<b>and for configuration C, which sends a different object</b>",
+        IND + "bits = T · H<sub>2</sub>(rho) + 3 · |S|"
+        + _c("the mask, then one symbol per override"),
+    ], "The map coder, in scripts/signalled_curve.py and "
+       "scripts/hybrid_curve.py. Take from it that line 3 charges the "
+       "histogram at a flat byte a symbol rather than coding it, and that no "
+       "arithmetic coder is run at any point: the payload is the entropy, "
+       "which is what an ideal coder would spend and a real one a little "
+       "more of.")
 
     k.par(
         f"At the 0.1 dB budget that comes to {mb_lo:.0f} bits a frame at "
@@ -515,30 +532,27 @@ def content(k):
            "frames.")
 
     k.par(
-        "The reported cost is an upper bound in three separate ways, and it "
-        "is worth saying which, because understating our own "
-        "overhead would be the same class of error as overstating our saving. "
-        "The entropy is computed on the unclamped argmin, so the cheapest "
-        f"allocation is spread across the three indices that share one cost "
-        f"and counted as three symbols where a codec would signal one; the "
-        f"comment in signalled_curve.py records the effect as at most "
-        f"{MERGE_SAVING[0]} bits a frame at q{qlo} and {MERGE_SAVING[1]} at "
-        f"q{qhi}. The histogram is charged at a flat byte a symbol rather "
-        "than coded. And no arithmetic coder is run at all: the payload is an "
-        "entropy, which is what an ideal coder would spend and a real one "
-        "would spend slightly more of.")
+        "Two further things make the reported cost an upper bound, and they "
+        "are worth naming, because understating our own overhead would be the "
+        "same class of error as overstating our saving. Line 1 counts the "
+        "unclamped argmin, so the cheapest allocation is spread over the "
+        f"three indices that share one cost and counted as three symbols "
+        f"where a codec would signal one; the comment in signalled_curve.py "
+        f"records the effect as at most {MERGE_SAVING[0]} bits a frame at "
+        f"q{qlo} and {MERGE_SAVING[1]} at q{qhi}. And the three raw bits a "
+        f"configuration C override pays would code one of {K - j} exits in "
+        "two.")
 
     k.par(
-        "Configuration C bills differently because it sends a different "
-        "object. What it needs is a mask saying which tiles were overridden "
-        "and a symbol for each override, so it pays T times the binary "
-        "entropy of the overridden fraction, plus three raw bits per "
-        f"override. At q{qlo} and a signalled fraction of "
+        "Configuration C sends a mask saying which tiles were overridden "
+        "and a symbol for each override, so its bill is the binary entropy "
+        "of the overridden fraction over the tiles, plus the overrides "
+        f"themselves. At q{qlo} and a signalled fraction of "
         f"{100 * r05['rho']:.0f}% that is {r05['map_bits']:.0f} bits a frame "
-        f"for {r05['overridden_per_frame']:.1f} overrides. Three bits for one "
-        "of four exits is again the overcharging direction, and the binary "
-        "entropy is checked against its closed form in the test file rather "
-        "than trusted.")
+        f"for {r05['overridden_per_frame']:.1f} overrides, against nothing at "
+        "all at a signalled fraction of zero, which is what makes that column "
+        "exactly configuration B. The binary entropy is checked against its "
+        "closed form in the test file rather than trusted.")
 
     # ------------------------------------------------------------------ G.6
     k.h2("One training step")

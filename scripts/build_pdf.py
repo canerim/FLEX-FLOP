@@ -718,17 +718,6 @@ def content(colw, fullw):
     h2("3.1 Setting and notation")
     par(r"We set out here the decoder we work on, the notation the rest of the "
         r"paper uses, and the three configurations we compare.")
-    figure_wide("patchify.png",
-                r"<b>Figure 4. What patchify does.</b> Captured from one real "
-                r"decode. <b>a</b>, the frame, padded to a whole number of "
-                r"tiles, with the grid the decoder will impose. <b>b</b>, the "
-                r"feature map after the shared stem, at one eighth of frame "
-                r"resolution, so a 256 pixel tile of picture is 32×32 of "
-                r"features; the tiling happens here and not in the pixel "
-                r"domain. <b>c</b>, four of the 40 tiles as the trunk now sees "
-                r"them, each its own batch element. <b>d</b>, the operation "
-                r"itself, and its inverse. It costs no arithmetic and the "
-                r"round trip is exact.")
     figure("ladder.png",
            r"<b>Figure 4. The ladder, priced.</b> What a tile costs at each "
            r"exit, as a percentage of one released decode, counted with hooks "
@@ -862,6 +851,17 @@ def content(colw, fullw):
            r"penalty. <b>b</b>, blocks skipped per exit, coloured by "
            r"adapter; the rule switches to the FFN at four skipped blocks. "
            r"Lengths counted with hooks off the modules themselves.")
+    figure_wide("patchify.png",
+                r"<b>Figure 4. What patchify does.</b> Captured from one real "
+                r"decode. <b>a</b>, the frame, padded to a whole number of "
+                r"tiles, with the grid the decoder will impose. <b>b</b>, the "
+                r"feature map after the shared stem, at one eighth of frame "
+                r"resolution, so a 256 pixel tile of picture is 32×32 of "
+                r"features; the tiling happens here and not in the pixel "
+                r"domain. <b>c</b>, four of the 40 tiles as the trunk now sees "
+                r"them, each its own batch element. <b>d</b>, the operation "
+                r"itself, and its inverse. It costs no arithmetic and the "
+                r"round trip is exact.")
     h2("3.4 Exit adapters")
     par(r"An early exit hands the shared head a feature the head was not "
         r"fitted to, and the adapter is the correction. For exits that skip "
