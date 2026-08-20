@@ -126,3 +126,63 @@ Recorded before building so the choice can be judged against the outcome:
 | new plot | the frontier with floor and saturation marked | the operating window is a headline claim and exists only as a table |
 | new plot | concentration of regret across tiles | justifies partial signalling; currently a Gini coefficient in prose |
 | new plot | the three deciders across rates, with the agreement paradox | result three of three, and it currently has no figure |
+
+---
+
+## Round 3: the narrative thread
+
+Sources: Schimel, *Writing Science*, whose OCAR structure (opening, challenge,
+action, resolution) is the one journal papers are built on, and the observation
+that generalist journals run LDR instead, a strong lead first. Read the
+introductions of ELIC (CVPR 2022) and the DCVC-UF paper alongside.
+
+### The story this paper is telling
+
+Stated once so the sections can be checked against it:
+
+**Opening.** A learned decoder spends the same computation on every region of a
+frame. A flat sky and a face are decoded at the same price.
+
+**Challenge.** The obvious repair is a smaller model, and every version of that
+changes the bitstream, so a file encoded yesterday cannot benefit. What is left
+is not what the decoder is, but how much of it runs where.
+
+**Action.** Cut the frame into tiles after a shared stem and let each leave the
+trunk at its own depth. Three things then have to be settled: cutting is not
+free, a budget only works inside a window, and something has to decide per tile.
+
+**Resolution.** The decision is already in the file. The bits the entropy model
+spent on a tile say how much computation reconstructing it needs, better than a
+trained router does.
+
+### Where the thread snaps
+
+Checked by reading the first sentence under every heading.
+
+**Sections 2, 3 and 5 have no opening paragraph at all.** The reader lands on
+"2. Related work" and immediately on "Early exit.". Three of the paper's eight
+sections begin with a subheading, so three times the thread is simply dropped
+and picked up somewhere else.
+
+**Section 4 opens on a fact, not a consequence.** "A 3x3 depthwise at feature
+position (x,y) computes a weighted sum over its neighbours." The reader has just
+been shown the method and is dropped into convolution arithmetic with no signal
+that this section is the bill for what they were just sold.
+
+**Two subsections open with an aside instead of the point.** 5.1 begins "One
+word on the budget before the numbers" and 5.4 begins "One assumption is worth
+naming before any of this". Both are worth saying and neither belongs first.
+Hedging before asserting is one of the surer marks of writing that was assembled
+rather than composed.
+
+**Where it already works,** and these are the model for the rest: 3.5 opens "The
+ladder and its costs are fixed by this point, and one decision is left". 5.6
+opens by saying what the trained head has to beat before it is worth its cost.
+5.8 opens by asking how often the map has to be recomputed, which is the
+question 5.7 leaves open. Each of those hands the reader forward.
+
+### The fix
+
+Openings for 2, 3 and 5. Rewrite the first sentence of 4, 4.2, 5.1 and 5.4 so it
+carries the thread rather than starting a new one. Move the two asides to after
+the point they qualify.

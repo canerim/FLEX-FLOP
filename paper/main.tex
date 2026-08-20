@@ -151,6 +151,13 @@ uses \BandUseLow\% of the band at low rate and \BandUseHigh\% at high rate.
 % =========================================================== related work
 \section{Related work}
 
+Three lines of work meet in this paper and none of them quite contains it. Early
+exit made depth a per-input decision and left it there; spatially adaptive
+inference made it a per-region decision but chose between separate networks; and
+learned compression has spent a decade making decoders cheaper by making them
+different, which is exactly what a deployed bitstream will not tolerate. What
+follows sets out what each gives us and what none of them gives.
+
 \paragraph{Early exit.} BranchyNet~\cite{branchynet} and MSDNet~\cite{msdnet}
 established the pattern of intermediate classifiers with a confidence rule;
 SDN~\cite{sdn} framed it as mitigating overthinking, and ZTW~\cite{ztw} recycles
@@ -313,6 +320,14 @@ the arithmetic untouched.
 
 % =========================================================== method
 \section{Method}
+
+The construction is short. A frame is cut into tiles once the shared part of the
+decoder has run, each tile is allowed to leave the remaining trunk at its own
+depth, and a small adapter reconciles an early departure with a head that was
+fitted to the full one. Everything difficult is in the three questions that
+follow from it: what cutting costs, what a budget can buy, and who decides. This
+section states the construction and the decision rule; Section~\ref{sec:tiles}
+prices the cut and Section~\ref{sec:exp} measures the rest.
 \label{sec:method}
 
 \subsection{Setting and notation}
@@ -908,6 +923,12 @@ that run.
 
 % =========================================================== experiments
 \section{Experiments}
+
+The measurements answer the questions the method leaves open, in the order it
+leaves them. What does adaptivity buy over the alternatives that need no ladder
+at all; where does a budget stop working; what does it cost to decide on the
+decoder's side instead of the encoder's; and what does any of it come to in
+seconds and joules rather than arithmetic.
 \label{sec:exp}
 
 \paragraph{Setup.} We fine-tune the decoder on $512{\times}512$ crops from
