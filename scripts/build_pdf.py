@@ -2212,29 +2212,9 @@ def build(out="paper/FLEX-UF.pdf"):
         story.append(Paragraph(f"[{i}] {r}",
                                S("ref", fontSize=7.2, leading=8.4, spaceAfter=2)))
 
-    # The supplement is part of this document, not a second one. CVPR submits a
-    # single PDF and the DCVC-UF paper this work builds on puts its
-    # supplementary material after the references in the same file, which is
-    # also what keeps the figure, table and equation numbers continuous without
-    # any bookkeeping: the counters here simply keep counting.
-    #
-    # Imported inside build() rather than at module scope because
-    # build_supp_pdf imports this module.
-    sys.path.insert(0, str(Path(__file__).resolve().parent))
-    import build_supp_pdf as SUPP
-    kit = SUPP.Kit(colw, PW - 2 * M)
-    built = SUPP._sections(kit)
-    if kit.flow:
-        story += [NextPageTemplate("supp"), PageBreak(),
-                  Paragraph("Where to Stop:<br/>Tile-Adaptive Early Exit in a "
-                            "Learned Image Decoder", TITLE),
-                  Paragraph("Supplementary Material", SUPP.SUBTITLE),
-                  NextPageTemplate("rest"), FrameBreak()]
-        story += kit.flow
-        print(f"  supplement: {', '.join(built)}")
-        if kit.bad_glyphs:
-            print(f"  NO GLYPH IN Times-Roman: {sorted(kit.bad_glyphs)}")
-
+    # The supplement is its own document again. It was folded in here when the
+    # target was one CVPR PDF; the author now wants it separate, and
+    # scripts/build_supp_pdf.py has always been able to build it alone.
     doc.build(story)
     if UNEXPANDED:
         print("  UNEXPANDED MACROS (run make_paper_tables.py): "
