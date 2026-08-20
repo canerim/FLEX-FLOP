@@ -176,12 +176,47 @@ AR(1) padding of Kaseva~\etal~\cite{arls}, which we implement and evaluate.
 \begin{table}[t]
 \centering
 \resizebox{\columnwidth}{!}{\input{tables/positioning}}
-\caption{\textbf{Where this sits.} Complexity control in learned compression
-varies the model; we vary how much of a fixed model runs where. The last column
-is what makes the difference operational. Every other row requires a decoder
-that matches the encoder that produced the stream.}
+\caption{\textbf{Where this sits.} What each method varies, at what
+granularity, and what that costs the stream. A single new-bitstream column
+cannot represent our own two modes, so the last three ask what actually changes:
+whether the coded latent is new, what side data travels with it, and whether a
+decoder alone can do it.}
 \label{tab:positioning}
 \end{table}
+
+
+\begin{table}[t]
+\centering
+\resizebox{\columnwidth}{!}{\input{tables/literature_img}}
+\caption{\textbf{What a learned image decoder costs.} Eleven codecs as
+published, measured on one machine by Li et al.~\cite{hpcm}: BD-Rate against
+VTM-22.0 on Kodak, arithmetic per pixel and parameters. The spread in cost is an
+order of magnitude, and every entry pays its cost on every pixel of every image.}
+\label{tab:litimg}
+\end{table}
+
+\begin{table}[t]
+\centering
+\resizebox{\columnwidth}{!}{\input{tables/literature_vid}}
+\caption{\textbf{The family this work modifies}, from DCVC-UF~\cite{dcvcuf}:
+MACs per 1080p frame, parameters, and BD-Rate against VTM-17.0 low delay.
+Comparable within this table and not against Table~\ref{tab:litimg}, which uses
+a different anchor and a different test set. The last column is the one this
+paper is about: whether the decoder spends more computation where the picture
+needs it. Our row is the intra decoder of the last DCVC-UF entry, at the
+$0.1\dB$ budget.}
+\label{tab:litvid}
+\end{table}
+
+Together the two tables say where the field spends its decoder budget.
+Complexity has moved a long way in both directions: \cite{tcm} and
+\cite{weconvene} buy rate with an order of magnitude more arithmetic per pixel
+than \cite{charm} or \cite{stf}, and DCVC-UF~\cite{dcvcuf} moves the other way,
+cutting a 1080p frame from DCVC-FM's $2642$ GMAC to $170$. Two things are
+constant down both tables. The cost is a property of the model, chosen once and
+paid on every image; and it is uniform over the frame, so a flat sky and a face
+are decoded at the same price. Those are the two the ladder in this paper
+changes, and it changes them without touching the model that was shipped.
 
 \paragraph{Complexity control in learned compression.} SlimCAE~\cite{slimcae}
 and slimmable video codecs~\cite{slimvc} expose several widths of one model.

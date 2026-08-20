@@ -45,8 +45,18 @@ def main(argv):
         raise SystemExit(f"{a.curve} has no op_points -- regenerate it with the "
                          f"current paper_curve.py")
 
+    # Both denominators, because the two differ by more than the rounding a
+    # reader would assume. `saving_pct` counts against OUR deepest exit, which
+    # costs 1.0095 released decodes -- it pays for seam repair and the release
+    # does not -- and `saving_pct_vs_release` counts against the released
+    # decoder itself, which is what every headline in this work quotes. A
+    # spread table in one denominator sitting beside a headline in the other is
+    # how a reader concludes the two disagree.
     out = {"curve": a.curve, "target_db": a.target,
-           "n_sequences": d.get("n_sequences"), "ckpt": d.get("ckpt"), "rows": []}
+           "n_sequences": d.get("n_sequences"), "ckpt": d.get("ckpt"),
+           "denominator_rows": "our own deepest exit (cost[-1])",
+           "denominator_rows_vs_release": "the released decoder (1.0)",
+           "rows": [], "rows_vs_release": []}
     print(f"  saving per sequence at a {a.target:.2f} dB budget, "
           f"{d.get('n_sequences')} CTC sequences\n")
     print(f"  {'qp':>4}{'mean':>9}{'sd':>8}{'min':>8}{'p25':>8}{'median':>9}"
@@ -56,16 +66,26 @@ def main(argv):
         if abs(op["target_db"] - a.target) > 1e-9 or not op.get("per_sequence"):
             continue
         ps = op["per_sequence"]
+        for key, dest in (("saving_pct", out["rows"]),
+                          ("saving_pct_vs_release", out["rows_vs_release"])):
+            if key not in ps[0]:
+                continue
+            v = np.array([r[key] for r in ps])
+            qq = np.percentile(v, [25, 50, 75])
+            dest.append({"qp": op["qp"], "mean": float(v.mean()),
+                         "sd": float(v.std()), "min": float(v.min()),
+                         "p25": float(qq[0]), "median": float(qq[1]),
+                         "p75": float(qq[2]), "max": float(v.max()),
+                         "worst_seq": ps[int(v.argmin())]["seq"],
+                         "best_seq": ps[int(v.argmax())]["seq"],
+                         "n": len(ps)})
         sv = np.array([r["saving_pct"] for r in ps])
         worst = min(ps, key=lambda r: r["saving_pct"])
         best = max(ps, key=lambda r: r["saving_pct"])
         q = np.percentile(sv, [25, 50, 75])
-        out["rows"].append({
-            "qp": op["qp"], "mean": float(sv.mean()), "sd": float(sv.std()),
-            "min": float(sv.min()), "p25": float(q[0]), "median": float(q[1]),
-            "p75": float(q[2]), "max": float(sv.max()),
-            "worst_seq": worst["seq"], "best_seq": best["seq"],
-            "n": len(ps), "per_sequence": ps})
+        # The per-sequence list travels with the first denominator's row so
+        # the file carries every sequence's own numbers, not just the summary.
+        out["rows"][-1]["per_sequence"] = ps
         print(f"  {op['qp']:>4}{sv.mean():>8.1f}%{sv.std():>8.1f}{sv.min():>8.1f}"
               f"{q[0]:>8.1f}{q[1]:>9.1f}{q[2]:>8.1f}{sv.max():>8.1f}   "
               f"{Path(worst['seq']).stem[:24]}")

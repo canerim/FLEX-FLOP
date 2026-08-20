@@ -1,0 +1,39 @@
+{
+  "figure": "paper/figures/qual_PAPER_videosrc24_q0_b01.png",
+  "what": "released decode and ours from one latent, at a stated budget",
+  "ckpt": "runs/RECIPE512/ckpt_PAPER.pth.tar",
+  "ckpt_epoch": 0,
+  "ckpt_step": null,
+  "seq": "videoSRC24_1920x1080_24.yuv",
+  "cls": "MCL-JCV",
+  "resolution": [
+    1920,
+    1080
+  ],
+  "qp": 0,
+  "budget_db": 0.1,
+  "delivered_db": 0.09962569922208786,
+  "saving_pct_vs_release": 18.13148260116577,
+  "bpp": 0.22112418711185455,
+  "psnr_released": 34.56103414842082,
+  "psnr_routed": 34.47891503564886,
+  "psnr_convention": "(6Y+U+V)/8 in 4:2:0 on 0..255",
+  "crop_px": 320,
+  "crop_centre_yx": [
+    640,
+    640
+  ],
+  "worst_tile": 18,
+  "worst_tile_exit": 5,
+  "n_tiles": 40,
+  "tile_px": 256,
+  "exit_hist": [
+    0,
+    0,
+    15,
+    2,
+    8,
+    15
+  ],
+  "amplification": 20
+}

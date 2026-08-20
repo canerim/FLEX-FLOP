@@ -2,7 +2,7 @@ FLEX-UF · REVIEWER FIX LIST
 30 items. Ticked only when the fix is in the built PDF and check_paper agrees.
 [ ] open   [~] in progress   [x] done
 
-Status: 16 / 30
+Status: 17 / 31
 
 ================================================================================
 CRITICAL (8)
@@ -246,3 +246,16 @@ STRUCTURE (2)
         spent predicting the compute the reconstruction needs. What is missing
         is not more experiments but flawless accounting and a clean deployment
         story around these three.
+
+================================================================================
+ADDED AFTER THE FIRST PASS (1)
+================================================================================
+
+[x] 31. Related work needs a summary table of learned compression, at least
+        twelve works including the DCVC family.
+        It should say, per method: what it is, the venue and year, what it
+        reports against which anchor, its decoder cost where the paper gives
+        one, and whether its decode compute is adaptive to content. The last
+        column is the one that positions this work: every entry spends the same
+        computation on every region, which is the premise the paper attacks.
+        Numbers only where a source states them, with the source named.

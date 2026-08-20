@@ -875,12 +875,12 @@ if d:
     # beside it, which is neither "yes" nor "no" to that question. Four columns
     # say what actually changes.
     rows = [
-        ("SlimCAE~\\cite{slimcae}", "width", "per stream", "changes", "--", "no"),
-        ("Slimmable video~\\cite{slimvc}", "width", "per stream", "changes", "--", "no"),
-        ("EVC~\\cite{evc}", "mask / pruning", "per model", "changes", "--", "no"),
+        ("SlimCAE~\\cite{slimcae}", "width", "per stream", "new", "--", "no"),
+        ("Slimmable video~\\cite{slimvc}", "width", "per stream", "new", "--", "no"),
+        ("EVC~\\cite{evc}", "mask / pruning", "per model", "new", "--", "no"),
         ("Spatial competition~\\cite{spatialcompetition}", "which codec",
-         "per region", "changes", "yes", "no"),
-        ("DCVC-RT~\\cite{dcvcrt}", "architecture", "fixed", "changes", "--", "no"),
+         "per region", "new", "yes", "no"),
+        ("DCVC-RT~\\cite{dcvcrt}", "architecture", "fixed", "new", "--", "no"),
         ("\\textbf{FLEX-UF} signalled", "\\textbf{decoder depth}",
          "\\textbf{per region}", "\\textbf{same}", "\\MapBits\\,b", "no"),
         ("\\textbf{FLEX-UF} bitstream-identical", "\\textbf{decoder depth}",
@@ -888,8 +888,8 @@ if d:
          "\\textbf{yes}"),
     ]
     lines = [r"\begin{tabular}{lllccc}", r"\toprule",
-             r"Method & What varies & Granularity & Coded & Side & Decoder \\",
-             r" & & & latent & data & only \\",
+             r"Method & Varies & Where & Latent & Side & Dec. \\",
+             r" & & & & data & only \\",
              r"\midrule"]
     for a_, b_, c_, d_, e_, f_ in rows:
         lines.append(f"{a_} & {b_} & {c_} & {d_} & {e_} & {f_} \\\\")
@@ -908,3 +908,54 @@ if _cc:
 w("macros.tex", "\n".join(f"\\newcommand{{\\{k}}}{{{v}}}"
                           for k, v in sorted(MACROS.items())))
 print(f"\n  {len(MACROS)} macros")
+
+# ------------------------------------------------------- the literature table
+# Numbers here are what other people PUBLISHED, not what we measured, and the
+# two blocks are on different anchors and different test sets. Mixing them into
+# one BD-Rate column would be the convention error this project keeps catching,
+# so they are two tables and each says what it is measured against.
+#
+# Image block: Table 1 of Li et al., Learned Image Compression with Hierarchical
+# Progressive Context Modeling, ICCV 2025 (arXiv:2507.19125), BD-Rate against
+# VTM-22.0 on Kodak, kMACs/pixel and parameters from the same table.
+# Video block: Tables 1 and 3 of Li et al., Ultra-Fast Neural Video Compression
+# (arXiv:2606.04410), BD-Rate against VTM-17.0 low delay, MACs per 1080p frame.
+print("literature")
+_LIT_IMG = [
+    ("CHARM~\\cite{charm}",         "496",  "58.5",  "$+0.86$"),
+    ("STF~\\cite{stf}",             "511",  "99.9",  "$-2.06$"),
+    ("ELIC~\\cite{elic}",           "574",  "36.9",  "$-3.22$"),
+    ("WeConvene~\\cite{weconvene}", "2343", "107.2", "$-6.98$"),
+    ("MambaVC~\\cite{mambavc}",     "814",  "47.9",  "$-8.72$"),
+    ("DCVC-DC intra~\\cite{dcvcdc}", "542", "45.5",  "$-9.18$"),
+    ("TCM~\\cite{tcm}",             "1824", "76.6",  "$-10.70$"),
+    ("FLIC~\\cite{flic}",           "1096", "71.0",  "$-13.20$"),
+    ("MLIC++~\\cite{mlicpp}",       "1283", "116.7", "$-15.15$"),
+    ("HPCM-Base~\\cite{hpcm}",      "919",  "68.5",  "$-15.31$"),
+    ("HPCM-Large~\\cite{hpcm}",     "1261", "89.7",  "$-19.19$"),
+]
+_lines = [r"\begin{tabular}{lrrr}", r"\toprule",
+          r"Method & kMAC/px & Par. (M) & BD-Rate (\%) \\", r"\midrule"]
+for _r in _LIT_IMG:
+    _lines.append(" & ".join(_r) + r" \\")
+_lines += [r"\bottomrule", r"\end{tabular}"]
+w("literature_img.tex", "\n".join(_lines))
+
+_LIT_VID = [
+    ("DCVC-DC~\\cite{dcvcdc}",        "--",   "18.3",  "$+14.5$", "no"),
+    ("DCVC-FM~\\cite{dcvcfm}",        "2642", "18.3",  "$-21.3$", "no"),
+    ("DCVC-RT~\\cite{dcvcrt}",        "385",  "20.7",  "$-21.0$", "no"),
+    ("DCVC-UF (LD)~\\cite{dcvcuf}",   "170",  "9.7",   "$-9.5$",  "no"),
+    ("DCVC-UF (HT-S)~\\cite{dcvcuf}", "211",  "81.2",  "$-31.6$", "no"),
+    ("DCVC-UF (HT-L)~\\cite{dcvcuf}", "343",  "120.5", "$-42.2$", "no"),
+]
+_lines = [r"\begin{tabular}{lrrrc}", r"\toprule",
+          r"Method & GMAC & Par. (M) & BD-Rate (\%) & Adaptive \\",
+          r"\midrule"]
+for _r in _LIT_VID:
+    _lines.append(" & ".join(_r) + r" \\")
+_lines += [r"\midrule",
+           r"\textbf{FLEX-UF} intra decoder & \textbf{\RelKMacPx$\,\to\,$\OursKMacPx} & -- & "
+           r"\textbf{$+$\BdRateALow} & \textbf{yes} \\",
+           r"\bottomrule", r"\end{tabular}"]
+w("literature_vid.tex", "\n".join(_lines))

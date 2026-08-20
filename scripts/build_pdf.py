@@ -44,7 +44,8 @@ def sub(t):
     for k in sorted(MACROS, key=len, reverse=True):
         t = t.replace("\\" + k, MACROS[k])
     t = (t.replace(r"\dB", " dB").replace(r"\%", "%").replace(r"\,", " ")
-          .replace(r"\times", "×").replace(r"\emph{", "<i>")
+          .replace(r"\times", "×")
+          .replace(r"\rightarrow", "\u2192").replace(r"\to", "\u2192").replace(r"\emph{", "<i>")
           .replace(r"\textbf{", "<b>").replace(r"\approx", "≈")
           .replace("---", "\u2014").replace("--", "\u2013")
           .replace(r"\lambda", "λ").replace(r"\beta", "β")
@@ -204,7 +205,15 @@ def tex_table(name, width):
         # \cite{key} has no meaning here -- there is no bibtex pass -- and the
         # brace-stripping below turned "SlimCAE~\cite{slimcae}" into
         # "SlimCAE~citeslimcae" in the positioning table.
-        line = re.sub(r"~?\\cite\{[^}]*\}", "", line)
+        # Map the key to the number this document gives it, rather than
+        # dropping the citation. A comparison table of other people's numbers
+        # is only usable if the reader can see whose numbers they are, and the
+        # keys are stable while the numbers move as REFS grows.
+        def _cite(m):
+            keys = [k.strip() for k in m.group(1).split(",")]
+            nums = [str(CITE[k]) for k in keys if k in CITE]
+            return (" [" + ", ".join(nums) + "]") if nums else ""
+        line = re.sub(r"~?\\cite\{([^}]*)\}", _cite, line)
         # \mathrm{sat} and friends: keep the text, drop the wrapper. Without
         # this the brace-stripping below prints "D_mathrmsat".
         line = re.sub(r"\\(?:mathrm|mathbf|text|textrm)\{([^}]*)\}",
@@ -350,8 +359,11 @@ def content(colw, fullw):
         # notation table loses its header on the far side of the break.
         A(KeepTogether(simple_table(rows, colw)))
 
-    def tbl(name, cap):
-        t = tex_table(name, colw)
+    def tbl(name, cap, width=None):
+        # width lets a table that cannot be read at column width run the full
+        # page. The literature comparison is six columns and eighteen rows, and
+        # at 251pt every cell wraps.
+        t = tex_table(name, width or colw)
         t.spaceBefore = 6
         block = [t, Spacer(1, 3),
                  Paragraph(sub(_autonum(cap, _TABN, "Table")), CAP)]
@@ -362,7 +374,7 @@ def content(colw, fullw):
         # 254.2pt of page 6's left column blank. Over that size let it break
         # across the column the way a longtable does -- repeatRows=1 on the
         # table reprints the header on the far side of the break.
-        if t.wrap(colw, FRAME_H)[1] > 0.5 * FRAME_H:
+        if t.wrap(width or colw, FRAME_H)[1] > 0.5 * FRAME_H:
             for f in block:
                 A(f)
         else:
@@ -562,6 +574,30 @@ def content(colw, fullw):
         r"column cannot represent our own two modes, so the last three ask "
         r"what actually changes: whether the coded latent is the same, what "
         r"side data travels with it, and whether the decoder alone can do it.")
+    tbl("literature_img",
+        r"<b>Table 2. What a learned image decoder costs.</b> Eleven codecs as "
+        r"published, measured on one machine by Li et al. [43]: BD-Rate against "
+        r"VTM-22.0 on Kodak, arithmetic per pixel and parameters. The spread in "
+        r"cost is an order of magnitude, and every entry pays its cost on every "
+        r"pixel of every image.")
+    tbl("literature_vid",
+        r"<b>Table 3. The family this work modifies</b>, from DCVC-UF [14]: "
+        r"MACs per 1080p frame, parameters, and BD-Rate against VTM-17.0 low "
+        r"delay. Comparable within this table and not against Table 2, which "
+        r"uses a different anchor and a different test set. The last column is "
+        r"the one this paper is about: whether the decoder spends more "
+        r"computation where the picture needs it. Our row is the intra decoder "
+        r"of the last DCVC-UF entry, at the 0.1 dB budget.")
+    par(r"Together the two tables say where the field spends its decoder "
+        r"budget. Complexity has moved a long way in both directions: TCM [46] "
+        r"and WeConvene [50] buy rate with an order of magnitude more "
+        r"arithmetic per pixel than CHARM [51] or STF [45], and DCVC-UF [14] "
+        r"moves the other way, cutting a 1080p frame from DCVC-FM's 2642 GMAC "
+        r"to 170. Two things are constant down both tables. The cost is a "
+        r"property of the model, chosen once and paid on every image; and it is "
+        r"uniform over the frame, so a flat sky and a face are decoded at the "
+        r"same price. Those are the two the ladder in this paper changes, and "
+        r"it changes them without touching the model that was shipped.")
     h2("Complexity control in learned compression.")
     par(r"SlimCAE [22] and slimmable video codecs [23] expose several widths "
         r"of one model. The choice is per stream and it changes the encoder, "
@@ -1856,6 +1892,17 @@ def content(colw, fullw):
 
 
 # ------------------------------------------------------------ references
+# Bibliography keys used inside generated tables, mapped to this document's own
+# reference numbers. paper/main.tex resolves these through bibtex; there is no
+# bibtex here, so the map is explicit and lives beside REFS. A key that is not
+# here prints no citation rather than a wrong one.
+CITE = {
+    "arls": 11, "slimcae": 22, "slimvc": 23, "evc": 22,
+    "spatialcompetition": 27, "dcvcrt": 33, "dcvcfm": 13, "dcvcuf": 14,
+    "hpcm": 43, "elic": 44, "stf": 45, "tcm": 46, "mlicpp": 47, "flic": 48,
+    "mambavc": 49, "weconvene": 50, "charm": 51, "dcvcdc": 52,
+}
+
 REFS = [
  "S. Wang et al. Adaptive patch exiting for scalable single image super-resolution. ECCV, 2022.",
  "J. Ballé et al. Variational image compression with a scale hyperprior. ICLR, 2018.",
@@ -1899,6 +1946,16 @@ REFS = [
  "H. Mozannar, D. Sontag. Consistent estimators for learning to defer to an expert. ICML, 2020.",
  "G. DeSalvo et al. Budgeted multiple-expert deferral. arXiv:2510.26706, 2025.",
  "M. Dong, M. Lu, and Z. Ma. Accelerating block-level rate control for learned image compression. arXiv:2409.01009, 2024.",
+    "Y. Li et al. Learned image compression with hierarchical progressive context modeling. ICCV, 2025.",
+    "D. He, Z. Yang, W. Peng, R. Ma, H. Qin, Y. Wang. ELIC: efficient learned image compression with unevenly grouped space-channel contextual adaptive coding. CVPR, 2022.",
+    "R. Zou, C. Song, Z. Zhang. The devil is in the details: window-based attention for image compression. CVPR, 2022.",
+    "J. Liu, H. Sun, J. Katto. Learned image compression with mixed transformer-CNN architectures. CVPR, 2023.",
+    "W. Jiang, R. Wang. MLIC++: linear complexity multi-reference entropy modeling for learned image compression. ICML Neural Compression Workshop, 2023.",
+    "H. Li, S. Li, W. Dai, C. Li, J. Zou, H. Xiong. Frequency-aware transformer for learned image compression. ICLR, 2024.",
+    "S. Qin et al. MambaVC: learned visual compression with selective state spaces. arXiv:2405.15413, 2024.",
+    "H. Fu, J. Liang, Z. Fang, J. Han, F. Liang, G. Zhang. WeConvene: learned image compression with wavelet-domain convolution and entropy model. ECCV, 2024.",
+    "D. Minnen, S. Singh. Channel-wise autoregressive entropy models for learned image compression. ICIP, 2020.",
+    "J. Li, B. Li, Y. Lu. Neural video compression with diverse contexts. CVPR, 2023.",
 ]
 
 

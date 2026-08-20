@@ -3,6 +3,8 @@
   "target_db": 0.3,
   "n_sequences": 53,
   "ckpt": "runs/RECIPE512/ckpt_PAPER.pth.tar",
+  "denominator_rows": "our own deepest exit (cost[-1])",
+  "denominator_rows_vs_release": "the released decoder (1.0)",
   "rows": [
     {
       "qp": 48,
@@ -669,6 +671,34 @@
           "saving_pct_vs_release": 31.671226501464844
         }
       ]
+    }
+  ],
+  "rows_vs_release": [
+    {
+      "qp": 48,
+      "mean": 39.11752204175265,
+      "sd": 0.0507042805284068,
+      "min": 38.751888275146484,
+      "p25": 39.12455368041992,
+      "median": 39.12455368041992,
+      "p75": 39.12455368041992,
+      "max": 39.12455368041992,
+      "worst_seq": "videoSRC12_1920x1080_30.yuv",
+      "best_seq": "Beauty_1920x1080_120fps_420_8bit_YUV.yuv",
+      "n": 53
+    },
+    {
+      "qp": 63,
+      "mean": 37.24190647197219,
+      "sd": 4.8247350373589315,
+      "min": 13.027006149291992,
+      "p25": 38.00654983520508,
+      "median": 39.12455368041992,
+      "p75": 39.12455368041992,
+      "max": 39.12455368041992,
+      "worst_seq": "BQSquare_416x240_60.yuv",
+      "best_seq": "Beauty_1920x1080_120fps_420_8bit_YUV.yuv",
+      "n": 53
     }
   ]
 }
