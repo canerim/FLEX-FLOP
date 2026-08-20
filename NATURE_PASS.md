@@ -73,3 +73,56 @@ broader perspective included.
 being applied to the abstract by another pass at the time of writing, and editing
 the same paragraph twice at once would lose one of them. This is queued behind
 that pass.
+
+---
+
+## Round 2: figures, against Nature's own figure guide
+
+Sources: Nature's figure guide, *Building and exporting figure panels*
+(research-figure-guide.nature.com), and the figure requirements in the author
+guidelines.
+
+The rules that bind, quoted:
+
+* "Figures should be laid out in a neat and space-efficient manner, minimizing
+  white space and with panels in an alphabetical order wherever possible."
+* "Consider the content and legibility of each panel and let that define its
+  size within the figure. Some panels may require more space than others."
+* Text 5 to 7 pt at final printed size, consistent across panels and across
+  figures. Panel labels lowercase, 8 pt bold, not italic.
+* Widths are 89 mm single column and 183 mm double; maximum height 170 mm.
+* "Avoiding red/green combinations and rainbow scales helps readers with colour
+  blindness to distinguish datasets."
+* "Text should be used instead of decorative icons wherever possible. Icons can
+  be open to interpretation and confuse the meaning of figures."
+* "Keys or keylines should be used in the figure wherever possible, rather than
+  having colour descriptions in the figure caption."
+
+### Ours, checked against that
+
+The two the author rejected fail different rules.
+
+**Figure 13, the deblocking gate.** Panel a spends its width on a line that is
+flat from 20 px onward: nine tenths of the panel carries one number. Panel b's
+bars have deliberately unequal widths, because width encodes the share of
+pixels, and nothing in the figure says so, which breaks the keys-in-the-figure
+rule. The figure is legible and says almost nothing.
+
+**Figure 14, the qualitative crop.** Four panels, one of which is a
+near-black difference map. It is the standard "look, no difference" figure, and
+its problem is not correctness but that it spends a full-width figure to show an
+absence. Nature's proportionality rule says panel size should follow content;
+here the most informative panel, the difference, is the least legible.
+
+### What replaces them, and what is added
+
+Recorded before building so the choice can be judged against the outcome:
+
+| slot | figure | why |
+|---|---|---|
+| replaces 13 | the seam gate, tiled, and the correction it makes on a real frame | shows the mechanism and its effect in one place; the correction map IS the tile lattice, which is the point |
+| replaces 14 | the exit map over the frame, beside what it costs | says WHERE the decoder spent, which is the paper's subject, rather than that the difference is invisible |
+| new diagram | how a multiplier turns a per-tile distortion table into an exit map | the core mechanism has no diagram anywhere in the paper |
+| new plot | the frontier with floor and saturation marked | the operating window is a headline claim and exists only as a table |
+| new plot | concentration of regret across tiles | justifies partial signalling; currently a Gini coefficient in prose |
+| new plot | the three deciders across rates, with the agreement paradox | result three of three, and it currently has no figure |
