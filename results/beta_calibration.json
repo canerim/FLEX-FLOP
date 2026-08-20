@@ -1,0 +1,77 @@
+{
+  "stage": "calibration only",
+  "ckpt": "runs/RECIPE512/ckpt_PAPER.pth.tar",
+  "budget_db": 0.1,
+  "router2": "runs/RECIPE512/routers2/v2_lam1.3e-5.pth",
+  "router2_meta": {
+    "lam": 1.3e-05,
+    "ckpt": "runs/RECIPE512/ckpt_eval.pth.tar",
+    "heldout_agree": 0.7183333498239517
+  },
+  "router_compute_share_pct_calibration": 0.16288874189707633,
+  "calibration_set": {
+    "split": "description_val.json",
+    "crop": 512,
+    "root": "/data10/shareddata/openimages/dcvc_train",
+    "n_images": 512
+  },
+  "beta_table": {
+    "0": 146.11267852783203,
+    "16": 133.2057418823242,
+    "32": 38.174539566040025,
+    "48": -33.90578651428226,
+    "63": null
+  },
+  "calibration_rows": [
+    {
+      "qp": 0,
+      "beta": 146.11267852783203,
+      "db_vs_uf": 0.09969975089461514,
+      "db_vs_uf_table": 0.09969680220547161,
+      "saving_pct": 24.703705264255404,
+      "saving_pct_vs_release": 23.98785063996911,
+      "saving_pct_measured": 23.24874357197869,
+      "floor_db": 0.030281470640687758,
+      "budget_reachable": true
+    },
+    {
+      "qp": 16,
+      "beta": 133.2057418823242,
+      "db_vs_uf": 0.09996726762983599,
+      "db_vs_uf_table": 0.0999716764290497,
+      "saving_pct": 20.396524271927774,
+      "saving_pct_vs_release": 19.639719912811415,
+      "saving_pct_measured": 18.991456791880328,
+      "floor_db": 0.03782805451373861,
+      "budget_reachable": true
+    },
+    {
+      "qp": 32,
+      "beta": 38.174539566040025,
+      "db_vs_uf": 0.09998760528105777,
+      "db_vs_uf_table": 0.09999453400450875,
+      "saving_pct": 14.512684883084148,
+      "saving_pct_vs_release": 13.699940567312296,
+      "saving_pct_measured": 13.204017438582696,
+      "floor_db": 0.049860980388075404,
+      "budget_reachable": true
+    },
+    {
+      "qp": 48,
+      "beta": -33.90578651428226,
+      "db_vs_uf": 0.09998548130897689,
+      "db_vs_uf_table": 0.09999153429816943,
+      "saving_pct": 8.600918587762862,
+      "saving_pct_vs_release": 7.731968472944573,
+      "saving_pct_measured": 7.3657171136942425,
+      "floor_db": 0.07008677572775923,
+      "budget_reachable": true
+    },
+    {
+      "qp": 63,
+      "beta": null,
+      "floor_db": 0.10351243682816857,
+      "budget_reachable": false
+    }
+  ]
+}

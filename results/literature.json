@@ -1,0 +1,24 @@
+{
+  "note": "Published figures, not measured here. Image block: Table 1 of Li et al., Learned Image Compression with Hierarchical Progressive Context Modeling, ICCV 2025 (arXiv:2507.19125); BD-Rate against VTM-22.0 on Kodak. Video block: Tables 1 and 3 of Li et al., Ultra-Fast Neural Video Compression (arXiv:2606.04410); BD-Rate against VTM-17.0 low delay, MACs per 1080p frame.",
+  "image": [
+    {"name": "CHARM",         "venue": "ICIP'20",  "kmac_px": 495.75,  "params_m": 58.53,  "bd_kodak": 0.86},
+    {"name": "STF",           "venue": "CVPR'22",  "kmac_px": 511.17,  "params_m": 99.86,  "bd_kodak": -2.06},
+    {"name": "ELIC",          "venue": "CVPR'22",  "kmac_px": 573.88,  "params_m": 36.93,  "bd_kodak": -3.22},
+    {"name": "WeConvene",     "venue": "ECCV'24",  "kmac_px": 2343.13, "params_m": 107.15, "bd_kodak": -6.98},
+    {"name": "MambaVC",       "venue": "arXiv'24", "kmac_px": 813.80,  "params_m": 47.88,  "bd_kodak": -8.72},
+    {"name": "DCVC-DC intra", "venue": "CVPR'23",  "kmac_px": 542.14,  "params_m": 45.51,  "bd_kodak": -9.18},
+    {"name": "TCM",           "venue": "CVPR'23",  "kmac_px": 1823.58, "params_m": 76.57,  "bd_kodak": -10.70},
+    {"name": "FLIC",          "venue": "ICLR'24",  "kmac_px": 1096.04, "params_m": 70.96,  "bd_kodak": -13.20},
+    {"name": "MLIC++",        "venue": "ICML'23",  "kmac_px": 1282.81, "params_m": 116.72, "bd_kodak": -15.15},
+    {"name": "HPCM-Base",     "venue": "ICCV'25",  "kmac_px": 918.57,  "params_m": 68.50,  "bd_kodak": -15.31},
+    {"name": "HPCM-Large",    "venue": "ICCV'25",  "kmac_px": 1261.29, "params_m": 89.71,  "bd_kodak": -19.19}
+  ],
+  "video": [
+    {"name": "DCVC-DC",        "gmac_frame": null, "params_m": 18.3,  "bd_vtm_ld": 14.5},
+    {"name": "DCVC-FM",        "gmac_frame": 2642, "params_m": 18.3,  "bd_vtm_ld": -21.3},
+    {"name": "DCVC-RT",        "gmac_frame": 385,  "params_m": 20.7,  "bd_vtm_ld": -21.0},
+    {"name": "DCVC-UF (LD)",   "gmac_frame": 170,  "params_m": 9.7,   "bd_vtm_ld": -9.5},
+    {"name": "DCVC-UF (HT-S)", "gmac_frame": 211,  "params_m": 81.2,  "bd_vtm_ld": -31.6},
+    {"name": "DCVC-UF (HT-L)", "gmac_frame": 343,  "params_m": 120.5, "bd_vtm_ld": -42.2}
+  ]
+}

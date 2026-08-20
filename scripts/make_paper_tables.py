@@ -523,6 +523,109 @@ if sa and b1:
             mac("GapLooseLow", f"{A3[qs[0]]-B3[qs[0]]:.1f}")
             mac("GapLooseHigh", f"{A3[qs[-1]]-B3[qs[-1]]:.1f}")
 
+# ------------------------------------------------- beta, calibrated held out
+# Configuration B's beta is bisected against the budget, and a deployed decoder
+# cannot run that bisection: the budget is a distortion against a source it
+# never receives. results/beta_calibration.json calibrates beta on the held-out
+# Open Images validation split instead and applies the table unchanged to the
+# test frames, so both numbers are on the same checkpoint, head and frames and
+# what separates them is the transfer rather than a change of anything else.
+print("held-out beta")
+bh, _ = pick("beta_calibration.json")
+trows = [r for r in (bh or {}).get("rows", [])
+         if r.get("budget_reachable")
+         and r.get("test_saving_pct_measured") is not None]
+if trows:
+    hby = {r["qp"]: r for r in trows}
+    hqs = [q for q in QPS if q in hby]
+    # Rates where the calibration set never reached the budget carry no beta at
+    # all. They stay in the table as blanks rather than being dropped: a rate
+    # the offline procedure cannot serve is the most important thing it does.
+    held = [q for q in hqs
+            if hby[q].get("heldout_saving_pct_measured") is not None]
+    calf = {r["qp"]: r.get("floor_db") for r in bh.get("calibration_rows", [])}
+    lines = [r"\begin{tabular}{lrrrrrrr}", r"\toprule",
+             r" & \multicolumn{3}{c}{$\beta$ held out}"
+             r" & \multicolumn{3}{c}{$\beta$ bisected on the test set} & \\",
+             r"$q$ & $\beta$ & saving & dB & $\beta$ & saving & dB"
+             r" & at equal dB \\", r"\midrule"]
+    for q in hqs:
+        r_ = hby[q]
+        tc = r_.get("transfer_cost_pts")
+        cells = [f"{q}"]
+        if q in held:
+            cells += [f"{r_['beta_heldout']:.0f}",
+                      f"{r_['heldout_saving_pct_measured']:.1f}",
+                      f"{r_['heldout_db']:.3f}"]
+        else:
+            cells += ["--", "--", "--"]
+        cells += [f"{r_['beta_test']:.0f}",
+                  f"{r_['test_saving_pct_measured']:.1f}",
+                  f"{r_['test_db']:.3f}",
+                  "--" if tc is None else
+                  (f"$-{tc:.1f}$" if tc > 0 else f"$+{-tc:.1f}$")]
+        lines.append(" & ".join(cells) + r" \\")
+    lines += [r"\bottomrule", r"\end{tabular}"]
+    w("beta_heldout.tex", "\n".join(lines))
+
+    cal = bh.get("calibration_set", {})
+    if cal.get("n_images"):
+        mac("HeldNCal", str(cal["n_images"]))
+    mac("HeldNRates", str(len(hqs)))
+    if held:
+        mac("HeldBetaLow", f"{hby[held[0]]['beta_heldout']:.0f}")
+        mac("HeldBetaHigh", f"{hby[held[-1]]['beta_heldout']:.0f}")
+        mac("HeldSavingLow",
+            f"{hby[held[0]]['heldout_saving_pct_measured']:.1f}")
+        mac("HeldSavingHigh",
+            f"{hby[held[-1]]['heldout_saving_pct_measured']:.1f}")
+        mac("HeldDbLow", f"{hby[held[0]]['heldout_db']:.3f}")
+        mac("HeldDbHigh", f"{hby[held[-1]]['heldout_db']:.3f}")
+        mac("HeldSavingMean",
+            f"{sum(hby[q]['heldout_saving_pct_measured'] for q in held)/len(held):.1f}")
+        mac("BisectedSavingMean",
+            f"{sum(hby[q]['test_saving_pct_measured'] for q in held)/len(held):.1f}")
+        # The two allocations sit at different delivered qualities, so the
+        # honest headline is the delivered dB and the saving given up at EQUAL
+        # dB, not the difference between two savings taken at two qualities.
+        dbs = {q: hby[q]["heldout_db"] for q in held}
+        mac("HeldDbWorst", f"{max(dbs.values()):.3f}")
+        mac("HeldDbWorstQp", str(max(dbs, key=dbs.get)))
+        mac("HeldDbBest", f"{min(dbs.values()):.3f}")
+        mac("HeldOverBudget",
+            f"{max(max(dbs.values()) - bh['budget_db'], 0.0):.3f}")
+        mac("HeldNOver", str(sum(1 for v in dbs.values()
+                                 if v > bh["budget_db"] + 5e-4)))
+        mac("HeldNHeld", str(len(held)))
+        tcs = {q: hby[q].get("transfer_cost_pts") for q in held
+               if hby[q].get("transfer_cost_pts") is not None}
+        if tcs:
+            mac("HeldTransferMax", f"{max(tcs.values()):.1f}")
+            mac("HeldTransferMin", f"{min(tcs.values()):.1f}")
+            mac("HeldTransferMaxQp", str(max(tcs, key=tcs.get)))
+            mac("HeldTransferMean",
+                f"{sum(tcs.values())/len(tcs):.1f}")
+    # Why the table lands where it does: the floor is the tiling penalty with
+    # no early exit at all, and it is not the same on 512px photographs as on
+    # 1080p video, so a budget measured from one is a different distance above
+    # the floor on the other.
+    fgap = {q: hby[q]["floor_db"] - calf[q] for q in hqs
+            if calf.get(q) is not None and hby[q].get("floor_db") is not None}
+    if fgap:
+        mac("HeldFloorGapMin", f"{min(fgap.values()):.3f}")
+        mac("HeldFloorGapMax", f"{max(fgap.values()):.3f}")
+        mac("HeldFloorCalLow", f"{calf[hqs[0]]:.3f}")
+        mac("HeldFloorTestLow", f"{hby[hqs[0]]['floor_db']:.3f}")
+        mac("HeldFloorCalHigh", f"{calf[hqs[-1]]:.3f}")
+        mac("HeldFloorTestHigh", f"{hby[hqs[-1]]['floor_db']:.3f}")
+    nob = [q for q in hqs if q not in held]
+    if nob:
+        mac("HeldNNoBeta", str(len(nob)))
+        mac("HeldNoBetaQp", str(nob[-1]))
+        if calf.get(nob[-1]) is not None:
+            mac("HeldNoBetaFloor", f"{calf[nob[-1]]:.3f}")
+        mac("HeldNoBetaForgone", f"{hby[nob[-1]]['test_saving_pct_measured']:.1f}")
+
 # ------------------------------------------------------------------ hybrid C
 print("hybrid C")
 hy, _ = pick("hybrid_RECIPE512_b01_fixed.json", "hybrid_RECIPE512_b01.json")

@@ -588,6 +588,24 @@ def content(colw, fullw):
         r"the one this paper is about: whether the decoder spends more "
         r"computation where the picture needs it. Our row is the intra decoder "
         r"of the last DCVC-UF entry, at the 0.1 dB budget.")
+    figure("field.png",
+           r"<b>Figure 2. Every published decoder is one number.</b> "
+           r"Arithmetic per pixel for the eleven image codecs of Table 2, and "
+           r"for the intra decoder this work modifies. Costs are comparable "
+           r"here even though the BD-Rate anchors are not, which is why this "
+           r"axis and not a rate-distortion one. The bar at the top is the "
+           r"same decoder as the rest of the paper: a 0.1 dB budget removes "
+           r"the pale section, and how much it removes depends on the "
+           r"picture.")
+    figure("tiles_unequal.png",
+           r"<b>Figure 3. Why depth should not be uniform.</b> One 1080p "
+           r"frame, 40 tiles. <b>a</b>, what each tile loses if it stops at "
+           r"the shallowest exit the ladder allows: a few lose nothing "
+           r"measurable and one loses 0.71 dB. A single depth for the frame "
+           r"has to be set by the worst of them. <b>b</b>, the bits the "
+           r"entropy model has already spent on a tile against the exit the "
+           r"Lagrangian oracle sends it to, at the 0.1 dB budget. The signal "
+           r"the decoder needs is already in the file.")
     par(r"Together the two tables say where the field spends its decoder "
         r"budget. Complexity has moved a long way in both directions: TCM [46] "
         r"and WeConvene [50] buy rate with an order of magnitude more "
@@ -700,6 +718,22 @@ def content(colw, fullw):
     h2("3.1 Setting and notation")
     par(r"We set out here the decoder we work on, the notation the rest of the "
         r"paper uses, and the three configurations we compare.")
+    figure("ladder.png",
+           r"<b>Figure 4. The ladder, priced.</b> What a tile costs at each "
+           r"exit, as a percentage of one released decode, counted with hooks "
+           r"on the executed pass and beside the arithmetic model the argmin "
+           r"uses. Exits below the split depth are not distinct, because the "
+           r"first j groups run for every tile whatever it does. The deepest "
+           r"exit costs slightly more than the release, which is the "
+           r"full-frame deblocking pass. Reported savings in this paper are "
+           r"the hook count.")
+    figure("allocation.png",
+           r"<b>Figure 5. Where the tiles actually go</b>, at the 0.1 dB "
+           r"budget, pooled over the whole test set. At the lowest rate two "
+           r"thirds of tiles take the cheapest available exit; at the highest "
+           r"only a fifth do and a quarter need the deepest. The allocation is "
+           r"not degenerate at either end, which is what makes the choice "
+           r"worth making.")
     h2("The decoder.")
     par(r"We work on the intra decoder of DCVC-UF [14]. The analysis side "
         r"stays frozen throughout: the patch embedding, the chunk encoder, the "
@@ -918,6 +952,26 @@ def content(colw, fullw):
         r"ones, so more tiles are handed to cheap exits and the frame again "
         r"gets cheaper and worse. We bisect β against the budget just as we "
         r"bisect λ.")
+    par(r"<b>Where β comes from at deployment.</b> A real decoder cannot run "
+        r"that bisection. It would need to know the delivered distortion, and "
+        r"the distortion is measured against a source the decoder never "
+        r"receives, which is the same missing variable that stopped it "
+        r"running the Lagrangian in the first place. Saying otherwise would "
+        r"smuggle the source back in at test time.")
+    par(r"So β is not chosen at test time. It is calibrated offline, once, on "
+        r"a held-out set, and shipped as a table indexed by the quality index "
+        r"and the budget. The decoder reads the quality index out of the "
+        r"bitstream, looks β up, and runs the argmax above; nothing in the "
+        r"loop needs the source. The table is 64 quality indices by however "
+        r"many budgets a deployment offers, which is a few hundred floats.")
+    par(r"We calibrate it on the \HeldNCal held-out Open Images validation "
+        r"frames, which are disjoint from the training images and from the "
+        r"test sequences: β is bisected to the budget on those, once per "
+        r"quality index, and the resulting table is then applied unchanged to "
+        r"the test set. Section 5.5 reports both that number and the one "
+        r"obtained by bisecting on the test set itself, because the "
+        r"difference between them is the only honest measure of whether the "
+        r"table transfers.")
     par(r"<b>Why a logarithm.</b> The oracle's rule adds a distortion to a "
         r"price. The head does not produce a distortion; it produces a "
         r"distribution over exits, and the quantity that plays the same "

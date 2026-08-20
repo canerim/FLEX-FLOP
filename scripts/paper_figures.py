@@ -14,6 +14,10 @@ DST.mkdir(parents=True, exist_ok=True)
 WANTED = [
     "sys_pipeline.png",
     "dcvcuf_framework.png",
+    "field.png",             # what every published decoder costs
+    "tiles_unequal.png",     # why one depth per frame is the wrong shape
+    "ladder.png",            # the per-exit cost, measured against modelled
+    "allocation.png",        # where the tiles go, by rate
     "router_arch.png",       # the router head, layer by layer   # the baseline, from the DCVC-UF paper
     "baseline.png",           # the decoder we modify, for the introduction       # fig 1, the method
     "qualitative.png",        # what the saving looks like

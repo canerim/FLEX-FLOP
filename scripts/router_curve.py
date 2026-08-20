@@ -43,53 +43,25 @@ import sys
 from pathlib import Path
 
 import torch
-import torch.nn.functional as F
 
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT))
 sys.path.insert(0, str(Path.home() / "DCVC"))
 
 import ctc_intra as C  # noqa: E402
+# The bisection and the cache it runs on live in flexuf/beta.py, because
+# scripts/beta_calibration.py has to run the SAME search on held-out images and
+# then apply its answer here. Two copies of a bisection is two bisections.
+# router_share is re-exported: scripts/combined_curve.py and
+# scripts/hybrid_curve.py import it from this module.
+from flexuf.beta import (at_beta, bisect_beta, build_cache,  # noqa: E402,F401
+                         floor_db, measured_saving, router_share)
 from flexuf.config import FlexUFConfig  # noqa: E402
 from flexuf.cost import exit_costs
-from flexuf.eval import (reference_frame_mse, tiled_exit_mses,
-                         true_frame_mse)  # noqa: E402
-from flexuf.measure import measured_saving_pct
 from flexuf.model import FlexUFIntra, load_flexuf_state  # noqa: E402
 from flexuf.reference import reference_for  # noqa: E402
 
 TARGET = 0.1        # overridden by --budget
-
-# `exit_costs()` prices the decoder. It does NOT include the router, because in
-# the signalled configuration the decoder never runs one. Here it does, so its
-# arithmetic is part of what the decode costs and has to come off the saving --
-# leaving it out would be the same class of error as the denominator in
-# DECISIONS 58: a real cost sitting outside the figure it belongs in.
-# Measured per RGB pixel against the decode's 217,113 MAC/px (mac_audit.py).
-DECODE_MACPX = 453540e6 / (1920 * 1088)
-
-
-def router_share(head, args, pixels: int) -> float:
-    """Fraction of one decode that this router head costs, measured not assumed."""
-    macs = {}
-
-    def hook(m, i, o):
-        if isinstance(m, torch.nn.Conv2d):
-            macs[id(m)] = (m.in_channels * m.out_channels * m.kernel_size[0]
-                           * m.kernel_size[1] * o.shape[-1] * o.shape[-2]
-                           / m.groups)
-        elif isinstance(m, torch.nn.Linear):
-            n = 1
-            for d in o.shape[:-1]:
-                n *= d
-            macs[id(m)] = m.in_features * m.out_features * n
-
-    hs = [m.register_forward_hook(hook) for m in head.modules()]
-    with torch.no_grad():
-        head(*args)
-    for h in hs:
-        h.remove()
-    return sum(macs.values()) / pixels / DECODE_MACPX
 
 
 def main(argv):
@@ -196,98 +168,14 @@ def main(argv):
         print(f"  {'qp':>4}{'tasarruf':>10}{'vs release':>12}{'dB':>10}{'beta':>10}")
     with torch.no_grad():
         for qp_v in a.qps:
-            cache = []
-            for x, pl in frames:
-                x = x.to(dev)
-                _, _, H, W = x.shape
-                P = cfg.rgb_patch
-                ph, pw = (-H) % P, (-W) % P
-                xp = F.pad(x, (0, pw, 0, ph), mode="replicate") if (ph or pw) else x
-                qp = torch.full((1,), qp_v, dtype=torch.int32, device=dev)
-                y, q, aux = net._encode_to_latent(xp, qp)
-                # DEPLOYED path, one tiled decode per exit. The previous form
-                # used dec.forward_all_exits, which runs full frame, so the
-                # tiling penalty cancelled against the full-frame reference and
-                # never appeared in the reported dB (flexuf/eval.py).
-                M = tiled_exit_mses(net.dec, y, q, xp, cfg)
-                R = reference_frame_mse(ref.dec, y, q, xp)
-                # What the decoder can see: the stem it has already computed,
-                # and (for V2) the latent and the entropy model's scales, both
-                # of which it has decoded before the trunk runs. Still zero
-                # added bits -- nothing here comes from the source frame.
-                stem = net.dec.upsample(y)
-                for g in range(cfg.split_depth):
-                    stem = net.dec.groups[g](stem)
-                if head2 is not None:
-                    lg = head2(stem, y, aux["scales_hat"], qp,
-                               cfg.feature_patch, cfg.latent_patch)
-                else:
-                    lg = net.router_head(stem, qp, cfg.feature_patch)
-                # The head masks exits below the split depth by ASSIGNING
-                # -1e4, which stops being a mask the moment the head's own
-                # logits reach that scale -- and this one's have: its raw
-                # outputs sit near -10000, so the "mask" is the LARGEST entry
-                # in every row and log_softmax puts almost all the mass on the
-                # two exits that do not exist. argmax then picks one and
-                # clamp(min=j) turns it into the cheapest real exit, for
-                # reasons that have nothing to do with the tile.
-                #
-                # Fixed at the decision site rather than in head2.py, because
-                # the head files are imported by live training runs and a
-                # crash-restart would pick up the edit mid-experiment. Every
-                # rule below reads lg[:, j:] only.
-                lg = lg[:, cfg.split_depth:]
-                lp = F.log_softmax(lg, 1)
-                if a.per_frame_scale:
-                    # The tilt trades log-probability against cost, so its
-                    # meaning depends on how large the log-probabilities are --
-                    # and a 144 K head is far more confident on some frames
-                    # than others. One global beta therefore over-tilts the
-                    # confident frames and under-tilts the rest. Normalising by
-                    # the frame's own mean magnitude removes that, and costs
-                    # nothing: it is a statistic of the decoder's own logits.
-                    m = (-lp).mean().clamp_min(1e-6)
-                    lp = lp / m
-                if rshare == 0.0:
-                    px = xp.shape[-1] * xp.shape[-2]
-                    rshare = (router_share(head2, (stem, y, aux["scales_hat"],
-                                                   qp, cfg.feature_patch,
-                                                   cfg.latent_patch), px)
-                              if head2 is not None else
-                              router_share(net.router_head,
-                                           (stem, qp, cfg.feature_patch), px))
-                    print(f"  router costs {100*rshare:.4f}% of the decode; "
-                          f"charged against every saving below\n")
-                cache.append((M, R, lp, y, q, xp))
+            def _say(r):
+                print(f"  router costs {100*r:.4f}% of the decode; "
+                      f"charged against every saving below\n")
 
-            def at_beta(beta):
-                SV = SVR = DB = n = 0.0
-                for M, R, lp, _y, _q, _xp in cache:
-                    k = (lp - beta * cost[None, cfg.split_depth:]).argmax(1) \
-                        + cfg.split_depth
-                    # rshare is added to the cost, i.e. subtracted from the
-                    # saving: the decoder pays for the router here.
-                    SV += (1 - (cost[k].mean() + rshare) / cost[-1]).item()
-                    SVR += (1 - cost[k].mean() - rshare).item()
-                    DB += (10 * torch.log10(
-                        M.gather(1, k[:, None]).squeeze(1).mean() / R)).item()
-                    n += 1
-                return 100 * SV / n, DB / n, 100 * SVR / n
-
-            def true_db(beta):
-                """What a decode of the router's actual map delivers.
-
-                The table measures each tile with its neighbours at the same
-                exit; a routed frame is mixed. One real decode per frame settles
-                it, which is affordable outside the bisection but not inside.
-                """
-                tot = 0.0
-                for M, R, lp, y_, q_, xp_ in cache:
-                    k = (lp - beta * cost[None, cfg.split_depth:]).argmax(1) \
-                        + cfg.split_depth
-                    tot += (10 * torch.log10(
-                        true_frame_mse(net.dec, y_, q_, xp_, k) / R)).item()
-                return tot / len(cache)
+            cache, rshare = build_cache(
+                net, ref, head2, cfg, [x for x, _pl in frames], qp_v, dev,
+                per_frame_scale=a.per_frame_scale, rshare=rshare,
+                on_rshare=_say)
 
             if a.at_lam is not None:
                 # Same lambda for both, so nothing here depends on the tilt or
@@ -319,44 +207,21 @@ def main(argv):
                       f"   agree {AG/n:.3f}")
                 continue
 
-            # Bisect beta for an exact budget. Large beta = cheap exits = worse
-            # dB, so dB is increasing in beta and the invariant is the same as
-            # the lambda bisection's.
-            # -50 did not reach the all-deepest allocation: a confident head
-            # has log-probability gaps of hundreds, and the masked exits sit at
-            # -1e4, so the tilt has to be able to outweigh those.
-            LO, HI = -2.0e4, 2.0e4
-            if true_db(LO) > TARGET:         # even the deepest choice overshoots
-                sv, db, svr = at_beta(LO)
+            # Even the deepest allocation the tilt can reach may overshoot the
+            # budget; then there is no beta and the rate is reported as
+            # unreachable rather than as a saving.
+            fl = floor_db(net.dec, cache, cost, cfg.split_depth, dev)
+            if fl > TARGET:
                 rows.append({"qp": qp_v, "saving_pct": None,
-                             "floor_db": true_db(LO), "budget_reachable": False})
-                print(f"  {qp_v:>4}{'—':>10}{'—':>12}{true_db(LO):>10.4f}"
+                             "floor_db": fl, "budget_reachable": False})
+                print(f"  {qp_v:>4}{'—':>10}{'—':>12}{fl:>10.4f}"
                       f"{'floor > budget':>16}")
                 continue
 
-            def bisect_to(t):
-                lo, hi = LO, HI
-                if at_beta(hi)[1] <= t:
-                    return hi
-                for _ in range(60):
-                    mid = 0.5 * (lo + hi)
-                    if at_beta(mid)[1] <= t:
-                        lo = mid
-                    else:
-                        hi = mid
-                return lo
-
-            # Bisect on the cheap table, then correct against a real decode of
-            # the router's actual map. Same two-level scheme as
-            # signalled_curve.py, and for the same reason.
-            inner, beta, td = TARGET, None, None
-            for _ in range(6):
-                beta = bisect_to(inner)
-                td = true_db(beta)
-                if abs(td - TARGET) < 5e-4:
-                    break
-                inner = inner + (TARGET - td)
-            sv, db_table, svr = at_beta(beta)
+            beta, td = bisect_beta(net.dec, cache, cost, cfg.split_depth,
+                                   rshare, TARGET, dev)
+            sv, db_table, svr = at_beta(cache, cost, cfg.split_depth, rshare,
+                                        beta)
             # The same saving counted off the decode rather than modelled. The
             # arithmetic model under-bills the shallow exits by a constant
             # 0.008 of a released decode (scripts/ceiling_measured.py), and
@@ -365,12 +230,8 @@ def main(argv):
             # from configuration A in the table that compares them. The
             # router's own share is charged against it here exactly as it is
             # against the modelled figure.
-            _m = 0.0
-            for M, R, lp, y_, q_, xp_ in cache:
-                k_ = (lp - beta * cost[None, cfg.split_depth:]).argmax(1) \
-                    + cfg.split_depth
-                _m += measured_saving_pct(net.dec, ref.dec, y_, q_, k_)
-            svr_meas = _m / len(cache) - 100 * rshare
+            svr_meas = measured_saving(net.dec, ref.dec, cache, cost,
+                                       cfg.split_depth, rshare, beta, dev)
             rows.append({"qp": qp_v, "saving_pct": sv,
                          "saving_pct_vs_release": svr,
                          "saving_pct_measured": svr_meas, "db_vs_uf": td,

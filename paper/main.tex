@@ -563,6 +563,27 @@ $\beta$ takes more away from the deep exits than from the shallow ones, so more
 tiles are handed to cheap exits and the frame again gets cheaper and worse. We
 bisect $\beta$ against the budget just as we bisect $\lambda$.
 
+\paragraph{Where $\beta$ comes from at deployment.} A real decoder cannot run
+that bisection. It would need to know the delivered distortion, and the
+distortion is measured against a source the decoder never receives, which is the
+same missing variable that stopped it running~(\ref{eq:lagrangian}) in the first
+place. Saying otherwise would smuggle the source back in at test time.
+
+So $\beta$ is not chosen at test time. It is calibrated offline, once, on a
+held-out set, and shipped as a table indexed by the quality index and the
+budget. The decoder reads the quality index out of the bitstream, looks $\beta$
+up, and runs the argmin in~(\ref{eq:router}); nothing in the loop needs the
+source. The table is $64$ quality indices by however many budgets a deployment
+offers, which is a few hundred floats.
+
+We calibrate it on the $512$ held-out Open Images validation frames, which are
+disjoint from the training images and from the test sequences: $\beta$ is
+bisected to the budget on those, once per quality index, and the resulting table
+is then applied unchanged to the test set. Section~\ref{sec:ab} reports both
+that number and the one obtained by bisecting on the test set itself, because
+the difference between them is the only honest measure of whether the table
+transfers.
+
 \paragraph{Why a logarithm.} The oracle's rule adds a distortion to a price. The
 head does not produce a distortion; it produces a distribution over exits, and
 the quantity that plays the same additive role is the surprisal
