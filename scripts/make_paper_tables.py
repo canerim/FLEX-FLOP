@@ -9,11 +9,54 @@ Every generator here prefers the full 53-sequence CTC file and falls back to the
 40-sequence one, printing which it used.
 """
 import json
+import sys
 from pathlib import Path
 
 R = Path(__file__).resolve().parents[1]
 RES, OUT = R / "results", R / "paper" / "tables"
+# _ceiling() below reads each run's config through flexuf, which needs the repo
+# and the DCVC checkout on the path.
+sys.path.insert(0, str(R))
+sys.path.insert(0, str(Path.home() / "DCVC"))
 OUT.mkdir(parents=True, exist_ok=True)
+
+# ---------------------------------------------------------------- the saving
+# ONE definition, for every table in this document.
+#
+# Three numbers for the architectural ceiling were in circulation: 41.91 from
+# before the FFN adapter was found to cost 5C^2 rather than 2, 39.12 from the
+# arithmetic model as it now stands, and 38.33 from hooks on the executed
+# decode. The model is still needed inside the argmin, where a per-tile price
+# has to be evaluated for every candidate exit at every step of a bisection and
+# decoding each candidate is not possible. It is not needed to REPORT, because
+# the routed decode is run anyway to measure distortion, so the saving can
+# simply be counted off it.
+#
+# Reported numbers are therefore the hook count. The model under-bills the
+# shallow exits by a constant 0.008 of a released decode, which is 0.4 to 0.8
+# saving points depending on the operating point, always in our favour. Every
+# table below is 0.4 to 0.8 points lower than it was, and correct.
+#
+# results/ceiling_measured.json holds the per-exit comparison.
+CEIL_MEASURED = 38.33   # overwritten below from results/ceiling_measured.json
+
+
+def sv_measured(row):
+    """Was this row's saving counted off the decode, or modelled?"""
+    return row.get("saving_pct_measured") is not None
+
+
+def sv(row):
+    """The saving a row reports, measured off the decode where available."""
+    m = row.get("saving_pct_measured")
+    return m if m is not None else row.get("saving_pct_vs_release")
+
+
+_cm = RES / "ceiling_measured.json"
+if _cm.exists():
+    CEIL_MEASURED = json.load(open(_cm))["ceiling_measured_pct"]
+
+
 QPS = [0, 16, 32, 48, 63]
 MACROS = {}
 
@@ -77,17 +120,17 @@ if d:
              r"\midrule"]
     for b in sorted(by):
         row = by[b]
-        vs = [row[q]["saving_pct_vs_release"] for q in QPS if q in row]
+        vs = [sv(row[q]) for q in QPS if q in row]
         lines.append(f"{b:.2f}\\,dB & " +
-                     " & ".join(f"{row[q]['saving_pct_vs_release']:.1f}" if q in row
+                     " & ".join(f"{sv(row[q]):.1f}" if q in row
                                 else "--" for q in QPS) +
                      f" & \\textbf{{{sum(vs)/len(vs):.1f}}} \\\\")
     lines += [r"\bottomrule", r"\end{tabular}"]
     w("main_results.tex", "\n".join(lines))
     r01 = by[0.1]
-    mac("MainLowRate", f"{r01[0]['saving_pct_vs_release']:.1f}")
-    mac("MainHighRate", f"{r01[63]['saving_pct_vs_release']:.1f}")
-    mac("MainMean", f"{sum(r01[q]['saving_pct_vs_release'] for q in QPS)/len(QPS):.1f}")
+    mac("MainLowRate", f"{sv(r01[0]):.1f}")
+    mac("MainHighRate", f"{sv(r01[63]):.1f}")
+    mac("MainMean", f"{sum(sv(r01[q]) for q in QPS)/len(QPS):.1f}")
     # A mean per budget, named by the budget, so the abstract can quote any row
     # of this table without a second measurement and without a hand-typed
     # number. MainMean stays as the 0.1 dB alias the prose already uses.
@@ -95,14 +138,14 @@ if d:
     _WORD = {5: "Half", 10: "One", 15: "OneHalf", 20: "Two", 30: "Three",
              50: "Five", 75: "Seven", 100: "Ten"}
     for _b, _row in by.items():
-        _v = [_row[q]["saving_pct_vs_release"] for q in QPS if q in _row]
+        _v = [sv(_row[q]) for q in QPS if q in _row]
         _w = _WORD.get(int(round(_b * 100)))
         if _v and _w:
             mac(f"MeanAt{_w}", f"{sum(_v)/len(_v):.1f}")
             if 0 in _row:
-                mac(f"LowAt{_w}", f"{_row[0]['saving_pct_vs_release']:.1f}")
+                mac(f"LowAt{_w}", f"{sv(_row[0]):.1f}")
             if 63 in _row:
-                mac(f"HighAt{_w}", f"{_row[63]['saving_pct_vs_release']:.1f}")
+                mac(f"HighAt{_w}", f"{sv(_row[63]):.1f}")
     mac("NumSeq", str(d["n_sequences"]))
     _mb = [r01[q]["map_bits"] for q in QPS
            if q in r01 and r01[q].get("map_bits")]
@@ -141,7 +184,10 @@ if d:
                         for q in qs) + r" \\",
              r"\bottomrule", r"\end{tabular}"]
     w("operating.tex", "\n".join(lines))
-    mac("Ceiling", f"{d['ceiling_pct']:.1f}")
+    # The measured ceiling, not the modelled one. saturation's own ceiling_pct
+    # comes from the arithmetic model, which under-bills the shallow exits.
+    mac("Ceiling", f"{CEIL_MEASURED:.1f}")
+    mac("CeilingModelled", f"{d['ceiling_pct']:.1f}")
     mac("FloorLow", f"{S[0]['floor_db']:.3f}")
     mac("FloorHigh", f"{S[max(qs)]['floor_db']:.3f}")
     mac("SatLow", f"{S[0]['saturation_db']:.3f}")
@@ -215,10 +261,24 @@ if d:
 
 # -------------------------------------------------------------- run compare
 print("run comparison")
-CFG = {"RECIPE512": ("K6 j2 256px", 41.91),
-       "BEST": ("K6 j2 256px", 41.91),
-       "BEST128": ("K6 j2 128px", 41.91),
-       "FINE12": ("K12 j4 128px", 50.29)}
+# Ceilings computed from each run's own config with the shipped cost model and
+# then corrected by the constant the hook count shows, rather than typed in.
+# They were 41.91 and 50.29 here, both from before the FFN adapter was found to
+# cost 5C^2, while \Ceiling elsewhere already said 39.1.
+def _ceiling(tag):
+    from flexuf.config import FlexUFConfig
+    from flexuf.cost import exit_costs
+    cfg = FlexUFConfig(**json.load(open(R / "runs" / tag / "meta.json"))["config"])
+    modelled = 100.0 * (1.0 - float(exit_costs(cfg, "head")[cfg.split_depth]))
+    # The hook count on RECIPE512 sits 0.79 points below its model; the offset
+    # is the same 0.008 of a released decode at every shallow exit, so it
+    # carries across ladders.
+    return modelled - (39.12 - CEIL_MEASURED)
+
+
+CFG = {t: (c, _ceiling(t)) for t, c in
+       (("RECIPE512", "K6 j2 256px"), ("BEST", "K6 j2 256px"),
+        ("BEST128", "K6 j2 128px"), ("FINE12", "K12 j4 128px"))}
 rows = []
 for tag in ("RECIPE512", "BEST", "BEST128", "FINE12"):
     d, _ = pick(f"signalled_{tag}_ctc53.json", f"signalled_{tag}_b135.json")
@@ -228,8 +288,12 @@ for tag in ("RECIPE512", "BEST", "BEST128", "FINE12"):
     for b in d["budgets"]:
         r = {x["qp"]: x for x in d["rows"]
              if abs(x["budget_db"] - b) < 1e-9 and x.get("budget_reachable")}
-        vs = [r[q]["saving_pct_vs_release"] for q in QPS if q in r]
-        means[b] = (sum(vs) / len(vs), len(vs)) if vs else (None, 0)
+        vs = [sv(r[q]) for q in QPS if q in r]
+        # Whether this run's rows are hook-counted or modelled. A table that
+        # mixes the two silently is the defect this pass exists to remove, so
+        # the modelled ones are marked and the caption says what the mark is.
+        meas = all(sv_measured(r[q]) for q in QPS if q in r) if r else False
+        means[b] = (sum(vs) / len(vs), len(vs), meas) if vs else (None, 0, False)
     rows.append((tag, d.get("ckpt_epoch"), means))
 if rows:
     buds = sorted({b for _, _, m in rows for b in m})
@@ -240,17 +304,18 @@ if rows:
     # .get, because the budgets are the union over runs and a run measured at
     # only three of them has no entry at the fourth. Indexing directly raised a
     # KeyError the moment RECIPE512 gained a 0.2 dB row that the others lack.
-    best_at = {b: max((m.get(b, (None, 0))[0] or -1) for _, _, m in rows)
+    best_at = {b: max((m.get(b, (None, 0, False))[0] or -1) for _, _, m in rows)
                for b in buds}
     for tag, ep, m in rows:
         cfgs, ceil = CFG.get(tag, ("--", 0))
         cells = []
         for b in buds:
-            v, n = m.get(b, (None, 0))
+            v, n, meas = m.get(b, (None, 0, False))
             if v is None:
                 cells.append("--")
             else:
-                t = f"{v:.1f}" + ("" if n == len(QPS) else r"$^{\ast}$")
+                t = (f"{v:.1f}" + ("" if n == len(QPS) else r"$^{\ast}$")
+                     + ("" if meas else r"$^{\dagger}$"))
                 cells.append(f"\\textbf{{{t}}}" if abs(v - best_at[b]) < 1e-9 else t)
         lines.append(f"{tag} & {cfgs} & {ceil:.1f} & " + " & ".join(cells) +
                      r" \\")
@@ -369,7 +434,7 @@ if d and lat:
     L = {r["qp"]: r for r in lat["rows"]}
     lq = sorted(L)[0]
     r01 = by[0.1]
-    mean01 = sum(r01[q]["saving_pct_vs_release"] for q in QPS if q in r01) / \
+    mean01 = sum(sv(r01[q]) for q in QPS if q in r01) / \
         len([q for q in QPS if q in r01])
     rows = [
         ("Released DCVC-UF", INTRA_GMAC, 100.0,
@@ -399,11 +464,11 @@ b1, _ = pick("router_RECIPE512_b01_PAPER.json", "router_RECIPE512_b01_fixed.json
 b3, _ = pick("router_RECIPE512_b03_PAPER.json", "router_RECIPE512_b03_fixed.json", "router_RECIPE512_b03.json")
 if sa and b1:
     def Aat(bud):
-        return {r["qp"]: r["saving_pct_vs_release"] for r in sa["rows"]
+        return {r["qp"]: sv(r) for r in sa["rows"]
                 if abs(r["budget_db"] - bud) < 1e-9 and r.get("budget_reachable")}
 
     def Bat(d_):
-        return {r["qp"]: r.get("saving_pct_vs_release") for r in (d_ or {}).get("rows", [])
+        return {r["qp"]: sv(r) for r in (d_ or {}).get("rows", [])
                 if r.get("budget_reachable")}
     A1, B1 = Aat(0.1), Bat(b1)
     # The bitstream-identical mode's own headline, so the contributions can
@@ -478,7 +543,7 @@ if hy:
     for q in qs:
         vals = [cell(q, r_) for r_ in show]
         lines.append(f"{q} & " + " & ".join(
-            f"{v['saving_pct_vs_release']:.1f}" if v else "---"
+            f"{sv(v):.1f}" if v else "---"
             for v in vals) + r" \\")
     lines += [r"\bottomrule", r"\end{tabular}"]
     w("hybrid.tex", "\n".join(lines))
@@ -486,11 +551,11 @@ if hy:
         b0, bx, ba = cell(q, 0.0), cell(q, r_), cell(q, 1.0)
         if not (b0 and bx and ba):
             return None
-        span = ba["saving_pct_vs_release"] - b0["saving_pct_vs_release"]
+        span = sv(ba) - sv(b0)
         if span <= 1e-9:
             return None
-        return 100 * (bx["saving_pct_vs_release"]
-                      - b0["saving_pct_vs_release"]) / span
+        return 100 * (sv(bx)
+                      - sv(b0)) / span
 
     qlo, qhi = qs[0], qs[-1]
     for tag, q in (("Low", qlo), ("High", qhi)):
@@ -500,7 +565,7 @@ if hy:
                 mac(f"HybridRecover{rt}{tag}", f"{v:.0f}")
             c_ = cell(q, r_)
             if c_ and tag == "High":
-                mac(f"HybridSave{rt}High", f"{c_['saving_pct_vs_release']:.1f}")
+                mac(f"HybridSave{rt}High", f"{sv(c_):.1f}")
     for rt, r_ in (("Tenth", 0.1), ("Fifth", 0.2), ("Half", 0.5),
                    ("Full", 1.0)):
         c_ = cell(qhi, r_)
@@ -513,8 +578,8 @@ if hy:
     for q in qs:
         ca, cb = cell(q, 1.0), cell(q, 0.5)
         if ca and cb:
-            over.append((q, cb["saving_pct_vs_release"]
-                         - ca["saving_pct_vs_release"]))
+            over.append((q, sv(cb)
+                         - sv(ca)))
     if over:
         beat = [d for _, d in over if d > 0]
         if beat:
@@ -605,7 +670,7 @@ if hy3:
     r3 = [r for r in hy3["rows"] if r.get("budget_reachable")]
 
     def _c3(q, rho):
-        return next((r["saving_pct_vs_release"] for r in r3
+        return next((sv(r) for r in r3
                      if r["qp"] == q and abs(r["rho"] - rho) < 1e-9), None)
     qs3 = sorted({r["qp"] for r in r3})
     rec = []
@@ -623,7 +688,7 @@ if hy3:
 hyr, _ = pick("hybrid_raterank_b01.json")
 if hy and hyr:
     def _t(d):
-        return {(r["qp"], round(r["rho"], 4)): r["saving_pct_vs_release"]
+        return {(r["qp"], round(r["rho"], 4)): sv(r)
                 for r in d["rows"] if r.get("budget_reachable")}
     Th, Tr = _t(hy), _t(hyr)
     both = [(k, Tr[k] - Th[k]) for k in Th if k in Tr and k[1] < 1.0]
@@ -722,7 +787,7 @@ if cb:
                  ("bits" if w_ == 0 else "head" if w_ == 1 else f"{w_:g}")
                  for w_ in ws) + r" \\", r"\midrule"]
     for q in qs:
-        vals = [(cell(q, w_) or {}).get("saving_pct_vs_release") for w_ in ws]
+        vals = [sv(cell(q, w_) or {}) for w_ in ws]
         best = max((v for v in vals if v is not None), default=None)
         lines.append(f"{q} & " + " & ".join(
             "---" if v is None else
@@ -734,13 +799,13 @@ if cb:
         c0, c1 = cell(q, 0.0), cell(q, 1.0)
         vals = [(w_, cell(q, w_)) for w_ in ws]
         vals = [(w_, c) for w_, c in vals if c]
-        bw, bc = max(vals, key=lambda t: t[1]["saving_pct_vs_release"])
-        mac(f"Blend{tag}Best", f"{bc['saving_pct_vs_release']:.1f}")
+        bw, bc = max(vals, key=lambda t: sv(t[1]))
+        mac(f"Blend{tag}Best", f"{sv(bc):.1f}")
         mac(f"Blend{tag}BestW", f"{bw:g}")
         if c1:
-            mac(f"BlendHeadOnly{tag}", f"{c1['saving_pct_vs_release']:.1f}")
+            mac(f"BlendHeadOnly{tag}", f"{sv(c1):.1f}")
         if c0:
-            mac(f"BlendBitsOnly{tag}", f"{c0['saving_pct_vs_release']:.1f}")
+            mac(f"BlendBitsOnly{tag}", f"{sv(c0):.1f}")
 
 # ---------------------------------------------------------------- BD-Rate
 print("BD-Rate")
@@ -761,7 +826,7 @@ if bdj:
     for r in bdj["rows"]:
         lines.append(f"{r['config']} & {r['budget_db']:.1f}\\,dB & "
                      f"{r['bd_rate_pct']:.2f} & "
-                     f"{r['saving_pct_vs_release']:.1f} & "
+                     f"{sv(r):.1f} & "
                      f"{r['map_bits']:.0f} \\\\")
     lines += [r"\bottomrule", r"\end{tabular}"]
     w("bdrate.tex", "\n".join(lines))
@@ -774,22 +839,22 @@ if rr3:
     rs3 = [r for r in rr3["rows"] if r.get("budget_reachable")]
     b3_, _ = pick("router_RECIPE512_b03_PAPER.json", "router_RECIPE512_b03_fixed.json", "router_RECIPE512_b03.json")
     if rs3 and b3_:
-        B3v = {r["qp"]: r["saving_pct_vs_release"] for r in b3_["rows"]
+        B3v = {r["qp"]: sv(r) for r in b3_["rows"]
                if r.get("budget_reachable")}
-        marg = [r["saving_pct_vs_release"] - B3v[r["qp"]] for r in rs3
+        marg = [sv(r) - B3v[r["qp"]] for r in rs3
                 if r["qp"] in B3v]
         if marg:
             mac("RateRankLooseAheadBy", f"{max(marg):.1f}")
     if rs3:
-        mac("RateRankLoose", f"{rs3[-1]['saving_pct_vs_release']:.1f}")
+        mac("RateRankLoose", f"{sv(rs3[-1]):.1f}")
 rr5, _ = pick("raterank_RECIPE512_b05.json")
 if rr5:
     rs5 = [r for r in rr5["rows"] if r.get("budget_reachable")]
-    if rs5 and all(abs(r["saving_pct_vs_release"]
+    if rs5 and all(abs(sv(r)
                        - r["oracle_saving_pct_vs_release"]) < 1e-6 for r in rs5):
         mac("RateRankHalfDbExact", "every")
         mac("RateRankLooseCeil",
-            f"{sum(1 for r in rs3 if r['saving_pct_vs_release'] > 41.9)}")
+            f"{sum(1 for r in rs3 if sv(r) > CEIL_MEASURED - 0.5)}")
 if rr:
     rs = [r for r in rr["rows"] if r.get("budget_reachable")]
     lines = [r"\begin{tabular}{lrrrrr}", r"\toprule",
@@ -798,9 +863,9 @@ if rr:
              r"\midrule"]
     for r in rs:
         b = (B1 or {}).get(r["qp"])
-        beats = b is not None and r["saving_pct_vs_release"] > b
-        v = (f"\\textbf{{{r['saving_pct_vs_release']:.1f}}}" if beats
-             else f"{r['saving_pct_vs_release']:.1f}")
+        beats = b is not None and sv(r) > b
+        v = (f"\\textbf{{{sv(r):.1f}}}" if beats
+             else f"{sv(r):.1f}")
         lines.append(f"{r['qp']} & {v} & "
                      + (f"{b:.1f}" if b is not None else "---")
                      + f" & {r['oracle_saving_pct_vs_release']:.1f} & "
@@ -809,10 +874,10 @@ if rr:
     lines += [r"\bottomrule", r"\end{tabular}"]
     w("raterank.tex", "\n".join(lines))
     if rs:
-        mac("RateRankLow", f"{rs[0]['saving_pct_vs_release']:.1f}")
-        mac("RateRankHigh", f"{rs[-1]['saving_pct_vs_release']:.1f}")
+        mac("RateRankLow", f"{sv(rs[0]):.1f}")
+        mac("RateRankHigh", f"{sv(rs[-1]):.1f}")
         if B1:
-            d_ = [(r["qp"], r["saving_pct_vs_release"] - B1[r["qp"]])
+            d_ = [(r["qp"], sv(r) - B1[r["qp"]])
                   for r in rs if r["qp"] in B1]
             win = [q for q, v in d_ if v > 0]
             if win:
@@ -866,7 +931,7 @@ d, _ = pick("signalled_RECIPE512_ctc53.json")
 if d:
     by = {r["qp"]: r for r in d["rows"]
           if abs(r["budget_db"] - 0.1) < 1e-9 and r.get("budget_reachable")}
-    mean01 = sum(by[q]["saving_pct_vs_release"] for q in QPS if q in by) / \
+    mean01 = sum(sv(by[q]) for q in QPS if q in by) / \
         len([q for q in QPS if q in by])
     ours_kmac = INTRA_GMAC_ * (1 - mean01 / 100) * 1e9 / PX / 1e3
     rel_kmac = INTRA_GMAC_ * 1e9 / PX / 1e3

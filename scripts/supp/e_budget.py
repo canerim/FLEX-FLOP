@@ -14,8 +14,15 @@ a conversion between two conventions, it is computed here at build time from the
 files named in the note beside the table, by the procedure in
 `scripts/tradeoff_figure.py`, and never typed.
 
-`paper/supp/e_budget.tex` carries the same section as LaTeX, with the derived
-figures written out as digits, because LaTeX cannot compute them.
+`paper/supplementary.tex` inputs `supp/e_budget`, which does not exist yet. When
+it is written it has to carry the derived figures as digits, because LaTeX
+cannot compute them, and this module is where they come from.
+
+What this section deliberately leaves to its neighbours: Section C derives the
+floor, the saturation point and the ceiling; Section D tabulates the two ends at
+nine rates, the per-sequence spread behind every mean, and the same operating
+point measured in a second metric. Repeating any of it here would make the
+document longer without making it say more.
 """
 import math
 

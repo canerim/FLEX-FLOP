@@ -75,7 +75,11 @@ def grid():
         return np.array([[idx[(q, budget)]["per_class"][c][field] for q in QPS]
                          for c in CLASSES])
 
-    fig, ax = plt.subplots(1, 3, figsize=(ns.W2, 1.95))
+    # One column wide and stacked, not a full-width band. A band forces a
+    # page break in the reportlab build, which abandons whatever is left of
+    # the page it breaks from; three heatmaps of six rows fit a column
+    # comfortably and cost no white page.
+    fig, ax = plt.subplots(3, 1, figsize=(ns.W1, 3.55))
     panels = [(mat(0.1, "saving"), "compute saved (%), 0.1 dB budget",
                0, 40, "%.1f"),
               (mat(0.3, "saving"), "compute saved (%), 0.3 dB budget",
@@ -84,10 +88,10 @@ def grid():
                0, 0.13, "%.3f")]
     for j3, (a, (m, title, lo, hi, fmt)) in enumerate(zip(ax, panels)):
         a.imshow(m, cmap="cividis", vmin=lo, vmax=hi, aspect="auto")
-        a.set_xticks(range(len(QPS)), [f"q{q}" for q in QPS])
-        a.set_yticks(range(len(CLASSES)),
-                     [nice(c) for c in CLASSES] if j3 == 0 else [""] * 6)
-        a.set_title(title, fontsize=6, color=ns.INK2, loc="left", pad=3)
+        a.set_xticks(range(len(QPS)),
+                     [f"q{q}" for q in QPS] if j3 == 2 else [""] * len(QPS))
+        a.set_yticks(range(len(CLASSES)), [nice(c) for c in CLASSES])
+        a.set_title(title, fontsize=6, color=ns.INK2, loc="left", pad=2.5)
         a.grid(False)
         rng = hi - lo
         for i in range(m.shape[0]):
@@ -98,10 +102,9 @@ def grid():
         for sp in a.spines.values():
             sp.set_visible(False)
         a.tick_params(length=0)
-    ns.panel(ax[0], "a", dx=-0.34, dy=1.20)
-    ns.panel(ax[1], "b", dx=-0.06, dy=1.20)
-    ns.panel(ax[2], "c", dx=-0.06, dy=1.20)
-    fig.subplots_adjust(wspace=0.10)
+    for a, L in zip(ax, "abc"):
+        ns.panel(a, L, dx=-0.30, dy=1.30)
+    fig.subplots_adjust(hspace=0.32)
     save(fig, "res_grid.png")
 
 

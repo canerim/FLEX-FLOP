@@ -2,7 +2,7 @@ FLEX-UF · REVIEWER FIX LIST
 30 items. Ticked only when the fix is in the built PDF and check_paper agrees.
 [ ] open   [~] in progress   [x] done
 
-Status: 18 / 31
+Status: 19 / 31
 
 ================================================================================
 CRITICAL (8)
@@ -24,7 +24,7 @@ CRITICAL (8)
         Files: main.tex, build_pdf.py, abstract, contributions, conclusion,
         Table 5 caption, related-work table.
 
-[ ] 02. Freeze the cost accounting on ONE canonical definition.
+[x] 02. Freeze the cost accounting on ONE canonical definition.
         Three different architectural ceilings are in circulation for the same
         quantity: 41.91%, 39.1%, 38.33%. The supplement says 38.33% is the one
         that agrees with the hook-measured cost, and that the hook audit moves

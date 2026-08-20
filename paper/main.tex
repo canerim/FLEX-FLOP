@@ -1640,18 +1640,20 @@ this method, and the optimism grows with how much of the frame exits early.
 \begin{table}[t]
 \centering
 \resizebox{\columnwidth}{!}{\input{tables/runs}}
-\caption{\textbf{Ladder settings}, mean saving (\%) over the five rates,
-same test set and protocol. ``Ceiling'' is Eq.~(\ref{eq:ceiling}).
-$^{\ast}$ one rate is infeasible at that budget, because the ladder's floor
-exceeds it, so the mean is over the remaining four.}
+\caption{\textbf{Ladder settings}, mean saving (\%) over the five rates, on
+each run's own latest checkpoint. Ceilings are $100(1-c_j)$ for that ladder,
+corrected by the offset the hook count shows. $^{\ast}$ some rate did not reach
+the budget. $^{\dagger}$ the saving is from the arithmetic model rather than
+counted off the decode, and is therefore $0.4$--$0.8$ points optimistic; only
+RECIPE512 has been re-measured with hooks at every budget.}
 \label{tab:runs}
 \end{table}
 
 Section~\ref{sec:operating} argued that once a budget saturates a ladder, the
 only way to spend more is an exit that does not exist. Table~\ref{tab:runs}
-measures that. A finer ladder ($K{=}12$, $j{=}4$) has a ceiling of $50.3\%$
-against \Ceiling\%, and the two orderings cross somewhere between $0.1$ and
-$0.3\dB$:
+measures that. A finer ladder ($K{=}12$, $j{=}4$) has a higher ceiling than the
+shipped one's \Ceiling\%, and the two orderings cross somewhere between $0.1$
+and $0.3\dB$:
 
 \begin{itemize}\itemsep1pt
 \item At $0.1\dB$ the coarse ladder wins, and the fine one cannot even reach the

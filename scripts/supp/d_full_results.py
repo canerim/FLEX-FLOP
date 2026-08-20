@@ -280,10 +280,10 @@ def content(k):
         "This section prints in full what the main paper samples: every class "
         "at every quality index and at three budgets, the frontier drawn "
         "class by class, and the distribution behind each mean, over "
-        "sequences and over tiles. Three measurements the main paper has no "
-        "room for are also here, a perceptual metric beside the decibel, the "
-        "composition with weight quantisation, and the raw numbers behind the "
-        "curves. It ends with the cases where the method does badly.")
+        "sequences and over tiles. It also carries three measurements the "
+        "main paper has no room for: a perceptual metric beside the decibel, "
+        "the composition with weight quantisation, and the raw numbers behind "
+        "the curves. It ends with the cases where the method does badly.")
 
     # ----------------------------------------------------------------- G.1
     k.h2("Every class at every rate")
@@ -307,28 +307,28 @@ def content(k):
            "same budget with different code and settle on "
            "λ = 5.126×10<super>-5</super> and 5.150×10<super>-5</super>.")
 
-    k.figwide("res_grid.png",
-              "The same measurement as a grid, with the looser budget beside "
-              "it. <b>a</b>, compute saved at the 0.1 dB budget. <b>b</b>, "
-              "the same at 0.3 dB, where every class at the three lowest "
-              "rates has reached the architectural ceiling of \\Ceiling% and "
-              "only q48 and q63 are still making a choice. <b>c</b>, the "
-              "quality actually given up at the 0.1 dB budget, which the set "
-              "meets and no class does: at q0 the allocation spends 0.116 dB "
-              "on MCL-JCV and 0.028 dB on HEVC D. The small classes are cheap "
-              "in quality for the same reason they are poor in saving, that "
-              "with two or eight tiles there is no fine-grained way to spend "
-              "a budget. The 0.5 dB grid is not drawn because every one of "
-              "its thirty cells is at the ceiling.")
+    k.fig("res_grid.png",
+          "The same measurement as a grid, with the looser budget under it. "
+          "<b>a</b>, compute saved at the 0.1 dB budget. <b>b</b>, the same "
+          "at 0.3 dB, where every class at the three lowest rates has reached "
+          "the architectural ceiling of \\Ceiling% and only q48 and q63 are "
+          "still making a choice. <b>c</b>, the quality actually given up at "
+          "the 0.1 dB budget, which the set meets and no class does: at q0 "
+          "the allocation spends 0.116 dB on MCL-JCV and 0.028 dB on HEVC D. "
+          "The small classes are cheap in quality for the same reason they "
+          "are poor in saving, that with two or eight tiles there is no "
+          "fine-grained way to spend a budget. The 0.5 dB grid is not drawn "
+          "because every one of its thirty cells is at the ceiling.",
+          maxh=230)
     k.note("Drawn by scripts/supp_results_figs.py from "
            "results/supp_per_class_budgets.json, on " + PINNED + ".")
 
     k.par(
         "The resolution effect is a property of the tiling and not of the "
-        "content, and it is the argument against reading a single mean over a "
-        "test set that mixes resolutions. MCL-JCV is 30 of the \\NumSeq "
-        "sequences and all of them are 1080p, so it carries most of the "
-        "pooled row.")
+        "content, which is the argument against reading a single mean over a "
+        "test set that mixes resolutions: MCL-JCV is 30 of the \\NumSeq "
+        "sequences and all of them 1080p, so it carries most of the pooled "
+        "row.")
 
     # ----------------------------------------------------------------- G.2
     k.h2("Where the tiles exit")
@@ -395,8 +395,9 @@ def content(k):
     k.par(
         "Two limits bound every panel. A budget below the floor cannot be met "
         "at all, because our deepest exit already differs from the released "
-        "decoder by \\FloorLow dB at q0 and \\FloorHigh dB at q63; a budget "
-        "above \\SatLow dB at q0 or \\SatHigh dB at q63 changes nothing, "
+        "decoder by \\FloorLow dB at q0 and \\FloorHigh dB at q63 in the "
+        "per-frame convention; a budget above \\SatLow dB at q0 or "
+        "\\SatHigh dB at q63 changes nothing, "
         "because every tile is already at the shallowest selectable exit. "
         "Between those two the multiplier is doing work, and the 0.1 dB "
         "budget is inside the window at every rate.")
@@ -476,13 +477,12 @@ def content(k):
     k.note("results/supp_opquality_PAPER.json, on " + PINNED + ", \\NumSeq "
            "sequences at one frame each. MS-SSIM is Wang et al. 2003 at five "
            "scales with an 11-tap Gaussian of σ = 1.5 on the valid region, on "
-           "the luma plane in 4:2:0 on 0 to 255, which is the domain the PSNR "
-           "column uses. The implementation self-checks at start-up and the "
-           "file records both results: identical inputs score 1.000000 and a "
-           "3x3 box blur scores 0.7797. λ is read from "
-           "results/signalled_RECIPE512_ctc53.json so the allocation is the "
-           "deployed one, and the delivered decibel recomputed here matches "
-           "the stored value to four decimals at every rate.")
+           "the luma plane in 4:2:0 on 0 to 255, the domain the PSNR column "
+           "uses; the implementation self-checks at start-up and the file "
+           "records that identical inputs score 1.000000 and a 3x3 box blur "
+           "0.7797. λ is read from results/signalled_RECIPE512_ctc53.json so "
+           "the allocation is the deployed one, and the delivered decibel "
+           "recomputed here matches the stored value to four decimals.")
 
     k.fig("res_rd.png",
           "<b>a</b>, the rate-quality curve of the released decoder and of "
@@ -538,18 +538,18 @@ def content(k):
            "deepest exit from 0.027 dB to 0.032 dB, so the two levers "
            "compose. At q63 they compete: the deepest exit moves from 0.108 "
            "dB to 0.223 dB, which is more than a whole 0.1 dB budget spent "
-           "before any tile has exited early. Six-bit costs between 0.63 and "
-           "2.18 dB at the deepest exit and four-bit is unusable at every "
-           "rate. The last column is the number of layers quantised, the same "
-           "86 in every integer row.")
+           "before any tile has exited early. Six-bit costs 0.13 dB at the "
+           "deepest exit at q0 and 2.18 dB at q63, and four-bit is unusable "
+           "at every rate. The last column is the number of layers "
+           "quantised, the same 86 in every integer row.")
     k.note("results/supp_quant_PAPER.json, on " + PINNED + ", 32 held-out "
            "images at 512 px. Weight-only, symmetric, per output channel, no "
-           "calibration, applied to dec.* and router_head.* with the encoder "
-           "asserted unchanged. This supersedes results/quant_BEST.json, the "
-           "same experiment on runs/BEST/ckpt_eval.pth.tar. Nothing here "
-           "measures an integer kernel: the file records the bit width and "
-           "the implied bit-operation ratio, and the arithmetic was carried "
-           "out in floating point on quantised weights.")
+           "calibration, on dec.* and router_head.* with the encoder asserted "
+           "unchanged; it supersedes results/quant_BEST.json, the same "
+           "experiment on runs/BEST/ckpt_eval.pth.tar. Nothing here measures "
+           "an integer kernel: the file records the bit width and the implied "
+           "bit-operation ratio, and the arithmetic ran in floating point on "
+           "quantised weights.")
 
     # ----------------------------------------------------------------- G.7
     k.h2("Integrated figures, and what they depend on")
@@ -609,18 +609,28 @@ def content(k):
            "sequences, so its levels are not the levels above and only its "
            "robustness conclusion is quoted.")
 
+    bd = k.J("bdrate.json")
+    _by = {(r["config"], round(r["budget_db"], 2)): r for r in bd["rows"]}
+    _gap = max(abs(_by[("A signalled", b)]["bd_rate_pct"]
+                   - _by[("B router", b)]["bd_rate_pct"])
+               for b in (0.1, 0.3, 0.5))
+    _sav = [(_by[("A signalled", b)]["saving_pct_vs_release"]
+             - _by[("B router", b)]["saving_pct_vs_release"])
+            for b in (0.1, 0.5)]
     k.rows(_bdrate_rows(k),
            "BD-Rate cost of the two configurations: the rate a reader would "
            "have to spend to buy back the quality the compute saving costs, "
            "integrated over the five rate points, which is the number that "
            "makes this trade-off comparable with a published codec result. "
            "Configuration A signals the exit map in the bitstream and pays "
-           "between \\MapBitsLo and \\MapBitsHi bits a frame for it, "
+           "\\MapBitsLo to \\MapBitsHi bits a frame for it at the 0.1 dB "
+           "budget, depending on the rate, "
            "configuration B infers it from what the decoder already holds and "
-           "pays none. Their BD-Rate costs differ by two hundredths of a "
-           "point at every budget, so the map is close to free; what A buys "
-           "with it is compute, and the gap in the last two columns is "
-           "7.7 points at the tight budget and vanishes at the loose one.")
+           "pays none. Their BD-Rate costs differ by at most "
+           f"{_gap:.3f} of a point, so the map is close to free. What A buys "
+           "with it is compute: the gap in the last two columns is "
+           f"{_sav[0]:.1f} points at the tight budget and {_sav[1]:.1f} at "
+           "the loose one, where both configurations are at the ceiling.")
     k.note("results/bdrate.json, every row on " + PINNED + ", which its "
            "sources block records file by file. The file it replaced is kept "
            "as results/bdrate_before_pinning.json, whose saving column reads "
@@ -646,23 +656,35 @@ def content(k):
            "histogram concentrates.")
     k.note("results/signalled_RECIPE512_ctc53.json, on " + PINNED + ", "
            "\\NumSeq sequences, per-frame convention. λ is the multiplier the "
-           "two-level bisection settled on and the saving is against the "
+           "two-level bisection settled on, and a λ of exactly 1 is the top "
+           "of its bracket, which marks a budget the ladder saturated below "
+           "rather than a price that was chosen. Saving is against the "
            "released decoder.")
 
+    _dd = [o["db_vs_uf_per_frame"] - o["db_vs_uf"]
+           for o in k.J(CURVE)["op_points"]]
+    _d1 = [o["db_vs_uf_per_frame"] - o["db_vs_uf"]
+           for o in k.J(CURVE)["op_points"] if o["target_db"] == 0.1]
     k.rows(_frontier_rows(k),
            "The frontier itself: every operating point behind the per-class "
            "figure, at seven budgets and five rates, with the exit shares "
            "that produced each one. Both decibel conventions are printed for "
-           "the same allocation and they differ by 0.02 to 0.04 dB "
-           "throughout, a quarter to a third of a 0.1 dB budget. A row "
+           "the same allocation, and they differ by "
+           f"{min(_dd):.3f} to {max(_dd):.3f} dB over the table and by "
+           f"{min(_d1):.3f} to {max(_d1):.3f} dB at the 0.1 dB budget, which "
+           "is a fifth of that budget. A row "
            "reading n/a in the saving column is a budget below the floor at "
-           "that rate, where no allocation meets the target; a row at 0.5 dB "
-           "is past saturation, where the file stores no histogram because "
-           "the allocation has stopped changing.")
+           "that rate, where no allocation meets the target. A row reading "
+           "100/0/0/0 is past saturation: the file stores neither a "
+           "multiplier nor a histogram there, and the shares are filled in "
+           "from what saturation means, every tile at the shallowest "
+           "selectable exit.")
     k.note("results/" + CURVE + ", on " + PINNED + ". Saving is converted to "
            "the released-decoder denominator by charging the retained cost "
-           "the price of our deepest exit, \\DeepestUniformCost released "
-           "decodes, derived here from the ceiling in "
+           "the price of our deepest exit, "
+           f"{_deepest_cost(k):.4f} released decodes, which is "
+           "\\DeepestUniformCost at the precision the paper prints and is "
+           "derived here from the ceiling in "
            "results/saturation_RECIPE512_ctc53.json and the saturated saving "
            "in this file. One caution about that denominator: this file bills "
            "the shared stem inside every tile's cost, while "
@@ -680,11 +702,12 @@ def content(k):
     k.bullets([
         "<b>Sequences that cost more than they save.</b> At q63 four "
         "sequences finish at minus 0.95%, which is every tile at full depth "
-        "and our deepest exit charging \\DeepestUniformCost released decodes "
-        "for the privilege: RaceHorses at 832x480 and at 416x240, "
-        "BlowingBubbles and BQSquare. Three more sit under 3%. On this "
-        "content the method should be switched off rather than run at a "
-        "budget, and the exit histogram is what tells the encoder so.",
+        "and our deepest exit costing that much more than a released decode: "
+        "RaceHorses at 832x480 and at 416x240, BlowingBubbles and BQSquare. "
+        "One more sits under 3% and ten in all save less than a tenth of a "
+        "decode. On this content the method should be switched off rather "
+        "than run at a budget, and the exit histogram is what tells the "
+        "encoder so.",
         "<b>The bottom tile row of a padded frame.</b> The six worst tiles in "
         "the test set are all in the last row of a 1080p frame at 78% "
         "padding, each losing between 1.72 and 1.97 dB. The allocation is "

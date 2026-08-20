@@ -1809,13 +1809,17 @@ def content(colw, fullw):
     h2("5.10 The right ladder depends on the budget")
     tbl("runs",
         r"<b>Table 9. Ladder settings</b>, mean saving (%) over the five "
-        r"rates, same test set and protocol. ``Ceiling'' is the architectural "
-        r"ceiling. * one rate is infeasible at that budget, because the "
-        r"ladder's floor exceeds it, so the mean is over the remaining four.")
+        r"rates, on each run's own latest checkpoint. Ceilings are 100(1-c_j) "
+        r"for that ladder, corrected by the offset the hook count shows. "
+        r"* some rate did not reach the budget, so the mean is over the rest. "
+        r"† the saving is from the arithmetic model rather than counted off "
+        r"the decode, and is therefore 0.4 to 0.8 points optimistic; only "
+        r"RECIPE512 has been re-measured with hooks at every budget.")
     par(r"Section 5.4 argued that once a budget saturates a ladder, the only "
         r"way to spend more is an exit that does not exist. The table measures "
-        r"that. A finer ladder (K=12, j=4) has a ceiling of 50.3% against "
-        r"\Ceiling%, and the two orderings cross somewhere between 0.1 and "
+        r"that. A finer ladder (K=12, j=4) has a higher ceiling than the "
+        r"shipped one's \Ceiling%, and the two orderings cross somewhere "
+        r"between 0.1 and "
         r"0.3 dB. At 0.1 dB the coarse ladder wins, and the fine one cannot "
         r"even reach the budget at the highest rate. Splitting later (j=4 "
         r"against j=2) puts twice as many blocks in the per-tile section, "

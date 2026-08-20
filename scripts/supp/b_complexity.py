@@ -7,7 +7,11 @@ that were actually executed. Three sources carry it:
   results/mac_audit.json          every leaf convolution of the released
                                   DCVC-UF intra decoder, by forward hook, with
                                   kernel, channels, groups, input and output
-                                  grid and MAC, at three resolutions
+                                  grid and MAC, at three resolutions. Written by
+                                  scripts/mac_audit_json.py, which is
+                                  scripts/mac_audit.py with its stdout report
+                                  replaced by a JSON dump; CPU only, because a
+                                  MAC count needs shapes and not weights
   results/adapter_cost.json       the same treatment for one DepthConvBlock and
                                   for the two adapter kinds, on the pinned
                                   checkpoint
@@ -16,7 +20,8 @@ that were actually executed. Three sources carry it:
 
 Nothing in this module reads a checkpoint, opens a CUDA context or writes to
 results/. Every number below is arithmetic on those JSON files, so a reader
-with the repository can rerun it.
+with the repository can rerun it. The three figures are drawn from the same
+files by scripts/supp_b_figures.py.
 
 The one structural fact that makes the section short: because a MAC count is
 linear in the exit map and the hook meter counts a module only when it fires,
@@ -270,8 +275,9 @@ def content(k):
     shapes = {(L["kernel"], L["in_ch"], L["out_ch"], L["stride"], L["groups"])
               for L in ma["layers"]}
     n_dw = sum(1 for L in ma["layers"] if L["kernel"] > 1)
-    k.par(r"Table " + str(k.peek_tbl()) + r" gives every convolution in the "
-          r"decode in the (K, C<sub>in</sub>, C<sub>out</sub>, S) convention "
+    k.par(r"Table " + str(k.peek_tbl()) + r" opens up the modules of Table " +
+          f"{t_shape}" + r", giving every convolution in the decode in the "
+          r"(K, C<sub>in</sub>, C<sub>out</sub>, S) convention "
           r"that the architecture figures of this literature use, with the "
           r"group count added because two of the shapes are depthwise. The " +
           f"{len(ma['layers'])}" + r" convolutions of the released decoder have "
@@ -574,7 +580,8 @@ def content(k):
     k.note(r"Model prices: the module's MAC/px divided by 8C² + 9C, times one "
            r"trunk block. Hook prices: the module's MAC/px times the feature "
            r"grid, divided by the decode total, both from "
-           r"results/mac\_audit.json and results/adapter\_cost.json. The three "
+           r"results/mac\_audit.json and results/adapter\_cost.json, and they "
+           r"are the last column of Table " + f"{t_add}" + r". The three "
            r"residual rows are the corresponding columns of Table " +
            f"{t_exit}" + r".")
 
@@ -661,9 +668,12 @@ def content(k):
         r"\RouterTimePct\% of decode time, \RouterTimeFactor× its arithmetic "
         r"share, an extra \RouterTimeExtra points bought by launching a small "
         r"kernel over a large map. That is the general reason a MAC count "
-        r"cannot see a kernel launch, in miniature. The router does not run at "
-        r"all in the signalled configuration, where the encoder chooses the "
-        r"map.",
+        r"cannot see a kernel launch, in miniature (results/router\_latency.json, " +
+        f"{rl['iters']}" + r" iterations at " +
+        f"{rl['resolution'][1]}×{rl['resolution'][0]}" + r" on an NVIDIA RTX "
+        r"A6000, measured on runs/RECIPE512/ckpt\_eval.pth.tar). The router "
+        r"does not run at all in the signalled configuration, where the encoder "
+        r"chooses the map.",
 
         r"<b>The masked path, not the sorted one.</b> The shipped "
         r"configuration leaves sorted\_tiles off, so every group is a masked "
@@ -756,7 +766,8 @@ def content(k):
           r"\TilingOverhead\% for the figure the main paper quotes. The second "
           r"is occupancy. A group late in the ladder launches kernels over a "
           r"handful of 32×32 feature maps, and a GPU sized for the first group "
-          r"is partly idle inside them: at 1080p a tile costs " +
+          r"is partly idle inside them. Dividing each group of Table " +
+          f"{t_stage}" + r" by the tiles alive in it, at 1080p a tile costs " +
           f"{100 * ((lm['group 5  (9 tiles)'] / 9) / (lm['group 2  (40 tiles)'] / 40) - 1):.1f}" +
           r"\% more in group 5, on 9 tiles, than in group 2 on 40. At 720p the "
           r"same curve rises by " +
@@ -888,7 +899,8 @@ def content(k):
           r"A partly idle GPU still draws most of its static power, so the "
           r"joules follow the seconds almost exactly, and the seconds fall "
           r"short of the multiply-accumulates for the occupancy reason of "
-          r"Figure " + f"{k.peek_fig() - 1}" + r"c. At 1080p and the lowest "
+          r"Figure " + f"{k.peek_fig() - 1}" + r"c, at the board powers of "
+          r"Table " + f"{t_abs}" + r". At 1080p and the lowest "
           r"rate the three read " + f"{hi['mac_saving_pct']:.2f}" + r"\%, " +
           f"{hi['time_saving_pct']:.2f}" + r"\% and " +
           f"{hi['energy_saving_pct']:.2f}" + r"\%; at the highest rate they "
