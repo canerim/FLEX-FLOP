@@ -30,27 +30,29 @@
 
 % =========================================================== abstract
 \begin{abstract}
-A learned image decoder runs the same graph on every frame whatever the frame
-contains. We add an early-exit ladder to the intra decoder of
-DCVC-UF~\cite{dcvcuf}, cut each frame into tiles, and let every tile leave the
-trunk at whichever of $K$ exits its content needs. The encoder and the entropy
-model stay frozen and the coded payload is unchanged, so the method applies to
-bitstreams that already exist. On the \NumSeq-sequence common test set a
-$0.1\dB$ budget removes \MainLowRate\% of the decoder's multiply--accumulates at
-the lowest rate and \MainHighRate\% at the highest, for a BD-Rate cost of
-\BdRateALow\%.
+Learned image decoders spend the same computation on every region of a frame,
+whatever that region contains. We show that decoding compute can instead be
+allocated spatially, by content, with the encoder, the entropy model and the
+transmitted representation left untouched. We add a multi-exit ladder to the
+intra decoder of DCVC-UF, so that tiles of one frame leave a shared
+reconstruction trunk at different depths. On \NumSeq\ test sequences under a
+$0.1\dB$ quality constraint this removes \MainLowRate\% to \MainHighRate\% of
+decoder multiply-accumulates across the rate range, \MeanAtOne\% on average, at a
+BD-Rate cost of \BdRateALow\%. At $0.2\dB$ the mean saving is \MeanAtTwo\% and at
+$0.3\dB$ it is \MeanAtThree\%, within $0.9$ points of the ladder's
+\Ceiling\% architectural ceiling.
 
-We also characterise when such a budget does anything at all. Below a floor set
-by tiling no allocation is feasible; above a saturation point every tile already
-takes the cheapest exit; and measuring the budget in units of the band between
-those two ends collapses five rate curves, \BandRawSpread\ points apart at a
-matched decibel, to within \BandSpreadMean. Tiling dominates the cost and scales
-with per-tile depth rather than with the area the tile border reaches. Finally,
-a rule with no parameters that routes on the bits the entropy model has already
-spent per tile beats our
-trained \RouterParams-parameter router at every rate by up to
-\RateRankBeatsBy\ points, which we report as a control that work on adaptive
-inference ought to include.
+Adaptive decoding works only inside a finite window. Tiling sets a rate-dependent
+quality floor below which no allocation is feasible, and a saturation point above
+which every tile already sits on the cheapest path. Rescaling the budget between
+those two limits collapses five rate curves that differ by \BandRawSpread\ points
+onto one within \BandSpreadMean. The dominant cost of adapting is set by per-tile
+decoding depth rather than by the spatial extent of boundary contamination.
+Finally, the bits the entropy model has already spent on a tile predict how deep
+that tile must decode better than a trained \RouterParams-parameter router does,
+by up to \RateRankBeatsBy\ points, with no parameters and nothing added to the
+file. A compressed representation carries not only what to reconstruct, but how
+much computation the reconstruction needs.
 \end{abstract}
 
 % =========================================================== introduction
@@ -393,19 +395,12 @@ rate, so it behaves as an operating point and not as an asymptote.
 \begin{figure}[t]
 \centering
 \includegraphics[width=\columnwidth]{figures/adapters.png}
-\caption{\textbf{Inside an exit adapter.} \textbf{a}, one DepthConvBlock and the
-two adapters drawn to scale and aligned at their right-hand ends. Bar length is a
-convolution's share of the block and bar height is the channel width it writes,
-so each adapter is visibly the tail of the block it stands in for: the FFN pair
-at $0.71$ of a block and the single pointwise at $0.14$. The hairline rule inside
-the block is its only $3\times3$, and neither adapter contains one, so no adapter
-adds receptive field and none contributes any tile-boundary penalty.
-\textbf{b}, the blocks each exit skips, coloured by the adapter it wears.
-Capacity is matched to the gap, the rule switching to the FFN at four skipped
-blocks (dotted), and the adapter's own cost is charged against the saving, so an
-exit-2 tile saves six blocks less $0.71$. The faded exits lie below the split
-depth, where no tile can leave. Every length is counted with hooks off the
-modules themselves by \texttt{scripts/adapter\_cost.py}.}
+\caption{\textbf{Inside an exit adapter.} \textbf{a}, one DepthConvBlock and the two
+adapters, drawn to scale: bar length is a share of the block, bar height the
+channel width written. Neither adapter contains the block's only $3\times3$ (the
+hairline rule), so neither adds receptive field or seam penalty. \textbf{b},
+blocks skipped per exit, coloured by adapter; the rule switches to the FFN at
+four skipped blocks. Lengths counted with hooks off the modules themselves.}
 \label{fig:adapters}
 \end{figure}
 
@@ -577,12 +572,11 @@ per-tile information at all.
 \begin{figure}[t]
 \centering
 \includegraphics[width=\columnwidth]{figures/router_arch.png}
-\caption{\textbf{The router head.} \textbf{a}, the three things it reads, all of
-which the decoder already holds. \textbf{b}, each is projected by a $1\times1$
-and then reduced to one vector per tile by its mean and standard deviation over
-that tile. \textbf{c}, a three-layer perceptron on that vector, one pass per
-tile. Every shape and parameter count is read off the module itself when the
-figure is drawn.}
+\caption{\textbf{The router head.} \textbf{a}, the three things it reads, all already held
+by the decoder. \textbf{b}, each projected by a $1\times1$, then reduced to one
+vector per tile by its mean and standard deviation. \textbf{c}, a three-layer
+perceptron, one pass per tile. Every shape and parameter count is read off the
+module when the figure is drawn.}
 \label{fig:routerarch}
 \end{figure}
 
@@ -637,14 +631,11 @@ effect flips.
 \begin{figure}[t]
 \centering
 \includegraphics[width=\columnwidth]{figures/seam_problem.png}
-\caption{\textbf{The artefact, before anything is done about it.}
-Bosphorus at 1080p, quality index 63, stock zero padding at the tile border.
-\textbf{a}, one frame decoded from the bitstream in one piece. \textbf{b}, the
-same bitstream, the same weights, every tile at full depth and no early exit
-anywhere, decoded in 256 pixel tiles: the absolute difference between the two
-decodes, amplified 30 times. The only thing that changed is that the second
-decode was tiled, and the error it produces is the tile lattice and nothing
-else. \textbf{c}, the boxed region of each.}
+\caption{\textbf{The artefact, before anything is done about it.} Bosphorus at 1080p,
+quality index 63, zero padding at the tile border. \textbf{a}, the frame decoded
+in one piece. \textbf{b}, the same bitstream and weights decoded in 256 pixel
+tiles, every tile at full depth: the difference between the two, amplified 30
+times. \textbf{c}, the boxed region of each.}
 \label{fig:seamproblem}
 \end{figure}
 
@@ -679,12 +670,10 @@ which is where the area law fails as a predictor.
 \begin{figure}[t]
 \centering
 \includegraphics[width=\columnwidth]{figures/contamination.png}
-\caption{\textbf{The seam against per-tile depth.} Sweeping the split depth
-sweeps $b$; $b{=}0$ is an exact control and measures $0.0000\dB$ at all three
-rates. \textbf{a}, the measurement with the fitted power law. \textbf{b},
-both models against $q63$ with one free scale each. \textbf{c}, mean relative
-error. The area fraction saturates once the border reaches every pixel; the
-penalty does not.}
+\caption{\textbf{The seam against per-tile depth.} \textbf{a}, the measurement with the
+fitted power law. \textbf{b}, both models against $q63$, one free scale each.
+\textbf{c}, mean relative error. The area fraction saturates once the border
+reaches every pixel; the penalty does not.}
 \label{fig:contam}
 \end{figure}
 
@@ -749,15 +738,12 @@ module in this paper does.
 \begin{figure}[t]
 \centering
 \includegraphics[width=\columnwidth]{figures/seam_module.png}
-\caption{\textbf{A learned deblocking filter.} A correction gated by position
-within a tile, applied once to the stitched frame, for $0.95\%$ of the decode.
-\textbf{a}, the gate against distance from the tile boundary, beside the
-initialisation it started from; shading is the spread over cells at the same distance. The trained
-gate keeps the ring, up to $0.76$ at a tile corner, and then flattens at $0.26$
-instead of switching off. \textbf{b}, the change in error measured with the
-filter on, by distance from the nearest tile boundary; bar width is the share of
-pixels, so bar area is what a ring contributes to the frame. It wins $0.27\%$ on the $6.2\%$ of pixels within $4$\,px of a boundary and
-loses $0.04$ to $0.05\%$ on the $94\%$ beyond it.}
+\caption{\textbf{A learned deblocking filter}, gated by position within a tile and applied
+once to the stitched frame, for $0.95\%$ of the decode. \textbf{a}, the trained
+gate against distance from the boundary, beside its initialisation. \textbf{b},
+the change in error by that distance; bar width is the share of pixels, so bar
+area is the contribution to the frame. It wins on the $6.2\%$ of pixels nearest a
+boundary and loses on the $94\%$ beyond.}
 \label{fig:seammodule}
 \end{figure}
 
@@ -1063,11 +1049,11 @@ reaches exit $j$ and the ceiling of Eq.~(\ref{eq:ceiling}) is reached.}
 \begin{figure}[t]
 \centering
 \includegraphics[width=\columnwidth]{figures/theory.png}
-\caption{\textbf{The structure of the allocation}, on one frame. \textbf{a},
-compute and distortion are monotone in the multiplier. \textbf{b}, the frontier
-between the floor (green) and saturation (orange); shaded regions are infeasible
-and wasted. \textbf{c}, what the Lagrangian reaches against the exact Pareto set,
-enumerated by dynamic programming; the two curves are indistinguishable.}
+\caption{\textbf{The structure of the allocation}, on one frame. \textbf{a}, compute and
+distortion are monotone in the multiplier. \textbf{b}, the frontier between floor
+and saturation; shaded regions are infeasible or wasted. \textbf{c}, what the
+Lagrangian reaches against the exact Pareto set, enumerated by dynamic
+programming.}
 \label{fig:theory}
 \end{figure}
 
@@ -1360,13 +1346,11 @@ lying around.
 \begin{figure}[t]
 \centering
 \includegraphics[width=\columnwidth]{figures/hybrid.png}
-\caption{\textbf{Partial signalling.} \textbf{a} Saving against the bits spent
-on the map; the left end of each line is B and the right end is A.
-\textbf{b} The same, normalised: what fraction of the A--B gap a given fraction
-of the map recovers; dashed is proportional recovery, and above $100\%$ a
-partial map is beating a complete one. \textbf{c} The same against the
-fixed-$\lambda$ Lorenz prediction; dashed is equality, and points above it are
-allocations a single multiplier cannot reach.}
+\caption{\textbf{Partial signalling.} \textbf{a}, saving against the bits spent on the map;
+each line runs from B on the left to A on the right. \textbf{b}, the same
+normalised by the A-to-B gap; dashed is proportional recovery. \textbf{c},
+against the fixed-$\lambda$ Lorenz bound; points above the dashed line are
+allocations one multiplier cannot reach.}
 \label{fig:hybrid}
 \end{figure}
 
@@ -1524,6 +1508,26 @@ saving arrives. The missing fifth is the tiling overhead together with the
 bookkeeping of a shrinking active set, and a MAC count sees neither. The
 shortfall scales with the saving instead of sitting at a fixed offset: at $q63$
 we measure \WallHighMeasured\% realised against \WallHighPredicted\% predicted.
+
+\paragraph{Seconds and joules.} Multiply-accumulates are the right unit to
+optimise, because they do not depend on the machine, but they are not the unit a
+deployment cares about. We measured both on the padded 1080p frame, sampling
+board power from the driver at $100$\,ms and running each condition for a fixed
+wall time rather than a fixed iteration count, because the sensor updates too
+slowly for ten iterations of a $100$\,ms decode to mean anything. Idle power was
+measured before and after each condition so that a neighbouring process waking up
+would appear as drift rather than as a saving.
+
+Energy follows time, not arithmetic. At $q0$, $q32$ and $q63$ the routed decode
+removes $33.0$, $22.9$ and $17.8\%$ of the arithmetic; it removes $29.1$, $19.1$
+and $14.1\%$ of the wall clock and $29.6$, $19.3$ and $14.2\%$ of the joules per
+frame. Board power barely moves, $298$\,W against $296$\,W at $q0$, because the
+later groups run on a shrinking set of tiles and a partly idle GPU still draws
+most of its static power. What early exit buys is a shorter decode, not a cooler
+one. Frame rate at 1080p goes from $9.0$ to $11.2$, and peak memory rises by
+$13.3\%$ at every resolution we could measure: tiling turns one feature map into
+a batch of small ones, so the peak is set by the widest point of the ladder
+rather than by its deepest.
 
 Sorting the tiles once by exit depth recovers part of it. The obvious
 implementation of a shrinking active set keeps a boolean mask, gathers the

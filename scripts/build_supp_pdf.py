@@ -233,7 +233,6 @@ ORDER = [
     "d_full_results",
     "e_budget",
     "f_router",
-    "z_legacy",
 ]
 
 

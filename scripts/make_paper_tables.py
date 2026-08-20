@@ -88,6 +88,21 @@ if d:
     mac("MainLowRate", f"{r01[0]['saving_pct_vs_release']:.1f}")
     mac("MainHighRate", f"{r01[63]['saving_pct_vs_release']:.1f}")
     mac("MainMean", f"{sum(r01[q]['saving_pct_vs_release'] for q in QPS)/len(QPS):.1f}")
+    # A mean per budget, named by the budget, so the abstract can quote any row
+    # of this table without a second measurement and without a hand-typed
+    # number. MainMean stays as the 0.1 dB alias the prose already uses.
+    # LaTeX macro names cannot contain digits, so the budget is spelled out.
+    _WORD = {5: "Half", 10: "One", 15: "OneHalf", 20: "Two", 30: "Three",
+             50: "Five", 75: "Seven", 100: "Ten"}
+    for _b, _row in by.items():
+        _v = [_row[q]["saving_pct_vs_release"] for q in QPS if q in _row]
+        _w = _WORD.get(int(round(_b * 100)))
+        if _v and _w:
+            mac(f"MeanAt{_w}", f"{sum(_v)/len(_v):.1f}")
+            if 0 in _row:
+                mac(f"LowAt{_w}", f"{_row[0]['saving_pct_vs_release']:.1f}")
+            if 63 in _row:
+                mac(f"HighAt{_w}", f"{_row[63]['saving_pct_vs_release']:.1f}")
     mac("NumSeq", str(d["n_sequences"]))
     _mb = [r01[q]["map_bits"] for q in QPS
            if q in r01 and r01[q].get("map_bits")]
@@ -222,7 +237,11 @@ if rows:
              r"Ladder & Config & Ceiling & " +
              " & ".join(f"{b:.1f}\\,dB" for b in buds) + r" \\",
              r"\midrule"]
-    best_at = {b: max((m[b][0] or -1) for _, _, m in rows) for b in buds}
+    # .get, because the budgets are the union over runs and a run measured at
+    # only three of them has no entry at the fourth. Indexing directly raised a
+    # KeyError the moment RECIPE512 gained a 0.2 dB row that the others lack.
+    best_at = {b: max((m.get(b, (None, 0))[0] or -1) for _, _, m in rows)
+               for b in buds}
     for tag, ep, m in rows:
         cfgs, ceil = CFG.get(tag, ("--", 0))
         cells = []

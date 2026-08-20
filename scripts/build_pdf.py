@@ -420,29 +420,33 @@ def content(colw, fullw):
     A(Paragraph("<b>Abstract</b>", S("ah", fontName="Times-Bold", fontSize=9.4,
                                      alignment=TA_CENTER, spaceAfter=4)))
     A(Paragraph(sub(
-        r"A learned image decoder runs the same graph on every frame whatever "
-        r"the frame contains. We add an early-exit ladder to the intra decoder "
-        r"of DCVC-UF, cut each frame into tiles, and let every tile leave the "
-        r"trunk at whichever of K exits its content needs. The encoder and the "
-        r"entropy model stay frozen and the coded payload is unchanged, so the "
-        r"method applies to bitstreams that already exist. On the "
-        r"\NumSeq-sequence common test set a 0.1 dB budget removes "
-        r"\MainLowRate% of the decoder's multiply-accumulates at the lowest "
-        r"rate and \MainHighRate% at the highest, for a BD-Rate cost of "
-        r"\BdRateALow%."
+        r"Learned image decoders spend the same computation on every region of "
+        r"a frame, whatever that region contains. We show that decoding compute "
+        r"can instead be allocated spatially, by content, with the encoder, the "
+        r"entropy model and the transmitted representation left untouched. We "
+        r"add a multi-exit ladder to the intra decoder of DCVC-UF, so that "
+        r"tiles of one frame leave a shared reconstruction trunk at different "
+        r"depths. On \NumSeq test sequences under a 0.1 dB quality constraint "
+        r"this removes \MainLowRate% to \MainHighRate% of decoder "
+        r"multiply-accumulates across the rate range, \MeanAtOne% on average, "
+        r"at a BD-Rate cost of \BdRateALow%. At 0.2 dB the mean saving is "
+        r"\MeanAtTwo% and at 0.3 dB it is \MeanAtThree%, within 0.9 points of "
+        r"the ladder's \Ceiling% architectural ceiling."
         r"<br/><br/>"
-        r"We also characterise when such a budget does anything at all. Below a "
-        r"floor set by tiling no allocation is feasible; above a saturation "
-        r"point every tile already takes the cheapest exit; and measuring the "
-        r"budget in units of the band between those two ends collapses five "
-        r"rate curves, \BandRawSpread points apart at a matched decibel, to "
-        r"within \BandSpreadMean. Tiling dominates the cost and scales with "
-        r"per-tile depth rather than with the area the tile border reaches. "
-        r"Finally, a rule with no "
-        r"parameters that routes on the bits the entropy model has already "
-        r"spent per tile beats our trained \RouterParams-parameter router at "
-        r"every rate by up to \RateRankBeatsBy points, which we report as a "
-        r"control that work on adaptive inference ought to include."), ABST))
+        r"Adaptive decoding works only inside a finite window. Tiling sets a "
+        r"rate-dependent quality floor below which no allocation is feasible, "
+        r"and a saturation point above which every tile already sits on the "
+        r"cheapest path. Rescaling the budget between those two limits "
+        r"collapses five rate curves that differ by \BandRawSpread points onto "
+        r"one within \BandSpreadMean. The dominant cost of adapting is set by "
+        r"per-tile decoding depth rather than by the spatial extent of boundary "
+        r"contamination. Finally, the bits the entropy model has already spent "
+        r"on a tile predict how deep that tile must decode better than a "
+        r"trained \RouterParams-parameter router does, by up to "
+        r"\RateRankBeatsBy points, with no parameters and nothing added to the "
+        r"file. A compressed representation carries not only what to "
+        r"reconstruct, but how much computation the reconstruction needs."),
+        ABST))
     A(Spacer(1, 6))
 
     # ---- 1 introduction --------------------------------------------------
@@ -752,21 +756,13 @@ def content(colw, fullw):
         r"operating point and not as an asymptote.")
     figure("adapters.png",
            r"<b>Figure 2. Inside an exit adapter.</b> <b>a</b>, one "
-           r"DepthConvBlock and the two adapters drawn to scale and aligned at "
-           r"their right-hand ends. Bar length is a convolution's share of the "
-           r"block and bar height is the channel width it writes, so each "
-           r"adapter is visibly the tail of the block it stands in for: the "
-           r"FFN pair at 0.71 of a block and the single pointwise at 0.14. The "
-           r"hairline rule inside the block is its only 3×3, and neither "
-           r"adapter contains one, so no adapter adds receptive field and none "
-           r"contributes any tile-boundary penalty. <b>b</b>, the blocks each "
-           r"exit skips, coloured by the adapter it wears. Capacity is matched "
-           r"to the gap, the rule switching to the FFN at four skipped blocks "
-           r"(dotted), and the adapter's own cost is charged against the "
-           r"saving, so an exit-2 tile saves six blocks less 0.71. The faded "
-           r"exits lie below the split depth, where no tile can leave. Every "
-           r"length is counted with hooks off the modules themselves by "
-           r"scripts/adapter_cost.py.")
+           r"DepthConvBlock and the two adapters, drawn to scale: bar "
+           r"length is a share of the block, bar height the channel width "
+           r"written. Neither adapter contains the block's only 3×3 (the "
+           r"hairline rule), so neither adds receptive field or seam "
+           r"penalty. <b>b</b>, blocks skipped per exit, coloured by "
+           r"adapter; the rule switches to the FFN at four skipped blocks. "
+           r"Lengths counted with hooks off the modules themselves.")
     h2("3.4 Exit adapters")
     par(r"An early exit hands the shared head a feature the head was not "
         r"fitted to, and the adapter is the correction. For exits that skip "
@@ -901,13 +897,12 @@ def content(colw, fullw):
         r"pixel. The perceptron runs once per tile, forty times for a 1080p "
         r"frame, so its width is nearly free.")
     figure("router_arch.png",
-           r"<b>Figure N. The router head.</b> <b>a</b>, the three things it "
-           r"reads, all of which the decoder already holds. <b>b</b>, each is "
-           r"projected by a 1×1 and then reduced to one vector per tile by its "
-           r"mean and standard deviation over that tile. <b>c</b>, a "
-           r"three-layer perceptron on that vector, one pass per tile. Every "
-           r"shape and parameter count is read off the module itself when the "
-           r"figure is drawn.")
+           r"<b>Figure N. The router head.</b> <b>a</b>, the three things "
+           r"it reads, all already held by the decoder. <b>b</b>, each "
+           r"projected by a 1×1, then reduced to one vector per tile by its "
+           r"mean and standard deviation. <b>c</b>, a three-layer "
+           r"perceptron, one pass per tile. Every shape and parameter count "
+           r"is read off the module when the figure is drawn.")
     par(r"Two details matter for reproducing it. Exits below the split depth "
         r"do not exist, and their logits are masked to −∞ rather than to a "
         r"large negative constant; nothing in the objective penalises a "
@@ -966,15 +961,12 @@ def content(colw, fullw):
     # ---- 4 the seam ------------------------------------------------------
     h1("4. The price of tiles")
     figure("seam_problem.png",
-           r"<b>Figure 3. The artefact, before anything is done about it.</b> "
-           r"Bosphorus at 1080p, quality index 63, stock zero padding at the "
-           r"tile border. <b>a</b>, one frame decoded from the bitstream in "
-           r"one piece. <b>b</b>, the same bitstream, the same weights, every "
-           r"tile at full depth and no early exit anywhere, decoded in 256 "
-           r"pixel tiles: the absolute difference between the two decodes, "
-           r"amplified 30 times. The only thing that changed is that the "
-           r"second decode was tiled, and the error it produces is the tile "
-           r"lattice and nothing else. <b>c</b>, the boxed region of each.")
+           r"<b>Figure 3. The artefact, before anything is done about "
+           r"it.</b> Bosphorus at 1080p, quality index 63, zero padding at "
+           r"the tile border. <b>a</b>, the frame decoded in one piece. "
+           r"<b>b</b>, the same bitstream and weights decoded in 256 pixel "
+           r"tiles, every tile at full depth: the difference between the "
+           r"two, amplified 30 times. <b>c</b>, the boxed region of each.")
     par(r"A 3×3 depthwise at feature position (x,y) computes a weighted sum "
         r"over its neighbours. Decoded full frame, those neighbours exist. "
         r"Decoded per tile they do not, and the kernel is handed whatever the "
@@ -1001,12 +993,11 @@ def content(colw, fullw):
         r"the area law saturates and the penalty does not, which is where the "
         r"area law fails as a predictor.")
     figure("contamination.png",
-           r"<b>Figure 4. The seam against per-tile depth.</b> Sweeping the "
-           r"split depth sweeps b; b=0 is an exact control and measures 0.0000 "
-           r"dB at all three rates. <b>a</b>, the measurement with the fitted "
-           r"power law. <b>b</b>, both models against q63 with one free scale "
-           r"each. <b>c</b>, mean relative error. The area fraction saturates "
-           r"once the border reaches every pixel; the penalty does not.")
+           r"<b>Figure 4. The seam against per-tile depth.</b> <b>a</b>, "
+           r"the measurement with the fitted power law. <b>b</b>, both "
+           r"models against q63, one free scale each. <b>c</b>, mean "
+           r"relative error. The area fraction saturates once the border "
+           r"reaches every pixel; the penalty does not.")
     h2("4.1 Padding is an estimator")
     par(r"Border padding is an <i>estimator</i> of the unseen neighbour, and "
         r"the seam is its error. The table below measures four of them, with "
@@ -1050,18 +1041,14 @@ def content(colw, fullw):
         r"the seam than any module in this paper does.")
     h2("4.3 A learned deblocking filter, and why we reject it")
     figure("seam_module.png",
-           r"<b>Figure 5. A learned deblocking filter.</b> A correction gated by position "
-           r"within a tile, applied once to the stitched frame, for 0.95% of "
-           r"the decode. <b>a</b>, the gate against distance from the tile "
-           r"boundary, beside the initialisation it started from; shading is "
-           r"the spread over cells at the same distance. The trained gate keeps "
-           r"the ring, up to 0.76 at a tile corner, and then flattens at 0.26 "
-           r"instead of switching off. <b>b</b>, the change in "
-           r"error measured with the filter on, by distance from the nearest "
-           r"tile boundary; bar width is the share of pixels, so bar area is "
-           r"what a ring contributes to the frame. It wins 0.27% on the 6.2% "
-           r"of pixels within 4 px of a boundary and loses 0.04 to 0.05% on "
-           r"the 94% beyond it.")
+           r"<b>Figure 5. A learned deblocking filter</b>, gated by "
+           r"position within a tile and applied once to the stitched frame, "
+           r"for 0.95% of the decode. <b>a</b>, the trained gate against "
+           r"distance from the boundary, beside its initialisation. "
+           r"<b>b</b>, the change in error by that distance; bar width is "
+           r"the share of pixels, so bar area is the contribution to the "
+           r"frame. It wins on the 6.2% of pixels nearest a boundary and "
+           r"loses on the 94% beyond.")
     par(r"What a standard codec does about a partition boundary is deblock it, "
         r"with a filter applied after reconstruction [9, 21]. The tile lattice "
         r"is known "
@@ -1291,12 +1278,12 @@ def content(colw, fullw):
         r"The floor is what tiling costs with no early exit at all; saturation "
         r"is where every tile reaches exit j and the ceiling is attained.")
     figure("theory.png",
-           r"<b>Figure 9. The structure of the allocation</b>, on one frame. "
-           r"<b>a</b>, compute and distortion are monotone in the multiplier. "
-           r"<b>b</b>, the frontier between the floor (green) and saturation "
-           r"(orange); shaded regions are infeasible and wasted. <b>c</b>, what "
-           r"the Lagrangian reaches against the exact Pareto set, enumerated by "
-           r"dynamic programming; the two curves are indistinguishable.")
+           r"<b>Figure 9. The structure of the allocation</b>, on one "
+           r"frame. <b>a</b>, compute and distortion are monotone in the "
+           r"multiplier. <b>b</b>, the frontier between floor and "
+           r"saturation; shaded regions are infeasible or wasted. <b>c</b>, "
+           r"what the Lagrangian reaches against the exact Pareto set, "
+           r"enumerated by dynamic programming.")
     par(r"The construction has enough structure to state as propositions, and "
         r"we check each one numerically instead of asserting it "
         r"(scripts/verify_theory.py, seven of seven). The allocation decouples "
@@ -1381,16 +1368,12 @@ def content(colw, fullw):
            r"are three points on this curve.")
     h2("5.5 Signalled versus predicted allocation")
     figure("router_ab.png",
-           r"<b>Figure 9. Who decides.</b> <b>(a)</b> The two decision paths "
-           r"of Section 3.1, drawn side by side: the encoder's search over all "
-           r"K exits per tile against the head's forward pass over decoded "
-           r"data. <b>(b)</b> Saving at 0.1 dB; "
-           r"shading is what a bit-exact bitstream costs. <b>(c)</b> That cost "
-           r"is smallest at q\GapMinQp, where the router needs almost no cost "
-           r"multiplier to reach the budget from where it was trained, and "
-           r"grows in both directions. At 0.3 dB it falls to the router's own "
-           r"\RouterCostPct% wherever the budget saturates the ladder, and "
-           r"widens where it does not.")
+           r"<b>Figure 9. Who decides.</b> <b>a</b>, the two decision paths "
+           r"side by side: the encoder's search over all K exits per tile "
+           r"against the head's forward pass over decoded data. <b>b</b>, "
+           r"saving at 0.1 dB; shading is what a bit-exact bitstream costs. "
+           r"<b>c</b>, that cost is smallest at q\GapMinQp\ and grows in "
+           r"both directions.")
     tbl("ab",
         r"<b>Table 7. Signalled against predicted</b> at two budgets, same "
         r"checkpoint and test set, with one router trained against the oracle "
@@ -1559,14 +1542,12 @@ def content(colw, fullw):
         r"The map costs an entropy-coded mask, N·H(ρ) bits with H the binary "
         r"entropy, plus 3 per override.")
     figure("hybrid.png",
-           r"<b>Figure 10. Partial signalling.</b> <b>a</b> Saving against the "
-           r"bits spent on the map; the left end of each line is B and the right "
-           r"end is A. <b>b</b> The same, normalised: what fraction of the A–B "
-           r"gap a given fraction of the map recovers; dashed is proportional "
-           r"recovery, and above 100% a partial map is beating a complete one. "
-           r"<b>c</b> The same against the fixed-λ Lorenz prediction; dashed is "
-           r"equality, and points above it are allocations a single multiplier "
-           r"cannot reach.")
+           r"<b>Figure 10. Partial signalling.</b> <b>a</b>, saving against "
+           r"the bits spent on the map; each line runs from B on the left "
+           r"to A on the right. <b>b</b>, the same normalised by the A-to-B "
+           r"gap; dashed is proportional recovery. <b>c</b>, against the "
+           r"fixed-λ Lorenz bound; points above the dashed line are "
+           r"allocations one multiplier cannot reach.")
     tbl("hybrid",
         r"<b>Table 8. Configuration C</b> at 0.1 dB. Columns are the fraction of "
         r"tiles the encoder overrides; the two end columns reproduce B and A to "
@@ -1685,6 +1666,26 @@ def content(colw, fullw):
         r"shortfall scales with the saving instead of sitting at a fixed "
         r"offset: at q63 we measure \WallHighMeasured% realised against "
         r"\WallHighPredicted% predicted.")
+    par(r"<b>Seconds and joules.</b> Multiply-accumulates are the right unit "
+        r"to optimise, because they do not depend on the machine, but they are "
+        r"not the unit a deployment cares about. We measured both on the "
+        r"padded 1080p frame, sampling board power from the driver at 100 ms "
+        r"and running each condition for a fixed wall time rather than a fixed "
+        r"iteration count, because the sensor updates too slowly for ten "
+        r"iterations of a 100 ms decode to mean anything. Idle power was "
+        r"measured before and after each condition so that a neighbouring "
+        r"process waking up would appear as drift rather than as a saving.")
+    par(r"Energy follows time, not arithmetic. At q0, q32 and q63 the routed "
+        r"decode removes 33.0, 22.9 and 17.8% of the arithmetic; it removes "
+        r"29.1, 19.1 and 14.1% of the wall clock and 29.6, 19.3 and 14.2% of "
+        r"the joules per frame. Board power barely moves, 298 W against 296 W "
+        r"at q0, because the later groups run on a shrinking set of tiles and a "
+        r"partly idle GPU still draws most of its static power. What early exit "
+        r"buys is a shorter decode, not a cooler one. Frame rate at 1080p goes "
+        r"from 9.0 to 11.2, and peak memory rises by 13.3% at every resolution "
+        r"we could measure: tiling turns one feature map into a batch of small "
+        r"ones, so the peak is set by the widest point of the ladder rather "
+        r"than by its deepest.")
     par(r"Sorting the tiles once by exit depth recovers part of it. The "
         r"obvious implementation of a shrinking active set keeps a boolean "
         r"mask, gathers the survivors and scatters the finished at every group "
@@ -1928,6 +1929,30 @@ def build(out="paper/FLEX-UF.pdf"):
     for i, r in enumerate(REFS, 1):
         story.append(Paragraph(f"[{i}] {r}",
                                S("ref", fontSize=7.2, leading=8.4, spaceAfter=2)))
+
+    # The supplement is part of this document, not a second one. CVPR submits a
+    # single PDF and the DCVC-UF paper this work builds on puts its
+    # supplementary material after the references in the same file, which is
+    # also what keeps the figure, table and equation numbers continuous without
+    # any bookkeeping: the counters here simply keep counting.
+    #
+    # Imported inside build() rather than at module scope because
+    # build_supp_pdf imports this module.
+    sys.path.insert(0, str(Path(__file__).resolve().parent))
+    import build_supp_pdf as SUPP
+    kit = SUPP.Kit(colw, PW - 2 * M)
+    built = SUPP._sections(kit)
+    if kit.flow:
+        story += [NextPageTemplate("wide"), PageBreak(),
+                  Paragraph("Where to Stop:<br/>Tile-Adaptive Early Exit in a "
+                            "Learned Image Decoder", TITLE),
+                  Paragraph("Supplementary Material", SUPP.SUBTITLE),
+                  NextPageTemplate("rest"), FrameBreak()]
+        story += kit.flow
+        print(f"  supplement: {', '.join(built)}")
+        if kit.bad_glyphs:
+            print(f"  NO GLYPH IN Times-Roman: {sorted(kit.bad_glyphs)}")
+
     doc.build(story)
     if UNEXPANDED:
         print("  UNEXPANDED MACROS (run make_paper_tables.py): "
