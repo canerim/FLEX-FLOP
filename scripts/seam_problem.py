@@ -31,6 +31,15 @@ ap.add_argument("--qp", type=int, default=63)
 ap.add_argument("--amp", type=float, default=30.0)
 ap.add_argument("--device", default="cuda:0")
 ap.add_argument("--out", default="docs/figures/seam_problem.png")
+# The checkpoint was hard-coded to runs/BEST/ckpt_eval.pth.tar, a file the
+# watchers overwrite, so the figure could not name what decoded it. Only the
+# trunk weights matter here -- the seam is drawn with seam repair switched off
+# and zero padding restored -- but a figure that cannot state its checkpoint is
+# not evidence, and the default is now the pinned one.
+ap.add_argument("--ckpt", default="runs/RECIPE512/ckpt_PAPER.pth.tar")
+ap.add_argument("--sidecar", default=None,
+                help="JSON file recording checkpoint, sequence, rate, the "
+                     "padding mode compared and the penalty measured")
 a = ap.parse_args()
 
 import ctc_intra as C
@@ -40,7 +49,7 @@ from flexuf.model import FlexUFIntra, load_flexuf_state
 from flexuf.reference import reference_for
 
 dev = a.device
-ck = torch.load(R / "runs/BEST/ckpt_eval.pth.tar", map_location="cpu", weights_only=False)
+ck = torch.load(R / a.ckpt, map_location="cpu", weights_only=False)
 cfg = FlexUFConfig(**ck["config"])
 net = FlexUFIntra(cfg).to(dev).eval(); load_flexuf_state(net, ck)
 ref = FlexUFIntra(cfg).to(dev).eval()
@@ -136,6 +145,25 @@ a3.imshow(np.clip(err[ZR:ZR+ZS, ZC:ZC+ZS] * a.amp, 0, 1), cmap="inferno",
 # No suptitle. The sequence, the quality index and the padding rule belong in
 # the caption, where a reader looks for provenance.
 for o in (R / a.out, R / "results/seam_problem.png"):
+    o.parent.mkdir(parents=True, exist_ok=True)
     fig.savefig(o, dpi=500, facecolor="white")
 print(f"  {P}px tiles, {(H+ph)//P}x{(W+pw)//P} grid   penalty {db.item():+.4f} dB")
+
+if a.sidecar:
+    import json
+    (R / a.sidecar).write_text(json.dumps(
+        {"figure": str(a.out),
+         "what": "the tiling artefact at frame scale, before any repair",
+         "ckpt": a.ckpt, "ckpt_epoch": ck.get("epoch"),
+         "ckpt_step": ck.get("step"),
+         "seq": s["name"], "cls": s["cls"], "resolution": [s["w"], s["h"]],
+         "qp": a.qp, "grid": [(H + ph) // P, (W + pw) // P], "tile_px": P,
+         "n_tiles": int(nt),
+         "compared": "every tile at the deepest exit with tile_pad_mode "
+                     "'zeros' and seam repair removed, against the released "
+                     "decoder's full-frame decode of the same latent",
+         "penalty_db": float(db.item()),
+         "amplification": a.amp,
+         "zoom_window_yxs": [ZR, ZC, ZS]}, indent=2))
+    print(f"  wrote {a.sidecar}")
 print(f"  wrote {a.out}")

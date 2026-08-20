@@ -1,0 +1,60 @@
+{
+  "curve": "results/supp_paper_curve_PAPER.json",
+  "convention": "pooled",
+  "n_sequences": 53,
+  "ckpt": "runs/RECIPE512/ckpt_PAPER.pth.tar",
+  "ckpt_epoch": 0,
+  "ckpt_step": null,
+  "db_interval": [
+    0.059,
+    0.3
+  ],
+  "saving_interval": [
+    10.0,
+    30.0
+  ],
+  "rows": [
+    {
+      "qp": 0,
+      "bd_saving_pct": null,
+      "bd_quality_db": 0.04527793274827192,
+      "floor_db": 0.03025190159678459,
+      "bd_saving_pct_zero_drift": null,
+      "n_points": 15
+    },
+    {
+      "qp": 16,
+      "bd_saving_pct": null,
+      "bd_quality_db": 0.057556752979021755,
+      "floor_db": 0.03984157368540764,
+      "bd_saving_pct_zero_drift": null,
+      "n_points": 14
+    },
+    {
+      "qp": 32,
+      "bd_saving_pct": null,
+      "bd_quality_db": 0.07205643704433046,
+      "floor_db": 0.04919103533029556,
+      "bd_saving_pct_zero_drift": null,
+      "n_points": 13
+    },
+    {
+      "qp": 48,
+      "bd_saving_pct": 32.802359572794884,
+      "bd_quality_db": 0.08162175246038025,
+      "floor_db": 0.054411210119724274,
+      "bd_saving_pct_zero_drift": null,
+      "n_points": 13
+    },
+    {
+      "qp": 63,
+      "bd_saving_pct": 30.818696452597067,
+      "bd_quality_db": 0.09227828991119982,
+      "floor_db": 0.058369219303131104,
+      "bd_saving_pct_zero_drift": null,
+      "n_points": 13
+    }
+  ],
+  "mean_bd_saving_pct": 31.810528012695976,
+  "mean_bd_quality_db": 0.08695002118579004
+}

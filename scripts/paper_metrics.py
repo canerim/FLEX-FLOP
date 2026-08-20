@@ -111,7 +111,11 @@ def bd_rate(r1, p1, r2, p2) -> float:
 
 
 def main():
-    anc = J("anchor_RECIPE512_ctc53.json", "anchor_BEST_5qp.json")
+    # Newest first: supp_anchor_PAPER.json is the drift measured on the pinned
+    # checkpoint, and the two behind it are the same measurement on
+    # ckpt_eval.pth.tar, a file the watchers overwrite.
+    anc = J("supp_anchor_PAPER.json", "anchor_RECIPE512_ctc53.json",
+            "anchor_BEST_5qp.json")
     why = J("why_qp.json")
     if not (anc and why):
         raise SystemExit("need results/anchor_BEST_5qp.json and why_qp.json")
@@ -181,7 +185,20 @@ def main():
         rows_for_fig.append((label, budget, bd, sv, qs, rate_ours, ours))
 
     # Recorded so the paper can expand it as a macro instead of typing it.
-    json.dump({"rows": [{"config": l, "budget_db": b, "bd_rate_pct": bd,
+    # Which files every row above came from, and which checkpoint each of
+    # those was measured on. The previous version of results/bdrate.json
+    # carried no checkpoint field at all, so a row measured on a superseded
+    # snapshot was indistinguishable from one measured on the pinned
+    # checkpoint.
+    prov = {"anchor": anc.get("ckpt"), "rate_bpp": why.get("ckpt")}
+    for label, fnames, budget in CONFIGS:
+        d = J(*fnames)
+        if not d:
+            continue
+        name = next(n for n in fnames if (ROOT / "results" / n).exists())
+        prov[f"{label} @ {budget:g} dB"] = {"file": name, "ckpt": d.get("ckpt")}
+    json.dump({"sources": prov,
+               "rows": [{"config": l, "budget_db": b, "bd_rate_pct": bd,
                          "saving_pct_vs_release": sv, "map_bits": mb}
                         for (l, b, bd, sv, *_), mb in
                         zip(rows_for_fig,
@@ -372,7 +389,10 @@ def figures(rows, rel_psnr, bpp, D):
 
 if __name__ == "__main__":
     rows = main()
-    anc, why = (J("anchor_RECIPE512_ctc53.json", "anchor_BEST_5qp.json"),
+    # Same candidate order as main(), or the figures would be drawn against a
+    # different anchor from the table above them.
+    anc, why = (J("supp_anchor_PAPER.json", "anchor_RECIPE512_ctc53.json",
+                  "anchor_BEST_5qp.json"),
                 J("why_qp.json"))
     print()
     figures(rows, {r["qp"]: r["stock_psnr"] for r in anc["rows"]},

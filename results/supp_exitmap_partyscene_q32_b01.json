@@ -1,0 +1,70 @@
+{
+  "figure": "paper/figures/exitmap_PAPER_partyscene_q32_b01.png",
+  "what": "which exit each tile takes, and what each tile pays",
+  "ckpt": "runs/RECIPE512/ckpt_PAPER.pth.tar",
+  "ckpt_epoch": 0,
+  "ckpt_step": null,
+  "seq": "PartyScene_832x480_50.yuv",
+  "cls": "HEVC_C",
+  "resolution": [
+    832,
+    480
+  ],
+  "qp": 32,
+  "budget_db": 0.1,
+  "delivered_db": 0.09848558157682419,
+  "saving_pct_vs_release": 12.330293655395508,
+  "grid": [
+    2,
+    4
+  ],
+  "n_tiles": 8,
+  "tile_px": 256,
+  "exit_hist": [
+    0,
+    0,
+    0,
+    2,
+    4,
+    2
+  ],
+  "exit_share_pct": [
+    0.0,
+    0.0,
+    0.0,
+    25.0,
+    50.0,
+    25.0
+  ],
+  "exit_map_row_major": [
+    5,
+    3,
+    5,
+    4,
+    4,
+    4,
+    4,
+    3
+  ],
+  "tile_penalty_db": [
+    0.051952820271253586,
+    0.19307167828083038,
+    0.051924172788858414,
+    0.12484769523143768,
+    0.11245907098054886,
+    0.0659557431936264,
+    0.07882174104452133,
+    0.2375362515449524
+  ],
+  "tile_penalty_db_max": 0.2375362515449524,
+  "tile_penalty_db_mean": 0.11457115411758423,
+  "penalty_definition": "10 log10(tile MSE at its chosen exit / the released decoder's MSE on the same tile)",
+  "exit_cost_vector": [
+    0.6087544560432434,
+    0.6087544560432434,
+    0.6087544560432434,
+    0.7578210830688477,
+    0.8697299361228943,
+    1.009507179260254
+  ]
+}

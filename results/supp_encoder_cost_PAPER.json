@@ -1,0 +1,22 @@
+{
+  "ckpt": "runs/RECIPE512/ckpt_PAPER.pth.tar",
+  "device": "NVIDIA RTX A6000",
+  "iters": 15,
+  "seq": "Bosphorus_1920x1080_120fps_420_8bit_YUV.yuv",
+  "qp": 63,
+  "n_tiles": 40,
+  "ms_one_decode": 114.9439697265625,
+  "ms_full_frame_table": 157.86700439453125,
+  "ms_deployed_table": 519.23046875,
+  "x_full_frame": 1.3734257201145683,
+  "x_deployed": 4.5172484470928325,
+  "exact": {
+    "saving": 17.388325929641724,
+    "db": 0.09917181730270386
+  },
+  "approx": {
+    "saving": 16.712665557861328,
+    "db": 0.09707532823085785,
+    "agreement": 0.824999988079071
+  }
+}

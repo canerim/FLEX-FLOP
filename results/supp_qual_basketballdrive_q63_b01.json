@@ -1,0 +1,39 @@
+{
+  "figure": "paper/figures/qual_PAPER_basketballdrive_q63_b01.png",
+  "what": "released decode and ours from one latent, at a stated budget",
+  "ckpt": "runs/RECIPE512/ckpt_PAPER.pth.tar",
+  "ckpt_epoch": 0,
+  "ckpt_step": null,
+  "seq": "BasketballDrive_1920x1080_50.yuv",
+  "cls": "HEVC_B",
+  "resolution": [
+    1920,
+    1080
+  ],
+  "qp": 63,
+  "budget_db": 0.1,
+  "delivered_db": 0.09788934141397476,
+  "saving_pct_vs_release": 29.362285137176514,
+  "bpp": 0.4667447805404663,
+  "psnr_released": 41.69260425847991,
+  "psnr_routed": 41.57472944702915,
+  "psnr_convention": "(6Y+U+V)/8 in 4:2:0 on 0..255",
+  "crop_px": 320,
+  "crop_centre_yx": [
+    160,
+    1152
+  ],
+  "worst_tile": 4,
+  "worst_tile_exit": 3,
+  "n_tiles": 40,
+  "tile_px": 256,
+  "exit_hist": [
+    0,
+    0,
+    23,
+    6,
+    10,
+    1
+  ],
+  "amplification": 20
+}

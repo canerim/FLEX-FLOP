@@ -1,12 +1,14 @@
-\begin{tabular}{llll}
+\begin{tabular}{lllccc}
 \toprule
-Method & What varies & Granularity & New bitstream \\
+Method & What varies & Granularity & Coded & Side & Decoder \\
+ & & & latent & data & only \\
 \midrule
-SlimCAE~\cite{slimcae} & width & per stream & yes \\
-Slimmable video~\cite{slimvc} & width & per stream & yes \\
-EVC~\cite{evc} & mask / pruning & per model & yes \\
-Spatial competition~\cite{spatialcompetition} & which codec & per region & yes \\
-DCVC-RT~\cite{dcvcrt} & architecture & fixed & yes \\
-\textbf{FLEX-UF} & \textbf{decoder depth} & \textbf{per region} & \textbf{no} \\
+SlimCAE~\cite{slimcae} & width & per stream & changes & -- & no \\
+Slimmable video~\cite{slimvc} & width & per stream & changes & -- & no \\
+EVC~\cite{evc} & mask / pruning & per model & changes & -- & no \\
+Spatial competition~\cite{spatialcompetition} & which codec & per region & changes & yes & no \\
+DCVC-RT~\cite{dcvcrt} & architecture & fixed & changes & -- & no \\
+\textbf{FLEX-UF} signalled & \textbf{decoder depth} & \textbf{per region} & \textbf{same} & \MapBits\,b & no \\
+\textbf{FLEX-UF} bitstream-identical & \textbf{decoder depth} & \textbf{per region} & \textbf{same} & \textbf{none} & \textbf{yes} \\
 \bottomrule
 \end{tabular}

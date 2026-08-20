@@ -1,0 +1,94 @@
+{
+  "what": "wall clock by device class and batch size",
+  "ckpt": "runs/RECIPE512/ckpt_PAPER.pth.tar",
+  "device": "CPU, 8 threads",
+  "device_arg": "cpu",
+  "torch_threads": 8,
+  "resolution": [
+    1920,
+    1080
+  ],
+  "padded": [
+    2048,
+    1280
+  ],
+  "tile_px": 256,
+  "tiles_per_frame": 40,
+  "budget_db": 0.1,
+  "exit_map_from": "results/supp_paper_curve_PAPER.json",
+  "timer": "time.perf_counter around a synchronised call",
+  "warmup": 1,
+  "iters": 5,
+  "interleaved": true,
+  "entropy_decode_timed": false,
+  "note": "8 threads on a shared machine; not an idle-box measurement",
+  "oom": [],
+  "rows": [
+    {
+      "qp": 0,
+      "batch": 1,
+      "ms_stock": 8835.978497751057,
+      "ms_deep": 8760.28559776023,
+      "ms_routed": 5625.206956174225,
+      "ms_stock_per_frame": 8835.978497751057,
+      "ms_deep_per_frame": 8760.28559776023,
+      "ms_routed_per_frame": 5625.206956174225,
+      "overhead_pct": -0.856644230292003,
+      "realised_saving_pct": 36.337475723758736,
+      "predicted_saving_pct": 34.58179691652708,
+      "hist_per_frame": [
+        1375,
+        0,
+        0,
+        277,
+        86,
+        27
+      ],
+      "hist_from_db": 0.1
+    },
+    {
+      "qp": 32,
+      "batch": 1,
+      "ms_stock": 8153.109740000218,
+      "ms_deep": 8764.248714316636,
+      "ms_routed": 5822.354465723038,
+      "ms_stock_per_frame": 8153.109740000218,
+      "ms_deep_per_frame": 8764.248714316636,
+      "ms_routed_per_frame": 5822.354465723038,
+      "overhead_pct": 7.495777608856291,
+      "realised_saving_pct": 28.587316356631277,
+      "predicted_saving_pct": 28.59372952799254,
+      "hist_per_frame": [
+        996,
+        0,
+        0,
+        296,
+        266,
+        207
+      ],
+      "hist_from_db": 0.1
+    },
+    {
+      "qp": 63,
+      "batch": 1,
+      "ms_stock": 8279.687859117985,
+      "ms_deep": 8797.178783919662,
+      "ms_routed": 6787.888179067522,
+      "ms_stock_per_frame": 8279.687859117985,
+      "ms_deep_per_frame": 8797.178783919662,
+      "ms_routed_per_frame": 6787.888179067522,
+      "overhead_pct": 6.250126014494528,
+      "realised_saving_pct": 18.017583578439154,
+      "predicted_saving_pct": 22.325889857811266,
+      "hist_per_frame": [
+        662,
+        0,
+        0,
+        326,
+        491,
+        286
+      ],
+      "hist_from_db": 0.1
+    }
+  ]
+}

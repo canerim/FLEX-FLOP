@@ -513,10 +513,15 @@ def content(colw, fullw):
     h2("Contributions.")
     par(r"<b>(i)</b> An early-exit ladder for a learned image decoder that "
         r"picks a depth per tile, which is spatial adaptivity at the "
-        r"granularity of a tile. It is deployable against existing bitstreams "
-        r"because the encoder and the coded payload are untouched, and it "
-        r"saves \MainLowRate% to \MainHighRate% of decoder MACs for 0.1 dB on "
-        r"the full common test set, at a BD-Rate cost of \BdRateALow%.")
+        r"granularity of a tile. The encoder, the entropy model and the coded "
+        r"latent are untouched in both modes we report. <i>Signalled</i> "
+        r"FLEX-UF leaves the latent unchanged and adds \MapBits bits per 1080p "
+        r"frame of routing metadata, or \MapOverheadLow% of a typical "
+        r"bitrate, and saves \MainLowRate% to \MainHighRate% of decoder MACs "
+        r"for 0.1 dB on the common test set at a BD-Rate cost of "
+        r"\BdRateALow%. <i>Bitstream-identical</i> FLEX-UF adds nothing at "
+        r"all, decodes a byte-identical file, and reaches \RouterLowRate% to "
+        r"\RouterHighRate%.")
     par(r"<b>(ii)</b> The band a distortion budget works in: a floor below "
         r"which no allocation is feasible, a saturation point above which none "
         r"improves, both in closed form, and seven propositions verified "
@@ -552,11 +557,11 @@ def content(colw, fullw):
         r"closest prior work is the per-channel AR(1) padding of Kaseva et al. "
         r"[11], which we implement and evaluate.")
     tbl("positioning",
-        r"<b>Table 1. Where this sits.</b> Complexity control in learned "
-        r"compression varies the model; we vary how much of a fixed model runs "
-        r"where. The last column is what makes the difference operational. "
-        r"Every other row requires a decoder that matches the encoder that "
-        r"produced the stream.")
+        r"<b>Table 1. Where this sits.</b> What each method varies, at what "
+        r"granularity, and what that costs the stream. A single new-bitstream "
+        r"column cannot represent our own two modes, so the last three ask "
+        r"what actually changes: whether the coded latent is the same, what "
+        r"side data travels with it, and whether the decoder alone can do it.")
     h2("Complexity control in learned compression.")
     par(r"SlimCAE [22] and slimmable video codecs [23] expose several widths "
         r"of one model. The choice is per stream and it changes the encoder, "
@@ -732,6 +737,13 @@ def content(colw, fullw):
         r"report. Because that head reads nothing the encoder cannot also "
         r"read, the encoder can run it too, and so knows tile by tile where it "
         r"will be wrong.")
+    par(r"Two of these are deployment modes and we name them so that no claim "
+        r"in this paper is ambiguous about what is sent. <i>Signalled</i> "
+        r"FLEX-UF is configuration A: the coded latent is unchanged and a small "
+        r"exit map travels beside it. <i>Bitstream-identical</i> FLEX-UF is "
+        r"configuration B: nothing is added, and the decoder reads a file that "
+        r"is byte for byte the one the released encoder produced. Every saving "
+        r"quoted in this paper is labelled with the mode it was measured in.")
     par(r"<b>C</b> interpolates between the two. The encoder signals a "
         r"fraction ρ of the tiles, the ones where leaving B alone is most "
         r"costly, and B decides the rest, so ρ=0 is B and ρ=1 is A. Any "

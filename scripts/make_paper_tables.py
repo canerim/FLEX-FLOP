@@ -395,8 +395,8 @@ if d and lat:
 # ------------------------------------------------------------------ A vs B
 print("A versus B")
 sa, _ = pick("signalled_RECIPE512_ctc53.json")
-b1, _ = pick("router_RECIPE512_b01_fixed.json", "router_RECIPE512_b01.json")
-b3, _ = pick("router_RECIPE512_b03_fixed.json", "router_RECIPE512_b03.json")
+b1, _ = pick("router_RECIPE512_b01_PAPER.json", "router_RECIPE512_b01_fixed.json", "router_RECIPE512_b01.json")
+b3, _ = pick("router_RECIPE512_b03_PAPER.json", "router_RECIPE512_b03_fixed.json", "router_RECIPE512_b03.json")
 if sa and b1:
     def Aat(bud):
         return {r["qp"]: r["saving_pct_vs_release"] for r in sa["rows"]
@@ -406,6 +406,15 @@ if sa and b1:
         return {r["qp"]: r.get("saving_pct_vs_release") for r in (d_ or {}).get("rows", [])
                 if r.get("budget_reachable")}
     A1, B1 = Aat(0.1), Bat(b1)
+    # The bitstream-identical mode's own headline, so the contributions can
+    # quote both modes without a number being typed in.
+    if 0 in B1 and B1[0] is not None:
+        mac("RouterLowRate", f"{B1[0]:.1f}")
+    if 63 in B1 and B1[63] is not None:
+        mac("RouterHighRate", f"{B1[63]:.1f}")
+    _bv = [v for v in B1.values() if v is not None]
+    if _bv:
+        mac("RouterMean", f"{sum(_bv)/len(_bv):.1f}")
     A3, B3 = Aat(0.3), Bat(b3)
     qs = [q for q in QPS if q in A1 and B1.get(q) is not None]
     if qs:
@@ -763,7 +772,7 @@ rr, _ = pick("raterank_RECIPE512_b01.json")
 rr3, _ = pick("raterank_RECIPE512_b03.json")
 if rr3:
     rs3 = [r for r in rr3["rows"] if r.get("budget_reachable")]
-    b3_, _ = pick("router_RECIPE512_b03_fixed.json", "router_RECIPE512_b03.json")
+    b3_, _ = pick("router_RECIPE512_b03_PAPER.json", "router_RECIPE512_b03_fixed.json", "router_RECIPE512_b03.json")
     if rs3 and b3_:
         B3v = {r["qp"]: r["saving_pct_vs_release"] for r in b3_["rows"]
                if r.get("budget_reachable")}
@@ -861,21 +870,29 @@ if d:
         len([q for q in QPS if q in by])
     ours_kmac = INTRA_GMAC_ * (1 - mean01 / 100) * 1e9 / PX / 1e3
     rel_kmac = INTRA_GMAC_ * 1e9 / PX / 1e3
+    # A single "new bitstream" column could not represent our own two modes:
+    # the signalled one leaves the coded latent untouched and sends a small map
+    # beside it, which is neither "yes" nor "no" to that question. Four columns
+    # say what actually changes.
     rows = [
-        ("SlimCAE~\\cite{slimcae}", "width", "per stream", "yes"),
-        ("Slimmable video~\\cite{slimvc}", "width", "per stream", "yes"),
-        ("EVC~\\cite{evc}", "mask / pruning", "per model", "yes"),
+        ("SlimCAE~\\cite{slimcae}", "width", "per stream", "changes", "--", "no"),
+        ("Slimmable video~\\cite{slimvc}", "width", "per stream", "changes", "--", "no"),
+        ("EVC~\\cite{evc}", "mask / pruning", "per model", "changes", "--", "no"),
         ("Spatial competition~\\cite{spatialcompetition}", "which codec",
-         "per region", "yes"),
-        ("DCVC-RT~\\cite{dcvcrt}", "architecture", "fixed", "yes"),
-        ("\\textbf{FLEX-UF}", "\\textbf{decoder depth}",
-         "\\textbf{per region}", "\\textbf{no}"),
+         "per region", "changes", "yes", "no"),
+        ("DCVC-RT~\\cite{dcvcrt}", "architecture", "fixed", "changes", "--", "no"),
+        ("\\textbf{FLEX-UF} signalled", "\\textbf{decoder depth}",
+         "\\textbf{per region}", "\\textbf{same}", "\\MapBits\\,b", "no"),
+        ("\\textbf{FLEX-UF} bitstream-identical", "\\textbf{decoder depth}",
+         "\\textbf{per region}", "\\textbf{same}", "\\textbf{none}",
+         "\\textbf{yes}"),
     ]
-    lines = [r"\begin{tabular}{llll}", r"\toprule",
-             r"Method & What varies & Granularity & New bitstream \\",
+    lines = [r"\begin{tabular}{lllccc}", r"\toprule",
+             r"Method & What varies & Granularity & Coded & Side & Decoder \\",
+             r" & & & latent & data & only \\",
              r"\midrule"]
-    for a_, b_, c_, e_ in rows:
-        lines.append(f"{a_} & {b_} & {c_} & {e_} \\\\")
+    for a_, b_, c_, d_, e_, f_ in rows:
+        lines.append(f"{a_} & {b_} & {c_} & {d_} & {e_} & {f_} \\\\")
     lines += [r"\bottomrule", r"\end{tabular}"]
     w("positioning.tex", "\n".join(lines))
     mac("OursKMacPx", f"{ours_kmac:.0f}")

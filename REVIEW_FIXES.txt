@@ -2,13 +2,13 @@ FLEX-UF · REVIEWER FIX LIST
 30 items. Ticked only when the fix is in the built PDF and check_paper agrees.
 [ ] open   [~] in progress   [x] done
 
-Status: 14 / 30
+Status: 16 / 30
 
 ================================================================================
 CRITICAL (8)
 ================================================================================
 
-[ ] 01. The "bitstream unchanged" claim contradicts the headline number.
+[x] 01. The "bitstream unchanged" claim contradicts the headline number.
         The contribution says deployable against existing bitstreams and then
         quotes 29.9-15.6%, which is configuration A, and A transmits an exit map
         of about 89 bits per frame. Table 5 is A. The conclusion repeats "no
@@ -201,7 +201,7 @@ MEDIUM (5)
         finds a maximum mismatch of 5.5e-5 dB over 60 allocations.
         FIX: one sentence before the theory, pointing at the check.
 
-[ ] 25. The related-work table needs more than a binary "new bitstream" column.
+[x] 25. The related-work table needs more than a binary "new bitstream" column.
         Four columns would be clearer: encoder weights changed, coded latent
         changed, side metadata, decoder-side-only possible. As it stands
         "FLEX-UF = no new bitstream" misrepresents A. Also drop absolutes such

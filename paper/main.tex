@@ -127,11 +127,15 @@ uses \BandUseLow\% of the band at low rate and \BandUseHigh\% at high rate.
 \paragraph{Contributions.}
 \begin{enumerate}\itemsep2pt
 \item An early-exit ladder for a learned image decoder that picks a depth per
-      tile, which is spatial adaptivity at the granularity of a tile. It is
-      deployable against existing bitstreams because the encoder and the coded
-      payload are untouched, and it saves \MainLowRate\% to \MainHighRate\% of
-      decoder MACs for $0.1\dB$ on the full common test set, at a BD-Rate cost
-      of \BdRateALow\%.
+      tile, which is spatial adaptivity at the granularity of a tile. The
+      encoder, the entropy model and the coded latent are untouched in both
+      modes we report. \emph{Signalled} FLEX-UF leaves the latent unchanged and
+      adds \MapBits\ bits per 1080p frame of routing metadata, or
+      \MapOverheadLow\% of a typical bitrate, and saves \MainLowRate\% to
+      \MainHighRate\% of decoder MACs for $0.1\dB$ on the common test set at a
+      BD-Rate cost of \BdRateALow\%. \emph{Bitstream-identical} FLEX-UF adds
+      nothing at all, decodes a byte-identical file, and reaches
+      \RouterLowRate\% to \RouterHighRate\%.
 \item The band a distortion budget works in: a floor below which no
       allocation is feasible, a saturation point above which none improves, both
       in closed form, and seven propositions verified numerically rather than
@@ -356,7 +360,13 @@ inside every B number we report. Because that head reads nothing the encoder
 cannot also read, the encoder can run it too, and so knows tile by tile where it
 will be wrong.
 
-\textbf{C} interpolates between the two. The encoder signals a fraction $\rho$
+\textbf{C} interpolates between the two. Two of these are deployment modes and
+we name them so that no claim in this paper is ambiguous about what is sent.
+\emph{Signalled} FLEX-UF is configuration~A: the coded latent is unchanged and a
+small exit map travels beside it. \emph{Bitstream-identical} FLEX-UF is
+configuration~B: nothing is added, and the decoder reads a file that is byte for
+byte the one the released encoder produced. Every saving quoted in this paper is
+labelled with the mode it was measured in. The encoder signals a fraction $\rho$
 of the tiles, the ones where leaving B alone is most costly, and B decides the
 rest, so $\rho{=}0$ is B and $\rho{=}1$ is A. Any decoder-side predictor can take
 B's place there, and Section~\ref{sec:hybrid}, which measures C, tries a second

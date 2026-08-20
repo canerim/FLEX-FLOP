@@ -1,0 +1,39 @@
+{
+  "figure": "paper/figures/qual_PAPER_bosphorus_q32_b03.png",
+  "what": "released decode and ours from one latent, at a stated budget",
+  "ckpt": "runs/RECIPE512/ckpt_PAPER.pth.tar",
+  "ckpt_epoch": 0,
+  "ckpt_step": null,
+  "seq": "Bosphorus_1920x1080_120fps_420_8bit_YUV.yuv",
+  "cls": "UVG",
+  "resolution": [
+    1920,
+    1080
+  ],
+  "qp": 32,
+  "budget_db": 0.3,
+  "delivered_db": 0.2112044245004654,
+  "saving_pct_vs_release": 39.12455439567566,
+  "bpp": 0.2739657461643219,
+  "psnr_released": 39.484085133334034,
+  "psnr_routed": 39.2772090313937,
+  "psnr_convention": "(6Y+U+V)/8 in 4:2:0 on 0..255",
+  "crop_px": 320,
+  "crop_centre_yx": [
+    640,
+    640
+  ],
+  "worst_tile": 18,
+  "worst_tile_exit": 2,
+  "n_tiles": 40,
+  "tile_px": 256,
+  "exit_hist": [
+    0,
+    0,
+    40,
+    0,
+    0,
+    0
+  ],
+  "amplification": 20
+}

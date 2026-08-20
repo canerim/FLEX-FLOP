@@ -1,25 +1,53 @@
 {
+  "sources": {
+    "anchor": "runs/RECIPE512/ckpt_PAPER.pth.tar",
+    "rate_bpp": "runs/BEST/ckpt_eval.pth.tar",
+    "A signalled @ 0.1 dB": {
+      "file": "signalled_RECIPE512_ctc53.json",
+      "ckpt": "runs/RECIPE512/ckpt_PAPER.pth.tar"
+    },
+    "A signalled @ 0.3 dB": {
+      "file": "signalled_RECIPE512_ctc53.json",
+      "ckpt": "runs/RECIPE512/ckpt_PAPER.pth.tar"
+    },
+    "A signalled @ 0.5 dB": {
+      "file": "signalled_RECIPE512_ctc53.json",
+      "ckpt": "runs/RECIPE512/ckpt_PAPER.pth.tar"
+    },
+    "B router @ 0.1 dB": {
+      "file": "router_RECIPE512_b01_fixed.json",
+      "ckpt": "runs/RECIPE512/ckpt_eval.pth.tar"
+    },
+    "B router @ 0.3 dB": {
+      "file": "router_RECIPE512_b03_fixed.json",
+      "ckpt": "runs/RECIPE512/ckpt_eval.pth.tar"
+    },
+    "B router @ 0.5 dB": {
+      "file": "router_RECIPE512_b05_fixed.json",
+      "ckpt": "runs/RECIPE512/ckpt_eval.pth.tar"
+    }
+  },
   "rows": [
     {
       "config": "A signalled",
       "budget_db": 0.1,
-      "bd_rate_pct": 0.8768045628258836,
-      "saving_pct_vs_release": 23.799742797635638,
-      "map_bits": 79.12935235815227
+      "bd_rate_pct": 0.8768820979476954,
+      "saving_pct_vs_release": 22.084098874398002,
+      "map_bits": 79.42362671078376
     },
     {
       "config": "A signalled",
       "budget_db": 0.3,
-      "bd_rate_pct": 2.3776448632471414,
-      "saving_pct_vs_release": 40.95342829542339,
-      "map_bits": 79.12935235815227
+      "bd_rate_pct": 2.3759306664514757,
+      "saving_pct_vs_release": 38.20405681178255,
+      "map_bits": 79.42362671078376
     },
     {
       "config": "A signalled",
       "budget_db": 0.5,
       "bd_rate_pct": 2.615107364913749,
-      "saving_pct_vs_release": 41.911393066622175,
-      "map_bits": 79.12935235815227
+      "saving_pct_vs_release": 39.124554058290876,
+      "map_bits": 79.42362671078376
     },
     {
       "config": "B router",

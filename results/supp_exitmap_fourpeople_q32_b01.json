@@ -1,0 +1,84 @@
+{
+  "figure": "paper/figures/exitmap_PAPER_fourpeople_q32_b01.png",
+  "what": "which exit each tile takes, and what each tile pays",
+  "ckpt": "runs/RECIPE512/ckpt_PAPER.pth.tar",
+  "ckpt_epoch": 0,
+  "ckpt_step": null,
+  "seq": "FourPeople_1280x720_60.yuv",
+  "cls": "HEVC_E",
+  "resolution": [
+    1280,
+    720
+  ],
+  "qp": 32,
+  "budget_db": 0.1,
+  "delivered_db": 0.09983669221401215,
+  "saving_pct_vs_release": 13.775962591171265,
+  "grid": [
+    3,
+    5
+  ],
+  "n_tiles": 15,
+  "tile_px": 256,
+  "exit_hist": [
+    0,
+    0,
+    3,
+    4,
+    0,
+    8
+  ],
+  "exit_share_pct": [
+    0.0,
+    0.0,
+    20.0,
+    26.666666666666668,
+    0.0,
+    53.333333333333336
+  ],
+  "exit_map_row_major": [
+    5,
+    5,
+    5,
+    2,
+    3,
+    5,
+    5,
+    5,
+    5,
+    5,
+    3,
+    3,
+    2,
+    2,
+    3
+  ],
+  "tile_penalty_db": [
+    0.10158795118331909,
+    0.14293330907821655,
+    0.08371748775243759,
+    0.1649191975593567,
+    0.06566814333200455,
+    0.07065768539905548,
+    0.06578287482261658,
+    0.06152690201997757,
+    0.05108051374554634,
+    0.049266278743743896,
+    0.199691042304039,
+    0.2504763901233673,
+    0.33795222640037537,
+    0.272014856338501,
+    0.15793409943580627
+  ],
+  "tile_penalty_db_max": 0.33795222640037537,
+  "tile_penalty_db_mean": 0.13834725320339203,
+  "penalty_definition": "10 log10(tile MSE at its chosen exit / the released decoder's MSE on the same tile)",
+  "exit_cost_vector": [
+    0.6087544560432434,
+    0.6087544560432434,
+    0.6087544560432434,
+    0.7578210830688477,
+    0.8697299361228943,
+    1.009507179260254
+  ]
+}

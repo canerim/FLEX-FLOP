@@ -37,6 +37,14 @@ ap.add_argument("--qp", type=int, default=32)
 ap.add_argument("--budget", type=float, default=0.1)
 ap.add_argument("--crop", type=int, default=320)
 ap.add_argument("--device", default="cuda:2")
+ap.add_argument("--out", default="docs/figures/qualitative.png")
+# Provenance beside the picture. Every earlier version of this figure wrote a
+# PNG and nothing else, so which checkpoint decoded it could not be recovered
+# once the per-epoch file it defaulted to had been overwritten -- and a
+# qualitative figure whose checkpoint cannot be stated is not evidence.
+ap.add_argument("--sidecar", default=None,
+                help="JSON file recording the checkpoint, sequence, rate, "
+                     "budget and the numbers printed on the panels")
 a = ap.parse_args()
 dev = a.device
 
@@ -51,7 +59,7 @@ K, j, P = cfg.num_exits, cfg.split_depth, cfg.rgb_patch
 
 seqs, _ = C.discover([])
 s = next(x for x in seqs if a.seq.lower() in x["name"].lower())
-x, _ = C.read_frames(s["path"], s["w"], s["h"], 1, 1)
+x, pl = C.read_frames(s["path"], s["w"], s["h"], 1, 1)
 x = x[0:1].to(dev); _, _, H, W = x.shape
 ph, pw = (-H) % P, (-W) % P
 xp = F.pad(x, (0, pw, 0, ph), mode="replicate") if (ph or pw) else x
@@ -59,7 +67,11 @@ nh, nw = (H + ph) // P, (W + pw) // P
 
 with torch.no_grad():
     qp = torch.full((1,), a.qp, dtype=torch.int32, device=dev)
-    y, q, _ = net._encode_to_latent(xp, qp)
+    y, q, aux = net._encode_to_latent(xp, qp)
+    # Rate is charged on the TRUE pixel count. It is identical for both panels:
+    # early exit changes the synthesis, never the bitstream, which is the whole
+    # reason the two decodes can be compared on one latent.
+    bpp = float(net._rate(aux, qp, H * W)[0].item())
     M = tiled_exit_mses(net.dec, y, q, xp, cfg)
     Rm = reference_frame_mse(ref.dec, y, q, xp)
     lo, hi = 0.0, 1.0
@@ -76,6 +88,10 @@ with torch.no_grad():
     db = (10 * torch.log10(true_frame_mse(net.dec, y, q, xp, k) / Rm)).item()
     rel = ref.dec.forward_full(y, q)[:, :, :H, :W]
     our = net.dec(y, q, exit_map=k)[:, :, :H, :W]
+    # The metric DCVC-UF's own paper reports: (6Y+U+V)/8 in 4:2:0 against the
+    # uint8 source planes, not against a chroma upsample of them.
+    psnr_rel = C.psnr_611_420(rel, pl[0])
+    psnr_our = C.psnr_611_420(our, pl[0])
 
 # the worst tile, so the crop is not a flattering choice
 per = ((our - rel) ** 2).mean(1)[0]
@@ -107,16 +123,38 @@ ax[0].imshow(to_img(rel))
 ax[0].add_patch(Rectangle((cx - h2, cy - h2), a.crop, a.crop, fill=False,
                           ec=ns.VERM, lw=1.0))
 ax[0].set_title("released, full frame", fontsize=6, color=ns.INK2, loc="left")
-ax[1].imshow(A_[sl]); ax[1].set_title("released", fontsize=6, color=ns.INK2,
-                                      loc="left")
-ax[2].imshow(B_[sl]); ax[2].set_title(f"ours, {saving:.0f}% fewer MACs",
-                                      fontsize=6, color=ns.INK2, loc="left")
+ax[1].imshow(A_[sl])
+ax[1].set_title(f"released\n{bpp:.4f} bpp, {psnr_rel:.2f} dB", fontsize=6,
+                color=ns.INK2, loc="left")
+ax[2].imshow(B_[sl])
+ax[2].set_title(f"ours, {saving:.0f}% fewer MACs\n{bpp:.4f} bpp, "
+                f"{psnr_our:.2f} dB", fontsize=6, color=ns.INK2, loc="left")
 im = ax[3].imshow(err[sl] * 20, cmap="magma", vmin=0, vmax=1)
 ax[3].set_title("|difference| ×20", fontsize=6, color=ns.INK2, loc="left")
 for b in ax:
     b.set_xticks([]); b.set_yticks([]); b.grid(False)
-out = R / "docs/figures/qualitative.png"
+out = R / a.out
+out.parent.mkdir(parents=True, exist_ok=True)
 fig.savefig(out, dpi=300, bbox_inches="tight")
 print(f"  {s['name'][:26]} q{a.qp}: {saving:.2f}% saved at {db:.4f} dB")
+print(f"  {bpp:.4f} bpp; PSNR released {psnr_rel:.3f}, ours {psnr_our:.3f}")
 print(f"  worst tile {ti} of {nh*nw}, exit {int(k[ti])}")
 print(f"  -> {out}")
+
+if a.sidecar:
+    import json
+    Path(R / a.sidecar).write_text(json.dumps(
+        {"figure": str(a.out), "what": "released decode and ours from one "
+                                       "latent, at a stated budget",
+         "ckpt": a.ckpt, "ckpt_epoch": ck.get("epoch"), "ckpt_step": ck.get("step"),
+         "seq": s["name"], "cls": s["cls"], "resolution": [s["w"], s["h"]],
+         "qp": a.qp, "budget_db": a.budget, "delivered_db": db,
+         "saving_pct_vs_release": saving, "bpp": bpp,
+         "psnr_released": psnr_rel, "psnr_routed": psnr_our,
+         "psnr_convention": "(6Y+U+V)/8 in 4:2:0 on 0..255",
+         "crop_px": a.crop, "crop_centre_yx": [cy, cx],
+         "worst_tile": ti, "worst_tile_exit": int(k[ti]),
+         "n_tiles": nh * nw, "tile_px": P,
+         "exit_hist": torch.bincount(k, minlength=K).tolist(),
+         "amplification": 20}, indent=2))
+    print(f"  -> {a.sidecar}")

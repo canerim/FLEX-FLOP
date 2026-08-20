@@ -1,0 +1,226 @@
+{
+  "what": "wall clock by device class and batch size",
+  "ckpt": "runs/RECIPE512/ckpt_PAPER.pth.tar",
+  "device": "NVIDIA RTX A6000",
+  "device_arg": "cuda:0",
+  "torch_threads": 48,
+  "resolution": [
+    1920,
+    1080
+  ],
+  "padded": [
+    2048,
+    1280
+  ],
+  "tile_px": 256,
+  "tiles_per_frame": 40,
+  "budget_db": 0.1,
+  "exit_map_from": "results/supp_paper_curve_PAPER.json",
+  "timer": "time.perf_counter around a synchronised call",
+  "warmup": 20,
+  "iters": 40,
+  "interleaved": true,
+  "entropy_decode_timed": false,
+  "note": "shared card: four training runs live on other GPUs",
+  "oom": [],
+  "rows": [
+    {
+      "qp": 0,
+      "batch": 1,
+      "ms_stock": 111.28255911171436,
+      "ms_deep": 115.17119244672358,
+      "ms_routed": 78.07530974969268,
+      "ms_stock_per_frame": 111.28255911171436,
+      "ms_deep_per_frame": 115.17119244672358,
+      "ms_routed_per_frame": 78.07530974969268,
+      "overhead_pct": 3.494378064315984,
+      "realised_saving_pct": 29.840479610722813,
+      "predicted_saving_pct": 34.58179691652708,
+      "hist_per_frame": [
+        1375,
+        0,
+        0,
+        277,
+        86,
+        27
+      ],
+      "hist_from_db": 0.1
+    },
+    {
+      "qp": 0,
+      "batch": 2,
+      "ms_stock": 222.2294092644006,
+      "ms_deep": 228.23594859801233,
+      "ms_routed": 153.4145891200751,
+      "ms_stock_per_frame": 111.1147046322003,
+      "ms_deep_per_frame": 114.11797429900616,
+      "ms_routed_per_frame": 76.70729456003755,
+      "overhead_pct": 2.702855285218053,
+      "realised_saving_pct": 30.965667582930966,
+      "predicted_saving_pct": 34.58179691652708,
+      "hist_per_frame": [
+        1375,
+        0,
+        0,
+        277,
+        86,
+        27
+      ],
+      "hist_from_db": 0.1
+    },
+    {
+      "qp": 0,
+      "batch": 4,
+      "ms_stock": 442.9992791265249,
+      "ms_deep": 459.62256914936006,
+      "ms_routed": 305.8581396471709,
+      "ms_stock_per_frame": 110.74981978163123,
+      "ms_deep_per_frame": 114.90564228734002,
+      "ms_routed_per_frame": 76.46453491179273,
+      "overhead_pct": 3.752441777244364,
+      "realised_saving_pct": 30.957418203875942,
+      "predicted_saving_pct": 34.58179691652708,
+      "hist_per_frame": [
+        1375,
+        0,
+        0,
+        277,
+        86,
+        27
+      ],
+      "hist_from_db": 0.1
+    },
+    {
+      "qp": 32,
+      "batch": 1,
+      "ms_stock": 111.4705151412636,
+      "ms_deep": 115.2724539861083,
+      "ms_routed": 84.59775755181909,
+      "ms_stock_per_frame": 111.4705151412636,
+      "ms_deep_per_frame": 115.2724539861083,
+      "ms_routed_per_frame": 84.59775755181909,
+      "overhead_pct": 3.4107125458481935,
+      "realised_saving_pct": 24.107502827442207,
+      "predicted_saving_pct": 28.59372952799254,
+      "hist_per_frame": [
+        996,
+        0,
+        0,
+        296,
+        266,
+        207
+      ],
+      "hist_from_db": 0.1
+    },
+    {
+      "qp": 32,
+      "batch": 2,
+      "ms_stock": 222.5073128938675,
+      "ms_deep": 228.3807983621955,
+      "ms_routed": 166.52347357012331,
+      "ms_stock_per_frame": 111.25365644693375,
+      "ms_deep_per_frame": 114.19039918109775,
+      "ms_routed_per_frame": 83.26173678506166,
+      "overhead_pct": 2.6396819915440517,
+      "realised_saving_pct": 25.160449153618426,
+      "predicted_saving_pct": 28.59372952799254,
+      "hist_per_frame": [
+        996,
+        0,
+        0,
+        296,
+        266,
+        207
+      ],
+      "hist_from_db": 0.1
+    },
+    {
+      "qp": 32,
+      "batch": 4,
+      "ms_stock": 443.06938210502267,
+      "ms_deep": 459.8821341060102,
+      "ms_routed": 331.5275087952614,
+      "ms_stock_per_frame": 110.76734552625567,
+      "ms_deep_per_frame": 114.97053352650255,
+      "ms_routed_per_frame": 82.88187719881535,
+      "overhead_pct": 3.794609305005503,
+      "realised_saving_pct": 25.174809592986502,
+      "predicted_saving_pct": 28.59372952799254,
+      "hist_per_frame": [
+        996,
+        0,
+        0,
+        296,
+        266,
+        207
+      ],
+      "hist_from_db": 0.1
+    },
+    {
+      "qp": 63,
+      "batch": 1,
+      "ms_stock": 111.45097413100302,
+      "ms_deep": 115.33577204681933,
+      "ms_routed": 91.48179600015283,
+      "ms_stock_per_frame": 111.45097413100302,
+      "ms_deep_per_frame": 115.33577204681933,
+      "ms_routed_per_frame": 91.48179600015283,
+      "overhead_pct": 3.4856563131067775,
+      "realised_saving_pct": 17.917454994496318,
+      "predicted_saving_pct": 22.325889857811266,
+      "hist_per_frame": [
+        662,
+        0,
+        0,
+        326,
+        491,
+        286
+      ],
+      "hist_from_db": 0.1
+    },
+    {
+      "qp": 63,
+      "batch": 2,
+      "ms_stock": 222.46587555855513,
+      "ms_deep": 228.3563455566764,
+      "ms_routed": 179.8785359133035,
+      "ms_stock_per_frame": 111.23293777927756,
+      "ms_deep_per_frame": 114.1781727783382,
+      "ms_routed_per_frame": 89.93926795665175,
+      "overhead_pct": 2.647808336146751,
+      "realised_saving_pct": 19.14331334562016,
+      "predicted_saving_pct": 22.325889857811266,
+      "hist_per_frame": [
+        662,
+        0,
+        0,
+        326,
+        491,
+        286
+      ],
+      "hist_from_db": 0.1
+    },
+    {
+      "qp": 63,
+      "batch": 4,
+      "ms_stock": 442.82602425664663,
+      "ms_deep": 459.483137819916,
+      "ms_routed": 358.43324195593596,
+      "ms_stock_per_frame": 110.70650606416166,
+      "ms_deep_per_frame": 114.870784454979,
+      "ms_routed_per_frame": 89.60831048898399,
+      "overhead_pct": 3.761548023567718,
+      "realised_saving_pct": 19.05777386105012,
+      "predicted_saving_pct": 22.325889857811266,
+      "hist_per_frame": [
+        662,
+        0,
+        0,
+        326,
+        491,
+        286
+      ],
+      "hist_from_db": 0.1
+    }
+  ]
+}

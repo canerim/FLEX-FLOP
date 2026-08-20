@@ -1,0 +1,46 @@
+{
+  "rows": [
+    {
+      "config": "A signalled",
+      "budget_db": 0.1,
+      "bd_rate_pct": 0.8768045628258836,
+      "saving_pct_vs_release": 23.799742797635638,
+      "map_bits": 79.12935235815227
+    },
+    {
+      "config": "A signalled",
+      "budget_db": 0.3,
+      "bd_rate_pct": 2.3776448632471414,
+      "saving_pct_vs_release": 40.95342829542339,
+      "map_bits": 79.12935235815227
+    },
+    {
+      "config": "A signalled",
+      "budget_db": 0.5,
+      "bd_rate_pct": 2.615107364913749,
+      "saving_pct_vs_release": 41.911393066622175,
+      "map_bits": 79.12935235815227
+    },
+    {
+      "config": "B router",
+      "budget_db": 0.1,
+      "bd_rate_pct": 0.8468446161676635,
+      "saving_pct_vs_release": 19.771215425066227,
+      "map_bits": 0.0
+    },
+    {
+      "config": "B router",
+      "budget_db": 0.3,
+      "bd_rate_pct": 2.354858843656671,
+      "saving_pct_vs_release": 38.39028596878052,
+      "map_bits": 0.0
+    },
+    {
+      "config": "B router",
+      "budget_db": 0.5,
+      "bd_rate_pct": 2.592289618388266,
+      "saving_pct_vs_release": 41.74850549337999,
+      "map_bits": 0.0
+    }
+  ]
+}

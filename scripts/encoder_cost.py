@@ -126,7 +126,13 @@ print(f"\n  exact search:       {s_dep:6.2f}% at {d_dep:.4f} dB")
 print(f"  approximate search: {s_ff:6.2f}% at {d_ff:.4f} dB   "
       f"(maps agree on {agree:.0%} of tiles)")
 
-json.dump({"seq": s["name"], "qp": a.qp, "n_tiles": nt,
+json.dump({# Which checkpoint these milliseconds were taken on. The file this
+           # replaced carried none, so a timing taken on a snapshot the
+           # watchers later overwrote could not be told from one taken on the
+           # pinned checkpoint.
+           "ckpt": a.ckpt, "device": torch.cuda.get_device_name(dev),
+           "iters": a.iters,
+           "seq": s["name"], "qp": a.qp, "n_tiles": nt,
            "ms_one_decode": t_dec, "ms_full_frame_table": t_ff,
            "ms_deployed_table": t_dep,
            "x_full_frame": t_ff / t_dec, "x_deployed": t_dep / t_dec,

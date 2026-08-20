@@ -57,6 +57,12 @@ def main(argv):
     ap.add_argument("--budget", type=float, default=0.1)
     ap.add_argument("--device", default="cuda:0")
     ap.add_argument("--out", default="docs/figures/exit_map.png")
+    # Provenance beside the picture: without it the figure cannot say which
+    # checkpoint routed the tiles it draws, which is the defect that made every
+    # earlier qualitative figure in this project unciteable.
+    ap.add_argument("--sidecar", default=None,
+                    help="JSON file recording checkpoint, sequence, rate, "
+                         "budget, the exit histogram and the per-tile penalty")
     a = ap.parse_args(argv)
 
     import ctc_intra as C
@@ -184,6 +190,31 @@ def main(argv):
     print(f"  {nh}x{nw} = {nh*nw} tiles, histogram {hist.tolist()}")
     print(f"  {saved:.2f}% saved at {k_sel_db:.4f} dB")
     print(f"  wrote {a.out}")
+
+    if a.sidecar:
+        import json
+        (R / a.sidecar).write_text(json.dumps(
+            {"figure": str(a.out),
+             "what": "which exit each tile takes, and what each tile pays",
+             "ckpt": a.ckpt, "ckpt_epoch": ck.get("epoch"),
+             "ckpt_step": ck.get("step"),
+             "seq": s["name"], "cls": s["cls"],
+             "resolution": [s["w"], s["h"]], "qp": a.qp,
+             "budget_db": a.budget, "delivered_db": k_sel_db,
+             "saving_pct_vs_release": saved,
+             "grid": [nh, nw], "n_tiles": int(nh * nw), "tile_px": P,
+             "exit_hist": hist.tolist(),
+             "exit_share_pct": [100 * float(h) / max(1, int(hist.sum()))
+                                for h in hist],
+             "exit_map_row_major": km.ravel().tolist(),
+             "tile_penalty_db": pen.ravel().tolist(),
+             "tile_penalty_db_max": float(pen.max()),
+             "tile_penalty_db_mean": float(pen.mean()),
+             "penalty_definition": "10 log10(tile MSE at its chosen exit / the "
+                                   "released decoder's MSE on the same tile)",
+             "exit_cost_vector": [float(c) for c in cost.tolist()]},
+            indent=2))
+        print(f"  wrote {a.sidecar}")
     return 0
 
 
