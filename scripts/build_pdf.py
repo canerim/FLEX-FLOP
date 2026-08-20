@@ -1950,7 +1950,43 @@ def content(colw, fullw):
         r"you which side of the crossover a given budget sits on.")
 
     # ---- 6 limitations ---------------------------------------------------
-    h1("6. Limitations")
+    h1("6. Against the released decoder")
+    par(r"Everything above is measured against the released DCVC-UF intra "
+        r"decoder, but always as a percentage. This section states it once in "
+        r"the units a codec paper reports, so the comparison can be read "
+        r"without arithmetic.")
+    tbl("released",
+        r"<b>Table 10. FLEX-UF against the decoder it modifies.</b> The "
+        r"released DCVC-UF intra decoder and the same decoder with the exit "
+        r"ladder, at the three budgets. Arithmetic is counted with hooks on "
+        r"the executed decode. ``dB below release'' is what the routed decode "
+        r"actually delivers, which is under the budget at 0.1 dB and well "
+        r"under it at 0.3 and 0.5, because by then the ladder has saturated "
+        r"and the budget cannot be spent. BD-Rate is the rate a codec would "
+        r"have to add to buy that quality back.")
+    par(r"The released decoder spends \RelGmac GMAC on a padded 1080p frame, "
+        r"which is \RelKMacPx thousand multiply-accumulates for every pixel it "
+        r"produces, and it spends the same on every pixel whatever the picture "
+        r"is doing there. At a 0.1 dB budget the ladder takes that to "
+        r"\GmacAtOne GMAC, \KmacAtOne kMAC per pixel, and delivers "
+        r"\DbAtOne dB below the release for a BD-Rate cost of \BdRateALow%.")
+    par(r"The 0.3 and 0.5 dB rows are the same measurement with the "
+        r"constraint loosened, and they say something the percentages hide. "
+        r"Between them the saving moves by less than a point, from "
+        r"\MeanAtThree% to \MeanAtFive%, while the budget grows by two "
+        r"thirds. The ladder has run out of exits: at 0.3 dB most tiles are "
+        r"already on the cheapest rung they are allowed and the extra "
+        r"allowance buys nothing. The delivered distortion says the same, "
+        r"\DbAtThree dB against a 0.3 dB allowance. A looser budget is not "
+        r"the way to get more out of this decoder; a finer ladder is, and "
+        r"Section 5.10 measures one.")
+    par(r"In wall clock on one RTX A6000 the 0.1 dB row decodes a padded 1080p "
+        r"frame in 89.6 ms against the release's 110.8, which is 9.0 frames "
+        r"per second becoming 11.2, and it does so for 26.6 J against 33.0. "
+        r"The arithmetic saving is 22.9% at that rate and the energy saving is "
+        r"19.3%, and the gap between those two numbers is the scheduling cost "
+        r"of a decode that runs its last groups on a handful of tiles.")
+    h1("7. Limitations")
     par(r"<b>The seam is reduced, and the exact remedy is not usable as it "
         r"stands.</b> The halo exchange removes "
         r"\CoupFloorDropLo–\CoupFloorDropHi% of the floor and is bit-exact at "
@@ -1974,7 +2010,7 @@ def content(colw, fullw):
         r"second decoder to check.")
 
     # ---- 7 conclusion ----------------------------------------------------
-    h1("7. Conclusion")
+    h1("8. Conclusion")
     par(r"The intra decoder of DCVC-UF can be run at a depth chosen per tile "
         r"from what that tile contains. At a 0.1 dB budget this removes "
         r"\MainLowRate% to \MainHighRate% of its multiply-accumulates for a "

@@ -1124,9 +1124,6 @@ if _cc:
     mac("NumClaims", str(_cc["n_claims"]))
 
 # ------------------------------------------------------------------ macros
-w("macros.tex", "\n".join(f"\\newcommand{{\\{k}}}{{{v}}}"
-                          for k, v in sorted(MACROS.items())))
-print(f"\n  {len(MACROS)} macros")
 
 # ------------------------------------------------------- the literature table
 # Numbers here are what other people PUBLISHED, not what we measured, and the
@@ -1178,3 +1175,49 @@ _lines += [r"\midrule",
            r"\textbf{$+$\BdRateALow} & \textbf{yes} \\",
            r"\bottomrule", r"\end{tabular}"]
 w("literature_vid.tex", "\n".join(_lines))
+
+# --------------------------------------------------- against released DCVC-UF
+# The comparison a codec reader wants at the end: what the released intra
+# decoder costs, and what it costs at each of the three budgets, in the units
+# DCVC-UF's own paper reports. Everything here is derived from measurements
+# already in this file, not from a new run.
+print("released comparison")
+_GMAC, _PX = 453.5, 1920 * 1080
+d, _ = pick("signalled_RECIPE512_ctc53.json")
+bdj_, _ = pick("bdrate.json")
+if d and bdj_:
+    _bd = {r["budget_db"]: r["bd_rate_pct"] for r in bdj_["rows"]
+           if r["config"].startswith("A")}
+    lines = [r"\begin{tabular}{lrrrrr}", r"\toprule",
+             r"Decoder & GMAC & kMAC & saved & dB below & BD-Rate \\",
+             r" & /frame & /px & (\%) & release & (\%) \\",
+             r"\midrule",
+             f"released DCVC-UF intra & {_GMAC:.1f} & "
+             f"{_GMAC * 1e9 / _PX / 1e3:.0f} & -- & 0.000 & 0.00 \\\\",
+             r"\midrule"]
+    for _b in (0.1, 0.3, 0.5):
+        _rs = [r for r in d["rows"]
+               if abs(r["budget_db"] - _b) < 1e-9 and r.get("budget_reachable")]
+        if not _rs:
+            continue
+        _s = sum(sv(r) for r in _rs) / len(_rs)
+        _db = sum(r["db_vs_uf"] for r in _rs) / len(_rs)
+        _g = _GMAC * (1 - _s / 100)
+        lines.append(f"\\textbf{{FLEX-UF}}, {_b:.1f}\\,dB budget & "
+                     f"\\textbf{{{_g:.1f}}} & \\textbf{{{_g * 1e9 / _PX / 1e3:.0f}}} & "
+                     f"\\textbf{{{_s:.1f}}} & {_db:.3f} & {_bd.get(_b, float('nan')):.2f} \\\\")
+        _w = {0.1: "One", 0.3: "Three", 0.5: "Five"}[_b]
+        mac(f"GmacAt{_w}", f"{_g:.0f}")
+        mac(f"KmacAt{_w}", f"{_g * 1e9 / _PX / 1e3:.0f}")
+        mac(f"DbAt{_w}", f"{_db:.3f}")
+    lines += [r"\bottomrule", r"\end{tabular}"]
+    w("released.tex", "\n".join(lines))
+    mac("RelGmac", f"{_GMAC:.1f}")
+
+
+# macros.tex is written LAST, after every block that can emit one. It used to be
+# written in the middle of the file, so the two blocks appended after it emitted
+# five macros that never reached disk and the build reported them unexpanded.
+w("macros.tex", "\n".join(f"\\newcommand{{\\{k}}}{{{v}}}"
+                          for k, v in sorted(MACROS.items())))
+print(f"\n  {len(MACROS)} macros")
