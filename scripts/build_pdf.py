@@ -1060,6 +1060,15 @@ def content(colw, fullw):
         r"At a high λ the oracle genuinely does send every tile to one exit, "
         r"and forcing spread there would force mistakes. Section 5.5 measures "
         r"what B gives up against A.")
+    figure("mechanism.png",
+           r"<b>Figure N. How a multiplier becomes a map.</b> Five tiles "
+           r"of one real frame. <b>a</b>, what each loses at each exit, "
+           r"against the deepest. <b>b</b>, what each exit costs. "
+           r"<b>c</b>, the two added with the multiplier that meets a "
+           r"0.1 dB budget, each curve scaled to its own minimum; the "
+           r"star is where the argmin lands and that is the tile's exit. "
+           r"<b>d</b>, the map the same rule produces for all 40 tiles. "
+           r"One number, λ, decides the whole frame.")
     h2("3.6 Training")
     par(r"All exits are decoded every step and the objective is")
     eq(r"\mathcal{L} = \mathcal{L}_{\mathrm{RD}} + w_{a}\,"
@@ -1165,15 +1174,15 @@ def content(colw, fullw):
         r"weights learning to live with it. That single change removes more of "
         r"the seam than any module in this paper does.")
     h2("4.3 A learned deblocking filter, and why we reject it")
-    figure("seam_module.png",
-           r"<b>Figure 5. A learned deblocking filter</b>, gated by "
-           r"position within a tile and applied once to the stitched frame, "
-           r"for 0.95% of the decode. <b>a</b>, the trained gate against "
-           r"distance from the boundary, beside its initialisation. "
-           r"<b>b</b>, the change in error by that distance; bar width is "
-           r"the share of pixels, so bar area is the contribution to the "
-           r"frame. It wins on the 6.2% of pixels nearest a boundary and "
-           r"loses on the 94% beyond.")
+    figure("seam_gate.png",
+           r"<b>Figure N. The deblocking gate, and what it does.</b> "
+           r"<b>a</b>, the trained gate G, one scalar per position within a "
+           r"tile, shared across all 384 channels. <b>b</b>, the same gate "
+           r"tiled over the canvas, which is how it is applied. <b>c</b>, the "
+           r"correction it actually adds on a real frame: the tile lattice and "
+           r"nothing else. <b>d</b>, a cut through the middle of a tile. The "
+           r"gate reaches 0.76 at a corner and then flattens at 0.17 rather "
+           r"than switching off, so the module is not a pure boundary filter.")
     par(r"What a standard codec does about a partition boundary is deblock it, "
         r"with a filter applied after reconstruction [9, 21]. The tile lattice "
         r"is known "
@@ -1266,12 +1275,6 @@ def content(colw, fullw):
         r"own deepest exit costs 1.0095 of it, and using that as the "
         r"denominator would flatter every result by 0.6–0.8 points.")
     h2("5.1 Main result")
-    figure("qualitative.png",
-           r"<b>Figure 6. What the saving looks like.</b> The same bitstream "
-           r"decoded by the released decoder and by ours at the 0.1 dB operating "
-           r"point, 30.5% fewer multiply-accumulates. The crop is the tile that "
-           r"gave up the most quality, chosen automatically, so it shows the "
-           r"method's worst case on this frame rather than a flattering one.")
     tbl("main_results",
         r"<b>Table 3. Decoder MACs saved</b> (%) against the released decoder, "
         r"per quality index and distortion budget, configuration A. The 0.3 and "
@@ -1515,6 +1518,14 @@ def content(colw, fullw):
            r"\SatLow dB. <b>b</b> The same relation inverted, so it reads as "
            r"what a saving target costs. The three budgets reported elsewhere "
            r"are three points on this curve.")
+    figure("window.png",
+           r"<b>Figure N. The window a budget works in.</b> <b>a</b>, saving "
+           r"against the distortion actually delivered, per rate. Every curve "
+           r"begins at a floor, below which no allocation meets the budget, "
+           r"and flattens at a saturation point, above which a looser budget "
+           r"buys nothing. <b>b</b>, those two limits against rate. The shaded "
+           r"band is the only region in which a budget is a design choice "
+           r"rather than a formality.")
     h2("5.5 Signalled versus predicted allocation")
     figure("router_ab.png",
            r"<b>Figure 9. Who decides.</b> <b>a</b>, the two decision paths "
@@ -1731,6 +1742,18 @@ def content(colw, fullw):
         r"and it rarely is. In adaptive inference the usual controls are a "
         r"uniform allocation and a random one. Both are much weaker than a "
         r"decoder-side signal that is already lying around.")
+    figure("deciders.png",
+           r"<b>Figure N. Three ways to choose an exit.</b> <b>a</b>, saving "
+           r"at the 0.1 dB budget. The encoder search sees the source and "
+           r"sends 89 bits a frame; the other two send nothing. The bit rule "
+           r"beats the trained head at every rate, by the margin printed above "
+           r"it, with no learned parameters against the head's 144,030. "
+           r"<b>b</b>, bars are the tiles on which the rule picks the exit the "
+           r"search would have, and the line is the fraction of the search's "
+           r"saving it nonetheless captures. Picking a different exit on most "
+           r"tiles costs it far less than picking a different exit sounds like "
+           r"it should, which is the case against training a router on exit "
+           r"labels.")
     h2("5.7 Signalling only what the router gets wrong")
     par(r"The encoder knows tile by tile where the router will be wrong, "
         r"because it can run that router itself (Section 3.1), and nothing "
@@ -1821,6 +1844,14 @@ def content(colw, fullw):
         r"and a large one is not. It also reframes the A–B gap. What the gap "
         r"measures is the price of <i>silence</i>, charged tile by tile, "
         r"rather than the price of prediction.")
+    figure("concentration.png",
+           r"<b>Figure N. The loss is concentrated.</b> <b>a</b>, the share of "
+           r"the total regret carried by the worst fraction of tiles, per "
+           r"rate; the dotted line is what an even spread would look like. "
+           r"<b>b</b>, the same as a Gini coefficient. At every rate a small "
+           r"minority of tiles carries most of what staying silent costs, "
+           r"which is why signalling a fraction of the map recovers most of "
+           r"the gap.")
     h2("5.8 Does the map have to be recomputed?")
     figure("map_transfer.png",
            r"<b>Figure 10. Reusing an exit map.</b> Solid is the transferred "
