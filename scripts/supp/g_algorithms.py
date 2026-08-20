@@ -95,7 +95,10 @@ def content(k):
     cfg = td["config"]
     K = cfg["num_exits"]
     j = cfg["split_depth"]
-    b = 12 // K
+    # b and the trunk length come off the ladder rather than being typed:
+    # exit 0 skips (K-1-0)b of the N = Kb blocks.
+    b = ac["exits"][0]["blocks_skipped"] // (K - 1)
+    N = K * b
     P = td["feature_patch"]
     r1080 = [r for r in td["rows"] if r["name"] == "1920x1080"][0]
 
@@ -110,7 +113,7 @@ def content(k):
 
     k.par(
         "The geometry is fixed throughout and is the pinned checkpoint's. The "
-        f"ladder has K = {K} exits over the released decoder's 12 trunk "
+        f"ladder has K = {K} exits over the released decoder's {N} trunk "
         f"blocks, so b = {b} blocks per exit, and the split depth is j = {j}, "
         f"which leaves exits {j} to {K - 1} selectable and the first {j * b} "
         f"blocks full-frame. One tile is {td['rgb_patch']} px of RGB, "
@@ -164,7 +167,7 @@ def content(k):
         "per-tile errors and a vector of per-exit prices.")
 
     # ------------------------------------------------------------------ G.2
-    lab_search = k.h2("The encoder-side search")
+    k.h2("The encoder-side search")
 
     k.par(
         "The encoder holds the source, so it can evaluate the allocation rule "
@@ -314,7 +317,7 @@ def content(k):
         "the map.")
 
     # ------------------------------------------------------------------ G.3
-    lab_route = k.h2("Routing at the decoder")
+    k.h2("Routing at the decoder")
 
     k.par(
         "Configuration B adds no bits, so the decision has to be made from "
@@ -396,7 +399,7 @@ def content(k):
         "to the head alone rather than assumed.")
 
     # ------------------------------------------------------------------ G.4
-    lab_hyb = k.h2("Choosing what to override")
+    k.h2("Choosing what to override")
 
     k.par(
         "Configuration C signals the exit of a fraction of the tiles and "
@@ -473,7 +476,7 @@ def content(k):
         "configuration B would not pass.")
 
     # ------------------------------------------------------------------ G.5
-    lab_bits = k.h2("What the map costs to send")
+    k.h2("What the map costs to send")
 
     hist_bits = 8 * K
     mb_lo = lam01[qlo]["map_bits"]
@@ -538,7 +541,7 @@ def content(k):
         "than trusted.")
 
     # ------------------------------------------------------------------ G.6
-    lab_train = k.h2("One training step")
+    k.h2("One training step")
 
     k.par(
         "The training step is where the pinned checkpoint's behaviour is "
@@ -639,7 +642,7 @@ def content(k):
         "run does not pass the flag that switches it on.")
 
     # ------------------------------------------------------------------ G.7
-    lab_ops = k.h2("The operations underneath")
+    k.h2("The operations underneath")
 
     C = ac["trunk_channels"]
 
@@ -742,7 +745,7 @@ def content(k):
            ". B.3 prices them as shares of a decode.")
 
     # ------------------------------------------------------------------ G.8
-    lab_wrong = k.h2("Where a natural implementation is wrong")
+    k.h2("Where a natural implementation is wrong")
 
     k.par(
         "Six operations, most of them in Table " + f"{t_ops}" + ", are written "
@@ -851,7 +854,7 @@ def content(k):
            "results file, which G.10 repeats.")
 
     # ------------------------------------------------------------------ G.9
-    lab_ctrl = k.h2("The controls that hold it in place")
+    k.h2("The controls that hold it in place")
 
     k.par(
         "Every property above that could fail silently has a test that fails "

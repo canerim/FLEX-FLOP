@@ -2,7 +2,7 @@ FLEX-UF · REVIEWER FIX LIST
 30 items. Ticked only when the fix is in the built PDF and check_paper agrees.
 [ ] open   [~] in progress   [x] done
 
-Status: 20 / 31
+Status: 21 / 31
 
 ================================================================================
 CRITICAL (8)
@@ -41,7 +41,7 @@ CRITICAL (8)
         FIX: regenerate BD-Rate once, on the final checkpoint, with the final
         evaluation convention and the final bitrate accounting. Evaluation only.
 
-[ ] 04. Say how beta is chosen at deployment time in configuration B.
+[x] 04. Say how beta is chosen at deployment time in configuration B.
         The paper correctly says the decoder cannot compute D(t,k), then says
         beta is bisected against the budget exactly as lambda is. A real decoder
         cannot know whether it hit 0.1 dB without the source. As written this

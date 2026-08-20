@@ -305,9 +305,9 @@ def content(k):
     k.par(
         "The ordering there is the one to take away. A budget in PSNR does "
         "not price the second metric evenly across content, and the "
-        "sequences where the two disagree most are ordinary 1080p clips in "
-        "the upper half of the set by saving rather than the hard cases "
-        "further down this section. On a clip with 40 tiles the "
+        "sequences where the two disagree most are ordinary 1080p clips "
+        "from the middle and upper part of the set by saving rather than the "
+        "hard cases further down this section. On a clip with 40 tiles the "
         "multiplier can move a third of the frame two rungs down the ladder "
         "and stay inside 0.1 dB of PSNR, and the tiles it moves are the flat, "
         "low-texture ones a structural metric weighs differently from a mean "
