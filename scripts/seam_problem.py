@@ -74,31 +74,68 @@ def rgb(t):
 ref_img = rgb(full); bad_img = rgb(bad)
 err = np.abs(bad_img - ref_img).mean(-1)[:H, :W]
 
-fig = plt.figure(figsize=(ns.W2, 3.4))
-gs = fig.add_gridspec(2, 3, width_ratios=[1.35, 1.35, 1.0], hspace=0.12, wspace=0.08)
-ZR, ZC, ZS = 384, 640, 320          # a window on a grid crossing
+# Layout. The three panels are placed by hand in figure coordinates rather than
+# by a gridspec, because their aspects differ and a grid cannot make differing
+# aspects sit flush. Two 16:9 frames and one column of two squares: solving
+# 2*AR*h + s = width with s = (h - gap)/2 gives the row height h directly, and
+# every panel then abuts its neighbour with no white gutter to trim.
+#
+# The earlier version spanned the frame across two rows of a uniform grid and
+# left about half the figure as margin, with a title line wide enough to be
+# clipped by the figure box.
+AR = W / H
+GAP, TOP = 0.03, 0.17
+h = (ns.W2 - 1.5 * GAP) / (2 * AR + 0.5)
+sq = 0.5 * (h - GAP)
+fw = AR * h
+fig = plt.figure(figsize=(ns.W2, h + TOP))
+FH = h + TOP
 
-a0 = fig.add_subplot(gs[:, 0]); a0.imshow(ref_img)
-a0.set_title("full frame", fontsize=6.5, color=ns.INK, loc="left")
-a0.add_patch(Rectangle((ZC, ZR), ZS, ZS, ec="#00e5ff", fc="none", lw=0.9))
 
-a1 = fig.add_subplot(gs[:, 1])
-a1.imshow(np.clip(err * a.amp, 0, 1), cmap="inferno", vmin=0, vmax=1)
-a1.set_title(f"|error| ×{a.amp:.0f}   {db.item():+.3f} dB", fontsize=6.5,
-             color=ns.VERM, loc="left")
-a1.add_patch(Rectangle((ZC, ZR), ZS, ZS, ec="#00e5ff", fc="none", lw=0.9))
-
-a2 = fig.add_subplot(gs[0, 2])
-a2.imshow(ref_img[ZR:ZR+ZS, ZC:ZC+ZS])
-a2.set_title("zoom", fontsize=6, color=ns.INK, loc="left")
-a3 = fig.add_subplot(gs[1, 2])
-a3.imshow(np.clip(err[ZR:ZR+ZS, ZC:ZC+ZS] * a.amp, 0, 1), cmap="inferno",
-          vmin=0, vmax=1)
-a3.set_title("zoom", fontsize=6, color=ns.VERM, loc="left")
-for A in (a0, a1, a2, a3):
+def place(x, y, w, hh):
+    A = fig.add_axes([x / ns.W2, y / FH, w / ns.W2, hh / FH])
     A.set_xticks([]); A.set_yticks([])
-fig.tight_layout()
+    for sp in A.spines.values():
+        sp.set_visible(False)
+    return A
+
+
+def label(A, text, colour, letter, panel_w):
+    # The panel letter sits on the title line rather than hanging outside the
+    # axes. Hanging it outside needs a left margin, and with the panels placed
+    # edge to edge there is none: the first letter was clipped by the figure
+    # box. The offset is converted from points through this panel's own width,
+    # so the gap after the letter is the same on a wide panel and a narrow one.
+    A.text(0, 1.015, letter, transform=A.transAxes, fontsize=7,
+           color=ns.INK, ha="left", va="bottom", fontweight="bold")
+    A.text(7.5 / 72 / panel_w, 1.015, text, transform=A.transAxes, fontsize=6,
+           color=colour, ha="left", va="bottom")
+
+
+ZR, ZC, ZS = 384, 640, 320          # a window on a grid crossing
+a0 = place(0, 0, fw, h)
+a0.imshow(ref_img, aspect="auto")
+label(a0, "decoded full frame", ns.INK, "a", fw)
+a0.add_patch(Rectangle((ZC, ZR), ZS, ZS, ec="#00e5ff", fc="none", lw=0.7))
+
+a1 = place(fw + GAP, 0, fw, h)
+a1.imshow(np.clip(err * a.amp, 0, 1), cmap="inferno", vmin=0, vmax=1,
+          aspect="auto")
+label(a1, f"|error| from tiling alone, ×{a.amp:.0f}   {db.item():+.3f} dB",
+      ns.VERM, "b", fw)
+a1.add_patch(Rectangle((ZC, ZR), ZS, ZS, ec="#00e5ff", fc="none", lw=0.7))
+
+x2 = 2 * (fw + GAP)
+a2 = place(x2, h - sq, sq, sq)
+a2.imshow(ref_img[ZR:ZR+ZS, ZC:ZC+ZS], aspect="auto")
+label(a2, "zoom", ns.INK, "c", sq)
+a3 = place(x2, 0, sq, sq)
+a3.imshow(np.clip(err[ZR:ZR+ZS, ZC:ZC+ZS] * a.amp, 0, 1), cmap="inferno",
+          vmin=0, vmax=1, aspect="auto")
+
+# No suptitle. The sequence, the quality index and the padding rule belong in
+# the caption, where a reader looks for provenance.
 for o in (R / a.out, R / "results/seam_problem.png"):
-    fig.savefig(o, dpi=300, bbox_inches="tight", facecolor="white")
+    fig.savefig(o, dpi=500, facecolor="white")
 print(f"  {P}px tiles, {(H+ph)//P}x{(W+pw)//P} grid   penalty {db.item():+.4f} dB")
 print(f"  wrote {a.out}")
