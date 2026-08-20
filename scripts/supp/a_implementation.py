@@ -1066,20 +1066,26 @@ def content(k):
            "checkpoint field.")
 
     cp = k.J("check_paper.json")
+    _failed = cp.get("failed") or []
+    _tail = (
+        f" One does not: \"{_failed[0]}\", which is open at the time of "
+        "writing and is listed among the limitations rather than presented as "
+        "passing." if _failed else
+        " All of them pass. One did not until recently, and the cause is worth "
+        "recording because it was not what it looked like: the partially "
+        "signalled configuration appeared not to reduce to the fully signalled "
+        "one at its endpoint, by 0.09 to 0.21 points, which bisection noise is "
+        "far too small to explain. Neither code path was wrong. The two sides "
+        "of the comparison were reading different measurements of the same "
+        "quantity, and the endpoint reproduces exactly once both read the same "
+        "file.")
     k.par(
         "Evaluation itself is deterministic once a checkpoint is fixed: the "
         "sequence list, the leading frames and the tile grid are all fixed and "
         "no crop is random. scripts/check_paper.py re-reads \\NumClaims "
         "numerical claims out of the paper's prose and checks each against the "
         "file it is supposed to come from. As recorded in "
-        f"results/check_paper.json, {cp['n_passed']} of them pass and one does "
-        f"not: \"{cp['failed'][0]}\". At its endpoint the partially signalled "
-        "configuration reduces to the fully signalled one by construction, and "
-        "on the re-measured data it does not quite: it finds a genuinely "
-        "cheaper allocation at the same delivered quality, by 0.04 to 0.21 "
-        "points, which bisection noise is too small to explain. It is open at "
-        "the time of writing and is listed among the limitations rather than "
-        "presented as passing.")
+        f"results/check_paper.json, {cp['n_passed']} of them pass." + _tail)
 
     # ---------------------------------------------------------------- A.18
     k.h2("Data, code and provenance")
