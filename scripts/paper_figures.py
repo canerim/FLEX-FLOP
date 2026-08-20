@@ -16,6 +16,7 @@ WANTED = [
     "dcvcuf_framework.png",
     "field.png",             # what every published decoder costs
     "tiles_unequal.png",     # why one depth per frame is the wrong shape
+    "patchify.png",          # how a frame becomes 40 independent tiles
     "ladder.png",            # the per-exit cost, measured against modelled
     "allocation.png",        # where the tiles go, by rate
     "router_arch.png",       # the router head, layer by layer   # the baseline, from the DCVC-UF paper

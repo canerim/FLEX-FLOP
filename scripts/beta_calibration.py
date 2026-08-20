@@ -307,14 +307,21 @@ def main(argv):
                 row["d_db"] = row["heldout_db"] - td_t
                 row["db_over_budget"] = row["heldout_db"] - a.budget
         rows.append(row)
-        nan = float("nan")
+
+        def _n(k):
+            # A rate the calibration set could not reach carries beta_heldout
+            # as an explicit None, so dict.get's default never fires and the
+            # format spec meets a None. Map missing and null to the same thing.
+            v = row.get(k)
+            return float("nan") if v is None else v
+
         print(f"  {qp_v:>4}"
-              f"{row.get('heldout_saving_pct_measured', nan):>10.2f}%"
-              f"{row.get('heldout_db', nan):>10.4f}"
-              f"{row.get('test_saving_pct_measured', nan):>10.2f}%"
-              f"{row.get('test_db', nan):>10.4f}"
-              f"{row.get('beta_heldout', nan):>11.2f}"
-              f"{row.get('beta_test', nan):>11.2f}   "
+              f"{_n('heldout_saving_pct_measured'):>10.2f}%"
+              f"{_n('heldout_db'):>10.4f}"
+              f"{_n('test_saving_pct_measured'):>10.2f}%"
+              f"{_n('test_db'):>10.4f}"
+              f"{_n('beta_heldout'):>11.2f}"
+              f"{_n('beta_test'):>11.2f}   "
               f"({time.time()-t0:.0f} s)")
         del cache
 

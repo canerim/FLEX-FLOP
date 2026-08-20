@@ -718,6 +718,17 @@ def content(colw, fullw):
     h2("3.1 Setting and notation")
     par(r"We set out here the decoder we work on, the notation the rest of the "
         r"paper uses, and the three configurations we compare.")
+    figure_wide("patchify.png",
+                r"<b>Figure 4. What patchify does.</b> Captured from one real "
+                r"decode. <b>a</b>, the frame, padded to a whole number of "
+                r"tiles, with the grid the decoder will impose. <b>b</b>, the "
+                r"feature map after the shared stem, at one eighth of frame "
+                r"resolution, so a 256 pixel tile of picture is 32×32 of "
+                r"features; the tiling happens here and not in the pixel "
+                r"domain. <b>c</b>, four of the 40 tiles as the trunk now sees "
+                r"them, each its own batch element. <b>d</b>, the operation "
+                r"itself, and its inverse. It costs no arithmetic and the "
+                r"round trip is exact.")
     figure("ladder.png",
            r"<b>Figure 4. The ladder, priced.</b> What a tile costs at each "
            r"exit, as a percentage of one released decode, counted with hooks "
@@ -1543,6 +1554,59 @@ def content(colw, fullw):
         r"right.")
     par(r"For a system that trains once, the single-router number is the "
         r"honest one, so that is what we report. It understates what B can do.")
+    tbl("beta_heldout",
+        r"<b>Table N. Choosing β without the test set.</b> Left, β bisected on "
+        r"the \HeldNCal held-out validation frames and then applied to the "
+        r"test frames unchanged; right, β bisected on the test frames "
+        r"themselves, which is what the signalled-against-predicted table "
+        r"reports. Savings are hook "
+        r"counts on the routed decode with the router's own compute charged "
+        r"against them. The last column re-bisects on the test set to the "
+        r"quality the held-out β delivered, so the two allocations are "
+        r"differenced at one distortion rather than across two.")
+    par(r"<b>Where the β above came from.</b> Every β in the signalled-against-"
+        r"predicted table was bisected against the budget on the test frames "
+        r"themselves, which is the one thing Section 3.4 says a decoder cannot "
+        r"do. The table immediately above repeats the measurement with the "
+        r"table a deployment would ship: β bisected once per quality index on "
+        r"the \HeldNCal held-out "
+        r"Open Images validation frames, then applied to the CTC frames "
+        r"without being touched again. Checkpoint, head, frames and budget are "
+        r"identical on both sides, so what separates the two columns is where "
+        r"β came from.")
+    par(r"At q0 the two agree, \HeldBetaLow against \BetaLow and "
+        r"\HeldSavingLow% against \BLow%, which is the same measurement to a "
+        r"hundredth of a point. At the rates in between, the held-out β misses "
+        r"the budget on the high side: it delivers \HeldDbWorst dB at "
+        r"q\HeldDbWorstQp where 0.1 dB was asked for, and \HeldNOver of the "
+        r"\HeldNHeld rates it covers overshoot. Distortion and saving move "
+        r"together, so those rows also report more saving, and reading one "
+        r"column straight against the other would credit the router with "
+        r"compute it bought using quality the budget did not allow. The last "
+        r"column takes that back out, re-bisecting on the test set to the "
+        r"quality the held-out β actually delivered: at equal delivered "
+        r"quality the two allocations agree to within \HeldTransferAbsMax "
+        r"points. What moves between the two sets is the decibel a given β "
+        r"delivers.")
+    par(r"The highest rate fails harder than that. On the calibration frames "
+        r"the floor, the distortion tiling costs with every tile already at "
+        r"the deepest exit, is \HeldNoBetaFloor dB at q\HeldNoBetaQp. That "
+        r"is above the budget, so no allocation on that set meets 0.1 dB and "
+        r"the bisection has nothing to return. The shipped table has a hole "
+        r"where the highest rate should be, and a decoder holding it falls "
+        r"back to the deepest allocation, which is our own full-depth path and "
+        r"costs slightly more than the release, so it saves nothing. The test "
+        r"frames, whose floor at that rate is \HeldFloorTestHigh dB, would "
+        r"have supported \HeldNoBetaForgone points. What fails there is the "
+        r"calibration set rather than the router: a budget written as an "
+        r"absolute decibel sits a different distance above the floor on 512px "
+        r"photographs than on 1080p video, and at the highest rate it sits "
+        r"below it.")
+    par(r"We keep the test-bisected figures as B's headline, since the "
+        r"comparison against A is built on them, and the held-out table is the "
+        r"correction a reader should apply. Calibrating on frames whose tiling "
+        r"penalty matches the ones the decoder will meet is the fix, and for a "
+        r"video decoder that means calibrating on video.")
     par(r"<b>Retraining with the mask fixed raises agreement and does not "
         r"simply raise the saving.</b> The head above was trained against a "
         r"suppression term sitting above its own logits (below). We retrained "

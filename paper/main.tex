@@ -408,6 +408,20 @@ B's place there, and Section~\ref{sec:hybrid}, which measures C, tries a second
 one. C transmits a mask rather than a full map, costs the encoder A's search plus
 one run of the predictor, and costs the decoder whatever that predictor costs.
 
+\begin{figure*}[t]
+\centering
+\includegraphics[width=\textwidth]{figures/patchify.png}
+\caption{\textbf{What patchify does.} Captured from one real decode.
+\textbf{a}, the frame, padded to a whole number of tiles, with the grid the
+decoder will impose. \textbf{b}, the feature map after the shared stem, at one
+eighth of frame resolution, so a $256$ pixel tile of picture is $32\times32$ of
+features; the tiling happens here and not in the pixel domain. \textbf{c}, four
+of the $40$ tiles as the trunk now sees them, each its own batch element.
+\textbf{d}, the operation itself, and its inverse. It costs no arithmetic and
+the round trip is exact.}
+\label{fig:patchify}
+\end{figure*}
+
 \subsection{Where the computation is}
 
 The DCVC-UF intra decoder is one upsampling block, twelve \texttt{DepthConvBlock}s
@@ -1295,6 +1309,61 @@ gives the allocation more room to be wrong in as well as more room to be right.
 
 For a system that trains once, the single-router number is the honest one, so
 that is what we report. It understates what B can do.
+
+\begin{table}[t]
+\centering
+\resizebox{\columnwidth}{!}{\input{tables/beta_heldout}}
+\caption{\textbf{Choosing $\beta$ without the test set.} Left, $\beta$ bisected
+on the \HeldNCal\ held-out validation frames and then applied to the test frames
+unchanged; right, $\beta$ bisected on the test frames themselves, which is what
+Table~\ref{tab:ab} reports. Savings are hook counts on the routed decode with
+the router's own compute charged against them. The last column re-bisects on the
+test set to the quality the held-out $\beta$ delivered, so the two allocations
+are differenced at one distortion rather than across two.}
+\label{tab:betaheldout}
+\end{table}
+
+\paragraph{Where the $\beta$ above came from.} Every $\beta$ in
+Table~\ref{tab:ab} was bisected against the budget on the test frames
+themselves, which is the one thing Section~\ref{sec:alloc} says a decoder cannot
+do. Table~\ref{tab:betaheldout} repeats the measurement with the table a
+deployment would ship: $\beta$ bisected once per quality index on the \HeldNCal\
+held-out Open Images validation frames, then applied to the CTC frames without
+being touched again. Checkpoint, head, frames and budget are identical on both
+sides, so what separates the two columns is where $\beta$ came from.
+
+At $q0$ the two agree, \HeldBetaLow\ against \BetaLow\ and \HeldSavingLow\%
+against \BLow\%, which is the same measurement to a hundredth of a point. At the
+rates in between, the held-out $\beta$ misses the budget on the high side: it
+delivers \HeldDbWorst\dB\ at $q\HeldDbWorstQp$ where $0.1\dB$ was asked for, and
+\HeldNOver\ of the \HeldNHeld\ rates it covers overshoot. Distortion and saving
+move together, so those rows also report more saving than Table~\ref{tab:ab}
+does, and reading one column straight against the other would credit the router
+with compute it bought using quality the budget did not allow. The last column
+takes that back out, re-bisecting on the test set to the quality the held-out
+$\beta$ actually delivered: at equal delivered quality the two allocations agree
+to within \HeldTransferAbsMax\ points. What moves between the two sets is the
+decibel a given $\beta$ delivers.
+
+The highest rate fails harder than that. On the calibration frames the floor,
+the distortion tiling costs with every tile already at the deepest exit, is
+\HeldNoBetaFloor\dB\ at $q\HeldNoBetaQp$. That is above the budget, so no
+allocation on that set meets $0.1\dB$ and the bisection has nothing to return.
+The shipped table has a hole where the highest rate should be, and a decoder
+holding it falls back to the deepest allocation, which is our own full-depth
+path and costs slightly more than the release, so it saves nothing. The test
+frames, whose floor at that rate is \HeldFloorTestHigh\dB, would have supported
+\HeldNoBetaForgone\ points. What fails there is the calibration set rather than
+the router: a budget written as an absolute decibel sits a different distance
+above the floor on $512$px photographs than on $1080$p video, and at the highest
+rate it sits below it.
+
+We keep the test-bisected figures as B's headline, since the comparison against
+A is built on them, and Table~\ref{tab:betaheldout} is the correction a reader
+should apply. Calibrating on frames whose tiling penalty matches the ones the
+decoder will meet is the fix, and for a video decoder that means calibrating on
+video.
+
 
 \textbf{Retraining with the mask fixed raises agreement and does not simply
 raise the saving.} The head above was trained against a suppression term sitting

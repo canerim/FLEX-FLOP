@@ -233,6 +233,8 @@ ORDER = [
     "d_full_results",
     "e_budget",
     "f_router",
+    "g_algorithms",
+    "h_limits",
 ]
 
 

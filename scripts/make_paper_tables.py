@@ -605,6 +605,11 @@ if trows:
             mac("HeldTransferMaxQp", str(max(tcs, key=tcs.get)))
             mac("HeldTransferMean",
                 f"{sum(tcs.values())/len(tcs):.1f}")
+            # Sign-free, because the prose claim is that the two allocations
+            # sit on the same frontier and the direction of a tenth of a point
+            # is not a claim worth making.
+            mac("HeldTransferAbsMax",
+                f"{max(abs(v) for v in tcs.values()):.1f}")
     # Why the table lands where it does: the floor is the tiling penalty with
     # no early exit at all, and it is not the same on 512px photographs as on
     # 1080p video, so a budget measured from one is a different distance above
