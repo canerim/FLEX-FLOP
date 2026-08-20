@@ -2,7 +2,7 @@ FLEX-UF · REVIEWER FIX LIST
 30 items. Ticked only when the fix is in the built PDF and check_paper agrees.
 [ ] open   [~] in progress   [x] done
 
-Status: 17 / 31
+Status: 18 / 31
 
 ================================================================================
 CRITICAL (8)
@@ -33,7 +33,7 @@ CRITICAL (8)
         FIX: choose the authoritative MAC definition, then regenerate every
         table, figure and abstract number from one script. No new experiment.
 
-[ ] 03. Recompute BD-Rate 0.88% on the pinned checkpoint.
+[x] 03. Recompute BD-Rate 0.88% on the pinned checkpoint.
         The supplement states that no integrated figure in this work is on the
         pinned checkpoint. The file the 0.88% comes from does not even record
         its checkpoint and predates the corrected cost model. This is one of the

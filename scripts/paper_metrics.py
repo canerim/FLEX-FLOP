@@ -116,12 +116,16 @@ def main():
     # ckpt_eval.pth.tar, a file the watchers overwrite.
     anc = J("supp_anchor_PAPER.json", "anchor_RECIPE512_ctc53.json",
             "anchor_BEST_5qp.json")
-    why = J("why_qp.json")
+    why = J("why_qp_PAPER.json", "why_qp.json")
     if not (anc and why):
         raise SystemExit("need results/anchor_BEST_5qp.json and why_qp.json")
     rel_psnr = {r["qp"]: r["stock_psnr"] for r in anc["rows"]}
     bpp = {r["qp"]: r["bpp"] for r in why["rows"]}
-    D = deepest_cost("BEST")
+    # The denominator is our own deepest exit, so it has to be the ladder the
+    # numbers come from. It was reading runs/BEST, a different run with the
+    # same nominal recipe whose measured saving differs from RECIPE512 by up to
+    # 4.8 points at a matched epoch.
+    D = deepest_cost("RECIPE512")
 
     # Every configuration measured, at every budget. Each entry is a list of
     # candidate files, newest first: a --budgets run stores all three budgets in
@@ -136,13 +140,16 @@ def main():
         ("A signalled", ["signalled_RECIPE512_ctc53.json",
                          "signalled_RECIPE512_b135.json",
                          "signalled_BEST_b05.json"], 0.5),
-        ("B router", ["router_RECIPE512_b01_fixed.json",
+        ("B router", ["router_RECIPE512_b01_PAPER.json",
+                      "router_RECIPE512_b01_fixed.json",
                       "router_RECIPE512_b01.json",
                       "router_RECIPE512_lam1.3e-5.json",
                       "router_BEST_v2.json"], 0.1),
-        ("B router", ["router_RECIPE512_b03_fixed.json",
+        ("B router", ["router_RECIPE512_b03_PAPER.json",
+                      "router_RECIPE512_b03_fixed.json",
                       "router_RECIPE512_b03.json"], 0.3),
-        ("B router", ["router_RECIPE512_b05_fixed.json",
+        ("B router", ["router_RECIPE512_b05_PAPER.json",
+                      "router_RECIPE512_b05_fixed.json",
                       "router_RECIPE512_b05.json"], 0.5),
     ]
 

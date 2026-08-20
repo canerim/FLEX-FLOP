@@ -1,0 +1,4289 @@
+{
+ "1920x1088": {
+  "what": "per-leaf-convolution MAC audit of the released DCVC-UF intra decoder, by forward hook on the real tensor shapes",
+  "source": "scripts/mac_audit.py, re-run to write JSON rather than stdout",
+  "weights": "none loaded: torch-initialised IntraDecoder(); a MAC count depends on shapes, not on values",
+  "device": "cpu",
+  "mac_convention": "one MAC = one multiply and one add; out_positions x out_channels x taps x in_ch/groups",
+  "frame": [
+   1920,
+   1088
+  ],
+  "latent": [
+   256,
+   68,
+   120
+  ],
+  "recon": [
+   3,
+   1088,
+   1920
+  ],
+  "ch_latent": 256,
+  "ch_trunk": 384,
+  "ch_preshuffle": 192,
+  "decoder_params": 14231808,
+  "total_mac": 453540372480,
+  "total_gmac": 453.54037248,
+  "kmac_per_px": 217.113,
+  "parts": {
+   "upsample": {
+    "gmac": 37.01219328,
+    "share": 0.08160727363170331
+   },
+   "trunk": {
+    "gmac": 405.64260864,
+    "share": 0.8943913998701137
+   },
+   "head": {
+    "gmac": 10.88557056,
+    "share": 0.024001326498182974
+   }
+  },
+  "pointwise_share": 0.9966423014743475,
+  "spatial_share": 0.003357698525652486,
+  "n_trunk_blocks": 12,
+  "per_block_gmac": {
+   "dec_1.1": 33.80355072,
+   "dec_1.2": 33.80355072,
+   "dec_1.3": 33.80355072,
+   "dec_1.4": 33.80355072,
+   "dec_1.5": 33.80355072,
+   "dec_1.6": 33.80355072,
+   "dec_1.7": 33.80355072,
+   "dec_1.8": 33.80355072,
+   "dec_1.9": 33.80355072,
+   "dec_1.10": 33.80355072,
+   "dec_1.11": 33.80355072,
+   "dec_1.12": 33.80355072
+  },
+  "layers": [
+   {
+    "name": "dec_1.0.up.conv.0",
+    "mac": 3208642560,
+    "kernel": 1,
+    "stride": 1,
+    "in_ch": 256,
+    "out_ch": 1536,
+    "groups": 1,
+    "calls": 1,
+    "out_hw": [
+     68,
+     120
+    ],
+    "in_hw": [
+     68,
+     120
+    ],
+    "part": "upsample"
+   },
+   {
+    "name": "dec_1.0.conv.dc.0",
+    "mac": 4812963840,
+    "kernel": 1,
+    "stride": 1,
+    "in_ch": 384,
+    "out_ch": 384,
+    "groups": 1,
+    "calls": 1,
+    "out_hw": [
+     136,
+     240
+    ],
+    "in_hw": [
+     136,
+     240
+    ],
+    "part": "upsample"
+   },
+   {
+    "name": "dec_1.0.conv.dc.2",
+    "mac": 112803840,
+    "kernel": 3,
+    "stride": 1,
+    "in_ch": 384,
+    "out_ch": 384,
+    "groups": 384,
+    "calls": 1,
+    "out_hw": [
+     136,
+     240
+    ],
+    "in_hw": [
+     136,
+     240
+    ],
+    "part": "upsample"
+   },
+   {
+    "name": "dec_1.0.conv.dc.3",
+    "mac": 4812963840,
+    "kernel": 1,
+    "stride": 1,
+    "in_ch": 384,
+    "out_ch": 384,
+    "groups": 1,
+    "calls": 1,
+    "out_hw": [
+     136,
+     240
+    ],
+    "in_hw": [
+     136,
+     240
+    ],
+    "part": "upsample"
+   },
+   {
+    "name": "dec_1.0.conv.ffn.0",
+    "mac": 19251855360,
+    "kernel": 1,
+    "stride": 1,
+    "in_ch": 384,
+    "out_ch": 1536,
+    "groups": 1,
+    "calls": 1,
+    "out_hw": [
+     136,
+     240
+    ],
+    "in_hw": [
+     136,
+     240
+    ],
+    "part": "upsample"
+   },
+   {
+    "name": "dec_1.0.conv.ffn.2",
+    "mac": 4812963840,
+    "kernel": 1,
+    "stride": 1,
+    "in_ch": 384,
+    "out_ch": 384,
+    "groups": 1,
+    "calls": 1,
+    "out_hw": [
+     136,
+     240
+    ],
+    "in_hw": [
+     136,
+     240
+    ],
+    "part": "upsample"
+   },
+   {
+    "name": "dec_1.1.dc.0",
+    "mac": 4812963840,
+    "kernel": 1,
+    "stride": 1,
+    "in_ch": 384,
+    "out_ch": 384,
+    "groups": 1,
+    "calls": 1,
+    "out_hw": [
+     136,
+     240
+    ],
+    "in_hw": [
+     136,
+     240
+    ],
+    "part": "trunk"
+   },
+   {
+    "name": "dec_1.1.dc.2",
+    "mac": 112803840,
+    "kernel": 3,
+    "stride": 1,
+    "in_ch": 384,
+    "out_ch": 384,
+    "groups": 384,
+    "calls": 1,
+    "out_hw": [
+     136,
+     240
+    ],
+    "in_hw": [
+     136,
+     240
+    ],
+    "part": "trunk"
+   },
+   {
+    "name": "dec_1.1.dc.3",
+    "mac": 4812963840,
+    "kernel": 1,
+    "stride": 1,
+    "in_ch": 384,
+    "out_ch": 384,
+    "groups": 1,
+    "calls": 1,
+    "out_hw": [
+     136,
+     240
+    ],
+    "in_hw": [
+     136,
+     240
+    ],
+    "part": "trunk"
+   },
+   {
+    "name": "dec_1.1.ffn.0",
+    "mac": 19251855360,
+    "kernel": 1,
+    "stride": 1,
+    "in_ch": 384,
+    "out_ch": 1536,
+    "groups": 1,
+    "calls": 1,
+    "out_hw": [
+     136,
+     240
+    ],
+    "in_hw": [
+     136,
+     240
+    ],
+    "part": "trunk"
+   },
+   {
+    "name": "dec_1.1.ffn.2",
+    "mac": 4812963840,
+    "kernel": 1,
+    "stride": 1,
+    "in_ch": 384,
+    "out_ch": 384,
+    "groups": 1,
+    "calls": 1,
+    "out_hw": [
+     136,
+     240
+    ],
+    "in_hw": [
+     136,
+     240
+    ],
+    "part": "trunk"
+   },
+   {
+    "name": "dec_1.2.dc.0",
+    "mac": 4812963840,
+    "kernel": 1,
+    "stride": 1,
+    "in_ch": 384,
+    "out_ch": 384,
+    "groups": 1,
+    "calls": 1,
+    "out_hw": [
+     136,
+     240
+    ],
+    "in_hw": [
+     136,
+     240
+    ],
+    "part": "trunk"
+   },
+   {
+    "name": "dec_1.2.dc.2",
+    "mac": 112803840,
+    "kernel": 3,
+    "stride": 1,
+    "in_ch": 384,
+    "out_ch": 384,
+    "groups": 384,
+    "calls": 1,
+    "out_hw": [
+     136,
+     240
+    ],
+    "in_hw": [
+     136,
+     240
+    ],
+    "part": "trunk"
+   },
+   {
+    "name": "dec_1.2.dc.3",
+    "mac": 4812963840,
+    "kernel": 1,
+    "stride": 1,
+    "in_ch": 384,
+    "out_ch": 384,
+    "groups": 1,
+    "calls": 1,
+    "out_hw": [
+     136,
+     240
+    ],
+    "in_hw": [
+     136,
+     240
+    ],
+    "part": "trunk"
+   },
+   {
+    "name": "dec_1.2.ffn.0",
+    "mac": 19251855360,
+    "kernel": 1,
+    "stride": 1,
+    "in_ch": 384,
+    "out_ch": 1536,
+    "groups": 1,
+    "calls": 1,
+    "out_hw": [
+     136,
+     240
+    ],
+    "in_hw": [
+     136,
+     240
+    ],
+    "part": "trunk"
+   },
+   {
+    "name": "dec_1.2.ffn.2",
+    "mac": 4812963840,
+    "kernel": 1,
+    "stride": 1,
+    "in_ch": 384,
+    "out_ch": 384,
+    "groups": 1,
+    "calls": 1,
+    "out_hw": [
+     136,
+     240
+    ],
+    "in_hw": [
+     136,
+     240
+    ],
+    "part": "trunk"
+   },
+   {
+    "name": "dec_1.3.dc.0",
+    "mac": 4812963840,
+    "kernel": 1,
+    "stride": 1,
+    "in_ch": 384,
+    "out_ch": 384,
+    "groups": 1,
+    "calls": 1,
+    "out_hw": [
+     136,
+     240
+    ],
+    "in_hw": [
+     136,
+     240
+    ],
+    "part": "trunk"
+   },
+   {
+    "name": "dec_1.3.dc.2",
+    "mac": 112803840,
+    "kernel": 3,
+    "stride": 1,
+    "in_ch": 384,
+    "out_ch": 384,
+    "groups": 384,
+    "calls": 1,
+    "out_hw": [
+     136,
+     240
+    ],
+    "in_hw": [
+     136,
+     240
+    ],
+    "part": "trunk"
+   },
+   {
+    "name": "dec_1.3.dc.3",
+    "mac": 4812963840,
+    "kernel": 1,
+    "stride": 1,
+    "in_ch": 384,
+    "out_ch": 384,
+    "groups": 1,
+    "calls": 1,
+    "out_hw": [
+     136,
+     240
+    ],
+    "in_hw": [
+     136,
+     240
+    ],
+    "part": "trunk"
+   },
+   {
+    "name": "dec_1.3.ffn.0",
+    "mac": 19251855360,
+    "kernel": 1,
+    "stride": 1,
+    "in_ch": 384,
+    "out_ch": 1536,
+    "groups": 1,
+    "calls": 1,
+    "out_hw": [
+     136,
+     240
+    ],
+    "in_hw": [
+     136,
+     240
+    ],
+    "part": "trunk"
+   },
+   {
+    "name": "dec_1.3.ffn.2",
+    "mac": 4812963840,
+    "kernel": 1,
+    "stride": 1,
+    "in_ch": 384,
+    "out_ch": 384,
+    "groups": 1,
+    "calls": 1,
+    "out_hw": [
+     136,
+     240
+    ],
+    "in_hw": [
+     136,
+     240
+    ],
+    "part": "trunk"
+   },
+   {
+    "name": "dec_1.4.dc.0",
+    "mac": 4812963840,
+    "kernel": 1,
+    "stride": 1,
+    "in_ch": 384,
+    "out_ch": 384,
+    "groups": 1,
+    "calls": 1,
+    "out_hw": [
+     136,
+     240
+    ],
+    "in_hw": [
+     136,
+     240
+    ],
+    "part": "trunk"
+   },
+   {
+    "name": "dec_1.4.dc.2",
+    "mac": 112803840,
+    "kernel": 3,
+    "stride": 1,
+    "in_ch": 384,
+    "out_ch": 384,
+    "groups": 384,
+    "calls": 1,
+    "out_hw": [
+     136,
+     240
+    ],
+    "in_hw": [
+     136,
+     240
+    ],
+    "part": "trunk"
+   },
+   {
+    "name": "dec_1.4.dc.3",
+    "mac": 4812963840,
+    "kernel": 1,
+    "stride": 1,
+    "in_ch": 384,
+    "out_ch": 384,
+    "groups": 1,
+    "calls": 1,
+    "out_hw": [
+     136,
+     240
+    ],
+    "in_hw": [
+     136,
+     240
+    ],
+    "part": "trunk"
+   },
+   {
+    "name": "dec_1.4.ffn.0",
+    "mac": 19251855360,
+    "kernel": 1,
+    "stride": 1,
+    "in_ch": 384,
+    "out_ch": 1536,
+    "groups": 1,
+    "calls": 1,
+    "out_hw": [
+     136,
+     240
+    ],
+    "in_hw": [
+     136,
+     240
+    ],
+    "part": "trunk"
+   },
+   {
+    "name": "dec_1.4.ffn.2",
+    "mac": 4812963840,
+    "kernel": 1,
+    "stride": 1,
+    "in_ch": 384,
+    "out_ch": 384,
+    "groups": 1,
+    "calls": 1,
+    "out_hw": [
+     136,
+     240
+    ],
+    "in_hw": [
+     136,
+     240
+    ],
+    "part": "trunk"
+   },
+   {
+    "name": "dec_1.5.dc.0",
+    "mac": 4812963840,
+    "kernel": 1,
+    "stride": 1,
+    "in_ch": 384,
+    "out_ch": 384,
+    "groups": 1,
+    "calls": 1,
+    "out_hw": [
+     136,
+     240
+    ],
+    "in_hw": [
+     136,
+     240
+    ],
+    "part": "trunk"
+   },
+   {
+    "name": "dec_1.5.dc.2",
+    "mac": 112803840,
+    "kernel": 3,
+    "stride": 1,
+    "in_ch": 384,
+    "out_ch": 384,
+    "groups": 384,
+    "calls": 1,
+    "out_hw": [
+     136,
+     240
+    ],
+    "in_hw": [
+     136,
+     240
+    ],
+    "part": "trunk"
+   },
+   {
+    "name": "dec_1.5.dc.3",
+    "mac": 4812963840,
+    "kernel": 1,
+    "stride": 1,
+    "in_ch": 384,
+    "out_ch": 384,
+    "groups": 1,
+    "calls": 1,
+    "out_hw": [
+     136,
+     240
+    ],
+    "in_hw": [
+     136,
+     240
+    ],
+    "part": "trunk"
+   },
+   {
+    "name": "dec_1.5.ffn.0",
+    "mac": 19251855360,
+    "kernel": 1,
+    "stride": 1,
+    "in_ch": 384,
+    "out_ch": 1536,
+    "groups": 1,
+    "calls": 1,
+    "out_hw": [
+     136,
+     240
+    ],
+    "in_hw": [
+     136,
+     240
+    ],
+    "part": "trunk"
+   },
+   {
+    "name": "dec_1.5.ffn.2",
+    "mac": 4812963840,
+    "kernel": 1,
+    "stride": 1,
+    "in_ch": 384,
+    "out_ch": 384,
+    "groups": 1,
+    "calls": 1,
+    "out_hw": [
+     136,
+     240
+    ],
+    "in_hw": [
+     136,
+     240
+    ],
+    "part": "trunk"
+   },
+   {
+    "name": "dec_1.6.dc.0",
+    "mac": 4812963840,
+    "kernel": 1,
+    "stride": 1,
+    "in_ch": 384,
+    "out_ch": 384,
+    "groups": 1,
+    "calls": 1,
+    "out_hw": [
+     136,
+     240
+    ],
+    "in_hw": [
+     136,
+     240
+    ],
+    "part": "trunk"
+   },
+   {
+    "name": "dec_1.6.dc.2",
+    "mac": 112803840,
+    "kernel": 3,
+    "stride": 1,
+    "in_ch": 384,
+    "out_ch": 384,
+    "groups": 384,
+    "calls": 1,
+    "out_hw": [
+     136,
+     240
+    ],
+    "in_hw": [
+     136,
+     240
+    ],
+    "part": "trunk"
+   },
+   {
+    "name": "dec_1.6.dc.3",
+    "mac": 4812963840,
+    "kernel": 1,
+    "stride": 1,
+    "in_ch": 384,
+    "out_ch": 384,
+    "groups": 1,
+    "calls": 1,
+    "out_hw": [
+     136,
+     240
+    ],
+    "in_hw": [
+     136,
+     240
+    ],
+    "part": "trunk"
+   },
+   {
+    "name": "dec_1.6.ffn.0",
+    "mac": 19251855360,
+    "kernel": 1,
+    "stride": 1,
+    "in_ch": 384,
+    "out_ch": 1536,
+    "groups": 1,
+    "calls": 1,
+    "out_hw": [
+     136,
+     240
+    ],
+    "in_hw": [
+     136,
+     240
+    ],
+    "part": "trunk"
+   },
+   {
+    "name": "dec_1.6.ffn.2",
+    "mac": 4812963840,
+    "kernel": 1,
+    "stride": 1,
+    "in_ch": 384,
+    "out_ch": 384,
+    "groups": 1,
+    "calls": 1,
+    "out_hw": [
+     136,
+     240
+    ],
+    "in_hw": [
+     136,
+     240
+    ],
+    "part": "trunk"
+   },
+   {
+    "name": "dec_1.7.dc.0",
+    "mac": 4812963840,
+    "kernel": 1,
+    "stride": 1,
+    "in_ch": 384,
+    "out_ch": 384,
+    "groups": 1,
+    "calls": 1,
+    "out_hw": [
+     136,
+     240
+    ],
+    "in_hw": [
+     136,
+     240
+    ],
+    "part": "trunk"
+   },
+   {
+    "name": "dec_1.7.dc.2",
+    "mac": 112803840,
+    "kernel": 3,
+    "stride": 1,
+    "in_ch": 384,
+    "out_ch": 384,
+    "groups": 384,
+    "calls": 1,
+    "out_hw": [
+     136,
+     240
+    ],
+    "in_hw": [
+     136,
+     240
+    ],
+    "part": "trunk"
+   },
+   {
+    "name": "dec_1.7.dc.3",
+    "mac": 4812963840,
+    "kernel": 1,
+    "stride": 1,
+    "in_ch": 384,
+    "out_ch": 384,
+    "groups": 1,
+    "calls": 1,
+    "out_hw": [
+     136,
+     240
+    ],
+    "in_hw": [
+     136,
+     240
+    ],
+    "part": "trunk"
+   },
+   {
+    "name": "dec_1.7.ffn.0",
+    "mac": 19251855360,
+    "kernel": 1,
+    "stride": 1,
+    "in_ch": 384,
+    "out_ch": 1536,
+    "groups": 1,
+    "calls": 1,
+    "out_hw": [
+     136,
+     240
+    ],
+    "in_hw": [
+     136,
+     240
+    ],
+    "part": "trunk"
+   },
+   {
+    "name": "dec_1.7.ffn.2",
+    "mac": 4812963840,
+    "kernel": 1,
+    "stride": 1,
+    "in_ch": 384,
+    "out_ch": 384,
+    "groups": 1,
+    "calls": 1,
+    "out_hw": [
+     136,
+     240
+    ],
+    "in_hw": [
+     136,
+     240
+    ],
+    "part": "trunk"
+   },
+   {
+    "name": "dec_1.8.dc.0",
+    "mac": 4812963840,
+    "kernel": 1,
+    "stride": 1,
+    "in_ch": 384,
+    "out_ch": 384,
+    "groups": 1,
+    "calls": 1,
+    "out_hw": [
+     136,
+     240
+    ],
+    "in_hw": [
+     136,
+     240
+    ],
+    "part": "trunk"
+   },
+   {
+    "name": "dec_1.8.dc.2",
+    "mac": 112803840,
+    "kernel": 3,
+    "stride": 1,
+    "in_ch": 384,
+    "out_ch": 384,
+    "groups": 384,
+    "calls": 1,
+    "out_hw": [
+     136,
+     240
+    ],
+    "in_hw": [
+     136,
+     240
+    ],
+    "part": "trunk"
+   },
+   {
+    "name": "dec_1.8.dc.3",
+    "mac": 4812963840,
+    "kernel": 1,
+    "stride": 1,
+    "in_ch": 384,
+    "out_ch": 384,
+    "groups": 1,
+    "calls": 1,
+    "out_hw": [
+     136,
+     240
+    ],
+    "in_hw": [
+     136,
+     240
+    ],
+    "part": "trunk"
+   },
+   {
+    "name": "dec_1.8.ffn.0",
+    "mac": 19251855360,
+    "kernel": 1,
+    "stride": 1,
+    "in_ch": 384,
+    "out_ch": 1536,
+    "groups": 1,
+    "calls": 1,
+    "out_hw": [
+     136,
+     240
+    ],
+    "in_hw": [
+     136,
+     240
+    ],
+    "part": "trunk"
+   },
+   {
+    "name": "dec_1.8.ffn.2",
+    "mac": 4812963840,
+    "kernel": 1,
+    "stride": 1,
+    "in_ch": 384,
+    "out_ch": 384,
+    "groups": 1,
+    "calls": 1,
+    "out_hw": [
+     136,
+     240
+    ],
+    "in_hw": [
+     136,
+     240
+    ],
+    "part": "trunk"
+   },
+   {
+    "name": "dec_1.9.dc.0",
+    "mac": 4812963840,
+    "kernel": 1,
+    "stride": 1,
+    "in_ch": 384,
+    "out_ch": 384,
+    "groups": 1,
+    "calls": 1,
+    "out_hw": [
+     136,
+     240
+    ],
+    "in_hw": [
+     136,
+     240
+    ],
+    "part": "trunk"
+   },
+   {
+    "name": "dec_1.9.dc.2",
+    "mac": 112803840,
+    "kernel": 3,
+    "stride": 1,
+    "in_ch": 384,
+    "out_ch": 384,
+    "groups": 384,
+    "calls": 1,
+    "out_hw": [
+     136,
+     240
+    ],
+    "in_hw": [
+     136,
+     240
+    ],
+    "part": "trunk"
+   },
+   {
+    "name": "dec_1.9.dc.3",
+    "mac": 4812963840,
+    "kernel": 1,
+    "stride": 1,
+    "in_ch": 384,
+    "out_ch": 384,
+    "groups": 1,
+    "calls": 1,
+    "out_hw": [
+     136,
+     240
+    ],
+    "in_hw": [
+     136,
+     240
+    ],
+    "part": "trunk"
+   },
+   {
+    "name": "dec_1.9.ffn.0",
+    "mac": 19251855360,
+    "kernel": 1,
+    "stride": 1,
+    "in_ch": 384,
+    "out_ch": 1536,
+    "groups": 1,
+    "calls": 1,
+    "out_hw": [
+     136,
+     240
+    ],
+    "in_hw": [
+     136,
+     240
+    ],
+    "part": "trunk"
+   },
+   {
+    "name": "dec_1.9.ffn.2",
+    "mac": 4812963840,
+    "kernel": 1,
+    "stride": 1,
+    "in_ch": 384,
+    "out_ch": 384,
+    "groups": 1,
+    "calls": 1,
+    "out_hw": [
+     136,
+     240
+    ],
+    "in_hw": [
+     136,
+     240
+    ],
+    "part": "trunk"
+   },
+   {
+    "name": "dec_1.10.dc.0",
+    "mac": 4812963840,
+    "kernel": 1,
+    "stride": 1,
+    "in_ch": 384,
+    "out_ch": 384,
+    "groups": 1,
+    "calls": 1,
+    "out_hw": [
+     136,
+     240
+    ],
+    "in_hw": [
+     136,
+     240
+    ],
+    "part": "trunk"
+   },
+   {
+    "name": "dec_1.10.dc.2",
+    "mac": 112803840,
+    "kernel": 3,
+    "stride": 1,
+    "in_ch": 384,
+    "out_ch": 384,
+    "groups": 384,
+    "calls": 1,
+    "out_hw": [
+     136,
+     240
+    ],
+    "in_hw": [
+     136,
+     240
+    ],
+    "part": "trunk"
+   },
+   {
+    "name": "dec_1.10.dc.3",
+    "mac": 4812963840,
+    "kernel": 1,
+    "stride": 1,
+    "in_ch": 384,
+    "out_ch": 384,
+    "groups": 1,
+    "calls": 1,
+    "out_hw": [
+     136,
+     240
+    ],
+    "in_hw": [
+     136,
+     240
+    ],
+    "part": "trunk"
+   },
+   {
+    "name": "dec_1.10.ffn.0",
+    "mac": 19251855360,
+    "kernel": 1,
+    "stride": 1,
+    "in_ch": 384,
+    "out_ch": 1536,
+    "groups": 1,
+    "calls": 1,
+    "out_hw": [
+     136,
+     240
+    ],
+    "in_hw": [
+     136,
+     240
+    ],
+    "part": "trunk"
+   },
+   {
+    "name": "dec_1.10.ffn.2",
+    "mac": 4812963840,
+    "kernel": 1,
+    "stride": 1,
+    "in_ch": 384,
+    "out_ch": 384,
+    "groups": 1,
+    "calls": 1,
+    "out_hw": [
+     136,
+     240
+    ],
+    "in_hw": [
+     136,
+     240
+    ],
+    "part": "trunk"
+   },
+   {
+    "name": "dec_1.11.dc.0",
+    "mac": 4812963840,
+    "kernel": 1,
+    "stride": 1,
+    "in_ch": 384,
+    "out_ch": 384,
+    "groups": 1,
+    "calls": 1,
+    "out_hw": [
+     136,
+     240
+    ],
+    "in_hw": [
+     136,
+     240
+    ],
+    "part": "trunk"
+   },
+   {
+    "name": "dec_1.11.dc.2",
+    "mac": 112803840,
+    "kernel": 3,
+    "stride": 1,
+    "in_ch": 384,
+    "out_ch": 384,
+    "groups": 384,
+    "calls": 1,
+    "out_hw": [
+     136,
+     240
+    ],
+    "in_hw": [
+     136,
+     240
+    ],
+    "part": "trunk"
+   },
+   {
+    "name": "dec_1.11.dc.3",
+    "mac": 4812963840,
+    "kernel": 1,
+    "stride": 1,
+    "in_ch": 384,
+    "out_ch": 384,
+    "groups": 1,
+    "calls": 1,
+    "out_hw": [
+     136,
+     240
+    ],
+    "in_hw": [
+     136,
+     240
+    ],
+    "part": "trunk"
+   },
+   {
+    "name": "dec_1.11.ffn.0",
+    "mac": 19251855360,
+    "kernel": 1,
+    "stride": 1,
+    "in_ch": 384,
+    "out_ch": 1536,
+    "groups": 1,
+    "calls": 1,
+    "out_hw": [
+     136,
+     240
+    ],
+    "in_hw": [
+     136,
+     240
+    ],
+    "part": "trunk"
+   },
+   {
+    "name": "dec_1.11.ffn.2",
+    "mac": 4812963840,
+    "kernel": 1,
+    "stride": 1,
+    "in_ch": 384,
+    "out_ch": 384,
+    "groups": 1,
+    "calls": 1,
+    "out_hw": [
+     136,
+     240
+    ],
+    "in_hw": [
+     136,
+     240
+    ],
+    "part": "trunk"
+   },
+   {
+    "name": "dec_1.12.dc.0",
+    "mac": 4812963840,
+    "kernel": 1,
+    "stride": 1,
+    "in_ch": 384,
+    "out_ch": 384,
+    "groups": 1,
+    "calls": 1,
+    "out_hw": [
+     136,
+     240
+    ],
+    "in_hw": [
+     136,
+     240
+    ],
+    "part": "trunk"
+   },
+   {
+    "name": "dec_1.12.dc.2",
+    "mac": 112803840,
+    "kernel": 3,
+    "stride": 1,
+    "in_ch": 384,
+    "out_ch": 384,
+    "groups": 384,
+    "calls": 1,
+    "out_hw": [
+     136,
+     240
+    ],
+    "in_hw": [
+     136,
+     240
+    ],
+    "part": "trunk"
+   },
+   {
+    "name": "dec_1.12.dc.3",
+    "mac": 4812963840,
+    "kernel": 1,
+    "stride": 1,
+    "in_ch": 384,
+    "out_ch": 384,
+    "groups": 1,
+    "calls": 1,
+    "out_hw": [
+     136,
+     240
+    ],
+    "in_hw": [
+     136,
+     240
+    ],
+    "part": "trunk"
+   },
+   {
+    "name": "dec_1.12.ffn.0",
+    "mac": 19251855360,
+    "kernel": 1,
+    "stride": 1,
+    "in_ch": 384,
+    "out_ch": 1536,
+    "groups": 1,
+    "calls": 1,
+    "out_hw": [
+     136,
+     240
+    ],
+    "in_hw": [
+     136,
+     240
+    ],
+    "part": "trunk"
+   },
+   {
+    "name": "dec_1.12.ffn.2",
+    "mac": 4812963840,
+    "kernel": 1,
+    "stride": 1,
+    "in_ch": 384,
+    "out_ch": 384,
+    "groups": 1,
+    "calls": 1,
+    "out_hw": [
+     136,
+     240
+    ],
+    "in_hw": [
+     136,
+     240
+    ],
+    "part": "trunk"
+   },
+   {
+    "name": "dec_2.adaptor",
+    "mac": 2406481920,
+    "kernel": 1,
+    "stride": 1,
+    "in_ch": 384,
+    "out_ch": 192,
+    "groups": 1,
+    "calls": 1,
+    "out_hw": [
+     136,
+     240
+    ],
+    "in_hw": [
+     136,
+     240
+    ],
+    "part": "head"
+   },
+   {
+    "name": "dec_2.dc.0",
+    "mac": 1203240960,
+    "kernel": 1,
+    "stride": 1,
+    "in_ch": 192,
+    "out_ch": 192,
+    "groups": 1,
+    "calls": 1,
+    "out_hw": [
+     136,
+     240
+    ],
+    "in_hw": [
+     136,
+     240
+    ],
+    "part": "head"
+   },
+   {
+    "name": "dec_2.dc.2",
+    "mac": 56401920,
+    "kernel": 3,
+    "stride": 1,
+    "in_ch": 192,
+    "out_ch": 192,
+    "groups": 192,
+    "calls": 1,
+    "out_hw": [
+     136,
+     240
+    ],
+    "in_hw": [
+     136,
+     240
+    ],
+    "part": "head"
+   },
+   {
+    "name": "dec_2.dc.3",
+    "mac": 1203240960,
+    "kernel": 1,
+    "stride": 1,
+    "in_ch": 192,
+    "out_ch": 192,
+    "groups": 1,
+    "calls": 1,
+    "out_hw": [
+     136,
+     240
+    ],
+    "in_hw": [
+     136,
+     240
+    ],
+    "part": "head"
+   },
+   {
+    "name": "dec_2.ffn.0",
+    "mac": 4812963840,
+    "kernel": 1,
+    "stride": 1,
+    "in_ch": 192,
+    "out_ch": 768,
+    "groups": 1,
+    "calls": 1,
+    "out_hw": [
+     136,
+     240
+    ],
+    "in_hw": [
+     136,
+     240
+    ],
+    "part": "head"
+   },
+   {
+    "name": "dec_2.ffn.2",
+    "mac": 1203240960,
+    "kernel": 1,
+    "stride": 1,
+    "in_ch": 192,
+    "out_ch": 192,
+    "groups": 1,
+    "calls": 1,
+    "out_hw": [
+     136,
+     240
+    ],
+    "in_hw": [
+     136,
+     240
+    ],
+    "part": "head"
+   }
+  ]
+ },
+ "1280x768": {
+  "what": "per-leaf-convolution MAC audit of the released DCVC-UF intra decoder, by forward hook on the real tensor shapes",
+  "source": "scripts/mac_audit.py, re-run to write JSON rather than stdout",
+  "weights": "none loaded: torch-initialised IntraDecoder(); a MAC count depends on shapes, not on values",
+  "device": "cpu",
+  "mac_convention": "one MAC = one multiply and one add; out_positions x out_channels x taps x in_ch/groups",
+  "frame": [
+   1280,
+   768
+  ],
+  "latent": [
+   256,
+   48,
+   80
+  ],
+  "recon": [
+   3,
+   768,
+   1280
+  ],
+  "ch_latent": 256,
+  "ch_trunk": 384,
+  "ch_preshuffle": 192,
+  "decoder_params": 14231808,
+  "total_mac": 213430763520,
+  "total_gmac": 213.43076352,
+  "kmac_per_px": 217.113,
+  "parts": {
+   "upsample": {
+    "gmac": 17.41750272,
+    "share": 0.08160727363170331
+   },
+   "trunk": {
+    "gmac": 190.89063936,
+    "share": 0.8943913998701137
+   },
+   "head": {
+    "gmac": 5.12262144,
+    "share": 0.024001326498182974
+   }
+  },
+  "pointwise_share": 0.9966423014743475,
+  "spatial_share": 0.003357698525652486,
+  "n_trunk_blocks": 12,
+  "per_block_gmac": {
+   "dec_1.1": 15.90755328,
+   "dec_1.2": 15.90755328,
+   "dec_1.3": 15.90755328,
+   "dec_1.4": 15.90755328,
+   "dec_1.5": 15.90755328,
+   "dec_1.6": 15.90755328,
+   "dec_1.7": 15.90755328,
+   "dec_1.8": 15.90755328,
+   "dec_1.9": 15.90755328,
+   "dec_1.10": 15.90755328,
+   "dec_1.11": 15.90755328,
+   "dec_1.12": 15.90755328
+  },
+  "layers": [
+   {
+    "name": "dec_1.0.up.conv.0",
+    "mac": 1509949440,
+    "kernel": 1,
+    "stride": 1,
+    "in_ch": 256,
+    "out_ch": 1536,
+    "groups": 1,
+    "calls": 1,
+    "out_hw": [
+     48,
+     80
+    ],
+    "in_hw": [
+     48,
+     80
+    ],
+    "part": "upsample"
+   },
+   {
+    "name": "dec_1.0.conv.dc.0",
+    "mac": 2264924160,
+    "kernel": 1,
+    "stride": 1,
+    "in_ch": 384,
+    "out_ch": 384,
+    "groups": 1,
+    "calls": 1,
+    "out_hw": [
+     96,
+     160
+    ],
+    "in_hw": [
+     96,
+     160
+    ],
+    "part": "upsample"
+   },
+   {
+    "name": "dec_1.0.conv.dc.2",
+    "mac": 53084160,
+    "kernel": 3,
+    "stride": 1,
+    "in_ch": 384,
+    "out_ch": 384,
+    "groups": 384,
+    "calls": 1,
+    "out_hw": [
+     96,
+     160
+    ],
+    "in_hw": [
+     96,
+     160
+    ],
+    "part": "upsample"
+   },
+   {
+    "name": "dec_1.0.conv.dc.3",
+    "mac": 2264924160,
+    "kernel": 1,
+    "stride": 1,
+    "in_ch": 384,
+    "out_ch": 384,
+    "groups": 1,
+    "calls": 1,
+    "out_hw": [
+     96,
+     160
+    ],
+    "in_hw": [
+     96,
+     160
+    ],
+    "part": "upsample"
+   },
+   {
+    "name": "dec_1.0.conv.ffn.0",
+    "mac": 9059696640,
+    "kernel": 1,
+    "stride": 1,
+    "in_ch": 384,
+    "out_ch": 1536,
+    "groups": 1,
+    "calls": 1,
+    "out_hw": [
+     96,
+     160
+    ],
+    "in_hw": [
+     96,
+     160
+    ],
+    "part": "upsample"
+   },
+   {
+    "name": "dec_1.0.conv.ffn.2",
+    "mac": 2264924160,
+    "kernel": 1,
+    "stride": 1,
+    "in_ch": 384,
+    "out_ch": 384,
+    "groups": 1,
+    "calls": 1,
+    "out_hw": [
+     96,
+     160
+    ],
+    "in_hw": [
+     96,
+     160
+    ],
+    "part": "upsample"
+   },
+   {
+    "name": "dec_1.1.dc.0",
+    "mac": 2264924160,
+    "kernel": 1,
+    "stride": 1,
+    "in_ch": 384,
+    "out_ch": 384,
+    "groups": 1,
+    "calls": 1,
+    "out_hw": [
+     96,
+     160
+    ],
+    "in_hw": [
+     96,
+     160
+    ],
+    "part": "trunk"
+   },
+   {
+    "name": "dec_1.1.dc.2",
+    "mac": 53084160,
+    "kernel": 3,
+    "stride": 1,
+    "in_ch": 384,
+    "out_ch": 384,
+    "groups": 384,
+    "calls": 1,
+    "out_hw": [
+     96,
+     160
+    ],
+    "in_hw": [
+     96,
+     160
+    ],
+    "part": "trunk"
+   },
+   {
+    "name": "dec_1.1.dc.3",
+    "mac": 2264924160,
+    "kernel": 1,
+    "stride": 1,
+    "in_ch": 384,
+    "out_ch": 384,
+    "groups": 1,
+    "calls": 1,
+    "out_hw": [
+     96,
+     160
+    ],
+    "in_hw": [
+     96,
+     160
+    ],
+    "part": "trunk"
+   },
+   {
+    "name": "dec_1.1.ffn.0",
+    "mac": 9059696640,
+    "kernel": 1,
+    "stride": 1,
+    "in_ch": 384,
+    "out_ch": 1536,
+    "groups": 1,
+    "calls": 1,
+    "out_hw": [
+     96,
+     160
+    ],
+    "in_hw": [
+     96,
+     160
+    ],
+    "part": "trunk"
+   },
+   {
+    "name": "dec_1.1.ffn.2",
+    "mac": 2264924160,
+    "kernel": 1,
+    "stride": 1,
+    "in_ch": 384,
+    "out_ch": 384,
+    "groups": 1,
+    "calls": 1,
+    "out_hw": [
+     96,
+     160
+    ],
+    "in_hw": [
+     96,
+     160
+    ],
+    "part": "trunk"
+   },
+   {
+    "name": "dec_1.2.dc.0",
+    "mac": 2264924160,
+    "kernel": 1,
+    "stride": 1,
+    "in_ch": 384,
+    "out_ch": 384,
+    "groups": 1,
+    "calls": 1,
+    "out_hw": [
+     96,
+     160
+    ],
+    "in_hw": [
+     96,
+     160
+    ],
+    "part": "trunk"
+   },
+   {
+    "name": "dec_1.2.dc.2",
+    "mac": 53084160,
+    "kernel": 3,
+    "stride": 1,
+    "in_ch": 384,
+    "out_ch": 384,
+    "groups": 384,
+    "calls": 1,
+    "out_hw": [
+     96,
+     160
+    ],
+    "in_hw": [
+     96,
+     160
+    ],
+    "part": "trunk"
+   },
+   {
+    "name": "dec_1.2.dc.3",
+    "mac": 2264924160,
+    "kernel": 1,
+    "stride": 1,
+    "in_ch": 384,
+    "out_ch": 384,
+    "groups": 1,
+    "calls": 1,
+    "out_hw": [
+     96,
+     160
+    ],
+    "in_hw": [
+     96,
+     160
+    ],
+    "part": "trunk"
+   },
+   {
+    "name": "dec_1.2.ffn.0",
+    "mac": 9059696640,
+    "kernel": 1,
+    "stride": 1,
+    "in_ch": 384,
+    "out_ch": 1536,
+    "groups": 1,
+    "calls": 1,
+    "out_hw": [
+     96,
+     160
+    ],
+    "in_hw": [
+     96,
+     160
+    ],
+    "part": "trunk"
+   },
+   {
+    "name": "dec_1.2.ffn.2",
+    "mac": 2264924160,
+    "kernel": 1,
+    "stride": 1,
+    "in_ch": 384,
+    "out_ch": 384,
+    "groups": 1,
+    "calls": 1,
+    "out_hw": [
+     96,
+     160
+    ],
+    "in_hw": [
+     96,
+     160
+    ],
+    "part": "trunk"
+   },
+   {
+    "name": "dec_1.3.dc.0",
+    "mac": 2264924160,
+    "kernel": 1,
+    "stride": 1,
+    "in_ch": 384,
+    "out_ch": 384,
+    "groups": 1,
+    "calls": 1,
+    "out_hw": [
+     96,
+     160
+    ],
+    "in_hw": [
+     96,
+     160
+    ],
+    "part": "trunk"
+   },
+   {
+    "name": "dec_1.3.dc.2",
+    "mac": 53084160,
+    "kernel": 3,
+    "stride": 1,
+    "in_ch": 384,
+    "out_ch": 384,
+    "groups": 384,
+    "calls": 1,
+    "out_hw": [
+     96,
+     160
+    ],
+    "in_hw": [
+     96,
+     160
+    ],
+    "part": "trunk"
+   },
+   {
+    "name": "dec_1.3.dc.3",
+    "mac": 2264924160,
+    "kernel": 1,
+    "stride": 1,
+    "in_ch": 384,
+    "out_ch": 384,
+    "groups": 1,
+    "calls": 1,
+    "out_hw": [
+     96,
+     160
+    ],
+    "in_hw": [
+     96,
+     160
+    ],
+    "part": "trunk"
+   },
+   {
+    "name": "dec_1.3.ffn.0",
+    "mac": 9059696640,
+    "kernel": 1,
+    "stride": 1,
+    "in_ch": 384,
+    "out_ch": 1536,
+    "groups": 1,
+    "calls": 1,
+    "out_hw": [
+     96,
+     160
+    ],
+    "in_hw": [
+     96,
+     160
+    ],
+    "part": "trunk"
+   },
+   {
+    "name": "dec_1.3.ffn.2",
+    "mac": 2264924160,
+    "kernel": 1,
+    "stride": 1,
+    "in_ch": 384,
+    "out_ch": 384,
+    "groups": 1,
+    "calls": 1,
+    "out_hw": [
+     96,
+     160
+    ],
+    "in_hw": [
+     96,
+     160
+    ],
+    "part": "trunk"
+   },
+   {
+    "name": "dec_1.4.dc.0",
+    "mac": 2264924160,
+    "kernel": 1,
+    "stride": 1,
+    "in_ch": 384,
+    "out_ch": 384,
+    "groups": 1,
+    "calls": 1,
+    "out_hw": [
+     96,
+     160
+    ],
+    "in_hw": [
+     96,
+     160
+    ],
+    "part": "trunk"
+   },
+   {
+    "name": "dec_1.4.dc.2",
+    "mac": 53084160,
+    "kernel": 3,
+    "stride": 1,
+    "in_ch": 384,
+    "out_ch": 384,
+    "groups": 384,
+    "calls": 1,
+    "out_hw": [
+     96,
+     160
+    ],
+    "in_hw": [
+     96,
+     160
+    ],
+    "part": "trunk"
+   },
+   {
+    "name": "dec_1.4.dc.3",
+    "mac": 2264924160,
+    "kernel": 1,
+    "stride": 1,
+    "in_ch": 384,
+    "out_ch": 384,
+    "groups": 1,
+    "calls": 1,
+    "out_hw": [
+     96,
+     160
+    ],
+    "in_hw": [
+     96,
+     160
+    ],
+    "part": "trunk"
+   },
+   {
+    "name": "dec_1.4.ffn.0",
+    "mac": 9059696640,
+    "kernel": 1,
+    "stride": 1,
+    "in_ch": 384,
+    "out_ch": 1536,
+    "groups": 1,
+    "calls": 1,
+    "out_hw": [
+     96,
+     160
+    ],
+    "in_hw": [
+     96,
+     160
+    ],
+    "part": "trunk"
+   },
+   {
+    "name": "dec_1.4.ffn.2",
+    "mac": 2264924160,
+    "kernel": 1,
+    "stride": 1,
+    "in_ch": 384,
+    "out_ch": 384,
+    "groups": 1,
+    "calls": 1,
+    "out_hw": [
+     96,
+     160
+    ],
+    "in_hw": [
+     96,
+     160
+    ],
+    "part": "trunk"
+   },
+   {
+    "name": "dec_1.5.dc.0",
+    "mac": 2264924160,
+    "kernel": 1,
+    "stride": 1,
+    "in_ch": 384,
+    "out_ch": 384,
+    "groups": 1,
+    "calls": 1,
+    "out_hw": [
+     96,
+     160
+    ],
+    "in_hw": [
+     96,
+     160
+    ],
+    "part": "trunk"
+   },
+   {
+    "name": "dec_1.5.dc.2",
+    "mac": 53084160,
+    "kernel": 3,
+    "stride": 1,
+    "in_ch": 384,
+    "out_ch": 384,
+    "groups": 384,
+    "calls": 1,
+    "out_hw": [
+     96,
+     160
+    ],
+    "in_hw": [
+     96,
+     160
+    ],
+    "part": "trunk"
+   },
+   {
+    "name": "dec_1.5.dc.3",
+    "mac": 2264924160,
+    "kernel": 1,
+    "stride": 1,
+    "in_ch": 384,
+    "out_ch": 384,
+    "groups": 1,
+    "calls": 1,
+    "out_hw": [
+     96,
+     160
+    ],
+    "in_hw": [
+     96,
+     160
+    ],
+    "part": "trunk"
+   },
+   {
+    "name": "dec_1.5.ffn.0",
+    "mac": 9059696640,
+    "kernel": 1,
+    "stride": 1,
+    "in_ch": 384,
+    "out_ch": 1536,
+    "groups": 1,
+    "calls": 1,
+    "out_hw": [
+     96,
+     160
+    ],
+    "in_hw": [
+     96,
+     160
+    ],
+    "part": "trunk"
+   },
+   {
+    "name": "dec_1.5.ffn.2",
+    "mac": 2264924160,
+    "kernel": 1,
+    "stride": 1,
+    "in_ch": 384,
+    "out_ch": 384,
+    "groups": 1,
+    "calls": 1,
+    "out_hw": [
+     96,
+     160
+    ],
+    "in_hw": [
+     96,
+     160
+    ],
+    "part": "trunk"
+   },
+   {
+    "name": "dec_1.6.dc.0",
+    "mac": 2264924160,
+    "kernel": 1,
+    "stride": 1,
+    "in_ch": 384,
+    "out_ch": 384,
+    "groups": 1,
+    "calls": 1,
+    "out_hw": [
+     96,
+     160
+    ],
+    "in_hw": [
+     96,
+     160
+    ],
+    "part": "trunk"
+   },
+   {
+    "name": "dec_1.6.dc.2",
+    "mac": 53084160,
+    "kernel": 3,
+    "stride": 1,
+    "in_ch": 384,
+    "out_ch": 384,
+    "groups": 384,
+    "calls": 1,
+    "out_hw": [
+     96,
+     160
+    ],
+    "in_hw": [
+     96,
+     160
+    ],
+    "part": "trunk"
+   },
+   {
+    "name": "dec_1.6.dc.3",
+    "mac": 2264924160,
+    "kernel": 1,
+    "stride": 1,
+    "in_ch": 384,
+    "out_ch": 384,
+    "groups": 1,
+    "calls": 1,
+    "out_hw": [
+     96,
+     160
+    ],
+    "in_hw": [
+     96,
+     160
+    ],
+    "part": "trunk"
+   },
+   {
+    "name": "dec_1.6.ffn.0",
+    "mac": 9059696640,
+    "kernel": 1,
+    "stride": 1,
+    "in_ch": 384,
+    "out_ch": 1536,
+    "groups": 1,
+    "calls": 1,
+    "out_hw": [
+     96,
+     160
+    ],
+    "in_hw": [
+     96,
+     160
+    ],
+    "part": "trunk"
+   },
+   {
+    "name": "dec_1.6.ffn.2",
+    "mac": 2264924160,
+    "kernel": 1,
+    "stride": 1,
+    "in_ch": 384,
+    "out_ch": 384,
+    "groups": 1,
+    "calls": 1,
+    "out_hw": [
+     96,
+     160
+    ],
+    "in_hw": [
+     96,
+     160
+    ],
+    "part": "trunk"
+   },
+   {
+    "name": "dec_1.7.dc.0",
+    "mac": 2264924160,
+    "kernel": 1,
+    "stride": 1,
+    "in_ch": 384,
+    "out_ch": 384,
+    "groups": 1,
+    "calls": 1,
+    "out_hw": [
+     96,
+     160
+    ],
+    "in_hw": [
+     96,
+     160
+    ],
+    "part": "trunk"
+   },
+   {
+    "name": "dec_1.7.dc.2",
+    "mac": 53084160,
+    "kernel": 3,
+    "stride": 1,
+    "in_ch": 384,
+    "out_ch": 384,
+    "groups": 384,
+    "calls": 1,
+    "out_hw": [
+     96,
+     160
+    ],
+    "in_hw": [
+     96,
+     160
+    ],
+    "part": "trunk"
+   },
+   {
+    "name": "dec_1.7.dc.3",
+    "mac": 2264924160,
+    "kernel": 1,
+    "stride": 1,
+    "in_ch": 384,
+    "out_ch": 384,
+    "groups": 1,
+    "calls": 1,
+    "out_hw": [
+     96,
+     160
+    ],
+    "in_hw": [
+     96,
+     160
+    ],
+    "part": "trunk"
+   },
+   {
+    "name": "dec_1.7.ffn.0",
+    "mac": 9059696640,
+    "kernel": 1,
+    "stride": 1,
+    "in_ch": 384,
+    "out_ch": 1536,
+    "groups": 1,
+    "calls": 1,
+    "out_hw": [
+     96,
+     160
+    ],
+    "in_hw": [
+     96,
+     160
+    ],
+    "part": "trunk"
+   },
+   {
+    "name": "dec_1.7.ffn.2",
+    "mac": 2264924160,
+    "kernel": 1,
+    "stride": 1,
+    "in_ch": 384,
+    "out_ch": 384,
+    "groups": 1,
+    "calls": 1,
+    "out_hw": [
+     96,
+     160
+    ],
+    "in_hw": [
+     96,
+     160
+    ],
+    "part": "trunk"
+   },
+   {
+    "name": "dec_1.8.dc.0",
+    "mac": 2264924160,
+    "kernel": 1,
+    "stride": 1,
+    "in_ch": 384,
+    "out_ch": 384,
+    "groups": 1,
+    "calls": 1,
+    "out_hw": [
+     96,
+     160
+    ],
+    "in_hw": [
+     96,
+     160
+    ],
+    "part": "trunk"
+   },
+   {
+    "name": "dec_1.8.dc.2",
+    "mac": 53084160,
+    "kernel": 3,
+    "stride": 1,
+    "in_ch": 384,
+    "out_ch": 384,
+    "groups": 384,
+    "calls": 1,
+    "out_hw": [
+     96,
+     160
+    ],
+    "in_hw": [
+     96,
+     160
+    ],
+    "part": "trunk"
+   },
+   {
+    "name": "dec_1.8.dc.3",
+    "mac": 2264924160,
+    "kernel": 1,
+    "stride": 1,
+    "in_ch": 384,
+    "out_ch": 384,
+    "groups": 1,
+    "calls": 1,
+    "out_hw": [
+     96,
+     160
+    ],
+    "in_hw": [
+     96,
+     160
+    ],
+    "part": "trunk"
+   },
+   {
+    "name": "dec_1.8.ffn.0",
+    "mac": 9059696640,
+    "kernel": 1,
+    "stride": 1,
+    "in_ch": 384,
+    "out_ch": 1536,
+    "groups": 1,
+    "calls": 1,
+    "out_hw": [
+     96,
+     160
+    ],
+    "in_hw": [
+     96,
+     160
+    ],
+    "part": "trunk"
+   },
+   {
+    "name": "dec_1.8.ffn.2",
+    "mac": 2264924160,
+    "kernel": 1,
+    "stride": 1,
+    "in_ch": 384,
+    "out_ch": 384,
+    "groups": 1,
+    "calls": 1,
+    "out_hw": [
+     96,
+     160
+    ],
+    "in_hw": [
+     96,
+     160
+    ],
+    "part": "trunk"
+   },
+   {
+    "name": "dec_1.9.dc.0",
+    "mac": 2264924160,
+    "kernel": 1,
+    "stride": 1,
+    "in_ch": 384,
+    "out_ch": 384,
+    "groups": 1,
+    "calls": 1,
+    "out_hw": [
+     96,
+     160
+    ],
+    "in_hw": [
+     96,
+     160
+    ],
+    "part": "trunk"
+   },
+   {
+    "name": "dec_1.9.dc.2",
+    "mac": 53084160,
+    "kernel": 3,
+    "stride": 1,
+    "in_ch": 384,
+    "out_ch": 384,
+    "groups": 384,
+    "calls": 1,
+    "out_hw": [
+     96,
+     160
+    ],
+    "in_hw": [
+     96,
+     160
+    ],
+    "part": "trunk"
+   },
+   {
+    "name": "dec_1.9.dc.3",
+    "mac": 2264924160,
+    "kernel": 1,
+    "stride": 1,
+    "in_ch": 384,
+    "out_ch": 384,
+    "groups": 1,
+    "calls": 1,
+    "out_hw": [
+     96,
+     160
+    ],
+    "in_hw": [
+     96,
+     160
+    ],
+    "part": "trunk"
+   },
+   {
+    "name": "dec_1.9.ffn.0",
+    "mac": 9059696640,
+    "kernel": 1,
+    "stride": 1,
+    "in_ch": 384,
+    "out_ch": 1536,
+    "groups": 1,
+    "calls": 1,
+    "out_hw": [
+     96,
+     160
+    ],
+    "in_hw": [
+     96,
+     160
+    ],
+    "part": "trunk"
+   },
+   {
+    "name": "dec_1.9.ffn.2",
+    "mac": 2264924160,
+    "kernel": 1,
+    "stride": 1,
+    "in_ch": 384,
+    "out_ch": 384,
+    "groups": 1,
+    "calls": 1,
+    "out_hw": [
+     96,
+     160
+    ],
+    "in_hw": [
+     96,
+     160
+    ],
+    "part": "trunk"
+   },
+   {
+    "name": "dec_1.10.dc.0",
+    "mac": 2264924160,
+    "kernel": 1,
+    "stride": 1,
+    "in_ch": 384,
+    "out_ch": 384,
+    "groups": 1,
+    "calls": 1,
+    "out_hw": [
+     96,
+     160
+    ],
+    "in_hw": [
+     96,
+     160
+    ],
+    "part": "trunk"
+   },
+   {
+    "name": "dec_1.10.dc.2",
+    "mac": 53084160,
+    "kernel": 3,
+    "stride": 1,
+    "in_ch": 384,
+    "out_ch": 384,
+    "groups": 384,
+    "calls": 1,
+    "out_hw": [
+     96,
+     160
+    ],
+    "in_hw": [
+     96,
+     160
+    ],
+    "part": "trunk"
+   },
+   {
+    "name": "dec_1.10.dc.3",
+    "mac": 2264924160,
+    "kernel": 1,
+    "stride": 1,
+    "in_ch": 384,
+    "out_ch": 384,
+    "groups": 1,
+    "calls": 1,
+    "out_hw": [
+     96,
+     160
+    ],
+    "in_hw": [
+     96,
+     160
+    ],
+    "part": "trunk"
+   },
+   {
+    "name": "dec_1.10.ffn.0",
+    "mac": 9059696640,
+    "kernel": 1,
+    "stride": 1,
+    "in_ch": 384,
+    "out_ch": 1536,
+    "groups": 1,
+    "calls": 1,
+    "out_hw": [
+     96,
+     160
+    ],
+    "in_hw": [
+     96,
+     160
+    ],
+    "part": "trunk"
+   },
+   {
+    "name": "dec_1.10.ffn.2",
+    "mac": 2264924160,
+    "kernel": 1,
+    "stride": 1,
+    "in_ch": 384,
+    "out_ch": 384,
+    "groups": 1,
+    "calls": 1,
+    "out_hw": [
+     96,
+     160
+    ],
+    "in_hw": [
+     96,
+     160
+    ],
+    "part": "trunk"
+   },
+   {
+    "name": "dec_1.11.dc.0",
+    "mac": 2264924160,
+    "kernel": 1,
+    "stride": 1,
+    "in_ch": 384,
+    "out_ch": 384,
+    "groups": 1,
+    "calls": 1,
+    "out_hw": [
+     96,
+     160
+    ],
+    "in_hw": [
+     96,
+     160
+    ],
+    "part": "trunk"
+   },
+   {
+    "name": "dec_1.11.dc.2",
+    "mac": 53084160,
+    "kernel": 3,
+    "stride": 1,
+    "in_ch": 384,
+    "out_ch": 384,
+    "groups": 384,
+    "calls": 1,
+    "out_hw": [
+     96,
+     160
+    ],
+    "in_hw": [
+     96,
+     160
+    ],
+    "part": "trunk"
+   },
+   {
+    "name": "dec_1.11.dc.3",
+    "mac": 2264924160,
+    "kernel": 1,
+    "stride": 1,
+    "in_ch": 384,
+    "out_ch": 384,
+    "groups": 1,
+    "calls": 1,
+    "out_hw": [
+     96,
+     160
+    ],
+    "in_hw": [
+     96,
+     160
+    ],
+    "part": "trunk"
+   },
+   {
+    "name": "dec_1.11.ffn.0",
+    "mac": 9059696640,
+    "kernel": 1,
+    "stride": 1,
+    "in_ch": 384,
+    "out_ch": 1536,
+    "groups": 1,
+    "calls": 1,
+    "out_hw": [
+     96,
+     160
+    ],
+    "in_hw": [
+     96,
+     160
+    ],
+    "part": "trunk"
+   },
+   {
+    "name": "dec_1.11.ffn.2",
+    "mac": 2264924160,
+    "kernel": 1,
+    "stride": 1,
+    "in_ch": 384,
+    "out_ch": 384,
+    "groups": 1,
+    "calls": 1,
+    "out_hw": [
+     96,
+     160
+    ],
+    "in_hw": [
+     96,
+     160
+    ],
+    "part": "trunk"
+   },
+   {
+    "name": "dec_1.12.dc.0",
+    "mac": 2264924160,
+    "kernel": 1,
+    "stride": 1,
+    "in_ch": 384,
+    "out_ch": 384,
+    "groups": 1,
+    "calls": 1,
+    "out_hw": [
+     96,
+     160
+    ],
+    "in_hw": [
+     96,
+     160
+    ],
+    "part": "trunk"
+   },
+   {
+    "name": "dec_1.12.dc.2",
+    "mac": 53084160,
+    "kernel": 3,
+    "stride": 1,
+    "in_ch": 384,
+    "out_ch": 384,
+    "groups": 384,
+    "calls": 1,
+    "out_hw": [
+     96,
+     160
+    ],
+    "in_hw": [
+     96,
+     160
+    ],
+    "part": "trunk"
+   },
+   {
+    "name": "dec_1.12.dc.3",
+    "mac": 2264924160,
+    "kernel": 1,
+    "stride": 1,
+    "in_ch": 384,
+    "out_ch": 384,
+    "groups": 1,
+    "calls": 1,
+    "out_hw": [
+     96,
+     160
+    ],
+    "in_hw": [
+     96,
+     160
+    ],
+    "part": "trunk"
+   },
+   {
+    "name": "dec_1.12.ffn.0",
+    "mac": 9059696640,
+    "kernel": 1,
+    "stride": 1,
+    "in_ch": 384,
+    "out_ch": 1536,
+    "groups": 1,
+    "calls": 1,
+    "out_hw": [
+     96,
+     160
+    ],
+    "in_hw": [
+     96,
+     160
+    ],
+    "part": "trunk"
+   },
+   {
+    "name": "dec_1.12.ffn.2",
+    "mac": 2264924160,
+    "kernel": 1,
+    "stride": 1,
+    "in_ch": 384,
+    "out_ch": 384,
+    "groups": 1,
+    "calls": 1,
+    "out_hw": [
+     96,
+     160
+    ],
+    "in_hw": [
+     96,
+     160
+    ],
+    "part": "trunk"
+   },
+   {
+    "name": "dec_2.adaptor",
+    "mac": 1132462080,
+    "kernel": 1,
+    "stride": 1,
+    "in_ch": 384,
+    "out_ch": 192,
+    "groups": 1,
+    "calls": 1,
+    "out_hw": [
+     96,
+     160
+    ],
+    "in_hw": [
+     96,
+     160
+    ],
+    "part": "head"
+   },
+   {
+    "name": "dec_2.dc.0",
+    "mac": 566231040,
+    "kernel": 1,
+    "stride": 1,
+    "in_ch": 192,
+    "out_ch": 192,
+    "groups": 1,
+    "calls": 1,
+    "out_hw": [
+     96,
+     160
+    ],
+    "in_hw": [
+     96,
+     160
+    ],
+    "part": "head"
+   },
+   {
+    "name": "dec_2.dc.2",
+    "mac": 26542080,
+    "kernel": 3,
+    "stride": 1,
+    "in_ch": 192,
+    "out_ch": 192,
+    "groups": 192,
+    "calls": 1,
+    "out_hw": [
+     96,
+     160
+    ],
+    "in_hw": [
+     96,
+     160
+    ],
+    "part": "head"
+   },
+   {
+    "name": "dec_2.dc.3",
+    "mac": 566231040,
+    "kernel": 1,
+    "stride": 1,
+    "in_ch": 192,
+    "out_ch": 192,
+    "groups": 1,
+    "calls": 1,
+    "out_hw": [
+     96,
+     160
+    ],
+    "in_hw": [
+     96,
+     160
+    ],
+    "part": "head"
+   },
+   {
+    "name": "dec_2.ffn.0",
+    "mac": 2264924160,
+    "kernel": 1,
+    "stride": 1,
+    "in_ch": 192,
+    "out_ch": 768,
+    "groups": 1,
+    "calls": 1,
+    "out_hw": [
+     96,
+     160
+    ],
+    "in_hw": [
+     96,
+     160
+    ],
+    "part": "head"
+   },
+   {
+    "name": "dec_2.ffn.2",
+    "mac": 566231040,
+    "kernel": 1,
+    "stride": 1,
+    "in_ch": 192,
+    "out_ch": 192,
+    "groups": 1,
+    "calls": 1,
+    "out_hw": [
+     96,
+     160
+    ],
+    "in_hw": [
+     96,
+     160
+    ],
+    "part": "head"
+   }
+  ]
+ },
+ "832x512": {
+  "what": "per-leaf-convolution MAC audit of the released DCVC-UF intra decoder, by forward hook on the real tensor shapes",
+  "source": "scripts/mac_audit.py, re-run to write JSON rather than stdout",
+  "weights": "none loaded: torch-initialised IntraDecoder(); a MAC count depends on shapes, not on values",
+  "device": "cpu",
+  "mac_convention": "one MAC = one multiply and one add; out_positions x out_channels x taps x in_ch/groups",
+  "frame": [
+   832,
+   512
+  ],
+  "latent": [
+   256,
+   32,
+   52
+  ],
+  "recon": [
+   3,
+   512,
+   832
+  ],
+  "ch_latent": 256,
+  "ch_trunk": 384,
+  "ch_preshuffle": 192,
+  "decoder_params": 14231808,
+  "total_mac": 92486664192,
+  "total_gmac": 92.486664192,
+  "kmac_per_px": 217.113,
+  "parts": {
+   "upsample": {
+    "gmac": 7.547584512,
+    "share": 0.08160727363170331
+   },
+   "trunk": {
+    "gmac": 82.719277056,
+    "share": 0.8943913998701137
+   },
+   "head": {
+    "gmac": 2.219802624,
+    "share": 0.024001326498182974
+   }
+  },
+  "pointwise_share": 0.9966423014743475,
+  "spatial_share": 0.003357698525652486,
+  "n_trunk_blocks": 12,
+  "per_block_gmac": {
+   "dec_1.1": 6.893273088,
+   "dec_1.2": 6.893273088,
+   "dec_1.3": 6.893273088,
+   "dec_1.4": 6.893273088,
+   "dec_1.5": 6.893273088,
+   "dec_1.6": 6.893273088,
+   "dec_1.7": 6.893273088,
+   "dec_1.8": 6.893273088,
+   "dec_1.9": 6.893273088,
+   "dec_1.10": 6.893273088,
+   "dec_1.11": 6.893273088,
+   "dec_1.12": 6.893273088
+  },
+  "layers": [
+   {
+    "name": "dec_1.0.up.conv.0",
+    "mac": 654311424,
+    "kernel": 1,
+    "stride": 1,
+    "in_ch": 256,
+    "out_ch": 1536,
+    "groups": 1,
+    "calls": 1,
+    "out_hw": [
+     32,
+     52
+    ],
+    "in_hw": [
+     32,
+     52
+    ],
+    "part": "upsample"
+   },
+   {
+    "name": "dec_1.0.conv.dc.0",
+    "mac": 981467136,
+    "kernel": 1,
+    "stride": 1,
+    "in_ch": 384,
+    "out_ch": 384,
+    "groups": 1,
+    "calls": 1,
+    "out_hw": [
+     64,
+     104
+    ],
+    "in_hw": [
+     64,
+     104
+    ],
+    "part": "upsample"
+   },
+   {
+    "name": "dec_1.0.conv.dc.2",
+    "mac": 23003136,
+    "kernel": 3,
+    "stride": 1,
+    "in_ch": 384,
+    "out_ch": 384,
+    "groups": 384,
+    "calls": 1,
+    "out_hw": [
+     64,
+     104
+    ],
+    "in_hw": [
+     64,
+     104
+    ],
+    "part": "upsample"
+   },
+   {
+    "name": "dec_1.0.conv.dc.3",
+    "mac": 981467136,
+    "kernel": 1,
+    "stride": 1,
+    "in_ch": 384,
+    "out_ch": 384,
+    "groups": 1,
+    "calls": 1,
+    "out_hw": [
+     64,
+     104
+    ],
+    "in_hw": [
+     64,
+     104
+    ],
+    "part": "upsample"
+   },
+   {
+    "name": "dec_1.0.conv.ffn.0",
+    "mac": 3925868544,
+    "kernel": 1,
+    "stride": 1,
+    "in_ch": 384,
+    "out_ch": 1536,
+    "groups": 1,
+    "calls": 1,
+    "out_hw": [
+     64,
+     104
+    ],
+    "in_hw": [
+     64,
+     104
+    ],
+    "part": "upsample"
+   },
+   {
+    "name": "dec_1.0.conv.ffn.2",
+    "mac": 981467136,
+    "kernel": 1,
+    "stride": 1,
+    "in_ch": 384,
+    "out_ch": 384,
+    "groups": 1,
+    "calls": 1,
+    "out_hw": [
+     64,
+     104
+    ],
+    "in_hw": [
+     64,
+     104
+    ],
+    "part": "upsample"
+   },
+   {
+    "name": "dec_1.1.dc.0",
+    "mac": 981467136,
+    "kernel": 1,
+    "stride": 1,
+    "in_ch": 384,
+    "out_ch": 384,
+    "groups": 1,
+    "calls": 1,
+    "out_hw": [
+     64,
+     104
+    ],
+    "in_hw": [
+     64,
+     104
+    ],
+    "part": "trunk"
+   },
+   {
+    "name": "dec_1.1.dc.2",
+    "mac": 23003136,
+    "kernel": 3,
+    "stride": 1,
+    "in_ch": 384,
+    "out_ch": 384,
+    "groups": 384,
+    "calls": 1,
+    "out_hw": [
+     64,
+     104
+    ],
+    "in_hw": [
+     64,
+     104
+    ],
+    "part": "trunk"
+   },
+   {
+    "name": "dec_1.1.dc.3",
+    "mac": 981467136,
+    "kernel": 1,
+    "stride": 1,
+    "in_ch": 384,
+    "out_ch": 384,
+    "groups": 1,
+    "calls": 1,
+    "out_hw": [
+     64,
+     104
+    ],
+    "in_hw": [
+     64,
+     104
+    ],
+    "part": "trunk"
+   },
+   {
+    "name": "dec_1.1.ffn.0",
+    "mac": 3925868544,
+    "kernel": 1,
+    "stride": 1,
+    "in_ch": 384,
+    "out_ch": 1536,
+    "groups": 1,
+    "calls": 1,
+    "out_hw": [
+     64,
+     104
+    ],
+    "in_hw": [
+     64,
+     104
+    ],
+    "part": "trunk"
+   },
+   {
+    "name": "dec_1.1.ffn.2",
+    "mac": 981467136,
+    "kernel": 1,
+    "stride": 1,
+    "in_ch": 384,
+    "out_ch": 384,
+    "groups": 1,
+    "calls": 1,
+    "out_hw": [
+     64,
+     104
+    ],
+    "in_hw": [
+     64,
+     104
+    ],
+    "part": "trunk"
+   },
+   {
+    "name": "dec_1.2.dc.0",
+    "mac": 981467136,
+    "kernel": 1,
+    "stride": 1,
+    "in_ch": 384,
+    "out_ch": 384,
+    "groups": 1,
+    "calls": 1,
+    "out_hw": [
+     64,
+     104
+    ],
+    "in_hw": [
+     64,
+     104
+    ],
+    "part": "trunk"
+   },
+   {
+    "name": "dec_1.2.dc.2",
+    "mac": 23003136,
+    "kernel": 3,
+    "stride": 1,
+    "in_ch": 384,
+    "out_ch": 384,
+    "groups": 384,
+    "calls": 1,
+    "out_hw": [
+     64,
+     104
+    ],
+    "in_hw": [
+     64,
+     104
+    ],
+    "part": "trunk"
+   },
+   {
+    "name": "dec_1.2.dc.3",
+    "mac": 981467136,
+    "kernel": 1,
+    "stride": 1,
+    "in_ch": 384,
+    "out_ch": 384,
+    "groups": 1,
+    "calls": 1,
+    "out_hw": [
+     64,
+     104
+    ],
+    "in_hw": [
+     64,
+     104
+    ],
+    "part": "trunk"
+   },
+   {
+    "name": "dec_1.2.ffn.0",
+    "mac": 3925868544,
+    "kernel": 1,
+    "stride": 1,
+    "in_ch": 384,
+    "out_ch": 1536,
+    "groups": 1,
+    "calls": 1,
+    "out_hw": [
+     64,
+     104
+    ],
+    "in_hw": [
+     64,
+     104
+    ],
+    "part": "trunk"
+   },
+   {
+    "name": "dec_1.2.ffn.2",
+    "mac": 981467136,
+    "kernel": 1,
+    "stride": 1,
+    "in_ch": 384,
+    "out_ch": 384,
+    "groups": 1,
+    "calls": 1,
+    "out_hw": [
+     64,
+     104
+    ],
+    "in_hw": [
+     64,
+     104
+    ],
+    "part": "trunk"
+   },
+   {
+    "name": "dec_1.3.dc.0",
+    "mac": 981467136,
+    "kernel": 1,
+    "stride": 1,
+    "in_ch": 384,
+    "out_ch": 384,
+    "groups": 1,
+    "calls": 1,
+    "out_hw": [
+     64,
+     104
+    ],
+    "in_hw": [
+     64,
+     104
+    ],
+    "part": "trunk"
+   },
+   {
+    "name": "dec_1.3.dc.2",
+    "mac": 23003136,
+    "kernel": 3,
+    "stride": 1,
+    "in_ch": 384,
+    "out_ch": 384,
+    "groups": 384,
+    "calls": 1,
+    "out_hw": [
+     64,
+     104
+    ],
+    "in_hw": [
+     64,
+     104
+    ],
+    "part": "trunk"
+   },
+   {
+    "name": "dec_1.3.dc.3",
+    "mac": 981467136,
+    "kernel": 1,
+    "stride": 1,
+    "in_ch": 384,
+    "out_ch": 384,
+    "groups": 1,
+    "calls": 1,
+    "out_hw": [
+     64,
+     104
+    ],
+    "in_hw": [
+     64,
+     104
+    ],
+    "part": "trunk"
+   },
+   {
+    "name": "dec_1.3.ffn.0",
+    "mac": 3925868544,
+    "kernel": 1,
+    "stride": 1,
+    "in_ch": 384,
+    "out_ch": 1536,
+    "groups": 1,
+    "calls": 1,
+    "out_hw": [
+     64,
+     104
+    ],
+    "in_hw": [
+     64,
+     104
+    ],
+    "part": "trunk"
+   },
+   {
+    "name": "dec_1.3.ffn.2",
+    "mac": 981467136,
+    "kernel": 1,
+    "stride": 1,
+    "in_ch": 384,
+    "out_ch": 384,
+    "groups": 1,
+    "calls": 1,
+    "out_hw": [
+     64,
+     104
+    ],
+    "in_hw": [
+     64,
+     104
+    ],
+    "part": "trunk"
+   },
+   {
+    "name": "dec_1.4.dc.0",
+    "mac": 981467136,
+    "kernel": 1,
+    "stride": 1,
+    "in_ch": 384,
+    "out_ch": 384,
+    "groups": 1,
+    "calls": 1,
+    "out_hw": [
+     64,
+     104
+    ],
+    "in_hw": [
+     64,
+     104
+    ],
+    "part": "trunk"
+   },
+   {
+    "name": "dec_1.4.dc.2",
+    "mac": 23003136,
+    "kernel": 3,
+    "stride": 1,
+    "in_ch": 384,
+    "out_ch": 384,
+    "groups": 384,
+    "calls": 1,
+    "out_hw": [
+     64,
+     104
+    ],
+    "in_hw": [
+     64,
+     104
+    ],
+    "part": "trunk"
+   },
+   {
+    "name": "dec_1.4.dc.3",
+    "mac": 981467136,
+    "kernel": 1,
+    "stride": 1,
+    "in_ch": 384,
+    "out_ch": 384,
+    "groups": 1,
+    "calls": 1,
+    "out_hw": [
+     64,
+     104
+    ],
+    "in_hw": [
+     64,
+     104
+    ],
+    "part": "trunk"
+   },
+   {
+    "name": "dec_1.4.ffn.0",
+    "mac": 3925868544,
+    "kernel": 1,
+    "stride": 1,
+    "in_ch": 384,
+    "out_ch": 1536,
+    "groups": 1,
+    "calls": 1,
+    "out_hw": [
+     64,
+     104
+    ],
+    "in_hw": [
+     64,
+     104
+    ],
+    "part": "trunk"
+   },
+   {
+    "name": "dec_1.4.ffn.2",
+    "mac": 981467136,
+    "kernel": 1,
+    "stride": 1,
+    "in_ch": 384,
+    "out_ch": 384,
+    "groups": 1,
+    "calls": 1,
+    "out_hw": [
+     64,
+     104
+    ],
+    "in_hw": [
+     64,
+     104
+    ],
+    "part": "trunk"
+   },
+   {
+    "name": "dec_1.5.dc.0",
+    "mac": 981467136,
+    "kernel": 1,
+    "stride": 1,
+    "in_ch": 384,
+    "out_ch": 384,
+    "groups": 1,
+    "calls": 1,
+    "out_hw": [
+     64,
+     104
+    ],
+    "in_hw": [
+     64,
+     104
+    ],
+    "part": "trunk"
+   },
+   {
+    "name": "dec_1.5.dc.2",
+    "mac": 23003136,
+    "kernel": 3,
+    "stride": 1,
+    "in_ch": 384,
+    "out_ch": 384,
+    "groups": 384,
+    "calls": 1,
+    "out_hw": [
+     64,
+     104
+    ],
+    "in_hw": [
+     64,
+     104
+    ],
+    "part": "trunk"
+   },
+   {
+    "name": "dec_1.5.dc.3",
+    "mac": 981467136,
+    "kernel": 1,
+    "stride": 1,
+    "in_ch": 384,
+    "out_ch": 384,
+    "groups": 1,
+    "calls": 1,
+    "out_hw": [
+     64,
+     104
+    ],
+    "in_hw": [
+     64,
+     104
+    ],
+    "part": "trunk"
+   },
+   {
+    "name": "dec_1.5.ffn.0",
+    "mac": 3925868544,
+    "kernel": 1,
+    "stride": 1,
+    "in_ch": 384,
+    "out_ch": 1536,
+    "groups": 1,
+    "calls": 1,
+    "out_hw": [
+     64,
+     104
+    ],
+    "in_hw": [
+     64,
+     104
+    ],
+    "part": "trunk"
+   },
+   {
+    "name": "dec_1.5.ffn.2",
+    "mac": 981467136,
+    "kernel": 1,
+    "stride": 1,
+    "in_ch": 384,
+    "out_ch": 384,
+    "groups": 1,
+    "calls": 1,
+    "out_hw": [
+     64,
+     104
+    ],
+    "in_hw": [
+     64,
+     104
+    ],
+    "part": "trunk"
+   },
+   {
+    "name": "dec_1.6.dc.0",
+    "mac": 981467136,
+    "kernel": 1,
+    "stride": 1,
+    "in_ch": 384,
+    "out_ch": 384,
+    "groups": 1,
+    "calls": 1,
+    "out_hw": [
+     64,
+     104
+    ],
+    "in_hw": [
+     64,
+     104
+    ],
+    "part": "trunk"
+   },
+   {
+    "name": "dec_1.6.dc.2",
+    "mac": 23003136,
+    "kernel": 3,
+    "stride": 1,
+    "in_ch": 384,
+    "out_ch": 384,
+    "groups": 384,
+    "calls": 1,
+    "out_hw": [
+     64,
+     104
+    ],
+    "in_hw": [
+     64,
+     104
+    ],
+    "part": "trunk"
+   },
+   {
+    "name": "dec_1.6.dc.3",
+    "mac": 981467136,
+    "kernel": 1,
+    "stride": 1,
+    "in_ch": 384,
+    "out_ch": 384,
+    "groups": 1,
+    "calls": 1,
+    "out_hw": [
+     64,
+     104
+    ],
+    "in_hw": [
+     64,
+     104
+    ],
+    "part": "trunk"
+   },
+   {
+    "name": "dec_1.6.ffn.0",
+    "mac": 3925868544,
+    "kernel": 1,
+    "stride": 1,
+    "in_ch": 384,
+    "out_ch": 1536,
+    "groups": 1,
+    "calls": 1,
+    "out_hw": [
+     64,
+     104
+    ],
+    "in_hw": [
+     64,
+     104
+    ],
+    "part": "trunk"
+   },
+   {
+    "name": "dec_1.6.ffn.2",
+    "mac": 981467136,
+    "kernel": 1,
+    "stride": 1,
+    "in_ch": 384,
+    "out_ch": 384,
+    "groups": 1,
+    "calls": 1,
+    "out_hw": [
+     64,
+     104
+    ],
+    "in_hw": [
+     64,
+     104
+    ],
+    "part": "trunk"
+   },
+   {
+    "name": "dec_1.7.dc.0",
+    "mac": 981467136,
+    "kernel": 1,
+    "stride": 1,
+    "in_ch": 384,
+    "out_ch": 384,
+    "groups": 1,
+    "calls": 1,
+    "out_hw": [
+     64,
+     104
+    ],
+    "in_hw": [
+     64,
+     104
+    ],
+    "part": "trunk"
+   },
+   {
+    "name": "dec_1.7.dc.2",
+    "mac": 23003136,
+    "kernel": 3,
+    "stride": 1,
+    "in_ch": 384,
+    "out_ch": 384,
+    "groups": 384,
+    "calls": 1,
+    "out_hw": [
+     64,
+     104
+    ],
+    "in_hw": [
+     64,
+     104
+    ],
+    "part": "trunk"
+   },
+   {
+    "name": "dec_1.7.dc.3",
+    "mac": 981467136,
+    "kernel": 1,
+    "stride": 1,
+    "in_ch": 384,
+    "out_ch": 384,
+    "groups": 1,
+    "calls": 1,
+    "out_hw": [
+     64,
+     104
+    ],
+    "in_hw": [
+     64,
+     104
+    ],
+    "part": "trunk"
+   },
+   {
+    "name": "dec_1.7.ffn.0",
+    "mac": 3925868544,
+    "kernel": 1,
+    "stride": 1,
+    "in_ch": 384,
+    "out_ch": 1536,
+    "groups": 1,
+    "calls": 1,
+    "out_hw": [
+     64,
+     104
+    ],
+    "in_hw": [
+     64,
+     104
+    ],
+    "part": "trunk"
+   },
+   {
+    "name": "dec_1.7.ffn.2",
+    "mac": 981467136,
+    "kernel": 1,
+    "stride": 1,
+    "in_ch": 384,
+    "out_ch": 384,
+    "groups": 1,
+    "calls": 1,
+    "out_hw": [
+     64,
+     104
+    ],
+    "in_hw": [
+     64,
+     104
+    ],
+    "part": "trunk"
+   },
+   {
+    "name": "dec_1.8.dc.0",
+    "mac": 981467136,
+    "kernel": 1,
+    "stride": 1,
+    "in_ch": 384,
+    "out_ch": 384,
+    "groups": 1,
+    "calls": 1,
+    "out_hw": [
+     64,
+     104
+    ],
+    "in_hw": [
+     64,
+     104
+    ],
+    "part": "trunk"
+   },
+   {
+    "name": "dec_1.8.dc.2",
+    "mac": 23003136,
+    "kernel": 3,
+    "stride": 1,
+    "in_ch": 384,
+    "out_ch": 384,
+    "groups": 384,
+    "calls": 1,
+    "out_hw": [
+     64,
+     104
+    ],
+    "in_hw": [
+     64,
+     104
+    ],
+    "part": "trunk"
+   },
+   {
+    "name": "dec_1.8.dc.3",
+    "mac": 981467136,
+    "kernel": 1,
+    "stride": 1,
+    "in_ch": 384,
+    "out_ch": 384,
+    "groups": 1,
+    "calls": 1,
+    "out_hw": [
+     64,
+     104
+    ],
+    "in_hw": [
+     64,
+     104
+    ],
+    "part": "trunk"
+   },
+   {
+    "name": "dec_1.8.ffn.0",
+    "mac": 3925868544,
+    "kernel": 1,
+    "stride": 1,
+    "in_ch": 384,
+    "out_ch": 1536,
+    "groups": 1,
+    "calls": 1,
+    "out_hw": [
+     64,
+     104
+    ],
+    "in_hw": [
+     64,
+     104
+    ],
+    "part": "trunk"
+   },
+   {
+    "name": "dec_1.8.ffn.2",
+    "mac": 981467136,
+    "kernel": 1,
+    "stride": 1,
+    "in_ch": 384,
+    "out_ch": 384,
+    "groups": 1,
+    "calls": 1,
+    "out_hw": [
+     64,
+     104
+    ],
+    "in_hw": [
+     64,
+     104
+    ],
+    "part": "trunk"
+   },
+   {
+    "name": "dec_1.9.dc.0",
+    "mac": 981467136,
+    "kernel": 1,
+    "stride": 1,
+    "in_ch": 384,
+    "out_ch": 384,
+    "groups": 1,
+    "calls": 1,
+    "out_hw": [
+     64,
+     104
+    ],
+    "in_hw": [
+     64,
+     104
+    ],
+    "part": "trunk"
+   },
+   {
+    "name": "dec_1.9.dc.2",
+    "mac": 23003136,
+    "kernel": 3,
+    "stride": 1,
+    "in_ch": 384,
+    "out_ch": 384,
+    "groups": 384,
+    "calls": 1,
+    "out_hw": [
+     64,
+     104
+    ],
+    "in_hw": [
+     64,
+     104
+    ],
+    "part": "trunk"
+   },
+   {
+    "name": "dec_1.9.dc.3",
+    "mac": 981467136,
+    "kernel": 1,
+    "stride": 1,
+    "in_ch": 384,
+    "out_ch": 384,
+    "groups": 1,
+    "calls": 1,
+    "out_hw": [
+     64,
+     104
+    ],
+    "in_hw": [
+     64,
+     104
+    ],
+    "part": "trunk"
+   },
+   {
+    "name": "dec_1.9.ffn.0",
+    "mac": 3925868544,
+    "kernel": 1,
+    "stride": 1,
+    "in_ch": 384,
+    "out_ch": 1536,
+    "groups": 1,
+    "calls": 1,
+    "out_hw": [
+     64,
+     104
+    ],
+    "in_hw": [
+     64,
+     104
+    ],
+    "part": "trunk"
+   },
+   {
+    "name": "dec_1.9.ffn.2",
+    "mac": 981467136,
+    "kernel": 1,
+    "stride": 1,
+    "in_ch": 384,
+    "out_ch": 384,
+    "groups": 1,
+    "calls": 1,
+    "out_hw": [
+     64,
+     104
+    ],
+    "in_hw": [
+     64,
+     104
+    ],
+    "part": "trunk"
+   },
+   {
+    "name": "dec_1.10.dc.0",
+    "mac": 981467136,
+    "kernel": 1,
+    "stride": 1,
+    "in_ch": 384,
+    "out_ch": 384,
+    "groups": 1,
+    "calls": 1,
+    "out_hw": [
+     64,
+     104
+    ],
+    "in_hw": [
+     64,
+     104
+    ],
+    "part": "trunk"
+   },
+   {
+    "name": "dec_1.10.dc.2",
+    "mac": 23003136,
+    "kernel": 3,
+    "stride": 1,
+    "in_ch": 384,
+    "out_ch": 384,
+    "groups": 384,
+    "calls": 1,
+    "out_hw": [
+     64,
+     104
+    ],
+    "in_hw": [
+     64,
+     104
+    ],
+    "part": "trunk"
+   },
+   {
+    "name": "dec_1.10.dc.3",
+    "mac": 981467136,
+    "kernel": 1,
+    "stride": 1,
+    "in_ch": 384,
+    "out_ch": 384,
+    "groups": 1,
+    "calls": 1,
+    "out_hw": [
+     64,
+     104
+    ],
+    "in_hw": [
+     64,
+     104
+    ],
+    "part": "trunk"
+   },
+   {
+    "name": "dec_1.10.ffn.0",
+    "mac": 3925868544,
+    "kernel": 1,
+    "stride": 1,
+    "in_ch": 384,
+    "out_ch": 1536,
+    "groups": 1,
+    "calls": 1,
+    "out_hw": [
+     64,
+     104
+    ],
+    "in_hw": [
+     64,
+     104
+    ],
+    "part": "trunk"
+   },
+   {
+    "name": "dec_1.10.ffn.2",
+    "mac": 981467136,
+    "kernel": 1,
+    "stride": 1,
+    "in_ch": 384,
+    "out_ch": 384,
+    "groups": 1,
+    "calls": 1,
+    "out_hw": [
+     64,
+     104
+    ],
+    "in_hw": [
+     64,
+     104
+    ],
+    "part": "trunk"
+   },
+   {
+    "name": "dec_1.11.dc.0",
+    "mac": 981467136,
+    "kernel": 1,
+    "stride": 1,
+    "in_ch": 384,
+    "out_ch": 384,
+    "groups": 1,
+    "calls": 1,
+    "out_hw": [
+     64,
+     104
+    ],
+    "in_hw": [
+     64,
+     104
+    ],
+    "part": "trunk"
+   },
+   {
+    "name": "dec_1.11.dc.2",
+    "mac": 23003136,
+    "kernel": 3,
+    "stride": 1,
+    "in_ch": 384,
+    "out_ch": 384,
+    "groups": 384,
+    "calls": 1,
+    "out_hw": [
+     64,
+     104
+    ],
+    "in_hw": [
+     64,
+     104
+    ],
+    "part": "trunk"
+   },
+   {
+    "name": "dec_1.11.dc.3",
+    "mac": 981467136,
+    "kernel": 1,
+    "stride": 1,
+    "in_ch": 384,
+    "out_ch": 384,
+    "groups": 1,
+    "calls": 1,
+    "out_hw": [
+     64,
+     104
+    ],
+    "in_hw": [
+     64,
+     104
+    ],
+    "part": "trunk"
+   },
+   {
+    "name": "dec_1.11.ffn.0",
+    "mac": 3925868544,
+    "kernel": 1,
+    "stride": 1,
+    "in_ch": 384,
+    "out_ch": 1536,
+    "groups": 1,
+    "calls": 1,
+    "out_hw": [
+     64,
+     104
+    ],
+    "in_hw": [
+     64,
+     104
+    ],
+    "part": "trunk"
+   },
+   {
+    "name": "dec_1.11.ffn.2",
+    "mac": 981467136,
+    "kernel": 1,
+    "stride": 1,
+    "in_ch": 384,
+    "out_ch": 384,
+    "groups": 1,
+    "calls": 1,
+    "out_hw": [
+     64,
+     104
+    ],
+    "in_hw": [
+     64,
+     104
+    ],
+    "part": "trunk"
+   },
+   {
+    "name": "dec_1.12.dc.0",
+    "mac": 981467136,
+    "kernel": 1,
+    "stride": 1,
+    "in_ch": 384,
+    "out_ch": 384,
+    "groups": 1,
+    "calls": 1,
+    "out_hw": [
+     64,
+     104
+    ],
+    "in_hw": [
+     64,
+     104
+    ],
+    "part": "trunk"
+   },
+   {
+    "name": "dec_1.12.dc.2",
+    "mac": 23003136,
+    "kernel": 3,
+    "stride": 1,
+    "in_ch": 384,
+    "out_ch": 384,
+    "groups": 384,
+    "calls": 1,
+    "out_hw": [
+     64,
+     104
+    ],
+    "in_hw": [
+     64,
+     104
+    ],
+    "part": "trunk"
+   },
+   {
+    "name": "dec_1.12.dc.3",
+    "mac": 981467136,
+    "kernel": 1,
+    "stride": 1,
+    "in_ch": 384,
+    "out_ch": 384,
+    "groups": 1,
+    "calls": 1,
+    "out_hw": [
+     64,
+     104
+    ],
+    "in_hw": [
+     64,
+     104
+    ],
+    "part": "trunk"
+   },
+   {
+    "name": "dec_1.12.ffn.0",
+    "mac": 3925868544,
+    "kernel": 1,
+    "stride": 1,
+    "in_ch": 384,
+    "out_ch": 1536,
+    "groups": 1,
+    "calls": 1,
+    "out_hw": [
+     64,
+     104
+    ],
+    "in_hw": [
+     64,
+     104
+    ],
+    "part": "trunk"
+   },
+   {
+    "name": "dec_1.12.ffn.2",
+    "mac": 981467136,
+    "kernel": 1,
+    "stride": 1,
+    "in_ch": 384,
+    "out_ch": 384,
+    "groups": 1,
+    "calls": 1,
+    "out_hw": [
+     64,
+     104
+    ],
+    "in_hw": [
+     64,
+     104
+    ],
+    "part": "trunk"
+   },
+   {
+    "name": "dec_2.adaptor",
+    "mac": 490733568,
+    "kernel": 1,
+    "stride": 1,
+    "in_ch": 384,
+    "out_ch": 192,
+    "groups": 1,
+    "calls": 1,
+    "out_hw": [
+     64,
+     104
+    ],
+    "in_hw": [
+     64,
+     104
+    ],
+    "part": "head"
+   },
+   {
+    "name": "dec_2.dc.0",
+    "mac": 245366784,
+    "kernel": 1,
+    "stride": 1,
+    "in_ch": 192,
+    "out_ch": 192,
+    "groups": 1,
+    "calls": 1,
+    "out_hw": [
+     64,
+     104
+    ],
+    "in_hw": [
+     64,
+     104
+    ],
+    "part": "head"
+   },
+   {
+    "name": "dec_2.dc.2",
+    "mac": 11501568,
+    "kernel": 3,
+    "stride": 1,
+    "in_ch": 192,
+    "out_ch": 192,
+    "groups": 192,
+    "calls": 1,
+    "out_hw": [
+     64,
+     104
+    ],
+    "in_hw": [
+     64,
+     104
+    ],
+    "part": "head"
+   },
+   {
+    "name": "dec_2.dc.3",
+    "mac": 245366784,
+    "kernel": 1,
+    "stride": 1,
+    "in_ch": 192,
+    "out_ch": 192,
+    "groups": 1,
+    "calls": 1,
+    "out_hw": [
+     64,
+     104
+    ],
+    "in_hw": [
+     64,
+     104
+    ],
+    "part": "head"
+   },
+   {
+    "name": "dec_2.ffn.0",
+    "mac": 981467136,
+    "kernel": 1,
+    "stride": 1,
+    "in_ch": 192,
+    "out_ch": 768,
+    "groups": 1,
+    "calls": 1,
+    "out_hw": [
+     64,
+     104
+    ],
+    "in_hw": [
+     64,
+     104
+    ],
+    "part": "head"
+   },
+   {
+    "name": "dec_2.ffn.2",
+    "mac": 245366784,
+    "kernel": 1,
+    "stride": 1,
+    "in_ch": 192,
+    "out_ch": 192,
+    "groups": 1,
+    "calls": 1,
+    "out_hw": [
+     64,
+     104
+    ],
+    "in_hw": [
+     64,
+     104
+    ],
+    "part": "head"
+   }
+  ]
+ }
+}

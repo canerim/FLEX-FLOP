@@ -1,0 +1,2020 @@
+{
+  "what": "module by module: where it sits, its tensors, its parameters, and its multiply-accumulates per output pixel",
+  "ckpt": "runs/RECIPE512/ckpt_PAPER.pth.tar",
+  "ckpt_md5": "daa3760937ea0bd89b89c555c2eefa88",
+  "ckpt_epoch": 0,
+  "config": {
+    "num_exits": 6,
+    "split_depth": 2,
+    "latent_patch": 16,
+    "latent_halo": 2,
+    "trunk_halo": 0,
+    "tile_coupling": false,
+    "tile_pad_mode": "replicate",
+    "seam_repair": "grid",
+    "adapter_kind": "scaled",
+    "adapter_expand": 4,
+    "full_frame_head": true,
+    "aux_weight": 1.0,
+    "aux_schedule": "constant",
+    "aux_warmup_epochs": 10,
+    "qp": 63
+  },
+  "derivation": "shapes and parameter counts read from the state dict; MAC per output pixel is O*(I/g)*kh*kw from the weight shape alone. No model instantiated, no GPU used.",
+  "params_total": 45445398,
+  "params_encoder_side": 27956246,
+  "params_decoder_side": 17489152,
+  "grids": {
+    "latent": "1/16 of the frame per side",
+    "feature": "1/8 of the frame per side, so 1/64 of the pixels",
+    "rgb": "the frame"
+  },
+  "mac_per_feature_px_released_decode": 13895232.0,
+  "mac_per_rgb_px_released_decode": 217113.0,
+  "share_of_released_decode": {
+    "upsample": 0.08160727363170331,
+    "groups.0": 0.1490652333116856,
+    "groups.1": 0.1490652333116856,
+    "groups.2": 0.1490652333116856,
+    "groups.3": 0.1490652333116856,
+    "groups.4": 0.1490652333116856,
+    "groups.5": 0.1490652333116856,
+    "one_block": 0.0745326166558428,
+    "adapters.0": 0.053059927318953724,
+    "adapters.1": 0.053059927318953724,
+    "adapters.2": 0.053059927318953724,
+    "adapters.3": 0.053059927318953724,
+    "adapters.4": 0.010611985463790745,
+    "seam_repair": 0.010860703873098341,
+    "head": 0.024001326498182974,
+    "router_head_v1_in_ckpt": 0.0006217960232689889,
+    "trunk_12_blocks": 0.8943913998701137
+  },
+  "share_note": "denominator is the released decoder: upsample + 12 trunk blocks + head, all on the feature grid. Seam repair and the adapters are ours and are charged on top of it, which is why the deepest exit exceeds 1.0.",
+  "roles": {
+    "upsample": {
+      "prefix": "dec.upsample.",
+      "params": 1431936,
+      "mac_per_out_px": 1428864,
+      "tensors": [
+        {
+          "name": "dec.upsample.up.conv.0.weight",
+          "shape": [
+            1536,
+            256,
+            1,
+            1
+          ],
+          "params": 393216,
+          "mac_per_out_px": 393216
+        },
+        {
+          "name": "dec.upsample.conv.dc.0.weight",
+          "shape": [
+            384,
+            384,
+            1,
+            1
+          ],
+          "params": 147456,
+          "mac_per_out_px": 147456
+        },
+        {
+          "name": "dec.upsample.conv.dc.0.bias",
+          "shape": [
+            384
+          ],
+          "params": 384,
+          "mac_per_out_px": 0
+        },
+        {
+          "name": "dec.upsample.conv.dc.2.weight",
+          "shape": [
+            384,
+            1,
+            3,
+            3
+          ],
+          "params": 3456,
+          "mac_per_out_px": 3456
+        },
+        {
+          "name": "dec.upsample.conv.dc.2.bias",
+          "shape": [
+            384
+          ],
+          "params": 384,
+          "mac_per_out_px": 0
+        },
+        {
+          "name": "dec.upsample.conv.dc.3.weight",
+          "shape": [
+            384,
+            384,
+            1,
+            1
+          ],
+          "params": 147456,
+          "mac_per_out_px": 147456
+        },
+        {
+          "name": "dec.upsample.conv.dc.3.bias",
+          "shape": [
+            384
+          ],
+          "params": 384,
+          "mac_per_out_px": 0
+        },
+        {
+          "name": "dec.upsample.conv.ffn.0.weight",
+          "shape": [
+            1536,
+            384,
+            1,
+            1
+          ],
+          "params": 589824,
+          "mac_per_out_px": 589824
+        },
+        {
+          "name": "dec.upsample.conv.ffn.0.bias",
+          "shape": [
+            1536
+          ],
+          "params": 1536,
+          "mac_per_out_px": 0
+        },
+        {
+          "name": "dec.upsample.conv.ffn.2.weight",
+          "shape": [
+            384,
+            384,
+            1,
+            1
+          ],
+          "params": 147456,
+          "mac_per_out_px": 147456
+        },
+        {
+          "name": "dec.upsample.conv.ffn.2.bias",
+          "shape": [
+            384
+          ],
+          "params": 384,
+          "mac_per_out_px": 0
+        }
+      ],
+      "mac_per_feature_px": 1133952.0
+    },
+    "groups.0": {
+      "prefix": "dec.groups.0.",
+      "params": 2077440,
+      "mac_per_out_px": 2071296,
+      "tensors": [
+        {
+          "name": "dec.groups.0.0.dc.0.weight",
+          "shape": [
+            384,
+            384,
+            1,
+            1
+          ],
+          "params": 147456,
+          "mac_per_out_px": 147456
+        },
+        {
+          "name": "dec.groups.0.0.dc.0.bias",
+          "shape": [
+            384
+          ],
+          "params": 384,
+          "mac_per_out_px": 0
+        },
+        {
+          "name": "dec.groups.0.0.dc.2.weight",
+          "shape": [
+            384,
+            1,
+            3,
+            3
+          ],
+          "params": 3456,
+          "mac_per_out_px": 3456
+        },
+        {
+          "name": "dec.groups.0.0.dc.2.bias",
+          "shape": [
+            384
+          ],
+          "params": 384,
+          "mac_per_out_px": 0
+        },
+        {
+          "name": "dec.groups.0.0.dc.3.weight",
+          "shape": [
+            384,
+            384,
+            1,
+            1
+          ],
+          "params": 147456,
+          "mac_per_out_px": 147456
+        },
+        {
+          "name": "dec.groups.0.0.dc.3.bias",
+          "shape": [
+            384
+          ],
+          "params": 384,
+          "mac_per_out_px": 0
+        },
+        {
+          "name": "dec.groups.0.0.ffn.0.weight",
+          "shape": [
+            1536,
+            384,
+            1,
+            1
+          ],
+          "params": 589824,
+          "mac_per_out_px": 589824
+        },
+        {
+          "name": "dec.groups.0.0.ffn.0.bias",
+          "shape": [
+            1536
+          ],
+          "params": 1536,
+          "mac_per_out_px": 0
+        },
+        {
+          "name": "dec.groups.0.0.ffn.2.weight",
+          "shape": [
+            384,
+            384,
+            1,
+            1
+          ],
+          "params": 147456,
+          "mac_per_out_px": 147456
+        },
+        {
+          "name": "dec.groups.0.0.ffn.2.bias",
+          "shape": [
+            384
+          ],
+          "params": 384,
+          "mac_per_out_px": 0
+        },
+        {
+          "name": "dec.groups.0.1.dc.0.weight",
+          "shape": [
+            384,
+            384,
+            1,
+            1
+          ],
+          "params": 147456,
+          "mac_per_out_px": 147456
+        },
+        {
+          "name": "dec.groups.0.1.dc.0.bias",
+          "shape": [
+            384
+          ],
+          "params": 384,
+          "mac_per_out_px": 0
+        },
+        {
+          "name": "dec.groups.0.1.dc.2.weight",
+          "shape": [
+            384,
+            1,
+            3,
+            3
+          ],
+          "params": 3456,
+          "mac_per_out_px": 3456
+        },
+        {
+          "name": "dec.groups.0.1.dc.2.bias",
+          "shape": [
+            384
+          ],
+          "params": 384,
+          "mac_per_out_px": 0
+        },
+        {
+          "name": "dec.groups.0.1.dc.3.weight",
+          "shape": [
+            384,
+            384,
+            1,
+            1
+          ],
+          "params": 147456,
+          "mac_per_out_px": 147456
+        },
+        {
+          "name": "dec.groups.0.1.dc.3.bias",
+          "shape": [
+            384
+          ],
+          "params": 384,
+          "mac_per_out_px": 0
+        },
+        {
+          "name": "dec.groups.0.1.ffn.0.weight",
+          "shape": [
+            1536,
+            384,
+            1,
+            1
+          ],
+          "params": 589824,
+          "mac_per_out_px": 589824
+        },
+        {
+          "name": "dec.groups.0.1.ffn.0.bias",
+          "shape": [
+            1536
+          ],
+          "params": 1536,
+          "mac_per_out_px": 0
+        },
+        {
+          "name": "dec.groups.0.1.ffn.2.weight",
+          "shape": [
+            384,
+            384,
+            1,
+            1
+          ],
+          "params": 147456,
+          "mac_per_out_px": 147456
+        },
+        {
+          "name": "dec.groups.0.1.ffn.2.bias",
+          "shape": [
+            384
+          ],
+          "params": 384,
+          "mac_per_out_px": 0
+        }
+      ],
+      "mac_per_feature_px": 2071296.0
+    },
+    "groups.1": {
+      "prefix": "dec.groups.1.",
+      "params": 2077440,
+      "mac_per_out_px": 2071296,
+      "tensors": [
+        {
+          "name": "dec.groups.1.0.dc.0.weight",
+          "shape": [
+            384,
+            384,
+            1,
+            1
+          ],
+          "params": 147456,
+          "mac_per_out_px": 147456
+        },
+        {
+          "name": "dec.groups.1.0.dc.0.bias",
+          "shape": [
+            384
+          ],
+          "params": 384,
+          "mac_per_out_px": 0
+        },
+        {
+          "name": "dec.groups.1.0.dc.2.weight",
+          "shape": [
+            384,
+            1,
+            3,
+            3
+          ],
+          "params": 3456,
+          "mac_per_out_px": 3456
+        },
+        {
+          "name": "dec.groups.1.0.dc.2.bias",
+          "shape": [
+            384
+          ],
+          "params": 384,
+          "mac_per_out_px": 0
+        },
+        {
+          "name": "dec.groups.1.0.dc.3.weight",
+          "shape": [
+            384,
+            384,
+            1,
+            1
+          ],
+          "params": 147456,
+          "mac_per_out_px": 147456
+        },
+        {
+          "name": "dec.groups.1.0.dc.3.bias",
+          "shape": [
+            384
+          ],
+          "params": 384,
+          "mac_per_out_px": 0
+        },
+        {
+          "name": "dec.groups.1.0.ffn.0.weight",
+          "shape": [
+            1536,
+            384,
+            1,
+            1
+          ],
+          "params": 589824,
+          "mac_per_out_px": 589824
+        },
+        {
+          "name": "dec.groups.1.0.ffn.0.bias",
+          "shape": [
+            1536
+          ],
+          "params": 1536,
+          "mac_per_out_px": 0
+        },
+        {
+          "name": "dec.groups.1.0.ffn.2.weight",
+          "shape": [
+            384,
+            384,
+            1,
+            1
+          ],
+          "params": 147456,
+          "mac_per_out_px": 147456
+        },
+        {
+          "name": "dec.groups.1.0.ffn.2.bias",
+          "shape": [
+            384
+          ],
+          "params": 384,
+          "mac_per_out_px": 0
+        },
+        {
+          "name": "dec.groups.1.1.dc.0.weight",
+          "shape": [
+            384,
+            384,
+            1,
+            1
+          ],
+          "params": 147456,
+          "mac_per_out_px": 147456
+        },
+        {
+          "name": "dec.groups.1.1.dc.0.bias",
+          "shape": [
+            384
+          ],
+          "params": 384,
+          "mac_per_out_px": 0
+        },
+        {
+          "name": "dec.groups.1.1.dc.2.weight",
+          "shape": [
+            384,
+            1,
+            3,
+            3
+          ],
+          "params": 3456,
+          "mac_per_out_px": 3456
+        },
+        {
+          "name": "dec.groups.1.1.dc.2.bias",
+          "shape": [
+            384
+          ],
+          "params": 384,
+          "mac_per_out_px": 0
+        },
+        {
+          "name": "dec.groups.1.1.dc.3.weight",
+          "shape": [
+            384,
+            384,
+            1,
+            1
+          ],
+          "params": 147456,
+          "mac_per_out_px": 147456
+        },
+        {
+          "name": "dec.groups.1.1.dc.3.bias",
+          "shape": [
+            384
+          ],
+          "params": 384,
+          "mac_per_out_px": 0
+        },
+        {
+          "name": "dec.groups.1.1.ffn.0.weight",
+          "shape": [
+            1536,
+            384,
+            1,
+            1
+          ],
+          "params": 589824,
+          "mac_per_out_px": 589824
+        },
+        {
+          "name": "dec.groups.1.1.ffn.0.bias",
+          "shape": [
+            1536
+          ],
+          "params": 1536,
+          "mac_per_out_px": 0
+        },
+        {
+          "name": "dec.groups.1.1.ffn.2.weight",
+          "shape": [
+            384,
+            384,
+            1,
+            1
+          ],
+          "params": 147456,
+          "mac_per_out_px": 147456
+        },
+        {
+          "name": "dec.groups.1.1.ffn.2.bias",
+          "shape": [
+            384
+          ],
+          "params": 384,
+          "mac_per_out_px": 0
+        }
+      ],
+      "mac_per_feature_px": 2071296.0
+    },
+    "groups.2": {
+      "prefix": "dec.groups.2.",
+      "params": 2077440,
+      "mac_per_out_px": 2071296,
+      "tensors": [
+        {
+          "name": "dec.groups.2.0.dc.0.weight",
+          "shape": [
+            384,
+            384,
+            1,
+            1
+          ],
+          "params": 147456,
+          "mac_per_out_px": 147456
+        },
+        {
+          "name": "dec.groups.2.0.dc.0.bias",
+          "shape": [
+            384
+          ],
+          "params": 384,
+          "mac_per_out_px": 0
+        },
+        {
+          "name": "dec.groups.2.0.dc.2.weight",
+          "shape": [
+            384,
+            1,
+            3,
+            3
+          ],
+          "params": 3456,
+          "mac_per_out_px": 3456
+        },
+        {
+          "name": "dec.groups.2.0.dc.2.bias",
+          "shape": [
+            384
+          ],
+          "params": 384,
+          "mac_per_out_px": 0
+        },
+        {
+          "name": "dec.groups.2.0.dc.3.weight",
+          "shape": [
+            384,
+            384,
+            1,
+            1
+          ],
+          "params": 147456,
+          "mac_per_out_px": 147456
+        },
+        {
+          "name": "dec.groups.2.0.dc.3.bias",
+          "shape": [
+            384
+          ],
+          "params": 384,
+          "mac_per_out_px": 0
+        },
+        {
+          "name": "dec.groups.2.0.ffn.0.weight",
+          "shape": [
+            1536,
+            384,
+            1,
+            1
+          ],
+          "params": 589824,
+          "mac_per_out_px": 589824
+        },
+        {
+          "name": "dec.groups.2.0.ffn.0.bias",
+          "shape": [
+            1536
+          ],
+          "params": 1536,
+          "mac_per_out_px": 0
+        },
+        {
+          "name": "dec.groups.2.0.ffn.2.weight",
+          "shape": [
+            384,
+            384,
+            1,
+            1
+          ],
+          "params": 147456,
+          "mac_per_out_px": 147456
+        },
+        {
+          "name": "dec.groups.2.0.ffn.2.bias",
+          "shape": [
+            384
+          ],
+          "params": 384,
+          "mac_per_out_px": 0
+        },
+        {
+          "name": "dec.groups.2.1.dc.0.weight",
+          "shape": [
+            384,
+            384,
+            1,
+            1
+          ],
+          "params": 147456,
+          "mac_per_out_px": 147456
+        },
+        {
+          "name": "dec.groups.2.1.dc.0.bias",
+          "shape": [
+            384
+          ],
+          "params": 384,
+          "mac_per_out_px": 0
+        },
+        {
+          "name": "dec.groups.2.1.dc.2.weight",
+          "shape": [
+            384,
+            1,
+            3,
+            3
+          ],
+          "params": 3456,
+          "mac_per_out_px": 3456
+        },
+        {
+          "name": "dec.groups.2.1.dc.2.bias",
+          "shape": [
+            384
+          ],
+          "params": 384,
+          "mac_per_out_px": 0
+        },
+        {
+          "name": "dec.groups.2.1.dc.3.weight",
+          "shape": [
+            384,
+            384,
+            1,
+            1
+          ],
+          "params": 147456,
+          "mac_per_out_px": 147456
+        },
+        {
+          "name": "dec.groups.2.1.dc.3.bias",
+          "shape": [
+            384
+          ],
+          "params": 384,
+          "mac_per_out_px": 0
+        },
+        {
+          "name": "dec.groups.2.1.ffn.0.weight",
+          "shape": [
+            1536,
+            384,
+            1,
+            1
+          ],
+          "params": 589824,
+          "mac_per_out_px": 589824
+        },
+        {
+          "name": "dec.groups.2.1.ffn.0.bias",
+          "shape": [
+            1536
+          ],
+          "params": 1536,
+          "mac_per_out_px": 0
+        },
+        {
+          "name": "dec.groups.2.1.ffn.2.weight",
+          "shape": [
+            384,
+            384,
+            1,
+            1
+          ],
+          "params": 147456,
+          "mac_per_out_px": 147456
+        },
+        {
+          "name": "dec.groups.2.1.ffn.2.bias",
+          "shape": [
+            384
+          ],
+          "params": 384,
+          "mac_per_out_px": 0
+        }
+      ],
+      "mac_per_feature_px": 2071296.0
+    },
+    "groups.3": {
+      "prefix": "dec.groups.3.",
+      "params": 2077440,
+      "mac_per_out_px": 2071296,
+      "tensors": [
+        {
+          "name": "dec.groups.3.0.dc.0.weight",
+          "shape": [
+            384,
+            384,
+            1,
+            1
+          ],
+          "params": 147456,
+          "mac_per_out_px": 147456
+        },
+        {
+          "name": "dec.groups.3.0.dc.0.bias",
+          "shape": [
+            384
+          ],
+          "params": 384,
+          "mac_per_out_px": 0
+        },
+        {
+          "name": "dec.groups.3.0.dc.2.weight",
+          "shape": [
+            384,
+            1,
+            3,
+            3
+          ],
+          "params": 3456,
+          "mac_per_out_px": 3456
+        },
+        {
+          "name": "dec.groups.3.0.dc.2.bias",
+          "shape": [
+            384
+          ],
+          "params": 384,
+          "mac_per_out_px": 0
+        },
+        {
+          "name": "dec.groups.3.0.dc.3.weight",
+          "shape": [
+            384,
+            384,
+            1,
+            1
+          ],
+          "params": 147456,
+          "mac_per_out_px": 147456
+        },
+        {
+          "name": "dec.groups.3.0.dc.3.bias",
+          "shape": [
+            384
+          ],
+          "params": 384,
+          "mac_per_out_px": 0
+        },
+        {
+          "name": "dec.groups.3.0.ffn.0.weight",
+          "shape": [
+            1536,
+            384,
+            1,
+            1
+          ],
+          "params": 589824,
+          "mac_per_out_px": 589824
+        },
+        {
+          "name": "dec.groups.3.0.ffn.0.bias",
+          "shape": [
+            1536
+          ],
+          "params": 1536,
+          "mac_per_out_px": 0
+        },
+        {
+          "name": "dec.groups.3.0.ffn.2.weight",
+          "shape": [
+            384,
+            384,
+            1,
+            1
+          ],
+          "params": 147456,
+          "mac_per_out_px": 147456
+        },
+        {
+          "name": "dec.groups.3.0.ffn.2.bias",
+          "shape": [
+            384
+          ],
+          "params": 384,
+          "mac_per_out_px": 0
+        },
+        {
+          "name": "dec.groups.3.1.dc.0.weight",
+          "shape": [
+            384,
+            384,
+            1,
+            1
+          ],
+          "params": 147456,
+          "mac_per_out_px": 147456
+        },
+        {
+          "name": "dec.groups.3.1.dc.0.bias",
+          "shape": [
+            384
+          ],
+          "params": 384,
+          "mac_per_out_px": 0
+        },
+        {
+          "name": "dec.groups.3.1.dc.2.weight",
+          "shape": [
+            384,
+            1,
+            3,
+            3
+          ],
+          "params": 3456,
+          "mac_per_out_px": 3456
+        },
+        {
+          "name": "dec.groups.3.1.dc.2.bias",
+          "shape": [
+            384
+          ],
+          "params": 384,
+          "mac_per_out_px": 0
+        },
+        {
+          "name": "dec.groups.3.1.dc.3.weight",
+          "shape": [
+            384,
+            384,
+            1,
+            1
+          ],
+          "params": 147456,
+          "mac_per_out_px": 147456
+        },
+        {
+          "name": "dec.groups.3.1.dc.3.bias",
+          "shape": [
+            384
+          ],
+          "params": 384,
+          "mac_per_out_px": 0
+        },
+        {
+          "name": "dec.groups.3.1.ffn.0.weight",
+          "shape": [
+            1536,
+            384,
+            1,
+            1
+          ],
+          "params": 589824,
+          "mac_per_out_px": 589824
+        },
+        {
+          "name": "dec.groups.3.1.ffn.0.bias",
+          "shape": [
+            1536
+          ],
+          "params": 1536,
+          "mac_per_out_px": 0
+        },
+        {
+          "name": "dec.groups.3.1.ffn.2.weight",
+          "shape": [
+            384,
+            384,
+            1,
+            1
+          ],
+          "params": 147456,
+          "mac_per_out_px": 147456
+        },
+        {
+          "name": "dec.groups.3.1.ffn.2.bias",
+          "shape": [
+            384
+          ],
+          "params": 384,
+          "mac_per_out_px": 0
+        }
+      ],
+      "mac_per_feature_px": 2071296.0
+    },
+    "groups.4": {
+      "prefix": "dec.groups.4.",
+      "params": 2077440,
+      "mac_per_out_px": 2071296,
+      "tensors": [
+        {
+          "name": "dec.groups.4.0.dc.0.weight",
+          "shape": [
+            384,
+            384,
+            1,
+            1
+          ],
+          "params": 147456,
+          "mac_per_out_px": 147456
+        },
+        {
+          "name": "dec.groups.4.0.dc.0.bias",
+          "shape": [
+            384
+          ],
+          "params": 384,
+          "mac_per_out_px": 0
+        },
+        {
+          "name": "dec.groups.4.0.dc.2.weight",
+          "shape": [
+            384,
+            1,
+            3,
+            3
+          ],
+          "params": 3456,
+          "mac_per_out_px": 3456
+        },
+        {
+          "name": "dec.groups.4.0.dc.2.bias",
+          "shape": [
+            384
+          ],
+          "params": 384,
+          "mac_per_out_px": 0
+        },
+        {
+          "name": "dec.groups.4.0.dc.3.weight",
+          "shape": [
+            384,
+            384,
+            1,
+            1
+          ],
+          "params": 147456,
+          "mac_per_out_px": 147456
+        },
+        {
+          "name": "dec.groups.4.0.dc.3.bias",
+          "shape": [
+            384
+          ],
+          "params": 384,
+          "mac_per_out_px": 0
+        },
+        {
+          "name": "dec.groups.4.0.ffn.0.weight",
+          "shape": [
+            1536,
+            384,
+            1,
+            1
+          ],
+          "params": 589824,
+          "mac_per_out_px": 589824
+        },
+        {
+          "name": "dec.groups.4.0.ffn.0.bias",
+          "shape": [
+            1536
+          ],
+          "params": 1536,
+          "mac_per_out_px": 0
+        },
+        {
+          "name": "dec.groups.4.0.ffn.2.weight",
+          "shape": [
+            384,
+            384,
+            1,
+            1
+          ],
+          "params": 147456,
+          "mac_per_out_px": 147456
+        },
+        {
+          "name": "dec.groups.4.0.ffn.2.bias",
+          "shape": [
+            384
+          ],
+          "params": 384,
+          "mac_per_out_px": 0
+        },
+        {
+          "name": "dec.groups.4.1.dc.0.weight",
+          "shape": [
+            384,
+            384,
+            1,
+            1
+          ],
+          "params": 147456,
+          "mac_per_out_px": 147456
+        },
+        {
+          "name": "dec.groups.4.1.dc.0.bias",
+          "shape": [
+            384
+          ],
+          "params": 384,
+          "mac_per_out_px": 0
+        },
+        {
+          "name": "dec.groups.4.1.dc.2.weight",
+          "shape": [
+            384,
+            1,
+            3,
+            3
+          ],
+          "params": 3456,
+          "mac_per_out_px": 3456
+        },
+        {
+          "name": "dec.groups.4.1.dc.2.bias",
+          "shape": [
+            384
+          ],
+          "params": 384,
+          "mac_per_out_px": 0
+        },
+        {
+          "name": "dec.groups.4.1.dc.3.weight",
+          "shape": [
+            384,
+            384,
+            1,
+            1
+          ],
+          "params": 147456,
+          "mac_per_out_px": 147456
+        },
+        {
+          "name": "dec.groups.4.1.dc.3.bias",
+          "shape": [
+            384
+          ],
+          "params": 384,
+          "mac_per_out_px": 0
+        },
+        {
+          "name": "dec.groups.4.1.ffn.0.weight",
+          "shape": [
+            1536,
+            384,
+            1,
+            1
+          ],
+          "params": 589824,
+          "mac_per_out_px": 589824
+        },
+        {
+          "name": "dec.groups.4.1.ffn.0.bias",
+          "shape": [
+            1536
+          ],
+          "params": 1536,
+          "mac_per_out_px": 0
+        },
+        {
+          "name": "dec.groups.4.1.ffn.2.weight",
+          "shape": [
+            384,
+            384,
+            1,
+            1
+          ],
+          "params": 147456,
+          "mac_per_out_px": 147456
+        },
+        {
+          "name": "dec.groups.4.1.ffn.2.bias",
+          "shape": [
+            384
+          ],
+          "params": 384,
+          "mac_per_out_px": 0
+        }
+      ],
+      "mac_per_feature_px": 2071296.0
+    },
+    "groups.5": {
+      "prefix": "dec.groups.5.",
+      "params": 2077440,
+      "mac_per_out_px": 2071296,
+      "tensors": [
+        {
+          "name": "dec.groups.5.0.dc.0.weight",
+          "shape": [
+            384,
+            384,
+            1,
+            1
+          ],
+          "params": 147456,
+          "mac_per_out_px": 147456
+        },
+        {
+          "name": "dec.groups.5.0.dc.0.bias",
+          "shape": [
+            384
+          ],
+          "params": 384,
+          "mac_per_out_px": 0
+        },
+        {
+          "name": "dec.groups.5.0.dc.2.weight",
+          "shape": [
+            384,
+            1,
+            3,
+            3
+          ],
+          "params": 3456,
+          "mac_per_out_px": 3456
+        },
+        {
+          "name": "dec.groups.5.0.dc.2.bias",
+          "shape": [
+            384
+          ],
+          "params": 384,
+          "mac_per_out_px": 0
+        },
+        {
+          "name": "dec.groups.5.0.dc.3.weight",
+          "shape": [
+            384,
+            384,
+            1,
+            1
+          ],
+          "params": 147456,
+          "mac_per_out_px": 147456
+        },
+        {
+          "name": "dec.groups.5.0.dc.3.bias",
+          "shape": [
+            384
+          ],
+          "params": 384,
+          "mac_per_out_px": 0
+        },
+        {
+          "name": "dec.groups.5.0.ffn.0.weight",
+          "shape": [
+            1536,
+            384,
+            1,
+            1
+          ],
+          "params": 589824,
+          "mac_per_out_px": 589824
+        },
+        {
+          "name": "dec.groups.5.0.ffn.0.bias",
+          "shape": [
+            1536
+          ],
+          "params": 1536,
+          "mac_per_out_px": 0
+        },
+        {
+          "name": "dec.groups.5.0.ffn.2.weight",
+          "shape": [
+            384,
+            384,
+            1,
+            1
+          ],
+          "params": 147456,
+          "mac_per_out_px": 147456
+        },
+        {
+          "name": "dec.groups.5.0.ffn.2.bias",
+          "shape": [
+            384
+          ],
+          "params": 384,
+          "mac_per_out_px": 0
+        },
+        {
+          "name": "dec.groups.5.1.dc.0.weight",
+          "shape": [
+            384,
+            384,
+            1,
+            1
+          ],
+          "params": 147456,
+          "mac_per_out_px": 147456
+        },
+        {
+          "name": "dec.groups.5.1.dc.0.bias",
+          "shape": [
+            384
+          ],
+          "params": 384,
+          "mac_per_out_px": 0
+        },
+        {
+          "name": "dec.groups.5.1.dc.2.weight",
+          "shape": [
+            384,
+            1,
+            3,
+            3
+          ],
+          "params": 3456,
+          "mac_per_out_px": 3456
+        },
+        {
+          "name": "dec.groups.5.1.dc.2.bias",
+          "shape": [
+            384
+          ],
+          "params": 384,
+          "mac_per_out_px": 0
+        },
+        {
+          "name": "dec.groups.5.1.dc.3.weight",
+          "shape": [
+            384,
+            384,
+            1,
+            1
+          ],
+          "params": 147456,
+          "mac_per_out_px": 147456
+        },
+        {
+          "name": "dec.groups.5.1.dc.3.bias",
+          "shape": [
+            384
+          ],
+          "params": 384,
+          "mac_per_out_px": 0
+        },
+        {
+          "name": "dec.groups.5.1.ffn.0.weight",
+          "shape": [
+            1536,
+            384,
+            1,
+            1
+          ],
+          "params": 589824,
+          "mac_per_out_px": 589824
+        },
+        {
+          "name": "dec.groups.5.1.ffn.0.bias",
+          "shape": [
+            1536
+          ],
+          "params": 1536,
+          "mac_per_out_px": 0
+        },
+        {
+          "name": "dec.groups.5.1.ffn.2.weight",
+          "shape": [
+            384,
+            384,
+            1,
+            1
+          ],
+          "params": 147456,
+          "mac_per_out_px": 147456
+        },
+        {
+          "name": "dec.groups.5.1.ffn.2.bias",
+          "shape": [
+            384
+          ],
+          "params": 384,
+          "mac_per_out_px": 0
+        }
+      ],
+      "mac_per_feature_px": 2071296.0
+    },
+    "one_block": {
+      "prefix": "dec.groups.0.0.",
+      "params": 1038720,
+      "mac_per_out_px": 1035648,
+      "tensors": [
+        {
+          "name": "dec.groups.0.0.dc.0.weight",
+          "shape": [
+            384,
+            384,
+            1,
+            1
+          ],
+          "params": 147456,
+          "mac_per_out_px": 147456
+        },
+        {
+          "name": "dec.groups.0.0.dc.0.bias",
+          "shape": [
+            384
+          ],
+          "params": 384,
+          "mac_per_out_px": 0
+        },
+        {
+          "name": "dec.groups.0.0.dc.2.weight",
+          "shape": [
+            384,
+            1,
+            3,
+            3
+          ],
+          "params": 3456,
+          "mac_per_out_px": 3456
+        },
+        {
+          "name": "dec.groups.0.0.dc.2.bias",
+          "shape": [
+            384
+          ],
+          "params": 384,
+          "mac_per_out_px": 0
+        },
+        {
+          "name": "dec.groups.0.0.dc.3.weight",
+          "shape": [
+            384,
+            384,
+            1,
+            1
+          ],
+          "params": 147456,
+          "mac_per_out_px": 147456
+        },
+        {
+          "name": "dec.groups.0.0.dc.3.bias",
+          "shape": [
+            384
+          ],
+          "params": 384,
+          "mac_per_out_px": 0
+        },
+        {
+          "name": "dec.groups.0.0.ffn.0.weight",
+          "shape": [
+            1536,
+            384,
+            1,
+            1
+          ],
+          "params": 589824,
+          "mac_per_out_px": 589824
+        },
+        {
+          "name": "dec.groups.0.0.ffn.0.bias",
+          "shape": [
+            1536
+          ],
+          "params": 1536,
+          "mac_per_out_px": 0
+        },
+        {
+          "name": "dec.groups.0.0.ffn.2.weight",
+          "shape": [
+            384,
+            384,
+            1,
+            1
+          ],
+          "params": 147456,
+          "mac_per_out_px": 147456
+        },
+        {
+          "name": "dec.groups.0.0.ffn.2.bias",
+          "shape": [
+            384
+          ],
+          "params": 384,
+          "mac_per_out_px": 0
+        }
+      ],
+      "mac_per_feature_px": 1035648.0
+    },
+    "adapters.0": {
+      "prefix": "dec.adapters.0.",
+      "params": 739200,
+      "mac_per_out_px": 737280,
+      "tensors": [
+        {
+          "name": "dec.adapters.0.pw_in.weight",
+          "shape": [
+            1536,
+            384,
+            1,
+            1
+          ],
+          "params": 589824,
+          "mac_per_out_px": 589824
+        },
+        {
+          "name": "dec.adapters.0.pw_in.bias",
+          "shape": [
+            1536
+          ],
+          "params": 1536,
+          "mac_per_out_px": 0
+        },
+        {
+          "name": "dec.adapters.0.pw_out.weight",
+          "shape": [
+            384,
+            384,
+            1,
+            1
+          ],
+          "params": 147456,
+          "mac_per_out_px": 147456
+        },
+        {
+          "name": "dec.adapters.0.pw_out.bias",
+          "shape": [
+            384
+          ],
+          "params": 384,
+          "mac_per_out_px": 0
+        }
+      ],
+      "mac_per_feature_px": 737280.0
+    },
+    "adapters.1": {
+      "prefix": "dec.adapters.1.",
+      "params": 739200,
+      "mac_per_out_px": 737280,
+      "tensors": [
+        {
+          "name": "dec.adapters.1.pw_in.weight",
+          "shape": [
+            1536,
+            384,
+            1,
+            1
+          ],
+          "params": 589824,
+          "mac_per_out_px": 589824
+        },
+        {
+          "name": "dec.adapters.1.pw_in.bias",
+          "shape": [
+            1536
+          ],
+          "params": 1536,
+          "mac_per_out_px": 0
+        },
+        {
+          "name": "dec.adapters.1.pw_out.weight",
+          "shape": [
+            384,
+            384,
+            1,
+            1
+          ],
+          "params": 147456,
+          "mac_per_out_px": 147456
+        },
+        {
+          "name": "dec.adapters.1.pw_out.bias",
+          "shape": [
+            384
+          ],
+          "params": 384,
+          "mac_per_out_px": 0
+        }
+      ],
+      "mac_per_feature_px": 737280.0
+    },
+    "adapters.2": {
+      "prefix": "dec.adapters.2.",
+      "params": 739200,
+      "mac_per_out_px": 737280,
+      "tensors": [
+        {
+          "name": "dec.adapters.2.pw_in.weight",
+          "shape": [
+            1536,
+            384,
+            1,
+            1
+          ],
+          "params": 589824,
+          "mac_per_out_px": 589824
+        },
+        {
+          "name": "dec.adapters.2.pw_in.bias",
+          "shape": [
+            1536
+          ],
+          "params": 1536,
+          "mac_per_out_px": 0
+        },
+        {
+          "name": "dec.adapters.2.pw_out.weight",
+          "shape": [
+            384,
+            384,
+            1,
+            1
+          ],
+          "params": 147456,
+          "mac_per_out_px": 147456
+        },
+        {
+          "name": "dec.adapters.2.pw_out.bias",
+          "shape": [
+            384
+          ],
+          "params": 384,
+          "mac_per_out_px": 0
+        }
+      ],
+      "mac_per_feature_px": 737280.0
+    },
+    "adapters.3": {
+      "prefix": "dec.adapters.3.",
+      "params": 739200,
+      "mac_per_out_px": 737280,
+      "tensors": [
+        {
+          "name": "dec.adapters.3.pw_in.weight",
+          "shape": [
+            1536,
+            384,
+            1,
+            1
+          ],
+          "params": 589824,
+          "mac_per_out_px": 589824
+        },
+        {
+          "name": "dec.adapters.3.pw_in.bias",
+          "shape": [
+            1536
+          ],
+          "params": 1536,
+          "mac_per_out_px": 0
+        },
+        {
+          "name": "dec.adapters.3.pw_out.weight",
+          "shape": [
+            384,
+            384,
+            1,
+            1
+          ],
+          "params": 147456,
+          "mac_per_out_px": 147456
+        },
+        {
+          "name": "dec.adapters.3.pw_out.bias",
+          "shape": [
+            384
+          ],
+          "params": 384,
+          "mac_per_out_px": 0
+        }
+      ],
+      "mac_per_feature_px": 737280.0
+    },
+    "adapters.4": {
+      "prefix": "dec.adapters.4.",
+      "params": 147840,
+      "mac_per_out_px": 147456,
+      "tensors": [
+        {
+          "name": "dec.adapters.4.conv.weight",
+          "shape": [
+            384,
+            384,
+            1,
+            1
+          ],
+          "params": 147456,
+          "mac_per_out_px": 147456
+        },
+        {
+          "name": "dec.adapters.4.conv.bias",
+          "shape": [
+            384
+          ],
+          "params": 384,
+          "mac_per_out_px": 0
+        }
+      ],
+      "mac_per_feature_px": 147456.0
+    },
+    "seam_repair": {
+      "prefix": "dec.seam_repair.",
+      "params": 152704,
+      "mac_per_out_px": 150912,
+      "tensors": [
+        {
+          "name": "dec.seam_repair.gate",
+          "shape": [
+            1,
+            1,
+            32,
+            32
+          ],
+          "params": 1024,
+          "mac_per_out_px": 0
+        },
+        {
+          "name": "dec.seam_repair.dw.weight",
+          "shape": [
+            384,
+            1,
+            3,
+            3
+          ],
+          "params": 3456,
+          "mac_per_out_px": 3456
+        },
+        {
+          "name": "dec.seam_repair.dw.bias",
+          "shape": [
+            384
+          ],
+          "params": 384,
+          "mac_per_out_px": 0
+        },
+        {
+          "name": "dec.seam_repair.pw.weight",
+          "shape": [
+            384,
+            384,
+            1,
+            1
+          ],
+          "params": 147456,
+          "mac_per_out_px": 147456
+        },
+        {
+          "name": "dec.seam_repair.pw.bias",
+          "shape": [
+            384
+          ],
+          "params": 384,
+          "mac_per_out_px": 0
+        }
+      ],
+      "mac_per_feature_px": 150912.0
+    },
+    "head": {
+      "prefix": "dec.head.",
+      "params": 335232,
+      "mac_per_out_px": 333504,
+      "tensors": [
+        {
+          "name": "dec.head.adaptor.weight",
+          "shape": [
+            192,
+            384,
+            1,
+            1
+          ],
+          "params": 73728,
+          "mac_per_out_px": 73728
+        },
+        {
+          "name": "dec.head.adaptor.bias",
+          "shape": [
+            192
+          ],
+          "params": 192,
+          "mac_per_out_px": 0
+        },
+        {
+          "name": "dec.head.dc.0.weight",
+          "shape": [
+            192,
+            192,
+            1,
+            1
+          ],
+          "params": 36864,
+          "mac_per_out_px": 36864
+        },
+        {
+          "name": "dec.head.dc.0.bias",
+          "shape": [
+            192
+          ],
+          "params": 192,
+          "mac_per_out_px": 0
+        },
+        {
+          "name": "dec.head.dc.2.weight",
+          "shape": [
+            192,
+            1,
+            3,
+            3
+          ],
+          "params": 1728,
+          "mac_per_out_px": 1728
+        },
+        {
+          "name": "dec.head.dc.2.bias",
+          "shape": [
+            192
+          ],
+          "params": 192,
+          "mac_per_out_px": 0
+        },
+        {
+          "name": "dec.head.dc.3.weight",
+          "shape": [
+            192,
+            192,
+            1,
+            1
+          ],
+          "params": 36864,
+          "mac_per_out_px": 36864
+        },
+        {
+          "name": "dec.head.dc.3.bias",
+          "shape": [
+            192
+          ],
+          "params": 192,
+          "mac_per_out_px": 0
+        },
+        {
+          "name": "dec.head.ffn.0.weight",
+          "shape": [
+            768,
+            192,
+            1,
+            1
+          ],
+          "params": 147456,
+          "mac_per_out_px": 147456
+        },
+        {
+          "name": "dec.head.ffn.0.bias",
+          "shape": [
+            768
+          ],
+          "params": 768,
+          "mac_per_out_px": 0
+        },
+        {
+          "name": "dec.head.ffn.2.weight",
+          "shape": [
+            192,
+            192,
+            1,
+            1
+          ],
+          "params": 36864,
+          "mac_per_out_px": 36864
+        },
+        {
+          "name": "dec.head.ffn.2.bias",
+          "shape": [
+            192
+          ],
+          "params": 192,
+          "mac_per_out_px": 0
+        }
+      ],
+      "mac_per_feature_px": 333504.0
+    },
+    "router_head_v1_in_ckpt": {
+      "prefix": "router_head.",
+      "params": 8726,
+      "mac_per_out_px": 8640,
+      "tensors": [
+        {
+          "name": "router_head.proj.weight",
+          "shape": [
+            16,
+            384,
+            1,
+            1
+          ],
+          "params": 6144,
+          "mac_per_out_px": 6144
+        },
+        {
+          "name": "router_head.proj.bias",
+          "shape": [
+            16
+          ],
+          "params": 16,
+          "mac_per_out_px": 0
+        },
+        {
+          "name": "router_head.mlp.0.weight",
+          "shape": [
+            64,
+            33
+          ],
+          "params": 2112,
+          "mac_per_out_px": 2112
+        },
+        {
+          "name": "router_head.mlp.0.bias",
+          "shape": [
+            64
+          ],
+          "params": 64,
+          "mac_per_out_px": 0
+        },
+        {
+          "name": "router_head.mlp.2.weight",
+          "shape": [
+            6,
+            64
+          ],
+          "params": 384,
+          "mac_per_out_px": 384
+        },
+        {
+          "name": "router_head.mlp.2.bias",
+          "shape": [
+            6
+          ],
+          "params": 6,
+          "mac_per_out_px": 0
+        }
+      ],
+      "mac_per_feature_px": 8640.0
+    }
+  },
+  "router_v2": {
+    "file": "runs/RECIPE512/routers2/v2_lam1.3e-5.pth",
+    "lam": 1.3e-05,
+    "trained_on": "runs/RECIPE512/ckpt_eval.pth.tar",
+    "params": 144030,
+    "tensors": [
+      {
+        "name": "bias",
+        "shape": [
+          6
+        ],
+        "params": 6
+      },
+      {
+        "name": "proj_stem.weight",
+        "shape": [
+          48,
+          384,
+          1,
+          1
+        ],
+        "params": 18432
+      },
+      {
+        "name": "proj_stem.bias",
+        "shape": [
+          48
+        ],
+        "params": 48
+      },
+      {
+        "name": "proj_lat.weight",
+        "shape": [
+          32,
+          512,
+          1,
+          1
+        ],
+        "params": 16384
+      },
+      {
+        "name": "proj_lat.bias",
+        "shape": [
+          32
+        ],
+        "params": 32
+      },
+      {
+        "name": "mlp.0.weight",
+        "shape": [
+          161
+        ],
+        "params": 161
+      },
+      {
+        "name": "mlp.0.bias",
+        "shape": [
+          161
+        ],
+        "params": 161
+      },
+      {
+        "name": "mlp.1.weight",
+        "shape": [
+          256,
+          161
+        ],
+        "params": 41216
+      },
+      {
+        "name": "mlp.1.bias",
+        "shape": [
+          256
+        ],
+        "params": 256
+      },
+      {
+        "name": "mlp.3.weight",
+        "shape": [
+          256,
+          256
+        ],
+        "params": 65536
+      },
+      {
+        "name": "mlp.3.bias",
+        "shape": [
+          256
+        ],
+        "params": 256
+      },
+      {
+        "name": "mlp.5.weight",
+        "shape": [
+          6,
+          256
+        ],
+        "params": 1536
+      },
+      {
+        "name": "mlp.5.bias",
+        "shape": [
+          6
+        ],
+        "params": 6
+      }
+    ]
+  }
+}

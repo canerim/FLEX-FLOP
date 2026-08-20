@@ -1,117 +1,81 @@
-"""Complete results: every rate against every test set, and the frontier.
+"""Complete results: every rate against every test set, and what it costs.
 
-The main paper samples. Its per-class table (`paper/tables/perclass.tex`) is
-one budget at three of the five quality indices; its headline is one budget at
-five. This section prints the whole grid, on the pinned checkpoint wherever a
-pinned measurement exists, and says which checkpoint every other table came
-from.
+The main paper samples this section. Its per-class table is one budget at
+three of the five quality indices, its headline is one budget at five, and its
+BD table is three budgets pooled over the set. Everything here is the full
+grid on the pinned checkpoint, together with the measurements the main paper
+has no room for: a second quality metric, the distribution over sequences and
+over tiles, the composition with weight quantisation, the raw numbers behind
+the curves, and the cases where the method does badly.
 
-Every number here is computed from a file in `results/` at build time by
-`k.J`, so nothing can drift between the measurement and the page. The LaTeX
-sibling, `paper/supp/d_full_results.tex`, carries the same numbers as literal
-digits; both were produced by the same helpers below, so they agree by
-construction rather than by proof-reading.
+Two habits run through the section and are stated once here.
+
+Provenance. Every number is read from a file in `results/` at build time by
+`k.J`, so the page and the measurement cannot drift apart, and the note under
+each table names the file. Where a table is not on
+`runs/RECIPE512/ckpt_PAPER.pth.tar` the note says which checkpoint it is on.
+
+Conventions. Two decibel conventions are in use in this project and they
+differ by about a third of a 0.1 dB budget, so each table says which one it is
+under. `per frame` averages a per-frame PSNR difference, which is what
+`~/DCVC/test_video.py` reports and therefore what a published DCVC-UF number
+means. `pooled` forms one mean squared error over the whole set and
+differences that. Two denominators are also in use for compute saved: against
+the released DCVC-UF decoder, which is what the paper quotes, and against our
+own deepest exit, which costs \\DeepestUniformCost released decodes because it
+pays for seam repair and the release does not.
 
 The public surface is `content(k)`. Everything else is a private helper that
-returns a list of rows, shared with the script that emitted the LaTeX.
+returns a list of rows.
 """
 
-# The six CTC classes, largest tile count first, which is also the order the
-# saving falls in.
-CLASSES = ["UVG", "MCL-JCV", "HEVC_B", "HEVC_E", "HEVC_C", "HEVC_D"]
+# Largest tile count first, which is also the order the saving falls in.
+CLASSES = ["MCL-JCV", "UVG", "HEVC_B", "HEVC_E", "HEVC_C", "HEVC_D"]
 QPS = [0, 16, 32, 48, 63]
 # Trunk blocks skipped at each of the six exits, from results/adapter_cost.json.
 SKIPPED = [10, 8, 6, 4, 2, 0]
-# The pinned checkpoint. Anything else is named at the table that uses it.
 PINNED = "runs/RECIPE512/ckpt_PAPER.pth.tar"
+CURVE = "supp_paper_curve_PAPER.json"
 
 
 def _name(c):
-    """CTC class names as the paper writes them."""
     return c.replace("HEVC_", "HEVC ")
+
+
+def _short(s):
+    """A sequence name short enough for a table cell."""
+    s = (s.replace(".yuv", "").replace("_420_8bit_YUV", "")
+          .replace("_1920x1080", "").replace("_120fps", ""))
+    head, _, tail = s.rpartition("_")
+    return head if head and tail.isdigit() else s
 
 
 def _f(x, n=1):
     return "n/a" if x is None else f"{x:.{n}f}"
 
 
-# ------------------------------------------------------------- the test set
-def _testset_rows(k):
-    """Class, resolution, padded size, tiles per frame, sequences."""
-    pc = k.J("supp_per_class_budgets.json")
-    td = k.J("tile_definition.json")
-    pad = {r["name"]: r for r in td["rows"]}
-    at = [r for r in pc["rows"]
-          if r["qp"] == 0 and abs(r["budget_db"] - 0.1) < 1e-9][0]["per_class"]
-    out = [["Class", "Resolution", "Decoded", "Tiles", "Seq."]]
-    tiles = seqs = 0
-    for c in CLASSES:
-        v = at[c]
-        p = pad.get(v["res"])
-        dec = f"{p['padded'][0]}x{p['padded'][1]}" if p else "n/a"
-        out.append([_name(c), v["res"], dec, v["tiles"], v["n"]])
-        tiles += v["tiles"] * v["n"]
-        seqs += v["n"]
-    out.append(["All", "mixed", "", tiles, seqs])
-    return out
-
-
-def _ladder_rows(k):
-    """The six exits, what each skips, and which are reachable."""
-    ac = k.J("adapter_cost.json")
-    out = [["Exit", "Blocks run", "Blocks skipped", "Adapter", "Selectable"]]
-    n = 12
-    for e in ac["exits"]:
-        out.append([f"e{e['exit']}", n - e["blocks_skipped"], e["blocks_skipped"],
-                    e["adapter_kind"] or "none",
-                    "yes" if e["reachable"] else "no"])
-    return out
-
-
-# ------------------------------------------------- per class, 0.1 dB budget
-def _pc_index(k):
+def _pc(k):
     d = k.J("supp_per_class_budgets.json")
     return {(r["qp"], round(r["budget_db"], 3)): r for r in d["rows"]}
 
 
-def _pc_saving_rows(k, budget):
-    idx = _pc_index(k)
+# ------------------------------------------------- every class, every rate
+def _class_saving_rows(k):
+    idx = _pc(k)
     out = [["Class"] + [f"q{q}" for q in QPS]]
     for c in CLASSES:
         out.append([_name(c)] +
-                   [_f(idx[(q, budget)]["per_class"][c]["saving"]) for q in QPS])
-    out.append(["All 53, pooled"] +
-               [_f(idx[(q, budget)]["overall_saving"]) for q in QPS])
+                   [_f(idx[(q, 0.1)]["per_class"][c]["saving"]) for q in QPS])
+    out.append(["All \\NumSeq, pooled"] +
+               [_f(idx[(q, 0.1)]["overall_saving"]) for q in QPS])
+    out.append(["Quality given up (dB)"] +
+               [_f(idx[(q, 0.1)]["overall_db"], 3) for q in QPS])
     return out
 
 
-def _pc_db_rows(k, budget):
-    idx = _pc_index(k)
-    out = [["Class"] + [f"q{q}" for q in QPS]]
-    for c in CLASSES:
-        out.append([_name(c)] +
-                   [_f(idx[(q, budget)]["per_class"][c]["db"], 3) for q in QPS])
-    out.append(["All 53, pooled"] +
-               [_f(idx[(q, budget)]["overall_db"], 3) for q in QPS])
-    return out
-
-
-def _pc_loose_rows(k, field, digits):
-    """0.3 dB and 0.5 dB in one table, budget as the first column."""
-    idx = _pc_index(k)
-    out = [["Budget", "Class"] + [f"q{q}" for q in QPS]]
-    for b in (0.3, 0.5):
-        for c in CLASSES:
-            out.append([f"{b:.1f} dB", _name(c)] +
-                       [_f(idx[(q, b)]["per_class"][c][field], digits)
-                        for q in QPS])
-    return out
-
-
-# ------------------------------------------------------------- exit shares
+# ------------------------------------------------------------ exit shares
 def _pooled_exit_rows(k):
-    """Where the 1765 tiles of one pass over the test set actually exited."""
-    idx = _pc_index(k)
+    idx = _pc(k)
     out = [["Rate", "e2", "e3", "e4", "e5", "Blocks skipped", "Saved"]]
     for q in QPS:
         r = idx[(q, 0.1)]
@@ -127,7 +91,7 @@ def _pooled_exit_rows(k):
 
 
 def _class_exit_rows(k):
-    idx = _pc_index(k)
+    idx = _pc(k)
     out = [["Class", "e2", "e3", "e4", "e5", "e2", "e3", "e4", "e5"]]
     for c in CLASSES:
         row = [_name(c)]
@@ -138,156 +102,173 @@ def _class_exit_rows(k):
     return out
 
 
-# --------------------------------------------------------- per sequence
+# -------------------------------------------------------- per sequence
 def _spread_rows(k):
-    d = k.J("per_sequence.json")
+    d = k.J("supp_per_sequence_PAPER_b010.json")
     out = [["Rate", "n", "Mean", "SD", "Min", "p25", "Median", "p75", "Max"]]
-    for r in d["rows"]:
+    for r in d["rows_vs_release"]:
         out.append([f"q{r['qp']}", r["n"]] +
                    [_f(r[f]) for f in ("mean", "sd", "min", "p25", "median",
                                        "p75", "max")])
     return out
 
 
-def _curve_ops(k, target=0.1):
-    d = k.J("curve_RECIPE512.json")
-    return {o["qp"]: o for o in d["op_points"]
-            if abs(o["target_db"] - target) < 1e-9 and o.get("per_sequence")}
+def _under_ten(k):
+    """Sequence-and-rate pairs saving less than a tenth of a decode."""
+    d = k.J("supp_per_sequence_PAPER_b010.json")
+    return sum(1 for r in d["rows"] for s in r["per_sequence"]
+               if s["saving_pct_vs_release"] < 10)
 
 
-def _pct(v, p):
-    """Percentile by linear interpolation, so numpy is not needed here."""
-    s = sorted(v)
-    i = (len(s) - 1) * p / 100.0
-    lo = int(i)
-    hi = min(lo + 1, len(s) - 1)
-    return s[lo] + (s[hi] - s[lo]) * (i - lo)
-
-
-def _spread53_rows(k):
-    ops = _curve_ops(k)
-    out = [["Rate", "n", "Mean", "SD", "Min", "p25", "Median", "p75", "Max",
-            "Under 10"]]
-    for q in QPS:
-        v = [r["saving_pct"] for r in ops[q]["per_sequence"]]
-        m = sum(v) / len(v)
-        sd = (sum((x - m) ** 2 for x in v) / len(v)) ** 0.5
-        out.append([f"q{q}", len(v), _f(m), _f(sd), _f(min(v)),
-                    _f(_pct(v, 25)), _f(_pct(v, 50)), _f(_pct(v, 75)),
-                    _f(max(v)), sum(1 for x in v if x < 10)])
-    return out
-
-
-def _tail_rows(k, n=6):
-    """The sequences the set mean is carried past, and the ones carrying it."""
-    ops = _curve_ops(k)
-    by = {r["seq"]: r for r in ops[63]["per_sequence"]}
-    at0 = {r["seq"]: r for r in ops[0]["per_sequence"]}
-    order = sorted(by, key=lambda s: by[s]["saving_pct"])
-    out = [["Sequence", "q0", "q63", "q63 vs release", "q63 dB"]]
+def _tail_seq_rows(k, n=6):
+    d = k.J("supp_per_sequence_PAPER_b010.json")
+    by = {r["qp"]: {s["seq"]: s for s in r["per_sequence"]} for r in d["rows"]}
+    order = sorted(by[63], key=lambda s: by[63][s]["saving_pct_vs_release"])
+    out = [["Sequence", "q0", "q63", "q63 dB"]]
     for s in order[:n] + order[-2:]:
-        r, r0 = by[s], at0[s]
-        out.append([s.replace(".yuv", "").replace("_420_8bit_YUV", ""),
-                    _f(r0["saving_pct"]), _f(r["saving_pct"]),
-                    _f(r["saving_pct_vs_release"]), _f(r["db_vs_uf"], 3)])
+        out.append([_short(s), _f(by[0][s]["saving_pct_vs_release"]),
+                    _f(by[63][s]["saving_pct_vs_release"]),
+                    _f(by[63][s]["db_vs_uf"], 3)])
     return out
 
 
-# ------------------------------------------------------------- the frontier
-def _grid_rows(k):
-    d = k.J("signalled_RECIPE512_grid.json")
-    by = {(r["qp"], round(r["budget_db"], 3)): r for r in d["rows"]}
-    out = [["Budget"] + [f"q{q}" for q in QPS]]
-    for b in d["budgets"]:
-        row = ["%g dB" % b]
-        for q in QPS:
-            r = by.get((q, round(b, 3)))
-            row.append(_f(r["saving_pct_vs_release"])
-                       if r and r.get("budget_reachable") else "n/a")
-        out.append(row)
+# ------------------------------------------------- a second quality metric
+def _metric_rows(k):
+    d = k.J("supp_opquality_PAPER.json")
+    out = [["Rate", "bpp", "PSNR", "ours", "lost", "MS-SSIM", "ours",
+            "lost"]]
+    for r in sorted(d["rows"], key=lambda r: r["qp"]):
+        out.append([f"q{r['qp']}", _f(r["bpp"], 4),
+                    _f(r["psnr_released"], 3), _f(r["psnr_routed"], 3),
+                    _f(-r["psnr_delta"], 4),
+                    _f(r["ms_ssim_released"], 5), _f(r["ms_ssim_routed"], 5),
+                    _f(r["ms_ssim_db_released"] - r["ms_ssim_db_routed"], 4)])
     return out
 
 
-def _operating_rows(k):
-    d = k.J("saturation_RECIPE512_ctc53.json")
-    out = [["Rate", "Floor", "Saturation", "Usable band", "0.1 dB uses"]]
+def _tile_tail_rows(k):
+    d = k.J("supp_opquality_PAPER.json")["tail"]
+    out = [["Rate", "Tiles", "Mean", "Median", "p95", "p99", "Max",
+            "Over 0.25", "Over 0.5", "Over 1.0"]]
+    for q in QPS:
+        t = d[str(q)]
+        out.append([f"q{q}", t["n_tiles"], _f(t["mean_db"], 3),
+                    _f(t["median_db"], 3), _f(t["p95_db"], 3),
+                    _f(t["p99_db"], 3), _f(t["max_db"], 3),
+                    t["n_over_0_25_db"], t["n_over_0_5_db"],
+                    t["n_over_1_db"]])
+    return out
+
+
+# ----------------------------------------------- composition with quantisation
+def _quant_rows(k):
+    d = k.J("supp_quant_PAPER.json")
+    out = [["Weights", "Rate", "e2", "e3", "e4", "e5", "Layers"]]
     for r in d["rows"]:
-        band = r["saturation_db"] - r["floor_db"]
-        out.append([f"q{r['qp']}", _f(r["floor_db"], 3),
-                    _f(r["saturation_db"], 3), _f(band, 3),
-                    _f(100 * (0.1 - r["floor_db"]) / band, 0) + "%"])
+        lab = "float32" if r["bits"] == 32 else f"int{r['bits']}"
+        out.append([lab, f"q{r['qp']}"] +
+                   [_f(r["db_per_exit"][i], 3) for i in (2, 3, 4, 5)] +
+                   [r["layers_quantised"]])
     return out
 
 
-def _curve_rows(k):
-    d = k.J("curve_RECIPE512.json")
-    by = {(o["qp"], round(o["target_db"], 3)): o for o in d["op_points"]}
-    tg = sorted({round(o["target_db"], 3) for o in d["op_points"]})
-    out = [["Budget"] + [f"q{q}" for q in QPS]]
-    for t in tg:
-        row = ["%g dB" % t]
-        for q in QPS:
-            o = by.get((q, t))
-            if o is None or o.get("saving_pct") is None:
-                row.append("n/a")
-            else:
-                row.append(_f(o["saving_pct"]) + ("*" if o.get("saturated")
-                                                  else ""))
-        out.append(row)
-    return out
-
-
-# --------------------------------------------------------------- BD figures
+# --------------------------------------------------------------- integrated
 def _bd_rows(k):
-    d = k.J("bdrate.json")
-    out = [["Configuration", "Budget", "BD-Rate", "MACs saved", "Map bits"]]
-    for r in d["rows"]:
-        out.append([r["config"], f"{r['budget_db']:.1f} dB",
-                    _f(r["bd_rate_pct"], 2) + "%",
-                    _f(r["saving_pct_vs_release"]) + "%",
-                    _f(r["map_bits"], 0)])
-    return out
-
-
-def _bd_perrate_rows(k):
-    d = k.J("bd_RECIPE512_ctc53.json")
-    out = [["Rate", "BD-saving", "BD-quality", "Floor", "Points"]]
-    for r in d["rows"]:
-        out.append([f"q{r['qp']}",
-                    "n/a" if r["bd_saving_pct"] is None
-                    else _f(r["bd_saving_pct"]) + "%",
-                    _f(r["bd_quality_db"], 3), _f(r["floor_db"], 3),
-                    r["n_points"]])
-    out.append(["Mean of the two that span it",
-                _f(d["mean_bd_saving_pct"]) + "%",
-                _f(d["mean_bd_quality_db"], 3), "", ""])
-    return out
-
-
-def _bd_interval_rows(k):
-    d = k.J("bd_sensitivity.json")
-    out = [["dB interval", "Mean", "q0", "q63", "q0 minus q63"]]
-    for r in d["rows"]:
-        out.append([f"{r['db_lo']:.3f} to {r['db_hi']:.2f}",
-                    _f(r["mean_bd_saving_pct"]) + "%",
-                    _f(r["qp_low"]) + "%", _f(r["qp_high"]) + "%",
-                    _f(r["rate_effect_pts"]) + " pt"])
-    return out
-
-
-def _bd_convention_rows(k):
-    a = k.J("bd_saving.json")
-    b = k.J("bd_saving_pooled.json")
+    a = k.J("supp_bd_PAPER_per_frame.json")
+    b = k.J("supp_bd_PAPER_pooled.json")
     A = {r["qp"]: r for r in a["rows"]}
     B = {r["qp"]: r for r in b["rows"]}
-    out = [["Rate", "Per frame", "Pooled", "Difference"]]
+    out = [["Rate", "BD-saving", "BD-quality", "BD-saving", "BD-quality",
+            "Points"]]
     for q in QPS:
-        out.append([f"q{q}", _f(A[q]["bd_saving_pct"]) + "%",
-                    _f(B[q]["bd_saving_pct"]) + "%",
-                    _f(B[q]["bd_saving_pct"] - A[q]["bd_saving_pct"]) + " pt"])
-    out.append(["Mean", _f(a["mean_bd_saving_pct"]) + "%",
+        out.append([f"q{q}",
+                    "n/a" if A[q]["bd_saving_pct"] is None
+                    else _f(A[q]["bd_saving_pct"]) + "%",
+                    _f(A[q]["bd_quality_db"], 4),
+                    "n/a" if B[q]["bd_saving_pct"] is None
+                    else _f(B[q]["bd_saving_pct"]) + "%",
+                    _f(B[q]["bd_quality_db"], 4), A[q]["n_points"]])
+    out.append(["Mean where defined", _f(a["mean_bd_saving_pct"]) + "%",
+                _f(a["mean_bd_quality_db"], 4),
                 _f(b["mean_bd_saving_pct"]) + "%",
-                _f(b["mean_bd_saving_pct"] - a["mean_bd_saving_pct"]) + " pt"])
+                _f(b["mean_bd_quality_db"], 4), ""])
+    return out
+
+
+def _bdrate_rows(k):
+    d = k.J("bdrate.json")
+    by = {(r["config"], round(r["budget_db"], 2)): r for r in d["rows"]}
+    out = [["Budget", "A BD-Rate", "B BD-Rate", "Difference", "A saved",
+            "B saved"]]
+    for b in (0.1, 0.3, 0.5):
+        a, r = by[("A signalled", b)], by[("B router", b)]
+        out.append(["%.1f dB" % b, _f(a["bd_rate_pct"], 3) + "%",
+                    _f(r["bd_rate_pct"], 3) + "%",
+                    _f(a["bd_rate_pct"] - r["bd_rate_pct"], 3) + " pt",
+                    _f(a["saving_pct_vs_release"]) + "%",
+                    _f(r["saving_pct_vs_release"]) + "%"])
+    return out
+
+
+# ----------------------------------------------------------- raw values
+def _deployed_rows(k):
+    d = k.J("signalled_RECIPE512_ctc53.json")
+    out = [["Rate", "Budget", "lambda", "dB", "Model", "Meter", "Map bits"]]
+    for r in d["rows"]:
+        out.append([f"q{r['qp']}", "%g" % r["budget_db"],
+                    "%.3e" % r["lam"] if r.get("lam") else "n/a",
+                    _f(r["db_vs_uf"], 4), _f(r["saving_pct_vs_release"]),
+                    _f(r["saving_pct_measured"]), _f(r["map_bits"], 0)])
+    return out
+
+
+def _deepest_cost(k):
+    """What our deepest exit costs, in released decodes, from pinned files.
+
+    At saturation every tile sits at the shallowest selectable exit, so the
+    saving the curve file records there is measured against our own deepest
+    exit while the ceiling the saturation file records is measured against the
+    release. One divides into the other. The result, 1.0095, is what
+    results/combined_RECIPE512_b01.json stores directly, and that file is on
+    runs/RECIPE512/ckpt_eval.pth.tar; deriving it from two pinned files avoids
+    quoting an unpinned one for a quantity the whole section leans on.
+    """
+    sat = k.J("saturation_RECIPE512_ctc53.json")
+    sv = [o["saving_pct"] for o in k.J(CURVE)["op_points"]
+          if o.get("saturated")][0]
+    return sat["cost_j"] / (1 - sv / 100)
+
+
+def _frontier_rows(k):
+    """The 35 measured operating points, both conventions, in one table.
+
+    paper_curve.py takes its argmin over the whole [tiles, K] table and
+    flexuf/eval.py fills the columns below the split depth with the decode at
+    the split depth, so those columns tie and the argmin returns the first of
+    them. Bins 0, 1 and 2 are one exit; folding them is what makes this
+    histogram agree with the clamped one in supp_per_class_budgets.json.
+    """
+    d = k.J(CURVE)
+    deep = _deepest_cost(k)
+    out = [["Rate", "Budget", "lambda", "dB pooled", "dB per frame",
+            "Saved", "e2/e3/e4/e5"]]
+    for o in d["op_points"]:
+        sv = o.get("saving_pct")
+        rel = "n/a" if sv is None else _f(100 - (100 - sv) * deep)
+        if o.get("hist"):
+            h = list(o["hist"])
+            h[2] += h[0] + h[1]
+            h[0] = h[1] = 0
+            n = sum(h)
+            sh = "/".join("%.0f" % (100 * h[i] / n) for i in (2, 3, 4, 5))
+        elif o.get("saturated"):
+            sh = "100/0/0/0"
+        else:
+            sh = "none"
+        out.append([f"q{o['qp']}", "%g" % o["target_db"],
+                    "%.3e" % o["lam"] if o.get("lam") else "n/a",
+                    _f(o["db_vs_uf"], 4), _f(o["db_vs_uf_per_frame"], 4),
+                    rel, sh])
     return out
 
 
@@ -296,314 +277,469 @@ def content(k):
     k.h1("Complete results")
 
     k.par(
-        "This section prints in full the measurements the main paper quotes "
-        "at one or two points. The per-class table there reports one budget "
-        "at three of the five quality indices; here every class appears at "
-        "every index and at three budgets. The frontier is then given at "
-        "every budget measured, and the integrated figures that summarise it "
-        "are given with the interval and the averaging convention each was "
-        "taken under, because both move the number by more than the "
-        "difference between the systems being compared.")
+        "This section prints in full what the main paper samples: every class "
+        "at every quality index and at three budgets, the frontier drawn "
+        "class by class, and the distribution behind each mean, over "
+        "sequences and over tiles. Three measurements the main paper has no "
+        "room for are also here, a perceptual metric beside the decibel, the "
+        "composition with weight quantisation, and the raw numbers behind the "
+        "curves. It ends with the cases where the method does badly.")
 
-    # -------------------------------------------------------------- D.1
-    k.h2("Every class at every rate, at the 0.1 dB budget")
+    # ----------------------------------------------------------------- G.1
+    k.h2("Every class at every rate")
 
-    t = k.rows(_pc_saving_rows(k, 0.1),
-               "Compute saved against the released decoder, per class, at "
-               "the 0.1 dB budget. The main paper prints the q0, q32 and q63 "
-               "columns of this table. Two effects are visible and they "
-               "compound: the saving falls with rate, from 29.7% to 15.6% on "
-               "the pooled row, and it falls with "
-               "decreasing resolution, from \\BigResLow% on MCL-JCV to "
-               "\\SmallResLow% on HEVC D at q0. At q63 both of the two "
-               "smallest classes sit at 2.5%, which is one tile in four at "
-               "the second-deepest exit and every other tile run to full "
-               "depth.")
-    k.note("results/supp_per_class_budgets.json, on " + PINNED + ", 53 "
-           "sequences at one frame each. This file extends "
-           "results/per_class_RECIPE512.json from three rates to five; on "
-           "the nine cells the two share, every saving, every decibel and "
-           "every histogram bin is bit-identical, so the extension is a "
-           "continuation of the same measurement and not a re-run. The "
-           "pooled row sits under a tenth of a point from the main paper's "
-           "\\MainLowRate% and \\MainHighRate%, which are the same budget "
-           "measured over two frames per sequence rather than one.")
+    k.rows(_class_saving_rows(k),
+           "Compute saved against the released decoder, by class and by "
+           "quality index, at the 0.1 dB budget; the main paper prints the "
+           "q0, q32 and q63 columns of the first six rows. Read it in two "
+           "directions. Along a row the saving falls with rate, because the "
+           "residual a shallow exit fails to reconstruct grows relative to "
+           "the quality being protected. Down a column it falls with "
+           "resolution, from \\BigResLow% on MCL-JCV to \\SmallResLow% on "
+           "HEVC D at q0, because a 256 px tile is 40 tiles on a 1080p frame "
+           "and two at 416x240. The last row is the quality the pooled "
+           "allocation gave up, which is the budget to within a thousandth of "
+           "a decibel at every rate.")
+    k.note("results/supp_per_class_budgets.json, on " + PINNED + ", \\NumSeq "
+           "sequences at one frame each, per-frame convention. The pooled row "
+           "reads 29.7% at q0 where the main paper's \\MainLowRate% comes "
+           "from results/signalled_RECIPE512_ctc53.json; the two bisect the "
+           "same budget with different code and settle on "
+           "λ = 5.126×10<super>-5</super> and 5.150×10<super>-5</super>.")
 
-    t = k.rows(_pc_db_rows(k, 0.1),
-               "Quality actually given up, per class, at the same operating "
-               "points. The budget is met on the set and on nothing else. At "
-               "q0 the allocation spends 0.116 dB on MCL-JCV and 0.028 dB on "
-               "HEVC D, a factor of four across classes at a single "
-               "multiplier. The small classes are cheap in quality for the "
-               "same reason they are poor in saving: with two or eight tiles "
-               "there is no fine-grained way to spend the budget, so the "
-               "bisection stops short of it.")
-    k.note("Same file and same rows as the previous table. Decibels are the "
-           "per-frame convention, averaged over the sequences of the class.")
+    k.figwide("res_grid.png",
+              "The same measurement as a grid, with the looser budget beside "
+              "it. <b>a</b>, compute saved at the 0.1 dB budget. <b>b</b>, "
+              "the same at 0.3 dB, where every class at the three lowest "
+              "rates has reached the architectural ceiling of \\Ceiling% and "
+              "only q48 and q63 are still making a choice. <b>c</b>, the "
+              "quality actually given up at the 0.1 dB budget, which the set "
+              "meets and no class does: at q0 the allocation spends 0.116 dB "
+              "on MCL-JCV and 0.028 dB on HEVC D. The small classes are cheap "
+              "in quality for the same reason they are poor in saving, that "
+              "with two or eight tiles there is no fine-grained way to spend "
+              "a budget. The 0.5 dB grid is not drawn because every one of "
+              "its thirty cells is at the ceiling.")
+    k.note("Drawn by scripts/supp_results_figs.py from "
+           "results/supp_per_class_budgets.json, on " + PINNED + ".")
 
     k.par(
         "The resolution effect is a property of the tiling and not of the "
-        "content. A 256 px tile is 40 tiles on a 1080p frame, 15 on 720p, "
-        "eight at 832x480 and two at 416x240, so the allocation has two "
-        "orders of magnitude fewer choices at the bottom of the range. It is "
-        "also the argument against reading a single mean over a test set "
-        "that mixes resolutions: the pooled row is dominated by MCL-JCV, "
-        "which is 30 of the 53 sequences and all of them 1080p.")
+        "content, and it is the argument against reading a single mean over a "
+        "test set that mixes resolutions. MCL-JCV is 30 of the \\NumSeq "
+        "sequences and all of them are 1080p, so it carries most of the "
+        "pooled row.")
 
-    # -------------------------------------------------------------- D.3
+    # ----------------------------------------------------------------- G.2
     k.h2("Where the tiles exit")
 
-    t = k.rows(_pooled_exit_rows(k),
-               "The exit histogram at the 0.1 dB budget, as a percentage of "
-               "the 1765 tiles in one pass over the test set, with the mean "
-               "number of trunk blocks skipped. At the lowest rate two "
-               "thirds of tiles take the shallowest selectable exit and the "
-               "ladder is barely used above it. At the highest rate the mass "
-               "is spread almost evenly over the four exits and the mean "
-               "depth skipped has fallen from 5.04 blocks to 2.82. The same "
-               "budget buys less at high rate because the residual the "
-               "shallow exits fail to reconstruct is larger relative to the "
-               "quality being protected.")
-    k.note("Histograms summed over the six classes from "
+    k.rows(_pooled_exit_rows(k),
+           "The exit histogram at the 0.1 dB budget, as a percentage of the "
+           "1765 tiles in one pass over the test set, with the mean number of "
+           "trunk blocks skipped and the saving that buys. At q0 two thirds "
+           "of tiles take the shallowest selectable exit and the ladder above "
+           "it is barely used. At q63 the mass is spread almost evenly over "
+           "the four exits and the mean depth skipped has fallen from 5.04 "
+           "blocks to 2.82. Exits e0 and e1 are omitted because the exit "
+           "clamp cannot select them: the split depth is 2, so a map naming a "
+           "shallower exit runs to e2 and wears e2's adapter.")
+    k.note("Histograms summed over the six classes of "
            "results/supp_per_class_budgets.json, on " + PINNED + ". Blocks "
-           "skipped per exit from results/adapter_cost.json.")
+           "skipped per exit from results/adapter_cost.json, same checkpoint.")
 
-    t = k.rows(_class_exit_rows(k),
-               "The same histogram split by class, at the two ends of the "
-               "rate range: the first four columns are q0 and the second "
-               "four are q63, each as a percentage of that class's tiles. "
-               "HEVC C and HEVC D never reach the shallowest exit at q63; "
-               "three quarters of their tiles run to full depth, which is "
-               "the 2.5% saving of the previous table seen tile by tile.")
+    k.fig("res_exits.png",
+          "How the ladder fills up. <b>a</b>, exit shares at the 0.1 dB "
+          "budget as the rate rises. <b>b</b>, exit shares at q63 as the "
+          "budget loosens, until at 0.3 dB 96% of tiles are already at the "
+          "shallowest exit and there is almost nothing left to allocate. Both "
+          "panels are pooled over the test set.", maxh=170)
+    k.note("Drawn by scripts/supp_results_figs.py from results/" + CURVE +
+           ", on " + PINNED + ", pooled convention, so the budgets on the "
+           "horizontal axis of <b>b</b> are looser than the identically "
+           "labelled ones in the table above.")
+
+    k.rows(_class_exit_rows(k),
+           "The same histogram split by class at the two ends of the rate "
+           "range: the first four columns are q0 and the second four are q63, "
+           "each as a percentage of that class's tiles. HEVC C and HEVC D "
+           "reach neither of the two shallowest exits at q63, and three "
+           "quarters of their tiles run to full depth, which is the "
+           "\\SmallResHigh% saving of the first table seen tile by tile. UVG "
+           "behaves differently from MCL-JCV at q63 despite being the same "
+           "resolution, which is content and not geometry.")
     k.note("results/supp_per_class_budgets.json, on " + PINNED + ".")
 
-    # -------------------------------------------------------------- D.4
-    k.h2("The 0.3 dB and 0.5 dB budgets")
+    # ----------------------------------------------------------------- G.3
+    k.h2("The frontier, class by class")
 
-    t = k.rows(_pc_loose_rows(k, "saving", 1),
-               "Compute saved per class at the two looser budgets. Almost "
-               "every cell is \\Ceiling%, which is the architectural "
-               "ceiling: the largest saving the ladder can reach, obtained "
-               "by putting every tile at the shallowest selectable exit. "
-               "Where a cell is below the ceiling the budget is still "
-               "binding and the allocation is still making a choice; that "
-               "happens at 0.3 dB only at q48 and q63.")
-    k.note("results/supp_per_class_budgets.json, on " + PINNED + ". The "
-           "ceiling is \\Ceiling% from results/saturation_RECIPE512_ctc53.json, "
-           "same checkpoint, which records it as 100(1 minus the cost of "
-           "exit e2) with that cost measured at 0.6088 of a released decode.")
-
-    t = k.rows(_pc_loose_rows(k, "db", 3),
-               "Quality given up at the two looser budgets. In the saturated "
-               "cells the delivered decibel is well under the budget, "
-               "because once every tile is at the shallowest exit there is "
-               "nothing further to spend and the multiplier has run to the "
-               "top of its bracket. The direction reverses at the bottom of "
-               "the resolution range: a 0.5 dB set budget costs 0.727 dB on "
-               "HEVC D at q63 and 0.573 dB on HEVC C, so the small classes "
-               "overshoot a budget that the set as a whole undershoots.")
-    k.note("results/supp_per_class_budgets.json, on " + PINNED + ". Where "
-           "the bisection saturates it returns the top of its bracket, "
-           "λ = 1, which is the marker for a budget the ladder cannot "
-           "reach rather than a price that was chosen.")
+    k.figwide("res_frontier.png",
+              "Compute saved against quality given up, one panel per class "
+              "and one curve per quality index, from the seven budgets at "
+              "which the frontier was measured. The dotted line is the "
+              "architectural ceiling of \\Ceiling%. Three things are visible "
+              "that a table of operating points hides. The curves are steep "
+              "and then flat, so most of the saving is bought in the first "
+              "tenth of a decibel and the rest of the band buys little. The "
+              "rate ordering is preserved at every budget, so a curve never "
+              "crosses another within a panel. And the panels move to the "
+              "right as resolution falls: MCL-JCV reaches the ceiling by 0.3 "
+              "dB at every rate, while HEVC D needs 0.5 dB at q48 and does "
+              "not reach it at q63 within the measured range.")
+    k.note("Drawn by scripts/supp_results_figs.py from results/" + CURVE +
+           ", on " + PINNED + ". A point is the mean over the sequences of "
+           "that class at a global operating point, so the multiplier is the "
+           "one the whole set was bisected to and not a per-class retuning. "
+           "Class membership per sequence from "
+           "results/supp_opquality_PAPER.json, same checkpoint.")
 
     k.par(
-        "Saturation is worth stating as a property of the design rather than "
-        "of these two budgets. The set-level decibel at which every tile "
-        "arrives at the shallowest exit is \\SatLow dB at q0 and \\SatHigh dB "
-        "at q63, so a budget above that number buys nothing further at any "
-        "rate, and a budget below \\FloorLow dB at q0 or \\FloorHigh dB at "
-        "q63 cannot be met at all, because the deepest exit already differs "
-        "from the released decoder by that much. The 0.1 dB budget sits "
-        "inside that window at every rate, which is why it is the one the "
-        "main paper reports.")
+        "Two limits bound every panel. A budget below the floor cannot be met "
+        "at all, because our deepest exit already differs from the released "
+        "decoder by \\FloorLow dB at q0 and \\FloorHigh dB at q63; a budget "
+        "above \\SatLow dB at q0 or \\SatHigh dB at q63 changes nothing, "
+        "because every tile is already at the shallowest selectable exit. "
+        "Between those two the multiplier is doing work, and the 0.1 dB "
+        "budget is inside the window at every rate.")
 
-    # -------------------------------------------------------------- D.5
+    # ----------------------------------------------------------------- G.4
     k.h2("Per-sequence spread")
 
     k.par(
-        "A set mean is not what any single clip receives. Because one "
-        "multiplier prices compute for the whole set, each sequence lands "
-        "wherever its own content puts it, and the spread of those landings "
-        "is the number a deployment would care about.")
+        "A set mean is not what any single clip receives. One multiplier "
+        "prices compute for the whole set, so each sequence lands wherever "
+        "its own content puts it, and the spread of those landings is what a "
+        "deployment would have to plan against.")
 
-    t = k.rows(_spread_rows(k),
-               "Compute saved per sequence at the 0.1 dB budget: the "
-               "distribution behind the mean. The interquartile range is "
-               "5.5 points wide at q0 and 7.6 at q63, and the gap between "
-               "best and worst sequence is 14.4 points at q0 and 31.4 at "
-               "q63. Quoting the mean alone would promise the hardest "
-               "content something it does not get.")
-    k.note("results/per_sequence.json. Not the pinned checkpoint: the file "
-           "records runs/BEST/ckpt_eval.pth.tar, 40 sequences. Those 40 are "
-           "UVG, MCL-JCV and HEVC E only, so the three classes where the "
-           "saving collapses are absent and the minimum column is not the "
-           "test set's minimum. The file also names "
-           "results/curve_BEST.json as its source, and that file has since "
-           "been regenerated with 53 sequences and different per-sequence "
-           "values, so this table cannot be reproduced from anything now on "
-           "disk. The next table asks the same question on a file that can.")
+    k.rows(_spread_rows(k),
+           "Compute saved per sequence at the 0.1 dB budget: the "
+           "distribution behind the mean, over all \\NumSeq sequences. The "
+           "interquartile range widens from 9.9 points at q0 to 15.0 at q63, "
+           "and the gap between best and worst sequence widens from 33.1 to "
+           "40.1. The minimum is negative at four of the five rates, because "
+           "a sequence whose tiles all run to full depth costs 0.95% more "
+           "than the released decoder: our deepest exit is the more expensive "
+           "of the two. Counting over rates as well as sequences, " +
+           str(_under_ten(k)) + " of the 265 pairs save less than a tenth of "
+           "a decode at this budget.")
+    k.note("results/supp_per_sequence_PAPER_b010.json, on " + PINNED + ", "
+           "read from its rows_vs_release block so that the denominator is "
+           "the released decoder. Pooled convention, because the operating "
+           "points come from results/" + CURVE + ".")
 
-    t = k.rows(_spread53_rows(k),
-               "The same question over all 53 sequences, including the "
-               "classes the previous table omits. The last column counts "
-               "sequences saving under 10%. At q0 there are none; at q63 "
-               "there are seven, and four of those save nothing at all, "
-               "which against the released decoder is minus 0.95% because "
-               "our deepest exit is the more expensive of the two. The "
-               "standard deviation rises from 6.7 to 12.2 points across "
-               "the rate range, so the saving at high rate is not only "
-               "smaller but harder to predict.")
-    k.note("Recomputed here from the per-sequence arrays in "
-           "results/curve_RECIPE512.json at its 0.1 dB operating point. Not "
-           "the pinned checkpoint: that file records "
-           "runs/RECIPE512/ckpt_eval.pth.tar at epoch 1, and it was measured "
-           "under an earlier compute-cost model whose ceiling is 42.5% "
-           "rather than \\Ceiling%, so the levels are not comparable with the "
-           "per-class tables above. The shape of the distribution is what "
-           "this table is for.")
+    k.fig("res_spread.png",
+          "The same distribution drawn. <b>a</b>, every sequence at the 0.1 "
+          "dB budget, one point per sequence, with the quartiles and whiskers "
+          "over them; the dashed line is the released decoder. <b>b</b>, the "
+          "mean with its quartiles as the budget loosens. A rate disappears "
+          "from <b>b</b> once its frontier saturates, because a saturated "
+          "operating point has no allocation left to break down.", maxh=170)
+    k.note("Drawn by scripts/supp_results_figs.py from the five "
+           "results/supp_per_sequence_PAPER_b0*.json files, all on " +
+           PINNED + ".")
 
-    t = k.rows(_tail_rows(k),
-               "The six hardest sequences at q63 and the two easiest, with "
-               "their q0 value for comparison and the decibel each actually "
-               "received. All six of the hard ones are 832x480 or 416x240. "
-               "The delivered decibel is not the budget on any of them: "
-               "across the 53 sequences at q63 it runs from "
-               "0.002 dB to 0.248 dB against a 0.1 dB target, so one "
-               "multiplier for the set means individual clips overshoot the "
-               "budget by a factor of two while others use a fiftieth of it.")
-    k.note("results/curve_RECIPE512.json, operating point 0.1 dB, on "
-           "runs/RECIPE512/ckpt_eval.pth.tar at epoch 1 rather than the "
-           "pinned checkpoint. The q63 saving against the release is the "
-           "same allocation counted against the released decoder rather "
-           "than against our deepest exit.")
+    k.rows(_tail_seq_rows(k),
+           "The six hardest sequences at q63 and the two easiest, with their "
+           "q0 value beside them and the decibel each actually received. All "
+           "six of the hard ones are 832x480 or 416x240. The delivered "
+           "decibel is not the budget on any of them: across the \\NumSeq "
+           "sequences at q63 it runs from 0.013 dB to 0.237 dB against a "
+           "0.1 dB target, so a single multiplier for the set means some "
+           "clips overshoot the budget by more than a factor of two while "
+           "others use an eighth of it.")
+    k.note("results/supp_per_sequence_PAPER_b010.json, on " + PINNED + ". "
+           "Savings are against the released decoder; the decibel is the "
+           "sequence's own, in the pooled convention.")
 
-    # -------------------------------------------------------------- D.6
-    k.h2("Integrated figures")
+    # ----------------------------------------------------------------- G.5
+    k.h2("A second metric, and the tiles that pay for the mean")
 
     k.par(
-        "A budget is one sample of a curve, and a conclusion drawn from one "
-        "sample is fragile. Video coding answers this for rate against "
-        "quality with Bjontegaard's construction [4], integrating one axis "
-        "over a stated interval of the other, and the same construction "
-        "applies with compute in place of rate. Two integrals are reported: "
-        "BD-saving, the mean compute saved over an interval of decibels, and "
-        "BD-quality, the mean decibel paid over an interval of saving. "
-        "Neither means anything without its interval, and both are given "
-        "with theirs.")
+        "The whole mechanism is denominated in PSNR, and PSNR is known not to "
+        "track visual quality closely. Two things follow that are worth "
+        "measuring rather than asserting: whether a perceptual metric agrees "
+        "that the loss is small, and how the loss is distributed over tiles, "
+        "since a mean of 0.1 dB is compatible with a few tiles losing a great "
+        "deal.")
 
-    t = k.rows(_bd_rows(k),
-               "BD-Rate cost of the two configurations at three budgets. "
-               "This is the rate a reader would have to spend to buy back "
-               "the quality the compute saving costs, integrated over the "
-               "five rate points, and it is the number that makes the "
-               "trade-off comparable with a published codec result. "
-               "Configuration A signals the exit map in the bitstream and "
-               "pays about 80 bits a frame for it; configuration B infers it "
-               "and pays none. Their BD-Rate costs differ by at most 0.03 "
-               "points at every budget, so the map is close to free, and at "
-               "the 0.1 dB budget A converts that into four more points of "
-               "compute saved.")
-    k.note("results/bdrate.json. The file records no checkpoint. It was "
-           "written before the current "
-           "results/signalled_RECIPE512_ctc53.json and its saving column is "
-           "on the superseded compute-cost model: it reads 41.9% at 0.5 dB "
-           "where the pinned file now saturates at \\Ceiling%. The BD-Rate "
-           "column is an integral of rate against quality and does not "
-           "depend on that model; the saving column does.")
+    k.rows(_metric_rows(k),
+           "PSNR and MS-SSIM at the 0.1 dB operating point, over the whole "
+           "test set. MS-SSIM agrees with PSNR about the direction and is "
+           "kinder about the size: expressed as -10log10(1 minus MS-SSIM), "
+           "the loss is 0.052 dB at q0 against 0.102 dB of PSNR, and 0.046 "
+           "against 0.118 at q63, so on this metric the budget costs about "
+           "half what the decibel it is written in suggests. Each metric is "
+           "given as the released decoder, ours, and what was lost, with the "
+           "MS-SSIM loss expressed as -10log10(1 minus MS-SSIM) so that the "
+           "two loss columns are in the same unit. The bpp column is the "
+           "released bitstream, which early exiting does not change beyond "
+           "the exit map.")
+    k.note("results/supp_opquality_PAPER.json, on " + PINNED + ", \\NumSeq "
+           "sequences at one frame each. MS-SSIM is Wang et al. 2003 at five "
+           "scales with an 11-tap Gaussian of σ = 1.5 on the valid region, on "
+           "the luma plane in 4:2:0 on 0 to 255, which is the domain the PSNR "
+           "column uses. The implementation self-checks at start-up and the "
+           "file records both results: identical inputs score 1.000000 and a "
+           "3x3 box blur scores 0.7797. λ is read from "
+           "results/signalled_RECIPE512_ctc53.json so the allocation is the "
+           "deployed one, and the delivered decibel recomputed here matches "
+           "the stored value to four decimals at every rate.")
 
-    f = k.figwide("paper_rdc.png",
-              "The same measurement drawn. Left, BD-Rate cost against "
-              "compute saved, with the released decoder at the origin: the "
-              "two configurations sit almost on top of each other in "
-              "BD-Rate, and loosening the budget moves both up and to the "
-              "right together. Right, decode cost per 1080p frame in GMAC. "
-              "Rendered from the same run as the previous table, so the "
-              "compute axis carries the same superseded cost model and the "
-              "BD-Rate axis does not.")
-    k.note("docs/figures/paper_rdc.png, written by scripts/paper_metrics.py "
-           "in the same pass that wrote results/bdrate.json.")
+    k.fig("res_rd.png",
+          "<b>a</b>, the rate-quality curve of the released decoder and of "
+          "ours at the 0.1 dB budget, over the five quality indices. At plot "
+          "scale they are one curve, which is what a 0.1 dB budget means. "
+          "<b>b</b>, the gap that panel <b>a</b> cannot show, in PSNR and in "
+          "MS-SSIM expressed as a decibel.", maxh=170)
+    k.note("Drawn by scripts/supp_results_figs.py from "
+           "results/supp_opquality_PAPER.json, on " + PINNED + ".")
 
-    t = k.rows(_bd_perrate_rows(k),
-               "BD-saving and BD-quality per rate, integrated over 0.066 to "
-               "0.3 dB and over 10% to 30% saving respectively. Three of the "
-               "five rates return no BD-saving at all, because their "
-               "measured frontier does not span the interval: the floor at "
-               "q0 is 0.033 dB but the sweep does not reach 0.3 dB before "
-               "saturating. Reporting a mean over the two rates that do span "
-               "it, as the file does, is a mean over the two hardest rates "
-               "and reads higher than a mean over five would.")
-    k.note("results/bd_RECIPE512_ctc53.json, on "
-           "runs/RECIPE512/ckpt_eval.pth.tar at epoch 0 rather than the "
-           "pinned checkpoint, 53 sequences, per-frame convention. Points is "
-           "the number of measured frontier points inside the interval.")
+    k.rows(_tile_tail_rows(k),
+           "How the 0.1 dB is distributed over the 1765 tiles of one pass "
+           "over the test set. The last three columns count tiles losing more "
+           "than a quarter, a half and a whole decibel. The median tile is at "
+           "or below the budget at every rate, and the tail is long: at q0, "
+           "302 tiles lose more than 0.25 dB, 79 lose more than 0.5 dB, and "
+           "the worst loses 1.97 dB. A budget stated as a mean says nothing "
+           "about the last three columns, which is why they are printed.")
+    k.note("results/supp_opquality_PAPER.json, on " + PINNED + ", at the same "
+           "operating points as the metric table above. A tile penalty is the "
+           "decibel between the released decode of that tile and ours.")
 
-    t = k.rows(_bd_interval_rows(k),
-               "What the interval does to the answer. The level moves by 6.3 "
-               "points across six defensible intervals, which is why an "
-               "interval is quoted beside every integrated number in this "
-               "work. The rate effect does not move: the lowest rate exceeds "
-               "the highest by 15.3 to 16.8 points on every interval tried, "
-               "so the statement that the saving falls by roughly fifteen "
-               "points across the quality range is about the decoder and not "
-               "about the integration.")
-    k.note("results/bd_sensitivity.json. The file records the convention but "
-           "not the curve; scripts/bd_sensitivity.py names it as "
-           "results/paper_curve_grid128.json, which is "
+    k.fig("res_tail.png",
+          "Where the tail comes from. <b>a</b>, mean and 95th percentile tile "
+          "penalty against the exit the tile took. The tail sits on e2, the "
+          "shallowest exit the clamp allows: at q0 its mean is 0.202 dB "
+          "against 0.054 dB at e5, and all 79 tiles above 0.5 dB took it. "
+          "<b>b</b>, the same penalty split by whether the tile contains "
+          "replicated padding. A 1080p frame is padded to 2048x1280, so 200 "
+          "of the bottom tile row's 256 rows are invented by replication, and "
+          "those tiles carry roughly double the mean penalty at every rate: "
+          "0.261 dB against 0.121 dB at q0, and 65 of the 79 tiles above half "
+          "a decibel are padded ones.", maxh=170)
+    k.note("Drawn by scripts/supp_results_figs.py from the tail_by_exit and "
+           "tail_by_padding blocks of results/supp_opquality_PAPER.json, on " +
+           PINNED + ". A tile counts as padded if any of its pixels came from "
+           "the replicate pad, recorded per tile as pad_fraction. Padding "
+           "geometry from results/tile_definition.json, same checkpoint.")
+
+    # ----------------------------------------------------------------- G.6
+    k.h2("Composition with weight quantisation")
+
+    k.par(
+        "Early exiting removes work and quantisation makes the remaining work "
+        "cheaper, so the two ought to compose. Whether they do is a question "
+        "about the same weights, and it is measured here rather than assumed.")
+
+    k.rows(_quant_rows(k),
+           "Quality given up against the released decoder with the decoder "
+           "weights quantised, at four exits and three rates. The float32 "
+           "rows are the ladder itself and are the baseline each integer row "
+           "should be read against. At q0 int8 is nearly free, moving the "
+           "deepest exit from 0.027 dB to 0.032 dB, so the two levers "
+           "compose. At q63 they compete: the deepest exit moves from 0.108 "
+           "dB to 0.223 dB, which is more than a whole 0.1 dB budget spent "
+           "before any tile has exited early. Six-bit costs between 0.63 and "
+           "2.18 dB at the deepest exit and four-bit is unusable at every "
+           "rate. The last column is the number of layers quantised, the same "
+           "86 in every integer row.")
+    k.note("results/supp_quant_PAPER.json, on " + PINNED + ", 32 held-out "
+           "images at 512 px. Weight-only, symmetric, per output channel, no "
+           "calibration, applied to dec.* and router_head.* with the encoder "
+           "asserted unchanged. This supersedes results/quant_BEST.json, the "
+           "same experiment on runs/BEST/ckpt_eval.pth.tar. Nothing here "
+           "measures an integer kernel: the file records the bit width and "
+           "the implied bit-operation ratio, and the arithmetic was carried "
+           "out in floating point on quantised weights.")
+
+    # ----------------------------------------------------------------- G.7
+    k.h2("Integrated figures, and what they depend on")
+
+    k.par(
+        "A budget is one sample of a curve. Video coding answers this for "
+        "rate against quality with Bjontegaard's construction [4], "
+        "integrating one axis over a stated interval of the other, and the "
+        "same construction applies with compute in place of rate. BD-saving "
+        "is the mean compute saved over an interval of decibels and "
+        "BD-quality is the mean decibel paid over an interval of saving. "
+        "Neither means anything without its interval and its convention, and "
+        "both are given with theirs.")
+
+    k.rows(_bd_rows(k),
+           "BD-saving and BD-quality per rate under both decibel "
+           "conventions: the first pair of columns is per frame and the "
+           "second is pooled. BD-saving is defined at only two of the five "
+           "rates, because at q0, q16 and q32 the frontier saturates below "
+           "the upper limit of the interval and there is no curve left to "
+           "integrate. The convention moves the answer by 1.9 points of "
+           "BD-saving and 0.018 dB of BD-quality on identical allocations, "
+           "and it moves it consistently, since per-frame averaging raises "
+           "every floor and pooling does not. Points is the number of "
+           "measured frontier points inside the interval.")
+    k.note("results/supp_bd_PAPER_per_frame.json and "
+           "results/supp_bd_PAPER_pooled.json, both on " + PINNED + " over "
+           "\\NumSeq sequences, integrating results/" + CURVE + ". BD-saving "
+           "is over 0.066 to 0.300 dB per frame and 0.059 to 0.300 dB pooled, "
+           "the lower limit being the highest floor any rate has under that "
+           "convention. BD-quality is over 10% to 30% saving. The floors "
+           "that set those lower limits are recorded per rate in both files "
+           "as floor_db, and appear directly in the frontier table below at "
+           "the two rates where the 0.05 dB budget is unreachable.")
+
+    k.par(
+        "Two sensitivities sit around those numbers and are worth stating "
+        "beside them. The first is the anchor. Our deepest exit is not "
+        "bit-exact with the released decoder, since it carries seam repair "
+        "and a fine-tuned trunk, and it starts every budget slightly behind: "
+        "the drift runs from 0.005 dB at q0 to 0.036 dB at q63, which at q63 "
+        "is a third of the whole budget. Setting it to zero would raise "
+        "BD-saving at q63 from 28.7% to 34.9%, a gain of 6.2 points. The "
+        "second is the interval. Over six defensible intervals the mean "
+        "BD-saving moves from 22.8% to 29.2%, a range of 6.3 points, while "
+        "the gap between the lowest and highest rate stays inside 15.3 to "
+        "16.8 points on every one of them; the level depends on the "
+        "integration and the rate effect does not.")
+    k.note("Anchor drift from results/supp_anchor_PAPER.json, on " + PINNED +
+           ", \\NumSeq frames, per-frame convention; the zero-drift figure is "
+           "the bd_saving_pct_zero_drift field of "
+           "results/supp_bd_PAPER_per_frame.json. Interval sensitivity from "
+           "results/bd_sensitivity.json, which is not pinned: "
+           "scripts/bd_sensitivity.py names its curve as "
+           "results/paper_curve_grid128.json, on "
            "runs/wdec_j2_p128_grid/ckpt_epo0.pth.tar at 128 px tiles over 40 "
-           "sequences. That is neither the pinned checkpoint nor the tile "
-           "size this work reports, so the levels here are not the levels "
-           "elsewhere in this section; the robustness conclusion is what it "
-           "is for. Intervals wide enough that a rate's frontier does not "
-           "span them are excluded rather than averaged over fewer rates.")
+           "sequences, so its levels are not the levels above and only its "
+           "robustness conclusion is quoted.")
 
-    t = k.rows(_bd_convention_rows(k),
-               "The averaging convention costs more than the systems being "
-               "compared differ by. The two columns are the same allocation "
-               "on the same curve, integrated under the two decibel "
-               "conventions, and they disagree by 7.3 to 9.6 points of "
-               "BD-saving. Part of that is the interval, which differs "
-               "between the two because the per-frame convention raises "
-               "every floor and so moves the lower limit the integration can "
-               "start from; the two effects cannot be separated from these "
-               "two files. Either way, no comparison across papers is "
-               "meaningful unless both state which convention they average "
-               "under.")
-    k.note("results/bd_saving.json, per-frame convention over 0.064 to 0.196 "
-           "dB, against results/bd_saving_pooled.json, pooled convention "
-           "over 0.057 to 0.300 dB. Both on "
-           "runs/wdec_j2_p128_grid/ckpt_epo0.pth.tar over 40 sequences, "
-           "which is neither the pinned checkpoint nor 256 px tiles.")
+    k.rows(_bdrate_rows(k),
+           "BD-Rate cost of the two configurations: the rate a reader would "
+           "have to spend to buy back the quality the compute saving costs, "
+           "integrated over the five rate points, which is the number that "
+           "makes this trade-off comparable with a published codec result. "
+           "Configuration A signals the exit map in the bitstream and pays "
+           "between \\MapBitsLo and \\MapBitsHi bits a frame for it, "
+           "configuration B infers it from what the decoder already holds and "
+           "pays none. Their BD-Rate costs differ by two hundredths of a "
+           "point at every budget, so the map is close to free; what A buys "
+           "with it is compute, and the gap in the last two columns is "
+           "7.7 points at the tight budget and vanishes at the loose one.")
+    k.note("results/bdrate.json, every row on " + PINNED + ", which its "
+           "sources block records file by file. The file it replaced is kept "
+           "as results/bdrate_before_pinning.json, whose saving column reads "
+           "41.9% at 0.5 dB where the pinned one reaches \\Ceiling%.")
 
-    # -------------------------------------------------------------- D.8
+    # ----------------------------------------------------------------- G.8
+    k.h2("Raw values behind the curves")
+
+    k.par(
+        "Everything above is an integral, a mean or a picture. What follows "
+        "is the measured numbers themselves, so that a reader can compare "
+        "against them without digitising a plot or rerunning a decode.")
+
+    k.rows(_deployed_rows(k),
+           "The deployed operating points: four budgets at five rates. Model "
+           "is the saving the cost model predicts for the chosen map and "
+           "Meter is what a forward hook on every convolution and linear "
+           "layer counted on the same decode, so the two columns are the cost "
+           "model checked against itself; the model reads high by 0.4 to 0.8 "
+           "points throughout. Map bits is the entropy of the per-frame exit "
+           "histogram, charged to the bitstream before any saving is "
+           "computed, and it falls as the budget loosens because the "
+           "histogram concentrates.")
+    k.note("results/signalled_RECIPE512_ctc53.json, on " + PINNED + ", "
+           "\\NumSeq sequences, per-frame convention. λ is the multiplier the "
+           "two-level bisection settled on and the saving is against the "
+           "released decoder.")
+
+    k.rows(_frontier_rows(k),
+           "The frontier itself: every operating point behind the per-class "
+           "figure, at seven budgets and five rates, with the exit shares "
+           "that produced each one. Both decibel conventions are printed for "
+           "the same allocation and they differ by 0.02 to 0.04 dB "
+           "throughout, a quarter to a third of a 0.1 dB budget. A row "
+           "reading n/a in the saving column is a budget below the floor at "
+           "that rate, where no allocation meets the target; a row at 0.5 dB "
+           "is past saturation, where the file stores no histogram because "
+           "the allocation has stopped changing.")
+    k.note("results/" + CURVE + ", on " + PINNED + ". Saving is converted to "
+           "the released-decoder denominator by charging the retained cost "
+           "the price of our deepest exit, \\DeepestUniformCost released "
+           "decodes, derived here from the ceiling in "
+           "results/saturation_RECIPE512_ctc53.json and the saturated saving "
+           "in this file. One caution about that denominator: this file bills "
+           "the shared stem inside every tile's cost, while "
+           "results/supp_latency_batch_1920x1080.json bills it once per frame "
+           "through flexuf/cost.py frame_relative_cost, and the two "
+           "accountings differ by about a third of a point on an identical "
+           "exit map at q0.")
+
+    # ----------------------------------------------------------------- G.9
+    k.h2("Failure cases")
+
+    k.par(
+        "Five cases are worth naming, all of them measured in the files "
+        "above rather than inferred.")
+    k.bullets([
+        "<b>Sequences that cost more than they save.</b> At q63 four "
+        "sequences finish at minus 0.95%, which is every tile at full depth "
+        "and our deepest exit charging \\DeepestUniformCost released decodes "
+        "for the privilege: RaceHorses at 832x480 and at 416x240, "
+        "BlowingBubbles and BQSquare. Three more sit under 3%. On this "
+        "content the method should be switched off rather than run at a "
+        "budget, and the exit histogram is what tells the encoder so.",
+        "<b>The bottom tile row of a padded frame.</b> The six worst tiles in "
+        "the test set are all in the last row of a 1080p frame at 78% "
+        "padding, each losing between 1.72 and 1.97 dB. The allocation is "
+        "behaving correctly given its table, and the table is measuring a "
+        "region that will be cropped away before anyone looks at it, so the "
+        "budget is being spent on invented pixels.",
+        "<b>The two smallest classes at high rate.</b> HEVC C and HEVC D save "
+        "\\SmallResHigh% at q63, which is one tile in four moved one exit up "
+        "and nothing else. With two tiles on a 416x240 frame there is no "
+        "allocation worth making, and the honest reading is that this method "
+        "needs a frame large enough to hold a useful number of tiles.",
+        "<b>Quantisation and early exit compete at high rate.</b> Int8 "
+        "weights cost 0.115 dB at q63 at the deepest exit, more than the "
+        "whole budget the allocation is then asked to work inside, while at "
+        "q0 they cost 0.005 dB. A deployment cannot assume the two savings "
+        "multiply.",
+        "<b>A 0.5 dB budget has no per-sequence breakdown to report.</b> The "
+        "queue that produced this section asked for one and the job failed. "
+        "The cause is the result: at 0.5 dB every rate is past saturation, "
+        "the frontier stops at the ceiling of \\Ceiling%, and a saturated "
+        "operating point carries no allocation to break down. The sweep now "
+        "runs from 0.10 dB to 0.30 dB.",
+    ])
+    k.note("Worst tiles from the worst_tiles block of "
+           "results/supp_opquality_PAPER.json and negative sequences from "
+           "results/supp_per_sequence_PAPER_b010.json, both on " + PINNED +
+           ". The failed job is recorded in results/supp_queue2.log at "
+           "12:06:04, and the saturation it ran into in "
+           "results/saturation_RECIPE512_ctc53.json.")
+
+    # ---------------------------------------------------------------- G.10
     k.h2("What this section does not measure")
 
-    k.par(
-        "Four gaps are worth naming so that they are visibly absent rather "
-        "than quietly missing.")
     k.bullets([
-        "No integrated figure in this work is on the pinned checkpoint. "
-        "results/bdrate.json records no checkpoint and predates the current "
-        "compute-cost model, results/bd_RECIPE512_ctc53.json is the epoch-0 "
-        "evaluation checkpoint, and the interval and convention studies are "
-        "on a 128 px run over 40 sequences. The per-class and frontier "
-        "tables above are pinned; the BD tables are not.",
-        "No per-sequence measurement is on the pinned checkpoint either. "
-        "results/per_sequence.json is a second training run over a "
-        "40-sequence subset and cannot be regenerated from the curve it "
-        "names, and results/curve_RECIPE512.json is the epoch-1 evaluation "
-        "checkpoint under a superseded cost model.",
+        "No interval on any headline comes from a repeated training run. No "
+        "configuration in this work was trained twice and no seed is set in "
+        "the decoder trainer, so the spread reported above is across "
+        "sequences at a fixed checkpoint and not across runs. Evaluation is "
+        "deterministic once a checkpoint is fixed and training is not, which "
+        "matters when reading any comparison of a few tenths of a point.",
         "The 0.1 dB budget is a convention this work adopts and not a "
         "perceptual threshold. Subjective work measures the smallest "
-        "noticeable change in quantisation parameter or in a video quality "
+        "noticeable change in a quantisation parameter or in a video quality "
         "metric, not in tenths of a decibel of PSNR, so no published result "
-        "licenses a claim that 0.1 dB is invisible. What it buys is a number "
-        "a codec reader can compare, namely \\BdRateALow% of BD-Rate, and "
-        "0.3 dB and 0.5 dB are reported beside it so that nothing rests on "
-        "the choice.",
-        "Every measurement here is on intra frames of video sequences, one "
-        "frame per sequence except in the frontier grid, which uses two. "
-        "Nothing here measures the inter-frame path, and nothing here "
-        "measures a second checkpoint, so the class and sequence effects are "
-        "reported without a replication.",
+        "licenses a claim that 0.1 dB is invisible. The MS-SSIM table is "
+        "evidence that the loss is small on a second metric, and the 0.3 dB "
+        "and 0.5 dB columns are there so that nothing rests on the choice.",
+        "One integrated figure is still not pinned. The interval study is on "
+        "a 128 px run over 40 sequences and is quoted only for its robustness "
+        "conclusion; every other table in this section is on " + PINNED + ".",
+        "Every measurement here is on intra frames of video sequences at one "
+        "frame per sequence. Nothing here measures the inter-frame path, a "
+        "second decoder, a resolution above 1080p, or a traditional-codec "
+        "anchor. The first three are out of reach on the evaluation card, "
+        "which has about 5 GB free; the last is a scope decision, since the "
+        "axis this work measures is decoder-side compute against a fixed "
+        "learned decoder whose own position against VTM is published.",
     ])

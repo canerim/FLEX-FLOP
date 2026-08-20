@@ -1,21 +1,29 @@
-"""The router: what a decoder-side predictor sees, what each input is worth,
-what the head costs, and how it fares against a rule with no parameters.
+"""The router and the parameter-free rule.
+
+Three things: which of the head's inputs carry anything, what the head costs to
+run, and how it fares against a routing rule that has no parameters at all. The
+head itself, its inputs, its shapes, its decision rule and its objective are
+specified in the main paper's allocation subsection and are not restated here.
 
 Every number in this section is computed here from a file in results/, and the
-file is named at the table that uses it. Nothing reads a checkpoint, opens a
-CUDA context or writes to results/. The results files read are
+file is named at the table or figure that uses it. Nothing reads a checkpoint,
+opens a CUDA context or writes to results/. The results files read are
 
     router_ablation.json                the six-variant input ablation
     router_ablation_<variant>.json      one training record per variant
     router_latency.json                 the head timed against its MAC share
-    router_RECIPE512_b01/b03/b05.json   configuration B at three budgets
-    raterank_RECIPE512_b01/b03/b05.json the parameter-free rule, same budgets
+    router_RECIPE512_b01/b03.json       the frozen-decoder head, two budgets
+    router_RECIPE512_b0*_jointhead.json the jointly trained head, same budgets
+    raterank_RECIPE512_b01/b03/b05.json the rule, the same budgets
     raterank_BEST_compare.json          the same comparison on a second run
     router_retrain_compare.json         the head retrained with the mask fixed
     static_RECIPE512_b01.json           the exit cost vector, pinned
     saturation_RECIPE512_ctc53.json     c_j and the architectural ceiling
-    tile_definition.json                tile, feature and latent geometry
+    supp_encoder_cost_PAPER.json        what the encoder-side search costs
     signalled_RECIPE512_ctc53.json      deployed configuration A, for contrast
+
+The two figures are drawn by scripts/supp_router_figs.py, which reads the same
+files and touches nothing else.
 
 paper/supp/f_router.tex carries the same section as LaTeX, with the same
 numbers in the same order.
@@ -25,126 +33,105 @@ numbers in the same order.
 #: single-group runs by descending agreement, then the no-per-tile control.
 VARIANT_ORDER = ["stem", "all", "latent", "scales", "bits", "qp"]
 
+def _joint_head_file(k):
+    """The naming the jointly trained head's curves are stored under.
+
+    These files were first written as router_RECIPE512_b0*_PAPER.json and then
+    renamed to _jointhead, which says what they are rather than which
+    checkpoint they are on. Both names are accepted so that this section builds
+    on either side of that rename, and the one that exists is what the notes
+    print.
+    """
+    for pat in ("router_RECIPE512_b0{b}_jointhead.json",
+                "router_RECIPE512_b0{b}_PAPER.json"):
+        if (k.RESULTS / pat.format(b=1)).exists():
+            return pat
+    raise FileNotFoundError(
+        "f_router: no curve for the jointly trained head; expected "
+        "results/router_RECIPE512_b01_jointhead.json")
+
 
 def content(k):
     A = k.J("router_ablation.json")
     V = {x["label"]: x for x in A["variants"]}
     floor = V["stem"]["constant_best_agree"]
-    # The per-variant records carry the training recipe the merged file does
-    # not. Reading all six also puts them in the build's provenance list, which
-    # is what the ablation table's note claims.
+    # The per-variant records carry the training recipe and the wall-clock that
+    # the merged file does not. Reading all six also puts them in the build's
+    # provenance list, which is what the ablation table's note claims.
     REC = {l: k.J(f"router_ablation_{l}.json") for l in VARIANT_ORDER}
     RL = k.J("router_latency.json")
-    k.J("tile_definition.json")
     ST = k.J("static_RECIPE512_b01.json")
     SAT = k.J("saturation_RECIPE512_ctc53.json")
+    EC = k.J("supp_encoder_cost_PAPER.json")
     rr = {b: k.J(f"raterank_RECIPE512_b0{b}.json") for b in (1, 3, 5)}
-    hd = {b: k.J(f"router_RECIPE512_b0{b}.json") for b in (1, 3, 5)}
+    # Two trained heads exist on the pinned checkpoint and they are different
+    # objects, so both are read and both are reported. hj is the head the
+    # checkpoint carries, trained jointly with the decoder; hf is the head
+    # trained afterwards against the frozen decoder.
+    HJ = _joint_head_file(k)
+    hj = {b: k.J(HJ.format(b=b)) for b in (1, 3)}
+    hf = {b: k.J(f"router_RECIPE512_b0{b}.json") for b in (1, 3)}
     QPS = [r["qp"] for r in rr[1]["rows"]]
     cost = {u["exit"]: 1.0 - u["saving"] / 100.0
             for u in ST["rows"][0]["uniform"]}
     block = (cost[3] - cost[2]) / 2.0
-    n_paper = RL["params"]
-    n_abl = V["stem"]["router_params"]
-
-    def head_at(b, q):
-        return [x for x in hd[b]["rows"]
-                if x["qp"] == q][0]["saving_pct_vs_release"]
-
-    k.h1("The router")
-
-    k.par(
-        "An exit map assigns one exit index to every tile of a frame. This "
-        "work produces such a map in three ways. Configuration A searches all "
-        "K exits for every tile at the encoder and signals the answer. "
-        "Configuration B predicts it at the decoder, from data the decoder "
-        "already holds, and signals nothing. A third way computes it at the "
-        "decoder from one number the entropy coder has already produced, with "
-        "nothing learned at all. This section is about the second and the "
-        "third.")
-
-    k.par(
-        "Write D(t,k) for the mean squared error of tile t decoded at exit k, "
-        "and c<sub>k</sub> for the cost of exit k in units of one released "
-        "decode. At a price \\lambda on compute, the oracle gives each tile "
-        "the exit that minimises the per-tile Lagrangian.")
-    k.eq(r"\ell(t,k) \;=\; D(t,k) \,+\, \lambda\, c_k")
-    k.eq(r"k^{*}(t) \;=\; \mathrm{arg\,min}_{\,k \geq j}\ \ell(t,k)")
-    k.par(
-        "The split depth j is the number of trunk groups every tile runs "
-        "before any tile may leave, so exits below j do not exist and the "
-        "minimisation starts there. \\lambda is bisected once per rate so that "
-        "the resulting map lands on the quality budget. <i>Agreement</i> below "
-        "always means the fraction of tiles on which a predictor picks the "
-        "same exit as this oracle at the same \\lambda. It is the quantity the "
-        "head is trained on, and part of what this section reports is that it "
-        "is not the quantity that matters.")
-
-    # ------------------------------------------------------------------ A.1
-    k.h2("What the head is trained to do")
-    k.par(
-        "The decoder is frozen throughout. The objective has two terms: a "
-        "cross-entropy to the oracle's own choice, weighted per tile, and the "
-        "expected regret against that choice.")
-    k.eq(r"\mathcal{L} \;=\; \frac{1}{|T|}\sum_{t \in T} w_t\, "
-         r"\mathrm{CE}\left(z(t),\, k^{*}(t)\right) \;+\; \alpha_r\, R")
-    k.eq(r"w_t = \frac{s_t}{\bar{s}}, \quad "
-         r"s_t = \max_k\, \ell(t,k) - \min_k\, \ell(t,k)")
-    k.eq(r"R \;=\; \frac{1}{|T|}\sum_{t \in T} \sum_{k} P_k(t)"
-         r"\left[\, \ell(t,k) - \min_{k'} \ell(t,k') \,\right]")
-    k.par(
-        "P(t) is the softmax of the scores z(t), and \\alpha<sub>r</sub> is 1 "
-        "in every run reported here. The weight w<sub>t</sub> is the spread "
-        "between the best and the worst option on that tile, normalised to "
-        "unit mean, so a tile where two exits are within a hair of each other "
-        "counts for little and a tile where the choice is most of the frame's "
-        "error counts for much. R is non-negative, is zero exactly when all "
-        "the mass sits on k*(t), and its value is the excess Lagrangian cost "
-        "the head is paying against the oracle, in the units of the frontier. "
-        "It is evaluated on a hard Gumbel straight-through sample [10], so "
-        "training decides one exit exactly as inference does while gradients "
-        "still reach the probabilities.")
-    k.par(
-        "The lineage is ClassSR's routing losses [12], with two of its three "
-        "terms dropped for stated reasons. Its Class-Loss exists to repair the "
-        "mismatch between a soft blend in training and an argmax at inference, "
-        "and the straight-through sample removes that mismatch at source, so "
-        "the repair has nothing left to do. Its Average-Loss exists because "
-        "ClassSR's branches are separate networks that receive no gradient "
-        "when unused; our exits share the trunk, and the trunk is frozen here, "
-        "so an unused exit degrades nothing and forcing usage would mean "
-        "routing tiles to exits the objective says are wrong.")
     st = REC["stem"]
-    k.bullets([
-        f"AdamW at learning rate {st['lr']:g} on a cosine schedule to zero, "
-        "weight decay 10<super>-4</super>, gradients clipped at unit norm "
-        "(scripts/train_router2.py).",
-        f"{st['steps']:,} steps at a batch of {st['batch_size']} crops of "
-        f"{st['crop']}×{st['crop']} from OpenImages [24], with one quality "
-        "index drawn uniformly per image.",
-        "One \\lambda for all rates, 1.3×10<super>-5</super>, which puts the "
-        "oracle near the 0.1 dB operating point.",
-        "Half the tiles of every batch are hidden from the optimiser, and "
-        "agreement is only ever reported on that half. In-sample agreement on "
-        "144 K parameters and a few thousand tiles will climb to anything at "
-        "all.",
-    ])
+    abl_hours = sum(REC[l]["wall_s"] for l in VARIANT_ORDER) / 3600.0
 
-    # ------------------------------------------------------------------ A.4
+    def at(d, q):
+        return [x for x in d["rows"] if x["qp"] == q][0]["saving_pct_vs_release"]
+
+    def rule(b, q):
+        return at(rr[b], q)
+
+    k.h1("The router and the parameter-free rule")
+
+    k.par(
+        "An exit map assigns one exit index to every tile of a frame, and this "
+        "work produces one in three ways. Configuration A searches all K exits "
+        "for every tile at the encoder, which holds the source, and signals the "
+        "answer. Configuration B predicts the map at the decoder from data the "
+        "decoder already holds, and signals nothing. The third way computes it "
+        "at the decoder from one number the entropy coder has already produced, "
+        "with nothing learned. The head architecture, the inputs it reads and "
+        "the rule by which it turns logits into an exit are given in the main "
+        "paper's allocation subsection, and none of that is repeated here. "
+        "What is here is what those inputs are worth, what the head costs to "
+        "run, and how it fares against the third way.")
+
+    k.par(
+        "Write D(t,k) for the mean squared error of tile t decoded at exit k "
+        "and c<sub>k</sub> for the cost of exit k in units of one released "
+        "decode. At a price \\lambda on compute, the Lagrangian oracle gives "
+        "each tile the exit that minimises")
+    k.eq(r"\ell(t,k) \;=\; D(t,k) \,+\, \lambda\, c_k, \qquad "
+         r"k^{*}(t) \;=\; \mathrm{arg\,min}_{\,k \geq j}\ \ell(t,k)")
+    k.par(
+        "The split depth j is the number of trunk groups every tile runs before "
+        "any tile may leave, so exits below j do not exist and the minimisation "
+        "starts there. Throughout this section, <i>agreement</i> means the "
+        "fraction of tiles on which a predictor picks the same exit as this "
+        "oracle at the same \\lambda. It is the quantity the head is trained "
+        "on. Part of what F.4 reports is that it is not the quantity that "
+        "decides which allocation is cheaper.")
+
+    # ------------------------------------------------------------------ F.1
     k.h2("What each input is worth")
     k.par(
-        "The head reads four per-tile signals and one per-frame signal, and "
-        "this paper's own result is that a rule reading a single number beats "
-        "it. That makes it fair to ask which of the five inputs carries "
-        "anything. The ablation trains the same head once per input group, "
-        "with every other group zeroed after its projection. Architecture, "
-        "parameter count, optimiser, seed, image order and quality draws are "
-        "identical across the six runs, so the only thing that differs is how "
-        "much the head is allowed to know. Zeroing after the projection rather "
-        "than deleting the projection is what makes that true.")
+        "The head reads four per-tile signals and one per-frame signal. Since "
+        "F.4 finds that a rule reading a single number beats it, it is fair to "
+        "ask which of the five carries anything. The ablation trains the same "
+        "head once per input group, with every other group zeroed after its "
+        "projection rather than deleted. Architecture, parameter count, "
+        "optimiser, seed, image order and quality draws are then identical "
+        "across the six runs, and the only thing that differs is how much the "
+        "head is allowed to know. All six carry "
+        f"{st['router_params']:,} parameters, which is the deployed head's "
+        f"{RL['params']:,} plus the projection for the bit count that the "
+        "deployed head does not use.")
     k.par(
         "The quality index q stays live in every single-group run. It is one "
-        "number per frame, the same for every tile in that frame, so it can "
+        "number per frame, identical for every tile in that frame, so it can "
         "say which operating point the decoder is at and cannot, even in "
         "principle, tell two tiles of one frame apart. Holding it live keeps "
         "the runs comparable on per-tile information alone. The run with q on "
@@ -156,263 +143,355 @@ def content(k):
         + [[V[l]["inputs"], f"{V[l]['agree']:.4f}", f"{V[l]['stderr']:.4f}",
             f"{V[l]['heldout_agree_last250']:.4f}",
             f"{V[l]['agree'] - floor:+.4f}"] for l in VARIANT_ORDER],
-        "<b>What each router input is worth.</b> Agreement with the oracle's "
-        "exit choice on 1,200 frames and 4,800 tiles the head never trained "
-        "on, with one standard error taken across frames rather than across "
-        "tiles, since tiles of one image are not independent draws. "
-        "<i>last 250</i> is the running held-out agreement over the final 250 "
-        "training steps, on 12 tiles a step, and is shown only to confirm that "
-        "the end-of-run measurement is not a fluctuation. <i>over floor</i> is "
-        "the margin over the best single constant exit, which scores "
-        f"{floor:.4f} on these tiles. The stem alone reaches the agreement of "
-        "all five inputs together, and q alone does not clear the floor.")
+        "<b>What each router input is worth.</b> Read the first column against "
+        "the last: only the stem moves agreement far from what a single "
+        "constant exit already achieves. Agreement with the oracle's exit "
+        f"choice on {V['stem']['n_frames']:,} frames and "
+        f"{V['stem']['n_tiles']:,} tiles the head never trained on, with one "
+        "standard error taken across frames rather than across tiles, since "
+        "tiles of one image are not independent draws. <i>last 250</i> is the "
+        "running held-out agreement over the final 250 training steps, on 12 "
+        "tiles a step, and confirms that the end-of-run measurement is not a "
+        "fluctuation. <i>over floor</i> is the margin over the best single "
+        f"constant exit, which scores {floor:.4f} on these tiles.")
     k.note(
-        "results/router_ablation.json, and the six per-variant training "
-        "records results/router_ablation_stem.json and its five siblings. All "
-        "on the pinned checkpoint, all at \\lambda = 1.3×10<super>-5</super>, "
-        f"all {st['steps']:,} steps from seed {st['seed']}, about an hour of "
-        "one NVIDIA RTX A6000 each.")
+        "results/router_ablation.json, and the six per-variant training records "
+        "results/router_ablation_stem.json and its five siblings. All on the "
+        "pinned checkpoint, all at \\lambda = 1.3×10<super>-5</super>, all "
+        f"{st['steps']:,} steps from seed {st['seed']}.")
+
+    k.fig("supp_router_inputs.png",
+          "<b>The input ablation, both halves of it.</b> <b>a</b>, agreement "
+          "with the oracle per variant, with one standard error across frames; "
+          "the dashed line is the best single constant exit. The two dark bars "
+          "are the two heads that see the stem. <b>b</b>, where each variant "
+          "sends its tiles, against the oracle's own distribution. Every "
+          "variant reproduces the oracle's use of the shallowest exit to within "
+          "a point, and what degrades as inputs are removed is the separation "
+          "of the middle of the ladder: the bit count alone nearly empties exit "
+          "3, and q alone uses two of the four exits available to it.",
+          maxh=126)
+    k.note("Drawn by scripts/supp_router_figs.py from "
+           "results/router_ablation.json, fields agree, stderr, pred_hist and "
+           "oracle_hist.")
 
     d_sa = V["stem"]["agree"] - V["all"]["agree"]
     se_sa = (V["stem"]["stderr"] ** 2 + V["all"]["stderr"] ** 2) ** 0.5
     k.par(
-        f"<b>The stem alone is the whole head.</b> Reading the stem and q "
-        f"gives {V['stem']['agree']:.4f}; reading the stem, the latent, the "
-        f"scales, the bit count and q gives {V['all']['agree']:.4f}. The "
-        f"difference is {d_sa:.4f}, against a standard error of "
-        f"{V['stem']['stderr']:.4f} on each measurement and {se_sa:.4f} on "
-        "their difference, so it is under a third of one standard error and "
-        "its sign is not determined. Four of the five inputs add nothing this "
-        "measurement can resolve. That is a negative result about those four "
-        "inputs, and it is worth stating what it does and does not say: it "
+        f"<b>The stem alone.</b> Reading the stem and q gives "
+        f"{V['stem']['agree']:.4f}; reading the stem, the latent, the scales, "
+        f"the bit count and q gives {V['all']['agree']:.4f}. The difference is "
+        f"{d_sa:.4f} against a standard error of {se_sa:.4f} on the difference, "
+        "so it is under a third of one standard error and its sign is not "
+        "determined. Four of the five inputs add nothing this measurement can "
+        "resolve. That result is about those four inputs in this head, and it "
         "does not show that the latent, the scales or the bit count are "
-        "uninformative about a tile, only that whatever they carry is already "
-        "carried by the stem, which is computed downstream of all of them.")
+        "uninformative about a tile. What it shows is that whatever they carry "
+        "is already carried by the stem, which is computed downstream of all of "
+        "them.")
     k.par(
-        "<b>The single-group ordering is clear and the separations are larger "
-        f"than the noise.</b> The stem at {V['stem']['agree']:.4f} is "
+        "<b>The single-group ordering.</b> The stem at "
+        f"{V['stem']['agree']:.4f} is "
         f"{V['stem']['agree'] - V['latent']['agree']:.4f} above the latent, "
         "against a standard error of "
         f"{(V['stem']['stderr']**2 + V['latent']['stderr']**2)**0.5:.4f} on "
-        "the difference; the latent is "
+        f"the difference; the latent is "
         f"{V['latent']['agree'] - V['scales']['agree']:.4f} above the scales; "
         "and the scales are "
         f"{V['scales']['agree'] - V['bits']['agree']:.4f} above the bit count, "
         "which is more than seven standard errors. The bit count is the "
-        "weakest per-tile input the head has. A.8 shows a rule that reads the "
-        "bit count and nothing else beating the head at every rate, which is "
-        "the sharpest form of the point that agreement is the wrong objective: "
-        "the input the head learns least from is the input that wins when it "
-        "is used differently.")
+        "weakest per-tile input the head has, and F.4 shows a rule that reads "
+        "the bit count and nothing else beating the head at every rate. The "
+        "input the head learns least from is the input that wins when it is "
+        "used differently.")
     k.par(
-        f"<b>The quality index alone sits at the floor.</b> It reaches "
+        f"<b>The floor.</b> The quality index on its own reaches "
         f"{V['qp']['agree']:.4f} ± {V['qp']['stderr']:.4f} where the best "
         f"single constant exit scores {floor:.4f}. A head with no per-tile "
-        "information cannot beat the best constant in expectation, and this "
-        "one does not. The floor is worth quoting beside every other row, "
-        "because an agreement of 0.62 cannot be read at all until it is known "
-        "that 0.50 is free.")
+        "information cannot beat the best constant in expectation, and this one "
+        "does not. The floor belongs beside every other row, because an "
+        "agreement of 0.62 cannot be read at all until it is known that 0.50 is "
+        "free.")
+    k.par(
+        f"<b>The ablation's own cost.</b> The six trainings took "
+        f"{abl_hours:.1f} hours of one NVIDIA RTX A6000 between them, from "
+        f"{min(REC[l]['wall_s'] for l in VARIANT_ORDER) / 60:.0f} to "
+        f"{max(REC[l]['wall_s'] for l in VARIANT_ORDER) / 60:.0f} minutes each "
+        "(results/router_ablation_*.json, field wall_s). The decoder is frozen "
+        "for all of them, so none of that is decoder training. It is the price "
+        "of the question, and it is worth stating beside a negative answer.")
 
-    oh = V["stem"]["oracle_hist"]
-    oh_tot = sum(oh)
-    hist = [["exit map", "exit 2", "exit 3", "exit 4", "exit 5"],
-            ["oracle"] + [f"{100 * x / oh_tot:.1f}" for x in oh[2:]]]
-    for l in VARIANT_ORDER:
-        ph = V[l]["pred_hist"]
-        s = sum(ph)
-        hist.append([V[l]["inputs"]] + [f"{100 * x / s:.1f}" for x in ph[2:]])
-    k.rows(hist,
-           "<b>Where each variant sends its tiles</b>, as a percentage of the "
-           "4,800 evaluation tiles. Exits 0 and 1 are below the split depth "
-           "and cannot be chosen. Every variant reproduces the oracle's use of "
-           "the shallowest exit to within a point, and what degrades as inputs "
-           "are removed is the separation of the middle of the ladder: the bit "
-           "count alone nearly empties exit 3 and piles the mass on the "
-           "deepest exit, and q alone uses two of the four exits available to "
-           "it.")
-    k.note("results/router_ablation.json, fields pred_hist and oracle_hist.")
-
-    # ------------------------------------------------------------------ A.6
+    # ------------------------------------------------------------------ F.2
     k.h2("What the head costs")
     k.rows(
         [["q", "decode (ms)", "stem (ms)", "router (ms)", "share (%)"]]
         + [[str(r["qp"]), f"{r['decode_ms']:.2f}", f"{r['stem_ms']:.2f}",
             f"{r['router_ms']:.3f}", f"{r['router_share_pct_time']:.3f}"]
            for r in RL["rows"]],
-        "<b>The head against the decode it decides for.</b> Three timings on "
-        "one latent, interleaved so that a co-tenant's load drift lands on all "
-        "of them equally. <i>decode</i> is the tiled decoder at the deepest "
-        "exit, which is what the head's share is a share of; <i>stem</i> is "
-        "the first j groups, which the head does not pay for because the "
-        "decoder runs them anyway before the split. The head takes "
-        "\\RouterTimePct\\% of the decode where its operation count predicts "
-        "\\RouterCostPct\\%, a factor of \\RouterTimeFactor.")
+        "<b>The head against the decode it decides for.</b> The share column is "
+        "the number to take away, and it is three times what the operation "
+        "count predicts. Three timings on one latent, interleaved so that a "
+        "co-tenant's load drift lands on all of them equally. <i>decode</i> is "
+        "the tiled decoder at the deepest exit, which is what the head's share "
+        "is a share of; <i>stem</i> is the first j groups, which the head does "
+        "not pay for because the decoder runs them anyway before the split. The "
+        "head takes \\RouterTimePct\\% of the decode where its operation count "
+        "predicts \\RouterCostPct\\%, a factor of \\RouterTimeFactor.")
     k.note(
-        "results/router_latency.json: 1920×1080 padded to 2048×1280, 40 "
-        f"iterations after warm-up, one NVIDIA RTX A6000, the {n_paper:,} "
-        "parameter head runs/RECIPE512/routers2/v2_lam1.3e-5.pth. Measured on "
+        "results/router_latency.json: 1920×1080 padded to 2048×1280, "
+        f"{RL['iters']} iterations after warm-up, one {RL['device']}, the "
+        f"{RL['params']:,} parameter head "
+        "runs/RECIPE512/routers2/v2_lam1.3e-5.pth. Measured on "
         "runs/RECIPE512/ckpt_eval.pth.tar rather than on the pinned "
         "checkpoint; the quantity is a ratio of two timings of the same "
         "weights, so it does not depend on which epoch they came from.")
     k.par(
         "The extra \\RouterTimeExtra points are launch overhead. A head of "
-        f"{n_paper:,} parameters evaluated on 40 vectors is small enough that "
-        "its wall-clock is dominated by the cost of starting its kernels, and "
-        "an operation count does not contain that. Every configuration-B "
+        f"{RL['params']:,} parameters evaluated on 40 vectors is small enough "
+        "that its wall-clock is dominated by the cost of starting its kernels, "
+        "and an operation count does not contain that. Every configuration-B "
         "saving in this work charges the head at its operation share, which is "
-        "the smaller of the two numbers and therefore the more flattering; the "
-        "honest reading is that the head costs about half a percent of the "
-        "decode in time. It remains small against what it decides about, since "
-        f"one trunk block is {100 * block:.1f}% of the decode by the same cost "
-        "vector.")
+        "the smaller of the two numbers and therefore the more flattering to "
+        "us; the honest reading is that the head costs about half a percent of "
+        "the decode in time. It stays small against what it decides about, "
+        f"since one trunk block is {100 * block:.1f}% of the decode by the cost "
+        "vector below.")
+    k.par(
+        "<b>Two heads, two shares.</b> The pinned checkpoint carries a head "
+        "that was trained jointly with the decoder, and a second head was "
+        "trained afterwards against that decoder once it was frozen. They are "
+        "different objects and they are priced differently: the jointly trained "
+        "one is charged "
+        f"{hj[1]['router_compute_share_pct']:.3f}% of the decode and the "
+        "frozen-decoder one \\RouterCostPct\\%, because the second reads the "
+        "decoded latent and the entropy model's scales as well as the stem. "
+        "Both shares are measured by hooks on the head's own convolutions and "
+        "linear layers rather than assumed, in the same run that produced the "
+        "saving. F.4 reports both heads.")
+    k.note(
+        f"results/{HJ.format(b=1)} and "
+        "results/router_RECIPE512_b01.json, field router_compute_share_pct in "
+        "each.")
+    k.par(
+        "<b>For scale, what the search costs instead.</b> Configuration A does "
+        "not run a head; it runs the argmin itself, which needs the true error "
+        "of every exit. On the pinned checkpoint at q63 one tiled 1080p decode "
+        f"takes {EC['ms_one_decode']:.0f} ms, the deployed table costs "
+        f"{EC['x_deployed']:.2f} of those and the full-frame table "
+        f"{EC['x_full_frame']:.2f}. A decoder-side head at half a percent of "
+        "one decode, and a rule at nothing, are both several orders below that, "
+        "which is the whole reason for wanting one.")
+    k.note("results/supp_encoder_cost_PAPER.json, pinned checkpoint, "
+           f"{EC['iters']} iterations on one {EC['device']}.")
 
-    # ------------------------------------------------------------------ A.7
-    k.h2("A rule with no parameters")
+    # ------------------------------------------------------------------ F.3
+    k.h2("The calibrated bit rule")
     k.par(
         "The entropy model produces one number per tile before the trunk runs, "
         "at no cost, and then discards it: how many bits that tile's latents "
         "took. Per-block bit allocation is a standard quantity in learned "
         "compression, where it is something to choose, and block-level rate "
-        "control sets it so that complex regions get more bits [42]. Here it "
-        "is read in the other direction, after the fact and at the decoder, as "
-        "a statement about how hard the region was. What follows is the whole "
-        "rule, and it can be implemented from this subsection alone.")
+        "control sets it so that complex regions get more bits [42]. Here it is "
+        "read in the other direction, after the fact and at the decoder, as a "
+        "statement about how hard the region was. The results files call the "
+        "rule <i>rate-rank</i>; the paper calls it the calibrated bit rule. "
+        "What follows is all of it.")
     k.par(
-        "<b>Step 1, the per-tile statistic.</b> Sum the entropy coder's "
-        "estimated bits r<sub>i</sub> over the latent positions i falling "
-        "inside tile t, and divide by the mean over the N tiles of that frame. "
-        "Normalising per frame rather than globally is deliberate. The "
-        "absolute rate level is a property of the frame, and what decides a "
-        "tile is how it compares with the rest of its own frame.")
+        "<b>The statistic.</b> Sum the entropy coder's estimated bits "
+        "r<sub>i</sub> over the latent positions i falling inside tile t, and "
+        "divide by the mean over the N tiles of that frame. Normalising per "
+        "frame rather than globally is deliberate: the absolute rate level is a "
+        "property of the frame, and what decides a tile is how it compares with "
+        "the rest of its own frame.")
     k.eq(r"b(t) \;=\; N\, \frac{\sum_{i \in t} r_i}{\sum_{i} r_i}")
     k.par(
-        "<b>Step 2, a rank-1 model of the distortion table.</b> Assume every "
-        "tile has the same shape of decay across the ladder, up to a scale "
-        "that depends only on b(t).")
+        "<b>The surrogate.</b> Assume every tile has the same shape of decay "
+        "across the ladder, up to a scale that depends only on b(t).")
     k.eq(r"\log D(t,k) \;\approx\; \alpha \log b(t) \,+\, c \,+\, "
          r"\log \varphi_k")
     k.par(
-        "\\varphi has one entry per reachable exit and says what that exit "
+        "φ has one entry per reachable exit and says what that exit "
         "costs on an average tile; \\alpha is an exponent fitted rather than "
-        "assumed. Fitting it is what lets the rule discover the direction of "
-        "the relation instead of asserting one, and an earlier version of this "
-        "surrogate that fixed the exponent at 1 was wrong about that "
-        "direction.")
+        "assumed. Fitting it is what lets the rule find the direction of the "
+        "relation instead of asserting one, and an earlier version of this "
+        "surrogate that fixed the exponent at 1 was wrong about that direction. "
+        "The fit is offline and leave-one-sequence-out, so no sequence "
+        "contributes to the profile that routes it, and its whole output is six "
+        "numbers per rate.")
     k.par(
-        "<b>Step 3, the fit.</b> Take the mean of log D(t,k) over the "
-        "reachable exits as the tile's difficulty, regress it on log b(t) by "
-        "ordinary least squares to obtain \\alpha and c, and set log \\varphi "
-        "to the mean residual per exit. Do this leave-one-sequence-out, so no "
-        "sequence contributes to the profile that routes it. The result is an "
-        "offline calibration constant rather than a per-frame quantity: six "
-        "numbers per rate, thirty for the five rates reported here.")
-    k.par(
-        "<b>Step 4, route.</b> Run the oracle's own Lagrangian on the "
-        "surrogate table in place of the true one.")
+        "<b>The decision.</b> Run the oracle's own Lagrangian on the surrogate "
+        "table in place of the true one, and bisect \\lambda against the budget "
+        "as configuration A does.")
     k.eq(r"\hat{k}(t) \;=\; \mathrm{arg\,min}_{\,k \geq j}\ "
          r"\left[\, e^{c}\, b(t)^{\alpha}\, \varphi_k \,+\, \lambda\, c_k "
          r"\,\right]")
-    k.par(
-        "<b>Step 5, hit the budget.</b> Bisect \\lambda as configuration A "
-        "does, in two levels: on the cheap per-tile table first, then "
-        "correcting the target against a real decode of the resulting map, "
-        "because the table and the decode differ slightly at the tile seams. "
-        "Nothing is signalled, nothing is trained, and the arithmetic per tile "
-        "is one power and K products. Sweeping \\lambda traces the lower "
-        "convex hull of the achievable set in the sense of [28], so the point "
-        "returned is the best one on that hull at the budget it consumes.")
+
+    box = [
+        ["<b>the decoder, once per frame</b>"],
+        ["&nbsp;1&nbsp; <i>input</i> r, the entropy coder's estimated bits per "
+         "latent position; the cost vector c; the price \\lambda; the "
+         "calibration (\\alpha, c<sub>0</sub>, φ) for this quality "
+         "index"],
+        ["&nbsp;2&nbsp; <i>for</i> each tile t of the N tiles of the frame"],
+        ["&nbsp;3&nbsp; &nbsp;&nbsp;&nbsp;&nbsp; b ← N · (sum of r<sub>i</sub> inside t) / "
+         "(sum of r<sub>i</sub> over the frame)"],
+        ["&nbsp;4&nbsp; &nbsp;&nbsp;&nbsp;&nbsp; <i>for</i> k = j … K−1"],
+        ["&nbsp;5&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; L<sub>k</sub> ← "
+         "e<super>c<sub>0</sub></super> · b<super>\\alpha</super> · "
+         "φ<sub>k</sub> + \\lambda · c<sub>k</sub>"],
+        ["&nbsp;6&nbsp; &nbsp;&nbsp;&nbsp;&nbsp; exit(t) ← the k that minimises "
+         "L<sub>k</sub>"],
+        ["&nbsp;7&nbsp; <i>return</i> exit"],
+        ["<b>offline, once per quality index, leave-one-sequence-out</b>"],
+        ["&nbsp;8&nbsp; d(t) ← mean over k ≥ j of log D(t,k)"],
+        ["&nbsp;9&nbsp; (\\alpha, c<sub>0</sub>) ← least squares of d(t) on "
+         "log b(t)"],
+        ["10&nbsp; log φ<sub>k</sub> ← mean over t of [ log D(t,k) − "
+         "\\alpha log b(t) − c<sub>0</sub> ]"],
+    ]
+    k.rows(box,
+           "<b>The calibrated bit rule, in full.</b> Lines 1 to 7 are what the "
+           "decoder runs: one power and K products per tile, no parameters, "
+           "nothing signalled. Lines 8 to 10 are the offline calibration, whose "
+           "entire output is the six numbers per rate printed in the next "
+           "table. \\lambda is bisected in two levels, on the cheap per-tile "
+           "table first and then against a real decode of the resulting map, "
+           "because the table and the decode differ slightly at the tile seams. "
+           "Sweeping \\lambda traces the lower convex hull of the achievable "
+           "set in the sense of [28], so the point returned is the best one on "
+           "that hull at the budget it consumes.",
+           header=False)
+
+    phi = [["q", "delivered dB", "\\alpha", "φ<sub>2</sub>", "φ<sub>3</sub>",
+            "φ<sub>4</sub>", "φ<sub>5</sub>"]]
+    for r in rr[1]["rows"]:
+        phi.append([str(r["qp"]), f"{r['db_vs_uf']:.4f}", f"{r['alpha']:.2f}"]
+                   + [f"{p:.4f}" for p in r["phi"]])
+    sp0 = 100 * (rr[1]["rows"][0]["phi"][0] / rr[1]["rows"][0]["phi"][-1] - 1)
+    sp63 = 100 * (rr[1]["rows"][-1]["phi"][0] / rr[1]["rows"][-1]["phi"][-1] - 1)
+    k.rows(phi,
+           "<b>The rule's entire state</b>, at the 0.1 dB budget. There is "
+           "nothing else to store, and it is printed here so that the rule can "
+           "be reproduced without refitting it. \\alpha is positive everywhere, "
+           "so a tile whose latents cost more bits is modelled as harder at "
+           "every exit and is sent deeper, which is what the correlations in "
+           f"F.4 confirm. φ is nearly flat, spanning {sp0:.1f}% at q0 "
+           f"and {sp63:.1f}% at q63 between its shallowest and deepest entry, "
+           f"against costs that span {cost[2]:.2f} to {cost[5]:.2f}, so what "
+           "moves a tile along the ladder is its own b(t) rather than the shape "
+           "of the profile. <i>delivered dB</i> is what the two-level bisection "
+           "actually landed on.")
+    k.note("results/raterank_RECIPE512_b01.json, pinned checkpoint, \\NumSeq "
+           "CTC sequences at one frame each.")
+
     k.par(
         "The costs c<sub>k</sub> on the pinned checkpoint are "
         + ", ".join(f"{cost[e]:.4f}" for e in sorted(cost))
         + " for exits 2 to 5, recovered from the frame-level saving of maps "
-        "that send every tile to one fixed exit "
-        "(results/static_RECIPE512_b01.json). The shallowest of them is what "
-        "sets the architectural ceiling of \\Ceiling\\% "
-        f"(results/saturation_RECIPE512_ctc53.json, c_j = {SAT['cost_j']:.4f}).")
+        "that send every tile to one fixed exit. The shallowest of them, "
+        f"c_j = {SAT['cost_j']:.4f}, sets the architectural ceiling of "
+        "\\Ceiling\\%. The deepest is above 1 because our ladder carries seam "
+        "repair and an adapter that the released decoder does not.")
+    k.note("results/static_RECIPE512_b01.json, field uniform, and "
+           "results/saturation_RECIPE512_ctc53.json, fields cost_j and "
+           "ceiling_pct.")
 
-    phi = [["q", "\\lambda", "\\alpha", "φ<sub>2</sub>", "φ<sub>3</sub>",
-            "φ<sub>4</sub>", "φ<sub>5</sub>"]]
-    for r in rr[1]["rows"]:
-        phi.append([str(r["qp"]), f"{r['lam']:.3g}", f"{r['alpha']:.2f}"]
-                   + [f"{p:.4f}" for p in r["phi"]])
-    k.rows(phi,
-           "<b>The rule's entire state</b>, at the 0.1 dB budget: the bisected "
-           "price \\lambda, the fitted exponent \\alpha, and the four-entry "
-           "exit profile \\varphi, per rate. \\alpha is positive everywhere, "
-           "so a tile whose latents cost more bits is modelled as harder at "
-           "every exit and is sent deeper, which is what the correlations "
-           "below confirm. \\varphi is nearly flat, spanning 4.1% at q0 and "
-           "7.8% at q63 between its shallowest and deepest entry, against "
-           "costs that span 0.61 to 1.01, so what moves a tile along the "
-           "ladder is its own b(t) rather than the shape of the profile.")
-    k.note("results/raterank_RECIPE512_b01.json, pinned checkpoint, \\NumSeq "
-           "CTC sequences at one frame each.")
-
-    # ------------------------------------------------------------------ A.8
+    # ------------------------------------------------------------------ F.4
     k.h2("The rule against the trained head")
-    cmp_rows = [["q", "0.1 rule", "0.1 head", "0.3 rule", "0.3 head",
-                 "0.5 rule", "0.5 head"]]
-    for i, q in enumerate(QPS):
-        row = [str(q)]
-        for b in (1, 3, 5):
-            row.append(f"{rr[b]['rows'][i]['saving_pct_vs_release']:.2f}")
-            row.append(f"{head_at(b, q):.2f}")
-        cmp_rows.append(row)
-    k.rows(cmp_rows,
-           "<b>The parameter-free rule against the \\RouterParams head</b>, at "
-           "three budgets and five rates, as the percentage of the released "
-           "decoder's operations saved. Both columns are charged for what they "
-           "cost: the head pays its \\RouterCostPct\\% compute share and the "
-           "rule pays nothing. The rule is ahead in every cell, though the "
-           "0.5 dB pair is arithmetic on two different cost vectors rather "
-           "than a comparison of allocations, for the reason given below.")
-    k.note(
-        "Rule: results/raterank_RECIPE512_b01.json, b03 and b05. Head: "
-        "results/router_RECIPE512_b01.json, b03 and b05. All on the pinned "
-        "checkpoint over \\NumSeq sequences at one frame each, except "
-        "results/raterank_RECIPE512_b05.json, which is on "
-        "runs/RECIPE512/ckpt_eval.pth.tar.")
+    k.par(
+        "Two trained heads exist on this checkpoint and both are reported, "
+        "since averaging them would hide the only spread this work has. "
+        "<i>joint</i> is the head the checkpoint carries, trained alongside the "
+        "decoder and read straight out of it. <i>frozen</i> is the "
+        "\\RouterParams head trained afterwards, against the decoder once it "
+        "had stopped moving. Both were evaluated on the pinned checkpoint over "
+        "\\NumSeq sequences at one frame each, by one script, at the same "
+        "budgets, and both are charged for their own compute.")
 
-    m01 = [rr[1]["rows"][i]["saving_pct_vs_release"] - head_at(1, q)
-           for i, q in enumerate(QPS)]
-    m03 = [rr[3]["rows"][i]["saving_pct_vs_release"] - head_at(3, q)
-           for i, q in enumerate(QPS)]
+    cmp_rows = [["q", "0.1 rule", "0.1 joint", "0.1 frozen",
+                 "0.3 rule", "0.3 joint", "0.3 frozen"]]
+    for q in QPS:
+        cmp_rows.append(
+            [str(q)]
+            + [f"{rule(1, q):.2f}", f"{at(hj[1], q):.2f}", f"{at(hf[1], q):.2f}",
+               f"{rule(3, q):.2f}", f"{at(hj[3], q):.2f}", f"{at(hf[3], q):.2f}"])
+    # Whether the rule wins outright is a fact about the files, not a claim to
+    # be typed: count it, and let the caption say the weaker thing if it must.
+    n_cells = 2 * len(QPS)
+    n_win = sum(1 for b in (1, 3) for q in QPS
+                if rule(b, q) > at(hj[b], q) and rule(b, q) > at(hf[b], q))
+    verdict = ("The rule is ahead of both heads in every cell of this table."
+               if n_win == n_cells else
+               f"The rule is ahead of both heads in {n_win} of the "
+               f"{n_cells} cells.")
+    k.rows(cmp_rows,
+           f"<b>The parameter-free rule against two trained heads</b>, as the "
+           "percentage of the released decoder's operations saved, at two "
+           f"budgets and five rates. {verdict} Every column is charged for what "
+           "it costs: each head pays its own compute share and the rule pays "
+           "nothing. The two heads are further apart from each other than "
+           "either is from the rule at several rates, which F.5 takes up.")
+    k.note(
+        "Rule: results/raterank_RECIPE512_b01.json and b03. Joint head: "
+        f"results/{HJ.format(b=1)} and its b03 sibling. Frozen head: "
+        "results/router_RECIPE512_b01.json and b03. All on "
+        "runs/RECIPE512/ckpt_PAPER.pth.tar.")
+
+    k.fig("supp_router_frontier.png",
+          "<b>The rule sits between the two heads and the oracle.</b> Saving at "
+          "each rate, against the Lagrangian oracle measured inside the same "
+          "run and the architectural ceiling (dotted). At 0.1 dB the rule is "
+          "above both heads at every rate, and the gap between the two heads is "
+          "wider than the gap between the rule and either of them. At 0.3 dB "
+          "the three lowest rates saturate and the three curves separate only "
+          "at q48 and q63.",
+          maxh=130)
+    k.note("Drawn by scripts/supp_router_figs.py from the six files named in "
+           "the table above and results/saturation_RECIPE512_ctc53.json.")
+
+    mj = [rule(1, q) - at(hj[1], q) for q in QPS]
+    mf = [rule(1, q) - at(hf[1], q) for q in QPS]
     k.par(
-        f"<b>At the working budget the rule wins at every rate.</b> The margin "
-        f"is {m01[0]:+.2f} points at q0 and {min(m01):+.2f} at its narrowest, "
-        f"which is q{QPS[m01.index(min(m01))]}, and it is positive at all "
-        "\\RateRankNWins measured rates, the largest being "
-        "\\RateRankBeatsBy points. A head trained on this decoder against this "
-        "oracle therefore returns nothing over a rule with no parameters, "
-        "while carrying \\RouterCostPct\\% of the decode that the rule does "
-        "not.")
+        "<b>At the working budget.</b> Against the joint head the rule is ahead "
+        f"by {min(mj):+.2f} points at its narrowest and {max(mj):+.2f} at its "
+        f"widest, the latter at q{QPS[mj.index(max(mj))]}. Against the frozen "
+        f"head it is ahead by {min(mf):+.2f} to {max(mf):+.2f} points. The rule "
+        "reaches \\RateRankLow% at q0 and \\RateRankHigh% at q63, and it is "
+        "ahead at all \\RateRankNWins measured rates whichever head it is "
+        "measured against. A head trained on this decoder against this oracle "
+        "returns nothing over a rule with no parameters, while carrying a "
+        "compute share that the rule does not.")
+
+    sat_j = SAT["ceiling_pct"] - at(hj[3], 0)
+    sat_f = SAT["ceiling_pct"] - at(hf[3], 0)
     k.par(
-        "<b>At 0.3 dB the two saturate at the low rates and separate at the "
-        "high ones.</b> At q0, q16 and q32 both configurations send every tile "
-        f"to the shallowest exit and reach the ceiling, and the {m03[0]:+.2f} "
-        "point difference between them is exactly the head's own "
-        "\\RouterCostPct\\% compute share, which the rule does not pay. At q48 "
-        f"and q63 the budget still binds and the margins widen to "
-        f"{m03[3]:+.2f} and {m03[4]:+.2f} points, the latter being "
-        "\\RateRankLooseAheadBy. The rule reaches \\RateRankLoose\\% at q63 "
-        f"where the head reaches {head_at(3, 63):.1f}%. A looser budget gives "
-        "the allocation more room to be wrong in as well as more room to be "
-        "right.")
+        "<b>At 0.3 dB the low rates saturate and the arithmetic is exact.</b> "
+        "At q0, q16 and q32 all three configurations send every tile to the "
+        "shallowest exit, so the maps are identical and the only difference "
+        "left is the price of deciding. The joint head falls "
+        f"{sat_j:.3f} points below the \\Ceiling% ceiling and the frozen head "
+        f"{sat_f:.3f}, which are their compute shares of "
+        f"{hj[1]['router_compute_share_pct']:.3f}% and "
+        f"{hf[1]['router_compute_share_pct']:.3f}% to three decimals. At q48 "
+        "and q63 the budget still binds and the allocations separate: the rule "
+        f"reaches {rule(3, 48):.1f}% and \\RateRankLoose% against the joint "
+        f"head's {at(hj[3], 48):.1f}% and {at(hj[3], 63):.1f}% and the frozen "
+        f"head's {at(hf[3], 48):.1f}% and {at(hf[3], 63):.1f}%. A looser budget "
+        "gives an allocation more room to be wrong in as well as more room to "
+        "be right, and the frozen head uses it to be wrong.")
 
     old_cj = 1.0 - rr[5]["rows"][0]["saving_pct_vs_release"] / 100.0
     k.par(
-        "<b>The 0.5 dB pair measures a cost model rather than an "
-        "allocation.</b> At 0.5 dB every rate saturates for both "
-        "configurations, so both send every tile to the shallowest exit and "
-        "the two maps are identical. The reported margin of "
-        f"{rr[5]['rows'][0]['saving_pct_vs_release'] - head_at(5, 0):.2f} "
-        "points is arithmetic on two different cost vectors. The rule's file "
-        "at that budget is on runs/RECIPE512/ckpt_eval.pth.tar, where the "
-        f"shallowest exit is priced at {old_cj:.4f} against the pinned "
-        f"{SAT['cost_j']:.4f}, a difference worth "
-        f"{100 * (SAT['cost_j'] - old_cj):.2f} points, and the remaining "
-        "\\RouterCostPct is the head's compute share. We report the row rather "
-        "than dropping it, and read nothing from it beyond the saturation.")
+        "<b>Why 0.5 dB is not in that table.</b> At 0.5 dB every rate saturates "
+        "for every configuration, so all three maps are identical and the only "
+        "thing a comparison could measure is the cost vector each file was "
+        "written with. The rule's 0.5 dB file is on "
+        "runs/RECIPE512/ckpt_eval.pth.tar, where the shallowest exit was priced "
+        f"at {old_cj:.4f} against the pinned {SAT['cost_j']:.4f}, a difference "
+        f"worth {100 * (SAT['cost_j'] - old_cj):.2f} points of apparent saving. "
+        "The file is results/raterank_RECIPE512_b05.json and it records that "
+        "the rule matches the oracle map exactly at all five rates there, which "
+        "is the only thing read from it.")
 
     diag = [["q", "rule agrees", "ρ depth", "ρ level", "ρ spread", "oracle"]]
     for r in rr[1]["rows"]:
@@ -423,14 +502,14 @@ def content(k):
                      f"{r['oracle_saving_pct_vs_release']:.2f}"])
     k.rows(diag,
            "<b>Why the rule works, and it is not by agreeing</b>, at 0.1 dB. "
-           "<i>rule agrees</i> is the fraction of tiles on which the rule "
-           "picks the oracle's exit, far below the head's held-out "
-           "\\RetrainAgreeOld and still saving more at every rate. The three "
-           "Spearman correlations are between a tile's bit count and, "
-           "respectively, the depth the oracle assigns it, its mean distortion "
-           "across the ladder, and the spread between its shallowest and its "
-           "deepest exit. <i>oracle</i> is the oracle allocation measured "
-           "inside the same run, which is the ceiling the rule is chasing.")
+           "Compare the second column with the fifth: the rule picks the "
+           "oracle's exit on a minority of tiles and still tracks the oracle's "
+           "saving. The three Spearman correlations are between a tile's bit "
+           "count and, respectively, the depth the oracle assigns it, its mean "
+           "distortion across the ladder, and the spread between its shallowest "
+           "and its deepest exit. <i>oracle</i> is the Lagrangian oracle "
+           "measured inside the same run, which is the ceiling the rule is "
+           "chasing.")
     k.note(
         "results/raterank_RECIPE512_b01.json. The file stores "
         "spearman_bits_vs_exit against the negated exit index, as "
@@ -446,22 +525,50 @@ def content(k):
 
     k.par(
         "The rule agrees with the oracle on \\RateRankAgreeLo to "
-        "\\RateRankAgreeHi of tiles, well under the head's "
+        "\\RateRankAgreeHi of tiles, well under the frozen head's held-out "
         "\\RetrainAgreeOld, and saves more at every rate. Agreement counts a "
         "disagreement between two exits that are within a hair of each other "
         "exactly as heavily as one that costs most of the frame's error, and "
         "most disagreements are of the first kind. What the rule gets right is "
-        "the ordering. A tile's bit count correlates with the spread across "
-        "the ladder, which is how much that tile stands to gain from depth, at "
+        "the ordering. A tile's bit count correlates with the spread across the "
+        "ladder, which is how much that tile stands to gain from depth, at "
         "\\RateRankSpreadLo to \\RateRankSpreadHi at every rate, and with the "
-        "depth the oracle actually assigns at +0.38 to +0.54.")
+        "depth the oracle actually assigns at "
+        f"{min(-r['spearman_bits_vs_exit'] for r in rr[1]['rows']):+.2f} to "
+        f"{max(-r['spearman_bits_vs_exit'] for r in rr[1]['rows']):+.2f}.")
     k.par(
         "What the rule cannot do is see past that ordering. A rank-1 model "
-        "gives every tile the same relative profile over exits, so b(t) "
-        "decides where on the ladder a tile falls and never the shape of its "
-        "trade-off. That is the ceiling this baseline sits at, and it is the "
-        "part a learned head would have to earn its parameters on. Neither of "
-        "our heads does.")
+        "gives every tile the same relative profile over exits, so b(t) decides "
+        "where on the ladder a tile falls and never the shape of its trade-off. "
+        "That is the ceiling this baseline sits at, and it is the part a "
+        "learned head would have to earn its parameters on. Neither of our two "
+        "heads does.")
+
+    # ------------------------------------------------------------------ F.5
+    k.h2("How much a trained head varies")
+    hh = [at(hj[1], q) - at(hf[1], q) for q in QPS]
+    n_gap = sum(1 for i, q in enumerate(QPS)
+                if abs(hh[i]) > min(rule(1, q) - at(hj[1], q),
+                                    rule(1, q) - at(hf[1], q)))
+    k.par(
+        "No head in this work was trained twice at two seeds, so there is no "
+        "seed variance to report and none was measured; "
+        "results/router_ablation.json records seed 0 for all six of its runs "
+        "and one_checkpoint true. A second training run is a training run, and "
+        "the evaluation queue that produced the rest of this supplement was "
+        "restricted to inference. What can be reported is the spread between "
+        "heads that were trained independently of each other, which is a looser "
+        "quantity than seed variance and a larger one.")
+    k.par(
+        "<b>Two heads on one decoder.</b> The joint and frozen heads differ by "
+        f"{hh[0]:+.2f} points at q0 and by {min(hh):+.2f} at q63, a range of "
+        f"{max(hh) - min(hh):.2f} points across the five rates at 0.1 dB, and "
+        "they cross: the joint head is the better of the two at q0 and the "
+        f"worse at every other rate. At {n_gap} of the five rates the two heads "
+        "differ from each other by more than the rule's margin over whichever "
+        "of them is nearer, so a comparison against one trained head says less "
+        "than it appears to. That is the reason both are printed in F.4 rather "
+        "than the better of them.")
 
     BB = k.J("raterank_BEST_compare.json")
     best = [["q", "oracle", "head", "rule", "margin", "rule agrees"]]
@@ -471,17 +578,18 @@ def content(k):
                      f"{BB['raterank'][q] - BB['router'][q]:+.2f}",
                      f"{BB['agreement'][q]:.3f}"])
     k.rows(best,
-           "<b>The same comparison on a second training run.</b> BEST is a "
-           "separate recipe at a different epoch with its own head, trained "
-           "the same way. The rule is ahead at \\BestRankWinsN of "
-           "\\BestRankOfN rates, by up to \\BestRankBy points, and stays "
-           "within \\BestRankToOracle points of the oracle everywhere. The one "
-           "rate it concedes is the only rate on either run where a trained "
-           "head finishes ahead, and it does so by under a point.")
+           "<b>The same comparison on a second training run.</b> The margin "
+           "column is the point: it is positive at four of the five rates and "
+           "wider than on the pinned run, so the pinned numbers are the "
+           "conservative ones. BEST is a separate recipe at a different epoch "
+           "with its own head, trained the same way. The rule is ahead at "
+           "\\BestRankWinsN of \\BestRankOfN rates, by up to \\BestRankBy "
+           "points, and stays within \\BestRankToOracle points of the oracle "
+           "everywhere. The one rate it concedes is the only rate on either run "
+           "where a trained head finishes ahead, and it does so by under a "
+           "point.")
     k.note("results/raterank_BEST_compare.json: the BEST run, \\NumSeq "
-           "sequences, 0.1 dB, not the pinned checkpoint. The margins there "
-           "are wider than on the pinned run, so the pinned numbers are the "
-           "conservative ones.")
+           "sequences, 0.1 dB, not the pinned checkpoint.")
 
     RT = k.J("router_retrain_compare.json")
     rt = [["q", "before", "after", "change", "β before", "β after"]]
@@ -490,45 +598,50 @@ def content(k):
                    f"{RT['v3'][q] - RT['v2'][q]:+.2f}",
                    f"{RT['beta_v2'][q]:.1f}", f"{RT['beta_v3'][q]:.1f}"])
     k.rows(rt,
-           "<b>Agreement rises and the saving does not follow.</b> The head "
-           "retrained after the exit mask was fixed, on the same recipe at the "
-           "same \\lambda. Held-out agreement goes from \\RetrainAgreeOld to "
-           "\\RetrainAgreeNew while the deployed saving moves by "
-           "+\\RetrainGain points at q\\RetrainGainQp and "
-           "&#8722;\\RetrainLoss at q\\RetrainLossQp. \\beta is the cost "
-           "multiplier the bisection applies to move a head trained at one "
-           "\\lambda onto this operating point, and the retrained head is "
-           "ahead where that multiplier is small and behind where it is "
-           "large.")
+           "<b>Agreement rises and the saving does not follow.</b> The change "
+           "column has both signs. The head was retrained after the exit mask "
+           "was fixed, on the same recipe at the same \\lambda; held-out "
+           "agreement went from \\RetrainAgreeOld to \\RetrainAgreeNew while "
+           "the deployed saving moved by +\\RetrainGain points at "
+           "q\\RetrainGainQp and &#8722;\\RetrainLoss at q\\RetrainLossQp. "
+           "\\beta is the cost multiplier the bisection applies to move a head "
+           "trained at one \\lambda onto this operating point, and the "
+           "retrained head is ahead where that multiplier is small and behind "
+           "where it is large. This is the same lesson as the rule's low "
+           "agreement, from the other direction.")
     k.note(
         "results/router_retrain_compare.json. The file records no checkpoint, "
-        f"and its configuration-B column reads {RT['v2']['0']:.2f}% at q0 "
-        "where the pinned measurement in results/router_RECIPE512_b01.json "
-        f"reads {head_at(1, 0):.2f}%, so the two are not on one basis. Only "
-        "the comparison of the two heads within the file is read here.")
+        f"and its before column reads {RT['v2']['0']:.2f}% at q0 where the "
+        "pinned measurement in results/router_RECIPE512_b01.json reads "
+        f"{at(hf[1], 0):.2f}%, so the two are not on one basis. Only the "
+        "comparison of the two heads within the file is read here.")
 
-    # ------------------------------------------------------------------ A.9
+    # ------------------------------------------------------------------ F.6
     k.h2("What this section does not measure")
     k.bullets([
-        "The ablation is one checkpoint, one \\lambda, one seed and "
-        f"{st['steps']:,} steps per variant; results/router_ablation.json "
-        "records the first of those as one_checkpoint. Nothing here says the "
-        "ordering of the input groups would survive a second decoder or a "
-        "second seed.",
+        "No seed variance, for either head or for any ablation variant. Every "
+        f"run in results/router_ablation.json is seed {st['seed']} on one "
+        "checkpoint, and nothing here says the ordering of the input groups "
+        "would survive a second seed or a second decoder.",
         "The ablation reports agreement and nothing else. No variant was "
         "carried through a budget bisection to a deployed saving, so this "
         "section cannot say what a stem-only head would save, and the argument "
         "that agreement and saving come apart applies to the ablation as much "
         "as to the head.",
-        "The head measured in configuration B was trained against "
-        "runs/RECIPE512/ckpt_eval.pth.tar and then evaluated on the pinned "
-        "checkpoint (results/router_RECIPE512_b01.json, field router2_meta), "
-        "while the ablation heads were trained against the pinned checkpoint "
-        f"itself. Its \\RetrainAgreeOld and the ablation's "
-        f"{V['all']['agree']:.4f} are therefore not two measurements of one "
-        "thing.",
+        "The frozen-decoder head was trained against one checkpoint and "
+        "evaluated on another. It was trained against "
+        "runs/RECIPE512/ckpt_eval.pth.tar, which the watchers overwrite, and "
+        "then run on the pinned checkpoint "
+        "(results/router_RECIPE512_b01.json, field router2_meta), while the "
+        "ablation heads were trained against the pinned checkpoint itself. Its "
+        f"\\RetrainAgreeOld and the ablation's {V['all']['agree']:.4f} are two "
+        "measurements of different things.",
         "One head covers all five rates. A head per rate is the obvious remedy "
-        "for the cost multiplier and is not measured here.",
-        "The rule's 0.5 dB file is off the pinned checkpoint, which is why "
-        "that pair of columns is read only for saturation.",
+        "for the cost multiplier in the retrain table and is not measured here.",
+        "The head is timed at batch 1 on one GPU class, and its share of the "
+        "decode in seconds is three times its share in operations. What that "
+        "factor would be on a device where kernel launches are cheaper is not "
+        "measured.",
+        "The rule's 0.5 dB file is off the pinned checkpoint, which is why that "
+        "budget is described rather than tabulated.",
     ])
