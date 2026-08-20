@@ -1904,10 +1904,25 @@ def build(out="paper/FLEX-UF.pdf"):
                  rightPadding=0, topPadding=0, bottomPadding=0)
     f_rw = Frame(M + colw + GAP, 0.7 * inch, colw, hw, id="rw", leftPadding=0,
                  rightPadding=0, topPadding=0, bottomPadding=0)
+
+    # The supplement's title block gets its own band. Reusing the wide-figure
+    # template put a 2.62 inch band above a 1.1 inch title and left the rest of
+    # the strip empty, a field of white between "Supplementary Material" and
+    # section A.
+    supp_band = 1.16 * inch
+    f_supp = Frame(M, PH - 0.7 * inch - supp_band, PW - 2 * M, supp_band,
+                   id="suppband", leftPadding=0, rightPadding=0,
+                   topPadding=0, bottomPadding=0)
+    hs = H - supp_band
+    f_ls = Frame(M, 0.7 * inch, colw, hs, id="ls", leftPadding=0,
+                 rightPadding=0, topPadding=0, bottomPadding=0)
+    f_rs = Frame(M + colw + GAP, 0.7 * inch, colw, hs, id="rs", leftPadding=0,
+                 rightPadding=0, topPadding=0, bottomPadding=0)
     doc.addPageTemplates([
         PageTemplate(id="first", frames=[f_ban, f_l1, f_r1], onPage=num),
         PageTemplate(id="rest", frames=[f_l, f_r], onPage=num),
-        PageTemplate(id="wide", frames=[f_wide, f_lw, f_rw], onPage=num)])
+        PageTemplate(id="wide", frames=[f_wide, f_lw, f_rw], onPage=num),
+        PageTemplate(id="supp", frames=[f_supp, f_ls, f_rs], onPage=num)])
 
     banner_cap = ("<b>Figure 1. The decoder we modify.</b> Figure 3 of "
                   "DCVC-UF [14], reproduced. Everything up to the "
@@ -1943,7 +1958,7 @@ def build(out="paper/FLEX-UF.pdf"):
     kit = SUPP.Kit(colw, PW - 2 * M)
     built = SUPP._sections(kit)
     if kit.flow:
-        story += [NextPageTemplate("wide"), PageBreak(),
+        story += [NextPageTemplate("supp"), PageBreak(),
                   Paragraph("Where to Stop:<br/>Tile-Adaptive Early Exit in a "
                             "Learned Image Decoder", TITLE),
                   Paragraph("Supplementary Material", SUPP.SUBTITLE),

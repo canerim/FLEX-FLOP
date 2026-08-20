@@ -434,8 +434,7 @@ def content(k):
         "table, in scripts/verify_theory.py.")
 
     # ==================================================================
-    k.h2("The sweep in one frame")
-
+    
     bits = tt["bits_per_tile"]
     ctt = tt["cost"][jt:]
     Dj = [row[jt:] for row in Dtt]
@@ -475,10 +474,6 @@ def content(k):
         "The most expensive tile holds its deepest exit five times longer than "
         "the middle one. This is the whole mechanism, and it is why a single "
         "uniform depth cannot be right for both.")
-    k.note("Computed from results/tile_table.json (Bosphorus, q32, 40 tiles, "
-           "the cost vector recorded in that file), checkpoint "
-           "runs/RECIPE512/ckpt_eval.pth.tar. Tiles chosen as the lowest, "
-           "median and highest coded bit count, not for their behaviour.")
 
     # sweep summary
     sw = tt["sweep"]
@@ -500,10 +495,6 @@ def content(k):
         "above the last row nothing more is available. The 60 prices in the "
         f"file produce only 33 distinct savings, which is the granularity {S[7]} "
         "quantifies.")
-    k.note("results/tile_table.json, checkpoint "
-           "runs/RECIPE512/ckpt_eval.pth.tar; savings are on the earlier cost "
-           "vector of Table " + str(t_cost) + ", where the ceiling is "
-           "41.91% rather than \\Ceiling%.")
 
     # ==================================================================
     k.h2("The achievable set")

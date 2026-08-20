@@ -496,6 +496,14 @@ def content(k):
 
     # ------------------------------------------------------------------
     k.h2("What the saving is worth in seconds")
+    k.fig("power.png",
+          "<b>Three units for one saving.</b> <b>a</b>, the same routed "
+          "decode measured as arithmetic, as wall clock and as joules "
+          "per frame. <b>b</b>, why they differ: the board draws the "
+          "same power either way, because the later groups run on a "
+          "shrinking set of tiles and a partly idle GPU still draws its "
+          "static power. <b>c</b>, peak memory, which routing raises "
+          "rather than lowers.")
 
     k.par(r"Arithmetic is the right unit to allocate in, because it is the "
           r"only one independent of the machine, the driver and whatever else "

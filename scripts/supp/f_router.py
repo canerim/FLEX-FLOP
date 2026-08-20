@@ -81,86 +81,6 @@ def content(k):
         "is not the quantity that matters.")
 
     # ------------------------------------------------------------------ A.1
-    k.h2("What a decoder-side predictor can see")
-    k.fig("router_sees.png",
-          "<b>What each side knows.</b> Configuration A, above, has the source "
-          "frame, so it can decode a tile at every exit and measure D(t,k) "
-          "directly; the map it finds then has to be carried in the "
-          "bitstream. Configuration B, below, has no source frame. It sees the "
-          "bitstream and whatever the decode has produced by the time the "
-          "trunk splits, and turns that into one score vector z(t) per tile.")
-    k.par(
-        "Four quantities are available at the decoder before any tile leaves "
-        "the trunk. The <i>stem</i> is the trunk activation after the first j "
-        "groups, 384 channels, on a feature map at one 64th of the output "
-        "pixel count, since a 256 px tile is 32 feature positions across. The "
-        "dequantised latent and the entropy model's predicted Gaussian scales "
-        "are 256 channels each, at one 256th of the pixel count, a 256 px tile "
-        "being 16 latent positions across. The quality index q is one integer "
-        "per frame. And the entropy coder's estimated bits per latent position "
-        "are produced on the way to the latent and then normally discarded. "
-        "The last of these is what the parameter-free rule of A.7 uses on its "
-        "own.")
-    k.note(
-        "Geometry from results/tile_definition.json, on the pinned "
-        "checkpoint: rgb_patch 256, feature_patch 32, latent_patch 16. At "
-        "1920×1080 the frame is padded to 2048×1280 and carries 40 tiles.")
-
-    # ------------------------------------------------------------------ A.2
-    k.h2("The head")
-    k.par(
-        "Configuration B's predictor is one small head, run once per frame, "
-        "that emits K scores per tile. A 1×1 convolution takes the stem to 48 "
-        "channels and another takes the concatenated latent and scales to 32. "
-        "Each projected map is pooled over the tile into a mean and a standard "
-        "deviation, which gives 96 and 64 numbers per tile; q, scaled to the "
-        "unit interval, is appended as one more. That 161-vector goes through "
-        "a layer normalisation and a three-layer perceptron of width 256 with "
-        "SiLU activations, and the K outputs are the tile's scores. Capacity "
-        "sits in the perceptron deliberately. It runs on one vector per tile, "
-        "40 of them for a 1080p frame, so its width is nearly free, while the "
-        "two 1×1 convolutions run per position and are the only part that "
-        "costs anything.")
-    k.fig("router_b_head.png",
-          "<b>The head.</b> Two 1×1 projections, pooling to one vector per "
-          "tile, then a perceptron. The parameter count and the compute share "
-          "drawn on the figure are the measured ones from "
-          "results/router_latency.json.",
-          maxh=118)
-
-    k.rows(
-        [["module", "shape", "paper head", "ablation head"],
-         ["stem projection", "1×1, 384 to 48", "18,480", "18,480"],
-         ["latent projection", "1×1, 512 to 32", "16,416", "16,416"],
-         ["rate projection", "1×1, 2 to 8", "0", "24"],
-         ["layer norm", "161 or 177", "322", "354"],
-         ["linear", "161 or 177 to 256", "41,472", "45,568"],
-         ["linear", "256 to 256", "65,792", "65,792"],
-         ["linear", "256 to K", "1,542", "1,542"],
-         ["total", "", f"{n_paper:,}", f"{n_abl:,}"]],
-        "<b>Where the head's parameters are.</b> Three quarters of them are in "
-        "the perceptron, which costs almost nothing to run because it sees one "
-        "vector per tile. The ablation family of A.5 adds a pathway for the "
-        "entropy coder's bit estimate, widening the input vector from 161 to "
-        "177, and that is the only difference between the two columns. The row "
-        "counts are read off the module definition in flexuf/router/head2.py "
-        f"and sum to the two totals the results files record: {n_paper:,} in "
-        f"results/router_latency.json and {n_abl:,} in "
-        "results/router_ablation.json.")
-
-    k.par(
-        "Exits below the split depth are suppressed in the score vector before "
-        "the choice is taken. An earlier version of the head did that with a "
-        "constant of &#8722;10<super>4</super>. Nothing in a cross-entropy or "
-        "a regret objective penalises a common offset in the scores, one "
-        "drifted in during training, and the head's own outputs settled near "
-        "that scale, so the suppressed entries became the largest in a typical "
-        "row and a large share of every allocation went to the cheapest exit "
-        "for a reason unrelated to the tile. The mask is now &#8722;infinity, "
-        "which cannot drift. A.8 reports what fixing it did to agreement and "
-        "to saving, and the two moved in different directions.")
-
-    # ------------------------------------------------------------------ A.3
     k.h2("What the head is trained to do")
     k.par(
         "The decoder is frozen throughout. The objective has two terms: a "
@@ -211,33 +131,6 @@ def content(k):
     ])
 
     # ------------------------------------------------------------------ A.4
-    k.h2("Load balancing")
-    k.par(
-        "A gate trained against a frozen table can settle on one exit early "
-        "and stay there, because the exit it happens to favour is the one it "
-        "gets most of its gradient from. The control used here is a per-exit "
-        "bias added to the scores before the choice is taken, updated by rule "
-        "rather than by gradient.")
-    k.eq(r"\beta_k \;\leftarrow\; \beta_k + \eta\left(\pi_k - u_k\right)")
-    k.par(
-        "\\pi<sub>k</sub> is the target share of exit k, u<sub>k</sub> its "
-        "realised share over the batch, and \\eta is 10<super>-2</super>; the "
-        "bias is then recentred to zero mean. Because it never enters the "
-        "loss, no interference gradient is added to the objective. The "
-        "mechanism is the loss-free balancing of [16], in place of the "
-        "auxiliary balance loss of [7].")
-    k.par(
-        "We borrow the mechanism and not its justification. Mixture-of-experts "
-        "models balance because experts are separate parameter sets with "
-        "finite capacity, so a starved expert is both under-trained and wasted "
-        "memory. Our exits share one trunk and have no capacity limit, so "
-        "neither reason carries over, and concentration on one exit can be the "
-        "correct answer. The target \\pi is therefore the oracle's own exit "
-        "histogram on the batch rather than a uniform share: at a high price "
-        "on compute the oracle genuinely does send almost every tile to one "
-        "exit, and balancing toward uniform there would be forcing mistakes.")
-
-    # ------------------------------------------------------------------ A.5
     k.h2("What each input is worth")
     k.par(
         "The head reads four per-tile signals and one per-frame signal, and "
