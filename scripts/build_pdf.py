@@ -1164,6 +1164,13 @@ def content(colw, fullw):
         r"per quality index and distortion budget, configuration A. The 0.3 and "
         r"0.5 dB rows sit on the architectural ceiling almost everywhere; past "
         r"that point a looser budget buys nothing.")
+    par(r"One word on the budget before the numbers. A tenth of a decibel is "
+        r"an engineering convention, chosen because it is small against the "
+        r"spacing of the rate points and because codec work has long used "
+        r"differences of this size as a working tolerance. It is not evidence "
+        r"that the difference is invisible, and we make no perceptual claim "
+        r"for it. The 0.2, 0.3 and 0.5 dB rows are there so a reader who "
+        r"disagrees with the choice can read off another one.")
     par(r"The table carries the headline numbers. At 0.1 dB the method saves "
         r"\MainLowRate% at the lowest rate and \MainHighRate% at the highest, "
         r"and \MainMean% on average, at a BD-Rate cost of \BdRateALow%; that "
@@ -1208,11 +1215,13 @@ def content(colw, fullw):
         r"together with two stronger controls, at matched compute.")
     par(r"The uniform rows answer the question directly, and the answer "
         r"sharpens with rate. At the lowest rate a static decoder can reach "
-        r"exit 3 inside the budget and save 27.0%, against the oracle's "
-        r"\MainLowRate%. At q48 and q63 the only uniform depth that fits is "
-        r"the deepest one, which <i>costs</i> 0.95% instead of saving "
-        r"anything. At those two rates, then, the comparison is between 17% "
-        r"and nothing at all, not between 17% and something smaller. Averaged "
+        r"exit 3 inside the budget and save \UniformThreeLow%, against the "
+        r"Lagrangian oracle's \MainLowRate%. At q48 and q63 the only uniform "
+        r"depth that fits is the deepest one, which <i>costs</i> "
+        r"\DeepestUniformCost% instead of saving anything. At those two "
+        r"rates, then, the comparison is between \OracleAtFortyEight% and "
+        r"\OracleAtSixtyThree% against nothing at all, not against something "
+        r"smaller. Averaged "
         r"over rates, the best static allocation saves \BestStaticMean% where "
         r"the adaptive one saves \MainMean%.")
     par(r"The two shuffled rows separate effects that are easy to conflate. We "
@@ -1297,6 +1306,15 @@ def content(colw, fullw):
            r"saturation; shaded regions are infeasible or wasted. <b>c</b>, "
            r"what the Lagrangian reaches against the exact Pareto set, "
            r"enumerated by dynamic programming.")
+    par(r"One assumption is worth naming before any of this. The argument "
+        r"treats the frame's distortion as a sum over tiles, while the "
+        r"deblocking pass runs on the stitched frame and therefore sees the "
+        r"whole exit map at once, so the tiles are not strictly independent. "
+        r"We measured the size of that coupling over 60 allocations and the "
+        r"largest mismatch between the separable prediction and a real decode "
+        r"is 5.5×10<super>-5</super> dB, four orders of magnitude below the "
+        r"budget. We proceed as if the objective were separable and treat that "
+        r"as measured rather than assumed.")
     par(r"The construction has enough structure to state as propositions, and "
         r"we check each one numerically instead of asserting it "
         r"(scripts/verify_theory.py, seven of seven). The allocation decouples "

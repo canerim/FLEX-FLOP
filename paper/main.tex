@@ -881,6 +881,14 @@ past that point a looser budget buys nothing.}
 \label{tab:main}
 \end{table}
 
+One word on the budget before the numbers. A tenth of a decibel is an
+engineering convention, chosen because it is small against the spacing of the
+rate points and because codec work has long used differences of this size as a
+working tolerance. It is not evidence that the difference is invisible, and we
+make no perceptual claim for it. The $0.2$, $0.3$ and $0.5\dB$ rows of
+Table~\ref{tab:main} are there so a reader who disagrees with the choice can
+read off another one.
+
 Table~\ref{tab:main} carries the headline numbers. At $0.1\dB$ the method saves
 \MainLowRate\% at the lowest rate and \MainHighRate\% at the highest, and
 \MainMean\% on average. We do not read the fall with rate as an artefact of the
@@ -936,10 +944,11 @@ together with two stronger controls, at matched compute.
 
 The uniform rows answer the question directly, and the answer sharpens with rate.
 At the lowest rate a static decoder can reach exit 3 inside the budget and save
-$27.0\%$, against the Lagrangian oracle's \MainLowRate\%. At $q48$ and $q63$ the only
-uniform depth that fits is the deepest one, which \emph{costs} $0.95\%$ instead
-of saving anything. At those two rates, then, the comparison is between $17\%$
-and nothing at all, not between $17\%$ and something smaller. Averaged over
+\UniformThreeLow\%, against the Lagrangian oracle's \MainLowRate\%. At $q48$ and
+$q63$ the only uniform depth that fits is the deepest one, which \emph{costs}
+\DeepestUniformCost\% instead of saving anything. At those two rates, then, the
+comparison is between \OracleAtFortyEight\% and \OracleAtSixtyThree\% against
+nothing at all, not against something smaller. Averaged over
 rates, the best static allocation saves \BestStaticMean\% where the adaptive one
 saves \MainMean\%.
 
@@ -1063,6 +1072,16 @@ programming.}
 \end{figure}
 
 The construction has enough structure to state as propositions, and we check each
+One assumption is worth naming before any of this. The argument treats the
+frame's distortion as a sum over tiles, while the deblocking pass runs on the
+stitched frame and therefore sees the whole exit map at once, so the tiles are
+not strictly independent. We measured the size of that coupling over $60$
+allocations and the largest mismatch between the separable prediction and a real
+decode is $5.5\times10^{-5}\dB$, four orders of magnitude below the budget. We
+proceed as if the objective were separable and treat that as measured rather
+than assumed.
+
+We check each
 one numerically instead of asserting it (\texttt{scripts/verify\_theory.py},
 seven of seven). The allocation decouples per tile; compute is non-increasing and
 distortion non-decreasing in $\lambda$; the sweep traces the lower convex hull

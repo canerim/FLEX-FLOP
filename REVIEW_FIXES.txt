@@ -2,7 +2,7 @@ FLEX-UF · REVIEWER FIX LIST
 30 items. Ticked only when the fix is in the built PDF and check_paper agrees.
 [ ] open   [~] in progress   [x] done
 
-Status: 11 / 30
+Status: 14 / 30
 
 ================================================================================
 CRITICAL (8)
@@ -111,7 +111,7 @@ VERY IMPORTANT (4)
         does not arrive in time say "later checkpoints improved the measured
         trade-off" rather than "lower bound", which is not a guarantee.
 
-[ ] 12. Table 7 disagrees with the prose next to it.
+[x] 12. Table 7 disagrees with the prose next to it.
         The table gives q0 uniform exit 3 as 24.2% saving; the prose says 27.0%.
         FIX: every table-against-prose value must pass, 100 out of 100, before
         submission.
@@ -176,7 +176,7 @@ IMPORTANT (8)
 MEDIUM (5)
 ================================================================================
 
-[ ] 21. Say in the main paper that 0.1 dB is not a perceptual threshold.
+[x] 21. Say in the main paper that 0.1 dB is not a perceptual threshold.
         It is an engineering convention, not evidence of imperceptibility. One
         sentence in the main results; the 0.2, 0.3 and 0.5 dB rows already close
         the sensitivity question.
@@ -195,7 +195,7 @@ MEDIUM (5)
         lifts the paper from an early-exit trick to a general point about
         adaptive inference.
 
-[ ] 24. Note the additivity assumption in the main Method.
+[x] 24. Note the additivity assumption in the main Method.
         The theory assumes separable tile distortions while the full-frame
         deblocker sees the whole exit map at once. The supplement tests this and
         finds a maximum mismatch of 5.5e-5 dB over 60 allocations.

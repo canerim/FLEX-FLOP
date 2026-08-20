@@ -305,6 +305,17 @@ if d:
     if _u3:
         mac("UniformThreeLow", f"{_u3['saving']:.1f}")
     mac("BestStaticMean", f"{sum(means['static'])/len(means['static']):.1f}")
+    # What the deepest uniform depth costs rather than saves, and the adaptive
+    # saving at the two rates where it is the only depth inside the budget.
+    # These were typed into the prose and one of them went stale by 2.8 points.
+    _u5 = next((u for u in (_r0 or {}).get("uniform", []) if u.get("exit") == 5),
+               None)
+    if _u5:
+        mac("DeepestUniformCost", f"{abs(_u5['saving']):.1f}")
+    for _q, _name in ((48, "OracleAtFortyEight"), (63, "OracleAtSixtyThree")):
+        _r = next((r for r in d["rows"] if r.get("qp") == _q), None)
+        if _r and _r.get("oracle"):
+            mac(_name, f"{_r['oracle']['saving']:.1f}")
     r0 = d["rows"][-1]
     if r0.get("rate_rank"):
         mac("RateRankDb", f"{r0['rate_rank']['db']:.3f}")
