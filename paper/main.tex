@@ -42,11 +42,12 @@ the lowest rate and \MainHighRate\% at the highest, for a BD-Rate cost of
 
 We also characterise when such a budget does anything at all. Below a floor set
 by tiling no allocation is feasible; above a saturation point every tile already
-sits on the cheapest rung; and measuring the budget in units of that window
-collapses five rate curves, \BandRawSpread\ points apart at a matched decibel,
-to within \BandSpreadMean. Tiling dominates the cost and scales with per-tile
-depth rather than with contaminated area. Finally, a rule with no parameters
-that routes on the bits the entropy model has already spent per tile beats our
+takes the cheapest exit; and measuring the budget in units of the band between
+those two ends collapses five rate curves, \BandRawSpread\ points apart at a
+matched decibel, to within \BandSpreadMean. Tiling dominates the cost and scales
+with per-tile depth rather than with the area the tile border reaches. Finally,
+a rule with no parameters that routes on the bits the entropy model has already
+spent per tile beats our
 trained \RouterParams-parameter router at every rate by up to
 \RateRankBeatsBy\ points, which we report as a control that work on adaptive
 inference ought to include.
@@ -90,9 +91,10 @@ taken per tile.}
 \label{fig:baseline}
 \end{figure*}
 
-Our method, FLEX-UF (Fig.~\ref{fig:baseline}), is an exit ladder over the
-twelve residual blocks of the
-DCVC-UF intra decoder. The first $j$ blocks run over the whole frame. The rest
+Our method, FLEX-UF (Fig.~\ref{fig:baseline}), attaches exits at intervals
+through the twelve residual blocks of the DCVC-UF intra decoder; we call that
+ordered set of exits the \emph{ladder}. The first $j$ blocks run over the whole
+frame. The rest
 run per tile, over a set of tiles that shrinks with depth, and the shrinkage is
 where the saving comes from. Each exit hands its feature to the shared head
 through a small pointwise adapter, zero-initialised so that at step zero the
@@ -103,32 +105,35 @@ little to do with early exit as it is usually studied.
 
 \paragraph{Tiling has a large price.} Spatial adaptivity needs tiles, and once a
 frame has been cut into tiles, every $3\times3$ convolution at a tile border
-reads invented values. Under the stock padding rule the resulting error on this
-decoder is \SeamZerosHigh$\dB$ at high rate. That is several times the entire
+reads invented values. The tile-boundary artefact that follows is what we call
+the \emph{seam}, and under the default padding rule it costs
+\SeamZerosHigh$\dB$ on this decoder at high rate. That is several times the entire
 budget the method works to, and it is paid before any tile has saved a single
 operation. In Section~\ref{sec:seam} we treat padding as an \emph{estimator} of
 the unseen neighbour and measure four of them. The ordering we get is not the
 obvious one.
 
-\paragraph{A quality budget has a working range.} Tiling costs something even
-when nothing exits early, so there is a \emph{floor}, and budgets below it admit
-no allocation at all. The ladder also has a shallowest rung, so there is a
-\emph{saturation} point above which every tile already sits on that rung and
-more quality buys nothing. Between the two the budget genuinely trades quality
-for compute. We measure both ends at every rate in Section~\ref{sec:operating},
-where the working budget uses \BandUseLow\% of that window at low rate and
-\BandUseHigh\% at high rate.
+\paragraph{A distortion budget only works inside a band.} Tiling costs something
+even when nothing exits early, so there is a \emph{floor}, and budgets below it
+admit no allocation at all. The ladder also has a shallowest usable exit, so
+there is a \emph{saturation} point above which every tile already takes that
+exit and more quality buys nothing. Between the two, in what we call the
+\emph{band}, the budget genuinely trades quality for compute. We measure both
+ends at every rate in Section~\ref{sec:operating}, where the $0.1\dB$ budget
+uses \BandUseLow\% of the band at low rate and \BandUseHigh\% at high rate.
 
 \paragraph{Contributions.}
 \begin{enumerate}\itemsep2pt
-\item A tile-adaptive early-exit ladder for a learned image decoder, deployable
-      against existing bitstreams because the encoder and the coded payload are
-      untouched. It saves \MainLowRate\% to \MainHighRate\% of decoder MACs for
-      $0.1\dB$ on the full CTC set, at a BD-Rate cost of \BdRateALow\%.
-\item The operating structure of a quality budget: a floor below which no
+\item An early-exit ladder for a learned image decoder that picks a depth per
+      tile, which is spatial adaptivity at the granularity of a tile. It is
+      deployable against existing bitstreams because the encoder and the coded
+      payload are untouched, and it saves \MainLowRate\% to \MainHighRate\% of
+      decoder MACs for $0.1\dB$ on the full common test set, at a BD-Rate cost
+      of \BdRateALow\%.
+\item The band a distortion budget works in: a floor below which no
       allocation is feasible, a saturation point above which none improves, both
       in closed form, and seven propositions verified numerically rather than
-      asserted. Measuring the budget in units of that window accounts for most
+      asserted. Measuring the budget in units of that band accounts for most
       of the rate dependence, on two independently trained checkpoints.
 \item A parameter-free control that adaptive-inference work is rarely measured
       against. Routing on the bits the entropy model has already spent per tile
@@ -188,30 +193,30 @@ only \emph{how much of the decoder runs where} varies.
 
 \paragraph{The closest neighbour.} Blard~\etal~\cite{spatialcompetition} also
 partition an image into regions, also choose per region by a rate--distortion
-cost computed at the encoder, and also transmit a mode map, which is the
-skeleton of our configuration A. The differences are in what the regions choose
-among and in what the map buys. Their regions choose among several
-\emph{separately trained} codecs, so the decoder must hold all of them and its
-complexity is that of one codec regardless of the choice; the map buys rate, not
-compute. Ours choose a prefix length of a single trunk, so the weights are shared
+cost computed at the encoder, and also transmit a mode map. The differences are
+in what the regions choose among and in what the map buys. Their regions choose
+among several \emph{separately trained} codecs, so the decoder must hold all of
+them and its complexity is that of one codec regardless of the choice; the map
+buys rate, not compute. Ours choose a prefix length of a single trunk, so the weights are shared
 by construction and the map buys compute at fixed rate. Because their
 alternatives are unrelated networks, no decoder-side predictor could stand in for
-the encoder's search. The nesting that makes our exits prefixes of one another is
-exactly what makes configuration B possible at all.
+the encoder's search. Our exits are prefixes of one another, and that nesting is
+what lets a decoder-side predictor stand in at all (Section~\ref{sec:setting}).
 
 \paragraph{Signalling versus prediction.} Being \emph{told} a mode decision
 rather than inferring it is the norm in standardised video coding.
 HEVC~\cite{hevc} and VVC~\cite{vvc} transmit partitioning, prediction mode and
-transform tree. We evaluate both and treat the signalled variant as the
-conventional design.
+transform tree. We evaluate both, and treat the signalled variant as the
+conventional design (Section~\ref{sec:setting}).
 
-\paragraph{Deferring to an oracle under a budget.} Configuration~C, where a
-predictor decides most cases and a small budget of the hardest ones is handed to
-something exact, is the shape of selective prediction~\cite{geifman2017selective}
-and learning to defer~\cite{madras2018l2d,mozannar2020consistent}, and of the
-budgeted variant of the latter~\cite{desalvo2025budgeted}. Two things differ, and
-both make our case easier. The expert here is the encoder's own search, so it is
-exact and always available at no test-time cost. What is scarce is the
+\paragraph{Deferring to an oracle under a budget.} Letting a predictor decide
+most cases and handing a small budget of the hardest ones to something exact is
+the shape of selective prediction~\cite{geifman2017selective} and learning to
+defer~\cite{madras2018l2d,mozannar2020consistent}, and of the budgeted variant of
+the latter~\cite{desalvo2025budgeted}. We build on that shape in
+Section~\ref{sec:hybrid}. Two things differ, and both make our case easier. The
+expert here is the encoder's own search, so it is exact and always available at
+no test-time cost. What is scarce is the
 \emph{bits} needed to say what it decided. The selection rule is not learned
 either. Because the objective is separable over tiles, the optimal set of size
 $s$ at a fixed multiplier is exactly the $s$ largest regrets, which the encoder
@@ -269,6 +274,93 @@ the arithmetic untouched.
 \section{Method}
 \label{sec:method}
 
+\subsection{Setting and notation}
+\label{sec:setting}
+
+We set out here the decoder we work on, the notation the rest of the paper uses,
+and the three configurations we compare.
+
+\paragraph{The decoder.} We work on the intra decoder of DCVC-UF~\cite{dcvcuf}.
+The analysis side stays frozen throughout: the patch embedding, the chunk
+encoder, the entropy model and the coded payload are never touched
+(Fig.~\ref{fig:baseline}). What we replace is the synthesis trunk that turns the
+decoded latent into a picture. We call the unmodified public decoder the
+\emph{released decoder}, and one full-frame run of it is the unit of both cost
+and quality below.
+
+\paragraph{Tiles and exits.} A frame is cut into square tiles, $256$\,px on a
+side unless we say otherwise, and each tile is carried through part of the trunk
+on its own. Tiles are indexed by $t$ and there are $N$ of them, $N{=}40$ at
+1080p. The trunk itself is a stack of twelve blocks; we cut it into $K$ groups
+and attach an exit to each, so exits are indexed by $k$ and exit $K-1$ is the
+whole trunk. The first $j$ groups run once over the whole frame and the remaining
+$K-j$ run per tile, so $j$ is the \emph{split depth}. A tile that leaves at exit
+$k$ runs groups $j$ to $k$ and skips everything after it. Writing $c_k$ for what
+a tile costs at exit $k$, a frame that assigns exit $k_t$ to tile $t$ costs
+$\frac{1}{N}\sum_t c_{k_t}$. Tiles are cut on the trunk's feature grid, which is
+coarser than the pixel grid, but we quote tile sizes in pixels.
+
+\paragraph{Distortion and the budget.} $D_{t,k}$ is the error tile $t$ incurs if
+it leaves at exit $k$. It is measured on the path we deploy at inference, a
+tiled decode, against the released decoder's full-frame decode of the same
+latent, so what tiling costs is inside it; we call that path the \emph{deployed
+path} and the table built on it the \emph{deployed table}. Tapping the exits of
+one full-frame forward pass gives a cheaper \emph{full-frame table} that is not
+the same quantity, and Section~\ref{sec:exp} measures the difference. Every
+result is quoted at a \emph{distortion budget}, the decibels a decoded frame is
+allowed to fall below the released decoder on that same latent, and the headline
+budget is $0.1\dB$. To allocate is to choose an exit for every tile so that the
+frame lands on its budget as cheaply as possible. A budget only buys something
+inside its band, because tiling costs quality before any tile exits early and the
+shallowest usable exit bounds what can be saved; Section~\ref{sec:operating}
+measures both ends. Rate is set by a quality index running from $q0$, the lowest
+rate, to $q63$, the highest, and we report five of them: $q0$, $q16$, $q32$, $q48$ and
+$q63$.
+
+\begin{center}\small
+\begin{tabular}{@{}l p{0.74\columnwidth}@{}}
+\toprule
+symbol & meaning \\
+\midrule
+$t$, $N$ & tile index and tiles per frame; $N{=}40$ at 1080p \\
+$k$, $K$ & exit index and number of exits, $k\in\{0,\dots,K-1\}$; $K{=}6$ \\
+$j$ & split depth: groups $0..j{-}1$ run full frame, $j..K{-}1$ per tile; $j{=}2$ \\
+$c_k$ & cost of a tile at exit $k$, as a fraction of one released full-frame decode \\
+$D_{t,k}$ & error of tile $t$ at exit $k$, tiled decode against the released full-frame decode of the same latent \\
+$\lambda$ & multiplier trading $c_k$ against $D_{t,k}$, bisected to the budget \\
+$\beta$ & the same trade applied to the router's logits \\
+$q$ & quality index, $q0$ the lowest rate and $q63$ the highest \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\paragraph{Three configurations.} All three choose the same object, one exit per
+tile, on the same weights and the same coded payload. Configurations~\textbf{A}
+and~\textbf{B} differ only in where that choice is made, and~\textbf{C} sits
+between them.
+
+\textbf{A} decides at the encoder. The encoder holds the source, so it knows
+$D_{t,k}$, picks each tile's exit by the Lagrangian of Section~\ref{sec:alloc},
+and transmits the resulting \emph{exit map}, one exit index per tile, which is
+the analogue of the mode map a standard codec signals. It entropy-codes to
+$\sim$\MapBits\ bits per 1080p frame, or \MapOverheadLow\% of a typical bitrate.
+It costs the encoder about one extra decode per frame and the decoder nothing.
+
+\textbf{B} decides at the decoder. A \RouterParams-parameter head reads decoded
+data only and predicts the same map (Section~\ref{sec:alloc}). Nothing is
+transmitted and the file stays byte-identical to the released one. It costs the
+decoder \RouterCostPct\% of its own multiply--accumulates, which is charged
+inside every B number we report. Because that head reads nothing the encoder
+cannot also read, the encoder can run it too, and so knows tile by tile where it
+will be wrong.
+
+\textbf{C} interpolates between the two. The encoder signals a fraction $\rho$
+of the tiles, the ones where leaving B alone is most costly, and B decides the
+rest, so $\rho{=}0$ is B and $\rho{=}1$ is A. Any decoder-side predictor can take
+B's place there, and Section~\ref{sec:hybrid}, which measures C, tries a second
+one. C transmits a mask rather than a full map, costs the encoder A's search plus
+one run of the predictor, and costs the decoder whatever that predictor costs.
+
 \subsection{Where the computation is}
 
 The DCVC-UF intra decoder is one upsampling block, twelve \texttt{DepthConvBlock}s
@@ -283,16 +375,10 @@ pointwise.
 
 \subsection{The exit ladder}
 
-With $K$ exits over the twelve blocks and split depth $j$, groups
-$0,\dots,j-1$ run full frame for every tile and groups $j,\dots,K-1$ run per
-tile. A tile assigned exit $k$ runs groups $j..k$ and then leaves. Writing $c_k$
-for the cost of exit $k$ in units of one released decode, the cost of a frame
-with exit map $\mathbf{k}$ is $\frac{1}{T}\sum_t c_{k_t}$ over its $T$ tiles.
-
-Two consequences follow, and both are easy to state wrongly. Exits shallower than
-$j$ are indistinguishable from each other, because the first $j$ groups run for
-every tile regardless, and the usable ladder therefore has $K-j$ distinct costs.
-The second consequence is the \emph{architectural ceiling}
+Two consequences follow from the ladder, and both are easy to state wrongly.
+Exits shallower than $j$ are indistinguishable from each other, because the first
+$j$ groups run for every tile regardless, and the usable ladder therefore has
+$K-j$ distinct costs. The second consequence is the \emph{architectural ceiling}
 \begin{equation}
 S_{\max} = 100\,(1 - c_j)\;\%,
 \label{eq:ceiling}
@@ -347,8 +433,8 @@ measured.}
 \begin{table}[t]
 \centering
 \resizebox{\columnwidth}{!}{\input{tables/adapters_ablation}}
-\caption{\textbf{What the adapters are worth.} dB below the release with every
-tile at that exit, with the trained adapters and with each set back to the
+\caption{\textbf{What the adapters are worth.} dB below the released decoder
+with every tile at that exit, with the trained adapters and with each set back to the
 identity it was initialised to. $^{\dagger}$ the deepest exit has no adapter by
 construction and is the control.}
 \label{tab:adapters}
@@ -361,52 +447,89 @@ budget, and the adapter buys \AdapterGainHigh$\dB$ of that back. We find the gai
 grows with rate and with the number of blocks the exit skips, so the design
 rationale here is a measurement rather than an argument, and the deepest exit
 moves by exactly zero. We would not describe the adapters as a refinement of the
-ladder, because without them it has no usable rung.
+ladder, because without them it has no usable exit.
 
 \subsection{Allocation}
 \label{sec:alloc}
 
-Given per-tile distortions $D_{t,k}$ and costs $c_k$, the allocation that
-minimises distortion at a compute budget is the Lagrangian
+The ladder and its costs are fixed by this point, and one decision is left. Every
+tile has to be given an exit, drawn from the usable ones, $k \ge j$, and we want
+the set of choices that keeps the frame inside its distortion budget for the least
+compute. There are $K-j$ choices per tile and $N$ tiles, so searching assignments
+one by one is out of the question. What makes the problem tractable is that the
+tiles do not interact: each contributes its own error $D_{t,k}$ and its own cost
+$c_k$, and the only thing they share is the single budget the frame has to meet.
+
+Problems of that shape are solved with a Lagrangian. Put a price $\lambda$ on
+compute, add $\lambda c_k$ to the error of exit $k$, and the budget constraint
+drops out; what is left is $N$ separate one-tile problems, each a minimum over
+$K-j$ numbers. Shoham and Gersho~\cite{shoham1988} showed that sweeping the price
+this way traces the lower convex hull of what the units can achieve together, and
+Ortega and Ramchandran~\cite{ortega1998} made the construction standard in image
+and video coding.
+
+What $\lambda$ does is set the exchange rate between compute and error. At
+$\lambda = 0$ compute is free and every tile takes whichever exit has the
+smallest error. As $\lambda$ rises, compute becomes expensive relative to error,
+and a tile drops to a shallower exit as soon as what that exit saves is worth
+more than the error it adds. Compute falls and error grows as $\lambda$ grows,
+neither of them turning back, so one value of $\lambda$ puts the frame exactly on
+its budget and we find that value by bisection. The rule each tile follows is
 \begin{equation}
 k^{*}_t(\lambda) \;=\; \arg\min_k \; \bigl[\, D_{t,k} + \lambda\, c_k \,\bigr],
 \label{eq:lagrangian}
 \end{equation}
-with $\lambda$ found by bisection so the frame lands on the quality budget.
-Both quantities in~(\ref{eq:lagrangian}) are available \emph{to the encoder},
-which holds the source. That gives configuration~\textbf{A}. The encoder searches
-and transmits the map, which entropy-codes to $\sim$\MapBits\ bits per 1080p
-frame, or \MapOverheadLow\% of a typical bitrate, and costs the decoder nothing.
+with the minimum taken over $k \ge j$. We call $k^{*}_t(\lambda)$ the
+\emph{oracle}'s choice, because it is made with the true error of every exit in
+hand. Both quantities in~(\ref{eq:lagrangian}) are available \emph{to the
+encoder}, which holds the source, so configuration~A can run this search exactly.
 
-What the search costs the \emph{encoder} depends on how that table is built, and
-the difference is larger than it looks. Take one tiled decode at 1080p as the
-unit. The deployed table is $K$ tiled decodes, so $4.6\times$; the full-frame
-table of Section~\ref{sec:method} is $1.4\times$. Section~5 shows that the
+What the search costs the \emph{encoder} depends on how the table of $D_{t,k}$ is
+built, and the two ways of building it are further apart than they look. Take one
+tiled decode at 1080p as the unit. The deployed table of
+Section~\ref{sec:setting} needs one tiled decode per exit, which comes to
+$4.6\times$ the unit rather than $K$ times it, because a shallow exit is cheaper
+to run than a full one. The full-frame table taps every exit off a single
+full-frame pass and comes to $1.4\times$. Section~\ref{sec:exp} shows that the
 full-frame table must not be used to \emph{report} quality, but it can still be
 used to \emph{rank}. Running the argmin on it, and the deployed path only to
 check the budget, we find the two searches agree on $85\%$ of tiles and land
-within $0.4$ points of saving of each other ($19.0\%$ against $18.6\%$, both
-under budget). So the exact search costs $4.6$ decodes and a practical encoder
-need not pay it.
+within $0.4$ points of saving of each other ($19.0\%$ against $18.6\%$, both under budget). The exact search therefore
+costs $4.6$ decodes and a practical encoder need not pay it; ranking on the
+full-frame table is the one extra decode per frame we quote for A.
 
-The decoder cannot evaluate~(\ref{eq:lagrangian}), because $D_{t,k}$ is the error
-against a source it never sees. What is missing is a variable, so no architecture
-recovers it and no amount of estimation capacity substitutes for it.
-Configuration~\textbf{B} therefore \emph{predicts}. A $144$K-parameter head reads
-the full-frame stem feature, the decoded latent $\hat{y}$, the entropy model's
-scales and the quality index, emits logits $z_t$, and decides
+The decoder cannot run~(\ref{eq:lagrangian}). $D_{t,k}$ is the error against the
+source, and the source is the one thing a decoder never receives. The gap is one
+of information: the errors the argmin compares depend on a picture that is not in
+the bitstream, so no decoder-side model recovers them, however large it is. What
+a decoder can do is estimate which exit the oracle would have picked, and
+configuration~B therefore \emph{predicts}. Its head reads what the decoder
+already holds, the feature at the split point, the decoded latent $\hat{y}$, the
+entropy model's scales and the quality index. For each tile $t$ it emits a vector
+of logits $z_t$, one entry per exit, and the tile takes
 \begin{equation}
 \hat{k}_t \;=\; \arg\max_k \;\bigl[\, \log \mathrm{softmax}(z_t)_k
-                                       - \beta\, c_k \,\bigr],
+                                       - \beta\, c_k \,\bigr].
 \label{eq:router}
 \end{equation}
-with $\beta$ bisected exactly as $\lambda$ is. Nothing is added to the file. We
-train the head against a \emph{frozen} decoder with a cost-sensitive
-cross-entropy to the oracle's choice, each tile weighted by the regret of
-choosing wrongly. Load balancing is loss-free~\cite{lossfreebalance}, and we bias
-it toward the oracle's own exit distribution instead of toward uniform. At a high
-$\lambda$ the oracle genuinely does send every tile to one exit, and forcing
-spread there would force mistakes.
+The first term is the head's score for exit $k$, on a log scale. The second is
+the price on compute that $\lambda$ carries in~(\ref{eq:lagrangian}): raising
+$\beta$ takes more away from the deep exits than from the shallow ones, so more
+tiles are handed to cheap exits and the frame again gets cheaper and worse. We
+bisect $\beta$ against the budget just as we bisect $\lambda$.
+
+The head is trained against a \emph{frozen} decoder, so the exits it chooses
+between do not move while it learns. Its target is the oracle's choice
+$k^{*}_t(\lambda)$ and the loss is a cross-entropy to that target, with each tile
+weighted by its \emph{regret}, meaning by how much the bracket
+in~(\ref{eq:lagrangian}) grows if the head's exit is used in place of the
+oracle's. A tile whose two best exits are nearly tied then counts for less than
+one where the wrong choice is expensive. A router like this can collapse onto a
+single exit during training, so it carries a balancing term; ours is
+loss-free~\cite{lossfreebalance} and is biased toward the oracle's own exit
+distribution instead of toward uniform. At a high $\lambda$ the oracle genuinely
+does send every tile to one exit, and forcing spread there would force mistakes.
+Section~\ref{sec:ab} measures what B gives up against A.
 
 \subsection{Training}
 
@@ -417,14 +540,18 @@ All exits are decoded every step and the objective is
    \;+\; w_d\,\mathcal{L}_{\mathrm{distill}},
 \end{equation}
 where
-$\mathcal{L}_{\mathrm{RD}} = \lambda \sum_k \alpha_k \mathrm{MSE}_k / \sum_k \alpha_k + \mathrm{bpp}$
-is the released rate--distortion loss averaged over exits. The anchor term
-$\mathcal{L}_{\mathrm{anchor}} = \lambda\lVert \hat{x}_{K-1} - \hat{x}^{\mathrm{rel}}\rVert^2$
-pins the deepest exit to the released decoder, so the reference every saving is
-quoted against cannot drift away underneath the measurement. The distillation
-term
+$\mathcal{L}_{\mathrm{RD}} = \lambda_{\mathrm{rd}} \sum_k \alpha_k \mathrm{MSE}_k / \sum_k \alpha_k + \mathrm{bpp}$
+is the released rate--distortion loss averaged over exits, with $\alpha_k$ fixed
+weights and $\lambda_{\mathrm{rd}}$ the codec's own rate--distortion weight,
+which is a different multiplier from the $\lambda$ of~(\ref{eq:lagrangian}). The
+anchor term
+$\mathcal{L}_{\mathrm{anchor}} = \lambda_{\mathrm{rd}}\lVert \hat{x}_{K-1} - \hat{x}^{\mathrm{rel}}\rVert^2$
+pins the deepest exit's reconstruction $\hat{x}_{K-1}$ to the released decoder's
+$\hat{x}^{\mathrm{rel}}$, so the reference every saving is quoted against cannot
+drift away underneath the measurement. The distillation term
 $\mathcal{L}_{\mathrm{distill}} = \frac{1}{K-1}\sum_k \lVert f_k - \mathrm{sg}(f_{k+1})\rVert^2 / \mathrm{Var}(f_{k+1})$
-supervises the adapters in feature space. We work in feature space and not in
+supervises the adapters in feature space, where $f_k$ is the feature at exit $k$
+and $\mathrm{sg}$ is a stop-gradient. We work in feature space and not in
 pixels because the head is a fixed map from feature to RGB, so matching the
 deeper feature is the stronger constraint, with $384$ dense channels of target
 instead of $3$. Each exit imitates its neighbour, exit $k$ following exit
@@ -444,15 +571,16 @@ effect flips.
 \includegraphics[width=\columnwidth]{figures/seam_problem.png}
 \caption{\textbf{The artefact, before anything is done about it.} One frame
 decoded twice from the \emph{same} bitstream with the same weights, every tile at
-full depth, stock zero padding, and no early exit anywhere. The only difference is that the right-hand
+full depth, default zero padding, and no early exit anywhere. The only difference is that the right-hand
 decode was tiled. The error map is the tile lattice and nothing else.}
 \label{fig:seamproblem}
 \end{figure}
 
-A $3\times3$ depthwise at feature position $(i,j)$ computes
-$\sum_{u,v} w_{u,v}\, f_{i+u,\,j+v}$. Decoded full frame, those neighbours exist.
+A $3\times3$ depthwise at feature position $(x,y)$ computes
+$\sum_{u,v} w_{u,v}\, f_{x+u,\,y+v}$, over kernel offsets $u,v$ and kernel
+weights $w_{u,v}$. Decoded full frame, those neighbours exist.
 Decoded per tile they do not, and the kernel is handed whatever the padding rule
-invents. Each convolution extends the contaminated region by one ring, so with $b$
+invents. Each convolution extends the affected region by one ring, so with $b$
 per-tile blocks on a tile of side $F$ the fraction of the tile within reach of an
 invented value is $1 - ((F-2b)/F)^2$. At our shipped $F{=}32$, $b{=}8$ that comes
 to $0.750$. Three quarters of the tile is affected, so what we are looking at is a
@@ -470,7 +598,7 @@ with $\alpha = 2.38$ at $q0$ falling to $1.93$ at $q63$ and $r = 0.98$--$0.995$ 
 log--log. Fitted with one free scale, the area fraction is wrong by $160$--$264\%$
 where the power law is wrong by $12$--$22\%$. Fixing the exponent at exactly two
 costs a factor of two, $31$--$38\%$, so the square is the right shape without
-being quite the right law. The exponent has a reading. The count of contaminated
+being quite the right law. The exponent has a reading. The count of affected
 pixels grows like perimeter times depth, $\propto b$, and the error accumulated in
 each of them grows with how many convolutions reached it, again $\propto b$. Once
 every pixel has been touched the area law saturates and the penalty does not,
@@ -483,8 +611,8 @@ which is where the area law fails as a predictor.
 sweeps $b$; $b{=}0$ is an exact control and measures $0.0000\dB$ at all three
 rates. \textbf{a}, the measurement with the fitted power law. \textbf{b},
 both models against $q63$ with one free scale each. \textbf{c}, mean relative
-error. The area fraction saturates once every pixel is contaminated; the penalty
-does not.}
+error. The area fraction saturates once the border reaches every pixel; the
+penalty does not.}
 \label{fig:contam}
 \end{figure}
 
@@ -498,8 +626,8 @@ so that tiling is the only difference from a full-frame decode.
 \centering
 \input{tables/padding}
 \caption{\textbf{Border estimators}, dB below the released decoder on the same
-latent, $256$\,px tiles, full CTC. Lower is better. The zeroth-order hold beats
-the first-order extrapolation by a wide margin, and the fitted AR(1) wins on
+latent, $256$\,px tiles, full CTC. Lower is better. Replication, a zero-order
+hold, beats linear extrapolation by a wide margin, and the fitted AR(1) wins on
 quality while costing $+10.7\%$ of decode wall-clock.}
 \label{tab:padding}
 \end{table}
@@ -520,7 +648,7 @@ $0.1\dB$ budget and a $\sim$30\% saving that trade does not close, so we drop it
 \caption{\textbf{The tiling penalty across the whole rate range}, every tile at
 full depth. The two steps that matter cost nothing, and the largest single
 factor is training the ladder with the seam present. Panel (b): the floor is
-charged \emph{inside} the quality budget and consumes a growing share of it.}
+charged \emph{inside} the distortion budget and consumes a growing share of it.}
 \label{fig:seamqp}
 \end{figure}
 
@@ -539,38 +667,42 @@ penalty, as~(\ref{eq:contam}) predicts, and costs no computation.}
 
 The largest factor of all is the easiest one to miss. On the untrained ladder,
 replicate padding leaves \SeamReplHigh$\dB$ at $q63$; after training, the same
-configuration leaves \FloorHigh$\dB$. So more than two thirds of what the
+setting leaves \FloorHigh$\dB$. So more than two thirds of what the
 estimator could not fix is absorbed by weights learning to live with it
 (Fig.~\ref{fig:seamqp}). That single change removes more of the seam than any
 module in this paper does.
 
-\subsection{A learned repair module, and why we reject it}
+\subsection{A learned deblocking filter, and why we reject it}
 
 \begin{figure}[t]
 \centering
 \includegraphics[width=\columnwidth]{figures/seam_module.png}
-\caption{\textbf{Grid seam repair.} A correction gated by position within a tile,
-applied once to the stitched frame, for $0.95\%$ of the decode. \textbf{a}, the
-gate against distance from the tile boundary, beside the initialisation it
-started from; shading is the spread over cells at the same distance. The trained
-gate keeps the ring, up to $0.76$ at a tile corner, and then flattens onto a
-floor of $0.26$ instead of switching off. \textbf{b}, the change in error
-measured with the repair on, by distance from the nearest tile boundary; bar
-width is the share of pixels, so bar area is what a band contributes to the
-frame. It wins $0.27\%$ on the $6.2\%$ of pixels within $4$\,px of a boundary and
+\caption{\textbf{A learned deblocking filter.} A correction gated by position
+within a tile, applied once to the stitched frame, for $0.95\%$ of the decode.
+\textbf{a}, the gate against distance from the tile boundary, beside the
+initialisation it started from; shading is the spread over cells at the same distance. The trained
+gate keeps the ring, up to $0.76$ at a tile corner, and then flattens at $0.26$
+instead of switching off. \textbf{b}, the change in error measured with the
+filter on, by distance from the nearest tile boundary; bar width is the share of
+pixels, so bar area is what a ring contributes to the frame. It wins $0.27\%$ on the $6.2\%$ of pixels within $4$\,px of a boundary and
 loses $0.04$ to $0.05\%$ on the $94\%$ beyond it.}
 \label{fig:seammodule}
 \end{figure}
 
-The tile lattice is known exactly at training and at inference, so a repair can be
-\emph{told} where to look instead of having to infer it. The module is
-$\mathrm{Rep}(f) = f + G[i \bmod P,\, j \bmod P]\cdot
-\mathrm{PW}(\mathrm{WSiLU}(\mathrm{DW}_{3\times3}(f)))$, with $G$ a $P{\times}P$
-gate shared over channels and initialised at $\exp(-d/\tau)$. It costs $0.95\%$
-of the decode.
+What a standard codec does about a partition boundary is deblock it, with a
+filter applied after reconstruction~\cite{hevc,vvc}. The tile lattice is known
+exactly at training and at inference, so ours can be \emph{told} where to look
+instead of having to infer it. The module is
+$\mathrm{Rep}(f) = f + G[x \bmod P,\, y \bmod P]\cdot
+\mathrm{PW}(\mathrm{WSiLU}(\mathrm{DW}_{3\times3}(f)))$, with $\mathrm{PW}$ a
+pointwise convolution, $\mathrm{DW}_{3\times3}$ a depthwise one,
+$\mathrm{WSiLU}$ the weighted SiLU of the DCVC line~\cite{dcvcrt}, $G$ a
+$P{\times}P$ gate shared over channels, $P$ the tile pitch in feature samples,
+and $G$ initialised at $\exp(-d/\tau)$ in the distance $d$ to the nearest tile
+boundary with $\tau$ a fixed decay length. It costs $0.95\%$ of the decode.
 
 It does not earn that. Splitting the per-pixel error by distance from the nearest
-tile boundary, we find the module gains $0.27\%$ in the $0$--$4$\,px band, which
+tile boundary, we find the filter gains $0.27\%$ in the $0$--$4$\,px ring, which
 is $6.2\%$ of pixels, and loses $0.04$--$0.05\%$ everywhere else. Give it a
 \emph{perfect} gate, with zero correction in the interior and the boundary gain
 unchanged, and the ceiling on what it could earn is
@@ -586,25 +718,27 @@ rescue it, because there is almost nothing left to win.
 \label{sec:coupling}
 
 Only $0.29\%$ of each block has spatial extent, so the exact fix is affordable.
-Give the $3\times3$ its real neighbour from a shared canvas and the cost is
-$+0.032\%$ of the decode, thirty times less than the repair module. The fix is
-also exact. At uniform depth a coupled tiled decode is bit-identical to a
-full-frame one, once the comparison is not confounded by the repair module, which
-runs on the stitched canvas and has no full-frame counterpart:
+Give the $3\times3$ its real neighbours across the tile border, a \emph{halo
+exchange} narrowed to the one operator that needs it; local
+padding~\cite{localpadding} does the same at every layer. The cost is
+$+0.032\%$ of the decode, thirty times less than the deblocking filter. The fix
+is also exact. At uniform depth a tiled decode with the exchange is bit-identical
+to a full-frame one, once the comparison is not confounded by the filter, which
+runs on the stitched frame and has no full-frame counterpart:
 
 \begin{center}\small
 \begin{tabular}{lr}
 \toprule
 at uniform depth & $\max|\text{tiled}-\text{full}|$ \\
 \midrule
-coupling, repair on (as shipped) & $1.13\times10^{-2}$ \\
-coupling, repair off & $\mathbf{0}$ \\
-replicate padding, repair off & $6.06\times10^{-2}$ \\
+halo exchange, filter on (as shipped) & $1.13\times10^{-2}$ \\
+halo exchange, filter off & $\mathbf{0}$ \\
+replicate padding, filter off & $6.06\times10^{-2}$ \\
 \bottomrule
 \end{tabular}
 \end{center}
 
-Coupling also removes most of the floor. Switched on at inference, it drops the
+The exchange also removes most of the floor. Switched on at inference, it drops the
 floor from $0.036$ to $0.003\dB$ at $q0$ and from $0.056$ to $0.030$ at $q63$,
 which is \CoupFloorDropLow\% and \CoupFloorDropHigh\% of the tiling penalty.
 \textbf{And it destroys the allocation.} At the same $0.1\dB$ budget the saving
@@ -612,32 +746,34 @@ falls from \CoupPaddedMid\% to \CoupCoupledMid\% at $q32$ and from
 \CoupPaddedHigh\% to \CoupCoupledHigh\% at $q63$.
 
 The reason is structural, and it is written into the condition on the exactness
-claim. Coupling is exact when every tile is at the \emph{same} depth, and routing
+claim. The exchange is exact when every tile is at the \emph{same} depth, and routing
 deliberately violates that condition. With replicate padding a tile is entirely
 independent of its neighbours, so the allocation is free to give adjacent tiles
-any depths it likes. Coupling makes a tile depend on its neighbours' features, and
+any depths it likes. The exchange makes a tile depend on its neighbours' features, and
 under routing those neighbours ran a different number of blocks. A shallow tile
-reading a deep neighbour's activation is a configuration the weights have never
+reading a deep neighbour's activation is an arrangement the weights have never
 seen, and that mismatch costs more than the seam it removed.
 
 The natural reading of the exactness result is that the exact fix should simply be
 adopted, and that reading is wrong. We report the negative result for that reason,
-and because the tension between coupling and routing belongs to the combination
-itself, so any spatially-adaptive decoder will inherit it. One caveat keeps the
-finding from being final, the same one that applies to the repair module. This
-model was trained with padding, and a run trained \emph{with} coupling could
-reverse the result. The burden of proof lies with that run.
+and because the tension between the halo exchange and routing belongs to the
+combination itself, so any spatially-adaptive decoder will inherit it. One
+caveat keeps the finding from being final, the same one that applies to the
+deblocking filter. This model was trained with padding, and a run trained
+\emph{with} the exchange could reverse the result. The burden of proof lies with
+that run.
 
 % =========================================================== experiments
 \section{Experiments}
+\label{sec:exp}
 
 \paragraph{Setup.} We fine-tune the decoder on $512{\times}512$ crops from
 OpenImages~\cite{openimages} with the encoder frozen ($\max|\Delta| = 0$ is
-asserted every run). One $\lambda$ is drawn per sample from a log-spaced range
-covering all 64 quality indices, so a single set of weights covers the whole rate
-range. We evaluate on the \NumSeq\ sequences of the common test set
-(UVG~\cite{uvg}, MCL-JCV~\cite{mcljcv} and HEVC classes B, C, D and E), one intra
-frame each.
+asserted every run). One $\lambda_{\mathrm{rd}}$ is drawn per sample from a
+log-spaced range covering all 64 quality indices, so a single set of weights
+covers the whole rate range. We evaluate on the \NumSeq\ sequences of the common
+test set (CTC: UVG~\cite{uvg}, MCL-JCV~\cite{mcljcv} and HEVC classes B, C, D
+and E), one intra frame each.
 
 \paragraph{Measurement protocol.} Two details of the protocol move the numbers
 enough that we state them here. The per-tile distortion table $D_{t,k}$ has to be
@@ -676,7 +812,7 @@ flattering one.}
 \centering
 \input{tables/main_results}
 \caption{\textbf{Decoder MACs saved} (\%) against the released decoder, per
-quality index and quality budget, configuration A. The $0.3$ and $0.5\dB$ rows
+quality index and distortion budget, configuration A. The $0.3$ and $0.5\dB$ rows
 sit on the architectural ceiling of Eq.~(\ref{eq:ceiling}) almost everywhere;
 past that point a looser budget buys nothing.}
 \label{tab:main}
@@ -715,7 +851,7 @@ nothing to allocate. Reporting the mean alone would hide both ends.
 \caption{\textbf{Where the decoder spends.} Bosphorus at $q32$, a
 $0.1\dB$ budget. (a) the assignment overlaid on the frame, (b) the exit index
 per tile, (c) the quality each tile gives up, against its \emph{own} full-depth
-reference. Water and sky leave at the shallowest rung; the boat and the
+reference. Water and sky leave at the shallowest exit; the boat and the
 shoreline run deep.}
 \label{fig:exitmap}
 \end{figure}
@@ -746,7 +882,7 @@ saves \MainMean\%.
 
 The two shuffled rows separate effects that are easy to conflate. We keep the
 oracle's own exit histogram, so the mix of depths and hence the average cost are
-unchanged, and assign it to tiles at random. Quality collapses. What the
+unchanged, and assign it to tiles at random. Quality falls sharply. What the
 allocation buys is knowing \emph{which} tiles can afford to run shallower;
 running some fraction of them shallower is worth nothing by itself. The
 rate-ranked row keeps the same histogram and orders it by a signal the decoder
@@ -757,10 +893,10 @@ the confidence rules used by early-exit classifiers~\cite{branchynet,msdnet},
 which likewise read a signal off the network's own output.
 
 It recovers most of the gap. At $q63$, random costs \RandomDb$\dB$ and the
-oracle $0.100\dB$ at identical compute, while rate-ranking costs
+oracle $0.100\dB$ at identical compute, while the rate-ranked row costs
 \RateRankDb$\dB$. That is \RateRankRecovers\% of the oracle's advantage over
 chance, at $0.68$--$0.79$ agreement with the oracle's map. A learned router
-therefore has to beat a free baseline that is already three quarters of the way
+therefore has to beat a parameter-free rule that is already three quarters of the way
 there. We would not have run that comparison without this control, and we
 suggest that any adaptive-inference paper report it. Given the oracle's
 histogram, what we measure here is \emph{ranking} and nothing else.
@@ -795,7 +931,7 @@ Completing the test set exposed a dependence that the 1080p-only subset had
 hidden. Table~\ref{tab:perclass} groups the saving by class. At 1080p, where a
 frame is 40 tiles, we save $36$--$39\%$ at the lowest rate. At $832{\times}480$ a
 frame is 8 tiles and the saving is $23.6\%$; at $416{\times}240$ it is 2 tiles
-and $16.5\%$. At high rate the small resolutions collapse to \SmallResHigh\%
+and $16.5\%$. At high rate the small resolutions fall to \SmallResHigh\%
 against \BigResHigh\% for 1080p.
 
 The natural explanation is granularity. With two tiles per frame there is almost
@@ -804,7 +940,7 @@ choice. That suggests a fix. Choose the tile size relative to the frame, since
 the MAC count does not depend on tile size at all and only the seam does.
 
 \textbf{We tested that fix and it mostly does not work.} We compare the
-$256$\,px configuration against a $128$\,px one at $q0$, which multiplies the
+$256$\,px tiling against a $128$\,px one at $q0$, which multiplies the
 tile count by $3.4$:
 
 \begin{center}\small
@@ -825,21 +961,21 @@ to eight. Everywhere else they cost between $1.7$ and $3.3$ points, including at
 $832{\times}480$, where the count rises from $8$ to $28$ and the saving still
 falls. Beyond a modest number of tiles, the extra seam outweighs the extra
 granularity. We report the comparison as indicative, since the two
-configurations come from different training runs and tile size is therefore
+tile sizes come from different training runs and tile size is therefore
 confounded with training. But the direction is consistent, and it is enough for
 us to say that a resolution-adaptive tile size is not the easy win the
 granularity argument suggests.
 
-\subsection{The working range of a quality budget}
+\subsection{The band a distortion budget works in}
 \label{sec:operating}
 
 \begin{figure}[t]
 \centering
 \includegraphics[width=\columnwidth]{figures/saturation_RECIPE512.png}
 \caption{\textbf{Three regions, and only the middle one is a design choice.}
-Below the floor no allocation meets the budget; above saturation every tile is
-already on the cheapest rung. The working $0.1\dB$ budget uses \BandUseLow\% of
-the window at the lowest rate and \BandUseHigh\% at the highest.}
+Below the floor no allocation meets the budget; above saturation every tile
+already takes the cheapest exit. The $0.1\dB$ budget uses \BandUseLow\% of the
+band at the lowest rate and \BandUseHigh\% at the highest.}
 \label{fig:operating}
 \end{figure}
 
@@ -877,7 +1013,7 @@ depth alone.
 The third of those has a practical edge. The sweep reaches only hull vertices, so
 a budget that falls between two of them cannot be met exactly. We measured what
 that costs by enumerating the \emph{exact} Pareto set with dynamic programming
-over tiles, which is feasible because the cost alphabet has four symbols. The
+over tiles, which is feasible because there are only four distinct exit costs. The
 sweep reaches 95 allocations against a Pareto set of 635, and the loss from
 convexity is at most $0.05$ saving points (Fig.~\ref{fig:theory}c). For this
 problem the standard construction is essentially optimal.
@@ -885,12 +1021,12 @@ problem the standard construction is essentially optimal.
 It matters \emph{why} that loss is small, since the reason is structural and
 points at what would make it smaller. The reachable costs form a lattice, and its
 spacing is set by how much the mean cost moves when the multiplier crosses a
-switching point. If $m$ tiles each move one rung there, the spacing is at most
-$m\max_k(c_{k+1}-c_k)/T$ saving points. The convexity loss cannot exceed the
+breakpoint. If $m$ tiles each move to the next exit there, the spacing is at most
+$m\max_k(c_{k+1}-c_k)/N$ saving points. The convexity loss cannot exceed the
 largest spacing, because a budget between two levels is served by the lower one.
 Here $m{=}2$, since tiles with identical rows switch together, and the bound is
 $0.745$ points; the measured spacing sits exactly on it. Nothing in the
-expression depends on content or rate, and the bound falls as $1/T$: halving the
+expression depends on content or rate, and the bound falls as $1/N$: halving the
 tile side puts four times as many tiles on the lattice, each carrying a quarter
 of the step. Fine granularity is what makes the Lagrangian relaxation lossless in
 practice, and no property of the images is doing that work.
@@ -908,8 +1044,8 @@ at \SatLow$\dB$, so the architectural bound behaves as an operating point rather
 than as an asymptote. Past it, the limiting factor is the \emph{ladder} and not
 the budget, which is an argument for a finer ladder before a looser budget. The
 same two numbers pick out a narrow regime: budgets in
-$[\SatLow, \SatWindowHi)\dB$ saturate the lowest rate and nothing else, a window
-\SatWindowMb\ millibels wide.
+$[\SatLow, \SatWindowHi)\dB$ saturate the lowest rate and nothing else, a range
+\SatWindowMb\ thousandths of a decibel wide.
 
 \begin{figure}[t]
 \centering
@@ -921,10 +1057,10 @@ fitted to all of them.}
 \label{fig:band}
 \end{figure}
 
-\textbf{And the window is almost all of the rate dependence.} At a matched
+\textbf{And the band is almost all of the rate dependence.} At a matched
 decibel the five rates are \BandRawSpread\ points apart. Rescale the budget axis
 onto each rate's own band, with the floor at $0$ and saturation at $1$, and they
-collapse onto a single curve, \BandSpreadMean\ points apart on average and
+collapse onto a single master curve, \BandSpreadMean\ points apart on average and
 \BandSpreadMax\ at worst (Fig.~\ref{fig:band}). The answer to ``how much does a
 $0.1\dB$ budget buy at this rate'' is therefore, to within a couple of points,
 ``where does $0.1\dB$ sit in this rate's band''. The floor and the saturation
@@ -955,18 +1091,18 @@ budgets reported elsewhere are three points on this curve.}
 \label{fig:tradeoff}
 \end{figure}
 \subsection{Signalled versus predicted allocation}
+\label{sec:ab}
 
 \begin{figure}[t]
 \centering
 \includegraphics[width=\columnwidth]{figures/router_ab.png}
-\caption{\textbf{Who decides.} \textbf{(a)} A holds the source, so it can
-decode all $K$ exits per tile and pick the true minimiser; it signals the map at
-$\sim$\MapBits\ bits/frame. B never sees the source and signals nothing; its
-\RouterParams-parameter head reads $\hat{y}$, the entropy scales and qp.
+\caption{\textbf{Who decides.} \textbf{(a)} The two decision paths of
+Section~\ref{sec:setting}, drawn side by side: the encoder's search over all $K$
+exits per tile against the head's forward pass over decoded data.
 \textbf{(b)} Saving at 0.1\,dB; shading is what a bit-exact bitstream costs.
-\textbf{(c)} That cost is smallest at $q\GapMinQp$, where the tilt needed to
-move the router off its training multiplier is essentially zero, and grows in
-both directions. At $0.3\dB$ it collapses to the router's own
+\textbf{(c)} That cost is smallest at $q\GapMinQp$, where the router needs
+almost no cost multiplier to reach the budget from where it was trained, and
+grows in both directions. At $0.3\dB$ it falls to the router's own
 \RouterCostPct\,\% wherever the budget saturates the ladder, and widens where it
 does not.}
 \label{fig:ab}
@@ -976,22 +1112,22 @@ does not.}
 \centering
 \resizebox{\columnwidth}{!}{\input{tables/ab}}
 \caption{\textbf{Signalled against predicted} at two budgets, same checkpoint and
-test set, with one router trained against the deployed oracle at a single
-$\lambda$.}
+test set, with one router trained against the oracle on the deployed table at a
+single $\lambda$.}
 \label{tab:ab}
 \end{table}
 
-Configuration~A is exact by construction and costs bits; configuration~B is
-approximate and costs none. Table~\ref{tab:ab} compares them.
+Table~\ref{tab:ab} compares the two, and what it prices is exactness against
+bits.
 \textbf{Not signalling costs \GapMin--\GapMax\ points}, roughly flat across
 rate, for zero added bits and a byte-identical file. The gap is smallest at
 $q\GapMinQp$ and widens toward both ends of the rate range.
 
-\textbf{It tracks $|\beta|$}, the tilt the bisection has to apply to move a
-router trained at one $\lambda$ onto another operating point. At
-$q\BetaMinQp$ the required tilt is $\beta{=}\BetaAtMin$, essentially none, since
+\textbf{It tracks $|\beta|$}, the cost multiplier the bisection has to apply to
+move a router trained at one $\lambda$ onto another operating point. At
+$q\BetaMinQp$ the required $\beta$ is $\BetaAtMin$, essentially none, since
 that is where the training $\lambda$ lands, and there the gap is at its minimum.
-At $q0$ the tilt is \BetaLow\ and the gap is \GapMax. A large tilt in either
+At $q0$ it is $\BetaLow$ and the gap is \GapMax. A large $\beta$ in either
 direction lets the cost term dominate the logits, which discards the content
 ranking the router learned. The remedy is a router per operating point, and a
 deployment would have one anyway: a single set of weights covers all rates, and
@@ -1000,7 +1136,7 @@ a \RouterParams\ head per rate is $0.3\%$ of the model each.
 Loosening the budget closes the gap only where the budget saturates the ladder.
 At $0.3\dB$ the gap is \GapLooseLow\ points at the three lowest rates. That is
 exactly the router's own \RouterCostPct\% of decode, so its \emph{prediction} is
-free there; both configurations send every tile to the cheapest rung, and
+free there; both configurations send every tile to the cheapest exit, and
 nothing is left to predict wrongly. At the two highest rates $0.3\dB$ does not
 saturate, and the gap \emph{widens} to \GapLooseHigh\ points. A looser budget
 gives the allocation more room to be wrong in as well as more room to be right.
@@ -1008,13 +1144,13 @@ gives the allocation more room to be wrong in as well as more room to be right.
 For a system that trains once, the single-router number is the honest one, so
 that is what we report. It understates what B can do.
 
-\textbf{Retraining with a working mask raises agreement and does not simply
+\textbf{Retraining with the mask fixed raises agreement and does not simply
 raise the saving.} The head above was trained against a suppression term sitting
 above its own logits (below). We retrained it with the mask fixed, same recipe
 and same $\lambda$. Held-out agreement rises from \RetrainAgreeOld\ to
 \RetrainAgreeNew, and the deployed saving moves by $+\RetrainGain$ points at
 $q\RetrainGainQp$ and $-\RetrainLoss$ at $q\RetrainLossQp$. We find the retrained head
-ahead where the required tilt is small and behind where it is large, which is
+ahead where the required $\beta$ is small and behind where it is large, which is
 the same axis the gap runs along. That is the second time in this paper that
 agreement with the oracle has moved opposite to the quantity that matters. We
 keep the original head for every other measurement so the comparisons stay on
@@ -1025,7 +1161,7 @@ An earlier version of this measurement put the gap at $1.7$ points at $q0$,
 rising to $13.3$ at $q63$. The exit mask was at fault. It suppresses exits below
 the split depth by assigning $-10^{4}$, the head's own logits had drifted to
 that scale, and the suppressed entries were therefore the largest in every row.
-A large share of every tile went to the cheapest rung for a reason unrelated to
+A large share of every tile went to the cheapest exit for a reason unrelated to
 its content. The mask is now $-\infty$. Fixing it costs $3.5$ points at $q0$,
 where the accident happened to agree with the oracle, and buys $9.4$ at $q63$,
 where it did not.
@@ -1036,7 +1172,7 @@ where it did not.
 \begin{figure}[t]
 \centering
 \includegraphics[width=\columnwidth]{figures/raterank.png}
-\caption{\textbf{The free baseline.} \textbf{a} Saving at $0.1\dB$; shaded where
+\caption{\textbf{The parameter-free rule.} \textbf{a} Saving at $0.1\dB$; shaded where
 the parameter-free rule beats the trained head. \textbf{b} What a tile's bit
 count is correlated with, against how often the rule agrees with the oracle
 outright; dotted is the head's own held-out agreement.}
@@ -1046,8 +1182,9 @@ outright; dotted is the head's own held-out agreement.}
 \begin{table}[t]
 \centering
 \resizebox{\columnwidth}{!}{\input{tables/raterank}}
-\caption{\textbf{The free baseline}, $0.1\dB$, same test set. Bold where the
-parameter-free rule beats the trained head. $\rho$ are Spearman correlations
+\caption{\textbf{The parameter-free rule}, $0.1\dB$, same test set; it is the
+``rate-rank'' column. Bold where the rule beats the trained head. $\rho$ are
+Spearman correlations
 between a tile's bit count and, respectively, the depth the oracle assigns it and
 the distortion it stands to gain from that depth.}
 \label{tab:raterank}
@@ -1066,7 +1203,7 @@ trained head.}
 \centering
 \resizebox{\columnwidth}{!}{\input{tables/blend}}
 \caption{\textbf{Blending the two decoder-side signals} at $0.1\dB$, both
-normalised to unit mean, weight $w$ from the bit rule to the head's ordering.
+normalised to unit mean, weight $w$ from the parameter-free rule to the head's ordering.
 Bold is the best per rate.}
 \label{tab:blend}
 \end{table}
@@ -1084,12 +1221,12 @@ exit costs on an average tile. We fit $(\alpha,c,\varphi)$ by least squares,
 leave-one-sequence-out, so that no sequence contributes to the profile that
 routes it. The same Lagrangian the oracle runs is then run on the surrogate.
 Nothing is signalled and nothing is trained; the arithmetic is one scalar per
-tile. \textbf{It beats the trained head at every rate.} The free rule is ahead
+tile. \textbf{It beats the trained head at every rate.} The parameter-free rule is ahead
 of the \RouterParams\ router at all \RateRankNWins\ measured rates, by margins
 that run from half a point at $q48$ to \RateRankBeatsBy\ points at $q0$. A head
 trained on this decoder against this oracle therefore returns nothing over a
 rule with no parameters at all, and it carries \RouterCostPct\% of the decode
-that the free rule does not.
+that the parameter-free rule does not.
 
 \textbf{Why it works is not that it agrees with the oracle.} It agrees on
 \RateRankAgreeLo--\RateRankAgreeHi\ of tiles, well below the router's $0.718$,
@@ -1101,14 +1238,14 @@ across the ladder, that is, with how much a tile stands to gain from depth, at
 $\rho_{\mathrm{spread}}=\RateRankSpreadLo$--\RateRankSpreadHi\ at every rate.
 
 \textbf{At a looser budget it stops being a baseline and becomes the answer.}
-At $0.3\dB$ the free rule matches the oracle exactly at the three lowest
+At $0.3\dB$ the parameter-free rule matches the oracle exactly at the three lowest
 rates, where both reach the same architectural ceiling, comes within $0.2$
 points of it at $q48$, and gives up \RateRankLoose\% against the oracle's
 \SigLooseHigh\% at $q63$. That is ahead of the trained head at every rate, by up to
-\RateRankLooseAheadBy\ points. The head is charged for itself and the free rule
+\RateRankLooseAheadBy\ points. The head is charged for itself and the rule
 is not. At a loose budget the head's ordering also has less left to contribute,
 because once the budget saturates the ladder there is little ordering left to
-get right, and the free rule gets it. \textbf{What it cannot do} is see
+get right, and the rule gets it. \textbf{What it cannot do} is see
 anything beyond that ordering. A rank-1 model in the level assigns every tile the
 same relative profile over exits, so $b$ only decides where on the ladder a tile
 falls, never the shape of its trade-off. That is the ceiling this baseline sits
@@ -1117,14 +1254,14 @@ does not earn them at any rate we measured.
 
 \textbf{It replicates on a second training run.}
 \texttt{BEST} is a separate recipe at a different epoch, with its own router
-trained the same way. There the free rule beats the trained head at
+trained the same way. There the parameter-free rule beats the trained head at
 \BestRankWinsN\ of \BestRankOfN\ rates, by up to \BestRankBy\ points, and comes
 within \BestRankToOracle\ points of the \emph{oracle} everywhere
 (Table~\ref{tab:raterankbest}). The margins there are wider than here, and the
 one rate it concedes is the only rate on either checkpoint where the head
 finishes ahead, by under a point. We do not read that as showing a learned head
 cannot be worth its parameters, only that neither of our training runs produced
-one that is. The free rule stays close to the oracle on both.
+one that is. The parameter-free rule stays close to the oracle on both.
 
 Per-block bit allocation is a standard quantity in learned compression, where it
 is something to \emph{choose}; block-level rate control sets it so that complex
@@ -1133,11 +1270,11 @@ other direction, after the fact and at the decoder, as a statement about how har
 a region was. It costs nothing because someone else has already paid for it.
 
 \textbf{Are the two signals complementary?} Barely. We normalise both surrogates
-to unit mean and blend them with one weight $w$, where $w{=}0$ is the bit rule
-and $w{=}1$ the head's ordering. The best blend is $w{=}0$ at the three lowest
-rates and a small head weight at the two highest, worth $+2.1$ points at $q48$
-and $+0.9$ at $q63$ (Table~\ref{tab:blend}). The head reads the entropy model's
-scales, so it already has most of what the bit count carries; what it adds is
+to unit mean and blend them with one weight $w$, where $w{=}0$ is the
+parameter-free rule and $w{=}1$ the head's ordering. The best blend is $w{=}0$ at
+the three lowest rates and a small head weight at the two highest, worth $+2.1$
+points at $q48$ and $+0.9$ at $q63$ (Table~\ref{tab:blend}). The head reads the
+entropy model's scales, so it already has most of what the bit count carries; what it adds is
 confined to $q48$ and $q63$.
 
 A learned component should be measured against the free alternative, and it
@@ -1170,16 +1307,17 @@ $0.1$ points, which is the check that the interpolation is real.}
 \label{tab:hybrid}
 \end{table}
 
-A and B are the two ends of one scale. The encoder can run the decoder's router,
-which reads only decoded data, so the encoder knows tile by tile where the
-prediction will be wrong. Nothing obliges it to correct every one of them.
+The encoder knows tile by tile where the router will be wrong, because it can run
+that router itself (Section~\ref{sec:setting}), and nothing obliges it to correct
+every one of them. That is the room configuration C works in.
 
-Configuration C signals a fraction $\rho$ of the tiles and leaves the rest to
-the router. We choose the overrides by Lagrangian regret,
-$\Delta(t)=L_\lambda(t,\hat{k})-L_\lambda(t,k^{*})$, which is exactly what the
-objective loses on that tile by staying silent. We hold $\beta$ at B's value and
-bisect $\lambda$ over the overrides to land back on the budget. The map
-costs an entropy-coded mask, $N H_2(\rho)$ bits, plus $3$ per override.
+We choose the $\rho N$ overridden tiles by Lagrangian regret,
+$\Delta(t)=L_\lambda(t,\hat{k}_t)-L_\lambda(t,k^{*}_t)$, where
+$L_\lambda(t,k) = D_{t,k}+\lambda c_k$ is the objective
+of~(\ref{eq:lagrangian}), so $\Delta(t)$ is exactly what that objective loses on
+tile $t$ by staying silent. We hold $\beta$ at B's value and bisect $\lambda$
+over the overrides to land back on the budget. The map costs an entropy-coded
+mask, $N H_2(\rho)$ bits with $H_2$ the binary entropy, plus $3$ per override.
 \textbf{The two ends check out.} At $\rho{=}0$ the measurement reproduces
 configuration~B to the second decimal at every rate, and at $\rho{=}1$ it
 reproduces~A. Neither end is imposed; both fall out of the same code path run
@@ -1235,11 +1373,11 @@ reports what \emph{kind} of predictor one has as well as how good it is.
 
 \textbf{Which predictor should C be built on?} Either will do, and the answer
 follows the same split as Section~\ref{sec:raterank}. Running the identical
-override rule over the parameter-free surrogate instead of the head is worth up
+override rule over the parameter-free rule instead of the head is worth up
 to \CPredBitsAhead\ points at the lowest rate and costs up to \CPredHeadAhead\
 at the highest. Both converge on A at $\rho{=}1$ to the second decimal at every
 rate, which is the third independent check that the two code paths agree. The
-best single operating point we measured is the free predictor with half the map
+best single operating point we measured is the parameter-free rule with half the map
 signalled, at \CBestSave\% at $q\CBestQp$. That is \CBestOverA\ points
 \emph{above} full signalling, with no learned component anywhere in the decoder.
 
@@ -1259,9 +1397,8 @@ distortion against a $0.1\dB$ budget.}
 \label{fig:transfer}
 \end{figure}
 
-Configuration~A costs the encoder about one extra decode per frame. How much
-that matters depends on how often the map has to be recomputed, and we have not
-seen that measured anywhere.
+How much A's extra decode at the encoder matters depends on how often the map has
+to be recomputed, and we have not seen that measured anywhere.
 
 \textbf{Across frames.} Reuse is close to free. We take the map found on frame
 $0$ and apply it eight frames later; at $q0$ the delivered distortion rises by
@@ -1290,7 +1427,7 @@ once per rate and reuse that search across frames.
 \centering
 \input{tables/complexity}
 \caption{\textbf{Decoder complexity} at 1080p. Our deepest exit costs slightly
-more than the release because it still pays the seam-repair module; that
+more than the released decoder because it still pays the deblocking filter; that
 $1.0095$, not $1.0$, is what every saving in this paper is \emph{not} divided by.
 Wall-clock is the sorted loop of Section~\ref{sec:wallclock}.}
 \label{tab:complexity}
@@ -1329,9 +1466,9 @@ saving goes from \WallMasked\% to \WallSorted\% (Table~\ref{tab:latency}), a
 gain of \WallSortedGain\ points, or a fifth of the shortfall, for a change that
 touches no arithmetic.
 
-The same gap appears in our own accounting. Every configuration~B number in this
-paper charges the router at its share of the decoder's multiply--accumulates,
-\RouterCostPct\%. We also timed the head directly, on the padded
+The same gap appears in our own accounting. The router is charged at its share of
+the decoder's multiply--accumulates, \RouterCostPct\%
+(Section~\ref{sec:setting}). We also timed the head directly, on the padded
 $2048{\times}1280$ frame the decoder actually sees, interleaved against a
 deepest-exit decode so that a co-tenant's load falls on both equally. It costs
 \RouterTimePct\%, which is \RouterTimeFactor$\times$ what its arithmetic
@@ -1353,7 +1490,7 @@ this method, and the optimism grows with how much of the frame exits early.
 \begin{table}[t]
 \centering
 \resizebox{\columnwidth}{!}{\input{tables/runs}}
-\caption{\textbf{Ladder configurations}, mean saving (\%) over the five rates,
+\caption{\textbf{Ladder settings}, mean saving (\%) over the five rates,
 same test set and protocol. ``Ceiling'' is Eq.~(\ref{eq:ceiling}).
 $^{\ast}$ one rate is infeasible at that budget, because the ladder's floor
 exceeds it, so the mean is over the remaining four.}
@@ -1361,7 +1498,7 @@ exceeds it, so the mean is over the remaining four.}
 \end{table}
 
 Section~\ref{sec:operating} argued that once a budget saturates a ladder, the
-only way to spend more is a rung that does not exist. Table~\ref{tab:runs}
+only way to spend more is an exit that does not exist. Table~\ref{tab:runs}
 measures that. A finer ladder ($K{=}12$, $j{=}4$) has a ceiling of $50.3\%$
 against \Ceiling\%, and the two orderings cross somewhere between $0.1$ and
 $0.3\dB$:
@@ -1377,19 +1514,18 @@ $0.3\dB$:
 \end{itemize}
 
 So the ladder is a choice made at the operating point, not a hyperparameter
-tuned once and fixed. The floor--saturation window of
-Section~\ref{sec:operating} tells you which side of the crossover a given budget
-sits on.
+tuned once and fixed. The band of Section~\ref{sec:operating} tells you which
+side of the crossover a given budget sits on.
 
 % =========================================================== limitations
 \section{Limitations}
 \label{sec:limits}
 
 \paragraph{The seam is reduced, and the exact remedy is not usable as it stands.}
-Canvas coupling removes \CoupFloorDropLo--\CoupFloorDropHi\% of the floor and is
-bit-exact at uniform depth (Section~\ref{sec:coupling}). It also collapses the
+The halo exchange removes \CoupFloorDropLo--\CoupFloorDropHi\% of the floor and
+is bit-exact at uniform depth (Section~\ref{sec:coupling}). It also destroys the
 routed saving, because routing puts neighbouring tiles at different depths. We do
-not know whether a decoder trained with coupling can recover both at once, and
+not know whether a decoder trained with the exchange can recover both at once, and
 that is the experiment we would run next. Until someone runs it, the floor is a
 cost this method pays.
 
@@ -1420,17 +1556,17 @@ is about early exit.
 \textbf{Tiling is the dominant cost and it is governed by depth.} All of that
 cost traces back to a single $3\times3$ that is $0.29\%$ of the arithmetic, and
 the penalty grows as the square of how many such convolutions run per tile. The
-corrupted-area fraction usually quoted alongside it predicts that penalty badly.
+affected-area fraction usually quoted alongside it predicts that penalty badly.
 
 \textbf{The exact remedy is in tension with the thing it enables.} Giving each
 convolution its real neighbour is bit-identical at uniform depth, and under
-routing it collapses the allocation, because routing is the deliberate violation
+routing it destroys the allocation, because routing is the deliberate violation
 of the condition that makes it exact. We expect any method that combines spatial
 adaptivity with tiled inference to walk into this.
 
-\textbf{A quality budget is only a control variable inside a measurable window.}
+\textbf{A distortion budget is only a control variable inside a measurable band.}
 Below the floor the budget admits nothing at all, and above saturation more of it
-buys nothing. A saving quoted without saying where in that window it sits has
+buys nothing. A saving quoted without saying where in that band it sits has
 left out the part of the result a reader most needs.
 
 We would attach three cautions to the measurements themselves. A saving in

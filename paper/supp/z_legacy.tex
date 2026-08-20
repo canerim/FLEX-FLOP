@@ -1,0 +1,297 @@
+% The old supplementary.tex, moved here whole so that nothing is lost.
+%
+% This is a transcription, not a rewrite. When supplementary.tex was cut down to
+% a shell of \input lines, its six sections had to go somewhere, and this is
+% where they went. scripts/supp/z_legacy.py holds the same content for the PDF
+% builder.
+%
+% One thing did change, and it is recorded here so that nobody later reads an
+% edit as the original. The vocabulary follows the vocabulary main.tex now uses:
+% deblocking filter for seam-repair module, halo exchange for canvas coupling,
+% ring for band, exit for rung, cost multiplier for tilt, and affected for
+% contaminated. No number, no table row and no claim was altered.
+%
+% It is unaudited and it is meant to be temporary. A separate audit of this text
+% against results/ and paper/tables/macros.tex found statements that do not
+% match the files they claim to come from, figures that no file in results/
+% contains at all, and tables that mix checkpoints without saying so. None of
+% that is corrected here, because correcting it inside a transcription would
+% make it impossible to tell what was moved from what was changed. A later agent
+% folds each paragraph into the section that now owns the subject, fixes it
+% against the file, and deletes this file, its .py sibling and both entries in
+% ORDER.
+%
+% Note that the six \section commands below become A to F under the \appendix
+% in supplementary.tex, which is what the PDF builder numbers them as too.
+
+\section{Architecture details}
+
+\paragraph{Costs.} With $K$ exits over $N{=}12$ trunk blocks and split depth $j$,
+the cost of exit $k$ in units of one released decode is
+\begin{equation}
+c_k = s_{\mathrm{up}} + s_{\mathrm{trunk}}\frac{(k{+}1)b}{N}
+      + s_{\mathrm{head}} + a_k + r,
+\end{equation}
+where $b = N/K$ blocks per exit, $s_{\mathrm{up}} = 0.0816$,
+$s_{\mathrm{trunk}} = 0.8944$, $s_{\mathrm{head}} = 0.0240$ are the measured
+shares of the released decoder, $a_k$ is the adapter's share and $r$ the
+deblocking filter's $0.0095$. Only the trunk term depends on $k$: the stem and
+head run for every tile at every depth, which is why the ceiling
+$100(1-c_j)$ is well below $100$ however shallow the ladder gets.
+
+\paragraph{Adapters.} $\mathrm{Ad}(f) = f + Wf$ with $W\in\mathbb{R}^{C\times C}$
+zero-initialised costs $C^2$ MAC/px, one eighth of a block's $8C^2 + 9C$. The
+FFN variant, $\mathrm{Ad}(f)=f+\mathrm{PW}(\mathrm{WSiLUChunkAdd}
+(\mathrm{PW}_{C\to 4C}(f)))$, costs $2C^2$. Assignment is by the number of blocks
+the exit skips: FFN at four or more, the $1\times1$ otherwise.
+
+\section{The tiling penalty in detail}
+
+\paragraph{Why only the depthwise matters.} A \texttt{DepthConvBlock} at $C=384$
+costs $8C^2 + 9C = 1{,}183{,}104$ MAC/px, of which the $3\times3$ depthwise is
+$9C = 3{,}456$, or $0.29\%$. Every other operator is $1\times1$ and has no
+neighbours to miss. This is why the exact remedy is affordable: haloing
+only the depthwise costs $+0.032\%$ of the decode at $256$\,px tiles,
+against $1.745\times$ for a halo carried through the whole block. An earlier
+iteration of this work measured that $1.745\times$ correctly and then rejected
+haloing altogether, instead of narrowing it to the one operator that needs it.
+
+\paragraph{Seam penalty against per-tile depth.} Sweeping the split depth $j$
+sweeps the number of per-tile blocks $b = (K-j)\,b_{\mathrm{exit}}$ from 12 to
+0, and the pure seam penalty follows (untrained warm start, every tile at full
+depth, 12 sequences):
+
+\begin{center}
+\begin{tabular}{rrrrr}
+\toprule
+$b$ & area $1-(\frac{F-2b}{F})^2$ & $q0$ & $q32$ & $q63$ \\
+\midrule
+12 & 0.938 & 0.175 & 0.314 & 0.606 \\
+10 & 0.859 & 0.100 & 0.149 & 0.234 \\
+ 8 & 0.750 & 0.065 & 0.107 & 0.194 \\
+ 6 & 0.609 & 0.032 & 0.053 & 0.089 \\
+ 4 & 0.438 & 0.009 & 0.018 & 0.038 \\
+ 2 & 0.234 & 0.003 & 0.006 & 0.017 \\
+ 0 & 0.000 & \textbf{0.000} & \textbf{0.000} & \textbf{0.000} \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+The $b=0$ row is the control and it is exactly zero at all three rates, so the
+measurement is of the seam and nothing else.
+
+The area fraction is a poor predictor: fitted with one free scale it is wrong by
+160--264\% on average. It counts whether a pixel is \emph{reached} by the border
+and not how far the border propagates into it, and it saturates: at $b=12$
+the border already reaches almost every pixel, yet the penalty keeps rising
+steeply. A power law fits well at every rate,
+\begin{equation}
+\text{seam} \;\propto\; b^{\alpha}, \qquad
+\alpha = 2.38,\, 2.22,\, 1.93 \text{ at } q0,\, q32,\, q63,
+\end{equation}
+with $r = 0.98$--$0.995$ in log--log and $12$--$22\%$ mean relative error. The
+exponent near two has a reading: the number of affected pixels grows like the
+perimeter times the depth, $\propto b$, and the error accumulated in each of them
+grows with the number of convolutions that reached it, also $\propto b$. Once
+the border has reached every pixel the first factor is fixed and only the second keeps
+growing, which is the regime in which the area fraction flattens and the
+measured penalty does not.
+
+\paragraph{The deblocking filter's ceiling.} Splitting per-pixel squared error
+by distance from the nearest tile boundary at $q63$, with the filter on against
+off and
+the same exit map:
+
+\begin{center}
+\begin{tabular}{lrrr}
+\toprule
+Ring (px) & Share & OFF & Change \\
+\midrule
+0--4    & 6.2\%  & $4.7\times10^{-5}$ & $-0.27\%$ \\
+4--16   & 17.3\% & $4.4\times10^{-5}$ & $+0.05\%$ \\
+16--64  & 51.6\% & $4.3\times10^{-5}$ & $+0.04\%$ \\
+64--128 & 25.0\% & $4.1\times10^{-5}$ & $+0.04\%$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+The error is $15\%$ higher in the boundary ring than in the interior and falls
+monotonically with distance, so the artefact is real and local. But the gate
+leaks: the filter gains only in the first ring. Taking the boundary gain and
+assuming a perfect gate elsewhere bounds what it could ever earn at
+$0.062 \times 4.7\!\times\!10^{-5} \times 0.0027 / 4.30\!\times\!10^{-5}
+\approx 1.8\times10^{-4}$ of the frame's error, i.e. $\approx 0.0008\dB$, for
+$0.95\%$ of the decode.
+
+\section{Reproducibility}
+
+\paragraph{Frozen encoder.} Every evaluation asserts
+$\max|\theta^{\mathrm{enc}}_{\mathrm{ours}} - \theta^{\mathrm{enc}}_{\mathrm{rel}}| = 0$
+before measuring. Without it the comparison is not on the same latent and the
+claim of an unchanged bitstream is unverified.
+
+\paragraph{Warm-start equivalence.} At initialisation the deepest exit
+reproduces the released decoder bit-exactly at $q0/32/63$, because every
+inherited weight is copied and every new module's last layer is zero.
+
+\paragraph{Sorted execution.} The reordering of
+Section~5 is bit-identical on CUDA under a random exit map and random content.
+It is \emph{not} bit-identical on CPU, and the reason is not the algorithm: a
+plain \texttt{DepthConvBlock} is already order-dependent at batch size 13 there,
+by about $10^{-7}$, while exact at 4, 9, 16 and 40, because oneDNN selects a
+different blocking. A test that compared the two paths on a decode of an
+all-zero image would pass vacuously (every tile carries the same latent, so any
+permutation is trivially exact), and ours therefore uses random content.
+
+\paragraph{Two decibel conventions.} Pooling every tile of every frame into one
+MSE and averaging a per-frame decibel differ by $0.023$--$0.033\dB$ on an
+identical allocation, a quarter to a third of the working budget, with pooling
+always the flattering one. We report per-frame, which is what the reference
+implementation of the baseline computes.
+
+\paragraph{Two quality metrics.} An RGB MSE ratio and the $6{:}1{:}1$-weighted
+YUV 4:2:0 PSNR the baseline reports agree within $0.003\dB$ on identical
+decodes across the whole rate range; we verified this rather than assuming it.
+
+\paragraph{Timing.} \texttt{torch.cuda.Event} is created on the process's
+current device, so a timing harness on a non-default GPU measures nothing in
+particular and says nothing about it. Every wall-clock figure here was
+re-measured with the device pinned, and a test asserts that every script using
+CUDA events pins it.
+
+\paragraph{Generated numbers.} No number in the paper is typed. Every table and
+every inline figure is generated from \texttt{results/} by one script, expanded
+as a macro, and a second script re-reads \NumClaims\ of them out of the prose
+and compares them against the same files, exiting non-zero on any disagreement.
+It has caught four drifts, one of which was a figure count that changed when a
+figure was inserted in the middle.
+
+\section{Claims this work made and then measured}
+
+Five statements that appeared in earlier drafts of this work, and what the
+experiment said. Each was plausible and argued from a mechanism, and in every
+case it took a measurement rather than a better argument to settle it.
+
+\begin{itemize}\itemsep3pt
+\item \textbf{``The corrupted-area fraction explains why split depth matters.''}
+      It predicts the seam with $160$--$264\%$ error, because the affected area
+      saturates once the border reaches every pixel and the damage does not. What
+      replaces it is a power law in $b$ with the exponent \emph{fitted}
+      ($2.38$, $2.22$, $1.93$ at $q0$, $q32$, $q63$), which fits to
+      $12$--$22\%$. A fixed square, which earlier drafts quoted as though it
+      were the same thing, fits to $31$--$38\%$: better than the area by a
+      factor of five and worse than the fitted exponent by a factor of two.
+\item \textbf{``The halo exchange is the clearest remaining gain, worth
+      $3.5$--$5$ points.''} It removes $47$--$91\%$ of the floor and collapses the
+      routed saving: \CoupPaddedMid\% to \CoupCoupledMid\% at $q32$,
+      \CoupPaddedHigh\% to \CoupCoupledHigh\% at
+      $q63$. The exchange is exact at uniform depth, and routing is the deliberate
+      violation of that condition.
+\item \textbf{``A tile size chosen per resolution is the obvious extension.''}
+      $128$\,px tiles help only at $416{\times}240$ ($+2.4$ points) and cost
+      $1.7$--$3.3$ points elsewhere, including at $832{\times}480$ where the tile
+      count rises from 8 to 28 and the saving still falls.
+\item \textbf{``Configuration A costs the encoder about $1.21$ decodes.''} The
+      exact search costs $4.6$. The $1.21$ figure was the full-frame table, which
+      may be used to rank but not to report.
+\item \textbf{``The recovery curve of partial signalling \emph{is} the Lorenz
+      curve of the per-tile regret.''} It is neither an identity nor, as the
+      second version of this claim said, an upper bound. Overriding a set
+      removes exactly its regret at a \emph{fixed} multiplier, but the
+      constraint is distortion, and returning to the budget re-bisects
+      $\lambda$. What the re-bisection opens up is a larger feasible set: the
+      hybrid runs the oracle's $\lambda$ on the overridden tiles and the
+      router's fixed $\beta$ on the rest, and two multipliers reach allocations
+      one cannot. Measured, the recovery exceeds the Lorenz prediction wherever
+      that matters, reaching \LorenzTightMin--\LorenzTightMax\% of it across
+      the sweep, and at \HybridBeatsAN\ of \HybridBeatsAOf\ rates a half map
+      beats a complete one outright. Both versions of the claim took a
+      separability argument that holds for the objective and applied it to a
+      saving measured at fixed distortion.
+\end{itemize}
+
+\section{Negative results}
+
+We list these because they cost real time and are not otherwise recoverable from
+the paper.
+
+\begin{itemize}\itemsep2pt
+\item \textbf{First-order border extrapolation.} Continuing the local gradient
+      past a tile boundary is $1.8\times$ worse than replication, a zero-order
+      hold, at
+      $q63$ (\SeamLinearHigh$\dB$ against \SeamReplHigh). Amplifying boundary
+      noise costs more than the trend recovers.
+\item \textbf{Fitted AR(1) padding}~\cite{arls}. The best estimator we measured,
+      and rejected: $0.02\dB$ for $10.7\%$ of decode wall-clock.
+\item \textbf{A learned deblocking filter.} Bounded above at $\approx 0.0008\dB$ for
+      $0.95\%$ of decode, even with a perfect gate.
+\item \textbf{Jointly training the router with the decoder.} In one
+      configuration the router collapsed to a rate-dependent constant with zero
+      agreement with the oracle; in another it did not. Training the router
+      against a frozen decoder is reliable and is what we report.
+\item \textbf{A halo through the per-tile trunk.} $1.745\times$ the cost of a
+      full decode, which is more than routing saves.
+\item \textbf{A rank-1 surrogate for the per-tile distortion.} Modelling
+      $\log D(t,k)\approx\alpha\log b(t)+c+\log\varphi_k$ from the tile's bit
+      count gives a routing rule with no learned parameters, and it works, but
+      only because it places tiles on the ladder by \emph{level}. What decides
+      a tile is the \emph{spread} across the ladder, which a rank-1
+      model in the level cannot represent, and the two are not the same
+      ordering: bits correlate with distortion at every exit and with the
+      depth the oracle assigns, at $\rho\approx0.53$, but a level-only model
+      cannot see which tiles have a steep ladder and which have a flat one.
+\item \textbf{A single router across all rates.} It comes within \GapMin\
+      points of the oracle at $q\GapMinQp$, where the cost multiplier the
+      bisection has to apply is essentially zero because that is where its training $\lambda$
+      lands, and falls to \GapMax\ at the far end. The gap tracks $|\beta|$ in
+      both directions. The remedy is a router per operating point.
+\end{itemize}
+
+\section{Things that were not running}
+
+Four checks this work cites were not measuring what they claimed, and all four
+were found by running them rather than by reading them.
+
+\begin{itemize}\itemsep2pt
+\item The bit-exactness test for the warm start declared \texttt{qp} as a bare
+      parameter with no \texttt{parametrize}, so \texttt{pytest} looked for a
+      fixture of that name and errored at setup. It has been cited by name for
+      the claim that the deepest exit reproduces the released decoder exactly.
+      Parametrised over three rates and every warm start on disk: six cases,
+      all exact.
+\item The equality check for the sorted per-tile loop compared the two paths on a
+      decode of \texttt{torch.zeros}, where every tile carries the same latent
+      and any permutation is trivially exact. On random content with a mixed exit
+      map the result is still bit-identical on CUDA, but the original check could
+      not have failed.
+\item Every wall-clock measurement in this work was taken with
+      \texttt{torch.cuda.Event}, which is created on the process's \emph{current}
+      device rather than on the device the tensors live on. The timing runs used
+      a non-default GPU, so the events and the work were on different cards.
+      This does not raise: it returns numbers. The tell, in hindsight, was that
+      the released decoder appeared to take $274$, $401$ and $512$\,ms at $q0$,
+      $q32$ and $q63$; a fixed-architecture synthesis network whose
+      arithmetic does not depend on the quality index cannot get slower with
+      it. Re-measured with the device pinned it is $111$\,ms at all three. The
+      corrections are not small and one of them reverses a claim: the tiling
+      overhead falls from $8.5\%$ to \TilingOverhead\%, and the unsorted
+      per-tile loop, reported as \emph{slower} than the dense decoder at high
+      rate, in fact realises \WallMasked\% at $q0$. Sorting the tiles is
+      therefore a $\WallSortedGain$-point improvement on a loop that already
+      worked. The wall-clock section of the main paper is written against the
+      corrected numbers. Anything in this
+      repository that timed a non-default GPU should be assumed to have had this
+      bug; a source test now asserts that every script using
+      \texttt{torch.cuda.Event} pins the device first, and it found two more.
+\item The router head suppresses exits below the split depth by assigning them
+      $-10^{4}$. That is a mask only while the head's own logits stay well above
+      it, and this head's did not: nothing in a cross-entropy or a regret
+      objective penalises a common offset, one drifted in during training, and
+      the raw outputs settled near $-10^{4}$. The two suppressed entries then
+      became the \emph{largest} in every row, took nearly all the probability
+      mass, and the caller's clamp turned the resulting choice into the cheapest
+      real exit, so a large share of every configuration-B allocation went to
+      the cheapest exit for a reason unrelated to the tile. The mask is now
+      $-\infty$, which cannot drift, and a test checks the property across six
+      logit scales rather than checking the constant.
+\end{itemize}

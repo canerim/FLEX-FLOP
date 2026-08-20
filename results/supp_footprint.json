@@ -1,0 +1,60 @@
+{
+  "ckpt": "runs/RECIPE512/ckpt_PAPER.pth.tar",
+  "qp": 32,
+  "budget_db": 0.1,
+  "hist": [
+    705,
+    0,
+    0,
+    439,
+    266,
+    355
+  ],
+  "device": "NVIDIA RTX A6000",
+  "rows": [
+    {
+      "size": "1024x512",
+      "n_tiles": 8,
+      "mac_saving_pct": 21.551450166503162,
+      "ms_full": 22.782880783081055,
+      "ms_routed": 20.04991912841797,
+      "fps_full": 43.8926055717509,
+      "fps_routed": 49.875512893348244,
+      "peak_mb_full": 180.0,
+      "peak_mb_routed": 204.0009765625,
+      "time_saving_pct": 11.99568079508465,
+      "peak_delta_pct": 13.333875868055545
+    },
+    {
+      "size": "1280x768",
+      "n_tiles": 15,
+      "mac_saving_pct": 23.06061820342402,
+      "ms_full": 43.59782409667969,
+      "ms_routed": 35.67206573486328,
+      "fps_full": 22.936924507573252,
+      "fps_routed": 28.033139640205157,
+      "peak_mb_full": 337.5,
+      "peak_mb_routed": 382.5009765625,
+      "time_saving_pct": 18.179252121025037,
+      "peak_delta_pct": 13.333622685185187
+    },
+    {
+      "size": "2048x1280",
+      "n_tiles": 40,
+      "mac_saving_pct": 22.882922717663156,
+      "ms_full": 110.77823638916016,
+      "ms_routed": 89.4382095336914,
+      "fps_full": 9.027043872471793,
+      "fps_routed": 11.180903611708592,
+      "peak_mb_full": 900.0,
+      "peak_mb_routed": 1020.0009765625,
+      "time_saving_pct": 19.263735866404264,
+      "peak_delta_pct": 13.333441840277782
+    },
+    {
+      "size": "3840x2304",
+      "n_tiles": 135,
+      "oom": true
+    }
+  ]
+}

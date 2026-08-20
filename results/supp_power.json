@@ -1,0 +1,266 @@
+{
+  "ckpt": "runs/RECIPE512/ckpt_PAPER.pth.tar",
+  "budget_db": 0.1,
+  "device": "NVIDIA RTX A6000",
+  "power_limit_w": 300.0,
+  "rows": [
+    {
+      "size": "1280x768",
+      "qp": 0,
+      "n_tiles": 15,
+      "hist": [
+        1244,
+        0,
+        0,
+        426,
+        54,
+        41
+      ],
+      "mac_saving_pct": 34.35243398598886,
+      "idle_w": {
+        "before": 74.64525,
+        "mid": 110.691,
+        "after": 122.40225000000001,
+        "mean": 102.57950000000001
+      },
+      "full": {
+        "ms_median": 43.45395278930664,
+        "ms_mean": 43.51311934927236,
+        "iters": 460,
+        "watts_mean": 283.9251,
+        "watts_max": 292.32,
+        "power_samples": 200
+      },
+      "routed": {
+        "ms_median": 30.064640045166016,
+        "ms_mean": 30.137381786323456,
+        "iters": 664,
+        "watts_mean": 286.84275,
+        "watts_max": 293.45,
+        "power_samples": 200
+      },
+      "time_saving_pct": 30.812646225904516,
+      "joules_per_frame_full": 12.337667891099168,
+      "joules_per_frame_routed": 8.623824028315545,
+      "energy_saving_pct": 30.1016682858105,
+      "joules_above_idle_full": 7.8801831409484855,
+      "joules_above_idle_routed": 5.5398082848024375,
+      "energy_saving_above_idle_pct": 29.699498276690463
+    },
+    {
+      "size": "1280x768",
+      "qp": 32,
+      "n_tiles": 15,
+      "hist": [
+        705,
+        0,
+        0,
+        439,
+        266,
+        355
+      ],
+      "mac_saving_pct": 23.06061820342402,
+      "idle_w": {
+        "before": 78.4905,
+        "mid": 124.55049999999999,
+        "after": 120.01025,
+        "mean": 107.68374999999999
+      },
+      "full": {
+        "ms_median": 43.4964485168457,
+        "ms_mean": 43.54858224739956,
+        "iters": 459,
+        "watts_mean": 293.6868341708543,
+        "watts_max": 297.83,
+        "power_samples": 199
+      },
+      "routed": {
+        "ms_median": 35.61062240600586,
+        "ms_mean": 35.68576607389671,
+        "iters": 561,
+        "watts_mean": 292.55420000000004,
+        "watts_max": 299.08,
+        "power_samples": 200
+      },
+      "time_saving_pct": 18.129816064835158,
+      "joules_per_frame_full": 12.774334262587965,
+      "joules_per_frame_routed": 10.418037149491122,
+      "energy_saving_pct": 18.445557041651096,
+      "joules_above_idle_full": 8.090473574612083,
+      "joules_above_idle_routed": 6.583351788978388,
+      "energy_saving_above_idle_pct": 18.628350636519542
+    },
+    {
+      "size": "1280x768",
+      "qp": 63,
+      "n_tiles": 15,
+      "hist": [
+        500,
+        0,
+        0,
+        330,
+        505,
+        430
+      ],
+      "mac_saving_pct": 18.017714277818463,
+      "idle_w": {
+        "before": 91.245,
+        "mid": 127.75775000000002,
+        "after": 126.20075,
+        "mean": 115.06783333333334
+      },
+      "full": {
+        "ms_median": 43.5333137512207,
+        "ms_mean": 43.58220460679796,
+        "iters": 459,
+        "watts_mean": 294.11204999999995,
+        "watts_max": 299.17,
+        "power_samples": 200
+      },
+      "routed": {
+        "ms_median": 37.87977600097656,
+        "ms_mean": 37.9575816232294,
+        "iters": 527,
+        "watts_mean": 294.20585,
+        "watts_max": 298.73,
+        "power_samples": 200
+      },
+      "time_saving_pct": 12.986692863659178,
+      "joules_per_frame_full": 12.803672150664708,
+      "joules_per_frame_routed": 11.14445169617691,
+      "energy_saving_pct": 12.958942051649291,
+      "joules_above_idle_full": 7.794388059491537,
+      "joules_above_idle_routed": 6.785707944592539,
+      "energy_saving_above_idle_pct": 12.941107206879288
+    },
+    {
+      "size": "2048x1280",
+      "qp": 0,
+      "n_tiles": 40,
+      "hist": [
+        1244,
+        0,
+        0,
+        426,
+        54,
+        41
+      ],
+      "mac_saving_pct": 32.976330298047564,
+      "idle_w": {
+        "before": 100.49625,
+        "mid": 128.677,
+        "after": 128.3635,
+        "mean": 119.17891666666667
+      },
+      "full": {
+        "ms_median": 110.73945617675781,
+        "ms_mean": 110.76548092668227,
+        "iters": 181,
+        "watts_mean": 298.1402,
+        "watts_max": 298.76,
+        "power_samples": 200
+      },
+      "routed": {
+        "ms_median": 78.55001831054688,
+        "ms_mean": 78.59815368652343,
+        "iters": 255,
+        "watts_mean": 296.0836,
+        "watts_max": 298.33,
+        "power_samples": 200
+      },
+      "time_saving_pct": 29.067722542208863,
+      "joules_per_frame_full": 33.01588361242981,
+      "joules_per_frame_routed": 23.257372201452636,
+      "energy_saving_pct": 29.557020267975787,
+      "joules_above_idle_full": 19.818075193028,
+      "joules_above_idle_routed": 13.89586611505483,
+      "energy_saving_above_idle_pct": 29.882867131600165
+    },
+    {
+      "size": "2048x1280",
+      "qp": 32,
+      "n_tiles": 40,
+      "hist": [
+        705,
+        0,
+        0,
+        439,
+        266,
+        355
+      ],
+      "mac_saving_pct": 22.882922717663156,
+      "idle_w": {
+        "before": 106.5165,
+        "mid": 128.18525,
+        "after": 124.989,
+        "mean": 119.89691666666666
+      },
+      "full": {
+        "ms_median": 110.7558364868164,
+        "ms_mean": 110.77763130651653,
+        "iters": 181,
+        "watts_mean": 298.12235,
+        "watts_max": 298.71,
+        "power_samples": 200
+      },
+      "routed": {
+        "ms_median": 89.5621109008789,
+        "ms_mean": 89.61377365248543,
+        "iters": 224,
+        "watts_mean": 297.36422885572136,
+        "watts_max": 298.91,
+        "power_samples": 201
+      },
+      "time_saving_pct": 19.135538368183646,
+      "joules_per_frame_full": 33.01879024966545,
+      "joules_per_frame_routed": 26.63256804273045,
+      "energy_saving_pct": 19.341175611361795,
+      "joules_above_idle_full": 19.739506952058665,
+      "joules_above_idle_routed": 15.894347095557018,
+      "energy_saving_above_idle_pct": 19.479513170416997
+    },
+    {
+      "size": "2048x1280",
+      "qp": 63,
+      "n_tiles": 40,
+      "hist": [
+        500,
+        0,
+        0,
+        330,
+        505,
+        430
+      ],
+      "mac_saving_pct": 17.84886211327742,
+      "idle_w": {
+        "before": 98.639,
+        "mid": 131.91424999999998,
+        "after": 121.88025,
+        "mean": 117.47783333333332
+      },
+      "full": {
+        "ms_median": 110.74559783935547,
+        "ms_mean": 110.7696996024959,
+        "iters": 181,
+        "watts_mean": 298.0495,
+        "watts_max": 298.7,
+        "power_samples": 200
+      },
+      "routed": {
+        "ms_median": 95.08454132080078,
+        "ms_mean": 95.12167004047411,
+        "iters": 211,
+        "watts_mean": 297.96305,
+        "watts_max": 298.75,
+        "power_samples": 200
+      },
+      "time_saving_pct": 14.1414709244445,
+      "joules_per_frame_full": 33.007670063220985,
+      "joules_per_frame_routed": 28.33167993979683,
+      "energy_saving_pct": 14.166374404700576,
+      "joules_above_idle_full": 19.99751717784882,
+      "joules_above_idle_routed": 17.16135404193535,
+      "energy_saving_above_idle_pct": 14.18257632029979
+    }
+  ]
+}

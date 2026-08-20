@@ -6,47 +6,48 @@
   "rows": [
     {
       "qp": 0,
-      "saved_at_budget": 34.16474802090724,
-      "db_for_target": 0.08111562964056812,
-      "overspend_db": -0.018884370359431885,
-      "floor_db": 0.045131485909223557,
+      "saved_at_budget": 35.0457133015585,
+      "db_for_target": 0.07706585069269943,
+      "overspend_db": -0.022934149307300575,
+      "floor_db": 0.0396944135427475,
       "floor_share_pct": null,
       "reachable": true
     },
     {
       "qp": 16,
-      "saved_at_budget": 28.79999068367632,
-      "db_for_target": 0.10488225857295874,
-      "overspend_db": 0.0048822585729587364,
-      "floor_db": 0.05970118194818497,
-      "floor_share_pct": 1222.818928084855,
+      "saved_at_budget": 29.620560997793028,
+      "db_for_target": 0.1015010723327392,
+      "overspend_db": 0.0015010723327391895,
+      "floor_db": 0.055783048272132874,
+      "floor_share_pct": 3716.213206750587,
       "reachable": true
     },
     {
       "qp": 32,
-      "saved_at_budget": 21.458582487488865,
-      "db_for_target": 0.1337183066364227,
-      "overspend_db": 0.033718306636422696,
-      "floor_db": 0.07611165195703506,
-      "floor_share_pct": 225.72797850654473,
+      "saved_at_budget": 22.3718064053501,
+      "db_for_target": 0.12937889476095374,
+      "overspend_db": 0.029378894760953733,
+      "floor_db": 0.07522118836641312,
+      "floor_share_pct": 256.038183119082,
       "reachable": true
     },
     {
       "qp": 48,
-      "saved_at_budget": 15.317260142776727,
-      "db_for_target": 0.1484881008128464,
-      "overspend_db": 0.04848810081284641,
-      "floor_db": 0.08913513273000717,
-      "floor_share_pct": 183.82888014948148,
+      "saved_at_budget": 16.476021433753548,
+      "db_for_target": 0.14414403940346754,
+      "overspend_db": 0.04414403940346753,
+      "floor_db": 0.08662954717874527,
+      "floor_share_pct": 196.24290923394855,
       "reachable": true
     },
     {
       "qp": 63,
-      "saved_at_budget": null,
-      "budget_reachable": false,
-      "floor_db": 0.10099963843822479,
-      "db_for_target": null,
-      "reachable": false
+      "saved_at_budget": 5.144358299330941,
+      "db_for_target": 0.16067735395884467,
+      "overspend_db": 0.06067735395884466,
+      "floor_db": 0.09792626649141312,
+      "floor_share_pct": 161.3884919204504,
+      "reachable": true
     }
   ]
 }
