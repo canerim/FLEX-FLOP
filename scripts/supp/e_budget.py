@@ -164,7 +164,7 @@ def content(k):
     k.par(f"With c_j = {cj:.4f}, recorded in "
           f"results/saturation_RECIPE512_ctc53.json, and c_(K−1) = {cK:.4f}, "
           f"recorded as deepest_exit_cost in "
-          f"results/router_RECIPE512_b01.json, the first reads \\Ceiling% and "
+          f"results/router_RECIPE512_b01.json, the first reads \\CeilingModelled% and "
           f"the second {100 * (1 - cj / cK):.1f}%. The deepest exit costs more "
           f"than one released decode because it carries the seam repair, which "
           f"the released decoder does not run, and that difference is the "
@@ -481,7 +481,7 @@ def content(k):
                  _f(b_sweep[0] - base[0], 3)])
     rows.append(["the budget axis, per-frame decibels to pooled, one sweep",
                  _f(b_pf[0], 3), _f(b_pool[0], 3), _f(b_pool[0] - b_pf[0], 3)])
-    rows.append([f"the assumed ceiling C, \\Ceiling to {CB:.2f}",
+    rows.append([f"the assumed ceiling C, \\CeilingModelled to {CB:.2f}",
                  _f(base[0], 3), _f(b_ceil[0], 3), _f(b_ceil[0] - base[0], 3)])
     rows.append(["the floor, the saturation file to the grid's own",
                  _f(base[0], 3), _f(b_floor[0], 3),

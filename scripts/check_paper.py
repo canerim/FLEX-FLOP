@@ -49,6 +49,18 @@ def J(*names):
     return json.load(open(min(found, key=rank)[1]))
 
 
+def sv(row, key="saving_pct"):
+    """The saving a row reports, hook-counted where the file carries it.
+
+    The same definition make_paper_tables uses. Without it this checker
+    compares a macro that is now measured against a file field that is
+    modelled, and reports a mismatch that is really a units error in the
+    checker.
+    """
+    m = row.get(key + "_measured")
+    return m if m is not None else row.get(key + "_vs_release")
+
+
 CLAIMS = []
 
 
@@ -127,9 +139,9 @@ if rr and b1:
         if not r.get("budget_reachable") or r["qp"] not in B:
             continue
         if r["qp"] == 63:
-            claim("rate-rank q63", mac("RateRankHigh"), r["saving_pct_vs_release"], 0.1)
+            claim("rate-rank q63", mac("RateRankHigh"), sv(r), 0.1)
         if r["qp"] == 0:
-            claim("rate-rank q0", mac("RateRankLow"), r["saving_pct_vs_release"], 0.1)
+            claim("rate-rank q0", mac("RateRankLow"), sv(r), 0.1)
     d_ = [(r["qp"], r["saving_pct_vs_release"] - B[r["qp"]]) for r in rr["rows"]
           if r.get("budget_reachable") and r["qp"] in B]
     # Re-measured on the pinned checkpoint with the corrected cost model, the
@@ -148,8 +160,12 @@ if hy and b1f and sg:
     rws = [r for r in hy["rows"] if r.get("budget_reachable")]
 
     def _h(q, rho):
-        return next((r["saving_pct_vs_release"] for r in rws
+        return next((sv(r) for r in rws
                      if r["qp"] == q and abs(r["rho"] - rho) < 1e-9), None)
+    # The hybrid file carries no hook count, so its endpoints are compared
+    # against the MODELLED A and B. Comparing a modelled interior against a
+    # measured endpoint would report the 0.008-per-decode model offset as a
+    # failure of the interpolation, which is a different thing entirely.
     Bv = {r["qp"]: r["saving_pct_vs_release"] for r in b1f["rows"]
           if r.get("budget_reachable")}
     Av = {r["qp"]: r["saving_pct_vs_release"] for r in sg["rows"]
@@ -160,7 +176,7 @@ if hy and b1f and sg:
     claim("hybrid: rho=1 reproduces A (max |diff|)", 0.0, max(ends1), 0.05)
     beat = [(_h(q, 0.5) - Av[q]) for q in Av if _h(q, 0.5) is not None]
     claim("hybrid: rates where half beats all", 4, sum(1 for d in beat if d > 0), 0)
-    claim("hybrid: best margin over A (pts)", 0.42, max(beat), 0.05)
+    claim("hybrid: best margin over A (pts)", mac("HybridBeatsABy"), max(beat), 0.05)
     # and the margin is not the bisection tolerance in disguise
     dbs = [abs(r["db_vs_uf"] - 0.1) for r in rws]
     # 5e-4 is the bisection's own stopping tolerance and the outer correction

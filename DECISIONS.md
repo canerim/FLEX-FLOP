@@ -4758,3 +4758,32 @@ exits early. The saving is measured against the released decoder, so drift
 costs the method rather than flattering it, but it grows with training and at
 some point the claim that the deepest exit is the released decoder stops being
 true. Any move to a later checkpoint has to report this as its own row.
+
+---
+
+## 93. DECISIONS 91 was a units error in the checker, not a bug in configuration C
+
+The open failure was "hybrid: rho=1 reproduces A", with C measuring 0.09 to 0.21
+points above A at matched delivered decibels. It is closed, and the cause is not
+what 91 assumed.
+
+The checker compared the hybrid file's endpoint against a signalled file chosen
+by `pick()`. Those two were not the same measurement: the hybrid run had been
+made against one signalled run and the checker was reading another, and after
+`signalled_RECIPE512_ctc53.json` was re-measured with four budgets the two lined
+up. The endpoint now reproduces A to 0.0000, exactly, at every rate.
+
+91 spent its length arguing that the discrepancy could not be bisection noise,
+which was correct, and then concluded that one of the two code paths must be
+charging differently, which was wrong. Both paths were right. What differed was
+which file each side of the comparison was reading.
+
+The lesson is the one this project keeps relearning in new costume: a
+disagreement between two numbers is a disagreement between two measurements, and
+the first question is whether they are measurements of the same thing. The
+checker now goes through the same `sv()` the tables use, and where the hybrid
+file carries no hook count it is compared against modelled endpoints rather than
+measured ones, so the model's 0.008-per-decode offset cannot masquerade as a
+failure of the interpolation.
+
+check_paper is 85/85 for the first time.

@@ -390,8 +390,8 @@ def content(k):
         + " for exits 2 to 5, recovered from the frame-level saving of maps "
         "that send every tile to one fixed exit. The shallowest of them, "
         f"c_j = {SAT['cost_j']:.4f}, sets the architectural ceiling of "
-        "\\Ceiling\\%. The deepest is above 1 because our ladder carries seam "
-        "repair and an adapter that the released decoder does not.")
+        "\\CeilingModelled\\%. The deepest is above 1 because our ladder carries "
+        "seam repair and an adapter that the released decoder does not.")
     k.note("results/static_RECIPE512_b01.json, field uniform, and "
            "results/saturation_RECIPE512_ctc53.json, fields cost_j and "
            "ceiling_pct.")
@@ -469,8 +469,8 @@ def content(k):
         "At q0, q16 and q32 all three configurations send every tile to the "
         "shallowest exit, so the maps are identical and the only difference "
         "left is the price of deciding. The joint head falls "
-        f"{sat_j:.3f} points below the \\Ceiling% ceiling and the frozen head "
-        f"{sat_f:.3f}, which are their compute shares of "
+        f"{sat_j:.3f} points below the \\CeilingModelled% ceiling and the frozen "
+        f"head {sat_f:.3f}, which are their compute shares of "
         f"{hj[1]['router_compute_share_pct']:.3f}% and "
         f"{hf[1]['router_compute_share_pct']:.3f}% to three decimals. At q48 "
         "and q63 the budget still binds and the allocations separate: the rule "

@@ -717,7 +717,7 @@ def content(k):
     _cv = [v["saving"] for r in pc["rows"] if r["budget_db"] >= 0.5
            for v in r["per_class"].values()]
     k.par(
-        f"<i>Remark.</i> S<sub>max</sub> = \\Ceiling% depends on the split "
+        f"<i>Remark.</i> S<sub>max</sub> = \\CeilingModelled% depends on the split "
         f"depth alone, so no amount of training raises it and the only lever "
         f"is j. It is a ceiling in multiply-accumulates and not in seconds; "
         f"the complexity section reports the wall-clock saving falling short "
@@ -728,7 +728,7 @@ def content(k):
     k.note("Per-class invariance from results/per_class_RECIPE512.json at "
            "budgets of 0.5 dB and above, checkpoint "
            "runs/RECIPE512/ckpt_PAPER.pth.tar; the ceiling itself is "
-           "\\Ceiling%, from results/saturation_RECIPE512_ctc53.json.")
+           "\\CeilingModelled%, from results/saturation_RECIPE512_ctc53.json.")
 
     # ==================================================================
     k.h2("What adaptivity is worth")

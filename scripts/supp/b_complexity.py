@@ -237,8 +237,8 @@ def content(k):
     t_shape = k.rows(rows,
         r"The decode, module by module, at a 1920×1080 frame padded to "
         r"1920×1088. Grids are height × width, and ``Where'' names the released "
-        r"decoder's three parts: the upsample dec\_1[0], the trunk "
-        r"dec\_1[1..12] and the head dec\_2. The last column is the module's "
+        r"decoder's three parts: the upsample dec_1[0], the trunk "
+        r"dec_1[1..12] and the head dec_2. The last column is the module's "
         r"share of one released decode, and for the two adapters it is the "
         r"share if every tile wears that adapter. Take from the table that the "
         r"grid changes exactly twice and never inside the trunk, so an exit "
@@ -248,14 +248,14 @@ def content(k):
         r"pixel; and that the FFN adapter is the most expensive thing this "
         r"work adds, at " + f"{100 * shr['aff']:.2f}" + r"\% of a decode, more "
         r"than half a trunk block.")
-    k.note(r"Released modules and their shapes: results/mac\_audit.json, "
+    k.note(r"Released modules and their shapes: results/mac_audit.json, "
            r"forward hooks on every convolution of an "
            r"IntraDecoder at the real tensor shapes. A MAC count depends on "
            r"shapes and not on values, so no weights are loaded for it. "
-           r"Adapters and seam repair: results/adapter\_cost.json, hooks on the "
-           r"modules of runs/RECIPE512/ckpt\_PAPER.pth.tar. Router: "
-           r"results/router\_latency.json, measured on "
-           r"runs/RECIPE512/ckpt\_eval.pth.tar; the head is the same size in "
+           r"Adapters and seam repair: results/adapter_cost.json, hooks on the "
+           r"modules of runs/RECIPE512/ckpt_PAPER.pth.tar. Router: "
+           r"results/router_latency.json, measured on "
+           r"runs/RECIPE512/ckpt_eval.pth.tar; the head is the same size in "
            r"both checkpoints.")
 
     k.fig("supp_b_cost.png",
@@ -326,8 +326,8 @@ def content(k):
         r"them in one decode carry " +
         f"{100 * ma['spatial_share']:.2f}" + r"\% of the arithmetic between "
         r"them.")
-    k.note(r"results/mac\_audit.json for the released rows, "
-           r"results/adapter\_cost.json for ours. The two depthwise "
+    k.note(r"results/mac_audit.json for the released rows, "
+           r"results/adapter_cost.json for ours. The two depthwise "
            r"convolutions are the whole of the decoder's spatial footprint, "
            r"which is why a tile boundary is cheap to repair.")
 
@@ -337,7 +337,7 @@ def content(k):
           r"has no neighbours to miss. The receptive field of the trunk plus "
           r"head grows by exactly one feature pixel per block, from 1 feature "
           r"pixel with no trunk blocks to 13 with all " + f"{P['nb']}" +
-          r", which is 104 RGB px per tile edge (results/dmc\_ld\_rf\_probe.json, "
+          r", which is 104 RGB px per tile edge (results/dmc_ld_rf_probe.json, "
           r"measured on the released DCVC checkpoints rather than ours). A tile "
           r"decoded alone is therefore wrong only in a band, and the band is "
           r"narrower for a tile that exits early.")
@@ -401,11 +401,11 @@ def content(k):
         r"whole block. Since the routed allocation lives at exits 2 and 3, "
         r"which both wear the FFN adapter, that correction lands on precisely "
         r"the exits the reported saving leans on.")
-    k.note(r"results/adapter\_cost.json for the two adapters, on the pinned "
+    k.note(r"results/adapter_cost.json for the two adapters, on the pinned "
            r"checkpoint. The seam-repair row is 9C + C² per pixel; Section " +
            f"{sec}.6 " + r"confirms that figure against a hook count rather "
            r"than taking it from the source. Router: "
-           r"results/router\_latency.json.")
+           r"results/router_latency.json.")
 
     k.par(r"The ladder assigns the FFN adapter to any exit skipping four or "
           r"more blocks and the 1×1 adapter otherwise, which at K = 6 and "
@@ -444,12 +444,12 @@ def content(k):
           r"\% of a released decode, and they run whatever the map says.")
 
     k.par(r"None of the four shares has to be taken on trust. "
-          r"results/mac\_audit.json gives s<sub>up</sub> = " +
+          r"results/mac_audit.json gives s<sub>up</sub> = " +
           f"{P['s_up']:.4f}" + r", s<sub>trunk</sub> = " +
           f"{P['s_trunk']:.4f}" + r" and s<sub>head</sub> = " +
           f"{P['s_head']:.4f}" + r" by hook count, so one trunk block is " +
           f"{P['p']:.6f}" + r" of a decode. That figure has an independent "
-          r"check. results/static\_RECIPE512\_b01.json records the frame-level "
+          r"check. results/static_RECIPE512_b01.json records the frame-level "
           r"saving of a map that sends every tile to exit e, for e = 2 to 5, on "
           r"the pinned checkpoint; differencing consecutive entries gives one "
           r"trunk block as " + f"{_block_from_static(k):.6f}" + r", which "
@@ -485,9 +485,9 @@ def content(k):
     k.note(r"Exits 0 and 1 are unreachable: the decoder clamps the map at "
            r"j = 2, so a tile nominally assigned them leaves through exit 2 and "
            r"wears exit 2's cost. The 2C² and 5C² vectors are recorded in "
-           r"results/why\_qp.json and results/why\_qp\_PAPER.json; a cost "
+           r"results/why_qp.json and results/why_qp_PAPER.json; a cost "
            r"vector is a property of the model rather than of the weights, so "
-           r"the first being measured on runs/BEST/ckpt\_eval.pth.tar does not "
+           r"the first being measured on runs/BEST/ckpt_eval.pth.tar does not "
            r"affect it.")
 
     k.par(r"The ceiling is 100(1 − c<sub>j</sub>), the saving when every tile "
@@ -495,8 +495,9 @@ def content(k):
           r"architecture and no allocation can pass it. Three values are in "
           r"circulation and they are the three columns of Table " +
           f"{t_exit}" + r": " + f"{100 * (1 - A2[2]):.2f}" + r"\% at 2C², "
-          r"\Ceiling\% at 5C², which is the value the paper's tables use, and " +
-          f"{100 * (1 - D[2]):.2f}" + r"\% by hook count. The last of the "
+          r"\CeilingModelled\% at 5C², and " +
+          f"{100 * (1 - D[2]):.2f}" + r"\% by hook count, which is the value the "
+          r"paper's tables use. The last of the "
           r"three is the one a meter agrees with, and the next subsection is "
           r"the demonstration.")
 
@@ -533,10 +534,10 @@ def content(k):
         r"condition, to four decimal places and in fact to floating point, "
         r"while the model the paper reports is optimistic by 0.47 to 0.80 "
         r"points and always in the same direction.")
-    k.note(r"results/supp\_power.json, pinned checkpoint, 0.1 dB budget, "
+    k.note(r"results/supp_power.json, pinned checkpoint, 0.1 dB budget, "
            r"NVIDIA RTX A6000. The map is the file's pooled exit histogram "
            r"rounded to the frame's tile count, which is what "
-           r"scripts/power\_profile.py decodes; its four columns are the tiles "
+           r"scripts/power_profile.py decodes; its four columns are the tiles "
            r"leaving at exits 2, 3, 4 and 5.")
 
     rec, resid, gap = _recover(k, D)
@@ -546,7 +547,7 @@ def content(k):
           r"consistent to " + _sci(resid) + r", and the solution differs from "
           r"the assembled vector by at most " + _sci(gap) + r" at any exit. "
           r"The identity is worth stating plainly: the per-module counts of "
-          r"results/mac\_audit.json and results/adapter\_cost.json are not a "
+          r"results/mac_audit.json and results/adapter_cost.json are not a "
           r"model of what the meter reports, they are what the meter reports, "
           r"rearranged. Where the paper's tables differ from the meter, the "
           r"difference has a closed form and Table " + str(k.peek_tbl()) +
@@ -580,7 +581,7 @@ def content(k):
     k.note(r"Model prices: the module's MAC/px divided by 8C² + 9C, times one "
            r"trunk block. Hook prices: the module's MAC/px times the feature "
            r"grid, divided by the decode total, both from "
-           r"results/mac\_audit.json and results/adapter\_cost.json, and they "
+           r"results/mac_audit.json and results/adapter_cost.json, and they "
            r"are the last column of Table " + f"{t_add}" + r". The three "
            r"residual rows are the corresponding columns of Table " +
            f"{t_exit}" + r".")
@@ -618,11 +619,11 @@ def content(k):
           f"{ctc[0]['saving_pct_measured']:.2f}" + r"\%, and \MainHighRate\% "
           r"at the highest against a measured " +
           f"{ctc[63]['saving_pct_measured']:.2f}" + r"\%.")
-    k.note(r"results/signalled\_RECIPE512\_grid.json and "
-           r"results/signalled\_RECIPE512\_ctc53.json, both on the pinned "
+    k.note(r"results/signalled_RECIPE512_grid.json and "
+           r"results/signalled_RECIPE512_ctc53.json, both on the pinned "
            r"checkpoint. Both columns are in the files: "
-           r"saving\_pct\_vs\_release is the model, saving\_pct\_measured is "
-           r"the hook count, and model\_minus\_measured is their difference.")
+           r"saving_pct_vs_release is the model, saving_pct_measured is "
+           r"the hook count, and model_minus_measured is their difference.")
 
     # ------------------------------------------------------------------
     k.h2("How the timings were taken")
@@ -638,7 +639,7 @@ def content(k):
     k.bullets([
         r"<b>Batch 1, and why.</b> Every wall clock here is one frame at a "
         r"time, which is what a decoder does. A batch is genuinely different "
-        r"work for this decoder and not a repetition, because exit\_map is "
+        r"work for this decoder and not a repetition, because exit_map is "
         r"indexed over the whole batch's tiles, so B frames of 40 tiles form "
         r"one shrinking active set of 40B and the groups run wider. Section " +
         f"{sec}.8 " + r"measures what the choice costs.",
@@ -650,7 +651,7 @@ def content(k):
         r"drift in a neighbouring job's load straight into the ratio, which is "
         r"the only quantity these runs exist to produce.",
 
-        r"<b>What the timer wraps.</b> time.perf\_counter around a "
+        r"<b>What the timer wraps.</b> time.perf_counter around a "
         r"synchronised call, not CUDA events, because events do not exist on "
         r"the CPU and the two device classes have to be timed alike. The timer "
         r"starts at the decoded latent and stops at the reconstruction, so it "
@@ -668,20 +669,20 @@ def content(k):
         r"\RouterTimePct\% of decode time, \RouterTimeFactor× its arithmetic "
         r"share, an extra \RouterTimeExtra points bought by launching a small "
         r"kernel over a large map. That is the general reason a MAC count "
-        r"cannot see a kernel launch, in miniature (results/router\_latency.json, " +
+        r"cannot see a kernel launch, in miniature (results/router_latency.json, " +
         f"{rl['iters']}" + r" iterations at " +
         f"{rl['resolution'][1]}×{rl['resolution'][0]}" + r" on an NVIDIA RTX "
-        r"A6000, measured on runs/RECIPE512/ckpt\_eval.pth.tar). The router "
+        r"A6000, measured on runs/RECIPE512/ckpt_eval.pth.tar). The router "
         r"does not run at all in the signalled configuration, where the encoder "
         r"chooses the map.",
 
         r"<b>The masked path, not the sorted one.</b> The shipped "
-        r"configuration leaves sorted\_tiles off, so every group is a masked "
+        r"configuration leaves sorted_tiles off, so every group is a masked "
         r"gather over the full tile batch. Sorting the tiles by depth turns "
         r"each group into a contiguous slice and recovers \WallSortedGain "
         r"points at 1080p for bit-identical output "
-        r"(results/latency\_RECIPE512\_sorted.json, on "
-        r"runs/RECIPE512/ckpt\_eval.pth.tar). None of the timings below use "
+        r"(results/latency_RECIPE512_sorted.json, on "
+        r"runs/RECIPE512/ckpt_eval.pth.tar). None of the timings below use "
         r"it, so they are the slower of the two implementations.",
     ])
 
@@ -729,8 +730,8 @@ def content(k):
         f"{100 * lm['head'] / tot_ms:.1f}" + r"\% of the clock for " +
         f"{100 * P['s_head']:.2f}" + r"\% of the arithmetic, being "
         r"bandwidth-bound rather than arithmetic-bound.")
-    k.note(r"results/supp\_latency\_1920x1080.json and "
-           r"results/supp\_latency\_1280x720.json, pinned checkpoint, q32, "
+    k.note(r"results/supp_latency_1920x1080.json and "
+           r"results/supp_latency_1280x720.json, pinned checkpoint, q32, "
            r"0.1 dB budget, NVIDIA RTX A6000 taken under the evaluation lock so "
            r"the card was not shared. Tile counts are that decode's own exit "
            r"map, which leaves 28, 14 and 9 of 40 tiles alive in groups 3, 4 "
@@ -741,7 +742,7 @@ def content(k):
           f"{td['feature_patch']}" + r" px feature tile, which the "
           r"encoder-side replicate padding guarantees: 1920×1080 becomes "
           r"2048×1280 and 40 tiles, 1280×720 becomes 1280×768 and 15 "
-          r"(results/tile\_definition.json).")
+          r"(results/tile_definition.json).")
 
     k.fig("supp_b_units.png",
           "<b>What the arithmetic is worth.</b> <b>a</b>, one exit map "
@@ -809,10 +810,10 @@ def content(k):
         r"A6000 falls short of the MAC model by 3.2 to 4.7 points at every "
         r"rate and every batch size, while the CPU meets or beats it at the "
         r"two lower rates.")
-    k.note(r"results/supp\_latency\_batch\_1920x1080.json and "
-           r"results/supp\_latency\_cpu\_1920x1080.json, pinned checkpoint, "
+    k.note(r"results/supp_latency_batch_1920x1080.json and "
+           r"results/supp_latency_cpu_1920x1080.json, pinned checkpoint, "
            r"0.1 dB budget, exit maps read from "
-           r"results/supp\_paper\_curve\_PAPER.json. GPU rows: " +
+           r"results/supp_paper_curve_PAPER.json. GPU rows: " +
            f"{lb['warmup']}" + r" warm-up and " + f"{lb['iters']}" +
            r" interleaved iterations. CPU rows: " + f"{lc['torch_threads']}" +
            r" threads, " + f"{lc['warmup']}" + r" warm-up and " +
@@ -863,7 +864,7 @@ def content(k):
         r"5.0 points ahead of both. Subtracting idle power changes nothing, "
         r"which is the check that the agreement is not an artefact of the "
         r"static draw.")
-    k.note(r"results/supp\_power.json, pinned checkpoint, 0.1 dB budget, "
+    k.note(r"results/supp_power.json, pinned checkpoint, 0.1 dB budget, "
            r"NVIDIA RTX A6000 with a " + f"{pw['power_limit_w']:.0f}" +
            r" W limit, taken under the evaluation lock. 720p is padded to "
            r"1280×768 and 15 tiles, 1080p to 2048×1280 and 40 tiles.")
@@ -885,7 +886,7 @@ def content(k):
         r"case and within 1 W in four of the six conditions, and at 720p q0 it "
         r"draws slightly <i>more</i>. Routing does not lower the instantaneous "
         r"draw of the card. It shortens the job.")
-    k.note(r"results/supp\_power.json. Watts are the mean of about 200 driver "
+    k.note(r"results/supp_power.json. Watts are the mean of about 200 driver "
            r"samples per run; times are medians over 181 to 664 iterations. "
            r"Idle over the six conditions in the order run: 74.6, 78.5, 91.2, "
            r"100.5, 106.5 and 98.6 W before, and 122.4, 120.0, 126.2, 128.4, "
@@ -948,12 +949,12 @@ def content(k):
         r"4K row is a genuine failure and is reported as one: the job ran out "
         r"of memory on a 48 GB card that four other processes were sharing, so "
         r"no measurement above 1080p exists anywhere in this work.")
-    k.note(r"results/supp\_footprint.json, pinned checkpoint, q32, 0.1 dB "
+    k.note(r"results/supp_footprint.json, pinned checkpoint, q32, 0.1 dB "
            r"budget, NVIDIA RTX A6000. Frame rates here are lower than in "
            r"Table " + f"{t_dev}" + r" because that table's maps are at "
            r"different rates and this one is q32 throughout. The 4K stage "
            r"profile queued alongside it failed the same way "
-           r"(results/supp\_queue.log).")
+           r"(results/supp_queue.log).")
 
     ec = k.J("supp_encoder_cost_PAPER.json")
     k.par(r"The signalled configuration moves the choice of exit map to the "
@@ -974,7 +975,7 @@ def content(k):
           r"saving is bought with encoder-side work, which suits a "
           r"compress-once decode-many deployment and does not suit live "
           r"encoding.")
-    k.note(r"results/supp\_encoder\_cost\_PAPER.json: pinned checkpoint, one "
+    k.note(r"results/supp_encoder_cost_PAPER.json: pinned checkpoint, one "
            r"sequence (Bosphorus), q63, 40 tiles, " + f"{ec['iters']}" +
            r" iterations on an NVIDIA RTX A6000.")
 
@@ -990,7 +991,7 @@ def content(k):
         r"between 0.14 and 0.80 points of saving, in the optimistic direction "
         r"at every exit. The hook-count column is the one a meter agrees "
         r"with, and the honest ceiling is " + f"{100 * (1 - D[2]):.2f}" +
-        r"\% rather than \Ceiling\%. The BD-Rate figures are unaffected, "
+        r"\% rather than \CeilingModelled\%. The BD-Rate figures are unaffected, "
         r"being integrals of rate against quality with no compute axis in "
         r"them; the BD-saving figures would shift by the same fraction of a "
         r"point as the savings they integrate.",

@@ -46,10 +46,15 @@ def sv_measured(row):
     return row.get("saving_pct_measured") is not None
 
 
-def sv(row):
+def sv(row, key="saving_pct"):
     """The saving a row reports, measured off the decode where available."""
-    m = row.get("saving_pct_measured")
-    return m if m is not None else row.get("saving_pct_vs_release")
+    m = row.get(key + "_measured")
+    return m if m is not None else row.get(key + "_vs_release")
+
+
+def sv_oracle(row):
+    """The Lagrangian oracle's saving on the same row, same definition."""
+    return sv(row, "oracle_saving_pct")
 
 
 _cm = RES / "ceiling_measured.json"
@@ -851,7 +856,7 @@ rr5, _ = pick("raterank_RECIPE512_b05.json")
 if rr5:
     rs5 = [r for r in rr5["rows"] if r.get("budget_reachable")]
     if rs5 and all(abs(sv(r)
-                       - r["oracle_saving_pct_vs_release"]) < 1e-6 for r in rs5):
+                       - sv_oracle(r)) < 1e-6 for r in rs5):
         mac("RateRankHalfDbExact", "every")
         mac("RateRankLooseCeil",
             f"{sum(1 for r in rs3 if sv(r) > CEIL_MEASURED - 0.5)}")
@@ -868,7 +873,7 @@ if rr:
              else f"{sv(r):.1f}")
         lines.append(f"{r['qp']} & {v} & "
                      + (f"{b:.1f}" if b is not None else "---")
-                     + f" & {r['oracle_saving_pct_vs_release']:.1f} & "
+                     + f" & {sv_oracle(r):.1f} & "
                      f"{-r['spearman_bits_vs_exit']:+.2f} & "
                      f"{r['spearman_bits_vs_spread']:+.2f} \\\\")
     lines += [r"\bottomrule", r"\end{tabular}"]

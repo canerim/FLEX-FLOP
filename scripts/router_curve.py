@@ -54,6 +54,7 @@ from flexuf.config import FlexUFConfig  # noqa: E402
 from flexuf.cost import exit_costs
 from flexuf.eval import (reference_frame_mse, tiled_exit_mses,
                          true_frame_mse)  # noqa: E402
+from flexuf.measure import measured_saving_pct
 from flexuf.model import FlexUFIntra, load_flexuf_state  # noqa: E402
 from flexuf.reference import reference_for  # noqa: E402
 
@@ -356,8 +357,23 @@ def main(argv):
                     break
                 inner = inner + (TARGET - td)
             sv, db_table, svr = at_beta(beta)
+            # The same saving counted off the decode rather than modelled. The
+            # arithmetic model under-bills the shallow exits by a constant
+            # 0.008 of a released decode (scripts/ceiling_measured.py), and
+            # every table in the paper now reports the hook count, so this file
+            # has to carry it or configuration B is on a different definition
+            # from configuration A in the table that compares them. The
+            # router's own share is charged against it here exactly as it is
+            # against the modelled figure.
+            _m = 0.0
+            for M, R, lp, y_, q_, xp_ in cache:
+                k_ = (lp - beta * cost[None, cfg.split_depth:]).argmax(1) \
+                    + cfg.split_depth
+                _m += measured_saving_pct(net.dec, ref.dec, y_, q_, k_)
+            svr_meas = _m / len(cache) - 100 * rshare
             rows.append({"qp": qp_v, "saving_pct": sv,
-                         "saving_pct_vs_release": svr, "db_vs_uf": td,
+                         "saving_pct_vs_release": svr,
+                         "saving_pct_measured": svr_meas, "db_vs_uf": td,
                          "db_vs_uf_table": db_table,
                          "beta": beta, "bpp_added": 0.0, "map_bits": 0,
                          "budget_reachable": True})

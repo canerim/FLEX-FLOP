@@ -311,7 +311,7 @@ def content(k):
           "The same measurement as a grid, with the looser budget under it. "
           "<b>a</b>, compute saved at the 0.1 dB budget. <b>b</b>, the same "
           "at 0.3 dB, where every class at the three lowest rates has reached "
-          "the architectural ceiling of \\Ceiling% and only q48 and q63 are "
+          "the architectural ceiling of \\CeilingModelled% and only q48 and q63 are "
           "still making a choice. <b>c</b>, the quality actually given up at "
           "the 0.1 dB budget, which the set meets and no class does: at q0 "
           "the allocation spends 0.116 dB on MCL-JCV and 0.028 dB on HEVC D. "
@@ -376,7 +376,7 @@ def content(k):
               "Compute saved against quality given up, one panel per class "
               "and one curve per quality index, from the seven budgets at "
               "which the frontier was measured. The dotted line is the "
-              "architectural ceiling of \\Ceiling%. Three things are visible "
+              "architectural ceiling of \\CeilingModelled%. Three things are visible "
               "that a table of operating points hides. The curves are steep "
               "and then flat, so most of the saving is bought in the first "
               "tenth of a decibel and the rest of the band buys little. The "
@@ -634,7 +634,7 @@ def content(k):
     k.note("results/bdrate.json, every row on " + PINNED + ", which its "
            "sources block records file by file. The file it replaced is kept "
            "as results/bdrate_before_pinning.json, whose saving column reads "
-           "41.9% at 0.5 dB where the pinned one reaches \\Ceiling%.")
+           "41.9% at 0.5 dB where the pinned one reaches \\CeilingModelled%.")
 
     # ----------------------------------------------------------------- G.8
     k.h2("Raw values behind the curves")
@@ -727,7 +727,7 @@ def content(k):
         "<b>A 0.5 dB budget has no per-sequence breakdown to report.</b> The "
         "queue that produced this section asked for one and the job failed. "
         "The cause is the result: at 0.5 dB every rate is past saturation, "
-        "the frontier stops at the ceiling of \\Ceiling%, and a saturated "
+        "the frontier stops at the ceiling of \\CeilingModelled%, and a saturated "
         "operating point carries no allocation to break down. The sweep now "
         "runs from 0.10 dB to 0.30 dB.",
     ])

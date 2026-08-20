@@ -470,7 +470,8 @@ def content(k):
         "patchify is a pure reshape and costs nothing, and it is where both "
         "the seam and every operation of saving come from. <b>b</b>, one exit "
         "group is two DepthConvBlocks, whose only operator with spatial extent "
-        "is a single 3×3 depthwise worth 0.29% of the block, so an early exit "
+        "is a single 3×3 depthwise worth 0.33% of the block (9C of the block's "
+        "7C² + 9C, results/mac_audit.json), so an early exit "
         "gives up almost purely pointwise capacity. <b>c</b>, the two adapters "
         "that replace it, both residual and both zero-initialised. Shapes are "
         "those of a 1080p frame padded to 2048×1280 and split into 40 tiles.",

@@ -2,7 +2,7 @@ FLEX-UF · REVIEWER FIX LIST
 30 items. Ticked only when the fix is in the built PDF and check_paper agrees.
 [ ] open   [~] in progress   [x] done
 
-Status: 19 / 31
+Status: 20 / 31
 
 ================================================================================
 CRITICAL (8)
@@ -67,7 +67,7 @@ CRITICAL (8)
         FIX: "Lagrangian oracle" or "single-multiplier oracle" everywhere, and
         reserve "global constrained optimum" for the exact Pareto point.
 
-[ ] 07. The hybrid endpoint consistency check is failing. Resolve it.
+[x] 07. The hybrid endpoint consistency check is failing. Resolve it.
         check_paper is 84/85 and the open failure is "hybrid: rho=1 reproduces
         A", while the main text makes the strong claim that it does. This is an
         internal correctness condition, not a limitation.

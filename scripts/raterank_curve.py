@@ -51,6 +51,7 @@ from flexuf.config import FlexUFConfig  # noqa: E402
 from flexuf.cost import exit_costs  # noqa: E402
 from flexuf.eval import (reference_frame_mse, tiled_exit_mses,
                          true_frame_mse)  # noqa: E402
+from flexuf.measure import measured_saving_pct  # noqa: E402
 from flexuf.model import FlexUFIntra, load_flexuf_state  # noqa: E402
 from flexuf.reference import reference_for  # noqa: E402
 
@@ -183,6 +184,22 @@ def main(argv):
                 return 100 * sum((1 - cost[m].mean()).item()
                                  for m in maps) / len(maps)
 
+            def sv_measured_of(maps):
+                """The same saving, counted off the decode instead of modelled.
+
+                The arithmetic model under-bills the shallow exits by a constant
+                0.008 of a released decode (scripts/ceiling_measured.py), which
+                is 0.4 to 0.8 saving points. Every table in the paper now
+                reports the hook count, so this file has to carry it too or the
+                rate-rank table and the main results table are on two different
+                definitions of the same quantity.
+                """
+                tot = 0.0
+                for (M, R, y_, q_, xp_, b_, nm_), m in zip(cache, maps):
+                    tot += measured_saving_pct(net.dec, ref.dec, y_, q_,
+                                               m.clamp(min=j))
+                return tot / len(maps)
+
             # Bisect on the cheap per-tile TABLE, then correct against a real
             # decode of the resulting map -- the same two-level scheme as
             # signalled_curve.py. The first version of this script bisected
@@ -267,6 +284,8 @@ def main(argv):
 
             rows.append({"qp": qp_v, "lam": lo,
                          "saving_pct_vs_release": sv_of(maps),
+                         "saving_pct_measured": sv_measured_of(maps),
+                         "oracle_saving_pct_measured": sv_measured_of(om),
                          "db_vs_uf": db_of(maps),
                          "oracle_saving_pct_vs_release": sv_of(om),
                          "agreement": agree, "spearman_bits_vs_exit": rho,
