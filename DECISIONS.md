@@ -4697,3 +4697,64 @@ timing on the wrong device, and the result file chosen by a stale hand-ordered
 list.
 
 The check stays red until it is understood.
+
+---
+
+## 92. Training helps, and the paper is quoting a checkpoint three points behind
+
+`ckpt_PAPER.pth.tar` is RECIPE512 at epoch 0. The run has since reached epoch 3,
+and the per-checkpoint watcher measured epochs 1 and 2 on the way. Same 53
+sequences, same 0.1 dB budget, same code path:
+
+| epoch | q0 | q16 | q32 | q48 | q63 | mean |
+|---|---|---|---|---|---|---|
+| 0, the pinned checkpoint | 29.9 | 25.6 | 20.9 | 18.3 | 15.6 | **22.1** |
+| 1 | 33.5 | 29.3 | 23.8 | 21.4 | 18.4 | **25.3** |
+| 2 | 33.5 | 28.8 | 23.0 | 20.4 | 17.3 | **24.6** |
+
+Epoch 1 is 3.2 points ahead of what the paper reports and epoch 2 is 2.5 ahead.
+Two points is not enough to call epoch 1 a peak, so moving the headline there
+would be picking the best of two rather than reporting the latest.
+
+### The reading that was nearly published instead
+
+The first pass through `results/signalled_*.json` looked like a collapse. BEST
+went 28.9 to 19.8, FINE12 27.8 to 19.5, BEST128 27.6 to 19.2, all in the same
+direction across four independent runs.
+
+The test set had grown. The epoch-1 measurements are on 40 sequences and the
+epoch-2 and epoch-3 ones on 53, because MCL-JCV and the smaller HEVC classes
+landed in between. HEVC C is 8 tiles per frame at 832x480 and HEVC D is 2 at
+416x240, and neither saves anything like a 1080p frame does. The whole apparent
+drop was the test set, not the training. This is the same mistake the project
+has already made twice in another form: comparing numbers measured over
+different intervals, and comparing a table dB against a delivered dB.
+
+### The comparison the ladder results cannot yet support
+
+RECIPE512 and BEST are the same recipe. Same K, same split depth, same scaled
+adapters, same grid seam repair, same 45,445,398 parameters, different runs.
+
+| epoch | RECIPE512 | BEST | gap |
+|---|---|---|---|
+| 1 | 25.3 | 24.2 | 1.1 |
+| 2 | 24.6 | 19.8 | 4.8 |
+
+At epoch 2 two runs of one configuration are 4.8 points apart, which is as large
+as the 256-against-128 tile difference the ladder table reports (256 px: 24.6;
+128 px: 19.3 for BEST128 and 19.7 for FINE12). Until that variance is bounded by
+repeated runs, no architectural comparison in this project is separable from
+run-to-run noise, and the ladder table should say so rather than rank the rows.
+
+BEST also falls from 24.2 at epoch 1 to 19.8 at epoch 2 while RECIPE512 does
+not. One run of the pair degrades and the other does not. Not diagnosed.
+
+### Anchor drift, which grows with training
+
+The deepest exit is supposed to reproduce the released decoder. At the latest
+RECIPE512 checkpoint it does not: -0.003 dB at q0, -0.015 at q32, -0.036 at q63.
+At the high rate that is a third of the 0.1 dB budget, spent before any tile
+exits early. The saving is measured against the released decoder, so drift
+costs the method rather than flattering it, but it grows with training and at
+some point the claim that the deepest exit is the released decoder stops being
+true. Any move to a later checkpoint has to report this as its own row.
