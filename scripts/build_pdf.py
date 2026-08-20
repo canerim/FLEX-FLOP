@@ -279,7 +279,12 @@ def _autonum(cap, counter, word):
     inserted in the middle -- which happened twice tonight.
     """
     counter[0] += 1
-    return re.sub(rf"{word}\s+\d+\.", f"{word} {counter[0]}.", cap, count=1)
+    # The placeholder may be a digit from an earlier build or a literal "N"
+    # typed by whoever wrote the caption. Matching only digits meant a caption
+    # written as "Figure N." kept the N, incremented the counter, and printed
+    # "Figure N." in the submitted PDF.
+    return re.sub(rf"{word}\s+(?:\d+|[A-Z])\.", f"{word} {counter[0]}.",
+                  cap, count=1)
 
 
 def fig(name, width, cap, maxh=None):
@@ -426,7 +431,8 @@ def content(colw, fullw):
         r"entropy model and the transmitted representation left untouched. We "
         r"add a multi-exit ladder to the intra decoder of DCVC-UF, so that "
         r"tiles of one frame leave a shared reconstruction trunk at different "
-        r"depths. On \NumSeq test sequences under a 0.1 dB quality constraint "
+        r"depths. On \NumSeq CTC intra frames, one from each sequence, under a "
+        r"0.1 dB quality constraint "
         r"this removes \MainLowRate% to \MainHighRate% of decoder "
         r"multiply-accumulates across the rate range, \MeanAtOne% on average, "
         r"at a BD-Rate cost of \BdRateALow%. At 0.2 dB the mean saving is "
@@ -517,7 +523,7 @@ def content(colw, fullw):
         r"numerically rather than asserted. Measuring the budget in units of "
         r"that band accounts for most of the rate dependence, on two "
         r"independently trained checkpoints.")
-    par(r"<b>(iii)</b> A parameter-free control that adaptive-inference work is "
+    par(r"<b>(iii)</b> A zero-learned-parameter control that adaptive-inference work is "
         r"rarely measured against. Routing on the bits the entropy model has "
         r"already spent per tile costs nothing, adds nothing to the stream, and "
         r"beats our trained head at every rate, while agreeing with the oracle "
@@ -821,9 +827,15 @@ def content(colw, fullw):
         r"puts the frame exactly on its budget and we find that value by "
         r"bisection. The rule each tile follows is")
     eq(r"k^{*}(t) = \mathrm{arg\,min}_{k}\ \left[\, D(t,k) + \lambda\, c_{k} \,\right]")
-    par(r"with the minimum taken over k ≥ j. We call k*(t) the <i>oracle</i>'s "
-        r"choice, because it is made with the true error of every exit in hand. "
-        r"Both quantities are available <i>to the encoder</i>, which holds the "
+    par(r"with the minimum taken over k ≥ j. We call k*(t) the choice of the "
+        r"<i>Lagrangian oracle</i>: it is made with the true error of every "
+        r"exit in hand, which no decoder has, but it is optimal only within the "
+        r"family of allocations one multiplier can reach. That qualifier is not "
+        r"cosmetic. Section 5.7 exhibits allocations that are cheaper at the "
+        r"same distortion than anything this rule produces, so <i>oracle</i> "
+        r"here means best under a single multiplier and not the global "
+        r"constrained optimum. Where we mean the latter we say so. Both "
+        r"quantities are available <i>to the encoder</i>, which holds the "
         r"source, so configuration A can run this search exactly.")
     par(r"What the search costs the <i>encoder</i> depends on how the table of "
         r"D(t,k) is built, and the two ways of building it are further apart "
@@ -845,7 +857,7 @@ def content(colw, fullw):
         r"gap is one of information: the errors the argmin compares depend on a "
         r"picture that is not in the bitstream, so no decoder-side model "
         r"recovers them, however large it is. What a "
-        r"decoder can do is estimate which exit the oracle would have picked, "
+        r"decoder can do is estimate which exit the Lagrangian oracle would have picked, "
         r"and configuration B therefore <i>predicts</i>. Its head reads what "
         r"the decoder already holds, the feature at the split point, the "
         r"decoded latent y-hat, the entropy model's scales and the quality "
@@ -1116,7 +1128,8 @@ def content(colw, fullw):
         r"encoder frozen (max|Δ| = 0 is asserted every run). One λ_rd is drawn "
         r"per sample from a log-spaced range covering all 64 quality indices, "
         r"so a single set of weights covers the whole rate range. We evaluate "
-        r"on the \NumSeq sequences of the common test set (CTC: UVG, MCL-JCV "
+        r"on one intra frame from each of the \NumSeq sequences of the common "
+        r"test set (CTC: UVG, MCL-JCV "
         r"and HEVC classes B, C, D and E), one intra frame each.")
     h2("Measurement protocol.")
     par(r"Two details of the protocol move the numbers enough that we state "
@@ -1207,7 +1220,7 @@ def content(colw, fullw):
         r"the average cost are unchanged, and assign it to tiles at random. "
         r"Quality falls sharply. What the allocation buys is knowing <i>which</i> "
         r"tiles can afford to run shallower; running some fraction of them "
-        r"shallower is worth nothing by itself. The rate-ranked row keeps the "
+        r"shallower is worth nothing by itself. The oracle-histogram bit ranking keeps the "
         r"same histogram and orders it by a signal the decoder already holds, "
         r"namely the bits the entropy model spent on each tile. This is the "
         r"cheapest router we can think of. It has no parameters and no "
@@ -1216,13 +1229,13 @@ def content(colw, fullw):
         r"classifiers [3, 20], which likewise read a signal off the network's "
         r"own output.")
     par(r"It recovers most of the gap. At q63, random costs \RandomDb dB and "
-        r"the oracle 0.100 dB at identical compute, while the rate-ranked row costs "
+        r"the oracle 0.100 dB at identical compute, while the oracle-histogram bit ranking costs "
         r"\RateRankDb dB. That is \RateRankRecovers% of the oracle's advantage "
         r"over chance, at 0.68–0.79 agreement with the oracle's map. A learned "
-        r"router therefore has to beat a parameter-free rule that is already three "
+        r"router therefore has to beat a calibrated bit rule that is already three "
         r"quarters of the way there. We would not have run that comparison "
         r"without this control, and we suggest that any adaptive-inference "
-        r"paper report it. Given the oracle's histogram, what we measure here "
+        r"paper report it. Given the Lagrangian oracle's histogram, what we measure here "
         r"is <i>ranking</i> and nothing else. Section 5.6 removes that crutch "
         r"and turns the same signal into a complete routing rule, which "
         r"matches the trained head across the whole rate range.")
@@ -1349,8 +1362,13 @@ def content(colw, fullw):
         r"rest off one curve. That curve is a one-parameter power law, "
         r"saving ≈ C·u^\BandExp, with C the architectural ceiling and u the "
         r"position in the band. We fit it in log space over all five rates and "
-        r"get R² = \BandR2, worst residual \BandFitErr points.")
-    par(r"<b>It is a property of the ladder, not of this checkpoint.</b> We "
+        r"get R² = \BandR2, worst residual \BandFitErr points. The claim we make "
+        r"is the <i>rescaling</i>: measuring the budget in units of each "
+        r"rate's own band is what collapses the curves. The exponent is an "
+        r"empirical fit to that collapse and not a law. Inverse fits to the "
+        r"same frontier disagree in it by up to 40%, so we report it as a "
+        r"description of these curves and read nothing into its value.")
+    par(r"<b>The collapse appears robust across two checkpoints.</b> We "
         r"repeated the measurement on a different training run, BEST, a "
         r"separate recipe taken at a different epoch, and the same thing "
         r"happens. The rates are \BandRawSpreadB points apart at a matched "
@@ -1444,25 +1462,25 @@ def content(colw, fullw):
         r"signalled and nothing is trained; the arithmetic is one scalar per "
         r"tile.")
     figure("raterank.png",
-           r"<b>Figure 10. The parameter-free rule.</b> <b>a</b> Saving at 0.1 dB; "
-           r"shaded where the parameter-free rule beats the trained head. "
+           r"<b>Figure 10. The calibrated bit rule.</b> <b>a</b> Saving at 0.1 dB; "
+           r"shaded where the calibrated bit rule beats the trained head. "
            r"<b>b</b> What a tile's bit count is correlated with, against how "
            r"often the rule agrees with the oracle outright; dotted is the "
            r"head's own held-out agreement.")
     tbl("raterank",
-        r"<b>Table 8. The parameter-free rule</b>, 0.1 dB, same test set; it is "
+        r"<b>Table 8. The calibrated bit rule</b>, 0.1 dB, same test set; it is "
         r"the ``rate-rank'' column. Bold where the rule beats the trained head. "
         r"ρ are Spearman "
         r"correlations between a tile's bit count and, respectively, the depth "
         r"the oracle assigns it and the distortion it stands to gain from that "
         r"depth.")
-    par(r"<b>It beats the trained head at every rate.</b> The parameter-free "
+    par(r"<b>It beats the trained head at every rate.</b> The zero-learned-parameter "
         r"rule is ahead of the \RouterParams router at all \RateRankNWins measured "
         r"rates, by margins that run from half a point at q48 to "
         r"\RateRankBeatsBy points at q0. A head trained on this decoder "
         r"against this oracle therefore returns nothing over a rule with no "
         r"parameters at all, and it carries \RouterCostPct% of the decode "
-        r"that the parameter-free rule does not.")
+        r"that the calibrated bit rule does not.")
     par(r"<b>Why it works is not that it agrees with the oracle.</b> It agrees "
         r"on \RateRankAgreeLo–\RateRankAgreeHi of tiles, well below the "
         r"router's 0.718, and still saves more at every rate. "
@@ -1474,7 +1492,7 @@ def content(colw, fullw):
         r"stands to gain from depth, at "
         r"ρ_spread = \RateRankSpreadLo–\RateRankSpreadHi at every rate.")
     par(r"<b>At a looser budget it stops being a baseline and becomes the "
-        r"answer.</b> At 0.3 dB the parameter-free rule matches the oracle exactly at "
+        r"answer.</b> At 0.3 dB the calibrated bit rule matches the oracle exactly at "
         r"the three lowest rates, where both reach the same architectural "
         r"ceiling, comes within 0.2 points of it at q48, and gives up "
         r"\RateRankLoose% against the oracle's \SigLooseHigh% at q63. "
@@ -1495,18 +1513,18 @@ def content(colw, fullw):
         r"measured.")
     tbl("raterank_best",
         r"<b>Table 9. The same comparison on a second training run</b> (BEST), "
-        r"0.1 dB, same test set. Bold where the parameter-free rule beats that "
+        r"0.1 dB, same test set. Bold where the calibrated bit rule beats that "
         r"run's own trained head.")
     par(r"<b>It replicates on a second training run.</b> "
         r"BEST is a separate recipe at a different epoch, with its own router "
-        r"trained the same way. There the parameter-free rule beats the trained head at "
+        r"trained the same way. There the calibrated bit rule beats the trained head at "
         r"\BestRankWinsN of \BestRankOfN rates, by up to \BestRankBy points, "
         r"and comes within \BestRankToOracle points of the <i>oracle</i> "
         r"everywhere. The margins there are wider than here, and the one rate "
         r"it concedes is the only rate on either checkpoint where the head "
         r"finishes ahead, by under a point. We do not read that as showing a "
         r"learned head cannot be worth its parameters, only that neither of "
-        r"our training runs produced one that is. The parameter-free rule stays close "
+        r"our training runs produced one that is. The calibrated bit rule stays close "
         r"to the oracle on both.")
     par(r"Per-block bit allocation is a standard quantity in learned "
         r"compression, where it is something to <i>choose</i>; block-level "
@@ -1516,11 +1534,11 @@ def content(colw, fullw):
         r"nothing because someone else has already paid for it.")
     tbl("blend",
         r"<b>Table 9. Blending the two decoder-side signals</b> at 0.1 dB, both "
-        r"normalised to unit mean, weight w from the parameter-free rule to the "
+        r"normalised to unit mean, weight w from the calibrated bit rule to the "
         r"head's ordering. Bold is the best per rate.")
     par(r"<b>Are the two signals complementary?</b> Barely. We normalise both "
         r"surrogates to unit mean and blend them with one weight w, where w=0 "
-        r"is the parameter-free rule and w=1 the head's ordering. The best blend is w=0 "
+        r"is the calibrated bit rule and w=1 the head's ordering. The best blend is w=0 "
         r"at the three lowest rates and a small head weight at the two "
         r"highest, worth +2.1 points at q48 and +0.9 at q63. The head reads "
         r"the entropy model's scales, so it already has most of what the bit "
@@ -1607,12 +1625,12 @@ def content(colw, fullw):
         r"well as how good it is.")
     par(r"<b>Which predictor should C be built on?</b> Either will do, and the "
         r"answer follows the same split as Section 5.6. Running the identical "
-        r"override rule over the parameter-free rule instead of the head "
+        r"override rule over the calibrated bit rule instead of the head "
         r"is worth up to \CPredBitsAhead points at the lowest rate and costs "
         r"up to \CPredHeadAhead at the highest. Both converge on A at ρ=1 to "
         r"the second decimal at every rate, which is the third independent "
         r"check that the two code paths agree. The best single operating point "
-        r"we measured is the parameter-free rule with half the map signalled, at "
+        r"we measured is the calibrated bit rule with half the map signalled, at "
         r"\CBestSave% at q\CBestQp. That is \CBestOverA points <i>above</i> "
         r"full signalling, with no learned component anywhere in the decoder.")
     par(r"Configuration C is what we would ship where a small map is tolerable "
@@ -1647,12 +1665,16 @@ def content(colw, fullw):
         r"where 33.1% was available. Shallow exits are cheap in quality at low "
         r"rate and expensive at high rate, so a map is calibrated to the rate "
         r"it was found at, and reusing one upward breaks the quality guarantee "
-        r"without anything in the decode reporting that it has. An encoder "
-        r"should search once per rate and reuse that search across frames.")
+        r"without anything in the decode reporting that it has. In our reuse "
+        r"probe, then, an encoder can search once per rate and reuse that "
+        r"search across the frames we tested. How far that carries beyond the "
+        r"offsets and sequences probed here we have not measured.")
     h2("5.9 Complexity and wall-clock")
     tbl("latency",
         r"<b>Table 8. Wall-clock</b>, 1080p, median of 40 interleaved "
-        r"iterations on one A100-class GPU, at the 0.1 dB operating point. "
+        r"iterations on one NVIDIA RTX A6000, 300 W board limit, PyTorch "
+        r"2.6.0 and CUDA 12.4, single precision, at the 0.1 dB operating "
+        r"point. "
         r"``MACs'' is what the arithmetic predicts; ``measured'' is the sorted "
         r"per-tile loop.")
     par(r"A saving in multiply-accumulates is not a saving in time. Tiling "
@@ -1794,7 +1816,7 @@ def content(colw, fullw):
         r"compared against a free one. Routing on the bits already spent per "
         r"tile needs no parameters and no training, it adds nothing to the "
         r"stream, and it beats our trained head at every rate we measured, "
-        r"while agreeing with the oracle on fewer tiles "
+        r"while agreeing with the Lagrangian oracle on fewer tiles "
         r"than the head does. We read that as a warning about the metric quite "
         r"as much as about the head. Finally, a timing harness will report "
         r"numbers whether or not it is timing the right device. Ours timed the "
@@ -1827,7 +1849,7 @@ REFS = [
  "S. Teerapittayanon et al. BranchyNet: fast inference via early exiting from deep neural networks. ICPR, 2016.",
  "B. Bross et al. Versatile Video Coding. IEEE TCSVT, 2021.",
  "F. Yang et al. Slimmable compressive autoencoders for practical neural image compression. CVPR, 2021.",
- "M. A. Yılmaz et al. Slimmable video codec. CVPRW, 2022.",
+ "M. A. Yilmaz et al. Slimmable video codec. CVPRW, 2022.",
  "A. Kuznetsova et al. The Open Images Dataset V4. IJCV, 2020.",
  "A. Mercat et al. UVG dataset: 50/120fps 4K sequences for video codec analysis. ACM MMSys, 2020.",
  "H. Wang et al. MCL-JCV: a JND-based H.264/AVC video quality assessment dataset. ICIP, 2016.",
@@ -1846,7 +1868,7 @@ REFS = [
  "D. Madras et al. Predict responsibly: improving fairness and accuracy by learning to defer. NeurIPS, 2018.",
  "H. Mozannar, D. Sontag. Consistent estimators for learning to defer to an expert. ICML, 2020.",
  "G. DeSalvo et al. Budgeted multiple-expert deferral. arXiv:2510.26706, 2025.",
- "Accelerating block-level rate control for learned image compression. arXiv:2409.01009, 2024.",
+ "M. Dong, M. Lu, and Z. Ma. Accelerating block-level rate control for learned image compression. arXiv:2409.01009, 2024.",
 ]
 
 

@@ -1,0 +1,248 @@
+FLEX-UF · REVIEWER FIX LIST
+30 items. Ticked only when the fix is in the built PDF and check_paper agrees.
+[ ] open   [~] in progress   [x] done
+
+Status: 11 / 30
+
+================================================================================
+CRITICAL (8)
+================================================================================
+
+[ ] 01. The "bitstream unchanged" claim contradicts the headline number.
+        The contribution says deployable against existing bitstreams and then
+        quotes 29.9-15.6%, which is configuration A, and A transmits an exit map
+        of about 89 bits per frame. Table 5 is A. The conclusion repeats "no
+        change to the coded payload" for the same numbers.
+        FIX: define two operating modes explicitly and use the names everywhere.
+        signalled FLEX-UF  = coded latent unchanged, plus ~X bits/frame of
+                             routing metadata
+        bitstream-identical FLEX-UF = decoder-side router, byte-identical file
+        If the headline stays A, the abstract must say "no change to the coded
+        latent, only ~X bits per frame of routing metadata". If we want the
+        "existing byte-identical bitstreams" headline, then B or the bit rule
+        becomes the headline.
+        Files: main.tex, build_pdf.py, abstract, contributions, conclusion,
+        Table 5 caption, related-work table.
+
+[ ] 02. Freeze the cost accounting on ONE canonical definition.
+        Three different architectural ceilings are in circulation for the same
+        quantity: 41.91%, 39.1%, 38.33%. The supplement says 38.33% is the one
+        that agrees with the hook-measured cost, and that the hook audit moves
+        the headline from 29.9 to 29.13 and 15.6 to 15.16. Main Table 16 still
+        prints 41.9 while the text under it argues from 39.1.
+        FIX: choose the authoritative MAC definition, then regenerate every
+        table, figure and abstract number from one script. No new experiment.
+
+[ ] 03. Recompute BD-Rate 0.88% on the pinned checkpoint.
+        The supplement states that no integrated figure in this work is on the
+        pinned checkpoint. The file the 0.88% comes from does not even record
+        its checkpoint and predates the corrected cost model. This is one of the
+        two most important numbers in the abstract.
+        FIX: regenerate BD-Rate once, on the final checkpoint, with the final
+        evaluation convention and the final bitrate accounting. Evaluation only.
+
+[ ] 04. Say how beta is chosen at deployment time in configuration B.
+        The paper correctly says the decoder cannot compute D(t,k), then says
+        beta is bisected against the budget exactly as lambda is. A real decoder
+        cannot know whether it hit 0.1 dB without the source. As written this
+        reads as test-time oracle leakage.
+        FIX: state the calibration protocol in the main paper. Choose beta on a
+        held-out calibration set, per (quality index, budget), and evaluate on
+        the test set with that fixed beta. Say whether the table is global,
+        per-rate or per-frame. Evaluation only, small, high value.
+
+[x] 05. "Parameter-free router" is not defensible as written.
+        The complete rule fits (alpha, c, phi) by least squares with
+        leave-one-sequence-out calibration, and the supplement lists six offline
+        calibration constants per rate. Zero LEARNED parameters, not zero
+        parameters.
+        FIX: rename throughout to something honest and equally strong:
+        "training-free calibrated bit rule", "zero-learned-parameter router", or
+        "scalar-calibrated rule". The contribution survives the rename.
+
+[x] 06. Narrow the word "oracle".
+        Configuration C beats A at the same distortion with half a map, and the
+        paper explains why: A is optimal only within the single-multiplier
+        Lagrangian family. Calling A "the oracle" without qualification misleads.
+        FIX: "Lagrangian oracle" or "single-multiplier oracle" everywhere, and
+        reserve "global constrained optimum" for the exact Pareto point.
+
+[ ] 07. The hybrid endpoint consistency check is failing. Resolve it.
+        check_paper is 84/85 and the open failure is "hybrid: rho=1 reproduces
+        A", while the main text makes the strong claim that it does. This is an
+        internal correctness condition, not a limitation.
+        FIX: either repair the code path or delete the claim. DECISIONS 91.
+
+[ ] 08. The deblocking-filter narrative contradicts itself.
+        The section is titled "A learned deblocking filter, and why we reject
+        it", yet the shipped configuration still pays for it: Table 6 blames it
+        for the deepest exit costing more than the release, and the supplement's
+        cost model carries r = 0.0095 for a full-frame filter.
+        FIX: either remove it from the shipped configuration and regenerate the
+        costs, or retitle and rewrite the verdict, for instance "why it is not
+        sufficient".
+
+================================================================================
+VERY IMPORTANT (4)
+================================================================================
+
+[ ] 09. Pin the evaluation protocol in one box in the main paper.
+        Two implementations of the same quantity differ by up to 3.29 saving
+        points, which is larger than some of the method differences the paper
+        reports, and the per-frame against pooled convention moves integrated
+        saving by 7 to 10 points.
+        FIX: one canonical convention in the main text, stated as a box or a
+        small table: reference is the released full-frame decoder; distortion
+        pooling is X; the scope of lambda and beta is X; the budget is applied
+        per frame or globally; the mixed map is re-decoded or not. Alternatives
+        become a supplement sensitivity study.
+
+[x] 10. The headline is 53 intra FRAMES, not 53 sequences.
+        One intra frame is taken from each of 53 sequences and most measurements
+        are one frame per sequence. "On 53 test sequences" reads stronger than
+        what was done.
+        FIX: "on 53 CTC intra frames, one from each sequence" in the abstract
+        and wherever the test set is described.
+
+[ ] 11. Do not leave "training is not converged" bare in the submission.
+        The launcher was given 16 epochs and the headline checkpoint is about
+        one pass in; later epochs measured 22.1 rising to 25.3.
+        FIX: freeze the run, make one checkpoint canonical, and if a later one
+        does not arrive in time say "later checkpoints improved the measured
+        trade-off" rather than "lower bound", which is not a guarantee.
+
+[ ] 12. Table 7 disagrees with the prose next to it.
+        The table gives q0 uniform exit 3 as 24.2% saving; the prose says 27.0%.
+        FIX: every table-against-prose value must pass, 100 out of 100, before
+        submission.
+
+================================================================================
+IMPORTANT (8)
+================================================================================
+
+[x] 13. Keep the band contribution, pull back the power law.
+        The collapse from 15.5 points of raw spread to about 1.7 to 2.2 is
+        strong and is arguably a separate contribution. But inverse fits to the
+        same frontier disagree in the exponent by up to 40%, and the supplement
+        itself calls the exponent a description rather than a law.
+        FIX: state clearly that band normalisation is the claim and u^0.38 is an
+        empirical fit.
+
+[x] 14. "Property of the ladder, not of the checkpoint" is too strong.
+        The collapse replicates on a second run but the exponent moves from 0.38
+        to 0.33.
+        FIX: "the collapse appears robust across two checkpoints".
+
+[x] 15. Make the halo-exchange negative result conditional.
+        As written it sounds universal, while the paper accepts that the model
+        was trained with replicate padding and that training with exchange might
+        change the outcome.
+        FIX: "on a decoder trained with independent-tile padding, introducing
+        halo exchange only at inference severely degrades routed allocation".
+
+[ ] 16. Soften the generalisations, do not run a second codec.
+        The work measures the DCVC-UF intra decoder only.
+        FIX: "any spatially adaptive decoder" becomes "we expect", "suggests",
+        or "in this architecture class", in the abstract, introduction and
+        conclusion.
+
+[ ] 17. Resolution-adaptive tile size is not a causal ablation.
+        The 128 and 256 px comparison comes from different training runs, which
+        the paper admits.
+        FIX: move it to the supplement, or mark it "indicative, confounded by
+        training". No matched retraining.
+
+[x] 18. Narrow the map-reuse claim.
+        A frame-0 map applied to frame 8 differs by 0.005 dB, and the paper
+        concludes one search per GOP.
+        FIX: "in our reuse probe". Optionally add a few more temporal offsets on
+        the existing CTC, no training.
+
+[x] 19. Make the wall-clock hardware name consistent and exact.
+        Main Table 15 says "A100-class GPU"; the supplement says NVIDIA RTX
+        A6000 for timing and power.
+        FIX: exact GPU, precision, PyTorch and CUDA versions, warmup, batching.
+        Wall clock is a strength of this paper; no ambiguity here.
+
+[ ] 20. Reduce the router deployment story to one option.
+        One place says a single head covers all 64 quality indices; another
+        proposes a router per operating point as a remedy for the gap away from
+        q32.
+        FIX: ship a shared head or rule plus an offline calibrated beta lookup
+        per (quality index, budget). If separate heads are seriously proposed,
+        compute the model storage explicitly.
+
+================================================================================
+MEDIUM (5)
+================================================================================
+
+[ ] 21. Say in the main paper that 0.1 dB is not a perceptual threshold.
+        It is an engineering convention, not evidence of imperceptibility. One
+        sentence in the main results; the 0.2, 0.3 and 0.5 dB rows already close
+        the sensitivity question.
+
+[x] 22. Give the two bit-based rules different names.
+        The Section 5.2 control knows the oracle's exit histogram, so it is a
+        ranking-quality control and not a standalone decoder router. Section 5.6
+        derives a complete map from a fitted surrogate. Calling both
+        "rate-ranked (free)" invites the reader to think they are one algorithm.
+        FIX: "oracle-histogram bit ranking" against "calibrated bit router".
+
+[ ] 23. Promote the free baseline beating the trained head to a main result.
+        It wins at 5 of 5 rates at 0.1 dB despite worse oracle agreement.
+        FIX: state the insight crisply. Classification accuracy over exit labels
+        is a poor router objective; regret and ranking are what matter. This
+        lifts the paper from an early-exit trick to a general point about
+        adaptive inference.
+
+[ ] 24. Note the additivity assumption in the main Method.
+        The theory assumes separable tile distortions while the full-frame
+        deblocker sees the whole exit map at once. The supplement tests this and
+        finds a maximum mismatch of 5.5e-5 dB over 60 allocations.
+        FIX: one sentence before the theory, pointing at the check.
+
+[ ] 25. The related-work table needs more than a binary "new bitstream" column.
+        Four columns would be clearer: encoder weights changed, coded latent
+        changed, side metadata, decoder-side-only possible. As it stands
+        "FLEX-UF = no new bitstream" misrepresents A. Also drop absolutes such
+        as "every other method changes ...".
+
+================================================================================
+POLISH (3)
+================================================================================
+
+[x] 26. "Figure N" is still in the router head caption. This is a direct
+        unfinished-paper signal.
+
+[x] 27. Clean the bibliography. Reference 23 has a broken glyph, "Y_lmaz", and
+        reference 42 appears without authors in the main reference list.
+
+[ ] 28. The supplement reads like an internal lab audit log.
+        Notes such as "file overwritten", "training still running", "wrong
+        device for months", "one identity remains open" and "file should be
+        regenerated" are excellent internal QA and make the paper look
+        unfinished. A.8 lists artefacts that are not pinned; the conclusion says
+        the timing harness measured the wrong device for months.
+        FIX: resolve the underlying problems, then turn the supplement into a
+        reproducibility document rather than a debugging diary.
+
+================================================================================
+STRUCTURE (2)
+================================================================================
+
+[ ] 29. The main paper's thesis is diffuse.
+        It is currently trying to be a seam-estimator paper, an early-exit
+        paper, a Lagrangian theory paper, a router paper, a partial-signalling
+        paper, a map-reuse paper and a hardware-efficiency paper at once.
+        FIX: four parts. (1) tile-adaptive decoder with unchanged latent,
+        (2) tiling creates a floor, (3) the usable budget band and the main
+        compute-quality result, (4) cheap bit-based routing and real latency.
+        Hybrid, Lorenz and Gini, the detailed deblocking failure, map reuse, the
+        fine-ladder comparison and the long proofs all move to the supplement.
+
+[ ] 30. Foreground the three strongest results and demote the rest to support.
+        The CVPR-worthy core: spatial compute allocation on a fixed learned
+        decoder; a finite feasible band caused by tiling; and the bits already
+        spent predicting the compute the reconstruction needs. What is missing
+        is not more experiments but flawless accounting and a clean deployment
+        story around these three.

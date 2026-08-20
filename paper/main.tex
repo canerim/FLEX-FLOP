@@ -35,7 +35,7 @@ whatever that region contains. We show that decoding compute can instead be
 allocated spatially, by content, with the encoder, the entropy model and the
 transmitted representation left untouched. We add a multi-exit ladder to the
 intra decoder of DCVC-UF, so that tiles of one frame leave a shared
-reconstruction trunk at different depths. On \NumSeq\ test sequences under a
+reconstruction trunk at different depths. On \NumSeq\ CTC intra frames, one from each sequence, under a
 $0.1\dB$ quality constraint this removes \MainLowRate\% to \MainHighRate\% of
 decoder multiply-accumulates across the rate range, \MeanAtOne\% on average, at a
 BD-Rate cost of \BdRateALow\%. At $0.2\dB$ the mean saving is \MeanAtTwo\% and at
@@ -137,10 +137,10 @@ uses \BandUseLow\% of the band at low rate and \BandUseHigh\% at high rate.
       in closed form, and seven propositions verified numerically rather than
       asserted. Measuring the budget in units of that band accounts for most
       of the rate dependence, on two independently trained checkpoints.
-\item A parameter-free control that adaptive-inference work is rarely measured
+\item A zero-learned-parameter control that adaptive-inference work is rarely measured
       against. Routing on the bits the entropy model has already spent per tile
       costs nothing, adds nothing to the stream, and beats our trained head at
-      every rate, while agreeing with the oracle on fewer tiles than the head
+      every rate, while agreeing with the Lagrangian oracle on fewer tiles than the head
       does.
 \end{enumerate}
 
@@ -474,9 +474,14 @@ its budget and we find that value by bisection. The rule each tile follows is
 k^{*}_t(\lambda) \;=\; \arg\min_k \; \bigl[\, D_{t,k} + \lambda\, c_k \,\bigr],
 \label{eq:lagrangian}
 \end{equation}
-with the minimum taken over $k \ge j$. We call $k^{*}_t(\lambda)$ the
-\emph{oracle}'s choice, because it is made with the true error of every exit in
-hand. Both quantities in~(\ref{eq:lagrangian}) are available \emph{to the
+with the minimum taken over $k \ge j$. We call $k^{*}_t(\lambda)$ the choice of
+the \emph{Lagrangian oracle}: it is made with the true error of every exit in
+hand, which no decoder has, but it is optimal only within the family of
+allocations one multiplier can reach. That qualifier is not cosmetic. Section
+\ref{sec:hybrid} exhibits allocations that are cheaper at the same distortion
+than anything this rule produces, so ``oracle'' here means best-under-a-single-%
+multiplier and not the global constrained optimum. Where we mean the latter we
+say so. Both quantities in~(\ref{eq:lagrangian}) are available \emph{to the
 encoder}, which holds the source, so configuration~A can run this search exactly.
 
 What the search costs the \emph{encoder} depends on how the table of $D_{t,k}$ is
@@ -497,7 +502,7 @@ The decoder cannot run~(\ref{eq:lagrangian}). $D_{t,k}$ is the error against the
 source, and the source is the one thing a decoder never receives. The gap is one
 of information: the errors the argmin compares depend on a picture that is not in
 the bitstream, so no decoder-side model recovers them, however large it is. What
-a decoder can do is estimate which exit the oracle would have picked, and
+a decoder can do is estimate which exit the Lagrangian oracle would have picked, and
 configuration~B therefore \emph{predicts}. Its head reads what the decoder
 already holds, the feature at the split point, the decoded latent $\hat{y}$, the
 entropy model's scales and the quality index. For each tile $t$ it emits a vector
@@ -829,7 +834,7 @@ that run.
 OpenImages~\cite{openimages} with the encoder frozen ($\max|\Delta| = 0$ is
 asserted every run). One $\lambda_{\mathrm{rd}}$ is drawn per sample from a
 log-spaced range covering all 64 quality indices, so a single set of weights
-covers the whole rate range. We evaluate on the \NumSeq\ sequences of the common
+covers the whole rate range. We evaluate on one intra frame from each of the \NumSeq\ sequences of the common
 test set (CTC: UVG~\cite{uvg}, MCL-JCV~\cite{mcljcv} and HEVC classes B, C, D
 and E), one intra frame each.
 
@@ -931,7 +936,7 @@ together with two stronger controls, at matched compute.
 
 The uniform rows answer the question directly, and the answer sharpens with rate.
 At the lowest rate a static decoder can reach exit 3 inside the budget and save
-$27.0\%$, against the oracle's \MainLowRate\%. At $q48$ and $q63$ the only
+$27.0\%$, against the Lagrangian oracle's \MainLowRate\%. At $q48$ and $q63$ the only
 uniform depth that fits is the deepest one, which \emph{costs} $0.95\%$ instead
 of saving anything. At those two rates, then, the comparison is between $17\%$
 and nothing at all, not between $17\%$ and something smaller. Averaged over
@@ -943,7 +948,7 @@ oracle's own exit histogram, so the mix of depths and hence the average cost are
 unchanged, and assign it to tiles at random. Quality falls sharply. What the
 allocation buys is knowing \emph{which} tiles can afford to run shallower;
 running some fraction of them shallower is worth nothing by itself. The
-rate-ranked row keeps the same histogram and orders it by a signal the decoder
+oracle-histogram bit ranking keeps the same histogram and orders it by a signal the decoder
 already holds, namely the bits the entropy model spent on each tile. This is the
 cheapest router we can think of. It has no parameters and no training, and the
 number is available before the trunk starts. It is also the natural analogue of
@@ -951,16 +956,16 @@ the confidence rules used by early-exit classifiers~\cite{branchynet,msdnet},
 which likewise read a signal off the network's own output.
 
 It recovers most of the gap. At $q63$, random costs \RandomDb$\dB$ and the
-oracle $0.100\dB$ at identical compute, while the rate-ranked row costs
-\RateRankDb$\dB$. That is \RateRankRecovers\% of the oracle's advantage over
+Lagrangian oracle $0.100\dB$ at identical compute, while the oracle-histogram bit ranking costs
+\RateRankDb$\dB$. That is \RateRankRecovers\% of the Lagrangian oracle's advantage over
 chance, at $0.68$--$0.79$ agreement with the oracle's map. A learned router
-therefore has to beat a parameter-free rule that is already three quarters of the way
+therefore has to beat a calibrated bit rule that is already three quarters of the way
 there. We would not have run that comparison without this control, and we
-suggest that any adaptive-inference paper report it. Given the oracle's
+suggest that any adaptive-inference paper report it. Given the Lagrangian oracle's
 histogram, what we measure here is \emph{ranking} and nothing else.
 Section~\ref{sec:raterank} removes that crutch and turns the same signal into a
 complete routing rule, which matches the trained head across the whole rate
-range. Fig.~\ref{fig:exitmap} shows the assignment the oracle arrives at.
+range. Fig.~\ref{fig:exitmap} shows the assignment the Lagrangian oracle arrives at.
 
 \subsection{Resolution, and the granularity of a tile}
 \label{sec:resolution}
@@ -1127,9 +1132,13 @@ small enough that a deployment could calibrate the two ends and read the rest of
 one curve. That curve is a one-parameter power law,
 $\text{saving} \approx C\,u^{\BandExp}$, with $C$ the architectural ceiling and
 $u$ the position in the band. We fit it in log space over all five rates and get
-$R^2 = \BandR2$, worst residual \BandFitErr\ points.
+$R^2 = \BandR2$, worst residual \BandFitErr\ points. The claim we make is the
+\emph{rescaling}: measuring the budget in units of each rate's own band is what
+collapses the curves. The exponent is an empirical fit to that collapse and not
+a law. Inverse fits to the same frontier disagree in it by up to $40\%$, so we
+report it as a description of these curves and read nothing into its value.
 
-\textbf{It is a property of the ladder, not of this checkpoint.} We repeated the
+\textbf{The collapse appears robust across two checkpoints.} We repeated the
 measurement on a different training run, \texttt{BEST}, a separate recipe taken
 at a different epoch, and the same thing happens. The rates are
 \BandRawSpreadB\ points apart at a matched decibel and \BandSpreadMeanB\ after
@@ -1230,8 +1239,8 @@ where it did not.
 \begin{figure}[t]
 \centering
 \includegraphics[width=\columnwidth]{figures/raterank.png}
-\caption{\textbf{The parameter-free rule.} \textbf{a} Saving at $0.1\dB$; shaded where
-the parameter-free rule beats the trained head. \textbf{b} What a tile's bit
+\caption{\textbf{The calibrated bit rule.} \textbf{a} Saving at $0.1\dB$; shaded where
+the calibrated bit rule beats the trained head. \textbf{b} What a tile's bit
 count is correlated with, against how often the rule agrees with the oracle
 outright; dotted is the head's own held-out agreement.}
 \label{fig:raterank}
@@ -1240,7 +1249,7 @@ outright; dotted is the head's own held-out agreement.}
 \begin{table}[t]
 \centering
 \resizebox{\columnwidth}{!}{\input{tables/raterank}}
-\caption{\textbf{The parameter-free rule}, $0.1\dB$, same test set; it is the
+\caption{\textbf{The calibrated bit rule}, $0.1\dB$, same test set; it is the
 ``rate-rank'' column. Bold where the rule beats the trained head. $\rho$ are
 Spearman correlations
 between a tile's bit count and, respectively, the depth the oracle assigns it and
@@ -1252,7 +1261,7 @@ the distortion it stands to gain from that depth.}
 \centering
 \resizebox{\columnwidth}{!}{\input{tables/raterank_best}}
 \caption{\textbf{The same comparison on a second training run} (\texttt{BEST}),
-$0.1\dB$, same test set. Bold where the parameter-free rule beats that run's own
+$0.1\dB$, same test set. Bold where the calibrated bit rule beats that run's own
 trained head.}
 \label{tab:raterankbest}
 \end{table}
@@ -1261,7 +1270,7 @@ trained head.}
 \centering
 \resizebox{\columnwidth}{!}{\input{tables/blend}}
 \caption{\textbf{Blending the two decoder-side signals} at $0.1\dB$, both
-normalised to unit mean, weight $w$ from the parameter-free rule to the head's ordering.
+normalised to unit mean, weight $w$ from the calibrated bit rule to the head's ordering.
 Bold is the best per rate.}
 \label{tab:blend}
 \end{table}
@@ -1279,12 +1288,12 @@ exit costs on an average tile. We fit $(\alpha,c,\varphi)$ by least squares,
 leave-one-sequence-out, so that no sequence contributes to the profile that
 routes it. The same Lagrangian the oracle runs is then run on the surrogate.
 Nothing is signalled and nothing is trained; the arithmetic is one scalar per
-tile. \textbf{It beats the trained head at every rate.} The parameter-free rule is ahead
+tile. \textbf{It beats the trained head at every rate.} The calibrated bit rule is ahead
 of the \RouterParams\ router at all \RateRankNWins\ measured rates, by margins
 that run from half a point at $q48$ to \RateRankBeatsBy\ points at $q0$. A head
 trained on this decoder against this oracle therefore returns nothing over a
 rule with no parameters at all, and it carries \RouterCostPct\% of the decode
-that the parameter-free rule does not.
+that the calibrated bit rule does not.
 
 \textbf{Why it works is not that it agrees with the oracle.} It agrees on
 \RateRankAgreeLo--\RateRankAgreeHi\ of tiles, well below the router's $0.718$,
@@ -1296,7 +1305,7 @@ across the ladder, that is, with how much a tile stands to gain from depth, at
 $\rho_{\mathrm{spread}}=\RateRankSpreadLo$--\RateRankSpreadHi\ at every rate.
 
 \textbf{At a looser budget it stops being a baseline and becomes the answer.}
-At $0.3\dB$ the parameter-free rule matches the oracle exactly at the three lowest
+At $0.3\dB$ the calibrated bit rule matches the oracle exactly at the three lowest
 rates, where both reach the same architectural ceiling, comes within $0.2$
 points of it at $q48$, and gives up \RateRankLoose\% against the oracle's
 \SigLooseHigh\% at $q63$. That is ahead of the trained head at every rate, by up to
@@ -1312,14 +1321,14 @@ does not earn them at any rate we measured.
 
 \textbf{It replicates on a second training run.}
 \texttt{BEST} is a separate recipe at a different epoch, with its own router
-trained the same way. There the parameter-free rule beats the trained head at
+trained the same way. There the calibrated bit rule beats the trained head at
 \BestRankWinsN\ of \BestRankOfN\ rates, by up to \BestRankBy\ points, and comes
 within \BestRankToOracle\ points of the \emph{oracle} everywhere
 (Table~\ref{tab:raterankbest}). The margins there are wider than here, and the
 one rate it concedes is the only rate on either checkpoint where the head
 finishes ahead, by under a point. We do not read that as showing a learned head
 cannot be worth its parameters, only that neither of our training runs produced
-one that is. The parameter-free rule stays close to the oracle on both.
+one that is. The calibrated bit rule stays close to the oracle on both.
 
 Per-block bit allocation is a standard quantity in learned compression, where it
 is something to \emph{choose}; block-level rate control sets it so that complex
@@ -1329,7 +1338,7 @@ a region was. It costs nothing because someone else has already paid for it.
 
 \textbf{Are the two signals complementary?} Barely. We normalise both surrogates
 to unit mean and blend them with one weight $w$, where $w{=}0$ is the
-parameter-free rule and $w{=}1$ the head's ordering. The best blend is $w{=}0$ at
+calibrated bit rule and $w{=}1$ the head's ordering. The best blend is $w{=}0$ at
 the three lowest rates and a small head weight at the two highest, worth $+2.1$
 points at $q48$ and $+0.9$ at $q63$ (Table~\ref{tab:blend}). The head reads the
 entropy model's scales, so it already has most of what the bit count carries; what it adds is
@@ -1429,11 +1438,11 @@ reports what \emph{kind} of predictor one has as well as how good it is.
 
 \textbf{Which predictor should C be built on?} Either will do, and the answer
 follows the same split as Section~\ref{sec:raterank}. Running the identical
-override rule over the parameter-free rule instead of the head is worth up
+override rule over the calibrated bit rule instead of the head is worth up
 to \CPredBitsAhead\ points at the lowest rate and costs up to \CPredHeadAhead\
 at the highest. Both converge on A at $\rho{=}1$ to the second decimal at every
 rate, which is the third independent check that the two code paths agree. The
-best single operating point we measured is the parameter-free rule with half the map
+best single operating point we measured is the calibrated bit rule with half the map
 signalled, at \CBestSave\% at $q\CBestQp$. That is \CBestOverA\ points
 \emph{above} full signalling, with no learned component anywhere in the decoder.
 
@@ -1473,8 +1482,9 @@ reverse is safe but wasteful: the $q63$ map applied at $q0$ delivers $0.075\dB$
 and only $19.8\%$ where $33.1\%$ was available. Shallow exits are cheap in
 quality at low rate and expensive at high rate, so a map is calibrated to the
 rate it was found at, and reusing one upward breaks the quality guarantee
-without anything in the decode reporting that it has. An encoder should search
-once per rate and reuse that search across frames.
+without anything in the decode reporting that it has. In our reuse probe, then, an encoder can search once per rate and reuse that
+search across the frames we tested. How far that carries beyond the offsets and
+sequences probed here we have not measured.
 
 \subsection{Complexity and wall-clock}
 \label{sec:wallclock}
@@ -1493,7 +1503,7 @@ Wall-clock is the sorted loop of Section~\ref{sec:wallclock}.}
 \centering
 \input{tables/latency}
 \caption{\textbf{Wall-clock}, 1080p, median of 40 interleaved iterations on one
-A100-class GPU, at the $0.1\dB$ operating point. ``MACs'' is what the arithmetic
+NVIDIA RTX A6000 with a $300$\,W board limit, PyTorch $2.6.0$ and CUDA $12.4$, single precision, one frame per iteration after $20$ warm-up iterations, at the $0.1\dB$ operating point. ``MACs'' is what the arithmetic
 predicts; ``measured'' is the sorted per-tile loop of
 Section~\ref{sec:wallclock}.}
 \label{tab:latency}
@@ -1599,8 +1609,12 @@ side of the crossover a given budget sits on.
 
 \paragraph{The seam is reduced, and the exact remedy is not usable as it stands.}
 The halo exchange removes \CoupFloorDropLo--\CoupFloorDropHi\% of the floor and
-is bit-exact at uniform depth (Section~\ref{sec:coupling}). It also destroys the
-routed saving, because routing puts neighbouring tiles at different depths. We do
+is bit-exact at uniform depth (Section~\ref{sec:coupling}). On a decoder trained
+with independent-tile padding, introducing the exchange only at inference also
+destroys the routed saving, because routing puts neighbouring tiles at different
+depths and the exchange then carries a shallow tile's feature into a deep
+neighbour. We state it that way deliberately: the finding is about this decoder
+and this training, not about halo exchange in general. We do
 not know whether a decoder trained with the exchange can recover both at once, and
 that is the experiment we would run next. Until someone runs it, the floor is a
 cost this method pays.
@@ -1650,7 +1664,7 @@ operations is an optimistic bound on a saving in time, and the optimism scales
 with the saving. A learned router should be compared against a free one. Routing
 on the bits already spent per tile needs no parameters and no training, it adds
 nothing to the stream, and it beats our trained head at every rate we measured,
-while agreeing with the oracle on fewer tiles than the head does. We read that
+while agreeing with the Lagrangian oracle on fewer tiles than the head does. We read that
 as a warning about the metric quite as much as about the head. Finally, a timing harness will report numbers whether or
 not it is timing the right device. Ours timed the wrong one for months, and what
 gave it away was a decoder that appeared to slow down with the quality index.
