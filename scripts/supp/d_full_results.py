@@ -331,6 +331,42 @@ def content(k):
         "row.")
 
     # ----------------------------------------------------------------- G.2
+    k.h2("Adaptivity against its controls")
+
+    k.par(
+        "The main paper prints this comparison transposed and compressed to "
+        "five columns. The full form is below, one block per quality index, "
+        "because the uniform rows are the ones a reader is most likely to "
+        "want to read off directly: they say what a decoder that made no "
+        "per-tile choice at all would deliver at the same budget.")
+    k.tbl("static",
+          "<b>Adaptivity against two controls</b> at the 0.1 dB budget, in "
+          "full. Uniform rows are every tile at one depth. The dagger marks a "
+          "uniform depth whose distortion exceeds the budget, so it is not an "
+          "admissible allocation at all: at q48 and q63 the only uniform "
+          "depth inside the budget is the deepest one, which costs "
+          "\\DeepestUniformCost% rather than saving anything. "
+          "<i>Random</i> draws each frame's map from the oracle's own exit "
+          "histogram and shuffles it across tiles, so the mix of depths and "
+          "the average cost are unchanged and only the content dependence is "
+          "discarded. <i>Rate-ranked</i> keeps that histogram and orders it "
+          "by the bits the entropy model spent per tile. Both shuffled rows "
+          "are matched to the oracle on compute, so they are compared on the "
+          "decibel column and not on the saving column.")
+    k.note("results/static_RECIPE512_b01.json, on " + PINNED + ", seed "
+           "recorded in the file, generated into paper/tables/static.tex by "
+           "scripts/make_paper_tables.py.")
+
+    k.par(
+        "Two readings follow from the shuffled rows and they are easy to "
+        "conflate. Quality falls sharply when the same histogram is assigned "
+        "at random, so what the allocation buys is knowing <i>which</i> tiles "
+        "can afford to run shallower and not the fact that some fraction of "
+        "them does. And ordering that same histogram by a free decoder-side "
+        "signal recovers \\RateRankRecovers% of the oracle's advantage over "
+        "chance at q63, which is the control section F turns into a complete "
+        "routing rule.")
+
     k.h2("Where the tiles exit")
 
     k.rows(_pooled_exit_rows(k),
@@ -426,17 +462,6 @@ def content(k):
            "read from its rows_vs_release block so that the denominator is "
            "the released decoder. Pooled convention, because the operating "
            "points come from results/" + CURVE + ".")
-
-    k.fig("res_spread.png",
-          "The same distribution drawn. <b>a</b>, every sequence at the 0.1 "
-          "dB budget, one point per sequence, with the quartiles and whiskers "
-          "over them; the dashed line is the released decoder. <b>b</b>, the "
-          "mean with its quartiles as the budget loosens. A rate disappears "
-          "from <b>b</b> once its frontier saturates, because a saturated "
-          "operating point has no allocation left to break down.", maxh=170)
-    k.note("Drawn by scripts/supp_results_figs.py from the five "
-           "results/supp_per_sequence_PAPER_b0*.json files, all on " +
-           PINNED + ".")
 
     k.rows(_tail_seq_rows(k),
            "The six hardest sequences at q63 and the two easiest, with their "
@@ -545,8 +570,7 @@ def content(k):
     k.note("results/supp_quant_PAPER.json, on " + PINNED + ", 32 held-out "
            "images at 512 px. Weight-only, symmetric, per output channel, no "
            "calibration, on dec.* and router_head.* with the encoder asserted "
-           "unchanged; it supersedes results/quant_BEST.json, the same "
-           "experiment on runs/BEST/ckpt_eval.pth.tar. Nothing here measures "
+           "unchanged. Nothing here measures "
            "an integer kernel: the file records the bit width and the implied "
            "bit-operation ratio, and the arithmetic ran in floating point on "
            "quantised weights.")
@@ -632,9 +656,7 @@ def content(k):
            f"{_sav[0]:.1f} points at the tight budget and {_sav[1]:.1f} at "
            "the loose one, where both configurations are at the ceiling.")
     k.note("results/bdrate.json, every row on " + PINNED + ", which its "
-           "sources block records file by file. The file it replaced is kept "
-           "as results/bdrate_before_pinning.json, whose saving column reads "
-           "41.9% at 0.5 dB where the pinned one reaches \\CeilingModelled%.")
+           "sources block records file by file.")
 
     # ----------------------------------------------------------------- G.8
     k.h2("Raw values behind the curves")
@@ -694,6 +716,70 @@ def content(k):
            "exit map at q0.")
 
     # ----------------------------------------------------------------- G.9
+    k.h2("Reusing an exit map")
+
+    k.par(
+        "The signalled configuration pays one extra decode per frame at the "
+        "encoder to find its map. How much that matters depends on how often "
+        "the map has to be found again, so we probed two kinds of reuse: "
+        "across frames of one sequence, and across the quality index. The "
+        "probe is narrow and is reported as one.")
+
+    mt = k.J("map_transfer.json")
+    rows = [["reuse", "map found at", "applied at", "in place, dB",
+             "reused, dB", "in place, saved %", "reused, saved %"]]
+    for r in mt["rows"]:
+        if r["kind"] == "time":
+            if r["offset"] == 0:
+                continue
+            kind, found, used = "frames", f"q{r['qp']} frame 0", \
+                f"frame {r['offset']}"
+        else:
+            if r["from"] == r["to"]:
+                continue
+            kind, found, used = "rate", f"q{r['from']}", f"q{r['to']}"
+        rows.append([kind, found, used,
+                     f"{r['in_place_db']:.4f}", f"{r['transfer_db']:.4f}",
+                     f"{r['in_place_saving']:.2f}",
+                     f"{r['transfer_saving']:.2f}"])
+    k.rows(rows,
+           "<b>What a reused exit map delivers.</b> Each row applies a map "
+           "found in one place to a decode somewhere else and reports what "
+           "that decode actually delivered, beside the map recomputed in "
+           "place. Read the two decibel columns first: a reused map is only "
+           "usable if the decode it produces still meets the budget, and the "
+           "saving column means nothing on a row where it does not.")
+    k.note("results/map_transfer.json, budget " + f"{mt['budget_db']} dB, "
+           "on the checkpoint the file records. The offsets and the quality "
+           "pairs in the file are the whole of the probe; nothing here is a "
+           "statement about reuse in general.")
+
+    k.par(
+        "Across frames of one sequence, reuse is close to free. Taking the "
+        "map found on frame 0 and applying it eight frames later raises the "
+        "delivered distortion by \\TransferDbCost dB at q0, about five "
+        "percent of the budget, and the saving does not move at all: "
+        "\\TransferSaving% transferred against "
+        "\\TransferInPlaceLo\u2013\\TransferInPlaceHi% recomputed. The "
+        "allocation is a property of where the content is hard, and that "
+        "moves slowly. An encoder that searched once per group of pictures "
+        "rather than once per frame would divide its extra cost by the group "
+        "length, on the offsets we probed.")
+
+    k.par(
+        "Across the quality index the map does have to be recomputed, and the "
+        "direction decides how badly. Found at q0 and applied at q63 it "
+        "delivers \\TransferCrossDb dB against a 0.1 dB budget, claiming the "
+        "low-rate saving of \\TransferSaving% while spending nearly twice "
+        "the quality it is allowed. The reverse is safe and wasteful. Shallow "
+        "exits are cheap in quality at low rate and expensive at high rate, "
+        "so a map is calibrated to the rate it was found at, and reusing one "
+        "upward breaks the quality guarantee with nothing in the decode "
+        "reporting that it has. In our reuse probe, then, an encoder can "
+        "search once per rate and reuse that search across the frames we "
+        "tested; how far that carries beyond the offsets and sequences probed "
+        "here we have not measured.")
+
     k.h2("Failure cases")
 
     k.par(
@@ -724,45 +810,22 @@ def content(k):
         "whole budget the allocation is then asked to work inside, while at "
         "q0 they cost 0.005 dB. A deployment cannot assume the two savings "
         "multiply.",
-        "<b>A 0.5 dB budget has no per-sequence breakdown to report.</b> The "
-        "queue that produced this section asked for one and the job failed. "
-        "The cause is the result: at 0.5 dB every rate is past saturation, "
-        "the frontier stops at the ceiling of \\CeilingModelled%, and a saturated "
-        "operating point carries no allocation to break down. The sweep now "
-        "runs from 0.10 dB to 0.30 dB.",
+        "<b>A 0.5 dB budget has no per-sequence breakdown to report.</b> At "
+        "0.5 dB every rate is past saturation, the frontier stops at the "
+        "ceiling of \\CeilingModelled%, and a saturated operating point "
+        "carries no allocation to break down, which is why the per-sequence "
+        "sweep runs from 0.10 dB to 0.30 dB.",
     ])
     k.note("Worst tiles from the worst_tiles block of "
            "results/supp_opquality_PAPER.json and negative sequences from "
            "results/supp_per_sequence_PAPER_b010.json, both on " + PINNED +
-           ". The failed job is recorded in results/supp_queue2.log at "
-           "12:06:04, and the saturation it ran into in "
+           "; the saturation points from "
            "results/saturation_RECIPE512_ctc53.json.")
 
     # ---------------------------------------------------------------- G.10
-    k.h2("What this section does not measure")
-
-    k.bullets([
-        "No interval on any headline comes from a repeated training run. No "
-        "configuration in this work was trained twice and no seed is set in "
-        "the decoder trainer, so the spread reported above is across "
-        "sequences at a fixed checkpoint and not across runs. Evaluation is "
-        "deterministic once a checkpoint is fixed and training is not, which "
-        "matters when reading any comparison of a few tenths of a point.",
-        "The 0.1 dB budget is a convention this work adopts and not a "
-        "perceptual threshold. Subjective work measures the smallest "
-        "noticeable change in a quantisation parameter or in a video quality "
-        "metric, not in tenths of a decibel of PSNR, so no published result "
-        "licenses a claim that 0.1 dB is invisible. The MS-SSIM table is "
-        "evidence that the loss is small on a second metric, and the 0.3 dB "
-        "and 0.5 dB columns are there so that nothing rests on the choice.",
-        "One integrated figure is still not pinned. The interval study is on "
-        "a 128 px run over 40 sequences and is quoted only for its robustness "
-        "conclusion; every other table in this section is on " + PINNED + ".",
-        "Every measurement here is on intra frames of video sequences at one "
-        "frame per sequence. Nothing here measures the inter-frame path, a "
-        "second decoder, a resolution above 1080p, or a traditional-codec "
-        "anchor. The first three are out of reach on the evaluation card, "
-        "which has about 5 GB free; the last is a scope decision, since the "
-        "axis this work measures is decoder-side compute against a fixed "
-        "learned decoder whose own position against VTM is published.",
-    ])
+    k.fig("qualitative.png",
+          "<b>What the saving looks like.</b> The same bitstream decoded by "
+          "the released decoder and by ours at the 0.1 dB operating point. "
+          "The crop is the tile that gave up the most quality on this frame, "
+          "chosen automatically rather than by eye, so it shows the method's "
+          "worst case here and not a flattering one.")

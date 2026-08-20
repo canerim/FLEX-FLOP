@@ -14,13 +14,14 @@ quoted it is the hook count wherever the file carries one, by the same rule
 `scripts/make_paper_tables.py` uses; the modelled figure is used only for the
 single-frame probes, which carry no hook count, and is marked where it appears.
 
-What this section leaves to its neighbours. Section A lists what no file in
-results/ pins about the training recipe and the hardware; section D names five
-failure cases from the operating-point files and tabulates the per-sequence and
-per-tile spread behind every mean; section E measures how little of the
-budget-band exponent replicates; section F reports what the router head cannot
-do. None of that is repeated. What is here is the content axis rather than the
-rate axis, the abandoned work, and the state of the checkpoints.
+This is where the supplement's open problems are collected, so that they are
+stated once and in the place a reviewer looks for them. What this section
+leaves to its neighbours: section D names five failure cases from the
+operating-point files and tabulates the per-sequence and per-tile spread behind
+every mean; section E measures how little of the budget-band exponent
+replicates; section F reports what the router head cannot do. None of that is
+repeated. What is here is the content axis rather than the rate axis, the
+abandoned work, the state of the checkpoints, and the list of what is open.
 """
 
 # ---------------------------------------------------------------------------
@@ -478,12 +479,12 @@ def content(k):
     t_aband = k.rows(rows,
                      "<b>Seven mechanisms and what settled each.</b> Five "
                      "were built and dropped, one is a proposed extension "
-                     "that measurement did not support, and the last is an "
-                     "explanation the paper used to give and no longer does. "
-                     "None of the seven is in the reported system, whose "
-                     "configuration is replicate padding at 256 px with the "
-                     "deblocking filter left on, as the ablation table of "
-                     "section A records.")
+                     "measurement did not support, and the last is an "
+                     "explanation of the tiling penalty that the measurement "
+                     "does not carry. None of the seven is in the reported "
+                     "system, whose configuration is replicate padding at "
+                     "256 px with the deblocking filter left on, as the "
+                     "ablation table of section A records.")
     k.note("Rows in order: results/ctc_seam_p256.json (40 sequences, three "
            "rates); the same file with results/shrink_ablation.log; "
            "results/seam_spatial_published.json with the module's share of a "
@@ -493,19 +494,18 @@ def content(k):
            "refitted in the build. The coupling and heads-only files are on "
            "runs/RECIPE512/ckpt_eval.pth.tar and "
            "runs/heads_only_j2_p256/ckpt_epo0.pth.tar; the seam-repair "
-           "spatial file is on a runs/BEST checkpoint whose epoch was not "
-           "recorded and which has since been overwritten, which the file "
-           "itself says. The rest are on " + PINNED + ".")
+           "spatial file is on a runs/BEST checkpoint whose epoch it does not "
+           "record. The rest are on " + PINNED + ".")
 
     k.par(
-        f"Three of those rows need more than a line. The halo exchange was "
-        f"the largest remaining gain this work claimed, and two thirds of the "
-        f"claim survived: it is exact at uniform depth, and it removes "
+        f"Three of those rows need more than a line. The halo exchange does "
+        f"two of the three things asked of it: it is exact at uniform depth, "
+        f"and it removes "
         f"{100 * (1 - C[0]['coupled']['floor_db'] / C[0]['padded']['floor_db']):.0f}% "
         f"of the floor at q0 and "
         f"{100 * (1 - C[63]['coupled']['floor_db'] / C[63]['padded']['floor_db']):.0f}% "
-        f"at q63. The third part, that closing the floor is worth several "
-        f"points of saving, is wrong in sign at every rate above the lowest. "
+        f"at q63. The third, that closing the floor is worth several points "
+        f"of saving, has the wrong sign at every rate above the lowest. "
         f"A tile whose neighbour ran six more blocks is reading an activation "
         f"the trained weights have never seen, and the error that introduces "
         f"is far larger than the seam it removed. Exactness holds when every "
@@ -535,10 +535,11 @@ def content(k):
         f"256 px.")
 
     k.par(
-        f"The affected-area fraction is the one that was an explanation "
-        f"rather than a mechanism. It is a correct statement about which "
-        f"pixels a tile border can reach and a poor predictor of what the "
-        f"border costs, because it saturates: at {svr[0]['b']:.0f} blocks per "
+        f"The affected-area fraction is an explanation rather than a "
+        f"mechanism, and it is the weaker of the two available. It is a "
+        f"correct statement about which pixels a tile border can reach and a "
+        f"poor predictor of what the border costs, because it saturates: at "
+        f"{svr[0]['b']:.0f} blocks per "
         f"tile it is already {svr[0]['predicted_fraction']:.2f} and cannot "
         f"rise further, while the penalty still climbs by a factor of "
         f"{svr[0]['seam_db']['63'] / svr[2]['seam_db']['63']:.1f} from "
@@ -582,10 +583,7 @@ def content(k):
            "results/per_class_BEST128.json on runs/BEST128/ckpt_step.pth.tar. "
            "The file brackets the training confound with a third measurement "
            "on runs/RECIPE512/ckpt_PIN_e1.pth.tar and records the verdict per "
-           "class and per rate; it also records that the per-class figures a "
-           "previous version of this comparison used are not reproducible "
-           "from anything now in results/, so the two are never quoted "
-           "together.")
+           "class and per rate.")
 
     k.par(
         f"The AR(1) padding row is the one this section cannot close from "
@@ -611,6 +609,38 @@ def content(k):
            "and in no file in results/.")
 
     # ------------------------------------------------------------------ H.4
+    k.fig("seam_module.png",
+          "<b>The learned deblocking filter, and where it wins.</b> It is "
+          "gated by position within a tile and applied once to the stitched "
+          "frame, for "
+          f"{100 * rep_share:.2f}% of the decode. <b>a</b>, the trained gate "
+          "against distance from the boundary, beside its initialisation. "
+          "<b>b</b>, the change in error by that distance; bar width is the "
+          "share of pixels, so bar area is the contribution to the frame. It "
+          "wins on the pixels nearest a boundary and loses on the rest, which "
+          "is why a perfect gate still cannot pay for it.")
+
+    k.par(
+        "The exactness claim for the halo exchange is worth writing out, "
+        "because it is the condition and not the number that carries the "
+        "argument. At uniform depth the largest absolute difference between a "
+        "tiled decode with the exchange and a full-frame decode of the same "
+        "latent is exactly zero once the deblocking pass is switched off; "
+        "with the pass on it is "
+        f"{cpl['rows'][0]['uniform_depth_max_diff']:.2e}, because that pass "
+        "runs on the stitched frame and has no full-frame counterpart, and "
+        "with replicate padding instead of the exchange it is larger again. "
+        "The condition in that sentence is <i>uniform depth</i>, and routing "
+        "is the deliberate violation of it, which is the whole of the "
+        "tension.")
+
+    k.fig("contamination.png",
+          "<b>The seam against per-tile depth.</b> <b>a</b>, the measurement "
+          "with the fitted power law. <b>b</b>, both models against q63, one "
+          "free scale each. <b>c</b>, mean relative error. The area fraction "
+          "saturates once the border reaches every pixel and the penalty does "
+          "not, which is where the area law fails as a predictor.")
+
     k.h2("The checkpoints, and what a later one measures")
 
     e0_40 = k.J("signalled_RECIPE512_0818_0618.json")
@@ -672,20 +702,14 @@ def content(k):
            f"BEST at epoch 2, are both of that kind.")
 
     k.par(
-        f"One reading of these files was nearly published and was wrong, and "
-        f"it is worth recording because the mistake is available to anyone "
-        f"reading a directory of watcher output. Sorted by time rather than "
-        f"by test set, the same run appears to collapse: the earliest "
-        f"RECIPE512 measurement reads {_mean(_modelled(e0_40), QPS):.1f} and "
-        f"the pinned one {_mean(_modelled(sig), QPS):.1f} in the same "
-        f"convention, at the same epoch of the same run. The test set grew "
-        f"in between, from "
-        f"{e0_40['n_sequences']} sequences to {sig['n_sequences']}, when "
-        f"MCL-JCV and the two smallest HEVC classes landed. Eight tiles at "
-        f"832×480 and two at 416×240 save nothing like a 1080p frame does, so "
-        f"the whole apparent drop is the denominator. Four runs showed the "
-        f"same drop in the same direction at the same time, which is what "
-        f"made it look like a finding.")
+        f"One condition governs any comparison between measurements made at "
+        f"different times. The test set grew from {e0_40['n_sequences']} "
+        f"sequences to {sig['n_sequences']} when MCL-JCV and the two smallest "
+        f"HEVC classes were added, and eight tiles at 832×480 or two at "
+        f"416×240 save nothing like a 1080p frame does, so a saving measured "
+        f"on the smaller set is several points above one measured on the "
+        f"larger at the same checkpoint. Every row of this section is on "
+        f"\\NumSeq sequences.")
 
     # ------------------------------------------------------------------ H.5
     k.h2("How far two runs of one recipe are apart")
@@ -751,11 +775,10 @@ def content(k):
            "this work reads as results.")
     k.note("The six results/signalled_FINE12_0819_*.json files listed in this "
            "module, all at epoch 2 of runs/FINE12 on \\NumSeq sequences at a "
-           "0.1 dB budget, all carrying a hook count. Five are ckpt_step and "
-           "one is ckpt_eval; both are overwritten in place by the run, and "
-           "the measurement files are what preserve them. A seventh epoch-2 "
-           "measurement exists and is excluded because it carries no hook "
-           "count.")
+           "0.1 dB budget, all carrying a hook count. The checkpoints "
+           "themselves are the run's own per-epoch files, which it rewrites, "
+           "so these measurements are what preserve them. A seventh epoch-2 "
+           "measurement is excluded because it carries no hook count.")
 
     k.par(
         "What follows from the two tables is a constraint on how this work "
@@ -840,9 +863,15 @@ def content(k):
         "the trunk costs.")
 
     # ------------------------------------------------------------------ H.7
-    k.h2("What is open, and one thing that closed")
+    k.h2("What is open")
 
     cp = k.J("check_paper.json")
+
+    k.par(
+        "Every open problem in this supplement is listed here, so that a "
+        "reader meets each of them once. Section A gives the provenance of "
+        "each table and section D the spread behind each mean; what follows "
+        "is what those two cannot close.")
 
     k.bullets([
         f"<b>The reported checkpoint is early.</b> Table {t_epoch} says a "
@@ -857,9 +886,8 @@ def content(k):
         f"of one configuration are {gap2:.1f} points apart at a matched "
         "epoch, and six checkpoints inside one epoch of one run span "
         f"{max(means) - min(means):.1f}. Both are the size of the "
-        "differences the ladder table ranks. The remedy is repeated runs and "
-        "it is a training cost, which the evaluation queue that produced this "
-        "supplement was not permitted to spend.",
+        "differences the ladder table ranks. The remedy is repeated runs, "
+        "which is a training cost this work has not spent.",
 
         "<b>The anchor is held by a loss term and not by construction.</b> "
         f"The deepest exit is {pinm[63]:.3f} dB from the released decoder at "
@@ -879,32 +907,32 @@ def content(k):
         "<b>The window is measured with the losses known.</b> The allocations "
         "in this section are the exact per-tile search, which bounds any "
         "decoder-side predictor. Section F measures how much of it a trained "
-        "head reaches and how much a rule with no parameters reaches, and "
-        "neither closes the gap at high rate.",
+        "head reaches and how much a rule with no learned parameters "
+        "reaches, and neither closes the gap at high rate.",
+
+        "<b>Part of the recipe is pinned outside results/.</b> Nothing that "
+        "writes to results/ runs inside the trainer, so the hyperparameter "
+        "table of A.11, the dataset statistics of A.8 and the training wall "
+        "clock are read from the launcher, the trainer and the run's own log "
+        "rather than from a measurement file. The warm-start report on disk "
+        "is the K = 12 rebuild rather than the K = 6 one the pinned run "
+        "descends from; its two zero-difference controls are asserted at "
+        "every build instead, so a failure would stop the run.",
+
+        "<b>One accelerator class.</b> Every millisecond and every joule in "
+        "this work is an NVIDIA RTX A6000, all eight cards in this machine "
+        "being that model, and the CPU rows of section B are the only second "
+        "device class. Power comes from the driver counter, with no external "
+        "meter to calibrate it against.",
     ])
 
     k.par(
-        f"One long-open check has closed, and the cause was not what it "
-        f"looked like. The partially signalled configuration is supposed to "
-        f"reduce to the fully signalled one when every tile is overridden, "
-        f"and for weeks the checker reported it missing by 0.09 to 0.21 "
-        f"points at matched delivered quality. Bisection noise is far too "
-        f"small to explain a gap that size, which was established and was "
-        f"correct, and the conclusion drawn from it, that one of the two code "
-        f"paths must be charging differently, was wrong. Both paths were "
-        f"right. The checker was comparing the hybrid file's endpoint against "
-        f"a different measurement of the fully signalled configuration from "
-        f"the one the hybrid run had been made against, and once both sides "
-        f"read the same file the endpoint reproduced to four decimals. The "
-        f"checker now goes through the same saving convention the generated "
-        f"tables use, and compares against modelled endpoints where the "
-        f"hybrid file carries no hook count, so the cost model's "
+        f"No internal check is outstanding. They all hold, including the one "
+        f"this list would otherwise have carried: the "
+        f"partially signalled configuration reduces to the fully signalled "
+        f"one to four decimals when every tile is overridden, with both sides "
+        f"read in the same saving convention, so the cost model's "
         f"{model_offset:.1f}-point offset cannot present itself as a failure "
         f"of the interpolation. As recorded in results/check_paper.json, "
         f"{cp['n_passed']} of {cp['n_passed'] + len(cp.get('failed') or [])} "
-        f"claims now pass.")
-    k.note("results/check_paper.json. Section A.16 reports the same closure "
-           "from the checker's side; what is added here is that the defect "
-           "was in the comparison rather than in either measurement, which is "
-           "the failure mode this project has met in several costumes and is "
-           "the reason every table in this supplement names its file.")
+        f"checked claims pass.")

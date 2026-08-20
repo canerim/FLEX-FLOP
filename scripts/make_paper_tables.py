@@ -366,6 +366,47 @@ if d:
     lines[-1] = r"\bottomrule"
     lines.append(r"\end{tabular}")
     w("static.tex", "\n".join(lines))
+    # The same cells, transposed, for the main paper. `static.tex` is 35 rows
+    # and 415.9pt tall, which is 60% of a column; the main text needs the same
+    # comparison in about a quarter of that. Rows are the allocations, columns
+    # the five quality indices, and a cell is the delivered dB over the MACs
+    # saved. Nothing is recomputed: every number comes out of the same rows.
+    qs = [row["qp"] for row in d["rows"]]
+    exits = sorted({u["exit"] for row in d["rows"] for u in row["uniform"]})
+    head = " & ".join([""] + [f"$q{q}$" for q in qs])
+    tlines = ["\\begin{tabular}{l" + "r" * len(qs) + "}", r"\toprule",
+              head + r" \\", r"\midrule"]
+
+    def _cell(v, mark=False):
+        # A uniform depth whose delivered dB is over budget is not an
+        # admissible allocation at all, which is the whole point of those
+        # rows, so the marker belongs on the cell and not on the row. The two
+        # shuffled controls are matched to the oracle on compute rather than
+        # on quality, so the same marker would say something else about them.
+        if v is None:
+            return "n/a"
+        s_ = f"{v[0]:.3f}/{v[1]:.1f}"
+        return s_ + (r"$^{\dagger}$" if mark and v[0] > B else "")
+
+    for e in exits:
+        cells = []
+        for row in d["rows"]:
+            u = next((x for x in row["uniform"] if x["exit"] == e), None)
+            cells.append((u["db"], u["saving"]) if u else None)
+        tlines.append(" & ".join([f"uniform {e}"] +
+                                 [_cell(c, True) for c in cells]) + r" \\")
+    for key, lab in (("random", "random"), ("rate_rank", "bit ranking")):
+        cells = []
+        for row in d["rows"]:
+            r_ = row.get(key)
+            cells.append((r_["db"], r_["saving"]) if r_ else None)
+        tlines.append(" & ".join([lab] + [_cell(c) for c in cells]) + r" \\")
+    cells = [(row["oracle"]["db"], row["oracle"]["saving"]) for row in d["rows"]]
+    tlines.append(" & ".join([r"\textbf{oracle}"] +
+                             [r"\textbf{" + _cell(c) + "}" for c in cells])
+                  + r" \\")
+    tlines += [r"\bottomrule", r"\end{tabular}"]
+    w("static_main.tex", "\n".join(tlines))
     # The shallowest uniform depth the paper quotes as the static alternative.
     # check_paper used to hardcode it, which made a legitimate re-measurement
     # look like prose drift.
@@ -824,7 +865,7 @@ if bc:
     mac("BandSpreadMax", f"{bc['band_spread_max_excl_edge']:.1f}")
     if "power_exponent" in bc:
         mac("BandExp", f"{bc['power_exponent']:.2f}")
-        mac("BandR2", f"{bc['power_r2']:.3f}")
+        mac("BandRTwo", f"{bc['power_r2']:.3f}")
         mac("BandFitErr", f"{bc['power_max_err']:.1f}")
     bb, _ = pick("band_collapse_BEST.json")
     if bb:

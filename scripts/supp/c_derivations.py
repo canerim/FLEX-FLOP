@@ -82,8 +82,8 @@ def content(k):
         "P is a proposition and T a theorem; the numbering is stable and is "
         "what the main paper cites. PAPER is "
         "runs/RECIPE512/ckpt_PAPER.pth.tar, eval is "
-        "runs/RECIPE512/ckpt_eval.pth.tar, since overwritten by the per-epoch "
-        "watcher, and BEST is runs/BEST/ckpt_eval.pth.tar. verify_theory is "
+        "runs/RECIPE512/ckpt_eval.pth.tar and BEST is "
+        "runs/BEST/ckpt_eval.pth.tar. verify_theory is "
         "scripts/verify_theory.py, which reports seven of seven propositions "
         "passing on one sequence at one rate.")
     k.note("Files named without a directory are under results/ with a .json "
@@ -101,14 +101,12 @@ def content(k):
     small = min(r["tiles_measured"] for r in td["rows"])
 
     k.par(
-        f"<b>Tiles.</b> The decoder is cut at a fixed depth. Everything above "
-        f"the cut runs once over the whole frame; everything below runs on "
-        f"square patches of the trunk's feature grid, which are the tiles. The "
-        f"frame is padded by replication first, so the grid divides exactly "
-        f"and the tiling is a partition. A tile is 32 feature positions on a "
-        f"side, 16 latent positions and 256 pixels. Tiles are indexed by t and "
-        f"N is their number in a frame: {ntile} at 1080p and {small} at "
-        f"416×240.")
+        f"<b>Tiles.</b> The decoder is cut at a fixed depth: everything above "
+        f"the cut runs once over the whole frame, everything below on square "
+        f"patches of the trunk's feature grid. Replicate padding makes the "
+        f"grid divide exactly, so the tiling is a partition. Tiles are indexed "
+        f"by t and N is their number in a frame, {ntile} at 1080p and {small} "
+        f"at 416×240; section A gives their geometry.")
 
     nex = ac["config"]["num_exits"]
     jj = ac["config"]["split_depth"]
@@ -116,45 +114,31 @@ def content(k):
     bpe = nblk // nex
 
     k.par(
-        f"<b>Exits.</b> The per-tile part of the decoder is a stack of {nblk} "
-        f"residual blocks, and an exit is a point at which a tile may stop and "
-        f"be handed to the reconstruction head. There are K = {nex}, evenly "
-        f"spaced, so exit k runs (k+1)b blocks with b = {bpe}. The split depth "
-        f"is j = {jj}: blocks 0 to jb-1 run full-frame whatever exit a tile "
-        f"takes, so the usable ladder has K - j = {nex - jj} members and k "
-        f"ranges over j, ..., K-1 throughout. Each exit below the deepest "
-        f"carries a small zero-initialised adapter, a tile leaving early "
-        f"handing the head a feature the head was not trained to read.")
+        f"<b>Exits.</b> An exit is a point at which a tile may stop and be "
+        f"handed to the reconstruction head. There are K = {nex} over {nblk} "
+        f"residual blocks, evenly spaced, so exit k runs (k+1)b blocks with "
+        f"b = {bpe}. At a split depth of j = {jj} the first jb blocks run "
+        f"full-frame whatever exit a tile takes, so the usable ladder has "
+        f"K - j = {nex - jj} members and k ranges over j, ..., K-1 "
+        f"throughout.")
 
     k.par(
         "<b>Distortion.</b> D<sub>t,k</sub> is the mean squared error tile t "
-        "incurs when it leaves at exit k, and two choices in that definition "
-        "do real work. The error is measured on the path actually deployed, a "
-        "tiled decode with replicate padding at tile borders, so what tiling "
-        "costs sits inside D<sub>t,k</sub>. And it is measured against the "
-        "released decoder's decode of the same latent, so encoder, hyperprior "
-        "and entropy model are byte-identical on both sides and synthesis is "
-        "the only difference. Nothing forces D<sub>t,K-1</sub> to zero, and "
-        f"{S[4]} returns to that.")
+        "incurs when it leaves at exit k, measured on the deployed tiled path "
+        "so that what tiling costs sits inside it, and measured against the "
+        "released decoder's decode of the same latent so that synthesis is the "
+        "only difference between the two sides. Nothing forces "
+        f"D<sub>t,K-1</sub> to zero, and {S[4]} returns to that.")
 
-    dbc = k.J("db_convention.json")
-    _dd = sorted(abs(r["difference_db"]) for r in dbc["rows"])
     k.par(
-        f"<b>Decibels.</b> Distortion is reported as 10 log<sub>10</sub> of "
-        f"the ratio to the reference, and the ratio can be formed at two "
-        f"levels. Pooling every tile of every frame into one mean squared "
-        f"error is the form the Lagrangian below is exact for; averaging a "
-        f"per-frame decibel is the codec convention, and it is what the budget "
-        f"is bisected against throughout. On an identical allocation the two "
-        f"read {_dd[0]:.3f} to {_dd[-1]:.3f} dB apart, "
-        f"{100 * _dd[0] / 0.1:.0f}% to {100 * _dd[-1] / 0.1:.0f}% of the 0.1 "
-        f"dB budget, so a decibel here means nothing without its convention.")
-    k.note("Convention gap from results/db_convention.json, checkpoint "
-           "runs/wdec_j2_p128_grid/ckpt_epo0.pth.tar, 40 frames: an old "
-           "checkpoint for a claim about arithmetic rather than about a model, "
-           "and the only file in results/ measuring both conventions on one "
-           "allocation. The budget section of this supplement measures the gap "
-           "on the pinned checkpoint.")
+        "<b>Decibels.</b> Distortion is reported as 10 log<sub>10</sub> of the "
+        "ratio to the reference, and the ratio can be formed at two levels. "
+        "Pooling every tile of every frame into one mean squared error is the "
+        "form the Lagrangian below is exact for; averaging a per-frame decibel "
+        "is the codec convention, and it is what the budget is bisected "
+        "against throughout. Section E measures how far apart the two read on "
+        "one allocation, which is a substantial fraction of the working "
+        "budget.")
 
     k.par(
         "<b>Compute.</b> Compute is counted in multiply-accumulate operations "
@@ -170,14 +154,13 @@ def content(k):
                r"\;+\; a_k \;+\; r")
 
     k.par(
-        f"with s<sub>up</sub> = 0.0816 the opening upsample, s<sub>trunk</sub> "
-        f"= 0.8944 the trunk spread over N<sub>blk</sub> = {nblk} blocks of "
-        f"which exit k runs (k+1)b, s<sub>head</sub> = 0.0240 the head, "
-        f"a<sub>k</sub> the adapter exit k wears and r = 0.0095 the full-frame "
-        f"deblocking filter. Only the trunk term depends on k, which is why a "
+        f"with s<sub>up</sub> the opening upsample, s<sub>trunk</sub> the "
+        f"trunk spread over N<sub>blk</sub> = {nblk} blocks of which exit k "
+        f"runs (k+1)b, s<sub>head</sub> the head, a<sub>k</sub> the adapter "
+        f"exit k wears and r the full-frame deblocking filter; section B "
+        f"measures all five. Only the trunk term depends on k, which is why a "
         f"ceiling exists: however shallow the ladder gets, the stem, the head "
-        f"and the filter are still paid. The four shares sum to 1.0095072, the "
-        f"deepest-exit cost in every configuration file read here.")
+        f"and the filter are still paid.")
 
     st = k.J("static_RECIPE512_b01.json")
     uni = st["rows"][0]["uniform"]
@@ -189,7 +172,7 @@ def content(k):
     adapter_blk = {e["exit"]: e["adapter_blocks"] for e in ac["exits"]}
 
     rows = [["exit k", "blocks", "adapter", "share", "c_k", "100(1-c_k)",
-             "earlier c_k"]]
+             "c_k, stored"]]
     for i, kk in enumerate(exits_B):
         rows.append([kk, (kk + 1) * bpe,
                      adapter_name[kk].replace("conv1x1", "1×1"),
@@ -199,16 +182,16 @@ def content(k):
         "<b>What each exit costs</b>, in units of one released full-frame "
         "decode, with the adapter share in units of one residual block. The "
         "deepest exit costs more than 1 because a tiled decode still pays the "
-        "deblocking filter. The last column is the earlier cost vector, built "
-        "when the FFN adapter was billed at 2C² instead of its measured 5C²; "
-        "the checks of Propositions 5, 6, 8 and 10 were run against it and say "
-        "so where they appear.")
+        "deblocking filter. The last column is the cost vector stored in "
+        "results/tile_table.json, which is the one the checks of "
+        "Propositions 5, 6, 8 and 10 are computed on; each says so where it "
+        "appears.")
     k.note("c_k from the uniform-depth rows of "
            "results/static_RECIPE512_b01.json and adapter shares from "
            "results/adapter_cost.json, both on "
-           "runs/RECIPE512/ckpt_PAPER.pth.tar; earlier vector from "
-           "results/tile_table.json. The complexity section audits the block "
-           "count itself.")
+           "runs/RECIPE512/ckpt_PAPER.pth.tar. Section B audits the block "
+           "count itself and prices the gap between the model the argmin runs "
+           "on and the hook count every saving is quoted from.")
 
     k.par(
         f"The gaps between those costs are what the allocation trades in, and "
@@ -230,8 +213,7 @@ def content(k):
         "mathematical necessity. Each result names the ones it uses.")
     k.bullets([
         "<b>(A1) Compute is additive over tiles.</b> Exact when tiles decode "
-        "independently, which is what a tiled decoder does, and it is why the "
-        "stem and the head sit inside c<sub>k</sub>.",
+        "independently, which is what a tiled decoder does.",
         "<b>(A2) Distortion is a tile mean</b>, and a tile's error does not "
         "depend on which exits its neighbours took. The first half is exact "
         "for any per-pixel loss averaged over a frame; the second is not free, "
@@ -253,20 +235,19 @@ def content(k):
                                / len(m) / ref)
         errs.append(abs(pred - s["db"]))
     k.par(
-        f"The second half of (A2) is checked rather than asserted. The "
-        f"per-tile table and the measured decode of the corresponding mixed "
-        f"map are recorded for {len(tt['sweep'])} allocations of one frame, "
-        f"spanning savings of {min(s['saving'] for s in tt['sweep']):.1f}% to "
-        f"{max(s['saving'] for s in tt['sweep']):.1f}%. The largest "
-        f"disagreement between prediction and decode is "
-        f"{max(errs) * 1e5:.1f}×10<super>-5</super> dB, four orders of "
-        f"magnitude below the budget. Nothing in (A1) to (A4) constrains "
-        f"D<sub>t,k</sub> itself, and nothing requires it to fall as k grows.")
+        f"The second half of (A2) is checked rather than asserted, over "
+        f"{len(tt['sweep'])} allocations of one frame spanning savings of "
+        f"{min(s['saving'] for s in tt['sweep']):.1f}% to "
+        f"{max(s['saving'] for s in tt['sweep']):.1f}%: the largest "
+        f"disagreement between the per-tile prediction and a decode of the "
+        f"mixed map is {max(errs) * 1e5:.1f}×10<super>-5</super> dB, four "
+        f"orders of magnitude below the budget. Nothing in (A1) to (A4) "
+        f"constrains D<sub>t,k</sub> itself, and nothing requires it to fall "
+        f"as k grows.")
     k.note("Additivity check computed from results/tile_table.json "
            "(Bosphorus, q32, 40 tiles), checkpoint "
-           "runs/RECIPE512/ckpt_eval.pth.tar, since overwritten by the "
-           "per-epoch watcher. What it checks is a property of the decode path "
-           "rather than of the weights.")
+           "runs/RECIPE512/ckpt_eval.pth.tar. What it checks is a property of "
+           "the decode path rather than of the weights.")
 
     # ==================================================================
     k.h2("A price on compute")
@@ -292,16 +273,10 @@ def content(k):
         "into the squared error that compute is deemed to be worth. Below it "
         "runs from about 2×10<super>-7</super> to about "
         "1×10<super>-4</super>, against squared errors of order "
-        "1×10<super>-4</super> on a 0 to 1 scale. What matters is where "
-        "\\lambda sits relative to the differences between exits.")
-
-    k.par(
-        "At \\lambda = 0 compute is free and every tile takes whichever exit "
-        "has the smallest error. As \\lambda grows the compute term grows "
-        "fastest for the deepest exit, so a tile drops to a shallower one once "
-        "the compute that exit saves, times the price, exceeds the error it "
-        "adds. Past a large enough \\lambda every tile has dropped as far as "
-        "the ladder allows.")
+        "1×10<super>-4</super> on a 0 to 1 scale, and what matters is where it "
+        "sits relative to the differences between exits: at zero every tile "
+        "takes its own lowest-error exit, and past a large enough price every "
+        "tile has dropped as far as the ladder allows.")
 
     k.h3("Proposition 1 (separation)")
     k.par(
@@ -324,31 +299,25 @@ def content(k):
 
     oq = k.J("supp_opquality_PAPER.json")
     _tl = oq["tail"]
-    _tmean = [_tl[q]["mean_db"] for q in _tl]
-    _t99 = [_tl[q]["p99_db"] for q in _tl]
     _tmax = max(_tl[q]["max_db"] for q in _tl)
     k.par(
         f"<i>Remark.</i> The result is about the frame mean and bounds no "
-        f"single tile. At the deployed 0.1 dB operating point the per-tile "
-        f"penalty over {_tl['0']['n_tiles']:,} tiles has a mean of "
-        f"{min(_tmean):.2f} to {max(_tmean):.2f} dB by rate, a 99th percentile "
-        f"of {min(_t99):.2f} to {max(_t99):.2f} dB and a worst tile of "
-        f"{_tmax:.2f} dB, so a frame inside its budget can hold a tile an "
-        f"order of magnitude outside it. No result in this section repairs "
-        f"that.")
+        f"single tile. At the deployed 0.1 dB operating point the worst tile "
+        f"in the test set gives up {_tmax:.2f} dB, so a frame inside its "
+        f"budget can hold a tile an order of magnitude outside it; section D "
+        f"tabulates that tail. No result in this section repairs it.")
     k.note("Per-tile tail from results/supp_opquality_PAPER.json, checkpoint "
-           "runs/RECIPE512/ckpt_PAPER.pth.tar, \\NumSeq sequences at five "
-           "rates, at the operating point read from "
-           "results/signalled_RECIPE512_ctc53.json.")
+           "runs/RECIPE512/ckpt_PAPER.pth.tar, at the operating point read "
+           "from results/signalled_RECIPE512_ctc53.json.")
 
     k.par(
         f"The N-dimensional search has become N independent searches over "
-        f"{nex - jj} numbers each. Ties are broken toward the shallower exit, "
-        f"which makes k<super>*</super> a function and costs nothing. We call "
-        f"k<super>*</super><sub>t</sub>(\\lambda) the oracle's choice, "
-        f"because it uses the true D<sub>t,k</sub>, which only the encoder "
-        f"has. The construction is Shoham and Gersho's [28] with compute in "
-        f"place of rate, made standard in coding by [29].")
+        f"{nex - jj} numbers each, with ties broken toward the shallower exit "
+        f"so that k<super>*</super> is a function. We call "
+        f"k<super>*</super><sub>t</sub>(\\lambda) the oracle's choice, because "
+        f"it uses the true D<sub>t,k</sub>, which only the encoder has. The "
+        f"construction is Shoham and Gersho's [28] with compute in place of "
+        f"rate, made standard in coding by [29].")
 
     k.h3("Proposition 2 (monotonicity)")
     k.par(
@@ -377,13 +346,6 @@ def content(k):
         "exact minimisation of the true table, whereas the deployed search "
         "bisects a predicted table and corrects with a real decode, at most "
         "six passes to 5×10<super>-4</super> dB.")
-
-    k.par(
-        "Monotonicity is what makes the budget searchable: bisecting \\lambda "
-        "against the measured decibels converges on the largest price whose "
-        "allocation still meets the budget, and that is also the cheapest such "
-        "allocation the family contains. Every \\lambda quoted in this project "
-        "is found that way, and so is the router's \\beta.")
 
     bits = tt["bits_per_tile"]
     ctt = tt["cost"][jt:]
@@ -466,24 +428,14 @@ def content(k):
         f"are attained only to that granularity, and at N = {small} the "
         f"smallest test class reaches three mixtures per pair of exits.")
 
-    rows = [["q", "exit 2", "exit 3", "exit 4", "exit 5", "best single"]]
-    for r in st["rows"]:
-        u = {x["exit"]: x for x in r["uniform"]}
-        rows.append([f"q{r['qp']}"]
-                    + [_f(u[kk]["db"], 4) for kk in exits_B]
-                    + [f"{r['best_static']['exit']} at "
-                       f"{r['best_static']['saving']:.1f}%"])
-    t_vert = k.rows(rows,
-        "<b>The vertices of the fixed-proportion set</b>, in dB below the "
-        "released decoder, one uniform-depth decode per column. These four "
-        "points and their hull are everything a content-blind allocation can "
-        "reach. The last column is the shallowest uniform depth that still "
-        "meets a 0.1 dB budget together with its saving; at the two highest "
-        "rates that is the deepest exit, which saves nothing.")
+    k.par(
+        "The four uniform-depth decodes are the vertices of that hull, and "
+        "they are everything a content-blind allocation can reach; section D "
+        "tabulates them in dB at every rate beside the two shuffled controls. "
+        "The mean over rates of the best single depth is \\BestStaticMean%, "
+        "against \\MainMean% for the per-tile allocation at the same budget.")
     k.note("results/static_RECIPE512_b01.json, checkpoint "
-           "runs/RECIPE512/ckpt_PAPER.pth.tar, \\NumSeq frames. The mean over "
-           "rates of the best single depth is \\BestStaticMean%, against "
-           "\\MainMean% for the per-tile allocation at the same budget.")
+           "runs/RECIPE512/ckpt_PAPER.pth.tar, \\NumSeq frames.")
 
     k.h3("Theorem 4 (per-tile assignment)")
     k.par(
@@ -504,18 +456,17 @@ def content(k):
     k.par(
         f"<i>Remark.</i> The theorem bounds what any allocation reaches, a "
         f"perfect router included, and says nothing about which of those "
-        f"points a price reaches, which is Proposition 5. It is also the one "
-        f"result here with no measurement behind it: the set has up to "
-        f"N(K-j-1) = {ntile * (nex - jj - 1)} vertices at 1080p and no "
-        f"experiment enumerates them.")
+        f"points a price reaches, which is Proposition 5. It is the one result "
+        f"here with no measurement behind it, the set having up to "
+        f"N(K-j-1) = {ntile * (nex - jj - 1)} vertices at 1080p.")
 
     k.par(
         f"Proposition 3 is the special case in which every tile has the same "
-        f"row. Otherwise the per-tile set is strictly larger, and the "
-        f"difference shows in the vertex count: the fixed-proportion hull has "
-        f"at most K-j = {nex - jj} vertices and so {nex - jj - 1} straight "
-        f"segments, while the Minkowski average is smooth at any plotted "
-        f"scale. Figure {k.peek_fig()} draws both on one frame.")
+        f"row, and otherwise the per-tile set is strictly larger: the "
+        f"fixed-proportion hull has at most K-j = {nex - jj} vertices and so "
+        f"{nex - jj - 1} straight segments, while the Minkowski average is "
+        f"smooth at any plotted scale. Figure {k.peek_fig()} draws both on one "
+        f"frame.")
 
     f_ach = k.fig("supp_achievable.png",
         "<b>The two achievable sets, on one frame.</b> <b>a</b>, the per-tile "
@@ -557,15 +508,14 @@ def content(k):
         "<i>Remark.</i> A budget between two hull vertices is unreachable by "
         "any price, and the proposition does not say what that costs, which is "
         "Proposition 6. The measurement below enumerates the exact Pareto set "
-        "on one frame at one rate and on the earlier cost vector.")
+        "on one frame at one rate, on that file's own cost vector.")
 
     k.par(
         "Everett's generalised multiplier method (1963) supplies the "
         "reassuring half of the converse: whatever compute the returned "
-        "allocation consumes, it is optimal for that level, so a sweep never "
-        "returns something dominated. With four distinct exit costs the whole "
-        "Pareto set can be enumerated by dynamic programming over tiles, so "
-        "the other half can be priced exactly.")
+        "allocation consumes, it is optimal for that level. With four distinct "
+        "exit costs the whole Pareto set can be enumerated by dynamic "
+        "programming over tiles, so the other half can be priced exactly.")
 
     rows = [["budget dB", "by sweep", "exact Pareto", "gap"]]
     for r in hg["rows"]:
@@ -580,9 +530,9 @@ def content(k):
         f"two negative entries are the sweep landing on a budget the "
         f"enumeration's grid straddles rather than the sweep beating the "
         f"Pareto set, which Proposition 5 forbids.")
-    k.note("results/hull_gap.json, Bosphorus q32, 40 tiles, on the earlier "
-           "cost vector; the enumeration and the sweep use the same vector, so "
-           "the gap is unaffected by the correction.")
+    k.note("results/hull_gap.json, Bosphorus q32, 40 tiles. The enumeration "
+           "and the sweep read one cost vector, so the gap does not depend on "
+           "which one.")
 
     k.h3("Proposition 6 (granularity)")
     k.par(
@@ -607,9 +557,9 @@ def content(k):
     k.par(
         f"<i>Remark.</i> Both hypotheses are read off a measured table rather "
         f"than guaranteed, and the bound is vacuous if either fails on another "
-        f"frame. The expression falls as 1/N, so it says nothing useful at the "
-        f"smallest test class, where N = {small} and one switch moves the "
-        f"frame by half the largest rung.")
+        f"frame. It falls as 1/N, so it says nothing useful at the smallest "
+        f"test class, where N = {small} and one switch moves the frame by half "
+        f"the largest rung.")
 
     k.par(
         f"On the measured table m = {tc['m_simultaneous']}, tiles with "
@@ -642,39 +592,19 @@ def content(k):
         "Immediate from Proposition 1 at \\lambda = 0, and from D(a) being a "
         "mean of terms each bounded below by its own tile minimum.")
 
-    _an = [abs(r["drift_db"]) for r in k.J("supp_anchor_PAPER.json")["rows"]]
-    _av = [abs(r["drift_db"]) for r in k.J("anchor_VERBATIM.json")["rows"]]
     k.par(
-        f"<i>Remark.</i> The floor is a statement about the table, and the "
-        f"table is a product of training, which (A3) does not constrain. If "
-        f"the deepest exit drifts from the reference by δ then the achievable "
-        f"set shifts up by δ before any compute is saved, and a budget below δ "
-        f"is unreachable at every allocation. With the training objective's "
-        f"anchor term the drift is {min(_an):.3f} to {max(_an):.3f} dB over q0 "
-        f"to q63; without it, {min(_av):.3f} to {max(_av):.3f} dB, which alone "
-        f"consumes more than the headline budget.")
-    k.note("Anchored drift from results/supp_anchor_PAPER.json, checkpoint "
-           "runs/RECIPE512/ckpt_PAPER.pth.tar, \\NumSeq frames. Unanchored "
-           "drift from results/anchor_VERBATIM.json, checkpoint "
-           "runs/VERBATIM/ckpt_eval.pth.tar, 40 frames, a different training "
-           "run at three rates. The two are not a controlled pair; the "
-           "direction is what the argument needs and each interval is quoted "
-           "as measured.")
+        "<i>Remark.</i> The floor is a statement about the table, and the "
+        "table is a product of training, which (A3) does not constrain. If the "
+        "deepest exit drifts from the reference by δ then the achievable set "
+        "shifts up by δ before any compute is saved, and a budget below δ is "
+        "unreachable at every allocation. Section H measures that drift, with "
+        "and without the training objective's anchor term.")
 
-    grid = k.J("signalled_RECIPE512_grid.json")
-    unreach = [r for r in grid["rows"] if not r.get("budget_reachable", True)]
     k.par(
-        f"Because D<sub>t,k</sub> is measured on the deployed tiled path, "
-        f"D<sub>min</sub> is not zero: it is what tiling costs before any tile "
-        f"exits early. Over the dense sweep the floor exceeds the budget in "
-        f"{len(unreach)} of {len(grid['rows'])} budget-and-rate cells, all of "
-        f"them at 0.05 dB.")
-    k.note("results/signalled_RECIPE512_grid.json, checkpoint "
-           "runs/RECIPE512/ckpt_PAPER.pth.tar, \\NumSeq sequences, 2 frames "
-           "per sequence, 9 budgets by 5 rates. Floor and saturation run "
-           "\\FloorLow to \\FloorHigh dB and \\SatLow to \\SatHigh dB across "
-           "the five reported rates "
-           "(results/saturation_RECIPE512_ctc53.json, same checkpoint).")
+        "Because D<sub>t,k</sub> is measured on the deployed tiled path, "
+        "D<sub>min</sub> is not zero: it is what tiling costs before any tile "
+        "exits early, and section E measures where it sits at each rate and "
+        "which budgets fall below it.")
 
     k.h3("Proposition 8 (saturation)")
     k.par("Define")
@@ -717,12 +647,11 @@ def content(k):
     _cv = [v["saving"] for r in pc["rows"] if r["budget_db"] >= 0.5
            for v in r["per_class"].values()]
     k.par(
-        f"<i>Remark.</i> S<sub>max</sub> = \\CeilingModelled% depends on the split "
-        f"depth alone, so no amount of training raises it and the only lever "
-        f"is j. It is a ceiling in multiply-accumulates and not in seconds; "
-        f"the complexity section reports the wall-clock saving falling short "
-        f"of it. Over the {len(_cv)} class-and-rate cells measured at a "
-        f"saturating budget the reported ceiling spreads by "
+        f"<i>Remark.</i> S<sub>max</sub> depends on the split depth alone, so "
+        f"no amount of training raises it and the only lever is j. It is a "
+        f"ceiling in multiply-accumulates and not in seconds, and section B "
+        f"reports the wall clock falling short of it. Over the {len(_cv)} "
+        f"class-and-rate cells measured at a saturating budget it spreads by "
         f"{max(_cv) - min(_cv):.0e} saving points, which is single-precision "
         f"noise.")
     k.note("Per-class invariance from results/per_class_RECIPE512.json at "
@@ -775,39 +704,26 @@ def content(k):
         f"<i>Remark.</i> \\Delta upper-bounds what any predictor gains over a "
         f"content-blind allocation at that price and says nothing about "
         f"whether one can get any of it, which is what {S[7]} measures. It is "
-        f"also a property of the ladder it is measured on: improving the "
-        f"shallow exits compresses the differences between exits, more tiles "
-        f"agree on the argmin, and \\Delta falls even as the saving rises, so "
-        f"it is not a figure of merit for a decoder.")
-
-    k.par(
-        "Two things follow. \\Delta depends only on the table "
-        "D<sub>t,k</sub> and the costs, so it is computable before any router "
-        "exists. And its equality condition is a condition on the data rather "
-        "than on the method: when every tile agrees on the best exit there is "
-        "nothing to adapt to.")
+        f"a property of the ladder as much as of the content: improving the "
+        f"shallow exits makes more tiles agree on the argmin, so \\Delta falls "
+        f"even as the saving rises and is not a figure of merit.")
 
     thc = k.J("theory_check.json")
-    lams = ["1e-05", "3e-05", "1e-04", "3e-04"]
-    rows = [["q", "λ=10<super>-5</super>", "3×10<super>-5</super>",
-             "10<super>-4</super>", "3×10<super>-4</super>"]]
-    for q in ["0", "16", "32", "48", "63"]:
-        d_ = thc[q]["delta"]
-        rows.append([f"q{q}"] + [f"{100 * d_[l]['delta'] / d_[l]['J_oracle']:.2f}%"
-                                 for l in lams])
-    t_delta = k.rows(rows,
-        "<b>The adaptivity gain in scale-free form</b>, Δ(λ) as a percentage "
-        "of J<sub>ad</sub>(λ). At the two smaller prices it rises with rate, "
-        "so adaptivity is worth most where the deep blocks are doing real "
-        "work. At the largest price it is near zero at every rate, which is "
-        "Theorem 10's equality condition arriving: the oracle has itself "
-        "collapsed onto one exit and nothing is left for a router to recover.")
-    k.note("results/theory_check.json, checkpoint runs/BEST/ckpt_eval.pth.tar, "
-           "40 sequences (UVG, MCL-JCV and HEVC class E; classes B, C and D "
-           "not measured), on the earlier cost vector of Table "
-           + str(t_cost) + ". This is the one table in the section not on the "
-           "pinned checkpoint, and nothing on the pinned checkpoint currently "
-           "reproduces it.")
+    _sf = {q: 100 * thc[q]["delta"]["3e-04"]["delta"]
+           / thc[q]["delta"]["3e-04"]["J_oracle"] for q in
+           ("0", "16", "32", "48", "63")}
+    k.par(
+        f"Read as a ratio Δ/J<sub>ad</sub> rather than in saving points, the "
+        f"gain rises with rate at a low price and falls to "
+        f"{min(_sf.values()):.2f}% to {max(_sf.values()):.2f}% at the highest "
+        f"price measured, which is Theorem 10's equality condition arriving: "
+        f"the oracle has itself collapsed onto one exit and nothing is left "
+        f"for a router to recover.")
+    k.note("Ratios from results/theory_check.json, checkpoint "
+           "runs/BEST/ckpt_eval.pth.tar, 40 sequences (UVG, MCL-JCV and HEVC "
+           "class E; classes B, C and D not measured), on the last column of "
+           "Table " + str(t_cost) + ". The table below is the same quantity "
+           "in saving points on the pinned checkpoint.")
 
     tgt = 10 ** (0.1 / 10)
     rows = [["q", "blind %", "oracle %", "gap", "blind dB", "shuffled dB"]]
@@ -842,8 +758,8 @@ def content(k):
         f"reading \\OracleDb dB and a shuffle reading up to \\RandomDb dB.")
     k.note("Computed from results/static_RECIPE512_b01.json, checkpoint "
            "runs/RECIPE512/ckpt_PAPER.pth.tar, \\NumSeq frames. The blind "
-           "columns are the lower hull of the four uniform-depth points of "
-           "Table " + str(t_vert) + " under Proposition 3, evaluated at the "
+           "columns are the lower hull of the four uniform-depth points under "
+           "Proposition 3, evaluated at the "
            "budget and at the oracle's compute; the shuffle column is a "
            "measured decode. At q0 the shuffle reads slightly better than the "
            "hull predicts, which bounds the interaction (A2) ignores at under "
@@ -890,13 +806,10 @@ def content(k):
     k.par(
         "<i>Remark.</i> This is a property of the decoder rather than a "
         "consequence of Theorem 4, and a convex D can fail it. "
-        "Differentiability also fails in one of the two cases: under fixed "
-        "proportions D is piecewise linear with K-j vertices, so ln D is "
-        "piecewise concave with upward jumps at the vertices and the shape one "
+        "Differentiability fails in one of the two cases: under fixed "
+        "proportions D is piecewise linear with K-j vertices, so the shape one "
         "sees depends on where one samples, whereas the per-tile hull is "
-        "smooth at any plotted scale. Treating one curve as the other is how a "
-        "confident claim about frontier shape becomes an artefact of vertex "
-        "spacing.")
+        "smooth at any plotted scale.")
 
     rows = [["q", "points", "condition holds", "margin", "quartic fit"]]
     for q in ["0", "16", "32", "48", "63"]:
@@ -920,6 +833,17 @@ def content(k):
 
     # ==================================================================
     k.h2("How much of the oracle a partial signal recovers")
+
+    k.par(
+        "Letting a predictor decide most cases and handing the hardest ones to "
+        "something exact is the shape of selective prediction [38] and "
+        "learning to defer [39, 40], and of the budgeted variant of the latter "
+        "[41]. Two things make the case easier here. The expert is the "
+        "encoder's own search, exact and free at test time, so what is scarce "
+        "is the bits needed to say what it decided rather than the expert's "
+        "time; and the selection rule is not learned, since a separable "
+        "objective makes the optimal set of size s exactly the s largest "
+        "regrets. What is left to measure is how concentrated the regret is.")
 
     hy = k.J("hybrid_RECIPE512_b01_fixed.json")
 
@@ -946,12 +870,9 @@ def content(k):
     k.par(
         f"Non-negativity is immediate from ({e_argmin}). The regret is what "
         f"the frame's Lagrangian loses on tile t by trusting the prediction, "
-        f"and by Proposition 1 those losses add. That gives the encoder an "
-        f"option the two extremes do not have: signal the exits of a subset S "
-        f"of the tiles and let the head decide the rest, which is deferral in "
-        f"the sense of [39, 40] with the cost of deferring made explicit. "
-        f"Signalling S removes "
-        f"exactly ∑<sub>t∈ S</sub> r<sub>t</sub> from the objective.")
+        f"and by Proposition 1 those losses add, so signalling the exits of a "
+        f"subset S removes exactly ∑<sub>t∈ S</sub> r<sub>t</sub> from the "
+        f"objective and leaves the rest to the head.")
 
     k.h3("Proposition 12 (Lorenz bound)")
     k.par(
@@ -982,12 +903,6 @@ def content(k):
         "multipliers reach allocations no single one does. The measured "
         "recovery is therefore not bounded by L, and Proposition 12 is the "
         "wrong thing to call a bound on the deployed system.")
-
-    k.par(
-        "The practical content is that an unequal regret distribution can be "
-        "repaired cheaply. If a tenth of the tiles carry half the regret then "
-        "signalling a tenth of them removes half of what the predictor gives "
-        "up, at a tenth of the bits.")
 
     def cell(q, rho):
         return next((x for x in hy["rows"]
@@ -1032,22 +947,12 @@ def content(k):
            "at \\HybridBeatsAN of \\HybridBeatsAOf rates, which is the same "
            "re-bisection effect.")
 
-    _tpf = cell(qs[0], 1.0)["tiles_per_frame"]
-    _mbf = cell(qs[0], 1.0)["map_bits"]
     k.par(
-        f"The signal is an entropy-coded mask over tiles plus an index per "
-        f"override. A fifth of the tiles costs \\HybridBitsFifth bits per "
-        f"frame and recovers over half the gap. The ρ = 1 endpoint, which "
-        f"reproduces the oracle's allocation, costs \\HybridBitsFull bits "
-        f"over {_tpf:.1f} tiles, {_mbf / _tpf:.1f} bits a tile against the 2 a "
-        f"fixed-length code over the K-j = {nex - jj} reachable exits would "
-        f"need, because at ρ = 1 the mask names every tile and is pure "
-        f"overhead. Configuration A signals its own map instead and pays "
-        f"\\MapBitsLo to \\MapBitsHi bits per frame, \\MapOverheadLow% of a "
-        f"typical bitrate.")
-    k.note("Map costs from results/hybrid_RECIPE512_b01_fixed.json and "
-           "results/signalled_RECIPE512_ctc53.json, both on "
-           "runs/RECIPE512/ckpt_PAPER.pth.tar.")
+        "The signal is an entropy-coded mask over tiles plus an index per "
+        "override, so its bill grows with ρ and is pure overhead at ρ = 1, "
+        "where the mask names every tile; section G prices both objects. A "
+        "fifth of the tiles costs \\HybridBitsFifth bits per frame and "
+        "recovers over half the gap.")
 
     # ==================================================================
     k.h2("The rate-rank rule, and the model it comes from")
@@ -1055,14 +960,12 @@ def content(k):
     rr = k.J("raterank_RECIPE512_b01.json")
 
     k.par(
-        "There is a cheaper way to guess the oracle than a trained head, and "
-        "it is worth deriving rather than presenting as a heuristic, because "
-        "the derivation says when it must work and how it fails. The decoder "
-        "holds, before the trunk runs, the bits the entropy coder spent on "
-        "each tile's latents; write b<sub>t</sub> for that count over the "
-        "frame's mean. The model is separability in log space: one scalar "
-        "difficulty per tile, and one ladder profile applying to every tile in "
-        "proportion.")
+        "The decoder holds, before the trunk runs, the bits the entropy coder "
+        "spent on each tile's latents; write b<sub>t</sub> for that count over "
+        "the frame's mean. Deriving the rule from a model rather than "
+        "presenting it as a heuristic says when it must work and how it fails. "
+        "The model is separability in log space: one scalar difficulty per "
+        "tile, and one ladder profile applying to every tile in proportion.")
     e_r1 = k.eq(r"\log D_{t,k} \;\approx\; u_t + \log\varphi_k, \qquad "
                 r"u_t \;=\; \alpha\log b_t + c")
 
@@ -1118,37 +1021,28 @@ def content(k):
         "construction drops exit 4.")
 
     cB = cost_B
-    _spans, _lev, _spr, _ext = [], [], [], []
-    rows = [["q", "α", "φ(2)", "φ(3)", "φ(4)", "φ(5)", "on hull", "agree"]]
+    _lev, _spr, _ext = [], [], []
     for r in rr["rows"]:
-        phi = r["phi"]
-        hull = _lower_hull(list(zip(cB, phi)))
-        _spans.append(100 * (max(phi) / min(phi) - 1))
         _lev.append(r["spearman_bits_vs_level"])
         _spr.append(r["spearman_bits_vs_spread"])
         _ext.append(-r["spearman_bits_vs_exit"])
-        rows.append([f"q{r['qp']}", _f(r["alpha"], 2)]
-                    + [_f(p, 4) for p in phi]
-                    + [",".join(str(exits_B[i]) for i in sorted(hull))]
-                    + [_f(r["agreement"], 3)])
     _alphas = [r["alpha"] for r in rr["rows"]]
-    t_fit = k.rows(rows,
-        f"<b>The fitted separable model.</b> α is the exponent relating a "
-        f"tile's coded bits to its difficulty and φ is the exit profile, both "
-        f"fitted leave-one-sequence-out; agree is the fraction of tiles on "
-        f"which the resulting rule and the oracle choose the same exit. α is "
-        f"positive at every rate, so a tile the entropy coder spent bits on is "
-        f"a tile every exit reconstructs worse, and it falls "
-        f"{max(_alphas) / min(_alphas):.0f}-fold from the lowest rate to the "
-        f"highest. The profile spans {min(_spans):.0f}% to {max(_spans):.0f}% "
-        f"from its shallowest entry to its deepest, which is the margin the "
-        f"rule works in. All four exits survive on the lower hull at every "
-        f"rate, so Proposition 14 costs nothing here.")
-    k.note("results/raterank_RECIPE512_b01.json, checkpoint "
-           "runs/RECIPE512/ckpt_PAPER.pth.tar, \\NumSeq sequences at a 0.1 dB "
-           "budget. Hull membership computed against the shipped cost vector "
-           "of Table " + str(t_cost) + ". The router section reports what the "
-           "rule saves against the trained head.")
+    # The hull claim below is checked here rather than asserted in prose.
+    assert all(len(_lower_hull(list(zip(cB, r["phi"])))) == len(cB)
+               for r in rr["rows"])
+    k.par(
+        f"Section F prints the fitted α and φ at every rate and reports what "
+        f"the rule saves. Two properties of that fit belong here, with the "
+        f"propositions they bear on. α is positive at every rate, so a tile "
+        f"the entropy coder spent bits on is a tile every exit reconstructs "
+        f"worse, and it falls {max(_alphas) / min(_alphas):.0f}-fold from the "
+        f"lowest rate to the highest. And all four exits survive on the lower "
+        f"hull of (c<sub>k</sub>, φ<sub>k</sub>) at every rate, so "
+        f"Proposition 14 costs nothing here.")
+    k.note("Fitted values from results/raterank_RECIPE512_b01.json, "
+           "checkpoint runs/RECIPE512/ckpt_PAPER.pth.tar, \\NumSeq sequences "
+           "at a 0.1 dB budget; hull membership computed in the build against "
+           "the shipped cost vector of Table " + str(t_cost) + ".")
 
     M = [[math.log(v) for v in row] for row in Dj]
     nT, nK = len(M), len(M[0])
@@ -1183,8 +1077,7 @@ def content(k):
         f"by Proposition 13 an error in log g<sub>t</sub> is a proportional "
         f"error in the price that tile faces. Coded bits correlate with the "
         f"mean level of a tile's row at Spearman {min(_lev):.2f} to "
-        f"{max(_lev):.2f}, with its spread at {min(_spr):.2f} to "
-        f"{max(_spr):.2f} and with the oracle's exit index at {min(_ext):.2f} "
+        f"{max(_lev):.2f} and with the oracle's exit index at {min(_ext):.2f} "
         f"to {max(_ext):.2f}, the ordering the model predicts.")
     k.note("Residual analysis computed from results/tile_table.json "
            "(Bosphorus, q32, 40 tiles), checkpoint "
@@ -1197,25 +1090,17 @@ def content(k):
            "here with the sign flipped, so a positive value means more bits "
            "and a deeper exit.")
 
-    k.par(
-        "The rule is the exact oracle for a decoder whose distortion table "
-        "happens to be rank-1, so its shortfall measures how far from rank-1 "
-        "the real table is, and Proposition 12 applies to it as it does to any "
-        "predictor whose regret the encoder can compute.")
-
     # ==================================================================
     k.h2("What is proved, what is checked, and what neither covers")
 
     k.par(
-        f"Table {t_index} lists every result with its evidence, and four gaps "
-        f"in it are worth naming. Theorem 10, the result the paper leans on "
-        f"hardest, is measured only on runs/BEST/ckpt_eval.pth.tar over 40 "
-        f"sequences and on the earlier cost vector; the pinned version in "
-        f"Table {t_adapt} gives it in saving points but not as a ratio. The "
-        f"convexity check of Table {t_lcx} records no checkpoint at all. The "
-        f"granularity and hull results of {S[3]} rest on one sequence at one "
-        f"rate, enough to check arithmetic and not enough to characterise a "
-        f"codec. And every proposition here concerns a frame mean under (A1) "
-        f"and (A2), so none bounds what a single tile gives up; the tail after "
-        f"Proposition 1 fills that in as a measurement rather than a "
-        f"guarantee.")
+        f"Table {t_index} lists every result with its evidence. Four gaps in "
+        f"it are worth naming. Theorem 10 is measured as a ratio only on "
+        f"runs/BEST/ckpt_eval.pth.tar over 40 sequences and on the stored cost "
+        f"vector; the pinned measurement of Table {t_adapt} gives it in saving "
+        f"points instead. The convexity check of Table {t_lcx} "
+        f"records no checkpoint. The granularity and hull results of {S[3]} "
+        f"rest on one sequence at one rate, which is enough to check "
+        f"arithmetic and not enough to characterise a codec. And every "
+        f"proposition here concerns a frame mean under (A1) and (A2), so none "
+        f"bounds what a single tile gives up.")

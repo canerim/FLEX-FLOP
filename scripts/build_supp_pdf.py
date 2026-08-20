@@ -313,15 +313,31 @@ def _main_counters():
     build_pdf.UNEXPANDED collects macro names the main paper failed to expand.
     Clear it afterwards so the warning at the end of this build is about the
     supplement and not about a document somebody else is editing.
+
+    That build appends this supplement to the paper, which would count the
+    supplement's own floats into the answer. Two things stop it. Registering
+    this module under its own name means the import inside build_pdf.build()
+    finds it rather than loading a second copy with its own counters, and
+    stubbing _sections leaves the supplement's flow empty, so the count that
+    comes back is the main paper's alone.
     """
     B._FIGN[0] = B._TABN[0] = B._EQN[0] = 0
     real_build = BaseDocTemplate.build
+    real_sections = globals()["_sections"]
+    prev = sys.modules.get("build_supp_pdf")
     try:
         BaseDocTemplate.build = lambda self, story, *a, **kw: None
+        sys.modules["build_supp_pdf"] = sys.modules[__name__]
+        globals()["_sections"] = lambda kit: []
         with contextlib.redirect_stdout(io.StringIO()):
             B.build("/dev/null")
     finally:
         BaseDocTemplate.build = real_build
+        globals()["_sections"] = real_sections
+        if prev is None:
+            sys.modules.pop("build_supp_pdf", None)
+        else:
+            sys.modules["build_supp_pdf"] = prev
     B.UNEXPANDED.clear()
     return B._FIGN[0], B._TABN[0], B._EQN[0]
 

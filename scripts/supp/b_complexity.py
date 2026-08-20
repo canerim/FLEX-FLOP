@@ -145,7 +145,6 @@ def content(k):
     ma, ac, C = P["ma"], P["ac"], P["C"]
     D, shr = _hook_vector(P)
     B = k.J("why_qp_PAPER.json")["cost"]
-    A2 = k.J("why_qp.json")["cost"]
     td = k.J("tile_definition.json")
 
     sec = k.h1("Architecture and complexity accounting")
@@ -158,24 +157,16 @@ def content(k):
           r"megabytes and frames per second, and none of which is the unit the "
           r"allocation is optimised in.")
 
-    k.par(r"Some vocabulary first, because the rest of the supplement uses it. "
-          r"A <i>multiply-accumulate</i> (MAC) is one multiply and one add, and "
-          r"MAC/px is per pixel of the grid the operator runs on, which is not "
-          r"the same grid for every operator. The <i>trunk</i> is the released "
-          r"decoder's stack of N = " + f"{P['nb']}" + r" identical "
-          r"DepthConvBlocks at width C = " + f"{C}" + r". An <i>exit</i> is a "
-          r"depth at which a tile may stop; the ladder has K = 6 of them, one "
-          r"every b = N/K = 2 blocks. The <i>split depth</i> j = 2 is how many "
-          r"exits' worth of blocks run once for the whole frame before any tile "
-          r"is allowed to leave, so the first jb = 4 blocks are full-frame and "
-          r"the last 8 are per-tile. An <i>adapter</i> is a small "
-          r"zero-initialised residual module that stands in for the blocks an "
-          r"exit skips. A <i>tile</i> is " + f"{td['rgb_patch']}" + r" RGB px "
-          r"square, which is " + f"{td['feature_patch']}" + r" px of the "
-          r"feature grid and " + f"{td['latent_patch']}" + r" px of the latent. "
-          r"The <i>exit map</i> is the per-tile assignment of exits. The "
-          r"<i>released decoder</i> is DCVC-UF's intra decoder [14] with none "
-          r"of this added, and it is the unit every cost below is quoted in.")
+    k.par(r"Two units first. A <i>multiply-accumulate</i> (MAC) is one "
+          r"multiply and one add, and MAC/px is per pixel of the grid the "
+          r"operator runs on, which is not the same grid for every operator. "
+          r"The <i>released decoder</i> is DCVC-UF's intra decoder [14] with "
+          r"none of this work added, and it is the unit every cost below is "
+          r"quoted in. The ladder's geometry is section A's: N = " +
+          f"{P['nb']}" + r" trunk blocks at width C = " + f"{C}" + r", K = 6 "
+          r"exits one every b = 2 blocks, a split depth of j = 2 that leaves "
+          r"the first four blocks full-frame, and a tile of " +
+          f"{td['rgb_patch']}" + r" RGB px.")
 
     # ------------------------------------------------------------------
     k.h2("The decoder, module by module")
@@ -353,12 +344,13 @@ def content(k):
     k.par(r"which is " + _n(P["blk_macpx"]) + r" MAC/px at C = " + f"{C}" +
           r" and " + _n(7 * ma["ch_preshuffle"] ** 2 + 9 * ma["ch_preshuffle"]) +
           r" at C = " + f"{ma['ch_preshuffle']}" + r", both matching Table " +
-          f"{t_layer}" + r" row by row. The cost model shipped in "
-          r"flexuf/cost.py writes it as 8C² + 9C = " + _n(P["blk_closed"]) +
-          r" instead, one C² too many, which overstates a block by " +
-          f"{100 * (P['blk_closed'] / P['blk_macpx'] - 1):.2f}" + r"\%. "
-          r"Sections " + f"{sec}.5 " + r"and " + f"{sec}.6 " + r"follow that "
-          r"one term to the end.")
+          f"{t_layer}" + r" row by row. The arithmetic model in "
+          r"flexuf/cost.py, which runs inside the allocation's argmin and "
+          r"nowhere else, writes the block as 8C² + 9C = " +
+          _n(P["blk_closed"]) + r" instead, so it prices a block " +
+          f"{100 * (P['blk_closed'] / P['blk_macpx'] - 1):.2f}" + r"\% high. "
+          r"Section " + f"{sec}.6 " + r"measures what that is worth against a "
+          r"hook count.")
 
     # ------------------------------------------------------------------
     k.h2("What the ladder adds")
@@ -396,11 +388,11 @@ def content(k):
     t_add = k.rows(rows,
         r"What the ladder adds, priced against one released decode. ``Blocks'' "
         r"is the module in units of a trunk block. Take from it that the FFN "
-        r"adapter costs 5C² and not 2C²: the gated activation is free, so the "
+        r"adapter costs 5C² per pixel: the gated activation is free, so the "
         r"pair is 4C² + C² rather than 4C² + 4C², and the module is 0.71 of a "
-        r"whole block. Since the routed allocation lives at exits 2 and 3, "
-        r"which both wear the FFN adapter, that correction lands on precisely "
-        r"the exits the reported saving leans on.")
+        r"whole block. The routed allocation lives at exits 2 and 3, which "
+        r"both wear it, so it is priced where the reported saving leans "
+        r"hardest.")
     k.note(r"results/adapter_cost.json for the two adapters, on the pinned "
            r"checkpoint. The seam-repair row is 9C + C² per pixel; Section " +
            f"{sec}.6 " + r"confirms that figure against a hook count rather "
@@ -462,46 +454,46 @@ def content(k):
     # ------------------------------------------------------------------
     k.h2("The per-exit cost vector and the ceiling")
 
-    rows = [["Exit k", "Blocks", "Adapter", "c (2C²)", "c (5C²)",
-             "c hook", "Saved \\%"]]
+    rows = [["Exit k", "Blocks", "Adapter", "c model", "c hook", "Saved \\%"]]
     for e in range(6):
         run = max(e, 2)
         kind = "none" if run == 5 else ("FFN" if (5 - run) * 2 >= 4 else "1×1")
         nm = f"{e}" if e >= 2 else f"{e} (clamped)"
-        rows.append([nm, f"{(run + 1) * 2}", kind, f"{A2[e]:.4f}",
+        rows.append([nm, f"{(run + 1) * 2}", kind,
                      f"{B[e]:.4f}", f"{D[e]:.4f}",
                      f"{100 * (1 - D[e]):.2f}"])
     t_exit = k.rows(rows,
-        r"The per-exit cost vector, in units of one released decode, under "
-        r"three prices for the same architecture: the first shipped table, "
-        r"which put the FFN adapter at 2C²; the table the paper reports, which "
-        r"corrected that to 5C² but kept the closed-form block; and the hook "
-        r"count assembled in Section " + f"{sec}.4" + r". Take from it that "
-        r"the two corrections move the shallowest reachable exit by 2.79 and "
-        r"then 0.80 points and leave exits 4 and 5 nearly untouched, because "
-        r"those wear the cheap adapter or none, and that the deepest exit "
-        r"costs " + f"{100 * (D[5] - 1):.2f}" + r"\% <i>more</i> than the "
-        r"release, which is the seam-repair pass.")
+        r"The per-exit cost vector, in units of one released decode, priced "
+        r"two ways: the arithmetic model the allocation's argmin runs on, and "
+        r"the hook count assembled in Section " + f"{sec}.4" + r", which is "
+        r"what every saving in the paper is quoted from. The two differ by "
+        r"most at the shallowest reachable exit, which wears the FFN adapter, "
+        r"and by least at exits 4 and 5, which wear the cheap adapter or "
+        r"none. The deepest exit costs " + f"{100 * (D[5] - 1):.2f}" +
+        r"\% <i>more</i> than the release, which is the seam-repair pass.")
     k.note(r"Exits 0 and 1 are unreachable: the decoder clamps the map at "
            r"j = 2, so a tile nominally assigned them leaves through exit 2 and "
-           r"wears exit 2's cost. The 2C² and 5C² vectors are recorded in "
-           r"results/why_qp.json and results/why_qp_PAPER.json; a cost "
-           r"vector is a property of the model rather than of the weights, so "
-           r"the first being measured on runs/BEST/ckpt_eval.pth.tar does not "
-           r"affect it.")
+           r"wears exit 2's cost. The model vector is recorded in "
+           r"results/why_qp_PAPER.json; a cost vector is a property of the "
+           r"model rather than of the weights.")
 
     k.par(r"The ceiling is 100(1 − c<sub>j</sub>), the saving when every tile "
           r"takes the shallowest reachable exit. It is a property of the "
-          r"architecture and no allocation can pass it. Three values are in "
-          r"circulation and they are the three columns of Table " +
-          f"{t_exit}" + r": " + f"{100 * (1 - A2[2]):.2f}" + r"\% at 2C², "
-          r"\CeilingModelled\% at 5C², and " +
-          f"{100 * (1 - D[2]):.2f}" + r"\% by hook count, which is the value the "
-          r"paper's tables use. The last of the "
-          r"three is the one a meter agrees with, and the next subsection is "
-          r"the demonstration.")
+          r"architecture and no allocation can pass it. The model reads "
+          r"\CeilingModelled\% and the meter " +
+          f"{100 * (1 - D[2]):.2f}" + r"\%, which is the value the paper's "
+          r"tables use, and the next subsection is the demonstration.")
 
     # ------------------------------------------------------------------
+    k.fig("ladder.png",
+          "<b>The ladder, priced.</b> What a tile costs at each exit, as a "
+          "percentage of one released decode, counted with hooks on the "
+          "executed pass and beside the arithmetic model the argmin uses. "
+          "Exits below the split depth are not distinct, because the first j "
+          "groups run for every tile whatever it does. The deepest exit costs "
+          "slightly more than the release, which is the full-frame deblocking "
+          "pass. Reported savings in the paper are the hook count.")
+
     k.h2("Predicted against hook-measured")
 
     k.par(r"A cost model and the decoder it models drift apart. The check that "
@@ -549,42 +541,14 @@ def content(k):
           r"The identity is worth stating plainly: the per-module counts of "
           r"results/mac_audit.json and results/adapter_cost.json are not a "
           r"model of what the meter reports, they are what the meter reports, "
-          r"rearranged. Where the paper's tables differ from the meter, the "
-          r"difference has a closed form and Table " + str(k.peek_tbl()) +
-          r" gives it term by term.")
-
-    rows = [["Term", "Model price", "Hook price", "Points of saving"]]
-    rows.append(["Seam repair", f"{P['rep_macpx'] / P['blk_closed'] * P['p']:.6f}",
-                 f"{shr['rep']:.6f}",
-                 f"{100 * (shr['rep'] - P['rep_macpx'] / P['blk_closed'] * P['p']):.4f}"])
-    rows.append(["1×1 adapter", f"{C * C / P['blk_closed'] * P['p']:.6f}",
-                 f"{shr['a1']:.6f}",
-                 f"{100 * (shr['a1'] - C * C / P['blk_closed'] * P['p']):.4f}"])
-    rows.append(["FFN adapter", f"{5 * C * C / P['blk_closed'] * P['p']:.6f}",
-                 f"{shr['aff']:.6f}",
-                 f"{100 * (shr['aff'] - 5 * C * C / P['blk_closed'] * P['p']):.4f}"])
-    rows.append(["<b>Exit 5 residual</b>", "", "",
-                 f"<b>{100 * (D[5] - B[5]):.4f}</b>"])
-    rows.append(["<b>Exit 4 residual</b>", "", "",
-                 f"<b>{100 * (D[4] - B[4]):.4f}</b>"])
-    rows.append(["<b>Exits 2, 3 residual</b>", "", "",
-                 f"<b>{100 * (D[2] - B[2]):.4f}</b>"])
-    t_dec = k.rows(rows,
-        r"The residual of Table " + f"{t_pm}" + r", term by term. Three "
-        r"modules are priced as a fraction of a block, and the shipped model's "
-        r"block is 8C² + 9C where the meter's is 7C² + 9C. Take from it that "
-        r"the residual is not noise and not a tolerance: exit 5 wears the "
-        r"repair mispricing alone, exit 4 wears the repair plus the 1×1 "
-        r"adapter, and exits 2 and 3 wear the repair plus the FFN adapter, "
-        r"which is why the error is largest exactly where the saving is "
-        r"largest.")
-    k.note(r"Model prices: the module's MAC/px divided by 8C² + 9C, times one "
-           r"trunk block. Hook prices: the module's MAC/px times the feature "
-           r"grid, divided by the decode total, both from "
-           r"results/mac_audit.json and results/adapter_cost.json, and they "
-           r"are the last column of Table " + f"{t_add}" + r". The three "
-           r"residual rows are the corresponding columns of Table " +
-           f"{t_exit}" + r".")
+          r"rearranged. The residual against the model is therefore not noise "
+          r"and not a tolerance but a closed form: three modules are priced "
+          r"as a fraction of a block, the model's block is 8C² + 9C where the "
+          r"meter's is 7C² + 9C, and the mispricing is largest at the exits "
+          r"wearing the FFN adapter, which are exactly the exits the saving "
+          r"leans on. It comes to " + f"{100 * (D[2] - B[2]):.4f}" + r" points "
+          r"of saving at exits 2 and 3 and " + f"{100 * (D[5] - B[5]):.4f}" +
+          r" at the deepest.")
 
     grid = k.J("signalled_RECIPE512_grid.json")
     gv = [r["model_minus_measured"] for r in grid["rows"]
@@ -608,17 +572,18 @@ def content(k):
           r"over the whole operating range rather than six points of it. The "
           r"residual is positive in all " + f"{len(gv)}" + r" cells, from " +
           f"{min(gv):.3f}" + r" to " + f"{max(gv):.3f}" + r" points, and it "
-          r"saturates at exactly the exits-2 value of Table " + f"{t_dec}" +
-          r". Reading the paper's headline figures as hook counts therefore "
-          r"means subtracting between " +
+          r"saturates at exactly that exits-2 value. The paper's headline "
+          r"figures are the hook counts, so no "
+          r"subtraction is left for a reader to do; had the model been "
+          r"quoted instead, every figure would have been between " +
           f"{min(ctc[q]['model_minus_measured'] for q in ctc):.2f}" +
           r" and " +
           f"{max(ctc[q]['model_minus_measured'] for q in ctc):.2f}" +
-          r" points: at the 0.1 dB budget the model reports \MainLowRate\% at "
-          r"the lowest rate against a measured " +
-          f"{ctc[0]['saving_pct_measured']:.2f}" + r"\%, and \MainHighRate\% "
-          r"at the highest against a measured " +
-          f"{ctc[63]['saving_pct_measured']:.2f}" + r"\%.")
+          r" points higher. At the 0.1 dB budget the model reads " +
+          f"{ctc[0]['saving_pct_vs_release']:.2f}" +
+          r"\% at the lowest rate where the meter reads \MainLowRate\%, and " +
+          f"{ctc[63]['saving_pct_vs_release']:.2f}" +
+          r"\% at the highest where the meter reads \MainHighRate\%.")
     k.note(r"results/signalled_RECIPE512_grid.json and "
            r"results/signalled_RECIPE512_ctc53.json, both on the pinned "
            r"checkpoint. Both columns are in the files: "
@@ -626,6 +591,20 @@ def content(k):
            r"the hook count, and model_minus_measured is their difference.")
 
     # ------------------------------------------------------------------
+    k.tbl("complexity",
+          "<b>Decoder complexity at 1080p</b>, in the three units a reader "
+          "is likely to want: arithmetic, arithmetic as a fraction of the "
+          "release, and milliseconds. Our deepest exit costs slightly more "
+          "than the released decoder because it still pays the deblocking "
+          "filter, and that 1.0095, not 1.0, is what every saving in the "
+          "paper is <i>not</i> divided by. Wall-clock is the sorted per-tile "
+          "loop.")
+    k.note("results/signalled_RECIPE512_ctc53.json and "
+           "results/latency_RECIPE512_sorted.json, generated into "
+           "paper/tables/complexity.tex by scripts/make_paper_tables.py. The "
+           "architectural-ceiling row has no wall clock because no allocation "
+           "on this test set reaches it at the budgets measured here.")
+
     k.h2("How the timings were taken")
 
     lb = k.J("supp_latency_batch_1920x1080.json")
@@ -634,7 +613,11 @@ def content(k):
 
     k.par(r"The rest of this section leaves arithmetic for the clock, so the "
           r"protocol comes first. Everything below follows the same rules and "
-          r"they are stated rather than implied.")
+          r"they are stated rather than implied. Every timing, power and "
+          r"memory figure in this section is at the 0.1 dB budget, and every "
+          r"GPU figure is an NVIDIA RTX A6000, all eight cards in this "
+          r"machine being that model; the CPU rows are the only second device "
+          r"class this work can report.")
 
     k.bullets([
         r"<b>Batch 1, and why.</b> Every wall clock here is one frame at a "
@@ -869,30 +852,6 @@ def content(k):
            r" W limit, taken under the evaluation lock. 720p is padded to "
            r"1280×768 and 15 tiles, 1080p to 2048×1280 and 40 tiles.")
 
-    rows = [["Condition", "ms rel.", "ms ours", "W rel.", "W ours", "J rel.",
-             "J ours"]]
-    for r in pw["rows"]:
-        rows.append([f"{lab[r['size']]} q{r['qp']}",
-                     f"{r['full']['ms_median']:.2f}",
-                     f"{r['routed']['ms_median']:.2f}",
-                     f"{r['full']['watts_mean']:.1f}",
-                     f"{r['routed']['watts_mean']:.1f}",
-                     f"{r['joules_per_frame_full']:.3f}",
-                     f"{r['joules_per_frame_routed']:.3f}"])
-    t_abs = k.rows(rows,
-        r"The measurement behind Table " + f"{t_three}" + r", in absolute "
-        r"units. Take from it why energy tracks time: the routed decode draws "
-        r"the same board power as the released one, within 3 W in the worst "
-        r"case and within 1 W in four of the six conditions, and at 720p q0 it "
-        r"draws slightly <i>more</i>. Routing does not lower the instantaneous "
-        r"draw of the card. It shortens the job.")
-    k.note(r"results/supp_power.json. Watts are the mean of about 200 driver "
-           r"samples per run; times are medians over 181 to 664 iterations. "
-           r"Idle over the six conditions in the order run: 74.6, 78.5, 91.2, "
-           r"100.5, 106.5 and 98.6 W before, and 122.4, 120.0, 126.2, 128.4, "
-           r"125.0 and 121.9 W after, on a card whose decode draw is 284 to "
-           r"298 W.")
-
     hi = pw["rows"][3]
     lo = pw["rows"][5]
     k.par(r"The engineering result should be stated plainly: the energy saving "
@@ -900,8 +859,11 @@ def content(k):
           r"A partly idle GPU still draws most of its static power, so the "
           r"joules follow the seconds almost exactly, and the seconds fall "
           r"short of the multiply-accumulates for the occupancy reason of "
-          r"Figure " + f"{k.peek_fig() - 1}" + r"c, at the board powers of "
-          r"Table " + f"{t_abs}" + r". At 1080p and the lowest "
+          r"Figure " + f"{k.peek_fig() - 1}" + r"c. The routed decode draws "
+          r"the same board power as the released one, within 3 W in the worst "
+          r"of the six conditions and within 1 W in four of them, so routing "
+          r"does not lower the instantaneous draw of the card; it shortens "
+          r"the job. At 1080p and the lowest "
           r"rate the three read " + f"{hi['mac_saving_pct']:.2f}" + r"\%, " +
           f"{hi['time_saving_pct']:.2f}" + r"\% and " +
           f"{hi['energy_saving_pct']:.2f}" + r"\%; at the highest rate they "
@@ -911,8 +873,8 @@ def content(k):
           r"figure as an energy figure overstates it by three and a half to "
           r"five points.")
 
-    k.par(r"Two limits. The idle baseline drifts upward as the card warms, "
-          r"from 74.6 W before the first condition to 128.4 W after the fourth, "
+    k.par(r"Two limits. The idle baseline drifts upward as the card warms "
+          r"through the six conditions, "
           r"so the above-idle column of Table " + f"{t_three}" + r" is the "
           r"weaker of the two energy figures, and it is only because it agrees "
           r"with the unadjusted column to within 0.4 points that the conclusion "
@@ -952,73 +914,22 @@ def content(k):
     k.note(r"results/supp_footprint.json, pinned checkpoint, q32, 0.1 dB "
            r"budget, NVIDIA RTX A6000. Frame rates here are lower than in "
            r"Table " + f"{t_dev}" + r" because that table's maps are at "
-           r"different rates and this one is q32 throughout. The 4K stage "
-           r"profile queued alongside it failed the same way "
-           r"(results/supp_queue.log).")
+           r"different rates and this one is q32 throughout. Nothing above "
+           r"1080p is measured anywhere in this work.")
 
     ec = k.J("supp_encoder_cost_PAPER.json")
     k.par(r"The signalled configuration moves the choice of exit map to the "
           r"encoder, which has to price the tiles before it can allocate them, "
-          r"and that cost belongs in a complexity section even though it falls "
-          r"on the other side. On one 1080p sequence at the highest rate, one "
-          r"tiled decode takes " + f"{ec['ms_one_decode']:.1f}" + r" ms; "
-          r"building the per-tile cost table full-frame takes " +
-          f"{ec['ms_full_frame_table']:.1f}" + r" ms, or " +
-          f"{ec['x_full_frame']:.3f}" + r"× one decode; and building it the "
-          r"way the deployed encoder does, per tile, takes " +
-          f"{ec['ms_deployed_table']:.1f}" + r" ms, or " +
-          f"{ec['x_deployed']:.3f}" + r"×. The two searches agree on " +
-          f"{100 * ec['approx']['agreement']:.1f}" + r"\% of tiles and reach " +
-          f"{ec['exact']['saving']:.2f}" + r"\% and " +
-          f"{ec['approx']['saving']:.2f}" + r"\% saving at the same budget. "
-          r"The asymmetry is the design rather than an accident: a decoder-side "
-          r"saving is bought with encoder-side work, which suits a "
-          r"compress-once decode-many deployment and does not suit live "
-          r"encoding.")
+          r"and that cost is " + f"{ec['x_deployed']:.2f}" + r" of one tiled "
+          r"decode per frame per rate; section G prices the two ways of "
+          r"building the table and says why only one of them may be used to "
+          r"report quality. The asymmetry is the design rather than an "
+          r"accident: a decoder-side saving is bought with encoder-side work, "
+          r"which suits a compress-once decode-many deployment and does not "
+          r"suit live encoding.")
     k.note(r"results/supp_encoder_cost_PAPER.json: pinned checkpoint, one "
            r"sequence (Bosphorus), q63, 40 tiles, " + f"{ec['iters']}" +
            r" iterations on an NVIDIA RTX A6000.")
-
-    # ------------------------------------------------------------------
-    k.h2("What no file in results/ pins")
-
-    k.par(r"Four gaps, listed so that they are visible rather than quietly "
-          r"absent.")
-
-    k.bullets([
-        r"<b>The paper's tables are on the 5C² column.</b> Tables " +
-        f"{t_exit}" + r" and " + f"{t_dec}" + r" together say by how much: "
-        r"between 0.14 and 0.80 points of saving, in the optimistic direction "
-        r"at every exit. The hook-count column is the one a meter agrees "
-        r"with, and the honest ceiling is " + f"{100 * (1 - D[2]):.2f}" +
-        r"\% rather than \CeilingModelled\%. The BD-Rate figures are unaffected, "
-        r"being integrals of rate against quality with no compute axis in "
-        r"them; the BD-saving figures would shift by the same fraction of a "
-        r"point as the savings they integrate.",
-
-        r"<b>Nothing above 1080p.</b> Both 4K jobs ran out of memory (Table " +
-        f"{t_mem}" + r"). GPU 2 has about 5 GB free on a card four other "
-        r"processes are sharing, and a 3840×2304 decode does not fit, so the "
-        r"resolution trend in this section rests on three points of which two "
-        r"carry power measurements. This is a limit of the machine and not of "
-        r"the method.",
-
-        r"<b>One GPU model, one power sensor, and no second card class.</b> "
-        r"Every millisecond and joule on a GPU here is an NVIDIA RTX A6000, "
-        r"because all eight cards in this machine are; the CPU rows of Table " +
-        f"{t_dev}" + r" are the only second device class, and they carry the "
-        r"noise floor stated beside them. Nothing here separates the decoder's "
-        r"energy from the board's, and no external meter was available to "
-        r"calibrate the driver counter against.",
-
-        r"<b>One budget for the clock.</b> Every timing, power and memory "
-        r"measurement in this section is at the 0.1 dB budget, and the stage "
-        r"profiles are at q32 only. The arithmetic is swept across the whole "
-        r"grid in Figure " + f"{k.peek_fig() - 1}" + r"b; the seconds are not, "
-        r"and a deeper budget moves more tiles to exit 2, where the occupancy "
-        r"penalty of Figure " + f"{k.peek_fig() - 1}" + r"c is smallest.",
-    ])
-
 
 def _block_from_static(k):
     """One trunk block as a fraction of a released decode, from measured savings.

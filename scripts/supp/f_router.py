@@ -1,8 +1,8 @@
-"""The router and the parameter-free rule.
+"""The router and the calibrated bit rule.
 
 Three things: which of the head's inputs carry anything, what the head costs to
-run, and how it fares against a routing rule that has no parameters at all. The
-head itself, its inputs, its shapes, its decision rule and its objective are
+run, and how it fares against a routing rule that has no learned parameters.
+The head itself, its inputs, its shapes, its decision rule and its objective are
 specified in the main paper's allocation subsection and are not restated here.
 
 Every number in this section is computed here from a file in results/, and the
@@ -84,7 +84,7 @@ def content(k):
     def rule(b, q):
         return at(rr[b], q)
 
-    k.h1("The router and the parameter-free rule")
+    k.h1("The router and the calibrated bit rule")
 
     k.par(
         "An exit map assigns one exit index to every tile of a frame, and this "
@@ -93,11 +93,11 @@ def content(k):
         "answer. Configuration B predicts the map at the decoder from data the "
         "decoder already holds, and signals nothing. The third way computes it "
         "at the decoder from one number the entropy coder has already produced, "
-        "with nothing learned. The head architecture, the inputs it reads and "
-        "the rule by which it turns logits into an exit are given in the main "
-        "paper's allocation subsection, and none of that is repeated here. "
-        "What is here is what those inputs are worth, what the head costs to "
-        "run, and how it fares against the third way.")
+        "with nothing learned. The main paper states the rule by which the "
+        "head turns logits into an exit and where its tilt comes from, and "
+        "that is not repeated. What is here is the head itself, what each of "
+        "its inputs is worth, what it costs to run, and how it fares against "
+        "the third way.")
 
     k.par(
         "Write D(t,k) for the mean squared error of tile t decoded at exit k "
@@ -222,6 +222,17 @@ def content(k):
         "of the question, and it is worth stating beside a negative answer.")
 
     # ------------------------------------------------------------------ F.2
+    k.par(
+        "One head covers every operating point, and the quality index is what "
+        "makes that possible. It is an input rather than a selector: during "
+        "training it is drawn uniformly at random for each batch, so one set "
+        "of weights sees all 64 indices, and at test time the same weights "
+        "run at every rate with the offline \u03b2 table of A.12 in front of "
+        "them. No head per rate is proposed anywhere in this work, since that "
+        "multiplies the stored parameters by the number of operating points a "
+        "deployment offers, and F.5 is the measurement of what the single "
+        "head gives up for that.")
+
     k.h2("What the head costs")
     k.rows(
         [["q", "decode (ms)", "stem (ms)", "router (ms)", "share (%)"]]
@@ -275,16 +286,57 @@ def content(k):
     k.par(
         "<b>For scale, what the search costs instead.</b> Configuration A does "
         "not run a head; it runs the argmin itself, which needs the true error "
-        "of every exit. On the pinned checkpoint at q63 one tiled 1080p decode "
-        f"takes {EC['ms_one_decode']:.0f} ms, the deployed table costs "
-        f"{EC['x_deployed']:.2f} of those and the full-frame table "
-        f"{EC['x_full_frame']:.2f}. A decoder-side head at half a percent of "
-        "one decode, and a rule at nothing, are both several orders below that, "
-        "which is the whole reason for wanting one.")
-    k.note("results/supp_encoder_cost_PAPER.json, pinned checkpoint, "
-           f"{EC['iters']} iterations on one {EC['device']}.")
+        "of every exit, and section G prices that at "
+        f"{EC['x_deployed']:.2f} of a tiled decode per frame. A decoder-side "
+        "head at half a percent of one decode, and a rule at nothing, are both "
+        "several orders below it, which is the whole reason for wanting one.")
 
     # ------------------------------------------------------------------ F.3
+    k.par(
+        "<b>The head, exactly.</b> Three things enter. The first is the "
+        "feature at the split point, 384 channels at one eighth of frame "
+        "resolution, which is the last thing every tile shares. The second is "
+        "the decoded latent concatenated with the entropy model's scales, the "
+        "predicted Gaussian width used to code each latent position, which is "
+        "already computed during the decode and is, position by position, an "
+        "estimate of how hard that position was to code. The third is the "
+        "quality index. Each of the first two is projected by a 1\u00d71 "
+        "convolution, to 48 and 32 channels, then reduced to one vector per "
+        "tile by taking the mean and the standard deviation over the tile. "
+        "That gives 96 + 64 + 1 = 161 numbers per tile, which pass through a "
+        "LayerNorm and a three-layer perceptron of width 256 with SiLU "
+        "activations, ending in K logits. Almost all of the "
+        f"{RL['params']:,} parameters sit in the 1\u00d71 on the stem, which "
+        "is the only part that runs per pixel; the perceptron runs once per "
+        "tile, forty times for a 1080p frame, so its width is nearly free.")
+
+    k.fig("router_arch.png",
+          "<b>The router head.</b> <b>a</b>, the three things it reads, all "
+          "already held by the decoder at the moment the decision is needed. "
+          "<b>b</b>, each projected by a 1\u00d71, then reduced to one vector "
+          "per tile by its mean and standard deviation. <b>c</b>, a "
+          "three-layer perceptron, one pass per tile. Every shape and "
+          "parameter count in the figure is read off the module when the "
+          "figure is drawn.")
+
+    k.par(
+        "<b>What it is trained against.</b> The head is fitted against a "
+        "frozen decoder, so the exits it chooses between do not move while it "
+        "learns. Its target is the Lagrangian oracle's choice and the loss is "
+        "a cross-entropy to that target, with each tile weighted by its "
+        "<i>regret</i>, meaning by how much the oracle's own bracket grows if "
+        "the head's exit is used in place of the oracle's. A tile whose two "
+        "best exits are nearly tied then counts for less than one where the "
+        "wrong choice is expensive, which is the same asymmetry that makes "
+        "agreement a poor score in F.4. A router of this shape can collapse "
+        "onto a single exit during training, so it carries a balancing term: "
+        "a per-exit bias added to the logits before the decision and updated "
+        "by usage rather than by a gradient, which is what makes it "
+        "loss-free [16]. It is biased toward the oracle's own exit "
+        "distribution rather than toward uniform, because at a high "
+        "multiplier the oracle genuinely does send every tile to one exit and "
+        "forcing spread there would force mistakes.")
+
     k.h2("The calibrated bit rule")
     k.par(
         "The entropy model produces one number per tile before the trunk runs, "
@@ -312,12 +364,10 @@ def content(k):
     k.par(
         "φ has one entry per reachable exit and says what that exit "
         "costs on an average tile; \\alpha is an exponent fitted rather than "
-        "assumed. Fitting it is what lets the rule find the direction of the "
-        "relation instead of asserting one, and an earlier version of this "
-        "surrogate that fixed the exponent at 1 was wrong about that direction. "
-        "The fit is offline and leave-one-sequence-out, so no sequence "
-        "contributes to the profile that routes it, and its whole output is six "
-        "numbers per rate.")
+        "assumed, which is what lets the rule find the direction of the "
+        "relation instead of asserting one. The fit is offline and "
+        "leave-one-sequence-out, so no sequence contributes to the profile "
+        "that routes it, and its whole output is six numbers per rate.")
     k.par(
         "<b>The decision.</b> Run the oracle's own Lagrangian on the surrogate "
         "table in place of the true one, and bisect \\lambda against the budget "
@@ -351,7 +401,7 @@ def content(k):
     ]
     k.rows(box,
            "<b>The calibrated bit rule, in full.</b> Lines 1 to 7 are what the "
-           "decoder runs: one power and K products per tile, no parameters, "
+           "decoder runs: one power and K products per tile, nothing learned, "
            "nothing signalled. Lines 8 to 10 are the offline calibration, whose "
            "entire output is the six numbers per rate printed in the next "
            "table. \\lambda is bisected in two levels, on the cheap per-tile "
@@ -425,7 +475,7 @@ def content(k):
                f"The rule is ahead of both heads in {n_win} of the "
                f"{n_cells} cells.")
     k.rows(cmp_rows,
-           f"<b>The parameter-free rule against two trained heads</b>, as the "
+           f"<b>The calibrated bit rule against two trained heads</b>, as the "
            "percentage of the released decoder's operations saved, at two "
            f"budgets and five rates. {verdict} Every column is charged for what "
            "it costs: each head pays its own compute share and the rule pays "
@@ -459,8 +509,8 @@ def content(k):
         "reaches \\RateRankLow% at q0 and \\RateRankHigh% at q63, and it is "
         "ahead at all \\RateRankNWins measured rates whichever head it is "
         "measured against. A head trained on this decoder against this oracle "
-        "returns nothing over a rule with no parameters, while carrying a "
-        "compute share that the rule does not.")
+        "returns nothing over a rule with no learned parameters, while "
+        "carrying a compute share that the rule does not.")
 
     sat_j = SAT["ceiling_pct"] - at(hj[3], 0)
     sat_f = SAT["ceiling_pct"] - at(hf[3], 0)
@@ -545,6 +595,25 @@ def content(k):
         "heads does.")
 
     # ------------------------------------------------------------------ F.5
+    k.par(
+        "<b>The two decoder-side signals are barely complementary.</b> "
+        "Normalising both surrogates to unit mean and blending them with one "
+        "weight, from the calibrated bit rule at one end to the head's "
+        "ordering at the other, the best blend is the rule alone at the three "
+        "lowest rates and a small head weight at the two highest. The head "
+        "reads the entropy model's scales, so it already holds most of what "
+        "the bit count carries, and what it adds is confined to q48 and q63.")
+    k.tbl("blend",
+          "<b>Blending the two decoder-side signals</b> at 0.1 dB, both "
+          "normalised to unit mean, with the weight running from the "
+          "calibrated bit rule to the head's ordering. Bold is the best per "
+          "rate. The two end columns are the two rules measured on their own "
+          "through the same code path, which is the check that the blend is "
+          "an interpolation and not a third system.")
+    k.note("results/combined_RECIPE512_b01.json, on the pinned checkpoint, "
+           "generated into paper/tables/blend.tex by "
+           "scripts/make_paper_tables.py.")
+
     k.h2("How much a trained head varies")
     hh = [at(hj[1], q) - at(hf[1], q) for q in QPS]
     n_gap = sum(1 for i, q in enumerate(QPS)
@@ -554,9 +623,7 @@ def content(k):
         "No head in this work was trained twice at two seeds, so there is no "
         "seed variance to report and none was measured; "
         "results/router_ablation.json records seed 0 for all six of its runs "
-        "and one_checkpoint true. A second training run is a training run, and "
-        "the evaluation queue that produced the rest of this supplement was "
-        "restricted to inference. What can be reported is the spread between "
+        "and one_checkpoint true. What can be reported is the spread between "
         "heads that were trained independently of each other, which is a looser "
         "quantity than seed variance and a larger one.")
     k.par(
@@ -599,8 +666,8 @@ def content(k):
                    f"{RT['beta_v2'][q]:.1f}", f"{RT['beta_v3'][q]:.1f}"])
     k.rows(rt,
            "<b>Agreement rises and the saving does not follow.</b> The change "
-           "column has both signs. The head was retrained after the exit mask "
-           "was fixed, on the same recipe at the same \\lambda; held-out "
+           "column has both signs. The two heads are one recipe at one "
+           "\\lambda, trained twice; held-out "
            "agreement went from \\RetrainAgreeOld to \\RetrainAgreeNew while "
            "the deployed saving moved by +\\RetrainGain points at "
            "q\\RetrainGainQp and &#8722;\\RetrainLoss at q\\RetrainLossQp. "
@@ -617,31 +684,61 @@ def content(k):
         "comparison of the two heads within the file is read here.")
 
     # ------------------------------------------------------------------ F.6
-    k.h2("What this section does not measure")
-    k.bullets([
-        "No seed variance, for either head or for any ablation variant. Every "
-        f"run in results/router_ablation.json is seed {st['seed']} on one "
-        "checkpoint, and nothing here says the ordering of the input groups "
-        "would survive a second seed or a second decoder.",
-        "The ablation reports agreement and nothing else. No variant was "
-        "carried through a budget bisection to a deployed saving, so this "
-        "section cannot say what a stem-only head would save, and the argument "
-        "that agreement and saving come apart applies to the ablation as much "
-        "as to the head.",
-        "The frozen-decoder head was trained against one checkpoint and "
-        "evaluated on another. It was trained against "
-        "runs/RECIPE512/ckpt_eval.pth.tar, which the watchers overwrite, and "
-        "then run on the pinned checkpoint "
-        "(results/router_RECIPE512_b01.json, field router2_meta), while the "
-        "ablation heads were trained against the pinned checkpoint itself. Its "
-        f"\\RetrainAgreeOld and the ablation's {V['all']['agree']:.4f} are two "
-        "measurements of different things.",
-        "One head covers all five rates. A head per rate is the obvious remedy "
-        "for the cost multiplier in the retrain table and is not measured here.",
-        "The head is timed at batch 1 on one GPU class, and its share of the "
-        "decode in seconds is three times its share in operations. What that "
-        "factor would be on a device where kernel launches are cheaper is not "
-        "measured.",
-        "The rule's 0.5 dB file is off the pinned checkpoint, which is why that "
-        "budget is described rather than tabulated.",
-    ])
+    k.par(
+        "<b>Choosing the tilt without the test set.</b> Every \u03b2 in the "
+        "main paper's A-against-B table was bisected against the budget on "
+        "the test frames themselves, which is the one thing a deployed "
+        "decoder cannot do. The table below repeats the measurement with the "
+        "table a deployment would actually ship: \u03b2 bisected once per "
+        "quality index on the \\HeldNCal held-out Open Images validation "
+        "frames, then applied to the CTC frames without being touched again. "
+        "Checkpoint, head, frames and budget are identical on both sides, so "
+        "what separates the two columns is where \u03b2 came from.")
+    k.tbl("beta_heldout",
+          "<b>Choosing \u03b2 without the test set.</b> Left, \u03b2 "
+          "bisected on the \\HeldNCal held-out validation frames and then "
+          "applied to the test frames unchanged; right, \u03b2 bisected on "
+          "the test frames themselves, which is what the main paper's "
+          "signalled-against-predicted table reports. Savings are hook counts "
+          "on the routed decode with the router's own compute charged against "
+          "them. The last column re-bisects on the test set to the quality "
+          "the held-out \u03b2 delivered, so the two allocations are "
+          "differenced at one distortion rather than across two.")
+    k.note("results/beta_calibration.json, generated into "
+           "paper/tables/beta_heldout.tex by scripts/make_paper_tables.py. "
+           "The calibration set is the 512 held-out Open Images validation "
+           "frames the file records, disjoint from the training images and "
+           "from the test sequences.")
+
+    k.par(
+        "At q0 the two agree, \\HeldBetaLow against \\BetaLow and "
+        "\\HeldSavingLow% against \\BLow%, which is the same measurement to "
+        "a hundredth of a point. At the rates in between the held-out "
+        "\u03b2 misses the budget on the high side: it delivers "
+        "\\HeldDbWorst dB at q\\HeldDbWorstQp where 0.1 dB was asked for, "
+        "and \\HeldNOver of the \\HeldNHeld rates it covers overshoot. "
+        "Distortion and saving move together, so those rows also report more "
+        "saving, and reading one column straight against the other would "
+        "credit the router with compute it bought using quality the budget "
+        "did not allow. The last column takes that back out: at equal "
+        "delivered quality the two allocations agree to within "
+        "\\HeldTransferAbsMax points. What moves between the two sets is the "
+        "decibel a given \u03b2 delivers, not the ordering it induces.")
+
+    k.par(
+        "The highest rate fails harder than that, and the failure is the "
+        "calibration set rather than the router. On the calibration frames "
+        "the floor, the distortion tiling costs with every tile already at "
+        "the deepest exit, is \\HeldNoBetaFloor dB at q\\HeldNoBetaQp. "
+        "That is above the budget, so no allocation on that set meets 0.1 dB "
+        "and the bisection has nothing to return: the shipped table has a "
+        "hole where the highest rate should be, and a decoder holding it "
+        "falls back to the deepest allocation, which is our own full-depth "
+        "path and saves nothing. The test frames, whose floor at that rate is "
+        "\\HeldFloorTestHigh dB, would have supported "
+        "\\HeldNoBetaForgone points. A budget written as an absolute decibel "
+        "sits a different distance above the floor on 512 px photographs than "
+        "on 1080p video, and at the highest rate it sits below it. "
+        "Calibrating on frames whose tiling penalty matches the ones the "
+        "decoder will meet is the fix, and for a video decoder that means "
+        "calibrating on video.")

@@ -6,19 +6,19 @@ work starts from and the exact file it is, the test set, the measurement
 conventions, every module with its shape and its parameter count, the two
 algorithms a reader would re-implement, the training configuration with a
 column saying which knob was searched and where, the hardware, the wall clock,
-the seeds, the sources of variation, and the places where no file in results/
-pins what the text says.
+the seeds and the sources of variation.
 
 Where a number can be read out of results/ it is read out of results/, so it
 cannot go stale. Three kinds of fact cannot be, and each is typed in the block
 below with the file it was typed from: the trainer's own flags, the dataset
-preparation statistics and the wall clock. Nothing that writes to results/ has
-ever run inside the trainer. A.17 lists that gap rather than hiding it.
+preparation statistics and the wall clock. Nothing that writes to results/ runs
+inside the trainer, which is why those three are typed; section H lists that gap
+with the rest of the open items.
 
 Nothing here opens a checkpoint, allocates on a GPU or writes to results/.
-The module shapes and parameter counts that used to be typed from the source
-now come from results/supp_module_shapes.json, which scripts/module_shapes.py
-derives from the pinned checkpoint's state dict on the CPU.
+Module shapes and parameter counts come from results/supp_module_shapes.json,
+which scripts/module_shapes.py derives from the pinned checkpoint's state dict
+on the CPU.
 """
 
 # ---------------------------------------------------------------------------
@@ -79,12 +79,6 @@ LAUNCH = ("freeze_encoder train_patched epoch_offset 99 new_lr_scale 20 "
           "distill_weight 1.0 distill_teacher adjacent lambdas 10 2048 "
           "batch_size 8 n 8 e 16 num_exits 6 split_depth 2 latent_patch 16 "
           "latent_halo 2 aux_weight 1.0 tile_pad replicate")
-
-# flexuf/cost.py, the comment on the exit clamp: what a router that assigned
-# the shallowest exit everywhere was billed before the clamp reached the cost
-# model, against the true figure.
-CLAMP_BUG = ("58.70", "42.9")
-
 
 # ---------------------------------------------------------------------------
 # The provenance table. Each entry is (results file, the generated table or
@@ -186,19 +180,14 @@ def content(k):
         "This section is the recipe and the protocol: the released codec the "
         "work starts from and the exact file it is, the test set, the "
         "conventions every decibel is measured under, every module with its "
-        "shape and its parameter count, the two algorithms a reader would have "
-        "to re-implement, the training configuration with a column naming "
-        "where each choice was measured, the hardware, the wall clock, the "
-        "seeds and what varies between two runs of one command. The sections "
-        "after it account for compute (B), derive the allocation rule and its "
-        "bounds (C), report the complete results (D), describe the quality "
-        "budget and its working range (E) and measure the decoder-side router "
-        "(F). Numbers are not repeated across sections; where a quantity "
-        "belongs to a later one, this section names it and stops. One fact "
-        "governs the rest and is stated here rather than buried: the "
-        "checkpoint every headline number comes from has seen the training set "
-        "exactly once, and A.10 reports how much the numbers move with a "
-        "second pass.")
+        "shape and its parameter count, the training configuration with a "
+        "column naming where each choice was measured, the hardware, the "
+        "seeds and what varies between two runs of one command. Numbers are "
+        "not repeated across sections; where a quantity belongs to a later "
+        "one, this section names it and stops. One fact governs the rest and "
+        "is stated here rather than buried: the checkpoint every headline "
+        "number comes from has seen the training set exactly once, and A.10 "
+        "reports how much the numbers move with a second pass.")
 
     # ---------------------------------------------------------------- A.2
     k.h2("Test settings: the released codec, and what is frozen")
@@ -298,6 +287,47 @@ def content(k):
         "empty.")
 
     # ---------------------------------------------------------------- A.4
+    k.par(
+        "Border padding is an <i>estimator</i> of the unseen neighbour, and "
+        "the seam is its error, so the four rules below are four estimators "
+        "compared on the same frames with early exit switched off, leaving "
+        "tiling as the only difference from a full-frame decode.")
+    k.tbl("padding",
+          "<b>Border estimators</b>, dB below the released decoder on the "
+          "same latent, 256 px tiles, full CTC, with every tile at full "
+          "depth. Lower is better. The ordering is not the obvious one. "
+          "Replication, a zero-order hold, beats linear extrapolation by a "
+          "wide margin, because extrapolating the local gradient past a "
+          "boundary amplifies whatever noise sits on that boundary and "
+          "assuming local constancy does not: \\SeamLinearHigh dB against "
+          "\\SeamReplHigh dB at q63. The fitted per-channel AR(1) rule wins "
+          "on quality, reaching \\SeamArlsHigh dB, and loses on cost at "
+          "+10.7% of decode wall-clock, which against a 0.1 dB budget does "
+          "not close; section H carries that verdict in full.")
+    k.note("results/ctc_seam_p256.json, generated into "
+           "paper/tables/padding.tex by scripts/make_paper_tables.py. The "
+           "shipped configuration is replicate padding.")
+
+    k.par(
+        "Tile size is the other half of what tiling costs, and it is free in "
+        "arithmetic: a tiled decode's multiply-accumulate count does not "
+        "depend on the tile side at all, because every tile runs the same "
+        "graph and the tiles partition the same feature map. What the side "
+        "buys is granularity for the allocation, and what it costs is seam. "
+        "The two sides we have measured are below.")
+    k.tbl("tilesize",
+          "<b>Tile size, at q63.</b> dB below the released decoder with every "
+          "tile at full depth, so this is tiling penalty and nothing else. "
+          "Doubling the side roughly halves the penalty, which is what a "
+          "perimeter-driven error predicts, and it costs no computation. "
+          "Against that, 256 px gives a 1080p frame 40 tiles to allocate "
+          "across and 128 px gives it 160; section H reports what happened "
+          "when we tried to spend that granularity.")
+    k.note("results/ctc_seam_p256.json and results/ctc_seam_p128.json, "
+           "generated into paper/tables/tilesize.tex by "
+           "scripts/make_paper_tables.py. The two tile sizes come from "
+           "separate training runs, which is the confound section H states.")
+
     k.h2("The measurement conventions")
 
     oq = k.J("supp_opquality_PAPER.json")
@@ -328,13 +358,12 @@ def content(k):
         "can cost and cannot flatter, and it does cost: a tile containing "
         "replicated rows gives up about twice the quality of one that does "
         "not.",
-        "<b>Decibels.</b> A budget is a loss against the released decoder on "
-        "the same latent, averaged per frame and then over frames, which is "
-        "the convention the released codec's own evaluation uses. Pooling all "
-        "tiles into one mean squared error first is the other live convention "
-        "and is not the same number; section E measures the gap at about a "
-        "third of a 0.1 dB budget. No table mixes the two and every table says "
-        "which it is on.",
+        "<b>Decibels.</b> The main paper's protocol box fixes the "
+        "convention; what it does not say is that pooling all tiles into one "
+        "mean squared error first, which is the other live convention, moves "
+        "the answer by about a third of a 0.1 dB budget. Section E measures "
+        "that gap. No table here mixes the two and every table says which it "
+        "is on.",
         "<b>A second metric.</b> MS-SSIM is reported beside PSNR at the "
         f"operating point, computed as {oq['ms_ssim_convention']}. The "
         "implementation is self-checked at start-up: identical inputs score "
@@ -349,10 +378,6 @@ def content(k):
         "<b>The reference.</b> The released decoder re-expressed in the same "
         "ladder and selected by K, so a K = 12 run cannot be quoted against "
         "the K = 6 remap.",
-        "<b>Wall clock.</b> Every second reported in this work is one frame "
-        "at a time on a shared card, timed the same way for both decoders. "
-        "The protocol, what the timer wraps and what is deliberately outside "
-        "it are stated in section B, where the seconds are reported.",
     ])
     k.note(
         "The padding figure and the second metric are both from "
@@ -477,17 +502,36 @@ def content(k):
         "those of a 1080p frame padded to 2048×1280 and split into 40 tiles.",
         maxh=230)
 
-    k.par(
-        f"Two of the five adapters can never run: at j = {j} the decoder "
-        f"clamps every exit to at least {j}, so adapters 0 and 1 are "
-        "unreachable at inference. They still take gradient from the "
-        "distillation term, which taps every exit, and they still occupy "
-        f"{P(dead)} of the {P(dec_new)} parameters we add. Dropping them is "
-        "the obvious saving in decoder size and is not done here, because the "
-        "split depth is a configuration knob and a checkpoint that has dropped "
-        "them cannot be re-run at another j.")
-
     # ---------------------------------------------------------------- A.6
+    k.fig("adapters.png",
+          "<b>Inside an exit adapter.</b> <b>a</b>, one DepthConvBlock and the "
+          "two adapters, drawn to scale: bar length is a share of the block, "
+          "bar height the channel width written. Neither adapter contains the "
+          "block's only 3\u00d73 (the hairline rule), so neither adds "
+          "receptive field or seam penalty, which is the design constraint "
+          "the seam measurement imposes. <b>b</b>, blocks skipped per exit, "
+          "coloured by adapter; the rule switches to the FFN at four skipped "
+          "blocks. Lengths are counted with hooks off the modules themselves.")
+
+    k.par(
+        "What the adapters are worth is measured rather than argued, and the "
+        "measurement is available because the identity is exactly what they "
+        "were initialised to. Setting each adapter back to that identity "
+        "leaves the ladder otherwise untouched, so the difference is what "
+        "training put into them.")
+    k.tbl("adapters_ablation",
+          "<b>What the adapters are worth.</b> dB below the released decoder "
+          "with every tile at that exit, with the trained adapters and with "
+          "each set back to the identity it was initialised to. The deepest "
+          "exit has no adapter by construction and is the control, and it "
+          "moves by exactly zero. Without the adapters the shallowest exit "
+          "costs \\AdapterNoneHigh dB at q63, forty-four times the working "
+          "budget, and the adapter buys \\AdapterGainHigh dB of that back.")
+    k.note("results/adapter_ablation.json, on runs/RECIPE512/ckpt_PAPER.pth.tar, "
+           "generated into "
+           "paper/tables/adapters_ablation.tex by "
+           "scripts/make_paper_tables.py.")
+
     k.h2("Tiles, and the exit clamp")
 
     r1080 = tdrows["1920x1080"]
@@ -512,10 +556,9 @@ def content(k):
         "The clamp is the most consequential line in the decoder. forward() "
         f"applies exit_map.clamp(min = j, max = K − 1) before the per-tile "
         f"loop, so a map naming exit 0 at j = {j} runs group {j} and wears "
-        f"exit {j}'s adapter. Four separate places have to apply the same "
-        "clamp and each was wrong at some point in this project. Getting any "
-        "of them wrong is silent, which is why they are listed rather than "
-        "described.")
+        f"exit {j}'s adapter. Four separate places have to apply that same "
+        "clamp, and getting any of them wrong is silent rather than loud, "
+        "which is why they are listed rather than described.")
 
     rows = [["file and function", "what it does"],
             ["decoder.py, forward",
@@ -531,20 +574,14 @@ def content(k):
              "the oracle label to the same bound"]]
     t_clamp = k.rows(
         rows,
-        "The exit clamp, and the four places that have to repeat it. Take "
-        "from it the failure mode rather than the rule: with the clamp in the "
-        "decoder but not in the cost model, a router that assigned the "
-        f"shallowest exit everywhere was billed {CLAMP_BUG[0]}% saved where "
-        f"the true figure is {CLAMP_BUG[1]}%, and that inflated number made "
-        "the router appear to beat a bound it cannot beat. The mask in the "
-        "router is −inf and not a large negative constant, because nothing in "
-        "a cross-entropy penalises a common offset, the raw logits drifted to "
-        "about −10<super>4</super>, and a −10<super>4</super> mask then became "
-        "the largest entry in the row.")
-    k.note("Source: the four files named in the first column, under flexuf/. "
-           "The two "
-           "percentages are the comment in flexuf/cost.py that records the "
-           "measurement; no results file carries them, which A.17 repeats.")
+        "The exit clamp, and the four places that have to repeat it. A clamp "
+        "in the decoder without the matching clamp in the cost model bills a "
+        "shallow map for compute it never ran, which is a saving no meter "
+        "agrees with. The mask in the router is −inf and not a large negative "
+        "constant, because nothing in a cross-entropy penalises a common "
+        "offset added to every logit, so a finite mask can stop being the "
+        "smallest entry in its row.")
+    k.note("Source: the four files named in the first column, under flexuf/.")
 
     # ---------------------------------------------------------------- A.8
     k.h2("The deployed decode, and how training differs from it")
@@ -722,48 +759,54 @@ def content(k):
     a1 = {r["qp"]: r for r in e1["rows"]
           if abs(r["budget_db"] - 0.1) < 1e-9}
     qps = sorted(at01)
-    rows = [["quality index", "epoch 0", "epoch 1", "change",
-             "floor e0", "floor e1"]]
-    d0 = d1 = 0.0
-    for q in qps:
-        s0 = at01[q]["saving_pct_vs_release"]
-        s1 = a1[q]["saving_pct_vs_release"]
-        d0 += s0
-        d1 += s1
-        rows.append([f"q{q}", f"{s0:.2f}", f"{s1:.2f}", f"+{s1 - s0:.2f}",
-                     f"{at01[q]['floor_db']:.4f}", f"{a1[q]['floor_db']:.4f}"])
-    m0, m1 = d0 / len(qps), d1 / len(qps)
-    rows.append(["mean", f"{m0:.2f}", f"{m1:.2f}", f"+{m1 - m0:.2f}", "", ""])
-    t_epoch = k.rows(
-        rows,
-        f"One more pass over the training set is worth {m1 - m0:.1f} points "
-        f"on average and never less than {min(a1[q]['saving_pct_vs_release'] - at01[q]['saving_pct_vs_release'] for q in qps):.1f}. "
-        "Saving at the 0.1 dB budget against the released decoder, in percent, "
-        "on the pinned checkpoint and on the epoch-1 pin, measured with the "
-        "identical protocol on the identical frames. The last two columns are "
-        "the floor, the quality already given up before any tile exits early; "
-        "it falls at every rate. The paper reports the left-hand column, which "
-        "is therefore a lower bound on what this configuration reaches.")
-    k.note("Source: results/signalled_RECIPE512_ctc53.json "
+    _fl0 = [at01[q]["floor_db"] for q in qps]
+    _fl1 = [a1[q]["floor_db"] for q in qps]
+
+    k.par(
+        f"The pinned checkpoint is the first epoch boundary of a run whose "
+        f"launcher was given {META['epochs_requested']} epochs. Section H "
+        f"tabulates what the later checkpoints of this run and of its sibling "
+        f"measure at the same budget on the same frames; the one figure that "
+        f"belongs here is the floor, the quality given up before any tile "
+        f"exits early, which falls at every rate between the two epoch pins: "
+        f"it spans {min(_fl0):.4f} to {max(_fl0):.4f} dB at epoch 0 and "
+        f"{min(_fl1):.4f} to {max(_fl1):.4f} at epoch 1. No comparison in "
+        "this paper "
+        "between two runs at different epochs can be read as a comparison "
+        "between two configurations, and where such a comparison appears it "
+        "is labelled with both epochs. Nothing here extrapolates to a "
+        "converged run.")
+    k.note("Floors from results/signalled_RECIPE512_ctc53.json "
            "(runs/RECIPE512/ckpt_PAPER.pth.tar, epoch 0) and "
            "results/signalled_RECIPE512_e1.json "
            "(runs/RECIPE512/ckpt_PIN_e1.pth.tar, epoch 1), both "
-           f"{sig['n_sequences']} sequences.")
-
-    k.par(
-        f"The run had reached epoch {LOG['last_epoch']}, step "
-        f"{LOG['last_step']} of {LOG['steps_per_epoch']}, when this was "
-        f"written, against the {META['epochs_requested']} epochs its launcher "
-        f"was given. Table {t_epoch} therefore carries a second reading: no "
-        "comparison in this paper between two runs at different epochs can be "
-        "read as a comparison between two configurations, and where such a "
-        "comparison appears it is labelled with both epochs. Nothing in "
-        "results/ projects the trajectory to convergence and this section does "
-        "not either; scripts/convergence.py fits a saturating curve with the "
-        "ceiling pinned but writes only a figure, so its asymptote is not a "
-        "number this document can cite.")
+           f"{sig['n_sequences']} sequences at the 0.1 dB budget.")
 
     # ---------------------------------------------------------------- A.12
+    k.eq(r"\mathcal{L} = \mathcal{L}_{\mathrm{RD}} + w_{a}\,"
+         r"\mathcal{L}_{\mathrm{anchor}} + w_{d}\,"
+         r"\mathcal{L}_{\mathrm{distill}}")
+
+    k.par(
+        "The distillation term is written in feature space and not in pixels "
+        "because the head is a fixed map from feature to RGB, so matching the "
+        "deeper feature is the stronger constraint, with " + str(C) + " dense "
+        "channels of target instead of three. Each exit imitates its "
+        "neighbour, exit k following exit k+1, rather than the deepest exit.")
+
+    k.par(
+        "One choice in the recipe matters more than the weights on those "
+        "three terms. The adapters are trained <i>through the tiled decode "
+        "path they are deployed in</i>, which is what the train_patched flag "
+        "of the launcher above selects. Training them full frame and tiling "
+        "only at inference loses 0.14 to 0.24 dB; training through the "
+        "deployed path gains 0.51 to 0.90 dB, so the sign of the effect "
+        "flips. A ladder that has never seen a seam does not know it has to "
+        "compensate for one.")
+    k.note("Those two ranges are read from the run log recorded in "
+           "DECISIONS.md for the warm-start and train_patched comparisons; no "
+           "file in results/ holds them.")
+
     k.h2("Every hyperparameter, and where each was measured")
 
     rows = [["knob", "value", "searched, and where"]]
@@ -851,41 +894,11 @@ def content(k):
         "converges in two or three passes, and each pass costs one decode per "
         "frame rather than one per bisection step.")
 
-    box2 = _box(k, [
-        "<b>input</b> budget t in dB, frames F, per-tile cost vector C",
-        "&nbsp;1&nbsp; <b>for</b> each frame: cache the [tiles, K] table M of "
-        "per-tile error,",
-        IND + IND + "one tiled decode per exit, and the released decoder's "
-        "frame error R",
-        "&nbsp;2&nbsp; floor = trueDb(0)" + _c("one decode per frame"),
-        "&nbsp;3&nbsp; <b>if</b> floor &gt; t: record unreachable and stop",
-        "&nbsp;4&nbsp; inner = t",
-        "&nbsp;5&nbsp; <b>repeat</b> at most 6 times:",
-        IND + "&nbsp;6&nbsp; lo, hi = 0, 1",
-        IND + "&nbsp;7&nbsp; <b>repeat</b> 60 times:"
-        + _c("on the table, no decode"),
-        IND + IND + "&nbsp;8&nbsp; mid = (lo + hi) / 2",
-        IND + IND + "&nbsp;9&nbsp; k = argmin over exits of M + mid · C",
-        IND + IND + "10&nbsp; <b>if</b> tableDb(k) ≤ inner: lo = mid "
-        "<b>else</b> hi = mid",
-        IND + "11&nbsp; lam = lo;  d = trueDb(lam)"
-        + _c("one decode per frame"),
-        IND + "12&nbsp; <b>if</b> |d − t| &lt; 5e-4: <b>stop</b>",
-        IND + "13&nbsp; inner = inner + (t − d)",
-        "14&nbsp; k = argmin of M + lam · C, clamped to j",
-        "15&nbsp; saving = 100 (1 − routed MACs / released MACs), by hooks",
-        "16&nbsp; bpp = bpp + mapBits(k) / pixels",
-    ], "Finding the operating point, as scripts/signalled_curve.py runs it. "
-       "Take from it that the arithmetic model is used only inside the argmin "
-       "on line 9, where a decode per candidate is impossible, and that the "
-       "number reported on line 15 is counted off the forward pass that "
-       "actually ran. Line 2 is measured on the deployed path rather than on "
-       "the table, because the floor is exactly where the tiling penalty is "
-       "largest.")
-
     k.par(
-        f"Three details of Table {box2} change what the numbers mean. A rate "
-        "whose floor exceeds its budget is written out with a reachability "
+        "Section G writes that search out line by line, with the shape each "
+        "step returns. Three details of it change what the numbers mean. A "
+        "rate whose floor exceeds its budget is written out with a "
+        "reachability "
         "flag rather than dropped, so a saturated or unreachable row is "
         "visible instead of absent. The saving is measured and not modelled: a "
         "forward hook on every convolution and linear layer counts the "
@@ -956,20 +969,14 @@ def content(k):
         "scripts/make_paper_tables.py and scripts/check_paper.py both hold the "
         "pinned name and, among candidates for one quantity, prefer a file "
         "whose own ckpt field records it, falling back to the most recently "
-        "written; hand-written order breaks ties and nothing else. That is a "
-        "fix rather than a convenience, because an earlier hand-ordered list "
-        "kept preferring a superseded file after the pinned one had been "
-        "remeasured.")
+        "written; hand-written order breaks ties and nothing else.")
 
-    fg_tree = k.fig(
-        "run_tree.png",
-        "<b>Lineage of the training runs.</b> Every run warm-starts from the "
-        "released decoder through one of two remaps, one per ladder size, and "
-        "freezes the encoder, so all of them consume the identical bitstream. "
-        "The flags shown are the ones that differ between runs. The progress "
-        "bars are a snapshot taken on 2026-08-18 and the runs have advanced "
-        "since; the current position of the run this paper reports is given in "
-        "A.10.", maxh=185)
+    k.par(
+        "Every run named in this document warm-starts from the released "
+        "decoder through one of two key remaps, one per ladder size, and "
+        "freezes the encoder, so all of them consume the identical bitstream "
+        "and differ only in the ladder flags of A.11. They are compared only "
+        "at labelled epochs, for the reason section H measures.")
 
     rows = [["results file", "backs", "checkpoint", "seq×fr"]]
     npin = 0
@@ -988,20 +995,15 @@ def content(k):
         f"{len(CONSUMED)} are on the pinned checkpoint and the rest are not, "
         f"so a reader comparing two rows of two different tables should check "
         f"this column first. R512 abbreviates the run RECIPE512, \"eval\" "
-        f"is the overwritten per-epoch file, and \"none\" means the file "
-        f"carries no checkpoint field at all, which is a defect in the script "
-        f"that wrote it.")
+        f"is a per-epoch file the watcher overwrites in place, and \"none\" "
+        f"means the file records no checkpoint field.")
 
     k.par(
-        f"Three groups in Table {t_prov} deserve separate comment. The pinned "
-        "group carries the headline saving, the operating range, the "
-        "per-class breakdown, the static controls and both routed "
-        "configurations, so the paper's central claim rests on one epoch of "
-        "one run measured consistently. The eval group is measured on a file "
-        "that has since been overwritten, so those numbers can be quoted but "
-        "not reproduced; the latency table and the adapter ablation are in it. "
-        "The group with no checkpoint field at all cannot even say which "
-        "decoder it describes.")
+        f"The pinned group of Table {t_prov} carries the headline saving, the "
+        "operating range, the per-class breakdown, the static controls and "
+        "both routed configurations, so the paper's central claim rests on "
+        "one epoch of one run measured consistently. Section H states what "
+        "the rest of the column costs in reproducibility.")
 
     # ---------------------------------------------------------------- A.17
     k.h2("Seeds, variation, and the interval that does exist")
@@ -1068,17 +1070,9 @@ def content(k):
     cp = k.J("check_paper.json")
     _failed = cp.get("failed") or []
     _tail = (
-        f" One does not: \"{_failed[0]}\", which is open at the time of "
-        "writing and is listed among the limitations rather than presented as "
-        "passing." if _failed else
-        " All of them pass. One did not until recently, and the cause is worth "
-        "recording because it was not what it looked like: the partially "
-        "signalled configuration appeared not to reduce to the fully signalled "
-        "one at its endpoint, by 0.09 to 0.21 points, which bisection noise is "
-        "far too small to explain. Neither code path was wrong. The two sides "
-        "of the comparison were reading different measurements of the same "
-        "quantity, and the endpoint reproduces exactly once both read the same "
-        "file.")
+        f" One does not: \"{_failed[0]}\", which is listed among the "
+        "limitations of section H rather than presented as passing."
+        if _failed else " All of them pass.")
     k.par(
         "Evaluation itself is deterministic once a checkpoint is fixed: the "
         "sequence list, the leading frames and the tile grid are all fixed and "
@@ -1108,50 +1102,4 @@ def content(k):
         "checkpoint is identified by md5 in A.14.",
         "<b>Human subjects.</b> None, which is why A.4 declines to claim that "
         "0.1 dB is invisible.",
-    ])
-
-    # ---------------------------------------------------------------- A.19
-    k.h2("What no file in results/ pins")
-
-    k.par(
-        "The rule this supplement follows is that a number is quoted only with "
-        "the file it came from. Applying it honestly means listing the places "
-        "where the file does not exist.")
-
-    k.bullets([
-        "<b>The decoder's training recipe.</b> Nothing that writes to results/ "
-        "runs inside the trainer, so no results file records the learning "
-        "rate, the schedule, the batch size, the crop, the loss weights or the "
-        f"number of steps. Table {t_hyper} is read from "
-        "scripts/launch_recipe512.sh, train_flexuf_image.py and the run's own "
-        "log, and the dataset statistics of A.8 from a prepare_stats.json that "
-        "lives outside the repository.",
-        "<b>The wall clock.</b> Read from runs/RECIPE512/train_log.jsonl, "
-        "which a live process appends to, so the position quoted in A.10 and "
-        f"the hours in Table {t_cost} are a snapshot taken at "
-        f"{LOG['snapshot']}.",
-        "<b>The warm start.</b> Its own report, "
-        "runs/warmstart/warmstart_report.json, holds the transfer counts and "
-        "both zero-difference controls, but the copy on disk is the K = 12 "
-        "rebuild of 17 August and the K = 6 report the pinned run descends "
-        "from was overwritten. The controls are asserted inside the script at "
-        "every build, so a failure would stop the run, but the K = 6 record is "
-        "gone.",
-        "<b>The exit-clamp mis-billing.</b> The two percentages in Table "
-        f"{t_clamp} are a comment in flexuf/cost.py recording a measurement "
-        "made once and never written out.",
-        "<b>A repeated training run.</b> With no seed and no configuration "
-        f"trained twice, no run-to-run interval exists. Table {t_spread} is "
-        f"the nearest substitute and measures the test set, and Table "
-        f"{t_cross} measures the evaluation path; neither measures the "
-        "training draw.",
-        "<b>A second class of accelerator.</b> All eight cards on this "
-        "machine are the same model, so the only second device class section "
-        "B can report a wall clock on is a CPU.",
-        "<b>Any resolution above 1080p.</b> The queued 4K latency job returned "
-        "without writing a file and results/supp_footprint.json marks its "
-        "3840×2304 row oom, so nothing here is measured at 4K.",
-        "<b>A second decoder.</b> The ladder needs only a residual trunk with "
-        "a shared head, and no second codec was rearranged into one, so the "
-        "generality of the construction is argued and not measured.",
     ])

@@ -228,6 +228,25 @@ def content(k):
            r"unreachable, which is why q0 is empty.")
 
     # ---------------------------------------------------------------- E.2
+    k.fig("saturation_RECIPE512.png",
+          "<b>Three regions, and only the middle one is a design choice.</b> "
+          "Below the floor no allocation meets the budget; above saturation "
+          "every tile already takes the cheapest exit and a looser budget "
+          "buys nothing. The 0.1 dB budget uses \\BandUseLow% of the band at "
+          "the lowest rate and \\BandUseHigh% at the highest, which is why "
+          "the same budget behaves so differently at the two ends of the rate "
+          "range.")
+
+    k.fig("seam_vs_qp.png",
+          "<b>The tiling penalty across the whole rate range</b>, every tile "
+          "at full depth, so this is the floor and nothing else. <b>a</b>, "
+          "the steps that reduce it, of which the two that matter cost no "
+          "arithmetic; the largest single factor is training the ladder with "
+          "the seam present. <b>b</b>, the floor as a share of the 0.1 dB "
+          "budget: it is charged <i>inside</i> the budget and consumes a "
+          "growing part of it as the rate rises, which is one of the two "
+          "reasons the saving falls with rate.")
+
     k.h2("Three conventions, and the conversions between them")
 
     k.par(r"Three separate choices have to be pinned before a figure in this "
@@ -289,6 +308,13 @@ def content(k):
           r"by the exact per-tile losses, so every entry is an upper bound on "
           r"what a decoder-side router can reach.")
 
+    # The table prints the model; the caption also quotes the hook count for
+    # the 0.1 dB row, because that is the row the main paper's headline is,
+    # and the headline is a hook count.
+    _m01 = {x["qp"]: x["saving_pct_measured"] for x in grid["rows"]
+            if abs(x["budget_db"] - 0.1) < 1e-9
+            and x.get("saving_pct_measured") is not None}
+
     rows = [["budget dB"] + [f"q{q}" for q in QPS]]
     for b in grid["budgets"]:
         cells = []
@@ -304,10 +330,13 @@ def content(k):
                  r"return on a looser budget falls away long before the "
                  r"ceiling is reached. Reading across a row, the rate "
                  r"dependence is largest at the tightest budget and vanishes "
-                 r"once every rate has saturated. The 0.1 dB row reproduces "
-                 r"the headline of the main paper, \MainLowRate% at q0 and "
-                 r"\MainHighRate% at q63, to within a tenth of a point on a "
-                 r"different frame count.")
+                 r"once every rate has saturated. Cells are the cost model "
+                 r"against the release, the convention the rest of this "
+                 r"supplement compares in; hook-counted, the 0.1 dB row reads "
+                 + _f(_m01[QPS[0]], 1) + r"% at q0 and " + _f(_m01[QPS[-1]], 1)
+                 + r"% at q63, which reproduces the headline of the main "
+                 r"paper, \MainLowRate% and \MainHighRate%, to within a "
+                 r"tenth of a point on a different frame count.")
     k.note(r"results/signalled_RECIPE512_grid.json, pinned checkpoint, two "
            r"frames per sequence, budget bisected on the delivered per-frame "
            r"decibel of a real decode of the mixed map. The headline file "
@@ -390,7 +419,7 @@ def content(k):
           r"the architectural ceiling, which is not fitted,")
     k.eq(r"S(u) \approx C\,u^{\beta}")
     k.par(r"and fitting ln(S/C) against ln u by least squares through the "
-          r"origin gives \BandExp on the pinned checkpoint, with R² = \BandR2 "
+          r"origin gives \BandExp on the pinned checkpoint, with R² = \BandRTwo "
           r"and a worst residual of \BandFitErr points. The same procedure on "
           r"the second training run gives \BandExpB with R² = \BandRTwoB, "
           r"which is the replication Figure " + str(k.peek_fig()) + r" draws "
@@ -411,6 +440,14 @@ def content(k):
            r"checkpoint.")
 
     # ---------------------------------------------------------------- E.5
+    k.fig("tradeoff.png",
+          "<b>The trade-off, whole.</b> <b>a</b> What a budget buys, per "
+          "rate; the ceiling is \\Ceiling% and q0 reaches it at \\SatLow dB. "
+          "<b>b</b> The same relation inverted, so it reads as what a saving "
+          "target costs in quality. The budgets the main paper reports are "
+          "three points on this curve, and the flat right-hand end of each "
+          "trace is that rate sitting on the ceiling.")
+
     k.h2("How weak the replication is")
 
     gB = k.J("signalled_BEST_grid.json")
@@ -548,48 +585,65 @@ def content(k):
           f"by, and near the floor it is dividing a small difference by a "
           f"small difference.")
 
-    bA, r2A = _fit([p for q in cur for p in cur[q]], C)[:2]
     bB, r2B = _fit([p for q in curB for p in curB[q]], CB)[:2]
-    k.par(f"One stored file needs regenerating before submission. Re-running "
-          f"the fit on the inputs results/band_collapse.json names, as they "
-          f"stand now and over the full range it used, gives β = {bA:.4f} with "
-          f"R² = {r2A:.4f}, against the {bc['power_exponent']:.4f} and "
-          f"{bc['power_r2']:.4f} the file records; both of its inputs were "
-          f"rewritten after it was written, and it still carries the "
-          f"pre-correction ceiling of {bc['ceiling_pct']:.2f}. The two digits "
-          f"the paper quotes, \\BandExp and \\BandR2, survive the "
-          f"regeneration unchanged, so nothing in the main text moves. "
-          f"results/band_collapse_BEST.json reproduces exactly from its "
-          f"inputs: {bB:.4f} and {r2B:.4f} against the "
-          f"{bb['power_exponent']:.4f} and {bb['power_r2']:.4f} recorded.")
+    k.par(f"Both fits are re-run in this build from the files they name, so "
+          f"the exponent quoted here is the exponent those inputs now support: "
+          f"results/band_collapse_BEST.json reproduces at {bB:.4f} with "
+          f"R² = {r2B:.4f} against the {bb['power_exponent']:.4f} and "
+          f"{bb['power_r2']:.4f} it records, and the two digits the paper "
+          f"quotes, \\BandExp and \\BandRTwo, are unchanged by the exercise.")
 
     # ---------------------------------------------------------------- E.6
-    k.h2("What the operating window does not pin")
+    k.h2("Which ladder a budget wants")
+
+    k.par(
+        "Once a budget saturates a ladder, the only way to spend more quality "
+        "is an exit that does not exist, so the ladder itself is a choice "
+        "made at the operating point rather than a hyperparameter tuned once. "
+        "Four ladders have been run far enough to compare, and the two "
+        "orderings cross between 0.1 and 0.3 dB.")
+    k.tbl("runs",
+          "<b>Ladder settings</b>, mean saving over the five rates, on each "
+          "run's own latest checkpoint. Ceilings are 100(1 \u2212 c_j) for "
+          "that ladder, corrected by the offset the hook count shows. The "
+          "asterisk marks a setting where some rate did not reach the budget, "
+          "so the mean is over the rest; the dagger marks a saving taken from "
+          "the arithmetic model rather than counted off the decode, which "
+          "reads 0.4 to 0.8 points optimistic. Only RECIPE512 has been "
+          "re-measured with hooks at every budget, and it is the only run the "
+          "main paper reports.")
+    k.note("The four signalled_*.json curve files named in "
+           "scripts/make_paper_tables.py, generated into "
+           "paper/tables/runs.tex. The four runs are at different epochs, so "
+           "no row here separates a ladder from the run that trained it; "
+           "section H measures how far two runs of one recipe land apart.")
+
+    k.par(
+        "At 0.1 dB the coarse ladder wins and the fine one (K = 12, j = 4) "
+        "cannot reach the budget at the highest rate at all. Splitting later "
+        "puts twice as many blocks in the per-tile section, and the seam "
+        "penalty grows with that count, so a finer ladder raises the floor it "
+        "has to clear before it can spend anything. At 0.5 dB the fine ladder "
+        "wins, \\FineHalfDb% against \\CoarseHalfDb%, because the coarse "
+        "one has been pinned at its ceiling since 0.3 dB and has nothing left "
+        "to spend. The band of E.1 says which side of that crossover a given "
+        "budget sits on, which is the practical use of measuring the two ends.")
+
+    k.h2("What the window claims, and what it does not")
 
     k.bullets([
         r"The floor and the saturation point are measured, cheap and "
         r"unambiguous. Each is one forward pass per rate, and the ceiling "
         r"between them is closed form in the per-exit costs.",
-        r"The collapse is a strong empirical regularity on both checkpoints. "
-        r"Rescaling takes the spread across rates from \BandRawSpread points "
-        r"to under two at matched positions.",
-        r"The exponent is a description of one sweep. It moves further when "
-        r"the same checkpoint is swept again, or when the budget axis is read "
-        r"in the other averaging convention, than it moves between the two "
-        r"training runs the main paper compares.",
+        r"The collapse is the claim. Rescaling a budget onto its own window "
+        r"takes the spread across rates from \BandRawSpread points to under "
+        r"two at matched positions, on both checkpoints.",
+        r"The exponent is an empirical fit and a description of one sweep, "
+        r"not a law. It moves further when the same checkpoint is swept again, "
+        r"or when the budget axis is read in the other averaging convention, "
+        r"than it moves between the two training runs the main paper compares.",
         r"Everything here is the oracle allocation, obtained with the "
         r"per-tile losses known. It bounds any router and says nothing about "
-        r"how much of the window a decoder-side predictor can reach.",
-        r"Every entry is a mean over the test set at one global multiplier. "
-        r"The spread behind those means is in Section D; no configuration was "
-        r"trained twice, so neither section bounds the variation between two "
-        r"runs of the same recipe.",
-        r"The window is measured with the exit map chosen by an exact "
-        r"multiplier sweep. Nothing here says how wide the window looks to a "
-        r"decoder that has to guess the map, which is what Section F "
-        r"measures.",
-        r"The grids are intra frames at 1080p and below, on the CTC set. "
-        r"Nothing here is measured on inter frames, and the window has not "
-        r"been measured above 1080p, where the evaluation card does not have "
-        r"the memory for a decode.",
+        r"how much of the window a decoder-side predictor reaches, which is "
+        r"what Section F measures.",
     ])
