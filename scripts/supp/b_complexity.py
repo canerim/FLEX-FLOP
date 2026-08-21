@@ -339,7 +339,7 @@ def content(k):
           r"activation folds 4C back to C for free, the closing 1×1 is C→C "
           r"rather than 4C→C and the block is")
 
-    k.eq(r"M_{\mathrm{block}}(C) = C^2 + 9C + C^2 + 4C^2 + C^2 = 7C^2 + 9C")
+    k.eq(r"M_{\mathrm{block}}(C) = C^2 + 9C + C^2 + 4C^2 + C^2 = 7C^2 + 9C,")
 
     k.par(r"which is " + _n(P["blk_macpx"]) + r" MAC/px at C = " + f"{C}" +
           r" and " + _n(7 * ma["ch_preshuffle"] ** 2 + 9 * ma["ch_preshuffle"]) +
@@ -419,13 +419,13 @@ def content(k):
           r"of exit k in units of one released decode is")
 
     k.eq(r"c_k = s_{\mathrm{up}} + s_{\mathrm{head}} + r + "
-         r"s_{\mathrm{trunk}}\frac{(\max(k,j)+1)b}{N} + a_{\max(k,j)}")
+         r"s_{\mathrm{trunk}}\frac{(\max(k,j)+1)b}{N} + a_{\max(k,j)},")
 
     k.par(r"and the frame-level cost of an exit map a over T tiles amortises "
           r"the shared part over the frame rather than over the tile,")
 
     k.eq(r"C(a) = s_{\mathrm{up}} + s_{\mathrm{trunk}}\frac{jb}{N} + "
-         r"s_{\mathrm{head}} + r + \frac{1}{T}\sum_{i=1}^{T} u_{a(i)}")
+         r"s_{\mathrm{head}} + r + \frac{1}{T}\sum_{i=1}^{T} u_{a(i)},")
 
     k.par(r"with u<sub>k</sub> the per-tile suffix, meaning the blocks after "
           r"the split plus the adapter. Only the last term depends on the map. "

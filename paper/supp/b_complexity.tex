@@ -85,7 +85,7 @@ That last figure is the premise of the whole method, so it is worth stating sepa
 The two DepthConvBlock widths obey the same closed form. Writing the block as a 1$\times$1 projection, a 3$\times$3 depthwise, a second 1$\times$1 and a feed-forward pair whose first 1$\times$1 expands to 4C and whose gated activation folds 4C back to C for free, the closing 1$\times$1 is C$\rightarrow$C rather than 4C$\rightarrow$C and the block is
 
 \begin{equation}
-M_{\mathrm{block}}(C) = C^2 + 9C + C^2 + 4C^2 + C^2 = 7C^2 + 9C
+M_{\mathrm{block}}(C) = C^2 + 9C + C^2 + 4C^2 + C^2 = 7C^2 + 9C,
 \end{equation}
 
 which is 1,035,648 MAC/px at C = 384 and 259,776 at C = 192, both matching Table 2 row by row. The arithmetic model in flexuf/cost.py, which runs inside the allocation's argmin and nowhere else, writes the block as 8C$^2$ + 9C = 1,183,104 instead, so it prices a block 14.24\% high. Section A.6 measures what that is worth against a hook count.
@@ -119,13 +119,13 @@ The ladder assigns the FFN adapter to any exit skipping four or more blocks and 
 Write s$_{up}$, s$_{trunk}$ and s$_{head}$ for the shares of a released decode taken by the upsample, the trunk and the head; a$_{k}$ for the adapter at exit k; and r for the seam-repair pass. A tile assigned an exit shallower than j still runs group j, because the decoder clamps the map, so the cost of exit k in units of one released decode is
 
 \begin{equation}
-c_k = s_{\mathrm{up}} + s_{\mathrm{head}} + r + s_{\mathrm{trunk}}\frac{(\max(k,j)+1)b}{N} + a_{\max(k,j)}
+c_k = s_{\mathrm{up}} + s_{\mathrm{head}} + r + s_{\mathrm{trunk}}\frac{(\max(k,j)+1)b}{N} + a_{\max(k,j)},
 \end{equation}
 
 and the frame-level cost of an exit map a over T tiles amortises the shared part over the frame rather than over the tile,
 
 \begin{equation}
-C(a) = s_{\mathrm{up}} + s_{\mathrm{trunk}}\frac{jb}{N} + s_{\mathrm{head}} + r + \frac{1}{T}\sum_{i=1}^{T} u_{a(i)}
+C(a) = s_{\mathrm{up}} + s_{\mathrm{trunk}}\frac{jb}{N} + s_{\mathrm{head}} + r + \frac{1}{T}\sum_{i=1}^{T} u_{a(i)},
 \end{equation}
 
 with u$_{k}$ the per-tile suffix, meaning the blocks after the split plus the adapter. Only the last term depends on the map. That is the structural reason a ladder over a decoder of this shape has a ceiling well below 100\%: at the split depth the upsample, the first jb = 4 blocks, the head and the repair pass are already 41.5\% of a released decode, and they run whatever the map says.

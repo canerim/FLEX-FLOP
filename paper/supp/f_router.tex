@@ -9,7 +9,7 @@ An exit map assigns one exit index to every tile of a frame, and this work produ
 Write D(t,k) for the mean squared error of tile t decoded at exit k and c$_{k}$ for the cost of exit k in units of one released decode. At a price \lambda on compute, the Lagrangian oracle gives each tile the exit that minimises
 
 \begin{equation}
-\ell(t,k) \;=\; D(t,k) \,+\, \lambda\, c_k, \qquad k^{*}(t) \;=\; \mathrm{arg\,min}_{\,k \geq j}\ \ell(t,k)
+\ell(t,k) \;=\; D(t,k) \,+\, \lambda\, c_k, \qquad k^{*}(t) \;=\; \mathrm{arg\,min}_{\,k \geq j}\ \ell(t,k).
 \end{equation}
 
 The split depth j is the number of trunk groups every tile runs before any tile may leave, so exits below j do not exist and the minimisation starts there. Throughout this section, \emph{agreement} means the fraction of tiles on which a predictor picks the same exit as this oracle at the same \lambda. It is the quantity the head is trained on. Part of what F.4 reports is that it is not the quantity that decides which allocation is cheaper.
@@ -102,13 +102,13 @@ The entropy model produces one number per tile before the trunk runs, at no cost
 \textbf{The statistic.} Sum the entropy coder's estimated bits r$_{i}$ over the latent positions i falling inside tile t, and divide by the mean over the N tiles of that frame. Normalising per frame rather than globally is deliberate: the absolute rate level is a property of the frame, and what decides a tile is how it compares with the rest of its own frame.
 
 \begin{equation}
-b(t) \;=\; N\, \frac{\sum_{i \in t} r_i}{\sum_{i} r_i}
+b(t) \;=\; N\, \frac{\sum_{i \in t} r_i}{\sum_{i} r_i}.
 \end{equation}
 
 \textbf{The surrogate.} Assume every tile has the same shape of decay across the ladder, up to a scale that depends only on b(t).
 
 \begin{equation}
-\log D(t,k) \;\approx\; \alpha \log b(t) \,+\, c \,+\, \log \varphi_k
+\log D(t,k) \;\approx\; \alpha \log b(t) \,+\, c \,+\, \log \varphi_k.
 \end{equation}
 
 $\varphi$ has one entry per reachable exit and says what that exit costs on an average tile; \alpha is an exponent fitted rather than assumed, which is what lets the rule find the direction of the relation instead of asserting one. The fit is offline and leave-one-sequence-out, so no sequence contributes to the profile that routes it, and its whole output is six numbers per rate.
@@ -116,7 +116,7 @@ $\varphi$ has one entry per reachable exit and says what that exit costs on an a
 \textbf{The decision.} Run the oracle's own Lagrangian on the surrogate table in place of the true one, and bisect \lambda against the budget as configuration A does.
 
 \begin{equation}
-\hat{k}(t) \;=\; \mathrm{arg\,min}_{\,k \geq j}\ \left[\, e^{c}\, b(t)^{\alpha}\, \varphi_k \,+\, \lambda\, c_k \,\right]
+\hat{k}(t) \;=\; \mathrm{arg\,min}_{\,k \geq j}\ \left[\, e^{c}\, b(t)^{\alpha}\, \varphi_k \,+\, \lambda\, c_k \,\right].
 \end{equation}
 
 \begin{table}[t]

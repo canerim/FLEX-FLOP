@@ -785,7 +785,7 @@ def content(k):
     # ---------------------------------------------------------------- A.12
     k.eq(r"\mathcal{L} = \mathcal{L}_{\mathrm{RD}} + w_{a}\,"
          r"\mathcal{L}_{\mathrm{anchor}} + w_{d}\,"
-         r"\mathcal{L}_{\mathrm{distill}}")
+         r"\mathcal{L}_{\mathrm{distill}}.")
 
     k.par(
         "The distillation term is written in feature space and not in pixels "

@@ -217,7 +217,7 @@ The pinned checkpoint is the first epoch boundary of a run whose launcher was gi
 {\small Floors from results/signalled\_RECIPE512\_ctc53.json (runs/RECIPE512/ckpt\_PAPER.pth.tar, epoch 0) and results/signalled\_RECIPE512\_e1.json (runs/RECIPE512/ckpt\_PIN\_e1.pth.tar, epoch 1), both 53 sequences at the 0.1 dB budget.}
 
 \begin{equation}
-\mathcal{L} = \mathcal{L}_{\mathrm{RD}} + w_{a}\,\mathcal{L}_{\mathrm{anchor}} + w_{d}\,\mathcal{L}_{\mathrm{distill}}
+\mathcal{L} = \mathcal{L}_{\mathrm{RD}} + w_{a}\,\mathcal{L}_{\mathrm{anchor}} + w_{d}\,\mathcal{L}_{\mathrm{distill}}.
 \end{equation}
 
 The distillation term is written in feature space and not in pixels because the head is a fixed map from feature to RGB, so matching the deeper feature is the stronger constraint, with 384 dense channels of target instead of three. Each exit imitates its neighbour, exit k following exit k+1, rather than the deepest exit.

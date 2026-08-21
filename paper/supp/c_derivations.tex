@@ -47,7 +47,7 @@ P14 & rank-1 uses hull exits & A.8 & raterank\_RECIPE512\_b01 & PAPER \\
 \textbf{Compute.} Compute is counted in multiply-accumulate operations and divided by those of one released full-frame decode, \IntraGmac\,GMAC at 1080p, so c = 1 is one released decode and a saving of S\% means the frame was decoded for (1 - S/100) of one. Every operator runs at a fixed multiple of the latent grid, which makes the cost of an exit resolution-independent. One tile at exit k costs
 
 \begin{equation}
-c_k \;=\; s_{\mathrm{up}} \;+\; s_{\mathrm{trunk}}\,\frac{(k+1)\,b}{N_{\mathrm{blk}}} \;+\; s_{\mathrm{head}} \;+\; a_k \;+\; r
+c_k \;=\; s_{\mathrm{up}} \;+\; s_{\mathrm{trunk}}\,\frac{(k+1)\,b}{N_{\mathrm{blk}}} \;+\; s_{\mathrm{head}} \;+\; a_k \;+\; r,
 \end{equation}
 
 with s$_{up}$ the opening upsample, s$_{trunk}$ the trunk spread over N$_{blk}$ = 12 blocks of which exit k runs (k+1)b, s$_{head}$ the head, a$_{k}$ the adapter exit k wears and r the full-frame deblocking filter; section B measures all five. Only the trunk term depends on k, which is why a ceiling exists: however shallow the ladder gets, the stem, the head and the filter are still paid.
@@ -75,7 +75,7 @@ The gaps between those costs are what the allocation trades in, and they are une
 \textbf{Assignments.} An assignment is a map a from tiles to exits. There are (K-j)$^{N}$ of them, 4$^{40}$ at 1080p, so they will not be enumerated. The frame's compute and distortion are
 
 \begin{equation}
-C(a) \;=\; \frac{1}{N}\sum_{t=1}^{N} c_{a(t)}, \qquad D(a) \;=\; \frac{1}{N}\sum_{t=1}^{N} D_{t,a(t)}
+C(a) \;=\; \frac{1}{N}\sum_{t=1}^{N} c_{a(t)}, \qquad D(a) \;=\; \frac{1}{N}\sum_{t=1}^{N} D_{t,a(t)}.
 \end{equation}
 
 Everything after this rests on four assumptions, none of them a mathematical necessity. Each result names the ones it uses.
@@ -96,13 +96,13 @@ The second half of (A2) is checked rather than asserted, over 60 allocations of 
 The encoder's problem is to spend as little compute as possible while staying inside a distortion budget:
 
 \begin{equation}
-\min_{a}\; C(a) \quad \mathrm{subject\ to} \quad D(a) \;\leq\; D_{\mathrm{budget}}
+\min_{a}\; C(a) \quad \mathrm{subject\ to} \quad D(a) \;\leq\; D_{\mathrm{budget}}.
 \end{equation}
 
 Constraint (0) couples the tiles: whether a tile can afford to leave early depends on how much of the budget the other 39 have used. The standard way out is to buy the constraint off with a price \lambda $\geq$ 0 charged per unit of compute:
 
 \begin{equation}
-L(a,\lambda) \;=\; D(a) + \lambda\,C(a) \;=\; \frac{1}{N}\sum_{t=1}^{N}\left[\,D_{t,a(t)} + \lambda\,c_{a(t)}\,\right]
+L(a,\lambda) \;=\; D(a) + \lambda\,C(a) \;=\; \frac{1}{N}\sum_{t=1}^{N}\left[\,D_{t,a(t)} + \lambda\,c_{a(t)}\,\right].
 \end{equation}
 
 \lambda is an exchange rate, in squared error per unit of relative compute, so \lambda c$_{k}$ converts the compute an exit uses into the squared error that compute is deemed to be worth. Below it runs from about 2$\times$10$^{-7}$ to about 1$\times$10$^{-4}$, against squared errors of order 1$\times$10$^{-4}$ on a 0 to 1 scale, and what matters is where it sits relative to the differences between exits: at zero every tile takes its own lowest-error exit, and past a large enough price every tile has dropped as far as the ladder allows.
@@ -112,7 +112,7 @@ L(a,\lambda) \;=\; D(a) + \lambda\,C(a) \;=\; \frac{1}{N}\sum_{t=1}^{N}\left[\,D
 For every \lambda $\geq$ 0, an assignment minimises L(a,\lambda) over all assignments if and only if it minimises the bracket tile by tile:
 
 \begin{equation}
-k^{\star}_t(\lambda) \;\in\; \arg\min_{k\,\geq\,j}\;\left[\,D_{t,k} + \lambda\,c_k\,\right]
+k^{\star}_t(\lambda) \;\in\; \mathrm{arg\,min}_{k \geq j}\;\left[\,D_{t,k} + \lambda\,c_k\,\right].
 \end{equation}
 
 \emph{Assumes} (A1) and (A2).
@@ -155,7 +155,7 @@ tile & bits & D(2) & D(3) & D(4) & D(5) & exits as $\lambda$ rises \\
 The pairs (C(a), D(a)) an allocation can produce form a set whose shape decides both what a sweep can reach and what adaptivity is worth. There are two versions of it. Write
 
 \begin{equation}
-\bar D_k \;=\; \frac{1}{N}\sum_{t=1}^{N} D_{t,k}
+\bar D_k \;=\; \frac{1}{N}\sum_{t=1}^{N} D_{t,k},
 \end{equation}
 
 for the exit mean at k, the one place tiles are averaged before anything is chosen.
@@ -177,7 +177,7 @@ The four uniform-depth decodes are the vertices of that hull, and they are every
 The convex hull of the pairs achievable by per-tile assignment is the Minkowski average of the N per-tile hulls,
 
 \begin{equation}
-\mathcal{A}_{\mathrm{tile}} \;=\; \frac{1}{N}\bigoplus_{t=1}^{N}\mathrm{conv}\{(c_k, D_{t,k}) : k \geq j\}
+\mathcal{A}_{\mathrm{tile}} \;=\; \frac{1}{N}\bigoplus_{t=1}^{N}\mathrm{conv}\{(c_k, D_{t,k}) : k \geq j\}.
 \end{equation}
 
 \emph{Assumes} (A1) and (A2).
@@ -232,7 +232,7 @@ budget dB & by sweep & exact Pareto & gap \\
 If at most m tiles switch exit at any single breakpoint of the sweep, and each switch moves a tile by one rung, then consecutive reachable savings differ by at most
 
 \begin{equation}
-\mathrm{spacing} \;\leq\; \frac{100\;m\,\max_k (c_{k+1}-c_k)}{N}\;\%
+\mathrm{spacing} \;\leq\; \frac{100\;m\,\max_k (c_{k+1}-c_k)}{N}\;\%,
 \end{equation}
 
 and the loss from convexity cannot exceed the largest spacing. \emph{Assumes} (A1), (A4) and Proposition 2.
@@ -262,7 +262,7 @@ Because D$_{t,k}$ is measured on the deployed tiled path, D$_{min}$ is not zero:
 Define
 
 \begin{equation}
-\lambda_{\mathrm{sat}} \;=\; \max_{t}\;\max_{k>j}\;\frac{D_{t,j}-D_{t,k}}{c_k-c_j}
+\lambda_{\mathrm{sat}} \;=\; \max_{t}\;\max_{k>j}\;\frac{D_{t,j}-D_{t,k}}{c_k-c_j},
 \end{equation}
 
 Then for every \lambda > \lambda$_{sat}$ the oracle assigns exit j to every tile, the frame's cost is exactly c$_{j}$, and no larger price changes anything. \emph{Assumes} (A1), (A4) and Proposition 1.
@@ -276,7 +276,7 @@ Then for every \lambda > \lambda$_{sat}$ the oracle assigns exit j to every tile
 The largest saving any allocation can reach is
 
 \begin{equation}
-S_{\max} \;=\; 100\,(1-c_j)\,\%
+S_{\max} \;=\; 100\,(1-c_j)\,\%.
 \end{equation}
 
 \emph{Assumes} (A1), (A4) and Proposition 8. \emph{Proof.} C(a) is a mean of costs each at least c$_{j}$, j being the shallowest usable exit, so C(a) $\geq$ c$_{j}$ with equality only for the constant map, which Proposition 8 shows is attained.
@@ -290,7 +290,7 @@ S_{\max} \;=\; 100\,(1-c_j)\,\%
 What content awareness is worth can be answered without building a predictor. Compare the best per-tile allocation with the best content-blind one at the same price:
 
 \begin{equation}
-J_{\mathrm{ad}}(\lambda)=\frac{1}{N}\sum_{t}\min_{k}\left[D_{t,k}+\lambda c_k\right], \quad J_{\mathrm{fix}}(\lambda)=\min_{k}\left[\bar D_k+\lambda c_k\right]
+J_{\mathrm{ad}}(\lambda)=\frac{1}{N}\sum_{t}\min_{k}\left[D_{t,k}+\lambda c_k\right], \quad J_{\mathrm{fix}}(\lambda)=\min_{k}\left[\bar D_k+\lambda c_k\right].
 \end{equation}
 
 J$_{ad}$ takes the minimum inside the average and J$_{fix}$ takes it outside. By Propositions 1 and 3 the first is the best the per-tile family attains at price \lambda and the second the best the fixed-proportion family attains.
@@ -331,7 +331,7 @@ q63 & 8.05 & 15.62 & 7.57 & 0.1367 & 0.1413 \\
 Theorem 4 gives D convex in C. The frontier is almost never plotted in those units: it is plotted as decibels against percentage saving, where convexity is a different statement, the logarithm being concave and increasing and so preserving neither convexity nor concavity. With S = 1 - C/c$_{K-1}$,
 
 \begin{equation}
-\mathrm{dB}(S) \;=\; \frac{10}{\ln 10}\,\ln D(C), \qquad C = (1-S)\,c_{K-1}
+\mathrm{dB}(S) \;=\; \frac{10}{\ln 10}\,\ln D(C), \qquad C = (1-S)\,c_{K-1}.
 \end{equation}
 
 \paragraph{Proposition 11 (plotted convexity is log-convexity)}
@@ -339,7 +339,7 @@ Theorem 4 gives D convex in C. The frontier is almost never plotted in those uni
 Let D be twice differentiable along the frontier. Then dB(S) is convex if and only if D is log-convex in C:
 
 \begin{equation}
-D\,D^{\prime\prime} \;\geq\; (D^{\prime})^{2} \qquad\Longleftrightarrow\qquad \frac{d}{dC}\left(\frac{1}{\lambda}\right) \;\geq\; \frac{1}{D}
+D\,D^{\prime\prime} \;\geq\; (D^{\prime})^{2} \qquad\Longleftrightarrow\qquad \frac{d}{dC}\left(\frac{1}{\lambda}\right) \;\geq\; \frac{1}{D}.
 \end{equation}
 
 \emph{Assumes} twice differentiability along the frontier, and Proposition 5 for the second form.
@@ -374,13 +374,13 @@ Letting a predictor decide most cases and handing the hardest ones to something 
 The decoder cannot run the argmin of Proposition 1, D$_{t,k}$ being an error against a source it never receives. A predictor can guess it. Writing p$_{t,k}$ for a head's probability that tile t belongs at exit k, its rule is
 
 \begin{equation}
-\hat k_t \;=\; \arg\max_k\left[\log p_{t,k} - \beta\,c_k\right] \;=\; \arg\min_k\left[\frac{-\log p_{t,k}}{\kappa} + \lambda\,c_k\right]
+\hat k_t \;=\; \mathrm{arg\,max}_{k \geq j}\left[\log p_{t,k} - \beta\,c_k\right] \;=\; \mathrm{arg\,min}_{k \geq j}\left[\frac{-\log p_{t,k}}{\kappa} + \lambda\,c_k\right].
 \end{equation}
 
 The second form of (0) is the same rule with \beta = \lambda \kappa, \kappa being a fixed calibration turning nats into squared error. Written that way it says that a router is the oracle of (0) with a surrogate in place of D$_{t,k}$, and that one price governs both. Define the per-tile regret at a fixed price:
 
 \begin{equation}
-r_t(\lambda) \;=\; \left[D_{t,\hat k_t} + \lambda c_{\hat k_t}\right] - \left[D_{t,k^{\star}_t} + \lambda c_{k^{\star}_t}\right] \;\geq\; 0
+r_t(\lambda) \;=\; \left[D_{t,\hat k_t} + \lambda c_{\hat k_t}\right] - \left[D_{t,k^{\star}_t} + \lambda c_{k^{\star}_t}\right] \;\geq\; 0.
 \end{equation}
 
 Non-negativity is immediate from (0). The regret is what the frame's Lagrangian loses on tile t by trusting the prediction, and by Proposition 1 those losses add, so signalling the exits of a subset S removes exactly ∑$_{t∈ S}$ r$_{t}$ from the objective and leaves the rest to the head.
@@ -390,7 +390,7 @@ Non-negativity is immediate from (0). The regret is what the frame's Lagrangian 
 Fix \lambda and let r$_{(1)}$ $\geq$ r$_{(2)}$ $\geq$ ... $\geq$ r$_{(N)}$ be the regrets in decreasing order with total R. For any subset S of size s, the fraction of the total regret that signalling S removes is at most
 
 \begin{equation}
-L(\rho) \;=\; \frac{1}{R}\sum_{i=1}^{\lceil \rho N\rceil} r_{(i)}, \qquad \rho = s/N
+L(\rho) \;=\; \frac{1}{R}\sum_{i=1}^{\lceil \rho N\rceil} r_{(i)}, \qquad \rho = s/N,
 \end{equation}
 
 with equality if and only if S is a set of s largest regrets. L is the Lorenz curve of the regret distribution: non-decreasing, concave, running from 0 to 1, and lying above the diagonal by an amount the Gini coefficient summarises. \emph{Assumes} (A1), (A2) and a fixed \lambda.
@@ -425,7 +425,7 @@ The signal is an entropy-coded mask over tiles plus an index per override, so it
 The decoder holds, before the trunk runs, the bits the entropy coder spent on each tile's latents; write b$_{t}$ for that count over the frame's mean. Deriving the rule from a model rather than presenting it as a heuristic says when it must work and how it fails. The model is separability in log space: one scalar difficulty per tile, and one ladder profile applying to every tile in proportion.
 
 \begin{equation}
-\log D_{t,k} \;\approx\; u_t + \log\varphi_k, \qquad u_t \;=\; \alpha\log b_t + c
+\log D_{t,k} \;\approx\; u_t + \log\varphi_k, \qquad u_t \;=\; \alpha\log b_t + c.
 \end{equation}
 
 Equivalently D$_{t,k}$ = g$_{t}$ $\varphi$$_{k}$ with g$_{t}$ = exp(u$_{t}$) > 0. The profile $\varphi$ is K-j numbers fitted once per rate and \alpha and c are two more, all three fitted leave-one-sequence-out. Nothing is learned per frame and nothing is transmitted, which is why the rule costs the decoder zero.
@@ -435,7 +435,7 @@ Equivalently D$_{t,k}$ = g$_{t}$ $\varphi$$_{k}$ with g$_{t}$ = exp(u$_{t}$) > 0
 If D$_{t,k}$ = g$_{t}$ $\varphi$$_{k}$ with g$_{t}$ > 0 then
 
 \begin{equation}
-\arg\min_k\left[g_t\varphi_k + \lambda c_k\right] \;=\; \arg\min_k\left[\varphi_k + \frac{\lambda}{g_t}c_k\right]
+\mathrm{arg\,min}_{k \geq j}\left[g_t\varphi_k + \lambda c_k\right] \;=\; \mathrm{arg\,min}_{k \geq j}\left[\varphi_k + \frac{\lambda}{g_t}c_k\right],
 \end{equation}
 
 so a tile's exit depends on the tile only through the scalar \lambda/g$_{t}$, and by Proposition 2 the chosen exit is non-increasing in it. Sorting tiles by g$_{t}$ and cutting the sorted list at K-j-1 thresholds therefore reproduces the oracle exactly. \emph{Assumes} exact rank-1 structure, and Proposition 2.

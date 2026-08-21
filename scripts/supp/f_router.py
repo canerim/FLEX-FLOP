@@ -105,7 +105,7 @@ def content(k):
         "decode. At a price \\lambda on compute, the Lagrangian oracle gives "
         "each tile the exit that minimises")
     k.eq(r"\ell(t,k) \;=\; D(t,k) \,+\, \lambda\, c_k, \qquad "
-         r"k^{*}(t) \;=\; \mathrm{arg\,min}_{\,k \geq j}\ \ell(t,k)")
+         r"k^{*}(t) \;=\; \mathrm{arg\,min}_{\,k \geq j}\ \ell(t,k).")
     k.par(
         "The split depth j is the number of trunk groups every tile runs before "
         "any tile may leave, so exits below j do not exist and the minimisation "
@@ -363,12 +363,12 @@ def content(k):
         "frame rather than globally is deliberate: the absolute rate level is a "
         "property of the frame, and what decides a tile is how it compares with "
         "the rest of its own frame.")
-    k.eq(r"b(t) \;=\; N\, \frac{\sum_{i \in t} r_i}{\sum_{i} r_i}")
+    k.eq(r"b(t) \;=\; N\, \frac{\sum_{i \in t} r_i}{\sum_{i} r_i}.")
     k.par(
         "<b>The surrogate.</b> Assume every tile has the same shape of decay "
         "across the ladder, up to a scale that depends only on b(t).")
     k.eq(r"\log D(t,k) \;\approx\; \alpha \log b(t) \,+\, c \,+\, "
-         r"\log \varphi_k")
+         r"\log \varphi_k.")
     k.par(
         "φ has one entry per reachable exit and says what that exit "
         "costs on an average tile; \\alpha is an exponent fitted rather than "
@@ -382,7 +382,7 @@ def content(k):
         "as configuration A does.")
     k.eq(r"\hat{k}(t) \;=\; \mathrm{arg\,min}_{\,k \geq j}\ "
          r"\left[\, e^{c}\, b(t)^{\alpha}\, \varphi_k \,+\, \lambda\, c_k "
-         r"\,\right]")
+         r"\,\right].")
 
     box = [
         ["<b>the decoder, once per frame</b>"],

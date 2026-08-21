@@ -151,7 +151,7 @@ def content(k):
 
     e_c = k.eq(r"c_k \;=\; s_{\mathrm{up}} \;+\; s_{\mathrm{trunk}}\,"
                r"\frac{(k+1)\,b}{N_{\mathrm{blk}}} \;+\; s_{\mathrm{head}} "
-               r"\;+\; a_k \;+\; r")
+               r"\;+\; a_k \;+\; r,")
 
     k.par(
         f"with s<sub>up</sub> the opening upsample, s<sub>trunk</sub> the "
@@ -206,7 +206,7 @@ def content(k):
         f"{nex - jj}<super>{ntile}</super> at 1080p, so they will not be "
         f"enumerated. The frame's compute and distortion are")
     e_CD = k.eq(r"C(a) \;=\; \frac{1}{N}\sum_{t=1}^{N} c_{a(t)}, \qquad "
-                r"D(a) \;=\; \frac{1}{N}\sum_{t=1}^{N} D_{t,a(t)}")
+                r"D(a) \;=\; \frac{1}{N}\sum_{t=1}^{N} D_{t,a(t)}.")
 
     k.par(
         "Everything after this rests on four assumptions, none of them a "
@@ -256,7 +256,7 @@ def content(k):
         "The encoder's problem is to spend as little compute as possible while "
         "staying inside a distortion budget:")
     e_con = k.eq(r"\min_{a}\; C(a) \quad \mathrm{subject\ to} \quad "
-                 r"D(a) \;\leq\; D_{\mathrm{budget}}")
+                 r"D(a) \;\leq\; D_{\mathrm{budget}}.")
 
     k.par(
         f"Constraint ({e_con}) couples the tiles: whether a tile can afford to "
@@ -265,7 +265,7 @@ def content(k):
         f"price \\lambda ≥ 0 charged per unit of compute:")
     e_L = k.eq(r"L(a,\lambda) \;=\; D(a) + \lambda\,C(a) \;=\; "
                r"\frac{1}{N}\sum_{t=1}^{N}\left[\,D_{t,a(t)} + "
-               r"\lambda\,c_{a(t)}\,\right]")
+               r"\lambda\,c_{a(t)}\,\right].")
 
     k.par(
         "\\lambda is an exchange rate, in squared error per unit of relative "
@@ -282,8 +282,8 @@ def content(k):
     k.par(
         "For every \\lambda ≥ 0, an assignment minimises L(a,\\lambda) over "
         "all assignments if and only if it minimises the bracket tile by tile:")
-    e_argmin = k.eq(r"k^{\star}_t(\lambda) \;\in\; \arg\min_{k\,\geq\,j}\;"
-                    r"\left[\,D_{t,k} + \lambda\,c_k\,\right]")
+    e_argmin = k.eq(r"k^{\star}_t(\lambda) \;\in\; \mathrm{arg\,min}_{k \geq j}\;"
+                    r"\left[\,D_{t,k} + \lambda\,c_k\,\right].")
     k.par("<i>Assumes</i> (A1) and (A2).")
     k.par(
         "<i>Proof.</i> Write f<sub>t</sub>(k) = D<sub>t,k</sub> + \\lambda "
@@ -402,7 +402,7 @@ def content(k):
         "The pairs (C(a), D(a)) an allocation can produce form a set whose "
         "shape decides both what a sweep can reach and what adaptivity is "
         "worth. There are two versions of it. Write")
-    e_Dbar = k.eq(r"\bar D_k \;=\; \frac{1}{N}\sum_{t=1}^{N} D_{t,k}")
+    e_Dbar = k.eq(r"\bar D_k \;=\; \frac{1}{N}\sum_{t=1}^{N} D_{t,k},")
     k.par(
         "for the exit mean at k, the one place tiles are averaged before "
         "anything is chosen.")
@@ -443,7 +443,7 @@ def content(k):
         "Minkowski average of the N per-tile hulls,")
     e_mink = k.eq(r"\mathcal{A}_{\mathrm{tile}} \;=\; \frac{1}{N}"
                   r"\bigoplus_{t=1}^{N}\mathrm{conv}\{(c_k, D_{t,k}) : "
-                  r"k \geq j\}")
+                  r"k \geq j\}.")
     k.par("<i>Assumes</i> (A1) and (A2).")
     k.par(
         "<i>Proof.</i> By (A1) and (A2) an achievable pair is the average of "
@@ -540,7 +540,7 @@ def content(k):
         "and each switch moves a tile by one rung, then consecutive reachable "
         "savings differ by at most")
     e_lat = k.eq(r"\mathrm{spacing} \;\leq\; \frac{100\;m\,"
-                 r"\max_k (c_{k+1}-c_k)}{N}\;\%")
+                 r"\max_k (c_{k+1}-c_k)}{N}\;\%,")
     k.par(
         "and the loss from convexity cannot exceed the largest spacing. "
         "<i>Assumes</i> (A1), (A4) and Proposition 2.")
@@ -609,7 +609,7 @@ def content(k):
     k.h3("Proposition 8 (saturation)")
     k.par("Define")
     e_sat = k.eq(r"\lambda_{\mathrm{sat}} \;=\; \max_{t}\;\max_{k>j}\;"
-                 r"\frac{D_{t,j}-D_{t,k}}{c_k-c_j}")
+                 r"\frac{D_{t,j}-D_{t,k}}{c_k-c_j},")
     k.par(
         "Then for every \\lambda > \\lambda<sub>sat</sub> the oracle assigns "
         "exit j to every tile, the frame's cost is exactly c<sub>j</sub>, and "
@@ -636,7 +636,7 @@ def content(k):
 
     k.h3("Proposition 9 (the ceiling)")
     k.par("The largest saving any allocation can reach is")
-    e_ceil = k.eq(r"S_{\max} \;=\; 100\,(1-c_j)\,\%")
+    e_ceil = k.eq(r"S_{\max} \;=\; 100\,(1-c_j)\,\%.")
     k.par(
         "<i>Assumes</i> (A1), (A4) and Proposition 8. <i>Proof.</i> C(a) is a "
         "mean of costs each at least c<sub>j</sub>, j being the shallowest "
@@ -669,7 +669,7 @@ def content(k):
     e_J = k.eq(r"J_{\mathrm{ad}}(\lambda)=\frac{1}{N}\sum_{t}\min_{k}"
                r"\left[D_{t,k}+\lambda c_k\right], \quad "
                r"J_{\mathrm{fix}}(\lambda)=\min_{k}\left[\bar D_k+"
-               r"\lambda c_k\right]")
+               r"\lambda c_k\right].")
 
     k.par(
         "J<sub>ad</sub> takes the minimum inside the average and "
@@ -777,7 +777,7 @@ def content(k):
         "and increasing and so preserving neither convexity nor concavity. "
         "With S = 1 - C/c<sub>K-1</sub>,")
     e_db = k.eq(r"\mathrm{dB}(S) \;=\; \frac{10}{\ln 10}\,\ln D(C), "
-                r"\qquad C = (1-S)\,c_{K-1}")
+                r"\qquad C = (1-S)\,c_{K-1}.")
 
     k.h3("Proposition 11 (plotted convexity is log-convexity)")
     k.par(
@@ -786,7 +786,7 @@ def content(k):
     e_lcx = k.eq(r"D\,D^{\prime\prime} \;\geq\; (D^{\prime})^{2} "
                  r"\qquad\Longleftrightarrow\qquad "
                  r"\frac{d}{dC}\left(\frac{1}{\lambda}\right) \;\geq\; "
-                 r"\frac{1}{D}")
+                 r"\frac{1}{D}.")
     k.par(
         "<i>Assumes</i> twice differentiability along the frontier, and "
         "Proposition 5 for the second form.")
@@ -852,9 +852,9 @@ def content(k):
         "being an error against a source it never receives. A predictor can "
         "guess it. Writing p<sub>t,k</sub> for a head's probability that tile "
         "t belongs at exit k, its rule is")
-    e_router = k.eq(r"\hat k_t \;=\; \arg\max_k\left[\log p_{t,k} - "
-                    r"\beta\,c_k\right] \;=\; \arg\min_k\left["
-                    r"\frac{-\log p_{t,k}}{\kappa} + \lambda\,c_k\right]")
+    e_router = k.eq(r"\hat k_t \;=\; \mathrm{arg\,max}_{k \geq j}\left[\log p_{t,k} - "
+                    r"\beta\,c_k\right] \;=\; \mathrm{arg\,min}_{k \geq j}\left["
+                    r"\frac{-\log p_{t,k}}{\kappa} + \lambda\,c_k\right].")
 
     k.par(
         f"The second form of ({e_router}) is the same rule with \\beta = "
@@ -865,7 +865,7 @@ def content(k):
         f"per-tile regret at a fixed price:")
     e_reg = k.eq(r"r_t(\lambda) \;=\; \left[D_{t,\hat k_t} + \lambda "
                  r"c_{\hat k_t}\right] - \left[D_{t,k^{\star}_t} + \lambda "
-                 r"c_{k^{\star}_t}\right] \;\geq\; 0")
+                 r"c_{k^{\star}_t}\right] \;\geq\; 0.")
 
     k.par(
         f"Non-negativity is immediate from ({e_argmin}). The regret is what "
@@ -881,7 +881,7 @@ def content(k):
         "any subset S of size s, the fraction of the total regret that "
         "signalling S removes is at most")
     e_lor = k.eq(r"L(\rho) \;=\; \frac{1}{R}\sum_{i=1}^{\lceil \rho N\rceil} "
-                 r"r_{(i)}, \qquad \rho = s/N")
+                 r"r_{(i)}, \qquad \rho = s/N,")
     k.par(
         "with equality if and only if S is a set of s largest regrets. L is "
         "the Lorenz curve of the regret distribution: non-decreasing, concave, "
@@ -967,7 +967,7 @@ def content(k):
         "The model is separability in log space: one scalar difficulty per "
         "tile, and one ladder profile applying to every tile in proportion.")
     e_r1 = k.eq(r"\log D_{t,k} \;\approx\; u_t + \log\varphi_k, \qquad "
-                r"u_t \;=\; \alpha\log b_t + c")
+                r"u_t \;=\; \alpha\log b_t + c.")
 
     k.par(
         "Equivalently D<sub>t,k</sub> = g<sub>t</sub> φ<sub>k</sub> with "
@@ -980,8 +980,8 @@ def content(k):
     k.par(
         "If D<sub>t,k</sub> = g<sub>t</sub> φ<sub>k</sub> with g<sub>t</sub> > "
         "0 then")
-    e_rank = k.eq(r"\arg\min_k\left[g_t\varphi_k + \lambda c_k\right] \;=\; "
-                  r"\arg\min_k\left[\varphi_k + \frac{\lambda}{g_t}c_k\right]")
+    e_rank = k.eq(r"\mathrm{arg\,min}_{k \geq j}\left[g_t\varphi_k + \lambda c_k\right] \;=\; "
+                  r"\mathrm{arg\,min}_{k \geq j}\left[\varphi_k + \frac{\lambda}{g_t}c_k\right],")
     k.par(
         "so a tile's exit depends on the tile only through the scalar "
         "\\lambda/g<sub>t</sub>, and by Proposition 2 the chosen exit is "

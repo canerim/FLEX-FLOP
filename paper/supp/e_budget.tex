@@ -15,7 +15,7 @@ The floor D\_min is the loss of a tiled decode with every tile at full depth. No
 Between them the saving is fixed by the ladder rather than by the budget. With c\_k the cost of exit k in units of one released full-frame decode, j the split depth and K the number of exits, the ceiling is closed form under either compute denominator:
 
 \begin{equation}
-S_{\mathrm{max}}^{\mathrm{rel}} = 100\,(1 - c_j), \;\; S_{\mathrm{max}}^{\mathrm{self}} = 100\,(1 - c_j/c_{K-1})
+S_{\mathrm{max}}^{\mathrm{rel}} = 100\,(1 - c_j), \;\; S_{\mathrm{max}}^{\mathrm{self}} = 100\,(1 - c_j/c_{K-1}),
 \end{equation}
 
 With c\_j = 0.6088, recorded in results/saturation\_RECIPE512\_ctc53.json, and c\_(K$-$1) = 1.0095, recorded as deepest\_exit\_cost in results/router\_RECIPE512\_b01.json, the first reads \CeilingModelled\% and the second 39.7\%. The deepest exit costs more than one released decode because it carries the seam repair, which the released decoder does not run, and that difference is the whole of the gap between the two ceilings.
@@ -60,7 +60,7 @@ the second sweep & the per-tile table at a zero multiplier, where a tile takes i
 Three separate choices have to be pinned before a figure in this section means anything, and the project makes all three in two ways in different files. The loss can be measured against the released decoder's full-frame decode of the same latent, which puts the cost of cutting the frame into tiles inside the budget, or against this model's own deepest exit decoded tile by tile, which cancels it. Decibels can be averaged per frame and then over frames, which is what the released codec's own evaluation does, or pooled into one mean squared error first. And the saving can be divided by the released decode or by our own deepest exit. Two of the three conversions are exact:
 
 \begin{equation}
-D^{\mathrm{rel}} = D^{\mathrm{self}} + D_{\mathrm{min}}, \;\;\; S^{\mathrm{rel}} = 100 - c_{K-1}\,(100 - S^{\mathrm{self}})
+D^{\mathrm{rel}} = D^{\mathrm{self}} + D_{\mathrm{min}}, \;\;\; S^{\mathrm{rel}} = 100 - c_{K-1}\,(100 - S^{\mathrm{self}}).
 \end{equation}
 
 \begin{table}[t]
@@ -118,7 +118,7 @@ Budgets in [\SatLow, \SatWindowHi) dB saturate the lowest rate and no other, a w
 With both ends of the window measured, a budget can be quoted as a position in the window rather than as a decibel figure. Write
 
 \begin{equation}
-u = \frac{D - D_{\mathrm{min}}}{D_{\mathrm{sat}} - D_{\mathrm{min}}}
+u = \frac{D - D_{\mathrm{min}}}{D_{\mathrm{sat}} - D_{\mathrm{min}}},
 \end{equation}
 
 so that u = 0 is the floor and u = 1 the saturation point. At a matched decibel the five rates are \BandRawSpread points apart in saving. At a matched u they are \BandSpreadMean points apart on average and \BandSpreadMax at worst, so the window accounts for most of the rate dependence of the trade-off and a couple of points are left over.
@@ -147,7 +147,7 @@ u & q0 & q16 & q32 & q48 & q63 & spread \\
 The collapsed curve is then described by one free number. With C the architectural ceiling, which is not fitted,
 
 \begin{equation}
-S(u) \approx C\,u^{\beta}
+S(u) \approx C\,u^{\beta},
 \end{equation}
 
 and fitting ln(S/C) against ln u by least squares through the origin gives \BandExp on the pinned checkpoint, with R$^2$ = \BandRTwo and a worst residual of \BandFitErr points. The same procedure on the second training run gives \BandExpB with R$^2$ = \BandRTwoB, which is the replication Figure 3 draws and Section A.5 takes apart.

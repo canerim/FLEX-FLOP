@@ -161,7 +161,7 @@ def content(k):
           r"full-frame decode, j the split depth and K the number of exits, "
           r"the ceiling is closed form under either compute denominator:")
     k.eq(r"S_{\mathrm{max}}^{\mathrm{rel}} = 100\,(1 - c_j), \;\; "
-         r"S_{\mathrm{max}}^{\mathrm{self}} = 100\,(1 - c_j/c_{K-1})")
+         r"S_{\mathrm{max}}^{\mathrm{self}} = 100\,(1 - c_j/c_{K-1}),")
     k.par(f"With c_j = {cj:.4f}, recorded in "
           f"results/saturation_RECIPE512_ctc53.json, and c_(K−1) = {cK:.4f}, "
           f"recorded as deepest_exit_cost in "
@@ -262,7 +262,7 @@ def content(k):
           r"divided by the released decode or by our own deepest exit. Two of "
           r"the three conversions are exact:")
     k.eq(r"D^{\mathrm{rel}} = D^{\mathrm{self}} + D_{\mathrm{min}}, \;\;\; "
-         r"S^{\mathrm{rel}} = 100 - c_{K-1}\,(100 - S^{\mathrm{self}})")
+         r"S^{\mathrm{rel}} = 100 - c_{K-1}\,(100 - S^{\mathrm{self}}).")
 
     def op(q, t):
         return [o for o in front["op_points"]
@@ -381,7 +381,7 @@ def content(k):
     k.par(r"With both ends of the window measured, a budget can be quoted as a "
           r"position in the window rather than as a decibel figure. Write")
     k.eq(r"u = \frac{D - D_{\mathrm{min}}}"
-         r"{D_{\mathrm{sat}} - D_{\mathrm{min}}}")
+         r"{D_{\mathrm{sat}} - D_{\mathrm{min}}},")
     k.par(r"so that u = 0 is the floor and u = 1 the saturation point. At a "
           r"matched decibel the five rates are \BandRawSpread points apart in "
           r"saving. At a matched u they are \BandSpreadMean points apart on "
@@ -418,7 +418,7 @@ def content(k):
 
     k.par(r"The collapsed curve is then described by one free number. With C "
           r"the architectural ceiling, which is not fitted,")
-    k.eq(r"S(u) \approx C\,u^{\beta}")
+    k.eq(r"S(u) \approx C\,u^{\beta},")
     k.par(r"and fitting ln(S/C) against ln u by least squares through the "
           r"origin gives \BandExp on the pinned checkpoint, with R² = \BandRTwo "
           r"and a worst residual of \BandFitErr points. The same procedure on "
