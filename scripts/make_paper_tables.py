@@ -1276,8 +1276,20 @@ try:
             continue
         _e = _d.get("ckpt_epoch")
         _m = sum(r["saving_pct_measured"] for r in _rs) / len(_rs)
-        if _e is not None and (_e not in _ser or _m > _ser[_e][0]):
-            _ser[_e] = (_m, Path(_f).name)
+        if _e is not None:
+            _ser.setdefault(_e, []).append((_m, Path(_f).name))
+    # One number per epoch, and not the best of them. The rule here used to be
+    # max(), which is cherry-picking the moment an epoch has more than one
+    # measurement -- and epoch 0 has four. They agree to 0.12 of a point, so it
+    # changed nothing, but a rule that would manufacture a monotone series if
+    # the files ever disagreed is not one to leave in. Median, and the spread
+    # is printed so it cannot hide.
+    for _e in list(_ser):
+        _v = sorted(_ser[_e])
+        _sp = _v[-1][0] - _v[0][0]
+        if _sp > 0.5:
+            print(f"   epoch {_e}: {len(_v)} files spread {_sp:.2f} points")
+        _ser[_e] = _v[len(_v) // 2]
     _WORD = {0: "Zero", 1: "One", 2: "Two", 3: "Three", 4: "Four"}
     for _e, (_m, _fn) in sorted(_ser.items()):
         if _e in _WORD:
