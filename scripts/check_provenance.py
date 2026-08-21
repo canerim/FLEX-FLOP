@@ -46,6 +46,42 @@ def read_by_documents() -> set[str]:
     return used
 
 
+# The commit that corrected the FFN adapter's cost from 2C^2 to 5C^2
+# (8792f0b, 2026-08-19 08:26). Anything modelled before it used the wrong
+# adapter cost, which is how the ceiling read 41.9 instead of 39.1 and how the
+# coupling ablation's savings came out two and a half points high.
+COST_FIX = 1787120787          # commit 8792f0b, 2026-08-19 08:26
+STALE_BASELINE = 28
+SAVKEY = re.compile(r"saving|saved|cost|ceiling|gmac|kmac", re.I)
+
+
+def pre_cost_fix(used: set[str]) -> list[tuple[str, str]]:
+    """Files the documents read that were measured before the cost model was
+    corrected, and that carry a saving or a cost.
+
+    Not all of them are wrong: a hook-counted saving does not go through the
+    model at all, and several of these are named in the supplement as modelled
+    and optimistic by a stated amount. What the list is for is knowing which
+    numbers are in that category without having to remember.
+    """
+    import datetime
+    out = []
+    for f in sorted(glob.glob(str(R / "results/*.json"))):
+        b = os.path.basename(f)
+        if b not in used or os.path.getsize(f) > 20_000_000:
+            continue
+        mt = os.path.getmtime(f)
+        if mt >= COST_FIX:
+            continue
+        try:
+            if not SAVKEY.search(open(f).read(200_000)):
+                continue
+        except Exception:
+            continue
+        out.append((datetime.datetime.fromtimestamp(mt).strftime("%m-%d %H:%M"), b))
+    return out
+
+
 def main() -> int:
     used = read_by_documents()
     pinned = ident = 0
@@ -76,12 +112,29 @@ def main() -> int:
           f"recording which, {len(lost)} recording neither")
     for b in sorted(lost):
         print(f"     {b}")
-    over = len(lost) > BASELINE
+    stale = pre_cost_fix(used)
+    print(f"\n  {len(stale)} of them were measured before the cost model was "
+          f"corrected on 2026-08-19 and carry a saving or a cost")
+    for d, b in stale[:6]:
+        print(f"     {d}  {b}")
+    if len(stale) > 6:
+        print(f"     ... and {len(stale) - 6} more")
+
+    over_lost = len(lost) > BASELINE
+    over_stale = len(stale) > STALE_BASELINE
+    over = over_lost or over_stale
+    if over_lost:
+        print(f"\n  {len(lost)} lost against a baseline of {BASELINE} -- a "
+              f"measurement has been added without recording its checkpoint")
+    if over_stale:
+        print(f"\n  {len(stale)} pre-cost-fix against a baseline of "
+              f"{STALE_BASELINE} -- a file older than the correction has been "
+              f"brought into the documents")
     if over:
-        print(f"\n  {len(lost)} lost, baseline {BASELINE} -- a new measurement "
-              f"has been added without recording its checkpoint")
+        pass
     else:
-        print(f"\n  PASS ({len(lost)} lost against a baseline of {BASELINE})")
+        print(f"\n  PASS ({len(lost)} lost against {BASELINE}, "
+              f"{len(stale)} pre-cost-fix against {STALE_BASELINE})")
     return 1 if over else 0
 
 
