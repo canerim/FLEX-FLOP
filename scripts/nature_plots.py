@@ -137,11 +137,15 @@ def concentration():
                    label=f"q{q}")
     ax[0].set_xlabel("fraction of tiles, worst first")
     ax[0].set_ylabel("fraction of the total regret")
-    ax[0].set_xlim(0, 1); ax[0].set_ylim(0, 1)
+    # The sweep covers rho up to 0.5, so the axis stops there. At xlim(0, 1)
+    # the curves ended in the middle of an empty panel and looked truncated,
+    # which is worse than an axis that says how far the measurement went.
+    _xmax = max(r["rho"] for r in rows if r.get("lorenz_at_rho") is not None)
+    ax[0].set_xlim(0, _xmax * 1.04); ax[0].set_ylim(0, 1.02)
     ax[0].legend(frameon=False, fontsize=5.0, handlelength=1.2, ncol=2,
                  borderpad=0, loc="lower right")
-    ax[0].text(0.04, 0.90, "equal shares", transform=ax[0].transAxes,
-               fontsize=4.8, color=ns.INK2, rotation=39)
+    ax[0].text(0.30, 0.24, "equal shares", transform=ax[0].transAxes,
+               fontsize=4.8, color=ns.INK2, rotation=27)
     ns.panel(ax[0], "a")
 
     gin = []

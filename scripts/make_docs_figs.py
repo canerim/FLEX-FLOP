@@ -64,9 +64,16 @@ def svr(row, D):
 
 
 def save(fig, name):
-    fig.savefig(OUT / name, dpi=300, bbox_inches="tight", facecolor="white")
+    # Both directories. build_pdf reads paper/figures, and a figure written
+    # only here goes stale there without anything saying so: tradeoff.png sat
+    # in paper/figures printing a 41.9% ceiling for days after the FFN
+    # accounting fixed it to 39.1, next to a caption that said 38.3.
+    for d in (OUT, R / "paper" / "figures"):
+        d.mkdir(parents=True, exist_ok=True)
+        fig.savefig(d / name, dpi=500, bbox_inches="tight", pad_inches=0.02,
+                    facecolor="white")
     plt.close(fig)
-    print(f"  docs/figures/{name}")
+    print(f"  {name}")
 
 
 # ----------------------------------------------------------------- topology

@@ -1785,8 +1785,9 @@ def content(colw, fullw):
         r"of the trade-off is the rate dependence of the band ([[fig:tradeoff]]).")
     figure("tradeoff.png",
            r"<b>Figure 9. The trade-off, whole.</b> <b>a</b> What a budget buys, "
-           r"per rate; the ceiling is \Ceiling% and q0 reaches it at "
-           r"\SatLow dB. <b>b</b> The same relation inverted, so it reads as "
+           r"per rate; the dotted line is the arithmetic ceiling, "
+           r"\CeilingModelled%, and q0 reaches it at \SatLow dB. "
+           r"<b>b</b> The same relation inverted, so it reads as "
            r"what a saving target costs. The three budgets reported elsewhere "
            r"are three points on this curve.")
     figure("window.png",
