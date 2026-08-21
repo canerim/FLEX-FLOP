@@ -862,7 +862,11 @@ if hy3:
     if rec:
         mac("HybridLooseRecLo", f"{min(v for _, v in rec):.0f}")
         mac("HybridLooseRecHi", f"{max(v for _, v in rec):.0f}")
-        mac("HybridLooseQps", " and ".join(f"$q{q}$" for q, _ in rec))
+        # No math delimiters inside a macro value: the reportlab build
+        # substitutes it into prose and has no way to strip them, so the
+        # paper printed a literal "$q48$ and $q63$". Plain text here; each
+        # document formats it the way its renderer expects.
+        mac("HybridLooseQps", " and ".join(f"q{q}" for q, _ in rec))
 
 # which predictor should configuration C be built on
 hyr, _ = pick("hybrid_raterank_b01.json")
@@ -1660,6 +1664,12 @@ except Exception as _e:
 # macros.tex is written LAST, after every block that can emit one. It used to be
 # written in the middle of the file, so the two blocks appended after it emitted
 # five macros that never reached disk and the build reported them unexpanded.
+# A macro value with a math delimiter in it is fine in LaTeX and prints
+# literally in the reportlab build, which has no way to know it was meant as
+# maths. HybridLooseQps carried "$q48$ and $q63$" into the paper that way.
+_mathy = {k: v for k, v in MACROS.items() if "$" in str(v)}
+for _k, _v in _mathy.items():
+    print(f"    MACRO WITH MATH DELIMITERS: {_k} = {_v}")
 w("macros.tex", "\n".join(f"\\newcommand{{\\{k}}}{{{v}}}"
                           for k, v in sorted(MACROS.items())))
 print(f"\n  {len(MACROS)} macros")
