@@ -1229,11 +1229,14 @@ def content(colw, fullw):
         r"where to look instead of having to infer it")
     eq(r"\mathrm{Rep}(f) = f + G[\,x\ \mathrm{mod}\ P,\ y\ \mathrm{mod}\ P\,]"
        r"\cdot \mathrm{PW}\left(\mathrm{WSiLU}(\mathrm{DW}_{3\times3}(f))\right)")
-    par(r"with PW a pointwise convolution, DW a depthwise one, WSiLU the "
-        r"weighted SiLU of the DCVC line [33], G a P×P gate shared over "
-        r"channels, P the tile pitch in feature samples, and G initialised at "
-        r"exp(−d/τ) in the distance d to the nearest tile boundary with τ a "
-        r"fixed decay length. It costs 0.95% of the decode.")
+    rows_tbl([["", ""],
+              ["PW, DW", "a pointwise convolution and a depthwise one"],
+              ["WSiLU", "the weighted SiLU of the DCVC line [33]"],
+              ["G", "a P×P gate, shared over all channels"],
+              ["P", "the tile pitch, in feature samples"],
+              ["G at step 0", "exp(−d/τ), with d the distance to the nearest "
+                              "tile boundary and τ a fixed decay length"]])
+    par(r"The whole pass costs 0.95% of the decode.")
     par(r"It does not earn that. Splitting the per-pixel error by distance "
         r"from the nearest tile boundary, we find the filter gains 0.27% in "
         r"the 0–4 px ring, which is 6.2% of pixels, and loses 0.04–0.05% "
@@ -1539,13 +1542,19 @@ def content(colw, fullw):
         r"as measured rather than assumed.")
     par(r"The construction has enough structure to state as propositions, and "
         r"we check each one numerically instead of asserting it "
-        r"(scripts/verify_theory.py, seven of seven). The allocation decouples "
-        r"per tile; compute is non-increasing and distortion non-decreasing in "
-        r"λ; the sweep traces the lower convex hull and therefore cannot reach "
-        r"an interior point of the achievable set; λ=0 reaches the least "
-        r"distortion the ladder can produce; beyond a finite λ, computable in "
-        r"closed form, the allocation is the constant map to exit j at cost "
-        r"exactly c_j; and the ceiling is a function of the split depth alone.")
+        r"(scripts/verify_theory.py, seven of seven).")
+    rows_tbl([["", ""],
+              ["1", "the allocation decouples per tile"],
+              ["2", "compute is non-increasing and distortion non-decreasing "
+                    "in λ"],
+              ["3", "the sweep traces the lower convex hull, so it cannot "
+                    "reach an interior point of the achievable set"],
+              ["4", "λ = 0 reaches the least distortion the ladder can "
+                    "produce"],
+              ["5", "beyond a finite λ, computable in closed form, the "
+                    "allocation is the constant map to exit j, at cost "
+                    "exactly c_j"],
+              ["6", "the ceiling is a function of the split depth alone"]])
     par(r"The third of those has a practical edge. The sweep reaches only hull "
         r"vertices, so a budget that falls between two of them cannot be met "
         r"exactly. We measured what that costs by enumerating the <i>exact</i> "
