@@ -1520,6 +1520,15 @@ try:
         mac("EpochLatest", str(max(_ser)))
         mac("EpochLatestMean", f"{_ser[max(_ser)][0]:.1f}")
         mac("EpochGain", f"{_ser[max(_ser)][0] - _ser[min(_ser)][0]:.1f}")
+        # The series itself, written out. The prose listed the values by hand
+        # and the list stopped at epoch 3 while \EpochLatest and \EpochGain
+        # moved to 4 on their own when that evaluation landed: four numbers,
+        # a range of five epochs, and a gain computed from a fifth the
+        # sentence never showed.
+        _vals = [f"{_ser[e][0]:.1f}%" for e in sorted(_ser)]
+        mac("EpochSeries", ", ".join(_vals[:-1]) + " and " + _vals[-1]
+            if len(_vals) > 1 else _vals[0])
+        mac("EpochFirst", str(min(_ser)))
 except Exception as _e:
     print("   checkpoint series:", _e)
 

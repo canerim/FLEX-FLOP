@@ -2361,8 +2361,7 @@ moving checkpoint was overwritten mid-measurement once, and a paper whose tables
 come from three different epochs is worse than one whose tables are early. Later
 checkpoints of the same run improved the measured trade-off, and monotonically:
 on the same \NumSeq\ frames at the same budget, with the same hook count, the run
-reads \EpochMeanZero\%, \EpochMeanOne\%, \EpochMeanTwo\% and \EpochMeanThree\% at
-epochs $0$ to \EpochLatest, a gain of \EpochGain\ points over the checkpoint this
+reads \EpochSeries\ at epochs \EpochFirst\ to \EpochLatest, a gain of \EpochGain\ points over the checkpoint this
 paper reports, and it was still training when we stopped measuring. We report the
 pinned checkpoint because every table has to come from one set of weights, and we
 do not read \EpochGain\ points as a bound on what a converged run would give.
