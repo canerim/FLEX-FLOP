@@ -1286,6 +1286,41 @@ except Exception as _e:
     print("   checkpoint series:", _e)
 
 
+# ---------------------------------------------------- rd_spread panel c
+# The sentence beside panel c quoted a median and an IQR typed in from an older
+# run, under the older saving definition. Now the figure dumps them.
+try:
+    _rs = json.load(open(R / "results/rd_spread_stats.json"))["rows"]
+    _lo = _rs["0"]
+    mac("SpreadMedLow", f"{_lo['median']:.1f}")
+    mac("SpreadIqrLoLow", f"{_lo['p25']:.1f}")
+    mac("SpreadIqrHiLow", f"{_lo['p75']:.1f}")
+    mac("SpreadWorst", f"{min(r['min'] for r in _rs.values()):.1f}")
+except Exception as _e:
+    print("   rd_spread stats:", _e)
+
+
+# ------------------------------------------------------- qualitative figure
+# The one figure that shows the reader there is nothing to see. Its numbers come
+# from the sidecar the figure script writes beside the PNG, so the caption and
+# the picture cannot disagree about which checkpoint decoded it.
+try:
+    _q = json.load(open(R / "results/qualitative_PAPER.json"))
+    mac("QualSeq", _q["seq"].split("_")[0])
+    mac("QualQp", str(_q["qp"]))
+    mac("QualDb", f"{_q['delivered_db']:.3f}")
+    mac("QualSaving", f"{_q['saving_pct_vs_release']:.1f}")
+    mac("QualPsnrRel", f"{_q['psnr_released']:.2f}")
+    mac("QualPsnrOurs", f"{_q['psnr_routed']:.2f}")
+    mac("QualBpp", f"{_q['bpp']:.4f}")
+    mac("QualAmp", str(_q["amplification"]))
+    mac("QualWorstTile", str(_q["worst_tile"]))
+    mac("QualNTiles", str(_q["n_tiles"]))
+    mac("QualWorstExit", str(_q["worst_tile_exit"]))
+except Exception as _e:
+    print("   qualitative:", _e)
+
+
 # macros.tex is written LAST, after every block that can emit one. It used to be
 # written in the middle of the file, so the two blocks appended after it emitted
 # five macros that never reached disk and the build reported them unexpanded.

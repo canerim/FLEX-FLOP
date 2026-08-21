@@ -1095,8 +1095,9 @@ median.}
 \end{figure}
 
 Figure~\ref{fig:rd}c shows the distribution that the headline averages over, and
-it is wide. At $q0$ the median sequence saves $38.6\%$, with an interquartile
-range of $32.0$--$41.5$, while the worst saves $-1.0\%$. The worst cases are the
+it is wide. At $q0$ the median sequence saves \SpreadMedLow\%, with an
+interquartile range of \SpreadIqrLoLow--\SpreadIqrHiLow, while the worst saves
+\SpreadWorst\%. The worst cases are the
 low-resolution sequences of Section~\ref{sec:resolution}, where two tiles leave
 nothing to allocate. Reporting the mean alone would hide both ends.
 
@@ -1932,6 +1933,28 @@ side of the crossover a given budget sits on.
 Everything above is measured against the released DCVC-UF intra decoder, but
 always as a percentage. This section states it once in the units a codec paper
 reports, so the comparison can be read without arithmetic.
+
+\begin{figure*}[t]
+\centering
+\includegraphics[width=\textwidth]{figures/qualitative.png}
+\caption{\textbf{What \QualSaving\% of the arithmetic costs, to look at.}
+\QualSeq\ at q\QualQp, one frame, with $\lambda$ bisected on that frame to
+\QualDb\dB. Both crops are decoded from the \emph{same} latent at \QualBpp\ bpp:
+the released decoder reaches \QualPsnrRel\dB and the routed decode
+\QualPsnrOurs\dB. The crop is centred on the tile that gave up the most, tile
+\QualWorstTile\ of \QualNTiles, not on a flattering one. Right, the absolute
+difference at $\times$\QualAmp.}
+\label{fig:qualitative}
+\end{figure*}
+
+The difference panel is the part worth reading. Amplified twenty times, what it
+shows is the rigging of the boat, the waterline and the edge of the flag, and
+almost nothing along the tile borders that cross the crop. The error the budget
+permits is spent where the picture is difficult, which is where the shallow
+exits fail, and not at the seams that Section~\ref{sec:seam} spends its length
+on. That is the seam repair and the border padding doing their work: the cut is
+still the largest single cost in the method, and by the time the reader sees the
+picture it is no longer the visible one.
 
 \begin{table}[t]
 \centering

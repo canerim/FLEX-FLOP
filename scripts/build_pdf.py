@@ -1439,8 +1439,9 @@ def content(colw, fullw):
            r"are compute saved. <b>c</b>, per sequence at a matched point near "
            r"0.1 dB; one dot per sequence, bar is the median.")
     par(r"Panel c shows the distribution that the headline averages over, and "
-        r"it is wide. At q0 the median sequence saves 38.6%, with an "
-        r"interquartile range of 32.0–41.5, while the worst saves −1.0%. The "
+        r"it is wide. At q0 the median sequence saves \SpreadMedLow%, with an "
+        r"interquartile range of \SpreadIqrLoLow–\SpreadIqrHiLow, while the "
+        r"worst saves \SpreadWorst%. The "
         r"worst cases are the low-resolution sequences of Section 5.3, where "
         r"two tiles leave nothing to allocate. Reporting the mean alone would "
         r"hide both ends.")
@@ -2175,6 +2176,23 @@ def content(colw, fullw):
         r"decoder, but always as a percentage. This section states it once in "
         r"the units a codec paper reports, so the comparison can be read "
         r"without arithmetic.")
+    figure_wide("qualitative.png",
+        r"<b>Figure N. What \QualSaving% of the arithmetic costs, to look at.</b> "
+        r"\QualSeq at q\QualQp, one frame, with λ bisected on that frame to "
+        r"\QualDb dB. Both crops are decoded from the <i>same</i> latent at "
+        r"\QualBpp bpp: the released decoder reaches \QualPsnrRel dB and the "
+        r"routed decode \QualPsnrOurs dB. The crop is centred on the tile that "
+        r"gave up the most, tile \QualWorstTile of \QualNTiles, not on a "
+        r"flattering one. Right, the absolute difference at ×\QualAmp.")
+    par(r"The difference panel is the part worth reading. Amplified twenty "
+        r"times, what it shows is the rigging of the boat, the waterline and "
+        r"the edge of the flag, and almost nothing along the tile borders that "
+        r"cross the crop. The error the budget permits is spent where the "
+        r"picture is difficult, which is where the shallow exits fail, and not "
+        r"at the seams that Section 4 spends its length on. That is the "
+        r"seam repair and the border padding doing their work: the cut is "
+        r"still the largest single cost in the method, and by the time the "
+        r"reader sees the picture it is no longer the visible one.")
     tbl("released",
         r"<b>Table 10. FLEX-UF against the decoder it modifies.</b> The "
         r"released DCVC-UF intra decoder and the same decoder with the exit "

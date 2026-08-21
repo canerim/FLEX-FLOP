@@ -16,6 +16,7 @@ import matplotlib.pyplot as plt
 R = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(R / "scripts"))
 import naturestyle as ns
+from savings import sv
 ns.apply()
 
 D = 1.0095
@@ -48,9 +49,11 @@ for b, c in ((0.1, ns.BLUE), (0.3, ns.ORANGE)):
             if abs(r["budget_db"] - b) < 1e-9 and r.get("budget_reachable")}
     ys = [rel[q] - rows[q]["db_vs_uf"] for q in qs if q in rows]
     xs = [bpp[q] for q in qs if q in rows]
-    sv = [rows[q]["saving_pct_vs_release"] for q in qs if q in rows]
-    ax[0].plot(xs, ys, "-s", ms=3.4, lw=1.0, color=c,
-               label=f"{b:g} dB, {np.mean(sv):.0f}% saved")
+    # No saving printed here. A number inside a PNG cannot be checked against
+    # the tables, and this legend read "24% saved" beside a table saying 21.5:
+    # a different definition averaged over a different set of rates. The
+    # caption carries it from the same macro the table does.
+    ax[0].plot(xs, ys, "-s", ms=3.4, lw=1.0, color=c, label=f"{b:g} dB budget")
 ax[0].set_xlabel("bitrate (bpp)"); ax[0].set_ylabel("PSNR (dB)")
 ax[0].legend(fontsize=5.5, loc="lower right")
 ns.panel(ax[0], "a")
@@ -64,7 +67,7 @@ for b, c in ((0.1, ns.BLUE), (0.3, ns.ORANGE)):
                ms=3.4, lw=1.0, color=c)
     for q in qs:
         if q in rows:
-            ax[1].annotate(f"{rows[q]['saving_pct_vs_release']:.0f}",
+            ax[1].annotate(f"{sv(rows[q]):.0f}",
                            (bpp[q], -rows[q]["db_vs_uf"]), fontsize=5,
                            color=c, ha="center", textcoords="offset points",
                            xytext=(0, 3))
@@ -80,7 +83,7 @@ for q in QPS:
     if not ops:
         continue
     o = min(ops, key=lambda o: abs(o.get("target_db", 9) - 0.1))
-    by[q] = [100 - (100 - s["saving_pct"]) * D for s in o["per_sequence"]]
+    by[q] = [100 - (100 - sv(s)) * D for s in o["per_sequence"]]
 ks = sorted(by)
 parts = ax[2].violinplot([by[q] for q in ks], positions=range(len(ks)),
                          widths=0.75, showextrema=False, showmedians=True)
@@ -96,8 +99,25 @@ ax[2].set_ylabel("MACs saved (%)")
 ns.panel(ax[2], "c", dx=-0.24)
 
 fig.tight_layout()
-fig.savefig(R / "docs/figures/rd_spread.png", dpi=300)
-print("  -> docs/figures/rd_spread.png")
+for _d in (R / "docs/figures", R / "paper/figures"):
+    _d.mkdir(parents=True, exist_ok=True)
+    fig.savefig(_d / "rd_spread.png", dpi=500, bbox_inches="tight",
+                pad_inches=0.02, facecolor="white")
+# The prose beside this panel quoted a median and an IQR that were typed in by
+# hand from an older run of this script, under the older saving definition, and
+# drifted by half a point when the definition was fixed. Dumped so make_paper_
+# tables can turn them into macros and check_paper can hold the sentence to them.
+_st = {}
+for q in ks:
+    v = np.array(by[q])
+    _st[str(q)] = {"median": float(np.median(v)),
+                   "p25": float(np.percentile(v, 25)),
+                   "p75": float(np.percentile(v, 75)),
+                   "min": float(v.min()), "max": float(v.max()),
+                   "n": int(len(v))}
+json.dump({"target_db": 0.1, "rows": _st},
+          open(R / "results/rd_spread_stats.json", "w"), indent=2)
+print("  -> docs/figures/rd_spread.png, paper/figures/rd_spread.png")
 for q in ks:
     v = np.array(by[q])
     print(f"    q{q:<3} n={len(v):>2}  median {np.median(v):5.1f}  "
