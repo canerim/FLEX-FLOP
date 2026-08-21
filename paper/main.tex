@@ -622,7 +622,7 @@ more than the error it adds. Compute falls and error grows as $\lambda$ grows,
 neither of them turning back, so one value of $\lambda$ puts the frame exactly on
 its budget and we find that value by bisection. The rule each tile follows is
 \begin{equation}
-k^{*}_t(\lambda) \;=\; \arg\min_k \; \bigl[\, D_{t,k} + \lambda\, c_k \,\bigr],
+k^{*}_t(\lambda) \;=\; \operatorname*{arg\,min}_{k \ge j} \; \bigl[\, D_{t,k} + \lambda\, c_k \,\bigr],
 \label{eq:lagrangian}
 \end{equation}
 with the minimum taken over $k \ge j$. We call $k^{*}_t(\lambda)$ the choice of
@@ -659,7 +659,7 @@ already holds, the feature at the split point, the decoded latent $\hat{y}$, the
 entropy model's scales and the quality index. For each tile $t$ it emits a vector
 of logits $z_t$, one entry per exit, and the tile takes
 \begin{equation}
-\hat{k}_t \;=\; \arg\max_k \;\bigl[\, \log \mathrm{softmax}(z_t)_k
+\hat{k}_t \;=\; \operatorname*{arg\,max}_{k \ge j} \;\bigl[\, \log \mathrm{softmax}(z_t)_k
                                        - \beta\, c_k \,\bigr].
 \label{eq:router}
 \end{equation}
@@ -793,6 +793,7 @@ All exits are decoded every step and the objective is
 \mathcal{L} \;=\; \mathcal{L}_{\mathrm{RD}}
    \;+\; w_a\,\mathcal{L}_{\mathrm{anchor}}
    \;+\; w_d\,\mathcal{L}_{\mathrm{distill}},
+\label{eq:loss}
 \end{equation}
 where
 $\mathcal{L}_{\mathrm{RD}} = \lambda_{\mathrm{rd}} \sum_k \alpha_k \mathrm{MSE}_k / \sum_k \alpha_k + \mathrm{bpp}$
@@ -847,7 +848,7 @@ That fraction tells us which pixels are affected and not how badly, and it turns
 out to be the wrong predictor of the penalty. We swept the split depth, which
 sweeps $b$ from 12 to 0 with $b{=}0$ as an exact zero-seam control, and measured
 \begin{equation}
-\text{seam} \;\propto\; b^{\alpha}, \qquad \alpha \approx 2,
+\Delta_{\mathrm{seam}} \;\propto\; b^{\alpha}, \qquad \alpha \approx 2,
 \label{eq:contam}
 \end{equation}
 with $\alpha = 2.38$ at $q0$ falling to $1.93$ at $q63$ and $r = 0.98$--$0.995$ in
@@ -932,13 +933,18 @@ What a standard codec does about a partition boundary is deblock it, with a
 filter applied after reconstruction~\cite{hevc,vvc} (Fig.~\ref{fig:seam_gate}). The tile lattice is known
 exactly at training and at inference, so ours can be \emph{told} where to look
 instead of having to infer it. The module is
-$\mathrm{Rep}(f) = f + G[x \bmod P,\, y \bmod P]\cdot
-\mathrm{PW}(\mathrm{WSiLU}(\mathrm{DW}_{3\times3}(f)))$, with $\mathrm{PW}$ a
+\begin{equation}
+\mathrm{Rep}(f) \;=\; f \;+\; G[x \bmod P,\, y \bmod P]\cdot
+\mathrm{PW}\bigl(\mathrm{WSiLU}(\mathrm{DW}_{3\times3}(f))\bigr),
+\label{eq:repair}
+\end{equation}
+Here $\mathrm{PW}$ is a
 pointwise convolution, $\mathrm{DW}_{3\times3}$ a depthwise one,
 $\mathrm{WSiLU}$ the weighted SiLU of the DCVC line~\cite{dcvcrt}, $G$ a
 $P{\times}P$ gate shared over channels, $P$ the tile pitch in feature samples,
 and $G$ initialised at $\exp(-d/\tau)$ in the distance $d$ to the nearest tile
-boundary and $\tau$ a fixed decay length. The whole pass costs $0.95\%$ of the
+boundary and $\tau$ a fixed decay length. The gate is what makes~(\ref{eq:repair}) a lattice filter rather than a general
+one: it is indexed by position within a tile, not by position in the frame. The whole pass costs $0.95\%$ of the
 decode.
 
 It does not earn that. Splitting the per-pixel error by distance from the nearest
@@ -1039,7 +1045,8 @@ seconds and joules rather than arithmetic.
 
 \paragraph{Setup.} We fine-tune the decoder on $512{\times}512$ crops from
 OpenImages~\cite{openimages} with the encoder frozen ($\max|\Delta| = 0$ is
-asserted every run). One $\lambda_{\mathrm{rd}}$ is drawn per sample from a
+asserted every run). The three terms of~(\ref{eq:loss}) are weighted once and never tuned per exit.
+One $\lambda_{\mathrm{rd}}$ is drawn per sample from a
 log-spaced range covering all 64 quality indices, so a single set of weights
 covers the whole rate range. We evaluate on one intra frame from each of the \NumSeq\ sequences of the common
 test set (CTC: UVG~\cite{uvg}, MCL-JCV~\cite{mcljcv} and HEVC classes B, C, D

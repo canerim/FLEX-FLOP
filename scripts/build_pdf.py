@@ -1036,7 +1036,7 @@ def content(colw, fullw):
         r"grows as λ grows, neither of them turning back, so one value of λ "
         r"puts the frame exactly on its budget and we find that value by "
         r"bisection. The rule each tile follows is")
-    eq(r"k^{*}(t) = \mathrm{arg\,min}_{k}\ \left[\, D(t,k) + \lambda\, c_{k} \,\right]")
+    eq(r"k^{*}(t) = \mathrm{arg\,min}_{k \geq j}\ \left[\, D(t,k) + \lambda\, c_{k} \,\right]")
     par(r"with the minimum taken over k ≥ j. We call k*(t) the choice of the "
         r"<i>Lagrangian oracle</i>: it is made with the true error of every "
         r"exit in hand, which no decoder has, but it is optimal only within the "
@@ -1073,7 +1073,7 @@ def content(colw, fullw):
         r"decoded latent y-hat, the entropy model's scales and the quality "
         r"index. For each tile t it emits a vector of logits z_t, one entry per "
         r"exit, and the tile takes")
-    eq(r"\hat{k}_{t} = \mathrm{arg\,max}_{k}\ \left[\, \log\,\mathrm{softmax}(z_{t})_{k} - \beta\, c_{k} \,\right]")
+    eq(r"\hat{k}_{t} = \mathrm{arg\,max}_{k \geq j}\ \left[\, \log\,\mathrm{softmax}(z_{t})_{k} - \beta\, c_{k} \,\right]")
     par(r"The first term is the head's score for exit k, on a log scale. The "
         r"second is the price on compute that λ carries in the Lagrangian: "
         r"raising β takes more away from the deep exits than from the shallow "
@@ -1246,7 +1246,7 @@ def content(colw, fullw):
         r"and it turns out to be the wrong predictor of the penalty. We swept "
         r"the split depth, which sweeps b from 12 to 0 with b=0 as an exact "
         r"zero-seam control, and measured")
-    eq(r"\mathrm{seam} \;\propto\; b^{\alpha}, \qquad \alpha \approx 2")
+    eq(r"\Delta_{\mathrm{seam}} \;\propto\; b^{\alpha}, \qquad \alpha \approx 2")
     par(r"with α = 2.38 at q0, 2.22 at q32 and 1.93 at q63, and r = 0.98–0.995 "
         r"in log-log. Fitted with one free scale, the area fraction is wrong "
         r"by 160–264% where the power law is wrong by 12–22%. Fixing the "
