@@ -90,5 +90,8 @@ ns.panel(c_, "c", dx=-0.30)
 
 fig.tight_layout()
 out = R / "docs/figures/perclass.png"
-fig.savefig(out, dpi=300)
+for _d in (R / "docs/figures", R / "paper/figures"):
+    _d.mkdir(parents=True, exist_ok=True)
+    fig.savefig(_d / "perclass.png", dpi=500, bbox_inches="tight",
+                pad_inches=0.02, facecolor="white")
 print(f"  -> {out}")

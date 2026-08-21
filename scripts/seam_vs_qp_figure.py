@@ -72,7 +72,10 @@ ns.panel(ax[1], "b", dx=-0.18)
 
 fig.tight_layout()
 out = R / "docs/figures/seam_vs_qp.png"
-fig.savefig(out, dpi=300)
+for _d in (R / "docs/figures", R / "paper/figures"):
+    _d.mkdir(parents=True, exist_ok=True)
+    fig.savefig(_d / "seam_vs_qp.png", dpi=500, bbox_inches="tight",
+                pad_inches=0.02, facecolor="white")
 print(f"  -> {out}")
 
 # The two dB conventions, printed rather than assumed equal: the seam tables use

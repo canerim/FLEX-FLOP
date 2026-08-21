@@ -85,8 +85,10 @@ def main():
             "its own\nlatest checkpoint",
             transform=ax.transAxes, fontsize=4.3, color=ns.INK2, va="top")
     out = ROOT / "docs/figures/ladder_crossover.png"
-    fig.savefig(out, dpi=500, bbox_inches="tight", pad_inches=0.02,
-                facecolor="white")
+    for _d in (ROOT / "docs/figures", ROOT / "paper/figures"):
+        _d.mkdir(parents=True, exist_ok=True)
+        fig.savefig(_d / "ladder_crossover.png", dpi=500, bbox_inches="tight",
+                    pad_inches=0.02, facecolor="white")
     print(f"  budgets {buds}")
     for tag, ceil, vals, m in rows:
         print(f"    {tag:<12} ceiling {ceil:5.1f}  {vals}  "

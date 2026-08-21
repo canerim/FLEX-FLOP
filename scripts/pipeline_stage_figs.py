@@ -100,9 +100,11 @@ def seam_fig(net, cfg, f, dev):
              fontsize=4.3, color=ns.INK2, ha="center", va="bottom")
     ns.panel(a3, "d", dx=-0.02, dy=0.92)
 
-    out = ROOT / "docs/figures/seam_gate.png"
-    fig.savefig(out, dpi=500, bbox_inches="tight", pad_inches=0.02,
-                facecolor="white")
+    for _d in (ROOT / "docs/figures", ROOT / "paper/figures"):
+        _d.mkdir(parents=True, exist_ok=True)
+        fig.savefig(_d / "seam_gate.png", dpi=500, bbox_inches="tight",
+                    pad_inches=0.02, facecolor="white")
+    out = ROOT / "paper/figures/seam_gate.png"
     print(f"  wrote {out.relative_to(ROOT)}   gate min {g.min():.3f} "
           f"max {g.max():.3f} mean {g.mean():.3f}")
 
@@ -151,8 +153,10 @@ def head_fig(net, cfg, f, q, dev):
             ha="center", va="center", fontsize=4.8, color=ns.INK2)
 
     out = ROOT / "docs/figures/head.png"
-    fig.savefig(out, dpi=500, bbox_inches="tight", pad_inches=0.02,
-                facecolor="white")
+    for _d in (ROOT / "docs/figures", ROOT / "paper/figures"):
+        _d.mkdir(parents=True, exist_ok=True)
+        fig.savefig(_d / "head.png", dpi=500, bbox_inches="tight",
+                    pad_inches=0.02, facecolor="white")
     print(f"  wrote {out.relative_to(ROOT)}   "
           f"{tuple(f.shape)} -> {tuple(blk.shape)} -> {tuple(img.shape)}")
 

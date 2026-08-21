@@ -73,5 +73,8 @@ ax[2].legend(fontsize=5.5, loc="upper right")
 ns.panel(ax[2], "c", dx=-0.26)
 
 fig.tight_layout()
-fig.savefig(R / "docs/figures/contamination.png", dpi=300)
+for _d in (R / "docs/figures", R / "paper/figures"):
+    _d.mkdir(parents=True, exist_ok=True)
+    fig.savefig(_d / "contamination.png", dpi=500, bbox_inches="tight",
+                pad_inches=0.02, facecolor="white")
 print("  -> docs/figures/contamination.png")

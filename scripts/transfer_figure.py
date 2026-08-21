@@ -65,5 +65,8 @@ cb.ax.tick_params(labelsize=5); cb.set_label("delivered dB", fontsize=5.5)
 ns.panel(ax[2], "c", dx=-0.28)
 
 fig.tight_layout()
-fig.savefig(R / "docs/figures/map_transfer.png", dpi=300)
+for _d in (R / "docs/figures", R / "paper/figures"):
+    _d.mkdir(parents=True, exist_ok=True)
+    fig.savefig(_d / "map_transfer.png", dpi=500, bbox_inches="tight",
+                pad_inches=0.02, facecolor="white")
 print("  -> docs/figures/map_transfer.png")

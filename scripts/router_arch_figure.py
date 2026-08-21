@@ -173,6 +173,9 @@ ax.text(50, 1.0, f"{n_par:,} parameters in total, and 0.162% of the decode it "
         color=ns.INK2)
 
 out = ROOT / "docs/figures/router_arch.png"
-fig.savefig(out, dpi=500, facecolor="white")
+for _d in (ROOT / "docs/figures", ROOT / "paper/figures"):
+    _d.mkdir(parents=True, exist_ok=True)
+    fig.savefig(_d / "router_arch.png", dpi=500, bbox_inches="tight",
+                pad_inches=0.02, facecolor="white")
 print(f"  {n_par:,} parameters   d_in={d_in}   hidden={hidden}")
 print(f"  wrote {out.relative_to(ROOT)}")

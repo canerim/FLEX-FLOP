@@ -153,7 +153,11 @@ def main(argv):
                  color=ns.INK2, loc="left", pad=3)
     ns.panel(a5, "f")
 
+    # paper_figures/ is the directory the author asked for; paper/figures/ is
+    # the one build_pdf actually reads. Writing only the first left the
+    # paper's copy at whatever had been placed there by hand.
     for out in (ROOT / "docs/figures/seam_repair_grid.png",
+                ROOT / "paper/figures/seam_repair_grid.png",
                 ROOT / "paper_figures/seam_repair_grid.png"):
         out.parent.mkdir(parents=True, exist_ok=True)
         fig.savefig(out, dpi=500, bbox_inches="tight", pad_inches=0.02,
@@ -163,8 +167,8 @@ def main(argv):
           f"recovered {d_off - d_on:+.4f}")
     print(f"  mean |change| from the repair: {delta.mean():.5f} "
           f"(peak {delta.max():.4f})")
-    print("  wrote docs/figures/seam_repair_grid.png and "
-          "paper_figures/seam_repair_grid.png")
+    print("  wrote docs/figures, paper/figures and paper_figures "
+          "copies of seam_repair_grid.png")
     return 0
 
 

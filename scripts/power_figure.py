@@ -91,6 +91,8 @@ for A in ax:
     A.tick_params(labelsize=5.2, length=2, width=0.5)
     A.yaxis.label.set_size(5.6)
 
-fig.savefig(ROOT / "docs/figures/power.png", dpi=500, bbox_inches="tight",
-            pad_inches=0.01, facecolor="white")
+for _d in (ROOT / "docs/figures", ROOT / "paper/figures"):
+    _d.mkdir(parents=True, exist_ok=True)
+    fig.savefig(_d / "power.png", dpi=500, bbox_inches="tight",
+                pad_inches=0.02, facecolor="white")
 print("  wrote docs/figures/power.png")
