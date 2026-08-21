@@ -1583,18 +1583,6 @@ def content(colw, fullw):
         r"and turns the same signal into a complete routing rule, which "
         r"matches the trained head across the whole rate range.")
 
-    par(r"<b>How much a trained head varies, and what that does to the "
-        r"claim.</b> No head here was trained twice at two seeds, so we have "
-        r"no seed variance to report. What we can report is the spread between "
-        r"two heads trained independently on the same decoder, which is looser "
-        r"than seed variance and larger. The joint and the frozen head differ "
-        r"by \HeadSpreadLow points at the lowest rate and \HeadSpreadHigh at "
-        r"the highest, a range of \HeadSpreadRange points, and they cross: "
-        r"whichever is better depends on the rate. At some rates that spread "
-        r"is wider than the rule's margin over either of them. So the claim we "
-        r"make is not that no learned router can beat the bit rule. It is that "
-        r"a rule costing nothing sits inside the band two of our own trained "
-        r"heads span, which is where a control belongs.")
     figure("spread.png",
            r"<b>Figure N. What the set mean hides.</b> Every test sequence as "
            r"a point, at the 0.1 dB budget; the bar is the median. At the "
@@ -2051,6 +2039,18 @@ def content(colw, fullw):
         r"routed decode \QualPsnrOurs dB. The crop is centred on the tile that "
         r"gave up the most, tile \QualWorstTile of \QualNTiles, not on a "
         r"flattering one. Right, the absolute difference at ×\QualAmp.")
+    par(r"<b>How much a trained head varies, and what that does to the "
+        r"claim.</b> No head here was trained twice at two seeds, so we have "
+        r"no seed variance to report. What we can report is the spread between "
+        r"two heads trained independently on the same decoder, which is looser "
+        r"than seed variance and larger. The joint and the frozen head differ "
+        r"by \HeadSpreadLow points at the lowest rate and \HeadSpreadHigh at "
+        r"the highest, a range of \HeadSpreadRange points, and they cross: "
+        r"whichever is better depends on the rate. At some rates that spread "
+        r"is wider than the rule's margin over either of them. So the claim we "
+        r"make is not that no learned router can beat the bit rule. It is that "
+        r"a rule costing nothing sits inside the band two of our own trained "
+        r"heads span, which is where a control belongs.")
     par(r"A learned component should be measured against the free alternative, "
         r"and it rarely is. In adaptive inference the usual controls are a "
         r"uniform allocation and a random one. Both are much weaker than a "

@@ -1181,7 +1181,8 @@ average cost and the mix of depths while discarding the content dependence.}
 
 The obvious alternative to routing tiles is to run every tile at the same
 shallower exit and accept the loss. Table~\ref{tab:static} puts that option,
-together with two stronger controls, at matched compute.
+together with two stronger controls, at matched compute. Fig.~\ref{fig:exitmap} shows the
+assignment the Lagrangian oracle arrives at.
 
 The uniform rows answer the question directly, and the answer sharpens with rate.
 At the lowest rate a static decoder can reach exit 3 inside the budget and save
@@ -1217,17 +1218,7 @@ Section~\ref{sec:raterank} removes that crutch and turns the same signal into a
 complete routing rule, which matches the trained head across the whole rate
 range.
 
-\paragraph{How much a trained head varies, and what that does to the claim.} No
-head here was trained twice at two seeds, so we have no seed variance to report.
-What we can report is the spread between two heads trained independently on the
-same decoder, which is looser than seed variance and larger. The joint and the
-frozen head differ by \HeadSpreadLow\ points at the lowest rate and
-\HeadSpreadHigh\ at the highest, a range of \HeadSpreadRange\ points, and they
-cross: whichever is better depends on the rate. At some rates that spread is
-wider than the rule's margin over either of them. So the claim we make is not
-that no learned router can beat the bit rule. It is that a rule costing nothing
-sits inside the band two of our own trained heads span, which is where a control
-belongs. Fig.~\ref{fig:exitmap} shows the assignment the Lagrangian oracle arrives at.
+
 
 \begin{figure}[t]
 \centering
@@ -1753,6 +1744,18 @@ the three lowest rates and a small head weight at the two highest, worth $+2.1$
 points at $q48$ and $+0.9$ at $q63$ (Table~\ref{tab:blend}). The head reads the
 entropy model's scales, so it already has most of what the bit count carries; what it adds is
 confined to $q48$ and $q63$.
+
+\paragraph{How much a trained head varies, and what that does to the claim.} No
+head here was trained twice at two seeds, so we have no seed variance to report.
+What we can report is the spread between two heads trained independently on the
+same decoder, which is looser than seed variance and larger. The joint and the
+frozen head differ by \HeadSpreadLow\ points at the lowest rate and
+\HeadSpreadHigh\ at the highest, a range of \HeadSpreadRange\ points, and they
+cross: whichever is better depends on the rate. At some rates that spread is
+wider than the rule's margin over either of them. So the claim we make is not
+that no learned router can beat the bit rule. It is that a rule costing nothing
+sits inside the band two of our own trained heads span, which is where a control
+belongs.
 
 A learned component should be measured against the free alternative, and it
 rarely is. In adaptive inference the usual controls are a uniform allocation and
