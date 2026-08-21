@@ -5390,3 +5390,31 @@ power law used to describe it. The paper said "again a power law, R² = 0.984".
 It now says the curve collapses the same way and the power law fits it less
 well, with both fits and both errors printed. Two checked claims were updated
 to the corrected values rather than the sentence being left to drift.
+
+## 118. The from-scratch run's saving number flatters an undertrained model
+
+`val_scratch.py` now runs the per-tile Lagrangian allocation as well as the
+uniform one, because the uniform figure is a floor and the paper's number is an
+allocation. Two things about what came out are worth writing down, because both
+would have been read as good news.
+
+The reference is not the paper's. This measures against the run's own deepest
+exit decoded in tiles; the paper measures against the released decoder's
+full-frame decode, so the paper's budget pays the tiling penalty first --
+0.072 dB of a 0.1 dB budget at q63 -- and this one does not. Measured this way
+the pinned checkpoint the paper reports gives 36.6 / 27.4 / 21.6% at
+q0 / q32 / q63 where the paper says 29.2 / 20.4 / 15.2. The gap is the floor,
+and it is close to constant across rates, which is what confirms the reading.
+That calibration was run on the pinned checkpoint before any SCRATCH105 number
+was believed.
+
+And an undertrained model has a compressed ladder. Its shallow exits are nearly
+as good as its deepest because none of them is good, so a fixed decibel budget
+buys a great deal of compute and this number goes UP. At epoch 1 SCRATCH105
+reads 37.4% at q63 against the pinned checkpoint's 21.6, while its deepest exit
+is 32.1 dB against the pinned one's 35.5. The saving is real and the quality it
+is saving from is three decibels worse.
+
+So the deepest exit's PSNR prints beside the saving, always. The two are read
+together or not at all, and a saving that rises while the deepest exit falls is
+the ladder collapsing rather than the method working.
