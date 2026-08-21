@@ -891,7 +891,8 @@ pointwise convolution, $\mathrm{DW}_{3\times3}$ a depthwise one,
 $\mathrm{WSiLU}$ the weighted SiLU of the DCVC line~\cite{dcvcrt}, $G$ a
 $P{\times}P$ gate shared over channels, $P$ the tile pitch in feature samples,
 and $G$ initialised at $\exp(-d/\tau)$ in the distance $d$ to the nearest tile
-boundary with $\tau$ a fixed decay length. It costs $0.95\%$ of the decode.
+boundary and $\tau$ a fixed decay length. The whole pass costs $0.95\%$ of the
+decode.
 
 It does not earn that. Splitting the per-pixel error by distance from the nearest
 tile boundary, we find the filter gains $0.27\%$ in the $0$--$4$\,px ring, which
@@ -1250,14 +1251,19 @@ than assumed.
 
 We check each
 one numerically instead of asserting it (\texttt{scripts/verify\_theory.py},
-seven of seven). The allocation decouples per tile; compute is non-increasing and
-distortion non-decreasing in $\lambda$; the sweep traces the lower convex hull
-and therefore cannot reach an interior point of the achievable set;
-$\lambda{=}0$ reaches the least distortion the ladder can produce; beyond a
-finite $\lambda$, computable in closed form as
-$\max_t \max_k (D_{t,j}-D_{t,k})/(c_k-c_j)$, the allocation is the constant map
-to exit $j$ at cost exactly $c_j$; and the ceiling is a function of the split
-depth alone.
+seven of seven).
+
+\begin{enumerate}\itemsep1pt
+\item The allocation decouples per tile.
+\item Compute is non-increasing and distortion non-decreasing in $\lambda$.
+\item The sweep traces the lower convex hull, so it cannot reach an interior
+      point of the achievable set.
+\item $\lambda{=}0$ reaches the least distortion the ladder can produce.
+\item Beyond a finite $\lambda$, computable in closed form as
+      $\max_t \max_k (D_{t,j}-D_{t,k})/(c_k-c_j)$, the allocation is the
+      constant map to exit $j$, at cost exactly $c_j$.
+\item The ceiling is a function of the split depth alone.
+\end{enumerate}
 
 The third of those has a practical edge. The sweep reaches only hull vertices, so
 a budget that falls between two of them cannot be met exactly. We measured what
