@@ -19,7 +19,11 @@ and the same 0.1 dB budget, the run reads:
 | 2 | 24.0% |
 | 3 | 25.8% |
 
-Monotone, 4.3 points, and epoch 4 was in progress at step 14,200 of 47,451.
+Monotone, 4.3 points. Epoch 4 is still in progress: at 2026-08-21 10:50 it was
+at step 32,800 of 47,451, so the next point on this table is a few hours away
+and the one after it is a day. `ckpt_eval.pth.tar` for this run was last
+written at the epoch-3 boundary on 08-20 at 21:23; the 20-minute checkpoint
+ages the heartbeat reports belong to the other three runs.
 
 **Why it is a decision and not a fix.** Reporting a later checkpoint is not
 cherry-picking, because there is no peak to pick; it is reporting the most
