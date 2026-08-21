@@ -1894,14 +1894,11 @@ def content(colw, fullw):
         r"honest one, so that is what we report. It understates what B can do.")
     tbl("beta_heldout",
         r"<b>Table N. Choosing β without the test set.</b> Left, β bisected on "
-        r"the \HeldNCal held-out validation frames and then applied to the "
-        r"test frames unchanged; right, β bisected on the test frames "
-        r"themselves, which is what the signalled-against-predicted table "
-        r"reports. Savings are hook "
-        r"counts on the routed decode with the router's own compute charged "
-        r"against them. The last column re-bisects on the test set to the "
-        r"quality the held-out β delivered, so the two allocations are "
-        r"differenced at one distortion rather than across two.")
+        r"the \HeldNCal held-out validation frames and applied to the test "
+        r"frames unchanged; right, β bisected on the test frames themselves. "
+        r"The last column re-bisects to the quality the held-out β delivered, "
+        r"so the two allocations are differenced at one distortion rather "
+        r"than across two.")
     par(r"<b>Where the β above came from.</b> Every β in the signalled-against-"
         r"predicted table was bisected against the budget on the test frames "
         r"themselves, which is the one thing Section 3.4 says a decoder cannot "

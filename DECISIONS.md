@@ -5274,3 +5274,24 @@ The richer version of the plot -- five rates, three budgets, and the arithmetic
 saved on a second axis -- is `rd_vs_uf.png` in Section D of the supplement,
 where there is room for it. The main paper keeps the two-panel version and its
 page count.
+
+## 113. Long captions are a layout cost, and one of them was worth three columns
+
+Raising every figure's type by a point cost about a column of page across
+thirty-five figures, and the discussion added another third of one. That is
+the trade the author asked for and it is the right one -- unreadable figures
+are a named CVPR format risk -- but it took the paper to 21 pages and left
+seven columns short of full.
+
+Two things paid for it, and neither cost the paper anything. Table 28 was a
+duplicate: the supplement already carries the identical "Seven mechanisms"
+table, so the paper's copy went and the paragraph points at the supplement.
+And Table 15's caption ran to ninety words, half of them repeating the note
+beneath it; trimmed to fifty, the table fits in the column it was jumping out
+of and three short columns closed at once.
+
+The lesson is worth recording because it is not obvious: a caption that
+overruns pushes its whole block to the next column, so the cost of a long
+caption is not the words but the gap they leave behind. Median caption in this
+paper is fifty-two words. The ones above seventy are where to look first the
+next time a column is short.
