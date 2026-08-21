@@ -5439,3 +5439,24 @@ value -- 0.194 against 0.184 dB at j=2, q63, on 20 frames -- which is the
 sampling in it and not a change of substance. The new ceiling table reads the
 file at build time, so those columns moved with it, and the sentence beside
 them that had 0.184 typed into it is a macro now.
+
+## 120. How many of these numbers can be repeated exactly, counted
+
+Finding one results file that named the wrong checkpoint raised the obvious
+next question: how many others cannot be traced to a set of weights at all?
+Counted over every file the two documents read, the answer is 48 on a
+checkpoint that does not move, 22 on one the watcher overwrites but recording
+the epoch or step it was at, and 20 recording neither.
+
+That last group is not new information -- several of its files are named as
+such where they are used, and the epoch tables of Section H exist because of
+it -- but it had never been stated as a number, and a reviewer asking "which
+of this is reproducible" deserves one. Nothing in the main paper's headline is
+in it; the pinned checkpoint carries every table the paper reports. What is in
+it is the adapter and coupling ablations, the configuration C sweeps, the
+wall-clock files and the anchor drift of the runs other than the pinned one.
+
+`check_provenance.py` is a ratchet rather than a pass/fail: it holds the
+present figure as a baseline and fails when the count grows, so a new
+measurement cannot be added without recording its checkpoint. Lowering the
+baseline after re-measuring one of the twenty is the way it is meant to move.

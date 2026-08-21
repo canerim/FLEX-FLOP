@@ -473,7 +473,8 @@ import subprocess as _sp  # noqa: E402
 for _name in ("check_twins", "check_tex", "prose_audit", "check_layout",
               "check_figs_fresh", "check_render", "check_fig_prose",
               "check_fig_overlap", "check_cites", "check_numbers",
-              "check_fig_claims", "check_mixed"):
+              "check_fig_claims", "check_mixed",
+              "check_provenance"):
     _r = _sp.run([sys.executable, str(Path(__file__).parent / f"{_name}.py")],
                  capture_output=True, text=True)
     _last = [l for l in _r.stdout.splitlines() if l.strip()]

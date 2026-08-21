@@ -887,6 +887,71 @@ def content(k):
         "the trunk costs.")
 
     # ------------------------------------------------------------------ H.7
+    k.h2("How much of this can be repeated exactly")
+
+    import glob as _glob
+    import json as _json
+    import os as _os
+    import re as _re
+    from pathlib import Path as _Path
+    _used = set()
+    _R = _Path(__file__).resolve().parents[2]
+    for _src in [_R / "scripts/build_pdf.py",
+                 _R / "scripts/make_paper_tables.py"] + \
+                sorted(_glob.glob(str(_R / "scripts/supp/*.py"))):
+        _used |= set(_re.findall(r"([A-Za-z0-9_.\-]+\.json)",
+                                 open(_src).read()))
+    _MOV = {"ckpt_eval.pth.tar", "ckpt_step.pth.tar"}
+    _ID = ("ckpt_epoch", "ckpt_step", "epoch", "step", "cumulative_step")
+    _pin = _idf = 0
+    _lost = []
+    for _res in sorted(_glob.glob(str(_R / "results/*.json"))):
+        if _os.path.getsize(_res) > 20_000_000:
+            continue
+        try:
+            _d = _json.loads(open(_res).read())
+        except Exception:
+            continue
+        if not isinstance(_d, dict):
+            continue
+        _ck = str(_d.get("ckpt") or _d.get("weights") or "")
+        _b = _os.path.basename(_res)
+        if not _ck or _b not in _used:
+            continue
+        if _os.path.basename(_ck) not in _MOV:
+            _pin += 1
+        elif any(_d.get(x) not in (None, "None", "") for x in _ID):
+            _idf += 1
+        else:
+            _lost.append(_b)
+
+    k.par(
+        f"Every measurement file records the checkpoint it was taken on, and "
+        f"there are three kinds of answer. {_pin} of the files these two "
+        f"documents read name a checkpoint that does not move -- a pin or a "
+        f"warm start -- so the measurement can be repeated exactly. Another "
+        f"{_idf} name one the watcher overwrites but record the epoch or step "
+        f"it was at, so the weights are identified even though the path is "
+        f"not. The remaining {len(_lost)} record neither, and their paths now "
+        f"point at whatever those runs have trained to since.")
+
+    k.par(
+        "That last group is not hidden -- several of the files in it are "
+        "named as such where they are used, and the epoch tables of this "
+        "section exist because of it -- but it is worth stating once as a "
+        "number rather than as remarks. Nothing in the main paper's headline "
+        "is in it: the pinned checkpoint carries every table the paper "
+        "reports. What is in it is the adapter and coupling ablations, the "
+        "hybrid sweeps of configuration C, the wall-clock files and the "
+        "anchor drift of the runs other than the pinned one. Repeating those "
+        "exactly would need the checkpoints back, which is why "
+        "scripts/check_provenance.py refuses to let the count grow.")
+
+    k.note("Counted in the build over results/*.json against the file names "
+           "scripts/build_pdf.py, scripts/make_paper_tables.py and "
+           "scripts/supp/*.py mention. The same count is a check, with the "
+           f"present figure of {len(_lost)} as its baseline.")
+
     k.h2("What is open")
 
     cp = k.J("check_paper.json")
