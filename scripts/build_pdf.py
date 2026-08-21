@@ -559,13 +559,10 @@ def content(colw, fullw):
         r"entropy model's own output beats our \RouterParams head at every "
         r"rate, by up to \RateRankBeatsBy points, with nothing added to the "
         r"file and nothing learned. It does so while picking the search's exit "
-        r"on FEWER tiles than the head does, which says that accuracy over "
+        r"on fewer tiles than the head does, which says that accuracy over "
         r"exit labels is the wrong objective and that ordering is what a "
-        r"router has to get right. A zero-learned-parameter control that adaptive-inference work is "
-        r"rarely measured against. Routing on the bits the entropy model has "
-        r"already spent per tile costs nothing, adds nothing to the stream, and "
-        r"beats our trained head at every rate, while agreeing with the oracle "
-        r"on fewer tiles than the head does.")
+        r"router has to get right. It is also the zero-learned-parameter "
+        r"control that adaptive-inference work is rarely measured against.")
     h1("2. Related work")
     par(r"Three lines of work meet in this paper and none of them quite "
         r"contains it. Early exit made depth a per-input decision and left it "
@@ -1393,10 +1390,10 @@ def content(colw, fullw):
         r"per quality index and distortion budget, configuration A. The 0.3 and "
         r"0.5 dB rows sit on the architectural ceiling almost everywhere; past "
         r"that point a looser budget buys nothing.")
-    par(r"A tenth of a decibel is an engineering convention. It is "
-        r"an engineering convention, chosen because it is small against the "
-        r"spacing of the rate points and because codec work has long used "
-        r"differences of this size as a working tolerance. It is not evidence "
+    par(r"A tenth of a decibel is a convention, not a threshold. We chose it "
+        r"because it is small against the spacing of the rate points and "
+        r"because codec work has long used differences of this size as a "
+        r"working tolerance. It is not evidence "
         r"that the difference is invisible, and we make no perceptual claim "
         r"for it. The 0.2, 0.3 and 0.5 dB rows are there so a reader who "
         r"disagrees with the choice can read off another one. We say this "

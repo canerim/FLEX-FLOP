@@ -156,8 +156,10 @@ computation should go.
 \item A zero-learned-parameter control that adaptive-inference work is rarely measured
       against. Routing on the bits the entropy model has already spent per tile
       costs nothing, adds nothing to the stream, and beats our trained head at
-      every rate, while agreeing with the Lagrangian oracle on fewer tiles than the head
-      does.
+      every rate, by up to \RateRankBeatsBy\ points, while agreeing with the
+      Lagrangian oracle on fewer tiles than the head does. That last part says
+      accuracy over exit labels is the wrong objective, and that ordering is
+      what a router has to get right.
 \end{enumerate}
 
 % =========================================================== related work
@@ -1057,8 +1059,8 @@ past that point a looser budget buys nothing.}
 \label{tab:main}
 \end{table}
 
-One word on the budget before the numbers. A tenth of a decibel is an
-engineering convention, chosen because it is small against the spacing of the
+One word on the budget before the numbers. A tenth of a decibel is a convention, not a
+threshold. We chose it because it is small against the spacing of the
 rate points and because codec work has long used differences of this size as a
 working tolerance. It is not evidence that the difference is invisible, and we
 make no perceptual claim for it. The $0.2$, $0.3$ and $0.5\dB$ rows of

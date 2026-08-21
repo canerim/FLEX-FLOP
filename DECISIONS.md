@@ -4851,3 +4851,28 @@ and that record should not be edited after the fact.
 The running eval was left to finish rather than killed. Killing it risked the
 watcher marking the checkpoint evaluated with no measurement written, and the
 next one lands on our own card regardless.
+
+## 96. A check for the paragraph that says the same thing twice (2026-08-21)
+
+Two paragraphs stated their point and then stated it again. Section 5.1 opened
+"A tenth of a decibel is an engineering convention. It is an engineering
+convention, chosen because...". Contribution (iii) gave the bit rule's result in
+three sentences and then repeated all three in different words, with a sentence
+fragment wedged between them. Every existing check passed both: they are not
+long, not hedged, not bolded, and every number in them is right.
+
+`prose_audit` now counts six-word phrases that occur twice inside one paragraph.
+Six, not four: at four it fires nineteen times on this paper and all nineteen are
+technical phrases the subject genuinely repeats, like "the calibrated bit rule".
+At six a repeat inside one paragraph is an accident, and both real defects were
+six-word repeats.
+
+Two things the check needed before it was usable. The supplement builds numbers
+with f-strings, so its paragraph source carries Python inside braces; left in,
+that code counted as words and produced 43 false repeats. Braces now collapse to
+a placeholder. And stripped mathematics leaves runs of single letters, so a
+repeat must carry three distinct words of three letters or more.
+
+Fatal in the paper, reported in the supplement. The supplement compares the same
+quantity across rates, and "at q0 the smaller tile is ahead ... at q63 the
+smaller tile is behind" is that sentence working, not failing.
