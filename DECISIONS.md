@@ -4787,3 +4787,43 @@ measured ones, so the model's 0.008-per-decode offset cannot masquerade as a
 failure of the interpolation.
 
 check_paper is 85/85 for the first time.
+
+---
+
+## 94. Epoch 3 is snapshotted, and the earlier reading of the epoch series was wrong
+
+`runs/RECIPE512/ckpt_eval.pth.tar` held epoch 3 and is overwritten by the
+training loop, so it is now also `ckpt_PIN_e3.pth.tar`. That costs 182 MB and
+buys the option of moving the paper onto it later, which the moving file would
+otherwise have taken away without warning.
+
+### The correction
+
+DECISIONS 92 read the epoch series as peaking at epoch 1 and falling, and the
+limitations section said so. Both were reading files that carry no hook count,
+where `sv()` falls back to the arithmetic model, which over-reports by 0.4 to
+0.8 points and not uniformly. Mixing the two definitions is the thing the whole
+accounting pass existed to stop, and it had survived inside the one paragraph
+about how much better the run gets.
+
+On the hook count alone, same 53 frames, same 0.1 dB budget:
+
+| epoch | mean saving | file |
+|---|---|---|
+| 0 | 21.5% | signalled_RECIPE512_ctc53.json, the pinned checkpoint |
+| 1 | 22.8% | signalled_RECIPE512_e1.json |
+| 2 | 24.0% | signalled_RECIPE512_0820_0140.json |
+| 3 | 25.8% | signalled_RECIPE512_0820_2125.json |
+
+Monotone, 4.3 points over four epochs, and epoch 4 was in progress at step
+14,200 of 47,451 when this was written.
+
+### What follows
+
+Moving the paper to the latest checkpoint is no longer picking a peak, because
+there is no peak; it is reporting the most recent measurement of a run that is
+still improving. `scripts/repin.sh` does the whole chain in one command and
+refuses to pin a moving file.
+
+The decision is the author's. What is recorded here is that the argument against
+moving, which I made in conversation, rested on a units error of mine.
