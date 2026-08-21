@@ -8,6 +8,7 @@ claims that a reader would act on, and exits non-zero if any has moved.
 Add a claim here whenever one is written into the text.
 """
 import json, re, sys
+import sys
 from pathlib import Path
 
 R = Path(__file__).resolve().parents[1]
@@ -439,4 +440,18 @@ print(f"\n  {len(CLAIMS)-len(bad)}/{len(CLAIMS)} prose claims match the data")
 json.dump({"n_claims": len(CLAIMS), "n_passed": len(CLAIMS) - len(bad),
            "failed": [c[1] for c in CLAIMS if not c[0]]},
           open(R / "results/check_paper.json", "w"), indent=2)
+# ---------------------------------------------------------------- structure
+# Two files carry this paper and each build is internally consistent, so
+# neither complains when they drift. They drifted twice in one night. These run
+# here so a divergence is caught by the same command that catches a stale
+# number.
+import subprocess as _sp  # noqa: E402
+for _name in ("check_twins", "prose_audit"):
+    _r = _sp.run([sys.executable, str(Path(__file__).parent / f"{_name}.py")],
+                 capture_output=True, text=True)
+    _last = [l for l in _r.stdout.splitlines() if l.strip()]
+    print(f"\n  {_name}: {_last[-1].strip() if _last else '(no output)'}")
+
 sys.exit(1 if bad else 0)
+
+
