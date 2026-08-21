@@ -14,3 +14,25 @@ Source: `Bosphorus_1920x1080_120fps_420_8bit_YUV.yuv`, frame 0, padded from 1920
 | `patch_3_water.png` | tile at row 3, col 6 |
 
 Colours are converted from the decoder's YCbCr 4:4:4 with `src.utils.transforms.ycbcr2rgb`; displaying those tensors directly renders the picture pink.
+
+## seam_repair_grid.png
+
+Grid seam repair shown on the grid, Bosphorus at quality index 63, the rate
+where the seam is worst. One forward pass of the pinned checkpoint
+`runs/RECIPE512/ckpt_PAPER.pth.tar`; nothing is drawn by hand.
+
+Six panels. **a** the frame with the 5x8 tile grid and the region the zooms come
+from. **b** and **c** the error against a full-frame decode of the same latent,
+amplified 25 times, with the repair off and on. **d** and **e** the same crossing
+of the grid in the picture itself. **f** what the repair changed there.
+
+Measured on this frame: the tiling penalty is +0.0405 dB with the repair off and
++0.0357 dB with it on, so the module recovers 0.0048 dB of the 0.0405 it was
+built to remove. The mean absolute change it makes to a pixel is 0.00015, with a
+peak of 0.0122. Those two numbers are why the paper does not present the module
+as the answer to the seam: it does something, on the seam, and it does not
+recover most of what tiling costs.
+
+Reproduce:
+
+    python scripts/seam_repair_grid_figure.py --device cuda:0
