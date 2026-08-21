@@ -746,7 +746,9 @@ def content(k):
         vs = [_at(d)[q] for d in f12]
         per_rate[q] = (min(vs), max(vs))
 
-    gap2 = _mean(E2, QPS) - _mean(B2, QPS)
+    # One computation for this number, in make_paper_tables, because the
+    # main paper quotes it too and had a stale 4.8 typed into it.
+    gap2 = float(k.macro("RunGapEpochTwo"))
 
     k.par(
         f"RECIPE512 and BEST are the same K, the same split depth, the same "

@@ -1643,7 +1643,7 @@ def content(colw, fullw):
         r"separates them separates two runs as well as two tile sizes. The "
         r"size of that confound is measurable and it is not small: two runs of "
         r"the SAME recipe, at a matched epoch on the same frames, differ by "
-        r"4.8 saving points, which is as large as the tile-size effect "
+        r"\RunGapEpochTwo saving points, which is as large as the tile-size effect "
         r"reported below. We report the comparison because the resolution "
         r"dependence it exposes is real and was hidden by a 1080p-only test "
         r"set, and we do not read the tile size as its cause.")

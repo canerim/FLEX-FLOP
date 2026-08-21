@@ -272,6 +272,26 @@ if d:
 
 # -------------------------------------------------------------- run compare
 print("run comparison")
+
+# How far two runs of one recipe land apart at a matched epoch. The main paper
+# had 4.8 typed into the confound paragraph and the supplement computed 4.7
+# from the same two files, because the typed one was taken from an earlier
+# pair. One computation, one macro, both builds.
+def _epoch_mean(name, budget=0.1):
+    import json as _j
+    p_ = R / "results" / name
+    if not p_.exists():
+        return None
+    vs = [sv(r) for r in _j.loads(p_.read_text())["rows"]
+          if abs(r.get("budget_db", -1) - budget) < 1e-9 and sv(r) is not None]
+    return sum(vs) / len(vs) if vs else None
+
+
+_e2 = _epoch_mean("signalled_RECIPE512_0820_0140.json")
+_b2 = _epoch_mean("signalled_BEST_0819_1050.json")
+if _e2 is not None and _b2 is not None:
+    mac("RunGapEpochTwo", f"{_e2 - _b2:.1f}")
+
 # Ceilings computed from each run's own config with the shipped cost model and
 # then corrected by the constant the hook count shows, rather than typed in.
 # They were 41.91 and 50.29 here, both from before the FFN adapter was found to
