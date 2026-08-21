@@ -141,10 +141,17 @@ def main(src="results/signalled_RECIPE512_grid.json",
     for i, l in enumerate("ab"):
         ns.panel(ax[i], l, dx=-0.22)
     fig.tight_layout(w_pad=1.6)
-    for _d in (R / "docs/figures", R / "paper/figures"):
-        _d.mkdir(parents=True, exist_ok=True)
-        fig.savefig(_d / "budget_band.png", dpi=500, bbox_inches="tight",
-                    pad_inches=0.02, facecolor="white")
+    # The name comes from the argument. It used to be the literal
+    # "budget_band.png" in a loop over both figure directories, so the run
+    # that draws the second training run's collapse overwrote the main
+    # paper's figure with it and reported the name it had not written. The
+    # paper carried the wrong picture under a caption that said otherwise.
+    # naturestyle's savefig mirrors into the twin directory and records the
+    # overlap audit under the real name, so one call is enough.
+    _out = R / out
+    _out.parent.mkdir(parents=True, exist_ok=True)
+    fig.savefig(_out, dpi=500, bbox_inches="tight",
+                pad_inches=0.02, facecolor="white")
     print(f"  -> {out}")
 
 

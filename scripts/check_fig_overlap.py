@@ -47,14 +47,25 @@ def main() -> int:
     # Naming the gap rather than reporting a clean sweep over part of the set:
     # the figures drawn from the model need a GPU and a checkpoint, and
     # regenerating one to audit it would replace a published picture.
-    missing = sorted(names - seen)
+    # Two of the figures are not drawings of ours and never pass through
+    # matplotlib, so "not yet audited" would read as work outstanding when
+    # there is nothing this check could ever say about them.
+    external = {
+        "dcvcuf_framework.png": "Figure 3 of the DCVC-UF paper, rasterised",
+        "flexuf_overview.png": "the teaser, drawn in diagrams.net",
+    }
+    missing = sorted(names - seen - set(external))
+    out_of_scope = sorted((names - seen) & set(external))
     if missing:
         print(f"     not yet audited ({len(missing)}): "
               f"{', '.join(m[:-4] for m in missing[:6])}"
               f"{' ...' if len(missing) > 6 else ''}")
+    for n in out_of_scope:
+        print(f"     out of scope: {n[:-4]} -- {external[n]}")
     # Summary last: check_paper reads the final line of each check.
-    print(f"  {len(seen)}/{len(names)} figures audited, {len(bad)} with "
-          f"collisions or invisible series")
+    print(f"  {len(seen)}/{len(names) - len(out_of_scope)} matplotlib "
+          f"figures audited, {len(bad)} with collisions or invisible series"
+          f"{f', {len(out_of_scope)} out of scope' if out_of_scope else ''}")
     return 1 if bad else 0
 
 

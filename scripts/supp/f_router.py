@@ -604,13 +604,25 @@ def content(k):
 
     # ------------------------------------------------------------------ F.5
     k.par(
-        "<b>The two decoder-side signals are barely complementary.</b> "
+        "<b>The two decoder-side signals are not complementary.</b> "
         "Normalising both surrogates to unit mean and blending them with one "
         "weight, from the calibrated bit rule at one end to the head's "
-        "ordering at the other, the best blend is the rule alone at the three "
-        "lowest rates and a small head weight at the two highest. The head "
-        "reads the entropy model's scales, so it already holds most of what "
-        "the bit count carries, and what it adds is confined to q48 and q63.")
+        "ordering at the other, the rule alone is best at every rate, and "
+        "every positive weight is worse than none. Trusting the head "
+        "completely costs \\BlendCostMin to \\BlendCostMax points, the most "
+        "at \\BlendCostMaxQ. The head reads the entropy model's scales and "
+        "the bit count is what those scales produce, so blending them mixes a "
+        "signal with a learned approximation of itself.")
+    k.par(
+        "An earlier version of this table, measured before the checkpoint was "
+        "pinned, showed a small gain at the two highest rates, and the paper "
+        "carried it as evidence of weak complementarity. Re-measuring on the "
+        "pinned weights removed it. The head in that measurement had been "
+        "trained against whichever weights runs/RECIPE512/ckpt_eval.pth.tar "
+        "held at the time, which is a moving pointer, so we cannot say from "
+        "the two files alone whether the gain was the cost model or the "
+        "mismatch. Every router number in this document is measured on the "
+        "pinned checkpoint for that reason.")
     k.tbl("blend",
           "<b>Blending the two decoder-side signals</b> at 0.1 dB, both "
           "normalised to unit mean, with the weight running from the "

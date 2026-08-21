@@ -224,7 +224,9 @@ The rule agrees with the oracle on \RateRankAgreeLo to \RateRankAgreeHi of tiles
 
 What the rule cannot do is see past that ordering. A rank-1 model gives every tile the same relative profile over exits, so b(t) decides where on the ladder a tile falls and never the shape of its trade-off. That is the ceiling this baseline sits at, and it is the part a learned head would have to earn its parameters on. Neither of our two heads does.
 
-\textbf{The two decoder-side signals are barely complementary.} Normalising both surrogates to unit mean and blending them with one weight, from the calibrated bit rule at one end to the head's ordering at the other, the best blend is the rule alone at the three lowest rates and a small head weight at the two highest. The head reads the entropy model's scales, so it already holds most of what the bit count carries, and what it adds is confined to q48 and q63.
+\textbf{The two decoder-side signals are not complementary.} Normalising both surrogates to unit mean and blending them with one weight, from the calibrated bit rule at one end to the head's ordering at the other, the rule alone is best at every rate, and every positive weight is worse than none. Trusting the head completely costs \BlendCostMin to \BlendCostMax points, the most at \BlendCostMaxQ. The head reads the entropy model's scales and the bit count is what those scales produce, so blending them mixes a signal with a learned approximation of itself.
+
+An earlier version of this table, measured before the checkpoint was pinned, showed a small gain at the two highest rates, and the paper carried it as evidence of weak complementarity. Re-measuring on the pinned weights removed it. The head in that measurement had been trained against whichever weights runs/RECIPE512/ckpt\_eval.pth.tar held at the time, which is a moving pointer, so we cannot say from the two files alone whether the gain was the cost model or the mismatch. Every router number in this document is measured on the pinned checkpoint for that reason.
 
 \begin{table}[t]
 \centering

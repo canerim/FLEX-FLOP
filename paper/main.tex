@@ -1787,11 +1787,16 @@ regions get more bits~\cite{blockratecontrol}. We read the same number in the
 other direction, after the fact and at the decoder, as a statement about how hard
 a region was. It costs nothing because someone else has already paid for it.
 
-\textbf{Are the two signals complementary?} Barely. We normalise both surrogates
+\textbf{Are the two signals complementary?} No. We normalise both surrogates
 to unit mean and blend them with one weight $w$, where $w{=}0$ is the
-calibrated bit rule and $w{=}1$ the head's ordering. The best blend is $w{=}0$ at
-the three lowest rates and a small head weight at the two highest, worth \BlendGainMid\ points at \BlendGainMidQ\ and \BlendGainHigh\ at \BlendGainHighQ (Table~\ref{tab:blend}). The head reads the
-entropy model's scales, so it already has most of what the bit count carries; what it adds is confined to \BlendGainMidQ\ and \BlendGainHighQ.
+calibrated bit rule and $w{=}1$ the head's ordering. The bit rule alone is best
+at every rate (Table~\ref{tab:blend}); no positive weight pays for itself
+anywhere, and handing the decision to the head costs between \BlendCostMin\ and
+\BlendCostMax\ points, the most at \BlendCostMaxQ. The reason is that they are
+not two signals. The head reads the entropy model's scales, and the bit count is
+what those scales produce, so the head is a learned re-derivation of the
+quantity it is being blended with. Mixing a noisier copy of a signal into the
+signal cannot add information, and the table shows it subtracting some.
 
 \paragraph{How much a trained head varies, and what that does to the claim.} No
 head here was trained twice at two seeds, so we have no seed variance to report.

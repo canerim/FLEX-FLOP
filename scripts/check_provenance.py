@@ -32,7 +32,7 @@ R = Path(__file__).resolve().parent.parent
 # Lowered from 20 on 2026-08-21: the adapter and coupling ablations were
 # traced back to the pinned checkpoint and re-measured on it. Lowering this
 # after converting one is the point of the number.
-BASELINE = 18
+BASELINE = 17
 MOVING = {"ckpt_eval.pth.tar", "ckpt_step.pth.tar"}
 IDENT = ("ckpt_epoch", "ckpt_step", "epoch", "step", "cumulative_step",
          "ckpt_mtime", "ckpt_sha")
@@ -51,7 +51,7 @@ def read_by_documents() -> set[str]:
 # adapter cost, which is how the ceiling read 41.9 instead of 39.1 and how the
 # coupling ablation's savings came out two and a half points high.
 COST_FIX = 1787120787          # commit 8792f0b, 2026-08-19 08:26
-STALE_BASELINE = 28
+STALE_BASELINE = 27
 SAVKEY = re.compile(r"saving|saved|cost|ceiling|gmac|kmac", re.I)
 
 

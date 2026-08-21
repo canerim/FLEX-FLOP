@@ -36,6 +36,12 @@ ALLOW = {
     # Section 5.6's account of the exit-mask bug describes measurements that
     # were taken before it was fixed. They are history, they are labelled as
     # history in the sentence itself, and no file holds them any more.
+    # Software versions. "CUDA 12.4" went unnoticed for weeks because
+    # \BlendBitsOnlyHigh happened to be 12.4 as well; when the blend was
+    # re-measured the coincidence ended and the version string surfaced. A
+    # value-matching check cannot tell a version from a measurement, so the
+    # versions are named here.
+    "12.4": "CUDA version", "2.6": "PyTorch version",
     "1.7": "pre-fix exit-mask gap, historical",
     "13.3": "pre-fix exit-mask gap, historical",
     "3.5": "cost of fixing the exit mask, historical",

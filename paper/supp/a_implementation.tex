@@ -340,7 +340,7 @@ hybrid\_v3\_b01 & rate rank, second run & R512/eval & 53$\times$1 \\
 latency\_RECIPE512\_sorted & latency & R512/eval & - \\
 router\_latency & operating range & R512/eval & - \\
 adapter\_ablation & adapter ablation & pinned & 16 fr \\
-combined\_RECIPE512\_b01 & blend & R512/eval & 53$\times$1 \\
+combined\_RECIPE512\_b01 & blend & pinned & 53$\times$1 \\
 hybrid\_RECIPE512\_b03\_fixed & macros only & R512/eval & 53$\times$1 \\
 hybrid\_lorenz\_b01 & macros only & R512/eval & 53$\times$1 \\
 coupling\_ablation & macros only & pinned & 16 fr \\
@@ -358,7 +358,7 @@ bdrate & BD-rate & \emph{none} & - \\
 check\_paper & claim check & \emph{none} & - \\
 \bottomrule
 \end{tabular}}
-\caption{Provenance of every generated table in the main paper. These are the 31 results files scripts/make\_paper\_tables.py reads, and the checkpoint column is read from each file at build time rather than typed. Take from it that 12 of the 31 are on the pinned checkpoint and the rest are not, so a reader comparing two rows of two different tables should check this column first. R512 abbreviates the run RECIPE512, "eval" is a per-epoch file the watcher overwrites in place, and "none" means the file records no checkpoint field.}
+\caption{Provenance of every generated table in the main paper. These are the 31 results files scripts/make\_paper\_tables.py reads, and the checkpoint column is read from each file at build time rather than typed. Take from it that 13 of the 31 are on the pinned checkpoint and the rest are not, so a reader comparing two rows of two different tables should check this column first. R512 abbreviates the run RECIPE512, "eval" is a per-epoch file the watcher overwrites in place, and "none" means the file records no checkpoint field.}
 \end{table}
 
 The pinned group of Table 10 carries the headline saving, the operating range, the per-class breakdown, the static controls and both routed configurations, so the paper's central claim rests on one epoch of one run measured consistently. Section H states what the rest of the column costs in reproducibility.
@@ -405,7 +405,7 @@ q63 & 12.93 & 12.36 & 0.57 \\
 
 {\small Source: results/crosscheck\_paths.json. The file records no checkpoint field.}
 
-Evaluation itself is deterministic once a checkpoint is fixed: the sequence list, the leading frames and the tile grid are all fixed and no crop is random. scripts/check\_paper.py re-reads \NumClaims numerical claims out of the paper's prose and checks each against the file it is supposed to come from. As recorded in results/check\_paper.json, 82 of them pass. One does not: "coupling q0 padded saving", which is listed among the limitations of section H rather than presented as passing.
+Evaluation itself is deterministic once a checkpoint is fixed: the sequence list, the leading frames and the tile grid are all fixed and no crop is random. scripts/check\_paper.py re-reads \NumClaims numerical claims out of the paper's prose and checks each against the file it is supposed to come from. As recorded in results/check\_paper.json, 90 of them pass. All of them pass.
 
 \subsection{Data, code and provenance}
 

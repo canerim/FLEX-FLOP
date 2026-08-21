@@ -326,10 +326,17 @@ if cb:
     def _c(q, w):
         return next((r["saving_pct_vs_release"] for r in rws
                      if r["qp"] == q and abs(r["gamma"] - w) < 1e-9), None)
-    for q, w, exp in ((48, 0.25, 2.1), (63, 0.1, 0.9)):
-        v, v0 = _c(q, w), _c(q, 0.0)
-        if v is not None and v0 is not None:
-            claim(f"blend gain q{q}", exp, v - v0, 0.15)
+    # The claim is now the shape of the table rather than two numbers in it:
+    # the bit rule alone wins at every rate. Written as a claim per rate so a
+    # failure names the rate that broke it.
+    _ws = sorted({r["gamma"] for r in rws})
+    for q in sorted({r["qp"] for r in rws}):
+        vs = [(w, _c(q, w)) for w in _ws]
+        vs = [(w, v) for w, v in vs if v is not None]
+        if len(vs) < 2:
+            continue
+        best_w = max(vs, key=lambda t: t[1])[0]
+        claim(f"blend: bit rule alone is best at q{q}", 0.0, best_w, 1e-9)
 
 # ---- rate rank, loose budgets ---------------------------------------------
 rr5 = J("raterank_RECIPE512_b05.json")

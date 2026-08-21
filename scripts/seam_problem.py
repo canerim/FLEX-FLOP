@@ -148,10 +148,14 @@ a3.imshow(np.clip(err[ZR:ZR+ZS, ZC:ZC+ZS] * a.amp, 0, 1), cmap="inferno",
 # the caption, where a reader looks for provenance.
 for o in (R / a.out, R / "results/seam_problem.png"):
     o.parent.mkdir(parents=True, exist_ok=True)
-    for _d in (R / "docs/figures", R / "paper/figures"):
-        _d.mkdir(parents=True, exist_ok=True)
-        fig.savefig(_d / "seam_problem.png", dpi=500, bbox_inches="tight",
-                    pad_inches=0.02, facecolor="white")
+    # The name comes from the argument. A hardcoded name in a loop over
+    # both figure directories ignored it silently, reported the name it
+    # had not written, and overwrote whatever did own that name.
+    # naturestyle's savefig mirrors into the twin directory and records
+    # the overlap audit under the real name, so one call is enough.
+    _out = R / a.out
+    _out.parent.mkdir(parents=True, exist_ok=True)
+    fig.savefig(_out, dpi=500, bbox_inches="tight", pad_inches=0.02, facecolor="white")
 print(f"  {P}px tiles, {(H+ph)//P}x{(W+pw)//P} grid   penalty {db.item():+.4f} dB")
 
 if a.sidecar:

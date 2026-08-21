@@ -1044,6 +1044,24 @@ if cb:
             mac(f"BlendHeadOnly{tag}", f"{sv(c1):.1f}")
         if c0:
             mac(f"BlendBitsOnly{tag}", f"{sv(c0):.1f}")
+    # What the head costs when it is trusted completely, across the rates.
+    # On the pinned checkpoint the bit rule wins everywhere, so the
+    # interesting quantity is no longer a gain but a price.
+    _cost = []
+    for q in qs:
+        c0, c1 = cell(q, 0.0), cell(q, 1.0)
+        if c0 and c1:
+            _cost.append(sv(c0) - sv(c1))
+    if _cost:
+        mac("BlendCostMin", f"{min(_cost):.1f}")
+        mac("BlendCostMax", f"{max(_cost):.1f}")
+        # The rate that pays the most for it, named rather than typed.
+        mac("BlendCostMaxQ", f"q{qs[_cost.index(max(_cost))]}")
+        mac("BlendBestW",
+            "0" if all(sv(cell(q, 0.0)) >= max(
+                sv(c) for _, c in [(w_, cell(q, w_)) for w_ in ws] if c)
+                - 1e-9 for q in qs) else "mixed")
+
     # What blending is worth at the two rates where it is worth anything. The
     # prose had +2.1 and +0.9 typed into it, which is how a number outlives
     # the measurement it came from.

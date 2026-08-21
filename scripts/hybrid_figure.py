@@ -74,10 +74,14 @@ def main(src=None, out="docs/figures/hybrid.png", lor=None):
     for i, l in enumerate("abc"):
         ns.panel(ax[i], l, dx=-0.22)
     fig.tight_layout(w_pad=1.6)
-    for _d in (R / "docs/figures", R / "paper/figures"):
-        _d.mkdir(parents=True, exist_ok=True)
-        fig.savefig(_d / "hybrid.png", dpi=500, bbox_inches="tight",
-                    pad_inches=0.02, facecolor="white")
+    # The name comes from the argument. A hardcoded name in a loop over
+    # both figure directories ignored it silently, reported the name it
+    # had not written, and overwrote whatever did own that name.
+    # naturestyle's savefig mirrors into the twin directory and records
+    # the overlap audit under the real name, so one call is enough.
+    _out = R / out
+    _out.parent.mkdir(parents=True, exist_ok=True)
+    fig.savefig(_out, dpi=500, bbox_inches="tight", pad_inches=0.02, facecolor="white")
     print(f"  -> {out}")
 
 
