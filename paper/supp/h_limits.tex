@@ -213,11 +213,11 @@ RECIPE512, pinned & 0.0051 & 0.0145 & 0.0362 & 53 \\
 RECIPE512, later & 0.0016 & 0.0131 & 0.0320 & 53 \\
 BEST & 0.0022 & 0.0082 & 0.0175 & 53 \\
 BEST128 & 0.0036 & 0.0104 & 0.0216 & 53 \\
-FINE12 & 0.0085 & 0.0260 & 0.0644 & 53 \\
+FINE12 & 0.0045 & 0.0249 & 0.0599 & 53 \\
 VERBATIM, no anchor term & 0.1101 & 0.1241 & 0.1594 & 40 \\
 \bottomrule
 \end{tabular}}
-\caption{\textbf{How far the deepest exit has moved from the released decoder}, in decibels, one checkpoint per run. The deepest exit is supposed to be the released decoder and the training objective carries a term that holds it there. The term does real work: the run trained without it sits 0.110 to 0.159 dB away, more than the whole headline budget at every rate before a single tile has exited early. The term does not hold it exactly, and what it leaves behind grows with rate: 36\% of a 0.1 dB budget at q63 on the pinned checkpoint and 64\% on the twelve-exit run, whose floor exceeds that budget outright at the highest rate.}
+\caption{\textbf{How far the deepest exit has moved from the released decoder}, in decibels, one checkpoint per run. The deepest exit is supposed to be the released decoder and the training objective carries a term that holds it there. The term does real work: the run trained without it sits 0.110 to 0.159 dB away, more than the whole headline budget at every rate before a single tile has exited early. The term does not hold it exactly, and what it leaves behind grows with rate: 36\% of a 0.1 dB budget at q63 on the pinned checkpoint and 60\% on the twelve-exit run, whose floor exceeds that budget outright at the highest rate.}
 \end{table}
 
 {\small results/supp\_anchor\_PAPER.json on runs/RECIPE512/ckpt\_PAPER.pth.tar; results/anchor\_RECIPE512.json, results/anchor\_BEST.json, results/anchor\_BEST128.json, results/anchor\_FINE12.json and results/anchor\_VERBATIM.json on the ckpt\_eval or ckpt\_step file of their runs, at the epoch each happened to be at, which none of them records. Frame counts differ by file and are printed, because two of these are 40 frames and are not comparable with the \NumSeq-frame rows at the fourth decimal.}
@@ -240,5 +240,5 @@ Every open problem in this supplement is listed here, so that a reader meets eac
 \item \textbf{One accelerator class.} Every millisecond and every joule in this work is an NVIDIA RTX A6000, all eight cards in this machine being that model, and the CPU rows of section B are the only second device class. Power comes from the driver counter, with no external meter to calibrate it against.
 \end{itemize}
 
-No internal check is outstanding. They all hold, including the one this list would otherwise have carried: the partially signalled configuration reduces to the fully signalled one to four decimals when every tile is overridden, with both sides read in the same saving convention, so the cost model's 0.8-point offset cannot present itself as a failure of the interpolation. As recorded in results/check\_paper.json, 85 of 85 checked claims pass.
+No internal check is outstanding. They all hold, including the one this list would otherwise have carried: the partially signalled configuration reduces to the fully signalled one to four decimals when every tile is overridden, with both sides read in the same saving convention, so the cost model's 0.8-point offset cannot present itself as a failure of the interpolation. As recorded in results/check\_paper.json, 87 of 87 checked claims pass.
 
