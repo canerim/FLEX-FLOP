@@ -1119,6 +1119,18 @@ Section~\ref{sec:raterank} removes that crutch and turns the same signal into a
 complete routing rule, which matches the trained head across the whole rate
 range. Fig.~\ref{fig:exitmap} shows the assignment the Lagrangian oracle arrives at.
 
+\begin{figure}[t]
+\centering
+\includegraphics[width=\columnwidth]{figures/spread.png}
+\caption{\textbf{What the set mean hides.} Every test sequence as a point, at
+the $0.1\dB$ budget; the bar is the median. At the lowest rate the saving runs
+from $28.1\%$ to $42.5\%$ across sequences and at the highest from $11.1\%$ to
+$42.5\%$. The spread within a rate is larger than the difference between rates,
+and it is content, not noise: the same sequences sit at the same end of it at
+every rate.}
+\label{fig:spread}
+\end{figure}
+
 \subsection{Resolution, and the granularity of a tile}
 \label{sec:resolution}
 
@@ -1180,6 +1192,16 @@ tile sizes come from different training runs and tile size is therefore
 confounded with training. But the direction is consistent, and it is enough for
 us to say that a resolution-adaptive tile size is not the easy win the
 granularity argument suggests.
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\columnwidth]{figures/exituse.png}
+\caption{\textbf{How deep each class has to go.} Mean exit taken by the tiles of
+each test class at the $0.1\dB$ budget, ordered by that mean. Resolution is the
+strongest predictor: the $416\times240$ class has two tiles a frame and almost
+no choice, and the 1080p classes have forty and use the whole ladder.}
+\label{fig:exituse}
+\end{figure}
 
 \subsection{The band a distortion budget works in}
 \label{sec:operating}

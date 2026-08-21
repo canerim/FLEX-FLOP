@@ -1441,6 +1441,14 @@ def content(colw, fullw):
         r"is <i>ranking</i> and nothing else. Section 5.6 removes that crutch "
         r"and turns the same signal into a complete routing rule, which "
         r"matches the trained head across the whole rate range.")
+    figure("spread.png",
+           r"<b>Figure N. What the set mean hides.</b> Every test sequence as "
+           r"a point, at the 0.1 dB budget; the bar is the median. At the "
+           r"lowest rate the saving runs from 28.1% to 42.5% across sequences "
+           r"and at the highest from 11.1% to 42.5%. The spread within a rate "
+           r"is larger than the difference between rates, and it is content, "
+           r"not noise: the same sequences sit at the same end of it at every "
+           r"rate.")
     h2("5.3 Resolution, and the granularity of a tile")
     par(r"<b>This comparison is indicative and confounded.</b> The 128 and 256 "
         r"pixel ladders are different training runs, so anything that "
@@ -1490,6 +1498,14 @@ def content(colw, fullw):
         r"But the direction is consistent, and it is enough for us to say that "
         r"a resolution-adaptive tile size is not the easy win the granularity "
         r"argument suggests.")
+    figure("exituse.png",
+           r"<b>Figure N. How deep each class has to go.</b> Mean exit taken "
+           r"by the tiles of each test class at the 0.1 dB budget, ordered by "
+           r"that mean. Resolution is the strongest predictor: the 416×240 "
+           r"class has two tiles a frame and almost no choice, and the 1080p "
+           r"classes have forty and use the whole ladder. This is the "
+           r"dependence Section 5.3 measures, seen per class rather than "
+           r"pooled.")
     h2("5.4 The band a distortion budget works in")
     figure("saturation_RECIPE512.png",
            r"<b>Figure 8. Three regions, and only the middle one is a design "
