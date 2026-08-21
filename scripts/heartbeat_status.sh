@@ -18,6 +18,11 @@ while true; do
   TW=$(echo "$OUT" | grep -oE 'check_twins: [A-Za-z0-9 ()]+' | head -1 | sed 's/check_twins: //')
   PR=$(echo "$OUT" | grep -oE 'prose_audit: [A-Za-z0-9 ()]+' | head -1 | sed 's/prose_audit: //')
   TX=$(echo "$OUT" | grep -oE 'check_tex: [A-Za-z0-9 ()]+' | head -1 | sed 's/check_tex: //')
+  # The three checks added on 21 August read the artefact rather than the
+  # source, which is where the last few defects were only visible.
+  LY=$(echo "$OUT" | grep -oE 'check_layout: [A-Za-z0-9 ()]+' | head -1 | sed 's/check_layout: //')
+  FR=$(echo "$OUT" | grep -oE 'check_figs_fresh: [A-Za-z0-9 ()]+' | head -1 | sed 's/check_figs_fresh: //')
+  RN=$(echo "$OUT" | grep -oE 'check_render: [A-Za-z0-9 ()]+' | head -1 | sed 's/check_render: //')
   # A page count that comes back empty is the PDF being rewritten as we read
   # it, not a missing paper. Saying "building" costs one word and stops a
   # blank field looking like a broken artefact.
@@ -39,6 +44,6 @@ while true; do
          [ -n "$f" ] && tail -1 "$f" 2>/dev/null | grep -o '"epoch": [0-9]*' | head -1 \
            | grep -o '[0-9]*$' | sed "s/^/${t:0:4}/"
        done | tr '\n' ' ')
-  echo "$TS  fix $FIX | claims $CHK twins $TW tex $TX prose $PR | paper ${MAIN}p supp ${SUPP}p | gpu ours=$OURS others=$OTHER | newest ckpt $AGE | ep $EP"
+  echo "$TS  fix $FIX | claims $CHK twins $TW tex $TX prose $PR layout $LY figs $FR render $RN | paper ${MAIN}p supp ${SUPP}p | gpu ours=$OURS others=$OTHER | newest ckpt $AGE | ep $EP"
   sleep "$INTERVAL"
 done
