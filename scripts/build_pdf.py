@@ -1160,17 +1160,15 @@ def content(colw, fullw):
         r"per tile by taking the mean and the standard deviation over the "
         r"tile. Both moments are there on purpose: the channel means describe "
         r"roughly a tile's colour and the standard deviations its texture, and "
-        r"texture is what decides how many blocks a tile needs. The same pair "
-        r"is what adaptive instance normalisation takes as a compact "
-        r"description of a feature map's style [51]. "
-        r"That gives 96 + 64 + 1 = 161 numbers per tile, which pass "
-        r"through LayerNorm and a three-layer perceptron of width 256 with "
-        r"SiLU activations, ending in K logits. The whole head is 144,030 "
-        r"parameters and \RouterCostPct% of the decode it is deciding about, "
-        r"almost all "
-        r"of it in the 1×1 on the stem, which is the only part that runs per "
-        r"pixel. The perceptron runs once per tile, forty times for a 1080p "
-        r"frame, so its width is nearly free.")
+        r"texture is what decides how many blocks a tile needs — the same "
+        r"pair adaptive instance normalisation takes as a compact "
+        r"description of a feature map's style [51]. What that gives per "
+        r"tile goes through LayerNorm and a three-layer perceptron ending "
+        r"in K logits. The head is \RouterParams parameters and "
+        r"\RouterCostPct% of the decode it is deciding about, almost all "
+        r"of it in the 1×1 on the stem, which is the only part that runs "
+        r"per pixel; the perceptron runs forty times for a 1080p frame, so "
+        r"its width is nearly free.")
     figure("router_arch.png",
            r"<b>Figure N. The router head.</b> <b>a</b>, the three things "
            r"it reads, all already held by the decoder. <b>b</b>, each "
@@ -1258,10 +1256,10 @@ def content(colw, fullw):
     par(r"At our shipped F=32, b=8 that comes to 0.750. Three quarters of the "
         r"tile is affected, so what we are looking at is a structured error "
         r"over most of the tile ([[fig:seam_problem]]) and not a thin border at its edge. "
-        r"Panel b is the same bitstream and the same weights decoded in tiles, "
-        r"and the difference from panel a is not a line along the seam but a "
-        r"texture filling each tile, which is why a deblocking filter aimed at "
-        r"the boundary recovers so little of it.")
+        r"Panel b is the same bitstream decoded in tiles, and what separates "
+        r"it from panel a is not a line along the seam but a texture filling "
+        r"each tile, which is why a deblocking filter aimed at the boundary "
+        r"recovers so little.")
     par(r"That fraction tells us which pixels are affected and not how badly, "
         r"and it turns out to be the wrong predictor of the penalty. We swept "
         r"the split depth, which sweeps b from 12 to 0 with b=0 as an exact "
@@ -1352,12 +1350,11 @@ def content(colw, fullw):
         r"with a filter applied after reconstruction [7, 19] ([[fig:seam_gate]]). The tile lattice "
         r"is known "
         r"exactly at training and at inference, so ours can be <i>told</i> "
-        r"where to look instead of having to infer it. Panel d is the reading "
-        r"that matters: the learned gate is not a switch. It reaches "
-        r"\GateMax at a tile corner, where two borders meet and the damage is "
-        r"worst, and settles at \GateMin in the interior rather than at zero, "
-        r"so the repair is applied everywhere and merely weighted by how far "
-        r"from a border a pixel is.")
+        r"where to look instead of having to infer it. Panel d is the "
+        r"reading that matters: the gate is not a switch. It reaches "
+        r"\GateMax at a corner and settles at \GateMin in the interior "
+        r"rather than at zero, so the repair is applied everywhere and "
+        r"weighted by distance from a border.")
     eq(r"\mathrm{Rep}(f) = f + G[\,x\ \mathrm{mod}\ P,\ y\ \mathrm{mod}\ P\,]"
        r"\cdot \mathrm{PW}\left(\mathrm{WSiLU}(\mathrm{DW}_{3\times3}(f))\right)")
     rows_tbl([["", ""],
@@ -1585,9 +1582,8 @@ def content(colw, fullw):
            r"are compute saved. <b>c</b>, per sequence at a matched point near "
            r"0.1 dB; one dot per sequence, bar is the median.")
     par(r"The obvious alternative to routing tiles is to run every tile at the "
-        r"same shallower exit and accept the loss. The table puts that "
-        r"option, together with two stronger controls, at matched compute "
-        r"([[tab:static]]).")
+        r"same shallower exit and accept the loss. At matched compute the best "
+        r"uniform choice gives up more at every rate ([[tab:static]]).")
     par(r"[[fig:exit_map]] shows what an allocation looks like on one frame. "
         r"Read it against the picture rather than against the histogram: the "
         r"water and the sky leave at the shallowest exit the ladder offers, "
@@ -1665,7 +1661,8 @@ def content(colw, fullw):
         r"<b>Table N. One frame from each class, at q32 and a 0.1 dB "
         r"budget.</b> The exits column is the histogram over the ladder, so "
         r"e4:2 is two tiles at exit 4.")
-    par(r"The table says where the method stops being adaptive ([[tab:probe]]). Reading down "
+    par(r"One frame per class says where adaptivity runs out ([[tab:probe]]). "
+        r"Reading down "
         r"it, the exit histogram narrows from a mixture over three rungs to a "
         r"single one, and at 416×240 both tiles take exit 4 and the frame "
         r"simply receives whatever that rung costs. That is not a router "
@@ -1687,7 +1684,8 @@ def content(colw, fullw):
         r"contains. The saving tracks tile count much more closely than it "
         r"tracks content.")
     par(r"Completing the test set exposed a dependence that the 1080p-only "
-        r"subset had hidden. The table groups the saving by class ([[fig:perclass]]) ([[tab:perclass]]). At 1080p, "
+        r"subset had hidden. By class, the saving follows tile count and not "
+        r"content ([[fig:perclass]], [[tab:perclass]]). At 1080p, "
         r"where a frame is 40 tiles, we save \ClassLowMcl% (MCL-JCV), "
         r"\ClassLowUvg% (UVG) and \ClassLowHevcB% (HEVC B) at the lowest "
         r"rate, three classes of very "
@@ -1783,7 +1781,9 @@ def content(colw, fullw):
         r"many tiles on the lattice, each carrying a quarter of the step. Fine "
         r"granularity is what makes the Lagrangian relaxation lossless in "
         r"practice, and no property of the images is doing that work.")
-    par(r"Two numbers bound what any budget can do ([[tab:operating]]) and [[fig:saturation_RECIPE512]]. The <b>floor</b> is the "
+    par(r"Two numbers bound what any budget can do, and both are set by the "
+        r"ladder rather than by training "
+        r"([[tab:operating]], [[fig:saturation_RECIPE512]]). The <b>floor</b> is the "
         r"distortion of a tiled decode with every tile at full depth, which is "
         r"pure tiling penalty: \FloorLow dB at q0, rising to \FloorHigh dB at "
         r"q63. A budget below it admits no allocation. The <b>saturation</b> "
@@ -1809,9 +1809,8 @@ def content(colw, fullw):
         r"Rescale the budget axis onto each rate's own band, with the floor at "
         r"0 and saturation at 1 ([[fig:budget_band]]), and they collapse onto a single master curve, "
         r"\BandSpreadMean points apart on average and \BandSpreadMax at worst. "
-        r"The answer to ``how much does a 0.1 dB budget buy at this rate'' is "
-        r"therefore, to within a couple of points, ``where does 0.1 dB sit in "
-        r"this rate's band''. The floor and the saturation point are both in "
+        r"So ``how much does a 0.1 dB budget buy at this rate'' is, to within a "
+        r"couple of points, ``where does 0.1 dB sit in this rate's band''. The floor and the saturation point are both in "
         r"closed form and both cheap to measure ([[fig:window]]). What they leave over is small "
         r"enough that a deployment could calibrate the two ends and read the "
         r"rest off one curve. That curve is a one-parameter power law, "
@@ -2600,7 +2599,8 @@ def content(colw, fullw):
         r"second decoder to check.")
     par(r"<b>Beyond those four, seven mechanisms are not in the system, and "
         r"each was removed by a measurement rather than by taste.</b> The "
-        r"table gives the number that ended each ([[tab:abandoned]]). Five were "
+        r"supplement tabulates all seven with the number that ended each. "
+        r"Five were "
         r"built and dropped, one is an extension the measurement did not "
         r"support, and the last is an explanation of the tiling penalty that "
         r"does not predict it. We report them because what fails is the part "
@@ -2608,10 +2608,6 @@ def content(colw, fullw):
         r"is not an interpolation problem, the halo exchange says exactness "
         r"and adaptivity are in tension, and the frozen trunk says the ladder "
         r"has to be trained through.")
-    tbl("abandoned",
-        r"<b>Table N. Seven mechanisms and what settled each.</b> None is in "
-        r"the reported system. The supplement gives the full measurement "
-        r"behind every row.")
 
     # ---- 7 conclusion ----------------------------------------------------
     h1("8. Conclusion")
