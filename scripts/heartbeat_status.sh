@@ -18,8 +18,10 @@ while true; do
          | while read -r p; do ps -o user= -p "$p" 2>/dev/null; done | grep -c can_karsal)
   OTHER=$(nvidia-smi --query-compute-apps=pid --format=csv,noheader 2>/dev/null \
           | while read -r p; do ps -o user= -p "$p" 2>/dev/null; done | grep -vc can_karsal)
-  NEWEST=$(find runs -name 'ckpt_eval.pth.tar' -o -name 'ckpt_step.pth.tar' 2>/dev/null \
-           | xargs -r stat -c %Y 2>/dev/null | sort -rn | head -1)
+  # runs is a symlink, so find needs -L or it never descends. stat over a glob
+  # is simpler and does not care.
+  NEWEST=$(stat -c %Y runs/*/ckpt_eval.pth.tar runs/*/ckpt_step.pth.tar \
+           2>/dev/null | sort -rn | head -1)
   AGE=$([ -n "${NEWEST:-}" ] && echo "$(( ($(date +%s) - NEWEST) / 60 ))m" || echo "-")
   EP=$(for t in RECIPE512 BEST COUPLED512 FINE12; do
          f=$(ls -t runs/$t/*.log 2>/dev/null | head -1)
