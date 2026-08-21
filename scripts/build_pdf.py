@@ -1501,7 +1501,7 @@ def content(colw, fullw):
            r"<b>Figure N. What the set mean hides.</b> Every test sequence as "
            r"a point, at the 0.1 dB budget; the bar is the median. At the "
            r"lowest rate the saving runs from \SpreadLowMin% to \SpreadLowMax% "
-           r"across sequences "
+           r"across the \SpreadNSeq sequences "
            r"and at the highest from \SpreadHighMin% to \SpreadHighMax%. The "
            r"spread within a rate "
            r"is larger than the difference between rates, and it is content, "

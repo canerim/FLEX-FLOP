@@ -1243,15 +1243,19 @@ try:
             mac("FpsRouted", f"{_hd['fps_routed']:.1f}")
 except Exception as _e:
     print("   supp_footprint.json:", _e)
+# From the file the figure itself dumps, not from results/per_sequence.json:
+# that held 40 sequences and a 42.5 maximum, both from before the test set was
+# completed and before the FFN accounting was fixed.
 try:
-    _ps = json.load(open(RES / "per_sequence.json"))
-    _rows = sorted(_ps["rows"], key=lambda r: r["qp"])
-    mac("SpreadLowMin", f"{_rows[0]['min']:.1f}")
-    mac("SpreadLowMax", f"{_rows[0]['max']:.1f}")
-    mac("SpreadHighMin", f"{_rows[-1]['min']:.1f}")
-    mac("SpreadHighMax", f"{_rows[-1]['max']:.1f}")
+    _sp = json.load(open(RES / "spread_stats.json"))["rows"]
+    _qs = sorted(_sp, key=int)
+    mac("SpreadLowMin", f"{_sp[_qs[0]]['min']:.1f}")
+    mac("SpreadLowMax", f"{_sp[_qs[0]]['max']:.1f}")
+    mac("SpreadHighMin", f"{_sp[_qs[-1]]['min']:.1f}")
+    mac("SpreadHighMax", f"{_sp[_qs[-1]]['max']:.1f}")
+    mac("SpreadNSeq", str(_sp[_qs[0]]["n"]))
 except Exception as _e:
-    print("   per_sequence.json:", _e)
+    print("   spread_stats.json:", _e)
 
 
 # ---------------------------------------------------- the checkpoint series

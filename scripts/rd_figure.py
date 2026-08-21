@@ -77,13 +77,15 @@ ax[1].set_ylim(-0.35, 0.06)
 ns.panel(ax[1], "b", dx=-0.24)
 
 # ---- c: the spread across sequences ----------------------------------------
-by = {}
-for q in QPS:
-    ops = [o for o in pc["op_points"] if o["qp"] == q and o.get("per_sequence")]
-    if not ops:
-        continue
-    o = min(ops, key=lambda o: abs(o.get("target_db", 9) - 0.1))
-    by[q] = [100 - (100 - sv(s)) * D for s in o["per_sequence"]]
+# One per-sequence source, and it is the one measured on the pinned checkpoint
+# over all 53 sequences. curve_RECIPE512_ctc53.json was used here and its
+# per-sequence maximum is 41.9, the architectural ceiling as it stood before the
+# FFN accounting was fixed -- a stale file, drawn beside tables that carry the
+# corrected 39.1. The saving is already referenced to the release in this file,
+# so there is no D to apply; applying it anyway cost 0.6 of a point.
+_ps = json.load(open(R / "results/supp_per_sequence_PAPER_b010.json"))
+by = {r["qp"]: [e["saving_pct_vs_release"] for e in r["per_sequence"]]
+      for r in _ps["rows"]}
 ks = sorted(by)
 parts = ax[2].violinplot([by[q] for q in ks], positions=range(len(ks)),
                          widths=0.75, showextrema=False, showmedians=True)

@@ -1,0 +1,42 @@
+{
+  "target_db": 0.1,
+  "denominator": "released decoder",
+  "source": "results/supp_per_sequence_PAPER_b010.json",
+  "rows": {
+    "0": {
+      "min": 6.038141250610352,
+      "max": 39.12455368041992,
+      "median": 35.88666915893555,
+      "n": 53,
+      "worst_seq": "BQSquare_416x240_60.yuv"
+    },
+    "16": {
+      "min": -0.9507179260253906,
+      "max": 39.12455368041992,
+      "median": 31.669044494628906,
+      "n": 53,
+      "worst_seq": "BQSquare_416x240_60.yuv"
+    },
+    "32": {
+      "min": -0.9507179260253906,
+      "max": 39.12455368041992,
+      "median": 26.101177215576172,
+      "n": 53,
+      "worst_seq": "PartyScene_832x480_50.yuv"
+    },
+    "48": {
+      "min": -0.9507179260253906,
+      "max": 39.12455368041992,
+      "median": 23.53678321838379,
+      "n": 53,
+      "worst_seq": "BlowingBubbles_416x240_50.yuv"
+    },
+    "63": {
+      "min": -0.9507179260253906,
+      "max": 39.12455368041992,
+      "median": 20.39288330078125,
+      "n": 53,
+      "worst_seq": "RaceHorses_832x480_30.yuv"
+    }
+  }
+}

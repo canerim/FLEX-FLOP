@@ -58,24 +58,31 @@ def short(name):
 
 
 def spread():
-    S = json.loads((RES / "per_sequence.json").read_text())
+    # results/per_sequence.json holds 40 sequences and a maximum of 42.5, both
+    # from before the test set was completed and before the FFN accounting was
+    # fixed. The paper reports 53 sequences and a ceiling of 39.1, so this panel
+    # disagreed with every table beside it. One canonical per-sequence file.
+    S = json.loads((RES / "supp_per_sequence_PAPER_b010.json").read_text())
     rows = sorted(S["rows"], key=lambda r: r["qp"])
     fig, ax = plt.subplots(figsize=(ns.W1, 1.72))
     tidy(ax)
     rng = np.random.default_rng(0)
     for n, r in enumerate(rows):
-        v = np.array([p["saving_pct"] for p in r["per_sequence"]])
+        v = np.array([p["saving_pct_vs_release"] for p in r["per_sequence"]])
         x = n + rng.uniform(-0.17, 0.17, size=v.size)
         ax.scatter(x, v, s=5, color=RATE_COLS[n % len(RATE_COLS)], lw=0,
                    alpha=0.85, zorder=3)
-        ax.plot([n - 0.30, n + 0.30], [r["median"]] * 2, color=ns.INK, lw=1.0,
+        # Median from the values actually plotted. r["median"] belongs to the
+        # own-deepest denominator and would sit half a point off the dots.
+        r["_median"], r["_min"] = float(np.median(v)), float(v.min())
+        ax.plot([n - 0.30, n + 0.30], [r["_median"]] * 2, color=ns.INK, lw=1.0,
                 zorder=4)
     ax.set_xticks(range(len(rows)))
     ax.set_xticklabels([f"q{r['qp']}" for r in rows])
     ax.set_ylabel("decoder MACs saved (%)")
     ax.set_xlabel("quality index")
     lo, hi = rows[0], rows[-1]
-    ax.annotate(short(hi["worst_seq"]), (len(rows) - 1, hi["min"]),
+    ax.annotate(short(hi["worst_seq"]), (len(rows) - 1, hi["_min"]),
                 textcoords="offset points", xytext=(8, -2), fontsize=4.6,
                 color=ns.INK2)
     ax.annotate(short(lo["best_seq"]), (0, lo["max"]),
@@ -84,9 +91,22 @@ def spread():
     ax.text(0.02, 0.05, "bar is the median", transform=ax.transAxes,
             fontsize=4.8, color=ns.INK2)
     save(fig, "spread.png")
-    print(f"  wrote spread.png   q0 spans {rows[0]['min']:.1f} to "
-          f"{rows[0]['max']:.1f}%, q63 spans {rows[-1]['min']:.1f} to "
-          f"{rows[-1]['max']:.1f}%")
+    # Dumped so the caption's numbers come from the same values the dots do.
+    # They were typed in from an older run of this script on a 40-sequence file
+    # and were 1.5 points out by the time anyone looked.
+    st = {str(r["qp"]): {
+            "min": float(min(p["saving_pct_vs_release"]
+                             for p in r["per_sequence"])),
+            "max": float(max(p["saving_pct_vs_release"]
+                             for p in r["per_sequence"])),
+            "median": r["_median"], "n": len(r["per_sequence"]),
+            "worst_seq": r["worst_seq"]} for r in rows}
+    json.dump({"target_db": 0.1, "denominator": "released decoder",
+               "source": "results/supp_per_sequence_PAPER_b010.json",
+               "rows": st}, open(RES / "spread_stats.json", "w"), indent=2)
+    lo, hi = st[str(rows[0]["qp"])], st[str(rows[-1]["qp"])]
+    print(f"  wrote spread.png   q0 spans {lo['min']:.1f} to {lo['max']:.1f}%, "
+          f"q63 spans {hi['min']:.1f} to {hi['max']:.1f}%  (n={lo['n']})")
 
 
 def exituse():
