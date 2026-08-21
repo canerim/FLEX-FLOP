@@ -41,7 +41,7 @@ is, but how much of it runs where.
 
 Here we show that decoding computation can be allocated by content on a decoder
 that is not allowed to change. A frame is cut into tiles after the shared part
-of the decoder has run, and each tile leaves the remaining trunk at its own
+of the decoder has run (Fig.~\ref{fig:patchify}), and each tile leaves the remaining trunk at its own
 depth, with the encoder, the entropy model and the coded latent untouched. On
 \NumSeq\ CTC intra frames a $0.1\dB$ constraint removes
 \MainLowRate--\MainHighRate\% of decoder multiply-accumulates across the rate
@@ -63,9 +63,10 @@ reconstruct, but how much computation the reconstruction is worth.
 \section{Introduction}
 
 Learned codecs are compared on rate and distortion, with complexity given as a
-single number, so many GMAC per frame or so many milliseconds. That number is a
-constant. A learned decoder runs the same graph on a page of text as on a
-cloudless sky, although the sky is much the easier picture.
+single number, so many GMAC per frame or so many milliseconds
+(Fig.~\ref{fig:field}). That number is a constant. A learned decoder runs the same graph on a page of text as on a
+cloudless sky, although the sky is much the easier picture, and the same is true
+tile by tile inside one frame (Fig.~\ref{fig:tiles_unequal}).
 
 Classification networks abandoned this a decade ago. Early-exit
 architectures~\cite{branchynet,msdnet,sdn} attach classifiers at intermediate
@@ -165,7 +166,7 @@ computation should go.
 % =========================================================== related work
 \section{Related work}
 
-Three lines of work meet in this paper and none of them quite contains it. Early
+Three lines of work meet in this paper and none of them quite contains it (Table~\ref{tab:positioning}). Early
 exit made depth a per-input decision and left it there; spatially adaptive
 inference made it a per-region decision but chose between separate networks; and
 learned compression has spent a decade making decoders cheaper by making them
@@ -231,7 +232,7 @@ $0.1\dB$ budget.}
 \label{tab:litvid}
 \end{table}
 
-Together the two tables say where the field spends its decoder budget.
+Together the two tables say where the field spends its decoder budget (Tables~\ref{tab:litimg} and~\ref{tab:litvid}).
 Complexity has moved a long way in both directions: \cite{tcm} and
 \cite{weconvene} buy rate with an order of magnitude more arithmetic per pixel
 than \cite{charm} or \cite{stf}, and DCVC-UF~\cite{dcvcuf} moves the other way,
@@ -308,7 +309,7 @@ either. Because the objective is separable over tiles, the optimal set of size
 $s$ at a fixed multiplier is exactly the $s$ largest regrets, which the encoder
 can compute. Who to defer and how to learn it is the open question in that
 literature, and it has a closed form here. What remains is the question we
-measure, which is how concentrated the regret is.
+measure, which is how concentrated the regret is (Fig.~\ref{fig:concentration}).
 
 \paragraph{Allocating a budget over units.} The construction we use is not new
 and we do not present it as such. Shoham and Gersho~\cite{shoham1988} showed
@@ -435,7 +436,7 @@ between them.
 
 \textbf{A} decides at the encoder. The encoder holds the source, so it knows
 $D_{t,k}$, picks each tile's exit by the Lagrangian of Section~\ref{sec:alloc},
-and transmits the resulting \emph{exit map}, one exit index per tile, which is
+and transmits the resulting \emph{exit map}, one exit index per tile (Fig.~\ref{fig:allocation}), which is
 the analogue of the mode map a standard codec signals. We report its cost as the
 entropy of the map's own per-frame histogram, \MapBits\ bits for a 1080p frame,
 which is \MapOverheadLow\% of a typical bitrate; that is what an arithmetic coder
@@ -520,7 +521,7 @@ from different training runs.
 Two consequences follow from the ladder, and both are easy to state wrongly.
 Exits shallower than $j$ are indistinguishable from each other, because the first
 $j$ groups run for every tile regardless, and the usable ladder therefore has
-$K-j$ distinct costs. The second consequence is the \emph{architectural ceiling}
+$K-j$ distinct costs (Fig.~\ref{fig:ladder}). The second consequence is the \emph{architectural ceiling}
 \begin{equation}
 S_{\max} = 100\,(1 - c_j)\;\%,
 \label{eq:ceiling}
@@ -580,7 +581,7 @@ construction and is the control.}
 \end{table}
 
 Zeroing the adapters measures what they learned, since the identity is exactly
-what they were initialised to (Table~\ref{tab:adapters}). Without them the
+what they were initialised to (Table~\ref{tab:adapters}) and Fig.~\ref{fig:adaptergain}. Without them the
 shallowest exit costs \AdapterNoneHigh$\dB$ at $q63$, forty-four times the
 budget, and the adapter buys \AdapterGainHigh$\dB$ of that back. We find the gain
 grows with rate and with the number of blocks the exit skips, so the design
@@ -591,7 +592,7 @@ ladder, because without them it has no usable exit.
 \subsection{Allocation}
 \label{sec:alloc}
 
-The ladder and its costs are fixed by this point, and one decision is left. Every
+The ladder and its costs are fixed by this point (Fig.~\ref{fig:mechanism}), and one decision is left. Every
 tile has to be given an exit, drawn from the usable ones, $k \ge j$, and we want
 the set of choices that keeps the frame inside its distortion budget for the least
 compute. There are $K-j$ choices per tile and $N$ tiles, so searching assignments
@@ -866,7 +867,7 @@ reaches every pixel; the penalty does not.}
 \subsection{Padding is an estimator}
 
 Border padding is an \emph{estimator} of the unseen neighbour, and the seam is its
-error. Table~\ref{tab:padding} measures four of them, with early exit switched off
+error (Fig.~\ref{fig:contam}). Table~\ref{tab:padding} measures four of them, with early exit switched off
 so that tiling is the only difference from a full-frame decode.
 
 \begin{table}[t]
@@ -922,7 +923,7 @@ module in this paper does.
 \subsection{A learned deblocking filter, and why it is not sufficient}
 
 What a standard codec does about a partition boundary is deblock it, with a
-filter applied after reconstruction~\cite{hevc,vvc}. The tile lattice is known
+filter applied after reconstruction~\cite{hevc,vvc} (Fig.~\ref{fig:seam_gate}). The tile lattice is known
 exactly at training and at inference, so ours can be \emph{told} where to look
 instead of having to infer it. The module is
 $\mathrm{Rep}(f) = f + G[x \bmod P,\, y \bmod P]\cdot
@@ -971,7 +972,7 @@ which is the measurement behind the section title.}
 \subsection{Removing the cause, and why it does not help}
 \label{sec:coupling}
 
-Only $0.29\%$ of each block has spatial extent, so the exact fix is affordable.
+Only $0.29\%$ of each block has spatial extent, so the exact fix is affordable (Fig.~\ref{fig:seamrepairgrid}).
 Give the $3\times3$ its real neighbours across the tile border, a \emph{halo
 exchange} narrowed to the one operator that needs it; local
 padding~\cite{localpadding} does the same at every layer. The cost is
@@ -1097,7 +1098,7 @@ median.}
 Figure~\ref{fig:rd}c shows the distribution that the headline averages over, and
 it is wide. At $q0$ the median sequence saves \SpreadMedLow\%, with an
 interquartile range of \SpreadIqrLoLow--\SpreadIqrHiLow, while the worst saves
-\SpreadWorst\%. The worst cases are the
+\SpreadWorst\% (Fig.~\ref{fig:spread}). The worst cases are the
 low-resolution sequences of Section~\ref{sec:resolution}, where two tiles leave
 nothing to allocate. Reporting the mean alone would hide both ends.
 
@@ -1110,7 +1111,7 @@ three budgets. Exits below the split depth do not exist and are not drawn.}
 \label{fig:exitvsrate}
 \end{figure}
 
-The fall in saving with rate is the allocation walking down the ladder. At the
+The fall in saving with rate is the allocation walking down the ladder (Fig.~\ref{fig:exitvsrate}). At the
 lowest rate \ExitShallowLow\% of tiles take the shallowest exit that exists and
 \ExitDeepLow\% take the deepest; at the highest those are \ExitShallowHigh\%
 and \ExitDeepHigh\%, and the mean exit moves from \ExitMeanLow\ to
@@ -1126,7 +1127,7 @@ of Table~\ref{tab:main} differ by less than a point.
 One multiplier is bisected for the whole test set, so the budget binds on the
 set mean and on nothing else. Sequence by sequence it does not bind at all.
 Between \OverBudgetLo\ and \OverBudgetHi\ of the \OverBudgetN\ sequences
-receive a decode worse than the $0.1\dB$ they were nominally given, and the
+receive a decode worse than the $0.1\dB$ they were nominally given (Table~\ref{tab:setbudget}), and the
 worst single sequence is \WorstSeqDb\dB, three and a half times the budget.
 Nothing is wrong with the bisection; this is what a mean is. We report it
 because a deployment that needs a per-sequence or per-frame guarantee has to
@@ -1241,7 +1242,7 @@ exit~4.}
 \label{tab:probe}
 \end{table}
 
-The table says where the method stops being adaptive. Reading down it, the exit
+The table says where the method stops being adaptive (Table~\ref{tab:probe}) (Fig.~\ref{fig:perclass}). Reading down it, the exit
 histogram narrows from a mixture over three rungs to a single one, and at
 $416{\times}240$ both tiles take exit~4 and the frame simply receives whatever
 that rung costs. That is not a router failing. It is a frame with two tiles and
@@ -1298,7 +1299,7 @@ granularity. We report the comparison as indicative, since the two
 tile sizes come from different training runs and tile size is therefore
 confounded with training. But the direction is consistent, and it is enough for
 us to say that a resolution-adaptive tile size is not the easy win the
-granularity argument suggests.
+granularity argument suggests (Fig.~\ref{fig:exituse}).
 
 \begin{figure}[t]
 \centering
@@ -1343,7 +1344,7 @@ programming.}
 \label{fig:theory}
 \end{figure}
 
-The construction has enough structure to state as propositions, and we check each
+The construction has enough structure to state as propositions (Fig.~\ref{fig:operating}), and we check each
 One assumption is worth naming before any of this. The argument treats the
 frame's distortion as a sum over tiles, while the deblocking pass runs on the
 stitched frame and therefore sees the whole exit map at once, so the tiles are
@@ -1442,7 +1443,7 @@ rescaling, and the collapsed curve is again a power law, $R^2 = \BandRTwoB$. The
 \emph{exponent} does not carry over: \BandExpB\ there against \BandExp\ here, so
 it describes a trained decoder and not the architecture. What replicates is the
 collapse. Within a checkpoint, the rate dependence of the trade-off is the rate
-dependence of the band.
+dependence of the band (Fig.~\ref{fig:tradeoff}).
 
 \begin{figure}[t]
 \centering
@@ -1488,7 +1489,7 @@ single $\lambda$.}
 \end{table}
 
 Table~\ref{tab:ab} compares the two, and what it prices is exactness against
-bits.
+bits (Fig.~\ref{fig:ab}).
 \textbf{Not signalling costs \GapMin--\GapMax\ points}, roughly flat across
 rate, for zero added bits and a byte-identical file. The gap is smallest at
 $q\GapMinQp$ and widens toward both ends of the rate range.
@@ -1611,7 +1612,7 @@ stem moves agreement away from what a single constant exit already achieves.}
 \label{tab:routerinputs}
 \end{table}
 
-The stem alone reaches \InputStemAgree, \InputStemOver\ over the floor, and
+The stem alone reaches \InputStemAgree (Table~\ref{tab:routerinputs}), \InputStemOver\ over the floor, and
 adding the latent, the scales and the bit count on top of it reaches
 \InputAllAgree, which is not an improvement. The signals are not independent:
 the entropy model's scales and the bits spent are both functions of the same
@@ -1664,7 +1665,7 @@ Bold is the best per rate.}
 \end{table}
 
 Before a $\RouterParams$ head is worth its \RouterCostPct\% of the decode, it has
-to beat what the decoder already knows. The entropy model has produced one
+to beat what the decoder already knows (Fig.~\ref{fig:raterank}) and Table~\ref{tab:raterank}. The entropy model has produced one
 number per tile before the trunk runs, and at no cost: how many bits that tile's
 latents took.
 
@@ -1735,7 +1736,7 @@ confined to $q48$ and $q63$.
 A learned component should be measured against the free alternative, and it
 rarely is. In adaptive inference the usual controls are a uniform allocation and
 a random one. Both are much weaker than a decoder-side signal that is already
-lying around.
+lying around (Fig.~\ref{fig:deciders}).
 
 \begin{figure}[t]
 \centering
@@ -1769,7 +1770,7 @@ $0.1$ points, which is the check that the interpolation is real.}
 
 The encoder knows tile by tile where the router will be wrong, because it can run
 that router itself (Section~\ref{sec:setting}), and nothing obliges it to correct
-every one of them. That is the room configuration C works in.
+every one of them. That is the room configuration C works in (Fig.~\ref{fig:hybrid}) and Table~\ref{tab:hybrid}.
 
 We choose the $\rho N$ overridden tiles by Lagrangian regret,
 $\Delta(t)=L_\lambda(t,\hat{k}_t)-L_\lambda(t,k^{*}_t)$, where
@@ -1865,7 +1866,7 @@ distortion against a $0.1\dB$ budget.}
 \end{figure}
 
 How much A's extra decode at the encoder matters depends on how often the map has
-to be recomputed, and we have not seen that measured anywhere.
+to be recomputed (Fig.~\ref{fig:transfer}), and we have not seen that measured anywhere.
 
 \textbf{Across frames.} Reuse is close to free. We take the map found on frame
 $0$ and apply it eight frames later; at $q0$ the delivered distortion rises by
@@ -1911,7 +1912,7 @@ Section~\ref{sec:wallclock}.}
 \label{tab:latency}
 \end{table}
 
-A saving in multiply--accumulates is not a saving in time. Tiling costs
+A saving in multiply--accumulates is not a saving in time (Table~\ref{tab:complexity}). Tiling costs
 \TilingOverhead\% before anything exits early, measured as the deepest-exit
 tiled decode against the released full-frame one at the same arithmetic and the
 same weights. On top of that, the routed decode realises \WallMasked\% at $q0$
@@ -1930,7 +1931,7 @@ slowly for ten iterations of a $100$\,ms decode to mean anything. Idle power was
 measured before and after each condition so that a neighbouring process waking up
 would appear as drift rather than as a saving.
 
-Energy follows time, not arithmetic. At $q0$, $q32$ and $q63$ the routed decode
+Energy follows time, not arithmetic (Fig.~\ref{fig:power}). At $q0$, $q32$ and $q63$ the routed decode
 removes \PowerMacLow, \PowerMacMid\ and \PowerMacHigh\% of the arithmetic; it removes \PowerTimeLow, \PowerTimeMid
 and \PowerTimeHigh\% of the wall clock and \PowerEnergyLow, \PowerEnergyMid\ and \PowerEnergyHigh\% of the joules per
 frame. Board power barely moves, $298$\,W against $296$\,W at $q0$, because the
@@ -2016,7 +2017,7 @@ and $0.3\dB$:
 
 So the ladder is a choice made at the operating point, not a hyperparameter
 tuned once and fixed. The band of Section~\ref{sec:operating} tells you which
-side of the crossover a given budget sits on.
+side of the crossover a given budget sits on (Fig.~\ref{fig:laddercross}).
 
 % =========================================================== limitations
 \section{Against the released decoder}
@@ -2039,7 +2040,7 @@ difference at $\times$\QualAmp.}
 \label{fig:qualitative}
 \end{figure*}
 
-The difference panel is the part worth reading. Amplified twenty times, what it
+The difference panel is the part worth reading (Fig.~\ref{fig:qualitative}). Amplified twenty times, what it
 shows is the rigging of the boat, the waterline and the edge of the flag, and
 almost nothing along the tile borders that cross the crop. The error the budget
 permits is spent where the picture is difficult, which is where the shallow
@@ -2074,7 +2075,7 @@ every resolution that fitted on the card.}
 \label{fig:power}
 \end{figure}
 
-The released decoder spends \RelGmac\ GMAC on a padded 1080p frame, which is
+The released decoder spends \RelGmac\ GMAC on a padded 1080p frame (Table~\ref{tab:released}), which is
 \RelKMacPx\ thousand multiply-accumulates for every pixel it produces, and it
 spends the same on every pixel whatever the picture is doing there. At a
 $0.1\dB$ budget the ladder takes that to \GmacAtOne\ GMAC, \KmacAtOne\ kMAC per
@@ -2182,7 +2183,7 @@ adaptivity with tiled inference to walk into this.
 
 \textbf{A distortion budget is only a control variable inside a measurable band.}
 Below the floor the budget admits nothing at all, and above saturation more of it
-buys nothing. A saving quoted without saying where in that band it sits has
+buys nothing (Fig.~\ref{fig:window}). A saving quoted without saying where in that band it sits has
 left out the part of the result a reader most needs.
 
 We would attach three cautions to the measurements themselves. A saving in

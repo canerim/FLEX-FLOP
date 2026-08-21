@@ -4961,3 +4961,27 @@ units.
 Final state: 20 pages, thinnest page 330 text elements and that is the tail of
 the references, every other page above 780. Figures 1 to 35 and tables 1 to 24
 with no gaps.
+
+## 100. A caption is not a reference (2026-08-21)
+
+Twenty-six of thirty-five figures and fifteen of twenty-four tables had no
+sentence pointing at them. Every one had a correct caption, correct numbering
+and a place in the flow, and nothing complained, because no check in this repo
+knew the difference between a figure that exists and a figure the reader is sent
+to. In a two-column paper that is not cosmetic: a float lands where it fits, and
+without a reference the reader has no idea which paragraph it belongs to.
+
+The reportlab build could not write one. `_autonum` numbers captions as they are
+emitted, so a sentence written before a figure has no number to use. Now
+`_figure_numbers()` and `_table_numbers()` read the emission order out of this
+file's own source before anything is laid out -- the banner first, then
+`content()` in source order, since there are no loops -- and prose writes
+`[[fig:name]]` or `[[tab:name]]`, which `sub()` resolves. An unknown name raises
+rather than printing a wrong number.
+
+Every reference was placed on the sentence that already made the figure's point,
+not appended as a new sentence. `check_paper` now reports how many figures and
+tables the prose names, and the LaTeX side is checked by `check_tex`, which
+already fails on a dangling `\ref`.
+
+35/35 and 24/24, both documents, and the paper is still exactly 20 pages.

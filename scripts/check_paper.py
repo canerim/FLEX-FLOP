@@ -452,6 +452,32 @@ for _name in ("check_twins", "check_tex", "prose_audit"):
     _last = [l for l in _r.stdout.splitlines() if l.strip()]
     print(f"\n  {_name}: {_last[-1].strip() if _last else '(no output)'}")
 
+# ------------------------------------------------------------ cross-refs
+# A figure the prose never points at is a figure the reader is never sent to.
+# Twenty-six of thirty-five figures and nine of twenty-four tables had no
+# sentence referring to them; nothing complained, because a caption is not a
+# reference. build_pdf writes [[fig:name]] and [[tab:name]] and resolves them to
+# numbers at build time, so this checks that every figure and table is named at
+# least once in the prose.
+_bp = (R / "scripts/build_pdf.py").read_text()
+_fig_names = [m.group(1) for m in re.finditer(
+    r'(?:^|\n)\s*(?:story \+= )?fig(?:ure|ure_wide)?\(\s*"([A-Za-z_0-9]+)\.png"',
+    _bp)]
+_tab_names = [m.group(1) for m in re.finditer(
+    r'(?:^|\n)\s*tbl\(\s*"([A-Za-z_0-9]+)"', _bp)]
+_cited_f = set(re.findall(r"\[\[fig:([A-Za-z_0-9]+)\]\]", _bp))
+_cited_t = set(re.findall(r"\[\[tab:([A-Za-z_0-9]+)\]\]", _bp))
+_nf = [n for n in _fig_names if n not in _cited_f]
+_nt = [n for n in _tab_names if n not in _cited_t]
+print(f"\n  cross-refs: {len(_fig_names) - len(_nf)}/{len(_fig_names)} figures "
+      f"and {len(_tab_names) - len(_nt)}/{len(_tab_names)} tables named in the "
+      f"prose")
+for n in _nf[:8]:
+    print(f"     figure never referenced: {n}")
+for n in _nt[:8]:
+    print(f"     table never referenced: {n}")
+
+
 # ---------------------------------------------------------------- figures
 # build_pdf reads paper/figures. A figure written only to docs/figures becomes
 # the italic words "[name missing]" where the picture should be, and nothing
