@@ -238,3 +238,45 @@ Eleven paragraphs. The joins, read as the last sentence of each:
 
 One weak join in eleven. The introduction was already doing the CVPR thing; what
 it lacked was the last handoff before the claims.
+
+---
+
+## Round 6: the NeurIPS pivot, and what ours was missing
+
+Read XCiT (NeurIPS 2021) as the venue exemplar. Its abstract turns on one
+sentence:
+
+> "Following their success in natural language processing, transformers have
+> recently shown much promise for computer vision. The self-attention operation
+> underlying transformers yields global interactions between all tokens ... and
+> enables flexible modelling of image data beyond the local interactions of
+> convolutions. **This flexibility, however, comes with a quadratic complexity
+> in time and memory**, hindering application to long sequences and
+> high-resolution images."
+
+The device is not the CVPR chain of dismissals and not the Nature widening
+opening. It is narrower and sharper: **name a virtue, then price it.** Attention
+is good, and the price of what makes it good is quadratic cost. The problem is
+not a deficiency someone failed to fix; it is what the strength costs. That
+framing earns the method, because the method is then not a repair but a way of
+keeping the virtue without paying for it.
+
+### What ours was missing
+
+Our abstract opened on a deficiency: a decoder spends the same arithmetic
+everywhere. True, and it reads as a complaint.
+
+The virtue was never named, and it is the more interesting half. A decoder is
+fixed by design. That is what makes a bitstream portable: any decoder that
+matches the standard reads any file that matches it, which is the entire
+premise of shipping compressed data. The uniformity we complain about is the
+price of that portability, and every method that lowers the cost by changing the
+model is quietly refusing to pay it.
+
+Said that way, the paper is no longer proposing a repair. It is keeping
+portability and declining the uniformity, which is what the work actually does.
+
+### Applied
+
+One clause, not another rewrite. The opening now names the fixed decoder as what
+makes a file readable anywhere before saying what it costs.
