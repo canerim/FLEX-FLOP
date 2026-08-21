@@ -60,6 +60,12 @@ def main():
     tex_fig = sorted(re.findall(
         r"includegraphics\[[^\]]*\]\{figures/([a-z_0-9]+)\.png\}", TEX))
     py_fig = sorted(re.findall(r'figure(?:_wide)?\("([a-z_0-9]+)\.png"', PY))
+    # The teaser is passed to fig() through a variable, so it is not in the
+    # literal scan; it is whichever of the two banner files is present.
+    for _b in ("flexuf_overview", "dcvcuf_framework"):
+        if (ROOT / "paper/figures" / f"{_b}.png").exists():
+            py_fig.append(_b)
+            break
     # the banner figure is emitted by fig() directly, not through figure()
     banner = re.findall(r'fig\("([a-z_0-9]+)\.png", PW', PY)
     py_fig += banner

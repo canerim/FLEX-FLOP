@@ -1480,6 +1480,7 @@ except Exception as _e:
 # ------------------------------------------------------- where the MACs are
 try:
     _ma = json.load(open(RES / "mac_audit.json"))["1920x1088"]
+    mac("DecGmac", f"{_ma['total_gmac']:.0f}")
     mac("TrunkShare", f"{100 * _ma['parts']['trunk']['share']:.1f}")
     mac("UpsampleShare", f"{100 * _ma['parts']['upsample']['share']:.1f}")
     mac("HeadShare", f"{100 * _ma['parts']['head']['share']:.1f}")

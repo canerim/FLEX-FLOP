@@ -56,9 +56,12 @@ def _figure_numbers():
     names = [m.group(1) for m in re.finditer(
         r'(?:^|\n)\s*(?:story \+= )?fig(?:ure|ure_wide)?\('
         r'\s*"([A-Za-z_0-9]+)\.png"', src)]
-    banner = "dcvcuf_framework"
-    names = ([banner] + [x for x in names if x != banner]
-             if banner in names else names)
+    # The banner is whichever teaser exists; it is emitted first whatever it is
+    # called, and it is passed to fig() through a variable, so it is not in the
+    # literal scan above.
+    banner = ("flexuf_overview" if (FIGS / "flexuf_overview.png").exists()
+              else "dcvcuf_framework")
+    names = [banner] + [x for x in names if x != banner]
     out = {}
     for n, x in enumerate(names, 1):
         out.setdefault(x, n)
@@ -504,7 +507,8 @@ def content(colw, fullw):
         r"network over it, and the network is fixed by design: that is what "
         r"lets any decoder read any file. On the intra decoder we study, that "
         r"network costs "
-        r"453 GMAC for a 1080p frame and spends the same arithmetic everywhere "
+        r"\\DecGmac GMAC for a 1080p frame and spends the same arithmetic "
+        r"everywhere "
         r"in it: a flat sky and a face are decoded at the same price. Making "
         r"decoders cheaper is now its own line of work, and almost all of it "
         r"changes the model, and so the bitstream: a file encoded yesterday "
@@ -2654,7 +2658,21 @@ def build(out="paper/FLEX-UF.pdf"):
     # holds: a band taller than its content leaves both columns of page 1 short,
     # and a wide figure placed in the flow instead would force a page break and
     # empty a column outright.
-    top_banner = 4.05 * inch
+    # The band is sized from the image that will go in it, not fixed. Our own
+    # overview is 2:1, so at the 7-inch text width it needs 3.5 inches and the
+    # title, authors and caption need about 1.4 more; the reproduction of
+    # DCVC-UF's figure is 3:1 and needed 4.05 in total. A band taller than its
+    # content leaves both columns of page 1 short, and a wide figure placed in
+    # the flow instead would force a page break and empty a column outright.
+    from PIL import Image as _PILI
+    _bp = FIGS / ("flexuf_overview.png" if (FIGS / "flexuf_overview.png").exists()
+                  else "dcvcuf_framework.png")
+    if _bp.exists():
+        _w, _h = _PILI.open(_bp).size
+        BANNER_MAXH = min((PW - 2 * M) * _h / _w, 3.60 * inch)
+    else:
+        BANNER_MAXH = 2.45 * inch
+    top_banner = BANNER_MAXH + 1.60 * inch
 
     doc = BaseDocTemplate(str(R / out), pagesize=letter,
                           leftMargin=M, rightMargin=M,
@@ -2716,20 +2734,42 @@ def build(out="paper/FLEX-UF.pdf"):
         PageTemplate(id="wide", frames=[f_wide, f_lw, f_rw], onPage=num),
         PageTemplate(id="supp", frames=[f_supp, f_ls, f_rs], onPage=num)])
 
-    banner_cap = ("<b>Figure 1. The decoder we modify.</b> Figure 3 of "
-                  "DCVC-UF [14], reproduced. Everything up to the "
-                  "reconstruction stays frozen in this work: the patch "
-                  "embedding, the chunk encoder, the entropy model and the "
-                  "coded payload. FLEX-UF replaces the frame-specific decoders "
-                  "on the right with a ladder of exits taken per tile.")
+    # The teaser is our own overview when it exists, and the reproduction of
+    # DCVC-UF's figure until then. The band grows to whatever the image needs
+    # at full text width, so a 2:1 diagram gets 3.5 inches and the two columns
+    # start below it.
+    OURS = FIGS / "flexuf_overview.png"
+    if OURS.exists():
+        BANNER_PNG = "flexuf_overview.png"
+        banner_cap = (
+            "<b>Figure 1. FLEX-UF, end to end.</b> The decoded latent is "
+            "upsampled once and passed through the two shared groups every "
+            "tile runs. <i>patchify</i> then cuts the feature map into 256 "
+            "pixel tiles and each tile leaves the remaining trunk at its own "
+            "depth, four exits deep at most; an adapter reconciles the early "
+            "departure with a head fitted to the full trunk, an FFN pair "
+            "where the exit skips four blocks or more and a residual 1×1 "
+            "otherwise. Who chooses the exit is the only thing that varies "
+            "between the three configurations. The tiles are then stitched "
+            "back, the grid seam is repaired, and one shared reconstruction "
+            "path produces the frame. The encoder, the entropy model and the "
+            "coded payload are untouched throughout.")
+    else:
+        BANNER_PNG = "dcvcuf_framework.png"
+        banner_cap = ("<b>Figure 1. The decoder we modify.</b> Figure 3 of "
+                      "DCVC-UF [14], reproduced. Everything up to the "
+                      "reconstruction stays frozen in this work: the patch "
+                      "embedding, the chunk encoder, the entropy model and the "
+                      "coded payload. FLEX-UF replaces the frame-specific "
+                      "decoders on the right with a ladder of exits taken per "
+                      "tile.")
     story = [
         Paragraph("Where to Stop:<br/>Tile-Adaptive Early Exit in a Learned "
                   "Image Decoder", TITLE),
         Paragraph("Anonymous CVPR submission &nbsp;&nbsp;·&nbsp;&nbsp; Paper ID "
                   "****", AUTH),
     ]
-    story += fig("dcvcuf_framework.png", PW - 2 * M, banner_cap,
-                 maxh=2.45 * inch)
+    story += fig(BANNER_PNG, PW - 2 * M, banner_cap, maxh=BANNER_MAXH)
     story += [NextPageTemplate("rest"), FrameBreak()]
     story += content(colw, PW - 2 * M)
     story.append(Paragraph("References", H1))
