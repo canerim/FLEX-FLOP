@@ -27,10 +27,14 @@ for q in qps:
                "-o", ms=3.5, lw=1.1, color=COL[q], label=f"q{q}")
     ax[0].plot([r["offset"] for r in rs], [r["in_place_db"] for r in rs],
                "--", lw=0.8, color=COL[q], alpha=0.6)
-ax[0].axhline(B, color=ns.INK, lw=0.8, ls=(0, (4, 2)))
+ax[0].axhline(B, color=ns.INK, lw=0.8, ls=(0, (4, 2)), label="0.1 dB budget")
 ax[0].set_xlabel("frames since the map was computed")
 ax[0].set_ylabel("delivered dB")
-ax[0].legend(fontsize=5.5, loc="upper left")
+ax[0].text(0.03, 0.06, "solid: transferred map\ndashed: recomputed in place",
+           transform=ax[0].transAxes, fontsize=4.6, color=ns.INK2,
+           va="bottom", linespacing=1.3)
+ax[0].legend(fontsize=5.0, loc="lower right", frameon=False,
+                 handlelength=1.2, labelspacing=0.25, borderpad=0.1)
 ns.panel(ax[0], "a")
 
 # b: saving when reused across frames
