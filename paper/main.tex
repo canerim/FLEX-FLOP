@@ -79,9 +79,9 @@ autoencoders~\cite{slimcae,slimvc} give
 one model several complexity levels, but the level is chosen \emph{per stream}
 rather than per region, and switching it changes the bitstream.
 
-We ask the spatial-adaptivity question inside a learned decoder, under a
-constraint that makes the answer deployable: \textbf{the encoder is frozen and
-the coded payload is unchanged}. Whatever we do has to consume the bitstream the
+We ask the spatial-adaptivity question inside a learned decoder, and we keep the
+property that makes it worth having: \textbf{the encoder is frozen and the coded
+payload is unchanged}. Whatever we do has to consume the bitstream the
 released encoder already produces. That rules out re-training the analysis
 transform, changing the entropy model, or altering the latent. It leaves one
 place to spend adaptivity, the synthesis transform.

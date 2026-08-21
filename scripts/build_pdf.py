@@ -475,7 +475,9 @@ def content(colw, fullw):
     h1("1. Introduction")
     par(r"Learned codecs are compared on rate and distortion, with complexity "
         r"given as a single number, so many GMAC per frame or so many "
-        r"milliseconds. That number is a constant. A learned decoder runs the "
+        r"milliseconds. That number is a constant, and it is constant for a "
+        r"good reason: a decoder that is the same everywhere is what lets a "
+        r"file encoded anywhere be read anywhere. A learned decoder runs the "
         r"same graph on a page of text as on a cloudless sky, although the sky "
         r"is much the easier picture.")
     par(r"Classification networks abandoned this a decade ago. Early-exit "
@@ -488,9 +490,9 @@ def content(colw, fullw):
         r"different route. Slimmable autoencoders [22, 23] give one model "
         r"several complexity levels, but the level is chosen <i>per stream</i> "
         r"rather than per region, and switching it changes the bitstream.")
-    par(r"We ask the spatial-adaptivity question inside a learned decoder, "
-        r"under a constraint that makes the answer deployable: <b>the encoder "
-        r"is frozen and the coded payload is unchanged.</b> Whatever we do has "
+    par(r"We ask the spatial-adaptivity question inside a learned decoder, and "
+        r"we keep the property that makes it worth having: <b>the encoder is "
+        r"frozen and the coded payload is unchanged.</b> Whatever we do has "
         r"to consume the bitstream the released encoder already produces. That "
         r"rules out re-training the analysis transform, changing the entropy "
         r"model, or altering the latent. It leaves one place to spend "
