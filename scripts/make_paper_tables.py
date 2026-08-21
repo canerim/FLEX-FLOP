@@ -1001,6 +1001,18 @@ if cb:
             mac(f"BlendHeadOnly{tag}", f"{sv(c1):.1f}")
         if c0:
             mac(f"BlendBitsOnly{tag}", f"{sv(c0):.1f}")
+    # What blending is worth at the two rates where it is worth anything. The
+    # prose had +2.1 and +0.9 typed into it, which is how a number outlives
+    # the measurement it came from.
+    for tag, q in (("Mid", qs[-2]), ("High", qs[-1])):
+        c0 = cell(q, 0.0)
+        vals = [(w_, cell(q, w_)) for w_ in ws]
+        vals = [(w_, c) for w_, c in vals if c]
+        if not (c0 and vals):
+            continue
+        _, bc = max(vals, key=lambda t: sv(t[1]))
+        mac(f"BlendGain{tag}", f"{sv(bc) - sv(c0):+.1f}")
+        mac(f"BlendGain{tag}Q", f"q{q}")
 
 # ---------------------------------------------------------------- BD-Rate
 print("BD-Rate")

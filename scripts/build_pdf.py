@@ -2097,9 +2097,11 @@ def content(colw, fullw):
         r"surrogates to unit mean and blend them with one weight w, where w=0 "
         r"is the calibrated bit rule and w=1 the head's ordering. The best blend is w=0 "
         r"at the three lowest rates ([[tab:blend]]) and a small head weight at the two "
-        r"highest, worth +2.1 points at q48 and +0.9 at q63. The head reads "
+        r"highest, worth \BlendGainMid points at \BlendGainMidQ and "
+        r"\BlendGainHigh at \BlendGainHighQ. The head reads "
         r"the entropy model's scales, so it already has most of what the bit "
-        r"count carries; what it adds is confined to q48 and q63.")
+        r"count carries; what it adds is confined to \BlendGainMidQ and "
+        r"\BlendGainHighQ.")
     par(r"<b>How much a trained head varies, and what that does to the "
         r"claim.</b> No head here was trained twice at two seeds, so we have "
         r"no seed variance to report. What we can report is the spread between "
