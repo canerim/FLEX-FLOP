@@ -5295,3 +5295,27 @@ overruns pushes its whole block to the next column, so the cost of a long
 caption is not the words but the gap they leave behind. Median caption in this
 paper is fifty-two words. The ones above seventy are where to look first the
 next time a column is short.
+
+## 114. A 23-day run needs a watchdog, and a watchdog needs to know when to stop
+
+SCRATCH105 is about 415 hours of training on one card. Left dead overnight it
+is not a delayed run, it is the whole run, so `scripts/keepalive_scratch.sh`
+checks every five minutes and relaunches it.
+
+The interesting part is the refusals. A watchdog that restarts a broken run
+forever burns a card for a week and produces a log nobody reads, so this one
+stops on three conditions: when the training log says it finished; after twenty
+restarts, which turns a crash loop into a dead run and a record rather than a
+permanent fire; and it waits for the card to be clear of our own processes
+first, so a dying trainer and its replacement never share the GPU.
+
+Every restart is appended to `runs/SCRATCH105/keepalive.log` with whatever the
+training log's last forty lines said about why -- out of memory, a traceback, a
+kill, or nothing at all -- because the gaps in the training log have to be
+accountable afterwards.
+
+What a restart costs is one epoch. The trainer resumes from
+`status_latest.pth.tar`, which is written at epoch boundaries; resuming
+mid-epoch would need the sampler position and is not worth the fragility. At
+about two hours an epoch against 415, that is half a per cent, and the
+alternative is measured in whole nights.
