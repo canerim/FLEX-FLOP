@@ -4985,3 +4985,61 @@ tables the prose names, and the LaTeX side is checked by `check_tex`, which
 already fails on a dangling `\ref`.
 
 35/35 and 24/24, both documents, and the paper is still exactly 20 pages.
+
+## 101. Column by column, not page by page (2026-08-21)
+
+The author looked at the built PDF and listed six places with visible white:
+page 15's right column "like a field", then pages 2, 7, 8, 16 and 17. Every
+check here passed. The per-page fill measure read 0.96 for all twenty pages,
+including the one that was blank, because the footer page number sits at the
+bottom of every page and a naive "lowest text on the page" finds it.
+
+Measured properly -- per column, footer excluded -- the list matched the author's
+exactly: p15R 0.31, p2R 0.78, p8R 0.81, p17R 0.81, p16R 0.87, p7L 0.88.
+
+The mechanism is `figure_wide`. reportlab has no float, so a full-width figure
+switches page template, which forces a page break; wherever that break lands,
+the rest of that page's columns are lost. `qualitative` was the worst case, and
+it did not need to be full width: the fourth panel was the whole frame with a box
+on it, which the caption can say in words. Three square crops tile a column
+exactly. `patchify` stays wide and keeps its break, because panel d is a
+left-to-right pipeline of four tensor shapes and a sentence, and at column width
+matplotlib's tight bounding box expands the saved figure straight back to eight
+inches to hold them.
+
+For the rest, story order is the only lever, so `scratchpad/fill_columns.py`
+finds the block that starts the column after the shortest one and tries it at
+paragraph boundaries either side, keeping whatever leaves the least empty column.
+One trap: the first version moved a figure among its neighbouring figures and
+seven candidate layouts came out identical to two decimal places -- reordering two
+figures that sit together changes nothing about how much text is above them.
+
+Empty column space went 1.63 to 0.52 of a column and the worst column 0.31 to
+0.76. `check_layout.py` now measures this from `check_paper`, so the next one is
+caught by a command rather than by eye.
+
+## 102. Two commits that never reached the PDF (2026-08-21)
+
+An insertion swallowed the newline before the following call and `build_pdf.py`
+stopped parsing. For two commits the build failed, and I read page counts and
+column fills off the stale PDF and reported them.
+
+`pdfinfo` on yesterday's PDF is indistinguishable from `pdfinfo` on today's. The
+build prints `-> paper/FLEX-UF.pdf` when it writes one, and that line was simply
+absent from output I was grepping for other things.
+
+`check_paper` now compiles `build_pdf.py` and compares the PDF's mtime against
+it. This is the third time tonight the same lesson has come around: DECISIONS 97
+said a check that reads the source cannot see what the source failed to produce.
+Here the check read the artefact and still could not tell, because the artefact
+was last night's.
+
+## 103. The heartbeat was wrapped in a loop it never left (2026-08-21)
+
+`heartbeat_status.sh` loops internally and prints one line every 300 seconds. The
+monitor I set up ran it inside another `while true` and piped it to `tail -1`.
+`tail -1` prints nothing until its input closes, and the script never exits, so
+the five-minute check produced no events at all after I restarted it. The monitor
+was alive, the script was running, and nothing arrived.
+
+The script is the event stream. The monitor now runs it directly.
