@@ -452,6 +452,26 @@ for _name in ("check_twins", "check_tex", "prose_audit", "check_layout"):
     _last = [l for l in _r.stdout.splitlines() if l.strip()]
     print(f"\n  {_name}: {_last[-1].strip() if _last else '(no output)'}")
 
+# ------------------------------------------------------------- the build
+# build_pdf.py stopped parsing for two commits and nothing said so: pdfinfo on a
+# stale PDF looks exactly like pdfinfo on a fresh one, and every layout number
+# measured in that window was measured on yesterday's file. Check that the
+# artefact is newer than the source that claims to produce it.
+_pdf = R / "paper/FLEX-UF.pdf"
+_src = R / "scripts/build_pdf.py"
+if _pdf.exists() and _src.exists():
+    _age = _pdf.stat().st_mtime - _src.stat().st_mtime
+    print(f"\n  build: PDF is {'newer' if _age >= 0 else 'OLDER'} than "
+          f"build_pdf.py by {abs(_age) / 60:.0f} min")
+    if _age < 0:
+        bad = bad or [("build", "PDF older than build_pdf.py")]
+try:
+    compile(_src.read_text(), str(_src), "exec")
+except SyntaxError as _e:
+    print(f"     build_pdf.py DOES NOT PARSE: line {_e.lineno}: {_e.msg}")
+    bad = bad or [("build", "build_pdf.py syntax error")]
+
+
 # ------------------------------------------------------------ cross-refs
 # A figure the prose never points at is a figure the reader is never sent to.
 # Twenty-six of thirty-five figures and nine of twenty-four tables had no
