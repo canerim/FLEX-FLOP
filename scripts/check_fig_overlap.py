@@ -48,12 +48,13 @@ def main() -> int:
     # the figures drawn from the model need a GPU and a checkpoint, and
     # regenerating one to audit it would replace a published picture.
     missing = sorted(names - seen)
-    print(f"  {len(seen)}/{len(names)} figures audited, {len(bad)} with "
-          f"collisions or invisible series")
     if missing:
         print(f"     not yet audited ({len(missing)}): "
               f"{', '.join(m[:-4] for m in missing[:6])}"
               f"{' ...' if len(missing) > 6 else ''}")
+    # Summary last: check_paper reads the final line of each check.
+    print(f"  {len(seen)}/{len(names)} figures audited, {len(bad)} with "
+          f"collisions or invisible series")
     return 1 if bad else 0
 
 

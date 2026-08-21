@@ -256,6 +256,37 @@ def _place_panels(fig, rend):
     return moved
 
 
+_TWINS = ("docs/figures", "paper/figures")
+
+
+def _mirror(fname):
+    """A figure written to one figure directory is written to both.
+
+    The paper reads paper/figures and the supplement prefers docs/figures, and
+    twelve producers wrote only one of them. That is how Figure 18 became a
+    placeholder (DECISIONS 97) and how the paper spent two days printing a
+    tiles_unequal.png that differed from the one its own script produces. The
+    producers no longer have to remember.
+    """
+    try:
+        p = _Path(fname)
+        if p.suffix != ".png" or not p.exists():
+            return
+        here = p.parent.resolve()
+        for a, b in (_TWINS, _TWINS[::-1]):
+            src = (_AUDIT.parent.parent / a).resolve()
+            if here != src:
+                continue
+            dst = _AUDIT.parent.parent / b
+            dst.mkdir(parents=True, exist_ok=True)
+            tgt = dst / p.name
+            if not tgt.exists() or tgt.read_bytes() != p.read_bytes():
+                tgt.write_bytes(p.read_bytes())
+            return
+    except Exception as e:
+        print(f"  figure mirror skipped for {fname}: {e}", file=_sys.stderr)
+
+
 def _install():
     from matplotlib.figure import Figure
     if getattr(Figure.savefig, "_ns_audited", False):
@@ -272,6 +303,7 @@ def _install():
                 print(f"  panel placement skipped for {fname}: {e}",
                       file=_sys.stderr)
         r = orig(self, fname, *a, **kw)
+        _mirror(fname)
         if audit_enabled() and isinstance(fname, (str, _Path)) \
                 and str(fname).endswith(".png"):
             try:

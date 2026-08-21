@@ -73,6 +73,25 @@ def supplement_figures():
     return sorted(out)
 
 
+def twins() -> list[str]:
+    """The same figure name in docs/figures and paper/figures must be the
+    same figure.
+
+    The paper reads paper/figures; the supplement prefers docs/figures. Twelve
+    producers wrote only one of the two, so the paper printed a tiles_unequal
+    that differed from the one its own script produces, and nothing complained:
+    the copy it printed was newer than the script, so this file passed it.
+    naturestyle mirrors every write now, and this is what proves it.
+    """
+    bad = []
+    a, b = ROOT / "docs/figures", ROOT / "paper/figures"
+    for f in sorted(b.glob("*.png")):
+        g = a / f.name
+        if g.exists() and g.read_bytes() != f.read_bytes():
+            bad.append(f.name)
+    return bad
+
+
 def main(argv):
     fail = "--fail" in argv
     paper = sorted(set(re.findall(
@@ -145,8 +164,18 @@ def main(argv):
               f"latest {when} -- {newer[0].name}")
     if unknown:
         print(f"     no producer identified: {', '.join(unknown)}")
-    print(f"\n  {'PASS' if not stale else str(len(stale)) + ' stale figure(s)'}")
-    return 1 if (stale and fail) else 0
+    tw = twins()
+    for n in tw:
+        print(f"     {n} differs between docs/figures and paper/figures")
+    bad = (stale and fail) or tw
+    if not bad:
+        note = "PASS"
+    else:
+        note = ", ".join(
+            x for x in (f"{len(stale)} stale figure(s)" if stale else "",
+                        f"{len(tw)} divergent copy/copies" if tw else "") if x)
+    print(f"\n  {note}")
+    return 1 if bad else 0
 
 
 if __name__ == "__main__":
