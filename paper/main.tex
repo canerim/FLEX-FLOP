@@ -174,8 +174,9 @@ follows sets out what each gives us and what none of them gives.
 
 \paragraph{Early exit.} BranchyNet~\cite{branchynet} and MSDNet~\cite{msdnet}
 established the pattern of intermediate classifiers with a confidence rule;
-SDN~\cite{sdn} framed it as mitigating overthinking, and ZTW~\cite{ztw} recycles
-earlier predictions. We train all exits jointly, after
+SDN~\cite{sdn} framed it as mitigating overthinking, ZTW~\cite{ztw} recycles
+earlier predictions, and RANet~\cite{ranet} varies input resolution rather than
+depth. We train all exits jointly, after
 Scardapane~\etal~\cite{scardapane2020}, and distil between exits as in Phuong
 and Lampert~\cite{phuong2019}. The caveat in~\cite{msd2024} is that too large a
 student--teacher gap hurts the shallowest exits, so our distillation runs
@@ -186,7 +187,8 @@ source the decoder cannot see (Section~\ref{sec:alloc}).
 
 \paragraph{Spatially adaptive inference.} ClassSR~\cite{classsr} sorts
 super-resolution patches into easy/medium/hard and runs a different network on
-each; APE~\cite{aptnet} exits patches at different depths;
+each; APE~\cite{aptnet} exits patches at different depths; Jia~\etal
+\cite{jia2022content} adapt a compression model to the content it is given;
 Glance-and-Focus~\cite{glancefocus} spends resolution adaptively. We share the
 per-region premise with all three, and we inherit the same tiling problem,
 though the cost of tile borders is rarely quantified in that line of work. To
@@ -264,7 +266,8 @@ changes, and it changes them without touching the model that was shipped.
 and slimmable video codecs~\cite{slimvc} expose several widths of one model.
 The choice is per stream and it changes the encoder, so the bitstream is not
 interchangeable. DCVC-FM~\cite{dcvcfm} and DCVC-UF~\cite{dcvcuf} reduce cost
-architecturally, for every frame equally. Rate--distortion--complexity has since
+architecturally, for every frame equally, as does the line of stronger entropy
+models they descend from~\cite{cheng2020}. Rate--distortion--complexity has since
 become an explicit third axis. Gao~\etal~\cite{gao2024rdc} tune spatial context
 usage to trade decode cost against rate, Ho~\etal~\cite{ho2024rdctradeoffs}
 survey where conditional residual coding sits on that surface, and
@@ -361,7 +364,7 @@ decoder has run, each tile is allowed to leave the remaining trunk at its own
 depth, and a small adapter reconciles an early departure with a head that was
 fitted to the full one. Everything difficult is in the three questions that
 follow from it: what cutting costs, what a budget can buy, and who decides. This
-section states the construction and the decision rule; Section~\ref{sec:tiles}
+section states the construction and the decision rule; Section~\ref{sec:seam}
 prices the cut and Section~\ref{sec:exp} measures the rest.
 \label{sec:method}
 
@@ -504,7 +507,7 @@ neither is free to ignore. Below, the tile has to be large enough that its borde
 is a small part of it. The seam grows with the fraction of a tile within reach of
 an invented value, $1-((F-2b)/F)^2$ for $b$ per-tile blocks on a tile of side
 $F$, so halving the side roughly doubles the damage at fixed depth
-(Section~\ref{sec:tiles}). Above, it has to be small enough that a frame holds
+(Section~\ref{sec:seam}). Above, it has to be small enough that a frame holds
 enough of them for an allocation to exist at all: at $256$ px a 1080p frame is
 $40$ tiles and a $416{\times}240$ frame is $2$, and the second is already close
 to having no choice to make (Section~\ref{sec:exp}). Standardised codecs bracket
@@ -669,7 +672,9 @@ So $\beta$ is not chosen at test time. It is calibrated offline, once, on a
 held-out set, and shipped as a table indexed by the quality index and the
 budget. The decoder reads the quality index out of the bitstream, looks $\beta$
 up, and runs the argmin in~(\ref{eq:router}); nothing in the loop needs the
-source. The table is $64$ quality indices by however many budgets a deployment
+source, and nothing needs a relaxation of the discrete choice~\cite{gumbel}
+either, because the head is supervised on the search's label rather than trained
+through the decision. The table is $64$ quality indices by however many budgets a deployment
 offers, which is a few hundred floats.
 
 We calibrate it on the $512$ held-out Open Images validation frames, which are
@@ -704,7 +709,8 @@ bracketed the budget from below.
 things enter. The first is the feature at the split point, $384$ channels at one
 eighth of frame resolution, which is the last thing every tile shares. The
 second is the decoded latent $\hat{y}$ concatenated with the entropy model's
-scales $\sigma$, the predicted Gaussian width used to code each latent position:
+scales $\sigma$~\cite{balle2018}, the predicted Gaussian width used to code
+each latent position:
 $\sigma$ is already computed during the decode and is, position by position, an
 estimate of how hard that position was to code. The third is the quality index.
 Each of the first two is projected by a $1\times1$ convolution, to $48$ and $32$
@@ -759,7 +765,9 @@ in~(\ref{eq:lagrangian}) grows if the head's exit is used in place of the
 oracle's. A tile whose two best exits are nearly tied then counts for less than
 one where the wrong choice is expensive. A router like this can collapse onto a
 single exit during training, so it carries a balancing term; ours is
-loss-free~\cite{lossfreebalance} and is biased toward the oracle's own exit
+loss-free~\cite{lossfreebalance}, unlike the auxiliary loss a
+mixture-of-experts router carries~\cite{switch}, and is biased toward the
+oracle's own exit
 distribution instead of toward uniform. At a high $\lambda$ the oracle genuinely
 does send every tile to one exit, and forcing spread there would force mistakes.
 Section~\ref{sec:ab} measures what B gives up against A.
@@ -1045,7 +1053,8 @@ produces.
 side is the deployed tiled decode, so the tiling penalty sits inside every
 number. Savings are fractions of the released decoder's cost. Our own deepest
 exit costs $1.0095$ of it, and using that as the denominator would flatter every
-result by $0.6$--$0.8$ points.
+result by $0.6$--$0.8$ points. Rate--distortion differences are integrated as
+BD-Rate~\cite{bjontegaard} over the five quality indices.
 
 \subsection{Main result}
 

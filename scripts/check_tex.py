@@ -93,8 +93,46 @@ def main():
             print(f"  {name:<24} {' | '.join(issues)}")
 
     print(f"  {len(files)} files checked")
-    print(f"\n  {'PASS' if not bad else str(bad) + ' file(s) with issues'}")
+    bad += check_refs_and_bib(ROOT)
+    print(f"\n  {'PASS' if not bad else str(bad) + ' issue(s)'}")
     return 0 if not bad else 1
+
+
+def check_refs_and_bib(root):
+    """Dangling \\ref and uncited bib entries, across main.tex and its inputs.
+
+    \\ref{sec:tiles} pointed at a label that never existed, so two sentences in
+    the built paper would have read "Section ??". bibtex is equally quiet the
+    other way: an entry nothing cites is silently dropped, which makes the
+    LaTeX reference list shorter than the reportlab one and renumbers everything
+    after it. Both are invisible in the source and obvious in the artefact.
+    """
+    import os
+    main = (root / "paper/main.tex").read_text()
+    files = [root / "paper/main.tex"]
+    for i in re.findall(r"\\input\{([^}]+)\}", main):
+        f = root / "paper" / (i if i.endswith(".tex") else i + ".tex")
+        if f.exists():
+            files.append(f)
+    s = "\n".join(f.read_text() for f in files)
+    labels = set(re.findall(r"\\label\{([^}]+)\}", s))
+    refs = set(re.findall(r"\\(?:ref|autoref|cref)\{([^}]+)\}", s))
+    dangling = sorted(refs - labels)
+    bibf = root / "paper/refs.bib"
+    uncited = []
+    if bibf.exists():
+        bib = set(re.findall(r"@\w+\{([^,]+),", bibf.read_text()))
+        cited = set()
+        for m in re.finditer(r"\\cite[a-z]*\{([^}]*)\}", s):
+            cited |= {k.strip() for k in m.group(1).split(",")}
+        uncited = sorted(bib - cited)
+    for r in dangling:
+        print(f"     DANGLING \\ref{{{r}}} -- prints as ??")
+    for k in uncited:
+        print(f"     UNCITED bib entry {k} -- bibtex will drop it")
+    print(f"  refs: {len(refs)} used, {len(dangling)} dangling; "
+          f"bib: {len(uncited)} uncited")
+    return len(dangling) + len(uncited)
 
 
 if __name__ == "__main__":

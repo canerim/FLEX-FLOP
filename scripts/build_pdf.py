@@ -585,7 +585,9 @@ def content(colw, fullw):
     h2("Early exit.")
     par(r"BranchyNet [20] and MSDNet [3] established the pattern of "
         r"intermediate classifiers with a confidence rule; SDN [15] framed it "
-        r"as mitigating overthinking. We train all exits jointly, after "
+        r"as mitigating overthinking, ZTW [54] recycles earlier predictions, "
+        r"and RANet [55] varies input resolution rather than depth. We train "
+        r"all exits jointly, after "
         r"Scardapane et al. [18], and distil between exits as in Phuong and "
         r"Lampert [17]. The caveat in [19] is that too large a student-teacher "
         r"gap hurts the shallowest exits, so our distillation runs between "
@@ -1042,7 +1044,10 @@ def content(colw, fullw):
         r"a held-out set, and shipped as a table indexed by the quality index "
         r"and the budget. The decoder reads the quality index out of the "
         r"bitstream, looks β up, and runs the argmax above; nothing in the "
-        r"loop needs the source. The table is 64 quality indices by however "
+        r"loop needs the source, and nothing needs a relaxation of the "
+        r"discrete choice [10] either, because the head is supervised on "
+        r"the search's label rather than trained through the decision. "
+        r"The table is 64 quality indices by however "
         r"many budgets a deployment offers, which is a few hundred floats.")
     par(r"We calibrate it on the \HeldNCal held-out Open Images validation "
         r"frames, which are disjoint from the training images and from the "
@@ -1076,7 +1081,7 @@ def content(colw, fullw):
     par(r"<b>The head, exactly.</b> Three things enter. The first is the "
         r"feature at the split point, 384 channels at one eighth of frame "
         r"resolution, which is the last thing every tile shares. The second is "
-        r"the decoded latent ŷ concatenated with the entropy model's scales σ, "
+        r"the decoded latent ŷ concatenated with the entropy model's scales σ [2], "
         r"the predicted Gaussian width used to code each latent position: σ is "
         r"already computed during the decode and is, position by position, an "
         r"estimate of how hard that position was to code. The third is the "
@@ -1129,7 +1134,9 @@ def content(colw, fullw):
         r"of the oracle's. A tile whose two best exits are nearly tied then "
         r"counts for less than one where the wrong choice is expensive. A "
         r"router like this can collapse onto a single exit during training, so "
-        r"it carries a balancing term; ours is loss-free [16] and is biased "
+        r"it carries a balancing term; ours is loss-free [16], unlike the "
+        r"auxiliary loss a mixture-of-experts router carries [7], and is "
+        r"biased "
         r"toward the oracle's own exit distribution instead of toward uniform. "
         r"At a high λ the oracle genuinely does send every tile to one exit, "
         r"and forcing spread there would force mistakes. Section 5.5 measures "
@@ -1373,7 +1380,9 @@ def content(colw, fullw):
         r"deployed tiled decode, so the tiling penalty sits inside every "
         r"number. Savings are fractions of the released decoder's cost. Our "
         r"own deepest exit costs 1.0095 of it, and using that as the "
-        r"denominator would flatter every result by 0.6–0.8 points.")
+        r"denominator would flatter every result by 0.6–0.8 points. "
+        r"Rate-distortion differences are integrated as BD-Rate [4] over "
+        r"the five quality indices.")
     par(r"<b>The protocol every number in this paper obeys.</b> Two "
         r"implementations of the same quantity have differed here by as "
         r"much as 3.29 saving points, and the choice between per-frame and "
@@ -2344,6 +2353,9 @@ REFS = [
     "J. Li, B. Li, Y. Lu. Neural video compression with diverse contexts. CVPR, 2023.",
  "X. Huang, S. Belongie. Arbitrary style transfer in real-time with adaptive "
  "instance normalization. ICCV, 2017.",
+ "M. Wolczyk et al. Zero time waste: recycling predictions in early exit neural "
+ "networks. NeurIPS, 2021.",
+ "L. Yang et al. Resolution adaptive networks for efficient inference. CVPR, 2020.",
 ]
 
 
