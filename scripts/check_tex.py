@@ -50,6 +50,48 @@ KNOWN = {
 }
 
 
+DIRECTION = {
+    # macro-name fragment -> words that mean the opposite of what it holds
+    "Beats": ("gives up", "loses", "behind", "short of", "falls short"),
+    "Ahead": ("gives up", "loses", "behind", "short of", "falls short"),
+    "Recovers": ("gives up", "loses"),
+    "Gap": ("beats", "ahead of"),
+    "Loses": ("beats", "ahead of"),
+}
+
+
+def directions() -> list[str]:
+    """A macro that means "ahead by" must not sit in a sentence that says
+    "gives up".
+
+    Section C of the supplement wrote "The rule gives up \\RateRankBeatsBy
+    saving points to the trained head" where that macro holds the rule's
+    *margin over* the head. The number was right, the sentence said the
+    opposite of the abstract, and every numeric check passed because the value
+    matched its own definition.
+    """
+    import glob
+    out = []
+    for f in [str(ROOT / "scripts/build_pdf.py"), str(ROOT / "paper/main.tex")] \
+            + sorted(glob.glob(str(ROOT / "scripts/supp/*.py"))):
+        src = open(f).read()
+        for m in re.finditer(r"\\\\?([A-Za-z]+)", src):
+            name = m.group(1)
+            for frag, words in DIRECTION.items():
+                if frag not in name:
+                    continue
+                # the sentence around the use, in the source's own text
+                lo = max(0, m.start() - 260)
+                ctx = re.sub(r"\s+", " ", src[lo:m.end() + 120]).lower()
+                ctx = ctx.rsplit(".", 1)[-1] if ". " in ctx[-200:] else ctx
+                for w in words:
+                    if w in ctx:
+                        out.append(f"{Path(f).name}: \\{name} used in a "
+                                   f"sentence that says \"{w}\"")
+                        break
+    return sorted(set(out))
+
+
 def panel_commas() -> list[str]:
     """Panel labels are set "a, the decoded frame": letter, comma, lower case.
 
@@ -183,7 +225,7 @@ def check_refs_and_bib(root):
     for b in _nopunct:
         print(f"     display equation ends without punctuation: {b}")
 
-    _panels = panel_commas()
+    _panels = panel_commas() + directions()
     for b in _panels:
         print(f"     {b}")
 

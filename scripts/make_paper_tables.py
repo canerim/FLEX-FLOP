@@ -1110,6 +1110,12 @@ if rr:
     if rs:
         mac("RateRankLow", f"{sv(rs[0]):.1f}")
         mac("RateRankHigh", f"{sv(rs[-1]):.1f}")
+        # What the rule gives up to the Lagrangian oracle, which is the gap
+        # Section C asks whether separability explains. Section C had been
+        # quoting \RateRankBeatsBy for it, which is the rule's margin over the
+        # trained head and points the other way.
+        _og = [sv_oracle(r) - sv(r) for r in rs]
+        mac("RateRankOracleGap", f"{max(_og):.1f}")
         if B1:
             d_ = [(r["qp"], sv(r) - B1[r["qp"]])
                   for r in rs if r["qp"] in B1]

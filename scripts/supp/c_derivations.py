@@ -1064,8 +1064,9 @@ def content(k):
               / sum((y - ym) ** 2 for y in rmean))
 
     k.par(
-        f"The rule gives up \\RateRankBeatsBy saving points to the trained "
-        f"head, and the loss is not in the separability. On the measured tile "
+        f"The rule gives up \\RateRankOracleGap saving points to the "
+        f"Lagrangian oracle at the rate where it does worst, and the loss is "
+        f"not in the separability. On the measured tile "
         f"table the separable model absorbs {100 * (1 - ssr / tot):.2f}% of "
         f"the variance of log D. The quantity it has to resolve is small: the "
         f"exit profile spans {spread:.4f} in log units while the non-separable "

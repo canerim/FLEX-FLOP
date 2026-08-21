@@ -5231,3 +5231,21 @@ Two cross-reference artefacts were fixed in the same paragraph: a figure
 reference that had been dropped between two sentences, leaving "already lying
 around (Figure 30) Panel b of that figure is the surprise", and the sentence
 it broke ending in two full stops.
+
+## 111. The supplement contradicted the abstract on claim (iii)
+
+The abstract says routing on coded bits "beats our trained router at every
+rate, by up to 3.4 points". Section C of the supplement said "The rule gives
+up 3.4 saving points to the trained head". Same macro, opposite sentence.
+
+`\RateRankBeatsBy` is `max(rule - head)`, the rule's margin over the head, and
+Section C wanted the rule's shortfall against the Lagrangian oracle, which is
+the gap its separability argument is about. That number is 3.7 and did not
+exist as a macro; it does now. Every numeric check passed throughout, because
+the value matched its own definition and nothing read the sentence around it.
+
+`check_tex` now reads that sentence. A macro whose name says "Beats" or
+"Ahead" may not appear in a clause that says "gives up", "loses", "behind" or
+"short of", and one whose name says "Gap" or "Loses" may not appear in one
+that says "beats" or "ahead of". Crude, and it catches the only failure of
+this kind either build has had.
