@@ -1983,14 +1983,6 @@ def content(colw, fullw):
         r"<i>spread</i> across the ladder, that is, with how much a tile "
         r"stands to gain from depth, at "
         r"ρ_spread = \RateRankSpreadLo–\RateRankSpreadHi at every rate.")
-    figure("qualitative.png",
-        r"<b>Figure N. What \QualSaving% of the arithmetic costs, to look at.</b> "
-        r"\QualSeq at q\QualQp, one frame, with λ bisected on that frame to "
-        r"\QualDb dB. Both crops are decoded from the <i>same</i> latent at "
-        r"\QualBpp bpp: the released decoder reaches \QualPsnrRel dB and the "
-        r"routed decode \QualPsnrOurs dB. The crop is centred on the tile that "
-        r"gave up the most, tile \QualWorstTile of \QualNTiles, not on a "
-        r"flattering one. Right, the absolute difference at ×\QualAmp.")
     par(r"At a looser budget it stops being a baseline and becomes the "
         r"answer. At 0.3 dB the calibrated bit rule matches the oracle exactly at "
         r"the three lowest rates, where both reach the same architectural "
@@ -2051,6 +2043,14 @@ def content(colw, fullw):
         r"highest, worth +2.1 points at q48 and +0.9 at q63. The head reads "
         r"the entropy model's scales, so it already has most of what the bit "
         r"count carries; what it adds is confined to q48 and q63.")
+    figure("qualitative.png",
+        r"<b>Figure N. What \QualSaving% of the arithmetic costs, to look at.</b> "
+        r"\QualSeq at q\QualQp, one frame, with λ bisected on that frame to "
+        r"\QualDb dB. Both crops are decoded from the <i>same</i> latent at "
+        r"\QualBpp bpp: the released decoder reaches \QualPsnrRel dB and the "
+        r"routed decode \QualPsnrOurs dB. The crop is centred on the tile that "
+        r"gave up the most, tile \QualWorstTile of \QualNTiles, not on a "
+        r"flattering one. Right, the absolute difference at ×\QualAmp.")
     par(r"A learned component should be measured against the free alternative, "
         r"and it rarely is. In adaptive inference the usual controls are a "
         r"uniform allocation and a random one. Both are much weaker than a "
@@ -2195,31 +2195,6 @@ def content(colw, fullw):
         r"probe, then, an encoder can search once per rate and reuse that "
         r"search across the frames we tested. How far that carries beyond the "
         r"offsets and sequences probed here we have not measured.")
-    h2("Where the saving is realised, and where it is not")
-    par(r"A saving in operations is an optimistic bound on a saving in time on "
-        r"the GPU we time on, and the optimism is a scheduling cost: the last "
-        r"groups of the trunk run on a handful of tiles and the card is "
-        r"largely idle. That cost is a property of the device, not of the "
-        r"method, so we measured the same decodes on a CPU with \CpuThreads "
-        r"threads and at three batch sizes on the GPU ([[tab:cpu_batch]]).")
-    tbl("cpu_batch",
-        r"<b>Table N. The same saving in three places.</b> Per cent removed at "
-        r"the 0.1 dB budget on a padded 1080p frame: the arithmetic model, the "
-        r"GPU at two batch sizes, and the CPU. Arithmetic is the same in every "
-        r"column; only the machine changes.")
-    par(r"On the CPU the bound is not optimistic. At the lowest rate the "
-        r"routed decode takes \CpuMsRouted seconds against "
-        r"\CpuMsStock, which is \CpuSavingLow% removed where the arithmetic "
-        r"model predicts \CpuPredLow%: a machine that does not care how many "
-        r"tiles are in flight realises slightly more than the operations "
-        r"count, because the tiles that exit early stop touching memory as "
-        r"well as arithmetic. The GPU recovers \BatchGainLow points by "
-        r"batching, and stops there. At the highest rate the CPU falls back to "
-        r"\CpuSavingHigh%, in line with the GPU, because at that rate the "
-        r"allocation is deep and there is little left to skip. The claim we "
-        r"take from this is narrow: the gap between operations and time is a "
-        r"scheduling property of the accelerator, and on a device without one "
-        r"the operations count is the honest figure.")
     h2("What the frame mean is made of")
     par(r"The budget binds on a frame, and a frame is 40 tiles. At the 0.1 dB "
         r"budget the median tile of the lowest rate gives up \TailMedian dB, "
@@ -2360,6 +2335,31 @@ def content(colw, fullw):
         r"why we give the shortfall as well. The error runs one way: "
         r"operations are an <i>optimistic</i> bound on this method, and the "
         r"optimism grows with how much of the frame exits early.")
+    h2("Where the saving is realised, and where it is not")
+    par(r"A saving in operations is an optimistic bound on a saving in time on "
+        r"the GPU we time on, and the optimism is a scheduling cost: the last "
+        r"groups of the trunk run on a handful of tiles and the card is "
+        r"largely idle. That cost is a property of the device, not of the "
+        r"method, so we measured the same decodes on a CPU with \CpuThreads "
+        r"threads and at three batch sizes on the GPU ([[tab:cpu_batch]]).")
+    tbl("cpu_batch",
+        r"<b>Table N. The same saving in three places.</b> Per cent removed at "
+        r"the 0.1 dB budget on a padded 1080p frame: the arithmetic model, the "
+        r"GPU at two batch sizes, and the CPU. Arithmetic is the same in every "
+        r"column; only the machine changes.")
+    par(r"On the CPU the bound is not optimistic. At the lowest rate the "
+        r"routed decode takes \CpuMsRouted seconds against "
+        r"\CpuMsStock, which is \CpuSavingLow% removed where the arithmetic "
+        r"model predicts \CpuPredLow%: a machine that does not care how many "
+        r"tiles are in flight realises slightly more than the operations "
+        r"count, because the tiles that exit early stop touching memory as "
+        r"well as arithmetic. The GPU recovers \BatchGainLow points by "
+        r"batching, and stops there. At the highest rate the CPU falls back to "
+        r"\CpuSavingHigh%, in line with the GPU, because at that rate the "
+        r"allocation is deep and there is little left to skip. The claim we "
+        r"take from this is narrow: the gap between operations and time is a "
+        r"scheduling property of the accelerator, and on a device without one "
+        r"the operations count is the honest figure.")
     h2("5.10 The right ladder depends on the budget")
     tbl("runs",
         r"<b>Table 9. Ladder settings</b>, mean saving (%) over the five "

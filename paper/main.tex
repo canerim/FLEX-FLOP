@@ -1915,37 +1915,6 @@ without anything in the decode reporting that it has. In our reuse probe, then, 
 search across the frames we tested. How far that carries beyond the offsets and
 sequences probed here we have not measured.
 
-\subsection{Where the saving is realised, and where it is not}
-
-A saving in operations is an optimistic bound on a saving in time on the GPU we
-time on, and the optimism is a scheduling cost: the last groups of the trunk run
-on a handful of tiles and the card is largely idle. That cost is a property of
-the device, not of the method, so we measured the same decodes on a CPU with
-\CpuThreads\ threads and at three batch sizes on the GPU
-(Table~\ref{tab:cpubatch}).
-
-\begin{table}[t]
-\centering
-\input{tables/cpu_batch}
-\caption{\textbf{The same saving in three places.} Per cent removed at the
-$0.1\dB$ budget on a padded 1080p frame: the arithmetic model, the GPU at two
-batch sizes, and the CPU. Arithmetic is the same in every column; only the
-machine changes.}
-\label{tab:cpubatch}
-\end{table}
-
-On the CPU the bound is not optimistic. At the lowest rate the routed decode
-takes \CpuMsRouted\ seconds against \CpuMsStock, which is \CpuSavingLow\%
-removed where the arithmetic model predicts \CpuPredLow\%: a machine that does
-not care how many tiles are in flight realises slightly more than the operations
-count, because the tiles that exit early stop touching memory as well as
-arithmetic. The GPU recovers \BatchGainLow\ points by batching, and stops
-there. At the highest rate the CPU falls back to \CpuSavingHigh\%, in line with
-the GPU, because at that rate the allocation is deep and there is little left to
-skip. The claim we take from this is narrow: the gap between operations and time
-is a scheduling property of the accelerator, and on a device without one the
-operations count is the honest figure.
-
 \subsection{What the frame mean is made of}
 
 The budget binds on a frame, and a frame is 40 tiles. At the $0.1\dB$ budget the
@@ -2099,6 +2068,37 @@ A paper that quotes only operations would report \WallPredicted\% where the same
 code, run as written, delivers \WallSorted\%. That is why we give the shortfall
 as well. The error runs one way: operations are an \emph{optimistic} bound on
 this method, and the optimism grows with how much of the frame exits early.
+
+\subsection{Where the saving is realised, and where it is not}
+
+A saving in operations is an optimistic bound on a saving in time on the GPU we
+time on, and the optimism is a scheduling cost: the last groups of the trunk run
+on a handful of tiles and the card is largely idle. That cost is a property of
+the device, not of the method, so we measured the same decodes on a CPU with
+\CpuThreads\ threads and at three batch sizes on the GPU
+(Table~\ref{tab:cpubatch}).
+
+\begin{table}[t]
+\centering
+\input{tables/cpu_batch}
+\caption{\textbf{The same saving in three places.} Per cent removed at the
+$0.1\dB$ budget on a padded 1080p frame: the arithmetic model, the GPU at two
+batch sizes, and the CPU. Arithmetic is the same in every column; only the
+machine changes.}
+\label{tab:cpubatch}
+\end{table}
+
+On the CPU the bound is not optimistic. At the lowest rate the routed decode
+takes \CpuMsRouted\ seconds against \CpuMsStock, which is \CpuSavingLow\%
+removed where the arithmetic model predicts \CpuPredLow\%: a machine that does
+not care how many tiles are in flight realises slightly more than the operations
+count, because the tiles that exit early stop touching memory as well as
+arithmetic. The GPU recovers \BatchGainLow\ points by batching, and stops
+there. At the highest rate the CPU falls back to \CpuSavingHigh\%, in line with
+the GPU, because at that rate the allocation is deep and there is little left to
+skip. The claim we take from this is narrow: the gap between operations and time
+is a scheduling property of the accelerator, and on a device without one the
+operations count is the honest figure.
 
 \subsection{The right ladder depends on the budget}
 \begin{figure}[t]
