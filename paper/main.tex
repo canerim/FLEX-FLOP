@@ -1126,7 +1126,7 @@ range. Fig.~\ref{fig:exitmap} shows the assignment the Lagrangian oracle arrives
 \includegraphics[width=\columnwidth]{figures/spread.png}
 \caption{\textbf{What the set mean hides.} Every test sequence as a point, at
 the $0.1\dB$ budget; the bar is the median. At the lowest rate the saving runs
-from $28.1\%$ to $42.5\%$ across sequences and at the highest from $11.1\%$ to
+from \SpreadLowMin\% to \SpreadLowMax\% across sequences and at the highest from \SpreadHighMin\% to
 $42.5\%$. The spread within a rate is larger than the difference between rates,
 and it is content, not noise: the same sequences sit at the same end of it at
 every rate.}
@@ -1791,13 +1791,13 @@ measured before and after each condition so that a neighbouring process waking u
 would appear as drift rather than as a saving.
 
 Energy follows time, not arithmetic. At $q0$, $q32$ and $q63$ the routed decode
-removes $33.0$, $22.9$ and $17.8\%$ of the arithmetic; it removes $29.1$, $19.1$
-and $14.1\%$ of the wall clock and $29.6$, $19.3$ and $14.2\%$ of the joules per
+removes \PowerMacLow, \PowerMacMid\ and \PowerMacHigh\% of the arithmetic; it removes \PowerTimeLow, \PowerTimeMid
+and \PowerTimeHigh\% of the wall clock and \PowerEnergyLow, \PowerEnergyMid\ and \PowerEnergyHigh\% of the joules per
 frame. Board power barely moves, $298$\,W against $296$\,W at $q0$, because the
 later groups run on a shrinking set of tiles and a partly idle GPU still draws
 most of its static power. What early exit buys is a shorter decode, not a cooler
-one. Frame rate at 1080p goes from $9.0$ to $11.2$, and peak memory rises by
-$13.3\%$ at every resolution we could measure: tiling turns one feature map into
+one. Frame rate at 1080p goes from \FpsFull\ to \FpsRouted, and peak memory rises by
+\PeakDelta\% at every resolution we could measure: tiling turns one feature map into
 a batch of small ones, so the peak is set by the widest point of the ladder
 rather than by its deepest.
 
@@ -1896,7 +1896,7 @@ measured as arithmetic, as wall clock and as joules per frame, at 1080p and a
 $0.1\dB$ budget. Energy follows the clock, not the arithmetic. \textbf{b}, why:
 the board draws the same power either way, because the later groups run on a
 shrinking set of tiles and a partly idle GPU still draws its static power.
-\textbf{c}, peak memory, which routing raises rather than lowers, by $13.3\%$ at
+\textbf{c}, peak memory, which routing raises rather than lowers, by \PeakDelta\% at
 every resolution that fitted on the card.}
 \label{fig:power}
 \end{figure}
