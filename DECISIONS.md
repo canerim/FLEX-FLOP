@@ -5086,3 +5086,12 @@ says so now and `check_paper` holds both ends.
 The lesson is DECISIONS 97 again in a larger form: a figure is a cached
 artefact, and a cache with no invalidation is a second copy of the results that
 nobody is checking.
+
+## 105. The References heading owns page 20, and a break rule keeps it there
+The author asked for the body to end on page 19 and the references to start on
+page 20. Trimming prose alone got it there, but the outcome hung on a single
+overflowing line: one added word tipped the paper to 21 pages twice tonight. The
+heading now carries `CondPageBreak(1.1*inch)`, so it opens a column instead of
+sitting at the foot of one, and the trimming only has to keep the body inside
+page 19 rather than land it on an exact line. The conclusion lost ~70 words of
+padding in the process; every claim it makes survived (87/87).

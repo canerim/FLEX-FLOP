@@ -21,7 +21,7 @@ from reportlab.lib.units import inch
 from reportlab.platypus import (BaseDocTemplate, Frame, PageTemplate, Image,
                                 Paragraph, Spacer, Table, TableStyle,
                                 KeepTogether, FrameBreak, NextPageTemplate,
-                                PageBreak)
+                                PageBreak, CondPageBreak)
 
 R = Path(__file__).resolve().parents[1]
 # Body frame height, the yardstick for "can this flowable share a column".
@@ -2559,12 +2559,11 @@ def content(colw, fullw):
         r"second decoder to check.")
     par(r"<b>Beyond those four, seven mechanisms are not in the system, and "
         r"each was removed by a measurement rather than by taste.</b> The "
-        r"table lists them with "
-        r"the number that ended each ([[tab:abandoned]]). Five were built and dropped, one is an "
-        r"extension the measurement did not support, and the last is the "
-        r"explanation of the tiling penalty that we found does not predict it. "
-        r"We report them because the shape of what fails is the part of this "
-        r"result most likely to transfer: the border estimators say the seam "
+        r"table gives the number that ended each ([[tab:abandoned]]). Five were "
+        r"built and dropped, one is an extension the measurement did not "
+        r"support, and the last is an explanation of the tiling penalty that "
+        r"does not predict it. We report them because what fails is the part "
+        r"most likely to transfer: the border estimators say the seam "
         r"is not an interpolation problem, the halo exchange says exactness "
         r"and adaptivity are in tension, and the frozen trunk says the ladder "
         r"has to be trained through.")
@@ -2576,38 +2575,33 @@ def content(colw, fullw):
     # ---- 7 conclusion ----------------------------------------------------
     h1("8. Conclusion")
     par(r"The intra decoder of DCVC-UF can be run at a depth chosen per tile "
-        r"from what that tile contains. At a 0.1 dB budget this removes "
+        r"from its content. At a 0.1 dB budget this removes "
         r"\MainLowRate% to \MainHighRate% of its multiply-accumulates for a "
         r"BD-Rate cost of \BdRateALow%, with no change to the encoder and none "
         r"to the coded payload.")
-    par(r"Three lessons we would expect to carry to decoders of this class, "
-        r"a residual trunk behind a shared head, and "
-        r"none of them is about early exit.")
-    par(r"Tiling is the dominant cost and it is governed by depth. All "
-        r"of that cost traces back to a single 3×3 that is 0.29% of the "
-        r"arithmetic, and the penalty grows as the square of how many such "
-        r"convolutions run per tile. The affected-area fraction usually "
-        r"quoted alongside it predicts that penalty badly.")
+    par(r"Three lessons should carry to decoders of this class, a residual "
+        r"trunk behind a shared head, and none is about early exit.")
+    par(r"Tiling is the dominant cost and it is governed by depth. All of it "
+        r"traces back to a single 3×3 that is 0.29% of the arithmetic, and "
+        r"the penalty grows as the square of how many such convolutions run "
+        r"per tile; the affected-area fraction usually quoted alongside it "
+        r"predicts that penalty badly.")
     par(r"The exact remedy is in tension with the thing it enables. "
         r"Giving each convolution its real neighbour is bit-identical at "
-        r"uniform depth, and under routing it destroys the allocation, "
-        r"because routing is the deliberate violation of the condition that "
-        r"makes it exact. We expect any method that combines spatial "
-        r"adaptivity with tiled inference to walk into this.")
+        r"uniform depth; under routing it destroys the allocation, because "
+        r"routing deliberately violates the condition that makes it exact. "
+        r"Any method mixing spatial adaptivity with tiled inference will "
+        r"meet it.")
     par(r"A distortion budget is only a control variable inside a "
-        r"measurable band. Below the floor the budget admits nothing at "
-        r"all, and above saturation more of it buys nothing. A saving quoted "
-        r"without saying where in that band it sits has left out the part of the "
-        r"result a reader most needs.")
-    par(r"We would attach three cautions to the measurements themselves. A "
-        r"saving in operations is an optimistic bound on a saving in time, "
-        r"and the optimism scales with the saving. A learned router should "
-        r"be compared against a free one: routing on the bits already spent "
-        r"per tile needs no parameters and no training, adds nothing to the "
-        r"stream, and beats our trained head at every rate, while agreeing "
-        r"with the oracle on fewer tiles than the head does. And a timing "
-        r"harness will report numbers whether or not it is timing the right "
-        r"device; ours timed the wrong one for months.")
+        r"measurable band. Below the floor it admits nothing; above saturation "
+        r"more buys nothing. A saving quoted without saying where in that "
+        r"band it sits omits what matters most.")
+    par(r"Three cautions attach to the measurements. A saving in operations "
+        r"bounds a saving in time optimistically, and the optimism scales "
+        r"with it. A learned router needs a free baseline: routing on the "
+        r"bits already spent per tile costs nothing and beats our trained "
+        r"head. And a timing harness reports numbers even when it times the "
+        r"wrong device, as ours did.")
 
     return F
 
@@ -2805,6 +2799,9 @@ def build(out="paper/FLEX-UF.pdf"):
     story += fig(BANNER_PNG, PW - 2 * M, banner_cap, maxh=BANNER_MAXH)
     story += [NextPageTemplate("rest"), FrameBreak()]
     story += content(colw, PW - 2 * M)
+    # The heading opens a column rather than sitting at the foot of one;
+    # without this a one-line body overflow decides which page it lands on.
+    story.append(CondPageBreak(1.1 * inch))
     story.append(Paragraph("References", H1))
     for i, r in enumerate(REFS, 1):
         story.append(Paragraph(f"[{i}] {r}",

@@ -2353,11 +2353,11 @@ in the method looks specific to it, since the ladder needs only a residual trunk
 with a shared head, but we have not measured a second decoder to check.
 
 \paragraph{Beyond those four, seven mechanisms are not in the system, and each
-was removed by a measurement rather than by taste.} Table~\ref{tab:abandoned} lists them with the
+was removed by a measurement rather than by taste.} Table~\ref{tab:abandoned} gives the
 number that ended each. Five were built and dropped, one is an extension the
-measurement did not support, and the last is the explanation of the tiling
-penalty that we found does not predict it. We report them because the shape of
-what fails is the part of this result most likely to transfer: the border
+measurement did not support, and the last is an explanation of the tiling
+penalty that does not predict it. We report them because what fails is the part
+most likely to transfer: the border
 estimators say the seam is not an interpolation problem, the halo exchange says
 exactness and adaptivity are in tension, and the frozen trunk says the ladder
 has to be trained through.
@@ -2374,41 +2374,34 @@ reported system. The supplement gives the full measurement behind every row.}
 % =========================================================== conclusion
 \section{Conclusion}
 
-The intra decoder of DCVC-UF can be run at a depth chosen per tile from what
-that tile contains. At a $0.1\dB$ budget this removes \MainLowRate\% to
+The intra decoder of DCVC-UF can be run at a depth chosen per tile from its
+content. At a $0.1\dB$ budget this removes \MainLowRate\% to
 \MainHighRate\% of its multiply--accumulates for a BD-Rate cost of
 \BdRateALow\%, with no change to the encoder and none to the coded payload.
 
-Three lessons we would expect to carry to decoders of this class, a residual
-trunk behind a shared head, and none of them
-is about early exit.
+Three lessons should carry to decoders of this class, a residual trunk behind a
+shared head, and none is about early exit.
 
-\textbf{Tiling is the dominant cost and it is governed by depth.} All of that
-cost traces back to a single $3\times3$ that is $0.29\%$ of the arithmetic, and
-the penalty grows as the square of how many such convolutions run per tile. The
+\textbf{Tiling is the dominant cost and it is governed by depth.} All of it
+traces back to a single $3\times3$ that is $0.29\%$ of the arithmetic, and the
+penalty grows as the square of how many such convolutions run per tile; the
 affected-area fraction usually quoted alongside it predicts that penalty badly.
 
 \textbf{The exact remedy is in tension with the thing it enables.} Giving each
-convolution its real neighbour is bit-identical at uniform depth, and under
-routing it destroys the allocation, because routing is the deliberate violation
-of the condition that makes it exact. We expect any method that combines spatial
-adaptivity with tiled inference to walk into this.
+convolution its real neighbour is bit-identical at uniform depth; under routing
+it destroys the allocation, because routing deliberately violates the condition
+that makes it exact. Any method mixing spatial adaptivity with tiled inference
+will meet it.
 
 \textbf{A distortion budget is only a control variable inside a measurable band.}
-Below the floor the budget admits nothing at all, and above saturation more of it
-buys nothing (Fig.~\ref{fig:window}) Panel~b draws those two limits against the rate and the band between them is
-the only region a budget can be chosen in.. A saving quoted without saying where in that band it sits has
-left out the part of the result a reader most needs.
+Below the floor it admits nothing; above saturation more buys nothing. A saving
+quoted without saying where in that band it sits omits what matters most.
 
-We would attach three cautions to the measurements themselves. A saving in
-operations is an optimistic bound on a saving in time, and the optimism scales
-with the saving. A learned router should be compared against a free one. Routing
-on the bits already spent per tile needs no parameters and no training, it adds
-nothing to the stream, and it beats our trained head at every rate we measured,
-while agreeing with the Lagrangian oracle on fewer tiles than the head does. We read that
-as a warning about the metric quite as much as about the head. Finally, a timing harness will report numbers whether or
-not it is timing the right device. Ours timed the wrong one for months, and what
-gave it away was a decoder that appeared to slow down with the quality index.
+Three cautions attach to the measurements. A saving in operations bounds a
+saving in time optimistically, and the optimism scales with it. A learned router
+needs a free baseline: routing on the bits already spent per tile costs nothing
+and beats our trained head. And a timing harness reports numbers even when it
+times the wrong device, as ours did.
 
 {\small
 \bibliographystyle{ieee_fullname}
