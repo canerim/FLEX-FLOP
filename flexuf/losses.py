@@ -122,6 +122,16 @@ def multi_exit_rd_loss(
     if weights is None:
         weights = torch.ones(K, dtype=torch.float32, device=bpp.device)
     weights = weights.to(bpp.device)
+    # An exit the caller did not decode arrives as None. It can only arrive that
+    # way when its weight is zero, so dropping it and its weight together leaves
+    # the weighted mean and the normaliser exactly as they were.
+    if any(m is None for m in mses):
+        keep = [i for i, m in enumerate(mses) if m is not None]
+        assert float(weights[[i for i in range(K) if i not in keep]].abs().sum()) == 0.0, \
+            "an exit with a non-zero weight was not decoded"
+        mses = [mses[i] for i in keep]
+        weights = weights[keep]
+        K = len(mses)
     w_sum = weights.sum()
 
     stacked = torch.stack(list(mses), dim=0)              # [K, B]

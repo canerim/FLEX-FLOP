@@ -115,18 +115,20 @@ class FlexUFIntra(DMCI):
         return (bits_y + bits_z) / pixel_num, bits_y, bits_z
 
     # -- training forward ----------------------------------------------------
-    def forward_all_exits(self, x: torch.Tensor, qp):
+    def forward_all_exits(self, x: torch.Tensor, qp, only=None):
         """Reconstructions at every exit, plus the shared rate.
 
         Returns a dict with `x_hats` (list of K tensors), `mses` (list of K),
-        and the single shared `bpp`.
+        and the single shared `bpp`. `only` restricts which exits are decoded;
+        the others come back as None and their mse as None, so a caller that
+        weights them at zero pays nothing for them.
         """
         _, _, H, W = x.size()
         pixel_num = H * W
         y_hat, curr_q_dec, aux = self._encode_to_latent(x, qp)
 
-        x_hats = self.dec.forward_all_exits(y_hat, curr_q_dec)
-        mses = [self.get_mse(x, xh) for xh in x_hats]
+        x_hats = self.dec.forward_all_exits(y_hat, curr_q_dec, only=only)
+        mses = [None if xh is None else self.get_mse(x, xh) for xh in x_hats]
         bpp, bits_y, bits_z = self._rate(aux, qp, pixel_num)
 
         return {
@@ -137,6 +139,10 @@ class FlexUFIntra(DMCI):
             "bits_z": bits_z,
             "_y_hat": y_hat,
             "_q_dec": curr_q_dec,
+            # The trunk this call already ran, tapped at every exit. The
+            # distillation term reads these rather than running the trunk a
+            # second time for the same crop.
+            "_feats": getattr(self.dec, "_last_exit_features", None),
         }
 
     def forward_all_exits_patched(self, x: torch.Tensor, qp, generator=None):

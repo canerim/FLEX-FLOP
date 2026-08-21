@@ -110,3 +110,34 @@ not something a build can look up and not something I will invent.
 It is cited once, in Section 2, for the observation that the Lagrangian
 relaxation has resurfaced for test-time compute in language models. Either
 fill the author list in or drop the sentence; both are one line.
+
+## 5. What SCRATCH105 does at epoch 90, when the recipe reaches 512x512
+
+SCRATCH105 trains on the paper's own Eq. (6)-(7) objective -- a reconstruction
+loss at every exit -- rather than on the random-depth objective every
+warm-started run uses. It has to: random depth asks only that the mixed-depth
+frame be good, nothing in it asks exit k+1 to beat exit k, and from random
+initialisation the ladder inverted within three thousand steps. The per-exit
+objective produced a monotone ladder within two hundred.
+
+For the first 90 epochs this gives up nothing. Microsoft's schedule trains at
+256x256, a 256 px tile in a 256 px crop is one tile, and patched training is
+the same computation as full-frame. At epoch 90 the recipe moves to 512x512
+and a crop becomes four tiles, so from that point the two objectives really
+differ and the mixed-depth condition -- a tile at exit 2 beside one at exit 5,
+which is what deployment produces -- stops being trained.
+
+Three options, none of them free:
+
+  * stay on Eq. (6)-(7) for all 105 epochs, and accept that the seam between
+    tiles of different depth is handled by the architecture (grid seam repair,
+    replicate padding) rather than by the objective;
+  * switch to --train_patched at epoch 90, which trains the deployed condition
+    for the last fifteen epochs on a ladder that is by then established, and
+    is the closest thing to what the warm-started runs do;
+  * add both terms, which is a third objective neither the paper nor Microsoft
+    describes.
+
+The second is what I would choose, and it is eight days away, so it is written
+down rather than decided. Whichever is picked, the run's meta.json and the
+supplement's recipe table have to say which objective trained which epochs.

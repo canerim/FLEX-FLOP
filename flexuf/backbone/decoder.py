@@ -425,19 +425,36 @@ class MultiExitIntraDecoder(nn.Module):
         return self._apply_head(self._at_exit(feat, stop), quant_step)
 
     def forward_all_exits(
-        self, y_hat: torch.Tensor, quant_step: torch.Tensor
+        self, y_hat: torch.Tensor, quant_step: torch.Tensor, only=None
     ) -> list[torch.Tensor]:
         """Every exit's reconstruction from ONE shared trunk pass.
 
         This is the efficient form of the Eq.(6)-(7) joint objective: the trunk
         runs once and each exit taps the running feature, instead of K separate
         forward passes. Cost is one full trunk plus K heads.
+
+        `only` restricts which heads are applied, and returns None in the other
+        slots so indices still line up with the exit number. A head whose
+        auxiliary weight is zero contributes nothing to the loss and nothing to
+        the gradient, so not running it is the same arithmetic -- and during the
+        warmup schedule's first epoch five of six weights are zero, which is the
+        difference between one decode's cost and six.
         """
+        want = None if only is None else set(int(k) for k in only)
         feat = self.upsample(y_hat)
-        outs = []
+        outs, feats = [], []
         for g in range(self.cfg.num_exits):
             feat = self.groups[g](feat)
-            outs.append(self._apply_head(self._at_exit(feat, g), quant_step))
+            e = self._at_exit(feat, g)
+            feats.append(e)
+            if want is not None and g not in want:
+                outs.append(None)
+                continue
+            outs.append(self._apply_head(e, quant_step))
+        # The adapted feature at every exit, which is what exit_features
+        # recomputes from scratch -- a second full trunk pass for tensors this
+        # loop has already produced. Distillation reads them from here instead.
+        self._last_exit_features = feats
         return outs
 
     def exit_features(self, y_hat: torch.Tensor) -> list[torch.Tensor]:

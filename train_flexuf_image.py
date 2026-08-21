@@ -133,6 +133,11 @@ def parse_args(argv):
                         "nothing it will face at inference")
     p.add_argument("--aux_weight", type=float, default=1.0, help="alpha_i of Eq.(6)")
     p.add_argument("--aux_schedule", choices=["constant", "warmup"], default="constant")
+    p.add_argument("--aux_warmup_epochs", type=int, default=10,
+                   help="epochs over which aux_schedule=warmup ramps alpha from "
+                        "0 to --aux_weight. The config carried this field and "
+                        "the command line had no way to set it, so every run "
+                        "that asked for a warmup got the default silently.")
     p.add_argument("--device", type=str, default="0")
     p.add_argument("--log_every", type=int, default=200)
     p.add_argument("--ckpt_every", type=int, default=0,
@@ -287,6 +292,7 @@ def build_cfg(args) -> FlexUFConfig:
         seam_repair=args.seam_repair,
         aux_weight=args.aux_weight,
         aux_schedule=args.aux_schedule,
+        aux_warmup_epochs=args.aux_warmup_epochs,
         tile_pad_mode=args.tile_pad,
         tile_coupling=args.tile_coupling,
     )
@@ -325,7 +331,7 @@ def _fp32(out):
         if torch.is_tensor(v):
             got[k] = v.float()
         elif isinstance(v, (list, tuple)):
-            got[k] = type(v)(t.float() if torch.is_tensor(t) else t for t in v)
+            got[k] = type(v)(t.float() if torch.is_tensor(t) else t for t in v)  # None passes through
         else:
             got[k] = v
     return got
@@ -400,7 +406,13 @@ def train_one_epoch(net, loader, optimizer, epoch, cfg, args, device, logf,
                        if args.joint_router else net.forward_random_depth(x, qp))
                 w_step = torch.ones(1, device=device)
             else:
-                out = net.forward_all_exits(x, qp)
+                # Only the exits the schedule is actually weighting. Under
+                # aux_schedule=warmup the first epoch weights one of six, and
+                # decoding the other five would be six times the cost for a
+                # term multiplied by zero.
+                active = [k for k in range(len(w)) if float(w[k]) != 0.0]
+                out = net.forward_all_exits(
+                    x, qp, only=None if len(active) == len(w) else active)
                 w_step = w
         # The latent stays as the forward produced it, in the autocast dtype and
         # attached to its graph, so the distillation and anchor terms below can
@@ -408,6 +420,7 @@ def train_one_epoch(net, loader, optimizer, epoch, cfg, args, device, logf,
         # encode was half the step time.
         y_cached = out.pop("_y_hat", None)
         q_cached = out.pop("_q_dec", None)
+        feats_cached = out.pop("_feats", None)
         # Out of the autocast region: the RD trade-off is the quantity the whole
         # paper is about and it is not evaluated at reduced precision. Casting
         # here rather than inside also keeps the loss graph in fp32, which is
@@ -468,11 +481,14 @@ def train_one_epoch(net, loader, optimizer, epoch, cfg, args, device, logf,
         distill = None
         if args.distill_weight > 0:
             with amp_ctx(args, device):
-                if y_cached is None:
-                    y_d, _, _ = net._encode_to_latent(x, qp)
+                if feats_cached is not None:
+                    _feats = feats_cached
                 else:
-                    y_d = y_cached
-                _feats = net.dec.exit_features(y_d)
+                    if y_cached is None:
+                        y_d, _, _ = net._encode_to_latent(x, qp)
+                    else:
+                        y_d = y_cached
+                    _feats = net.dec.exit_features(y_d)
             distill = ladder_distill_loss([f.float() for f in _feats],
                                           args.distill_teacher)
             ld["loss"] = ld["loss"] + args.distill_weight * distill
@@ -517,8 +533,18 @@ def train_one_epoch(net, loader, optimizer, epoch, cfg, args, device, logf,
                     rd = per_exit_rd(diag["mses"], diag["bpp"], lambdas).tolist()
                     mixed = psnr_from_mse(out["mses"][0].mean()).item()
                 else:
-                    psnrs = [psnr_from_mse(m.mean()).item() for m in out["mses"]]
-                    rd = per_exit_rd(out["mses"], out["bpp"], lambdas).tolist()
+                    # During the warmup schedule the step only decodes the
+                    # exits it weights, so the others are None here. The
+                    # per-exit PSNR is the health signal that says whether the
+                    # ladder is ordered, and it is worth one full pass every
+                    # log_every steps to keep it.
+                    src = out
+                    if any(m is None for m in out["mses"]):
+                        with amp_ctx(args, device):
+                            src = net.forward_all_exits(x, qp)
+                        src = _fp32(src)
+                    psnrs = [psnr_from_mse(m.mean()).item() for m in src["mses"]]
+                    rd = per_exit_rd(src["mses"], src["bpp"], lambdas).tolist()
                     mixed = None
             t1 = time.time()
             seen = i * args.batch_size
