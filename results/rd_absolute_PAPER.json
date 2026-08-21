@@ -1,0 +1,44 @@
+{
+  "ckpt": "runs/RECIPE512/ckpt_PAPER.pth.tar",
+  "ref": "/home/can_karsal/FLEX-UF/runs/warmstart/ckpt_warmstart.pth.tar",
+  "n_frames": 53,
+  "frames_per_seq": 1,
+  "psnr_convention": "6:1:1 weighted, YUV420, as scripts/ctc_intra.py",
+  "rows": [
+    {
+      "qp": 0,
+      "bpp": 0.23138420311909802,
+      "psnr_release": 32.53648776780542,
+      "psnr_deepest": 32.53136077160925,
+      "drift_db": -0.0051269961961679655
+    },
+    {
+      "qp": 16,
+      "bpp": 0.26714062606388667,
+      "psnr_release": 35.33506710451625,
+      "psnr_deepest": 35.32643622203631,
+      "drift_db": -0.008630882479946932
+    },
+    {
+      "qp": 32,
+      "bpp": 0.33516611411886393,
+      "psnr_release": 38.13514807298646,
+      "psnr_deepest": 38.12063687452372,
+      "drift_db": -0.014511198462741959
+    },
+    {
+      "qp": 48,
+      "bpp": 0.4559440089846557,
+      "psnr_release": 40.77662767246529,
+      "psnr_deepest": 40.75334479491607,
+      "drift_db": -0.023282877549220603
+    },
+    {
+      "qp": 63,
+      "bpp": 0.6718749471430508,
+      "psnr_release": 43.15541434961555,
+      "psnr_deepest": 43.119258755164125,
+      "drift_db": -0.03615559445142077
+    }
+  ]
+}

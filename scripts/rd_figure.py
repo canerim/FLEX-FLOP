@@ -35,8 +35,24 @@ anc = J("anchor_RECIPE512_ctc53.json")
 why = J("why_qp.json")
 sig = J("signalled_RECIPE512_ctc53.json")
 pc = J("curve_RECIPE512_ctc53.json")
-rel = {r["qp"]: r["stock_psnr"] for r in anc["rows"]}
-bpp = {r["qp"]: r["bpp"] for r in why["rows"]}
+# One file for both axes, measured together on the same frames.
+#
+# This plot used to take PSNR from results/anchor_RECIPE512_ctc53.json -- 53
+# frames, one per sequence, RECIPE512 -- and the bitrate from
+# results/why_qp.json, which is 40 sequences at TWO frames each on a BEST
+# checkpoint. Rate from one test set against quality from another, on the plane
+# a compression reviewer reads first. The bitrates were 4% low at q0 and 23%
+# low at q63, which moves every point of the released curve left and flatters
+# the whole picture. results/rd_absolute_PAPER.json measures bpp and PSNR in
+# one pass over the paper's own \NumSeq frames and asserts on the weights that
+# the two encoders are bit-identical before it reports a shared rate.
+_rda = J("rd_absolute_PAPER.json")
+if _rda:
+    rel = {r["qp"]: r["psnr_release"] for r in _rda["rows"]}
+    bpp = {r["qp"]: r["bpp"] for r in _rda["rows"]}
+else:
+    rel = {r["qp"]: r["stock_psnr"] for r in anc["rows"]}
+    bpp = {r["qp"]: r["bpp"] for r in why["rows"]}
 qs = [q for q in QPS if q in rel and q in bpp]
 
 # Two panels, not three. The third was a per-sequence violin, which is what

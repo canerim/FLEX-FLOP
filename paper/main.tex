@@ -713,8 +713,8 @@ outweigh them before the allocation moves at all. A narrower bracket we tried
 first, $[-50, 50]$, never reached the all-deepest allocation and so never
 bracketed the budget from below.
 
-\paragraph{The head, exactly.} Figure~\ref{fig:routerarch} draws it. Three
-things enter. The first is the feature at the split point, $384$ channels at one
+\paragraph{The head, exactly.} Three things enter it, and the third is the one
+that earns its parameters (Fig.~\ref{fig:routerarch}). The first is the feature at the split point, $384$ channels at one
 eighth of frame resolution, which is the last thing every tile shares. The
 second is the decoded latent $\hat{y}$ concatenated with the entropy model's
 scales $\sigma$~\cite{balle2018}, the predicted Gaussian width used to code
@@ -1541,8 +1541,10 @@ single $\lambda$.}
 \end{table}
 
 Table~\ref{tab:ab} compares the two, and what it prices is exactness against
-bits (Fig.~\ref{fig:ab}) Panel~a of that figure is the two decision paths side by side, and the only
-place they differ is who holds the source..
+bits (Fig.~\ref{fig:ab}). Panel~a puts the two decision paths side by side; the
+only place they differ is who holds the source. A searches at the encoder, which
+has the picture, and sends the answer; B guesses at the decoder, which has only
+the latent.
 \textbf{Not signalling costs \GapMin--\GapMax\ points}, roughly flat across
 rate, for zero added bits and a byte-identical file. The gap is smallest at
 $q\GapMinQp$ and widens toward both ends of the rate range.

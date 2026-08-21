@@ -27,6 +27,7 @@ while true; do
   FO=$(echo "$OUT" | grep -oE 'check_fig_overlap: [A-Za-z0-9 ()/,]+' | head -1 | sed 's/check_fig_overlap: //')
   CT=$(echo "$OUT" | grep -oE 'check_cites: [A-Za-z0-9 ()]+' | head -1 | sed 's/check_cites: //')
   NU=$(echo "$OUT" | grep -oE 'check_numbers: [A-Za-z0-9 ()]+' | head -1 | sed 's/check_numbers: //')
+  FC=$(echo "$OUT" | grep -oE 'check_fig_claims: [A-Za-z0-9 ()]+' | head -1 | sed 's/check_fig_claims: //')
   # A page count that comes back empty is the PDF being rewritten as we read
   # it, not a missing paper. Saying "building" costs one word and stops a
   # blank field looking like a broken artefact.
@@ -58,6 +59,6 @@ except Exception:
 print(f\"ep{d['epoch']} {100*d['seen']/d['total']:.1f}% spread {d['spread_dB']:+.2f}dB {d['sec']:.0f}s/200\")
 " 2>/dev/null)
   SCALIVE=$(pgrep -fc "save_dir.*SCRATCH105" 2>/dev/null || echo 0)
-  echo "$TS  fix $FIX | claims $CHK twins $TW tex $TX prose $PR layout $LY figs $FR render $RN figprose $FP overlap "$FO" cites $CT numbers $NU | paper ${MAIN}p supp ${SUPP}p | gpu ours=$OURS others=$OTHER | newest ckpt $AGE | ep $EP | scratch ${SC:--} pids=$SCALIVE"
+  echo "$TS  fix $FIX | claims $CHK twins $TW tex $TX prose $PR layout $LY figs $FR render $RN figprose $FP overlap "$FO" cites $CT numbers $NU figclaims $FC | paper ${MAIN}p supp ${SUPP}p | gpu ours=$OURS others=$OTHER | newest ckpt $AGE | ep $EP | scratch ${SC:--} pids=$SCALIVE"
   sleep "$INTERVAL"
 done

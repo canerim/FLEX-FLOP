@@ -5249,3 +5249,28 @@ the value matched its own definition and nothing read the sentence around it.
 "short of", and one whose name says "Gap" or "Loses" may not appear in one
 that says "beats" or "ahead of". Crude, and it catches the only failure of
 this kind either build has had.
+
+## 112. The rate-quality plane had rate from one test set and quality from another
+
+Figure 18 panel a is the plot a compression reviewer reads first: PSNR against
+bitrate, with the released decoder as the reference curve. Its PSNR came from
+`results/anchor_RECIPE512_ctc53.json` -- 53 frames, one per sequence, the
+pinned RECIPE512 checkpoint -- and its bitrate from `results/why_qp.json`,
+which is 40 sequences at two frames each on a BEST checkpoint. Two test sets,
+one plot.
+
+The error is not small. Measured on the paper's own frames the bitrates are
+0.2314 to 0.6719 bpp; the file the figure was reading says 0.2226 to 0.5466,
+which is 4% low at q0 and 23% low at q63. Every point of the released curve sat
+left of where it belongs, and so did ours, which is the direction that flatters
+a codec.
+
+`scripts/rd_absolute.py` now measures bpp and PSNR in one pass over the \NumSeq
+CTC intra frames and asserts on the weights that the two encoders are
+bit-identical before reporting one rate for both curves -- because a shared
+x-axis is a claim, not a convenience. The figure reads that file for both axes.
+
+The richer version of the plot -- five rates, three budgets, and the arithmetic
+saved on a second axis -- is `rd_vs_uf.png` in Section D of the supplement,
+where there is room for it. The main paper keeps the two-panel version and its
+page count.

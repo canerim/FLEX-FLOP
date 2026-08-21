@@ -1147,7 +1147,8 @@ def content(colw, fullw):
         r"allocation moves at all. A narrower bracket we tried first, [−50, "
         r"50], never reached the all-deepest allocation and so never bracketed "
         r"the budget from below.")
-    par(r"<b>The head, exactly. [[fig:router_arch]] draws it.</b> Three things enter. The first is the "
+    par(r"<b>The head, exactly.</b> Three things enter it, and the third is "
+        r"the one that earns its parameters ([[fig:router_arch]]). The first is the "
         r"feature at the split point, 384 channels at one eighth of frame "
         r"resolution, which is the last thing every tile shares. The second is "
         r"the decoded latent ŷ concatenated with the entropy model's scales σ [2], "
@@ -1256,7 +1257,11 @@ def content(colw, fullw):
     eq(r"1 - \left(\frac{F-2b}{F}\right)^{2}", tag=False)
     par(r"At our shipped F=32, b=8 that comes to 0.750. Three quarters of the "
         r"tile is affected, so what we are looking at is a structured error "
-        r"over most of the tile ([[fig:seam_problem]]) and not a thin border at its edge.")
+        r"over most of the tile ([[fig:seam_problem]]) and not a thin border at its edge. "
+        r"Panel b is the same bitstream and the same weights decoded in tiles, "
+        r"and the difference from panel a is not a line along the seam but a "
+        r"texture filling each tile, which is why a deblocking filter aimed at "
+        r"the boundary recovers so little of it.")
     par(r"That fraction tells us which pixels are affected and not how badly, "
         r"and it turns out to be the wrong predictor of the penalty. We swept "
         r"the split depth, which sweeps b from 12 to 0 with b=0 as an exact "
@@ -1347,7 +1352,12 @@ def content(colw, fullw):
         r"with a filter applied after reconstruction [7, 19] ([[fig:seam_gate]]). The tile lattice "
         r"is known "
         r"exactly at training and at inference, so ours can be <i>told</i> "
-        r"where to look instead of having to infer it")
+        r"where to look instead of having to infer it. Panel d is the reading "
+        r"that matters: the learned gate is not a switch. It reaches "
+        r"\GateMax at a tile corner, where two borders meet and the damage is "
+        r"worst, and settles at \GateMin in the interior rather than at zero, "
+        r"so the repair is applied everywhere and merely weighted by how far "
+        r"from a border a pixel is.")
     eq(r"\mathrm{Rep}(f) = f + G[\,x\ \mathrm{mod}\ P,\ y\ \mathrm{mod}\ P\,]"
        r"\cdot \mathrm{PW}\left(\mathrm{WSiLU}(\mathrm{DW}_{3\times3}(f))\right)")
     rows_tbl([["", ""],
@@ -1851,7 +1861,11 @@ def content(colw, fullw):
         r"checkpoint and test set, with one router trained against the oracle "
         r"on the deployed table at a single λ.")
     par(r"The table above compares the two, and what it prices is exactness "
-        r"against bits ([[tab:ab]], [[fig:router_ab]]) Panel a of that figure is the two decision paths side by side, and the only place they differ is who holds the source..")
+        r"against bits ([[tab:ab]], [[fig:router_ab]]). Panel a puts the two "
+        r"decision paths side by side; the only place they differ is who "
+        r"holds the source. A searches at the encoder, which has the picture, "
+        r"and sends the answer; B guesses at the decoder, which has only the "
+        r"latent.")
     par(r"<b>Not signalling costs \GapMin–\GapMax points</b>, roughly flat "
         r"across rate, for zero added bits and a byte-identical file. The gap "
         r"is smallest at q\GapMinQp and widens toward both ends of the rate "

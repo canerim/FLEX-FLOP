@@ -509,6 +509,22 @@ def content(k):
            "the allocation is the deployed one, and the delivered decibel "
            "recomputed here matches the stored value to four decimals.")
 
+    k.fig("rd_vs_uf.png",
+          "<b>a</b>, rate against quality over the five quality indices, the "
+          "released DCVC-UF intra decoder and FLEX-UF at three budgets, on "
+          "the \\NumSeq CTC intra frames. Both axes come from one pass over "
+          "the same frames, and the encoders are asserted bit-identical on "
+          "the weights before a shared rate is reported -- the main paper's "
+          "version of this plane took its bitrate from a 40-sequence, "
+          "two-frame file and its quality from the \\NumSeq-frame one, which "
+          "put the released curve up to 23% left of where it belongs. "
+          "<b>b</b>, the same difference magnified: the decibels each budget "
+          "delivered, against the decoder arithmetic it bought on the "
+          "right-hand axis.", maxh=190)
+    k.note("Drawn by scripts/rd_vs_uf_figure.py from "
+           "results/rd_absolute_PAPER.json and "
+           "results/signalled_RECIPE512_ctc53.json, both on " + PINNED + ".")
+
     k.fig("res_rd.png",
           "<b>a</b>, the rate-quality curve of the released decoder and of "
           "ours at the 0.1 dB budget, over the five quality indices. At plot "
