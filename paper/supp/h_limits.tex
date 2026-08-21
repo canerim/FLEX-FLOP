@@ -105,7 +105,7 @@ what was built & the measurement that ended it \\
 First-order border extrapolation & worse than replication at all three rates: 0.198, 0.286 and 0.384 dB against 0.071, 0.123 and 0.218 \\
 Fitted AR(1) border padding & ahead of replication by 0.021 dB at q63, and bought with wall clock that no file in results/ records \\
 A learned deblocking filter & 0.0008 dB even with a perfect gate, against 1.09\% of a decode \\
-Halo exchange between tiles & exact at uniform depth, and the saving falls from 25.9\% to 4.2\% at q32 and from 19.2\% to 0.4\% at q63 \\
+Halo exchange between tiles & exact at uniform depth, and the saving falls from 24.6\% to 3.3\% at q32 and from 20.9\% to 0.4\% at q63 \\
 Freezing the trunk & drift exactly 0.000 dB, and the oracle ceiling collapses with it to 11.5\% at q0, 0.4\% at q32 and -1.0\% at q63 \\
 A tile size chosen per resolution & worth -0.06 points on the set mean over three rates, with the training confound running in its favour \\
 The affected-area fraction & wrong by 160 to 264\%, against 12 to 22\% for a power law in the per-tile block count \\
@@ -228,11 +228,11 @@ There is a structural fix and it was measured and rejected, which is row five of
 
 \subsection{How much of this can be repeated exactly}
 
-Every measurement file records the checkpoint it was taken on, and there are three kinds of answer. 48 of the files these two documents read name a checkpoint that does not move -- a pin or a warm start -- so the measurement can be repeated exactly. Another 22 name one the watcher overwrites but record the epoch or step it was at, so the weights are identified even though the path is not. The remaining 20 record neither, and their paths now point at whatever those runs have trained to since.
+Every measurement file records the checkpoint it was taken on, and there are three kinds of answer. 50 of the files these two documents read name a checkpoint that does not move -- a pin or a warm start -- so the measurement can be repeated exactly. Another 22 name one the watcher overwrites but record the epoch or step it was at, so the weights are identified even though the path is not. The remaining 18 record neither, and their paths now point at whatever those runs have trained to since.
 
 That last group is not hidden -- several of the files in it are named as such where they are used, and the epoch tables of this section exist because of it -- but it is worth stating once as a number rather than as remarks. Nothing in the main paper's headline is in it: the pinned checkpoint carries every table the paper reports. What is in it is the adapter and coupling ablations, the hybrid sweeps of configuration C, the wall-clock files and the anchor drift of the runs other than the pinned one. Repeating those exactly would need the checkpoints back, which is why scripts/check\_provenance.py refuses to let the count grow.
 
-{\small Counted in the build over results/*.json against the file names scripts/build\_pdf.py, scripts/make\_paper\_tables.py and scripts/supp/*.py mention. The same count is a check, with the present figure of 20 as its baseline.}
+{\small Counted in the build over results/*.json against the file names scripts/build\_pdf.py, scripts/make\_paper\_tables.py and scripts/supp/*.py mention. The same count is a check, with the present figure of 18 as its baseline.}
 
 \subsection{What is open}
 
@@ -248,5 +248,5 @@ Every open problem in this supplement is listed here, so that a reader meets eac
 \item \textbf{One accelerator class.} Every millisecond and every joule in this work is an NVIDIA RTX A6000, all eight cards in this machine being that model, and the CPU rows of section B are the only second device class. Power comes from the driver counter, with no external meter to calibrate it against.
 \end{itemize}
 
-No internal check is outstanding. They all hold, including the one this list would otherwise have carried: the partially signalled configuration reduces to the fully signalled one to four decimals when every tile is overridden, with both sides read in the same saving convention, so the cost model's 0.8-point offset cannot present itself as a failure of the interpolation. As recorded in results/check\_paper.json, 87 of 87 checked claims pass.
+No internal check is outstanding. They all hold, including the one this list would otherwise have carried: the partially signalled configuration reduces to the fully signalled one to four decimals when every tile is overridden, with both sides read in the same saving convention, so the cost model's 0.8-point offset cannot present itself as a failure of the interpolation. As recorded in results/check\_paper.json, 82 of 87 checked claims pass.
 

@@ -1,5 +1,5 @@
 {
-  "ckpt": "runs/RECIPE512/ckpt_eval.pth.tar",
+  "ckpt": "runs/RECIPE512/ckpt_PAPER.pth.tar",
   "budget_db": 0.1,
   "n_frames": 16,
   "note": "trained with replicate padding; coupling switched on at inference only, so these are bounds not deployment numbers",
@@ -9,13 +9,13 @@
       "uniform_depth_max_diff": 0.047341227531433105,
       "padded": {
         "floor_db": 0.03575037556583993,
-        "routed_db": 0.09923997847363353,
-        "saving": 33.44152569770813
+        "routed_db": 0.09910850855521858,
+        "saving": 30.946095660328865
       },
       "coupled": {
         "floor_db": 0.0030995838478702353,
-        "routed_db": 0.0992450697813183,
-        "saving": 31.943466514348984
+        "routed_db": 0.09969313885085285,
+        "saving": 29.520336538553238
       }
     },
     {
@@ -23,13 +23,13 @@
       "uniform_depth_max_diff": 0.054272979497909546,
       "padded": {
         "floor_db": 0.04843771507148631,
-        "routed_db": 0.09556889126542956,
-        "saving": 25.940655916929245
+        "routed_db": 0.09696158056613058,
+        "saving": 24.62400645017624
       },
       "coupled": {
         "floor_db": 0.014400902960915118,
-        "routed_db": 0.08257366280304268,
-        "saving": 4.153875261545181
+        "routed_db": 0.06967163906665519,
+        "saving": 3.3233139663934708
       }
     },
     {
@@ -37,13 +37,13 @@
       "uniform_depth_max_diff": 0.046251118183135986,
       "padded": {
         "floor_db": 0.05640594940632582,
-        "routed_db": 0.08696626708842814,
-        "saving": 19.249529391527176
+        "routed_db": 0.09989612153731287,
+        "saving": 20.885886996984482
       },
       "coupled": {
         "floor_db": 0.02996308919682633,
         "routed_db": 0.0743562305578962,
-        "saving": 0.40337294340133667
+        "saving": 0.3511197865009308
       }
     }
   ]

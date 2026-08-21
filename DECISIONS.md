@@ -5460,3 +5460,32 @@ wall-clock files and the anchor drift of the runs other than the pinned one.
 present figure as a baseline and fails when the count grows, so a new
 measurement cannot be added without recording its checkpoint. Lowering the
 baseline after re-measuring one of the twenty is the way it is meant to move.
+
+## 121. The coupling ablation was computed with the cost model the paper corrected
+
+Tracing the two ablations back to the pinned checkpoint turned up a stale
+measurement, and the way it was identified is the useful part.
+
+The adapter ablation reproduced bit for bit on `ckpt_PAPER`, which is
+bit-identical to `ckpt_epo0` over all 427 tensors, so the supplement's note
+that it is on the pinned checkpoint was right and the file's `ckpt_eval` field
+was merely uninformative. The coupling ablation did not reproduce: the savings
+moved 33.4 to 30.9 at q0, 25.9 to 24.6 at q32, and 19.2 to 20.9 at q63.
+
+The floor separates the two possible causes. It is a plain decode -- a
+full-depth tiled frame against a full-frame one -- and it identifies the
+weights; the saving runs through the cost model and the multiplier bisection.
+The floors are identical to four decimals at every rate: 0.0358, 0.0484,
+0.0564, old and new. So the weights were never in question. Two further runs
+on the pinned checkpoint agreed with each other exactly, and a run on the
+epoch-1 pin gave a different floor (0.0332), which rules out a stale
+checkpoint from the other side.
+
+Same weights, same frames, different code. The savings in that file were
+computed before the FFN adapter was found to cost 5C^2, which is the same
+correction behind DECISIONS 112 and 117. The file now carries today's numbers
+and names the pin; five checked claims and six macros moved with it.
+
+The conclusion is untouched and slightly stronger: the halo exchange takes the
+routed saving from 24.6% to 3.3% at q32, an 86% collapse where the stale
+numbers said 84%.

@@ -74,7 +74,7 @@ def claim(label, expected, actual, tol=0.06):
 d = J("coupling_ablation.json")
 if d:
     by = {r["qp"]: r for r in d["rows"]}
-    for qp, pad, cpl in ((0, 33.44, 31.94), (32, 25.94, 4.15), (63, 19.25, 0.40)):
+    for qp, pad, cpl in ((0, 30.95, 29.52), (32, 24.62, 3.32), (63, 20.89, 0.35)):
         if qp in by:
             claim(f"coupling q{qp} padded saving", pad, by[qp]["padded"]["saving"])
             claim(f"coupling q{qp} coupled saving", cpl,

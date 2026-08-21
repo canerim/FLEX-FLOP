@@ -29,7 +29,10 @@ import sys
 from pathlib import Path
 
 R = Path(__file__).resolve().parent.parent
-BASELINE = 20
+# Lowered from 20 on 2026-08-21: the adapter and coupling ablations were
+# traced back to the pinned checkpoint and re-measured on it. Lowering this
+# after converting one is the point of the number.
+BASELINE = 18
 MOVING = {"ckpt_eval.pth.tar", "ckpt_step.pth.tar"}
 IDENT = ("ckpt_epoch", "ckpt_step", "epoch", "step", "cumulative_step",
          "ckpt_mtime", "ckpt_sha")
