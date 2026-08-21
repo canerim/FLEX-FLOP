@@ -3,6 +3,7 @@ import json, sys
 from pathlib import Path
 import numpy as np
 import matplotlib
+import matplotlib.ticker
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 
@@ -26,6 +27,11 @@ for q in qps:
     bb = np.linspace(b.min(), b.max(), 50)
     ax[0].loglog(bb, np.exp(A[1]) * bb ** A[0], "-", lw=1.0, color=COL[q])
 ax[0].set_xlabel("per-tile blocks $b$"); ax[0].set_ylabel("seam (dB)")
+# The log axis labelled 3 and 6 as 3x10^0 and 6x10^0 beside plain 2, 4, 8:
+# one axis, two notations.
+ax[0].set_xticks([2, 4, 6, 8, 10, 12])
+ax[0].get_xaxis().set_major_formatter(matplotlib.ticker.ScalarFormatter())
+ax[0].get_xaxis().set_minor_formatter(matplotlib.ticker.NullFormatter())
 ax[0].set_xticks([2, 4, 8, 12])
 ax[0].get_xaxis().set_major_formatter(matplotlib.ticker.ScalarFormatter())
 ax[0].legend(fontsize=5.5, loc="upper left")

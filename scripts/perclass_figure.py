@@ -41,7 +41,9 @@ for c in ORDER:
     a.plot(qps, ys, marker="o", ms=3.5, lw=1.2, color=COL[c],
            label=f"{c.replace('_',' ')}  ({t} tiles, n={n})")
 a.set_xlabel("qp"); a.set_ylabel("decoder MACs saved (%)")
-a.legend(loc="lower left", fontsize=4.8, ncol=2, columnspacing=0.8)
+a.legend(loc="upper right", fontsize=4.4, ncol=1, columnspacing=0.8,
+             frameon=False, handlelength=1.2, labelspacing=0.25,
+             borderpad=0.1)
 a.set_ylim(0, 42)
 a.set_title("0.1 dB, global operating point",
             fontsize=6, color=ns.INK2, loc="left")
@@ -59,9 +61,13 @@ r0 = rows[0]
 for c in ORDER:
     if c in r0["per_class"]:
         v = r0["per_class"][c]
+        # Three classes share 40 tiles, so their labels landed on top of one
+        # another at the right edge. Fan them out vertically by the order they
+        # appear, which is also the order of their savings.
+        _dy = {"UVG": -7, "HEVC_B": -1}.get(c, 3)
         b.annotate(c.replace("HEVC_", "").replace("MCL-JCV", "MCL"),
                    (v["tiles"], v["saving"]), fontsize=5, color=ns.INK2,
-                   textcoords="offset points", xytext=(4, 3))
+                   textcoords="offset points", xytext=(4, _dy))
 b.set_xscale("log"); b.set_xticks([2, 8, 15, 40])
 b.get_xaxis().set_major_formatter(matplotlib.ticker.ScalarFormatter())
 b.set_xlabel("tiles per frame at 256 px"); b.set_ylabel("MACs saved (%)")
@@ -83,7 +89,7 @@ for i, (c, v) in enumerate(zip(names, db)):
             va="center", color=ns.INK2)
 c_.set_yticks(range(len(names)))
 c_.set_yticklabels([c.replace("_", " ") for c in names], fontsize=5.5)
-c_.set_xlabel("dB spent at the global operating point")
+c_.set_xlabel("dB spent, global operating point")
 c_.set_xlim(0, max(db) * 1.45)
 c_.set_title("dB spent per class", fontsize=6, color=ns.INK2, loc="left")
 ns.panel(c_, "c", dx=-0.30)
