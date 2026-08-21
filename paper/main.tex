@@ -543,7 +543,11 @@ An early exit hands the shared head a feature the head was not fitted to, and th
 adapter is the correction. For exits that skip little we use a residual
 $1\times1$, $\mathrm{Ad}(f) = f + Wf$ with $W$ zero-initialised. For exits that
 skip four blocks or more we use the pointwise expand/activate/contract pair of
-the block's own FFN (Fig.~\ref{fig:adapters}). Both are \emph{pointwise by
+the block's own FFN (Fig.~\ref{fig:adapters}). The threshold is where the
+capacity mismatch stops being ignorable: a $1\times1$ costs $C^2$ per pixel and
+each block it stands in for costs $8C^2+9C$, so at two skipped blocks it is
+replacing sixteen times its own arithmetic and at six it is replacing fifty.
+Both are \emph{pointwise by
 design}. A $3\times3$ inside an adapter would add seam damage at the tiles that
 took an early exit, and those are the tiles least able to afford it.
 Zero-initialising the last layer makes every adapter exactly the identity at step
