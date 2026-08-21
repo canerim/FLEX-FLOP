@@ -22,6 +22,8 @@ WANTED = [
     "deciders.png",
     "mechanism.png",
     "seam_gate.png",
+    "seam_repair_grid.png",
+    "power.png",
     "ladder.png",            # the per-exit cost, measured against modelled
     "allocation.png",        # where the tiles go, by rate
     "router_arch.png",       # the router head, layer by layer   # the baseline, from the DCVC-UF paper

@@ -881,6 +881,20 @@ for $0.95\%$ of the decode. We rejected AR(1) padding at $0.0019\dB$ per point o
 decode, and this is worse by an order of magnitude. Tightening the gate cannot
 rescue it, because there is almost nothing left to win.
 
+\begin{figure*}[t]
+\centering
+\includegraphics[width=\textwidth]{figures/seam_repair_grid.png}
+\caption{\textbf{What the deblocking pass does to a picture.} Bosphorus at
+$q63$, the rate where the seam is worst, decoded twice from one latent with
+every tile at full depth. \textbf{a}, the frame and its $5\times8$ grid.
+\textbf{b}, \textbf{c}, the error against a full-frame decode of the same
+latent, amplified $25$ times, with the pass off and on. \textbf{d}, \textbf{e},
+one grid crossing in the picture itself. \textbf{f}, what the pass changed
+there. It recovers $0.005\dB$ of the $0.041\dB$ that tiling costs on this frame,
+which is the measurement behind the section title.}
+\label{fig:seamrepairgrid}
+\end{figure*}
+
 \subsection{Removing the cause, and why it does not help}
 \label{sec:coupling}
 

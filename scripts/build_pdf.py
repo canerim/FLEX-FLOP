@@ -1241,6 +1241,17 @@ def content(colw, fullw):
         r"rejected AR(1) padding at 0.0019 dB per point of decode, and this is "
         r"worse by an order of magnitude. Tightening the gate cannot rescue "
         r"it, because there is almost nothing left to win.")
+    figure_wide("seam_repair_grid.png",
+                r"<b>Figure N. What the deblocking pass does to a picture.</b> "
+                r"Bosphorus at q63, the rate where the seam is worst, decoded "
+                r"twice from one latent with every tile at full depth. "
+                r"<b>a</b>, the frame and its 5×8 grid. <b>b</b>, <b>c</b>, "
+                r"the error against a full-frame decode of the same latent, "
+                r"amplified 25 times, with the pass off and on. <b>d</b>, "
+                r"<b>e</b>, one grid crossing in the picture itself. <b>f</b>, "
+                r"what the pass changed there. It recovers 0.005 dB of the "
+                r"0.041 dB that tiling costs on this frame, which is the "
+                r"measurement behind the section title.")
     h2("4.4 Removing the cause, and why it does not help")
     par(r"Only 0.29% of each block has spatial extent, so the exact fix is "
         r"affordable. Give the 3×3 its real neighbours across the tile border, "
@@ -2058,6 +2069,15 @@ def content(colw, fullw):
         r"you which side of the crossover a given budget sits on.")
 
     # ---- 6 limitations ---------------------------------------------------
+    figure("power.png",
+           r"<b>Figure N. Three units for one saving.</b> <b>a</b>, the same "
+           r"routed decode measured as arithmetic, as wall clock and as joules "
+           r"per frame, at 1080p and a 0.1 dB budget. Energy follows the clock, "
+           r"not the arithmetic. <b>b</b>, why: the board draws the same power "
+           r"either way, because the later groups run on a shrinking set of "
+           r"tiles and a partly idle GPU still draws its static power. "
+           r"<b>c</b>, peak memory, which routing raises rather than lowers, by "
+           r"13.3% at every resolution that fitted on the card.")
     h1("6. Against the released decoder")
     par(r"Everything above is measured against the released DCVC-UF intra "
         r"decoder, but always as a percentage. This section states it once in "
