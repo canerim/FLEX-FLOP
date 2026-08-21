@@ -15,8 +15,15 @@
 set -u
 cd "$HOME/FLEX-UF"
 for D in runs/*/; do
-  CK="$D/ckpt_eval.pth.tar"
-  [ -f "$CK" ] || continue
+  # ckpt_eval is what the watcher promotes; a run with no watcher -- SCRATCH105
+  # has none, because the CTC chain is meaningless for it -- has only
+  # status_latest.pth.tar at its epoch boundaries, and that is overwritten just
+  # as readily. Pin from whichever exists.
+  CK=""
+  for CAND in "$D/ckpt_eval.pth.tar" "$D/status_latest.pth.tar"; do
+    if [ -f "$CAND" ]; then CK="$CAND"; break; fi
+  done
+  [ -n "$CK" ] || continue
   EP=$(./.venv/bin/python - "$CK" <<'PYEOF' 2>/dev/null
 import sys, torch
 try:
@@ -30,7 +37,11 @@ PYEOF
   [ -n "$EP" ] || continue
   PIN="$D/ckpt_PIN_e$EP.pth.tar"
   if [ ! -f "$PIN" ]; then
-    cp "$CK" "$PIN.tmp" && mv "$PIN.tmp" "$PIN"
-    echo "$(date '+%F %T') pinned $(basename "$D") epoch $EP -> $(basename "$PIN")"
+    if ./.venv/bin/python scripts/pin_one.py "$CK" "$PIN.tmp"; then
+      mv "$PIN.tmp" "$PIN"
+      echo "$(date '+%F %T') pinned $(basename "$D") epoch $EP -> $(basename "$PIN")"
+    else
+      rm -f "$PIN.tmp"
+    fi
   fi
 done
