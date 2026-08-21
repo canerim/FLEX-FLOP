@@ -1426,6 +1426,16 @@ except Exception as _e:
     print("   supp_opquality:", _e)
 
 
+# ------------------------------------------------------- where the MACs are
+try:
+    _ma = json.load(open(RES / "mac_audit.json"))["1920x1088"]
+    mac("TrunkShare", f"{100 * _ma['parts']['trunk']['share']:.1f}")
+    mac("UpsampleShare", f"{100 * _ma['parts']['upsample']['share']:.1f}")
+    mac("HeadShare", f"{100 * _ma['parts']['head']['share']:.1f}")
+except Exception as _e:
+    print("   mac audit:", _e)
+
+
 # ------------------------------------------------- the exit map on one frame
 try:
     _em = json.load(open(RES / "supp_exitmap_bosphorus_q32_b01.json"))

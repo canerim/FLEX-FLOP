@@ -21,6 +21,7 @@ R = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(R)); sys.path.insert(0, str(Path.home() / "DCVC"))
 sys.path.insert(0, str(R / "scripts"))
 import naturestyle as ns
+from savings import sv, pick
 ns.apply()
 from flexuf.config import FlexUFConfig
 from flexuf import cost as fc
@@ -56,9 +57,14 @@ def blank(ax):
 
 
 def save(fig, name):
-    fig.savefig(FIG / name, dpi=300, bbox_inches="tight")
+    # Both directories: build_pdf reads paper/figures, and a figure written
+    # only to docs/figures goes stale there in silence.
+    for d in (FIG, R / "paper" / "figures"):
+        d.mkdir(parents=True, exist_ok=True)
+        fig.savefig(d / name, dpi=500, bbox_inches="tight", pad_inches=0.02,
+                    facecolor="white")
     plt.close(fig)
-    print(f"  -> docs/figures/{name}")
+    print(f"  -> {name}")
 
 
 # ===========================================================  1. the data path
@@ -472,27 +478,35 @@ def training():
 # =====================================================  5. router A versus B
 def router_ab():
     """The two ways the exit map can be produced, and what the difference costs."""
-    def rows(*names, key="saving_pct_vs_release", budget=None):
-        for f in names:
-            p = R / "results" / f
-            if p.exists():
-                break
-        d = json.load(open(p))
+    def rows(*names, key="saving_pct", budget=None):
+        """Canonical file, canonical definition.
+
+        First-that-exists preferred router_..._b01_fixed.json, an earlier
+        experiment, over the pinned checkpoint's file, and the saving came from
+        the arithmetic model rather than the hook count. Both are what
+        make_paper_tables fixed for the tables; the figures beside them kept
+        the old behaviour.
+        """
+        d, _ = pick(*names)
+        if d is None:
+            raise FileNotFoundError(names[0])
         rs = [r for r in d["rows"] if r.get("budget_reachable", True)
               and (budget is None or r.get("budget_db") is None
                    or abs(r["budget_db"] - budget) < 1e-9)]
-        return {r["qp"]: r[key] for r in rs if r.get(key) is not None}, d
+        return {r["qp"]: sv(r, key) for r in rs if sv(r, key) is not None}, d
 
     # RECIPE512 on the deployed path, one router trained at a single lambda.
     # The older BEST files are on the full-frame table (flexuf/eval.py) and must
     # not be mixed in.
-    sig, dA = rows("signalled_RECIPE512_ctc53.json", key="saving_pct_vs_release",
+    sig, dA = rows("signalled_RECIPE512_ctc53.json", key="saving_pct",
                    budget=0.1)
     A, _ = rows("signalled_RECIPE512_ctc53.json", budget=0.1)
     A3, _ = rows("signalled_RECIPE512_ctc53.json", budget=0.3)
     A5, _ = rows("signalled_RECIPE512_ctc53.json", budget=0.5)
-    B, dB = rows("router_RECIPE512_b01_fixed.json", "router_RECIPE512_b01.json")
-    B3, _ = rows("router_RECIPE512_b03_fixed.json", "router_RECIPE512_b03.json")
+    B, dB = rows("router_RECIPE512_b01_PAPER.json",
+                 "router_RECIPE512_b01_fixed.json", "router_RECIPE512_b01.json")
+    B3, _ = rows("router_RECIPE512_b03_PAPER.json",
+                 "router_RECIPE512_b03_fixed.json", "router_RECIPE512_b03.json")
     B5 = {}
     Ba = B
     qps = sorted(q for q in A if q in B)
@@ -526,7 +540,11 @@ def router_ab():
     arrow(0.23, y - 0.055, 0.31, ns.PURPLE)
     chip(0.32, y - 0.155, 0.26, 0.20, "decode\nall $K$", "#ffffff", ns.PURPLE)
     arrow(0.59, y - 0.055, 0.66, ns.PURPLE)
-    chip(0.67, y - 0.155, 0.28, 0.20, "map\n+ 3 b/tile", "#ffffff", ns.PURPLE)
+    # The paper prices the map at 89 bits a frame over 40 tiles, entropy
+    # coded. "3 b/tile" was the raw index width and read as a different
+    # number from the one every table gives.
+    chip(0.67, y - 0.155, 0.28, 0.20, "map\n+89 b/frame", "#ffffff",
+         ns.PURPLE)
     a.text(0.5, 0.585, r"$k^{*}=\arg\min_k\,[\,\mathrm{MSE}_k+\lambda c_k]$",
            fontsize=6.2, ha="center", va="center", color=ns.PURPLE)
 
@@ -537,7 +555,7 @@ def router_ab():
     arrow(0.23, y - 0.055, 0.31, ns.BLUE)
     chip(0.32, y - 0.155, 0.26, 0.20, "head\n144 K", "#ffffff", ns.BLUE)
     arrow(0.59, y - 0.055, 0.66, ns.BLUE)
-    chip(0.67, y - 0.155, 0.28, 0.20, "map\n+ 0 b/tile", "#ffffff", ns.BLUE)
+    chip(0.67, y - 0.155, 0.28, 0.20, "map\n+0 bits", "#ffffff", ns.BLUE)
     a.text(0.5, 0.085, r"$\hat{k}=\arg\max_k\,[\,\log p_k-\beta c_k]$",
            fontsize=6.2, ha="center", va="center", color=ns.BLUE)
     ns.panel(a, "a", dx=-0.02, dy=1.06)

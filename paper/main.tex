@@ -498,7 +498,7 @@ operation and its inverse, which costs no arithmetic and is exact.}
 \subsection{Where the computation is}
 
 The DCVC-UF intra decoder is one upsampling block, twelve \texttt{DepthConvBlock}s
-and a head, costing $453.5$ GMAC per 1080p frame. The twelve blocks are $89.4\%$
+and a head, costing $453.5$ GMAC per 1080p frame. The twelve blocks are \\TrunkShare\\%
 of that, which is why we build the ladder across them. Inside one block at
 $C{=}384$ channels, the only operator with any spatial extent is a $3\times3$
 depthwise convolution, and it costs $9C$ against the block's $8C^2 + 9C$. That is

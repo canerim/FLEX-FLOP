@@ -35,3 +35,36 @@ def sv_oracle(row):
 def measured(row, key="saving_pct"):
     """True when the row carries a hook count, so a table can mark the rest."""
     return row.get(key + "_measured") is not None
+
+
+def pick(*names, res=None):
+    """The canonical result file among candidates, by provenance not by order.
+
+    Same rule as make_paper_tables.pick, and here so a figure script cannot
+    disagree with the table beside it. raterank_figure.py hardcoded
+    router_RECIPE512_b01_fixed.json and drew a "144 K head" curve at 27.2% at
+    q0 while the table printed 23.6: a different head, measured before the
+    checkpoint was pinned.
+
+    Prefer a file measured on the pinned checkpoint, then the most recently
+    written. The order the names are given in only breaks ties.
+    """
+    import json as _json
+    from pathlib import Path as _Path
+    res = _Path(res) if res else _Path(__file__).resolve().parent.parent / "results"
+    found = [(n, res / n) for n in names if (res / n).exists()]
+    if not found:
+        return None, None
+
+    def rank(item):
+        n, p = item
+        pinned = 0
+        try:
+            d = _json.load(open(p))
+            pinned = 1 if "ckpt_PAPER" in str(d.get("ckpt", "")) else 0
+        except Exception:
+            pass
+        return (-pinned, -p.stat().st_mtime)
+
+    n, p = sorted(found, key=rank)[0]
+    return _json.load(open(p)), n

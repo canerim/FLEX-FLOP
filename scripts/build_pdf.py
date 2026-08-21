@@ -934,7 +934,8 @@ def content(colw, fullw):
     h2("3.2 Where the computation is")
     par(r"The DCVC-UF intra decoder is one upsampling block, twelve "
         r"DepthConvBlocks and a head, costing 453.5 GMAC per 1080p frame. The "
-        r"twelve blocks are 89.4% of that, which is why we build the ladder "
+        r"twelve blocks are \\TrunkShare% of that, which is why we build the "
+        r"ladder "
         r"across them. Inside one block at C=384 channels, the only operator "
         r"with any spatial extent is a 3×3 depthwise convolution, and it costs "
         r"9C against the block's 8C²+9C. That is <b>0.29%.</b> We come back to "
