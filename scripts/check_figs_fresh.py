@@ -62,6 +62,17 @@ def producers():
     return {k: v[0] for k, v in out.items()}
 
 
+def supplement_figures():
+    """The names the supplement asks for, which build_supp_pdf resolves from
+    docs/figures first and paper/figures second."""
+    import glob
+    out = set()
+    for f in sorted(glob.glob(str(ROOT / "scripts/supp/[a-z]_*.py"))):
+        out |= set(re.findall(r'k\.fig\(\s*"([A-Za-z_0-9]+)\.png"',
+                              Path(f).read_text(errors="ignore")))
+    return sorted(out)
+
+
 def main(argv):
     fail = "--fail" in argv
     paper = sorted(set(re.findall(
@@ -99,7 +110,34 @@ def main(argv):
         newer = [d for d in deps if d.stat().st_mtime > png.stat().st_mtime]
         if newer:
             stale.append((n, src.name, newer))
-    print(f"  {len(paper)} figures, {len(prod)} producers found")
+    # The supplement's figures too: they are built by the same scripts and go
+    # stale the same way, and two of them had not been regenerated since their
+    # producer changed.
+    for n in supplement_figures():
+        if n in paper:
+            continue
+        png = None
+        for d in ("docs/figures", "paper/figures"):
+            if (ROOT / d / f"{n}.png").exists():
+                png = ROOT / d / f"{n}.png"
+                break
+        src = prod.get(n)
+        if png is None or src is None:
+            continue
+        deps = [ROOT / "results" / d
+                for d in set(re.findall(r'"([A-Za-z_0-9./]+\.json)"',
+                                        src.read_text(errors="ignore")))]
+        deps = [d for d in deps if d.exists()]
+        if src.stat().st_mtime > png.stat().st_mtime:
+            deps.append(src)
+        if [d for d in deps if d.stat().st_mtime > png.stat().st_mtime]:
+            stale.append((n + " (supp)", src.name,
+                          [d for d in deps
+                           if d.stat().st_mtime > png.stat().st_mtime]))
+
+    print(f"  {len(paper)} paper figures and "
+          f"{len(supplement_figures())} supplement figures, "
+          f"{len(prod)} producers found")
     for n, s, newer in stale:
         when = time.strftime("%m-%d %H:%M",
                              time.localtime(max(d.stat().st_mtime for d in newer)))
