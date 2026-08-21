@@ -515,6 +515,19 @@ except SyntaxError as _e:
     bad = bad or [("build", "build_pdf.py syntax error")]
 
 
+# ------------------------------------------- references inside a clause
+# Placing the cross-references automatically dropped five of them between a
+# verb and its object: "the median sequence saves (Figure 20) 38.0%". A
+# reference belongs at the end of the clause it supports.
+_bp_src = (R / "scripts/build_pdf.py").read_text()
+_mid = re.findall(
+    r"\(\[\[[a-z]+:[A-Za-z_0-9]+\]\](?:, \[\[[a-z]+:[A-Za-z_0-9]+\]\])*\)"
+    r'\s*"?\s*(?:r")?\s*(?:\\[A-Za-z]|\d)', _bp_src)
+if _mid:
+    print(f"\n  {len(_mid)} cross-reference(s) sit mid-clause, before a number")
+    bad = bad or [("refs", f"{len(_mid)} mid-clause")]
+
+
 # ------------------------------------------------------------ cross-refs
 # A figure the prose never points at is a figure the reader is never sent to.
 # Twenty-six of thirty-five figures and nine of twenty-four tables had no
