@@ -446,7 +446,7 @@ json.dump({"n_claims": len(CLAIMS), "n_passed": len(CLAIMS) - len(bad),
 # here so a divergence is caught by the same command that catches a stale
 # number.
 import subprocess as _sp  # noqa: E402
-for _name in ("check_twins", "check_tex", "prose_audit"):
+for _name in ("check_twins", "check_tex", "prose_audit", "check_layout"):
     _r = _sp.run([sys.executable, str(Path(__file__).parent / f"{_name}.py")],
                  capture_output=True, text=True)
     _last = [l for l in _r.stdout.splitlines() if l.strip()]

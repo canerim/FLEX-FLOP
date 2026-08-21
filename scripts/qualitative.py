@@ -116,26 +116,26 @@ def to_img(t):
 A_, B_ = to_img(rel), to_img(our)
 err = np.abs(A_ - B_).mean(2)
 
-# One by four across the page. Two by two at column width was tried: the frame
-# is 16:9 and the crops are square, so the grid is either ragged or letterboxed,
-# and the column build caps a figure at 1.25 inches, which would leave the crops
-# under an inch. The full-width row forces a page break; that is fixed by where
-# the call sits in the story, not by shrinking the picture.
-fig = plt.figure(figsize=(ns.W2, 2.0))
-gs = fig.add_gridspec(1, 4, width_ratios=[1.62, 1, 1, 1], wspace=0.04)
-ax = [fig.add_subplot(gs[i]) for i in range(4)]
-ax[0].imshow(to_img(rel))
-ax[0].add_patch(Rectangle((cx - h2, cy - h2), a.crop, a.crop, fill=False,
-                          ec=ns.VERM, lw=1.0))
-ax[0].set_title("released, full frame", fontsize=5.2, color=ns.INK2, loc="left")
-ax[1].imshow(A_[sl])
-ax[1].set_title(f"released\n{bpp:.4f} bpp, {psnr_rel:.2f} dB", fontsize=5.2,
-                color=ns.INK2, loc="left")
-ax[2].imshow(B_[sl])
-ax[2].set_title(f"ours, {saving:.0f}% fewer MACs\n{bpp:.4f} bpp, "
-                f"{psnr_our:.2f} dB", fontsize=5.2, color=ns.INK2, loc="left")
-im = ax[3].imshow(err[sl] * 20, cmap="magma", vmin=0, vmax=1)
-ax[3].set_title("|difference| ×20", fontsize=5.2, color=ns.INK2, loc="left")
+# Three panels in a row at column width, not four across the page.
+#
+# A full-width figure has to force a page break -- reportlab has no float
+# mechanism -- and wherever the break lands, the rest of that page's columns are
+# lost. This one left page 15's right column ending at 31% of the page. The
+# fourth panel was the whole frame with a box on it, which is context the caption
+# can carry in words; the three that matter are the two crops and the difference,
+# and they are square, so they tile a column exactly.
+fig = plt.figure(figsize=(ns.W1, 1.42))
+gs = fig.add_gridspec(1, 3, wspace=0.045)
+ax = [fig.add_subplot(gs[i]) for i in range(3)]
+ax[0].imshow(A_[sl])
+ax[0].set_title(f"released, {psnr_rel:.2f} dB", fontsize=4.8, color=ns.INK2,
+                loc="left", pad=2)
+ax[1].imshow(B_[sl])
+ax[1].set_title(f"ours, {saving:.0f}% fewer, {psnr_our:.2f} dB",
+                fontsize=4.8, color=ns.INK2, loc="left", pad=2)
+im = ax[2].imshow(err[sl] * 20, cmap="magma", vmin=0, vmax=1)
+ax[2].set_title("|difference| ×20", fontsize=4.8, color=ns.INK2,
+                loc="right", pad=2)
 for b in ax:
     b.set_xticks([]); b.set_yticks([]); b.grid(False)
     # Square cells. The full frame is 16:9 and the crops are square, so without
