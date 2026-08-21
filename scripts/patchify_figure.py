@@ -96,10 +96,13 @@ def main(argv):
     print(f"  unpatchify(patchify(f)) == f exactly: {exact}")
 
     # ---------------------------------------------------------------- layout
+    # Page width, deliberately. Panel d is a left-to-right pipeline of four
+    # tensor shapes with a sentence under it, and neither fits a 3.5-inch
+    # column: rebuilt at column width, matplotlib's tight bounding box expanded
+    # the saved figure straight back to 8 inches to hold the text. The page
+    # break this forces costs about a third of a column, and that is the price
+    # of the one figure in the paper that is genuinely wide.
     fig = plt.figure(figsize=(ns.W2, 2.78))
-    # The three top panels have different aspects, so the row is sized by the
-    # tallest and the band beneath it has to be tight or the figure is mostly
-    # white. hspace is negative for that reason.
     gs = fig.add_gridspec(2, 3, height_ratios=[1.0, 0.50],
                           width_ratios=[1.0, 1.0, 0.78],
                           hspace=0.02, wspace=0.16)
@@ -195,10 +198,14 @@ def main(argv):
             ha="center", va="center", fontsize=4.8, color=ns.INK2)
     ns.panel(ax, "d", dx=-0.005, dy=0.92)
 
-    out = ROOT / "docs/figures/patchify.png"
-    fig.savefig(out, dpi=500, bbox_inches="tight", pad_inches=0.02,
-                facecolor="white")
-    print(f"  wrote {out.relative_to(ROOT)}")
+    # build_pdf reads paper/figures, not docs/figures. Writing only here is how
+    # Figure 18 became the words "[spread.png missing]" (DECISIONS 97).
+    for out in (ROOT / "docs/figures/patchify.png",
+                ROOT / "paper/figures/patchify.png"):
+        out.parent.mkdir(parents=True, exist_ok=True)
+        fig.savefig(out, dpi=500, bbox_inches="tight", pad_inches=0.02,
+                    facecolor="white")
+        print(f"  wrote {out.relative_to(ROOT)}")
     return 0
 
 

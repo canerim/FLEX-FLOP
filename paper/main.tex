@@ -1903,6 +1903,65 @@ without anything in the decode reporting that it has. In our reuse probe, then, 
 search across the frames we tested. How far that carries beyond the offsets and
 sequences probed here we have not measured.
 
+\subsection{What the frame mean is made of}
+
+The budget binds on a frame, and a frame is 40 tiles. At the $0.1\dB$ budget the
+median tile of the lowest rate gives up \TailMedian\dB, which is about what the
+frame gives up, but the ninety-ninth percentile is \TailPNinetyNine\dB and the worst
+single tile in \TailNTiles\ is \TailMax. \TailOverOne\ tiles lose more than a
+decibel while their frames stay inside a tenth of one
+(Table~\ref{tab:tiletail}).
+
+\begin{table}[t]
+\centering
+\input{tables/tiletail}
+\caption{\textbf{The distribution behind the frame mean.} Per-tile loss against
+the released decoder at the $0.1\dB$ budget, over every tile of every test
+sequence.}
+\label{tab:tiletail}
+\end{table}
+
+Which tiles they are is the part that matters, and it is the seam of
+Section~\ref{sec:seam} arriving in the allocation. Split the tiles by whether
+their receptive field reaches an invented value: the interior tiles give up
+\TailInterior\dB on average and the \TailBorderN\ tiles with padding give up
+\TailBorder, \TailBorderRatio\ times as much. The border is not only where the
+picture is damaged, it is where the allocation is most expensive, because a tile
+that already carries a seam has less room left inside the budget before it has to
+decode deeper. A deployment that wants a per-tile guarantee rather than a
+per-frame one has a straightforward lever: clamp the shallowest exit a border
+tile may take, at the cost of the saving those tiles carry.
+
+\subsection{A budget in one metric is not a budget in another}
+
+Every allocation in this paper is bisected on PSNR, which prices a squared error
+and nothing else. The obvious question is what that does to a metric built to
+track perception, so we measure MS-SSIM on the same frames at the same operating
+point (Table~\ref{tab:msssim}), converted to decibels by $-10\log_{10}(1-m)$ so
+the two are read on one scale.
+
+\begin{table}[t]
+\centering
+\input{tables/msssim}
+\caption{\textbf{Two metrics at one operating point.} The $0.1\dB$ budget,
+\NumSeq\ sequences, configuration~A. MS-SSIM is converted to decibels by
+$-10\log_{10}(1-m)$. Both columns are what the routed decode gives up against
+the released decoder on the same latent.}
+\label{tab:msssim}
+\end{table}
+
+The perceptual metric loses less than the budget spends. Against \MsPsnrLoss\dB
+of PSNR the same decodes give up \MsSsimLossLo--\MsSsimLossHi\dB of MS-SSIM,
+\MsSsimRatio\ of the PSNR loss, at every rate. We do not read that as a
+perceptual claim. The shallow exits blur, and blurring costs a squared error more
+than it costs a structural similarity, so a budget written in PSNR is the
+conservative one of the two to write. What it is not is evenly priced across
+content: the sequence that gives up most MS-SSIM is \MsWorstSeq, which loses
+\MsWorstDb\ of it while saving \MsWorstSaving\% of the arithmetic, and it is
+an ordinary 1080p clip from the middle of the set rather than one of the hard
+cases. A deployment that cares about a particular metric should bisect on that
+metric; nothing in the method depends on which one it is.
+
 \subsection{Complexity and wall-clock}
 \label{sec:wallclock}
 
@@ -2062,6 +2121,29 @@ exits fail, and not at the seams that Section~\ref{sec:seam} spends its length
 on. That is the seam repair and the border padding doing their work: the cut is
 still the largest single cost in the method, and by the time the reader sees the
 picture it is no longer the visible one.
+
+The same frame at the top of the rate range says what the budget costs there (Fig.~\ref{fig:qualitativehigh}). At
+$q\QualHighQp$, \QualHighBpp\ bpp, the released decoder reaches
+\QualHighPsnrRel\dB and the routed decode \QualHighPsnrOurs\dB for
+\QualHighDb\dB delivered, and the saving is \QualHighSaving\% against
+\QualSaving\% at $q\QualQp$. The allocation is what moved: on this frame
+\QualShallowLow\ of 40 tiles take the shallowest exit at $q\QualQp$ and
+\QualShallowHigh\ does at $q\QualHighQp$, while the deepest exit goes from
+\QualDeepLow\ tiles to \QualDeepHigh. The picture is as hard to tell apart at
+either rate. What changes is how much of the decoder the budget will release,
+which is the rate dependence of Section~\ref{sec:operating} arriving in a single
+frame.
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\columnwidth]{figures/qualitative_q63.png}
+\caption{\textbf{The same frame at the top of the rate range.} Bosphorus at
+$q\QualHighQp$, \QualHighBpp\ bpp, the same $0.1\dB$ budget and the same crop
+as Fig.~\ref{fig:qualitative}. The released decoder reaches
+\QualHighPsnrRel\dB and the routed decode \QualHighPsnrOurs\dB, for
+\QualHighSaving\% of the arithmetic rather than \QualSaving\%.}
+\label{fig:qualitativehigh}
+\end{figure}
 
 \begin{table}[t]
 \centering

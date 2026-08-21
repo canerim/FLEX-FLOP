@@ -1378,6 +1378,97 @@ except Exception as _e:
     print("   abandoned_rows.json:", _e)
 
 
+# ------------------------------------------------------- a second metric
+# The budget is bisected on PSNR. A reviewer will ask what that does to a
+# perceptual metric, and the answer belongs in the paper rather than only in the
+# supplement: MS-SSIM in dB, on the same frames at the same operating point.
+try:
+    _oq = json.load(open(RES / "supp_opquality_PAPER.json"))
+    # No saving column. It would be this file's arithmetic model, half a point
+    # away from the hook count Table 3 reports, and the comparison here is
+    # between two metrics at one operating point, not another saving figure.
+    _rows = ["\\begin{tabular}{lrrrr}", "\\toprule",
+             "q & PSNR lost & MS-SSIM lost & released & routed \\\\",
+             " & (dB) & (dB) & (MS-SSIM) & (MS-SSIM) \\\\", "\\midrule"]
+    _p, _m = [], []
+    for r in _oq["rows"]:
+        _dp = -r["psnr_delta"]
+        _dm = r["ms_ssim_db_released"] - r["ms_ssim_db_routed"]
+        _p.append(_dp)
+        _m.append(_dm)
+        _rows.append(f"q{r['qp']} & {_dp:.3f} & {_dm:.3f} & "
+                     f"{r['ms_ssim_released']:.4f} & {r['ms_ssim_routed']:.4f} "
+                     f"\\\\")
+    _rows += ["\\bottomrule", "\\end{tabular}"]
+    w("msssim.tex", "\n".join(_rows))
+    mac("MsPsnrLoss", f"{sum(_p) / len(_p):.3f}")
+    mac("MsSsimLossLo", f"{min(_m):.3f}")
+    mac("MsSsimLossHi", f"{max(_m):.3f}")
+    mac("MsSsimRatio", f"{(sum(_m) / len(_m)) / (sum(_p) / len(_p)):.2f}")
+    _ws = _oq["worst_sequences_by_ms_ssim"]
+    mac("MsWorstSeq", _ws[0]["seq"].split("_")[0])
+    mac("MsWorstDb", f"{_ws[0]['ms_ssim_db_released'] - _ws[0]['ms_ssim_db_routed']:.3f}"
+        if "ms_ssim_db_released" in _ws[0] else f"{-_ws[0]['ms_ssim_delta']:.4f}")
+    mac("MsWorstSaving", f"{_ws[0]['saving_pct']:.1f}")
+except Exception as _e:
+    print("   supp_opquality:", _e)
+
+
+# ------------------------------------------------------- the per-tile tail
+# The budget binds on a frame mean. This is what that mean is made of, and the
+# split by padding is the one number that ties Section 4 to Section 5: the tiles
+# that pay for the mean are the ones with an invented neighbour.
+try:
+    _oq2 = json.load(open(RES / "supp_opquality_PAPER.json"))
+    _t, _bp = _oq2["tail"], _oq2["tail_by_padding"]
+    _ln = ["\\begin{tabular}{lrrrrrr}", "\\toprule",
+           "q & tiles & median & p95 & p99 & max & over $1\\dB$ \\\\",
+           " &  & (dB) & (dB) & (dB) & (dB) &  \\\\", "\\midrule"]
+    for q in sorted(_t, key=int):
+        r = _t[q]
+        _ln.append(f"q{q} & {r['n_tiles']} & {r['median_db']:.3f} & "
+                   f"{r['p95_db']:.3f} & {r['p99_db']:.3f} & "
+                   f"{r['max_db']:.3f} & {r['n_over_1_db']} \\\\")
+    _ln += ["\\bottomrule", "\\end{tabular}"]
+    w("tiletail.tex", "\n".join(_ln))
+    _q0 = _t[sorted(_t, key=int)[0]]
+    mac("TailMedian", f"{_q0['median_db']:.3f}")
+    mac("TailPNinetyNine", f"{_q0['p99_db']:.2f}")
+    mac("TailMax", f"{_q0['max_db']:.2f}")
+    mac("TailOverOne", str(_q0["n_over_1_db"]))
+    mac("TailNTiles", str(_q0["n_tiles"]))
+    _b0 = _bp[sorted(_bp, key=int)[0]]
+    mac("TailInterior", f"{_b0['no_padding']['mean_db']:.3f}")
+    mac("TailBorder", f"{_b0['some_padding']['mean_db']:.3f}")
+    mac("TailBorderRatio",
+        f"{_b0['some_padding']['mean_db'] / _b0['no_padding']['mean_db']:.1f}")
+    mac("TailBorderN", str(_b0["some_padding"]["n"]))
+except Exception as _e:
+    print("   per-tile tail:", _e)
+
+
+# --------------------------------------------- the same frame at high rate
+# The qualitative figure is at q32. The same frame at q63 is the honest
+# counterpart: the saving is smaller and the allocation deeper, and both are
+# measured rather than argued.
+try:
+    _q6 = json.load(open(R / "results/qualitative_PAPER_q63.json"))
+    mac("QualHighQp", str(_q6["qp"]))
+    mac("QualHighDb", f"{_q6['delivered_db']:.3f}")
+    mac("QualHighSaving", f"{_q6['saving_pct_vs_release']:.1f}")
+    mac("QualHighBpp", f"{_q6['bpp']:.4f}")
+    mac("QualHighPsnrRel", f"{_q6['psnr_released']:.2f}")
+    mac("QualHighPsnrOurs", f"{_q6['psnr_routed']:.2f}")
+    _h32 = json.load(open(R / "results/qualitative_PAPER.json"))["exit_hist"]
+    _h63 = _q6["exit_hist"]
+    mac("QualShallowLow", str(_h32[2]))
+    mac("QualShallowHigh", str(_h63[2]))
+    mac("QualDeepLow", str(_h32[-1]))
+    mac("QualDeepHigh", str(_h63[-1]))
+except Exception as _e:
+    print("   qualitative q63:", _e)
+
+
 # ---------------------------------------------------- rd_spread panel c
 # The sentence beside panel c quoted a median and an IQR typed in from an older
 # run, under the older saving definition. Now the figure dumps them.

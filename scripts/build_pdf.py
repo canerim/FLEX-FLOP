@@ -2182,6 +2182,52 @@ def content(colw, fullw):
         r"probe, then, an encoder can search once per rate and reuse that "
         r"search across the frames we tested. How far that carries beyond the "
         r"offsets and sequences probed here we have not measured.")
+    h2("What the frame mean is made of")
+    par(r"The budget binds on a frame, and a frame is 40 tiles. At the 0.1 dB "
+        r"budget the median tile of the lowest rate gives up \TailMedian dB, "
+        r"which is about what the frame gives up, but the ninety-ninth "
+        r"percentile is \TailPNinetyNine dB and the worst single tile in "
+        r"\TailNTiles is \TailMax. \TailOverOne tiles lose more than a "
+        r"decibel while their frames stay inside a tenth of one ([[tab:tiletail]]).")
+    tbl("tiletail",
+        r"<b>Table N. The distribution behind the frame mean.</b> Per-tile "
+        r"loss against the released decoder at the 0.1 dB budget, over every "
+        r"tile of every test sequence.")
+    par(r"Which tiles they are is the part that matters, and it is the seam of "
+        r"Section 4 arriving in the allocation. Split the tiles by whether "
+        r"their receptive field reaches an invented value: the interior tiles "
+        r"give up \TailInterior dB on average and the \TailBorderN tiles "
+        r"with padding give up \TailBorder, \TailBorderRatio times as much. "
+        r"The border is not only where the picture is damaged, it is where the "
+        r"allocation is most expensive, because a tile that already carries a "
+        r"seam has less room left inside the budget before it has to decode "
+        r"deeper. A deployment that wants a per-tile guarantee rather than a "
+        r"per-frame one has a straightforward lever: clamp the shallowest exit "
+        r"a border tile may take, at the cost of the saving those tiles carry.")
+    h2("5.9 A budget in one metric is not a budget in another")
+    par(r"Every allocation in this paper is bisected on PSNR, which prices a "
+        r"squared error and nothing else. The obvious question is what that "
+        r"does to a metric built to track perception, so we measure MS-SSIM on "
+        r"the same frames at the same operating point ([[tab:msssim]]), converted to decibels "
+        r"by −10 log₁₀(1 − m) so the two are read on one scale.")
+    tbl("msssim",
+        r"<b>Table N. Two metrics at one operating point.</b> The 0.1 dB "
+        r"budget, \NumSeq sequences, configuration A. MS-SSIM is converted to "
+        r"decibels by −10 log₁₀(1 − m). Both columns are what the routed "
+        r"decode gives up against the released decoder on the same latent.")
+    par(r"The perceptual metric loses less than the budget spends. Against "
+        r"\MsPsnrLoss dB of PSNR the same decodes give up "
+        r"\MsSsimLossLo–\MsSsimLossHi dB of MS-SSIM, \MsSsimRatio of the "
+        r"PSNR loss, at every rate. We do not read that as a perceptual claim. "
+        r"The shallow exits blur, and blurring costs a squared error more than "
+        r"it costs a structural similarity, so a budget written in PSNR is the "
+        r"conservative one of the two to write. What it is not is evenly "
+        r"priced across content: the sequence that gives up most MS-SSIM is "
+        r"\MsWorstSeq, which loses \MsWorstDb of it while saving "
+        r"\MsWorstSaving% of the arithmetic, and it is an ordinary 1080p clip "
+        r"from the middle of the set rather than one of the hard cases. A "
+        r"deployment that cares about a particular metric should bisect on "
+        r"that metric; nothing in the method depends on which one it is.")
     h2("5.9 Complexity and wall-clock")
     tbl("latency",
         r"<b>Table 8. Wall-clock</b>, 1080p, median of 40 interleaved "
@@ -2305,6 +2351,25 @@ def content(colw, fullw):
         r"seam repair and the border padding doing their work: the cut is "
         r"still the largest single cost in the method, and by the time the "
         r"reader sees the picture it is no longer the visible one.")
+    par(r"The same frame at the top of the rate range says what the budget "
+        r"costs there ([[fig:qualitative_q63]]). At q\QualHighQp, \QualHighBpp bpp, the released "
+        r"decoder reaches \QualHighPsnrRel dB and the routed decode "
+        r"\QualHighPsnrOurs dB for \QualHighDb dB delivered, and the saving "
+        r"is \QualHighSaving% against \QualSaving% at q\QualQp. The "
+        r"allocation is what moved: on this frame \QualShallowLow of 40 tiles "
+        r"take the shallowest exit at q\QualQp and \QualShallowHigh does at "
+        r"q\QualHighQp, while the deepest exit goes from \QualDeepLow tiles "
+        r"to \QualDeepHigh. The picture is as hard to tell apart at either "
+        r"rate. What changes is how much of the decoder the budget will "
+        r"release, which is the rate dependence of Section 5.4 arriving in a "
+        r"single frame.")
+    figure("qualitative_q63.png",
+           r"<b>Figure N. The same frame at the top of the rate range.</b> "
+           r"Bosphorus at q\QualHighQp, \QualHighBpp bpp, the same 0.1 dB "
+           r"budget and the same crop as [[fig:qualitative]]. The released "
+           r"decoder reaches \QualHighPsnrRel dB and the routed decode "
+           r"\QualHighPsnrOurs dB, for \QualHighSaving% of the arithmetic "
+           r"rather than \QualSaving%.")
     tbl("released",
         r"<b>Table 10. FLEX-UF against the decoder it modifies.</b> The "
         r"released DCVC-UF intra decoder and the same decoder with the exit "
