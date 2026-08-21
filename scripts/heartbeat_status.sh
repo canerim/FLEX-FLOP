@@ -23,6 +23,7 @@ while true; do
   LY=$(echo "$OUT" | grep -oE 'check_layout: [A-Za-z0-9 ()]+' | head -1 | sed 's/check_layout: //')
   FR=$(echo "$OUT" | grep -oE 'check_figs_fresh: [A-Za-z0-9 ()]+' | head -1 | sed 's/check_figs_fresh: //')
   RN=$(echo "$OUT" | grep -oE 'check_render: [A-Za-z0-9 ()]+' | head -1 | sed 's/check_render: //')
+  FP=$(echo "$OUT" | grep -oE 'check_fig_prose: [A-Za-z0-9 ()]+' | head -1 | sed 's/check_fig_prose: //')
   # A page count that comes back empty is the PDF being rewritten as we read
   # it, not a missing paper. Saying "building" costs one word and stops a
   # blank field looking like a broken artefact.
@@ -44,6 +45,6 @@ while true; do
          [ -n "$f" ] && tail -1 "$f" 2>/dev/null | grep -o '"epoch": [0-9]*' | head -1 \
            | grep -o '[0-9]*$' | sed "s/^/${t:0:4}/"
        done | tr '\n' ' ')
-  echo "$TS  fix $FIX | claims $CHK twins $TW tex $TX prose $PR layout $LY figs $FR render $RN | paper ${MAIN}p supp ${SUPP}p | gpu ours=$OURS others=$OTHER | newest ckpt $AGE | ep $EP"
+  echo "$TS  fix $FIX | claims $CHK twins $TW tex $TX prose $PR layout $LY figs $FR render $RN figprose $FP | paper ${MAIN}p supp ${SUPP}p | gpu ours=$OURS others=$OTHER | newest ckpt $AGE | ep $EP"
   sleep "$INTERVAL"
 done

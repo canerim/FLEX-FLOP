@@ -1790,7 +1790,7 @@ def content(colw, fullw):
         r"The answer to ``how much does a 0.1 dB budget buy at this rate'' is "
         r"therefore, to within a couple of points, ``where does 0.1 dB sit in "
         r"this rate's band''. The floor and the saturation point are both in "
-        r"closed form and both cheap to measure. What they leave over is small "
+        r"closed form and both cheap to measure ([[fig:window]]). What they leave over is small "
         r"enough that a deployment could calibrate the two ends and read the "
         r"rest off one curve. That curve is a one-parameter power law, "
         r"saving ≈ C·u^\BandExp, with C the architectural ceiling and u the "
@@ -2596,21 +2596,19 @@ def content(colw, fullw):
         r"adaptivity with tiled inference to walk into this.")
     par(r"A distortion budget is only a control variable inside a "
         r"measurable band. Below the floor the budget admits nothing at "
-        r"all, and above saturation more of it buys nothing ([[fig:window]]) Panel b draws those two limits against the rate, and the band between them is the only region a budget can be chosen in.. A saving quoted "
+        r"all, and above saturation more of it buys nothing. A saving quoted "
         r"without saying where in that band it sits has left out the part of the "
         r"result a reader most needs.")
     par(r"We would attach three cautions to the measurements themselves. A "
-        r"saving in operations is an optimistic bound on a saving in time, and "
-        r"the optimism scales with the saving. A learned router should be "
-        r"compared against a free one. Routing on the bits already spent per "
-        r"tile needs no parameters and no training, it adds nothing to the "
-        r"stream, and it beats our trained head at every rate we measured, "
-        r"while agreeing with the Lagrangian oracle on fewer tiles "
-        r"than the head does. We read that as a warning about the metric quite "
-        r"as much as about the head. Finally, a timing harness will report "
-        r"numbers whether or not it is timing the right device. Ours timed the "
-        r"wrong one for months, and what gave it away was a decoder that "
-        r"appeared to slow down with the quality index.")
+        r"saving in operations is an optimistic bound on a saving in time, "
+        r"and the optimism scales with the saving. A learned router should "
+        r"be compared against a free one: routing on the bits already spent "
+        r"per tile needs no parameters and no training, adds nothing to the "
+        r"stream, and beats our trained head at every rate, while agreeing "
+        r"with the oracle on fewer tiles than the head does. And a timing "
+        r"harness will report numbers whether or not it is timing the right "
+        r"device; ours timed the wrong one for months.")
+
     return F
 
 
