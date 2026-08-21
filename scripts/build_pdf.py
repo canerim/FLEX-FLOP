@@ -2079,6 +2079,16 @@ def content(colw, fullw):
         r"operations are an <i>optimistic</i> bound on this method, and the "
         r"optimism grows with how much of the frame exits early.")
     h2("5.10 The right ladder depends on the budget")
+    figure("ladder_crossover.png",
+           r"<b>Figure N. The right ladder depends on the budget.</b> Saving "
+           r"against budget for four ladders, with each one's architectural "
+           r"ceiling as a dotted line. A finer ladder has a higher ceiling and "
+           r"a higher floor, so the curves cross: the coarse ladder wins where "
+           r"the budget is tight and cannot be spent, and the fine one wins "
+           r"where it is loose enough to reach exits the coarse ladder does "
+           r"not have. The crossing is the design choice this section is "
+           r"about.")
+
     tbl("runs",
         r"<b>Table 9. Ladder settings</b>, mean saving (%) over the five "
         r"rates, on each run's own latest checkpoint. Ceilings are 100(1-c_j) "

@@ -1840,6 +1840,17 @@ as well. The error runs one way: operations are an \emph{optimistic} bound on
 this method, and the optimism grows with how much of the frame exits early.
 
 \subsection{The right ladder depends on the budget}
+\begin{figure}[t]
+\centering
+\includegraphics[width=\columnwidth]{figures/ladder_crossover.png}
+\caption{\textbf{The right ladder depends on the budget.} Saving against budget
+for four ladders, with each one's architectural ceiling as a dotted line. A finer
+ladder has a higher ceiling and a higher floor, so the curves cross: the coarse
+ladder wins where the budget is tight and cannot be spent, and the fine one wins
+where it is loose enough to reach exits the coarse ladder does not have.}
+\label{fig:laddercross}
+\end{figure}
+
 \label{sec:ladder}
 
 \begin{table}[t]
