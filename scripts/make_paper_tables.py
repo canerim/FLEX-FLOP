@@ -1452,6 +1452,27 @@ except Exception as _e:
     print("   supp_opquality:", _e)
 
 
+# --------------------------------------------- the big-resolution classes
+# The prose named three classes at the lowest rate and only the first was a
+# macro; the other two were typed in and went stale when the per-class figures
+# moved to the hook count -- UVG read 33.1 where the measurement is 30.6.
+try:
+    _pc = json.load(open(RES / "per_class_RECIPE512.json"))
+    _rows = _pc.get("rows", _pc)
+    _r0 = next(r for r in _rows
+               if r.get("qp") == 0 and abs(r.get("budget_db", 0.1) - 0.1) < 1e-9)
+    _cl = _r0["per_class"]
+    for _key, _name in (("MCL-JCV", "Mcl"), ("UVG", "Uvg"), ("HEVC_B", "HevcB"),
+                        ("HEVC_C", "HevcC"), ("HEVC_D", "HevcD"),
+                        ("HEVC_E", "HevcE")):
+        if _key in _cl:
+            mac(f"ClassLow{_name}", f"{_cl[_key]['saving']:.1f}")
+            if _name in ("Mcl", "Uvg", "HevcB"):
+                mac(f"BigRes{_name}", f"{_cl[_key]['saving']:.1f}")
+except Exception as _e:
+    print("   per-class q0:", _e)
+
+
 # ------------------------------------------------------- where the MACs are
 try:
     _ma = json.load(open(RES / "mac_audit.json"))["1920x1088"]

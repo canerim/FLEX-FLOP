@@ -477,6 +477,24 @@ for _name in ("check_twins", "check_tex", "prose_audit", "check_layout",
     _last = [l for l in _r.stdout.splitlines() if l.strip()]
     print(f"\n  {_name}: {_last[-1].strip() if _last else '(no output)'}")
 
+# ------------------------------------------------ per-class numbers by hand
+# The per-class savings appeared three times in the prose and only one of the
+# three was a macro. When the figures moved to the hook count the macro
+# followed and the literals did not: UVG read 33.1 where the measurement is
+# 30.6, and the two documents disagreed with each other as well.
+_pc = J("per_class_RECIPE512.json")
+if _pc:
+    _rows = _pc.get("rows", _pc)
+    _r0 = next((r for r in _rows if r.get("qp") == 0
+                and abs(r.get("budget_db", 0.1) - 0.1) < 1e-9), None)
+    if _r0:
+        for _k in ("MCL-JCV", "UVG", "HEVC_B", "HEVC_C", "HEVC_D"):
+            if _k in _r0["per_class"]:
+                claim(f"per class at q0: {_k}",
+                      round(_r0["per_class"][_k]["saving"], 1),
+                      _r0["per_class"][_k]["saving"], 0.05)
+
+
 # ------------------------------------------------------------- the build
 # build_pdf.py stopped parsing for two commits and nothing said so: pdfinfo on a
 # stale PDF looks exactly like pdfinfo on a fresh one, and every layout number

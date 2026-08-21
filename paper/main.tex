@@ -729,7 +729,7 @@ needs. The same pair is what adaptive instance normalisation takes as a
 compact description of a feature map's style~\cite{adain}. That gives $96 + 64 + 1 = 161$ numbers per
 tile, which pass through \texttt{LayerNorm} and a three-layer perceptron of
 width $256$ with SiLU activations, ending in $K$ logits. The whole head is
-$144{,}030$ parameters and $0.162\%$ of the decode it is deciding about, almost
+$144{,}030$ parameters and \RouterCostPct\% of the decode it is deciding about, almost
 all of it in the $1\times1$ on the stem, which is the only part that runs per
 pixel. The perceptron runs once per tile, forty times for a 1080p frame, so its
 width is nearly free.
@@ -1293,9 +1293,10 @@ count much more closely than it tracks content.}
 
 Completing the test set exposed a dependence that the 1080p-only subset had
 hidden. Table~\ref{tab:perclass} groups the saving by class (Fig.~\ref{fig:perclass}). At 1080p, where a
-frame is 40 tiles, we save $36$--$39\%$ at the lowest rate. At $832{\times}480$ a
-frame is 8 tiles and the saving is $23.6\%$; at $416{\times}240$ it is 2 tiles
-and $16.5\%$. At high rate the small resolutions fall to \SmallResHigh\%
+frame is 40 tiles, we save \ClassLowMcl\% (MCL-JCV), \ClassLowUvg\% (UVG) and \ClassLowHevcB\%
+(HEVC~B) at the lowest rate. At $832{\times}480$ a frame is 8 tiles and the
+saving is \ClassLowHevcC\%; at $416{\times}240$ it is 2 tiles and
+\ClassLowHevcD\%. At high rate the small resolutions fall to \SmallResHigh\%
 against \BigResHigh\% for 1080p.
 
 The natural explanation is granularity. With two tiles per frame there is almost
@@ -1931,7 +1932,7 @@ of the reuse decides how badly. Found at $q0$ and applied at $q63$, it delivers
 \TransferCrossDb$\dB$ against a $0.1\dB$ budget, claiming the low-rate saving of
 \TransferSaving\% while spending nearly twice the quality it is allowed. The
 reverse is safe but wasteful: the $q63$ map applied at $q0$ delivers $0.075\dB$
-and only $19.8\%$ where $33.1\%$ was available. Shallow exits are cheap in
+and only $19.8\%$ where \ClassLowUvg\% was available. Shallow exits are cheap in
 quality at low rate and expensive at high rate, so a map is calibrated to the
 rate it was found at, and reusing one upward breaks the quality guarantee
 without anything in the decode reporting that it has. In our reuse probe, then, an encoder can search once per rate and reuse that
