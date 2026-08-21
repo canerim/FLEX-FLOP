@@ -5183,3 +5183,25 @@ the reference it lands on.
 `check_cites.py` reads the supplement too, and the author-name test applies
 there: `c_derivations.py` writing "Shoham and Gersho [24]" fails, which is
 exactly what the renumbering did.
+
+## 109. The twins carried different prose and check_twins could not see it
+
+`check_twins` compared sections, subsections, figure and table counts, and
+passed while the two builds said different things. Three defects were sitting
+inside that gap. `build_pdf` printed `\BlendGainMid` where `main.tex` still had
+"+2.1" typed into the sentence, so a change to the measurement would have
+moved one build and not the other. `MidResLow` and `SmallResLow` were second
+names for `ClassLowHevcC` and `ClassLowHevcD`, one number under two macros.
+And three paragraphs existed only in the reportlab build: the opening of
+Section 4, the reason the reporting conventions are stated at all, and -- the
+one that matters -- the confound in the tile-size comparison, which says two
+runs of the same recipe differ by as much as the effect being reported.
+
+Both gaps are checks now. The macro sets must agree, which catches a number
+that has become a macro in one build and stayed literal in the other. And the
+prose is compared at paragraph granularity, by six thirty-character probes
+spread across each paragraph: a prefix match reports every paragraph whose
+first line wraps differently, and three forty-character probes still reported
+one because `main.tex` carries an extra `\ref` in the middle of it. The probe
+comparison found a fourth divergence on its first clean run, where `build_pdf`
+reports the fitted exponent at three rates and `main.tex` reported two.

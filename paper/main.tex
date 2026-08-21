@@ -824,6 +824,11 @@ effect flips.
 \section{The price of tiles}
 \label{sec:seam}
 
+Cutting a frame into tiles is what makes per-tile depth possible and it is
+not free, so before any saving is claimed the cut has to be priced. This
+section does that, and the price is larger and stranger than the literature
+on tiled inference suggests.
+
 \begin{figure}[t]
 \centering
 \includegraphics[width=\columnwidth]{figures/seam_problem.png}
@@ -853,8 +858,8 @@ sweeps $b$ from 12 to 0 with $b{=}0$ as an exact zero-seam control, and measured
 \Delta_{\mathrm{seam}} \;\propto\; b^{\alpha}, \qquad \alpha \approx 2,
 \label{eq:contam}
 \end{equation}
-with $\alpha = 2.38$ at $q0$ falling to $1.93$ at $q63$ and $r = 0.98$--$0.995$ in
-log--log. Fitted with one free scale, the area fraction is wrong by $160$--$264\%$
+with $\alpha = 2.38$ at $q0$, $2.22$ at $q32$ and $1.93$ at $q63$, and
+$r = 0.98$--$0.995$ in log--log. Fitted with one free scale, the area fraction is wrong by $160$--$264\%$
 where the power law is wrong by $12$--$22\%$. Fixing the exponent at exactly two
 costs a factor of two, $31$--$38\%$, so the square is the right shape without
 being quite the right law. The exponent has a reading. The count of affected
@@ -1083,6 +1088,10 @@ result by $0.6$--$0.8$ points. Rate--distortion differences are integrated as
 BD-Rate~\cite{bjontegaard} over the five quality indices. Means are taken over unrounded values, so
 averaging a printed row can differ from the printed mean by a unit in the last
 place.
+Two implementations of the same quantity have differed here by as much as
+$3.29$ saving points, and the choice between per-frame and pooled distortion
+moves an integrated saving by 7 to 10, so the convention is not a detail and
+we fix it once.
 
 \subsection{Main result}
 
@@ -1259,6 +1268,15 @@ every rate.}
 
 \subsection{Resolution, and the granularity of a tile}
 \label{sec:resolution}
+
+\textbf{This comparison is indicative and confounded.} The $128$ and $256$
+pixel ladders are different training runs, so anything that separates them
+separates two runs as well as two tile sizes. The size of that confound is
+measurable and it is not small: two runs of the \emph{same} recipe, at a
+matched epoch on the same frames, differ by $4.8$ saving points, which is as
+large as the tile-size effect reported below. We report the comparison
+because the resolution dependence it exposes is real and was hidden by a
+1080p-only test set, and we do not read the tile size as its cause.
 
 \begin{figure}[t]
 \centering
@@ -1743,7 +1761,9 @@ points of it at $q48$, and gives up \RateRankLoose\% against the oracle's
 \RateRankLooseAheadBy\ points. The head is charged for itself and the rule
 is not. At a loose budget the head's ordering also has less left to contribute,
 because once the budget saturates the ladder there is little ordering left to
-get right, and the rule gets it. \textbf{What it cannot do} is see
+get right, and the rule gets it. At $0.5\dB$ it reaches the ceiling at
+\RateRankHalfDbExact\ rate and its assignment is \emph{identical} to the
+oracle's on every tile. \textbf{What it cannot do} is see
 anything beyond that ordering. A rank-1 model in the level assigns every tile the
 same relative profile over exits, so $b$ only decides where on the ladder a tile
 falls, never the shape of its trade-off. That is the ceiling this baseline sits
@@ -1770,10 +1790,8 @@ a region was. It costs nothing because someone else has already paid for it.
 \textbf{Are the two signals complementary?} Barely. We normalise both surrogates
 to unit mean and blend them with one weight $w$, where $w{=}0$ is the
 calibrated bit rule and $w{=}1$ the head's ordering. The best blend is $w{=}0$ at
-the three lowest rates and a small head weight at the two highest, worth $+2.1$
-points at $q48$ and $+0.9$ at $q63$ (Table~\ref{tab:blend}). The head reads the
-entropy model's scales, so it already has most of what the bit count carries; what it adds is
-confined to $q48$ and $q63$.
+the three lowest rates and a small head weight at the two highest, worth \BlendGainMid\ points at \BlendGainMidQ\ and \BlendGainHigh\ at \BlendGainHighQ (Table~\ref{tab:blend}). The head reads the
+entropy model's scales, so it already has most of what the bit count carries; what it adds is confined to \BlendGainMidQ\ and \BlendGainHighQ.
 
 \paragraph{How much a trained head varies, and what that does to the claim.} No
 head here was trained twice at two seeds, so we have no seed variance to report.

@@ -99,6 +99,69 @@ def main():
             print(f"     duplicate subsection number {d}")
     print(f"  subsection numbers: {len(_n)}, {len(_dup)} duplicated")
 
+    # A macro used by one build and not the other is how the two carried
+    # different numbers while passing every check here: build_pdf said
+    # \\BlendGainMid and main.tex still had "+2.1" typed into the sentence.
+    # Comparing the sets is enough -- if both name the macro, both print
+    # whatever it currently holds.
+    defined = set(re.findall(r"\\newcommand\{\\([A-Za-z]+)\}",
+                             (ROOT / "paper/tables/macros.tex").read_text()))
+    used_tex = set(re.findall(r"\\([A-Za-z]+)", TEX)) & defined
+    used_py = set(re.findall(r"\\\\?([A-Za-z]+)", PY)) & defined
+    only_t = sorted(used_tex - used_py)
+    only_p = sorted(used_py - used_tex)
+    print(f"  macros: tex {len(used_tex)}, py {len(used_py)}")
+    for m_ in only_t:
+        print(f"     only main.tex uses \\{m_}")
+    for m_ in only_p:
+        print(f"     only build_pdf uses \\{m_}")
+    bad += len(only_t) + len(only_p)
+
+    # And the prose itself, at paragraph granularity. Three paragraphs lived
+    # only in the reportlab build for days -- the opening of Section 4, the
+    # reason the reporting conventions are stated at all, and the confound in
+    # the tile-size comparison, which is the one that matters. Matching is by
+    # three forty-character probes taken from across each paragraph, because a
+    # single prefix match reports every paragraph whose first line wraps
+    # differently or opens with a macro.
+    def _n(t):
+        t = re.sub(r"\[\[[a-z]+:[a-z0-9_]+\]\]", " ", t)
+        t = re.sub(r"\\\\?[A-Za-z]+\*?", " ", t)
+        t = re.sub(r"<[^>]+>", " ", t)
+        return re.sub(r"[^a-z]", "", t.lower())
+
+    pars = []
+    for m_ in re.finditer(r"\n    par\(", PY):
+        seg, d, e = PY[m_.end():m_.end() + 3500], 1, None
+        for i_, c_ in enumerate(seg):
+            if c_ == "(":
+                d += 1
+            elif c_ == ")":
+                d -= 1
+                if d == 0:
+                    e = i_
+                    break
+        t = "".join(x.group(1) for x in
+                    re.finditer(r'r?f?"((?:[^"\\]|\\.)*)"', seg[:e]))
+        if len(_n(t)) > 120:
+            pars.append(t)
+    T = _n(re.sub(r"%.*", "", TEX))
+    missing = []
+    for t in pars:
+        n_ = _n(t)
+        # Six probes of thirty characters, spread across the paragraph. Three
+        # of forty reported the released-decoder paragraph as missing because
+        # main.tex carries one extra \ref in the middle of it, which moves
+        # every later probe.
+        step = max(1, (len(n_) - 30) // 5)
+        probes = [n_[i_:i_ + 30] for i_ in range(0, len(n_) - 30, step)][:6]
+        if not any(pr in T for pr in probes if len(pr) == 30):
+            missing.append(re.sub(r"\s+", " ", re.sub(r"<[^>]+>", "", t))[:70])
+    print(f"  paragraphs: py {len(pars)}, {len(missing)} not in main.tex")
+    for t in missing:
+        print(f"     only in build_pdf: {t}")
+    bad += len(missing)
+
     print(f"\n  {'PASS' if not bad else str(bad) + ' divergence(s)'}")
     return 0 if not bad else 1
 

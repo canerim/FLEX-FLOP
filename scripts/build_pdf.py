@@ -1679,8 +1679,8 @@ def content(colw, fullw):
         r"rate, three classes of very "
         r"different content within \BigResSpread points of each other. At "
         r"832×480 a "
-        r"frame is 8 tiles and the saving is \MidResLow%; at 416×240 it is 2 "
-        r"tiles and \SmallResLow%. At high rate the small resolutions fall "
+        r"frame is 8 tiles and the saving is \ClassLowHevcC%; at 416×240 it is 2 "
+        r"tiles and \ClassLowHevcD%. At high rate the small resolutions fall "
         r"to \SmallResHigh% against \BigResHigh% for 1080p.")
     par(r"The natural explanation is granularity. With two tiles per frame "
         r"there is almost no allocation left to make, and the Lagrangian "
