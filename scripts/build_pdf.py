@@ -1287,7 +1287,7 @@ def content(colw, fullw):
            r"what the pass changed there. It recovers 0.005 dB of the 0.041 dB "
            r"tiling costs on this frame.")
     par(r"Border padding is an <i>estimator</i> of the unseen neighbour, and "
-        r"the seam is its error ([[fig:contamination]]). The table below measures four of them, with "
+        r"the seam is its error ([[fig:contamination]]) Panel c there is the comparison the section turns on: the affected-area fraction misses the penalty by 160-264% where a power law in the per-tile block count misses it by 12-22.. The table below measures four of them, with "
         r"early exit switched off ([[tab:padding]]) so that tiling is the only difference from a "
         r"full-frame decode.")
     tbl("padding",
@@ -1827,7 +1827,7 @@ def content(colw, fullw):
         r"checkpoint and test set, with one router trained against the oracle "
         r"on the deployed table at a single λ.")
     par(r"The table above compares the two, and what it prices is exactness "
-        r"against bits ([[tab:ab]], [[fig:router_ab]]).")
+        r"against bits ([[tab:ab]], [[fig:router_ab]]) Panel a of that figure is the two decision paths side by side, and the only place they differ is who holds the source..")
     par(r"<b>Not signalling costs \GapMin–\GapMax points</b>, roughly flat "
         r"across rate, for zero added bits and a byte-identical file. The gap "
         r"is smallest at q\GapMinQp and widens toward both ends of the rate "
@@ -1958,7 +1958,7 @@ def content(colw, fullw):
         r"learn what to do with it.")
     h2("5.6 A router with no parameters")
     par(r"Before a \RouterParams head is worth its \RouterCostPct% of the "
-        r"decode, it has to beat what the decoder already knows ([[fig:raterank]], [[tab:raterank]]). The entropy "
+        r"decode, it has to beat what the decoder already knows ([[fig:raterank]], [[tab:raterank]]) The shaded region in panel a is where the free rule is ahead, and it covers every rate.. The entropy "
         r"model has produced one number per tile before the trunk runs, and at "
         r"no cost: how many bits that tile's latents took.")
     par(r"We turn it into a routing rule with no learned parameters. We model "
@@ -2096,12 +2096,12 @@ def content(colw, fullw):
     par(r"A learned component should be measured against the free alternative, "
         r"and it rarely is. In adaptive inference the usual controls are a "
         r"uniform allocation and a random one. Both are much weaker than a "
-        r"decoder-side signal that is already lying around ([[fig:deciders]]).")
+        r"decoder-side signal that is already lying around ([[fig:deciders]]) Panel b of that figure is the surprise: the rule picks the search's exit on fewer than half the tiles and still captures three quarters of its saving, which is why agreement is the wrong thing to optimise..")
     h2("5.7 Signalling only what the router gets wrong")
     par(r"The encoder knows tile by tile where the router will be wrong, "
         r"because it can run that router itself (Section 3.1), and nothing "
         r"obliges it to correct every one of them. That is the room "
-        r"configuration C works in ([[fig:hybrid]], [[tab:hybrid]]).")
+        r"configuration C works in ([[fig:hybrid]], [[tab:hybrid]]) The curves in panel a rise steeply and then flatten: almost all of what signalling buys is bought by the first tenth of the tiles..")
     par(r"We choose the ρN overridden tiles by Lagrangian regret, "
         r"Δ(t) = L(t,k-hat) − L(t,k*) with L(t,k) = D(t,k) + λc_k the "
         r"objective of the Lagrangian in Section 3.5, so Δ(t) is exactly what "
@@ -2206,7 +2206,9 @@ def content(colw, fullw):
            r"budget.")
     par(r"How much A's extra decode at the encoder matters depends on how "
         r"often the map has to be recomputed, and we have not seen that "
-        r"measured anywhere ([[fig:map_transfer]]).")
+        r"measured anywhere ([[fig:map_transfer]]). Panel c reads as a "
+        r"matrix of what a map costs when it is applied at a rate it was "
+        r"not computed for. It is markedly asymmetric.")
     par(r"<b>Across frames.</b> Reuse is close to free. We take the map found "
         r"on frame 0 and apply it eight frames later; at q0 the delivered "
         r"distortion rises by \TransferDbCost dB, five percent of the budget, "
@@ -2419,7 +2421,7 @@ def content(colw, fullw):
         r"and has nothing left to spend.")
     par(r"So the ladder is a choice made at the operating point, not a "
         r"hyperparameter tuned once and fixed. The band of Section 5.4 tells "
-        r"you which side of the crossover a given budget sits on.")
+        r"you which side of the crossover a given budget sits on. The two dotted lines in [[fig:ladder_crossover]] are the two ceilings, and the crossing between them is the whole argument: a finer ladder is worse until the budget is large enough to reach past the coarse one's ceiling.")
 
     # ---- 6 limitations ---------------------------------------------------
     h1("6. Against the released decoder")
@@ -2486,6 +2488,21 @@ def content(colw, fullw):
         r"The arithmetic saving is 22.9% at that rate and the energy saving is "
         r"19.3%, and the gap between those two numbers is the scheduling cost "
         r"of a decode that runs its last groups on a handful of tiles.")
+    tbl("bdrate",
+        r"<b>Table N. BD-Rate against the released decoder</b>, integrated "
+        r"over the five quality indices, and what each configuration puts in "
+        r"the file to get it.")
+    par(r"BD-Rate is the number a codec paper is read on, so we give it for "
+        r"both configurations at all three budgets rather than only for the "
+        r"headline ([[tab:bdrate]]). Two things in the table are worth reading against each "
+        r"other. The cost of a budget is not linear in it: going from 0.1 to "
+        r"0.3 dB nearly triples the BD-Rate while the saving moves by "
+        r"\GapBudgetPoints points, because the second decibel is spent on "
+        r"tiles that were already cheap. And B pays marginally less than A at "
+        r"every budget, which is not B being better: it delivers slightly "
+        r"less saving for slightly less distortion, and it sends nothing, so "
+        r"the \MapBits bits A spends are the whole of the difference in what "
+        r"reaches the file.")
     h1("7. Limitations")
     par(r"That result is bounded on four sides: by a cost the method pays and "
         r"cannot yet remove, by the kind of frame it was measured on, by where "
@@ -2562,7 +2579,7 @@ def content(colw, fullw):
         r"adaptivity with tiled inference to walk into this.")
     par(r"A distortion budget is only a control variable inside a "
         r"measurable band. Below the floor the budget admits nothing at "
-        r"all, and above saturation more of it buys nothing ([[fig:window]]). A saving quoted "
+        r"all, and above saturation more of it buys nothing ([[fig:window]]) Panel b draws those two limits against the rate, and the band between them is the only region a budget can be chosen in.. A saving quoted "
         r"without saying where in that band it sits has left out the part of the "
         r"result a reader most needs.")
     par(r"We would attach three cautions to the measurements themselves. A "

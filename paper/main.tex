@@ -876,7 +876,9 @@ reaches every pixel; the penalty does not.}
 \subsection{Padding is an estimator}
 
 Border padding is an \emph{estimator} of the unseen neighbour, and the seam is its
-error (Fig.~\ref{fig:contam}). Table~\ref{tab:padding} measures four of them, with early exit switched off
+error (Fig.~\ref{fig:contam}) Panel~c there is the comparison the section turns on: the affected-area
+fraction misses the penalty by 160--264\% where a power law in the per-tile
+block count misses it by 12--22.. Table~\ref{tab:padding} measures four of them, with early exit switched off
 so that tiling is the only difference from a full-frame decode.
 
 \begin{table}[t]
@@ -1521,7 +1523,8 @@ single $\lambda$.}
 \end{table}
 
 Table~\ref{tab:ab} compares the two, and what it prices is exactness against
-bits (Fig.~\ref{fig:ab}).
+bits (Fig.~\ref{fig:ab}) Panel~a of that figure is the two decision paths side by side, and the only
+place they differ is who holds the source..
 \textbf{Not signalling costs \GapMin--\GapMax\ points}, roughly flat across
 rate, for zero added bits and a byte-identical file. The gap is smallest at
 $q\GapMinQp$ and widens toward both ends of the rate range.
@@ -1697,7 +1700,8 @@ Bold is the best per rate.}
 \end{table}
 
 Before a $\RouterParams$ head is worth its \RouterCostPct\% of the decode, it has
-to beat what the decoder already knows (Fig.~\ref{fig:raterank}) and Table~\ref{tab:raterank}. The entropy model has produced one
+to beat what the decoder already knows (Fig.~\ref{fig:raterank}) and Table~\ref{tab:raterank} The shaded region in panel~a is where the free rule is ahead, and it covers
+every rate.. The entropy model has produced one
 number per tile before the trunk runs, and at no cost: how many bits that tile's
 latents took.
 
@@ -1780,7 +1784,9 @@ belongs.
 A learned component should be measured against the free alternative, and it
 rarely is. In adaptive inference the usual controls are a uniform allocation and
 a random one. Both are much weaker than a decoder-side signal that is already
-lying around (Fig.~\ref{fig:deciders}).
+lying around (Fig.~\ref{fig:deciders}) Panel~b of that figure is the surprise: the rule picks the search's exit on
+fewer than half the tiles and still captures three quarters of its saving, which
+is why agreement is the wrong thing to optimise..
 
 \begin{figure}[t]
 \centering
@@ -1819,7 +1825,8 @@ $0.1$ points, which is the check that the interpolation is real.}
 
 The encoder knows tile by tile where the router will be wrong, because it can run
 that router itself (Section~\ref{sec:setting}), and nothing obliges it to correct
-every one of them. That is the room configuration C works in (Fig.~\ref{fig:hybrid}) and Table~\ref{tab:hybrid}.
+every one of them. That is the room configuration C works in (Fig.~\ref{fig:hybrid}) and Table~\ref{tab:hybrid} The curves in panel~a rise steeply and then flatten: almost all of what
+signalling buys is bought by the first tenth of the tiles..
 
 We choose the $\rho N$ overridden tiles by Lagrangian regret,
 $\Delta(t)=L_\lambda(t,\hat{k}_t)-L_\lambda(t,k^{*}_t)$, where
@@ -1917,7 +1924,8 @@ distortion against a $0.1\dB$ budget.}
 \end{figure}
 
 How much A's extra decode at the encoder matters depends on how often the map has
-to be recomputed (Fig.~\ref{fig:transfer}), and we have not seen that measured anywhere.
+to be recomputed (Fig.~\ref{fig:transfer}) Panel~c reads as a matrix of what a map costs when it is applied at a rate it
+was not computed for. It is markedly asymmetric., and we have not seen that measured anywhere.
 
 \textbf{Across frames.} Reuse is close to free. We take the map found on frame
 $0$ and apply it eight frames later; at $q0$ the delivered distortion rises by
@@ -2170,7 +2178,9 @@ and $0.3\dB$:
 
 So the ladder is a choice made at the operating point, not a hyperparameter
 tuned once and fixed. The band of Section~\ref{sec:operating} tells you which
-side of the crossover a given budget sits on (Fig.~\ref{fig:laddercross}).
+side of the crossover a given budget sits on (Fig.~\ref{fig:laddercross}) The two dotted lines in that figure are the two ceilings, and the crossing
+between them is the whole argument: a finer ladder is worse until the budget is
+large enough to reach past the coarse one's ceiling..
 
 % =========================================================== limitations
 \section{Against the released decoder}
@@ -2274,6 +2284,25 @@ saving is $22.9\%$ at that rate and the energy saving is $19.3\%$, and the gap
 between those two numbers is the scheduling cost of a decode that runs its last
 groups on a handful of tiles.
 
+\begin{table}[t]
+\centering
+\input{tables/bdrate}
+\caption{\textbf{BD-Rate against the released decoder}, integrated over the five
+quality indices, and what each configuration puts in the file to get it.}
+\label{tab:bdrate}
+\end{table}
+
+BD-Rate is the number a codec paper is read on, so we give it for both
+configurations at all three budgets rather than only for the headline
+(Table~\ref{tab:bdrate}). Two things in the table are worth reading against each
+other. The cost of a budget is not linear in it: going from $0.1$ to $0.3\dB$
+nearly triples the BD-Rate while the saving moves by \GapBudgetPoints\ points,
+because the second decibel is spent on tiles that were already cheap. And B pays
+marginally less than A at every budget, which is not B being better: it delivers
+slightly less saving for slightly less distortion, and it sends nothing, so the
+\MapBits\ bits A spends are the whole of the difference in what reaches the
+file.
+
 \section{Limitations}
 That result is bounded on four sides: by a cost the method pays and cannot
 yet remove, by the kind of frame it was measured on, by where in its training
@@ -2359,7 +2388,8 @@ adaptivity with tiled inference to walk into this.
 
 \textbf{A distortion budget is only a control variable inside a measurable band.}
 Below the floor the budget admits nothing at all, and above saturation more of it
-buys nothing (Fig.~\ref{fig:window}). A saving quoted without saying where in that band it sits has
+buys nothing (Fig.~\ref{fig:window}) Panel~b draws those two limits against the rate and the band between them is
+the only region a budget can be chosen in.. A saving quoted without saying where in that band it sits has
 left out the part of the result a reader most needs.
 
 We would attach three cautions to the measurements themselves. A saving in

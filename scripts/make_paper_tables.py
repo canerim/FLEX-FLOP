@@ -1004,15 +1004,22 @@ if bdj:
             v = _bd(cfg, bud)
             if v is not None:
                 mac(f"BdRate{tag}{bt}", f"{v:.2f}")
-    lines = [r"\begin{tabular}{lrrrr}", r"\toprule",
-             r"configuration & budget & BD-Rate (\%) & saved (\%) & bits/frame \\",
+    # No saving column. This file carries no hook count, so its saving is the
+    # arithmetic model and would print 22.1 beside a headline table saying
+    # 21.5. The saving is Table 3's job; this one is BD-Rate and side channel.
+    lines = [r"\begin{tabular}{lrrr}", r"\toprule",
+             r"configuration & budget & BD-Rate (\%) & side channel \\",
              r"\midrule"]
     for r in bdj["rows"]:
         lines.append(f"{r['config']} & {r['budget_db']:.1f}\\,dB & "
                      f"{r['bd_rate_pct']:.2f} & "
-                     f"{sv(r):.1f} & "
-                     f"{r['map_bits']:.0f} \\\\")
+                     f"{r['map_bits']:.0f} bits/frame \\\\")
     lines += [r"\bottomrule", r"\end{tabular}"]
+    try:
+        mac("GapBudgetPoints",
+            f"{float(MACROS['MeanAtThree']) - float(MACROS['MeanAtOne']):.1f}")
+    except Exception as _e:
+        print("   budget gap:", _e)
     w("bdrate.tex", "\n".join(lines))
 
 # ------------------------------------------------------------- rate rank
