@@ -45,6 +45,16 @@ def producers():
         names = set(re.findall(r'figures/([A-Za-z_0-9]+)\.png', t))
         names |= set(re.findall(r'save\(\s*fig,\s*"([A-Za-z_0-9]+)\.png"', t))
         names |= set(re.findall(r'savefig\([^)]*?"([A-Za-z_0-9]+)\.png"', t))
+        # f-string filenames: f"saturation_{TAG}.png" and the --out default of
+        # a script that takes one. Two figures had no producer for this reason.
+        # f-string filenames, with or without a directory in the same literal:
+        # f"saturation_{TAG}.png" is written as _d / f"saturation_{TAG}.png".
+        # The braces come out and what is left is the stem the file will have.
+        for m in re.findall(r'f"([A-Za-z_0-9{}./]*?)\.png"', t):
+            stem = re.sub(r"\{[^{}]*\}", "", m).strip("/").split("/")[-1]
+            if stem:
+                names.add(stem)
+        names |= set(re.findall(r'out="[^"]*?figures/([A-Za-z_0-9]+)\.png"', t))
         writes_here = "paper/figures" in t or "paper\" / \"figures" in t
         for n in names:
             if n not in out or (writes_here and not out[n][1]):
@@ -64,6 +74,12 @@ def main(argv):
         if not png.exists():
             continue
         src = prod.get(n)
+        if src is None:
+            # A stem from an f-string ("saturation_{TAG}") or a --out default
+            # ("qualitative", which also writes qualitative_q63): match the
+            # longest producer stem that this figure's name starts with.
+            cands = [k for k in prod if n.startswith(k) and k]
+            src = prod[max(cands, key=len)] if cands else None
         if src is None:
             unknown.append(n)
             continue

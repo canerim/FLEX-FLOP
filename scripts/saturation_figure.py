@@ -48,7 +48,7 @@ a.plot(qp, flo, marker="^", color=ns.GREEN, lw=1.2,
        label="floor — every tile at full depth")
 a.plot(qp, sat, marker="o", color=ns.BLUE, lw=1.2,
        label=f"saturation — every tile at exit {d['exit_j']}")
-a.axhline(0.1, color=ns.INK, lw=0.8, ls=(0, (4, 2)))
+a.axhline(0.1, color=ns.INK, lw=0.8, ls=(0, (4, 2)), label="0.1 dB budget")
 
 a.annotate(f"{sat[0]:.3f} dB", (qp[0], sat[0]), fontsize=5.5, color=ns.BLUE,
            textcoords="offset points", xytext=(3, 5))
@@ -81,6 +81,10 @@ for x, u in zip(qp[::2], (100 * used)[::2]):
 ns.panel(b, "b", dx=-0.20)
 
 fig.tight_layout()
-out = R / f"docs/figures/saturation_{TAG}.png"
-fig.savefig(out, dpi=300)
-print(f"  -> {out}")
+# Both directories. build_pdf reads paper/figures, and the f-string filename
+# also hid this figure from check_figs_fresh, which looks for a literal name.
+for _d in (R / "docs/figures", R / "paper/figures"):
+    _d.mkdir(parents=True, exist_ok=True)
+    fig.savefig(_d / f"saturation_{TAG}.png", dpi=500, bbox_inches="tight",
+                pad_inches=0.02, facecolor="white")
+    print(f"  -> {_d.relative_to(R)}/saturation_{TAG}.png")
