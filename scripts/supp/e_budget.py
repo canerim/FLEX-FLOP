@@ -466,9 +466,14 @@ def content(k):
     k.par(r"and fitting ln(S/C) against ln u by least squares through the "
           r"origin gives \BandExp on the pinned checkpoint, with R² = \BandRTwo "
           r"and a worst residual of \BandFitErr points. The same procedure on "
-          r"the second training run gives \BandExpB with R² = \BandRTwoB, "
-          r"which is the replication Figure " + str(k.peek_fig()) + r" draws "
-          r"and Section " + sec + r".5 takes apart.")
+          r"the second training run gives \BandExpB with R² = \BandRTwoB and "
+          r"a worst residual of \BandFitErrB points -- the collapse "
+          r"replicates, the quality of the one-parameter description of it "
+          r"does not. The sensitivity table at the end of this section is the "
+          r"reason to expect that: the assumed ceiling is one of the things this "
+          r"exponent is most sensitive to, and the second run's ceiling is "
+          r"its own. Figure " + str(k.peek_fig()) + r" draws it "
+          r"and Section " + sec + r".5 takes it apart.")
 
     k.fig("budget_band_BEST.png",
           r"<b>The collapse on the second training run.</b> <b>a</b>, saving "
