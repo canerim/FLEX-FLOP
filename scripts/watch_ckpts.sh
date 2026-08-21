@@ -54,12 +54,32 @@
 set -u
 cd "$HOME/FLEX-UF"
 TAG=${1:?usage: watch_ckpts.sh <run_tag> [gpu] [poll_seconds]}
-GPU=${2:-$("$HOME/FLEX-UF/scripts/pick_gpu.sh")}
+# A card can be asked for, but not one that belongs to somebody else. Fixing
+# the default was not enough: the five watchers were started as
+# "watch_ckpts.sh TAG 2 900", with the card on the command line, so they kept
+# evaluating on GPU2 long after GPU2 stopped being ours. Validate what is
+# asked for, and say so when it is refused.
+GPU=${2:-}
+PICKED=$("$HOME/FLEX-UF/scripts/pick_gpu.sh" || true)
+if [ -n "$GPU" ]; then
+  GUUID=$(nvidia-smi --query-gpu=uuid --format=csv,noheader -i "$GPU" 2>/dev/null || true)
+  OWNERS=$(nvidia-smi --query-compute-apps=pid,gpu_uuid --format=csv,noheader 2>/dev/null \
+    | grep -F "$GUUID" | cut -d, -f1 \
+    | while read -r q; do ps -o user= -p "${q// }" 2>/dev/null; done \
+    | sort -u | grep -v "^$(id -un)$" || true)
+  if [ -n "$OWNERS" ]; then
+    echo "watch_ckpts: GPU$GPU belongs to $(echo $OWNERS); using GPU${PICKED:-none}" >&2
+    GPU=$PICKED
+  fi
+else
+  GPU=$PICKED
+fi
 if [ -z "${GPU:-}" ]; then
   echo "watch_ckpts: no GPU free of other users; refusing to borrow one" >&2
   exit 1
 fi
 POLL=${3:-900}
+echo "=== $TAG watching, evaluating on GPU$GPU @ $(date '+%F %T') ==="
 D="runs/$TAG"
 LOCK=/tmp/flexuf_eval.lock
 

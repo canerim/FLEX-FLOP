@@ -932,6 +932,12 @@ def content(colw, fullw):
         r"a full map, costs the encoder A's search plus one run of the "
         r"predictor, and costs the decoder whatever that predictor costs.")
     h2("3.2 Where the computation is")
+    tbl("adapters_ablation",
+        r"<b>Table 2. What the adapters are worth.</b> dB below the released "
+        r"decoder with "
+        r"every tile at that exit, with the trained adapters and with each set "
+        r"back to the identity it was initialised to. † the deepest exit has no "
+        r"adapter by construction and is the control.")
     par(r"The DCVC-UF intra decoder is one upsampling block, twelve "
         r"DepthConvBlocks and a head, costing 453.5 GMAC per 1080p frame. The "
         r"twelve blocks are \\TrunkShare% of that, which is why we build the "
@@ -997,12 +1003,6 @@ def content(colw, fullw):
            r"with and without its adapter. <b>b</b>, the dB the adapter "
            r"recovers. <b>c</b>, the same against the number of blocks the "
            r"exit skips, which is the design rationale measured.")
-    tbl("adapters_ablation",
-        r"<b>Table 2. What the adapters are worth.</b> dB below the released "
-        r"decoder with "
-        r"every tile at that exit, with the trained adapters and with each set "
-        r"back to the identity it was initialised to. † the deepest exit has no "
-        r"adapter by construction and is the control.")
     par(r"Zeroing the adapters measures what they learned, since the identity "
         r"is exactly what they were initialised to ([[fig:adapter_gain]]) and [[tab:adapters_ablation]]. Without them the "
         r"shallowest exit costs \AdapterNoneHigh dB at q63, forty-four times "
@@ -1405,6 +1405,11 @@ def content(colw, fullw):
         r"test set (CTC: UVG, MCL-JCV "
         r"and HEVC classes B, C, D and E), one intra frame each.")
     h2("Measurement protocol.")
+    tbl("complexity",
+        r"<b>Table 4. Decoder complexity</b> at 1080p. Our deepest exit costs "
+        r"slightly more than the released decoder because it still pays the "
+        r"deblocking filter; that 1.0095, not 1.0, is what every saving in this paper is "
+        r"<i>not</i> divided by. Wall-clock is the sorted loop of Section 5.9.")
     par(r"Two details of the protocol move the numbers enough that we state "
         r"them here. The per-tile distortion table has to be built on the "
         r"<i>deployed</i> decode path, that is, one tiled decode per exit, "
@@ -1473,11 +1478,6 @@ def content(colw, fullw):
         r"ladder. High-rate reconstructions carry detail the shallow exits "
         r"cannot reproduce, and the floor rises with rate as well; both "
         r"effects push the same way.")
-    tbl("complexity",
-        r"<b>Table 4. Decoder complexity</b> at 1080p. Our deepest exit costs "
-        r"slightly more than the released decoder because it still pays the "
-        r"deblocking filter; that 1.0095, not 1.0, is what every saving in this paper is "
-        r"<i>not</i> divided by. Wall-clock is the sorted loop of Section 5.9.")
     figure("rd_spread.png",
            r"<b>Figure 7. The plane a codec is read on, and the spread behind "
            r"the mean.</b> <b>a</b>, operating points against the released "
@@ -1564,6 +1564,10 @@ def content(colw, fullw):
         r"smaller. Averaged "
         r"over rates, the best static allocation saves \BestStaticMean% where "
         r"the adaptive one saves \MainMean%.")
+    tbl("probe",
+        r"<b>Table N. One frame from each class, at q32 and a 0.1 dB "
+        r"budget.</b> The exits column is the histogram over the ladder, so "
+        r"e4:2 is two tiles at exit 4.")
     par(r"The two shuffled rows separate effects that are easy to conflate. We "
         r"keep the oracle's own exit histogram, so the mix of depths and hence "
         r"the average cost are unchanged, and assign it to tiles at random. "
@@ -1617,10 +1621,6 @@ def content(colw, fullw):
         r"reported below. We report the comparison because the resolution "
         r"dependence it exposes is real and was hidden by a 1080p-only test "
         r"set, and we do not read the tile size as its cause.")
-    tbl("probe",
-        r"<b>Table N. One frame from each class, at q32 and a 0.1 dB "
-        r"budget.</b> The exits column is the histogram over the ladder, so "
-        r"e4:2 is two tiles at exit 4.")
     par(r"The table says where the method stops being adaptive ([[tab:probe]]). Reading down "
         r"it, the exit histogram narrows from a mixture over three rungs to a "
         r"single one, and at 416×240 both tiles take exit 4 and the frame "
@@ -1969,6 +1969,14 @@ def content(colw, fullw):
         r"correlations between a tile's bit count and, respectively, the depth "
         r"the oracle assigns it and the distortion it stands to gain from that "
         r"depth.")
+    figure("qualitative.png",
+        r"<b>Figure N. What \QualSaving% of the arithmetic costs, to look at.</b> "
+        r"\QualSeq at q\QualQp, one frame, with λ bisected on that frame to "
+        r"\QualDb dB. Both crops are decoded from the <i>same</i> latent at "
+        r"\QualBpp bpp: the released decoder reaches \QualPsnrRel dB and the "
+        r"routed decode \QualPsnrOurs dB. The crop is centred on the tile that "
+        r"gave up the most, tile \QualWorstTile of \QualNTiles, not on a "
+        r"flattering one. Right, the absolute difference at ×\QualAmp.")
     par(r"It beats the trained head at every rate. The zero-learned-parameter "
         r"rule is ahead of the \RouterParams router at all \RateRankNWins measured "
         r"rates, by margins that run from half a point at q48 to "
@@ -2043,6 +2051,14 @@ def content(colw, fullw):
         r"<b>Table 9. Blending the two decoder-side signals</b> at 0.1 dB, both "
         r"normalised to unit mean, weight w from the calibrated bit rule to the "
         r"head's ordering. Bold is the best per rate.")
+    figure("concentration.png",
+           r"<b>Figure N. The loss is concentrated.</b> <b>a</b>, the share of "
+           r"the total regret carried by the worst fraction of tiles, per "
+           r"rate; the dotted line is what an even spread would look like. "
+           r"<b>b</b>, the same as a Gini coefficient. At every rate a small "
+           r"minority of tiles carries most of what staying silent costs, "
+           r"which is why signalling a fraction of the map recovers most of "
+           r"the gap.")
     par(r"<b>Are the two signals complementary?</b> Barely. We normalise both "
         r"surrogates to unit mean and blend them with one weight w, where w=0 "
         r"is the calibrated bit rule and w=1 the head's ordering. The best blend is w=0 "
@@ -2050,14 +2066,6 @@ def content(colw, fullw):
         r"highest, worth +2.1 points at q48 and +0.9 at q63. The head reads "
         r"the entropy model's scales, so it already has most of what the bit "
         r"count carries; what it adds is confined to q48 and q63.")
-    figure("qualitative.png",
-        r"<b>Figure N. What \QualSaving% of the arithmetic costs, to look at.</b> "
-        r"\QualSeq at q\QualQp, one frame, with λ bisected on that frame to "
-        r"\QualDb dB. Both crops are decoded from the <i>same</i> latent at "
-        r"\QualBpp bpp: the released decoder reaches \QualPsnrRel dB and the "
-        r"routed decode \QualPsnrOurs dB. The crop is centred on the tile that "
-        r"gave up the most, tile \QualWorstTile of \QualNTiles, not on a "
-        r"flattering one. Right, the absolute difference at ×\QualAmp.")
     par(r"<b>How much a trained head varies, and what that does to the "
         r"claim.</b> No head here was trained twice at two seeds, so we have "
         r"no seed variance to report. What we can report is the spread between "
@@ -2104,14 +2112,6 @@ def content(colw, fullw):
         r"fifth recovers \HybridRecoverFifthLow–\HybridRecoverFifthHigh%. "
         r"Recovery is concave everywhere, so the first bits spent are the most "
         r"useful ones.")
-    figure("concentration.png",
-           r"<b>Figure N. The loss is concentrated.</b> <b>a</b>, the share of "
-           r"the total regret carried by the worst fraction of tiles, per "
-           r"rate; the dotted line is what an even spread would look like. "
-           r"<b>b</b>, the same as a Gini coefficient. At every rate a small "
-           r"minority of tiles carries most of what staying silent costs, "
-           r"which is why signalling a fraction of the map recovers most of "
-           r"the gap.")
     par(r"And a partial map can beat a complete one. At \HybridBeatsAN "
         r"of \HybridBeatsAOf rates, signalling half the tiles for "
         r"\HybridBitsHalf bits saves <i>more</i> than signalling all of them, "
@@ -2136,6 +2136,16 @@ def content(colw, fullw):
         r"fixed distortion, not the objective, and returning to the budget "
         r"means re-bisecting λ. That re-bisection is also what lets the "
         r"two-multiplier allocations above escape the bound.")
+    figure("ladder_crossover.png",
+           r"<b>Figure N. The right ladder depends on the budget.</b> Saving "
+           r"against budget for four ladders, with each one's architectural "
+           r"ceiling as a dotted line. A finer ladder has a higher ceiling and "
+           r"a higher floor, so the curves cross: the coarse ladder wins where "
+           r"the budget is tight and cannot be spent, and the fine one wins "
+           r"where it is loose enough to reach exits the coarse ladder does "
+           r"not have. The crossing is the design choice this section is "
+           r"about.")
+
     par(r"At the loose budget it matters where the gap is. At 0.3 dB "
         r"the three lowest rates are saturated, and there is nothing for a "
         r"partial map to buy. At \HybridLooseQps, where the gap is "
@@ -2187,16 +2197,6 @@ def content(colw, fullw):
         r"moves slowly. A codec would search once per group of pictures "
         r"instead of once per frame, and divide the encoder cost by the group "
         r"length.")
-    figure("ladder_crossover.png",
-           r"<b>Figure N. The right ladder depends on the budget.</b> Saving "
-           r"against budget for four ladders, with each one's architectural "
-           r"ceiling as a dotted line. A finer ladder has a higher ceiling and "
-           r"a higher floor, so the curves cross: the coarse ladder wins where "
-           r"the budget is tight and cannot be spent, and the fine one wins "
-           r"where it is loose enough to reach exits the coarse ladder does "
-           r"not have. The crossing is the design choice this section is "
-           r"about.")
-
     par(r"<b>Across rate.</b> Here the map does have to be recomputed, and the "
         r"direction of the reuse decides how badly. Found at q0 and applied at "
         r"q63, it delivers \TransferCrossDb dB against a 0.1 dB budget, "
