@@ -1782,9 +1782,9 @@ def content(colw, fullw):
         r"the lowest rate and nothing else, a range \SatWindowMb thousandths "
         r"of a decibel wide.")
     figure("budget_band.png",
-           r"<b>Figure 9. The band is the rate dependence.</b> <b>a</b> Saving "
+           r"<b>Figure 9. The band is the rate dependence.</b> <b>a</b>, saving "
            r"against the budget, with each rate's floor and saturation point "
-           r"ticked. <b>b</b> The same with the budget axis rescaled onto each "
+           r"ticked. <b>b</b>, the same with the budget axis rescaled onto each "
            r"rate's own band. Five curves become one; dashed is the one-parameter "
            r"power law fitted to all of them.")
     par(r"And the band is almost all of the rate dependence. At a "
@@ -1817,10 +1817,10 @@ def content(colw, fullw):
         r"replicates is the collapse. Within a checkpoint, the rate dependence "
         r"of the trade-off is the rate dependence of the band ([[fig:tradeoff]]).")
     figure("tradeoff.png",
-           r"<b>Figure 9. The trade-off, whole.</b> <b>a</b> What a budget buys, "
+           r"<b>Figure 9. The trade-off, whole.</b> <b>a</b>, what a budget buys, "
            r"per rate; the dotted line is the arithmetic ceiling, "
            r"\CeilingModelled%, and q0 reaches it at \SatLow dB. "
-           r"<b>b</b> The same relation inverted, so it reads as "
+           r"<b>b</b>, the same relation inverted, so it reads as "
            r"what a saving target costs. The three budgets reported elsewhere "
            r"are three points on this curve.")
     figure("window.png",
@@ -1990,9 +1990,9 @@ def content(colw, fullw):
         r"signalled and nothing is trained; the arithmetic is one scalar per "
         r"tile.")
     figure("raterank.png",
-           r"<b>Figure 10. The calibrated bit rule.</b> <b>a</b> Saving at 0.1 dB; "
+           r"<b>Figure 10. The calibrated bit rule.</b> <b>a</b>, saving at 0.1 dB; "
            r"shaded where the calibrated bit rule beats the trained head. "
-           r"<b>b</b> What a tile's bit count is correlated with, against how "
+           r"<b>b</b>, what a tile's bit count is correlated with, against how "
            r"often the rule agrees with the oracle outright; dotted is the "
            r"head's own held-out agreement.")
     tbl("raterank",

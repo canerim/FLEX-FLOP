@@ -242,9 +242,9 @@ def content(k):
 
     k.fig("exitmap_PAPER_racehorses_416x240_q32_b01.png",
           "<b>The smallest frame in the test set, and the whole of its "
-          "allocation.</b> <b>a</b> the decoded frame with the single tile "
-          "boundary drawn, tinted by the exit each tile took. <b>b</b> the "
-          "exit map, two cells. <b>c</b> the loss each tile pays. Both tiles "
+          "allocation.</b> <b>a</b>, the decoded frame with the single tile "
+          "boundary drawn, tinted by the exit each tile took. <b>b</b>, the "
+          "exit map, two cells. <b>c</b>, the loss each tile pays. Both tiles "
           "take exit 4 and the map has nothing to trade; the legend gives "
           "what each rung would have saved had a tile taken it.",
           maxh=80)
@@ -384,11 +384,11 @@ def content(k):
 
     sp = k.J("supp_seam_problem_bosphorus_q63.json")
     k.fig("seam_PAPER_bosphorus_q63.png",
-          f"<b>The seam, at frame scale.</b> <b>a</b> the decoded frame. "
-          f"<b>b</b> the absolute error against a full-frame decode of the "
+          f"<b>The seam, at frame scale.</b> <b>a</b>, the decoded frame. "
+          f"<b>b</b>, the absolute error against a full-frame decode of the "
           f"same latent, amplified {sp['amplification']:.0f}×, with every "
           f"tile at the deepest exit so that nothing here is early exiting. "
-          f"<b>c</b> a zoom on one junction. The tile grid is the error: "
+          f"<b>c</b>, a zoom on one junction. The tile grid is the error: "
           f"{sp['penalty_db']:.3f} dB at q63, paid before the allocation "
           f"begins.", maxh=80)
     k.note("paper/figures/seam_PAPER_bosphorus_q63.png, drawn from "

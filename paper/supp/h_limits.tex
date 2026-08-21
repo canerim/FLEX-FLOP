@@ -32,7 +32,7 @@ RaceHorses, 416$\times$240 & 2 & e4:2 & 13.0 & 0.097 & 0.113 \\
 \begin{figure}[t]
 \centering
 \includegraphics[width=\columnwidth]{figures/exitmap_PAPER_racehorses_416x240_q32_b01.png}
-\caption{\textbf{The smallest frame in the test set, and the whole of its allocation.} \textbf{a} the decoded frame with the single tile boundary drawn, tinted by the exit each tile took. \textbf{b} the exit map, two cells. \textbf{c} the loss each tile pays. Both tiles take exit 4 and the map has nothing to trade; the legend gives what each rung would have saved had a tile taken it.}
+\caption{\textbf{The smallest frame in the test set, and the whole of its allocation.} \textbf{a}, the decoded frame with the single tile boundary drawn, tinted by the exit each tile took. \textbf{b}, the exit map, two cells. \textbf{c}, the loss each tile pays. Both tiles take exit 4 and the map has nothing to trade; the legend gives what each rung would have saved had a tile taken it.}
 \end{figure}
 
 {\small paper/figures/exitmap\_PAPER\_racehorses\_416x240\_q32\_b01.png, drawn from results/supp\_exitmap\_racehorses\_416x240\_q32\_b01.json on runs/RECIPE512/ckpt\_PAPER.pth.tar. RaceHorses at 416$\times$240, q32, 0.1 dB.}
@@ -86,7 +86,7 @@ The other thing a set mean hides is how much of the budget is gone before any ti
 \begin{figure}[t]
 \centering
 \includegraphics[width=\columnwidth]{figures/seam_PAPER_bosphorus_q63.png}
-\caption{\textbf{The seam, at frame scale.} \textbf{a} the decoded frame. \textbf{b} the absolute error against a full-frame decode of the same latent, amplified 30$\times$, with every tile at the deepest exit so that nothing here is early exiting. \textbf{c} a zoom on one junction. The tile grid is the error: 0.124 dB at q63, paid before the allocation begins.}
+\caption{\textbf{The seam, at frame scale.} \textbf{a}, the decoded frame. \textbf{b}, the absolute error against a full-frame decode of the same latent, amplified 30$\times$, with every tile at the deepest exit so that nothing here is early exiting. \textbf{c}, a zoom on one junction. The tile grid is the error: 0.124 dB at q63, paid before the allocation begins.}
 \end{figure}
 
 {\small paper/figures/seam\_PAPER\_bosphorus\_q63.png, drawn from results/supp\_seam\_problem\_bosphorus\_q63.json on runs/RECIPE512/ckpt\_PAPER.pth.tar. The panel is the worst case rather than the shipped one: the file records tile\_pad\_mode zeros with the deblocking filter removed, which is how the artefact is made visible. The floors quoted above are the shipped configuration, replicate padding with the filter on.}

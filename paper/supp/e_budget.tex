@@ -155,7 +155,7 @@ and fitting ln(S/C) against ln u by least squares through the origin gives \Band
 \begin{figure}[t]
 \centering
 \includegraphics[width=\columnwidth]{figures/budget_band_BEST.png}
-\caption{\textbf{The collapse on the second training run.} \textbf{a} Saving against budget, one line per rate, with each rate's floor and saturation point ticked. \textbf{b} The same with the budget axis rescaled onto each rate's own window; dashed is the one-parameter power law. The main paper shows this pair for the pinned checkpoint.}
+\caption{\textbf{The collapse on the second training run.} \textbf{a}, saving against budget, one line per rate, with each rate's floor and saturation point ticked. \textbf{b}, the same with the budget axis rescaled onto each rate's own window; dashed is the one-parameter power law. The main paper shows this pair for the pinned checkpoint.}
 \end{figure}
 
 {\small docs/figures/budget\_band\_BEST.png, drawn by scripts/tradeoff\_figure.py from results/signalled\_BEST\_grid.json and results/saturation\_BEST\_ctc53.json, both on runs/BEST/ckpt\_eval.pth.tar rather than on the pinned checkpoint.}
@@ -163,7 +163,7 @@ and fitting ln(S/C) against ln u by least squares through the origin gives \Band
 \begin{figure}[t]
 \centering
 \includegraphics[width=\columnwidth]{figures/tradeoff.png}
-\caption{\textbf{The trade-off, whole.} \textbf{a} What a budget buys, per rate; the ceiling is \Ceiling\% and q0 reaches it at \SatLow dB. \textbf{b} The same relation inverted, so it reads as what a saving target costs in quality. The budgets the main paper reports are three points on this curve, and the flat right-hand end of each trace is that rate sitting on the ceiling.}
+\caption{\textbf{The trade-off, whole.} \textbf{a}, what a budget buys, per rate; the ceiling is \Ceiling\% and q0 reaches it at \SatLow dB. \textbf{b}, the same relation inverted, so it reads as what a saving target costs in quality. The budgets the main paper reports are three points on this curve, and the flat right-hand end of each trace is that rate sitting on the ceiling.}
 \end{figure}
 
 \subsection{How weak the replication is}
@@ -194,7 +194,7 @@ the fit form, 1/b from the inverse fit, per rate & 0.326 & 0.459 & 0.133 \\
 \begin{figure}[t]
 \centering
 \includegraphics[width=\columnwidth]{figures/band_sensitivity_PAPER.png}
-\caption{\textbf{The collapse, and what the exponent is sensitive to.} \textbf{a} The rescaled points from two sweeps of the pinned checkpoint, filled circles for the 106-frame grid and open triangles for the \NumSeq-frame frontier, with the power law fitted to each over the shaded window. The two sweeps of one checkpoint do not lie on one curve. \textbf{b} The exponent under one change at a time, with the vertical line at the exponent of the first row of Table 5. The change of checkpoint, which the main paper reads as a finding, is the smallest of the six.}
+\caption{\textbf{The collapse, and what the exponent is sensitive to.} \textbf{a}, the rescaled points from two sweeps of the pinned checkpoint, filled circles for the 106-frame grid and open triangles for the \NumSeq-frame frontier, with the power law fitted to each over the shaded window. The two sweeps of one checkpoint do not lie on one curve. \textbf{b}, the exponent under one change at a time, with the vertical line at the exponent of the first row of Table 5. The change of checkpoint, which the main paper reads as a finding, is the smallest of the six.}
 \end{figure}
 
 {\small docs/figures/band\_sensitivity\_PAPER.png, drawn by scripts/supp\_fig\_band\_sensitivity.py, which imports the fit from this section's module so that the figure and the table cannot disagree. Sources as for the table above.}

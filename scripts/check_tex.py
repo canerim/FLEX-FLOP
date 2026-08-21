@@ -50,6 +50,32 @@ KNOWN = {
 }
 
 
+def panel_commas() -> list[str]:
+    """Panel labels are set "a, the decoded frame": letter, comma, lower case.
+
+    Sixteen captions had "<b>a</b> The decoded frame", which reads as a
+    sentence that begins with a stray letter. The built PDF cannot be checked
+    for this -- the bold run is gone by then -- so it is checked at the source,
+    where <b>a</b> is unambiguous. A label followed by a colon, an en-dash or a
+    second label is a deliberate grouping and passes; a label preceded by a
+    word is a reference to a panel in running text, not a label.
+    """
+    import glob
+    out = []
+    for f in [str(ROOT / "scripts/build_pdf.py")] + sorted(
+            glob.glob(str(ROOT / "scripts/supp/*.py"))):
+        s = open(f).read()
+        for m in re.finditer(r"(.{0,14})<b>([a-f])</b>(.)", s):
+            before, letter, after = m.groups()
+            if after in ",:\u2013-" or after == "<":
+                continue
+            if re.search(r"(?:panel|panels|axis of|and|in)\s+$", before):
+                continue
+            out.append(f"{Path(f).name}: <b>{letter}</b> not followed by a "
+                       f"comma")
+    return out
+
+
 def main():
     macros = set(re.findall(
         r"\\newcommand\{\\(\w+)\}",
@@ -157,6 +183,10 @@ def check_refs_and_bib(root):
     for b in _nopunct:
         print(f"     display equation ends without punctuation: {b}")
 
+    _panels = panel_commas()
+    for b in _panels:
+        print(f"     {b}")
+
     for r in dangling:
         print(f"     DANGLING \\ref{{{r}}} -- prints as ??")
     for k in uncited:
@@ -164,7 +194,7 @@ def check_refs_and_bib(root):
     print(f"  refs: {len(refs)} used, {len(dangling)} dangling; "
           f"bib: {len(uncited)} uncited")
     return (len(dangling) + len(uncited) + len(_abs)
-            + len(_uneq) + len(_nopunct) + len(set(_dbl)))
+            + len(_uneq) + len(_nopunct) + len(set(_dbl)) + len(_panels))
 
 
 if __name__ == "__main__":

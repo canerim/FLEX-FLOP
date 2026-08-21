@@ -427,9 +427,9 @@ def content(k):
           r"and Section " + sec + r".5 takes apart.")
 
     k.fig("budget_band_BEST.png",
-          r"<b>The collapse on the second training run.</b> <b>a</b> Saving "
+          r"<b>The collapse on the second training run.</b> <b>a</b>, saving "
           r"against budget, one line per rate, with each rate's floor and "
-          r"saturation point ticked. <b>b</b> The same with the budget axis "
+          r"saturation point ticked. <b>b</b>, the same with the budget axis "
           r"rescaled onto each rate's own window; dashed is the "
           r"one-parameter power law. The main paper shows this pair for the "
           r"pinned checkpoint.")
@@ -442,9 +442,9 @@ def content(k):
 
     # ---------------------------------------------------------------- E.5
     k.fig("tradeoff.png",
-          "<b>The trade-off, whole.</b> <b>a</b> What a budget buys, per "
+          "<b>The trade-off, whole.</b> <b>a</b>, what a budget buys, per "
           "rate; the ceiling is \\Ceiling% and q0 reaches it at \\SatLow dB. "
-          "<b>b</b> The same relation inverted, so it reads as what a saving "
+          "<b>b</b>, the same relation inverted, so it reads as what a saving "
           "target costs in quality. The budgets the main paper reports are "
           "three points on this curve, and the flat right-hand end of each "
           "trace is that rate sitting on the ceiling.")
@@ -561,11 +561,11 @@ def content(k):
 
     k.fig("band_sensitivity_PAPER.png",
           r"<b>The collapse, and what the exponent is sensitive to.</b> "
-          r"<b>a</b> The rescaled points from two sweeps of the pinned "
+          r"<b>a</b>, the rescaled points from two sweeps of the pinned "
           r"checkpoint, filled circles for the 106-frame grid and open "
           r"triangles for the \NumSeq-frame frontier, with the power law "
           r"fitted to each over the shaded window. The two sweeps of one "
-          r"checkpoint do not lie on one curve. <b>b</b> The exponent under "
+          r"checkpoint do not lie on one curve. <b>b</b>, the exponent under "
           r"one change at a time, with the vertical line at the exponent of "
           r"the first row of Table " + str(k.peek_tbl() - 1) + r". The change "
           r"of checkpoint, which the main paper reads as a finding, is the "

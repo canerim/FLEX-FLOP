@@ -609,8 +609,13 @@ if trows:
         cells += [f"{r_['beta_test']:.0f}",
                   f"{r_['test_saving_pct_measured']:.1f}",
                   f"{r_['test_db']:.3f}",
+                  # tc == 0.0 printed "$+-0.0$": the else branch formatted
+                  # -0.0, which Python renders with its sign. Every value in
+                  # this column is a hundredth of a point or less, which is the
+                  # finding, so it is printed at two decimals and exact zero is
+                  # printed without a sign.
                   "--" if tc is None else
-                  (f"$-{tc:.1f}$" if tc > 0 else f"$+{-tc:.1f}$")]
+                  ("$0.00$" if abs(tc) < 5e-3 else f"${-tc:+.2f}$")]
         lines.append(" & ".join(cells) + r" \\")
     lines += [r"\bottomrule", r"\end{tabular}"]
     w("beta_heldout.tex", "\n".join(lines))
