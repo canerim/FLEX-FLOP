@@ -17,6 +17,7 @@ while true; do
   CHK=$(echo "$OUT" | grep -oE '[0-9]+/[0-9]+ prose claims' | head -1 | sed 's/ prose claims//')
   TW=$(echo "$OUT" | grep -oE 'check_twins: [A-Za-z0-9 ()]+' | head -1 | sed 's/check_twins: //')
   PR=$(echo "$OUT" | grep -oE 'prose_audit: [A-Za-z0-9 ()]+' | head -1 | sed 's/prose_audit: //')
+  TX=$(echo "$OUT" | grep -oE 'check_tex: [A-Za-z0-9 ()]+' | head -1 | sed 's/check_tex: //')
   MAIN=$(pdfinfo paper/FLEX-UF.pdf 2>/dev/null | awk '/Pages/{print $2}')
   SUPP=$(pdfinfo paper/FLEX-UF-supp.pdf 2>/dev/null | awk '/Pages/{print $2}')
   OURS=$(nvidia-smi --query-compute-apps=pid --format=csv,noheader 2>/dev/null \
@@ -33,6 +34,6 @@ while true; do
          [ -n "$f" ] && tail -1 "$f" 2>/dev/null | grep -o '"epoch": [0-9]*' | head -1 \
            | grep -o '[0-9]*$' | sed "s/^/${t:0:4}/"
        done | tr '\n' ' ')
-  echo "$TS  fix $FIX | claims $CHK twins $TW prose $PR | paper ${MAIN}p supp ${SUPP}p | gpu ours=$OURS others=$OTHER | newest ckpt $AGE | ep $EP"
+  echo "$TS  fix $FIX | claims $CHK twins $TW tex $TX prose $PR | paper ${MAIN}p supp ${SUPP}p | gpu ours=$OURS others=$OTHER | newest ckpt $AGE | ep $EP"
   sleep "$INTERVAL"
 done
