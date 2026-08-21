@@ -1,6 +1,6 @@
 {
   "ckpt": "runs/RECIPE512/ckpt_PAPER.pth.tar",
-  "ckpt_epoch": 0,
+  "ckpt_epoch": 4,
   "ceiling_pct": 39.12455439567566,
   "exit_j": 2,
   "cost_j": 0.6087544560432434,
@@ -9,56 +9,56 @@
   "rows": [
     {
       "qp": 0,
-      "saturation_db": 0.17913864257763018,
-      "floor_db": 0.03606705714614605,
+      "saturation_db": 0.13905803718656864,
+      "floor_db": 0.026302311077432812,
       "saving_pct_vs_release": 39.12455439567566
     },
     {
       "qp": 8,
-      "saturation_db": 0.19448017223544842,
-      "floor_db": 0.04015886639508436,
+      "saturation_db": 0.1522844946187622,
+      "floor_db": 0.02912696606462013,
       "saving_pct_vs_release": 39.12455439567566
     },
     {
       "qp": 16,
-      "saturation_db": 0.21938385153716466,
-      "floor_db": 0.04524077130657322,
+      "saturation_db": 0.17203353507057675,
+      "floor_db": 0.03370456311430009,
       "saving_pct_vs_release": 39.12455439567566
     },
     {
       "qp": 24,
-      "saturation_db": 0.25135549055939577,
-      "floor_db": 0.05033574325366402,
+      "saturation_db": 0.19739489654465667,
+      "floor_db": 0.03909658268972669,
       "saving_pct_vs_release": 39.12455439567566
     },
     {
       "qp": 32,
-      "saturation_db": 0.28190643185714503,
-      "floor_db": 0.05429050696240562,
+      "saturation_db": 0.21777989019481642,
+      "floor_db": 0.04246583397342068,
       "saving_pct_vs_release": 39.12455439567566
     },
     {
       "qp": 40,
-      "saturation_db": 0.30491188140410297,
-      "floor_db": 0.058629018140359306,
+      "saturation_db": 0.23475867351692803,
+      "floor_db": 0.04507647756979151,
       "saving_pct_vs_release": 39.12455439567566
     },
     {
       "qp": 48,
-      "saturation_db": 0.3329586906815475,
-      "floor_db": 0.06223638876745442,
+      "saturation_db": 0.25259073022401557,
+      "floor_db": 0.04788450048006368,
       "saving_pct_vs_release": 39.12455439567566
     },
     {
       "qp": 56,
-      "saturation_db": 0.365305484746987,
-      "floor_db": 0.0664810160754846,
+      "saturation_db": 0.27040059520107396,
+      "floor_db": 0.050768769293461205,
       "saving_pct_vs_release": 39.12455439567566
     },
     {
       "qp": 63,
-      "saturation_db": 0.3955302557574128,
-      "floor_db": 0.07158995953933248,
+      "saturation_db": 0.2879855834509967,
+      "floor_db": 0.05420672011403543,
       "saving_pct_vs_release": 39.12455439567566
     }
   ]

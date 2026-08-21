@@ -27,6 +27,38 @@ from flexuf.model import FlexUFIntra, load_flexuf_state  # noqa: E402
 from flexuf.reference import reference_for        # noqa: E402
 
 
+
+class _Routed(torch.nn.Module):
+    """fvcore calls model(*inputs); the decoder wants an exit map by keyword."""
+
+    def __init__(self, dec, exit_map=None, full=False):
+        super().__init__()
+        self.dec, self.exit_map, self.full = dec, exit_map, full
+
+    def forward(self, y, q):
+        if self.full:
+            return self.dec.forward_full(y, q)
+        return self.dec(y, q, exit_map=self.exit_map)
+
+
+def _fvcore_macs(dec, y, q, exit_map=None, full=False):
+    """MACs of one decode, counted by fvcore. None if it is not installed.
+
+    Despite the name, FlopCountAnalysis counts multiply-accumulates, which is
+    MacMeter's convention too, so the two are directly comparable with no
+    factor of two involved.
+    """
+    try:
+        from fvcore.nn import FlopCountAnalysis
+    except ImportError:
+        return None
+    fa = FlopCountAnalysis(_Routed(dec, exit_map=exit_map, full=full), (y, q))
+    fa.unsupported_ops_warnings(False)
+    fa.uncalled_modules_warnings(False)
+    return float(fa.total())
+
+
+
 def main(argv):
     ap = argparse.ArgumentParser()
     ap.add_argument("--ckpt", default="runs/RECIPE512/ckpt_PAPER.pth.tar")
@@ -62,6 +94,11 @@ def main(argv):
         with MacMeter(ref) as rel:
             ref.dec.forward_full(y, q)
         released = rel.total
+        # The same count from fvcore, which is nobody here's code. It agrees
+        # to six decimals on every exit (results/mac_crosscheck.json), so this
+        # changes no number; it is here so the ceiling the paper prints is a
+        # number a reader can reproduce with a standard tool.
+        released_fv = _fvcore_macs(ref.dec, y, q, full=True)
 
         model = exit_costs(cfg, "head")
         print(f"  {W}x{H}, {n_tiles} tiles, released decode "
@@ -74,9 +111,18 @@ def main(argv):
             with MacMeter(net.dec) as m:
                 net.dec(y, q, exit_map=em)
             meas = m.total / released
+            meas_fv = (_fvcore_macs(net.dec, y, q, exit_map=em) / released_fv
+                       if released_fv else None)
+            if meas_fv is not None and abs(meas_fv - meas) > 1e-4:
+                raise SystemExit(
+                    f"exit {k}: MacMeter says {meas:.6f} of a released "
+                    f"decode, fvcore says {meas_fv:.6f}. The two counters "
+                    f"have drifted and the ceiling is not trustworthy.")
             # exit_costs returns a tensor; json wants floats.
             mk = float(model[k])
             row = {"exit": k, "modelled": mk, "measured": float(meas),
+                   "measured_fvcore": (float(meas_fv) if meas_fv is not None
+                                       else None),
                    "ceiling_modelled_pct": 100 * (1 - mk),
                    "ceiling_measured_pct": 100 * (1 - float(meas))}
             out["exits"].append(row)

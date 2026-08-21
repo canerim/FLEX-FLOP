@@ -1,0 +1,70 @@
+{
+  "ckpt": "runs/RECIPE512/ckpt_PAPER.pth.tar",
+  "qp": 32,
+  "size": "512x512",
+  "n_tiles": 4,
+  "split_depth": 2,
+  "num_exits": 6,
+  "counter_a": "flexuf.measure.MacMeter",
+  "counter_b": "fvcore.nn.FlopCountAnalysis",
+  "rows": [
+    {
+      "exit": 0,
+      "macmeter": 35100819456.0,
+      "fvcore": 35100819456.0,
+      "saving_pct_macmeter": 38.327506874300475,
+      "saving_pct_fvcore": 38.327506874300475
+    },
+    {
+      "exit": 1,
+      "macmeter": 35100819456.0,
+      "fvcore": 35100819456.0,
+      "saving_pct_macmeter": 38.327506874300475,
+      "saving_pct_fvcore": 38.327506874300475
+    },
+    {
+      "exit": 2,
+      "macmeter": 35100819456.0,
+      "fvcore": 35100819456.0,
+      "saving_pct_macmeter": 38.327506874300475,
+      "saving_pct_fvcore": 38.327506874300475
+    },
+    {
+      "exit": 3,
+      "macmeter": 43584847872.0,
+      "fvcore": 43584847872.0,
+      "saving_pct_macmeter": 23.42098354313191,
+      "saving_pct_fvcore": 23.42098354313191
+    },
+    {
+      "exit": 4,
+      "macmeter": 49652957184.0,
+      "fvcore": 49652957184.0,
+      "saving_pct_macmeter": 12.759254397479658,
+      "saving_pct_fvcore": 12.759254397479658
+    },
+    {
+      "exit": 5,
+      "macmeter": 57533005824.0,
+      "fvcore": 57533005824.0,
+      "saving_pct_macmeter": -1.0860703873098343,
+      "saving_pct_fvcore": -1.0860703873098343
+    }
+  ],
+  "released": {
+    "macmeter": 56914870272.0,
+    "fvcore": 56914870272.0
+  },
+  "ceiling_pct_macmeter": 38.327506874300475,
+  "ceiling_pct_fvcore": 38.327506874300475,
+  "ceiling_diff_points": 0.0,
+  "unhandled_ops": {
+    "aten::pixel_shuffle": 14,
+    "aten::mul": 353,
+    "aten::sigmoid": 158,
+    "aten::add": 400,
+    "aten::pad": 30,
+    "aten::neg": 24,
+    "aten::repeat": 6
+  }
+}

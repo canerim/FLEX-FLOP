@@ -835,7 +835,9 @@ def content(colw, fullw):
            r"the hook count.")
     figure("allocation.png",
            r"<b>Figure 5. Where the tiles actually go</b>, at the 0.1 dB "
-           r"budget, pooled over the whole test set. At the lowest rate two "
+           r"budget, pooled over the whole test set: the share of tiles taking "
+           r"each exit, against rate. Exits below the split depth are not "
+           r"drawn because a tile cannot take one. At the lowest rate two "
            r"thirds of tiles take the cheapest available exit; at the highest "
            r"only a fifth do and a quarter need the deepest. The allocation is "
            r"not degenerate at either end, which is what makes the choice "
@@ -2568,11 +2570,25 @@ def content(colw, fullw):
         r"less saving for slightly less distortion, and it sends nothing, so "
         r"the \MapBits bits A spends are the whole of the difference in what "
         r"reaches the file.")
+    figure("bdrate.png",
+           r"<b>Figure N. What the saving costs in rate.</b> BD-rate against "
+           r"the released decoder, against the decoder MACs saved, for both "
+           r"configurations at the three budgets; each point is labelled with "
+           r"the budget that produced it. The star is the released decoder "
+           r"itself: no saving, no cost. Anchored on the same bitstream, so a "
+           r"BD-rate here is the price of decoding one file with fewer "
+           r"operations, not one codec against another.")
     h1("7. Limitations")
     par(r"That result is bounded on four sides: by a cost the method pays and "
         r"cannot yet remove, by the kind of frame it was measured on, by where "
         r"in its training the measured model sits, and by the fact that there "
         r"is one of it. We take them in that order.")
+    figure("training_plateau.png",
+           r"<b>Figure N. The run had not converged.</b> Measured saving at "
+           r"the 0.1 dB budget on the \NumSeq test frames, hook-counted, one "
+           r"point per completed epoch of the reported run. The circled point "
+           r"is the checkpoint this paper reports. The training loss over the "
+           r"same epochs is flat; the supplement shows the two together.")
     par(r"<b>The seam is reduced, and the exact remedy is not usable as it "
         r"stands.</b> The halo exchange removes "
         r"\CoupFloorDropLo–\CoupFloorDropHi% of the floor and is bit-exact at "
@@ -2586,21 +2602,25 @@ def content(colw, fullw):
         r"answer here, because an exit map propagates through the reference "
         r"chain and a shallow tile in one frame is a worse reference for the "
         r"next one.")
-    par(r"<b>The checkpoint is early in its schedule.</b> Every number in "
-        r"this paper is measured on one pinned checkpoint, "
-        r"runs/RECIPE512/ckpt_PAPER.pth.tar, taken at the end of the first "
-        r"pass over the training set. It is pinned because a moving checkpoint "
-        r"was overwritten mid-measurement once, and a paper whose tables come "
-        r"from three different epochs is worse than one whose tables are "
-        r"early. Later checkpoints of the same run improved the measured "
-        r"trade-off, and monotonically. On the same \NumSeq frames at the "
-        r"same budget, with the same hook count, the run reads "
+    par(r"<b>The run had not converged when we measured it.</b> Every number "
+        r"in this paper is measured on one pinned checkpoint, "
+        r"runs/RECIPE512/ckpt_PAPER.pth.tar, taken at the end of epoch "
+        r"\PaperEpoch -- \PaperPasses passes over the training set. It is "
+        r"pinned because a moving checkpoint was overwritten mid-measurement "
+        r"once, and a paper whose tables come from three different epochs is "
+        r"worse than one whose tables are early. On the same \NumSeq frames "
+        r"at the same budget, with the same hook count, the run reads "
         r"\EpochSeries at epochs \EpochFirst to \EpochLatest, a gain of "
-        r"\EpochGain points over the checkpoint this paper reports, and it "
-        r"was still training when we stopped measuring. We report the pinned "
-        r"checkpoint because every table in the paper has to come from one "
-        r"set of weights, and we do not read \EpochGain points as a bound on "
-        r"what a converged run would give.")
+        r"\EpochGain points across the five, and the last of them is the one "
+        r"reported here ([[fig:training_plateau]]). The series had not "
+        r"flattened, so \MeanAtOne% is a lower bound on what this recipe "
+        r"reaches and not an estimate of it. The training loss says otherwise "
+        r"and is the wrong thing to watch: its median is flat from the first "
+        r"epoch on, because the objective is dominated by a deepest exit that "
+        r"is a fine-tune of an already converged decoder, while what improves "
+        r"is the agreement between exits -- a small term in the sum and the "
+        r"whole of what the saving depends on. The supplement plots the two "
+        r"together.")
     par(r"<b>A single decoder.</b> All results are on DCVC-UF's intra decoder. "
         r"Nothing in the method looks specific to it, since the ladder needs "
         r"only a residual trunk with a shared head, but we have not measured a "

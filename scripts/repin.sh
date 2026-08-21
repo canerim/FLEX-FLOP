@@ -15,7 +15,13 @@
 set -euo pipefail
 cd "$HOME/FLEX-UF"
 SRC=${1:?usage: repin.sh <checkpoint>}
-GPU=${GPU:-2}
+# GPU 2 belongs to another account on this machine, and it was the default
+# here for a week. Nothing in this script checks, so the default is now a card
+# this account owns; scripts/gpu.py picks the freest of those when it can.
+GPU=${GPU:-$(./.venv/bin/python -c "
+import sys; sys.path.insert(0, 'scripts')
+import gpu
+print(gpu.pick('cuda:7').replace('cuda:', '') or 7)" 2>/dev/null || echo 7)}
 PY=./.venv/bin/python
 PIN=runs/RECIPE512/ckpt_PAPER.pth.tar
 LOG=results/repin.log
@@ -74,6 +80,10 @@ run $PY scripts/ceiling_measured.py --ckpt "$PIN" --device cuda:0 \
 # 8. the bitrate BD-Rate is built from
 run $PY -u scripts/why_qp.py --ckpt "$PIN" --device cuda:0 \
     --out results/why_qp_PAPER.json
+# 8b. per-component rate-distortion. Reads the sweep from step 2 for its
+#     operating points, so it has to come after it.
+run $PY -u scripts/rd_yuv.py --ckpt "$PIN" --device cuda:0 \
+    --out results/rd_yuv_PAPER.json
 
 # 9. figures that read the checkpoint rather than a results file
 for F in patchify_figure pipeline_stage_figs seam_repair_grid_figure; do
@@ -84,6 +94,11 @@ done
 $PY scripts/paper_metrics.py    >>"$LOG" 2>&1
 $PY scripts/make_paper_tables.py >>"$LOG" 2>&1
 $PY scripts/nature_plots.py      >>"$LOG" 2>&1
+# The curves against the released decoder, and the BD trade-off, both read
+# results files that step 10 has just rewritten.
+$PY scripts/rd_vs_uf_figure.py   >>"$LOG" 2>&1
+$PY scripts/bd_figure.py --layout wide   --out docs/figures/bdrate_wide.png >>"$LOG" 2>&1
+$PY scripts/bd_figure.py --layout column --out docs/figures/bdrate.png      >>"$LOG" 2>&1
 $PY scripts/spread_figs.py       >>"$LOG" 2>&1
 $PY scripts/paper_figures.py     >>"$LOG" 2>&1
 $PY scripts/build_pdf.py         2>&1 | tee -a "$LOG"

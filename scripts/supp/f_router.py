@@ -619,10 +619,38 @@ def content(k):
         "carried it as evidence of weak complementarity. Re-measuring on the "
         "pinned weights removed it. The head in that measurement had been "
         "trained against whichever weights runs/RECIPE512/ckpt_eval.pth.tar "
-        "held at the time, which is a moving pointer, so we cannot say from "
-        "the two files alone whether the gain was the cost model or the "
-        "mismatch. Every router number in this document is measured on the "
-        "pinned checkpoint for that reason.")
+        "held at the time, which is a moving pointer, so the first suspicion "
+        "was that the head had simply been measured against the weights it "
+        "was fitted to. It had not. Repeating the sweep on the epoch-1 pin "
+        "with the corrected cost model gives w=0 at every rate as well "
+        "(results/combined_RECIPE512_b01_e1.json), so the absence of "
+        "complementarity survives a change of checkpoint and the gain was "
+        "never a property of the two signals. What did change between the two "
+        "measurements is the cost model: the earlier file predates the "
+        "correction to the exit adapter's cost, and under the wrong cost an "
+        "exit assignment can be scored better than it is. Every router number "
+        "in this document is measured on the pinned checkpoint, after that "
+        "correction, for this reason.")
+    # Read from the two files rather than typed, so the sentence moves if
+    # either sweep is repeated.
+    def _w0(_f):
+        _d = k.J(_f)
+        if not _d:
+            return {}
+        return {r["qp"]: r["saving_pct_vs_release"] for r in _d["rows"]
+                if abs(r["gamma"]) < 1e-9}
+    _e0 = _w0("combined_RECIPE512_b01.json")
+    _e1 = _w0("combined_RECIPE512_b01_e1.json")
+    if _e0 and _e1:
+        _lo, _hi = min(_e0), max(_e0)
+        k.par(
+            f"The same control makes a second point in passing. At w=0 the "
+            f"epoch-1 ladder saves more than the epoch-0 one at every rate -- "
+            f"{_e1[_lo]:.1f} against {_e0[_lo]:.1f} at q{_lo} and "
+            f"{_e1[_hi]:.1f} against {_e0[_hi]:.1f} at q{_hi} -- which is the "
+            f"epoch series of Section 5 seen through a different measurement. "
+            f"The checkpoint the paper reports is the first one, and it is the "
+            f"weakest one we have.")
     k.tbl("blend",
           "<b>Blending the two decoder-side signals</b> at 0.1 dB, both "
           "normalised to unit mean, with the weight running from the "

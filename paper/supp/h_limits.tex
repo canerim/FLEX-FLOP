@@ -146,7 +146,7 @@ The exactness claim for the halo exchange is worth writing out, because it is th
 
 \subsection{The checkpoints, and what a later one measures}
 
-Every table in this supplement is measured on runs/RECIPE512/ckpt\_PAPER.pth.tar, which is the first epoch boundary of a run that has since passed three. The per-checkpoint watcher measured the epochs in between on the same \NumSeq sequences at the same budget through the same code path, and Table 5 is what they say.
+Every table in this supplement is measured on runs/RECIPE512/ckpt\_PAPER.pth.tar, taken at the end of epoch 4. The per-checkpoint watcher measured the earlier epochs of the same run on the same \NumSeq sequences at the same budget through the same code path, and Table 5 is what they say.
 
 \begin{table}[t]
 \centering
@@ -155,18 +155,20 @@ Every table in this supplement is measured on runs/RECIPE512/ckpt\_PAPER.pth.tar
 \toprule
 checkpoint & q0 & q16 & q32 & q48 & q63 & mean \\
 \midrule
-RECIPE512, epoch 0, pinned & 29.2 & 25.0 & 20.4 & 17.9 & 15.2 & 21.5 \\
-RECIPE512, epoch 1 & 33.5 & 29.3 & 23.8 & 21.4 & 18.4 & 25.3 \\
+RECIPE512, epoch 0 & 29.2 & 25.0 & 20.3 & 17.8 & 15.2 & 21.5 \\
+RECIPE512, epoch 1 & 30.1 & 26.4 & 21.4 & 19.4 & 16.8 & 22.8 \\
 RECIPE512, epoch 2 & 32.8 & 28.1 & 22.5 & 19.9 & 16.9 & 24.0 \\
+RECIPE512, epoch 3 & 33.2 & 29.5 & 24.2 & 22.4 & 19.9 & 25.8 \\
+RECIPE512, epoch 4, pinned & 33.7 & 30.1 & 26.1 & 24.8 & 23.5 & 27.6 \\
 BEST, epoch 1 & 34.0 & 27.7 & 22.3 & 19.8 & 17.2 & 24.2 \\
 BEST, epoch 2 & 29.4 & 23.2 & 18.0 & 14.5 & 11.5 & 19.3 \\
 BEST, epoch 3 & 30.8 & 24.7 & 19.2 & 15.6 & 12.2 & 20.5 \\
 \bottomrule
 \end{tabular}}
-\caption{\textbf{Compute saved at the 0.1 dB budget as training continues.} RECIPE512 and BEST are two runs of one configuration, same architecture and same recipe, differing only in the draw. The pinned row is what the paper reports. Epoch 2 of the same run is hook-counted like the pinned row and is 2.5 points ahead of it; epoch 1 reads 3.7 ahead in a file that carries no hook count and is therefore about 0.8 points optimistic against the other rows. Either way the paper is quoting a checkpoint behind the run that produced it. Two measurements are not enough to call epoch 1 a peak, and moving the headline there would be choosing the better of two rather than reporting the latest.}
+\caption{\textbf{Compute saved at the 0.1 dB budget as training continues.} RECIPE512 and BEST are two runs of one configuration, same architecture and same recipe, differing only in the draw. The pinned row is what the paper reports, and it is the last epoch the run had completed when we stopped. Every RECIPE512 row is hook-counted on the same \NumSeq sequences, so the differences between them carry no convention offset. The series rises at every rate and at every step -- 21.5\% to 27.6\% on the set mean -- and the gain is larger at the high rates than the low ones, which is where the method had the least to give: q63 moves by 8.3 points against 4.5 at q0. Nothing here has flattened.}
 \end{table}
 
-{\small results/signalled\_RECIPE512\_ctc53.json on runs/RECIPE512/ckpt\_PAPER.pth.tar, and results/signalled\_RECIPE512\_0819\_0556.json, results/signalled\_RECIPE512\_0820\_0140.json, results/signalled\_BEST\_ctc53.json, results/signalled\_BEST\_0819\_1050.json and results/signalled\_BEST\_0820\_0841.json on the ckpt\_eval and ckpt\_step files of their runs, which the watchers overwrite; each records its own epoch. Savings are hook-counted where the file carries a hook count and modelled where it does not, which applies to the two epoch-1 rows and makes them optimistic by about 0.8 points against the rest. A difference between two rows that agree about the convention carries none of that offset, and the two comparisons this section draws conclusions from, epoch 0 against epoch 2 and RECIPE512 against BEST at epoch 2, are both of that kind.}
+{\small The RECIPE512 rows are every results/signalled\_RECIPE512\_*.json over the full \NumSeq set that carries a hook count, one row per epoch, selected by savings.epoch\_series -- the same rule the main paper's macros and the plateau figure use. The BEST rows are results/signalled\_BEST\_ctc53.json, results/signalled\_BEST\_0819\_1050.json and results/signalled\_BEST\_0820\_0841.json on the ckpt\_eval and ckpt\_step files of that run, which the watchers overwrite; each records its own epoch. None of the three carries a hook count, so they are on one basis with each other and about 0.8 points optimistic against every RECIPE512 row. Comparisons within either block carry none of that offset; comparisons across the two do.}
 
 One condition governs any comparison between measurements made at different times. The test set grew from 40 sequences to 53 when MCL-JCV and the two smallest HEVC classes were added, and eight tiles at 832$\times$480 or two at 416$\times$240 save nothing like a 1080p frame does, so a saving measured on the smaller set is several points above one measured on the larger at the same checkpoint. Every row of this section is on \NumSeq sequences.
 
@@ -213,7 +215,7 @@ RECIPE512, pinned & 0.0051 & 0.0145 & 0.0362 & 53 \\
 RECIPE512, later & 0.0004 & 0.0114 & 0.0283 & 53 \\
 BEST & 0.0022 & 0.0082 & 0.0175 & 53 \\
 BEST128 & 0.0036 & 0.0104 & 0.0216 & 53 \\
-FINE12 & 0.0056 & 0.0253 & 0.0616 & 53 \\
+FINE12 & 0.0073 & 0.0255 & 0.0617 & 53 \\
 VERBATIM, no anchor term & 0.1101 & 0.1241 & 0.1594 & 40 \\
 \bottomrule
 \end{tabular}}
@@ -228,7 +230,7 @@ There is a structural fix and it was measured and rejected, which is row five of
 
 \subsection{How much of this can be repeated exactly}
 
-Every measurement file records the checkpoint it was taken on, and there are three kinds of answer. 51 of the files these two documents read name a checkpoint that does not move -- a pin or a warm start -- so the measurement can be repeated exactly. Another 22 name one the watcher overwrites but record the epoch or step it was at, so the weights are identified even though the path is not. The remaining 17 record neither, and their paths now point at whatever those runs have trained to since.
+Every measurement file records the checkpoint it was taken on, and there are three kinds of answer. 52 of the files these two documents read name a checkpoint that does not move -- a pin or a warm start -- so the measurement can be repeated exactly. Another 21 name one the watcher overwrites but record the epoch or step it was at, so the weights are identified even though the path is not. The remaining 17 record neither, and their paths now point at whatever those runs have trained to since.
 
 That last group is not hidden -- several of the files in it are named as such where they are used, and the epoch tables of this section exist because of it -- but it is worth stating once as a number rather than as remarks. Nothing in the main paper's headline is in it: the pinned checkpoint carries every table the paper reports. What is in it is the adapter and coupling ablations, the hybrid sweeps of configuration C, the wall-clock files and the anchor drift of the runs other than the pinned one. Repeating those exactly would need the checkpoints back, which is why scripts/check\_provenance.py refuses to let the count grow.
 

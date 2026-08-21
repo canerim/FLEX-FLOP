@@ -267,7 +267,7 @@ exit the oracle sends it to, at $0.1\dB$.}
 \begin{figure}[t]
 \centering
 \includegraphics[width=\columnwidth]{figures/allocation.png}
-\caption{\textbf{Where the tiles actually go}, at the $0.1\dB$ budget, pooled over the whole test set. At the lowest rate two thirds of tiles take the cheapest available exit; at the highest only a fifth do and a quarter need the deepest.}
+\caption{\textbf{Where the tiles actually go}, at the $0.1\dB$ budget, pooled over the whole test set: the share of tiles taking each exit, against rate. Exits below the split depth are not drawn because a tile cannot take one. At the lowest rate two thirds of tiles take the cheapest available exit; at the highest only a fifth do and a quarter need the deepest.}
 \label{fig:allocation}
 \end{figure}
 
@@ -2338,6 +2338,13 @@ slightly less saving for slightly less distortion, and it sends nothing, so the
 \MapBits\ bits A spends are the whole of the difference in what reaches the
 file.
 
+\begin{figure}[t]
+\centering
+\includegraphics[width=\columnwidth]{figures/bdrate.png}
+\caption{\textbf{What the saving costs in rate.} BD-rate against the released decoder, against the decoder MACs saved, for both configurations at the three budgets; each point is labelled with the budget that produced it. The star is the released decoder itself: no saving, no cost. Anchored on the same bitstream, so a BD-rate here is the price of decoding one file with fewer operations, not one codec against another.}
+\label{fig:bdrate}
+\end{figure}
+
 \section{Limitations}
 That result is bounded on four sides: by a cost the method pays and cannot
 yet remove, by the kind of frame it was measured on, by where in its training
@@ -2345,6 +2352,13 @@ the measured model sits, and by the fact that there is one of it. We take them
 in that order.
 
 \label{sec:limits}
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\columnwidth]{figures/training_plateau.png}
+\caption{\textbf{The run had not converged.} Measured saving at the $0.1\dB$ budget on the \NumSeq\ test frames, hook-counted, one point per completed epoch of the reported run. The circled point is the checkpoint this paper reports. The training loss over the same epochs is flat; the supplement shows the two together.}
+\label{fig:training_plateau}
+\end{figure}
 
 \paragraph{The seam is reduced, and the exact remedy is not usable as it stands.}
 The halo exchange removes \CoupFloorDropLo--\CoupFloorDropHi\% of the floor and
@@ -2363,17 +2377,22 @@ Extending the ladder to inter frames raises a question we do not answer here,
 because an exit map propagates through the reference chain and a shallow tile in
 one frame is a worse reference for the next one.
 
-\paragraph{The checkpoint is early in its schedule.} Every number in this paper
-is measured on one pinned checkpoint, \texttt{runs/RECIPE512/ckpt\_PAPER.pth.tar},
-taken at the end of the first pass over the training set. It is pinned because a
-moving checkpoint was overwritten mid-measurement once, and a paper whose tables
-come from three different epochs is worse than one whose tables are early. Later
-checkpoints of the same run improved the measured trade-off, and monotonically:
-on the same \NumSeq\ frames at the same budget, with the same hook count, the run
-reads \EpochSeries\ at epochs \EpochFirst\ to \EpochLatest, a gain of \EpochGain\ points over the checkpoint this
-paper reports, and it was still training when we stopped measuring. We report the
-pinned checkpoint because every table has to come from one set of weights, and we
-do not read \EpochGain\ points as a bound on what a converged run would give.
+\paragraph{The run had not converged when we measured it.} Every number in this
+paper is measured on one pinned checkpoint, \texttt{runs/RECIPE512/ckpt\_PAPER.pth.tar},
+taken at the end of epoch \PaperEpoch --- \PaperPasses\ passes over the training
+set. It is pinned because a moving checkpoint was overwritten mid-measurement
+once, and a paper whose tables come from three different epochs is worse than one
+whose tables are early. On the same \NumSeq\ frames at the same budget, with the
+same hook count, the run reads \EpochSeries\ at epochs \EpochFirst\ to
+\EpochLatest, a gain of \EpochGain\ points across the five, and the last of them
+is the one reported here (Figure~\ref{fig:training_plateau}). The series had not
+flattened, so \MeanAtOne\% is a lower bound on what this recipe reaches and not
+an estimate of it. The training loss says otherwise and is the wrong thing to
+watch: its median is flat from the first epoch on, because the objective is
+dominated by a deepest exit that is a fine-tune of an already converged decoder,
+while what improves is the agreement between exits --- a small term in the sum
+and the whole of what the saving depends on. The supplement plots the two
+together.
 
 
 \paragraph{A single decoder.} All results are on DCVC-UF's intra decoder. Nothing

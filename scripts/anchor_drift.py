@@ -26,7 +26,7 @@ from flexuf.reference import reference_for
 
 ap = argparse.ArgumentParser()
 ap.add_argument("--ckpt", required=True)
-ap.add_argument("--qps", type=int, nargs="+", default=[0, 32, 63])
+ap.add_argument("--qps", type=int, nargs="+", default=[0, 16, 32, 48, 63])
 ap.add_argument("--frames", type=int, default=1)
 ap.add_argument("--device", default=_gpu("cuda:4"))
 ap.add_argument("--out", default=None,

@@ -92,12 +92,13 @@ def svr(row, D):
     return None if s is None else 100.0 - (100.0 - s) * D
 
 
-def bd_rate(r1, p1, r2, p2) -> float:
+def _bd_rate_ours(r1, p1, r2, p2) -> float:
     """Bjontegaard rate difference (%), curve 2 against anchor curve 1.
 
     Cubic in (log rate, PSNR), integrated over the overlapping PSNR range --
-    the standard formulation (Bjontegaard, VCEG-M33), and the same one the
-    DCVC-UF paper's BD-Rate column uses.
+    the standard formulation (Bjontegaard, VCEG-M33). Kept as the check on the
+    reference implementation rather than as the thing that computes the
+    number; see bd_rate below.
     """
     lr1, lr2 = np.log(r1), np.log(r2)
     p_lo, p_hi = max(min(p1), min(p2)), min(max(p1), max(p2))
@@ -108,6 +109,47 @@ def bd_rate(r1, p1, r2, p2) -> float:
     i1 = np.polyval(np.polyint(c1), [p_lo, p_hi])
     i2 = np.polyval(np.polyint(c2), [p_lo, p_hi])
     return 100.0 * (np.exp((i2[1] - i2[0] - (i1[1] - i1[0])) / (p_hi - p_lo)) - 1)
+
+
+def bd_rate(r1, p1, r2, p2) -> float:
+    """BD-rate from the reference implementation, checked against our own.
+
+    The number the paper prints comes from the `bjontegaard` package (FAU-LMS),
+    which implements VCEG-M33's cubic method along with the Akima and PCHIP
+    variants the JVET common test conditions moved to. A BD-rate is the number
+    a compression reviewer reads first and the last place to be running
+    thirteen lines of our own numpy, so the reference computes it.
+
+    Ours still runs, on every call, and a disagreement larger than a
+    hundredth of a point raises rather than being averaged away or logged. On
+    the paper's curves the two agree to four decimals; the gap between the
+    reference's own three interpolation methods is larger than the gap between
+    either implementation and the other.
+
+    Falls back to ours if the package is absent, and says so, because a build
+    on a machine without it should still produce a paper.
+    """
+    ours = _bd_rate_ours(r1, p1, r2, p2)
+    try:
+        import bjontegaard as _bj
+    except ImportError:
+        global _BD_WARNED
+        if not _BD_WARNED:
+            print("  bjontegaard not installed; BD-rate from our own cubic",
+                  file=sys.stderr)
+            _BD_WARNED = True
+        return ours
+    ref = float(_bj.bd_rate(np.asarray(r1), np.asarray(p1),
+                            np.asarray(r2), np.asarray(p2), method="cubic"))
+    if np.isfinite(ours) and abs(ref - ours) > 0.01:
+        raise SystemExit(
+            f"BD-rate implementations disagree: bjontegaard {ref:+.4f}% "
+            f"against ours {ours:+.4f}%. One of them is wrong and the paper "
+            f"should not be built until it is known which.")
+    return ref
+
+
+_BD_WARNED = False
 
 
 def main():

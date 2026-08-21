@@ -39,11 +39,19 @@ FIG = ROOT / "docs" / "figures"
 
 
 def _bare(ax):
+    """Spines off, and nothing smaller than the house style allows.
+
+    This used to set ticks at 6 pt and axis labels at 5.8, which is below the
+    floor naturestyle applies to every other figure and below Nature's own.
+    These four figures are the first four in the paper, so the first thing a
+    reader met was the smallest type in it.
+    """
     ax.spines["top"].set_visible(False)
     ax.spines["right"].set_visible(False)
-    ax.tick_params(labelsize=6, length=2, width=0.5)
-    ax.xaxis.label.set_size(5.8)
-    ax.yaxis.label.set_size(5.8)
+    ax.tick_params(labelsize=plt.rcParams["xtick.labelsize"],
+                   length=2, width=0.5)
+    ax.xaxis.label.set_size(plt.rcParams["axes.labelsize"])
+    ax.yaxis.label.set_size(plt.rcParams["axes.labelsize"])
     return ax
 
 
@@ -195,6 +203,21 @@ def ladder():
 
 # ------------------------------------------------------ d. where tiles go
 def allocation():
+    """How the exit distribution moves with rate.
+
+    This was a stacked bar and it had three faults. Its legend advertised six
+    exits when the split depth makes the first two unreachable, so two of the
+    six keys named categories that are structurally zero and two of the six
+    shades were spent on them. Stacking put every band except the bottom one
+    on a moving baseline, which is exactly the comparison the figure is for:
+    the claim is that the mass moves deeper as the rate rises, and a reader
+    could not follow any band but the first. And the share was encoded three
+    times over -- bar height, gridded axis, and a number printed inside each
+    segment.
+
+    One line per reachable exit, labelled where it ends, is the same data with
+    the trends legible and nothing drawn that cannot happen.
+    """
     # supp_per_class_budgets.json carries all five rates; the older file has
     # three. Either way take the 0.1 dB rows only: at 0.3 and 0.5 the budget
     # saturates the ladder and every tile sits on the cheapest rung, which is a
@@ -205,36 +228,47 @@ def allocation():
     P = json.loads((RES / _f).read_text())
     rows = {r["qp"]: r for r in P["rows"] if abs(r["budget_db"] - 0.1) < 1e-9}
     qs = sorted(rows)
-    K = len(next(iter(rows.values()))["per_class"].values().__iter__().__next__()["hist"]) \
-        if rows else 6
+    K = len(next(iter(rows[qs[0]]["per_class"].values()))["hist"])
     share = np.zeros((len(qs), K))
     for i, q in enumerate(qs):
         h = np.zeros(K)
         for cl in rows[q]["per_class"].values():
             h += np.array(cl["hist"], dtype=float)
         share[i] = 100 * h / h.sum()
-    fig, ax = plt.subplots(figsize=(ns.W1, 1.12))
+
+    # Only the exits a tile can actually take. The clamp at the split depth
+    # makes the shallower ones structurally empty, and drawing an empty
+    # category invites the reader to wonder where it went.
+    used = [e for e in range(K) if share[:, e].max() > 0]
+    ramp = ["#9ecae1", "#6baed6", "#3182bd", "#08519c", "#08306b", "#041f4a"]
+
+    fig, ax = plt.subplots(figsize=(ns.W1, 1.25))
     _bare(ax)
-    bottom = np.zeros(len(qs))
-    cols = ["#dfe7f3", "#c2d3ea", "#9dbadd", "#6f99cc", "#3f74b5", "#1f4e96"]
-    for e in range(K):
-        ax.bar([str(q) for q in qs], share[:, e], 0.62, bottom=bottom,
-               color=cols[e % len(cols)], lw=0, label=f"exit {e}")
-        for i in range(len(qs)):
-            if share[i, e] > 7:
-                ax.text(i, bottom[i] + share[i, e] / 2, f"{share[i, e]:.0f}",
-                        ha="center", va="center", fontsize=6,
-                        color="white" if e >= 3 else ns.INK)
-        bottom += share[:, e]
+    x = np.arange(len(qs))
+    for n, e in enumerate(used):
+        ax.plot(x, share[:, e], "-o", color=ramp[n % len(ramp)], lw=1.2,
+                ms=3, zorder=3, label=f"exit {e}")
+    # Direct end-labels were the first attempt and the audit refused them: the
+    # four lines converge into 5 points of each other at the highest rate, so
+    # the labels sat on top of one another. The key goes in the upper right,
+    # which no series enters -- the deepest exit reaches 28% and the axis runs
+    # to 70.
+    ax.legend(frameon=False, fontsize=6, ncol=2, handlelength=1.2,
+              columnspacing=0.9, labelspacing=0.25, loc="upper right",
+              borderpad=0)
+    ax.set_xticks(x)
+    ax.set_xticklabels([str(q) for q in qs])
+    ax.set_xlim(-0.15, len(qs) - 1 + 0.12)
+    ax.set_ylim(0, max(70, share.max() * 1.08))
+    ax.set_yticks([0, 20, 40, 60])
     ax.set_xlabel("quality index")
     ax.set_ylabel("share of tiles (%)")
-    ax.set_ylim(0, 100)
-    ax.legend(frameon=False, fontsize=6, ncol=3, handlelength=1.0,
-              columnspacing=0.8, loc="upper center", bbox_to_anchor=(0.5, 1.28),
-              borderpad=0)
+    ax.grid(axis="x", visible=False)
     fig.savefig(FIG / "allocation.png", dpi=500, bbox_inches="tight",
                 pad_inches=0.01, facecolor="white")
     print("  wrote allocation.png")
+    for n, e in enumerate(used):
+        print(f"     exit {e}: " + " ".join(f"{v:5.1f}" for v in share[:, e]))
 
 
 if __name__ == "__main__":

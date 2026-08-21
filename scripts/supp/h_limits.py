@@ -122,6 +122,38 @@ def _at(doc, budget=0.1):
     return out
 
 
+
+def _epoch_rates(k, epoch, n_seq=53, budget=0.1):
+    """{rate: saving} for one epoch of the reported run, hook-counted.
+
+    Same selection as savings.epoch_series -- full test set, hook count only,
+    median where an epoch was measured twice -- but per rate rather than
+    averaged, because the table prints the rates.
+    """
+    import glob as _g
+    import json as _j
+    import statistics as _st
+    from pathlib import Path as _P
+    res = _P(__file__).resolve().parents[2] / "results"
+    per = {}
+    for f in _g.glob(str(res / "signalled_RECIPE512_*.json")):
+        try:
+            d = _j.loads(_P(f).read_text())
+        except Exception:
+            continue
+        if d.get("n_sequences") != n_seq or d.get("ckpt_epoch") != epoch:
+            continue
+        rows = [r for r in d.get("rows", [])
+                if r.get("budget_db") == budget and r.get("budget_reachable")]
+        if not rows or rows[0].get("saving_pct_measured") is None:
+            continue
+        for r in rows:
+            v = _sv(r)
+            if v is not None:
+                per.setdefault(r["qp"], []).append(v)
+    return {q: _st.median(v) for q, v in per.items()}
+
+
 def _mean(d, qps):
     vs = [d[q] for q in qps if q in d]
     return sum(vs) / len(vs) if vs else None
@@ -666,28 +698,42 @@ def content(k):
     k.h2("The checkpoints, and what a later one measures")
 
     e0_40 = k.J("signalled_RECIPE512_0818_0618.json")
-    e1 = k.J("signalled_RECIPE512_0819_0556.json")
-    e2 = k.J("signalled_RECIPE512_0820_0140.json")
     b1 = k.J("signalled_BEST_ctc53.json")
     b2 = k.J("signalled_BEST_0819_1050.json")
     b3 = k.J("signalled_BEST_0820_0841.json")
 
     P = _at(sig)
-    E1, E2 = _at(e1), _at(e2)
     B1, B2, B3 = _at(b1), _at(b2), _at(b3)
 
+    # Every completed epoch of the reported run, by the one rule: the full
+    # test set, the hook count, the median where an epoch was measured twice.
+    # The rows used to be three files named by hand, one of which carried no
+    # hook count and had to be disclosed as optimistic in its own caption.
+    # There is a hook-counted file for every epoch now, and the rule that
+    # picks them is the one make_paper_tables and the plateau figure use, so
+    # the three cannot drift apart.
+    import sys as _sys
+    from pathlib import Path as _P
+    _sys.path.insert(0, str(_P(__file__).resolve().parents[1]))
+    from savings import epoch_series as _es
+    _ser = _es()
+    _pe = int(k.macro("PaperEpoch"))
+
     k.par(
-        "Every table in this supplement is measured on " + PINNED + ", which "
-        "is the first epoch boundary of a run that has since passed three. "
-        "The per-checkpoint watcher measured the epochs in between on the "
-        "same \\NumSeq sequences at the same budget through the same code "
-        "path, and Table " + str(k.peek_tbl()) + " is what they say.")
+        "Every table in this supplement is measured on " + PINNED + ", taken "
+        f"at the end of epoch {_pe}. The per-checkpoint watcher measured the "
+        "earlier epochs of the same run on the same \\NumSeq sequences at "
+        "the same budget through the same code path, and Table "
+        + str(k.peek_tbl()) + " is what they say.")
 
     rows = [["checkpoint"] + [f"q{q}" for q in QPS] + ["mean"]]
-    for lab, d in (("RECIPE512, epoch 0, pinned", P),
-                   ("RECIPE512, epoch 1", E1),
-                   ("RECIPE512, epoch 2", E2),
-                   ("BEST, epoch 1", B1),
+    for _e in sorted(_ser):
+        _d = _epoch_rates(k, _e)
+        _lab = (f"RECIPE512, epoch {_e}, pinned" if _e == _pe
+                else f"RECIPE512, epoch {_e}")
+        rows.append([_lab] + [_f(_d[q], 1) if q in _d else "-" for q in QPS]
+                    + [_f(_ser[_e], 1)])
+    for lab, d in (("BEST, epoch 1", B1),
                    ("BEST, epoch 2", B2),
                    ("BEST, epoch 3", B3)):
         rows.append([lab] + [_f(d[q], 1) if q in d else "-" for q in QPS]
@@ -697,31 +743,31 @@ def content(k):
         "<b>Compute saved at the 0.1 dB budget as training continues.</b> "
         "RECIPE512 and BEST are two runs of one configuration, same "
         "architecture and same recipe, differing only in the draw. The "
-        "pinned row is what the paper reports. Epoch 2 of the same run is "
-        f"hook-counted like the pinned row and is "
-        f"{_mean(E2, QPS) - _mean(P, QPS):.1f} points ahead of it; epoch 1 "
-        f"reads {_mean(E1, QPS) - _mean(P, QPS):.1f} ahead in a file that "
-        f"carries no hook count and is therefore about {model_offset:.1f} "
-        f"points optimistic against the other rows. Either way the paper is "
-        f"quoting a checkpoint behind the run that produced it. Two "
-        "measurements are not enough to call epoch 1 a peak, and moving the "
-        "headline there would be choosing the better of two rather than "
-        "reporting the latest.")
-    k.note("results/signalled_RECIPE512_ctc53.json on " + PINNED + ", and "
-           "results/signalled_RECIPE512_0819_0556.json, "
-           "results/signalled_RECIPE512_0820_0140.json, "
+        "pinned row is what the paper reports, and it is the last epoch the "
+        f"run had completed when we stopped. Every RECIPE512 row is "
+        f"hook-counted on the same \\NumSeq sequences, so the differences "
+        f"between them carry no convention offset. The series rises at every "
+        f"rate and at every step -- {_ser[min(_ser)]:.1f}% to "
+        f"{_ser[max(_ser)]:.1f}% on the set mean -- and the gain is larger at "
+        f"the high rates than the low ones, which is where the method had the "
+        f"least to give: q63 moves by "
+        f"{_epoch_rates(k, max(_ser))[63] - _epoch_rates(k, min(_ser))[63]:.1f} "
+        f"points against "
+        f"{_epoch_rates(k, max(_ser))[0] - _epoch_rates(k, min(_ser))[0]:.1f} "
+        f"at q0. Nothing here has flattened.")
+    k.note("The RECIPE512 rows are every results/signalled_RECIPE512_*.json "
+           "over the full \\NumSeq set that carries a hook count, one row "
+           "per epoch, selected by savings.epoch_series -- the same rule the "
+           "main paper's macros and the plateau figure use. The BEST rows are "
            "results/signalled_BEST_ctc53.json, "
            "results/signalled_BEST_0819_1050.json and "
            "results/signalled_BEST_0820_0841.json on the ckpt_eval and "
-           "ckpt_step files of their runs, which the watchers overwrite; each "
-           "records its own epoch. Savings are hook-counted where the file "
-           f"carries a hook count and modelled where it does not, which "
-           f"applies to the two epoch-1 rows and makes them optimistic by "
-           f"about {model_offset:.1f} points against the rest. A difference "
-           f"between two rows that agree about the convention carries none "
-           f"of that offset, and the two comparisons this section draws "
-           f"conclusions from, epoch 0 against epoch 2 and RECIPE512 against "
-           f"BEST at epoch 2, are both of that kind.")
+           "ckpt_step files of that run, which the watchers overwrite; each "
+           "records its own epoch. None of the three carries a hook count, so "
+           f"they are on one basis with each other and about "
+           f"{model_offset:.1f} points optimistic against every RECIPE512 "
+           f"row. Comparisons within either block carry none of that offset; "
+           f"comparisons across the two do.")
 
     k.par(
         f"One condition governs any comparison between measurements made at "

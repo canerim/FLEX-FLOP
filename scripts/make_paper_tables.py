@@ -1592,6 +1592,27 @@ try:
 except Exception as _e:
     print("   checkpoint series:", _e)
 
+# Which epoch the paper actually reports, read from the pinned checkpoint
+# rather than from the series. The two were the same while the paper sat on
+# epoch 0 and the sentence saying so was typed; they are not the same after a
+# repin, and a limitations paragraph that says "the first pass" while the
+# tables come from the fifth is the kind of drift this file exists to stop.
+print("pinned epoch")
+try:
+    import torch as _torch
+    _ck = _torch.load(R / "runs/RECIPE512/ckpt_PAPER.pth.tar",
+                      map_location="cpu", weights_only=False)
+    _pe = _ck.get("epoch")
+    if _pe is not None:
+        mac("PaperEpoch", str(int(_pe)))
+        # How many passes over the training set that is, for prose that wants
+        # to say it in words. Epoch indices start at zero.
+        _WORDS = {1: "one", 2: "two", 3: "three", 4: "four", 5: "five",
+                  6: "six", 7: "seven", 8: "eight", 9: "nine", 10: "ten"}
+        mac("PaperPasses", _WORDS.get(int(_pe) + 1, str(int(_pe) + 1)))
+except Exception as _e:
+    print("   pinned epoch:", _e)
+
 
 # ------------------------------------------------- where the ladder is used
 try:

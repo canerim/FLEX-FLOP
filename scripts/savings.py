@@ -68,3 +68,52 @@ def pick(*names, res=None):
 
     n, p = sorted(found, key=rank)[0]
     return _json.load(open(p)), n
+
+
+def epoch_series(run="RECIPE512", n_seq=53, budget=0.1, res=None):
+    """{epoch: mean saving} for one run, on the frames the paper reports.
+
+    Three rules, and each was got wrong somewhere before it was written down.
+
+    Only the full test set. The set grew from 40 sequences to 53 when MCL-JCV
+    and the two smallest HEVC classes were added, and small frames save far
+    less, so a 40-sequence number sits several points above a 53-sequence one
+    at the same weights.
+
+    Only the hook count. sv() falls back to the arithmetic model when a file
+    carries no hook count, silently and in our favour, and one epoch-1 file
+    has no hook count: a series built with the fallback read 24.1% at epoch 1
+    where the hook-counted file reads 22.8%, which is two conventions averaged
+    into one curve.
+
+    The median where an epoch was measured more than once, never the best.
+    Epoch 0 has four files; max() over them would manufacture a rising series
+    the moment they disagreed.
+
+        from savings import epoch_series
+        epoch_series()          # {0: 21.5, 1: 22.8, ...}
+    """
+    import glob as _glob
+    import json as _json
+    import statistics as _st
+    from pathlib import Path as _Path
+    res = _Path(res) if res else _Path(__file__).resolve().parent.parent / "results"
+    ser = {}
+    for f in _glob.glob(str(res / f"signalled_{run}_*.json")):
+        try:
+            d = _json.loads(_Path(f).read_text())
+        except Exception:
+            continue
+        if d.get("n_sequences") != n_seq:
+            continue
+        rows = [r for r in d.get("rows", [])
+                if r.get("budget_db") == budget and r.get("budget_reachable")]
+        if not rows or not measured(rows[0]):
+            continue
+        vals = [v for v in (sv(r) for r in rows) if v is not None]
+        if len(vals) < 5:
+            continue
+        e = d.get("ckpt_epoch")
+        if e is not None:
+            ser.setdefault(e, []).append(sum(vals) / len(vals))
+    return {e: _st.median(v) for e, v in sorted(ser.items())}
