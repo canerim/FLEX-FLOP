@@ -1826,9 +1826,11 @@ of~(\ref{eq:lagrangian}), so $\Delta(t)$ is exactly what that objective loses on
 tile $t$ by staying silent. We hold $\beta$ at B's value and bisect $\lambda$
 over the overrides to land back on the budget. The map costs an entropy-coded
 mask, $N H_2(\rho)$ bits with $H_2$ the binary entropy, plus $3$ per override.
-\textbf{The two ends check out.} At $\rho{=}0$ the measurement reproduces
-configuration~B to the second decimal at every rate, and at $\rho{=}1$ it
-reproduces~A. Neither end is imposed; both fall out of the same code path run
+\textbf{The two ends check out.} At $\rho{=}0$ the sweep reproduces configuration~B
+and at $\rho{=}1$ it reproduces~A, each to within
+\HybridEndOffsetLo--\HybridEndOffsetHi\ points. That residue is not
+disagreement: this sweep was never hook-counted, so its savings come from the
+arithmetic model, and the model over-reports by exactly that much (Section~\ref{sec:exp}). Neither end is imposed; both fall out of the same code path run
 against independently measured files, so the columns between them are measuring
 something real.
 

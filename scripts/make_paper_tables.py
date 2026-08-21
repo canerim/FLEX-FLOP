@@ -673,6 +673,10 @@ if trows:
         mac("HeldNoBetaForgone", f"{hby[nob[-1]]['test_saving_pct_measured']:.1f}")
 
 # ------------------------------------------------------------------ hybrid C
+# The sweep is arithmetic-model only: no hook count was taken for it. That is
+# why its ends sit 0.4 to 0.8 points above configurations A and B, which are
+# hook-counted -- the same offset the reporting conventions describe. The
+# macros below let the paper say so instead of claiming the ends agree exactly.
 print("hybrid C")
 hy, _ = pick("hybrid_RECIPE512_b01_fixed.json", "hybrid_RECIPE512_b01.json")
 if hy:
@@ -740,6 +744,28 @@ if hy:
             mac("HybridBeatsAN", str(len(beat)))
             mac("HybridBeatsAOf", str(len(over)))
             mac("HybridBeatsABy", f"{max(beat):.2f}")
+    # How far the sweep's ends sit from the hook-counted A and B.
+    try:
+        _bB, _ = pick("router_RECIPE512_b01_PAPER.json",
+                      "router_RECIPE512_b01_fixed.json",
+                      "router_RECIPE512_b01.json")
+        _bA = json.load(open(RES / "signalled_RECIPE512_ctc53.json"))
+        _B = {r["qp"]: sv(r) for r in _bB["rows"] if r.get("budget_reachable")}
+        _A = {r["qp"]: sv(r) for r in _bA["rows"]
+              if abs(r["budget_db"] - 0.1) < 1e-9 and r.get("budget_reachable")}
+        _off = []
+        for _q in _B:
+            _r0 = [r for r in hy["rows"] if r["qp"] == _q and r["rho"] == 0.0]
+            _r1 = [r for r in hy["rows"] if r["qp"] == _q and r["rho"] == 1.0]
+            if _r0 and _q in _B:
+                _off.append(sv(_r0[0]) - _B[_q])
+            if _r1 and _q in _A:
+                _off.append(sv(_r1[0]) - _A[_q])
+        if _off:
+            mac("HybridEndOffsetLo", f"{min(_off):.2f}")
+            mac("HybridEndOffsetHi", f"{max(_off):.2f}")
+    except Exception as _e:
+        print("   hybrid end offsets:", _e)
     # The hybrid file carries its own Lorenz statistics now; the separate
     # lorenz run is only a fallback for files written before that.
     lo_ = hy if any(r.get("gini_regret") is not None for r in rows_) else None

@@ -2101,9 +2101,13 @@ def content(colw, fullw):
            r"gap; dashed is proportional recovery. <b>c</b>, against the "
            r"fixed-λ Lorenz bound; points above the dashed line are "
            r"allocations one multiplier cannot reach.")
-    par(r"The two ends check out. At ρ=0 the measurement reproduces "
-        r"configuration B to the second decimal at every rate, and at ρ=1 it "
-        r"reproduces A. Neither end is imposed; both fall out of the same code "
+    par(r"The two ends check out. At ρ=0 the sweep reproduces configuration "
+        r"B and at ρ=1 it reproduces A, each to within "
+        r"\HybridEndOffsetLo–\HybridEndOffsetHi points. That residue is "
+        r"not disagreement: this sweep was never hook-counted, so its "
+        r"savings come from the arithmetic model, and the model "
+        r"over-reports by exactly that much. Neither end is imposed; both fall "
+        r"out of the same code "
         r"path run against independently measured files, so the columns "
         r"between them are measuring something real.")
     par(r"Most of the gap is cheap. Overriding a tenth of the tiles for "

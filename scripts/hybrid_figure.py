@@ -16,6 +16,7 @@ import matplotlib.pyplot as plt
 
 R = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(R / "scripts"))
+from savings import sv, pick as _pk
 import naturestyle as ns  # noqa: E402
 
 ns.apply()
@@ -27,6 +28,9 @@ def main(src=None, out="docs/figures/hybrid.png", lor=None):
             if (R / n).exists():
                 return R / n
         return R / names[-1]
+    # The pinned checkpoint's file first, by provenance. _fixed happens to be
+    # the pinned one here, but the name does not say so and the next file to
+    # arrive under a new name would go unnoticed.
     src = src or _pick("results/hybrid_RECIPE512_b01_fixed.json",
                        "results/hybrid_RECIPE512_b01.json")
     lor = lor or _pick("results/hybrid_lorenz_b01_fixed.json",
@@ -45,7 +49,7 @@ def main(src=None, out="docs/figures/hybrid.png", lor=None):
     for c, q in zip(cols, qps):
         rs = sorted([r for r in rows if r["qp"] == q], key=lambda r: r["rho"])
         b = [r["map_bits"] for r in rs]
-        s = [r["saving_pct_vs_release"] for r in rs]
+        s = [sv(r) for r in rs]
         ax[0].plot(b, s, marker="o", ms=3, color=c, label=f"qp {q}")
         lo, hi = s[0], s[-1]
         if hi - lo > 1e-9:
@@ -54,7 +58,7 @@ def main(src=None, out="docs/figures/hybrid.png", lor=None):
                        marker="o", ms=3, color=c, label=f"qp {q}")
         if L:
             xy = [(L[(q, round(r["rho"], 6))],
-                   100 * (r["saving_pct_vs_release"] - lo) / (hi - lo))
+                   100 * (sv(r) - lo) / (hi - lo))
                   for r in rs if (q, round(r["rho"], 6)) in L and hi - lo > 1e-9]
             if xy:
                 ax[2].plot(*zip(*sorted(xy)), marker="o", ms=3, color=c)
@@ -70,8 +74,10 @@ def main(src=None, out="docs/figures/hybrid.png", lor=None):
     for i, l in enumerate("abc"):
         ns.panel(ax[i], l, dx=-0.22)
     fig.tight_layout(w_pad=1.6)
-    p = R / out
-    fig.savefig(p, dpi=300, bbox_inches="tight", facecolor="white")
+    for _d in (R / "docs/figures", R / "paper/figures"):
+        _d.mkdir(parents=True, exist_ok=True)
+        fig.savefig(_d / "hybrid.png", dpi=500, bbox_inches="tight",
+                    pad_inches=0.02, facecolor="white")
     print(f"  -> {out}")
 
 

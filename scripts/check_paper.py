@@ -244,6 +244,28 @@ if cl:
     claim("contamination: fixed square, worst", 38, max(errs["b2"]), 1)
     claim("contamination: fixed square, best", 31, min(errs["b2"]), 1)
 
+# ---- configuration C's ends against A and B -------------------------------
+# The paper used to say the sweep reproduces A and B "to the second decimal".
+# That was true while all three were arithmetic-model numbers and stopped being
+# true when A and B moved to the hook count; nothing noticed, because it was
+# not a registered claim. It is one now.
+_hy = J("hybrid_RECIPE512_b01_fixed.json") or J("hybrid_RECIPE512_b01.json")
+_rb = J("router_RECIPE512_b01_PAPER.json")
+_sa = J("signalled_RECIPE512_ctc53.json")
+if _hy and _rb and _sa:
+    _B = {r["qp"]: sv(r) for r in _rb["rows"] if r.get("budget_reachable")}
+    _A = {r["qp"]: sv(r) for r in _sa["rows"]
+          if abs(r["budget_db"] - 0.1) < 1e-9 and r.get("budget_reachable")}
+    _d = []
+    for _q in _B:
+        for _rho, _ref in ((0.0, _B), (1.0, _A)):
+            _r = [r for r in _hy["rows"] if r["qp"] == _q and r["rho"] == _rho]
+            if _r and _q in _ref:
+                _d.append(sv(_r[0]) - _ref[_q])
+    if _d:
+        claim("hybrid: end offset, smallest", 0.43, min(_d), 0.05)
+        claim("hybrid: end offset, largest", 0.78, max(_d), 0.05)
+
 # ---- the band collapse ----------------------------------------------------
 bc = J("band_collapse.json")
 if bc:

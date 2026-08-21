@@ -74,3 +74,26 @@ That symmetry is already stated in Section 3.5 and survives the swap.
 **Cost.** No new measurement. It is a renaming and a reordering of Sections 5.5
 to 5.7, and the numbers already exist in
 `results/raterank_RECIPE512_b01.json`.
+
+---
+
+## 3. Hook-count the configuration C sweep
+
+**What is true now.** Every saving in the paper is the hook count except one
+table and one figure: the configuration C sweep, which was never re-measured
+with hooks. Its ends therefore sit 0.43 to 0.78 points above the hook-counted A
+and B they should reproduce, which is exactly the offset the reporting
+conventions describe for the arithmetic model.
+
+**Why it matters.** The paper claimed the ends "reproduce A and B to the second
+decimal". That was true when all three were modelled and stopped being true when
+A and B moved to the hook count. It now states the offset and its cause, which
+is honest, but it is the only place in the paper where two conventions meet
+inside one sentence.
+
+**Cost.** One sweep: five rates by seven values of rho on the pinned checkpoint,
+`scripts/hybrid_curve.py` with hooks on. A few hours of the evaluation card,
+which is currently idle between checkpoint boundaries.
+
+**Not done unattended because** it changes a published table and two macros, and
+the author asked that the main experiment not be touched without a decision.
