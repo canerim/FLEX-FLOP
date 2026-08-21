@@ -1413,7 +1413,10 @@ def content(colw, fullw):
     par(r"We fine-tune the decoder on 512×512 crops from OpenImages with the "
         r"encoder frozen (max|Δ| = 0 is asserted every run). One λ_rd is drawn "
         r"per sample from a log-spaced range covering all 64 quality indices, "
-        r"so a single set of weights covers the whole rate range. We evaluate "
+        r"so a single set of weights covers the whole rate range. The ladder "
+        r"adds \ParamsAdapters M parameters to the decoder's \ParamsTotal M, "
+        r"almost all in the adapters, and the pinned checkpoint is one pass "
+        r"over \TrainImages images. We evaluate "
         r"on one intra frame from each of the \NumSeq sequences of the common "
         r"test set (CTC: UVG, MCL-JCV "
         r"and HEVC classes B, C, D and E), one intra frame each.")
@@ -1492,12 +1495,6 @@ def content(colw, fullw):
         r"ladder. High-rate reconstructions carry detail the shallow exits "
         r"cannot reproduce, and the floor rises with rate as well; both "
         r"effects push the same way.")
-    figure("rd_spread.png",
-           r"<b>Figure 7. The plane a codec is read on, and the spread behind "
-           r"the mean.</b> <b>a</b>, operating points against the released "
-           r"curve. <b>b</b>, the same with the quality axis expanded; labels "
-           r"are compute saved. <b>c</b>, per sequence at a matched point near "
-           r"0.1 dB; one dot per sequence, bar is the median.")
     par(r"Panel c shows the distribution that the headline averages over, and "
         r"it is wide ([[fig:rd_spread]]). At q0 the median sequence saves ([[fig:spread]]) \SpreadMedLow%, with an "
         r"interquartile range of \SpreadIqrLoLow–\SpreadIqrHiLow, while the "
@@ -1554,6 +1551,12 @@ def content(colw, fullw):
         r"map from the oracle's own exit histogram and shuffles it across "
         r"tiles, which preserves the average cost and the mix of depths while "
         r"discarding the content dependence.")
+    figure("rd_spread.png",
+           r"<b>Figure 7. The plane a codec is read on, and the spread behind "
+           r"the mean.</b> <b>a</b>, operating points against the released "
+           r"curve. <b>b</b>, the same with the quality axis expanded; labels "
+           r"are compute saved. <b>c</b>, per sequence at a matched point near "
+           r"0.1 dB; one dot per sequence, bar is the median.")
     par(r"The obvious alternative to routing tiles is to run every tile at the "
         r"same shallower exit and accept the loss. The table puts that "
         r"option, together with two stronger controls, at matched compute "

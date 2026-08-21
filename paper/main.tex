@@ -1052,7 +1052,9 @@ OpenImages~\cite{openimages} with the encoder frozen ($\max|\Delta| = 0$ is
 asserted every run). The three terms of~(\ref{eq:loss}) are weighted once and never tuned per exit.
 One $\lambda_{\mathrm{rd}}$ is drawn per sample from a
 log-spaced range covering all 64 quality indices, so a single set of weights
-covers the whole rate range. We evaluate on one intra frame from each of the \NumSeq\ sequences of the common
+covers the whole rate range. The ladder adds \ParamsAdapters~M parameters to
+the decoder's \ParamsTotal~M, almost all in the adapters, and the pinned
+checkpoint is one pass over \TrainImages\ images. We evaluate on one intra frame from each of the \NumSeq\ sequences of the common
 test set (CTC: UVG~\cite{uvg}, MCL-JCV~\cite{mcljcv} and HEVC classes B, C, D
 and E), one intra frame each.
 

@@ -1463,6 +1463,22 @@ except Exception as _e:
     print("   supp_opquality:", _e)
 
 
+# ------------------------------------------------- what the ladder costs to add
+# A reviewer asks two things about a method that fine-tunes: how much it adds to
+# the model, and how much training it took. Neither was in the paper.
+try:
+    _mt = json.load(open(R / "runs/RECIPE512/meta.json"))
+    mac("ParamsTotal", f"{_mt['params_total'] / 1e6:.1f}")
+    mac("ParamsAdapters", f"{_mt['params_adapters'] / 1e6:.2f}")
+    mac("ParamsAdapterPct",
+        f"{100 * _mt['params_adapters'] / _mt['params_total']:.1f}")
+    mac("TrainImages", f"{_mt['dataset_size']:,}")
+    mac("TrainBatch", str(_mt["batch_size"]))
+    mac("TrainSteps", f"{_mt['dataset_size'] // _mt['batch_size']:,}")
+except Exception as _e:
+    print("   run meta:", _e)
+
+
 # --------------------------------------------- the big-resolution classes
 # The prose named three classes at the lowest rate and only the first was a
 # macro; the other two were typed in and went stale when the per-class figures
