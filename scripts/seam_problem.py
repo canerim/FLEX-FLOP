@@ -146,7 +146,10 @@ a3.imshow(np.clip(err[ZR:ZR+ZS, ZC:ZC+ZS] * a.amp, 0, 1), cmap="inferno",
 # the caption, where a reader looks for provenance.
 for o in (R / a.out, R / "results/seam_problem.png"):
     o.parent.mkdir(parents=True, exist_ok=True)
-    fig.savefig(o, dpi=500, facecolor="white")
+    for _d in (R / "docs/figures", R / "paper/figures"):
+        _d.mkdir(parents=True, exist_ok=True)
+        fig.savefig(_d / "seam_problem.png", dpi=500, bbox_inches="tight",
+                    pad_inches=0.02, facecolor="white")
 print(f"  {P}px tiles, {(H+ph)//P}x{(W+pw)//P} grid   penalty {db.item():+.4f} dB")
 
 if a.sidecar:

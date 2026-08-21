@@ -184,7 +184,10 @@ def main(argv):
     fig.tight_layout(w_pad=1.4)
     out = R / a.out
     out.parent.mkdir(parents=True, exist_ok=True)
-    fig.savefig(out, dpi=300, bbox_inches="tight", facecolor="white")
+    for _d in (R / "docs/figures", R / "paper/figures"):
+        _d.mkdir(parents=True, exist_ok=True)
+        fig.savefig(_d / "exit_map.png", dpi=500, bbox_inches="tight",
+                    pad_inches=0.02, facecolor="white")
     plt.close(fig)
     hist = np.bincount(km.ravel(), minlength=K)
     print(f"  {nh}x{nw} = {nh*nw} tiles, histogram {hist.tolist()}")
