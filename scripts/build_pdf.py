@@ -86,6 +86,11 @@ def sub(t):
     """Expand \Macro and the handful of TeX-isms the text uses."""
     def _figref(m):
         k = m.group(1)
+        # The teaser is whichever file is in place; prose says [[fig:banner]]
+        # and does not have to know which.
+        if k == "banner":
+            k = ("flexuf_overview" if (FIGS / "flexuf_overview.png").exists()
+                 else "dcvcuf_framework")
         if k not in FIGN:
             raise KeyError(f"[[fig:{k}]] names no figure in this document")
         return f"Figure {FIGN[k]}"
@@ -502,19 +507,20 @@ def content(colw, fullw):
     # ---- abstract -------------------------------------------------------
     A(Paragraph("<b>Abstract</b>", S("ah", fontName="Times-Bold", fontSize=9.4,
                                      alignment=TA_CENTER, spaceAfter=4)))
+    # Three flowables, not one. As a single Paragraph the abstract could
+    # not fit the left column of page 1 once the teaser grew, so it moved
+    # whole to the right column and left the left one empty.
     A(Paragraph(sub(
         r"A learned image decoder reconstructs a picture by running a fixed "
         r"network over it, and the network is fixed by design: that is what "
-        r"lets any decoder read any file. On the intra decoder we study, that "
-        r"network costs "
-        r"\DecGmac GMAC for a 1080p frame and spends the same arithmetic "
-        r"everywhere "
-        r"in it: a flat sky and a face are decoded at the same price. Making "
-        r"decoders cheaper is now its own line of work, and almost all of it "
-        r"changes the model, and so the bitstream: a file encoded yesterday "
-        r"cannot benefit. What is left to vary is not what the decoder is, "
-        r"but how much of it runs where."
-        r"<br/><br/>"
+        r"lets any decoder read any file. On the intra decoder we study, "
+        r"that network costs \DecGmac GMAC for a 1080p frame and spends the "
+        r"same arithmetic everywhere in it: a flat sky and a face are "
+        r"decoded at the same price. Making decoders cheaper is now its own "
+        r"line of work, and almost all of it changes the model, and so the "
+        r"bitstream: a file encoded yesterday cannot benefit. What is left "
+        r"to vary is not what the decoder is, but how much of it runs where."), ABST))
+    A(Paragraph(sub(
         r"Here we show that decoding computation can be allocated by content "
         r"on a decoder that is not allowed to change. A frame is cut into "
         r"tiles after the shared part of the decoder has run, and each tile "
@@ -522,20 +528,21 @@ def content(colw, fullw):
         r"entropy model and the coded latent untouched. On \NumSeq CTC intra "
         r"frames a 0.1 dB constraint removes \MainLowRate to \MainHighRate% "
         r"of decoder multiply-accumulates across the rate range, \MeanAtOne% "
-        r"on average, for a BD-Rate cost of \BdRateALow%."
-        r"<br/><br/>"
-        r"Two findings are not specific to this decoder. Adaptivity is usable "
-        r"only inside a window that tiling itself creates, between a floor "
-        r"below which no allocation meets the budget and a saturation point "
-        r"above which none improves; rescaling the budget between those limits "
-        r"collapses five rate curves \BandRawSpread points apart onto one "
-        r"within \BandSpreadMean. And what is needed to allocate is already "
-        r"in the file: routing on the bits the entropy model has spent on a "
-        r"tile beats our trained \RouterParams-parameter router at every "
-        r"rate, by up to \RateRankBeatsBy points, while agreeing with the "
-        r"exhaustive search on fewer tiles. A compressed representation "
-        r"records not only what to reconstruct, but how much computation the "
-        r"reconstruction is worth."), ABST))
+        r"on average, for a BD-Rate cost of \BdRateALow%."), ABST))
+    A(Paragraph(sub(
+        r"Two findings are not specific to this decoder. Adaptivity is "
+        r"usable only inside a window that tiling itself creates, between a "
+        r"floor below which no allocation meets the budget and a saturation "
+        r"point above which none improves; rescaling the budget between "
+        r"those limits collapses five rate curves \BandRawSpread points "
+        r"apart onto one within \BandSpreadMean. And what is needed to "
+        r"allocate is already in the file: routing on the bits the entropy "
+        r"model has spent on a tile beats our trained "
+        r"\RouterParams-parameter router at every rate, by up to "
+        r"\RateRankBeatsBy points, while agreeing with the exhaustive search "
+        r"on fewer tiles. A compressed representation records not only what "
+        r"to reconstruct, but how much computation the reconstruction is "
+        r"worth."), ABST))
     A(Spacer(1, 6))
 
     # ---- 1 introduction --------------------------------------------------
@@ -565,7 +572,7 @@ def content(colw, fullw):
         r"model, or altering the latent. It leaves one place to spend "
         r"adaptivity, the synthesis transform.")
     par(r"Our method, FLEX-UF, attaches exits at intervals through the twelve "
-        r"residual blocks ([[fig:dcvcuf_framework]]) of the DCVC-UF intra decoder; we call that ordered "
+        r"residual blocks ([[fig:banner]]) of the DCVC-UF intra decoder; we call that ordered "
         r"set of exits the <i>ladder</i>. The first j blocks run over the "
         r"whole frame. The rest run per tile, over a set of tiles that shrinks "
         r"with depth, and the shrinkage is where the saving comes from. Each "
@@ -944,7 +951,7 @@ def content(colw, fullw):
         r"adapter by construction and is the control.")
     par(r"The DCVC-UF intra decoder is one upsampling block, twelve "
         r"DepthConvBlocks and a head, costing 453.5 GMAC per 1080p frame. The "
-        r"twelve blocks are \\TrunkShare% of that, which is why we build the "
+        r"twelve blocks are \TrunkShare% of that, which is why we build the "
         r"ladder "
         r"across them. Inside one block at C=384 channels, the only operator "
         r"with any spatial extent is a 3×3 depthwise convolution, and it costs "
@@ -1157,7 +1164,7 @@ def content(colw, fullw):
         r"That gives 96 + 64 + 1 = 161 numbers per tile, which pass "
         r"through LayerNorm and a three-layer perceptron of width 256 with "
         r"SiLU activations, ending in K logits. The whole head is 144,030 "
-        r"parameters and \\RouterCostPct% of the decode it is deciding about, "
+        r"parameters and \RouterCostPct% of the decode it is deciding about, "
         r"almost all "
         r"of it in the 1×1 on the stem, which is the only part that runs per "
         r"pixel. The perceptron runs once per tile, forty times for a 1080p "
@@ -2215,7 +2222,7 @@ def content(colw, fullw):
         r"claiming the low-rate saving of \TransferSaving% while spending "
         r"nearly twice the quality it is allowed. The reverse is safe but "
         r"wasteful: the q63 map applied at q0 delivers 0.075 dB and only 19.8% "
-        r"where \\ClassLowUvg% was available. Shallow exits are cheap in quality at low "
+        r"where \ClassLowUvg% was available. Shallow exits are cheap in quality at low "
         r"rate and expensive at high rate, so a map is calibrated to the rate "
         r"it was found at, and reusing one upward breaks the quality guarantee "
         r"without anything in the decode reporting that it has. In our reuse "
@@ -2672,7 +2679,7 @@ def build(out="paper/FLEX-UF.pdf"):
         BANNER_MAXH = min((PW - 2 * M) * _h / _w, 3.60 * inch)
     else:
         BANNER_MAXH = 2.45 * inch
-    top_banner = BANNER_MAXH + 1.60 * inch
+    top_banner = BANNER_MAXH + 1.35 * inch
 
     doc = BaseDocTemplate(str(R / out), pagesize=letter,
                           leftMargin=M, rightMargin=M,
@@ -2742,18 +2749,12 @@ def build(out="paper/FLEX-UF.pdf"):
     if OURS.exists():
         BANNER_PNG = "flexuf_overview.png"
         banner_cap = (
-            "<b>Figure 1. FLEX-UF, end to end.</b> The decoded latent is "
-            "upsampled once and passed through the two shared groups every "
-            "tile runs. <i>patchify</i> then cuts the feature map into 256 "
-            "pixel tiles and each tile leaves the remaining trunk at its own "
-            "depth, four exits deep at most; an adapter reconciles the early "
-            "departure with a head fitted to the full trunk, an FFN pair "
-            "where the exit skips four blocks or more and a residual 1×1 "
-            "otherwise. Who chooses the exit is the only thing that varies "
-            "between the three configurations. The tiles are then stitched "
-            "back, the grid seam is repaired, and one shared reconstruction "
-            "path produces the frame. The encoder, the entropy model and the "
-            "coded payload are untouched throughout.")
+            "<b>Figure 1. FLEX-UF.</b> Two shared groups run for every tile; "
+            "patchify then cuts the feature map into 256 pixel tiles and each "
+            "tile leaves the trunk at its own depth, an adapter reconciling "
+            "the early exit with a head fitted to the full one. The tiles are "
+            "stitched back, the grid seam repaired, and one shared path "
+            "reconstructs the frame.")
     else:
         BANNER_PNG = "dcvcuf_framework.png"
         banner_cap = ("<b>Figure 1. The decoder we modify.</b> Figure 3 of "

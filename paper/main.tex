@@ -89,12 +89,12 @@ place to spend adaptivity, the synthesis transform.
 
 \begin{figure*}[t]
 \centering
-\includegraphics[width=\textwidth]{figures/dcvcuf_framework.png}
-\caption{\textbf{The decoder we modify.} Figure~3 of DCVC-UF~\cite{dcvcuf},
-reproduced. Everything up to the reconstruction stays frozen in this work: the
-patch embedding, the chunk encoder, the entropy model and the coded payload.
-FLEX-UF replaces the frame-specific decoders on the right with a ladder of exits
-taken per tile.}
+\includegraphics[width=\textwidth]{figures/flexuf_overview.png}
+\caption{\textbf{FLEX-UF.} Two shared groups run for every tile; \emph{patchify}
+then cuts the feature map into $256$ pixel tiles and each tile leaves the trunk
+at its own depth, an adapter reconciling the early exit with a head fitted to
+the full one. The tiles are stitched back, the grid seam repaired, and one
+shared path reconstructs the frame.}
 \label{fig:baseline}
 \end{figure*}
 

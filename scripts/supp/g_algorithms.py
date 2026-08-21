@@ -663,8 +663,8 @@ def content(k):
     C = ac["trunk_channels"]
 
     k.par(
-        "Underneath the five procedures are perhaps a dozen operations that "
-        "have to be exactly right and are silent when they are not. Table " +
+        "Below the five procedures sit perhaps a dozen operations that have "
+        "to be exactly right and are silent when they are not. Table " +
         str(k.peek_tbl()) + " writes each one out with the file and the "
         "function it lives in. Shapes are given for the pinned geometry: T "
         "tiles, C = " + f"{C}" + " channels, a feature tile of " +
