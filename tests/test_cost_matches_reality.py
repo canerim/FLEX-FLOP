@@ -38,13 +38,15 @@ import torch.nn as nn
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 sys.path.insert(0, str(Path.home() / "DCVC"))
+sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "scripts"))
+from gpu import pick as _gpu  # noqa: E402
 
 from flexuf.backbone.decoder import MultiExitIntraDecoder  # noqa: E402
 from flexuf.config import LATENT_CH, TRUNK_CH, FlexUFConfig  # noqa: E402
 from flexuf.cost import frame_relative_cost  # noqa: E402
 
 DEVICE = os.environ.get("FLEXUF_TEST_DEVICE",
-                        "cuda:0" if torch.cuda.is_available() else "cpu")
+                        _gpu("cuda:0") if torch.cuda.is_available() else "cpu")
 # Big enough that the amortised stem is not a rounding error, small enough to be
 # quick: 64x64 latent -> 128x128 feature -> 1024x1024 RGB.
 LAT = 64

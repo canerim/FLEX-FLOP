@@ -79,6 +79,23 @@ def _n(x):
     return f"{int(round(x)):,}"
 
 
+def _n_equiv() -> int:
+    """How many properties tests/test_equivalence.py actually holds.
+
+    It said six and there are ten. A count typed into a sentence about tests
+    is the same class of number as any other typed into a sentence about
+    measurements, and it drifts the same way: four tests were added and the
+    word did not move.
+    """
+    import re
+    from pathlib import Path
+    p = Path(__file__).resolve().parents[2] / "tests/test_equivalence.py"
+    try:
+        return len(re.findall(r"^def test_", p.read_text(), re.M))
+    except OSError:
+        return 0
+
+
 def content(k):
     sec = k.h1("Algorithms, and how each step is implemented")
 
@@ -887,15 +904,19 @@ def content(k):
         "with a largest absolute difference of zero, so the claim rests on "
         "the two models producing the same pixels rather than on the key "
         "remap having been audited correctly.",
-        "<b>test_equivalence.py</b> holds six properties at zero tolerance: "
+        f"<b>test_equivalence.py</b> holds {_n_equiv()} properties at zero "
+        "tolerance: "
         "the warm-started ladder at its deepest exit is the released decoder; "
         "every untrained exit is that decoder truncated at its own depth; "
         "patchify and unpatchify round-trip losslessly; with j = K the tiled "
         "path reproduces the full decode, which exercises the halo, the loop, "
         "the canvas, the crop and the head at once; every seam-repair variant "
         "is the identity at initialisation and the grid gate is concentrated "
-        "on the border; and a mixed-depth map costs less than an all-deepest "
-        "one.",
+        "on the border; a mixed-depth map costs less than an all-deepest one; "
+        "and one trunk pass tapped at every exit gives the same pixels as K "
+        "separate passes, which is what makes the joint objective of "
+        "Eq. (6)-(7) affordable and is the property the from-scratch run "
+        "depends on.",
         "<b>test_cost_matches_reality.py</b> runs the decode, counts its MACs "
         "with hooks and requires the arithmetic model to agree, which is the "
         "control that was missing when the model and the decoder drifted "

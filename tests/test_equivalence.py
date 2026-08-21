@@ -37,6 +37,8 @@ import torch.nn.functional as F
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 sys.path.insert(0, str(Path.home() / "DCVC"))
+sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "scripts"))
+from gpu import pick as _gpu  # noqa: E402
 
 from src.models.image_model import IntraDecoder  # noqa: E402
 
@@ -52,7 +54,11 @@ from flexuf.backbone.warmstart import (  # noqa: E402
 from flexuf.config import LATENT_CH, TRUNK_CH, FlexUFConfig  # noqa: E402
 from flexuf.cost import exit_costs, saving  # noqa: E402
 
-DEVICE = "cuda:4" if torch.cuda.is_available() else "cpu"
+# Ask the driver rather than naming a card. "cuda:4" was ours when this was
+# written; a hard-coded index sends the suite to whoever owns that card now,
+# and it raises "invalid device ordinal" under CUDA_VISIBLE_DEVICES, which is
+# how seven of these looked like failures when they were fine.
+DEVICE = _gpu("cuda:0") if torch.cuda.is_available() else "cpu"
 LAT_H, LAT_W = 16, 16   # -> 32x32 feature -> 512x512 RGB
 
 

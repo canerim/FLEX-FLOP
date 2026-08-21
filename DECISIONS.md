@@ -5319,3 +5319,28 @@ What a restart costs is one epoch. The trainer resumes from
 mid-epoch would need the sampler position and is not worth the fragility. At
 about two hours an epoch against 415, that is half a per cent, and the
 alternative is measured in whole nights.
+
+## 115. The supplement said six tests and there are ten, and nothing ran them
+
+Section G.9 claims that every property which could fail silently has a test
+that fails loudly, asserted at zero tolerance. Two things were wrong with that.
+
+The count was typed. It said `test_equivalence.py` holds six properties and it
+holds ten -- four were added and the word did not move, which is the same
+failure as any other number typed into a sentence. It is read from the file
+now, and the property that had gone undescribed is the one that matters most
+today: one trunk pass tapped at every exit gives the same pixels as K separate
+passes, which is what makes the Eq. (6)-(7) objective affordable and is
+precisely what the from-scratch run depends on.
+
+And nothing ran them. A paper that says "asserted at zero tolerance" while the
+assertion is red is worse than one that says nothing, so `check_tests.py` runs
+the suite and also checks that every test file the supplement names by path
+exists. It needs a GPU, so it is not in the per-build check; it is what to run
+before a submission and after any change to `flexuf/`.
+
+Three test files named a card by index -- `DEVICE = "cuda:4"` -- which is
+DECISIONS 106 again in a place I had not looked. GPU4 is ours today. They ask
+the driver now, and the suite passes both plainly and under a restricted
+CUDA_VISIBLE_DEVICES, which it did not before: seven tests looked like failures
+and were fine.

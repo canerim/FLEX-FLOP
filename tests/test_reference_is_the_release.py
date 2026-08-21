@@ -27,6 +27,8 @@ import torch
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT))
 sys.path.insert(0, str(Path.home() / "DCVC"))
+sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "scripts"))
+from gpu import pick as _gpu  # noqa: E402
 
 RELEASE = Path.home() / "DCVC" / "checkpoints" / "cvpr2026_image.pth.tar"
 # Every warm start in use. FINE12's numbers are quoted against the K=12 file,
@@ -48,7 +50,7 @@ def test_deepest_exit_is_the_released_decoder(qp, warmstart):
     from flexuf.config import FlexUFConfig
     from flexuf.model import FlexUFIntra, load_flexuf_state
 
-    dev = "cuda:0" if torch.cuda.is_available() else "cpu"
+    dev = _gpu("cuda:0") if torch.cuda.is_available() else "cpu"
 
     rel = DMCI()
     sd = torch.load(RELEASE, map_location="cpu", weights_only=False)
