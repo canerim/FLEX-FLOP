@@ -42,14 +42,17 @@ ax[0].plot(qp, tra, marker="^", ms=3.5, lw=1.2, color=ns.GREEN,
            label="…and after training (the actual floor)")
 ax[0].set_yscale("log")
 ax[0].set_xlabel("qp   (0 = lowest rate  →  63 = highest)")
-ax[0].set_ylabel("dB below the release  (log)")
+# "(log)" pushed the label into the panel letter; the axis says it and so
+# does the caption.
+ax[0].set_ylabel("dB below the release")
 ax[0].legend(loc="upper left", fontsize=5)
-ax[0].set_title("Tiling penalty, no early exit", fontsize=6, color=ns.INK2, loc="left")
+ax[0].set_title("Tiling penalty, no early exit", fontsize=6, color=ns.INK2,
+                loc="left", pad=6)
 for x, y in ((qp[0], zer[0]), (qp[-1], zer[-1]), (qp[-1], rep[-1]),
              (qp[-1], tra[-1])):
     ax[0].annotate(f"{y:.3f}", (x, y), fontsize=5, color=ns.INK2,
                    textcoords="offset points", xytext=(0, 5), ha="center")
-ns.panel(ax[0], "a")
+ns.panel(ax[0], "a", dx=-0.16, dy=1.14)
 
 # ---- b: what the budget is spent on ---------------------------------------
 # The floor is charged inside the 0.1 dB, so the headroom that early exit can
@@ -67,8 +70,8 @@ ax[1].set_ylabel("dB of the 0.1 dB budget")
 ax[1].set_ylim(0, BUDGET * 1.25)
 ax[1].legend(loc="upper left", fontsize=5)
 ax[1].set_title("Budget consumed by the floor",
-                fontsize=6, color=ns.INK2, loc="left")
-ns.panel(ax[1], "b", dx=-0.18)
+                fontsize=6, color=ns.INK2, loc="left", pad=6)
+ns.panel(ax[1], "b", dx=-0.22, dy=1.14)
 
 fig.tight_layout()
 out = R / "docs/figures/seam_vs_qp.png"

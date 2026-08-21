@@ -1295,7 +1295,8 @@ def content(colw, fullw):
     h2("4.2 What actually removes the seam")
     figure("seam_vs_qp.png",
            r"<b>Figure 4. The tiling penalty across the whole rate range</b>, "
-           r"every tile at full depth. The two steps that matter cost nothing, "
+           r"every tile at full depth; the left axis is logarithmic. The two "
+           r"steps that matter cost nothing, "
            r"and the largest single factor is training the ladder with the seam "
            r"present. Panel (b): the floor is charged <i>inside</i> the "
            r"distortion budget and consumes a growing share of it.")
