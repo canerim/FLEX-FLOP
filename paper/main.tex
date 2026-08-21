@@ -1254,7 +1254,7 @@ exit~4.}
 \label{tab:probe}
 \end{table}
 
-The table says where the method stops being adaptive (Table~\ref{tab:probe}) (Fig.~\ref{fig:perclass}). Reading down it, the exit
+The table says where the method stops being adaptive (Table~\ref{tab:probe}). Reading down it, the exit
 histogram narrows from a mixture over three rungs to a single one, and at
 $416{\times}240$ both tiles take exit~4 and the frame simply receives whatever
 that rung costs. That is not a router failing. It is a frame with two tiles and
@@ -1275,7 +1275,7 @@ count much more closely than it tracks content.}
 \end{table}
 
 Completing the test set exposed a dependence that the 1080p-only subset had
-hidden. Table~\ref{tab:perclass} groups the saving by class. At 1080p, where a
+hidden. Table~\ref{tab:perclass} groups the saving by class (Fig.~\ref{fig:perclass}). At 1080p, where a
 frame is 40 tiles, we save $36$--$39\%$ at the lowest rate. At $832{\times}480$ a
 frame is 8 tiles and the saving is $23.6\%$; at $416{\times}240$ it is 2 tiles
 and $16.5\%$. At high rate the small resolutions fall to \SmallResHigh\%
@@ -1356,7 +1356,7 @@ programming.}
 \label{fig:theory}
 \end{figure}
 
-The construction has enough structure to state as propositions (Fig.~\ref{fig:operating}), and we check each
+The construction has enough structure to state as propositions, and we check each
 One assumption is worth naming before any of this. The argument treats the
 frame's distortion as a sum over tiles, while the deblocking pass runs on the
 stitched frame and therefore sees the whole exit map at once, so the tiles are
@@ -1403,7 +1403,7 @@ tile side puts four times as many tiles on the lattice, each carrying a quarter
 of the step. Fine granularity is what makes the Lagrangian relaxation lossless in
 practice, and no property of the images is doing that work.
 
-Two numbers bound what any budget can do (Table~\ref{tab:operating}). The
+Two numbers bound what any budget can do (Table~\ref{tab:operating}) and Fig.~\ref{fig:operating}. The
 \textbf{floor} $D_{\min}$ is the distortion of a tiled decode with every tile at
 full depth, which is pure tiling penalty: \FloorLow$\dB$ at $q0$, rising to
 \FloorHigh$\dB$ at $q63$. A budget below it admits no allocation. The

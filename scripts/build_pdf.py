@@ -1607,7 +1607,7 @@ def content(colw, fullw):
         r"<b>Table N. One frame from each class, at q32 and a 0.1 dB "
         r"budget.</b> The exits column is the histogram over the ladder, so "
         r"e4:2 is two tiles at exit 4.")
-    par(r"The table says where the method stops being adaptive ([[fig:perclass]], [[tab:probe]]). Reading down "
+    par(r"The table says where the method stops being adaptive ([[tab:probe]]). Reading down "
         r"it, the exit histogram narrows from a mixture over three rungs to a "
         r"single one, and at 416×240 both tiles take exit 4 and the frame "
         r"simply receives whatever that rung costs. That is not a router "
@@ -1629,7 +1629,7 @@ def content(colw, fullw):
         r"contains. The saving tracks tile count much more closely than it "
         r"tracks content.")
     par(r"Completing the test set exposed a dependence that the 1080p-only "
-        r"subset had hidden. The table groups the saving by class ([[tab:perclass]]). At 1080p, "
+        r"subset had hidden. The table groups the saving by class ([[fig:perclass]]) ([[tab:perclass]]). At 1080p, "
         r"where a frame is 40 tiles, we save \BigResLow% (MCL-JCV), 33.1% "
         r"(UVG) and 33.8% (HEVC B) at the lowest rate, three classes of very "
         r"different content within three points of each other. At 832×480 a "
@@ -1683,7 +1683,7 @@ def content(colw, fullw):
         r"is 5.5×10<super>-5</super> dB, four orders of magnitude below the "
         r"budget. We proceed as if the objective were separable and treat that "
         r"as measured rather than assumed.")
-    par(r"The construction has enough structure to state as propositions ([[fig:saturation_RECIPE512]]), and "
+    par(r"The construction has enough structure to state as propositions, and "
         r"we check each one numerically instead of asserting it "
         r"(scripts/verify_theory.py, seven of seven).")
     rows_tbl([["", ""],
@@ -1720,7 +1720,7 @@ def content(colw, fullw):
         r"many tiles on the lattice, each carrying a quarter of the step. Fine "
         r"granularity is what makes the Lagrangian relaxation lossless in "
         r"practice, and no property of the images is doing that work.")
-    par(r"Two numbers bound what any budget can do ([[tab:operating]]). The <b>floor</b> is the "
+    par(r"Two numbers bound what any budget can do ([[tab:operating]]) and [[fig:saturation_RECIPE512]]. The <b>floor</b> is the "
         r"distortion of a tiled decode with every tile at full depth, which is "
         r"pure tiling penalty: \FloorLow dB at q0, rising to \FloorHigh dB at "
         r"q63. A budget below it admits no allocation. The <b>saturation</b> "
