@@ -115,6 +115,50 @@ def _f(x, n=2):
 
 
 # ------------------------------------------------------------------ section
+def _ceiling_rows(k):
+    """The ceiling for each split depth, beside the seam that split costs.
+
+    Two halves that the supplement had separately and never together: the
+    ceiling is arithmetic and needs no run, the seam is measured, and the
+    question a reader has -- what would it take to save half the decoder --
+    is answered only by putting them in one table.
+    """
+    import ast
+    import sys
+    from pathlib import Path as _P
+    _root = _P(__file__).resolve().parents[2]
+    if str(_root) not in sys.path:
+        sys.path.insert(0, str(_root))
+    import torch
+    from flexuf.config import FlexUFConfig
+    from flexuf.cost import frame_relative_cost
+    seam = {}
+    try:
+        d = k.J("supp_seam_vs_split.json")
+        for r in d["rows"]:
+            s_ = r["seam_db"]
+            if isinstance(s_, str):
+                s_ = ast.literal_eval(s_)
+            seam[int(r["j"])] = {int(q): v for q, v in s_.items()}
+    except Exception:
+        pass
+    rows = [["split j", "blocks per tile", "ceiling", "seam q0", "seam q32",
+             "seam q63"]]
+    for j in (4, 3, 2, 1, 0):
+        cfg = FlexUFConfig(num_exits=6, split_depth=j, latent_patch=16,
+                           latent_halo=2, adapter_kind="scaled",
+                           seam_repair="grid")
+        c = frame_relative_cost(torch.full((40,), j, dtype=torch.long), cfg)
+        sm = seam.get(j, {})
+        tag = " (shipped)" if j == 2 else ""
+        rows.append([f"{j}{tag}", str((6 - j) * cfg.blocks_per_exit),
+                     f"{100 * (1 - c):.1f}%",
+                     f"{sm.get(0, float('nan')):.3f}" if sm else "--",
+                     f"{sm.get(32, float('nan')):.3f}" if sm else "--",
+                     f"{sm.get(63, float('nan')):.3f}" if sm else "--"])
+    return rows
+
+
 def content(k):
     sec = k.h1("The operating window")
 
@@ -629,6 +673,36 @@ def content(k):
         "one has been pinned at its ceiling since 0.3 dB and has nothing left "
         "to spend. The band of E.1 says which side of that crossover a given "
         "budget sits on, which is the practical use of measuring the two ends.")
+
+    k.h2("What would raise the ceiling")
+
+    k.par(
+        "The four ladders above were trained; the ceiling is not, and it can "
+        "be read off the cost model for any split without running anything. "
+        "That matters because the ceiling is the binding constraint at a "
+        "loose budget -- at 0.3 dB the shipped ladder reaches 91 to 100% of "
+        "its own ceiling, so nothing but a higher ceiling helps -- and "
+        "because the obvious way to raise it, splitting earlier, is paid for "
+        "in seam. Both halves are measured here, against each other.")
+
+    k.rows(_ceiling_rows(k),
+           "<b>The ceiling against what it costs.</b> Ceiling is "
+           "100(1 \u2212 c_j) from flexuf/cost.py on a 40-tile 1080p frame, "
+           "frame-relative, for a K = 6 ladder over the same twelve blocks. "
+           "The seam columns are the measured penalty at that split on the "
+           "<i>untrained</i> ladder, from results/supp_seam_vs_split.json; "
+           "training absorbs roughly two thirds of it, so the trained floor "
+           "at the shipped split is 0.072 dB at q63 where the untrained "
+           "number here is 0.184. Halving the split depth is worth about "
+           "fifteen points of ceiling and costs about a fifth of a decibel of "
+           "seam at the highest rate, which at a 0.1 dB budget is the whole "
+           "budget and at 0.3 dB is not.")
+
+    k.note("Ceilings computed in the build from flexuf/cost.py; seam from "
+           "results/supp_seam_vs_split.json, 20 frames at 256 px tiles. "
+           "Nothing in this table is a trained result: it is the design "
+           "space, and the four rows of the previous table are four points "
+           "in it.")
 
     k.h2("What the window claims, and what it does not")
 
