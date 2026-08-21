@@ -878,7 +878,7 @@ reaches every pixel; the penalty does not.}
 Border padding is an \emph{estimator} of the unseen neighbour, and the seam is its
 error (Fig.~\ref{fig:contam}) Panel~c there is the comparison the section turns on: the affected-area
 fraction misses the penalty by 160--264\% where a power law in the per-tile
-block count misses it by 12--22.. Table~\ref{tab:padding} measures four of them, with early exit switched off
+block count misses it by 12--22. Table~\ref{tab:padding} measures four of them, with early exit switched off
 so that tiling is the only difference from a full-frame decode.
 
 \begin{table}[t]
@@ -1054,9 +1054,12 @@ One $\lambda_{\mathrm{rd}}$ is drawn per sample from a
 log-spaced range covering all 64 quality indices, so a single set of weights
 covers the whole rate range. The ladder adds \ParamsAdapters~M parameters to
 the decoder's \ParamsTotal~M, almost all in the adapters, and the pinned
-checkpoint is one pass over \TrainImages\ images. We evaluate on one intra frame from each of the \NumSeq\ sequences of the common
-test set (CTC: UVG~\cite{uvg}, MCL-JCV~\cite{mcljcv} and HEVC classes B, C, D
-and E), one intra frame each.
+checkpoint is one pass over \TrainImages\ images. We evaluate on one intra frame from each of the \NumSeq\ sequences of the
+common test set (CTC: UVG~\cite{uvg}, MCL-JCV~\cite{mcljcv} and HEVC classes B,
+C, D and E~\cite{hevc}). One frame per sequence and not several: this is the
+intra path, every sequence opens with exactly one such frame, and taking more
+from a sequence would re-measure the same content and weight the long sequences
+more.
 
 \paragraph{Measurement protocol.} Two details of the protocol move the numbers
 enough that we state them here. The per-tile distortion table $D_{t,k}$ has to be

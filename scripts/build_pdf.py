@@ -1287,9 +1287,13 @@ def content(colw, fullw):
            r"what the pass changed there. It recovers 0.005 dB of the 0.041 dB "
            r"tiling costs on this frame.")
     par(r"Border padding is an <i>estimator</i> of the unseen neighbour, and "
-        r"the seam is its error ([[fig:contamination]]) Panel c there is the comparison the section turns on: the affected-area fraction misses the penalty by 160-264% where a power law in the per-tile block count misses it by 12-22.. The table below measures four of them, with "
-        r"early exit switched off ([[tab:padding]]) so that tiling is the only difference from a "
-        r"full-frame decode.")
+        r"the seam is its error ([[fig:contamination]]). Panel c there is the "
+        r"comparison the section turns on: the affected-area fraction misses "
+        r"the penalty by 160-264% where a power law in the per-tile block "
+        r"count misses it by 12-22. The table below measures four of them, "
+        r"with "
+        r"early exit switched off ([[tab:padding]]) so that tiling is the "
+        r"only difference from a full-frame decode.")
     tbl("padding",
         r"<b>Table 1. Border estimators</b>, dB below the released decoder on "
         r"the same latent, 256 px tiles, full CTC. Lower is better. "
@@ -1418,8 +1422,11 @@ def content(colw, fullw):
         r"almost all in the adapters, and the pinned checkpoint is one pass "
         r"over \TrainImages images. We evaluate "
         r"on one intra frame from each of the \NumSeq sequences of the common "
-        r"test set (CTC: UVG, MCL-JCV "
-        r"and HEVC classes B, C, D and E), one intra frame each.")
+        r"test set (CTC: UVG [28], MCL-JCV [29] and HEVC classes B, C, D and "
+        r"E [9]). One frame per sequence and not several: this is the intra "
+        r"path, every sequence opens with exactly one such frame, and taking "
+        r"more from a sequence would re-measure the same content and weight "
+        r"the long sequences more.")
     h2("Measurement protocol.")
     tbl("complexity",
         r"<b>Table 4. Decoder complexity</b> at 1080p. Our deepest exit costs "
