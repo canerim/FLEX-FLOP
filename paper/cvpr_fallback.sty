@@ -17,3 +17,11 @@
   \end{center}\par \vskip 1.5em}
 \makeatother
 \newcommand{\cvprfinalcopy}{}
+% The real cvpr.sty defines \etal; this file did not, so any build without
+% cvpr.sty on the path stopped at the first citation that used it.
+\newcommand{\etal}{\emph{et al}\onedot}
+\makeatletter
+\def\onedot{\futurelet\@let@token\@onedot}
+\def\@onedot{\ifx\@let@token.\else.\null\fi\xspace}
+\makeatother
+\usepackage{xspace}
