@@ -27,7 +27,7 @@ D="runs/$TAG"
 LOG="$D/keepalive.log"
 N=0
 say() { echo "$(date '+%F %T') $*" >> "$LOG"; }
-say "keepalive started for $TAG on GPU$GPU, every ${EVERY}s, max $MAXRESTART restarts"
+say "keepalive started for $TAG on GPU$GPU, every ${EVERY}s, limit $MAXRESTART"
 while true; do
   sleep "$EVERY"
   # Alive? The trainer's own process, not this script and not the watchers.
@@ -38,7 +38,7 @@ while true; do
     say "$TAG finished; keepalive exiting"; exit 0
   fi
   if [ "$N" -ge "$MAXRESTART" ]; then
-    say "$TAG down and $N restarts already spent; refusing to restart again"
+    say "$TAG down and $N already spent; refusing to restart again"
     exit 1
   fi
   WHY=$(tail -40 "$D/train.log" 2>/dev/null \
@@ -52,6 +52,6 @@ while true; do
     sleep 10
   done
   N=$((N + 1))
-  say "$TAG is not running (${WHY:-no error in the log}); restart $N of $MAXRESTART"
+  say "RESTART $N of $MAXRESTART: $TAG was not running (${WHY:-no error in the log})"
   GPU="$GPU" bash scripts/launch_scratch105.sh >> "$LOG" 2>&1
 done
