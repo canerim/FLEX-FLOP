@@ -30,29 +30,32 @@
 
 % =========================================================== abstract
 \begin{abstract}
-Learned image decoders spend the same computation on every region of a frame,
-whatever that region contains. We show that decoding compute can instead be
-allocated spatially, by content, with the encoder, the entropy model and the
-transmitted representation left untouched. We add a multi-exit ladder to the
-intra decoder of DCVC-UF, so that tiles of one frame leave a shared
-reconstruction trunk at different depths. On \NumSeq\ CTC intra frames, one from each sequence, under a
-$0.1\dB$ quality constraint this removes \MainLowRate\% to \MainHighRate\% of
-decoder multiply-accumulates across the rate range, \MeanAtOne\% on average, at a
-BD-Rate cost of \BdRateALow\%. At $0.2\dB$ the mean saving is \MeanAtTwo\% and at
-$0.3\dB$ it is \MeanAtThree\%, within $0.9$ points of the ladder's
-\Ceiling\% architectural ceiling.
+A learned image decoder reconstructs a picture by running a fixed network over
+it. On the intra decoder we study, that network costs $453$ GMAC for a $1080$p
+frame and spends the same arithmetic everywhere in it: a flat sky and a face are
+decoded at the same price. Making decoders cheaper is now its own line of work,
+and almost all of it changes the model, which changes the bitstream, so a file
+encoded yesterday cannot benefit from a decoder redesigned today. What is left
+to vary is not what the decoder is, but how much of it runs where.
 
-Adaptive decoding works only inside a finite window. Tiling sets a rate-dependent
-quality floor below which no allocation is feasible, and a saturation point above
-which every tile already sits on the cheapest path. Rescaling the budget between
-those two limits collapses five rate curves that differ by \BandRawSpread\ points
-onto one within \BandSpreadMean. The dominant cost of adapting is set by per-tile
-decoding depth rather than by the spatial extent of boundary contamination.
-Finally, the bits the entropy model has already spent on a tile predict how deep
-that tile must decode better than a trained \RouterParams-parameter router does,
-by up to \RateRankBeatsBy\ points, with no parameters and nothing added to the
-file. A compressed representation carries not only what to reconstruct, but how
-much computation the reconstruction needs.
+Here we show that decoding computation can be allocated by content on a decoder
+that is not allowed to change. A frame is cut into tiles after the shared part
+of the decoder has run, and each tile leaves the remaining trunk at its own
+depth, with the encoder, the entropy model and the coded latent untouched. On
+\NumSeq\ CTC intra frames a $0.1\dB$ constraint removes
+\MainLowRate--\MainHighRate\% of decoder multiply-accumulates across the rate
+range, \MeanAtOne\% on average, for a BD-Rate cost of \BdRateALow\%.
+
+Two findings are not specific to this decoder. Adaptivity is usable only inside
+a window that tiling itself creates, between a floor below which no allocation
+meets the budget and a saturation point above which none improves; rescaling the
+budget between those limits collapses five rate curves \BandRawSpread\ points
+apart onto one within \BandSpreadMean. And what is needed to allocate is already
+in the file: routing on the bits the entropy model has spent on a tile beats our
+trained \RouterParams-parameter router at every rate, by up to
+\RateRankBeatsBy\ points, while agreeing with the exhaustive search on fewer
+tiles. A compressed representation records not only what to reconstruct, but how
+much computation the reconstruction is worth.
 \end{abstract}
 
 % =========================================================== introduction
