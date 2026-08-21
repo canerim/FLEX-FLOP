@@ -1564,10 +1564,6 @@ def content(colw, fullw):
         r"smaller. Averaged "
         r"over rates, the best static allocation saves \BestStaticMean% where "
         r"the adaptive one saves \MainMean%.")
-    tbl("probe",
-        r"<b>Table N. One frame from each class, at q32 and a 0.1 dB "
-        r"budget.</b> The exits column is the histogram over the ladder, so "
-        r"e4:2 is two tiles at exit 4.")
     par(r"The two shuffled rows separate effects that are easy to conflate. We "
         r"keep the oracle's own exit histogram, so the mix of depths and hence "
         r"the average cost are unchanged, and assign it to tiles at random. "
@@ -1621,6 +1617,10 @@ def content(colw, fullw):
         r"reported below. We report the comparison because the resolution "
         r"dependence it exposes is real and was hidden by a 1080p-only test "
         r"set, and we do not read the tile size as its cause.")
+    tbl("probe",
+        r"<b>Table N. One frame from each class, at q32 and a 0.1 dB "
+        r"budget.</b> The exits column is the histogram over the ladder, so "
+        r"e4:2 is two tiles at exit 4.")
     par(r"The table says where the method stops being adaptive ([[tab:probe]]). Reading down "
         r"it, the exit histogram narrows from a mixture over three rungs to a "
         r"single one, and at 416×240 both tiles take exit 4 and the frame "

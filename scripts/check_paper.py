@@ -247,7 +247,9 @@ if cl:
 # ---- the band collapse ----------------------------------------------------
 bc = J("band_collapse.json")
 if bc:
-    claim("band: raw spread at 0.1 dB", 15.5, bc["raw_spread_at_tenth_db"], 0.2)
+    # 15.5 was the spread under the arithmetic model. The band figure now uses
+    # the hook count, like every table, and the spread it measures is 14.0.
+    claim("band: raw spread at 0.1 dB", 14.0, bc["raw_spread_at_tenth_db"], 0.2)
     claim("band: spread after rescaling, mean", 1.7, bc["band_spread_mean"], 0.2)
     claim("band: spread after rescaling, worst", 2.2,
           bc["band_spread_max_excl_edge"], 0.2)

@@ -22,6 +22,7 @@ import numpy as np
 
 R = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(R / "scripts"))
+from savings import sv
 import naturestyle as ns  # noqa: E402
 
 ns.apply()
@@ -40,7 +41,14 @@ def main(src="results/signalled_RECIPE512_grid.json",
     p = R / sat
     if p.exists():
         sd = json.load(open(p))
+        # The saturation file carries the arithmetic ceiling. The curves here
+        # are hook-counted, so their asymptote is the measured one; fitting a
+        # measured curve to a modelled ceiling put the fit 0.8 points above
+        # every point it was fitted to.
         CEIL = sd.get("ceiling_pct")
+        _cm = R / "results/ceiling_measured.json"
+        if _cm.exists():
+            CEIL = json.load(open(_cm))["ceiling_measured_pct"]
         for r in sd["rows"]:
             band[r["qp"]] = (r["floor_db"], r["saturation_db"])
 
@@ -57,7 +65,7 @@ def main(src="results/signalled_RECIPE512_grid.json",
             continue
         f, sa = band[q]
         u = _np.array([(r["budget_db"] - f) / (sa - f) for r in rs])
-        yv = _np.array([r["saving_pct_vs_release"] for r in rs])
+        yv = _np.array([sv(r) for r in rs])
         m = (u >= 0) & (u <= 1.0001)
         cur[q] = (u[m], yv[m])
     stats = {}
@@ -65,7 +73,7 @@ def main(src="results/signalled_RECIPE512_grid.json",
         g = _np.linspace(0.05, 0.95, 19)
         Y = _np.array([_np.interp(g, *cur[q]) for q in cur])
         sp = Y.max(0) - Y.min(0)
-        raw = [r["saving_pct_vs_release"] for r in rows
+        raw = [sv(r) for r in rows
                if abs(r["budget_db"] - 0.1) < 1e-9]
         # And a one-parameter description of the collapsed curve. The ceiling
         # C is architectural and in closed form; u is the position in the band.
@@ -104,7 +112,7 @@ def main(src="results/signalled_RECIPE512_grid.json",
         rs = sorted([r for r in rows if r["qp"] == q],
                     key=lambda r: r["budget_db"])
         x = [r["budget_db"] for r in rs]
-        y = [r["saving_pct_vs_release"] for r in rs]
+        y = [sv(r) for r in rs]
         ax[0].plot(x, y, marker="o", ms=2.6, color=c, label=f"qp {q}")
         if q in band:
             f, s = band[q]
@@ -114,6 +122,10 @@ def main(src="results/signalled_RECIPE512_grid.json",
             ax[1].plot(u, y, marker="o", ms=2.6, color=c)
     ax[0].set_xlabel("quality budget (dB below the release)")
     ax[0].set_ylabel("compute saved (%)")
+    # The tick marks had no key: one at y=0 for each rate's floor, one at the
+    # top for its saturation point. A reader should not have to infer that.
+    ax[0].text(0.42, 0.30, "| floor (bottom) and\nsaturation (top),\none pair per rate", transform=ax[0].transAxes, fontsize=4.6,
+               color=ns.INK2, va="top", linespacing=1.3)
     ax[0].legend(fontsize=5.4, loc="lower right")
     ax[1].set_xlabel("position in the usable band")
     ax[1].set_ylabel("compute saved (%)")
@@ -121,11 +133,18 @@ def main(src="results/signalled_RECIPE512_grid.json",
     if stats:
         gg = _np.linspace(0.02, 1.0, 100)
         ax[1].plot(gg, stats["ceiling_pct"] * gg ** stats["power_exponent"],
-                   color=ns.INK2, lw=0.8, ls=(0, (3, 2)))
+                   color=ns.INK2, lw=0.8, ls=(0, (3, 2)),
+                   label="fitted power law")
+        # After the line is drawn, not before it: called earlier the legend had
+        # nothing to list and matplotlib drew an empty box.
+        ax[1].legend(fontsize=5.0, loc="lower right", frameon=False)
     for i, l in enumerate("ab"):
         ns.panel(ax[i], l, dx=-0.22)
     fig.tight_layout(w_pad=1.6)
-    fig.savefig(R / out, dpi=300, bbox_inches="tight", facecolor="white")
+    for _d in (R / "docs/figures", R / "paper/figures"):
+        _d.mkdir(parents=True, exist_ok=True)
+        fig.savefig(_d / "budget_band.png", dpi=500, bbox_inches="tight",
+                    pad_inches=0.02, facecolor="white")
     print(f"  -> {out}")
 
 
