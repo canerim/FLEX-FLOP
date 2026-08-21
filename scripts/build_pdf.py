@@ -600,6 +600,14 @@ def content(colw, fullw):
         r"creates; and that the file already says where the computation should "
         r"go.")
     h2("Contributions.")
+    figure("tiles_unequal.png",
+           r"<b>Figure N. Why depth should not be uniform.</b> One 1080p frame, "
+                      r"40 tiles. <b>a</b>, what each tile loses at the shallowest exit "
+                      r"the ladder allows: a few lose nothing measurable and one loses "
+                      r"0.71 dB, and a single depth has to be set by the worst of them. "
+                      r"<b>b</b>, the bits already spent on a tile against the exit the "
+                      r"oracle sends it to, at 0.1 dB."
+           )
     par(r"<b>(i)</b> An early-exit ladder for a learned image decoder that "
         r"picks a depth per tile, which is spatial adaptivity at the "
         r"granularity of a tile. The encoder, the entropy model and the coded "
@@ -678,14 +686,6 @@ def content(colw, fullw):
         r"the one this paper is about: whether the decoder spends more "
         r"computation where the picture needs it. Our row is the intra decoder "
         r"of the last DCVC-UF entry, at the 0.1 dB budget.")
-    figure("tiles_unequal.png",
-           r"<b>Figure N. Why depth should not be uniform.</b> One 1080p frame, "
-                      r"40 tiles. <b>a</b>, what each tile loses at the shallowest exit "
-                      r"the ladder allows: a few lose nothing measurable and one loses "
-                      r"0.71 dB, and a single depth has to be set by the worst of them. "
-                      r"<b>b</b>, the bits already spent on a tile against the exit the "
-                      r"oracle sends it to, at 0.1 dB."
-           )
     par(r"Together the two tables say where the field spends its decoder "
         r"budget ([[tab:literature_img]], [[tab:literature_vid]]). Complexity has moved a long way in both directions: TCM [46] "
         r"and WeConvene [50] buy rate with an order of magnitude more "
@@ -1563,6 +1563,14 @@ def content(colw, fullw):
         r"also the natural analogue of the confidence rules used by early-exit "
         r"classifiers [3, 20], which likewise read a signal off the network's "
         r"own output.")
+    figure("exituse.png",
+           r"<b>Figure N. How deep each class has to go.</b> Mean exit taken "
+           r"by the tiles of each test class at the 0.1 dB budget, ordered by "
+           r"that mean. Resolution is the strongest predictor: the 416×240 "
+           r"class has two tiles a frame and almost no choice, and the 1080p "
+           r"classes have forty and use the whole ladder. This is the "
+           r"dependence Section 5.3 measures, seen per class rather than "
+           r"pooled.")
     par(r"It recovers most of the gap. At q63, random costs \RandomDb dB and "
         r"the oracle 0.100 dB at identical compute, while the oracle-histogram bit ranking costs "
         r"\RateRankDb dB. That is \RateRankRecovers% of the oracle's advantage "
@@ -1647,14 +1655,6 @@ def content(colw, fullw):
         r"But the direction is consistent, and it is enough for us to say that "
         r"a resolution-adaptive tile size is not the easy win the granularity "
         r"argument suggests ([[fig:exituse]]).")
-    figure("exituse.png",
-           r"<b>Figure N. How deep each class has to go.</b> Mean exit taken "
-           r"by the tiles of each test class at the 0.1 dB budget, ordered by "
-           r"that mean. Resolution is the strongest predictor: the 416×240 "
-           r"class has two tiles a frame and almost no choice, and the 1080p "
-           r"classes have forty and use the whole ladder. This is the "
-           r"dependence Section 5.3 measures, seen per class rather than "
-           r"pooled.")
     h2("5.4 The band a distortion budget works in")
     figure("saturation_RECIPE512.png",
            r"<b>Figure 8. Three regions, and only the middle one is a design "
@@ -1970,6 +1970,14 @@ def content(colw, fullw):
         r"<i>spread</i> across the ladder, that is, with how much a tile "
         r"stands to gain from depth, at "
         r"ρ_spread = \RateRankSpreadLo–\RateRankSpreadHi at every rate.")
+    figure("qualitative.png",
+        r"<b>Figure N. What \QualSaving% of the arithmetic costs, to look at.</b> "
+        r"\QualSeq at q\QualQp, one frame, with λ bisected on that frame to "
+        r"\QualDb dB. Both crops are decoded from the <i>same</i> latent at "
+        r"\QualBpp bpp: the released decoder reaches \QualPsnrRel dB and the "
+        r"routed decode \QualPsnrOurs dB. The crop is centred on the tile that "
+        r"gave up the most, tile \QualWorstTile of \QualNTiles, not on a "
+        r"flattering one. Right, the absolute difference at ×\QualAmp.")
     par(r"At a looser budget it stops being a baseline and becomes the "
         r"answer. At 0.3 dB the calibrated bit rule matches the oracle exactly at "
         r"the three lowest rates, where both reach the same architectural "
@@ -2039,14 +2047,6 @@ def content(colw, fullw):
         r"because it can run that router itself (Section 3.1), and nothing "
         r"obliges it to correct every one of them. That is the room "
         r"configuration C works in ([[fig:hybrid]], [[tab:hybrid]]).")
-    figure("qualitative.png",
-        r"<b>Figure N. What \QualSaving% of the arithmetic costs, to look at.</b> "
-        r"\QualSeq at q\QualQp, one frame, with λ bisected on that frame to "
-        r"\QualDb dB. Both crops are decoded from the <i>same</i> latent at "
-        r"\QualBpp bpp: the released decoder reaches \QualPsnrRel dB and the "
-        r"routed decode \QualPsnrOurs dB. The crop is centred on the tile that "
-        r"gave up the most, tile \QualWorstTile of \QualNTiles, not on a "
-        r"flattering one. Right, the absolute difference at ×\QualAmp.")
     par(r"We choose the ρN overridden tiles by Lagrangian regret, "
         r"Δ(t) = L(t,k-hat) − L(t,k*) with L(t,k) = D(t,k) + λc_k the "
         r"objective of the Lagrangian in Section 3.5, so Δ(t) is exactly what "
@@ -2201,6 +2201,15 @@ def content(colw, fullw):
         r"shortfall scales with the saving instead of sitting at a fixed "
         r"offset: at q63 we measure \WallHighMeasured% realised against "
         r"\WallHighPredicted% predicted.")
+    figure("power.png",
+           r"<b>Figure N. Three units for one saving.</b> <b>a</b>, the same "
+           r"routed decode measured as arithmetic, as wall clock and as joules "
+           r"per frame, at 1080p and a 0.1 dB budget. Energy follows the clock, "
+           r"not the arithmetic. <b>b</b>, why: the board draws the same power "
+           r"either way, because the later groups run on a shrinking set of "
+           r"tiles and a partly idle GPU still draws its static power. "
+           r"<b>c</b>, peak memory, which routing raises rather than lowers, by "
+           r"\PeakDelta% at every resolution that fitted on the card.")
     par(r"<b>Seconds and joules.</b> Multiply-accumulates are the right unit "
         r"to optimise, because they do not depend on the machine, but they are "
         r"not the unit a deployment cares about. We measured both on the "
@@ -2282,15 +2291,6 @@ def content(colw, fullw):
         r"you which side of the crossover a given budget sits on.")
 
     # ---- 6 limitations ---------------------------------------------------
-    figure("power.png",
-           r"<b>Figure N. Three units for one saving.</b> <b>a</b>, the same "
-           r"routed decode measured as arithmetic, as wall clock and as joules "
-           r"per frame, at 1080p and a 0.1 dB budget. Energy follows the clock, "
-           r"not the arithmetic. <b>b</b>, why: the board draws the same power "
-           r"either way, because the later groups run on a shrinking set of "
-           r"tiles and a partly idle GPU still draws its static power. "
-           r"<b>c</b>, peak memory, which routing raises rather than lowers, by "
-           r"\PeakDelta% at every resolution that fitted on the card.")
     h1("6. Against the released decoder")
     par(r"Everything above is measured against the released DCVC-UF intra "
         r"decoder, but always as a percentage. This section states it once in "
