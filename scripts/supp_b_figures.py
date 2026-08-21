@@ -86,10 +86,10 @@ def fig_cost():
             ax[0].bar(x[i], 100 * vals[i], 0.82, color="none",
                       edgecolor=ns.VERM, lw=0.7, hatch="////")
     ax[0].axvline(4.5, color=ns.INK2, lw=0.6, ls="--")
-    ax[0].text(4.7, 8.2, "split, j = 2", fontsize=4.8, color=ns.INK2,
+    ax[0].text(4.7, 8.2, "split, j = 2", fontsize=6, color=ns.INK2,
                ha="left", va="top")
     ax[0].set_xticks(x)
-    ax[0].set_xticklabels(names, fontsize=4.2)
+    ax[0].set_xticklabels(names, fontsize=6)
     ax[0].tick_params(axis="x", pad=1)
     ax[0].set_ylabel("% of a released decode", labelpad=1)
     ax[0].set_ylim(0, 9.2)
@@ -112,7 +112,7 @@ def fig_cost():
     ax[1].set_xlabel("exit k", labelpad=1)
     ax[1].set_ylabel("saved (%)")
     ax[1].set_ylim(-4, 46)
-    ax[1].legend(frameon=False, fontsize=4.8, handlelength=1.2, borderpad=0,
+    ax[1].legend(frameon=False, fontsize=6, handlelength=1.2, borderpad=0,
                  labelspacing=0.2, loc="lower left")
     ns.panel(ax[1], "b", dx=-0.28)
 
@@ -150,7 +150,7 @@ def fig_check():
     ax[0].set_ylabel("predicted (%)")
     ax[0].set_xlim(lo, hi)
     ax[0].set_ylim(lo, hi)
-    ax[0].legend(frameon=False, fontsize=4.8, handlelength=1.0, borderpad=0,
+    ax[0].legend(frameon=False, fontsize=6, handlelength=1.0, borderpad=0,
                  labelspacing=0.2, loc="upper left")
     ns.panel(ax[0], "a", dx=-0.26)
 
@@ -166,11 +166,11 @@ def fig_check():
                    lw=0.8, label=f"q{q}")
     ceil = 100 * (D[2] - B[2])
     ax[1].axhline(ceil, color=ns.INK2, lw=0.6, ls="--")
-    ax[1].text(0.5, ceil - 0.012, "exit-2 map", fontsize=4.8, color=ns.INK2,
+    ax[1].text(0.5, ceil - 0.012, "exit-2 map", fontsize=6, color=ns.INK2,
                ha="right", va="top")
     ax[1].set_xlabel("budget (dB)", labelpad=1)
     ax[1].set_ylabel("model − hook count (pts)")
-    ax[1].legend(frameon=False, fontsize=4.8, handlelength=1.1, borderpad=0,
+    ax[1].legend(frameon=False, fontsize=6, handlelength=1.1, borderpad=0,
                  labelspacing=0.15, loc="lower right", ncol=2,
                  columnspacing=0.7)
     ns.panel(ax[1], "b", dx=-0.28)
@@ -206,7 +206,7 @@ def fig_units():
     ax[0].set_ylabel("saved (%)", labelpad=1)
     ax[0].set_ylim(0, 44)
     ax[0].set_yticks([0, 10, 20, 30])
-    ax[0].legend(frameon=False, fontsize=4.8, handlelength=1.0, borderpad=0,
+    ax[0].legend(frameon=False, fontsize=6, handlelength=1.0, borderpad=0,
                  labelspacing=0.2, loc="upper right")
     ns.panel(ax[0], "a", dx=-0.40, dy=1.14)
 
@@ -227,7 +227,7 @@ def fig_units():
     ax[1].set_ylabel("saved (%)", labelpad=1)
     ax[1].set_ylim(12, 46)
     ax[1].set_yticks([20, 30, 40])
-    ax[1].legend(frameon=False, fontsize=4.8, handlelength=1.2, borderpad=0,
+    ax[1].legend(frameon=False, fontsize=6, handlelength=1.2, borderpad=0,
                  labelspacing=0.2, loc="upper right")
     ns.panel(ax[1], "b", dx=-0.40, dy=1.14)
 
@@ -249,7 +249,7 @@ def fig_units():
     ax[2].set_xticks([], minor=True)
     ax[2].set_ylim(0.392, 0.462)
     ax[2].set_yticks([0.40, 0.42, 0.44, 0.46])
-    ax[2].legend(frameon=False, fontsize=4.8, handlelength=1.2, borderpad=0,
+    ax[2].legend(frameon=False, fontsize=6, handlelength=1.2, borderpad=0,
                  labelspacing=0.2, loc="lower left")
     ns.panel(ax[2], "c", dx=-0.44, dy=1.14)
 

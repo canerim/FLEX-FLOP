@@ -62,11 +62,11 @@ def seam_fig(net, cfg, f, dev):
 
     a0 = bare(fig.add_subplot(gs[0, 0]))
     im = a0.imshow(g, cmap="viridis", vmin=0, vmax=max(1.0, g.max()))
-    a0.set_title(f"gate G, {P}×{P}", fontsize=5.2, color=ns.INK2, loc="left",
+    a0.set_title(f"gate G, {P}×{P}", fontsize=6, color=ns.INK2, loc="left",
                  pad=3)
     ns.panel(a0, "a")
     cb = fig.colorbar(im, ax=a0, fraction=0.046, pad=0.03)
-    cb.ax.tick_params(labelsize=4.2, length=1.5, width=0.4)
+    cb.ax.tick_params(labelsize=6, length=1.5, width=0.4)
 
     a1 = bare(fig.add_subplot(gs[0, 1]))
     a1.imshow(np.tile(g, (3, 3)), cmap="viridis", vmin=0,
@@ -74,13 +74,13 @@ def seam_fig(net, cfg, f, dev):
     for t in (1, 2):
         a1.axhline(t * P - 0.5, color="w", lw=0.5)
         a1.axvline(t * P - 0.5, color="w", lw=0.5)
-    a1.set_title("tiled over the canvas", fontsize=5.2, color=ns.INK2,
+    a1.set_title("tiled over the canvas", fontsize=6, color=ns.INK2,
                  loc="left", pad=3)
     ns.panel(a1, "b")
 
     a2 = bare(fig.add_subplot(gs[0, 2]))
     a2.imshow(corr, cmap="inferno")
-    a2.set_title("what it actually adds, on a real frame", fontsize=5.2,
+    a2.set_title("what it actually adds, on a real frame", fontsize=6,
                  color=ns.INK2, loc="left", pad=3)
     ns.panel(a2, "c")
 
@@ -92,14 +92,14 @@ def seam_fig(net, cfg, f, dev):
     prof = g[P // 2, :]
     a3b = a3.inset_axes([0.06, 0.16, 0.92, 0.66])
     a3b.plot(np.arange(P), prof, color=ns.VERM, lw=1.0)
-    a3b.set_xlabel("position across a tile", fontsize=4.8)
-    a3b.set_ylabel("gate", fontsize=4.8)
-    a3b.tick_params(labelsize=4.4, length=1.5, width=0.4)
+    a3b.set_xlabel("position across a tile", fontsize=6)
+    a3b.set_ylabel("gate", fontsize=6)
+    a3b.tick_params(labelsize=6, length=1.5, width=0.4)
     for sp in ("top", "right"):
         a3b.spines[sp].set_visible(False)
     a3b.axhline(prof.min(), color=ns.GRID, lw=0.5, ls=":")
     a3b.text(P / 2, prof.min(), f"{prof.min():.2f} in the interior",
-             fontsize=4.3, color=ns.INK2, ha="center", va="bottom")
+             fontsize=6, color=ns.INK2, ha="center", va="bottom")
     ns.panel(a3, "d", dx=-0.02, dy=0.92)
 
     for _d in (ROOT / "docs/figures", ROOT / "paper/figures"):
@@ -135,9 +135,9 @@ def head_fig(net, cfg, f, q, dev):
         ax.add_patch(FancyBboxPatch((cx - w / 2, y - h / 2), w, h,
                                     boxstyle="round,pad=0.3,rounding_size=0.8",
                                     fc="white", ec=col, lw=0.8, zorder=2))
-        ax.text(cx, y + 1.4, t, ha="center", va="center", fontsize=5.3,
+        ax.text(cx, y + 1.4, t, ha="center", va="center", fontsize=6,
                 color=ns.INK, zorder=3)
-        ax.text(cx, y - 2.1, sub, ha="center", va="center", fontsize=4.6,
+        ax.text(cx, y - 2.1, sub, ha="center", va="center", fontsize=6,
                 color=ns.INK2, zorder=3)
 
     def arr(x0, x1, lab=""):
@@ -146,7 +146,7 @@ def head_fig(net, cfg, f, q, dev):
                                      shrinkA=2, shrinkB=2, zorder=1))
         if lab:
             ax.text((x0 + x1) / 2, 17.6, lab, ha="center", va="bottom",
-                    fontsize=4.5, color=ns.INK2)
+                    fontsize=6, color=ns.INK2)
 
     C_, Hh, Wf = f.shape[1], f.shape[2], f.shape[3]
     box(11, 20, f"stitched feature\\n[1, {C_}, {Hh}, {Wf}]",
@@ -161,7 +161,7 @@ def head_fig(net, cfg, f, q, dev):
     ax.text(50, 3.0, "The head runs once, on the whole frame, after every tile "
             "has been written back. It is 2.4% of the decode and it is the same "
             "block whatever depth the tiles took.",
-            ha="center", va="center", fontsize=4.8, color=ns.INK2)
+            ha="center", va="center", fontsize=6, color=ns.INK2)
 
     out = ROOT / "docs/figures/head.png"
     for _d in (ROOT / "docs/figures", ROOT / "paper/figures"):

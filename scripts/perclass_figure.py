@@ -41,7 +41,7 @@ for c in ORDER:
     a.plot(qps, ys, marker="o", ms=3.5, lw=1.2, color=COL[c],
            label=f"{c.replace('_',' ')}  ({t} tiles, n={n})")
 a.set_xlabel("qp"); a.set_ylabel("decoder MACs saved (%)")
-a.legend(loc="upper right", fontsize=4.4, ncol=1, columnspacing=0.8,
+a.legend(loc="upper right", fontsize=6, ncol=1, columnspacing=0.8,
              frameon=False, handlelength=1.2, labelspacing=0.25,
              borderpad=0.1)
 a.set_ylim(0, 42)
@@ -66,12 +66,12 @@ for c in ORDER:
         # appear, which is also the order of their savings.
         _dy = {"UVG": -7, "HEVC_B": -1}.get(c, 3)
         b.annotate(c.replace("HEVC_", "").replace("MCL-JCV", "MCL"),
-                   (v["tiles"], v["saving"]), fontsize=5, color=ns.INK2,
+                   (v["tiles"], v["saving"]), fontsize=6, color=ns.INK2,
                    textcoords="offset points", xytext=(4, _dy))
 b.set_xscale("log"); b.set_xticks([2, 8, 15, 40])
 b.get_xaxis().set_major_formatter(matplotlib.ticker.ScalarFormatter())
 b.set_xlabel("tiles per frame at 256 px"); b.set_ylabel("MACs saved (%)")
-b.legend(loc="lower right", fontsize=5)
+b.legend(loc="lower right", fontsize=6)
 b.set_title("Saving against tile count",
             fontsize=6, color=ns.INK2, loc="left")
 ns.panel(b, "b", dx=-0.22)
@@ -83,12 +83,12 @@ names = [c for c in ORDER if c in r["per_class"]]
 db = [r["per_class"][c]["db"] for c in names]
 c_.barh(range(len(names)), db, color=[COL[c] for c in names], height=0.62)
 c_.axvline(0.1, color=ns.INK, lw=0.9, ls=(0, (4, 2)))
-c_.text(0.1, len(names) - 0.35, " budget", fontsize=5, color=ns.INK, va="top")
+c_.text(0.1, len(names) - 0.35, " budget", fontsize=6, color=ns.INK, va="top")
 for i, (c, v) in enumerate(zip(names, db)):
-    c_.text(v + 0.003, i, f"{r['per_class'][c]['res']}", fontsize=5,
+    c_.text(v + 0.003, i, f"{r['per_class'][c]['res']}", fontsize=6,
             va="center", color=ns.INK2)
 c_.set_yticks(range(len(names)))
-c_.set_yticklabels([c.replace("_", " ") for c in names], fontsize=5.5)
+c_.set_yticklabels([c.replace("_", " ") for c in names], fontsize=6)
 c_.set_xlabel("dB spent, global operating point")
 c_.set_xlim(0, max(db) * 1.45)
 c_.set_title("dB spent per class", fontsize=6, color=ns.INK2, loc="left")

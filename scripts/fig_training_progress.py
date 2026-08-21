@@ -113,7 +113,7 @@ ns.panel(ax[1], "b")
 ax[0].set_title("Lower is a tighter ladder", fontsize=6, color=ns.INK2, loc="left")
 ax[1].set_title("Higher is less drift from the reference decoder", fontsize=6,
                 color=ns.INK2, loc="left")
-ax[1].legend(loc="lower right", ncol=2, fontsize=5.5)
+ax[1].legend(loc="lower right", ncol=2, fontsize=6)
 fig.tight_layout()
 out = R / "results" / "nf_progress.png"
 fig.savefig(out, dpi=300, bbox_inches="tight")

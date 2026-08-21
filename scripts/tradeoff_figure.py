@@ -124,9 +124,9 @@ def main(src="results/signalled_RECIPE512_grid.json",
     ax[0].set_ylabel("compute saved (%)")
     # The tick marks had no key: one at y=0 for each rate's floor, one at the
     # top for its saturation point. A reader should not have to infer that.
-    ax[0].text(0.42, 0.30, "| floor (bottom) and\nsaturation (top),\none pair per rate", transform=ax[0].transAxes, fontsize=4.6,
+    ax[0].text(0.42, 0.30, "| floor (bottom) and\nsaturation (top),\none pair per rate", transform=ax[0].transAxes, fontsize=6,
                color=ns.INK2, va="top", linespacing=1.3)
-    ax[0].legend(fontsize=5.4, loc="lower right")
+    ax[0].legend(fontsize=6, loc="lower right")
     ax[1].set_xlabel("position in the usable band")
     ax[1].set_ylabel("compute saved (%)")
     ax[1].set_xlim(0, 1)
@@ -137,7 +137,7 @@ def main(src="results/signalled_RECIPE512_grid.json",
                    label="fitted power law")
         # After the line is drawn, not before it: called earlier the legend had
         # nothing to list and matplotlib drew an empty box.
-        ax[1].legend(fontsize=5.0, loc="lower right", frameon=False)
+        ax[1].legend(fontsize=6, loc="lower right", frameon=False)
     for i, l in enumerate("ab"):
         ns.panel(ax[i], l, dx=-0.22)
     fig.tight_layout(w_pad=1.6)

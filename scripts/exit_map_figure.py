@@ -163,7 +163,7 @@ def main(argv):
 
     im = ax[1].imshow(km, cmap=cmap, norm=norm, interpolation="nearest")
     for (r, c), v in np.ndenumerate(km):
-        ax[1].text(c, r, str(v), ha="center", va="center", fontsize=4.5,
+        ax[1].text(c, r, str(v), ha="center", va="center", fontsize=6,
                    color="white" if v >= K - 2 else ns.INK)
     ax[1].set_title(f"{saved:.1f}% saved, {k_sel_db:.3f} dB", fontsize=6,
                     color=ns.INK2, loc="left")
@@ -171,7 +171,7 @@ def main(argv):
     im2 = ax[2].imshow(pen, cmap="viridis", interpolation="nearest")
     ax[2].set_title("dB per tile", fontsize=6, color=ns.INK2, loc="left")
     cb = fig.colorbar(im2, ax=ax[2], fraction=0.046, pad=0.02)
-    cb.ax.tick_params(labelsize=4.5)
+    cb.ax.tick_params(labelsize=6)
 
     for A in ax:
         A.set_xticks([]); A.set_yticks([])
@@ -180,7 +180,7 @@ def main(argv):
     ax[0].legend(handles=[Patch(facecolor=ramp[i],
                                 label=f"exit {k} · {100*(1-float(cost[k])):.0f}% saved")
                           for i, k in enumerate(used)],
-                 loc="upper center", bbox_to_anchor=(0.5, -0.02), fontsize=4.6,
+                 loc="upper center", bbox_to_anchor=(0.5, -0.02), fontsize=6,
                  ncol=2, frameon=False)
     for i, l in enumerate("abc"):
         ns.panel(ax[i], l, dx=-0.06, dy=1.04)

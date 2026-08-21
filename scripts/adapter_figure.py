@@ -35,7 +35,7 @@ for q in qps:
     ax[0].plot([], [], "-", color=COL[q], lw=1.4, label=f"q{q}")
 ax[0].plot([], [], "o", color="#666666", ms=3.6, label="without")
 ax[0].plot([], [], "_", color="#666666", ms=6, label="with")
-ax[0].legend(fontsize=5, loc="lower left", ncol=2, columnspacing=0.7)
+ax[0].legend(fontsize=6, loc="lower left", ncol=2, columnspacing=0.7)
 ns.panel(ax[0], "a")
 
 # b: the gain
@@ -45,7 +45,7 @@ for q, r in zip(qps, d["rows"]):
 ax[1].axhline(0, color=ns.INK, lw=0.7)
 ax[1].set_xticks(exits); ax[1].set_xlabel("exit")
 ax[1].set_ylabel("dB recovered by the adapter")
-ax[1].legend(fontsize=5.5, loc="upper right")
+ax[1].legend(fontsize=6, loc="upper right")
 ns.panel(ax[1], "b", dx=-0.24)
 
 # c: gain against the number of blocks the exit skips

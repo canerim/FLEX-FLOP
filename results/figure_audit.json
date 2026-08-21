@@ -63,10 +63,6 @@
     "outside": [],
     "overlaps": []
   },
-  "head.png": {
-    "outside": [],
-    "overlaps": []
-  },
   "headline_RECIPE512.png": {
     "outside": [],
     "overlaps": []
@@ -179,10 +175,6 @@
     "outside": [],
     "overlaps": []
   },
-  "seam_gate.png": {
-    "outside": [],
-    "overlaps": []
-  },
   "seam_module.png": {
     "outside": [],
     "overlaps": []
@@ -245,7 +237,48 @@
   },
   "training_BEST.png": {
     "outside": [],
-    "overlaps": []
+    "overlaps": [
+      {
+        "a": "epoch 1",
+        "b": "epoch 2",
+        "frac": 0.25
+      },
+      {
+        "a": "epoch 2",
+        "b": "epoch 3",
+        "frac": 0.25
+      },
+      {
+        "a": "epoch 3",
+        "b": "epoch 4",
+        "frac": 0.25
+      },
+      {
+        "a": "epoch 4",
+        "b": "epoch 5",
+        "frac": 0.25
+      },
+      {
+        "a": "epoch 1",
+        "b": "epoch 2",
+        "frac": 0.25
+      },
+      {
+        "a": "epoch 2",
+        "b": "epoch 3",
+        "frac": 0.25
+      },
+      {
+        "a": "epoch 3",
+        "b": "epoch 4",
+        "frac": 0.25
+      },
+      {
+        "a": "epoch 4",
+        "b": "epoch 5",
+        "frac": 0.25
+      }
+    ]
   },
   "training_scheme.png": {
     "outside": [],

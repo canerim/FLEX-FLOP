@@ -96,8 +96,8 @@ def a_search():
     ax[0].set_xlabel("exit"); ax[0].set_ylabel("tile")
     ax[0].set_yticks([]); ax[0].grid(False)
     cb = fig.colorbar(im, ax=ax[0], fraction=0.046, pad=0.03)
-    cb.ax.tick_params(labelsize=5)
-    cb.set_label("MSE ×10⁻⁴", fontsize=5.5)
+    cb.ax.tick_params(labelsize=6)
+    cb.set_label("MSE ×10⁻⁴", fontsize=6)
     ns.panel(ax[0], "a")
 
     ax[1].step(range(len(ks)), cost, where="mid", color=ns.INK, lw=1.3)
@@ -122,8 +122,8 @@ def a_search():
     ax[2].set_yticks([]); ax[2].grid(False)
     cb2 = fig.colorbar(im2, ax=ax[2], fraction=0.046, pad=0.03,
                        ticks=ks)
-    cb2.ax.tick_params(labelsize=5)
-    cb2.set_label("exit", fontsize=5.5)
+    cb2.ax.tick_params(labelsize=6)
+    cb2.set_label("exit", fontsize=6)
     ns.panel(ax[2], "c", dx=-0.26)
     fig.tight_layout()
     save(fig, "router_a_search.png")

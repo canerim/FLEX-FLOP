@@ -348,7 +348,7 @@ def figures(rows, rel_psnr, bpp, D):
         a_.set_xlabel("bpp")
         a_.set_title(title, fontsize=6, color=ns.INK2, loc="left")
     ax[0].set_ylabel("PSNR (dB), YUV420")
-    ax[0].legend(loc="lower right", fontsize=4.4, frameon=False)
+    ax[0].legend(loc="lower right", fontsize=6, frameon=False)
     for i, l in enumerate("abc"):
         ns.panel(ax[i], l, dx=-0.20)
     fig.tight_layout(w_pad=1.8)
@@ -368,7 +368,7 @@ def figures(rows, rel_psnr, bpp, D):
                   label="released decoder")
     ax[0].set_xlabel("BD-Rate cost (%), lower is better")
     ax[0].set_ylabel("intra decode MACs saved (%)")
-    ax[0].legend(loc="upper left", fontsize=5.0, frameon=False,
+    ax[0].legend(loc="upper left", fontsize=6, frameon=False,
                  handletextpad=0.4, labelspacing=0.28)
     ns.panel(ax[0], "a")
 
@@ -379,10 +379,10 @@ def figures(rows, rel_psnr, bpp, D):
     cols = [ns.INK] + [BCOL[b] for _, b, *_ in rows]
     ax[1].barh(range(len(macs)), macs, color=cols, height=0.6)
     for i, m in enumerate(macs):
-        ax[1].text(m + 6, i, f"{m:.0f}G", va="center", fontsize=5,
+        ax[1].text(m + 6, i, f"{m:.0f}G", va="center", fontsize=6,
                    color=ns.INK2)
     ax[1].set_yticks(range(len(macs)))
-    ax[1].set_yticklabels(labels, fontsize=4.6)
+    ax[1].set_yticklabels(labels, fontsize=6)
     ax[1].invert_yaxis()
     ax[1].set_xlabel("intra decode GMAC per 1080p frame")
     ax[1].set_xlim(0, INTRA_GMAC * 1.18)

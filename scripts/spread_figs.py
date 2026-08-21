@@ -47,7 +47,7 @@ RATE_COLS = ["#08306b", "#2171b5", "#4292c6", "#6baed6", "#9ecae1"]
 def tidy(ax):
     ax.spines["top"].set_visible(False)
     ax.spines["right"].set_visible(False)
-    ax.tick_params(labelsize=5.4, length=2, width=0.5)
+    ax.tick_params(labelsize=6, length=2, width=0.5)
     ax.xaxis.label.set_size(5.8)
     ax.yaxis.label.set_size(5.8)
     return ax
@@ -83,13 +83,13 @@ def spread():
     ax.set_xlabel("quality index")
     lo, hi = rows[0], rows[-1]
     ax.annotate(short(hi["worst_seq"]), (len(rows) - 1, hi["_min"]),
-                textcoords="offset points", xytext=(8, -2), fontsize=4.6,
+                textcoords="offset points", xytext=(8, -2), fontsize=6,
                 color=ns.INK2)
     ax.annotate(short(lo["best_seq"]), (0, lo["max"]),
-                textcoords="offset points", xytext=(8, -2), fontsize=4.6,
+                textcoords="offset points", xytext=(8, -2), fontsize=6,
                 color=ns.INK2)
     ax.text(0.02, 0.05, "bar is the median", transform=ax.transAxes,
-            fontsize=4.8, color=ns.INK2)
+            fontsize=6, color=ns.INK2)
     save(fig, "spread.png")
     # Dumped so the caption's numbers come from the same values the dots do.
     # They were typed in from an older run of this script on a 40-sequence file
@@ -133,23 +133,23 @@ def exituse():
     fig, ax = plt.subplots(figsize=(ns.W1, 1.5))
     im = ax.imshow(M, cmap="YlGnBu", aspect="auto", vmin=2, vmax=5)
     ax.set_xticks(range(len(qs)))
-    ax.set_xticklabels([f"q{q}" for q in qs], fontsize=5.4)
+    ax.set_xticklabels([f"q{q}" for q in qs], fontsize=6)
     ax.set_yticks(range(len(classes)))
-    ax.set_yticklabels([f"{c}  {res.get(c, '')}" for c in classes], fontsize=4.8)
+    ax.set_yticklabels([f"{c}  {res.get(c, '')}" for c in classes], fontsize=6)
     ax.tick_params(length=0)
     for ci in range(len(classes)):
         for qi in range(len(qs)):
             if np.isnan(M[ci, qi]):
                 continue
             ax.text(qi, ci, f"{M[ci, qi]:.1f}", ha="center", va="center",
-                    fontsize=4.6,
+                    fontsize=6,
                     color="white" if M[ci, qi] > 3.6 else ns.INK)
     for sp in ax.spines.values():
         sp.set_visible(False)
     cb = fig.colorbar(im, ax=ax, fraction=0.030, pad=0.02)
-    cb.ax.tick_params(labelsize=4.6, length=1.5, width=0.4)
-    cb.set_label("mean exit taken", fontsize=5.2)
-    ax.set_xlabel("quality index", fontsize=5.8)
+    cb.ax.tick_params(labelsize=6, length=1.5, width=0.4)
+    cb.set_label("mean exit taken", fontsize=6)
+    ax.set_xlabel("quality index", fontsize=6)
     save(fig, "exituse.png")
     print(f"  wrote exituse.png   mean exit {np.nanmin(M):.2f} to "
           f"{np.nanmax(M):.2f} across {len(classes)} classes")

@@ -2602,33 +2602,28 @@ def content(colw, fullw):
     # ---- 7 conclusion ----------------------------------------------------
     h1("8. Conclusion")
     par(r"The intra decoder of DCVC-UF can be run at a depth chosen per tile "
-        r"from its content. At a 0.1 dB budget this removes "
-        r"\MainLowRate% to \MainHighRate% of its multiply-accumulates for a "
-        r"BD-Rate cost of \BdRateALow%, with no change to the encoder and none "
-        r"to the coded payload.")
-    par(r"Three lessons should carry to decoders of this class, a residual "
-        r"trunk behind a shared head, and none is about early exit.")
-    par(r"Tiling is the dominant cost and it is governed by depth. All of it "
-        r"traces back to a single 3×3 that is 0.29% of the arithmetic, and "
-        r"the penalty grows as the square of how many such convolutions run "
-        r"per tile; the affected-area fraction usually quoted alongside it "
-        r"predicts that penalty badly.")
-    par(r"The exact remedy is in tension with the thing it enables. "
-        r"Giving each convolution its real neighbour is bit-identical at "
-        r"uniform depth; under routing it destroys the allocation, because "
-        r"routing deliberately violates the condition that makes it exact. "
-        r"Any method mixing spatial adaptivity with tiled inference will "
-        r"meet it.")
-    par(r"A distortion budget is only a control variable inside a "
-        r"measurable band. Below the floor it admits nothing; above saturation "
-        r"more buys nothing. A saving quoted without saying where in that "
-        r"band it sits omits what matters most.")
-    par(r"Three cautions attach to the measurements. A saving in operations "
-        r"bounds a saving in time optimistically, and the optimism scales "
-        r"with it. A learned router needs a free baseline: routing on the "
-        r"bits already spent per tile costs nothing and beats our trained "
-        r"head. And a timing harness reports numbers even when it times the "
-        r"wrong device, as ours did.")
+        r"from its content. At a 0.1 dB budget this removes \MainLowRate% to "
+        r"\MainHighRate% of its multiply-accumulates for a BD-Rate cost of "
+        r"\BdRateALow%, with no change to the encoder and none to the payload. "
+        r"Three lessons should carry to decoders of this class, and none is "
+        r"about early exit.")
+    par(r"Tiling is the dominant cost and it is governed by depth. It traces "
+        r"back to a single 3×3 that is 0.29% of the arithmetic, and the "
+        r"penalty grows as the square of how many run per tile; the "
+        r"affected-area fraction usually quoted predicts it badly.")
+    par(r"The exact remedy is in tension with the thing it enables. Giving "
+        r"each convolution its real neighbour is bit-identical at uniform "
+        r"depth; under routing it destroys the allocation, because routing "
+        r"violates the condition that makes it exact. Any method mixing "
+        r"spatial adaptivity with tiled inference meets this.")
+    par(r"A distortion budget is only a control variable inside a measurable "
+        r"band. Below the floor it admits nothing; above saturation more buys "
+        r"nothing. A saving quoted without saying where in that band it sits "
+        r"omits what matters.")
+    par(r"Three cautions attach. A saving in operations bounds one in time "
+        r"optimistically, and the optimism scales with it. A learned router "
+        r"needs a free baseline; ours loses to one costing nothing. And a "
+        r"timing harness reports numbers even when it times the wrong thing.")
 
     return F
 

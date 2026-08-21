@@ -28,8 +28,13 @@ def apply():
     plt.rcParams.update({
         "font.family": "sans-serif",
         "font.sans-serif": ["DejaVu Sans", "Helvetica", "Arial"],
-        "font.size": 7, "axes.labelsize": 7, "axes.titlesize": 7,
-        "xtick.labelsize": 6, "ytick.labelsize": 6, "legend.fontsize": 6,
+        # A point larger than Nature's floor throughout. Nature sets body text
+        # at 7 and ticks at 6 for a 89 mm column; these figures are read in a
+        # CVPR two-column layout and at that size the ticks were the first
+        # thing the author called unreadable. Nothing here goes below 6 now,
+        # and no figure sets its own size below 6 either.
+        "font.size": 8, "axes.labelsize": 8, "axes.titlesize": 8,
+        "xtick.labelsize": 7, "ytick.labelsize": 7, "legend.fontsize": 7,
         "axes.linewidth": 0.5, "grid.linewidth": 0.4,
         "xtick.major.width": 0.5, "ytick.major.width": 0.5,
         "xtick.major.size": 2, "ytick.major.size": 2,
@@ -51,7 +56,7 @@ def panel(ax, letter, dx=-0.16, dy=1.06):
     is marked here and nudged left at save time if it turns out to collide;
     see _place_panels below.
     """
-    t = ax.text(dx, dy, letter, transform=ax.transAxes, fontsize=8,
+    t = ax.text(dx, dy, letter, transform=ax.transAxes, fontsize=9,
                 fontweight="bold", va="top", ha="left", color=INK)
     t._ns_panel = True
     return t

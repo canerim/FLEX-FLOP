@@ -38,7 +38,7 @@ def main(src="results/combined_RECIPE512_b01.json",
         a_.set_xlabel("blend weight $w$   (0 = bits, 1 = head)")
     ax[0].set_ylabel("saved at 0.1 dB (%)")
     ax[1].set_ylabel("change from $w{=}0$ (points)")
-    ax[0].legend(fontsize=5.4, loc="lower left")
+    ax[0].legend(fontsize=6, loc="lower left")
     for i, l in enumerate("ab"):
         ns.panel(ax[i], l, dx=-0.22)
     fig.tight_layout(w_pad=1.6)

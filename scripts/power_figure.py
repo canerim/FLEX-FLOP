@@ -46,11 +46,11 @@ for k, (v, c, lab) in enumerate([(mac, ns.BLUE, "MACs"),
     ax[0].bar(x + (k - 1) * w, v, w, color=c, label=lab, lw=0)
 ax[0].set_xticks(x); ax[0].set_xticklabels([f"q{q}" for q in qps])
 ax[0].set_ylabel("saved (%)")
-ax[0].legend(frameon=False, fontsize=5, handlelength=1.1, borderpad=0,
+ax[0].legend(frameon=False, fontsize=6, handlelength=1.1, borderpad=0,
              loc="upper right")
 ax[0].set_ylim(0, 40)
 ns.panel(ax[0], "a")
-ax[0].set_title("1080p, 0.1 dB budget", fontsize=5.8, color=ns.INK2, loc="left")
+ax[0].set_title("1080p, 0.1 dB budget", fontsize=6, color=ns.INK2, loc="left")
 
 # (b) why: the board never gets cooler
 pf = [r["full"]["watts_mean"] for r in rows]
@@ -58,12 +58,12 @@ pr = [r["routed"]["watts_mean"] for r in rows]
 ax[1].plot(x, pf, "o-", color=ns.INK2, ms=2.4, lw=0.9, label="full decode")
 ax[1].plot(x, pr, "s--", color=ns.VERM, ms=2.4, lw=0.9, label="routed")
 ax[1].axhline(P["power_limit_w"], color=ns.GRID, lw=0.6, ls=":")
-ax[1].text(x[0], P["power_limit_w"] - 0.6, "board limit", fontsize=4.8,
+ax[1].text(x[0], P["power_limit_w"] - 0.6, "board limit", fontsize=6,
            color=ns.INK2, ha="left", va="top")
 ax[1].set_xticks(x); ax[1].set_xticklabels([f"q{q}" for q in qps])
 ax[1].set_ylabel("board power (W)")
 ax[1].set_ylim(282, 304)
-ax[1].legend(frameon=False, fontsize=5, handlelength=1.4, borderpad=0,
+ax[1].legend(frameon=False, fontsize=6, handlelength=1.4, borderpad=0,
              loc="lower right")
 ns.panel(ax[1], "b")
 
@@ -77,18 +77,18 @@ ax[2].bar(xf + 0.19, [r["peak_mb_routed"] for r in fr], 0.38, color=ns.VERM,
           lw=0, label="routed")
 for i, r in enumerate(fr):
     ax[2].text(i, r["peak_mb_routed"] + 30, f"+{r['peak_delta_pct']:.1f}%",
-               ha="center", fontsize=4.8, color=ns.VERM)
+               ha="center", fontsize=6, color=ns.VERM)
 ax[2].set_xticks(xf)
-ax[2].set_xticklabels([s.replace("x", "×") for s in lbl], fontsize=4.8)
+ax[2].set_xticklabels([s.replace("x", "×") for s in lbl], fontsize=6)
 ax[2].set_ylabel("peak memory (MB)")
 ax[2].set_ylim(0, 1250)
-ax[2].legend(frameon=False, fontsize=5, handlelength=1.1, borderpad=0,
+ax[2].legend(frameon=False, fontsize=6, handlelength=1.1, borderpad=0,
              loc="upper left")
 ns.panel(ax[2], "c")
 
 for A in ax:
     A.spines["top"].set_visible(False); A.spines["right"].set_visible(False)
-    A.tick_params(labelsize=5.2, length=2, width=0.5)
+    A.tick_params(labelsize=6, length=2, width=0.5)
     A.yaxis.label.set_size(5.6)
 
 for _d in (ROOT / "docs/figures", ROOT / "paper/figures"):

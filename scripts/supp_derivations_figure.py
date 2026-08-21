@@ -52,7 +52,7 @@ ax[0].plot(vx, vy, "--s", color=ns.ORANGE, lw=1.0, ms=3.0,
            label="fixed proportions")
 for x, y, kk in zip(vx, vy, range(j, j + K)):
     ax[0].annotate(f"{kk}", (x, y), textcoords="offset points",
-                   xytext=(3.5, 2.5), fontsize=5.5, color=ns.ORANGE)
+                   xytext=(3.5, 2.5), fontsize=6, color=ns.ORANGE)
 # the vertical gap at the middle vertex, where both sets are interior
 xg = vx[1]
 yg = np.interp(xg, sv[::-1], dbv[::-1])
@@ -61,10 +61,10 @@ ax[0].annotate("", xy=(xg, yg), xytext=(xg, vy[1]),
 # Right of the arrow, not left of it: on the left it sat on the vertex label
 # for exit 4, which is three data units away at this scale.
 ax[0].text(xg + 1.0, 0.5 * (yg + vy[1]), f"{vy[1] - yg:.3f} dB",
-           fontsize=5.5, va="center", ha="left", color=ns.INK2)
+           fontsize=6, va="center", ha="left", color=ns.INK2)
 ax[0].set_xlabel("MACs saved (%)")
 ax[0].set_ylabel("dB below released")
-ax[0].legend(fontsize=5.5, loc="upper left")
+ax[0].legend(fontsize=6, loc="upper left")
 ns.panel(ax[0], "a", dx=-0.30)
 
 # b -- what the price does to each tile, tiles ordered by coded bits
@@ -80,7 +80,7 @@ ax[1].set_xlim(-7.5, -3.5)
 cb = fig.colorbar(plt.cm.ScalarMappable(norm=norm, cmap=cmap), ax=ax[1],
                   ticks=np.arange(j, j + K), pad=0.03, fraction=0.09)
 cb.set_label("exit", fontsize=6)
-cb.ax.tick_params(labelsize=5.5, width=0.4, length=1.6)
+cb.ax.tick_params(labelsize=6, width=0.4, length=1.6)
 cb.outline.set_linewidth(0.4)
 ns.panel(ax[1], "b", dx=-0.34)
 

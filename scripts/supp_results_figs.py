@@ -97,7 +97,7 @@ def grid():
         for i in range(m.shape[0]):
             for j in range(m.shape[1]):
                 v = m[i, j]
-                a.text(j, i, fmt % v, ha="center", va="center", fontsize=5.4,
+                a.text(j, i, fmt % v, ha="center", va="center", fontsize=6,
                        color="white" if (v - lo) / rng < 0.55 else "black")
         for sp in a.spines.values():
             sp.set_visible(False)
@@ -143,9 +143,9 @@ def frontier():
         a.set_xticks([0.0, 0.2, 0.4, 0.6])
         a.set_ylim(-3, 44)
     ax[0].set_ylabel("compute saved (%)")
-    ax[0].legend(loc="lower right", fontsize=4.6, handlelength=1.0,
+    ax[0].legend(loc="lower right", fontsize=6, handlelength=1.0,
                  labelspacing=0.25, borderpad=0.1)
-    ax[0].text(0.02, ceiling + 1.2, "ceiling", fontsize=4.8, color=ns.INK2)
+    ax[0].text(0.02, ceiling + 1.2, "ceiling", fontsize=6, color=ns.INK2)
     fig.subplots_adjust(bottom=0.26, wspace=0.16)
     fig.supxlabel("quality given up (dB), mean over the sequences of the class",
                   fontsize=6.5, y=0.075)
@@ -206,7 +206,7 @@ def spread():
     b.set_ylabel("compute saved (%)")
     b.set_title("mean, with the quartiles", fontsize=6, color=ns.INK2,
                 loc="left")
-    b.legend(loc="lower right", fontsize=5, handlelength=1.0,
+    b.legend(loc="lower right", fontsize=6, handlelength=1.0,
              labelspacing=0.25, ncol=2, columnspacing=0.8)
     ns.panel(b, "b", dx=-0.24)
     fig.subplots_adjust(wspace=0.42)
@@ -250,7 +250,7 @@ def exits():
     a.set_ylim(0, 100)
     a.set_title("0.1 dB, by rate", fontsize=6, color=ns.INK2, loc="left")
     a.legend(loc="upper center", bbox_to_anchor=(0.5, -0.14), ncol=4,
-             fontsize=5, handlelength=0.9, columnspacing=0.9)
+             fontsize=6, handlelength=0.9, columnspacing=0.9)
     ns.panel(a, "a", dx=-0.24)
 
     b = ax[1]
@@ -289,7 +289,7 @@ def rd():
            lw=1.1, ls="--", color=ns.VERM, label="ours, 0.1 dB budget")
     a.set_xlabel("bpp")
     a.set_ylabel("PSNR (dB)")
-    a.legend(loc="lower right", fontsize=5, handlelength=1.4)
+    a.legend(loc="lower right", fontsize=6, handlelength=1.4)
     a.set_title("the two curves overlap", fontsize=6, color=ns.INK2,
                 loc="left")
     ns.panel(a, "a", dx=-0.26)
@@ -304,7 +304,7 @@ def rd():
           width=0.36, color=ns.ORANGE, label="MS-SSIM, in dB")
     b.set_xticks(x, [f"q{r['qp']}" for r in order])
     b.set_ylabel("quality given up (dB)")
-    b.legend(loc="upper left", fontsize=5, handlelength=0.9)
+    b.legend(loc="upper left", fontsize=6, handlelength=0.9)
     b.set_title("the same loss, two metrics", fontsize=6, color=ns.INK2,
                 loc="left")
     ns.panel(b, "b", dx=-0.26)
@@ -331,7 +331,7 @@ def tail():
     a.set_ylabel("tile penalty (dB)")
     a.set_title("mean (solid), p95 (dotted)", fontsize=6, color=ns.INK2,
                 loc="left")
-    a.legend(loc="upper right", fontsize=5, ncol=2, handlelength=1.0,
+    a.legend(loc="upper right", fontsize=6, ncol=2, handlelength=1.0,
              columnspacing=0.8, labelspacing=0.25)
     ns.panel(a, "a", dx=-0.26)
 
@@ -347,7 +347,7 @@ def tail():
     b.plot(x + 0.19, pad95, "_", ms=6, mew=1.0, color=ns.INK)
     b.set_xticks(x, [f"q{q}" for q in QPS])
     b.set_ylabel("tile penalty (dB)")
-    b.legend(loc="upper right", fontsize=5, handlelength=0.9)
+    b.legend(loc="upper right", fontsize=6, handlelength=0.9)
     b.set_title("bars mean, ticks p95", fontsize=6, color=ns.INK2, loc="left")
     ns.panel(b, "b", dx=-0.26)
     fig.subplots_adjust(wspace=0.42)

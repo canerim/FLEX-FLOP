@@ -38,16 +38,16 @@ def blank(a):
     a.grid(False)
 
 
-def chip(a, x, y, w, h, txt, ec, fc="#ffffff", fs=5.4, bold=False, sub=None):
+def chip(a, x, y, w, h, txt, ec, fc="#ffffff", fs=6.5, bold=False, sub=None):
     a.add_patch(FancyBboxPatch((x, y), w, h, boxstyle="round,pad=0.004",
                                facecolor=fc, edgecolor=ec, lw=0.7,
                                transform=a.transAxes, zorder=3))
-    a.text(x + w / 2, y + h * (0.67 if sub else 0.5), txt, ha="center",
+    a.text(x + w / 2, y + h * (0.74 if sub else 0.5), txt, ha="center",
            va="center", fontsize=fs, color=INK,
            weight="bold" if bold else "normal", transform=a.transAxes, zorder=4)
     if sub:
-        a.text(x + w / 2, y + h * 0.23, sub, ha="center", va="center",
-               fontsize=4.1, color=INK2, transform=a.transAxes, zorder=4)
+        a.text(x + w / 2, y + h * 0.22, sub, ha="center", va="center",
+               fontsize=6, color=INK2, transform=a.transAxes, zorder=4)
 
 
 def _res(a, x0, x1, ytop, hgt):
@@ -90,18 +90,18 @@ def panel_patchify(a):
                           facecolor=ORANGE, alpha=0.55, edgecolor=ORANGE,
                           lw=0.9, transform=a.transAxes))
     a.text(x0 + w / 2, y0 + h + 0.08, "[1, 384, 160, 256]", ha="center",
-           fontsize=5, color=INK2, transform=a.transAxes)
+           fontsize=6, color=INK2, transform=a.transAxes)
     a.text(x0 + w / 2, y0 - 0.11, "5 × 8 tiles of 32 × 32", ha="center",
-           fontsize=5, color=INK2, transform=a.transAxes)
+           fontsize=6, color=INK2, transform=a.transAxes)
 
     # the surgery
     xs = 0.345
     for k, t in enumerate((".view(1, 384, 5, 32, 8, 32)",
                            ".permute(0, 2, 4, 1, 3, 5)",
                            ".reshape(40, 384, 32, 32)")):
-        a.text(xs, 0.62 - 0.13 * k, t, fontsize=5.2, family="monospace",
+        a.text(xs, 0.62 - 0.13 * k, t, fontsize=6, family="monospace",
                color=INK, transform=a.transAxes)
-    a.text(xs, 0.23, "0 FLOP", fontsize=5.4, color=GREEN, weight="bold",
+    a.text(xs, 0.23, "0 FLOP", fontsize=6, color=GREEN, weight="bold",
            transform=a.transAxes)
     arrow(a, 0.30, 0.50, 0.335, 0.50)
 
@@ -118,12 +118,12 @@ def panel_patchify(a):
                           lw=1.0, transform=a.transAxes, zorder=9))
     arrow(a, 0.605, 0.50, 0.638, 0.50)
     a.text(bx + bw / 2 + 0.02, by + bh + 0.10,
-           "40 batch elements,\neach 384 × 32 × 32", ha="center", fontsize=5,
+           "40 batch elements,\neach 384 × 32 × 32", ha="center", fontsize=6,
            color=INK2, transform=a.transAxes, linespacing=1.5)
     a.text(0.80, 0.50,
            "every later 3×3 meets padding\nhere, not a neighbour — this\n"
            "reshape is where the seam is born",
-           fontsize=4.9, color=VERM, va="center", ha="left",
+           fontsize=6, color=VERM, va="center", ha="left",
            transform=a.transAxes, linespacing=1.7)
 
 
@@ -133,16 +133,16 @@ def panel_block(a):
     a.text(0.0, 0.99, "one exit group  =  2 × DepthConvBlock", fontsize=6.5,
            weight="bold", color=BLUE, transform=a.transAxes, va="top")
 
-    H = 0.17
-    y = 0.53                                   # dc row
-    y2 = 0.09                                  # ffn row
+    H = 0.24
+    y = 0.55                                   # dc row
+    y2 = 0.10                                  # ffn row
     XIN, XOUT = 0.06, 0.845                    # in / out chips
     JOIN = 0.775                               # the two residual adds
 
     chip(a, XIN, y, 0.075, H, "in", BLUE)
-    a.text(0.0, y + H / 2, "dc", fontsize=5.4, color=INK2, style="italic",
+    a.text(0.0, y + H / 2, "dc", fontsize=6, color=INK2, style="italic",
            va="center", transform=a.transAxes)
-    a.text(0.0, y2 + H / 2, "ffn", fontsize=5.4, color=INK2, style="italic",
+    a.text(0.0, y2 + H / 2, "ffn", fontsize=6, color=INK2, style="italic",
            va="center", transform=a.transAxes)
 
     dc = [(0.17, 0.135, "PW 1×1", "384 → 384", BLUE, "#ffffff", False),
@@ -183,9 +183,9 @@ def panel_block(a):
     a.text(0.43, y - 0.085,
            "the only operator with spatial extent — 0.29% of the block, "
            "and the whole cause of the seam",
-           fontsize=4.8, color=VERM, ha="center", transform=a.transAxes)
+           fontsize=6, color=VERM, ha="center", transform=a.transAxes)
     a.text(0.43, y2 - 0.085, "74.8% of the block, and entirely pointwise",
-           fontsize=4.8, color=GREEN, ha="center", transform=a.transAxes)
+           fontsize=6, color=GREEN, ha="center", transform=a.transAxes)
 
 
 # ------------------------------------------------------------- c: the adapters
@@ -195,8 +195,8 @@ def panel_adapters(a):
            color=ORANGE, transform=a.transAxes, va="top")
 
     y = 0.55
-    a.text(0.0, y + 0.26, "conv1x1  ·  exits skipping < 4 blocks",
-           fontsize=5.2, color=INK2, transform=a.transAxes)
+    a.text(0.0, y + 0.30, "conv1x1  ·  exits skipping < 4 blocks",
+           fontsize=6, color=INK2, transform=a.transAxes)
     chip(a, 0.02, y, 0.10, 0.15, "f", ORANGE, fc="#fdf6ec")
     chip(a, 0.17, y, 0.17, 0.15, "PW 1×1", ORANGE, fc="#fdf6ec",
          sub="384 → 384,  W = 0")
@@ -205,12 +205,12 @@ def panel_adapters(a):
     for x0, x1 in ((0.125, 0.165), (0.343, 0.385)):
         arrow(a, x0, y + 0.075, x1, y + 0.075)
     _res(a, 0.07, 0.40, y + 0.155, 0.085)
-    a.text(0.46, y + 0.075, "1 C²", fontsize=5.6, color=INK, va="center",
+    a.text(0.46, y + 0.075, "1 C²", fontsize=6, color=INK, va="center",
            weight="bold", transform=a.transAxes)
 
     y2 = 0.12
     a.text(0.0, y2 + 0.26, "ffn  ·  exits skipping ≥ 4 blocks",
-           fontsize=5.2, color=INK2, transform=a.transAxes)
+           fontsize=6, color=INK2, transform=a.transAxes)
     chip(a, 0.02, y2, 0.08, 0.15, "f", ORANGE, fc="#fdf6ec")
     chip(a, 0.13, y2, 0.15, 0.15, "PW 1×1", ORANGE, fc="#fdf6ec",
          sub="384 → 1536")
@@ -224,18 +224,18 @@ def panel_adapters(a):
                    (0.643, 0.665)):
         arrow(a, x0, y2 + 0.075, x1, y2 + 0.075)
     _res(a, 0.06, 0.68, y2 + 0.155, 0.085)
-    a.text(0.74, y2 + 0.075, "5 C²", fontsize=5.6, color=VERM, va="center",
+    a.text(0.74, y2 + 0.075, "5 C²", fontsize=6, color=VERM, va="center",
            weight="bold", transform=a.transAxes)
-    a.text(0.74, y2 - 0.005, "not 2", fontsize=4.6, color=VERM, va="center",
+    a.text(0.74, y2 - 0.005, "not 2", fontsize=6, color=VERM, va="center",
            transform=a.transAxes)
     a.text(0.02, 0.02, "both residual and zero-initialised, so at step 0 the "
-           "ladder is bit-exact DCVC-UF", fontsize=4.8, color=INK2,
+           "ladder is bit-exact DCVC-UF", fontsize=6, color=INK2,
            transform=a.transAxes)
 
 
 def main(out="docs/figures/pipeline_detail.png"):
-    fig = plt.figure(figsize=(ns.W2, 4.3))
-    gs = fig.add_gridspec(3, 1, height_ratios=[1.15, 1.0, 1.0], hspace=0.50)
+    fig = plt.figure(figsize=(ns.W2, 7.4))
+    gs = fig.add_gridspec(3, 1, height_ratios=[1.0, 1.25, 1.1], hspace=0.42)
     for i, (fn, lab) in enumerate(((panel_patchify, "a"),
                                    (panel_block, "b"),
                                    (panel_adapters, "c"))):

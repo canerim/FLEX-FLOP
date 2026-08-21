@@ -52,13 +52,13 @@ ax[1].axvspan(dbv[-1], dbv.max() + 0.05, color="#bbbbbb", alpha=0.22, lw=0)
 _lo, _hi = ax[1].get_ylim() if ax[1].get_ylim()[1] > 0 else (0, sv.max())
 _ytxt = sv.max() * 0.52
 ax[1].text(dbv[0] - 0.008, _ytxt, "infeasible", rotation=90, ha="center",
-           va="center", fontsize=4.8, color=ns.VERM)
+           va="center", fontsize=6, color=ns.VERM)
 ax[1].text(dbv[-1] + 0.018, _ytxt, "wasted", rotation=90, ha="center",
-           va="center", fontsize=4.8, color=ns.INK2)
+           va="center", fontsize=6, color=ns.INK2)
 ax[1].annotate("floor", (dbv[0], sv[0]), textcoords="offset points",
-               xytext=(9, 4), fontsize=4.8, color=ns.GREEN)
+               xytext=(9, 4), fontsize=6, color=ns.GREEN)
 ax[1].annotate("saturation", (dbv[-1], sv[-1]), textcoords="offset points",
-               xytext=(-44, 7), fontsize=4.8, color=ns.ORANGE)
+               xytext=(-44, 7), fontsize=6, color=ns.ORANGE)
 ax[1].set_xlabel("dB"); ax[1].set_ylabel("MACs saved (%)")
 ax[1].set_xlim(dbv[0] - 0.02, dbv[-1] + 0.04)
 ns.panel(ax[1], "b", dx=-0.24)
@@ -71,7 +71,7 @@ ax[2].plot(b_, [r["pareto_saving"] for r in rows], "-o", ms=3.5, lw=1.1,
 ax[2].plot(b_, [r["hull_saving"] for r in rows], "--s", ms=3.5, lw=1.1,
            color=ns.BLUE, label="reachable by λ")
 ax[2].set_xlabel("budget (dB)"); ax[2].set_ylabel("MACs saved (%)")
-ax[2].legend(fontsize=5.5, loc="lower right")
+ax[2].legend(fontsize=6, loc="lower right")
 ns.panel(ax[2], "c", dx=-0.24)
 
 fig.tight_layout()

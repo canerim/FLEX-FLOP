@@ -117,33 +117,33 @@ def main(argv):
     a0.imshow(img_ref)
     grid(a0)
     a0.add_patch(Rectangle((c0, r0), S, S, ec=ns.VERM, fc="none", lw=0.9))
-    a0.set_title(f"{a.seq} at q{a.qp}, the {nh}x{nw} tile grid", fontsize=5.2,
+    a0.set_title(f"{a.seq} at q{a.qp}, the {nh}x{nw} tile grid", fontsize=6,
                  color=ns.INK2, loc="left", pad=3)
     ns.panel(a0, "a")
 
     a1 = bare(fig.add_subplot(gs[0, 1]))
     a1.imshow(np.clip(e_off * a.amp, 0, 1), cmap="inferno", vmin=0, vmax=1)
-    a1.set_title(f"repair off, {d_off:+.3f} dB", fontsize=5.2, color=ns.VERM,
+    a1.set_title(f"repair off, {d_off:+.3f} dB", fontsize=6, color=ns.VERM,
                  loc="left", pad=3)
     ns.panel(a1, "b")
 
     a2 = bare(fig.add_subplot(gs[1, 0]))
     a2.imshow(np.clip(e_on * a.amp, 0, 1), cmap="inferno", vmin=0, vmax=1)
-    a2.set_title(f"repair on, {d_on:+.3f} dB", fontsize=5.2, color=ns.GREEN,
+    a2.set_title(f"repair on, {d_on:+.3f} dB", fontsize=6, color=ns.GREEN,
                  loc="left", pad=3)
     ns.panel(a2, "c")
 
     a3 = bare(fig.add_subplot(gs[1, 1]))
     a3.imshow(img_off[r0:r0 + S, c0:c0 + S])
     grid(a3, off_r=r0, off_c=c0)
-    a3.set_title("zoom, repair off", fontsize=5.2, color=ns.VERM, loc="left",
+    a3.set_title("zoom, repair off", fontsize=6, color=ns.VERM, loc="left",
                  pad=3)
     ns.panel(a3, "d")
 
     a4 = bare(fig.add_subplot(gs[2, 0]))
     a4.imshow(img_on[r0:r0 + S, c0:c0 + S])
     grid(a4, off_r=r0, off_c=c0)
-    a4.set_title("zoom, repair on", fontsize=5.2, color=ns.GREEN, loc="left",
+    a4.set_title("zoom, repair on", fontsize=6, color=ns.GREEN, loc="left",
                  pad=3)
     ns.panel(a4, "e")
 
@@ -151,7 +151,7 @@ def main(argv):
     a5.imshow(np.clip(delta[r0:r0 + S, c0:c0 + S] * a.amp * 2, 0, 1),
               cmap="inferno", vmin=0, vmax=1)
     grid(a5, off_r=r0, off_c=c0)
-    a5.set_title(f"what the repair changed, x{a.amp * 2:.0f}", fontsize=5.2,
+    a5.set_title(f"what the repair changed, x{a.amp * 2:.0f}", fontsize=6,
                  color=ns.INK2, loc="left", pad=3)
     ns.panel(a5, "f")
 

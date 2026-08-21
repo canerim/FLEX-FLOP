@@ -58,7 +58,7 @@ for b, c in ((0.1, ns.BLUE), (0.3, ns.ORANGE)):
     # caption carries it from the same macro the table does.
     ax[0].plot(xs, ys, "-s", ms=3.4, lw=1.0, color=c, label=f"{b:g} dB budget")
 ax[0].set_xlabel("bitrate (bpp)"); ax[0].set_ylabel("PSNR (dB)")
-ax[0].legend(fontsize=5.5, loc="lower right")
+ax[0].legend(fontsize=6, loc="lower right")
 ns.panel(ax[0], "a")
 
 # ---- b: the same, quality axis expanded ------------------------------------
@@ -71,7 +71,7 @@ for b, c in ((0.1, ns.BLUE), (0.3, ns.ORANGE)):
     for q in qs:
         if q in rows:
             ax[1].annotate(f"{sv(rows[q]):.0f}",
-                           (bpp[q], -rows[q]["db_vs_uf"]), fontsize=5,
+                           (bpp[q], -rows[q]["db_vs_uf"]), fontsize=6,
                            color=c, ha="center", textcoords="offset points",
                            xytext=(0, 3))
 ax[1].axhline(0, color=ns.INK, lw=1.0)

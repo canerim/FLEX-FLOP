@@ -122,7 +122,7 @@ def main(argv):
         a0.axhline(r * P, color="#00e5ff", lw=0.55)
     for c in range(1, nw):
         a0.axvline(c * P, color="#00e5ff", lw=0.55)
-    a0.set_title(f"frame, {W0}×{H0}, padded to {W}×{H}", fontsize=5.4,
+    a0.set_title(f"frame, {W0}×{H0}, padded to {W}×{H}", fontsize=6,
                  color=ns.INK2, loc="left", pad=3)
     ns.panel(a0, "a")
 
@@ -134,7 +134,7 @@ def main(argv):
     for c in range(1, nw):
         a1.axvline(c * Fp, color="#00e5ff", lw=0.55)
     a1.set_title(f"stem feature after {j} shared blocks, {fw}×{fh}×{f.shape[1]}",
-                 fontsize=5.4, color=ns.INK2, loc="left", pad=3)
+                 fontsize=6, color=ns.INK2, loc="left", pad=3)
     ns.panel(a1, "b")
 
     # c. four tiles, as the trunk now sees them: separate batch elements
@@ -145,10 +145,10 @@ def main(argv):
         ax = bare(fig.add_subplot(gc[n // 2, n % 2]))
         ax.imshow(tiles[t, 0:].pow(2).mean(0).sqrt().cpu().numpy(),
                   cmap="magma", vmin=vmin, vmax=vmax)
-        ax.set_xlabel(f"tile {t}", fontsize=4.4, color=ns.INK2, labelpad=1)
+        ax.set_xlabel(f"tile {t}", fontsize=6, color=ns.INK2, labelpad=1)
         if n == 0:
             ax.set_title(f"{nh * nw} independent tiles, {Fp}×{Fp} each",
-                         fontsize=5.4, color=ns.INK2, loc="left", pad=3)
+                         fontsize=6, color=ns.INK2, loc="left", pad=3)
             ns.panel(ax, "c")
 
     # d. the tensor algebra, written out
@@ -159,9 +159,9 @@ def main(argv):
         ax.add_patch(FancyBboxPatch((cx - w / 2, y - h / 2), w, h,
                                     boxstyle="round,pad=0.3,rounding_size=0.8",
                                     fc="white", ec=colour, lw=0.8, zorder=2))
-        ax.text(cx, y + 1.5, txt, ha="center", va="center", fontsize=5.4,
+        ax.text(cx, y + 1.5, txt, ha="center", va="center", fontsize=6,
                 color=ns.INK, zorder=3)
-        ax.text(cx, y - 2.0, sub, ha="center", va="center", fontsize=4.6,
+        ax.text(cx, y - 2.0, sub, ha="center", va="center", fontsize=6,
                 color=ns.INK2, zorder=3)
 
     def arr(x0, x1, label):
@@ -169,7 +169,7 @@ def main(argv):
                                      mutation_scale=6, lw=0.7, color="#7a8899",
                                      shrinkA=2, shrinkB=2, zorder=1))
         ax.text((x0 + x1) / 2, 19.6, label, ha="center", va="bottom",
-                fontsize=4.6, color=ns.INK2)
+                fontsize=6, color=ns.INK2)
 
     C_ = f.shape[1]
     box(11, 20, f"f  [1, {C_}, {fh}, {fw}]", "the stem's output", ns.BLUE)
@@ -191,13 +191,13 @@ def main(argv):
                                  shrinkA=2, shrinkB=2, zorder=1))
     ax.text(50, 4.4, f"unpatchify: view [1, {nh}, {nw}, {C_}, {Fp}, {Fp}] "
                      f"→ permute → reshape [1, {C_}, {fh}, {fw}]",
-            ha="center", va="center", fontsize=4.9, color=ns.GREEN)
+            ha="center", va="center", fontsize=6, color=ns.GREEN)
     ax.text(50, 1.0,
             "Zero multiply-accumulates in either direction, and the round trip "
             "is exact: unpatchify(patchify(f)) equals f bit for bit. What "
             "changes is that a 3×3 in the trunk now sees zero padding where a "
             "neighbour used to be, and that a tile can stop early.",
-            ha="center", va="center", fontsize=4.8, color=ns.INK2)
+            ha="center", va="center", fontsize=6, color=ns.INK2)
     ns.panel(ax, "d", dx=-0.005, dy=0.92)
 
     # build_pdf reads paper/figures, not docs/figures. Writing only here is how

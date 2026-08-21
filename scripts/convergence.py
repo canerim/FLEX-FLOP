@@ -80,17 +80,17 @@ for c, (t, d_) in zip(ns.SERIES, sorted(pts.items())):
                       0.34, color=[c, c], alpha=[1.0, 0.55][0])
             ax[1].bar([len(report) - 1 + 0.18], [s2], 0.34, color=c, alpha=0.5)
 ax[0].axvline(4 * SPE / 1000, color=ns.INK2, lw=0.7, ls=(0, (1, 2)))
-ax[0].text(4 * SPE / 1000 - 3, ax[0].get_ylim()[0] + 1, "4 epochs", fontsize=5,
+ax[0].text(4 * SPE / 1000 - 3, ax[0].get_ylim()[0] + 1, "4 epochs", fontsize=6,
            color=ns.INK2, rotation=90, ha="right")
 ax[0].set_xlabel("cumulative training step (thousands)")
 ax[0].set_ylabel("mean saving at 0.1 dB, 5 rates (%)")
-ax[0].legend(loc="upper left", fontsize=5, ncol=2, frameon=False)
+ax[0].legend(loc="upper left", fontsize=6, ncol=2, frameon=False)
 ax[0].set_title("dashed = saturating fit, ceiling pinned", fontsize=6,
                 color=ns.INK2, loc="left")
 ns.panel(ax[0], "a")
 
 ax[1].set_xticks(range(len(report)))
-ax[1].set_xticklabels([r[0] for r in report], fontsize=5.5)
+ax[1].set_xticklabels([r[0] for r in report], fontsize=6)
 ax[1].axhline(0, color=ns.INK2, lw=0.6)
 ax[1].set_ylabel("slope (points per 1k steps)")
 ax[1].set_title("solid = first half, pale = second — all decelerating",

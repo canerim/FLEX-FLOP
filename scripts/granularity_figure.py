@@ -81,8 +81,8 @@ def main():
     ax.set_xlabel(f"tiles per frame at {TILE} px")
     ax.set_ylabel("MACs saved (%)")
     ax.text(0.02, 0.94, f"r = {r:.2f} against log tiles", transform=ax.transAxes,
-            fontsize=5.4, color=ns.INK2, va="top")
-    ax.legend(loc="lower right", frameon=False, fontsize=5.0, ncol=5,
+            fontsize=6, color=ns.INK2, va="top")
+    ax.legend(loc="lower right", frameon=False, fontsize=6, ncol=5,
               handletextpad=0.2, columnspacing=0.7, borderpad=0.1)
     ns.tidy(ax) if hasattr(ns, "tidy") else None
     for s in ("top", "right"):

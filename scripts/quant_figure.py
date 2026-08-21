@@ -40,7 +40,7 @@ for c, b in zip(ns.SERIES, bits):
 ax[0].set_xticks(range(K)); ax[0].set_xlabel("exit")
 ax[0].set_ylabel(f"dB above the release, qp {QP}")
 ax[0].set_yscale("log")
-ax[0].legend(loc="lower left", fontsize=5, frameon=False, ncol=2)
+ax[0].legend(loc="lower left", fontsize=6, frameon=False, ncol=2)
 ax[0].set_title("Every exit degrades — the deepest most", fontsize=6,
                 color=ns.INK2, loc="left")
 ns.panel(ax[0], "a")
@@ -53,13 +53,13 @@ for c, q in zip(ns.SERIES, qps):
     ax[1].plot(bo, sp, marker="o", ms=4.5, lw=1.3, color=c, label=f"qp {q}")
     for x, y, b in zip(bo, sp, bits):
         if q == qps[-1]:
-            ax[1].annotate(("fp32" if b == 32 else f"{b} b"), (x, y), fontsize=4.6,
+            ax[1].annotate(("fp32" if b == 32 else f"{b} b"), (x, y), fontsize=6,
                            color=ns.INK2, textcoords="offset points",
                            xytext=(3, -7))
 ax[1].set_xscale("log")
 ax[1].set_xlabel("arithmetic cost (BOPs vs fp32)")
 ax[1].set_ylabel("spread, exit 0 − deepest (dB)")
-ax[1].legend(loc="center right", fontsize=5, frameon=False)
+ax[1].legend(loc="center right", fontsize=6, frameon=False)
 # Not "quantisation flattens the ladder" -- it does that at HIGH rate, where the
 # spread was large to begin with. At qp0 the spread is flat to slightly rising.
 # The general claim would have been wrong in a way the figure itself disproves.

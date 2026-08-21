@@ -52,7 +52,7 @@ def main(out="docs/figures/raterank.png"):
                               for r in rs],
                        color=ns.GREEN, alpha=0.13, lw=0, interpolate=True)
     ax[0].set_xlabel("qp"); ax[0].set_ylabel("saved at 0.1 dB (%)")
-    ax[0].legend(fontsize=5.4, loc="lower left")
+    ax[0].legend(fontsize=6, loc="lower left")
 
     ax[1].plot(q, [-r["spearman_bits_vs_exit"] for r in rs], marker="o",
                color=ns.ORANGE, label="depth chosen")
@@ -64,7 +64,7 @@ def main(out="docs/figures/raterank.png"):
                  label="head's held-out agreement")
     ax[1].set_xlabel("qp"); ax[1].set_ylabel("Spearman $\\rho$")
     ax[1].set_ylim(0, 1)
-    ax[1].legend(fontsize=5.4, loc="lower left")
+    ax[1].legend(fontsize=6, loc="lower left")
     for i, l in enumerate("ab"):
         ns.panel(ax[i], l, dx=-0.22)
     fig.tight_layout(w_pad=1.6)

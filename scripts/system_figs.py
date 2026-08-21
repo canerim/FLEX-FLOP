@@ -246,7 +246,7 @@ def adapters():
                                       edgecolor="white", lw=0.35))
             x += w
     a.plot([], [], color=ns.VERM, lw=1.1, label="3×3")
-    a.legend(loc="lower left", fontsize=5.5, handlelength=0.9,
+    a.legend(loc="lower left", fontsize=6, handlelength=0.9,
              borderpad=0.0, handletextpad=0.4)
     a.set_xlim(-0.02, 1.02); a.set_ylim(-2.42, 0.86)
     a.set_xticks([0, 0.5, 1.0]); a.set_xticklabels(["0", "0.5", "1"])
@@ -281,7 +281,7 @@ def adapters():
     for kind, lab in (("ffn", "FFN"), ("conv1x1", "1×1"), (None, "none")):
         b.plot([], [], marker="o", ms=4.2, lw=0, mfc=face[kind], mec=ns.INK2,
                mew=0.5, label=lab)
-    b.legend(loc="upper right", fontsize=5.5, handlelength=0.8,
+    b.legend(loc="upper right", fontsize=6, handlelength=0.8,
              borderpad=0.0, handletextpad=0.2, labelspacing=0.25)
     b.set_xticks(ks); b.set_xlim(-0.55, K_ - 0.45); b.set_ylim(-0.9, 11.6)
     # Blocks come whole, so the ticks are the numbers of blocks that exist.
@@ -397,12 +397,12 @@ def training():
         arrow(a, 0.715, 0.80 if i == 0 else y + 0.125, 0.715, y, color=ns.ORANGE,
               lw=0.5, style="-")
         arrow(a, 0.715, y, 0.81, y, color=ns.ORANGE, lw=0.5)
-        a.text(0.835, y, f"x̂$_{i}$  →  MSE$_{i}$", fontsize=5.6, va="center")
+        a.text(0.835, y, f"x̂$_{i}$  →  MSE$_{i}$", fontsize=6, va="center")
     a.text(0.0, 0.60, "Every exit is decoded every step, so the ladder is\n"
            "trained as ONE object rather than as K separate\n"
            "models. The shared prefix means this costs one\n"
            "trunk pass plus K adapter-and-head passes, not K\n"
-           "full decodes.", fontsize=5.4, va="top", linespacing=1.7)
+           "full decodes.", fontsize=6, va="top", linespacing=1.7)
     ns.panel(a, "a", dx=-0.02, dy=1.16)
 
     # ---- b: the objective --------------------------------------------------
@@ -427,7 +427,7 @@ def training():
            "distillation ($w_d$ = 1) — supervises the adapters in FEATURE space, exit $k$\n"
            "     imitating exit $k{+}1$; adjacent rather than deepest, because a large\n"
            "     student–teacher gap is reported to hurt the shallowest exits",
-           fontsize=5.3, va="top", linespacing=1.75)
+           fontsize=6, va="top", linespacing=1.75)
     ns.panel(a, "b", dx=-0.02, dy=1.14)
 
     # ---- c: what is trained ------------------------------------------------
@@ -439,20 +439,20 @@ def training():
         w = v / P_TOT
         a.barh([0], [w], left=left, color=c, height=0.55)
         a.text(left + w/2, 0, f"{name}\n{v/1e6:.2f} M  ({100*w:.1f}%)",
-               ha="center", va="center", fontsize=5.3, linespacing=1.6,
+               ha="center", va="center", fontsize=6, linespacing=1.6,
                color="white" if c != "#c9c9c9" else ns.INK)
         left += w
     a.barh([-0.85], [P_RT / P_TOT], color=ns.SKY, height=0.30)
     a.text(P_RT / P_TOT + 0.02, -0.85,
            f"router head, configuration B only — {P_RT/1e3:.0f} K, "
-           f"{100*P_RT/P_TOT:.2f}%", fontsize=5.3, va="center")
+           f"{100*P_RT/P_TOT:.2f}%", fontsize=6, va="center")
     a.set_xlim(0, 1); a.set_ylim(-1.5, 0.7)
     a.set_xticks([]); a.set_yticks([]); a.grid(False)
     for sp in a.spines.values():
         sp.set_visible(False)
     a.set_title("The encoder is never touched, so a trained decoder consumes\n"
                 "byte-for-byte the stream the released encoder produces.",
-                fontsize=5.8, color=ns.INK2, loc="left")
+                fontsize=6, color=ns.INK2, loc="left")
     ns.panel(a, "c", dx=-0.06, dy=1.30)
 
     # ---- d: the recipe -----------------------------------------------------
@@ -472,8 +472,8 @@ def training():
     ]
     y = 0.86
     for k, v in rows:
-        a.text(0.0, y, k, fontsize=5.6, weight="bold", va="top", color=ns.BLUE)
-        a.text(0.29, y, v, fontsize=5.2, va="top", linespacing=1.6)
+        a.text(0.0, y, k, fontsize=6, weight="bold", va="top", color=ns.BLUE)
+        a.text(0.29, y, v, fontsize=6, va="top", linespacing=1.6)
         y -= 0.185 if "\n" in v else 0.115
     ns.panel(a, "d", dx=-0.06, dy=1.14)
 
@@ -572,10 +572,10 @@ def router_ab():
     a.plot(qps, ya, marker="o", color=ns.PURPLE, label="A  signalled")
     a.plot(qps, yb, marker="s", color=ns.BLUE, label="B  predicted")
     for q in qps:
-        a.annotate(f"{A[q]-B[q]:.1f}", (q, (A[q] + B[q]) / 2), fontsize=5,
+        a.annotate(f"{A[q]-B[q]:.1f}", (q, (A[q] + B[q]) / 2), fontsize=6,
                    color=ns.VERM, ha="center", va="center")
     a.set_xlabel("qp"); a.set_ylabel("saved at 0.1 dB (%)")
-    a.legend(loc="lower left", fontsize=5.4)
+    a.legend(loc="lower left", fontsize=6)
     ns.panel(a, "b", dx=-0.26)
 
     # ---- c: the gap shrinks as the budget grows ---------------------------
@@ -585,9 +585,9 @@ def router_ab():
         qq = [q for q in qps if q in Ax and q in Bx]
         a.plot(qq, [Ax[q] - Bx[q] for q in qq], marker="o", color=c, label=lab)
     a.axhline(0.163, color=ns.INK2, lw=0.7, ls=(0, (3, 2)))
-    a.text(qps[0], 0.55, "router cost", fontsize=5, color=ns.INK2)
+    a.text(qps[0], 0.55, "router cost", fontsize=6, color=ns.INK2)
     a.set_xlabel("qp"); a.set_ylabel("A $-$ B  (points)")
-    a.legend(loc="upper left", fontsize=5.4)
+    a.legend(loc="upper left", fontsize=6)
     ns.panel(a, "c", dx=-0.26)
 
     fig.tight_layout()

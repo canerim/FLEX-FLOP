@@ -30,11 +30,19 @@ for q in qps:
 ax[0].axhline(B, color=ns.INK, lw=0.8, ls=(0, (4, 2)), label="0.1 dB budget")
 ax[0].set_xlabel("frames since the map was computed")
 ax[0].set_ylabel("delivered dB")
-ax[0].text(0.03, 0.06, "solid: transferred map\ndashed: recomputed in place",
-           transform=ax[0].transAxes, fontsize=4.6, color=ns.INK2,
-           va="bottom", linespacing=1.3)
-ax[0].legend(fontsize=5.0, loc="lower right", frameon=False,
-                 handlelength=1.2, labelspacing=0.25, borderpad=0.1)
+# The solid/dashed convention as legend entries rather than as a note in the
+# corner. It was a note, and once the type went up a point the note and the
+# legend were sitting on each other; and a reader should not have to find a
+# free-floating sentence to learn what the two line styles mean.
+from matplotlib.lines import Line2D  # noqa: E402
+_style = [Line2D([], [], color=ns.INK2, lw=1.1, ls="-", label="transferred map"),
+          Line2D([], [], color=ns.INK2, lw=0.8, ls="--", alpha=0.6,
+                 label="recomputed in place")]
+_h, _l = ax[0].get_legend_handles_labels()
+ax[0].legend(_h + _style, _l + [h.get_label() for h in _style],
+             fontsize=6, loc="lower right", frameon=False, ncol=2,
+             handlelength=1.2, labelspacing=0.25, columnspacing=0.9,
+             borderpad=0.1)
 ns.panel(ax[0], "a")
 
 # b: saving when reused across frames
@@ -58,14 +66,14 @@ im = ax[2].imshow(Mx, cmap="magma_r", vmin=B * 0.8, vmax=B * 2.1)
 for i in range(len(src)):
     for j2 in range(len(dst)):
         ax[2].text(j2, i, f"{Mx[i, j2]:.3f}", ha="center", va="center",
-                   fontsize=5.5,
+                   fontsize=6,
                    color="white" if Mx[i, j2] > B * 1.5 else ns.INK)
 ax[2].set_xticks(range(len(dst))); ax[2].set_xticklabels([f"q{q}" for q in dst])
 ax[2].set_yticks(range(len(src))); ax[2].set_yticklabels([f"q{q}" for q in src])
 ax[2].set_xlabel("applied at"); ax[2].set_ylabel("map computed at")
 ax[2].grid(False)
 cb = fig.colorbar(im, ax=ax[2], fraction=0.046, pad=0.03)
-cb.ax.tick_params(labelsize=5); cb.set_label("delivered dB", fontsize=5.5)
+cb.ax.tick_params(labelsize=6); cb.set_label("delivered dB", fontsize=6)
 ns.panel(ax[2], "c", dx=-0.28)
 
 fig.tight_layout()

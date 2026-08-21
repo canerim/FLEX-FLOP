@@ -41,7 +41,7 @@ FIG = ROOT / "docs" / "figures"
 def _bare(ax):
     ax.spines["top"].set_visible(False)
     ax.spines["right"].set_visible(False)
-    ax.tick_params(labelsize=5.4, length=2, width=0.5)
+    ax.tick_params(labelsize=6, length=2, width=0.5)
     ax.xaxis.label.set_size(5.8)
     ax.yaxis.label.set_size(5.8)
     return ax
@@ -80,20 +80,20 @@ def field():
     ax.barh(y[0], rel - ours, height=0.62, left=ours, color=ns.VERM, lw=0,
             alpha=0.22)
     ax.plot([ours, ours], [y[0] - 0.31, y[0] + 0.31], color=ns.VERM, lw=0.9)
-    ax.text(rel + 40, y[0], "0.1 dB budget removes this", fontsize=4.6,
+    ax.text(rel + 40, y[0], "0.1 dB budget removes this", fontsize=6,
             color=ns.VERM, va="center")
 
     for sp in ("top", "right", "left"):
         ax.spines[sp].set_visible(False)
     ax.set_yticks(y)
-    ax.set_yticklabels(names, fontsize=4.9)
+    ax.set_yticklabels(names, fontsize=6)
     ax.get_yticklabels()[0].set_color(ns.VERM)
     ax.tick_params(axis="y", length=0)
-    ax.tick_params(axis="x", labelsize=5.2, length=2, width=0.5)
-    ax.set_xlabel("decoder arithmetic (kMAC per pixel)", fontsize=5.8)
+    ax.tick_params(axis="x", labelsize=6, length=2, width=0.5)
+    ax.set_xlabel("decoder arithmetic (kMAC per pixel)", fontsize=6)
     ax.set_xlim(0, 2650)
     for yy, v in zip(y[1:], vals[1:]):
-        ax.text(v + 40, yy, f"{v:.0f}", fontsize=4.4, color=ns.INK2,
+        ax.text(v + 40, yy, f"{v:.0f}", fontsize=6, color=ns.INK2,
                 va="center")
     fig.savefig(FIG / "field.png", dpi=500, bbox_inches="tight",
                 pad_inches=0.02, facecolor="white")
@@ -137,7 +137,7 @@ def tiles():
     ax[0].set_xlabel("dB lost at the shallowest exit")
     ax[0].set_ylabel("tiles")
     ns.panel(ax[0], "a")
-    ax[0].set_title(f"one 1080p frame, {len(loss)} tiles", fontsize=5.2,
+    ax[0].set_title(f"one 1080p frame, {len(loss)} tiles", fontsize=6,
                     color=ns.INK2, loc="left")
 
     # A little horizontal jitter, because the exit index is discrete and the
@@ -149,9 +149,9 @@ def tiles():
     ax[1].set_ylabel("exit the oracle assigns")
     ax[1].set_yticks(sorted(set(exits.tolist())))
     ax[1].text(0.96, 0.08, f"Spearman {rho:+.2f}", transform=ax[1].transAxes,
-               ha="right", fontsize=5.0, color=ns.INK2)
+               ha="right", fontsize=6, color=ns.INK2)
     ns.panel(ax[1], "b")
-    ax[1].set_title("at the 0.1 dB budget", fontsize=5.2, color=ns.INK2,
+    ax[1].set_title("at the 0.1 dB budget", fontsize=6, color=ns.INK2,
                     loc="left")
     fig.savefig(FIG / "tiles_unequal.png", dpi=500, bbox_inches="tight",
                 pad_inches=0.01, facecolor="white")
@@ -173,20 +173,20 @@ def ladder():
     ax.step(k, mo, where="mid", color=ns.INK2, lw=0.8, ls="--",
             label="arithmetic model")
     ax.axhline(100, color=ns.GRID, lw=0.6)
-    ax.text(k[-1], 101, "released decoder", fontsize=4.6, color=ns.INK2,
+    ax.text(k[-1], 101, "released decoder", fontsize=6, color=ns.INK2,
             ha="right")
     ax.axvspan(-0.5, j - 0.5, color="#f2f2f2", zorder=0)
     ax.text((j - 1) / 2, 62, "below the split:\nno tile may stop here",
-            fontsize=4.6, color=ns.INK2, ha="center")
+            fontsize=6, color=ns.INK2, ha="center")
     ax.annotate("", xy=(j, me[j]), xytext=(j, 100),
                 arrowprops=dict(arrowstyle="<->", lw=0.8, color=ns.VERM))
     ax.text(j + 0.12, (me[j] + 100) / 2, f"ceiling\n{C['ceiling_measured_pct']:.1f}%",
-            fontsize=4.8, color=ns.VERM, va="center")
+            fontsize=6, color=ns.VERM, va="center")
     ax.set_xlabel("exit")
     ax.set_ylabel("cost, released decode = 100")
     ax.set_ylim(55, 108)
     ax.set_xticks(k)
-    ax.legend(frameon=False, fontsize=4.8, handlelength=1.5, loc="lower right",
+    ax.legend(frameon=False, fontsize=6, handlelength=1.5, loc="lower right",
               borderpad=0)
     fig.savefig(FIG / "ladder.png", dpi=500, bbox_inches="tight",
                 pad_inches=0.01, facecolor="white")
@@ -223,13 +223,13 @@ def allocation():
         for i in range(len(qs)):
             if share[i, e] > 7:
                 ax.text(i, bottom[i] + share[i, e] / 2, f"{share[i, e]:.0f}",
-                        ha="center", va="center", fontsize=4.4,
+                        ha="center", va="center", fontsize=6,
                         color="white" if e >= 3 else ns.INK)
         bottom += share[:, e]
     ax.set_xlabel("quality index")
     ax.set_ylabel("share of tiles (%)")
     ax.set_ylim(0, 100)
-    ax.legend(frameon=False, fontsize=4.5, ncol=3, handlelength=1.0,
+    ax.legend(frameon=False, fontsize=6, ncol=3, handlelength=1.0,
               columnspacing=0.8, loc="upper center", bbox_to_anchor=(0.5, 1.28),
               borderpad=0)
     fig.savefig(FIG / "allocation.png", dpi=500, bbox_inches="tight",

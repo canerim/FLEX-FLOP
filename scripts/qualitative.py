@@ -131,13 +131,13 @@ fig = plt.figure(figsize=(ns.W1, 1.42))
 gs = fig.add_gridspec(1, 3, wspace=0.045)
 ax = [fig.add_subplot(gs[i]) for i in range(3)]
 ax[0].imshow(A_[sl])
-ax[0].set_title(f"released, {psnr_rel:.2f} dB", fontsize=4.8, color=ns.INK2,
+ax[0].set_title(f"released, {psnr_rel:.2f} dB", fontsize=6, color=ns.INK2,
                 loc="left", pad=2)
 ax[1].imshow(B_[sl])
 ax[1].set_title(f"ours, {saving:.0f}% fewer, {psnr_our:.2f} dB",
-                fontsize=4.8, color=ns.INK2, loc="left", pad=2)
+                fontsize=6, color=ns.INK2, loc="left", pad=2)
 im = ax[2].imshow(err[sl] * 20, cmap="magma", vmin=0, vmax=1)
-ax[2].set_title("|difference| ×20", fontsize=4.8, color=ns.INK2,
+ax[2].set_title("|difference| ×20", fontsize=6, color=ns.INK2,
                 loc="right", pad=2)
 for b in ax:
     b.set_xticks([]); b.set_yticks([]); b.grid(False)

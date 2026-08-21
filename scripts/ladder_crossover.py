@@ -61,7 +61,7 @@ def main():
     fig, ax = plt.subplots(figsize=(ns.W1, 1.62))
     ax.spines["top"].set_visible(False)
     ax.spines["right"].set_visible(False)
-    ax.tick_params(labelsize=5.4, length=2, width=0.5)
+    ax.tick_params(labelsize=6, length=2, width=0.5)
 
     for tag, ceil, vals, modelled in rows:
         col, ls, mk, lab = STYLE.get(tag, (ns.INK2, "-", "o", tag))
@@ -71,19 +71,19 @@ def main():
                 label=lab + ("*" if modelled else ""))
         ax.axhline(ceil, color=col, lw=0.5, ls=":", alpha=0.6)
     ax.text(buds[-1], rows[-1][1] + 0.6, "ceiling of the fine ladder",
-            fontsize=4.6, color=ns.VERM, ha="right")
+            fontsize=6, color=ns.VERM, ha="right")
     ax.text(buds[-1], rows[0][1] - 2.4, "ceiling of the coarse one",
-            fontsize=4.6, color=ns.BLUE, ha="right")
+            fontsize=6, color=ns.BLUE, ha="right")
 
     ax.set_xlabel("distortion budget (dB)")
     ax.set_ylabel("decoder MACs saved (%)")
     ax.set_xticks(buds)
-    ax.legend(frameon=False, fontsize=4.7, handlelength=1.6, borderpad=0,
+    ax.legend(frameon=False, fontsize=6, handlelength=1.6, borderpad=0,
               loc="lower right")
     ax.text(0.02, 0.95, "* saving from the arithmetic model, not hooks; only "
             "the first row\nis hook-counted at every budget, and each run is on "
             "its own\nlatest checkpoint",
-            transform=ax.transAxes, fontsize=4.3, color=ns.INK2, va="top")
+            transform=ax.transAxes, fontsize=6, color=ns.INK2, va="top")
     out = ROOT / "docs/figures/ladder_crossover.png"
     for _d in (ROOT / "docs/figures", ROOT / "paper/figures"):
         _d.mkdir(parents=True, exist_ok=True)

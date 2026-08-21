@@ -112,14 +112,14 @@ UP, TR, HD = 0.0816, 0.8944, 0.0240
 x0 = 0.04; w_up = 0.10
 a.add_patch(Rectangle((x0, .42), w_up, .28, fc="#cfe3f5", ec=TUM, lw=.6))
 a.text(x0 + w_up/2, .56, "upsample", ha="center", va="center", fontsize=6)
-a.text(x0 + w_up/2, .36, f"{100*UP:.1f}%", ha="center", fontsize=5.5, color=INK3)
+a.text(x0 + w_up/2, .36, f"{100*UP:.1f}%", ha="center", fontsize=6, color=INK3)
 bw = 0.052; gap = .004; xb = x0 + w_up + .03
 for b in range(12):
     shared = b < 4
     a.add_patch(Rectangle((xb + b*(bw+gap), .42), bw, .28,
                           fc="#cfe3f5" if shared else "#fce3c8",
                           ec=TUM if shared else ns.ORANGE, lw=.6))
-    a.text(xb + b*(bw+gap) + bw/2, .56, str(b), ha="center", va="center", fontsize=5.5)
+    a.text(xb + b*(bw+gap) + bw/2, .56, str(b), ha="center", va="center", fontsize=6)
     if b in (5, 7, 9, 11):
         a.annotate("", xy=(xb + b*(bw+gap) + bw/2, .30), xytext=(xb + b*(bw+gap) + bw/2, .42),
                    arrowprops=dict(arrowstyle="->", color=ns.VERM, lw=.8))
@@ -130,12 +130,12 @@ for b in range(12):
                # deepest exit (1.0095). Dividing by cost[-1] printed the deepest
                # exit as "0%" saved, which hides the seam-repair tax at exactly
                # the point where the figure is making a claim about cost.
-               f"{100*(1-cost[k]).item():+.1f}%", ha="center", fontsize=5.5,
+               f"{100*(1-cost[k]).item():+.1f}%", ha="center", fontsize=6,
                color=INK3)
 xh = xb + 12*(bw+gap) + .02
 a.add_patch(Rectangle((xh, .42), .07, .28, fc="#cfe3f5", ec=TUM, lw=.6))
 a.text(xh + .035, .56, "head", ha="center", va="center", fontsize=6)
-a.text(xh + .035, .36, f"{100*HD:.1f}%", ha="center", fontsize=5.5, color=INK3)
+a.text(xh + .035, .36, f"{100*HD:.1f}%", ha="center", fontsize=6, color=INK3)
 a.text(x0, .84, "full-frame — no seams", color=TUM, fontsize=6)
 a.text(xb + 4*(bw+gap), .84, "per tile — the skippable part, 89.4% of the decode",
        color=ns.ORANGE, fontsize=6)

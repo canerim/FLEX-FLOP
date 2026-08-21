@@ -122,10 +122,10 @@ def main(out="docs/figures/band_sensitivity_PAPER.png"):
                edgecolor=ns.BLUE, lw=0.4)
     ax[1].axvline(b_grid, color=ns.INK, lw=0.8)
     for y, (_, b) in zip(ypos, bars):
-        ax[1].text(b + 0.008, y, "%.2f" % b, va="center", fontsize=5.5,
+        ax[1].text(b + 0.008, y, "%.2f" % b, va="center", fontsize=6,
                    color=ns.INK)
     ax[1].set_yticks(ypos)
-    ax[1].set_yticklabels([n for n, _ in bars], fontsize=5.5)
+    ax[1].set_yticklabels([n for n, _ in bars], fontsize=6)
     ax[1].set_xlim(0, 0.52)
     ax[1].set_xlabel("fitted exponent β")
     ax[1].grid(axis="y", visible=False)

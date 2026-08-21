@@ -68,7 +68,7 @@ def main(src=None, out="docs/figures/hybrid.png", lor=None):
     ax[2].set_ylabel("measured recovery (%)")
     ax[0].set_xlabel("signalled bits per frame")
     ax[0].set_ylabel(f"saved at {d['budget_db']:g} dB (%)")
-    ax[0].legend(fontsize=5, frameon=False, loc="lower right")
+    ax[0].legend(fontsize=6, frameon=False, loc="lower right")
     ax[1].set_xlabel("fraction of tiles signalled")
     ax[1].set_ylabel("gap to A recovered (%)")
     for i, l in enumerate("abc"):

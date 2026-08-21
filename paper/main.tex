@@ -2393,33 +2393,29 @@ reported system. The supplement gives the full measurement behind every row.}
 \section{Conclusion}
 
 The intra decoder of DCVC-UF can be run at a depth chosen per tile from its
-content. At a $0.1\dB$ budget this removes \MainLowRate\% to
-\MainHighRate\% of its multiply--accumulates for a BD-Rate cost of
-\BdRateALow\%, with no change to the encoder and none to the coded payload.
+content. At a $0.1\dB$ budget this removes \MainLowRate\% to \MainHighRate\% of
+its multiply--accumulates for a BD-Rate cost of \BdRateALow\%, with no change to
+the encoder and none to the payload. Three lessons should carry to decoders of
+this class, and none is about early exit.
 
-Three lessons should carry to decoders of this class, a residual trunk behind a
-shared head, and none is about early exit.
-
-\textbf{Tiling is the dominant cost and it is governed by depth.} All of it
-traces back to a single $3\times3$ that is $0.29\%$ of the arithmetic, and the
-penalty grows as the square of how many such convolutions run per tile; the
-affected-area fraction usually quoted alongside it predicts that penalty badly.
+\textbf{Tiling is the dominant cost and it is governed by depth.} It traces back
+to a single $3\times3$ that is $0.29\%$ of the arithmetic, and the penalty grows
+as the square of how many run per tile; the affected-area fraction usually
+quoted predicts it badly.
 
 \textbf{The exact remedy is in tension with the thing it enables.} Giving each
 convolution its real neighbour is bit-identical at uniform depth; under routing
-it destroys the allocation, because routing deliberately violates the condition
-that makes it exact. Any method mixing spatial adaptivity with tiled inference
-will meet it.
+it destroys the allocation, because routing violates the condition that makes it
+exact. Any method mixing spatial adaptivity with tiled inference meets this.
 
 \textbf{A distortion budget is only a control variable inside a measurable band.}
 Below the floor it admits nothing; above saturation more buys nothing. A saving
-quoted without saying where in that band it sits omits what matters most.
+quoted without saying where in that band it sits omits what matters.
 
-Three cautions attach to the measurements. A saving in operations bounds a
-saving in time optimistically, and the optimism scales with it. A learned router
-needs a free baseline: routing on the bits already spent per tile costs nothing
-and beats our trained head. And a timing harness reports numbers even when it
-times the wrong device, as ours did.
+Three cautions attach. A saving in operations bounds one in time optimistically,
+and the optimism scales with it. A learned router needs a free baseline; ours
+loses to one costing nothing. And a timing harness reports numbers even when it
+times the wrong thing.
 
 {\small
 \bibliographystyle{ieee_fullname}

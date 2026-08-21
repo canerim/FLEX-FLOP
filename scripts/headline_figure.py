@@ -56,18 +56,18 @@ a.fill_between(qp, y1, y2, color=ns.ORANGE, alpha=0.13, lw=0)
 a.plot(qp, y2, marker="o", color=ns.ORANGE, lw=1.3,
        label=f"{B2:.4f} dB — where qp 0 saturates")
 a.plot(qp, y1, marker="s", color=ns.BLUE, lw=1.3, label=f"{B1:.2f} dB — the target")
-a.annotate(f"{y2[0]:.1f}", (qp[0], y2[0]), fontsize=5.5, color=ns.ORANGE,
+a.annotate(f"{y2[0]:.1f}", (qp[0], y2[0]), fontsize=6, color=ns.ORANGE,
            textcoords="offset points", xytext=(4, -9))
-a.annotate(f"{y1[0]:.1f}", (qp[0], y1[0]), fontsize=5.5, color=ns.BLUE,
+a.annotate(f"{y1[0]:.1f}", (qp[0], y1[0]), fontsize=6, color=ns.BLUE,
            textcoords="offset points", xytext=(4, -9))
-a.annotate(f"{y1[-1]:.1f}", (qp[-1], y1[-1]), fontsize=5.5, color=ns.BLUE,
+a.annotate(f"{y1[-1]:.1f}", (qp[-1], y1[-1]), fontsize=6, color=ns.BLUE,
            textcoords="offset points", xytext=(-3, -9), ha="right")
-a.annotate(f"{y2[-1]:.1f}", (qp[-1], y2[-1]), fontsize=5.5, color=ns.ORANGE,
+a.annotate(f"{y2[-1]:.1f}", (qp[-1], y2[-1]), fontsize=6, color=ns.ORANGE,
            textcoords="offset points", xytext=(-3, 5), ha="right")
 a.set_xlabel("qp   (0 = lowest rate  →  63 = highest)")
 a.set_ylabel("decoder MACs saved vs the release (%)")
 a.set_xlim(qp[0], qp[-1]); a.set_ylim(0, CEIL * 1.18)
-a.legend(loc="lower left", fontsize=5)
+a.legend(loc="lower left", fontsize=6)
 a.set_title(f"{fine['n_sequences']} CTC sequences",
             fontsize=6, color=ns.INK2, loc="left")
 ns.panel(a, "a")
@@ -81,14 +81,14 @@ b.fill_between(qp, sd, 0.40, color="#bbbbbb", alpha=0.20, lw=0)
 b.plot(qp, fd, marker="^", color=ns.GREEN, lw=1.2, label="floor: tiling alone")
 b.plot(qp, sd, marker="o", color=ns.ORANGE, lw=1.2, label="saturation: ceiling reached")
 b.axhline(B1, color=ns.BLUE, lw=1.0, ls=(0, (4, 2)))
-b.text(qp[-1], B1 + 0.006, f"{B1:.2f} dB", fontsize=5, color=ns.BLUE, ha="right")
+b.text(qp[-1], B1 + 0.006, f"{B1:.2f} dB", fontsize=6, color=ns.BLUE, ha="right")
 b.axhline(B2, color=ns.ORANGE, lw=0.8, ls=(0, (1, 2)))
-b.text(qp[0] + 1, B2 + 0.006, f"{B2:.4f} dB", fontsize=5, color=ns.ORANGE)
+b.text(qp[0] + 1, B2 + 0.006, f"{B2:.4f} dB", fontsize=6, color=ns.ORANGE)
 
 
 b.set_xlabel("qp"); b.set_ylabel("quality budget, dB below the release")
 b.set_xlim(qp[0], qp[-1]); b.set_ylim(0, 0.40)
-b.legend(loc="upper left", fontsize=5, bbox_to_anchor=(0.0, 0.93))
+b.legend(loc="upper left", fontsize=6, bbox_to_anchor=(0.0, 0.93))
 b.set_title("Floor, saturation, and the two budgets",
             fontsize=6, color=ns.INK2, loc="left")
 ns.panel(b, "b", dx=-0.22)
@@ -98,7 +98,7 @@ c = ax[2]
 gain = np.array(y2) - np.array(y1)
 c.bar(qp, gain, width=5.0, color=ns.PURPLE)
 for x, g in zip(qp, gain):
-    c.annotate(f"{g:.1f}", (x, g), fontsize=5, ha="center", va="bottom",
+    c.annotate(f"{g:.1f}", (x, g), fontsize=6, ha="center", va="bottom",
                color=ns.INK, textcoords="offset points", xytext=(0, 1.5))
 c.set_xlabel("qp")
 c.set_ylabel(f"extra saving from {B1:.2f} → {B2:.4f} dB (pts)")

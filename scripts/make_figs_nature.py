@@ -114,14 +114,14 @@ for i, v in enumerate(val):
     # axis origin where the row is, not floating at the top of the panel.
     a.text(v - .05 if v else .06, i - h / 2 if v else i,
            "max|diff| = 0.0" if v == 0 else f"{v:.3f}",
-           va="center", ha="right" if v else "left", fontsize=5.5,
+           va="center", ha="right" if v else "left", fontsize=6,
            color=ns.GREEN if v == 0 else ns.INK2,
            fontweight="bold" if v == 0 else "normal")
 if _tr:
     for i, v in enumerate(_tr):
         if v:
             a.text(v - .04, i + h / 2, f"{v:.3f}", va="center", ha="right",
-                   fontsize=5.5, color=ns.BLUE)
+                   fontsize=6, color=ns.BLUE)
 a.set_yticks(range(4)); a.set_yticklabels(lab); a.invert_yaxis()
 a.set_xlim(-3.35, .75)
 a.set_xlabel("dB below released DCVC-UF (qp 0)")
@@ -130,7 +130,7 @@ a.legend(handles=[Patch(facecolor=ns.INK2, label="warm start, no training"),
                   Patch(facecolor=ns.BLUE, label="BEST, one epoch")],
          # y is inverted, so "lower right" is the exit-2 row -- where the bars
          # are. The empty space is the deepest-exit row on the left.
-         loc="upper left", fontsize=5.5, framealpha=.9)
+         loc="upper left", fontsize=6, framealpha=.9)
 a.grid(axis="y", visible=False)
 save(fig, "nf_warmstart.png")
 
@@ -150,7 +150,7 @@ for x, y, nm, c, ha in ((0, 3.2e-4, "e1–e4 read here\ndrift 0.20 dB", ns.VERM,
                         (90, 4.0e-5, "VERBATIM", ns.GREEN, "right"),
                         (99, 4.5e-6, "RECIPE512", ns.ORANGE, "right")):
     a.axvline(x, color=c, ls="--", lw=.7)
-    a.annotate(nm, (x, y), fontsize=5.5, color=c, ha=ha, va="center",
+    a.annotate(nm, (x, y), fontsize=6, color=c, ha=ha, va="center",
                xytext=(3 if ha == "left" else -3, 0), textcoords="offset points")
 a.set_ylim(3e-7, 1.6e-3)
 save(fig, "nf_schedule.png")
@@ -163,7 +163,7 @@ for off, v, c, l in ((-w_-.01, [-.153, -.201, -.263], ns.VERM, "schedule read fr
                      (w_+.01, [0, 0, 0], ns.GREEN, "backbone frozen")):
     a.bar(xs + off, v, w_, color=c, label=l)
     for x, y in zip(xs + off, v):
-        if y: a.text(x, y - .006, f"{y:+.3f}", ha="center", va="top", fontsize=5.5, color=ns.INK2)
+        if y: a.text(x, y - .006, f"{y:+.3f}", ha="center", va="top", fontsize=6, color=ns.INK2)
 a.set_xticks(xs); a.set_xticklabels(["qp 0", "qp 32", "qp 63"]); a.set_ylim(-.30, .05)
 a.set_ylabel("dB vs released DCVC-UF"); a.legend(loc="lower left", ncol=1)
 save(fig, "nf_anchor.png")
@@ -175,8 +175,8 @@ p128 = [1.1670, .2125, .5021, .1785, 0.0]; p256 = [.5477, .1070, .2638, .0879, 0
 xs = np.arange(5); w_ = .38
 a.bar(xs - w_/2 - .01, p128, w_, color=ns.BLUE, label="128 px tiles")
 a.bar(xs + w_/2 + .01, p256, w_, color=ns.GREEN, label="256 px tiles")
-for x, v in zip(xs - w_/2 - .01, p128): a.text(x, v + .03, f"{v:.2f}", ha="center", fontsize=5.5, color=ns.INK2)
-for x, v in zip(xs + w_/2 + .01, p256): a.text(x, v + .03, f"{v:.2f}", ha="center", fontsize=5.5, color=ns.INK2)
+for x, v in zip(xs - w_/2 - .01, p128): a.text(x, v + .03, f"{v:.2f}", ha="center", fontsize=6, color=ns.INK2)
+for x, v in zip(xs + w_/2 + .01, p256): a.text(x, v + .03, f"{v:.2f}", ha="center", fontsize=6, color=ns.INK2)
 a.annotate("no seam:\nidentical to full-frame", xy=(4, .05), xytext=(3.05, .62),
            fontsize=6, color=ns.GREEN, ha="center",
            arrowprops=dict(arrowstyle="->", color=ns.GREEN, lw=.7))
@@ -192,7 +192,7 @@ xs = np.arange(4); w_ = .38
 a.bar(xs - w_/2 - .01, mac, w_, color=ns.BLUE, label="MAC model")
 a.bar(xs + w_/2 + .01, wall, w_, color=ns.ORANGE, label="Wall clock, 1080p")
 for x, (u, v) in enumerate(zip(mac, wall)):
-    a.text(x, max(u, v) + 1.2, f"{v-u:+.1f} pt", ha="center", fontsize=5.5, color=ns.INK2)
+    a.text(x, max(u, v) + 1.2, f"{v-u:+.1f} pt", ha="center", fontsize=6, color=ns.INK2)
 a.set_xticks(xs); a.set_xticklabels(ex); a.set_ylim(0, 50)
 a.set_ylabel("Compute saved (%)"); a.legend()
 save(fig, "nf_cost.png")
@@ -248,7 +248,7 @@ fig, (a, b) = plt.subplots(1, 2, figsize=(ns.W2, 2.0))
 for c, s in zip([ns.BLUE, ns.GREEN, ns.ORANGE], (15, 20, 30)):
     a.plot(qps, [db_at(q, s) for q in qps], color=c, marker="o", label=f"{s}% saved")
 a.axhline(.1, color=ns.INK2, lw=.6, ls=(0, (3, 2)))
-a.text(63, .105, "0.1 dB", ha="right", fontsize=5.5, color=ns.INK2)
+a.text(63, .105, "0.1 dB", ha="right", fontsize=6, color=ns.INK2)
 a.set_xticks(qps); a.set_xlabel("QP (low = low bitrate)")
 a.set_ylabel("dB below released DCVC-UF"); a.legend(loc="upper left")
 ns.panel(a, "a"); a.set_title("Fixed saving → quality cost", loc="left", pad=3)
@@ -293,7 +293,7 @@ if all(iso.values()):
     for off, q, c in ((-w_-.01, 0, ns.BLUE), (0, 32, ns.ORANGE), (w_+.01, 63, ns.GREEN)):
         y = [next(sv(r) for r in iso[k]["rows"] if r["qp"] == q) for k, _ in order]
         a.bar(xs + off, y, w_, color=c, label=f"qp {q}")
-        for x, v in zip(xs + off, y): a.text(x, v + .5, f"{v:.1f}", ha="center", fontsize=5.5, color=ns.INK2)
+        for x, v in zip(xs + off, y): a.text(x, v + .5, f"{v:.1f}", ha="center", fontsize=6, color=ns.INK2)
     a.set_xticks(xs); a.set_xticklabels([l for _, l in order]); a.set_ylim(0, 30)
     a.set_ylabel("Compute saved at ≤0.1 dB (%)"); a.legend(ncol=3, loc="upper right")
     save(fig, "nf_isolation.png")
@@ -315,17 +315,17 @@ if sg and pc:
                ls=(0, (4, 2)), alpha=.85)
         a.plot(sgm[q]["db_vs_uf"], sv(sgm[q]), marker="o", ms=4.5, color=c,
                markeredgecolor="white", markeredgewidth=.6)
-        a.annotate(f"qp {q}", (sgm[q]["db_vs_uf"], sv(sgm[q])), fontsize=5.5,
+        a.annotate(f"qp {q}", (sgm[q]["db_vs_uf"], sv(sgm[q])), fontsize=6,
                    color=c, textcoords="offset points", xytext=(5, -2))
     a.plot(0.367, 24.8, marker="X", ms=6, color=ns.VERM, markeredgecolor="white",
            markeredgewidth=.6)
     a.annotate("predicting router (qp 32)\n24.8% for 0.367 dB — off the frontier",
-               (0.367, 24.8), xytext=(0.30, 6.0), fontsize=5.5, color=ns.VERM,
+               (0.367, 24.8), xytext=(0.30, 6.0), fontsize=6, color=ns.VERM,
                ha="center", va="center",
                arrowprops=dict(arrowstyle="-", color=ns.VERM, lw=.4,
                                shrinkA=2, shrinkB=3))
     a.axvline(.1, color=ns.INK2, lw=.6, ls=(0, (3, 2)))
-    a.text(.105, 1, "0.1 dB", fontsize=5.5, color=ns.INK2, rotation=90, va="bottom")
+    a.text(.105, 1, "0.1 dB", fontsize=6, color=ns.INK2, rotation=90, va="bottom")
     a.set_xlim(-.01, .42); a.set_ylim(0, 34)
     a.set_xlabel("dB below released DCVC-UF"); a.set_ylabel("Compute saved (%)")
     from matplotlib.lines import Line2D
@@ -387,7 +387,7 @@ if pc2:
                 # Okabe-Ito yellow is the only light swatch here; the other
                 # three need white text to stay legible.
                 a.text(xi, b_ + v_ / 2, f"{v_:.0f}", ha="center", va="center",
-                       fontsize=5.5, color=ns.INK if k == 3 else "white")
+                       fontsize=6, color=ns.INK if k == 3 else "white")
         bot += v
     a.set_xticks(x); a.set_xticklabels([f"qp {q}" for q in qps])
     a.set_ylabel("Share of tiles (%)"); a.set_ylim(0, 100)
@@ -412,22 +412,22 @@ if bd:
     ax[0].bar(x, extra, .62, bottom=got, color="none", edgecolor=ns.BLUE,
               hatch="////", linewidth=.5, label="if the deepest exit did not drift")
     for xi, (g, e) in enumerate(zip(got, extra)):
-        ax[0].text(xi, g / 2, f"{g:.0f}", ha="center", va="center", fontsize=5.5,
+        ax[0].text(xi, g / 2, f"{g:.0f}", ha="center", va="center", fontsize=6,
                    color="white")
         if e:
-            ax[0].text(xi, g + e + 1.0, f"+{e:.1f}", ha="center", fontsize=5,
+            ax[0].text(xi, g + e + 1.0, f"+{e:.1f}", ha="center", fontsize=6,
                        color=ns.BLUE)
     lo, hi = bd["db_interval"]
     ax[0].set_ylabel("BD-saving (%)")
     ax[0].set_ylim(0, 48)
-    ax[0].legend(loc="upper right", fontsize=5.5)
+    ax[0].legend(loc="upper right", fontsize=6)
     ax[0].grid(axis="y", visible=False)
 
     ax[1].plot(x, [r["bd_quality_db"] for r in rs], marker="o", ms=4,
                color=ns.VERM, lw=1.0)
     for xi, r in enumerate(rs):
         ax[1].annotate(f"{r['bd_quality_db']:.3f}", (xi, r["bd_quality_db"]),
-                       fontsize=5.5, color=ns.VERM, textcoords="offset points",
+                       fontsize=6, color=ns.VERM, textcoords="offset points",
                        xytext=(0, 6), ha="center")
     slo, shi = bd["saving_interval"]
     ax[1].set_ylabel("BD-quality (dB)")
@@ -463,7 +463,7 @@ if ps:
         a.plot([i - .34, i + .34], [r["median"]] * 2, color=ns.BLUE, lw=1.4,
                zorder=3)
         a.plot([i, i], [r["p25"], r["p75"]], color=ns.BLUE, lw=.7, zorder=3)
-        a.annotate(f"{r['max'] / r['min']:.1f}×", (i, 46), fontsize=5.5,
+        a.annotate(f"{r['max'] / r['min']:.1f}×", (i, 46), fontsize=6,
                    color=ns.VERM, ha="center")
     a.set_xticks(xs); a.set_xticklabels([f"qp {r['qp']}" for r in rows])
     a.set_ylabel("Compute saved at 0.10 dB (%)")
@@ -504,7 +504,7 @@ if th2 and ps2:
         ax[1].plot([i - .34, i + .34], [r["median"]] * 2, color=ns.BLUE, lw=1.3,
                    zorder=3)
         ax[1].plot([i, i], [r["p25"], r["p75"]], color=ns.BLUE, lw=.7, zorder=3)
-        ax[1].annotate(f"{r['max'] / r['min']:.1f}×", (i, 46.5), fontsize=5.5,
+        ax[1].annotate(f"{r['max'] / r['min']:.1f}×", (i, 46.5), fontsize=6,
                        color=ns.VERM, ha="center")
     ax[1].set_ylabel("Compute saved at 0.10 dB (%)")
     ax[1].set_ylim(0, 51)
@@ -535,11 +535,11 @@ if c0 and c1:
                label="after epoch 1")
         a_.set_xticks(x)
         a_.set_xticklabels([f"exit {k}" if k < 5 else "deepest" for k in ks],
-                           fontsize=5.5)
+                           fontsize=6)
         a_.set_title(f"qp {q}", fontsize=6, color=ns.INK2, loc="left")
         a_.grid(axis="y", visible=False)
     ax[0].set_ylabel("dB below released DCVC-UF")
-    ax[0].legend(loc="upper right", fontsize=5.5)
+    ax[0].legend(loc="upper right", fontsize=6)
     # The point is the SHAPE: the deepest bar pair is level, every shallower
     # pair opens up, and it opens wider the shallower it is.
     # Title states the observation, not a cause. The obvious reading -- that
