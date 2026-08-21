@@ -20,7 +20,11 @@ LOG=results/beta_calibration.log
 for STAGE in calibrate evaluate; do
   echo "$(date '+%F %T')  -> $OUT ($STAGE, head $R2)" >>"$LOG"
   ( flock -w 21600 9 || exit 1
-    CUDA_VISIBLE_DEVICES=2 ./.venv/bin/python -u scripts/beta_calibration.py \
+# GPU chosen by scripts/pick_gpu.sh, not hardcoded: the card this script
+# used to pin to belongs to another user now. See watch_ckpts.sh.
+GPU=$("$(dirname "$0")/pick_gpu.sh")
+[ -n "${GPU:-}" ] || { echo "no GPU free of other users" >&2; exit 1; }
+    CUDA_VISIBLE_DEVICES="$GPU" ./.venv/bin/python -u scripts/beta_calibration.py \
       --ckpt "$CK" --router2 "$R2" --device cuda:0 --frames 1 --budget 0.1 \
       --stage "$STAGE" --out "$OUT" >>"$LOG" 2>&1 ) 9>/tmp/flexuf_eval.lock
   echo "$(date '+%F %T')  done rc=$?" >>"$LOG"

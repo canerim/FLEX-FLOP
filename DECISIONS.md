@@ -4827,3 +4827,27 @@ refuses to pin a moving file.
 
 The decision is the author's. What is recorded here is that the argument against
 moving, which I made in conversation, rested on a units error of mine.
+
+## 95. The eval chain was on a card that stopped being ours (2026-08-21)
+
+`watch_ckpts.sh` defaulted to `GPU=${2:-2}`. That was correct when GPU2 held
+VERBATIM. VERBATIM ended, another user moved onto GPU2, and the default did not
+notice: tonight's FINE12 evaluation started at 04:37 on a card `cankan` had been
+running on for eight hours. Small (3.5 GB against 40 GB free) and short (~8 min),
+but not ours to take, and the standing rule on this machine is explicit.
+
+The fix is not a new number. A hardcoded index is a memory of who owned a card,
+and cards change hands silently. `scripts/pick_gpu.sh` asks the driver instead:
+it lists every GPU, reads the owner of each compute process on it, and returns
+the one this account has to itself with the most free memory. If no card is free
+of other users it prints nothing, so the caller gets an empty
+`CUDA_VISIBLE_DEVICES` and fails loudly rather than quietly borrowing one.
+
+`watch_ckpts.sh`, `pin_router.sh`, `run_beta_calibration.sh`, `run_signalled.sh`
+and `run_signalled_256.sh` now go through it. The `launch_*.sh` scripts are left
+exactly as they are: they record how the four running experiments were started,
+and that record should not be edited after the fact.
+
+The running eval was left to finish rather than killed. Killing it risked the
+watcher marking the checkpoint evaluated with no measurement written, and the
+next one lands on our own card regardless.

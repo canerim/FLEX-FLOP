@@ -24,7 +24,15 @@
 #
 # Which card, and what it costs
 # -----------------------------
-# Evaluations share GPU2 with VERBATIM, and that is not free: VERBATIM's step
+# The card is chosen at start by scripts/pick_gpu.sh, which asks the driver who
+# is on each GPU and returns one this account has to itself. The hardcoded GPU2
+# below was right when GPU2 held VERBATIM and wrong the moment that run ended:
+# on 2026-08-21 a nightly eval landed on a card another user had been on for
+# eight hours. A card stops being ours without telling anybody, so ask rather
+# than remember. The reasoning that follows is about sharing with our OWN runs,
+# which is the only sharing on offer here.
+#
+# Evaluations share a card with a training run, and that is not free: VERBATIM's step
 # time went from 0.377 s to 0.601 s once the chain started running regularly, a
 # 60% slowdown taking its epoch from 5.0 h to 7.9 h.
 #
@@ -46,7 +54,11 @@
 set -u
 cd "$HOME/FLEX-UF"
 TAG=${1:?usage: watch_ckpts.sh <run_tag> [gpu] [poll_seconds]}
-GPU=${2:-2}
+GPU=${2:-$("$HOME/FLEX-UF/scripts/pick_gpu.sh")}
+if [ -z "${GPU:-}" ]; then
+  echo "watch_ckpts: no GPU free of other users; refusing to borrow one" >&2
+  exit 1
+fi
 POLL=${3:-900}
 D="runs/$TAG"
 LOCK=/tmp/flexuf_eval.lock
