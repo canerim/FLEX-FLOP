@@ -125,7 +125,9 @@ there is a \emph{saturation} point above which every tile already takes that
 exit and more quality buys nothing. Between the two, in what we call the
 \emph{band}, the budget genuinely trades quality for compute. We measure both
 ends at every rate in Section~\ref{sec:operating}, where the $0.1\dB$ budget
-uses \BandUseLow\% of the band at low rate and \BandUseHigh\% at high rate.
+uses \BandUseLow\% of the band at low rate and \BandUseHigh\% at high rate. A budget, then, is a control variable only inside a
+window that the method's own geometry creates, and knowing where that window is
+turns out to matter more than any tuning inside it.
 
 The paper makes three claims and everything else in it is support for one of
 them: that decoding computation can be allocated by content on a decoder nobody

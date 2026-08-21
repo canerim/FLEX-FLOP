@@ -524,7 +524,9 @@ def content(colw, fullw):
         r"the <i>band</i>, the budget genuinely trades quality for compute. We "
         r"measure both ends at every rate in Section 5.4, where the 0.1 dB "
         r"budget uses \BandUseLow% of the band at low rate and \BandUseHigh% "
-        r"at high rate.")
+        r"at high rate. A budget, then, is a control variable only inside a "
+        r"window that the method's own geometry creates, and knowing where "
+        r"that window is turns out to matter more than any tuning inside it.")
     par(r"The paper makes three claims and everything else in it is support "
         r"for one of them: that decoding computation can be allocated by "
         r"content on a decoder nobody is allowed to change; that a distortion "

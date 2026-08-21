@@ -186,3 +186,55 @@ question 5.7 leaves open. Each of those hands the reader forward.
 Openings for 2, 3 and 5. Rewrite the first sentence of 4, 4.2, 5.1 and 5.4 so it
 carries the thread rather than starting a new one. Move the two asides to after
 the point they qualify.
+
+---
+
+## Round 5: how CVPR introductions are built, and whether ours is
+
+Read the introductions of ELIC (CVPR 2022) and DCVC-UF (arXiv:2606.04410) as the
+venue exemplars, alongside the Nature material of rounds 1 and 4.
+
+### The CVPR device
+
+Both are built the same way, and it is not the Nature shape. A CVPR introduction
+is a chain of dismissals. Each background paragraph names a direction the field
+has taken, gives it its due in one or two sentences, and then turns on it:
+
+* DCVC-UF: "Both paradigms offer low decoding complexity. **However**, as they
+  need extensive online optimization for each video, their encoding complexity
+  is quite high."
+* DCVC-UF again: "recent NVCs also follow a similar design to traditional
+  hierarchical-B coding. **However**, they still operate on a frame-by-frame
+  basis..."
+* ELIC: "These heavy structures significantly improve the RD performance **but**
+  hurt the speed."
+
+The turn is what carries the reader forward. By the time the contribution
+arrives, the space around it has been emptied one direction at a time, and the
+gap is not asserted, it is what is left.
+
+The Nature shape of round 4 is different: a widening opening, then a single
+narrowing to the problem. Both work. A paper submitted to CVPR should use the
+CVPR one and can borrow Nature's discipline about the first sentence.
+
+### Ours, checked
+
+Eleven paragraphs. The joins, read as the last sentence of each:
+
+1. "...as on a cloudless sky, although the sky is much the easier picture." The
+   turn is there and it is the paper's premise in one image.
+2. "...chosen per stream rather than per region, and switching it changes the
+   bitstream." Names the direction and closes it. This is the CVPR device.
+3. "It leaves one place to spend adaptivity, the synthesis transform." The gap,
+   as what is left rather than as an assertion.
+4. The method, in one paragraph.
+5. A 26-word signpost: two problems, neither about early exit. Good, and the
+   shortest paragraph in the paper.
+6. "The ordering we get is not the obvious one." A hook into Section 4.
+7. Ended on a number, and a number is not a turn. **Fixed:** it now closes on
+   what the number means, that a budget is a control variable only inside a
+   window the method's own geometry creates.
+8-11. The spine sentence and the three contributions.
+
+One weak join in eleven. The introduction was already doing the CVPR thing; what
+it lacked was the last handoff before the claims.
