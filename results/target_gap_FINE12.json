@@ -1,52 +1,52 @@
 {
   "curve": "results/curve_FINE12.json",
-  "ckpt": "runs/FINE12/ckpt_step.pth.tar",
+  "ckpt": "runs/FINE12/ckpt_eval.pth.tar",
   "target_pct": 30.0,
   "budget_db": 0.1,
   "rows": [
     {
       "qp": 0,
-      "saved_at_budget": 36.36048397539806,
-      "db_for_target": 0.07072864394580888,
-      "overspend_db": -0.029271356054191122,
-      "floor_db": 0.03654327243566513,
+      "saved_at_budget": 36.10478591073054,
+      "db_for_target": 0.07204051092172295,
+      "overspend_db": -0.027959489078277056,
+      "floor_db": 0.03981327638030052,
       "floor_share_pct": null,
       "reachable": true
     },
     {
       "qp": 16,
-      "saved_at_budget": 31.353620159744878,
-      "db_for_target": 0.09452277518049426,
-      "overspend_db": -0.005477224819505744,
-      "floor_db": 0.05271365866065025,
+      "saved_at_budget": 31.128971221770144,
+      "db_for_target": 0.09551633237370671,
+      "overspend_db": -0.004483667626293292,
+      "floor_db": 0.05368897691369057,
       "floor_share_pct": null,
       "reachable": true
     },
     {
       "qp": 32,
-      "saved_at_budget": 23.964123094937058,
-      "db_for_target": 0.12292034581801552,
-      "overspend_db": 0.02292034581801551,
-      "floor_db": 0.07066478580236435,
-      "floor_share_pct": 308.30593204584835,
+      "saved_at_budget": 24.15746614279395,
+      "db_for_target": 0.1231221757562983,
+      "overspend_db": 0.023122175756298297,
+      "floor_db": 0.070340596139431,
+      "floor_share_pct": 304.2127042057051,
       "reachable": true
     },
     {
       "qp": 48,
-      "saved_at_budget": 19.441262894786103,
-      "db_for_target": 0.13572751296812244,
-      "overspend_db": 0.03572751296812243,
-      "floor_db": 0.08157557249069214,
-      "floor_share_pct": 228.32703906224103,
+      "saved_at_budget": 19.734268499140892,
+      "db_for_target": 0.13656044015662375,
+      "overspend_db": 0.03656044015662374,
+      "floor_db": 0.08086775243282318,
+      "floor_share_pct": 221.18922005968295,
       "reachable": true
     },
     {
       "qp": 63,
-      "saved_at_budget": 11.775140561260159,
-      "db_for_target": 0.14994352419379417,
-      "overspend_db": 0.049943524193794164,
-      "floor_db": 0.09224670380353928,
-      "floor_share_pct": 184.70203152984863,
+      "saved_at_budget": 13.042807705375829,
+      "db_for_target": 0.15319974386771756,
+      "overspend_db": 0.05319974386771756,
+      "floor_db": 0.09081439673900604,
+      "floor_share_pct": 170.70457512881683,
       "reachable": true
     }
   ]

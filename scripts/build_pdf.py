@@ -1658,10 +1658,11 @@ def content(colw, fullw):
         r"tracks content.")
     par(r"Completing the test set exposed a dependence that the 1080p-only "
         r"subset had hidden. The table groups the saving by class ([[fig:perclass]]) ([[tab:perclass]]). At 1080p, "
-        r"where a frame is 40 tiles, we save \BigResMcl% (MCL-JCV), "
-        r"\BigResUvg% (UVG) and \BigResHevcB% (HEVC B) at the lowest "
+        r"where a frame is 40 tiles, we save \ClassLowMcl% (MCL-JCV), "
+        r"\ClassLowUvg% (UVG) and \ClassLowHevcB% (HEVC B) at the lowest "
         r"rate, three classes of very "
-        r"different content within three points of each other. At 832×480 a "
+        r"different content within \BigResSpread points of each other. At "
+        r"832×480 a "
         r"frame is 8 tiles and the saving is \MidResLow%; at 416×240 it is 2 "
         r"tiles and \SmallResLow%. At high rate the small resolutions fall "
         r"to \SmallResHigh% against \BigResHigh% for 1080p.")

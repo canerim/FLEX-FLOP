@@ -1478,8 +1478,14 @@ try:
                         ("HEVC_E", "HevcE")):
         if _key in _cl:
             mac(f"ClassLow{_name}", f"{_cl[_key]['saving']:.1f}")
-            if _name in ("Mcl", "Uvg", "HevcB"):
-                mac(f"BigRes{_name}", f"{_cl[_key]['saving']:.1f}")
+            # BigRes{Mcl,Uvg,HevcB} were a second name for the same three
+            # numbers, one document using each. ClassLow* is the surviving name.
+    # How far apart the three 1080p classes are. The prose called it "within
+    # three points", which was true of the arithmetic-model figures (0.7 apart)
+    # and is not true of the hook count.
+    _big = [_cl[k]["saving"] for k in ("MCL-JCV", "UVG", "HEVC_B") if k in _cl]
+    if len(_big) == 3:
+        mac("BigResSpread", f"{max(_big) - min(_big):.1f}")
 except Exception as _e:
     print("   per-class q0:", _e)
 
