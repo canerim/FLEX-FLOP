@@ -34,6 +34,20 @@ def main() -> int:
     for n in missing:
         print(f"     the supplement names tests/{n} and it does not exist")
 
+    # The propositions, which both documents claim are checked numerically
+    # rather than asserted. Same class of claim as the test suite: nothing was
+    # running them either.
+    th = subprocess.run([str(R / ".venv/bin/python"),
+                         str(R / "scripts/verify_theory.py")],
+                        capture_output=True, text=True)
+    tl = [l for l in th.stdout.splitlines() if "propositions verified" in l]
+    nprop = tl[0].strip() if tl else "verify_theory.py produced no verdict"
+    if "FAIL" in th.stdout or not tl:
+        for l in th.stdout.splitlines():
+            if "FAIL" in l:
+                print(f"     {l.strip()}")
+        missing.append("a proposition did not verify")
+
     out = subprocess.run(
         [str(R / ".venv/bin/python"), "-m", "pytest", str(R / "tests"),
          "-q", "--no-header"],
@@ -43,7 +57,7 @@ def main() -> int:
     m = re.search(r"(\d+) passed", line)
     nfail = re.search(r"(\d+) failed", line)
     print(f"  {len(named)} test files named in the supplement, "
-          f"{len(missing)} missing | pytest: {line.strip()}")
+          f"{len(missing)} missing | pytest: {line.strip()} | {nprop}")
     if nfail or missing:
         for l in out.stdout.splitlines():
             if l.startswith("FAILED"):

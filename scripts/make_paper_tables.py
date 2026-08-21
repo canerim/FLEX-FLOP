@@ -1057,6 +1057,19 @@ if cb:
         mac(f"BlendGain{tag}", f"{sv(bc) - sv(c0):+.1f}")
         mac(f"BlendGain{tag}Q", f"q{q}")
 
+# ------------------------------------------------- the propositions, counted
+# "seven of seven" was typed into both documents. The file says how many there
+# are and how many passed; if a proposition is added or one starts failing,
+# the sentence should move with it.
+print("propositions")
+try:
+    _tc = json.load(open(RES / "theory_checks.json"))
+    mac("PropsPassed", str(int(_tc["n_passed"])))
+    mac("PropsTotal", str(int(_tc["n_propositions"])))
+except Exception as _e:
+    print("   theory_checks.json:", _e)
+
+
 # ------------------------------------------- two numbers derived from others
 # A typed number sitting beside the macros it is computed from is the failure
 # this file keeps finding: the macro moves and the neighbour does not. Both of

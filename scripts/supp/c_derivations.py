@@ -84,7 +84,7 @@ def content(k):
         "runs/RECIPE512/ckpt_PAPER.pth.tar, eval is "
         "runs/RECIPE512/ckpt_eval.pth.tar and BEST is "
         "runs/BEST/ckpt_eval.pth.tar. verify_theory is "
-        "scripts/verify_theory.py, which reports seven of seven propositions "
+        "scripts/verify_theory.py, which reports \\PropsPassed of \\PropsTotal propositions "
         "passing on one sequence at one rate.")
     k.note("Files named without a directory are under results/ with a .json "
            "extension; the saturation and Lorenz rows are the _ctc53 and "

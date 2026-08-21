@@ -1746,7 +1746,7 @@ def content(colw, fullw):
         r"as measured rather than assumed.")
     par(r"The construction has enough structure to state as propositions, and "
         r"we check each one numerically instead of asserting it "
-        r"(scripts/verify_theory.py, seven of seven).")
+        r"(scripts/verify_theory.py, \PropsPassed of \PropsTotal).")
     rows_tbl([["", ""],
               ["1", "the allocation decouples per tile"],
               ["2", "compute is non-increasing and distortion non-decreasing "
