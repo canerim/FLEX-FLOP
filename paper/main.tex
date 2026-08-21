@@ -234,6 +234,27 @@ paid on every image; and it is uniform over the frame, so a flat sky and a face
 are decoded at the same price. Those are the two the ladder in this paper
 changes, and it changes them without touching the model that was shipped.
 
+\begin{figure}[t]
+\centering
+\includegraphics[width=\columnwidth]{figures/field.png}
+\caption{\textbf{Every published decoder is one number.} Arithmetic per pixel for the eleven image codecs of Table~\ref{tab:litimg}, and for the intra decoder this work modifies. Costs are comparable here even though the BD-Rate anchors are not, which is why this axis and not a rate-distortion one. The bar at the top is the same decoder as the rest of the paper: a $0.1\dB$ budget removes the pale section, and how much it removes depends on the picture.}
+\label{fig:field}
+\end{figure}
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\columnwidth]{figures/tiles_unequal.png}
+\caption{\textbf{Why depth should not be uniform.} One 1080p frame, 40 tiles. \textbf{a}, what each tile loses if it stops at the shallowest exit the ladder allows: a few lose nothing measurable and one loses $0.71\dB$. A single depth for the frame has to be set by the worst of them. \textbf{b}, the bits the entropy model has already spent on a tile against the exit the Lagrangian oracle sends it to, at the $0.1\dB$ budget.}
+\label{fig:tiles_unequal}
+\end{figure}
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\columnwidth]{figures/allocation.png}
+\caption{\textbf{Where the tiles actually go}, at the $0.1\dB$ budget, pooled over the whole test set. At the lowest rate two thirds of tiles take the cheapest available exit; at the highest only a fifth do and a quarter need the deepest.}
+\label{fig:allocation}
+\end{figure}
+
 \paragraph{Complexity control in learned compression.} SlimCAE~\cite{slimcae}
 and slimmable video codecs~\cite{slimvc} expose several widths of one model.
 The choice is per stream and it changes the encoder, so the bitstream is not
@@ -445,6 +466,13 @@ of the $40$ tiles as the trunk now sees them, each its own batch element.
 the round trip is exact.}
 \label{fig:patchify}
 \end{figure*}
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\columnwidth]{figures/ladder.png}
+\caption{\textbf{The ladder, priced.} What a tile costs at each exit, as a percentage of one released decode, counted with hooks on the executed pass and beside the arithmetic model the argmin uses. Exits below the split depth are not distinct. The deepest exit costs slightly more than the release, which is the full-frame deblocking pass.}
+\label{fig:ladder}
+\end{figure}
 
 \subsection{Where the computation is}
 
@@ -702,6 +730,13 @@ distribution instead of toward uniform. At a high $\lambda$ the oracle genuinely
 does send every tile to one exit, and forcing spread there would force mistakes.
 Section~\ref{sec:ab} measures what B gives up against A.
 
+\begin{figure}[t]
+\centering
+\includegraphics[width=\columnwidth]{figures/mechanism.png}
+\caption{\textbf{How a multiplier becomes a map.} Five tiles of one real frame. \textbf{a}, what each loses at each exit, against the deepest. \textbf{b}, what each exit costs. \textbf{c}, the two added with the multiplier that meets a $0.1\dB$ budget, each curve scaled to its own minimum; the star is where the argmin lands. \textbf{d}, the map the same rule produces for all 40 tiles.}
+\label{fig:mechanism}
+\end{figure}
+
 \subsection{Training}
 
 All exits are decoded every step and the objective is
@@ -844,18 +879,6 @@ module in this paper does.
 
 \subsection{A learned deblocking filter, and why it is not sufficient}
 
-\begin{figure}[t]
-\centering
-\includegraphics[width=\columnwidth]{figures/seam_module.png}
-\caption{\textbf{A learned deblocking filter}, gated by position within a tile and applied
-once to the stitched frame, for $0.95\%$ of the decode. \textbf{a}, the trained
-gate against distance from the boundary, beside its initialisation. \textbf{b},
-the change in error by that distance; bar width is the share of pixels, so bar
-area is the contribution to the frame. It wins on the $6.2\%$ of pixels nearest a
-boundary and loses on the $94\%$ beyond.}
-\label{fig:seammodule}
-\end{figure}
-
 What a standard codec does about a partition boundary is deblock it, with a
 filter applied after reconstruction~\cite{hevc,vvc}. The tile lattice is known
 exactly at training and at inference, so ours can be \emph{told} where to look
@@ -894,6 +917,13 @@ there. It recovers $0.005\dB$ of the $0.041\dB$ that tiling costs on this frame,
 which is the measurement behind the section title.}
 \label{fig:seamrepairgrid}
 \end{figure*}
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\columnwidth]{figures/seam_gate.png}
+\caption{\textbf{The deblocking gate, and what it does.} \textbf{a}, the trained gate $G$, one scalar per position within a tile, shared across all 384 channels. \textbf{b}, the same gate tiled over the canvas. \textbf{c}, the correction it adds on a real frame: the tile lattice and nothing else. \textbf{d}, a cut through the middle of a tile.}
+\label{fig:seam_gate}
+\end{figure}
 
 \subsection{Removing the cause, and why it does not help}
 \label{sec:coupling}
@@ -983,17 +1013,6 @@ exit costs $1.0095$ of it, and using that as the denominator would flatter every
 result by $0.6$--$0.8$ points.
 
 \subsection{Main result}
-
-\begin{figure}[t]
-\centering
-\includegraphics[width=\columnwidth]{figures/qualitative.png}
-\caption{\textbf{What the saving looks like.} The same bitstream decoded by the
-released decoder and by ours at the $0.1\dB$ operating point, $30.5\%$ fewer
-multiply--accumulates. The crop is the tile that gave up the most quality, chosen
-automatically, so it shows the method's worst case on this frame rather than a
-flattering one.}
-\label{fig:qual}
-\end{figure}
 
 \begin{table}[t]
 \centering
@@ -1300,6 +1319,13 @@ same relation inverted, so it reads as what a saving target costs. The three
 budgets reported elsewhere are three points on this curve.}
 \label{fig:tradeoff}
 \end{figure}
+\begin{figure}[t]
+\centering
+\includegraphics[width=\columnwidth]{figures/window.png}
+\caption{\textbf{The window a budget works in.} \textbf{a}, saving against the distortion actually delivered, per rate. Every curve begins at a floor and flattens at a saturation point. \textbf{b}, those two limits against rate; the shaded band is the only region in which a budget is a design choice rather than a formality.}
+\label{fig:window}
+\end{figure}
+
 \subsection{Signalled versus predicted allocation}
 \label{sec:ab}
 
@@ -1547,6 +1573,13 @@ rarely is. In adaptive inference the usual controls are a uniform allocation and
 a random one. Both are much weaker than a decoder-side signal that is already
 lying around.
 
+\begin{figure}[t]
+\centering
+\includegraphics[width=\columnwidth]{figures/deciders.png}
+\caption{\textbf{Three ways to choose an exit.} \textbf{a}, saving at the $0.1\dB$ budget. The encoder search sees the source and sends \MapBits\ bits a frame; the other two send nothing. \textbf{b}, bars are the tiles on which the rule picks the exit the search would have, and the line is the fraction of the search's saving it nonetheless captures.}
+\label{fig:deciders}
+\end{figure}
+
 \subsection{Signalling only what the router gets wrong}
 \label{sec:hybrid}
 
@@ -1647,6 +1680,13 @@ signalled, at \CBestSave\% at $q\CBestQp$. That is \CBestOverA\ points
 Configuration C is what we would ship where a small map is tolerable and a large
 one is not. It also reframes the A--B gap. What the gap measures is the price of
 \emph{silence}, charged tile by tile, rather than the price of prediction.
+\begin{figure}[t]
+\centering
+\includegraphics[width=\columnwidth]{figures/concentration.png}
+\caption{\textbf{The loss is concentrated.} \textbf{a}, the share of the total regret carried by the worst fraction of tiles, per rate; the dotted line is an even spread. \textbf{b}, the same as a Gini coefficient.}
+\label{fig:concentration}
+\end{figure}
+
 \subsection{Does the map have to be recomputed?}
 \label{sec:transfer}
 
@@ -1804,6 +1844,62 @@ tuned once and fixed. The band of Section~\ref{sec:operating} tells you which
 side of the crossover a given budget sits on.
 
 % =========================================================== limitations
+\section{Against the released decoder}
+\label{sec:released}
+
+Everything above is measured against the released DCVC-UF intra decoder, but
+always as a percentage. This section states it once in the units a codec paper
+reports, so the comparison can be read without arithmetic.
+
+\begin{table}[t]
+\centering
+\resizebox{\columnwidth}{!}{\input{tables/released}}
+\caption{\textbf{FLEX-UF against the decoder it modifies.} The released DCVC-UF
+intra decoder and the same decoder with the exit ladder, at the three budgets.
+Arithmetic is counted with hooks on the executed decode. ``dB below release'' is
+what the routed decode actually delivers, which is under the budget at
+$0.1\dB$ and well under it at $0.3$ and $0.5$, because by then the ladder has
+saturated and the budget cannot be spent. BD-Rate is the rate a codec would have
+to add to buy that quality back.}
+\label{tab:released}
+\end{table}
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\columnwidth]{figures/power.png}
+\caption{\textbf{Three units for one saving.} \textbf{a}, the same routed decode
+measured as arithmetic, as wall clock and as joules per frame, at 1080p and a
+$0.1\dB$ budget. Energy follows the clock, not the arithmetic. \textbf{b}, why:
+the board draws the same power either way, because the later groups run on a
+shrinking set of tiles and a partly idle GPU still draws its static power.
+\textbf{c}, peak memory, which routing raises rather than lowers, by $13.3\%$ at
+every resolution that fitted on the card.}
+\label{fig:power}
+\end{figure}
+
+The released decoder spends \RelGmac\ GMAC on a padded 1080p frame, which is
+\RelKMacPx\ thousand multiply-accumulates for every pixel it produces, and it
+spends the same on every pixel whatever the picture is doing there. At a
+$0.1\dB$ budget the ladder takes that to \GmacAtOne\ GMAC, \KmacAtOne\ kMAC per
+pixel, and delivers \DbAtOne\dB\ below the release for a BD-Rate cost of
+\BdRateALow\%.
+
+The $0.3$ and $0.5\dB$ rows are the same measurement with the constraint
+loosened, and they say something the percentages hide. Between them the saving
+moves by less than a point, from \MeanAtThree\% to \MeanAtFive\%, while the
+budget grows by two thirds. The ladder has run out of exits: at $0.3\dB$ most
+tiles are already on the cheapest rung they are allowed and the extra allowance
+buys nothing. The delivered distortion says the same, \DbAtThree\dB\ against a
+$0.3\dB$ allowance. A looser budget is not the way to get more out of this
+decoder; a finer ladder is, and Section~\ref{sec:exp} measures one.
+
+In wall clock on one RTX A6000 the $0.1\dB$ row decodes a padded 1080p frame in
+$89.6$ ms against the release's $110.8$, which is $9.0$ frames per second
+becoming $11.2$, and it does so for $26.6$ J against $33.0$. The arithmetic
+saving is $22.9\%$ at that rate and the energy saving is $19.3\%$, and the gap
+between those two numbers is the scheduling cost of a decode that runs its last
+groups on a handful of tiles.
+
 \section{Limitations}
 \label{sec:limits}
 
