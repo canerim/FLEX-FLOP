@@ -2131,8 +2131,9 @@ def content(colw, fullw):
         r"whichever is better depends on the rate. Both are read off the "
         r"arithmetic model rather than the hook count, because only one of "
         r"them was hook-counted, and mixing the two conventions adds most of "
-        r"a point to the spread. At some rates that spread "
-        r"is wider than the rule's margin over either of them. So the claim we "
+        r"a point to the spread. At \HeadSpreadWiderN of the "
+        r"\HeadSpreadRatesN rates that spread is wider than the rule's margin "
+        r"over whichever head is nearer. So the claim we "
         r"make is not that no learned router can beat the bit rule. It is that "
         r"a rule costing nothing sits inside the band two of our own trained "
         r"heads span, which is where a control belongs.")

@@ -1796,8 +1796,8 @@ same decoder, which is looser than seed variance and larger. The joint and the
 frozen head differ by \HeadSpreadLow\ points at the lowest rate and
 \HeadSpreadHigh\ at the highest, a range of \HeadSpreadRange\ points, and they cross: whichever is better depends on the rate. Both are read off the arithmetic model rather than the hook count,
 because only one of them was hook-counted, and mixing the two conventions
-adds most of a point to the spread. At some rates that spread is
-wider than the rule's margin over either of them. So the claim we make is not
+adds most of a point to the spread. At \HeadSpreadWiderN\ of the \HeadSpreadRatesN\ rates that spread is wider
+than the rule's margin over whichever head is nearer. So the claim we make is not
 that no learned router can beat the bit rule. It is that a rule costing nothing
 sits inside the band two of our own trained heads span, which is where a control
 belongs.

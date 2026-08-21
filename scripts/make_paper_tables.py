@@ -1225,6 +1225,23 @@ if rr:
         # trained head and points the other way.
         _og = [sv_oracle(r) - sv(r) for r in rs]
         mac("RateRankOracleGap", f"{max(_og):.1f}")
+        # How often the spread between our two heads is wider than the rule's
+        # margin over whichever of them is nearer. The paper said "at some
+        # rates" and the answer is every one of them; understating a caveat
+        # against our own claim is the wrong direction to be vague in.
+        try:
+            _rf = {r["qp"]: r["saving_pct_vs_release"] for r in
+                   json.load(open(RES / "router_RECIPE512_b01_PAPER.json"))["rows"]}
+            _rj = {r["qp"]: r["saving_pct_vs_release"] for r in
+                   json.load(open(RES / "router_RECIPE512_b01_jointhead.json"))["rows"]}
+            _ru = {r["qp"]: r["saving_pct_vs_release"] for r in rs}
+            _qs = [q for q in _rf if q in _rj and q in _ru]
+            _w = sum(1 for q in _qs
+                     if abs(_rj[q] - _rf[q]) > _ru[q] - max(_rf[q], _rj[q]))
+            mac("HeadSpreadWiderN", str(_w))
+            mac("HeadSpreadRatesN", str(len(_qs)))
+        except Exception as _e:
+            print("   head spread vs margin:", _e)
         if B1:
             d_ = [(r["qp"], sv(r) - B1[r["qp"]])
                   for r in rs if r["qp"] in B1]
