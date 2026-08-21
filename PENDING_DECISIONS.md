@@ -141,3 +141,25 @@ Three options, none of them free:
 The second is what I would choose, and it is eight days away, so it is written
 down rather than decided. Whichever is picked, the run's meta.json and the
 supplement's recipe table have to say which objective trained which epochs.
+
+## 6. Two figures still carry the old type, and regenerating them moves a checkpoint
+
+The type in every figure went up a point, but a figure only gets the new style
+when it is regenerated, and two of them cannot be regenerated safely.
+
+`exit_map.png` and `seam_PAPER_bosphorus_q63.png` are drawn from
+`runs/BEST/ckpt_eval.pth.tar`. BEST has no pinned checkpoint -- `ckpt_eval` is
+a name the watcher rewrites, and BEST has trained five more epochs since those
+figures were made. Regenerating them would silently replace the checkpoint
+behind two published pictures, which is the class of defect DECISIONS 106 is
+about, and it would do it to make the labels one point bigger.
+
+The other five unaudited figures need nothing: `flexuf_overview` and
+`dcvcuf_framework` are drawings rather than plots, `exitmap_PAPER_*` sets its
+own type at 8 to 11 pt, and `budget_band_BEST` is a supplement figure on the
+same BEST problem.
+
+Two ways out, both the author's call: pin a BEST checkpoint and record which
+epoch it is, so those two figures have a reference that stays still; or accept
+that they are a point smaller than the rest and say so nowhere, because nobody
+will notice a single point on an exit map.

@@ -117,7 +117,10 @@ def main(argv):
     a0.imshow(img_ref)
     grid(a0)
     a0.add_patch(Rectangle((c0, r0), S, S, ec=ns.VERM, fc="none", lw=0.9))
-    a0.set_title(f"{a.seq} at q{a.qp}, the {nh}x{nw} tile grid", fontsize=6,
+    # The caption already names the sequence and the rate. Repeating them in a
+    # left-aligned title makes it long enough to run under the next panel's
+    # label, which is what the audit was reporting.
+    a0.set_title(f"the {nh}x{nw} tile grid", fontsize=6,
                  color=ns.INK2, loc="left", pad=3)
     ns.panel(a0, "a")
 

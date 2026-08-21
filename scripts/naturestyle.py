@@ -226,14 +226,23 @@ def _place_panels(fig, rend):
     """
     from matplotlib.text import Text
     moved = 0
+    # Every text in the FIGURE, not in the label's own axes. A panel label sits
+    # in the margin between two panels, so what it collides with is usually the
+    # neighbour's title -- which an axes-local comparison cannot see, and which
+    # is exactly what it failed to see in patchify and seam_repair_grid.
+    all_text = []
+    for _ax in fig.axes:
+        if not _ax.get_visible():
+            continue
+        for t in _ax.findobj(Text):
+            if t.get_visible() and (t.get_text() or "").strip():
+                all_text.append(t)
     for ax in fig.axes:
         labs = [t for t in ax.findobj(Text)
                 if getattr(t, "_ns_panel", False) and t.get_visible()]
         if not labs:
             continue
-        others = [t for t in ax.findobj(Text)
-                  if t.get_visible() and (t.get_text() or "").strip()
-                  and not getattr(t, "_ns_panel", False)]
+        others = [t for t in all_text if not getattr(t, "_ns_panel", False)]
         for t in labs:
             for _ in range(6):
                 try:
@@ -254,7 +263,16 @@ def _place_panels(fig, rend):
                 if not hit:
                     break
                 px, py = t.get_position()
-                t.set_position((px - 0.05, py))
+                # Up first. What a panel label collides with is nearly always a
+                # title, and a title is wide and thin: going up clears it in
+                # one or two steps where going left walks along it and can make
+                # the overlap worse, which is what happened to seam_repair_grid
+                # (17% became 53%). Left is the fallback, for a label that has
+                # run out of vertical room.
+                if _ < 3:
+                    t.set_position((px, py + 0.07))
+                else:
+                    t.set_position((px - 0.05, py))
                 moved += 1
                 fig.canvas.draw()
                 rend = fig.canvas.get_renderer()
