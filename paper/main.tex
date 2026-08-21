@@ -1101,6 +1101,49 @@ interquartile range of \SpreadIqrLoLow--\SpreadIqrHiLow, while the worst saves
 low-resolution sequences of Section~\ref{sec:resolution}, where two tiles leave
 nothing to allocate. Reporting the mean alone would hide both ends.
 
+\begin{figure}[t]
+\centering
+\includegraphics[width=\columnwidth]{figures/exit_vs_rate.png}
+\caption{\textbf{Where the ladder is used.} Tiles per exit over the whole test
+set. \textbf{a}, the $0.1\dB$ budget at five rates. \textbf{b}, one rate at the
+three budgets. Exits below the split depth do not exist and are not drawn.}
+\label{fig:exitvsrate}
+\end{figure}
+
+The fall in saving with rate is the allocation walking down the ladder. At the
+lowest rate \ExitShallowLow\% of tiles take the shallowest exit that exists and
+\ExitDeepLow\% take the deepest; at the highest those are \ExitShallowHigh\%
+and \ExitDeepHigh\%, and the mean exit moves from \ExitMeanLow\ to
+\ExitMeanHigh. A high-rate reconstruction carries detail the shallow exits
+cannot reproduce, so the same decibel buys fewer rungs. Panel~b is the
+saturation of Section~\ref{sec:operating} in the same units: at $0.3\dB$ and
+above every tile is already at the shallowest rung the ladder offers, and a
+looser budget has nothing left to buy. That is why the $0.3$ and $0.5\dB$ rows
+of Table~\ref{tab:main} differ by less than a point.
+
+\subsection{What a set-level budget hides}
+
+One multiplier is bisected for the whole test set, so the budget binds on the
+set mean and on nothing else. Sequence by sequence it does not bind at all.
+Between \OverBudgetLo\ and \OverBudgetHi\ of the \OverBudgetN\ sequences
+receive a decode worse than the $0.1\dB$ they were nominally given, and the
+worst single sequence is \WorstSeqDb\dB, three and a half times the budget.
+Nothing is wrong with the bisection; this is what a mean is. We report it
+because a deployment that needs a per-sequence or per-frame guarantee has to
+bisect per sequence or per frame, which the encoder-side configuration can do at
+the cost of one search each, and because a saving quoted against a set-level
+budget is not the same quantity as one quoted against a guarantee.
+
+\begin{table}[t]
+\centering
+\resizebox{\columnwidth}{!}{\input{tables/setbudget}}
+\caption{\textbf{The $0.1\dB$ budget, sequence by sequence.} Over budget counts
+the sequences whose delivered loss exceeds the budget; the last two columns give
+the least-saving sequence at each rate. The negative entries are the
+$416{\times}240$ class, where a frame is two tiles.}
+\label{tab:setbudget}
+\end{table}
+
 \subsection{Is per-tile adaptivity necessary?}
 \label{sec:necessary}
 
@@ -1188,6 +1231,25 @@ deployment; each class is then reported at that $\lambda$. The ordering follows
 tile count, not content.}
 \label{fig:perclass}
 \end{figure}
+
+\begin{table}[t]
+\centering
+\resizebox{\columnwidth}{!}{\input{tables/probe}}
+\caption{\textbf{One frame from each class, at q32 and a $0.1\dB$ budget.} The
+exits column is the histogram over the ladder, so \emph{e4:2} is two tiles at
+exit~4.}
+\label{tab:probe}
+\end{table}
+
+The table says where the method stops being adaptive. Reading down it, the exit
+histogram narrows from a mixture over three rungs to a single one, and at
+$416{\times}240$ both tiles take exit~4 and the frame simply receives whatever
+that rung costs. That is not a router failing. It is a frame with two tiles and
+no allocation to make, and it is why the low-resolution classes sit at the bottom
+of every per-class result in this paper. The worst-tile column moves the other
+way and shows the price the budget is paying somewhere in the frame: $0.310\dB$
+on one Bosphorus tile against a $0.100\dB$ frame average, which is the
+concentration Section~\ref{sec:ab} measures.
 
 \begin{table}[t]
 \centering
@@ -1528,6 +1590,36 @@ A large share of every tile went to the cheapest exit for a reason unrelated to
 its content. The mask is now $-\infty$. Fixing it costs $3.5$ points at $q0$,
 where the accident happened to agree with the oracle, and buys $9.4$ at $q63$,
 where it did not.
+
+\subsection{What each router input is worth}
+
+The head reads four per-tile signals and the quality index, and one of them
+carries almost all of it. We retrain the same head once per input group, zeroing
+the others after their projection rather than deleting them, so architecture,
+parameter count, optimiser, seed and data order are identical across the six
+runs and only what the head is allowed to know differs. The quality index stays
+live everywhere: it is one number per frame and cannot tell two tiles of a frame
+apart, so the run with it alone is the floor that no per-tile information
+reaches, \InputQpAgree\ agreement.
+
+\begin{table}[t]
+\centering
+\resizebox{\columnwidth}{!}{\input{tables/router_inputs}}
+\caption{\textbf{What each router input is worth.} Agreement with the search's
+exit choice on held-out frames. Read the first column against the last: only the
+stem moves agreement away from what a single constant exit already achieves.}
+\label{tab:routerinputs}
+\end{table}
+
+The stem alone reaches \InputStemAgree, \InputStemOver\ over the floor, and
+adding the latent, the scales and the bit count on top of it reaches
+\InputAllAgree, which is not an improvement. The signals are not independent:
+the entropy model's scales and the bits spent are both functions of the same
+latent the stem was computed from, so the head is being given one piece of
+information in four dressings. That is worth stating beside
+Section~\ref{sec:raterank}, where a rule reading the bit count alone beats the
+whole head: the bit count is not a weak input, it is the same input, read by
+something that does not have to learn what to do with it.
 
 \subsection{A router with no parameters}
 \label{sec:raterank}
@@ -2042,6 +2134,24 @@ epochs $0$ to \EpochLatest, a gain of \EpochGain\ points over the checkpoint thi
 paper reports, and it was still training when we stopped measuring. We report the
 pinned checkpoint because every table has to come from one set of weights, and we
 do not read \EpochGain\ points as a bound on what a converged run would give.
+
+\paragraph{Seven mechanisms are not in the system, and each was removed by a
+measurement rather than by taste.} Table~\ref{tab:abandoned} lists them with the
+number that ended each. Five were built and dropped, one is an extension the
+measurement did not support, and the last is the explanation of the tiling
+penalty that we found does not predict it. We report them because the shape of
+what fails is the part of this result most likely to transfer: the border
+estimators say the seam is not an interpolation problem, the halo exchange says
+exactness and adaptivity are in tension, and the frozen trunk says the ladder
+has to be trained through.
+
+\begin{table}[t]
+\centering
+\resizebox{\columnwidth}{!}{\input{tables/abandoned}}
+\caption{\textbf{Seven mechanisms and what settled each.} None is in the
+reported system. The supplement gives the full measurement behind every row.}
+\label{tab:abandoned}
+\end{table}
 
 \paragraph{A single decoder.} All results are on DCVC-UF's intra decoder. Nothing
 in the method looks specific to it, since the ladder needs only a residual trunk

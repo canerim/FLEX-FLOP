@@ -4902,3 +4902,62 @@ makes a missing picture fail the same command that catches a stale number.
 
 The general lesson is the one from DECISIONS 91 and 96: a check that reads the
 source cannot see what the source failed to produce. Read the artefact.
+
+## 98. A blank page in the middle of the paper (2026-08-21)
+
+Page 5 of the built PDF was one word and a page number. Page 17 was three
+fifths empty. Both are `figure_wide`, which has to force a page break because
+reportlab has no float mechanism: it switches to a full-width page template,
+emits the figure into the top band, and switches back. If the story happens to
+be three lines into a fresh page when that runs, those three lines are the whole
+page.
+
+So the placement of the call in the story, not the figure, decides whether a
+page is wasted. `scratchpad/sweep_wide.py` moves the call to each statement
+boundary within ±9000 characters, builds, and counts text elements per page from
+`pdftotext -bbox`. For `patchify.png`: the original anchor gives 21 pages with a
+two-element page, and eighteen of the thirty-seven candidates give 20 pages with
+no page thinner than the references tail. We took the good anchor nearest the
+original so the figure still sits where the text discusses it.
+
+Two things this cost, recorded because both were tempting and both were wrong.
+Rebuilding the qualitative figure two-by-two at column width removes the page
+break, and it also letterboxes a 16:9 frame beside square crops and runs into
+the 1.25-inch cap that `figure()` puts on a column figure, which would leave the
+crops under an inch. The picture is not the problem. Where the call sits is.
+
+The measurement to keep: text elements per page. Fill measured as the lowest
+line on the page reads 0.96 on every page of a paper with a blank one in it,
+because the page number is on the blank page too.
+
+## 99. Twenty pages, and none of them empty (2026-08-21)
+
+The target was exactly twenty pages. Getting there meant fixing two things and
+adding one.
+
+Fixed: both `figure_wide` calls were forcing their page break three lines into a
+fresh page, so page 5 was one word and page 17 was three fifths white. The sweep
+in DECISIONS 98 moved each to the anchor nearest its original position that
+wastes no page.
+
+Added, from measurement rather than padding. A qualitative figure in Section 6:
+the released decoder and ours from the same latent, the crop centred on the tile
+that gave up the most. Two tables promoted from the supplement, generated from
+the same dumps the supplement uses so the two documents cannot disagree: the
+seven mechanisms that were built and dropped with the number that ended each,
+and one frame per class showing the exit histogram collapsing to a single rung
+at 416x240. Two subsections that were only in the supplement: what a set-level
+budget hides -- 29 to 34 of the 53 sequences receive a decode worse than the
+budget, because one multiplier is bisected for the set mean -- and what each
+router input is worth, where the stem alone reaches the agreement that all five
+inputs together reach.
+
+And one new figure, `exit_vs_rate.png`: the allocation walking down the ladder
+as the rate rises, 67% of tiles at the shallowest live exit at q0 against 22% at
+q63. It is the paper's own explanation of why the saving falls with rate, drawn
+rather than asserted, and panel b is the saturation of Section 5.4 in the same
+units.
+
+Final state: 20 pages, thinnest page 330 text elements and that is the tail of
+the references, every other page above 780. Figures 1 to 35 and tables 1 to 24
+with no gaps.

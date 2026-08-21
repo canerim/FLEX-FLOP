@@ -1290,6 +1290,94 @@ except Exception as _e:
     print("   checkpoint series:", _e)
 
 
+# ------------------------------------------------- where the ladder is used
+try:
+    _ev = json.load(open(RES / "exit_vs_rate.json"))
+    mac("ExitMeanLow", f"{_ev['mean_exit_low_rate']:.2f}")
+    mac("ExitMeanHigh", f"{_ev['mean_exit_high_rate']:.2f}")
+    mac("ExitShallowLow", f"{_ev['share_two_low']:.0f}")
+    mac("ExitShallowHigh", f"{_ev['share_two_high']:.0f}")
+    mac("ExitDeepLow", f"{_ev['share_deepest_low']:.0f}")
+    mac("ExitDeepHigh", f"{_ev['share_deepest_high']:.0f}")
+except Exception as _e:
+    print("   exit_vs_rate.json:", _e)
+
+
+# ------------------------------------------------- what each input is worth
+try:
+    _ri = json.load(open(RES / "router_inputs_rows.json"))["rows"]
+    _l3 = ["\\begin{tabular}{lrrrr}", "\\toprule",
+           " & ".join(c.replace("±", "$\\pm$") for c in _ri[0]) + " \\\\",
+           "\\midrule"]
+    for r in _ri[1:]:
+        _l3.append(" & ".join(r) + " \\\\")
+    _l3 += ["\\bottomrule", "\\end{tabular}"]
+    w("router_inputs.tex", "\n".join(_l3))
+    mac("InputStemAgree", _ri[1][1])
+    mac("InputAllAgree", _ri[2][1])
+    mac("InputQpAgree", _ri[-1][1])
+    mac("InputStemOver", _ri[1][4])
+except Exception as _e:
+    print("   router_inputs_rows.json:", _e)
+
+
+# ------------------------------------------- what a set-level budget hides
+try:
+    _sb = json.load(open(RES / "setbudget_rows.json"))["rows"]
+    def _t2(x):
+        return x.replace("%", "\\%")
+    _l2 = ["\\begin{tabular}{lrrlrl}", "\\toprule",
+           " & ".join(_t2(c) for c in _sb[0]) + " \\\\", "\\midrule"]
+    for r in _sb[1:]:
+        _l2.append(" & ".join(_t2(c) for c in r) + " \\\\")
+    _l2 += ["\\bottomrule", "\\end{tabular}"]
+    w("setbudget.tex", "\n".join(_l2))
+    _ov = [int(r[1].split()[0]) for r in _sb[1:]]
+    _n = int(_sb[1][1].split()[-1])
+    mac("OverBudgetLo", str(min(_ov)))
+    mac("OverBudgetHi", str(max(_ov)))
+    mac("OverBudgetN", str(_n))
+    mac("WorstSeqDb", f"{max(float(r[2]) for r in _sb[1:]):.3f}")
+except Exception as _e:
+    print("   setbudget_rows.json:", _e)
+
+
+# ------------------------------------------------ one frame per class
+try:
+    _pr = json.load(open(RES / "probe_rows.json"))["rows"]
+    def _t(x):
+        return x.replace("%", "\\%").replace("×", "$\\times$")
+    _ln = ["\\begin{tabular}{lrlrrr}", "\\toprule",
+           " & ".join(_t(c) for c in _pr[0]) + " \\\\", "\\midrule"]
+    for r in _pr[1:]:
+        _ln.append(" & ".join(_t(c) for c in r) + " \\\\")
+    _ln += ["\\bottomrule", "\\end{tabular}"]
+    w("probe.tex", "\n".join(_ln))
+except Exception as _e:
+    print("   probe_rows.json:", _e)
+
+
+# ------------------------------------------------ built and abandoned
+# The supplement computes these rows; this writes the paper's copy from the same
+# dump, so the two documents cannot disagree about what was tried or why it was
+# dropped. Regenerated whenever the supplement is built.
+try:
+    _ab = json.load(open(RES / "abandoned_rows.json"))["rows"]
+    def _tex(t):
+        return (t.replace("%", "\\%").replace("&", "\\&")
+                 .replace("--", "-{}-"))
+    _lines = ["\\begin{tabular}{p{0.30\\columnwidth}p{0.62\\columnwidth}}",
+              "\\toprule",
+              f"{_tex(_ab[0][0])} & {_tex(_ab[0][1])} \\\\", "\\midrule"]
+    for r in _ab[1:]:
+        _lines.append(f"{_tex(r[0])} & {_tex(r[1])} \\\\")
+    _lines += ["\\bottomrule", "\\end{tabular}"]
+    w("abandoned.tex", "\n".join(_lines))
+    mac("AbandonedN", str(len(_ab) - 1))
+except Exception as _e:
+    print("   abandoned_rows.json:", _e)
+
+
 # ---------------------------------------------------- rd_spread panel c
 # The sentence beside panel c quoted a median and an IQR typed in from an older
 # run, under the older saving definition. Now the figure dumps them.

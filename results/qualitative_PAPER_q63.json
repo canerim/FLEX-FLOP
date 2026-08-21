@@ -1,5 +1,5 @@
 {
-  "figure": "docs/figures/qualitative.png",
+  "figure": "docs/figures/qualitative_q63.png",
   "what": "released decode and ours from one latent, at a stated budget",
   "ckpt": "runs/RECIPE512/ckpt_PAPER.pth.tar",
   "ckpt_epoch": 0,
@@ -10,13 +10,13 @@
     1920,
     1080
   ],
-  "qp": 32,
+  "qp": 63,
   "budget_db": 0.1,
-  "delivered_db": 0.09970109909772873,
-  "saving_pct_vs_release": 28.129255771636963,
-  "bpp": 0.2740049362182617,
-  "psnr_released": 39.484085133334034,
-  "psnr_routed": 39.385634276728084,
+  "delivered_db": 0.09917181730270386,
+  "saving_pct_vs_release": 17.388325929641724,
+  "bpp": 0.46548566222190857,
+  "psnr_released": 45.25721592370831,
+  "psnr_routed": 45.15654038400756,
   "psnr_convention": "(6Y+U+V)/8 in 4:2:0 on 0..255",
   "crop_px": 320,
   "crop_centre_yx": [
@@ -30,10 +30,10 @@
   "exit_hist": [
     0,
     0,
-    15,
-    19,
-    6,
-    0
+    1,
+    22,
+    10,
+    7
   ],
   "amplification": 20
 }

@@ -138,11 +138,19 @@ def content(k):
         "its own is then the floor that choice implies, which is the agreement "
         "reachable with no per-tile information whatever.")
 
+    _abl = ([["live inputs", "agreement", "± s.e.", "last 250", "over floor"]]
+            + [[V[l]["inputs"], f"{V[l]['agree']:.4f}",
+                f"{V[l]['stderr']:.4f}",
+                f"{V[l]['heldout_agree_last250']:.4f}",
+                f"{V[l]['agree'] - floor:+.4f}"] for l in VARIANT_ORDER])
+    import json as _j3
+    from pathlib import Path as _P3
+    _j3.dump({"rows": _abl},
+             open(_P3(__file__).resolve().parents[2] / "results/router_inputs_rows.json",
+                  "w"), indent=2)
+
     k.rows(
-        [["live inputs", "agreement", "± s.e.", "last 250", "over floor"]]
-        + [[V[l]["inputs"], f"{V[l]['agree']:.4f}", f"{V[l]['stderr']:.4f}",
-            f"{V[l]['heldout_agree_last250']:.4f}",
-            f"{V[l]['agree'] - floor:+.4f}"] for l in VARIANT_ORDER],
+        _abl,
         "<b>What each router input is worth.</b> Read the first column against "
         "the last: only the stem moves agreement far from what a single "
         "constant exit already achieves. Agreement with the oracle's exit "

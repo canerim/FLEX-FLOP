@@ -116,26 +116,39 @@ def to_img(t):
 A_, B_ = to_img(rel), to_img(our)
 err = np.abs(A_ - B_).mean(2)
 
+# One by four across the page. Two by two at column width was tried: the frame
+# is 16:9 and the crops are square, so the grid is either ragged or letterboxed,
+# and the column build caps a figure at 1.25 inches, which would leave the crops
+# under an inch. The full-width row forces a page break; that is fixed by where
+# the call sits in the story, not by shrinking the picture.
 fig = plt.figure(figsize=(ns.W2, 2.0))
 gs = fig.add_gridspec(1, 4, width_ratios=[1.62, 1, 1, 1], wspace=0.04)
 ax = [fig.add_subplot(gs[i]) for i in range(4)]
 ax[0].imshow(to_img(rel))
 ax[0].add_patch(Rectangle((cx - h2, cy - h2), a.crop, a.crop, fill=False,
                           ec=ns.VERM, lw=1.0))
-ax[0].set_title("released, full frame", fontsize=6, color=ns.INK2, loc="left")
+ax[0].set_title("released, full frame", fontsize=5.2, color=ns.INK2, loc="left")
 ax[1].imshow(A_[sl])
-ax[1].set_title(f"released\n{bpp:.4f} bpp, {psnr_rel:.2f} dB", fontsize=6,
+ax[1].set_title(f"released\n{bpp:.4f} bpp, {psnr_rel:.2f} dB", fontsize=5.2,
                 color=ns.INK2, loc="left")
 ax[2].imshow(B_[sl])
 ax[2].set_title(f"ours, {saving:.0f}% fewer MACs\n{bpp:.4f} bpp, "
-                f"{psnr_our:.2f} dB", fontsize=6, color=ns.INK2, loc="left")
+                f"{psnr_our:.2f} dB", fontsize=5.2, color=ns.INK2, loc="left")
 im = ax[3].imshow(err[sl] * 20, cmap="magma", vmin=0, vmax=1)
-ax[3].set_title("|difference| ×20", fontsize=6, color=ns.INK2, loc="left")
+ax[3].set_title("|difference| ×20", fontsize=5.2, color=ns.INK2, loc="left")
 for b in ax:
     b.set_xticks([]); b.set_yticks([]); b.grid(False)
+    # Square cells. The full frame is 16:9 and the crops are square, so without
+    # this the first panel is half again as wide as the others and the grid
+    # reads as a mistake. Letterboxing the frame costs nothing; it is context.
+    for sp in b.spines.values():
+        sp.set_linewidth(0.4); sp.set_color("#c8ccd0")
 out = R / a.out
 out.parent.mkdir(parents=True, exist_ok=True)
-fig.savefig(out, dpi=300, bbox_inches="tight")
+for _d in (out, R / "paper/figures" / out.name):
+    _d.parent.mkdir(parents=True, exist_ok=True)
+    fig.savefig(_d, dpi=500, bbox_inches="tight", pad_inches=0.02,
+                facecolor="white")
 print(f"  {s['name'][:26]} q{a.qp}: {saving:.2f}% saved at {db:.4f} dB")
 print(f"  {bpp:.4f} bpp; PSNR released {psnr_rel:.3f}, ours {psnr_our:.3f}")
 print(f"  worst tile {ti} of {nh*nw}, exit {int(k[ti])}")

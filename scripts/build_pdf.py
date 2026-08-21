@@ -867,13 +867,6 @@ def content(colw, fullw):
         r"configuration B: nothing is added, and the decoder reads a file that "
         r"is byte for byte the one the released encoder produced. Every saving "
         r"quoted in this paper is labelled with the mode it was measured in.")
-    par(r"<b>C</b> interpolates between the two. The encoder signals a "
-        r"fraction ρ of the tiles, the ones where leaving B alone is most "
-        r"costly, and B decides the rest, so ρ=0 is B and ρ=1 is A. Any "
-        r"decoder-side predictor can take B's place there, and Section 5.7, "
-        r"which measures C, tries a second one. C transmits a mask rather than "
-        r"a full map, costs the encoder A's search plus one run of the "
-        r"predictor, and costs the decoder whatever that predictor costs.")
     figure_wide("patchify.png",
                 r"<b>Figure 4. What patchify does.</b> Captured from one real "
                 r"decode. <b>a</b>, the frame, padded to a whole number of "
@@ -885,6 +878,13 @@ def content(colw, fullw):
                 r"them, each its own batch element. <b>d</b>, the operation "
                 r"itself, and its inverse. It costs no arithmetic and the "
                 r"round trip is exact.")
+    par(r"<b>C</b> interpolates between the two. The encoder signals a "
+        r"fraction ρ of the tiles, the ones where leaving B alone is most "
+        r"costly, and B decides the rest, so ρ=0 is B and ρ=1 is A. Any "
+        r"decoder-side predictor can take B's place there, and Section 5.7, "
+        r"which measures C, tries a second one. C transmits a mask rather than "
+        r"a full map, costs the encoder A's search plus one run of the "
+        r"predictor, and costs the decoder whatever that predictor costs.")
     h2("3.2 Where the computation is")
     par(r"The DCVC-UF intra decoder is one upsampling block, twelve "
         r"DepthConvBlocks and a head, costing 453.5 GMAC per 1080p frame. The "
@@ -1445,6 +1445,41 @@ def content(colw, fullw):
         r"worst cases are the low-resolution sequences of Section 5.3, where "
         r"two tiles leave nothing to allocate. Reporting the mean alone would "
         r"hide both ends.")
+    figure("exit_vs_rate.png",
+           r"<b>Figure N. Where the ladder is used.</b> Tiles per exit over "
+           r"the whole test set. <b>a</b>, the 0.1 dB budget at five rates. "
+           r"<b>b</b>, one rate at the three budgets. Exits below the split "
+           r"depth do not exist and are not drawn.")
+    par(r"The fall in saving with rate is the allocation walking down the "
+        r"ladder. At the lowest rate \ExitShallowLow% of tiles take the "
+        r"shallowest exit that exists and \ExitDeepLow% take the deepest; at "
+        r"the highest those are \ExitShallowHigh% and \ExitDeepHigh%, and "
+        r"the mean exit moves from \ExitMeanLow to \ExitMeanHigh. A "
+        r"high-rate reconstruction carries detail the shallow exits cannot "
+        r"reproduce, so the same decibel buys fewer rungs. Panel b is the "
+        r"saturation of Section 5.4 in the same units: at 0.3 dB and above "
+        r"every tile is already at the shallowest rung the ladder offers, and "
+        r"a looser budget has nothing left to buy. That is why the 0.3 and 0.5 "
+        r"dB rows of Table 3 differ by less than a point.")
+    h2("What a set-level budget hides")
+    par(r"One multiplier is bisected for the whole test set, so the budget "
+        r"binds on the set mean and on nothing else. Sequence by sequence it "
+        r"does not bind at all. Between \OverBudgetLo and \OverBudgetHi of "
+        r"the \OverBudgetN sequences receive a decode worse than the 0.1 dB "
+        r"they were nominally given, and the worst single sequence is "
+        r"\WorstSeqDb dB, three and a half times the budget. Nothing is wrong "
+        r"with the bisection; this is what a mean is. We report it because a "
+        r"deployment that needs a per-sequence or per-frame guarantee has to "
+        r"bisect per sequence or per frame, which the encoder-side "
+        r"configuration can do at the cost of one search each, and because a "
+        r"saving quoted against a set-level budget is not the same quantity "
+        r"as one quoted against a guarantee.")
+    tbl("setbudget",
+        r"<b>Table N. The 0.1 dB budget, sequence by sequence.</b> Over "
+        r"budget counts the sequences whose delivered loss exceeds the "
+        r"budget; the last two columns give the least-saving sequence at each "
+        r"rate. The negative entries are the 416×240 class, where a frame is "
+        r"two tiles.")
     h2("5.2 Is per-tile adaptivity necessary?")
     figure("exit_map.png",
            r"<b>Figure 6. Where the decoder spends.</b> Bosphorus at q32, a "
@@ -1517,6 +1552,20 @@ def content(colw, fullw):
         r"reported below. We report the comparison because the resolution "
         r"dependence it exposes is real and was hidden by a 1080p-only test "
         r"set, and we do not read the tile size as its cause.")
+    tbl("probe",
+        r"<b>Table N. One frame from each class, at q32 and a 0.1 dB "
+        r"budget.</b> The exits column is the histogram over the ladder, so "
+        r"e4:2 is two tiles at exit 4.")
+    par(r"The table says where the method stops being adaptive. Reading down "
+        r"it, the exit histogram narrows from a mixture over three rungs to a "
+        r"single one, and at 416×240 both tiles take exit 4 and the frame "
+        r"simply receives whatever that rung costs. That is not a router "
+        r"failing. It is a frame with two tiles and no allocation to make, and "
+        r"it is why the low-resolution classes sit at the bottom of every "
+        r"per-class result in this paper. The worst-tile column moves the "
+        r"other way and shows the price the budget is paying somewhere in the "
+        r"frame: 0.310 dB on one Bosphorus tile against a 0.100 dB frame "
+        r"average, which is the concentration Section 5.5 measures.")
     figure("perclass.png",
            r"<b>Figure 7. Saving by test class</b> at one global operating "
            r"point. λ is bisected once so the whole set lands on the budget, "
@@ -1809,6 +1858,31 @@ def content(colw, fullw):
         r"negative infinity. Fixing it costs 3.5 points at q0, where the "
         r"accident happened to agree with the oracle, and buys 9.4 at q63, "
         r"where it did not.")
+    h2("What each router input is worth")
+    par(r"The head reads four per-tile signals and the quality index, and one "
+        r"of them carries almost all of it. We retrain the same head once per "
+        r"input group, zeroing the others after their projection rather than "
+        r"deleting them, so architecture, parameter count, optimiser, seed and "
+        r"data order are identical across the six runs and only what the head "
+        r"is allowed to know differs. The quality index stays live everywhere: "
+        r"it is one number per frame and cannot tell two tiles of a frame "
+        r"apart, so the run with it alone is the floor that no per-tile "
+        r"information reaches, \InputQpAgree agreement.")
+    tbl("router_inputs",
+        r"<b>Table N. What each router input is worth.</b> Agreement with the "
+        r"search's exit choice on held-out frames. Read the first column "
+        r"against the last: only the stem moves agreement away from what a "
+        r"single constant exit already achieves.")
+    par(r"The stem alone reaches \InputStemAgree, \InputStemOver over the "
+        r"floor, and adding the latent, the scales and the bit count on top of "
+        r"it reaches \InputAllAgree, which is not an improvement. The signals "
+        r"are not independent: the entropy model's scales and the bits spent "
+        r"are both functions of the same latent the stem was computed from, so "
+        r"the head is being given one piece of information in four dressings. "
+        r"That is worth stating beside Section 5.6, where a rule reading the "
+        r"bit count alone beats the whole head: the bit count is not a weak "
+        r"input, it is the same input, read by something that does not have to "
+        r"learn what to do with it.")
     h2("5.6 A router with no parameters")
     par(r"Before a \RouterParams head is worth its \RouterCostPct% of the "
         r"decode, it has to beat what the decoder already knows. The entropy "
@@ -1927,6 +2001,14 @@ def content(colw, fullw):
         r"because it can run that router itself (Section 3.1), and nothing "
         r"obliges it to correct every one of them. That is the room "
         r"configuration C works in.")
+    figure_wide("qualitative.png",
+        r"<b>Figure N. What \QualSaving% of the arithmetic costs, to look at.</b> "
+        r"\QualSeq at q\QualQp, one frame, with λ bisected on that frame to "
+        r"\QualDb dB. Both crops are decoded from the <i>same</i> latent at "
+        r"\QualBpp bpp: the released decoder reaches \QualPsnrRel dB and the "
+        r"routed decode \QualPsnrOurs dB. The crop is centred on the tile that "
+        r"gave up the most, tile \QualWorstTile of \QualNTiles, not on a "
+        r"flattering one. Right, the absolute difference at ×\QualAmp.")
     par(r"We choose the ρN overridden tiles by Lagrangian regret, "
         r"Δ(t) = L(t,k-hat) − L(t,k*) with L(t,k) = D(t,k) + λc_k the "
         r"objective of the Lagrangian in Section 3.5, so Δ(t) is exactly what "
@@ -2176,14 +2258,6 @@ def content(colw, fullw):
         r"decoder, but always as a percentage. This section states it once in "
         r"the units a codec paper reports, so the comparison can be read "
         r"without arithmetic.")
-    figure_wide("qualitative.png",
-        r"<b>Figure N. What \QualSaving% of the arithmetic costs, to look at.</b> "
-        r"\QualSeq at q\QualQp, one frame, with λ bisected on that frame to "
-        r"\QualDb dB. Both crops are decoded from the <i>same</i> latent at "
-        r"\QualBpp bpp: the released decoder reaches \QualPsnrRel dB and the "
-        r"routed decode \QualPsnrOurs dB. The crop is centred on the tile that "
-        r"gave up the most, tile \QualWorstTile of \QualNTiles, not on a "
-        r"flattering one. Right, the absolute difference at ×\QualAmp.")
     par(r"The difference panel is the part worth reading. Amplified twenty "
         r"times, what it shows is the rigging of the boat, the waterline and "
         r"the edge of the flag, and almost nothing along the tile borders that "
@@ -2258,6 +2332,20 @@ def content(colw, fullw):
         r"checkpoint because every table in the paper has to come from one "
         r"set of weights, and we do not read \EpochGain points as a bound on "
         r"what a converged run would give.")
+    par(r"<b>Seven mechanisms are not in the system, and each was removed by "
+        r"a measurement rather than by taste.</b> The table lists them with "
+        r"the number that ended each. Five were built and dropped, one is an "
+        r"extension the measurement did not support, and the last is the "
+        r"explanation of the tiling penalty that we found does not predict it. "
+        r"We report them because the shape of what fails is the part of this "
+        r"result most likely to transfer: the border estimators say the seam "
+        r"is not an interpolation problem, the halo exchange says exactness "
+        r"and adaptivity are in tension, and the frozen trunk says the ladder "
+        r"has to be trained through.")
+    tbl("abandoned",
+        r"<b>Table N. Seven mechanisms and what settled each.</b> None is in "
+        r"the reported system. The supplement gives the full measurement "
+        r"behind every row.")
     par(r"<b>A single decoder.</b> All results are on DCVC-UF's intra decoder. "
         r"Nothing in the method looks specific to it, since the ladder needs "
         r"only a residual trunk with a shared head, but we have not measured a "
