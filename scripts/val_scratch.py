@@ -34,6 +34,44 @@ from gpu import pick                              # noqa: E402
 from why_qp_val import load_val                   # noqa: E402
 
 
+def _budget_savings(cfg, ps, budgets=(0.1, 0.2, 0.3)):
+    """For each budget, the shallowest UNIFORM exit within it and what it saves.
+
+    Two things this number is not, both of which would make it look like the
+    paper's headline and it is neither.
+
+    It is a uniform allocation -- every tile at the same exit -- chosen off the
+    set mean. The paper's 29.2% at q0 is a per-tile allocation, which is
+    strictly better, so this is a lower bound on what this checkpoint could do
+    and the gap between them is the thing the whole paper is about.
+
+    And its reference is this run's own deepest exit, not the released decoder.
+    SCRATCH105 has no relation to the release; the question it exists to answer
+    is whether a ladder built from random initialisation buys the same kind of
+    trade a warm-started one does, and that question is asked against itself.
+
+    Frame-relative, so the stem and head are amortised once as they are at
+    deployment.
+    """
+    # frame_relative_cost takes a per-tile exit MAP, so a uniform map at exit k
+    # gives that exit's frame-level cost: the stem and head are amortised once
+    # whatever the tiles do, which is the whole point of the frame-relative
+    # basis and the reason a per-tile cost vector cannot be used here.
+    from flexuf.cost import frame_relative_cost
+    C = [frame_relative_cost(torch.full((cfg.tiles_for_crop(1080),), k,
+                                        dtype=torch.long), cfg)
+         for k in range(cfg.num_exits)]
+    out = {}
+    deep = ps[-1]
+    for b in budgets:
+        ok = [k for k in range(cfg.split_depth, len(ps)) if deep - ps[k] <= b]
+        k = min(ok) if ok else len(ps) - 1
+        out[f"uniform_exit_at_{b:g}db"] = k
+        out[f"uniform_saving_pct_at_{b:g}db"] = round(100.0 * (1.0 - C[k]), 2)
+        out[f"uniform_delivered_db_at_{b:g}db"] = round(deep - ps[k], 4)
+    return out
+
+
 def psnr(mse: torch.Tensor) -> float:
     return float(10.0 * torch.log10(1.0 / mse.clamp_min(1e-10)))
 
@@ -85,11 +123,22 @@ def main() -> int:
                 acc = m if acc is None else acc + m
                 bpp_sum += float(out["bpp"].mean())
             acc = acc / len(imgs)
+            ps = [psnr(v) for v in acc]
             rows.append({
                 "qp": qp,
-                "psnr_per_exit": [round(psnr(v), 3) for v in acc],
+                "psnr_per_exit": [round(v, 3) for v in ps],
                 "bpp": round(bpp_sum / len(imgs), 4),
-                "spread_dB": round(psnr(acc[-1]) - psnr(acc[0]), 3),
+                "spread_dB": round(ps[-1] - ps[0], 3),
+                # What the ladder is worth, on this run's own terms.
+                #
+                # SCRATCH105 has no released decoder to be measured against --
+                # it IS a different decoder -- so its reference is its own
+                # deepest exit, and the question the run exists to answer is
+                # whether a ladder built from random initialisation buys the
+                # same kind of trade a warm-started one does. This is that
+                # number as it trains: the cheapest exit whose quality is
+                # within the budget of the deepest, and what that exit costs.
+                **_budget_savings(cfg, ps),
             })
 
     rec = {
@@ -108,7 +157,9 @@ def main() -> int:
         f.write(json.dumps(rec) + "\n")
     for r in rows:
         print(f"  q{r['qp']:<3} psnr {r['psnr_per_exit']}  "
-              f"bpp {r['bpp']:.4f}  spread {r['spread_dB']:+.3f} dB")
+              f"bpp {r['bpp']:.4f}  spread {r['spread_dB']:+.3f} dB  "
+              f"| 0.1 dB uniform: exit {r['uniform_exit_at_0.1db']}, "
+              f"{r['uniform_saving_pct_at_0.1db']:+.1f}%")
     print(f"  {args.run} @ epoch {rec['epoch']} step {rec['step']} "
           f"({rec['sec']}s, {len(imgs)} images)")
     return 0
