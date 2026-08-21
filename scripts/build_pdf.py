@@ -507,7 +507,7 @@ def content(colw, fullw):
         r"network over it, and the network is fixed by design: that is what "
         r"lets any decoder read any file. On the intra decoder we study, that "
         r"network costs "
-        r"\\DecGmac GMAC for a 1080p frame and spends the same arithmetic "
+        r"\DecGmac GMAC for a 1080p frame and spends the same arithmetic "
         r"everywhere "
         r"in it: a flat sky and a face are decoded at the same price. Making "
         r"decoders cheaper is now its own line of work, and almost all of it "

@@ -131,6 +131,13 @@ def check_refs_and_bib(root):
     # when the cross-references were placed automatically.
     _m = re.search(r"\\begin\{abstract\}(.*?)\\end\{abstract\}", main, re.S)
     _abs = re.findall(r"\\(?:ref|autoref|cref)\{[^}]*\}", _m.group(1)) if _m else []
+    # A doubled backslash before a macro survives LaTeX as a line break and
+    # prints as a literal in the reportlab build: the abstract read "\\454 GMAC"
+    # for one build that way.
+    _dbl = re.findall(r"\\\\\\\\[A-Za-z]+", s)
+    for d in set(_dbl):
+        print(f"     DOUBLED BACKSLASH before a macro: {d}")
+
     for r in _abs:
         print(f"     REFERENCE IN THE ABSTRACT: {r}")
 
@@ -157,7 +164,7 @@ def check_refs_and_bib(root):
     print(f"  refs: {len(refs)} used, {len(dangling)} dangling; "
           f"bib: {len(uncited)} uncited")
     return (len(dangling) + len(uncited) + len(_abs)
-            + len(_uneq) + len(_nopunct))
+            + len(_uneq) + len(_nopunct) + len(set(_dbl)))
 
 
 if __name__ == "__main__":
