@@ -381,11 +381,13 @@ def content(k):
         "head has log-probability gaps of hundreds, so a tilt of a few tens "
         "moves nothing at all, and the bracket runs to plus and minus "
         "2×10<super>4</super>; at the 0.1 dB budget and q0 the bisection "
-        f"settles at {b_q0['beta']:.0f}. The outer correction against a real "
-        "decode is the same as in the search above and lives in the same two "
-        "functions, because the calibration experiment has to run the "
-        "identical bisection on held-out images and then apply its answer "
-        "unchanged to the test frames; a bisection copied into a second "
+        f"settles at {b_q0['beta']:.0f}.")
+    k.par(
+        "The outer correction against a real decode is the same as in the "
+        "search above, and it lives in the same two functions. The reason is "
+        "the calibration experiment: it has to run the identical bisection on "
+        "held-out images and then apply its answer unchanged to the test "
+        "frames. A bisection copied into a second "
         "caller is a second bisection, and this project has twice paid for a "
         "selection rule that was fixed in one copy and not the other.")
 
@@ -857,9 +859,11 @@ def content(k):
         "measured per exit on the pinned checkpoint: the model under-bills by "
         f"{diffs[0]:.4f} of a released decode at exits 0 to 3, "
         f"{diffs[K - 2]:.4f} at exit {K - 2} and {diffs[K - 1]:.4f} at the "
-        "deepest, which is why the reported saving is the meter's and the "
-        "model's part is confined to the inside of an argmin. B.6 takes the "
-        "residual apart term by term.")
+        "deepest.")
+    k.par(
+        "That residual is why the reported saving is the meter's, and why the "
+        "model's part is confined to the inside of an argmin. B.6 takes it "
+        "apart term by term.")
     k.note("results/ceiling_measured.json, pinned checkpoint, "
            f"q{cm['qp']}, {cm['size']}, {cm['n_tiles']} tiles. Its modelled "
            "column is flexuf/cost.py and its measured column is "

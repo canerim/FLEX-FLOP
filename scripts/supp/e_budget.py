@@ -134,10 +134,11 @@ def content(k):
           r"is admissible, and a saturation point, above which every "
           r"allocation has reached the same ceiling, lies the window of "
           r"budgets in which the decoder has anything to trade. Section C "
-          r"derives the two ends and Section D tabulates them; this section "
-          r"is about the window itself: how the two ends are measured and how "
-          r"far the measurements agree, what has to be stated with every "
-          r"decibel before any of it means anything, the sweep across the "
+          r"derives the two ends and Section D tabulates them. This section "
+          r"is about the window itself.")
+    k.par(r"It covers how the two ends are measured and how far the "
+          r"measurements agree, what has to be stated with every decibel "
+          r"before any of it means anything, the sweep across the "
           r"whole window, and how much of the rescaling that collapses the "
           r"five rates onto one curve survives a change of sweep, of "
           r"convention or of checkpoint.")

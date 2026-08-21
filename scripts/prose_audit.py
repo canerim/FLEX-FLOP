@@ -25,11 +25,14 @@ ROOT = Path(__file__).resolve().parent.parent
 
 
 def paragraphs(path):
-    """Each par() call's text, separately. Never joined."""
+    """Each par() call's text, separately. Never joined.
+
+    Matches both the main paper's par(...) and the supplement's k.par(...).
+    """
     s = path.read_text()
     out = []
-    for m in re.finditer(r'par\(\s*((?:r?"[^"]*"\s*)+)\)', s):
-        t = "".join(re.findall(r'r?"([^"]*)"', m.group(1)))
+    for m in re.finditer(r'(?:k\.)?par\(\s*((?:r?f?"[^"]*"\s*)+)\)', s):
+        t = "".join(re.findall(r'r?f?"([^"]*)"', m.group(1)))
         t = re.sub(r"<[^>]+>", "", t)
         t = re.sub(r"\\[A-Za-z]+", "", t)
         out.append(re.sub(r"\s+", " ", t).strip())
@@ -44,8 +47,18 @@ def sentences(pars):
                 yield x
 
 
-def main():
-    pars = paragraphs(ROOT / "scripts/build_pdf.py")
+def main(argv):
+    which = argv[0] if argv else "paper"
+    if which == "supp":
+        import glob
+        pars = []
+        for f in sorted(glob.glob(str(ROOT / "scripts/supp/[a-z]_*.py"))):
+            pars += paragraphs(Path(f))
+        src_files = sorted(glob.glob(str(ROOT / "scripts/supp/[a-z]_*.py")))
+    else:
+        pars = paragraphs(ROOT / "scripts/build_pdf.py")
+        src_files = [str(ROOT / "scripts/build_pdf.py")]
+    print(f"  auditing: {which}")
     sents = list(sentences(pars))
     L = [len(x.split()) for x in sents]
     body = " ".join(pars)
@@ -61,9 +74,15 @@ def main():
     # is the point of it: they are one thought. Exempted by name rather than by
     # raising the threshold until it disappears.
     SPINE = "The paper makes three claims"
+    # The supplement is a methods document. Its sentences carry shapes,
+    # provenance and conditions, and holding those together is what its reader
+    # is there for; the paper's job is to be read once, straight through. One
+    # threshold for both would either license run-ons in the paper or condemn
+    # correct writing in the supplement.
+    LIMIT = 70 if which == "supp" else 55
     over = [x for x in sents
-            if len(x.split()) > 55 and not x.startswith(SPINE)]
-    print(f"  over 55 words: {len(over)}")
+            if len(x.split()) > LIMIT and not x.startswith(SPINE)]
+    print(f"  over {LIMIT} words: {len(over)}")
     for x in over:
         bad += 1
         print(f"     ({len(x.split())}w) {x[:96]}")
@@ -71,9 +90,10 @@ def main():
     print("\n  bolded lead-ins")
     b = sum(1 for p in pars if p.lstrip().startswith("<b>"))
     # measured on the source, where the tags survive
-    src = (ROOT / "scripts/build_pdf.py").read_text()
-    raw = [("".join(re.findall(r'r?"([^"]*)"', m.group(1)))).lstrip()
-           for m in re.finditer(r'par\(\s*((?:r?"[^"]*"\s*)+)\)', src)]
+    src = "\n".join(Path(f).read_text() for f in src_files)
+    raw = [("".join(re.findall(r'r?f?"([^"]*)"', m.group(1)))).lstrip()
+           for m in re.finditer(r'(?:k\.)?par\(\s*((?:r?f?"[^"]*"\s*)+)\)',
+                                src)]
     b = sum(1 for p in raw if p.startswith("<b>"))
     pct = 100 * b / len(raw)
     print(f"     {b} of {len(raw)}  ({pct:.0f}%)   threshold 20%")
@@ -111,4 +131,4 @@ def main():
 
 
 if __name__ == "__main__":
-    raise SystemExit(main())
+    raise SystemExit(main(sys.argv[1:]))
