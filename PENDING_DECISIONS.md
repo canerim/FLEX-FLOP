@@ -1,8 +1,8 @@
-# Two decisions waiting, both the author's
+# Decisions waiting, all the author's
 
-Neither is a defect and neither is urgent. Both would improve the paper, both
-change numbers that appear in the abstract, and both are cheap to execute once
-decided. They are here so they are not lost between sessions.
+None is a defect and none is urgent. Each is here so it is not lost between
+sessions, and each says what it would cost to act on. Items 1 to 3 change
+numbers that appear in the abstract; 4 to 7 do not.
 
 ---
 
@@ -18,12 +18,23 @@ and the same 0.1 dB budget, the run reads:
 | 1 | 22.8% |
 | 2 | 24.0% |
 | 3 | 25.8% |
+| 4 | 27.6% |
 
-Monotone, 4.3 points. Epoch 4 is still in progress: at 2026-08-21 10:50 it was
-at step 32,800 of 47,451, so the next point on this table is a few hours away
-and the one after it is a day. `ckpt_eval.pth.tar` for this run was last
-written at the epoch-3 boundary on 08-20 at 21:23; the 20-minute checkpoint
-ages the heartbeat reports belong to the other three runs.
+Monotone, 6.1 points, and still climbing: as of 2026-08-21 21:30 the run is
+part-way through epoch 5. The paper prints this series from `\EpochSeries`,
+so the table above is generated and this file is the one place it is typed.
+
+Epoch 4 is the best measurement this run has produced and its weights were
+fifteen hours from being destroyed: `ckpt_eval.pth.tar` is rewritten at every
+boundary, and only epochs 1 and 3 had been snapshotted. It is now
+`ckpt_PIN_e4.pth.tar`, and `scripts/pin_epochs.sh` runs on a half-hourly timer
+so that no epoch of any run is lost again -- it copies a boundary checkpoint
+only when that epoch has no pin yet, so it costs 182 MB per epoch against a
+free terabyte and does nothing in between. Five other runs were pinned at the
+same time; all of them had exactly one epoch's weights left.
+
+So the choice is open at epoch 3 (25.8%), epoch 4 (27.6%), or a later one as it
+lands. It no longer expires.
 
 **Why it is a decision and not a fix.** Reporting a later checkpoint is not
 cherry-picking, because there is no peak to pick; it is reporting the most
@@ -31,9 +42,8 @@ recent measurement of a run that is still improving. But every table, macro and
 figure comes from one set of weights, so the whole chain has to be re-measured.
 
 **Cost.** One command, a few hours of the evaluation card:
-`scripts/repin.sh runs/RECIPE512/ckpt_PIN_e3.pth.tar`. Epoch 3 is already
-snapshotted, so the option does not expire when the training loop overwrites
-`ckpt_eval.pth.tar`.
+`scripts/repin.sh runs/RECIPE512/ckpt_PIN_e4.pth.tar` for the best of them, or
+`ckpt_PIN_e3` for the more conservative one.
 
 **My correction on the record.** I argued against moving, on the grounds that
 epoch 2 read below epoch 1 and picking epoch 1 would be picking a peak. That
