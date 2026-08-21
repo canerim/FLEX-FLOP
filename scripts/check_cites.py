@@ -143,6 +143,12 @@ def main() -> int:
     if missing:
         print(f"     not in CITE (fine unless a table cites them): "
               f"{len(missing)}")
+    # A reference printed without authors reads as an incomplete entry, and
+    # for an arXiv paper the authors are never actually unknown. Reported
+    # rather than failed: filling one in is the author's call, not a build's.
+    noauth = sorted(k for k, f in B.items() if not f.get("author"))
+    if noauth:
+        print(f"     no author in refs.bib: {', '.join(noauth)}")
     for b in bad:
         print(f"     {b}")
     print(f"\n  {'PASS' if not bad else str(len(bad)) + ' citation issue(s)'}")

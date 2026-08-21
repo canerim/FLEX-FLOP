@@ -97,3 +97,16 @@ which is currently idle between checkpoint boundaries.
 
 **Not done unattended because** it changes a published table and two macros, and
 the author asked that the main experiment not be touched without a decision.
+
+## 4. `ctca` is printed without authors
+
+`@article{ctca}` in `paper/refs.bib` -- "Adaptive Test-Time Compute Allocation
+for Reasoning LLMs via Constrained Policy Optimization", arXiv:2604.14853 --
+has no `author` field, so it prints as reference [28] with the title first
+while every other entry starts with a name. It is the only such entry.
+`check_cites.py` reports it and does not fail on it, because the authors are
+not something a build can look up and not something I will invent.
+
+It is cited once, in Section 2, for the observation that the Lagrangian
+relaxation has resurfaced for test-time compute in language models. Either
+fill the author list in or drop the sentence; both are one line.
