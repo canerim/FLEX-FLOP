@@ -1446,8 +1446,10 @@ def content(colw, fullw):
     figure("spread.png",
            r"<b>Figure N. What the set mean hides.</b> Every test sequence as "
            r"a point, at the 0.1 dB budget; the bar is the median. At the "
-           r"lowest rate the saving runs from 28.1% to 42.5% across sequences "
-           r"and at the highest from 11.1% to 42.5%. The spread within a rate "
+           r"lowest rate the saving runs from \SpreadLowMin% to \SpreadLowMax% "
+           r"across sequences "
+           r"and at the highest from \SpreadHighMin% to \SpreadHighMax%. The "
+           r"spread within a rate "
            r"is larger than the difference between rates, and it is content, "
            r"not noise: the same sequences sit at the same end of it at every "
            r"rate.")
@@ -2019,13 +2021,16 @@ def content(colw, fullw):
         r"measured before and after each condition so that a neighbouring "
         r"process waking up would appear as drift rather than as a saving.")
     par(r"Energy follows time, not arithmetic. At q0, q32 and q63 the routed "
-        r"decode removes 33.0, 22.9 and 17.8% of the arithmetic; it removes "
-        r"29.1, 19.1 and 14.1% of the wall clock and 29.6, 19.3 and 14.2% of "
+        r"decode removes \PowerMacLow, \PowerMacMid and \PowerMacHigh% of the "
+        r"arithmetic; it removes "
+        r"\PowerTimeLow, \PowerTimeMid and \PowerTimeHigh% of the wall clock "
+        r"and \PowerEnergyLow, \PowerEnergyMid and \PowerEnergyHigh% of "
         r"the joules per frame. Board power barely moves, 298 W against 296 W "
         r"at q0, because the later groups run on a shrinking set of tiles and a "
         r"partly idle GPU still draws most of its static power. What early exit "
         r"buys is a shorter decode, not a cooler one. Frame rate at 1080p goes "
-        r"from 9.0 to 11.2, and peak memory rises by 13.3% at every resolution "
+        r"from \FpsFull to \FpsRouted, and peak memory rises by \PeakDelta% at "
+        r"every resolution "
         r"we could measure: tiling turns one feature map into a batch of small "
         r"ones, so the peak is set by the widest point of the ladder rather "
         r"than by its deepest.")
@@ -2095,7 +2100,7 @@ def content(colw, fullw):
            r"either way, because the later groups run on a shrinking set of "
            r"tiles and a partly idle GPU still draws its static power. "
            r"<b>c</b>, peak memory, which routing raises rather than lowers, by "
-           r"13.3% at every resolution that fitted on the card.")
+           r"\PeakDelta% at every resolution that fitted on the card.")
     h1("6. Against the released decoder")
     par(r"Everything above is measured against the released DCVC-UF intra "
         r"decoder, but always as a percentage. This section states it once in "

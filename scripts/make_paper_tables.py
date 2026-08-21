@@ -1215,6 +1215,45 @@ if d and bdj_:
     mac("RelGmac", f"{_GMAC:.1f}")
 
 
+# ------------------------------------------------- numbers typed into figures
+# Captions written by hand carry literals, and a literal in a caption goes stale
+# exactly like a literal in prose. These are the ones the figures added in the
+# last pass introduced.
+print("figure numbers")
+d = J("supp_power.json") if False else None
+try:
+    _pw = json.load(open(RES / "supp_power.json"))
+    _r = [r for r in _pw["rows"] if r["size"] == "2048x1280"]
+    for _q, _n in ((0, "Low"), (32, "Mid"), (63, "High")):
+        _x = next((r for r in _r if r["qp"] == _q), None)
+        if _x:
+            mac(f"PowerMac{_n}", f"{_x['mac_saving_pct']:.1f}")
+            mac(f"PowerTime{_n}", f"{_x['time_saving_pct']:.1f}")
+            mac(f"PowerEnergy{_n}", f"{_x['energy_saving_pct']:.1f}")
+except Exception as _e:
+    print("   supp_power.json:", _e)
+try:
+    _fp = json.load(open(RES / "supp_footprint.json"))
+    _ok = [r for r in _fp["rows"] if not r.get("oom")]
+    if _ok:
+        mac("PeakDelta", f"{max(r['peak_delta_pct'] for r in _ok):.1f}")
+        _hd = next((r for r in _ok if r["size"] == "2048x1280"), None)
+        if _hd:
+            mac("FpsFull", f"{_hd['fps_full']:.1f}")
+            mac("FpsRouted", f"{_hd['fps_routed']:.1f}")
+except Exception as _e:
+    print("   supp_footprint.json:", _e)
+try:
+    _ps = json.load(open(RES / "per_sequence.json"))
+    _rows = sorted(_ps["rows"], key=lambda r: r["qp"])
+    mac("SpreadLowMin", f"{_rows[0]['min']:.1f}")
+    mac("SpreadLowMax", f"{_rows[0]['max']:.1f}")
+    mac("SpreadHighMin", f"{_rows[-1]['min']:.1f}")
+    mac("SpreadHighMax", f"{_rows[-1]['max']:.1f}")
+except Exception as _e:
+    print("   per_sequence.json:", _e)
+
+
 # macros.tex is written LAST, after every block that can emit one. It used to be
 # written in the middle of the file, so the two blocks appended after it emitted
 # five macros that never reached disk and the build reported them unexpanded.
