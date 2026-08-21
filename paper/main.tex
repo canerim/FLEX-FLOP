@@ -1215,7 +1215,19 @@ suggest that any adaptive-inference paper report it. Given the Lagrangian oracle
 histogram, what we measure here is \emph{ranking} and nothing else.
 Section~\ref{sec:raterank} removes that crutch and turns the same signal into a
 complete routing rule, which matches the trained head across the whole rate
-range. Fig.~\ref{fig:exitmap} shows the assignment the Lagrangian oracle arrives at.
+range.
+
+\paragraph{How much a trained head varies, and what that does to the claim.} No
+head here was trained twice at two seeds, so we have no seed variance to report.
+What we can report is the spread between two heads trained independently on the
+same decoder, which is looser than seed variance and larger. The joint and the
+frozen head differ by \HeadSpreadLow\ points at the lowest rate and
+\HeadSpreadHigh\ at the highest, a range of \HeadSpreadRange\ points, and they
+cross: whichever is better depends on the rate. At some rates that spread is
+wider than the rule's margin over either of them. So the claim we make is not
+that no learned router can beat the bit rule. It is that a rule costing nothing
+sits inside the band two of our own trained heads span, which is where a control
+belongs. Fig.~\ref{fig:exitmap} shows the assignment the Lagrangian oracle arrives at.
 
 \begin{figure}[t]
 \centering
@@ -1903,6 +1915,37 @@ without anything in the decode reporting that it has. In our reuse probe, then, 
 search across the frames we tested. How far that carries beyond the offsets and
 sequences probed here we have not measured.
 
+\subsection{Where the saving is realised, and where it is not}
+
+A saving in operations is an optimistic bound on a saving in time on the GPU we
+time on, and the optimism is a scheduling cost: the last groups of the trunk run
+on a handful of tiles and the card is largely idle. That cost is a property of
+the device, not of the method, so we measured the same decodes on a CPU with
+\CpuThreads\ threads and at three batch sizes on the GPU
+(Table~\ref{tab:cpubatch}).
+
+\begin{table}[t]
+\centering
+\input{tables/cpu_batch}
+\caption{\textbf{The same saving in three places.} Per cent removed at the
+$0.1\dB$ budget on a padded 1080p frame: the arithmetic model, the GPU at two
+batch sizes, and the CPU. Arithmetic is the same in every column; only the
+machine changes.}
+\label{tab:cpubatch}
+\end{table}
+
+On the CPU the bound is not optimistic. At the lowest rate the routed decode
+takes \CpuMsRouted\ seconds against \CpuMsStock, which is \CpuSavingLow\%
+removed where the arithmetic model predicts \CpuPredLow\%: a machine that does
+not care how many tiles are in flight realises slightly more than the operations
+count, because the tiles that exit early stop touching memory as well as
+arithmetic. The GPU recovers \BatchGainLow\ points by batching, and stops
+there. At the highest rate the CPU falls back to \CpuSavingHigh\%, in line with
+the GPU, because at that rate the allocation is deep and there is little left to
+skip. The claim we take from this is narrow: the gap between operations and time
+is a scheduling property of the accelerator, and on a device without one the
+operations count is the honest figure.
+
 \subsection{What the frame mean is made of}
 
 The budget binds on a frame, and a frame is 40 tiles. At the $0.1\dB$ budget the
@@ -1931,6 +1974,17 @@ that already carries a seam has less room left inside the budget before it has t
 decode deeper. A deployment that wants a per-tile guarantee rather than a
 per-frame one has a straightforward lever: clamp the shallowest exit a border
 tile may take, at the cost of the saving those tiles carry.
+
+The tail also has a depth. Split the same tiles by the exit they took and the
+whole of it sits at the shallowest rung: tiles at \TailExitLo\ lose
+\TailExitLoMean\dB on average and \TailExitLoOver\ of them lose more than half
+a decibel, while every tile at a deeper exit averages \TailExitRestMean\dB and
+\TailExitRestOver\ of them pass half a decibel. The multiplier is doing what it
+was asked to do, spending the budget where it is cheapest, and the consequence is
+that the loss is not spread thinly over the frame but concentrated on the tiles
+it sent furthest. That is the same concentration Section~\ref{sec:ab} uses to
+build configuration~C, seen from the distortion side rather than the regret
+side.
 
 \subsection{A budget in one metric is not a budget in another}
 

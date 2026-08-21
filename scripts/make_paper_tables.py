@@ -1414,6 +1414,76 @@ except Exception as _e:
     print("   supp_opquality:", _e)
 
 
+# ------------------------------------------- which exit the tail comes from
+try:
+    _te = json.load(open(RES / "supp_opquality_PAPER.json"))["tail_by_exit"]
+    _q = sorted(_te, key=int)[0]
+    _live = {k: v for k, v in _te[_q].items() if v}
+    _lo = min(_live, key=int)
+    mac("TailExitLo", f"e{_lo}")
+    mac("TailExitLoMean", f"{_live[_lo]['mean_db']:.3f}")
+    mac("TailExitLoOver", str(_live[_lo]["n_over_0_5_db"]))
+    _rest = [v for k, v in _live.items() if k != _lo]
+    mac("TailExitRestMean",
+        f"{sum(v['mean_db'] * v['n'] for v in _rest) / sum(v['n'] for v in _rest):.3f}")
+    mac("TailExitRestOver", str(sum(v["n_over_0_5_db"] for v in _rest)))
+except Exception as _e:
+    print("   tail by exit:", _e)
+
+
+# ------------------------------------------------ how far two heads differ
+# Claim (iii) is that a free rule beats our trained head. The obvious objection
+# is that the head was badly tuned, and the honest answer is the spread between
+# two heads trained independently on the same decoder.
+try:
+    _hf = json.load(open(RES / "router_RECIPE512_b01_PAPER.json"))
+    _hj = json.load(open(RES / "router_RECIPE512_b01_jointhead.json"))
+    _F = {r["qp"]: sv(r) for r in _hf["rows"]}
+    _J = {r["qp"]: sv(r) for r in _hj["rows"]}
+    _d = [_J[q] - _F[q] for q in sorted(_F) if q in _J]
+    mac("HeadSpreadLow", f"{_d[0]:+.1f}")
+    mac("HeadSpreadHigh", f"{_d[-1]:+.1f}")
+    mac("HeadSpreadRange", f"{max(_d) - min(_d):.1f}")
+except Exception as _e:
+    print("   two heads:", _e)
+
+
+# ---------------------------------------------------------- CPU and batch
+# The paper says a saving in operations is an optimistic bound on a saving in
+# time. On a CPU it is not: the arithmetic model under-predicts what the routed
+# decode actually saves there. Worth reporting, since a decoder saving that only
+# shows on one accelerator is a weaker result.
+try:
+    _cpu = json.load(open(RES / "supp_latency_cpu_1920x1080.json"))
+    _bat = json.load(open(RES / "supp_latency_batch_1920x1080.json"))
+    _b1 = {r["qp"]: r for r in _bat["rows"] if r["batch"] == 1}
+    _b4 = {r["qp"]: r for r in _bat["rows"] if r["batch"] == max(
+        x["batch"] for x in _bat["rows"])}
+    _ln = ["\\begin{tabular}{lrrrr}", "\\toprule",
+           "q & arithmetic & GPU, batch 1 & GPU, batch 4 & CPU \\\\",
+           "\\midrule"]
+    for r in _cpu["rows"]:
+        q = r["qp"]
+        _ln.append(
+            f"q{q} & {r['predicted_saving_pct']:.1f} & "
+            f"{_b1[q]['realised_saving_pct']:.1f} & "
+            f"{_b4[q]['realised_saving_pct']:.1f} & "
+            f"{r['realised_saving_pct']:.1f} \\\\")
+    _ln += ["\\bottomrule", "\\end{tabular}"]
+    w("cpu_batch.tex", "\n".join(_ln))
+    _c0 = _cpu["rows"][0]
+    mac("CpuThreads", str(_cpu["torch_threads"]))
+    mac("CpuSavingLow", f"{_c0['realised_saving_pct']:.1f}")
+    mac("CpuPredLow", f"{_c0['predicted_saving_pct']:.1f}")
+    mac("CpuSavingHigh", f"{_cpu['rows'][-1]['realised_saving_pct']:.1f}")
+    mac("CpuMsStock", f"{_c0['ms_stock_per_frame'] / 1000:.1f}")
+    mac("CpuMsRouted", f"{_c0['ms_routed_per_frame'] / 1000:.1f}")
+    mac("BatchGainLow",
+        f"{_b4[_c0['qp']]['realised_saving_pct'] - _b1[_c0['qp']]['realised_saving_pct']:.1f}")
+except Exception as _e:
+    print("   cpu/batch latency:", _e)
+
+
 # ------------------------------------------------------- the per-tile tail
 # The budget binds on a frame mean. This is what that mean is made of, and the
 # split by padding is the one number that ties Section 4 to Section 5: the tiles

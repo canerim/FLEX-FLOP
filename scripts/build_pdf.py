@@ -1582,7 +1582,19 @@ def content(colw, fullw):
         r"is <i>ranking</i> and nothing else. Section 5.6 removes that crutch "
         r"and turns the same signal into a complete routing rule, which "
         r"matches the trained head across the whole rate range.")
-    figure("spread.png",
+
+    par(r"<b>How much a trained head varies, and what that does to the "
+        r"claim.</b> No head here was trained twice at two seeds, so we have "
+        r"no seed variance to report. What we can report is the spread between "
+        r"two heads trained independently on the same decoder, which is looser "
+        r"than seed variance and larger. The joint and the frozen head differ "
+        r"by \HeadSpreadLow points at the lowest rate and \HeadSpreadHigh at "
+        r"the highest, a range of \HeadSpreadRange points, and they cross: "
+        r"whichever is better depends on the rate. At some rates that spread "
+        r"is wider than the rule's margin over either of them. So the claim we "
+        r"make is not that no learned router can beat the bit rule. It is that "
+        r"a rule costing nothing sits inside the band two of our own trained "
+        r"heads span, which is where a control belongs.")    figure("spread.png",
            r"<b>Figure N. What the set mean hides.</b> Every test sequence as "
            r"a point, at the 0.1 dB budget; the bar is the median. At the "
            r"lowest rate the saving runs from \SpreadLowMin% to \SpreadLowMax% "
@@ -2182,6 +2194,31 @@ def content(colw, fullw):
         r"probe, then, an encoder can search once per rate and reuse that "
         r"search across the frames we tested. How far that carries beyond the "
         r"offsets and sequences probed here we have not measured.")
+    h2("Where the saving is realised, and where it is not")
+    par(r"A saving in operations is an optimistic bound on a saving in time on "
+        r"the GPU we time on, and the optimism is a scheduling cost: the last "
+        r"groups of the trunk run on a handful of tiles and the card is "
+        r"largely idle. That cost is a property of the device, not of the "
+        r"method, so we measured the same decodes on a CPU with \CpuThreads "
+        r"threads and at three batch sizes on the GPU ([[tab:cpu_batch]]).")
+    tbl("cpu_batch",
+        r"<b>Table N. The same saving in three places.</b> Per cent removed at "
+        r"the 0.1 dB budget on a padded 1080p frame: the arithmetic model, the "
+        r"GPU at two batch sizes, and the CPU. Arithmetic is the same in every "
+        r"column; only the machine changes.")
+    par(r"On the CPU the bound is not optimistic. At the lowest rate the "
+        r"routed decode takes \CpuMsRouted seconds against "
+        r"\CpuMsStock, which is \CpuSavingLow% removed where the arithmetic "
+        r"model predicts \CpuPredLow%: a machine that does not care how many "
+        r"tiles are in flight realises slightly more than the operations "
+        r"count, because the tiles that exit early stop touching memory as "
+        r"well as arithmetic. The GPU recovers \BatchGainLow points by "
+        r"batching, and stops there. At the highest rate the CPU falls back to "
+        r"\CpuSavingHigh%, in line with the GPU, because at that rate the "
+        r"allocation is deep and there is little left to skip. The claim we "
+        r"take from this is narrow: the gap between operations and time is a "
+        r"scheduling property of the accelerator, and on a device without one "
+        r"the operations count is the honest figure.")
     h2("What the frame mean is made of")
     par(r"The budget binds on a frame, and a frame is 40 tiles. At the 0.1 dB "
         r"budget the median tile of the lowest rate gives up \TailMedian dB, "
@@ -2204,6 +2241,17 @@ def content(colw, fullw):
         r"deeper. A deployment that wants a per-tile guarantee rather than a "
         r"per-frame one has a straightforward lever: clamp the shallowest exit "
         r"a border tile may take, at the cost of the saving those tiles carry.")
+    par(r"The tail also has a depth. Split the same tiles by the exit they "
+        r"took and the whole of it sits at the shallowest rung: tiles at "
+        r"\TailExitLo lose \TailExitLoMean dB on average and \TailExitLoOver "
+        r"of them lose more than half a decibel, while every tile at a deeper "
+        r"exit averages \TailExitRestMean dB and \TailExitRestOver of them "
+        r"pass half a decibel. The multiplier is doing what it was asked to "
+        r"do, spending the budget where it is cheapest, and the consequence is "
+        r"that the loss is not spread thinly over the frame but concentrated "
+        r"on the tiles it sent furthest. That is the same concentration "
+        r"Section 5.5 uses to build configuration C, seen from the distortion "
+        r"side rather than the regret side.")
     h2("5.9 A budget in one metric is not a budget in another")
     par(r"Every allocation in this paper is bisected on PSNR, which prices a "
         r"squared error and nothing else. The obvious question is what that "
