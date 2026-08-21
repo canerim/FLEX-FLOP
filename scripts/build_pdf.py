@@ -2537,8 +2537,13 @@ def content(colw, fullw):
         r"checkpoint because every table in the paper has to come from one "
         r"set of weights, and we do not read \EpochGain points as a bound on "
         r"what a converged run would give.")
-    par(r"<b>Seven mechanisms are not in the system, and each was removed by "
-        r"a measurement rather than by taste.</b> The table lists them with "
+    par(r"<b>A single decoder.</b> All results are on DCVC-UF's intra decoder. "
+        r"Nothing in the method looks specific to it, since the ladder needs "
+        r"only a residual trunk with a shared head, but we have not measured a "
+        r"second decoder to check.")
+    par(r"<b>Beyond those four, seven mechanisms are not in the system, and "
+        r"each was removed by a measurement rather than by taste.</b> The "
+        r"table lists them with "
         r"the number that ended each ([[tab:abandoned]]). Five were built and dropped, one is an "
         r"extension the measurement did not support, and the last is the "
         r"explanation of the tiling penalty that we found does not predict it. "
@@ -2551,10 +2556,6 @@ def content(colw, fullw):
         r"<b>Table N. Seven mechanisms and what settled each.</b> None is in "
         r"the reported system. The supplement gives the full measurement "
         r"behind every row.")
-    par(r"<b>A single decoder.</b> All results are on DCVC-UF's intra decoder. "
-        r"Nothing in the method looks specific to it, since the ladder needs "
-        r"only a residual trunk with a shared head, but we have not measured a "
-        r"second decoder to check.")
 
     # ---- 7 conclusion ----------------------------------------------------
     h1("8. Conclusion")
