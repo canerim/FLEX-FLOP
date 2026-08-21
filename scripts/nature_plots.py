@@ -28,6 +28,17 @@ import naturestyle as ns  # noqa: E402
 ns.apply()
 RES = ROOT / "results"
 FIG = ROOT / "docs" / "figures"
+OUT = (FIG, ROOT / "paper" / "figures")
+
+
+def _save(fig, name):
+    """build_pdf reads paper/figures; writing only to docs/figures is how
+    Figure 18 became a placeholder once (DECISIONS 97)."""
+    for d in OUT:
+        d.mkdir(parents=True, exist_ok=True)
+        fig.savefig(d / name, dpi=500, bbox_inches="tight", pad_inches=0.02,
+                    facecolor="white")
+
 
 # One sequential ramp, dark to light, used for every rate everywhere. Not a
 # rainbow, and it survives greyscale.
@@ -74,8 +85,12 @@ def window():
     ax[0].set_ylabel("decoder MACs saved (%)")
     ax[0].legend(frameon=False, fontsize=5.0, handlelength=1.2, ncol=2,
                  borderpad=0, loc="lower right")
-    ax[0].text(0.02, 0.94, "▽ floor: below this no allocation is feasible",
-               transform=ax[0].transAxes, fontsize=4.8, color=ns.INK2)
+    # Down beside the floor markers, not across the top. At 0.94 of the axes it
+    # ran straight through the q0 and q16 curves, which is where they are
+    # steepest and where a reader is looking.
+    ax[0].text(0.09, 0.10, "▽ floor: below this\nno allocation is feasible",
+               transform=ax[0].transAxes, fontsize=4.8, color=ns.INK2,
+               va="bottom", linespacing=1.25)
     ns.panel(ax[0], "a")
 
     # b. the two limits against rate, which is what makes the window finite
@@ -93,8 +108,7 @@ def window():
                "the window a budget\ncan do anything in", fontsize=4.8,
                color=ns.INK2, ha="center", va="center")
     ns.panel(ax[1], "b")
-    fig.savefig(FIG / "window.png", dpi=500, bbox_inches="tight",
-                pad_inches=0.02, facecolor="white")
+    _save(fig, "window.png")
     print("  wrote window.png")
 
 
@@ -144,8 +158,7 @@ def concentration():
     ax[1].set_ylim(0, 1.0)
     ax[1].axhline(0, color=ns.INK2, lw=0.5)
     ns.panel(ax[1], "b")
-    fig.savefig(FIG / "concentration.png", dpi=500, bbox_inches="tight",
-                pad_inches=0.02, facecolor="white")
+    _save(fig, "concentration.png")
     print(f"  wrote concentration.png   Gini {min(gin):.2f} to {max(gin):.2f}")
 
 
@@ -213,8 +226,7 @@ def deciders():
                transform=ax[1].transAxes, ha="center", fontsize=4.8,
                color=ns.INK2)
     ns.panel(ax[1], "b")
-    fig.savefig(FIG / "deciders.png", dpi=500, bbox_inches="tight",
-                pad_inches=0.02, facecolor="white")
+    _save(fig, "deciders.png")
     print("  wrote deciders.png")
 
 
@@ -232,27 +244,27 @@ def mechanism():
     # full-width figure forces a page break in the two-column flow, and this
     # one does not earn a page.
     fig = plt.figure(figsize=(ns.W1, 2.35))
-    gs = fig.add_gridspec(2, 2, wspace=0.46, hspace=0.62)
+    gs = fig.add_gridspec(2, 2, wspace=0.62, hspace=0.62)
 
     a0 = tidy(fig.add_subplot(gs[0, 0]))
     for n, t in enumerate(show):
         a0.plot(range(j, K), 10 * np.log10(D[t, j:] / D[t, K - 1]), "o-",
                 ms=2.0, lw=0.8, color=RATE_COLS[n % len(RATE_COLS)],
                 label=f"tile {t}")
-    a0.set_xlabel("exit k"); a0.set_ylabel("D(t,k), dB above the deepest")
+    a0.set_xlabel("exit k"); a0.set_ylabel("D(t,k), dB")
     a0.set_xticks(range(j, K))
     a0.legend(frameon=False, fontsize=4.5, handlelength=1.1, borderpad=0)
     a0.set_title("what each tile loses", fontsize=5.2, color=ns.INK2,
                  loc="left", pad=3)
-    ns.panel(a0, "a")
+    ns.panel(a0, "a", dx=-0.34, dy=1.16)
 
     a1 = tidy(fig.add_subplot(gs[0, 1]))
     a1.step(range(j, K), cost[j:], where="mid", color=ns.INK2, lw=1.0)
-    a1.set_xlabel("exit k"); a1.set_ylabel("c(k), released decode = 1")
+    a1.set_xlabel("exit k"); a1.set_ylabel("c(k)")
     a1.set_xticks(range(j, K))
     a1.set_title("what each exit costs", fontsize=5.2, color=ns.INK2,
                  loc="left", pad=3)
-    ns.panel(a1, "b")
+    ns.panel(a1, "b", dx=-0.22, dy=1.16)
 
     a2 = tidy(fig.add_subplot(gs[1, 0]))
     for n, t in enumerate(show):
@@ -263,13 +275,13 @@ def mechanism():
         kk = int(np.argmin(L)) + j
         a2.plot([kk], [1.0], "*", ms=5, color=RATE_COLS[n % len(RATE_COLS)])
     a2.set_xlabel("exit k")
-    a2.set_ylabel("D(t,k) + λ c(k), scaled")
+    a2.set_ylabel("D + λc, scaled")
     a2.set_xticks(range(j, K))
     a2.set_title("add the price, take the argmin", fontsize=5.2, color=ns.INK2,
                  loc="left", pad=3)
-    a2.text(0.97, 0.92, "★ the tile's exit", transform=a2.transAxes,
-            ha="right", fontsize=4.8, color=ns.INK2)
-    ns.panel(a2, "c")
+    a2.text(0.97, 0.06, "★ the tile's exit", transform=a2.transAxes,
+            ha="right", va="bottom", fontsize=4.8, color=ns.INK2)
+    ns.panel(a2, "c", dx=-0.34, dy=1.16)
 
     a3 = fig.add_subplot(gs[1, 1])
     a3.set_xticks([]); a3.set_yticks([])
@@ -284,9 +296,8 @@ def mechanism():
                     color="white" if grid[r, c] >= K - 2 else ns.INK)
     a3.set_title(f"the map, λ = {lam:.2e}", fontsize=5.2, color=ns.INK2,
                  loc="left", pad=3)
-    ns.panel(a3, "d")
-    fig.savefig(FIG / "mechanism.png", dpi=500, bbox_inches="tight",
-                pad_inches=0.02, facecolor="white")
+    ns.panel(a3, "d", dx=-0.10, dy=1.16)
+    _save(fig, "mechanism.png")
     print(f"  wrote mechanism.png   lambda {lam:.3e}, "
           f"exits {sorted(set(chosen.tolist()))}")
 

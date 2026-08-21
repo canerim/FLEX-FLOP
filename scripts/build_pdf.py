@@ -1105,8 +1105,9 @@ def content(colw, fullw):
         r"table transfers.")
     figure("mechanism.png",
            r"<b>Figure N. How a multiplier becomes a map.</b> Five tiles "
-           r"of one real frame. <b>a</b>, what each loses at each exit, "
-           r"against the deepest. <b>b</b>, what each exit costs. "
+           r"of one real frame. <b>a</b>, D(t,k), what each tile loses at exit "
+           r"k in dB against the deepest. <b>b</b>, c(k), what each exit "
+           r"costs as a fraction of one released decode. "
            r"<b>c</b>, the two added with the multiplier that meets a "
            r"0.1 dB budget, each curve scaled to its own minimum; the "
            r"star is where the argmin lands and that is the tile's exit. "

@@ -134,13 +134,30 @@ def check_refs_and_bib(root):
     for r in _abs:
         print(f"     REFERENCE IN THE ABSTRACT: {r}")
 
+    # A numbered display equation nothing points at is a number on the page for
+    # no reason; CVPR sets those unnumbered. And an equation that ends without
+    # punctuation reads as if the sentence stopped.
+    _eq = re.findall(r"\\label\{(eq:[^}]+)\}", s)
+    _uneq = [e for e in _eq
+             if not re.search(r"\\(?:ref|eqref)\{" + re.escape(e) + r"\}", s)]
+    for e in _uneq:
+        print(f"     numbered equation never referenced: {e}")
+    _nopunct = []
+    for m in re.finditer(r"\\begin\{(equation|align)\}(.*?)\\end\{\1\}", s, re.S):
+        body = re.sub(r"\\label\{[^}]*\}", "", m.group(2)).strip()
+        if body and body[-1] not in ".,;":
+            _nopunct.append(re.sub(r"\s+", " ", body)[:40])
+    for b in _nopunct:
+        print(f"     display equation ends without punctuation: {b}")
+
     for r in dangling:
         print(f"     DANGLING \\ref{{{r}}} -- prints as ??")
     for k in uncited:
         print(f"     UNCITED bib entry {k} -- bibtex will drop it")
     print(f"  refs: {len(refs)} used, {len(dangling)} dangling; "
           f"bib: {len(uncited)} uncited")
-    return len(dangling) + len(uncited) + len(_abs)
+    return (len(dangling) + len(uncited) + len(_abs)
+            + len(_uneq) + len(_nopunct))
 
 
 if __name__ == "__main__":
