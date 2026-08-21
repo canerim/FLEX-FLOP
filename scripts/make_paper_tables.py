@@ -1052,6 +1052,30 @@ if cb:
         mac(f"BlendGain{tag}", f"{sv(bc) - sv(c0):+.1f}")
         mac(f"BlendGain{tag}Q", f"q{q}")
 
+# ------------------------------------------- two numbers derived from others
+# A typed number sitting beside the macros it is computed from is the failure
+# this file keeps finding: the macro moves and the neighbour does not. Both of
+# these were typed.
+print("derived")
+try:
+    _sa = float(MACROS["SeamArlsHigh"]) if "SeamArlsHigh" in MACROS else None
+    _sr = float(MACROS["SeamReplHigh"]) if "SeamReplHigh" in MACROS else None
+    if _sa is not None and _sr is not None:
+        mac("SeamArlsGain", f"{abs(_sr - _sa):.2f}")
+except Exception as _e:
+    print("   arls gain:", _e)
+try:
+    _rt = json.load(open(RES / "router_RECIPE512_b01_PAPER.json"))
+    _ha = _rt.get("router2_meta")
+    if isinstance(_ha, str):
+        import ast as _ast
+        _ha = _ast.literal_eval(_ha)
+    if _ha and _ha.get("heldout_agree") is not None:
+        mac("RouterHeldAgree", f"{float(_ha['heldout_agree']):.3f}")
+except Exception as _e:
+    print("   router heldout agree:", _e)
+
+
 # ------------------------------------------------------------- the seam gate
 # Its corner value and its plateau, which the figure's caption quoted from the
 # terminal. pipeline_stage_figs writes them now.

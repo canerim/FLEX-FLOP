@@ -1309,7 +1309,7 @@ def content(colw, fullw):
         r"boundary, and assuming local constancy does not. The gap is wide, "
         r"\SeamLinearHigh dB against \SeamReplHigh dB at q63. <b>The best "
         r"estimator loses on cost.</b> The per-channel AR(1) fit of [9] "
-        r"reaches \SeamArlsHigh dB, about 0.02 dB better than replication, and "
+        r"reaches \SeamArlsHigh dB, \SeamArlsGain dB better than replication, and "
         r"it costs 10.7% of decode wall-clock. Against a 0.1 dB budget and a "
         r"~24% saving that trade does not close, so we drop it.")
     h2("4.2 What actually removes the seam")
@@ -2038,7 +2038,7 @@ def content(colw, fullw):
         r"that the calibrated bit rule does not.")
     par(r"Why it works is not that it agrees with the oracle. It agrees "
         r"on \RateRankAgreeLo–\RateRankAgreeHi of tiles, well below the "
-        r"router's 0.718, and still saves more at every rate. "
+        r"router's \RouterHeldAgree, and still saves more at every rate. "
         r"Agreement weighs a disagreement on a tile where two exits are within "
         r"a hair of each other exactly as heavily as one where the choice is "
         r"most of the frame's error, and most tiles are the former. The "

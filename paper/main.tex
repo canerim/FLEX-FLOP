@@ -901,7 +901,7 @@ quality while costing $+10.7\%$ of decode wall-clock.}
 a boundary amplifies whatever noise sits on that boundary, and assuming local
 constancy does not. The gap is wide, \SeamLinearHigh$\dB$ against
 \SeamReplHigh$\dB$ at $q63$. \textbf{The best estimator loses on cost.} The
-per-channel AR(1) fit of~\cite{arls} reaches \SeamArlsHigh$\dB$, about $0.02\dB$
+per-channel AR(1) fit of~\cite{arls} reaches \SeamArlsHigh$\dB$, \SeamArlsGain$\dB$
 better than replication, and it costs $10.7\%$ of decode wall-clock. Against a
 $0.1\dB$ budget and a $\sim$30\% saving that trade does not close, so we drop it.
 
@@ -1741,7 +1741,8 @@ rule with no parameters at all, and it carries \RouterCostPct\% of the decode
 that the calibrated bit rule does not.
 
 \textbf{Why it works is not that it agrees with the oracle.} It agrees on
-\RateRankAgreeLo--\RateRankAgreeHi\ of tiles, well below the router's $0.718$,
+\RateRankAgreeLo--\RateRankAgreeHi\ of tiles, well below the
+router's \RouterHeldAgree,
 and still saves more at every rate. Agreement weighs a disagreement on
 a tile where two exits are within a hair of each other exactly as heavily as one
 where the choice is most of the frame's error, and most tiles are the former.

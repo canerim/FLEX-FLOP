@@ -5344,3 +5344,26 @@ DECISIONS 106 again in a place I had not looked. GPU4 is ours today. They ask
 the driver now, and the suite passes both plainly and under a restricted
 CUDA_VISIBLE_DEVICES, which it did not before: seven tests looked like failures
 and were fine.
+
+## 116. A live macro beside a typed number, and the check that lists them
+
+Twice today the same defect, both times mine. Fixing the two-head comparison
+moved `\HeadSpreadRange` from 8.8 to 8.4 and left the sentence resting on it
+saying "at some rates" where the answer had become all five. `\EpochLatest` and
+`\EpochGain` recomputed themselves when RECIPE512's epoch 4 landed and the list
+of values beside them stopped at epoch 3 -- four numbers, a range of five
+epochs, and a gain taken from a fifth the sentence never showed.
+
+A number that updates itself beside one that does not is a worse arrangement
+than two typed numbers, because it looks maintained. `check_mixed.py` lists
+every sentence in that arrangement and holds an allow-list with a reason for
+each one that is deliberate: a floor quoted beside the drop it suffers, a
+lambda printed to identify a bisection, a wall-clock share stated once. Eleven
+are allowed and named. Two were not deliberate and are macros now: the AR(1)
+estimator's margin over replication, which is the difference between two
+macros and so was guaranteed to drift, and the router's held-out agreement,
+which sits in a results file and was typed.
+
+The check is cheap and its allow-list is the interesting part -- it is a record
+of which typed numbers somebody has actually looked at, which is not something
+the repository had before.
