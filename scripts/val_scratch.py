@@ -250,8 +250,26 @@ def main() -> int:
         "sec": round(time.time() - t0, 1),
         "rows": rows,
     }
-    with open(d / "val.jsonl", "a") as f:
-        f.write(json.dumps(rec) + "\n")
+    # One row per checkpoint. The loop polls every quarter hour and the
+    # checkpoint is written every 2500 steps, so most polls see a checkpoint
+    # they have already measured; and running this by hand to test it wrote
+    # four identical rows for one step, which made the trend detector compare
+    # a measurement with itself and report no change.
+    out = d / "val.jsonl"
+    prev = None
+    if out.exists():
+        for line in out.read_text().splitlines():
+            if line.strip():
+                try:
+                    prev = json.loads(line)
+                except Exception:
+                    pass
+    if prev and (prev.get("epoch"), prev.get("step")) == (rec["epoch"], rec["step"]):
+        print(f"  {args.run}: already measured epoch {rec['epoch']} "
+              f"step {rec['step']}; not appending")
+    else:
+        with open(out, "a") as f:
+            f.write(json.dumps(rec) + "\n")
     for r in rows:
         print(f"  q{r['qp']:<3} psnr {r['psnr_per_exit']}  "
               f"bpp {r['bpp']:.4f}  spread {r['spread_dB']:+.3f} dB  "
