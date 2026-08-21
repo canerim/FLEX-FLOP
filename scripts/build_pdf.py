@@ -2109,7 +2109,10 @@ def content(colw, fullw):
         r"than seed variance and larger. The joint and the frozen head differ "
         r"by \HeadSpreadLow points at the lowest rate and \HeadSpreadHigh at "
         r"the highest, a range of \HeadSpreadRange points, and they cross: "
-        r"whichever is better depends on the rate. At some rates that spread "
+        r"whichever is better depends on the rate. Both are read off the "
+        r"arithmetic model rather than the hook count, because only one of "
+        r"them was hook-counted, and mixing the two conventions adds most of "
+        r"a point to the spread. At some rates that spread "
         r"is wider than the rule's margin over either of them. So the claim we "
         r"make is not that no learned router can beat the bit rule. It is that "
         r"a rule costing nothing sits inside the band two of our own trained "
@@ -2117,7 +2120,11 @@ def content(colw, fullw):
     par(r"A learned component should be measured against the free alternative, "
         r"and it rarely is. In adaptive inference the usual controls are a "
         r"uniform allocation and a random one. Both are much weaker than a "
-        r"decoder-side signal that is already lying around ([[fig:deciders]]) Panel b of that figure is the surprise: the rule picks the search's exit on fewer than half the tiles and still captures three quarters of its saving, which is why agreement is the wrong thing to optimise..")
+        r"decoder-side signal that is already lying around "
+        r"([[fig:deciders]]). Panel b of that figure is the surprise: the "
+        r"rule picks the search's exit on fewer than half the tiles and still "
+        r"captures three quarters of its saving, which is why agreement is "
+        r"the wrong thing to optimise.")
     h2("5.7 Signalling only what the router gets wrong")
     par(r"The encoder knows tile by tile where the router will be wrong, "
         r"because it can run that router itself (Section 3.1), and nothing "

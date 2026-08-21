@@ -1598,8 +1598,14 @@ except Exception as _e:
 try:
     _hf = json.load(open(RES / "router_RECIPE512_b01_PAPER.json"))
     _hj = json.load(open(RES / "router_RECIPE512_b01_jointhead.json"))
-    _F = {r["qp"]: sv(r) for r in _hf["rows"]}
-    _J = {r["qp"]: sv(r) for r in _hj["rows"]}
+    # Both sides on the arithmetic model, not sv(). The frozen head's file
+    # carries a hook count and the jointly trained head's does not, so sv()
+    # took the hook count on one side and the model on the other and reported
+    # a spread inflated by the very convention offset this paper warns about:
+    # +3.2 at q0 where a like-for-like comparison gives +2.4. Section F of the
+    # supplement compares them on the model and is the one that was right.
+    _F = {r["qp"]: r["saving_pct_vs_release"] for r in _hf["rows"]}
+    _J = {r["qp"]: r["saving_pct_vs_release"] for r in _hj["rows"]}
     _d = [_J[q] - _F[q] for q in sorted(_F) if q in _J]
     mac("HeadSpreadLow", f"{_d[0]:+.1f}")
     mac("HeadSpreadHigh", f"{_d[-1]:+.1f}")

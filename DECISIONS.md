@@ -5205,3 +5205,29 @@ first line wraps differently, and three forty-character probes still reported
 one because `main.tex` carries an extra `\ref` in the middle of it. The probe
 comparison found a fourth divergence on its first clean run, where `build_pdf`
 reports the fitted exponent at three rates and `main.tex` reported two.
+
+## 110. The paper and the supplement measured the two heads on different bases
+
+Claim (iii) rests on a free rule beating a trained head, and the obvious
+objection is that the head was badly tuned. The answer both documents give is
+the spread between two independently trained heads -- and they gave different
+answers: the paper said the two differ by +3.2 points at q0 and span 8.8,
+Section F of the supplement said +2.4 and 8.4.
+
+The frozen head's results file carries a hook count and the jointly trained
+head's does not. `sv()` takes the hook count where it exists, so the paper's
+computation took the hook count on one side and the arithmetic model on the
+other, and reported a spread inflated by exactly the convention offset this
+paper spends a paragraph warning about. The supplement read an older file for
+the frozen head, which has no hook count, and so compared like with like by
+accident.
+
+Both now read the arithmetic model on both sides, and the paper says so, since
+a reader who has been told the paper hook-counts everything is owed the
+exception. The spread is 8.4 points and the argument it supports is unchanged:
+two of our own heads span a band the free rule sits inside.
+
+Two cross-reference artefacts were fixed in the same paragraph: a figure
+reference that had been dropped between two sentences, leaving "already lying
+around (Figure 30) Panel b of that figure is the surprise", and the sentence
+it broke ending in two full stops.
