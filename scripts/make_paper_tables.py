@@ -263,6 +263,12 @@ if d:
         mac("WallHighMeasured",
             f"{rhi.get('realised_saving_sorted_pct', rhi['realised_saving_pct']):.1f}")
         mac("WallHighPredicted", f"{rhi['predicted_saving_pct']:.1f}")
+        # The shortfall in points at each end, so the prose can say the
+        # arithmetic over-promises by a fraction of the saving rather than by
+        # a constant, without either number being typed anywhere.
+        mac("WallShortLow", f"{r0['predicted_saving_pct'] - r0['realised_saving_sorted_pct']:.1f}")
+        mac("WallShortHigh",
+            f"{rhi['predicted_saving_pct'] - rhi.get('realised_saving_sorted_pct', rhi['realised_saving_pct']):.1f}")
 
 # -------------------------------------------------------------- run compare
 print("run comparison")

@@ -2050,12 +2050,16 @@ Section~\ref{sec:wallclock}.}
 A saving in multiply--accumulates is not a saving in time (Table~\ref{tab:complexity}). Tiling costs
 \TilingOverhead\% before anything exits early, measured as the deepest-exit
 tiled decode against the released full-frame one at the same arithmetic and the
-same weights. On top of that, the routed decode realises \WallMasked\% at $q0$
-where its operations predict \WallPredicted\%. Four fifths of the predicted
-saving arrives. The missing fifth is the tiling overhead together with the
+same weights. On top of that, the routed decode realises \WallSorted\% at q0 where its operations predict
+\WallPredicted\%, and \WallHighMeasured\% at q63 against
+\WallHighPredicted\%: about four fifths of the predicted saving arrives at
+either end. What does not arrive is the tiling overhead together with the
 bookkeeping of a shrinking active set, and a MAC count sees neither. The
-shortfall scales with the saving instead of sitting at a fixed offset: at $q63$
-we measure \WallHighMeasured\% realised against \WallHighPredicted\% predicted.
+shortfall scales with the saving rather than sitting at a fixed offset,
+\WallShortLow\ points at the low rate against \WallShortHigh\ at the high
+one. Both figures are the sorted loop; written as the obvious one the
+low-rate decode realises \WallMasked\%, which is where the
+\WallSortedGain\ points below come from.
 
 \paragraph{Seconds and joules.} Multiply-accumulates are the right unit to
 optimise, because they do not depend on the machine, but they are not the unit a
