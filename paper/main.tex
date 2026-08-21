@@ -245,14 +245,22 @@ changes, and it changes them without touching the model that was shipped.
 \begin{figure}[t]
 \centering
 \includegraphics[width=\columnwidth]{figures/field.png}
-\caption{\textbf{Every published decoder is one number.} Arithmetic per pixel for the eleven image codecs of Table~\ref{tab:litimg}, and for the intra decoder this work modifies. Costs are comparable here even though the BD-Rate anchors are not, which is why this axis and not a rate-distortion one. The bar at the top is the same decoder as the rest of the paper: a $0.1\dB$ budget removes the pale section, and how much it removes depends on the picture.}
+\caption{\textbf{Every published decoder is one number.} Arithmetic per pixel for the
+eleven image codecs of Table~\ref{tab:litimg} and for the decoder this work
+modifies. Costs are comparable here even where the BD-Rate anchors are not. On
+the top bar a $0.1\dB$ budget removes the pale section, by an amount that depends
+on the picture.}
 \label{fig:field}
 \end{figure}
 
 \begin{figure}[t]
 \centering
 \includegraphics[width=\columnwidth]{figures/tiles_unequal.png}
-\caption{\textbf{Why depth should not be uniform.} One 1080p frame, 40 tiles. \textbf{a}, what each tile loses if it stops at the shallowest exit the ladder allows: a few lose nothing measurable and one loses $0.71\dB$. A single depth for the frame has to be set by the worst of them. \textbf{b}, the bits the entropy model has already spent on a tile against the exit the Lagrangian oracle sends it to, at the $0.1\dB$ budget.}
+\caption{\textbf{Why depth should not be uniform.} One 1080p frame, 40 tiles.
+\textbf{a}, what each tile loses at the shallowest exit the ladder allows: a few
+lose nothing measurable and one loses $0.71\dB$, and a single depth has to be set
+by the worst of them. \textbf{b}, the bits already spent on a tile against the
+exit the oracle sends it to, at $0.1\dB$.}
 \label{fig:tiles_unequal}
 \end{figure}
 
@@ -478,14 +486,12 @@ one run of the predictor, and costs the decoder whatever that predictor costs.
 \begin{figure*}[t]
 \centering
 \includegraphics[width=\textwidth]{figures/patchify.png}
-\caption{\textbf{What patchify does.} Captured from one real decode.
-\textbf{a}, the frame, padded to a whole number of tiles, with the grid the
-decoder will impose. \textbf{b}, the feature map after the shared stem, at one
-eighth of frame resolution, so a $256$ pixel tile of picture is $32\times32$ of
-features; the tiling happens here and not in the pixel domain. \textbf{c}, four
-of the $40$ tiles as the trunk now sees them, each its own batch element.
-\textbf{d}, the operation itself, and its inverse. It costs no arithmetic and
-the round trip is exact.}
+\caption{\textbf{What patchify does.} From one real decode. \textbf{a}, the frame padded
+to whole tiles, with the grid the decoder will impose. \textbf{b}, the feature
+map after the shared stem at one eighth resolution, so a $256$\,px tile is
+$32\times32$ of features: the tiling happens here, not in the pixel domain.
+\textbf{c}, four of the 40 tiles as the trunk sees them. \textbf{d}, the
+operation and its inverse, which costs no arithmetic and is exact.}
 \label{fig:patchify}
 \end{figure*}
 
@@ -951,21 +957,24 @@ rescue it, because there is almost nothing left to win.
 \begin{figure}[t]
 \centering
 \includegraphics[width=\columnwidth]{figures/seam_repair_grid.png}
-\caption{\textbf{What the deblocking pass does to a picture.} Bosphorus at
-$q63$, the rate where the seam is worst, decoded twice from one latent with
-every tile at full depth. \textbf{a}, the frame and its $5\times8$ grid.
-\textbf{b}, \textbf{c}, the error against a full-frame decode of the same
-latent, amplified $25$ times, with the pass off and on. \textbf{d}, \textbf{e},
-one grid crossing in the picture itself. \textbf{f}, what the pass changed
-there. It recovers $0.005\dB$ of the $0.041\dB$ that tiling costs on this frame,
-which is the measurement behind the section title.}
+\caption{\textbf{What the deblocking pass does to a picture.} Bosphorus at $q63$, the
+rate where the seam is worst, decoded twice from one latent at full depth.
+\textbf{a}, the frame and its $5\times8$ grid. \textbf{b}, \textbf{c}, error
+against a full-frame decode, $\times25$, pass off and on. \textbf{d}--\textbf{f},
+one grid crossing and what the pass changed there. It recovers $0.005\dB$ of the
+$0.041\dB$ tiling costs on this frame.}
 \label{fig:seamrepairgrid}
 \end{figure}
 
 \begin{figure}[t]
 \centering
 \includegraphics[width=\columnwidth]{figures/seam_gate.png}
-\caption{\textbf{The deblocking gate, and what it does.} \textbf{a}, the trained gate $G$, one scalar per position within a tile, shared across all 384 channels. \textbf{b}, the same gate tiled over the canvas. \textbf{c}, the correction it adds on a real frame: the tile lattice and nothing else. \textbf{d}, a cut through the middle of a tile.}
+\caption{\textbf{The deblocking gate, and what it does.} \textbf{a}, the trained gate
+$G$, one scalar per position within a tile, shared across all $384$ channels.
+\textbf{b}, the same gate tiled over the canvas, which is how it is applied.
+\textbf{c}, the correction it adds on a real frame: the tile lattice and nothing
+else. \textbf{d}, a cut through a tile. The gate reaches $0.76$ at a corner and
+flattens at $0.17$ rather than switching off.}
 \label{fig:seam_gate}
 \end{figure}
 
@@ -1741,7 +1750,12 @@ lying around (Fig.~\ref{fig:deciders}).
 \begin{figure}[t]
 \centering
 \includegraphics[width=\columnwidth]{figures/deciders.png}
-\caption{\textbf{Three ways to choose an exit.} \textbf{a}, saving at the $0.1\dB$ budget. The encoder search sees the source and sends \MapBits\ bits a frame; the other two send nothing. \textbf{b}, bars are the tiles on which the rule picks the exit the search would have, and the line is the fraction of the search's saving it nonetheless captures.}
+\caption{\textbf{Three ways to choose an exit.} \textbf{a}, saving at $0.1\dB$. The
+encoder search sees the source and sends \MapBits\ bits a frame; the other two
+send nothing. The bit rule beats the trained head at every rate, with no learned
+parameters against the head's \RouterParams. \textbf{b}, bars are the tiles where
+the rule picks the search's exit, the line the fraction of its saving it captures
+anyway.}
 \label{fig:deciders}
 \end{figure}
 
@@ -2027,9 +2041,9 @@ Everything above is measured against the released DCVC-UF intra decoder, but
 always as a percentage. This section states it once in the units a codec paper
 reports, so the comparison can be read without arithmetic.
 
-\begin{figure*}[t]
+\begin{figure}[t]
 \centering
-\includegraphics[width=\textwidth]{figures/qualitative.png}
+\includegraphics[width=\columnwidth]{figures/qualitative.png}
 \caption{\textbf{What \QualSaving\% of the arithmetic costs, to look at.}
 \QualSeq\ at q\QualQp, one frame, with $\lambda$ bisected on that frame to
 \QualDb\dB. Both crops are decoded from the \emph{same} latent at \QualBpp\ bpp:
@@ -2038,7 +2052,7 @@ the released decoder reaches \QualPsnrRel\dB and the routed decode
 \QualWorstTile\ of \QualNTiles, not on a flattering one. Right, the absolute
 difference at $\times$\QualAmp.}
 \label{fig:qualitative}
-\end{figure*}
+\end{figure}
 
 The difference panel is the part worth reading (Fig.~\ref{fig:qualitative}). Amplified twenty times, what it
 shows is the rigging of the boat, the waterline and the edge of the flag, and

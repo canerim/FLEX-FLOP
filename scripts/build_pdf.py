@@ -678,24 +678,14 @@ def content(colw, fullw):
         r"the one this paper is about: whether the decoder spends more "
         r"computation where the picture needs it. Our row is the intra decoder "
         r"of the last DCVC-UF entry, at the 0.1 dB budget.")
-    figure("field.png",
-           r"<b>Figure 2. Every published decoder is one number.</b> "
-           r"Arithmetic per pixel for the eleven image codecs of Table 2, and "
-           r"for the intra decoder this work modifies. Costs are comparable "
-           r"here even though the BD-Rate anchors are not, which is why this "
-           r"axis and not a rate-distortion one. The bar at the top is the "
-           r"same decoder as the rest of the paper: a 0.1 dB budget removes "
-           r"the pale section, and how much it removes depends on the "
-           r"picture.")
     figure("tiles_unequal.png",
-           r"<b>Figure 3. Why depth should not be uniform.</b> One 1080p "
-           r"frame, 40 tiles. <b>a</b>, what each tile loses if it stops at "
-           r"the shallowest exit the ladder allows: a few lose nothing "
-           r"measurable and one loses 0.71 dB. A single depth for the frame "
-           r"has to be set by the worst of them. <b>b</b>, the bits the "
-           r"entropy model has already spent on a tile against the exit the "
-           r"Lagrangian oracle sends it to, at the 0.1 dB budget. The signal "
-           r"the decoder needs is already in the file.")
+           r"<b>Figure N. Why depth should not be uniform.</b> One 1080p frame, "
+                      r"40 tiles. <b>a</b>, what each tile loses at the shallowest exit "
+                      r"the ladder allows: a few lose nothing measurable and one loses "
+                      r"0.71 dB, and a single depth has to be set by the worst of them. "
+                      r"<b>b</b>, the bits already spent on a tile against the exit the "
+                      r"oracle sends it to, at 0.1 dB."
+           )
     par(r"Together the two tables say where the field spends its decoder "
         r"budget ([[tab:literature_img]], [[tab:literature_vid]]). Complexity has moved a long way in both directions: TCM [46] "
         r"and WeConvene [50] buy rate with an order of magnitude more "
@@ -707,6 +697,13 @@ def content(colw, fullw):
         r"same price. Those are the two the ladder in this paper changes, and "
         r"it changes them without touching the model that was shipped.")
     h2("Complexity control in learned compression.")
+    figure("field.png",
+           r"<b>Figure N. Every published decoder is one number.</b> Arithmetic "
+           r"per pixel for the eleven image codecs of Table 2 and for the "
+           r"decoder this work modifies. Costs are comparable here even where "
+           r"the BD-Rate anchors are not. On the top bar a 0.1 dB budget "
+           r"removes the pale section, by an amount that depends on the "
+           r"picture.")
     par(r"SlimCAE [22] and slimmable video codecs [23] expose several widths "
         r"of one model. The choice is per stream and it changes the encoder, "
         r"so the bitstream is not interchangeable. DCVC-FM [13] and DCVC-UF "
@@ -920,16 +917,13 @@ def content(colw, fullw):
         r"is byte for byte the one the released encoder produced. Every saving "
         r"quoted in this paper is labelled with the mode it was measured in.")
     figure_wide("patchify.png",
-                r"<b>Figure 4. What patchify does.</b> Captured from one real "
-                r"decode. <b>a</b>, the frame, padded to a whole number of "
-                r"tiles, with the grid the decoder will impose. <b>b</b>, the "
-                r"feature map after the shared stem, at one eighth of frame "
-                r"resolution, so a 256 pixel tile of picture is 32×32 of "
-                r"features; the tiling happens here and not in the pixel "
-                r"domain. <b>c</b>, four of the 40 tiles as the trunk now sees "
-                r"them, each its own batch element. <b>d</b>, the operation "
-                r"itself, and its inverse. It costs no arithmetic and the "
-                r"round trip is exact.")
+                r"<b>Figure N. What patchify does.</b> From one real decode. <b>a</b>, "
+           r"the frame padded to whole tiles, with the grid the decoder will "
+           r"impose. <b>b</b>, the feature map after the shared stem at one "
+           r"eighth resolution, so a 256 px tile is 32×32 of features: the "
+           r"tiling happens here, not in the pixel domain. <b>c</b>, four of "
+           r"the 40 tiles as the trunk sees them. <b>d</b>, the operation and "
+           r"its inverse, which costs no arithmetic and is exact.")
     par(r"<b>C</b> interpolates between the two. The encoder signals a "
         r"fraction ρ of the tiles, the ones where leaving B alone is most "
         r"costly, and B decides the rest, so ρ=0 is B and ρ=1 is A. Any "
@@ -1109,6 +1103,15 @@ def content(colw, fullw):
         r"obtained by bisecting on the test set itself, because the "
         r"difference between them is the only honest measure of whether the "
         r"table transfers.")
+    figure("mechanism.png",
+           r"<b>Figure N. How a multiplier becomes a map.</b> Five tiles "
+           r"of one real frame. <b>a</b>, what each loses at each exit, "
+           r"against the deepest. <b>b</b>, what each exit costs. "
+           r"<b>c</b>, the two added with the multiplier that meets a "
+           r"0.1 dB budget, each curve scaled to its own minimum; the "
+           r"star is where the argmin lands and that is the tile's exit. "
+           r"<b>d</b>, the map the same rule produces for all 40 tiles. "
+           r"One number, λ, decides the whole frame.")
     par(r"<b>Why a logarithm.</b> The oracle's rule adds a distortion to a "
         r"price. The head does not produce a distortion; it produces a "
         r"distribution over exits, and the quantity that plays the same "
@@ -1193,15 +1196,6 @@ def content(colw, fullw):
         r"At a high λ the oracle genuinely does send every tile to one exit, "
         r"and forcing spread there would force mistakes. Section 5.5 measures "
         r"what B gives up against A.")
-    figure("mechanism.png",
-           r"<b>Figure N. How a multiplier becomes a map.</b> Five tiles "
-           r"of one real frame. <b>a</b>, what each loses at each exit, "
-           r"against the deepest. <b>b</b>, what each exit costs. "
-           r"<b>c</b>, the two added with the multiplier that meets a "
-           r"0.1 dB budget, each curve scaled to its own minimum; the "
-           r"star is where the argmin lands and that is the tile's exit. "
-           r"<b>d</b>, the map the same rule produces for all 40 tiles. "
-           r"One number, λ, decides the whole frame.")
     h2("3.6 Training")
     par(r"All exits are decoded every step and the objective is")
     eq(r"\mathcal{L} = \mathcal{L}_{\mathrm{RD}} + w_{a}\,"
@@ -1270,6 +1264,14 @@ def content(colw, fullw):
            r"relative error. The area fraction saturates once the border "
            r"reaches every pixel; the penalty does not.")
     h2("4.1 Padding is an estimator")
+    figure("seam_repair_grid.png",
+           r"<b>Figure N. What the deblocking pass does to a picture.</b> "
+           r"Bosphorus at q63, the rate where the seam is worst, decoded twice "
+           r"from one latent at full depth. <b>a</b>, the frame and its 5×8 "
+           r"grid. <b>b</b>, <b>c</b>, error against a full-frame decode, "
+           r"×25, pass off and on. <b>d</b>–<b>f</b>, one grid crossing and "
+           r"what the pass changed there. It recovers 0.005 dB of the 0.041 dB "
+           r"tiling costs on this frame.")
     par(r"Border padding is an <i>estimator</i> of the unseen neighbour, and "
         r"the seam is its error ([[fig:contamination]]). The table below measures four of them, with "
         r"early exit switched off ([[tab:padding]]) so that tiling is the only difference from a "
@@ -1314,14 +1316,13 @@ def content(colw, fullw):
         r"the seam than any module in this paper does.")
     h2("4.3 A learned deblocking filter, and why it is not sufficient")
     figure("seam_gate.png",
-           r"<b>Figure N. The deblocking gate, and what it does.</b> "
-           r"<b>a</b>, the trained gate G, one scalar per position within a "
-           r"tile, shared across all 384 channels. <b>b</b>, the same gate "
-           r"tiled over the canvas, which is how it is applied. <b>c</b>, the "
-           r"correction it actually adds on a real frame: the tile lattice and "
-           r"nothing else. <b>d</b>, a cut through the middle of a tile. The "
-           r"gate reaches 0.76 at a corner and then flattens at 0.17 rather "
-           r"than switching off, so the module is not a pure boundary filter.")
+           r"<b>Figure N. The deblocking gate, and what it does.</b> <b>a</b>, "
+           r"the trained gate G, one scalar per position within a tile, shared "
+           r"across all 384 channels. <b>b</b>, the same gate tiled over the "
+           r"canvas, which is how it is applied. <b>c</b>, the correction it "
+           r"adds on a real frame: the tile lattice and nothing else. "
+           r"<b>d</b>, a cut through a tile. The gate reaches 0.76 at a corner "
+           r"and flattens at 0.17 rather than switching off.")
     par(r"What a standard codec does about a partition boundary is deblock it, "
         r"with a filter applied after reconstruction [9, 21] ([[fig:seam_gate]]). The tile lattice "
         r"is known "
@@ -1346,17 +1347,6 @@ def content(colw, fullw):
         r"rejected AR(1) padding at 0.0019 dB per point of decode, and this is "
         r"worse by an order of magnitude. Tightening the gate cannot rescue "
         r"it, because there is almost nothing left to win.")
-    figure("seam_repair_grid.png",
-           r"<b>Figure N. What the deblocking pass does to a picture.</b> "
-           r"Bosphorus at q63, the rate where the seam is worst, decoded "
-           r"twice from one latent with every tile at full depth. "
-           r"<b>a</b>, the frame and its 5×8 grid. <b>b</b>, <b>c</b>, "
-           r"the error against a full-frame decode of the same latent, "
-           r"amplified 25 times, with the pass off and on. <b>d</b>, "
-           r"<b>e</b>, one grid crossing in the picture itself. <b>f</b>, "
-           r"what the pass changed there. It recovers 0.005 dB of the "
-           r"0.041 dB that tiling costs on this frame, which is the "
-           r"measurement behind the section title.")
     h2("4.4 Removing the cause, and why it does not help")
     par(r"Only 0.29% of each block has spatial extent, so the exact fix is "
         r"affordable ([[fig:seam_repair_grid]]). Give the 3×3 its real neighbours across the tile border, "
@@ -1993,6 +1983,14 @@ def content(colw, fullw):
         r"to get right, and the rule gets it. At 0.5 dB it reaches the "
         r"ceiling at \RateRankHalfDbExact rate and its assignment is "
         r"<i>identical</i> to the oracle's on every tile.")
+    figure("deciders.png",
+           r"<b>Figure N. Three ways to choose an exit.</b> <b>a</b>, saving at "
+           r"0.1 dB. The encoder search sees the source and sends 89 bits a "
+           r"frame; the other two send nothing. The bit rule beats the trained "
+           r"head at every rate, with no learned parameters against the head's "
+           r"144,030. <b>b</b>, bars are the tiles where the rule picks the "
+           r"search's exit, the line the fraction of its saving it captures "
+           r"anyway.")
     par(r"<b>What it cannot do</b> is see anything beyond that ordering. A "
         r"rank-1 model in the level assigns every tile the same relative "
         r"profile over exits, so b only decides where on the ladder a tile "
@@ -2036,24 +2034,12 @@ def content(colw, fullw):
         r"and it rarely is. In adaptive inference the usual controls are a "
         r"uniform allocation and a random one. Both are much weaker than a "
         r"decoder-side signal that is already lying around ([[fig:deciders]]).")
-    figure("deciders.png",
-           r"<b>Figure N. Three ways to choose an exit.</b> <b>a</b>, saving "
-           r"at the 0.1 dB budget. The encoder search sees the source and "
-           r"sends 89 bits a frame; the other two send nothing. The bit rule "
-           r"beats the trained head at every rate, by the margin printed above "
-           r"it, with no learned parameters against the head's 144,030. "
-           r"<b>b</b>, bars are the tiles on which the rule picks the exit the "
-           r"search would have, and the line is the fraction of the search's "
-           r"saving it nonetheless captures. Picking a different exit on most "
-           r"tiles costs it far less than picking a different exit sounds like "
-           r"it should, which is the case against training a router on exit "
-           r"labels.")
     h2("5.7 Signalling only what the router gets wrong")
     par(r"The encoder knows tile by tile where the router will be wrong, "
         r"because it can run that router itself (Section 3.1), and nothing "
         r"obliges it to correct every one of them. That is the room "
         r"configuration C works in ([[fig:hybrid]], [[tab:hybrid]]).")
-    figure_wide("qualitative.png",
+    figure("qualitative.png",
         r"<b>Figure N. What \QualSaving% of the arithmetic costs, to look at.</b> "
         r"\QualSeq at q\QualQp, one frame, with λ bisected on that frame to "
         r"\QualDb dB. Both crops are decoded from the <i>same</i> latent at "
@@ -2084,6 +2070,14 @@ def content(colw, fullw):
         r"reproduces A. Neither end is imposed; both fall out of the same code "
         r"path run against independently measured files, so the columns "
         r"between them are measuring something real.")
+    figure("concentration.png",
+           r"<b>Figure N. The loss is concentrated.</b> <b>a</b>, the share of "
+           r"the total regret carried by the worst fraction of tiles, per "
+           r"rate; the dotted line is what an even spread would look like. "
+           r"<b>b</b>, the same as a Gini coefficient. At every rate a small "
+           r"minority of tiles carries most of what staying silent costs, "
+           r"which is why signalling a fraction of the map recovers most of "
+           r"the gap.")
     par(r"Most of the gap is cheap. Overriding a tenth of the tiles for "
         r"\HybridBitsTenth bits per frame recovers "
         r"\HybridRecoverTenthLow–\HybridRecoverTenthHigh% of the gap, and a "
@@ -2146,14 +2140,6 @@ def content(colw, fullw):
         r"and a large one is not. It also reframes the A–B gap. What the gap "
         r"measures is the price of <i>silence</i>, charged tile by tile, "
         r"rather than the price of prediction.")
-    figure("concentration.png",
-           r"<b>Figure N. The loss is concentrated.</b> <b>a</b>, the share of "
-           r"the total regret carried by the worst fraction of tiles, per "
-           r"rate; the dotted line is what an even spread would look like. "
-           r"<b>b</b>, the same as a Gini coefficient. At every rate a small "
-           r"minority of tiles carries most of what staying silent costs, "
-           r"which is why signalling a fraction of the map recovers most of "
-           r"the gap.")
     h2("5.8 Does the map have to be recomputed?")
     figure("map_transfer.png",
            r"<b>Figure 10. Reusing an exit map.</b> Solid is the transferred "
@@ -2173,6 +2159,16 @@ def content(colw, fullw):
         r"moves slowly. A codec would search once per group of pictures "
         r"instead of once per frame, and divide the encoder cost by the group "
         r"length.")
+    figure("ladder_crossover.png",
+           r"<b>Figure N. The right ladder depends on the budget.</b> Saving "
+           r"against budget for four ladders, with each one's architectural "
+           r"ceiling as a dotted line. A finer ladder has a higher ceiling and "
+           r"a higher floor, so the curves cross: the coarse ladder wins where "
+           r"the budget is tight and cannot be spent, and the fine one wins "
+           r"where it is loose enough to reach exits the coarse ladder does "
+           r"not have. The crossing is the design choice this section is "
+           r"about.")
+
     par(r"<b>Across rate.</b> Here the map does have to be recomputed, and the "
         r"direction of the reuse decides how badly. Found at q0 and applied at "
         r"q63, it delivers \TransferCrossDb dB against a 0.1 dB budget, "
@@ -2261,16 +2257,6 @@ def content(colw, fullw):
         r"operations are an <i>optimistic</i> bound on this method, and the "
         r"optimism grows with how much of the frame exits early.")
     h2("5.10 The right ladder depends on the budget")
-    figure("ladder_crossover.png",
-           r"<b>Figure N. The right ladder depends on the budget.</b> Saving "
-           r"against budget for four ladders, with each one's architectural "
-           r"ceiling as a dotted line. A finer ladder has a higher ceiling and "
-           r"a higher floor, so the curves cross: the coarse ladder wins where "
-           r"the budget is tight and cannot be spent, and the fine one wins "
-           r"where it is loose enough to reach exits the coarse ladder does "
-           r"not have. The crossing is the design choice this section is "
-           r"about.")
-
     tbl("runs",
         r"<b>Table 9. Ladder settings</b>, mean saving (%) over the five "
         r"rates, on each run's own latest checkpoint. Ceilings are 100(1-c_j) "
