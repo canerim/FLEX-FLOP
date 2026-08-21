@@ -5043,3 +5043,46 @@ the five-minute check produced no events at all after I restarted it. The monito
 was alive, the script was running, and nothing arrived.
 
 The script is the event stream. The monitor now runs it directly.
+
+## 104. The figures were a second, unchecked copy of the results (2026-08-21)
+
+The author asked for the plots to be explained, the formulations set to
+conference standard, and nothing overlapping or cut off. Auditing all sixty
+figures for that turned up something larger: five of them printed numbers the
+paper had corrected days earlier.
+
+`rd_spread` said "0.1 dB, 24% saved" beside a table saying 21.5. `tradeoff` and
+`budget_band` drew a 41.9% ceiling, which is the architectural ceiling as it
+stood before the FFN accounting fixed it to 38.3. `raterank` and `router_ab`
+drew configuration B from `router_..._b01_fixed.json`, an earlier experiment, at
+27.2% at q0 where every table says 23.6 -- and with that file the trained head
+sits ABOVE the calibrated bit rule at the low rates, so the figure contradicted
+the paper's third claim on the page that states it.
+
+One cause, three faces. Each figure script chose its own result file by a
+hand-written first-that-exists list, its own saving definition, and its own
+output directory. `make_paper_tables` had already fixed the first two for the
+tables and nothing had carried the fix across. Twelve producers wrote
+`docs/figures` only, so the copy the paper reads went stale in silence, and
+eight more figures had not been regenerated since their own script changed.
+
+What is in place now: one `sv()` and one `pick()` in `scripts/savings.py`, used
+by the tables and the figures alike; every producer writes both directories; and
+`check_figs_fresh` compares each of the sixty figures against the result files
+its producer opens *and against the producer itself*, which is the case that
+actually bit.
+
+The rest of the audit, in one list. Text sitting on data in four figures, a
+truncated axis label, two panel letters on top of the labels beside them, an
+axis in two notations, six unkeyed visual elements -- shaded bands, endpoint
+dots, dashed fits, tick marks -- and a Lorenz panel whose curves stopped at half
+the axis because the sweep did.
+
+And one claim that had quietly become false: configuration C's ends were said to
+reproduce A and B "to the second decimal". They sit 0.43 to 0.78 points above
+them, because the C sweep was never hook-counted while A and B were. The paper
+says so now and `check_paper` holds both ends.
+
+The lesson is DECISIONS 97 again in a larger form: a figure is a cached
+artefact, and a cache with no invalidation is a second copy of the results that
+nobody is checking.
