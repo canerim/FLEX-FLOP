@@ -1426,6 +1426,20 @@ except Exception as _e:
     print("   supp_opquality:", _e)
 
 
+# ------------------------------------------------- the exit map on one frame
+try:
+    _em = json.load(open(RES / "supp_exitmap_bosphorus_q32_b01.json"))
+    _h = _em["exit_hist"]
+    _live = [n for n in _h if n]
+    mac("SplitShallow", str(_live[0]))
+    mac("SplitMid", str(_live[1]))
+    mac("SplitDeep", str(_live[2]))
+    mac("ExitmapWorst", f"{_em['tile_penalty_db_max']:.2f}")
+    mac("ExitmapFrame", f"{_em['delivered_db']:.3f}")
+except Exception as _e:
+    print("   exit map:", _e)
+
+
 # ------------------------------------------- which exit the tail comes from
 try:
     _te = json.load(open(RES / "supp_opquality_PAPER.json"))["tail_by_exit"]

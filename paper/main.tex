@@ -1183,8 +1183,14 @@ average cost and the mix of depths while discarding the content dependence.}
 
 The obvious alternative to routing tiles is to run every tile at the same
 shallower exit and accept the loss. Table~\ref{tab:static} puts that option,
-together with two stronger controls, at matched compute. Fig.~\ref{fig:exitmap} shows the
-assignment the Lagrangian oracle arrives at.
+together with two stronger controls, at matched compute. Fig.~\ref{fig:exitmap} shows what that assignment looks like on one frame.
+Read it against the picture rather than against the histogram: the water and
+the sky leave at the shallowest exit the ladder offers, the boat and the
+shoreline run to the deepest, and the split is \SplitShallow--\SplitMid--\SplitDeep
+over the three rungs the multiplier used. What panel~c adds is the price: no
+tile pays more than \ExitmapWorst\dB against its own full-depth reference while
+the frame stays at \ExitmapFrame\dB, which is the concentration this section
+measures, drawn on one picture.
 
 The uniform rows answer the question directly, and the answer sharpens with rate.
 At the lowest rate a static decoder can reach exit 3 inside the budget and save
@@ -1351,8 +1357,8 @@ reaches exit $j$ and the ceiling of Eq.~(\ref{eq:ceiling}) is reached.}
 \centering
 \includegraphics[width=\columnwidth]{figures/theory.png}
 \caption{\textbf{The structure of the allocation}, on one frame. \textbf{a}, compute and
-distortion are monotone in the multiplier. \textbf{b}, the frontier between floor
-and saturation; shaded regions are infeasible or wasted. \textbf{c}, what the
+distortion are monotone in the multiplier. \textbf{b}, the frontier, with both ends
+and both dead bands marked on the panel. \textbf{c}, what the
 Lagrangian reaches against the exact Pareto set, enumerated by dynamic
 programming.}
 \label{fig:theory}

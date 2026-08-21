@@ -46,6 +46,19 @@ ax[1].plot([dbv[0]], [sv[0]], "o", ms=6, color=ns.GREEN)
 ax[1].plot([dbv[-1]], [sv[-1]], "o", ms=6, color=ns.ORANGE)
 ax[1].axvspan(dbv.min() - 0.02, dbv[0], color=ns.VERM, alpha=0.10, lw=0)
 ax[1].axvspan(dbv[-1], dbv.max() + 0.05, color="#bbbbbb", alpha=0.22, lw=0)
+# Two shaded bands and two dots, and nothing on the panel said which was which:
+# the caption read "shaded regions are infeasible or wasted" and left the reader
+# to guess the order. Label them where they are.
+_lo, _hi = ax[1].get_ylim() if ax[1].get_ylim()[1] > 0 else (0, sv.max())
+_ytxt = sv.max() * 0.52
+ax[1].text(dbv[0] - 0.008, _ytxt, "infeasible", rotation=90, ha="center",
+           va="center", fontsize=4.8, color=ns.VERM)
+ax[1].text(dbv[-1] + 0.018, _ytxt, "wasted", rotation=90, ha="center",
+           va="center", fontsize=4.8, color=ns.INK2)
+ax[1].annotate("floor", (dbv[0], sv[0]), textcoords="offset points",
+               xytext=(9, 4), fontsize=4.8, color=ns.GREEN)
+ax[1].annotate("saturation", (dbv[-1], sv[-1]), textcoords="offset points",
+               xytext=(-44, 7), fontsize=4.8, color=ns.ORANGE)
 ax[1].set_xlabel("dB"); ax[1].set_ylabel("MACs saved (%)")
 ax[1].set_xlim(dbv[0] - 0.02, dbv[-1] + 0.04)
 ns.panel(ax[1], "b", dx=-0.24)
@@ -62,7 +75,10 @@ ax[2].legend(fontsize=5.5, loc="lower right")
 ns.panel(ax[2], "c", dx=-0.24)
 
 fig.tight_layout()
-fig.savefig(R / "docs/figures/theory.png", dpi=300)
-print("  -> docs/figures/theory.png")
+for _d in (R / "docs/figures", R / "paper/figures"):
+    _d.mkdir(parents=True, exist_ok=True)
+    fig.savefig(_d / "theory.png", dpi=500, bbox_inches="tight",
+                pad_inches=0.02, facecolor="white")
+print("  -> docs/figures/theory.png, paper/figures/theory.png")
 print(f"    floor {dbv[0]:.4f} dB at {sv[0]:.2f}%   "
       f"saturation {dbv[-1]:.4f} dB at {sv[-1]:.2f}%")

@@ -1539,8 +1539,18 @@ def content(colw, fullw):
         r"tiles, which preserves the average cost and the mix of depths while "
         r"discarding the content dependence.")
     par(r"The obvious alternative to routing tiles is to run every tile at the "
-        r"same shallower exit and accept the loss ([[fig:exit_map]]). The table puts that option, "
-        r"together with two stronger controls, at matched compute ([[tab:static]]).")
+        r"same shallower exit and accept the loss. The table puts that "
+        r"option, together with two stronger controls, at matched compute "
+        r"([[tab:static]]).")
+    par(r"[[fig:exit_map]] shows what an allocation looks like on one frame. "
+        r"Read it against the picture rather than against the histogram: the "
+        r"water and the sky leave at the shallowest exit the ladder offers, "
+        r"the boat and the shoreline run to the deepest, and the split is "
+        r"\SplitShallow-\SplitMid-\SplitDeep over the three rungs the "
+        r"multiplier used. What panel c adds is the price: no tile pays more "
+        r"than \ExitmapWorst dB against its own full-depth reference while "
+        r"the frame stays at \ExitmapFrame dB, which is the concentration "
+        r"this section measures, drawn on one picture.")
     par(r"The uniform rows answer the question directly, and the answer "
         r"sharpens with rate. At the lowest rate a static decoder can reach "
         r"exit 3 inside the budget and save \UniformThreeLow%, against the "
@@ -1672,8 +1682,8 @@ def content(colw, fullw):
     figure("theory.png",
            r"<b>Figure 9. The structure of the allocation</b>, on one "
            r"frame. <b>a</b>, compute and distortion are monotone in the "
-           r"multiplier. <b>b</b>, the frontier between floor and "
-           r"saturation; shaded regions are infeasible or wasted. <b>c</b>, "
+           r"multiplier. <b>b</b>, the frontier, with both ends and both "
+           r"dead bands marked on the panel. <b>c</b>, "
            r"what the Lagrangian reaches against the exact Pareto set, "
            r"enumerated by dynamic programming.")
     par(r"The argument that follows assumes tiles are independent. It "
@@ -2016,6 +2026,10 @@ def content(colw, fullw):
         r"learned head cannot be worth its parameters, only that neither of "
         r"our training runs produced one that is. The calibrated bit rule stays close "
         r"to the oracle on both.")
+    tbl("hybrid",
+        r"<b>Table 8. Configuration C</b> at 0.1 dB. Columns are the fraction of "
+        r"tiles the encoder overrides; the two end columns reproduce B and A to "
+        r"within 0.1 points, which is the check that the interpolation is real.")
     par(r"Per-block bit allocation is a standard quantity in learned "
         r"compression, where it is something to <i>choose</i>; block-level "
         r"rate control sets it so that complex regions get more bits [42]. We "
@@ -2076,10 +2090,6 @@ def content(colw, fullw):
            r"gap; dashed is proportional recovery. <b>c</b>, against the "
            r"fixed-λ Lorenz bound; points above the dashed line are "
            r"allocations one multiplier cannot reach.")
-    tbl("hybrid",
-        r"<b>Table 8. Configuration C</b> at 0.1 dB. Columns are the fraction of "
-        r"tiles the encoder overrides; the two end columns reproduce B and A to "
-        r"within 0.1 points, which is the check that the interpolation is real.")
     par(r"The two ends check out. At ρ=0 the measurement reproduces "
         r"configuration B to the second decimal at every rate, and at ρ=1 it "
         r"reproduces A. Neither end is imposed; both fall out of the same code "
