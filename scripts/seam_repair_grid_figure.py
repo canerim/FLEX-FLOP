@@ -90,9 +90,12 @@ def main(argv):
     # A crossing of the tile grid, away from the frame edge.
     r0, c0, S = 2 * P - 96, 3 * P - 96, 192
 
-    fig = plt.figure(figsize=(ns.W2, 3.15))
-    gs = fig.add_gridspec(2, 3, height_ratios=[1.0, 0.82],
-                          hspace=0.20, wspace=0.06)
+    # Three rows of two at single-column width rather than two rows of three
+    # at double. A full-width figure in this two-column flow abandons the rest
+    # of the page it starts on, and this figure is not worth a page.
+    fig = plt.figure(figsize=(ns.W1, 3.25))
+    gs = fig.add_gridspec(3, 2, height_ratios=[1.0, 1.0, 1.0],
+                          hspace=0.24, wspace=0.06)
 
     def bare(ax):
         ax.set_xticks([])
@@ -122,27 +125,27 @@ def main(argv):
                  loc="left", pad=3)
     ns.panel(a1, "b")
 
-    a2 = bare(fig.add_subplot(gs[0, 2]))
+    a2 = bare(fig.add_subplot(gs[1, 0]))
     a2.imshow(np.clip(e_on * a.amp, 0, 1), cmap="inferno", vmin=0, vmax=1)
     a2.set_title(f"repair on, {d_on:+.3f} dB", fontsize=5.2, color=ns.GREEN,
                  loc="left", pad=3)
     ns.panel(a2, "c")
 
-    a3 = bare(fig.add_subplot(gs[1, 0]))
+    a3 = bare(fig.add_subplot(gs[1, 1]))
     a3.imshow(img_off[r0:r0 + S, c0:c0 + S])
     grid(a3, off_r=r0, off_c=c0)
     a3.set_title("zoom, repair off", fontsize=5.2, color=ns.VERM, loc="left",
                  pad=3)
     ns.panel(a3, "d")
 
-    a4 = bare(fig.add_subplot(gs[1, 1]))
+    a4 = bare(fig.add_subplot(gs[2, 0]))
     a4.imshow(img_on[r0:r0 + S, c0:c0 + S])
     grid(a4, off_r=r0, off_c=c0)
     a4.set_title("zoom, repair on", fontsize=5.2, color=ns.GREEN, loc="left",
                  pad=3)
     ns.panel(a4, "e")
 
-    a5 = bare(fig.add_subplot(gs[1, 2]))
+    a5 = bare(fig.add_subplot(gs[2, 1]))
     a5.imshow(np.clip(delta[r0:r0 + S, c0:c0 + S] * a.amp * 2, 0, 1),
               cmap="inferno", vmin=0, vmax=1)
     grid(a5, off_r=r0, off_c=c0)

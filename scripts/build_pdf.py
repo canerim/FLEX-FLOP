@@ -852,6 +852,17 @@ def content(colw, fullw):
         r"which measures C, tries a second one. C transmits a mask rather than "
         r"a full map, costs the encoder A's search plus one run of the "
         r"predictor, and costs the decoder whatever that predictor costs.")
+    figure_wide("patchify.png",
+                r"<b>Figure 4. What patchify does.</b> Captured from one real "
+                r"decode. <b>a</b>, the frame, padded to a whole number of "
+                r"tiles, with the grid the decoder will impose. <b>b</b>, the "
+                r"feature map after the shared stem, at one eighth of frame "
+                r"resolution, so a 256 pixel tile of picture is 32×32 of "
+                r"features; the tiling happens here and not in the pixel "
+                r"domain. <b>c</b>, four of the 40 tiles as the trunk now sees "
+                r"them, each its own batch element. <b>d</b>, the operation "
+                r"itself, and its inverse. It costs no arithmetic and the "
+                r"round trip is exact.")
     h2("3.2 Where the computation is")
     par(r"The DCVC-UF intra decoder is one upsampling block, twelve "
         r"DepthConvBlocks and a head, costing 453.5 GMAC per 1080p frame. The "
@@ -882,17 +893,6 @@ def content(colw, fullw):
            r"penalty. <b>b</b>, blocks skipped per exit, coloured by "
            r"adapter; the rule switches to the FFN at four skipped blocks. "
            r"Lengths counted with hooks off the modules themselves.")
-    figure_wide("patchify.png",
-                r"<b>Figure 4. What patchify does.</b> Captured from one real "
-                r"decode. <b>a</b>, the frame, padded to a whole number of "
-                r"tiles, with the grid the decoder will impose. <b>b</b>, the "
-                r"feature map after the shared stem, at one eighth of frame "
-                r"resolution, so a 256 pixel tile of picture is 32×32 of "
-                r"features; the tiling happens here and not in the pixel "
-                r"domain. <b>c</b>, four of the 40 tiles as the trunk now sees "
-                r"them, each its own batch element. <b>d</b>, the operation "
-                r"itself, and its inverse. It costs no arithmetic and the "
-                r"round trip is exact.")
     h2("3.4 Exit adapters")
     par(r"An early exit hands the shared head a feature the head was not "
         r"fitted to, and the adapter is the correction. For exits that skip "
@@ -1241,17 +1241,17 @@ def content(colw, fullw):
         r"rejected AR(1) padding at 0.0019 dB per point of decode, and this is "
         r"worse by an order of magnitude. Tightening the gate cannot rescue "
         r"it, because there is almost nothing left to win.")
-    figure_wide("seam_repair_grid.png",
-                r"<b>Figure N. What the deblocking pass does to a picture.</b> "
-                r"Bosphorus at q63, the rate where the seam is worst, decoded "
-                r"twice from one latent with every tile at full depth. "
-                r"<b>a</b>, the frame and its 5×8 grid. <b>b</b>, <b>c</b>, "
-                r"the error against a full-frame decode of the same latent, "
-                r"amplified 25 times, with the pass off and on. <b>d</b>, "
-                r"<b>e</b>, one grid crossing in the picture itself. <b>f</b>, "
-                r"what the pass changed there. It recovers 0.005 dB of the "
-                r"0.041 dB that tiling costs on this frame, which is the "
-                r"measurement behind the section title.")
+    figure("seam_repair_grid.png",
+           r"<b>Figure N. What the deblocking pass does to a picture.</b> "
+           r"Bosphorus at q63, the rate where the seam is worst, decoded "
+           r"twice from one latent with every tile at full depth. "
+           r"<b>a</b>, the frame and its 5×8 grid. <b>b</b>, <b>c</b>, "
+           r"the error against a full-frame decode of the same latent, "
+           r"amplified 25 times, with the pass off and on. <b>d</b>, "
+           r"<b>e</b>, one grid crossing in the picture itself. <b>f</b>, "
+           r"what the pass changed there. It recovers 0.005 dB of the "
+           r"0.041 dB that tiling costs on this frame, which is the "
+           r"measurement behind the section title.")
     h2("4.4 Removing the cause, and why it does not help")
     par(r"Only 0.29% of each block has spatial extent, so the exact fix is "
         r"affordable. Give the 3×3 its real neighbours across the tile border, "

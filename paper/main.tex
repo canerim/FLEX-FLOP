@@ -453,6 +453,13 @@ B's place there, and Section~\ref{sec:hybrid}, which measures C, tries a second
 one. C transmits a mask rather than a full map, costs the encoder A's search plus
 one run of the predictor, and costs the decoder whatever that predictor costs.
 
+\begin{figure}[t]
+\centering
+\includegraphics[width=\columnwidth]{figures/ladder.png}
+\caption{\textbf{The ladder, priced.} What a tile costs at each exit, as a percentage of one released decode, counted with hooks on the executed pass and beside the arithmetic model the argmin uses. Exits below the split depth are not distinct. The deepest exit costs slightly more than the release, which is the full-frame deblocking pass.}
+\label{fig:ladder}
+\end{figure}
+
 \begin{figure*}[t]
 \centering
 \includegraphics[width=\textwidth]{figures/patchify.png}
@@ -466,13 +473,6 @@ of the $40$ tiles as the trunk now sees them, each its own batch element.
 the round trip is exact.}
 \label{fig:patchify}
 \end{figure*}
-
-\begin{figure}[t]
-\centering
-\includegraphics[width=\columnwidth]{figures/ladder.png}
-\caption{\textbf{The ladder, priced.} What a tile costs at each exit, as a percentage of one released decode, counted with hooks on the executed pass and beside the arithmetic model the argmin uses. Exits below the split depth are not distinct. The deepest exit costs slightly more than the release, which is the full-frame deblocking pass.}
-\label{fig:ladder}
-\end{figure}
 
 \subsection{Where the computation is}
 
@@ -904,9 +904,9 @@ for $0.95\%$ of the decode. We rejected AR(1) padding at $0.0019\dB$ per point o
 decode, and this is worse by an order of magnitude. Tightening the gate cannot
 rescue it, because there is almost nothing left to win.
 
-\begin{figure*}[t]
+\begin{figure}[t]
 \centering
-\includegraphics[width=\textwidth]{figures/seam_repair_grid.png}
+\includegraphics[width=\columnwidth]{figures/seam_repair_grid.png}
 \caption{\textbf{What the deblocking pass does to a picture.} Bosphorus at
 $q63$, the rate where the seam is worst, decoded twice from one latent with
 every tile at full depth. \textbf{a}, the frame and its $5\times8$ grid.
@@ -916,7 +916,7 @@ one grid crossing in the picture itself. \textbf{f}, what the pass changed
 there. It recovers $0.005\dB$ of the $0.041\dB$ that tiling costs on this frame,
 which is the measurement behind the section title.}
 \label{fig:seamrepairgrid}
-\end{figure*}
+\end{figure}
 
 \begin{figure}[t]
 \centering
