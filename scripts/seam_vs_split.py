@@ -91,7 +91,16 @@ with torch.no_grad():
               "".join(f"{v:>10.4f}" for v in vals), flush=True)
         del net; torch.cuda.empty_cache()
 
-json.dump({"ckpt": a.ckpt, "tile_px": P, "feature_px": Fp,
+# Provenance, said properly. This file recorded "ckpt": a.ckpt, and a.ckpt is
+# only where the CONFIG is read from -- the weights are the warm start, loaded
+# on line 62, because the point is to measure geometry with nothing trained
+# into it. A reader of the old field would conclude the sweep is on the pinned
+# checkpoint, and I did, for about ten minutes.
+json.dump({"weights": str(reference_for(cfg0, None)),
+           "config_from": a.ckpt,
+           "ckpt": str(reference_for(cfg0, None)),
+           "seam_repair": "none", "tile_pad_mode": "replicate",
+           "tile_px": P, "feature_px": Fp,
            "blocks_per_exit": b_per, "n_frames": len(frames),
            "sequences": [s["name"] for s in seqs], "rows": rows},
           open(a.out, "w"), indent=2)

@@ -5418,3 +5418,24 @@ is saving from is three decibels worse.
 So the deepest exit's PSNR prints beside the saving, always. The two are read
 together or not at all, and a saving that rises while the deepest exit falls is
 the ladder collapsing rather than the method working.
+
+## 119. A results file recorded the checkpoint whose config it read, not the weights it used
+
+`seam_vs_split.py` measures the seam with nothing trained into it -- it reads
+the *config* from a checkpoint and then loads the warm start, so the number is
+geometry and not a decoder. Its output file recorded `"ckpt":
+runs/RECIPE512/ckpt_PAPER.pth.tar`, which is the config it read. A reader would
+conclude the sweep is on the pinned checkpoint, and I did, for about ten
+minutes, while writing a caption that said the opposite.
+
+The caption was right and the file was wrong, which is the more dangerous way
+round: the prose is checked and a provenance field is not. The file now records
+`weights` and `config_from` separately, plus the two settings that make the
+measurement mean what it means, `seam_repair: none` and `tile_pad_mode:
+replicate`.
+
+Re-running it reproduced the sweep to within about six per cent at the largest
+value -- 0.194 against 0.184 dB at j=2, q63, on 20 frames -- which is the
+sampling in it and not a change of substance. The new ceiling table reads the
+file at build time, so those columns moved with it, and the sentence beside
+them that had 0.184 typed into it is a macro now.

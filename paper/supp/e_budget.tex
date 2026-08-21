@@ -228,14 +228,14 @@ The four ladders above were trained; the ceiling is not, and it can be read off 
 \toprule
 split j & blocks per tile & ceiling & seam q0 & seam q32 & seam q63 \\
 \midrule
-4 & 4 & 13.0\% & 0.009 & 0.020 & 0.042 \\
-3 & 6 & 24.2\% & 0.032 & 0.054 & 0.092 \\
-2 (shipped) & 8 & 39.1\% & 0.065 & 0.104 & 0.184 \\
-1 & 10 & 54.0\% & 0.098 & 0.144 & 0.224 \\
-0 & 12 & 68.9\% & 0.173 & 0.304 & 0.599 \\
+4 & 4 & 13.0\% & 0.009 & 0.018 & 0.038 \\
+3 & 6 & 24.2\% & 0.032 & 0.053 & 0.089 \\
+2 (shipped) & 8 & 39.1\% & 0.065 & 0.107 & 0.194 \\
+1 & 10 & 54.0\% & 0.100 & 0.149 & 0.234 \\
+0 & 12 & 68.9\% & 0.175 & 0.314 & 0.606 \\
 \bottomrule
 \end{tabular}}
-\caption{\textbf{The ceiling against what it costs.} Ceiling is 100(1 $-$ c\_j) from flexuf/cost.py on a 40-tile 1080p frame, frame-relative, for a K = 6 ladder over the same twelve blocks. The seam columns are the measured penalty at that split on the \emph{untrained} ladder, from results/supp\_seam\_vs\_split.json; training absorbs roughly two thirds of it, so the trained floor at the shipped split is 0.072 dB at q63 where the untrained number here is 0.184. Halving the split depth is worth about fifteen points of ceiling and costs about a fifth of a decibel of seam at the highest rate, which at a 0.1 dB budget is the whole budget and at 0.3 dB is not.}
+\caption{\textbf{The ceiling against what it costs.} Ceiling is 100(1 $-$ c\_j) from flexuf/cost.py on a 40-tile 1080p frame, frame-relative, for a K = 6 ladder over the same twelve blocks. The seam columns are the measured penalty at that split on the \emph{untrained} ladder, from results/supp\_seam\_vs\_split.json; training absorbs most of it -- the trained floor at the shipped split is \FloorHigh dB at q63 against the untrained number in this table -- so read the seam columns as a ratio between splits rather than as decibels a trained model would pay. Halving the split depth is worth about fifteen points of ceiling and costs about a fifth of a decibel of seam at the highest rate, which at a 0.1 dB budget is the whole budget and at 0.3 dB is not.}
 \end{table}
 
 {\small Ceilings computed in the build from flexuf/cost.py; seam from results/supp\_seam\_vs\_split.json, 20 frames at 256 px tiles. Nothing in this table is a trained result: it is the design space, and the four rows of the previous table are four points in it.}
