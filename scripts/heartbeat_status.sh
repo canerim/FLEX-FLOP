@@ -18,12 +18,14 @@ while true; do
          | while read -r p; do ps -o user= -p "$p" 2>/dev/null; done | grep -c can_karsal)
   OTHER=$(nvidia-smi --query-compute-apps=pid --format=csv,noheader 2>/dev/null \
           | while read -r p; do ps -o user= -p "$p" 2>/dev/null; done | grep -vc can_karsal)
-  NEW=$(find runs -name 'ckpt_*.pth.tar' -newermt '-40 minutes' 2>/dev/null | wc -l)
+  NEWEST=$(find runs -name 'ckpt_eval.pth.tar' -o -name 'ckpt_step.pth.tar' 2>/dev/null \
+           | xargs -r stat -c %Y 2>/dev/null | sort -rn | head -1)
+  AGE=$([ -n "${NEWEST:-}" ] && echo "$(( ($(date +%s) - NEWEST) / 60 ))m" || echo "-")
   EP=$(for t in RECIPE512 BEST COUPLED512 FINE12; do
          f=$(ls -t runs/$t/*.log 2>/dev/null | head -1)
          [ -n "$f" ] && tail -1 "$f" 2>/dev/null | grep -o '"epoch": [0-9]*' | head -1 \
            | grep -o '[0-9]*$' | sed "s/^/${t:0:4}/"
        done | tr '\n' ' ')
-  echo "$TS  fix $FIX | check $CHK | paper ${MAIN}p supp ${SUPP}p | gpu ours=$OURS others=$OTHER | new ckpts 40m: $NEW | ep $EP"
+  echo "$TS  fix $FIX | check $CHK | paper ${MAIN}p supp ${SUPP}p | gpu ours=$OURS others=$OTHER | newest ckpt $AGE | ep $EP"
   sleep "$INTERVAL"
 done

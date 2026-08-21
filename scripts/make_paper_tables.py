@@ -1254,6 +1254,38 @@ except Exception as _e:
     print("   per_sequence.json:", _e)
 
 
+# ---------------------------------------------------- the checkpoint series
+# What later epochs of the pinned run measure, on the same frames at the same
+# budget and with the same hook count. The limitations section quoted these
+# from modelled files once, which inflated them and reversed their order.
+print("checkpoint series")
+try:
+    import glob as _glob
+    _ser = {}
+    for _f in _glob.glob(str(RES / "signalled_RECIPE512_*.json")):
+        _d = json.load(open(_f))
+        if _d.get("n_sequences") != 53:
+            continue
+        _rs = [r for r in _d["rows"]
+               if r.get("budget_db") == 0.1 and r.get("budget_reachable")]
+        if len(_rs) < 5 or _rs[0].get("saving_pct_measured") is None:
+            continue
+        _e = _d.get("ckpt_epoch")
+        _m = sum(r["saving_pct_measured"] for r in _rs) / len(_rs)
+        if _e is not None and (_e not in _ser or _m > _ser[_e][0]):
+            _ser[_e] = (_m, Path(_f).name)
+    _WORD = {0: "Zero", 1: "One", 2: "Two", 3: "Three", 4: "Four"}
+    for _e, (_m, _fn) in sorted(_ser.items()):
+        if _e in _WORD:
+            mac(f"EpochMean{_WORD[_e]}", f"{_m:.1f}")
+    if _ser:
+        mac("EpochLatest", str(max(_ser)))
+        mac("EpochLatestMean", f"{_ser[max(_ser)][0]:.1f}")
+        mac("EpochGain", f"{_ser[max(_ser)][0] - _ser[min(_ser)][0]:.1f}")
+except Exception as _e:
+    print("   checkpoint series:", _e)
+
+
 # macros.tex is written LAST, after every block that can emit one. It used to be
 # written in the middle of the file, so the two blocks appended after it emitted
 # five macros that never reached disk and the build reported them unexpanded.
