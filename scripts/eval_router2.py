@@ -24,6 +24,8 @@ import torch
 import torch.nn.functional as F
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 sys.path.insert(0, str(Path.home() / "DCVC"))
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from gpu import pick as _gpu  # noqa: E402
 import ctc_intra as C
 from flexuf.config import FlexUFConfig
 from flexuf.cost import exit_costs
@@ -36,7 +38,7 @@ ap.add_argument("--ckpt", required=True)
 ap.add_argument("--router", required=True)
 ap.add_argument("--qps", type=int, nargs="+", default=[0, 32, 63])
 ap.add_argument("--frames", type=int, default=2)
-ap.add_argument("--device", default="cuda:4")
+ap.add_argument("--device", default=_gpu("cuda:4"))
 a = ap.parse_args()
 dev = a.device
 

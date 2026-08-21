@@ -38,6 +38,9 @@ R = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(R))
 sys.path.insert(0, str(R / "scripts"))
 sys.path.insert(0, str(Path.home() / "DCVC"))
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from gpu import pick as _gpu  # noqa: E402
+from ckpt import pinned as _pin  # noqa: E402
 
 import matplotlib
 matplotlib.use("Agg")
@@ -51,11 +54,11 @@ ns.apply()
 
 def main(argv):
     ap = argparse.ArgumentParser()
-    ap.add_argument("--ckpt", default="runs/BEST/ckpt_eval.pth.tar")
+    ap.add_argument("--ckpt", default=_pin("runs/BEST/ckpt_eval.pth.tar"))
     ap.add_argument("--seq", default="Bosphorus")
     ap.add_argument("--qp", type=int, default=32)
     ap.add_argument("--budget", type=float, default=0.1)
-    ap.add_argument("--device", default="cuda:0")
+    ap.add_argument("--device", default=_gpu("cuda:0"))
     ap.add_argument("--out", default="docs/figures/exit_map.png")
     # Provenance beside the picture: without it the figure cannot say which
     # checkpoint routed the tiles it draws, which is the defect that made every

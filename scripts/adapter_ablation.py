@@ -21,6 +21,9 @@ import torch.nn.functional as F
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 sys.path.insert(0, str(Path.home() / "DCVC"))
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from gpu import pick as _gpu  # noqa: E402
+from ckpt import pinned as _pin  # noqa: E402
 import ctc_intra as C
 from flexuf.config import FlexUFConfig
 from flexuf.eval import reference_frame_mse, true_frame_mse
@@ -28,10 +31,10 @@ from flexuf.model import FlexUFIntra, load_flexuf_state
 from flexuf.reference import reference_for
 
 ap = argparse.ArgumentParser()
-ap.add_argument("--ckpt", default="runs/RECIPE512/ckpt_eval.pth.tar")
+ap.add_argument("--ckpt", default=_pin("runs/RECIPE512/ckpt_eval.pth.tar"))
 ap.add_argument("--qps", type=int, nargs="+", default=[0, 32, 63])
 ap.add_argument("--max_seqs", type=int, default=16)
-ap.add_argument("--device", default="cuda:7")
+ap.add_argument("--device", default=_gpu("cuda:7"))
 ap.add_argument("--out", default="results/adapter_ablation.json")
 a = ap.parse_args()
 dev = a.device

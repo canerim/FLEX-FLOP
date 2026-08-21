@@ -39,6 +39,8 @@ import torch
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT))
 sys.path.insert(0, str(Path.home() / "DCVC"))
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from gpu import pick as _gpu  # noqa: E402
 
 from flexuf.config import FlexUFConfig  # noqa: E402
 from flexuf.measure import MacMeter  # noqa: E402
@@ -138,7 +140,7 @@ def main(argv):
     ap.add_argument("--sizes", nargs="+", default=["1280x720", "1920x1080"])
     ap.add_argument("--seconds", type=float, default=20.0,
                     help="wall time per condition; the power sensor needs it")
-    ap.add_argument("--device", default="cuda:0")
+    ap.add_argument("--device", default=_gpu("cuda:0"))
     ap.add_argument("--gpu_index", type=int, default=2,
                     help="index nvidia-smi uses, which is NOT the index torch "
                          "uses when CUDA_VISIBLE_DEVICES is set")

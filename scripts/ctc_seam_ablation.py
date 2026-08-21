@@ -36,6 +36,8 @@ import torch
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 sys.path.insert(0, str(Path.home() / "DCVC"))
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from gpu import pick as _gpu  # noqa: E402
 import ctc_intra as C
 from flexuf.config import FlexUFConfig
 from flexuf.model import FlexUFIntra, load_flexuf_state
@@ -53,7 +55,7 @@ ap.add_argument("--seqs", nargs="*", default=None,
                 help="select sequences by name, so a stored table can be "
                      "re-measured on exactly the set it was measured on")
 ap.add_argument("--out", default=None)
-ap.add_argument("--device", default="cuda:6")
+ap.add_argument("--device", default=_gpu("cuda:6"))
 a = ap.parse_args()
 
 seqs, missing = C.discover([])

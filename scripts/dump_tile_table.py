@@ -14,6 +14,9 @@ import torch.nn.functional as F
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 sys.path.insert(0, str(Path.home() / "DCVC"))
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from gpu import pick as _gpu  # noqa: E402
+from ckpt import pinned as _pin  # noqa: E402
 import ctc_intra as C
 from flexuf.config import FlexUFConfig
 from flexuf.cost import exit_costs
@@ -22,10 +25,10 @@ from flexuf.model import FlexUFIntra, load_flexuf_state
 from flexuf.reference import reference_for
 
 ap = argparse.ArgumentParser()
-ap.add_argument("--ckpt", default="runs/RECIPE512/ckpt_eval.pth.tar")
+ap.add_argument("--ckpt", default=_pin("runs/RECIPE512/ckpt_eval.pth.tar"))
 ap.add_argument("--seq", default="Bosphorus")
 ap.add_argument("--qp", type=int, default=32)
-ap.add_argument("--device", default="cuda:2")
+ap.add_argument("--device", default=_gpu("cuda:2"))
 ap.add_argument("--out", default="results/tile_table.json")
 a = ap.parse_args()
 dev = a.device

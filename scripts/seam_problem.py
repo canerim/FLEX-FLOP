@@ -19,6 +19,8 @@ import numpy as np, torch, torch.nn.functional as F
 R = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(R)); sys.path.insert(0, str(R / "scripts"))
 sys.path.insert(0, str(Path.home() / "DCVC"))
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from gpu import pick as _gpu  # noqa: E402
 import matplotlib; matplotlib.use("Agg")
 import matplotlib.pyplot as plt  # noqa: E402
 from matplotlib.patches import Rectangle  # noqa: E402
@@ -29,7 +31,7 @@ ap = argparse.ArgumentParser()
 ap.add_argument("--seq", default="Bosphorus")
 ap.add_argument("--qp", type=int, default=63)
 ap.add_argument("--amp", type=float, default=30.0)
-ap.add_argument("--device", default="cuda:0")
+ap.add_argument("--device", default=_gpu("cuda:0"))
 ap.add_argument("--out", default="docs/figures/seam_problem.png")
 # The checkpoint was hard-coded to runs/BEST/ckpt_eval.pth.tar, a file the
 # watchers overwrite, so the figure could not name what decoded it. Only the

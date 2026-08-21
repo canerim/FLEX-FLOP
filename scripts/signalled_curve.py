@@ -36,6 +36,8 @@ import torch.nn.functional as F
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 sys.path.insert(0, str(Path.home() / "DCVC"))
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from gpu import pick as _gpu  # noqa: E402
 import ctc_intra as C
 from flexuf.config import FlexUFConfig
 from flexuf.cost import exit_costs
@@ -72,7 +74,7 @@ ap.add_argument("--latent_patch", type=int, default=None,
 ap.add_argument("--seam_repair", default=None,
                 help="override the seam-repair module, e.g. 'none' when changing "
                      "tile size (see --latent_patch).")
-ap.add_argument("--device", default="cuda:4")
+ap.add_argument("--device", default=_gpu("cuda:4"))
 ap.add_argument("--budgets", type=float, nargs="+", default=None,
                 help="evaluate several quality budgets in ONE pass. Everything "
                      "expensive -- encoding, decoding all K exits, the reference "

@@ -21,6 +21,9 @@ from matplotlib.patches import Rectangle
 R = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(R)); sys.path.insert(0, str(Path.home() / "DCVC"))
 sys.path.insert(0, str(R / "scripts"))
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from gpu import pick as _gpu  # noqa: E402
+from ckpt import pinned as _pin  # noqa: E402
 import naturestyle as ns
 ns.apply()
 import ctc_intra as C
@@ -31,12 +34,12 @@ from flexuf.model import FlexUFIntra, load_flexuf_state
 from flexuf.reference import reference_for
 
 ap = argparse.ArgumentParser()
-ap.add_argument("--ckpt", default="runs/RECIPE512/ckpt_eval.pth.tar")
+ap.add_argument("--ckpt", default=_pin("runs/RECIPE512/ckpt_eval.pth.tar"))
 ap.add_argument("--seq", default="Bosphorus")
 ap.add_argument("--qp", type=int, default=32)
 ap.add_argument("--budget", type=float, default=0.1)
 ap.add_argument("--crop", type=int, default=320)
-ap.add_argument("--device", default="cuda:2")
+ap.add_argument("--device", default=_gpu("cuda:2"))
 ap.add_argument("--out", default="docs/figures/qualitative.png")
 # Provenance beside the picture. Every earlier version of this figure wrote a
 # PNG and nothing else, so which checkpoint decoded it could not be recovered

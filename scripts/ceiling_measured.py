@@ -17,6 +17,8 @@ import torch
 
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT)); sys.path.insert(0, str(Path.home() / "DCVC"))
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from gpu import pick as _gpu  # noqa: E402
 
 from flexuf.config import FlexUFConfig            # noqa: E402
 from flexuf.cost import exit_costs                # noqa: E402
@@ -30,7 +32,7 @@ def main(argv):
     ap.add_argument("--ckpt", default="runs/RECIPE512/ckpt_PAPER.pth.tar")
     ap.add_argument("--qp", type=int, default=32)
     ap.add_argument("--size", default="1920x1080")
-    ap.add_argument("--device", default="cuda:0")
+    ap.add_argument("--device", default=_gpu("cuda:0"))
     ap.add_argument("--out", default="results/ceiling_measured.json")
     a = ap.parse_args(argv)
 

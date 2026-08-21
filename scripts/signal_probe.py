@@ -19,6 +19,8 @@ from pathlib import Path
 import torch
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 sys.path.insert(0, str(Path.home() / "DCVC"))
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from gpu import pick as _gpu  # noqa: E402
 from torch.utils.data import DataLoader, SequentialSampler
 from src.datasets.image_dataset import ImageFolder
 from src.utils.common import get_training_lambdas
@@ -32,7 +34,7 @@ ap.add_argument("--ckpt", default="runs/warmstart/ckpt_warmstart.pth.tar")
 ap.add_argument("--qp", type=int, default=32)
 ap.add_argument("--patch", type=int, default=16)
 ap.add_argument("--batches", type=int, default=40)
-ap.add_argument("--device", default="cuda:4")
+ap.add_argument("--device", default=_gpu("cuda:4"))
 a = ap.parse_args()
 dev = a.device
 

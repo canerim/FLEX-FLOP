@@ -23,6 +23,9 @@ import torch.nn.functional as F
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 sys.path.insert(0, str(Path.home() / "DCVC"))
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from gpu import pick as _gpu  # noqa: E402
+from ckpt import pinned as _pin  # noqa: E402
 import ctc_intra as C
 from flexuf.config import FlexUFConfig
 from flexuf.cost import exit_costs
@@ -31,7 +34,7 @@ from flexuf.model import FlexUFIntra, load_flexuf_state
 from flexuf.reference import reference_for
 
 ap = argparse.ArgumentParser()
-ap.add_argument("--ckpt", default="runs/RECIPE512/ckpt_eval.pth.tar")
+ap.add_argument("--ckpt", default=_pin("runs/RECIPE512/ckpt_eval.pth.tar"))
 ap.add_argument("--qp", type=int, default=32)
 ap.add_argument("--iters", type=int, default=15)
 ap.add_argument("--seq", default=None,
@@ -39,7 +42,7 @@ ap.add_argument("--seq", default=None,
                      "Beauty, which is easy enough that the ladder saturates at "
                      "0.1 dB and both searches trivially agree -- an "
                      "uninformative comparison.")
-ap.add_argument("--device", default="cuda:7")
+ap.add_argument("--device", default=_gpu("cuda:7"))
 ap.add_argument("--out", default="results/encoder_cost.json")
 a = ap.parse_args()
 # torch.cuda.Event is created on the CURRENT device, not on the device the

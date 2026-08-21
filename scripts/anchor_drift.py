@@ -17,6 +17,8 @@ from pathlib import Path
 import torch, torch.nn.functional as F
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 sys.path.insert(0, str(Path.home() / "DCVC"))
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from gpu import pick as _gpu  # noqa: E402
 import ctc_intra as C
 from flexuf.config import FlexUFConfig
 from flexuf.model import FlexUFIntra, load_flexuf_state
@@ -26,7 +28,7 @@ ap = argparse.ArgumentParser()
 ap.add_argument("--ckpt", required=True)
 ap.add_argument("--qps", type=int, nargs="+", default=[0, 32, 63])
 ap.add_argument("--frames", type=int, default=1)
-ap.add_argument("--device", default="cuda:4")
+ap.add_argument("--device", default=_gpu("cuda:4"))
 ap.add_argument("--out", default=None,
                 help="write the drift to JSON as well as printing it. The deck "
                      "quotes this number and had no file to read it from, so it "

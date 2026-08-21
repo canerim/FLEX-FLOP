@@ -5095,3 +5095,46 @@ heading now carries `CondPageBreak(1.1*inch)`, so it opens a column instead of
 sitting at the foot of one, and the trimming only has to keep the body inside
 page 19 rather than land it on an exact line. The conclusion lost ~70 words of
 padding in the process; every claim it makes survived (87/87).
+
+## 105. Figures are audited for collisions and invisible content at save time
+
+The author's instruction was that a plot must not have things sitting on top
+of each other and must not hide what it draws. Neither is visible in a figure
+script, so `naturestyle.apply()` now wraps `savefig`: every figure this
+repository writes is measured against its own renderer for text boxes that
+share pixels and for series with nothing inside the axes, and the verdict goes
+to `results/figure_audit.json`. `check_fig_overlap.py` reads that file and
+fails on any figure the paper or the supplement uses.
+
+Two measurement traps cost an hour each and are worth recording. Matplotlib
+keeps tick objects for locations outside the current view and leaves them
+visible -- they are clipped at draw, not hidden -- so their labels sit at the
+ends of the axis and collide with everything; ticks are now filtered against
+the view interval. And `savefig(bbox_inches="tight")` leaves the axis labels
+positioned against the expanded bbox, which put `window.png`'s x-axis label 54
+pixels above where it is drawn and produced a page of collisions that do not
+exist. The audit draws once more before measuring.
+
+What survived the two fixes was small and real: four panel labels sitting on
+tick numbers, a gap annotation on a vertex label in `supp_achievable`, and the
+two lines of every box in `system_figs` overlapping by a sixth. Panel labels
+now step left at save time until they are clear, so only the ones that collide
+move and every other figure is written byte for byte as before.
+
+## 106. Forty-five scripts named a GPU that stopped being ours
+
+`grep default="cuda:` returned forty-five hits, eight of them `cuda:2`. GPU2
+was ours when those were written; it belongs to another user now. Running any
+of those eight today would have put a process on a stranger's card on a shared
+machine, which is the one thing this work must not do. `scripts/gpu.py` asks
+the driver instead: a card this account has to itself, most free memory first,
+and `cpu` rather than somebody else's GPU if there is no such card. An explicit
+`--device` still wins; this only decides what happens when nobody said.
+
+Fourteen scripts had the same problem in a second dimension: they defaulted to
+`ckpt_eval.pth.tar`, which is not a checkpoint but a name the watcher rewrites,
+so re-running them a week later reproduces the command and not the result.
+`scripts/ckpt.py` resolves those to the run's pinned checkpoint where one
+exists and says on stderr when one does not. RECIPE512 has a pin and now
+resolves to it; BEST does not, and the supplement already says which of its
+tables rest on a checkpoint whose epoch nothing records.

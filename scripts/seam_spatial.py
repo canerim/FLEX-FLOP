@@ -43,6 +43,8 @@ import torch.nn.functional as F
 R = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(R))
 sys.path.insert(0, str(Path.home() / "DCVC"))
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from gpu import pick as _gpu  # noqa: E402
 
 # Distance from the nearest tile boundary, in RGB pixels. The first band is the
 # ring the module is meant to repair; the rest is the interior it is meant to
@@ -205,7 +207,7 @@ def main(argv=None):
     ap.add_argument("--seqs", type=int, default=6)
     ap.add_argument("--qp", type=int, default=63)
     ap.add_argument("--budget", type=float, default=0.1)
-    ap.add_argument("--device", default="cuda:2")
+    ap.add_argument("--device", default=_gpu("cuda:2"))
     ap.add_argument("--gate-only", action="store_true")
     ap.add_argument("--out", default="results/seam_spatial.json")
     a = ap.parse_args(argv)

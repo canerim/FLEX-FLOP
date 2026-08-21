@@ -34,6 +34,9 @@ import torch
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT))
 sys.path.insert(0, str(Path.home() / "DCVC"))
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from gpu import pick as _gpu  # noqa: E402
+from ckpt import pinned as _pin  # noqa: E402
 
 from flexuf.backbone.decoder import patchify, unpatchify  # noqa: E402
 from flexuf.config import FlexUFConfig  # noqa: E402
@@ -59,14 +62,14 @@ def timed(fn, warmup, iters):
 
 def main(argv):
     ap = argparse.ArgumentParser()
-    ap.add_argument("--ckpt", default="runs/BEST/ckpt_eval.pth.tar")
+    ap.add_argument("--ckpt", default=_pin("runs/BEST/ckpt_eval.pth.tar"))
     ap.add_argument("--qp", type=int, default=32)
     ap.add_argument("--budget_db", type=float, default=0.3)
     ap.add_argument("--width", type=int, default=1920)
     ap.add_argument("--height", type=int, default=1088)
     ap.add_argument("--warmup", type=int, default=10)
     ap.add_argument("--iters", type=int, default=40)
-    ap.add_argument("--device", default="cuda:0")
+    ap.add_argument("--device", default=_gpu("cuda:0"))
     ap.add_argument("--out", default="results/latency_profile_BEST.json")
     a = ap.parse_args(argv)
     # torch.cuda.Event is created on the CURRENT device, not on the device the

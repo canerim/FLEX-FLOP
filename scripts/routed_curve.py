@@ -33,6 +33,8 @@ import torch.nn.functional as F
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 sys.path.insert(0, str(Path.home() / "DCVC"))
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from gpu import pick as _gpu  # noqa: E402
 import ctc_intra as C
 from flexuf.config import FlexUFConfig
 from flexuf.cost import exit_costs
@@ -50,7 +52,7 @@ ap.add_argument("--routers", nargs="*", default=[],
                      "these the run is an ORACLE and says so; with them it is "
                      "the deployable system, deciding from the stem before any "
                      "deep block runs.")
-ap.add_argument("--device", default="cuda:2")
+ap.add_argument("--device", default=_gpu("cuda:2"))
 ap.add_argument("--out", default="results/routed_curve.json")
 a = ap.parse_args()
 dev = a.device

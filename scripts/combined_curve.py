@@ -39,6 +39,8 @@ import torch.nn.functional as F
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT))
 sys.path.insert(0, str(Path.home() / "DCVC"))
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from gpu import pick as _gpu  # noqa: E402
 
 import ctc_intra as C  # noqa: E402
 from flexuf.config import FlexUFConfig, LATENT_CH, TRUNK_CH  # noqa: E402
@@ -61,7 +63,7 @@ def main(argv):
                     help="blend weight w: 0 = bits only, 1 = the head only")
     ap.add_argument("--frames", type=int, default=1)
     ap.add_argument("--max_seqs", type=int, default=0)
-    ap.add_argument("--device", default="cuda:0")
+    ap.add_argument("--device", default=_gpu("cuda:0"))
     ap.add_argument("--budget", type=float, default=0.1)
     ap.add_argument("--out", required=True)
     a = ap.parse_args(argv)

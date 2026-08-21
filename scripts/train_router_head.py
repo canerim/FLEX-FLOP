@@ -26,6 +26,8 @@ from pathlib import Path
 import torch
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 sys.path.insert(0, str(Path.home() / "DCVC"))
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from gpu import pick as _gpu  # noqa: E402
 from torch.utils.data import DataLoader
 from src.datasets.image_dataset import ImageFolder
 from src.utils.common import get_training_lambdas
@@ -42,7 +44,7 @@ ap.add_argument("--batch_size", type=int, default=6)
 ap.add_argument("--crop", type=int, default=512)
 ap.add_argument("--lr", type=float, default=3e-3)
 ap.add_argument("--tau", type=float, default=1.0)
-ap.add_argument("--device", default="cuda:2")
+ap.add_argument("--device", default=_gpu("cuda:2"))
 ap.add_argument("--out", required=True)
 a = ap.parse_args()
 dev = a.device

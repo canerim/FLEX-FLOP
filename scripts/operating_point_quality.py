@@ -64,6 +64,8 @@ import torch.nn.functional as F
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 sys.path.insert(0, str(Path.home() / "DCVC"))
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from gpu import pick as _gpu  # noqa: E402
 import ctc_intra as C  # noqa: E402
 from src.utils.transforms import yuv_444_to_420  # noqa: E402
 from flexuf.config import FlexUFConfig  # noqa: E402
@@ -157,7 +159,7 @@ def main(argv):
                          "mistaken for a full one")
     ap.add_argument("--worst", type=int, default=30,
                     help="how many individual tiles to name")
-    ap.add_argument("--device", default="cuda:0")
+    ap.add_argument("--device", default=_gpu("cuda:0"))
     ap.add_argument("--out", required=True)
     a = ap.parse_args(argv)
     dev = a.device

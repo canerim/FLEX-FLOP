@@ -40,6 +40,9 @@ import torch
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT))
 sys.path.insert(0, str(Path.home() / "DCVC"))
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from gpu import pick as _gpu  # noqa: E402
+from ckpt import pinned as _pin  # noqa: E402
 
 from flexuf.backbone.decoder import patchify  # noqa: E402
 from flexuf.config import FlexUFConfig  # noqa: E402
@@ -65,12 +68,12 @@ def med(fn, warmup=10, iters=40):
 
 def main(argv):
     ap = argparse.ArgumentParser()
-    ap.add_argument("--ckpt", default="runs/BEST/ckpt_eval.pth.tar")
+    ap.add_argument("--ckpt", default=_pin("runs/BEST/ckpt_eval.pth.tar"))
     ap.add_argument("--qp", type=int, default=32)
     ap.add_argument("--budgets", type=float, nargs="+", default=[0.1, 0.3])
     ap.add_argument("--width", type=int, default=1920)
     ap.add_argument("--height", type=int, default=1088)
-    ap.add_argument("--device", default="cuda:0")
+    ap.add_argument("--device", default=_gpu("cuda:0"))
     ap.add_argument("--out", default="results/sorted_exec_BEST.json")
     a = ap.parse_args(argv)
     # torch.cuda.Event is created on the CURRENT device and a bare

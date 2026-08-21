@@ -58,8 +58,10 @@ xg = vx[1]
 yg = np.interp(xg, sv[::-1], dbv[::-1])
 ax[0].annotate("", xy=(xg, yg), xytext=(xg, vy[1]),
                arrowprops=dict(arrowstyle="<->", lw=0.6, color=ns.INK2))
-ax[0].text(xg - 2.6, 0.5 * (yg + vy[1]), f"{vy[1] - yg:.3f} dB",
-           fontsize=5.5, va="center", ha="right", color=ns.INK2)
+# Right of the arrow, not left of it: on the left it sat on the vertex label
+# for exit 4, which is three data units away at this scale.
+ax[0].text(xg + 1.0, 0.5 * (yg + vy[1]), f"{vy[1] - yg:.3f} dB",
+           fontsize=5.5, va="center", ha="left", color=ns.INK2)
 ax[0].set_xlabel("MACs saved (%)")
 ax[0].set_ylabel("dB below released")
 ax[0].legend(fontsize=5.5, loc="upper left")

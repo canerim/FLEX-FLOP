@@ -29,6 +29,8 @@ import torch
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT))
 sys.path.insert(0, str(Path.home() / "DCVC"))
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from gpu import pick as _gpu  # noqa: E402
 
 from flexuf.config import FlexUFConfig  # noqa: E402
 from flexuf.measure import MacMeter  # noqa: E402
@@ -69,7 +71,7 @@ def main(argv):
                     default=["832x480", "1280x720", "1920x1080", "3840x2160"])
     ap.add_argument("--warmup", type=int, default=5)
     ap.add_argument("--iters", type=int, default=25)
-    ap.add_argument("--device", default="cuda:0")
+    ap.add_argument("--device", default=_gpu("cuda:0"))
     ap.add_argument("--out", default="results/supp_footprint.json")
     a = ap.parse_args(argv)
 

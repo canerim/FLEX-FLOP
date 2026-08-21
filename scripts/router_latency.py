@@ -34,6 +34,8 @@ import torch
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT))
 sys.path.insert(0, str(Path.home() / "DCVC"))
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from gpu import pick as _gpu  # noqa: E402
 
 from flexuf.config import FlexUFConfig, LATENT_CH, TRUNK_CH  # noqa: E402
 from flexuf.model import FlexUFIntra, load_flexuf_state  # noqa: E402
@@ -52,7 +54,7 @@ def main(argv):
     ap.add_argument("--height", type=int, default=1280)
     ap.add_argument("--warmup", type=int, default=10)
     ap.add_argument("--iters", type=int, default=40)
-    ap.add_argument("--device", default="cuda:0")
+    ap.add_argument("--device", default=_gpu("cuda:0"))
     ap.add_argument("--out", default="results/router_latency.json")
     a = ap.parse_args(argv)
 

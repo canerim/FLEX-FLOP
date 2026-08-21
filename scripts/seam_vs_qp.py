@@ -31,13 +31,16 @@ import torch, torch.nn.functional as F
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 sys.path.insert(0, str(Path.home() / "DCVC"))
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from gpu import pick as _gpu  # noqa: E402
+from ckpt import pinned as _pin  # noqa: E402
 import ctc_intra as C
 from flexuf.config import FlexUFConfig
 from flexuf.model import FlexUFIntra, load_flexuf_state
 from flexuf.reference import reference_for
 
 ap = argparse.ArgumentParser()
-ap.add_argument("--ckpt", default="runs/BEST/ckpt_eval.pth.tar",
+ap.add_argument("--ckpt", default=_pin("runs/BEST/ckpt_eval.pth.tar"),
                 help="the TRAINED run whose floor is the third curve")
 ap.add_argument("--qps", type=int, nargs="+",
                 default=[0, 8, 16, 24, 32, 40, 48, 56, 63])
@@ -55,7 +58,7 @@ ap.add_argument("--seqs", nargs="*", default=None,
 ap.add_argument("--spread", action="store_true",
                 help="sample frames across the sequence instead of taking the "
                      "first, as ctc_seam_ablation.py does")
-ap.add_argument("--device", default="cuda:0")
+ap.add_argument("--device", default=_gpu("cuda:0"))
 ap.add_argument("--out", default="results/seam_vs_qp.json")
 a = ap.parse_args()
 dev = a.device

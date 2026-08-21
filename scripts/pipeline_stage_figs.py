@@ -23,6 +23,8 @@ from matplotlib.patches import FancyArrowPatch, FancyBboxPatch, Rectangle
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT)); sys.path.insert(0, str(ROOT / "scripts"))
 sys.path.insert(0, str(Path.home() / "DCVC"))
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from gpu import pick as _gpu  # noqa: E402
 
 import ctc_intra as C                                     # noqa: E402
 import naturestyle as ns                                  # noqa: E402
@@ -166,7 +168,7 @@ def main(argv):
     ap.add_argument("--ckpt", default="runs/RECIPE512/ckpt_PAPER.pth.tar")
     ap.add_argument("--seq", default="Bosphorus")
     ap.add_argument("--qp", type=int, default=32)
-    ap.add_argument("--device", default="cuda:0")
+    ap.add_argument("--device", default=_gpu("cuda:0"))
     a = ap.parse_args(argv)
 
     torch.cuda.set_device(a.device)

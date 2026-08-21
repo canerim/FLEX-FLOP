@@ -39,11 +39,16 @@ def box(ax, x, y, w, h, label, sub=None, fc_="white", ec=ns.INK2, lw=0.7,
         fs=6, tc=ns.INK, r=0.012):
     ax.add_patch(FancyBboxPatch((x, y), w, h, boxstyle=f"round,pad=0,rounding_size={r}",
                                 facecolor=fc_, edgecolor=ec, linewidth=lw))
-    ax.text(x + w / 2, y + h / 2 + (0.012 if sub else 0), label, ha="center",
+    # 0.012/-0.028 left the two lines 17% overlapped in training_scheme, where
+    # the axes is short enough that four hundredths of it is under a line of
+    # 6 pt type. The pair is set from the font size instead, so it stays clear
+    # whatever shape the diagram is.
+    gap = 0.021 * (fs / 6.0)
+    ax.text(x + w / 2, y + h / 2 + (gap if sub else 0), label, ha="center",
             va="center", fontsize=fs, color=tc)
     if sub:
-        ax.text(x + w / 2, y + h / 2 - 0.028, sub, ha="center", va="center",
-                fontsize=fs - 1.2, color=ns.INK2)
+        ax.text(x + w / 2, y + h / 2 - 1.9 * gap, sub, ha="center",
+                va="center", fontsize=fs - 1.2, color=ns.INK2)
 
 
 def arrow(ax, x0, y0, x1, y1, color=ns.INK2, lw=0.7, style="-|>", ls="-"):

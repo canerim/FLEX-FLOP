@@ -53,6 +53,8 @@ import torch
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT)); sys.path.insert(0, str(ROOT / "scripts"))
 sys.path.insert(0, str(Path.home() / "DCVC"))
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from gpu import pick as _gpu  # noqa: E402
 
 import ctc_intra as C                                     # noqa: E402
 from flexuf.beta import (at_beta, bisect_beta, build_cache,  # noqa: E402
@@ -98,7 +100,7 @@ def main(argv):
                          "through the shared code, so the two are printed side "
                          "by side and a divergence is visible rather than "
                          "assumed away.")
-    ap.add_argument("--device", default="cuda:0")
+    ap.add_argument("--device", default=_gpu("cuda:0"))
     ap.add_argument("--out", default="results/beta_calibration.json")
     a = ap.parse_args(argv)
 

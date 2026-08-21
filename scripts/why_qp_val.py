@@ -34,6 +34,8 @@ import torch.nn.functional as F
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT))
 sys.path.insert(0, str(Path.home() / "DCVC"))
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from gpu import pick as _gpu  # noqa: E402
 
 from flexuf.config import FlexUFConfig  # noqa: E402
 from flexuf.model import FlexUFIntra, load_flexuf_state  # noqa: E402
@@ -78,7 +80,7 @@ def main(argv):
     ap.add_argument("--qps", type=int, nargs="+", default=[0, 32, 63])
     ap.add_argument("--images", type=int, default=64)
     ap.add_argument("--crop", type=int, default=512)
-    ap.add_argument("--device", default="cuda:0")
+    ap.add_argument("--device", default=_gpu("cuda:0"))
     ap.add_argument("--out", default=None)
     a = ap.parse_args(argv)
 

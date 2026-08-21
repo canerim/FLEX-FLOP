@@ -24,6 +24,8 @@ from matplotlib.patches import Rectangle
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 sys.path.insert(0, str(Path.home() / "DCVC"))
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from ckpt import pinned as _pin  # noqa: E402
 import ctc_intra as C
 from src.utils.transforms import ycbcr2rgb
 from flexuf.config import FlexUFConfig
@@ -41,7 +43,7 @@ dev = "cuda:0"   # index within CUDA_VISIBLE_DEVICES, not the physical card
 # match anything else on the deck.
 import argparse
 _ap = argparse.ArgumentParser()
-_ap.add_argument("--ckpt", default="runs/BEST/ckpt_eval.pth.tar")
+_ap.add_argument("--ckpt", default=_pin("runs/BEST/ckpt_eval.pth.tar"))
 _a, _ = _ap.parse_known_args()
 ck = torch.load(_a.ckpt, map_location="cpu", weights_only=False)
 cfg = FlexUFConfig(**ck["config"]) if "config" in ck else FlexUFConfig()

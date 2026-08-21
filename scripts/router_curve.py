@@ -47,6 +47,8 @@ import torch
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT))
 sys.path.insert(0, str(Path.home() / "DCVC"))
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from gpu import pick as _gpu  # noqa: E402
 
 import ctc_intra as C  # noqa: E402
 # The bisection and the cache it runs on live in flexuf/beta.py, because
@@ -76,7 +78,7 @@ def main(argv):
     ap.add_argument("--qps", type=int, nargs="+", default=[0, 16, 32, 48, 63])
     ap.add_argument("--frames", type=int, default=1)
     ap.add_argument("--max_seqs", type=int, default=0)
-    ap.add_argument("--device", default="cuda:0")
+    ap.add_argument("--device", default=_gpu("cuda:0"))
     ap.add_argument("--at_lam", type=float, default=None,
                     help="Skip the budget bisection and report the oracle and "
                          "the router at THIS lambda instead. Both then sit at "
