@@ -5138,3 +5138,27 @@ so re-running them a week later reproduces the command and not the result.
 exists and says on stderr when one does not. RECIPE512 has a pin and now
 resolves to it; BEST does not, and the supplement already says which of its
 tables rest on a checkpoint whose epoch nothing records.
+
+## 107. EVC cited SlimCAE, and two references were printed that nothing cites
+
+`check_twins` proves the LaTeX source and the reportlab build carry the same
+paper, and ignores markup so that `\cite{evc}` and "[22]" look like the same
+thing written two ways. They were not. The reportlab build maps keys to
+numbers by hand in `CITE`, and `CITE["evc"]` was 22, which is SlimCAE: in the
+built paper, the positioning table's EVC row cited somebody else's work. The
+same hand-maintained list carried a duplicate of the VVC reference and a
+Cheng et al. entry the paper never cites, both printed in the bibliography.
+
+Fixing it meant renumbering, which is the moment citations go wrong quietly,
+so it was done by tokenising the builder and rewriting bracket numbers inside
+string literals only, after checking that every such number is a citation and
+that nothing cites the two entries being dropped. Seventeen acronym citations
+were then verified by hand against the reference they land on.
+
+`check_cites.py` is what makes the next one loud: every key in `CITE` must
+land on a reference whose author and year match `refs.bib`, every number the
+prose uses must exist, every reference must be cited by something, and where
+the prose names an author -- "Shoham and Gersho [26]" -- the reference must
+carry that name. Model acronyms are deliberately not checked: DCVC-UF is not
+in its own reference string, and testing it would report every correct
+citation in the related-work section.

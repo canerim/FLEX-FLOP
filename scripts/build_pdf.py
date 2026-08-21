@@ -556,12 +556,12 @@ def content(colw, fullw):
         r"is much the easier picture ([[fig:tiles_unequal]]).")
     par(r"Classification networks abandoned this a decade ago. Early-exit "
         r"architectures attach classifiers at intermediate depths and stop as "
-        r"soon as the prediction is confident [3, 15, 20], and the literature "
+        r"soon as the prediction is confident [3, 13, 18], and the literature "
         r"around them is by now mature. Super-resolution adopted the same idea "
-        r"spatially. ClassSR [12] routes image patches to networks of "
+        r"spatially. ClassSR [10] routes image patches to networks of "
         r"different capacity by difficulty, and APE [1] exits patches at "
         r"different depths of one network. Learned compression has taken a "
-        r"different route. Slimmable autoencoders [22, 23] give one model "
+        r"different route. Slimmable autoencoders [20, 21] give one model "
         r"several complexity levels, but the level is chosen <i>per stream</i> "
         r"rather than per region, and switching it changes the bitstream.")
     par(r"We ask the spatial-adaptivity question inside a learned decoder, and "
@@ -654,13 +654,13 @@ def content(colw, fullw):
         r"which is exactly what a deployed bitstream will not tolerate. What "
         r"follows sets out what each gives us and what none of them gives.")
     h2("Early exit.")
-    par(r"BranchyNet [20] and MSDNet [3] established the pattern of "
-        r"intermediate classifiers with a confidence rule; SDN [15] framed it "
-        r"as mitigating overthinking, ZTW [54] recycles earlier predictions, "
-        r"and RANet [55] varies input resolution rather than depth. We train "
+    par(r"BranchyNet [18] and MSDNet [3] established the pattern of "
+        r"intermediate classifiers with a confidence rule; SDN [13] framed it "
+        r"as mitigating overthinking, ZTW [52] recycles earlier predictions, "
+        r"and RANet [53] varies input resolution rather than depth. We train "
         r"all exits jointly, after "
-        r"Scardapane et al. [18], and distil between exits as in Phuong and "
-        r"Lampert [17]. The caveat in [19] is that too large a student-teacher "
+        r"Scardapane et al. [16], and distil between exits as in Phuong and "
+        r"Lampert [15]. The caveat in [17] is that too large a student-teacher "
         r"gap hurts the shallowest exits, so our distillation runs between "
         r"<i>adjacent</i> exits. All of this work exits on a confidence signal "
         r"computed from the network's own output. A decoder has no such "
@@ -668,15 +668,15 @@ def content(colw, fullw):
         r"decide is the error against a source the decoder cannot see "
         r"(Section 3.5).")
     h2("Spatially adaptive inference.")
-    par(r"ClassSR [12] sorts super-resolution patches into easy/medium/hard "
+    par(r"ClassSR [10] sorts super-resolution patches into easy/medium/hard "
         r"and runs a different network on each; APE [1] exits patches at "
-        r"different depths; Glance-and-Focus [8] spends resolution adaptively. "
+        r"different depths; Glance-and-Focus [6] spends resolution adaptively. "
         r"We share the per-region premise with all three, and we inherit the "
         r"same tiling problem, though the cost of tile borders is rarely "
         r"quantified in that line of work. To our knowledge the estimator view "
         r"of border padding and its measured ordering (Section 4) is new. The "
         r"closest prior work is the per-channel AR(1) padding of Kaseva et al. "
-        r"[11], which we implement and evaluate.")
+        r"[9], which we implement and evaluate.")
     tbl("positioning",
         r"<b>Table 1. Where this sits.</b> What each method varies, at what "
         r"granularity, and what that costs the stream. A single new-bitstream "
@@ -685,12 +685,12 @@ def content(colw, fullw):
         r"side data travels with it, and whether the decoder alone can do it.")
     tbl("literature_img",
         r"<b>Table 2. What a learned image decoder costs.</b> Eleven codecs as "
-        r"published, measured on one machine by Li et al. [43]: BD-Rate against "
+        r"published, measured on one machine by Li et al. [41]: BD-Rate against "
         r"VTM-22.0 on Kodak, arithmetic per pixel and parameters. The spread in "
         r"cost is an order of magnitude, and every entry pays its cost on every "
         r"pixel of every image.")
     tbl("literature_vid",
-        r"<b>Table 3. The family this work modifies</b>, from DCVC-UF [14]: "
+        r"<b>Table 3. The family this work modifies</b>, from DCVC-UF [12]: "
         r"MACs per 1080p frame, parameters, and BD-Rate against VTM-17.0 low "
         r"delay. Comparable within this table and not against Table 2, which "
         r"uses a different anchor and a different test set. The last column is "
@@ -698,9 +698,9 @@ def content(colw, fullw):
         r"computation where the picture needs it. Our row is the intra decoder "
         r"of the last DCVC-UF entry, at the 0.1 dB budget.")
     par(r"Together the two tables say where the field spends its decoder "
-        r"budget ([[tab:literature_img]], [[tab:literature_vid]]). Complexity has moved a long way in both directions: TCM [46] "
-        r"and WeConvene [50] buy rate with an order of magnitude more "
-        r"arithmetic per pixel than CHARM [51] or STF [45], and DCVC-UF [14] "
+        r"budget ([[tab:literature_img]], [[tab:literature_vid]]). Complexity has moved a long way in both directions: TCM [44] "
+        r"and WeConvene [48] buy rate with an order of magnitude more "
+        r"arithmetic per pixel than CHARM [49] or STF [43], and DCVC-UF [12] "
         r"moves the other way, cutting a 1080p frame from DCVC-FM's 2642 GMAC "
         r"to 170. Two things are constant down both tables. The cost is a "
         r"property of the model, chosen once and paid on every image; and it is "
@@ -715,21 +715,21 @@ def content(colw, fullw):
            r"the BD-Rate anchors are not. On the top bar a 0.1 dB budget "
            r"removes the pale section, by an amount that depends on the "
            r"picture.")
-    par(r"SlimCAE [22] and slimmable video codecs [23] expose several widths "
+    par(r"SlimCAE [20] and slimmable video codecs [21] expose several widths "
         r"of one model. The choice is per stream and it changes the encoder, "
-        r"so the bitstream is not interchangeable. DCVC-FM [13] and DCVC-UF "
-        r"[14] reduce cost architecturally, for every frame equally. "
+        r"so the bitstream is not interchangeable. DCVC-FM [11] and DCVC-UF "
+        r"[12] reduce cost architecturally, for every frame equally. "
         r"Rate–distortion–complexity has since become an explicit third axis. "
-        r"Gao et al. [35] tune spatial context usage to trade decode cost "
-        r"against rate, Ho et al. [36] survey where conditional residual "
-        r"coding sits on that surface, and Zhang and Gao [37] route <i>whole "
+        r"Gao et al. [33] tune spatial context usage to trade decode cost "
+        r"against rate, Ho et al. [34] survey where conditional residual "
+        r"coding sits on that surface, and Zhang and Gao [35] route <i>whole "
         r"frames</i> to one of several jointly-trained coding paths, spending "
         r"less computation on cheaper frames. Every one of these changes the "
         r"model, and with it what the encoder emits. Our axis is orthogonal. "
         r"The model and the bitstream are both fixed, and only <i>how much of "
         r"the decoder runs where</i> varies.")
     h2("The closest neighbour.")
-    par(r"Blard et al. [27] also partition an image into regions, also choose "
+    par(r"Blard et al. [25] also partition an image into regions, also choose "
         r"per region by a rate–distortion cost computed at the encoder, and "
         r"also transmit a mode map. The differences are in what the regions "
         r"choose among and in what "
@@ -744,15 +744,15 @@ def content(colw, fullw):
         r"what lets a decoder-side predictor stand in at all (Section 3.1).")
     h2("Signalling versus prediction.")
     par(r"Being <i>told</i> a mode decision rather than inferring it is the "
-        r"norm in standardised video coding. HEVC [9] and VVC [21] transmit "
+        r"norm in standardised video coding. HEVC [7] and VVC [19] transmit "
         r"partitioning, prediction mode and transform tree. We evaluate both, "
         r"and treat the signalled variant as the conventional design "
         r"(Section 3.1).")
     h2("Deferring to an oracle under a budget.")
     par(r"Letting a predictor decide most cases and handing a small budget of "
         r"the hardest ones to something exact is the shape of selective "
-        r"prediction [38] and learning to defer [39, 40], and of the budgeted "
-        r"variant of the latter [41]. We build on that shape in Section 5.7. "
+        r"prediction [36] and learning to defer [37, 38], and of the budgeted "
+        r"variant of the latter [39]. We build on that shape in Section 5.7. "
         r"Two things differ, and both make our case easier. The expert here is the encoder's own "
         r"search, so it is exact and always available at no test-time cost. "
         r"What is scarce is the <i>bits</i> needed to say what it decided. The "
@@ -764,22 +764,22 @@ def content(colw, fullw):
         r"question we measure, which is how concentrated the regret is ([[fig:concentration]]).")
     h2("Allocating a budget over units.")
     par(r"The construction we use is not new and we do not present it as such. "
-        r"Shoham and Gersho [28] showed that for a finite set of per-unit "
+        r"Shoham and Gersho [26] showed that for a finite set of per-unit "
         r"operating points, a Lagrangian sweep decouples the allocation across "
         r"units and traces exactly the lower convex hull of the achievable "
-        r"set; Ortega and Ramchandran [29] made it standard practice in image "
+        r"set; Ortega and Ramchandran [27] made it standard practice in image "
         r"and video coding. What we add is the structure this particular "
         r"operating set has: a floor below which no allocation is feasible, a "
         r"saturation point above which none improves, and a measurement of "
         r"what the convex-hull restriction costs (Section 5.4). The same "
         r"relaxation has resurfaced for test-time compute in language models "
-        r"[30], with per-instance decoupling and a binary search on the "
+        r"[28], with per-instance decoupling and a binary search on the "
         r"multiplier. That is the identical structure in a domain with no rate "
         r"axis, and we read it as evidence that the floor/saturation "
         r"characterisation is worth stating generally.")
     h2("How much is there to gain?")
     par(r"Bounding what adaptive inference could achieve is itself a line of "
-        r"work. Hasan et al. [34] derive an oracle bound on efficiency at "
+        r"work. Hasan et al. [32] derive an oracle bound on efficiency at "
         r"fixed accuracy, given per-model resource and accuracy, and report "
         r"43–121× on ImageNet and 7–81× on HellaSwag. Their bound has a "
         r"ceiling and no floor, because the largest model in their family "
@@ -792,8 +792,8 @@ def content(colw, fullw):
     h2("Tile boundaries.")
     par(r"Every method that processes an image in independently-computed tiles "
         r"meets the same artefact. The remedies in the literature are overlap "
-        r"and averaging, local padding from neighbouring patches [31], "
-        r"training with overlaps [32], and fitted extrapolation [11]. Local "
+        r"and averaging, local padding from neighbouring patches [29], "
+        r"training with overlaps [30], and fitted extrapolation [9]. Local "
         r"padding is the closest to the exact remedy we describe in Section "
         r"4.4, and the difference is accounting. It pads every convolutional "
         r"layer and does not report the cost. We pad only the 0.29% of each "
@@ -803,7 +803,7 @@ def content(colw, fullw):
         r"ordering of four estimators, and the dependence of the penalty on "
         r"per-tile depth (Section 4) have not been reported.")
     h2("Where the time goes.")
-    par(r"DCVC-RT [33] argues that operational rather than computational "
+    par(r"DCVC-RT [31] argues that operational rather than computational "
         r"complexity is the speed bottleneck for neural codecs, and cites "
         r"channel reductions that yield linear rather than quadratic speedups. "
         r"Section 5.9 is an instance of that claim inside one loop. Removing "
@@ -841,7 +841,7 @@ def content(colw, fullw):
            r"not degenerate at either end, which is what makes the choice "
            r"worth making.")
     h2("The decoder.")
-    par(r"We work on the intra decoder of DCVC-UF [14]. The analysis side "
+    par(r"We work on the intra decoder of DCVC-UF [12]. The analysis side "
         r"stays frozen throughout: the patch embedding, the chunk encoder, the "
         r"entropy model and the coded payload are never touched (Figure 1). "
         r"What we replace is the synthesis trunk that turns the decoded latent "
@@ -970,7 +970,7 @@ def content(colw, fullw):
         r"frame is 40 tiles and a 416×240 frame is 2, and the second is "
         r"already close to having no choice to make (Section 5.3). Standardised "
         r"codecs bracket their own partition the same way and land nearby, at "
-        r"64 pixels in HEVC [9] and 128 in VVC [21], for reasons that include "
+        r"64 pixels in HEVC [7] and 128 in VVC [19], for reasons that include "
         r"this one. We measured 128 against 256 and report it, with the caveat "
         r"that the two come from different training runs.")
 
@@ -1036,9 +1036,9 @@ def content(colw, fullw):
     par(r"Problems of that shape are solved with a Lagrangian. Put a price λ on "
         r"compute, add λ c_k to the error of exit k, and the budget constraint "
         r"drops out; what is left is N separate one-tile problems, each a "
-        r"minimum over K−j numbers. Shoham and Gersho [28] showed that sweeping "
+        r"minimum over K−j numbers. Shoham and Gersho [26] showed that sweeping "
         r"the price this way traces the lower convex hull of what the units can "
-        r"achieve together, and Ortega and Ramchandran [29] made the "
+        r"achieve together, and Ortega and Ramchandran [27] made the "
         r"construction standard in image and video coding.")
     par(r"What λ does is set the exchange rate between compute and error. At "
         r"λ=0 compute is free and every tile takes whichever exit has the "
@@ -1103,7 +1103,7 @@ def content(colw, fullw):
         r"and the budget. The decoder reads the quality index out of the "
         r"bitstream, looks β up, and runs the argmax above; nothing in the "
         r"loop needs the source, and nothing needs a relaxation of the "
-        r"discrete choice [10] either, because the head is supervised on "
+        r"discrete choice [8] either, because the head is supervised on "
         r"the search's label rather than trained through the decision. "
         r"The table is 64 quality indices by however "
         r"many budgets a deployment offers, which is a few hundred floats.")
@@ -1160,7 +1160,7 @@ def content(colw, fullw):
         r"roughly a tile's colour and the standard deviations its texture, and "
         r"texture is what decides how many blocks a tile needs. The same pair "
         r"is what adaptive instance normalisation takes as a compact "
-        r"description of a feature map's style [53]. "
+        r"description of a feature map's style [51]. "
         r"That gives 96 + 64 + 1 = 161 numbers per tile, which pass "
         r"through LayerNorm and a three-layer perceptron of width 256 with "
         r"SiLU activations, ending in K logits. The whole head is 144,030 "
@@ -1203,8 +1203,8 @@ def content(colw, fullw):
         r"of the oracle's. A tile whose two best exits are nearly tied then "
         r"counts for less than one where the wrong choice is expensive. A "
         r"router like this can collapse onto a single exit during training, so "
-        r"it carries a balancing term; ours is loss-free [16], unlike the "
-        r"auxiliary loss a mixture-of-experts router carries [7], and is "
+        r"it carries a balancing term; ours is loss-free [14], unlike the "
+        r"auxiliary loss a mixture-of-experts router carries [5], and is "
         r"biased "
         r"toward the oracle's own exit distribution instead of toward uniform. "
         r"At a high λ the oracle genuinely does send every tile to one exit, "
@@ -1227,7 +1227,7 @@ def content(colw, fullw):
         r"feature to RGB, so matching the deeper feature is the stronger "
         r"constraint, with 384 dense channels of target instead of 3. Each "
         r"exit imitates its neighbour, exit k following exit k+1, and not the "
-        r"deepest exit, for the reason given in [19].")
+        r"deepest exit, for the reason given in [17].")
     par(r"We train the adapters <i>through the tiled decode path they are "
         r"deployed in</i>. Training them full frame and tiling only at "
         r"inference loses 0.14–0.24 dB; training through the deployed path "
@@ -1304,7 +1304,7 @@ def content(colw, fullw):
         r"gradient past a boundary amplifies whatever noise sits on that "
         r"boundary, and assuming local constancy does not. The gap is wide, "
         r"\SeamLinearHigh dB against \SeamReplHigh dB at q63. <b>The best "
-        r"estimator loses on cost.</b> The per-channel AR(1) fit of [11] "
+        r"estimator loses on cost.</b> The per-channel AR(1) fit of [9] "
         r"reaches \SeamArlsHigh dB, about 0.02 dB better than replication, and "
         r"it costs 10.7% of decode wall-clock. Against a 0.1 dB budget and a "
         r"~24% saving that trade does not close, so we drop it.")
@@ -1343,7 +1343,7 @@ def content(colw, fullw):
            r"<b>d</b>, a cut through a tile. The gate reaches 0.76 at a corner "
            r"and flattens at 0.17 rather than switching off.")
     par(r"What a standard codec does about a partition boundary is deblock it, "
-        r"with a filter applied after reconstruction [9, 21] ([[fig:seam_gate]]). The tile lattice "
+        r"with a filter applied after reconstruction [7, 19] ([[fig:seam_gate]]). The tile lattice "
         r"is known "
         r"exactly at training and at inference, so ours can be <i>told</i> "
         r"where to look instead of having to infer it")
@@ -1351,7 +1351,7 @@ def content(colw, fullw):
        r"\cdot \mathrm{PW}\left(\mathrm{WSiLU}(\mathrm{DW}_{3\times3}(f))\right)")
     rows_tbl([["", ""],
               ["PW, DW", "a pointwise convolution and a depthwise one"],
-              ["WSiLU", "the weighted SiLU of the DCVC line [33]"],
+              ["WSiLU", "the weighted SiLU of the DCVC line [31]"],
               ["G", "a P×P gate, shared over all channels"],
               ["P", "the tile pitch, in feature samples"],
               ["G at step 0", "exp(−d/τ), with d the distance to the nearest "
@@ -1370,7 +1370,7 @@ def content(colw, fullw):
     par(r"Only 0.29% of each block has spatial extent, so the exact fix is "
         r"affordable ([[fig:seam_repair_grid]]). Give the 3×3 its real neighbours across the tile border, "
         r"a <i>halo exchange</i> narrowed to the one operator that needs it; "
-        r"local padding [31] does the same at every layer. The cost is "
+        r"local padding [29] does the same at every layer. The cost is "
         r"+0.032% of the decode, thirty times less than the deblocking "
         r"filter. The fix is also exact. At uniform depth a tiled decode with "
         r"the exchange is bit-identical to a full-frame one, once the "
@@ -1414,7 +1414,7 @@ def content(colw, fullw):
         r"of the encoder's; and what does any of it come to in seconds and "
         r"joules rather than arithmetic.")
     h2("Setup.")
-    par(r"We fine-tune the decoder on 512×512 crops from OpenImages with the "
+    par(r"We fine-tune the decoder on 512×512 crops from OpenImages [22] with the "
         r"encoder frozen (max|Δ| = 0 is asserted every run). One λ_rd is drawn "
         r"per sample from a log-spaced range covering all 64 quality indices, "
         r"so a single set of weights covers the whole rate range. The ladder "
@@ -1422,8 +1422,8 @@ def content(colw, fullw):
         r"almost all in the adapters, and the pinned checkpoint is one pass "
         r"over \TrainImages images. We evaluate "
         r"on one intra frame from each of the \NumSeq sequences of the common "
-        r"test set (CTC: UVG [28], MCL-JCV [29] and HEVC classes B, C, D and "
-        r"E [9]). One frame per sequence and not several: this is the intra "
+        r"test set (CTC: UVG [23], MCL-JCV [24] and HEVC classes B, C, D and "
+        r"E [7]). One frame per sequence and not several: this is the intra "
         r"path, every sequence opens with exactly one such frame, and taking "
         r"more from a sequence would re-measure the same content and weight "
         r"the long sequences more.")
@@ -1600,7 +1600,7 @@ def content(colw, fullw):
         r"cheapest router we can think of. It has no parameters and no "
         r"training, and the number is available before the trunk starts. It is "
         r"also the natural analogue of the confidence rules used by early-exit "
-        r"classifiers [3, 20], which likewise read a signal off the network's "
+        r"classifiers [3, 18], which likewise read a signal off the network's "
         r"own output.")
     figure("exituse.png",
            r"<b>Figure N. How deep each class has to go.</b> Mean exit taken "
@@ -2072,7 +2072,7 @@ def content(colw, fullw):
         r"within 0.1 points, which is the check that the interpolation is real.")
     par(r"Per-block bit allocation is a standard quantity in learned "
         r"compression, where it is something to <i>choose</i>; block-level "
-        r"rate control sets it so that complex regions get more bits [42]. We "
+        r"rate control sets it so that complex regions get more bits [40]. We "
         r"read the same number in the other direction, after the fact and at "
         r"the decoder, as a statement about how hard a region was. It costs "
         r"nothing because someone else has already paid for it.")
@@ -2611,72 +2611,69 @@ def content(colw, fullw):
 # reference numbers. paper/main.tex resolves these through bibtex; there is no
 # bibtex here, so the map is explicit and lives beside REFS. A key that is not
 # here prints no citation rather than a wrong one.
-CITE = {
-    "arls": 11, "slimcae": 22, "slimvc": 23, "evc": 22,
-    "spatialcompetition": 27, "dcvcrt": 33, "dcvcfm": 13, "dcvcuf": 14,
-    "hpcm": 43, "elic": 44, "stf": 45, "tcm": 46, "mlicpp": 47, "flic": 48,
-    "mambavc": 49, "weconvene": 50, "charm": 51, "dcvcdc": 52,
+CITE = { "arls": 9, "slimcae": 20, "slimvc": 21, "evc": 54,
+    "spatialcompetition": 25, "dcvcrt": 31, "dcvcfm": 11, "dcvcuf": 12,
+    "hpcm": 41, "elic": 42, "stf": 43, "tcm": 44, "mlicpp": 45,
+    "flic": 46, "mambavc": 47, "weconvene": 48, "charm": 49, "dcvcdc": 50,
 }
 
 REFS = [
- "S. Wang et al. Adaptive patch exiting for scalable single image super-resolution. ECCV, 2022.",
- "J. Ballé et al. Variational image compression with a scale hyperprior. ICLR, 2018.",
- "G. Huang et al. Multi-scale dense networks for resource efficient image classification. ICLR, 2018.",
- "G. Bjøntegaard. Calculation of average PSNR differences between RD curves. VCEG-M33, 2001.",
- "B. Bross et al. Overview of the Versatile Video Coding standard. IEEE TCSVT, 2021.",
- "Z. Cheng et al. Learned image compression with discretized Gaussian mixture likelihoods. CVPR, 2020.",
- "W. Fedus et al. Switch Transformers. JMLR, 2022.",
- "G. Huang et al. Glance and Focus networks for dynamic visual recognition. IEEE TPAMI, 2023.",
- "G. J. Sullivan et al. Overview of the High Efficiency Video Coding standard. IEEE TCSVT, 2012.",
- "E. Jang et al. Categorical reparameterization with Gumbel-softmax. ICLR, 2017.",
- "T. Kaseva et al. Per-channel autoregressive linear prediction padding in tiled CNN processing of 2D spatial data. arXiv:2502.12300, 2025.",
- "X. Kong et al. ClassSR: a general framework to accelerate super-resolution networks by data characteristic. CVPR, 2021.",
- "J. Li, B. Li, Y. Lu. Neural video compression with feature modulation. CVPR, 2024.",
- "J. Li, B. Li, Y. Lu. Uniformly accelerated neural video codec with feature refinement. ACM MM, 2024.",
- "Y. Kaya et al. Shallow-deep networks: understanding and mitigating network overthinking. ICML, 2019.",
- "L. Wang et al. Auxiliary-loss-free load balancing strategy for mixture-of-experts. arXiv:2408.15664, 2024.",
- "M. Phuong, C. H. Lampert. Distillation-based training for multi-exit architectures. ICCV, 2019.",
- "S. Scardapane et al. Why should we add early exits to neural networks? Cognitive Computation, 2020.",
- "W. Sun et al. Multi-exit self-distillation with appropriate teachers. FITEE, 2024.",
- "S. Teerapittayanon et al. BranchyNet: fast inference via early exiting from deep neural networks. ICPR, 2016.",
- "B. Bross et al. Versatile Video Coding. IEEE TCSVT, 2021.",
- "F. Yang et al. Slimmable compressive autoencoders for practical neural image compression. CVPR, 2021.",
- "M. A. Yilmaz et al. Slimmable video codec. CVPRW, 2022.",
- "A. Kuznetsova et al. The Open Images Dataset V4. IJCV, 2020.",
- "A. Mercat et al. UVG dataset: 50/120fps 4K sequences for video codec analysis. ACM MMSys, 2020.",
- "H. Wang et al. MCL-JCV: a JND-based H.264/AVC video quality assessment dataset. ICIP, 2016.",
- "T. Blard et al. Spatial competition for low-complexity learned image compression. arXiv:2605.13243, 2026.",
- "Y. Shoham, A. Gersho. Efficient bit allocation for an arbitrary set of quantizers. IEEE TASSP, 1988.",
- "A. Ortega, K. Ramchandran. Rate-distortion methods for image and video compression. IEEE SPM, 1998.",
- "Adaptive test-time compute allocation for reasoning LLMs via constrained policy optimization. arXiv:2604.14853, 2026.",
- "H. A. Alhaija et al. Local padding in patch-based GANs for seamless infinite-sized texture synthesis. arXiv:2309.02340, 2023.",
- "C. Innamorati et al. Overlap training to mitigate inconsistencies caused by image tiling in CNNs. arXiv:1812.02203, 2018.",
- "Z. Jia et al. Towards practical real-time neural video compression. CVPR, 2025.",
- "B. A. Hasan et al. Adaptive inference: theoretical limits and unexplored opportunities. arXiv:2402.04359, 2024.",
- "Y. Gao et al. Exploring the rate-distortion-complexity optimization in neural image compression. CVIU, 2024.",
- "Y.-H. Ho et al. On the rate-distortion-complexity trade-offs of neural video coding. arXiv:2410.03898, 2024.",
- "C. Zhang, W. Gao. Learned rate control for frame-level adaptive neural video compression via dynamic neural network. arXiv:2508.20709, 2025.",
- "Y. Geifman, R. El-Yaniv. Selective classification for deep neural networks. NeurIPS, 2017.",
- "D. Madras et al. Predict responsibly: improving fairness and accuracy by learning to defer. NeurIPS, 2018.",
- "H. Mozannar, D. Sontag. Consistent estimators for learning to defer to an expert. ICML, 2020.",
- "G. DeSalvo et al. Budgeted multiple-expert deferral. arXiv:2510.26706, 2025.",
- "M. Dong, M. Lu, and Z. Ma. Accelerating block-level rate control for learned image compression. arXiv:2409.01009, 2024.",
-    "Y. Li et al. Learned image compression with hierarchical progressive context modeling. ICCV, 2025.",
-    "D. He, Z. Yang, W. Peng, R. Ma, H. Qin, Y. Wang. ELIC: efficient learned image compression with unevenly grouped space-channel contextual adaptive coding. CVPR, 2022.",
-    "R. Zou, C. Song, Z. Zhang. The devil is in the details: window-based attention for image compression. CVPR, 2022.",
-    "J. Liu, H. Sun, J. Katto. Learned image compression with mixed transformer-CNN architectures. CVPR, 2023.",
-    "W. Jiang, R. Wang. MLIC++: linear complexity multi-reference entropy modeling for learned image compression. ICML Neural Compression Workshop, 2023.",
-    "H. Li, S. Li, W. Dai, C. Li, J. Zou, H. Xiong. Frequency-aware transformer for learned image compression. ICLR, 2024.",
-    "S. Qin et al. MambaVC: learned visual compression with selective state spaces. arXiv:2405.15413, 2024.",
-    "H. Fu, J. Liang, Z. Fang, J. Han, F. Liang, G. Zhang. WeConvene: learned image compression with wavelet-domain convolution and entropy model. ECCV, 2024.",
-    "D. Minnen, S. Singh. Channel-wise autoregressive entropy models for learned image compression. ICIP, 2020.",
-    "J. Li, B. Li, Y. Lu. Neural video compression with diverse contexts. CVPR, 2023.",
- "X. Huang, S. Belongie. Arbitrary style transfer in real-time with adaptive "
- "instance normalization. ICCV, 2017.",
- "M. Wolczyk et al. Zero time waste: recycling predictions in early exit neural "
- "networks. NeurIPS, 2021.",
- "L. Yang et al. Resolution adaptive networks for efficient inference. CVPR, 2020.",
+ 'S. Wang et al. Adaptive patch exiting for scalable single image super-resolution. ECCV, 2022.',
+ 'J. Ballé et al. Variational image compression with a scale hyperprior. ICLR, 2018.',
+ 'G. Huang et al. Multi-scale dense networks for resource efficient image classification. ICLR, 2018.',
+ 'G. Bjøntegaard. Calculation of average PSNR differences between RD curves. VCEG-M33, 2001.',
+ 'W. Fedus et al. Switch Transformers. JMLR, 2022.',
+ 'G. Huang et al. Glance and Focus networks for dynamic visual recognition. IEEE TPAMI, 2023.',
+ 'G. J. Sullivan et al. Overview of the High Efficiency Video Coding standard. IEEE TCSVT, 2012.',
+ 'E. Jang et al. Categorical reparameterization with Gumbel-softmax. ICLR, 2017.',
+ 'T. Kaseva et al. Per-channel autoregressive linear prediction padding in tiled CNN processing of 2D spatial data. arXiv:2502.12300, 2025.',
+ 'X. Kong et al. ClassSR: a general framework to accelerate super-resolution networks by data characteristic. CVPR, 2021.',
+ 'J. Li, B. Li, Y. Lu. Neural video compression with feature modulation. CVPR, 2024.',
+ 'J. Li, B. Li, Y. Lu. Uniformly accelerated neural video codec with feature refinement. ACM MM, 2024.',
+ 'Y. Kaya et al. Shallow-deep networks: understanding and mitigating network overthinking. ICML, 2019.',
+ 'L. Wang et al. Auxiliary-loss-free load balancing strategy for mixture-of-experts. arXiv:2408.15664, 2024.',
+ 'M. Phuong, C. H. Lampert. Distillation-based training for multi-exit architectures. ICCV, 2019.',
+ 'S. Scardapane et al. Why should we add early exits to neural networks? Cognitive Computation, 2020.',
+ 'W. Sun et al. Multi-exit self-distillation with appropriate teachers. FITEE, 2024.',
+ 'S. Teerapittayanon et al. BranchyNet: fast inference via early exiting from deep neural networks. ICPR, 2016.',
+ 'B. Bross et al. Versatile Video Coding. IEEE TCSVT, 2021.',
+ 'F. Yang et al. Slimmable compressive autoencoders for practical neural image compression. CVPR, 2021.',
+ 'M. A. Yilmaz et al. Slimmable video codec. CVPRW, 2022.',
+ 'A. Kuznetsova et al. The Open Images Dataset V4. IJCV, 2020.',
+ 'A. Mercat et al. UVG dataset: 50/120fps 4K sequences for video codec analysis. ACM MMSys, 2020.',
+ 'H. Wang et al. MCL-JCV: a JND-based H.264/AVC video quality assessment dataset. ICIP, 2016.',
+ 'T. Blard et al. Spatial competition for low-complexity learned image compression. arXiv:2605.13243, 2026.',
+ 'Y. Shoham, A. Gersho. Efficient bit allocation for an arbitrary set of quantizers. IEEE TASSP, 1988.',
+ 'A. Ortega, K. Ramchandran. Rate-distortion methods for image and video compression. IEEE SPM, 1998.',
+ 'Adaptive test-time compute allocation for reasoning LLMs via constrained policy optimization. arXiv:2604.14853, 2026.',
+ 'H. A. Alhaija et al. Local padding in patch-based GANs for seamless infinite-sized texture synthesis. arXiv:2309.02340, 2023.',
+ 'C. Innamorati et al. Overlap training to mitigate inconsistencies caused by image tiling in CNNs. arXiv:1812.02203, 2018.',
+ 'Z. Jia et al. Towards practical real-time neural video compression. CVPR, 2025.',
+ 'B. A. Hasan et al. Adaptive inference: theoretical limits and unexplored opportunities. arXiv:2402.04359, 2024.',
+ 'Y. Gao et al. Exploring the rate-distortion-complexity optimization in neural image compression. CVIU, 2024.',
+ 'Y.-H. Ho et al. On the rate-distortion-complexity trade-offs of neural video coding. arXiv:2410.03898, 2024.',
+ 'C. Zhang, W. Gao. Learned rate control for frame-level adaptive neural video compression via dynamic neural network. arXiv:2508.20709, 2025.',
+ 'Y. Geifman, R. El-Yaniv. Selective classification for deep neural networks. NeurIPS, 2017.',
+ 'D. Madras et al. Predict responsibly: improving fairness and accuracy by learning to defer. NeurIPS, 2018.',
+ 'H. Mozannar, D. Sontag. Consistent estimators for learning to defer to an expert. ICML, 2020.',
+ 'G. DeSalvo et al. Budgeted multiple-expert deferral. arXiv:2510.26706, 2025.',
+ 'M. Dong, M. Lu, and Z. Ma. Accelerating block-level rate control for learned image compression. arXiv:2409.01009, 2024.',
+ 'Y. Li et al. Learned image compression with hierarchical progressive context modeling. ICCV, 2025.',
+ 'D. He, Z. Yang, W. Peng, R. Ma, H. Qin, Y. Wang. ELIC: efficient learned image compression with unevenly grouped space-channel contextual adaptive coding. CVPR, 2022.',
+ 'R. Zou, C. Song, Z. Zhang. The devil is in the details: window-based attention for image compression. CVPR, 2022.',
+ 'J. Liu, H. Sun, J. Katto. Learned image compression with mixed transformer-CNN architectures. CVPR, 2023.',
+ 'W. Jiang, R. Wang. MLIC++: linear complexity multi-reference entropy modeling for learned image compression. ICML Neural Compression Workshop, 2023.',
+ 'H. Li, S. Li, W. Dai, C. Li, J. Zou, H. Xiong. Frequency-aware transformer for learned image compression. ICLR, 2024.',
+ 'S. Qin et al. MambaVC: learned visual compression with selective state spaces. arXiv:2405.15413, 2024.',
+ 'H. Fu, J. Liang, Z. Fang, J. Han, F. Liang, G. Zhang. WeConvene: learned image compression with wavelet-domain convolution and entropy model. ECCV, 2024.',
+ 'D. Minnen, S. Singh. Channel-wise autoregressive entropy models for learned image compression. ICIP, 2020.',
+ 'J. Li, B. Li, Y. Lu. Neural video compression with diverse contexts. CVPR, 2023.',
+ 'X. Huang, S. Belongie. Arbitrary style transfer in real-time with adaptive instance normalization. ICCV, 2017.',
+ 'M. Wolczyk et al. Zero time waste: recycling predictions in early exit neural networks. NeurIPS, 2021.',
+ 'L. Yang et al. Resolution adaptive networks for efficient inference. CVPR, 2020.',
+ 'G.-H. Wang, J. Li, B. Li, Y. Lu. EVC: towards real-time neural image compression with mask decay. ICLR, 2023.',
 ]
+
 
 
 def build(out="paper/FLEX-UF.pdf"):
@@ -2784,7 +2781,7 @@ def build(out="paper/FLEX-UF.pdf"):
     else:
         BANNER_PNG = "dcvcuf_framework.png"
         banner_cap = ("<b>Figure 1. The decoder we modify.</b> Figure 3 of "
-                      "DCVC-UF [14], reproduced. Everything up to the "
+                      "DCVC-UF [12], reproduced. Everything up to the "
                       "reconstruction stays frozen in this work: the patch "
                       "embedding, the chunk encoder, the entropy model and the "
                       "coded payload. FLEX-UF replaces the frame-specific "
