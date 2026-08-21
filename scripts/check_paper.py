@@ -284,8 +284,8 @@ if bc:
         claim("band on BEST: raw spread", 16.9, bb["raw_spread_at_tenth_db"], 0.2)
         claim("band on BEST: spread after rescaling", 1.6,
               bb["band_spread_mean"], 0.2)
-        claim("band on BEST: power-law exponent", 0.33, bb["power_exponent"], 0.01)
-        claim("band on BEST: power-law R2", 0.984, bb["power_r2"], 0.002)
+        claim("band on BEST: power-law exponent", 0.28, bb["power_exponent"], 0.01)
+        claim("band on BEST: power-law R2", 0.907, bb["power_r2"], 0.002)
 
 # ---- the retrain ----------------------------------------------------------
 rt = J("router_retrain_compare.json")

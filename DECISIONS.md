@@ -5367,3 +5367,26 @@ which sits in a results file and was typed.
 The check is cheap and its allow-list is the interesting part -- it is a record
 of which typed numbers somebody has actually looked at, which is not something
 the repository had before.
+
+## 117. The BEST band collapse was fitted against a ceiling the paper had corrected
+
+`budget_band_BEST.png` and `results/band_collapse_BEST.json` were made on
+19 August with `ceiling_pct = 41.91`, which is the modelled ceiling from before
+the FFN adapter was found to cost 5C^2. The paper corrected that everywhere
+else -- `tradeoff_figure.py` reads `results/ceiling_measured.json` and gets
+38.33 -- but the BEST variant of the figure is produced by the same script with
+different positional arguments, so it has no entry in the producer map and was
+never regenerated.
+
+Refitting against the right ceiling weakens a robustness claim, which is why
+it is worth stating plainly. The exponent moves from 0.33 to 0.28, R² from
+0.984 to 0.907, and the worst-case error of the one-parameter fit from 1.9
+points to 4.1. The spreads do not move at all: 16.9 points at a matched decibel
+and 1.6 after rescaling, exactly as before.
+
+So what replicates across the two checkpoints is the collapse itself -- the
+rate dependence really is the band, on both runs -- and not the quality of the
+power law used to describe it. The paper said "again a power law, R² = 0.984".
+It now says the curve collapses the same way and the power law fits it less
+well, with both fits and both errors printed. Two checked claims were updated
+to the corrected values rather than the sentence being left to drift.

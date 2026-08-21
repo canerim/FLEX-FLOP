@@ -946,6 +946,11 @@ if bc:
         mac("BandExp", f"{bc['power_exponent']:.2f}")
         mac("BandRTwo", f"{bc['power_r2']:.3f}")
         mac("BandFitErr", f"{bc['power_max_err']:.1f}")
+        try:
+            _bb = json.load(open(RES / "band_collapse_BEST.json"))
+            mac("BandFitErrB", f"{_bb['power_max_err']:.1f}")
+        except Exception as _e:
+            print("   BEST fit error:", _e)
     bb, _ = pick("band_collapse_BEST.json")
     if bb:
         mac("BandRawSpreadB", f"{bb['raw_spread_at_tenth_db']:.1f}")

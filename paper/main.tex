@@ -1490,8 +1490,11 @@ report it as a description of these curves and read nothing into its value.
 measurement on a different training run, \texttt{BEST}, a separate recipe taken
 at a different epoch, and the same thing happens. The rates are
 \BandRawSpreadB\ points apart at a matched decibel and \BandSpreadMeanB\ after
-rescaling, and the collapsed curve is again a power law, $R^2 = \BandRTwoB$. The
-\emph{exponent} does not carry over: \BandExpB\ there against \BandExp\ here, so
+rescaling, and the collapsed curve collapses the same way, though the power law fits it
+less well: $R^2 = \BandRTwoB$ against \BandRTwo\ here, and \BandFitErrB\ points
+of worst-case error against \BandFitErr. What replicates is the collapse, not
+the quality of the one-parameter description of it. The \emph{exponent} does
+not carry over either: \BandExpB\ there against \BandExp\ here, so
 it describes a trained decoder and not the architecture. What replicates is the
 collapse. Within a checkpoint, the rate dependence of the trade-off is the rate
 dependence of the band (Fig.~\ref{fig:tradeoff}).
