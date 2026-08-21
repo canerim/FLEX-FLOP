@@ -107,6 +107,7 @@ DELIB = [
     ("--anchor_weight", "en derin cikisi yayinlanmis decoder'a baglamak"),
     ("--new_lr_scale", "sifir-baslatmali modullere ayri lr"),
     ("--freeze_encoder", "encoder'i tamamen dondurmak"),
+    ("--bf16", "bfloat16 autocast; kayiplar fp32'de hesaplanir"),
 ]
 for flag, why in DELIB:
     check(f"BILEREK EKLENDI {flag}", flag in OURS, why)

@@ -26,6 +26,7 @@ while true; do
   FP=$(echo "$OUT" | grep -oE 'check_fig_prose: [A-Za-z0-9 ()]+' | head -1 | sed 's/check_fig_prose: //')
   FO=$(echo "$OUT" | grep -oE 'check_fig_overlap: [A-Za-z0-9 ()/,]+' | head -1 | sed 's/check_fig_overlap: //')
   CT=$(echo "$OUT" | grep -oE 'check_cites: [A-Za-z0-9 ()]+' | head -1 | sed 's/check_cites: //')
+  NU=$(echo "$OUT" | grep -oE 'check_numbers: [A-Za-z0-9 ()]+' | head -1 | sed 's/check_numbers: //')
   # A page count that comes back empty is the PDF being rewritten as we read
   # it, not a missing paper. Saying "building" costs one word and stops a
   # blank field looking like a broken artefact.
@@ -42,11 +43,21 @@ while true; do
   NEWEST=$(stat -c %Y runs/*/ckpt_eval.pth.tar runs/*/ckpt_step.pth.tar \
            2>/dev/null | sort -rn | head -1)
   AGE=$([ -n "${NEWEST:-}" ] && echo "$(( ($(date +%s) - NEWEST) / 60 ))m" || echo "-")
-  EP=$(for t in RECIPE512 BEST COUPLED512 FINE12; do
+  EP=$(for t in RECIPE512 BEST FINE12 SCRATCH105; do
          f=$(ls -t runs/$t/*.log 2>/dev/null | head -1)
          [ -n "$f" ] && tail -1 "$f" 2>/dev/null | grep -o '"epoch": [0-9]*' | head -1 \
            | grep -o '[0-9]*$' | sed "s/^/${t:0:4}/"
        done | tr '\n' ' ')
-  echo "$TS  fix $FIX | claims $CHK twins $TW tex $TX prose $PR layout $LY figs $FR render $RN figprose $FP overlap "$FO" cites $CT | paper ${MAIN}p supp ${SUPP}p | gpu ours=$OURS others=$OTHER | newest ckpt $AGE | ep $EP"
+  SC=$(tail -1 runs/SCRATCH105/train.log 2>/dev/null \
+       | ./.venv/bin/python -c "
+import sys, json
+try:
+    d = json.loads(sys.stdin.read())
+except Exception:
+    print('-'); raise SystemExit
+print(f\"ep{d['epoch']} {100*d['seen']/d['total']:.1f}% spread {d['spread_dB']:+.2f}dB {d['sec']:.0f}s/200\")
+" 2>/dev/null)
+  SCALIVE=$(pgrep -fc "save_dir.*SCRATCH105" 2>/dev/null || echo 0)
+  echo "$TS  fix $FIX | claims $CHK twins $TW tex $TX prose $PR layout $LY figs $FR render $RN figprose $FP overlap "$FO" cites $CT numbers $NU | paper ${MAIN}p supp ${SUPP}p | gpu ours=$OURS others=$OTHER | newest ckpt $AGE | ep $EP | scratch ${SC:--} pids=$SCALIVE"
   sleep "$INTERVAL"
 done

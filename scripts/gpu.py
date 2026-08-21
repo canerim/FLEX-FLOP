@@ -80,6 +80,14 @@ def pick(fallback: str = "cuda:0") -> str:
     if env:
         _CACHE["device"] = env
         return env
+    # Under CUDA_VISIBLE_DEVICES the driver's indices are not torch's. Asking
+    # nvidia-smi and returning cuda:7 into a process that can see one card
+    # raises "invalid device ordinal", which is what happened to
+    # pipeline_stage_figs. Inside a restricted view there is nothing to pick.
+    vis = os.environ.get("CUDA_VISIBLE_DEVICES")
+    if vis is not None and vis.strip() != "":
+        _CACHE["device"] = "cuda:0"
+        return "cuda:0"
     try:
         rows = subprocess.run(
             ["nvidia-smi", "--query-gpu=index,uuid,memory.used,memory.total",

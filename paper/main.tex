@@ -639,14 +639,15 @@ What the search costs the \emph{encoder} depends on how the table of $D_{t,k}$ i
 built, and the two ways of building it are further apart than they look. Take one
 tiled decode at 1080p as the unit. The deployed table of
 Section~\ref{sec:setting} needs one tiled decode per exit, which comes to
-$4.6\times$ the unit rather than $K$ times it, because a shallow exit is cheaper
+$\EncDeployedX\times$ the unit rather than $K$ times it, because a shallow exit is cheaper
 to run than a full one. The full-frame table taps every exit off a single
-full-frame pass and comes to $1.4\times$. Section~\ref{sec:exp} shows that the
+full-frame pass and comes to $\EncFullFrameX\times$. Section~\ref{sec:exp} shows that the
 full-frame table must not be used to \emph{report} quality, but it can still be
 used to \emph{rank}. Running the argmin on it, and the deployed path only to
-check the budget, we find the two searches agree on $85\%$ of tiles and land
-within $0.4$ points of saving of each other ($19.0\%$ against $18.6\%$, both under budget). The exact search therefore
-costs $4.6$ decodes and a practical encoder need not pay it; ranking on the
+check the budget, we find the two searches agree on \EncAgree\% of tiles and land
+within \EncSavingGap\ points of saving of each other (\EncApproxSaving\%
+against \EncExactSaving\%, both under budget). The exact search therefore
+costs \EncDeployedX\ decodes and a practical encoder need not pay it; ranking on the
 full-frame table is the one extra decode per frame we quote for A.
 
 The decoder cannot run~(\ref{eq:lagrangian}). $D_{t,k}$ is the error against the
@@ -988,8 +989,8 @@ $0.041\dB$ tiling costs on this frame.}
 $G$, one scalar per position within a tile, shared across all $384$ channels.
 \textbf{b}, the same gate tiled over the canvas, which is how it is applied.
 \textbf{c}, the correction it adds on a real frame: the tile lattice and nothing
-else. \textbf{d}, a cut through a tile. The gate reaches $0.76$ at a corner and
-flattens at $0.17$ rather than switching off.}
+else. \textbf{d}, a cut through a tile. The gate reaches \GateMax at a corner and
+flattens at \GateMin\ rather than switching off.}
 \label{fig:seam_gate}
 \end{figure}
 
@@ -1088,10 +1089,12 @@ result by $0.6$--$0.8$ points. Rate--distortion differences are integrated as
 BD-Rate~\cite{bjontegaard} over the five quality indices. Means are taken over unrounded values, so
 averaging a printed row can differ from the printed mean by a unit in the last
 place.
-Two implementations of the same quantity have differed here by as much as
-$3.29$ saving points, and the choice between per-frame and pooled distortion
-moves an integrated saving by 7 to 10, so the convention is not a detail and
-we fix it once.
+The conventions above are not bookkeeping. Measuring the same allocation per
+frame rather than pooled over the set moves an integrated saving by up to
+\ConvPooledMax\ points, and the interval a BD figure is integrated over moves a
+mean by \ConvIntervalRange\ across \ConvIntervalN\ defensible choices. Both are
+larger than several of the effects this paper reports, so the convention is
+fixed once and stated here.
 
 \subsection{Main result}
 
@@ -1243,7 +1246,7 @@ which likewise read a signal off the network's own output.
 It recovers most of the gap. At $q63$, random costs \RandomDb$\dB$ and the
 Lagrangian oracle $0.100\dB$ at identical compute, while the oracle-histogram bit ranking costs
 \RateRankDb$\dB$. That is \RateRankRecovers\% of the Lagrangian oracle's advantage over
-chance, at $0.68$--$0.79$ agreement with the oracle's map. A learned router
+chance, at \HistAgreeLo--\HistAgreeHi\ agreement with the oracle's map. A learned router
 therefore has to beat a calibrated bit rule that is already three quarters of the way
 there. We would not have run that comparison without this control, and we
 suggest that any adaptive-inference paper report it. Given the Lagrangian oracle's
@@ -1331,32 +1334,23 @@ no allocation left to make, and the Lagrangian degenerates towards a uniform
 choice. That suggests a fix. Choose the tile size relative to the frame, since
 the MAC count does not depend on tile size at all and only the seam does.
 
-\textbf{We tested that fix and it mostly does not work.} We compare the
-$256$\,px tiling against a $128$\,px one at $q0$, which multiplies the
-tile count by $3.4$:
+\textbf{We tested that fix and what it does depends on the rate, not on the
+resolution.} Halving the tile side multiplies the tile count by
+\TileCountMul. At $q0$ the smaller tile is ahead in \TileAheadLow\ of the
+\TileClassesN\ classes, by \TileGainLowMin\ to \TileGainLowMax\ points, and
+behind only on \TileLowLoser. At $q32$ and $q63$ it is behind on every class,
+by up to \TileBehindMidMax\ and \TileBehindHighMax\ points
+(Fig.~\ref{fig:exituse}).
 
-\begin{center}\small
-\begin{tabular}{lrrr}
-\toprule
-class & 256\,px & 128\,px & $\Delta$ \\
-\midrule
-MCL-JCV (1080p) & 36.3 & 34.3 & $-2.0$ \\
-HEVC B (1080p) & 33.8 & 32.1 & $-1.7$ \\
-HEVC C ($832{\times}480$) & 20.9 & 17.6 & $-3.3$ \\
-HEVC D ($416{\times}240$) & 11.3 & \textbf{13.7} & $\mathbf{+2.4}$ \\
-\bottomrule
-\end{tabular}
-\end{center}
-
-Smaller tiles help only at the smallest resolution, where the count goes from two
-to eight. Everywhere else they cost between $1.7$ and $3.3$ points, including at
-$832{\times}480$, where the count rises from $8$ to $28$ and the saving still
-falls. Beyond a modest number of tiles, the extra seam outweighs the extra
-granularity. We report the comparison as indicative, since the two
-tile sizes come from different training runs and tile size is therefore
-confounded with training. But the direction is consistent, and it is enough for
-us to say that a resolution-adaptive tile size is not the easy win the
-granularity argument suggests (Fig.~\ref{fig:exituse}).
+So granularity buys something only where the budget is loose relative to what
+a tile costs, and the seam it pays for grows with rate until it swallows the
+gain. Splicing the smaller tile into the classes that want it, and leaving the
+rest, is worth \TileSpliceDelta\ points on the set mean averaged over rates:
+nothing. We report the comparison as indicative, since the two tile sizes come
+from different training runs and the 128\,px run has \TileConfoundSteps\ steps
+more, which favours the column that wins at $q0$ and not the one that wins
+elsewhere. What survives the confound is that a resolution-adaptive tile size
+is not the easy win the granularity argument suggests.~\ref{fig:exituse}).
 
 \begin{figure}[t]
 \centering
@@ -2200,7 +2194,7 @@ and $0.3\dB$:
       budget at the highest rate. Splitting later ($j{=}4$ against $j{=}2$) puts
       twice as many blocks in the per-tile section, which by
       Eq.~(\ref{eq:contam}) raises the floor.
-\item At $0.5\dB$ the fine ladder wins by $6.7$ points, \FineHalfDb\% against
+\item At $0.5\dB$ the fine ladder wins by \FineHalfGain\ points, \FineHalfDb\% against
       \CoarseHalfDb\%, because the coarse one has been pinned at its ceiling
       since $0.3\dB$ and has nothing left to spend.
 \end{itemize}
@@ -2306,12 +2300,13 @@ buys nothing. The delivered distortion says the same, \DbAtThree\dB\ against a
 $0.3\dB$ allowance. A looser budget is not the way to get more out of this
 decoder; a finer ladder is, and Section~\ref{sec:exp} measures one.
 
-In wall clock on one RTX A6000 the $0.1\dB$ row decodes a padded 1080p frame in
-$89.6$ ms against the release's $110.8$, which is $9.0$ frames per second
-becoming $11.2$, and it does so for $26.6$ J against $33.0$. The arithmetic
-saving is $22.9\%$ at that rate and the energy saving is $19.3\%$, and the gap
-between those two numbers is the scheduling cost of a decode that runs its last
-groups on a handful of tiles.
+In wall clock on one RTX A6000, at \PowerQMid\ and the $0.1\dB$ budget, a
+padded 1080p frame decodes in \PowerMsMid\ ms against the release's
+\PowerMsFullMid, which is \PowerFpsFullMid\ frames per second becoming
+\PowerFpsMid, and it does so for \PowerJMid\ J against \PowerJFullMid. The
+arithmetic saving is \PowerMacMid\% at that rate and the energy saving is
+\PowerEnergyMid\%, and the gap between those two numbers is the scheduling
+cost of a decode that runs its last groups on a handful of tiles.
 
 \begin{table}[t]
 \centering

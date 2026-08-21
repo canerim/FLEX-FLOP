@@ -352,16 +352,34 @@ if rows:
                      r" \\")
     lines += [r"\bottomrule", r"\end{tabular}"]
     w("runs.tex", "\n".join(lines))
-    fm = dict(rows).get if False else None
+    _half = {}
     for tag, ep, m in rows:
         if tag == "FINE12":
-            mac("FineHalfDb", f"{m.get(0.5,(0,0))[0]:.1f}")
+            _half["fine"] = m.get(0.5, (0, 0))[0]
+            mac("FineHalfDb", f"{_half['fine']:.1f}")
         if tag == "RECIPE512":
-            mac("CoarseHalfDb", f"{m.get(0.5,(0,0))[0]:.1f}")
+            _half["coarse"] = m.get(0.5, (0, 0))[0]
+            mac("CoarseHalfDb", f"{_half['coarse']:.1f}")
+    # The margin between them, which Section 5.10 had as 6.7 typed into the
+    # sentence beside the two macros that make it. They now read 48.6 and 38.3,
+    # so the sentence disagreed with its own numbers by three and a half points.
+    if "fine" in _half and "coarse" in _half:
+        mac("FineHalfGain", f"{_half['fine'] - _half['coarse']:.1f}")
 
 # ------------------------------------------------------------- static baseline
 print("static baseline")
 d, _ = pick("static_RECIPE512_b01.json")
+# The oracle-histogram bit ranking's agreement with the oracle's map, which
+# Section 5.5 had as "0.68-0.79" typed into the sentence. It is the only
+# agreement number in the paper that is not the trained head's, and reusing
+# \RateRankAgree* for it would have been worse than typing it.
+try:
+    _ra = [r["rate_rank"]["agreement"] for r in d["rows"] if "rate_rank" in r]
+    if _ra:
+        mac("HistAgreeLo", f"{min(_ra):.2f}")
+        mac("HistAgreeHi", f"{max(_ra):.2f}")
+except Exception as _e:
+    print("   rate_rank agreement:", _e)
 if d:
     B = d["budget_db"]
     lines = [r"\begin{tabular}{llrr}", r"\toprule",
@@ -1034,6 +1052,97 @@ if cb:
         mac(f"BlendGain{tag}", f"{sv(bc) - sv(c0):+.1f}")
         mac(f"BlendGain{tag}Q", f"q{q}")
 
+# ------------------------------------------------------------- the seam gate
+# Its corner value and its plateau, which the figure's caption quoted from the
+# terminal. pipeline_stage_figs writes them now.
+print("seam gate")
+try:
+    _sg = json.load(open(RES / "seam_gate.json"))
+    mac("GateMax", f"{_sg['gate_max']:.2f}")
+    mac("GateMin", f"{_sg['gate_min']:.2f}")
+except Exception as _e:
+    print("   seam_gate.json:", _e)
+
+
+# ------------------------------------------------- what the search costs A
+# Section 3.5 quoted 4.6x for the deployed table where the file says 4.52,
+# and the other five numbers in that passage were typed too.
+print("encoder cost")
+try:
+    _ec = json.load(open(RES / "encoder_cost.json"))
+    mac("EncDeployedX", f"{_ec['x_deployed']:.1f}")
+    mac("EncFullFrameX", f"{_ec['x_full_frame']:.1f}")
+    mac("EncAgree", f"{100 * _ec['approx']['agreement']:.0f}")
+    mac("EncApproxSaving", f"{_ec['approx']['saving']:.1f}")
+    mac("EncExactSaving", f"{_ec['exact']['saving']:.1f}")
+    mac("EncSavingGap",
+        f"{abs(_ec['approx']['saving'] - _ec['exact']['saving']):.1f}")
+except Exception as _e:
+    print("   encoder_cost.json:", _e)
+
+
+# ------------------------------------------------------------- tile size
+# Section 5.3 compared a 256 px column of 36.3 / 33.8 / 20.9 / 11.3 against a
+# 128 px one. Those four numbers are in no results file: the live 256 px
+# column is 33.7 / 31.1 / 18.0 / 8.8, which is the paper's own per-class table
+# two paragraphs earlier. Comparing a stale column against a current one
+# reversed the sign at the lowest rate, where the supplement already says the
+# smaller tile is ahead in five classes of six.
+print("tile size")
+try:
+    _ts = json.load(open(RES / "tilesize_adaptive.json"))
+    _byq = {r["qp"]: r for r in _ts["per_qp"]}
+    _q0 = _byq[0]
+    _d0 = [(c["cls"], c["saving_128_pct"] - c["saving_256_pct"])
+           for c in _q0["classes"]]
+    _ahead = [c for c, v in _d0 if v > 0]
+    mac("TileAheadLow", str(len(_ahead)))
+    mac("TileClassesN", str(len(_d0)))
+    mac("TileGainLowMin", f"{min(v for _, v in _d0 if v > 0):+.1f}")
+    mac("TileGainLowMax", f"{max(v for _, v in _d0):+.1f}")
+    _behind0 = [c for c, v in _d0 if v <= 0]
+    mac("TileLowLoser", _behind0[0].replace("_", " ") if _behind0 else "none")
+    for _q, _n in ((32, "Mid"), (63, "High")):
+        _d = [c["saving_128_pct"] - c["saving_256_pct"]
+              for c in _byq[_q]["classes"]]
+        mac(f"TileBehind{_n}", str(sum(1 for v in _d if v < 0)))
+        mac(f"TileBehind{_n}Max", f"{-min(_d):.1f}")
+    mac("TileSpliceDelta",
+        f"{_ts['summary_over_qps']['mean_set_mean_delta_adaptive_minus_256']:+.2f}")
+    _c0 = _q0["classes"][0]
+    mac("TileCountMul", f"{_c0['tiles_128'] / _c0['tiles_256']:.1f}")
+    mac("TileConfoundSteps", f"{_ts['confound']['training_gap_steps']:,}")
+except Exception as _e:
+    print("   tilesize_adaptive.json:", _e)
+
+
+# ------------------------------------------------- what a convention is worth
+# The protocol paragraph used to say two implementations had differed by 3.29
+# saving points and that per-frame against pooled moved an integrated saving by
+# 7 to 10. Neither number is in results/ any more, and the second is off by a
+# factor of three against what the pinned files measure. Both are computed here
+# now, from the files the supplement integrates.
+print("conventions")
+try:
+    _pf = json.load(open(RES / "supp_bd_PAPER_per_frame.json"))["rows"]
+    _po = json.load(open(RES / "supp_bd_PAPER_pooled.json"))["rows"]
+    _pairs = [(a["bd_saving_pct"], b["bd_saving_pct"])
+              for a, b in zip(_pf, _po)
+              if a.get("bd_saving_pct") is not None
+              and b.get("bd_saving_pct") is not None]
+    if _pairs:
+        mac("ConvPooledMax", f"{max(abs(x - y) for x, y in _pairs):.1f}")
+except Exception as _e:
+    print("   pooled vs per-frame:", _e)
+try:
+    _iv = [r["mean_bd_saving_pct"]
+           for r in json.load(open(RES / "bd_sensitivity.json"))["rows"]]
+    mac("ConvIntervalRange", f"{max(_iv) - min(_iv):.1f}")
+    mac("ConvIntervalN", str(len(_iv)))
+except Exception as _e:
+    print("   bd interval:", _e)
+
+
 # ---------------------------------------------------------------- BD-Rate
 print("BD-Rate")
 bdj, _ = pick("bdrate.json")
@@ -1316,6 +1425,16 @@ try:
             mac(f"PowerMac{_n}", f"{_x['mac_saving_pct']:.1f}")
             mac(f"PowerTime{_n}", f"{_x['time_saving_pct']:.1f}")
             mac(f"PowerEnergy{_n}", f"{_x['energy_saving_pct']:.1f}")
+            # The milliseconds, frames and joules behind those percentages.
+            # Section 6 had all six typed into a sentence that did not say
+            # which rate they belong to, and a reader would take them for q0.
+            mac(f"PowerMs{_n}", f"{_x['routed']['ms_median']:.1f}")
+            mac(f"PowerMsFull{_n}", f"{_x['full']['ms_median']:.1f}")
+            mac(f"PowerFps{_n}", f"{1000 / _x['routed']['ms_median']:.1f}")
+            mac(f"PowerFpsFull{_n}", f"{1000 / _x['full']['ms_median']:.1f}")
+            mac(f"PowerJ{_n}", f"{_x['joules_per_frame_routed']:.1f}")
+            mac(f"PowerJFull{_n}", f"{_x['joules_per_frame_full']:.1f}")
+            mac(f"PowerQ{_n}", f"q{_q}")
 except Exception as _e:
     print("   supp_power.json:", _e)
 try:

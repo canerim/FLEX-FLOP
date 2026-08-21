@@ -135,6 +135,8 @@ class FlexUFIntra(DMCI):
             "bpp": bpp,
             "bits_y": bits_y,
             "bits_z": bits_z,
+            "_y_hat": y_hat,
+            "_q_dec": curr_q_dec,
         }
 
     def forward_all_exits_patched(self, x: torch.Tensor, qp, generator=None):
@@ -213,8 +215,15 @@ class FlexUFIntra(DMCI):
         x_hat = self.dec(y_hat, curr_q_dec, exit_map=em)
 
         bpp, bits_y, bits_z = self._rate(aux, qp, H * W)
+        # The latent, so the distillation and anchor terms do not encode the
+        # same crop a second and third time. y_hat is deterministic given
+        # (x, qp) -- process_with_mask rounds through QuantFunc, and the only
+        # stochastic thing in the encode, add_noise, is applied inside _rate to
+        # y_res and z for the bit estimate and never touches this tensor. So
+        # reusing it is the same arithmetic, one encoder pass instead of two.
         return {"x_hats": [x_hat], "mses": [self.get_mse(x, x_hat)], "bpp": bpp,
-                "bits_y": bits_y, "bits_z": bits_z}
+                "bits_y": bits_y, "bits_z": bits_z,
+                "_y_hat": y_hat, "_q_dec": curr_q_dec}
 
     def forward(self, x, qp, *, mode: str = "random_depth", tau: float = 1.0,
                 beta: float = 0.0, anchor_net=None, want_distill: bool = False,
@@ -241,15 +250,17 @@ class FlexUFIntra(DMCI):
         # The anchor and the distillation term both need their own passes, and
         # both touch parameters DDP must know about, so they belong inside this
         # forward rather than beside it.
-        if anchor_net is not None:
+        y_a = out.get("_y_hat")
+        q_a = out.get("_q_dec")
+        if y_a is None:
             y_a, q_a, _ = self._encode_to_latent(x, qp)
+        if anchor_net is not None:
             with torch.no_grad():
                 ref = anchor_net.dec.forward_full(y_a, q_a)
             out["anchor_mse"] = ((self.dec.forward_full(y_a, q_a) - ref) ** 2).mean()
         if want_distill:
-            y_d, _, _ = self._encode_to_latent(x, qp)
             from .losses import ladder_distill_loss
-            out["distill"] = ladder_distill_loss(self.dec.exit_features(y_d),
+            out["distill"] = ladder_distill_loss(self.dec.exit_features(y_a),
                                                  distill_teacher)
         return out
 

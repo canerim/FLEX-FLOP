@@ -44,6 +44,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import contextlib
 import math
 import os
 import sys
@@ -259,6 +260,17 @@ def parse_args(argv):
                         "too strong at qp0 and 5x too weak at qp63, which is "
                         "backwards: the drift is 10x larger at qp63. Off by "
                         "default so running jobs are unaffected by a restart.")
+    p.add_argument("--bf16", action="store_true",
+                   help="Run the forward passes under torch.autocast in "
+                        "bfloat16. Microsoft's train_image.py is fp32 and this "
+                        "is the one departure from it, made deliberately: an "
+                        "A6000 has no fp16 tensor-core advantage over bf16 and "
+                        "bf16 keeps fp32's exponent range, so the gradient "
+                        "clip at 0.1 and the non-finite guard behave as they "
+                        "do in fp32 -- which fp16 plus a loss scaler would "
+                        "not. Losses are computed in fp32 outside the "
+                        "autocast region so the RD trade-off is not evaluated "
+                        "at reduced precision.")
     p.add_argument("--freeze_encoder", action="store_true",
                    help="freeze the encoder, hyperprior and entropy model; train "
                         "the WHOLE decoder (trunk, head and adapters)")
@@ -303,6 +315,31 @@ def _param_groups(net, new_lr_scale):
           f"(lr x1), {sum(p.numel() for p in fresh):,} new (lr x{new_lr_scale})",
           flush=True)
     return groups
+
+
+def _fp32(out):
+    """Every tensor a forward returned, in fp32. Lists and tensors only, which
+    is what the forwards produce."""
+    got = {}
+    for k, v in out.items():
+        if torch.is_tensor(v):
+            got[k] = v.float()
+        elif isinstance(v, (list, tuple)):
+            got[k] = type(v)(t.float() if torch.is_tensor(t) else t for t in v)
+        else:
+            got[k] = v
+    return got
+
+
+def amp_ctx(args, device):
+    """bfloat16 autocast when asked for, and nothing at all when not.
+
+    contextlib.nullcontext rather than an `if` at every call site, so the fp32
+    path is exactly the code Microsoft's trainer runs.
+    """
+    if not getattr(args, "bf16", False):
+        return contextlib.nullcontext()
+    return torch.autocast(device_type="cuda", dtype=torch.bfloat16)
 
 
 def train_one_epoch(net, loader, optimizer, epoch, cfg, args, device, logf,
@@ -353,17 +390,29 @@ def train_one_epoch(net, loader, optimizer, epoch, cfg, args, device, logf,
         batch = [t.to(device, non_blocking=True) for t in batch]
         x, qp, lambdas = batch[0], batch[-2], batch[-1]
 
-        if args.train_patched:
-            # FLEX Stage A: one patched decode with a fresh random depth per
-            # tile. Trains the mixed-depth frame that deployment actually
-            # produces, at the cost of a single decode rather than K.
-            out = (net.forward_joint(x, qp, tau=args.gumbel_tau,
-                                     beta=args.router_beta)
-                   if args.joint_router else net.forward_random_depth(x, qp))
-            w_step = torch.ones(1, device=device)
-        else:
-            out = net.forward_all_exits(x, qp)
-            w_step = w
+        with amp_ctx(args, device):
+            if args.train_patched:
+                # FLEX Stage A: one patched decode with a fresh random depth per
+                # tile. Trains the mixed-depth frame that deployment actually
+                # produces, at the cost of a single decode rather than K.
+                out = (net.forward_joint(x, qp, tau=args.gumbel_tau,
+                                         beta=args.router_beta)
+                       if args.joint_router else net.forward_random_depth(x, qp))
+                w_step = torch.ones(1, device=device)
+            else:
+                out = net.forward_all_exits(x, qp)
+                w_step = w
+        # The latent stays as the forward produced it, in the autocast dtype and
+        # attached to its graph, so the distillation and anchor terms below can
+        # reuse it instead of encoding the same crop again. Measured: the second
+        # encode was half the step time.
+        y_cached = out.pop("_y_hat", None)
+        q_cached = out.pop("_q_dec", None)
+        # Out of the autocast region: the RD trade-off is the quantity the whole
+        # paper is about and it is not evaluated at reduced precision. Casting
+        # here rather than inside also keeps the loss graph in fp32, which is
+        # what the 0.1 grad clip was tuned against.
+        out = _fp32(out)
         ld = multi_exit_rd_loss(out["mses"], out["bpp"], lambdas, w_step)
 
         # Anchor: hold the deepest exit on the released decoder's output.
@@ -380,10 +429,15 @@ def train_one_epoch(net, loader, optimizer, epoch, cfg, args, device, logf,
         # be asking it to beat DCVC-UF, which is a different project.
         anchor_mse = None
         if anchor_net is not None:
-            with torch.no_grad():
-                y_a, q_a, _ = net._encode_to_latent(x, qp)
-                ref = anchor_net.dec.forward_full(y_a, q_a)
-            deep = net.dec.forward_full(*net._encode_to_latent(x, qp)[:2])
+            with amp_ctx(args, device):
+                if y_cached is None:
+                    y_a, q_a, _ = net._encode_to_latent(x, qp)
+                else:
+                    y_a, q_a = y_cached, q_cached
+                with torch.no_grad():
+                    ref = anchor_net.dec.forward_full(y_a, q_a)
+                deep = net.dec.forward_full(y_a, q_a)
+            deep, ref = deep.float(), ref.float()
             anchor_mse = ((deep - ref) ** 2).mean()
             # The stated intent is "scaled by the same lambda the reconstruction
             # term carries, so the weight does not have to be retuned per QP".
@@ -413,8 +467,13 @@ def train_one_epoch(net, loader, optimizer, epoch, cfg, args, device, logf,
         # 3-channel output. One extra trunk pass, tapped at every exit.
         distill = None
         if args.distill_weight > 0:
-            y_d, _, _ = net._encode_to_latent(x, qp)
-            distill = ladder_distill_loss(net.dec.exit_features(y_d),
+            with amp_ctx(args, device):
+                if y_cached is None:
+                    y_d, _, _ = net._encode_to_latent(x, qp)
+                else:
+                    y_d = y_cached
+                _feats = net.dec.exit_features(y_d)
+            distill = ladder_distill_loss([f.float() for f in _feats],
                                           args.distill_teacher)
             ld["loss"] = ld["loss"] + args.distill_weight * distill
 
@@ -451,7 +510,9 @@ def train_one_epoch(net, loader, optimizer, epoch, cfg, args, device, logf,
                     # loss notices. Cheap to recover: one extra full-frame pass
                     # every log_every steps, which at 200 is a fraction of a
                     # percent of training time.
-                    diag = net.forward_all_exits(x, qp)
+                    with amp_ctx(args, device):
+                        diag = net.forward_all_exits(x, qp)
+                    diag = _fp32(diag)
                     psnrs = [psnr_from_mse(m.mean()).item() for m in diag["mses"]]
                     rd = per_exit_rd(diag["mses"], diag["bpp"], lambdas).tolist()
                     mixed = psnr_from_mse(out["mses"][0].mean()).item()

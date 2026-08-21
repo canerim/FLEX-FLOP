@@ -1,0 +1,19 @@
+# Pinned to the versions this training environment has been running on, so a
+# rebuild reproduces the same numerics/throughput.
+#
+# torch / torchvision are deliberately absent: they come from the cu128 index
+# in the Dockerfile (the PyPI wheels would not carry the sm_120 kernels the
+# Blackwell cards on this host need).
+
+# --- imported by the training path ---
+matplotlib==3.10.7      # validation RD plots
+numpy==2.2.6
+pillow==12.0.0
+tqdm==4.67.1
+wandb==0.26.1           # optional monitoring; --wandb_mode disabled turns it off
+
+# --- only needed to build the entropy-coding extensions (src/cpp,
+#     src/layers/extensions/inference); training never imports them ---
+ninja==1.13.0
+psutil==7.1.0
+pybind11==3.0.1

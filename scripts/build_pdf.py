@@ -1063,15 +1063,16 @@ def content(colw, fullw):
         r"D(t,k) is built, and the two ways of building it are further apart "
         r"than they look. Take one tiled decode at 1080p as the unit. The "
         r"deployed table of Section 3.1 needs one tiled decode per exit, which "
-        r"comes to 4.6× the unit rather than K times it, because a shallow "
+        r"comes to \EncDeployedX× the unit rather than K times it, because a shallow "
         r"exit is cheaper to run than a full one. The full-frame table taps "
-        r"every exit off a single full-frame pass and comes to 1.4×. "
+        r"every exit off a single full-frame pass and comes to \EncFullFrameX×. "
         r"Section 5 shows that the full-frame table must not be used to "
         r"<i>report</i> quality, but it can still be used to <i>rank</i>. "
         r"Running the argmin on it, and the deployed path only to check the "
-        r"budget, we find the two searches agree on 85% of tiles and land "
-        r"within 0.4 points of saving of each other (19.0% against 18.6%, both "
-        r"under budget). The exact search therefore costs 4.6 decodes and a "
+        r"budget, we find the two searches agree on \EncAgree% of tiles and land "
+        r"within \EncSavingGap points of saving of each other "
+        r"(\EncApproxSaving% against \EncExactSaving%, both "
+        r"under budget). The exact search therefore costs \EncDeployedX decodes and a "
         r"practical encoder need not pay it; ranking on the full-frame table "
         r"is the one extra decode per frame we quote for A.")
     par(r"The decoder cannot run the argmin. D(t,k) is the error against the "
@@ -1340,8 +1341,8 @@ def content(colw, fullw):
            r"across all 384 channels. <b>b</b>, the same gate tiled over the "
            r"canvas, which is how it is applied. <b>c</b>, the correction it "
            r"adds on a real frame: the tile lattice and nothing else. "
-           r"<b>d</b>, a cut through a tile. The gate reaches 0.76 at a corner "
-           r"and flattens at 0.17 rather than switching off.")
+           r"<b>d</b>, a cut through a tile. The gate reaches \GateMax at a corner "
+           r"and flattens at \GateMin rather than switching off.")
     par(r"What a standard codec does about a partition boundary is deblock it, "
         r"with a filter applied after reconstruction [7, 19] ([[fig:seam_gate]]). The tile lattice "
         r"is known "
@@ -1457,11 +1458,14 @@ def content(colw, fullw):
         r"the five quality indices. "
         r"Means are taken over unrounded values, so averaging a printed row "
         r"can differ from the printed mean by a unit in the last place.")
-    par(r"<b>The protocol every number in this paper obeys.</b> Two "
-        r"implementations of the same quantity have differed here by as "
-        r"much as 3.29 saving points, and the choice between per-frame and "
-        r"pooled distortion moves an integrated saving by 7 to 10, so the "
-        r"convention is not a detail and we fix it once.")
+    par(r"<b>The protocol every number in this paper obeys.</b> The "
+        r"conventions above are not bookkeeping. Measuring the same "
+        r"allocation per frame rather than pooled over the set moves an "
+        r"integrated saving by up to \ConvPooledMax points, and the interval "
+        r"a BD figure is integrated over moves a mean by \ConvIntervalRange "
+        r"across \ConvIntervalN defensible choices. Both are larger than "
+        r"several of the effects this paper reports, so the convention is "
+        r"fixed once and stated here.")
     proto = [["reference", "the released DCVC-UF decoder, run full-frame on the "
                        "same latent"],
          ["distortion", "MSE pooled over the frame, then converted to dB "
@@ -1618,7 +1622,7 @@ def content(colw, fullw):
     par(r"It recovers most of the gap. At q63, random costs \RandomDb dB and "
         r"the oracle 0.100 dB at identical compute, while the oracle-histogram bit ranking costs "
         r"\RateRankDb dB. That is \RateRankRecovers% of the oracle's advantage "
-        r"over chance, at 0.68–0.79 agreement with the oracle's map. A learned "
+        r"over chance, at \HistAgreeLo–\HistAgreeHi agreement with the oracle's map. A learned "
         r"router therefore has to beat a calibrated bit rule that is already three "
         r"quarters of the way there. We would not have run that comparison "
         r"without this control, and we suggest that any adaptive-inference "
@@ -1687,21 +1691,24 @@ def content(colw, fullw):
         r"degenerates towards a uniform choice. That suggests a fix. Choose "
         r"the tile size relative to the frame, since the MAC count does not "
         r"depend on tile size at all and only the seam does.")
-    par(r"We tested that fix and it mostly does not work. We compare "
-        r"the 256 px tiling against a 128 px one at q0, which "
-        r"multiplies the tile count by 3.4. MCL-JCV (1080p) goes from 36.3 to "
-        r"34.3, HEVC B (1080p) from 33.8 to 32.1, HEVC C (832×480) from 20.9 "
-        r"to 17.6, and HEVC D (416×240) from 11.3 to <b>13.7</b>.")
-    par(r"Smaller tiles help only at the smallest resolution, where the count "
-        r"goes from two to eight. Everywhere else they cost between 1.7 and "
-        r"3.3 points, including at 832×480, where the count rises from 8 to 28 "
-        r"and the saving still falls. Beyond a modest number of tiles, the "
-        r"extra seam outweighs the extra granularity. We report the comparison "
-        r"as indicative, since the two tile sizes come from different "
-        r"training runs and tile size is therefore confounded with training. "
-        r"But the direction is consistent, and it is enough for us to say that "
-        r"a resolution-adaptive tile size is not the easy win the granularity "
-        r"argument suggests ([[fig:exituse]]).")
+    par(r"We tested that fix and what it does depends on the rate, not on "
+        r"the resolution. Halving the tile side multiplies the tile count by "
+        r"\TileCountMul. At q0 the smaller tile is ahead in \TileAheadLow of "
+        r"the \TileClassesN classes, by \TileGainLowMin to \TileGainLowMax "
+        r"points, and behind only on \TileLowLoser. At q32 and q63 it is "
+        r"behind on every class, by up to \TileBehindMidMax and "
+        r"\TileBehindHighMax points ([[fig:exituse]]).")
+    par(r"So granularity buys something only where the budget is loose "
+        r"relative to what a tile costs, and the seam it pays for grows with "
+        r"rate until it swallows the gain. Splicing the smaller tile into the "
+        r"classes that want it, and leaving the rest, is worth "
+        r"\TileSpliceDelta points on the set mean averaged over rates: "
+        r"nothing. We report the comparison as indicative, since the two tile "
+        r"sizes come from different training runs and the 128 px run has "
+        r"\TileConfoundSteps steps more, which favours the column that wins "
+        r"at q0 and not the one that wins elsewhere. What survives the "
+        r"confound is that a resolution-adaptive tile size is not the easy "
+        r"win the granularity argument suggests.")
     h2("5.4 The band a distortion budget works in")
     figure("saturation_RECIPE512.png",
            r"<b>Figure 8. Three regions, and only the middle one is a design "
@@ -1837,7 +1844,7 @@ def content(colw, fullw):
            r"side by side: the encoder's search over all K exits per tile "
            r"against the head's forward pass over decoded data. <b>b</b>, "
            r"saving at 0.1 dB; shading is what a bit-exact bitstream costs. "
-           r"<b>c</b>, that cost is smallest at q\GapMinQp\ and grows in "
+           r"<b>c</b>, that cost is smallest at q\GapMinQp and grows in "
            r"both directions.")
     tbl("ab",
         r"<b>Table 7. Signalled against predicted</b> at two budgets, same "
@@ -2449,7 +2456,7 @@ def content(colw, fullw):
         r"even reach the budget at the highest rate. Splitting later (j=4 "
         r"against j=2) puts twice as many blocks in the per-tile section, "
         r"which by the power law of Section 4 raises the floor. At 0.5 dB the fine "
-        r"ladder wins by 6.7 points, \FineHalfDb% against \CoarseHalfDb%, "
+        r"ladder wins by \FineHalfGain points, \FineHalfDb% against \CoarseHalfDb%, "
         r"because the coarse one has been pinned at its ceiling since 0.3 dB "
         r"and has nothing left to spend.")
     par(r"So the ladder is a choice made at the operating point, not a "
@@ -2516,12 +2523,14 @@ def content(colw, fullw):
         r"\DbAtThree dB against a 0.3 dB allowance. A looser budget is not "
         r"the way to get more out of this decoder; a finer ladder is, and "
         r"Section 5.10 measures one.")
-    par(r"In wall clock on one RTX A6000 the 0.1 dB row decodes a padded 1080p "
-        r"frame in 89.6 ms against the release's 110.8, which is 9.0 frames "
-        r"per second becoming 11.2, and it does so for 26.6 J against 33.0. "
-        r"The arithmetic saving is 22.9% at that rate and the energy saving is "
-        r"19.3%, and the gap between those two numbers is the scheduling cost "
-        r"of a decode that runs its last groups on a handful of tiles.")
+    par(r"In wall clock on one RTX A6000, at \PowerQMid and the 0.1 dB "
+        r"budget, a padded 1080p frame decodes in \PowerMsMid ms against the "
+        r"release's \PowerMsFullMid, which is \PowerFpsFullMid frames per "
+        r"second becoming \PowerFpsMid, and it does so for \PowerJMid J "
+        r"against \PowerJFullMid. The arithmetic saving is \PowerMacMid% at "
+        r"that rate and the energy saving is \PowerEnergyMid%, and the gap "
+        r"between those two numbers is the scheduling cost of a decode that "
+        r"runs its last groups on a handful of tiles.")
     tbl("bdrate",
         r"<b>Table N. BD-Rate against the released decoder</b>, integrated "
         r"over the five quality indices, and what each configuration puts in "

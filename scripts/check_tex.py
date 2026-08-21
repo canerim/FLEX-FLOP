@@ -81,9 +81,14 @@ def directions() -> list[str]:
                 if frag not in name:
                     continue
                 # the sentence around the use, in the source's own text
+                # Only what comes BEFORE the macro, back to the last
+                # sentence end. "ahead in 5 of 6 classes ... and behind only
+                # on HEVC C" is a correct sentence that names both directions;
+                # what was wrong was "gives up \\RateRankBeatsBy", where the
+                # verb governs the macro.
                 lo = max(0, m.start() - 260)
-                ctx = re.sub(r"\s+", " ", src[lo:m.end() + 120]).lower()
-                ctx = ctx.rsplit(".", 1)[-1] if ". " in ctx[-200:] else ctx
+                ctx = re.sub(r"\s+", " ", src[lo:m.start()]).lower()
+                ctx = ctx.rsplit(". ", 1)[-1]
                 for w in words:
                     if w in ctx:
                         out.append(f"{Path(f).name}: \\{name} used in a "

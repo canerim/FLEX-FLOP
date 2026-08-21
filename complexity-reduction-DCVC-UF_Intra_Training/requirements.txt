@@ -1,0 +1,17 @@
+# Non-Docker installs only -- the container builds from docker/requirements-docker.txt,
+# which pins exact versions. torch/torchvision are not listed here either: install
+# them from the CUDA-matching index first (see README.md).
+
+# --- training path ---
+matplotlib      # validation RD plots
+numpy
+pillow
+tqdm
+wandb           # optional monitoring; --wandb_mode disabled turns it off
+
+# --- only needed to build the entropy-coding extensions (src/cpp,
+#     src/layers/extensions/inference); training never touches them ---
+cmake
+ninja
+psutil
+pybind11

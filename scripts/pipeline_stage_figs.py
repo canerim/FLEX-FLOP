@@ -107,6 +107,15 @@ def seam_fig(net, cfg, f, dev):
         fig.savefig(_d / "seam_gate.png", dpi=500, bbox_inches="tight",
                     pad_inches=0.02, facecolor="white")
     out = ROOT / "paper/figures/seam_gate.png"
+    # The caption quotes the gate's corner value and its plateau. They were
+    # typed into it; a figure that prints its numbers to the terminal and not
+    # to a file is a figure whose caption cannot be checked.
+    import json as _json
+    (ROOT / "results/seam_gate.json").write_text(_json.dumps({
+        "ckpt": str(getattr(net, "_ckpt_path", "")),
+        "gate_min": float(g.min()), "gate_max": float(g.max()),
+        "gate_mean": float(g.mean()),
+    }, indent=2))
     print(f"  wrote {out.relative_to(ROOT)}   gate min {g.min():.3f} "
           f"max {g.max():.3f} mean {g.mean():.3f}")
 

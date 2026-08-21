@@ -1,0 +1,112 @@
+# DCVC-UF-Intra training in Docker.
+#
+#   docker compose build            # ~5 min, mostly the torch cu128 wheel
+#   docker compose up train         # runs train_image_allqp_OpenImage.sh
+#   docker compose run --rm shell   # interactive shell in the same environment
+#
+# Layout. The training scripts reach the datasets as ../datasets/..., so the two
+# host directories are mounted as siblings under /workspace, mirroring how they
+# sit next to each other in the home directory:
+#
+#   /home/<user>/DCVC-UF   -> /workspace/DCVC-UF   (this repo, working dir)
+#   /home/<user>/datasets  -> /workspace/datasets  (train + val)
+#
+# Everything else the run needs -- SAVE_DIR, the reference checkpoint, the
+# reference RD cache -- lives under this repo's own checkpoints/, so no third
+# mount is involved and the relative paths in the .sh recipes work unchanged.
+#
+# The description.json index files the datasets need are generated on container
+# start by docker/prepare_datasets.sh (skipped when they already exist).
+
+name: dcvc-uf
+
+x-train-env: &train-env
+  image: dcvc-uf-train:latest
+  build:
+    context: .
+    dockerfile: docker/Dockerfile
+    args:
+      UID: "${DOCKER_UID:-1006}"
+      GID: "${DOCKER_GID:-1006}"
+  working_dir: /workspace/DCVC-UF
+  # Run as the host user so checkpoints, description.json and wandb/ do not come
+  # back owned by root.
+  user: "${DOCKER_UID:-1006}:${DOCKER_GID:-1006}"
+  # CDI device syntax rather than the legacy `--gpus all`, which can lose GPU
+  # access after a host systemd daemon-reload.
+  devices:
+    - nvidia.com/gpu=all
+  # DataLoader workers hand tensors over shared memory; the default 64 MB
+  # /dev/shm makes them die with "bus error" at -n 16.
+  ipc: host
+  ulimits:
+    memlock: -1
+    stack: 67108864
+  environment:
+    HOME: /home/trainer
+    # uid 1006 has no /etc/passwd entry in the image (the entrypoint adds one,
+    # but set this too so getpass.getuser() is never the thing that fails).
+    USER: trainer
+    # IMPORTANT: src/utils/common.py:start_train() spawns one DDP process per
+    # *visible* GPU. Exposing more than one card here silently turns the run
+    # into multi-GPU DDP with batch_size 16 per rank -- which is not the recipe
+    # train_image_allqp_OpenImage.sh documents. Keep it at a single index unless
+    # you mean it; the value indexes physical GPUs, and the chosen card becomes
+    # cuda:0 inside the container.
+    CUDA_VISIBLE_DEVICES: "${DCVC_GPUS:-0}"
+    OMP_NUM_THREADS: "${OMP_NUM_THREADS:-8}"
+    # Read from .env (gitignored), so the key never lands in a tracked file or
+    # in the image. Without it training still runs, just without monitoring.
+    WANDB_API_KEY: "${WANDB_API_KEY:-}"
+    # 1 = rebuild description.json even if present (after adding/removing images)
+    FORCE_DESCRIPTION: "${FORCE_DESCRIPTION:-0}"
+    # Recipe overrides, forwarded from the host so `EPOCHS=2 docker compose up
+    # train` reaches the script. Compose only passes variables named here, and
+    # an empty value is what the script's ${VAR:-default} falls back on, so
+    # leaving them unset keeps every default in train_image_allqp_OpenImage.sh.
+    EPOCHS: "${EPOCHS:-}"
+    BATCH_SIZE: "${BATCH_SIZE:-}"
+    SAVE_DIR: "${SAVE_DIR:-}"
+    EXP_NAME: "${EXP_NAME:-}"
+    COMPILE: "${COMPILE:-}"
+    COMPILE_MODE: "${COMPILE_MODE:-}"
+  volumes:
+    - .:/workspace/DCVC-UF
+    - ../datasets:/workspace/datasets
+    # $HOME as a named volume: keeps the triton / inductor max-autotune caches
+    # between runs, so only the first start pays the compilation cost.
+    # `docker volume rm dcvc-uf_trainer-home` wipes them.
+    - trainer-home:/home/trainer
+
+services:
+  # --- the actual training run ----------------------------------------------
+  # Override the script with TRAIN_SCRIPT=... docker compose up train
+  train:
+    <<: *train-env
+    command: bash ${TRAIN_SCRIPT:-train_image_allqp_OpenImage.sh}
+    # No TTY: wandb prompts for a login on an interactive terminal when
+    # WANDB_API_KEY is missing, which would stall the run. Without a TTY it
+    # fails fast and train_image.py carries on unmonitored.
+    tty: false
+    stdin_open: false
+    restart: "no"
+
+  # --- interactive shell in the same environment ------------------------------
+  shell:
+    <<: *train-env
+    command: bash
+    tty: true
+    stdin_open: true
+
+  # --- dataset indexing only ---------------------------------------------------
+  # The entrypoint has already done it by the time the command runs; this is the
+  # way to (re)generate description.json without starting a training run:
+  #   FORCE_DESCRIPTION=1 docker compose run --rm prepare
+  prepare:
+    <<: *train-env
+    command: bash -c "echo '[prepare] dataset description.json files are up to date'"
+    tty: false
+    stdin_open: false
+
+volumes:
+  trainer-home:
