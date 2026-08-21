@@ -1472,9 +1472,10 @@ def content(colw, fullw):
         r"disagrees with the choice can read off another one ([[tab:main_results]]). We say this "
         r"before the numbers because every number in this section is "
         r"conditioned on it.")
-    par(r"The table carries the headline numbers. At 0.1 dB the method saves "
-        r"\MainLowRate% at the lowest rate and \MainHighRate% at the highest, "
-        r"and \MainMean% on average, at a BD-Rate cost of \BdRateALow%; that "
+    par(r"At 0.1 dB the method saves "
+        r"\MainLowRate% of the decoder's multiply-accumulates at the lowest "
+        r"rate and \MainHighRate% at the highest, \MainMean% on average, for "
+        r"a BD-Rate cost of \BdRateALow% ([[tab:main_results]]); that "
         r"is, the compute is worth about the same as a \BdRateALow% increase "
         r"in bitrate. We do not read the fall with rate as an artefact of the "
         r"ladder. High-rate reconstructions carry detail the shallow exits "
