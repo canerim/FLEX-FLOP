@@ -1972,6 +1972,11 @@ between those two numbers is the scheduling cost of a decode that runs its last
 groups on a handful of tiles.
 
 \section{Limitations}
+That result is bounded on four sides: by a cost the method pays and cannot
+yet remove, by the kind of frame it was measured on, by where in its training
+the measured model sits, and by the fact that there is one of it. We take them
+in that order.
+
 \label{sec:limits}
 
 \paragraph{The seam is reduced, and the exact remedy is not usable as it stands.}

@@ -2190,6 +2190,10 @@ def content(colw, fullw):
         r"19.3%, and the gap between those two numbers is the scheduling cost "
         r"of a decode that runs its last groups on a handful of tiles.")
     h1("7. Limitations")
+    par(r"That result is bounded on four sides: by a cost the method pays and "
+        r"cannot yet remove, by the kind of frame it was measured on, by where "
+        r"in its training the measured model sits, and by the fact that there "
+        r"is one of it. We take them in that order.")
     par(r"<b>The seam is reduced, and the exact remedy is not usable as it "
         r"stands.</b> The halo exchange removes "
         r"\CoupFloorDropLo–\CoupFloorDropHi% of the floor and is bit-exact at "
