@@ -50,6 +50,13 @@ def main(argv):
             # "Table N." reached a built PDF: the protocol table is written
             # with rows_tbl and a hand-made caption, so it never went through
             # the numbering that fig() and tbl() apply.
+            # A sentence ending in two full stops is the signature of a
+            # cross-reference dropped in between two clauses: the reference
+            # took the first sentence's stop with it and the second kept its
+            # own. Range notation like "0..K-1" is excluded by requiring a
+            # letter and a space after.
+            ("sentence ends in two full stops",
+             re.findall(r"[a-z]\.\.\s+[A-Z]|[a-z]\.\.\s*$", t, re.M)),
             ("caption still says Figure/Table/Section N",
              re.findall(r"(?:Figure|Table|Section|Eq\.) N\b", t)),
             ("brace from a macro value", re.findall(r"[{}]", t)),

@@ -1993,7 +1993,9 @@ def content(colw, fullw):
         r"what to do with it.")
     h2("5.6 A router with no parameters")
     par(r"Before a \RouterParams head is worth its \RouterCostPct% of the "
-        r"decode, it has to beat what the decoder already knows ([[fig:raterank]], [[tab:raterank]]) The shaded region in panel a is where the free rule is ahead, and it covers every rate.. The entropy "
+        r"decode, it has to beat what the decoder already knows "
+        r"([[fig:raterank]], [[tab:raterank]]). The shaded region in panel a is where the "
+        r"free rule is ahead, and it covers every rate. The entropy "
         r"model has produced one number per tile before the trunk runs, and at "
         r"no cost: how many bits that tile's latents took.")
     par(r"We turn it into a routing rule with no learned parameters. We model "
@@ -2146,7 +2148,9 @@ def content(colw, fullw):
     par(r"The encoder knows tile by tile where the router will be wrong, "
         r"because it can run that router itself (Section 3.1), and nothing "
         r"obliges it to correct every one of them. That is the room "
-        r"configuration C works in ([[fig:hybrid]], [[tab:hybrid]]) The curves in panel a rise steeply and then flatten: almost all of what signalling buys is bought by the first tenth of the tiles..")
+        r"configuration C works in ([[fig:hybrid]], [[tab:hybrid]]). The curves in "
+        r"panel a rise steeply and then flatten: almost all of what "
+        r"signalling buys is bought by the first tenth of the tiles.")
     par(r"We choose the ρN overridden tiles by Lagrangian regret, "
         r"Δ(t) = L(t,k-hat) − L(t,k*) with L(t,k) = D(t,k) + λc_k the "
         r"objective of the Lagrangian in Section 3.5, so Δ(t) is exactly what "
