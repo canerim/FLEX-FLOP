@@ -6,7 +6,7 @@
 
 This section states what the decoder is, module by module and convolution by convolution, derives what a decode costs from those shapes, and then checks the derivation against counts taken off decodes that were run. It closes with what the saving is worth in the units a deployment measures, which are milliseconds, joules, megabytes and frames per second, and none of which is the unit the allocation is optimised in.
 
-Two units first. A \emph{multiply-accumulate} (MAC) is one multiply and one add, and MAC/px is per pixel of the grid the operator runs on, which is not the same grid for every operator. The \emph{released decoder} is DCVC-UF's intra decoder [14] with none of this work added, and it is the unit every cost below is quoted in. The ladder's geometry is section A's: N = 12 trunk blocks at width C = 384, K = 6 exits one every b = 2 blocks, a split depth of j = 2 that leaves the first four blocks full-frame, and a tile of 256 RGB px.
+Two units first. A \emph{multiply-accumulate} (MAC) is one multiply and one add, and MAC/px is per pixel of the grid the operator runs on, which is not the same grid for every operator. The \emph{released decoder} is DCVC-UF's intra decoder [12] with none of this work added, and it is the unit every cost below is quoted in. The ladder's geometry is section A's: N = 12 trunk blocks at width C = 384, K = 6 exits one every b = 2 blocks, a split depth of j = 2 that leaves the first four blocks full-frame, and a tile of 256 RGB px.
 
 \subsection{The decoder, module by module}
 

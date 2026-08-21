@@ -160,7 +160,7 @@ def content(k):
     k.par(r"Two units first. A <i>multiply-accumulate</i> (MAC) is one "
           r"multiply and one add, and MAC/px is per pixel of the grid the "
           r"operator runs on, which is not the same grid for every operator. "
-          r"The <i>released decoder</i> is DCVC-UF's intra decoder [14] with "
+          r"The <i>released decoder</i> is DCVC-UF's intra decoder [12] with "
           r"none of this work added, and it is the unit every cost below is "
           r"quoted in. The ladder's geometry is section A's: N = " +
           f"{P['nb']}" + r" trunk blocks at width C = " + f"{C}" + r", K = 6 "

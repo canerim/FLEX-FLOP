@@ -5162,3 +5162,24 @@ the prose names an author -- "Shoham and Gersho [26]" -- the reference must
 carry that name. Model acronyms are deliberately not checked: DCVC-UF is not
 in its own reference string, and testing it would report every correct
 citation in the related-work section.
+
+## 108. The supplement cites the paper's numbers and did not know they moved
+
+Dropping two references from `build_pdf.REFS` renumbered everything above
+them, and the supplement writes its citations as numbers -- it shares the
+paper's list without printing it, so nothing in its own build could notice.
+Nineteen citations across five sections meant different papers for the length
+of one commit: Open Images had become Yilmaz, Shoham and Gersho had become
+MCL-JCV.
+
+They were rewritten the same way as the paper's, tokenised and restricted to
+bracket numbers in prose position -- preceded by a space or opening the
+literal -- because the supplement's f-strings are full of `C[63]` and
+`ctc[32]`, which are dictionaries. One citation escaped the first pass by
+opening its literal after a line break, and is the reason the rule now
+includes the quote character. Every one of the nineteen was then read against
+the reference it lands on.
+
+`check_cites.py` reads the supplement too, and the author-name test applies
+there: `c_derivations.py` writing "Shoham and Gersho [24]" fails, which is
+exactly what the renumbering did.

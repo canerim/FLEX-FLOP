@@ -187,7 +187,7 @@ def content(k):
           f"different failure from a budget falling in a gap of the Lagrangian "
           f"hull, where the sweep returns the nearest reachable point and "
           f"Everett's argument still makes it optimal for the compute it "
-          f"consumes [28, 29]. Below the floor the feasible set is empty and "
+          f"consumes [26, 27]. Below the floor the feasible set is empty and "
           f"there is nothing to return. Three cells of the grid in Section "
           + sec + f".3 are in that state and are recorded as such rather than "
           f"dropped: at a 0.05 dB budget the three highest rates, "

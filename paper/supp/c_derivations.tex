@@ -123,7 +123,7 @@ k^{\star}_t(\lambda) \;\in\; \mathrm{arg\,min}_{k \geq j}\;\left[\,D_{t,k} + \la
 
 {\small Per-tile tail from results/supp\_opquality\_PAPER.json, checkpoint runs/RECIPE512/ckpt\_PAPER.pth.tar, at the operating point read from results/signalled\_RECIPE512\_ctc53.json.}
 
-The N-dimensional search has become N independent searches over 4 numbers each, with ties broken toward the shallower exit so that k$^{*}$ is a function. We call k$^{*}$$_{t}$(\lambda) the oracle's choice, because it uses the true D$_{t,k}$, which only the encoder has. The construction is Shoham and Gersho's [28] with compute in place of rate, made standard in coding by [29].
+The N-dimensional search has become N independent searches over 4 numbers each, with ties broken toward the shallower exit so that k$^{*}$ is a function. We call k$^{*}$$_{t}$(\lambda) the oracle's choice, because it uses the true D$_{t,k}$, which only the encoder has. The construction is Shoham and Gersho's [26] with compute in place of rate, made standard in coding by [27].
 
 \paragraph{Proposition 2 (monotonicity)}
 
@@ -369,7 +369,7 @@ q63 & 13 & 100.0\% & 0.0230 & 74.7\% \\
 
 \subsection{How much of the oracle a partial signal recovers}
 
-Letting a predictor decide most cases and handing the hardest ones to something exact is the shape of selective prediction [38] and learning to defer [39, 40], and of the budgeted variant of the latter [41]. Two things make the case easier here. The expert is the encoder's own search, exact and free at test time, so what is scarce is the bits needed to say what it decided rather than the expert's time; and the selection rule is not learned, since a separable objective makes the optimal set of size s exactly the s largest regrets. What is left to measure is how concentrated the regret is.
+Letting a predictor decide most cases and handing the hardest ones to something exact is the shape of selective prediction [36] and learning to defer [37, 38], and of the budgeted variant of the latter [39]. Two things make the case easier here. The expert is the encoder's own search, exact and free at test time, so what is scarce is the bits needed to say what it decided rather than the expert's time; and the selection rule is not learned, since a separable objective makes the optimal set of size s exactly the s largest regrets. What is left to measure is how concentrated the regret is.
 
 The decoder cannot run the argmin of Proposition 1, D$_{t,k}$ being an error against a source it never receives. A predictor can guess it. Writing p$_{t,k}$ for a head's probability that tile t belongs at exit k, its rule is
 

@@ -316,8 +316,8 @@ def content(k):
         f"so that k<super>*</super> is a function. We call "
         f"k<super>*</super><sub>t</sub>(\\lambda) the oracle's choice, because "
         f"it uses the true D<sub>t,k</sub>, which only the encoder has. The "
-        f"construction is Shoham and Gersho's [28] with compute in place of "
-        f"rate, made standard in coding by [29].")
+        f"construction is Shoham and Gersho's [26] with compute in place of "
+        f"rate, made standard in coding by [27].")
 
     k.h3("Proposition 2 (monotonicity)")
     k.par(
@@ -836,9 +836,9 @@ def content(k):
 
     k.par(
         "Letting a predictor decide most cases and handing the hardest ones to "
-        "something exact is the shape of selective prediction [38] and "
-        "learning to defer [39, 40], and of the budgeted variant of the latter "
-        "[41]. Two things make the case easier here. The expert is the "
+        "something exact is the shape of selective prediction [36] and "
+        "learning to defer [37, 38], and of the budgeted variant of the latter "
+        "[39]. Two things make the case easier here. The expert is the "
         "encoder's own search, exact and free at test time, so what is scarce "
         "is the bits needed to say what it decided rather than the expert's "
         "time; and the selection rule is not learned, since a separable "

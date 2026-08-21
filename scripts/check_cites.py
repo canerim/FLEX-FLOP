@@ -130,6 +130,41 @@ def main() -> int:
             bad.append(f"the prose writes \"{' and '.join(who)} [{n}]\" and "
                        f"[{n}] is \"{refs[n - 1][:52]}...\"")
 
+    # The supplement cites the paper's numbers without printing the list, so
+    # a renumbering in build_pdf silently rewrites what its sentences mean.
+    # Only bracket numbers in prose position are read -- preceded by a space
+    # or opening the literal -- because the supplement's f-strings are full of
+    # C[63] and ctc[32], which are dictionaries and not references.
+    import io
+    import tokenize
+    prose_cite = re.compile(r'(?:(?<=\s)|(?<=["\']))\[(\d{1,2}(?:\s*,\s*\d{1,2})*)\]')
+    nsupp = 0
+    for f in sorted((R / "scripts/supp").glob("*.py")):
+        fsrc = f.read_text()
+        for tok in tokenize.generate_tokens(io.StringIO(fsrc).readline):
+            if tok.type != tokenize.STRING:
+                continue
+            for m in prose_cite.finditer(tok.string):
+                ns = [int(x) for x in m.group(1).replace(" ", "").split(",")]
+                if max(ns) < 7:
+                    continue
+                nsupp += 1
+                for n in ns:
+                    if not 1 <= n <= len(refs):
+                        bad.append(f"{f.name} cites [{n}] and there are "
+                                   f"{len(refs)} references")
+                ctx = re.sub(r"\s+", " ", tok.string[max(0, m.start() - 60):
+                                                     m.start()])
+                am = re.search(r"([A-Z][A-Za-z-]{2,})\s+(?:et al\.|and\s+"
+                               r"([A-Z][A-Za-z-]{2,}))(?:'s)?\s*$", ctx)
+                if am and 1 <= ns[0] <= len(refs):
+                    who = [w for w in am.groups() if w]
+                    ref = norm(refs[ns[0] - 1])
+                    if not any(norm(w) in ref for w in who):
+                        bad.append(f"{f.name} writes \"{' and '.join(who)} "
+                                   f"[{ns[0]}]\" and [{ns[0]}] is "
+                                   f"\"{refs[ns[0] - 1][:46]}...\"")
+
     tex_keys = set(re.findall(r"\\cite\{([^}]*)\}", TEX.read_text()))
     tex_keys = {k.strip() for g in tex_keys for k in g.split(",")}
     # main.tex cites by key and bibtex numbers them; the reportlab build only
@@ -139,7 +174,8 @@ def main() -> int:
     missing = sorted(k for k in tex_keys if k and k not in cite and k in B)
     print(f"  {len(cite)} mapped keys, {len(refs)} references, "
           f"{len(tex_keys)} keys cited in main.tex, "
-          f"{checked} named citations verified")
+          f"{checked} named citations verified, "
+          f"{nsupp} in the supplement")
     if missing:
         print(f"     not in CITE (fine unless a table cites them): "
               f"{len(missing)}")

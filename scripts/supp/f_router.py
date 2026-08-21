@@ -340,7 +340,7 @@ def content(k):
         "onto a single exit during training, so it carries a balancing term: "
         "a per-exit bias added to the logits before the decision and updated "
         "by usage rather than by a gradient, which is what makes it "
-        "loss-free [16]. It is biased toward the oracle's own exit "
+        "loss-free [14]. It is biased toward the oracle's own exit "
         "distribution rather than toward uniform, because at a high "
         "multiplier the oracle genuinely does send every tile to one exit and "
         "forcing spread there would force mistakes.")
@@ -351,7 +351,7 @@ def content(k):
         "at no cost, and then discards it: how many bits that tile's latents "
         "took. Per-block bit allocation is a standard quantity in learned "
         "compression, where it is something to choose, and block-level rate "
-        "control sets it so that complex regions get more bits [42]. Here it is "
+        "control sets it so that complex regions get more bits [40]. Here it is "
         "read in the other direction, after the fact and at the decoder, as a "
         "statement about how hard the region was. The results files call the "
         "rule <i>rate-rank</i>; the paper calls it the calibrated bit rule. "
@@ -416,7 +416,7 @@ def content(k):
            "table first and then against a real decode of the resulting map, "
            "because the table and the decode differ slightly at the tile seams. "
            "Sweeping \\lambda traces the lower convex hull of the achievable "
-           "set in the sense of [28], so the point returned is the best one on "
+           "set in the sense of [26], so the point returned is the best one on "
            "that hull at the budget it consumes.",
            header=False)
 

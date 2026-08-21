@@ -273,7 +273,7 @@ def content(k):
     k.note("Sources: results/per_class_RECIPE512.json for the class membership "
            "and tile counts, results/tile_definition.json for the padded "
            "sizes; both on runs/RECIPE512/ckpt_PAPER.pth.tar. The sequences "
-           "are UVG [25], MCL-JCV [26] and HEVC classes B, C, D and E [9]; the "
+           "are UVG [23], MCL-JCV [24] and HEVC classes B, C, D and E [7]; the "
            "full list of \\NumSeq names is recorded in the measured field of "
            "results/signalled_RECIPE512_ctc53.json, with not_measured empty.")
 
@@ -390,7 +390,7 @@ def content(k):
 
     k.par(
         "Two limits belong beside that list. Sweeping a multiplier reaches "
-        "only the lower convex hull of the achievable set [28, 29], so a "
+        "only the lower convex hull of the achievable set [26, 27], so a "
         "budget falling in a gap of the hull is met at the nearest reachable "
         "point; every row carries a reachability flag and a floor, and rows "
         "whose floor already exceeds the budget are reported as unreachable "
@@ -637,7 +637,7 @@ def content(k):
     k.h2("The training data")
 
     k.par(
-        "Training uses Open Images [24], fetched from the CVDF public mirror "
+        "Training uses Open Images [22], fetched from the CVDF public mirror "
         "by scripts/fetch_openimages.sh and prepared by "
         "scripts/prepare_openimages.py into the flat layout DCVC-UF's own "
         f"ImageFolder expects. Of {PREP['scanned']} files scanned, "
@@ -739,7 +739,7 @@ def content(k):
         "meaningless. The distillation term supervises each adapter in feature "
         "space against the exit one step deeper, normalised by the teacher's "
         "own variance, following the adjacent-teacher form rather than the "
-        "deepest-teacher form [17], since a large gap between student and "
+        "deepest-teacher form [15], since a large gap between student and "
         "teacher is reported to hurt the shallowest exits most. Gradients are "
         "clipped at a norm of 0.1 and a batch whose norm is not finite is "
         f"dropped; across all {LOG['records']} records the count of steps "
@@ -1085,15 +1085,15 @@ def content(k):
     k.h2("Data, code and provenance")
 
     k.bullets([
-        "<b>Training images.</b> Open Images [24], from the CVDF public "
+        "<b>Training images.</b> Open Images [22], from the CVDF public "
         "mirror named in scripts/fetch_openimages.sh. The terms are the ones "
         "that mirror publishes and nothing here redistributes them.",
-        "<b>Test sequences.</b> UVG [25] from ultravideo.fi, MCL-JCV [26] and "
+        "<b>Test sequences.</b> UVG [23] from ultravideo.fi, MCL-JCV [24] and "
         "HEVC classes B, C and D from the public mirrors named in "
         "scripts/fetch_mcljcv.sh and scripts/fetch_hevc_bcd.sh, and HEVC class "
         "E from media.xiph.org. Each fetch script records its source URL, and "
         "no sequence is re-encoded before it is measured.",
-        "<b>The released codec.</b> The DCVC-UF intra checkpoint [14], "
+        "<b>The released codec.</b> The DCVC-UF intra checkpoint [12], "
         "identified by sha256 in results/dmc_ld_recon_audit.json and used "
         "under the licence its repository ships.",
         "<b>Our code and checkpoints.</b> The trainer, the ladder, the cost "
