@@ -47,7 +47,11 @@ def main(argv):
             ("unexpanded macro", re.findall(r"\\[A-Za-z]{3,}", t)),
             ("stray backslash", re.findall(r"\\\d", t)),
             ("unresolved reference token", re.findall(r"\[\[[a-z]+:", t)),
-            ("caption still says Figure N", re.findall(r"Figure N\.", t)),
+            # "Table N." reached a built PDF: the protocol table is written
+            # with rows_tbl and a hand-made caption, so it never went through
+            # the numbering that fig() and tbl() apply.
+            ("caption still says Figure/Table/Section N",
+             re.findall(r"(?:Figure|Table|Section|Eq\.) N\b", t)),
             ("brace from a macro value", re.findall(r"[{}]", t)),
             ("math delimiter", re.findall(r"\$", t)),
         ]

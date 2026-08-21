@@ -1475,7 +1475,12 @@ def content(colw, fullw):
                     "decode's, on the same latent"]]
     rows_tbl([["", ""]] + proto)
     A(Paragraph(sub(
-        r"<b>Table N. The measurement protocol.</b> Every number in this "
+        # Unnumbered, like the notation table above it: this is a reference
+        # box rather than a result, nothing cites it by number, and routing it
+        # through tbl() would renumber every table after it. It reached the
+        # submitted PDF reading "Table N." because rows_tbl has no caption of
+        # its own and the hand-written one never saw _autonum.
+        r"<b>The measurement protocol.</b> Every number in this "
         r"paper is measured this way. The supplement varies each line in turn "
         r"and reports what the alternative costs."), CAP))
     h2("5.1 Main result")
