@@ -2228,7 +2228,7 @@ def content(colw, fullw):
         r"on the tiles it sent furthest. That is the same concentration "
         r"Section 5.5 uses to build configuration C, seen from the distortion "
         r"side rather than the regret side.")
-    h2("5.9 A budget in one metric is not a budget in another")
+    h2("A budget in one metric is not a budget in another")
     par(r"Every allocation in this paper is bisected on PSNR, which prices a "
         r"squared error and nothing else. The obvious question is what that "
         r"does to a metric built to track perception, so we measure MS-SSIM on "

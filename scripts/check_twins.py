@@ -79,6 +79,20 @@ def main():
         print(f"     only in one: {t}")
         bad += 1
 
+    # A duplicated subsection number in the reportlab build points every
+    # "Section 5.9" in the prose at two different places. LaTeX numbers its own
+    # subsections so it cannot happen there, which is exactly why the reportlab
+    # side needs checking.
+    import collections as _c
+    _n = [h for h in re.findall(r'h2\(\s*r?"([^"]+)"', PY)
+          if re.match(r"\d+\.\d+ ", h)]
+    _dup = [k for k, v in _c.Counter(x.split()[0] for x in _n).items() if v > 1]
+    if _dup:
+        bad += len(_dup)
+        for d in _dup:
+            print(f"     duplicate subsection number {d}")
+    print(f"  subsection numbers: {len(_n)}, {len(_dup)} duplicated")
+
     print(f"\n  {'PASS' if not bad else str(bad) + ' divergence(s)'}")
     return 0 if not bad else 1
 
