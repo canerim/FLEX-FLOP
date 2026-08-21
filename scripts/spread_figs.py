@@ -28,6 +28,19 @@ import naturestyle as ns  # noqa: E402
 ns.apply()
 RES = ROOT / "results"
 FIG = ROOT / "docs" / "figures"
+# The paper reads paper/figures, not docs/figures. spread.png was written here
+# only, so build_pdf printed "[spread.png missing]" where Figure 18 should be,
+# in a paper that otherwise passed every check. Write to both.
+OUT = (FIG, ROOT / "paper" / "figures")
+
+
+def save(fig, name):
+    for d in OUT:
+        d.mkdir(parents=True, exist_ok=True)
+        fig.savefig(d / name, dpi=500, bbox_inches="tight",
+                    pad_inches=0.02, facecolor="white")
+
+
 RATE_COLS = ["#08306b", "#2171b5", "#4292c6", "#6baed6", "#9ecae1"]
 
 
@@ -70,8 +83,7 @@ def spread():
                 color=ns.INK2)
     ax.text(0.02, 0.05, "bar is the median", transform=ax.transAxes,
             fontsize=4.8, color=ns.INK2)
-    fig.savefig(FIG / "spread.png", dpi=500, bbox_inches="tight",
-                pad_inches=0.02, facecolor="white")
+    save(fig, "spread.png")
     print(f"  wrote spread.png   q0 spans {rows[0]['min']:.1f} to "
           f"{rows[0]['max']:.1f}%, q63 spans {rows[-1]['min']:.1f} to "
           f"{rows[-1]['max']:.1f}%")
@@ -118,8 +130,7 @@ def exituse():
     cb.ax.tick_params(labelsize=4.6, length=1.5, width=0.4)
     cb.set_label("mean exit taken", fontsize=5.2)
     ax.set_xlabel("quality index", fontsize=5.8)
-    fig.savefig(FIG / "exituse.png", dpi=500, bbox_inches="tight",
-                pad_inches=0.02, facecolor="white")
+    save(fig, "exituse.png")
     print(f"  wrote exituse.png   mean exit {np.nanmin(M):.2f} to "
           f"{np.nanmax(M):.2f} across {len(classes)} classes")
 

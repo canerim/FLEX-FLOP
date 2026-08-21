@@ -452,6 +452,24 @@ for _name in ("check_twins", "check_tex", "prose_audit"):
     _last = [l for l in _r.stdout.splitlines() if l.strip()]
     print(f"\n  {_name}: {_last[-1].strip() if _last else '(no output)'}")
 
+# ---------------------------------------------------------------- figures
+# build_pdf reads paper/figures. A figure written only to docs/figures becomes
+# the italic words "[name missing]" where the picture should be, and nothing
+# else notices: the caption is present, the numbering is continuous, the claims
+# still match. Figure 18 of a 19-page paper was that placeholder until this
+# check existed.
+_refs = sorted(set(re.findall(r'figure(?:_wide)?\(\s*"([^"]+\.png)"',
+                              (R / "scripts/build_pdf.py").read_text())))
+_absent = [n for n in _refs if not (R / "paper/figures" / n).exists()]
+print(f"\n  figures: {len(_refs) - len(_absent)}/{len(_refs)} present in "
+      f"paper/figures")
+for n in _absent:
+    _where = " (exists in docs/figures)" \
+        if (R / "docs/figures" / n).exists() else ""
+    print(f"     MISSING {n}{_where}")
+if _absent:
+    bad = bad or [("figures", f"{len(_absent)} missing")]
+
 sys.exit(1 if bad else 0)
 
 

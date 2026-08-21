@@ -281,6 +281,9 @@ _FIGN = [0]
 _TABN = [0]
 
 
+_MISSING = []
+
+
 def _autonum(cap, counter, word):
     """Replace a hand-written 'Figure N.' with the running count.
 
@@ -307,6 +310,14 @@ def fig(name, width, cap, maxh=None):
     """
     p = FIGS / name
     if not p.exists():
+        # Loudly. spread.png was written to docs/figures and never copied here,
+        # so Figure 18 of a 19-page paper was the words "[spread.png missing]"
+        # in italics, and every check passed: the caption is fine, the claims
+        # are fine, the twins agree. The placeholder stays, because a build that
+        # dies takes the other 32 figures with it, but it no longer does so in
+        # silence and check_paper refuses the paper outright.
+        print(f"  MISSING FIGURE: {p}", file=sys.stderr)
+        _MISSING.append(name)
         return [Paragraph(f"<i>[{name} missing]</i>", CAP)]
     from PIL import Image as PILImage
     w, h = PILImage.open(p).size
@@ -2435,6 +2446,9 @@ def build(out="paper/FLEX-UF.pdf"):
     # target was one CVPR PDF; the author now wants it separate, and
     # scripts/build_supp_pdf.py has always been able to build it alone.
     doc.build(story)
+    if _MISSING:
+        print(f"  {len(_MISSING)} MISSING FIGURE(S): "
+              f"{', '.join(_MISSING)}", file=sys.stderr)
     if UNEXPANDED:
         print("  UNEXPANDED MACROS (run make_paper_tables.py): "
               + ", ".join(sorted(UNEXPANDED)))

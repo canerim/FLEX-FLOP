@@ -4876,3 +4876,29 @@ repeat must carry three distinct words of three letters or more.
 Fatal in the paper, reported in the supplement. The supplement compares the same
 quantity across rates, and "at q0 the smaller tile is ahead ... at q63 the
 smaller tile is behind" is that sentence working, not failing.
+
+## 97. Figure 18 was the words "[spread.png missing]" (2026-08-21)
+
+For an unknown number of builds, Figure 18 of the paper was not a figure. It was
+the italic string `[spread.png missing]`, set in caption type where the picture
+should be, under a correct caption with correct numbering.
+
+Every check passed. `check_paper` verified the claims the caption makes, and
+they were right. `check_twins` confirmed main.tex and build_pdf.py agree on the
+figure list, and they did. `check_tex` and `prose_audit` have no opinion about
+images. The figure numbering was continuous in both files, because `_autonum`
+increments whether or not a picture arrives.
+
+The cause: `spread_figs.py` writes to `docs/figures` and `build_pdf.py` reads
+`paper/figures`. Every other figure had been copied across at some point;
+this one never was. It was found by counting the numbers in the built PDF's text
+layer and noticing that 18 was absent between 17 and 19.
+
+Three changes. `spread_figs.py` writes to both directories. `fig()` prints the
+missing path to stderr and the build prints a summary line at the end, so the
+placeholder is never silent again. And `check_paper` now checks that every
+figure `build_pdf.py` names exists where `build_pdf.py` looks for it, which
+makes a missing picture fail the same command that catches a stale number.
+
+The general lesson is the one from DECISIONS 91 and 96: a check that reads the
+source cannot see what the source failed to produce. Read the artefact.
