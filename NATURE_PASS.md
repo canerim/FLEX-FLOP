@@ -280,3 +280,28 @@ portability and declining the uniformity, which is what the work actually does.
 
 One clause, not another rewrite. The opening now names the fixed decoder as what
 makes a file readable anywhere before saying what it costs.
+
+## Round 7 — can the reader recompute the headline?
+
+The lens: Nature expects a result to be reconstructible from what is printed. Not
+"trust the pipeline" -- the numbers on the page should close.
+
+Applied to Table 3, the paper's headline table. Average each printed row and
+compare with the printed mean:
+
+    0.10 dB   computed 21.54   printed 21.5   ok
+    0.20 dB   computed 33.64   printed 33.7   off by 0.06
+    0.30 dB   computed 37.40   printed 37.4   ok
+    0.50 dB   computed 38.30   printed 38.3   ok
+
+The 0.20 row is a rounding artefact: the mean is taken over unrounded values,
+which land just above 33.65, while averaging the rounded cells gives 33.64. The
+mean is right and the cells are right. What was missing is the sentence that
+tells a reader which of the two they are looking at, so a careful one does not
+spend ten minutes deciding the table is wrong. One clause in the reporting
+conventions, which is where the paper already fixes its other definitions.
+
+The general point for the rest of the paper: every table whose last column is an
+aggregate owes the reader a note on when the rounding happened. This is the same
+discipline as the two saving definitions -- the number is not the claim until the
+convention is stated.

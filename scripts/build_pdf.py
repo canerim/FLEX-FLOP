@@ -1424,7 +1424,9 @@ def content(colw, fullw):
         r"own deepest exit costs 1.0095 of it, and using that as the "
         r"denominator would flatter every result by 0.6–0.8 points. "
         r"Rate-distortion differences are integrated as BD-Rate [4] over "
-        r"the five quality indices.")
+        r"the five quality indices. "
+        r"Means are taken over unrounded values, so averaging a printed row "
+        r"can differ from the printed mean by a unit in the last place.")
     par(r"<b>The protocol every number in this paper obeys.</b> Two "
         r"implementations of the same quantity have differed here by as "
         r"much as 3.29 saving points, and the choice between per-frame and "

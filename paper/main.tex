@@ -1064,7 +1064,9 @@ side is the deployed tiled decode, so the tiling penalty sits inside every
 number. Savings are fractions of the released decoder's cost. Our own deepest
 exit costs $1.0095$ of it, and using that as the denominator would flatter every
 result by $0.6$--$0.8$ points. Rate--distortion differences are integrated as
-BD-Rate~\cite{bjontegaard} over the five quality indices.
+BD-Rate~\cite{bjontegaard} over the five quality indices. Means are taken over unrounded values, so
+averaging a printed row can differ from the printed mean by a unit in the last
+place.
 
 \subsection{Main result}
 
