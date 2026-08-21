@@ -692,6 +692,21 @@ def build(out="paper/FLEX-UF-supp.pdf"):
     kit = Kit(colw, fullw)
     built = _sections(kit)
 
+    # The same sections, rendered to LaTeX. paper/supplementary.tex inputs eight
+    # files that had never been written, so the LaTeX submission carried an
+    # empty supplement. Writing them by hand would have left two sources to keep
+    # in step; this renders them from the one that already exists.
+    import importlib
+    from supp_tex import TexKit
+    for _name in ORDER:
+        try:
+            _mod = importlib.import_module(f"supp.{_name}")
+            importlib.reload(_mod)
+            TexKit(_name).render(_mod.content)
+        except Exception as _e:
+            print(f"  LaTeX for {_name}: {type(_e).__name__}: {_e}")
+
+
     # Title block, measured rather than guessed. A band taller than what it
     # holds leaves both columns of page 1 short, which is the defect the main
     # paper's own template comments complain about.
