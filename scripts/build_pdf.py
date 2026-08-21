@@ -522,6 +522,12 @@ def content(colw, fullw):
         r"measure both ends at every rate in Section 5.4, where the 0.1 dB "
         r"budget uses \BandUseLow% of the band at low rate and \BandUseHigh% "
         r"at high rate.")
+    par(r"The paper makes three claims and everything else in it is support "
+        r"for one of them: that decoding computation can be allocated by "
+        r"content on a decoder nobody is allowed to change; that a distortion "
+        r"budget is a usable control only inside a window that tiling itself "
+        r"creates; and that the file already says where the computation should "
+        r"go.")
     h2("Contributions.")
     par(r"<b>(i)</b> An early-exit ladder for a learned image decoder that "
         r"picks a depth per tile, which is spatial adaptivity at the "
@@ -540,7 +546,14 @@ def content(colw, fullw):
         r"numerically rather than asserted. Measuring the budget in units of "
         r"that band accounts for most of the rate dependence, on two "
         r"independently trained checkpoints.")
-    par(r"<b>(iii)</b> A zero-learned-parameter control that adaptive-inference work is "
+    par(r"<b>(iii)</b> The bits a tile has already cost predict how deep it "
+        r"has to decode, better than a trained router does. Routing on the "
+        r"entropy model's own output beats our \RouterParams head at every "
+        r"rate, by up to \RateRankBeatsBy points, with nothing added to the "
+        r"file and nothing learned. It does so while picking the search's exit "
+        r"on FEWER tiles than the head does, which says that accuracy over "
+        r"exit labels is the wrong objective and that ordering is what a "
+        r"router has to get right. A zero-learned-parameter control that adaptive-inference work is "
         r"rarely measured against. Routing on the bits the entropy model has "
         r"already spent per tile costs nothing, adds nothing to the stream, and "
         r"beats our trained head at every rate, while agreeing with the oracle "
@@ -1194,7 +1207,7 @@ def content(colw, fullw):
         r"than two thirds of what the estimator could not fix is absorbed by "
         r"weights learning to live with it. That single change removes more of "
         r"the seam than any module in this paper does.")
-    h2("4.3 A learned deblocking filter, and why we reject it")
+    h2("4.3 A learned deblocking filter, and why it is not sufficient")
     figure("seam_gate.png",
            r"<b>Figure N. The deblocking gate, and what it does.</b> "
            r"<b>a</b>, the trained gate G, one scalar per position within a "
@@ -1301,6 +1314,27 @@ def content(colw, fullw):
         r"number. Savings are fractions of the released decoder's cost. Our "
         r"own deepest exit costs 1.0095 of it, and using that as the "
         r"denominator would flatter every result by 0.6–0.8 points.")
+    par(r"<b>The protocol every number in this paper obeys.</b> Two "
+        r"implementations of the same quantity have differed here by as "
+        r"much as 3.29 saving points, and the choice between per-frame and "
+        r"pooled distortion moves an integrated saving by 7 to 10, so the "
+        r"convention is not a detail and we fix it once.")
+    proto = [["reference", "the released DCVC-UF decoder, run full-frame on the "
+                       "same latent"],
+         ["distortion", "MSE pooled over the frame, then converted to dB "
+                        "against that reference, then averaged over frames"],
+         ["budget", "applied per frame, not to the set mean"],
+         ["λ and β", "one scalar per (quality index, budget), not per frame "
+                     "and not per tile"],
+         ["the map", "re-decoded: every reported dB is a real decode of the "
+                     "mixed-depth map, never the uniform-exit table"],
+         ["saving", "hook-counted MACs of that decode over the released "
+                    "decode's, on the same latent"]]
+    rows_tbl([["", ""]] + proto)
+    A(Paragraph(sub(
+        r"<b>Table N. The measurement protocol.</b> Every number in this "
+        r"paper is measured this way. The supplement varies each line in turn "
+        r"and reports what the alternative costs."), CAP))
     h2("5.1 Main result")
     tbl("main_results",
         r"<b>Table 3. Decoder MACs saved</b> (%) against the released decoder, "
@@ -1394,6 +1428,15 @@ def content(colw, fullw):
         r"and turns the same signal into a complete routing rule, which "
         r"matches the trained head across the whole rate range.")
     h2("5.3 Resolution, and the granularity of a tile")
+    par(r"<b>This comparison is indicative and confounded.</b> The 128 and 256 "
+        r"pixel ladders are different training runs, so anything that "
+        r"separates them separates two runs as well as two tile sizes. The "
+        r"size of that confound is measurable and it is not small: two runs of "
+        r"the SAME recipe, at a matched epoch on the same frames, differ by "
+        r"4.8 saving points, which is as large as the tile-size effect "
+        r"reported below. We report the comparison because the resolution "
+        r"dependence it exposes is real and was hidden by a 1080p-only test "
+        r"set, and we do not read the tile size as its cause.")
     figure("perclass.png",
            r"<b>Figure 7. Saving by test class</b> at one global operating "
            r"point. λ is bisected once so the whole set lands on the budget, "
@@ -1579,10 +1622,12 @@ def content(colw, fullw):
         r"that is where the training λ lands, and there the gap is at its "
         r"minimum. At q0 it is \BetaLow and the gap is \GapMax. A large β in "
         r"either direction lets the cost term dominate the logits, which "
-        r"discards the content ranking the router learned. The remedy is a "
-        r"router per operating point, and a deployment would have one anyway: "
-        r"a single set of weights covers all rates, and a \RouterParams head "
-        r"per rate is 0.3% of the model each.")
+        r"discards the content ranking the router learned. What we ship is "
+        r"one head for every rate, with β read from an offline table indexed "
+        r"by quality index and budget (Section 3.5). A head per operating "
+        r"point would close this gap and we do not propose it: it multiplies "
+        r"the stored model by the number of rates, and the rule of Section 5.6 "
+        r"closes more of the gap for nothing.")
     par(r"Loosening the budget closes the gap only where the budget saturates "
         r"the ladder. At 0.3 dB the gap is \GapLooseLow points at the three "
         r"lowest rates. That is exactly the router's own \RouterCostPct% of "
@@ -2060,10 +2105,17 @@ def content(colw, fullw):
         r"answer here, because an exit map propagates through the reference "
         r"chain and a shallow tile in one frame is a worse reference for the "
         r"next one.")
-    par(r"<b>Training is not converged.</b> At every checkpoint we have "
-        r"measured more than once, the saving was still going up. We therefore "
-        r"read the numbers reported here as a lower bound on what a converged "
-        r"run would give.")
+    par(r"<b>The checkpoint is early in its schedule.</b> Every number in "
+        r"this paper is measured on one pinned checkpoint, "
+        r"runs/RECIPE512/ckpt_PAPER.pth.tar, taken at the end of the first "
+        r"pass over the training set. It is pinned because a moving checkpoint "
+        r"was overwritten mid-measurement once, and a paper whose tables come "
+        r"from three different epochs is worse than one whose tables are "
+        r"early. Later checkpoints of the same run improved the measured "
+        r"trade-off: on the same 53 frames at the same budget, epoch 1 reads "
+        r"25.3% and epoch 2 reads 24.6% where the pinned checkpoint reads "
+        r"\MeanAtOne%. Two points do not establish a trend and we do not read "
+        r"them as a bound on what a converged run would give.")
     par(r"<b>A single decoder.</b> All results are on DCVC-UF's intra decoder. "
         r"Nothing in the method looks specific to it, since the ladder needs "
         r"only a residual trunk with a shared head, but we have not measured a "
@@ -2076,7 +2128,8 @@ def content(colw, fullw):
         r"\MainLowRate% to \MainHighRate% of its multiply-accumulates for a "
         r"BD-Rate cost of \BdRateALow%, with no change to the encoder and none "
         r"to the coded payload.")
-    par(r"Three lessons we would carry to any spatially adaptive decoder, and "
+    par(r"Three lessons we would expect to carry to decoders of this class, "
+        r"a residual trunk behind a shared head, and "
         r"none of them is about early exit.")
     par(r"Tiling is the dominant cost and it is governed by depth. All "
         r"of that cost traces back to a single 3×3 that is 0.29% of the "

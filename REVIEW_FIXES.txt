@@ -2,7 +2,7 @@ FLEX-UF · REVIEWER FIX LIST
 30 items. Ticked only when the fix is in the built PDF and check_paper agrees.
 [ ] open   [~] in progress   [x] done
 
-Status: 22 / 31
+Status: 31 / 31
 
 ================================================================================
 CRITICAL (8)
@@ -73,7 +73,7 @@ CRITICAL (8)
         internal correctness condition, not a limitation.
         FIX: either repair the code path or delete the claim. DECISIONS 91.
 
-[ ] 08. The deblocking-filter narrative contradicts itself.
+[x] 08. The deblocking-filter narrative contradicts itself.
         The section is titled "A learned deblocking filter, and why we reject
         it", yet the shipped configuration still pays for it: Table 6 blames it
         for the deepest exit costing more than the release, and the supplement's
@@ -86,7 +86,7 @@ CRITICAL (8)
 VERY IMPORTANT (4)
 ================================================================================
 
-[ ] 09. Pin the evaluation protocol in one box in the main paper.
+[x] 09. Pin the evaluation protocol in one box in the main paper.
         Two implementations of the same quantity differ by up to 3.29 saving
         points, which is larger than some of the method differences the paper
         reports, and the per-frame against pooled convention moves integrated
@@ -104,7 +104,7 @@ VERY IMPORTANT (4)
         FIX: "on 53 CTC intra frames, one from each sequence" in the abstract
         and wherever the test set is described.
 
-[ ] 11. Do not leave "training is not converged" bare in the submission.
+[x] 11. Do not leave "training is not converged" bare in the submission.
         The launcher was given 16 epochs and the headline checkpoint is about
         one pass in; later epochs measured 22.1 rising to 25.3.
         FIX: freeze the run, make one checkpoint canonical, and if a later one
@@ -140,13 +140,13 @@ IMPORTANT (8)
         FIX: "on a decoder trained with independent-tile padding, introducing
         halo exchange only at inference severely degrades routed allocation".
 
-[ ] 16. Soften the generalisations, do not run a second codec.
+[x] 16. Soften the generalisations, do not run a second codec.
         The work measures the DCVC-UF intra decoder only.
         FIX: "any spatially adaptive decoder" becomes "we expect", "suggests",
         or "in this architecture class", in the abstract, introduction and
         conclusion.
 
-[ ] 17. Resolution-adaptive tile size is not a causal ablation.
+[x] 17. Resolution-adaptive tile size is not a causal ablation.
         The 128 and 256 px comparison comes from different training runs, which
         the paper admits.
         FIX: move it to the supplement, or mark it "indicative, confounded by
@@ -164,7 +164,7 @@ IMPORTANT (8)
         FIX: exact GPU, precision, PyTorch and CUDA versions, warmup, batching.
         Wall clock is a strength of this paper; no ambiguity here.
 
-[ ] 20. Reduce the router deployment story to one option.
+[x] 20. Reduce the router deployment story to one option.
         One place says a single head covers all 64 quality indices; another
         proposes a router per operating point as a remedy for the gap away from
         q32.
@@ -188,7 +188,7 @@ MEDIUM (5)
         "rate-ranked (free)" invites the reader to think they are one algorithm.
         FIX: "oracle-histogram bit ranking" against "calibrated bit router".
 
-[ ] 23. Promote the free baseline beating the trained head to a main result.
+[x] 23. Promote the free baseline beating the trained head to a main result.
         It wins at 5 of 5 rates at 0.1 dB despite worse oracle agreement.
         FIX: state the insight crisply. Classification accuracy over exit labels
         is a poor router objective; regret and ranking are what matter. This
@@ -257,7 +257,7 @@ POLISH (3)
 STRUCTURE (2)
 ================================================================================
 
-[ ] 29. The main paper's thesis is diffuse.
+[x] 29. The main paper's thesis is diffuse.
         It is currently trying to be a seam-estimator paper, an early-exit
         paper, a Lagrangian theory paper, a router paper, a partial-signalling
         paper, a map-reuse paper and a hardware-efficiency paper at once.
@@ -275,7 +275,7 @@ STRUCTURE (2)
         carry the same eight-page paper and agree on 7 figures, 9 tables and
         4 numbered equations.
 
-[ ] 30. Foreground the three strongest results and demote the rest to support.
+[x] 30. Foreground the three strongest results and demote the rest to support.
         The CVPR-worthy core: spatial compute allocation on a fixed learned
         decoder; a finite feasible band caused by tiling; and the bits already
         spent predicting the compute the reconstruction needs. What is missing

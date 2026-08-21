@@ -124,6 +124,12 @@ exit and more quality buys nothing. Between the two, in what we call the
 ends at every rate in Section~\ref{sec:operating}, where the $0.1\dB$ budget
 uses \BandUseLow\% of the band at low rate and \BandUseHigh\% at high rate.
 
+The paper makes three claims and everything else in it is support for one of
+them: that decoding computation can be allocated by content on a decoder nobody
+is allowed to change; that a distortion budget is a usable control only inside a
+window that tiling itself creates; and that the file already says where the
+computation should go.
+
 \paragraph{Contributions.}
 \begin{enumerate}\itemsep2pt
 \item An early-exit ladder for a learned image decoder that picks a depth per
@@ -833,7 +839,7 @@ estimator could not fix is absorbed by weights learning to live with it
 (Fig.~\ref{fig:seamqp}). That single change removes more of the seam than any
 module in this paper does.
 
-\subsection{A learned deblocking filter, and why we reject it}
+\subsection{A learned deblocking filter, and why it is not sufficient}
 
 \begin{figure}[t]
 \centering
@@ -1817,7 +1823,8 @@ that tile contains. At a $0.1\dB$ budget this removes \MainLowRate\% to
 \MainHighRate\% of its multiply--accumulates for a BD-Rate cost of
 \BdRateALow\%, with no change to the encoder and none to the coded payload.
 
-Three lessons we would carry to any spatially adaptive decoder, and none of them
+Three lessons we would expect to carry to decoders of this class, a residual
+trunk behind a shared head, and none of them
 is about early exit.
 
 \textbf{Tiling is the dominant cost and it is governed by depth.} All of that
