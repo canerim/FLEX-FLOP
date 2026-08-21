@@ -41,7 +41,7 @@ is, but how much of it runs where.
 
 Here we show that decoding computation can be allocated by content on a decoder
 that is not allowed to change. A frame is cut into tiles after the shared part
-of the decoder has run (Fig.~\ref{fig:patchify}), and each tile leaves the remaining trunk at its own
+of the decoder has run, and each tile leaves the remaining trunk at its own
 depth, with the encoder, the entropy model and the coded latent untouched. On
 \NumSeq\ CTC intra frames a $0.1\dB$ constraint removes
 \MainLowRate--\MainHighRate\% of decoder multiply-accumulates across the rate
@@ -369,7 +369,7 @@ the arithmetic untouched.
 \section{Method}
 
 The construction is short. A frame is cut into tiles once the shared part of the
-decoder has run, each tile is allowed to leave the remaining trunk at its own
+decoder has run (Fig.~\ref{fig:patchify}), each tile is allowed to leave the remaining trunk at its own
 depth, and a small adapter reconciles an early departure with a head that was
 fitted to the full one. Everything difficult is in the three questions that
 follow from it: what cutting costs, what a budget can buy, and who decides. This
@@ -2071,11 +2071,12 @@ this method, and the optimism grows with how much of the frame exits early.
 
 \subsection{Where the saving is realised, and where it is not}
 
-A saving in operations is an optimistic bound on a saving in time on the GPU we
-time on, and the optimism is a scheduling cost: the last groups of the trunk run
-on a handful of tiles and the card is largely idle. That cost is a property of
-the device, not of the method, so we measured the same decodes on a CPU with
-\CpuThreads\ threads and at three batch sizes on the GPU
+That optimism is a scheduling cost, and scheduling belongs to the device rather
+than to the method: the last groups of the trunk run on a handful of tiles and
+the card is largely idle waiting for them. If that is what the gap is, a machine
+that does not care how many tiles are in flight should not show it. We measured
+the same decodes on a CPU with \CpuThreads\ threads, and at three batch sizes on
+the GPU to see whether feeding it more work closes the gap instead
 (Table~\ref{tab:cpubatch}).
 
 \begin{table}[t]
@@ -2090,10 +2091,10 @@ machine changes.}
 
 On the CPU the bound is not optimistic. At the lowest rate the routed decode
 takes \CpuMsRouted\ seconds against \CpuMsStock, which is \CpuSavingLow\%
-removed where the arithmetic model predicts \CpuPredLow\%: a machine that does
-not care how many tiles are in flight realises slightly more than the operations
-count, because the tiles that exit early stop touching memory as well as
-arithmetic. The GPU recovers \BatchGainLow\ points by batching, and stops
+removed where the arithmetic model predicts \CpuPredLow\%. It realises slightly
+more than the operations count, because the tiles that exit early stop touching
+memory as well as arithmetic, and nothing there is waiting on a wide device to
+fill. The GPU recovers \BatchGainLow\ points by batching, and stops
 there. At the highest rate the CPU falls back to \CpuSavingHigh\%, in line with
 the GPU, because at that rate the allocation is deep and there is little left to
 skip. The claim we take from this is narrow: the gap between operations and time

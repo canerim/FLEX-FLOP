@@ -2083,6 +2083,12 @@ def content(colw, fullw):
         r"reproduces A. Neither end is imposed; both fall out of the same code "
         r"path run against independently measured files, so the columns "
         r"between them are measuring something real.")
+    par(r"Most of the gap is cheap. Overriding a tenth of the tiles for "
+        r"\HybridBitsTenth bits per frame recovers "
+        r"\HybridRecoverTenthLow–\HybridRecoverTenthHigh% of the gap, and a "
+        r"fifth recovers \HybridRecoverFifthLow–\HybridRecoverFifthHigh%. "
+        r"Recovery is concave everywhere, so the first bits spent are the most "
+        r"useful ones.")
     figure("concentration.png",
            r"<b>Figure N. The loss is concentrated.</b> <b>a</b>, the share of "
            r"the total regret carried by the worst fraction of tiles, per "
@@ -2091,12 +2097,6 @@ def content(colw, fullw):
            r"minority of tiles carries most of what staying silent costs, "
            r"which is why signalling a fraction of the map recovers most of "
            r"the gap.")
-    par(r"Most of the gap is cheap. Overriding a tenth of the tiles for "
-        r"\HybridBitsTenth bits per frame recovers "
-        r"\HybridRecoverTenthLow–\HybridRecoverTenthHigh% of the gap, and a "
-        r"fifth recovers \HybridRecoverFifthLow–\HybridRecoverFifthHigh%. "
-        r"Recovery is concave everywhere, so the first bits spent are the most "
-        r"useful ones.")
     par(r"And a partial map can beat a complete one. At \HybridBeatsAN "
         r"of \HybridBeatsAOf rates, signalling half the tiles for "
         r"\HybridBitsHalf bits saves <i>more</i> than signalling all of them, "
@@ -2336,30 +2336,32 @@ def content(colw, fullw):
         r"operations are an <i>optimistic</i> bound on this method, and the "
         r"optimism grows with how much of the frame exits early.")
     h2("Where the saving is realised, and where it is not")
-    par(r"A saving in operations is an optimistic bound on a saving in time on "
-        r"the GPU we time on, and the optimism is a scheduling cost: the last "
-        r"groups of the trunk run on a handful of tiles and the card is "
-        r"largely idle. That cost is a property of the device, not of the "
-        r"method, so we measured the same decodes on a CPU with \CpuThreads "
-        r"threads and at three batch sizes on the GPU ([[tab:cpu_batch]]).")
+    par(r"That optimism is a scheduling cost, and scheduling belongs to the "
+        r"device rather than to the method: the last groups of the trunk run "
+        r"on a handful of tiles and the card is largely idle waiting for "
+        r"them. If that is what the gap is, a machine that does not care how "
+        r"many tiles are in flight should not show it. We measured the same "
+        r"decodes on a CPU with \CpuThreads threads, and at three batch "
+        r"sizes on the GPU to see whether feeding it more work closes the "
+        r"gap instead ([[tab:cpu_batch]]).")
     tbl("cpu_batch",
         r"<b>Table N. The same saving in three places.</b> Per cent removed at "
         r"the 0.1 dB budget on a padded 1080p frame: the arithmetic model, the "
         r"GPU at two batch sizes, and the CPU. Arithmetic is the same in every "
         r"column; only the machine changes.")
     par(r"On the CPU the bound is not optimistic. At the lowest rate the "
-        r"routed decode takes \CpuMsRouted seconds against "
-        r"\CpuMsStock, which is \CpuSavingLow% removed where the arithmetic "
-        r"model predicts \CpuPredLow%: a machine that does not care how many "
-        r"tiles are in flight realises slightly more than the operations "
-        r"count, because the tiles that exit early stop touching memory as "
-        r"well as arithmetic. The GPU recovers \BatchGainLow points by "
-        r"batching, and stops there. At the highest rate the CPU falls back to "
-        r"\CpuSavingHigh%, in line with the GPU, because at that rate the "
+        r"routed decode takes \CpuMsRouted seconds against \CpuMsStock, "
+        r"which is \CpuSavingLow% removed where the arithmetic model "
+        r"predicts \CpuPredLow%. It realises slightly more than the "
+        r"operations count, because the tiles that exit early stop touching "
+        r"memory as well as arithmetic, and nothing there is waiting on a "
+        r"wide device to fill. The GPU recovers \BatchGainLow points by "
+        r"batching, and stops there. At the highest rate the CPU falls back "
+        r"to \CpuSavingHigh%, in line with the GPU, because at that rate the "
         r"allocation is deep and there is little left to skip. The claim we "
         r"take from this is narrow: the gap between operations and time is a "
-        r"scheduling property of the accelerator, and on a device without one "
-        r"the operations count is the honest figure.")
+        r"scheduling property of the accelerator, and on a device without "
+        r"one the operations count is the honest figure.")
     h2("5.10 The right ladder depends on the budget")
     tbl("runs",
         r"<b>Table 9. Ladder settings</b>, mean saving (%) over the five "

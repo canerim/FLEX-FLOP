@@ -126,13 +126,21 @@ def check_refs_and_bib(root):
         for m in re.finditer(r"\\cite[a-z]*\{([^}]*)\}", s):
             cited |= {k.strip() for k in m.group(1).split(",")}
         uncited = sorted(bib - cited)
+    # An abstract is read on its own, off the paper's own page. A figure
+    # reference there points at something the reader cannot see; one arrived
+    # when the cross-references were placed automatically.
+    _m = re.search(r"\\begin\{abstract\}(.*?)\\end\{abstract\}", main, re.S)
+    _abs = re.findall(r"\\(?:ref|autoref|cref)\{[^}]*\}", _m.group(1)) if _m else []
+    for r in _abs:
+        print(f"     REFERENCE IN THE ABSTRACT: {r}")
+
     for r in dangling:
         print(f"     DANGLING \\ref{{{r}}} -- prints as ??")
     for k in uncited:
         print(f"     UNCITED bib entry {k} -- bibtex will drop it")
     print(f"  refs: {len(refs)} used, {len(dangling)} dangling; "
           f"bib: {len(uncited)} uncited")
-    return len(dangling) + len(uncited)
+    return len(dangling) + len(uncited) + len(_abs)
 
 
 if __name__ == "__main__":
