@@ -1594,7 +1594,8 @@ def content(colw, fullw):
         r"is wider than the rule's margin over either of them. So the claim we "
         r"make is not that no learned router can beat the bit rule. It is that "
         r"a rule costing nothing sits inside the band two of our own trained "
-        r"heads span, which is where a control belongs.")    figure("spread.png",
+        r"heads span, which is where a control belongs.")
+    figure("spread.png",
            r"<b>Figure N. What the set mean hides.</b> Every test sequence as "
            r"a point, at the 0.1 dB budget; the bar is the median. At the "
            r"lowest rate the saving runs from \SpreadLowMin% to \SpreadLowMax% "
