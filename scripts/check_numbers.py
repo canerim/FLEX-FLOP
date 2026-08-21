@@ -15,6 +15,7 @@ constants the paper states rather than measures.
 from __future__ import annotations
 
 import io
+import os
 import re
 import sys
 import tokenize
@@ -58,8 +59,11 @@ def prose_numbers(path: Path) -> dict[str, list[int]]:
     src = path.read_text()
     out: dict[str, list[int]] = {}
     lit = re.compile(r'r?f?"((?:[^"\\]|\\.)*)"')
-    for m in re.finditer(r"\n\s*(?:story \+= )?(?:par|h1|h2|note|figure_wide"
-                         r"|figure|tbl)\(", src):
+    # build_pdf writes `par(...)`; the supplement sections write `k.par(...)`
+    # on a Kit object. Matching only the bare form made the supplement half of
+    # this check a no-op that reported PASS over zero sentences.
+    for m in re.finditer(r"\n\s*(?:story \+= )?(?:k\.)?(?:par|h1|h2|note|fig"
+                         r"|figwide|figure_wide|figure|tbl|rows)\(", src):
         seg, d, e = src[m.end():m.end() + 3500], 1, None
         for i, c in enumerate(seg):
             if c == "(":
@@ -96,6 +100,62 @@ def section_numbers() -> set[str]:
     return set(re.findall(r'h2\("(\d+\.\d+)', src))
 
 
+def measured() -> set[str]:
+    """Every number in results/, in the forms a paper prints it in.
+
+    The supplement computes almost all of its numbers in f-strings, so a typed
+    decimal there is the exception and worth checking. Requiring it to be a
+    macro or a claim would be too strong -- the supplement legitimately quotes
+    values no macro carries -- so the test is that it exists SOMEWHERE in the
+    measurements.
+
+    Be clear about what that does and does not catch. Fifty thousand printed
+    forms come out of results/, so almost any two-decimal number is in the
+    index and a value that drifted from 0.25 to 0.27 will pass. What it does
+    catch is a number that exists nowhere in the measurements at all -- which
+    is precisely how "3.29 saving points" and "7 to 10" survived in the main
+    paper's protocol paragraph, one of them wrong by a factor of three. An
+    orphan, not a drift.
+
+    Mantissas are indexed too. Lambdas are stored as 5.126e-05 and printed as
+    "5.126 x 10^-5", and without the mantissa form every one of them reads as
+    unbacked.
+    """
+    import glob
+    import json as _j
+    out: set[str] = set()
+
+    def add_num(o):
+        a = abs(o)
+        for d in (1, 2, 3, 4):
+            out.add(f"{a:.{d}f}")
+            out.add(f"{a:.{d}f}".rstrip("0").rstrip(".") or "0")
+        if 0 < a < 0.01 or a >= 1e4:
+            m = f"{a:e}".split("e")[0]
+            for d in (1, 2, 3, 4):
+                out.add(f"{float(m):.{d}f}")
+                out.add(f"{float(m):.{d}f}".rstrip("0").rstrip(".") or "0")
+
+    def walk(o):
+        if isinstance(o, dict):
+            for v in o.values():
+                walk(v)
+        elif isinstance(o, list):
+            for v in o:
+                walk(v)
+        elif isinstance(o, (int, float)) and not isinstance(o, bool):
+            add_num(o)
+
+    for f in sorted(glob.glob(str(R / "results/*.json"))):
+        try:
+            if os.path.getsize(f) > 20_000_000:
+                continue
+            walk(_j.loads(open(f).read()))
+        except Exception:
+            pass
+    return out
+
+
 def known() -> set[str]:
     """Every number the build can justify: macro values, and the expected side
     of each check_paper claim.
@@ -121,7 +181,18 @@ def known() -> set[str]:
 
 def main() -> int:
     have = known() | set(ALLOW) | section_numbers()
+    meas = measured()
     bad = []
+    # The supplement is checked against the measurements rather than against
+    # macros: it computes nearly everything in f-strings, so what is left typed
+    # is what deserves the question "is this still true anywhere?"
+    import glob as _glob
+    for f in sorted(_glob.glob(str(R / "scripts/supp/*.py"))):
+        f = Path(f)
+        for n, lines in sorted(prose_numbers(f).items()):
+            if n in meas or n in have:
+                continue
+            bad.append((f.name, n, lines))
     for f in (R / "scripts/build_pdf.py",):
         for n, lines in sorted(prose_numbers(f).items()):
             if n in have:
