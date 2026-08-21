@@ -514,10 +514,8 @@ def content(k):
           "released DCVC-UF intra decoder and FLEX-UF at three budgets, on "
           "the \\NumSeq CTC intra frames. Both axes come from one pass over "
           "the same frames, and the encoders are asserted bit-identical on "
-          "the weights before a shared rate is reported -- the main paper's "
-          "version of this plane took its bitrate from a 40-sequence, "
-          "two-frame file and its quality from the \\NumSeq-frame one, which "
-          "put the released curve up to 23% left of where it belongs. "
+          "the weights before a shared rate is reported, because a shared "
+          "x-axis is a claim rather than a convenience. "
           "<b>b</b>, the same difference magnified: the decibels each budget "
           "delivered, against the decoder arithmetic it bought on the "
           "right-hand axis.", maxh=190)

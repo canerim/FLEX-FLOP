@@ -186,7 +186,7 @@ q63 & 0.6717 & 43.155 & 43.037 & 0.1181 & 0.99419 & 0.99413 & 0.0464 \\
 \begin{figure}[t]
 \centering
 \includegraphics[width=\columnwidth]{figures/rd_vs_uf.png}
-\caption{\textbf{a}, rate against quality over the five quality indices, the released DCVC-UF intra decoder and FLEX-UF at three budgets, on the \NumSeq CTC intra frames. Both axes come from one pass over the same frames, and the encoders are asserted bit-identical on the weights before a shared rate is reported -- the main paper's version of this plane took its bitrate from a 40-sequence, two-frame file and its quality from the \NumSeq-frame one, which put the released curve up to 23\% left of where it belongs. \textbf{b}, the same difference magnified: the decibels each budget delivered, against the decoder arithmetic it bought on the right-hand axis.}
+\caption{\textbf{a}, rate against quality over the five quality indices, the released DCVC-UF intra decoder and FLEX-UF at three budgets, on the \NumSeq CTC intra frames. Both axes come from one pass over the same frames, and the encoders are asserted bit-identical on the weights before a shared rate is reported, because a shared x-axis is a claim rather than a convenience. \textbf{b}, the same difference magnified: the decibels each budget delivered, against the decoder arithmetic it bought on the right-hand axis.}
 \end{figure}
 
 {\small Drawn by scripts/rd\_vs\_uf\_figure.py from results/rd\_absolute\_PAPER.json and results/signalled\_RECIPE512\_ctc53.json, both on runs/RECIPE512/ckpt\_PAPER.pth.tar.}
