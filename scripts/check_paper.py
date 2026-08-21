@@ -470,6 +470,13 @@ json.dump({"n_claims": len(CLAIMS), "n_passed": len(CLAIMS) - len(bad),
 # here so a divergence is caught by the same command that catches a stale
 # number.
 import subprocess as _sp  # noqa: E402
+# Two of these measure quality rather than correctness and are advisory: a
+# short column and a repeated sentence opening are things to look at, not
+# things that make the paper wrong. The rest are fatal, and until now none of
+# them was: this loop printed their last line and threw their exit codes away,
+# so check_paper returned 0 while a sub-check returned 1 and anybody using it
+# as a gate would have seen a green light.
+_ADVISORY = {"check_layout", "prose_audit"}
 for _name in ("check_twins", "check_tex", "prose_audit", "check_layout",
               "check_figs_fresh", "check_render", "check_fig_prose",
               "check_fig_overlap", "check_cites", "check_numbers",
@@ -478,7 +485,15 @@ for _name in ("check_twins", "check_tex", "prose_audit", "check_layout",
     _r = _sp.run([sys.executable, str(Path(__file__).parent / f"{_name}.py")],
                  capture_output=True, text=True)
     _last = [l for l in _r.stdout.splitlines() if l.strip()]
-    print(f"\n  {_name}: {_last[-1].strip() if _last else '(no output)'}")
+    _verdict = _last[-1].strip() if _last else "(no output)"
+    _flag = ""
+    if _r.returncode and _name not in _ADVISORY:
+        bad = bad or []
+        bad.append((_name, f"exit {_r.returncode}"))
+        _flag = "   <-- FAILING"
+    elif _r.returncode:
+        _flag = "   (advisory)"
+    print(f"\n  {_name}: {_verdict}{_flag}")
 
 # ------------------------------------------------ per-class numbers by hand
 # The per-class savings appeared three times in the prose and only one of the
