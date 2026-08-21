@@ -707,7 +707,11 @@ $\sigma$ is already computed during the decode and is, position by position, an
 estimate of how hard that position was to code. The third is the quality index.
 Each of the first two is projected by a $1\times1$ convolution, to $48$ and $32$
 channels, and then reduced to one vector per tile by taking the mean and the
-standard deviation over the tile. That gives $96 + 64 + 1 = 161$ numbers per
+standard deviation over the tile. Both moments are there on
+purpose: the channel means describe roughly a tile's colour and the standard
+deviations its texture, and texture is what decides how many blocks a tile
+needs. The same pair is what adaptive instance normalisation takes as a
+compact description of a feature map's style~\cite{adain}. That gives $96 + 64 + 1 = 161$ numbers per
 tile, which pass through \texttt{LayerNorm} and a three-layer perceptron of
 width $256$ with SiLU activations, ending in $K$ logits. The whole head is
 $144{,}030$ parameters and $0.162\%$ of the decode it is deciding about, almost

@@ -1075,7 +1075,12 @@ def content(colw, fullw):
         r"quality index. Each of the first two is projected by a 1×1 "
         r"convolution, to 48 and 32 channels, and then reduced to one vector "
         r"per tile by taking the mean and the standard deviation over the "
-        r"tile. That gives 96 + 64 + 1 = 161 numbers per tile, which pass "
+        r"tile. Both moments are there on purpose: the channel means describe "
+        r"roughly a tile's colour and the standard deviations its texture, and "
+        r"texture is what decides how many blocks a tile needs. The same pair "
+        r"is what adaptive instance normalisation takes as a compact "
+        r"description of a feature map's style [53]. "
+        r"That gives 96 + 64 + 1 = 161 numbers per tile, which pass "
         r"through LayerNorm and a three-layer perceptron of width 256 with "
         r"SiLU activations, ending in K logits. The whole head is 144,030 "
         r"parameters and 0.162% of the decode it is deciding about, almost all "
@@ -2325,6 +2330,8 @@ REFS = [
     "H. Fu, J. Liang, Z. Fang, J. Han, F. Liang, G. Zhang. WeConvene: learned image compression with wavelet-domain convolution and entropy model. ECCV, 2024.",
     "D. Minnen, S. Singh. Channel-wise autoregressive entropy models for learned image compression. ICIP, 2020.",
     "J. Li, B. Li, Y. Lu. Neural video compression with diverse contexts. CVPR, 2023.",
+ "X. Huang, S. Belongie. Arbitrary style transfer in real-time with adaptive "
+ "instance normalization. ICCV, 2017.",
 ]
 
 
