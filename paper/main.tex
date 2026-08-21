@@ -497,6 +497,21 @@ pointwise.
 
 \subsection{The exit ladder}
 
+\paragraph{Why the tile is 256 pixels.} Two constraints bracket the choice and
+neither is free to ignore. Below, the tile has to be large enough that its border
+is a small part of it. The seam grows with the fraction of a tile within reach of
+an invented value, $1-((F-2b)/F)^2$ for $b$ per-tile blocks on a tile of side
+$F$, so halving the side roughly doubles the damage at fixed depth
+(Section~\ref{sec:tiles}). Above, it has to be small enough that a frame holds
+enough of them for an allocation to exist at all: at $256$ px a 1080p frame is
+$40$ tiles and a $416{\times}240$ frame is $2$, and the second is already close
+to having no choice to make (Section~\ref{sec:exp}). Standardised codecs bracket
+their own partition the same way and land nearby, at $64$ pixels in
+HEVC~\cite{hevc} and $128$ in VVC~\cite{vvc}, for reasons that include this one.
+We measured $128$ against $256$ and report it, with the caveat that the two come
+from different training runs.
+
+
 Two consequences follow from the ladder, and both are easy to state wrongly.
 Exits shallower than $j$ are indistinguishable from each other, because the first
 $j$ groups run for every tile regardless, and the usable ladder therefore has

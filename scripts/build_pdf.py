@@ -886,6 +886,20 @@ def content(colw, fullw):
         r"through it, and it is what makes the exact remedy of Section 4.4 "
         r"affordable at all. It is also why we kept the adapters pointwise.")
     h2("3.3 The exit ladder")
+    par(r"<b>Why the tile is 256 pixels.</b> Two constraints bracket the "
+        r"choice and neither is free to ignore. Below, the tile has to be "
+        r"large enough that its border is a small part of it. The seam grows "
+        r"with the fraction of a tile within reach of an invented value, "
+        r"1-((F-2b)/F)² for b per-tile blocks on a tile of side F, so halving "
+        r"the side roughly doubles the damage at fixed depth (Section 4). Above, it has to be small enough that a frame holds "
+        r"enough of them for an allocation to exist at all: at 256 px a 1080p "
+        r"frame is 40 tiles and a 416×240 frame is 2, and the second is "
+        r"already close to having no choice to make (Section 5.3). Standardised "
+        r"codecs bracket their own partition the same way and land nearby, at "
+        r"64 pixels in HEVC [9] and 128 in VVC [21], for reasons that include "
+        r"this one. We measured 128 against 256 and report it, with the caveat "
+        r"that the two come from different training runs.")
+
     par(r"Two consequences follow from the ladder, and both are easy to state "
         r"wrongly. Exits "
         r"shallower than j are indistinguishable from each other, because the "
