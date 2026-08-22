@@ -945,6 +945,23 @@ def content(colw, fullw):
         r"which measures C, tries a second one. C transmits a mask rather than "
         r"a full map, costs the encoder A's search plus one run of the "
         r"predictor, and costs the decoder whatever that predictor costs.")
+    # Placed at the section boundary rather than four paragraphs into
+    # 3.2. figure_wide breaks the page where it is called, and called
+    # there it cut the flow a third of the way down a column and left
+    # the rest of that page empty: 1.7 columns of white for one wide
+    # figure. At the boundary the break costs what the boundary costs.
+    figure_wide("patchify.png",
+                r"<b>Figure N. What patchify does.</b> From one real decode. <b>a</b>, "
+           r"the frame padded to whole tiles, with the grid the decoder will "
+           r"impose. <b>b</b>, the feature map after the shared stem at one "
+           r"eighth resolution, so a 256 px tile is 32×32 of features: the "
+           r"tiling happens here, not in the pixel domain. <b>c</b>, four of "
+           r"the 40 tiles as the trunk sees them. <b>d</b>, the operation and "
+           r"its inverse. Zero multiply-accumulates in either direction, and "
+           r"the round trip is exact: unpatchify(patchify(f)) equals f bit "
+           r"for bit. What changes is that a 3×3 in the trunk now sees zero "
+           r"padding where a neighbour used to be, and that a tile can stop "
+           r"early.")
     h2("3.2 Where the computation is")
     tbl("adapters_ablation",
         r"<b>Table 2. What the adapters are worth.</b> dB below the released "
@@ -962,18 +979,6 @@ def content(colw, fullw):
         r"the fraction several times below. Tile borders damage the picture "
         r"through it, and it is what makes the exact remedy of Section 4.4 "
         r"affordable at all. It is also why we kept the adapters pointwise.")
-    figure_wide("patchify.png",
-                r"<b>Figure N. What patchify does.</b> From one real decode. <b>a</b>, "
-           r"the frame padded to whole tiles, with the grid the decoder will "
-           r"impose. <b>b</b>, the feature map after the shared stem at one "
-           r"eighth resolution, so a 256 px tile is 32×32 of features: the "
-           r"tiling happens here, not in the pixel domain. <b>c</b>, four of "
-           r"the 40 tiles as the trunk sees them. <b>d</b>, the operation and "
-           r"its inverse. Zero multiply-accumulates in either direction, and "
-           r"the round trip is exact: unpatchify(patchify(f)) equals f bit "
-           r"for bit. What changes is that a 3×3 in the trunk now sees zero "
-           r"padding where a neighbour used to be, and that a tile can stop "
-           r"early.")
     h2("3.3 The exit ladder")
     par(r"<b>Why the tile is 256 pixels.</b> Two constraints bracket it. The "
         r"tile has to be large enough that its border is a small part of it, "
@@ -1526,10 +1531,20 @@ def content(colw, fullw):
         r"and it is wide ([[fig:rd_spread]]). At q0 the median sequence "
         r"saves \SpreadMedLow%, with an interquartile range of "
         r"\SpreadIqrLoLow–\SpreadIqrHiLow, while the worst saves "
-        r"\SpreadWorst%. The worst cases are the "
+        r"\SpreadWorst% ([[fig:spread]]). The worst cases are the "
         r"low-resolution sequences of Section 5.3, where two tiles leave "
         r"nothing to allocate. Reporting the mean alone would hide both "
         r"ends.")
+    figure("spread.png",
+           r"<b>Figure N. What the set mean hides.</b> Every test sequence as "
+           r"a point, at the 0.1 dB budget; the bar is the median. At the "
+           r"lowest rate the saving runs from \SpreadLowMin% to \SpreadLowMax% "
+           r"across the \SpreadNSeq sequences "
+           r"and at the highest from \SpreadHighMin% to \SpreadHighMax%. The "
+           r"spread within a rate "
+           r"is larger than the difference between rates, and it is content, "
+           r"not noise: the same sequences sit at the same end of it at every "
+           r"rate.")
     figure("exit_vs_rate.png",
            r"<b>Figure N. Where the ladder is used.</b> Tiles per exit over "
            r"the whole test set. <b>a</b>, the 0.1 dB budget at five rates. "
@@ -1691,7 +1706,15 @@ def content(colw, fullw):
         r"the \TileClassesN classes, by \TileGainLowMin to \TileGainLowMax "
         r"points, and behind only on \TileLowLoser. At q32 and q63 it is "
         r"behind on every class, by up to \TileBehindMidMax and "
-        r"\TileBehindHighMax points.")
+        r"\TileBehindHighMax points ([[fig:exituse]]).")
+    figure("exituse.png",
+           r"<b>Figure N. How deep each class has to go.</b> Mean exit taken "
+           r"by the tiles of each test class at the 0.1 dB budget, ordered by "
+           r"that mean. Resolution is the strongest predictor: the 416×240 "
+           r"class has two tiles a frame and almost no choice, and the 1080p "
+           r"classes have forty and use the whole ladder. This is the "
+           r"dependence Section 5.3 measures, seen per class rather than "
+           r"pooled.")
     par(r"So granularity buys something only where the budget is loose "
         r"relative to what a tile costs, and the seam it pays for grows with "
         r"rate until it swallows the gain. Splicing the smaller tile into the "
@@ -1797,7 +1820,7 @@ def content(colw, fullw):
         r"\BandSpreadMean points apart on average and \BandSpreadMax at worst. "
         r"So ``how much does a 0.1 dB budget buy at this rate'' is, to within a "
         r"couple of points, ``where does 0.1 dB sit in this rate's band''. Both "
-        r"limits are in closed form and cheap to measure, so "
+        r"limits are in closed form and cheap to measure ([[fig:window]]), so "
         r"a deployment could calibrate the two ends and read the rest off one "
         r"curve. That curve is a one-parameter power law, "
         r"saving ≈ C·u^\BandExp, with C the architectural ceiling and u the "
@@ -1807,6 +1830,14 @@ def content(colw, fullw):
         r"rate's own band is what collapses the curves. Inverse fits to the "
         r"same frontier disagree in the exponent by up to 40%, so it is a "
         r"description of these curves and not a law.")
+    figure("window.png",
+           r"<b>Figure N. The window a budget works in.</b> <b>a</b>, saving "
+           r"against the distortion actually delivered, per rate. Every curve "
+           r"begins at a floor, below which no allocation meets the budget, "
+           r"and flattens at a saturation point, above which a looser budget "
+           r"buys nothing. <b>b</b>, those two limits against rate. The shaded "
+           r"band is the only region in which a budget is a design choice "
+           r"rather than a formality.")
     par(r"The collapse appears robust across two checkpoints. We "
         r"repeated the measurement on a different training run, BEST, a "
         r"separate recipe taken at a different epoch, and the same thing "
@@ -2112,10 +2143,18 @@ def content(colw, fullw):
         r"and it rarely is. In adaptive inference the usual controls are a "
         r"uniform allocation and a random one. Both are much weaker than a "
         r"decoder-side signal that is already lying around "
-        r". Panel b of that figure is the surprise: the "
+        r"([[fig:deciders]]). Panel b of that figure is the surprise: the "
         r"rule picks the search's exit on fewer than half the tiles and still "
         r"captures three quarters of its saving, which is why agreement is "
         r"the wrong thing to optimise.")
+    figure("deciders.png",
+           r"<b>Figure N. Three ways to choose an exit.</b> <b>a</b>, saving at "
+           r"0.1 dB. The encoder search sees the source and sends 89 bits a "
+           r"frame; the other two send nothing. The bit rule beats the trained "
+           r"head at every rate, with no learned parameters against the head's "
+           r"144,030. <b>b</b>, bars are the tiles where the rule picks the "
+           r"search's exit, the line the fraction of its saving it captures "
+           r"anyway.")
     h2("5.7 Signalling only what the router gets wrong")
     par(r"The encoder knows tile by tile where the router will be wrong, "
         r"because it can run that router itself (Section 3.1), and nothing "
@@ -2803,9 +2842,12 @@ def build(out="paper/FLEX-UF.pdf"):
     story += fig(BANNER_PNG, PW - 2 * M, banner_cap, maxh=BANNER_MAXH)
     story += [NextPageTemplate("rest"), FrameBreak()]
     story += content(colw, PW - 2 * M)
-    # The heading opens a column rather than sitting at the foot of one;
-    # without this a one-line body overflow decides which page it lands on.
-    story.append(CondPageBreak(1.1 * inch))
+    # The references get a page. The rule for this paper is that the content
+    # ends on the page before them, and a conditional break left four entries
+    # stranded at the foot of the last content page whenever the body came
+    # within an inch of the bottom -- which is where a paper that has been
+    # trimmed to fit always sits.
+    story.append(PageBreak())
     story.append(Paragraph("References", H1))
     for i, r in enumerate(REFS, 1):
         story.append(Paragraph(f"[{i}] {r}",

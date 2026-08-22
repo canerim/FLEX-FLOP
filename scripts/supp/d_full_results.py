@@ -37,10 +37,8 @@ SKIPPED = [10, 8, 6, 4, 2, 0]
 PINNED = "runs/RECIPE512/ckpt_PAPER.pth.tar"
 CURVE = "supp_paper_curve_PAPER.json"
 
-
 def _name(c):
     return c.replace("HEVC_", "HEVC ")
-
 
 def _short(s):
     """A sequence name short enough for a table cell."""
@@ -49,15 +47,12 @@ def _short(s):
     head, _, tail = s.rpartition("_")
     return head if head and tail.isdigit() else s
 
-
 def _f(x, n=1):
     return "n/a" if x is None else f"{x:.{n}f}"
-
 
 def _pc(k):
     d = k.J("supp_per_class_budgets.json")
     return {(r["qp"], round(r["budget_db"], 3)): r for r in d["rows"]}
-
 
 # ------------------------------------------------- every class, every rate
 def _class_saving_rows(k):
@@ -71,7 +66,6 @@ def _class_saving_rows(k):
     out.append(["Quality given up (dB)"] +
                [_f(idx[(q, 0.1)]["overall_db"], 3) for q in QPS])
     return out
-
 
 # ------------------------------------------------------------ exit shares
 def _pooled_exit_rows(k):
@@ -89,7 +83,6 @@ def _pooled_exit_rows(k):
                    [_f(mb, 2), _f(r["overall_saving"])])
     return out
 
-
 def _class_exit_rows(k):
     idx = _pc(k)
     out = [["Class", "e2", "e3", "e4", "e5", "e2", "e3", "e4", "e5"]]
@@ -101,7 +94,6 @@ def _class_exit_rows(k):
         out.append(row)
     return out
 
-
 # -------------------------------------------------------- per sequence
 def _spread_rows(k):
     d = k.J("supp_per_sequence_PAPER_b010.json")
@@ -112,13 +104,11 @@ def _spread_rows(k):
                                        "p75", "max")])
     return out
 
-
 def _under_ten(k):
     """Sequence-and-rate pairs saving less than a tenth of a decode."""
     d = k.J("supp_per_sequence_PAPER_b010.json")
     return sum(1 for r in d["rows"] for s in r["per_sequence"]
                if s["saving_pct_vs_release"] < 10)
-
 
 def _tail_seq_rows(k, n=6):
     d = k.J("supp_per_sequence_PAPER_b010.json")
@@ -130,7 +120,6 @@ def _tail_seq_rows(k, n=6):
                     _f(by[63][s]["saving_pct_vs_release"]),
                     _f(by[63][s]["db_vs_uf"], 3)])
     return out
-
 
 # ------------------------------------------------- a second quality metric
 def _metric_rows(k):
@@ -145,7 +134,6 @@ def _metric_rows(k):
                     _f(r["ms_ssim_db_released"] - r["ms_ssim_db_routed"], 4)])
     return out
 
-
 def _tile_tail_rows(k):
     d = k.J("supp_opquality_PAPER.json")["tail"]
     out = [["Rate", "Tiles", "Mean", "Median", "p95", "p99", "Max",
@@ -159,7 +147,6 @@ def _tile_tail_rows(k):
                     t["n_over_1_db"]])
     return out
 
-
 # ----------------------------------------------- composition with quantisation
 def _quant_rows(k):
     d = k.J("supp_quant_PAPER.json")
@@ -170,7 +157,6 @@ def _quant_rows(k):
                    [_f(r["db_per_exit"][i], 3) for i in (2, 3, 4, 5)] +
                    [r["layers_quantised"]])
     return out
-
 
 # --------------------------------------------------------------- integrated
 def _bd_rows(k):
@@ -194,7 +180,6 @@ def _bd_rows(k):
                 _f(b["mean_bd_quality_db"], 4), ""])
     return out
 
-
 def _bdrate_rows(k):
     d = k.J("bdrate.json")
     by = {(r["config"], round(r["budget_db"], 2)): r for r in d["rows"]}
@@ -209,7 +194,6 @@ def _bdrate_rows(k):
                     _f(r["saving_pct_vs_release"]) + "%"])
     return out
 
-
 # ----------------------------------------------------------- raw values
 def _deployed_rows(k):
     d = k.J("signalled_RECIPE512_ctc53.json")
@@ -220,7 +204,6 @@ def _deployed_rows(k):
                     _f(r["db_vs_uf"], 4), _f(r["saving_pct_vs_release"]),
                     _f(r["saving_pct_measured"]), _f(r["map_bits"], 0)])
     return out
-
 
 def _deepest_cost(k):
     """What our deepest exit costs, in released decodes, from pinned files.
@@ -237,7 +220,6 @@ def _deepest_cost(k):
     sv = [o["saving_pct"] for o in k.J(CURVE)["op_points"]
           if o.get("saturated")][0]
     return sat["cost_j"] / (1 - sv / 100)
-
 
 def _frontier_rows(k):
     """The 35 measured operating points, both conventions, in one table.
@@ -270,7 +252,6 @@ def _frontier_rows(k):
                     _f(o["db_vs_uf"], 4), _f(o["db_vs_uf_per_frame"], 4),
                     rel, sh])
     return out
-
 
 # ------------------------------------------------------------------ prose
 def content(k):
@@ -382,15 +363,6 @@ def content(k):
     k.note("Histograms summed over the six classes of "
            "results/supp_per_class_budgets.json, on " + PINNED + ". Blocks "
            "skipped per exit from results/adapter_cost.json, same checkpoint.")
-
-    k.fig("exituse.png",
-          "<b>How deep each class has to go.</b> Mean exit taken by the "
-          "tiles of each test class at the 0.1 dB budget, ordered by that "
-          "mean. Resolution is the strongest predictor: the 416×240 class "
-          "has two tiles a frame and almost no choice, and the 1080p "
-          "classes have forty and use the whole ladder. This is the "
-          "dependence the main paper's tile-count section measures, seen per "
-          "class rather than pooled.")
 
     k.fig("res_exits.png",
           "How the ladder fills up. <b>a</b>, exit shares at the 0.1 dB "
@@ -552,16 +524,6 @@ def content(k):
     k.note("results/supp_opquality_PAPER.json, on " + PINNED + ", at the same "
            "operating points as the metric table above. A tile penalty is the "
            "decibel between the released decode of that tile and ours.")
-
-    k.fig("spread.png",
-          "<b>What the set mean hides.</b> Every test sequence as a "
-          "point, at the 0.1 dB budget; the bar is the median. At the "
-          "lowest rate the saving runs from \\SpreadLowMin% to "
-          "\\SpreadLowMax% across the \\SpreadNSeq sequences and at the "
-          "highest from \\SpreadHighMin% to \\SpreadHighMax%. The spread "
-          "within a rate is larger than the difference between rates, and "
-          "it is content, not noise: the same sequences sit at the same "
-          "end of it at every rate. ")
 
     k.fig("res_tail.png",
           "Where the tail comes from. <b>a</b>, mean and 95th percentile tile "

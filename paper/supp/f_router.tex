@@ -189,12 +189,6 @@ q & 0.1 rule & 0.1 joint & 0.1 frozen & 0.3 rule & 0.3 joint & 0.3 frozen \\
 
 \begin{figure}[t]
 \centering
-\includegraphics[width=\columnwidth]{figures/deciders.png}
-\caption{\textbf{Three ways to choose an exit.} \textbf{a}, saving at 0.1 dB. The encoder search sees the source and sends 89 bits a frame; the other two send nothing. The bit rule beats the trained head at every rate, with no learned parameters against the head's 144,030. \textbf{b}, bars are the tiles where the rule picks the search's exit, the line the fraction of its saving it captures anyway. }
-\end{figure}
-
-\begin{figure}[t]
-\centering
 \includegraphics[width=\columnwidth]{figures/supp_router_frontier.png}
 \caption{\textbf{The rule sits between the two heads and the oracle.} Saving at each rate, against the Lagrangian oracle measured inside the same run and the architectural ceiling (dotted). At 0.1 dB the rule is above both heads at every rate, and the gap between the two heads is wider than the gap between the rule and either of them. At 0.3 dB the three lowest rates saturate and the three curves separate only at q48 and q63.}
 \end{figure}

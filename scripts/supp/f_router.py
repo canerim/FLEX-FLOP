@@ -50,7 +50,6 @@ def _joint_head_file(k):
         "f_router: no curve for the jointly trained head; expected "
         "results/router_RECIPE512_b01_jointhead.json")
 
-
 def content(k):
     A = k.J("router_ablation_e4.json", "router_ablation.json")
     V = {x["label"]: x for x in A["variants"]}
@@ -499,15 +498,6 @@ def content(k):
         f"results/{HJ.format(b=1)} and its b03 sibling. Frozen head: "
         "results/router_RECIPE512_b01_e4head.json and b03. All on "
         "runs/RECIPE512/ckpt_PAPER.pth.tar.")
-
-    k.fig("deciders.png",
-          "<b>Three ways to choose an exit.</b> <b>a</b>, saving at 0.1 "
-          "dB. The encoder search sees the source and sends 89 bits a "
-          "frame; the other two send nothing. The bit rule beats the "
-          "trained head at every rate, with no learned parameters against "
-          "the head's 144,030. <b>b</b>, bars are the tiles where the "
-          "rule picks the search's exit, the line the fraction of its "
-          "saving it captures anyway. ")
 
     k.fig("supp_router_frontier.png",
           "<b>The rule sits between the two heads and the oracle.</b> Saving at "

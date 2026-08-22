@@ -319,6 +319,7 @@ can compute. Who to defer and how to learn it is the open question in that
 literature, and it has a closed form here. What remains is the question we
 measure, which is how concentrated the regret is.
 
+
 \paragraph{Allocating a budget over units.} The construction we use is not new
 and we do not present it as such. Shoham and Gersho~\cite{shoham1988} showed
 that for a finite set of per-unit operating points, a Lagrangian sweep decouples
@@ -1131,9 +1132,21 @@ median.}
 Figure~\ref{fig:rd}c shows the distribution that the headline averages over, and
 it is wide. At $q0$ the median sequence saves \SpreadMedLow\%, with an
 interquartile range of \SpreadIqrLoLow--\SpreadIqrHiLow, while the worst saves
-\SpreadWorst\%. The worst cases are the
+\SpreadWorst\% (Fig.~\ref{fig:spread}). The worst cases are the
 low-resolution sequences of Section~\ref{sec:resolution}, where two tiles leave
 nothing to allocate. Reporting the mean alone would hide both ends.
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\columnwidth]{figures/spread.png}
+\caption{\textbf{What the set mean hides.} Every test sequence as a point, at
+the $0.1\dB$ budget; the bar is the median. At the lowest rate the saving runs
+from \SpreadLowMin\% to \SpreadLowMax\% across the \SpreadNSeq\ sequences and at
+the highest from \SpreadHighMin\% to \SpreadHighMax\%. The spread within a rate is larger than the difference between rates,
+and it is content, not noise: the same sequences sit at the same end of it at
+every rate.}
+\label{fig:spread}
+\end{figure}
 
 \begin{figure}[t]
 \centering
@@ -1322,7 +1335,17 @@ resolution.} Halving the tile side multiplies the tile count by
 \TileClassesN\ classes, by \TileGainLowMin\ to \TileGainLowMax\ points, and
 behind only on \TileLowLoser. At $q32$ and $q63$ it is behind on every class,
 by up to \TileBehindMidMax\ and \TileBehindHighMax\ points
-.
+(Fig.~\ref{fig:exituse}).
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\columnwidth]{figures/exituse.png}
+\caption{\textbf{How deep each class has to go.} Mean exit taken by the tiles of
+each test class at the $0.1\dB$ budget, ordered by that mean. Resolution is the
+strongest predictor: the $416\times240$ class has two tiles a frame and almost
+no choice, and the 1080p classes have forty and use the whole ladder.}
+\label{fig:exituse}
+\end{figure}
 
 So granularity buys something only where the budget is loose relative to what
 a tile costs, and the seam it pays for grows with rate until it swallows the
@@ -1448,7 +1471,7 @@ collapse onto a single master curve, \BandSpreadMean\ points apart on average an
 \BandSpreadMax\ at worst (Fig.~\ref{fig:band}). The answer to ``how much does a
 $0.1\dB$ budget buy at this rate'' is therefore, to within a couple of points,
 ``where does $0.1\dB$ sit in this rate's band''. Both limits are in closed form and
-cheap to measure, so a deployment could calibrate the two ends and read the rest
+cheap to measure (Fig.~\ref{fig:window}), so a deployment could calibrate the two ends and read the rest
 off one curve. That curve is a one-parameter power law,
 $\text{saving} \approx C\,u^{\BandExp}$, with $C$ the architectural ceiling and
 $u$ the position in the band. We fit it in log space over all five rates and get
@@ -1457,6 +1480,12 @@ $R^2 = \BandRTwo$, worst residual \BandFitErr\ points. The claim we make is the
 collapses the curves. Inverse fits to the same frontier disagree in the
 exponent by up to $40\%$, so it is a description of these curves and not a law.
 
+\begin{figure}[t]
+\centering
+\includegraphics[width=\columnwidth]{figures/window.png}
+\caption{\textbf{The window a budget works in.} \textbf{a}, saving against the distortion actually delivered, per rate. Every curve begins at a floor and flattens at a saturation point. \textbf{b}, those two limits against rate; the shaded band is the only region in which a budget is a design choice rather than a formality.}
+\label{fig:window}
+\end{figure}
 \textbf{The collapse appears robust across two checkpoints.} We repeated the
 measurement on a different training run, \texttt{BEST}, a separate recipe taken
 at a different epoch, and the same thing happens. The rates are
@@ -1782,9 +1811,21 @@ trained heads span.
 A learned component should be measured against the free alternative, and it
 rarely is. In adaptive inference the usual controls are a uniform allocation and
 a random one. Both are much weaker than a decoder-side signal that is already
-lying around. Panel~b of that figure is the surprise: the rule picks the search's exit on
+lying around (Fig.~\ref{fig:deciders}). Panel~b of that figure is the surprise: the rule picks the search's exit on
 fewer than half the tiles and still captures three quarters of its saving, which
 is why agreement is the wrong thing to optimise.
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\columnwidth]{figures/deciders.png}
+\caption{\textbf{Three ways to choose an exit.} \textbf{a}, saving at $0.1\dB$. The
+encoder search sees the source and sends \MapBits\ bits a frame; the other two
+send nothing. The bit rule beats the trained head at every rate, with no learned
+parameters against the head's \RouterParams. \textbf{b}, bars are the tiles where
+the rule picks the search's exit, the line the fraction of its saving it captures
+anyway.}
+\label{fig:deciders}
+\end{figure}
 
 
 \subsection{Signalling only what the router gets wrong}

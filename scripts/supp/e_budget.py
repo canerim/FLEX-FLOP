@@ -40,7 +40,6 @@ QPS = [0, 16, 32, 48, 63]
 # difference in which part of the curve each sweep happened to sample.
 WLO, WHI = 0.15, 0.85
 
-
 # --------------------------------------------------------------- arithmetic
 def _curves(grid, sat):
     """Each rate's reachable points as (position in band, saving vs release)."""
@@ -61,7 +60,6 @@ def _curves(grid, sat):
         cur[q] = pts
     return cur
 
-
 def _interp(pts, u):
     xs = [p[0] for p in pts]
     ys = [p[1] for p in pts]
@@ -74,7 +72,6 @@ def _interp(pts, u):
             t = (u - xs[i - 1]) / (xs[i] - xs[i - 1])
             return ys[i - 1] + t * (ys[i] - ys[i - 1])
     return ys[-1]
-
 
 def _fit(pts, C):
     """Least squares on ln(saving/C) against ln u, through the origin.
@@ -104,15 +101,12 @@ def _fit(pts, C):
     tot = sum((y - m) ** 2 for y in ys)
     return b, 1.0 - sse / tot, mx, len(ys)
 
-
 def _win(cur):
     """Every point of every rate that falls inside the common window."""
     return [p for q in cur for p in cur[q] if WLO <= p[0] <= WHI]
 
-
 def _f(x, n=2):
     return f"{x:.{n}f}"
-
 
 # ------------------------------------------------------------------ section
 def _ceiling_rows(k):
@@ -157,7 +151,6 @@ def _ceiling_rows(k):
                      f"{sm.get(32, float('nan')):.3f}" if sm else "--",
                      f"{sm.get(63, float('nan')):.3f}" if sm else "--"])
     return rows
-
 
 def content(k):
     sec = k.h1("The operating window")
@@ -318,16 +311,6 @@ def content(k):
           "the lowest rate and \\BandUseHigh% at the highest, which is why "
           "the same budget behaves so differently at the two ends of the rate "
           "range.")
-
-    k.fig("window.png",
-          "<b>The window a budget works in.</b> <b>a</b>, saving against the "
-          "distortion actually delivered, per rate. Every curve begins at a "
-          "floor, below which no allocation meets the budget, and flattens at "
-          "a saturation point, above which a looser budget buys nothing. "
-          "<b>b</b>, those two limits against rate. The shaded band is the "
-          "only region in which a budget is a design choice rather than a "
-          "formality. The main paper states both limits and reads them off "
-          "this picture.")
 
     k.fig("seam_vs_qp.png",
           "<b>The tiling penalty across the whole rate range</b>, every tile "
