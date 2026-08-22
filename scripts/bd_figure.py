@@ -87,8 +87,26 @@ def main() -> int:
         # ceiling there -- so their labels go on opposite sides of the curve.
         off = (5, 4) if i == 0 else (-5, -11)
         ha = "left" if i == 0 else "right"
+        # Budgets that land on the same point get one label between them.
+        # Past 0.3 dB the ladder is saturated and 0.3 and 0.5 are the same
+        # measurement, so two labels sat exactly on top of each other -- which
+        # the audit refused, and rightly: the figure should say they coincide
+        # rather than print one over the other.
+        groups, seen = [], []
         for r, xi, yi in zip(rs, x, y):
-            ax[0].annotate(f"{r['budget_db']:g} dB", (xi, yi),
+            for g in seen:
+                if abs(g["x"] - xi) < 1e-6 and abs(g["y"] - yi) < 1e-6:
+                    g["b"].append(r["budget_db"])
+                    break
+            else:
+                g = {"x": xi, "y": yi, "b": [r["budget_db"]]}
+                seen.append(g)
+                groups.append(g)
+        for g in groups:
+            bs = g["b"]
+            lbl = (f"{bs[0]:g} dB" if len(bs) == 1
+                   else f"{min(bs):g}–{max(bs):g} dB")
+            ax[0].annotate(lbl, (g["x"], g["y"]),
                            textcoords="offset points", xytext=off,
                            fontsize=6, color=col, ha=ha)
     ax[0].set_xlabel("decoder MACs saved (%)")

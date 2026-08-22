@@ -15,14 +15,14 @@ This section prints in full what the main paper samples: every class at every qu
 \toprule
 Class & q0 & q16 & q32 & q48 & q63 \\
 \midrule
-MCL-JCV & 33.7 & 30.4 & 26.2 & 23.0 & 20.2 \\
-UVG & 30.6 & 28.9 & 23.1 & 18.7 & 15.5 \\
-HEVC B & 31.1 & 25.8 & 18.2 & 12.4 & 9.7 \\
-HEVC E & 29.1 & 25.2 & 18.4 & 15.1 & 15.5 \\
-HEVC C & 18.0 & 6.3 & 1.7 & 2.8 & 2.5 \\
-HEVC D & 8.8 & 2.5 & 2.5 & 2.5 & 2.5 \\
-All \NumSeq, pooled & 29.7 & 25.5 & 20.9 & 17.9 & 15.6 \\
-Quality given up (dB) & 0.099 & 0.099 & 0.100 & 0.098 & 0.100 \\
+MCL-JCV & 37.1 & 34.4 & 31.2 & 30.2 & 29.2 \\
+UVG & 36.0 & 33.8 & 31.2 & 28.3 & 26.7 \\
+HEVC B & 34.9 & 31.3 & 25.1 & 21.9 & 19.4 \\
+HEVC E & 36.6 & 32.4 & 29.3 & 29.3 & 29.3 \\
+HEVC C & 25.6 & 17.1 & 7.8 & 6.6 & 4.8 \\
+HEVC D & 18.3 & 10.9 & 2.5 & 2.5 & 2.5 \\
+All \NumSeq, pooled & 34.4 & 30.8 & 26.6 & 25.2 & 24.1 \\
+Quality given up (dB) & 0.100 & 0.100 & 0.099 & 0.099 & 0.100 \\
 \bottomrule
 \end{tabular}}
 \caption{Compute saved against the released decoder, by class and by quality index, at the 0.1 dB budget; the main paper prints the q0, q32 and q63 columns of the first six rows. Read it in two directions. Along a row the saving falls with rate, because the residual a shallow exit fails to reconstruct grows relative to the quality being protected. Down a column it falls with resolution, from \BigResLow\% on MCL-JCV to \SmallResLow\% on HEVC D at q0, because a 256 px tile is 40 tiles on a 1080p frame and two at 416x240. The last row is the quality the pooled allocation gave up, which is the budget to within a thousandth of a decibel at every rate.}
@@ -63,11 +63,11 @@ Two readings follow from the shuffled rows and they are easy to conflate. Qualit
 \toprule
 Rate & e2 & e3 & e4 & e5 & Blocks skipped & Saved \\
 \midrule
-q0 & 67.4 & 20.7 & 8.3 & 3.6 & 5.04 & 29.7 \\
-q16 & 58.2 & 18.6 & 13.1 & 10.0 & 4.50 & 25.5 \\
-q32 & 43.5 & 19.5 & 18.8 & 18.2 & 3.77 & 20.9 \\
-q48 & 34.4 & 16.8 & 24.3 & 24.5 & 3.22 & 17.9 \\
-q63 & 22.3 & 23.1 & 28.1 & 26.6 & 2.82 & 15.6 \\
+q0 & 84.0 & 13.5 & 2.1 & 0.5 & 5.62 & 34.4 \\
+q16 & 71.7 & 18.8 & 7.0 & 2.6 & 5.19 & 30.8 \\
+q32 & 60.2 & 20.7 & 10.8 & 8.3 & 4.66 & 26.6 \\
+q48 & 55.3 & 19.6 & 15.8 & 9.3 & 4.42 & 25.2 \\
+q63 & 50.1 & 21.5 & 18.5 & 9.9 & 4.24 & 24.1 \\
 \bottomrule
 \end{tabular}}
 \caption{The exit histogram at the 0.1 dB budget, as a percentage of the 1765 tiles in one pass over the test set, with the mean number of trunk blocks skipped and the saving that buys. At q0 two thirds of tiles take the shallowest selectable exit and the ladder above it is barely used. At q63 the mass is spread almost evenly over the four exits and the mean depth skipped has fallen from 5.04 blocks to 2.82. Exits e0 and e1 are omitted because the exit clamp cannot select them: the split depth is 2, so a map naming a shallower exit runs to e2 and wears e2's adapter.}
@@ -90,12 +90,12 @@ q63 & 22.3 & 23.1 & 28.1 & 26.6 & 2.82 & 15.6 \\
 \toprule
 Class & e2 & e3 & e4 & e5 & e2 & e3 & e4 & e5 \\
 \midrule
-MCL-JCV & 73.8 & 17.2 & 5.7 & 3.4 & 29.8 & 23.4 & 23.5 & 23.3 \\
-UVG & 54.3 & 31.1 & 14.3 & 0.4 & 5.7 & 31.4 & 44.6 & 18.2 \\
-HEVC B & 64.0 & 18.5 & 12.5 & 5.0 & 6.5 & 11.0 & 37.5 & 45.0 \\
-HEVC E & 51.1 & 35.6 & 4.4 & 8.9 & 15.6 & 35.6 & 8.9 & 40.0 \\
-HEVC C & 3.1 & 53.1 & 31.2 & 12.5 & 0.0 & 0.0 & 25.0 & 75.0 \\
-HEVC D & 0.0 & 25.0 & 25.0 & 50.0 & 0.0 & 0.0 & 25.0 & 75.0 \\
+MCL-JCV & 88.5 & 9.3 & 1.8 & 0.3 & 57.8 & 19.7 & 14.4 & 8.1 \\
+UVG & 80.4 & 18.2 & 1.4 & 0.0 & 40.0 & 31.1 & 27.5 & 1.4 \\
+HEVC B & 75.5 & 21.0 & 2.0 & 1.5 & 26.5 & 20.5 & 32.5 & 20.5 \\
+HEVC E & 84.4 & 13.3 & 2.2 & 0.0 & 57.8 & 24.4 & 6.7 & 11.1 \\
+HEVC C & 18.8 & 68.8 & 12.5 & 0.0 & 0.0 & 12.5 & 18.8 & 68.8 \\
+HEVC D & 0.0 & 62.5 & 25.0 & 12.5 & 0.0 & 0.0 & 25.0 & 75.0 \\
 \bottomrule
 \end{tabular}}
 \caption{The same histogram split by class at the two ends of the rate range: the first four columns are q0 and the second four are q63, each as a percentage of that class's tiles. HEVC C and HEVC D reach neither of the two shallowest exits at q63, and three quarters of their tiles run to full depth, which is the \SmallResHigh\% saving of the first table seen tile by tile. UVG behaves differently from MCL-JCV at q63 despite being the same resolution, which is content and not geometry.}
@@ -291,12 +291,12 @@ Two sensitivities sit around those numbers and are worth stating beside them. Th
 \toprule
 Budget & A BD-Rate & B BD-Rate & Difference & A saved & B saved \\
 \midrule
-0.1 dB & 1.034\% & 1.005\% & 0.029 pt & 22.1\% & 23.4\% \\
-0.3 dB & 2.813\% & 2.795\% & 0.018 pt & 38.2\% & 35.6\% \\
-0.5 dB & 3.075\% & 3.055\% & 0.021 pt & 39.1\% & 39.0\% \\
+0.1 dB & 1.032\% & 1.005\% & 0.027 pt & 28.3\% & 23.4\% \\
+0.3 dB & 2.339\% & 2.318\% & 0.020 pt & 39.1\% & 39.0\% \\
+0.5 dB & 2.339\% & 2.318\% & 0.020 pt & 39.1\% & 39.0\% \\
 \bottomrule
 \end{tabular}}
-\caption{BD-Rate cost of the two configurations: the rate a reader would have to spend to buy back the quality the compute saving costs, integrated over the five rate points, which is the number that makes this trade-off comparable with a published codec result. Configuration A signals the exit map in the bitstream and pays \MapBitsLo to \MapBitsHi bits a frame for it at the 0.1 dB budget, depending on the rate, configuration B infers it from what the decoder already holds and pays none. Their BD-Rate costs differ by at most 0.029 of a point, so the map is close to free. What A buys with it is compute: the gap in the last two columns is -1.3 points at the tight budget and 0.2 at the loose one, where both configurations are at the ceiling.}
+\caption{BD-Rate cost of the two configurations: the rate a reader would have to spend to buy back the quality the compute saving costs, integrated over the five rate points, which is the number that makes this trade-off comparable with a published codec result. Configuration A signals the exit map in the bitstream and pays \MapBitsLo to \MapBitsHi bits a frame for it at the 0.1 dB budget, depending on the rate, configuration B infers it from what the decoder already holds and pays none. Their BD-Rate costs differ by at most 0.027 of a point, so the map is close to free. What A buys with it is compute: the gap in the last two columns is 4.9 points at the tight budget and 0.2 at the loose one, where both configurations are at the ceiling.}
 \end{table}
 
 {\small results/bdrate.json, every row on runs/RECIPE512/ckpt\_PAPER.pth.tar, which its sources block records file by file.}

@@ -331,7 +331,7 @@ static\_RECIPE512\_b01 & static controls & pinned, e0 & 53 \\
 per\_class\_RECIPE512 & per class & pinned, e0 & 53 fr \\
 router\_RECIPE512\_b01 & A against B & pinned, e0 & 53$\times$1 \\
 router\_RECIPE512\_b03 & A against B & pinned, e0 & 53$\times$1 \\
-raterank\_RECIPE512\_b01 & rate rank & pinned & 53$\times$1 \\
+raterank\_RECIPE512\_b01 & rate rank & pinned, e4 & 53$\times$1 \\
 raterank\_RECIPE512\_b03 & rate rank & pinned & 53$\times$1 \\
 raterank\_RECIPE512\_b05 & rate rank & R512/eval & 53$\times$1 \\
 hybrid\_RECIPE512\_b01\_fixed & partial signalling & pinned & 53$\times$1 \\
@@ -405,7 +405,7 @@ q63 & 10.32 & 10.83 & -0.51 \\
 
 {\small Source: results/crosscheck\_paths.json. The file records no checkpoint field.}
 
-Evaluation itself is deterministic once a checkpoint is fixed: the sequence list, the leading frames and the tile grid are all fixed and no crop is random. scripts/check\_paper.py re-reads \NumClaims numerical claims out of the paper's prose and checks each against the file it is supposed to come from. As recorded in results/check\_paper.json, 90 of them pass. All of them pass.
+Evaluation itself is deterministic once a checkpoint is fixed: the sequence list, the leading frames and the tile grid are all fixed and no crop is random. scripts/check\_paper.py re-reads \NumClaims numerical claims out of the paper's prose and checks each against the file it is supposed to come from. As recorded in results/check\_paper.json, 78 of them pass. One does not: "rate-rank: best margin (pts)", which is listed among the limitations of section H rather than presented as passing.
 
 \subsection{Data, code and provenance}
 
