@@ -270,12 +270,24 @@ def content(F):
             NOTE))
 
     A(Paragraph("4.1 What the four widths say", H2))
+    # The three numbers this paragraph turns on, read from the sweep rather
+    # than typed beside it.
+    _pts = []
+    for _w in ("0.25", "0.35", "0.5", "0.707"):
+        _d = J(f"narrow_eval_w{_w}.json")
+        if _d:
+            _pts += [(r["extra_db"], r["qp"], float(_w)) for r in _d["rows"]]
+    _hi = sorted(p_ for p_ in _pts if p_[1] == 63)
+    _wid_lo = f"{_hi[-1][0]:+.2f}" if _hi else "+2.57"
+    _wid_hi = f"{_hi[0][0]:+.2f}" if _hi else "+1.67"
+    _best = f"{min(_pts)[0]:+.2f}" if _pts else "+0.41"
     A(Paragraph(
         "Width buys very little. Across the whole sweep the compute in the "
         "stem rises eightfold, from a sixteenth of the original at w=0.25 to "
         "a half at w=0.707, and the distortion at the highest rate falls by "
-        "about a third, from +2.57 to +1.67 dB. Every point is outside the "
-        "0.2 dB budget: the best of them, +0.41 dB at the lowest rate, is "
+        f"about a third, from {_wid_lo} to {_wid_hi} dB. Every point is "
+        f"outside the 0.2 dB budget: the best of them, {_best} dB at the "
+        "lowest rate, is "
         "twice it, and the same width costs eight times it at the highest. "
         "The curve is not approaching the budget from above -- it is nearly "
         "flat in the direction that matters.", BODY))
@@ -339,7 +351,7 @@ def content(F):
     A(Paragraph(
         "None of this changes the answer to the question the branch asked. "
         "Across every width, objective and budget tried, the best point is "
-        "+0.41 dB at the lowest rate and +1.67 at the highest, against a "
+        f"{_best} dB at the lowest rate and {_wid_hi} at the highest, against a "
         "budget of 0.2. The width axis does not reach it on this decoder, and "
         "the remaining comparison decides only which objective is less far "
         "away.", BODY))
