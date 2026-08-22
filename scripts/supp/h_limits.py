@@ -991,7 +991,6 @@ def content(k):
     pinm = {r["qp"]: abs(r["drift_db"]) for r in anc["rows"]}
     both = [q for q in (0, 16, 32, 48, 63) if q in e0m and q in pinm]
     fell = [q for q in both if pinm[q] < e0m[q]]
-    ratio = pinm[63] / pinm[0] if pinm[0] else float("nan")
     k.par(
         f"Whether it grows with training is now settled, on this run at "
         f"least. The two RECIPE512 rows are four epochs apart on the same "
@@ -1000,11 +999,13 @@ def content(k):
         f"q0 and {e0m[63]:.4f} to {pinm[63]:.4f} at q63. The anchor term "
         f"tightens its hold as the run goes on rather than losing it, which "
         f"is the direction the term is there to produce and not one we had "
-        f"evidence for before. The direction with rate survives the move and "
-        f"steepens: the deepest exit sits {ratio:.0f} times further from the "
-        f"released decoder at q63 than at q0 on the reported weights, against "
-        f"{e0m[63] / e0m[0]:.0f} times four epochs earlier, because q0 "
-        f"improved by more than the rest. The open problem is the size at the "
+        f"evidence for before. It does not fall evenly. At q0 the drift is "
+        f"down to {pinm[0]:.4f} dB, which is where this measurement stops "
+        f"resolving it; at q63 it fell by "
+        f"{100 * (1 - pinm[63] / e0m[63]):.0f}% and is still "
+        f"{pinm[63]:.4f}. The ratio between the two ends is therefore not "
+        f"worth quoting, and the direction with rate is what survives the "
+        f"move. The open problem is the size at the "
         f"top of the ladder, not the trend: at q63 "
         f"{100 * pinm[63] / 0.1:.0f}% of a 0.1 dB budget is spent before the "
         f"allocation begins, and a move to any later checkpoint has to "
