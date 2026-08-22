@@ -62,7 +62,14 @@ class NeighbourHead(StemRouterHeadV2):
         self.tile_lat = int(tile_lat)
         r = self.r_bits
         old = self.proj_bits
+        # Building the wider convolution draws from the global RNG, which
+        # would leave the data loader shuffling in a different order than in
+        # the sweep this run is compared against. The draws are made and the
+        # state put back, so the batch order and every parameter the parent
+        # built are the ones the "all" variant of the ablation saw.
+        _st = torch.get_rng_state()
         self.proj_bits = nn.Conv2d(4, r, 1)
+        torch.set_rng_state(_st)
         with torch.no_grad():
             # Start from the trained-from-scratch equivalent of the two-channel
             # head: the first two channels keep their initialisation, the two
