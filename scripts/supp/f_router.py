@@ -59,6 +59,14 @@ def content(k):
     # provenance list, which is what the ablation table's note claims.
     REC = {l: k.J(f"router_ablation_{l}_e4.json", f"router_ablation_{l}.json")
            for l in VARIANT_ORDER}
+    # Each variant falls back to the record from before the repin on its own,
+    # so a sweep that is half re-measured would put six rows from two
+    # checkpoints in one table and nothing would say so. The comparison is
+    # between variants, so a mixture is not a small error: it is the whole
+    # measurement.
+    _eps = {(r.get("ckpt"), r.get("ckpt_epoch")) for r in REC.values()}
+    _mixed = sorted(f"{l} on epoch {REC[l].get('ckpt_epoch')}"
+                    for l in VARIANT_ORDER) if len(_eps) > 1 else []
     RL = k.J("router_latency.json")
     ST = k.J("static_RECIPE512_b01.json")
     SAT = k.J("saturation_RECIPE512_ctc53.json")
@@ -224,6 +232,13 @@ def content(k):
         f"does not. The floor belongs beside every other row: an agreement of "
         f"{V['bits']['agree']:.2f} cannot be read at all until it is known "
         f"that {floor:.2f} is free.")
+    if _mixed:
+        k.par(
+            "<b>These six rows are not on one checkpoint.</b> " +
+            ", ".join(_mixed) + ". The comparison between them is only a "
+            "comparison of inputs when the weights are the same, so this "
+            "table should not be read until the sweep has been repeated on "
+            "one checkpoint throughout.")
     k.par(
         f"<b>The ablation's own cost.</b> The six trainings took "
         f"{abl_hours:.1f} hours of one NVIDIA RTX A6000 between them, from "
