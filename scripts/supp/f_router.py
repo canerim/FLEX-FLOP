@@ -496,6 +496,15 @@ def content(k):
         "results/router_RECIPE512_b01.json and b03. All on "
         "runs/RECIPE512/ckpt_PAPER.pth.tar.")
 
+    k.fig("deciders.png",
+          "<b>Three ways to choose an exit.</b> <b>a</b>, saving at 0.1 "
+          "dB. The encoder search sees the source and sends 89 bits a "
+          "frame; the other two send nothing. The bit rule beats the "
+          "trained head at every rate, with no learned parameters against "
+          "the head's 144,030. <b>b</b>, bars are the tiles where the "
+          "rule picks the search's exit, the line the fraction of its "
+          "saving it captures anyway. ")
+
     k.fig("supp_router_frontier.png",
           "<b>The rule sits between the two heads and the oracle.</b> Saving at "
           "each rate, against the Lagrangian oracle measured inside the same "

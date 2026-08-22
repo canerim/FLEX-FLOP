@@ -383,6 +383,15 @@ def content(k):
            "results/supp_per_class_budgets.json, on " + PINNED + ". Blocks "
            "skipped per exit from results/adapter_cost.json, same checkpoint.")
 
+    k.fig("exituse.png",
+          "<b>How deep each class has to go.</b> Mean exit taken by the "
+          "tiles of each test class at the 0.1 dB budget, ordered by that "
+          "mean. Resolution is the strongest predictor: the 416×240 class "
+          "has two tiles a frame and almost no choice, and the 1080p "
+          "classes have forty and use the whole ladder. This is the "
+          "dependence the main paper's tile-count section measures, seen per "
+          "class rather than pooled.")
+
     k.fig("res_exits.png",
           "How the ladder fills up. <b>a</b>, exit shares at the 0.1 dB "
           "budget as the rate rises. <b>b</b>, exit shares at q63 as the "
@@ -543,6 +552,16 @@ def content(k):
     k.note("results/supp_opquality_PAPER.json, on " + PINNED + ", at the same "
            "operating points as the metric table above. A tile penalty is the "
            "decibel between the released decode of that tile and ours.")
+
+    k.fig("spread.png",
+          "<b>What the set mean hides.</b> Every test sequence as a "
+          "point, at the 0.1 dB budget; the bar is the median. At the "
+          "lowest rate the saving runs from \\SpreadLowMin% to "
+          "\\SpreadLowMax% across the \\SpreadNSeq sequences and at the "
+          "highest from \\SpreadHighMin% to \\SpreadHighMax%. The spread "
+          "within a rate is larger than the difference between rates, and "
+          "it is content, not noise: the same sequences sit at the same "
+          "end of it at every rate. ")
 
     k.fig("res_tail.png",
           "Where the tail comes from. <b>a</b>, mean and 95th percentile tile "
@@ -843,3 +862,20 @@ def content(k):
           "The crop is the tile that gave up the most quality on this frame, "
           "chosen automatically rather than by eye, so it shows the method's "
           "worst case here and not a flattering one.")
+
+    k.fig("qualitative_q63.png",
+          "<b>The same frame at the top of the rate range.</b> Bosphorus at "
+          "q\\QualHighQp, \\QualHighBpp bpp, the same 0.1 dB budget and the "
+          "same crop as the figure above. The released decoder reaches "
+          "\\QualHighPsnrRel dB and the routed decode \\QualHighPsnrOurs dB "
+          "for \\QualHighDb dB delivered, and the saving is "
+          "\\QualHighSaving% of the arithmetic against \\QualSaving% at "
+          "q\\QualQp.")
+    k.par(
+        "The allocation is what moved between the two pictures. On this frame "
+        "\\QualShallowLow of 40 tiles take the shallowest exit at q\\QualQp "
+        "and \\QualShallowHigh does at q\\QualHighQp, while the deepest exit "
+        "goes from \\QualDeepLow tiles to \\QualDeepHigh. The picture is as "
+        "hard to tell apart at either rate; what changes is how much of the "
+        "decoder the budget will release, which is the rate dependence of the "
+        "main paper's operating-point section arriving in a single frame.")

@@ -753,6 +753,16 @@ def content(k):
         "is the deliberate violation of it, which is the whole of the "
         "tension.")
 
+    k.fig("ladder_crossover.png",
+          "<b>The right ladder depends on the budget.</b> Saving against "
+          "budget for four ladders, with each one's architectural ceiling "
+          "as a dotted line. A finer ladder has a higher ceiling and a "
+          "higher floor, so the curves cross: the coarse ladder wins "
+          "where the budget is tight and cannot be spent, and the fine "
+          "one wins where it is loose enough to reach exits the coarse "
+          "ladder does not have. The crossing is the design choice this "
+          "section is about. ")
+
     k.fig("contamination.png",
           "<b>The seam against per-tile depth.</b> <b>a</b>, the measurement "
           "with the fitted power law. <b>b</b>, both models against q63, one "

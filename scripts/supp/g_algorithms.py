@@ -497,6 +497,15 @@ def content(k):
         "configuration B would not pass.")
 
     # ------------------------------------------------------------------ G.5
+    k.fig("concentration.png",
+          "<b>The loss is concentrated.</b> <b>a</b>, the share of the "
+          "total regret carried by the worst fraction of tiles, per rate; "
+          "the dotted line is what an even spread would look like. "
+          "<b>b</b>, the same as a Gini coefficient. At every rate a "
+          "small minority of tiles carries most of what staying silent "
+          "costs, which is why signalling a fraction of the map recovers "
+          "most of the gap. ")
+
     k.h2("What the map costs to send")
 
     hist_bits = 8 * K

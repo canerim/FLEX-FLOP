@@ -9,15 +9,18 @@
   },
   "adapter_gain.png": {
     "outside": [],
-    "overlaps": []
+    "overlaps": [],
+    "type_scale": 1.6
   },
   "adapters.png": {
     "outside": [],
-    "overlaps": []
+    "overlaps": [],
+    "type_scale": 1.0
   },
   "allocation.png": {
     "outside": [],
-    "overlaps": []
+    "overlaps": [],
+    "type_scale": 1.0
   },
   "band_sensitivity_PAPER.png": {
     "outside": [],
@@ -25,11 +28,13 @@
   },
   "bdrate.png": {
     "outside": [],
-    "overlaps": []
+    "overlaps": [],
+    "type_scale": 1.0
   },
   "bdrate_wide.png": {
     "outside": [],
-    "overlaps": []
+    "overlaps": [],
+    "type_scale": 1.0
   },
   "blend.png": {
     "outside": [],
@@ -37,19 +42,23 @@
   },
   "budget_band.png": {
     "outside": [],
-    "overlaps": []
+    "overlaps": [],
+    "type_scale": 1.6
   },
   "budget_band_BEST.png": {
     "outside": [],
-    "overlaps": []
+    "overlaps": [],
+    "type_scale": 1.6
   },
   "concentration.png": {
     "outside": [],
-    "overlaps": []
+    "overlaps": [],
+    "type_scale": 1.6
   },
   "contamination.png": {
     "outside": [],
-    "overlaps": []
+    "overlaps": [],
+    "type_scale": 1.6
   },
   "convergence.png": {
     "outside": [],
@@ -57,11 +66,13 @@
   },
   "deciders.png": {
     "outside": [],
-    "overlaps": []
+    "overlaps": [],
+    "type_scale": 1.6
   },
   "exit_vs_rate.png": {
     "outside": [],
-    "overlaps": []
+    "overlaps": [],
+    "type_scale": 1.6
   },
   "exitmap_PAPER_basketballdrive_q32_b01.png": {
     "outside": [],
@@ -79,13 +90,20 @@
     "outside": [],
     "overlaps": []
   },
+  "exitmap_PAPER_racehorses_416x240_q32_b01.png": {
+    "outside": [],
+    "overlaps": [],
+    "type_scale": 1.6
+  },
   "exituse.png": {
     "outside": [],
-    "overlaps": []
+    "overlaps": [],
+    "type_scale": 1.0
   },
   "field.png": {
     "outside": [],
-    "overlaps": []
+    "overlaps": [],
+    "type_scale": 1.0
   },
   "granularity.png": {
     "outside": [],
@@ -112,11 +130,13 @@
   },
   "hybrid.png": {
     "outside": [],
-    "overlaps": []
+    "overlaps": [],
+    "type_scale": 1.6
   },
   "ladder.png": {
     "outside": [],
-    "overlaps": []
+    "overlaps": [],
+    "type_scale": 1.0
   },
   "ladder_crossover.png": {
     "outside": [],
@@ -128,19 +148,23 @@
   },
   "map_transfer.png": {
     "outside": [],
-    "overlaps": []
+    "overlaps": [],
+    "type_scale": 1.6
   },
   "mechanism.png": {
     "outside": [],
-    "overlaps": []
+    "overlaps": [],
+    "type_scale": 1.0
   },
   "paper_rd.png": {
     "outside": [],
-    "overlaps": []
+    "overlaps": [],
+    "type_scale": 1.0
   },
   "paper_rdc.png": {
     "outside": [],
-    "overlaps": []
+    "overlaps": [],
+    "type_scale": 1.0
   },
   "patchify.png": {
     "outside": [],
@@ -149,7 +173,8 @@
   },
   "perclass.png": {
     "outside": [],
-    "overlaps": []
+    "overlaps": [],
+    "type_scale": 1.6
   },
   "pipeline_detail.png": {
     "outside": [],
@@ -157,7 +182,8 @@
   },
   "power.png": {
     "outside": [],
-    "overlaps": []
+    "overlaps": [],
+    "type_scale": 1.6
   },
   "qualitative.png": {
     "outside": [],
@@ -177,19 +203,23 @@
   },
   "raterank.png": {
     "outside": [],
-    "overlaps": []
+    "overlaps": [],
+    "type_scale": 1.6
   },
   "rd_spread.png": {
     "outside": [],
-    "overlaps": []
+    "overlaps": [],
+    "type_scale": 1.6
   },
   "rd_vs_uf.png": {
     "outside": [],
-    "overlaps": []
+    "overlaps": [],
+    "type_scale": 1.0
   },
   "rd_yuv.png": {
     "outside": [],
-    "overlaps": []
+    "overlaps": [],
+    "type_scale": 1.0
   },
   "res_exits.png": {
     "outside": [],
@@ -221,7 +251,8 @@
   },
   "router_ab.png": {
     "outside": [],
-    "overlaps": []
+    "overlaps": [],
+    "type_scale": 1.0
   },
   "router_arch.png": {
     "outside": [],
@@ -245,7 +276,8 @@
   },
   "saturation_RECIPE512.png": {
     "outside": [],
-    "overlaps": []
+    "overlaps": [],
+    "type_scale": 1.6
   },
   "seam_gate.png": {
     "outside": [],
@@ -253,7 +285,8 @@
   },
   "seam_module.png": {
     "outside": [],
-    "overlaps": []
+    "overlaps": [],
+    "type_scale": 1.6
   },
   "seam_problem.png": {
     "outside": [],
@@ -269,7 +302,8 @@
   },
   "spread.png": {
     "outside": [],
-    "overlaps": []
+    "overlaps": [],
+    "type_scale": 1.0
   },
   "supp_achievable.png": {
     "outside": [],
@@ -297,15 +331,18 @@
   },
   "sys_pipeline.png": {
     "outside": [],
-    "overlaps": []
+    "overlaps": [],
+    "type_scale": 1.0
   },
   "theory.png": {
     "outside": [],
-    "overlaps": []
+    "overlaps": [],
+    "type_scale": 1.6
   },
   "tiles_unequal.png": {
     "outside": [],
-    "overlaps": []
+    "overlaps": [],
+    "type_scale": 1.0
   },
   "topology.png": {
     "outside": [],
@@ -362,18 +399,22 @@
   },
   "training_plateau.png": {
     "outside": [],
-    "overlaps": []
+    "overlaps": [],
+    "type_scale": 1.0
   },
   "training_plateau_wide.png": {
     "outside": [],
-    "overlaps": []
+    "overlaps": [],
+    "type_scale": 1.0
   },
   "training_scheme.png": {
     "outside": [],
-    "overlaps": []
+    "overlaps": [],
+    "type_scale": 1.0
   },
   "window.png": {
     "outside": [],
-    "overlaps": []
+    "overlaps": [],
+    "type_scale": 1.6
   }
 }

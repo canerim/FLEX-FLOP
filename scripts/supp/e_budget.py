@@ -318,6 +318,16 @@ def content(k):
           "the same budget behaves so differently at the two ends of the rate "
           "range.")
 
+    k.fig("window.png",
+          "<b>The window a budget works in.</b> <b>a</b>, saving against the "
+          "distortion actually delivered, per rate. Every curve begins at a "
+          "floor, below which no allocation meets the budget, and flattens at "
+          "a saturation point, above which a looser budget buys nothing. "
+          "<b>b</b>, those two limits against rate. The shaded band is the "
+          "only region in which a budget is a design choice rather than a "
+          "formality. The main paper states both limits and reads them off "
+          "this picture.")
+
     k.fig("seam_vs_qp.png",
           "<b>The tiling penalty across the whole rate range</b>, every tile "
           "at full depth, so this is the floor and nothing else. <b>a</b>, "

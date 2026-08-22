@@ -406,17 +406,17 @@ with equality if and only if S is a set of s largest regrets. L is the Lorenz cu
 \toprule
 q & Gini & L(.1) & rec(.1) & L(.2) & rec(.2) & L(.5) & rec(.5) \\
 \midrule
-q0 & 0.34 & 23\% & 25\% & 37\% & 45\% & 73\% & 89\% \\
-q16 & 0.50 & 35\% & 27\% & 49\% & 49\% & 83\% & 101\% \\
-q32 & 0.50 & 30\% & 37\% & 47\% & 65\% & 86\% & 104\% \\
-q48 & 0.52 & 31\% & 29\% & 48\% & 51\% & 88\% & 90\% \\
-q63 & 0.57 & 35\% & 28\% & 53\% & 48\% & 91\% & 88\% \\
+q0 & 0.95 & 100\% & 36\% & 100\% & 53\% & 100\% & 86\% \\
+q16 & 0.92 & 89\% & 34\% & 100\% & 45\% & 100\% & 83\% \\
+q32 & 0.90 & 82\% & 38\% & 100\% & 57\% & 100\% & 83\% \\
+q48 & 0.80 & 58\% & 37\% & 86\% & 60\% & 100\% & 88\% \\
+q63 & 0.75 & 50\% & 31\% & 75\% & 52\% & 100\% & 83\% \\
 \bottomrule
 \end{tabular}}
-\caption{\textbf{The Lorenz curve of the regret, and what signalling recovers.} L($\rho$) is the share of the total regret carried by the $\rho$ worst tiles, which Proposition 12 says is the most any signal of that size can remove at a fixed price; rec($\rho$) is the share of the predictor-to-oracle gap the measured sweep recovers. Regret is concentrated at every rate, Gini \GiniMin to \GiniMax: a tenth of the tiles carries 23\% to 35\% of the total regret and recovers 25\% to 37\% of the gap. Over every reachable cell the ratio rec/L runs from \LorenzTightMin\% to \LorenzTightMax\%, for the reason the remark gives.}
+\caption{\textbf{The Lorenz curve of the regret, and what signalling recovers.} L($\rho$) is the share of the total regret carried by the $\rho$ worst tiles, which Proposition 12 says is the most any signal of that size can remove at a fixed price; rec($\rho$) is the share of the predictor-to-oracle gap the measured sweep recovers. Regret is concentrated at every rate, Gini \GiniMin to \GiniMax: a tenth of the tiles carries 50\% to 100\% of the total regret and recovers 31\% to 38\% of the gap. Over every reachable cell the ratio rec/L runs from \LorenzTightMin\% to \LorenzTightMax\%, for the reason the remark gives.}
 \end{table}
 
-{\small results/hybrid\_RECIPE512\_b01\_fixed.json, checkpoint runs/RECIPE512/ckpt\_PAPER.pth.tar, \NumSeq sequences at a 0.1 dB budget; the head it is measured against was trained on runs/RECIPE512/ckpt\_eval.pth.tar. rec($\rho$) is computed here from the same file as the saving at $\rho$, relative to the $\rho$ = 0 and $\rho$ = 1 endpoints. Signalling half the tiles beats signalling all of them at \HybridBeatsAN of \HybridBeatsAOf rates, which is the same re-bisection effect.}
+{\small results/hybrid\_RECIPE512\_b01\_e4head.json, checkpoint runs/RECIPE512/ckpt\_PAPER.pth.tar, \NumSeq sequences at a 0.1 dB budget, against the head fitted to that checkpoint. rec($\rho$) is computed here from the same file as the saving at $\rho$, relative to the $\rho$ = 0 and $\rho$ = 1 endpoints. Signalling half the tiles beats signalling all of them at \HybridHalfVsFullN of \HybridHalfVsFullOf rates here; on a head fitted to other weights it did so at two of them, which is the re-bisection effect the remark predicts rather than a property of the decoder.}
 
 The signal is an entropy-coded mask over tiles plus an index per override, so its bill grows with $\rho$ and is pure overhead at $\rho$ = 1, where the mask names every tile; section G prices both objects. A fifth of the tiles costs \HybridBitsFifth bits per frame and recovers over half the gap.
 

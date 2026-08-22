@@ -940,14 +940,15 @@ def content(k):
         f"Over every reachable cell the ratio rec/L runs from "
         f"\\LorenzTightMin% to \\LorenzTightMax%, for the reason the remark "
         f"gives.")
-    k.note("results/hybrid_RECIPE512_b01_fixed.json, checkpoint "
+    k.note("results/hybrid_RECIPE512_b01_e4head.json, checkpoint "
            "runs/RECIPE512/ckpt_PAPER.pth.tar, \\NumSeq sequences at a 0.1 dB "
-           "budget; the head it is measured against was trained on "
-           "runs/RECIPE512/ckpt_eval.pth.tar. rec(ρ) is computed here from the "
-           "same file as the saving at ρ, relative to the ρ = 0 and ρ = 1 "
-           "endpoints. Signalling half the tiles beats signalling all of them "
-           "at \\HybridBeatsAN of \\HybridBeatsAOf rates, which is the same "
-           "re-bisection effect.")
+           "budget, against the head fitted to that checkpoint. rec(\u03c1) is "
+           "computed here from the same file as the saving at \u03c1, relative "
+           "to the \u03c1 = 0 and \u03c1 = 1 endpoints. Signalling half the "
+           "tiles beats signalling all of them at \\HybridHalfVsFullN of "
+           "\\HybridHalfVsFullOf rates here; on a head fitted to other weights it "
+           "did so at two of them, which is the re-bisection effect the "
+           "remark predicts rather than a property of the decoder.")
 
     k.par(
         "The signal is an entropy-coded mask over tiles plus an index per "

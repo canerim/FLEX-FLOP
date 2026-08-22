@@ -835,11 +835,28 @@ if hy:
             over.append((q, sv(cb)
                          - sv(ca)))
     if over:
+        # Signalling half the tiles against signalling all of them. On a head
+        # fitted to other weights this was positive at two rates; with the
+        # head the paper reports, B starts high enough that the second
+        # multiplier has nothing left to exploit and it is negative
+        # everywhere. Both counts are always defined, so a paragraph that
+        # reports the comparison prints a number rather than a macro name.
         beat = [d for _, d in over if d > 0]
-        if beat:
-            mac("HybridBeatsAN", str(len(beat)))
-            mac("HybridBeatsAOf", str(len(over)))
-            mac("HybridBeatsABy", f"{max(beat):.2f}")
+        mac("HybridHalfVsFullN", str(len(beat)))
+        mac("HybridHalfVsFullOf", str(len(over)))
+        mac("HybridBeatsABy", f"{max(beat):.2f}" if beat else "0.00")
+        # How far B (rho = 0) starts below A (rho = 1), worst rate.
+        _g0 = [(q, sv(cell(q, 1.0)) - sv(cell(q, 0.0))) for q, _ in over
+               if cell(q, 1.0) and cell(q, 0.0)]
+        if _g0:
+            mac("HybridStartGapLo", f"{min(v for _, v in _g0):.1f}")
+            mac("HybridStartGapHi", f"{max(v for _, v in _g0):.1f}")
+        short = [-d for _, d in over if d <= 0]
+        if short:
+            mac("HybridHalfShortLo", f"{min(short):.2f}")
+            mac("HybridHalfShortHi", f"{max(short):.2f}")
+            mac("HybridHalfShortHiQp", str(max(over, key=lambda t: -t[1])[0]))
+            mac("HybridHalfShortLoQp", str(max(over, key=lambda t: t[1])[0]))
     # How far the sweep's ends sit from the hook-counted A and B.
     try:
         _bB, _ = pick("router_RECIPE512_b01_e4head.json", "router_RECIPE512_b01_PAPER.json",

@@ -21,7 +21,7 @@ Bosphorus, 1920$\times$1080 & 40 & e2:29 e3:8 e4:3 & 34.2 & 0.099 & 0.374 \\
 BasketballDrive, 1920$\times$1080 & 40 & e2:22 e3:9 e4:9 & 29.9 & 0.099 & 0.178 \\
 FourPeople, 1280$\times$720 & 15 & e2:6 e3:1 e4:3 e5:5 & 19.6 & 0.100 & 0.271 \\
 PartyScene, 832$\times$480 & 8 & e3:4 e4:3 e5:1 & 16.9 & 0.097 & 0.162 \\
-RaceHorses, 416$\times$240 & 2 & e4:2 & 13.0 & 0.097 & 0.113 \\
+RaceHorses, 416$\times$240 & 2 & e3:1 e4:1 & 18.6 & 0.095 & 0.134 \\
 \bottomrule
 \end{tabular}}
 \caption{\textbf{One frame from each class at q32 and a 0.1 dB budget.} The exits taken column is the histogram over the ladder, so \emph{e4:2} is two tiles at exit 4. Take from it that the allocation stops being an allocation at the bottom of the table: at 416$\times$240 both tiles take the same exit, and the frame receives whatever that one rung happens to cost. The worst tile column is the largest per-tile loss in the frame and is between two and three times the frame's own delivered decibel on the three largest frames, which is the tail section D measures over the whole set.}
@@ -37,7 +37,7 @@ RaceHorses, 416$\times$240 & 2 & e4:2 & 13.0 & 0.097 & 0.113 \\
 
 {\small paper/figures/exitmap\_PAPER\_racehorses\_416x240\_q32\_b01.png, drawn from results/supp\_exitmap\_racehorses\_416x240\_q32\_b01.json on runs/RECIPE512/ckpt\_PAPER.pth.tar. RaceHorses at 416$\times$240, q32, 0.1 dB.}
 
-The two frames at either end of that table are the same decoder at the same budget. Bosphorus at 1080p spreads 40 tiles over exits 2, 3, 4 and saves 34.2\% of the modelled decode; RaceHorses at 416$\times$240 puts both of its tiles on exit 4 and saves 13.0\%. Nothing about the content separates them. What separates them is that a two-cell map has three admissible states above the split depth and a 40-cell map has more states than the sweep could enumerate, so the Lagrangian has somewhere to put the budget in one case and not in the other.
+The two frames at either end of that table are the same decoder at the same budget. Bosphorus at 1080p spreads 40 tiles over exits 2, 3, 4 and saves 34.2\% of the modelled decode; RaceHorses at 416$\times$240 puts both of its tiles on exit 4 and saves 18.6\%. Nothing about the content separates them. What separates them is that a two-cell map has three admissible states above the split depth and a 40-cell map has more states than the sweep could enumerate, so the Lagrangian has somewhere to put the budget in one case and not in the other.
 
 \begin{table}[t]
 \centering
@@ -168,6 +168,12 @@ The exactness claim for the halo exchange is worth writing out, because it is th
 
 \begin{figure}[t]
 \centering
+\includegraphics[width=\columnwidth]{figures/ladder_crossover.png}
+\caption{\textbf{The right ladder depends on the budget.} Saving against budget for four ladders, with each one's architectural ceiling as a dotted line. A finer ladder has a higher ceiling and a higher floor, so the curves cross: the coarse ladder wins where the budget is tight and cannot be spent, and the fine one wins where it is loose enough to reach exits the coarse ladder does not have. The crossing is the design choice this section is about. }
+\end{figure}
+
+\begin{figure}[t]
+\centering
 \includegraphics[width=\columnwidth]{figures/contamination.png}
 \caption{\textbf{The seam against per-tile depth.} \textbf{a}, the measurement with the fitted power law. \textbf{b}, both models against q63, one free scale each. \textbf{c}, mean relative error. The area fraction saturates once the border reaches every pixel and the penalty does not, which is where the area law fails as a predictor.}
 \end{figure}
@@ -258,7 +264,7 @@ There is a structural fix and it was measured and rejected, which is row five of
 
 \subsection{How much of this can be repeated exactly}
 
-Every measurement file records the checkpoint it was taken on, and there are three kinds of answer. 61 of the files these two documents read name a checkpoint that does not move -- a pin or a warm start -- so the measurement can be repeated exactly. Another 17 name one the watcher overwrites but record the epoch or step it was at, so the weights are identified even though the path is not. The remaining 12 record neither, and their paths now point at whatever those runs have trained to since.
+Every measurement file records the checkpoint it was taken on, and there are three kinds of answer. 62 of the files these two documents read name a checkpoint that does not move -- a pin or a warm start -- so the measurement can be repeated exactly. Another 17 name one the watcher overwrites but record the epoch or step it was at, so the weights are identified even though the path is not. The remaining 12 record neither, and their paths now point at whatever those runs have trained to since.
 
 That last group is not hidden -- several of the files in it are named as such where they are used, and the epoch tables of this section exist because of it -- but it is worth stating once as a number rather than as remarks. Nothing in the main paper's headline is in it: the pinned checkpoint carries every table the paper reports. What is in it is the adapter and coupling ablations, the hybrid sweeps of configuration C, the wall-clock files and the anchor drift of the runs other than the pinned one. Repeating those exactly would need the checkpoints back, which is why scripts/check\_provenance.py refuses to let the count grow.
 

@@ -317,7 +317,7 @@ either. Because the objective is separable over tiles, the optimal set of size
 $s$ at a fixed multiplier is exactly the $s$ largest regrets, which the encoder
 can compute. Who to defer and how to learn it is the open question in that
 literature, and it has a closed form here. What remains is the question we
-measure, which is how concentrated the regret is (Fig.~\ref{fig:concentration}).
+measure, which is how concentrated the regret is.
 
 \paragraph{Allocating a budget over units.} The construction we use is not new
 and we do not present it as such. Shoham and Gersho~\cite{shoham1988} showed
@@ -1131,7 +1131,7 @@ median.}
 Figure~\ref{fig:rd}c shows the distribution that the headline averages over, and
 it is wide. At $q0$ the median sequence saves \SpreadMedLow\%, with an
 interquartile range of \SpreadIqrLoLow--\SpreadIqrHiLow, while the worst saves
-\SpreadWorst\% (Fig.~\ref{fig:spread}). The worst cases are the
+\SpreadWorst\%. The worst cases are the
 low-resolution sequences of Section~\ref{sec:resolution}, where two tiles leave
 nothing to allocate. Reporting the mean alone would hide both ends.
 
@@ -1250,17 +1250,6 @@ range.
 
 
 
-\begin{figure}[t]
-\centering
-\includegraphics[width=\columnwidth]{figures/spread.png}
-\caption{\textbf{What the set mean hides.} Every test sequence as a point, at
-the $0.1\dB$ budget; the bar is the median. At the lowest rate the saving runs
-from \SpreadLowMin\% to \SpreadLowMax\% across the \SpreadNSeq\ sequences and at
-the highest from \SpreadHighMin\% to \SpreadHighMax\%. The spread within a rate is larger than the difference between rates,
-and it is content, not noise: the same sequences sit at the same end of it at
-every rate.}
-\label{fig:spread}
-\end{figure}
 
 \subsection{Resolution, and the granularity of a tile}
 \label{sec:resolution}
@@ -1333,7 +1322,7 @@ resolution.} Halving the tile side multiplies the tile count by
 \TileClassesN\ classes, by \TileGainLowMin\ to \TileGainLowMax\ points, and
 behind only on \TileLowLoser. At $q32$ and $q63$ it is behind on every class,
 by up to \TileBehindMidMax\ and \TileBehindHighMax\ points
-(Fig.~\ref{fig:exituse}).
+.
 
 So granularity buys something only where the budget is loose relative to what
 a tile costs, and the seam it pays for grows with rate until it swallows the
@@ -1343,17 +1332,8 @@ nothing. We report the comparison as indicative, since the two tile sizes come
 from different training runs and the 128\,px run has \TileConfoundSteps\ steps
 more, which favours the column that wins at $q0$ and not the one that wins
 elsewhere. What survives the confound is that a resolution-adaptive tile size
-is not the easy win the granularity argument suggests.~\ref{fig:exituse}).
+is not the easy win the granularity argument suggests.
 
-\begin{figure}[t]
-\centering
-\includegraphics[width=\columnwidth]{figures/exituse.png}
-\caption{\textbf{How deep each class has to go.} Mean exit taken by the tiles of
-each test class at the $0.1\dB$ budget, ordered by that mean. Resolution is the
-strongest predictor: the $416\times240$ class has two tiles a frame and almost
-no choice, and the 1080p classes have forty and use the whole ladder.}
-\label{fig:exituse}
-\end{figure}
 
 \subsection{The band a distortion budget works in}
 \label{sec:operating}
@@ -1499,12 +1479,6 @@ the dotted line is the arithmetic ceiling,
 same relation inverted, so it reads as what a saving target costs. The three
 budgets reported elsewhere are three points on this curve.}
 \label{fig:tradeoff}
-\end{figure}
-\begin{figure}[t]
-\centering
-\includegraphics[width=\columnwidth]{figures/window.png}
-\caption{\textbf{The window a budget works in.} \textbf{a}, saving against the distortion actually delivered, per rate. Every curve begins at a floor and flattens at a saturation point. \textbf{b}, those two limits against rate; the shaded band is the only region in which a budget is a design choice rather than a formality.}
-\label{fig:window}
 \end{figure}
 
 \subsection{Signalled versus predicted allocation}
@@ -1808,21 +1782,10 @@ trained heads span.
 A learned component should be measured against the free alternative, and it
 rarely is. In adaptive inference the usual controls are a uniform allocation and
 a random one. Both are much weaker than a decoder-side signal that is already
-lying around (Fig.~\ref{fig:deciders}). Panel~b of that figure is the surprise: the rule picks the search's exit on
+lying around. Panel~b of that figure is the surprise: the rule picks the search's exit on
 fewer than half the tiles and still captures three quarters of its saving, which
 is why agreement is the wrong thing to optimise.
 
-\begin{figure}[t]
-\centering
-\includegraphics[width=\columnwidth]{figures/deciders.png}
-\caption{\textbf{Three ways to choose an exit.} \textbf{a}, saving at $0.1\dB$. The
-encoder search sees the source and sends \MapBits\ bits a frame; the other two
-send nothing. The bit rule beats the trained head at every rate, with no learned
-parameters against the head's \RouterParams. \textbf{b}, bars are the tiles where
-the rule picks the search's exit, the line the fraction of its saving it captures
-anyway.}
-\label{fig:deciders}
-\end{figure}
 
 \subsection{Signalling only what the router gets wrong}
 \label{sec:hybrid}
@@ -1873,20 +1836,23 @@ something real.
 recovers \HybridRecoverFifthLow--\HybridRecoverFifthHigh\%. Recovery is concave
 everywhere, so the first bits spent are the most useful ones.
 
-\textbf{And a partial map can beat a complete one.} At \HybridBeatsAN\ of
-\HybridBeatsAOf\ rates, signalling half the tiles for \HybridBitsHalf\ bits
-saves \emph{more} than signalling all of them, by up to \HybridBeatsABy\ points,
-at the same distortion. Both land within the bisection's $5\times10^{-4}\dB$
-tolerance of the budget, and the local exchange rate is about $48$ saving points
-per decibel, so the tolerance is worth $0.02$ points against a margin ten to
-twenty times that. The margin is therefore real, and it does not come from a
-better predictor. The hybrid has \emph{two} multipliers where A has one: the
-oracle's $\lambda$ governs the overridden tiles and the router's fixed $\beta$
-the rest. A two-multiplier allocation reaches points on the distortion--compute
-plane that a single Lagrangian sweep cannot, for the same reason the sweep
-misses interior Pareto points at all (Section~\ref{sec:operating}).
-Configuration~A is optimal among allocations reachable by one multiplier, and
-that is a smaller set than the word suggests.
+\textbf{A partial map does not beat a complete one here}, and the reason it
+could is worth stating anyway. Signalling half the tiles for \HybridBitsHalf\
+bits lands \HybridHalfShortLo\ points short of signalling all of them at
+$q\HybridHalfShortLoQp$ and \HybridHalfShortHi\ short at
+$q\HybridHalfShortHiQp$, at the same distortion: it beats the full map at
+\HybridHalfVsFullN\ of \HybridHalfVsFullOf\ rates. Nothing forces that ordering, because
+the hybrid has \emph{two} multipliers where A has one: the oracle's $\lambda$
+governs the overridden tiles and the router's fixed $\beta$ the rest. A
+two-multiplier allocation reaches points on the distortion--compute plane that a
+single Lagrangian sweep cannot, for the same reason the sweep misses interior
+Pareto points at all (Section~\ref{sec:operating}), so a partial map beating a
+complete one is not a contradiction and we have measured it happening on a
+decoder whose predictor was worse. Configuration~A is optimal among allocations
+reachable by one multiplier, and that is a smaller set than the word suggests.
+What closes the gap here is the predictor: with a head fitted to these weights B
+starts \HybridStartGapLo--\HybridStartGapHi\ points below A, and there is little
+left for a second multiplier to exploit.
 
 \textbf{Why the recovery is concave, and what bounds it.} At a fixed $\lambda$
 the objective is separable, so overriding a set removes \emph{exactly} the sum
@@ -1928,12 +1894,6 @@ signalled, at \CBestSave\% at $q\CBestQp$. That is \CBestOverA\ points
 Configuration C is what we would ship where a small map is tolerable and a large
 one is not. It also reframes the A--B gap. What the gap measures is the price of
 \emph{silence}, charged tile by tile, rather than the price of prediction.
-\begin{figure}[t]
-\centering
-\includegraphics[width=\columnwidth]{figures/concentration.png}
-\caption{\textbf{The loss is concentrated.} \textbf{a}, the share of the total regret carried by the worst fraction of tiles, per rate; the dotted line is an even spread. \textbf{b}, the same as a Gini coefficient.}
-\label{fig:concentration}
-\end{figure}
 
 \subsection{Does the map have to be recomputed?}
 \label{sec:transfer}
@@ -2164,16 +2124,6 @@ is a scheduling property of the accelerator, and on a device without one the
 operations count is the honest figure.
 
 \subsection{The right ladder depends on the budget}
-\begin{figure}[t]
-\centering
-\includegraphics[width=\columnwidth]{figures/ladder_crossover.png}
-\caption{\textbf{The right ladder depends on the budget.} Saving against budget
-for four ladders, with each one's architectural ceiling as a dotted line. A finer
-ladder has a higher ceiling and a higher floor, so the curves cross: the coarse
-ladder wins where the budget is tight and cannot be spent, and the fine one wins
-where it is loose enough to reach exits the coarse ladder does not have.}
-\label{fig:laddercross}
-\end{figure}
 
 \label{sec:ladder}
 
@@ -2207,7 +2157,7 @@ and $0.3\dB$:
 
 So the ladder is a choice made at the operating point, not a hyperparameter
 tuned once and fixed. The band of Section~\ref{sec:operating} tells you which
-side of the crossover a given budget sits on (Fig.~\ref{fig:laddercross}) The two dotted lines in that figure are the two ceilings, and the crossing
+side of the crossover a given budget sits on The two dotted lines in that figure are the two ceilings, and the crossing
 between them is the whole argument: a finer ladder is worse until the budget is
 large enough to reach past the coarse one's ceiling..
 
@@ -2241,28 +2191,6 @@ on. That is the seam repair and the border padding doing their work: the cut is
 still the largest single cost in the method, and by the time the reader sees the
 picture it is no longer the visible one.
 
-The same frame at the top of the rate range says what the budget costs there (Fig.~\ref{fig:qualitativehigh}). At
-$q\QualHighQp$, \QualHighBpp\ bpp, the released decoder reaches
-\QualHighPsnrRel\dB and the routed decode \QualHighPsnrOurs\dB for
-\QualHighDb\dB delivered, and the saving is \QualHighSaving\% against
-\QualSaving\% at $q\QualQp$. The allocation is what moved: on this frame
-\QualShallowLow\ of 40 tiles take the shallowest exit at $q\QualQp$ and
-\QualShallowHigh\ does at $q\QualHighQp$, while the deepest exit goes from
-\QualDeepLow\ tiles to \QualDeepHigh. The picture is as hard to tell apart at
-either rate. What changes is how much of the decoder the budget will release,
-which is the rate dependence of Section~\ref{sec:operating} arriving in a single
-frame.
-
-\begin{figure}[t]
-\centering
-\includegraphics[width=\columnwidth]{figures/qualitative_q63.png}
-\caption{\textbf{The same frame at the top of the rate range.} Bosphorus at
-$q\QualHighQp$, \QualHighBpp\ bpp, the same $0.1\dB$ budget and the same crop
-as Fig.~\ref{fig:qualitative}. The released decoder reaches
-\QualHighPsnrRel\dB and the routed decode \QualHighPsnrOurs\dB, for
-\QualHighSaving\% of the arithmetic rather than \QualSaving\%.}
-\label{fig:qualitativehigh}
-\end{figure}
 
 \begin{table}[t]
 \centering

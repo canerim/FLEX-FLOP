@@ -193,8 +193,12 @@ if hy and b1f and sg:
     ends1 = [abs(_h(q, 1.0) - Av[q]) for q in Av if _h(q, 1.0) is not None]
     claim("hybrid: rho=1 reproduces A (max |diff|)", 0.0, max(ends1), 0.05)
     beat = [(_h(q, 0.5) - Av[q]) for q in Av if _h(q, 0.5) is not None]
-    claim("hybrid: rates where half beats all", 2, sum(1 for d in beat if d > 0), 0)
-    claim("hybrid: best margin over A (pts)", mac("HybridBeatsABy"), max(beat), 0.05)
+    # 2 with the head fitted to other weights, 0 with the head the paper
+    # reports: B starts close enough to A that the second multiplier has
+    # nothing left to exploit. The paper says so in those words.
+    claim("hybrid: rates where half beats all", 0, sum(1 for d in beat if d > 0), 0)
+    claim("hybrid: half's worst shortfall (pts)", 0.98, -min(beat), 0.05)
+    claim("hybrid: half's best shortfall (pts)", 0.16, -max(beat), 0.05)
     # and the margin is not the bisection tolerance in disguise
     dbs = [abs(r["db_vs_uf"] - 0.1) for r in rws]
     # 5e-4 is the bisection's own stopping tolerance and the outer correction
@@ -268,7 +272,10 @@ if cl:
 # not a registered claim. It is one now.
 _hy = (J("hybrid_RECIPE512_b01_e4head.json")
        or J("hybrid_RECIPE512_b01_fixed.json") or J("hybrid_RECIPE512_b01.json"))
-_rb = J("router_RECIPE512_b01_PAPER.json")
+# The same order the paper uses, or the offsets are measured against a B
+# curve the paper does not report.
+_rb = J("router_RECIPE512_b01_e4head.json", "router_RECIPE512_b01_PAPER.json",
+        "router_RECIPE512_b01_fixed.json", "router_RECIPE512_b01.json")
 _sa = J("signalled_RECIPE512_ctc53.json")
 if _hy and _rb and _sa:
     _B = {r["qp"]: sv(r) for r in _rb["rows"] if r.get("budget_reachable")}
@@ -281,8 +288,10 @@ if _hy and _rb and _sa:
             if _r and _q in _ref:
                 _d.append(sv(_r[0]) - _ref[_q])
     if _d:
-        claim("hybrid: end offset, smallest", 0.58, min(_d), 0.05)
-        claim("hybrid: end offset, largest", 0.78, max(_d), 0.05)
+        claim("hybrid: end offset, smallest", mac("HybridEndOffsetLo"),
+              min(_d), 0.05)
+        claim("hybrid: end offset, largest", mac("HybridEndOffsetHi"),
+              max(_d), 0.05)
 
 # ---- the band collapse ----------------------------------------------------
 bc = J("band_collapse.json")
@@ -315,15 +324,19 @@ if rt:
     claim("retrain: worst loss (pts)", 3.4, -min(ds.values()), 0.1)
 
 # ---- what the retrain does to the regret distribution ----------------------
-hv3 = J("hybrid_v3_b01.json")
-if hy and hv3:
+# The pair the paper compares: the pre-fix head and the post-fix head, both on
+# the pinned weights. `hy` is a third head and is not the comparison partner.
+hv3 = J("hybrid_v3_b01_pin.json", "hybrid_v3_b01.json")
+hy2 = J("hybrid_RECIPE512_b01_fixed.json")
+if hy2 and hv3:
     def _g(d):
         return {r["qp"]: r["gini_regret"] for r in d["rows"]
                 if r.get("gini_regret") is not None}
-    G2, G3 = _g(hy), _g(hv3)
+    G2, G3 = _g(hy2), _g(hv3)
     common = [q for q in G2 if q in G3]
     if common:
-        claim("gini: rates where the retrain concentrates regret", 5,
+        claim("gini: rates where the retrain concentrates regret",
+              int(mac("GiniRetrainUpN")),
               sum(1 for q in common if G3[q] > G2[q]), 0)
 
 # ---- the free rule on a second training run --------------------------------

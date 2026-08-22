@@ -77,6 +77,12 @@ q63 & 50.1 & 21.5 & 18.5 & 9.9 & 4.24 & 24.1 \\
 
 \begin{figure}[t]
 \centering
+\includegraphics[width=\columnwidth]{figures/exituse.png}
+\caption{\textbf{How deep each class has to go.} Mean exit taken by the tiles of each test class at the 0.1 dB budget, ordered by that mean. Resolution is the strongest predictor: the 416$\times$240 class has two tiles a frame and almost no choice, and the 1080p classes have forty and use the whole ladder. This is the dependence the main paper's tile-count section measures, seen per class rather than pooled.}
+\end{figure}
+
+\begin{figure}[t]
+\centering
 \includegraphics[width=\columnwidth]{figures/res_exits.png}
 \caption{How the ladder fills up. \textbf{a}, exit shares at the 0.1 dB budget as the rate rises. \textbf{b}, exit shares at q63 as the budget loosens, until at 0.3 dB 96\% of tiles are already at the shallowest exit and there is almost nothing left to allocate. Both panels are pooled over the test set.}
 \end{figure}
@@ -217,6 +223,12 @@ q63 & 1765 & 0.139 & 0.106 & 0.386 & 0.744 & 1.421 & 195 & 48 & 4 \\
 \end{table}
 
 {\small results/supp\_opquality\_PAPER.json, on runs/RECIPE512/ckpt\_PAPER.pth.tar, at the same operating points as the metric table above. A tile penalty is the decibel between the released decode of that tile and ours.}
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\columnwidth]{figures/spread.png}
+\caption{\textbf{What the set mean hides.} Every test sequence as a point, at the 0.1 dB budget; the bar is the median. At the lowest rate the saving runs from \SpreadLowMin\% to \SpreadLowMax\% across the \SpreadNSeq sequences and at the highest from \SpreadHighMin\% to \SpreadHighMax\%. The spread within a rate is larger than the difference between rates, and it is content, not noise: the same sequences sit at the same end of it at every rate. }
+\end{figure}
 
 \begin{figure}[t]
 \centering
@@ -447,4 +459,12 @@ Five cases are worth naming, all of them measured in the files above rather than
 \includegraphics[width=\columnwidth]{figures/qualitative.png}
 \caption{\textbf{What the saving looks like.} The same bitstream decoded by the released decoder and by ours at the 0.1 dB operating point. The crop is the tile that gave up the most quality on this frame, chosen automatically rather than by eye, so it shows the method's worst case here and not a flattering one.}
 \end{figure}
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\columnwidth]{figures/qualitative_q63.png}
+\caption{\textbf{The same frame at the top of the rate range.} Bosphorus at q\QualHighQp, \QualHighBpp bpp, the same 0.1 dB budget and the same crop as the figure above. The released decoder reaches \QualHighPsnrRel dB and the routed decode \QualHighPsnrOurs dB for \QualHighDb dB delivered, and the saving is \QualHighSaving\% of the arithmetic against \QualSaving\% at q\QualQp.}
+\end{figure}
+
+The allocation is what moved between the two pictures. On this frame \QualShallowLow of 40 tiles take the shallowest exit at q\QualQp and \QualShallowHigh does at q\QualHighQp, while the deepest exit goes from \QualDeepLow tiles to \QualDeepHigh. The picture is as hard to tell apart at either rate; what changes is how much of the decoder the budget will release, which is the rate dependence of the main paper's operating-point section arriving in a single frame.
 
