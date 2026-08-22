@@ -363,6 +363,55 @@ def content(F):
         "made of. There are easy regions in a picture, and there are none in "
         "the computation that turns a latent into one.", BODY))
 
+    A(Paragraph("4.4 The stem trained jointly with the ladder", H2))
+    A(Paragraph(
+        "Every width above was fitted to a frozen target: reproduce, with "
+        "fewer channels, the representation a decoder trained without it "
+        "produces. That is the hardest version of the task and the obvious "
+        "objection to the negative result, so it was run the other way. The "
+        "trunk and the adapters were unfrozen and trained together with the "
+        "narrow stem for 20,000 steps, which lets the exits move to meet the "
+        "stem rather than requiring the stem to reproduce something fitted "
+        "without it.", BODY))
+    jt = [(w, J(f"narrow_eval_w{w}.json"), J(f"joint_eval_w{w}_joint.json"))
+          for w in ("0.5", "0.25")]
+    jrows = [["width", "training", "ceiling", "dB q0", "q32", "q63"]]
+    for w, fz, jn in jt:
+        if fz:
+            jrows.append([w, "frozen target",
+                          f"{fz['rows'][0]['ceiling_narrow_pct']:.1f}%"]
+                         + [f"{r['db_narrow_stem']:.3f}" for r in fz["rows"]])
+        if jn:
+            jrows.append([w, "trained jointly",
+                          f"{jn['rows'][0]['ceiling_pct']:.1f}%"]
+                         + [f"{r['db_vs_uf']:.3f}" for r in jn["rows"]])
+    if fz:
+        jrows.append(["1.0", "the ladder as it ships",
+                      f"{fz['rows'][0]['ceiling_full_pct']:.1f}%"]
+                     + [f"{r['db_full_stem']:.3f}" for r in fz["rows"]])
+    A(table(jrows,
+            "<b>Table 5. A narrow stem fitted to a frozen target against one "
+            "trained with the ladder.</b> Decibels below the released decoder "
+            "at exit 2, over 12 sequences. The last row is the same exit with "
+            "the stem the decoder ships, which is what the extra channels "
+            "buy. The ceiling is unchanged by how the stem was trained: it is "
+            "a property of the architecture."))
+    A(Paragraph(
+        "Joint training helps, and by a lot: at width 0.5 the cost falls from "
+        "0.585 to 0.293 dB at q0 and from 2.162 to 0.778 at q63, so roughly "
+        "half to a third of the damage was the frozen target rather than the "
+        "missing channels. It is not enough. The cheapest point of the "
+        "cheapest configuration is 0.293 dB, which is 1.5 times the 0.2 dB "
+        "budget, and the highest rate costs 3.9 times it. Halving the stem "
+        "again buys 2 points of ceiling and costs slightly more quality, "
+        "which is the same flat trade the four widths showed.", BODY))
+    A(Paragraph(
+        "The prediction recorded before this ran was that the frozen target "
+        "was the obstacle. It was part of it, and the part it was is now "
+        "measured; what remains is not. A stem with half the channels, "
+        "trained with everything downstream free to accommodate it, still "
+        "costs more than the budget the whole method is built around.", BODY))
+
     A(Paragraph("5. What this leaves", H1))
     A(Paragraph(
         "The branch set out to reach 55% at a 0.2 dB budget with the ladder "
@@ -372,13 +421,15 @@ def content(F):
         "was tested with an oracle, so it is not a matter of finding a better "
         "gate or a longer schedule.", BODY))
     A(Paragraph(
-        "Two things would still be worth running, and neither is a variation "
-        "on what is here. The narrow stem was fitted to a frozen target; "
-        "training it jointly with the ladder lets the exits move to meet it "
-        "rather than requiring it to reproduce a decoder that was fitted "
-        "without it. And nothing here questioned the split depth, because the "
+        "One thing would still be worth running, and it is not a variation on "
+        "what is here. The other -- training the narrow stem jointly with the "
+        "ladder -- has now been run and is Section 4.4: it recovers half to "
+        "two thirds of what the frozen target cost and still lands at 1.5 to "
+        "3.9 times the budget. Nothing here questioned the split depth, "
+        "because the "
         "instruction was to leave it alone -- but the arithmetic in Section 1 "
-        "says that lowering it is the one move that reaches the target "
+        "says that lowering it is the one move left that could reach the "
+        "target "
         "cleanly, at a seam cost this project has already measured "
         "(0.100/0.144/0.234 dB by split at 256 px, untrained). Between a "
         "known seam cost and three axes that each cost more, the seam is the "

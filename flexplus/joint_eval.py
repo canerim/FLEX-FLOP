@@ -92,13 +92,19 @@ def main() -> int:
                       if (ph or pw) else x)
                 qp = torch.full((1,), qp_v, dtype=torch.int32, device=dev)
                 y, q, _ = net._encode_to_latent(xp, qp)
-                base = net.dec.upsample(y)
+                # The upsample runs before the stem and its arithmetic is
+                # part of the decode. Metering from after it made the ceiling
+                # read eight points too high -- 74.2% where narrow_eval, which
+                # counts it, reads 66.0% for the same architecture. A ceiling
+                # is a property of the architecture, so the two have to agree.
+                with MacMeter(net.dec) as m0:
+                    base = net.dec.upsample(y)
                 with MacMeter(net.dec) as m1, MacMeter(narrow) as m2:
                     feat = narrow(base)
                     for g in range(j, j + 1):
                         feat = net.dec.groups[g](feat)
                     rec = net.dec._apply_head(net.dec._at_exit(feat, j), q)
-                m_n += m1.total + m2.total
+                m_n += m0.total + m1.total + m2.total
                 tot += ((rec - xp) ** 2).mean().item()
                 with MacMeter(ref) as m3:
                     rr = ref.dec.forward_full(y, q)

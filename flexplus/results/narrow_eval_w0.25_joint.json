@@ -1,0 +1,40 @@
+{
+  "ckpt": "runs/RECIPE512/ckpt_PAPER.pth.tar",
+  "ckpt_epoch": 4,
+  "n_frames": 12,
+  "rows": [
+    {
+      "width": 0.25,
+      "channels": 96,
+      "qp": 0,
+      "exit": 2,
+      "db_full_stem": 1.5614837408065796,
+      "db_narrow_stem": 0.30493203550577164,
+      "extra_db": -1.256551705300808,
+      "ceiling_full_pct": 47.57430462478064,
+      "ceiling_narrow_pct": 68.14055353663761
+    },
+    {
+      "width": 0.25,
+      "channels": 96,
+      "qp": 32,
+      "exit": 2,
+      "db_full_stem": 2.947624623775482,
+      "db_narrow_stem": 0.5750303715467453,
+      "extra_db": -2.372594252228737,
+      "ceiling_full_pct": 47.57430462478064,
+      "ceiling_narrow_pct": 68.14055353663761
+    },
+    {
+      "width": 0.25,
+      "channels": 96,
+      "qp": 63,
+      "exit": 2,
+      "db_full_stem": 4.558993577957153,
+      "db_narrow_stem": 0.7791406661272049,
+      "extra_db": -3.7798529118299484,
+      "ceiling_full_pct": 47.57430462478064,
+      "ceiling_narrow_pct": 68.14055353663761
+    }
+  ]
+}
