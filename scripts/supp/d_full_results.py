@@ -281,12 +281,18 @@ def content(k):
            "and two at 416x240. The last row is the quality the pooled "
            "allocation gave up, which is the budget to within a thousandth of "
            "a decibel at every rate.")
+    _pcb0 = next((r for r in k.J("supp_per_class_budgets.json")["rows"]
+                  if r["qp"] == 0), None)
+    _sg0 = next((r for r in k.J("signalled_RECIPE512_ctc53.json")["rows"]
+                 if r["qp"] == 0 and abs(r["budget_db"] - 0.1) < 1e-9), None)
     k.note("results/supp_per_class_budgets.json, on " + PINNED + ", \\NumSeq "
            "sequences at one frame each, per-frame convention. The pooled row "
-           "reads 29.7% at q0 where the main paper's \\MainLowRate% comes "
-           "from results/signalled_RECIPE512_ctc53.json; the two bisect the "
-           "same budget with different code and settle on "
-           "λ = 5.126×10<super>-5</super> and 5.150×10<super>-5</super>.")
+           f"reads {_pcb0['overall_saving']:.1f}% at q0 where the main paper's "
+           "\\MainLowRate% comes from "
+           "results/signalled_RECIPE512_ctc53.json; the two bisect the same "
+           "budget with different code and settle on "
+           f"\u03bb = {_pcb0['lam'] * 1e5:.3f}\u00d710<super>-5</super> and "
+           f"{_sg0['lam'] * 1e5:.3f}\u00d710<super>-5</super>.")
 
     k.fig("res_grid.png",
           "The same measurement as a grid, with the looser budget under it. "

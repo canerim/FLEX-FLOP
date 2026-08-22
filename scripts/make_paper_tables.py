@@ -1395,10 +1395,23 @@ try:
     _ahead = [c for c, v in _d0 if v > 0]
     mac("TileAheadLow", str(len(_ahead)))
     mac("TileClassesN", str(len(_d0)))
-    mac("TileGainLowMin", f"{min(v for _, v in _d0 if v > 0):+.1f}")
-    mac("TileGainLowMax", f"{max(v for _, v in _d0):+.1f}")
+    # On the pinned checkpoint the smaller tile is behind at every class and
+    # every rate, so there is no gain to quote and asking for one threw.
+    if _ahead:
+        mac("TileGainLowMin", f"{min(v for _, v in _d0 if v > 0):+.1f}")
+        mac("TileGainLowMax", f"{max(v for _, v in _d0):+.1f}")
+    mac("TileBehindLowMin", f"{-max(v for _, v in _d0):.1f}")
+    mac("TileBehindLowMax", f"{-min(v for _, v in _d0):.1f}")
     _behind0 = [c for c, v in _d0 if v <= 0]
+    mac("TileBehindLow", str(len(_behind0)))
     mac("TileLowLoser", _behind0[0].replace("_", " ") if _behind0 else "none")
+    # How the training-gap bracket falls, per rate: a class below the bracket
+    # loses by more than a whole epoch of training is worth, so its loss is
+    # not the missing steps.
+    for _q, _n in ((0, "Low"), (32, "Mid"), (63, "High")):
+        _bk = [c.get("vs_training_bracket") for c in _byq[_q]["classes"]]
+        mac(f"TileBelowBracket{_n}", str(sum(1 for v in _bk if v == "below")))
+        mac(f"TileInsideBracket{_n}", str(sum(1 for v in _bk if v == "inside")))
     for _q, _n in ((32, "Mid"), (63, "High")):
         _d = [c["saving_128_pct"] - c["saving_256_pct"]
               for c in _byq[_q]["classes"]]
@@ -1408,7 +1421,10 @@ try:
         f"{_ts['summary_over_qps']['mean_set_mean_delta_adaptive_minus_256']:+.2f}")
     _c0 = _q0["classes"][0]
     mac("TileCountMul", f"{_c0['tiles_128'] / _c0['tiles_256']:.1f}")
-    mac("TileConfoundSteps", f"{_ts['confound']['training_gap_steps']:,}")
+    # As a magnitude, with the direction in the sentence rather than in a
+    # minus sign the reader has to interpret.
+    mac("TileConfoundSteps",
+        f"{abs(_ts['confound']['training_gap_steps']):,}")
 except Exception as _e:
     print("   tilesize_adaptive.json:", _e)
 

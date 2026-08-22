@@ -1384,14 +1384,11 @@ def content(colw, fullw):
         r"\SeamRecovHi at q\SeamRecovHiQp, of a tiling penalty that runs "
         r"\SeamPenaltyLo–\SeamPenaltyHi dB; at the rate where the seam is "
         r"worst that is \SeamRecovShareHi% of it, and at the lowest rate it "
-        r"is a fortieth. Tightening the gate cannot change that: a gate that "
-        r"took the pass wherever it helps and left it off wherever it hurts "
-        r"— the best a filter indexed by position within a tile can do — "
-        r"would add \SeamPerfectExtra dB. The comparison that settles it is "
-        r"the next section, on one basis with this one: the pass spends "
-        r"0.95% of the decode's arithmetic to take a seventh off the seam at "
-        r"the rate where the seam is worst, and the exchange spends 0.032% "
-        r"to remove it exactly.")
+        r"is a fortieth. Tightening the gate cannot change that: the best a "
+        r"filter indexed by position within a tile can do, taking the pass "
+        r"wherever it helps and leaving it off wherever it hurts, would add "
+        r"\SeamPerfectExtra dB. The next section spends 0.032% of the same "
+        r"arithmetic and removes the seam exactly.")
     h2("4.4 Removing the cause, and why it does not help")
     par(r"Only 0.29% of each block has spatial extent, so the exact fix is "
         r"affordable ([[fig:seam_repair_grid]]). Give the 3×3 its real neighbours across the tile border, "
@@ -1714,13 +1711,12 @@ def content(colw, fullw):
         r"degenerates towards a uniform choice. That suggests a fix. Choose "
         r"the tile size relative to the frame, since the MAC count does not "
         r"depend on tile size at all and only the seam does.")
-    par(r"We tested that fix and what it does depends on the rate, not on "
-        r"the resolution. Halving the tile side multiplies the tile count by "
-        r"\TileCountMul. At q0 the smaller tile is ahead in \TileAheadLow of "
-        r"the \TileClassesN classes, by \TileGainLowMin to \TileGainLowMax "
-        r"points, and behind only on \TileLowLoser. At q32 and q63 it is "
-        r"behind on every class, by up to \TileBehindMidMax and "
-        r"\TileBehindHighMax points ([[fig:exituse]]).")
+    par(r"We tested that fix and it does not pay at any rate. Halving the "
+        r"tile side multiplies the tile count by \TileCountMul, and the "
+        r"smaller tile is behind on all \TileClassesN classes at all three "
+        r"rates: by \TileBehindLowMin–\TileBehindLowMax points at q0, and by "
+        r"up to \TileBehindMidMax and \TileBehindHighMax at q32 and q63 "
+        r"([[fig:exituse]]).")
     figure("exituse.png",
            r"<b>Figure N. How deep each class has to go.</b> Mean exit taken "
            r"by the tiles of each test class at the 0.1 dB budget, ordered by "
@@ -1736,10 +1732,13 @@ def content(colw, fullw):
         r"\TileSpliceDelta points on the set mean averaged over rates: "
         r"nothing. We report the comparison as indicative, since the two tile "
         r"sizes come from different training runs and the 128 px run has "
-        r"\TileConfoundSteps steps more, which favours the column that wins "
-        r"at q0 and not the one that wins elsewhere. What survives the "
-        r"confound is that a resolution-adaptive tile size is not the easy "
-        r"win the granularity argument suggests.")
+        r"\TileConfoundSteps steps fewer, so the deficit runs against the "
+        r"column that loses. An epoch of training brackets it: at q32 and "
+        r"q63 every class sits below even the one-epoch 256 px baseline, so "
+        r"the loss is more than the missing steps are worth; at q0 "
+        r"\TileInsideBracketLow of \TileClassesN sit inside the bracket and "
+        r"cannot be attributed to tile size at all. A resolution-adaptive "
+        r"tile size is not the easy win the granularity argument suggests.")
     h2("5.4 The band a distortion budget works in")
     figure("saturation_RECIPE512.png",
            r"<b>Figure 8. Three regions, and only the middle one is a design "
@@ -1834,7 +1833,7 @@ def content(colw, fullw):
         r"\BandSpreadMean points apart on average and \BandSpreadMax at worst. "
         r"So ``how much does a 0.1 dB budget buy at this rate'' is, to within a "
         r"couple of points, ``where does 0.1 dB sit in this rate's band''. Both "
-        r"limits are in closed form and cheap to measure ([[fig:window]]), so "
+        r"limits are in closed form and cheap to measure, so "
         r"a deployment could calibrate the two ends and read the rest off one "
         r"curve. That curve is a one-parameter power law, "
         r"saving ≈ C·u^\BandExp, with C the architectural ceiling and u the "
@@ -1844,14 +1843,6 @@ def content(colw, fullw):
         r"rate's own band is what collapses the curves. Inverse fits to the "
         r"same frontier disagree in the exponent by up to 40%, so it is a "
         r"description of these curves and not a law.")
-    figure("window.png",
-           r"<b>Figure N. The window a budget works in.</b> <b>a</b>, saving "
-           r"against the distortion actually delivered, per rate. Every curve "
-           r"begins at a floor, below which no allocation meets the budget, "
-           r"and flattens at a saturation point, above which a looser budget "
-           r"buys nothing. <b>b</b>, those two limits against rate. The shaded "
-           r"band is the only region in which a budget is a design choice "
-           r"rather than a formality.")
     par(r"The collapse appears robust across two checkpoints. We "
         r"repeated the measurement on a different training run, BEST, a "
         r"separate recipe taken at a different epoch, and the same thing "

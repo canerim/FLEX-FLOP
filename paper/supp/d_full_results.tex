@@ -28,7 +28,7 @@ Quality given up (dB) & 0.100 & 0.100 & 0.099 & 0.099 & 0.100 \\
 \caption{Compute saved against the released decoder, by class and by quality index, at the 0.1 dB budget; the main paper prints the q0, q32 and q63 columns of the first six rows. Read it in two directions. Along a row the saving falls with rate, because the residual a shallow exit fails to reconstruct grows relative to the quality being protected. Down a column it falls with resolution, from \BigResLow\% on MCL-JCV to \SmallResLow\% on HEVC D at q0, because a 256 px tile is 40 tiles on a 1080p frame and two at 416x240. The last row is the quality the pooled allocation gave up, which is the budget to within a thousandth of a decibel at every rate.}
 \end{table}
 
-{\small results/supp\_per\_class\_budgets.json, on runs/RECIPE512/ckpt\_PAPER.pth.tar, \NumSeq sequences at one frame each, per-frame convention. The pooled row reads 29.7\% at q0 where the main paper's \MainLowRate\% comes from results/signalled\_RECIPE512\_ctc53.json; the two bisect the same budget with different code and settle on $\lambda$ = 5.126$\times$10$^{-5}$ and 5.150$\times$10$^{-5}$.}
+{\small results/supp\_per\_class\_budgets.json, on runs/RECIPE512/ckpt\_PAPER.pth.tar, \NumSeq sequences at one frame each, per-frame convention. The pooled row reads 34.4\% at q0 where the main paper's \MainLowRate\% comes from results/signalled\_RECIPE512\_ctc53.json; the two bisect the same budget with different code and settle on $\lambda$ = 7.272$\times$10$^{-5}$ and 7.280$\times$10$^{-5}$.}
 
 \begin{figure}[t]
 \centering

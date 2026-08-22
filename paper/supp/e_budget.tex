@@ -50,6 +50,12 @@ the dense grid & the same quantity, over 106 frames & 0.022 & 0.048 \\
 
 \begin{figure}[t]
 \centering
+\includegraphics[width=\columnwidth]{figures/window.png}
+\caption{\textbf{The window a budget works in.} \textbf{a}, saving against the distortion actually delivered, per rate. Every curve begins at a floor, below which no allocation meets the budget, and flattens at a saturation point, above which a looser budget buys nothing. \textbf{b}, those two limits against rate. The shaded band is the only region in which a budget is a design choice rather than a formality. The main paper states both limits; this is them drawn.}
+\end{figure}
+
+\begin{figure}[t]
+\centering
 \includegraphics[width=\columnwidth]{figures/seam_vs_qp.png}
 \caption{\textbf{The tiling penalty across the whole rate range}, every tile at full depth, so this is the floor and nothing else. \textbf{a}, the steps that reduce it, of which the two that matter cost no arithmetic; the largest single factor is training the ladder with the seam present. \textbf{b}, the floor as a share of the 0.1 dB budget: it is charged \emph{inside} the budget and consumes a growing part of it as the rate rises, which is one of the two reasons the saving falls with rate.}
 \end{figure}
@@ -150,7 +156,7 @@ The collapsed curve is then described by one free number. With C the architectur
 S(u) \approx C\,u^{\beta},
 \end{equation}
 
-and fitting ln(S/C) against ln u by least squares through the origin gives \BandExp on the pinned checkpoint, with R$^2$ = \BandRTwo and a worst residual of \BandFitErr points. The same procedure on the second training run gives \BandExpB with R$^2$ = \BandRTwoB and a worst residual of \BandFitErrB points -- the collapse replicates, the quality of the one-parameter description of it does not. The sensitivity table at the end of this section is the reason to expect that: the assumed ceiling is one of the things this exponent is most sensitive to, and the second run's ceiling is its own. Figure 3 draws it and Section A.5 takes it apart.
+and fitting ln(S/C) against ln u by least squares through the origin gives \BandExp on the pinned checkpoint, with R$^2$ = \BandRTwo and a worst residual of \BandFitErr points. The same procedure on the second training run gives \BandExpB with R$^2$ = \BandRTwoB and a worst residual of \BandFitErrB points -- the collapse replicates, the quality of the one-parameter description of it does not. The sensitivity table at the end of this section is the reason to expect that: the assumed ceiling is one of the things this exponent is most sensitive to, and the second run's ceiling is its own. Figure 4 draws it and Section A.5 takes it apart.
 
 \begin{figure}[t]
 \centering

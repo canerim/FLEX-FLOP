@@ -213,16 +213,16 @@ Everett's generalised multiplier method (1963) supplies the reassuring half of t
 \toprule
 budget dB & by sweep & exact Pareto & gap \\
 \midrule
-0.05 & 12.398 & 12.421 & 0.0230 \\
-0.08 & 25.443 & 25.489 & 0.0452 \\
-0.10 & 30.475 & 30.496 & 0.0209 \\
-0.12 & 33.782 & 33.803 & 0.0211 \\
-0.15 & 37.439 & 37.461 & 0.0211 \\
-0.18 & 40.048 & 40.046 & -0.0018 \\
-0.20 & 41.166 & 41.165 & -0.0016 \\
+0.05 & 19.903 & 20.066 & 0.1630 \\
+0.08 & 30.831 & 30.922 & 0.0912 \\
+0.10 & 34.186 & 34.183 & -0.0027 \\
+0.12 & 36.516 & 36.605 & 0.0894 \\
+0.15 & 38.752 & 38.748 & -0.0044 \\
+0.18 & 39.125 & 39.120 & -0.0046 \\
+0.20 & 39.125 & 39.120 & -0.0046 \\
 \bottomrule
 \end{tabular}}
-\caption{\textbf{What convexity costs.} Savings in per cent at seven budgets on one frame. The sweep reaches 95 allocations against the 635 on the exact Pareto set, and the largest loss over these budgets is 0.045 saving points. The two negative entries are the sweep landing on a budget the enumeration's grid straddles rather than the sweep beating the Pareto set, which Proposition 5 forbids.}
+\caption{\textbf{What convexity costs.} Savings in per cent at seven budgets on one frame. The sweep reaches 95 allocations against the 615 on the exact Pareto set, and the largest loss over these budgets is 0.163 saving points. The two negative entries are the sweep landing on a budget the enumeration's grid straddles rather than the sweep beating the Pareto set, which Proposition 5 forbids.}
 \end{table}
 
 {\small results/hull\_gap.json, Bosphorus q32, 40 tiles. The enumeration and the sweep read one cost vector, so the gap does not depend on which one.}
@@ -355,11 +355,11 @@ D\,D^{\prime\prime} \;\geq\; (D^{\prime})^{2} \qquad\Longleftrightarrow\qquad \f
 \toprule
 q & points & condition holds & margin & quartic fit \\
 \midrule
-q0 & 16 & 100.0\% & 0.0024 & 84.0\% \\
-q16 & 14 & 100.0\% & 0.0050 & 76.3\% \\
-q32 & 13 & 100.0\% & 0.0088 & 75.3\% \\
-q48 & 13 & 100.0\% & 0.0145 & 73.7\% \\
-q63 & 13 & 100.0\% & 0.0230 & 74.7\% \\
+q0 & 19 & 100.0\% & 0.0020 & 78.0\% \\
+q16 & 19 & 100.0\% & 0.0040 & 73.3\% \\
+q32 & 19 & 100.0\% & 0.0075 & 71.0\% \\
+q48 & 18 & 100.0\% & 0.0134 & 69.3\% \\
+q63 & 18 & 100.0\% & 0.0205 & 68.7\% \\
 \bottomrule
 \end{tabular}}
 \caption{\textbf{Testing log-convexity on the measured frontier.} The direct test asks whether the secant slopes of ln D against S are non-decreasing, and the margin is the smallest increase attained. The condition holds at every point of every frontier and the margin grows tenfold from the lowest rate to the highest. Fitting a quartic and differentiating it twice instead reports 73.7\% to 84.0\%, and the difference is the fit rather than the data: near the ceiling the frontier is close to vertical and a polynomial overshoots, whereas the secant test has no fitted degree to choose.}

@@ -1334,12 +1334,11 @@ no allocation left to make, and the Lagrangian degenerates towards a uniform
 choice. That suggests a fix. Choose the tile size relative to the frame, since
 the MAC count does not depend on tile size at all and only the seam does.
 
-\textbf{We tested that fix and what it does depends on the rate, not on the
-resolution.} Halving the tile side multiplies the tile count by
-\TileCountMul. At $q0$ the smaller tile is ahead in \TileAheadLow\ of the
-\TileClassesN\ classes, by \TileGainLowMin\ to \TileGainLowMax\ points, and
-behind only on \TileLowLoser. At $q32$ and $q63$ it is behind on every class,
-by up to \TileBehindMidMax\ and \TileBehindHighMax\ points
+\textbf{We tested that fix and it does not pay at any rate.} Halving the tile
+side multiplies the tile count by \TileCountMul, and the smaller tile is behind
+on all \TileClassesN\ classes at all three rates: by
+\TileBehindLowMin--\TileBehindLowMax\ points at $q0$, and by up to
+\TileBehindMidMax\ and \TileBehindHighMax\ at $q32$ and $q63$
 (Fig.~\ref{fig:exituse}).
 
 \begin{figure}[t]
@@ -1358,9 +1357,12 @@ gain. Splicing the smaller tile into the classes that want it, and leaving the
 rest, is worth \TileSpliceDelta\ points on the set mean averaged over rates:
 nothing. We report the comparison as indicative, since the two tile sizes come
 from different training runs and the 128\,px run has \TileConfoundSteps\ steps
-more, which favours the column that wins at $q0$ and not the one that wins
-elsewhere. What survives the confound is that a resolution-adaptive tile size
-is not the easy win the granularity argument suggests.
+fewer, so the deficit runs against the column that loses. An epoch of training
+brackets it: at $q32$ and $q63$ every class sits below even the one-epoch
+$256$\,px baseline, so the loss is more than the missing steps are worth; at
+$q0$ \TileInsideBracketLow\ of \TileClassesN\ sit inside the bracket and cannot
+be attributed to tile size at all. A resolution-adaptive tile size is not the
+easy win the granularity argument suggests.
 
 
 \subsection{The band a distortion budget works in}
@@ -1476,7 +1478,7 @@ collapse onto a single master curve, \BandSpreadMean\ points apart on average an
 \BandSpreadMax\ at worst (Fig.~\ref{fig:band}). The answer to ``how much does a
 $0.1\dB$ budget buy at this rate'' is therefore, to within a couple of points,
 ``where does $0.1\dB$ sit in this rate's band''. Both limits are in closed form and
-cheap to measure (Fig.~\ref{fig:window}), so a deployment could calibrate the two ends and read the rest
+cheap to measure, so a deployment could calibrate the two ends and read the rest
 off one curve. That curve is a one-parameter power law,
 $\text{saving} \approx C\,u^{\BandExp}$, with $C$ the architectural ceiling and
 $u$ the position in the band. We fit it in log space over all five rates and get
@@ -1485,12 +1487,6 @@ $R^2 = \BandRTwo$, worst residual \BandFitErr\ points. The claim we make is the
 collapses the curves. Inverse fits to the same frontier disagree in the
 exponent by up to $40\%$, so it is a description of these curves and not a law.
 
-\begin{figure}[t]
-\centering
-\includegraphics[width=\columnwidth]{figures/window.png}
-\caption{\textbf{The window a budget works in.} \textbf{a}, saving against the distortion actually delivered, per rate. Every curve begins at a floor and flattens at a saturation point. \textbf{b}, those two limits against rate; the shaded band is the only region in which a budget is a design choice rather than a formality.}
-\label{fig:window}
-\end{figure}
 \textbf{The collapse appears robust across two checkpoints.} We repeated the
 measurement on a different training run, \texttt{BEST}, a separate recipe taken
 at a different epoch, and the same thing happens. The rates are
