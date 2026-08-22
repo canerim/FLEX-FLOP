@@ -180,16 +180,18 @@ def main() -> int:
                 loss = F.mse_loss(narrow(base), target)
                 rel_den = target.pow(2).mean()
             else:
-                # An exit per step, sampled over the ones a tile may take, so
-                # the stem stays usable for the whole ladder rather than only
-                # for the rung the ceiling lives on.
-                k_exit = j + (step % (K - j))
+                # Every exit each step, not one sampled from them. Sampling
+                # gave each exit a quarter of the updates the feature
+                # objective gives all of them at once, so a run matched on
+                # steps was still not matched on updates per exit -- and the
+                # decode objective lost the comparison by about that much.
                 feat = narrow(base)
-                for g in range(j, k_exit + 1):
+                loss = 0.0
+                for g in range(j, K):
                     feat = net.dec.groups[g](feat)
-                rec = net.dec._apply_head(
-                    net.dec._at_exit(feat, k_exit), q)
-                loss = F.mse_loss(rec, x)
+                    rec = net.dec._apply_head(net.dec._at_exit(feat, g), q)
+                    loss = loss + F.mse_loss(rec, x)
+                loss = loss / (K - j)
                 rel_den = x.pow(2).mean()
             opt.zero_grad(set_to_none=True)
             loss.backward()

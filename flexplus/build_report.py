@@ -286,9 +286,25 @@ def content(F):
         "sixth of the updates. The step count was reduced because a decode "
         "forward and backward is dearer than a feature one, which was a "
         "reasonable thing to want and an unreasonable way to get it: it "
-        "traded away the only property that made the two runs comparable. A "
-        "matched-budget run at 20,000 steps and batch 8 is queued, and the "
-        "answer for this objective waits on it.", BODY))
+        "traded away the only property that made the two runs comparable.", BODY))
+    A(Paragraph(
+        "Matching the budget at 20,000 steps and batch 8 recovered most of "
+        "the difference -- +2.51 to +1.99 dB at the highest rate -- and left "
+        "the decode objective still behind the feature one at all three "
+        "rates, by ten to twenty per cent. The budget was still not matched. "
+        "Sampling one exit of four per step gives each exit a quarter of the "
+        "updates that the feature objective's single target gives all of them "
+        "at once, so equal steps are not equal updates per exit, and the gap "
+        "is about that size. The objective now supervises every exit each "
+        "step, at four times the cost per step, which is the comparison "
+        "worth reporting.", BODY))
+    A(Paragraph(
+        "None of this changes the answer to the question the branch asked. "
+        "Across every width, objective and budget tried, the best point is "
+        "+0.41 dB at the lowest rate and +1.67 at the highest, against a "
+        "budget of 0.2. The width axis does not reach it on this decoder, and "
+        "the remaining comparison decides only which objective is less far "
+        "away.", BODY))
 
     A(Paragraph("5. Open", H1))
     A(Paragraph(
