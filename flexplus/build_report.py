@@ -45,6 +45,23 @@ CAP = ParagraphStyle("c", fontName="Times-Roman", fontSize=8.4, leading=10.6,
                      alignment=TA_JUSTIFY, spaceAfter=8)
 
 
+def UF(name):
+    """A results file from the main tree, read-only.
+
+    The three numbers this report quotes from the paper -- the ceiling, what
+    the deployed system delivers against it, and what adaptive depth returns
+    -- are the paper's own measurements. Typing them here is how a branch
+    report ends up quoting a headline the paper has since moved off.
+    """
+    p = Path.home() / "FLEX-UF" / "results" / name
+    if not p.exists():
+        return None
+    try:
+        return json.loads(p.read_text())
+    except Exception:
+        return None
+
+
 def J(name):
     p = HERE / "results" / name
     if not p.exists():
@@ -83,13 +100,25 @@ def content(F):
 
     # ---------------------------------------------------------------- 1
     A(Paragraph("1. What the ceiling is made of", H1))
+    _cm = UF("ceiling_measured.json")
+    _sg = UF("signalled_RECIPE512_ctc53.json")
+    _ceil = _cm["ceiling_measured_pct"] if _cm else 38.33
+    _at2 = None
+    if _sg:
+        _rows = [r for r in _sg["rows"]
+                 if abs(r["budget_db"] - 0.2) < 1e-9 and r.get("budget_reachable")]
+        _vals = [r.get("saving_pct_measured") or r["saving_pct_vs_release"]
+                 for r in _rows]
+        _at2 = sum(_vals) / len(_vals) if _vals else None
     A(Paragraph(
-        "The paper's ceiling is 38.33% counted. It is not a routing result "
-        "and no better router can move it: it is what a frame costs when "
-        "every tile already sits on the shallowest rung it is allowed. At a "
-        "0.2 dB budget the deployed system delivers 36.81% of that 38.33%, "
-        "which is 96% of the ceiling, so the allocation is very nearly "
-        "finished and the ceiling is the whole of what is left.", BODY))
+        f"The paper's ceiling is {_ceil:.2f}% counted. It is not a routing "
+        "result and no better router can move it: it is what a frame costs "
+        "when every tile already sits on the shallowest rung it is allowed. "
+        + (f"At a 0.2 dB budget the deployed system delivers {_at2:.2f}% of "
+           f"that {_ceil:.2f}%, which is {100 * _at2 / _ceil:.0f}% of the "
+           "ceiling, so the allocation is very nearly finished and the "
+           "ceiling is the whole of what is left." if _at2 else
+           "The deployed system at a loose budget sits very near it."), BODY))
     ds = J("design_space.json")
     A(Paragraph(
         "Decomposing that floor decides the experiment by arithmetic rather "
@@ -352,10 +381,15 @@ def content(F):
         "stem's work by channel, by width or by position and the price is "
         "the same order: two to ten times the budget. The stem is not doing "
         "redundant work anywhere.", BODY))
+    _sg1 = UF("signalled_RECIPE512_ctc53.json")
+    _h = [r.get("saving_pct_measured") or r["saving_pct_vs_release"]
+          for r in (_sg1["rows"] if _sg1 else [])
+          if abs(r["budget_db"] - 0.1) < 1e-9 and r.get("budget_reachable")]
+    _headline = sum(_h) / len(_h) if _h else 27.6
     A(Paragraph(
         "Set against the paper this is a sharp contrast worth stating. "
         "Content-adaptive <i>depth</i> works: the same decoder gives up 0.1 "
-        "dB and returns 27.6% of its arithmetic, because some tiles genuinely "
+        f"dB and returns {_headline:.1f}% of its arithmetic, because some tiles genuinely "
         "need less of the trunk than others. Content-adaptive <i>stem</i> "
         "does not, on any of the three axes. The difference is what is being "
         "chosen. The exit ladder decides how much further to go from a shared "
@@ -396,15 +430,32 @@ def content(F):
             "the stem the decoder ships, which is what the extra channels "
             "buy. The ceiling is unchanged by how the stem was trained: it is "
             "a property of the architecture."))
-    A(Paragraph(
-        "Joint training helps, and by a lot: at width 0.5 the cost falls from "
-        "0.585 to 0.293 dB at q0 and from 2.162 to 0.778 at q63, so roughly "
-        "half to a third of the damage was the frozen target rather than the "
-        "missing channels. It is not enough. The cheapest point of the "
-        "cheapest configuration is 0.293 dB, which is 1.5 times the 0.2 dB "
-        "budget, and the highest rate costs 3.9 times it. Halving the stem "
-        "again buys 2 points of ceiling and costs slightly more quality, "
-        "which is the same flat trade the four widths showed.", BODY))
+    # Read rather than typed. Every number in this paragraph is in the table
+    # above it, and the table is read from the files; a sentence that repeats
+    # them from memory is the defect the main paper spent a day removing.
+    _fz5, _jn5 = J("narrow_eval_w0.5.json"), J("joint_eval_w0.5_joint.json")
+    _jn25 = J("joint_eval_w0.25_joint.json")
+    if _fz5 and _jn5 and _jn25:
+        _fz = {r["qp"]: r["db_narrow_stem"] for r in _fz5["rows"]}
+        _jn = {r["qp"]: r["db_vs_uf"] for r in _jn5["rows"]}
+        _best = min(min(_jn.values()),
+                    min(r["db_vs_uf"] for r in _jn25["rows"]))
+        _worst = max(max(_jn.values()),
+                     max(r["db_vs_uf"] for r in _jn25["rows"]))
+        _c5 = _jn5["rows"][0]["ceiling_pct"]
+        _c25 = _jn25["rows"][0]["ceiling_pct"]
+        A(Paragraph(
+            f"Joint training helps, and by a lot: at width 0.5 the cost falls "
+            f"from {_fz[0]:.3f} to {_jn[0]:.3f} dB at q0 and from "
+            f"{_fz[63]:.3f} to {_jn[63]:.3f} at q63, so between a half and "
+            f"two thirds of the damage was the frozen target rather than the "
+            f"missing channels. It is not enough. The cheapest point of "
+            f"either configuration is {_best:.3f} dB, which is "
+            f"{_best / 0.2:.1f} times the 0.2 dB budget, and the highest rate "
+            f"costs {_worst / 0.2:.1f} times it. Halving the stem again buys "
+            f"{_c25 - _c5:.1f} points of ceiling and costs slightly more "
+            f"quality, which is the same flat trade the four widths showed.",
+            BODY))
     A(Paragraph(
         "The prediction recorded before this ran was that the frozen target "
         "was the obstacle. It was part of it, and the part it was is now "
