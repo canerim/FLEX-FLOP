@@ -26,7 +26,24 @@ run () {
 run $PY scripts/paper_metrics.py
 run $PY scripts/make_paper_tables.py
 
-# 2. figures that read results files
+# 2. figures that read results files.
+#
+# This list was short, and short meant that after a repin most figures kept
+# whatever data they were last drawn from while the tables moved. Everything
+# here reads a results file and needs no card; the ones that need a
+# checkpoint are in repin_stage3.sh.
+run $PY scripts/motivation_figs.py
+run $PY scripts/perclass_figure.py
+run $PY scripts/contamination_figure.py
+run $PY scripts/theory_figure.py
+run $PY scripts/transfer_figure.py
+run $PY scripts/adapter_figure.py
+run $PY scripts/power_figure.py
+run $PY scripts/rd_figure.py
+run $PY scripts/exit_vs_rate.py
+run $PY scripts/saturation_figure.py
+run $PY scripts/system_figs.py
+run $PY scripts/build_router_pdf.py
 run $PY scripts/nature_plots.py
 run $PY scripts/spread_figs.py
 run $PY scripts/tradeoff_figure.py
