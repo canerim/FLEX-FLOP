@@ -412,6 +412,69 @@ def content(F):
         "trained with everything downstream free to accommodate it, still "
         "costs more than the budget the whole method is built around.", BODY))
 
+    A(Paragraph("4.5 A router that can see a tile's neighbours", H2))
+    A(Paragraph(
+        "One more input, and it is not on the stem. Every group the paper's "
+        "head reads is read at the tile: the bits pathway normalises the "
+        "entropy coder's output by the frame mean, so a tile knows how it "
+        "compares with the picture and not with what is next to it. "
+        "Difficulty is spatially correlated -- that is why the exit maps have "
+        "contiguous regions rather than salt and pepper -- so the "
+        "neighbourhood mean is information the head does not have and could "
+        "have for sixteen parameters. Two more channels on that pathway carry "
+        "the rate box-filtered over a three-tile window and its log. They "
+        "start at zero, the RNG stream is restored after the wider "
+        "convolution is built, and the recipe is the one every variant of the "
+        "paper's ablation runs: 3000 steps, lambda 1.3e-5, seed 0, on the "
+        "pinned checkpoint. The only difference is what the head can see.", BODY))
+    _nb = J("router_ablation_nbits.json")
+    _all = None
+    _p = Path.home() / "FLEX-UF/results/router_ablation_e4.json"
+    if _p.exists():
+        import json as _j
+        _all = _j.loads(_p.read_text())
+    if _nb and _all:
+        _v = {r["label"]: r for r in _all["variants"]}
+        _e = _nb.get("eval") or {}
+        rows = [["head", "inputs", "agreement", "floor", "params"]]
+        for lab in ("all", "stem", "bits"):
+            if lab in _v:
+                r = _v[lab]
+                rows.append([lab, r["inputs"],
+                             f"{r['agree']:.4f} ± {r['stderr']:.4f}",
+                             f"{r['constant_best_agree']:.3f}",
+                             f"{r['router_params']:,}"])
+        rows.append(["+ neighbours", "all, plus the neighbourhood rate",
+                     f"{_e.get('agree', float('nan')):.4f} ± "
+                     f"{_e.get('stderr_across_frames', float('nan')):.4f}",
+                     f"{_e.get('constant_best_agree', float('nan')):.3f}",
+                     f"{_nb.get('router_params', 0):,}"])
+        A(table(rows,
+                "<b>Table 6. What the neighbourhood is worth.</b> Agreement "
+                "with the oracle's exit choice on fresh images, plus or minus "
+                "one standard error across frames, on the checkpoint the "
+                "paper reports. The floor is the best single constant exit on "
+                "the same tiles."))
+        _d = (_e.get("agree", 0) - _v["all"]["agree"]) if "all" in _v else None
+        if _d is not None:
+            A(Paragraph(
+                f"The neighbourhood is worth {_d:+.4f} in agreement against "
+                f"the same head without it, on {_e.get('n_tiles', 0):,} "
+                f"held-out tiles. "
+                + ("That is inside the standard error of either measurement, "
+                   "so what this says is that the signal a tile carries about "
+                   "itself is not obviously improved by what is beside it -- "
+                   "not that neighbourhood information is worthless, but that "
+                   "this way of giving it to this head does not pay."
+                   if abs(_d) < 2 * (_e.get("stderr_across_frames") or 1)
+                   else "That is outside the standard error of the "
+                        "measurement, and it is the largest single change any "
+                        "input has made to this head."), BODY))
+    else:
+        A(Paragraph(
+            "The run is not in results/ yet; this section prints its numbers "
+            "when it is.", BODY))
+
     A(Paragraph("5. What this leaves", H1))
     A(Paragraph(
         "The branch set out to reach 55% at a 0.2 dB budget with the ladder "
