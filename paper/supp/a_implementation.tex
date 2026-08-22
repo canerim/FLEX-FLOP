@@ -329,8 +329,8 @@ signalled\_RECIPE512\_ctc53 & main results, complexity & pinned, e4 & 53$\times$
 saturation\_RECIPE512\_ctc53 & operating range & pinned, e4 & 53 fr \\
 static\_RECIPE512\_b01 & static controls & pinned, e4 & 53 \\
 per\_class\_RECIPE512 & per class & pinned, e4 & 53 fr \\
-router\_RECIPE512\_b01 & A against B & pinned, e4 & 53$\times$1 \\
-router\_RECIPE512\_b03 & A against B & pinned, e4 & 53$\times$1 \\
+router\_RECIPE512\_b01\_e4head & A against B & pinned, e4 & 53$\times$1 \\
+router\_RECIPE512\_b03\_e4head & A against B & pinned, e4 & 53$\times$1 \\
 raterank\_RECIPE512\_b01 & rate rank & pinned, e4 & 53$\times$1 \\
 raterank\_RECIPE512\_b03 & rate rank & pinned, e4 & 53$\times$1 \\
 raterank\_RECIPE512\_b05 & rate rank & pinned, e4 & 53$\times$1 \\
@@ -405,7 +405,7 @@ q63 & 11.66 & 11.48 & 0.18 \\
 
 {\small Source: results/crosscheck\_paths.json. The file records no checkpoint field.}
 
-Evaluation itself is deterministic once a checkpoint is fixed: the sequence list, the leading frames and the tile grid are all fixed and no crop is random. scripts/check\_paper.py re-reads \NumClaims numerical claims out of the paper's prose and checks each against the file it is supposed to come from. As recorded in results/check\_paper.json, 80 of them pass. One does not: "hybrid: rho=0 reproduces B (max |diff|)", which is listed among the limitations of section H rather than presented as passing.
+Evaluation itself is deterministic once a checkpoint is fixed: the sequence list, the leading frames and the tile grid are all fixed and no crop is random. scripts/check\_paper.py re-reads \NumClaims numerical claims out of the paper's prose and checks each against the file it is supposed to come from. As recorded in results/check\_paper.json, 82 of them pass. One does not: "band: raw spread at 0.1 dB", which is listed among the limitations of section H rather than presented as passing.
 
 \subsection{Data, code and provenance}
 

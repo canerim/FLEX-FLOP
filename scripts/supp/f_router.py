@@ -12,7 +12,7 @@ opens a CUDA context or writes to results/. The results files read are
     router_ablation.json                the six-variant input ablation
     router_ablation_<variant>.json      one training record per variant
     router_latency.json                 the head timed against its MAC share
-    router_RECIPE512_b01/b03.json       the frozen-decoder head, two budgets
+    router_RECIPE512_b0*_e4head.json    the frozen-decoder head, two budgets
     router_RECIPE512_b0*_jointhead.json the jointly trained head, same budgets
     raterank_RECIPE512_b01/b03/b05.json the rule, the same budgets
     raterank_BEST_compare.json          the same comparison on a second run
@@ -71,7 +71,11 @@ def content(k):
     # trained afterwards against the frozen decoder.
     HJ = _joint_head_file(k)
     hj = {b: k.J(HJ.format(b=b)) for b in (1, 3)}
-    hf = {b: k.J(f"router_RECIPE512_b0{b}.json") for b in (1, 3)}
+    # The frozen-decoder head fitted to the pinned weights, which is the one
+    # the paper reports, falling back to the head fitted on 19 August for a
+    # build that runs before the refit.
+    hf = {b: k.J(f"router_RECIPE512_b0{b}_e4head.json",
+                 f"router_RECIPE512_b0{b}.json") for b in (1, 3)}
     QPS = [r["qp"] for r in rr[1]["rows"]]
     cost = {u["exit"]: 1.0 - u["saving"] / 100.0
             for u in ST["rows"][0]["uniform"]}
@@ -290,8 +294,8 @@ def content(k):
         "saving. F.4 reports both heads.")
     k.note(
         f"results/{HJ.format(b=1)} and "
-        "results/router_RECIPE512_b01.json, field router_compute_share_pct in "
-        "each.")
+        "results/router_RECIPE512_b01_e4head.json, field "
+        "router_compute_share_pct in each.")
     k.par(
         "<b>For scale, what the search costs instead.</b> Configuration A does "
         "not run a head; it runs the argmin itself, which needs the true error "
@@ -493,7 +497,7 @@ def content(k):
     k.note(
         "Rule: results/raterank_RECIPE512_b01.json and b03. Joint head: "
         f"results/{HJ.format(b=1)} and its b03 sibling. Frozen head: "
-        "results/router_RECIPE512_b01.json and b03. All on "
+        "results/router_RECIPE512_b01_e4head.json and b03. All on "
         "runs/RECIPE512/ckpt_PAPER.pth.tar.")
 
     k.fig("deciders.png",
@@ -737,7 +741,8 @@ def content(k):
     k.note(
         "results/router_retrain_compare.json. The file records no checkpoint, "
         f"and its before column reads {RT['v2']['0']:.2f}% at q0 where the "
-        "pinned measurement in results/router_RECIPE512_b01.json reads "
+        "pinned measurement in results/router_RECIPE512_b01_e4head.json "
+        "reads "
         f"{at(hf[1], 0):.2f}%, so the two are not on one basis. Only the "
         "comparison of the two heads within the file is read here.")
 

@@ -81,7 +81,7 @@ The extra \RouterTimeExtra points are launch overhead. A head of 144,024 paramet
 
 \textbf{Two heads, two shares.} The pinned checkpoint carries a head that was trained jointly with the decoder, and a second head was trained afterwards against that decoder once it was frozen. They are different objects and they are priced differently: the jointly trained one is charged 0.044\% of the decode and the frozen-decoder one \RouterCostPct\%, because the second reads the decoded latent and the entropy model's scales as well as the stem. Both shares are measured by hooks on the head's own convolutions and linear layers rather than assumed, in the same run that produced the saving. F.4 reports both heads.
 
-{\small results/router\_RECIPE512\_b01\_jointhead.json and results/router\_RECIPE512\_b01.json, field router\_compute\_share\_pct in each.}
+{\small results/router\_RECIPE512\_b01\_jointhead.json and results/router\_RECIPE512\_b01\_e4head.json, field router\_compute\_share\_pct in each.}
 
 \textbf{For scale, what the search costs instead.} Configuration A does not run a head; it runs the argmin itself, which needs the true error of every exit, and section G prices that at 4.52 of a tiled decode per frame. A decoder-side head at half a percent of one decode, and a rule at nothing, are both several orders below it, which is the whole reason for wanting one.
 
@@ -175,17 +175,17 @@ Two trained heads exist on this checkpoint and both are reported, since averagin
 \toprule
 q & 0.1 rule & 0.1 joint & 0.1 frozen & 0.3 rule & 0.3 joint & 0.3 frozen \\
 \midrule
-0 & 34.48 & 26.84 & 28.96 & 39.12 & 39.08 & 38.96 \\
-16 & 30.10 & 18.36 & 26.03 & 39.12 & 39.08 & 38.96 \\
-32 & 24.90 & 13.21 & 23.00 & 39.12 & 39.08 & 38.96 \\
-48 & 22.06 & 8.26 & 20.67 & 39.12 & 37.03 & 38.96 \\
-63 & 20.14 & 5.13 & 18.49 & 39.12 & 34.07 & 38.96 \\
+0 & 34.48 & 26.84 & 33.31 & 39.12 & 39.08 & 38.96 \\
+16 & 30.10 & 18.36 & 29.06 & 39.12 & 39.08 & 38.96 \\
+32 & 24.90 & 13.21 & 24.76 & 39.12 & 39.08 & 38.96 \\
+48 & 22.06 & 8.26 & 21.16 & 39.12 & 37.03 & 38.96 \\
+63 & 20.14 & 5.13 & 18.21 & 39.12 & 34.07 & 38.96 \\
 \bottomrule
 \end{tabular}}
 \caption{\textbf{The calibrated bit rule against two trained heads}, as the percentage of the released decoder's operations saved, at two budgets and five rates. The rule is ahead of both heads in every cell of this table. Every column is charged for what it costs: each head pays its own compute share and the rule pays nothing. The two heads are further apart from each other than either is from the rule at several rates, which F.5 takes up.}
 \end{table}
 
-{\small Rule: results/raterank\_RECIPE512\_b01.json and b03. Joint head: results/router\_RECIPE512\_b01\_jointhead.json and its b03 sibling. Frozen head: results/router\_RECIPE512\_b01.json and b03. All on runs/RECIPE512/ckpt\_PAPER.pth.tar.}
+{\small Rule: results/raterank\_RECIPE512\_b01.json and b03. Joint head: results/router\_RECIPE512\_b01\_jointhead.json and its b03 sibling. Frozen head: results/router\_RECIPE512\_b01\_e4head.json and b03. All on runs/RECIPE512/ckpt\_PAPER.pth.tar.}
 
 \begin{figure}[t]
 \centering
@@ -201,7 +201,7 @@ q & 0.1 rule & 0.1 joint & 0.1 frozen & 0.3 rule & 0.3 joint & 0.3 frozen \\
 
 {\small Drawn by scripts/supp\_router\_figs.py from the six files named in the table above and results/saturation\_RECIPE512\_ctc53.json.}
 
-\textbf{At the working budget.} Against the joint head the rule is ahead by +7.65 points at its narrowest and +15.02 at its widest, the latter at q63. Against the frozen head it is ahead by +1.39 to +5.53 points. The rule reaches \RateRankLow\% at q0 and \RateRankHigh\% at q63, and it is ahead at all \RateRankNWins measured rates whichever head it is measured against. A head trained on this decoder against this oracle returns nothing over a rule with no learned parameters, while carrying a compute share that the rule does not.
+\textbf{At the working budget.} Against the joint head the rule is ahead by +7.65 points at its narrowest and +15.02 at its widest, the latter at q63. Against the frozen head it is ahead by +0.13 to +1.94 points. The rule reaches \RateRankLow\% at q0 and \RateRankHigh\% at q63, and it is ahead at all \RateRankNWins measured rates whichever head it is measured against. A head trained on this decoder against this oracle returns nothing over a rule with no learned parameters, while carrying a compute share that the rule does not.
 
 \textbf{At 0.3 dB the low rates saturate and the arithmetic is exact.} At q0, q16 and q32 all three configurations send every tile to the shallowest exit, so the maps are identical and the only difference left is the price of deciding. The joint head falls 0.044 points below the \CeilingModelled\% ceiling and the frozen head 0.163, which are their compute shares of 0.044\% and 0.163\% to three decimals. At q48 and q63 the budget still binds and the allocations separate: the rule reaches 39.1\% and \RateRankLoose\% against the joint head's 37.0\% and 34.1\% and the frozen head's 39.0\% and 39.0\%. A looser budget gives an allocation more room to be wrong in as well as more room to be right, and the frozen head uses it to be wrong.
 
@@ -248,7 +248,7 @@ The same control makes a second point in passing. At w=0 the epoch-1 ladder save
 
 No head in this work was trained twice at two seeds, so there is no seed variance to report and none was measured; results/router\_ablation.json records seed 0 for all six of its runs and one\_checkpoint true. What can be reported is the spread between heads that were trained independently of each other, which is a looser quantity than seed variance and a larger one.
 
-\textbf{Two heads on one decoder.} The joint and frozen heads differ by -2.12 points at q0 and by -13.37 at q63, a range of 11.25 points across the five rates at 0.1 dB, and they cross: the joint head is the better of the two at q0 and the worse at every other rate. At 4 of the five rates the two heads differ from each other by more than the rule's margin over whichever of them is nearer, so a comparison against one trained head says less than it appears to. That is the reason both are printed in F.4 rather than the better of them.
+\textbf{Two heads on one decoder.} The joint and frozen heads differ by -6.47 points at q0 and by -13.08 at q63, a range of 6.61 points across the five rates at 0.1 dB, and they cross: the joint head is the better of the two at q0 and the worse at every other rate. At 5 of the five rates the two heads differ from each other by more than the rule's margin over whichever of them is nearer, so a comparison against one trained head says less than it appears to. That is the reason both are printed in F.4 rather than the better of them.
 
 \begin{table}[t]
 \centering
@@ -286,7 +286,7 @@ q & before & after & change & $\beta$ before & $\beta$ after \\
 \caption{\textbf{Agreement rises and the saving does not follow.} The change column has both signs. The two heads are one recipe at one \lambda, trained twice; held-out agreement went from \RetrainAgreeOld to \RetrainAgreeNew while the deployed saving moved by +\RetrainGain points at q\RetrainGainQp and \&\#8722;\RetrainLoss at q\RetrainLossQp. \beta is the cost multiplier the bisection applies to move a head trained at one \lambda onto this operating point, and the retrained head is ahead where that multiplier is small and behind where it is large. This is the same lesson as the rule's low agreement, from the other direction.}
 \end{table}
 
-{\small results/router\_retrain\_compare.json. The file records no checkpoint, and its before column reads 27.18\% at q0 where the pinned measurement in results/router\_RECIPE512\_b01.json reads 28.96\%, so the two are not on one basis. Only the comparison of the two heads within the file is read here.}
+{\small results/router\_retrain\_compare.json. The file records no checkpoint, and its before column reads 27.18\% at q0 where the pinned measurement in results/router\_RECIPE512\_b01\_e4head.json reads 33.31\%, so the two are not on one basis. Only the comparison of the two heads within the file is read here.}
 
 \textbf{Choosing the tilt without the test set.} Every $\beta$ in the main paper's A-against-B table was bisected against the budget on the test frames themselves, which is the one thing a deployed decoder cannot do. The table below repeats the measurement with the table a deployment would actually ship: $\beta$ bisected once per quality index on the \HeldNCal held-out Open Images validation frames, then applied to the CTC frames without being touched again. Checkpoint, head, frames and budget are identical on both sides, so what separates the two columns is where $\beta$ came from.
 

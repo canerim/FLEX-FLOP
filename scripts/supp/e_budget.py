@@ -165,7 +165,8 @@ def content(k):
     sat = k.J("saturation_RECIPE512_ctc53.json")
     grid = k.J("signalled_RECIPE512_grid.json")
     front = k.J("supp_paper_curve_PAPER.json")
-    rtr = k.J("router_RECIPE512_b01.json")
+    rtr = k.J("router_RECIPE512_b01_e4head.json",
+              "router_RECIPE512_b01.json")
 
     S = {r["qp"]: r for r in sat["rows"]}
     cj = sat["cost_j"]
