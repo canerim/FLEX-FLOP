@@ -277,6 +277,19 @@ def content(F):
         "the comparison is between one measured cost and one arithmetic one. "
         "The direction is not in doubt; the factor is.", BODY))
 
+    A(Paragraph("4.2 The decode objective, and a comparison not to make", H2))
+    A(Paragraph(
+        "The first decode-objective run came out worse than the feature one "
+        "at the same width, and the comparison is not usable. It trained for "
+        "12,000 steps at batch 4 against 20,000 at batch 8, and it also "
+        "samples one exit per step out of four, so each exit saw roughly a "
+        "sixth of the updates. The step count was reduced because a decode "
+        "forward and backward is dearer than a feature one, which was a "
+        "reasonable thing to want and an unreasonable way to get it: it "
+        "traded away the only property that made the two runs comparable. A "
+        "matched-budget run at 20,000 steps and batch 8 is queued, and the "
+        "answer for this objective waits on it.", BODY))
+
     A(Paragraph("5. Open", H1))
     A(Paragraph(
         "The decode objective is running: the narrow stem trained on the "
