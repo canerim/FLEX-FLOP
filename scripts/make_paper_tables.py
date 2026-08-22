@@ -738,6 +738,14 @@ if trows:
             mac("HeldNoBetaFloor", f"{calf[nob[-1]]:.3f}")
         mac("HeldNoBetaForgone", f"{hby[nob[-1]]['test_saving_pct_measured']:.1f}")
 
+# The cost of our own deepest exit, relative to the released decoder. It is
+# the denominator the paper deliberately does not use, and it was typed into
+# two sentences; it is arithmetic over the architecture, but a typed number
+# beside a live one is how the last three drifts started.
+_dc, _ = pick("router_RECIPE512_b01_e4head.json", "router_RECIPE512_b01_PAPER.json")
+if _dc and _dc.get("deepest_exit_cost"):
+    mac("DeepestExitCost", f"{_dc['deepest_exit_cost']:.4f}")
+
 # ---------------------------------------------------------------- exactness
 print("halo exactness")
 he, _ = pick("halo_exactness.json")

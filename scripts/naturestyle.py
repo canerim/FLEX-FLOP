@@ -255,7 +255,7 @@ def audit_enabled():
     return _os.environ.get("NS_NO_AUDIT") != "1"
 
 
-def _record(path, over, out):
+def _record(path, over, out, type_scale=None):
     try:
         db = _json.loads(_AUDIT.read_text()) if _AUDIT.exists() else {}
     except Exception:
@@ -264,6 +264,13 @@ def _record(path, over, out):
     # Every audited figure is recorded, clean or not, so that a checker can
     # tell a figure that passed from a figure nobody has looked at.
     db[key] = {"overlaps": over[:8], "outside": out[:8]}
+    # What the type on this canvas was multiplied by before it was drawn. A
+    # checker comparing drawn width against printed width needs it, and
+    # reading it out of the producer's source was guesswork: it missed every
+    # output named by an f-string and could not see a scale that was not
+    # exactly for_column().
+    if type_scale is not None:
+        db[key]["type_scale"] = round(float(type_scale), 4)
     if over or out:
         print(f"  FIGURE AUDIT {key}: {len(over)} text collision(s), "
               f"{len(out)} series outside the axes", file=_sys.stderr)
@@ -397,7 +404,8 @@ def _install():
                 # geometry the reader sees.
                 self.canvas.draw()
                 rend = self.canvas.get_renderer()
-                _record(fname, _overlaps(_boxes(self, rend)), _outside(self))
+                _record(fname, _overlaps(_boxes(self, rend)), _outside(self),
+                        type_scale=_SCALE)
             except Exception as e:                      # never break a build
                 print(f"  figure audit skipped for {fname}: {e}",
                       file=_sys.stderr)

@@ -491,14 +491,17 @@ to whole tiles, with the grid the decoder will impose. \textbf{b}, the feature
 map after the shared stem at one eighth resolution, so a $256$\,px tile is
 $32\times32$ of features: the tiling happens here, not in the pixel domain.
 \textbf{c}, four of the 40 tiles as the trunk sees them. \textbf{d}, the
-operation and its inverse, which costs no arithmetic and is exact.}
+operation and its inverse. Zero multiply-accumulates in either direction, and
+the round trip is exact: unpatchify(patchify($f$)) equals $f$ bit for bit. What
+changes is that a $3\times3$ in the trunk now sees zero padding where a
+neighbour used to be, and that a tile can stop early.}
 \label{fig:patchify}
 \end{figure*}
 
 \subsection{Where the computation is}
 
 The DCVC-UF intra decoder is one upsampling block, twelve \texttt{DepthConvBlock}s
-and a head, costing $453.5$ GMAC per 1080p frame. The twelve blocks are \\TrunkShare\\%
+and a head, costing $\RelGmac$ GMAC per 1080p frame. The twelve blocks are \\TrunkShare\\%
 of that, which is why we build the ladder across them. Inside one block at
 $C{=}384$ channels, the only operator with any spatial extent is a $3\times3$
 depthwise convolution, and it costs $9C$ against the block's $8C^2 + 9C$. That is
@@ -1074,7 +1077,7 @@ produces.
 \emph{released} decoder's full-frame decode of the \emph{same} latent, and our
 side is the deployed tiled decode, so the tiling penalty sits inside every
 number. Savings are fractions of the released decoder's cost. Our own deepest
-exit costs $1.0095$ of it, and using that as the denominator would flatter every
+exit costs $\DeepestExitCost$ of it, and using that as the denominator would flatter every
 result by $0.6$--$0.8$ points. Rate--distortion differences are integrated as
 BD-Rate~\cite{bjontegaard} over the five quality indices. Means are taken over unrounded values, so
 averaging a printed row can differ from the printed mean by a unit in the last
@@ -2048,7 +2051,7 @@ metric; nothing in the method depends on which one it is.
 \input{tables/complexity}
 \caption{\textbf{Decoder complexity} at 1080p. Our deepest exit costs slightly
 more than the released decoder because it still pays the deblocking filter; that
-$1.0095$, not $1.0$, is what every saving in this paper is \emph{not} divided by.
+$\DeepestExitCost$, not $1.0$, is what every saving in this paper is \emph{not} divided by.
 Wall-clock is the sorted loop of Section~\ref{sec:wallclock}.}
 \label{tab:complexity}
 \end{table}

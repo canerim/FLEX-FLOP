@@ -44,6 +44,7 @@ def main() -> int:
     _sys.path.insert(0, str(R / "scripts"))
     import naturestyle as _ns
     scaled = set()
+    _fstem = []
     for prod in sorted(list((R / "scripts").glob("*.py"))
                        + list((R / "scripts/supp").glob("*.py"))):
         t = prod.read_text()
@@ -53,6 +54,23 @@ def main() -> int:
         # so match the basename wherever it occurs rather than a bare literal.
         scaled |= {m.rsplit("/", 1)[-1]
                    for m in re.findall(r'["\']([A-Za-z0-9_./\-]+\.png)["\']', t)}
+        # Some producers name their output with an f-string --
+        # f"saturation_{TAG}.png" -- which the literal match above cannot see,
+        # so a figure that does set its type for the column was reported as if
+        # it did not. Turn the braces into a wildcard and match on that.
+        for pat in re.findall(r'f["\']([A-Za-z0-9_./\-]*\{[^"\']*\.png)["\']', t):
+            rx = re.compile("^" + re.sub(r"\{[^}]*\}", r"[A-Za-z0-9_.\\-]+",
+                                         re.escape(pat).replace(r"\{", "{")
+                                         .replace(r"\}", "}")
+                                         .rsplit("/", 1)[-1]) + "$")
+            _fstem.append(rx)
+
+    import json as _json
+    _apath = R / "results/figure_audit.json"
+    try:
+        _audit = _json.loads(_apath.read_text()) if _apath.exists() else {}
+    except Exception:
+        _audit = {}
 
     rows = []
     for names, avail, where in ((col, COL_W, "column"),
@@ -63,7 +81,15 @@ def main() -> int:
                 continue
             w, h = Image.open(p).size
             drawn = w / DPI
-            type_scale = _ns.MAX_COLUMN_SCALE if n in scaled else 1.0
+            # The figure itself records what its type was multiplied by, as
+            # of the last time it was drawn. Fall back to reading the
+            # producer's source for figures drawn before that was recorded.
+            rec = _audit.get(n) or {}
+            if "type_scale" in rec:
+                type_scale = rec["type_scale"] or 1.0
+            else:
+                _is = n in scaled or any(rx.match(n) for rx in _fstem)
+                type_scale = _ns.MAX_COLUMN_SCALE if _is else 1.0
             rows.append(((drawn / avail) / type_scale, n, drawn, avail,
                          where, type_scale))
 

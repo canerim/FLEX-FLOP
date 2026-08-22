@@ -176,7 +176,11 @@ def _render_math(tex: str, fontsize: float = None, dpi: int = 600) -> tuple:
 
 # ---------------------------------------------------------------- styles
 def S(name, **kw):
-    base = dict(fontName="Times-Roman", fontSize=8.6, leading=10.4,
+    # 8.6 on 10.1 rather than on 10.4. The references have to fit on the last
+    # page and the content runs a page past where it should end; a ratio of
+    # 1.17 is inside what a two-column journal sets, and it is the part of
+    # that page that can be bought back without touching a sentence.
+    base = dict(fontName="Times-Roman", fontSize=8.6, leading=10.1,
                 alignment=TA_JUSTIFY, spaceAfter=4)
     base.update(kw)
     return ParagraphStyle(name, **base)
@@ -949,7 +953,7 @@ def content(colw, fullw):
         r"back to the identity it was initialised to. † the deepest exit has no "
         r"adapter by construction and is the control.")
     par(r"The DCVC-UF intra decoder is one upsampling block, twelve "
-        r"DepthConvBlocks and a head, costing 453.5 GMAC per 1080p frame. The "
+        r"DepthConvBlocks and a head, costing \\RelGmac GMAC per 1080p frame. The "
         r"twelve blocks are \TrunkShare% of that, which is why we build the "
         r"ladder "
         r"across them. Inside one block at C=384 channels, the only operator "
@@ -965,7 +969,11 @@ def content(colw, fullw):
            r"eighth resolution, so a 256 px tile is 32×32 of features: the "
            r"tiling happens here, not in the pixel domain. <b>c</b>, four of "
            r"the 40 tiles as the trunk sees them. <b>d</b>, the operation and "
-           r"its inverse, which costs no arithmetic and is exact.")
+           r"its inverse. Zero multiply-accumulates in either direction, and "
+           r"the round trip is exact: unpatchify(patchify(f)) equals f bit "
+           r"for bit. What changes is that a 3×3 in the trunk now sees zero "
+           r"padding where a neighbour used to be, and that a tile can stop "
+           r"early.")
     h2("3.3 The exit ladder")
     par(r"<b>Why the tile is 256 pixels.</b> Two constraints bracket it. The "
         r"tile has to be large enough that its border is a small part of it, "
@@ -1435,7 +1443,7 @@ def content(colw, fullw):
     tbl("complexity",
         r"<b>Table 4. Decoder complexity</b> at 1080p. Our deepest exit costs "
         r"slightly more than the released decoder because it still pays the "
-        r"deblocking filter; that 1.0095, not 1.0, is what every saving in this paper is "
+        r"deblocking filter; that \\DeepestExitCost, not 1.0, is what every saving in this paper is "
         r"<i>not</i> divided by. Wall-clock is the sorted loop of Section 5.9.")
     par(r"Two details of the protocol move the numbers enough that we state "
         r"them here. The per-tile distortion table has to be built on the "
@@ -1455,7 +1463,7 @@ def content(colw, fullw):
         r"full-frame decode of the <i>same</i> latent, and our side is the "
         r"deployed tiled decode, so the tiling penalty sits inside every "
         r"number. Savings are fractions of the released decoder's cost. Our "
-        r"own deepest exit costs 1.0095 of it, and using that as the "
+        r"own deepest exit costs \\DeepestExitCost of it, and using that as the "
         r"denominator would flatter every result by 0.6–0.8 points. "
         r"Rate-distortion differences are integrated as BD-Rate [4] over "
         r"the five quality indices. "

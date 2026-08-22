@@ -618,6 +618,10 @@ def ab_budgets():
 
 # ---------------------------------------------------------------- trade-off
 def tradeoff():
+    # This one is placed in a column, not across the page, so its type has to
+    # be set for the column or every label prints at half size. It was the
+    # widest figure in the paper reading at 1/2.0.
+    ns.apply(ns.for_column())
     """The trade-off read in both directions, and the ceiling that bounds it.
 
     Every other figure fixes a dB budget and reports the saving. A deployment
@@ -677,6 +681,7 @@ def tradeoff():
 
     fig.tight_layout(w_pad=2.2)
     save(fig, "tradeoff.png")
+    ns.apply()          # back to page scale for whatever draws next
 
 
 # ---------------------------------------------------------------- run tree
