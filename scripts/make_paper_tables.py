@@ -1834,6 +1834,26 @@ try:
         if _sp > 0.5:
             print(f"   epoch {_e}: {len(_v)} files spread {_sp:.2f} points")
         _ser[_e] = _v[len(_v) // 2]
+    # The series stops at the pin. The watcher keeps measuring after a repin
+    # -- epoch 5 landed while this paper was being finished -- and a series
+    # that runs past the checkpoint the paper reports makes three sentences
+    # false at once: the last value is no longer the one reported, the gain is
+    # over a different span, and "the series had not flattened" is a claim
+    # about data the paper does not show. What happens after the pin is a
+    # different statement and belongs in a sentence that says so.
+    _pin_e = None
+    try:
+        import torch as _t
+        _pin_e = _t.load(R / "runs/RECIPE512/ckpt_PAPER.pth.tar",
+                         map_location="cpu", weights_only=False).get("epoch")
+    except Exception:
+        pass
+    if _pin_e is not None:
+        _past = sorted(e for e in _ser if e > _pin_e)
+        if _past:
+            print(f"   epoch series: dropping {_past}, past the pin at "
+                  f"{_pin_e}")
+        _ser = {e: v for e, v in _ser.items() if e <= _pin_e}
     _WORD = {0: "Zero", 1: "One", 2: "Two", 3: "Three", 4: "Four"}
     for _e, (_m, _fn) in sorted(_ser.items()):
         if _e in _WORD:
@@ -1847,7 +1867,9 @@ try:
         # moved to 4 on their own when that evaluation landed: four numbers,
         # a range of five epochs, and a gain computed from a fifth the
         # sentence never showed.
-        _vals = [f"{_ser[e][0]:.1f}%" for e in sorted(_ser)]
+        # Escaped: this macro is read by LaTeX too, where a bare % comments
+        # out the rest of the line and takes the closing brace with it.
+        _vals = [f"{_ser[e][0]:.1f}\\%" for e in sorted(_ser)]
         mac("EpochSeries", ", ".join(_vals[:-1]) + " and " + _vals[-1]
             if len(_vals) > 1 else _vals[0])
         mac("EpochFirst", str(min(_ser)))

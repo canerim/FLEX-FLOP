@@ -25,7 +25,8 @@ KNOWN = {
     "section", "subsection", "subsubsection", "paragraph", "label", "ref",
     "cite", "textbf", "emph", "textit", "small", "footnotesize", "begin",
     "end", "item", "itemize", "enumerate", "itemsep", "table", "figure",
-    "tabular", "toprule", "midrule", "bottomrule", "multicolumn", "centering",
+    "tabular", "toprule", "midrule", "bottomrule", "cmidrule", "multicolumn",
+    "centering",
     "resizebox", "columnwidth", "textwidth", "linewidth", "includegraphics",
     "caption", "input", "vspace", "hspace", "clearpage", "newpage",
     "times", "approx", "leq", "geq", "le", "ge", "neq", "rightarrow", "to",
@@ -129,6 +130,11 @@ def main():
         (ROOT / "paper/tables/macros.tex").read_text()))
     files = sorted(glob.glob(str(ROOT / "paper/supp/[a-z]_*.tex")))
     files += [str(ROOT / "paper/main.tex")]
+    # The generated tables are \input into main.tex, so a brace or an
+    # environment that does not close in one of them breaks the submission
+    # exactly as if it were written there. Thirty of them are rewritten every
+    # time make_paper_tables runs and none was being read here.
+    files += sorted(glob.glob(str(ROOT / "paper/tables/*.tex")))
     bad = 0
     for f in files:
         s = Path(f).read_text()
