@@ -493,10 +493,13 @@ def training():
 
 # =====================================================  5. router A versus B
 def router_ab():
-    # Formulas placed beside labels at chosen coordinates, so this is a
-    # schematic in a plot's clothing and scaling its type moves one onto the
-    # other. It stays at the drawn size.
-    ns.apply()
+    # A schematic in a plot's clothing: formulas placed beside labels at
+    # chosen coordinates. That was the reason given for leaving its type at
+    # page scale, and the consequence was a figure drawn seven inches wide
+    # and printed in a 3.5 inch column, so every label reached the reader at
+    # half the size it was set at. Scaled for the column, with the audit in
+    # naturestyle to say whether anything now sits on anything else.
+    ns.apply(ns.for_column())
     """The two ways the exit map can be produced, and what the difference costs."""
     def rows(*names, key="saving_pct", budget=None):
         """Canonical file, canonical definition.
@@ -565,7 +568,9 @@ def router_ab():
     # number from the one every table gives.
     chip(0.67, y - 0.155, 0.28, 0.20, "map\n+89 b/frame", "#ffffff",
          ns.PURPLE)
-    a.text(0.5, 0.585, r"$k^{*}=\arg\min_k\,[\,\mathrm{MSE}_k+\lambda c_k]$",
+    # Set for the column, the formula is half again as tall and reached the
+    # chip above it; both formulas moved down by 0.045 of the panel.
+    a.text(0.5, 0.540, r"$k^{*}=\arg\min_k\,[\,\mathrm{MSE}_k+\lambda c_k]$",
            fontsize=ns.fs(6.2), ha="center", va="center", color=ns.PURPLE)
 
     # B row
@@ -576,7 +581,7 @@ def router_ab():
     chip(0.32, y - 0.155, 0.26, 0.20, "head\n144 K", "#ffffff", ns.BLUE)
     arrow(0.59, y - 0.055, 0.66, ns.BLUE)
     chip(0.67, y - 0.155, 0.28, 0.20, "map\n+0 bits", "#ffffff", ns.BLUE)
-    a.text(0.5, 0.085, r"$\hat{k}=\arg\max_k\,[\,\log p_k-\beta c_k]$",
+    a.text(0.5, 0.040, r"$\hat{k}=\arg\max_k\,[\,\log p_k-\beta c_k]$",
            fontsize=ns.fs(6.2), ha="center", va="center", color=ns.BLUE)
     ns.panel(a, "a", dx=-0.02, dy=1.06)
 
