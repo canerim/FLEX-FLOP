@@ -1682,8 +1682,9 @@ def content(colw, fullw):
         r"it is why the low-resolution classes sit at the bottom of every "
         r"per-class result in this paper. The worst-tile column moves the "
         r"other way and shows the price the budget is paying somewhere in the "
-        r"frame: 0.310 dB on one Bosphorus tile against a 0.100 dB frame "
-        r"average, which is the concentration Section 5.5 measures.")
+        r"frame: \ExitmapWorst dB on one Bosphorus tile against a "
+        r"\ExitmapFrame dB frame average, which is the concentration "
+        r"Section 5.5 measures.")
     figure("perclass.png",
            r"<b>Figure 7. Saving by test class</b> at one global operating "
            r"point. λ is bisected once so the whole set lands on the budget, "

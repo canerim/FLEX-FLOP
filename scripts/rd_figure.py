@@ -127,7 +127,12 @@ for q in ks:
                    "p75": float(np.percentile(v, 75)),
                    "min": float(v.min()), "max": float(v.max()),
                    "n": int(len(v))}
-json.dump({"target_db": 0.1, "rows": _st},
+# Derived from the per-sequence file, and it carries that file's provenance
+# so the epoch check can see where it came from rather than reporting a file
+# that names no checkpoint at all.
+json.dump({"target_db": 0.1, "rows": _st,
+           "from": "results/supp_per_sequence_PAPER_b010.json",
+           "ckpt": _ps.get("ckpt"), "ckpt_epoch": _ps.get("ckpt_epoch")},
           open(R / "results/rd_spread_stats.json", "w"), indent=2)
 print("  -> docs/figures/rd_spread.png, paper/figures/rd_spread.png")
 for q in ks:

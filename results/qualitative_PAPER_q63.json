@@ -2,7 +2,7 @@
   "figure": "docs/figures/qualitative_q63.png",
   "what": "released decode and ours from one latent, at a stated budget",
   "ckpt": "runs/RECIPE512/ckpt_PAPER.pth.tar",
-  "ckpt_epoch": 0,
+  "ckpt_epoch": 4,
   "ckpt_step": null,
   "seq": "Bosphorus_1920x1080_120fps_420_8bit_YUV.yuv",
   "cls": "UVG",
@@ -12,11 +12,11 @@
   ],
   "qp": 63,
   "budget_db": 0.1,
-  "delivered_db": 0.09917181730270386,
-  "saving_pct_vs_release": 17.388325929641724,
-  "bpp": 0.4653228521347046,
+  "delivered_db": 0.09872345626354218,
+  "saving_pct_vs_release": 26.333415508270264,
+  "bpp": 0.4653703570365906,
   "psnr_released": 45.25721592370831,
-  "psnr_routed": 45.15654038400756,
+  "psnr_routed": 45.16332807587671,
   "psnr_convention": "(6Y+U+V)/8 in 4:2:0 on 0..255",
   "crop_px": 320,
   "crop_centre_yx": [
@@ -30,10 +30,10 @@
   "exit_hist": [
     0,
     0,
-    1,
-    22,
-    10,
-    7
+    19,
+    7,
+    11,
+    3
   ],
   "amplification": 20
 }

@@ -179,7 +179,14 @@ def fallbacks() -> set[str]:
 def documents_read() -> set[str]:
     out = set()
     for s in _sources():
-        out |= set(re.findall(r'"([A-Za-z0-9_.\-]+\.json)"', s.read_text()))
+        t = s.read_text()
+        out |= set(re.findall(r'"([A-Za-z0-9_.\-]+\.json)"', t))
+        # A path literal with its directory in it -- R / "results/x.json" --
+        # is the same read and was invisible to the pattern above, because a
+        # slash is not in the character class. Two files feeding the
+        # qualitative macros were being read that way and never checked.
+        out |= {m.rsplit("/", 1)[-1] for m in
+                re.findall(r'"(?:results|\./results)/([A-Za-z0-9_.\-]+\.json)"', t)}
     return out - fallbacks()
 
 

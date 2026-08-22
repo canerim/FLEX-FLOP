@@ -41,5 +41,8 @@
       "max": 39.12455368041992,
       "n": 53
     }
-  }
+  },
+  "from": "results/supp_per_sequence_PAPER_b010.json",
+  "ckpt": "runs/RECIPE512/ckpt_PAPER.pth.tar",
+  "ckpt_epoch": 4
 }
