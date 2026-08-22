@@ -10,6 +10,7 @@
       "exit": 0,
       "modelled": 0.6087544560432434,
       "measured": 0.6167249312569952,
+      "measured_fvcore": 0.6167249312569952,
       "ceiling_modelled_pct": 39.12455439567566,
       "ceiling_measured_pct": 38.327506874300475
     },
@@ -17,6 +18,7 @@
       "exit": 1,
       "modelled": 0.6087544560432434,
       "measured": 0.6167249312569952,
+      "measured_fvcore": 0.6167249312569952,
       "ceiling_modelled_pct": 39.12455439567566,
       "ceiling_measured_pct": 38.327506874300475
     },
@@ -24,6 +26,7 @@
       "exit": 2,
       "modelled": 0.6087544560432434,
       "measured": 0.6167249312569952,
+      "measured_fvcore": 0.6167249312569952,
       "ceiling_modelled_pct": 39.12455439567566,
       "ceiling_measured_pct": 38.327506874300475
     },
@@ -31,6 +34,7 @@
       "exit": 3,
       "modelled": 0.7578210830688477,
       "measured": 0.7657901645686809,
+      "measured_fvcore": 0.7657901645686809,
       "ceiling_modelled_pct": 24.217891693115234,
       "ceiling_measured_pct": 23.42098354313191
     },
@@ -38,6 +42,7 @@
       "exit": 4,
       "modelled": 0.8697299361228943,
       "measured": 0.8724074560252034,
+      "measured_fvcore": 0.8724074560252034,
       "ceiling_modelled_pct": 13.027006387710571,
       "ceiling_measured_pct": 12.759254397479658
     },
@@ -45,10 +50,13 @@
       "exit": 5,
       "modelled": 1.009507179260254,
       "measured": 1.0108607038730983,
+      "measured_fvcore": 1.0108607038730983,
       "ceiling_modelled_pct": -0.9507179260253906,
       "ceiling_measured_pct": -1.0860703873098343
     }
   ],
   "ceiling_measured_pct": 38.327506874300475,
-  "ceiling_modelled_pct": 39.12455439567566
+  "ceiling_modelled_pct": 39.12455439567566,
+  "ckpt_epoch": 4,
+  "stamped_by": "scripts/stamp_ckpt.py"
 }

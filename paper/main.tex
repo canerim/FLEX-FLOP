@@ -509,19 +509,15 @@ pointwise.
 
 \subsection{The exit ladder}
 
-\paragraph{Why the tile is 256 pixels.} Two constraints bracket the choice and
-neither is free to ignore. Below, the tile has to be large enough that its border
-is a small part of it. The seam grows with the fraction of a tile within reach of
-an invented value, $1-((F-2b)/F)^2$ for $b$ per-tile blocks on a tile of side
-$F$, so halving the side roughly doubles the damage at fixed depth
-(Section~\ref{sec:seam}). Above, it has to be small enough that a frame holds
-enough of them for an allocation to exist at all: at $256$ px a 1080p frame is
-$40$ tiles and a $416{\times}240$ frame is $2$, and the second is already close
-to having no choice to make (Section~\ref{sec:exp}). Standardised codecs bracket
-their own partition the same way and land nearby, at $64$ pixels in
-HEVC~\cite{hevc} and $128$ in VVC~\cite{vvc}, for reasons that include this one.
-We measured $128$ against $256$ and report it, with the caveat that the two come
-from different training runs.
+\paragraph{Why the tile is 256 pixels.} Two constraints bracket it. The tile has
+to be large enough that its border is a small part of it, since the seam grows
+with the fraction within reach of an invented value, $1-((F-2b)/F)^2$ for $b$
+per-tile blocks on a side $F$ (Section~\ref{sec:seam}); and small enough that a
+frame holds enough tiles for an allocation to exist, which at $256$ px is $40$
+for 1080p and $2$ for $416{\times}240$ (Section~\ref{sec:exp}). Standardised
+codecs bracket their own partition the same way and land nearby, at $64$ pixels
+in HEVC~\cite{hevc} and $128$ in VVC~\cite{vvc}. The supplement measures $128$
+against $256$.
 
 
 Two consequences follow from the ladder, and both are easy to state wrongly.
@@ -714,26 +710,21 @@ first, $[-50, 50]$, never reached the all-deepest allocation and so never
 bracketed the budget from below.
 
 \paragraph{The head, exactly.} Three things enter it, and the third is the one
-that earns its parameters (Fig.~\ref{fig:routerarch}). The first is the feature at the split point, $384$ channels at one
-eighth of frame resolution, which is the last thing every tile shares. The
-second is the decoded latent $\hat{y}$ concatenated with the entropy model's
+that earns its parameters; Fig.~\ref{fig:routerarch} gives every shape and
+count. The first is the feature at the split point, the last thing every tile
+shares. The second is the decoded latent $\hat{y}$ with the entropy model's
 scales $\sigma$~\cite{balle2018}, the predicted Gaussian width used to code
-each latent position:
-$\sigma$ is already computed during the decode and is, position by position, an
-estimate of how hard that position was to code. The third is the quality index.
-Each of the first two is projected by a $1\times1$ convolution, to $48$ and $32$
-channels, and then reduced to one vector per tile by taking the mean and the
-standard deviation over the tile. Both moments are there on
-purpose: the channel means describe roughly a tile's colour and the standard
-deviations its texture, and texture is what decides how many blocks a tile
-needs. The same pair is what adaptive instance normalisation takes as a
-compact description of a feature map's style~\cite{adain}. That gives $96 + 64 + 1 = 161$ numbers per
-tile, which pass through \texttt{LayerNorm} and a three-layer perceptron of
-width $256$ with SiLU activations, ending in $K$ logits. The whole head is
-$144{,}030$ parameters and \RouterCostPct\% of the decode it is deciding about, almost
-all of it in the $1\times1$ on the stem, which is the only part that runs per
-pixel. The perceptron runs once per tile, forty times for a 1080p frame, so its
-width is nearly free.
+each latent position: $\sigma$ is already computed during the decode and is,
+position by position, an estimate of how hard that position was to code. The
+third is the quality index. Each of the first two is projected by a
+$1\times1$ and reduced to one vector per tile by its mean and standard
+deviation. Both moments are there on purpose: the means describe roughly a
+tile's colour and the deviations its texture, and texture is what decides how
+many blocks a tile needs --- the same pair adaptive instance normalisation
+takes as a compact description of style~\cite{adain}. The head is
+\RouterParams\ parameters and \RouterCostPct\% of the decode it is deciding
+about, almost all of it in the $1\times1$ on the stem, which is the only part
+that runs per pixel.
 
 Two details matter for reproducing it. Exits below the split depth do not exist,
 and their logits are masked to $-\infty$ rather than to a large negative
@@ -1482,9 +1473,8 @@ $\text{saving} \approx C\,u^{\BandExp}$, with $C$ the architectural ceiling and
 $u$ the position in the band. We fit it in log space over all five rates and get
 $R^2 = \BandRTwo$, worst residual \BandFitErr\ points. The claim we make is the
 \emph{rescaling}: measuring the budget in units of each rate's own band is what
-collapses the curves. The exponent is an empirical fit to that collapse and not
-a law. Inverse fits to the same frontier disagree in it by up to $40\%$, so we
-report it as a description of these curves and read nothing into its value.
+collapses the curves. Inverse fits to the same frontier disagree in the
+exponent by up to $40\%$, so it is a description of these curves and not a law.
 
 \textbf{The collapse appears robust across two checkpoints.} We repeated the
 measurement on a different training run, \texttt{BEST}, a separate recipe taken
@@ -1803,13 +1793,13 @@ head here was trained twice at two seeds, so we have no seed variance to report.
 What we can report is the spread between two heads trained independently on the
 same decoder, which is looser than seed variance and larger. The joint and the
 frozen head differ by \HeadSpreadLow\ points at the lowest rate and
-\HeadSpreadHigh\ at the highest, a range of \HeadSpreadRange\ points, and they cross: whichever is better depends on the rate. Both are read off the arithmetic model rather than the hook count,
-because only one of them was hook-counted, and mixing the two conventions
-adds most of a point to the spread. At \HeadSpreadWiderN\ of the \HeadSpreadRatesN\ rates that spread is wider
-than the rule's margin over whichever head is nearer. So the claim we make is not
-that no learned router can beat the bit rule. It is that a rule costing nothing
-sits inside the band two of our own trained heads span, which is where a control
-belongs.
+\HeadSpreadHigh\ at the highest, a range of \HeadSpreadRange\ points, and they
+cross: whichever is better depends on the rate. Both are read off the arithmetic
+model, because only one of them was hook-counted. At \HeadSpreadWiderN\ of the
+\HeadSpreadRatesN\ rates that spread is wider than the rule's margin over
+whichever head is nearer. The claim is not that no learned router can beat the
+bit rule, but that a rule costing nothing sits inside the band two of our own
+trained heads span.
 
 A learned component should be measured against the free alternative, and it
 rarely is. In adaptive inference the usual controls are a uniform allocation and
@@ -2388,11 +2378,9 @@ same hook count, the run reads \EpochSeries\ at epochs \EpochFirst\ to
 is the one reported here (Figure~\ref{fig:training_plateau}). The series had not
 flattened, so \MeanAtOne\% is a lower bound on what this recipe reaches and not
 an estimate of it. The training loss says otherwise and is the wrong thing to
-watch: its median is flat from the first epoch on, because the objective is
-dominated by a deepest exit that is a fine-tune of an already converged decoder,
-while what improves is the agreement between exits --- a small term in the sum
-and the whole of what the saving depends on. The supplement plots the two
-together.
+watch: it is flat from the first epoch, because the objective is dominated by a
+deepest exit with nothing left to gain while what improves is the agreement
+between exits. The supplement plots the two together.
 
 
 \paragraph{A single decoder.} All results are on DCVC-UF's intra decoder. Nothing
