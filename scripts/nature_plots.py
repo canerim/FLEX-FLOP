@@ -200,9 +200,11 @@ def deciders():
                    ha="center", fontsize=ns.fs(6), color=ns.ORANGE)
     ax[0].set_xticks(x); ax[0].set_xticklabels([f"q{q}" for q in qs])
     ax[0].set_ylabel("decoder MACs saved (%)")
-    ax[0].set_ylim(0, 34)
-    ax[0].legend(frameon=False, fontsize=ns.fs(6), handlelength=1.1, borderpad=0,
-                 loc="upper right")
+    # Room above the bars for a three-line key that used to sit on the
+    # margin labels printed over them.
+    ax[0].set_ylim(0, 44)
+    ax[0].legend(frameon=False, fontsize=ns.fs(6), handlelength=1.1,
+                 borderpad=0, labelspacing=0.25, loc="upper right")
     ns.panel(ax[0], "a")
 
     # b. agreement against what the agreement buys. The tempting version of

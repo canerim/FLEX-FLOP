@@ -44,7 +44,7 @@ a.fill_between(qp, 0, flo, color=ns.VERM, alpha=0.16, lw=0)
 a.fill_between(qp, flo, sat, color=ns.GREEN, alpha=0.16, lw=0)
 a.fill_between(qp, sat, 0.42, color="#bbbbbb", alpha=0.22, lw=0)
 a.plot(qp, flo, marker="^", color=ns.GREEN, lw=1.2,
-       label="floor — every tile at full depth")
+       label="floor")
 a.plot(qp, sat, marker="o", color=ns.BLUE, lw=1.2,
        label=f"saturation — every tile at exit {d['exit_j']}")
 a.axhline(0.1, color=ns.INK, lw=0.8, ls=(0, (4, 2)), label="0.1 dB budget")

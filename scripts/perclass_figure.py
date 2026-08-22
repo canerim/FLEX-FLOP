@@ -80,8 +80,10 @@ b.set_xscale("log"); b.set_xticks([2, 8, 15, 40])
 b.get_xaxis().set_major_formatter(matplotlib.ticker.ScalarFormatter())
 b.set_xlabel("tiles per frame"); b.set_ylabel("MACs saved (%)")
 b.legend(loc="lower right", fontsize=ns.fs(6))
+# Centred, and the y limit lifted to keep it clear of the highest end-label:
+# left-aligned it sat on MCL, which is the top point of the panel.
 b.set_title("Saving against tile count",
-            fontsize=ns.fs(6), color=ns.INK2, loc="left")
+            fontsize=ns.fs(6), color=ns.INK2, loc="center", pad=9)
 ns.panel(b, "b", dx=-0.22)
 
 # ---- c: what each class actually spends ------------------------------------
