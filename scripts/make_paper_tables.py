@@ -726,6 +726,16 @@ if trows:
         # fitted to 512px photographs overshot the budget on video; on this one
         # it undershoots at every rate, which is the safe direction and a
         # different claim, so the quantities the prose needs are different too.
+        ovr = {q: dbs[q] - bh["budget_db"] for q in held
+               if dbs[q] > bh["budget_db"] + 5e-4}
+        if ovr:
+            mac("HeldOverMax", f"{max(ovr.values()):.3f}")
+            mac("HeldOverMaxQp", str(max(ovr, key=ovr.get)))
+            mac("HeldOverMin", f"{min(ovr.values()):.3f}")
+            mac("HeldOverPctMax",
+                f"{100 * max(ovr.values()) / bh['budget_db']:.0f}")
+            mac("HeldOverPctMin",
+                f"{100 * min(ovr.values()) / bh['budget_db']:.0f}")
         und = {q: bh["budget_db"] - dbs[q] for q in held
                if dbs[q] < bh["budget_db"] - 5e-4}
         mac("HeldNUnder", str(len(und)))
@@ -738,6 +748,7 @@ if trows:
             mac("HeldGiveUpMax", f"{max(gaps.values()):.1f}")
             mac("HeldGiveUpMaxQp", str(max(gaps, key=gaps.get)))
             mac("HeldGiveUpMin", f"{min(gaps.values()):.1f}")
+            mac("HeldGiveUpMinAbs", f"{abs(min(gaps.values())):.1f}")
             mac("HeldGiveUpMinQp", str(min(gaps, key=gaps.get)))
         tcs = {q: hby[q].get("transfer_cost_pts") for q in held
                if hby[q].get("transfer_cost_pts") is not None}

@@ -1589,17 +1589,17 @@ held-out Open Images validation frames, then applied to the CTC frames without
 being touched again. Checkpoint, head, frames and budget are identical on both
 sides, so what separates the two columns is where $\beta$ came from.
 
-The held-out $\beta$ misses the budget on the low side, at every rate: it
-delivers between \HeldDbBest\dB\ and \HeldDbWorst\dB\ where $0.1\dB$ was asked
-for, \HeldNUnder\ of the \HeldNHeld\ rates it covers undershoot and \HeldNOver\
-overshoot. That is the safe direction. A decoder holding this table never spends
-quality the budget did not allow; it spends less than it was allowed to, and
-buys less compute with it. Distortion and saving move together, so those rows
-report less saving than Table~\ref{tab:ab} does, from \HeldGiveUpMin\ points at
-$q\HeldGiveUpMinQp$ to \HeldGiveUpMax\ at $q\HeldGiveUpMaxQp$. The last column
-shows that nothing else is lost: re-bisecting on the test set to the quality the
-held-out $\beta$ actually delivered, the two allocations agree to within
-\HeldTransferAbsMax\ points. What moves between the two sets is the decibel a
+The held-out $\beta$ misses the budget, and mostly on the high side: it delivers
+between \HeldDbBest\dB\ and \HeldDbWorst\dB\ where $0.1\dB$ was asked for,
+overshooting at \HeldNOver\ of the \HeldNHeld\ rates it covers by
+\HeldOverMin--\HeldOverMax\dB, which is \HeldOverPctMin--\HeldOverPctMax\% of
+the budget, and undershooting at $q\HeldUnderMaxQp$ by \HeldUnderMax. Distortion
+and saving move together, so those rows also report more saving, up to
+\HeldGiveUpMinAbs\ points more at $q\HeldGiveUpMinQp$, and reading the column
+straight against Table~\ref{tab:ab} would credit the router with compute it
+bought using quality the budget did not allow. The last column takes that back
+out: at the quality the held-out $\beta$ actually delivered, the two allocations
+agree to within \HeldTransferAbsMax\ points. What moves between the two sets is the decibel a
 given $\beta$ delivers, not where the allocation lands once that decibel is
 fixed.
 

@@ -779,19 +779,23 @@ def content(k):
            "from the test sequences.")
 
     k.par(
-        "The held-out \u03b2 misses the budget on the low side, at every "
-        "rate: it delivers between \\HeldDbBest and \\HeldDbWorst dB where "
-        "0.1 dB was asked for, \\HeldNUnder of the \\HeldNHeld rates it "
-        "covers undershoot and \\HeldNOver overshoot. That is the safe "
-        "direction: a decoder holding this table never spends quality the "
-        "budget did not allow, it spends less than it was allowed to. "
-        "Distortion and saving move together, so those rows report less "
-        "saving, from \\HeldGiveUpMin points at q\\HeldGiveUpMinQp to "
-        "\\HeldGiveUpMax at q\\HeldGiveUpMaxQp. The last column shows what "
-        "is not lost: at equal delivered quality the two allocations agree to "
-        "within \\HeldTransferAbsMax points. What moves between the two sets "
-        "is the decibel a given \u03b2 delivers, not the ordering it "
-        "induces.")
+        "The held-out \u03b2 misses the budget, and mostly on the high "
+        "side: it delivers between \\HeldDbBest and \\HeldDbWorst dB where "
+        "0.1 dB was asked for, overshooting at \\HeldNOver of the "
+        "\\HeldNHeld rates it covers by \\HeldOverMin-\\HeldOverMax dB, "
+        "which is \\HeldOverPctMin to \\HeldOverPctMax% of the budget, and "
+        "undershooting at q\\HeldUnderMaxQp by \\HeldUnderMax. Distortion "
+        "and saving move together, so the rows that overshoot report more "
+        "saving, up to \\HeldGiveUpMinAbs points more at "
+        "q\\HeldGiveUpMinQp, and the rate that undershoots reports "
+        "\\HeldGiveUpMax less. The direction is not fixed by the frames "
+        "alone: measured against a head fitted to other weights the same "
+        "transfer undershot at every rate, so what a given \u03b2 delivers "
+        "on video depends on the head as well as on the pictures. The last "
+        "column shows what is not lost: at equal delivered quality the two "
+        "allocations agree to within \\HeldTransferAbsMax points. What moves "
+        "between the two sets is the decibel a given \u03b2 delivers, not "
+        "the ordering it induces.")
 
     k.par(
         "The highest rate is where this used to fail outright. On the "
