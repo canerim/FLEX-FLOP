@@ -148,14 +148,14 @@ $\varphi$ has one entry per reachable exit and says what that exit costs on an a
 \toprule
 q & delivered dB & \alpha & $\varphi$$_{2}$ & $\varphi$$_{3}$ & $\varphi$$_{4}$ & $\varphi$$_{5}$ \\
 \midrule
-0 & 0.1000 & 9.91 & 1.0242 & 1.0009 & 0.9912 & 0.9841 \\
-16 & 0.1000 & 4.58 & 1.0251 & 1.0021 & 0.9911 & 0.9822 \\
-32 & 0.0998 & 2.73 & 1.0297 & 1.0013 & 0.9893 & 0.9804 \\
-48 & 0.0999 & 1.94 & 1.0350 & 1.0004 & 0.9884 & 0.9771 \\
-63 & 0.0997 & 1.43 & 1.0494 & 0.9963 & 0.9829 & 0.9731 \\
+0 & 0.0998 & 10.05 & 1.0216 & 0.9965 & 0.9932 & 0.9890 \\
+16 & 0.1000 & 4.61 & 1.0229 & 0.9966 & 0.9930 & 0.9879 \\
+32 & 0.1000 & 2.74 & 1.0262 & 0.9978 & 0.9910 & 0.9855 \\
+48 & 0.0999 & 1.95 & 1.0282 & 0.9979 & 0.9902 & 0.9842 \\
+63 & 0.0996 & 1.43 & 1.0302 & 0.9991 & 0.9882 & 0.9832 \\
 \bottomrule
 \end{tabular}}
-\caption{\textbf{The rule's entire state}, at the 0.1 dB budget. There is nothing else to store, and it is printed here so that the rule can be reproduced without refitting it. \alpha is positive everywhere, so a tile whose latents cost more bits is modelled as harder at every exit and is sent deeper, which is what the correlations in F.4 confirm. $\varphi$ is nearly flat, spanning 4.1\% at q0 and 7.8\% at q63 between its shallowest and deepest entry, against costs that span 0.61 to 1.01, so what moves a tile along the ladder is its own b(t) rather than the shape of the profile. \emph{delivered dB} is what the two-level bisection actually landed on.}
+\caption{\textbf{The rule's entire state}, at the 0.1 dB budget. There is nothing else to store, and it is printed here so that the rule can be reproduced without refitting it. \alpha is positive everywhere, so a tile whose latents cost more bits is modelled as harder at every exit and is sent deeper, which is what the correlations in F.4 confirm. $\varphi$ is nearly flat, spanning 3.3\% at q0 and 4.8\% at q63 between its shallowest and deepest entry, against costs that span 0.61 to 1.01, so what moves a tile along the ladder is its own b(t) rather than the shape of the profile. \emph{delivered dB} is what the two-level bisection actually landed on.}
 \end{table}
 
 {\small results/raterank\_RECIPE512\_b01.json, pinned checkpoint, \NumSeq CTC sequences at one frame each.}
@@ -175,11 +175,11 @@ Two trained heads exist on this checkpoint and both are reported, since averagin
 \toprule
 q & 0.1 rule & 0.1 joint & 0.1 frozen & 0.3 rule & 0.3 joint & 0.3 frozen \\
 \midrule
-0 & 27.76 & 26.84 & 24.41 & 39.12 & 39.08 & 38.96 \\
-16 & 22.61 & 18.36 & 20.95 & 39.12 & 39.08 & 38.96 \\
-32 & 18.20 & 13.21 & 17.43 & 39.12 & 39.08 & 38.96 \\
-48 & 14.66 & 8.26 & 14.15 & 37.73 & 37.03 & 33.40 \\
-63 & 11.97 & 5.13 & 11.14 & 34.34 & 34.07 & 27.73 \\
+0 & 34.39 & 26.84 & 24.41 & 39.12 & 39.08 & 38.96 \\
+16 & 30.01 & 18.36 & 20.95 & 39.12 & 39.08 & 38.96 \\
+32 & 24.90 & 13.21 & 17.43 & 39.12 & 39.08 & 38.96 \\
+48 & 22.04 & 8.26 & 14.15 & 37.73 & 37.03 & 33.40 \\
+63 & 20.14 & 5.13 & 11.14 & 34.34 & 34.07 & 27.73 \\
 \bottomrule
 \end{tabular}}
 \caption{\textbf{The calibrated bit rule against two trained heads}, as the percentage of the released decoder's operations saved, at two budgets and five rates. The rule is ahead of both heads in every cell of this table. Every column is charged for what it costs: each head pays its own compute share and the rule pays nothing. The two heads are further apart from each other than either is from the rule at several rates, which F.5 takes up.}
@@ -195,7 +195,7 @@ q & 0.1 rule & 0.1 joint & 0.1 frozen & 0.3 rule & 0.3 joint & 0.3 frozen \\
 
 {\small Drawn by scripts/supp\_router\_figs.py from the six files named in the table above and results/saturation\_RECIPE512\_ctc53.json.}
 
-\textbf{At the working budget.} Against the joint head the rule is ahead by +0.92 points at its narrowest and +6.85 at its widest, the latter at q63. Against the frozen head it is ahead by +0.52 to +3.35 points. The rule reaches \RateRankLow\% at q0 and \RateRankHigh\% at q63, and it is ahead at all \RateRankNWins measured rates whichever head it is measured against. A head trained on this decoder against this oracle returns nothing over a rule with no learned parameters, while carrying a compute share that the rule does not.
+\textbf{At the working budget.} Against the joint head the rule is ahead by +7.56 points at its narrowest and +15.02 at its widest, the latter at q63. Against the frozen head it is ahead by +7.47 to +9.99 points. The rule reaches \RateRankLow\% at q0 and \RateRankHigh\% at q63, and it is ahead at all \RateRankNWins measured rates whichever head it is measured against. A head trained on this decoder against this oracle returns nothing over a rule with no learned parameters, while carrying a compute share that the rule does not.
 
 \textbf{At 0.3 dB the low rates saturate and the arithmetic is exact.} At q0, q16 and q32 all three configurations send every tile to the shallowest exit, so the maps are identical and the only difference left is the price of deciding. The joint head falls 0.044 points below the \CeilingModelled\% ceiling and the frozen head 0.163, which are their compute shares of 0.044\% and 0.163\% to three decimals. At q48 and q63 the budget still binds and the allocations separate: the rule reaches 37.7\% and \RateRankLoose\% against the joint head's 37.0\% and 34.1\% and the frozen head's 33.4\% and 27.7\%. A looser budget gives an allocation more room to be wrong in as well as more room to be right, and the frozen head uses it to be wrong.
 
@@ -208,19 +208,19 @@ q & 0.1 rule & 0.1 joint & 0.1 frozen & 0.3 rule & 0.3 joint & 0.3 frozen \\
 \toprule
 q & rule agrees & $\rho$ depth & $\rho$ level & $\rho$ spread & oracle \\
 \midrule
-0 & 0.453 & +0.54 & +0.83 & +0.61 & 29.90 \\
-16 & 0.320 & +0.52 & +0.84 & +0.65 & 25.62 \\
-32 & 0.283 & +0.53 & +0.86 & +0.71 & 20.93 \\
-48 & 0.353 & +0.53 & +0.84 & +0.72 & 18.33 \\
-63 & 0.392 & +0.39 & +0.88 & +0.68 & 15.64 \\
+0 & 0.669 & +0.42 & +0.83 & +0.61 & 34.46 \\
+16 & 0.467 & +0.46 & +0.85 & +0.68 & 30.83 \\
+32 & 0.300 & +0.47 & +0.86 & +0.73 & 26.70 \\
+48 & 0.239 & +0.51 & +0.84 & +0.80 & 25.38 \\
+63 & 0.303 & +0.45 & +0.88 & +0.71 & 24.10 \\
 \bottomrule
 \end{tabular}}
 \caption{\textbf{Why the rule works, and it is not by agreeing}, at 0.1 dB. Compare the second column with the fifth: the rule picks the oracle's exit on a minority of tiles and still tracks the oracle's saving. The three Spearman correlations are between a tile's bit count and, respectively, the depth the oracle assigns it, its mean distortion across the ladder, and the spread between its shallowest and its deepest exit. \emph{oracle} is the Lagrangian oracle measured inside the same run, which is the ceiling the rule is chasing.}
 \end{table}
 
-{\small results/raterank\_RECIPE512\_b01.json. The file stores spearman\_bits\_vs\_exit against the negated exit index, as scripts/raterank\_curve.py computes it, so the correlation with depth quoted here is its negative. The oracle column is measured at one frame per sequence and is not charged for the exit map; deployed configuration A, which carries the map, reads 29.9, 25.6, 20.9, 18.3, 15.6\% over the same five rates at two frames per sequence (results/signalled\_RECIPE512\_ctc53.json).}
+{\small results/raterank\_RECIPE512\_b01.json. The file stores spearman\_bits\_vs\_exit against the negated exit index, as scripts/raterank\_curve.py computes it, so the correlation with depth quoted here is its negative. The oracle column is measured at one frame per sequence and is not charged for the exit map; deployed configuration A, which carries the map, reads 34.5, 30.8, 26.7, 25.4, 24.1\% over the same five rates at two frames per sequence (results/signalled\_RECIPE512\_ctc53.json).}
 
-The rule agrees with the oracle on \RateRankAgreeLo to \RateRankAgreeHi of tiles, well under the frozen head's held-out \RetrainAgreeOld, and saves more at every rate. Agreement counts a disagreement between two exits that are within a hair of each other exactly as heavily as one that costs most of the frame's error, and most disagreements are of the first kind. What the rule gets right is the ordering. A tile's bit count correlates with the spread across the ladder, which is how much that tile stands to gain from depth, at \RateRankSpreadLo to \RateRankSpreadHi at every rate, and with the depth the oracle actually assigns at +0.39 to +0.54.
+The rule agrees with the oracle on \RateRankAgreeLo to \RateRankAgreeHi of tiles, well under the frozen head's held-out \RetrainAgreeOld, and saves more at every rate. Agreement counts a disagreement between two exits that are within a hair of each other exactly as heavily as one that costs most of the frame's error, and most disagreements are of the first kind. What the rule gets right is the ordering. A tile's bit count correlates with the spread across the ladder, which is how much that tile stands to gain from depth, at \RateRankSpreadLo to \RateRankSpreadHi at every rate, and with the depth the oracle actually assigns at +0.42 to +0.51.
 
 What the rule cannot do is see past that ordering. A rank-1 model gives every tile the same relative profile over exits, so b(t) decides where on the ladder a tile falls and never the shape of its trade-off. That is the ceiling this baseline sits at, and it is the part a learned head would have to earn its parameters on. Neither of our two heads does.
 
@@ -242,7 +242,7 @@ The same control makes a second point in passing. At w=0 the epoch-1 ladder save
 
 No head in this work was trained twice at two seeds, so there is no seed variance to report and none was measured; results/router\_ablation.json records seed 0 for all six of its runs and one\_checkpoint true. What can be reported is the spread between heads that were trained independently of each other, which is a looser quantity than seed variance and a larger one.
 
-\textbf{Two heads on one decoder.} The joint and frozen heads differ by +2.43 points at q0 and by -6.01 at q63, a range of 8.44 points across the five rates at 0.1 dB, and they cross: the joint head is the better of the two at q0 and the worse at every other rate. At 5 of the five rates the two heads differ from each other by more than the rule's margin over whichever of them is nearer, so a comparison against one trained head says less than it appears to. That is the reason both are printed in F.4 rather than the better of them.
+\textbf{Two heads on one decoder.} The joint and frozen heads differ by +2.43 points at q0 and by -6.01 at q63, a range of 8.44 points across the five rates at 0.1 dB, and they cross: the joint head is the better of the two at q0 and the worse at every other rate. At 0 of the five rates the two heads differ from each other by more than the rule's margin over whichever of them is nearer, so a comparison against one trained head says less than it appears to. That is the reason both are printed in F.4 rather than the better of them.
 
 \begin{table}[t]
 \centering

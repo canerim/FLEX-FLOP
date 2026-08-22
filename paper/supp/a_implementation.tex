@@ -70,7 +70,7 @@ Tile size is the other half of what tiling costs, and it is free in arithmetic: 
 \item \textbf{Padding.} Frames are padded by replication, bottom and right only, to a whole number of tiles; results/tile\_definition.json records the site as the RGB frame before the encoder and the mode as "replicate, bottom and right only: F.pad(x, (0, pw, 0, ph))". The stock codec aligns to 16, which is enough for the transform and not for a tile grid. Rate is charged on the true pixel count and PSNR computed after cropping back, so padding can cost and cannot flatter, and it does cost: a tile containing replicated rows gives up about twice the quality of one that does not.
 \item \textbf{Decibels.} The main paper's protocol box fixes the convention; what it does not say is that pooling all tiles into one mean squared error first, which is the other live convention, moves the answer by about a third of a 0.1 dB budget. Section E measures that gap. No table here mixes the two and every table says which it is on.
 \item \textbf{A second metric.} MS-SSIM is reported beside PSNR at the operating point, computed as Wang et al. 2003, 5 scales, 11-tap Gaussian sigma 1.5, valid region, luma plane in 4:2:0 on 0..255. The implementation is self-checked at start-up: identical inputs score 1.000000 and a 3$\times$3 box blur scores 0.7797, both recorded in results/supp\_opquality\_PAPER.json.
-\item \textbf{The map is billed.} The exit map is entropy coded from a per-frame histogram and its cost added to the rate before any saving is computed: 79 to 95 bits per frame at the 0.1 dB budget, at most 9.09e-05 bpp. Every row records map\_bits and the bpp it added.
+\item \textbf{The map is billed.} The exit map is entropy coded from a per-frame histogram and its cost added to the rate before any saving is computed: 64 to 91 bits per frame at the 0.1 dB budget, at most 8.92e-05 bpp. Every row records map\_bits and the bpp it added.
 \item \textbf{The reference.} The released decoder re-expressed in the same ladder and selected by K, so a K = 12 run cannot be quoted against the K = 6 remap.
 \end{itemize}
 
@@ -212,7 +212,7 @@ The loss has three terms. The rate-distortion term is the released loss, a multi
 
 An epoch is 47,451 optimiser steps, which is 379,614 images at batch 8. The run logs every 200 steps and the median interval is 299.8 s, so a step costs about 1.5 s and an epoch about 19.8 hours. Training is fp32 throughout on a single NVIDIA RTX A6000 with eight data workers.
 
-The pinned checkpoint is the first epoch boundary of a run whose launcher was given 16 epochs. Section H tabulates what the later checkpoints of this run and of its sibling measure at the same budget on the same frames; the one figure that belongs here is the floor, the quality given up before any tile exits early, which falls at every rate between the two epoch pins: it spans 0.0326 to 0.0659 dB at epoch 0 and 0.0295 to 0.0595 at epoch 1. No comparison in this paper between two runs at different epochs can be read as a comparison between two configurations, and where such a comparison appears it is labelled with both epochs. Nothing here extrapolates to a converged run.
+The pinned checkpoint is the first epoch boundary of a run whose launcher was given 16 epochs. Section H tabulates what the later checkpoints of this run and of its sibling measure at the same budget on the same frames; the one figure that belongs here is the floor, the quality given up before any tile exits early, which falls at every rate between the two epoch pins: it spans 0.0222 to 0.0485 dB at epoch 0 and 0.0295 to 0.0595 at epoch 1. No comparison in this paper between two runs at different epochs can be read as a comparison between two configurations, and where such a comparison appears it is labelled with both epochs. Nothing here extrapolates to a converged run.
 
 {\small Floors from results/signalled\_RECIPE512\_ctc53.json (runs/RECIPE512/ckpt\_PAPER.pth.tar, epoch 0) and results/signalled\_RECIPE512\_e1.json (runs/RECIPE512/ckpt\_PIN\_e1.pth.tar, epoch 1), both 53 sequences at the 0.1 dB budget.}
 
@@ -286,7 +286,7 @@ batch, when timing & 1 & supp\_latency\_batch, at 1, 2 and 4 \\
 
 A budget is a quality target rather than a multiplier, so the multiplier has to be found, and it is found twice over: an inner bisection on a cheap table of per-tile distortions, and an outer correction against what a real decode delivers. The two levels exist because the table measures each tile with every other tile at the same exit, while a routed frame is mixed and a tile's border sees whatever depth its neighbour chose. The residual between them is small and nearly constant, so shifting the inner target by it converges in two or three passes, and each pass costs one decode per frame rather than one per bisection step.
 
-Section G writes that search out line by line, with the shape each step returns. Three details of it change what the numbers mean. A rate whose floor exceeds its budget is written out with a reachability flag rather than dropped, so a saturated or unreachable row is visible instead of absent. The saving is measured and not modelled: a forward hook on every convolution and linear layer counts the multiply-accumulates the routed decode performed and divides by the same count for the released decode on the same latent, so the ratio needs no calibration constant and a module skipped by an early exit costs nothing because its hook never fires. The gap between model and meter is reported in every row: at the 0.1 dB budget it runs from 0.43 to 0.69 points, always in the direction of the model flattering us, and it is the measured column the paper quotes.
+Section G writes that search out line by line, with the shape each step returns. Three details of it change what the numbers mean. A rate whose floor exceeds its budget is written out with a reachability flag rather than dropped, so a saturated or unreachable row is visible instead of absent. The saving is measured and not modelled: a forward hook on every convolution and linear layer counts the multiply-accumulates the routed decode performed and divides by the same count for the released decode on the same latent, so the ratio needs no calibration constant and a module skipped by an early exit costs nothing because its hook never fires. The gap between model and meter is reported in every row: at the 0.1 dB budget it runs from 0.58 to 0.77 points, always in the direction of the model flattering us, and it is the measured column the paper quotes.
 
 Two saving columns exist and only one is quoted. One divides by our own deepest exit, the other by the released decoder, and the released decoder is the denominator every claim is stated against; it is exactly 1 in the units of the cost table, so the seam-repair tax stays inside the figure it is supposed to be net of. The same two-level scheme with different constants runs in scripts/raterank\_curve.py, scripts/router\_curve.py and scripts/hybrid\_curve.py, whose constants Table 8 lists.
 
@@ -325,8 +325,8 @@ Every run named in this document warm-starts from the released decoder through o
 \toprule
 results file & backs & checkpoint & seq$\times$fr \\
 \midrule
-signalled\_RECIPE512\_ctc53 & main results, complexity & pinned, e0 & 53$\times$1 \\
-saturation\_RECIPE512\_ctc53 & operating range & pinned, e0 & 53 fr \\
+signalled\_RECIPE512\_ctc53 & main results, complexity & pinned, e4 & 53$\times$1 \\
+saturation\_RECIPE512\_ctc53 & operating range & pinned, e4 & 53 fr \\
 static\_RECIPE512\_b01 & static controls & pinned, e0 & 53 \\
 per\_class\_RECIPE512 & per class & pinned, e0 & 53 fr \\
 router\_RECIPE512\_b01 & A against B & pinned, e0 & 53$\times$1 \\
@@ -393,14 +393,14 @@ q63 & 20.00 & 11.13 & -0.95 & 20.39 & 39.12 & RaceHorses \\
 \toprule
 quality index & path 1 & path 2 & gap \\
 \midrule
-q0 & 36.43 & 34.00 & 2.44 \\
-q16 & 31.44 & 28.54 & 2.90 \\
-q32 & 24.76 & 22.23 & 2.53 \\
-q48 & 20.39 & 18.23 & 2.15 \\
-q63 & 12.93 & 12.36 & 0.57 \\
+q0 & 36.14 & 33.64 & 2.49 \\
+q16 & 31.32 & 28.48 & 2.85 \\
+q32 & 24.43 & 21.86 & 2.57 \\
+q48 & 19.04 & 17.01 & 2.03 \\
+q63 & 10.32 & 10.83 & -0.51 \\
 \bottomrule
 \end{tabular}}
-\caption{Two implementations of the same quantity do not agree. Saving in percent at the 0.1 dB budget, computed by the curve-sweeping path and by the signalling path, which differ in how they pool distortion across tiles and frames. Take from it a floor on protocol sensitivity: the gap reaches 2.90 points, larger than several of the differences the paper draws conclusions from, so numbers from the two paths are never mixed inside one table.}
+\caption{Two implementations of the same quantity do not agree. Saving in percent at the 0.1 dB budget, computed by the curve-sweeping path and by the signalling path, which differ in how they pool distortion across tiles and frames. Take from it a floor on protocol sensitivity: the gap reaches 2.85 points, larger than several of the differences the paper draws conclusions from, so numbers from the two paths are never mixed inside one table.}
 \end{table}
 
 {\small Source: results/crosscheck\_paths.json. The file records no checkpoint field.}

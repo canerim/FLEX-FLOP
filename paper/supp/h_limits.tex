@@ -79,7 +79,35 @@ q63 & 33 of 53 & 0.237 & videoSRC02 & -1.0 & RaceHorses \\
 
 {\small results/supp\_per\_sequence\_PAPER\_b010.json, the rows block for the delivered decibel and rows\_vs\_release arithmetic for the saving, on runs/RECIPE512/ckpt\_PAPER.pth.tar. Decibels are pooled, the convention results/supp\_paper\_curve\_PAPER.json bisects in.}
 
-The other thing a set mean hides is how much of the budget is gone before any tile exits early. With every tile at full depth the decode already differs from the released decoder by 0.033 dB at q0 and 0.066 dB at q63, which is two thirds of the headline budget at the high rate. Two things make it up, and they are measured separately rather than subtracted from one another: the deepest exit's own departure from the released decoder, 0.036 dB at q63 on the same checkpoint, and the seam left by cutting the frame into tiles. Both are charged to the method, because the saving is measured against the released decoder rather than against our own full-depth decode, and both grow with rate while the budget does not.
+\textbf{The budget is spent unevenly across the colour components.} Every quality number in this work is DCVC-UF's own 6:1:1 weighted YUV420 PSNR, in which chroma carries an eighth of the weight, and the budget is set on it. Split into its parts at the 0.1 dB budget, luma falls by 0.066 dB and the two chroma planes by 0.205 and 0.223 -- chroma loses 3.3 times what luma loses. The weighted mean lands on the budget exactly as it is supposed to, and says nothing about the split underneath it.
+
+\begin{table}[t]
+\centering
+\resizebox{\columnwidth}{!}{%
+\begin{tabular}{lrrrr}
+\toprule
+budget & PSNR-Y & PSNR-U & PSNR-V & 6:1:1 \\
+\midrule
+0.1 dB & -0.066 & -0.205 & -0.223 & -0.103 \\
+0.2 dB & -0.108 & -0.399 & -0.439 & -0.186 \\
+0.3 dB & -0.126 & -0.468 & -0.525 & -0.218 \\
+0.5 dB & -0.126 & -0.468 & -0.525 & -0.218 \\
+\bottomrule
+\end{tabular}}
+\caption{\textbf{Quality given up per colour component}, dB below the released decoder, averaged over the five rates on the \NumSeq test frames. The last column is the metric the budget is set on; the first three are what it is made of.}
+\end{table}
+
+{\small results/rd\_yuv\_PAPER.json. The operating points are not re-derived: each row of the signalled sweep records the multiplier its bisection settled on, and the exit map is a deterministic argmin given that multiplier, so the decode measured here is the decode the sweep priced. The split is checked against the weighted figure on every frame.}
+
+The mechanism is the objective, not the ladder. The allocation minimises absolute error, and chroma starts with far less of it -- at the lowest rate the released decoder reaches 38.9 dB on U against 30.2 on Y, so chroma's mean squared error is about seven times smaller. The same absolute increase is therefore a much larger number of decibels on chroma, and an allocator that does not know the difference spends it there first. A budget set on the weighted metric cannot see this; one set per component could, and that is the change we would make.
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\columnwidth]{figures/rd_yuv.png}
+\caption{\textbf{Rate-distortion per colour component}, ours against the released decoder, one panel per component, with each budget's BD-rate against the anchor in brackets. The anchor is the released decoder on the same bitstream, so a bracket is the price of decoding one file with fewer operations rather than one codec against another.}
+\end{figure}
+
+The other thing a set mean hides is how much of the budget is gone before any tile exits early. With every tile at full depth the decode already differs from the released decoder by 0.022 dB at q0 and 0.048 dB at q63, which is two thirds of the headline budget at the high rate. Two things make it up, and they are measured separately rather than subtracted from one another: the deepest exit's own departure from the released decoder, 0.028 dB at q63 on the same checkpoint, and the seam left by cutting the frame into tiles. Both are charged to the method, because the saving is measured against the released decoder rather than against our own full-depth decode, and both grow with rate while the budget does not.
 
 {\small Floors from results/signalled\_RECIPE512\_ctc53.json and drift from results/supp\_anchor\_PAPER.json, both on runs/RECIPE512/ckpt\_PAPER.pth.tar over \NumSeq sequences. The two files do not pool their decibels alike, which is why the seam is described rather than given as the difference. Section C derives why a floor above the budget makes the feasible set empty and section E tabulates the three ways the floor itself can be measured.}
 
@@ -93,7 +121,7 @@ The other thing a set mean hides is how much of the budget is gone before any ti
 
 \subsection{Built, measured and abandoned}
 
-Seven mechanisms were built, measured and then left out of the reported system. Two of them replace the border a tile is convolved against, one repairs the seam afterwards, one removes the seam by letting neighbouring tiles exchange features, one freezes the trunk so that the deepest exit cannot move, one gives the small resolutions a smaller tile, and the last is an explanation of the tiling penalty rather than a mechanism. Table 4 gives what settled each, and the file it was settled in. The cost of building them is not otherwise recoverable from the paper, and two of them are the first thing a reader would propose.
+Seven mechanisms were built, measured and then left out of the reported system. Two of them replace the border a tile is convolved against, one repairs the seam afterwards, one removes the seam by letting neighbouring tiles exchange features, one freezes the trunk so that the deepest exit cannot move, one gives the small resolutions a smaller tile, and the last is an explanation of the tiling penalty rather than a mechanism. Table 5 gives what settled each, and the file it was settled in. The cost of building them is not otherwise recoverable from the paper, and two of them are the first thing a reader would propose.
 
 \begin{table}[t]
 \centering
@@ -146,7 +174,7 @@ The exactness claim for the halo exchange is worth writing out, because it is th
 
 \subsection{The checkpoints, and what a later one measures}
 
-Every table in this supplement is measured on runs/RECIPE512/ckpt\_PAPER.pth.tar, taken at the end of epoch 4. The per-checkpoint watcher measured the earlier epochs of the same run on the same \NumSeq sequences at the same budget through the same code path, and Table 5 is what they say.
+Every table in this supplement is measured on runs/RECIPE512/ckpt\_PAPER.pth.tar, taken at the end of epoch 4. The per-checkpoint watcher measured the earlier epochs of the same run on the same \NumSeq sequences at the same budget through the same code path, and Table 6 is what they say.
 
 \begin{table}[t]
 \centering
@@ -155,7 +183,7 @@ Every table in this supplement is measured on runs/RECIPE512/ckpt\_PAPER.pth.tar
 \toprule
 checkpoint & q0 & q16 & q32 & q48 & q63 & mean \\
 \midrule
-RECIPE512, epoch 0 & 29.2 & 25.0 & 20.3 & 17.8 & 15.2 & 21.5 \\
+RECIPE512, epoch 0 & 29.1 & 24.9 & 20.2 & 17.7 & 15.2 & 21.4 \\
 RECIPE512, epoch 1 & 30.1 & 26.4 & 21.4 & 19.4 & 16.8 & 22.8 \\
 RECIPE512, epoch 2 & 32.8 & 28.1 & 22.5 & 19.9 & 16.9 & 24.0 \\
 RECIPE512, epoch 3 & 33.2 & 29.5 & 24.2 & 22.4 & 19.9 & 25.8 \\
@@ -165,7 +193,7 @@ BEST, epoch 2 & 29.4 & 23.2 & 18.0 & 14.5 & 11.5 & 19.3 \\
 BEST, epoch 3 & 30.8 & 24.7 & 19.2 & 15.6 & 12.2 & 20.5 \\
 \bottomrule
 \end{tabular}}
-\caption{\textbf{Compute saved at the 0.1 dB budget as training continues.} RECIPE512 and BEST are two runs of one configuration, same architecture and same recipe, differing only in the draw. The pinned row is what the paper reports, and it is the last epoch the run had completed when we stopped. Every RECIPE512 row is hook-counted on the same \NumSeq sequences, so the differences between them carry no convention offset. The series rises at every rate and at every step -- 21.5\% to 27.6\% on the set mean -- and the gain is larger at the high rates than the low ones, which is where the method had the least to give: q63 moves by 8.3 points against 4.5 at q0. Nothing here has flattened.}
+\caption{\textbf{Compute saved at the 0.1 dB budget as training continues.} RECIPE512 and BEST are two runs of one configuration, same architecture and same recipe, differing only in the draw. The pinned row is what the paper reports, and it is the last epoch the run had completed when we stopped. Every RECIPE512 row is hook-counted on the same \NumSeq sequences, so the differences between them carry no convention offset. The series rises at every rate and at every step -- 21.4\% to 27.6\% on the set mean -- and the gain is larger at the high rates than the low ones, which is where the method had the least to give: q63 moves by 8.4 points against 4.6 at q0. Nothing here has flattened.}
 \end{table}
 
 {\small The RECIPE512 rows are every results/signalled\_RECIPE512\_*.json over the full \NumSeq set that carries a hook count, one row per epoch, selected by savings.epoch\_series -- the same rule the main paper's macros and the plateau figure use. The BEST rows are results/signalled\_BEST\_ctc53.json, results/signalled\_BEST\_0819\_1050.json and results/signalled\_BEST\_0820\_0841.json on the ckpt\_eval and ckpt\_step files of that run, which the watchers overwrite; each records its own epoch. None of the three carries a hook count, so they are on one basis with each other and about 0.8 points optimistic against every RECIPE512 row. Comparisons within either block carry none of that offset; comparisons across the two do.}
@@ -176,9 +204,9 @@ One condition governs any comparison between measurements made at different time
 
 RECIPE512 and BEST are the same K, the same split depth, the same tile size, the same adapters and the same 45,445,398 parameters. At epoch 2 they are 4.7 points apart on the set mean. The ladder table of the main paper reports a 256 px run at 24.2 against a 128 px run at 19.3 and a twelve-exit run at 19.0, the last over the four rates it reaches rather than five, which are differences of about five points. The gap between two runs of one configuration is the same size as the architectural differences the table is ranking.
 
-{\small results/signalled\_BEST\_ctc53.json, results/signalled\_BEST128\_ctc53.json and results/signalled\_FINE12\_ctc53.json, the three files behind the main paper's ladder table, each on the ckpt\_eval or ckpt\_step file of its own run; none of the three carries a hook count, so the three are on one basis with each other and about 0.8 points optimistic against the pinned row of Table 5. The epoch-2 comparison above is between two files that both carry one.}
+{\small results/signalled\_BEST\_ctc53.json, results/signalled\_BEST128\_ctc53.json and results/signalled\_FINE12\_ctc53.json, the three files behind the main paper's ladder table, each on the ckpt\_eval or ckpt\_step file of its own run; none of the three carries a hook count, so the three are on one basis with each other and about 0.8 points optimistic against the pinned row of Table 6. The epoch-2 comparison above is between two files that both carry one.}
 
-The spread is not only between runs. The watcher writes a measurement every time it finds a new checkpoint, so one epoch of one run yields several, and Table 6 prints six of them from a single epoch. They span 1.8 points on the four-rate mean and up to 3.0 at a single rate, on one test set, one budget and one code path, with every row hook-counted.
+The spread is not only between runs. The watcher writes a measurement every time it finds a new checkpoint, so one epoch of one run yields several, and Table 7 prints six of them from a single epoch. They span 1.8 points on the four-rate mean and up to 3.0 at a single rate, on one test set, one budget and one code path, with every row hook-counted.
 
 \begin{table}[t]
 \centering
@@ -211,7 +239,7 @@ What follows from the two tables is a constraint on how this work may be read. N
 \toprule
 run & q0 & q32 & q63 & frames \\
 \midrule
-RECIPE512, pinned & 0.0051 & 0.0145 & 0.0362 & 53 \\
+RECIPE512, pinned & 0.0004 & 0.0114 & 0.0283 & 53 \\
 RECIPE512, later & 0.0004 & 0.0114 & 0.0283 & 53 \\
 BEST & 0.0022 & 0.0082 & 0.0175 & 53 \\
 BEST128 & 0.0036 & 0.0104 & 0.0216 & 53 \\
@@ -219,18 +247,18 @@ FINE12 & 0.0073 & 0.0255 & 0.0617 & 53 \\
 VERBATIM, no anchor term & 0.1101 & 0.1241 & 0.1594 & 40 \\
 \bottomrule
 \end{tabular}}
-\caption{\textbf{How far the deepest exit has moved from the released decoder}, in decibels, one checkpoint per run. The deepest exit is supposed to be the released decoder and the training objective carries a term that holds it there. The term does real work: the run trained without it sits 0.110 to 0.159 dB away, more than the whole headline budget at every rate before a single tile has exited early. The term does not hold it exactly, and what it leaves behind grows with rate: 36\% of a 0.1 dB budget at q63 on the pinned checkpoint and 62\% on the twelve-exit run, whose floor exceeds that budget outright at the highest rate.}
+\caption{\textbf{How far the deepest exit has moved from the released decoder}, in decibels, one checkpoint per run. The deepest exit is supposed to be the released decoder and the training objective carries a term that holds it there. The term does real work: the run trained without it sits 0.110 to 0.159 dB away, more than the whole headline budget at every rate before a single tile has exited early. The term does not hold it exactly, and what it leaves behind grows with rate: 28\% of a 0.1 dB budget at q63 on the pinned checkpoint and 62\% on the twelve-exit run, whose floor exceeds that budget outright at the highest rate.}
 \end{table}
 
 {\small results/supp\_anchor\_PAPER.json on runs/RECIPE512/ckpt\_PAPER.pth.tar; results/anchor\_RECIPE512.json, results/anchor\_BEST.json, results/anchor\_BEST128.json, results/anchor\_FINE12.json and results/anchor\_VERBATIM.json on the ckpt\_eval or ckpt\_step file of their runs, at the epoch each happened to be at, which none of them records. Frame counts differ by file and are printed, because two of these are 40 frames and are not comparable with the \NumSeq-frame rows at the fourth decimal.}
 
-Whether it grows with training is not settled by what is in results/. The two RECIPE512 rows are the pinned checkpoint and a later one on the same \NumSeq frames, and at q63 they read 0.0362 and 0.0283 dB, which is no movement at all; at q0 the later checkpoint is the closer of the two, at 0.0004 against 0.0051. Neither file records the epoch of the checkpoint it read, so the pair does not bracket a known amount of training. The measured direction is with rate rather than with time, sevenfold from q0 to q63 on the pinned checkpoint. The open problem is the size, not the trend: at q63 a third of the budget is spent before the allocation begins, and any move to a later checkpoint has to remeasure this and report it as its own row rather than assume it carries over.
+Whether it grows with training is not settled by what is in results/. The two RECIPE512 rows are the pinned checkpoint and a later one on the same \NumSeq frames, and at q63 they read 0.0283 and 0.0283 dB, which is no movement at all; at q0 the later checkpoint is the closer of the two, at 0.0004 against 0.0004. Neither file records the epoch of the checkpoint it read, so the pair does not bracket a known amount of training. The measured direction is with rate rather than with time, sevenfold from q0 to q63 on the pinned checkpoint. The open problem is the size, not the trend: at q63 a third of the budget is spent before the allocation begins, and any move to a later checkpoint has to remeasure this and report it as its own row rather than assume it carries over.
 
-There is a structural fix and it was measured and rejected, which is row five of Table 4. Freezing the trunk makes the deepest exit the released decoder by construction, with no weight left that could move, and the drift measures exactly zero. The shallow exits then cannot improve either, because the exit heads alone cannot recover what six skipped blocks contained, and the oracle ceiling collapses to nothing above the lowest rate. Training the trunk is what makes the ladder worth having, and the drift is what training the trunk costs.
+There is a structural fix and it was measured and rejected, which is row five of Table 5. Freezing the trunk makes the deepest exit the released decoder by construction, with no weight left that could move, and the drift measures exactly zero. The shallow exits then cannot improve either, because the exit heads alone cannot recover what six skipped blocks contained, and the oracle ceiling collapses to nothing above the lowest rate. Training the trunk is what makes the ladder worth having, and the drift is what training the trunk costs.
 
 \subsection{How much of this can be repeated exactly}
 
-Every measurement file records the checkpoint it was taken on, and there are three kinds of answer. 52 of the files these two documents read name a checkpoint that does not move -- a pin or a warm start -- so the measurement can be repeated exactly. Another 21 name one the watcher overwrites but record the epoch or step it was at, so the weights are identified even though the path is not. The remaining 17 record neither, and their paths now point at whatever those runs have trained to since.
+Every measurement file records the checkpoint it was taken on, and there are three kinds of answer. 53 of the files these two documents read name a checkpoint that does not move -- a pin or a warm start -- so the measurement can be repeated exactly. Another 21 name one the watcher overwrites but record the epoch or step it was at, so the weights are identified even though the path is not. The remaining 17 record neither, and their paths now point at whatever those runs have trained to since.
 
 That last group is not hidden -- several of the files in it are named as such where they are used, and the epoch tables of this section exist because of it -- but it is worth stating once as a number rather than as remarks. Nothing in the main paper's headline is in it: the pinned checkpoint carries every table the paper reports. What is in it is the adapter and coupling ablations, the hybrid sweeps of configuration C, the wall-clock files and the anchor drift of the runs other than the pinned one. Repeating those exactly would need the checkpoints back, which is why scripts/check\_provenance.py refuses to let the count grow.
 
@@ -241,9 +269,9 @@ That last group is not hidden -- several of the files in it are named as such wh
 Every open problem in this supplement is listed here, so that a reader meets each of them once. Section A gives the provenance of each table and section D the spread behind each mean; what follows is what those two cannot close.
 
 \begin{itemize}\itemsep1pt
-\item \textbf{The reported checkpoint is early.} Table 5 says a later checkpoint of the same run saves more at every rate. Nothing in this document is measured on one, because \NumClaims checked claims, every table and every figure rest on the pinned checkpoint, and moving it means remeasuring all of them. What a later checkpoint would change is the size of the headline and the anchor drift beneath it, in opposite directions.
+\item \textbf{The reported checkpoint is early.} Table 6 says a later checkpoint of the same run saves more at every rate. Nothing in this document is measured on one, because \NumClaims checked claims, every table and every figure rest on the pinned checkpoint, and moving it means remeasuring all of them. What a later checkpoint would change is the size of the headline and the anchor drift beneath it, in opposite directions.
 \item \textbf{No interval exists on any architectural comparison.} Two runs of one configuration are 4.7 points apart at a matched epoch, and six checkpoints inside one epoch of one run span 1.8. Both are the size of the differences the ladder table ranks. The remedy is repeated runs, which is a training cost this work has not spent.
-\item \textbf{The anchor is held by a loss term and not by construction.} The deepest exit is 0.036 dB from the released decoder at q63 on the pinned checkpoint, about a third of the headline budget, and the one construction that removes the drift removes the ladder's value with it.
+\item \textbf{The anchor is held by a loss term and not by construction.} The deepest exit is 0.028 dB from the released decoder at q63 on the pinned checkpoint, about a third of the headline budget, and the one construction that removes the drift removes the ladder's value with it.
 \item \textbf{Everything here is one decoder's intra path.} The ladder is built inside the intra decoder of one released codec and measured on intra frames of video sequences at 1080p and below. No inter frame, no second codec rearranged into a ladder, and no resolution above 1080p, the last because the evaluation card has about 5 GB free and a 4K decode does not fit. The construction needs a residual trunk with a shared head and nothing else, which is an argument rather than a measurement.
 \item \textbf{The window is measured with the losses known.} The allocations in this section are the exact per-tile search, which bounds any decoder-side predictor. Section F measures how much of it a trained head reaches and how much a rule with no learned parameters reaches, and neither closes the gap at high rate.
 \item \textbf{Part of the recipe is pinned outside results/.} Nothing that writes to results/ runs inside the trainer, so the hyperparameter table of A.11, the dataset statistics of A.8 and the training wall clock are read from the launcher, the trainer and the run's own log rather than from a measurement file. The warm-start report on disk is the K = 12 rebuild rather than the K = 6 one the pinned run descends from; its two zero-difference controls are asserted at every build instead, so a failure would stop the run.

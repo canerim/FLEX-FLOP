@@ -1,5 +1,18 @@
 {
   "n_claims": 90,
-  "n_passed": 90,
-  "failed": []
+  "n_passed": 78,
+  "failed": [
+    "rate-rank: best margin (pts)",
+    "rate-rank: worst margin (pts)",
+    "hybrid: rho=1 reproduces A (max |diff|)",
+    "hybrid: rates where half beats all",
+    "hybrid: best margin over A (pts)",
+    "hybrid: end offset, smallest",
+    "hybrid: end offset, largest",
+    "band: spread after rescaling, mean",
+    "band: spread after rescaling, worst",
+    "band: power-law exponent",
+    "band: power-law R2",
+    "band: power-law worst residual"
+  ]
 }

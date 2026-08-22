@@ -66,5 +66,7 @@
     "aten::pad": 30,
     "aten::neg": 24,
     "aten::repeat": 6
-  }
+  },
+  "ckpt_epoch": 4,
+  "stamped_by": "scripts/stamp_ckpt.py"
 }
