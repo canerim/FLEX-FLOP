@@ -65,6 +65,25 @@ STRUCTURAL |= {n: "wall-clock of a fixed architecture" for n in (
     "supp_latency_batch_1920x1080.json", "supp_latency_cpu_1920x1080.json",
     "supp_power.json")}
 
+# Derived: computed from other result files rather than from a decode, so
+# they have no checkpoint of their own and asking for one is a category
+# error. Their provenance is the provenance of what fed them, which is what
+# check_provenance already follows.
+DERIVED = {
+    "band_collapse.json": "fitted to signalled_*_grid + saturation",
+    "band_collapse_BEST.json": "the same fit on the second run",
+    "bd_sensitivity.json": "BD integrals over the frontier",
+    "bdrate.json": "paper_metrics, from the anchor and the sweeps",
+    "exit_vs_rate.json": "summarised from the per-class histograms",
+    "probe_rows.json": "a table assembled for the supplement",
+    "router_inputs_rows.json": "a table assembled for the supplement",
+    "router_retrain_compare.json": "two router files against each other",
+    "setbudget_rows.json": "a table assembled for the supplement",
+    "spread_stats.json": "per-sequence spread of the sweeps",
+    "tilesize_adaptive.json": "arithmetic over the tile table",
+    "frontier_law.json": "fitted to the frontier",
+}
+
 # Historical: measured on a named other checkpoint on purpose.
 HISTORICAL_PAT = [
     (re.compile(r"_BEST"), "the second training run"),
@@ -106,7 +125,7 @@ def main() -> int:
         p = R / "results" / n
         if not p.exists():
             continue
-        if n in STRUCTURAL:
+        if n in STRUCTURAL or n in DERIVED:
             skipped += 1
             continue
         if any(pat.search(n) for pat, _ in HISTORICAL_PAT):
@@ -119,6 +138,12 @@ def main() -> int:
         if not isinstance(d, dict):
             continue
         ck = str(d.get("ckpt", ""))
+        # ckpt_eval is the file the watcher overwrites every epoch, so a
+        # result that names it names nothing: it cannot be checked, only
+        # re-measured.
+        if "ckpt_eval" in ck or "ckpt_step" in ck:
+            unlabelled.append(f"{n}  (names a moving checkpoint)")
+            continue
         if "RECIPE512" not in ck:
             # No checkpoint recorded and not exempt: nobody can tell what it
             # was measured on, which is the same problem in a quieter form.

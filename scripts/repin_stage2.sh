@@ -90,4 +90,22 @@ step signalled_RECIPE512_grid.json \
       --budgets 0.05 0.075 0.1 0.15 0.2 0.25 0.3 0.4 0.5 \
       --device cuda:0 --frames 1 --out "$TMP/signalled_RECIPE512_grid.json"
 
+# --- the ablations. Comparisons within a checkpoint, so they were valid on
+#     the old one; they are re-measured here because the paper quotes their
+#     numbers next to numbers from this one.
+step adapter_ablation.json \
+  $PY -u scripts/adapter_ablation.py --ckpt "$PIN" --device cuda:0 \
+      --out "$TMP/adapter_ablation.json"
+step coupling_ablation.json \
+  $PY -u scripts/coupling_ablation.py --ckpt "$PIN" --device cuda:0 \
+      --out "$TMP/coupling_ablation.json"
+step map_transfer.json \
+  $PY -u scripts/map_transfer.py --ckpt "$PIN" --device cuda:0 \
+      --out "$TMP/map_transfer.json"
+
+# --- the per-component split, which reads the sweep from stage 1
+step rd_yuv_PAPER.json \
+  $PY -u scripts/rd_yuv.py --ckpt "$PIN" --device cuda:0 \
+      --out "$TMP/rd_yuv_PAPER.json"
+
 echo "=== stage 2 done $(date '+%F %T') ===" | tee -a "$LOG"
