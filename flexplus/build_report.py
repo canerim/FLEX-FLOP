@@ -201,17 +201,30 @@ def content(F):
         "encoder, the entropy model, the rest of the trunk, the exits and the "
         "head all frozen. The target is therefore a pure regression and any "
         "quality change is attributable to the stem alone.", BODY))
-    ne = J("narrow_eval.json")
+    # One file per width, written as each finishes, so the table fills in
+    # during the sweep rather than only at the end of it.
+    allrows = []
+    for f in sorted((HERE / "results").glob("narrow_eval*.json")):
+        try:
+            d = json.loads(f.read_text())
+        except Exception:
+            continue
+        for r in d.get("rows", []):
+            r = dict(r)
+            r["objective"] = "decode" if "decode" in f.name else "feature"
+            allrows.append(r)
+    ne = {"rows": allrows} if allrows else None
     if ne and ne.get("rows"):
-        widths = sorted({r["width"] for r in ne["rows"]})
-        rows = [["width", "channels", "ceiling", "extra dB q0",
+        widths = sorted({(r["objective"], r["width"]) for r in ne["rows"]})
+        rows = [["objective", "width", "channels", "ceiling", "extra dB q0",
                  "q32", "q63"]]
-        for w in widths:
-            rs = {r["qp"]: r for r in ne["rows"] if r["width"] == w}
+        for obj, w in widths:
+            rs = {r["qp"]: r for r in ne["rows"]
+                  if r["width"] == w and r["objective"] == obj}
             if not rs:
                 continue
             any_r = next(iter(rs.values()))
-            rows.append([f"{w:g}", str(any_r["channels"]),
+            rows.append([obj, f"{w:g}", str(any_r["channels"]),
                          f"{any_r['ceiling_narrow_pct']:.1f}%"]
                         + [f"{rs[q]['extra_db']:+.3f}" if q in rs else "--"
                            for q in (0, 32, 63)])
@@ -227,14 +240,44 @@ def content(F):
             "document is built from the result files, so it fills itself in.",
             NOTE))
 
+    A(Paragraph("4.1 What the two widths say", H2))
+    A(Paragraph(
+        "Doubling the stem's arithmetic buys almost nothing. Going from half "
+        "width to 0.707 -- which is twice the multiply-accumulates, since cost "
+        "goes as the square -- reduces the extra distortion by about a "
+        "seventh, from +0.48 to +0.40 dB at the lowest rate and +1.94 to "
+        "+1.67 at the highest, while the ceiling falls from 66.0% to 63.4%. "
+        "Both widths plateau at about 5% relative error in the stem feature "
+        "after twenty thousand steps, and both are between two and eight "
+        "times outside the budget.", BODY))
+    A(Paragraph(
+        "Capacity is therefore not what binds. What binds is the objective. A "
+        "5% error in the feature comes out as 5.4 times the dB at the lowest "
+        "rate and 9.6 at the highest, because the trunk below the split "
+        "amplifies stem error rather than absorbing it -- and a mean squared "
+        "error on the feature is indifferent to the direction of the error "
+        "while the trunk is not. Matching the stem is the wrong thing to ask "
+        "for; matching the decode is the thing that is measured.", BODY))
+    A(Paragraph(
+        "One number is worth keeping from the negative result. At about equal "
+        "distortion the trained half-width stem runs three times less "
+        "arithmetic than untrained channel dropping did, so training does "
+        "move the trade-off. It moves it from far outside the budget to still "
+        "far outside it.", BODY))
+
     A(Paragraph("5. Open", H1))
     A(Paragraph(
-        "Whether a width that fits the budget exists is the whole question "
-        "and it is not answered here yet. If one does, two things follow that "
-        "this experiment does not test: the narrow stem has to be trained "
-        "jointly with the ladder rather than fitted to a frozen target, and a "
-        "single fixed width is a weaker design than a gate that chooses one "
-        "per frame, which is what Dynamic Slimmable Network is for.", BODY))
+        "The decode objective is running: the narrow stem trained on the "
+        "reconstruction at an exit sampled per step, which is the quantity "
+        "the budget is set in. If it closes the gap, two things follow that "
+        "neither experiment tests: the narrow stem should be trained jointly "
+        "with the ladder rather than fitted to anything frozen, and a single "
+        "fixed width is a weaker design than a gate that picks one per frame, "
+        "which is what Dynamic Slimmable Network is for. If it does not close "
+        "the gap, the width axis is answered for this decoder and the "
+        "remaining candidate from the literature is spatial sparsity, whose "
+        "cost falls only linearly but which leaves the stem's shapes alone.",
+        BODY))
 
 
 def build(out=str(HERE / "FLEX-PLUS.pdf")):
