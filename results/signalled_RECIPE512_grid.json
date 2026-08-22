@@ -3,15 +3,16 @@
   "ckpt_epoch": 4,
   "ckpt_step": null,
   "budgets": [
+    0.03,
+    0.04,
     0.05,
     0.075,
     0.1,
+    0.125,
     0.15,
     0.2,
     0.25,
-    0.3,
-    0.4,
-    0.5
+    0.3
   ],
   "frames_per_seq": 1,
   "n_sequences": 53,
@@ -74,6 +75,36 @@
   "rows": [
     {
       "qp": 0,
+      "saving_pct": 15.35682813176569,
+      "saving_pct_measured": 14.112717931684818,
+      "model_minus_measured": 0.43939238943207926,
+      "db_vs_uf": 0.0299825449913459,
+      "db_vs_uf_table": 0.029974046848573774,
+      "saving_pct_vs_release": 14.552110321116897,
+      "lam": 8.069340310611593e-06,
+      "bpp_added": 9.471002987183673e-05,
+      "map_bits": 101.62731224635861,
+      "floor_db": 0.02218279027476696,
+      "budget_db": 0.03,
+      "budget_reachable": true
+    },
+    {
+      "qp": 0,
+      "saving_pct": 20.27171883942946,
+      "saving_pct_measured": 18.979146499575172,
+      "model_minus_measured": 0.534581871631147,
+      "db_vs_uf": 0.03998931021130872,
+      "db_vs_uf_table": 0.03999475689323725,
+      "saving_pct_vs_release": 19.51372837120632,
+      "lam": 1.4143127827991563e-05,
+      "bpp_added": 9.463865660632709e-05,
+      "map_bits": 99.6050225068938,
+      "floor_db": 0.02218279027476696,
+      "budget_db": 0.04,
+      "budget_reachable": true
+    },
+    {
+      "qp": 0,
       "saving_pct": 24.06674106166048,
       "saving_pct_measured": 22.74665944323054,
       "model_minus_measured": 0.5981710787668746,
@@ -115,6 +146,21 @@
       "map_bits": 64.08974056198912,
       "floor_db": 0.02218279027476696,
       "budget_db": 0.1,
+      "budget_reachable": true
+    },
+    {
+      "qp": 0,
+      "saving_pct": 38.5716198750262,
+      "saving_pct_measured": 37.1928816478403,
+      "model_minus_measured": 0.7947284313672114,
+      "db_vs_uf": 0.12489453140857085,
+      "db_vs_uf_table": 0.1248907412419904,
+      "saving_pct_vs_release": 37.98761007920751,
+      "lam": 0.00015078632713993925,
+      "bpp_added": 7.135362167856436e-05,
+      "map_bits": 53.38984710990258,
+      "floor_db": 0.02218279027476696,
+      "budget_db": 0.125,
       "budget_reachable": true
     },
     {
@@ -178,33 +224,26 @@
       "budget_reachable": true
     },
     {
-      "qp": 0,
-      "saving_pct": 39.69785537359849,
-      "saving_pct_measured": 38.32750687430051,
-      "model_minus_measured": 0.7970471839903652,
-      "db_vs_uf": 0.13905803718656864,
-      "db_vs_uf_table": 0.1390580084385737,
-      "saving_pct_vs_release": 39.124554058290876,
-      "lam": 1.0,
-      "bpp_added": 6.6647516529592e-05,
-      "map_bits": 48.0,
-      "floor_db": 0.02218279027476696,
-      "budget_db": 0.4,
-      "budget_reachable": true
+      "qp": 16,
+      "saving_pct": null,
+      "db_vs_uf": null,
+      "floor_db": 0.03162763780861531,
+      "budget_db": 0.03,
+      "budget_reachable": false
     },
     {
-      "qp": 0,
-      "saving_pct": 39.69785537359849,
-      "saving_pct_measured": 38.32750687430051,
-      "model_minus_measured": 0.7970471839903652,
-      "db_vs_uf": 0.13905803718656864,
-      "db_vs_uf_table": 0.1390580084385737,
-      "saving_pct_vs_release": 39.124554058290876,
-      "lam": 1.0,
-      "bpp_added": 6.6647516529592e-05,
-      "map_bits": 48.0,
-      "floor_db": 0.02218279027476696,
-      "budget_db": 0.5,
+      "qp": 16,
+      "saving_pct": 13.327697650441584,
+      "saving_pct_measured": 12.096362480228319,
+      "model_minus_measured": 0.40732614759052765,
+      "db_vs_uf": 0.03998339197264528,
+      "db_vs_uf_table": 0.0399791072737777,
+      "saving_pct_vs_release": 12.503688627818846,
+      "lam": 4.135229801249807e-06,
+      "bpp_added": 9.179913895485684e-05,
+      "map_bits": 97.90073904451334,
+      "floor_db": 0.03162763780861531,
+      "budget_db": 0.04,
       "budget_reachable": true
     },
     {
@@ -250,6 +289,21 @@
       "map_bits": 74.57718961868646,
       "floor_db": 0.03162763780861531,
       "budget_db": 0.1,
+      "budget_reachable": true
+    },
+    {
+      "qp": 16,
+      "saving_pct": 34.9702314385828,
+      "saving_pct_measured": 33.59661419681553,
+      "model_minus_measured": 0.7553681762961233,
+      "db_vs_uf": 0.12476614915396807,
+      "db_vs_uf_table": 0.12476882637249974,
+      "saving_pct_vs_release": 34.35198237311165,
+      "lam": 5.327502549334808e-05,
+      "bpp_added": 7.625854500868296e-05,
+      "map_bits": 62.890114104972696,
+      "floor_db": 0.03162763780861531,
+      "budget_db": 0.125,
       "budget_reachable": true
     },
     {
@@ -313,34 +367,20 @@
       "budget_reachable": true
     },
     {
-      "qp": 16,
-      "saving_pct": 39.69785537359849,
-      "saving_pct_measured": 38.32750687430051,
-      "model_minus_measured": 0.7970471839903652,
-      "db_vs_uf": 0.17203353507057675,
-      "db_vs_uf_table": 0.17203352565191826,
-      "saving_pct_vs_release": 39.124554058290876,
-      "lam": 1.0,
-      "bpp_added": 6.6647516529592e-05,
-      "map_bits": 48.0,
-      "floor_db": 0.03162763780861531,
-      "budget_db": 0.4,
-      "budget_reachable": true
+      "qp": 32,
+      "saving_pct": null,
+      "db_vs_uf": null,
+      "floor_db": 0.04117947485174914,
+      "budget_db": 0.03,
+      "budget_reachable": false
     },
     {
-      "qp": 16,
-      "saving_pct": 39.69785537359849,
-      "saving_pct_measured": 38.32750687430051,
-      "model_minus_measured": 0.7970471839903652,
-      "db_vs_uf": 0.17203353507057675,
-      "db_vs_uf_table": 0.17203352565191826,
-      "saving_pct_vs_release": 39.124554058290876,
-      "lam": 1.0,
-      "bpp_added": 6.6647516529592e-05,
-      "map_bits": 48.0,
-      "floor_db": 0.03162763780861531,
-      "budget_db": 0.5,
-      "budget_reachable": true
+      "qp": 32,
+      "saving_pct": null,
+      "db_vs_uf": null,
+      "floor_db": 0.04117947485174914,
+      "budget_db": 0.04,
+      "budget_reachable": false
     },
     {
       "qp": 32,
@@ -385,6 +425,21 @@
       "map_bits": 84.44052517414093,
       "floor_db": 0.04117947485174914,
       "budget_db": 0.1,
+      "budget_reachable": true
+    },
+    {
+      "qp": 32,
+      "saving_pct": 31.596250579042255,
+      "saving_pct_measured": 30.250251390698313,
+      "model_minus_measured": 0.6956727024401843,
+      "db_vs_uf": 0.1249278177559938,
+      "db_vs_uf_table": 0.12494568923874846,
+      "saving_pct_vs_release": 30.945924093138498,
+      "lam": 2.083680647046917e-05,
+      "bpp_added": 8.149694441911987e-05,
+      "map_bits": 73.72321333750239,
+      "floor_db": 0.04117947485174914,
+      "budget_db": 0.125,
       "budget_reachable": true
     },
     {
@@ -448,34 +503,20 @@
       "budget_reachable": true
     },
     {
-      "qp": 32,
-      "saving_pct": 39.69785537359849,
-      "saving_pct_measured": 38.32750687430051,
-      "model_minus_measured": 0.7970471839903652,
-      "db_vs_uf": 0.21777989019481642,
-      "db_vs_uf_table": 0.21777986348518785,
-      "saving_pct_vs_release": 39.124554058290876,
-      "lam": 1.0,
-      "bpp_added": 6.6647516529592e-05,
-      "map_bits": 48.0,
-      "floor_db": 0.04117947485174914,
-      "budget_db": 0.4,
-      "budget_reachable": true
+      "qp": 48,
+      "saving_pct": null,
+      "db_vs_uf": null,
+      "floor_db": 0.04537954111583531,
+      "budget_db": 0.03,
+      "budget_reachable": false
     },
     {
-      "qp": 32,
-      "saving_pct": 39.69785537359849,
-      "saving_pct_measured": 38.32750687430051,
-      "model_minus_measured": 0.7970471839903652,
-      "db_vs_uf": 0.21777989019481642,
-      "db_vs_uf_table": 0.21777986348518785,
-      "saving_pct_vs_release": 39.124554058290876,
-      "lam": 1.0,
-      "bpp_added": 6.6647516529592e-05,
-      "map_bits": 48.0,
-      "floor_db": 0.04117947485174914,
-      "budget_db": 0.5,
-      "budget_reachable": true
+      "qp": 48,
+      "saving_pct": null,
+      "db_vs_uf": null,
+      "floor_db": 0.04537954111583531,
+      "budget_db": 0.04,
+      "budget_reachable": false
     },
     {
       "qp": 48,
@@ -520,6 +561,21 @@
       "map_bits": 88.77239373494994,
       "floor_db": 0.04537954111583531,
       "budget_db": 0.1,
+      "budget_reachable": true
+    },
+    {
+      "qp": 48,
+      "saving_pct": 29.90534339310988,
+      "saving_pct_measured": 28.57655899384279,
+      "model_minus_measured": 0.6623825406674086,
+      "db_vs_uf": 0.12492818304530855,
+      "db_vs_uf_table": 0.1249514676208766,
+      "saving_pct_vs_release": 29.2389415345102,
+      "lam": 1.144142925113556e-05,
+      "bpp_added": 8.474629733494257e-05,
+      "map_bits": 79.1933499844569,
+      "floor_db": 0.04537954111583531,
+      "budget_db": 0.125,
       "budget_reachable": true
     },
     {
@@ -583,34 +639,20 @@
       "budget_reachable": true
     },
     {
-      "qp": 48,
-      "saving_pct": 39.69785537359849,
-      "saving_pct_measured": 38.32750687430051,
-      "model_minus_measured": 0.7970471839903652,
-      "db_vs_uf": 0.25259073022401557,
-      "db_vs_uf_table": 0.25259067437980537,
-      "saving_pct_vs_release": 39.124554058290876,
-      "lam": 1.0,
-      "bpp_added": 6.6647516529592e-05,
-      "map_bits": 48.0,
-      "floor_db": 0.04537954111583531,
-      "budget_db": 0.4,
-      "budget_reachable": true
+      "qp": 63,
+      "saving_pct": null,
+      "db_vs_uf": null,
+      "floor_db": 0.04847150362307592,
+      "budget_db": 0.03,
+      "budget_reachable": false
     },
     {
-      "qp": 48,
-      "saving_pct": 39.69785537359849,
-      "saving_pct_measured": 38.32750687430051,
-      "model_minus_measured": 0.7970471839903652,
-      "db_vs_uf": 0.25259073022401557,
-      "db_vs_uf_table": 0.25259067437980537,
-      "saving_pct_vs_release": 39.124554058290876,
-      "lam": 1.0,
-      "bpp_added": 6.6647516529592e-05,
-      "map_bits": 48.0,
-      "floor_db": 0.04537954111583531,
-      "budget_db": 0.5,
-      "budget_reachable": true
+      "qp": 63,
+      "saving_pct": null,
+      "db_vs_uf": null,
+      "floor_db": 0.04847150362307592,
+      "budget_db": 0.04,
+      "budget_reachable": false
     },
     {
       "qp": 63,
@@ -655,6 +697,21 @@
       "map_bits": 90.6063492073203,
       "floor_db": 0.04847150362307592,
       "budget_db": 0.1,
+      "budget_reachable": true
+    },
+    {
+      "qp": 63,
+      "saving_pct": 28.707227167093528,
+      "saving_pct_measured": 27.386071195514322,
+      "model_minus_measured": 0.6433632155165725,
+      "db_vs_uf": 0.12489965621311709,
+      "db_vs_uf_table": 0.12492997178210402,
+      "saving_pct_vs_release": 28.029434411030895,
+      "lam": 7.1172487423601036e-06,
+      "bpp_added": 8.656740424733438e-05,
+      "map_bits": 83.73825522638717,
+      "floor_db": 0.04847150362307592,
+      "budget_db": 0.125,
       "budget_reachable": true
     },
     {
@@ -715,36 +772,6 @@
       "map_bits": 48.0,
       "floor_db": 0.04847150362307592,
       "budget_db": 0.3,
-      "budget_reachable": true
-    },
-    {
-      "qp": 63,
-      "saving_pct": 39.69785537359849,
-      "saving_pct_measured": 38.32750687430051,
-      "model_minus_measured": 0.7970471839903652,
-      "db_vs_uf": 0.2879855834509967,
-      "db_vs_uf_table": 0.2879855879494604,
-      "saving_pct_vs_release": 39.124554058290876,
-      "lam": 1.0,
-      "bpp_added": 6.6647516529592e-05,
-      "map_bits": 48.0,
-      "floor_db": 0.04847150362307592,
-      "budget_db": 0.4,
-      "budget_reachable": true
-    },
-    {
-      "qp": 63,
-      "saving_pct": 39.69785537359849,
-      "saving_pct_measured": 38.32750687430051,
-      "model_minus_measured": 0.7970471839903652,
-      "db_vs_uf": 0.2879855834509967,
-      "db_vs_uf_table": 0.2879855879494604,
-      "saving_pct_vs_release": 39.124554058290876,
-      "lam": 1.0,
-      "bpp_added": 6.6647516529592e-05,
-      "map_bits": 48.0,
-      "floor_db": 0.04847150362307592,
-      "budget_db": 0.5,
       "budget_reachable": true
     }
   ]

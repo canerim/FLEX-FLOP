@@ -22,7 +22,7 @@ With c\_j = 0.6088, recorded in results/saturation\_RECIPE512\_ctc53.json, and c
 
 Section D tabulates both ends at all nine measured rates, and that table is not repeated here. The one property of it this section needs is that a budget in decibels means something different at each rate: both ends widen as the rate falls, the band widens faster than the floor rises, and the 0.1 dB budget that sits \BandUseLow\% of the way up the band at q0 sits \BandUseHigh\% of the way up at q63. The rescaling of Section A.4 turns out to need that position rather than the decibel figure.
 
-A budget below the floor admits no allocation at all, which is a different failure from a budget falling in a gap of the Lagrangian hull, where the sweep returns the nearest reachable point and Everett's argument still makes it optimal for the compute it consumes [26, 27]. Below the floor the feasible set is empty and there is nothing to return. No cell of the grid in Section A.3 is in that state on the reported weights: the smallest budget swept, 0.05 dB, is above the floor at every rate, so every cell has an allocation to return. On an earlier checkpoint the three highest rates were below the floor at that budget and the grid recorded them as unreachable, which is what the machinery for an empty feasible set is there for.
+A budget below the floor admits no allocation at all, which is a different failure from a budget falling in a gap of the Lagrangian hull, where the sweep returns the nearest reachable point and Everett's argument still makes it optimal for the compute it consumes [26, 27]. Below the floor the feasible set is empty and there is nothing to return. 7 of the cells of the grid in Section A.3 are in that state and are recorded as such rather than dropped: q16, q32, q32, q48, q48, q63 and q63, at the smallest budgets swept, have floors of 0.032, 0.041, 0.041, 0.045, 0.045, 0.048 and 0.048 dB.
 
 Two estimates of the floor are in play and they are not interchangeable. Table 1 gives them, because the rescaling below divides by the distance between the floor and the saturation point, and near the floor that is a small difference divided by a small difference.
 
@@ -96,15 +96,16 @@ Table 3 is the sweep the main paper quotes: nine budgets across five rates, meas
 \toprule
 budget dB & q0 & q16 & q32 & q48 & q63 \\
 \midrule
+0.030 & 14.6 & none & none & none & none \\
+0.040 & 19.5 & 12.5 & none & none & none \\
 0.050 & 23.3 & 17.4 & 11.4 & 8.2 & 5.1 \\
 0.075 & 29.9 & 25.5 & 20.9 & 19.6 & 18.1 \\
 0.100 & 34.5 & 30.8 & 26.7 & 25.4 & 24.1 \\
+0.125 & 38.0 & 34.4 & 30.9 & 29.2 & 28.0 \\
 0.150 & 39.1 & 37.1 & 33.9 & 32.3 & 30.9 \\
 0.200 & 39.1 & 39.1 & 38.3 & 36.4 & 35.0 \\
 0.250 & 39.1 & 39.1 & 39.1 & 39.1 & 37.8 \\
 0.300 & 39.1 & 39.1 & 39.1 & 39.1 & 39.1 \\
-0.400 & 39.1 & 39.1 & 39.1 & 39.1 & 39.1 \\
-0.500 & 39.1 & 39.1 & 39.1 & 39.1 & 39.1 \\
 \bottomrule
 \end{tabular}}
 \caption{\textbf{Compute saved against budget, release-referenced.} \emph{none} marks a budget below that rate's floor, where no allocation is admissible. Reading down a column, the return on a looser budget falls away long before the ceiling is reached. Reading across a row, the rate dependence is largest at the tightest budget and vanishes once every rate has saturated. Cells are the cost model against the release, the convention the rest of this supplement compares in; hook-counted, the 0.1 dB row reads 33.7\% at q0 and 23.5\% at q63, which reproduces the headline of the main paper, \MainLowRate\% and \MainHighRate\%, to within a tenth of a point on a different frame count.}
@@ -135,19 +136,19 @@ so that u = 0 is the floor and u = 1 the saturation point. At a matched decibel 
 \toprule
 u & q0 & q16 & q32 & q48 & q63 & spread \\
 \midrule
-0.1 & 23.3 & 17.4 & 15.2 & 16.5 & 18.7 & 8.17 \\
-0.2 & 23.3 & 21.1 & 21.5 & 22.8 & 24.2 & 3.12 \\
-0.3 & 26.0 & 25.6 & 25.5 & 26.7 & 27.4 & 1.88 \\
-0.4 & 29.0 & 28.5 & 28.5 & 29.5 & 30.6 & 2.12 \\
-0.5 & 31.3 & 31.2 & 31.0 & 32.3 & 32.6 & 1.61 \\
-0.6 & 33.4 & 32.9 & 33.6 & 34.0 & 34.5 & 1.60 \\
-0.7 & 34.5 & 34.7 & 35.2 & 35.7 & 36.0 & 1.54 \\
+0.1 & 18.3 & 16.2 & 15.2 & 16.5 & 18.7 & 3.57 \\
+0.2 & 22.9 & 21.1 & 21.5 & 22.8 & 24.2 & 3.14 \\
+0.3 & 26.0 & 25.6 & 25.5 & 26.8 & 27.9 & 2.38 \\
+0.4 & 29.0 & 28.5 & 28.8 & 29.8 & 30.7 & 2.16 \\
+0.5 & 31.3 & 31.2 & 31.6 & 32.3 & 32.6 & 1.41 \\
+0.6 & 33.4 & 33.2 & 33.6 & 34.0 & 34.5 & 1.35 \\
+0.7 & 35.2 & 35.0 & 35.2 & 35.7 & 36.0 & 1.03 \\
 \bottomrule
 \end{tabular}}
 \caption{\textbf{The five rates at matched positions in their own windows.} Read across a row: five rates whose raw savings at a matched decibel differ by \BandRawSpread points agree here to about a point and a half. The spread is largest at the bottom of the window, where the floor subtraction is a large fraction of a small number and the two files disagree about the floor by a few thousandths of a decibel.}
 \end{table}
 
-{\small Computed in the build from results/signalled\_RECIPE512\_grid.json and results/saturation\_RECIPE512\_ctc53.json by the rescaling in scripts/tradeoff\_figure.py, linearly interpolated between measured points. Every rate has measured points spanning u = 0.10 to 0.70, so no entry is an extrapolation. Mean spread over these seven positions 2.86 points, worst 8.17, against the \BandSpreadMean and \BandSpreadMax recorded in results/band\_collapse.json, which interpolates on a wider grid and holds the last measured value beyond each rate's last point.}
+{\small Computed in the build from results/signalled\_RECIPE512\_grid.json and results/saturation\_RECIPE512\_ctc53.json by the rescaling in scripts/tradeoff\_figure.py, linearly interpolated between measured points. Every rate has measured points spanning u = 0.10 to 0.70, so no entry is an extrapolation. Mean spread over these seven positions 2.15 points, worst 3.57, against the \BandSpreadMean and \BandSpreadMax recorded in results/band\_collapse.json, which interpolates on a wider grid and holds the last measured value beyond each rate's last point.}
 
 The collapsed curve is then described by one free number. With C the architectural ceiling, which is not fitted,
 
@@ -182,19 +183,19 @@ The main paper says the collapse replicates and the exponent does not. Two check
 \toprule
 what is changed & $\beta$ before & $\beta$ after & $\Delta$ \\
 \midrule
-the checkpoint, pinned to BEST, each with its own ceiling & 0.325 & 0.310 & -0.015 \\
-the sweep, 106 frames to \NumSeq, one checkpoint & 0.325 & 0.229 & -0.096 \\
+the checkpoint, pinned to BEST, each with its own ceiling & 0.320 & 0.310 & -0.010 \\
+the sweep, 106 frames to \NumSeq, one checkpoint & 0.320 & 0.229 & -0.091 \\
 the budget axis, per-frame decibels to pooled, one sweep & 0.239 & 0.160 & -0.078 \\
-the assumed ceiling C, \CeilingModelled to 41.91 & 0.325 & 0.385 & 0.060 \\
-the floor, the saturation file to the grid's own & 0.325 & 0.338 & 0.013 \\
-the rate, fitted one at a time, q63 against q32 & 0.285 & 0.360 & 0.075 \\
+the assumed ceiling C, \CeilingModelled to 41.91 & 0.320 & 0.382 & 0.062 \\
+the floor, the saturation file to the grid's own & 0.320 & 0.339 & 0.019 \\
+the rate, fitted one at a time, q63 against q32 & 0.284 & 0.354 & 0.071 \\
 the fit form, 1/b from the inverse fit, per rate & 0.326 & 0.459 & 0.133 \\
 \bottomrule
 \end{tabular}}
 \caption{\textbf{What moves the exponent.} Take from it that the exponent describes a sweep rather than a decoder. Every row except the floor moves it by as much as changing the checkpoint does, re-sweeping the same checkpoint moves it twice as far, and reading the budget axis in the other averaging convention moves it almost as far again. The comparison the main paper draws between \BandExp and \BandExpB is inside the noise of every other choice on this list.}
 \end{table}
 
-{\small Computed in the build. Rows 4, 5 and 6, and the before column of rows 1 and 2, refit results/signalled\_RECIPE512\_grid.json against results/saturation\_RECIPE512\_ctc53.json; the after column of row 1 uses results/signalled\_BEST\_grid.json and results/saturation\_BEST\_ctc53.json on runs/BEST/ckpt\_eval.pth.tar, whose ceiling is its own; the after column of row 2 uses the operating points of results/supp\_paper\_curve\_PAPER.json and row 3 uses its raw sweep; row 7 is results/frontier\_law.json, fitted to results/curve\_BEST.json on the same second run over 40 sequences. Every fit is over u in [0.15, 0.85] and through the origin in log space, on 16 to 22 points. R$^2$ stays between 0.897 and 0.969 across the rows, so no row is a bad fit to its own data.}
+{\small Computed in the build. Rows 4, 5 and 6, and the before column of rows 1 and 2, refit results/signalled\_RECIPE512\_grid.json against results/saturation\_RECIPE512\_ctc53.json; the after column of row 1 uses results/signalled\_BEST\_grid.json and results/saturation\_BEST\_ctc53.json on runs/BEST/ckpt\_eval.pth.tar, whose ceiling is its own; the after column of row 2 uses the operating points of results/supp\_paper\_curve\_PAPER.json and row 3 uses its raw sweep; row 7 is results/frontier\_law.json, fitted to results/curve\_BEST.json on the same second run over 40 sequences. Every fit is over u in [0.15, 0.85] and through the origin in log space, on 20 to 22 points. R$^2$ stays between 0.897 and 0.968 across the rows, so no row is a bad fit to its own data.}
 
 \begin{figure}[t]
 \centering
@@ -204,7 +205,7 @@ the fit form, 1/b from the inverse fit, per rate & 0.326 & 0.459 & 0.133 \\
 
 {\small docs/figures/band\_sensitivity\_PAPER.png, drawn by scripts/supp\_fig\_band\_sensitivity.py, which imports the fit from this section's module so that the figure and the table cannot disagree. Sources as for the table above.}
 
-The floor is the one input the exponent is insensitive to over this window, and only over this window. Refitting over the whole range instead, where the points below u = 0.15 sit, moves it from 0.347 to 0.387 when the floor is taken from the grid rather than from the saturation file. A rescaling is only as good as the two numbers it divides by, and near the floor it is dividing a small difference by a small difference.
+The floor is the one input the exponent is insensitive to over this window, and only over this window. Refitting over the whole range instead, where the points below u = 0.15 sit, moves it from 0.339 to 0.384 when the floor is taken from the grid rather than from the saturation file. A rescaling is only as good as the two numbers it divides by, and near the floor it is dividing a small difference by a small difference.
 
 Both fits are re-run in this build from the files they name, so the exponent quoted here is the exponent those inputs now support: results/band\_collapse\_BEST.json reproduces at 0.3253 with R$^2$ = 0.9843 against the 0.2827 and 0.9068 it records, and the two digits the paper quotes, \BandExp and \BandRTwo, are unchanged by the exercise.
 

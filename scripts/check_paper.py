@@ -42,10 +42,16 @@ def J(*names):
     def rank(item):
         _n, p = item
         try:
-            on_pin = PINNED in (json.load(open(p)).get("ckpt") or "")
+            d = json.load(open(p))
         except Exception:
-            on_pin = False
-        return (0 if on_pin else 1, -p.stat().st_mtime)
+            d = {}
+        on_pin = PINNED in (d.get("ckpt") or "")
+        meta = d.get("router2_meta") or {}
+        head_off = bool(d.get("router2")) and meta.get("ckpt_epoch") != d.get("ckpt_epoch")
+        # Same order as make_paper_tables.pick(): hand order decides among
+        # files that are equally on the pin, so a newer file cannot take the
+        # comparison away from the configuration the paper reports.
+        return (0 if on_pin else 1, 1 if head_off else 0, names.index(_n))
 
     return json.load(open(min(found, key=rank)[1]))
 
@@ -296,16 +302,19 @@ if _hy and _rb and _sa:
 # ---- the band collapse ----------------------------------------------------
 bc = J("band_collapse.json")
 if bc:
-    # 15.5 was the spread under the arithmetic model. The band figure now uses
-    # the hook count, like every table, and the spread it measures is 14.0.
-    claim("band: raw spread at 0.1 dB", 14.0, bc["raw_spread_at_tenth_db"], 0.2)
-    claim("band: spread after rescaling, mean", 1.7, bc["band_spread_mean"], 0.2)
-    claim("band: spread after rescaling, worst", 2.2,
+    # 15.5 was the spread under the arithmetic model, and 14.0 was the hook
+    # count on epoch 0. These are epoch 4 on the ten-budget grid: the earlier
+    # grid put three of its nine budgets inside q0's band and the rest past
+    # saturation, so the rescaled spread it reported was a sampling artefact
+    # (3.2 on average against 2.0 here, 8.0 at worst against 3.5).
+    claim("band: raw spread at 0.1 dB", 10.2, bc["raw_spread_at_tenth_db"], 0.2)
+    claim("band: spread after rescaling, mean", 2.0, bc["band_spread_mean"], 0.2)
+    claim("band: spread after rescaling, worst", 3.5,
           bc["band_spread_max_excl_edge"], 0.2)
     if "power_exponent" in bc:
-        claim("band: power-law exponent", 0.38, bc["power_exponent"], 0.01)
-        claim("band: power-law R2", 0.989, bc["power_r2"], 0.002)
-        claim("band: power-law worst residual", 2.0, bc["power_max_err"], 0.1)
+        claim("band: power-law exponent", 0.34, bc["power_exponent"], 0.01)
+        claim("band: power-law R2", 0.984, bc["power_r2"], 0.002)
+        claim("band: power-law worst residual", 2.2, bc["power_max_err"], 0.1)
     bb = J("band_collapse_BEST.json")
     if bb:
         claim("band on BEST: raw spread", 16.9, bb["raw_spread_at_tenth_db"], 0.2)

@@ -336,13 +336,13 @@ raterank\_RECIPE512\_b03 & rate rank & pinned, e4 & 53$\times$1 \\
 raterank\_RECIPE512\_b05 & rate rank & pinned, e4 & 53$\times$1 \\
 hybrid\_RECIPE512\_b01\_fixed & partial signalling & pinned, e4 & 53$\times$1 \\
 hybrid\_raterank\_b01 & rate rank, second run & pinned, e4 & 53$\times$1 \\
-hybrid\_v3\_b01 & rate rank, second run & R512/eval & 53$\times$1 \\
+hybrid\_v3\_b01\_pin & the retrained head, on the pin & pinned, e4 & 53$\times$1 \\
 latency\_RECIPE512\_sorted & latency & R512/eval & - \\
 router\_latency & operating range & R512/eval & - \\
 adapter\_ablation & adapter ablation & pinned, e4 & 16 fr \\
 combined\_RECIPE512\_b01 & blend & pinned, e4 & 53$\times$1 \\
 hybrid\_RECIPE512\_b03\_fixed & macros only & pinned, e4 & 53$\times$1 \\
-hybrid\_lorenz\_b01 & macros only & R512/eval & 53$\times$1 \\
+hybrid\_lorenz\_b01 & macros only & pinned, e4 & 53$\times$1 \\
 coupling\_ablation & macros only & pinned, e4 & 16 fr \\
 map\_transfer & macros only & pinned, e4 & - \\
 band\_collapse & macros only & \emph{none} & - \\
@@ -358,7 +358,7 @@ bdrate & BD-rate & \emph{none} & - \\
 check\_paper & claim check & \emph{none} & - \\
 \bottomrule
 \end{tabular}}
-\caption{Provenance of every generated table in the main paper. These are the 31 results files scripts/make\_paper\_tables.py reads, and the checkpoint column is read from each file at build time rather than typed. Take from it that 16 of the 31 are on the pinned checkpoint and the rest are not, so a reader comparing two rows of two different tables should check this column first. R512 abbreviates the run RECIPE512, "eval" is a per-epoch file the watcher overwrites in place, and "none" means the file records no checkpoint field.}
+\caption{Provenance of every generated table in the main paper. These are the 31 results files scripts/make\_paper\_tables.py reads, and the checkpoint column is read from each file at build time rather than typed. Take from it that 18 of the 31 are on the pinned checkpoint and the rest are not, so a reader comparing two rows of two different tables should check this column first. R512 abbreviates the run RECIPE512, "eval" is a per-epoch file the watcher overwrites in place, and "none" means the file records no checkpoint field.}
 \end{table}
 
 The pinned group of Table 10 carries the headline saving, the operating range, the per-class breakdown, the static controls and both routed configurations, so the paper's central claim rests on one epoch of one run measured consistently. Section H states what the rest of the column costs in reproducibility.
@@ -393,19 +393,19 @@ q63 & 26.69 & 10.77 & -0.95 & 29.87 & 39.12 & BQSquare \\
 \toprule
 quality index & path 1 & path 2 & gap \\
 \midrule
-q0 & 36.08 & 33.68 & 2.41 \\
-q16 & 31.19 & 28.40 & 2.79 \\
-q32 & 24.80 & 22.28 & 2.52 \\
-q48 & 19.38 & 17.44 & 1.94 \\
-q63 & 11.66 & 11.48 & 0.18 \\
+q0 & 37.24 & 34.74 & 2.50 \\
+q16 & 32.13 & 29.24 & 2.90 \\
+q32 & 24.84 & 22.36 & 2.48 \\
+q48 & 20.19 & 18.05 & 2.14 \\
+q63 & 14.48 & 13.14 & 1.34 \\
 \bottomrule
 \end{tabular}}
-\caption{Two implementations of the same quantity do not agree. Saving in percent at the 0.1 dB budget, computed by the curve-sweeping path and by the signalling path, which differ in how they pool distortion across tiles and frames. Take from it a floor on protocol sensitivity: the gap reaches 2.79 points, larger than several of the differences the paper draws conclusions from, so numbers from the two paths are never mixed inside one table.}
+\caption{Two implementations of the same quantity do not agree. Saving in percent at the 0.1 dB budget, computed by the curve-sweeping path and by the signalling path, which differ in how they pool distortion across tiles and frames. Take from it a floor on protocol sensitivity: the gap reaches 2.90 points, larger than several of the differences the paper draws conclusions from, so numbers from the two paths are never mixed inside one table.}
 \end{table}
 
 {\small Source: results/crosscheck\_paths.json. The file records no checkpoint field.}
 
-Evaluation itself is deterministic once a checkpoint is fixed: the sequence list, the leading frames and the tile grid are all fixed and no crop is random. scripts/check\_paper.py re-reads \NumClaims numerical claims out of the paper's prose and checks each against the file it is supposed to come from. As recorded in results/check\_paper.json, 82 of them pass. One does not: "band: raw spread at 0.1 dB", which is listed among the limitations of section H rather than presented as passing.
+Evaluation itself is deterministic once a checkpoint is fixed: the sequence list, the leading frames and the tile grid are all fixed and no crop is random. scripts/check\_paper.py re-reads \NumClaims numerical claims out of the paper's prose and checks each against the file it is supposed to come from. As recorded in results/check\_paper.json, 88 of them pass. All of them pass.
 
 \subsection{Data, code and provenance}
 

@@ -54,7 +54,7 @@ qp & 0.4923 & 0.0114 & 0.4900 & -0.0083 \\
 
 \textbf{The floor.} The quality index on its own reaches 0.4923 $\pm$ 0.0114 where the best single constant exit scores 0.5006. A head with no per-tile information cannot beat the best constant in expectation, and this one does not. The floor belongs beside every other row: an agreement of 0.62 cannot be read at all until it is known that 0.50 is free.
 
-\textbf{The ablation's own cost.} The six trainings took 6.4 hours of one NVIDIA RTX A6000 between them, from 55 to 66 minutes each (the ablation's own records, field wall\_s). The decoder is frozen for all of them, so none of that is decoder training. It is the price of the question, and it is worth stating beside a negative answer.
+\textbf{The ablation's own cost.} The six trainings took 6.2 hours of one NVIDIA RTX A6000 between them, from 55 to 67 minutes each (the ablation's own records, field wall\_s). The decoder is frozen for all of them, so none of that is decoder training. It is the price of the question, and it is worth stating beside a negative answer.
 
 One head covers every operating point, and the quality index is what makes that possible. It is an input rather than a selector: during training it is drawn uniformly at random for each batch, so one set of weights sees all 64 indices, and at test time the same weights run at every rate with the offline $\beta$ table of A.12 in front of them. No head per rate is proposed anywhere in this work, since that multiplies the stored parameters by the number of operating points a deployment offers, and F.5 is the measurement of what the single head gives up for that.
 
@@ -175,11 +175,11 @@ Two trained heads exist on this checkpoint and both are reported, since averagin
 \toprule
 q & 0.1 rule & 0.1 joint & 0.1 frozen & 0.3 rule & 0.3 joint & 0.3 frozen \\
 \midrule
-0 & 34.48 & 26.84 & 33.31 & 39.12 & 39.08 & 38.96 \\
-16 & 30.10 & 18.36 & 29.06 & 39.12 & 39.08 & 38.96 \\
-32 & 24.90 & 13.21 & 24.76 & 39.12 & 39.08 & 38.96 \\
-48 & 22.06 & 8.26 & 21.16 & 39.12 & 37.03 & 38.96 \\
-63 & 20.14 & 5.13 & 18.21 & 39.12 & 34.07 & 38.96 \\
+0 & 34.48 & 32.63 & 33.31 & 39.12 & 39.08 & 38.96 \\
+16 & 30.10 & 28.29 & 29.06 & 39.12 & 39.08 & 38.96 \\
+32 & 24.90 & 21.47 & 24.76 & 39.12 & 39.08 & 38.96 \\
+48 & 22.06 & 15.96 & 21.16 & 39.12 & 39.08 & 38.96 \\
+63 & 20.14 & 11.44 & 18.21 & 39.12 & 39.08 & 38.96 \\
 \bottomrule
 \end{tabular}}
 \caption{\textbf{The calibrated bit rule against two trained heads}, as the percentage of the released decoder's operations saved, at two budgets and five rates. The rule is ahead of both heads in every cell of this table. Every column is charged for what it costs: each head pays its own compute share and the rule pays nothing. The two heads are further apart from each other than either is from the rule at several rates, which F.5 takes up.}
@@ -201,9 +201,9 @@ q & 0.1 rule & 0.1 joint & 0.1 frozen & 0.3 rule & 0.3 joint & 0.3 frozen \\
 
 {\small Drawn by scripts/supp\_router\_figs.py from the six files named in the table above and results/saturation\_RECIPE512\_ctc53.json.}
 
-\textbf{At the working budget.} Against the joint head the rule is ahead by +7.65 points at its narrowest and +15.02 at its widest, the latter at q63. Against the frozen head it is ahead by +0.13 to +1.94 points. The rule reaches \RateRankLow\% at q0 and \RateRankHigh\% at q63, and it is ahead at all \RateRankNWins measured rates whichever head it is measured against. A head trained on this decoder against this oracle returns nothing over a rule with no learned parameters, while carrying a compute share that the rule does not.
+\textbf{At the working budget.} Against the joint head the rule is ahead by +1.81 points at its narrowest and +8.70 at its widest, the latter at q63. Against the frozen head it is ahead by +0.13 to +1.94 points. The rule reaches \RateRankLow\% at q0 and \RateRankHigh\% at q63, and it is ahead at all \RateRankNWins measured rates whichever head it is measured against. A head trained on this decoder against this oracle returns nothing over a rule with no learned parameters, while carrying a compute share that the rule does not.
 
-\textbf{At 0.3 dB the low rates saturate and the arithmetic is exact.} At q0, q16 and q32 all three configurations send every tile to the shallowest exit, so the maps are identical and the only difference left is the price of deciding. The joint head falls 0.044 points below the \CeilingModelled\% ceiling and the frozen head 0.163, which are their compute shares of 0.044\% and 0.163\% to three decimals. At q48 and q63 the budget still binds and the allocations separate: the rule reaches 39.1\% and \RateRankLoose\% against the joint head's 37.0\% and 34.1\% and the frozen head's 39.0\% and 39.0\%. A looser budget gives an allocation more room to be wrong in as well as more room to be right, and the frozen head uses it to be wrong.
+\textbf{At 0.3 dB the low rates saturate and the arithmetic is exact.} At q0, q16 and q32 all three configurations send every tile to the shallowest exit, so the maps are identical and the only difference left is the price of deciding. The joint head falls 0.044 points below the \CeilingModelled\% ceiling and the frozen head 0.163, which are their compute shares of 0.044\% and 0.163\% to three decimals. At q48 and q63 the budget still binds and the allocations separate: the rule reaches 39.1\% and \RateRankLoose\% against the joint head's 39.1\% and 39.1\% and the frozen head's 39.0\% and 39.0\%. A looser budget gives an allocation more room to be wrong in as well as more room to be right, and the frozen head uses it to be wrong.
 
 \textbf{Why 0.5 dB is not in that table.} At 0.5 dB every rate saturates for every configuration, so all three maps are identical and the only thing a comparison could measure is the cost vector each file was written with. The rule's 0.5 dB file is on runs/RECIPE512/ckpt\_eval.pth.tar, where the shallowest exit was priced at 0.6088 against the pinned 0.6088, a difference worth -0.00 points of apparent saving. The file is results/raterank\_RECIPE512\_b05.json and it records that the rule matches the oracle map exactly at all five rates there, which is the only thing read from it.
 
@@ -248,7 +248,7 @@ The same control makes a second point in passing. At w=0 the epoch-1 ladder save
 
 No head in this work was trained twice at two seeds, so there is no seed variance to report and none was measured; results/router\_ablation.json records seed 0 for all six of its runs and one\_checkpoint true. What can be reported is the spread between heads that were trained independently of each other, which is a looser quantity than seed variance and a larger one.
 
-\textbf{Two heads on one decoder.} The joint and frozen heads differ by -6.47 points at q0 and by -13.08 at q63, a range of 6.61 points across the five rates at 0.1 dB, and they cross: the joint head is the better of the two at q0 and the worse at every other rate. At 5 of the five rates the two heads differ from each other by more than the rule's margin over whichever of them is nearer, so a comparison against one trained head says less than it appears to. That is the reason both are printed in F.4 rather than the better of them.
+\textbf{Two heads on one decoder.} The joint and frozen heads differ by -0.68 points at q0 and by -6.76 at q63, a range of 6.08 points across the five rates at 0.1 dB, and they cross: the joint head is the better of the two at q0 and the worse at every other rate. At 3 of the five rates the two heads differ from each other by more than the rule's margin over whichever of them is nearer, so a comparison against one trained head says less than it appears to. That is the reason both are printed in F.4 rather than the better of them.
 
 \begin{table}[t]
 \centering

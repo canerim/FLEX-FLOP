@@ -102,7 +102,7 @@ CONSUMED = [
     ("raterank_RECIPE512_b05.json", "rate rank"),
     ("hybrid_RECIPE512_b01_fixed.json", "partial signalling"),
     ("hybrid_raterank_b01.json", "rate rank, second run"),
-    ("hybrid_v3_b01.json", "rate rank, second run"),
+    ("hybrid_v3_b01_pin.json", "the retrained head, on the pin"),
     ("latency_RECIPE512_sorted.json", "latency"),
     ("router_latency.json", "operating range"),
     ("adapter_ablation.json", "adapter ablation"),

@@ -93,10 +93,21 @@ def pick(*names):
     def rank(item):
         n, p = item
         try:
-            on_pin = PINNED in (json.load(open(p)).get("ckpt") or "")
+            d = json.load(open(p))
         except Exception:
-            on_pin = False
-        return (0 if on_pin else 1, -p.stat().st_mtime)
+            d = {}
+        on_pin = PINNED in (d.get("ckpt") or "")
+        # A router head fitted to other weights makes a file a measurement of
+        # a configuration the paper does not report, even when the decoder
+        # weights are the pinned ones.
+        meta = d.get("router2_meta") or {}
+        head_off = bool(d.get("router2")) and meta.get("ckpt_epoch") != d.get("ckpt_epoch")
+        # Hand order last, and it decides among files that are equally on the
+        # pin. Ranking those by mtime let a driver from the pre-refit chain
+        # rewrite router_RECIPE512_b01.json at 13:28 and take the headline
+        # away from the head the paper reports, silently, because the stale
+        # file was newer.
+        return (0 if on_pin else 1, 1 if head_off else 0, names.index(n))
 
     n, p = min(found, key=rank)
     others = [m for m, _ in found if m != n]

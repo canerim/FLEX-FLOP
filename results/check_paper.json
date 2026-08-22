@@ -1,12 +1,5 @@
 {
   "n_claims": 88,
-  "n_passed": 82,
-  "failed": [
-    "band: raw spread at 0.1 dB",
-    "band: spread after rescaling, mean",
-    "band: spread after rescaling, worst",
-    "band: power-law exponent",
-    "band: power-law R2",
-    "band: power-law worst residual"
-  ]
+  "n_passed": 88,
+  "failed": []
 }

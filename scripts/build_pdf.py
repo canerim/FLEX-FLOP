@@ -544,7 +544,7 @@ def content(colw, fullw):
         r"floor below which no allocation meets the budget and a saturation "
         r"point above which none improves; rescaling the budget between "
         r"those limits collapses five rate curves \BandRawSpread points "
-        r"apart onto one within \BandSpreadMean. And what is needed to "
+        r"apart to \BandSpreadMean apart on average. And what is needed to "
         r"allocate is already in the file: routing on the bits the entropy "
         r"model has spent on a tile matches our trained "
         r"\RouterParams-parameter router, ahead by \RateRankBeatsMean "

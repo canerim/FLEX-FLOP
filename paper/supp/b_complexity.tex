@@ -191,10 +191,10 @@ Because a hook count is exactly linear in the exit map, six mixtures spanning fo
 \begin{figure}[t]
 \centering
 \includegraphics[width=\columnwidth]{figures/supp_b_check.png}
-\caption{\textbf{The model against the meter.} \textbf{a}, six decodes at two resolutions: the hook-count assembly lies on the identity line and the model the paper reports lies above it. \textbf{b}, the same residual over the whole budget grid, 9 budgets by 5 quality indices on \NumSeq sequences. It is positive everywhere, grows with the budget, and saturates at the value an all-exit-2 map implies.}
+\caption{\textbf{The model against the meter.} \textbf{a}, six decodes at two resolutions: the hook-count assembly lies on the identity line and the model the paper reports lies above it. \textbf{b}, the same residual over the whole budget grid, 10 budgets by 5 quality indices on \NumSeq sequences. It is positive everywhere, grows with the budget, and saturates at the value an all-exit-2 map implies.}
 \end{figure}
 
-Figure 3b runs the same comparison over the whole operating range rather than six points of it. The residual is positive in all 45 cells, from 0.241 to 0.797 points, and it saturates at exactly that exits-2 value. The paper's headline figures are the hook counts, so no subtraction is left for a reader to do; had the model been quoted instead, every figure would have been between 0.58 and 0.77 points higher. At the 0.1 dB budget the model reads 34.46\% at the lowest rate where the meter reads \MainLowRate\%, and 24.10\% at the highest where the meter reads \MainHighRate\%.
+Figure 3b runs the same comparison over the whole operating range rather than six points of it. The residual is positive in all 43 cells, from 0.241 to 0.797 points, and it saturates at exactly that exits-2 value. The paper's headline figures are the hook counts, so no subtraction is left for a reader to do; had the model been quoted instead, every figure would have been between 0.58 and 0.77 points higher. At the 0.1 dB budget the model reads 34.46\% at the lowest rate where the meter reads \MainLowRate\%, and 24.10\% at the highest where the meter reads \MainHighRate\%.
 
 {\small results/signalled\_RECIPE512\_grid.json and results/signalled\_RECIPE512\_ctc53.json, both on the pinned checkpoint. Both columns are in the files: saving\_pct\_vs\_release is the model, saving\_pct\_measured is the hook count, and model\_minus\_measured is their difference.}
 
