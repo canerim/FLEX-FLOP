@@ -106,6 +106,15 @@ def _sources():
                R / "scripts/paper_metrics.py"])
 
 
+def _in_prose(text: str, pos: int) -> bool:
+    """Is this offset inside a triple-quoted block or a comment?"""
+    head = text[:pos]
+    if head.count('"""') % 2 or head.count("'''") % 2:
+        return True
+    line = head.rsplit(chr(10), 1)[-1]
+    return line.lstrip().startswith("#")
+
+
 def fallbacks() -> set[str]:
     """Names a document mentions but does not read.
 
@@ -137,9 +146,16 @@ def fallbacks() -> set[str]:
         # pre-fix hybrid file, which one section reads directly and another
         # lists behind the pinned-head measurement, was exempted from the
         # check that is there to catch exactly that file going stale.
+        # Docstrings and comments do not count. Section F's docstring says
+        # the curves "were first written as router_RECIPE512_b0*_PAPER.json
+        # and then renamed", and reading that sentence as a live read put
+        # three superseded files back into the sweep.
         for m in re.finditer(r'"([A-Za-z0-9_.\-]+\.json)"', t):
-            if not any(a <= m.start() < b for a, b in spans):
-                live.add(m.group(1))
+            if any(a <= m.start() < b for a, b in spans):
+                continue
+            if _in_prose(t, m.start()):
+                continue
+            live.add(m.group(1))
     return behind - live
 
 
@@ -161,6 +177,12 @@ def main() -> int:
         return 1
 
     stale, unlabelled, ok, skipped = [], [], 0, 0
+    # A file can be measured on the pinned decoder and still report a
+    # configuration the paper does not: the router head is a second set of
+    # weights, and one fitted to a different epoch answers a question about
+    # that epoch. Twice today a file like that was the newest on disk and won
+    # the tie-break in both readers.
+    head_off = []
     for n in sorted(documents_read()):
         p = R / "results" / n
         if not p.exists():
@@ -196,15 +218,28 @@ def main() -> int:
         elif e != want:
             stale.append((n, e))
         else:
-            ok += 1
+            meta = d.get("router2_meta") or {}
+            # Compare what the head was fitted to against what the file was
+            # measured on. The epoch is the wrong field for this: the heads
+            # fitted before the repin record no epoch at all, and "None !=
+            # 4" reads as a different epoch when what it means is a head
+            # fitted to a checkpoint that moves.
+            hck = str(meta.get("ckpt") or "")
+            if d.get("router2") and hck and hck != ck:
+                head_off.append((n, hck.rsplit("/", 1)[-1]))
+            else:
+                ok += 1
 
     for n, e in stale:
         print(f"     epoch {e}, wanted {want}: {n}")
     for n in unlabelled:
         print(f"     no epoch recorded: {n}")
+    for n, he in head_off:
+        print(f"     measured on the pin, with a head fitted to {he}: {n}")
     print(f"\n  {ok} on epoch {want}, {len(stale)} stale, "
-          f"{len(unlabelled)} unlabelled, {skipped} exempt")
-    return 1 if (stale or unlabelled) else 0
+          f"{len(unlabelled)} unlabelled, {len(head_off)} with a head off the "
+          f"pin, {skipped} exempt")
+    return 1 if (stale or unlabelled or head_off) else 0
 
 
 if __name__ == "__main__":

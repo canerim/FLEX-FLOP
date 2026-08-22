@@ -72,6 +72,22 @@ MACROS = {}
 PINNED = "ckpt_PAPER.pth.tar"
 
 
+def _pick_json(*names):
+    """The first of these that exists, as parsed JSON.
+
+    Three sites read the configuration-B curve with a plain json.load and the
+    _PAPER name, which is the head fitted before the repin. They are the
+    router's held-out agreement and the frozen-against-joint comparison, and
+    both are about the head, so reading the one the paper does not report was
+    the whole error.
+    """
+    for n in names:
+        p = RES / n
+        if p.exists():
+            return json.load(open(p))
+    raise FileNotFoundError(names[0])
+
+
 def pick(*names):
     """The best available candidate, by provenance rather than by list order.
 
@@ -1255,7 +1271,8 @@ try:
 except Exception as _e:
     print("   arls gain:", _e)
 try:
-    _rt = json.load(open(RES / "router_RECIPE512_b01_PAPER.json"))
+    _rt = _pick_json("router_RECIPE512_b01_e4head.json",
+                       "router_RECIPE512_b01_PAPER.json")
     _ha = _rt.get("router2_meta")
     if isinstance(_ha, str):
         import ast as _ast
@@ -1445,7 +1462,8 @@ if rr:
         # against our own claim is the wrong direction to be vague in.
         try:
             _rf = {r["qp"]: r["saving_pct_vs_release"] for r in
-                   json.load(open(RES / "router_RECIPE512_b01_PAPER.json"))["rows"]}
+                   _pick_json("router_RECIPE512_b01_e4head.json",
+                       "router_RECIPE512_b01_PAPER.json")["rows"]}
             _rj = {r["qp"]: r["saving_pct_vs_release"] for r in
                    json.load(open(RES / "router_RECIPE512_b01_jointhead.json"))["rows"]}
             _ru = {r["qp"]: r["saving_pct_vs_release"] for r in rs}
@@ -1990,7 +2008,8 @@ except Exception as _e:
 # is that the head was badly tuned, and the honest answer is the spread between
 # two heads trained independently on the same decoder.
 try:
-    _hf = json.load(open(RES / "router_RECIPE512_b01_PAPER.json"))
+    _hf = _pick_json("router_RECIPE512_b01_e4head.json",
+                       "router_RECIPE512_b01_PAPER.json")
     _hj = json.load(open(RES / "router_RECIPE512_b01_jointhead.json"))
     # Both sides on the arithmetic model, not sv(). The frozen head's file
     # carries a hook count and the jointly trained head's does not, so sv()
