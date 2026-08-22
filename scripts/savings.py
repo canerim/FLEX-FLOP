@@ -70,7 +70,8 @@ def pick(*names, res=None):
     return _json.load(open(p)), n
 
 
-def epoch_series(run="RECIPE512", n_seq=53, budget=0.1, res=None):
+def epoch_series(run="RECIPE512", n_seq=53, budget=0.1, res=None,
+                 through_pin=True):
     """{epoch: mean saving} for one run, on the frames the paper reports.
 
     Three rules, and each was got wrong somewhere before it was written down.
@@ -116,4 +117,21 @@ def epoch_series(run="RECIPE512", n_seq=53, budget=0.1, res=None):
         e = d.get("ckpt_epoch")
         if e is not None:
             ser.setdefault(e, []).append(sum(vals) / len(vals))
-    return {e: _st.median(v) for e, v in sorted(ser.items())}
+    out = {e: _st.median(v) for e, v in sorted(ser.items())}
+    if through_pin:
+        # The watcher keeps measuring after the pin. A series that runs past
+        # the checkpoint the paper reports says the last value is the reported
+        # one when it is not, and it did: epoch 5 landed mid-afternoon and the
+        # limitations paragraph absorbed it without a word. Pass
+        # through_pin=False to see what the run has done since.
+        try:
+            import torch as _torch
+            pin = _torch.load(
+                _Path(__file__).resolve().parent.parent
+                / f"runs/{run}/ckpt_PAPER.pth.tar",
+                map_location="cpu", weights_only=False).get("epoch")
+        except Exception:
+            pin = None
+        if pin is not None:
+            out = {e: v for e, v in out.items() if e <= pin}
+    return out

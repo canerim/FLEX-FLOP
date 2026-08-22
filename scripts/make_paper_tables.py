@@ -1841,6 +1841,8 @@ try:
     # over a different span, and "the series had not flattened" is a claim
     # about data the paper does not show. What happens after the pin is a
     # different statement and belongs in a sentence that says so.
+    # savings.epoch_series() carries the same rule for the figure that draws
+    # this series; both stop at the pin.
     _pin_e = None
     try:
         import torch as _t
