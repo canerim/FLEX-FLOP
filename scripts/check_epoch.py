@@ -99,15 +99,55 @@ HISTORICAL_PAT = [
 ]
 
 
-def documents_read() -> set[str]:
-    srcs = ([R / "scripts/build_pdf.py"]
+def _sources():
+    return ([R / "scripts/build_pdf.py"]
             + sorted((R / "scripts/supp").glob("[a-z]_*.py"))
             + [R / "scripts/make_paper_tables.py",
                R / "scripts/paper_metrics.py"])
+
+
+def fallbacks() -> set[str]:
+    """Names a document mentions but does not read.
+
+    Every reader here takes a list of candidates and uses the first that
+    exists, so a document that names both the measurement on the pinned
+    checkpoint and the older one it replaced reads only the first. Counting
+    the second as stale would leave this check permanently red for files
+    nothing reads any more, and deleting them would break a build that runs
+    before the stage that writes the new one.
+    """
+    call = re.compile(r'(?:k\.J|self\.J|\bJ|pick|rows)\(\s*((?:f?"[^"]+\.json"'
+                      r'(?:\s*,\s*)?)+)\s*[,)]', re.S)
+    behind, live = set(), set()
+    for s in _sources():
+        t = s.read_text()
+        spans = []
+        for m in call.finditer(t):
+            names = re.findall(r'"([A-Za-z0-9_.\-]+\.json)"', m.group(1))
+            spans.append((m.start(1), m.end(1)))
+            if len(names) < 2:
+                live |= set(names)
+                continue
+            first = next((n for n in names if (R / "results" / n).exists()),
+                         names[0])
+            live.add(first)
+            behind |= {n for n in names if n != first}
+        # A name that also appears outside every candidate list is read on its
+        # own somewhere, so it is not a fallback anywhere. Without this the
+        # pre-fix hybrid file, which one section reads directly and another
+        # lists behind the pinned-head measurement, was exempted from the
+        # check that is there to catch exactly that file going stale.
+        for m in re.finditer(r'"([A-Za-z0-9_.\-]+\.json)"', t):
+            if not any(a <= m.start() < b for a, b in spans):
+                live.add(m.group(1))
+    return behind - live
+
+
+def documents_read() -> set[str]:
     out = set()
-    for s in srcs:
+    for s in _sources():
         out |= set(re.findall(r'"([A-Za-z0-9_.\-]+\.json)"', s.read_text()))
-    return out
+    return out - fallbacks()
 
 
 def main() -> int:

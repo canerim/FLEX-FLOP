@@ -88,8 +88,7 @@ def content(k):
         "scripts/verify_theory.py, which reports \\PropsPassed of \\PropsTotal propositions "
         "passing on one sequence at one rate.")
     k.note("Files named without a directory are under results/ with a .json "
-           "extension; the saturation and Lorenz rows are the _ctc53 and "
-           "_b01_fixed variants of the names given. T4 is proved and not "
+           "extension, and the table names them in full. T4 is proved and not "
            "measured: it describes a set of 120 vertices that no experiment "
            "enumerates.")
 
