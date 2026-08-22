@@ -240,16 +240,24 @@ def content(F):
             "document is built from the result files, so it fills itself in.",
             NOTE))
 
-    A(Paragraph("4.1 What the two widths say", H2))
+    A(Paragraph("4.1 What the four widths say", H2))
     A(Paragraph(
-        "Doubling the stem's arithmetic buys almost nothing. Going from half "
-        "width to 0.707 -- which is twice the multiply-accumulates, since cost "
-        "goes as the square -- reduces the extra distortion by about a "
-        "seventh, from +0.48 to +0.40 dB at the lowest rate and +1.94 to "
-        "+1.67 at the highest, while the ceiling falls from 66.0% to 63.4%. "
-        "Both widths plateau at about 5% relative error in the stem feature "
-        "after twenty thousand steps, and both are between two and eight "
-        "times outside the budget.", BODY))
+        "Width buys very little. Across the whole sweep the compute in the "
+        "stem rises eightfold, from a sixteenth of the original at w=0.25 to "
+        "a half at w=0.707, and the distortion at the highest rate falls by "
+        "about a third, from +2.57 to +1.67 dB. Every point is outside the "
+        "0.2 dB budget: the best of them, +0.41 dB at the lowest rate, is "
+        "twice it, and the same width costs eight times it at the highest. "
+        "The curve is not approaching the budget from above -- it is nearly "
+        "flat in the direction that matters.", BODY))
+    A(Paragraph(
+        "The ceiling hardly moves either, 68.1% down to 63.4%, because the "
+        "stem is only half of the floor and the rest of it is unchanged "
+        "whatever the stem costs. That is worth stating the other way round: "
+        "the prize does not depend on getting the width small. Any stem "
+        "replacement that met the budget would put the ceiling somewhere "
+        "between 63 and 68%, well past the 55% this branch was opened for. "
+        "The obstacle is fidelity, not cost.", BODY))
     A(Paragraph(
         "Capacity is therefore not what binds. What binds is the objective. A "
         "5% error in the feature comes out as 5.4 times the dB at the lowest "
