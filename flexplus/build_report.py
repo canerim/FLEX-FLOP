@@ -290,14 +290,23 @@ def content(F):
     A(Paragraph(
         "Matching the budget at 20,000 steps and batch 8 recovered most of "
         "the difference -- +2.51 to +1.99 dB at the highest rate -- and left "
-        "the decode objective still behind the feature one at all three "
-        "rates, by ten to twenty per cent. The budget was still not matched. "
-        "Sampling one exit of four per step gives each exit a quarter of the "
-        "updates that the feature objective's single target gives all of them "
-        "at once, so equal steps are not equal updates per exit, and the gap "
-        "is about that size. The objective now supervises every exit each "
-        "step, at four times the cost per step, which is the comparison "
-        "worth reporting.", BODY))
+        "the decode objective behind the feature one at all three rates, by "
+        "ten to twenty per cent. The obvious suspect was the exit sampling: "
+        "one exit of four per step gives each exit a quarter of the updates "
+        "that the feature objective's single target gives all of them at "
+        "once. Supervising every exit each step, at four times the cost, "
+        "changed nothing -- +0.444, +1.207, +2.064 against +0.452, +1.178, "
+        "+1.992 -- so that was not the reason.", BODY))
+    A(Paragraph(
+        "The feature objective is simply the better one here, which is not "
+        "what we expected of it: it optimises a proxy while the other "
+        "optimises the reported quantity. The likely reason, and this is a "
+        "hypothesis rather than a measurement, is dilution. The decode loss "
+        "at an exit is the error that exit makes anyway plus the damage the "
+        "narrow stem adds, and only the second part carries information about "
+        "the stem; the feature target isolates the stem's contribution "
+        "exactly. Optimising the measured quantity is not the better choice "
+        "when the measured quantity is mostly something else.", BODY))
     A(Paragraph(
         "None of this changes the answer to the question the branch asked. "
         "Across every width, objective and budget tried, the best point is "
