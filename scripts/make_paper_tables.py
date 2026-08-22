@@ -816,6 +816,36 @@ if _rg:
     mac("TileRefDeepHi", f"{_rg['tiling_deep_hi']:.3f}")
     mac("TileRefFrames", str(_rg["n_frames"]))
 
+# The deblocking pass, split by distance from the tile boundary. Section 4.3
+# argued from five typed numbers that it does not earn its cost; they are
+# measured now, and the verdict turns out to depend on the rate.
+print("seam ring")
+_sr, _ = pick("seam_ring.json")
+if _sr:
+    mac("SeamRingPct", f"{100 * _sr['ring_fraction_of_pixels']:.1f}")
+    mac("SeamRingGainPct", f"{abs(_sr['ring_error_change_vs_source_pct']):.2f}")
+    mac("SeamInteriorPct",
+        f"{abs(_sr['interior_error_change_vs_source_pct']):.3f}")
+    mac("SeamRecovLo", f"{_sr['recovered_lo']:.4f}")
+    mac("SeamRecovHi", f"{_sr['recovered_hi']:.4f}")
+    mac("SeamRecovHiQp", str(_sr["recovered_hi_qp"]))
+    mac("SeamPerfectExtra", f"{_sr['perfect_gate_extra_db']:.4f}")
+    mac("SeamPenaltyLo", f"{min(r['penalty_off_db'] for r in _sr['by_rate']):.3f}")
+    mac("SeamPenaltyHi", f"{max(r['penalty_off_db'] for r in _sr['by_rate']):.3f}")
+    mac("SeamRingFrames", str(_sr["n_frames"]))
+    _pp = [r["recovered_db"] / 0.95 for r in _sr["by_rate"]]
+    mac("SeamPerPointLo", f"{min(_pp):.4f}")
+    mac("SeamPerPointHi", f"{max(_pp):.4f}")
+    _hi = max(_sr["by_rate"], key=lambda r: r["recovered_db"])
+    mac("SeamRecovShareHi",
+        f"{100 * _hi['recovered_db'] / _hi['penalty_off_db']:.0f}")
+
+# The single frame the deblocking figure is drawn from.
+_srg, _ = pick("seam_repair_grid.json")
+if _srg:
+    mac("SeamGridRecovered", f"{_srg['recovered_db']:.3f}")
+    mac("SeamGridPenalty", f"{_srg['penalty_off_db']:.3f}")
+
 # ---------------------------------------------------------------- exactness
 print("halo exactness")
 he, _ = pick("halo_exactness.json")

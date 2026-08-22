@@ -1295,7 +1295,8 @@ def content(colw, fullw):
            r"from one latent at full depth. <b>a</b>, the frame and its 5×8 "
            r"grid. <b>b</b>, <b>c</b>, error against a full-frame decode, "
            r"×25, pass off and on. <b>d</b>–<b>f</b>, one grid crossing and "
-           r"what the pass changed there. It recovers 0.005 dB of the 0.041 dB "
+           r"what the pass changed there. It recovers \SeamGridRecovered dB of "
+           r"the \SeamGridPenalty dB "
            r"tiling costs on this frame.")
     par(r"Border padding is an <i>estimator</i> of the unseen neighbour, and "
         r"the seam is its error ([[fig:contamination]]). Panel c there is the "
@@ -1372,15 +1373,23 @@ def content(colw, fullw):
               ["G at step 0", "exp(−d/τ), with d the distance to the nearest "
                               "tile boundary and τ a fixed decay length"]])
     par(r"The whole pass costs 0.95% of the decode.")
-    par(r"It does not earn that. Splitting the per-pixel error by distance "
-        r"from the nearest tile boundary, we find the filter gains 0.27% in "
-        r"the 0–4 px ring, which is 6.2% of pixels, and loses 0.04–0.05% "
-        r"everywhere else. Give it a <i>perfect</i> gate, with zero correction "
-        r"in the interior and the boundary gain unchanged, and the ceiling on "
-        r"what it could earn is ≈0.0008 dB, for 0.95% of the decode. We "
-        r"rejected AR(1) padding at 0.0019 dB per point of decode, and this is "
-        r"worse by an order of magnitude. Tightening the gate cannot rescue "
-        r"it, because there is almost nothing left to win.")
+    par(r"Whether it earns that depends on the rate. Splitting the per-pixel "
+        r"error by distance from the nearest tile boundary over "
+        r"\SeamRingFrames frames, the ring within 4 px of a boundary is "
+        r"\SeamRingPct% of the pixels and the pass takes \SeamRingGainPct% "
+        r"off its error, leaving the interior within \SeamInteriorPct% of "
+        r"where it was. In decibels it recovers \SeamRecovLo at q0 and "
+        r"\SeamRecovHi at q\SeamRecovHiQp, of a tiling penalty that runs "
+        r"\SeamPenaltyLo–\SeamPenaltyHi dB; at the rate where the seam is "
+        r"worst that is \SeamRecovShareHi% of it, and at the lowest rate it "
+        r"is a fortieth. Tightening the gate cannot change that: a gate that "
+        r"took the pass wherever it helps and left it off wherever it hurts "
+        r"— the best a filter indexed by position within a tile can do — "
+        r"would add \SeamPerfectExtra dB. The comparison that settles it is "
+        r"the next section, on one basis with this one: the pass spends "
+        r"0.95% of the decode's arithmetic to take a seventh off the seam at "
+        r"the rate where the seam is worst, and the exchange spends 0.032% "
+        r"to remove it exactly.")
     h2("4.4 Removing the cause, and why it does not help")
     par(r"Only 0.29% of each block has spatial extent, so the exact fix is "
         r"affordable ([[fig:seam_repair_grid]]). Give the 3×3 its real neighbours across the tile border, "

@@ -949,18 +949,20 @@ boundary and $\tau$ a fixed decay length. The gate is what makes~(\ref{eq:repair
 one: it is indexed by position within a tile, not by position in the frame. The whole pass costs $0.95\%$ of the
 decode.
 
-It does not earn that. Splitting the per-pixel error by distance from the nearest
-tile boundary, we find the filter gains $0.27\%$ in the $0$--$4$\,px ring, which
-is $6.2\%$ of pixels, and loses $0.04$--$0.05\%$ everywhere else. Give it a
-\emph{perfect} gate, with zero correction in the interior and the boundary gain
-unchanged, and the ceiling on what it could earn is
-\begin{equation*}
-0.062 \times 0.000047 \times 0.0027 \,/\, 4.30\!\times\!10^{-5}
-\;\approx\; 0.0008\dB,
-\end{equation*}
-for $0.95\%$ of the decode. We rejected AR(1) padding at $0.0019\dB$ per point of
-decode, and this is worse by an order of magnitude. Tightening the gate cannot
-rescue it, because there is almost nothing left to win.
+Whether it earns that depends on the rate. Splitting the per-pixel error by
+distance from the nearest tile boundary over \SeamRingFrames\ frames, the ring
+within $4$\,px of a boundary is \SeamRingPct\% of the pixels and the pass takes
+\SeamRingGainPct\% off its error, leaving the interior within
+\SeamInteriorPct\% of where it was. In decibels it recovers \SeamRecovLo\ at
+$q0$ and \SeamRecovHi\ at $q\SeamRecovHiQp$, of a tiling penalty that runs
+\SeamPenaltyLo--\SeamPenaltyHi\dB; at the rate where the seam is worst that is
+\SeamRecovShareHi\% of it, and at the lowest rate it is a fortieth. Tightening
+the gate cannot change that: a gate that took the pass wherever it helps and
+left it off wherever it hurts---the best a filter indexed by position within a
+tile can do---would add \SeamPerfectExtra\dB. The comparison that settles it is
+the next section, on one basis with this one: the pass spends $0.95\%$ of the
+decode's arithmetic to take a seventh off the seam at the rate where the seam is
+worst, and the exchange spends $0.032\%$ to remove it exactly.
 
 \begin{figure}[t]
 \centering
@@ -969,8 +971,8 @@ rescue it, because there is almost nothing left to win.
 rate where the seam is worst, decoded twice from one latent at full depth.
 \textbf{a}, the frame and its $5\times8$ grid. \textbf{b}, \textbf{c}, error
 against a full-frame decode, $\times25$, pass off and on. \textbf{d}--\textbf{f},
-one grid crossing and what the pass changed there. It recovers $0.005\dB$ of the
-$0.041\dB$ tiling costs on this frame.}
+one grid crossing and what the pass changed there. It recovers
+\SeamGridRecovered\dB\ of the \SeamGridPenalty\dB\ tiling costs on this frame.}
 \label{fig:seamrepairgrid}
 \end{figure}
 

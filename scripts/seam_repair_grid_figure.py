@@ -167,6 +167,18 @@ def main(argv):
         out.parent.mkdir(parents=True, exist_ok=True)
         fig.savefig(out, dpi=500, bbox_inches="tight", pad_inches=0.02,
                     facecolor="white")
+    # The caption quotes what the pass recovers and what tiling costs on this
+    # frame. They were printed to a terminal and typed into it, which is a
+    # figure whose caption cannot be checked and cannot move with the
+    # checkpoint.
+    import json as _json
+    (ROOT / "results/seam_repair_grid.json").write_text(_json.dumps({
+        "ckpt": a.ckpt, "ckpt_epoch": int(ck.get("epoch", -1)),
+        "seq": s_["name"], "qp": a.qp, "tiles": f"{nh}x{nw}",
+        "penalty_off_db": float(d_off), "penalty_on_db": float(d_on),
+        "recovered_db": float(d_off - d_on),
+        "mean_abs_change": float(delta.mean()), "peak_change": float(delta.max()),
+    }, indent=2))
     print(f"  {s_['name']}  q{a.qp}  {nh}x{nw} tiles")
     print(f"  seam penalty: repair off {d_off:+.4f} dB, on {d_on:+.4f} dB, "
           f"recovered {d_off - d_on:+.4f}")

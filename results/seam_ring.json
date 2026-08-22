@@ -1,0 +1,45 @@
+{
+  "by_rate": [
+    {
+      "qp": 0,
+      "penalty_off_db": 0.022800523946642455,
+      "penalty_on_db": 0.022207119906691858,
+      "recovered_db": 0.0005934040399505972
+    },
+    {
+      "qp": 32,
+      "penalty_off_db": 0.027629022142773248,
+      "penalty_on_db": 0.02566008735579367,
+      "recovered_db": 0.0019689347869795773
+    },
+    {
+      "qp": 63,
+      "penalty_off_db": 0.02848793825771999,
+      "penalty_on_db": 0.02463030632552612,
+      "recovered_db": 0.0038576319321938675
+    }
+  ],
+  "recovered_lo": 0.0005934040399505972,
+  "recovered_hi": 0.0038576319321938675,
+  "recovered_hi_qp": 63,
+  "ckpt": "runs/RECIPE512/ckpt_PAPER.pth.tar",
+  "ckpt_epoch": 4,
+  "n_frames": 16,
+  "qps": [
+    0,
+    32,
+    63
+  ],
+  "ring_px": 4,
+  "tile_px": 256,
+  "ring_fraction_of_pixels": 0.0615234375,
+  "penalty_off_db": 0.02427869112191154,
+  "penalty_on_db": 0.023124766876382524,
+  "penalty_perfect_gate_db": 0.02283611229580068,
+  "recovered_db": 0.0011539242455290179,
+  "perfect_gate_extra_db": 0.0002886545805818423,
+  "ring_error_change_pct": -9.952870677759506,
+  "interior_error_change_pct": 2.9690348729373373,
+  "ring_error_change_vs_source_pct": -0.5492496442422778,
+  "interior_error_change_vs_source_pct": -0.0010406345279490026
+}

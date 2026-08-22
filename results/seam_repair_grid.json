@@ -1,0 +1,12 @@
+{
+  "ckpt": "runs/RECIPE512/ckpt_PAPER.pth.tar",
+  "ckpt_epoch": 4,
+  "seq": "Bosphorus_1920x1080_120fps_420_8bit_YUV.yuv",
+  "qp": 63,
+  "tiles": "5x8",
+  "penalty_off_db": 0.04263237863779068,
+  "penalty_on_db": 0.025656789541244507,
+  "recovered_db": 0.016975589096546173,
+  "mean_abs_change": 0.0001314533146796748,
+  "peak_change": 0.016268303617835045
+}
