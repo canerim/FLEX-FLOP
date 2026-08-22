@@ -523,9 +523,9 @@ def router_ab():
     A, _ = rows("signalled_RECIPE512_ctc53.json", budget=0.1)
     A3, _ = rows("signalled_RECIPE512_ctc53.json", budget=0.3)
     A5, _ = rows("signalled_RECIPE512_ctc53.json", budget=0.5)
-    B, dB = rows("router_RECIPE512_b01_PAPER.json",
+    B, dB = rows("router_RECIPE512_b01_e4head.json", "router_RECIPE512_b01_PAPER.json",
                  "router_RECIPE512_b01_fixed.json", "router_RECIPE512_b01.json")
-    B3, _ = rows("router_RECIPE512_b03_PAPER.json",
+    B3, _ = rows("router_RECIPE512_b03_e4head.json", "router_RECIPE512_b03_PAPER.json",
                  "router_RECIPE512_b03_fixed.json", "router_RECIPE512_b03.json")
     B5 = {}
     Ba = B

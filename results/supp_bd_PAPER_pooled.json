@@ -3,10 +3,10 @@
   "convention": "pooled",
   "n_sequences": 53,
   "ckpt": "runs/RECIPE512/ckpt_PAPER.pth.tar",
-  "ckpt_epoch": 0,
+  "ckpt_epoch": 4,
   "ckpt_step": null,
   "db_interval": [
-    0.059,
+    0.044,
     0.3
   ],
   "saving_interval": [
@@ -17,44 +17,42 @@
     {
       "qp": 0,
       "bd_saving_pct": null,
-      "bd_quality_db": 0.04527793274827192,
-      "floor_db": 0.03025190159678459,
+      "bd_quality_db": 0.033020469826539625,
+      "floor_db": 0.02276904694736004,
       "bd_saving_pct_zero_drift": null,
       "n_points": 15
     },
     {
       "qp": 16,
       "bd_saving_pct": null,
-      "bd_quality_db": 0.057556752979021755,
-      "floor_db": 0.03984157368540764,
+      "bd_quality_db": 0.04365756312073731,
+      "floor_db": 0.0307485181838274,
       "bd_saving_pct_zero_drift": null,
       "n_points": 14
     },
     {
       "qp": 32,
       "bd_saving_pct": null,
-      "bd_quality_db": 0.07205643704433046,
-      "floor_db": 0.04919103533029556,
+      "bd_quality_db": 0.05442656550626072,
+      "floor_db": 0.03793231397867203,
       "bd_saving_pct_zero_drift": null,
       "n_points": 13
     },
     {
       "qp": 48,
-      "bd_saving_pct": 32.802359572794884,
-      "bd_quality_db": 0.08162175246038025,
-      "floor_db": 0.054411210119724274,
+      "bd_saving_pct": null,
+      "bd_quality_db": 0.059471278373641155,
+      "floor_db": 0.041373610496520996,
       "bd_saving_pct_zero_drift": null,
       "n_points": 13
     },
     {
       "qp": 63,
-      "bd_saving_pct": 30.818696452597067,
-      "bd_quality_db": 0.09227828991119982,
-      "floor_db": 0.058369219303131104,
+      "bd_saving_pct": null,
+      "bd_quality_db": 0.0636028212504401,
+      "floor_db": 0.04345512390136719,
       "bd_saving_pct_zero_drift": null,
-      "n_points": 13
+      "n_points": 12
     }
-  ],
-  "mean_bd_saving_pct": 31.810528012695976,
-  "mean_bd_quality_db": 0.08695002118579004
+  ]
 }

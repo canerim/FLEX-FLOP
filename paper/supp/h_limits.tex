@@ -241,13 +241,13 @@ run & q0 & q32 & q63 & frames \\
 \midrule
 RECIPE512, pinned & 0.0004 & 0.0114 & 0.0283 & 53 \\
 RECIPE512, later & 0.0004 & 0.0114 & 0.0283 & 53 \\
-BEST & 0.0022 & 0.0082 & 0.0175 & 53 \\
+BEST & 0.0015 & 0.0088 & 0.0154 & 53 \\
 BEST128 & 0.0036 & 0.0104 & 0.0216 & 53 \\
-FINE12 & 0.0073 & 0.0255 & 0.0617 & 53 \\
+FINE12 & 0.0071 & 0.0253 & 0.0610 & 53 \\
 VERBATIM, no anchor term & 0.1101 & 0.1241 & 0.1594 & 40 \\
 \bottomrule
 \end{tabular}}
-\caption{\textbf{How far the deepest exit has moved from the released decoder}, in decibels, one checkpoint per run. The deepest exit is supposed to be the released decoder and the training objective carries a term that holds it there. The term does real work: the run trained without it sits 0.110 to 0.159 dB away, more than the whole headline budget at every rate before a single tile has exited early. The term does not hold it exactly, and what it leaves behind grows with rate: 28\% of a 0.1 dB budget at q63 on the pinned checkpoint and 62\% on the twelve-exit run, whose floor exceeds that budget outright at the highest rate.}
+\caption{\textbf{How far the deepest exit has moved from the released decoder}, in decibels, one checkpoint per run. The deepest exit is supposed to be the released decoder and the training objective carries a term that holds it there. The term does real work: the run trained without it sits 0.110 to 0.159 dB away, more than the whole headline budget at every rate before a single tile has exited early. The term does not hold it exactly, and what it leaves behind grows with rate: 28\% of a 0.1 dB budget at q63 on the pinned checkpoint and 61\% on the twelve-exit run, whose floor exceeds that budget outright at the highest rate.}
 \end{table}
 
 {\small results/supp\_anchor\_PAPER.json on runs/RECIPE512/ckpt\_PAPER.pth.tar; results/anchor\_RECIPE512.json, results/anchor\_BEST.json, results/anchor\_BEST128.json, results/anchor\_FINE12.json and results/anchor\_VERBATIM.json on the ckpt\_eval or ckpt\_step file of their runs, at the epoch each happened to be at, which none of them records. Frame counts differ by file and are printed, because two of these are 40 frames and are not comparable with the \NumSeq-frame rows at the fourth decimal.}
@@ -258,11 +258,11 @@ There is a structural fix and it was measured and rejected, which is row five of
 
 \subsection{How much of this can be repeated exactly}
 
-Every measurement file records the checkpoint it was taken on, and there are three kinds of answer. 53 of the files these two documents read name a checkpoint that does not move -- a pin or a warm start -- so the measurement can be repeated exactly. Another 21 name one the watcher overwrites but record the epoch or step it was at, so the weights are identified even though the path is not. The remaining 17 record neither, and their paths now point at whatever those runs have trained to since.
+Every measurement file records the checkpoint it was taken on, and there are three kinds of answer. 55 of the files these two documents read name a checkpoint that does not move -- a pin or a warm start -- so the measurement can be repeated exactly. Another 21 name one the watcher overwrites but record the epoch or step it was at, so the weights are identified even though the path is not. The remaining 15 record neither, and their paths now point at whatever those runs have trained to since.
 
 That last group is not hidden -- several of the files in it are named as such where they are used, and the epoch tables of this section exist because of it -- but it is worth stating once as a number rather than as remarks. Nothing in the main paper's headline is in it: the pinned checkpoint carries every table the paper reports. What is in it is the adapter and coupling ablations, the hybrid sweeps of configuration C, the wall-clock files and the anchor drift of the runs other than the pinned one. Repeating those exactly would need the checkpoints back, which is why scripts/check\_provenance.py refuses to let the count grow.
 
-{\small Counted in the build over results/*.json against the file names scripts/build\_pdf.py, scripts/make\_paper\_tables.py and scripts/supp/*.py mention. The same count is a check, with the present figure of 17 as its baseline.}
+{\small Counted in the build over results/*.json against the file names scripts/build\_pdf.py, scripts/make\_paper\_tables.py and scripts/supp/*.py mention. The same count is a check, with the present figure of 15 as its baseline.}
 
 \subsection{What is open}
 
@@ -278,5 +278,5 @@ Every open problem in this supplement is listed here, so that a reader meets eac
 \item \textbf{One accelerator class.} Every millisecond and every joule in this work is an NVIDIA RTX A6000, all eight cards in this machine being that model, and the CPU rows of section B are the only second device class. Power comes from the driver counter, with no external meter to calibrate it against.
 \end{itemize}
 
-No internal check is outstanding. They all hold, including the one this list would otherwise have carried: the partially signalled configuration reduces to the fully signalled one to four decimals when every tile is overridden, with both sides read in the same saving convention, so the cost model's 0.8-point offset cannot present itself as a failure of the interpolation. As recorded in results/check\_paper.json, 78 of 90 checked claims pass.
+No internal check is outstanding. They all hold, including the one this list would otherwise have carried: the partially signalled configuration reduces to the fully signalled one to four decimals when every tile is overridden, with both sides read in the same saving convention, so the cost model's 0.8-point offset cannot present itself as a failure of the interpolation. As recorded in results/check\_paper.json, 79 of 90 checked claims pass.
 

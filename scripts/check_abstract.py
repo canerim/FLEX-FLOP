@@ -30,6 +30,8 @@ SOURCE = {
     "BandSpreadMean": "band_collapse.json",
     "RouterParams": "supp_module_shapes.json",
     "RateRankBeatsBy": "raterank_RECIPE512_b01.json",
+    "RateRankBeatsMean": "raterank_RECIPE512_b01.json",
+    "RateRankBeatsMin": "raterank_RECIPE512_b01.json",
 }
 
 

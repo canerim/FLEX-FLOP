@@ -314,14 +314,14 @@ Read as a ratio $\Delta$/J$_{ad}$ rather than in saving points, the gain rises w
 \toprule
 q & blind \% & oracle \% & gap & blind dB & shuffled dB \\
 \midrule
-q0 & 25.38 & 29.90 & 4.52 & 0.1262 & 0.1248 \\
-q16 & 19.45 & 25.63 & 6.18 & 0.1278 & 0.1335 \\
-q32 & 15.02 & 20.93 & 5.91 & 0.1304 & 0.1411 \\
-q48 & 12.00 & 18.28 & 6.27 & 0.1373 & 0.1451 \\
-q63 & 8.05 & 15.62 & 7.57 & 0.1367 & 0.1413 \\
+q0 & 31.66 & 34.46 & 2.79 & 0.1147 & 0.1143 \\
+q16 & 27.38 & 30.82 & 3.45 & 0.1213 & 0.1227 \\
+q32 & 22.72 & 26.67 & 3.95 & 0.1238 & 0.1337 \\
+q48 & 19.00 & 25.33 & 6.32 & 0.1321 & 0.1423 \\
+q63 & 16.76 & 24.10 & 7.34 & 0.1370 & 0.1471 \\
 \bottomrule
 \end{tabular}}
-\caption{\textbf{The same gap in the units the paper reports.} Columns 2 to 4 are savings at a 0.1 dB budget: the best content-blind mixture of uniform depths, the per-tile oracle, and the difference. Columns 5 and 6 are decibels at the oracle's own compute, what the best blind mixture would read there and what a random shuffle of the oracle's exit map actually reads. Adaptivity is worth 4.5 to 7.6 saving points, rising with rate, against an oracle reading \OracleDb dB and a shuffle reading up to \RandomDb dB.}
+\caption{\textbf{The same gap in the units the paper reports.} Columns 2 to 4 are savings at a 0.1 dB budget: the best content-blind mixture of uniform depths, the per-tile oracle, and the difference. Columns 5 and 6 are decibels at the oracle's own compute, what the best blind mixture would read there and what a random shuffle of the oracle's exit map actually reads. Adaptivity is worth 2.8 to 7.3 saving points, rising with rate, against an oracle reading \OracleDb dB and a shuffle reading up to \RandomDb dB.}
 \end{table}
 
 {\small Computed from results/static\_RECIPE512\_b01.json, checkpoint runs/RECIPE512/ckpt\_PAPER.pth.tar, \NumSeq frames. The blind columns are the lower hull of the four uniform-depth points under Proposition 3, evaluated at the budget and at the oracle's compute; the shuffle column is a measured decode. At q0 the shuffle reads slightly better than the hull predicts, which bounds the interaction (A2) ignores at under 0.002 dB.}
@@ -406,14 +406,14 @@ with equality if and only if S is a set of s largest regrets. L is the Lorenz cu
 \toprule
 q & Gini & L(.1) & rec(.1) & L(.2) & rec(.2) & L(.5) & rec(.5) \\
 \midrule
-q0 & 0.53 & 35\% & 29\% & 51\% & 53\% & 87\% & 103\% \\
-q16 & 0.49 & 27\% & 33\% & 46\% & 59\% & 87\% & 102\% \\
-q32 & 0.61 & 37\% & 40\% & 59\% & 68\% & 95\% & 106\% \\
-q48 & 0.67 & 45\% & 39\% & 65\% & 63\% & 96\% & 100\% \\
-q63 & 0.73 & 53\% & 39\% & 72\% & 62\% & 99\% & 94\% \\
+q0 & 0.34 & 23\% & 25\% & 37\% & 45\% & 73\% & 89\% \\
+q16 & 0.50 & 35\% & 27\% & 49\% & 49\% & 83\% & 101\% \\
+q32 & 0.50 & 30\% & 37\% & 47\% & 65\% & 86\% & 104\% \\
+q48 & 0.52 & 31\% & 29\% & 48\% & 51\% & 88\% & 90\% \\
+q63 & 0.57 & 35\% & 28\% & 53\% & 48\% & 91\% & 88\% \\
 \bottomrule
 \end{tabular}}
-\caption{\textbf{The Lorenz curve of the regret, and what signalling recovers.} L($\rho$) is the share of the total regret carried by the $\rho$ worst tiles, which Proposition 12 says is the most any signal of that size can remove at a fixed price; rec($\rho$) is the share of the predictor-to-oracle gap the measured sweep recovers. Regret is concentrated at every rate, Gini \GiniMin to \GiniMax: a tenth of the tiles carries 27\% to 53\% of the total regret and recovers 29\% to 40\% of the gap. Over every reachable cell the ratio rec/L runs from \LorenzTightMin\% to \LorenzTightMax\%, for the reason the remark gives.}
+\caption{\textbf{The Lorenz curve of the regret, and what signalling recovers.} L($\rho$) is the share of the total regret carried by the $\rho$ worst tiles, which Proposition 12 says is the most any signal of that size can remove at a fixed price; rec($\rho$) is the share of the predictor-to-oracle gap the measured sweep recovers. Regret is concentrated at every rate, Gini \GiniMin to \GiniMax: a tenth of the tiles carries 23\% to 35\% of the total regret and recovers 25\% to 37\% of the gap. Over every reachable cell the ratio rec/L runs from \LorenzTightMin\% to \LorenzTightMax\%, for the reason the remark gives.}
 \end{table}
 
 {\small results/hybrid\_RECIPE512\_b01\_fixed.json, checkpoint runs/RECIPE512/ckpt\_PAPER.pth.tar, \NumSeq sequences at a 0.1 dB budget; the head it is measured against was trained on runs/RECIPE512/ckpt\_eval.pth.tar. rec($\rho$) is computed here from the same file as the saving at $\rho$, relative to the $\rho$ = 0 and $\rho$ = 1 endpoints. Signalling half the tiles beats signalling all of them at \HybridBeatsAN of \HybridBeatsAOf rates, which is the same re-bisection effect.}

@@ -52,10 +52,10 @@ a window that tiling itself creates, between a floor below which no allocation
 meets the budget and a saturation point above which none improves; rescaling the
 budget between those limits collapses five rate curves \BandRawSpread\ points
 apart onto one within \BandSpreadMean\ points. And what is needed to allocate is already
-in the file: routing on the bits the entropy model has spent on a tile beats our
-trained \RouterParams-parameter router at every rate, by up to
-\RateRankBeatsBy\ points, while agreeing with the exhaustive search on fewer
-tiles. A compressed representation records not only what to
+in the file: routing on the bits the entropy model has spent on a tile matches
+our trained \RouterParams-parameter router, ahead by \RateRankBeatsMean\ points
+on average and level with it at one rate, while agreeing with the exhaustive
+search on fewer tiles. A compressed representation records not only what to
 reconstruct, but how much computation the reconstruction is worth.
 \end{abstract}
 
@@ -156,8 +156,8 @@ computation should go.
       of the rate dependence, on two independently trained checkpoints.
 \item A zero-learned-parameter control that adaptive-inference work is rarely measured
       against. Routing on the bits the entropy model has already spent per tile
-      costs nothing, adds nothing to the stream, and beats our trained head at
-      every rate, by up to \RateRankBeatsBy\ points, while agreeing with the
+      costs nothing, adds nothing to the stream, and matches our trained head,
+      ahead by \RateRankBeatsMean\ points on average, while agreeing with the
       Lagrangian oracle on fewer tiles than the head does. That last part says
       accuracy over exit labels is the wrong objective, and that ordering is
       what a router has to get right.
@@ -1006,9 +1006,10 @@ replicate padding, filter off & $6.06\times10^{-2}$ \\
 \end{tabular}
 \end{center}
 
-The exchange also removes most of the floor. Switched on at inference, it drops the
-floor from $0.036$ to $0.003\dB$ at $q0$ and from $0.056$ to $0.030$ at $q63$,
-which is \CoupFloorDropLow\% and \CoupFloorDropHigh\% of the tiling penalty.
+The exchange also removes most of the floor. Switched on at inference, it drops
+the floor from \CoupFloorPadLow\ to \CoupFloorCplLow$\dB$ at $q0$ and from
+\CoupFloorPadHigh\ to \CoupFloorCplHigh\ at $q63$, which is
+\CoupFloorDropLow\% and \CoupFloorDropHigh\% of the tiling penalty.
 \textbf{And it destroys the allocation.} At the same $0.1\dB$ budget the saving
 falls from \CoupPaddedMid\% to \CoupCoupledMid\% at $q32$ and from
 \CoupPaddedHigh\% to \CoupCoupledHigh\% at $q63$.
@@ -1462,10 +1463,9 @@ onto each rate's own band, with the floor at $0$ and saturation at $1$, and they
 collapse onto a single master curve, \BandSpreadMean\ points apart on average and
 \BandSpreadMax\ at worst (Fig.~\ref{fig:band}). The answer to ``how much does a
 $0.1\dB$ budget buy at this rate'' is therefore, to within a couple of points,
-``where does $0.1\dB$ sit in this rate's band''. The floor and the saturation
-point are both in closed form and both cheap to measure. What they leave over is
-small enough that a deployment could calibrate the two ends and read the rest off
-one curve. That curve is a one-parameter power law,
+``where does $0.1\dB$ sit in this rate's band''. Both limits are in closed form and
+cheap to measure, so a deployment could calibrate the two ends and read the rest
+off one curve. That curve is a one-parameter power law,
 $\text{saving} \approx C\,u^{\BandExp}$, with $C$ the architectural ceiling and
 $u$ the position in the band. We fit it in log space over all five rates and get
 $R^2 = \BandRTwo$, worst residual \BandFitErr\ points. The claim we make is the
@@ -1723,12 +1723,14 @@ exit costs on an average tile. We fit $(\alpha,c,\varphi)$ by least squares,
 leave-one-sequence-out, so that no sequence contributes to the profile that
 routes it. The same Lagrangian the oracle runs is then run on the surrogate.
 Nothing is signalled and nothing is trained; the arithmetic is one scalar per
-tile. \textbf{It beats the trained head at every rate.} The calibrated bit rule is ahead
-of the \RouterParams\ router at all \RateRankNWins\ measured rates, by margins
-that run from half a point at $q48$ to \RateRankBeatsBy\ points at $q0$. A head
-trained on this decoder against this oracle therefore returns nothing over a
-rule with no parameters at all, and it carries \RouterCostPct\% of the decode
-that the calibrated bit rule does not.
+tile. \textbf{It matches the trained head.} The calibrated bit rule is ahead of
+the \RouterParams\ router at all \RateRankNWins\ measured rates, but by
+\RateRankBeatsMean\ points on average and \RateRankBeatsMin\ where they meet,
+which is a tie and not a win. The head is re-fitted on the checkpoint it is
+judged on; on an earlier one the rule appeared to win by five. A head trained
+on this decoder against this oracle
+therefore returns nothing over a rule with no parameters at all, and it carries
+\RouterCostPct\% of the decode that the calibrated bit rule does not.
 
 \textbf{Why it works is not that it agrees with the oracle.} It agrees on
 \RateRankAgreeLo--\RateRankAgreeHi\ of tiles, well below the
@@ -1890,12 +1892,13 @@ table reports is saving at fixed distortion, not the objective, and returning to
 the budget means re-bisecting $\lambda$. That re-bisection is also what lets the
 two-multiplier allocations above escape the bound.
 
-\textbf{At the loose budget it matters where the gap is.} At $0.3\dB$ the three
-lowest rates are saturated, and there is nothing for a partial map to buy. At
-\HybridLooseQps, where the gap is \GapLooseHigh\ points, half the map recovers
-\HybridLooseRecLo--\HybridLooseRecHi\% of it. The allocation follows the same
-rule here as everywhere else, which is to spend the bits where the ladder still
-has somewhere to go.
+\textbf{At the loose budget there is no gap left to buy.} At $0.3\dB$ every rate
+is saturated on this checkpoint: the predicted map is within
+\HybridLooseGapMax\ points of the signalled one everywhere, so C has nothing to
+recover and nothing to spend bits on. That is the ladder having improved rather
+than the mechanism failing --- on an earlier checkpoint three rates were
+saturated and the rest had a gap worth half a map. C is a tight-budget
+mechanism.
 
 \textbf{A better predictor concentrates its regret, which is what the Gini was
 for.} We rebuild C on the retrained head of Section~\ref{sec:ab}. The Gini of the
@@ -2316,7 +2319,8 @@ quality indices, and what each configuration puts in the file to get it.}
 
 BD-Rate is the number a codec paper is read on, so we give it for both
 configurations at all three budgets rather than only for the headline
-(Table~\ref{tab:bdrate}). Two things in the table are worth reading against each
+(Table~\ref{tab:bdrate}, and Fig.~\ref{fig:bdrate} plots it against what it
+buys). Two things in the table are worth reading against each
 other. The cost of a budget is not linear in it: going from $0.1$ to $0.3\dB$
 nearly triples the BD-Rate while the saving moves by \GapBudgetPoints\ points,
 because the second decibel is spent on tiles that were already cheap. And B pays

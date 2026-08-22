@@ -12,7 +12,12 @@ cd "$HOME/FLEX-UF"
 PY=./.venv/bin/python
 PIN=runs/RECIPE512/ckpt_PAPER.pth.tar
 CURVE=results/supp_paper_curve_PAPER.json
-GPU=${GPU:-7}
+# Card 0, not 7. Card 7 is the from-scratch run's, and sharing it cost that
+# run about sixty per cent of its step rate. Card 0 carries RECIPE512 and has
+# the most free memory of the cards this account holds, so the measurements
+# go there and the long run gets its own card back. Set deliberately rather
+# than taken from the environment: the caller passes 7.
+GPU=0
 TMP=${TMP_DIR:?set TMP_DIR}
 LOG=results/repin_stage3.log
 mkdir -p "$TMP"
@@ -24,7 +29,7 @@ step () {
   fi
   echo "  $(date '+%H:%M:%S')  $base" | tee -a "$LOG"
   ( flock -w 43200 9 || exit 1
-    CUDA_VISIBLE_DEVICES="$GPU" "$@" ) 9>/tmp/flexuf_eval_gpu7.lock \
+    CUDA_VISIBLE_DEVICES="$GPU" "$@" ) 9>/tmp/flexuf_eval_gpu${GPU}.lock \
     >>"$LOG" 2>&1
   local rc=$?
   if [ "$rc" -eq 0 ] && [ -s "$TMP/$base" ]; then

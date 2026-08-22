@@ -550,8 +550,8 @@ if d and lat:
 # ------------------------------------------------------------------ A vs B
 print("A versus B")
 sa, _ = pick("signalled_RECIPE512_ctc53.json")
-b1, _ = pick("router_RECIPE512_b01_PAPER.json", "router_RECIPE512_b01_fixed.json", "router_RECIPE512_b01.json")
-b3, _ = pick("router_RECIPE512_b03_PAPER.json", "router_RECIPE512_b03_fixed.json", "router_RECIPE512_b03.json")
+b1, _ = pick("router_RECIPE512_b01_e4head.json", "router_RECIPE512_b01_PAPER.json", "router_RECIPE512_b01_fixed.json", "router_RECIPE512_b01.json")
+b3, _ = pick("router_RECIPE512_b03_e4head.json", "router_RECIPE512_b03_PAPER.json", "router_RECIPE512_b03_fixed.json", "router_RECIPE512_b03.json")
 if sa and b1:
     def Aat(bud):
         return {r["qp"]: sv(r) for r in sa["rows"]
@@ -795,7 +795,7 @@ if hy:
             mac("HybridBeatsABy", f"{max(beat):.2f}")
     # How far the sweep's ends sit from the hook-counted A and B.
     try:
-        _bB, _ = pick("router_RECIPE512_b01_PAPER.json",
+        _bB, _ = pick("router_RECIPE512_b01_e4head.json", "router_RECIPE512_b01_PAPER.json",
                       "router_RECIPE512_b01_fixed.json",
                       "router_RECIPE512_b01.json")
         _bA = json.load(open(RES / "signalled_RECIPE512_ctc53.json"))
@@ -888,6 +888,14 @@ if cp:
     if mid:
         mac("CoupPaddedMid", f"{mid['padded']['saving']:.1f}")
         mac("CoupCoupledMid", f"{mid['coupled']['saving']:.1f}")
+    # The floors themselves, because the prose quoted them as typed numbers
+    # beside these live percentages and they went stale the moment the
+    # checkpoint moved.
+    for tag, qp in (("Low", 0), ("High", 63)):
+        r = next((x for x in rows_ if x["qp"] == qp), None)
+        if r:
+            mac(f"CoupFloorPad{tag}", f"{r['padded']['floor_db']:.3f}")
+            mac(f"CoupFloorCpl{tag}", f"{r['coupled']['floor_db']:.3f}")
     drops = [100*(1 - r['coupled']['floor_db']/r['padded']['floor_db'])
              for r in rows_]
     mac("CoupFloorDropLo", f"{min(drops):.0f}")
@@ -916,6 +924,23 @@ if hy3:
         # paper printed a literal "$q48$ and $q63$". Plain text here; each
         # document formats it the way its renderer expects.
         mac("HybridLooseQps", " and ".join(f"q{q}" for q, _ in rec))
+    else:
+        # Every rate saturated. On the checkpoint the paper first reported
+        # some rates still had a gap for a partial map to recover at the
+        # loose budget; on this one configuration B alone reaches within a
+        # fifth of a point of the signalled map everywhere, so there is
+        # nothing left to buy. The macros are defined either way, because an
+        # undefined one prints as itself.
+        _gaps = []
+        for q in qs3:
+            b0, ba = _c3(q, 0.0), _c3(q, 1.0)
+            if None not in (b0, ba):
+                _gaps.append(ba - b0)
+        mac("HybridLooseQps", "no rate")
+        mac("HybridLooseRecLo", "0")
+        mac("HybridLooseRecHi", "0")
+        if _gaps:
+            mac("HybridLooseGapMax", f"{max(_gaps):.2f}")
 
 # which predictor should configuration C be built on
 hyr, _ = pick("hybrid_raterank_b01.json")
@@ -1262,7 +1287,7 @@ rr, _ = pick("raterank_RECIPE512_b01.json")
 rr3, _ = pick("raterank_RECIPE512_b03.json")
 if rr3:
     rs3 = [r for r in rr3["rows"] if r.get("budget_reachable")]
-    b3_, _ = pick("router_RECIPE512_b03_PAPER.json", "router_RECIPE512_b03_fixed.json", "router_RECIPE512_b03.json")
+    b3_, _ = pick("router_RECIPE512_b03_e4head.json", "router_RECIPE512_b03_PAPER.json", "router_RECIPE512_b03_fixed.json", "router_RECIPE512_b03.json")
     if rs3 and b3_:
         B3v = {r["qp"]: sv(r) for r in b3_["rows"]
                if r.get("budget_reachable")}
@@ -1333,6 +1358,14 @@ if rr:
                 mac("RateRankBeatsUpTo", str(max(win)))
                 mac("RateRankNWins", str(len(win)))
                 mac("RateRankBeatsBy", f"{max(v for _, v in d_):.1f}")
+                # The mean matters more than the maximum now. Against a head
+                # fitted to the checkpoint it is judged on, the free rule's
+                # margin is under a point on average and four thousandths of
+                # a point at one rate -- it matches the head rather than
+                # beating it, and the sentence in the abstract has to say so.
+                mac("RateRankBeatsMean",
+                    f"{sum(v for _, v in d_) / len(d_):.2f}")
+                mac("RateRankBeatsMin", f"{min(v for _, v in d_):.2f}")
             if any(v <= 0 for _, v in d_):
                 mac("RateRankLosesBy", f"{max(-v for _, v in d_ if v <= 0):.1f}")
                 mac("RateRankLosesFrom",

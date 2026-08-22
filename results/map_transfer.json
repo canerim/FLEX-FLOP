@@ -1,5 +1,5 @@
 {
-  "ckpt": "runs/RECIPE512/ckpt_eval.pth.tar",
+  "ckpt": "runs/RECIPE512/ckpt_PAPER.pth.tar",
   "budget_db": 0.1,
   "sequences": [
     "Beauty_1920x1080_120fps_420_8bit_YUV.yuv",
@@ -16,217 +16,219 @@
       "kind": "time",
       "qp": 0,
       "offset": 0,
-      "in_place_db": 0.09989258740097284,
-      "in_place_saving": 33.05144011974335,
-      "transfer_db": 0.09989258740097284,
-      "transfer_saving": 33.05144011974335
+      "in_place_db": 0.09979980532079935,
+      "in_place_saving": 34.197788685560226,
+      "transfer_db": 0.09979980532079935,
+      "transfer_saving": 34.197788685560226
     },
     {
       "kind": "time",
       "qp": 0,
       "offset": 1,
-      "in_place_db": 0.09994623996317387,
-      "in_place_saving": 32.664259523153305,
-      "transfer_db": 0.10553390625864267,
-      "transfer_saving": 33.05144011974335
+      "in_place_db": 0.09984014928340912,
+      "in_place_saving": 34.197789430618286,
+      "transfer_db": 0.1013868572190404,
+      "transfer_saving": 34.197788685560226
     },
     {
       "kind": "time",
       "qp": 0,
       "offset": 2,
-      "in_place_db": 0.09935860987752676,
-      "in_place_saving": 32.91459381580353,
-      "transfer_db": 0.10305093508213758,
-      "transfer_saving": 33.05144011974335
+      "in_place_db": 0.09910876210778952,
+      "in_place_saving": 34.395868331193924,
+      "transfer_db": 0.09943046513944864,
+      "transfer_saving": 34.197788685560226
     },
     {
       "kind": "time",
       "qp": 0,
       "offset": 4,
-      "in_place_db": 0.09944041259586811,
-      "in_place_saving": 33.14751163125038,
-      "transfer_db": 0.1033743703737855,
-      "transfer_saving": 33.05144011974335
+      "in_place_db": 0.09911429695785046,
+      "in_place_saving": 34.395869076251984,
+      "transfer_db": 0.10069417674094439,
+      "transfer_saving": 34.197788685560226
     },
     {
       "kind": "time",
       "qp": 0,
       "offset": 8,
-      "in_place_db": 0.09940601140260696,
-      "in_place_saving": 32.99905136227608,
-      "transfer_db": 0.10516938753426075,
-      "transfer_saving": 33.05144011974335
+      "in_place_db": 0.09972082544118166,
+      "in_place_saving": 34.5240093767643,
+      "transfer_db": 0.10239741764962673,
+      "transfer_saving": 34.197788685560226
     },
     {
       "kind": "time",
       "qp": 32,
       "offset": 0,
-      "in_place_db": 0.09437009133398533,
-      "in_place_saving": 25.451599806547165,
-      "transfer_db": 0.09437009133398533,
-      "transfer_saving": 25.451599806547165
+      "in_place_db": 0.09821081254631281,
+      "in_place_saving": 30.88638186454773,
+      "transfer_db": 0.09821081254631281,
+      "transfer_saving": 30.88638186454773
     },
     {
       "kind": "time",
       "qp": 32,
       "offset": 1,
-      "in_place_db": 0.09679134236648679,
-      "in_place_saving": 25.757361948490143,
-      "transfer_db": 0.09982945444062352,
-      "transfer_saving": 25.451599806547165
+      "in_place_db": 0.09764624899253249,
+      "in_place_saving": 30.426080524921417,
+      "transfer_db": 0.10115427989512682,
+      "transfer_saving": 30.88638186454773
     },
     {
       "kind": "time",
       "qp": 32,
       "offset": 2,
-      "in_place_db": 0.09909611754119396,
-      "in_place_saving": 27.023956179618835,
-      "transfer_db": 0.09761363174766302,
-      "transfer_saving": 25.451599806547165
+      "in_place_db": 0.09554143203422427,
+      "in_place_saving": 30.65609633922577,
+      "transfer_db": 0.0992065779864788,
+      "transfer_saving": 30.88638186454773
     },
     {
       "kind": "time",
       "qp": 32,
       "offset": 4,
-      "in_place_db": 0.09997340384870768,
-      "in_place_saving": 27.43159383535385,
-      "transfer_db": 0.09608543198555708,
-      "transfer_saving": 25.451599806547165
+      "in_place_db": 0.09568961663171649,
+      "in_place_saving": 30.93877136707306,
+      "transfer_db": 0.09702747501432896,
+      "transfer_saving": 30.88638186454773
     },
     {
       "kind": "time",
       "qp": 32,
       "offset": 8,
-      "in_place_db": 0.09474520618095994,
-      "in_place_saving": 26.16790235042572,
-      "transfer_db": 0.09657438239082694,
-      "transfer_saving": 25.451599806547165
+      "in_place_db": 0.09989595366641879,
+      "in_place_saving": 31.76012635231018,
+      "transfer_db": 0.09758473327383399,
+      "transfer_saving": 30.88638186454773
     },
     {
       "kind": "time",
       "qp": 63,
       "offset": 0,
-      "in_place_db": 0.09458773024380207,
-      "in_place_saving": 19.83783170580864,
-      "transfer_db": 0.09458773024380207,
-      "transfer_saving": 19.83783170580864
+      "in_place_db": 0.0924853254109621,
+      "in_place_saving": 26.46196335554123,
+      "transfer_db": 0.0924853254109621,
+      "transfer_saving": 26.46196335554123
     },
     {
       "kind": "time",
       "qp": 63,
       "offset": 1,
-      "in_place_db": 0.09340817877091467,
-      "in_place_saving": 19.97758001089096,
-      "transfer_db": 0.0958024999126792,
-      "transfer_saving": 19.83783170580864
+      "in_place_db": 0.0905295442789793,
+      "in_place_saving": 26.34834051132202,
+      "transfer_db": 0.09295837674289942,
+      "transfer_saving": 26.46196335554123
     },
     {
       "kind": "time",
       "qp": 63,
       "offset": 2,
-      "in_place_db": 0.0930960369296372,
-      "in_place_saving": 19.64859440922737,
-      "transfer_db": 0.0970582440495491,
-      "transfer_saving": 19.83783170580864
+      "in_place_db": 0.09053532383404672,
+      "in_place_saving": 26.240521669387817,
+      "transfer_db": 0.09332981891930103,
+      "transfer_saving": 26.46196335554123
     },
     {
       "kind": "time",
       "qp": 63,
       "offset": 4,
-      "in_place_db": 0.09581083850935102,
-      "in_place_saving": 20.015455782413483,
-      "transfer_db": 0.09842549171298742,
-      "transfer_saving": 19.83783170580864
+      "in_place_db": 0.0915702956262976,
+      "in_place_saving": 26.33368745446205,
+      "transfer_db": 0.09391216654330492,
+      "transfer_saving": 26.46196335554123
     },
     {
       "kind": "time",
       "qp": 63,
       "offset": 8,
-      "in_place_db": 0.0937960462179035,
-      "in_place_saving": 19.738855957984924,
-      "transfer_db": 0.09824270382523537,
-      "transfer_saving": 19.83783170580864
+      "in_place_db": 0.09256649622693658,
+      "in_place_saving": 26.709529757499695,
+      "transfer_db": 0.09341485891491175,
+      "transfer_saving": 26.46196335554123
     },
     {
       "kind": "rate",
       "from": 0,
       "to": 0,
-      "in_place_db": 0.09989258740097284,
-      "in_place_saving": 33.05144011974335,
-      "transfer_db": 0.09989258740097284,
-      "transfer_saving": 33.05144011974335
+      "in_place_db": 0.09979980532079935,
+      "in_place_saving": 34.197788685560226,
+      "transfer_db": 0.09979980532079935,
+      "transfer_saving": 34.197788685560226
     },
     {
       "kind": "rate",
       "from": 0,
       "to": 32,
-      "in_place_db": 0.09437009133398533,
-      "in_place_saving": 25.451599806547165,
-      "transfer_db": 0.14249567175284028,
-      "transfer_saving": 33.05144011974335
+      "in_place_db": 0.09821081254631281,
+      "in_place_saving": 30.88638186454773,
+      "transfer_db": 0.12755462108179927,
+      "transfer_saving": 34.197788685560226
     },
     {
       "kind": "rate",
       "from": 0,
       "to": 63,
-      "in_place_db": 0.09458773024380207,
-      "in_place_saving": 19.83783170580864,
-      "transfer_db": 0.1899485345929861,
-      "transfer_saving": 33.05144011974335
+      "in_place_db": 0.0924853254109621,
+      "in_place_saving": 26.46196335554123,
+      "transfer_db": 0.15856055868789554,
+      "transfer_saving": 34.197788685560226
     },
     {
       "kind": "rate",
       "from": 32,
       "to": 0,
-      "in_place_db": 0.09989258740097284,
-      "in_place_saving": 33.05144011974335,
-      "transfer_db": 0.09109675511717796,
-      "transfer_saving": 25.451599806547165
+      "in_place_db": 0.09979980532079935,
+      "in_place_saving": 34.197788685560226,
+      "transfer_db": 0.09468774171546102,
+      "transfer_saving": 30.88638186454773
     },
     {
       "kind": "rate",
       "from": 32,
       "to": 32,
-      "in_place_db": 0.09437009133398533,
-      "in_place_saving": 25.451599806547165,
-      "transfer_db": 0.09437009133398533,
-      "transfer_saving": 25.451599806547165
+      "in_place_db": 0.09821081254631281,
+      "in_place_saving": 30.88638186454773,
+      "transfer_db": 0.09821081254631281,
+      "transfer_saving": 30.88638186454773
     },
     {
       "kind": "rate",
       "from": 32,
       "to": 63,
-      "in_place_db": 0.09458773024380207,
-      "in_place_saving": 19.83783170580864,
-      "transfer_db": 0.12976552452892065,
-      "transfer_saving": 25.451599806547165
+      "in_place_db": 0.0924853254109621,
+      "in_place_saving": 26.46196335554123,
+      "transfer_db": 0.12284733867272735,
+      "transfer_saving": 30.88638186454773
     },
     {
       "kind": "rate",
       "from": 63,
       "to": 0,
-      "in_place_db": 0.09989258740097284,
-      "in_place_saving": 33.05144011974335,
-      "transfer_db": 0.0745636448264122,
-      "transfer_saving": 19.83783170580864
+      "in_place_db": 0.09979980532079935,
+      "in_place_saving": 34.197788685560226,
+      "transfer_db": 0.08236913895234466,
+      "transfer_saving": 26.46196335554123
     },
     {
       "kind": "rate",
       "from": 63,
       "to": 32,
-      "in_place_db": 0.09437009133398533,
-      "in_place_saving": 25.451599806547165,
-      "transfer_db": 0.0906544802710414,
-      "transfer_saving": 19.83783170580864
+      "in_place_db": 0.09821081254631281,
+      "in_place_saving": 30.88638186454773,
+      "transfer_db": 0.08735382556915283,
+      "transfer_saving": 26.46196335554123
     },
     {
       "kind": "rate",
       "from": 63,
       "to": 63,
-      "in_place_db": 0.09458773024380207,
-      "in_place_saving": 19.83783170580864,
-      "transfer_db": 0.09458773024380207,
-      "transfer_saving": 19.83783170580864
+      "in_place_db": 0.0924853254109621,
+      "in_place_saving": 26.46196335554123,
+      "transfer_db": 0.0924853254109621,
+      "transfer_saving": 26.46196335554123
     }
-  ]
+  ],
+  "ckpt_epoch": 4,
+  "stamped_by": "scripts/stamp_ckpt.py"
 }

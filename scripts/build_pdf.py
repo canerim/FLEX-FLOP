@@ -542,10 +542,10 @@ def content(colw, fullw):
         r"those limits collapses five rate curves \BandRawSpread points "
         r"apart onto one within \BandSpreadMean. And what is needed to "
         r"allocate is already in the file: routing on the bits the entropy "
-        r"model has spent on a tile beats our trained "
-        r"\RouterParams-parameter router at every rate, by up to "
-        r"\RateRankBeatsBy points, while agreeing with the exhaustive search "
-        r"on fewer tiles. A compressed representation records not only what "
+        r"model has spent on a tile matches our trained "
+        r"\RouterParams-parameter router, ahead by \RateRankBeatsMean "
+        r"points on average and level with it at one rate, while agreeing "
+        r"with the exhaustive search on fewer tiles. A compressed representation records not only what "
         r"to reconstruct, but how much computation the reconstruction is "
         r"worth."), ABST))
     A(Spacer(1, 6))
@@ -642,9 +642,9 @@ def content(colw, fullw):
         r"that band accounts for most of the rate dependence, on two "
         r"independently trained checkpoints.")
     par(r"<b>(iii)</b> The bits a tile has already cost predict how deep it "
-        r"has to decode, better than a trained router does. Routing on the "
-        r"entropy model's own output beats our \RouterParams head at every "
-        r"rate, by up to \RateRankBeatsBy points, with nothing added to the "
+        r"has to decode as well as a trained router does. Routing on the "
+        r"entropy model's own output is ahead of our \RouterParams head by "
+        r"\RateRankBeatsMean points on average, with nothing added to the "
         r"file and nothing learned. It does so while picking the search's exit "
         r"on fewer tiles than the head does, which says that accuracy over "
         r"exit labels is the wrong objective and that ordering is what a "
@@ -934,14 +934,6 @@ def content(colw, fullw):
         r"configuration B: nothing is added, and the decoder reads a file that "
         r"is byte for byte the one the released encoder produced. Every saving "
         r"quoted in this paper is labelled with the mode it was measured in.")
-    figure_wide("patchify.png",
-                r"<b>Figure N. What patchify does.</b> From one real decode. <b>a</b>, "
-           r"the frame padded to whole tiles, with the grid the decoder will "
-           r"impose. <b>b</b>, the feature map after the shared stem at one "
-           r"eighth resolution, so a 256 px tile is 32×32 of features: the "
-           r"tiling happens here, not in the pixel domain. <b>c</b>, four of "
-           r"the 40 tiles as the trunk sees them. <b>d</b>, the operation and "
-           r"its inverse, which costs no arithmetic and is exact.")
     par(r"<b>C</b> interpolates between the two. The encoder signals a "
         r"fraction ρ of the tiles, the ones where leaving B alone is most "
         r"costly, and B decides the rest, so ρ=0 is B and ρ=1 is A. Any "
@@ -966,6 +958,14 @@ def content(colw, fullw):
         r"the fraction several times below. Tile borders damage the picture "
         r"through it, and it is what makes the exact remedy of Section 4.4 "
         r"affordable at all. It is also why we kept the adapters pointwise.")
+    figure_wide("patchify.png",
+                r"<b>Figure N. What patchify does.</b> From one real decode. <b>a</b>, "
+           r"the frame padded to whole tiles, with the grid the decoder will "
+           r"impose. <b>b</b>, the feature map after the shared stem at one "
+           r"eighth resolution, so a 256 px tile is 32×32 of features: the "
+           r"tiling happens here, not in the pixel domain. <b>c</b>, four of "
+           r"the 40 tiles as the trunk sees them. <b>d</b>, the operation and "
+           r"its inverse, which costs no arithmetic and is exact.")
     h2("3.3 The exit ladder")
     par(r"<b>Why the tile is 256 pixels.</b> Two constraints bracket it. The "
         r"tile has to be large enough that its border is a small part of it, "
@@ -1380,10 +1380,11 @@ def content(colw, fullw):
         r"stitched frame and has no full-frame counterpart. Measured: 1.13e-2 "
         r"with the filter on, <b>exactly 0</b> with it off, against 6.06e-2 "
         r"for replicate padding.")
-    par(r"The exchange also removes most of the floor. Switched on at inference, "
-        r"it drops the floor from 0.036 to 0.003 dB at q0 and from 0.056 to "
-        r"0.030 at q63, which is \CoupFloorDropLow% and \CoupFloorDropHigh% of "
-        r"the tiling penalty.")
+    par(r"The exchange also removes most of the floor. Switched on at "
+        r"inference, it drops the floor from \CoupFloorPadLow to "
+        r"\CoupFloorCplLow dB at q0 and from \CoupFloorPadHigh to "
+        r"\CoupFloorCplHigh at q63, which is \CoupFloorDropLow% and "
+        r"\CoupFloorDropHigh% of the tiling penalty.")
     par(r"And it destroys the allocation. At the same 0.1 dB budget the "
         r"saving falls from \CoupPaddedMid% to \CoupCoupledMid% at q32 and from "
         r"\CoupPaddedHigh% to \CoupCoupledHigh% at q63.")
@@ -1804,10 +1805,10 @@ def content(colw, fullw):
         r"0 and saturation at 1 ([[fig:budget_band]]), and they collapse onto a single master curve, "
         r"\BandSpreadMean points apart on average and \BandSpreadMax at worst. "
         r"So ``how much does a 0.1 dB budget buy at this rate'' is, to within a "
-        r"couple of points, ``where does 0.1 dB sit in this rate's band''. The floor and the saturation point are both in "
-        r"closed form and both cheap to measure ([[fig:window]]). What they leave over is small "
-        r"enough that a deployment could calibrate the two ends and read the "
-        r"rest off one curve. That curve is a one-parameter power law, "
+        r"couple of points, ``where does 0.1 dB sit in this rate's band''. Both "
+        r"limits are in closed form and cheap to measure ([[fig:window]]), so "
+        r"a deployment could calibrate the two ends and read the rest off one "
+        r"curve. That curve is a one-parameter power law, "
         r"saving ≈ C·u^\BandExp, with C the architectural ceiling and u the "
         r"position in the band. We fit it in log space over all five rates and "
         r"get R² = \BandRTwo, worst residual \BandFitErr points. The claim we make "
@@ -2026,10 +2027,13 @@ def content(colw, fullw):
         r"routed decode \QualPsnrOurs dB. The crop is centred on the tile that "
         r"gave up the most, tile \QualWorstTile of \QualNTiles, not on a "
         r"flattering one. Right, the absolute difference at ×\QualAmp.")
-    par(r"It beats the trained head at every rate. The zero-learned-parameter "
-        r"rule is ahead of the \RouterParams router at all \RateRankNWins measured "
-        r"rates, by margins that run from half a point at q48 to "
-        r"\RateRankBeatsBy points at q0. A head trained on this decoder "
+    par(r"It matches the trained head. The zero-learned-parameter rule is "
+        r"ahead of the \RouterParams router at all \RateRankNWins measured "
+        r"rates, but by \RateRankBeatsMean points on average and "
+        r"\RateRankBeatsMin where they meet, which is a tie and not a win. "
+        r"The head is re-fitted on the checkpoint it is judged on; on an "
+        r"earlier one the rule appeared to win by five. A head trained on "
+        r"this decoder "
         r"against this oracle therefore returns nothing over a rule with no "
         r"parameters at all, and it carries \RouterCostPct% of the decode "
         r"that the calibrated bit rule does not.")
@@ -2213,13 +2217,13 @@ def content(colw, fullw):
            r"not have. The crossing is the design choice this section is "
            r"about.")
 
-    par(r"At the loose budget it matters where the gap is. At 0.3 dB "
-        r"the three lowest rates are saturated, and there is nothing for a "
-        r"partial map to buy. At \HybridLooseQps, where the gap is "
-        r"\GapLooseHigh points, half the map recovers "
-        r"\HybridLooseRecLo–\HybridLooseRecHi% of it. The allocation follows "
-        r"the same rule here as everywhere else, which is to spend the bits "
-        r"where the ladder still has somewhere to go.")
+    par(r"At the loose budget there is no gap left to buy. At 0.3 dB every "
+        r"rate is saturated on this checkpoint: the predicted map is within "
+        r"\HybridLooseGapMax points of the signalled one everywhere, so C "
+        r"has nothing to recover and nothing to spend bits on. That is the "
+        r"ladder having improved rather than the mechanism failing -- on an "
+        r"earlier checkpoint three rates were saturated and the rest had a "
+        r"gap worth half a map. C is a tight-budget mechanism.")
     par(r"A better predictor concentrates its regret, which is what the "
         r"Gini was for. We rebuild C on the retrained head of Section 5.5. "
         r"The Gini of the per-tile regret rises at \GiniRetrainUpN of "
@@ -2550,7 +2554,8 @@ def content(colw, fullw):
         r"the file to get it.")
     par(r"BD-Rate is the number a codec paper is read on, so we give it for "
         r"both configurations at all three budgets rather than only for the "
-        r"headline ([[tab:bdrate]]). Two things in the table are worth reading against each "
+        r"headline ([[tab:bdrate]], and [[fig:bdrate]] plots it against what "
+        r"it buys). Two things in the table are worth reading against each "
         r"other. The cost of a budget is not linear in it: going from 0.1 to "
         r"0.3 dB nearly triples the BD-Rate while the saving moves by "
         r"\GapBudgetPoints points, because the second decibel is spent on "

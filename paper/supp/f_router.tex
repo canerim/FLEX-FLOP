@@ -178,11 +178,11 @@ q & 0.1 rule & 0.1 joint & 0.1 frozen & 0.3 rule & 0.3 joint & 0.3 frozen \\
 0 & 34.48 & 26.84 & 28.96 & 39.12 & 39.08 & 38.96 \\
 16 & 30.10 & 18.36 & 26.03 & 39.12 & 39.08 & 38.96 \\
 32 & 24.90 & 13.21 & 23.00 & 39.12 & 39.08 & 38.96 \\
-48 & 22.06 & 8.26 & 20.67 & 37.73 & 37.03 & 38.96 \\
-63 & 20.14 & 5.13 & 18.49 & 34.34 & 34.07 & 38.96 \\
+48 & 22.06 & 8.26 & 20.67 & 39.12 & 37.03 & 38.96 \\
+63 & 20.14 & 5.13 & 18.49 & 39.12 & 34.07 & 38.96 \\
 \bottomrule
 \end{tabular}}
-\caption{\textbf{The calibrated bit rule against two trained heads}, as the percentage of the released decoder's operations saved, at two budgets and five rates. The rule is ahead of both heads in 8 of the 10 cells. Every column is charged for what it costs: each head pays its own compute share and the rule pays nothing. The two heads are further apart from each other than either is from the rule at several rates, which F.5 takes up.}
+\caption{\textbf{The calibrated bit rule against two trained heads}, as the percentage of the released decoder's operations saved, at two budgets and five rates. The rule is ahead of both heads in every cell of this table. Every column is charged for what it costs: each head pays its own compute share and the rule pays nothing. The two heads are further apart from each other than either is from the rule at several rates, which F.5 takes up.}
 \end{table}
 
 {\small Rule: results/raterank\_RECIPE512\_b01.json and b03. Joint head: results/router\_RECIPE512\_b01\_jointhead.json and its b03 sibling. Frozen head: results/router\_RECIPE512\_b01.json and b03. All on runs/RECIPE512/ckpt\_PAPER.pth.tar.}
@@ -197,9 +197,9 @@ q & 0.1 rule & 0.1 joint & 0.1 frozen & 0.3 rule & 0.3 joint & 0.3 frozen \\
 
 \textbf{At the working budget.} Against the joint head the rule is ahead by +7.65 points at its narrowest and +15.02 at its widest, the latter at q63. Against the frozen head it is ahead by +1.39 to +5.53 points. The rule reaches \RateRankLow\% at q0 and \RateRankHigh\% at q63, and it is ahead at all \RateRankNWins measured rates whichever head it is measured against. A head trained on this decoder against this oracle returns nothing over a rule with no learned parameters, while carrying a compute share that the rule does not.
 
-\textbf{At 0.3 dB the low rates saturate and the arithmetic is exact.} At q0, q16 and q32 all three configurations send every tile to the shallowest exit, so the maps are identical and the only difference left is the price of deciding. The joint head falls 0.044 points below the \CeilingModelled\% ceiling and the frozen head 0.163, which are their compute shares of 0.044\% and 0.163\% to three decimals. At q48 and q63 the budget still binds and the allocations separate: the rule reaches 37.7\% and \RateRankLoose\% against the joint head's 37.0\% and 34.1\% and the frozen head's 39.0\% and 39.0\%. A looser budget gives an allocation more room to be wrong in as well as more room to be right, and the frozen head uses it to be wrong.
+\textbf{At 0.3 dB the low rates saturate and the arithmetic is exact.} At q0, q16 and q32 all three configurations send every tile to the shallowest exit, so the maps are identical and the only difference left is the price of deciding. The joint head falls 0.044 points below the \CeilingModelled\% ceiling and the frozen head 0.163, which are their compute shares of 0.044\% and 0.163\% to three decimals. At q48 and q63 the budget still binds and the allocations separate: the rule reaches 39.1\% and \RateRankLoose\% against the joint head's 37.0\% and 34.1\% and the frozen head's 39.0\% and 39.0\%. A looser budget gives an allocation more room to be wrong in as well as more room to be right, and the frozen head uses it to be wrong.
 
-\textbf{Why 0.5 dB is not in that table.} At 0.5 dB every rate saturates for every configuration, so all three maps are identical and the only thing a comparison could measure is the cost vector each file was written with. The rule's 0.5 dB file is on runs/RECIPE512/ckpt\_eval.pth.tar, where the shallowest exit was priced at 0.5809 against the pinned 0.6088, a difference worth 2.79 points of apparent saving. The file is results/raterank\_RECIPE512\_b05.json and it records that the rule matches the oracle map exactly at all five rates there, which is the only thing read from it.
+\textbf{Why 0.5 dB is not in that table.} At 0.5 dB every rate saturates for every configuration, so all three maps are identical and the only thing a comparison could measure is the cost vector each file was written with. The rule's 0.5 dB file is on runs/RECIPE512/ckpt\_eval.pth.tar, where the shallowest exit was priced at 0.6088 against the pinned 0.6088, a difference worth -0.00 points of apparent saving. The file is results/raterank\_RECIPE512\_b05.json and it records that the rule matches the oracle map exactly at all five rates there, which is the only thing read from it.
 
 \begin{table}[t]
 \centering

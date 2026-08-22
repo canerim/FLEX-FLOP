@@ -25,7 +25,7 @@ def main(out="docs/figures/raterank.png"):
     # hand-written order. This script preferred router_..._b01_fixed.json and
     # drew configuration B at 27.2% at q0 while the table printed 23.6 -- a
     # different head, measured before the checkpoint was pinned.
-    b1, _src = pick("router_RECIPE512_b01_PAPER.json",
+    b1, _src = pick("router_RECIPE512_b01_e4head.json", "router_RECIPE512_b01_PAPER.json",
                     "router_RECIPE512_b01_fixed.json",
                     "router_RECIPE512_b01.json")
     print(f"  configuration B from {_src}")

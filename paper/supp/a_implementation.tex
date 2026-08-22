@@ -327,21 +327,21 @@ results file & backs & checkpoint & seq$\times$fr \\
 \midrule
 signalled\_RECIPE512\_ctc53 & main results, complexity & pinned, e4 & 53$\times$1 \\
 saturation\_RECIPE512\_ctc53 & operating range & pinned, e4 & 53 fr \\
-static\_RECIPE512\_b01 & static controls & pinned, e0 & 53 \\
-per\_class\_RECIPE512 & per class & pinned, e0 & 53 fr \\
+static\_RECIPE512\_b01 & static controls & pinned, e4 & 53 \\
+per\_class\_RECIPE512 & per class & pinned, e4 & 53 fr \\
 router\_RECIPE512\_b01 & A against B & pinned, e4 & 53$\times$1 \\
 router\_RECIPE512\_b03 & A against B & pinned, e4 & 53$\times$1 \\
 raterank\_RECIPE512\_b01 & rate rank & pinned, e4 & 53$\times$1 \\
-raterank\_RECIPE512\_b03 & rate rank & pinned & 53$\times$1 \\
-raterank\_RECIPE512\_b05 & rate rank & R512/eval & 53$\times$1 \\
-hybrid\_RECIPE512\_b01\_fixed & partial signalling & pinned & 53$\times$1 \\
-hybrid\_raterank\_b01 & rate rank, second run & pinned & 53$\times$1 \\
+raterank\_RECIPE512\_b03 & rate rank & pinned, e4 & 53$\times$1 \\
+raterank\_RECIPE512\_b05 & rate rank & pinned, e4 & 53$\times$1 \\
+hybrid\_RECIPE512\_b01\_fixed & partial signalling & pinned, e4 & 53$\times$1 \\
+hybrid\_raterank\_b01 & rate rank, second run & pinned, e4 & 53$\times$1 \\
 hybrid\_v3\_b01 & rate rank, second run & R512/eval & 53$\times$1 \\
 latency\_RECIPE512\_sorted & latency & R512/eval & - \\
 router\_latency & operating range & R512/eval & - \\
 adapter\_ablation & adapter ablation & pinned & 16 fr \\
 combined\_RECIPE512\_b01 & blend & pinned & 53$\times$1 \\
-hybrid\_RECIPE512\_b03\_fixed & macros only & R512/eval & 53$\times$1 \\
+hybrid\_RECIPE512\_b03\_fixed & macros only & pinned, e4 & 53$\times$1 \\
 hybrid\_lorenz\_b01 & macros only & R512/eval & 53$\times$1 \\
 coupling\_ablation & macros only & pinned & 16 fr \\
 map\_transfer & macros only & R512/eval & - \\
@@ -358,7 +358,7 @@ bdrate & BD-rate & \emph{none} & - \\
 check\_paper & claim check & \emph{none} & - \\
 \bottomrule
 \end{tabular}}
-\caption{Provenance of every generated table in the main paper. These are the 31 results files scripts/make\_paper\_tables.py reads, and the checkpoint column is read from each file at build time rather than typed. Take from it that 13 of the 31 are on the pinned checkpoint and the rest are not, so a reader comparing two rows of two different tables should check this column first. R512 abbreviates the run RECIPE512, "eval" is a per-epoch file the watcher overwrites in place, and "none" means the file records no checkpoint field.}
+\caption{Provenance of every generated table in the main paper. These are the 31 results files scripts/make\_paper\_tables.py reads, and the checkpoint column is read from each file at build time rather than typed. Take from it that 15 of the 31 are on the pinned checkpoint and the rest are not, so a reader comparing two rows of two different tables should check this column first. R512 abbreviates the run RECIPE512, "eval" is a per-epoch file the watcher overwrites in place, and "none" means the file records no checkpoint field.}
 \end{table}
 
 The pinned group of Table 10 carries the headline saving, the operating range, the per-class breakdown, the static controls and both routed configurations, so the paper's central claim rests on one epoch of one run measured consistently. Section H states what the rest of the column costs in reproducibility.
@@ -393,19 +393,19 @@ q63 & 20.00 & 11.13 & -0.95 & 20.39 & 39.12 & RaceHorses \\
 \toprule
 quality index & path 1 & path 2 & gap \\
 \midrule
-q0 & 36.14 & 33.64 & 2.49 \\
-q16 & 31.32 & 28.48 & 2.85 \\
-q32 & 24.43 & 21.86 & 2.57 \\
-q48 & 19.04 & 17.01 & 2.03 \\
-q63 & 10.32 & 10.83 & -0.51 \\
+q0 & 34.28 & 31.59 & 2.69 \\
+q16 & 29.35 & 25.83 & 3.53 \\
+q32 & 23.15 & 20.18 & 2.97 \\
+q48 & 19.02 & 16.74 & 2.28 \\
+q63 & 14.74 & 13.30 & 1.44 \\
 \bottomrule
 \end{tabular}}
-\caption{Two implementations of the same quantity do not agree. Saving in percent at the 0.1 dB budget, computed by the curve-sweeping path and by the signalling path, which differ in how they pool distortion across tiles and frames. Take from it a floor on protocol sensitivity: the gap reaches 2.85 points, larger than several of the differences the paper draws conclusions from, so numbers from the two paths are never mixed inside one table.}
+\caption{Two implementations of the same quantity do not agree. Saving in percent at the 0.1 dB budget, computed by the curve-sweeping path and by the signalling path, which differ in how they pool distortion across tiles and frames. Take from it a floor on protocol sensitivity: the gap reaches 3.53 points, larger than several of the differences the paper draws conclusions from, so numbers from the two paths are never mixed inside one table.}
 \end{table}
 
 {\small Source: results/crosscheck\_paths.json. The file records no checkpoint field.}
 
-Evaluation itself is deterministic once a checkpoint is fixed: the sequence list, the leading frames and the tile grid are all fixed and no crop is random. scripts/check\_paper.py re-reads \NumClaims numerical claims out of the paper's prose and checks each against the file it is supposed to come from. As recorded in results/check\_paper.json, 78 of them pass. One does not: "rate-rank: best margin (pts)", which is listed among the limitations of section H rather than presented as passing.
+Evaluation itself is deterministic once a checkpoint is fixed: the sequence list, the leading frames and the tile grid are all fixed and no crop is random. scripts/check\_paper.py re-reads \NumClaims numerical claims out of the paper's prose and checks each against the file it is supposed to come from. As recorded in results/check\_paper.json, 79 of them pass. One does not: "rate-rank: best margin (pts)", which is listed among the limitations of section H rather than presented as passing.
 
 \subsection{Data, code and provenance}
 

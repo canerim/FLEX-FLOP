@@ -74,12 +74,15 @@ def claim(label, expected, actual, tol=0.06):
 d = J("coupling_ablation.json")
 if d:
     by = {r["qp"]: r for r in d["rows"]}
-    for qp, pad, cpl in ((0, 30.95, 29.52), (32, 24.62, 3.32), (63, 20.89, 0.35)):
+    # Epoch 4. The savings rose with the ladder and the floors fell with the
+    # deepest exit; what did not move is the finding -- the exchange still
+    # destroys the routed saving, and more so as the rate rises.
+    for qp, pad, cpl in ((0, 35.20, 34.81), (32, 31.17, 5.54), (63, 28.00, 1.03)):
         if qp in by:
             claim(f"coupling q{qp} padded saving", pad, by[qp]["padded"]["saving"])
             claim(f"coupling q{qp} coupled saving", cpl,
                   by[qp]["coupled"]["saving"])
-    for qp, pad, cpl in ((0, 0.0358, 0.0031), (63, 0.0564, 0.0300)):
+    for qp, pad, cpl in ((0, 0.0279, -0.0001), (63, 0.0420, 0.0240)):
         if qp in by:
             claim(f"coupling q{qp} floor padded", pad,
                   by[qp]["padded"]["floor_db"], 0.0006)
@@ -132,10 +135,16 @@ if t:
 
 # ---- rate rank ------------------------------------------------------------
 rr = J("raterank_RECIPE512_b01.json")
-b1 = J("router_RECIPE512_b01_fixed.json", "router_RECIPE512_b01.json")
+# The same chain the paper reads, in the same order. This read the old head
+# while make_paper_tables read the re-fitted one, so the check was testing a
+# comparison the paper does not make -- which is how a check stops being one.
+b1 = J("router_RECIPE512_b01_e4head.json", "router_RECIPE512_b01_PAPER.json",
+       "router_RECIPE512_b01_fixed.json", "router_RECIPE512_b01.json")
 if rr and b1:
-    B = {r["qp"]: r["saving_pct_vs_release"] for r in b1["rows"]
-         if r.get("budget_reachable")}
+    # Hook count, like every saving the paper prints. This read the modelled
+    # number while the macro it is checking is hook-counted, so the two were
+    # a few tenths of a point apart for no reason a reader could see.
+    B = {r["qp"]: sv(r) for r in b1["rows"] if r.get("budget_reachable")}
     for r in rr["rows"]:
         if not r.get("budget_reachable") or r["qp"] not in B:
             continue
@@ -143,15 +152,19 @@ if rr and b1:
             claim("rate-rank q63", mac("RateRankHigh"), sv(r), 0.1)
         if r["qp"] == 0:
             claim("rate-rank q0", mac("RateRankLow"), sv(r), 0.1)
-    d_ = [(r["qp"], r["saving_pct_vs_release"] - B[r["qp"]]) for r in rr["rows"]
+    d_ = [(r["qp"], sv(r) - B[r["qp"]]) for r in rr["rows"]
           if r.get("budget_reachable") and r["qp"] in B]
     # Re-measured on the pinned checkpoint with the corrected cost model, the
     # free rule wins at every rate, so there is no deficit left to check. The
     # retired expectations were 3 wins, a 2.7-point best margin and a 0.8-point
     # worst deficit, all measured against an unpinned head.
     claim("rate-rank: rates it wins", 5, sum(1 for _, v in d_ if v > 0), 0)
-    claim("rate-rank: best margin (pts)", 3.4, max(v for _, v in d_), 0.1)
-    claim("rate-rank: worst margin (pts)", 0.5, min(v for _, v in d_), 0.1)
+    # Against a head fitted to the checkpoint it is judged on, the free rule's
+    # margin is a fraction of what it looked like against a head fitted to an
+    # earlier one: 1.9 at best and 0.13 at worst, where it read 5.5 and 1.4.
+    # The abstract says "matches" now, not "beats".
+    claim("rate-rank: best margin (pts)", 1.85, max(v for _, v in d_), 0.1)
+    claim("rate-rank: worst margin (pts)", 0.00, min(v for _, v in d_), 0.1)
 
 # ---- hybrid C -------------------------------------------------------------
 hy = J("hybrid_RECIPE512_b01_fixed.json", "hybrid_RECIPE512_b01.json")
@@ -176,7 +189,7 @@ if hy and b1f and sg:
     ends1 = [abs(_h(q, 1.0) - Av[q]) for q in Av if _h(q, 1.0) is not None]
     claim("hybrid: rho=1 reproduces A (max |diff|)", 0.0, max(ends1), 0.05)
     beat = [(_h(q, 0.5) - Av[q]) for q in Av if _h(q, 0.5) is not None]
-    claim("hybrid: rates where half beats all", 4, sum(1 for d in beat if d > 0), 0)
+    claim("hybrid: rates where half beats all", 2, sum(1 for d in beat if d > 0), 0)
     claim("hybrid: best margin over A (pts)", mac("HybridBeatsABy"), max(beat), 0.05)
     # and the margin is not the bisection tolerance in disguise
     dbs = [abs(r["db_vs_uf"] - 0.1) for r in rws]
@@ -263,7 +276,7 @@ if _hy and _rb and _sa:
             if _r and _q in _ref:
                 _d.append(sv(_r[0]) - _ref[_q])
     if _d:
-        claim("hybrid: end offset, smallest", 0.43, min(_d), 0.05)
+        claim("hybrid: end offset, smallest", 0.58, min(_d), 0.05)
         claim("hybrid: end offset, largest", 0.78, max(_d), 0.05)
 
 # ---- the band collapse ----------------------------------------------------
@@ -305,7 +318,7 @@ if hy and hv3:
     G2, G3 = _g(hy), _g(hv3)
     common = [q for q in G2 if q in G3]
     if common:
-        claim("gini: rates where the retrain concentrates regret", 4,
+        claim("gini: rates where the retrain concentrates regret", 5,
               sum(1 for q in common if G3[q] > G2[q]), 0)
 
 # ---- the free rule on a second training run --------------------------------
@@ -361,13 +374,13 @@ d = J("map_transfer.json")
 if d:
     rt = {(r["from"], r["to"]): r for r in d["rows"] if r["kind"] == "rate"}
     if (0, 63) in rt:
-        claim("transfer q0->q63 delivered dB", 0.190, rt[(0, 63)]["transfer_db"],
+        claim("transfer q0->q63 delivered dB", 0.159, rt[(0, 63)]["transfer_db"],
               0.002)
-        claim("transfer q0->q63 saving", 33.05, rt[(0, 63)]["transfer_saving"])
+        claim("transfer q0->q63 saving", 34.20, rt[(0, 63)]["transfer_saving"])
     if (63, 0) in rt:
-        claim("transfer q63->q0 delivered dB", 0.075, rt[(63, 0)]["transfer_db"],
+        claim("transfer q63->q0 delivered dB", 0.082, rt[(63, 0)]["transfer_db"],
               0.002)
-        claim("transfer q63->q0 saving", 19.84, rt[(63, 0)]["transfer_saving"])
+        claim("transfer q63->q0 saving", 26.46, rt[(63, 0)]["transfer_saving"])
 
 # ---- encoder cost -----------------------------------------------------------
 d = J("encoder_cost.json")
@@ -391,7 +404,7 @@ if d:
     r63 = rows.get(63)
     if r63 and r63.get("rate_rank"):
         claim("rate-rank q63 dB", 0.110, r63["rate_rank"]["db"], 0.002)
-        claim("random q63 dB", 0.141, r63["random"]["db"], 0.002)
+        claim("random q63 dB", 0.147, r63["random"]["db"], 0.002)
         gapv = r63["random"]["db"] - r63["oracle"]["db"]
         got = r63["random"]["db"] - r63["rate_rank"]["db"]
         claim("rate-rank recovers %", 75, 100 * got / gapv, 2)
@@ -401,8 +414,8 @@ d = J("adapter_ablation.json")
 if d:
     r63 = next((r for r in d["rows"] if r["qp"] == 63), None)
     if r63:
-        claim("adapters: exit 2 without, q63", 4.40, r63["all_off"]["2"], 0.01)
-        claim("adapters: exit 2 gain, q63", 4.10,
+        claim("adapters: exit 2 without, q63", 4.54, r63["all_off"]["2"], 0.01)
+        claim("adapters: exit 2 gain, q63", 4.33,
               r63["all_off"]["2"] - r63["trained"]["2"], 0.01)
         claim("adapters: deepest exit control", 0.0,
               r63["all_off"]["5"] - r63["trained"]["5"], 1e-9)
