@@ -535,7 +535,7 @@ for _name in ("check_twins", "check_tex", "prose_audit", "check_layout",
               "check_fig_claims", "check_mixed",
               "check_provenance", "bd_crosscheck", "mac_crosscheck_report",
               "check_epoch", "check_fig_scale", "check_abstract",
-              "check_derived_fresh"):
+              "check_derived_fresh", "check_ink"):
     _r = _sp.run([sys.executable, str(Path(__file__).parent / f"{_name}.py")],
                  capture_output=True, text=True)
     _last = [l for l in _r.stdout.splitlines() if l.strip()]
