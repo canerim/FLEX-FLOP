@@ -5489,3 +5489,54 @@ and names the pin; five checked claims and six macros moved with it.
 The conclusion is untouched and slightly stronger: the halo exchange takes the
 routed saving from 24.6% to 3.3% at q32, an 86% collapse where the stale
 numbers said 84%.
+
+## 122. The newest file was taking the headline from the reported one
+
+Both readers of `results/` ranked candidates by "measured on the pinned
+checkpoint, then most recently written", and mtime was the wrong tie-break.
+
+A driver from the chain that ran before the router head was re-fitted was
+still alive, sharing card 7 with the from-scratch run, and at 13:28 it
+rewrote `router_RECIPE512_b0*.json` with the head fitted on 19 August to
+whatever `ckpt_eval` held then. Both files are on the pinned checkpoint, so
+the tie fell to recency and the stale one won. Configuration B's headline
+went from 32.5% to 28.2% at q0, the tables and the checker moved together,
+and nothing said anything: the check that compares the paper against the
+data was reading the same wrong file the paper was.
+
+Hand order is now the last key in both `make_paper_tables.pick()` and
+`check_paper.J()`, and a file whose `router2_meta` records a head fitted to
+a different epoch than its own decoder loses to one whose head matches.
+Intent is written in the call; recency is an accident of which driver ran
+last. The driver is stopped and the three files are in `results/superseded/`.
+
+## 123. A name a document lists behind another is not a file it reads
+
+`check_epoch` counted every `.json` literal in the builders as a file the
+paper reads, which meant a candidate list of three names contributed three
+files to the sweep. The older two can never be brought onto the pinned
+checkpoint -- the file that replaced them is what gets measured -- so the
+check could not have gone green while the fallbacks were spelled out.
+
+It now resolves each candidate list the way the readers do and exempts what
+sits behind the live one, with one guard: a name read on its own anywhere is
+live everywhere. Without it the pre-fix hybrid file, which Section C reads
+directly and `make_paper_tables` lists behind the pinned-head measurement,
+would have been exempted from the check that exists for exactly that file.
+
+## 124. The references get a page, and the wide figure stopped spending one
+
+Two layout rules, both learned from what the builder actually did.
+
+`figure_wide` breaks the page where it is called. Called four paragraphs
+into Section 3.2, it cut the flow a third of the way down a column and left
+one and a half columns of that page empty. Called at the section boundary,
+the break costs what the boundary costs. That page paid for four of the five
+figures that had been moved to the supplement to get the paper to twenty.
+
+The references were emitted after `CondPageBreak(1.1 * inch)`, which starts
+a column rather than a page. A paper trimmed to fit always ends within an
+inch of the bottom, so four entries were stranded at the foot of the last
+content page. They now follow a plain `PageBreak()`: the rule for this paper
+is that the content ends on the page before them, and the layout says so
+rather than depending on how close the body happens to land.
