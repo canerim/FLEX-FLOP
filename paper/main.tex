@@ -552,15 +552,13 @@ adapter is the correction. For exits that skip little we use a residual
 $1\times1$, $\mathrm{Ad}(f) = f + Wf$ with $W$ zero-initialised. For exits that
 skip four blocks or more we use the pointwise expand/activate/contract pair of
 the block's own FFN (Fig.~\ref{fig:adapters}). The threshold is where the
-capacity mismatch stops being ignorable: a $1\times1$ costs $C^2$ per pixel and
-each block it stands in for costs $8C^2+9C$, so at two skipped blocks it is
-replacing sixteen times its own arithmetic and at six it is replacing fifty.
-Both are \emph{pointwise by
-design}. A $3\times3$ inside an adapter would add seam damage at the tiles that
-took an early exit, and those are the tiles least able to afford it.
-Zero-initialising the last layer makes every adapter exactly the identity at step
-zero, so the deepest exit is bit-exactly the released decoder before training
-begins and every shallow exit starts from ``the decoder as it is''.
+capacity mismatch stops being ignorable: a $1\times1$ costs $C^2$ per pixel
+against a block's $8C^2+9C$, so at two skipped blocks it stands in for sixteen
+times its own arithmetic. Both are \emph{pointwise by design}: a $3\times3$
+inside an adapter would add seam damage at exactly the tiles least able to
+afford it. Zero-initialising the last layer makes every adapter the identity at
+step zero, so the deepest exit is bit-exactly the released decoder before
+training begins.
 
 \begin{figure}[t]
 \centering
@@ -639,12 +637,11 @@ $\EncDeployedX\times$ the unit rather than $K$ times it, because a shallow exit 
 to run than a full one. The full-frame table taps every exit off a single
 full-frame pass and comes to $\EncFullFrameX\times$. Section~\ref{sec:exp} shows that the
 full-frame table must not be used to \emph{report} quality, but it can still be
-used to \emph{rank}. Running the argmin on it, and the deployed path only to
-check the budget, we find the two searches agree on \EncAgree\% of tiles and land
-within \EncSavingGap\ points of saving of each other (\EncApproxSaving\%
-against \EncExactSaving\%, both under budget). The exact search therefore
-costs \EncDeployedX\ decodes and a practical encoder need not pay it; ranking on the
-full-frame table is the one extra decode per frame we quote for A.
+used to \emph{rank}: the two searches agree on \EncAgree\% of tiles and land
+within \EncSavingGap\ points of saving of each other, both under budget. A
+practical encoder therefore need not pay the \EncDeployedX\ decodes the exact
+search costs; ranking on the full-frame table is the one extra decode per frame
+we quote for A.
 
 The decoder cannot run~(\ref{eq:lagrangian}). $D_{t,k}$ is the error against the
 source, and the source is the one thing a decoder never receives. The gap is one
@@ -2361,6 +2358,14 @@ and this training, not about halo exchange in general. We do
 not know whether a decoder trained with the exchange can recover both at once, and
 that is the experiment we would run next. Until someone runs it, the floor is a
 cost this method pays.
+
+\paragraph{The budget does not say how it is spent.} Every quality number here
+is DCVC-UF's own 6:1:1 weighted PSNR, in which chroma carries an eighth of the
+weight, and the budget is set on it. Split into its parts at $0.1\dB$, luma
+falls by \ChromaLumaDrop\ dB and the two chroma planes by \ChromaUDrop\ and
+\ChromaVDrop: chroma loses \ChromaRatio\ times what luma does. The allocation
+minimises absolute error and chroma begins with less of it. A budget set per
+component would see this; ours cannot.
 
 \paragraph{Intra frames only.} This is the image path of a video codec.
 Extending the ladder to inter frames raises a question we do not answer here,

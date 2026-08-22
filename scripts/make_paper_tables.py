@@ -1075,6 +1075,28 @@ if cb:
         mac(f"BlendGain{tag}", f"{sv(bc) - sv(c0):+.1f}")
         mac(f"BlendGain{tag}Q", f"q{q}")
 
+# ------------------------------------------------ the colour components
+# The budget is set on a 6:1:1 weighted PSNR in which chroma carries an
+# eighth, so the weighted mean can land on the budget while its parts move
+# apart underneath it. Nothing else in the paper would show that.
+print("per component")
+try:
+    _yv = json.load(open(RES / "rd_yuv_PAPER.json"))
+    _rel = {r["qp"]: r for r in _yv["rows"] if r["config"] == "release"}
+    _at = {r["qp"]: r for r in _yv["rows"] if r.get("budget_db") == 0.1}
+    _qs = sorted(q for q in _rel if q in _at)
+    if _qs:
+        def _d(k):
+            return sum(_at[q][k] - _rel[q][k] for q in _qs) / len(_qs)
+        _dy, _du, _dv = _d("psnr_y"), _d("psnr_u"), _d("psnr_v")
+        mac("ChromaLumaDrop", f"{abs(_dy):.2f}")
+        mac("ChromaUDrop", f"{abs(_du):.2f}")
+        mac("ChromaVDrop", f"{abs(_dv):.2f}")
+        mac("ChromaRatio", f"{((_du + _dv) / 2) / _dy:.1f}")
+except Exception as _e:
+    print("   rd_yuv_PAPER.json:", _e)
+
+
 # ------------------------------------------------- the propositions, counted
 # "seven of seven" was typed into both documents. The file says how many there
 # are and how many passed; if a proposition is added or one starts failing,

@@ -1003,15 +1003,13 @@ def content(colw, fullw):
         r"For exits that skip four blocks or more we use the pointwise "
         r"expand/activate/contract pair of the block's own FFN ([[fig:adapters]]). The threshold "
         r"is where the capacity mismatch stops being ignorable: a 1×1 costs C² "
-        r"per pixel and each block it stands in for costs 8C²+9C, so at two "
-        r"skipped blocks it is replacing sixteen times its own arithmetic and "
-        r"at six it is replacing fifty. Both are "
-        r"<i>pointwise by design</i>. A 3×3 inside an adapter would add seam "
-        r"damage at the tiles that took an early exit, and those are the tiles "
-        r"least able to afford it. Zero-initialising the last layer makes "
-        r"every adapter exactly the identity at step zero, so the deepest exit "
-        r"is bit-exactly the released decoder before training begins and every "
-        r"shallow exit starts from ``the decoder as it is''.")
+        r"per pixel against a block's 8C²+9C, so at two skipped blocks it "
+        r"stands in for sixteen times its own arithmetic. Both are "
+        r"<i>pointwise by design</i>: a 3×3 inside an adapter would add seam "
+        r"damage at exactly the tiles least able to afford it. "
+        r"Zero-initialising the last layer makes every adapter the identity at "
+        r"step zero, so the deepest exit is bit-exactly the released decoder "
+        r"before training begins.")
     figure("adapter_gain.png",
            r"<b>Figure 3. What the adapters are worth.</b> <b>a</b>, each exit "
            r"with and without its adapter. <b>b</b>, the dB the adapter "
@@ -1070,14 +1068,12 @@ def content(colw, fullw):
         r"exit is cheaper to run than a full one. The full-frame table taps "
         r"every exit off a single full-frame pass and comes to \EncFullFrameX×. "
         r"Section 5 shows that the full-frame table must not be used to "
-        r"<i>report</i> quality, but it can still be used to <i>rank</i>. "
-        r"Running the argmin on it, and the deployed path only to check the "
-        r"budget, we find the two searches agree on \EncAgree% of tiles and land "
-        r"within \EncSavingGap points of saving of each other "
-        r"(\EncApproxSaving% against \EncExactSaving%, both "
-        r"under budget). The exact search therefore costs \EncDeployedX decodes and a "
-        r"practical encoder need not pay it; ranking on the full-frame table "
-        r"is the one extra decode per frame we quote for A.")
+        r"<i>report</i> quality, but it can still be used to <i>rank</i>: the "
+        r"two searches agree on \EncAgree% of tiles and land within "
+        r"\EncSavingGap points of saving of each other, both under budget. A "
+        r"practical encoder therefore need not pay the \EncDeployedX decodes "
+        r"the exact search costs; ranking on the full-frame table is the one "
+        r"extra decode per frame we quote for A.")
     par(r"The decoder cannot run the argmin. D(t,k) is the error against the "
         r"source, and the source is the one thing a decoder never receives. The "
         r"gap is one of information: the errors the argmin compares depend on a "
@@ -2590,6 +2586,14 @@ def content(colw, fullw):
         r"Whether a decoder trained with the exchange recovers both at once "
         r"is the experiment we would run next; until it is run, the floor is "
         r"a cost this method pays.")
+    par(r"<b>The budget does not say how it is spent.</b> Every quality "
+        r"number here is DCVC-UF's own 6:1:1 weighted PSNR, in which chroma "
+        r"carries an eighth of the weight, and the budget is set on it. Split "
+        r"into its parts at 0.1 dB, luma falls by \ChromaLumaDrop dB and the "
+        r"two chroma planes by \ChromaUDrop and \ChromaVDrop: chroma loses "
+        r"\ChromaRatio times what luma does. The allocation minimises "
+        r"absolute error and chroma begins with less of it. A budget set per "
+        r"component would see this; ours cannot.")
     par(r"<b>Intra frames only.</b> This is the image path of a video codec. "
         r"Extending the ladder to inter frames raises a question we do not "
         r"answer here, because an exit map propagates through the reference "
@@ -2853,7 +2857,11 @@ def build(out="paper/FLEX-UF.pdf"):
     story.append(Paragraph("References", H1))
     for i, r in enumerate(REFS, 1):
         story.append(Paragraph(f"[{i}] {r}",
-                               S("ref", fontSize=7.2, leading=8.4, spaceAfter=2)))
+                               # Set tighter than the body, as a reference list conventionally is. At
+                               # 8.4 leading the last three entries fell to a
+                               # twenty-first page.
+                               S("ref", fontSize=7.2, leading=8.0,
+                                 spaceAfter=1.4)))
 
     # The supplement is its own document again. It was folded in here when the
     # target was one CVPR PDF; the author now wants it separate, and
