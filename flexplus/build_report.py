@@ -315,19 +315,79 @@ def content(F):
         "the remaining comparison decides only which objective is less far "
         "away.", BODY))
 
-    A(Paragraph("5. Open", H1))
+    A(Paragraph("4.3 The third axis, and what all three of them say", H2))
+    sp = J("spatial_probe.json")
     A(Paragraph(
-        "The decode objective is running: the narrow stem trained on the "
-        "reconstruction at an exit sampled per step, which is the quantity "
-        "the budget is set in. If it closes the gap, two things follow that "
-        "neither experiment tests: the narrow stem should be trained jointly "
-        "with the ladder rather than fitted to anything frozen, and a single "
-        "fixed width is a weaker design than a gate that picks one per frame, "
-        "which is what Dynamic Slimmable Network is for. If it does not close "
-        "the gap, the width axis is answered for this decoder and the "
-        "remaining candidate from the literature is spatial sparsity, whose "
-        "cost falls only linearly but which leaves the stem's shapes alone.",
-        BODY))
+        "Spatial sparsity is the one axis left, and the cheapest to settle. "
+        "Rank each position by how much the four stem blocks move it -- the "
+        "norm of the stem's own residual -- and hand the least-moved fraction "
+        "the stem's input instead of its output. The ranking is an oracle: it "
+        "sees the output a learned mask would have to predict, so a learned "
+        "mask cannot beat it and a failure here is conclusive.", BODY))
+    if sp:
+        keeps = sorted({r["keep"] for r in sp["rows"]}, reverse=True)
+        rows = [["active fraction", "ceiling", "+dB q0", "q32", "q63"]]
+        for k in keeps:
+            r = {x["qp"]: x for x in sp["rows"] if x["keep"] == k}
+            if not r:
+                continue
+            any_r = next(iter(r.values()))
+            rows.append([f"{k:g}", f"{any_r['ceiling_modelled_pct']:.1f}%"]
+                        + [f"{r[q]['extra_db']:+.3f}" if q in r else "--"
+                           for q in (0, 32, 63)])
+        A(table(rows,
+                "<b>Table 4. An oracle spatial mask on the stem.</b> Quality "
+                "measured; the ceiling is arithmetic, the active fraction "
+                "times the stem's share of the floor. Nothing else in the "
+                "floor moves."))
+    A(Paragraph(
+        "Skipping the least-moved quarter of positions costs between +0.49 "
+        "and +0.96 dB, two and a half to five times the budget. At half the "
+        "positions -- the setting whose ceiling is the 54% this branch was "
+        "aiming at -- it costs +1.05 to +2.01. The axis is closed, and closed "
+        "harder than width, because no learned mask can do better than the "
+        "ranking used here.", BODY))
+    A(Paragraph(
+        "<b>All three axes agree, and that is the result.</b> Remove the "
+        "stem's work by channel, by width or by position and the price is "
+        "the same order: two to ten times the budget. The stem is not doing "
+        "redundant work anywhere.", BODY))
+    A(Paragraph(
+        "Set against the paper this is a sharp contrast worth stating. "
+        "Content-adaptive <i>depth</i> works: the same decoder gives up 0.1 "
+        "dB and returns 27.6% of its arithmetic, because some tiles genuinely "
+        "need less of the trunk than others. Content-adaptive <i>stem</i> "
+        "does not, on any of the three axes. The difference is what is being "
+        "chosen. The exit ladder decides how much further to go from a shared "
+        "representation; these probes remove the work that representation is "
+        "made of. There are easy regions in a picture, and there are none in "
+        "the computation that turns a latent into one.", BODY))
+
+    A(Paragraph("5. What this leaves", H1))
+    A(Paragraph(
+        "The branch set out to reach 55% at a 0.2 dB budget with the ladder "
+        "shape left alone, and it does not get there. Every route to the only "
+        "lever large enough -- the four always-on trunk blocks -- costs "
+        "between two and ten times the budget, and one of the three routes "
+        "was tested with an oracle, so it is not a matter of finding a better "
+        "gate or a longer schedule.", BODY))
+    A(Paragraph(
+        "Two things would still be worth running, and neither is a variation "
+        "on what is here. The narrow stem was fitted to a frozen target; "
+        "training it jointly with the ladder lets the exits move to meet it "
+        "rather than requiring it to reproduce a decoder that was fitted "
+        "without it. And nothing here questioned the split depth, because the "
+        "instruction was to leave it alone -- but the arithmetic in Section 1 "
+        "says that lowering it is the one move that reaches the target "
+        "cleanly, at a seam cost this project has already measured "
+        "(0.100/0.144/0.234 dB by split at 256 px, untrained). Between a "
+        "known seam cost and three axes that each cost more, the seam is the "
+        "cheaper problem.", BODY))
+    A(Paragraph(
+        "The negative result is worth keeping either way. A decoder's shared "
+        "stem is not slack: the ceiling in the paper is not an artefact of "
+        "how the ladder was cut, and a reader who assumes there is easy work "
+        "to remove below the split should be shown these numbers.", BODY))
 
 
 def build(out=str(HERE / "FLEX-PLUS.pdf")):

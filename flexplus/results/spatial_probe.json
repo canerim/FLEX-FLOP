@@ -1,0 +1,105 @@
+{
+  "ckpt": "runs/RECIPE512/ckpt_PAPER.pth.tar",
+  "ckpt_epoch": 4,
+  "split_depth": 2,
+  "n_frames": 12,
+  "what": "oracle spatial mask on the always-on stem, quality only; the cost column is arithmetic",
+  "rows": [
+    {
+      "qp": 0,
+      "keep": 1.0,
+      "db_vs_uf": 0.10827437043190002,
+      "extra_db": 0.0,
+      "stem_cost_modelled": 0.2981,
+      "ceiling_modelled_pct": 39.12
+    },
+    {
+      "qp": 0,
+      "keep": 0.75,
+      "db_vs_uf": 0.5995897948741913,
+      "extra_db": 0.49131542444229126,
+      "stem_cost_modelled": 0.22357499999999997,
+      "ceiling_modelled_pct": 46.57249999999999
+    },
+    {
+      "qp": 0,
+      "keep": 0.5,
+      "db_vs_uf": 1.155378520488739,
+      "extra_db": 1.047104150056839,
+      "stem_cost_modelled": 0.14905,
+      "ceiling_modelled_pct": 54.025
+    },
+    {
+      "qp": 0,
+      "keep": 0.25,
+      "db_vs_uf": 1.7136132717132568,
+      "extra_db": 1.6053389012813568,
+      "stem_cost_modelled": 0.074525,
+      "ceiling_modelled_pct": 61.4775
+    },
+    {
+      "qp": 32,
+      "keep": 1.0,
+      "db_vs_uf": 0.17057068645954132,
+      "extra_db": 0.0,
+      "stem_cost_modelled": 0.2981,
+      "ceiling_modelled_pct": 39.12
+    },
+    {
+      "qp": 32,
+      "keep": 0.75,
+      "db_vs_uf": 0.8088814467191696,
+      "extra_db": 0.6383107602596283,
+      "stem_cost_modelled": 0.22357499999999997,
+      "ceiling_modelled_pct": 46.57249999999999
+    },
+    {
+      "qp": 32,
+      "keep": 0.5,
+      "db_vs_uf": 1.499088853597641,
+      "extra_db": 1.3285181671380997,
+      "stem_cost_modelled": 0.14905,
+      "ceiling_modelled_pct": 54.025
+    },
+    {
+      "qp": 32,
+      "keep": 0.25,
+      "db_vs_uf": 2.279740124940872,
+      "extra_db": 2.109169438481331,
+      "stem_cost_modelled": 0.074525,
+      "ceiling_modelled_pct": 61.4775
+    },
+    {
+      "qp": 63,
+      "keep": 1.0,
+      "db_vs_uf": 0.22494925186038017,
+      "extra_db": 0.0,
+      "stem_cost_modelled": 0.2981,
+      "ceiling_modelled_pct": 39.12
+    },
+    {
+      "qp": 63,
+      "keep": 0.75,
+      "db_vs_uf": 1.1848613619804382,
+      "extra_db": 0.9599121101200581,
+      "stem_cost_modelled": 0.22357499999999997,
+      "ceiling_modelled_pct": 46.57249999999999
+    },
+    {
+      "qp": 63,
+      "keep": 0.5,
+      "db_vs_uf": 2.236318290233612,
+      "extra_db": 2.011369038373232,
+      "stem_cost_modelled": 0.14905,
+      "ceiling_modelled_pct": 54.025
+    },
+    {
+      "qp": 63,
+      "keep": 0.25,
+      "db_vs_uf": 3.4747186303138733,
+      "extra_db": 3.249769378453493,
+      "stem_cost_modelled": 0.074525,
+      "ceiling_modelled_pct": 61.4775
+    }
+  ]
+}
