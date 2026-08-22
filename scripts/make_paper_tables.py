@@ -846,6 +846,18 @@ if _srg:
     mac("SeamGridRecovered", f"{_srg['recovered_db']:.3f}")
     mac("SeamGridPenalty", f"{_srg['penalty_off_db']:.3f}")
 
+# The motivation figure's caption quotes what the worst tile loses at the
+# shallowest exit. It was typed, and on the pinned checkpoint it is less than
+# half what it said -- and some tiles are now better at the shallow exit than
+# at the deepest, which the caption had no way to say.
+print("tiles unequal")
+_tu, _ = pick("tiles_unequal.json")
+if _tu:
+    mac("TileLossWorst", f"{_tu['loss_max_db']:.2f}")
+    mac("TileLossBest", f"{_tu['loss_min_db']:.2f}")
+    mac("TileLossNTiles", str(_tu["n_tiles"]))
+    mac("TileBitsSpearman", f"{_tu['spearman_bits_exit']:+.2f}")
+
 # ---------------------------------------------------------------- exactness
 print("halo exactness")
 he, _ = pick("halo_exactness.json")

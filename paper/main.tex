@@ -256,11 +256,12 @@ on the picture.}
 \begin{figure}[t]
 \centering
 \includegraphics[width=\columnwidth]{figures/tiles_unequal.png}
-\caption{\textbf{Why depth should not be uniform.} One 1080p frame, 40 tiles.
-\textbf{a}, what each tile loses at the shallowest exit the ladder allows: a few
-lose nothing measurable and one loses $0.71\dB$, and a single depth has to be set
-by the worst of them. \textbf{b}, the bits already spent on a tile against the
-exit the oracle sends it to, at $0.1\dB$.}
+\caption{\textbf{Why depth should not be uniform.} One 1080p frame,
+\TileLossNTiles\ tiles. \textbf{a}, what each tile loses at the shallowest exit
+the ladder allows: the spread runs from \TileLossBest\dB, where the shallow exit
+is the better one, to \TileLossWorst, and a single depth has to be set by the
+worst of them. \textbf{b}, the bits already spent on a tile against the exit the
+oracle sends it to, at $0.1\dB$; the rank correlation is \TileBitsSpearman.}
 \label{fig:tiles_unequal}
 \end{figure}
 

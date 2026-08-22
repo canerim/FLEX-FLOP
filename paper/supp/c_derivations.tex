@@ -59,8 +59,8 @@ with s$_{up}$ the opening upsample, s$_{trunk}$ the trunk spread over N$_{blk}$ 
 \toprule
 exit k & blocks & adapter & share & c\_k & 100(1-c\_k) & c\_k, stored \\
 \midrule
-2 & 6 & ffn & 0.712 & 0.6088 & 39.12 & 0.5809 \\
-3 & 8 & ffn & 0.712 & 0.7578 & 24.22 & 0.7300 \\
+2 & 6 & ffn & 0.712 & 0.6088 & 39.12 & 0.6088 \\
+3 & 8 & ffn & 0.712 & 0.7578 & 24.22 & 0.7578 \\
 4 & 10 & 1$\times$1 & 0.142 & 0.8697 & 13.03 & 0.8697 \\
 5 & 12 & none & 0.000 & 1.0095 & -0.95 & 1.0095 \\
 \bottomrule
@@ -87,7 +87,7 @@ Everything after this rests on four assumptions, none of them a mathematical nec
 \item \textbf{(A4) The cost vector is strictly increasing} in k over k $\geq$ j, which Table 2 shows it is.
 \end{itemize}
 
-The second half of (A2) is checked rather than asserted, over 60 allocations of one frame spanning savings of 1.2\% to 41.9\%: the largest disagreement between the per-tile prediction and a decode of the mixed map is 5.5$\times$10$^{-5}$ dB, four orders of magnitude below the budget. Nothing in (A1) to (A4) constrains D$_{t,k}$ itself, and nothing requires it to fall as k grows.
+The second half of (A2) is checked rather than asserted, over 60 allocations of one frame spanning savings of 2.8\% to 39.1\%: the largest disagreement between the per-tile prediction and a decode of the mixed map is 3.6$\times$10$^{-5}$ dB, four orders of magnitude below the budget. Nothing in (A1) to (A4) constrains D$_{t,k}$ itself, and nothing requires it to fall as k grows.
 
 {\small Additivity check computed from results/tile\_table.json (Bosphorus, q32, 40 tiles), checkpoint runs/RECIPE512/ckpt\_eval.pth.tar. What it checks is a property of the decode path rather than of the weights.}
 
@@ -140,12 +140,12 @@ Let \lambda$_{1}$ < \lambda$_{2}$ and let a$_{1}$, a$_{2}$ be the corresponding 
 \toprule
 tile & bits & D(2) & D(3) & D(4) & D(5) & exits as $\lambda$ rises \\
 \midrule
-34 & 10,446 & 1.608 & 1.638 & 1.679 & 1.655 & 2 throughout \\
-0 & 12,996 & 9.346 & 9.249 & 9.207 & 9.180 & 5, 4 at 1.9, 3 at 3.0, 2 at 6.5 \\
-18 & 16,989 & 16.249 & 15.795 & 15.638 & 15.606 & 5, 4 at 2.3, 3 at 11.2, 2 at 30.6 \\
+35 & 10,492 & 1.400 & 1.416 & 1.444 & 1.433 & 2 throughout \\
+0 & 12,786 & 9.274 & 9.217 & 9.183 & 9.168 & 5, 4 at 1.0, 3 at 3.1, 2 at 3.8 \\
+18 & 17,060 & 16.040 & 15.716 & 15.584 & 15.561 & 5, 4 at 1.7, 3 at 11.9, 2 at 21.8 \\
 \bottomrule
 \end{tabular}}
-\caption{\textbf{Three tiles of one frame, and what the price does to them.} D is in units of 10$^{-5}$ squared error and switch points in units of 10$^{-6}$ of $\lambda$. The cheapest tile prefers the shallowest exit at every price including $\lambda$ = 0, its error not falling with depth at all, so depth is not always worth buying. The most expensive tile holds out against the shallowest exit 4.7 times longer than the middle one, which is why one uniform depth cannot suit both.}
+\caption{\textbf{Three tiles of one frame, and what the price does to them.} D is in units of 10$^{-5}$ squared error and switch points in units of 10$^{-6}$ of $\lambda$. The cheapest tile prefers the shallowest exit at every price including $\lambda$ = 0, its error not falling with depth at all, so depth is not always worth buying. The most expensive tile holds out against the shallowest exit 5.7 times longer than the middle one, which is why one uniform depth cannot suit both.}
 \end{table}
 
 {\small results/tile\_table.json (Bosphorus, q32, 40 tiles), checkpoint runs/RECIPE512/ckpt\_eval.pth.tar. The 60 prices stored in that file produce 33 distinct savings, the granularity A.3 quantifies.}
@@ -269,7 +269,7 @@ Then for every \lambda > \lambda$_{sat}$ the oracle assigns exit j to every tile
 
 \emph{Proof.} Exit j beats exit k on tile t precisely when D$_{t,j}$ + \lambda c$_{j}$ $\leq$ D$_{t,k}$ + \lambda c$_{k}$, that is when \lambda $\geq$ (D$_{t,j}$ - D$_{t,k}$)/(c$_{k}$ - c$_{j}$), the denominator being positive for k > j by (A4). Taking the maximum over k and then over t gives a single price beyond which exit j wins everywhere. The cost of the constant map is c$_{j}$ by (0).
 
-\emph{Remark.} \lambda$_{sat}$ is a maximum over the tiles of one frame, so a price chosen for a sequence saturates some of its frames and not others, and it constrains the price rather than the budget. On the worked frame the closed form gives 3.045$\times$10$^{-5}$, exactly the last switch of the most expensive tile in Table 3.
+\emph{Remark.} \lambda$_{sat}$ is a maximum over the tiles of one frame, so a price chosen for a sequence saturates some of its frames and not others, and it constrains the price rather than the budget. On the worked frame the closed form gives 2.174$\times$10$^{-5}$, exactly the last switch of the most expensive tile in Table 3.
 
 \paragraph{Proposition 9 (the ceiling)}
 
@@ -454,9 +454,9 @@ Section F prints the fitted $\alpha$ and $\varphi$ at every rate and reports wha
 
 {\small Fitted values from results/raterank\_RECIPE512\_b01.json, checkpoint runs/RECIPE512/ckpt\_PAPER.pth.tar, \NumSeq sequences at a 0.1 dB budget; hull membership computed in the build against the shipped cost vector of Table 2.}
 
-The rule gives up \RateRankOracleGap saving points to the Lagrangian oracle at the rate where it does worst, and the loss is not in the separability. On the measured tile table the separable model absorbs 99.96\% of the variance of log D. The quantity it has to resolve is small: the exit profile spans 0.0449 in log units while the non-separable residual has a root mean square of 0.0144, 32\% of it. A model can explain almost all of a table and still be unable to order the differences that decide the argmin, which reads only the differences. Predicting a tile's difficulty from its bit count alone then leaves R$^2$ = 0.84, and by Proposition 13 an error in log g$_{t}$ is a proportional error in the price that tile faces. Coded bits correlate with the mean level of a tile's row at Spearman 0.83 to 0.88 and with the oracle's exit index at 0.41 to 0.51, the ordering the model predicts.
+The rule gives up \RateRankOracleGap saving points to the Lagrangian oracle at the rate where it does worst, and the loss is not in the separability. On the measured tile table the separable model absorbs 99.99\% of the variance of log D. The quantity it has to resolve is small: the exit profile spans 0.0268 in log units while the non-separable residual has a root mean square of 0.0089, 33\% of it. A model can explain almost all of a table and still be unable to order the differences that decide the argmin, which reads only the differences. Predicting a tile's difficulty from its bit count alone then leaves R$^2$ = 0.84, and by Proposition 13 an error in log g$_{t}$ is a proportional error in the price that tile faces. Coded bits correlate with the mean level of a tile's row at Spearman 0.83 to 0.88 and with the oracle's exit index at 0.41 to 0.51, the ordering the model predicts.
 
-{\small Residual analysis computed from results/tile\_table.json (Bosphorus, q32, 40 tiles), checkpoint runs/RECIPE512/ckpt\_eval.pth.tar; $\alpha$ fitted there is 4.69 against 2.75 for the \NumSeq-sequence fit at the same rate, the difference being one sequence against \NumSeq. Spearman correlations from results/raterank\_RECIPE512\_b01.json, pinned checkpoint; the file stores the last against the negated exit index and it is reported here with the sign flipped, so a positive value means more bits and a deeper exit.}
+{\small Residual analysis computed from results/tile\_table.json (Bosphorus, q32, 40 tiles), checkpoint runs/RECIPE512/ckpt\_eval.pth.tar; $\alpha$ fitted there is 4.65 against 2.75 for the \NumSeq-sequence fit at the same rate, the difference being one sequence against \NumSeq. Spearman correlations from results/raterank\_RECIPE512\_b01.json, pinned checkpoint; the file stores the last against the negated exit index and it is reported here with the sign flipped, so a positive value means more bits and a deeper exit.}
 
 \subsection{What is proved, what is checked, and what neither covers}
 

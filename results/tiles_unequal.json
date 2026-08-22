@@ -1,0 +1,10 @@
+{
+  "figure": "tiles_unequal.png",
+  "what": "per-tile loss at the shallowest exit the ladder allows, on one frame, and the rank correlation between a tile's bits and the exit the oracle sends it to",
+  "ckpt": "runs/RECIPE512/ckpt_PAPER.pth.tar",
+  "ckpt_epoch": 4,
+  "n_tiles": 40,
+  "loss_min_db": -0.1796513312365497,
+  "loss_max_db": 0.2979527972742593,
+  "spearman_bits_exit": 0.4155722326454035
+}

@@ -37,7 +37,6 @@ STRUCTURAL = {
     "mac_audit.json": "hook count of the released decoder, by stage",
     "encoder_cost.json": "the encoder we never touch",
     "supp_encoder_cost_PAPER.json": "the encoder we never touch",
-    "tile_table.json": "tile geometry",
     "tile_definition.json": "tile geometry",
     "supp_module_shapes.json": "layer shapes",
     "supp_footprint.json": "parameter and activation footprint",

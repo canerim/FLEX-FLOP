@@ -163,6 +163,18 @@ def tiles():
                     loc="left")
     fig.savefig(FIG / "tiles_unequal.png", dpi=500, bbox_inches="tight",
                 pad_inches=0.01, facecolor="white")
+    # The caption quotes what the worst tile loses at the shallowest exit.
+    # It was printed here and typed into the caption, so it could not move
+    # with the checkpoint and did not: the caption said 0.71 dB.
+    (RES / "tiles_unequal.json").write_text(json.dumps({
+        "figure": "tiles_unequal.png",
+        "what": "per-tile loss at the shallowest exit the ladder allows, on "
+                "one frame, and the rank correlation between a tile's bits "
+                "and the exit the oracle sends it to",
+        "ckpt": T.get("ckpt"), "ckpt_epoch": T.get("ckpt_epoch"),
+        "n_tiles": int(loss.size), "loss_min_db": float(loss.min()),
+        "loss_max_db": float(loss.max()), "spearman_bits_exit": float(rho),
+    }, indent=2))
     print(f"  wrote tiles_unequal.png   loss {loss.min():.3f} to "
           f"{loss.max():.3f} dB, Spearman(bits, exit) = {rho:+.2f}")
 

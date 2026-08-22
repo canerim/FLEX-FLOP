@@ -622,11 +622,13 @@ def content(colw, fullw):
     h2("Contributions.")
     figure("tiles_unequal.png",
            r"<b>Figure N. Why depth should not be uniform.</b> One 1080p frame, "
-                      r"40 tiles. <b>a</b>, what each tile loses at the shallowest exit "
-                      r"the ladder allows: a few lose nothing measurable and one loses "
-                      r"0.71 dB, and a single depth has to be set by the worst of them. "
-                      r"<b>b</b>, the bits already spent on a tile against the exit the "
-                      r"oracle sends it to, at 0.1 dB."
+                      r"\TileLossNTiles tiles. <b>a</b>, what each tile loses at the "
+                      r"shallowest exit the ladder allows: the spread runs from "
+                      r"\TileLossBest dB, where the shallow exit is the better one, to "
+                      r"\TileLossWorst, and a single depth has to be set by the worst of "
+                      r"them. <b>b</b>, the bits already spent on a tile against the exit "
+                      r"the oracle sends it to, at 0.1 dB; the rank correlation is "
+                      r"\TileBitsSpearman."
            )
     par(r"<b>(i)</b> An early-exit ladder for a learned image decoder that "
         r"picks a depth per tile, which is spatial adaptivity at the "
