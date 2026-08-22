@@ -1020,7 +1020,8 @@ if cp:
     mac("CoupFloorDropHi", f"{max(drops):.0f}")
 
 # hybrid at the loose budget: where the gap is large, how cheaply it closes
-hy3, _ = pick("hybrid_RECIPE512_b03_fixed.json")
+hy3, _ = pick("hybrid_RECIPE512_b03_e4head.json",
+                 "hybrid_RECIPE512_b03_fixed.json")
 if hy3:
     r3 = [r for r in hy3["rows"] if r.get("budget_reachable")]
 

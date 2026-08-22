@@ -107,7 +107,8 @@ CONSUMED = [
     ("router_latency.json", "operating range"),
     ("adapter_ablation.json", "adapter ablation"),
     ("combined_RECIPE512_b01.json", "blend"),
-    ("hybrid_RECIPE512_b03_fixed.json", "macros only"),
+    (("hybrid_RECIPE512_b03_e4head.json",
+      "hybrid_RECIPE512_b03_fixed.json"), "macros only"),
     ("hybrid_lorenz_b01.json", "macros only"),
     ("coupling_ablation.json", "macros only"),
     ("map_transfer.json", "macros only"),
@@ -981,11 +982,15 @@ def content(k):
     rows = [["results file", "backs", "checkpoint", "seq×fr"]]
     npin = 0
     for name, backs in CONSUMED:
-        d = k.J(name)
+        # A row may name candidates, the way the readers do, and then it is
+        # the one that exists that gets described.
+        names = (name,) if isinstance(name, str) else tuple(name)
+        d = k.J(*names)
+        used = next((n for n in names if (k.RESULTS / n).exists()), names[0])
         lab = _ckpt_label(d)
         if lab.startswith("pinned"):
             npin += 1
-        rows.append([name.replace(".json", ""), backs, lab, _n_label(d)])
+        rows.append([used.replace(".json", ""), backs, lab, _n_label(d)])
     t_prov = k.rows(
         rows,
         f"Provenance of every generated table in the main paper. These are the "

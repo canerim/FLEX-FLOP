@@ -85,6 +85,15 @@ DERIVED = {
 }
 
 # Historical: measured on a named other checkpoint on purpose.
+# Files whose whole point is a head fitted somewhere else. Both sides of the
+# retrained-head comparison are heads from before the repin -- one before the
+# exit-mask fix and one after -- and re-fitting either to the pinned weights
+# would destroy the comparison rather than update it.
+HEAD_HISTORICAL = {
+    "hybrid_RECIPE512_b01_fixed.json": "the pre-fix head",
+    "hybrid_v3_b01_pin.json": "the post-fix head",
+}
+
 HISTORICAL_PAT = [
     (re.compile(r"_BEST"), "the second training run"),
     (re.compile(r"BEST128"), "the 128 px run"),
@@ -125,13 +134,17 @@ def fallbacks() -> set[str]:
     nothing reads any more, and deleting them would break a build that runs
     before the stage that writes the new one.
     """
-    call = re.compile(r'(?:k\.J|self\.J|\bJ|pick|rows)\(\s*((?:f?"[^"]+\.json"'
+    call = re.compile(r'(?:k\.J|self\.J|\bJ|_pick_json|pick|rows)\(\s*((?:f?"[^"]+\.json"'
                       r'(?:\s*,\s*)?)+)\s*[,)]', re.S)
+    lst = re.compile(r'\[\s*((?:"[^"]+\.json"\s*,?\s*){2,})\]', re.S)
     behind, live = set(), set()
     for s in _sources():
         t = s.read_text()
         spans = []
-        for m in call.finditer(t):
+        # A candidate list is sometimes a list rather than an argument
+        # list: paper_metrics keeps ["a.json", "b.json", ...] beside the
+        # budget it belongs to. Same meaning, same first-that-exists rule.
+        for m in list(call.finditer(t)) + list(lst.finditer(t)):
             names = re.findall(r'"([A-Za-z0-9_.\-]+\.json)"', m.group(1))
             spans.append((m.start(1), m.end(1)))
             if len(names) < 2:
@@ -225,7 +238,12 @@ def main() -> int:
             # 4" reads as a different epoch when what it means is a head
             # fitted to a checkpoint that moves.
             hck = str(meta.get("ckpt") or "")
-            if d.get("router2") and hck and hck != ck:
+            # A head that is named but does not run is not part of the
+            # measurement: the rate-rank hybrid passes one and reports a
+            # compute share of zero because the base predictor is the rule.
+            _unused = d.get("router_compute_share_pct") == 0
+            if (d.get("router2") and hck and hck != ck and not _unused
+                    and n not in HEAD_HISTORICAL):
                 head_off.append((n, hck.rsplit("/", 1)[-1]))
             else:
                 ok += 1

@@ -212,7 +212,8 @@ if hy and b1f and sg:
     claim("hybrid: worst |dB - budget|", 0.0, max(dbs), 2e-3)
 
 # ---- hybrid at the loose budget -------------------------------------------
-hy3 = J("hybrid_RECIPE512_b03_fixed.json")
+hy3 = J("hybrid_RECIPE512_b03_e4head.json",
+                 "hybrid_RECIPE512_b03_fixed.json")
 if hy3:
     r3 = [r for r in hy3["rows"] if r.get("budget_reachable")]
 
