@@ -389,6 +389,71 @@ def content(k):
            "on " + PINNED + ". Decibels are pooled, the convention "
            "results/supp_paper_curve_PAPER.json bisects in.")
 
+    # ------------------------------------------------------------ colour
+    # A weighted mean can be held while its parts move apart underneath it,
+    # and DCVC-UF's metric weights chroma at a seventh. Nothing else in
+    # either document would have shown this.
+    yuv = k.J("rd_yuv_PAPER.json")
+    if yuv:
+        _rel = {r["qp"]: r for r in yuv["rows"] if r["config"] == "release"}
+        _b = sorted({r["budget_db"] for r in yuv["rows"]
+                     if r["budget_db"] is not None})
+        _ours = {b: {r["qp"]: r for r in yuv["rows"]
+                     if r["budget_db"] == b} for b in _b}
+        _qs = sorted(_rel)
+
+        def _drop(b, key):
+            g = _ours[b]
+            v = [g[q][key] - _rel[q][key] for q in _qs if q in g]
+            return sum(v) / len(v) if v else float("nan")
+
+        _dy, _du, _dv = (_drop(0.1, "psnr_y"), _drop(0.1, "psnr_u"),
+                         _drop(0.1, "psnr_v"))
+        _ratio = ((_du + _dv) / 2) / _dy if _dy else float("nan")
+        k.par(
+            f"<b>The budget is spent unevenly across the colour components.</b> "
+            f"Every quality number in this work is DCVC-UF's own 6:1:1 "
+            f"weighted YUV420 PSNR, in which chroma carries an eighth of the "
+            f"weight, and the budget is set on it. Split into its parts at the "
+            f"0.1 dB budget, luma falls by {abs(_dy):.3f} dB and the two "
+            f"chroma planes by {abs(_du):.3f} and {abs(_dv):.3f} -- chroma "
+            f"loses {_ratio:.1f} times what luma loses. The weighted mean "
+            f"lands on the budget exactly as it is supposed to, and says "
+            f"nothing about the split underneath it.")
+        rows = [["budget", "PSNR-Y", "PSNR-U", "PSNR-V", "6:1:1"]]
+        for b in _b:
+            rows.append([f"{b:g} dB"] + [
+                f"{_drop(b, kk):+.3f}"
+                for kk in ("psnr_y", "psnr_u", "psnr_v", "psnr_611")])
+        k.rows(rows,
+               "<b>Quality given up per colour component</b>, dB below the "
+               "released decoder, averaged over the five rates on the "
+               "\\NumSeq test frames. The last column is the metric the "
+               "budget is set on; the first three are what it is made of.")
+        k.note("results/rd_yuv_PAPER.json. The operating points are not "
+               "re-derived: each row of the signalled sweep records the "
+               "multiplier its bisection settled on, and the exit map is a "
+               "deterministic argmin given that multiplier, so the decode "
+               "measured here is the decode the sweep priced. The split is "
+               "checked against the weighted figure on every frame.")
+        k.par(
+            "The mechanism is the objective, not the ladder. The allocation "
+            "minimises absolute error, and chroma starts with far less of it "
+            "-- at the lowest rate the released decoder reaches 38.9 dB on U "
+            "against 30.2 on Y, so chroma's mean squared error is about seven "
+            "times smaller. The same absolute increase is therefore a much "
+            "larger number of decibels on chroma, and an allocator that does "
+            "not know the difference spends it there first. A budget set on "
+            "the weighted metric cannot see this; one set per component "
+            "could, and that is the change we would make.")
+        k.fig("rd_yuv.png",
+              "<b>Rate-distortion per colour component</b>, ours against the "
+              "released decoder, one panel per component, with each budget's "
+              "BD-rate against the anchor in brackets. The anchor is the "
+              "released decoder on the same bitstream, so a bracket is the "
+              "price of decoding one file with fewer operations rather than "
+              "one codec against another.")
+
     fl = {r["qp"]: r["floor_db"] for r in sig["rows"]
           if abs(r["budget_db"] - 0.1) < 1e-9}
     dr = {r["qp"]: abs(r["drift_db"]) for r in anc["rows"]}

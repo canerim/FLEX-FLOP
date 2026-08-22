@@ -22,6 +22,10 @@ sys.path.insert(0, str(R)); sys.path.insert(0, str(Path.home() / "DCVC"))
 sys.path.insert(0, str(R / "scripts"))
 import naturestyle as ns
 from savings import sv, pick
+# These are hand-laid-out schematics: every box and label sits at a
+# coordinate chosen against the others, so scaling the type moves text into
+# text. They stay at the drawn size until they are redrawn at column width,
+# which is a layout job and not a style switch.
 ns.apply()
 from flexuf.config import FlexUFConfig
 from flexuf import cost as fc
@@ -107,7 +111,7 @@ def pipeline():
     arrow(ax, 0.2975, 0.878, 0.2975, 0.775)
 
     # --- decoder stem, full frame ------------------------------------------
-    ax.text(0.015, 0.815, "DECODER  ·  full frame", fontsize=6.2, weight="bold")
+    ax.text(0.015, 0.815, "DECODER  ·  full frame", fontsize=ns.fs(6.2), weight="bold")
     two(0.10, 0.700, 0.105, 0.070, "upsample", f"{100*fc.SHARE_UPSAMPLE:.1f}% of MACs",
         fc_="#dceaf7")
     trunk_each = 100 * fc.SHARE_TRUNK / fc.N_TRUNK_BLOCKS
@@ -124,7 +128,7 @@ def pipeline():
     x0, wg, gap = 0.575, 0.088, 0.017
     ax.text(0.575, 0.815, f"PER TILE  ·  K = {K} exits over "
             f"{fc.N_TRUNK_BLOCKS} blocks, split depth j = {j}",
-            fontsize=6.2, weight="bold")
+            fontsize=ns.fs(6.2), weight="bold")
     for g in range(j, K):
         x = x0 + (g - j) * (wg + gap)
         two(x, 0.700, wg, 0.070, f"group {g}", f"{cfg.blocks_per_exit} blocks",
@@ -165,19 +169,19 @@ def pipeline():
     ax.add_patch(Rectangle((0.015, 0.035), 0.455, 0.245, facecolor="#fdf4f9",
                            edgecolor=ns.PURPLE, lw=0.7))
     ax.text(0.032, 0.252, "A  ·  the encoder searches, then signals the map",
-            fontsize=6, color=ns.PURPLE, weight="bold")
+            fontsize=ns.fs(6), color=ns.PURPLE, weight="bold")
     ax.text(0.243, 0.155, "k*(t) = argmin$_k$ [ MSE(t,k) + λ·c$_k$ ]",
-            fontsize=6.2, ha="center")
+            fontsize=ns.fs(6.2), ha="center")
     ax.text(0.243, 0.085, "≈94 bit/frame", fontsize=FSS, ha="center",
             color=ns.INK2)
 
     ax.add_patch(Rectangle((0.53, 0.035), 0.455, 0.245, facecolor="#eef6fb",
                            edgecolor=ns.BLUE, lw=0.7))
     ax.text(0.547, 0.252, "B  ·  the decoder predicts it, nothing is signalled",
-            fontsize=6, color=ns.BLUE, weight="bold")
+            fontsize=ns.fs(6), color=ns.BLUE, weight="bold")
     ax.text(0.757, 0.155,
             "k̂(t) = argmax$_k$ [ log softmax(z$_t$)$_k$ − β·c$_k$ ]",
-            fontsize=6.2, ha="center")
+            fontsize=ns.fs(6.2), ha="center")
     ax.text(0.757, 0.085, "0 bits, 0.163% of a decode", fontsize=FSS,
             ha="center", color=ns.INK2)
 
@@ -246,7 +250,7 @@ def adapters():
                                       edgecolor="white", lw=0.35))
             x += w
     a.plot([], [], color=ns.VERM, lw=1.1, label="3×3")
-    a.legend(loc="lower left", fontsize=6, handlelength=0.9,
+    a.legend(loc="lower left", fontsize=ns.fs(6), handlelength=0.9,
              borderpad=0.0, handletextpad=0.4)
     a.set_xlim(-0.02, 1.02); a.set_ylim(-2.42, 0.86)
     a.set_xticks([0, 0.5, 1.0]); a.set_xticklabels(["0", "0.5", "1"])
@@ -281,7 +285,7 @@ def adapters():
     for kind, lab in (("ffn", "FFN"), ("conv1x1", "1×1"), (None, "none")):
         b.plot([], [], marker="o", ms=4.2, lw=0, mfc=face[kind], mec=ns.INK2,
                mew=0.5, label=lab)
-    b.legend(loc="upper right", fontsize=6, handlelength=0.8,
+    b.legend(loc="upper right", fontsize=ns.fs(6), handlelength=0.8,
              borderpad=0.0, handletextpad=0.2, labelspacing=0.25)
     b.set_xticks(ks); b.set_xlim(-0.55, K_ - 0.45); b.set_ylim(-0.9, 11.6)
     # Blocks come whole, so the ticks are the numbers of blocks that exist.
@@ -383,7 +387,7 @@ def training():
     # ---- a: one pass, K reconstructions -----------------------------------
     a = fig.add_subplot(gs[0, 0]); blank(a)
     a.text(0.0, 1.05, "One forward pass produces ALL K reconstructions",
-           fontsize=6.5, weight="bold")
+           fontsize=ns.fs(6.5), weight="bold")
     box(a, 0.0, 0.80, 0.28, 0.16, "OpenImages crop", "512×512, random qp",
         fc_="#f0f0f0", fs=5.4)
     arrow(a, 0.28, 0.88, 0.31, 0.88)
@@ -397,29 +401,29 @@ def training():
         arrow(a, 0.715, 0.80 if i == 0 else y + 0.125, 0.715, y, color=ns.ORANGE,
               lw=0.5, style="-")
         arrow(a, 0.715, y, 0.81, y, color=ns.ORANGE, lw=0.5)
-        a.text(0.835, y, f"x̂$_{i}$  →  MSE$_{i}$", fontsize=6, va="center")
+        a.text(0.835, y, f"x̂$_{i}$  →  MSE$_{i}$", fontsize=ns.fs(6), va="center")
     a.text(0.0, 0.60, "Every exit is decoded every step, so the ladder is\n"
            "trained as ONE object rather than as K separate\n"
            "models. The shared prefix means this costs one\n"
            "trunk pass plus K adapter-and-head passes, not K\n"
-           "full decodes.", fontsize=6, va="top", linespacing=1.7)
+           "full decodes.", fontsize=ns.fs(6), va="top", linespacing=1.7)
     ns.panel(a, "a", dx=-0.02, dy=1.16)
 
     # ---- b: the objective --------------------------------------------------
     a = fig.add_subplot(gs[1, 0]); blank(a)
-    a.text(0.0, 1.02, "The objective", fontsize=6.5, weight="bold")
+    a.text(0.0, 1.02, "The objective", fontsize=ns.fs(6.5), weight="bold")
     a.text(0.0, 0.95, r"$\mathcal{L}\;=\;\mathcal{L}_{\mathrm{RD}}\;+\;"
            r"w_a\,\mathcal{L}_{\mathrm{anchor}}\;+\;"
-           r"w_d\,\mathcal{L}_{\mathrm{distill}}$", fontsize=7.5, va="top")
+           r"w_d\,\mathcal{L}_{\mathrm{distill}}$", fontsize=ns.fs(7.5), va="top")
     a.text(0.0, 0.665, r"$\mathcal{L}_{\mathrm{RD}}=\lambda\,"
            r"\frac{\sum_k \alpha_k\,\mathrm{MSE}_k}{\sum_k \alpha_k}"
-           r"\;+\;\mathrm{bpp}$", fontsize=7, va="center")
+           r"\;+\;\mathrm{bpp}$", fontsize=ns.fs(7), va="center")
     a.text(0.42, 0.665, r"$\mathcal{L}_{\mathrm{anchor}}=\lambda\,"
            r"\|\hat{x}_{K-1}-\hat{x}^{\mathrm{release}}\|^2$",
-           fontsize=7, va="center")
+           fontsize=ns.fs(7), va="center")
     a.text(0.0, 0.40, r"$\mathcal{L}_{\mathrm{distill}}=\frac{1}{K-1}"
            r"\sum_{k}\frac{\|f_k-\mathrm{sg}(f_{k+1})\|^2}"
-           r"{\mathrm{Var}(f_{k+1})}$", fontsize=7, va="center")
+           r"{\mathrm{Var}(f_{k+1})}$", fontsize=ns.fs(7), va="center")
     a.text(0.0, 0.20,
            "RD — the released loss, λ·MSE + bpp, with MSE averaged over the exits\n"
            "anchor ($w_a$ = 10) — pins the DEEPEST exit to the released decoder, so the\n"
@@ -427,7 +431,7 @@ def training():
            "distillation ($w_d$ = 1) — supervises the adapters in FEATURE space, exit $k$\n"
            "     imitating exit $k{+}1$; adjacent rather than deepest, because a large\n"
            "     student–teacher gap is reported to hurt the shallowest exits",
-           fontsize=6, va="top", linespacing=1.75)
+           fontsize=ns.fs(6), va="top", linespacing=1.75)
     ns.panel(a, "b", dx=-0.02, dy=1.14)
 
     # ---- c: what is trained ------------------------------------------------
@@ -439,25 +443,25 @@ def training():
         w = v / P_TOT
         a.barh([0], [w], left=left, color=c, height=0.55)
         a.text(left + w/2, 0, f"{name}\n{v/1e6:.2f} M  ({100*w:.1f}%)",
-               ha="center", va="center", fontsize=6, linespacing=1.6,
+               ha="center", va="center", fontsize=ns.fs(6), linespacing=1.6,
                color="white" if c != "#c9c9c9" else ns.INK)
         left += w
     a.barh([-0.85], [P_RT / P_TOT], color=ns.SKY, height=0.30)
     a.text(P_RT / P_TOT + 0.02, -0.85,
            f"router head, configuration B only — {P_RT/1e3:.0f} K, "
-           f"{100*P_RT/P_TOT:.2f}%", fontsize=6, va="center")
+           f"{100*P_RT/P_TOT:.2f}%", fontsize=ns.fs(6), va="center")
     a.set_xlim(0, 1); a.set_ylim(-1.5, 0.7)
     a.set_xticks([]); a.set_yticks([]); a.grid(False)
     for sp in a.spines.values():
         sp.set_visible(False)
     a.set_title("The encoder is never touched, so a trained decoder consumes\n"
                 "byte-for-byte the stream the released encoder produces.",
-                fontsize=6, color=ns.INK2, loc="left")
+                fontsize=ns.fs(6), color=ns.INK2, loc="left")
     ns.panel(a, "c", dx=-0.06, dy=1.30)
 
     # ---- d: the recipe -----------------------------------------------------
     a = fig.add_subplot(gs[1, 1]); blank(a)
-    a.text(0.0, 1.02, "The recipe, and why each line is there", fontsize=6.5,
+    a.text(0.0, 1.02, "The recipe, and why each line is there", fontsize=ns.fs(6.5),
            weight="bold")
     rows = [
         ("warm start", "every inherited weight copied from the release, every new\n"
@@ -472,8 +476,8 @@ def training():
     ]
     y = 0.86
     for k, v in rows:
-        a.text(0.0, y, k, fontsize=6, weight="bold", va="top", color=ns.BLUE)
-        a.text(0.29, y, v, fontsize=6, va="top", linespacing=1.6)
+        a.text(0.0, y, k, fontsize=ns.fs(6), weight="bold", va="top", color=ns.BLUE)
+        a.text(0.29, y, v, fontsize=ns.fs(6), va="top", linespacing=1.6)
         y -= 0.185 if "\n" in v else 0.115
     ns.panel(a, "d", dx=-0.06, dy=1.14)
 
@@ -536,7 +540,7 @@ def router_ab():
                              (0.06, "B", ns.BLUE, "#eef6fb")):
         a.add_patch(Rectangle((0.0, y0), 1.0, 0.38, facecolor=fc,
                               edgecolor=col, lw=0.7))
-        a.text(0.02, y0 + 0.335, tag, fontsize=7, weight="bold", color=col)
+        a.text(0.02, y0 + 0.335, tag, fontsize=ns.fs(7), weight="bold", color=col)
 
     # A row
     y = 0.80
@@ -551,7 +555,7 @@ def router_ab():
     chip(0.67, y - 0.155, 0.28, 0.20, "map\n+89 b/frame", "#ffffff",
          ns.PURPLE)
     a.text(0.5, 0.585, r"$k^{*}=\arg\min_k\,[\,\mathrm{MSE}_k+\lambda c_k]$",
-           fontsize=6.2, ha="center", va="center", color=ns.PURPLE)
+           fontsize=ns.fs(6.2), ha="center", va="center", color=ns.PURPLE)
 
     # B row
     y = 0.30
@@ -562,7 +566,7 @@ def router_ab():
     arrow(0.59, y - 0.055, 0.66, ns.BLUE)
     chip(0.67, y - 0.155, 0.28, 0.20, "map\n+0 bits", "#ffffff", ns.BLUE)
     a.text(0.5, 0.085, r"$\hat{k}=\arg\max_k\,[\,\log p_k-\beta c_k]$",
-           fontsize=6.2, ha="center", va="center", color=ns.BLUE)
+           fontsize=ns.fs(6.2), ha="center", va="center", color=ns.BLUE)
     ns.panel(a, "a", dx=-0.02, dy=1.06)
 
     # ---- b: measured saving vs rate ---------------------------------------
@@ -572,10 +576,10 @@ def router_ab():
     a.plot(qps, ya, marker="o", color=ns.PURPLE, label="A  signalled")
     a.plot(qps, yb, marker="s", color=ns.BLUE, label="B  predicted")
     for q in qps:
-        a.annotate(f"{A[q]-B[q]:.1f}", (q, (A[q] + B[q]) / 2), fontsize=6,
+        a.annotate(f"{A[q]-B[q]:.1f}", (q, (A[q] + B[q]) / 2), fontsize=ns.fs(6),
                    color=ns.VERM, ha="center", va="center")
     a.set_xlabel("qp"); a.set_ylabel("saved at 0.1 dB (%)")
-    a.legend(loc="lower left", fontsize=6)
+    a.legend(loc="lower left", fontsize=ns.fs(6))
     ns.panel(a, "b", dx=-0.26)
 
     # ---- c: the gap shrinks as the budget grows ---------------------------
@@ -585,9 +589,9 @@ def router_ab():
         qq = [q for q in qps if q in Ax and q in Bx]
         a.plot(qq, [Ax[q] - Bx[q] for q in qq], marker="o", color=c, label=lab)
     a.axhline(0.163, color=ns.INK2, lw=0.7, ls=(0, (3, 2)))
-    a.text(qps[0], 0.55, "router cost", fontsize=6, color=ns.INK2)
+    a.text(qps[0], 0.55, "router cost", fontsize=ns.fs(6), color=ns.INK2)
     a.set_xlabel("qp"); a.set_ylabel("A $-$ B  (points)")
-    a.legend(loc="upper left", fontsize=6)
+    a.legend(loc="upper left", fontsize=ns.fs(6))
     ns.panel(a, "c", dx=-0.26)
 
     fig.tight_layout()

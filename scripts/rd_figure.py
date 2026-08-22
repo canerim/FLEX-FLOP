@@ -12,13 +12,13 @@ import numpy as np
 import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
+from matplotlib.ticker import MaxNLocator
 
 R = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(R / "scripts"))
 import naturestyle as ns
 from savings import sv
-ns.apply()
-
+ns.apply(ns.for_column())
 D = 1.0095
 QPS = [0, 16, 32, 48, 63]
 
@@ -74,7 +74,7 @@ for b, c in ((0.1, ns.BLUE), (0.3, ns.ORANGE)):
     # caption carries it from the same macro the table does.
     ax[0].plot(xs, ys, "-s", ms=3.4, lw=1.0, color=c, label=f"{b:g} dB budget")
 ax[0].set_xlabel("bitrate (bpp)"); ax[0].set_ylabel("PSNR (dB)")
-ax[0].legend(fontsize=6, loc="lower right")
+ax[0].legend(fontsize=ns.fs(6), loc="lower right")
 ns.panel(ax[0], "a")
 
 # ---- b: the same, quality axis expanded ------------------------------------
@@ -84,15 +84,21 @@ for b, c in ((0.1, ns.BLUE), (0.3, ns.ORANGE)):
     xs = [bpp[q] for q in qs if q in rows]
     ax[1].plot(xs, [-rows[q]["db_vs_uf"] for q in qs if q in rows], "-s",
                ms=3.4, lw=1.0, color=c)
-    for q in qs:
+    # Alternating above and below the point. Two neighbouring rates sit
+    # close enough on this axis that both labels above put 34 on top of 30.
+    for _i, q in enumerate(qs):
         if q in rows:
+            _up = _i % 2 == 0
             ax[1].annotate(f"{sv(rows[q]):.0f}",
-                           (bpp[q], -rows[q]["db_vs_uf"]), fontsize=6,
+                           (bpp[q], -rows[q]["db_vs_uf"]), fontsize=ns.fs(6),
                            color=c, ha="center", textcoords="offset points",
-                           xytext=(0, 3))
+                           va="bottom" if _up else "top",
+                           xytext=(0, 3 if _up else -3))
 ax[1].axhline(0, color=ns.INK, lw=1.0)
 ax[1].set_xlabel("bitrate (bpp)"); ax[1].set_ylabel("dB vs the release")
 ax[1].set_ylim(-0.35, 0.06)
+for _a in ax:
+    _a.yaxis.set_major_locator(MaxNLocator(nbins=5))
 ns.panel(ax[1], "b", dx=-0.24)
 
 # ---- c: the spread across sequences ----------------------------------------

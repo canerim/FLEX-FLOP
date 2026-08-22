@@ -25,9 +25,7 @@ sys.path.insert(0, str(R / "scripts"))
 from savings import sv
 import naturestyle as ns  # noqa: E402
 
-ns.apply()
-
-
+ns.apply(ns.for_column())
 def main(src="results/signalled_RECIPE512_grid.json",
          sat="results/saturation_RECIPE512_ctc53.json",
          out="docs/figures/budget_band.png",
@@ -124,9 +122,11 @@ def main(src="results/signalled_RECIPE512_grid.json",
     ax[0].set_ylabel("compute saved (%)")
     # The tick marks had no key: one at y=0 for each rate's floor, one at the
     # top for its saturation point. A reader should not have to infer that.
-    ax[0].text(0.42, 0.30, "| floor (bottom) and\nsaturation (top),\none pair per rate", transform=ax[0].transAxes, fontsize=6,
+    # Bottom left, clear of the rate labels that sit along the curves.
+    ax[0].text(0.02, 0.06, "ticks: floor and saturation, one pair per rate",
+               transform=ax[0].transAxes, fontsize=ns.fs(6),
                color=ns.INK2, va="top", linespacing=1.3)
-    ax[0].legend(fontsize=6, loc="lower right")
+    ax[0].legend(fontsize=ns.fs(6), loc="lower right")
     ax[1].set_xlabel("position in the usable band")
     ax[1].set_ylabel("compute saved (%)")
     ax[1].set_xlim(0, 1)
@@ -137,7 +137,7 @@ def main(src="results/signalled_RECIPE512_grid.json",
                    label="fitted power law")
         # After the line is drawn, not before it: called earlier the legend had
         # nothing to list and matplotlib drew an empty box.
-        ax[1].legend(fontsize=6, loc="lower right", frameon=False)
+        ax[1].legend(fontsize=ns.fs(6), loc="lower right", frameon=False)
     for i, l in enumerate("ab"):
         ns.panel(ax[i], l, dx=-0.22)
     fig.tight_layout(w_pad=1.6)

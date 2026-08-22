@@ -175,29 +175,55 @@ def ladder():
     mo = [100 * e["modelled"] for e in ex]
     me = [100 * e["measured"] for e in ex]
     j = C["split_depth"]
-    fig, ax = plt.subplots(figsize=(ns.W1, 1.12))
+    # Taller than it was. At 1.12 inches the y-axis label did not fit the
+    # figure and bbox_inches="tight" cropped its first letter off, so the
+    # first thing a reader of Section 3 met was an axis labelled "ost,
+    # released decode"; the released-decoder line ran under its own label and
+    # the ceiling arrow sat on top of the step it measures.
+    fig, ax = plt.subplots(figsize=(ns.W1, 1.55))
     _bare(ax)
-    ax.step(k, me, where="mid", color=ns.BLUE, lw=1.1, label="counted with hooks")
-    ax.step(k, mo, where="mid", color=ns.INK2, lw=0.8, ls="--",
-            label="arithmetic model")
-    ax.axhline(100, color=ns.GRID, lw=0.6)
-    ax.text(k[-1], 101, "released decoder", fontsize=6, color=ns.INK2,
-            ha="right")
+    ax.step(k, me, where="mid", color=ns.BLUE, lw=1.3, label="counted with hooks",
+            zorder=3)
+    ax.step(k, mo, where="mid", color=ns.INK2, lw=0.9, ls="--",
+            label="arithmetic model", zorder=3)
+    ax.axhline(100, color=ns.INK2, lw=0.6, ls=(0, (1, 2)), zorder=1)
+    # Above the line, at the left, where no series goes: the step reaches 100
+    # only at the last exit, so the right-hand end is exactly where this label
+    # used to collide with it.
+    ax.text(k[-1] + 0.45, 100, "released\ndecoder", fontsize=6,
+            color=ns.INK2, ha="right", va="bottom")
     ax.axvspan(-0.5, j - 0.5, color="#f2f2f2", zorder=0)
-    ax.text((j - 1) / 2, 62, "below the split:\nno tile may stop here",
-            fontsize=6, color=ns.INK2, ha="center")
-    ax.annotate("", xy=(j, me[j]), xytext=(j, 100),
-                arrowprops=dict(arrowstyle="<->", lw=0.8, color=ns.VERM))
-    ax.text(j + 0.12, (me[j] + 100) / 2, f"ceiling\n{C['ceiling_measured_pct']:.1f}%",
-            fontsize=6, color=ns.VERM, va="center")
+    # In the empty upper half of the grey band. At the bottom it lay across
+    # the step it is describing, which the text audit cannot see because it
+    # compares text against text and not against a line.
+    ax.text((j - 1) / 2, 94, "below the split:\nno tile\nmay stop here",
+            fontsize=6, color=ns.INK2, ha="center", va="top")
+    # The ceiling arrow between the shallowest usable exit and the release,
+    # drawn just right of the step so it measures the gap without covering it.
+    xa = j + 0.42
+    ax.annotate("", xy=(xa, me[j]), xytext=(xa, 100),
+                arrowprops=dict(arrowstyle="<->", lw=0.9, color=ns.VERM,
+                                shrinkA=0, shrinkB=0))
+    ax.text(xa - 0.14, (me[j] + 100) / 2,
+            f"ceiling\n{C['ceiling_measured_pct']:.1f}%",
+            fontsize=6, color=ns.VERM, va="center", ha="right")
     ax.set_xlabel("exit")
-    ax.set_ylabel("cost, released decode = 100")
-    ax.set_ylim(55, 108)
+    # Short enough to fit the axis. It used to read "cost, released decode =
+    # 100", which needed more height than the figure has and was cropped to
+    # "ost, released decode" in the paper; the released decoder's own line is
+    # labelled on the plot, so the axis does not have to say it twice.
+    # Eight characters. Anything longer is taller than a 1.55 inch axis and
+    # gets cropped by the tight bounding box; the caption carries the unit.
+    ax.set_ylabel("cost (%)")
+    ax.set_ylim(52, 110)
+    ax.set_xlim(-0.55, k[-1] + 0.55)
     ax.set_xticks(k)
-    ax.legend(frameon=False, fontsize=6, handlelength=1.5, loc="lower right",
-              borderpad=0)
+    ax.set_yticks([60, 70, 80, 90, 100])
+    ax.legend(frameon=False, fontsize=6, handlelength=1.6, loc="lower right",
+              borderpad=0, labelspacing=0.3)
+    fig.tight_layout()
     fig.savefig(FIG / "ladder.png", dpi=500, bbox_inches="tight",
-                pad_inches=0.01, facecolor="white")
+                pad_inches=0.03, facecolor="white")
     print("  wrote ladder.png")
 
 

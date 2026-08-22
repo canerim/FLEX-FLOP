@@ -20,6 +20,9 @@ R = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(R / "scripts"))
 import naturestyle as ns
 
+# Type set for the column this prints in; see naturestyle.for_column.
+ns.apply(ns.for_column())
+
 d = json.load(open(R / "results/seam_vs_qp.json"))
 rows = d["rows"]
 qp = np.array([r["qp"] for r in rows], float)

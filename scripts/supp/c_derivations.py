@@ -1021,24 +1021,55 @@ def content(k):
         "construction drops exit 4.")
 
     cB = cost_B
+    cfgB_split = 2      # exits below the split are not in cost_B
     _lev, _spr, _ext = [], [], []
     for r in rr["rows"]:
         _lev.append(r["spearman_bits_vs_level"])
         _spr.append(r["spearman_bits_vs_spread"])
         _ext.append(-r["spearman_bits_vs_exit"])
     _alphas = [r["alpha"] for r in rr["rows"]]
-    # The hull claim below is checked here rather than asserted in prose.
-    assert all(len(_lower_hull(list(zip(cB, r["phi"])))) == len(cB)
-               for r in rr["rows"])
+    # Computed, not asserted. This was an assert, and it fired the first time
+    # the paper moved to a later checkpoint -- which is the assert doing its
+    # job, and also a build that dies rather than a sentence that updates.
+    # Hull membership is a measurement about the fitted profile, so it is
+    # measured and then described.
+    # _lower_hull returns INDICES, not points. Comparing points against it
+    # made every exit look off the hull, and the sentence below said so.
+    _off = {}
+    for r in rr["rows"]:
+        _h = set(_lower_hull(list(zip(cB, r["phi"]))))
+        _miss = [i for i in range(len(cB)) if i not in _h]
+        if _miss:
+            _off[r["qp"]] = _miss
+    if not _off:
+        _hull_sentence = (
+            "And all four exits survive on the lower hull of "
+            "(c<sub>k</sub>, φ<sub>k</sub>) at every rate, so Proposition 14 "
+            "costs nothing here.")
+    else:
+        _rates = ", ".join(f"q{q}" for q in sorted(_off))
+        _ex = sorted({cfgB_split + i for m in _off.values() for i in m})
+        _exs = ", ".join(f"exit {e}" for e in _ex)
+        _hull_sentence = (
+            f"And the hull is no longer full: at {_rates} the fitted profile "
+            f"puts {_exs} above the line joining its neighbours, so the "
+            f"Lagrangian rule cannot select it there whatever the multiplier. "
+            f"On the checkpoint this paper first reported all four exits "
+            f"survived; on the one it reports now, the two lowest rates have "
+            f"a rung the rule will not use. That is Proposition 14 costing "
+            f"something rather than nothing. We have two checkpoints and so "
+            f"cannot say whether further training removes more rungs or puts "
+            f"this one back; what the two do establish is that hull "
+            f"membership is a property of the weights and not of the design, "
+            f"and a claim that it is full has to be re-checked whenever they "
+            f"move.")
     k.par(
         f"Section F prints the fitted α and φ at every rate and reports what "
         f"the rule saves. Two properties of that fit belong here, with the "
         f"propositions they bear on. α is positive at every rate, so a tile "
         f"the entropy coder spent bits on is a tile every exit reconstructs "
         f"worse, and it falls {max(_alphas) / min(_alphas):.0f}-fold from the "
-        f"lowest rate to the highest. And all four exits survive on the lower "
-        f"hull of (c<sub>k</sub>, φ<sub>k</sub>) at every rate, so "
-        f"Proposition 14 costs nothing here.")
+        f"lowest rate to the highest. " + _hull_sentence)
     k.note("Fitted values from results/raterank_RECIPE512_b01.json, "
            "checkpoint runs/RECIPE512/ckpt_PAPER.pth.tar, \\NumSeq sequences "
            "at a 0.1 dB budget; hull membership computed in the build against "

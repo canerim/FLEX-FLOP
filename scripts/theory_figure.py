@@ -9,8 +9,7 @@ import matplotlib.pyplot as plt
 R = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(R / "scripts"))
 import naturestyle as ns
-ns.apply()
-
+ns.apply(ns.for_column())
 d = json.load(open(R / "results/tile_table.json"))
 gap = json.load(open(R / "results/hull_gap.json"))
 D = np.array(d["D"])[:, d["j"]:]
@@ -28,7 +27,7 @@ C_, Dd = np.array(C_), np.array(Dd)
 sv = 100 * (1 - C_)
 dbv = db(Dd)
 
-fig, ax = plt.subplots(1, 3, figsize=(ns.W2, 2.3))
+fig, ax = plt.subplots(1, 3, figsize=(ns.W2, 2.6))
 
 # a: monotonicity in the multiplier
 ax[0].semilogx(np.clip(lams, 1e-9, None), sv, color=ns.BLUE, lw=1.3)
@@ -52,13 +51,13 @@ ax[1].axvspan(dbv[-1], dbv.max() + 0.05, color="#bbbbbb", alpha=0.22, lw=0)
 _lo, _hi = ax[1].get_ylim() if ax[1].get_ylim()[1] > 0 else (0, sv.max())
 _ytxt = sv.max() * 0.52
 ax[1].text(dbv[0] - 0.008, _ytxt, "infeasible", rotation=90, ha="center",
-           va="center", fontsize=6, color=ns.VERM)
+           va="center", fontsize=ns.fs(6), color=ns.VERM)
 ax[1].text(dbv[-1] + 0.018, _ytxt, "wasted", rotation=90, ha="center",
-           va="center", fontsize=6, color=ns.INK2)
+           va="center", fontsize=ns.fs(6), color=ns.INK2)
 ax[1].annotate("floor", (dbv[0], sv[0]), textcoords="offset points",
-               xytext=(9, 4), fontsize=6, color=ns.GREEN)
+               xytext=(9, 4), fontsize=ns.fs(6), color=ns.GREEN)
 ax[1].annotate("saturation", (dbv[-1], sv[-1]), textcoords="offset points",
-               xytext=(-44, 7), fontsize=6, color=ns.ORANGE)
+               xytext=(-44, 7), fontsize=ns.fs(6), color=ns.ORANGE)
 ax[1].set_xlabel("dB"); ax[1].set_ylabel("MACs saved (%)")
 ax[1].set_xlim(dbv[0] - 0.02, dbv[-1] + 0.04)
 ns.panel(ax[1], "b", dx=-0.24)
@@ -71,10 +70,10 @@ ax[2].plot(b_, [r["pareto_saving"] for r in rows], "-o", ms=3.5, lw=1.1,
 ax[2].plot(b_, [r["hull_saving"] for r in rows], "--s", ms=3.5, lw=1.1,
            color=ns.BLUE, label="reachable by λ")
 ax[2].set_xlabel("budget (dB)"); ax[2].set_ylabel("MACs saved (%)")
-ax[2].legend(fontsize=6, loc="lower right")
+ax[2].legend(fontsize=ns.fs(6), loc="lower right")
 ns.panel(ax[2], "c", dx=-0.24)
 
-fig.tight_layout()
+fig.tight_layout(w_pad=2.2, h_pad=1.2)
 for _d in (R / "docs/figures", R / "paper/figures"):
     _d.mkdir(parents=True, exist_ok=True)
     fig.savefig(_d / "theory.png", dpi=500, bbox_inches="tight",

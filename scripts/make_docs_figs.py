@@ -24,6 +24,10 @@ sys.path.insert(0, str(R / "scripts"))
 sys.path.insert(0, str(R))
 import naturestyle as ns  # noqa: E402
 
+# These are hand-laid-out schematics: every box and label sits at a
+# coordinate chosen against the others, so scaling the type moves text into
+# text. They stay at the drawn size until they are redrawn at column width,
+# which is a layout job and not a style switch.
 ns.apply()
 OUT = R / "docs" / "figures"
 OUT.mkdir(parents=True, exist_ok=True)
@@ -110,16 +114,16 @@ def topology():
     a.add_patch(FancyBboxPatch((2, y), 9, 6, boxstyle="round,pad=0.3",
                                fc=FROZEN, ec="none"))
     a.text(6.5, y + 3, "encoder\nhyperprior\nentropy", ha="center", va="center",
-           fontsize=6, color="#333333")
-    a.text(6.5, y - 2.2, "FROZEN\n27.9M", ha="center", va="top", fontsize=6,
+           fontsize=ns.fs(6), color="#333333")
+    a.text(6.5, y - 2.2, "FROZEN\n27.9M", ha="center", va="top", fontsize=ns.fs(6),
            color="#666666")
 
     a.add_patch(FancyBboxPatch((14, y), 7, 6, boxstyle="round,pad=0.3",
                                fc=TRAIN, ec="none"))
-    a.text(17.5, y + 3, "upsample", ha="center", va="center", fontsize=6,
+    a.text(17.5, y + 3, "upsample", ha="center", va="center", fontsize=ns.fs(6),
            color="white")
     a.text(17.5, y - 2.2, "8.2% of\ndecode MAC", ha="center", va="top",
-           fontsize=6, color="#666666")
+           fontsize=ns.fs(6), color="#666666")
 
     # the twelve blocks
     x0, bw, gap = 24, 4.6, 0.7
@@ -130,14 +134,14 @@ def topology():
                                    fc=TRAIN, ec="none",
                                    alpha=1.0 if shared else 0.72))
         a.text(x + bw / 2, y + 3, str(b), ha="center", va="center",
-               fontsize=6, color="white")
+               fontsize=ns.fs(6), color="white")
     trunk_end = x0 + 12 * (bw + gap) - gap
 
     a.add_patch(FancyBboxPatch((trunk_end + 2, y), 6, 6,
                                boxstyle="round,pad=0.3", fc=TRAIN, ec="none"))
-    a.text(trunk_end + 5, y + 3, "head", ha="center", va="center", fontsize=6,
+    a.text(trunk_end + 5, y + 3, "head", ha="center", va="center", fontsize=ns.fs(6),
            color="white")
-    a.text(trunk_end + 5, y - 2.2, "2.4%", ha="center", va="top", fontsize=6,
+    a.text(trunk_end + 5, y - 2.2, "2.4%", ha="center", va="top", fontsize=ns.fs(6),
            color="#666666")
 
     # the split
@@ -145,9 +149,9 @@ def topology():
     a.plot([xs, xs], [y - 4, y + 11], color=ns.VERM, lw=1.0, ls=(0, (3, 2)))
     # Two labels, two heights: side by side at 5.5 pt they overlap at the split.
     a.text(xs - 1.5, y + 8.4, f"groups 0–{j-1}  ·  FULL-FRAME", ha="right",
-           fontsize=6, color=ns.INK2)
+           fontsize=ns.fs(6), color=ns.INK2)
     a.text(xs + 1.5, y + 11.6, f"groups {j}–{K-1}  ·  PER TILE  ·  the skippable "
-           f"part, 89.4% of decode MAC", fontsize=6, color=ns.ORANGE)
+           f"part, 89.4% of decode MAC", fontsize=ns.fs(6), color=ns.ORANGE)
 
     # Exits 0..j-1 exist in the ladder but end INSIDE the full-frame stem,
     # which runs once for the whole frame whether or not any tile stops early.
@@ -160,11 +164,11 @@ def topology():
         a.add_patch(FancyArrowPatch((x - bw / 2, y), (x - bw / 2, y - 4),
                                     arrowstyle="-|>", mutation_scale=6,
                                     color="#999999", lw=0.7))
-        a.text(x - bw / 2, y - 5.4, f"exit {k}", ha="center", fontsize=6,
+        a.text(x - bw / 2, y - 5.4, f"exit {k}", ha="center", fontsize=ns.fs(6),
                color="#999999")
     a.text(x0, y - 16.6, f"exits 0–{j-1} end inside the full-frame stem: same\n"
            f"cost as exit {j}, so the allocator never picks them",
-           fontsize=6, color="#999999", va="top")
+           fontsize=ns.fs(6), color="#999999", va="top")
 
     # exits
     for k in range(j, K):
@@ -173,14 +177,14 @@ def topology():
                                     arrowstyle="-|>", mutation_scale=7,
                                     color=ns.VERM, lw=0.8))
         sv = 100 * (1 - cost[k] / cost[-1])
-        a.text(x - bw / 2, y - 8.5, f"exit {k}", ha="center", fontsize=6,
+        a.text(x - bw / 2, y - 8.5, f"exit {k}", ha="center", fontsize=ns.fs(6),
                color=ns.VERM)
-        a.text(x - bw / 2, y - 11.2, f"{sv:.0f}% saved", ha="center", fontsize=6,
+        a.text(x - bw / 2, y - 11.2, f"{sv:.0f}% saved", ha="center", fontsize=ns.fs(6),
                color="#666666")
         nm = (adapter_name[k] if k < len(adapter_name) else None)
         a.text(x - bw / 2, y - 13.0,
                f"{nm} adapter" if nm else "no adapter\n(raw feature)",
-               ha="center", va="top", fontsize=6, color="#888888")
+               ha="center", va="top", fontsize=ns.fs(6), color="#888888")
 
     # router
     # The router reads the stem, i.e. the output of the last SHARED group, so
@@ -188,7 +192,7 @@ def topology():
     a.add_patch(FancyBboxPatch((x0 + 1, y + 15.5), 21, 5,
                                boxstyle="round,pad=0.3", fc=ns.GREEN, ec="none"))
     a.text(x0 + 11.5, y + 18, "router head — 8.7K params", ha="center",
-           va="center", fontsize=6, color="white")
+           va="center", fontsize=ns.fs(6), color="white")
     a.add_patch(FancyArrowPatch((x0 + 11.5, y + 15.5), (xs - 1, y + 6.4),
                                 arrowstyle="-|>", mutation_scale=7,
                                 color=ns.GREEN, lw=0.8,
@@ -197,21 +201,21 @@ def topology():
     # 453,540 MMAC decode. The MLP is 2,496 MAC x 40 tiles and rounds to zero.
     a.text(x0 + 24, y + 19.4, "reads the shared 240x136 stem map: 200.6 MMAC, "
            "0.044% of the 453,540 MMAC decode.",
-           fontsize=6, color="#555555", va="center")
+           fontsize=ns.fs(6), color="#555555", va="center")
     # 94 bits per frame, measured -- results/signalled_*.json map_bits. Divided
     # by 1920x1080; an earlier caption quoted 1.2e-4, which is the 720p figure.
     a.text(x0 + 24, y + 16.8, "In the SHIPPED system the encoder picks the "
            "assignment instead and signals it: 94 bits/frame = 4.5e-5 bpp at 1080p.",
-           fontsize=6, color="#555555", va="center")
+           fontsize=ns.fs(6), color="#555555", va="center")
 
     # "byte-identical bitstream" was too strong: it holds for the file only in
     # the decoder-side-router configuration. The SHIPPED system signals a ~94
     # bit map per frame, so the coded payload is identical and the file is not.
     a.text(2, 4, "blue = trained (decoder 17.49M + router 8.7K = 38.5% of the "
            "model)   ·   grey = frozen, so the coded payload is bit-identical "
-           "to the release", fontsize=6, color="#444444")
+           "to the release", fontsize=ns.fs(6), color="#444444")
     a.text(2, 1, f"K = {K} exits over 12 blocks, split depth j = {j}, "
-           f"{cfg.rgb_patch}×{cfg.rgb_patch} px tiles", fontsize=6,
+           f"{cfg.rgb_patch}×{cfg.rgb_patch} px tiles", fontsize=ns.fs(6),
            color="#444444")
     save(fig, "topology.png")
 
@@ -259,9 +263,9 @@ def rd_curve():
                    label=lab)
     ax[0].set_xlabel("bitrate (bpp)")
     ax[0].set_ylabel("PSNR (dB), 6:1:1 in 4:2:0")
-    ax[0].legend(loc="lower right", fontsize=6)
+    ax[0].legend(loc="lower right", fontsize=ns.fs(6))
     ns.panel(ax[0], "a")
-    ax[0].set_title("Rate-quality, 40 CTC sequences", fontsize=6, color=ns.INK2,
+    ax[0].set_title("Rate-quality, 40 CTC sequences", fontsize=ns.fs(6), color=ns.INK2,
                     loc="left")
 
     # zoom: the quality axis a 0.1 dB budget actually spans
@@ -273,7 +277,7 @@ def rd_curve():
                    ls=(0, (4, 2)))
         for q, s in zip(qps, sv):
             if s == s:
-                ax[1].annotate(f"{s:.0f}%", (bpp[q], -db), fontsize=6, color=c,
+                ax[1].annotate(f"{s:.0f}%", (bpp[q], -db), fontsize=ns.fs(6), color=c,
                                ha="center", va="bottom",
                                textcoords="offset points", xytext=(0, 2))
     ax[1].set_xlabel("bitrate (bpp)")
@@ -281,7 +285,7 @@ def rd_curve():
     ax[1].set_ylim(-0.24, 0.05)
     ns.panel(ax[1], "b", dx=-0.18)
     ax[1].set_title("Same data, quality axis expanded; labels are compute saved",
-                    fontsize=6, color=ns.INK2, loc="left")
+                    fontsize=ns.fs(6), color=ns.INK2, loc="left")
     fig.tight_layout()
     save(fig, "rate_quality.png")
 
@@ -323,7 +327,7 @@ def loss_curves(tag="BEST"):
     ax[0].plot(x, roll(loss), color=ns.BLUE, lw=1.2)
     ax[0].set_xlabel("training step (thousands)")
     ax[0].set_ylabel("loss (λ·MSE + bpp)")
-    ax[0].set_title("Loss: flat after ~5k steps", fontsize=6, color=ns.INK2,
+    ax[0].set_title("Loss: flat after ~5k steps", fontsize=ns.fs(6), color=ns.INK2,
                     loc="left")
     # The loss is lambda*MSE + bpp and bpp swings twofold between batches --
     # 0.32 to 0.61 within ten consecutive records -- so it tracks the content
@@ -331,7 +335,7 @@ def loss_curves(tag="BEST"):
     # therefore weak evidence of convergence, and panel c is the answer to
     # "has it converged" that this panel cannot give.
     r_ = np.corrcoef(loss, [q["bpp"] for q in tail])[0, 1]
-    ax[0].text(0.03, 0.06, f"corr(loss, batch bpp) = {r_:.2f}", fontsize=6,
+    ax[0].text(0.03, 0.06, f"corr(loss, batch bpp) = {r_:.2f}", fontsize=ns.fs(6),
                color=ns.VERM, transform=ax[0].transAxes)
     ns.panel(ax[0], "a")
 
@@ -343,8 +347,8 @@ def loss_curves(tag="BEST"):
                    label="deepest" if k == K - 1 else f"exit {k}")
     ax[1].set_xlabel("training step (thousands)")
     ax[1].set_ylabel("PSNR on the batch (dB)")
-    ax[1].legend(loc="lower right", fontsize=6, ncol=2)
-    ax[1].set_title("Per-exit on the training batch", fontsize=6, color=ns.INK2,
+    ax[1].legend(loc="lower right", fontsize=ns.fs(6), ncol=2)
+    ax[1].set_title("Per-exit on the training batch", fontsize=ns.fs(6), color=ns.INK2,
                     loc="left")
     ns.panel(ax[1], "b", dx=-0.18)
 
@@ -372,13 +376,13 @@ def loss_curves(tag="BEST"):
         xs = sorted(pts)
         ax[2].plot(xs, [pts[k] for k in xs], marker="o", ms=3.5, lw=1.0,
                    color=c, label=r, zorder=3 if r == tag else 2)
-    ax[2].legend(loc="lower left", fontsize=6, ncol=1, frameon=False)
+    ax[2].legend(loc="lower left", fontsize=ns.fs(6), ncol=1, frameon=False)
     ax[2].set_xlabel("cumulative training step (thousands)")
     ax[2].set_ylabel(f"saved vs release at 0.1 dB, qp {QP} (%)")
     # Not "still climbing": CONTROL falls, which is the open question of the
     # project and must not be papered over by a caption chosen for the runs
     # that behave.
-    ax[2].set_title("Measured on fixed CTC frames", fontsize=6,
+    ax[2].set_title("Measured on fixed CTC frames", fontsize=ns.fs(6),
                     color=ns.INK2, loc="left")
     ns.panel(ax[2], "c", dx=-0.20)
 
@@ -387,8 +391,8 @@ def loss_curves(tag="BEST"):
             a_.axvline(e * STEPS_PER_EPOCH / 1000, color=ns.INK2, lw=0.6,
                        ls=(0, (3, 2)))
             a_.text(e * STEPS_PER_EPOCH / 1000, a_.get_ylim()[1],
-                    f" epoch {e}", fontsize=6, color=ns.INK2, va="top")
-    fig.suptitle(f"{tag}: one epoch is 47,451 steps", fontsize=6, color=ns.INK2,
+                    f" epoch {e}", fontsize=ns.fs(6), color=ns.INK2, va="top")
+    fig.suptitle(f"{tag}: one epoch is 47,451 steps", fontsize=ns.fs(6), color=ns.INK2,
                  x=0.005, ha="left")
     fig.tight_layout(rect=(0, 0, 1, 0.95), w_pad=2.4)
     save(fig, f"training_{tag}.png")
@@ -419,20 +423,20 @@ def ab_compare():
     ax[0].bar(x + 0.19, [b[q] for q in qs], 0.36, color=ns.ORANGE,
               label="B · decoder predicts, nothing sent (byte-identical)")
     ax[0].axhline(30, color=ns.INK2, lw=0.7, ls=(0, (3, 2)))
-    ax[0].text(len(qs) - 0.5, 30.5, "30% target", fontsize=6, color=ns.INK2,
+    ax[0].text(len(qs) - 0.5, 30.5, "30% target", fontsize=ns.fs(6), color=ns.INK2,
                ha="right")
     ax[0].set_xticks(x); ax[0].set_xticklabels([f"qp {q}" for q in qs])
     ax[0].set_ylabel("decode compute saved at 0.1 dB (%)")
-    ax[0].legend(loc="upper right", fontsize=6, frameon=False)
+    ax[0].legend(loc="upper right", fontsize=ns.fs(6), frameon=False)
     ax[0].set_ylim(0, 42)
-    ax[0].set_title("Same checkpoint, same frames, same budget", fontsize=6,
+    ax[0].set_title("Same checkpoint, same frames, same budget", fontsize=ns.fs(6),
                     color=ns.INK2, loc="left")
     ns.panel(ax[0], "a")
 
     gap = [a[q] - b[q] for q in qs]
     ax[1].plot(x, gap, marker="o", ms=4, color=ns.VERM, lw=1.2)
     for i, g in enumerate(gap):
-        ax[1].annotate(f"{g:.1f}", (i, g), fontsize=6, color=ns.VERM,
+        ax[1].annotate(f"{g:.1f}", (i, g), fontsize=ns.fs(6), color=ns.VERM,
                        ha="center", va="bottom",
                        textcoords="offset points", xytext=(0, 3))
     # The router's own arithmetic is already inside B, so it is a floor under
@@ -440,12 +444,12 @@ def ab_compare():
     # the last 0.163 points.
     ax[1].axhline(0.1629, color=ns.INK2, lw=0.7, ls=(0, (1, 2)))
     ax[1].text(0, 0.35, "0.163% — the router's own compute, already charged",
-               fontsize=6, color=ns.INK2)
+               fontsize=ns.fs(6), color=ns.INK2)
     ax[1].set_xticks(x); ax[1].set_xticklabels([f"qp {q}" for q in qs])
     ax[1].set_ylabel("points of saving given up (A − B)")
     ax[1].set_ylim(0, 7.5)
     ax[1].set_title("The price of an unchanged bitstream — an upper bound",
-                    fontsize=6, color=ns.INK2, loc="left")
+                    fontsize=ns.fs(6), color=ns.INK2, loc="left")
     ns.panel(ax[1], "b", dx=-0.18)
     fig.tight_layout(w_pad=2.2)
     save(fig, "ab_decision.png")
@@ -481,8 +485,8 @@ def latency():
                    label=f"{b:g} dB, wall-clock")
     ax[0].set_xticks(qs); ax[0].set_xlabel("qp")
     ax[0].set_ylabel("decode saved (%)")
-    ax[0].legend(loc="lower left", fontsize=6, ncol=2, frameon=False)
-    ax[0].set_title("solid = MACs, dashed = measured", fontsize=6,
+    ax[0].legend(loc="lower left", fontsize=ns.fs(6), ncol=2, frameon=False)
+    ax[0].set_title("solid = MACs, dashed = measured", fontsize=ns.fs(6),
                     color=ns.INK2, loc="left")
     ns.panel(ax[0], "a")
 
@@ -494,14 +498,14 @@ def latency():
                     for x in r], marker="o", ms=4, color=c, lw=1.3,
                    label=f"{b:g} dB")
     ax[1].axhline(1.0, color=ns.INK2, lw=0.7, ls=(0, (1, 2)))
-    ax[1].text(0, 1.02, "what the MAC model promises", fontsize=6,
+    ax[1].text(0, 1.02, "what the MAC model promises", fontsize=ns.fs(6),
                color=ns.INK2)
     ax[1].set_xticks(qs); ax[1].set_xlabel("qp")
     ax[1].set_ylabel("realised / predicted")
     ax[1].set_ylim(0, 1.1)
-    ax[1].legend(loc="lower right", fontsize=6, frameon=False, title="budget",
+    ax[1].legend(loc="lower right", fontsize=ns.fs(6), frameon=False, title="budget",
                  title_fontsize=6)
-    ax[1].set_title("A looser budget cashes in better", fontsize=6,
+    ax[1].set_title("A looser budget cashes in better", fontsize=ns.fs(6),
                     color=ns.INK2, loc="left")
     ns.panel(ax[1], "b", dx=-0.18)
 
@@ -513,7 +517,7 @@ def latency():
     ax[2].plot(xs, ys, marker="o", ms=5, color=ns.BLUE, lw=1.3,
                label="FLEX-UF (this work)")
     for x, y, b in zip(xs, ys, buds):
-        ax[2].annotate(f"{b:g} dB", (x, y), fontsize=6, color=ns.BLUE,
+        ax[2].annotate(f"{b:g} dB", (x, y), fontsize=ns.fs(6), color=ns.BLUE,
                        textcoords="offset points", xytext=(4, -5))
     # DCVC-UF ships two model sizes; the line between them is what the field
     # currently pays for speed. Table 1 (BD-Rate) and Table 3 (FPS) of
@@ -523,8 +527,8 @@ def latency():
                label="DCVC-UF HT-L → HT-S (their Table 1+3)")
     ax[2].set_xlabel("decode speedup (×)")
     ax[2].set_ylabel("BD-Rate given up (%)")
-    ax[2].legend(loc="upper left", fontsize=6, frameon=False)
-    ax[2].set_title("Lower is cheaper speed", fontsize=6, color=ns.INK2,
+    ax[2].legend(loc="upper left", fontsize=ns.fs(6), frameon=False)
+    ax[2].set_title("Lower is cheaper speed", fontsize=ns.fs(6), color=ns.INK2,
                     loc="left")
     ns.panel(ax[2], "c", dx=-0.20)
     fig.tight_layout(w_pad=2.0)
@@ -587,26 +591,26 @@ def ab_budgets():
         ax[1].plot(qq, [A[q] - best[q] for q in qq],
                    marker="o", ms=4, color=c, lw=1.3, label=f"{bud:g} dB")
     ax[0].axhline(CEIL, color=ns.VERM, lw=0.8, ls=(0, (1, 2)))
-    ax[0].text(0, CEIL - 1.0, f"ladder ceiling {CEIL:.1f}%", fontsize=6,
+    ax[0].text(0, CEIL - 1.0, f"ladder ceiling {CEIL:.1f}%", fontsize=ns.fs(6),
                color=ns.VERM, va="top")
     ax[0].set_xticks(QPS); ax[0].set_xlabel("qp")
     ax[0].set_ylabel("intra decode saved vs release (%)")
-    ax[0].legend(loc="lower left", fontsize=6, ncol=2, frameon=False)
-    ax[0].set_title("solid = A signalled, dashed = B predicted", fontsize=6,
+    ax[0].legend(loc="lower left", fontsize=ns.fs(6), ncol=2, frameon=False)
+    ax[0].set_title("solid = A signalled, dashed = B predicted", fontsize=ns.fs(6),
                     color=ns.INK2, loc="left")
     ns.panel(ax[0], "a")
 
     # The router's own compute is a hard floor under the gap: even a perfect
     # predictor still has to run.
     ax[1].axhline(0.1629, color=ns.INK2, lw=0.7, ls=(0, (1, 2)))
-    ax[1].text(0, 0.22, "0.163% — the router's own compute", fontsize=6,
+    ax[1].text(0, 0.22, "0.163% — the router's own compute", fontsize=ns.fs(6),
                color=ns.INK2)
     ax[1].set_xticks(QPS); ax[1].set_xlabel("qp")
     ax[1].set_ylabel("points given up by not signalling")
-    ax[1].legend(loc="upper right", fontsize=6, frameon=False, title="budget",
+    ax[1].legend(loc="upper right", fontsize=ns.fs(6), frameon=False, title="budget",
                  title_fontsize=6)
     ax[1].set_title("Seeing the source frame is worth most at a tight budget",
-                    fontsize=6, color=ns.INK2, loc="left")
+                    fontsize=ns.fs(6), color=ns.INK2, loc="left")
     ns.panel(ax[1], "b", dx=-0.18)
     fig.tight_layout(w_pad=2.2)
     save(fig, "ab_budgets.png")
@@ -648,22 +652,22 @@ def tradeoff():
         ax[0].plot(d, v, color=c, lw=1.2, label=f"qp {q}")
         ax[1].plot(v, d, color=c, lw=1.2)
     ax[0].axvline(0.1, color=ns.INK2, lw=0.7, ls=(0, (3, 2)))
-    ax[0].text(0.102, 2, "0.1 dB budget", fontsize=6, color=ns.INK2, rotation=90,
+    ax[0].text(0.102, 2, "0.1 dB budget", fontsize=ns.fs(6), color=ns.INK2, rotation=90,
                va="bottom")
     ax[0].axhline(CEIL, color=ns.VERM, lw=0.8, ls=(0, (1, 2)))
     ax[0].text(0.005, CEIL - 0.9, f"ceiling {CEIL:.1f}%: every tile at exit "
-               f"{cfg.split_depth}", fontsize=6, color=ns.VERM, va="top")
+               f"{cfg.split_depth}", fontsize=ns.fs(6), color=ns.VERM, va="top")
     ax[0].set_xlabel("quality given up (dB below the release)")
     ax[0].set_ylabel("decode compute saved (%)")
     ax[0].set_xlim(0, 0.30)
-    ax[0].legend(loc="lower right", fontsize=6, ncol=2, frameon=False)
+    ax[0].legend(loc="lower right", fontsize=ns.fs(6), ncol=2, frameon=False)
     ns.panel(ax[0], "a")
 
     ax[1].axvline(30, color=ns.INK2, lw=0.7, ls=(0, (3, 2)))
-    ax[1].text(29.4, 0.27, "30% target", fontsize=6, color=ns.INK2, rotation=90,
+    ax[1].text(29.4, 0.27, "30% target", fontsize=ns.fs(6), color=ns.INK2, rotation=90,
                ha="right", va="top")
     ax[1].axvline(CEIL, color=ns.VERM, lw=0.8, ls=(0, (1, 2)))
-    ax[1].text(CEIL - 0.6, 0.27, f"ceiling {CEIL:.1f}%", fontsize=6,
+    ax[1].text(CEIL - 0.6, 0.27, f"ceiling {CEIL:.1f}%", fontsize=ns.fs(6),
                color=ns.VERM, rotation=90, ha="right", va="top")
     ax[1].set_xlabel("decode compute saved (%)")
     ax[1].set_ylabel("quality that costs (dB)")
@@ -752,12 +756,12 @@ def run_tree():
         flags = "  ".join(
             f"{SHORT[k]}={r['argv'][k]}" for k in SHOW
             if k in r["argv"] and r["argv"][k] not in (None, False))
-        a.text(50.5, y + 0.56, flags, fontsize=6, color=ns.INK2, va="center")
+        a.text(50.5, y + 0.56, flags, fontsize=ns.fs(6), color=ns.INK2, va="center")
         ep, st = r.get("epoch", 0), r.get("step", 0)
         done = ep + st / STEPS_PER_EPOCH
         a.text(50.5, y + 0.22, f"{done:.2f} epochs done"
                + ("" if live else "  ·  not running"),
-               fontsize=6, color=ns.VERM if live else "#999999", va="center")
+               fontsize=ns.fs(6), color=ns.VERM if live else "#999999", va="center")
         # progress against the 4-epoch selection point, not the -e 16 the
         # launcher was given: nothing here will be trained for sixteen epochs.
         a.add_patch(plt.Rectangle((78, y + 0.16), 20, 0.14, fc="#e8e8e8",
@@ -765,12 +769,12 @@ def run_tree():
         a.add_patch(plt.Rectangle((78, y + 0.16), 20 * min(done / 4, 1), 0.14,
                                   fc=ns.VERM if live else "#bbbbbb", ec="none"))
     a.text(78, len(order) + 0.05, "progress toward the 4-epoch selection point",
-           fontsize=6, color=ns.INK2)
+           fontsize=ns.fs(6), color=ns.INK2)
     a.text(1, -1.0, "blue = training now  ·  every run warm-starts from the "
            "release and freezes the encoder, so all of them emit the identical "
            "bitstream\nno further architectures are planned: the four live "
            "recipes run to 4 epochs and are selected on BD-saving over the "
-           "common rate interval", fontsize=6, color=ns.INK2, va="top")
+           "common rate interval", fontsize=ns.fs(6), color=ns.INK2, va="top")
     save(fig, "run_tree.png")
 
 

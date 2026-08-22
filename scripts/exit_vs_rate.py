@@ -26,7 +26,7 @@ ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "scripts"))
 import naturestyle as ns                                    # noqa: E402
 
-ns.apply()
+ns.apply(ns.for_column())
 OUT = (ROOT / "docs" / "figures", ROOT / "paper" / "figures")
 RATE_COLS = ["#08306b", "#2171b5", "#4292c6", "#6baed6", "#9ecae1"]
 
@@ -66,7 +66,7 @@ def main():
     ax[0].set_xlabel("exit taken")
     ax[0].set_ylabel("tiles (%)")
     ax[0].set_ylim(0, 78)
-    ax[0].legend(frameon=False, fontsize=6, ncol=5, handletextpad=0.25,
+    ax[0].legend(frameon=False, fontsize=ns.fs(6), ncol=5, handletextpad=0.25,
                  columnspacing=0.6, borderpad=0.05, loc="upper center", bbox_to_anchor=(0.55, 1.14))
     ns.panel(ax[0], "a")
 
@@ -84,7 +84,7 @@ def main():
     ax[1].set_xticks(range(len(live)))
     ax[1].set_xticklabels([f"e{i}" for i in live])
     ax[1].set_xlabel(f"exit taken, q{q_mid}")
-    ax[1].legend(frameon=False, fontsize=6, ncol=3, handletextpad=0.25,
+    ax[1].legend(frameon=False, fontsize=ns.fs(6), ncol=3, handletextpad=0.25,
                  columnspacing=0.6, borderpad=0.05, loc="upper center", bbox_to_anchor=(0.6, 1.14))
     ax[1].set_ylim(0, 112)
     ns.panel(ax[1], "b")

@@ -25,6 +25,10 @@ ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "scripts"))
 import naturestyle as ns  # noqa: E402
 
+# These are hand-laid-out schematics: every box and label sits at a
+# coordinate chosen against the others, so scaling the type moves text into
+# text. They stay at the drawn size until they are redrawn at column width,
+# which is a layout job and not a style switch.
 ns.apply()
 RES = ROOT / "results"
 FIG = ROOT / "docs" / "figures"
@@ -48,9 +52,9 @@ RATE_COLS = ["#08306b", "#2171b5", "#4292c6", "#6baed6", "#9ecae1"]
 def tidy(ax):
     ax.spines["top"].set_visible(False)
     ax.spines["right"].set_visible(False)
-    ax.tick_params(labelsize=6, length=2, width=0.5)
-    ax.xaxis.label.set_size(5.8)
-    ax.yaxis.label.set_size(5.8)
+    ax.tick_params(labelsize=ns.fs(6), length=2, width=0.5)
+    ax.xaxis.label.set_size(ns.fs(5.8))
+    ax.yaxis.label.set_size(ns.fs(5.8))
     return ax
 
 
@@ -83,13 +87,13 @@ def window():
                        color=RATE_COLS[n % len(RATE_COLS)], clip_on=False)
     ax[0].set_xlabel("distortion delivered, dB below the released decoder")
     ax[0].set_ylabel("decoder MACs saved (%)")
-    ax[0].legend(frameon=False, fontsize=6, handlelength=1.2, ncol=2,
+    ax[0].legend(frameon=False, fontsize=ns.fs(6), handlelength=1.2, ncol=2,
                  borderpad=0, loc="lower right")
     # Down beside the floor markers, not across the top. At 0.94 of the axes it
     # ran straight through the q0 and q16 curves, which is where they are
     # steepest and where a reader is looking.
     ax[0].text(0.09, 0.10, "▽ floor: below this\nno allocation is feasible",
-               transform=ax[0].transAxes, fontsize=6, color=ns.INK2,
+               transform=ax[0].transAxes, fontsize=ns.fs(6), color=ns.INK2,
                va="bottom", linespacing=1.25)
     ns.panel(ax[0], "a")
 
@@ -102,10 +106,10 @@ def window():
     ax[1].plot(qq, sa, "s-", ms=2.2, lw=0.9, color=ns.VERM, label="saturation")
     ax[1].set_xlabel("quality index")
     ax[1].set_ylabel("budget (dB)")
-    ax[1].legend(frameon=False, fontsize=6, handlelength=1.4, borderpad=0,
+    ax[1].legend(frameon=False, fontsize=ns.fs(6), handlelength=1.4, borderpad=0,
                  loc="upper left")
     ax[1].text(qq[len(qq) // 2], (fl[len(fl) // 2] + sa[len(sa) // 2]) / 2,
-               "the window a budget\ncan do anything in", fontsize=6,
+               "the window a budget\ncan do anything in", fontsize=ns.fs(6),
                color=ns.INK2, ha="center", va="center")
     ns.panel(ax[1], "b")
     _save(fig, "window.png")
@@ -142,10 +146,10 @@ def concentration():
     # which is worse than an axis that says how far the measurement went.
     _xmax = max(r["rho"] for r in rows if r.get("lorenz_at_rho") is not None)
     ax[0].set_xlim(0, _xmax * 1.04); ax[0].set_ylim(0, 1.02)
-    ax[0].legend(frameon=False, fontsize=6, handlelength=1.2, ncol=2,
+    ax[0].legend(frameon=False, fontsize=ns.fs(6), handlelength=1.2, ncol=2,
                  borderpad=0, loc="lower right")
     ax[0].text(0.30, 0.24, "equal shares", transform=ax[0].transAxes,
-               fontsize=6, color=ns.INK2, rotation=27)
+               fontsize=ns.fs(6), color=ns.INK2, rotation=27)
     ns.panel(ax[0], "a")
 
     gin = []
@@ -155,7 +159,7 @@ def concentration():
         gin.append(float(np.mean(g)) if g else np.nan)
     ax[1].bar([str(q) for q in qs], gin, 0.6, color=RATE_COLS, lw=0)
     for i, g in enumerate(gin):
-        ax[1].text(i, g + 0.012, f"{g:.2f}", ha="center", fontsize=6,
+        ax[1].text(i, g + 0.012, f"{g:.2f}", ha="center", fontsize=ns.fs(6),
                    color=ns.INK2)
     ax[1].set_xlabel("quality index")
     ax[1].set_ylabel("Gini of per-tile regret")
@@ -193,11 +197,11 @@ def deciders():
               label="trained router, nothing sent")
     for i, q in enumerate(qs):
         ax[0].text(i, max(R[q], B[q]) + 0.7, f"+{R[q] - B[q]:.1f}",
-                   ha="center", fontsize=6, color=ns.ORANGE)
+                   ha="center", fontsize=ns.fs(6), color=ns.ORANGE)
     ax[0].set_xticks(x); ax[0].set_xticklabels([f"q{q}" for q in qs])
     ax[0].set_ylabel("decoder MACs saved (%)")
     ax[0].set_ylim(0, 34)
-    ax[0].legend(frameon=False, fontsize=6, handlelength=1.1, borderpad=0,
+    ax[0].legend(frameon=False, fontsize=ns.fs(6), handlelength=1.1, borderpad=0,
                  loc="upper right")
     ns.panel(ax[0], "a")
 
@@ -212,22 +216,22 @@ def deciders():
     ax[1].bar(xx, [AG[q] for q in ok], 0.55, color="#9ecae1", lw=0)
     for i_, q in enumerate(ok):
         ax[1].text(i_, AG[q] + 0.015, f"{AG[q]:.2f}", ha="center",
-                   fontsize=6, color=ns.INK2)
+                   fontsize=ns.fs(6), color=ns.INK2)
     ax[1].set_ylabel("tiles where the rule picks\nthe oracle's exit")
     ax[1].set_ylim(0, 1.0)
     ax[1].set_xticks(xx); ax[1].set_xticklabels([f"q{q}" for q in ok])
     a1b = ax[1].twinx()
     a1b.plot(xx, [100 * R[q] / A[q] for q in ok], "o-", ms=2.6, lw=0.9,
              color=ns.ORANGE)
-    a1b.set_ylabel("% of the encoder search's saving", fontsize=6,
+    a1b.set_ylabel("% of the encoder search's saving", fontsize=ns.fs(6),
                    color=ns.ORANGE)
-    a1b.tick_params(labelsize=6, length=2, width=0.5, colors=ns.ORANGE)
+    a1b.tick_params(labelsize=ns.fs(6), length=2, width=0.5, colors=ns.ORANGE)
     a1b.set_ylim(0, 100)
     for sp in ("top",):
         a1b.spines[sp].set_visible(False)
     ax[1].text(0.5, 0.06, "picks a different exit on most tiles,\nand still "
                "captures three quarters of the search",
-               transform=ax[1].transAxes, ha="center", fontsize=6,
+               transform=ax[1].transAxes, ha="center", fontsize=ns.fs(6),
                color=ns.INK2)
     ns.panel(ax[1], "b")
     _save(fig, "deciders.png")
@@ -257,8 +261,8 @@ def mechanism():
                 label=f"tile {t}")
     a0.set_xlabel("exit k"); a0.set_ylabel("D(t,k), dB")
     a0.set_xticks(range(j, K))
-    a0.legend(frameon=False, fontsize=6, handlelength=1.1, borderpad=0)
-    a0.set_title("what each tile loses", fontsize=6, color=ns.INK2,
+    a0.legend(frameon=False, fontsize=ns.fs(6), handlelength=1.1, borderpad=0)
+    a0.set_title("what each tile loses", fontsize=ns.fs(6), color=ns.INK2,
                  loc="left", pad=3)
     ns.panel(a0, "a", dx=-0.34, dy=1.16)
 
@@ -266,7 +270,7 @@ def mechanism():
     a1.step(range(j, K), cost[j:], where="mid", color=ns.INK2, lw=1.0)
     a1.set_xlabel("exit k"); a1.set_ylabel("c(k)")
     a1.set_xticks(range(j, K))
-    a1.set_title("what each exit costs", fontsize=6, color=ns.INK2,
+    a1.set_title("what each exit costs", fontsize=ns.fs(6), color=ns.INK2,
                  loc="left", pad=3)
     ns.panel(a1, "b", dx=-0.22, dy=1.16)
 
@@ -281,10 +285,10 @@ def mechanism():
     a2.set_xlabel("exit k")
     a2.set_ylabel("D + λc, scaled")
     a2.set_xticks(range(j, K))
-    a2.set_title("add the price, take the argmin", fontsize=6, color=ns.INK2,
+    a2.set_title("add the price, take the argmin", fontsize=ns.fs(6), color=ns.INK2,
                  loc="left", pad=3)
     a2.text(0.97, 0.06, "★ the tile's exit", transform=a2.transAxes,
-            ha="right", va="bottom", fontsize=6, color=ns.INK2)
+            ha="right", va="bottom", fontsize=ns.fs(6), color=ns.INK2)
     ns.panel(a2, "c", dx=-0.34, dy=1.16)
 
     a3 = fig.add_subplot(gs[1, 1])
@@ -296,9 +300,9 @@ def mechanism():
     for r in range(T["nh"]):
         for c in range(T["nw"]):
             a3.text(c, r, str(grid[r, c]), ha="center", va="center",
-                    fontsize=6,
+                    fontsize=ns.fs(6),
                     color="white" if grid[r, c] >= K - 2 else ns.INK)
-    a3.set_title(f"the map, λ = {lam:.2e}", fontsize=6, color=ns.INK2,
+    a3.set_title(f"the map, λ = {lam:.2e}", fontsize=ns.fs(6), color=ns.INK2,
                  loc="left", pad=3)
     ns.panel(a3, "d", dx=-0.10, dy=1.16)
     _save(fig, "mechanism.png")

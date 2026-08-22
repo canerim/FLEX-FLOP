@@ -24,7 +24,64 @@ YELLOW, VERM, PURPLE, BLACK = "#F0E442", "#D55E00", "#CC79A7", "#000000"
 SERIES = [BLUE, ORANGE, GREEN, VERM, PURPLE, SKY]
 INK, INK2, GRID = "#000000", "#4d4d4d", "#d9d9d9"
 
-def apply():
+# The column a figure is printed in, in inches: build_pdf uses letter paper
+# with 0.62 inch margins and a 0.28 inch gutter.
+COL_IN = (8.5 - 2 * 0.62 - 0.28) / 2
+MAX_COLUMN_SCALE = 1.6
+
+
+def for_column(drawn_in=None):
+    """Font scale for a figure drawn wider than the column it prints in.
+
+    matplotlib sets type in points on the canvas, and the document scales the
+    whole canvas to fit its column. A figure drawn at W2 (7.2 in) and printed
+    in a 3.49 in column therefore prints all of its type at 48% of the size it
+    was set at: an 8 pt axis label lands at 3.9 pt. Twenty-three of the
+    paper's figures were in that state and nothing in the build could see it,
+    because every check reads the file rather than the page.
+
+    Passing the scale back into apply() sets the type large on the canvas so
+    that it lands right on the page. The alternative -- redrawing each figure
+    at column width -- is the same fix done by hand, and makes two-panel
+    figures a third of an inch tall once the height cap has narrowed them.
+
+    Capped at MAX_COLUMN_SCALE. The full ratio is 2.06, and at 2.06 a
+    three-panel figure has correct type and nowhere to put it: the panels are
+    a third of a column wide and every label, legend and annotation collides
+    with its neighbour. 1.6 is what the layouts hold -- an 8 pt axis label
+    prints at 6.2 and a 6 pt annotation at 4.7, against 3.9 and 2.9 before.
+    The rest has to come from simpler figures, not a bigger multiplier.
+    """
+    drawn_in = W2 if drawn_in is None else drawn_in
+    return min(MAX_COLUMN_SCALE, max(1.0, drawn_in / COL_IN))
+
+
+_SCALE = 1.0
+
+
+def fs(pt):
+    """An explicit type size, in the same units apply()'s scale uses.
+
+    rcParams only covers what a figure does not set for itself, and these
+    figures set a great deal for themselves -- sixty-three explicit sizes in
+    one producer. Scaling the defaults and leaving the explicit sizes alone
+    gave figures with correct axis labels and three-point annotations, which
+    is worse than uniformly small. Every explicit size goes through here.
+    """
+    return round(pt * _SCALE, 2)
+
+
+def apply(scale=1.0):
+    """The house style. `scale` multiplies every type size.
+
+    Use apply(for_column()) in a producer that draws at W2 and is placed in a
+    column; leave it at 1 for a figure drawn at the width it prints at.
+    """
+    global _SCALE
+    _SCALE = scale
+
+    def _s(v):
+        return round(v * scale, 2)
     plt.rcParams.update({
         "font.family": "sans-serif",
         "font.sans-serif": ["DejaVu Sans", "Helvetica", "Arial"],
@@ -33,12 +90,15 @@ def apply():
         # CVPR two-column layout and at that size the ticks were the first
         # thing the author called unreadable. Nothing here goes below 6 now,
         # and no figure sets its own size below 6 either.
-        "font.size": 8, "axes.labelsize": 8, "axes.titlesize": 8,
-        "xtick.labelsize": 7, "ytick.labelsize": 7, "legend.fontsize": 7,
-        "axes.linewidth": 0.5, "grid.linewidth": 0.4,
-        "xtick.major.width": 0.5, "ytick.major.width": 0.5,
-        "xtick.major.size": 2, "ytick.major.size": 2,
-        "lines.linewidth": 1.0, "lines.markersize": 3,
+        "font.size": _s(8), "axes.labelsize": _s(8),
+        "axes.titlesize": _s(8), "xtick.labelsize": _s(7),
+        "ytick.labelsize": _s(7), "legend.fontsize": _s(7),
+        # Strokes and markers scale with the type, or a figure set large for a
+        # column ends up as big text on hairlines.
+        "axes.linewidth": _s(0.5), "grid.linewidth": _s(0.4),
+        "xtick.major.width": _s(0.5), "ytick.major.width": _s(0.5),
+        "xtick.major.size": _s(2), "ytick.major.size": _s(2),
+        "lines.linewidth": _s(1.0), "lines.markersize": _s(3),
         "figure.facecolor": "white", "axes.facecolor": "white",
         "savefig.facecolor": "white", "savefig.dpi": 300,
         "axes.grid": True, "grid.color": GRID, "axes.axisbelow": True,

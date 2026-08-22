@@ -19,8 +19,7 @@ import matplotlib.pyplot as plt
 R = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(R / "scripts"))
 import naturestyle as ns
-ns.apply()
-
+ns.apply(ns.for_column())
 TAG = sys.argv[1] if len(sys.argv) > 1 else "RECIPE512"
 def _pick(*names):
     for n in names:
@@ -50,9 +49,9 @@ a.plot(qp, sat, marker="o", color=ns.BLUE, lw=1.2,
        label=f"saturation — every tile at exit {d['exit_j']}")
 a.axhline(0.1, color=ns.INK, lw=0.8, ls=(0, (4, 2)), label="0.1 dB budget")
 
-a.annotate(f"{sat[0]:.3f} dB", (qp[0], sat[0]), fontsize=6, color=ns.BLUE,
+a.annotate(f"{sat[0]:.3f} dB", (qp[0], sat[0]), fontsize=ns.fs(6), color=ns.BLUE,
            textcoords="offset points", xytext=(3, 5))
-a.annotate(f"{sat[-1]:.3f} dB", (qp[-1], sat[-1]), fontsize=6, color=ns.BLUE,
+a.annotate(f"{sat[-1]:.3f} dB", (qp[-1], sat[-1]), fontsize=ns.fs(6), color=ns.BLUE,
            textcoords="offset points", xytext=(-4, 5), ha="right")
 
 
@@ -60,7 +59,7 @@ a.annotate(f"{sat[-1]:.3f} dB", (qp[-1], sat[-1]), fontsize=6, color=ns.BLUE,
 a.set_ylim(0, 0.42); a.set_xlim(qp[0], qp[-1])
 a.set_xlabel("qp   (0 = lowest rate  →  63 = highest)")
 a.set_ylabel("quality budget, dB below the release")
-a.legend(loc="center left", fontsize=6, bbox_to_anchor=(0.02, 0.62))
+a.legend(loc="center left", fontsize=ns.fs(6), bbox_to_anchor=(0.02, 0.62))
 ns.panel(a, "a")
 
 # ---- b: what a budget is worth, and where it stops being worth anything ----
@@ -72,11 +71,11 @@ used = (0.1 - flo) / (sat - flo)
 b2 = b.twinx()
 b2.plot(qp, 100 * used, marker="o", color=ns.BLUE, lw=1.0, ls=(0, (3, 2)))
 b2.set_ylabel("share of the band 0.1 dB uses (%)", color=ns.BLUE,
-               fontsize=6)
+               fontsize=ns.fs(6))
 b2.tick_params(axis="y", colors=ns.BLUE)
 b2.grid(False)
 for x, u in zip(qp[::2], (100 * used)[::2]):
-    b2.annotate(f"{u:.0f}%", (x, u), fontsize=6, color=ns.BLUE,
+    b2.annotate(f"{u:.0f}%", (x, u), fontsize=ns.fs(6), color=ns.BLUE,
                 textcoords="offset points", xytext=(0, -9), ha="center")
 ns.panel(b, "b", dx=-0.20)
 

@@ -9,8 +9,7 @@ import matplotlib.pyplot as plt
 R = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(R / "scripts"))
 import naturestyle as ns
-ns.apply()
-
+ns.apply(ns.for_column())
 d = json.load(open(R / "results/map_transfer.json"))
 B = d["budget_db"]
 time_rows = [r for r in d["rows"] if r["kind"] == "time"]
@@ -18,7 +17,7 @@ rate_rows = [r for r in d["rows"] if r["kind"] == "rate"]
 qps = sorted({r["qp"] for r in time_rows})
 COL = {0: ns.BLUE, 32: ns.ORANGE, 63: ns.VERM}
 
-fig, ax = plt.subplots(1, 3, figsize=(ns.W2, 2.3))
+fig, ax = plt.subplots(1, 3, figsize=(ns.W2, 2.8))
 
 # a: quality when the map is reused across frames
 for q in qps:
@@ -28,21 +27,20 @@ for q in qps:
     ax[0].plot([r["offset"] for r in rs], [r["in_place_db"] for r in rs],
                "--", lw=0.8, color=COL[q], alpha=0.6)
 ax[0].axhline(B, color=ns.INK, lw=0.8, ls=(0, (4, 2)), label="0.1 dB budget")
-ax[0].set_xlabel("frames since the map was computed")
+ax[0].set_xlabel("frames since computed")
 ax[0].set_ylabel("delivered dB")
 # The solid/dashed convention as legend entries rather than as a note in the
 # corner. It was a note, and once the type went up a point the note and the
 # legend were sitting on each other; and a reader should not have to find a
 # free-floating sentence to learn what the two line styles mean.
 from matplotlib.lines import Line2D  # noqa: E402
-_style = [Line2D([], [], color=ns.INK2, lw=1.1, ls="-", label="transferred map"),
+_style = [Line2D([], [], color=ns.INK2, lw=1.1, ls="-", label="transferred"),
           Line2D([], [], color=ns.INK2, lw=0.8, ls="--", alpha=0.6,
                  label="recomputed in place")]
 _h, _l = ax[0].get_legend_handles_labels()
 ax[0].legend(_h + _style, _l + [h.get_label() for h in _style],
-             fontsize=6, loc="lower right", frameon=False, ncol=2,
-             handlelength=1.2, labelspacing=0.25, columnspacing=0.9,
-             borderpad=0.1)
+             fontsize=ns.fs(6), loc="lower left", frameon=False, ncol=1,
+             handlelength=1.2, labelspacing=0.22, borderpad=0.1)
 ns.panel(ax[0], "a")
 
 # b: saving when reused across frames
@@ -52,7 +50,7 @@ for q in qps:
                "-o", ms=3.5, lw=1.1, color=COL[q])
     ax[1].plot([r["offset"] for r in rs], [r["in_place_saving"] for r in rs],
                "--", lw=0.8, color=COL[q], alpha=0.6)
-ax[1].set_xlabel("frames since the map was computed")
+ax[1].set_xlabel("frames since computed")
 ax[1].set_ylabel("MACs saved (%)")
 ns.panel(ax[1], "b", dx=-0.24)
 
@@ -65,18 +63,21 @@ for r in rate_rows:
 im = ax[2].imshow(Mx, cmap="magma_r", vmin=B * 0.8, vmax=B * 2.1)
 for i in range(len(src)):
     for j2 in range(len(dst)):
-        ax[2].text(j2, i, f"{Mx[i, j2]:.3f}", ha="center", va="center",
-                   fontsize=6,
+        # Without the leading zero: five characters do not fit a cell at
+        # column type and ran into the legend beside it.
+        ax[2].text(j2, i, f"{Mx[i, j2]:.3f}".lstrip("0"),
+                   ha="center", va="center",
+                   fontsize=ns.fs(6),
                    color="white" if Mx[i, j2] > B * 1.5 else ns.INK)
 ax[2].set_xticks(range(len(dst))); ax[2].set_xticklabels([f"q{q}" for q in dst])
 ax[2].set_yticks(range(len(src))); ax[2].set_yticklabels([f"q{q}" for q in src])
 ax[2].set_xlabel("applied at"); ax[2].set_ylabel("map computed at")
 ax[2].grid(False)
 cb = fig.colorbar(im, ax=ax[2], fraction=0.046, pad=0.03)
-cb.ax.tick_params(labelsize=6); cb.set_label("delivered dB", fontsize=6)
+cb.ax.tick_params(labelsize=ns.fs(6)); cb.set_label("delivered dB", fontsize=ns.fs(6))
 ns.panel(ax[2], "c", dx=-0.28)
 
-fig.tight_layout()
+fig.tight_layout(w_pad=2.2, h_pad=1.2)
 for _d in (R / "docs/figures", R / "paper/figures"):
     _d.mkdir(parents=True, exist_ok=True)
     fig.savefig(_d / "map_transfer.png", dpi=500, bbox_inches="tight",

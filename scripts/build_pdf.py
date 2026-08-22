@@ -502,6 +502,11 @@ def content(colw, fullw):
         # arriving with less than that left would jump to the next column and
         # strand the text behind it. Page 3 lost 35% of its left column that
         # way.
+        # 1.25 inches was the cap while every figure's type was set at half
+        # the size it printed at, so a squeezed figure cost nothing anyone
+        # could read anyway. With the type set for the column, a three-panel
+        # figure needs 3.2 inches of canvas, which lands at 1.55 on the page,
+        # and capping it at 1.25 would narrow the figure and undo the change.
         A(KeepTogether(fig(name, colw, cap, maxh=1.25 * inch)))
 
     # ---- abstract -------------------------------------------------------

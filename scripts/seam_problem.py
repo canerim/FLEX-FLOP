@@ -25,8 +25,7 @@ import matplotlib; matplotlib.use("Agg")
 import matplotlib.pyplot as plt  # noqa: E402
 from matplotlib.patches import Rectangle  # noqa: E402
 import naturestyle as ns  # noqa: E402
-ns.apply()
-
+ns.apply(ns.for_column())
 ap = argparse.ArgumentParser()
 ap.add_argument("--seq", default="Bosphorus")
 ap.add_argument("--qp", type=int, default=63)
@@ -117,9 +116,9 @@ def label(A, text, colour, letter, panel_w):
     # edge to edge there is none: the first letter was clipped by the figure
     # box. The offset is converted from points through this panel's own width,
     # so the gap after the letter is the same on a wide panel and a narrow one.
-    A.text(0, 1.015, letter, transform=A.transAxes, fontsize=7,
+    A.text(0, 1.015, letter, transform=A.transAxes, fontsize=ns.fs(7),
            color=ns.INK, ha="left", va="bottom", fontweight="bold")
-    A.text(7.5 / 72 / panel_w, 1.015, text, transform=A.transAxes, fontsize=6,
+    A.text(7.5 / 72 / panel_w, 1.015, text, transform=A.transAxes, fontsize=ns.fs(6),
            color=colour, ha="left", va="bottom")
 
 
