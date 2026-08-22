@@ -115,10 +115,19 @@ def main() -> int:
     # which is the same quantity the budget is measured in.
     ap.add_argument("--objective", choices=("feature", "decode"),
                     default="feature")
+    # Every experiment so far fitted the narrow stem to a decoder that was
+    # trained without it, and asked it to reproduce a representation the rest
+    # of the network already depends on. This lets the rest move instead: the
+    # per-tile trunk and the adapters are trained alongside the narrow stem,
+    # so the exits can learn to work from a cheaper stem rather than requiring
+    # the cheap stem to imitate an expensive one.
+    ap.add_argument("--unfreeze_trunk", action="store_true")
     a = ap.parse_args()
     dev = a.device
     tag = a.tag or (f"w{a.width:g}" if a.objective == "feature"
                     else f"w{a.width:g}_decode")
+    if a.unfreeze_trunk and a.tag is None:
+        tag += "_joint"
 
     ck = torch.load(ROOT / a.ckpt, map_location="cpu", weights_only=False)
     cfg = FlexUFConfig(**ck["config"])
@@ -138,6 +147,17 @@ def main() -> int:
 
     K = cfg.num_exits
     narrow = NarrowStem(C, a.width).to(dev)
+    trainable = list(narrow.parameters())
+    if a.unfreeze_trunk:
+        for g in range(j, K):
+            for _p in net.dec.groups[g].parameters():
+                _p.requires_grad_(True)
+                trainable.append(_p)
+        for _n, _p in net.dec.named_parameters():
+            if "adapter" in _n and not _p.requires_grad:
+                _p.requires_grad_(True)
+                trainable.append(_p)
+        net.dec.train()
     n_par = sum(p.numel() for p in narrow.parameters())
     full_par = sum(p.numel() for k in range(j)
                    for p in net.dec.groups[k].parameters())
@@ -153,7 +173,7 @@ def main() -> int:
     dl = torch.utils.data.DataLoader(
         ds, batch_size=a.batch, shuffle=True, num_workers=4, drop_last=True,
         pin_memory=True)
-    opt = torch.optim.Adam(narrow.parameters(), lr=a.lr)
+    opt = torch.optim.Adam(trainable, lr=a.lr)
     log = HERE / f"logs/narrow_{tag}.jsonl"
     log.parent.mkdir(parents=True, exist_ok=True)
 
@@ -209,6 +229,11 @@ def main() -> int:
 
     out_p = HERE / f"results/narrow_stem_{tag}.pth"
     out_p.parent.mkdir(parents=True, exist_ok=True)
+    if a.unfreeze_trunk:
+        torch.save({"dec": net.dec.state_dict(), "width": a.width,
+                    "ckpt": a.ckpt, "objective": a.objective,
+                    "unfroze": "groups j..K-1 and the adapters"},
+                   HERE / f"results/joint_dec_{tag}.pth")
     torch.save({"state_dict": narrow.state_dict(), "width": a.width,
                 "channels": narrow.c, "channels_full": C,
                 "macs_per_px": narrow.macs_per_px(),

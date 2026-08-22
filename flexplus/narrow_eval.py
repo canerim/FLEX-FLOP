@@ -52,6 +52,12 @@ def main() -> int:
     ap.add_argument("--qps", type=int, nargs="+", default=[0, 32, 63])
     ap.add_argument("--max_seqs", type=int, default=12)
     ap.add_argument("--device", default="cuda:0")
+    # A jointly trained run moves the trunk and the adapters as well as the
+    # stem, so evaluating it against the pinned decoder would pair a stem
+    # trained for one trunk with a different one -- a mismatch that would look
+    # like a failure and mean nothing.
+    ap.add_argument("--dec", default=None,
+                    help="a decoder state_dict saved by --unfreeze_trunk")
     ap.add_argument("--out", default=str(HERE / "results/narrow_eval.json"))
     a = ap.parse_args()
     dev = a.device
@@ -69,6 +75,12 @@ def main() -> int:
     load_flexuf_state(ref, torch.load(reference_for(cfg, None),
                                       map_location="cpu", weights_only=False))
     j, K = cfg.split_depth, cfg.num_exits
+    if a.dec:
+        _d = torch.load(ROOT / a.dec if not Path(a.dec).is_absolute()
+                        else a.dec, map_location="cpu", weights_only=False)
+        net.dec.load_state_dict(_d["dec"])
+        net.dec.eval()
+        print(f"  decoder replaced from {a.dec} ({_d.get('unfroze')})")
 
     seqs, _ = C.discover([])
     frames = []
