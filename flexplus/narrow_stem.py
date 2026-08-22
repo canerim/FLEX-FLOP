@@ -107,9 +107,18 @@ def main() -> int:
                     default="/data10/shareddata/openimages/dcvc_train")
     ap.add_argument("--device", default="cuda:0")
     ap.add_argument("--tag", default=None)
+    # Matching the stem's output feature is a proxy, and measurement says it
+    # is a poor one: a 5% relative error in the feature came out as 5 to 10
+    # times the dB at the exit, because the three trunk blocks below the split
+    # amplify stem error rather than absorbing it. "decode" trains on the
+    # thing that is actually reported -- the reconstruction at an exit --
+    # which is the same quantity the budget is measured in.
+    ap.add_argument("--objective", choices=("feature", "decode"),
+                    default="feature")
     a = ap.parse_args()
     dev = a.device
-    tag = a.tag or f"w{a.width:g}"
+    tag = a.tag or (f"w{a.width:g}" if a.objective == "feature"
+                    else f"w{a.width:g}_decode")
 
     ck = torch.load(ROOT / a.ckpt, map_location="cpu", weights_only=False)
     cfg = FlexUFConfig(**ck["config"])
@@ -127,6 +136,7 @@ def main() -> int:
         y, q, _ = net._encode_to_latent(probe, qp)
         C = stem_full(net.dec, y, j).shape[1]
 
+    K = cfg.num_exits
     narrow = NarrowStem(C, a.width).to(dev)
     n_par = sum(p.numel() for p in narrow.parameters())
     full_par = sum(p.numel() for k in range(j)
@@ -163,16 +173,30 @@ def main() -> int:
             x = img
             with torch.no_grad():
                 y, q, _ = net._encode_to_latent(x, qp)
-                target = stem_full(net.dec, y, j)
                 base = net.dec.upsample(y)
-            out = narrow(base)
-            loss = F.mse_loss(out, target)
+                target = (stem_full(net.dec, y, j)
+                          if a.objective == "feature" else None)
+            if a.objective == "feature":
+                loss = F.mse_loss(narrow(base), target)
+                rel_den = target.pow(2).mean()
+            else:
+                # An exit per step, sampled over the ones a tile may take, so
+                # the stem stays usable for the whole ladder rather than only
+                # for the rung the ceiling lives on.
+                k_exit = j + (step % (K - j))
+                feat = narrow(base)
+                for g in range(j, k_exit + 1):
+                    feat = net.dec.groups[g](feat)
+                rec = net.dec._apply_head(
+                    net.dec._at_exit(feat, k_exit), q)
+                loss = F.mse_loss(rec, x)
+                rel_den = x.pow(2).mean()
             opt.zero_grad(set_to_none=True)
             loss.backward()
             opt.step()
             step += 1
             if step % 100 == 0 or step == 1:
-                rel = (loss / target.pow(2).mean()).item()
+                rel = (loss / rel_den).item()
                 rec = {"step": step, "loss": loss.item(),
                        "relative_mse": rel, "qp": qp_v,
                        "sec_per_step": (time.time() - t0) / step}
@@ -187,7 +211,7 @@ def main() -> int:
                 "channels": narrow.c, "channels_full": C,
                 "macs_per_px": narrow.macs_per_px(),
                 "ckpt": a.ckpt, "ckpt_epoch": ck.get("epoch"),
-                "steps": a.steps}, out_p)
+                "steps": a.steps, "objective": a.objective}, out_p)
     print(f"  wrote {out_p}")
     return 0
 
