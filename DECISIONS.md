@@ -5540,3 +5540,35 @@ inch of the bottom, so four entries were stranded at the foot of the last
 content page. They now follow a plain `PageBreak()`: the rule for this paper
 is that the content ends on the page before them, and the layout says so
 rather than depending on how close the body happens to land.
+
+## 125. The head is a second set of weights, and the checks did not know it
+
+The repin moved the decoder. It did not move the router head, and for most
+of a day nothing noticed that a file could be measured on the pinned
+decoder and still describe a configuration the paper does not report.
+
+`check_epoch` now compares what a file was measured *with* against what it
+was measured *on*: if `router2_meta.ckpt` names a checkpoint other than the
+file's own, the file is a measurement of a different configuration. It
+found eight. Three were plain `json.load` calls in `make_paper_tables`
+naming the pre-repin curve, and two of those are about the head itself --
+the router's held-out agreement, which moved from 0.718 to 0.762, and the
+frozen-against-joint comparison. Two are deliberate and are named in the
+check: both sides of the retrained-head pair are heads from before the
+repin, and re-fitting either destroys the comparison rather than updating
+it. One names a head it does not run, which is detected from its zero
+compute share rather than listed.
+
+The eighth was `beta_calibration.json`, the table a deployment would ship,
+and re-measuring it reversed a claim. With the head fitted before the
+repin the held-out beta undershot the budget at every rate; with the head
+fitted to the reported weights it overshoots at four of five, by 18 to 28%
+of the budget, and undershoots only at q63. The paragraph had been
+rewritten that morning to say undershooting was "the safe direction"; it
+now says which way it misses and by how much, and the supplement carries
+the sentence the pair of measurements actually supports -- what a given
+beta delivers on video depends on the head as well as on the pictures.
+
+What did not move is the transfer cost. At equal delivered quality the two
+allocations agree to within 0.03 points on both heads, which is the claim
+the section rests on and the reason the section survives its own reversal.
