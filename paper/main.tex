@@ -1067,10 +1067,12 @@ built on the \emph{deployed} decode path, that is, one tiled decode per exit,
 rather than by tapping the exits of a single full-frame forward pass. Tapping is
 the natural implementation and it is correct for training. But with a full-frame
 reference on the other side of the ratio, the tiling penalty cancels, and the
-quality reported is that of a decoder nobody ships. On our model the gap is
-$+0.035\dB$ at the deepest exit and $+0.008\dB$ at the shallowest. It is not a
-constant offset; it grows with how many blocks ran per tile, so we cannot correct
-for it after the fact. The second detail is that once the allocation is chosen,
+quality reported is that of a decoder nobody ships. What cancels is what the cut
+costs at that depth, and on \TileRefFrames\ frames it is
+\TileRefDeepLo--\TileRefDeepHi\dB\ at the deepest exit and
+\TileRefShallowLo--\TileRefShallowHi\ at the shallowest, across the rate range.
+It is not a constant offset; it grows with how many blocks ran per tile, so we
+cannot correct for it after the fact. The second detail is that once the allocation is chosen,
 we decode that \emph{mixed} map once and report the distortion it actually
 produces.
 

@@ -1,0 +1,54 @@
+{
+  "ckpt": "runs/RECIPE512/ckpt_PAPER.pth.tar",
+  "ckpt_epoch": 4,
+  "n_frames": 16,
+  "qps": [
+    0,
+    32,
+    63
+  ],
+  "measured": "uniform-depth tiled decode scored against the released decoder and against this model's own full-frame decode at the same exit; the gap is the difference",
+  "rows": [
+    {
+      "exit": 2,
+      "db_vs_release": 0.1308087445795536,
+      "tiling_db": 0.007992957253009081,
+      "drift_db": 0.12281578732654452
+    },
+    {
+      "exit": 5,
+      "db_vs_release": 0.026757526211440563,
+      "tiling_db": 0.023735614959150553,
+      "drift_db": 0.0030219112522900105
+    }
+  ],
+  "by_rate": [
+    {
+      "qp": 0,
+      "tiling_db_exit2": 0.008312307763844728,
+      "db_vs_release_exit2": 0.11444428004324436,
+      "tiling_db_exit5": 0.023563634604215622,
+      "db_vs_release_exit5": 0.024036818649619818
+    },
+    {
+      "qp": 32,
+      "tiling_db_exit2": 0.00831850862596184,
+      "db_vs_release_exit2": 0.1636245846748352,
+      "tiling_db_exit5": 0.025222385302186012,
+      "db_vs_release_exit5": 0.03234954085201025
+    },
+    {
+      "qp": 63,
+      "tiling_db_exit2": 0.004562851681839675,
+      "db_vs_release_exit2": 0.1872788369655609,
+      "tiling_db_exit5": 0.021554476115852594,
+      "db_vs_release_exit5": 0.0359431398101151
+    }
+  ],
+  "tiling_deep": 0.023735614959150553,
+  "tiling_shallow": 0.007992957253009081,
+  "tiling_deep_lo": 0.021554476115852594,
+  "tiling_deep_hi": 0.025222385302186012,
+  "tiling_shallow_lo": 0.004562851681839675,
+  "tiling_shallow_hi": 0.00831850862596184
+}

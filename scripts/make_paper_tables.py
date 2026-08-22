@@ -804,6 +804,18 @@ _dc, _ = pick("router_RECIPE512_b01_e4head.json", "router_RECIPE512_b01_PAPER.js
 if _dc and _dc.get("deepest_exit_cost"):
     mac("DeepestExitCost", f"{_dc['deepest_exit_cost']:.4f}")
 
+# What the cut costs at uniform depth, measured against this model's own
+# full-frame decode -- the quantity that cancels when both sides of the ratio
+# are tiled. Two numbers were typed into Section 5.1 for it.
+print("reference gap")
+_rg, _ = pick("reference_gap.json")
+if _rg:
+    mac("TileRefShallowLo", f"{_rg['tiling_shallow_lo']:.3f}")
+    mac("TileRefShallowHi", f"{_rg['tiling_shallow_hi']:.3f}")
+    mac("TileRefDeepLo", f"{_rg['tiling_deep_lo']:.3f}")
+    mac("TileRefDeepHi", f"{_rg['tiling_deep_hi']:.3f}")
+    mac("TileRefFrames", str(_rg["n_frames"]))
+
 # ---------------------------------------------------------------- exactness
 print("halo exactness")
 he, _ = pick("halo_exactness.json")

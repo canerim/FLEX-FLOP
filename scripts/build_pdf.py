@@ -1457,10 +1457,12 @@ def content(colw, fullw):
         r"pass. Tapping is the natural implementation and it is correct for "
         r"training. But with a full-frame reference on the other side of the "
         r"ratio, the tiling penalty cancels, and the quality reported is that "
-        r"of a decoder nobody ships. On our model the gap is +0.035 dB at the "
-        r"deepest exit and +0.008 dB at the shallowest. It is not a constant "
-        r"offset; it grows with how many blocks ran per tile, so we cannot "
-        r"correct for it after the fact. The second detail is that once the "
+        r"of a decoder nobody ships. What cancels is what the cut costs at "
+        r"that depth, and on \TileRefFrames frames it is "
+        r"\TileRefDeepLo–\TileRefDeepHi dB at the deepest exit and "
+        r"\TileRefShallowLo–\TileRefShallowHi at the shallowest, across the "
+        r"rate range. It is not a constant offset; it grows with how many "
+        r"blocks ran per tile, so we cannot correct for it after the fact. The second detail is that once the "
         r"allocation is chosen, we decode that <i>mixed</i> map once and "
         r"report the distortion it actually produces.")
     h2("Reporting conventions.")
