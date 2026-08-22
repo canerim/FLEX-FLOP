@@ -978,10 +978,10 @@ def content(colw, fullw):
     par(r"<b>Why the tile is 256 pixels.</b> Two constraints bracket it. The "
         r"tile has to be large enough that its border is a small part of it, "
         r"since the seam grows with the fraction within reach of an invented "
-        r"value, 1-((F-2b)/F)² for b per-tile blocks on a side F (Section 4); "
-        r"and small enough that a frame holds enough tiles for an allocation "
-        r"to exist, which at 256 px is 40 for 1080p and 2 for 416×240 "
-        r"(Section 5.3). Standardised codecs bracket their own partition the "
+        r"value, 1-((F-2b)/F)² for b per-tile blocks on a side F (Section 4). "
+        r"It has to be small enough that a frame holds enough tiles for an "
+        r"allocation to exist, which at 256 px is 40 for 1080p and 2 for "
+        r"416×240 (Section 5.3). Standardised codecs bracket their own partition the "
         r"same way and land nearby, at 64 pixels in HEVC [7] and 128 in VVC "
         r"[19]. The supplement measures 128 against 256.")
 
@@ -1166,7 +1166,7 @@ def content(colw, fullw):
         r"vector per tile by its mean and standard deviation. Both moments "
         r"are there on purpose: the means describe roughly a tile's colour "
         r"and the deviations its texture, and texture is what decides how "
-        r"many blocks a tile needs — the same pair adaptive instance "
+        r"many blocks a tile needs -- the same pair adaptive instance "
         r"normalisation takes as a compact description of style [51]. The "
         r"head is \RouterParams parameters and \RouterCostPct% of the "
         r"decode it is deciding about, almost all of it in the 1×1 on the "
@@ -2081,7 +2081,8 @@ def content(colw, fullw):
         r"<b>Table 9. Blending the two decoder-side signals</b> at 0.1 dB, both "
         r"normalised to unit mean, weight w from the calibrated bit rule to the "
         r"head's ordering. Bold is the best per rate.")
-    par(r"<b>Are the two signals complementary?</b> No. We normalise both "
+    par(r"<b>Whether the two signals are complementary.</b> They are not. We "
+        r"normalise both "
         r"surrogates to unit mean and blend them with one weight w, where w=0 "
         r"is the calibrated bit rule and w=1 the head's ordering. The bit rule "
         r"alone is best at every rate ([[tab:blend]]); no positive weight pays "
@@ -2200,7 +2201,7 @@ def content(colw, fullw):
         r"The Lorenz reading is therefore worth having as a diagnostic and not "
         r"as a decoration; it reports what <i>kind</i> of predictor one has as "
         r"well as how good it is.")
-    par(r"<b>Which predictor should C be built on?</b> Either will do, and the "
+    par(r"<b>Which predictor C should be built on.</b> Either will do, and the "
         r"answer follows the same split as Section 5.6. Running the identical "
         r"override rule over the calibrated bit rule instead of the head "
         r"is worth up to \CPredBitsAhead points at the lowest rate and costs "

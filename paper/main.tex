@@ -515,9 +515,9 @@ pointwise.
 \paragraph{Why the tile is 256 pixels.} Two constraints bracket it. The tile has
 to be large enough that its border is a small part of it, since the seam grows
 with the fraction within reach of an invented value, $1-((F-2b)/F)^2$ for $b$
-per-tile blocks on a side $F$ (Section~\ref{sec:seam}); and small enough that a
-frame holds enough tiles for an allocation to exist, which at $256$ px is $40$
-for 1080p and $2$ for $416{\times}240$ (Section~\ref{sec:exp}). Standardised
+per-tile blocks on a side $F$ (Section~\ref{sec:seam}). It has to be small
+enough that a frame holds enough tiles for an allocation to exist, which at
+$256$ px is $40$ for 1080p and $2$ for $416{\times}240$ (Section~\ref{sec:exp}). Standardised
 codecs bracket their own partition the same way and land nearby, at $64$ pixels
 in HEVC~\cite{hevc} and $128$ in VVC~\cite{vvc}. The supplement measures $128$
 against $256$.
@@ -1755,7 +1755,7 @@ regions get more bits~\cite{blockratecontrol}. We read the same number in the
 other direction, after the fact and at the decoder, as a statement about how hard
 a region was. It costs nothing because someone else has already paid for it.
 
-\textbf{Are the two signals complementary?} No. We normalise both surrogates
+\textbf{Whether the two signals are complementary.} They are not. We normalise both surrogates
 to unit mean and blend them with one weight $w$, where $w{=}0$ is the
 calibrated bit rule and $w{=}1$ the head's ordering. The bit rule alone is best
 at every rate (Table~\ref{tab:blend}); no positive weight pays for itself
@@ -1881,7 +1881,7 @@ a base close to A leaves little for the extra multiplier to exploit. The Lorenz
 reading is therefore worth having as a diagnostic and not as a decoration; it
 reports what \emph{kind} of predictor one has as well as how good it is.
 
-\textbf{Which predictor should C be built on?} Either will do, and the answer
+\textbf{Which predictor C should be built on.} Either will do, and the answer
 follows the same split as Section~\ref{sec:raterank}. Running the identical
 override rule over the calibrated bit rule instead of the head is worth up
 to \CPredBitsAhead\ points at the lowest rate and costs up to \CPredHeadAhead\
