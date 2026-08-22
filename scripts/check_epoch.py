@@ -137,6 +137,9 @@ def fallbacks() -> set[str]:
     call = re.compile(r'(?:k\.J|self\.J|\bJ|_pick_json|pick|rows)\(\s*((?:f?"[^"]+\.json"'
                       r'(?:\s*,\s*)?)+)\s*[,)]', re.S)
     lst = re.compile(r'\[\s*((?:"[^"]+\.json"\s*,?\s*){2,})\]', re.S)
+    # And as a bare tuple: the provenance table keeps its candidates as
+    # (("a.json", "b.json"), "what it feeds").
+    tup = re.compile(r'\(\s*((?:"[^"]+\.json"\s*,?\s*){2,})\)', re.S)
     behind, live = set(), set()
     for s in _sources():
         t = s.read_text()
@@ -144,7 +147,8 @@ def fallbacks() -> set[str]:
         # A candidate list is sometimes a list rather than an argument
         # list: paper_metrics keeps ["a.json", "b.json", ...] beside the
         # budget it belongs to. Same meaning, same first-that-exists rule.
-        for m in list(call.finditer(t)) + list(lst.finditer(t)):
+        for m in (list(call.finditer(t)) + list(lst.finditer(t))
+                  + list(tup.finditer(t))):
             names = re.findall(r'"([A-Za-z0-9_.\-]+\.json)"', m.group(1))
             spans.append((m.start(1), m.end(1)))
             if len(names) < 2:

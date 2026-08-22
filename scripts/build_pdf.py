@@ -1937,9 +1937,9 @@ def content(colw, fullw):
         r"decibel a given β delivers, not where the allocation lands once "
         r"that decibel is fixed.")
     par(r"The highest rate is where this used to fail outright, and it is "
-        r"worth saying what changed. The floor on the calibration frames -- "
+        r"worth saying what changed. The floor on the calibration frames is "
         r"the distortion tiling costs with every tile already at the deepest "
-        r"exit -- is \HeldFloorCalHigh dB at the highest rate against "
+        r"exit. At the highest rate it is \HeldFloorCalHigh dB against "
         r"\HeldFloorTestHigh dB on the test frames, and the difference "
         r"changes sign along the ladder: the calibration floor is the lower "
         r"of the two at the \HeldFloorNBelow lowest rates, by at most "
