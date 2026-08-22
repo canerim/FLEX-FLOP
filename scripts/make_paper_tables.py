@@ -169,7 +169,15 @@ if d:
     mac("MapBitsLo", f"{min(_mb):.0f}")
     mac("MapBitsHi", f"{max(_mb):.0f}")
     mac("RouterParams", "144\\,K")
-    mac("RouterCostPct", "0.163")
+    # Read from the file that reports configuration B rather than typed
+    # beside it. The head's share is a property of the head, and the paper
+    # changed which head it reports today.
+    _bshare, _ = pick("router_RECIPE512_b01_e4head.json",
+                      "router_RECIPE512_b01_PAPER.json")
+    if _bshare and _bshare.get("router_compute_share_pct"):
+        mac("RouterCostPct", f"{_bshare['router_compute_share_pct']:.3f}")
+    else:
+        mac("RouterCostPct", "0.163")
 rl, _ = pick("router_latency.json")
 if rl:
     mac("RouterTimePct", f"{rl['router_share_pct_time_median']:.2f}")
