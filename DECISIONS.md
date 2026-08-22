@@ -5572,3 +5572,34 @@ beta delivers on video depends on the head as well as on the pictures.
 What did not move is the transfer cost. At equal delivered quality the two
 allocations agree to within 0.03 points on both heads, which is the claim
 the section rests on and the reason the section survives its own reversal.
+
+## 126. Derived files were exempt from the epoch check and nothing checked them
+
+The epoch check waves through files computed from other results files:
+their provenance is the provenance of what fed them, and asking a table of
+arithmetic which checkpoint it was measured on is a category error. That
+reasoning is sound and it was load-bearing for nothing, because nothing
+verified the premise. A derived file inherits its source's provenance only
+while it has actually been recomputed since the source moved.
+
+Four had not been. results/tile_table.json is the per-tile, per-exit
+distortion of one frame; it was re-measured on the pinned checkpoint this
+evening, and the Pareto enumeration, the log-convexity check and the
+tile-size splice were all still the August arithmetic over the August
+table. One of them is a proposition's headroom: the largest gap between
+the swept hull and the exact Pareto set reads 0.163 points, not the 0.05
+the paper claimed, and the Pareto set has 615 points rather than 635.
+
+scripts/check_derived_fresh.py compares each derived file's modification
+time against the files it is computed from, and it is in the gate. The
+input map is written down rather than inferred: the script that writes
+most of these reads sixty other files for other reasons, so scanning it
+for .json literals made everything it writes look stale. Someone has to
+think once, in that map, and then the check does the rest.
+
+The tile-size comparison is the one that changed most. On the pinned
+checkpoint the 128 px tile loses at every class and every rate, where the
+August file had it winning at q0 on five of six, and the confound flipped
+with it: the 128 px run now has 165,804 steps FEWER than the 256 px one,
+so the training deficit runs against the column that loses rather than for
+it.
