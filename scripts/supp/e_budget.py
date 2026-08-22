@@ -226,25 +226,53 @@ def content(k):
           r"out to need that position rather than the decibel figure.")
 
     unreach = [r for r in grid["rows"] if not r.get("budget_reachable")]
-    names = [f"q{r['qp']}" for r in unreach]
-    k.par(f"A budget below the floor admits no allocation at all, which is a "
-          f"different failure from a budget falling in a gap of the Lagrangian "
-          f"hull, where the sweep returns the nearest reachable point and "
-          f"Everett's argument still makes it optimal for the compute it "
-          f"consumes [26, 27]. Below the floor the feasible set is empty and "
-          f"there is nothing to return. Three cells of the grid in Section "
-          + sec + f".3 are in that state and are recorded as such rather than "
-          f"dropped: at a 0.05 dB budget the three highest rates, "
-          + ", ".join(names[:-1]) + " and " + names[-1] + f", have floors of "
-          + ", ".join(_f(r["floor_db"], 3) for r in unreach[:-1])
-          + " and " + _f(unreach[-1]["floor_db"], 3) + " dB.")
+    # This paragraph used to name three cells and their floors. Which cells
+    # are below the floor is a property of the checkpoint, not of the method:
+    # on the reported weights every cell of the grid admits an allocation, and
+    # a sentence that counts to three would have been wrong rather than
+    # merely stale.
+    head = ("A budget below the floor admits no allocation at all, which is a "
+            "different failure from a budget falling in a gap of the "
+            "Lagrangian hull, where the sweep returns the nearest reachable "
+            "point and Everett's argument still makes it optimal for the "
+            "compute it consumes [26, 27]. Below the floor the feasible set "
+            "is empty and there is nothing to return. ")
+    if unreach:
+        names = [f"q{r['qp']}" for r in unreach]
+        floors = [_f(r["floor_db"], 3) for r in unreach]
+        joined = (names[0] if len(names) == 1
+                  else ", ".join(names[:-1]) + " and " + names[-1])
+        jf = (floors[0] if len(floors) == 1
+              else ", ".join(floors[:-1]) + " and " + floors[-1])
+        k.par(head + f"{len(unreach)} of the cells of the grid in Section "
+              + sec + f".3 are in that state and are recorded as such rather "
+              f"than dropped: {joined}, at the smallest budgets swept, have "
+              f"floors of {jf} dB.")
+    else:
+        lo = min(grid["budgets"]) if grid.get("budgets") else None
+        k.par(head + "No cell of the grid in Section " + sec + ".3 is in that "
+              "state on the reported weights: the smallest budget swept, "
+              + (f"{lo:g} dB, " if lo is not None else "")
+              + "is above the floor at every rate, so every cell has an "
+              "allocation to return. On an earlier checkpoint the three "
+              "highest rates were below the floor at that budget and the grid "
+              "recorded them as unreachable, which is what the machinery for "
+              "an empty feasible set is there for.")
 
     fq0 = [r for r in grid["rows"] if r["qp"] == 0][0]["floor_db"]
     fq63 = [r for r in grid["rows"] if r["qp"] == 63][0]["floor_db"]
-    tq63 = [o for o in front["op_points"]
-            if o["qp"] == 63 and o.get("budget_reachable") is False][0]
-    k.par(r"Three estimates of the floor are in play and they are not "
-          r"interchangeable. Table " + str(k.peek_tbl()) + r" gives all three, "
+    # The third estimate was read off an operating point the sweep marked
+    # unreachable: with no budget it could meet, the per-tile table fell back
+    # to each tile's own lowest-error exit. No budget in the sweep is
+    # unreachable on the reported weights, so that row has no source and the
+    # table carries the two estimates that do.
+    tq63 = next((o for o in front["op_points"]
+                 if o["qp"] == 63 and o.get("budget_reachable") is False),
+                None)
+    k.par(("Three estimates of the floor are in play and they are not "
+           "interchangeable. " if tq63 else
+           "Two estimates of the floor are in play and they are not "
+           "interchangeable. ") + r"Table " + str(k.peek_tbl()) + r" gives them, "
           r"because the rescaling below divides by the distance between the "
           r"floor and the saturation point, and near the floor that is a small "
           r"difference divided by a small difference.")
@@ -254,15 +282,23 @@ def content(k):
              r"\FloorHigh"],
             ["the dense grid", "the same quantity, over 106 frames",
              _f(fq0, 3), _f(fq63, 3)],
-            ["the second sweep", "the per-tile table at a zero multiplier, "
-             "where a tile takes its own lowest-error exit",
-             "-", _f(tq63["db_vs_uf_per_frame"], 3)]],
-           r"<b>Three measurements of the floor, in decibels.</b> The first "
-           r"two differ by three to six thousandths of a decibel because they "
-           r"are the same quantity over a different number of frames. The "
-           r"third is a different quantity: a tile whose shallower exit "
-           r"happens to have the lower error takes it, so the table's floor "
-           r"sits below the deployed one. Everything downstream of here takes "
+            *([["the second sweep",
+                "the per-tile table at a zero multiplier, where a tile takes "
+                "its own lowest-error exit",
+                "-", _f(tq63["db_vs_uf_per_frame"], 3)]] if tq63 else [])],
+           (r"<b>Three measurements of the floor, in decibels.</b> The "
+            r"first two differ by three to six thousandths of a decibel "
+            r"because they are the same quantity over a different number of "
+            r"frames. The third is a different quantity: a tile whose "
+            r"shallower exit happens to have the lower error takes it, so the "
+            r"table's floor sits below the deployed one. " if tq63 else
+            r"<b>Two measurements of the floor, in decibels.</b> They differ "
+            r"by three to six thousandths of a decibel because they are the "
+            r"same quantity over a different number of frames. A third "
+            r"estimate, the per-tile table at a zero multiplier, is read off "
+            r"an operating point the sweep could not meet, and on the "
+            r"reported weights there is no such point. ") +
+           r"Everything downstream of here takes "
            r"both ends of the window from the first row, so that the floor and "
            r"the saturation point are on one measurement.")
     k.note(r"The three rows are results/saturation_RECIPE512_ctc53.json, "

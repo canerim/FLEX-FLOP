@@ -52,7 +52,7 @@ if [ -s "$CURVE" ]; then
   for CONV in per_frame pooled; do
     step "supp_bd_PAPER_${CONV}.json" \
       $PY -u scripts/bd_saving.py --curve "$CURVE" --convention "$CONV" \
-          --out "$TMP/supp_bd_PAPER_${CONV}.json"
+          --db_hi 0.11 --out "$TMP/supp_bd_PAPER_${CONV}.json"
   done
 fi
 

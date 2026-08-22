@@ -992,16 +992,17 @@ padding~\cite{localpadding} does the same at every layer. The cost is
 $+0.032\%$ of the decode, thirty times less than the deblocking filter. The fix
 is also exact. At uniform depth a tiled decode with the exchange is bit-identical
 to a full-frame one, once the comparison is not confounded by the filter, which
-runs on the stitched frame and has no full-frame counterpart:
+runs on the stitched frame and has no full-frame counterpart. Measured over
+\HaloNFrames\ frames and three rates:
 
 \begin{center}\small
 \begin{tabular}{lr}
 \toprule
 at uniform depth & $\max|\text{tiled}-\text{full}|$ \\
 \midrule
-halo exchange, filter on (as shipped) & $1.13\times10^{-2}$ \\
-halo exchange, filter off & $\mathbf{0}$ \\
-replicate padding, filter off & $6.06\times10^{-2}$ \\
+halo exchange, filter on (as shipped) & $\HaloFilterOnMath$ \\
+halo exchange, filter off & $\HaloFilterOffMath$ \\
+replicate padding, filter off & $\HaloPaddingMath$ \\
 \bottomrule
 \end{tabular}
 \end{center}
@@ -1582,31 +1583,32 @@ held-out Open Images validation frames, then applied to the CTC frames without
 being touched again. Checkpoint, head, frames and budget are identical on both
 sides, so what separates the two columns is where $\beta$ came from.
 
-At $q0$ the two agree, \HeldBetaLow\ against \BetaLow\ and \HeldSavingLow\%
-against \BLow\%, which is the same measurement to a hundredth of a point. At the
-rates in between, the held-out $\beta$ misses the budget on the high side: it
-delivers \HeldDbWorst\dB\ at $q\HeldDbWorstQp$ where $0.1\dB$ was asked for, and
-\HeldNOver\ of the \HeldNHeld\ rates it covers overshoot. Distortion and saving
-move together, so those rows also report more saving than Table~\ref{tab:ab}
-does, and reading one column straight against the other would credit the router
-with compute it bought using quality the budget did not allow. The last column
-takes that back out, re-bisecting on the test set to the quality the held-out
-$\beta$ actually delivered: at equal delivered quality the two allocations agree
-to within \HeldTransferAbsMax\ points. What moves between the two sets is the
-decibel a given $\beta$ delivers.
+The held-out $\beta$ misses the budget on the low side, at every rate: it
+delivers between \HeldDbBest\dB\ and \HeldDbWorst\dB\ where $0.1\dB$ was asked
+for, \HeldNUnder\ of the \HeldNHeld\ rates it covers undershoot and \HeldNOver\
+overshoot. That is the safe direction. A decoder holding this table never spends
+quality the budget did not allow; it spends less than it was allowed to, and
+buys less compute with it. Distortion and saving move together, so those rows
+report less saving than Table~\ref{tab:ab} does, from \HeldGiveUpMin\ points at
+$q\HeldGiveUpMinQp$ to \HeldGiveUpMax\ at $q\HeldGiveUpMaxQp$. The last column
+shows that nothing else is lost: re-bisecting on the test set to the quality the
+held-out $\beta$ actually delivered, the two allocations agree to within
+\HeldTransferAbsMax\ points. What moves between the two sets is the decibel a
+given $\beta$ delivers, not where the allocation lands once that decibel is
+fixed.
 
-The highest rate fails harder than that. On the calibration frames the floor,
-the distortion tiling costs with every tile already at the deepest exit, is
-\HeldNoBetaFloor\dB\ at $q\HeldNoBetaQp$. That is above the budget, so no
-allocation on that set meets $0.1\dB$ and the bisection has nothing to return.
-The shipped table has a hole where the highest rate should be, and a decoder
-holding it falls back to the deepest allocation, which is our own full-depth
-path and costs slightly more than the release, so it saves nothing. The test
-frames, whose floor at that rate is \HeldFloorTestHigh\dB, would have supported
-\HeldNoBetaForgone\ points. What fails there is the calibration set rather than
-the router: a budget written as an absolute decibel sits a different distance
-above the floor on $512$px photographs than on $1080$p video, and at the highest
-rate it sits below it.
+The highest rate is where this used to fail outright, and it is worth saying
+what changed. The floor on the calibration frames---the distortion tiling costs
+with every tile already at the deepest exit---is \HeldFloorCalHigh\dB\ at the
+highest rate against \HeldFloorTestHigh\dB\ on the test frames, a gap of
+\HeldFloorGapMin\ to \HeldFloorGapMax\dB\ across the ladder. On an earlier
+checkpoint that calibration floor sat above the budget, no allocation on
+$512$px photographs met $0.1\dB$ there, and the shipped table had a hole where
+the highest rate should be. Four epochs of training pulled the floor below the
+budget and the hole closed: \HeldNNoBeta\ of the \HeldNRates\ rates are missing
+from the table now. The gap itself does not close, and it is the reason the
+transfer undershoots---a budget written as an absolute decibel sits a different
+distance above the floor on $512$px photographs than on $1080$p video.
 
 We keep the test-bisected figures as B's headline, since the comparison against
 A is built on them, and Table~\ref{tab:betaheldout} is the correction a reader
@@ -1960,8 +1962,8 @@ encoder cost by the group length.
 of the reuse decides how badly. Found at $q0$ and applied at $q63$, it delivers
 \TransferCrossDb$\dB$ against a $0.1\dB$ budget, claiming the low-rate saving of
 \TransferSaving\% while spending nearly twice the quality it is allowed. The
-reverse is safe but wasteful: the $q63$ map applied at $q0$ delivers $0.075\dB$
-and only $19.8\%$ where \ClassLowUvg\% was available. Shallow exits are cheap in
+reverse is safe but wasteful: the $q63$ map applied at $q0$ delivers
+\TransferBackDb$\dB$ and only \TransferBackSaving\% where \ClassLowUvg\% was available. Shallow exits are cheap in
 quality at low rate and expensive at high rate, so a map is calibrated to the
 rate it was found at, and reusing one upward breaks the quality guarantee
 without anything in the decode reporting that it has. In our reuse probe, then, an encoder can search once per rate and reuse that

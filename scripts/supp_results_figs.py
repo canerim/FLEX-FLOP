@@ -158,8 +158,12 @@ def frontier():
 def spread():
     """results/supp_per_sequence_PAPER_b0*.json, released-decoder denominator."""
     b010 = J("supp_per_sequence_PAPER_b010.json")
+    # 0.30 dB is off the epoch-4 frontier: every rate saturates below it, so
+    # paper_curve.py attaches no operating point there and per_sequence_spread
+    # has nothing to break down. The file from the earlier checkpoint still
+    # exists; reading it here would put an epoch-0 point in an epoch-4 panel.
     budgets = [(0.10, "b010"), (0.15, "b015"), (0.20, "b020"),
-               (0.25, "b025"), (0.30, "b030")]
+               (0.25, "b025")]
 
     fig, ax = plt.subplots(1, 2, figsize=(ns.W1, 2.35))
 

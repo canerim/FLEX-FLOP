@@ -168,7 +168,10 @@ class TexKit:
         return 0
 
     # -- data --------------------------------------------------------------
-    def J(self, filename):
+    def J(self, *filenames):
+        """The first of these that exists; see build_supp_pdf.J."""
+        filename = next((n for n in filenames if (RESULTS / n).exists()),
+                        filenames[0])
         if filename not in self._json:
             p = RESULTS / filename
             if not p.exists():

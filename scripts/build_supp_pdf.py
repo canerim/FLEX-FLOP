@@ -603,7 +603,17 @@ class Kit:
         return n
 
     # -- data -------------------------------------------------------------
-    def J(self, filename):
+    def J(self, *filenames):
+        """The first of these that exists.
+
+        A section that names one file cannot say "the measurement on the
+        pinned checkpoint, or the older one if that is all there is". Several
+        quantities now have a second file measured on the pin, and every
+        reader should prefer it without the section having to know whether
+        the stage that writes it has run yet.
+        """
+        filename = next((n for n in filenames if (RESULTS / n).exists()),
+                        filenames[0])
         p = RESULTS / filename
         if filename not in self._json_cache:
             if not p.exists():

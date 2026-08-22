@@ -54,6 +54,9 @@ def main(argv):
     # how a reader concludes the two disagree.
     out = {"curve": a.curve, "target_db": a.target,
            "n_sequences": d.get("n_sequences"), "ckpt": d.get("ckpt"),
+           # Carried from the curve: a derived file that does not say which
+           # epoch it came from cannot be checked against the pinned one.
+           "ckpt_epoch": d.get("ckpt_epoch"),
            "denominator_rows": "our own deepest exit (cost[-1])",
            "denominator_rows_vs_release": "the released decoder (1.0)",
            "rows": [], "rows_vs_release": []}

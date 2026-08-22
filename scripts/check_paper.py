@@ -167,8 +167,12 @@ if rr and b1:
     claim("rate-rank: worst margin (pts)", 0.00, min(v for _, v in d_), 0.1)
 
 # ---- hybrid C -------------------------------------------------------------
-hy = J("hybrid_RECIPE512_b01_fixed.json", "hybrid_RECIPE512_b01.json")
-b1f = J("router_RECIPE512_b01_fixed.json", "router_RECIPE512_b01.json")
+hy = J("hybrid_RECIPE512_b01_e4head.json",
+       "hybrid_RECIPE512_b01_fixed.json", "hybrid_RECIPE512_b01.json")
+# The same order the paper uses. This read the old head's file while the
+# paper reported the head fitted to the pin.
+b1f = J("router_RECIPE512_b01_e4head.json", "router_RECIPE512_b01_PAPER.json",
+        "router_RECIPE512_b01_fixed.json", "router_RECIPE512_b01.json")
 sg = J("signalled_RECIPE512_ctc53.json")
 if hy and b1f and sg:
     rws = [r for r in hy["rows"] if r.get("budget_reachable")]
@@ -262,7 +266,8 @@ if cl:
 # That was true while all three were arithmetic-model numbers and stopped being
 # true when A and B moved to the hook count; nothing noticed, because it was
 # not a registered claim. It is one now.
-_hy = J("hybrid_RECIPE512_b01_fixed.json") or J("hybrid_RECIPE512_b01.json")
+_hy = (J("hybrid_RECIPE512_b01_e4head.json")
+       or J("hybrid_RECIPE512_b01_fixed.json") or J("hybrid_RECIPE512_b01.json"))
 _rb = J("router_RECIPE512_b01_PAPER.json")
 _sa = J("signalled_RECIPE512_ctc53.json")
 if _hy and _rb and _sa:

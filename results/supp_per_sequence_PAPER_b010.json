@@ -3,350 +3,18 @@
   "target_db": 0.1,
   "n_sequences": 53,
   "ckpt": "runs/RECIPE512/ckpt_PAPER.pth.tar",
+  "ckpt_epoch": 4,
   "denominator_rows": "our own deepest exit (cost[-1])",
   "denominator_rows_vs_release": "the released decoder (1.0)",
   "rows": [
     {
       "qp": 0,
-      "mean": 33.33719971494855,
-      "sd": 7.437398663205285,
-      "min": 6.923037528991699,
-      "p25": 29.497337341308594,
-      "median": 36.49046325683594,
-      "p75": 39.32870101928711,
-      "max": 39.69785690307617,
-      "worst_seq": "BQSquare_416x240_60.yuv",
-      "best_seq": "videoSRC01_1920x1080_30.yuv",
-      "n": 53,
-      "per_sequence": [
-        {
-          "seq": "Beauty_1920x1080_120fps_420_8bit_YUV.yuv",
-          "db_vs_uf": 0.08093060553073883,
-          "saving_pct": 38.95954513549805,
-          "saving_pct_vs_release": 38.37922286987305
-        },
-        {
-          "seq": "Bosphorus_1920x1080_120fps_420_8bit_YUV.yuv",
-          "db_vs_uf": 0.13874728977680206,
-          "saving_pct": 37.85206604003906,
-          "saving_pct_vs_release": 37.2612190246582
-        },
-        {
-          "seq": "HoneyBee_1920x1080_120fps_420_8bit_YUV.yuv",
-          "db_vs_uf": 0.1641361117362976,
-          "saving_pct": 24.372989654541016,
-          "saving_pct_vs_release": 23.653989791870117
-        },
-        {
-          "seq": "Jockey_1920x1080_120fps_420_8bit_YUV.yuv",
-          "db_vs_uf": 0.15718618035316467,
-          "saving_pct": 31.11414909362793,
-          "saving_pct_vs_release": 30.45923614501953
-        },
-        {
-          "seq": "ReadySteadyGo_1920x1080_120fps_420_8bit_YUV.yuv",
-          "db_vs_uf": 0.10518639534711838,
-          "saving_pct": 31.48331069946289,
-          "saving_pct_vs_release": 30.8319091796875
-        },
-        {
-          "seq": "ShakeNDry_1920x1080_120fps_420_8bit_YUV.yuv",
-          "db_vs_uf": 0.10067801922559738,
-          "saving_pct": 39.32870101928711,
-          "saving_pct_vs_release": 38.751888275146484
-        },
-        {
-          "seq": "YachtRide_1920x1080_120fps_420_8bit_YUV.yuv",
-          "db_vs_uf": 0.13024406135082245,
-          "saving_pct": 36.74460220336914,
-          "saving_pct_vs_release": 36.143218994140625
-        },
-        {
-          "seq": "videoSRC01_1920x1080_30.yuv",
-          "db_vs_uf": 0.14868348836898804,
-          "saving_pct": 39.69785690307617,
-          "saving_pct_vs_release": 39.12455368041992
-        },
-        {
-          "seq": "videoSRC02_1920x1080_30.yuv",
-          "db_vs_uf": 0.24549558758735657,
-          "saving_pct": 39.69785690307617,
-          "saving_pct_vs_release": 39.12455368041992
-        },
-        {
-          "seq": "videoSRC03_1920x1080_30.yuv",
-          "db_vs_uf": 0.13621829450130463,
-          "saving_pct": 36.19032669067383,
-          "saving_pct_vs_release": 35.583675384521484
-        },
-        {
-          "seq": "videoSRC04_1920x1080_30.yuv",
-          "db_vs_uf": 0.029811274260282516,
-          "saving_pct": 37.85206604003906,
-          "saving_pct_vs_release": 37.2612190246582
-        },
-        {
-          "seq": "videoSRC05_1920x1080_25.yuv",
-          "db_vs_uf": 0.17387020587921143,
-          "saving_pct": 33.97539138793945,
-          "saving_pct_vs_release": 33.34768295288086
-        },
-        {
-          "seq": "videoSRC06_1920x1080_25.yuv",
-          "db_vs_uf": 0.06699635833501816,
-          "saving_pct": 39.69785690307617,
-          "saving_pct_vs_release": 39.12455368041992
-        },
-        {
-          "seq": "videoSRC07_1920x1080_25.yuv",
-          "db_vs_uf": 0.12638121843338013,
-          "saving_pct": 36.74460220336914,
-          "saving_pct_vs_release": 36.143218994140625
-        },
-        {
-          "seq": "videoSRC08_1920x1080_25.yuv",
-          "db_vs_uf": 0.1416737139225006,
-          "saving_pct": 39.32870101928711,
-          "saving_pct_vs_release": 38.751888275146484
-        },
-        {
-          "seq": "videoSRC09_1920x1080_25.yuv",
-          "db_vs_uf": 0.07301998138427734,
-          "saving_pct": 24.929428100585938,
-          "saving_pct_vs_release": 24.215715408325195
-        },
-        {
-          "seq": "videoSRC10_1920x1080_30.yuv",
-          "db_vs_uf": 0.17292654514312744,
-          "saving_pct": 27.743572235107422,
-          "saving_pct_vs_release": 27.056615829467773
-        },
-        {
-          "seq": "videoSRC11_1920x1080_30.yuv",
-          "db_vs_uf": 0.13066105544567108,
-          "saving_pct": 39.69785690307617,
-          "saving_pct_vs_release": 39.12455368041992
-        },
-        {
-          "seq": "videoSRC12_1920x1080_30.yuv",
-          "db_vs_uf": 0.09466376900672913,
-          "saving_pct": 36.49046325683594,
-          "saving_pct_vs_release": 35.88666915893555
-        },
-        {
-          "seq": "videoSRC13_1920x1080_30.yuv",
-          "db_vs_uf": 0.054457224905490875,
-          "saving_pct": 30.72090721130371,
-          "saving_pct_vs_release": 30.062257766723633
-        },
-        {
-          "seq": "videoSRC14_1920x1080_30.yuv",
-          "db_vs_uf": 0.13840629160404205,
-          "saving_pct": 37.205772399902344,
-          "saving_pct_vs_release": 36.60877990722656
-        },
-        {
-          "seq": "videoSRC15_1920x1080_30.yuv",
-          "db_vs_uf": 0.09826895594596863,
-          "saving_pct": 37.48291015625,
-          "saving_pct_vs_release": 36.8885498046875
-        },
-        {
-          "seq": "videoSRC16_1920x1080_30.yuv",
-          "db_vs_uf": 0.22022944688796997,
-          "saving_pct": 39.69785690307617,
-          "saving_pct_vs_release": 39.12455368041992
-        },
-        {
-          "seq": "videoSRC17_1920x1080_24.yuv",
-          "db_vs_uf": 0.10051865875720978,
-          "saving_pct": 39.69785690307617,
-          "saving_pct_vs_release": 39.12455368041992
-        },
-        {
-          "seq": "videoSRC18_1920x1080_25.yuv",
-          "db_vs_uf": 0.1323692947626114,
-          "saving_pct": 36.09831237792969,
-          "saving_pct_vs_release": 35.490787506103516
-        },
-        {
-          "seq": "videoSRC19_1920x1080_30.yuv",
-          "db_vs_uf": 0.12497295439243317,
-          "saving_pct": 39.69785690307617,
-          "saving_pct_vs_release": 39.12455368041992
-        },
-        {
-          "seq": "videoSRC20_1920x1080_25.yuv",
-          "db_vs_uf": 0.1283796727657318,
-          "saving_pct": 34.45956802368164,
-          "saving_pct_vs_release": 33.83646011352539
-        },
-        {
-          "seq": "videoSRC21_1920x1080_24.yuv",
-          "db_vs_uf": 0.18878354132175446,
-          "saving_pct": 39.69785690307617,
-          "saving_pct_vs_release": 39.12455368041992
-        },
-        {
-          "seq": "videoSRC22_1920x1080_24.yuv",
-          "db_vs_uf": 0.11854898929595947,
-          "saving_pct": 37.59794235229492,
-          "saving_pct_vs_release": 37.00467300415039
-        },
-        {
-          "seq": "videoSRC23_1920x1080_24.yuv",
-          "db_vs_uf": 0.14521105587482452,
-          "saving_pct": 38.221229553222656,
-          "saving_pct_vs_release": 37.63388442993164
-        },
-        {
-          "seq": "videoSRC24_1920x1080_24.yuv",
-          "db_vs_uf": 0.18959692120552063,
-          "saving_pct": 31.759368896484375,
-          "saving_pct_vs_release": 31.1105899810791
-        },
-        {
-          "seq": "videoSRC25_1920x1080_24.yuv",
-          "db_vs_uf": 0.07560334354639053,
-          "saving_pct": 25.98980712890625,
-          "saving_pct_vs_release": 25.28618049621582
-        },
-        {
-          "seq": "videoSRC26_1920x1080_30.yuv",
-          "db_vs_uf": 0.1757524609565735,
-          "saving_pct": 39.32870101928711,
-          "saving_pct_vs_release": 38.751888275146484
-        },
-        {
-          "seq": "videoSRC27_1920x1080_30.yuv",
-          "db_vs_uf": 0.15182070434093475,
-          "saving_pct": 39.69785690307617,
-          "saving_pct_vs_release": 39.12455368041992
-        },
-        {
-          "seq": "videoSRC28_1920x1080_30.yuv",
-          "db_vs_uf": 0.11120475083589554,
-          "saving_pct": 39.32870101928711,
-          "saving_pct_vs_release": 38.751888275146484
-        },
-        {
-          "seq": "videoSRC29_1920x1080_24.yuv",
-          "db_vs_uf": 0.11989689618349075,
-          "saving_pct": 39.69785690307617,
-          "saving_pct_vs_release": 39.12455368041992
-        },
-        {
-          "seq": "videoSRC30_1920x1080_30.yuv",
-          "db_vs_uf": 0.162116140127182,
-          "saving_pct": 39.32870101928711,
-          "saving_pct_vs_release": 38.751888275146484
-        },
-        {
-          "seq": "BQTerrace_1920x1080_60.yuv",
-          "db_vs_uf": 0.06461241841316223,
-          "saving_pct": 27.76656723022461,
-          "saving_pct_vs_release": 27.079832077026367
-        },
-        {
-          "seq": "BasketballDrive_1920x1080_50.yuv",
-          "db_vs_uf": 0.15058419108390808,
-          "saving_pct": 34.067405700683594,
-          "saving_pct_vs_release": 33.44057083129883
-        },
-        {
-          "seq": "Cactus_1920x1080_50.yuv",
-          "db_vs_uf": 0.0825391560792923,
-          "saving_pct": 29.497337341308594,
-          "saving_pct_vs_release": 28.82705307006836
-        },
-        {
-          "seq": "Kimono1_1920x1080_24.yuv",
-          "db_vs_uf": 0.09512878209352493,
-          "saving_pct": 39.69785690307617,
-          "saving_pct_vs_release": 39.12455368041992
-        },
-        {
-          "seq": "ParkScene_1920x1080_24.yuv",
-          "db_vs_uf": 0.0672130137681961,
-          "saving_pct": 39.32870101928711,
-          "saving_pct_vs_release": 38.751888275146484
-        },
-        {
-          "seq": "FourPeople_1280x720_60.yuv",
-          "db_vs_uf": 0.11324398964643478,
-          "saving_pct": 33.05231475830078,
-          "saving_pct_vs_release": 32.41583251953125
-        },
-        {
-          "seq": "Johnny_1280x720_60.yuv",
-          "db_vs_uf": 0.1859874129295349,
-          "saving_pct": 35.76018142700195,
-          "saving_pct_vs_release": 35.149444580078125
-        },
-        {
-          "seq": "KristenAndSara_1280x720_60.yuv",
-          "db_vs_uf": 0.13284634053707123,
-          "saving_pct": 33.359039306640625,
-          "saving_pct_vs_release": 32.72547149658203
-        },
-        {
-          "seq": "BQMall_832x480_60.yuv",
-          "db_vs_uf": 0.08075377345085144,
-          "saving_pct": 27.237462997436523,
-          "saving_pct_vs_release": 26.545698165893555
-        },
-        {
-          "seq": "BasketballDrill_832x480_50.yuv",
-          "db_vs_uf": 0.10463453084230423,
-          "saving_pct": 21.81513214111328,
-          "saving_pct_vs_release": 21.071815490722656
-        },
-        {
-          "seq": "PartyScene_832x480_50.yuv",
-          "db_vs_uf": 0.03278888389468193,
-          "saving_pct": 17.65807342529297,
-          "saving_pct_vs_release": 16.87523078918457
-        },
-        {
-          "seq": "RaceHorses_832x480_30.yuv",
-          "db_vs_uf": 0.05645684152841568,
-          "saving_pct": 19.388830184936523,
-          "saving_pct_vs_release": 18.622446060180664
-        },
-        {
-          "seq": "BasketballPass_416x240_50.yuv",
-          "db_vs_uf": 0.0585474856197834,
-          "saving_pct": 24.93157958984375,
-          "saving_pct_vs_release": 24.217891693115234
-        },
-        {
-          "seq": "BlowingBubbles_416x240_50.yuv",
-          "db_vs_uf": 0.036577723920345306,
-          "saving_pct": 19.388830184936523,
-          "saving_pct_vs_release": 18.622446060180664
-        },
-        {
-          "seq": "BQSquare_416x240_60.yuv",
-          "db_vs_uf": 0.02479514479637146,
-          "saving_pct": 6.923037528991699,
-          "saving_pct_vs_release": 6.038141250610352
-        },
-        {
-          "seq": "RaceHorses_416x240_30.yuv",
-          "db_vs_uf": 0.06856674700975418,
-          "saving_pct": 19.388830184936523,
-          "saving_pct_vs_release": 18.622446060180664
-        }
-      ]
-    },
-    {
-      "qp": 16,
-      "mean": 29.47781731947413,
-      "sd": 10.503569695952011,
-      "min": 0.0,
-      "p25": 24.326974868774414,
-      "median": 32.31256103515625,
-      "p75": 38.22123336791992,
+      "mean": 37.42403365081211,
+      "sd": 3.673546165628395,
+      "min": 24.93157958984375,
+      "p25": 36.375450134277344,
+      "median": 39.32870101928711,
+      "p75": 39.69785690307617,
       "max": 39.69785690307617,
       "worst_seq": "BQSquare_416x240_60.yuv",
       "best_seq": "Beauty_1920x1080_120fps_420_8bit_YUV.yuv",
@@ -354,665 +22,998 @@
       "per_sequence": [
         {
           "seq": "Beauty_1920x1080_120fps_420_8bit_YUV.yuv",
-          "db_vs_uf": 0.06811725348234177,
+          "db_vs_uf": 0.08195392787456512,
           "saving_pct": 39.69785690307617,
           "saving_pct_vs_release": 39.12455368041992
         },
         {
           "seq": "Bosphorus_1920x1080_120fps_420_8bit_YUV.yuv",
-          "db_vs_uf": 0.13936853408813477,
-          "saving_pct": 37.205772399902344,
-          "saving_pct_vs_release": 36.60877990722656
+          "db_vs_uf": 0.11730548739433289,
+          "saving_pct": 39.69785690307617,
+          "saving_pct_vs_release": 39.12455368041992
         },
         {
           "seq": "HoneyBee_1920x1080_120fps_420_8bit_YUV.yuv",
-          "db_vs_uf": 0.14876854419708252,
-          "saving_pct": 19.386672973632812,
-          "saving_pct_vs_release": 18.620269775390625
+          "db_vs_uf": 0.21645471453666687,
+          "saving_pct": 35.63712692260742,
+          "saving_pct_vs_release": 35.02522277832031
         },
         {
           "seq": "Jockey_1920x1080_120fps_420_8bit_YUV.yuv",
-          "db_vs_uf": 0.16598919034004211,
-          "saving_pct": 34.252525329589844,
-          "saving_pct_vs_release": 33.62744903564453
+          "db_vs_uf": 0.248463436961174,
+          "saving_pct": 39.32870101928711,
+          "saving_pct_vs_release": 38.751888275146484
         },
         {
           "seq": "ReadySteadyGo_1920x1080_120fps_420_8bit_YUV.yuv",
-          "db_vs_uf": 0.1266346573829651,
-          "saving_pct": 26.72812271118164,
-          "saving_pct_vs_release": 26.031511306762695
-        },
-        {
-          "seq": "ShakeNDry_1920x1080_120fps_420_8bit_YUV.yuv",
-          "db_vs_uf": 0.08719222247600555,
+          "db_vs_uf": 0.12265686690807343,
           "saving_pct": 37.852073669433594,
           "saving_pct_vs_release": 37.26122283935547
         },
         {
+          "seq": "ShakeNDry_1920x1080_120fps_420_8bit_YUV.yuv",
+          "db_vs_uf": 0.08228921890258789,
+          "saving_pct": 39.69785690307617,
+          "saving_pct_vs_release": 39.12455368041992
+        },
+        {
           "seq": "YachtRide_1920x1080_120fps_420_8bit_YUV.yuv",
-          "db_vs_uf": 0.16098281741142273,
-          "saving_pct": 33.23706817626953,
-          "saving_pct_vs_release": 32.60234069824219
+          "db_vs_uf": 0.11913232505321503,
+          "saving_pct": 39.32870101928711,
+          "saving_pct_vs_release": 38.751888275146484
         },
         {
           "seq": "videoSRC01_1920x1080_30.yuv",
-          "db_vs_uf": 0.14131242036819458,
+          "db_vs_uf": 0.1272294819355011,
           "saving_pct": 39.69785690307617,
           "saving_pct_vs_release": 39.12455368041992
         },
         {
           "seq": "videoSRC02_1920x1080_30.yuv",
-          "db_vs_uf": 0.3108063340187073,
+          "db_vs_uf": 0.18520115315914154,
           "saving_pct": 39.69785690307617,
           "saving_pct_vs_release": 39.12455368041992
         },
         {
           "seq": "videoSRC03_1920x1080_30.yuv",
-          "db_vs_uf": 0.16734138131141663,
-          "saving_pct": 36.305355072021484,
-          "saving_pct_vs_release": 35.699798583984375
+          "db_vs_uf": 0.14318327605724335,
+          "saving_pct": 38.95954513549805,
+          "saving_pct_vs_release": 38.37922286987305
         },
         {
           "seq": "videoSRC04_1920x1080_30.yuv",
-          "db_vs_uf": 0.03637031093239784,
-          "saving_pct": 27.996623992919922,
-          "saving_pct_vs_release": 27.312076568603516
+          "db_vs_uf": 0.02626199647784233,
+          "saving_pct": 39.69785690307617,
+          "saving_pct_vs_release": 39.12455368041992
         },
         {
           "seq": "videoSRC05_1920x1080_25.yuv",
-          "db_vs_uf": 0.14355194568634033,
-          "saving_pct": 30.92902946472168,
-          "saving_pct_vs_release": 30.272357940673828
+          "db_vs_uf": 0.18324555456638336,
+          "saving_pct": 38.59038543701172,
+          "saving_pct_vs_release": 38.00654983520508
         },
         {
           "seq": "videoSRC06_1920x1080_25.yuv",
-          "db_vs_uf": 0.07446606457233429,
+          "db_vs_uf": 0.040373001247644424,
           "saving_pct": 39.69785690307617,
           "saving_pct_vs_release": 39.12455368041992
         },
         {
           "seq": "videoSRC07_1920x1080_25.yuv",
-          "db_vs_uf": 0.10179580748081207,
-          "saving_pct": 32.12852478027344,
-          "saving_pct_vs_release": 31.483257293701172
+          "db_vs_uf": 0.1230458989739418,
+          "saving_pct": 38.95954513549805,
+          "saving_pct_vs_release": 38.37922286987305
         },
         {
           "seq": "videoSRC08_1920x1080_25.yuv",
-          "db_vs_uf": 0.10685921460390091,
-          "saving_pct": 38.95954513549805,
-          "saving_pct_vs_release": 38.37922286987305
+          "db_vs_uf": 0.10153636336326599,
+          "saving_pct": 39.69785690307617,
+          "saving_pct_vs_release": 39.12455368041992
         },
         {
           "seq": "videoSRC09_1920x1080_25.yuv",
-          "db_vs_uf": 0.07115734368562698,
-          "saving_pct": 14.472609519958496,
-          "saving_pct_vs_release": 13.659482955932617
+          "db_vs_uf": 0.0883079245686531,
+          "saving_pct": 34.5296630859375,
+          "saving_pct_vs_release": 33.907222747802734
         },
         {
           "seq": "videoSRC10_1920x1080_30.yuv",
-          "db_vs_uf": 0.18065792322158813,
-          "saving_pct": 24.326974868774414,
-          "saving_pct_vs_release": 23.607540130615234
+          "db_vs_uf": 0.20404300093650818,
+          "saving_pct": 35.10586166381836,
+          "saving_pct_vs_release": 34.48889923095703
         },
         {
           "seq": "videoSRC11_1920x1080_30.yuv",
-          "db_vs_uf": 0.1431196630001068,
-          "saving_pct": 39.32870101928711,
-          "saving_pct_vs_release": 38.751888275146484
+          "db_vs_uf": 0.09498998522758484,
+          "saving_pct": 39.69785690307617,
+          "saving_pct_vs_release": 39.12455368041992
         },
         {
           "seq": "videoSRC12_1920x1080_30.yuv",
-          "db_vs_uf": 0.09335058927536011,
-          "saving_pct": 32.797821044921875,
-          "saving_pct_vs_release": 32.15891647338867
+          "db_vs_uf": 0.09322897344827652,
+          "saving_pct": 38.68240737915039,
+          "saving_pct_vs_release": 38.099449157714844
         },
         {
           "seq": "videoSRC13_1920x1080_30.yuv",
-          "db_vs_uf": 0.04292970895767212,
-          "saving_pct": 19.133621215820312,
-          "saving_pct_vs_release": 18.364810943603516
+          "db_vs_uf": 0.05279681831598282,
+          "saving_pct": 36.375450134277344,
+          "saving_pct_vs_release": 35.77056121826172
         },
         {
           "seq": "videoSRC14_1920x1080_30.yuv",
-          "db_vs_uf": 0.15020263195037842,
-          "saving_pct": 33.974308013916016,
-          "saving_pct_vs_release": 33.346588134765625
+          "db_vs_uf": 0.13325805962085724,
+          "saving_pct": 39.69785690307617,
+          "saving_pct_vs_release": 39.12455368041992
         },
         {
           "seq": "videoSRC15_1920x1080_30.yuv",
-          "db_vs_uf": 0.081211619079113,
-          "saving_pct": 31.41321563720703,
-          "saving_pct_vs_release": 30.761146545410156
+          "db_vs_uf": 0.09633003175258636,
+          "saving_pct": 39.69785690307617,
+          "saving_pct_vs_release": 39.12455368041992
         },
         {
           "seq": "videoSRC16_1920x1080_30.yuv",
-          "db_vs_uf": 0.16180339455604553,
-          "saving_pct": 38.95954513549805,
-          "saving_pct_vs_release": 38.37922286987305
+          "db_vs_uf": 0.16746443510055542,
+          "saving_pct": 39.69785690307617,
+          "saving_pct_vs_release": 39.12455368041992
         },
         {
           "seq": "videoSRC17_1920x1080_24.yuv",
-          "db_vs_uf": 0.10971179604530334,
-          "saving_pct": 38.405269622802734,
-          "saving_pct_vs_release": 37.819679260253906
+          "db_vs_uf": 0.07493016123771667,
+          "saving_pct": 39.69785690307617,
+          "saving_pct_vs_release": 39.12455368041992
         },
         {
           "seq": "videoSRC18_1920x1080_25.yuv",
-          "db_vs_uf": 0.12455189228057861,
-          "saving_pct": 32.15260314941406,
-          "saving_pct_vs_release": 31.507570266723633
+          "db_vs_uf": 0.12298953533172607,
+          "saving_pct": 38.68240737915039,
+          "saving_pct_vs_release": 38.099449157714844
         },
         {
           "seq": "videoSRC19_1920x1080_30.yuv",
-          "db_vs_uf": 0.13272783160209656,
-          "saving_pct": 37.574928283691406,
-          "saving_pct_vs_release": 36.9814453125
+          "db_vs_uf": 0.10617722570896149,
+          "saving_pct": 39.69785690307617,
+          "saving_pct_vs_release": 39.12455368041992
         },
         {
           "seq": "videoSRC20_1920x1080_25.yuv",
-          "db_vs_uf": 0.1258028745651245,
-          "saving_pct": 31.69034767150879,
-          "saving_pct_vs_release": 31.040912628173828
+          "db_vs_uf": 0.13115033507347107,
+          "saving_pct": 37.944095611572266,
+          "saving_pct_vs_release": 37.35411834716797
         },
         {
           "seq": "videoSRC21_1920x1080_24.yuv",
-          "db_vs_uf": 0.23167140781879425,
+          "db_vs_uf": 0.13287395238876343,
           "saving_pct": 39.69785690307617,
           "saving_pct_vs_release": 39.12455368041992
         },
         {
           "seq": "videoSRC22_1920x1080_24.yuv",
-          "db_vs_uf": 0.1283806711435318,
-          "saving_pct": 35.86717987060547,
-          "saving_pct_vs_release": 35.2574577331543
+          "db_vs_uf": 0.10100477933883667,
+          "saving_pct": 38.95954513549805,
+          "saving_pct_vs_release": 38.37922286987305
         },
         {
           "seq": "videoSRC23_1920x1080_24.yuv",
-          "db_vs_uf": 0.160626620054245,
-          "saving_pct": 36.83662414550781,
-          "saving_pct_vs_release": 36.23611831665039
+          "db_vs_uf": 0.12337300926446915,
+          "saving_pct": 39.69785690307617,
+          "saving_pct_vs_release": 39.12455368041992
         },
         {
           "seq": "videoSRC24_1920x1080_24.yuv",
-          "db_vs_uf": 0.1815507560968399,
-          "saving_pct": 29.935508728027344,
-          "saving_pct_vs_release": 29.269392013549805
+          "db_vs_uf": 0.21706148982048035,
+          "saving_pct": 37.205772399902344,
+          "saving_pct_vs_release": 36.60877990722656
         },
         {
           "seq": "videoSRC25_1920x1080_24.yuv",
-          "db_vs_uf": 0.06339368224143982,
-          "saving_pct": 17.01069450378418,
-          "saving_pct_vs_release": 16.221702575683594
+          "db_vs_uf": 0.07773818075656891,
+          "saving_pct": 31.11306381225586,
+          "saving_pct_vs_release": 30.458147048950195
         },
         {
           "seq": "videoSRC26_1920x1080_30.yuv",
-          "db_vs_uf": 0.19190581142902374,
-          "saving_pct": 35.17487716674805,
-          "saving_pct_vs_release": 34.558570861816406
+          "db_vs_uf": 0.14220434427261353,
+          "saving_pct": 39.69785690307617,
+          "saving_pct_vs_release": 39.12455368041992
         },
         {
           "seq": "videoSRC27_1920x1080_30.yuv",
-          "db_vs_uf": 0.14496470987796783,
+          "db_vs_uf": 0.10922260582447052,
           "saving_pct": 39.69785690307617,
           "saving_pct_vs_release": 39.12455368041992
         },
         {
           "seq": "videoSRC28_1920x1080_30.yuv",
-          "db_vs_uf": 0.10824811458587646,
+          "db_vs_uf": 0.09396010637283325,
           "saving_pct": 39.69785690307617,
           "saving_pct_vs_release": 39.12455368041992
         },
         {
           "seq": "videoSRC29_1920x1080_24.yuv",
-          "db_vs_uf": 0.1225491613149643,
+          "db_vs_uf": 0.10928168147802353,
           "saving_pct": 39.69785690307617,
           "saving_pct_vs_release": 39.12455368041992
         },
         {
           "seq": "videoSRC30_1920x1080_30.yuv",
-          "db_vs_uf": 0.1451019048690796,
+          "db_vs_uf": 0.133137047290802,
+          "saving_pct": 39.69785690307617,
+          "saving_pct_vs_release": 39.12455368041992
+        },
+        {
+          "seq": "BQTerrace_1920x1080_60.yuv",
+          "db_vs_uf": 0.07088230550289154,
+          "saving_pct": 34.34454345703125,
+          "saving_pct_vs_release": 33.72034454345703
+        },
+        {
+          "seq": "BasketballDrive_1920x1080_50.yuv",
+          "db_vs_uf": 0.1784597933292389,
+          "saving_pct": 38.590389251708984,
+          "saving_pct_vs_release": 38.00655746459961
+        },
+        {
+          "seq": "Cactus_1920x1080_50.yuv",
+          "db_vs_uf": 0.10172399878501892,
+          "saving_pct": 36.19032669067383,
+          "saving_pct_vs_release": 35.583675384521484
+        },
+        {
+          "seq": "Kimono1_1920x1080_24.yuv",
+          "db_vs_uf": 0.06944930553436279,
+          "saving_pct": 39.69785690307617,
+          "saving_pct_vs_release": 39.12455368041992
+        },
+        {
+          "seq": "ParkScene_1920x1080_24.yuv",
+          "db_vs_uf": 0.05360383167862892,
+          "saving_pct": 39.69785690307617,
+          "saving_pct_vs_release": 39.12455368041992
+        },
+        {
+          "seq": "FourPeople_1280x720_60.yuv",
+          "db_vs_uf": 0.12610110640525818,
+          "saving_pct": 38.713443756103516,
+          "saving_pct_vs_release": 38.13077926635742
+        },
+        {
+          "seq": "Johnny_1280x720_60.yuv",
+          "db_vs_uf": 0.20548510551452637,
+          "saving_pct": 39.69784927368164,
+          "saving_pct_vs_release": 39.124549865722656
+        },
+        {
+          "seq": "KristenAndSara_1280x720_60.yuv",
+          "db_vs_uf": 0.137431800365448,
+          "saving_pct": 37.72901916503906,
+          "saving_pct_vs_release": 37.13699722290039
+        },
+        {
+          "seq": "BQMall_832x480_60.yuv",
+          "db_vs_uf": 0.0932963639497757,
+          "saving_pct": 34.16050720214844,
+          "saving_pct_vs_release": 33.5345573425293
+        },
+        {
+          "seq": "BasketballDrill_832x480_50.yuv",
+          "db_vs_uf": 0.12950745224952698,
+          "saving_pct": 30.929035186767578,
+          "saving_pct_vs_release": 30.27236557006836
+        },
+        {
+          "seq": "PartyScene_832x480_50.yuv",
+          "db_vs_uf": 0.044221848249435425,
+          "saving_pct": 28.623151779174805,
+          "saving_pct_vs_release": 27.94455909729004
+        },
+        {
+          "seq": "RaceHorses_832x480_30.yuv",
+          "db_vs_uf": 0.08644674718379974,
+          "saving_pct": 32.31472396850586,
+          "saving_pct_vs_release": 31.671226501464844
+        },
+        {
+          "seq": "BasketballPass_416x240_50.yuv",
+          "db_vs_uf": 0.1261659860610962,
+          "saving_pct": 39.69785690307617,
+          "saving_pct_vs_release": 39.12455368041992
+        },
+        {
+          "seq": "BlowingBubbles_416x240_50.yuv",
+          "db_vs_uf": 0.0673980563879013,
+          "saving_pct": 32.31472396850586,
+          "saving_pct_vs_release": 31.671226501464844
+        },
+        {
+          "seq": "BQSquare_416x240_60.yuv",
+          "db_vs_uf": 0.049403976649045944,
+          "saving_pct": 24.93157958984375,
+          "saving_pct_vs_release": 24.217891693115234
+        },
+        {
+          "seq": "RaceHorses_416x240_30.yuv",
+          "db_vs_uf": 0.06812591850757599,
+          "saving_pct": 24.93157958984375,
+          "saving_pct_vs_release": 24.217891693115234
+        }
+      ]
+    },
+    {
+      "qp": 16,
+      "mean": 33.769091498177005,
+      "sd": 8.069114939558984,
+      "min": 0.0,
+      "p25": 31.090063095092773,
+      "median": 36.74460220336914,
+      "p75": 39.32870101928711,
+      "max": 39.69785690307617,
+      "worst_seq": "BQSquare_416x240_60.yuv",
+      "best_seq": "Beauty_1920x1080_120fps_420_8bit_YUV.yuv",
+      "n": 53,
+      "per_sequence": [
+        {
+          "seq": "Beauty_1920x1080_120fps_420_8bit_YUV.yuv",
+          "db_vs_uf": 0.051193591207265854,
+          "saving_pct": 39.69785690307617,
+          "saving_pct_vs_release": 39.12455368041992
+        },
+        {
+          "seq": "Bosphorus_1920x1080_120fps_420_8bit_YUV.yuv",
+          "db_vs_uf": 0.1254754513502121,
+          "saving_pct": 39.32870101928711,
+          "saving_pct_vs_release": 38.751888275146484
+        },
+        {
+          "seq": "HoneyBee_1920x1080_120fps_420_8bit_YUV.yuv",
+          "db_vs_uf": 0.19227235019207,
+          "saving_pct": 31.9455623626709,
+          "saving_pct_vs_release": 31.298553466796875
+        },
+        {
+          "seq": "Jockey_1920x1080_120fps_420_8bit_YUV.yuv",
+          "db_vs_uf": 0.16380704939365387,
+          "saving_pct": 37.852073669433594,
+          "saving_pct_vs_release": 37.26122283935547
+        },
+        {
+          "seq": "ReadySteadyGo_1920x1080_120fps_420_8bit_YUV.yuv",
+          "db_vs_uf": 0.12783226370811462,
+          "saving_pct": 31.390207290649414,
+          "saving_pct_vs_release": 30.737924575805664
+        },
+        {
+          "seq": "ShakeNDry_1920x1080_120fps_420_8bit_YUV.yuv",
+          "db_vs_uf": 0.07522071897983551,
+          "saving_pct": 39.69785690307617,
+          "saving_pct_vs_release": 39.12455368041992
+        },
+        {
+          "seq": "YachtRide_1920x1080_120fps_420_8bit_YUV.yuv",
+          "db_vs_uf": 0.1701764464378357,
+          "saving_pct": 38.221229553222656,
+          "saving_pct_vs_release": 37.63388442993164
+        },
+        {
+          "seq": "videoSRC01_1920x1080_30.yuv",
+          "db_vs_uf": 0.10541225969791412,
+          "saving_pct": 39.69785690307617,
+          "saving_pct_vs_release": 39.12455368041992
+        },
+        {
+          "seq": "videoSRC02_1920x1080_30.yuv",
+          "db_vs_uf": 0.24291099607944489,
+          "saving_pct": 39.69785690307617,
+          "saving_pct_vs_release": 39.12455368041992
+        },
+        {
+          "seq": "videoSRC03_1920x1080_30.yuv",
+          "db_vs_uf": 0.15450403094291687,
+          "saving_pct": 38.03611373901367,
+          "saving_pct_vs_release": 37.4470100402832
+        },
+        {
+          "seq": "videoSRC04_1920x1080_30.yuv",
+          "db_vs_uf": 0.03887396305799484,
+          "saving_pct": 34.067405700683594,
+          "saving_pct_vs_release": 33.44057083129883
+        },
+        {
+          "seq": "videoSRC05_1920x1080_25.yuv",
+          "db_vs_uf": 0.13201825320720673,
+          "saving_pct": 33.88336944580078,
+          "saving_pct_vs_release": 33.254783630371094
+        },
+        {
+          "seq": "videoSRC06_1920x1080_25.yuv",
+          "db_vs_uf": 0.06110168993473053,
+          "saving_pct": 39.69785690307617,
+          "saving_pct_vs_release": 39.12455368041992
+        },
+        {
+          "seq": "videoSRC07_1920x1080_25.yuv",
+          "db_vs_uf": 0.11582370102405548,
+          "saving_pct": 36.74460220336914,
+          "saving_pct_vs_release": 36.143218994140625
+        },
+        {
+          "seq": "videoSRC08_1920x1080_25.yuv",
+          "db_vs_uf": 0.10717087239027023,
+          "saving_pct": 39.69785690307617,
+          "saving_pct_vs_release": 39.12455368041992
+        },
+        {
+          "seq": "videoSRC09_1920x1080_25.yuv",
+          "db_vs_uf": 0.08993908762931824,
+          "saving_pct": 27.237462997436523,
+          "saving_pct_vs_release": 26.545698165893555
+        },
+        {
+          "seq": "videoSRC10_1920x1080_30.yuv",
+          "db_vs_uf": 0.19209304451942444,
+          "saving_pct": 30.53578758239746,
+          "saving_pct_vs_release": 29.87537956237793
+        },
+        {
+          "seq": "videoSRC11_1920x1080_30.yuv",
+          "db_vs_uf": 0.11283490061759949,
+          "saving_pct": 39.69785690307617,
+          "saving_pct_vs_release": 39.12455368041992
+        },
+        {
+          "seq": "videoSRC12_1920x1080_30.yuv",
+          "db_vs_uf": 0.09027224034070969,
+          "saving_pct": 35.936195373535156,
+          "saving_pct_vs_release": 35.32712936401367
+        },
+        {
+          "seq": "videoSRC13_1920x1080_30.yuv",
+          "db_vs_uf": 0.04815485328435898,
+          "saving_pct": 24.16594696044922,
+          "saving_pct_vs_release": 23.44498062133789
+        },
+        {
+          "seq": "videoSRC14_1920x1080_30.yuv",
+          "db_vs_uf": 0.148792564868927,
+          "saving_pct": 37.29780197143555,
+          "saving_pct_vs_release": 36.70167922973633
+        },
+        {
+          "seq": "videoSRC15_1920x1080_30.yuv",
+          "db_vs_uf": 0.08898105472326279,
+          "saving_pct": 36.74460220336914,
+          "saving_pct_vs_release": 36.143218994140625
+        },
+        {
+          "seq": "videoSRC16_1920x1080_30.yuv",
+          "db_vs_uf": 0.13128145039081573,
+          "saving_pct": 39.69785690307617,
+          "saving_pct_vs_release": 39.12455368041992
+        },
+        {
+          "seq": "videoSRC17_1920x1080_24.yuv",
+          "db_vs_uf": 0.09129741787910461,
+          "saving_pct": 39.05156326293945,
+          "saving_pct_vs_release": 38.47211456298828
+        },
+        {
+          "seq": "videoSRC18_1920x1080_25.yuv",
+          "db_vs_uf": 0.1282002180814743,
+          "saving_pct": 37.574928283691406,
+          "saving_pct_vs_release": 36.9814453125
+        },
+        {
+          "seq": "videoSRC19_1920x1080_30.yuv",
+          "db_vs_uf": 0.12112102657556534,
+          "saving_pct": 39.32870101928711,
+          "saving_pct_vs_release": 38.751888275146484
+        },
+        {
+          "seq": "videoSRC20_1920x1080_25.yuv",
+          "db_vs_uf": 0.12153435498476028,
+          "saving_pct": 35.821170806884766,
+          "saving_pct_vs_release": 35.21100997924805
+        },
+        {
+          "seq": "videoSRC21_1920x1080_24.yuv",
+          "db_vs_uf": 0.20286870002746582,
+          "saving_pct": 39.69785690307617,
+          "saving_pct_vs_release": 39.12455368041992
+        },
+        {
+          "seq": "videoSRC22_1920x1080_24.yuv",
+          "db_vs_uf": 0.11766678839921951,
           "saving_pct": 38.22123336791992,
           "saving_pct_vs_release": 37.633888244628906
         },
         {
+          "seq": "videoSRC23_1920x1080_24.yuv",
+          "db_vs_uf": 0.1374453604221344,
+          "saving_pct": 38.95954513549805,
+          "saving_pct_vs_release": 38.37922286987305
+        },
+        {
+          "seq": "videoSRC24_1920x1080_24.yuv",
+          "db_vs_uf": 0.2023533284664154,
+          "saving_pct": 35.08285140991211,
+          "saving_pct_vs_release": 34.465675354003906
+        },
+        {
+          "seq": "videoSRC25_1920x1080_24.yuv",
+          "db_vs_uf": 0.07771580666303635,
+          "saving_pct": 26.452058792114258,
+          "saving_pct_vs_release": 25.752824783325195
+        },
+        {
+          "seq": "videoSRC26_1920x1080_30.yuv",
+          "db_vs_uf": 0.19911742210388184,
+          "saving_pct": 38.95954513549805,
+          "saving_pct_vs_release": 38.37922286987305
+        },
+        {
+          "seq": "videoSRC27_1920x1080_30.yuv",
+          "db_vs_uf": 0.10619692504405975,
+          "saving_pct": 39.69785690307617,
+          "saving_pct_vs_release": 39.12455368041992
+        },
+        {
+          "seq": "videoSRC28_1920x1080_30.yuv",
+          "db_vs_uf": 0.08294449001550674,
+          "saving_pct": 39.69785690307617,
+          "saving_pct_vs_release": 39.12455368041992
+        },
+        {
+          "seq": "videoSRC29_1920x1080_24.yuv",
+          "db_vs_uf": 0.1331164687871933,
+          "saving_pct": 39.69785690307617,
+          "saving_pct_vs_release": 39.12455368041992
+        },
+        {
+          "seq": "videoSRC30_1920x1080_30.yuv",
+          "db_vs_uf": 0.12138283252716064,
+          "saving_pct": 39.32870101928711,
+          "saving_pct_vs_release": 38.751888275146484
+        },
+        {
           "seq": "BQTerrace_1920x1080_60.yuv",
-          "db_vs_uf": 0.07094495743513107,
-          "saving_pct": 14.910781860351562,
-          "saving_pct_vs_release": 14.101820945739746
+          "db_vs_uf": 0.08022979646921158,
+          "saving_pct": 24.79139518737793,
+          "saving_pct_vs_release": 24.076372146606445
         },
         {
           "seq": "BasketballDrive_1920x1080_50.yuv",
-          "db_vs_uf": 0.13741375505924225,
-          "saving_pct": 32.31256103515625,
-          "saving_pct_vs_release": 31.669044494628906
+          "db_vs_uf": 0.14476893842220306,
+          "saving_pct": 36.46746826171875,
+          "saving_pct_vs_release": 35.86345291137695
         },
         {
           "seq": "Cactus_1920x1080_50.yuv",
-          "db_vs_uf": 0.08145347982645035,
-          "saving_pct": 27.212303161621094,
-          "saving_pct_vs_release": 26.520299911499023
+          "db_vs_uf": 0.08116231858730316,
+          "saving_pct": 31.090063095092773,
+          "saving_pct_vs_release": 30.434925079345703
         },
         {
           "seq": "Kimono1_1920x1080_24.yuv",
-          "db_vs_uf": 0.10954015702009201,
+          "db_vs_uf": 0.08271744847297668,
           "saving_pct": 39.05156326293945,
           "saving_pct_vs_release": 38.47211456298828
         },
         {
           "seq": "ParkScene_1920x1080_24.yuv",
-          "db_vs_uf": 0.0665426179766655,
-          "saving_pct": 36.582481384277344,
-          "saving_pct_vs_release": 35.97956466674805
+          "db_vs_uf": 0.058250200003385544,
+          "saving_pct": 38.33625793457031,
+          "saving_pct_vs_release": 37.7500114440918
         },
         {
           "seq": "FourPeople_1280x720_60.yuv",
-          "db_vs_uf": 0.12453730404376984,
-          "saving_pct": 28.68233871459961,
-          "saving_pct_vs_release": 28.00430679321289
+          "db_vs_uf": 0.14077815413475037,
+          "saving_pct": 35.76018142700195,
+          "saving_pct_vs_release": 35.149444580078125
         },
         {
           "seq": "Johnny_1280x720_60.yuv",
-          "db_vs_uf": 0.1627744436264038,
-          "saving_pct": 30.344438552856445,
-          "saving_pct_vs_release": 29.682212829589844
+          "db_vs_uf": 0.16995041072368622,
+          "saving_pct": 35.76018142700195,
+          "saving_pct_vs_release": 35.149444580078125
         },
         {
           "seq": "KristenAndSara_1280x720_60.yuv",
-          "db_vs_uf": 0.14920878410339355,
-          "saving_pct": 28.805028915405273,
-          "saving_pct_vs_release": 28.128164291381836
+          "db_vs_uf": 0.16007575392723083,
+          "saving_pct": 35.082489013671875,
+          "saving_pct_vs_release": 34.46530532836914
         },
         {
           "seq": "BQMall_832x480_60.yuv",
-          "db_vs_uf": 0.08231919258832932,
-          "saving_pct": 18.463241577148438,
-          "saving_pct_vs_release": 17.688060760498047
+          "db_vs_uf": 0.10179176926612854,
+          "saving_pct": 30.468935012817383,
+          "saving_pct_vs_release": 29.807889938354492
         },
         {
           "seq": "BasketballDrill_832x480_50.yuv",
-          "db_vs_uf": 0.09881706535816193,
-          "saving_pct": 13.501006126403809,
-          "saving_pct_vs_release": 12.6786470413208
+          "db_vs_uf": 0.1326223909854889,
+          "saving_pct": 25.851774215698242,
+          "saving_pct_vs_release": 25.146835327148438
         },
         {
           "seq": "PartyScene_832x480_50.yuv",
-          "db_vs_uf": 0.03134068474173546,
-          "saving_pct": 8.30872631072998,
-          "saving_pct_vs_release": 7.437002658843994
+          "db_vs_uf": 0.035422470420598984,
+          "saving_pct": 13.155937194824219,
+          "saving_pct_vs_release": 12.330293655395508
         },
         {
           "seq": "RaceHorses_832x480_30.yuv",
-          "db_vs_uf": 0.06618418544530869,
-          "saving_pct": 16.61745262145996,
-          "saving_pct_vs_release": 15.824723243713379
+          "db_vs_uf": 0.07458209246397018,
+          "saving_pct": 27.237462997436523,
+          "saving_pct_vs_release": 26.545698165893555
         },
         {
           "seq": "BasketballPass_416x240_50.yuv",
-          "db_vs_uf": 0.07935096323490143,
+          "db_vs_uf": 0.10167644917964935,
+          "saving_pct": 24.93157958984375,
+          "saving_pct_vs_release": 24.217891693115234
+        },
+        {
+          "seq": "BlowingBubbles_416x240_50.yuv",
+          "db_vs_uf": 0.03664497658610344,
           "saving_pct": 13.846087455749512,
           "saving_pct_vs_release": 13.027006149291992
         },
         {
-          "seq": "BlowingBubbles_416x240_50.yuv",
-          "db_vs_uf": 0.03559911251068115,
-          "saving_pct": 6.923037528991699,
-          "saving_pct_vs_release": 6.038141250610352
-        },
-        {
           "seq": "BQSquare_416x240_60.yuv",
-          "db_vs_uf": 0.028679419308900833,
+          "db_vs_uf": 0.020357603207230568,
           "saving_pct": 0.0,
           "saving_pct_vs_release": -0.9507179260253906
         },
         {
           "seq": "RaceHorses_416x240_30.yuv",
-          "db_vs_uf": 0.05047671124339104,
-          "saving_pct": 6.923037528991699,
-          "saving_pct_vs_release": 6.038141250610352
+          "db_vs_uf": 0.056310683488845825,
+          "saving_pct": 19.388830184936523,
+          "saving_pct_vs_release": 18.622446060180664
         }
       ]
     },
     {
       "qp": 32,
-      "mean": 25.29033961835897,
-      "sd": 11.923369914373538,
+      "mean": 30.18041773112315,
+      "sd": 10.103995628822199,
       "min": 0.0,
-      "p25": 19.01751708984375,
-      "median": 26.797134399414062,
-      "p75": 34.897743225097656,
+      "p25": 26.750051498413086,
+      "median": 33.26007843017578,
+      "p75": 38.221229553222656,
       "max": 39.69785690307617,
-      "worst_seq": "PartyScene_832x480_50.yuv",
-      "best_seq": "videoSRC21_1920x1080_24.yuv",
+      "worst_seq": "BQSquare_416x240_60.yuv",
+      "best_seq": "videoSRC01_1920x1080_30.yuv",
       "n": 53,
       "per_sequence": [
         {
           "seq": "Beauty_1920x1080_120fps_420_8bit_YUV.yuv",
-          "db_vs_uf": 0.04746614396572113,
-          "saving_pct": 38.03611373901367,
-          "saving_pct_vs_release": 37.4470100402832
+          "db_vs_uf": 0.04050071910023689,
+          "saving_pct": 38.405269622802734,
+          "saving_pct_vs_release": 37.819679260253906
         },
         {
           "seq": "Bosphorus_1920x1080_120fps_420_8bit_YUV.yuv",
-          "db_vs_uf": 0.1323401778936386,
-          "saving_pct": 33.606231689453125,
-          "saving_pct_vs_release": 32.975013732910156
+          "db_vs_uf": 0.12597689032554626,
+          "saving_pct": 37.85206604003906,
+          "saving_pct_vs_release": 37.2612190246582
         },
         {
           "seq": "HoneyBee_1920x1080_120fps_420_8bit_YUV.yuv",
-          "db_vs_uf": 0.15845227241516113,
-          "saving_pct": 19.01751708984375,
-          "saving_pct_vs_release": 18.247604370117188
+          "db_vs_uf": 0.15651056170463562,
+          "saving_pct": 27.51460075378418,
+          "saving_pct_vs_release": 26.825469970703125
         },
         {
           "seq": "Jockey_1920x1080_120fps_420_8bit_YUV.yuv",
-          "db_vs_uf": 0.147168830037117,
-          "saving_pct": 33.6982421875,
-          "saving_pct_vs_release": 33.067901611328125
+          "db_vs_uf": 0.15040767192840576,
+          "saving_pct": 38.221229553222656,
+          "saving_pct_vs_release": 37.63388442993164
         },
         {
           "seq": "ReadySteadyGo_1920x1080_120fps_420_8bit_YUV.yuv",
-          "db_vs_uf": 0.11346541345119476,
-          "saving_pct": 17.84103012084961,
-          "saving_pct_vs_release": 17.05992889404297
+          "db_vs_uf": 0.11733270436525345,
+          "saving_pct": 25.08937644958496,
+          "saving_pct_vs_release": 24.3771915435791
         },
         {
           "seq": "ShakeNDry_1920x1080_120fps_420_8bit_YUV.yuv",
-          "db_vs_uf": 0.10819409042596817,
+          "db_vs_uf": 0.1003289595246315,
+          "saving_pct": 38.22123336791992,
+          "saving_pct_vs_release": 37.633888244628906
+        },
+        {
+          "seq": "YachtRide_1920x1080_120fps_420_8bit_YUV.yuv",
+          "db_vs_uf": 0.18348775804042816,
           "saving_pct": 33.79133987426758,
           "saving_pct_vs_release": 33.16188430786133
         },
         {
-          "seq": "YachtRide_1920x1080_120fps_420_8bit_YUV.yuv",
-          "db_vs_uf": 0.1754770278930664,
-          "saving_pct": 27.51244354248047,
-          "saving_pct_vs_release": 26.823287963867188
+          "seq": "videoSRC01_1920x1080_30.yuv",
+          "db_vs_uf": 0.0989142432808876,
+          "saving_pct": 39.69785690307617,
+          "saving_pct_vs_release": 39.12455368041992
         },
         {
-          "seq": "videoSRC01_1920x1080_30.yuv",
-          "db_vs_uf": 0.12001775205135345,
+          "seq": "videoSRC02_1920x1080_30.yuv",
+          "db_vs_uf": 0.2577178478240967,
+          "saving_pct": 38.221229553222656,
+          "saving_pct_vs_release": 37.63388442993164
+        },
+        {
+          "seq": "videoSRC03_1920x1080_30.yuv",
+          "db_vs_uf": 0.15827056765556335,
+          "saving_pct": 35.91319274902344,
+          "saving_pct_vs_release": 35.30390930175781
+        },
+        {
+          "seq": "videoSRC04_1920x1080_30.yuv",
+          "db_vs_uf": 0.047375500202178955,
+          "saving_pct": 29.15118408203125,
+          "saving_pct_vs_release": 28.477609634399414
+        },
+        {
+          "seq": "videoSRC05_1920x1080_25.yuv",
+          "db_vs_uf": 0.10928218066692352,
+          "saving_pct": 30.744993209838867,
+          "saving_pct_vs_release": 30.086570739746094
+        },
+        {
+          "seq": "videoSRC06_1920x1080_25.yuv",
+          "db_vs_uf": 0.027157306671142578,
+          "saving_pct": 39.69785690307617,
+          "saving_pct_vs_release": 39.12455368041992
+        },
+        {
+          "seq": "videoSRC07_1920x1080_25.yuv",
+          "db_vs_uf": 0.08333252370357513,
+          "saving_pct": 30.8359317779541,
+          "saving_pct_vs_release": 30.17837905883789
+        },
+        {
+          "seq": "videoSRC08_1920x1080_25.yuv",
+          "db_vs_uf": 0.09049434214830399,
+          "saving_pct": 39.69785690307617,
+          "saving_pct_vs_release": 39.12455368041992
+        },
+        {
+          "seq": "videoSRC09_1920x1080_25.yuv",
+          "db_vs_uf": 0.08658276498317719,
+          "saving_pct": 19.529020309448242,
+          "saving_pct_vs_release": 18.76397132873535
+        },
+        {
+          "seq": "videoSRC10_1920x1080_30.yuv",
+          "db_vs_uf": 0.1841438114643097,
+          "saving_pct": 26.750051498413086,
+          "saving_pct_vs_release": 26.05364990234375
+        },
+        {
+          "seq": "videoSRC11_1920x1080_30.yuv",
+          "db_vs_uf": 0.11490413546562195,
           "saving_pct": 39.32870101928711,
           "saving_pct_vs_release": 38.751888275146484
         },
         {
-          "seq": "videoSRC02_1920x1080_30.yuv",
-          "db_vs_uf": 0.26593345403671265,
-          "saving_pct": 36.19032669067383,
-          "saving_pct_vs_release": 35.583675384521484
-        },
-        {
-          "seq": "videoSRC03_1920x1080_30.yuv",
-          "db_vs_uf": 0.1594500094652176,
-          "saving_pct": 32.91284942626953,
-          "saving_pct_vs_release": 32.27503967285156
-        },
-        {
-          "seq": "videoSRC04_1920x1080_30.yuv",
-          "db_vs_uf": 0.046810101717710495,
-          "saving_pct": 22.411096572875977,
-          "saving_pct_vs_release": 21.673446655273438
-        },
-        {
-          "seq": "videoSRC05_1920x1080_25.yuv",
-          "db_vs_uf": 0.11316025257110596,
-          "saving_pct": 25.942712783813477,
-          "saving_pct_vs_release": 25.23863983154297
-        },
-        {
-          "seq": "videoSRC06_1920x1080_25.yuv",
-          "db_vs_uf": 0.0381622277200222,
-          "saving_pct": 38.221229553222656,
-          "saving_pct_vs_release": 37.63388442993164
-        },
-        {
-          "seq": "videoSRC07_1920x1080_25.yuv",
-          "db_vs_uf": 0.077498659491539,
-          "saving_pct": 25.157320022583008,
-          "saving_pct_vs_release": 24.445777893066406
-        },
-        {
-          "seq": "videoSRC08_1920x1080_25.yuv",
-          "db_vs_uf": 0.09619786590337753,
-          "saving_pct": 38.221229553222656,
-          "saving_pct_vs_release": 37.63388442993164
-        },
-        {
-          "seq": "videoSRC09_1920x1080_25.yuv",
-          "db_vs_uf": 0.07127906382083893,
-          "saving_pct": 6.717080116271973,
-          "saving_pct_vs_release": 5.830222129821777
-        },
-        {
-          "seq": "videoSRC10_1920x1080_30.yuv",
-          "db_vs_uf": 0.1833036243915558,
-          "saving_pct": 20.610254287719727,
-          "saving_pct_vs_release": 19.85548210144043
-        },
-        {
-          "seq": "videoSRC11_1920x1080_30.yuv",
-          "db_vs_uf": 0.12358636409044266,
-          "saving_pct": 37.205772399902344,
-          "saving_pct_vs_release": 36.60877990722656
-        },
-        {
           "seq": "videoSRC12_1920x1080_30.yuv",
-          "db_vs_uf": 0.09060081094503403,
-          "saving_pct": 25.988727569580078,
-          "saving_pct_vs_release": 25.28508949279785
+          "db_vs_uf": 0.10565480589866638,
+          "saving_pct": 32.88984298706055,
+          "saving_pct_vs_release": 32.25181579589844
         },
         {
           "seq": "videoSRC13_1920x1080_30.yuv",
-          "db_vs_uf": 0.060163311660289764,
-          "saving_pct": 15.002799034118652,
-          "saving_pct_vs_release": 14.19471549987793
+          "db_vs_uf": 0.056012727320194244,
+          "saving_pct": 19.064611434936523,
+          "saving_pct_vs_release": 18.29514503479004
         },
         {
           "seq": "videoSRC14_1920x1080_30.yuv",
-          "db_vs_uf": 0.1300707310438156,
-          "saving_pct": 28.227752685546875,
-          "saving_pct_vs_release": 27.545398712158203
+          "db_vs_uf": 0.14340068399906158,
+          "saving_pct": 33.974308013916016,
+          "saving_pct_vs_release": 33.346588134765625
         },
         {
           "seq": "videoSRC15_1920x1080_30.yuv",
-          "db_vs_uf": 0.08250359445810318,
-          "saving_pct": 26.797134399414062,
-          "saving_pct_vs_release": 26.101177215576172
+          "db_vs_uf": 0.08472390472888947,
+          "saving_pct": 32.151527404785156,
+          "saving_pct_vs_release": 31.506479263305664
         },
         {
           "seq": "videoSRC16_1920x1080_30.yuv",
-          "db_vs_uf": 0.14625588059425354,
-          "saving_pct": 38.59038543701172,
-          "saving_pct_vs_release": 38.00654983520508
+          "db_vs_uf": 0.12358083575963974,
+          "saving_pct": 39.69785690307617,
+          "saving_pct_vs_release": 39.12455368041992
         },
         {
           "seq": "videoSRC17_1920x1080_24.yuv",
-          "db_vs_uf": 0.12876969575881958,
-          "saving_pct": 33.95130157470703,
-          "saving_pct_vs_release": 33.3233642578125
+          "db_vs_uf": 0.12365932762622833,
+          "saving_pct": 36.766536712646484,
+          "saving_pct_vs_release": 36.16536331176758
         },
         {
           "seq": "videoSRC18_1920x1080_25.yuv",
-          "db_vs_uf": 0.13185855746269226,
-          "saving_pct": 27.259380340576172,
-          "saving_pct_vs_release": 26.56782341003418
+          "db_vs_uf": 0.13652382791042328,
+          "saving_pct": 33.26007843017578,
+          "saving_pct_vs_release": 32.62556838989258
         },
         {
           "seq": "videoSRC19_1920x1080_30.yuv",
-          "db_vs_uf": 0.13140149414539337,
-          "saving_pct": 32.86683654785156,
-          "saving_pct_vs_release": 32.22858810424805
+          "db_vs_uf": 0.1473354995250702,
+          "saving_pct": 37.574928283691406,
+          "saving_pct_vs_release": 36.9814453125
         },
         {
           "seq": "videoSRC20_1920x1080_25.yuv",
-          "db_vs_uf": 0.11506597697734833,
-          "saving_pct": 25.205474853515625,
-          "saving_pct_vs_release": 24.49439239501953
+          "db_vs_uf": 0.11733774095773697,
+          "saving_pct": 31.252182006835938,
+          "saving_pct_vs_release": 30.598581314086914
         },
         {
           "seq": "videoSRC21_1920x1080_24.yuv",
-          "db_vs_uf": 0.3534838855266571,
+          "db_vs_uf": 0.21745546162128448,
           "saving_pct": 39.69785690307617,
           "saving_pct_vs_release": 39.12455368041992
         },
         {
           "seq": "videoSRC22_1920x1080_24.yuv",
-          "db_vs_uf": 0.17547054588794708,
-          "saving_pct": 36.582481384277344,
-          "saving_pct_vs_release": 35.97956466674805
+          "db_vs_uf": 0.1427103728055954,
+          "saving_pct": 37.967098236083984,
+          "saving_pct_vs_release": 37.37733840942383
         },
         {
           "seq": "videoSRC23_1920x1080_24.yuv",
-          "db_vs_uf": 0.17524731159210205,
-          "saving_pct": 36.46746826171875,
-          "saving_pct_vs_release": 35.86345291137695
+          "db_vs_uf": 0.14567968249320984,
+          "saving_pct": 38.221229553222656,
+          "saving_pct_vs_release": 37.63388442993164
         },
         {
           "seq": "videoSRC24_1920x1080_24.yuv",
-          "db_vs_uf": 0.1747291386127472,
-          "saving_pct": 26.704030990600586,
-          "saving_pct_vs_release": 26.007192611694336
+          "db_vs_uf": 0.18637923896312714,
+          "saving_pct": 32.33665084838867,
+          "saving_pct_vs_release": 31.693363189697266
         },
         {
           "seq": "videoSRC25_1920x1080_24.yuv",
-          "db_vs_uf": 0.07419581711292267,
-          "saving_pct": 12.786781311035156,
-          "saving_pct_vs_release": 11.957627296447754
+          "db_vs_uf": 0.07399885356426239,
+          "saving_pct": 19.365829467773438,
+          "saving_pct_vs_release": 18.599224090576172
         },
         {
           "seq": "videoSRC26_1920x1080_30.yuv",
-          "db_vs_uf": 0.17691922187805176,
-          "saving_pct": 29.750394821166992,
-          "saving_pct_vs_release": 29.08251953125
+          "db_vs_uf": 0.18294277787208557,
+          "saving_pct": 33.79026794433594,
+          "saving_pct_vs_release": 33.16080093383789
         },
         {
           "seq": "videoSRC27_1920x1080_30.yuv",
-          "db_vs_uf": 0.13444429636001587,
-          "saving_pct": 38.95954513549805,
-          "saving_pct_vs_release": 38.37922286987305
+          "db_vs_uf": 0.10199657827615738,
+          "saving_pct": 39.69785690307617,
+          "saving_pct_vs_release": 39.12455368041992
         },
         {
           "seq": "videoSRC28_1920x1080_30.yuv",
-          "db_vs_uf": 0.11550963670015335,
-          "saving_pct": 38.68240737915039,
-          "saving_pct_vs_release": 38.099449157714844
+          "db_vs_uf": 0.09681408107280731,
+          "saving_pct": 39.69785690307617,
+          "saving_pct_vs_release": 39.12455368041992
         },
         {
           "seq": "videoSRC29_1920x1080_24.yuv",
-          "db_vs_uf": 0.3543223440647125,
+          "db_vs_uf": 0.219517782330513,
           "saving_pct": 39.69785690307617,
           "saving_pct_vs_release": 39.12455368041992
         },
         {
           "seq": "videoSRC30_1920x1080_30.yuv",
-          "db_vs_uf": 0.11950958520174026,
-          "saving_pct": 34.897743225097656,
-          "saving_pct_vs_release": 34.278804779052734
+          "db_vs_uf": 0.11019940674304962,
+          "saving_pct": 37.48291778564453,
+          "saving_pct_vs_release": 36.88855743408203
         },
         {
           "seq": "BQTerrace_1920x1080_60.yuv",
-          "db_vs_uf": 0.06921951472759247,
-          "saving_pct": 10.547751426696777,
-          "saving_pct_vs_release": 9.697312355041504
+          "db_vs_uf": 0.0813518539071083,
+          "saving_pct": 20.28925323486328,
+          "saving_pct_vs_release": 19.531429290771484
         },
         {
           "seq": "BasketballDrive_1920x1080_50.yuv",
-          "db_vs_uf": 0.11536948382854462,
-          "saving_pct": 28.64291763305664,
-          "saving_pct_vs_release": 27.964513778686523
+          "db_vs_uf": 0.1257701814174652,
+          "saving_pct": 34.34454345703125,
+          "saving_pct_vs_release": 33.72034454345703
         },
         {
           "seq": "Cactus_1920x1080_50.yuv",
-          "db_vs_uf": 0.07087262719869614,
-          "saving_pct": 19.618881225585938,
-          "saving_pct_vs_release": 18.85468292236328
+          "db_vs_uf": 0.08011189103126526,
+          "saving_pct": 26.889150619506836,
+          "saving_pct_vs_release": 26.194072723388672
         },
         {
           "seq": "Kimono1_1920x1080_24.yuv",
-          "db_vs_uf": 0.12307660281658173,
-          "saving_pct": 34.320457458496094,
-          "saving_pct_vs_release": 33.69602966308594
+          "db_vs_uf": 0.11664177477359772,
+          "saving_pct": 36.74352264404297,
+          "saving_pct_vs_release": 36.142127990722656
         },
         {
           "seq": "ParkScene_1920x1080_24.yuv",
-          "db_vs_uf": 0.06938867270946503,
-          "saving_pct": 24.996274948120117,
-          "saving_pct_vs_release": 24.283201217651367
+          "db_vs_uf": 0.0750751867890358,
+          "saving_pct": 31.320117950439453,
+          "saving_pct_vs_release": 30.66716766357422
         },
         {
           "seq": "FourPeople_1280x720_60.yuv",
-          "db_vs_uf": 0.14353039860725403,
-          "saving_pct": 22.956985473632812,
-          "saving_pct_vs_release": 22.22452163696289
+          "db_vs_uf": 0.16603654623031616,
+          "saving_pct": 31.574249267578125,
+          "saving_pct_vs_release": 30.9237117767334
         },
         {
           "seq": "Johnny_1280x720_60.yuv",
-          "db_vs_uf": 0.1779961884021759,
-          "saving_pct": 24.744659423828125,
-          "saving_pct_vs_release": 24.02919578552246
+          "db_vs_uf": 0.1970938742160797,
+          "saving_pct": 34.0367317199707,
+          "saving_pct_vs_release": 33.40960693359375
         },
         {
           "seq": "KristenAndSara_1280x720_60.yuv",
-          "db_vs_uf": 0.14829126000404358,
-          "saving_pct": 26.09716033935547,
-          "saving_pct_vs_release": 25.39455223083496
+          "db_vs_uf": 0.1488545835018158,
+          "saving_pct": 32.37461853027344,
+          "saving_pct_vs_release": 31.7316951751709
         },
         {
           "seq": "BQMall_832x480_60.yuv",
-          "db_vs_uf": 0.08053473383188248,
-          "saving_pct": 10.039490699768066,
-          "saving_pct_vs_release": 9.18421745300293
+          "db_vs_uf": 0.09471949934959412,
+          "saving_pct": 21.234619140625,
+          "saving_pct_vs_release": 20.485782623291016
         },
         {
           "seq": "BasketballDrill_832x480_50.yuv",
-          "db_vs_uf": 0.07261422276496887,
-          "saving_pct": 6.923037528991699,
-          "saving_pct_vs_release": 6.038141250610352
+          "db_vs_uf": 0.09402091801166534,
+          "saving_pct": 18.003141403198242,
+          "saving_pct_vs_release": 17.22358512878418
         },
         {
           "seq": "PartyScene_832x480_50.yuv",
-          "db_vs_uf": 0.057261642068624496,
-          "saving_pct": 0.0,
-          "saving_pct_vs_release": -0.9507179260253906
+          "db_vs_uf": 0.0516694039106369,
+          "saving_pct": 1.7307579517364502,
+          "saving_pct_vs_release": 0.7964968681335449
         },
         {
           "seq": "RaceHorses_832x480_30.yuv",
-          "db_vs_uf": 0.058858029544353485,
-          "saving_pct": 3.1164467334747314,
-          "saving_pct_vs_release": 2.1953582763671875
+          "db_vs_uf": 0.06789758056402206,
+          "saving_pct": 13.155937194824219,
+          "saving_pct_vs_release": 12.330293655395508
         },
         {
           "seq": "BasketballPass_416x240_50.yuv",
-          "db_vs_uf": 0.03881854936480522,
+          "db_vs_uf": 0.025820450857281685,
           "saving_pct": 13.846087455749512,
           "saving_pct_vs_release": 13.027006149291992
         },
         {
           "seq": "BlowingBubbles_416x240_50.yuv",
-          "db_vs_uf": 0.023962680250406265,
-          "saving_pct": 0.0,
-          "saving_pct_vs_release": -0.9507179260253906
+          "db_vs_uf": 0.030378375202417374,
+          "saving_pct": 6.923037528991699,
+          "saving_pct_vs_release": 6.038141250610352
         },
         {
           "seq": "BQSquare_416x240_60.yuv",
-          "db_vs_uf": 0.06238128989934921,
+          "db_vs_uf": 0.04627792537212372,
           "saving_pct": 0.0,
           "saving_pct_vs_release": -0.9507179260253906
         },
         {
           "seq": "RaceHorses_416x240_30.yuv",
-          "db_vs_uf": 0.06171882152557373,
-          "saving_pct": 0.0,
-          "saving_pct_vs_release": -0.9507179260253906
+          "db_vs_uf": 0.07963258028030396,
+          "saving_pct": 13.846087455749512,
+          "saving_pct_vs_release": 13.027006149291992
         }
       ]
     },
     {
       "qp": 48,
-      "mean": 23.13455175453762,
-      "sd": 11.638754320813325,
+      "mean": 28.53115542429798,
+      "sd": 10.603794370269654,
       "min": 0.0,
-      "p25": 14.631485939025879,
-      "median": 24.256885528564453,
-      "p75": 32.036502838134766,
+      "p25": 23.934818267822266,
+      "median": 31.73636245727539,
+      "p75": 37.11375427246094,
       "max": 39.69785690307617,
       "worst_seq": "BlowingBubbles_416x240_50.yuv",
       "best_seq": "videoSRC01_1920x1080_30.yuv",
@@ -1020,652 +1021,652 @@
       "per_sequence": [
         {
           "seq": "Beauty_1920x1080_120fps_420_8bit_YUV.yuv",
-          "db_vs_uf": 0.037398021668195724,
-          "saving_pct": 33.559139251708984,
-          "saving_pct_vs_release": 32.92747116088867
+          "db_vs_uf": 0.04263494163751602,
+          "saving_pct": 38.03611373901367,
+          "saving_pct_vs_release": 37.4470100402832
         },
         {
           "seq": "Bosphorus_1920x1080_120fps_420_8bit_YUV.yuv",
-          "db_vs_uf": 0.1480090469121933,
-          "saving_pct": 32.036502838134766,
-          "saving_pct_vs_release": 31.390363693237305
+          "db_vs_uf": 0.1511867642402649,
+          "saving_pct": 37.11375427246094,
+          "saving_pct_vs_release": 36.51588439941406
         },
         {
           "seq": "HoneyBee_1920x1080_120fps_420_8bit_YUV.yuv",
-          "db_vs_uf": 0.12942954897880554,
-          "saving_pct": 14.631485939025879,
-          "saving_pct_vs_release": 13.819873809814453
+          "db_vs_uf": 0.13995158672332764,
+          "saving_pct": 25.390594482421875,
+          "saving_pct_vs_release": 24.681270599365234
         },
         {
           "seq": "Jockey_1920x1080_120fps_420_8bit_YUV.yuv",
-          "db_vs_uf": 0.1351936310529709,
-          "saving_pct": 31.48223114013672,
-          "saving_pct_vs_release": 30.83081817626953
+          "db_vs_uf": 0.1255931556224823,
+          "saving_pct": 36.00629425048828,
+          "saving_pct_vs_release": 35.397891998291016
         },
         {
           "seq": "ReadySteadyGo_1920x1080_120fps_420_8bit_YUV.yuv",
-          "db_vs_uf": 0.11614026129245758,
-          "saving_pct": 13.594114303588867,
-          "saving_pct_vs_release": 12.772637367248535
+          "db_vs_uf": 0.14263972640037537,
+          "saving_pct": 23.934818267822266,
+          "saving_pct_vs_release": 23.211652755737305
         },
         {
           "seq": "ShakeNDry_1920x1080_120fps_420_8bit_YUV.yuv",
-          "db_vs_uf": 0.1169985830783844,
-          "saving_pct": 27.328401565551758,
-          "saving_pct_vs_release": 26.637500762939453
+          "db_vs_uf": 0.12458912283182144,
+          "saving_pct": 35.54403305053711,
+          "saving_pct_vs_release": 34.931236267089844
         },
         {
           "seq": "YachtRide_1920x1080_120fps_420_8bit_YUV.yuv",
-          "db_vs_uf": 0.18225428462028503,
-          "saving_pct": 23.74970245361328,
-          "saving_pct_vs_release": 23.0247802734375
+          "db_vs_uf": 0.19049137830734253,
+          "saving_pct": 30.92902946472168,
+          "saving_pct_vs_release": 30.272357940673828
         },
         {
           "seq": "videoSRC01_1920x1080_30.yuv",
-          "db_vs_uf": 0.09914550185203552,
+          "db_vs_uf": 0.07079572230577469,
           "saving_pct": 39.69785690307617,
           "saving_pct_vs_release": 39.12455368041992
         },
         {
           "seq": "videoSRC02_1920x1080_30.yuv",
-          "db_vs_uf": 0.26831117272377014,
-          "saving_pct": 34.158348083496094,
-          "saving_pct_vs_release": 33.532379150390625
+          "db_vs_uf": 0.25346818566322327,
+          "saving_pct": 37.205780029296875,
+          "saving_pct_vs_release": 36.60878372192383
         },
         {
           "seq": "videoSRC03_1920x1080_30.yuv",
-          "db_vs_uf": 0.16553521156311035,
-          "saving_pct": 31.98941421508789,
-          "saving_pct_vs_release": 31.342823028564453
+          "db_vs_uf": 0.14688356220722198,
+          "saving_pct": 34.5745849609375,
+          "saving_pct_vs_release": 33.95257568359375
         },
         {
           "seq": "videoSRC04_1920x1080_30.yuv",
-          "db_vs_uf": 0.05992996692657471,
-          "saving_pct": 16.825580596923828,
-          "saving_pct_vs_release": 16.03482437133789
+          "db_vs_uf": 0.059925880283117294,
+          "saving_pct": 26.127826690673828,
+          "saving_pct_vs_release": 25.425512313842773
         },
         {
           "seq": "videoSRC05_1920x1080_25.yuv",
-          "db_vs_uf": 0.08874265849590302,
-          "saving_pct": 22.61815071105957,
-          "saving_pct_vs_release": 21.882469177246094
+          "db_vs_uf": 0.0917293131351471,
+          "saving_pct": 28.990150451660156,
+          "saving_pct_vs_release": 28.315044403076172
         },
         {
           "seq": "videoSRC06_1920x1080_25.yuv",
-          "db_vs_uf": 0.022934360429644585,
-          "saving_pct": 36.49047088623047,
-          "saving_pct_vs_release": 35.88667678833008
+          "db_vs_uf": 0.016646387055516243,
+          "saving_pct": 39.32870101928711,
+          "saving_pct_vs_release": 38.751888275146484
         },
         {
           "seq": "videoSRC07_1920x1080_25.yuv",
-          "db_vs_uf": 0.06357735395431519,
-          "saving_pct": 18.833477020263672,
-          "saving_pct_vs_release": 18.061811447143555
+          "db_vs_uf": 0.0703306570649147,
+          "saving_pct": 26.24286460876465,
+          "saving_pct_vs_release": 25.54163932800293
         },
         {
           "seq": "videoSRC08_1920x1080_25.yuv",
-          "db_vs_uf": 0.08247768878936768,
-          "saving_pct": 36.559478759765625,
-          "saving_pct_vs_release": 35.95634078979492
+          "db_vs_uf": 0.07361405342817307,
+          "saving_pct": 38.95954513549805,
+          "saving_pct_vs_release": 38.37922286987305
         },
         {
           "seq": "videoSRC09_1920x1080_25.yuv",
-          "db_vs_uf": 0.08213376998901367,
-          "saving_pct": 8.793985366821289,
-          "saving_pct_vs_release": 7.926875114440918
+          "db_vs_uf": 0.09299740195274353,
+          "saving_pct": 21.282779693603516,
+          "saving_pct_vs_release": 20.53440284729004
         },
         {
           "seq": "videoSRC10_1920x1080_30.yuv",
-          "db_vs_uf": 0.1843671202659607,
-          "saving_pct": 19.986963272094727,
-          "saving_pct_vs_release": 19.22626495361328
+          "db_vs_uf": 0.1763937771320343,
+          "saving_pct": 26.612018585205078,
+          "saving_pct_vs_release": 25.914304733276367
         },
         {
           "seq": "videoSRC11_1920x1080_30.yuv",
-          "db_vs_uf": 0.13796396553516388,
-          "saving_pct": 36.467464447021484,
-          "saving_pct_vs_release": 35.86344909667969
+          "db_vs_uf": 0.11510177701711655,
+          "saving_pct": 38.59038543701172,
+          "saving_pct_vs_release": 38.00654983520508
         },
         {
           "seq": "videoSRC12_1920x1080_30.yuv",
-          "db_vs_uf": 0.11583882570266724,
-          "saving_pct": 22.50312614440918,
-          "saving_pct_vs_release": 21.766345977783203
+          "db_vs_uf": 0.1157601848244667,
+          "saving_pct": 28.042633056640625,
+          "saving_pct_vs_release": 27.3585205078125
         },
         {
           "seq": "videoSRC13_1920x1080_30.yuv",
-          "db_vs_uf": 0.07819940149784088,
-          "saving_pct": 14.241480827331543,
-          "saving_pct_vs_release": 13.42616081237793
+          "db_vs_uf": 0.08277332782745361,
+          "saving_pct": 21.99593734741211,
+          "saving_pct_vs_release": 21.254337310791016
         },
         {
           "seq": "videoSRC14_1920x1080_30.yuv",
-          "db_vs_uf": 0.12075447291135788,
-          "saving_pct": 25.180322647094727,
-          "saving_pct_vs_release": 24.4689998626709
+          "db_vs_uf": 0.13634270429611206,
+          "saving_pct": 32.22053527832031,
+          "saving_pct_vs_release": 31.57614517211914
         },
         {
           "seq": "videoSRC15_1920x1080_30.yuv",
-          "db_vs_uf": 0.08921335637569427,
-          "saving_pct": 25.250417709350586,
-          "saving_pct_vs_release": 24.539756774902344
+          "db_vs_uf": 0.09188492596149445,
+          "saving_pct": 31.73636245727539,
+          "saving_pct_vs_release": 31.08736801147461
         },
         {
           "seq": "videoSRC16_1920x1080_30.yuv",
-          "db_vs_uf": 0.1429588496685028,
-          "saving_pct": 37.85206604003906,
-          "saving_pct_vs_release": 37.2612190246582
+          "db_vs_uf": 0.10966584831476212,
+          "saving_pct": 38.95954513549805,
+          "saving_pct_vs_release": 38.37922286987305
         },
         {
           "seq": "videoSRC17_1920x1080_24.yuv",
-          "db_vs_uf": 0.14776034653186798,
-          "saving_pct": 29.612361907958984,
-          "saving_pct_vs_release": 28.943174362182617
+          "db_vs_uf": 0.14166319370269775,
+          "saving_pct": 33.74318313598633,
+          "saving_pct_vs_release": 33.1132698059082
         },
         {
           "seq": "videoSRC18_1920x1080_25.yuv",
-          "db_vs_uf": 0.14897915720939636,
-          "saving_pct": 23.65768051147461,
-          "saving_pct_vs_release": 22.9318790435791
+          "db_vs_uf": 0.1548852175474167,
+          "saving_pct": 31.575328826904297,
+          "saving_pct_vs_release": 30.924802780151367
         },
         {
           "seq": "videoSRC19_1920x1080_30.yuv",
-          "db_vs_uf": 0.15979082882404327,
-          "saving_pct": 30.65081214904785,
-          "saving_pct_vs_release": 29.99149513244629
+          "db_vs_uf": 0.15234661102294922,
+          "saving_pct": 34.25144577026367,
+          "saving_pct_vs_release": 33.62635803222656
         },
         {
           "seq": "videoSRC20_1920x1080_25.yuv",
-          "db_vs_uf": 0.1286948025226593,
-          "saving_pct": 20.427291870117188,
-          "saving_pct_vs_release": 19.670778274536133
+          "db_vs_uf": 0.13374856114387512,
+          "saving_pct": 28.96714210510254,
+          "saving_pct_vs_release": 28.291820526123047
         },
         {
           "seq": "videoSRC21_1920x1080_24.yuv",
-          "db_vs_uf": 0.2899000942707062,
+          "db_vs_uf": 0.173318549990654,
           "saving_pct": 39.69785690307617,
           "saving_pct_vs_release": 39.12455368041992
         },
         {
           "seq": "videoSRC22_1920x1080_24.yuv",
-          "db_vs_uf": 0.1890145242214203,
-          "saving_pct": 36.60549545288086,
-          "saving_pct_vs_release": 36.00279235839844
-        },
-        {
-          "seq": "videoSRC23_1920x1080_24.yuv",
-          "db_vs_uf": 0.19468477368354797,
-          "saving_pct": 36.09830856323242,
-          "saving_pct_vs_release": 35.490779876708984
-        },
-        {
-          "seq": "videoSRC24_1920x1080_24.yuv",
-          "db_vs_uf": 0.1772775650024414,
-          "saving_pct": 25.572484970092773,
-          "saving_pct_vs_release": 24.864887237548828
-        },
-        {
-          "seq": "videoSRC25_1920x1080_24.yuv",
-          "db_vs_uf": 0.08379264920949936,
-          "saving_pct": 11.54019832611084,
-          "saving_pct_vs_release": 10.69919490814209
-        },
-        {
-          "seq": "videoSRC26_1920x1080_30.yuv",
-          "db_vs_uf": 0.15427468717098236,
-          "saving_pct": 24.256885528564453,
-          "saving_pct_vs_release": 23.53678321838379
-        },
-        {
-          "seq": "videoSRC27_1920x1080_30.yuv",
-          "db_vs_uf": 0.16011519730091095,
+          "db_vs_uf": 0.1627579927444458,
           "saving_pct": 38.95954513549805,
           "saving_pct_vs_release": 38.37922286987305
         },
         {
+          "seq": "videoSRC23_1920x1080_24.yuv",
+          "db_vs_uf": 0.16630959510803223,
+          "saving_pct": 38.95954513549805,
+          "saving_pct_vs_release": 38.37922286987305
+        },
+        {
+          "seq": "videoSRC24_1920x1080_24.yuv",
+          "db_vs_uf": 0.18068474531173706,
+          "saving_pct": 31.41321563720703,
+          "saving_pct_vs_release": 30.761146545410156
+        },
+        {
+          "seq": "videoSRC25_1920x1080_24.yuv",
+          "db_vs_uf": 0.07111557573080063,
+          "saving_pct": 15.903228759765625,
+          "saving_pct_vs_release": 15.103703498840332
+        },
+        {
+          "seq": "videoSRC26_1920x1080_30.yuv",
+          "db_vs_uf": 0.19634230434894562,
+          "saving_pct": 32.86684036254883,
+          "saving_pct_vs_release": 32.22859573364258
+        },
+        {
+          "seq": "videoSRC27_1920x1080_30.yuv",
+          "db_vs_uf": 0.11131121963262558,
+          "saving_pct": 39.69785690307617,
+          "saving_pct_vs_release": 39.12455368041992
+        },
+        {
           "seq": "videoSRC28_1920x1080_30.yuv",
-          "db_vs_uf": 0.1260669082403183,
-          "saving_pct": 36.09722137451172,
-          "saving_pct_vs_release": 35.489688873291016
+          "db_vs_uf": 0.11276932060718536,
+          "saving_pct": 38.59038543701172,
+          "saving_pct_vs_release": 38.00654983520508
         },
         {
           "seq": "videoSRC29_1920x1080_24.yuv",
-          "db_vs_uf": 0.2009408175945282,
+          "db_vs_uf": 0.13276097178459167,
           "saving_pct": 39.69785690307617,
           "saving_pct_vs_release": 39.12455368041992
         },
         {
           "seq": "videoSRC30_1920x1080_30.yuv",
-          "db_vs_uf": 0.0950750857591629,
-          "saving_pct": 30.880863189697266,
-          "saving_pct_vs_release": 30.22373390197754
+          "db_vs_uf": 0.0991070419549942,
+          "saving_pct": 35.54403305053711,
+          "saving_pct_vs_release": 34.931236267089844
         },
         {
           "seq": "BQTerrace_1920x1080_60.yuv",
-          "db_vs_uf": 0.07318747043609619,
-          "saving_pct": 8.932012557983398,
-          "saving_pct_vs_release": 8.066213607788086
+          "db_vs_uf": 0.08496709167957306,
+          "saving_pct": 19.08761215209961,
+          "saving_pct_vs_release": 18.31836700439453
         },
         {
           "seq": "BasketballDrive_1920x1080_50.yuv",
-          "db_vs_uf": 0.09066521376371384,
-          "saving_pct": 26.057737350463867,
-          "saving_pct_vs_release": 25.354755401611328
+          "db_vs_uf": 0.10670565068721771,
+          "saving_pct": 33.79026794433594,
+          "saving_pct_vs_release": 33.16080093383789
         },
         {
           "seq": "Cactus_1920x1080_50.yuv",
-          "db_vs_uf": 0.06853566318750381,
-          "saving_pct": 17.102718353271484,
-          "saving_pct_vs_release": 16.31460189819336
+          "db_vs_uf": 0.07648447155952454,
+          "saving_pct": 25.41252326965332,
+          "saving_pct_vs_release": 24.703407287597656
         },
         {
           "seq": "Kimono1_1920x1080_24.yuv",
-          "db_vs_uf": 0.14119964838027954,
-          "saving_pct": 30.373680114746094,
-          "saving_pct_vs_release": 29.711729049682617
+          "db_vs_uf": 0.1379263550043106,
+          "saving_pct": 34.48149108886719,
+          "saving_pct_vs_release": 33.85859298706055
         },
         {
           "seq": "ParkScene_1920x1080_24.yuv",
-          "db_vs_uf": 0.0843588337302208,
-          "saving_pct": 15.6940279006958,
-          "saving_pct_vs_release": 14.892518997192383
+          "db_vs_uf": 0.08657616376876831,
+          "saving_pct": 20.495223999023438,
+          "saving_pct_vs_release": 19.73935890197754
         },
         {
           "seq": "FourPeople_1280x720_60.yuv",
-          "db_vs_uf": 0.13813649117946625,
-          "saving_pct": 20.18777084350586,
-          "saving_pct_vs_release": 19.428979873657227
-        },
-        {
-          "seq": "Johnny_1280x720_60.yuv",
-          "db_vs_uf": 0.1514357477426529,
-          "saving_pct": 21.975439071655273,
-          "saving_pct_vs_release": 21.2336483001709
-        },
-        {
-          "seq": "KristenAndSara_1280x720_60.yuv",
-          "db_vs_uf": 0.17328821122646332,
+          "db_vs_uf": 0.1495283991098404,
           "saving_pct": 27.759265899658203,
           "saving_pct_vs_release": 27.072460174560547
         },
         {
+          "seq": "Johnny_1280x720_60.yuv",
+          "db_vs_uf": 0.18175184726715088,
+          "saving_pct": 34.0367317199707,
+          "saving_pct_vs_release": 33.40960693359375
+        },
+        {
+          "seq": "KristenAndSara_1280x720_60.yuv",
+          "db_vs_uf": 0.14753766357898712,
+          "saving_pct": 33.113651275634766,
+          "saving_pct_vs_release": 32.477752685546875
+        },
+        {
           "seq": "BQMall_832x480_60.yuv",
-          "db_vs_uf": 0.07846686244010925,
-          "saving_pct": 4.847210884094238,
-          "saving_pct_vs_release": 3.942573070526123
+          "db_vs_uf": 0.10047617554664612,
+          "saving_pct": 18.118173599243164,
+          "saving_pct_vs_release": 17.339706420898438
         },
         {
           "seq": "BasketballDrill_832x480_50.yuv",
-          "db_vs_uf": 0.04127053543925285,
-          "saving_pct": 5.192279815673828,
-          "saving_pct_vs_release": 4.290926456451416
+          "db_vs_uf": 0.04904923960566521,
+          "saving_pct": 13.155937194824219,
+          "saving_pct_vs_release": 12.330293655395508
         },
         {
           "seq": "PartyScene_832x480_50.yuv",
-          "db_vs_uf": 0.08145551383495331,
+          "db_vs_uf": 0.06339775770902634,
           "saving_pct": 4.847210884094238,
           "saving_pct_vs_release": 3.942573070526123
         },
         {
           "seq": "RaceHorses_832x480_30.yuv",
-          "db_vs_uf": 0.07566694915294647,
-          "saving_pct": 1.7307579517364502,
-          "saving_pct_vs_release": 0.7964968681335449
+          "db_vs_uf": 0.0756150409579277,
+          "saving_pct": 9.694415092468262,
+          "saving_pct_vs_release": 8.835864067077637
         },
         {
           "seq": "BasketballPass_416x240_50.yuv",
-          "db_vs_uf": 0.04475376754999161,
+          "db_vs_uf": 0.028004592284560204,
           "saving_pct": 13.846087455749512,
           "saving_pct_vs_release": 13.027006149291992
         },
         {
           "seq": "BlowingBubbles_416x240_50.yuv",
-          "db_vs_uf": 0.054303329437971115,
+          "db_vs_uf": 0.04372574761509895,
           "saving_pct": 0.0,
           "saving_pct_vs_release": -0.9507179260253906
         },
         {
           "seq": "BQSquare_416x240_60.yuv",
-          "db_vs_uf": 0.0951920822262764,
+          "db_vs_uf": 0.07601086795330048,
           "saving_pct": 0.0,
           "saving_pct_vs_release": -0.9507179260253906
         },
         {
           "seq": "RaceHorses_416x240_30.yuv",
-          "db_vs_uf": 0.06470729410648346,
-          "saving_pct": 0.0,
-          "saving_pct_vs_release": -0.9507179260253906
+          "db_vs_uf": 0.06478583812713623,
+          "saving_pct": 6.923037528991699,
+          "saving_pct_vs_release": 6.038141250610352
         }
       ]
     },
     {
       "qp": 63,
-      "mean": 20.755425826558525,
-      "sd": 11.02819619701352,
+      "mean": 27.38066527528583,
+      "sd": 10.665084011848307,
       "min": 0.0,
-      "p25": 13.525093078613281,
-      "median": 21.142595291137695,
-      "p75": 28.344934463500977,
+      "p25": 23.359691619873047,
+      "median": 30.53470802307129,
+      "p75": 34.920745849609375,
       "max": 39.69785690307617,
-      "worst_seq": "RaceHorses_832x480_30.yuv",
-      "best_seq": "videoSRC29_1920x1080_24.yuv",
+      "worst_seq": "BQSquare_416x240_60.yuv",
+      "best_seq": "videoSRC01_1920x1080_30.yuv",
       "n": 53,
       "per_sequence": [
         {
           "seq": "Beauty_1920x1080_120fps_420_8bit_YUV.yuv",
-          "db_vs_uf": 0.04339464008808136,
-          "saving_pct": 27.582538604736328,
-          "saving_pct_vs_release": 26.89405059814453
+          "db_vs_uf": 0.04373343661427498,
+          "saving_pct": 34.45956802368164,
+          "saving_pct_vs_release": 33.83646011352539
         },
         {
           "seq": "Bosphorus_1920x1080_120fps_420_8bit_YUV.yuv",
-          "db_vs_uf": 0.16239690780639648,
-          "saving_pct": 28.344934463500977,
-          "saving_pct_vs_release": 27.6636962890625
+          "db_vs_uf": 0.15329676866531372,
+          "saving_pct": 34.990840911865234,
+          "saving_pct_vs_release": 34.37278747558594
         },
         {
           "seq": "HoneyBee_1920x1080_120fps_420_8bit_YUV.yuv",
-          "db_vs_uf": 0.12511833012104034,
-          "saving_pct": 13.499933242797852,
-          "saving_pct_vs_release": 12.677562713623047
+          "db_vs_uf": 0.12622834742069244,
+          "saving_pct": 23.91289520263672,
+          "saving_pct_vs_release": 23.18952178955078
         },
         {
           "seq": "Jockey_1920x1080_120fps_420_8bit_YUV.yuv",
-          "db_vs_uf": 0.12753868103027344,
-          "saving_pct": 29.91250228881836,
-          "saving_pct_vs_release": 29.246170043945312
+          "db_vs_uf": 0.12013308703899384,
+          "saving_pct": 36.74460220336914,
+          "saving_pct_vs_release": 36.143218994140625
         },
         {
           "seq": "ReadySteadyGo_1920x1080_120fps_420_8bit_YUV.yuv",
-          "db_vs_uf": 0.12275651842355728,
-          "saving_pct": 14.863687515258789,
-          "saving_pct_vs_release": 14.054280281066895
+          "db_vs_uf": 0.12994158267974854,
+          "saving_pct": 21.602703094482422,
+          "saving_pct_vs_release": 20.857364654541016
         },
         {
           "seq": "ShakeNDry_1920x1080_120fps_420_8bit_YUV.yuv",
-          "db_vs_uf": 0.11062891781330109,
-          "saving_pct": 20.333105087280273,
-          "saving_pct_vs_release": 19.57569694519043
+          "db_vs_uf": 0.13187764585018158,
+          "saving_pct": 31.48223114013672,
+          "saving_pct_vs_release": 30.83081817626953
         },
         {
           "seq": "YachtRide_1920x1080_120fps_420_8bit_YUV.yuv",
-          "db_vs_uf": 0.16274651885032654,
-          "saving_pct": 21.142595291137695,
-          "saving_pct_vs_release": 20.39288330078125
+          "db_vs_uf": 0.19146889448165894,
+          "saving_pct": 31.48331069946289,
+          "saving_pct_vs_release": 30.8319091796875
         },
         {
           "seq": "videoSRC01_1920x1080_30.yuv",
-          "db_vs_uf": 0.09260869771242142,
-          "saving_pct": 38.59038543701172,
-          "saving_pct_vs_release": 38.00654983520508
+          "db_vs_uf": 0.06261654943227768,
+          "saving_pct": 39.69785690307617,
+          "saving_pct_vs_release": 39.12455368041992
         },
         {
           "seq": "videoSRC02_1920x1080_30.yuv",
-          "db_vs_uf": 0.2367171347141266,
-          "saving_pct": 33.235992431640625,
-          "saving_pct_vs_release": 32.601253509521484
+          "db_vs_uf": 0.21538181602954865,
+          "saving_pct": 37.205772399902344,
+          "saving_pct_vs_release": 36.60877990722656
         },
         {
           "seq": "videoSRC03_1920x1080_30.yuv",
-          "db_vs_uf": 0.17177963256835938,
-          "saving_pct": 29.289215087890625,
-          "saving_pct_vs_release": 28.616952896118164
+          "db_vs_uf": 0.16740413010120392,
+          "saving_pct": 34.920745849609375,
+          "saving_pct_vs_release": 34.302024841308594
         },
         {
           "seq": "videoSRC04_1920x1080_30.yuv",
-          "db_vs_uf": 0.087938591837883,
-          "saving_pct": 11.54019832611084,
-          "saving_pct_vs_release": 10.69919490814209
+          "db_vs_uf": 0.08382514864206314,
+          "saving_pct": 22.020017623901367,
+          "saving_pct_vs_release": 21.278650283813477
         },
         {
           "seq": "videoSRC05_1920x1080_25.yuv",
-          "db_vs_uf": 0.061784666031599045,
-          "saving_pct": 18.532258987426758,
-          "saving_pct_vs_release": 17.757732391357422
+          "db_vs_uf": 0.07754188776016235,
+          "saving_pct": 28.34385108947754,
+          "saving_pct_vs_release": 27.66260528564453
         },
         {
           "seq": "videoSRC06_1920x1080_25.yuv",
-          "db_vs_uf": 0.025379370898008347,
-          "saving_pct": 24.60627555847168,
-          "saving_pct_vs_release": 23.889493942260742
+          "db_vs_uf": 0.028655249625444412,
+          "saving_pct": 34.73670959472656,
+          "saving_pct_vs_release": 34.11623764038086
         },
         {
           "seq": "videoSRC07_1920x1080_25.yuv",
-          "db_vs_uf": 0.048584919422864914,
-          "saving_pct": 13.385987281799316,
-          "saving_pct_vs_release": 12.562531471252441
+          "db_vs_uf": 0.06542539596557617,
+          "saving_pct": 24.60411834716797,
+          "saving_pct_vs_release": 23.887317657470703
         },
         {
           "seq": "videoSRC08_1920x1080_25.yuv",
-          "db_vs_uf": 0.06129566952586174,
-          "saving_pct": 31.943405151367188,
-          "saving_pct_vs_release": 31.29637908935547
+          "db_vs_uf": 0.06577114760875702,
+          "saving_pct": 37.852073669433594,
+          "saving_pct_vs_release": 37.26122283935547
         },
         {
           "seq": "videoSRC09_1920x1080_25.yuv",
-          "db_vs_uf": 0.08638229221105576,
-          "saving_pct": 15.603071212768555,
-          "saving_pct_vs_release": 14.800697326660156
+          "db_vs_uf": 0.08073344081640244,
+          "saving_pct": 23.359691619873047,
+          "saving_pct_vs_release": 22.631061553955078
         },
         {
           "seq": "videoSRC10_1920x1080_30.yuv",
-          "db_vs_uf": 0.16435793042182922,
-          "saving_pct": 14.97979736328125,
-          "saving_pct_vs_release": 14.171493530273438
+          "db_vs_uf": 0.1707613319158554,
+          "saving_pct": 25.896709442138672,
+          "saving_pct_vs_release": 25.192195892333984
         },
         {
           "seq": "videoSRC11_1920x1080_30.yuv",
-          "db_vs_uf": 0.1954767256975174,
-          "saving_pct": 34.344547271728516,
-          "saving_pct_vs_release": 33.72035217285156
+          "db_vs_uf": 0.17088226974010468,
+          "saving_pct": 38.95954513549805,
+          "saving_pct_vs_release": 38.37922286987305
         },
         {
           "seq": "videoSRC12_1920x1080_30.yuv",
-          "db_vs_uf": 0.15667235851287842,
-          "saving_pct": 17.9560489654541,
-          "saving_pct_vs_release": 17.176044464111328
+          "db_vs_uf": 0.15990211069583893,
+          "saving_pct": 25.85069465637207,
+          "saving_pct_vs_release": 25.14574432373047
         },
         {
           "seq": "videoSRC13_1920x1080_30.yuv",
-          "db_vs_uf": 0.11039675772190094,
-          "saving_pct": 14.933782577514648,
-          "saving_pct_vs_release": 14.125042915344238
+          "db_vs_uf": 0.12009179592132568,
+          "saving_pct": 26.17384147644043,
+          "saving_pct_vs_release": 25.471961975097656
         },
         {
           "seq": "videoSRC14_1920x1080_30.yuv",
-          "db_vs_uf": 0.11452648043632507,
-          "saving_pct": 22.342086791992188,
-          "saving_pct_vs_release": 21.60378074645996
+          "db_vs_uf": 0.1267000138759613,
+          "saving_pct": 31.205093383789062,
+          "saving_pct_vs_release": 30.55104637145996
         },
         {
           "seq": "videoSRC15_1920x1080_30.yuv",
-          "db_vs_uf": 0.08478228747844696,
-          "saving_pct": 17.680007934570312,
-          "saving_pct_vs_release": 16.897375106811523
+          "db_vs_uf": 0.08838401734828949,
+          "saving_pct": 26.75111961364746,
+          "saving_pct_vs_release": 26.05472755432129
         },
         {
           "seq": "videoSRC16_1920x1080_30.yuv",
-          "db_vs_uf": 0.1364315152168274,
-          "saving_pct": 36.92864227294922,
-          "saving_pct_vs_release": 36.32901382446289
+          "db_vs_uf": 0.08861838281154633,
+          "saving_pct": 37.85206604003906,
+          "saving_pct_vs_release": 37.2612190246582
         },
         {
           "seq": "videoSRC17_1920x1080_24.yuv",
-          "db_vs_uf": 0.1226005032658577,
-          "saving_pct": 21.902830123901367,
-          "saving_pct_vs_release": 21.16034698486328
+          "db_vs_uf": 0.13336801528930664,
+          "saving_pct": 30.16555404663086,
+          "saving_pct_vs_release": 29.501623153686523
         },
         {
           "seq": "videoSRC18_1920x1080_25.yuv",
-          "db_vs_uf": 0.15358562767505646,
-          "saving_pct": 20.611328125,
-          "saving_pct_vs_release": 19.856565475463867
+          "db_vs_uf": 0.1582925170660019,
+          "saving_pct": 29.9135799407959,
+          "saving_pct_vs_release": 29.24725341796875
         },
         {
           "seq": "videoSRC19_1920x1080_30.yuv",
-          "db_vs_uf": 0.1894616186618805,
-          "saving_pct": 25.596559524536133,
-          "saving_pct_vs_release": 24.88919448852539
+          "db_vs_uf": 0.20305052399635315,
+          "saving_pct": 33.62815475463867,
+          "saving_pct_vs_release": 32.99714279174805
         },
         {
           "seq": "videoSRC20_1920x1080_25.yuv",
-          "db_vs_uf": 0.13982175290584564,
-          "saving_pct": 15.856141090393066,
-          "saving_pct_vs_release": 15.056169509887695
+          "db_vs_uf": 0.15762007236480713,
+          "saving_pct": 28.57498550415039,
+          "saving_pct_vs_release": 27.895933151245117
         },
         {
           "seq": "videoSRC21_1920x1080_24.yuv",
-          "db_vs_uf": 0.16873598098754883,
-          "saving_pct": 38.95954513549805,
-          "saving_pct_vs_release": 38.37922286987305
+          "db_vs_uf": 0.11368430405855179,
+          "saving_pct": 39.69785690307617,
+          "saving_pct_vs_release": 39.12455368041992
         },
         {
           "seq": "videoSRC22_1920x1080_24.yuv",
-          "db_vs_uf": 0.19616809487342834,
-          "saving_pct": 37.34381103515625,
-          "saving_pct_vs_release": 36.748130798339844
-        },
-        {
-          "seq": "videoSRC23_1920x1080_24.yuv",
-          "db_vs_uf": 0.19919060170650482,
-          "saving_pct": 34.436561584472656,
-          "saving_pct_vs_release": 33.81324005126953
-        },
-        {
-          "seq": "videoSRC24_1920x1080_24.yuv",
-          "db_vs_uf": 0.1595747470855713,
-          "saving_pct": 23.01138687133789,
-          "saving_pct_vs_release": 22.279441833496094
-        },
-        {
-          "seq": "videoSRC25_1920x1080_24.yuv",
-          "db_vs_uf": 0.08847229182720184,
-          "saving_pct": 10.063576698303223,
-          "saving_pct_vs_release": 9.208536148071289
-        },
-        {
-          "seq": "videoSRC26_1920x1080_30.yuv",
-          "db_vs_uf": 0.14840683341026306,
-          "saving_pct": 22.25006866455078,
-          "saving_pct_vs_release": 21.510887145996094
-        },
-        {
-          "seq": "videoSRC27_1920x1080_30.yuv",
-          "db_vs_uf": 0.2099566012620926,
+          "db_vs_uf": 0.14879655838012695,
           "saving_pct": 38.95954513549805,
           "saving_pct_vs_release": 38.37922286987305
         },
         {
+          "seq": "videoSRC23_1920x1080_24.yuv",
+          "db_vs_uf": 0.1708250343799591,
+          "saving_pct": 38.95954513549805,
+          "saving_pct_vs_release": 38.37922286987305
+        },
+        {
+          "seq": "videoSRC24_1920x1080_24.yuv",
+          "db_vs_uf": 0.15559805929660797,
+          "saving_pct": 30.581802368164062,
+          "saving_pct_vs_release": 29.921829223632812
+        },
+        {
+          "seq": "videoSRC25_1920x1080_24.yuv",
+          "db_vs_uf": 0.07558910548686981,
+          "saving_pct": 15.626091003417969,
+          "saving_pct_vs_release": 14.823931694030762
+        },
+        {
+          "seq": "videoSRC26_1920x1080_30.yuv",
+          "db_vs_uf": 0.17687198519706726,
+          "saving_pct": 31.759368896484375,
+          "saving_pct_vs_release": 31.1105899810791
+        },
+        {
+          "seq": "videoSRC27_1920x1080_30.yuv",
+          "db_vs_uf": 0.12677142024040222,
+          "saving_pct": 39.69785690307617,
+          "saving_pct_vs_release": 39.12455368041992
+        },
+        {
           "seq": "videoSRC28_1920x1080_30.yuv",
-          "db_vs_uf": 0.14931581914424896,
-          "saving_pct": 34.435482025146484,
-          "saving_pct_vs_release": 33.81214904785156
+          "db_vs_uf": 0.12779907882213593,
+          "saving_pct": 37.38982009887695,
+          "saving_pct_vs_release": 36.79457473754883
         },
         {
           "seq": "videoSRC29_1920x1080_24.yuv",
-          "db_vs_uf": 0.19432684779167175,
+          "db_vs_uf": 0.12593615055084229,
           "saving_pct": 39.69785690307617,
           "saving_pct_vs_release": 39.12455368041992
         },
         {
           "seq": "videoSRC30_1920x1080_30.yuv",
-          "db_vs_uf": 0.08945426344871521,
-          "saving_pct": 27.142202377319336,
-          "saving_pct_vs_release": 26.44953155517578
+          "db_vs_uf": 0.08953846246004105,
+          "saving_pct": 32.98186111450195,
+          "saving_pct_vs_release": 32.344703674316406
         },
         {
           "seq": "BQTerrace_1920x1080_60.yuv",
-          "db_vs_uf": 0.07562267780303955,
-          "saving_pct": 7.085156440734863,
-          "saving_pct_vs_release": 6.2017974853515625
+          "db_vs_uf": 0.08179084211587906,
+          "saving_pct": 16.571443557739258,
+          "saving_pct_vs_release": 15.778273582458496
         },
         {
           "seq": "BasketballDrive_1920x1080_50.yuv",
-          "db_vs_uf": 0.0755595862865448,
-          "saving_pct": 25.73459243774414,
-          "saving_pct_vs_release": 25.02853775024414
+          "db_vs_uf": 0.0805438905954361,
+          "saving_pct": 32.31363296508789,
+          "saving_pct_vs_release": 31.670129776000977
         },
         {
           "seq": "Cactus_1920x1080_50.yuv",
-          "db_vs_uf": 0.05414840206503868,
-          "saving_pct": 13.525093078613281,
-          "saving_pct_vs_release": 12.702960014343262
+          "db_vs_uf": 0.06221797689795494,
+          "saving_pct": 23.680686950683594,
+          "saving_pct_vs_release": 22.955108642578125
         },
         {
           "seq": "Kimono1_1920x1080_24.yuv",
-          "db_vs_uf": 0.12003035098314285,
-          "saving_pct": 21.902835845947266,
-          "saving_pct_vs_release": 21.16035270690918
+          "db_vs_uf": 0.1374950110912323,
+          "saving_pct": 30.53470802307129,
+          "saving_pct_vs_release": 29.87428855895996
         },
         {
           "seq": "ParkScene_1920x1080_24.yuv",
-          "db_vs_uf": 0.0924617201089859,
-          "saving_pct": 10.085498809814453,
-          "saving_pct_vs_release": 9.230667114257812
+          "db_vs_uf": 0.09245310723781586,
+          "saving_pct": 15.440964698791504,
+          "saving_pct_vs_release": 14.637046813964844
         },
         {
           "seq": "FourPeople_1280x720_60.yuv",
-          "db_vs_uf": 0.14065085351467133,
-          "saving_pct": 19.448734283447266,
-          "saving_pct_vs_release": 18.682920455932617
+          "db_vs_uf": 0.15505608916282654,
+          "saving_pct": 28.49829864501953,
+          "saving_pct_vs_release": 27.818519592285156
         },
         {
           "seq": "Johnny_1280x720_60.yuv",
-          "db_vs_uf": 0.13870565593242645,
-          "saving_pct": 21.54314422607422,
-          "saving_pct_vs_release": 20.7972412109375
+          "db_vs_uf": 0.15901528298854828,
+          "saving_pct": 34.77576446533203,
+          "saving_pct_vs_release": 34.15566635131836
         },
         {
           "seq": "KristenAndSara_1280x720_60.yuv",
-          "db_vs_uf": 0.19476991891860962,
-          "saving_pct": 28.066003799438477,
-          "saving_pct_vs_release": 27.382110595703125
+          "db_vs_uf": 0.1480921059846878,
+          "saving_pct": 33.113651275634766,
+          "saving_pct_vs_release": 32.477752685546875
         },
         {
           "seq": "BQMall_832x480_60.yuv",
-          "db_vs_uf": 0.10707490146160126,
+          "db_vs_uf": 0.11813032627105713,
+          "saving_pct": 18.003141403198242,
+          "saving_pct_vs_release": 17.22358512878418
+        },
+        {
+          "seq": "BasketballDrill_832x480_50.yuv",
+          "db_vs_uf": 0.0008308601099997759,
+          "saving_pct": 8.30872631072998,
+          "saving_pct_vs_release": 7.437002658843994
+        },
+        {
+          "seq": "PartyScene_832x480_50.yuv",
+          "db_vs_uf": 0.09760435670614243,
           "saving_pct": 6.577968597412109,
           "saving_pct_vs_release": 5.689787864685059
         },
         {
-          "seq": "BasketballDrill_832x480_50.yuv",
-          "db_vs_uf": 0.030351128429174423,
-          "saving_pct": 6.923037528991699,
-          "saving_pct_vs_release": 6.038141250610352
-        },
-        {
-          "seq": "PartyScene_832x480_50.yuv",
-          "db_vs_uf": 0.10984000563621521,
-          "saving_pct": 3.461521863937378,
-          "saving_pct_vs_release": 2.5437116622924805
-        },
-        {
           "seq": "RaceHorses_832x480_30.yuv",
-          "db_vs_uf": 0.09376707673072815,
-          "saving_pct": 0.0,
-          "saving_pct_vs_release": -0.9507179260253906
+          "db_vs_uf": 0.07889952510595322,
+          "saving_pct": 4.847210884094238,
+          "saving_pct_vs_release": 3.942573070526123
         },
         {
           "seq": "BasketballPass_416x240_50.yuv",
-          "db_vs_uf": 0.01281946524977684,
+          "db_vs_uf": -0.011432300321757793,
           "saving_pct": 13.846087455749512,
           "saving_pct_vs_release": 13.027006149291992
         },
         {
           "seq": "BlowingBubbles_416x240_50.yuv",
-          "db_vs_uf": 0.07466606050729752,
-          "saving_pct": 0.0,
-          "saving_pct_vs_release": -0.9507179260253906
+          "db_vs_uf": 0.07152249664068222,
+          "saving_pct": 6.923037528991699,
+          "saving_pct_vs_release": 6.038141250610352
         },
         {
           "seq": "BQSquare_416x240_60.yuv",
-          "db_vs_uf": 0.18470552563667297,
+          "db_vs_uf": 0.1460416316986084,
           "saving_pct": 0.0,
           "saving_pct_vs_release": -0.9507179260253906
         },
         {
           "seq": "RaceHorses_416x240_30.yuv",
-          "db_vs_uf": 0.08625541627407074,
+          "db_vs_uf": 0.06448438763618469,
           "saving_pct": 0.0,
           "saving_pct_vs_release": -0.9507179260253906
         }
@@ -1675,25 +1676,25 @@
   "rows_vs_release": [
     {
       "qp": 0,
-      "mean": 32.70342445373535,
-      "sd": 7.508107316642847,
-      "min": 6.038141250610352,
-      "p25": 28.82705307006836,
-      "median": 35.88666915893555,
-      "p75": 38.751888275146484,
+      "mean": 36.82911279066553,
+      "sd": 3.7084711255416134,
+      "min": 24.217891693115234,
+      "p25": 35.77056121826172,
+      "median": 38.751888275146484,
+      "p75": 39.12455368041992,
       "max": 39.12455368041992,
       "worst_seq": "BQSquare_416x240_60.yuv",
-      "best_seq": "videoSRC01_1920x1080_30.yuv",
+      "best_seq": "Beauty_1920x1080_120fps_420_8bit_YUV.yuv",
       "n": 53
     },
     {
       "qp": 16,
-      "mean": 28.80735061753471,
-      "sd": 10.60342856636805,
+      "mean": 33.139422290730025,
+      "sd": 8.145829363222365,
       "min": -0.9507179260253906,
-      "p25": 23.607540130615234,
-      "median": 31.669044494628906,
-      "p75": 37.633888244628906,
+      "p25": 30.434925079345703,
+      "median": 36.143218994140625,
+      "p75": 38.751888275146484,
       "max": 39.12455368041992,
       "worst_seq": "BQSquare_416x240_60.yuv",
       "best_seq": "Beauty_1920x1080_120fps_420_8bit_YUV.yuv",
@@ -1701,25 +1702,25 @@
     },
     {
       "qp": 32,
-      "mean": 24.58006137272097,
-      "sd": 12.036727423365004,
+      "mean": 29.516630451634246,
+      "sd": 10.200055704250234,
       "min": -0.9507179260253906,
-      "p25": 18.247604370117188,
-      "median": 26.101177215576172,
-      "p75": 34.278804779052734,
+      "p25": 26.05364990234375,
+      "median": 32.62556838989258,
+      "p75": 37.63388442993164,
       "max": 39.12455368041992,
-      "worst_seq": "PartyScene_832x480_50.yuv",
-      "best_seq": "videoSRC21_1920x1080_24.yuv",
+      "worst_seq": "BQSquare_416x240_60.yuv",
+      "best_seq": "videoSRC01_1920x1080_30.yuv",
       "n": 53
     },
     {
       "qp": 48,
-      "mean": 22.403778148147296,
-      "sd": 11.749406084490632,
+      "mean": 27.851687944160318,
+      "sd": 10.704606404242357,
       "min": -0.9507179260253906,
-      "p25": 13.819873809814453,
-      "median": 23.53678321838379,
-      "p75": 31.390363693237305,
+      "p25": 23.211652755737305,
+      "median": 31.08736801147461,
+      "p75": 36.51588439941406,
       "max": 39.12455368041992,
       "worst_seq": "BlowingBubbles_416x240_50.yuv",
       "best_seq": "videoSRC01_1920x1080_30.yuv",
@@ -1727,15 +1728,15 @@
     },
     {
       "qp": 63,
-      "mean": 20.002033647501243,
-      "sd": 11.133043342510275,
+      "mean": 26.690260131404084,
+      "sd": 10.7664787606851,
       "min": -0.9507179260253906,
-      "p25": 12.702960014343262,
-      "median": 20.39288330078125,
-      "p75": 27.6636962890625,
+      "p25": 22.631061553955078,
+      "median": 29.87428855895996,
+      "p75": 34.302024841308594,
       "max": 39.12455368041992,
-      "worst_seq": "RaceHorses_832x480_30.yuv",
-      "best_seq": "videoSRC29_1920x1080_24.yuv",
+      "worst_seq": "BQSquare_416x240_60.yuv",
+      "best_seq": "videoSRC01_1920x1080_30.yuv",
       "n": 53
     }
   ]

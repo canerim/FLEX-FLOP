@@ -925,7 +925,7 @@ def content(k):
     # ---------------------------------------------------------------- A.13
     k.h2("What the work cost to produce")
 
-    ra = k.J("router_ablation_stem.json")
+    ra = k.J("router_ablation_stem_e4.json", "router_ablation_stem.json")
     ec = k.J("supp_encoder_cost_PAPER.json")
 
     rows = [["item", "cost", "source"],

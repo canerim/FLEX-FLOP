@@ -107,7 +107,8 @@ def content(k):
     cm = k.J("ceiling_measured.json")
     ec = k.J("supp_encoder_cost_PAPER.json")
     sig = k.J("signalled_RECIPE512_ctc53.json")
-    hyb = k.J("hybrid_RECIPE512_b01_fixed.json")
+    hyb = k.J("hybrid_RECIPE512_b01_e4head.json",
+                "hybrid_RECIPE512_b01_fixed.json")
 
     cfg = td["config"]
     K = cfg["num_exits"]

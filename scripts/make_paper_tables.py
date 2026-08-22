@@ -687,6 +687,23 @@ if trows:
         mac("HeldNOver", str(sum(1 for v in dbs.values()
                                  if v > bh["budget_db"] + 5e-4)))
         mac("HeldNHeld", str(len(held)))
+        # The direction reversed at epoch 4. On the earlier checkpoint a beta
+        # fitted to 512px photographs overshot the budget on video; on this one
+        # it undershoots at every rate, which is the safe direction and a
+        # different claim, so the quantities the prose needs are different too.
+        und = {q: bh["budget_db"] - dbs[q] for q in held
+               if dbs[q] < bh["budget_db"] - 5e-4}
+        mac("HeldNUnder", str(len(und)))
+        if und:
+            mac("HeldUnderMax", f"{max(und.values()):.3f}")
+            mac("HeldUnderMaxQp", str(max(und, key=und.get)))
+        gaps = {q: hby[q]["test_saving_pct_measured"]
+                - hby[q]["heldout_saving_pct_measured"] for q in held}
+        if gaps:
+            mac("HeldGiveUpMax", f"{max(gaps.values()):.1f}")
+            mac("HeldGiveUpMaxQp", str(max(gaps, key=gaps.get)))
+            mac("HeldGiveUpMin", f"{min(gaps.values()):.1f}")
+            mac("HeldGiveUpMinQp", str(min(gaps, key=gaps.get)))
         tcs = {q: hby[q].get("transfer_cost_pts") for q in held
                if hby[q].get("transfer_cost_pts") is not None}
         if tcs:
@@ -714,12 +731,33 @@ if trows:
         mac("HeldFloorCalHigh", f"{calf[hqs[-1]]:.3f}")
         mac("HeldFloorTestHigh", f"{hby[hqs[-1]]['floor_db']:.3f}")
     nob = [q for q in hqs if q not in held]
+    mac("HeldNNoBeta", str(len(nob)))
     if nob:
-        mac("HeldNNoBeta", str(len(nob)))
         mac("HeldNoBetaQp", str(nob[-1]))
         if calf.get(nob[-1]) is not None:
             mac("HeldNoBetaFloor", f"{calf[nob[-1]]:.3f}")
         mac("HeldNoBetaForgone", f"{hby[nob[-1]]['test_saving_pct_measured']:.1f}")
+
+# ---------------------------------------------------------------- exactness
+print("halo exactness")
+he, _ = pick("halo_exactness.json")
+if he:
+    w_ = he["worst"]
+    def _e(x):
+        return "0" if x == 0 else f"{x:.2e}".replace("e-0", "e-")
+    mac("HaloFilterOn", _e(w_["halo exchange, filter on"]))
+    mac("HaloFilterOff", _e(w_["halo exchange, filter off"]))
+    mac("HaloPadding", _e(w_["replicate padding, filter off"]))
+    mac("HaloNFrames", str(he["n_frames"]))
+    # main.tex sets the same three numbers in a table, in maths.
+    def _m(x):
+        if x == 0:
+            return r"\mathbf{0}"
+        t = f"{x:.2e}".split("e")
+        return f"{t[0]}\\times10^{{{int(t[1])}}}"
+    mac("HaloFilterOnMath", _m(w_["halo exchange, filter on"]))
+    mac("HaloFilterOffMath", _m(w_["halo exchange, filter off"]))
+    mac("HaloPaddingMath", _m(w_["replicate padding, filter off"]))
 
 # ------------------------------------------------------------------ hybrid C
 # The sweep is arithmetic-model only: no hook count was taken for it. That is
@@ -727,7 +765,8 @@ if trows:
 # hook-counted -- the same offset the reporting conventions describe. The
 # macros below let the paper say so instead of claiming the ends agree exactly.
 print("hybrid C")
-hy, _ = pick("hybrid_RECIPE512_b01_fixed.json", "hybrid_RECIPE512_b01.json")
+hy, _ = pick("hybrid_RECIPE512_b01_e4head.json",
+             "hybrid_RECIPE512_b01_fixed.json", "hybrid_RECIPE512_b01.json")
 if hy:
     rows_ = [r for r in hy["rows"] if r.get("budget_reachable")]
     qs = [q for q in QPS if any(r["qp"] == q for r in rows_)]
@@ -872,6 +911,13 @@ if mt:
                  None)
     if cross:
         mac("TransferCrossDb", f"{cross['transfer_db']:.3f}")
+    # The reverse direction, which the prose carried as two typed numbers
+    # beside these macros and which went stale with the checkpoint.
+    back = next((r for r in rr_ if r.get("from") == 63 and r.get("to") == 0),
+                None)
+    if back:
+        mac("TransferBackDb", f"{back['transfer_db']:.3f}")
+        mac("TransferBackSaving", f"{back['transfer_saving']:.1f}")
 
 # --------------------------------------------------------------- coupling
 print("coupling")
@@ -996,12 +1042,17 @@ if rt:
     mac("RetrainLossQp", str(min(ds, key=lambda q: ds[q])))
 
 # what a better predictor does to the regret distribution
-hv3, _ = pick("hybrid_v3_b01.json")
-if hy and hv3:
+# The claim is about the head, so both sides are measured on the pinned
+# weights and differ only in which head C is built on: the pre-fix head in
+# _fixed, the post-fix head in _pin. `hy` is not the comparison partner any
+# more -- it now reports the head fitted to the pin, which is a third head.
+hv3, _ = pick("hybrid_v3_b01_pin.json", "hybrid_v3_b01.json")
+hy0, _ = pick("hybrid_RECIPE512_b01_fixed.json")
+if hy0 and hv3:
     def _g(d):
         return {r["qp"]: r["gini_regret"] for r in d["rows"]
                 if r.get("gini_regret") is not None}
-    G2, G3 = _g(hy), _g(hv3)
+    G2, G3 = _g(hy0), _g(hv3)
     common = [q for q in G2 if q in G3]
     if common:
         up = [q for q in common if G3[q] > G2[q]]

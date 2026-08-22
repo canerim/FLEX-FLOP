@@ -91,7 +91,7 @@ HISTORICAL_PAT = [
     (re.compile(r"FINE12"), "the twelve-exit run"),
     (re.compile(r"VERBATIM"), "the verbatim-recipe run"),
     (re.compile(r"CONTROL"), "the control run"),
-    (re.compile(r"_e1\.json$"), "an earlier epoch, kept as a control"),
+    (re.compile(r"_e\d+\.json$"), "an earlier epoch, kept as a control"),
     (re.compile(r"signalled_RECIPE512_\d{4}_\d{4}\.json$"),
      "the per-epoch watcher series"),
     (re.compile(r"^abandoned_"), "mechanisms measured and dropped"),

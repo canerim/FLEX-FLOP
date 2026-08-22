@@ -52,13 +52,14 @@ def _joint_head_file(k):
 
 
 def content(k):
-    A = k.J("router_ablation.json")
+    A = k.J("router_ablation_e4.json", "router_ablation.json")
     V = {x["label"]: x for x in A["variants"]}
     floor = V["stem"]["constant_best_agree"]
     # The per-variant records carry the training recipe and the wall-clock that
     # the merged file does not. Reading all six also puts them in the build's
     # provenance list, which is what the ablation table's note claims.
-    REC = {l: k.J(f"router_ablation_{l}.json") for l in VARIANT_ORDER}
+    REC = {l: k.J(f"router_ablation_{l}_e4.json", f"router_ablation_{l}.json")
+           for l in VARIANT_ORDER}
     RL = k.J("router_latency.json")
     ST = k.J("static_RECIPE512_b01.json")
     SAT = k.J("saturation_RECIPE512_ctc53.json")
@@ -759,34 +760,36 @@ def content(k):
            "from the test sequences.")
 
     k.par(
-        "At q0 the two agree, \\HeldBetaLow against \\BetaLow and "
-        "\\HeldSavingLow% against \\BLow%, which is the same measurement to "
-        "a hundredth of a point. At the rates in between the held-out "
-        "\u03b2 misses the budget on the high side: it delivers "
-        "\\HeldDbWorst dB at q\\HeldDbWorstQp where 0.1 dB was asked for, "
-        "and \\HeldNOver of the \\HeldNHeld rates it covers overshoot. "
-        "Distortion and saving move together, so those rows also report more "
-        "saving, and reading one column straight against the other would "
-        "credit the router with compute it bought using quality the budget "
-        "did not allow. The last column takes that back out: at equal "
-        "delivered quality the two allocations agree to within "
-        "\\HeldTransferAbsMax points. What moves between the two sets is the "
-        "decibel a given \u03b2 delivers, not the ordering it induces.")
+        "The held-out \u03b2 misses the budget on the low side, at every "
+        "rate: it delivers between \\HeldDbBest and \\HeldDbWorst dB where "
+        "0.1 dB was asked for, \\HeldNUnder of the \\HeldNHeld rates it "
+        "covers undershoot and \\HeldNOver overshoot. That is the safe "
+        "direction: a decoder holding this table never spends quality the "
+        "budget did not allow, it spends less than it was allowed to. "
+        "Distortion and saving move together, so those rows report less "
+        "saving, from \\HeldGiveUpMin points at q\\HeldGiveUpMinQp to "
+        "\\HeldGiveUpMax at q\\HeldGiveUpMaxQp. The last column shows what "
+        "is not lost: at equal delivered quality the two allocations agree to "
+        "within \\HeldTransferAbsMax points. What moves between the two sets "
+        "is the decibel a given \u03b2 delivers, not the ordering it "
+        "induces.")
 
     k.par(
-        "The highest rate fails harder than that, and the failure is the "
-        "calibration set rather than the router. On the calibration frames "
-        "the floor, the distortion tiling costs with every tile already at "
-        "the deepest exit, is \\HeldNoBetaFloor dB at q\\HeldNoBetaQp. "
-        "That is above the budget, so no allocation on that set meets 0.1 dB "
-        "and the bisection has nothing to return: the shipped table has a "
-        "hole where the highest rate should be, and a decoder holding it "
-        "falls back to the deepest allocation, which is our own full-depth "
-        "path and saves nothing. The test frames, whose floor at that rate is "
-        "\\HeldFloorTestHigh dB, would have supported "
-        "\\HeldNoBetaForgone points. A budget written as an absolute decibel "
-        "sits a different distance above the floor on 512 px photographs than "
-        "on 1080p video, and at the highest rate it sits below it. "
+        "The highest rate is where this used to fail outright. On the "
+        "calibration frames the floor, the distortion tiling costs with every "
+        "tile already at the deepest exit, is \\HeldFloorCalHigh dB there "
+        "against \\HeldFloorTestHigh dB on the test frames, and the gap runs "
+        "\\HeldFloorGapMin to \\HeldFloorGapMax dB across the ladder. On an "
+        "earlier checkpoint that calibration floor sat above the budget: no "
+        "allocation on 512 px photographs met 0.1 dB at the highest rate, the "
+        "shipped table had a hole where that rate should be, and a decoder "
+        "holding it fell back to the deepest allocation, which is our own "
+        "full-depth path and saves nothing. Four epochs of training pulled "
+        "the floor below the budget and the hole closed: \\HeldNNoBeta of "
+        "the \\HeldNRates rates are missing from the table now. The gap "
+        "itself is what remains, and it is what makes the transfer "
+        "undershoot. A budget written as an absolute decibel sits a different "
+        "distance above the floor on 512 px photographs than on 1080p video. "
         "Calibrating on frames whose tiling penalty matches the ones the "
         "decoder will meet is the fix, and for a video decoder that means "
         "calibrating on video.")

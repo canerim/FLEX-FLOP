@@ -64,18 +64,26 @@ for q, mk in zip(qps, ("o", "s", "^")):
     b.plot(xs, ys, mk, ms=5, ls="none", label=f"qp {q}",
            color={0: ns.BLUE, 32: ns.ORANGE, 63: ns.VERM}[q])
 r0 = rows[0]
+# Classes that share a tile count land on the same vertical, so their labels
+# have to be fanned out. The offsets used to be a hand-written table keyed by
+# class name, tuned to where the points sat on an earlier checkpoint; when the
+# savings moved, two of them collided again. Computed from the data instead:
+# within a group, labels stack downwards in the order of their savings.
+_groups = {}
+for c in ORDER:
+    if c in r0["per_class"]:
+        _groups.setdefault(r0["per_class"][c]["tiles"], []).append(c)
+_dys = {}
+for _x, _cs in _groups.items():
+    _cs.sort(key=lambda c: -r0["per_class"][c]["saving"])
+    for _i, _c in enumerate(_cs):
+        _dys[_c] = 7 - _i * 13
 for c in ORDER:
     if c in r0["per_class"]:
         v = r0["per_class"][c]
-        # Three classes share 40 tiles, so their labels landed on top of one
-        # another at the right edge. Fan them out vertically by the order they
-        # appear, which is also the order of their savings.
-        # Offsets in points, so they have to grow with the type: tuned at
-        # 6 pt they overlapped again once the figure was set for the column.
-        _dy = {"UVG": -13, "HEVC_B": -2}.get(c, 7)
         b.annotate(c.replace("HEVC_", "").replace("MCL-JCV", "MCL"),
                    (v["tiles"], v["saving"]), fontsize=ns.fs(6), color=ns.INK2,
-                   textcoords="offset points", xytext=(4, _dy))
+                   textcoords="offset points", xytext=(4, _dys[c]))
 b.set_xscale("log"); b.set_xticks([2, 8, 15, 40])
 b.get_xaxis().set_major_formatter(matplotlib.ticker.ScalarFormatter())
 b.set_xlabel("tiles per frame"); b.set_ylabel("MACs saved (%)")

@@ -69,12 +69,12 @@ Tile size is the other half of what tiling costs, and it is free in arithmetic: 
 \item \textbf{Colour.} Sources are YUV 4:2:0, 8 bit, converted to 4:4:4, divided by 255 and shifted by $-$0.5 for the network. PSNR is the released codec's own metric, (6$\cdot$Y + U + V)/8, computed after converting the reconstruction back to 4:2:0 on the 0 to 255 scale. Measuring in 4:4:4 would compare against a chroma upsample of the source rather than the source, and would report a chroma PSNR no published DCVC-UF number could be compared with.
 \item \textbf{Padding.} Frames are padded by replication, bottom and right only, to a whole number of tiles; results/tile\_definition.json records the site as the RGB frame before the encoder and the mode as "replicate, bottom and right only: F.pad(x, (0, pw, 0, ph))". The stock codec aligns to 16, which is enough for the transform and not for a tile grid. Rate is charged on the true pixel count and PSNR computed after cropping back, so padding can cost and cannot flatter, and it does cost: a tile containing replicated rows gives up about twice the quality of one that does not.
 \item \textbf{Decibels.} The main paper's protocol box fixes the convention; what it does not say is that pooling all tiles into one mean squared error first, which is the other live convention, moves the answer by about a third of a 0.1 dB budget. Section E measures that gap. No table here mixes the two and every table says which it is on.
-\item \textbf{A second metric.} MS-SSIM is reported beside PSNR at the operating point, computed as Wang et al. 2003, 5 scales, 11-tap Gaussian sigma 1.5, valid region, luma plane in 4:2:0 on 0..255. The implementation is self-checked at start-up: identical inputs score 1.000000 and a 3$\times$3 box blur scores 0.7797, both recorded in results/supp\_opquality\_PAPER.json.
+\item \textbf{A second metric.} MS-SSIM is reported beside PSNR at the operating point, computed as Wang et al. 2003, 5 scales, 11-tap Gaussian sigma 1.5, valid region, luma plane in 4:2:0 on 0..255. The implementation is self-checked at start-up: identical inputs score 1.000000 and a 3$\times$3 box blur scores 0.7804, both recorded in results/supp\_opquality\_PAPER.json.
 \item \textbf{The map is billed.} The exit map is entropy coded from a per-frame histogram and its cost added to the rate before any saving is computed: 64 to 91 bits per frame at the 0.1 dB budget, at most 8.92e-05 bpp. Every row records map\_bits and the bpp it added.
 \item \textbf{The reference.} The released decoder re-expressed in the same ladder and selected by K, so a K = 12 run cannot be quoted against the K = 6 remap.
 \end{itemize}
 
-{\small The padding figure and the second metric are both from results/supp\_opquality\_PAPER.json on the pinned checkpoint, 53 sequences at the 0.1 dB operating point: mean per-tile penalty 0.260 dB over the 547 tiles containing replicated rows against 0.121 dB over the 1,218 that do not, at q0. The map-bit range is from results/signalled\_RECIPE512\_ctc53.json, field map\_bits.}
+{\small The padding figure and the second metric are both from results/supp\_opquality\_PAPER.json on the pinned checkpoint, 53 sequences at the 0.1 dB operating point: mean per-tile penalty 0.218 dB over the 547 tiles containing replicated rows against 0.113 dB over the 1,218 that do not, at q0. The map-bit range is from results/signalled\_RECIPE512\_ctc53.json, field map\_bits.}
 
 Two limits belong beside that list. Sweeping a multiplier reaches only the lower convex hull of the achievable set [26, 27], so a budget falling in a gap of the hull is met at the nearest reachable point; every row carries a reachability flag and a floor, and rows whose floor already exceeds the budget are reported as unreachable rather than dropped. And 0.1 dB is a reporting convention, not a perceptual threshold. Subjective work measures the smallest noticeable change in quantisation parameter or in a video quality metric, not in tenths of a decibel of PSNR, so nothing published licenses a claim that 0.1 dB is invisible; 0.3 dB and 0.5 dB are reported beside it so that the choice carries no weight.
 
@@ -339,12 +339,12 @@ hybrid\_raterank\_b01 & rate rank, second run & pinned, e4 & 53$\times$1 \\
 hybrid\_v3\_b01 & rate rank, second run & R512/eval & 53$\times$1 \\
 latency\_RECIPE512\_sorted & latency & R512/eval & - \\
 router\_latency & operating range & R512/eval & - \\
-adapter\_ablation & adapter ablation & pinned & 16 fr \\
-combined\_RECIPE512\_b01 & blend & pinned & 53$\times$1 \\
+adapter\_ablation & adapter ablation & pinned, e4 & 16 fr \\
+combined\_RECIPE512\_b01 & blend & pinned, e4 & 53$\times$1 \\
 hybrid\_RECIPE512\_b03\_fixed & macros only & pinned, e4 & 53$\times$1 \\
 hybrid\_lorenz\_b01 & macros only & R512/eval & 53$\times$1 \\
-coupling\_ablation & macros only & pinned & 16 fr \\
-map\_transfer & macros only & R512/eval & - \\
+coupling\_ablation & macros only & pinned, e4 & 16 fr \\
+map\_transfer & macros only & pinned, e4 & - \\
 band\_collapse & macros only & \emph{none} & - \\
 band\_collapse\_BEST & macros only & \emph{none} & - \\
 router\_retrain\_compare & macros only & \emph{none} & - \\
@@ -358,7 +358,7 @@ bdrate & BD-rate & \emph{none} & - \\
 check\_paper & claim check & \emph{none} & - \\
 \bottomrule
 \end{tabular}}
-\caption{Provenance of every generated table in the main paper. These are the 31 results files scripts/make\_paper\_tables.py reads, and the checkpoint column is read from each file at build time rather than typed. Take from it that 15 of the 31 are on the pinned checkpoint and the rest are not, so a reader comparing two rows of two different tables should check this column first. R512 abbreviates the run RECIPE512, "eval" is a per-epoch file the watcher overwrites in place, and "none" means the file records no checkpoint field.}
+\caption{Provenance of every generated table in the main paper. These are the 31 results files scripts/make\_paper\_tables.py reads, and the checkpoint column is read from each file at build time rather than typed. Take from it that 16 of the 31 are on the pinned checkpoint and the rest are not, so a reader comparing two rows of two different tables should check this column first. R512 abbreviates the run RECIPE512, "eval" is a per-epoch file the watcher overwrites in place, and "none" means the file records no checkpoint field.}
 \end{table}
 
 The pinned group of Table 10 carries the headline saving, the operating range, the per-class breakdown, the static controls and both routed configurations, so the paper's central claim rests on one epoch of one run measured consistently. Section H states what the rest of the column costs in reproducibility.
@@ -374,14 +374,14 @@ No seed is set anywhere in the decoder's trainer. Four things vary between two r
 \toprule
 quality index & mean & sd & min & median & max & worst sequence \\
 \midrule
-q0 & 32.70 & 7.51 & 6.04 & 35.89 & 39.12 & BQSquare \\
-q16 & 28.81 & 10.60 & -0.95 & 31.67 & 39.12 & BQSquare \\
-q32 & 24.58 & 12.04 & -0.95 & 26.10 & 39.12 & PartyScene \\
-q48 & 22.40 & 11.75 & -0.95 & 23.54 & 39.12 & BlowingBubbles \\
-q63 & 20.00 & 11.13 & -0.95 & 20.39 & 39.12 & RaceHorses \\
+q0 & 36.83 & 3.71 & 24.22 & 38.75 & 39.12 & BQSquare \\
+q16 & 33.14 & 8.15 & -0.95 & 36.14 & 39.12 & BQSquare \\
+q32 & 29.52 & 10.20 & -0.95 & 32.63 & 39.12 & BQSquare \\
+q48 & 27.85 & 10.70 & -0.95 & 31.09 & 39.12 & BlowingBubbles \\
+q63 & 26.69 & 10.77 & -0.95 & 29.87 & 39.12 & BQSquare \\
 \bottomrule
 \end{tabular}}
-\caption{The interval this work can honestly report: saving in percent against the released decoder at the 0.1 dB budget, across the \NumSeq test sequences, on the pinned checkpoint. Take from it that the spread is content and not noise. It widens with rate, from a standard deviation of 7.5 points at q0 to 11.1 at q63, and the minimum turns negative at the high rates because a sequence whose tiles all stay at the deepest exit costs about 1\% more than the released decoder rather than less. This measures the test set, not the training draw, and is not a substitute for the run-to-run interval that does not exist.}
+\caption{The interval this work can honestly report: saving in percent against the released decoder at the 0.1 dB budget, across the \NumSeq test sequences, on the pinned checkpoint. Take from it that the spread is content and not noise. It widens with rate, from a standard deviation of 3.7 points at q0 to 10.8 at q63, and the minimum turns negative at the high rates because a sequence whose tiles all stay at the deepest exit costs about 1\% more than the released decoder rather than less. This measures the test set, not the training draw, and is not a substitute for the run-to-run interval that does not exist.}
 \end{table}
 
 {\small Source: results/supp\_per\_sequence\_PAPER\_b010.json, the rows\_vs\_release block, computed from results/supp\_paper\_curve\_PAPER.json on runs/RECIPE512/ckpt\_PAPER.pth.tar. The file carries the same spread in our own deepest-exit denominator as well; the two differ by more than rounding and are never mixed.}
@@ -393,19 +393,19 @@ q63 & 20.00 & 11.13 & -0.95 & 20.39 & 39.12 & RaceHorses \\
 \toprule
 quality index & path 1 & path 2 & gap \\
 \midrule
-q0 & 34.28 & 31.59 & 2.69 \\
-q16 & 29.35 & 25.83 & 3.53 \\
-q32 & 23.15 & 20.18 & 2.97 \\
-q48 & 19.02 & 16.74 & 2.28 \\
-q63 & 14.74 & 13.30 & 1.44 \\
+q0 & 36.08 & 33.68 & 2.41 \\
+q16 & 31.19 & 28.40 & 2.79 \\
+q32 & 24.80 & 22.28 & 2.52 \\
+q48 & 19.38 & 17.44 & 1.94 \\
+q63 & 11.66 & 11.48 & 0.18 \\
 \bottomrule
 \end{tabular}}
-\caption{Two implementations of the same quantity do not agree. Saving in percent at the 0.1 dB budget, computed by the curve-sweeping path and by the signalling path, which differ in how they pool distortion across tiles and frames. Take from it a floor on protocol sensitivity: the gap reaches 3.53 points, larger than several of the differences the paper draws conclusions from, so numbers from the two paths are never mixed inside one table.}
+\caption{Two implementations of the same quantity do not agree. Saving in percent at the 0.1 dB budget, computed by the curve-sweeping path and by the signalling path, which differ in how they pool distortion across tiles and frames. Take from it a floor on protocol sensitivity: the gap reaches 2.79 points, larger than several of the differences the paper draws conclusions from, so numbers from the two paths are never mixed inside one table.}
 \end{table}
 
 {\small Source: results/crosscheck\_paths.json. The file records no checkpoint field.}
 
-Evaluation itself is deterministic once a checkpoint is fixed: the sequence list, the leading frames and the tile grid are all fixed and no crop is random. scripts/check\_paper.py re-reads \NumClaims numerical claims out of the paper's prose and checks each against the file it is supposed to come from. As recorded in results/check\_paper.json, 79 of them pass. One does not: "rate-rank: best margin (pts)", which is listed among the limitations of section H rather than presented as passing.
+Evaluation itself is deterministic once a checkpoint is fixed: the sequence list, the leading frames and the tile grid are all fixed and no crop is random. scripts/check\_paper.py re-reads \NumClaims numerical claims out of the paper's prose and checks each against the file it is supposed to come from. As recorded in results/check\_paper.json, 80 of them pass. One does not: "hybrid: rho=0 reproduces B (max |diff|)", which is listed among the limitations of section H rather than presented as passing.
 
 \subsection{Data, code and provenance}
 

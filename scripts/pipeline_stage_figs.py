@@ -60,7 +60,7 @@ def seam_fig(net, cfg, f, dev):
 
     a0 = bare(fig.add_subplot(gs[0, 0]))
     im = a0.imshow(g, cmap="viridis", vmin=0, vmax=max(1.0, g.max()))
-    a0.set_title(f"gate G, {P}×{P}", fontsize=ns.fs(6), color=ns.INK2, loc="left",
+    a0.set_title(f"gate G\n{P}×{P}", fontsize=ns.fs(6), color=ns.INK2, loc="left",
                  pad=3)
     ns.panel(a0, "a")
     cb = fig.colorbar(im, ax=a0, fraction=0.046, pad=0.03)
@@ -78,7 +78,7 @@ def seam_fig(net, cfg, f, dev):
 
     a2 = bare(fig.add_subplot(gs[0, 2]))
     a2.imshow(corr, cmap="inferno")
-    a2.set_title("what it actually adds, on a real frame", fontsize=ns.fs(6),
+    a2.set_title("what it actually adds,\non a real frame", fontsize=ns.fs(6),
                  color=ns.INK2, loc="left", pad=3)
     ns.panel(a2, "c")
 
@@ -111,6 +111,7 @@ def seam_fig(net, cfg, f, dev):
     import json as _json
     (ROOT / "results/seam_gate.json").write_text(_json.dumps({
         "ckpt": str(getattr(net, "_ckpt_path", "")),
+        "epoch": int(getattr(net, "_ckpt_epoch", -1)),
         "gate_min": float(g.min()), "gate_max": float(g.max()),
         "gate_mean": float(g.mean()),
     }, indent=2))
@@ -183,6 +184,8 @@ def main(argv):
     cfg = FlexUFConfig(**ck["config"])
     net = FlexUFIntra(cfg).to(a.device).eval()
     load_flexuf_state(net, ck)
+    net._ckpt_path = a.ckpt
+    net._ckpt_epoch = int(ck.get("epoch", -1))
 
     seqs, _ = C.discover([])
     s_ = ([q for q in seqs if a.seq in q["name"]] or seqs)[0]

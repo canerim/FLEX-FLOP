@@ -126,14 +126,14 @@ A set mean is not what any single clip receives. One multiplier prices compute f
 \toprule
 Rate & n & Mean & SD & Min & p25 & Median & p75 & Max \\
 \midrule
-q0 & 53 & 32.7 & 7.5 & 6.0 & 28.8 & 35.9 & 38.8 & 39.1 \\
-q16 & 53 & 28.8 & 10.6 & -1.0 & 23.6 & 31.7 & 37.6 & 39.1 \\
-q32 & 53 & 24.6 & 12.0 & -1.0 & 18.2 & 26.1 & 34.3 & 39.1 \\
-q48 & 53 & 22.4 & 11.7 & -1.0 & 13.8 & 23.5 & 31.4 & 39.1 \\
-q63 & 53 & 20.0 & 11.1 & -1.0 & 12.7 & 20.4 & 27.7 & 39.1 \\
+q0 & 53 & 36.8 & 3.7 & 24.2 & 35.8 & 38.8 & 39.1 & 39.1 \\
+q16 & 53 & 33.1 & 8.1 & -1.0 & 30.4 & 36.1 & 38.8 & 39.1 \\
+q32 & 53 & 29.5 & 10.2 & -1.0 & 26.1 & 32.6 & 37.6 & 39.1 \\
+q48 & 53 & 27.9 & 10.7 & -1.0 & 23.2 & 31.1 & 36.5 & 39.1 \\
+q63 & 53 & 26.7 & 10.8 & -1.0 & 22.6 & 29.9 & 34.3 & 39.1 \\
 \bottomrule
 \end{tabular}}
-\caption{Compute saved per sequence at the 0.1 dB budget: the distribution behind the mean, over all \NumSeq sequences. The interquartile range widens from 9.9 points at q0 to 15.0 at q63, and the gap between best and worst sequence widens from 33.1 to 40.1. The minimum is negative at four of the five rates, because a sequence whose tiles all run to full depth costs 0.95\% more than the released decoder: our deepest exit is the more expensive of the two. Counting over rates as well as sequences, 33 of the 265 pairs save less than a tenth of a decode at this budget.}
+\caption{Compute saved per sequence at the 0.1 dB budget: the distribution behind the mean, over all \NumSeq sequences. The interquartile range widens from 9.9 points at q0 to 15.0 at q63, and the gap between best and worst sequence widens from 33.1 to 40.1. The minimum is negative at four of the five rates, because a sequence whose tiles all run to full depth costs 0.95\% more than the released decoder: our deepest exit is the more expensive of the two. Counting over rates as well as sequences, 15 of the 265 pairs save less than a tenth of a decode at this budget.}
 \end{table}
 
 {\small results/supp\_per\_sequence\_PAPER\_b010.json, on runs/RECIPE512/ckpt\_PAPER.pth.tar, read from its rows\_vs\_release block so that the denominator is the released decoder. Pooled convention, because the operating points come from results/supp\_paper\_curve\_PAPER.json.}
@@ -145,14 +145,14 @@ q63 & 53 & 20.0 & 11.1 & -1.0 & 12.7 & 20.4 & 27.7 & 39.1 \\
 \toprule
 Sequence & q0 & q63 & q63 dB \\
 \midrule
-RaceHorses\_832x480 & 18.6 & -1.0 & 0.094 \\
-BlowingBubbles\_416x240 & 18.6 & -1.0 & 0.075 \\
-BQSquare\_416x240 & 6.0 & -1.0 & 0.185 \\
-RaceHorses\_416x240 & 18.6 & -1.0 & 0.086 \\
-PartyScene\_832x480 & 16.9 & 2.5 & 0.110 \\
-BQMall\_832x480 & 26.5 & 5.7 & 0.107 \\
-videoSRC27 & 39.1 & 38.4 & 0.210 \\
-videoSRC29 & 39.1 & 39.1 & 0.194 \\
+BQSquare\_416x240 & 24.2 & -1.0 & 0.146 \\
+RaceHorses\_416x240 & 24.2 & -1.0 & 0.064 \\
+RaceHorses\_832x480 & 31.7 & 3.9 & 0.079 \\
+PartyScene\_832x480 & 27.9 & 5.7 & 0.098 \\
+BlowingBubbles\_416x240 & 31.7 & 6.0 & 0.072 \\
+BasketballDrill\_832x480 & 30.3 & 7.4 & 0.001 \\
+videoSRC27 & 39.1 & 39.1 & 0.127 \\
+videoSRC29 & 39.1 & 39.1 & 0.126 \\
 \bottomrule
 \end{tabular}}
 \caption{The six hardest sequences at q63 and the two easiest, with their q0 value beside them and the decibel each actually received. All six of the hard ones are 832x480 or 416x240. The delivered decibel is not the budget on any of them: across the \NumSeq sequences at q63 it runs from 0.013 dB to 0.237 dB against a 0.1 dB target, so a single multiplier for the set means some clips overshoot the budget by more than a factor of two while others use an eighth of it.}
@@ -171,11 +171,11 @@ The whole mechanism is denominated in PSNR, and PSNR is known not to track visua
 \toprule
 Rate & bpp & PSNR & ours & lost & MS-SSIM & ours & lost \\
 \midrule
-q0 & 0.2313 & 32.536 & 32.435 & 0.1018 & 0.89934 & 0.89813 & 0.0520 \\
-q16 & 0.2671 & 35.335 & 35.235 & 0.1001 & 0.94904 & 0.94850 & 0.0455 \\
-q32 & 0.3352 & 38.135 & 38.035 & 0.1004 & 0.97565 & 0.97542 & 0.0399 \\
-q48 & 0.4561 & 40.777 & 40.674 & 0.1026 & 0.98790 & 0.98779 & 0.0376 \\
-q63 & 0.6717 & 43.155 & 43.037 & 0.1181 & 0.99419 & 0.99413 & 0.0464 \\
+q0 & 0.2314 & 32.536 & 32.435 & 0.1012 & 0.89934 & 0.89818 & 0.0498 \\
+q16 & 0.2671 & 35.335 & 35.235 & 0.1003 & 0.94904 & 0.94855 & 0.0417 \\
+q32 & 0.3351 & 38.135 & 38.036 & 0.0990 & 0.97565 & 0.97544 & 0.0375 \\
+q48 & 0.4560 & 40.777 & 40.675 & 0.1014 & 0.98790 & 0.98780 & 0.0334 \\
+q63 & 0.6716 & 43.155 & 43.044 & 0.1117 & 0.99419 & 0.99414 & 0.0390 \\
 \bottomrule
 \end{tabular}}
 \caption{PSNR and MS-SSIM at the 0.1 dB operating point, over the whole test set. MS-SSIM agrees with PSNR about the direction and is kinder about the size: expressed as -10log10(1 minus MS-SSIM), the loss is 0.052 dB at q0 against 0.102 dB of PSNR, and 0.046 against 0.118 at q63, so on this metric the budget costs about half what the decibel it is written in suggests. Each metric is given as the released decoder, ours, and what was lost, with the MS-SSIM loss expressed as -10log10(1 minus MS-SSIM) so that the two loss columns are in the same unit. The bpp column is the released bitstream, which early exiting does not change beyond the exit map.}
@@ -206,11 +206,11 @@ q63 & 0.6717 & 43.155 & 43.037 & 0.1181 & 0.99419 & 0.99413 & 0.0464 \\
 \toprule
 Rate & Tiles & Mean & Median & p95 & p99 & Max & Over 0.25 & Over 0.5 & Over 1.0 \\
 \midrule
-q0 & 1765 & 0.164 & 0.109 & 0.463 & 1.184 & 1.971 & 302 & 79 & 26 \\
-q16 & 1765 & 0.153 & 0.106 & 0.480 & 0.852 & 1.495 & 267 & 80 & 7 \\
-q32 & 1765 & 0.142 & 0.104 & 0.400 & 0.671 & 1.587 & 250 & 50 & 2 \\
-q48 & 1765 & 0.151 & 0.100 & 0.441 & 0.934 & 1.636 & 237 & 74 & 17 \\
-q63 & 1765 & 0.111 & 0.098 & 0.288 & 0.539 & 1.264 & 136 & 21 & 4 \\
+q0 & 1765 & 0.145 & 0.106 & 0.429 & 0.945 & 1.379 & 244 & 66 & 15 \\
+q16 & 1765 & 0.139 & 0.109 & 0.388 & 0.660 & 1.299 & 211 & 50 & 5 \\
+q32 & 1765 & 0.141 & 0.107 & 0.393 & 0.640 & 1.032 & 218 & 48 & 1 \\
+q48 & 1765 & 0.140 & 0.109 & 0.374 & 0.722 & 1.423 & 191 & 47 & 4 \\
+q63 & 1765 & 0.139 & 0.106 & 0.386 & 0.744 & 1.421 & 195 & 48 & 4 \\
 \bottomrule
 \end{tabular}}
 \caption{How the 0.1 dB is distributed over the 1765 tiles of one pass over the test set. The last three columns count tiles losing more than a quarter, a half and a whole decibel. The median tile is at or below the budget at every rate, and the tail is long: at q0, 302 tiles lose more than 0.25 dB, 79 lose more than 0.5 dB, and the worst loses 1.97 dB. A budget stated as a mean says nothing about the last three columns, which is why they are printed.}
@@ -237,18 +237,18 @@ Early exiting removes work and quantisation makes the remaining work cheaper, so
 \toprule
 Weights & Rate & e2 & e3 & e4 & e5 & Layers \\
 \midrule
-float32 & q0 & 0.172 & 0.083 & 0.052 & 0.027 & 0 \\
-float32 & q32 & 0.381 & 0.212 & 0.133 & 0.048 & 0 \\
-float32 & q63 & 0.890 & 0.545 & 0.344 & 0.108 & 0 \\
-int8 & q0 & 0.178 & 0.088 & 0.057 & 0.032 & 86 \\
-int8 & q32 & 0.407 & 0.237 & 0.159 & 0.072 & 86 \\
-int8 & q63 & 1.001 & 0.660 & 0.463 & 0.223 & 86 \\
-int6 & q0 & 0.300 & 0.206 & 0.166 & 0.135 & 86 \\
-int6 & q32 & 1.021 & 0.845 & 0.735 & 0.633 & 86 \\
-int6 & q63 & 2.830 & 2.568 & 2.407 & 2.183 & 86 \\
-int4 & q0 & 1.651 & 1.525 & 1.484 & 1.400 & 86 \\
-int4 & q32 & 4.228 & 4.026 & 4.008 & 3.892 & 86 \\
-int4 & q63 & 8.177 & 7.850 & 7.929 & 7.830 & 86 \\
+float32 & q0 & 0.132 & 0.058 & 0.039 & 0.021 & 0 \\
+float32 & q32 & 0.284 & 0.144 & 0.100 & 0.037 & 0 \\
+float32 & q63 & 0.650 & 0.371 & 0.265 & 0.085 & 0 \\
+int8 & q0 & 0.140 & 0.065 & 0.045 & 0.026 & 86 \\
+int8 & q32 & 0.315 & 0.171 & 0.129 & 0.062 & 86 \\
+int8 & q63 & 0.776 & 0.496 & 0.394 & 0.207 & 86 \\
+int6 & q0 & 0.297 & 0.217 & 0.206 & 0.169 & 86 \\
+int6 & q32 & 1.046 & 0.877 & 0.845 & 0.736 & 86 \\
+int6 & q63 & 2.794 & 2.535 & 2.506 & 2.287 & 86 \\
+int4 & q0 & 1.835 & 1.594 & 1.555 & 1.390 & 86 \\
+int4 & q32 & 4.390 & 4.120 & 4.138 & 3.907 & 86 \\
+int4 & q63 & 8.356 & 8.039 & 8.139 & 7.898 & 86 \\
 \bottomrule
 \end{tabular}}
 \caption{Quality given up against the released decoder with the decoder weights quantised, at four exits and three rates. The float32 rows are the ladder itself and are the baseline each integer row should be read against. At q0 int8 is nearly free, moving the deepest exit from 0.027 dB to 0.032 dB, so the two levers compose. At q63 they compete: the deepest exit moves from 0.108 dB to 0.223 dB, which is more than a whole 0.1 dB budget spent before any tile has exited early. Six-bit costs 0.13 dB at the deepest exit at q0 and 2.18 dB at q63, and four-bit is unusable at every rate. The last column is the number of layers quantised, the same 86 in every integer row.}
@@ -267,12 +267,12 @@ A budget is one sample of a curve. Video coding answers this for rate against qu
 \toprule
 Rate & BD-saving & BD-quality & BD-saving & BD-quality & Points \\
 \midrule
-q0 & n/a & 0.0544 & n/a & 0.0453 & 15 \\
-q16 & n/a & 0.0686 & n/a & 0.0576 & 14 \\
-q32 & n/a & 0.0861 & n/a & 0.0721 & 13 \\
-q48 & 31.1\% & 0.0981 & 32.8\% & 0.0816 & 13 \\
-q63 & 28.7\% & 0.1121 & 30.8\% & 0.0923 & 13 \\
-Mean where defined & 29.9\% & 0.1051 & 31.8\% & 0.0870 &  \\
+q0 & 33.2\% & 0.0372 & 34.9\% & 0.0330 & 15 \\
+q16 & 29.4\% & 0.0509 & 31.6\% & 0.0437 & 14 \\
+q32 & 24.8\% & 0.0652 & 27.7\% & 0.0544 & 13 \\
+q48 & 23.0\% & 0.0705 & 25.7\% & 0.0595 & 13 \\
+q63 & 20.9\% & 0.0758 & 24.0\% & 0.0636 & 12 \\
+Mean where defined & 26.3\% & 0.0599 & 28.8\% & 0.0508 &  \\
 \bottomrule
 \end{tabular}}
 \caption{BD-saving and BD-quality per rate under both decibel conventions: the first pair of columns is per frame and the second is pooled. BD-saving is defined at only two of the five rates, because at q0, q16 and q32 the frontier saturates below the upper limit of the interval and there is no curve left to integrate. The convention moves the answer by 1.9 points of BD-saving and 0.018 dB of BD-quality on identical allocations, and it moves it consistently, since per-frame averaging raises every floor and pooling does not. Points is the number of measured frontier points inside the interval.}
@@ -291,12 +291,12 @@ Two sensitivities sit around those numbers and are worth stating beside them. Th
 \toprule
 Budget & A BD-Rate & B BD-Rate & Difference & A saved & B saved \\
 \midrule
-0.1 dB & 1.032\% & 1.005\% & 0.027 pt & 28.3\% & 23.4\% \\
+0.1 dB & 1.032\% & 1.007\% & 0.025 pt & 28.3\% & 25.3\% \\
 0.3 dB & 2.339\% & 2.318\% & 0.020 pt & 39.1\% & 39.0\% \\
 0.5 dB & 2.339\% & 2.318\% & 0.020 pt & 39.1\% & 39.0\% \\
 \bottomrule
 \end{tabular}}
-\caption{BD-Rate cost of the two configurations: the rate a reader would have to spend to buy back the quality the compute saving costs, integrated over the five rate points, which is the number that makes this trade-off comparable with a published codec result. Configuration A signals the exit map in the bitstream and pays \MapBitsLo to \MapBitsHi bits a frame for it at the 0.1 dB budget, depending on the rate, configuration B infers it from what the decoder already holds and pays none. Their BD-Rate costs differ by at most 0.027 of a point, so the map is close to free. What A buys with it is compute: the gap in the last two columns is 4.9 points at the tight budget and 0.2 at the loose one, where both configurations are at the ceiling.}
+\caption{BD-Rate cost of the two configurations: the rate a reader would have to spend to buy back the quality the compute saving costs, integrated over the five rate points, which is the number that makes this trade-off comparable with a published codec result. Configuration A signals the exit map in the bitstream and pays \MapBitsLo to \MapBitsHi bits a frame for it at the 0.1 dB budget, depending on the rate, configuration B infers it from what the decoder already holds and pays none. Their BD-Rate costs differ by at most 0.025 of a point, so the map is close to free. What A buys with it is compute: the gap in the last two columns is 3.0 points at the tight budget and 0.2 at the loose one, where both configurations are at the ceiling.}
 \end{table}
 
 {\small results/bdrate.json, every row on runs/RECIPE512/ckpt\_PAPER.pth.tar, which its sources block records file by file.}
@@ -346,44 +346,44 @@ q63 & 0.5 & 1.000e+00 & 0.2880 & 39.1 & 38.3 & 48 \\
 \toprule
 Rate & Budget & lambda & dB pooled & dB per frame & Saved & e2/e3/e4/e5 \\
 \midrule
-q0 & 0.05 & 2.065e-05 & 0.0500 & 0.0610 & 23.2 & 36/27/20/17 \\
-q0 & 0.1 & 7.286e-05 & 0.0999 & 0.1171 & 34.9 & 78/16/5/2 \\
-q0 & 0.15 & 2.371e-04 & 0.1499 & 0.1686 & 38.8 & 98/2/0/0 \\
-q0 & 0.2 & n/a & 0.1597 & 0.1791 & 39.1 & 100/0/0/0 \\
-q0 & 0.25 & n/a & 0.1597 & 0.1791 & 39.1 & 100/0/0/0 \\
-q0 & 0.3 & n/a & 0.1597 & 0.1791 & 39.1 & 100/0/0/0 \\
-q0 & 0.5 & n/a & 0.1597 & 0.1791 & 39.1 & 100/0/0/0 \\
-q16 & 0.05 & 6.631e-06 & 0.0500 & 0.0594 & 16.6 & 24/20/20/35 \\
-q16 & 0.1 & 3.199e-05 & 0.1000 & 0.1179 & 31.9 & 69/15/10/6 \\
-q16 & 0.15 & 7.234e-05 & 0.1499 & 0.1673 & 36.9 & 88/9/2/1 \\
-q16 & 0.2 & 2.483e-04 & 0.1998 & 0.2167 & 39.1 & 100/0/0/0 \\
-q16 & 0.25 & n/a & 0.2022 & 0.2194 & 39.1 & 100/0/0/0 \\
-q16 & 0.3 & n/a & 0.2022 & 0.2194 & 39.1 & 100/0/0/0 \\
-q16 & 0.5 & n/a & 0.2022 & 0.2194 & 39.1 & 100/0/0/0 \\
-q32 & 0.05 & 9.305e-07 & 0.0500 & 0.0544 & 5.0 & 6/8/11/75 \\
-q32 & 0.1 & 1.398e-05 & 0.1000 & 0.1212 & 28.0 & 56/17/15/12 \\
-q32 & 0.15 & 2.862e-05 & 0.1500 & 0.1716 & 34.2 & 78/12/8/3 \\
-q32 & 0.2 & 5.497e-05 & 0.1999 & 0.2199 & 37.4 & 91/7/2/0 \\
-q32 & 0.25 & 1.445e-04 & 0.2498 & 0.2741 & 39.0 & 99/1/0/0 \\
-q32 & 0.3 & n/a & 0.2581 & 0.2819 & 39.1 & 100/0/0/0 \\
-q32 & 0.5 & n/a & 0.2581 & 0.2819 & 39.1 & 100/0/0/0 \\
-q48 & 0.05 & n/a & 0.0544 & 0.0599 & n/a & none \\
-q48 & 0.1 & 7.190e-06 & 0.1000 & 0.1204 & 25.5 & 49/15/22/14 \\
-q48 & 0.15 & 1.508e-05 & 0.1500 & 0.1728 & 32.3 & 71/12/11/5 \\
-q48 & 0.2 & 2.682e-05 & 0.1998 & 0.2228 & 36.0 & 85/8/6/1 \\
-q48 & 0.25 & 4.950e-05 & 0.2500 & 0.2768 & 38.1 & 95/4/1/0 \\
-q48 & 0.3 & 1.548e-04 & 0.2996 & 0.3322 & 39.1 & 100/0/0/0 \\
-q48 & 0.5 & n/a & 0.3005 & 0.3330 & 39.1 & 100/0/0/0 \\
-q63 & 0.05 & n/a & 0.0584 & 0.0659 & n/a & none \\
-q63 & 0.1 & 4.293e-06 & 0.1000 & 0.1225 & 22.6 & 38/18/28/16 \\
-q63 & 0.15 & 8.642e-06 & 0.1500 & 0.1757 & 30.2 & 63/14/16/6 \\
-q63 & 0.2 & 1.500e-05 & 0.1999 & 0.2274 & 34.4 & 79/10/9/3 \\
-q63 & 0.25 & 2.537e-05 & 0.2499 & 0.2709 & 36.9 & 90/5/5/1 \\
-q63 & 0.3 & 4.557e-05 & 0.2998 & 0.3333 & 38.4 & 96/3/1/0 \\
-q63 & 0.5 & n/a & 0.3534 & 0.3955 & 39.1 & 100/0/0/0 \\
+q0 & 0.05 & 2.742e-05 & 0.0500 & 0.0611 & 29.0 & 51/31/11/6 \\
+q0 & 0.1 & 1.077e-04 & 0.1000 & 0.1157 & 37.8 & 92/7/1/0 \\
+q0 & 0.15 & n/a & 0.1239 & 0.1391 & 39.1 & 100/0/0/0 \\
+q0 & 0.2 & n/a & 0.1239 & 0.1391 & 39.1 & 100/0/0/0 \\
+q0 & 0.25 & n/a & 0.1239 & 0.1391 & 39.1 & 100/0/0/0 \\
+q0 & 0.3 & n/a & 0.1239 & 0.1391 & 39.1 & 100/0/0/0 \\
+q0 & 0.5 & n/a & 0.1239 & 0.1391 & 39.1 & 100/0/0/0 \\
+q16 & 0.05 & 1.019e-05 & 0.0500 & 0.0605 & 24.3 & 40/28/15/17 \\
+q16 & 0.1 & 4.165e-05 & 0.0999 & 0.1148 & 35.4 & 80/15/3/2 \\
+q16 & 0.15 & 1.336e-04 & 0.1500 & 0.1646 & 38.9 & 98/2/0/0 \\
+q16 & 0.2 & n/a & 0.1585 & 0.1720 & 39.1 & 100/0/0/0 \\
+q16 & 0.25 & n/a & 0.1585 & 0.1720 & 39.1 & 100/0/0/0 \\
+q16 & 0.3 & n/a & 0.1585 & 0.1720 & 39.1 & 100/0/0/0 \\
+q16 & 0.5 & n/a & 0.1585 & 0.1720 & 39.1 & 100/0/0/0 \\
+q32 & 0.05 & 4.037e-06 & 0.0500 & 0.0608 & 18.6 & 25/26/21/28 \\
+q32 & 0.1 & 1.772e-05 & 0.1000 & 0.1157 & 32.5 & 69/18/8/4 \\
+q32 & 0.15 & 4.134e-05 & 0.1500 & 0.1647 & 37.2 & 89/9/2/0 \\
+q32 & 0.2 & 1.435e-04 & 0.1998 & 0.2152 & 39.1 & 100/0/0/0 \\
+q32 & 0.25 & n/a & 0.2019 & 0.2178 & 39.1 & 100/0/0/0 \\
+q32 & 0.3 & n/a & 0.2019 & 0.2178 & 39.1 & 100/0/0/0 \\
+q32 & 0.5 & n/a & 0.2019 & 0.2178 & 39.1 & 100/0/0/0 \\
+q48 & 0.05 & 1.884e-06 & 0.0500 & 0.0599 & 15.8 & 22/18/24/35 \\
+q48 & 0.1 & 9.772e-06 & 0.1000 & 0.1148 & 31.0 & 64/19/12/6 \\
+q48 & 0.15 & 2.126e-05 & 0.1500 & 0.1666 & 36.1 & 84/11/4/1 \\
+q48 & 0.2 & 5.103e-05 & 0.1999 & 0.2191 & 38.5 & 96/3/1/0 \\
+q48 & 0.25 & n/a & 0.2305 & 0.2526 & 39.1 & 100/0/0/0 \\
+q48 & 0.3 & n/a & 0.2305 & 0.2526 & 39.1 & 100/0/0/0 \\
+q48 & 0.5 & n/a & 0.2305 & 0.2526 & 39.1 & 100/0/0/0 \\
+q63 & 0.05 & 1.054e-06 & 0.0500 & 0.0598 & 13.7 & 16/18/25/40 \\
+q63 & 0.1 & 6.072e-06 & 0.1000 & 0.1154 & 29.7 & 58/21/15/6 \\
+q63 & 0.15 & 1.282e-05 & 0.1499 & 0.1658 & 35.1 & 80/12/6/2 \\
+q63 & 0.2 & 2.536e-05 & 0.1998 & 0.2180 & 37.8 & 93/6/2/0 \\
+q63 & 0.25 & 6.566e-05 & 0.2498 & 0.2784 & 39.0 & 99/1/0/0 \\
+q63 & 0.3 & n/a & 0.2613 & 0.2880 & 39.1 & 100/0/0/0 \\
+q63 & 0.5 & n/a & 0.2613 & 0.2880 & 39.1 & 100/0/0/0 \\
 \bottomrule
 \end{tabular}}
-\caption{The frontier itself: every operating point behind the per-class figure, at seven budgets and five rates, with the exit shares that produced each one. Both decibel conventions are printed for the same allocation, and they differ by 0.004 to 0.042 dB over the table and by 0.017 to 0.022 dB at the 0.1 dB budget, which is a fifth of that budget. A row reading n/a in the saving column is a budget below the floor at that rate, where no allocation meets the target. A row reading 100/0/0/0 is past saturation: the file stores neither a multiplier nor a histogram there, and the shares are filled in from what saturation means, every tile at the shallowest selectable exit.}
+\caption{The frontier itself: every operating point behind the per-class figure, at seven budgets and five rates, with the exit shares that produced each one. Both decibel conventions are printed for the same allocation, and they differ by 0.010 to 0.029 dB over the table and by 0.015 to 0.016 dB at the 0.1 dB budget, which is a fifth of that budget. A row reading n/a in the saving column is a budget below the floor at that rate, where no allocation meets the target. A row reading 100/0/0/0 is past saturation: the file stores neither a multiplier nor a histogram there, and the shares are filled in from what saturation means, every tile at the shallowest selectable exit.}
 \end{table}
 
 {\small results/supp\_paper\_curve\_PAPER.json, on runs/RECIPE512/ckpt\_PAPER.pth.tar. Saving is converted to the released-decoder denominator by charging the retained cost the price of our deepest exit, 1.0095 released decodes, which is \DeepestUniformCost at the precision the paper prints and is derived here from the ceiling in results/saturation\_RECIPE512\_ctc53.json and the saturated saving in this file. One caution about that denominator: this file bills the shared stem inside every tile's cost, while results/supp\_latency\_batch\_1920x1080.json bills it once per frame through flexuf/cost.py frame\_relative\_cost, and the two accountings differ by about a third of a point on an identical exit map at q0.}
@@ -399,24 +399,24 @@ The signalled configuration pays one extra decode per frame at the encoder to fi
 \toprule
 reuse & map found at & applied at & in place, dB & reused, dB & in place, saved \% & reused, saved \% \\
 \midrule
-frames & q0 frame 0 & frame 1 & 0.0999 & 0.1055 & 32.66 & 33.05 \\
-frames & q0 frame 0 & frame 2 & 0.0994 & 0.1031 & 32.91 & 33.05 \\
-frames & q0 frame 0 & frame 4 & 0.0994 & 0.1034 & 33.15 & 33.05 \\
-frames & q0 frame 0 & frame 8 & 0.0994 & 0.1052 & 33.00 & 33.05 \\
-frames & q32 frame 0 & frame 1 & 0.0968 & 0.0998 & 25.76 & 25.45 \\
-frames & q32 frame 0 & frame 2 & 0.0991 & 0.0976 & 27.02 & 25.45 \\
-frames & q32 frame 0 & frame 4 & 0.1000 & 0.0961 & 27.43 & 25.45 \\
-frames & q32 frame 0 & frame 8 & 0.0947 & 0.0966 & 26.17 & 25.45 \\
-frames & q63 frame 0 & frame 1 & 0.0934 & 0.0958 & 19.98 & 19.84 \\
-frames & q63 frame 0 & frame 2 & 0.0931 & 0.0971 & 19.65 & 19.84 \\
-frames & q63 frame 0 & frame 4 & 0.0958 & 0.0984 & 20.02 & 19.84 \\
-frames & q63 frame 0 & frame 8 & 0.0938 & 0.0982 & 19.74 & 19.84 \\
-rate & q0 & q32 & 0.0944 & 0.1425 & 25.45 & 33.05 \\
-rate & q0 & q63 & 0.0946 & 0.1899 & 19.84 & 33.05 \\
-rate & q32 & q0 & 0.0999 & 0.0911 & 33.05 & 25.45 \\
-rate & q32 & q63 & 0.0946 & 0.1298 & 19.84 & 25.45 \\
-rate & q63 & q0 & 0.0999 & 0.0746 & 33.05 & 19.84 \\
-rate & q63 & q32 & 0.0944 & 0.0907 & 25.45 & 19.84 \\
+frames & q0 frame 0 & frame 1 & 0.0998 & 0.1014 & 34.20 & 34.20 \\
+frames & q0 frame 0 & frame 2 & 0.0991 & 0.0994 & 34.40 & 34.20 \\
+frames & q0 frame 0 & frame 4 & 0.0991 & 0.1007 & 34.40 & 34.20 \\
+frames & q0 frame 0 & frame 8 & 0.0997 & 0.1024 & 34.52 & 34.20 \\
+frames & q32 frame 0 & frame 1 & 0.0976 & 0.1012 & 30.43 & 30.89 \\
+frames & q32 frame 0 & frame 2 & 0.0955 & 0.0992 & 30.66 & 30.89 \\
+frames & q32 frame 0 & frame 4 & 0.0957 & 0.0970 & 30.94 & 30.89 \\
+frames & q32 frame 0 & frame 8 & 0.0999 & 0.0976 & 31.76 & 30.89 \\
+frames & q63 frame 0 & frame 1 & 0.0905 & 0.0930 & 26.35 & 26.46 \\
+frames & q63 frame 0 & frame 2 & 0.0905 & 0.0933 & 26.24 & 26.46 \\
+frames & q63 frame 0 & frame 4 & 0.0916 & 0.0939 & 26.33 & 26.46 \\
+frames & q63 frame 0 & frame 8 & 0.0926 & 0.0934 & 26.71 & 26.46 \\
+rate & q0 & q32 & 0.0982 & 0.1276 & 30.89 & 34.20 \\
+rate & q0 & q63 & 0.0925 & 0.1586 & 26.46 & 34.20 \\
+rate & q32 & q0 & 0.0998 & 0.0947 & 34.20 & 30.89 \\
+rate & q32 & q63 & 0.0925 & 0.1228 & 26.46 & 30.89 \\
+rate & q63 & q0 & 0.0998 & 0.0824 & 34.20 & 26.46 \\
+rate & q63 & q32 & 0.0982 & 0.0874 & 30.89 & 26.46 \\
 \bottomrule
 \end{tabular}}
 \caption{\textbf{What a reused exit map delivers.} Each row applies a map found in one place to a decode somewhere else and reports what that decode actually delivered, beside the map recomputed in place. Read the two decibel columns first: a reused map is only usable if the decode it produces still meets the budget, and the saving column means nothing on a row where it does not.}

@@ -929,8 +929,14 @@ def content(k):
     k.h2("Anchor drift")
 
     A = {
+        # The run's own second row was a measurement of whatever ckpt_eval
+        # pointed at on the day, at an epoch it never recorded. The pin now
+        # sits at that same run's epoch 4 and is measured here at all five
+        # rates, so the row added nothing the first row does not say, and it
+        # could not be checked against the pin. The four rows that follow are
+        # different runs and stay: they are the controls this table is for.
         "RECIPE512, pinned": k.J("supp_anchor_PAPER.json"),
-        "RECIPE512, later": k.J("anchor_RECIPE512.json"),
+        "RECIPE512, epoch 0": k.J("anchor_RECIPE512_e0.json"),
         "BEST": k.J("anchor_BEST.json"),
         "BEST128": k.J("anchor_BEST128.json"),
         "FINE12": k.J("anchor_FINE12.json"),
@@ -960,7 +966,9 @@ def content(k):
            f"twelve-exit run, whose floor exceeds that budget outright at "
            f"the highest rate.")
     k.note("results/supp_anchor_PAPER.json on " + PINNED + "; "
-           "results/anchor_RECIPE512.json, results/anchor_BEST.json, "
+           "results/anchor_RECIPE512_e0.json is the same measurement on the "
+           "same frames and rates when the pin held epoch 0 of that run; "
+           "results/anchor_BEST.json, "
            "results/anchor_BEST128.json, results/anchor_FINE12.json and "
            "results/anchor_VERBATIM.json on the ckpt_eval or ckpt_step file "
            "of their runs, at the epoch each happened to be at, which none of "
@@ -968,23 +976,30 @@ def content(k):
            "because two of these are 40 frames and are not comparable with "
            "the \\NumSeq-frame rows at the fourth decimal.")
 
-    lat = A["RECIPE512, later"]
-    latm = {r["qp"]: abs(r["drift_db"]) for r in lat["rows"]}
+    e0 = A["RECIPE512, epoch 0"]
+    e0m = {r["qp"]: abs(r["drift_db"]) for r in e0["rows"]}
     pinm = {r["qp"]: abs(r["drift_db"]) for r in anc["rows"]}
+    both = [q for q in (0, 16, 32, 48, 63) if q in e0m and q in pinm]
+    fell = [q for q in both if pinm[q] < e0m[q]]
+    ratio = pinm[63] / pinm[0] if pinm[0] else float("nan")
     k.par(
-        f"Whether it grows with training is not settled by what is in "
-        f"results/. The two RECIPE512 rows are the pinned checkpoint and a "
-        f"later one on the same \\NumSeq frames, and at q63 they read "
-        f"{pinm[63]:.4f} and {latm[63]:.4f} dB, which is no movement at all; "
-        f"at q0 the later checkpoint is the closer of the two, at "
-        f"{latm[0]:.4f} against {pinm[0]:.4f}. Neither file records the epoch "
-        f"of the checkpoint it read, so the pair does not bracket a known "
-        f"amount of training. The measured direction is with rate rather than "
-        f"with time, sevenfold from q0 to q63 on the pinned checkpoint. The "
-        f"open problem is the size, not the trend: at q63 a third of the "
-        f"budget is spent before the allocation begins, and any move to a "
-        f"later checkpoint has to remeasure this and report it as its own "
-        f"row rather than assume it carries over.")
+        f"Whether it grows with training is now settled, on this run at "
+        f"least. The two RECIPE512 rows are four epochs apart on the same "
+        f"\\NumSeq frames and the same rates, and the drift falls at "
+        f"{len(fell)} of the {len(both)}: {e0m[0]:.4f} to {pinm[0]:.4f} dB at "
+        f"q0 and {e0m[63]:.4f} to {pinm[63]:.4f} at q63. The anchor term "
+        f"tightens its hold as the run goes on rather than losing it, which "
+        f"is the direction the term is there to produce and not one we had "
+        f"evidence for before. The direction with rate survives the move and "
+        f"steepens: the deepest exit sits {ratio:.0f} times further from the "
+        f"released decoder at q63 than at q0 on the reported weights, against "
+        f"{e0m[63] / e0m[0]:.0f} times four epochs earlier, because q0 "
+        f"improved by more than the rest. The open problem is the size at the "
+        f"top of the ladder, not the trend: at q63 "
+        f"{100 * pinm[63] / 0.1:.0f}% of a 0.1 dB budget is spent before the "
+        f"allocation begins, and a move to any later checkpoint has to "
+        f"remeasure this and report it as its own row rather than assume it "
+        f"carries over.")
 
     k.par(
         "There is a structural fix and it was measured and rejected, which is "

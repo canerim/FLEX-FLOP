@@ -23,6 +23,16 @@ import matplotlib.pyplot as plt                                 # noqa: E402
 
 RES = R / "results"
 OUT = R / "paper" / "figures"
+# The paper reads paper/figures and the supplement prefers docs/figures. This
+# file wrote one of them, so the freshness check saw a supplement figure that
+# never moved.
+_OUT2 = R / "docs" / "figures"
+
+
+def _both(fig, name, **kw):
+    for _d in (OUT, _OUT2):
+        _d.mkdir(parents=True, exist_ok=True)
+        fig.savefig(_d / name, **kw)
 
 SOURCES = [
     "router_ablation.json",
@@ -38,7 +48,10 @@ SHORT = {"stem": "stem", "all": "all five", "latent": "latent",
          "scales": "scales", "bits": "bits", "qp": "q only"}
 
 
-def J(name):
+def J(*names):
+    """The first of these that exists, so a figure prefers the sweep measured
+    on the pinned checkpoint and still draws before that sweep has run."""
+    name = next((n for n in names if (RES / n).exists()), names[0])
     return json.loads((RES / name).read_text())
 
 
@@ -64,7 +77,7 @@ def sv(d, qp):
 
 
 def inputs_figure():
-    A = J("router_ablation.json")
+    A = J("router_ablation_e4.json", "router_ablation.json")
     V = {x["label"]: x for x in A["variants"]}
     floor = V["stem"]["constant_best_agree"]
 
@@ -111,7 +124,7 @@ def inputs_figure():
     ns.panel(b, "b", dx=-0.30)
 
     OUT.mkdir(parents=True, exist_ok=True)
-    fig.savefig(OUT / "supp_router_inputs.png", dpi=400, bbox_inches="tight")
+    _both(fig, "supp_router_inputs.png", dpi=400, bbox_inches="tight")
     plt.close(fig)
     print("  -> paper/figures/supp_router_inputs.png")
 
@@ -147,7 +160,7 @@ def frontier_figure():
     axes[0].legend(ncol=2, fontsize=6, loc="lower left", handlelength=1.3,
                    columnspacing=0.8, handletextpad=0.4)
     OUT.mkdir(parents=True, exist_ok=True)
-    fig.savefig(OUT / "supp_router_frontier.png", dpi=400, bbox_inches="tight")
+    _both(fig, "supp_router_frontier.png", dpi=400, bbox_inches="tight")
     plt.close(fig)
     print("  -> paper/figures/supp_router_frontier.png")
 

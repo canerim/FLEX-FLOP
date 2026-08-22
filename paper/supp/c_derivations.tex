@@ -19,12 +19,12 @@ P3 & blind sets are a hull & A.3 & static\_RECIPE512\_b01 & PAPER \\
 T4 & a Minkowski average & A.3 & not measured & - \\
 P5 & reaches only the hull & A.3 & hull\_gap & eval \\
 P6 & savings on a 1/N lattice & A.3 & theory\_checks & eval \\
-P7 & the floor & A.4 & saturation\_RECIPE512 & PAPER \\
+P7 & the floor & A.4 & saturation\_RECIPE512\_ctc53 & PAPER \\
 P8 & the saturation price & A.4 & verify\_theory & eval \\
 P9 & the ceiling & A.4 & per\_class\_RECIPE512 & PAPER \\
 T10 & adaptivity gain & A.5 & theory\_check & BEST \\
 P11 & plotted log-convexity & A.6 & logconvexity & none \\
-P12 & Lorenz bound & A.7 & hybrid\_RECIPE512\_b01 & PAPER \\
+P12 & Lorenz bound & A.7 & hybrid\_RECIPE512\_b01\_e4head & PAPER \\
 P13 & rank-1 threshold rule & A.8 & raterank\_RECIPE512\_b01 & PAPER \\
 P14 & rank-1 uses hull exits & A.8 & raterank\_RECIPE512\_b01 & PAPER \\
 \bottomrule
@@ -119,7 +119,7 @@ k^{\star}_t(\lambda) \;\in\; \mathrm{arg\,min}_{k \geq j}\;\left[\,D_{t,k} + \la
 
 \emph{Proof.} Write f$_{t}$(k) = D$_{t,k}$ + \lambda c$_{k}$. Then N L(a,\lambda) = ∑$_{t}$ f$_{t}$(a(t)), a sum in which the t-th term depends on a only through a(t). For any assignment a, term by term f$_{t}$(a(t)) $\geq$ min$_{k}$ f$_{t}$(k), so N L(a,\lambda) $\geq$ ∑$_{t}$ min$_{k}$ f$_{t}$(k), and the right-hand side is attained by any a that picks a minimiser in every tile. Conversely if a is optimal and some tile had f$_{t}$(a(t)) > min$_{k}$ f$_{t}$(k), replacing a(t) by that minimiser and leaving every other tile alone would strictly lower L.
 
-\emph{Remark.} The result is about the frame mean and bounds no single tile. At the deployed 0.1 dB operating point the worst tile in the test set gives up 1.97 dB, so a frame inside its budget can hold a tile an order of magnitude outside it; section D tabulates that tail. No result in this section repairs it.
+\emph{Remark.} The result is about the frame mean and bounds no single tile. At the deployed 0.1 dB operating point the worst tile in the test set gives up 1.42 dB, so a frame inside its budget can hold a tile an order of magnitude outside it; section D tabulates that tail. No result in this section repairs it.
 
 {\small Per-tile tail from results/supp\_opquality\_PAPER.json, checkpoint runs/RECIPE512/ckpt\_PAPER.pth.tar, at the operating point read from results/signalled\_RECIPE512\_ctc53.json.}
 

@@ -63,6 +63,22 @@
     "outside": [],
     "overlaps": []
   },
+  "exitmap_PAPER_basketballdrive_q32_b01.png": {
+    "outside": [],
+    "overlaps": []
+  },
+  "exitmap_PAPER_bosphorus_q32_b01.png": {
+    "outside": [],
+    "overlaps": []
+  },
+  "exitmap_PAPER_fourpeople_q32_b01.png": {
+    "outside": [],
+    "overlaps": []
+  },
+  "exitmap_PAPER_partyscene_q32_b01.png": {
+    "outside": [],
+    "overlaps": []
+  },
   "exituse.png": {
     "outside": [],
     "overlaps": []
@@ -232,18 +248,7 @@
   },
   "seam_gate.png": {
     "outside": [],
-    "overlaps": [
-      {
-        "a": "gate G, 32\u00d732",
-        "b": "1.0",
-        "frac": 0.22
-      },
-      {
-        "a": "what it actually adds, on a real frame",
-        "b": "0.5",
-        "frac": 0.83
-      }
-    ]
+    "overlaps": []
   },
   "seam_module.png": {
     "outside": [],
@@ -315,42 +320,42 @@
       {
         "a": "epoch 1",
         "b": "epoch 2",
-        "frac": 0.27
+        "frac": 0.36
       },
       {
         "a": "epoch 2",
         "b": "epoch 3",
-        "frac": 0.27
+        "frac": 0.36
       },
       {
         "a": "epoch 3",
         "b": "epoch 4",
-        "frac": 0.27
+        "frac": 0.36
       },
       {
         "a": "epoch 4",
         "b": "epoch 5",
-        "frac": 0.27
+        "frac": 0.36
+      },
+      {
+        "a": "epoch 5",
+        "b": "epoch 6",
+        "frac": 0.36
       },
       {
         "a": "epoch 1",
         "b": "epoch 2",
-        "frac": 0.27
+        "frac": 0.36
       },
       {
         "a": "epoch 2",
         "b": "epoch 3",
-        "frac": 0.27
+        "frac": 0.36
       },
       {
         "a": "epoch 3",
         "b": "epoch 4",
-        "frac": 0.27
-      },
-      {
-        "a": "epoch 4",
-        "b": "epoch 5",
-        "frac": 0.27
+        "frac": 0.36
       }
     ]
   },

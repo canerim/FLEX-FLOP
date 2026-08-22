@@ -15,15 +15,15 @@
       "ckpt": "runs/RECIPE512/ckpt_PAPER.pth.tar"
     },
     "B router @ 0.1 dB": {
-      "file": "router_RECIPE512_b01_PAPER.json",
+      "file": "router_RECIPE512_b01_e4head.json",
       "ckpt": "runs/RECIPE512/ckpt_PAPER.pth.tar"
     },
     "B router @ 0.3 dB": {
-      "file": "router_RECIPE512_b03_PAPER.json",
+      "file": "router_RECIPE512_b03_e4head.json",
       "ckpt": "runs/RECIPE512/ckpt_PAPER.pth.tar"
     },
     "B router @ 0.5 dB": {
-      "file": "router_RECIPE512_b05_PAPER.json",
+      "file": "router_RECIPE512_b05_e4head.json",
       "ckpt": "runs/RECIPE512/ckpt_PAPER.pth.tar"
     }
   },
@@ -52,8 +52,8 @@
     {
       "config": "B router",
       "budget_db": 0.1,
-      "bd_rate_pct": 1.004614932112835,
-      "saving_pct_vs_release": 23.42810553902725,
+      "bd_rate_pct": 1.0067014092097315,
+      "saving_pct_vs_release": 25.299672371760572,
       "map_bits": 0.0
     },
     {

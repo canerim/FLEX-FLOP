@@ -67,12 +67,13 @@ def content(k):
            ["T4", "a Minkowski average", S[3], "not measured", "-"],
            ["P5", "reaches only the hull", S[3], "hull_gap", "eval"],
            ["P6", "savings on a 1/N lattice", S[3], "theory_checks", "eval"],
-           ["P7", "the floor", S[4], "saturation_RECIPE512", "PAPER"],
+           ["P7", "the floor", S[4], "saturation_RECIPE512_ctc53", "PAPER"],
            ["P8", "the saturation price", S[4], "verify_theory", "eval"],
            ["P9", "the ceiling", S[4], "per_class_RECIPE512", "PAPER"],
            ["T10", "adaptivity gain", S[5], "theory_check", "BEST"],
            ["P11", "plotted log-convexity", S[6], "logconvexity", "none"],
-           ["P12", "Lorenz bound", S[7], "hybrid_RECIPE512_b01", "PAPER"],
+           ["P12", "Lorenz bound", S[7], "hybrid_RECIPE512_b01_e4head",
+            "PAPER"],
            ["P13", "rank-1 threshold rule", S[8], "raterank_RECIPE512_b01",
             "PAPER"],
            ["P14", "rank-1 uses hull exits", S[8], "raterank_RECIPE512_b01",
@@ -845,7 +846,8 @@ def content(k):
         "objective makes the optimal set of size s exactly the s largest "
         "regrets. What is left to measure is how concentrated the regret is.")
 
-    hy = k.J("hybrid_RECIPE512_b01_fixed.json")
+    hy = k.J("hybrid_RECIPE512_b01_e4head.json",
+               "hybrid_RECIPE512_b01_fixed.json")
 
     k.par(
         "The decoder cannot run the argmin of Proposition 1, D<sub>t,k</sub> "

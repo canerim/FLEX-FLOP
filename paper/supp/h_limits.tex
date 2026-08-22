@@ -17,10 +17,10 @@ A frame is cut into tiles of 256 px, so the number of decisions the allocation h
 \toprule
 frame & tiles & exits taken & saved \% & delivered dB & worst tile dB \\
 \midrule
-Bosphorus, 1920$\times$1080 & 40 & e2:15 e3:19 e4:6 & 28.1 & 0.100 & 0.310 \\
-BasketballDrive, 1920$\times$1080 & 40 & e2:14 e3:13 e4:11 e5:2 & 25.1 & 0.098 & 0.232 \\
-FourPeople, 1280$\times$720 & 15 & e2:3 e3:4 e5:8 & 13.8 & 0.100 & 0.338 \\
-PartyScene, 832$\times$480 & 8 & e3:2 e4:4 e5:2 & 12.3 & 0.098 & 0.238 \\
+Bosphorus, 1920$\times$1080 & 40 & e2:29 e3:8 e4:3 & 34.2 & 0.099 & 0.374 \\
+BasketballDrive, 1920$\times$1080 & 40 & e2:22 e3:9 e4:9 & 29.9 & 0.099 & 0.178 \\
+FourPeople, 1280$\times$720 & 15 & e2:6 e3:1 e4:3 e5:5 & 19.6 & 0.100 & 0.271 \\
+PartyScene, 832$\times$480 & 8 & e3:4 e4:3 e5:1 & 16.9 & 0.097 & 0.162 \\
 RaceHorses, 416$\times$240 & 2 & e4:2 & 13.0 & 0.097 & 0.113 \\
 \bottomrule
 \end{tabular}}
@@ -37,7 +37,7 @@ RaceHorses, 416$\times$240 & 2 & e4:2 & 13.0 & 0.097 & 0.113 \\
 
 {\small paper/figures/exitmap\_PAPER\_racehorses\_416x240\_q32\_b01.png, drawn from results/supp\_exitmap\_racehorses\_416x240\_q32\_b01.json on runs/RECIPE512/ckpt\_PAPER.pth.tar. RaceHorses at 416$\times$240, q32, 0.1 dB.}
 
-The two frames at either end of that table are the same decoder at the same budget. Bosphorus at 1080p spreads 40 tiles over exits 2, 3, 4 and saves 28.1\% of the modelled decode; RaceHorses at 416$\times$240 puts both of its tiles on exit 4 and saves 13.0\%. Nothing about the content separates them. What separates them is that a two-cell map has three admissible states above the split depth and a 40-cell map has more states than the sweep could enumerate, so the Lagrangian has somewhere to put the budget in one case and not in the other.
+The two frames at either end of that table are the same decoder at the same budget. Bosphorus at 1080p spreads 40 tiles over exits 2, 3, 4 and saves 34.2\% of the modelled decode; RaceHorses at 416$\times$240 puts both of its tiles on exit 4 and saves 13.0\%. Nothing about the content separates them. What separates them is that a two-cell map has three admissible states above the split depth and a 40-cell map has more states than the sweep could enumerate, so the Lagrangian has somewhere to put the budget in one case and not in the other.
 
 \begin{table}[t]
 \centering
@@ -46,12 +46,12 @@ The two frames at either end of that table are the same decoder at the same budg
 \toprule
 sequence & q & tiles & PSNR lost dB & MS-SSIM lost dB & saved \% & its rank \\
 \midrule
-videoSRC02 & q0 & 40 & 0.231 & 0.164 & 38.8 & 66th \\
-videoSRC01 & q0 & 40 & 0.143 & 0.154 & 38.8 & 66th \\
-videoSRC26 & q0 & 40 & 0.136 & 0.123 & 35.8 & 45th \\
+videoSRC26 & q0 & 40 & 0.137 & 0.118 & 39.1 & 49th \\
+KristenAndSara & q0 & 15 & 0.162 & 0.111 & 37.1 & 26th \\
+videoSRC03 & q0 & 40 & 0.147 & 0.107 & 37.4 & 28th \\
 \bottomrule
 \end{tabular}}
-\caption{\textbf{The three sequences that lose most on the perceptual metric.} All three are 1080p frames at the lowest rate and carry the full 40 tiles. The MS-SSIM column is $-$10 log10(1 $-$ MS-SSIM), the unit section D puts the two metrics in, and on these sequences it is two to three times the set mean of 0.052 dB at this rate. The PSNR column is the same file's own difference in PSNR and runs from 0.136 to 0.231 dB, over the nominal budget on all three, which is the per-sequence overshoot the next subsection measures. The last column is where each sits in the set by compute saved, from the 45th percentile to the 66th: these are not the sequences that save least.}
+\caption{\textbf{The three sequences that lose most on the perceptual metric.} All three are 1080p frames at the lowest rate and carry the full 40 tiles. The MS-SSIM column is $-$10 log10(1 $-$ MS-SSIM), the unit section D puts the two metrics in, and on these sequences it is two to three times the set mean of 0.050 dB at this rate. The PSNR column is the same file's own difference in PSNR and runs from 0.137 to 0.162 dB, over the nominal budget on all three, which is the per-sequence overshoot the next subsection measures. The last column is where each sits in the set by compute saved, from the 26th percentile to the 49th: these are not the sequences that save least.}
 \end{table}
 
 {\small The worst\_sequences\_by\_ms\_ssim block of results/supp\_opquality\_PAPER.json, on runs/RECIPE512/ckpt\_PAPER.pth.tar, \NumSeq sequences at one frame each, at the 0.1 dB operating point of results/supp\_paper\_curve\_PAPER.json. That block is the file's own shortlist of the fifteen largest MS-SSIM losses over the whole sweep, reordered here by the decibel rather than by the raw difference. The saving column is the same file's per-sequence saving against our own deepest exit and the rank is its percentile among the \NumSeq sequences of results/supp\_per\_sequence\_PAPER\_b010.json at the same rate.}
@@ -67,11 +67,11 @@ The ordering there is the one to take away. A budget in PSNR does not price the 
 \toprule
 q & over budget & worst dB & on & least saved \% & on \\
 \midrule
-q0 & 34 of 53 & 0.245 & videoSRC02 & 6.0 & BQSquare \\
-q16 & 33 of 53 & 0.311 & videoSRC02 & -1.0 & BQSquare \\
-q32 & 32 of 53 & 0.354 & videoSRC29 & -1.0 & PartyScene \\
-q48 & 29 of 53 & 0.290 & videoSRC21 & -1.0 & BlowingBubbles \\
-q63 & 33 of 53 & 0.237 & videoSRC02 & -1.0 & RaceHorses \\
+q0 & 32 of 53 & 0.248 & Jockey & 24.2 & BQSquare \\
+q16 & 33 of 53 & 0.243 & videoSRC02 & -1.0 & BQSquare \\
+q32 & 31 of 53 & 0.258 & videoSRC02 & -1.0 & BQSquare \\
+q48 & 31 of 53 & 0.253 & videoSRC02 & -1.0 & BlowingBubbles \\
+q63 & 31 of 53 & 0.215 & videoSRC02 & -1.0 & BQSquare \\
 \bottomrule
 \end{tabular}}
 \caption{\textbf{The 0.1 dB budget, sequence by sequence.} The multiplier is bisected once for the whole set, so the budget binds on the set mean and on nothing else. Rather more than half the sequences receive a decode worse than the budget they were nominally given, and the worst of them receives between two and three and a half times it. Section D.4 gives the spread on the compute axis; this is the same allocation seen on the quality axis.}
@@ -133,7 +133,7 @@ what was built & the measurement that ended it \\
 First-order border extrapolation & worse than replication at all three rates: 0.198, 0.286 and 0.384 dB against 0.071, 0.123 and 0.218 \\
 Fitted AR(1) border padding & ahead of replication by 0.021 dB at q63, and bought with wall clock that no file in results/ records \\
 A learned deblocking filter & 0.0008 dB even with a perfect gate, against 1.09\% of a decode \\
-Halo exchange between tiles & exact at uniform depth, and the saving falls from 24.6\% to 3.3\% at q32 and from 20.9\% to 0.4\% at q63 \\
+Halo exchange between tiles & exact at uniform depth, and the saving falls from 31.2\% to 5.5\% at q32 and from 28.0\% to 1.0\% at q63 \\
 Freezing the trunk & drift exactly 0.000 dB, and the oracle ceiling collapses with it to 11.5\% at q0, 0.4\% at q32 and -1.0\% at q63 \\
 A tile size chosen per resolution & worth -0.06 points on the set mean over three rates, with the training confound running in its favour \\
 The affected-area fraction & wrong by 160 to 264\%, against 12 to 22\% for a power law in the per-tile block count \\
@@ -144,7 +144,7 @@ The affected-area fraction & wrong by 160 to 264\%, against 12 to 22\% for a pow
 
 {\small Rows in order: results/ctc\_seam\_p256.json (40 sequences, three rates); the same file with results/shrink\_ablation.log; results/seam\_spatial\_published.json with the module's share of a decode from results/supp\_module\_shapes.json; results/coupling\_ablation.json; results/first\_ckpt\_headsonly.log; results/tilesize\_adaptive.json; results/supp\_seam\_vs\_split.json, refitted in the build. The coupling and heads-only files are on runs/RECIPE512/ckpt\_eval.pth.tar and runs/heads\_only\_j2\_p256/ckpt\_epo0.pth.tar; the seam-repair spatial file is on a runs/BEST checkpoint whose epoch it does not record. The rest are on runs/RECIPE512/ckpt\_PAPER.pth.tar.}
 
-Three of those rows need more than a line. The halo exchange does two of the three things asked of it: it is exact at uniform depth, and it removes 91\% of the floor at q0 and 47\% at q63. The third, that closing the floor is worth several points of saving, has the wrong sign at every rate above the lowest. A tile whose neighbour ran six more blocks is reading an activation the trained weights have never seen, and the error that introduces is far larger than the seam it removed. Exactness holds when every tile is at the same depth, and routing is the deliberate violation of that condition, so the two are in tension by construction. The one caveat that keeps this from being final is that the model was trained with replicate padding, so switching the exchange on at inference is a distribution shift; a run trained with it could reverse the sign, and no such run exists.
+Three of those rows need more than a line. The halo exchange does two of the three things asked of it: it is exact at uniform depth, and it removes 100\% of the floor at q0 and 43\% at q63. The third, that closing the floor is worth several points of saving, has the wrong sign at every rate above the lowest. A tile whose neighbour ran six more blocks is reading an activation the trained weights have never seen, and the error that introduces is far larger than the seam it removed. Exactness holds when every tile is at the same depth, and routing is the deliberate violation of that condition, so the two are in tension by construction. The one caveat that keeps this from being final is that the model was trained with replicate padding, so switching the exchange on at inference is a distribution shift; a run trained with it could reverse the sign, and no such run exists.
 
 The deblocking filter is the reverse case, where the mechanism does what it was built to do and the amount is too small to pay for. Error falls monotonically with distance from the nearest tile boundary, 4.7e-05 in the innermost 4 px against 4.1e-05 more than 64 px away, so the seam is real and it is local. The filter's gate leaks: it gains in the boundary band and loses slightly everywhere else. Giving it a perfect gate, with its boundary gain kept and its interior loss set to zero, bounds it at 0.0008 dB for 1.09\% of a decode. Tightening the gate cannot rescue the module because there is not enough in the band for it to win. It is still switched on in the reported system, because it was trained jointly with the decoder and switching it off at inference is not the same experiment as training without it, and no run has been trained without it at 256 px.
 
@@ -164,7 +164,7 @@ The AR(1) padding row is the one this section cannot close from results/. It is 
 \caption{\textbf{The learned deblocking filter, and where it wins.} It is gated by position within a tile and applied once to the stitched frame, for 1.09\% of the decode. \textbf{a}, the trained gate against distance from the boundary, beside its initialisation. \textbf{b}, the change in error by that distance; bar width is the share of pixels, so bar area is the contribution to the frame. It wins on the pixels nearest a boundary and loses on the rest, which is why a perfect gate still cannot pay for it.}
 \end{figure}
 
-The exactness claim for the halo exchange is worth writing out, because it is the condition and not the number that carries the argument. At uniform depth the largest absolute difference between a tiled decode with the exchange and a full-frame decode of the same latent is exactly zero once the deblocking pass is switched off; with the pass on it is 4.73e-02, because that pass runs on the stitched frame and has no full-frame counterpart, and with replicate padding instead of the exchange it is larger again. The condition in that sentence is \emph{uniform depth}, and routing is the deliberate violation of it, which is the whole of the tension.
+The exactness claim for the halo exchange is worth writing out, because it is the condition and not the number that carries the argument. At uniform depth the largest absolute difference between a tiled decode with the exchange and a full-frame decode of the same latent is exactly zero once the deblocking pass is switched off; with the pass on it is 4.27e-02, because that pass runs on the stitched frame and has no full-frame counterpart, and with replicate padding instead of the exchange it is larger again. The condition in that sentence is \emph{uniform depth}, and routing is the deliberate violation of it, which is the whole of the tension.
 
 \begin{figure}[t]
 \centering
@@ -183,7 +183,7 @@ Every table in this supplement is measured on runs/RECIPE512/ckpt\_PAPER.pth.tar
 \toprule
 checkpoint & q0 & q16 & q32 & q48 & q63 & mean \\
 \midrule
-RECIPE512, epoch 0 & 29.1 & 24.9 & 20.2 & 17.7 & 15.2 & 21.4 \\
+RECIPE512, epoch 0 & 29.2 & 25.0 & 20.3 & 17.8 & 15.2 & 21.5 \\
 RECIPE512, epoch 1 & 30.1 & 26.4 & 21.4 & 19.4 & 16.8 & 22.8 \\
 RECIPE512, epoch 2 & 32.8 & 28.1 & 22.5 & 19.9 & 16.9 & 24.0 \\
 RECIPE512, epoch 3 & 33.2 & 29.5 & 24.2 & 22.4 & 19.9 & 25.8 \\
@@ -193,7 +193,7 @@ BEST, epoch 2 & 29.4 & 23.2 & 18.0 & 14.5 & 11.5 & 19.3 \\
 BEST, epoch 3 & 30.8 & 24.7 & 19.2 & 15.6 & 12.2 & 20.5 \\
 \bottomrule
 \end{tabular}}
-\caption{\textbf{Compute saved at the 0.1 dB budget as training continues.} RECIPE512 and BEST are two runs of one configuration, same architecture and same recipe, differing only in the draw. The pinned row is what the paper reports, and it is the last epoch the run had completed when we stopped. Every RECIPE512 row is hook-counted on the same \NumSeq sequences, so the differences between them carry no convention offset. The series rises at every rate and at every step -- 21.4\% to 27.6\% on the set mean -- and the gain is larger at the high rates than the low ones, which is where the method had the least to give: q63 moves by 8.4 points against 4.6 at q0. Nothing here has flattened.}
+\caption{\textbf{Compute saved at the 0.1 dB budget as training continues.} RECIPE512 and BEST are two runs of one configuration, same architecture and same recipe, differing only in the draw. The pinned row is what the paper reports, and it is the last epoch the run had completed when we stopped. Every RECIPE512 row is hook-counted on the same \NumSeq sequences, so the differences between them carry no convention offset. The series rises at every rate and at every step -- 21.5\% to 27.6\% on the set mean -- and the gain is larger at the high rates than the low ones, which is where the method had the least to give: q63 moves by 8.3 points against 4.5 at q0. Nothing here has flattened.}
 \end{table}
 
 {\small The RECIPE512 rows are every results/signalled\_RECIPE512\_*.json over the full \NumSeq set that carries a hook count, one row per epoch, selected by savings.epoch\_series -- the same rule the main paper's macros and the plateau figure use. The BEST rows are results/signalled\_BEST\_ctc53.json, results/signalled\_BEST\_0819\_1050.json and results/signalled\_BEST\_0820\_0841.json on the ckpt\_eval and ckpt\_step files of that run, which the watchers overwrite; each records its own epoch. None of the three carries a hook count, so they are on one basis with each other and about 0.8 points optimistic against every RECIPE512 row. Comparisons within either block carry none of that offset; comparisons across the two do.}
@@ -240,29 +240,29 @@ What follows from the two tables is a constraint on how this work may be read. N
 run & q0 & q32 & q63 & frames \\
 \midrule
 RECIPE512, pinned & 0.0004 & 0.0114 & 0.0283 & 53 \\
-RECIPE512, later & 0.0004 & 0.0114 & 0.0283 & 53 \\
+RECIPE512, epoch 0 & 0.0051 & 0.0145 & 0.0362 & 53 \\
 BEST & 0.0015 & 0.0088 & 0.0154 & 53 \\
 BEST128 & 0.0036 & 0.0104 & 0.0216 & 53 \\
-FINE12 & 0.0071 & 0.0253 & 0.0610 & 53 \\
+FINE12 & 0.0056 & 0.0254 & 0.0600 & 53 \\
 VERBATIM, no anchor term & 0.1101 & 0.1241 & 0.1594 & 40 \\
 \bottomrule
 \end{tabular}}
-\caption{\textbf{How far the deepest exit has moved from the released decoder}, in decibels, one checkpoint per run. The deepest exit is supposed to be the released decoder and the training objective carries a term that holds it there. The term does real work: the run trained without it sits 0.110 to 0.159 dB away, more than the whole headline budget at every rate before a single tile has exited early. The term does not hold it exactly, and what it leaves behind grows with rate: 28\% of a 0.1 dB budget at q63 on the pinned checkpoint and 61\% on the twelve-exit run, whose floor exceeds that budget outright at the highest rate.}
+\caption{\textbf{How far the deepest exit has moved from the released decoder}, in decibels, one checkpoint per run. The deepest exit is supposed to be the released decoder and the training objective carries a term that holds it there. The term does real work: the run trained without it sits 0.110 to 0.159 dB away, more than the whole headline budget at every rate before a single tile has exited early. The term does not hold it exactly, and what it leaves behind grows with rate: 28\% of a 0.1 dB budget at q63 on the pinned checkpoint and 60\% on the twelve-exit run, whose floor exceeds that budget outright at the highest rate.}
 \end{table}
 
-{\small results/supp\_anchor\_PAPER.json on runs/RECIPE512/ckpt\_PAPER.pth.tar; results/anchor\_RECIPE512.json, results/anchor\_BEST.json, results/anchor\_BEST128.json, results/anchor\_FINE12.json and results/anchor\_VERBATIM.json on the ckpt\_eval or ckpt\_step file of their runs, at the epoch each happened to be at, which none of them records. Frame counts differ by file and are printed, because two of these are 40 frames and are not comparable with the \NumSeq-frame rows at the fourth decimal.}
+{\small results/supp\_anchor\_PAPER.json on runs/RECIPE512/ckpt\_PAPER.pth.tar; results/anchor\_RECIPE512\_e0.json is the same measurement on the same frames and rates when the pin held epoch 0 of that run; results/anchor\_BEST.json, results/anchor\_BEST128.json, results/anchor\_FINE12.json and results/anchor\_VERBATIM.json on the ckpt\_eval or ckpt\_step file of their runs, at the epoch each happened to be at, which none of them records. Frame counts differ by file and are printed, because two of these are 40 frames and are not comparable with the \NumSeq-frame rows at the fourth decimal.}
 
-Whether it grows with training is not settled by what is in results/. The two RECIPE512 rows are the pinned checkpoint and a later one on the same \NumSeq frames, and at q63 they read 0.0283 and 0.0283 dB, which is no movement at all; at q0 the later checkpoint is the closer of the two, at 0.0004 against 0.0004. Neither file records the epoch of the checkpoint it read, so the pair does not bracket a known amount of training. The measured direction is with rate rather than with time, sevenfold from q0 to q63 on the pinned checkpoint. The open problem is the size, not the trend: at q63 a third of the budget is spent before the allocation begins, and any move to a later checkpoint has to remeasure this and report it as its own row rather than assume it carries over.
+Whether it grows with training is now settled, on this run at least. The two RECIPE512 rows are four epochs apart on the same \NumSeq frames and the same rates, and the drift falls at 5 of the 5: 0.0051 to 0.0004 dB at q0 and 0.0362 to 0.0283 at q63. The anchor term tightens its hold as the run goes on rather than losing it, which is the direction the term is there to produce and not one we had evidence for before. The direction with rate survives the move and steepens: the deepest exit sits 76 times further from the released decoder at q63 than at q0 on the reported weights, against 7 times four epochs earlier, because q0 improved by more than the rest. The open problem is the size at the top of the ladder, not the trend: at q63 28\% of a 0.1 dB budget is spent before the allocation begins, and a move to any later checkpoint has to remeasure this and report it as its own row rather than assume it carries over.
 
 There is a structural fix and it was measured and rejected, which is row five of Table 5. Freezing the trunk makes the deepest exit the released decoder by construction, with no weight left that could move, and the drift measures exactly zero. The shallow exits then cannot improve either, because the exit heads alone cannot recover what six skipped blocks contained, and the oracle ceiling collapses to nothing above the lowest rate. Training the trunk is what makes the ladder worth having, and the drift is what training the trunk costs.
 
 \subsection{How much of this can be repeated exactly}
 
-Every measurement file records the checkpoint it was taken on, and there are three kinds of answer. 55 of the files these two documents read name a checkpoint that does not move -- a pin or a warm start -- so the measurement can be repeated exactly. Another 21 name one the watcher overwrites but record the epoch or step it was at, so the weights are identified even though the path is not. The remaining 15 record neither, and their paths now point at whatever those runs have trained to since.
+Every measurement file records the checkpoint it was taken on, and there are three kinds of answer. 61 of the files these two documents read name a checkpoint that does not move -- a pin or a warm start -- so the measurement can be repeated exactly. Another 17 name one the watcher overwrites but record the epoch or step it was at, so the weights are identified even though the path is not. The remaining 12 record neither, and their paths now point at whatever those runs have trained to since.
 
 That last group is not hidden -- several of the files in it are named as such where they are used, and the epoch tables of this section exist because of it -- but it is worth stating once as a number rather than as remarks. Nothing in the main paper's headline is in it: the pinned checkpoint carries every table the paper reports. What is in it is the adapter and coupling ablations, the hybrid sweeps of configuration C, the wall-clock files and the anchor drift of the runs other than the pinned one. Repeating those exactly would need the checkpoints back, which is why scripts/check\_provenance.py refuses to let the count grow.
 
-{\small Counted in the build over results/*.json against the file names scripts/build\_pdf.py, scripts/make\_paper\_tables.py and scripts/supp/*.py mention. The same count is a check, with the present figure of 15 as its baseline.}
+{\small Counted in the build over results/*.json against the file names scripts/build\_pdf.py, scripts/make\_paper\_tables.py and scripts/supp/*.py mention. The same count is a check, with the present figure of 12 as its baseline.}
 
 \subsection{What is open}
 
@@ -278,5 +278,5 @@ Every open problem in this supplement is listed here, so that a reader meets eac
 \item \textbf{One accelerator class.} Every millisecond and every joule in this work is an NVIDIA RTX A6000, all eight cards in this machine being that model, and the CPU rows of section B are the only second device class. Power comes from the driver counter, with no external meter to calibrate it against.
 \end{itemize}
 
-No internal check is outstanding. They all hold, including the one this list would otherwise have carried: the partially signalled configuration reduces to the fully signalled one to four decimals when every tile is overridden, with both sides read in the same saving convention, so the cost model's 0.8-point offset cannot present itself as a failure of the interpolation. As recorded in results/check\_paper.json, 79 of 90 checked claims pass.
+No internal check is outstanding. They all hold, including the one this list would otherwise have carried: the partially signalled configuration reduces to the fully signalled one to four decimals when every tile is overridden, with both sides read in the same saving convention, so the cost model's 0.8-point offset cannot present itself as a failure of the interpolation. As recorded in results/check\_paper.json, 80 of 87 checked claims pass.
 

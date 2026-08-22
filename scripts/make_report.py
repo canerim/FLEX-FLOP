@@ -393,9 +393,9 @@ w("**B — the decoder predicts it and nothing is signalled.** The decoder never
   "byte-identical to a stock stream and it is deployable by a decoder vendor "
   "alone. The head costs 0.163% of a decode, charged inside every B number.")
 w("")
-bfiles = [("0.1", "router_RECIPE512_b01_fixed.json"),
-          ("0.3", "router_RECIPE512_b03_fixed.json"),
-          ("0.5", "router_RECIPE512_b05_fixed.json")]
+bfiles = [("0.1", "router_RECIPE512_b01_e4head.json"),
+          ("0.3", "router_RECIPE512_b03_e4head.json"),
+          ("0.5", "router_RECIPE512_b05_e4head.json")]
 tabs = {b: load(f) for b, f in bfiles}
 brs, _ = data.get("RECIPE512", (None, None))
 if any(tabs.values()):

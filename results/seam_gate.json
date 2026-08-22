@@ -1,6 +1,9 @@
 {
-  "ckpt": "",
+  "ckpt": "runs/RECIPE512/ckpt_PAPER.pth.tar",
+  "epoch": 4,
   "gate_min": 0.17776870727539062,
   "gate_max": 0.4797523319721222,
-  "gate_mean": 0.20920385420322418
+  "gate_mean": 0.20920385420322418,
+  "ckpt_epoch": 4,
+  "stamped_by": "scripts/stamp_ckpt.py"
 }

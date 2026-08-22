@@ -1,0 +1,36 @@
+{
+  "ckpt": "runs/RECIPE512/ckpt_PAPER.pth.tar",
+  "ckpt_epoch": 4,
+  "n_frames": 16,
+  "qps": [
+    0,
+    32,
+    63
+  ],
+  "measured": "max|full-frame decode - tiled decode| at uniform depth, over frames and rates",
+  "worst": {
+    "halo exchange, filter on": 0.04274696111679077,
+    "halo exchange, filter off": 0.0,
+    "replicate padding, filter off": 0.17507946491241455
+  },
+  "rows": [
+    {
+      "qp": 0,
+      "halo exchange, filter on": 0.04274696111679077,
+      "halo exchange, filter off": 0.0,
+      "replicate padding, filter off": 0.17507946491241455
+    },
+    {
+      "qp": 32,
+      "halo exchange, filter on": 0.04236882925033569,
+      "halo exchange, filter off": 0.0,
+      "replicate padding, filter off": 0.12842649221420288
+    },
+    {
+      "qp": 63,
+      "halo exchange, filter on": 0.040377914905548096,
+      "halo exchange, filter off": 0.0,
+      "replicate padding, filter off": 0.06694898009300232
+    }
+  ]
+}

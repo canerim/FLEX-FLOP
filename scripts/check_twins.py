@@ -108,8 +108,15 @@ def main():
                              (ROOT / "paper/tables/macros.tex").read_text()))
     used_tex = set(re.findall(r"\\([A-Za-z]+)", TEX)) & defined
     used_py = set(re.findall(r"\\\\?([A-Za-z]+)", PY)) & defined
-    only_t = sorted(used_tex - used_py)
-    only_p = sorted(used_py - used_tex)
+    # One quantity, two renderings: main.tex sets three of these in a table,
+    # in maths, and build_pdf sets the same three in a sentence, in text.
+    # \XMath in one document and \X in the other is one number in two
+    # typesettings, not a divergence.
+    def _paired(name, other):
+        return (name.endswith("Math") and name[:-4] in other) or \
+               (name + "Math") in other
+    only_t = sorted(m for m in used_tex - used_py if not _paired(m, used_py))
+    only_p = sorted(m for m in used_py - used_tex if not _paired(m, used_tex))
     print(f"  macros: tex {len(used_tex)}, py {len(used_py)}")
     for m_ in only_t:
         print(f"     only main.tex uses \\{m_}")
