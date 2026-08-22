@@ -23,6 +23,13 @@ than days:
          blocks entirely -- the crudest possible slimming, and a lower bound
          on what a trained slimmable stem (ICLR 2019) would give
 
+This is a QUALITY probe and not a cost one. The implementation runs the whole
+stem and then substitutes channels, because what is being asked is what those
+channels' contribution is worth, not what skipping them would save. A real
+implementation would not compute them, and would save something less than the
+fraction dropped, since the channels interact inside each block. No compute
+number is quoted from this file.
+
 Both are deliberately untrained. A trained version can only do better, so a
 negative result here is conclusive and a positive one is a floor.
 

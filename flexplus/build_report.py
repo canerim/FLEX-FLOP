@@ -259,11 +259,15 @@ def content(F):
         "while the trunk is not. Matching the stem is the wrong thing to ask "
         "for; matching the decode is the thing that is measured.", BODY))
     A(Paragraph(
-        "One number is worth keeping from the negative result. At about equal "
-        "distortion the trained half-width stem runs three times less "
-        "arithmetic than untrained channel dropping did, so training does "
-        "move the trade-off. It moves it from far outside the budget to still "
-        "far outside it.", BODY))
+        "Training does move the trade-off, and the size of the move is worth "
+        "stating carefully. The trained half-width stem reaches about the "
+        "distortion that untrained channel dropping reached while computing a "
+        "quarter of the stem against three quarters of it -- but the dropping "
+        "probe substitutes channels after running the whole stem, because it "
+        "was written to ask what those channels are worth and not what "
+        "skipping them saves. Its compute figure is therefore notional and "
+        "the comparison is between one measured cost and one arithmetic one. "
+        "The direction is not in doubt; the factor is.", BODY))
 
     A(Paragraph("5. Open", H1))
     A(Paragraph(
