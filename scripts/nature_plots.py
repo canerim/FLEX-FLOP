@@ -25,11 +25,11 @@ ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "scripts"))
 import naturestyle as ns  # noqa: E402
 
-# These are hand-laid-out schematics: every box and label sits at a
-# coordinate chosen against the others, so scaling the type moves text into
-# text. They stay at the drawn size until they are redrawn at column width,
-# which is a layout job and not a style switch.
-ns.apply()
+# Three of the four figures here are ordinary two-panel data plots and take
+# the column scaling. mechanism() is a hand-laid-out schematic -- every box
+# and label at a coordinate chosen against the others -- so it sets the scale
+# back to 1 for itself; it is drawn at W1 already and needs no scaling.
+ns.apply(ns.for_column())
 RES = ROOT / "results"
 FIG = ROOT / "docs" / "figures"
 OUT = (FIG, ROOT / "paper" / "figures")
@@ -71,7 +71,7 @@ def window():
         (RES / "saturation_RECIPE512_ctc53.json").read_text())["rows"]}
     qs = sorted({r["qp"] for r in G["rows"]})
 
-    fig, ax = plt.subplots(1, 2, figsize=(ns.W2, 1.72),
+    fig, ax = plt.subplots(1, 2, figsize=(ns.W2, 2.45),
                            gridspec_kw={"width_ratios": [1.25, 1.0],
                                         "wspace": 0.3})
     tidy(ax[0]); tidy(ax[1])
@@ -92,9 +92,9 @@ def window():
     # Down beside the floor markers, not across the top. At 0.94 of the axes it
     # ran straight through the q0 and q16 curves, which is where they are
     # steepest and where a reader is looking.
-    ax[0].text(0.09, 0.10, "▽ floor: below this\nno allocation is feasible",
+    ax[0].text(0.03, 0.90, "▽ floor: below this no\nallocation is feasible",
                transform=ax[0].transAxes, fontsize=ns.fs(6), color=ns.INK2,
-               va="bottom", linespacing=1.25)
+               va="top", linespacing=1.25)
     ns.panel(ax[0], "a")
 
     # b. the two limits against rate, which is what makes the window finite
@@ -123,7 +123,7 @@ def concentration():
     rows = [r for r in H["rows"] if r.get("budget_reachable")]
     qs = sorted({r["qp"] for r in rows})
 
-    fig, ax = plt.subplots(1, 2, figsize=(ns.W2, 1.72),
+    fig, ax = plt.subplots(1, 2, figsize=(ns.W2, 2.45),
                            gridspec_kw={"width_ratios": [1.0, 1.15],
                                         "wspace": 0.32})
     tidy(ax[0]); tidy(ax[1])
@@ -148,7 +148,7 @@ def concentration():
     ax[0].set_xlim(0, _xmax * 1.04); ax[0].set_ylim(0, 1.02)
     ax[0].legend(frameon=False, fontsize=ns.fs(6), handlelength=1.2, ncol=2,
                  borderpad=0, loc="lower right")
-    ax[0].text(0.30, 0.24, "equal shares", transform=ax[0].transAxes,
+    ax[0].text(0.62, 0.50, "equal shares", transform=ax[0].transAxes,
                fontsize=ns.fs(6), color=ns.INK2, rotation=27)
     ns.panel(ax[0], "a")
 
@@ -183,7 +183,7 @@ def deciders():
          if abs(r["budget_db"] - 0.1) < 1e-9 and r.get("budget_reachable")}
     qs = sorted(A)
 
-    fig, ax = plt.subplots(1, 2, figsize=(ns.W2, 1.72),
+    fig, ax = plt.subplots(1, 2, figsize=(ns.W2, 2.45),
                            gridspec_kw={"width_ratios": [1.3, 1.0],
                                         "wspace": 0.3})
     tidy(ax[0]); tidy(ax[1])
@@ -202,9 +202,12 @@ def deciders():
     ax[0].set_ylabel("decoder MACs saved (%)")
     # Room above the bars for a three-line key that used to sit on the
     # margin labels printed over them.
-    ax[0].set_ylim(0, 44)
+    # The margin labels sit just above the tallest bar of each group, so the
+    # key has to start above all of them rather than beside them.
+    ax[0].set_ylim(0, 52)
     ax[0].legend(frameon=False, fontsize=ns.fs(6), handlelength=1.1,
-                 borderpad=0, labelspacing=0.25, loc="upper right")
+                 borderpad=0, labelspacing=0.25, loc="upper center",
+                 ncol=1)
     ns.panel(ax[0], "a")
 
     # b. agreement against what the agreement buys. The tempting version of
@@ -231,8 +234,8 @@ def deciders():
     a1b.set_ylim(0, 100)
     for sp in ("top",):
         a1b.spines[sp].set_visible(False)
-    ax[1].text(0.5, 0.06, "picks a different exit on most tiles,\nand still "
-               "captures three quarters of the search",
+    ax[1].text(0.5, -0.30, "a different exit on most tiles, three quarters "
+               "of the search",
                transform=ax[1].transAxes, ha="center", fontsize=ns.fs(6),
                color=ns.INK2)
     ns.panel(ax[1], "b")
@@ -242,7 +245,12 @@ def deciders():
 
 # ------------------------------------------------------- 4. the mechanism
 def mechanism():
-    """How a multiplier turns a table of per-tile distortions into a map."""
+    """How a multiplier turns a table of per-tile distortions into a map.
+
+    Drawn at column width, so its type is already the size it prints at and
+    the column scaling would double it inside a layout of fixed coordinates.
+    """
+    ns.apply()
     T = json.loads((RES / "tile_table.json").read_text())
     D = np.array(T["D"]); j, K = T["j"], T["K"]
     cost = np.array(T["cost"])

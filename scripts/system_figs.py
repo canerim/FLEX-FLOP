@@ -22,11 +22,11 @@ sys.path.insert(0, str(R)); sys.path.insert(0, str(Path.home() / "DCVC"))
 sys.path.insert(0, str(R / "scripts"))
 import naturestyle as ns
 from savings import sv, pick
-# These are hand-laid-out schematics: every box and label sits at a
-# coordinate chosen against the others, so scaling the type moves text into
-# text. They stay at the drawn size until they are redrawn at column width,
-# which is a layout job and not a style switch.
-ns.apply()
+# The two-panel data plots here take the column scaling. The schematics do
+# not: every box and label sits at a coordinate chosen against the others, so
+# doubling the type moves text into text. Each of those sets the scale back
+# for itself, and adapters() is drawn at column width already.
+ns.apply(ns.for_column())
 from flexuf.config import FlexUFConfig
 from flexuf import cost as fc
 from flexuf.cost import exit_costs
@@ -78,6 +78,8 @@ def save(fig, name):
 
 # ===========================================================  1. the data path
 def pipeline():
+    # Drawn at a fixed layout, or already at column width: no scaling.
+    ns.apply()
     fig, ax = plt.subplots(figsize=(ns.W2, 4.3)); blank(ax)
     FS, FSS = 5.8, 4.9
 
@@ -198,6 +200,8 @@ def pipeline():
 
 # ======================================================  2. inside the adapters
 def adapters():
+    # Drawn at a fixed layout, or already at column width: no scaling.
+    ns.apply()
     """Figure 2: what an exit adapter is made of, and which exit wears which.
 
     Two facts have to land and both of them are geometric, so both are drawn
@@ -299,6 +303,7 @@ def adapters():
 
 # ===================================================  3. the seam-repair module
 def seam_module():
+    ns.apply(ns.for_column())
     """What the gate learned, and where the module changes the error.
 
     Both panels are a quantity against distance from the tile boundary, because
@@ -373,6 +378,8 @@ def seam_module():
 
 # ==========================================================  4. how it is trained
 def training():
+    # Drawn at a fixed layout, or already at column width: no scaling.
+    ns.apply()
     """What is frozen, what is trained, and what every term of the loss is for."""
     import flexuf.model as fm
     net = fm.FlexUFIntra(cfg)
@@ -486,6 +493,10 @@ def training():
 
 # =====================================================  5. router A versus B
 def router_ab():
+    # Formulas placed beside labels at chosen coordinates, so this is a
+    # schematic in a plot's clothing and scaling its type moves one onto the
+    # other. It stays at the drawn size.
+    ns.apply()
     """The two ways the exit map can be produced, and what the difference costs."""
     def rows(*names, key="saving_pct", budget=None):
         """Canonical file, canonical definition.
