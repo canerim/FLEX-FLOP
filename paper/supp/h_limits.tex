@@ -265,7 +265,7 @@ There is a structural fix and it was measured and rejected, which is row five of
 
 \subsection{How much of this can be repeated exactly}
 
-Every measurement file records the checkpoint it was taken on, and there are three kinds of answer. 63 of the files these two documents read name a checkpoint that does not move -- a pin or a warm start -- so the measurement can be repeated exactly. Another 17 name one the watcher overwrites but record the epoch or step it was at, so the weights are identified even though the path is not. The remaining 11 record neither, and their paths now point at whatever those runs have trained to since.
+Every measurement file records the checkpoint it was taken on, and there are three kinds of answer. 64 of the files these two documents read name a checkpoint that does not move -- a pin or a warm start -- so the measurement can be repeated exactly. Another 17 name one the watcher overwrites but record the epoch or step it was at, so the weights are identified even though the path is not. The remaining 11 record neither, and their paths now point at whatever those runs have trained to since.
 
 That last group is not hidden -- several of the files in it are named as such where they are used, and the epoch tables of this section exist because of it -- but it is worth stating once as a number rather than as remarks. Nothing in the main paper's headline is in it: the pinned checkpoint carries every table the paper reports. What is in it is the adapter and coupling ablations, the hybrid sweeps of configuration C, the wall-clock files and the anchor drift of the runs other than the pinned one. Repeating those exactly would need the checkpoints back, which is why scripts/check\_provenance.py refuses to let the count grow.
 

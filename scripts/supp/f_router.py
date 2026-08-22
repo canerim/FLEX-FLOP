@@ -9,7 +9,7 @@ Every number in this section is computed here from a file in results/, and the
 file is named at the table or figure that uses it. Nothing reads a checkpoint,
 opens a CUDA context or writes to results/. The results files read are
 
-    router_ablation.json                the six-variant input ablation
+    router_ablation_e4.json             the six-variant input ablation
     router_ablation_<variant>.json      one training record per variant
     router_latency.json                 the head timed against its MAC share
     router_RECIPE512_b0*_e4head.json    the frozen-decoder head, two budgets
@@ -175,7 +175,7 @@ def content(k):
         "fluctuation. <i>over floor</i> is the margin over the best single "
         f"constant exit, which scores {floor:.4f} on these tiles.")
     k.note(
-        "results/router_ablation.json, and the six per-variant training records "
+        "results/router_ablation_e4.json, and the six per-variant training records "
         "results/router_ablation_stem.json and its five siblings. All on the "
         "pinned checkpoint, all at \\lambda = 1.3×10<super>-5</super>, all "
         f"{st['steps']:,} steps from seed {st['seed']}.")
@@ -192,7 +192,7 @@ def content(k):
           "3, and q alone uses two of the four exits available to it.",
           maxh=126)
     k.note("Drawn by scripts/supp_router_figs.py from "
-           "results/router_ablation.json, fields agree, stderr, pred_hist and "
+           "results/router_ablation_e4.json, fields agree, stderr, pred_hist and "
            "oracle_hist.")
 
     d_sa = V["stem"]["agree"] - V["all"]["agree"]
@@ -689,7 +689,7 @@ def content(k):
     k.par(
         "No head in this work was trained twice at two seeds, so there is no "
         "seed variance to report and none was measured; "
-        "results/router_ablation.json records seed 0 for all six of its runs "
+        "results/router_ablation_e4.json records seed 0 for all six of its runs "
         "and one_checkpoint true. What can be reported is the spread between "
         "heads that were trained independently of each other, which is a looser "
         "quantity than seed variance and a larger one.")

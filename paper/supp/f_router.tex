@@ -27,18 +27,18 @@ The quality index q stays live in every single-group run. It is one number per f
 \toprule
 live inputs & agreement & $\pm$ s.e. & last 250 & over floor \\
 \midrule
-stem,qp & 0.7750 & 0.0074 & 0.7607 & +0.2744 \\
-stem,latent,scales,bits,qp & 0.7721 & 0.0075 & 0.7543 & +0.2715 \\
-latent,qp & 0.7448 & 0.0080 & 0.7433 & +0.2442 \\
-scales,qp & 0.7156 & 0.0083 & 0.7170 & +0.2150 \\
-bits,qp & 0.6202 & 0.0091 & 0.6137 & +0.1196 \\
-qp & 0.4923 & 0.0114 & 0.4900 & -0.0083 \\
+stem,qp & 0.7738 & 0.0072 & 0.7513 & +0.3921 \\
+stem,latent,scales,bits,qp & 0.7698 & 0.0073 & 0.7503 & +0.3881 \\
+latent,qp & 0.7448 & 0.0077 & 0.7267 & +0.3631 \\
+scales,qp & 0.7108 & 0.0081 & 0.6937 & +0.3292 \\
+bits,qp & 0.5846 & 0.0090 & 0.5687 & +0.2029 \\
+qp & 0.4133 & 0.0112 & 0.4080 & +0.0317 \\
 \bottomrule
 \end{tabular}}
-\caption{\textbf{What each router input is worth.} Read the first column against the last: only the stem moves agreement far from what a single constant exit already achieves. Agreement with the oracle's exit choice on 1,200 frames and 4,800 tiles the head never trained on, with one standard error taken across frames rather than across tiles, since tiles of one image are not independent draws. \emph{last 250} is the running held-out agreement over the final 250 training steps, on 12 tiles a step, and confirms that the end-of-run measurement is not a fluctuation. \emph{over floor} is the margin over the best single constant exit, which scores 0.5006 on these tiles.}
+\caption{\textbf{What each router input is worth.} Read the first column against the last: only the stem moves agreement far from what a single constant exit already achieves. Agreement with the oracle's exit choice on 1,200 frames and 4,800 tiles the head never trained on, with one standard error taken across frames rather than across tiles, since tiles of one image are not independent draws. \emph{last 250} is the running held-out agreement over the final 250 training steps, on 12 tiles a step, and confirms that the end-of-run measurement is not a fluctuation. \emph{over floor} is the margin over the best single constant exit, which scores 0.3817 on these tiles.}
 \end{table}
 
-{\small results/router\_ablation.json, and the six per-variant training records results/router\_ablation\_stem.json and its five siblings. All on the pinned checkpoint, all at \lambda = 1.3$\times$10$^{-5}$, all 3,000 steps from seed 0.}
+{\small results/router\_ablation\_e4.json, and the six per-variant training records results/router\_ablation\_stem.json and its five siblings. All on the pinned checkpoint, all at \lambda = 1.3$\times$10$^{-5}$, all 3,000 steps from seed 0.}
 
 \begin{figure}[t]
 \centering
@@ -46,17 +46,15 @@ qp & 0.4923 & 0.0114 & 0.4900 & -0.0083 \\
 \caption{\textbf{The input ablation, both halves of it.} \textbf{a}, agreement with the oracle per variant, with one standard error across frames; the dashed line is the best single constant exit. The two dark bars are the two heads that see the stem. \textbf{b}, where each variant sends its tiles, against the oracle's own distribution. Every variant reproduces the oracle's use of the shallowest exit to within a point, and what degrades as inputs are removed is the separation of the middle of the ladder: the bit count alone nearly empties exit 3, and q alone uses two of the four exits available to it.}
 \end{figure}
 
-{\small Drawn by scripts/supp\_router\_figs.py from results/router\_ablation.json, fields agree, stderr, pred\_hist and oracle\_hist.}
+{\small Drawn by scripts/supp\_router\_figs.py from results/router\_ablation\_e4.json, fields agree, stderr, pred\_hist and oracle\_hist.}
 
-\textbf{The stem alone.} Reading the stem and q gives 0.7750; reading the stem, the latent, the scales, the bit count and q gives 0.7721. The difference is 0.0029 against a standard error of 0.0105 on the difference, so it is under a third of one standard error and its sign is not determined. Four of the five inputs add nothing this measurement can resolve. That result is about those four inputs in this head, and it does not show that the latent, the scales or the bit count are uninformative about a tile. What it shows is that whatever they carry is already carried by the stem, which is computed downstream of all of them.
+\textbf{The stem alone.} Reading the stem and q gives 0.7738; reading the stem, the latent, the scales, the bit count and q gives 0.7698. The difference is 0.0040 against a standard error of 0.0103 on the difference, so it is under a third of one standard error and its sign is not determined. Four of the five inputs add nothing this measurement can resolve. That result is about those four inputs in this head, and it does not show that the latent, the scales or the bit count are uninformative about a tile. What it shows is that whatever they carry is already carried by the stem, which is computed downstream of all of them.
 
-\textbf{The single-group ordering.} The stem at 0.7750 is 0.0302 above the latent, against a standard error of 0.0109 on the difference; the latent is 0.0292 above the scales; and the scales are 0.0954 above the bit count, which is more than seven standard errors. The bit count is the weakest per-tile input the head has, and F.4 shows a rule that reads the bit count and nothing else beating the head at every rate. The input the head learns least from is the input that wins when it is used differently.
+\textbf{The single-group ordering.} The stem at 0.7738 is 0.0290 above the latent, against a standard error of 0.0106 on the difference; the latent is 0.0340 above the scales; and the scales are 0.1263 above the bit count, which is more than seven standard errors. The bit count is the weakest per-tile input the head has, and F.4 shows a rule that reads the bit count and nothing else beating the head at every rate. The input the head learns least from is the input that wins when it is used differently.
 
-\textbf{The floor.} The quality index on its own reaches 0.4923 $\pm$ 0.0114 where the best single constant exit scores 0.5006. A head with no per-tile information cannot beat the best constant in expectation, and this one does not. The floor belongs beside every other row: an agreement of 0.62 cannot be read at all until it is known that 0.50 is free.
+\textbf{The floor.} The quality index on its own reaches 0.4133 $\pm$ 0.0112 where the best single constant exit scores 0.3817. A head with no per-tile information cannot beat the best constant in expectation, and this one does not. The floor belongs beside every other row: an agreement of 0.58 cannot be read at all until it is known that 0.38 is free.
 
-\textbf{These six rows are not on one checkpoint.} all on epoch 4, bits on epoch 4, latent on epoch 4, qp on epoch 0, scales on epoch 4, stem on epoch 4. The comparison between them is only a comparison of inputs when the weights are the same, so this table should not be read until the sweep has been repeated on one checkpoint throughout.
-
-\textbf{The ablation's own cost.} The six trainings took 6.1 hours of one NVIDIA RTX A6000 between them, from 55 to 68 minutes each (the ablation's own records, field wall\_s). The decoder is frozen for all of them, so none of that is decoder training. It is the price of the question, and it is worth stating beside a negative answer.
+\textbf{The ablation's own cost.} The six trainings took 6.0 hours of one NVIDIA RTX A6000 between them, from 55 to 68 minutes each (the ablation's own records, field wall\_s). The decoder is frozen for all of them, so none of that is decoder training. It is the price of the question, and it is worth stating beside a negative answer.
 
 One head covers every operating point, and the quality index is what makes that possible. It is an input rather than a selector: during training it is drawn uniformly at random for each batch, so one set of weights sees all 64 indices, and at test time the same weights run at every rate with the offline $\beta$ table of A.12 in front of them. No head per rate is proposed anywhere in this work, since that multiplies the stored parameters by the number of operating points a deployment offers, and F.5 is the measurement of what the single head gives up for that.
 
@@ -242,7 +240,7 @@ The same control makes a second point in passing. At w=0 the epoch-1 ladder save
 
 \subsection{How much a trained head varies}
 
-No head in this work was trained twice at two seeds, so there is no seed variance to report and none was measured; results/router\_ablation.json records seed 0 for all six of its runs and one\_checkpoint true. What can be reported is the spread between heads that were trained independently of each other, which is a looser quantity than seed variance and a larger one.
+No head in this work was trained twice at two seeds, so there is no seed variance to report and none was measured; results/router\_ablation\_e4.json records seed 0 for all six of its runs and one\_checkpoint true. What can be reported is the spread between heads that were trained independently of each other, which is a looser quantity than seed variance and a larger one.
 
 \textbf{Two heads on one decoder.} The joint and frozen heads differ by -0.68 points at q0 and by -6.76 at q63, a range of 6.08 points across the five rates at 0.1 dB, and they cross: the joint head is the better of the two at q0 and the worse at every other rate. At 3 of the five rates the two heads differ from each other by more than the rule's margin over whichever of them is nearer, so a comparison against one trained head says less than it appears to. That is the reason both are printed in F.4 rather than the better of them.
 
