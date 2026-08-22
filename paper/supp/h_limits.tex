@@ -194,13 +194,12 @@ RECIPE512, epoch 1 & 30.1 & 26.4 & 21.4 & 19.4 & 16.8 & 22.8 \\
 RECIPE512, epoch 2 & 32.8 & 28.1 & 22.5 & 19.9 & 16.9 & 24.0 \\
 RECIPE512, epoch 3 & 33.2 & 29.5 & 24.2 & 22.4 & 19.9 & 25.8 \\
 RECIPE512, epoch 4, pinned & 33.7 & 30.1 & 26.1 & 24.8 & 23.5 & 27.6 \\
-RECIPE512, epoch 5 & 34.3 & 30.8 & 26.1 & 24.8 & 23.4 & 27.9 \\
 BEST, epoch 1 & 34.0 & 27.7 & 22.3 & 19.8 & 17.2 & 24.2 \\
 BEST, epoch 2 & 29.4 & 23.2 & 18.0 & 14.5 & 11.5 & 19.3 \\
 BEST, epoch 3 & 30.8 & 24.7 & 19.2 & 15.6 & 12.2 & 20.5 \\
 \bottomrule
 \end{tabular}}
-\caption{\textbf{Compute saved at the 0.1 dB budget as training continues.} RECIPE512 and BEST are two runs of one configuration, same architecture and same recipe, differing only in the draw. The pinned row is what the paper reports, and it is the last epoch the run had completed when we stopped. Every RECIPE512 row is hook-counted on the same \NumSeq sequences, so the differences between them carry no convention offset. The series rises at every rate and at every step -- 21.5\% to 27.9\% on the set mean -- and the gain is larger at the high rates than the low ones, which is where the method had the least to give: q63 moves by 8.3 points against 5.2 at q0. Nothing here has flattened.}
+\caption{\textbf{Compute saved at the 0.1 dB budget as training continues.} RECIPE512 and BEST are two runs of one configuration, same architecture and same recipe, differing only in the draw. The pinned row is what the paper reports, and it is the last epoch the run had completed when we stopped. Every RECIPE512 row is hook-counted on the same \NumSeq sequences, so the differences between them carry no convention offset. The series rises at every rate and at every step -- 21.5\% to 27.6\% on the set mean -- and the gain is larger at the high rates than the low ones, which is where the method had the least to give: q63 moves by 8.3 points against 4.5 at q0. Nothing here has flattened.}
 \end{table}
 
 {\small The RECIPE512 rows are every results/signalled\_RECIPE512\_*.json over the full \NumSeq set that carries a hook count, one row per epoch, selected by savings.epoch\_series -- the same rule the main paper's macros and the plateau figure use. The BEST rows are results/signalled\_BEST\_ctc53.json, results/signalled\_BEST\_0819\_1050.json and results/signalled\_BEST\_0820\_0841.json on the ckpt\_eval and ckpt\_step files of that run, which the watchers overwrite; each records its own epoch. None of the three carries a hook count, so they are on one basis with each other and about 0.8 points optimistic against every RECIPE512 row. Comparisons within either block carry none of that offset; comparisons across the two do.}
@@ -250,11 +249,11 @@ RECIPE512, pinned & 0.0004 & 0.0114 & 0.0283 & 53 \\
 RECIPE512, epoch 0 & 0.0051 & 0.0145 & 0.0362 & 53 \\
 BEST & 0.0015 & 0.0088 & 0.0154 & 53 \\
 BEST128 & 0.0036 & 0.0104 & 0.0216 & 53 \\
-FINE12 & 0.0075 & 0.0245 & 0.0602 & 53 \\
+FINE12 & 0.0060 & 0.0250 & 0.0611 & 53 \\
 VERBATIM, no anchor term & 0.1101 & 0.1241 & 0.1594 & 40 \\
 \bottomrule
 \end{tabular}}
-\caption{\textbf{How far the deepest exit has moved from the released decoder}, in decibels, one checkpoint per run. The deepest exit is supposed to be the released decoder and the training objective carries a term that holds it there. The term does real work: the run trained without it sits 0.110 to 0.159 dB away, more than the whole headline budget at every rate before a single tile has exited early. The term does not hold it exactly, and what it leaves behind grows with rate: 28\% of a 0.1 dB budget at q63 on the pinned checkpoint and 60\% on the twelve-exit run, whose floor exceeds that budget outright at the highest rate.}
+\caption{\textbf{How far the deepest exit has moved from the released decoder}, in decibels, one checkpoint per run. The deepest exit is supposed to be the released decoder and the training objective carries a term that holds it there. The term does real work: the run trained without it sits 0.110 to 0.159 dB away, more than the whole headline budget at every rate before a single tile has exited early. The term does not hold it exactly, and what it leaves behind grows with rate: 28\% of a 0.1 dB budget at q63 on the pinned checkpoint and 61\% on the twelve-exit run, whose floor exceeds that budget outright at the highest rate.}
 \end{table}
 
 {\small results/supp\_anchor\_PAPER.json on runs/RECIPE512/ckpt\_PAPER.pth.tar; results/anchor\_RECIPE512\_e0.json is the same measurement on the same frames and rates when the pin held epoch 0 of that run; results/anchor\_BEST.json, results/anchor\_BEST128.json, results/anchor\_FINE12.json and results/anchor\_VERBATIM.json on the ckpt\_eval or ckpt\_step file of their runs, at the epoch each happened to be at, which none of them records. Frame counts differ by file and are printed, because two of these are 40 frames and are not comparable with the \NumSeq-frame rows at the fourth decimal.}
