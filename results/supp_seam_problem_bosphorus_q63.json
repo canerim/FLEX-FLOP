@@ -2,7 +2,7 @@
   "figure": "paper/figures/seam_PAPER_bosphorus_q63.png",
   "what": "the tiling artefact at frame scale, before any repair",
   "ckpt": "runs/RECIPE512/ckpt_PAPER.pth.tar",
-  "ckpt_epoch": 0,
+  "ckpt_epoch": 4,
   "ckpt_step": null,
   "seq": "Bosphorus_1920x1080_120fps_420_8bit_YUV.yuv",
   "cls": "UVG",
@@ -18,7 +18,7 @@
   "tile_px": 256,
   "n_tiles": 40,
   "compared": "every tile at the deepest exit with tile_pad_mode 'zeros' and seam repair removed, against the released decoder's full-frame decode of the same latent",
-  "penalty_db": 0.12438486516475677,
+  "penalty_db": 0.13579832017421722,
   "amplification": 30.0,
   "zoom_window_yxs": [
     384,

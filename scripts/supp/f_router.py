@@ -222,15 +222,15 @@ def content(k):
         f"{V['qp']['agree']:.4f} ± {V['qp']['stderr']:.4f} where the best "
         f"single constant exit scores {floor:.4f}. A head with no per-tile "
         "information cannot beat the best constant in expectation, and this one "
-        "does not. The floor belongs beside every other row, because an "
-        "agreement of 0.62 cannot be read at all until it is known that 0.50 is "
-        "free.")
+        f"does not. The floor belongs beside every other row: an agreement of "
+        f"{V['bits']['agree']:.2f} cannot be read at all until it is known "
+        f"that {floor:.2f} is free.")
     k.par(
         f"<b>The ablation's own cost.</b> The six trainings took "
         f"{abl_hours:.1f} hours of one NVIDIA RTX A6000 between them, from "
         f"{min(REC[l]['wall_s'] for l in VARIANT_ORDER) / 60:.0f} to "
         f"{max(REC[l]['wall_s'] for l in VARIANT_ORDER) / 60:.0f} minutes each "
-        "(results/router_ablation_*.json, field wall_s). The decoder is frozen "
+        "(the ablation's own records, field wall_s). The decoder is frozen "
         "for all of them, so none of that is decoder training. It is the price "
         "of the question, and it is worth stating beside a negative answer.")
 

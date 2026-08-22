@@ -1,0 +1,53 @@
+{
+  "script": "scripts/train_router2.py",
+  "label": "stem",
+  "ckpt": "runs/RECIPE512/ckpt_PAPER.pth.tar",
+  "ckpt_epoch": 4,
+  "router_ckpt": "runs/RECIPE512/routers2/ablation/inputs_stem_e4.pth",
+  "inputs": "stem,qp",
+  "with_bits": true,
+  "router_params": 148176,
+  "lam": 1.3e-05,
+  "steps": 3000,
+  "batch_size": 6,
+  "crop": 512,
+  "lr": 0.001,
+  "alpha": 1.0,
+  "seed": 0,
+  "device": "cuda:0",
+  "cuda_visible_devices": "4",
+  "gpu_name": "NVIDIA RTX A6000",
+  "tile_px": 256,
+  "split_depth": 2,
+  "num_exits": 6,
+  "heldout_agree_last50": 0.7400000232458115,
+  "heldout_agree_last250": 0.751333353638649,
+  "heldout_tiles_per_step": 12,
+  "eval": {
+    "agree": 0.7737500071525574,
+    "stderr_across_frames": 0.007211368065327406,
+    "n_frames": 1200,
+    "n_tiles": 4800,
+    "batches": 200,
+    "constant_best_agree": 0.3816666603088379,
+    "pred_hist": [
+      0.0,
+      0.0,
+      1249.0,
+      1168.0,
+      389.0,
+      1994.0
+    ],
+    "oracle_hist": [
+      0.0,
+      0.0,
+      1237.0,
+      1217.0,
+      514.0,
+      1832.0
+    ],
+    "note": "fresh draws from the same shuffled epoch, never trained on"
+  },
+  "wall_s": 3284.780435562134,
+  "finished": "2026-08-22T12:26:14"
+}

@@ -114,7 +114,7 @@ The other thing a set mean hides is how much of the budget is gone before any ti
 \begin{figure}[t]
 \centering
 \includegraphics[width=\columnwidth]{figures/seam_PAPER_bosphorus_q63.png}
-\caption{\textbf{The seam, at frame scale.} \textbf{a}, the decoded frame. \textbf{b}, the absolute error against a full-frame decode of the same latent, amplified 30$\times$, with every tile at the deepest exit so that nothing here is early exiting. \textbf{c}, a zoom on one junction. The tile grid is the error: 0.124 dB at q63, paid before the allocation begins.}
+\caption{\textbf{The seam, at frame scale.} \textbf{a}, the decoded frame. \textbf{b}, the absolute error against a full-frame decode of the same latent, amplified 30$\times$, with every tile at the deepest exit so that nothing here is early exiting. \textbf{c}, a zoom on one junction. The tile grid is the error: 0.136 dB at q63, paid before the allocation begins.}
 \end{figure}
 
 {\small paper/figures/seam\_PAPER\_bosphorus\_q63.png, drawn from results/supp\_seam\_problem\_bosphorus\_q63.json on runs/RECIPE512/ckpt\_PAPER.pth.tar. The panel is the worst case rather than the shipped one: the file records tile\_pad\_mode zeros with the deblocking filter removed, which is how the artefact is made visible. The floors quoted above are the shipped configuration, replicate padding with the filter on.}
@@ -264,7 +264,7 @@ There is a structural fix and it was measured and rejected, which is row five of
 
 \subsection{How much of this can be repeated exactly}
 
-Every measurement file records the checkpoint it was taken on, and there are three kinds of answer. 62 of the files these two documents read name a checkpoint that does not move -- a pin or a warm start -- so the measurement can be repeated exactly. Another 17 name one the watcher overwrites but record the epoch or step it was at, so the weights are identified even though the path is not. The remaining 12 record neither, and their paths now point at whatever those runs have trained to since.
+Every measurement file records the checkpoint it was taken on, and there are three kinds of answer. 64 of the files these two documents read name a checkpoint that does not move -- a pin or a warm start -- so the measurement can be repeated exactly. Another 17 name one the watcher overwrites but record the epoch or step it was at, so the weights are identified even though the path is not. The remaining 12 record neither, and their paths now point at whatever those runs have trained to since.
 
 That last group is not hidden -- several of the files in it are named as such where they are used, and the epoch tables of this section exist because of it -- but it is worth stating once as a number rather than as remarks. Nothing in the main paper's headline is in it: the pinned checkpoint carries every table the paper reports. What is in it is the adapter and coupling ablations, the hybrid sweeps of configuration C, the wall-clock files and the anchor drift of the runs other than the pinned one. Repeating those exactly would need the checkpoints back, which is why scripts/check\_provenance.py refuses to let the count grow.
 
