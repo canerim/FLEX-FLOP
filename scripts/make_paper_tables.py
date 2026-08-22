@@ -737,6 +737,18 @@ if trows:
     if fgap:
         mac("HeldFloorGapMin", f"{min(fgap.values()):.3f}")
         mac("HeldFloorGapMax", f"{max(fgap.values()):.3f}")
+        # The same difference the other way up, which is the direction the
+        # prose reads it in: how far the calibration floor sits ABOVE the
+        # test one. It changes sign along the ladder, and a signed range
+        # printed as "a gap of -0.024 to 0.005" said nothing.
+        _co = {q: -v for q, v in fgap.items()}
+        _above = [q for q in _co if _co[q] > 0]
+        _below = [q for q in _co if _co[q] <= 0]
+        mac("HeldFloorCalOverMax", f"{max(_co.values()):.3f}")
+        mac("HeldFloorCalOverMaxQp", str(max(_co, key=_co.get)))
+        mac("HeldFloorCalUnderMax", f"{-min(_co.values()):.3f}")
+        mac("HeldFloorNAbove", str(len(_above)))
+        mac("HeldFloorNBelow", str(len(_below)))
         mac("HeldFloorCalLow", f"{calf[hqs[0]]:.3f}")
         mac("HeldFloorTestLow", f"{hby[hqs[0]]['floor_db']:.3f}")
         mac("HeldFloorCalHigh", f"{calf[hqs[-1]]:.3f}")

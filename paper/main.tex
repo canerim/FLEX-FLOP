@@ -1606,15 +1606,20 @@ fixed.
 The highest rate is where this used to fail outright, and it is worth saying
 what changed. The floor on the calibration frames---the distortion tiling costs
 with every tile already at the deepest exit---is \HeldFloorCalHigh\dB\ at the
-highest rate against \HeldFloorTestHigh\dB\ on the test frames, a gap of
-\HeldFloorGapMin\ to \HeldFloorGapMax\dB\ across the ladder. On an earlier
+highest rate against \HeldFloorTestHigh\dB\ on the test frames, and the
+difference changes sign along the ladder: the calibration floor is the lower of
+the two at the \HeldFloorNBelow\ lowest rates, by at most
+\HeldFloorCalUnderMax\dB, and the higher at the other \HeldFloorNAbove, by
+\HeldFloorCalOverMax\dB\ at $q\HeldFloorCalOverMaxQp$. On an earlier
 checkpoint that calibration floor sat above the budget, no allocation on
 $512$px photographs met $0.1\dB$ there, and the shipped table had a hole where
 the highest rate should be. Four epochs of training pulled the floor below the
 budget and the hole closed: \HeldNNoBeta\ of the \HeldNRates\ rates are missing
-from the table now. The gap itself does not close, and it is the reason the
-transfer undershoots---a budget written as an absolute decibel sits a different
-distance above the floor on $512$px photographs than on $1080$p video.
+from the table now. That difference is a quarter of the budget at
+$q\HeldFloorCalOverMaxQp$ and it is why the transfer undershoots there. At the
+bottom of the ladder the two floors agree to within \HeldFloorCalUnderMax\dB,
+so the shortfall there is not the floor but what a given $\beta$ delivers above
+it.
 
 We keep the test-bisected figures as B's headline, since the comparison against
 A is built on them, and Table~\ref{tab:betaheldout} is the correction a reader
