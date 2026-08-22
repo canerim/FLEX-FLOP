@@ -1,0 +1,224 @@
+{
+  "ckpt": "runs/RECIPE512/ckpt_PAPER.pth.tar",
+  "split_depth": 2,
+  "num_exits": 6,
+  "n_frames": 12,
+  "qps": [
+    0,
+    32,
+    63
+  ],
+  "what": "dB below the released decoder at each exit, with the always-on stem degraded",
+  "rows": [
+    {
+      "qp": 0,
+      "exit": 2,
+      "stem": "full",
+      "db_vs_uf": 0.10827437043190002,
+      "extra_db_vs_full_stem": 0.0
+    },
+    {
+      "qp": 0,
+      "exit": 5,
+      "stem": "full",
+      "db_vs_uf": 0.00021225974705885164,
+      "extra_db_vs_full_stem": 0.0
+    },
+    {
+      "qp": 0,
+      "exit": 2,
+      "stem": "half",
+      "db_vs_uf": 4.382774233818054,
+      "extra_db_vs_full_stem": 4.274499863386154
+    },
+    {
+      "qp": 0,
+      "exit": 5,
+      "stem": "half",
+      "db_vs_uf": 4.325459003448486,
+      "extra_db_vs_full_stem": 4.3252467437014275
+    },
+    {
+      "qp": 0,
+      "exit": 2,
+      "stem": "drop 0.25",
+      "db_vs_uf": 0.6122472882270813,
+      "extra_db_vs_full_stem": 0.5039729177951813
+    },
+    {
+      "qp": 0,
+      "exit": 5,
+      "stem": "drop 0.25",
+      "db_vs_uf": 0.3977293521165848,
+      "extra_db_vs_full_stem": 0.3975170923695259
+    },
+    {
+      "qp": 0,
+      "exit": 2,
+      "stem": "drop 0.5",
+      "db_vs_uf": 1.2523141503334045,
+      "extra_db_vs_full_stem": 1.1440397799015045
+    },
+    {
+      "qp": 0,
+      "exit": 5,
+      "stem": "drop 0.5",
+      "db_vs_uf": 0.9909417480230331,
+      "extra_db_vs_full_stem": 0.9907294882759743
+    },
+    {
+      "qp": 0,
+      "exit": 2,
+      "stem": "drop 0.75",
+      "db_vs_uf": 2.0705175399780273,
+      "extra_db_vs_full_stem": 1.9622431695461273
+    },
+    {
+      "qp": 0,
+      "exit": 5,
+      "stem": "drop 0.75",
+      "db_vs_uf": 1.6950589418411255,
+      "extra_db_vs_full_stem": 1.6948466820940666
+    },
+    {
+      "qp": 32,
+      "exit": 2,
+      "stem": "full",
+      "db_vs_uf": 0.17057068645954132,
+      "extra_db_vs_full_stem": 0.0
+    },
+    {
+      "qp": 32,
+      "exit": 5,
+      "stem": "full",
+      "db_vs_uf": 0.00781570270191878,
+      "extra_db_vs_full_stem": 0.0
+    },
+    {
+      "qp": 32,
+      "exit": 2,
+      "stem": "half",
+      "db_vs_uf": 9.942058324813843,
+      "extra_db_vs_full_stem": 9.771487638354301
+    },
+    {
+      "qp": 32,
+      "exit": 5,
+      "stem": "half",
+      "db_vs_uf": 9.941053986549377,
+      "extra_db_vs_full_stem": 9.933238283847459
+    },
+    {
+      "qp": 32,
+      "exit": 2,
+      "stem": "drop 0.25",
+      "db_vs_uf": 1.3709448277950287,
+      "extra_db_vs_full_stem": 1.2003741413354874
+    },
+    {
+      "qp": 32,
+      "exit": 5,
+      "stem": "drop 0.25",
+      "db_vs_uf": 1.0455229133367538,
+      "extra_db_vs_full_stem": 1.037707210634835
+    },
+    {
+      "qp": 32,
+      "exit": 2,
+      "stem": "drop 0.5",
+      "db_vs_uf": 2.2621366381645203,
+      "extra_db_vs_full_stem": 2.091565951704979
+    },
+    {
+      "qp": 32,
+      "exit": 5,
+      "stem": "drop 0.5",
+      "db_vs_uf": 1.8686877191066742,
+      "extra_db_vs_full_stem": 1.8608720164047554
+    },
+    {
+      "qp": 32,
+      "exit": 2,
+      "stem": "drop 0.75",
+      "db_vs_uf": 2.9595834016799927,
+      "extra_db_vs_full_stem": 2.7890127152204514
+    },
+    {
+      "qp": 32,
+      "exit": 5,
+      "stem": "drop 0.75",
+      "db_vs_uf": 2.435856908559799,
+      "extra_db_vs_full_stem": 2.4280412058578804
+    },
+    {
+      "qp": 63,
+      "exit": 2,
+      "stem": "full",
+      "db_vs_uf": 0.22494925186038017,
+      "extra_db_vs_full_stem": 0.0
+    },
+    {
+      "qp": 63,
+      "exit": 5,
+      "stem": "full",
+      "db_vs_uf": 0.018698025960475206,
+      "extra_db_vs_full_stem": 0.0
+    },
+    {
+      "qp": 63,
+      "exit": 2,
+      "stem": "half",
+      "db_vs_uf": 14.16766881942749,
+      "extra_db_vs_full_stem": 13.94271956756711
+    },
+    {
+      "qp": 63,
+      "exit": 5,
+      "stem": "half",
+      "db_vs_uf": 14.171137809753418,
+      "extra_db_vs_full_stem": 14.152439783792943
+    },
+    {
+      "qp": 63,
+      "exit": 2,
+      "stem": "drop 0.25",
+      "db_vs_uf": 2.4371561408042908,
+      "extra_db_vs_full_stem": 2.2122068889439106
+    },
+    {
+      "qp": 63,
+      "exit": 5,
+      "stem": "drop 0.25",
+      "db_vs_uf": 2.08268404006958,
+      "extra_db_vs_full_stem": 2.063986014109105
+    },
+    {
+      "qp": 63,
+      "exit": 2,
+      "stem": "drop 0.5",
+      "db_vs_uf": 3.516787588596344,
+      "extra_db_vs_full_stem": 3.291838336735964
+    },
+    {
+      "qp": 63,
+      "exit": 5,
+      "stem": "drop 0.5",
+      "db_vs_uf": 3.094891905784607,
+      "extra_db_vs_full_stem": 3.0761938798241317
+    },
+    {
+      "qp": 63,
+      "exit": 2,
+      "stem": "drop 0.75",
+      "db_vs_uf": 4.299874007701874,
+      "extra_db_vs_full_stem": 4.074924755841494
+    },
+    {
+      "qp": 63,
+      "exit": 5,
+      "stem": "drop 0.75",
+      "db_vs_uf": 3.7699830532073975,
+      "extra_db_vs_full_stem": 3.7512850272469223
+    }
+  ]
+}
