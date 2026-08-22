@@ -41,7 +41,6 @@ STRUCTURAL = {
     "supp_module_shapes.json": "layer shapes",
     "supp_footprint.json": "parameter and activation footprint",
     "why_qp_PAPER.json": "bitrate of a bitstream we do not change",
-    "rd_absolute_PAPER.json": "release PSNR and bitrate; our column is a check",
     "dmc_ld_recon_audit.json": "the released codec's own reconstruction",
     "seam_spatial_published.json": "geometry of the published seam",
     "logconvexity.json": "a property of the cost model",
