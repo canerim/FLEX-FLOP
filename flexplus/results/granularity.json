@@ -1,0 +1,72 @@
+{
+  "ckpt": "/home/can_karsal/FLEX-UF/runs/RECIPE512/ckpt_PAPER.pth.tar",
+  "target_db": 0.1,
+  "frames": 12,
+  "rows": [
+    {
+      "qp": 32,
+      "cells": [
+        {
+          "cell_px": 256,
+          "db": 0.09998746930311124,
+          "saving_pct_vs_release": 32.97533217567867,
+          "saving_no_band_pct": 33.26941855112712,
+          "band_cost_pct": 0.29408637544844396,
+          "hist": [
+            0,
+            0,
+            298,
+            150,
+            18,
+            14
+          ]
+        },
+        {
+          "cell_px": 128,
+          "db": 0.09999661395947139,
+          "saving_pct_vs_release": 33.96561206173897,
+          "saving_no_band_pct": 34.59794370770454,
+          "band_cost_pct": 0.6323316459655643,
+          "hist": [
+            0,
+            0,
+            1359,
+            416,
+            107,
+            38
+          ]
+        },
+        {
+          "cell_px": 64,
+          "db": 0.09994776640087366,
+          "saving_pct_vs_release": 34.509197164611685,
+          "saving_no_band_pct": 35.804886039810036,
+          "band_cost_pct": 1.2956888751983513,
+          "hist": [
+            0,
+            0,
+            5952,
+            1239,
+            377,
+            112
+          ]
+        },
+        {
+          "cell_px": 32,
+          "db": 0.09999911269793908,
+          "saving_pct_vs_release": 34.683431674467194,
+          "saving_no_band_pct": 37.144280582997546,
+          "band_cost_pct": 2.4608489085303518,
+          "hist": [
+            0,
+            0,
+            25995,
+            3334,
+            1102,
+            289
+          ]
+        }
+      ]
+    }
+  ]
+}

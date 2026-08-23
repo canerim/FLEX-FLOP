@@ -1,0 +1,48 @@
+{
+  "ckpt": "runs/RECIPE512/ckpt_PAPER.pth.tar",
+  "ckpt_epoch": 4,
+  "seq": "Bosphorus_1920x1080_120fps_420_8bit_YUV.yuv",
+  "qp": 32,
+  "K": 6,
+  "j": 2,
+  "blocks_per_exit": 2,
+  "what": "per-position depth with a max-plus dilated receptive field; uniform depth is the exactness check",
+  "rows": [
+    {
+      "kind": "uniform",
+      "exit": 2,
+      "db_per_position": 0.1419553253799677,
+      "db_tiled": 0.15029664151370525,
+      "trunk_fraction": 0.5
+    },
+    {
+      "kind": "uniform",
+      "exit": 3,
+      "db_per_position": 0.05936670582741499,
+      "db_tiled": 0.07687308359891176,
+      "trunk_fraction": 0.6666666666666666
+    },
+    {
+      "kind": "uniform",
+      "exit": 4,
+      "db_per_position": 0.027596659492701292,
+      "db_tiled": 0.049714152701199055,
+      "trunk_fraction": 0.8333333333333334
+    },
+    {
+      "kind": "uniform",
+      "exit": 5,
+      "db_per_position": 0.008676587021909654,
+      "db_tiled": 0.03367873840034008,
+      "trunk_fraction": 1.0
+    },
+    {
+      "kind": "routed",
+      "map": "supp_exitmap_bosphorus_q32_b01.json",
+      "db_per_position": 0.08644573390483856,
+      "db_tiled": 0.09881556034088135,
+      "trunk_fraction": 0.5640706380208333,
+      "trunk_fraction_tiled": 0.5583333333333333
+    }
+  ]
+}
