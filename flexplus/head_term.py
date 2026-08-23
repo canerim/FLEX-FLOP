@@ -87,7 +87,7 @@ def main():
                 idx = torch.arange(K, device=dev, dtype=M.dtype)
 
                 def at(lam):
-                    k = (M + lam * idx[None, :]).argmin(1).clamp(min=j)
+                    k = (M[:, j:] + lam * idx[None, j:]).argmin(1) + j
                     return (10 * torch.log10(
                         M.gather(1, k[:, None]).squeeze(1).mean()
                         / R.mean())).item(), k

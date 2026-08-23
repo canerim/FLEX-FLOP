@@ -1,0 +1,164 @@
+{
+  "target_db": 0.1,
+  "cell_px": 64,
+  "K": 6,
+  "j": 2,
+  "shape_sd": [
+    7083515218.37469,
+    4244803428.141477
+  ],
+  "rows": [
+    {
+      "model": "oracle",
+      "per_qp": {
+        "0": {
+          "saving_pct": 38.62623405799791,
+          "db": 0.09998722275621504
+        },
+        "16": {
+          "saving_pct": 35.75072360685391,
+          "db": 0.0999934857990411
+        },
+        "32": {
+          "saving_pct": 32.56501230267786,
+          "db": 0.09999639609865384
+        },
+        "48": {
+          "saving_pct": 30.52715111485693,
+          "db": 0.09999908225519909
+        },
+        "63": {
+          "saving_pct": 29.137091682803394,
+          "db": 0.09999691772947365
+        }
+      },
+      "mean_saving_pct": 33.321242553038005
+    },
+    {
+      "model": "raterank",
+      "per_qp": {
+        "0": {
+          "saving_pct": 37.47987699302614,
+          "db": 0.09997799153691828
+        },
+        "16": {
+          "saving_pct": 34.49956245054248,
+          "db": 0.0999967104997387
+        },
+        "32": {
+          "saving_pct": 30.991792654141204,
+          "db": 0.0999992176879958
+        },
+        "48": {
+          "saving_pct": 24.695492244034135,
+          "db": 0.09996620657624537
+        },
+        "63": {
+          "saving_pct": 22.46558069262159,
+          "db": 0.099936647984288
+        }
+      },
+      "mean_saving_pct": 30.02646100687311
+    },
+    {
+      "model": "gbm_mono",
+      "per_qp": {
+        "0": {
+          "saving_pct": 37.50289857667981,
+          "db": 0.09999620383952952
+        },
+        "16": {
+          "saving_pct": 33.87174190305918,
+          "db": 0.0999889314903466
+        },
+        "32": {
+          "saving_pct": 30.223739340547517,
+          "db": 0.09999805026352541
+        },
+        "48": {
+          "saving_pct": 27.375980570710755,
+          "db": 0.09999938063172288
+        },
+        "63": {
+          "saving_pct": 24.59615987918814,
+          "db": 0.09999914601529482
+        }
+      },
+      "mean_saving_pct": 30.714104054037087
+    }
+  ],
+  "raterank_alpha": 0.13133978130929247,
+  "raterank_phi": [
+    0.06874931780185715,
+    0.03311407992080296,
+    0.018908726449701697,
+    0.0
+  ],
+  "ablation": [
+    {
+      "inputs": "hepsi",
+      "n_features": 26,
+      "mean_saving_pct": 30.714104054037087
+    },
+    {
+      "inputs": "-bits",
+      "n_features": 23,
+      "mean_saving_pct": 30.715240563033074
+    },
+    {
+      "inputs": "-latent",
+      "n_features": 16,
+      "mean_saving_pct": 30.623529025925233
+    },
+    {
+      "inputs": "-scales",
+      "n_features": 23,
+      "mean_saving_pct": 30.679091425335365
+    },
+    {
+      "inputs": "-stem",
+      "n_features": 22,
+      "mean_saving_pct": 30.640353346881824
+    },
+    {
+      "inputs": "-qp",
+      "n_features": 24,
+      "mean_saving_pct": 30.448837435861652
+    },
+    {
+      "inputs": "-nbr",
+      "n_features": 22,
+      "mean_saving_pct": 30.74789345226667
+    },
+    {
+      "inputs": "yalniz bits",
+      "n_features": 3,
+      "mean_saving_pct": 30.258627676693767
+    },
+    {
+      "inputs": "yalniz latent",
+      "n_features": 10,
+      "mean_saving_pct": 29.874437481469432
+    },
+    {
+      "inputs": "yalniz scales",
+      "n_features": 3,
+      "mean_saving_pct": 29.302985964496855
+    },
+    {
+      "inputs": "yalniz stem",
+      "n_features": 4,
+      "mean_saving_pct": 30.684472015392977
+    },
+    {
+      "inputs": "yalniz qp",
+      "n_features": 2,
+      "mean_saving_pct": 15.101164556961965
+    },
+    {
+      "inputs": "yalniz nbr",
+      "n_features": 4,
+      "mean_saving_pct": 30.183067627148297
+    }
+  ]
+}

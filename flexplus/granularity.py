@@ -154,9 +154,14 @@ def main():
                 def at(lam, dat=dat):
                     ks, dbs = [], []
                     for M, R, *_ in dat:
-                        k = (M + lam * torch.arange(
-                            K, device=dev, dtype=M.dtype)[None, :]).argmin(1)
-                        k = k.clamp(min=j)
+                        # argmin over the exits that exist. Below the split
+                        # the decoder clamps, so those columns carry exit j's
+                        # error at a lower billed cost; including them and
+                        # clipping after prices the shallow option at a rate
+                        # no decoder charges.
+                        k = (M[:, j:] + lam * torch.arange(
+                            j, K, device=dev, dtype=M.dtype)[None, :]
+                             ).argmin(1) + j
                         ks.append(k)
                         dbs.append((10 * torch.log10(
                             M.gather(1, k[:, None]).squeeze(1).mean()

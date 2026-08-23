@@ -4,3 +4,5 @@ runs/
 *.log
 __pycache__/
 *.pyc
+.venv-ml/
+flexplus/results/*.npz
