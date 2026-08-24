@@ -193,6 +193,14 @@ def story2(s):
                     "to serve a deeper neighbour. The band in (c) is computed by "
                     "dilating the map in (a)&ndash;(b), not drawn by hand, which "
                     "is why it is thin and irregular rather than a fixed halo."))
+    s.append(figure("fig10_pipeline", "pipe",
+                    "The decode with the allocation path drawn in. The router "
+                    "reads quantities the decoder already has &mdash; per-cell "
+                    "bits from the entropy model, latent statistics, and the "
+                    "stem feature &mdash; so it adds nothing to the bitstream "
+                    "and its own cost is 0.009% of a decode. The map it produces "
+                    "is dilated once, and the trunk then runs where "
+                    "<i>D</i>(<i>x</i>)&nbsp;&ge;&nbsp;<i>b</i>."))
     s.append(P("4.1&nbsp;&nbsp;Exactness, verified rather than argued", H2))
     s.append(P("The argument above covers the trunk. It does not cover the head, "
                "which has its own 3&times;3 and at a depth boundary reads one cell "
@@ -280,6 +288,14 @@ def story3(s):
                     "epoch: it stops improving at the pinned epoch, which is the "
                     "same conclusion the saving series and the training log reach "
                     "independently."))
+    s.append(figure("fig11_budget", "budget",
+                    "Where one decode's compute goes. The floor is the cost with "
+                    "every cell at the shallowest exit it may take, and it is "
+                    "what caps the ceiling: 0.609 for the tiled ladder, 0.599 "
+                    "once per-position decoding removes seam repair, and 0.301 "
+                    "once the clamp stops forcing four shared blocks on every "
+                    "position. The upsample, adapter and head terms are "
+                    "irreducible; the trunk is not."))
     s.append(P("Unlocking them is a change to one line of the decode path. With "
                "per-position decoding at 64&nbsp;px cells, the oracle allocation "
                "at the 0.1&nbsp;dB budget moves as follows.", BODY))

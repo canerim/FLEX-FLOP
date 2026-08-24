@@ -41,7 +41,8 @@ def fig3_ladder():
             fontsize=6.0, color=S.VERM)
     ax.set_xlabel("trunk blocks run"); ax.set_ylabel("dB above the release")
     ax.set_xticks(blocks); ax.set_yscale("log")
-    ax.set_title("(a) measured cost of each rung", fontsize=7.4, pad=5)
+    ax.set_title("measured cost of each rung", fontsize=7.0, pad=4, loc="left")
+    S.panel(ax, "a")
     S.despine(ax)
 
     ax = axes[1]
@@ -58,7 +59,8 @@ def fig3_ladder():
     ax.text(4.12, ax.get_ylim()[1] * 0.97, "pin", fontsize=6.2, color=S.INK2,
             va="top")
     ax.set_xlabel("epoch"); ax.set_ylabel("spread $e_2\\!\\to\\!e_5$ (dB)")
-    ax.set_title("(b) the spread stops at epoch 4", fontsize=7.4, pad=5)
+    ax.set_title("the spread stops at epoch 4", fontsize=7.0, pad=4, loc="left")
+    S.panel(ax, "b")
     S.despine(ax)
     fig.savefig(OUT / "fig3_ladder.pdf"); fig.savefig(OUT / "fig3_ladder.png")
     plt.close(fig)
@@ -69,35 +71,51 @@ def fig4_granularity():
     g = J("granularity_ctc53_fixed.json")
     by = {r["qp"]: {c["cell_px"]: c for c in r["cells"]} for r in g["rows"]}
     cells = [256, 128, 64, 32]
-    fig, axes = plt.subplots(1, 2, figsize=(6.6, 2.25))
+    fig, axes = plt.subplots(1, 2, figsize=(6.5, 2.15),
+                             gridspec_kw=dict(wspace=0.34))
 
     ax = axes[0]
     for i, q in enumerate([0, 32, 63]):
         y = [by[q][c]["saving_pct_vs_release"] for c in cells]
-        ax.plot(range(len(cells)), y, "o-", color=S.CAT[i])
-        S.label_end(ax, len(cells) - 1, y[-1], f"qp{q}", S.CAT[i], dx=4)
-    ax.set_xticks(range(len(cells))); ax.set_xticklabels([f"{c}" for c in cells])
+        ax.plot(range(len(cells)), y, "o-", color=S.CAT[i], clip_on=False,
+                zorder=3)
+        ax.annotate(f"qp {q}", (len(cells) - 1, y[-1]), xytext=(5, 0),
+                    textcoords="offset points", color=S.CAT[i], fontsize=6.4,
+                    va="center", fontweight="bold", annotation_clip=False)
+    ax.set_xticks(range(len(cells))); ax.set_xticklabels([str(c) for c in cells])
+    ax.set_xlim(-0.16, len(cells) - 1 + 0.62)
     ax.set_xlabel("allocation cell (px)"); ax.set_ylabel("saving (%)")
-    ax.set_title("(a) net saving", fontsize=7.4, pad=5)
-    S.despine(ax)
+    ax.set_title("net saving after the band is charged", fontsize=7.0, pad=4,
+                 loc="left")
+    S.panel(ax, "a", dx=-0.20)
+    S.ygrid(ax); S.despine(ax)
 
     ax = axes[1]
-    w = 0.62
     net = [np.mean([by[q][c]["saving_pct_vs_release"] for q in QPS]) for c in cells]
     band = [np.mean([by[q][c]["band_cost_pct"] for q in QPS]) for c in cells]
-    xs = np.arange(len(cells))
-    ax.bar(xs, net, w, color=S.BLUE, label="net saving")
-    ax.bar(xs, band, w, bottom=net, color=S.ORANGE, label="band cost")
+    xs = np.arange(len(cells)); w = 0.46
+    ax.bar(xs, net, w, color=S.BLUE, zorder=3)
+    ax.bar(xs, band, w, bottom=[n + 0.10 for n in net], color=S.ORANGE, zorder=3)
     for x, nv, bv in zip(xs, net, band):
-        ax.text(x, nv + bv + 0.4, f"{bv:.2f}", ha="center", fontsize=6.0,
-                color=S.VERM)
-        ax.text(x, nv - 1.6, f"{nv:.1f}", ha="center", fontsize=6.2,
+        ax.text(x, nv + bv + 0.9, f"{bv:.2f}", ha="center", fontsize=6.0,
+                color=S.VERM, fontweight="bold")
+        ax.text(x, nv - 1.9, f"{nv:.1f}", ha="center", fontsize=6.4,
                 color="white", fontweight="bold")
-    ax.set_xticks(xs); ax.set_xticklabels([f"{c}" for c in cells])
-    ax.set_xlabel("allocation cell (px)"); ax.set_ylabel("mean over five rates (%)")
-    ax.set_title("(b) at 32 px the band eats the gain", fontsize=7.4, pad=5)
-    ax.legend(loc="lower right", ncol=1)
-    S.despine(ax)
+    ax.annotate("band cost", (xs[-1] + 0.30, net[-1] + band[-1] / 2),
+                xytext=(9, 6), textcoords="offset points", ha="left",
+                fontsize=6.2, color=S.VERM, annotation_clip=False,
+                arrowprops=dict(arrowstyle="-", color=S.VERM, lw=0.5,
+                                shrinkA=0, shrinkB=1))
+    ax.text(xs[1], net[1] / 2, "net saving", ha="center", fontsize=6.2,
+            color="white")
+    ax.set_xticks(xs); ax.set_xticklabels([str(c) for c in cells])
+    ax.set_ylim(0, 41); ax.set_xlim(-0.55, len(cells) - 1 + 1.05)
+    ax.set_xlabel("allocation cell (px)")
+    ax.set_ylabel("mean over five rates (%)")
+    ax.set_title("at 32 px the band eats the gain", fontsize=7.0, pad=4,
+                 loc="left")
+    S.panel(ax, "b", dx=-0.20)
+    S.ygrid(ax); S.despine(ax)
     fig.savefig(OUT / "fig4_granularity.pdf")
     fig.savefig(OUT / "fig4_granularity.png")
     plt.close(fig)
@@ -135,7 +153,8 @@ def fig5_frontier():
             ax.plot(db[m], s[m], ls=ls, color=col, label=lab)
         ax.axvline(0.10, color=S.MUTED, lw=0.8, ls=(0, (2, 2)))
         ax.set_xlabel("dB below the release"); ax.set_xlim(0, 0.30)
-        ax.set_title(f"qp {q}", fontsize=7.4, pad=5)
+        ax.set_title(f"qp {q}", fontsize=7.0, pad=4, loc="left")
+        S.panel(ax, "ab"[0 if q == 0 else 1])
         S.despine(ax)
     axes[0].set_ylabel("saving (%)")
     axes[0].text(0.085, 4, "BD interval", fontsize=6.0, color=S.INK2, ha="center")
@@ -168,6 +187,7 @@ def fig6_waterfall():
     ax.set_xticks(range(len(steps)))
     ax.set_xticklabels([s[0] for s in steps], fontsize=6.2)
     ax.set_ylabel("saving at 0.1 dB (%)"); ax.set_ylim(0, 40)
+    S.ygrid(ax)
     ax.set_title("all inference-time, one checkpoint", fontsize=7.2, pad=5)
     S.despine(ax)
     fig.savefig(OUT / "fig6_waterfall.pdf"); fig.savefig(OUT / "fig6_waterfall.png")
@@ -229,9 +249,10 @@ def fig9_router():
                 color=S.INK)
     ax.set_xticks(range(1, len(ev) + 1))
     ax.set_xlabel("component"); ax.set_ylabel("variance explained (%)")
-    ax.set_title("(a) the error curve is nearly rank-1", fontsize=7.4, pad=5)
+    ax.set_title("the error curve is nearly rank-1", fontsize=7.0, pad=4, loc="left")
+    S.panel(ax, "a")
     ax.set_ylim(0, 108)
-    S.despine(ax)
+    S.ygrid(ax); S.despine(ax)
 
     ax = axes[1]
     r2 = {r["model"]: r["mean_saving_pct"] for r in J("router_fit3.json")["rows"]}
@@ -252,7 +273,8 @@ def fig9_router():
     ax.set_yticks(ys); ax.set_yticklabels([n for _, n in names], fontsize=6.6)
     ax.invert_yaxis(); ax.set_xlabel("mean saving at 0.1 dB (%)")
     ax.set_xlim(0, 41); ax.legend(loc="lower right")
-    ax.set_title("(b) the gap between oracle and real", fontsize=7.4, pad=5)
+    ax.set_title("the gap between oracle and real", fontsize=7.0, pad=4, loc="left")
+    S.panel(ax, "b")
     S.despine(ax)
     fig.savefig(OUT / "fig9_router.pdf"); fig.savefig(OUT / "fig9_router.png")
     plt.close(fig)

@@ -128,7 +128,8 @@ def fig2_mechanism():
     fig, axes = plt.subplots(1, 3, figsize=(6.6, 2.30))
 
     ax = axes[0]
-    ax.set_title("(a) tiled decoding", fontsize=7.2, pad=6)
+    ax.set_title("tiled decoding", fontsize=7.0, pad=5, loc="left")
+    S.panel(ax, "a", dx=-0.02, dy=1.16)
     for r in range(n):
         for c in range(n):
             block(ax, c, n - 1 - r, 0.94, 0.94,
@@ -137,22 +138,24 @@ def fig2_mechanism():
     for k in range(1, n):
         ax.axvline(k - 0.03, color=S.VERM, lw=1.6, ymin=0.14, ymax=0.99)
         ax.axhline(k - 0.03, color=S.VERM, lw=1.6, xmin=0.01, xmax=0.985)
-    ax.text(n / 2 - 0.5, -0.62, "her kesim kenari uydurma\ndeger okur -- dikis",
+    ax.text(n / 2 - 0.5, -0.62, "every cut edge convolves\nagainst an invented value",
             ha="center", va="top", fontsize=6.0, color=S.VERM)
 
     ax = axes[1]
-    ax.set_title("(b) per-position depth", fontsize=7.2, pad=6)
+    ax.set_title("per-position depth", fontsize=7.0, pad=5, loc="left")
+    S.panel(ax, "b", dx=-0.02, dy=1.16)
     for r in range(n):
         for c in range(n):
             block(ax, c, n - 1 - r, 1.0, 1.0,
                   cmap(0.16 + 0.13 * depth[r, c]), "none", f"{depth[r, c]}", 6.6,
                   lw=0.0)
     ax.text(n / 2 - 0.5, -0.62,
-            "kesim yok; her konum kendi\nderinligine kadar cozulur",
+            "no cut; every position is\ndecoded to its own depth",
             ha="center", va="top", fontsize=6.0, color=S.BLUE)
 
     ax = axes[2]
-    ax.set_title("(c) what it pays: the band", fontsize=7.2, pad=6)
+    ax.set_title("what it pays: the band", fontsize=7.0, pad=5, loc="left")
+    S.panel(ax, "c", dx=-0.02, dy=1.16)
     for r in range(n):
         for c in range(n):
             block(ax, c, n - 1 - r, 1.0, 1.0, "#f5f5f5", "none", "", 6, lw=0.0)
@@ -160,7 +163,7 @@ def fig2_mechanism():
               cmap=mpl_green(), vmin=0, vmax=1, interpolation="nearest",
               zorder=3, alpha=0.95)
     ax.text(n / 2 - 0.5, -0.62,
-            f"derin komsuya hizmet eden\nkonumlar: +%{band_pct:.0f} trunk",
+            f"positions still computing for a\ndeeper neighbour: +{band_pct:.0f}% trunk",
             ha="center", va="top", fontsize=6.0, color=S.GREEN)
 
     for ax in axes:

@@ -27,23 +27,50 @@ SURF  = "#ffffff"
 
 
 def setup():
+    """Nature-ish: no box, no grid unless a reading needs one, generous white.
+
+    The rules that matter here are the ones a copy editor would enforce --
+    axis lines only where they are read against, ticks pointing out, units in
+    the label, one weight of type, and direct labels in place of a legend box
+    wherever four or fewer series make that legible.
+    """
     mpl.rcParams.update({
-        "figure.dpi": 200, "savefig.dpi": 200,
-        "savefig.bbox": "tight", "savefig.pad_inches": 0.02,
-        "font.family": "DejaVu Sans", "font.size": 7.2,
-        "axes.titlesize": 7.8, "axes.labelsize": 7.4,
-        "xtick.labelsize": 6.8, "ytick.labelsize": 6.8,
-        "legend.fontsize": 6.8, "legend.frameon": False,
-        "axes.edgecolor": MUTED, "axes.linewidth": 0.6,
+        "figure.dpi": 300, "savefig.dpi": 300,
+        "savefig.bbox": "tight", "savefig.pad_inches": 0.015,
+        "font.family": "DejaVu Sans", "font.size": 6.8,
+        "axes.titlesize": 7.0, "axes.labelsize": 7.0,
+        "xtick.labelsize": 6.4, "ytick.labelsize": 6.4,
+        "legend.fontsize": 6.4, "legend.frameon": False,
+        "legend.handlelength": 1.1, "legend.handletextpad": 0.5,
+        "legend.labelspacing": 0.32, "legend.borderpad": 0.0,
+        "axes.edgecolor": INK, "axes.linewidth": 0.55,
         "axes.labelcolor": INK, "text.color": INK,
-        "xtick.color": INK2, "ytick.color": INK2,
-        "xtick.major.width": 0.6, "ytick.major.width": 0.6,
-        "xtick.major.size": 2.5, "ytick.major.size": 2.5,
-        "axes.grid": True, "grid.color": GRID, "grid.linewidth": 0.5,
-        "axes.axisbelow": True, "lines.linewidth": 1.6,
-        "lines.markersize": 3.6, "figure.facecolor": SURF,
-        "axes.facecolor": SURF, "legend.handlelength": 1.4,
+        "axes.labelpad": 2.6, "axes.titlepad": 3.0,
+        "xtick.color": INK, "ytick.color": INK,
+        "xtick.direction": "out", "ytick.direction": "out",
+        "xtick.major.width": 0.55, "ytick.major.width": 0.55,
+        "xtick.major.size": 2.2, "ytick.major.size": 2.2,
+        "xtick.major.pad": 1.8, "ytick.major.pad": 1.8,
+        "axes.grid": False, "grid.color": GRID, "grid.linewidth": 0.4,
+        "axes.axisbelow": True, "lines.linewidth": 1.25,
+        "lines.markersize": 3.0, "lines.markeredgewidth": 0.0,
+        "figure.facecolor": SURF, "axes.facecolor": SURF,
+        "axes.spines.top": False, "axes.spines.right": False,
+        "patch.linewidth": 0.6,
     })
+
+
+def panel(ax, letter, dx=-0.155, dy=1.045):
+    """The bold panel letter outside the axes, not inside the title."""
+    ax.text(dx, dy, letter, transform=ax.transAxes, fontsize=8.0,
+            fontweight="bold", va="top", ha="left", color=INK)
+
+
+def ygrid(ax, alpha=1.0):
+    """A horizontal rule set, for panels read as magnitudes."""
+    ax.set_axisbelow(True)
+    ax.yaxis.grid(True, color=GRID, linewidth=0.4, alpha=alpha)
+    ax.xaxis.grid(False)
 
 
 def despine(ax, keep=("left", "bottom")):
