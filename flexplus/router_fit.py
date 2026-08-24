@@ -144,9 +144,18 @@ def main():
     ap.add_argument("--out", default=str(RES / "router_fit.json"))
     ap.add_argument("--models", nargs="+",
                     default=["oracle", "raterank", "flat", "ridge", "gbm",
-                             "gbm_shape", "rank1_gbm", "gbm_mono"])
+                             "gbm_shape", "rank1_gbm", "gbm_mono",
+                             "gbm_smear", "mlp"])
     ap.add_argument("--ablate", action="store_true")
     ap.add_argument("--perframe", action="store_true")
+    ap.add_argument("--split", type=int, default=None,
+                    help="override the split depth. The dumps carry every "
+                         "exit's real error because they are taken with "
+                         "forward_all_exits, which does not clamp; the clamp "
+                         "is a property of the DEPLOYED forward, not of the "
+                         "ladder. Setting 0 asks what the already-trained "
+                         "shallow rungs are worth once per-position decoding "
+                         "removes the seam the split existed to control.")
     a = ap.parse_args()
 
     C = Cost(json.loads((RES / "cost_constants.json").read_text()))
@@ -154,6 +163,8 @@ def main():
     feats = list(tr["features"])
     groups = json.loads(str(tr["groups"]))
     K, j = int(tr["K"][0]), int(tr["split_depth"][0])
+    if a.split is not None:
+        j = a.split
     cell = int(tr["cell"][0])
     cf = cell // C.feature_stride
     cost_k = np.array([(k + 1) * C.blocks_per_exit for k in range(K)],
@@ -202,6 +213,47 @@ def main():
                       l2_regularization=1.0, random_state=0).fit(
                     xt, np.log(Mtr[:, k]))
                 P[:, k] = np.exp(m.predict(xe))
+        elif name == "gbm_smear":
+            # The Lagrangian wants E[m_k | x]. A model fitted on log m gives
+            # exp(E[log m]) -- the geometric mean, which is below the
+            # arithmetic one by exp(sigma^2/2) for log-normal residuals. A
+            # CONSTANT factor would be harmless: it rescales every exit
+            # equally and the bisection absorbs it into lambda. But the
+            # residual spread is not constant across exits -- a shallow exit
+            # is harder to predict than a deep one -- so the correction is
+            # per exit and it does move the argmin. Duan's smearing estimator:
+            # take the factor straight from the training residuals rather than
+            # assuming they are log-normal.
+            from sklearn.ensemble import HistGradientBoostingRegressor as H
+            base = H(max_iter=400, learning_rate=0.06, l2_regularization=1.0,
+                     random_state=0).fit(xt, np.log(Mtr[:, -1]))
+            lb = base.predict(xe)
+            sm = float(np.mean(np.exp(np.log(Mtr[:, -1]) - base.predict(xt))))
+            P[:, -1] = np.exp(lb) * sm
+            acc = np.zeros(len(xe))
+            acc_t = np.zeros(len(xt))
+            for k in range(K - 2, j - 1, -1):
+                step = np.log(Mtr[:, k] / Mtr[:, k + 1]).clip(min=0)
+                m = H(max_iter=400, learning_rate=0.06, l2_regularization=1.0,
+                      random_state=0).fit(xt, np.log1p(step))
+                acc = acc + np.expm1(m.predict(xe)).clip(min=0)
+                acc_t = acc_t + np.expm1(m.predict(xt)).clip(min=0)
+                res = np.log(Mtr[:, k]) - (base.predict(xt) + acc_t)
+                P[:, k] = np.exp(lb + acc) * float(np.mean(np.exp(res)))
+        elif name == "mlp":
+            # The model class the shipped router uses, fitted here on the same
+            # targets as the trees so the comparison is about capacity rather
+            # than about what is being predicted.
+            from sklearn.neural_network import MLPRegressor
+            from sklearn.preprocessing import StandardScaler
+            from sklearn.pipeline import make_pipeline
+            xt_ = np.log1p(np.abs(xt)); xe_ = np.log1p(np.abs(xe))
+            Y = np.log(Mtr[:, j:])
+            mm = make_pipeline(
+                StandardScaler(),
+                MLPRegressor(hidden_layer_sizes=(128, 64), max_iter=120,
+                             early_stopping=True, random_state=0)).fit(xt_, Y)
+            P[:, j:] = np.exp(mm.predict(xe_))
         elif name == "rank1_gbm":
             # Rate-rank's structure with rate-rank's weakest part replaced.
             # It is rank-1 by construction -- one learned scale per cell times
@@ -281,7 +333,7 @@ def main():
         return P, float(al), lphi.tolist()
 
     out = {"target_db": a.target, "cell_px": cell, "K": K, "j": j,
-           "shape_sd": shape_sd.tolist(), "rows": []}
+           "shape_sd": shape_sd, "rows": []}
     rr_pred, rr_al, rr_phi = raterank_pred()
     out["raterank_alpha"] = rr_al
     out["raterank_phi"] = rr_phi
