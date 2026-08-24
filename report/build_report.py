@@ -138,3 +138,56 @@ def build(story, out):
                   leftPadding=0, rightPadding=0, topPadding=0, bottomPadding=0)
     doc.addPageTemplates([PageTemplate(id="p", frames=[frame], onPage=_page)])
     doc.build(story)
+
+
+# --- maths -----------------------------------------------------------------
+# reportlab has no TeX. The main paper's build_pdf.py renders each display with
+# matplotlib's mathtext and embeds the result; the same trick is used here so
+# the two documents set equations the same way.
+import hashlib
+
+_MATHDIR = HERE / "fig" / "math"
+
+
+def math(tex, fontsize=10.2, dpi=600, inline=False):
+    """A display equation, rendered once and cached by its own hash."""
+    import matplotlib
+    matplotlib.use("Agg")
+    import matplotlib.pyplot as plt
+    _MATHDIR.mkdir(parents=True, exist_ok=True)
+    key = hashlib.sha1(f"{tex}|{fontsize}|{dpi}".encode()).hexdigest()[:16]
+    png = _MATHDIR / f"{key}.png"
+    if not png.exists():
+        fig = plt.figure(figsize=(0.01, 0.01))
+        fig.text(0, 0, f"${tex}$", fontsize=fontsize, color="black")
+        fig.savefig(png, dpi=dpi, bbox_inches="tight", pad_inches=0.02,
+                    transparent=True)
+        plt.close(fig)
+    from PIL import Image as PILImage
+    w, h = PILImage.open(png).size
+    scale = 72.0 / dpi
+    img = Image(str(png))
+    img.drawWidth = w * scale
+    img.drawHeight = h * scale
+    img.hAlign = "CENTER"
+    return img
+
+
+def display(tex, fontsize=10.2):
+    return KeepTogether([Spacer(1, 3), math(tex, fontsize), Spacer(1, 5)])
+
+
+THM = S("thm", fontName="Times-Bold", fontSize=9.4, leading=11.6,
+        spaceBefore=7, spaceAfter=2, alignment=TA_JUSTIFY)
+STMT = S("stmt", fontName="Times-Italic", fontSize=9.4, leading=11.6,
+         spaceAfter=4)
+PRF = S("prf", fontSize=9.2, leading=11.2, spaceAfter=6)
+
+
+def theorem(kind, n, title, statement, style=STMT):
+    head = f"<b>{kind} {n}</b>" + (f" ({title})." if title else ".")
+    return KeepTogether([Paragraph(f"{head} {statement}", style)])
+
+
+def proof(text):
+    return Paragraph(f"<i>Proof.</i> {text} &#9633;", PRF)
