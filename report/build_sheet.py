@@ -20,15 +20,13 @@ ORDER = [
     ("fig1_training", "The ladder the main experiment trains",
      "Six exits are trained; the deployed forward can select four. The clamp "
      "at j=2, and the two adapters the RD loss never reaches."),
-    ("fig_configA", "Configuration A -- signalled",
-     "The encoder searches the exact table and transmits the map. 27.64% mean "
-     "at 0.1 dB, 64-91 bits/frame."),
-    ("fig_configB", "Configuration B -- bitstream-identical",
-     "Nothing added to the file. StemRouterHeadV2, 144k parameters, 0.163% of "
-     "a decode. 24.69% mean. THIS is what the decoder side runs."),
-    ("fig_configC", "Configuration C -- partial signalling",
-     "The map is sent only where the predictor is worst. Beats A by 1.6 points "
-     "at the lowest rate on the tiled ladder; does not transfer to 64 px / j=0."),
+    ("fig16_configs", "The three configurations on one grammar",
+     "Same decoder, same ladder, same Lagrangian; they differ only in who "
+     "decides the exit map and what that costs to transmit. A measures "
+     "instead of predicting and pays 64-91 bits a frame; B predicts from what "
+     "the decode already holds and pays nothing; C sends the map only where "
+     "the predictor is worst. Insets: the map against the frame, the router's "
+     "agreement with the oracle, and rho sweeping B to A."),
     ("fig2_mechanism", "Tiled decoding, per-position depth, and the band",
      "The cut and its seam; the dilation that replaces it; and the positions "
      "that keep computing for a deeper neighbour. The band is computed, not drawn."),
