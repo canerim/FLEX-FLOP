@@ -285,3 +285,56 @@ if __name__ == "__main__":
     for f in (fig3_ladder, fig4_granularity, fig5_frontier, fig6_waterfall,
               fig7_gather, fig8_epochs, fig9_router):
         f(); print(f"  {f.__name__} yazildi", flush=True)
+
+
+def fig12_interaction():
+    """The two levers are not additive: each is worth more with the other."""
+    import numpy as np
+    vals = {  # measured, per-position decoding, 0.1 dB, oracle allocation
+        (256, 2): [36.92, 33.99, 30.69, 28.69, 27.26],
+        (256, 0): [40.51, 35.88, 30.41, 28.75, 26.78],
+        (64, 2): [38.63, 35.75, 32.57, 30.53, 29.14],
+        (64, 0): [45.56, 40.16, 33.84, 31.46, 29.09],
+    }
+    fig, axes = plt.subplots(1, 2, figsize=(6.5, 2.25),
+                             gridspec_kw=dict(wspace=0.36))
+
+    ax = axes[0]
+    xs = np.arange(2); w = 0.34
+    m = {k: float(np.mean(v)) for k, v in vals.items()}
+    ax.bar(xs - w / 2, [m[(256, 2)], m[(64, 2)]], w, color=S.BLUE,
+           label="$j$=2 (clamped)", zorder=3)
+    ax.bar(xs + w / 2, [m[(256, 0)], m[(64, 0)]], w, color=S.GREEN,
+           label="$j$=0 (unlocked)", zorder=3)
+    for i, c in enumerate((256, 64)):
+        for off, jj, col in ((-w / 2, 2, S.BLUE), (w / 2, 0, S.GREEN)):
+            ax.text(i + off, m[(c, jj)] + 0.5, f"{m[(c, jj)]:.2f}", ha="center",
+                    fontsize=6.2, color=col, fontweight="bold")
+        d = m[(c, 0)] - m[(c, 2)]
+        ax.annotate(f"+{d:.2f}", (i, max(m[(c, 2)], m[(c, 0)]) + 2.4),
+                    ha="center", fontsize=6.6, color=S.INK, fontweight="bold")
+    ax.set_xticks(xs); ax.set_xticklabels(["256 px cell", "64 px cell"])
+    ax.set_ylabel("mean saving at 0.1 dB (%)"); ax.set_ylim(0, 42)
+    ax.set_title("unlocking pays only where there is room", fontsize=7.0,
+                 pad=4, loc="left")
+    ax.legend(loc="lower right")
+    S.panel(ax, "a", dx=-0.20); S.ygrid(ax); S.despine(ax)
+
+    ax = axes[1]
+    for i, c in enumerate((256, 64)):
+        d = [vals[(c, 0)][k] - vals[(c, 2)][k] for k in range(5)]
+        col = [S.ORANGE, S.GREEN][i]
+        ax.plot(range(5), d, "o-", color=col, clip_on=False, zorder=3)
+        ax.annotate(f"{c} px", (4, d[-1]), xytext=(5, 0),
+                    textcoords="offset points", color=col, fontsize=6.4,
+                    va="center", fontweight="bold", annotation_clip=False)
+    ax.axhline(0, color=S.INK, lw=0.6, zorder=2)
+    ax.set_xticks(range(5)); ax.set_xticklabels([str(q) for q in QPS])
+    ax.set_xlim(-0.15, 4.6)
+    ax.set_xlabel("rate (qp)"); ax.set_ylabel("gain from $j$=0 (points)")
+    ax.set_title("the gain is entirely at low rate", fontsize=7.0, pad=4,
+                 loc="left")
+    S.panel(ax, "b", dx=-0.20); S.ygrid(ax); S.despine(ax)
+    fig.savefig(OUT / "fig12_interaction.pdf")
+    fig.savefig(OUT / "fig12_interaction.png")
+    plt.close(fig)

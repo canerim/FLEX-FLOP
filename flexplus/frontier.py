@@ -34,6 +34,11 @@ def main():
     ap.add_argument("--test", default=str(RES / "cells_ctc64.npz"))
     ap.add_argument("--qps", type=int, nargs="+", default=[0, 16, 32, 48, 63])
     ap.add_argument("--points", type=int, default=32)
+    ap.add_argument("--split", type=int, default=None,
+                    help="override the split depth. The dumps carry every "
+                         "exit's real error, so j=0 asks what the frontier "
+                         "looks like once per-position decoding removes the "
+                         "seam the split existed to control.")
     ap.add_argument("--out", default=str(RES / "frontier_pp64.json"))
     a = ap.parse_args()
 
@@ -41,6 +46,8 @@ def main():
     te = load(a.test)
     M = te["M"].astype(np.float64); R = te["R"].astype(np.float64)
     K, j = int(te["K"][0]), int(te["split_depth"][0])
+    if a.split is not None:
+        j = a.split
     cell = int(te["cell"][0]); cf = cell // C.feature_stride
     cost_k = np.array([(k + 1) * C.blocks_per_exit for k in range(K)], float)
     print(f"  hucre {cell}px, {M.shape[0]} hucre, {a.points} lambda", flush=True)
@@ -84,6 +91,7 @@ def main():
     Path(a.out).write_text(json.dumps(
         {"script": "flexplus/frontier.py", "cell_px": cell,
          "decode": "per-position, dilated receptive field",
+         "split_depth": j,
          "ckpt": "runs/RECIPE512/ckpt_PAPER.pth.tar", "ckpt_epoch": 4,
          "n_sequences": len(shapes), "frames_per_seq": 1,
          "rows": rows}, indent=2))

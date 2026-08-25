@@ -1,0 +1,68 @@
+{
+  "curve": "/home/can_karsal/FLEX-PLUS/flexplus/results/frontier_pp64_j0.json",
+  "convention": "per_frame",
+  "n_sequences": 53,
+  "ckpt": "runs/RECIPE512/ckpt_PAPER.pth.tar",
+  "ckpt_epoch": 4,
+  "ckpt_step": null,
+  "db_interval": [
+    0.05,
+    0.12
+  ],
+  "saving_interval": [
+    10.0,
+    30.0
+  ],
+  "rows": [
+    {
+      "qp": 0,
+      "bd_saving_pct": 42.79842354503985,
+      "bd_quality_db": -0.0044015548335993495,
+      "floor_db": -0.02275446872771866,
+      "bd_saving_pct_zero_drift": 38.79080930759753,
+      "n_points": 23
+    },
+    {
+      "qp": 16,
+      "bd_saving_pct": 37.383849429476285,
+      "bd_quality_db": 0.015266864548610848,
+      "floor_db": -0.008354015995240341,
+      "bd_saving_pct_zero_drift": 35.91664403425839,
+      "n_points": 23
+    },
+    {
+      "qp": 32,
+      "bd_saving_pct": 30.978663471403415,
+      "bd_quality_db": 0.036098107941932286,
+      "floor_db": 0.003545184746474414,
+      "bd_saving_pct_zero_drift": 31.564319869293065,
+      "n_points": 22
+    },
+    {
+      "qp": 48,
+      "bd_saving_pct": 28.62163078101559,
+      "bd_quality_db": 0.045335406874145306,
+      "floor_db": 0.010070835779290042,
+      "bd_saving_pct_zero_drift": 30.23874625811742,
+      "n_points": 22
+    },
+    {
+      "qp": 63,
+      "bd_saving_pct": 26.316634399033884,
+      "bd_quality_db": 0.055319570518420826,
+      "floor_db": 0.014315601177128254,
+      "bd_saving_pct_zero_drift": 28.509378612194613,
+      "n_points": 21
+    }
+  ],
+  "mean_bd_saving_pct": 33.21984032519381,
+  "mean_bd_quality_db": 0.029523679009901983,
+  "no_drift_gain_pts": -0.2158607089016023,
+  "no_drift_gain_rates": [
+    0,
+    16,
+    32,
+    48,
+    63
+  ]
+}
