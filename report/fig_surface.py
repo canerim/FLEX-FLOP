@@ -27,12 +27,15 @@ RES = Path(__file__).resolve().parent.parent / "flexplus" / "results"
 MARK = [0.10, 0.16, 0.20]
 
 
+PERFECT = 0.121317
+
+
 def main():
     s = Sweep(str(RES / "cells_ctc64_e8.npz"), 2)
     ceil = s.ceiling_saving(0)
     sat = {q: s.ceiling_db(q) for q in QPS}
-    budgets = np.round(np.linspace(0.05, 0.30, 26), 4)
-    cache = RES / "surface_saving.npy"
+    budgets = np.round(np.linspace(0.05, 0.30, 51), 5)
+    cache = RES / "surface_saving_dense.npy"
     if cache.exists():
         Z = np.load(cache)
     else:
@@ -42,64 +45,88 @@ def main():
                 Z[i, jx] = s.operate(q, float(b))[1]
         np.save(cache, Z)
 
-    fig = plt.figure(figsize=(6.9, 2.75))
-    ax = fig.add_subplot(1, 2, 1, projection="3d")
-    X, Y = np.meshgrid(budgets, np.arange(len(QPS)))
-    ax.plot_surface(X, Y, Z, cmap=cm.viridis, linewidth=0, antialiased=True,
-                    rstride=1, cstride=1, alpha=0.94, vmin=Z.min(), vmax=ceil)
-    # the ceiling, and where each rate meets it
-    ax.plot_wireframe(X, Y, np.full_like(Z, ceil), color=S.MUTED, lw=0.35,
-                      rstride=1, cstride=6, alpha=0.55)
-    for i, q in enumerate(QPS):
-        ax.plot([sat[q]], [i], [ceil], "o", color=S.VERM, ms=3.4, zorder=10)
-    for b in MARK:
-        ax.plot([b] * len(QPS), np.arange(len(QPS)),
-                [s.operate(q, b)[1] for q in QPS], color="white", lw=1.4,
-                zorder=9)
+    # A rate axis fine enough that the surface reads as a surface. The
+    # measurement is on five rates; interpolating BETWEEN them is a drawing
+    # choice, not a claim, so the five measured ridges stay drawn on top.
+    yi = np.linspace(0, len(QPS) - 1, 61)
+    Zi = np.empty((len(yi), len(budgets)))
+    for jx in range(len(budgets)):
+        Zi[:, jx] = np.interp(yi, np.arange(len(QPS)), Z[:, jx])
+
+    fig = plt.figure(figsize=(6.9, 2.85))
+    ax = fig.add_subplot(1, 2, 1, projection="3d", computed_zorder=False)
+    X, Y = np.meshgrid(budgets, yi)
+    norm = plt.Normalize(Z.min(), ceil)
+    ax.plot_surface(X, Y, Zi, cmap=cm.viridis, norm=norm, linewidth=0,
+                    antialiased=True, rstride=1, cstride=1, shade=True,
+                    zorder=1)
+    # the ceiling, as a plane rather than a wire cage
+    ax.plot_surface(X, Y, np.full_like(Zi, ceil), color="#9a9a9a", alpha=0.10,
+                    linewidth=0, antialiased=True, shade=False, zorder=2)
+    # where the surface meets it: one curve, not five markers
+    ys = np.linspace(0, len(QPS) - 1, 200)
+    xs = np.interp(ys, np.arange(len(QPS)), [sat[q] for q in QPS])
+    ax.plot(xs, ys, [ceil] * len(ys), color=S.VERM, lw=1.6, zorder=6)
+    # the budget at which exactly one rate is on the ceiling
+    zs = np.interp(ys, np.arange(len(QPS)),
+                   [s.operate(q, PERFECT)[1] for q in QPS])
+    ax.plot([PERFECT] * len(ys), ys, zs, color="white", lw=1.7, zorder=7)
+
     ax.set_xlabel("budget (dB)", labelpad=-4)
-    ax.set_ylabel("rate", labelpad=-6)
-    ax.set_zlabel("saving (%)", labelpad=-6)
+    ax.set_ylabel("rate", labelpad=-4)
+    # set_zlabel is swallowed by the tight layout at this box aspect; the
+    # label goes on the figure instead, beside the tick column it belongs to.
+    fig.text(0.012, 0.60, "saving (%)", fontsize=7.0, rotation=90,
+             va="center", ha="left", color=S.INK)
     ax.set_yticks(range(len(QPS)))
     ax.set_yticklabels([f"q{q}" for q in QPS])
     ax.set_xticks([0.05, 0.15, 0.25])
-    ax.tick_params(pad=-2)
-    ax.view_init(elev=24, azim=-128)
-    ax.set_box_aspect((1.25, 1.0, 0.72))
+    ax.set_zticks([25, 30, 35, 40])
+    ax.tick_params(pad=-2.5, length=0)
+    ax.view_init(elev=22, azim=-126)
+    ax.set_box_aspect((1.3, 1.0, 0.70))
     for pane in (ax.xaxis, ax.yaxis, ax.zaxis):
-        pane.pane.set_facecolor("white"); pane.pane.set_edgecolor(S.GRID)
+        pane.pane.fill = False
+        pane.pane.set_edgecolor("none")
+        pane.line.set_color(S.MUTED)
+        pane.line.set_linewidth(0.5)
     ax.grid(False)
-    ax.set_title("saving over rate and budget", fontsize=7.0, pad=-2,
-                 loc="left")
-    # Axes3D.text takes (x, y, z, s); the 2-D panel helper cannot be reused, so
-    # the letter is placed in figure coordinates instead.
-    fig.text(0.045, 0.95, "a", fontsize=8.0, fontweight="bold", va="top",
+    ax.text(sat[63] + 0.010, len(QPS) - 1, ceil + 0.9, "saturation locus",
+            color=S.VERM, fontsize=6.0, zorder=8)
+    ax.text(PERFECT + 0.004, 0.0, float(zs[0]) + 0.6, "0.121 dB",
+            color=S.INK, fontsize=6.0, zorder=8, ha="left",
+            fontweight="bold")
+    fig.text(0.045, 0.955, "a", fontsize=8.0, fontweight="bold", va="top",
              color=S.INK)
+    fig.text(0.085, 0.955, "saving over rate and budget", fontsize=7.0,
+             va="top", color=S.INK)
 
     ax2 = fig.add_subplot(1, 2, 2)
-    for i, b in enumerate(MARK):
+    marks = [(0.10, S.BLUE, "0.10 dB"), (PERFECT, S.VERM, "0.121 dB"),
+             (0.20, S.GREEN, "0.20 dB")]
+    for b, col, lab in marks:
         y = [s.operate(q, b)[1] for q in QPS]
-        ax2.plot(range(len(QPS)), y, "o-", color=S.CAT[i], clip_on=False,
-                 zorder=3)
-        ax2.annotate(f"{b:.2f} dB", (len(QPS) - 1, y[-1]), xytext=(5, 0),
-                     textcoords="offset points", color=S.CAT[i], fontsize=6.4,
+        ax2.plot(range(len(QPS)), y, "o-", color=col, clip_on=False, zorder=3)
+        ax2.annotate(lab, (len(QPS) - 1, y[-1]), xytext=(5, 0),
+                     textcoords="offset points", color=col, fontsize=6.4,
                      va="center", fontweight="bold", annotation_clip=False)
-    ax2.axhline(ceil, color=S.VERM, lw=0.9, ls=(0, (3, 2)), zorder=2)
-    ax2.annotate(f"ceiling {ceil:.2f}%", (0, ceil), xytext=(2, 3),
-                 textcoords="offset points", fontsize=6.2, color=S.VERM)
+    ax2.axhline(ceil, color=S.INK, lw=0.7, ls=(0, (3, 2)), zorder=2)
+    ax2.annotate(f"ceiling {ceil:.2f}%", (0.02, ceil), xytext=(0, 3),
+                 textcoords="offset points", fontsize=6.2, color=S.INK)
     ax2.set_xticks(range(len(QPS)))
     ax2.set_xticklabels([f"q{q}" for q in QPS])
-    ax2.set_xlim(-0.15, len(QPS) - 1 + 0.75)
+    ax2.set_xlim(-0.15, len(QPS) - 1 + 0.78); ax2.set_ylim(28, 41.6)
     ax2.set_xlabel("rate"); ax2.set_ylabel("saving (%)")
-    ax2.set_title("three budgets, and where each rate saturates",
+    ax2.set_title("at 0.121 dB exactly one rate is on the ceiling",
                   fontsize=7.0, pad=4, loc="left")
     S.panel(ax2, "b", dx=-0.19)
     S.ygrid(ax2); S.despine(ax2)
-    fig.subplots_adjust(wspace=0.28)
+    fig.subplots_adjust(wspace=0.26, left=0.02, right=0.965, top=0.90,
+                        bottom=0.14)
     fig.savefig(OUT / "fig13_surface.pdf")
     fig.savefig(OUT / "fig13_surface.png")
     plt.close(fig)
-    print(f"  fig13 yazildi   tavan {ceil:.2f}%   doyma "
-          + " ".join(f"q{q}:{sat[q]:.4f}" for q in QPS))
+    print(f"  fig13 yazildi   tavan {ceil:.4f}%   kusursuz butce {PERFECT:.6f} dB")
 
 
 if __name__ == "__main__":
