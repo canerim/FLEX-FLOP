@@ -62,7 +62,19 @@ ORDER = [
     ("fig13_surface", "Saving over rate and budget, and where it saturates",
      "Each rate meets the ceiling at its own budget -- 0.121 dB at q0 rising "
      "to 0.270 at q63 -- beyond which further tolerance buys nothing. At "
-     "0.16 dB two rates are already there and the rest are at 87-96% of it."),
+     "0.121317 dB exactly one rate is there and the rest are at 79-95% of it."),
+    ("fig15a_frames_010", "0.10 dB: what the reported budget buys, frame by frame",
+     "53 CTC frames at five rates, every point measured. The spread across "
+     "content is wider than the spread across rates, and no rate yet rests "
+     "on the ceiling."),
+    ("fig15b_frames_perfect", "0.121317 dB: the perfect budget",
+     "q0's whole row lies on the ceiling and nothing else does. This is the "
+     "largest budget at which no tolerance is wasted: one rate has run out "
+     "of depth to give up, the next does not until 0.153 dB."),
+    ("fig15c_frames_020", "0.20 dB: past the point of return",
+     "q0, q16 and q32 are pinned to the ceiling at 40.08%. The extra 0.079 dB "
+     "over the perfect budget buys them nothing at all and buys q48 and q63 "
+     "5.8 and 5.8 points."),
     ("fig8_epochs", "The paper's epoch series, independently confirmed",
      "Re-measured with current scripts on every surviving checkpoint."),
 ]
