@@ -59,6 +59,10 @@ ORDER = [
     ("fig9_router", "The routing axis",
      "The error curve is nearly rank-1 at j=2, and the gap between oracle and "
      "a real router at both split depths."),
+    ("fig13_surface", "Saving over rate and budget, and where it saturates",
+     "Each rate meets the ceiling at its own budget -- 0.121 dB at q0 rising "
+     "to 0.270 at q63 -- beyond which further tolerance buys nothing. At "
+     "0.16 dB two rates are already there and the rest are at 87-96% of it."),
     ("fig8_epochs", "The paper's epoch series, independently confirmed",
      "Re-measured with current scripts on every surviving checkpoint."),
 ]

@@ -1,0 +1,164 @@
+{
+  "cell_px": 64,
+  "split_depth": 2,
+  "test": "/home/can_karsal/FLEX-PLUS/flexplus/results/cells_ctc64_e8.npz",
+  "saturation_db": {
+    "0": 0.12131715556859046,
+    "16": 0.15306502943789219,
+    "32": 0.1971555872500479,
+    "48": 0.2345433132164324,
+    "63": 0.2703198927694286
+  },
+  "rows": [
+    {
+      "budget_db": 0.1,
+      "qp": 0,
+      "bpp": 0.2313214473004611,
+      "psnr_release": 32.53648776780542,
+      "psnr_ours": 32.436490050966064,
+      "db_below": 0.09999771683935367,
+      "saving_pct": 38.81213273041018,
+      "saturated": false
+    },
+    {
+      "budget_db": 0.1,
+      "qp": 16,
+      "bpp": 0.2672514187277488,
+      "psnr_release": 35.33506710451625,
+      "psnr_ours": 35.23507172322981,
+      "db_below": 0.09999538128643966,
+      "saving_pct": 36.03948948436039,
+      "saturated": false
+    },
+    {
+      "budget_db": 0.1,
+      "qp": 32,
+      "bpp": 0.3350701745388643,
+      "psnr_release": 38.13514807298646,
+      "psnr_ours": 38.035151550543915,
+      "db_below": 0.09999652244254237,
+      "saving_pct": 32.81799299764593,
+      "saturated": false
+    },
+    {
+      "budget_db": 0.1,
+      "qp": 48,
+      "bpp": 0.45585586243080645,
+      "psnr_release": 40.77662767246529,
+      "psnr_ours": 40.676630021031066,
+      "db_below": 0.09999765143422353,
+      "saving_pct": 30.649219336449708,
+      "saturated": false
+    },
+    {
+      "budget_db": 0.1,
+      "qp": 63,
+      "bpp": 0.6715907381390626,
+      "psnr_release": 43.15541434961555,
+      "psnr_ours": 43.05541962944098,
+      "db_below": 0.0999947201745668,
+      "saving_pct": 29.294527081219012,
+      "saturated": false
+    },
+    {
+      "budget_db": 0.1218,
+      "qp": 0,
+      "bpp": 0.2313214473004611,
+      "psnr_release": 32.53648776780542,
+      "psnr_ours": 32.41517061223683,
+      "db_below": 0.12131715556859046,
+      "saving_pct": 40.07527426160343,
+      "saturated": true
+    },
+    {
+      "budget_db": 0.1218,
+      "qp": 16,
+      "bpp": 0.2672514187277488,
+      "psnr_release": 35.33506710451625,
+      "psnr_ours": 35.213274324307484,
+      "db_below": 0.12179278020876293,
+      "saving_pct": 38.18977436751082,
+      "saturated": false
+    },
+    {
+      "budget_db": 0.1218,
+      "qp": 32,
+      "bpp": 0.3350701745388643,
+      "psnr_release": 38.13514807298646,
+      "psnr_ours": 38.0133505416052,
+      "db_below": 0.12179753138126378,
+      "saving_pct": 35.14148960154546,
+      "saturated": false
+    },
+    {
+      "budget_db": 0.1218,
+      "qp": 48,
+      "bpp": 0.45585586243080645,
+      "psnr_release": 40.77662767246529,
+      "psnr_ours": 40.65482888937642,
+      "db_below": 0.12179878308886824,
+      "saving_pct": 33.07816990649304,
+      "saturated": false
+    },
+    {
+      "budget_db": 0.1218,
+      "qp": 63,
+      "bpp": 0.6715907381390626,
+      "psnr_release": 43.15541434961555,
+      "psnr_ours": 43.03361664934765,
+      "db_below": 0.12179770026790022,
+      "saving_pct": 31.702692902085882,
+      "saturated": false
+    },
+    {
+      "budget_db": 0.2,
+      "qp": 0,
+      "bpp": 0.2313214473004611,
+      "psnr_release": 32.53648776780542,
+      "psnr_ours": 32.41517061223683,
+      "db_below": 0.12131715556859046,
+      "saving_pct": 40.07527426160343,
+      "saturated": true
+    },
+    {
+      "budget_db": 0.2,
+      "qp": 16,
+      "bpp": 0.2672514187277488,
+      "psnr_release": 35.33506710451625,
+      "psnr_ours": 35.18200207507836,
+      "db_below": 0.15306502943789219,
+      "saving_pct": 40.07527426160343,
+      "saturated": true
+    },
+    {
+      "budget_db": 0.2,
+      "qp": 32,
+      "bpp": 0.3350701745388643,
+      "psnr_release": 38.13514807298646,
+      "psnr_ours": 37.937992485736416,
+      "db_below": 0.1971555872500479,
+      "saving_pct": 40.07527426160343,
+      "saturated": true
+    },
+    {
+      "budget_db": 0.2,
+      "qp": 48,
+      "bpp": 0.45585586243080645,
+      "psnr_release": 40.77662767246529,
+      "psnr_ours": 40.57668234653056,
+      "db_below": 0.1999453259347263,
+      "saving_pct": 38.85260496017262,
+      "saturated": false
+    },
+    {
+      "budget_db": 0.2,
+      "qp": 63,
+      "bpp": 0.6715907381390626,
+      "psnr_release": 43.15541434961555,
+      "psnr_ours": 42.955432866904104,
+      "db_below": 0.19998148271144087,
+      "saving_pct": 37.486513421086656,
+      "saturated": false
+    }
+  ]
+}
