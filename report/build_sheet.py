@@ -73,6 +73,12 @@ ORDER = [
      "q0, q16 and q32 are pinned to the ceiling at 40.08%. The extra 0.079 dB "
      "over the perfect budget buys them nothing at all and buys q48 and q63 "
      "5.8 and 5.8 points."),
+    ("fig17_guarantee", "A budget the frame keeps, not one the set keeps",
+     "Left: what each of 265 frame-rate pairs actually receives under one "
+     "multiplier per rate against one per frame, measured on the deployed "
+     "tiled path. 134 frames above the budget becomes 1, and the mean saving "
+     "rises 28.15 to 28.32. Right: the tail against its price, with the "
+     "decoder-side remedies on the per-cell tables (hollow)."),
     ("fig8_epochs", "The paper's epoch series, independently confirmed",
      "Re-measured with current scripts on every surviving checkpoint."),
 ]
