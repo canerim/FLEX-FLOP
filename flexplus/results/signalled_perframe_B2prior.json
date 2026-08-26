@@ -1,0 +1,5152 @@
+{
+  "script": "flexplus/signalled_perframe.py",
+  "budget_db": 0.1,
+  "ckpt": "/home/can_karsal/FLEX-PLUS/experiments/CALEX_B2_prior/ckpt.pth.tar",
+  "ckpt_epoch": null,
+  "decode": "deployed tiled path, one real decode per correction step",
+  "lambda": "bisected per frame on the true delivered decibel",
+  "map_bits_note": "order-0 entropy + per-frame histogram + 16 bits of lambda",
+  "n_frames": 53,
+  "rows": [
+    {
+      "qp": 0,
+      "n": 53,
+      "mean_db": 0.08900445924614961,
+      "p95_db": 0.09974288642406463,
+      "max_db": 0.09995913505554199,
+      "over_budget": 0,
+      "infeasible": 0,
+      "saving_pct_measured": 33.992741280972815,
+      "map_bits": 84.48893240037954,
+      "hist_pct": [
+        0.0,
+        0.0,
+        80.22662889518413,
+        14.220963172804533,
+        4.759206798866855,
+        0.7932011331444759
+      ],
+      "per_frame": [
+        {
+          "seq": "Beauty_1920x1080_120fps_420_8bit_YUV.yuv",
+          "db": 0.07678306102752686,
+          "floor_db": 0.010313140228390694,
+          "lam": 0.9999847412109375,
+          "feasible": true,
+          "saving_pct_measured": 38.327506874300475,
+          "saving_pct_vs_release": 39.12455368041992,
+          "map_bits": 64.0,
+          "bpp_added": 3.08641975308642e-05,
+          "hist": [
+            0,
+            0,
+            40,
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "seq": "Bosphorus_1920x1080_120fps_420_8bit_YUV.yuv",
+          "db": 0.09953058511018753,
+          "floor_db": 0.01180296204984188,
+          "lam": 6.5441282458778e-05,
+          "feasible": true,
+          "saving_pct_measured": 37.20951762446284,
+          "saving_pct_vs_release": 38.00654983520508,
+          "map_bits": 79.37246108055115,
+          "bpp_added": 3.827761433282752e-05,
+          "hist": [
+            0,
+            0,
+            37,
+            3,
+            0,
+            0
+          ]
+        },
+        {
+          "seq": "HoneyBee_1920x1080_120fps_420_8bit_YUV.yuv",
+          "db": 0.09903012961149216,
+          "floor_db": 0.056917257606983185,
+          "lam": 3.8311675780278165e-05,
+          "feasible": true,
+          "saving_pct_measured": 20.807367591991266,
+          "saving_pct_vs_release": 21.419078826904297,
+          "map_bits": 114.77734470367432,
+          "bpp_added": 5.535172873441084e-05,
+          "hist": [
+            0,
+            0,
+            3,
+            23,
+            14,
+            0
+          ]
+        },
+        {
+          "seq": "Jockey_1920x1080_120fps_420_8bit_YUV.yuv",
+          "db": 0.0980842262506485,
+          "floor_db": 0.025855444371700287,
+          "lam": 4.1491506635793485e-05,
+          "feasible": true,
+          "saving_pct_measured": 26.34549750590707,
+          "saving_pct_vs_release": 27.01016616821289,
+          "map_bits": 126.45112419128418,
+          "bpp_added": 6.09814449224943e-05,
+          "hist": [
+            0,
+            0,
+            15,
+            15,
+            10,
+            0
+          ]
+        },
+        {
+          "seq": "ReadySteadyGo_1920x1080_120fps_420_8bit_YUV.yuv",
+          "db": 0.09863893687725067,
+          "floor_db": 0.032285306602716446,
+          "lam": 7.854316572775133e-05,
+          "feasible": true,
+          "saving_pct_measured": 33.589006646308604,
+          "saving_pct_vs_release": 34.37278366088867,
+          "map_bits": 104.21743774414062,
+          "bpp_added": 5.025918101087029e-05,
+          "hist": [
+            0,
+            0,
+            28,
+            11,
+            1,
+            0
+          ]
+        },
+        {
+          "seq": "ShakeNDry_1920x1080_120fps_420_8bit_YUV.yuv",
+          "db": 0.08162419497966766,
+          "floor_db": 0.016661860048770905,
+          "lam": 0.9999847412109375,
+          "feasible": true,
+          "saving_pct_measured": 38.327506874300475,
+          "saving_pct_vs_release": 39.12455368041992,
+          "map_bits": 64.0,
+          "bpp_added": 3.08641975308642e-05,
+          "hist": [
+            0,
+            0,
+            40,
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "seq": "YachtRide_1920x1080_120fps_420_8bit_YUV.yuv",
+          "db": 0.09995558112859726,
+          "floor_db": 0.02609938196837902,
+          "lam": 6.09824728599051e-05,
+          "feasible": true,
+          "saving_pct_measured": 36.09152837462519,
+          "saving_pct_vs_release": 36.88855743408203,
+          "map_bits": 88.39361095428467,
+          "bpp_added": 4.262809170249068e-05,
+          "hist": [
+            0,
+            0,
+            34,
+            6,
+            0,
+            0
+          ]
+        },
+        {
+          "seq": "videoSRC01_1920x1080_30.yuv",
+          "db": 0.09486892819404602,
+          "floor_db": 0.009309480898082256,
+          "lam": 4.008806445199298e-05,
+          "feasible": true,
+          "saving_pct_measured": 37.582180707742054,
+          "saving_pct_vs_release": 38.37922286987305,
+          "map_bits": 75.45587921142578,
+          "bpp_added": 3.638883063822617e-05,
+          "hist": [
+            0,
+            0,
+            38,
+            2,
+            0,
+            0
+          ]
+        },
+        {
+          "seq": "videoSRC02_1920x1080_30.yuv",
+          "db": 0.09944557398557663,
+          "floor_db": 0.031368438154459,
+          "lam": 1.9338386664458085e-05,
+          "feasible": true,
+          "saving_pct_measured": 31.24690829199541,
+          "saving_pct_vs_release": 32.04389190673828,
+          "map_bits": 103.92783546447754,
+          "bpp_added": 5.0119519417668564e-05,
+          "hist": [
+            0,
+            0,
+            21,
+            19,
+            0,
+            0
+          ]
+        },
+        {
+          "seq": "videoSRC03_1920x1080_30.yuv",
+          "db": 0.09763067960739136,
+          "floor_db": 0.03301701694726944,
+          "lam": 5.313383189786691e-05,
+          "feasible": true,
+          "saving_pct_measured": 34.06778958422573,
+          "saving_pct_vs_release": 34.838348388671875,
+          "map_bits": 103.67040538787842,
+          "bpp_added": 4.9995372968691364e-05,
+          "hist": [
+            0,
+            0,
+            30,
+            8,
+            2,
+            0
+          ]
+        },
+        {
+          "seq": "videoSRC04_1920x1080_30.yuv",
+          "db": 0.024918172508478165,
+          "floor_db": 0.005360263865441084,
+          "lam": 0.9999847412109375,
+          "feasible": true,
+          "saving_pct_measured": 38.327506874300475,
+          "saving_pct_vs_release": 39.12455368041992,
+          "map_bits": 64.0,
+          "bpp_added": 3.08641975308642e-05,
+          "hist": [
+            0,
+            0,
+            40,
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "seq": "videoSRC05_1920x1080_25.yuv",
+          "db": 0.09786555171012878,
+          "floor_db": 0.044896215200424194,
+          "lam": 3.626183206506539e-05,
+          "feasible": true,
+          "saving_pct_measured": 26.798994072211247,
+          "saving_pct_vs_release": 27.50004005432129,
+          "map_bits": 127.7053394317627,
+          "bpp_added": 6.158629409324976e-05,
+          "hist": [
+            0,
+            0,
+            15,
+            18,
+            6,
+            1
+          ]
+        },
+        {
+          "seq": "videoSRC06_1920x1080_25.yuv",
+          "db": 0.039816949516534805,
+          "floor_db": -0.0031359228305518627,
+          "lam": 0.9999847412109375,
+          "feasible": true,
+          "saving_pct_measured": 38.327506874300475,
+          "saving_pct_vs_release": 39.12455368041992,
+          "map_bits": 64.0,
+          "bpp_added": 3.08641975308642e-05,
+          "hist": [
+            0,
+            0,
+            40,
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "seq": "videoSRC07_1920x1080_25.yuv",
+          "db": 0.0995376706123352,
+          "floor_db": 0.03081740438938141,
+          "lam": 5.7786664001469035e-05,
+          "feasible": true,
+          "saving_pct_measured": 35.45232206270468,
+          "saving_pct_vs_release": 36.236114501953125,
+          "map_bits": 94.90234279632568,
+          "bpp_added": 4.576694772199348e-05,
+          "hist": [
+            0,
+            0,
+            33,
+            6,
+            1,
+            0
+          ]
+        },
+        {
+          "seq": "videoSRC08_1920x1080_25.yuv",
+          "db": 0.09978660196065903,
+          "floor_db": 0.01631423644721508,
+          "lam": 5.015696842747275e-05,
+          "feasible": true,
+          "saving_pct_measured": 37.688300562379965,
+          "saving_pct_vs_release": 38.47211456298828,
+          "map_bits": 70.74643635749817,
+          "bpp_added": 3.411768728660213e-05,
+          "hist": [
+            0,
+            0,
+            39,
+            0,
+            1,
+            0
+          ]
+        },
+        {
+          "seq": "videoSRC09_1920x1080_25.yuv",
+          "db": 0.09803663939237595,
+          "floor_db": 0.024151116609573364,
+          "lam": 0.00013246689104562392,
+          "feasible": true,
+          "saving_pct_measured": 35.34620220806677,
+          "saving_pct_vs_release": 36.143218994140625,
+          "map_bits": 92.87712240219116,
+          "bpp_added": 4.479027893624188e-05,
+          "hist": [
+            0,
+            0,
+            32,
+            8,
+            0,
+            0
+          ]
+        },
+        {
+          "seq": "videoSRC10_1920x1080_30.yuv",
+          "db": 0.09829983860254288,
+          "floor_db": 0.06741436570882797,
+          "lam": 2.749290615611244e-05,
+          "feasible": true,
+          "saving_pct_measured": 21.337966865180803,
+          "saving_pct_vs_release": 21.88355255126953,
+          "map_bits": 142.51550102233887,
+          "bpp_added": 6.872854023068039e-05,
+          "hist": [
+            0,
+            0,
+            14,
+            9,
+            9,
+            8
+          ]
+        },
+        {
+          "seq": "videoSRC11_1920x1080_30.yuv",
+          "db": 0.09076002240180969,
+          "floor_db": 0.013193689286708832,
+          "lam": 0.9999847412109375,
+          "feasible": true,
+          "saving_pct_measured": 38.327506874300475,
+          "saving_pct_vs_release": 39.12455368041992,
+          "map_bits": 64.0,
+          "bpp_added": 3.08641975308642e-05,
+          "hist": [
+            0,
+            0,
+            40,
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "seq": "videoSRC12_1920x1080_30.yuv",
+          "db": 0.09772078692913055,
+          "floor_db": 0.021911466494202614,
+          "lam": 0.00023771836185915163,
+          "feasible": true,
+          "saving_pct_measured": 37.95484379102126,
+          "saving_pct_vs_release": 38.751888275146484,
+          "map_bits": 70.74643635749817,
+          "bpp_added": 3.411768728660213e-05,
+          "hist": [
+            0,
+            0,
+            39,
+            1,
+            0,
+            0
+          ]
+        },
+        {
+          "seq": "videoSRC13_1920x1080_30.yuv",
+          "db": 0.07028175890445709,
+          "floor_db": 0.012528839521110058,
+          "lam": 0.9999847412109375,
+          "feasible": true,
+          "saving_pct_measured": 38.327506874300475,
+          "saving_pct_vs_release": 39.12455368041992,
+          "map_bits": 64.0,
+          "bpp_added": 3.08641975308642e-05,
+          "hist": [
+            0,
+            0,
+            40,
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "seq": "videoSRC14_1920x1080_30.yuv",
+          "db": 0.09995913505554199,
+          "floor_db": 0.028003564104437828,
+          "lam": 6.087473775551189e-05,
+          "feasible": true,
+          "saving_pct_measured": 35.45232206270468,
+          "saving_pct_vs_release": 36.23611831665039,
+          "map_bits": 94.90234279632568,
+          "bpp_added": 4.576694772199348e-05,
+          "hist": [
+            0,
+            0,
+            33,
+            6,
+            1,
+            0
+          ]
+        },
+        {
+          "seq": "videoSRC15_1920x1080_30.yuv",
+          "db": 0.09307035803794861,
+          "floor_db": 0.016936222091317177,
+          "lam": 0.9999847412109375,
+          "feasible": true,
+          "saving_pct_measured": 38.327506874300475,
+          "saving_pct_vs_release": 39.12455368041992,
+          "map_bits": 64.0,
+          "bpp_added": 3.08641975308642e-05,
+          "hist": [
+            0,
+            0,
+            40,
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "seq": "videoSRC16_1920x1080_30.yuv",
+          "db": 0.09843547642230988,
+          "floor_db": 0.029900742694735527,
+          "lam": 1.852424793469254e-05,
+          "feasible": true,
+          "saving_pct_measured": 30.97787787926103,
+          "saving_pct_vs_release": 31.669044494628906,
+          "map_bits": 115.15592002868652,
+          "bpp_added": 5.553429785334034e-05,
+          "hist": [
+            0,
+            0,
+            26,
+            6,
+            8,
+            0
+          ]
+        },
+        {
+          "seq": "videoSRC17_1920x1080_24.yuv",
+          "db": 0.07386091351509094,
+          "floor_db": 0.018542343750596046,
+          "lam": 0.9999847412109375,
+          "feasible": true,
+          "saving_pct_measured": 38.327506874300475,
+          "saving_pct_vs_release": 39.12455368041992,
+          "map_bits": 64.0,
+          "bpp_added": 3.08641975308642e-05,
+          "hist": [
+            0,
+            0,
+            40,
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "seq": "videoSRC18_1920x1080_25.yuv",
+          "db": 0.09877760708332062,
+          "floor_db": 0.02703794278204441,
+          "lam": 5.4772646763012744e-05,
+          "feasible": true,
+          "saving_pct_measured": 33.695126500946515,
+          "saving_pct_vs_release": 34.465675354003906,
+          "map_bits": 105.46635055541992,
+          "bpp_added": 5.08614730687789e-05,
+          "hist": [
+            0,
+            0,
+            29,
+            9,
+            2,
+            0
+          ]
+        },
+        {
+          "seq": "videoSRC19_1920x1080_30.yuv",
+          "db": 0.09585250914096832,
+          "floor_db": 0.013039874844253063,
+          "lam": 0.9999847412109375,
+          "feasible": true,
+          "saving_pct_measured": 38.327506874300475,
+          "saving_pct_vs_release": 39.12455368041992,
+          "map_bits": 64.0,
+          "bpp_added": 3.08641975308642e-05,
+          "hist": [
+            0,
+            0,
+            40,
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "seq": "videoSRC20_1920x1080_25.yuv",
+          "db": 0.09876850247383118,
+          "floor_db": 0.032032981514930725,
+          "lam": 6.417813256121008e-05,
+          "feasible": true,
+          "saving_pct_measured": 33.45511323596468,
+          "saving_pct_vs_release": 34.20912551879883,
+          "map_bits": 108.01892185211182,
+          "bpp_added": 5.209245845491504e-05,
+          "hist": [
+            0,
+            0,
+            30,
+            7,
+            2,
+            1
+          ]
+        },
+        {
+          "seq": "videoSRC21_1920x1080_24.yuv",
+          "db": 0.09112860262393951,
+          "floor_db": -0.039671242237091064,
+          "lam": 2.3972299459273927e-05,
+          "feasible": true,
+          "saving_pct_measured": 37.688300562379965,
+          "saving_pct_vs_release": 38.472110748291016,
+          "map_bits": 70.74643635749817,
+          "bpp_added": 3.411768728660213e-05,
+          "hist": [
+            0,
+            0,
+            39,
+            0,
+            1,
+            0
+          ]
+        },
+        {
+          "seq": "videoSRC22_1920x1080_24.yuv",
+          "db": 0.09733908623456955,
+          "floor_db": 0.02442912757396698,
+          "lam": 0.00014321512571768835,
+          "feasible": true,
+          "saving_pct_measured": 37.582180707742054,
+          "saving_pct_vs_release": 38.37922286987305,
+          "map_bits": 75.45587921142578,
+          "bpp_added": 3.638883063822617e-05,
+          "hist": [
+            0,
+            0,
+            38,
+            2,
+            0,
+            0
+          ]
+        },
+        {
+          "seq": "videoSRC23_1920x1080_24.yuv",
+          "db": 0.09882315248250961,
+          "floor_db": 0.02412589080631733,
+          "lam": 5.711684661946492e-05,
+          "feasible": true,
+          "saving_pct_measured": 36.09152837462519,
+          "saving_pct_vs_release": 36.88855743408203,
+          "map_bits": 88.39361095428467,
+          "bpp_added": 4.262809170249068e-05,
+          "hist": [
+            0,
+            0,
+            34,
+            6,
+            0,
+            0
+          ]
+        },
+        {
+          "seq": "videoSRC24_1920x1080_24.yuv",
+          "db": 0.09966972470283508,
+          "floor_db": 0.06548710912466049,
+          "lam": 2.3961668375704903e-05,
+          "feasible": true,
+          "saving_pct_measured": 25.065841290019485,
+          "saving_pct_vs_release": 25.65775489807129,
+          "map_bits": 133.28453922271729,
+          "bpp_added": 6.427688041219004e-05,
+          "hist": [
+            0,
+            0,
+            17,
+            8,
+            13,
+            2
+          ]
+        },
+        {
+          "seq": "videoSRC25_1920x1080_24.yuv",
+          "db": 0.09940813481807709,
+          "floor_db": 0.025401504710316658,
+          "lam": 0.0001469857306801714,
+          "feasible": true,
+          "saving_pct_measured": 33.05592018902599,
+          "saving_pct_vs_release": 33.81324005126953,
+          "map_bits": 108.98697280883789,
+          "bpp_added": 5.2559304016607776e-05,
+          "hist": [
+            0,
+            0,
+            28,
+            9,
+            3,
+            0
+          ]
+        },
+        {
+          "seq": "videoSRC26_1920x1080_30.yuv",
+          "db": 0.0990508645772934,
+          "floor_db": 0.03155141696333885,
+          "lam": 4.175305821263464e-05,
+          "feasible": true,
+          "saving_pct_measured": 34.60087604150834,
+          "saving_pct_vs_release": 35.397891998291016,
+          "map_bits": 96.45112419128418,
+          "bpp_added": 4.6513852329901705e-05,
+          "hist": [
+            0,
+            0,
+            30,
+            10,
+            0,
+            0
+          ]
+        },
+        {
+          "seq": "videoSRC27_1920x1080_30.yuv",
+          "db": 0.09749754518270493,
+          "floor_db": 0.005246503744274378,
+          "lam": 3.440863838477526e-05,
+          "feasible": true,
+          "saving_pct_measured": 37.582180707742054,
+          "saving_pct_vs_release": 38.37922286987305,
+          "map_bits": 75.45587921142578,
+          "bpp_added": 3.638883063822617e-05,
+          "hist": [
+            0,
+            0,
+            38,
+            2,
+            0,
+            0
+          ]
+        },
+        {
+          "seq": "videoSRC28_1920x1080_30.yuv",
+          "db": 0.08911141008138657,
+          "floor_db": 0.016922296956181526,
+          "lam": 0.9999847412109375,
+          "feasible": true,
+          "saving_pct_measured": 38.327506874300475,
+          "saving_pct_vs_release": 39.12455368041992,
+          "map_bits": 64.0,
+          "bpp_added": 3.08641975308642e-05,
+          "hist": [
+            0,
+            0,
+            40,
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "seq": "videoSRC29_1920x1080_24.yuv",
+          "db": 0.07136716693639755,
+          "floor_db": -0.04073459655046463,
+          "lam": 0.9999847412109375,
+          "feasible": true,
+          "saving_pct_measured": 38.327506874300475,
+          "saving_pct_vs_release": 39.12455368041992,
+          "map_bits": 64.0,
+          "bpp_added": 3.08641975308642e-05,
+          "hist": [
+            0,
+            0,
+            40,
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "seq": "videoSRC30_1920x1080_30.yuv",
+          "db": 0.09800880402326584,
+          "floor_db": 0.02768051251769066,
+          "lam": 3.230456513847457e-05,
+          "feasible": true,
+          "saving_pct_measured": 35.45232206270468,
+          "saving_pct_vs_release": 36.236114501953125,
+          "map_bits": 94.90234279632568,
+          "bpp_added": 4.576694772199348e-05,
+          "hist": [
+            0,
+            0,
+            33,
+            6,
+            1,
+            0
+          ]
+        },
+        {
+          "seq": "BQTerrace_1920x1080_60.yuv",
+          "db": 0.09673155844211578,
+          "floor_db": 0.023462709039449692,
+          "lam": 0.00021307031420292333,
+          "feasible": true,
+          "saving_pct_measured": 36.83685454118363,
+          "saving_pct_vs_release": 37.633888244628906,
+          "map_bits": 82.75982522964478,
+          "bpp_added": 3.9911181148555545e-05,
+          "hist": [
+            0,
+            0,
+            36,
+            4,
+            0,
+            0
+          ]
+        },
+        {
+          "seq": "BasketballDrive_1920x1080_50.yuv",
+          "db": 0.09971374273300171,
+          "floor_db": 0.031253814697265625,
+          "lam": 4.3239213482593186e-05,
+          "feasible": true,
+          "saving_pct_measured": 31.298724627267827,
+          "saving_pct_vs_release": 32.04279708862305,
+          "map_bits": 115.81847095489502,
+          "bpp_added": 5.585381508241465e-05,
+          "hist": [
+            0,
+            0,
+            24,
+            12,
+            4,
+            0
+          ]
+        },
+        {
+          "seq": "Cactus_1920x1080_50.yuv",
+          "db": 0.09945771843194962,
+          "floor_db": 0.023561576381325722,
+          "lam": 0.00011298308163532056,
+          "feasible": true,
+          "saving_pct_measured": 34.81311575078415,
+          "saving_pct_vs_release": 35.583675384521484,
+          "map_bits": 99.3673505783081,
+          "bpp_added": 4.792021150574272e-05,
+          "hist": [
+            0,
+            0,
+            32,
+            6,
+            2,
+            0
+          ]
+        },
+        {
+          "seq": "Kimono1_1920x1080_24.yuv",
+          "db": 0.06824619323015213,
+          "floor_db": 0.014704195782542229,
+          "lam": 0.9999847412109375,
+          "feasible": true,
+          "saving_pct_measured": 38.327506874300475,
+          "saving_pct_vs_release": 39.12455368041992,
+          "map_bits": 64.0,
+          "bpp_added": 3.08641975308642e-05,
+          "hist": [
+            0,
+            0,
+            40,
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "seq": "ParkScene_1920x1080_24.yuv",
+          "db": 0.05295434594154358,
+          "floor_db": 0.010819272138178349,
+          "lam": 0.9999847412109375,
+          "feasible": true,
+          "saving_pct_measured": 38.327506874300475,
+          "saving_pct_vs_release": 39.12455368041992,
+          "map_bits": 64.0,
+          "bpp_added": 3.08641975308642e-05,
+          "hist": [
+            0,
+            0,
+            40,
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "seq": "FourPeople_1280x720_60.yuv",
+          "db": 0.09895877540111542,
+          "floor_db": 0.02642512321472168,
+          "lam": 8.784318470134167e-05,
+          "feasible": true,
+          "saving_pct_measured": 34.635420265023285,
+          "saving_pct_vs_release": 35.397159576416016,
+          "map_bits": 77.58380973339081,
+          "bpp_added": 8.418382132529384e-05,
+          "hist": [
+            0,
+            0,
+            12,
+            2,
+            1,
+            0
+          ]
+        },
+        {
+          "seq": "Johnny_1280x720_60.yuv",
+          "db": 0.09135369211435318,
+          "floor_db": 0.04035145416855812,
+          "lam": 2.9951491342217196e-05,
+          "feasible": true,
+          "saving_pct_measured": 27.74978928023656,
+          "saving_pct_vs_release": 28.502643585205078,
+          "map_bits": 83.09358382225037,
+          "bpp_added": 9.016230883490708e-05,
+          "hist": [
+            0,
+            0,
+            6,
+            8,
+            0,
+            1
+          ]
+        },
+        {
+          "seq": "KristenAndSara_1280x720_60.yuv",
+          "db": 0.09924772381782532,
+          "floor_db": 0.03965586796402931,
+          "lam": 5.35862318429281e-05,
+          "feasible": true,
+          "saving_pct_measured": 32.007848447582596,
+          "saving_pct_vs_release": 32.72547149658203,
+          "map_bits": 82.54961037635803,
+          "bpp_added": 8.957205987018016e-05,
+          "hist": [
+            0,
+            0,
+            11,
+            2,
+            1,
+            1
+          ]
+        },
+        {
+          "seq": "BQMall_832x480_60.yuv",
+          "db": 0.09250429272651672,
+          "floor_db": 0.02740219607949257,
+          "lam": 0.00011224340778426267,
+          "feasible": true,
+          "saving_pct_measured": 32.73756062511227,
+          "saving_pct_vs_release": 33.5345573425293,
+          "map_bits": 71.63547229766846,
+          "bpp_added": 0.00017937568183510732,
+          "hist": [
+            0,
+            0,
+            5,
+            3,
+            0,
+            0
+          ]
+        },
+        {
+          "seq": "BasketballDrill_832x480_50.yuv",
+          "db": 0.09436134994029999,
+          "floor_db": 0.04151258245110512,
+          "lam": 6.775148631277261e-05,
+          "feasible": true,
+          "saving_pct_measured": 23.95158281632146,
+          "saving_pct_vs_release": 24.6823673248291,
+          "map_bits": 72.49022483825684,
+          "bpp_added": 0.00018151598767592356,
+          "hist": [
+            0,
+            0,
+            1,
+            6,
+            1,
+            0
+          ]
+        },
+        {
+          "seq": "PartyScene_832x480_50.yuv",
+          "db": 0.08215764164924622,
+          "floor_db": 0.013564269989728928,
+          "lam": 0.9999847412109375,
+          "feasible": true,
+          "saving_pct_measured": 38.327506874300475,
+          "saving_pct_vs_release": 39.12455368041992,
+          "map_bits": 64.0,
+          "bpp_added": 0.00016025641025641026,
+          "hist": [
+            0,
+            0,
+            8,
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "seq": "RaceHorses_832x480_30.yuv",
+          "db": 0.09545190632343292,
+          "floor_db": 0.02198564074933529,
+          "lam": 0.0001601872709215968,
+          "feasible": true,
+          "saving_pct_measured": 32.73756062511227,
+          "saving_pct_vs_release": 33.5345573425293,
+          "map_bits": 71.63547229766846,
+          "bpp_added": 0.00017937568183510732,
+          "hist": [
+            0,
+            0,
+            5,
+            3,
+            0,
+            0
+          ]
+        },
+        {
+          "seq": "BasketballPass_416x240_50.yuv",
+          "db": 0.07757189124822617,
+          "floor_db": 0.007385196629911661,
+          "lam": 9.866572872851975e-05,
+          "feasible": true,
+          "saving_pct_measured": 30.8742452087162,
+          "saving_pct_vs_release": 31.671226501464844,
+          "map_bits": 66.0,
+          "bpp_added": 0.0006610576923076923,
+          "hist": [
+            0,
+            0,
+            1,
+            1,
+            0,
+            0
+          ]
+        },
+        {
+          "seq": "BlowingBubbles_416x240_50.yuv",
+          "db": 0.06709831953048706,
+          "floor_db": 0.0037839149590581656,
+          "lam": 0.00019788140343734995,
+          "feasible": true,
+          "saving_pct_measured": 30.8742452087162,
+          "saving_pct_vs_release": 31.671226501464844,
+          "map_bits": 66.0,
+          "bpp_added": 0.0006610576923076923,
+          "hist": [
+            0,
+            0,
+            1,
+            1,
+            0,
+            0
+          ]
+        },
+        {
+          "seq": "BQSquare_416x240_60.yuv",
+          "db": 0.07250577211380005,
+          "floor_db": 0.008640935644507408,
+          "lam": 0.00020402737573022023,
+          "feasible": true,
+          "saving_pct_measured": 30.8742452087162,
+          "saving_pct_vs_release": 31.671226501464844,
+          "map_bits": 66.0,
+          "bpp_added": 0.0006610576923076923,
+          "hist": [
+            0,
+            0,
+            1,
+            1,
+            0,
+            0
+          ]
+        },
+        {
+          "seq": "RaceHorses_416x240_30.yuv",
+          "db": 0.06617653369903564,
+          "floor_db": 0.02587088569998741,
+          "lam": 0.00014419636136153713,
+          "feasible": true,
+          "saving_pct_measured": 23.42098354313191,
+          "saving_pct_vs_release": 24.217891693115234,
+          "map_bits": 64.0,
+          "bpp_added": 0.000641025641025641,
+          "hist": [
+            0,
+            0,
+            0,
+            2,
+            0,
+            0
+          ]
+        }
+      ]
+    },
+    {
+      "qp": 16,
+      "n": 53,
+      "mean_db": 0.09285811145069464,
+      "p95_db": 0.09953635036945344,
+      "max_db": 0.09999151527881622,
+      "over_budget": 0,
+      "infeasible": 0,
+      "saving_pct_measured": 31.13303488862291,
+      "map_bits": 92.54496667520056,
+      "hist_pct": [
+        0.0,
+        0.0,
+        69.63172804532577,
+        20.56657223796034,
+        7.818696883852692,
+        1.9830028328611897
+      ],
+      "per_frame": [
+        {
+          "seq": "Beauty_1920x1080_120fps_420_8bit_YUV.yuv",
+          "db": 0.0500934012234211,
+          "floor_db": 0.010188148356974125,
+          "lam": 0.9999847412109375,
+          "feasible": true,
+          "saving_pct_measured": 38.327506874300475,
+          "saving_pct_vs_release": 39.12455368041992,
+          "map_bits": 64.0,
+          "bpp_added": 3.08641975308642e-05,
+          "hist": [
+            0,
+            0,
+            40,
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "seq": "Bosphorus_1920x1080_120fps_420_8bit_YUV.yuv",
+          "db": 0.09948200732469559,
+          "floor_db": 0.030833853408694267,
+          "lam": 2.0865541955572553e-05,
+          "feasible": true,
+          "saving_pct_measured": 34.70699589614624,
+          "saving_pct_vs_release": 35.490779876708984,
+          "map_bits": 99.29703617095947,
+          "bpp_added": 4.788630216577907e-05,
+          "hist": [
+            0,
+            0,
+            31,
+            8,
+            1,
+            0
+          ]
+        },
+        {
+          "seq": "HoneyBee_1920x1080_120fps_420_8bit_YUV.yuv",
+          "db": 0.09924013167619705,
+          "floor_db": 0.06448285281658173,
+          "lam": 1.5985433492460288e-05,
+          "feasible": true,
+          "saving_pct_measured": 17.28924569233533,
+          "saving_pct_vs_release": 17.735593795776367,
+          "map_bits": 123.61874008178711,
+          "bpp_added": 5.9615518943763074e-05,
+          "hist": [
+            0,
+            0,
+            4,
+            10,
+            24,
+            2
+          ]
+        },
+        {
+          "seq": "Jockey_1920x1080_120fps_420_8bit_YUV.yuv",
+          "db": 0.09905897080898285,
+          "floor_db": 0.034384533762931824,
+          "lam": 1.320105729973875e-05,
+          "feasible": true,
+          "saving_pct_measured": 27.75655994804549,
+          "saving_pct_vs_release": 28.43115997314453,
+          "map_bits": 129.14695167541504,
+          "bpp_added": 6.228151604717161e-05,
+          "hist": [
+            0,
+            0,
+            19,
+            12,
+            8,
+            1
+          ]
+        },
+        {
+          "seq": "ReadySteadyGo_1920x1080_120fps_420_8bit_YUV.yuv",
+          "db": 0.09935753047466278,
+          "floor_db": 0.04599875211715698,
+          "lam": 2.7722891900339164e-05,
+          "feasible": true,
+          "saving_pct_measured": 25.732821157646015,
+          "saving_pct_vs_release": 26.380950927734375,
+          "map_bits": 131.7515172958374,
+          "bpp_added": 6.353757585640307e-05,
+          "hist": [
+            0,
+            0,
+            15,
+            14,
+            10,
+            1
+          ]
+        },
+        {
+          "seq": "ShakeNDry_1920x1080_120fps_420_8bit_YUV.yuv",
+          "db": 0.0747322216629982,
+          "floor_db": 0.019481509923934937,
+          "lam": 0.9999847412109375,
+          "feasible": true,
+          "saving_pct_measured": 38.327506874300475,
+          "saving_pct_vs_release": 39.12455368041992,
+          "map_bits": 64.0,
+          "bpp_added": 3.08641975308642e-05,
+          "hist": [
+            0,
+            0,
+            40,
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "seq": "YachtRide_1920x1080_120fps_420_8bit_YUV.yuv",
+          "db": 0.09851494431495667,
+          "floor_db": 0.039020709693431854,
+          "lam": 1.992409124795813e-05,
+          "feasible": true,
+          "saving_pct_measured": 28.42353981567203,
+          "saving_pct_vs_release": 29.154359817504883,
+          "map_bits": 120.72196388244629,
+          "bpp_added": 5.821853968096368e-05,
+          "hist": [
+            0,
+            0,
+            17,
+            18,
+            5,
+            0
+          ]
+        },
+        {
+          "seq": "videoSRC01_1920x1080_30.yuv",
+          "db": 0.09744793176651001,
+          "floor_db": 0.017803549766540527,
+          "lam": 0.9999847412109375,
+          "feasible": true,
+          "saving_pct_measured": 38.327506874300475,
+          "saving_pct_vs_release": 39.12455368041992,
+          "map_bits": 64.0,
+          "bpp_added": 3.08641975308642e-05,
+          "hist": [
+            0,
+            0,
+            40,
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "seq": "videoSRC02_1920x1080_30.yuv",
+          "db": 0.09901545196771622,
+          "floor_db": 0.05197685956954956,
+          "lam": 6.103420673753135e-06,
+          "feasible": true,
+          "saving_pct_measured": 25.626701303008115,
+          "saving_pct_vs_release": 26.288063049316406,
+          "map_bits": 131.04483032226562,
+          "bpp_added": 6.319677388226545e-05,
+          "hist": [
+            0,
+            0,
+            14,
+            16,
+            9,
+            1
+          ]
+        },
+        {
+          "seq": "videoSRC03_1920x1080_30.yuv",
+          "db": 0.09849976003170013,
+          "floor_db": 0.04017911106348038,
+          "lam": 1.9551296645659022e-05,
+          "feasible": true,
+          "saving_pct_measured": 31.59179781956861,
+          "saving_pct_vs_release": 32.345794677734375,
+          "map_bits": 115.76116943359375,
+          "bpp_added": 5.5826181246910564e-05,
+          "hist": [
+            0,
+            0,
+            25,
+            12,
+            2,
+            1
+          ]
+        },
+        {
+          "seq": "videoSRC04_1920x1080_30.yuv",
+          "db": 0.0601520799100399,
+          "floor_db": 0.012462245300412178,
+          "lam": 0.9999847412109375,
+          "feasible": true,
+          "saving_pct_measured": 38.327506874300475,
+          "saving_pct_vs_release": 39.12455368041992,
+          "map_bits": 64.0,
+          "bpp_added": 3.08641975308642e-05,
+          "hist": [
+            0,
+            0,
+            40,
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "seq": "videoSRC05_1920x1080_25.yuv",
+          "db": 0.09957004338502884,
+          "floor_db": 0.04051918163895607,
+          "lam": 2.4225309971370734e-05,
+          "feasible": true,
+          "saving_pct_measured": 28.42353981567203,
+          "saving_pct_vs_release": 29.154359817504883,
+          "map_bits": 120.72196388244629,
+          "bpp_added": 5.821853968096368e-05,
+          "hist": [
+            0,
+            0,
+            17,
+            18,
+            5,
+            0
+          ]
+        },
+        {
+          "seq": "videoSRC06_1920x1080_25.yuv",
+          "db": 0.05289808288216591,
+          "floor_db": 0.005826128181070089,
+          "lam": 0.9999847412109375,
+          "feasible": true,
+          "saving_pct_measured": 38.327506874300475,
+          "saving_pct_vs_release": 39.12455368041992,
+          "map_bits": 64.0,
+          "bpp_added": 3.08641975308642e-05,
+          "hist": [
+            0,
+            0,
+            40,
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "seq": "videoSRC07_1920x1080_25.yuv",
+          "db": 0.0979374349117279,
+          "floor_db": 0.02766096591949463,
+          "lam": 3.7603256714646704e-05,
+          "feasible": true,
+          "saving_pct_measured": 33.695126500946515,
+          "saving_pct_vs_release": 34.465675354003906,
+          "map_bits": 105.46635055541992,
+          "bpp_added": 5.08614730687789e-05,
+          "hist": [
+            0,
+            0,
+            29,
+            9,
+            2,
+            0
+          ]
+        },
+        {
+          "seq": "videoSRC08_1920x1080_25.yuv",
+          "db": 0.09395048767328262,
+          "floor_db": 0.016848035156726837,
+          "lam": 0.9999847412109375,
+          "feasible": true,
+          "saving_pct_measured": 38.327506874300475,
+          "saving_pct_vs_release": 39.12455368041992,
+          "map_bits": 64.0,
+          "bpp_added": 3.08641975308642e-05,
+          "hist": [
+            0,
+            0,
+            40,
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "seq": "videoSRC09_1920x1080_25.yuv",
+          "db": 0.09906352311372757,
+          "floor_db": 0.033930454403162,
+          "lam": 5.410097674030112e-05,
+          "feasible": true,
+          "saving_pct_measured": 28.477843335037512,
+          "saving_pct_vs_release": 29.24834442138672,
+          "map_bits": 112.23184013366699,
+          "bpp_added": 5.412415129902922e-05,
+          "hist": [
+            0,
+            0,
+            15,
+            23,
+            2,
+            0
+          ]
+        },
+        {
+          "seq": "videoSRC10_1920x1080_30.yuv",
+          "db": 0.09888134151697159,
+          "floor_db": 0.08444160223007202,
+          "lam": 7.415233994834125e-06,
+          "feasible": true,
+          "saving_pct_measured": 14.760194000359261,
+          "saving_pct_vs_release": 15.196598052978516,
+          "map_bits": 139.35115242004395,
+          "bpp_added": 6.720252335071564e-05,
+          "hist": [
+            0,
+            0,
+            9,
+            8,
+            6,
+            17
+          ]
+        },
+        {
+          "seq": "videoSRC11_1920x1080_30.yuv",
+          "db": 0.09667788445949554,
+          "floor_db": 0.02481522224843502,
+          "lam": 2.338155627512606e-05,
+          "feasible": true,
+          "saving_pct_measured": 37.582180707742054,
+          "saving_pct_vs_release": 38.37922286987305,
+          "map_bits": 75.45587921142578,
+          "bpp_added": 3.638883063822617e-05,
+          "hist": [
+            0,
+            0,
+            38,
+            2,
+            0,
+            0
+          ]
+        },
+        {
+          "seq": "videoSRC12_1920x1080_30.yuv",
+          "db": 0.09778203070163727,
+          "floor_db": 0.02969815395772457,
+          "lam": 5.710178993467707e-05,
+          "feasible": true,
+          "saving_pct_measured": 35.82498514598389,
+          "saving_pct_vs_release": 36.60877990722656,
+          "map_bits": 92.29374313354492,
+          "bpp_added": 4.4508942483383934e-05,
+          "hist": [
+            0,
+            0,
+            34,
+            5,
+            1,
+            0
+          ]
+        },
+        {
+          "seq": "videoSRC13_1920x1080_30.yuv",
+          "db": 0.09919256716966629,
+          "floor_db": 0.02402961067855358,
+          "lam": 7.58929918447393e-05,
+          "feasible": true,
+          "saving_pct_measured": 33.21634356302939,
+          "saving_pct_vs_release": 34.000118255615234,
+          "map_bits": 105.47561073303223,
+          "bpp_added": 5.086593881801323e-05,
+          "hist": [
+            0,
+            0,
+            27,
+            12,
+            1,
+            0
+          ]
+        },
+        {
+          "seq": "videoSRC14_1920x1080_30.yuv",
+          "db": 0.09871839731931686,
+          "floor_db": 0.04342949390411377,
+          "lam": 2.0887246137135662e-05,
+          "feasible": true,
+          "saving_pct_measured": 30.020312003426785,
+          "saving_pct_vs_release": 30.737924575805664,
+          "map_bits": 120.24030113220215,
+          "bpp_added": 5.798625633304502e-05,
+          "hist": [
+            0,
+            0,
+            22,
+            12,
+            6,
+            0
+          ]
+        },
+        {
+          "seq": "videoSRC15_1920x1080_30.yuv",
+          "db": 0.09704697877168655,
+          "floor_db": 0.02421444281935692,
+          "lam": 5.651090214087162e-05,
+          "feasible": true,
+          "saving_pct_measured": 36.83685454118363,
+          "saving_pct_vs_release": 37.63388442993164,
+          "map_bits": 82.75982522964478,
+          "bpp_added": 3.9911181148555545e-05,
+          "hist": [
+            0,
+            0,
+            36,
+            4,
+            0,
+            0
+          ]
+        },
+        {
+          "seq": "videoSRC16_1920x1080_30.yuv",
+          "db": 0.09752639383077621,
+          "floor_db": 0.03138488531112671,
+          "lam": 1.182284813694423e-05,
+          "feasible": true,
+          "saving_pct_measured": 36.09152837462519,
+          "saving_pct_vs_release": 36.8885498046875,
+          "map_bits": 88.39361095428467,
+          "bpp_added": 4.262809170249068e-05,
+          "hist": [
+            0,
+            0,
+            34,
+            6,
+            0,
+            0
+          ]
+        },
+        {
+          "seq": "videoSRC17_1920x1080_24.yuv",
+          "db": 0.09309165179729462,
+          "floor_db": 0.024201057851314545,
+          "lam": 6.807124373153783e-05,
+          "feasible": true,
+          "saving_pct_measured": 37.95484379102126,
+          "saving_pct_vs_release": 38.751888275146484,
+          "map_bits": 70.74643635749817,
+          "bpp_added": 3.411768728660213e-05,
+          "hist": [
+            0,
+            0,
+            39,
+            1,
+            0,
+            0
+          ]
+        },
+        {
+          "seq": "videoSRC18_1920x1080_25.yuv",
+          "db": 0.09799361228942871,
+          "floor_db": 0.02770366333425045,
+          "lam": 2.7524483812157996e-05,
+          "feasible": true,
+          "saving_pct_measured": 31.831811084550445,
+          "saving_pct_vs_release": 32.60234451293945,
+          "map_bits": 111.5350570678711,
+          "bpp_added": 5.378812551498413e-05,
+          "hist": [
+            0,
+            0,
+            24,
+            14,
+            2,
+            0
+          ]
+        },
+        {
+          "seq": "videoSRC19_1920x1080_30.yuv",
+          "db": 0.09858022630214691,
+          "floor_db": 0.0315241776406765,
+          "lam": 2.630488688737387e-05,
+          "feasible": true,
+          "saving_pct_measured": 35.82498514598389,
+          "saving_pct_vs_release": 36.60878372192383,
+          "map_bits": 92.29374313354492,
+          "bpp_added": 4.4508942483383934e-05,
+          "hist": [
+            0,
+            0,
+            34,
+            5,
+            1,
+            0
+          ]
+        },
+        {
+          "seq": "videoSRC20_1920x1080_25.yuv",
+          "db": 0.0988069549202919,
+          "floor_db": 0.03411024436354637,
+          "lam": 3.022349574166583e-05,
+          "feasible": true,
+          "saving_pct_measured": 31.59179781956861,
+          "saving_pct_vs_release": 32.345794677734375,
+          "map_bits": 115.76116943359375,
+          "bpp_added": 5.5826181246910564e-05,
+          "hist": [
+            0,
+            0,
+            25,
+            12,
+            2,
+            1
+          ]
+        },
+        {
+          "seq": "videoSRC21_1920x1080_24.yuv",
+          "db": 0.09774255752563477,
+          "floor_db": 0.010872980579733849,
+          "lam": 6.626947651966475e-06,
+          "feasible": true,
+          "saving_pct_measured": 34.91923560542206,
+          "saving_pct_vs_release": 35.67657470703125,
+          "map_bits": 97.65723133087158,
+          "bpp_added": 4.709550122052063e-05,
+          "hist": [
+            0,
+            0,
+            33,
+            4,
+            3,
+            0
+          ]
+        },
+        {
+          "seq": "videoSRC22_1920x1080_24.yuv",
+          "db": 0.09829528629779816,
+          "floor_db": 0.026370063424110413,
+          "lam": 3.053183354495559e-05,
+          "feasible": true,
+          "saving_pct_measured": 35.47885202636415,
+          "saving_pct_vs_release": 36.259342193603516,
+          "map_bits": 92.29374313354492,
+          "bpp_added": 4.4508942483383934e-05,
+          "hist": [
+            0,
+            0,
+            34,
+            5,
+            0,
+            1
+          ]
+        },
+        {
+          "seq": "videoSRC23_1920x1080_24.yuv",
+          "db": 0.09879530966281891,
+          "floor_db": 0.031814564019441605,
+          "lam": 2.265795865241671e-05,
+          "feasible": true,
+          "saving_pct_measured": 33.695126500946515,
+          "saving_pct_vs_release": 34.465675354003906,
+          "map_bits": 105.46635055541992,
+          "bpp_added": 5.08614730687789e-05,
+          "hist": [
+            0,
+            0,
+            29,
+            9,
+            2,
+            0
+          ]
+        },
+        {
+          "seq": "videoSRC24_1920x1080_24.yuv",
+          "db": 0.09951388835906982,
+          "floor_db": 0.06761622428894043,
+          "lam": 1.1508013812999707e-05,
+          "feasible": true,
+          "saving_pct_measured": 23.86701855715687,
+          "saving_pct_vs_release": 24.422550201416016,
+          "map_bits": 135.5796422958374,
+          "bpp_added": 6.538370095285368e-05,
+          "hist": [
+            0,
+            0,
+            18,
+            5,
+            12,
+            5
+          ]
+        },
+        {
+          "seq": "videoSRC25_1920x1080_24.yuv",
+          "db": 0.09771623462438583,
+          "floor_db": 0.03193945065140724,
+          "lam": 6.418975317501463e-05,
+          "feasible": true,
+          "saving_pct_measured": 29.223169501595947,
+          "saving_pct_vs_release": 29.993677139282227,
+          "map_bits": 113.15158748626709,
+          "bpp_added": 5.4567702298547016e-05,
+          "hist": [
+            0,
+            0,
+            17,
+            21,
+            2,
+            0
+          ]
+        },
+        {
+          "seq": "videoSRC26_1920x1080_30.yuv",
+          "db": 0.098450668156147,
+          "floor_db": 0.04272055625915527,
+          "lam": 1.6421757209172938e-05,
+          "feasible": true,
+          "saving_pct_measured": 28.635779524947836,
+          "saving_pct_vs_release": 29.34015464782715,
+          "map_bits": 123.21204566955566,
+          "bpp_added": 5.9419389308234794e-05,
+          "hist": [
+            0,
+            0,
+            19,
+            14,
+            7,
+            0
+          ]
+        },
+        {
+          "seq": "videoSRC27_1920x1080_30.yuv",
+          "db": 0.09455537796020508,
+          "floor_db": 0.016909921541810036,
+          "lam": 2.328402206330793e-05,
+          "feasible": true,
+          "saving_pct_measured": 37.95484379102126,
+          "saving_pct_vs_release": 38.751888275146484,
+          "map_bits": 70.74643635749817,
+          "bpp_added": 3.411768728660213e-05,
+          "hist": [
+            0,
+            0,
+            39,
+            1,
+            0,
+            0
+          ]
+        },
+        {
+          "seq": "videoSRC28_1920x1080_30.yuv",
+          "db": 0.08288456499576569,
+          "floor_db": 0.024757051840424538,
+          "lam": 0.9999847412109375,
+          "feasible": true,
+          "saving_pct_measured": 38.327506874300475,
+          "saving_pct_vs_release": 39.12455368041992,
+          "map_bits": 64.0,
+          "bpp_added": 3.08641975308642e-05,
+          "hist": [
+            0,
+            0,
+            40,
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "seq": "videoSRC29_1920x1080_24.yuv",
+          "db": 0.0929391086101532,
+          "floor_db": -0.021804293617606163,
+          "lam": 0.9999847412109375,
+          "feasible": true,
+          "saving_pct_measured": 38.327506874300475,
+          "saving_pct_vs_release": 39.12455368041992,
+          "map_bits": 64.0,
+          "bpp_added": 3.08641975308642e-05,
+          "hist": [
+            0,
+            0,
+            40,
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "seq": "videoSRC30_1920x1080_30.yuv",
+          "db": 0.09815913438796997,
+          "floor_db": 0.02623060718178749,
+          "lam": 2.4718258828215767e-05,
+          "feasible": true,
+          "saving_pct_measured": 36.09152837462519,
+          "saving_pct_vs_release": 36.88855743408203,
+          "map_bits": 88.39361095428467,
+          "bpp_added": 4.262809170249068e-05,
+          "hist": [
+            0,
+            0,
+            34,
+            6,
+            0,
+            0
+          ]
+        },
+        {
+          "seq": "BQTerrace_1920x1080_60.yuv",
+          "db": 0.09843547642230988,
+          "floor_db": 0.035952381789684296,
+          "lam": 5.618517207039986e-05,
+          "feasible": true,
+          "saving_pct_measured": 27.19943071119647,
+          "saving_pct_vs_release": 27.94346809387207,
+          "map_bits": 116.72948265075684,
+          "bpp_added": 5.6293153284508504e-05,
+          "hist": [
+            0,
+            0,
+            13,
+            23,
+            4,
+            0
+          ]
+        },
+        {
+          "seq": "BasketballDrive_1920x1080_50.yuv",
+          "db": 0.09841472655534744,
+          "floor_db": 0.03724454715847969,
+          "lam": 2.2395649466488976e-05,
+          "feasible": true,
+          "saving_pct_measured": 30.126431858064695,
+          "saving_pct_vs_release": 30.83081817626953,
+          "map_bits": 119.96443176269531,
+          "bpp_added": 5.7853217478151674e-05,
+          "hist": [
+            0,
+            0,
+            23,
+            10,
+            7,
+            0
+          ]
+        },
+        {
+          "seq": "Cactus_1920x1080_50.yuv",
+          "db": 0.0999646931886673,
+          "floor_db": 0.030964422971010208,
+          "lam": 5.914324447076069e-05,
+          "feasible": true,
+          "saving_pct_measured": 33.05592018902599,
+          "saving_pct_vs_release": 33.81324005126953,
+          "map_bits": 108.98697280883789,
+          "bpp_added": 5.2559304016607776e-05,
+          "hist": [
+            0,
+            0,
+            28,
+            9,
+            3,
+            0
+          ]
+        },
+        {
+          "seq": "Kimono1_1920x1080_24.yuv",
+          "db": 0.09095876663923264,
+          "floor_db": 0.022077327594161034,
+          "lam": 0.9999847412109375,
+          "feasible": true,
+          "saving_pct_measured": 38.327506874300475,
+          "saving_pct_vs_release": 39.12455368041992,
+          "map_bits": 64.0,
+          "bpp_added": 3.08641975308642e-05,
+          "hist": [
+            0,
+            0,
+            40,
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "seq": "ParkScene_1920x1080_24.yuv",
+          "db": 0.07341603934764862,
+          "floor_db": 0.01340943481773138,
+          "lam": 0.9999847412109375,
+          "feasible": true,
+          "saving_pct_measured": 38.327506874300475,
+          "saving_pct_vs_release": 39.12455368041992,
+          "map_bits": 64.0,
+          "bpp_added": 3.08641975308642e-05,
+          "hist": [
+            0,
+            0,
+            40,
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "seq": "FourPeople_1280x720_60.yuv",
+          "db": 0.0990164652466774,
+          "floor_db": 0.03843113034963608,
+          "lam": 2.582535034889588e-05,
+          "feasible": true,
+          "saving_pct_measured": 28.743557502314466,
+          "saving_pct_vs_release": 29.49642562866211,
+          "map_bits": 83.3003910779953,
+          "bpp_added": 9.038670906900532e-05,
+          "hist": [
+            0,
+            0,
+            7,
+            7,
+            0,
+            1
+          ]
+        },
+        {
+          "seq": "Johnny_1280x720_60.yuv",
+          "db": 0.099254310131073,
+          "floor_db": 0.040808968245983124,
+          "lam": 1.7173989363072906e-05,
+          "feasible": true,
+          "saving_pct_measured": 26.894197952218434,
+          "saving_pct_vs_release": 27.505964279174805,
+          "map_bits": 88.60335969924927,
+          "bpp_added": 9.614079828477568e-05,
+          "hist": [
+            0,
+            0,
+            8,
+            2,
+            4,
+            1
+          ]
+        },
+        {
+          "seq": "KristenAndSara_1280x720_60.yuv",
+          "db": 0.09864500910043716,
+          "floor_db": 0.04627331718802452,
+          "lam": 1.7859152649180032e-05,
+          "feasible": true,
+          "saving_pct_measured": 25.758936590623314,
+          "saving_pct_vs_release": 26.388328552246094,
+          "map_bits": 89.0935834646225,
+          "bpp_added": 9.667272511352268e-05,
+          "hist": [
+            0,
+            0,
+            8,
+            3,
+            1,
+            3
+          ]
+        },
+        {
+          "seq": "BQMall_832x480_60.yuv",
+          "db": 0.09999151527881622,
+          "floor_db": 0.032332584261894226,
+          "lam": 5.438543583713429e-05,
+          "feasible": true,
+          "saving_pct_measured": 29.010929792320127,
+          "saving_pct_vs_release": 29.807889938354492,
+          "map_bits": 71.63547229766846,
+          "bpp_added": 0.00017937568183510732,
+          "hist": [
+            0,
+            0,
+            3,
+            5,
+            0,
+            0
+          ]
+        },
+        {
+          "seq": "BasketballDrill_832x480_50.yuv",
+          "db": 0.09544532746076584,
+          "floor_db": 0.04569854959845543,
+          "lam": 3.408298380236374e-05,
+          "feasible": true,
+          "saving_pct_measured": 18.09011897030579,
+          "saving_pct_vs_release": 18.622446060180664,
+          "map_bits": 72.0,
+          "bpp_added": 0.00018028846153846155,
+          "hist": [
+            0,
+            0,
+            0,
+            4,
+            4,
+            0
+          ]
+        },
+        {
+          "seq": "PartyScene_832x480_50.yuv",
+          "db": 0.09784986078739166,
+          "floor_db": 0.02183368243277073,
+          "lam": 0.00012568275906232884,
+          "feasible": true,
+          "saving_pct_measured": 30.8742452087162,
+          "saving_pct_vs_release": 31.671226501464844,
+          "map_bits": 72.0,
+          "bpp_added": 0.00018028846153846155,
+          "hist": [
+            0,
+            0,
+            4,
+            4,
+            0,
+            0
+          ]
+        },
+        {
+          "seq": "RaceHorses_832x480_30.yuv",
+          "db": 0.09896889328956604,
+          "floor_db": 0.026363886892795563,
+          "lam": 8.526866804459132e-05,
+          "feasible": true,
+          "saving_pct_measured": 30.8742452087162,
+          "saving_pct_vs_release": 31.671226501464844,
+          "map_bits": 72.0,
+          "bpp_added": 0.00018028846153846155,
+          "hist": [
+            0,
+            0,
+            4,
+            4,
+            0,
+            0
+          ]
+        },
+        {
+          "seq": "BasketballPass_416x240_50.yuv",
+          "db": 0.07476885616779327,
+          "floor_db": 0.028034428134560585,
+          "lam": 3.891739197570132e-05,
+          "feasible": true,
+          "saving_pct_measured": 18.09011897030579,
+          "saving_pct_vs_release": 18.622446060180664,
+          "map_bits": 66.0,
+          "bpp_added": 0.0006610576923076923,
+          "hist": [
+            0,
+            0,
+            0,
+            1,
+            1,
+            0
+          ]
+        },
+        {
+          "seq": "BlowingBubbles_416x240_50.yuv",
+          "db": 0.07115937769412994,
+          "floor_db": 0.015027696266770363,
+          "lam": 9.162185961031355e-05,
+          "feasible": true,
+          "saving_pct_measured": 23.42098354313191,
+          "saving_pct_vs_release": 24.217891693115234,
+          "map_bits": 64.0,
+          "bpp_added": 0.000641025641025641,
+          "hist": [
+            0,
+            0,
+            0,
+            2,
+            0,
+            0
+          ]
+        },
+        {
+          "seq": "BQSquare_416x240_60.yuv",
+          "db": 0.0857742428779602,
+          "floor_db": 0.01912998966872692,
+          "lam": 9.386613510287134e-05,
+          "feasible": true,
+          "saving_pct_measured": 18.09011897030579,
+          "saving_pct_vs_release": 18.622446060180664,
+          "map_bits": 66.0,
+          "bpp_added": 0.0006610576923076923,
+          "hist": [
+            0,
+            0,
+            0,
+            1,
+            1,
+            0
+          ]
+        },
+        {
+          "seq": "RaceHorses_416x240_30.yuv",
+          "db": 0.08705217391252518,
+          "floor_db": 0.03384055942296982,
+          "lam": 0.00010318833938072203,
+          "feasible": true,
+          "saving_pct_measured": 23.42098354313191,
+          "saving_pct_vs_release": 24.217891693115234,
+          "map_bits": 64.0,
+          "bpp_added": 0.000641025641025641,
+          "hist": [
+            0,
+            0,
+            0,
+            2,
+            0,
+            0
+          ]
+        }
+      ]
+    },
+    {
+      "qp": 32,
+      "n": 53,
+      "mean_db": 0.09485150040742361,
+      "p95_db": 0.09985045343637466,
+      "max_db": 0.0999874696135521,
+      "over_budget": 0,
+      "infeasible": 0,
+      "saving_pct_measured": 27.379743736610855,
+      "map_bits": 102.14319527599046,
+      "hist_pct": [
+        0.0,
+        0.0,
+        57.22379603399433,
+        24.192634560906516,
+        12.181303116147308,
+        6.402266288951841
+      ],
+      "per_frame": [
+        {
+          "seq": "Beauty_1920x1080_120fps_420_8bit_YUV.yuv",
+          "db": 0.04896733537316322,
+          "floor_db": 0.007116431370377541,
+          "lam": 0.9999847412109375,
+          "feasible": true,
+          "saving_pct_measured": 38.327506874300475,
+          "saving_pct_vs_release": 39.12455368041992,
+          "map_bits": 64.0,
+          "bpp_added": 3.08641975308642e-05,
+          "hist": [
+            0,
+            0,
+            40,
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "seq": "Bosphorus_1920x1080_120fps_420_8bit_YUV.yuv",
+          "db": 0.09857465326786041,
+          "floor_db": 0.030606118962168694,
+          "lam": 1.092454022000311e-05,
+          "feasible": true,
+          "saving_pct_measured": 33.3224634176673,
+          "saving_pct_vs_release": 34.0930061340332,
+          "map_bits": 107.05190563201904,
+          "bpp_added": 5.162611189815733e-05,
+          "hist": [
+            0,
+            0,
+            28,
+            10,
+            2,
+            0
+          ]
+        },
+        {
+          "seq": "HoneyBee_1920x1080_120fps_420_8bit_YUV.yuv",
+          "db": 0.09944911301136017,
+          "floor_db": 0.0679057314991951,
+          "lam": 7.761000233585946e-06,
+          "feasible": true,
+          "saving_pct_measured": 16.171256442497683,
+          "saving_pct_vs_release": 16.617589950561523,
+          "map_bits": 134.60297966003418,
+          "bpp_added": 6.491270238234673e-05,
+          "hist": [
+            0,
+            0,
+            4,
+            11,
+            19,
+            6
+          ]
+        },
+        {
+          "seq": "Jockey_1920x1080_120fps_420_8bit_YUV.yuv",
+          "db": 0.0987052246928215,
+          "floor_db": 0.03325079008936882,
+          "lam": 8.917140803532675e-06,
+          "feasible": true,
+          "saving_pct_measured": 30.659518315347313,
+          "saving_pct_vs_release": 31.390363693237305,
+          "map_bits": 118.20600891113281,
+          "bpp_added": 5.700521263075464e-05,
+          "hist": [
+            0,
+            0,
+            23,
+            12,
+            5,
+            0
+          ]
+        },
+        {
+          "seq": "ReadySteadyGo_1920x1080_120fps_420_8bit_YUV.yuv",
+          "db": 0.0996914878487587,
+          "floor_db": 0.05131843686103821,
+          "lam": 1.2064934708178043e-05,
+          "feasible": true,
+          "saving_pct_measured": 20.885713890923164,
+          "saving_pct_vs_release": 21.44120979309082,
+          "map_bits": 140.92293643951416,
+          "bpp_added": 6.796052104529039e-05,
+          "hist": [
+            0,
+            0,
+            10,
+            13,
+            12,
+            5
+          ]
+        },
+        {
+          "seq": "ShakeNDry_1920x1080_120fps_420_8bit_YUV.yuv",
+          "db": 0.09872041642665863,
+          "floor_db": 0.028485005721449852,
+          "lam": 1.8591935258882586e-05,
+          "feasible": true,
+          "saving_pct_measured": 36.83685454118363,
+          "saving_pct_vs_release": 37.633888244628906,
+          "map_bits": 82.75982522964478,
+          "bpp_added": 3.9911181148555545e-05,
+          "hist": [
+            0,
+            0,
+            36,
+            4,
+            0,
+            0
+          ]
+        },
+        {
+          "seq": "YachtRide_1920x1080_120fps_420_8bit_YUV.yuv",
+          "db": 0.09885147958993912,
+          "floor_db": 0.04979093000292778,
+          "lam": 7.293012458831072e-06,
+          "feasible": true,
+          "saving_pct_measured": 20.88447029887662,
+          "saving_pct_vs_release": 21.393680572509766,
+          "map_bits": 135.0098361968994,
+          "bpp_added": 6.510891020298004e-05,
+          "hist": [
+            0,
+            0,
+            11,
+            8,
+            18,
+            3
+          ]
+        },
+        {
+          "seq": "videoSRC01_1920x1080_30.yuv",
+          "db": 0.08850627392530441,
+          "floor_db": 0.015734979882836342,
+          "lam": 0.9999847412109375,
+          "feasible": true,
+          "saving_pct_measured": 38.327506874300475,
+          "saving_pct_vs_release": 39.12455368041992,
+          "map_bits": 64.0,
+          "bpp_added": 3.08641975308642e-05,
+          "hist": [
+            0,
+            0,
+            40,
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "seq": "videoSRC02_1920x1080_30.yuv",
+          "db": 0.09883883595466614,
+          "floor_db": 0.06274054944515228,
+          "lam": 2.52091558650136e-06,
+          "feasible": true,
+          "saving_pct_measured": 22.8298627903442,
+          "saving_pct_vs_release": 23.4217529296875,
+          "map_bits": 141.0448350906372,
+          "bpp_added": 6.801930704602489e-05,
+          "hist": [
+            0,
+            0,
+            14,
+            12,
+            8,
+            6
+          ]
+        },
+        {
+          "seq": "videoSRC03_1920x1080_30.yuv",
+          "db": 0.0999874696135521,
+          "floor_db": 0.04972438886761665,
+          "lam": 6.683874744339846e-06,
+          "feasible": true,
+          "saving_pct_measured": 28.58271959762888,
+          "saving_pct_vs_release": 29.293704986572266,
+          "map_bits": 127.13559055328369,
+          "bpp_added": 6.131153093811907e-05,
+          "hist": [
+            0,
+            0,
+            20,
+            14,
+            4,
+            2
+          ]
+        },
+        {
+          "seq": "videoSRC04_1920x1080_30.yuv",
+          "db": 0.09710520505905151,
+          "floor_db": 0.019327916204929352,
+          "lam": 6.73667336741346e-05,
+          "feasible": true,
+          "saving_pct_measured": 37.20951762446284,
+          "saving_pct_vs_release": 38.00654983520508,
+          "map_bits": 79.37246108055115,
+          "bpp_added": 3.827761433282752e-05,
+          "hist": [
+            0,
+            0,
+            37,
+            3,
+            0,
+            0
+          ]
+        },
+        {
+          "seq": "videoSRC05_1920x1080_25.yuv",
+          "db": 0.09986654669046402,
+          "floor_db": 0.04001496359705925,
+          "lam": 1.413721292919945e-05,
+          "feasible": true,
+          "saving_pct_measured": 28.156996587030715,
+          "saving_pct_vs_release": 28.874588012695312,
+          "map_bits": 122.39361190795898,
+          "bpp_added": 5.9024697100674666e-05,
+          "hist": [
+            0,
+            0,
+            17,
+            17,
+            6,
+            0
+          ]
+        },
+        {
+          "seq": "videoSRC06_1920x1080_25.yuv",
+          "db": 0.024228857830166817,
+          "floor_db": 0.002163010649383068,
+          "lam": 0.9999847412109375,
+          "feasible": true,
+          "saving_pct_measured": 38.327506874300475,
+          "saving_pct_vs_release": 39.12455368041992,
+          "map_bits": 64.0,
+          "bpp_added": 3.08641975308642e-05,
+          "hist": [
+            0,
+            0,
+            40,
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "seq": "videoSRC07_1920x1080_25.yuv",
+          "db": 0.09888742119073868,
+          "floor_db": 0.028814682736992836,
+          "lam": 2.4687150471436325e-05,
+          "feasible": true,
+          "saving_pct_measured": 32.41671387710547,
+          "saving_pct_vs_release": 33.16080093383789,
+          "map_bits": 111.96583652496338,
+          "bpp_added": 5.399587023773311e-05,
+          "hist": [
+            0,
+            0,
+            27,
+            9,
+            4,
+            0
+          ]
+        },
+        {
+          "seq": "videoSRC08_1920x1080_25.yuv",
+          "db": 0.08602041751146317,
+          "floor_db": 0.018973292782902718,
+          "lam": 0.9999847412109375,
+          "feasible": true,
+          "saving_pct_measured": 38.327506874300475,
+          "saving_pct_vs_release": 39.12455368041992,
+          "map_bits": 64.0,
+          "bpp_added": 3.08641975308642e-05,
+          "hist": [
+            0,
+            0,
+            40,
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "seq": "videoSRC09_1920x1080_25.yuv",
+          "db": 0.09972690045833588,
+          "floor_db": 0.041798196732997894,
+          "lam": 2.137582214345457e-05,
+          "feasible": true,
+          "saving_pct_measured": 22.22091721822277,
+          "saving_pct_vs_release": 22.935152053833008,
+          "map_bits": 103.26748275756836,
+          "bpp_added": 4.980106228663598e-05,
+          "hist": [
+            0,
+            0,
+            2,
+            32,
+            5,
+            1
+          ]
+        },
+        {
+          "seq": "videoSRC10_1920x1080_30.yuv",
+          "db": 0.0998397246003151,
+          "floor_db": 0.09768839180469513,
+          "lam": 1.6090907593024895e-06,
+          "feasible": true,
+          "saving_pct_measured": 6.957068439015623,
+          "saving_pct_vs_release": 7.251214981079102,
+          "map_bits": 117.90666007995605,
+          "bpp_added": 5.68608507330035e-05,
+          "hist": [
+            0,
+            0,
+            4,
+            5,
+            3,
+            28
+          ]
+        },
+        {
+          "seq": "videoSRC11_1920x1080_30.yuv",
+          "db": 0.09622420370578766,
+          "floor_db": 0.02811569906771183,
+          "lam": 1.499196241638856e-05,
+          "feasible": true,
+          "saving_pct_measured": 37.20951762446284,
+          "saving_pct_vs_release": 38.00654983520508,
+          "map_bits": 79.37246108055115,
+          "bpp_added": 3.827761433282752e-05,
+          "hist": [
+            0,
+            0,
+            37,
+            3,
+            0,
+            0
+          ]
+        },
+        {
+          "seq": "videoSRC12_1920x1080_30.yuv",
+          "db": 0.09917891025543213,
+          "floor_db": 0.037116218358278275,
+          "lam": 1.7861339074443094e-05,
+          "feasible": true,
+          "saving_pct_measured": 31.164831216923904,
+          "saving_pct_vs_release": 31.8791446685791,
+          "map_bits": 119.0560474395752,
+          "bpp_added": 5.741514633467168e-05,
+          "hist": [
+            0,
+            0,
+            26,
+            8,
+            5,
+            1
+          ]
+        },
+        {
+          "seq": "videoSRC13_1920x1080_30.yuv",
+          "db": 0.09767825901508331,
+          "floor_db": 0.03259259834885597,
+          "lam": 3.0469678677036427e-05,
+          "feasible": true,
+          "saving_pct_measured": 26.292437578588114,
+          "saving_pct_vs_release": 26.963716506958008,
+          "map_bits": 130.5510082244873,
+          "bpp_added": 6.295862665146957e-05,
+          "hist": [
+            0,
+            0,
+            19,
+            13,
+            2,
+            6
+          ]
+        },
+        {
+          "seq": "videoSRC14_1920x1080_30.yuv",
+          "db": 0.09962569922208786,
+          "floor_db": 0.04078999161720276,
+          "lam": 1.1028218068531714e-05,
+          "feasible": true,
+          "saving_pct_measured": 27.491260311450716,
+          "saving_pct_vs_release": 28.19892692565918,
+          "map_bits": 128.30869579315186,
+          "bpp_added": 6.187726456074067e-05,
+          "hist": [
+            0,
+            0,
+            18,
+            16,
+            3,
+            3
+          ]
+        },
+        {
+          "seq": "videoSRC15_1920x1080_30.yuv",
+          "db": 0.09977041929960251,
+          "floor_db": 0.031204473227262497,
+          "lam": 2.3656649318581913e-05,
+          "feasible": true,
+          "saving_pct_measured": 34.33433281286703,
+          "saving_pct_vs_release": 35.11811065673828,
+          "map_bits": 101.14107990264893,
+          "bpp_added": 4.877559794687931e-05,
+          "hist": [
+            0,
+            0,
+            30,
+            9,
+            1,
+            0
+          ]
+        },
+        {
+          "seq": "videoSRC16_1920x1080_30.yuv",
+          "db": 0.09870675206184387,
+          "floor_db": 0.030619487166404724,
+          "lam": 1.003045508696232e-05,
+          "feasible": true,
+          "saving_pct_measured": 37.20951762446284,
+          "saving_pct_vs_release": 38.00654983520508,
+          "map_bits": 79.37246108055115,
+          "bpp_added": 3.827761433282752e-05,
+          "hist": [
+            0,
+            0,
+            37,
+            3,
+            0,
+            0
+          ]
+        },
+        {
+          "seq": "videoSRC17_1920x1080_24.yuv",
+          "db": 0.09957916289567947,
+          "floor_db": 0.03685801476240158,
+          "lam": 1.1042531696148217e-05,
+          "feasible": true,
+          "saving_pct_measured": 32.60242362272181,
+          "saving_pct_vs_release": 33.3233642578125,
+          "map_bits": 108.54215049743652,
+          "bpp_added": 5.23447870840261e-05,
+          "hist": [
+            0,
+            0,
+            31,
+            4,
+            2,
+            3
+          ]
+        },
+        {
+          "seq": "videoSRC18_1920x1080_25.yuv",
+          "db": 0.0995776355266571,
+          "floor_db": 0.040444809943437576,
+          "lam": 1.1065637409046758e-05,
+          "feasible": true,
+          "saving_pct_measured": 26.426330988932033,
+          "saving_pct_vs_release": 27.127378463745117,
+          "map_bits": 127.35375785827637,
+          "bpp_added": 6.141674279430767e-05,
+          "hist": [
+            0,
+            0,
+            14,
+            19,
+            6,
+            1
+          ]
+        },
+        {
+          "seq": "videoSRC19_1920x1080_30.yuv",
+          "db": 0.09947745501995087,
+          "floor_db": 0.03627943992614746,
+          "lam": 1.084000450646272e-05,
+          "feasible": true,
+          "saving_pct_measured": 31.138301253264434,
+          "saving_pct_vs_release": 31.85592269897461,
+          "map_bits": 116.74162292480469,
+          "bpp_added": 5.629900796913806e-05,
+          "hist": [
+            0,
+            0,
+            25,
+            9,
+            6,
+            0
+          ]
+        },
+        {
+          "seq": "videoSRC20_1920x1080_25.yuv",
+          "db": 0.09823353588581085,
+          "floor_db": 0.045815352350473404,
+          "lam": 1.4707192349305842e-05,
+          "feasible": true,
+          "saving_pct_measured": 27.358610493153336,
+          "saving_pct_vs_release": 28.082805633544922,
+          "map_bits": 125.4116096496582,
+          "bpp_added": 6.048013582641696e-05,
+          "hist": [
+            0,
+            0,
+            16,
+            19,
+            3,
+            2
+          ]
+        },
+        {
+          "seq": "videoSRC21_1920x1080_24.yuv",
+          "db": 0.09654826670885086,
+          "floor_db": 0.048495832830667496,
+          "lam": 2.098189725074917e-06,
+          "feasible": true,
+          "saving_pct_measured": 23.62824888422158,
+          "saving_pct_vs_release": 24.21353530883789,
+          "map_bits": 126.83802032470703,
+          "bpp_added": 6.116802677696134e-05,
+          "hist": [
+            0,
+            0,
+            12,
+            12,
+            16,
+            0
+          ]
+        },
+        {
+          "seq": "videoSRC22_1920x1080_24.yuv",
+          "db": 0.09902962297201157,
+          "floor_db": 0.03838648647069931,
+          "lam": 7.707014447078109e-06,
+          "feasible": true,
+          "saving_pct_measured": 31.272194663608353,
+          "saving_pct_vs_release": 32.01957321166992,
+          "map_bits": 111.8570556640625,
+          "bpp_added": 5.394341033182026e-05,
+          "hist": [
+            0,
+            0,
+            26,
+            11,
+            0,
+            3
+          ]
+        },
+        {
+          "seq": "videoSRC23_1920x1080_24.yuv",
+          "db": 0.09925784170627594,
+          "floor_db": 0.040167827159166336,
+          "lam": 7.444394213962369e-06,
+          "feasible": true,
+          "saving_pct_measured": 31.086484917992017,
+          "saving_pct_vs_release": 31.857013702392578,
+          "map_bits": 112.76962661743164,
+          "bpp_added": 5.438350049065955e-05,
+          "hist": [
+            0,
+            0,
+            22,
+            16,
+            2,
+            0
+          ]
+        },
+        {
+          "seq": "videoSRC24_1920x1080_24.yuv",
+          "db": 0.09895219653844833,
+          "floor_db": 0.08330205082893372,
+          "lam": 4.843918759434018e-06,
+          "feasible": true,
+          "saving_pct_measured": 19.100744773458977,
+          "saving_pct_vs_release": 19.60000991821289,
+          "map_bits": 137.85138511657715,
+          "bpp_added": 6.647925593970735e-05,
+          "hist": [
+            0,
+            0,
+            15,
+            6,
+            5,
+            14
+          ]
+        },
+        {
+          "seq": "videoSRC25_1920x1080_24.yuv",
+          "db": 0.09757904708385468,
+          "floor_db": 0.04776109382510185,
+          "lam": 2.5095444470935035e-05,
+          "feasible": true,
+          "saving_pct_measured": 23.60420610465518,
+          "saving_pct_vs_release": 24.285381317138672,
+          "map_bits": 127.94134521484375,
+          "bpp_added": 6.17001086105535e-05,
+          "hist": [
+            0,
+            0,
+            9,
+            23,
+            5,
+            3
+          ]
+        },
+        {
+          "seq": "videoSRC26_1920x1080_30.yuv",
+          "db": 0.09912779927253723,
+          "floor_db": 0.050351329147815704,
+          "lam": 7.062425538606476e-06,
+          "feasible": true,
+          "saving_pct_measured": 23.654778847881055,
+          "saving_pct_vs_release": 24.236757278442383,
+          "map_bits": 132.11429977416992,
+          "bpp_added": 6.371252882627794e-05,
+          "hist": [
+            0,
+            0,
+            13,
+            11,
+            15,
+            1
+          ]
+        },
+        {
+          "seq": "videoSRC27_1920x1080_30.yuv",
+          "db": 0.097179114818573,
+          "floor_db": 0.021468959748744965,
+          "lam": 0.9999847412109375,
+          "feasible": true,
+          "saving_pct_measured": 38.327506874300475,
+          "saving_pct_vs_release": 39.12455368041992,
+          "map_bits": 64.0,
+          "bpp_added": 3.08641975308642e-05,
+          "hist": [
+            0,
+            0,
+            40,
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "seq": "videoSRC28_1920x1080_30.yuv",
+          "db": 0.09426610171794891,
+          "floor_db": 0.024323590099811554,
+          "lam": 0.9999847412109375,
+          "feasible": true,
+          "saving_pct_measured": 38.327506874300475,
+          "saving_pct_vs_release": 39.12455368041992,
+          "map_bits": 64.0,
+          "bpp_added": 3.08641975308642e-05,
+          "hist": [
+            0,
+            0,
+            40,
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "seq": "videoSRC29_1920x1080_24.yuv",
+          "db": 0.09963228553533554,
+          "floor_db": 0.03833414241671562,
+          "lam": 1.943364623002708e-06,
+          "feasible": true,
+          "saving_pct_measured": 24.027441931160276,
+          "saving_pct_vs_release": 24.60942268371582,
+          "map_bits": 131.75151252746582,
+          "bpp_added": 6.353757355684115e-05,
+          "hist": [
+            0,
+            0,
+            14,
+            10,
+            15,
+            1
+          ]
+        },
+        {
+          "seq": "videoSRC30_1920x1080_30.yuv",
+          "db": 0.098756343126297,
+          "floor_db": 0.03514721617102623,
+          "lam": 1.470534971304005e-05,
+          "feasible": true,
+          "saving_pct_measured": 35.07965897942547,
+          "saving_pct_vs_release": 35.86345291137695,
+          "map_bits": 97.22563648223877,
+          "bpp_added": 4.688736327268459e-05,
+          "hist": [
+            0,
+            0,
+            32,
+            7,
+            1,
+            0
+          ]
+        },
+        {
+          "seq": "BQTerrace_1920x1080_60.yuv",
+          "db": 0.09882113337516785,
+          "floor_db": 0.042535483837127686,
+          "lam": 2.5461719815211836e-05,
+          "feasible": true,
+          "saving_pct_measured": 23.656022439927593,
+          "saving_pct_vs_release": 24.284290313720703,
+          "map_bits": 136.57336139678955,
+          "bpp_added": 6.586292505632213e-05,
+          "hist": [
+            0,
+            0,
+            12,
+            16,
+            9,
+            3
+          ]
+        },
+        {
+          "seq": "BasketballDrive_1920x1080_50.yuv",
+          "db": 0.09852910041809082,
+          "floor_db": 0.039129484444856644,
+          "lam": 1.2139348655182403e-05,
+          "feasible": true,
+          "saving_pct_measured": 29.38110569150627,
+          "saving_pct_vs_release": 30.085485458374023,
+          "map_bits": 121.96741962432861,
+          "bpp_added": 5.881916455648563e-05,
+          "hist": [
+            0,
+            0,
+            21,
+            12,
+            7,
+            0
+          ]
+        },
+        {
+          "seq": "Cactus_1920x1080_50.yuv",
+          "db": 0.09957157075405121,
+          "floor_db": 0.036814894527196884,
+          "lam": 2.559523818490561e-05,
+          "feasible": true,
+          "saving_pct_measured": 30.233795304749144,
+          "saving_pct_vs_release": 30.97124671936035,
+          "map_bits": 120.72948360443115,
+          "bpp_added": 5.82221660900999e-05,
+          "hist": [
+            0,
+            0,
+            23,
+            13,
+            2,
+            2
+          ]
+        },
+        {
+          "seq": "Kimono1_1920x1080_24.yuv",
+          "db": 0.09824821352958679,
+          "floor_db": 0.03389346972107887,
+          "lam": 1.2327550393820275e-05,
+          "feasible": true,
+          "saving_pct_measured": 33.347749789280236,
+          "saving_pct_vs_release": 34.06869888305664,
+          "map_bits": 101.6572322845459,
+          "bpp_added": 4.902451402611203e-05,
+          "hist": [
+            0,
+            0,
+            33,
+            2,
+            2,
+            3
+          ]
+        },
+        {
+          "seq": "ParkScene_1920x1080_24.yuv",
+          "db": 0.09814850240945816,
+          "floor_db": 0.024513041600584984,
+          "lam": 3.360582650202559e-05,
+          "feasible": true,
+          "saving_pct_measured": 34.57310248580232,
+          "saving_pct_vs_release": 35.32712936401367,
+          "map_bits": 100.41211986541748,
+          "bpp_added": 4.8424054719047784e-05,
+          "hist": [
+            0,
+            0,
+            33,
+            4,
+            2,
+            1
+          ]
+        },
+        {
+          "seq": "FourPeople_1280x720_60.yuv",
+          "db": 0.0999530553817749,
+          "floor_db": 0.06108330935239792,
+          "lam": 8.38915821077535e-06,
+          "feasible": true,
+          "saving_pct_measured": 19.793011012698457,
+          "saving_pct_vs_release": 20.298904418945312,
+          "map_bits": 91.4839448928833,
+          "bpp_added": 9.926643326050706e-05,
+          "hist": [
+            0,
+            0,
+            6,
+            2,
+            2,
+            5
+          ]
+        },
+        {
+          "seq": "Johnny_1280x720_60.yuv",
+          "db": 0.09787264466285706,
+          "floor_db": 0.05951531603932381,
+          "lam": 5.799616701551713e-06,
+          "feasible": true,
+          "saving_pct_measured": 19.439278163905428,
+          "saving_pct_vs_release": 19.9892520904541,
+          "map_bits": 92.9937174320221,
+          "bpp_added": 0.00010090464131078786,
+          "hist": [
+            0,
+            0,
+            4,
+            5,
+            2,
+            4
+          ]
+        },
+        {
+          "seq": "KristenAndSara_1280x720_60.yuv",
+          "db": 0.09858782589435577,
+          "floor_db": 0.06267982721328735,
+          "lam": 7.695879503444303e-06,
+          "feasible": true,
+          "saving_pct_measured": 23.13136477318263,
+          "saving_pct_vs_release": 23.71664047241211,
+          "map_bits": 90.19698703289032,
+          "bpp_added": 9.786999461034106e-05,
+          "hist": [
+            0,
+            0,
+            7,
+            3,
+            1,
+            4
+          ]
+        },
+        {
+          "seq": "BQMall_832x480_60.yuv",
+          "db": 0.09736794978380203,
+          "floor_db": 0.04578820616006851,
+          "lam": 1.8808636014000513e-05,
+          "feasible": true,
+          "saving_pct_measured": 21.286150529908387,
+          "saving_pct_vs_release": 21.8846435546875,
+          "map_bits": 75.24511241912842,
+          "bpp_added": 0.0001884142438379618,
+          "hist": [
+            0,
+            0,
+            1,
+            4,
+            3,
+            0
+          ]
+        },
+        {
+          "seq": "BasketballDrill_832x480_50.yuv",
+          "db": 0.09791567176580429,
+          "floor_db": 0.04982009902596474,
+          "lam": 2.260529527120525e-05,
+          "feasible": true,
+          "saving_pct_measured": 18.09011897030579,
+          "saving_pct_vs_release": 18.622446060180664,
+          "map_bits": 72.0,
+          "bpp_added": 0.00018028846153846155,
+          "hist": [
+            0,
+            0,
+            0,
+            4,
+            4,
+            0
+          ]
+        },
+        {
+          "seq": "PartyScene_832x480_50.yuv",
+          "db": 0.0936596691608429,
+          "floor_db": 0.0480596162378788,
+          "lam": 5.2672194215119816e-05,
+          "feasible": true,
+          "saving_pct_measured": 16.3594533722071,
+          "saving_pct_vs_release": 16.87523078918457,
+          "map_bits": 75.24511241912842,
+          "bpp_added": 0.0001884142438379618,
+          "hist": [
+            0,
+            0,
+            0,
+            4,
+            3,
+            1
+          ]
+        },
+        {
+          "seq": "RaceHorses_832x480_30.yuv",
+          "db": 0.09811762720346451,
+          "floor_db": 0.040263235569000244,
+          "lam": 2.4618913812446408e-05,
+          "feasible": true,
+          "saving_pct_measured": 21.286150529908387,
+          "saving_pct_vs_release": 21.8846435546875,
+          "map_bits": 75.24511241912842,
+          "bpp_added": 0.0001884142438379618,
+          "hist": [
+            0,
+            0,
+            1,
+            4,
+            3,
+            0
+          ]
+        },
+        {
+          "seq": "BasketballPass_416x240_50.yuv",
+          "db": 0.0810825452208519,
+          "floor_db": 0.025318637490272522,
+          "lam": 5.695092295354698e-05,
+          "feasible": true,
+          "saving_pct_measured": 23.42098354313191,
+          "saving_pct_vs_release": 24.217891693115234,
+          "map_bits": 64.0,
+          "bpp_added": 0.000641025641025641,
+          "hist": [
+            0,
+            0,
+            0,
+            2,
+            0,
+            0
+          ]
+        },
+        {
+          "seq": "BlowingBubbles_416x240_50.yuv",
+          "db": 0.0902874618768692,
+          "floor_db": 0.01668558269739151,
+          "lam": 5.920615240029292e-05,
+          "feasible": true,
+          "saving_pct_measured": 23.42098354313191,
+          "saving_pct_vs_release": 24.217891693115234,
+          "map_bits": 64.0,
+          "bpp_added": 0.000641025641025641,
+          "hist": [
+            0,
+            0,
+            0,
+            2,
+            0,
+            0
+          ]
+        },
+        {
+          "seq": "BQSquare_416x240_60.yuv",
+          "db": 0.08202047646045685,
+          "floor_db": 0.04591524973511696,
+          "lam": 4.0357577745453455e-05,
+          "feasible": true,
+          "saving_pct_measured": 5.836592005084906,
+          "saving_pct_vs_release": 6.038141250610352,
+          "map_bits": 66.0,
+          "bpp_added": 0.0006610576923076923,
+          "hist": [
+            0,
+            0,
+            0,
+            0,
+            1,
+            1
+          ]
+        },
+        {
+          "seq": "RaceHorses_416x240_30.yuv",
+          "db": 0.09259805828332901,
+          "floor_db": 0.049468982964754105,
+          "lam": 3.552122689143289e-05,
+          "feasible": true,
+          "saving_pct_measured": 18.09011897030579,
+          "saving_pct_vs_release": 18.622446060180664,
+          "map_bits": 66.0,
+          "bpp_added": 0.0006610576923076923,
+          "hist": [
+            0,
+            0,
+            0,
+            1,
+            1,
+            0
+          ]
+        }
+      ]
+    },
+    {
+      "qp": 48,
+      "n": 53,
+      "mean_db": 0.09355574884926374,
+      "p95_db": 0.09984681159257888,
+      "max_db": 0.09995205700397491,
+      "over_budget": 0,
+      "infeasible": 0,
+      "saving_pct_measured": 25.1719924299919,
+      "map_bits": 106.5401443962781,
+      "hist_pct": [
+        0.0,
+        0.0,
+        50.87818696883853,
+        24.475920679886684,
+        16.543909348441925,
+        8.101983002832862
+      ],
+      "per_frame": [
+        {
+          "seq": "Beauty_1920x1080_120fps_420_8bit_YUV.yuv",
+          "db": 0.05496590584516525,
+          "floor_db": 0.0076281046494841576,
+          "lam": 0.9999847412109375,
+          "feasible": true,
+          "saving_pct_measured": 38.327506874300475,
+          "saving_pct_vs_release": 39.12455368041992,
+          "map_bits": 64.0,
+          "bpp_added": 3.08641975308642e-05,
+          "hist": [
+            0,
+            0,
+            40,
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "seq": "Bosphorus_1920x1080_120fps_420_8bit_YUV.yuv",
+          "db": 0.09856504201889038,
+          "floor_db": 0.040708959102630615,
+          "lam": 4.487398655328434e-06,
+          "feasible": true,
+          "saving_pct_measured": 30.232551712702605,
+          "saving_pct_vs_release": 30.9237060546875,
+          "map_bits": 118.83802318572998,
+          "bpp_added": 5.731000346534046e-05,
+          "hist": [
+            0,
+            0,
+            24,
+            8,
+            8,
+            0
+          ]
+        },
+        {
+          "seq": "HoneyBee_1920x1080_120fps_420_8bit_YUV.yuv",
+          "db": 0.09896029531955719,
+          "floor_db": 0.061339568346738815,
+          "lam": 5.475874786498025e-06,
+          "feasible": true,
+          "saving_pct_measured": 17.39660913901977,
+          "saving_pct_vs_release": 17.876022338867188,
+          "map_bits": 108.23466205596924,
+          "bpp_added": 5.2196499834090106e-05,
+          "hist": [
+            0,
+            0,
+            1,
+            15,
+            24,
+            0
+          ]
+        },
+        {
+          "seq": "Jockey_1920x1080_120fps_420_8bit_YUV.yuv",
+          "db": 0.09955082088708878,
+          "floor_db": 0.03479798883199692,
+          "lam": 5.339274139259942e-06,
+          "feasible": true,
+          "saving_pct_measured": 30.76563816998521,
+          "saving_pct_vs_release": 31.483257293701172,
+          "map_bits": 118.1089677810669,
+          "bpp_added": 5.695841424627069e-05,
+          "hist": [
+            0,
+            0,
+            24,
+            10,
+            6,
+            0
+          ]
+        },
+        {
+          "seq": "ReadySteadyGo_1920x1080_120fps_420_8bit_YUV.yuv",
+          "db": 0.09959989786148071,
+          "floor_db": 0.06365694105625153,
+          "lam": 6.171073437144514e-06,
+          "feasible": true,
+          "saving_pct_measured": 15.238976938276384,
+          "saving_pct_vs_release": 15.662151336669922,
+          "map_bits": 138.72196578979492,
+          "bpp_added": 6.6899096156344e-05,
+          "hist": [
+            0,
+            0,
+            5,
+            9,
+            17,
+            9
+          ]
+        },
+        {
+          "seq": "ShakeNDry_1920x1080_120fps_420_8bit_YUV.yuv",
+          "db": 0.0987674742937088,
+          "floor_db": 0.04037044197320938,
+          "lam": 6.966321961954236e-06,
+          "feasible": true,
+          "saving_pct_measured": 29.753768774785485,
+          "saving_pct_vs_release": 30.458147048950195,
+          "map_bits": 121.0643949508667,
+          "bpp_added": 5.8383678120595436e-05,
+          "hist": [
+            0,
+            0,
+            22,
+            11,
+            7,
+            0
+          ]
+        },
+        {
+          "seq": "YachtRide_1920x1080_120fps_420_8bit_YUV.yuv",
+          "db": 0.09983163326978683,
+          "floor_db": 0.05897754430770874,
+          "lam": 3.908766302629374e-06,
+          "feasible": true,
+          "saving_pct_measured": 17.52925895731716,
+          "saving_pct_vs_release": 17.992145538330078,
+          "map_bits": 135.82780265808105,
+          "bpp_added": 6.550337705347273e-05,
+          "hist": [
+            0,
+            0,
+            6,
+            10,
+            19,
+            5
+          ]
+        },
+        {
+          "seq": "videoSRC01_1920x1080_30.yuv",
+          "db": 0.06864166259765625,
+          "floor_db": 0.013466724194586277,
+          "lam": 0.9999847412109375,
+          "feasible": true,
+          "saving_pct_measured": 38.327506874300475,
+          "saving_pct_vs_release": 39.12455368041992,
+          "map_bits": 64.0,
+          "bpp_added": 3.08641975308642e-05,
+          "hist": [
+            0,
+            0,
+            40,
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "seq": "videoSRC02_1920x1080_30.yuv",
+          "db": 0.09886465221643448,
+          "floor_db": 0.0727526992559433,
+          "lam": 1.218902070831973e-06,
+          "feasible": true,
+          "saving_pct_measured": 19.208108220143426,
+          "saving_pct_vs_release": 19.74044418334961,
+          "map_bits": 136.16063022613525,
+          "bpp_added": 6.566388417541245e-05,
+          "hist": [
+            0,
+            0,
+            6,
+            15,
+            15,
+            4
+          ]
+        },
+        {
+          "seq": "videoSRC03_1920x1080_30.yuv",
+          "db": 0.09985744208097458,
+          "floor_db": 0.051635127514600754,
+          "lam": 4.099323632544838e-06,
+          "feasible": true,
+          "saving_pct_measured": 28.23534288596261,
+          "saving_pct_vs_release": 28.896718978881836,
+          "map_bits": 127.5768985748291,
+          "bpp_added": 6.152435309357113e-05,
+          "hist": [
+            0,
+            0,
+            24,
+            7,
+            4,
+            5
+          ]
+        },
+        {
+          "seq": "videoSRC04_1920x1080_30.yuv",
+          "db": 0.09784631431102753,
+          "floor_db": 0.030491992831230164,
+          "lam": 2.253526145068463e-05,
+          "feasible": true,
+          "saving_pct_measured": 32.31059402246756,
+          "saving_pct_vs_release": 33.06790542602539,
+          "map_bits": 111.8570556640625,
+          "bpp_added": 5.394341033182026e-05,
+          "hist": [
+            0,
+            0,
+            26,
+            11,
+            3,
+            0
+          ]
+        },
+        {
+          "seq": "videoSRC05_1920x1080_25.yuv",
+          "db": 0.09912273287773132,
+          "floor_db": 0.032382428646087646,
+          "lam": 1.1719816939148586e-05,
+          "feasible": true,
+          "saving_pct_measured": 29.16886598223045,
+          "saving_pct_vs_release": 29.89969825744629,
+          "map_bits": 120.55685901641846,
+          "bpp_added": 5.813891734973884e-05,
+          "hist": [
+            0,
+            0,
+            19,
+            16,
+            5,
+            0
+          ]
+        },
+        {
+          "seq": "videoSRC06_1920x1080_25.yuv",
+          "db": 0.01673663966357708,
+          "floor_db": 0.002516422187909484,
+          "lam": 0.9999847412109375,
+          "feasible": true,
+          "saving_pct_measured": 38.327506874300475,
+          "saving_pct_vs_release": 39.12455368041992,
+          "map_bits": 64.0,
+          "bpp_added": 3.08641975308642e-05,
+          "hist": [
+            0,
+            0,
+            40,
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "seq": "videoSRC07_1920x1080_25.yuv",
+          "db": 0.09995205700397491,
+          "floor_db": 0.027299819514155388,
+          "lam": 1.511527989350725e-05,
+          "feasible": true,
+          "saving_pct_measured": 31.56526785590914,
+          "saving_pct_vs_release": 32.322566986083984,
+          "map_bits": 113.9774169921875,
+          "bpp_added": 5.496596112663363e-05,
+          "hist": [
+            0,
+            0,
+            24,
+            13,
+            3,
+            0
+          ]
+        },
+        {
+          "seq": "videoSRC08_1920x1080_25.yuv",
+          "db": 0.07560385763645172,
+          "floor_db": 0.014761467464268208,
+          "lam": 0.9999847412109375,
+          "feasible": true,
+          "saving_pct_measured": 38.327506874300475,
+          "saving_pct_vs_release": 39.12455368041992,
+          "map_bits": 64.0,
+          "bpp_added": 3.08641975308642e-05,
+          "hist": [
+            0,
+            0,
+            40,
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "seq": "videoSRC09_1920x1080_25.yuv",
+          "db": 0.09884744137525558,
+          "floor_db": 0.0484236478805542,
+          "lam": 1.1160144822497386e-05,
+          "feasible": true,
+          "saving_pct_measured": 21.954373989581466,
+          "saving_pct_vs_release": 22.65537452697754,
+          "map_bits": 105.78726196289062,
+          "bpp_added": 5.101623358549895e-05,
+          "hist": [
+            0,
+            0,
+            2,
+            31,
+            6,
+            1
+          ]
+        },
+        {
+          "seq": "videoSRC10_1920x1080_30.yuv",
+          "db": 0.09964442998170853,
+          "floor_db": 0.09386841207742691,
+          "lam": 1.8375885701971129e-06,
+          "feasible": true,
+          "saving_pct_measured": 9.726133395973523,
+          "saving_pct_vs_release": 10.046756744384766,
+          "map_bits": 126.92187690734863,
+          "bpp_added": 6.120846687275686e-05,
+          "hist": [
+            0,
+            0,
+            7,
+            3,
+            6,
+            24
+          ]
+        },
+        {
+          "seq": "videoSRC11_1920x1080_30.yuv",
+          "db": 0.09832362830638885,
+          "floor_db": 0.031990326941013336,
+          "lam": 5.438952939584851e-06,
+          "feasible": true,
+          "saving_pct_measured": 36.09152837462519,
+          "saving_pct_vs_release": 36.8885498046875,
+          "map_bits": 88.39361095428467,
+          "bpp_added": 4.262809170249068e-05,
+          "hist": [
+            0,
+            0,
+            34,
+            6,
+            0,
+            0
+          ]
+        },
+        {
+          "seq": "videoSRC12_1920x1080_30.yuv",
+          "db": 0.09964492917060852,
+          "floor_db": 0.05115829035639763,
+          "lam": 7.729043318249751e-06,
+          "feasible": true,
+          "saving_pct_measured": 24.74623813405922,
+          "saving_pct_vs_release": 25.331533432006836,
+          "map_bits": 136.11323738098145,
+          "bpp_added": 6.56410288295628e-05,
+          "hist": [
+            0,
+            0,
+            18,
+            7,
+            11,
+            4
+          ]
+        },
+        {
+          "seq": "videoSRC13_1920x1080_30.yuv",
+          "db": 0.09919458627700806,
+          "floor_db": 0.04382466524839401,
+          "lam": 1.111890196625609e-05,
+          "feasible": true,
+          "saving_pct_measured": 24.055215486866288,
+          "saving_pct_vs_release": 24.680185317993164,
+          "map_bits": 135.6158151626587,
+          "bpp_added": 6.540114542952291e-05,
+          "hist": [
+            0,
+            0,
+            17,
+            12,
+            3,
+            8
+          ]
+        },
+        {
+          "seq": "videoSRC14_1920x1080_30.yuv",
+          "db": 0.09960141777992249,
+          "floor_db": 0.04183921590447426,
+          "lam": 6.503779331978876e-06,
+          "feasible": true,
+          "saving_pct_measured": 26.50467728786392,
+          "saving_pct_vs_release": 27.14950942993164,
+          "map_bits": 133.23540115356445,
+          "bpp_added": 6.425318342668039e-05,
+          "hist": [
+            0,
+            0,
+            18,
+            11,
+            9,
+            2
+          ]
+        },
+        {
+          "seq": "videoSRC15_1920x1080_30.yuv",
+          "db": 0.09908377379179001,
+          "floor_db": 0.033711615949869156,
+          "lam": 1.2013953892164864e-05,
+          "feasible": true,
+          "saving_pct_measured": 32.33712398612704,
+          "saving_pct_vs_release": 33.091121673583984,
+          "map_bits": 113.27587985992432,
+          "bpp_added": 5.462764267936165e-05,
+          "hist": [
+            0,
+            0,
+            27,
+            10,
+            2,
+            1
+          ]
+        },
+        {
+          "seq": "videoSRC16_1920x1080_30.yuv",
+          "db": 0.09802956134080887,
+          "floor_db": 0.029874004423618317,
+          "lam": 8.510103725711815e-06,
+          "feasible": true,
+          "saving_pct_measured": 37.20951762446284,
+          "saving_pct_vs_release": 38.00654983520508,
+          "map_bits": 79.37246108055115,
+          "bpp_added": 3.827761433282752e-05,
+          "hist": [
+            0,
+            0,
+            37,
+            3,
+            0,
+            0
+          ]
+        },
+        {
+          "seq": "videoSRC17_1920x1080_24.yuv",
+          "db": 0.09913638979196548,
+          "floor_db": 0.04547927901148796,
+          "lam": 5.46427872905042e-06,
+          "feasible": true,
+          "saving_pct_measured": 25.785881084964966,
+          "saving_pct_vs_release": 26.427400588989258,
+          "map_bits": 135.6158151626587,
+          "bpp_added": 6.540114542952291e-05,
+          "hist": [
+            0,
+            0,
+            17,
+            12,
+            8,
+            3
+          ]
+        },
+        {
+          "seq": "videoSRC18_1920x1080_25.yuv",
+          "db": 0.09949617832899094,
+          "floor_db": 0.05440200865268707,
+          "lam": 5.147549927642103e-06,
+          "feasible": true,
+          "saving_pct_measured": 22.13759655110472,
+          "saving_pct_vs_release": 22.722864151000977,
+          "map_bits": 124.87712287902832,
+          "bpp_added": 6.022237793163017e-05,
+          "hist": [
+            0,
+            0,
+            8,
+            16,
+            16,
+            0
+          ]
+        },
+        {
+          "seq": "videoSRC19_1920x1080_30.yuv",
+          "db": 0.09982606768608093,
+          "floor_db": 0.04779898375272751,
+          "lam": 4.450397682376206e-06,
+          "feasible": true,
+          "saving_pct_measured": 26.317723950201042,
+          "saving_pct_vs_release": 26.939403533935547,
+          "map_bits": 130.26959800720215,
+          "bpp_added": 6.282291570563376e-05,
+          "hist": [
+            0,
+            0,
+            18,
+            9,
+            12,
+            1
+          ]
+        },
+        {
+          "seq": "videoSRC20_1920x1080_25.yuv",
+          "db": 0.09950679540634155,
+          "floor_db": 0.05949386954307556,
+          "lam": 5.745511771237943e-06,
+          "feasible": true,
+          "saving_pct_measured": 21.286150529908387,
+          "saving_pct_vs_release": 21.8846378326416,
+          "map_bits": 136.5991916656494,
+          "bpp_added": 6.587538178320285e-05,
+          "hist": [
+            0,
+            0,
+            8,
+            18,
+            10,
+            4
+          ]
+        },
+        {
+          "seq": "videoSRC21_1920x1080_24.yuv",
+          "db": 0.0998731255531311,
+          "floor_db": 0.03500650078058243,
+          "lam": 1.3132566891727038e-06,
+          "feasible": true,
+          "saving_pct_measured": 29.38110569150627,
+          "saving_pct_vs_release": 30.085485458374023,
+          "map_bits": 121.96741962432861,
+          "bpp_added": 5.881916455648563e-05,
+          "hist": [
+            0,
+            0,
+            21,
+            12,
+            7,
+            0
+          ]
+        },
+        {
+          "seq": "videoSRC22_1920x1080_24.yuv",
+          "db": 0.09828668087720871,
+          "floor_db": 0.04280565306544304,
+          "lam": 3.2991665648296475e-06,
+          "feasible": true,
+          "saving_pct_measured": 29.408879247212283,
+          "saving_pct_vs_release": 30.15624237060547,
+          "map_bits": 115.88357353210449,
+          "bpp_added": 5.5885211001207796e-05,
+          "hist": [
+            0,
+            0,
+            21,
+            16,
+            0,
+            3
+          ]
+        },
+        {
+          "seq": "videoSRC23_1920x1080_24.yuv",
+          "db": 0.09860604256391525,
+          "floor_db": 0.04940090328454971,
+          "lam": 3.0668225008412264e-06,
+          "feasible": true,
+          "saving_pct_measured": 27.837393431070456,
+          "saving_pct_vs_release": 28.548372268676758,
+          "map_bits": 127.81846904754639,
+          "bpp_added": 6.164085119962692e-05,
+          "hist": [
+            0,
+            0,
+            18,
+            16,
+            4,
+            2
+          ]
+        },
+        {
+          "seq": "videoSRC24_1920x1080_24.yuv",
+          "db": 0.09955133497714996,
+          "floor_db": 0.09069816023111343,
+          "lam": 1.7665370251052082e-06,
+          "feasible": true,
+          "saving_pct_measured": 17.342305619654287,
+          "saving_pct_vs_release": 17.78203773498535,
+          "map_bits": 132.6222791671753,
+          "bpp_added": 6.39575034563924e-05,
+          "hist": [
+            0,
+            0,
+            15,
+            2,
+            7,
+            16
+          ]
+        },
+        {
+          "seq": "videoSRC25_1920x1080_24.yuv",
+          "db": 0.09697863459587097,
+          "floor_db": 0.05495772138237953,
+          "lam": 1.8077743334288243e-05,
+          "feasible": true,
+          "saving_pct_measured": 20.221221207389707,
+          "saving_pct_vs_release": 20.81308937072754,
+          "map_bits": 136.19680786132812,
+          "bpp_added": 6.568133095164358e-05,
+          "hist": [
+            0,
+            0,
+            10,
+            17,
+            3,
+            10
+          ]
+        },
+        {
+          "seq": "videoSRC26_1920x1080_30.yuv",
+          "db": 0.0998397246003151,
+          "floor_db": 0.05717223137617111,
+          "lam": 3.996169652964454e-06,
+          "feasible": true,
+          "saving_pct_measured": 21.17754349117741,
+          "saving_pct_vs_release": 21.69666862487793,
+          "map_bits": 137.85757446289062,
+          "bpp_added": 6.648224077106994e-05,
+          "hist": [
+            0,
+            0,
+            12,
+            8,
+            16,
+            4
+          ]
+        },
+        {
+          "seq": "videoSRC27_1920x1080_30.yuv",
+          "db": 0.09851999580860138,
+          "floor_db": 0.026169883087277412,
+          "lam": 8.00257930677617e-06,
+          "feasible": true,
+          "saving_pct_measured": 37.95484379102126,
+          "saving_pct_vs_release": 38.751888275146484,
+          "map_bits": 70.74643635749817,
+          "bpp_added": 3.411768728660213e-05,
+          "hist": [
+            0,
+            0,
+            39,
+            1,
+            0,
+            0
+          ]
+        },
+        {
+          "seq": "videoSRC28_1920x1080_30.yuv",
+          "db": 0.096932053565979,
+          "floor_db": 0.030569106340408325,
+          "lam": 7.723921044089366e-06,
+          "feasible": true,
+          "saving_pct_measured": 36.30376808390101,
+          "saving_pct_vs_release": 37.074344635009766,
+          "map_bits": 86.7598237991333,
+          "bpp_added": 4.1840192804365985e-05,
+          "hist": [
+            0,
+            0,
+            36,
+            2,
+            2,
+            0
+          ]
+        },
+        {
+          "seq": "videoSRC29_1920x1080_24.yuv",
+          "db": 0.09811155498027802,
+          "floor_db": 0.017256461083889008,
+          "lam": 1.5992882254067808e-06,
+          "feasible": true,
+          "saving_pct_measured": 35.34620220806677,
+          "saving_pct_vs_release": 36.143218994140625,
+          "map_bits": 92.87712240219116,
+          "bpp_added": 4.479027893624188e-05,
+          "hist": [
+            0,
+            0,
+            32,
+            8,
+            0,
+            0
+          ]
+        },
+        {
+          "seq": "videoSRC30_1920x1080_30.yuv",
+          "db": 0.09917080402374268,
+          "floor_db": 0.029370086267590523,
+          "lam": 9.677829439169727e-06,
+          "feasible": true,
+          "saving_pct_measured": 34.44045266750494,
+          "saving_pct_vs_release": 35.21100997924805,
+          "map_bits": 101.6455545425415,
+          "bpp_added": 4.9018882398987995e-05,
+          "hist": [
+            0,
+            0,
+            31,
+            7,
+            2,
+            0
+          ]
+        },
+        {
+          "seq": "BQTerrace_1920x1080_60.yuv",
+          "db": 0.09830591082572937,
+          "floor_db": 0.050359517335891724,
+          "lam": 1.329112274106592e-05,
+          "feasible": true,
+          "saving_pct_measured": 21.605753685868645,
+          "saving_pct_vs_release": 22.210861206054688,
+          "map_bits": 139.0097131729126,
+          "bpp_added": 6.703786321996171e-05,
+          "hist": [
+            0,
+            0,
+            10,
+            17,
+            7,
+            6
+          ]
+        },
+        {
+          "seq": "BasketballDrive_1920x1080_50.yuv",
+          "db": 0.09867031872272491,
+          "floor_db": 0.02630367875099182,
+          "lam": 9.180596862279344e-06,
+          "feasible": true,
+          "saving_pct_measured": 31.777507565184948,
+          "saving_pct_vs_release": 32.50835418701172,
+          "map_bits": 114.52672386169434,
+          "bpp_added": 5.523086605984488e-05,
+          "hist": [
+            0,
+            0,
+            26,
+            9,
+            5,
+            0
+          ]
+        },
+        {
+          "seq": "Cactus_1920x1080_50.yuv",
+          "db": 0.09835045784711838,
+          "floor_db": 0.036912430077791214,
+          "lam": 1.7232896425412036e-05,
+          "feasible": true,
+          "saving_pct_measured": 29.755012366832023,
+          "saving_pct_vs_release": 30.505687713623047,
+          "map_bits": 118.63845729827881,
+          "bpp_added": 5.7213762200173036e-05,
+          "hist": [
+            0,
+            0,
+            21,
+            16,
+            1,
+            2
+          ]
+        },
+        {
+          "seq": "Kimono1_1920x1080_24.yuv",
+          "db": 0.09710318595170975,
+          "floor_db": 0.04250779747962952,
+          "lam": 5.311880158842541e-06,
+          "feasible": true,
+          "saving_pct_measured": 26.769976924458692,
+          "saving_pct_vs_release": 27.381742477416992,
+          "map_bits": 130.63065910339355,
+          "bpp_added": 6.299703853365815e-05,
+          "hist": [
+            0,
+            0,
+            22,
+            5,
+            9,
+            4
+          ]
+        },
+        {
+          "seq": "ParkScene_1920x1080_24.yuv",
+          "db": 0.09883326292037964,
+          "floor_db": 0.04866785556077957,
+          "lam": 1.1924868886126205e-05,
+          "feasible": true,
+          "saving_pct_measured": 22.21594285003662,
+          "saving_pct_vs_release": 22.745006561279297,
+          "map_bits": 137.85138511657715,
+          "bpp_added": 6.647925593970735e-05,
+          "hist": [
+            0,
+            0,
+            15,
+            6,
+            14,
+            5
+          ]
+        },
+        {
+          "seq": "FourPeople_1280x720_60.yuv",
+          "db": 0.0992036983370781,
+          "floor_db": 0.06201076880097389,
+          "lam": 4.878888830717187e-06,
+          "feasible": true,
+          "saving_pct_measured": 17.94696770805986,
+          "saving_pct_vs_release": 18.435203552246094,
+          "map_bits": 85.4421010017395,
+          "bpp_added": 9.27106130661236e-05,
+          "hist": [
+            0,
+            0,
+            6,
+            2,
+            0,
+            7
+          ]
+        },
+        {
+          "seq": "Johnny_1280x720_60.yuv",
+          "db": 0.09901140630245209,
+          "floor_db": 0.053462691605091095,
+          "lam": 3.654316969914362e-06,
+          "feasible": true,
+          "saving_pct_measured": 20.079313537190313,
+          "saving_pct_vs_release": 20.673376083374023,
+          "map_bits": 91.44209885597229,
+          "bpp_added": 9.922102740448382e-05,
+          "hist": [
+            0,
+            0,
+            3,
+            7,
+            2,
+            3
+          ]
+        },
+        {
+          "seq": "KristenAndSara_1280x720_60.yuv",
+          "db": 0.09817583858966827,
+          "floor_db": 0.058240488171577454,
+          "lam": 3.7752115531475283e-06,
+          "feasible": true,
+          "saving_pct_measured": 23.06061820342402,
+          "saving_pct_vs_release": 23.65471076965332,
+          "map_bits": 92.33869516849518,
+          "bpp_added": 0.00010019389666720397,
+          "hist": [
+            0,
+            0,
+            6,
+            4,
+            2,
+            3
+          ]
+        },
+        {
+          "seq": "BQMall_832x480_60.yuv",
+          "db": 0.09804119169712067,
+          "floor_db": 0.05915885418653488,
+          "lam": 1.0334963917557616e-05,
+          "feasible": true,
+          "saving_pct_measured": 16.890052645396636,
+          "saving_pct_vs_release": 17.339706420898438,
+          "map_bits": 78.0,
+          "bpp_added": 0.0001953125,
+          "hist": [
+            0,
+            0,
+            1,
+            2,
+            4,
+            1
+          ]
+        },
+        {
+          "seq": "BasketballDrill_832x480_50.yuv",
+          "db": 0.0944596379995346,
+          "floor_db": 0.022187557071447372,
+          "lam": 1.9819073713733815e-05,
+          "feasible": true,
+          "saving_pct_measured": 20.755551256718853,
+          "saving_pct_vs_release": 21.420169830322266,
+          "map_bits": 70.49022483825684,
+          "bpp_added": 0.00017650797485541073,
+          "hist": [
+            0,
+            0,
+            0,
+            6,
+            2,
+            0
+          ]
+        },
+        {
+          "seq": "PartyScene_832x480_50.yuv",
+          "db": 0.09328927099704742,
+          "floor_db": 0.061604488641023636,
+          "lam": 2.8491782359196804e-05,
+          "feasible": true,
+          "saving_pct_measured": 13.694021085794027,
+          "saving_pct_vs_release": 14.077508926391602,
+          "map_bits": 74.39035987854004,
+          "bpp_added": 0.00018627393799714554,
+          "hist": [
+            0,
+            0,
+            0,
+            2,
+            5,
+            1
+          ]
+        },
+        {
+          "seq": "RaceHorses_832x480_30.yuv",
+          "db": 0.09622925519943237,
+          "floor_db": 0.05103958398103714,
+          "lam": 1.3790107914246619e-05,
+          "feasible": true,
+          "saving_pct_measured": 14.761437592405802,
+          "saving_pct_vs_release": 15.244138717651367,
+          "map_bits": 78.49022483825684,
+          "bpp_added": 0.00019654002613746203,
+          "hist": [
+            0,
+            0,
+            1,
+            3,
+            1,
+            3
+          ]
+        },
+        {
+          "seq": "BasketballPass_416x240_50.yuv",
+          "db": 0.06348704546689987,
+          "floor_db": 0.028361566364765167,
+          "lam": 1.9060147678828798e-05,
+          "feasible": true,
+          "saving_pct_measured": 18.09011897030579,
+          "saving_pct_vs_release": 18.622446060180664,
+          "map_bits": 66.0,
+          "bpp_added": 0.0006610576923076923,
+          "hist": [
+            0,
+            0,
+            0,
+            1,
+            1,
+            0
+          ]
+        },
+        {
+          "seq": "BlowingBubbles_416x240_50.yuv",
+          "db": 0.08029790222644806,
+          "floor_db": 0.04392460361123085,
+          "lam": 1.9925760170735884e-05,
+          "feasible": true,
+          "saving_pct_measured": 12.759254397479658,
+          "saving_pct_vs_release": 13.027006149291992,
+          "map_bits": 64.0,
+          "bpp_added": 0.000641025641025641,
+          "hist": [
+            0,
+            0,
+            0,
+            0,
+            2,
+            0
+          ]
+        },
+        {
+          "seq": "BQSquare_416x240_60.yuv",
+          "db": 0.07731354236602783,
+          "floor_db": 0.07731354236602783,
+          "lam": 2.2806118977314327e-05,
+          "feasible": true,
+          "saving_pct_measured": -1.0860703873098343,
+          "saving_pct_vs_release": -0.9507179260253906,
+          "map_bits": 64.0,
+          "bpp_added": 0.000641025641025641,
+          "hist": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            2
+          ]
+        },
+        {
+          "seq": "RaceHorses_416x240_30.yuv",
+          "db": 0.0846111848950386,
+          "floor_db": 0.0464213490486145,
+          "lam": 1.3421224139165133e-05,
+          "feasible": true,
+          "saving_pct_measured": 12.759254397479658,
+          "saving_pct_vs_release": 13.027006149291992,
+          "map_bits": 64.0,
+          "bpp_added": 0.000641025641025641,
+          "hist": [
+            0,
+            0,
+            0,
+            0,
+            2,
+            0
+          ]
+        }
+      ]
+    },
+    {
+      "qp": 63,
+      "n": 53,
+      "mean_db": 0.09607194033714961,
+      "p95_db": 0.09984195530414582,
+      "max_db": 0.14671339094638824,
+      "over_budget": 1,
+      "infeasible": 1,
+      "saving_pct_measured": 23.907418352446506,
+      "map_bits": 107.8424170692012,
+      "hist_pct": [
+        0.0,
+        0.0,
+        47.59206798866855,
+        23.456090651558075,
+        18.69688385269122,
+        10.254957507082153
+      ],
+      "per_frame": [
+        {
+          "seq": "Beauty_1920x1080_120fps_420_8bit_YUV.yuv",
+          "db": 0.06966787576675415,
+          "floor_db": 0.01063903421163559,
+          "lam": 0.9999847412109375,
+          "feasible": true,
+          "saving_pct_measured": 38.327506874300475,
+          "saving_pct_vs_release": 39.12455368041992,
+          "map_bits": 64.0,
+          "bpp_added": 3.08641975308642e-05,
+          "hist": [
+            0,
+            0,
+            40,
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "seq": "Bosphorus_1920x1080_120fps_420_8bit_YUV.yuv",
+          "db": 0.0988069549202919,
+          "floor_db": 0.04563348740339279,
+          "lam": 2.1406958694569767e-06,
+          "feasible": true,
+          "saving_pct_measured": 25.785881084964966,
+          "saving_pct_vs_release": 26.427400588989258,
+          "map_bits": 135.6158151626587,
+          "bpp_added": 6.540114542952291e-05,
+          "hist": [
+            0,
+            0,
+            17,
+            12,
+            8,
+            3
+          ]
+        },
+        {
+          "seq": "HoneyBee_1920x1080_120fps_420_8bit_YUV.yuv",
+          "db": 0.09913994371891022,
+          "floor_db": 0.06242670491337776,
+          "lam": 4.117230673728045e-06,
+          "feasible": true,
+          "saving_pct_measured": 18.141935305578205,
+          "saving_pct_vs_release": 18.621355056762695,
+          "map_bits": 113.97742176055908,
+          "bpp_added": 5.4965963426195545e-05,
+          "hist": [
+            0,
+            0,
+            3,
+            13,
+            24,
+            0
+          ]
+        },
+        {
+          "seq": "Jockey_1920x1080_120fps_420_8bit_YUV.yuv",
+          "db": 0.09894915670156479,
+          "floor_db": 0.0331839993596077,
+          "lam": 3.9569758882862516e-06,
+          "feasible": true,
+          "saving_pct_measured": 32.8954968150226,
+          "saving_pct_vs_release": 33.626365661621094,
+          "map_bits": 108.87626075744629,
+          "bpp_added": 5.2505912788120316e-05,
+          "hist": [
+            0,
+            0,
+            29,
+            6,
+            5,
+            0
+          ]
+        },
+        {
+          "seq": "ReadySteadyGo_1920x1080_120fps_420_8bit_YUV.yuv",
+          "db": 0.09863488376140594,
+          "floor_db": 0.06692294776439667,
+          "lam": 4.265704774297774e-06,
+          "feasible": true,
+          "saving_pct_measured": 15.691229912534022,
+          "saving_pct_vs_release": 16.104490280151367,
+          "map_bits": 125.55381202697754,
+          "bpp_added": 6.0548713361775436e-05,
+          "hist": [
+            0,
+            0,
+            3,
+            9,
+            24,
+            4
+          ]
+        },
+        {
+          "seq": "ShakeNDry_1920x1080_120fps_420_8bit_YUV.yuv",
+          "db": 0.09913386404514313,
+          "floor_db": 0.04662059247493744,
+          "lam": 4.1924567995010875e-06,
+          "feasible": true,
+          "saving_pct_measured": 24.427878570145502,
+          "saving_pct_vs_release": 25.0528507232666,
+          "map_bits": 127.14849853515625,
+          "bpp_added": 6.131775585221656e-05,
+          "hist": [
+            0,
+            0,
+            12,
+            15,
+            13,
+            0
+          ]
+        },
+        {
+          "seq": "YachtRide_1920x1080_120fps_420_8bit_YUV.yuv",
+          "db": 0.09903569519519806,
+          "floor_db": 0.06154680997133255,
+          "lam": 2.499274160072673e-06,
+          "feasible": true,
+          "saving_pct_measured": 18.56765831617637,
+          "saving_pct_vs_release": 19.04047203063965,
+          "map_bits": 128.04057502746582,
+          "bpp_added": 6.174796249395535e-05,
+          "hist": [
+            0,
+            0,
+            6,
+            10,
+            22,
+            2
+          ]
+        },
+        {
+          "seq": "videoSRC01_1920x1080_30.yuv",
+          "db": 0.06220215931534767,
+          "floor_db": 0.011056824587285519,
+          "lam": 0.9999847412109375,
+          "feasible": true,
+          "saving_pct_measured": 38.327506874300475,
+          "saving_pct_vs_release": 39.12455368041992,
+          "map_bits": 64.0,
+          "bpp_added": 3.08641975308642e-05,
+          "hist": [
+            0,
+            0,
+            40,
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "seq": "videoSRC02_1920x1080_30.yuv",
+          "db": 0.0981631800532341,
+          "floor_db": 0.051688846200704575,
+          "lam": 1.261374563910067e-06,
+          "feasible": true,
+          "saving_pct_measured": 24.694421798786802,
+          "saving_pct_vs_release": 25.332624435424805,
+          "map_bits": 137.31931114196777,
+          "bpp_added": 6.622266162324835e-05,
+          "hist": [
+            0,
+            0,
+            15,
+            14,
+            7,
+            4
+          ]
+        },
+        {
+          "seq": "videoSRC03_1920x1080_30.yuv",
+          "db": 0.09867790341377258,
+          "floor_db": 0.05626417696475983,
+          "lam": 1.963595423148945e-06,
+          "feasible": true,
+          "saving_pct_measured": 24.906661508062623,
+          "saving_pct_vs_release": 25.518417358398438,
+          "map_bits": 134.43856143951416,
+          "bpp_added": 6.483341118803731e-05,
+          "hist": [
+            0,
+            0,
+            20,
+            8,
+            4,
+            8
+          ]
+        },
+        {
+          "seq": "videoSRC04_1920x1080_30.yuv",
+          "db": 0.09813787043094635,
+          "floor_db": 0.052499644458293915,
+          "lam": 8.656353202241007e-06,
+          "feasible": true,
+          "saving_pct_measured": 23.62824888422158,
+          "saving_pct_vs_release": 24.21353530883789,
+          "map_bits": 138.30870056152344,
+          "bpp_added": 6.669979772450011e-05,
+          "hist": [
+            0,
+            0,
+            18,
+            8,
+            6,
+            8
+          ]
+        },
+        {
+          "seq": "videoSRC05_1920x1080_25.yuv",
+          "db": 0.09835095703601837,
+          "floor_db": 0.02229984477162361,
+          "lam": 8.508384780725464e-06,
+          "feasible": true,
+          "saving_pct_measured": 31.086484917992017,
+          "saving_pct_vs_release": 31.857013702392578,
+          "map_bits": 112.76962661743164,
+          "bpp_added": 5.438350049065955e-05,
+          "hist": [
+            0,
+            0,
+            22,
+            16,
+            2,
+            0
+          ]
+        },
+        {
+          "seq": "videoSRC06_1920x1080_25.yuv",
+          "db": 0.05527210235595703,
+          "floor_db": 0.004458898212760687,
+          "lam": 0.9999847412109375,
+          "feasible": true,
+          "saving_pct_measured": 38.327506874300475,
+          "saving_pct_vs_release": 39.12455368041992,
+          "map_bits": 64.0,
+          "bpp_added": 3.08641975308642e-05,
+          "hist": [
+            0,
+            0,
+            40,
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "seq": "videoSRC07_1920x1080_25.yuv",
+          "db": 0.09760283678770065,
+          "floor_db": 0.025267165154218674,
+          "lam": 1.2171664820925798e-05,
+          "feasible": true,
+          "saving_pct_measured": 30.659518315347313,
+          "saving_pct_vs_release": 31.390363693237305,
+          "map_bits": 118.20600891113281,
+          "bpp_added": 5.700521263075464e-05,
+          "hist": [
+            0,
+            0,
+            23,
+            12,
+            5,
+            0
+          ]
+        },
+        {
+          "seq": "videoSRC08_1920x1080_25.yuv",
+          "db": 0.07479073107242584,
+          "floor_db": 0.013225692324340343,
+          "lam": 0.9999847412109375,
+          "feasible": true,
+          "saving_pct_measured": 38.327506874300475,
+          "saving_pct_vs_release": 39.12455368041992,
+          "map_bits": 64.0,
+          "bpp_added": 3.08641975308642e-05,
+          "hist": [
+            0,
+            0,
+            40,
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "seq": "videoSRC09_1920x1080_25.yuv",
+          "db": 0.09811003506183624,
+          "floor_db": 0.043136294931173325,
+          "lam": 8.506144695274998e-06,
+          "feasible": true,
+          "saving_pct_measured": 26.347984690000136,
+          "saving_pct_vs_release": 27.105241775512695,
+          "map_bits": 110.52099609375,
+          "bpp_added": 5.329909148039641e-05,
+          "hist": [
+            0,
+            0,
+            10,
+            27,
+            3,
+            0
+          ]
+        },
+        {
+          "seq": "videoSRC10_1920x1080_30.yuv",
+          "db": 0.09950679540634155,
+          "floor_db": 0.08960184454917908,
+          "lam": 1.5549640011158772e-06,
+          "feasible": true,
+          "saving_pct_measured": 9.167760567077977,
+          "saving_pct_vs_release": 9.511524200439453,
+          "map_bits": 124.76470375061035,
+          "bpp_added": 6.0168163459977986e-05,
+          "hist": [
+            0,
+            0,
+            5,
+            7,
+            3,
+            25
+          ]
+        },
+        {
+          "seq": "videoSRC11_1920x1080_30.yuv",
+          "db": 0.09979216754436493,
+          "floor_db": 0.04671790450811386,
+          "lam": 1.4939087122911587e-06,
+          "feasible": true,
+          "saving_pct_measured": 29.301515800527834,
+          "saving_pct_vs_release": 30.01581382751465,
+          "map_bits": 124.92309951782227,
+          "bpp_added": 6.0244550307591754e-05,
+          "hist": [
+            0,
+            0,
+            21,
+            13,
+            5,
+            1
+          ]
+        },
+        {
+          "seq": "videoSRC12_1920x1080_30.yuv",
+          "db": 0.09895776212215424,
+          "floor_db": 0.07818923145532608,
+          "lam": 2.1613450371660292e-06,
+          "feasible": true,
+          "saving_pct_measured": 13.428721449199266,
+          "saving_pct_vs_release": 13.845271110534668,
+          "map_bits": 136.55685806274414,
+          "bpp_added": 6.58549662725425e-05,
+          "hist": [
+            0,
+            0,
+            8,
+            8,
+            5,
+            19
+          ]
+        },
+        {
+          "seq": "videoSRC13_1920x1080_30.yuv",
+          "db": 0.09863387793302536,
+          "floor_db": 0.05086151510477066,
+          "lam": 4.719138814834878e-06,
+          "feasible": true,
+          "saving_pct_measured": 21.231847010542893,
+          "saving_pct_vs_release": 21.790653228759766,
+          "map_bits": 136.57335662841797,
+          "bpp_added": 6.58629227567602e-05,
+          "hist": [
+            0,
+            0,
+            16,
+            9,
+            3,
+            12
+          ]
+        },
+        {
+          "seq": "videoSRC14_1920x1080_30.yuv",
+          "db": 0.09910602867603302,
+          "floor_db": 0.04129258543252945,
+          "lam": 3.7112022255314514e-06,
+          "feasible": true,
+          "saving_pct_measured": 26.132014204584706,
+          "saving_pct_vs_release": 26.776844024658203,
+          "map_bits": 133.84138011932373,
+          "bpp_added": 6.454541865322325e-05,
+          "hist": [
+            0,
+            0,
+            17,
+            12,
+            9,
+            2
+          ]
+        },
+        {
+          "seq": "videoSRC15_1920x1080_30.yuv",
+          "db": 0.09946884214878082,
+          "floor_db": 0.03776654228568077,
+          "lam": 6.454518370446749e-06,
+          "feasible": true,
+          "saving_pct_measured": 27.915739730002354,
+          "saving_pct_vs_release": 28.57050323486328,
+          "map_bits": 130.36325359344482,
+          "bpp_added": 6.286808140115973e-05,
+          "hist": [
+            0,
+            0,
+            22,
+            8,
+            7,
+            3
+          ]
+        },
+        {
+          "seq": "videoSRC16_1920x1080_30.yuv",
+          "db": 0.0956529751420021,
+          "floor_db": 0.025984104722738266,
+          "lam": 7.73560896050185e-06,
+          "feasible": true,
+          "saving_pct_measured": 37.20951762446284,
+          "saving_pct_vs_release": 38.00654983520508,
+          "map_bits": 79.37246108055115,
+          "bpp_added": 3.827761433282752e-05,
+          "hist": [
+            0,
+            0,
+            37,
+            3,
+            0,
+            0
+          ]
+        },
+        {
+          "seq": "videoSRC17_1920x1080_24.yuv",
+          "db": 0.09824872016906738,
+          "floor_db": 0.04527537152171135,
+          "lam": 3.7594019806630463e-06,
+          "feasible": true,
+          "saving_pct_measured": 23.467825510218177,
+          "saving_pct_vs_release": 24.026662826538086,
+          "map_bits": 137.11992168426514,
+          "bpp_added": 6.612650544187169e-05,
+          "hist": [
+            0,
+            0,
+            16,
+            7,
+            13,
+            4
+          ]
+        },
+        {
+          "seq": "videoSRC18_1920x1080_25.yuv",
+          "db": 0.09945113956928253,
+          "floor_db": 0.06688828021287918,
+          "lam": 2.922796738857869e-06,
+          "feasible": true,
+          "saving_pct_measured": 19.446877893078717,
+          "saving_pct_vs_release": 19.949466705322266,
+          "map_bits": 126.1091365814209,
+          "bpp_added": 6.081652034212042e-05,
+          "hist": [
+            0,
+            0,
+            6,
+            12,
+            21,
+            1
+          ]
+        },
+        {
+          "seq": "videoSRC19_1920x1080_30.yuv",
+          "db": 0.09894814342260361,
+          "floor_db": 0.06452570110559464,
+          "lam": 1.9320195860927925e-06,
+          "feasible": true,
+          "saving_pct_measured": 17.929695596302388,
+          "saving_pct_vs_release": 18.43557357788086,
+          "map_bits": 132.78689289093018,
+          "bpp_added": 6.403688893274025e-05,
+          "hist": [
+            0,
+            0,
+            4,
+            15,
+            17,
+            4
+          ]
+        },
+        {
+          "seq": "videoSRC20_1920x1080_25.yuv",
+          "db": 0.09900735318660736,
+          "floor_db": 0.07371483743190765,
+          "lam": 2.9565444492618553e-06,
+          "feasible": true,
+          "saving_pct_measured": 16.305149852841605,
+          "saving_pct_vs_release": 16.781240463256836,
+          "map_bits": 129.60547351837158,
+          "bpp_added": 6.250263962112827e-05,
+          "hist": [
+            0,
+            0,
+            2,
+            15,
+            18,
+            5
+          ]
+        },
+        {
+          "seq": "videoSRC21_1920x1080_24.yuv",
+          "db": 0.09679435193538666,
+          "floor_db": 0.016528280451893806,
+          "lam": 4.413973329064902e-06,
+          "feasible": true,
+          "saving_pct_measured": 37.95484379102126,
+          "saving_pct_vs_release": 38.751888275146484,
+          "map_bits": 70.74643635749817,
+          "bpp_added": 3.411768728660213e-05,
+          "hist": [
+            0,
+            0,
+            39,
+            1,
+            0,
+            0
+          ]
+        },
+        {
+          "seq": "videoSRC22_1920x1080_24.yuv",
+          "db": 0.09826238453388214,
+          "floor_db": 0.04062740504741669,
+          "lam": 1.8625714801601134e-06,
+          "feasible": true,
+          "saving_pct_measured": 30.021555595473327,
+          "saving_pct_vs_release": 30.785459518432617,
+          "map_bits": 113.15158748626709,
+          "bpp_added": 5.4567702298547016e-05,
+          "hist": [
+            0,
+            0,
+            21,
+            17,
+            0,
+            2
+          ]
+        },
+        {
+          "seq": "videoSRC23_1920x1080_24.yuv",
+          "db": 0.09731884300708771,
+          "floor_db": 0.04738472029566765,
+          "lam": 1.9167073332937434e-06,
+          "feasible": true,
+          "saving_pct_measured": 27.863923394729927,
+          "saving_pct_vs_release": 28.57159423828125,
+          "map_bits": 128.0533685684204,
+          "bpp_added": 6.175413221856694e-05,
+          "hist": [
+            0,
+            0,
+            19,
+            15,
+            3,
+            3
+          ]
+        },
+        {
+          "seq": "videoSRC24_1920x1080_24.yuv",
+          "db": 0.09996064752340317,
+          "floor_db": 0.08054693043231964,
+          "lam": 1.955115294549614e-06,
+          "feasible": true,
+          "saving_pct_measured": 20.218734023296626,
+          "saving_pct_vs_release": 20.718008041381836,
+          "map_bits": 140.2255620956421,
+          "bpp_added": 6.762421011556813e-05,
+          "hist": [
+            0,
+            0,
+            15,
+            5,
+            10,
+            10
+          ]
+        },
+        {
+          "seq": "videoSRC25_1920x1080_24.yuv",
+          "db": 0.09927403181791306,
+          "floor_db": 0.06257980316877365,
+          "lam": 1.2576761946547776e-05,
+          "feasible": true,
+          "saving_pct_measured": 19.44812148512526,
+          "saving_pct_vs_release": 19.996994018554688,
+          "map_bits": 141.05427169799805,
+          "bpp_added": 6.802385787904998e-05,
+          "hist": [
+            0,
+            0,
+            11,
+            13,
+            5,
+            11
+          ]
+        },
+        {
+          "seq": "videoSRC26_1920x1080_30.yuv",
+          "db": 0.09936512261629105,
+          "floor_db": 0.049072787165641785,
+          "lam": 2.6304551283828914e-06,
+          "feasible": true,
+          "saving_pct_measured": 21.631040057481588,
+          "saving_pct_vs_release": 22.186548233032227,
+          "map_bits": 141.17463493347168,
+          "bpp_added": 6.808190342084862e-05,
+          "hist": [
+            0,
+            0,
+            12,
+            11,
+            12,
+            5
+          ]
+        },
+        {
+          "seq": "videoSRC27_1920x1080_30.yuv",
+          "db": 0.09796425700187683,
+          "floor_db": 0.028963826596736908,
+          "lam": 1.7436159396311268e-06,
+          "feasible": true,
+          "saving_pct_measured": 35.07965897942547,
+          "saving_pct_vs_release": 35.86344909667969,
+          "map_bits": 97.22563648223877,
+          "bpp_added": 4.688736327268459e-05,
+          "hist": [
+            0,
+            0,
+            32,
+            7,
+            1,
+            0
+          ]
+        },
+        {
+          "seq": "videoSRC28_1920x1080_30.yuv",
+          "db": 0.09641003608703613,
+          "floor_db": 0.03395767882466316,
+          "lam": 3.3831174732767977e-06,
+          "feasible": true,
+          "saving_pct_measured": 33.1077365242984,
+          "saving_pct_vs_release": 33.81214904785156,
+          "map_bits": 101.6455545425415,
+          "bpp_added": 4.9018882398987995e-05,
+          "hist": [
+            0,
+            0,
+            31,
+            2,
+            7,
+            0
+          ]
+        },
+        {
+          "seq": "videoSRC29_1920x1080_24.yuv",
+          "db": 0.09960546344518661,
+          "floor_db": 0.014074667356908321,
+          "lam": 1.4677334547741339e-06,
+          "feasible": true,
+          "saving_pct_measured": 37.582180707742054,
+          "saving_pct_vs_release": 38.37922286987305,
+          "map_bits": 75.45587921142578,
+          "bpp_added": 3.638883063822617e-05,
+          "hist": [
+            0,
+            0,
+            38,
+            2,
+            0,
+            0
+          ]
+        },
+        {
+          "seq": "videoSRC30_1920x1080_30.yuv",
+          "db": 0.09851139783859253,
+          "floor_db": 0.030990635976195335,
+          "lam": 8.006401913007721e-06,
+          "feasible": true,
+          "saving_pct_measured": 32.92202677868207,
+          "saving_pct_vs_release": 33.64958190917969,
+          "map_bits": 110.06076240539551,
+          "bpp_added": 5.307714236371311e-05,
+          "hist": [
+            0,
+            0,
+            30,
+            5,
+            4,
+            1
+          ]
+        },
+        {
+          "seq": "BQTerrace_1920x1080_60.yuv",
+          "db": 0.0987791195511818,
+          "floor_db": 0.05531759932637215,
+          "lam": 8.059006177063566e-06,
+          "feasible": true,
+          "saving_pct_measured": 19.952190794655323,
+          "saving_pct_vs_release": 20.438241958618164,
+          "map_bits": 130.10913276672363,
+          "bpp_added": 6.27455308481499e-05,
+          "hist": [
+            0,
+            0,
+            9,
+            8,
+            21,
+            2
+          ]
+        },
+        {
+          "seq": "BasketballDrive_1920x1080_50.yuv",
+          "db": 0.09889906644821167,
+          "floor_db": 0.01702389121055603,
+          "lam": 1.0480000128154643e-05,
+          "feasible": true,
+          "saving_pct_measured": 33.96166972958782,
+          "saving_pct_vs_release": 34.74544906616211,
+          "map_bits": 102.77639293670654,
+          "bpp_added": 4.9564232704816044e-05,
+          "hist": [
+            0,
+            0,
+            29,
+            10,
+            1,
+            0
+          ]
+        },
+        {
+          "seq": "Cactus_1920x1080_50.yuv",
+          "db": 0.0975835993885994,
+          "floor_db": 0.03148357570171356,
+          "lam": 1.4291327715909574e-05,
+          "feasible": true,
+          "saving_pct_measured": 30.473808569730963,
+          "saving_pct_vs_release": 31.227802276611328,
+          "map_bits": 118.16626453399658,
+          "bpp_added": 5.698604578221286e-05,
+          "hist": [
+            0,
+            0,
+            22,
+            15,
+            2,
+            1
+          ]
+        },
+        {
+          "seq": "Kimono1_1920x1080_24.yuv",
+          "db": 0.09839751571416855,
+          "floor_db": 0.04402761906385422,
+          "lam": 3.7469208109541796e-06,
+          "feasible": true,
+          "saving_pct_measured": 23.25558580094237,
+          "saving_pct_vs_release": 23.840862274169922,
+          "map_bits": 139.4666566848755,
+          "bpp_added": 6.72582256389253e-05,
+          "hist": [
+            0,
+            0,
+            14,
+            11,
+            11,
+            4
+          ]
+        },
+        {
+          "seq": "ParkScene_1920x1080_24.yuv",
+          "db": 0.09969654679298401,
+          "floor_db": 0.059191539883613586,
+          "lam": 6.2224844441516325e-06,
+          "feasible": true,
+          "saving_pct_measured": 16.197786406157167,
+          "saving_pct_vs_release": 16.640811920166016,
+          "map_bits": 142.71766090393066,
+          "bpp_added": 6.882603245752829e-05,
+          "hist": [
+            0,
+            0,
+            8,
+            8,
+            13,
+            11
+          ]
+        },
+        {
+          "seq": "FourPeople_1280x720_60.yuv",
+          "db": 0.09872547537088394,
+          "floor_db": 0.06341255456209183,
+          "lam": 2.640910679474473e-06,
+          "feasible": true,
+          "saving_pct_measured": 17.593234859266836,
+          "saving_pct_vs_release": 18.12555694580078,
+          "map_bits": 87.4839415550232,
+          "bpp_added": 9.492615186091926e-05,
+          "hist": [
+            0,
+            0,
+            4,
+            5,
+            0,
+            6
+          ]
+        },
+        {
+          "seq": "Johnny_1280x720_60.yuv",
+          "db": 0.09585706889629364,
+          "floor_db": 0.050481315702199936,
+          "lam": 3.0730907383258455e-06,
+          "feasible": true,
+          "saving_pct_measured": 24.623675229028198,
+          "saving_pct_vs_release": 25.270689010620117,
+          "map_bits": 90.72905683517456,
+          "bpp_added": 9.844732729511129e-05,
+          "hist": [
+            0,
+            0,
+            5,
+            6,
+            3,
+            1
+          ]
+        },
+        {
+          "seq": "KristenAndSara_1280x720_60.yuv",
+          "db": 0.09824314713478088,
+          "floor_db": 0.07132642716169357,
+          "lam": 2.090007001243066e-06,
+          "feasible": true,
+          "saving_pct_measured": 22.208343120863326,
+          "saving_pct_vs_release": 22.784793853759766,
+          "map_bits": 86.58734703063965,
+          "bpp_added": 9.395328453845448e-05,
+          "hist": [
+            0,
+            0,
+            7,
+            3,
+            0,
+            5
+          ]
+        },
+        {
+          "seq": "BQMall_832x480_60.yuv",
+          "db": 0.09511864185333252,
+          "floor_db": 0.0721244066953659,
+          "lam": 5.327501639840193e-06,
+          "feasible": true,
+          "saving_pct_measured": 11.963355487695349,
+          "saving_pct_vs_release": 12.330293655395508,
+          "map_bits": 76.0,
+          "bpp_added": 0.00019030448717948718,
+          "hist": [
+            0,
+            0,
+            0,
+            2,
+            4,
+            2
+          ]
+        },
+        {
+          "seq": "BasketballDrill_832x480_50.yuv",
+          "db": 0.08793909847736359,
+          "floor_db": 0.00021484824537765235,
+          "lam": 1.638759295019554e-05,
+          "feasible": true,
+          "saving_pct_measured": 22.618866673114923,
+          "saving_pct_vs_release": 23.283504486083984,
+          "map_bits": 74.39035987854004,
+          "bpp_added": 0.00018627393799714554,
+          "hist": [
+            0,
+            0,
+            1,
+            5,
+            2,
+            0
+          ]
+        },
+        {
+          "seq": "PartyScene_832x480_50.yuv",
+          "db": 0.09991663694381714,
+          "floor_db": 0.09358163923025131,
+          "lam": 8.316849545775273e-06,
+          "feasible": true,
+          "saving_pct_measured": 7.169308148291442,
+          "saving_pct_vs_release": 7.437002658843994,
+          "map_bits": 75.24511241912842,
+          "bpp_added": 0.0001884142438379618,
+          "hist": [
+            0,
+            0,
+            0,
+            1,
+            3,
+            4
+          ]
+        },
+        {
+          "seq": "RaceHorses_832x480_30.yuv",
+          "db": 0.09410805255174637,
+          "floor_db": 0.06871096044778824,
+          "lam": 8.636226084490772e-06,
+          "feasible": true,
+          "saving_pct_measured": 8.634674109795359,
+          "saving_pct_vs_release": 8.951986312866211,
+          "map_bits": 76.39035987854004,
+          "bpp_added": 0.00019128195081765835,
+          "hist": [
+            0,
+            0,
+            1,
+            1,
+            1,
+            5
+          ]
+        },
+        {
+          "seq": "BasketballPass_416x240_50.yuv",
+          "db": 0.09045935422182083,
+          "floor_db": -0.010372459888458252,
+          "lam": 2.9976652513141744e-05,
+          "feasible": true,
+          "saving_pct_measured": 23.42098354313191,
+          "saving_pct_vs_release": 24.217891693115234,
+          "map_bits": 64.0,
+          "bpp_added": 0.000641025641025641,
+          "hist": [
+            0,
+            0,
+            0,
+            2,
+            0,
+            0
+          ]
+        },
+        {
+          "seq": "BlowingBubbles_416x240_50.yuv",
+          "db": 0.09240850806236267,
+          "floor_db": 0.0599774494767189,
+          "lam": 1.7891809875436593e-05,
+          "feasible": true,
+          "saving_pct_measured": 12.759254397479658,
+          "saving_pct_vs_release": 13.027006149291992,
+          "map_bits": 64.0,
+          "bpp_added": 0.000641025641025641,
+          "hist": [
+            0,
+            0,
+            0,
+            0,
+            2,
+            0
+          ]
+        },
+        {
+          "seq": "BQSquare_416x240_60.yuv",
+          "db": 0.14671339094638824,
+          "floor_db": 0.14671339094638824,
+          "lam": 0.0,
+          "feasible": false,
+          "saving_pct_measured": -1.0860703873098343,
+          "saving_pct_vs_release": -0.9507179260253906,
+          "map_bits": 64.0,
+          "bpp_added": 0.000641025641025641,
+          "hist": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            2
+          ]
+        },
+        {
+          "seq": "RaceHorses_416x240_30.yuv",
+          "db": 0.08405112475156784,
+          "floor_db": 0.06292374432086945,
+          "lam": 8.298460670630448e-06,
+          "feasible": true,
+          "saving_pct_measured": 5.836592005084906,
+          "saving_pct_vs_release": 6.038141250610352,
+          "map_bits": 66.0,
+          "bpp_added": 0.0006610576923076923,
+          "hist": [
+            0,
+            0,
+            0,
+            0,
+            1,
+            1
+          ]
+        }
+      ]
+    }
+  ]
+}
