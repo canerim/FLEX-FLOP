@@ -205,6 +205,16 @@ def parse_args(argv):
     p.add_argument("--ckpt_every", type=int, default=0,
                    help="steps between mid-epoch weight snapshots (0 = epoch end only)")
     p.add_argument("--tag", type=str, default="", help="experiment label for logs")
+    p.add_argument("--anchor_ckpt", type=str, default=None,
+                   help="what the deepest exit is pinned to. The original "
+                        "trainer uses --pretrain for both the starting "
+                        "weights and the anchor, which is right when the "
+                        "start IS the release. Resuming from a trained "
+                        "checkpoint it is not: the anchor then pins the model "
+                        "to itself, anchor_mse is identically zero on the "
+                        "full-frame path a frozen backbone cannot move, and "
+                        "the tiled deepest path drifts unchecked. Defaults to "
+                        "--pretrain, so behaviour is unchanged when unset.")
     p.add_argument("--exit_prior", type=str, default="",
                    help="comma-separated usage over the K exits at the "
                         "operating budget; empty keeps the original uniform "
@@ -750,12 +760,13 @@ def main(argv):
             raise SystemExit("--anchor_weight needs --pretrain: the anchor IS the "
                              "released decoder, and without a warm start there is "
                              "nothing to pin to.")
+        _apath = args.anchor_ckpt or args.pretrain
         anchor_net = FlexUFIntra(cfg).to(device).eval()
-        load_flexuf_state(anchor_net, torch.load(args.pretrain, map_location="cpu",
+        load_flexuf_state(anchor_net, torch.load(_apath, map_location="cpu",
                                                  weights_only=False))
         for prm in anchor_net.parameters():
             prm.requires_grad = False
-        print(f"anchor: deepest exit pinned to {args.pretrain} "
+        print(f"anchor: deepest exit pinned to {_apath} "
               f"with weight {args.anchor_weight}", flush=True)
 
     if args.freeze_encoder:
