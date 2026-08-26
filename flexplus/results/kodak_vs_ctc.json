@@ -1,0 +1,52 @@
+{
+  "note": "exploratory, not a paper number",
+  "budget_db": 0.1,
+  "ckpt_epoch": 4,
+  "rows": [
+    {
+      "qp": 0,
+      "ctc_room": 0.07781720972523304,
+      "ctc_saving": 33.69147393814317,
+      "kodak_room": 0.07804576077032835,
+      "kodak_saving": 35.38445417823899,
+      "ctc_deepest_deficit": -0.00037090384210358707,
+      "kodak_deepest_deficit": -0.0004789462217971163
+    },
+    {
+      "qp": 16,
+      "ctc_room": 0.0683723621913847,
+      "ctc_saving": 30.135087467277504,
+      "kodak_room": 0.07528401700158914,
+      "kodak_saving": 32.292631026239796,
+      "ctc_deepest_deficit": -0.004689004041502187,
+      "kodak_deepest_deficit": -0.004942522737078292
+    },
+    {
+      "qp": 32,
+      "ctc_room": 0.05882052514825087,
+      "ctc_saving": 26.071878577445418,
+      "kodak_room": 0.06551643055863679,
+      "kodak_saving": 25.273475102826634,
+      "ctc_deepest_deficit": -0.011413442465553203,
+      "kodak_deepest_deficit": -0.013301722548362704
+    },
+    {
+      "qp": 48,
+      "ctc_room": 0.054620458884164697,
+      "ctc_saving": 24.77971344197861,
+      "kodak_room": 0.04460082217119635,
+      "kodak_saving": 15.234463159737095,
+      "ctc_deepest_deficit": -0.018762978293537458,
+      "kodak_deepest_deficit": -0.030405656097912015
+    },
+    {
+      "qp": 63,
+      "ctc_room": 0.05152849637692408,
+      "ctc_saving": 23.517577013413327,
+      "kodak_room": 0.010630917952706417,
+      "kodak_saving": 4.321712656542907,
+      "ctc_deepest_deficit": -0.02831800575216903,
+      "kodak_deepest_deficit": -0.056290320702721885
+    }
+  ]
+}

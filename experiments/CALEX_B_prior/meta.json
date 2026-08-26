@@ -1,0 +1,32 @@
+{
+  "tag": "CALEX_B_prior",
+  "config": {
+    "num_exits": 6,
+    "split_depth": 2,
+    "latent_patch": 16,
+    "latent_halo": 2,
+    "trunk_halo": 0,
+    "tile_coupling": false,
+    "tile_pad_mode": "replicate",
+    "seam_repair": "grid",
+    "adapter_kind": "scaled",
+    "adapter_expand": 4,
+    "full_frame_head": true,
+    "sorted_tiles": false,
+    "aux_weight": 1.0,
+    "aux_schedule": "constant",
+    "aux_warmup_epochs": 10,
+    "qp": 63
+  },
+  "recipe": "microsoft train_image.py, verbatim schedule",
+  "params_total": 45445398,
+  "params_adapters": 3104640,
+  "dataset": "/data10/shareddata/openimages/dcvc_train",
+  "dataset_size": 379614,
+  "batch_size": 8,
+  "epochs": 1,
+  "device": "0",
+  "rgb_patch": 256,
+  "tiles_per_256crop": 1,
+  "tiles_per_512crop": 4
+}

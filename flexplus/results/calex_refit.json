@@ -1,0 +1,56 @@
+{
+  "ckpt": "/home/can_karsal/FLEX-UF/runs/RECIPE512/ckpt_PIN_e9.pth.tar",
+  "ckpt_epoch": 9,
+  "crops": 900,
+  "qps": [
+    0,
+    16,
+    32,
+    48,
+    63
+  ],
+  "size": 256,
+  "mu": 0.001,
+  "target_usage": "0,0,0.710,0.211,0.043,0.036",
+  "lam_used": {
+    "0": 0.00011185985567863099,
+    "16": 8.18916341813747e-05,
+    "32": 6.236690751393327e-05,
+    "48": 4.821724905923475e-05,
+    "63": 4.3916234062635347e-05
+  },
+  "calib_usage_pct": [
+    0.0,
+    0.0,
+    73.97777777777777,
+    17.644444444444442,
+    2.3555555555555556,
+    6.022222222222222
+  ],
+  "exits": {
+    "2": {
+      "tiles_survivor": 3329,
+      "tiles_pooled": 4500,
+      "sse_trained_on_survivors": 1161614.064049691,
+      "sse_survivor_fit": 1112862.212856017,
+      "sse_trained_on_all": 3987939.6003810465,
+      "sse_pooled_fit": 3845995.1150879115
+    },
+    "3": {
+      "tiles_survivor": 794,
+      "tiles_pooled": 4500,
+      "sse_trained_on_survivors": 580051.8993267566,
+      "sse_survivor_fit": 560067.250485586,
+      "sse_trained_on_all": 2881726.0278018713,
+      "sse_pooled_fit": 2767501.9573399276
+    },
+    "4": {
+      "tiles_survivor": 106,
+      "tiles_pooled": 4500,
+      "sse_trained_on_survivors": 79574.81680486444,
+      "sse_survivor_fit": 71634.46607501991,
+      "sse_trained_on_all": 2134835.546075277,
+      "sse_pooled_fit": 2084032.6979934871
+    }
+  }
+}
