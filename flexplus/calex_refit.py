@@ -288,13 +288,18 @@ def main():
             line += f"   hayatta-kalan {s0:.4e} -> {s1:.4e} ({100*(1-s1/s0):+.2f}%)"
         print(line, flush=True)
 
+    # --out names the run, not a file inside somebody else's run. The first
+    # version derived the directory from outdir.parent, so passing a NEW --out
+    # wrote into the OLD run's folder and overwrote the checkpoint the
+    # headline had been measured on.
     outdir = Path(a.out).parent
-    for name, key in (("CALEX_A_survivor", "surv"), ("CALEX_A_pooled", "pool")):
+    stem = outdir.name
+    for name, key in ((f"{stem}_survivor", "surv"), (f"{stem}_pooled", "pool")):
         st = {kk: vv.clone() for kk, vv in net.state_dict().items()}
         net2 = FlexUFIntra(cfg).to(dev).eval(); net2.load_state_dict(st)
         for k, W in solved[key].items():
             set_linear(net2.dec.adapters[k], W[:-1].float(), W[-1].float())
-        p = outdir.parent / name / "ckpt.pth.tar"
+        p = outdir.parent / name / "ckpt.pth.tar"  # sibling of --out's dir
         p.parent.mkdir(parents=True, exist_ok=True)
         torch.save({"state_dict": net2.state_dict(), "config": ck["config"],
                     "epoch": ck.get("epoch"), "calex": report}, p)

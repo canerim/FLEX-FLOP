@@ -28,6 +28,24 @@
       "over_budget": 1,
       "n": 265,
       "worst_db": 0.1413
+    },
+    "calexA_perframe_heldout_prior": {
+      "saving_pct": 28.708544520204203,
+      "guarantee": true,
+      "over_budget": 1,
+      "n": 265,
+      "worst_db": 0.1413,
+      "note": "prior derived from a disjoint half of the video set, never the test half"
+    },
+    "B2_prior_perframe": {
+      "saving_pct": 28.316986137728996,
+      "guarantee": true,
+      "note": "corrected fine-tune, usage-matched weights"
+    },
+    "B2_control_perframe": {
+      "saving_pct": 28.317884548251506,
+      "guarantee": true,
+      "note": "corrected fine-tune, uniform weights"
     }
   },
   "exit_usage_pct_perframe_e9": [
@@ -48,6 +66,8 @@
     "the two gains are partly redundant: CALEX-A adds 0.65 under a global multiplier and 0.42 under a per-frame one, because both recover slack left by pricing every frame the same",
     "exits 0 and 1 are exactly 0% -- the clamp, measured rather than inferred",
     "e2 and e3 together carry 82.6% of tiles",
-    "one frame of 265 is infeasible: its tiling floor exceeds the budget"
+    "one frame of 265 is infeasible: its tiling floor exceeds the budget",
+    "the corrected fine-tune is neutral: 28.32 with the prior, 28.32 without, 28.32 for the baseline. The first attempt's -3.52 and -8.21 were the harness, not the idea, and once the harness is right the idea has nothing left to fix because the adapters have converged -- for an average distribution SGD cannot be pointed away from",
+    "deriving the prior from a disjoint half of the video set changes the result by 0.03 points, so nothing is taken from the test set"
   ]
 }
