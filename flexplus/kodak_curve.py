@@ -83,6 +83,9 @@ def main():
     ap.add_argument("--budgets", type=float, nargs="+", default=[0.1, 0.2])
     ap.add_argument("--device", default="cpu")
     ap.add_argument("--max_images", type=int, default=0)
+    ap.add_argument("--perframe", action="store_true",
+                    help="also bisect a multiplier per image and report how "
+                         "many images the budget cannot reach at all")
     ap.add_argument("--out", default=str(RES / "kodak_curve.json"))
     a = ap.parse_args()
     dev = torch.device(a.device)
@@ -153,6 +156,57 @@ def main():
                     else:
                         hi = mid
                 return lo
+
+            # ---- per-image guarantee -------------------------------------
+            # The headline the appendix argues for is a per-frame bound, and a
+            # bound is only worth stating where it can be met. Kodak is the
+            # hard case: its tiling floor at the top rate already eats most of
+            # a 0.1 dB budget, so some images may be infeasible outright. That
+            # is worth knowing before the claim is made, not after.
+            if a.perframe:
+                pf = []
+                for (M, R, npx, y_, q_, xp_), (name, _, _) in zip(cache, imgs):
+                    def tdb(lam):
+                        k = (M + lam * cost[None, :]).argmin(1).clamp(
+                            min=cfg.split_depth)
+                        return float(10 * torch.log10(
+                            true_frame_mse(net.dec, y_, q_, xp_, k) / R))
+                    fl = tdb(0.0)
+                    tgt = a.budgets[0]
+                    if fl > tgt:
+                        lam, td = 0.0, fl
+                    else:
+                        lo, hi = 0.0, 1.0
+                        for _ in range(28):
+                            mid = 0.5 * (lo + hi)
+                            if tdb(mid) <= tgt:
+                                lo = mid
+                            else:
+                                hi = mid
+                        lam, td = lo, tdb(lo)
+                    k = (M + lam * cost[None, :]).argmin(1).clamp(
+                        min=cfg.split_depth)
+                    pf.append({"img": name, "floor_db": fl, "db": td,
+                               "lam": lam,
+                               "saving_pct_vs_release": float(
+                                   100 * (1 - cost[k].mean()))})
+                d_ = np.array([x["db"] for x in pf])
+                f_ = np.array([x["floor_db"] for x in pf])
+                s_ = np.array([x["saving_pct_vs_release"] for x in pf])
+                infeas = int((f_ > a.budgets[0] + 1e-9).sum())
+                rows.append({"qp": qp_v, "mode": "per_image",
+                             "budget_db": a.budgets[0], "n": len(pf),
+                             "infeasible": infeas,
+                             "mean_db": float(d_.mean()),
+                             "max_db": float(d_.max()),
+                             "mean_floor_db": float(f_.mean()),
+                             "max_floor_db": float(f_.max()),
+                             "saving_pct_vs_release": float(s_.mean()),
+                             "per_image": pf})
+                print(f"   q{qp_v:<3} KARE-BASINA: tasarruf {s_.mean():6.2f}%  "
+                      f"ort dB {d_.mean():.4f}  max {d_.max():.4f}  "
+                      f"taban ort {f_.mean():.4f} max {f_.max():.4f}  "
+                      f"ULASILAMAZ {infeas}/{len(pf)}", flush=True)
 
             for target in a.budgets:
                 if floor_db > target:
