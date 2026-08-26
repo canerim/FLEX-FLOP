@@ -1,0 +1,44 @@
+{
+  "what": "is the deployed exit-usage prior a property of the test set or of the content domain",
+  "budget_db": 0.1,
+  "cell_px": 256,
+  "split_depth": 2,
+  "ckpt_epoch": 4,
+  "ctc_half_A_27seq": [
+    0.0,
+    0.0,
+    0.703,
+    0.222,
+    0.048,
+    0.027
+  ],
+  "ctc_half_B_26seq": [
+    0.0,
+    0.0,
+    0.719,
+    0.202,
+    0.038,
+    0.041
+  ],
+  "ctc_full_53seq": [
+    0.0,
+    0.0,
+    0.71,
+    0.211,
+    0.043,
+    0.036
+  ],
+  "openimages_train": [
+    0.0,
+    0.0,
+    0.448,
+    0.278,
+    0.022,
+    0.252
+  ],
+  "kl_halfA_halfB_nat": 0.0048,
+  "tv_halfA_halfB": 0.029,
+  "kl_train_vs_ctc_nat": 0.3474,
+  "tv_train_vs_ctc": 0.283,
+  "reading": "the prior is stable across disjoint halves of the video set and unstable across domains, so it must be estimated from held-out material of the DEPLOYMENT domain, not of the training domain; 27 sequences suffice"
+}
