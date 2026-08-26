@@ -64,6 +64,12 @@ def main():
     ap.add_argument("--qps", type=int, nargs="+", default=[0, 16, 32, 48, 63])
     ap.add_argument("--device", default="cuda:0")
     ap.add_argument("--max_seqs", type=int, default=0)
+    ap.add_argument("--global_lambda", action="store_true",
+                    help="the shipped protocol instead: one multiplier per "
+                         "rate, bisected on the set mean, reported per frame. "
+                         "This is what the appendix compares against, measured "
+                         "the same way and on the same checkpoint so the two "
+                         "differ only in where the multiplier is chosen.")
     ap.add_argument("--out", default=str(RES / "signalled_perframe.json"))
     a = ap.parse_args()
     dev = torch.device(a.device)
@@ -113,38 +119,126 @@ def main():
                     return float(10 * torch.log10(
                         true_frame_mse(net.dec, y, q, xp, k) / R))
 
+                if a.global_lambda:
+                    # Collected now, solved after the loop: one multiplier has
+                    # to see every frame before it can be chosen.
+                    per.append({"seq": nm, "_M": M, "_R": R, "_y": y,
+                                "_q": q, "_xp": xp, "floor_db": true_db(0.0)})
+                    continue
                 floor = true_db(0.0)
                 if floor > a.budget:
-                    lam, td = 0.0, floor
+                    # The ladder cannot reach the budget on this frame at all:
+                    # cutting it into tiles already costs more than the budget
+                    # allows, before a single tile has exited early. Recorded
+                    # as infeasible rather than quietly served over budget.
+                    lam, td, feas = 0.0, floor, False
                 else:
-                    # Bisect the cheap table, correct against a real decode,
-                    # repeat. The table prices each tile with its neighbours at
-                    # the SAME exit; a routed frame is mixed, and only a decode
-                    # settles the residual.
-                    inner = a.budget
-                    for _ in range(6):
-                        if table_db(1.0) < inner:
-                            lam = 1.0
+                    # Bisect on the TRUE delivered decibel, not on the table.
+                    #
+                    # The first version bisected the cheap table and corrected
+                    # against a decode six times. That converges for most
+                    # frames and leaves the rest above the budget -- 17 of 53
+                    # at qp0, 25 at qp32 -- because nothing in it ever enforces
+                    # the bound it exists to deliver. A guarantee measured by a
+                    # solver that does not guarantee is not a guarantee.
+                    #
+                    # So: seed a bracket from the table, which costs no decode,
+                    # then bisect on real decodes while keeping only
+                    # multipliers whose delivered decibel is at or under the
+                    # budget. The lambda returned is by construction one of
+                    # those, so the bound holds for every feasible frame by
+                    # construction rather than by convergence.
+                    seed = 1.0
+                    if table_db(seed) >= a.budget:
+                        lo, hi = 0.0, seed
+                        for _ in range(40):
+                            mid = 0.5 * (lo + hi)
+                            if table_db(mid) <= a.budget:
+                                lo = mid
+                            else:
+                                hi = mid
+                        seed = lo
+                    lam, td, feas = 0.0, floor, True
+                    hi = min(1.0, max(seed * 4.0, 1e-6))
+                    for _ in range(16):
+                        mid = 0.5 * (lam + hi)
+                        t = true_db(mid)
+                        if t <= a.budget:
+                            lam, td = mid, t
                         else:
-                            lo, hi = 0.0, 1.0
-                            for _ in range(45):
-                                mid = 0.5 * (lo + hi)
-                                if table_db(mid) <= inner:
-                                    lo = mid
-                                else:
-                                    hi = mid
-                            lam = lo
-                        td = true_db(lam)
-                        if abs(td - a.budget) < 5e-4:
-                            break
-                        inner = max(1e-5, min(1.0, inner + (a.budget - td)))
+                            hi = mid
                 k = (M + lam * cost[None, :]).argmin(1).clamp(min=j)
                 per.append({
                     "seq": nm, "db": td, "floor_db": floor, "lam": lam,
+                    "feasible": feas,
                     "saving_pct_measured": measured_saving_pct(
                         net.dec, ref.dec, y, q, k),
                     "saving_pct_vs_release": float(100 * (1 - cost[k].mean())),
-                    "map_bits": map_bits(k, K), "bpp_added": map_bits(k, K) / (H * W)})
+                    "map_bits": map_bits(k, K),
+                    "bpp_added": map_bits(k, K) / (H * W),
+                    # Which exits the frame actually used. Left out of the
+                    # first version, which meant the configuration being
+                    # quoted had no exit distribution of its own and the
+                    # nearest available one came from a file whose argmin runs
+                    # over all K before the clamp -- so its "e0" column is
+                    # really e2, and reading it as written would put 87% of
+                    # tiles at an exit the decoder cannot reach.
+                    "hist": torch.bincount(k, minlength=K).tolist()})
+            if a.global_lambda:
+                def setmean(lam):
+                    t = 0.0
+                    for z in per:
+                        k = (z["_M"] + lam * cost[None, :]).argmin(1).clamp(min=j)
+                        t += float(10 * torch.log10(true_frame_mse(
+                            net.dec, z["_y"], z["_q"], z["_xp"], k) / z["_R"]))
+                    return t / len(per)
+                # Seed from the table before touching a decode. The
+                # multiplier this budget needs is around 1e-4, and bisecting
+                # [0, 1] twelve times cannot resolve that -- the smallest value
+                # it tries is already too large, so lo stays at zero and the
+                # answer comes back as "decode everything deepest": 3.40% saved
+                # at 0.023 dB, which is not an operating point anyone asked
+                # for. The table costs no decode to bisect finely, and the real
+                # decodes then only have to correct it.
+                def setmean_table(lam):
+                    t = 0.0
+                    for z in per:
+                        M_ = z["_M"]
+                        k = (M_ + lam * cost[None, :]).argmin(1)
+                        t += float(10 * torch.log10(
+                            M_.gather(1, k[:, None]).squeeze(1).mean() / z["_R"]))
+                    return t / len(per)
+                lo, hi = 0.0, 1.0
+                if setmean_table(hi) <= a.budget:
+                    seed = hi
+                else:
+                    for _ in range(45):
+                        mid = 0.5 * (lo + hi)
+                        if setmean_table(mid) <= a.budget:
+                            lo = mid
+                        else:
+                            hi = mid
+                    seed = lo
+                lam_g, hi = 0.0, min(1.0, max(seed * 4.0, 1e-6))
+                for _ in range(12):
+                    mid = 0.5 * (lam_g + hi)
+                    if setmean(mid) <= a.budget:
+                        lam_g = mid
+                    else:
+                        hi = mid
+                for z in per:
+                    k = (z["_M"] + lam_g * cost[None, :]).argmin(1).clamp(min=j)
+                    z["lam"] = lam_g
+                    z["db"] = float(10 * torch.log10(true_frame_mse(
+                        net.dec, z["_y"], z["_q"], z["_xp"], k) / z["_R"]))
+                    z["feasible"] = z["floor_db"] <= a.budget
+                    z["saving_pct_measured"] = measured_saving_pct(
+                        net.dec, ref.dec, z["_y"], z["_q"], k)
+                    z["saving_pct_vs_release"] = float(100 * (1 - cost[k].mean()))
+                    z["map_bits"] = map_bits(k, K)
+                    z["bpp_added"] = 0.0
+                    for kk in ("_M", "_R", "_y", "_q", "_xp"):
+                        z.pop(kk)
             db = np.array([p["db"] for p in per])
             sv = np.array([p["saving_pct_measured"] for p in per])
             rows.append({"qp": qp_v, "n": len(per),
@@ -152,13 +246,17 @@ def main():
                          "p95_db": float(np.percentile(db, 95)),
                          "max_db": float(db.max()),
                          "over_budget": int((db > a.budget + 1e-9).sum()),
+                         "infeasible": int(sum(not z["feasible"] for z in per)),
                          "saving_pct_measured": float(sv.mean()),
                          "map_bits": float(np.mean([p["map_bits"] for p in per])),
+                         "hist_pct": (lambda h: (100 * h / h.sum()).tolist())(
+                             np.array([p["hist"] for p in per], float).sum(0)),
                          "per_frame": per})
             print(f"   q{qp_v:>3}  tasarruf {sv.mean():6.2f}%   ort dB "
                   f"{db.mean():.4f}  p95 {np.percentile(db,95):.4f}  "
                   f"max {db.max():.4f}  asan "
-                  f"{int((db>a.budget+1e-9).sum())}/{len(per)}  "
+                  f"{int((db>a.budget+1e-9).sum())}/{len(per)} "
+                  f"(ulasilamaz {int(sum(not z['feasible'] for z in per))})  "
                   f"harita {np.mean([p['map_bits'] for p in per]):.0f} bit",
                   flush=True)
 

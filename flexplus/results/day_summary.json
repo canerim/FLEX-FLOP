@@ -1,0 +1,53 @@
+{
+  "what": "the day's measured configurations, deployed tiled path, 53 CTC intra frames, 0.1 dB",
+  "ckpt": "runs/RECIPE512/ckpt_PIN_e9.pth.tar",
+  "ckpt_epoch": 9,
+  "release_gmac_1080p": 454.0,
+  "configs": {
+    "global_lambda": {
+      "saving_pct": 28.154983897177623,
+      "guarantee": false,
+      "over_budget": 134,
+      "n": 265,
+      "worst_db": 0.2613
+    },
+    "perframe_lambda": {
+      "saving_pct": 28.324579609835382,
+      "guarantee": true,
+      "over_budget": 1,
+      "n": 265,
+      "worst_db": 0.1413
+    },
+    "calexA_global": {
+      "saving_pct": 28.796929240133977,
+      "guarantee": false
+    },
+    "calexA_perframe": {
+      "saving_pct": 28.741319558052943,
+      "guarantee": true,
+      "over_budget": 1,
+      "n": 265,
+      "worst_db": 0.1413
+    }
+  },
+  "exit_usage_pct_perframe_e9": [
+    0.0,
+    0.0,
+    60.88385269121813,
+    21.699716713881017,
+    11.999999999999998,
+    5.4164305949008495
+  ],
+  "epoch_series_mean_saving": {
+    "4": 27.64,
+    "8": 28.14,
+    "9": 28.15,
+    "10": 28.13
+  },
+  "notes": [
+    "the two gains are partly redundant: CALEX-A adds 0.65 under a global multiplier and 0.42 under a per-frame one, because both recover slack left by pricing every frame the same",
+    "exits 0 and 1 are exactly 0% -- the clamp, measured rather than inferred",
+    "e2 and e3 together carry 82.6% of tiles",
+    "one frame of 265 is infeasible: its tiling floor exceeds the budget"
+  ]
+}

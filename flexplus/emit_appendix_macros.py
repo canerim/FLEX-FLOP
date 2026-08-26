@@ -13,9 +13,21 @@ S = json.loads((R / "safe_routing.json").read_text())
 og, op = G["modes"]["global"], G["modes"]["perframe"]
 pg, sg = S["rows"][0], S["signalled_lambda_perframe"]
 thr = min(S["decoder_perframe"], key=lambda r: r["max"])
+T = json.loads((R / "guarantee_tiled_e9.json").read_text())
+tg, tp = T["global"], T["perframe"]
 mg = max(S["rows"], key=lambda r: r["saving_pct"])
 
 M = {
+    # the deployed tiled path -- what the appendix quotes
+    "GuardTiledN": f"{tg['n']}",
+    "GuardTiledOverN": f"{tg['over']}",
+    "GuardTiledPNinetyFive": f"{tg['p95']:.3f}",
+    "GuardTiledMax": f"{tg['max']:.3f}",
+    "GuardTiledSaving": f"{tg['saving']:.2f}",
+    "GuardTiledPfIn": f"{tp['n'] - tp['over']}",
+    "GuardTiledPfMax": f"{tp['max']:.3f}",
+    "GuardTiledPfSaving": f"{tp['saving']:.2f}",
+    # the per-cell tables -- what ranks the decoder-side remedies
     "GuardN": f"{og['n']}",
     "GuardOverN": f"{og['over_budget']}",
     "GuardPNinetyFive": f"{og['p95']:.3f}",
