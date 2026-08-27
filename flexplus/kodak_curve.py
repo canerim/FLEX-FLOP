@@ -52,15 +52,22 @@ HERE = Path(__file__).resolve().parent
 RES = HERE / "results"
 
 
-def load_kodak(d, n=0):
-    """Kodak in the exact domain the decoder was trained on.
+def load_kodak(d, n=0, pattern="*.png"):
+    """An image set in the exact domain the decoder was trained on.
 
     /255, RGB to YCbCr, minus 0.5 -- the chain in DCVC's image_dataset.py. The
-    RGB original is kept alongside so PSNR can be reported where Kodak is read.
+    RGB original is kept alongside so PSNR can be reported where these sets are
+    read, which is RGB.
+
+    Odd dimensions are cropped to even before the colour conversion, because
+    rgb2ycbcr_np asserts even height and width and CLIC does not promise them.
+    Cropping one row costs a strip of the image and keeps the transform the
+    one the decoder was trained on; padding would not.
     """
     out = []
-    for p in sorted(Path(d).glob("kodim*.png"))[: n or None]:
+    for p in sorted(Path(d).glob(pattern))[: n or None]:
         rgb = np.array(Image.open(p).convert("RGB"), dtype=np.float32) / 255.0
+        rgb = rgb[: rgb.shape[0] // 2 * 2, : rgb.shape[1] // 2 * 2]
         x = torch.as_tensor(rgb2ycbcr_np(rgb) - 0.5,
                             dtype=torch.float32).permute(2, 0, 1)[None]
         g = torch.as_tensor(rgb, dtype=torch.float32).permute(2, 0, 1)[None]
@@ -79,6 +86,8 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--ckpt", default=str(UF / "runs/RECIPE512/ckpt_PAPER.pth.tar"))
     ap.add_argument("--data", default=str(HERE.parent / "data/kodak"))
+    ap.add_argument("--pattern", default="*.png")
+    ap.add_argument("--tag", default="Kodak24")
     ap.add_argument("--qps", type=int, nargs="+", default=[0, 16, 32, 48, 63])
     ap.add_argument("--budgets", type=float, nargs="+", default=[0.1, 0.2])
     ap.add_argument("--device", default="cpu")
@@ -101,8 +110,8 @@ def main():
     assert worst == 0.0, f"encoder differs by {worst}: one bpp cannot serve both"
     cost = exit_costs(cfg, "head").to(dev)
 
-    imgs = load_kodak(a.data, a.max_images)
-    print(f"  {len(imgs)} Kodak goruntusu, {cfg.rgb_patch}px karo, "
+    imgs = load_kodak(a.data, a.max_images, a.pattern)
+    print(f"  {len(imgs)} {a.tag} goruntusu, {cfg.rgb_patch}px karo, "
           f"epoch {ck.get('epoch')}, {dev}", flush=True)
 
     rows, t0 = [], time.time()
@@ -163,7 +172,7 @@ def main():
             # hard case: its tiling floor at the top rate already eats most of
             # a 0.1 dB budget, so some images may be infeasible outright. That
             # is worth knowing before the claim is made, not after.
-            if a.perframe:
+            for _bidx, _b in enumerate(a.budgets if a.perframe else []):
                 pf = []
                 for (M, R, npx, y_, q_, xp_), (name, _, _) in zip(cache, imgs):
                     def tdb(lam):
@@ -172,7 +181,7 @@ def main():
                         return float(10 * torch.log10(
                             true_frame_mse(net.dec, y_, q_, xp_, k) / R))
                     fl = tdb(0.0)
-                    tgt = a.budgets[0]
+                    tgt = _b
                     if fl > tgt:
                         lam, td = 0.0, fl
                     else:
@@ -193,9 +202,9 @@ def main():
                 d_ = np.array([x["db"] for x in pf])
                 f_ = np.array([x["floor_db"] for x in pf])
                 s_ = np.array([x["saving_pct_vs_release"] for x in pf])
-                infeas = int((f_ > a.budgets[0] + 1e-9).sum())
+                infeas = int((f_ > _b + 1e-9).sum())
                 rows.append({"qp": qp_v, "mode": "per_image",
-                             "budget_db": a.budgets[0], "n": len(pf),
+                             "budget_db": _b, "n": len(pf),
                              "infeasible": infeas,
                              "mean_db": float(d_.mean()),
                              "max_db": float(d_.max()),
@@ -203,7 +212,7 @@ def main():
                              "max_floor_db": float(f_.max()),
                              "saving_pct_vs_release": float(s_.mean()),
                              "per_image": pf})
-                print(f"   q{qp_v:<3} KARE-BASINA: tasarruf {s_.mean():6.2f}%  "
+                print(f"   q{qp_v:<3} {_b:.3f}dB KARE-BASINA: tasarruf {s_.mean():6.2f}%  "
                       f"ort dB {d_.mean():.4f}  max {d_.max():.4f}  "
                       f"taban ort {f_.mean():.4f} max {f_.max():.4f}  "
                       f"ULASILAMAZ {infeas}/{len(pf)}", flush=True)
@@ -249,7 +258,7 @@ def main():
                       f"release {ps_rel/n:.3f}", flush=True)
 
     Path(a.out).write_text(json.dumps(
-        {"script": "flexplus/kodak_curve.py", "dataset": "Kodak24",
+        {"script": "flexplus/kodak_curve.py", "dataset": a.tag,
          "n_images": len(imgs), "tile_px": cfg.rgb_patch,
          "split_depth": cfg.split_depth, "num_exits": cfg.num_exits,
          "ckpt": a.ckpt, "ckpt_epoch": ck.get("epoch"),
