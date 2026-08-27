@@ -41,8 +41,14 @@ def load(f):
 
 
 def series(d):
-    """{budget: (bpp[], psnr[], saving[])} plus the released anchor."""
-    rel_b, rel_p = [], []
+    """{budget: (bpp[], psnr[], saving[])} plus the released anchor.
+
+    The deepest exit is kept beside it. It is the ladder run to full depth,
+    which carries no adapter and is bit-exact with the released decoder, so
+    the two curves should sit on top of each other -- and a reader who cannot
+    see that has to take it on trust.
+    """
+    rel_b, rel_p, deep_p = [], [], []
     by = {}
     for r in d["rows"]:
         if r.get("mode") == "per_image" or not r.get("budget_reachable"):
@@ -54,9 +60,10 @@ def series(d):
             if q in by[b] and q not in anchor_done:
                 rel_b.append(by[b][q]["bpp"])
                 rel_p.append(by[b][q]["psnr_release_rgb"])
+                deep_p.append(by[b][q]["psnr_deepest_rgb"])
                 anchor_done.add(q)
     o = np.argsort(rel_b)
-    rel = (np.array(rel_b)[o], np.array(rel_p)[o])
+    rel = (np.array(rel_b)[o], np.array(rel_p)[o], np.array(deep_p)[o])
     out = {}
     for b in sorted(by):
         qs = [q for q in QPS if q in by[b]]
@@ -83,8 +90,10 @@ def frame(ax):
 
 def rd_panel(ax, d, title, zoom=None):
     rel, ser = series(d)
-    ax.plot(rel[0], rel[1], "-", color="#555555", lw=1.6, zorder=6,
-            label="DCVC-UF (released)")
+    ax.plot(rel[0], rel[1], "-", color="#111111", lw=1.5, marker="D", ms=3.4,
+            markerfacecolor="#111111", zorder=8, label="DCVC-UF (released)")
+    ax.plot(rel[0], rel[2], "-", color="#9a9a9a", lw=2.6, alpha=0.55,
+            zorder=7, label="FLEX, deepest exit (bit-exact)")
     for b, c, ls, mk in BUD:
         if b not in ser:
             continue
@@ -96,14 +105,17 @@ def rd_panel(ax, d, title, zoom=None):
     ax.set_xlabel("Bit-rate (bpp)", fontsize=7.6)
     ax.set_ylabel("PSNR (dB)  ↑", fontsize=7.6)
     ax.set_title(title, fontsize=8.6, fontweight="bold", pad=4)
-    ax.legend(fontsize=5.5, loc="lower right", frameon=True, framealpha=0.95,
+    ax.legend(fontsize=5.2, loc="lower right", frameon=True, framealpha=0.95,
               edgecolor="#999999", handlelength=1.6, borderpad=0.45,
               labelspacing=0.30)
     if zoom:
         x0, x1, y0, y1 = zoom
         axi = inset_axes(ax, width="36%", height="30%", loc="upper left",
                          borderpad=1.4)
-        axi.plot(rel[0], rel[1], "-", color="#555555", lw=1.4, zorder=6)
+        axi.plot(rel[0], rel[2], "-", color="#9a9a9a", lw=2.4, alpha=0.55,
+                 zorder=7)
+        axi.plot(rel[0], rel[1], "-", color="#111111", lw=1.3, marker="D",
+                 ms=2.8, markerfacecolor="#111111", zorder=8)
         for b, c, ls, mk in BUD:
             if b not in ser:
                 continue
@@ -120,8 +132,9 @@ def rd_panel(ax, d, title, zoom=None):
 
 def cost_panel(ax, d, title):
     rel, ser = series(d)
-    ax.plot(rel[0], np.full(rel[0].size, DECGMAC), "-", color="#555555",
-            lw=1.6, zorder=6, label="DCVC-UF (released)")
+    ax.plot(rel[0], np.full(rel[0].size, DECGMAC), "-", color="#111111",
+            lw=1.5, marker="D", ms=3.4, markerfacecolor="#111111", zorder=8,
+            label="DCVC-UF (released)")
     for b, c, ls, mk in BUD:
         if b not in ser:
             continue
@@ -133,7 +146,7 @@ def cost_panel(ax, d, title):
     ax.set_xlabel("Bit-rate (bpp)", fontsize=7.6)
     ax.set_ylabel("decoder GMAC per 1080p frame  ↓", fontsize=7.6)
     ax.set_title(title, fontsize=8.6, fontweight="bold", pad=4)
-    ax.legend(fontsize=5.5, loc="lower right", frameon=True, framealpha=0.95,
+    ax.legend(fontsize=5.2, loc="lower right", frameon=True, framealpha=0.95,
               edgecolor="#999999", handlelength=1.6, borderpad=0.45,
               labelspacing=0.30)
 
@@ -162,13 +175,14 @@ def main():
             # a zoom chosen by eye shows five lines on top of each other, which
             # is what the first draft did. Pick the rate with the widest spread
             # and window tightly around it.
-            _, ser = series(d)
+            _rel, ser = series(d)
             common = set.intersection(*[set(np.round(ser[b][0], 6))
                                         for b in ser]) if ser else set()
             best, spread = None, -1.0
             for x in sorted(common):
                 vs = [float(ser[b][1][np.argmin(np.abs(ser[b][0] - x))])
                       for b in ser]
+                vs.append(float(_rel[1][np.argmin(np.abs(_rel[0] - x))]))
                 if max(vs) - min(vs) > spread:
                     spread, best = max(vs) - min(vs), x
             if best is None:
@@ -176,7 +190,8 @@ def main():
             else:
                 vs = [float(ser[b][1][np.argmin(np.abs(ser[b][0] - best))])
                       for b in ser]
-                pad = max(0.06, 0.35 * spread)
+                vs.append(float(_rel[1][np.argmin(np.abs(_rel[0] - best))]))
+                pad = max(0.05, 0.28 * spread)
                 rd_panel(ax, d, title,
                          zoom=(best * 0.955, best * 1.045,
                                min(vs) - pad, max(vs) + pad))
