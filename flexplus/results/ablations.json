@@ -1,0 +1,690 @@
+{
+  "families": {
+    "granularity": {
+      "what": "cell size, per-position decode, 0.1 dB",
+      "source": "flexplus/results/granularity_ctc53_fixed.json",
+      "ckpt_epoch": 4,
+      "rows": [
+        {
+          "cell_px": 256,
+          "mean": 31.509302533469377,
+          "per_qp": [
+            36.923726938781996,
+            33.98749188643856,
+            30.687067997791782,
+            28.685505000527158,
+            27.262720843807386
+          ],
+          "band_pct": 0.3273777812341955
+        },
+        {
+          "cell_px": 128,
+          "mean": 32.66340651565193,
+          "per_qp": [
+            37.72618411945149,
+            34.97736339225197,
+            31.857264814836473,
+            30.107514520047484,
+            28.64870573167223
+          ],
+          "band_pct": 0.7253250764266881
+        },
+        {
+          "cell_px": 64,
+          "mean": 33.27497694609116,
+          "per_qp": [
+            38.1671269999595,
+            35.55537755252628,
+            32.54317800822872,
+            30.759143560386427,
+            29.350058609354846
+          ],
+          "band_pct": 1.5556835863269427
+        },
+        {
+          "cell_px": 32,
+          "mean": 33.587725874645805,
+          "per_qp": [
+            38.49053455922188,
+            36.09014928003879,
+            32.80579718644074,
+            31.01531835141523,
+            29.536829996112367
+          ],
+          "band_pct": 2.7499362243572394
+        }
+      ]
+    },
+    "clamp": {
+      "what": "split depth, 64 px cells, per-position, 0.1 dB",
+      "source": "flexplus/results/cells_ctc64.npz",
+      "ckpt_epoch": 4,
+      "rows": [
+        {
+          "split_depth": 2,
+          "mean": 33.321242553038005,
+          "per_qp": [
+            38.62623405799791,
+            35.75072360685391,
+            32.56501230267786,
+            30.52715111485693,
+            29.137091682803394
+          ],
+          "ceiling_pct": 40.07527426160343
+        },
+        {
+          "split_depth": 0,
+          "mean": 36.02349747072393,
+          "per_qp": [
+            45.55797203428915,
+            40.16060560547324,
+            33.841947928286054,
+            31.462686963713292,
+            29.094274821857923
+          ],
+          "ceiling_pct": 69.88860759493673
+        }
+      ]
+    },
+    "decode_geometry": {
+      "what": "tiled against per-position, 0.1 dB",
+      "source": "signalled_RECIPE512_ctc53.json + granularity_ctc53_fixed.json",
+      "ckpt_epoch": 4,
+      "rows": [
+        {
+          "decode": "tiled 256 px (the paper)",
+          "mean": 27.639146087651607,
+          "per_qp": [
+            33.69147393814317,
+            30.135087467277504,
+            26.071878577445418,
+            24.77971344197861,
+            23.517577013413327
+          ]
+        },
+        {
+          "decode": "per-position, 256 px cells",
+          "mean": 31.509302533469377,
+          "per_qp": [
+            36.923726938781996,
+            33.98749188643856,
+            30.687067997791782,
+            28.685505000527158,
+            27.262720843807386
+          ]
+        },
+        {
+          "decode": "per-position, 64 px cells",
+          "mean": 33.27497694609116,
+          "per_qp": [
+            38.1671269999595,
+            35.55537755252628,
+            32.54317800822872,
+            30.759143560386427,
+            29.350058609354846
+          ]
+        }
+      ]
+    },
+    "router_models": {
+      "what": "what predicts the exit-error curve, 0.1 dB",
+      "source": "flexplus/results/router_fit.json",
+      "cell_px": 64,
+      "split_depth": 2,
+      "rows": [
+        {
+          "model": "oracle",
+          "mean": 33.321242553038005,
+          "per_qp": [
+            38.62623405799791,
+            35.75072360685391,
+            32.56501230267786,
+            30.52715111485693,
+            29.137091682803394
+          ]
+        },
+        {
+          "model": "raterank",
+          "mean": 30.02646100687311,
+          "per_qp": [
+            37.47987699302614,
+            34.49956245054248,
+            30.991792654141204,
+            24.695492244034135,
+            22.46558069262159
+          ]
+        },
+        {
+          "model": "flat",
+          "mean": 15.101164556961965,
+          "per_qp": [
+            25.16860759493661,
+            25.16860759493661,
+            25.16860759493661,
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "model": "ridge",
+          "mean": 30.608577834948257,
+          "per_qp": [
+            37.60030545885069,
+            33.64563734748346,
+            29.970993794818,
+            27.286619782534604,
+            24.539332791054523
+          ]
+        },
+        {
+          "model": "gbm",
+          "mean": 26.99895234518729,
+          "per_qp": [
+            35.01353458433552,
+            30.073511768777138,
+            25.48386113445389,
+            23.139256420477217,
+            21.284597817892692
+          ]
+        },
+        {
+          "model": "gbm_shape",
+          "mean": 30.696510106357334,
+          "per_qp": [
+            37.628460549180744,
+            33.818981055600474,
+            30.073507226121464,
+            27.357669906740924,
+            24.603931794143065
+          ]
+        }
+      ]
+    },
+    "router_inputs": {
+      "what": "which input group carries the signal",
+      "source": "FLEX-UF/results/router_ablation_*_e4.json",
+      "rows": [
+        {
+          "inputs": "stem,latent,scales,bits,qp",
+          "agree_pct": 76.97916626930237,
+          "constant_pct": 38.16666603088379,
+          "file": "router_ablation_all_e4.json"
+        },
+        {
+          "inputs": "bits,qp",
+          "agree_pct": 58.45833420753479,
+          "constant_pct": 38.16666603088379,
+          "file": "router_ablation_bits_e4.json"
+        },
+        {
+          "inputs": "latent,qp",
+          "agree_pct": 74.47916865348816,
+          "constant_pct": 38.16666603088379,
+          "file": "router_ablation_latent_e4.json"
+        },
+        {
+          "inputs": "qp",
+          "agree_pct": 41.333335638046265,
+          "constant_pct": 38.16666603088379,
+          "file": "router_ablation_qp_e4.json"
+        },
+        {
+          "inputs": "scales,qp",
+          "agree_pct": 71.08333706855774,
+          "constant_pct": 38.16666603088379,
+          "file": "router_ablation_scales_e4.json"
+        },
+        {
+          "inputs": "stem,qp",
+          "agree_pct": 77.37500071525574,
+          "constant_pct": 38.16666603088379,
+          "file": "router_ablation_stem_e4.json"
+        }
+      ]
+    },
+    "calex_refit": {
+      "what": "closed-form adapter refit, global lambda, 0.1 dB",
+      "baseline_mean": 28.154983897177623,
+      "ckpt_epoch": 9,
+      "source": "flexplus/results/signalled_CALEX_A_*.json",
+      "rows": [
+        {
+          "arm": "survivors, matched lambda",
+          "mean": 28.796929240133977,
+          "per_qp": [
+            34.35904822712528,
+            30.97520819738336,
+            27.247391128991257,
+            26.074829827333634,
+            25.328168819836364
+          ]
+        },
+        {
+          "arm": "all tiles (control)",
+          "mean": 28.343729363085345,
+          "per_qp": [
+            34.21489322706401,
+            30.79518977553557,
+            26.81172459624321,
+            25.512447261399135,
+            24.384391955184807
+          ]
+        },
+        {
+          "arm": "survivors, WRONG lambda (control)",
+          "mean": 28.141981190735482,
+          "per_qp": [
+            34.389731318940186,
+            30.853831527952288,
+            26.663017580011605,
+            25.079364375858876,
+            23.723961150914466
+          ]
+        }
+      ]
+    },
+    "fine_tuning": {
+      "what": "does gradient descent add anything, per-frame guarantee, 0.1 dB",
+      "ckpt_epoch": 9,
+      "source": "flexplus/results/signalled_perframe_*.json",
+      "rows": [
+        {
+          "arm": "baseline, no fine-tune",
+          "mean": 28.324579609835382,
+          "per_qp": [
+            33.94382405336444,
+            31.149558759463496,
+            27.362867905757106,
+            25.17567106390734,
+            23.990976266684537
+          ]
+        },
+        {
+          "arm": "6000 steps, usage-matched weights",
+          "mean": 28.316986137728996,
+          "per_qp": [
+            33.992741280972815,
+            31.13303488862291,
+            27.379743736610855,
+            25.1719924299919,
+            23.907418352446506
+          ]
+        },
+        {
+          "arm": "6000 steps, uniform weights (control)",
+          "mean": 28.317884548251506,
+          "per_qp": [
+            33.85391782333329,
+            31.051953730033123,
+            27.327353836872533,
+            25.22338641324851,
+            24.13281093777008
+          ]
+        },
+        {
+          "arm": "closed-form refit, no training",
+          "mean": 28.741319558052943,
+          "per_qp": [
+            34.11164640897806,
+            31.304311666588024,
+            27.558004965504008,
+            25.735889727538634,
+            24.996745021655972
+          ]
+        }
+      ]
+    },
+    "block_sparsity": {
+      "what": "what a B x B block-sparse kernel would realise",
+      "source": "flexplus/results/mask_structure_*_all.json",
+      "rows": [
+        {
+          "cells": "256 px cells",
+          "ideal_pct": 31.509303102059864,
+          "blocks": {
+            "2": 31.2759510899726,
+            "4": 30.881759773803832,
+            "8": 29.938337407451634,
+            "16": 27.913017124432763,
+            "32": 24.17474857097363
+          }
+        },
+        {
+          "cells": "64 px cells",
+          "ideal_pct": 33.321242553038005,
+          "blocks": {
+            "2": 32.33191311022314,
+            "4": 30.698104094447018,
+            "8": 27.625712581489644,
+            "16": 21.539815458363606,
+            "32": 8.597137108029768
+          }
+        }
+      ]
+    },
+    "guarantee": {
+      "what": "where the multiplier is chosen, deployed tiled path",
+      "source": "flexplus/results/guarantee_tiled_e9.json",
+      "ckpt_epoch": 9,
+      "rows": [
+        {
+          "mode": "one lambda per rate",
+          "saving": 28.154983897177623,
+          "over": 134,
+          "n": 265,
+          "p95": 0.16700227260589598,
+          "max": 0.26128190755844116
+        },
+        {
+          "mode": "one lambda per frame",
+          "saving": 28.324579609835382,
+          "over": 1,
+          "n": 265,
+          "p95": 0.09985187649726868,
+          "max": 0.14125077426433563,
+          "infeasible": 1
+        }
+      ]
+    },
+    "budget": {
+      "what": "the operating point, per-frame guarantee, epoch 9",
+      "source": "flexplus/results/signalled_perframe_*.json",
+      "rows": [
+        {
+          "budget_db": 0.1,
+          "mean": 28.741319558052943,
+          "saturated": 0,
+          "n": 265
+        },
+        {
+          "budget_db": 0.121317,
+          "mean": 31.331347409821984,
+          "saturated": 65,
+          "n": 265
+        }
+      ]
+    },
+    "safe_routing": {
+      "what": "can a margin rule shorten the decoder-side tail",
+      "source": "flexplus/results/safe_routing.json",
+      "margins": [
+        {
+          "delta": 0.0,
+          "saving": 24.165107204840382,
+          "max_db": 0.47543830123983544,
+          "over": 116
+        },
+        {
+          "delta": 0.1,
+          "saving": 24.165107204840382,
+          "max_db": 0.47543830123983544,
+          "over": 116
+        },
+        {
+          "delta": 0.25,
+          "saving": 24.855456954064167,
+          "max_db": 0.47543830123983544,
+          "over": 115
+        },
+        {
+          "delta": 0.4,
+          "saving": 25.541589204681152,
+          "max_db": 0.47543830123983544,
+          "over": 114
+        },
+        {
+          "delta": 0.55,
+          "saving": 25.612443181275374,
+          "max_db": 0.47543830123983544,
+          "over": 114
+        },
+        {
+          "delta": 0.7,
+          "saving": 25.612443181275374,
+          "max_db": 0.47543830123983544,
+          "over": 114
+        },
+        {
+          "delta": 0.85,
+          "saving": 25.612443181275374,
+          "max_db": 0.47543830123983544,
+          "over": 114
+        },
+        {
+          "delta": 0.95,
+          "saving": 25.612443181275374,
+          "max_db": 0.47543830123983544,
+          "over": 114
+        }
+      ],
+      "throttle": [
+        {
+          "target": 0.1,
+          "saving": 18.140392643897783,
+          "max_db": 0.3147368055263633
+        },
+        {
+          "target": 0.085,
+          "saving": 15.748583456731144,
+          "max_db": 0.3147368055263633
+        },
+        {
+          "target": 0.07,
+          "saving": 13.136746819520738,
+          "max_db": 0.3147368055263633
+        },
+        {
+          "target": 0.06,
+          "saving": 10.397484213040364,
+          "max_db": 0.21575716299636982
+        },
+        {
+          "target": 0.05,
+          "saving": 8.77339670408407,
+          "max_db": 0.2077059462332874
+        },
+        {
+          "target": 0.04,
+          "saving": 6.985475806066396,
+          "max_db": 0.19231011446540713
+        }
+      ],
+      "signalled_lambda": {
+        "mean_db": 0.09123312136160339,
+        "p50": 0.09762471215952762,
+        "p90": 0.09966452674181692,
+        "p95": 0.09985045227678462,
+        "max": 0.11397747907668669,
+        "over_010": 1,
+        "over_015": 0,
+        "n": 265,
+        "saving_pct": 25.05531161531725
+      }
+    },
+    "kodak": {
+      "what": "does it transfer to an image benchmark",
+      "source": "flexplus/results/kodak_*.json",
+      "ckpt_epoch": 4,
+      "global_lambda": [
+        {
+          "qp": 0,
+          "budget_db": 0.1,
+          "saving": 35.38445417823899,
+          "db": 0.10052782646380365
+        },
+        {
+          "qp": 0,
+          "budget_db": 0.2,
+          "saving": 38.3275068743005,
+          "db": 0.11916208593174815
+        },
+        {
+          "qp": 16,
+          "budget_db": 0.1,
+          "saving": 32.292631026239796,
+          "db": 0.09958147521441181
+        },
+        {
+          "qp": 16,
+          "budget_db": 0.2,
+          "saving": 38.3275068743005,
+          "db": 0.14299331745132804
+        },
+        {
+          "qp": 32,
+          "budget_db": 0.1,
+          "saving": 25.273475102826634,
+          "db": 0.09960286024337013
+        },
+        {
+          "qp": 32,
+          "budget_db": 0.2,
+          "saving": 38.22398935116738,
+          "db": 0.2014488478501638
+        },
+        {
+          "qp": 48,
+          "budget_db": 0.1,
+          "saving": 15.234463159737095,
+          "db": 0.09989470134799679
+        },
+        {
+          "qp": 48,
+          "budget_db": 0.2,
+          "saving": 29.20817730859046,
+          "db": 0.19984020479023457
+        },
+        {
+          "qp": 63,
+          "budget_db": 0.1,
+          "saving": 4.321712656542907,
+          "db": 0.09976203568900625
+        },
+        {
+          "qp": 63,
+          "budget_db": 0.2,
+          "saving": 19.857977182388897,
+          "db": 0.20008609226594368
+        }
+      ],
+      "per_image": [
+        {
+          "qp": 0,
+          "saving": 33.928672552108765,
+          "infeasible": 0,
+          "n": 24,
+          "mean_floor_db": 0.021954239229671657
+        },
+        {
+          "qp": 32,
+          "saving": 25.83245615164439,
+          "infeasible": 0,
+          "n": 24,
+          "mean_floor_db": 0.034483569441363215
+        },
+        {
+          "qp": 63,
+          "saving": 5.871323972940445,
+          "infeasible": 8,
+          "n": 24,
+          "mean_floor_db": 0.08936908204729359
+        }
+      ]
+    },
+    "epochs": {
+      "what": "does more training help",
+      "source": "signalled_RECIPE512_*",
+      "rows": [
+        {
+          "epoch": 0,
+          "mean": 30.283332526683807
+        },
+        {
+          "epoch": 1,
+          "mean": 25.27767136411847
+        },
+        {
+          "epoch": 2,
+          "mean": 24.036601755680834
+        },
+        {
+          "epoch": 3,
+          "mean": 25.838778328544514
+        },
+        {
+          "epoch": 4,
+          "mean": 27.639146087651607
+        },
+        {
+          "epoch": 5,
+          "mean": 27.888725365080308
+        },
+        {
+          "epoch": 6,
+          "mean": 28.07217265958976
+        },
+        {
+          "epoch": 7,
+          "mean": 27.91185826283488
+        },
+        {
+          "epoch": 8,
+          "mean": 28.139727603806705
+        },
+        {
+          "epoch": 9,
+          "mean": 28.154983897177623
+        },
+        {
+          "epoch": 10,
+          "mean": 28.13157203852373
+        }
+      ]
+    },
+    "prior_stability": {
+      "what": "is the deployed exit-usage prior a property of the test set or of the content domain",
+      "budget_db": 0.1,
+      "cell_px": 256,
+      "split_depth": 2,
+      "ckpt_epoch": 4,
+      "ctc_half_A_27seq": [
+        0.0,
+        0.0,
+        0.703,
+        0.222,
+        0.048,
+        0.027
+      ],
+      "ctc_half_B_26seq": [
+        0.0,
+        0.0,
+        0.719,
+        0.202,
+        0.038,
+        0.041
+      ],
+      "ctc_full_53seq": [
+        0.0,
+        0.0,
+        0.71,
+        0.211,
+        0.043,
+        0.036
+      ],
+      "openimages_train": [
+        0.0,
+        0.0,
+        0.448,
+        0.278,
+        0.022,
+        0.252
+      ],
+      "kl_halfA_halfB_nat": 0.0048,
+      "tv_halfA_halfB": 0.029,
+      "kl_train_vs_ctc_nat": 0.3474,
+      "tv_train_vs_ctc": 0.283,
+      "reading": "the prior is stable across disjoint halves of the video set and unstable across domains, so it must be estimated from held-out material of the DEPLOYMENT domain, not of the training domain; 27 sequences suffice"
+    }
+  },
+  "unparsed": []
+}

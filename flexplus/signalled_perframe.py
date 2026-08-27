@@ -125,6 +125,13 @@ def main():
                     per.append({"seq": nm, "_M": M, "_R": R, "_y": y,
                                 "_q": q, "_xp": xp, "floor_db": true_db(0.0)})
                     continue
+                # The ceiling as well as the floor: what this frame
+                # delivers when every tile takes the shallowest exit it may.
+                # A frame whose ceiling is already under the budget cannot
+                # spend the rest of it, so the tolerance above that point is
+                # wasted on it -- which is what picking an operating point is
+                # about, and what a budget quoted without it hides.
+                ceil = true_db(1e9)
                 floor = true_db(0.0)
                 if floor > a.budget:
                     # The ladder cannot reach the budget on this frame at all:
@@ -169,8 +176,9 @@ def main():
                             hi = mid
                 k = (M + lam * cost[None, :]).argmin(1).clamp(min=j)
                 per.append({
-                    "seq": nm, "db": td, "floor_db": floor, "lam": lam,
-                    "feasible": feas,
+                    "seq": nm, "db": td, "floor_db": floor,
+                    "ceiling_db": ceil, "saturated": bool(ceil <= a.budget),
+                    "lam": lam, "feasible": feas,
                     "saving_pct_measured": measured_saving_pct(
                         net.dec, ref.dec, y, q, k),
                     "saving_pct_vs_release": float(100 * (1 - cost[k].mean())),
@@ -247,6 +255,12 @@ def main():
                          "max_db": float(db.max()),
                          "over_budget": int((db > a.budget + 1e-9).sum()),
                          "infeasible": int(sum(not z["feasible"] for z in per)),
+                         "saturated": int(sum(z.get("saturated", False)
+                                              for z in per)),
+                         "mean_ceiling_db": float(np.mean(
+                             [z["ceiling_db"] for z in per])),
+                         "min_ceiling_db": float(np.min(
+                             [z["ceiling_db"] for z in per])),
                          "saving_pct_measured": float(sv.mean()),
                          "map_bits": float(np.mean([p["map_bits"] for p in per])),
                          "hist_pct": (lambda h: (100 * h / h.sum()).tolist())(
@@ -256,7 +270,8 @@ def main():
                   f"{db.mean():.4f}  p95 {np.percentile(db,95):.4f}  "
                   f"max {db.max():.4f}  asan "
                   f"{int((db>a.budget+1e-9).sum())}/{len(per)} "
-                  f"(ulasilamaz {int(sum(not z['feasible'] for z in per))})  "
+                  f"(ulasilamaz {int(sum(not z['feasible'] for z in per))}, "
+                  f"doymus {int(sum(z.get('saturated', False) for z in per))})  "
                   f"harita {np.mean([p['map_bits'] for p in per]):.0f} bit",
                   flush=True)
 
