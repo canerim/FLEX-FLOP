@@ -1,0 +1,117 @@
+\documentclass[10pt]{article}
+\usepackage[letterpaper,margin=0.85in]{geometry}\usepackage{times}\usepackage{graphicx}\usepackage{booktabs}\usepackage{tabularx}\usepackage[font=small,labelfont=bf]{caption}\usepackage{amsmath}\usepackage{xcolor}
+\usepackage[colorlinks,allcolors={rgb:red,0.21;green,0.49;blue,0.74}]{hyperref}
+\setlength{\parskip}{3pt}\setlength{\parindent}{0pt}
+\title{\vspace{-2.2em}What choosing the exit map costs: end-to-end encoder and decoder runtime\\\large DCVC-UF on the 53 CTC intra frames, NoGAN-MS and ELIC on Kodak-24 and CLIC-41}\author{FLEX project}\date{\today}
+\begin{document}\maketitle\vspace{-1.8em}
+\paragraph{Summary.} On 1080p frames a plain DCVC-UF encode (analysis, priors and rANS coding) takes 447\,ms and a plain decode 605\,ms. Guaranteeing $\le$0.1\,dB per frame with the fast oracle raises the encoder to 2.25$\times$ (the extra work equals 1.4 released synthesis passes), and delivers 29.3\,\% decoder MAC saving; the decoder then runs in 86\,\% of the released decoder's time. The same map as first shipped cost 6.78$\times$. A decoder-side router leaves the encoder untouched only without the guarantee (27.4\,\%, 120 of 265 frame-qp over budget, worst 0.278\,dB); with it, the router needs the table (2.60$\times$) or 10 routed decodes (8.95$\times$). Its advantage is side information (8 bits instead of 57 bits per frame, 0.066\,\% of the stream on average), not encoder time. For the in-place gated image decoders the oracle is an offline search of 19--23 table decodes plus 14 search decodes per image.
+
+\section*{1\quad Setup}
+\textbf{Data.} DCVC-UF: the first intra frame of all 53 sequences in DCVC's own CTC configuration (UVG 7, MCL-JCV 30, HEVC B 5, C 4, D 4, E 3), four resolutions from 416$\times$240 to 1920$\times$1080, qp 0, 16, 32, 48, 63 (265 frame-qp). Frames are padded to whole 256-px tiles; rates are real rANS bytes over the true pixel count. Image decoders: Kodak-24 (768$\times$512) and CLIC-41 (professional validation, $\approx$2048$\times$1365).
+\textbf{Models.} DCVC-UF RECIPE512 e15 ladder (6 exits, split depth 2, 256-px tiles, grid seam repair), router head ce\_soft (148k parameters); NoGAN-MS q3 60k (9 gated blocks, 64-px cells); ELIC N=192 with MAC-priced stand-ins (11 gated stages, 256-px cells).
+\textbf{Timing.} NVIDIA RTX A6000, PyTorch, TF32 off, CUDA-synchronised wall clock per stage; the arithmetic coder is the released C++ rANS on the CPU. All stages of one frame are timed back to back, so contention on the shared card affects every regime alike; tables report medians. Timing jitter measured on one 1080p frame repeated 10 times: coefficient of variation 6--51\,\% per stage (Fig.~S1). The DCVC-UF release ships its coder as a CUDA extension we do not build, so the plain pipeline is re-assembled from the model's own modules; the decoder's entropy stage decodes the same symbols in the coder's LIFO order, which is the same work as the sequential decoder.
+\textbf{Budget.} Per-frame loss $\le$0.1\,dB against the released decoder's full-frame reconstruction of the same latent (ratio convention); savings are decoder MAC savings from the measured cost table.
+
+\begin{table}[h]\centering\footnotesize
+\begin{tabularx}{\linewidth}{@{}p{3.2cm}Xp{3.3cm}p{2.3cm}c@{}}\toprule
+Regime & Encoder does, beyond a plain encode & Decoder does & Side information & Guarantee \\\midrule
+Released (no selection) & -- & released synthesis & 0 & -- \\
+Oracle, as first shipped & 6 routed decodes (4 distinct) $\to$ table; 40-step $\lambda$ bisection (GPU); 1 verification decode & parse map; routed synthesis & map, KT-coded & yes \\
+Oracle, fast & 1 tapped all-exits pass $\to$ table; 24-step $\lambda$ bisection (CPU) & parse map; routed synthesis & map, KT-coded & yes \\
+Router, $\beta$ fixed per qp & -- & router head on the shared stem; routed synthesis & 0 (per-qp $\beta$ in the header) & no \\
+Router, $\beta$ searched on the table & 1 tapped pass $\to$ table; stem + router head; 30-step $\beta$ bisection (CPU) & router head; routed synthesis & 8-bit $\beta$ & yes \\
+Router, $\beta$ searched by decoding & stem + router head; 10-step $\beta$ bisection, each step a routed decode & router head; routed synthesis & 8-bit $\beta$ & yes \\
+\bottomrule\end{tabularx}
+\caption{The six regimes. The oracle chooses each tile's exit at the encoder from the tile-by-exit distortion table and one multiplier; the router predicts it at the decoder from the shared stem and one multiplier.}\end{table}
+
+\section*{2\quad DCVC-UF}
+\begin{table}[h]\centering\footnotesize\setlength{\tabcolsep}{3.5pt}
+\begin{tabular}{@{}lrrrrrrrrr@{}}\toprule
+ & \multicolumn{3}{c}{Encoder, 1080p} & \multicolumn{2}{c}{Decoder, 1080p} & \multicolumn{4}{c}{All frame-qp} \\\cmidrule(lr){2-4}\cmidrule(lr){5-6}\cmidrule(l){7-10}
+Regime & ms & $\times$ plain & synth.\ eq. & ms & of released & side (\% bits) & saving (\%) & worst dB & over budget \\\midrule
+Released (no selection) & 447 & 1.00$\times$ & 0.0 & 605 & 100\,\% & 0.000 & 0.0 & 0.000 & 0 \\
+Oracle, as first shipped & 2,974 & 6.78$\times$ & 6.4 & 540 & 86\,\% & 0.066 & 29.3 & 0.139 & 1 \\
+Oracle, fast & 1,030 & 2.25$\times$ & 1.4 & 540 & 86\,\% & 0.066 & 29.3 & 0.139 & 1 \\
+Router, $\beta$ fixed per qp & 447 & 1.00$\times$ & 0.0 & 543 & 88\,\% & 0.000 & 27.4 & 0.278 & 120 \\
+Router, $\beta$ searched on the table & 1,191 & 2.60$\times$ & 1.8 & 543 & 88\,\% & 0.014 & 27.7 & 0.139 & 2 \\
+Router, $\beta$ searched by decoding & 4,093 & 8.95$\times$ & 9.0 & 543 & 88\,\% & 0.014 & 27.6 & 0.139 & 2 \\
+\bottomrule\end{tabular}
+\caption{End-to-end cost per regime. \emph{synth.\ eq.}: encoder work beyond the plain encode in units of one released synthesis pass. Decoder time includes entropy decoding and the latent path; only synthesis changes between regimes.}\end{table}
+
+\paragraph{Decoder.} At 1080p the plain decoder spends 21\,ms in rANS decoding, 181\,ms in the hyper-decoder and spatial prior, and 399\,ms in synthesis; only synthesis is gated. Routed synthesis takes 333\,ms with the oracle map (17\,\% less time for 29\,\% fewer MACs), so the whole decoder runs in 86\,\% of the released time. At 416$\times$240 the tiled routed path is slower than the released decoder (39 against 22\,ms of synthesis): the frame is padded to 512$\times$256 and split into two 256-px tiles, and the per-tile overhead exceeds the MACs saved. The routed decoder is faster end to end from 1280$\times$720 upward (Table~4); below that, per-tile overhead exceeds the MACs saved.
+
+\paragraph{Budget.} Every guaranteed regime keeps every feasible frame at or under 0.1\,dB. The frame-qp listed over budget under R1, R2 (1) and R4, R5 (2) are frames whose deepest-exit tiling floor already exceeds the budget; no map can meet it and the deepest map is sent. Without the per-frame search (router, fixed $\beta$) 120 of 265 frame-qp exceed the budget, worst 0.278\,dB.
+
+\begin{figure}[h]\centering\includegraphics[width=\linewidth]{figs/rt_fig1_timeline_1080p.pdf}
+\caption{\textbf{Where the time goes at 1080p.} \textbf{a}, encoder stages per regime (medians); the ratio is to a plain encode. \textbf{b}, decoder stages; routed synthesis replaces released synthesis and the router head or map parsing is added.}\end{figure}
+
+\begin{table}[h]\centering\footnotesize
+\begin{tabular}{@{}lrrrr@{}}\toprule
+Stage (median ms) & 416$\times$240 & 832$\times$480 & 1280$\times$720 & 1920$\times$1080 \\\midrule
+Encoder: analysis, hyperprior, 4-step spatial prior & 24.9 & 92.7 & 132.2 & 400.7 \\
+Encoder: rANS coding of $z$ and $y$ (CPU) & 35.8 & 52.2 & 30.8 & 40.8 \\
+Decoder: rANS decoding (CPU) & 7.8 & 11.1 & 12.4 & 21.5 \\
+Decoder: hyper-decoder and spatial prior & 14.2 & 41.1 & 74.1 & 181.0 \\
+Decoder: synthesis, released & 21.8 & 95.9 & 138.6 & 398.5 \\
+Decoder: synthesis, oracle map & 39.1 & 99.3 & 146.3 & 332.6 \\
+Decoder: synthesis, router map & 34.5 & 92.9 & 126.4 & 327.6 \\
+Table: 6 routed decodes & 173.9 & 436.8 & 809.7 & 1,987.1 \\
+Table: tapped all-exits pass & 29.4 & 123.7 & 202.2 & 553.9 \\
+Stem (upsample + shared groups) & 9.2 & 31.2 & 52.0 & 144.6 \\
+Router head & 3.1 & 3.9 & 3.7 & 3.4 \\
+$\lambda$ bisection, GPU (40 steps) & 93.2 & 102.5 & 103.2 & 100.6 \\
+$\lambda$ bisection, CPU (24 steps) & 2.7 & 3.2 & 3.1 & 3.3 \\
+$\beta$ bisection on the table, CPU & 0.4 & 0.4 & 0.4 & 0.5 \\
+$\beta$ bisection by 10 routed decodes & 397.0 & 950.7 & 1,688.8 & 3,482.1 \\
+Map entropy coding (KT) & 0.0 & 0.0 & 0.0 & 0.0 \\
+\midrule
+Plain encoder (analysis + rANS) & 60.1 & 143.0 & 168.5 & 446.7 \\
+Plain decoder (rANS + latent + synthesis) & 44.4 & 148.2 & 222.1 & 604.9 \\
+\bottomrule\end{tabular}
+\caption{Every timed stage by resolution (medians over all qp).}\end{table}
+
+\begin{figure}[h]\centering\includegraphics[width=\linewidth]{figs/rt_fig2_resolution.pdf}
+\caption{\textbf{Scaling with frame size.} \textbf{a}, encoder time per frame; \textbf{b}, overhead over a plain encode; \textbf{c}, end-to-end decoder time relative to the released decoder.}\end{figure}
+
+\begin{table}[h]\centering\footnotesize
+\begin{tabular}{@{}lrccccrr@{}}\toprule
+Resolution & frame-qp & oracle, shipped & oracle, fast & router, $\beta$/table & router, $\beta$/decodes & decoder, oracle map & decoder, router \\\midrule
+416$\times$240 & 20 & 6.03$\times$ & 1.49$\times$ & 1.68$\times$ & 7.74$\times$ & 135\,\% & 151\,\% \\
+832$\times$480 & 20 & 5.34$\times$ & 1.92$\times$ & 2.15$\times$ & 8.41$\times$ & 108\,\% & 108\,\% \\
+1280$\times$720 & 15 & 7.38$\times$ & 2.23$\times$ & 2.64$\times$ & 11.13$\times$ & 97\,\% & 93\,\% \\
+1920$\times$1080 & 210 & 6.78$\times$ & 2.25$\times$ & 2.60$\times$ & 8.95$\times$ & 86\,\% & 88\,\% \\
+\bottomrule\end{tabular}
+\caption{Encoder overhead ($\times$ plain encode) and decoder time (\% of released) by resolution.}\end{table}
+
+\begin{figure}[h]\centering\includegraphics[width=\linewidth]{figs/rt_fig3_tradeoff.pdf}
+\caption{\textbf{What the time buys.} \textbf{a}, decoder MAC saving at 0.1\,dB against encoder overhead, all frame-qp. \textbf{b}, side information as a share of the frame's real bitstream, per qp.}\end{figure}
+
+\begin{table}[h]\centering\footnotesize
+\begin{tabular}{@{}lrrrr@{}}\toprule
+qp & frame bits (mean) & map bits (KT) & map / frame & $\beta$ / frame \\\midrule
+0 & 36,350 & 42.8 & 0.152\,\% & 0.0220\,\% \\
+16 & 80,278 & 50.1 & 0.083\,\% & 0.0100\,\% \\
+32 & 167,034 & 60.4 & 0.052\,\% & 0.0048\,\% \\
+48 & 329,316 & 65.7 & 0.029\,\% & 0.0024\,\% \\
+63 & 656,018 & 67.1 & 0.014\,\% & 0.0012\,\% \\
+\bottomrule\end{tabular}
+\caption{Side information against the real rANS stream, all 53 frames. Map bits include 16 bits for $\lambda$'s histogram header.}\end{table}
+
+\section*{3\quad In-place gated image decoders}
+\begin{table}[h]\centering\scriptsize\setlength{\tabcolsep}{2.5pt}
+\begin{tabular}{@{}lrrrrrrrrrrll@{}}\toprule
+Decoder, set & imgs & blocks & configs & encode & decode & table & accounting & search & shipped (decodes' time) & fast (decodes' time) & decodes shipped / fast & saving \% \\\midrule
+NoGAN-MS, Kodak-24 & 24 & 9 & 19 & 31 & 140 & 3,431 & 4,155 & 6,502 & 14.1 s (101) & 8.1 s (58) & 19+14 / 19+1.2 & 18.2 / 15.4 \\
+NoGAN-MS, CLIC-41 & 41 & 9 & 19 & 120 & 507 & 12,771 & 2,036 & 11,296 & 26.2 s (52) & 16.2 s (32) & 19+14 / 19+1.7 & 33.3 / 28.1 \\
+ELIC, Kodak-24 & 24 & 11 & 23 & 81 & 85 & 4,001 & 6,563 & 6,321 & 17.0 s (199) & 11.2 s (131) & 23+14 / 23+1.1 & 14.6 / 14.4 \\
+ELIC, CLIC-41 & 41 & 11 & 23 & 252 & 290 & 14,269 & 3,066 & 10,648 & 28.2 s (97) & 19.1 s (66) & 23+14 / 23+2.6 & 20.8 / 17.5 \\
+\bottomrule\end{tabular}
+\caption{Oracle search per image at 0.1\,dB, medians in ms unless marked. \emph{Shipped}: one decode per uniform configuration, then 14 bisection steps each a real decode with a halo-aware MAC count. \emph{Fast}: the same table, bisection on the table's own estimate of the delivered loss, then verification decodes and back-off until feasible. \emph{Encode} is the analysis transform only.}\end{table}
+\begin{figure}[h]\centering\includegraphics[width=\linewidth]{figs/rt_fig4_image_decoders.pdf}
+\caption{\textbf{Image decoders.} \textbf{a}, per-image search time and its parts, shipped and fast. \textbf{b}, saving delivered. \textbf{c}, full decodes per image.}\end{figure}
+
+\paragraph{Reading.} In DCVC-UF the tiles are independent, so one tapped pass through the per-tile trunk gives every exit's distortion and the encoder's selection is cheap. In the image decoders a block runs wherever any cell within its receptive field asks for it, so the delivered loss and cost of a map are only known by decoding it; the oracle there is a measurement procedure, and its cost is dominated by the per-configuration decodes and by the halo-aware MAC accounting, which is bookkeeping and can be vectorised.
+
+\begin{figure}[h]\centering\includegraphics[width=0.5\linewidth]{figs/rt_figS1_jitter.pdf}
+\caption{\textbf{S1.} Coefficient of variation of each stage over 10 repeats of one 1080p frame, qp 32.}\end{figure}
+\end{document}
