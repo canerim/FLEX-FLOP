@@ -1,0 +1,19 @@
+{
+  "started_utc": "2026-09-27T15:37:26Z",
+  "minimum_finish_utc": "2026-09-27T21:37:26Z",
+  "state": "active",
+  "scope": "DCVC-UF spatial early exit and independent depth codecs",
+  "constraints": [
+    "Preserve frozen official training recipe and running jobs",
+    "CPU-only supporting analysis while training GPUs are occupied",
+    "No invented empirical results",
+    "Keep ongoing-training diagnostics separate from final manuscript evidence"
+  ],
+  "workstreams": [
+    "Matched-epoch and matched-rate learning diagnostics, interpolation sensitivity and released reference",
+    "Depth-aware real-bitstream evaluation path and isolated decoder correctness",
+    "Spatial-allocation controls, leakage and system-cost accounting",
+    "Literature positioning, testable ablations, manuscript and reproducible figures",
+    "Regular training health checks and reproducible research diary"
+  ]
+}

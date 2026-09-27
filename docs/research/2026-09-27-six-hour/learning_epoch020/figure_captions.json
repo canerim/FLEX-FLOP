@@ -1,0 +1,10 @@
+[
+  {
+    "name": "fig_learning_matched_rate",
+    "caption": "Interim monitoring only. Per-image log-rate linear interpolation, four fixed centre crops. No confidence interval or final capacity conclusion. The released anchor has a different training history."
+  },
+  {
+    "name": "fig_qp_and_interpolation",
+    "caption": "Panel a decomposes the same-QP32 quality difference into the raw difference and the linear log-rate adjustment to each crop's D2 QP32 bitrate. Panel b compares two interpolators at fixed .1/.2/.4 estimated bpp; their difference is sensitivity, not a statistical interval. Both panels use four fixed crops at the same ongoing-training epoch."
+  }
+]

@@ -1,0 +1,10 @@
+[
+  {
+    "name": "fig_crossfit_budget_risk",
+    "caption": "Five-fold sequence-disjoint calibration of a fixed router, Bayer dither and uniform depth. Solid lines fit the training mean; dashed lines fit its 90th percentile. Every frame-QP remains, including outcomes from infeasible calibration groups. The 0.05 dB Q90 target is infeasible for groups covering 159/265 held-out cases in each policy. These are padded source-error table diagnostics, not delivered mixed-image quality or an untouched test set."
+  },
+  {
+    "name": "fig_crossfit_loss_distribution",
+    "caption": "At a 0.1 dB table-loss target, held-out loss distributions differ substantially between training-mean and training-Q90 calibration. Curves are descriptive ECDFs of 265 correlated frame-QP observations, not confidence bands or final cropped reconstruction errors. No source-conditioned test fallback is applied."
+  }
+]
