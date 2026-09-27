@@ -35,10 +35,11 @@ shrinking tile batch. We do not claim that content-dependent codec
 computation itself is new.
 
 \paragraph{Complete-codec selection.}
-Spatial competition selects specialized codecs by region and communicates
-a mode map~\cite{blard2026spatial}. It is the closest comparison for our
-planned independent depth bank, where each expert owns its analysis and
-entropy parameters. That system differs from shared-latent early exit:
-choosing an expert before encoding changes both its representation and rate.
-The six-depth control therefore tests a separate capacity frontier rather
-than retroactively adding shallow exits to the present checkpoint.
+Spatial competition trains content-specialized codecs, compares their
+rate--distortion costs by region and communicates a mode
+map~\cite{blard2026spatial}. Its mode search evaluates multiple complete
+codecs at the encoder. Our planned depth bank instead varies synthesis
+capacity and tests a predictor that selects a codec before encoding.
+Each expert still owns its analysis and entropy parameters, so selection
+changes both representation and rate. This is a separate capacity frontier,
+not additional exits of the present shared-latent checkpoint.

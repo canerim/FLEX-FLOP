@@ -179,6 +179,57 @@ cost monotonicity, and checks that enumeration never discards a better
 archived feasible saving. An independent three-exit example verifies the
 non-monotone failure mechanism against a dense control grid.
 
+\section{Sequence-Disjoint Control Calibration}
+\label{sec:crossfit}
+
+The source-calibrated sweep answers which allocation a policy can attain
+when its scalar control is tuned for each image. It does not establish what
+happens when that control is fixed before seeing a new source image.
+We therefore add a CPU diagnostic that keeps the router checkpoint and
+archived tile tables fixed while separating control calibration by sequence.
+All five QPs of a sequence stay in one fold. Sorting sequence-name hashes
+and assigning ranks modulo five yields folds of 10/10/11/11/11 sequences.
+For each QP, controls are fitted on four folds and evaluated on the fifth;
+each of the 265 frame--QP pairs is evaluated exactly once per setting.
+The data have previously informed development, so this is a calibration
+diagnostic, not an untouched external test.
+
+We search a fixed router grid of 4,097 prices in $[-256,256]$, which reaches
+both all-shallow and all-deep endpoints on every frame. Dither uses 385
+mixture controls from zero to three; uniform uses the four reachable depths.
+Among controls satisfying a training-fold mean or 90th-percentile table-loss
+target, we maximise mean MAC saving. If none satisfies the target, we use
+the lowest training-risk control and explicitly retain its infeasibility.
+No test-source-conditioned fallback is applied. A held-out-label
+perturbation check confirms that test losses cannot change the fitted control.
+
+At a 0.1\,dB mean target, router and dither save 27.379\% and 24.608\%
+MACs, with mean held-out losses of 0.1006 and 0.0997\,dB. Nevertheless,
+122/265 and 123/265 cases exceed the target. Fitting the training-fold
+90th percentile reduces these counts to 32 and 29, while savings become
+17.586\% and 15.558\%. At the tighter 0.05\,dB Q90 target, calibration
+groups covering 159/265 test cases are infeasible for each policy; these
+cases remain in every reported aggregate.
+
+\begin{figure*}[t]
+\centering
+\includegraphics[width=\textwidth,trim=0 10 0 22,clip]{figs/crossfit20260927/fig_crossfit_budget_risk.pdf}
+\caption{\textbf{A source-free control trades arithmetic savings against tail risk.}
+Controls are calibrated on other sequences, separately at each QP, using
+the training mean (solid) or 90th percentile (dashed). All 265 pairs are
+retained, including cases from infeasible calibration groups.
+\textbf{a}, Modelled MAC saving. \textbf{b}, Fraction exceeding the table-loss
+target. These padded source-error diagnostics do not establish final mixed-image
+quality, a per-frame guarantee or complete decoder speed.}
+\label{fig:crossfit}
+\end{figure*}
+
+This distinction changes the deployment question: an average quality target,
+a bound on the frequency of large losses, and encoder-side verification of
+every frame are different contracts. Our table result supports investigating
+source-free control, but repair, cropping and reference alignment still
+require final-reconstruction replay before a delivered-quality claim.
+
 \section{Separating the Histogram from Spatial Placement}
 
 A map can save arithmetic by selecting many cheap exits even if their

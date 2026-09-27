@@ -135,6 +135,17 @@ dönük, sınırlı aday havuzu analizidir; seçilen haritalar gerçektir ama
 seçim için gereken denemelerin encoder maliyeti hesaba dahil değildir.
 Dolayısıyla henüz yeni bir deployable router veya net hız sonucu sayılmaz.
 
+R1 için ek bir **CPU kalibrasyon teşhisi** tamamlandı: aynı sequence'in beş
+QP'si birlikte tutularak beş katlı ayrım yapıldı; scalar kontrol diğer dört
+grupta seçildi. 0,1 dB ortalama hedefinde router/dither tasarrufu
+%27,379/%24,608, hedef aşımı 122/265 ve 123/265. Eğitim gruplarının Q90
+kaybını sınırlayınca tasarruf %17,586/%15,558, aşım 32/265 ve 29/265 oluyor.
+Bu, padded kaynak-hata tablosudur; veri daha önce geliştirmede incelendi.
+Dolayısıyla final mixed reconstruction, dış test başarısı veya kare başına
+garanti sayılmaz. Sonraki R1 deneyi seçilmiş kontrolleri final görüntüde
+decode etmeli ve ortalama hedef ile tail-risk hedefini ayrı raporlamalı.
+Veri: `data/crossfit20260927/analysis.json`; supplement S5.
+
 ## 4. Denemeye değer somut yöntem: kazanç ve maliyeti tahmin eden router
 
 “Karmaşık görüntü → derin model” etiketi yerine MLP, her expert için ucuz

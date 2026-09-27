@@ -18,8 +18,10 @@ exits per expert would add another axis and is outside the current design.
 The principal empirical limitation is the gap between allocation evidence
 and a complete codec benchmark. Current controls use source calibration,
 reported mixed losses use the fine-tuned full-depth anchor, and MAC counts
-exclude routing and signalling. A common-reference replay and a held-out
-control sweep are required before a practical guarantee can be claimed.
+exclude routing and signalling. A sequence-disjoint control diagnostic in
+the supplement exposes the difference between mean loss and tail risk;
+common-reference final-image replay is still required before a practical
+guarantee can be claimed.
 Actual bytes and paired wall-clock timings must include entropy work,
 packing, tile movement and fallbacks. Boundary crops and perceptual metrics
 are also needed; RGB PSNR alone does not establish visual equivalence.
