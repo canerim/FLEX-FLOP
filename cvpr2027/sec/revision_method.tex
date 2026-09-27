@@ -1,87 +1,150 @@
-\section{Spatial Early Exit under a Quality Target}
+\section{FLEX-UF: Spatial Early Exit}
 \label{sec:method}
 
-\subsection{Shared representation and conditional execution}
-Let $\hat y$ denote the decoded latent of a fixed analysis transform and
-entropy model. A full-frame upsampling stage and four shared trunk blocks
-produce features with 384 channels at one eighth of the RGB resolution.
-The pinned e15 configuration partitions this canvas into $32\times32$
-feature tiles, corresponding to $256\times256$ RGB regions. The remaining
-eight blocks are executed in pairs. Although the model exposes six nominal
-exit indices, the first two lie before the split and are clamped: inference
-has four distinct reachable depths, $\mathcal K=\{6,8,10,12\}$.
+\subsection{A shared representation, a variable synthesis depth}
+Let $\hat y$ be the recovered latent of the fixed DCVC-UF analysis transform
+and entropy model. The synthesis network upsamples it by two and processes
+384-channel features at one eighth of the RGB resolution. We divide its
+twelve trunk blocks into six consecutive pairs. A split index determines
+which pairs run on the full frame and which run conditionally on tiles.
+In the evaluated configuration, four blocks form the common stem and the
+remaining eight form a four-stage conditional suffix.
 
-Each active tile traverses the next pair of blocks. Tiles assigned to that
-depth pass through an exit-specific pointwise adapter and leave the active
-batch; the others continue. The adapted tiles are stitched into a feature
-canvas. A grid-conditioned repair and the shared output head reconstruct the
-image. The halo-free tiled trunk uses replicate padding. This reduces work
-only when the execution path actually removes departed tiles; evaluating all
-branches and masking their outputs would have different runtime behaviour.
-
-\subsection{Selection objective and its approximation}
-For tile $t$ and exit $k$, let $M_{t,k}$ be the source MSE measured from a
-candidate tiled reconstruction, and let $R$ be the source MSE of the full-depth
-released-weight reference on the padded source. The search uses the table surrogate
+The stem output is partitioned into $32\times32$ feature tiles, each
+covering $256\times256$ RGB pixels. For a tile assigned depth $k$, let
+$f_t^{(k)}$ be its feature after the corresponding block pair and let
+$A_k$ be its adapter. The complete image is reconstructed as
 \begin{equation}
- \widetilde\Delta(\mathbf k)=10\log_{10}
- \frac{N^{-1}\sum_{t=1}^{N} M_{t,k_t}}{R}.
- \label{eq:surrogate}
+ \hat x_{\mathbf k}=H\!\left(q\odot G\!\left[
+ \operatorname{stitch}_t A_{k_t}(f_t^{(k_t)})\right]\right),
+ \label{eq:decode}
 \end{equation}
-The recorded cost $c_k$ is normalised to a full-frame reference decode. For
-equal padded tiles, the cost model gives
+where $G$ is grid-conditioned repair, $q$ is the decoder's quality scaling,
+and $H$ is the common output head, including pixel shuffle. Adaptation acts
+on features before the shared head, so tiles with different stopping depths
+need not be stitched directly in RGB space.
+
+\paragraph{Reachable depth and actual execution.}
+Although the configuration contains six nominal exit indices, the first two
+precede the split and are clamped in this evaluation. The distinct reachable
+depths are $\mathcal K=\{6,8,10,12\}$. At each conditional stage the
+implementation gathers only the surviving tiles, executes the next block
+pair, and writes departing tiles through their adapters. A deeper tile
+reuses all computation already performed. Evaluating all four candidates
+and masking their RGB outputs would not implement this execution saving.
+For the recorded example in \cref{fig:system}, the active population decreases
+from 40 to 27, seven and three tiles.
+
+\subsection{Exit adaptation and boundary consistency}
+
+An intermediate feature is not automatically compatible with the final head.
+The exit adapter supplies the missing transformation with pointwise residual
+operators. Its residual output is zero-initialised, preserving the inherited
+feature at initialisation. The evaluated depth-scaled adapters allocate
+capacity according to the depth they replace. Pointwise operators avoid
+introducing a new spatial receptive field at each exit; their arithmetic is
+included in the per-exit cost model. The deepest exit uses an identity
+connection rather than an additional learned adapter.
+
+Independent tile execution still removes context from the trunk's spatial
+operators. The conditional trunk uses replicate padding without a halo.
+After stitching, a depthwise spatial filter and pointwise mixing correct the
+full feature canvas. A learned gate indexed by position within the tile
+gives the repair access to the known boundary lattice. The head then operates
+on the complete canvas. This design spends a shared output-stage cost to
+recover boundary context instead of expanding every conditional block with
+overlapping halos. Whether that trade is favourable is an empirical question:
+repair removal, halo size and patch size belong in separate matched
+ablations, with retraining distinguished from an inference-only intervention.
+
+\subsection{Training the exits and the stopping predictor}
+
+The shared-latent model is initialised from released DCVC-UF weights.
+Analysis and entropy parameters remain frozen; the synthesis network,
+adapters and repair are fine-tuned. Training samples tile depths and applies
+reconstruction supervision through the mixed tiled path. Thus the adapters
+learn under the same stitching and full-frame head used at inference. The
+training implementation also supports a full-depth reconstruction anchor
+against the frozen release and adjacent-exit feature distillation.
+The inspected e15 training configuration enables both terms. Its objective can be written as
 \begin{equation}
- C(\mathbf k)=N^{-1}\sum_t c_{k_t},\qquad
- S(\mathbf k)=100\,[1-C(\mathbf k)].
+ \mathcal L=\mathbb E_{\mathbf k}\!\left[R+\lambda D(x,\hat x_{\mathbf k})\right]
+ +a\mathcal L_{\rm anchor}+b\mathcal L_{\rm feature}.
+ \label{eq:training}
+\end{equation}
+Here the latent-rate term $R$ is shared across exits. With the front end
+frozen it does not optimise exit-dependent rate. The archived fine-tuning
+configuration uses 512-pixel crops and batch size eight; it is distinct from
+the new full 105-epoch official-recipe depth study in \cref{sec:depth}.
+The supplement records the available training provenance and its limits.
+
+The evaluated stopping predictor uses a 384-to-48 pointwise stem projection,
+per-tile mean and standard deviation, and the normalised QP. A two-layer
+256-unit MLP predicts exit scores. Inspection of the actual router checkpoint
+shows that its live inputs are \emph{stem and QP}; the more general
+implementation contains latent, entropy-scale and bit-feature branches, but
+these do not supply content information in this run. This distinction is
+important for reproducing the model rather than merely its class name.
+
+For tile errors $M_{t,k}$ and normalised costs $c_k$, the training target is
+softened from the Lagrangian $L_{t,k}=M_{t,k}+\lambda_c c_k$:
+\begin{equation}
+ p^*_{t,k}\propto\exp\!\left[-\frac{L_{t,k}-\min_j L_{t,j}}
+ {\tau\,\max(\max_j L_{t,j}-\min_j L_{t,j},\epsilon)}\right].
+ \label{eq:softtarget}
+\end{equation}
+The checkpoint records $\lambda_c=1.3\times10^{-5}$ and $\tau=0.1$.
+Soft-label cross-entropy, together with the implementation's regret term,
+reduces the penalty for confusing nearly equivalent exits. This loss trains
+an allocation predictor; it is not a calibrated bound on final image error.
+
+\subsection{Stopping under a quality target}
+
+For equal padded tiles, the arithmetic model is
+\begin{equation}
+ C(\mathbf k)=\frac1N\sum_t c_{k_t},\qquad
+ S(\mathbf k)=100[1-C(\mathbf k)].
  \label{eq:cost}
 \end{equation}
-Source-informed selection chooses
-\begin{equation}
- k_t(\lambda)=\arg\min_k\{M_{t,k}+\lambda c_k\},
- \label{eq:search}
-\end{equation}
-with a per-frame search for the quality target. We call this procedure
-\emph{source-informed search}, rather than a certified global optimum of the
-final reconstruction problem.
+Shared stem and output work, exit adapters and conditional depth are included
+in $c_k$. Router execution, signalling and general system overhead are
+outside this decoder MAC quantity. The four costs are approximately
+$\{0.609,0.758,0.870,1.010\}$ relative to full-frame synthesis. In particular,
+a tiled all-deep map can cost more than the full-frame reference because repair
+is still executed.
 
-The distinction is substantive. Tables are selected on the padded RGB image;
-reported loss uses the final mixed reconstruction and the full-frame
-\emph{fine-tuned e15} reconstruction, both cropped to the source extent.
-The two anchors differ in synthesis weights as well as spatial support;
-the supplement traces both evaluation paths and the checkpoint comparison.
-In addition, full-frame repair and head operations couple
-neighbouring tiles. Consequently, $\widetilde\Delta$ is a selection surrogate,
-not an identity for delivered distortion. We report both the target and the
-measured loss and count crossings of the nominal threshold explicitly.
-These crossings do not isolate enforcement error under a common reference;
-that requires a new evaluation against both cropped anchors.
-
-\subsection{Router and content-blind controls}
-The router projects intermediate synthesis features and latent/entropy-scale
-information, pools them per tile and predicts exit scores. Given log scores
-$\ell_{t,k}$, the recorded decision is
+Source-informed search minimises $M_{t,k}+\lambda c_k$ per tile and adjusts
+$\lambda$ for a target table loss. The learned alternative uses
 \begin{equation}
- k_t(\beta)=\arg\max_k\{\ell_{t,k}-\beta c_k\}.
+ k_t(\beta)=\arg\max_k\{\ell_{t,k}-\beta c_k\},
  \label{eq:router}
 \end{equation}
-The evaluated sweep fits $\beta$ separately on each source frame's table.
-This measures the attainable allocation with source calibration. Deployment
-with a fixed, held-out control parameter is a separate experiment.
-Increasing $\beta$ makes the selected cost non-increasing, but need not make
-source distortion monotone. The supplement audits the recorded bisection
-against the finite set of assignments along this control path.
+where $\ell$ denotes log scores. Uniform depth selects one exit per frame.
+Bayer dithering mixes adjacent exits with a fixed spatial ordering. Its
+mixture fraction is calibrated under the same target, so it controls for
+finer average depth without predicting spatial difficulty.
 
-Uniform depth selects one reachable exit for the whole frame. Bayer dithering
-mixes two adjacent exits according to a fixed spatial ordering, with its
-mixture fraction selected under the same table-based quality target. It has
-no content predictor but can realise finer average costs than uniform depth.
-All four methods use the same checkpoint and per-exit cost vector.
+In the recorded sweep, all controls are calibrated per source frame using
+stored error tables. This is an attainable allocation study, not a test of
+autonomous held-out calibration. Increasing $\beta$ cannot increase selected
+cost, but source distortion need not be monotone; the supplement audits the
+finite assignment path for both router and dither.
 
-\subsection{Rate and decision information}
-Keeping the coded latent fixed does not make all routing modes byte-identical.
-Encoder-selected maps require a communicated decision representation. A
-source-calibrated decoder router also needs its control parameter to be
-communicated or otherwise reproduced. The curves in this study model decoder
-MACs and do not add router cost or decision signalling to that quantity.
-They therefore isolate allocation quality; a deployment comparison must
-add those costs and verify actual encoded bytes separately.
+\subsection{Quality references and decision information}
+
+The table target compares padded RGB candidate errors to a released-weight
+full-depth reference. Final reported loss instead compares the cropped mixed
+output to the cropped, fine-tuned e15 full-frame output. These anchors are
+not interchangeable: the encoder/entropy weights match, while inherited
+synthesis weights have changed. Full-frame repair also couples neighbouring
+tiles. A table threshold therefore does not guarantee the same numerical
+loss after final reconstruction. We retain this distinction in the nominal
+sweep and add a retrospective common-reference delivered-loss comparison.
+
+The information path also determines the deployment cost. Encoder-selected
+maps require side information. A source-calibrated router needs its control
+parameter communicated or reproducibly recovered. A decoder-local router
+with a fixed validation-selected control can avoid a per-frame source table,
+but its quality--cost frontier must be measured separately. Common latents
+establish a shared payload opportunity; they do not make unmeasured routing
+headers or complete bitstreams free.

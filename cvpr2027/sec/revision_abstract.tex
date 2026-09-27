@@ -1,21 +1,21 @@
 \begin{abstract}
-Spatially adaptive decoding can save computation by stopping easy regions
-early, but a large total saving need not imply a large benefit from content
-adaptation. We study this distinction in the intra decoder accompanying
-DCVC-UF. A shared synthesis trunk feeds tile-level exits, pointwise adapters
-and a full-frame reconstruction head, while the analysis transform and entropy
-model remain fixed. We compare source-informed exit search and a learned
-router with uniform depth and ordered dithering on the same recorded mixed
-reconstructions. Across 53 first intra frames and five quality indices, the
-router saves \MainRouterSaving\% of modelled decoder multiply--accumulates at
-a 0.1\,dB target, compared with \MainDitherSaving\% for dithering on 263 common
-frame--quality pairs. The paired advantage is \MainPremium\ percentage points
-and falls to \LoosePremium\ points at a 0.3\,dB target as the exit ladder
-saturates. A reference audit shows that selection and final reporting use
-different reconstruction anchors, preventing a delivered-quality guarantee
-from the nominal target alone. Historical timing isolates a further cost:
-acquiring source-error tables at the encoder.
-These findings identify where spatial routing adds value and which quality,
-signalling and execution costs must be included before arithmetic savings can
-be interpreted as practical acceleration.
+A fast learned codec still spends the same synthesis depth on every image
+region. We introduce FLEX-UF, a spatial early-exit design for the intra
+decoder of DCVC-UF that makes this depth a local decision. A shared latent
+and full-frame stem feed a nested decoder; tiles leave through pointwise
+adapters, while a shared repair and reconstruction head restore a complete
+image. The design reuses computation across exits and preserves the learned
+representation. We study source-informed selection and learned routing
+against uniform depth and ordered dithering on 53 intra frames at five
+quality indices. At a nominal 0.1\,dB target, the router removes
+\MainRouterSaving\% of modelled decoder multiply--accumulates, including
+\MainPremium\ percentage points beyond dithering. A retrospective comparison
+under a common RGB-loss cap against fine-tuned full-depth synthesis retains
+a 2.93-point margin across all
+265 frame--quality pairs. The benefit contracts as the shallowest exit
+saturates, identifying when spatial adaptation is useful. These results
+establish an arithmetic--quality trade-off under source-calibrated control;
+complete bitstream latency remains to be measured. A controlled
+2/4/6/8/10/12-block study is specified to test how shared early exits compare
+with independently trained depth-reduced DCVC-UF codecs.
 \end{abstract}

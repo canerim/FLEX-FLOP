@@ -36,6 +36,10 @@ encoder/entropy tensors with no changes. All 143 inherited synthesis tensors
 that can be compared have changed, with a maximum absolute parameter
 difference of 0.2481. Thus the reporting path cannot be identified with
 released synthesis merely because it executes all twelve trunk blocks.
+After exact key remapping, all 398 inherited warm-start tensors also match
+the archived official D12 release. Extra adapter/router tensors are outside
+this comparison. This second check ties the inspected warm start to the
+released parameters without assuming that its filename proves provenance.
 
 This distinction limits the interpretation of threshold crossings. The
 recorded 7/263 RGB and 49/263 YUV losses above a nominal 0.1\,dB target combine
@@ -52,6 +56,19 @@ should trigger an explicit fallback whose bytes and runtime are recorded.
 
 \begin{figure*}[t]
 \centering
+\includegraphics[width=\textwidth]{figs/refresh20260927/fig3_delivered_quality.pdf}
+\caption{\textbf{Nominal targets and final reporting answer different questions.}
+\textbf{a}, Recorded average cropped RGB loss against MAC saving.
+\textbf{b}, Router RGB and YUV 6:1:1 loss distributions at a nominal
+0.1\,dB target. \textbf{c}, Counts above that numerical target, among the
+263 common cases and with $10^{-4}$\,dB tolerance. Selection uses a released
+reference on padded RGB; reporting uses cropped e15 full-frame synthesis.
+The counts therefore do not isolate a common-reference guarantee failure.}
+\label{fig:nominalquality}
+\end{figure*}
+
+\begin{figure*}[t]
+\centering
 \includegraphics[width=\textwidth]{figs/extended20260927/figS1_reference_protocol.pdf}
 \caption{\textbf{Reference and support are part of the measurement.}
 Candidate tile errors come from e15, whereas the table denominator comes
@@ -60,6 +77,48 @@ full-depth e15 reconstruction. The CPU tensor comparison establishes a
 weight difference in the inspected checkpoints. The figure traces code
 paths and does not depict newly decoded images.}
 \label{fig:anchors}
+\end{figure*}
+
+\section{What Additional Synthesis Depth Buys}
+
+Each column of the archived source-error table was produced by decoding a
+uniform-depth map and measuring per-tile source MSE. Its equal-area tile
+average is therefore the padded RGB MSE of that actual uniform
+reconstruction. Comparing this mean to the separately evaluated released
+reference gives mean losses of 0.2045, 0.0968, 0.0605 and 0.0379\,dB for
+6/8/10/12 blocks over all 265 pairs. The corresponding modelled MAC savings
+are 39.12\%, 24.22\%, 13.03\% and $-0.95$\%. The negative all-deep saving
+reflects shared repair overhead relative to the full-frame reference.
+These values use padded support and cannot substitute for cropped
+released-reference replay.
+
+For adjacent depths, the local quality improvement is
+$g_t=10\log_{10}(M_{t,k}/M_{t,k+1})$. The frame-median improvement, averaged
+across pairs, is 0.0993\,dB for 6-to-8 blocks, 0.0320\,dB for 8-to-10,
+and 0.0213\,dB for 10-to-12. The respective mean within-frame interquartile
+ranges are 0.0748, 0.0340 and 0.0238\,dB. This quantifies both diminishing
+returns and variation within the same image. The average fractions of tiles
+whose error increases are 4.37\%, 11.55\% and 11.41\%; deeper synthesis is
+not uniformly better at every location.
+
+\Cref{fig:exitprofile} uses equal frame--QP weighting, rather than letting
+larger images dominate through their tile counts. Sequence-cluster intervals
+retain all five QPs together. Each tile comparison still changes the depth
+of its neighbours because the underlying maps are uniform. It is a
+conditional reconstruction diagnostic, not a causal one-tile intervention
+or a completed independent-codec depth ablation.
+
+\begin{figure*}[t]
+\centering
+\includegraphics[width=\textwidth]{figs/extended20260927/figS6_exit_depth_profile.pdf}
+\caption{\textbf{The value of additional depth varies across regions.}
+\textbf{a}, Uniform-depth padded RGB quality against the released anchor
+and the recorded MAC model. \textbf{b}, Mean frame-median tile improvement
+and mean within-frame IQR for adjacent depths. \textbf{c}, Mean fraction of
+tiles whose error increases. Error bars are 95\% sequence-cluster intervals.
+These are actual archived uniform reconstructions; neighbouring depths
+change together, and independent shallow codecs are not represented.}
+\label{fig:exitprofile}
 \end{figure*}
 
 \section{Auditing the Scalar Control Search}
@@ -158,6 +217,94 @@ final-image quality or latency.}
 \label{fig:control}
 \end{figure*}
 
+\section{A Common Cap on Delivered RGB Loss}
+
+The stored mixed reconstructions permit a second comparison under a common
+reporting anchor. For each frame--QP pair and policy, we collect its up to
+six archived nominal-budget maps, deduplicate identical maps, and retain
+only candidates whose measured cropped RGB loss meets the chosen cap,
+with tolerance $10^{-4}$\,dB. The evaluated full-frame e15 reconstruction
+is an explicit fallback with zero relative loss and zero MAC saving.
+The cheapest eligible candidate is selected; ties prefer lower loss.
+
+This keeps all 265 pairs at every cap. At 0.1\,dB, the retained maps save
+29.19\% of modelled decoder MACs for source-informed search, 27.75\% for
+the router, 24.81\% for dithering and 22.98\% for uniform depth.
+The router--dither difference is 2.93 percentage points, with a paired
+95\% sequence-cluster interval of [2.11,3.79]. Their mean achieved RGB
+losses are 0.0786 and 0.0791\,dB, respectively. Full-frame fallback is
+selected for one router case, two search cases, two dither cases and
+eleven uniform cases. At a 0.3\,dB cap, the routing margin falls to
+0.35 points [0.11,0.64] (\cref{fig:deliveredcap}).
+
+Every selected output was measured in the original archive, and no new
+image or interpolated operating point is introduced. This diagnostic is
+nevertheless retrospective and source-aware: it selects among candidates
+after their final quality is known. It neither accounts for the cost of
+obtaining those candidates nor establishes an autonomous policy. Its finite
+candidate pools are not exhaustive, and its reference is fine-tuned e15,
+not the released model. Within those boundaries, the observed routing
+margin survives both a common delivered-loss cap and explicit fallbacks.
+
+A descriptive influence check removes each sequence with all five QPs.
+At 0.1\,dB, the remaining mean router--dither margin ranges from 2.80 to
+3.12 points; this sensitivity range is not a confidence interval. Each QP
+also has a positive mean margin. Removing the three pairs where either
+method falls back leaves 2.91 points over 262 pairs, although this restricted
+subset changes the estimand. At 0.5\,dB, 262 pairs tie and all three positive
+differences belong to one sequence. These checks are reproducible from
+\texttt{cap\_influence\_audit.json}.
+
+\begin{figure*}[t]
+\centering
+\includegraphics[width=\textwidth]{figs/extended20260927/figS3_delivered_cap.pdf}
+\caption{\textbf{Controlling delivered loss within the recorded candidate pool.}
+\textbf{a}, Maximum saving among actually measured eligible outputs,
+including a full-frame e15 fallback. \textbf{b}, Paired router--dither
+difference with 95\% sequence-cluster intervals. \textbf{c}, Explicit
+fallback counts. All 265 pairs are retained, with RGB-loss tolerance
+$10^{-4}$\,dB. This retrospective source-aware comparison excludes the
+cost of candidate generation and makes no released-reference or latency claim.}
+\label{fig:deliveredcap}
+\end{figure*}
+
+\section{Shared-Exit Training Provenance}
+
+The released warm start, shared-exit fine-tuning and independent depth
+trainings are three distinct checkpoints/protocols. The archived shared-exit
+metadata lists 379,614 training images, batch size eight and 16 configured
+fine-tuning epochs. The inspected launcher selects 512-pixel crops through
+the late part of the upstream schedule, freezes the encoder/entropy path,
+and enables mixed-tile training, depth-scaled adapters, grid repair,
+adjacent feature distillation and a full-depth anchor. Its anchor and
+distillation coefficients are 10 and 1, respectively; the anchor code scales
+its batch-mean reconstruction error by the batch-mean $\lambda$ unless the
+separate per-sample option is enabled. The e15 checkpoint stores weights,
+epoch and architectural configuration, not the complete launch command.
+Thus the launcher and metadata document the inspected intended setup,
+rather than proving every historical process argument.
+
+The evaluated router checkpoint explicitly stores live inputs
+\texttt{stem,qp}, soft-label cross-entropy, temperature ratio 0.1,
+training cost weight $1.3\times10^{-5}$, 48 stem projection channels and
+256 hidden units. It has no spatial-context convolution. General-purpose
+latent/scale/bit pathways remain in the class, but do not provide variable
+content to this checkpoint. The decoder feature is pooled by tile mean and
+standard deviation, and the QP is divided by 63. Checkpoint inspection is
+recorded in \texttt{design\_audit.json}. This corrects the broader description
+one would obtain by reading the router class defaults alone.
+
+The companion run record matches the checkpoint path, codec epoch, live
+inputs and stored evaluation statistics. It records 6,000 updates, batch
+size six, 512-pixel crops, seed zero, initial learning rate $10^{-3}$ and a
+regret coefficient of one. The inspected trainer uses AdamW with weight
+decay $10^{-4}$, cosine scheduling and gradient clipping at norm one on
+Open Images. Its online agreement monitor withholds tiles within training
+images; the final label-agreement pass draws fresh images from the same
+shuffled epoch. Neither statistic is used as the manuscript's reconstruction
+or held-out calibration result. The stored head contains 148,176 parameters,
+including its inactive input branches.
+
 \section{The Independent Depth Study}
 
 The ongoing experiment retains the first two, four or six synthesis trunk
@@ -167,6 +314,50 @@ alongside the decoder. Each model consequently has its own representation,
 distinct from the shared-latent exits evaluated in the main paper.
 \Cref{fig:bank} shows a possible later deployment path, not an implemented
 six-expert result.
+
+\paragraph{The pinned training protocol.}
+The source is Microsoft's image-training recipe at commit
+\texttt{cbdae87a5445}~\cite{microsoft2026training}. All 384,795 images in
+Open Images train\_0/1/2 are retained as lossless decoded-RGB PNGs, with
+pixel equality checked during preparation. Each independent model uses
+seed 42, Xavier initialisation, batch size 16, AdamW with the upstream
+defaults, and gradient clipping at norm 0.1. QP is sampled from 0--63 with
+logarithmic $\lambda$ interpolation from 10 to 2048. The original loss,
+including its literal 0.0833 coefficient, and the upstream crop, flip and
+colour transforms are retained. \Cref{tab:training} records the full
+105-epoch schedule. There are 24,049 batches per epoch and 2,525,145 scheduled updates
+per model. With the official shuffled \texttt{drop\_last=True}, eleven
+images per epoch do not enter a batch; no image is permanently excluded
+from the training manifest.
+
+Training uses FP32 with the upstream TF32 flags and
+\texttt{torch.compile}, with \texttt{fallback\_random=True} to retain the
+PyTorch random-number path. AMP is disabled. The instrumented eager step
+was checked against the upstream step at identical inputs and RNG state.
+Compilation can change floating-point operation order, so protocol parity
+does not imply bitwise-identical training trajectories. Checkpoint manifests
+retain the execution mode and source hashes.
+
+\begin{table}[t]
+\centering
+\caption{\textbf{Unshortened official image-training schedule.}
+Epoch indices are zero-based. Each row applies to D2, D4 and D6; the
+architectural intervention is the retained synthesis depth.}
+\label{tab:training}
+\begin{tabular}{lrr}
+\toprule
+Epochs & RGB crop & Learning rate \\
+\midrule
+0--44 & $256^2$ & $2\times10^{-4}$ \\
+45--69 & $256^2$ & $5\times10^{-5}$ \\
+70--89 & $256^2$ & $10^{-5}$ \\
+90--94 & $512^2$ & $2\times10^{-4}$ \\
+95--98 & $512^2$ & $5\times10^{-5}$ \\
+99--102 & $512^2$ & $10^{-5}$ \\
+103--104 & $512^2$ & $10^{-6}$ \\
+\bottomrule
+\end{tabular}
+\end{table}
 
 \paragraph{Isolating depth.}
 Released D12 is a useful deployment anchor, but a D12 trained with the same
@@ -183,24 +374,37 @@ statistics, the MLP and source-informed search. Full-frame versus patchwise
 D12 measures the cost of tiling and entropy resets before routing receives
 credit for any gain. A histogram-preserving shuffle separates the chosen
 expert proportions from their spatial placement.
+A model below the dataset-mean frontier may still help a subset of patches.
+Expert removal should therefore be evaluated by leave-one-expert-out
+routing at matched constraints, not justified by mean full-image quality
+alone.
 
 \paragraph{A concrete router hypothesis.}
 A lightweight encoder-side predictor can estimate each expert's distortion
-and rate relative to a cheap reference. Given measured runtime tables, a
-candidate decision score is
+and rate relative to a cheap reference. Let $z_{t,k}$ indicate the expert
+assigned to patch $t$ and $n_k=\sum_t z_{t,k}$. For measured grouped-runtime
+tables $\tau_k(n_k)$, a proposed system objective is
 \begin{equation}
- \widehat J_k=\widehat D_k+\lambda\widehat R_k+
- \mu T_k(n_k,\mathrm{shape}).
+ \widehat J=\sum_{t,k}z_{t,k}(\widehat D_{t,k}+\lambda\widehat R_{t,k})
+ +\mu\sum_k\tau_k(n_k).
  \label{eq:proposed}
 \end{equation}
-Here $n_k$ is the number of patches assigned to expert $k$; grouped execution
-can make runtime depend on the assignment as a whole. The score is therefore
-a proposed approximation requiring measured validation, rather than an
-independent per-patch latency oracle. Regression or regret-weighted training
-should be compared against ordinary exit-label cross-entropy. A second-stage
-top-two verification can be restricted to small predicted margins, with
-its threshold selected on held-out calibration images and its extra encoding
-work included in the total.
+Routing, packing and scatter/gather work must also enter the measured total;
+the expression isolates the expert-runtime dependence. An independent
+per-patch latency label approximates this coupled problem. A bounded
+post-processing variant could move a patch from $k$ to $j$ according to its
+predicted RD change and the measured marginal time
+$\tau_k(n_k-1)-\tau_k(n_k)+\tau_j(n_j+1)-\tau_j(n_j)$.
+The number of passes and decision-time limit should be fixed on validation
+images. Any improvement must include this extra control work.
+
+Regression or regret-weighted training should be compared against ordinary
+exit-label cross-entropy. A second-stage top-two verification can be
+restricted to small predicted margins, with its threshold selected on
+held-out calibration images and its extra encoding work included. Neither
+a large prediction margin nor a low average regression error establishes a
+framewise quality guarantee. These are prospective experiments, not measured
+components of the current shared-exit system.
 
 Spatial competition between complete codecs already provides a close
 precedent~\cite{blard2026spatial}; adaptive compression and patch early exit
@@ -212,7 +416,7 @@ assessment~\cite{jia2025dcvcrt,tatwawadi2026practical}.
 
 \begin{figure*}[t]
 \centering
-\includegraphics[width=\textwidth]{figs/extended20260927/figS3_codec_bank_plan.pdf}
+\includegraphics[width=\textwidth]{figs/extended20260927/figS4_codec_bank_plan.pdf}
 \caption{\textbf{An independent codec bank is a separate experimental system.}
 Training status is shown as of 27 September 2026. D2/D4/D6 are in progress,
 D8/D10 are planned, and D12 is the released reference. Each expert owns its
@@ -253,3 +457,70 @@ best validation-selected blind control on common achieved rate--distortion
 support. Critical comparisons should then be repeated across training
 seeds. A content bootstrap at fixed weights measures a different source of
 variation and cannot replace those repeats.
+
+
+\section{Analytical Scenarios for the Pending Depth Measurements}
+
+The independent depth study has no completed RD or latency frontier yet.
+To make the design hypothesis inspectable, \cref{fig:scenario} separates
+exact architectural parameter counts from a hypothetical runtime model.
+For retained depth $d$, let $f$ be the assumed fraction of full-depth time
+spent in the twelve-block trunk and let $h$ be added routing/grouping overhead
+normalised by the original full-depth time. Under linear trunk-time scaling,
+\begin{equation}
+ \frac{T(d)}{T(12)}=(1-f)+f\frac{d}{12}+h.
+ \label{eq:scenario}
+\end{equation}
+We sweep $f\in\{0.5,0.7,0.9\}$ and $h\in\{0,0.03\}$. These are explicit
+sensitivity assumptions, not fractions estimated from the hardware.
+The reciprocal of \cref{eq:scenario} is the plotted scenario speedup.
+It shows why removing most trunk blocks need not yield a proportional
+reduction in complete codec time. The curves deliberately contain no
+predicted PSNR, bitrate or empirical uncertainty bands.
+
+Exact decoder size is $1,767,168+1,038,720d$ parameters; adding the
+27,947,520 non-synthesis parameters gives complete-codec size. This formula
+matches all three independent training manifests. It describes capacity,
+not compute: retained tensors, arithmetic and measured device time are
+separate quantities. The data file labels these scenarios explicitly and
+records every assumption used to generate them.
+A separate CPU construction of all six depths verifies these counts and
+exact equality of their retained initial tensors to the seed-matched D12
+initialisation; it performs no training or quality evaluation.
+
+\begin{figure*}[t]
+\centering
+\includegraphics[width=\textwidth]{figs/extended20260927/figS5_analytical_depth_scenarios.pdf}
+\caption{\textbf{A transparent design-space illustration for unfinished experiments.}
+\textbf{a}, Exact architectural parameter counts. \textbf{b,c}, Analytical
+runtime sensitivity to assumed trunk-time share and added overhead.
+Open markers and dashed lines denote assumptions, not measurements or
+fitted forecasts. No quality or bitrate outcome is assigned to an
+unfinished model.}
+\label{fig:scenario}
+\end{figure*}
+
+\section{Encoder Information Acquisition}
+
+\Cref{fig:encoderstages} separates candidate reconstruction from error-table
+construction, control search and the final mixed reconstruction. A single
+trunk pass can tap all reachable depths, reducing repeated prefix work.
+The historical timing summary lacks raw repetition uncertainty; it cannot
+be used as a paired end-to-end benchmark. In addition, the archived GPU
+search timer may include pending reference work, so it is excluded from the
+isolated search comparison. The runtime audit in the paper repository also
+identifies an older neural replay benchmark whose outputs are not causally
+reconstructed from decoded stream symbols. Its stage labels must not be
+read as a verified complete codec.
+
+\begin{figure*}[t]
+\centering
+\includegraphics[width=\textwidth]{figs/refresh20260927/fig4_decision_cost.pdf}
+\caption{\textbf{The decision path has an encoder cost.}
+\textbf{a}, Stages required for source-error-based selection, with prefix
+reuse across candidate exits. \textbf{b}, Historical table-construction
+upper medians over 24 pooled trials, without invented uncertainty bars.
+\textbf{c}, A fixed held-out control and per-frame source calibration require
+different information. This is a stage analysis, not an end-to-end speedup.}
+\label{fig:encoderstages}
+\end{figure*}

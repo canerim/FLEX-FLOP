@@ -17,6 +17,7 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 from flexuf.config import FlexUFConfig
 from flexuf.reference import reference_for
+from flexuf.backbone.warmstart import remap_decoder_state
 
 
 def sha(p):
@@ -34,6 +35,17 @@ def main():
     ref_path = Path(reference_for(FlexUFConfig(**ck["config"]), None))
     ref = torch.load(ref_path, map_location="cpu", weights_only=False, mmap=True)
     a = ck["state_dict"]; b = ref.get("state_dict", ref.get("net", ref))
+    release_path=Path("/data10/shareddata/can_karsal/dcvcuf_depth_20260927/reference_d12/released_cvpr2026_image.pth.tar")
+    release=torch.load(release_path,map_location="cpu",weights_only=False,mmap=True)
+    release=release.get("state_dict",release)
+    mapped,unknown=remap_decoder_state({k[4:]:v for k,v in release.items() if k.startswith("dec.")},2)
+    assert not unknown
+    mapped={f"dec.{k}":v for k,v in mapped.items()} | {k:v for k,v in release.items() if not k.startswith("dec.")}
+    missing=[k for k in mapped if k not in b]
+    changed=[k for k in mapped if k in b and not torch.equal(mapped[k],b[k])]
+    assert not missing and not changed
+    release_match=dict(compared=len(mapped),missing=missing,changed=changed,
+                       interpretation="All inherited warm-start tensors match the archived official released D12 after exact key remapping; extra adapter/router parameters are outside this comparison.")
     groups = {}
     for name, predicate in [
         ("encoder_entropy", lambda k: not k.startswith(("dec.", "router_head."))),
@@ -46,11 +58,13 @@ def main():
     assert groups["encoder_entropy"]["compared"] > 0
     assert groups["encoder_entropy"]["changed"] == 0
     assert groups["decoder_inherited"]["changed"] > 0
-    files = [p, ref_path, ROOT / "flexplus/dump_router_lp.py",
-             ROOT / "flexplus/eval_rules_ctc.py", ROOT / "flexuf/backbone/decoder.py"]
+    files = [p, ref_path, release_path, ROOT / "flexplus/dump_router_lp.py",
+             ROOT / "flexplus/eval_rules_ctc.py", ROOT / "flexuf/backbone/decoder.py",
+             ROOT/"flexuf/backbone/warmstart.py",Path(__file__)]
     result = dict(
         inspection="CPU state-dict comparison and source trace; no GPU or new image-quality measurement",
         checkpoint_config=ck["config"], checkpoint_epoch=ck["epoch"], groups=groups,
+        warmstart_matches_official_release=release_match,
         selection_reference="dump_router_lp.py loads reference_for(cfg) into a separate ref model; R is reference_frame_mse(ref.dec, y, q, padded_source)",
         reporting_reference="eval_rules_ctc.py uses net.dec.forward_full(y,q), after loading the fine-tuned e15 model, and crops it; raw field psnr_release is misleading",
         implications=[
@@ -61,7 +75,7 @@ def main():
             "Paired MAC differences between recorded policies do not depend on renaming the reporting anchor.",
             "Exact cropped released-reference losses cannot be reconstructed from the exported JSON alone; rerun with both anchors.",
         ],
-        hashes={str(f.relative_to(ROOT)): sha(f) for f in files},
+        hashes={str(f.relative_to(ROOT)) if f.is_relative_to(ROOT) else str(f): sha(f) for f in files},
         caveat="Hashes and weight comparison describe files present at audit time; historical evaluator code/checkpoint hashes were not recorded during execution.",
     )
     out = ROOT / "paper/data/refresh20260927/reference_audit.json"

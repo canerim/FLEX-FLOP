@@ -1,52 +1,44 @@
 \section{Related Work}
 \label{sec:related}
 
-\paragraph{Spatially adaptive reconstruction.}
-ClassSR routes super-resolution patches to networks of different
-capacity~\cite{kong2021classsr}; APE instead permits patches to exit a shared
-network at different depths~\cite{wang2022ape}. RBQE also uses early exit
-to adapt the effort spent enhancing already compressed
-images~\cite{xing2020rbqe}. Building on spatial capacity selection, we
-examine early exit inside a learned synthesis transform and the constraints
-of its coded representation:
-which decision information is available at each endpoint, what must be
-signalled, and how a local assignment affects final reconstruction quality.
+\paragraph{Efficient learned decoding.}
+DCVC-RT argues that arithmetic count alone misses important operational
+costs, including memory traffic and execution overhead~\cite{jia2025dcvcrt}.
+DCVC-UF advances throughput-oriented codec design~\cite{li2026dcvcuf}.
+Our intervention is confined to the synthesis transform of its intra model:
+the representation and entropy path are shared, and computation varies
+spatially after entropy recovery. Shallow-decoder work offers a complementary
+approach by reducing synthesis capacity globally~\cite{yang2023shallow}.
+This motivates treating a fixed shallow decoder as a necessary control for
+an adaptive one, rather than attributing every reduction from full depth to
+successful routing.
 
-\paragraph{Adaptive complexity in compression.}
-Slimmable compressive autoencoders provide multiple model
-widths~\cite{yang2021slimcae}. AdaNIC combines blockwise transform capacity
-with a routing agent~\cite{tao2023adanic}, while cgSlimDecoder selects
-decoder channel widths under complexity constraints~\cite{hu2023cgslim}.
-These methods already establish content- or complexity-dependent computation
-within learned compression. Our comparison focuses on depth allocation in
-the synthesis path of a fixed coded representation and on its incremental
-benefit over blind mixtures. A matched reproduction of these alternatives
-is the next step in evaluating the broader adaptive-codec frontier.
+\paragraph{Spatial adaptation and early exit.}
+ClassSR assigns super-resolution patches to networks of different
+capacity~\cite{kong2021classsr}, whereas APE predicts incremental benefit to
+select each patch's exit depth~\cite{wang2022ape}. RBQE adapts
+the depth used to enhance already compressed images~\cite{xing2020rbqe}.
+These studies establish adaptive reconstruction effort. FLEX-UF
+applies this principle inside DCVC-UF synthesis, where a common coded
+representation, exit-feature alignment and tile-boundary context constrain
+the available stopping paths. Our evaluation also distinguishes the benefit
+of spatial placement from the cheaper average depth it enables.
 
+\paragraph{Adaptive capacity within compression.}
+Slimmable compressive autoencoders vary model
+width~\cite{yang2021slimcae}; AdaNIC varies transform width spatially using
+blockwise operators and a learned router~\cite{tao2023adanic}; cgSlimDecoder controls decoder
+channel widths under complexity constraints~\cite{hu2023cgslim}. These
+methods already demonstrate adaptive computation in learned compression.
+Our focus is nested depth in DCVC-UF, executed through a shared stem and a
+shrinking tile batch. We do not claim that content-dependent codec
+computation itself is new.
 
-\paragraph{Spatial competition between complete codecs.}
-Blard et al.~\cite{blard2026spatial} select a specialized codec per region
-using source rate--distortion cost and transmit a mode map. This is a close
-precedent for our ongoing independent codec-bank direction, where each
-expert has its own encoder and entropy model. The present shared-latent
-experiment instead varies synthesis depth after one common representation.
-The two settings require different baselines and different signalling claims.
-
-\paragraph{Efficient synthesis and practical execution.}
-Shallow decoders investigate how computation can be shifted toward the
-encoder~\cite{yang2023shallow}. DCVC-RT distinguishes arithmetic cost from
-operational overhead, including memory traffic and function
-calls~\cite{jia2025dcvcrt}; DCVC-UF further develops a throughput-oriented
-video codec~\cite{li2026dcvcuf}. Recent practical image-codec design also
-optimises perceptual performance against measured device
-runtime~\cite{tatwawadi2026practical}. These results motivate reporting actual
-execution alongside multiply--accumulates. Our scope is the supplied
-intra model, not DCVC-UF's inter-frame or chunk-coding performance.
-
-\paragraph{Distortion and perception.}
-Generative compression explicitly studies reconstruction fidelity and
-perceptual realism~\cite{mentzer2020,muckley2023illm}. A small PSNR change
-therefore cannot establish perceptual equivalence. We use archived
-non-DCVC experiments only to examine this limitation and the dependence on
-decoder architecture; they are not evidence of a perceptual guarantee for
-FLEX.
+\paragraph{Complete-codec selection.}
+Spatial competition selects specialized codecs by region and communicates
+a mode map~\cite{blard2026spatial}. It is the closest comparison for our
+planned independent depth bank, where each expert owns its analysis and
+entropy parameters. That system differs from shared-latent early exit:
+choosing an expert before encoding changes both its representation and rate.
+The six-depth control therefore tests a separate capacity frontier rather
+than retroactively adding shallow exits to the present checkpoint.

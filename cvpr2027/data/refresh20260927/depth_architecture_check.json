@@ -1,0 +1,65 @@
+{
+  "scope": "CPU instantiation of D2/D4/D6/D8/D10/D12 with the frozen training constructor. Exact capacity and equal retained initialization only; no trained RD, inference runtime, or new training run.",
+  "seed": 42,
+  "torch_version": "2.9.1+cu126",
+  "gpu_initialized": false,
+  "checks": "All retained tensors exactly match independently reconstructed D12 initialization; parameter counts agree with the architectural formula; retained block count is depth plus one upsampler.",
+  "rows": [
+    {
+      "depth": 2,
+      "decoder_parameters": 3844608,
+      "total_parameters": 31792128,
+      "matched_initial_tensors": 298,
+      "differing_initial_tensors": [],
+      "all_parameters_trainable": true
+    },
+    {
+      "depth": 4,
+      "decoder_parameters": 5922048,
+      "total_parameters": 33869568,
+      "matched_initial_tensors": 318,
+      "differing_initial_tensors": [],
+      "all_parameters_trainable": true
+    },
+    {
+      "depth": 6,
+      "decoder_parameters": 7999488,
+      "total_parameters": 35947008,
+      "matched_initial_tensors": 338,
+      "differing_initial_tensors": [],
+      "all_parameters_trainable": true
+    },
+    {
+      "depth": 8,
+      "decoder_parameters": 10076928,
+      "total_parameters": 38024448,
+      "matched_initial_tensors": 358,
+      "differing_initial_tensors": [],
+      "all_parameters_trainable": true
+    },
+    {
+      "depth": 10,
+      "decoder_parameters": 12154368,
+      "total_parameters": 40101888,
+      "matched_initial_tensors": 378,
+      "differing_initial_tensors": [],
+      "all_parameters_trainable": true
+    },
+    {
+      "depth": 12,
+      "decoder_parameters": 14231808,
+      "total_parameters": 42179328,
+      "matched_initial_tensors": 398,
+      "differing_initial_tensors": [],
+      "all_parameters_trainable": true
+    }
+  ],
+  "bank_parameters": 221914368,
+  "bank_fp32_weights_mib": 846.5361328125,
+  "source_hashes": {
+    "/home/can_karsal/FLEX-PLUS/scripts/audit_depth_capacity.py": "7b9b9d0b7be8e836a52141842e78524b99106ae9b6b21599de1ebeea999e7d69",
+    "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/code_snapshot_v2/runtime.py": "4fd52865b66c9109c70265fe7f35b759b5a76c15432ebc4cdff26b1a1c580058",
+    "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/upstream/src/models/image_model.py": "95ff7158ffa592b608f346f3585e6111380bee08e50096a1e7c0355acf01089e",
+    "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/upstream/src/models/common_model.py": "e309a7144514836f29453f8d1fe65df8f7ab72d17ed1efea08ac35ee9f67469a"
+  }
+}

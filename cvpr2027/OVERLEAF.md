@@ -3,8 +3,8 @@
 Overleaf main document: **`main.tex`**, compiler **pdfLaTeX**. This repository's
 root is the `cvpr2027/` subtree of the FLEX-PLUS research workspace.
 
-The 27 September 2026 evidence revision contains a complete initial narrative,
-nine editable vector figure sets across the main paper and protocol
+The 27 September 2026 evidence revision contains a DCVC-UF-only early-exit manuscript,
+twelve editable vector figure sets across the main paper and protocol
 supplement, generated numerical macros, paired source tables and hash
 manifests. Build with:
 
@@ -22,20 +22,25 @@ validation values are not presented as final manuscript results.
 - Protocol and planned codec-bank atlas: `figs/extended20260927/extended_atlas.pdf`.
 - Stand-alone protocol supplement: `supplement.tex` / `supplement.pdf`.
 - Prioritised Turkish ablation plan: `ABLATION_PLAN_TR.md`.
+- Claim assessment and reviewer questions: `REVIEWER_NOTES_TR.md`.
 - Individual editable figures: PDF and SVG in the same directory.
 - Data and generated macros: `data/refresh20260927/`.
 - Full captions and measurement scope: `figs/refresh20260927/captions.json`.
 - Portable figure generators: `scripts/build_figures.py` and
   `scripts/build_extended_figures.py`. Both consume the bundled data; no GPU,
   checkpoints or source dataset are required to regenerate the plots.
+- Palette, typography and evidence styles: `FIGURE_STYLE.md`.
+- Runtime scope and required full-bitstream benchmark: `RUNTIME_AUDIT_TR.md`.
 - Evidence and editorial decisions: `WRITING_AND_EVIDENCE.md`.
 
 To regenerate figures on a CPU Python environment with Liberation Sans fonts:
 
 ```bash
 python -m pip install -r scripts/figure-requirements.txt
+python scripts/build_evidence_tables.py
 python scripts/build_figures.py
 python scripts/build_extended_figures.py
+python scripts/audit_cap_influence.py > data/refresh20260927/cap_influence_audit.json
 python scripts/verify_bundle.py --check-pdfs
 ```
 
@@ -45,7 +50,7 @@ FLEX research repository under `scripts/paper_refresh_data.py` and
 records/checkpoints. Source hashes captured during this revision are
 inspection provenance, not retrospective proof of historical execution.
 `figure_reproduction_report.json` records a separate reproduction using only
-the bundled data and scripts: all 29 PDF/SVG/PNG artifacts were byte-identical.
+the bundled data and scripts: all 38 PDF/SVG/PNG artifacts were byte-identical.
 `verification_report.json` records data consistency, PDF references, font
 embedding and page checks. The checks do not rerun the historical codec.
 

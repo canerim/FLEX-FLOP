@@ -1,24 +1,32 @@
 {
-  "bundled_files_checked": 42,
+  "bundled_files_checked": 59,
   "summary_rows_checked": 24,
   "paired_samples": 6108,
-  "vector_figure_sets": 9,
+  "delivered_cap_summary_rows_checked": 24,
+  "delivered_cap_influence_contrasts_checked": 6,
+  "released_warmstart_tensors_matched": 398,
+  "uniform_depth_summary_rows_checked": 24,
+  "analytical_scenarios_checked": 36,
+  "independently_instantiated_depths_checked": 6,
+  "vector_figure_sets": 12,
   "min_figure_font_pt": 5.5,
   "text_outside_canvas": 0,
   "compiled_documents": {
     "main": {
-      "pages": 8,
+      "pages": 9,
       "all_fonts_embedded": true,
       "unresolved_references": 0,
       "near_blank_pages": 0,
-      "sha256": "53829b0b10027a73b95b5a8346253b2857c80db17d165e91835ff86acbded7dd"
+      "reference_start_page": 9,
+      "sha256": "f89103dd69187640df7adca12659d9f46dc327a956d63f2ec36ee67d0391002a"
     },
     "supplement": {
-      "pages": 5,
+      "pages": 10,
       "all_fonts_embedded": true,
       "unresolved_references": 0,
       "near_blank_pages": 0,
-      "sha256": "7d4594c5c4f9dd733435b94ce42ab5941623844acbf40adb385d0449e5f73500"
+      "reference_start_page": 10,
+      "sha256": "9c242b57419226a55b040fe2e427bdaba26c60c155b8f41eb91ad6bbb5d873c0"
     }
   },
   "scope": "Integrity and internal consistency of the supplied publication bundle, not historical-run reproduction or a new codec evaluation"
