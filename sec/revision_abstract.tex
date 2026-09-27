@@ -1,0 +1,20 @@
+\begin{abstract}
+Spatially adaptive decoding can save computation by stopping easy regions
+early, but a large total saving need not imply a large benefit from content
+adaptation. We study this distinction in the intra decoder accompanying
+DCVC-UF. A shared synthesis trunk feeds tile-level exits, pointwise adapters
+and a full-frame reconstruction head, while the analysis transform and entropy
+model remain fixed. We compare source-informed exit search and a learned
+router with uniform depth and ordered dithering on the same recorded mixed
+reconstructions. Across 53 first intra frames and five quality indices, the
+router saves \MainRouterSaving\% of modelled decoder multiply--accumulates at
+a 0.1\,dB target, compared with \MainDitherSaving\% for dithering on 263 common
+frame--quality pairs. The paired advantage is \MainPremium\ percentage points
+and falls to \LoosePremium\ points at a 0.3\,dB target as the exit ladder
+saturates. Evaluation of the final cropped images also reveals target-budget
+violations that tile-level calibration does not eliminate. Historical timing
+isolates a further cost: acquiring source-error tables at the encoder.
+These findings identify where spatial routing adds value and which quality,
+signalling and execution costs must be included before arithmetic savings can
+be interpreted as practical acceleration.
+\end{abstract}

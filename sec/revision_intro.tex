@@ -1,0 +1,67 @@
+\section{Introduction}
+\label{sec:intro}
+
+A learned decoder applies the same synthesis network to every region of an
+image. A fixed network makes execution predictable, but it also spends the
+same depth on regions with different reconstruction requirements. Spatial
+early exit offers a direct alternative: retain a shared representation and
+allow individual regions to stop once further computation has little value.
+The central question is how much this content dependence contributes beyond
+simply using a cheaper decoder.
+
+This distinction matters because several mechanisms can produce a similar
+headline saving. A uniform shallow network removes work everywhere. A
+content-blind mixture of two depths makes the available cost levels finer.
+A learned router additionally decides \emph{where} the more expensive depth
+is useful. Comparing only with a full-depth reference credits the router for
+all three effects. It does not establish that content prediction is worth its
+own execution and calibration costs.
+
+We investigate this question in the intra decoder supplied with
+DCVC-UF~\cite{li2026dcvcuf}. Our shared-latent implementation, FLEX, divides
+the synthesis trunk into block pairs and attaches tile-level exits
+(\cref{fig:system}). A pointwise adapter aligns each exiting feature with a
+shared reconstruction head. A full-frame repair operation addresses the
+known tile grid. The encoder and entropy model remain fixed, but the synthesis
+network is fine-tuned: compatibility of the coded representation does not
+require the reconstruction network to remain unchanged.
+
+The compression setting provides two distinct sources of decision information.
+An encoder can compare candidate reconstructions with the source image. A
+decoder can use recovered latents, entropy-model information and intermediate
+features, but does not know the source error. These regimes must remain
+separate. In particular, a router with decoder-available inputs is not an
+autonomous decoder-side policy if its control parameter is fitted to the
+source of each test image. Our recorded budget sweeps use that latter,
+source-calibrated protocol, and we label them accordingly.
+
+Three observations organise the study. First, routing adds a measurable but
+budget-dependent advantage over ordered dithering. At a 0.1\,dB target the
+paired gain is \MainPremium\ percentage points; at 0.3\,dB it is
+\LoosePremium\ points. Second, selecting a map from a tile-error table is
+not sufficient to guarantee the distortion of a cropped, mixed-depth image.
+Third, source-informed decisions have an encoder cost: the required error
+table contains reconstructions, not merely cheap router logits.
+
+Our contributions are a shared-latent spatial early-exit implementation; a
+paired evaluation that separates depth reduction, blind mixing and learned
+allocation; and a measurement analysis connecting the quality target to
+delivered distortion and the cost of obtaining routing information. The
+current evidence supports decoder arithmetic reductions and historical stage
+timings. It does not yet establish an end-to-end speed advantage over the best
+content-blind policy. Independently trained depth-reduced codecs form a
+separate, ongoing experiment rather than additional exits of this model.
+
+\begin{figure*}[t]
+\centering
+\includegraphics[width=\textwidth]{figs/refresh20260927/fig1_shared_latent_system.pdf}
+\caption{\textbf{Shared-latent spatial early exit.} Four trunk blocks run over
+the full feature canvas. The four reachable exits execute 6, 8, 10 or 12
+total trunk blocks. The recorded router assignment controls which tiles
+continue through each block pair; blank cells have already exited. Pointwise
+adapters feed a stitched canvas, followed by grid repair and a shared head.
+Tensor values are schematic; tile assignments are recorded data from
+videoSRC05 at QP32 and a 0.1\,dB target. This is distinct from the ongoing
+independent D2/D4/D6 codec training.}
+\label{fig:system}
+\end{figure*}

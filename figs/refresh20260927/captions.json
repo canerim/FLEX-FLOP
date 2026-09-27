@@ -1,0 +1,26 @@
+[
+  {
+    "name": "fig1_shared_latent_system",
+    "caption": "Shared-latent early exit, pinned e15 configuration. The first four of twelve trunk blocks run over the full feature canvas. Each reachable tile exit executes 6, 8, 10 or 12 total trunk blocks. The recorded router map determines the occupancy of the four spatial grids; blank cells have already exited. Feature values and tensor stacks are schematic. The displayed map is an actual archived assignment, not a proposed D2/D4/D6 codec-bank route. The full-frame repair/head couples tile outputs, so per-tile loss tables do not by themselves guarantee final-frame quality."
+  },
+  {
+    "name": "fig2_budget_value",
+    "caption": "The value of spatial routing depends on the quality budget. Means use the common feasible frame\u2013QP pairs of all four rules at each budget: 204, 263, 265, 265, 265 and 265, respectively. These are 53 first intra frames at five QPs before exclusions. Shading in b shows paired 95% sequence-cluster bootstrap intervals (5,000 draws, fixed checkpoint). Panel c stratifies the paired premium by QP, and d keeps the same 204 pairs across all budgets. The cost is the decoder MAC model and excludes routing/bitstream overhead. Per-frame source-informed calibration is used for all curves; target losses are not guarantees or exactly matched achieved losses."
+  },
+  {
+    "name": "fig3_delivered_quality",
+    "caption": "Final reconstructions expose the limits of table-based calibration. Panel a plots the measured mean RGB loss against decoder MAC savings at the six recorded target budgets; joining segments guide the eye and are not measurements at interpolated budgets. Panels b and c use the 263 common cases at a 0.1 dB target. A violation is a delivered loss above target + 0.0001 dB. RGB and YUV 6:1:1 differ, but RGB itself also violates the target. The protocol selected on padded RGB tables and measured cropped mixed reconstructions; it did not apply a verified fallback or post-selection repair of the budget."
+  },
+  {
+    "name": "fig4_decision_cost",
+    "caption": "The encoder pays to acquire source-error information. The upper trace is schematic; the table and search stages are distinct from latent creation. In the archived benchmark, six trial exits contain only four distinct reachable outputs. A shared tiled pass reduces mean table-construction time from 1,347.65 ms to 336.87 ms. Bars use the archived upper median of 24 pooled trials (eight frames \u00d7 three repeats, QP32); raw trial distributions and a contemporaneous load log are unavailable, so no uncertainty bars are invented. The archived GPU search timer can include pending reference-decode work and is excluded here. These stage measurements establish neither end-to-end encode latency nor a router speedup. The source-calibrated budget curves require information unavailable to an autonomous decoder."
+  },
+  {
+    "name": "fig5_spatial_decisions",
+    "caption": "Actual exit assignments at two target budgets on one QP32 frame. Tile colours denote total executed trunk blocks and use the same key as Fig. 1. Maps are cropped to the visible source extent. The left column is an archived source-luma thumbnail, not a reconstruction; this figure visualises allocation and does not establish perceptual similarity. The sequence was selected by proximity to the aggregate router\u2013dither premium at 0.1 dB among the five available thumbnails. Numerical annotations are computed from the recorded mixed reconstructions and the MAC cost model."
+  },
+  {
+    "name": "fig6_scope_and_perception",
+    "caption": "Transfer diagnostics on existing non-DCVC reconstructions. Panel a compares the source-informed selection with the best dataset-level blind rule at a 0.1 dB target; intervals are paired image-bootstrap 95% intervals from the independently audited archive. Dataset and adapter variants remain separate. Dense masked evaluation computes candidate branches before selection, so the savings are region/halo cost models, not measured speedups. Selection in these experiments uses deviation from the reference decoder and is not a certified source-distortion optimum. Panel b shows independent Kodak-24 evaluations under PSNR and LPIPS constraints; each line joins three recorded points. LPIPS increase is measured against the reference decoder's output. No DCVC-UF perceptual conclusion follows from these two other models."
+  }
+]
