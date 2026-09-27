@@ -1,11 +1,11 @@
 [
   {
     "name": "fig1_shared_latent_system",
-    "caption": "Shared-latent early exit, pinned e15 configuration. The first four of twelve trunk blocks run over the full feature canvas. Each reachable tile exit executes 6, 8, 10 or 12 total trunk blocks. The recorded router map determines the occupancy of the four spatial grids; blank cells have already exited. Feature values and tensor stacks are schematic. The displayed map is an actual archived assignment, not a proposed D2/D4/D6 codec-bank route. The full-frame repair/head couples tile outputs, so per-tile loss tables do not by themselves guarantee final-frame quality."
+    "caption": "Exact execution structure of the evaluated shared-latent early-exit path. Four full-frame stem blocks precede tile execution. The router consumes stem statistics and QP; its control is source-calibrated in the reported sweep. The actual videoSRC05 QP32 map at the 0.1 dB target leaves 40, 27, 7 and 3 tiles active at total depths 6, 8, 10 and 12. Blank cells have departed. Exit adapters write into a common canvas before full-frame repair and reconstruction. Tensor values are schematic; tile assignments and counts are recorded. Colours run from light teal at depth 6 to navy at depth 12."
   },
   {
     "name": "fig2_budget_value",
-    "caption": "The value of spatial routing depends on the quality budget. Means use the common feasible frame\u2013QP pairs of all four rules at each budget: 204, 263, 265, 265, 265 and 265, respectively. These are 53 first intra frames at five QPs before exclusions. Shading in b shows paired 95% sequence-cluster bootstrap intervals (5,000 draws, fixed checkpoint). Panel c stratifies the paired premium by QP, and d keeps the same 204 pairs across all budgets. The cost is the decoder MAC model and excludes routing/bitstream overhead. Per-frame source-informed calibration is used for all curves; target losses are not guarantees or exactly matched achieved losses."
+    "caption": "Compact nominal-budget comparison. Panel a separates total modelled decoder arithmetic saving from the additional value of spatial placement. Panel b reports the paired search-minus-dither and router-minus-dither means with 95% sequence-cluster bootstrap intervals; the shaded row is the 0.1 dB target. Common cohort sizes are 204, 263, 265, 265, 265 and 265. Colours and markers consistently identify four policies. Controls use per-frame source calibration; nominal targets do not guarantee final cropped quality. No measured runtime reduction is implied."
   },
   {
     "name": "fig3_delivered_quality",
@@ -17,10 +17,14 @@
   },
   {
     "name": "fig5_spatial_decisions",
-    "caption": "Actual exit assignments at two target budgets on one QP32 frame. Tile colours denote total executed trunk blocks and use the same key as Fig. 1. Maps are cropped to the visible source extent. The left column is an archived source-luma thumbnail, not a reconstruction; this figure visualises allocation and does not establish perceptual similarity. The sequence was selected by proximity to the aggregate router\u2013dither premium at 0.1 dB among the five available thumbnails. Numerical annotations are computed from the recorded mixed reconstructions and the MAC cost model."
+    "caption": "Recorded exit assignments at a nominal 0.1 dB target for videoSRC05 QP32. The source-luma thumbnail is archived evaluator data, not generated imagery or a reconstructed output. Maps are cropped to the valid image extent. Depth colours match the execution diagram. This frame was chosen from five available thumbnails by proximity to the aggregate routing margin. Quality and MAC annotations are recorded mixed-output measurements and modelled arithmetic, respectively. At 0.3 dB the search, router and dither maps for this frame all take depth 6; repeated identical maps are omitted."
   },
   {
     "name": "fig6_depth_study_system",
     "caption": "Shared early exit and the independent DCVC-UF depth study answer different questions. Panel a shows one latent with nested synthesis depths 6/8/10/12; only this family has completed reconstruction comparisons. Panel b shows independent D2/D4/D6 training, planned D8/D10 and the released D12 anchor. The same-recipe D12 control is still needed. Panel c is a proposed subsequent model-bank routing path, selecting before encoding and transmitting expert identity. Network and queue geometry is schematic, not projected quality or throughput."
+  },
+  {
+    "name": "fig7_budget_sensitivity",
+    "caption": "The value of spatial routing depends on the quality budget. Means use the common feasible frame\u2013QP pairs of all four rules at each budget: 204, 263, 265, 265, 265 and 265, respectively. These are 53 first intra frames at five QPs before exclusions. Shading in b shows paired 95% sequence-cluster bootstrap intervals (5,000 draws, fixed checkpoint). Panel c stratifies the paired premium by QP, and d keeps the same 204 pairs across all budgets. The cost is the decoder MAC model and excludes routing/bitstream overhead. Per-frame source-informed calibration is used for all curves; target losses are not guarantees or exactly matched achieved losses."
   }
 ]

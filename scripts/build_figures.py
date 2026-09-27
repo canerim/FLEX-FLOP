@@ -173,87 +173,75 @@ def audit_and_save(fig, name, caption, book):
 
 
 def architecture(d, book):
-    fig, ax = schematic(101)
-    ax.set_ylim(0,119)
+    fig, ax = schematic(60)
     ex = d["example"]
     m = np.array(ex["rules"]["router"]["0.1"]["map"]).reshape(ex["grid"])
-    heading(ax, 3, 115, "a", "A shared representation, spatially variable synthesis")
-    # Tensor planes and a trunk strip communicate resolution and depth.
-    tensor(ax, 5, 93, 18, 12, "#e7eef2", grid=6)
-    text(ax, 14, 89, "Decoded latent", ha="center")
-    text(ax, 14, 85, "256 × H/16 × W/16", ha="center", fontsize=6)
-    arrow(ax, (26, 99), (36, 99))
-    ax.add_patch(Polygon([[39, 94], [39, 104], [47, 107], [47, 91]], facecolor="#c1d4df", edgecolor=MUTED, lw=.55))
-    text(ax, 43, 88, "Upsample ×2", ha="center", fontsize=6)
-    arrow(ax, (49, 99), (56, 99))
-    strip(ax, 59, 94, 4, color=BLUE)
-    text(ax, 64, 89, "4 shared blocks", ha="center")
-    arrow(ax, (70, 99), (80, 99))
-    tensor(ax, 83, 93, 18, 12, grid=4)
-    text(ax, 92, 89, "Stem features", ha="center")
-    text(ax, 92, 85, "384 × H/8 × W/8", ha="center", fontsize=6)
-    # The stopping predictor branches from the existing stem. Its compact
-    # graph and separate control arrow distinguish scores from calibration.
-    ax.plot([94, 94, 116], [108, 112, 112], color=BLUE, lw=.65)
-    arrow(ax, (113,112), (118,112), color=BLUE, lw=.65)
-    nodes=[[(120,110),(120,114)],[(125,109),(125,112),(125,115)],[(130,110),(130,114)]]
-    for left,right in zip(nodes[:-1],nodes[1:]):
-        for xx,yy in left:
-            for u,v in right:ax.plot([xx,u],[yy,v],color="#AEC9CB",lw=.4)
-    for col in nodes:
-        for xx,yy in col:ax.scatter(xx,yy,s=5,color=BLUE,zorder=4)
-    text(ax,105,116,"Pool + QP",ha="center",fontsize=5.7,color=BLUE)
-    text(ax,135,113,"MLP scores",fontsize=5.8,color=BLUE)
-    arrow(ax,(130,109),(130,107),color=BLUE,lw=.65)
-    text(ax,169,112,"Control β",ha="center",fontsize=5.8,color=ORANGE)
-    arrow(ax,(159,112),(145,105),color=ORANGE,lw=.65)
-    arrow(ax, (105, 99), (115, 99))
-    tilemap(ax, 118, 92, 25, 15, m)
-    text(ax, 130.5, 88, "Extract feature tiles", ha="center")
-    text(ax, 130.5, 84, "32 × 32 ↔ 256 × 256 RGB", ha="center", fontsize=6)
-    arrow(ax, (146, 99), (155, 99))
-    # Tile stack leaves the plane, rather than another labelled rectangle.
-    for i in reversed(range(4)):
-        tensor(ax, 158 + i * 2.5, 93 + i * 1.1, 7, 7, DEPTH[i], layers=1, grid=2)
-    text(ax, 165, 88, "Tile batch", ha="center")
-    text(ax, 165, 84, "N × 384 × 32 × 32", ha="center", fontsize=6)
-    ax.plot([3, 180], [80, 80], color=GRID, lw=.5)
-
-    heading(ax, 3, 75, "b", "Only surviving tiles traverse the next block pair")
-    xs = [7, 37, 67, 97]
+    heading(ax, 3, 56, "a", "Recover once; assign a stopping depth to each tile")
+    tensor(ax, 5, 40, 13, 8, "#E7EEF2", grid=4)
+    text(ax, 12, 36, "Latent", ha="center", fontsize=6.5)
+    arrow(ax, (21, 44), (29, 44))
+    strip(ax, 31, 40, 4, w=2.2, h=8)
+    text(ax, 37, 36, "Upsample + stem", ha="center", fontsize=6.5)
+    arrow(ax, (44, 44), (57, 44))
+    tensor(ax, 60, 40, 14, 8, grid=4)
+    text(ax, 67, 36, "384-channel features", ha="center", fontsize=6.5)
+    arrow(ax, (78, 44), (88, 44), color=BLUE)
+    text(ax, 106, 47, "Pool + QP → MLP", ha="center", fontsize=7, color=BLUE)
+    text(ax, 106, 41, "Scores + control β", ha="center", fontsize=6.5)
+    arrow(ax, (128, 44), (142, 44), color=BLUE)
+    tilemap(ax, 147, 39, 19, 11.9, m)
+    text(ax, 157, 35, "Depth map", ha="center", fontsize=6.5)
+    ax.plot([3, 180], [32, 32], color=GRID, lw=.6)
+    heading(ax, 3, 28, "b", "Continue only the surviving tiles")
+    xs = [7, 39, 71, 103]
     for j, x in enumerate(xs):
-        threshold = j + 2
-        n = int((m >= threshold).sum())
-        text(ax, x + 10, 69, f"Blocks {5 + 2*j}–{6 + 2*j}", ha="center", fontsize=6)
-        tilemap(ax, x, 52, 20, 12.5, m, threshold=threshold)
-        text(ax, x + 10, 48, f"{n}/{m.size} active", ha="center", fontsize=6)
+        n = int((m >= j + 2).sum())
+        tilemap(ax, x, 12, 20, 12.5, m, threshold=j + 2)
+        text(ax, x + 10, 9, f"{n}/40 · depth {6+2*j}", ha="center", fontsize=6.5)
         if j < 3:
-            arrow(ax, (x + 21.5, 58), (x + 28, 58))
-        # Exit-specific paths join a common feature canvas.
-        xx = x + 10
-        arrow(ax, (xx, 46), (xx, 41.5), color=DEPTH[j])
-        ax.add_patch(Polygon([[xx - 3, 40], [xx, 37.5], [xx + 3, 40], [xx, 42.5]],
-                              fc=DEPTH[j], ec=MUTED, lw=.45))
-        ax.plot([xx, xx, 137], [37.5, 33 - j * 1.2, 33 - j * 1.2], color=DEPTH[j], lw=1.0)
-    text(ax, 62, 25, "Pointwise exit adapters; deepest exit uses identity", ha="center", fontsize=6)
-    arrow(ax, (137, 29.5), (145, 41), color=MUTED)
-    tilemap(ax, 147, 42, 25, 15, m)
-    text(ax, 159.5, 62, "Stitched feature canvas", ha="center")
-    text(ax, 159.5, 37, "Grid repair → scale → head", ha="center", fontsize=6)
-    text(ax, 159.5, 33, "PixelShuffle ×8 → RGB", ha="center", fontsize=6)
-    depth_key(ax, 8, 19)
-    text(ax, 178, 19, "Map: videoSRC05, QP32, 0.1 dB target", ha="right", fontsize=5.7)
-
-    ax.plot([3, 180], [14, 14], color=GRID, lw=.5)
-    text(ax, 4, 10, "Frozen encoder + entropy model", weight="bold", fontsize=6)
-    text(ax, 4, 5.5, "The synthesis network and exit adapters are fine-tuned.", fontsize=6)
-    text(ax, 95, 10, "Shared head couples neighbouring tiles", weight="bold", fontsize=6)
-    text(ax, 95, 5.5, "Evaluate the final mixed reconstruction after cropping.", fontsize=6)
+            arrow(ax, (x + 21, 18), (x + 30, 18))
+        # Each exit writes its features to a common canvas; lanes stay separate.
+        yy = 5.8 - j * .95
+        ax.plot([x, x, 139], [12, yy, yy], color=DEPTH[j], lw=.9)
+    ax.plot([139, 139], [2.95, 5.8], color=MUTED, lw=.7)
+    arrow(ax, (139, 4.5), (146, 13), color=MUTED)
+    tilemap(ax, 148, 13, 19, 11.9, m)
+    text(ax, 157.5, 28, "Stitch → repair → head", ha="center", fontsize=6.5)
+    text(ax, 157.5, 9, "Canvas → RGB", ha="center", fontsize=6.5)
+    text(ax, 4, 1.5, "Pointwise exit adapters; deepest exit uses identity", fontsize=6.2)
     audit_and_save(fig, "fig1_shared_latent_system",
-        "Shared-latent early exit, pinned e15 configuration. The first four of twelve trunk blocks run over the full feature canvas. Each reachable tile exit executes 6, 8, 10 or 12 total trunk blocks. The recorded router map determines the occupancy of the four spatial grids; blank cells have already exited. Feature values and tensor stacks are schematic. The displayed map is an actual archived assignment, not a proposed D2/D4/D6 codec-bank route. The full-frame repair/head couples tile outputs, so per-tile loss tables do not by themselves guarantee final-frame quality.", book)
+        "Exact execution structure of the evaluated shared-latent early-exit path. Four full-frame stem blocks precede tile execution. The router consumes stem statistics and QP; its control is source-calibrated in the reported sweep. The actual videoSRC05 QP32 map at the 0.1 dB target leaves 40, 27, 7 and 3 tiles active at total depths 6, 8, 10 and 12. Blank cells have departed. Exit adapters write into a common canvas before full-frame repair and reconstruction. Tensor values are schematic; tile assignments and counts are recorded. Colours run from light teal at depth 6 to navy at depth 12.", book)
 
 
 def budget(d, book):
+    fig, axs = plt.subplots(1, 2, figsize=(183 * MM, 65 * MM), gridspec_kw={"width_ratios":[1.08,1]})
+    fig.subplots_adjust(left=.074, right=.975, bottom=.23, top=.76, wspace=.35)
+    ax=axs[0]; panel(ax,"a","Depth supplies most of the saving")
+    for rule in LABEL:
+        rr=[r for r in d["summary"] if r["rule"]==rule]
+        ax.plot(BUD,[r["mean"] for r in rr],color=COL[rule],marker=MARK[rule],label=LABEL[rule])
+    ax.axhline(d["ceiling_pct"],color=MUTED,lw=.6,ls=(0,(3,2)))
+    ax.text(.29,40.4,"39.12% ceiling",fontsize=6.5,color=MUTED)
+    ax.set(xlabel="Nominal RGB-loss target (dB)",ylabel="Decoder MAC saving (%)",xlim=(.035,.52),ylim=(8,44))
+    ax.set_xticks([.05,.1,.2,.3,.5],[".05",".10",".20",".30",".50"])
+    ax=axs[1]; panel(ax,"b","Content adds value at tighter targets")
+    ax.grid(False); ax.grid(axis="x",color=GRID,lw=.45)
+    ax.axhspan(.55,1.45,color="#F0F5F4",zorder=0)
+    for name,c,marker,dy in [("oracle_minus_dither",TEAL,"o",-.13),("router_minus_dither",BLUE,"s",.13)]:
+        rr=[r for r in d["contrasts"] if r["contrast"]==name]
+        v=np.array([r["mean"] for r in rr]);lo=np.array([r["lo"] for r in rr]);hi=np.array([r["hi"] for r in rr])
+        ax.errorbar(v,np.arange(6)+dy,xerr=[v-lo,hi-v],fmt=marker,color=c,ms=3.3,lw=.9,capsize=2)
+    ax.axvline(0,color=MUTED,lw=.6)
+    ax.set_yticks(range(6),[".05",".10",".15",".20",".30",".50"])
+    ax.set(xlim=(-.4,7.6),ylim=(5.6,-.6),xlabel="Extra MAC saving over dither (pp)",ylabel="Nominal target (dB)")
+    handles=[Line2D([],[],color=COL[k],marker=MARK[k],label=LABEL[k]) for k in LABEL]
+    fig.legend(handles=handles,loc="upper center",bbox_to_anchor=(.52,1.01),ncol=4,fontsize=7,handlelength=1.8,columnspacing=2.1)
+    fig.text(.5,.035,"Paired 95% sequence intervals · source-calibrated controls · arithmetic savings, excluding routing and signalling",ha="center",fontsize=6.5,color=MUTED)
+    audit_and_save(fig,"fig2_budget_value",
+        "Compact nominal-budget comparison. Panel a separates total modelled decoder arithmetic saving from the additional value of spatial placement. Panel b reports the paired search-minus-dither and router-minus-dither means with 95% sequence-cluster bootstrap intervals; the shaded row is the 0.1 dB target. Common cohort sizes are 204, 263, 265, 265, 265 and 265. Colours and markers consistently identify four policies. Controls use per-frame source calibration; nominal targets do not guarantee final cropped quality. No measured runtime reduction is implied.",book)
+
+
+def budget_detail(d, book):
     fig, axs = plt.subplots(2, 2, figsize=(183 * MM, 119 * MM))
     fig.subplots_adjust(left=.085, right=.977, bottom=.115, top=.90, wspace=.29, hspace=.58)
     ax = axs[0, 0]; panel(ax, "a", "Total saving and simple controls")
@@ -302,7 +290,7 @@ def budget(d, book):
     for a in [axs[0, 0], axs[0, 1], axs[1, 1]]:
         a.set(xlabel="Target RGB loss budget (dB)", xlim=(.03, .52))
         a.set_xticks([.05, .1, .2, .3, .5], [".05", ".10", ".20", ".30", ".50"])
-    audit_and_save(fig, "fig2_budget_value",
+    audit_and_save(fig, "fig7_budget_sensitivity",
         "The value of spatial routing depends on the quality budget. Means use the common feasible frame–QP pairs of all four rules at each budget: 204, 263, 265, 265, 265 and 265, respectively. These are 53 first intra frames at five QPs before exclusions. Shading in b shows paired 95% sequence-cluster bootstrap intervals (5,000 draws, fixed checkpoint). Panel c stratifies the paired premium by QP, and d keeps the same 204 pairs across all budgets. The cost is the decoder MAC model and excludes routing/bitstream overhead. Per-frame source-informed calibration is used for all curves; target losses are not guarantees or exactly matched achieved losses.", book)
 
 
@@ -400,39 +388,29 @@ def decision_cost(d, book):
 
 
 def maps(d, book):
-    fig, ax = schematic(86)
-    ex = d["example"]; mshape = ex["grid"]
-    thumbs = np.load(THUMBNAILS)
-    heading(ax, 3, 81, "a", "Spatial decisions converge as the quality budget relaxes")
-    text(ax, 7, 75, f"{ex['seq']}  ·  QP32  ·  archived source luma", fontsize=6)
-    xs = [7, 44, 81, 118, 155]
-    for x, label in zip(xs, ["Source", "Search", "Router", "Dither", "Uniform"]):
-        text(ax, x + 13.5, 68, label, ha="center", weight="bold", fontsize=6)
-    H, W = ex["hw"]
-    for row, (b, y) in enumerate([(.1, 48), (.3, 21)]):
-        # Thumbnail has been downsampled in the original evaluator; no added
-        # enhancement, contrast adjustment or generated reconstruction.
-        ax.imshow(thumbs[str(ex["index"])], cmap="gray", vmin=0, vmax=255,
-                  extent=(7, 34, y, y + 27 * H / W), zorder=1)
-        text(ax, 20.5, y - 5, f"Target {b:.1f} dB", ha="center", fontsize=6)
-        for x, rule in zip(xs[1:], LABEL):
-            v = ex["rules"][rule][str(b)]
-            m = np.array(v["map"]).reshape(mshape)
-            # Crop the original padded grid to the actual image rectangle.
-            for iy in range(mshape[0]):
-                for ix in range(mshape[1]):
-                    left, right = ix * 256, min((ix + 1) * 256, W)
-                    top, bottom = iy * 256, min((iy + 1) * 256, H)
-                    if right <= left or bottom <= top:
-                        continue
-                    ax.add_patch(Rectangle((x + left / W * 27, y + (H - bottom) / W * 27),
-                                           (right - left) / W * 27, (bottom - top) / W * 27,
-                                           facecolor=DEPTH[int(m[iy, ix]) - 2], edgecolor="white", lw=.4))
-            text(ax, x + 13.5, y - 5, f"{v['saving']:.1f}% MAC saved", ha="center", fontsize=6)
-            text(ax, x + 13.5, y - 9, f"{v['db_rgb']:.3f} dB RGB loss", ha="center", fontsize=6)
-    depth_key(ax, 37, 5.5)
-    audit_and_save(fig, "fig5_spatial_decisions",
-        "Actual exit assignments at two target budgets on one QP32 frame. Tile colours denote total executed trunk blocks and use the same key as Fig. 1. Maps are cropped to the visible source extent. The left column is an archived source-luma thumbnail, not a reconstruction; this figure visualises allocation and does not establish perceptual similarity. The sequence was selected by proximity to the aggregate router–dither premium at 0.1 dB among the five available thumbnails. Numerical annotations are computed from the recorded mixed reconstructions and the MAC cost model.", book)
+    fig, ax = schematic(49)
+    ex=d["example"];mshape=ex["grid"];H,W=ex["hw"]
+    thumbs=np.load(THUMBNAILS)
+    heading(ax,3,45,"a","One source, four allocations at the 0.1 dB target")
+    xs=[4,40,76,112,148]; width=30
+    for x,label in zip(xs,["Source luma","Search","Router","Bayer dither","Uniform"]):
+        text(ax,x+width/2,38,label,ha="center",weight="bold",fontsize=7)
+    y=18
+    ax.imshow(thumbs[str(ex["index"])],cmap="gray",vmin=0,vmax=255,extent=(xs[0],xs[0]+width,y,y+width*H/W),zorder=1)
+    text(ax,xs[0]+width/2,14,ex["seq"].split("_")[0],ha="center",fontsize=6.5)
+    text(ax,xs[0]+width/2,10,"QP32",ha="center",fontsize=6.5)
+    for x,rule in zip(xs[1:],LABEL):
+        v=ex["rules"][rule]["0.1"];m=np.array(v["map"]).reshape(mshape)
+        for iy in range(mshape[0]):
+            for ix in range(mshape[1]):
+                left,right=ix*256,min((ix+1)*256,W);top,bottom=iy*256,min((iy+1)*256,H)
+                if right<=left or bottom<=top:continue
+                ax.add_patch(Rectangle((x+left/W*width,y+(H-bottom)/W*width),(right-left)/W*width,(bottom-top)/W*width,facecolor=DEPTH[int(m[iy,ix])-2],edgecolor="white",lw=.4))
+        text(ax,x+width/2,14,f"{v['saving']:.1f}% MAC saved",ha="center",fontsize=6.5)
+        text(ax,x+width/2,10,f"{v['db_rgb']:.3f} dB loss",ha="center",fontsize=6.5)
+    depth_key(ax,40,3)
+    audit_and_save(fig,"fig5_spatial_decisions",
+        "Recorded exit assignments at a nominal 0.1 dB target for videoSRC05 QP32. The source-luma thumbnail is archived evaluator data, not generated imagery or a reconstructed output. Maps are cropped to the valid image extent. Depth colours match the execution diagram. This frame was chosen from five available thumbnails by proximity to the aggregate routing margin. Quality and MAC annotations are recorded mixed-output measurements and modelled arithmetic, respectively. At 0.3 dB the search, router and dither maps for this frame all take depth 6; repeated identical maps are omitted.",book)
 
 
 def depth_system(d, book):
@@ -521,6 +499,7 @@ def main():
         decision_cost(d, book)
         maps(d, book)
         depth_system(d, book)
+        budget_detail(d, book)
     (OUT / "captions.json").write_text(json.dumps(CAPTIONS, indent=2) + "\n")
     (OUT / "layout_audit.json").write_text(json.dumps(AUDIT, indent=2) + "\n")
     manifest = {p.name: hashlib.sha256(p.read_bytes()).hexdigest() for p in sorted(OUT.iterdir()) if p.suffix in {".pdf", ".svg", ".png"}}

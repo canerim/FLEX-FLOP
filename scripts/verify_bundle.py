@@ -99,7 +99,11 @@ def main():
             assert "<text" in (path/(record["figure"]+".svg")).read_text()
             min_font=min(min_font,*(t["size_pt"] for t in record["text"]))
             figure_count+=1
-    assert figure_count==12
+    assert figure_count==13
+    illustration=json.loads((ROOT/"figs/adaptive20260927/provenance.json").read_text())
+    asset=ROOT/illustration["asset"]
+    assert digest(asset)==illustration["sha256"],"Changed conceptual illustration"
+    checked.append(str(asset.relative_to(ROOT)))
     reports={}
     if args.check_pdfs:
         for name in ["main","supplement"]:
@@ -128,7 +132,7 @@ def main():
                 uniform_depth_summary_rows_checked=len(depth["uniform_summary"]),
                 analytical_scenarios_checked=len(design["projection"]["rows"]),
                 independently_instantiated_depths_checked=len(architecture["rows"]),
-                vector_figure_sets=figure_count,min_figure_font_pt=min_font,
+                vector_figure_sets=figure_count,conceptual_ai_illustrations=1,min_figure_font_pt=min_font,
                 text_outside_canvas=0,compiled_documents=reports,
                 scope="Integrity and internal consistency of the supplied publication bundle, not historical-run reproduction or a new codec evaluation")
     print(json.dumps(result,indent=2))

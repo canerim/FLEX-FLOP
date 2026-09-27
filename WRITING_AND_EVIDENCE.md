@@ -1,19 +1,26 @@
 # Narrative and evidence decisions
 
-The manuscript now centres on **spatial early exit within DCVC-UF**. The
-opening moves from uniform synthesis depth to three concrete obstacles:
-intermediate feature compatibility, tile boundaries and decision cost. The
-method addresses those with nested execution, pointwise adaptation, shared
-repair and a stopping predictor. Router-versus-dither analysis evaluates one
-component of that system rather than defining the entire paper's story.
+The manuscript now centres on **spatially adaptive DCVC-UF computation**:
+spend synthesis depth where its incremental reconstruction benefit matters.
+The measured implementation is within-model early exit. ClassSR-inspired
+selection among six independent codecs is the complementary experimental
+path, with its training and routing status explicit. These are alternatives,
+not a serial bank-to-exit cascade.
+
+The opening connects the common allocation problem to the different
+commitments of representation reuse and capacity specialisation. It then
+introduces the three early-exit obstacles: intermediate feature compatibility,
+tile boundaries and decision cost. Router-versus-dither analysis isolates
+the benefit of content allocation from the saving of cheaper average depth.
 
 Only DCVC-UF numerical experiments appear in the active manuscript and plot
 bundle. Other reconstruction networks have been removed from the results.
 Adaptive-codec and patch-exit papers remain relevant related work, with no
 unsubstantiated claim to have invented content-dependent computation.
 
-The independent 2/4/6/8/10/12 study tests a second question: how much is lost
-by sharing one representation? Its training status, exact parameter counts
+The independent 2/4/6/8/10/12 study asks how specialised capacity compares
+with shared exits. A causal weight-sharing comparison additionally requires
+matched training/data/initialisation; current training histories differ. Its training status, exact parameter counts
 and evaluation controls are explicit. A separate analytical sensitivity
 plot exposes assumptions for pending runtime measurements; it does not
 fabricate quality, bitrate, speedup observations or uncertainty intervals.
@@ -66,3 +73,10 @@ held-out control calibration, full coded bytes and paired end-to-end latency.
 For the independent bank, add the same-recipe D12 control before attributing
 released-model gaps to depth, and quantify patching/grouping overhead before
 expanding the MLP. The detailed priority order is in `ABLATION_PLAN_TR.md`.
+
+The opening conceptual illustration was generated with built-in image_gen
+and iteratively corrected for independent-expert and exit connectivity.
+`IMAGEGEN.md` preserves every prompt; `figs/adaptive20260927/provenance.json`
+pins the final binary. Its image planes are explicitly illustrative and
+never presented as experimental crops. Statistical figures remain editable
+and data-generated.

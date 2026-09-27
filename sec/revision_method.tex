@@ -1,5 +1,42 @@
-\section{FLEX-UF: Spatial Early Exit}
+\section{Spatially Adaptive DCVC-UF}
 \label{sec:method}
+
+\subsection{The allocation problem}
+Let $\mathbf a=(a_1,\ldots,a_N)$ assign a synthesis option to each
+region. A common formulation is
+\begin{equation}
+ \min_{\mathbf a}\; \mathcal C(\mathbf a)
+ \quad\text{subject to}\quad
+ D(x,\hat x_{\mathbf a})-D(x,\hat x_{\rm ref})\leq\delta,
+ \label{eq:allocation}
+\end{equation}
+where $D$ is a distortion measure and $\mathcal C$ is the chosen compute
+cost. In our PSNR-loss experiments, the constraint uses the corresponding
+logarithmic ratio of reconstruction MSEs. The distortion belongs to the
+\emph{assembled image}: spatial interactions can invalidate an additive
+tile-error approximation.
+
+For early exit, $a_t$ identifies a stopping point after one latent has been
+recovered. For the prospective model bank, $a_t$ identifies a complete
+codec before encoding, making both payload rate and reconstruction depend
+on the assignment. An independent-bank comparison must therefore also
+match rate, including expert signalling. Equation~\eqref{eq:allocation}
+organises the two designs; it does not assert that their feasible sets or
+costs are equal. We implement the shared-exit case below and specify the
+independent-capacity experiment in \cref{sec:depth}.
+
+\begin{figure*}[t]
+\centering
+\includegraphics[width=\textwidth]{figs/refresh20260927/fig1_shared_latent_system.pdf}
+\caption{\textbf{Actual early-exit execution reuses work and shrinks the tile batch.}
+\textbf{a}, Four shared stem blocks supply features for the MLP and
+conditional synthesis. \textbf{b}, The recorded videoSRC05 QP32 map leaves
+40, 27, 7 and 3 active tiles at depths 6/8/10/12; blank cells have exited.
+Adapters write departing features into one canvas before full-frame repair
+and the common output head. Tensor values are schematic; occupancy is
+measured. The evaluated control is calibrated with source-error tables.}
+\label{fig:system}
+\end{figure*}
 
 \subsection{A shared representation, a variable synthesis depth}
 Let $\hat y$ be the recovered latent of the fixed DCVC-UF analysis transform
