@@ -30,17 +30,18 @@ DATA = ROOT / ("data/refresh20260927" if BUNDLED else "paper/data/refresh2026092
 OUT = ROOT / ("figs/refresh20260927" if BUNDLED else "paper/figures/refresh20260927")
 THUMBNAILS = DATA / "source_thumbnails.npz" if BUNDLED else ROOT / "flexplus/results/eval_rules_thumbs.npz"
 MM = 1 / 25.4
-INK, MUTED, GRID = "#18252e", "#54616a", "#dee4e8"
-BLUE, ORANGE, TEAL, GREY = "#0072b2", "#d55e00", "#009e73", "#828b91"
-DEPTH = ["#d9e7ef", "#91bdd3", "#398aaf", "#17516f"]
-COL = dict(oracle=INK, router=BLUE, dither=ORANGE, uniform=GREY)
+INK, MUTED, GRID = "#183342", "#5A6C75", "#E2E9EB"
+BLUE, ORANGE, TEAL, GREY = "#007F86", "#BB7534", "#63527C", "#8999A3"
+DEPTH_ALL = ["#DCECEB", "#A8D4CE", "#60B1A8", "#2B8D8C", "#286777", "#244457"]
+DEPTH = DEPTH_ALL[2:]
+COL = dict(oracle=TEAL, router=BLUE, dither=ORANGE, uniform=GREY)
 MARK = dict(oracle="o", router="s", dither="^", uniform="D")
 LABEL = dict(oracle="Source-informed search", router="Router", dither="Bayer dither", uniform="Uniform depth")
 BUD = [.05, .1, .15, .2, .3, .5]
 plt.rcParams.update({
-    "font.family": "Liberation Sans", "font.size": 6.5,
-    "axes.labelsize": 6.5, "axes.titlesize": 7, "xtick.labelsize": 6,
-    "ytick.labelsize": 6, "legend.fontsize": 6, "axes.linewidth": .55,
+    "font.family": "Liberation Sans", "font.size": 7,
+    "axes.labelsize": 7, "axes.titlesize": 7.2, "xtick.labelsize": 6.3,
+    "ytick.labelsize": 6.3, "legend.fontsize": 6.3, "axes.linewidth": .55,
     "axes.spines.top": False, "axes.spines.right": False,
     "xtick.major.width": .5, "ytick.major.width": .5,
     "xtick.major.size": 2.5, "ytick.major.size": 2.5,
@@ -172,7 +173,8 @@ def audit_and_save(fig, name, caption, book):
 
 
 def architecture(d, book):
-    fig, ax = schematic(119)
+    fig, ax = schematic(101)
+    ax.set_ylim(0,119)
     ex = d["example"]
     m = np.array(ex["rules"]["router"]["0.1"]["map"]).reshape(ex["grid"])
     heading(ax, 3, 115, "a", "A shared representation, spatially variable synthesis")
@@ -190,6 +192,21 @@ def architecture(d, book):
     tensor(ax, 83, 93, 18, 12, grid=4)
     text(ax, 92, 89, "Stem features", ha="center")
     text(ax, 92, 85, "384 × H/8 × W/8", ha="center", fontsize=6)
+    # The stopping predictor branches from the existing stem. Its compact
+    # graph and separate control arrow distinguish scores from calibration.
+    ax.plot([94, 94, 116], [108, 112, 112], color=BLUE, lw=.65)
+    arrow(ax, (113,112), (118,112), color=BLUE, lw=.65)
+    nodes=[[(120,110),(120,114)],[(125,109),(125,112),(125,115)],[(130,110),(130,114)]]
+    for left,right in zip(nodes[:-1],nodes[1:]):
+        for xx,yy in left:
+            for u,v in right:ax.plot([xx,u],[yy,v],color="#AEC9CB",lw=.4)
+    for col in nodes:
+        for xx,yy in col:ax.scatter(xx,yy,s=5,color=BLUE,zorder=4)
+    text(ax,105,116,"Pool + QP",ha="center",fontsize=5.7,color=BLUE)
+    text(ax,135,113,"MLP scores",fontsize=5.8,color=BLUE)
+    arrow(ax,(130,109),(130,107),color=BLUE,lw=.65)
+    text(ax,169,112,"Control β",ha="center",fontsize=5.8,color=ORANGE)
+    arrow(ax,(159,112),(145,105),color=ORANGE,lw=.65)
     arrow(ax, (105, 99), (115, 99))
     tilemap(ax, 118, 92, 25, 15, m)
     text(ax, 130.5, 88, "Extract feature tiles", ha="center")
@@ -218,7 +235,7 @@ def architecture(d, book):
         ax.add_patch(Polygon([[xx - 3, 40], [xx, 37.5], [xx + 3, 40], [xx, 42.5]],
                               fc=DEPTH[j], ec=MUTED, lw=.45))
         ax.plot([xx, xx, 137], [37.5, 33 - j * 1.2, 33 - j * 1.2], color=DEPTH[j], lw=1.0)
-    text(ax, 62, 25, "Exit adapters align channels before stitching", ha="center", fontsize=6)
+    text(ax, 62, 25, "Pointwise exit adapters; deepest exit uses identity", ha="center", fontsize=6)
     arrow(ax, (137, 29.5), (145, 41), color=MUTED)
     tilemap(ax, 147, 42, 25, 15, m)
     text(ax, 159.5, 62, "Stitched feature canvas", ha="center")
@@ -249,7 +266,7 @@ def budget(d, book):
     ax.legend(loc="lower right", fontsize=5.8, handlelength=1.3, labelspacing=.35)
 
     ax = axs[0, 1]; panel(ax, "b", "The additional value of routing shrinks")
-    for contrast, c, marker, label in [("oracle_minus_dither", INK, "o", "Search − dither"),
+    for contrast, c, marker, label in [("oracle_minus_dither", TEAL, "o", "Search − dither"),
                                         ("router_minus_dither", BLUE, "s", "Router − dither")]:
         rs = [r for r in d["contrasts"] if r["contrast"] == contrast]
         y = np.array([r["mean"] for r in rs]); lo = np.array([r["lo"] for r in rs]); hi = np.array([r["hi"] for r in rs])
@@ -383,16 +400,16 @@ def decision_cost(d, book):
 
 
 def maps(d, book):
-    fig, ax = schematic(101)
+    fig, ax = schematic(86)
     ex = d["example"]; mshape = ex["grid"]
     thumbs = np.load(THUMBNAILS)
-    heading(ax, 3, 96, "a", "Spatial decisions converge as the quality budget relaxes")
-    text(ax, 7, 90, f"{ex['seq']}  ·  QP32  ·  archived source luma", fontsize=6)
+    heading(ax, 3, 81, "a", "Spatial decisions converge as the quality budget relaxes")
+    text(ax, 7, 75, f"{ex['seq']}  ·  QP32  ·  archived source luma", fontsize=6)
     xs = [7, 44, 81, 118, 155]
     for x, label in zip(xs, ["Source", "Search", "Router", "Dither", "Uniform"]):
-        text(ax, x + 13.5, 82, label, ha="center", weight="bold", fontsize=6)
+        text(ax, x + 13.5, 68, label, ha="center", weight="bold", fontsize=6)
     H, W = ex["hw"]
-    for row, (b, y) in enumerate([(.1, 58), (.3, 25)]):
+    for row, (b, y) in enumerate([(.1, 48), (.3, 21)]):
         # Thumbnail has been downsampled in the original evaluator; no added
         # enhancement, contrast adjustment or generated reconstruction.
         ax.imshow(thumbs[str(ex["index"])], cmap="gray", vmin=0, vmax=255,
@@ -418,33 +435,73 @@ def maps(d, book):
         "Actual exit assignments at two target budgets on one QP32 frame. Tile colours denote total executed trunk blocks and use the same key as Fig. 1. Maps are cropped to the visible source extent. The left column is an archived source-luma thumbnail, not a reconstruction; this figure visualises allocation and does not establish perceptual similarity. The sequence was selected by proximity to the aggregate router–dither premium at 0.1 dB among the five available thumbnails. Numerical annotations are computed from the recorded mixed reconstructions and the MAC cost model.", book)
 
 
-def transfer(d, book):
-    fig, axs = plt.subplots(1, 2, figsize=(183 * MM, 83 * MM), gridspec_kw={"width_ratios": [1.3, 1]})
-    fig.subplots_adjust(left=.225, right=.985, bottom=.18, top=.84, wspace=.42)
-    ax = axs[0]; panel(ax, "a", "A source-informed map does not always win")
-    rs = [r for r in d["other_decoders"] if r["rule"] == "oracle" and float(r["budget"]) == .1]
-    rs.sort(key=lambda r: r["premium"])
-    for i, r in enumerate(rs):
-        c = BLUE if r["premium"] >= 0 else ORANGE
-        ax.errorbar(r["premium"], i, xerr=[[r["premium"] - r["premium_lo"]], [r["premium_hi"] - r["premium"]]],
-                    fmt="o", ms=3, color=c, capsize=2, lw=.8)
-    ax.set_yticks(range(len(rs)), [r["label"] + " / " + r["dataset"].split("-")[0] for r in rs])
-    ax.tick_params(axis="y", labelsize=5.8)
-    ax.axvline(0, color=INK, lw=.7)
-    ax.set(xlabel="Gain over the best blind rule (points)", ylim=(-.8, len(rs) - .2))
-    ax.grid(axis="x", color=GRID, lw=.45)
+def depth_system(d, book):
+    fig, ax = schematic(103)
+    ax.set_ylim(0,125)
+    heading(ax, 3, 119, "a", "Shared early exit: one representation, nested synthesis")
+    # A latent stack feeds a single trunk. Departing paths converge on a
+    # common canvas; the staircase encodes retained block depth, not runtime.
+    tensor(ax, 7, 95, 13, 12, "#E3EEED", grid=4)
+    text(ax, 14, 90, "One latent", ha="center", fontsize=6.3)
+    arrow(ax, (23,101), (34,101))
+    strip(ax, 37, 97, 4, w=2.4, h=8, color=BLUE)
+    text(ax, 43, 90, "Shared stem", ha="center", fontsize=6.3)
+    arrow(ax, (51,101), (62,101))
+    for i, c in enumerate(DEPTH):
+        x=65+i*16
+        strip(ax,x,97,2,w=3,h=8,color=c)
+        if i<3:arrow(ax,(x+8,101),(x+14,101),color=c)
+        ax.plot([x+4,x+4,133],[96,88-i*2.6,88-i*2.6],color=c,lw=1.2)
+        ax.scatter([x+4],[96],s=9,color=c,zorder=4)
+        text(ax,x+4,109,str(6+2*i),ha="center",fontsize=6.3,weight="bold",color=c)
+    arrow(ax,(133,81),(147,98),color=BLUE)
+    tensor(ax,150,96,15,11,DEPTH[0],grid=4)
+    text(ax,157,90,"Common head",ha="center",fontsize=6.3)
+    text(ax,178,79,"MEASURED EXIT FAMILY",ha="right",color=BLUE,fontsize=5.8,weight="bold")
+    ax.plot([3,180],[75,75],color=GRID,lw=.7)
 
-    ax = axs[1]; panel(ax, "b", "PSNR permits perceptual loss")
-    for model, c, marker in [("NoGAN-MS", BLUE, "o"), ("MS-ILLM", ORANGE, "s")]:
-        for kind, style in [("psnr", "-"), ("lpips", "--")]:
-            rr = [r for r in d["perception"] if r["model"] == model and r["budget"].startswith("lpips") == (kind == "lpips")]
-            rr.sort(key=lambda r: r["dlpips"])
-            ax.plot([r["dlpips"] for r in rr], [r["saving"] for r in rr], color=c, marker=marker,
-                    ls=style, mfc=c if kind == "psnr" else "white", label=f"{model} / {kind.upper()}")
-    ax.set(xlabel="Mean LPIPS increase (lower is better)", ylabel="Modelled MAC saving (%)", xlim=(-.002, .078), ylim=(0, 75))
-    ax.legend(loc="upper left", fontsize=5.6, handlelength=1.6)
-    audit_and_save(fig, "fig6_scope_and_perception",
-        "Transfer diagnostics on existing non-DCVC reconstructions. Panel a compares the source-informed selection with the best dataset-level blind rule at a 0.1 dB target; intervals are paired image-bootstrap 95% intervals from the independently audited archive. Dataset and adapter variants remain separate. Dense masked evaluation computes candidate branches before selection, so the savings are region/halo cost models, not measured speedups. Selection in these experiments uses deviation from the reference decoder and is not a certified source-distortion optimum. Panel b shows independent Kodak-24 evaluations under PSNR and LPIPS constraints; each line joins three recorded points. LPIPS increase is measured against the reference decoder's output. No DCVC-UF perceptual conclusion follows from these two other models.", book)
+    heading(ax,3,70,"b","Independent depth controls: each codec learns its own representation")
+    xs=[14,45,76,107,138,169]
+    for x,depth,c in zip(xs,[2,4,6,8,10,12],DEPTH_ALL):
+        text(ax,x,62,f"D{depth}",ha="center",fontsize=7,weight="bold",color=INK)
+        # Each expert has its own analysis funnel and latent glyph.
+        ax.add_patch(Polygon([[x-8,58],[x+8,58],[x+3,54],[x-3,54]],fc=c,ec=MUTED,lw=.4))
+        for j in range(3):ax.add_patch(Rectangle((x-3+j*2.2,50.5),1.5,2,fc=c,ec=MUTED,lw=.3))
+        for j in range(depth):ax.add_patch(Rectangle((x-8+j*1.35,44),1.0,4.2,fc=c,ec=MUTED,lw=.3))
+        status="TRAINING" if depth<8 else "PLANNED" if depth<12 else "RELEASED"
+        text(ax,x,40,status,ha="center",fontsize=5.8,weight="bold",color=MUTED if depth in (8,10) else BLUE if depth<8 else INK)
+        if depth in (8,10):ax.add_patch(Rectangle((x-10,43),21,16.5,fill=False,ec=MUTED,ls=(0,(2,2)),lw=.5))
+    text(ax,3,34,"Same-recipe D12 is an additional control. The released anchor alone does not isolate depth.",fontsize=6.2)
+    ax.plot([3,180],[29,29],color=GRID,lw=.7)
+
+    heading(ax,3,24,"c","Later routing study: select before encoding; signal which expert owns the payload")
+    # Feature samples, an actual node graph, batched tiles and a byte tape.
+    for i,c in enumerate([DEPTH_ALL[1],DEPTH_ALL[3],DEPTH_ALL[5]]):
+        ax.add_patch(Rectangle((7+i*2,9+i),8,7,fc=c,ec="white",lw=.5))
+    text(ax,12,4,"RGB patches",ha="center",fontsize=6)
+    arrow(ax,(24,13),(35,13))
+    nodes=[[(40,10),(40,16)],[(46,8),(46,13),(46,18)],[(52,10),(52,16)]]
+    for aa,bb in zip(nodes[:-1],nodes[1:]):
+        for x,y in aa:
+            for u,v in bb:ax.plot([x,u],[y,v],color="#BBCDCE",lw=.45)
+    for col in nodes:
+        for x,y in col:ax.scatter(x,y,s=9,c=BLUE,zorder=4)
+    text(ax,46,4,"MLP selector",ha="center",fontsize=6)
+    arrow(ax,(56,13),(69,13))
+    for i,c in enumerate([DEPTH_ALL[1],DEPTH_ALL[3],DEPTH_ALL[5]]):
+        for j in reversed(range(3-i)):
+            ax.add_patch(Rectangle((74+i*5+j*.5,10+j*.8),4,6,fc=c,ec="white",lw=.4))
+    text(ax,81,4,"Expert queues",ha="center",fontsize=6)
+    arrow(ax,(91,13),(104,13))
+    strip(ax,109,10,6,w=1.4,h=6,color=BLUE)
+    text(ax,115,4,"Selected codec",ha="center",fontsize=6)
+    arrow(ax,(126,13),(136,13))
+    for x,w,c,lab in [(141,6,ORANGE,"ID"),(147,9,TEAL,"z"),(156,20,BLUE,"y")]:
+        ax.add_patch(Rectangle((x,9),w,8,fc=c,ec="white",lw=.6))
+        text(ax,x+w/2,13,lab,ha="center",color="white",fontsize=6)
+    text(ax,159,4,"Control + payload",ha="center",fontsize=6)
+    audit_and_save(fig,"fig6_depth_study_system",
+        "Shared early exit and the independent DCVC-UF depth study answer different questions. Panel a shows one latent with nested synthesis depths 6/8/10/12; only this family has completed reconstruction comparisons. Panel b shows independent D2/D4/D6 training, planned D8/D10 and the released D12 anchor. The same-recipe D12 control is still needed. Panel c is a proposed subsequent model-bank routing path, selecting before encoding and transmitting expert identity. Network and queue geometry is schematic, not projected quality or throughput.",book)
 
 
 def main():
@@ -463,7 +520,7 @@ def main():
         quality(d, book)
         decision_cost(d, book)
         maps(d, book)
-        transfer(d, book)
+        depth_system(d, book)
     (OUT / "captions.json").write_text(json.dumps(CAPTIONS, indent=2) + "\n")
     (OUT / "layout_audit.json").write_text(json.dumps(AUDIT, indent=2) + "\n")
     manifest = {p.name: hashlib.sha256(p.read_bytes()).hexdigest() for p in sorted(OUT.iterdir()) if p.suffix in {".pdf", ".svg", ".png"}}

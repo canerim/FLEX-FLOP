@@ -3,10 +3,41 @@
 27 Eylül 2026 · Yeni GPU/eğitim deneyleri öneridir; tamamlanan CPU tablo
 kontrolleri üçüncü bölümde açıkça ayrılmıştır.
 
-**Ana soru:** Aynı kalite ve gerçek bitrate altında, içerikten hangi modelin
-çalıştırılacağını öğrenmek, en iyi sabit veya içerikten bağımsız seçime göre
-uçtan uca süreyi azaltıyor mu? D2/D4/D6 eğitimi bu sorunun kapasite eksenini
-kuruyor. Tek başına üç modelin PSNR farkı, bir router katkısını kanıtlamıyor.
+**Ana hikâye:** DCVC-UF sentezini bölgesel early exit ile azaltmak. Router bu
+yapının durma kararını veriyor; 2/4/6/8/10/12 bağımsız model kıyası daha sonra
+kapasite ve paylaşım etkisini ayıracak. Bütün sayısal deneyler DCVC-UF içinde
+kalacak. Ana başarı ölçütü aynı gerçekleşen kalite ve gerçek bitrate altında,
+karar/taşıma/entropy maliyetleri dahil pozitif süre kazancı.
+
+## 0. Önce early-exit mekanizmasını kanıtlayan ablasyonlar
+
+| Kod / öncelik | Tek değişken | Eşlenmiş kontrol ve çıktı | Yeniden eğitim? |
+|---|---|---|---|
+| E0 / P0 | Tam görüntü ve bütün patch'ler 12 blok | Aynı e15 ağırlıkları ve ayrı released referans; crop sonrası RGB/YUV kaybı, gerçek süre | İlk teşhis için hayır |
+| E1 / P0 | Uniform / Bayer / MLP / kaynak bilgili seçim | Aynı aday derinlikler ve hedef; gerçekleşmiş kalite, fallback, MAC ve tam süre | Predictor gerektiğinde ayrı; codec sabit |
+| E2 / P0 | 1×1 / pointwise FFN / depth-scaled adapter | Aynı eğitim adımı ve veri; her exit'in RD ve süresi | Evet; adapter kapatmak aynı ablasyon değildir |
+| E3 / P0 | Repair yok / depthwise / grid-gated repair | Aynı patch ve eğitim; boundary bandı ile interior MSE ayrı, final görüntü | Evet; ayrıca mevcut modelde kapatma hassasiyet testi yapılabilir |
+| E4 / P1 | Full-frame head / patch head | Head dışındaki ayarlar aynı; boundary hatası, halo dahil hesap | Evet |
+| E5 / P1 | Full-frame exit eğitimi / random mixed-tile eğitimi | Aynı güncelleme sayısı ve ortak test yolu; train–deploy farkı | Evet |
+| E6 / P1 | Distillation kapalı / adjacent / deepest | Anchor sabit; sığ exit kalitesi ve deepest drift birlikte | Evet |
+| E7 / P1 | Anchor kapalı / mevcut batch-mean / per-sample lambda | QP bazlı released-reference drift; sığ exit frontier'ı | Evet |
+| E8 / P1 | Shared stem 2/4/6 blok | Gerçekte erişilebilir exit sayısı, aynı hedef altında MAC ve wall time | Evet; ortak minimum derinlikte de karşılaştır |
+| E9 / P1 | 128/256/512 RGB patch ve halo | Repair/head sabit; seam yoğunluğu, side bits, batch doluluğu | Eşleşmiş eğitim tercih edilir |
+
+Bu tabloda “yeniden eğitim” yazan kollar şu anda başlatılmış değildir.
+Sağlıklı D2/D4/D6 koşuları aynı protokolle devam eder. İlk küçük tarama E0/E1
+ile ölçüm yolunu sabitler; sonra E2/E3, yöntemin iki temel tasarım kararını
+sınar. Tüm kombinasyonların Kartezyen çarpımını çalıştırmak gereksizdir.
+
+**Şu an ölçülebilen derinlik etkisi:** mevcut shared-exit uniform
+rekonstrüksiyonlarında 6/8/10/12 blok için padded RGB kaybı, released tam
+görüntüye göre ortalama 0,2045/0,0968/0,0605/0,0379 dB.
+MAC tasarrufu %39,12/%24,22/%13,03/−%0,95. Bu bir CPU arşiv analizidir;
+bağımsız sığ model sonucu veya cropped mixed-map kalite iddiası değildir.
+Sonraki iki bloğun tile bazlı katkısı da tekdüze değil: 6→8, 8→10 ve 10→12
+geçişlerinde görüntü içindeki tile kazançlarının ortalama IQR'ı 0,0748/0,0340/0,0238 dB.
+Bu sonuç early exit için mekânsal fırsatı gösterir; boundary ve kaynak
+kalibrasyonu etkisini tek başına ayırmaz.
 
 ## 1. Önce iki sistemi birbirinden ayırıyoruz
 
@@ -20,7 +51,10 @@ kuruyor. Tek başına üç modelin PSNR farkı, bir router katkısını kanıtla
 Bağımsız modellerin encoder ve entropy ağırlıkları da öğreniliyor. Bu nedenle
 bir modelin latentini diğer decoder'a vermek geçerli bir bankalı codec tasarımı
 değil. Ortak encoder isteyen alternatif için encoder/entropy dondurulmalı ve
-decoder'lar ortak latent üzerinde ayrıca eğitilmeli. Bunlar ayrı deneylerdir.
+decoder'lar ortak latent üzerinde ayrıca eğitilmeli. Bunlar ayrı deneylerdir. Mevcut e15 fine-tuning çalışması ile 105 epoch
+sıfırdan eğitimli bankayı doğrudan karşılaştırmak bir sistem kıyasıdır;
+farkı yalnız ağırlık paylaşımına bağlamak için iki kolda da veri, başlangıç
+ve eğitim bütçesi eşleştirilmiş ek kontrol gerekir.
 
 ## 2. Ana deneyin nedensel kontrolü
 
@@ -66,7 +100,7 @@ diye adlandırılır.
 | R0 / P0 | Uniform / Bayer / histogramı koruyan shuffle / MLP / source-informed | Aynı gerçekleşen RD altında toplam süre; paired fark | Bütün yöntemlerde aynı padding, patch ve bitstream formatı |
 | R1 / P0 | Sabit held-out kontrol / kare başına source-calibrated kontrol | Encoder ve decoder maliyeti ayrı; side bits; hedef aşımı | Test kaynak görüntüsünün decoder policy kalibrasyonuna sızmaması |
 | R2 / P0 | Exit-label CE / maliyet-ağırlıklı regret / `(D,R)` tahmini | Ek latency kazancı, RD regret, kalibrasyon | Eşleşme doğruluğu tek başına başarı ölçütü değil |
-| R3 / P1 | QP-only / varyans+kenar / düşük çözünürlüklü RGB / öğrenilmiş feature | Girdi üretimi dahil süre ve RD | Codec seçilmeden mevcut olmayan latent/scales girdisi ücretsiz sayılamaz |
+| R3 / P0 | QP-only / varyans+kenar / düşük çözünürlüklü RGB / öğrenilmiş feature | Girdi üretimi dahil süre ve RD | Codec seçilmeden mevcut olmayan latent/scales girdisi ücretsiz sayılamaz |
 | R4 / P1 | D2+D12 / D2+D6+D12 / tam banka | RD-time frontier, ağırlık belleği ve expert kullanım oranı | Ara expertlerin yalnız kullanılması değil, frontiere katkısı |
 | R5 / P1 | MAC etiketi / ölçülmüş latency etiketi | Farklı çözünürlük ve microbatch boyutunda frontier | Latency label'ı cihaz ve batch koşuluna bağlıdır |
 | R6 / P2 | Tek seçim / yalnız belirsiz patch'lerde top-2 doğrulama | Arama maliyeti dahil encode süresi ve regret | İkinci denemenin reconstruction maliyetini dahil et |
@@ -87,6 +121,17 @@ dither'ınki 0,0007 dB. Router'ın aynı histogramda mümkün olan en iyi tablo
 yerleşimine uzaklığı 0,0044 dB. Bunlar kaynak tablo değerleridir; final
 crop/repair altında kaliteyi ispatlamaz. Bir sonraki somut ablasyon,
 aynı histogramlı shuffle ve optimum haritaları gerçekten decode etmek.
+
+Gerçek reconstruction kayıtlarında ikinci bir kontrol de tamamlandı:
+her politika için altı bütçede önceden decode edilmiş adaylar arasından,
+aynı **gerçekleşmiş RGB kaybı** sınırını karşılayan en ucuzu seçildi.
+Tam görüntü e15 referansı sıfır kayıplı/sıfır tasarruflu fallback olarak
+eklendi. Böylece her sınırda 265 çiftin tamamı korunuyor. 0,1 dB'de
+router–dither farkı 2,93 MAC puanı (%95 dizi bootstrap aralığı 2,11–3,79),
+0,3 dB'de 0,35 puan (0,11–0,64). Bu kaynak görüntüyü kullanan geriye
+dönük, sınırlı aday havuzu analizidir; seçilen haritalar gerçektir ama
+seçim için gereken denemelerin encoder maliyeti hesaba dahil değildir.
+Dolayısıyla henüz yeni bir deployable router veya net hız sonucu sayılmaz.
 
 ## 4. Denemeye değer somut yöntem: kazanç ve maliyeti tahmin eden router
 
@@ -113,6 +158,23 @@ doğrulanmalı ve gerekli fallback'in maliyeti raporlanmalıdır.
 Offline etiket üretimi de kaydedilecek: kaç patch × expert × QP, GPU-saat,
 depolama ve amortizasyon. Bu eğitim maliyeti inference ms içine eklenmez,
 fakat “ücretsiz oracle” gibi sunulmaz.
+
+Gruplu yürütmede bir expert'e patch eklemenin maliyeti sabit değildir.
+Tam kararın süre terimi `sum_k tau_k(n_k)` olmalı; `tau_k` ölçülmüş batch
+tablosudur. Basit bağımsız MLP kararından sonra sınırlı bir düzeltme kolu,
+patch'i k'dan j'ye taşırken
+`tau_k(n_k-1)-tau_k(n_k)+tau_j(n_j+1)-tau_j(n_j)` marjinal süresini kullanabilir.
+Bu öneri için önceden belirlenmiş az sayıda geçiş ve karar süresi limiti gerekir.
+Kazanç, düzeltmenin kendi süresi dahil plain MLP'ye karşı ölçülür. Dataset
+ortalamasında baskılanmış bir expert patch altkümesinde yararlı olabilir;
+expert silme kararı yalnız ortalama RD tablosundan verilmemelidir.
+
+Shared-exit sistemde decoded sembollerin ideal bit maliyeti gibi ucuz
+özellikler ayrıca güçlü içerik baseline'ıdır. Arşivde rate-rank denemeleri
+var; farklı kalibrasyon/reconstruction protokollerindeki özetleri bu ana
+eğriye eklemiyoruz. Aynı görüntü, aynı anchor, aynı gerçekleşmiş kalite ve
+aynı kontrol ayrımıyla yeniden ölçülmeleri gerekiyor. Noisy training-rate
+özelliği decoder'ın eriştiği gerçek sembol bilgisinin yerine geçirilemez.
 
 ## 5. Patch ve yürütme ablasyonları
 
@@ -206,3 +268,21 @@ cihaz süresi ve algısal kaliteyi birlikte gözeten güncel bir tasarım örne�
 Bizim çıkarımımız: router maliyetini teorik MAC ile etiketlemek yerine,
 hedef cihazdaki patch/batch koşullarında ölçmek ve sınır artefaktlarını ayrı
 incelemek gerekli. Bu çalışma bizim modele aktarılmış bir sonuç değil.
+
+
+## 8. Sonuca göre karar: hangi hipotezi ne zaman bırakacağız?
+
+| Gözlenecek sonuç | Araştırma kararı | Sonraki küçük kontrol |
+|---|---|---|
+| Adapter eklemek sığ exit'in aynı-rate kalitesini iyileştiriyor | Exit-feature uyumu katkısı savunulabilir | En küçük yeterli adapter; ağırlık, MAC ve süre dahil |
+| Repair yalnız seam bandında yardımcı oluyor | Katkıyı genel kalite iddiası yerine sınır tutarlılığı üzerinden açıkla | Boundary/interior MSE ve aynı eğitimli halo kontrolü |
+| Repair kaldırılınca yeniden eğitimle fark kapanıyor | Daha basit model ana aday olsun | Kapatma müdahalesi ile yeniden eğitim sonucunu karıştırma |
+| MLP MAC kazandırıyor, toplam decoder süresini kazandırmıyor | Early-exit mekanizmasının kazancı ayrı; MLP dağıtım iddiasını daralt | Dither ve ucuz entropy proxy'siyle aynı yükte ölçüm |
+| MLP sıkı bütçede faydalı, gevşek bütçede overhead'e yeniliyor | Bütçeye bağlı kontrol seçimi test et | Validation'da sabitlenmiş router/dither geçişi; testte eşik arama yok |
+| Bağımsız D2 ve D6 aynı QP'de benzer PSNR veriyor | Kapasite eşitliği sonucu çıkarma | Aynı gerçek bitrate, aynı epoch ve görüntü başına paired fark |
+| Ortalama RD'de ara expert baskılanıyor | Expert'i hemen silme | Patch altkümeleri ve leave-one-expert-out frontier |
+| Tiling/entropy reset maliyeti kazanımdan büyük | Model-bankası router'ını büyütmeden patch protokolünü düzelt | Full-frame D12 / patch D12 ve patch boyutu kontrolü |
+
+Bunlar önceden belirlenen yorumlama kurallarıdır; tablodaki koşulların
+ölçülmüş olduğu anlamına gelmez. Bir bileşenin olumsuz sonucu bütün early-exit
+hikâyesini geçersiz kılmaz; hangi bileşenin gerçekten katkı sunduğunu daraltır.

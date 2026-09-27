@@ -1,42 +1,26 @@
-\section{Discussion and Next Experiments}
-\label{sec:discussion}
+\section{Discussion}
 
-The relevant deployment question is whether content prediction improves the
-rate--distortion--time frontier after its own costs are included. The current
-paired analysis identifies a region of budgets where further routing work is
-plausible and a saturation region where even an accurate predictor has little
-room to help. It also gives strong controls: uniform depth, ordered dithering,
-and source-informed selection should accompany every router comparison.
+FLEX-UF exposes two operating regimes. Tight quality constraints leave room
+for useful learned placement. Near the shallowest-exit ceiling, blind
+mixtures approach the same arithmetic cost, and routing overhead can outweigh
+the remaining margin. A practical stopping policy should therefore be chosen
+jointly with the quality budget and measured device cost.
 
-The margin also sets an overhead budget. Under the explicit simplifying
-assumption that synthesis time is proportional to the recorded MAC model,
-the 0.1\,dB router--dither difference permits extra router work equivalent
-to only 3.40\% of the dither synthesis time before the advantage disappears.
-At 0.3\,dB that allowance falls to 0.62\%. These are compute-based
-break-even illustrations, not measured latency predictions; real grouped
-execution and memory traffic determine the actual margin.
-
-Three experimental gaps are decisive. First, quality must be verified on the
-final cropped reconstruction in the chosen metric, with a measured fallback
-for infeasible or over-budget plans. Second, a held-out, decoder-available
-control policy must be compared separately from test-frame source calibration.
-Third, actual encoded bytes and end-to-end timings must include decision
-signalling, entropy decoding, routing, tile movement and stitching, measured
-on the same device with paired execution orders.
-
-An ongoing depth study trains independent DCVC-UF intra codecs with two,
-four and six decoder trunk blocks under the pinned official training recipe.
-Their encoders and entropy models are also trained, so their latents are not
-interchangeable exits of the shared-latent model studied here. Released D12
-is a deployment reference; a D12 model trained under the same protocol is
-needed to isolate depth from training provenance. No incomplete training
-snapshot is included as a final result in this manuscript.
+The principal limitation is the gap between this allocation evidence and a
+complete codec benchmark. The current controls use source calibration,
+reported losses use the fine-tuned full-depth anchor, and MAC counts exclude
+routing and signalling. A common-reference quality replay and a held-out
+control sweep are required before a practical guarantee can be claimed.
+Actual bytes and paired wall-clock timings must then include entropy work,
+packing, tile movement and fallbacks. Perceptual metrics and boundary crops
+also remain necessary; a small RGB PSNR loss alone does not prove visual
+indistinguishability.
 
 \section{Conclusion}
-Spatial early exit provides a concrete mechanism for reducing decoder
-arithmetic, but its scientific value is the gain beyond cheaper blind
-allocations. On the recorded shared-latent DCVC-UF experiment, that gain is
-largest in a restricted quality-budget range and contracts as the ladder
-saturates. Delivered-quality checks and the cost of acquiring decision
-information are equally central to the claim. Together, these observations
-define a testable route from a flexible decoder to a practical adaptive codec.
+We presented FLEX-UF, a DCVC-UF spatial early-exit design that combines a
+shared synthesis stem, conditional tile depth, pointwise adaptation and
+full-frame repair. Recorded reconstructions show substantial decoder
+arithmetic reductions and a further, budget-dependent gain from learned
+placement over dithering. A common delivered-loss analysis preserves that
+trend. Controlled depth and complete-bitstream experiments are the next
+tests of whether these arithmetic gains produce a practical codec speedup.

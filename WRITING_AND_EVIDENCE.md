@@ -1,44 +1,48 @@
 # Narrative and evidence decisions
 
-The manuscript asks what learned spatial allocation contributes beyond using
-less decoder capacity. That question gives the introduction, the controls
-and the primary figure the same organising principle. The current results
-belong to the shared-latent e15 system. The independent depth-reduced codec
-bank is an ongoing experiment with a separate representation and protocol.
+The manuscript now centres on **spatial early exit within DCVC-UF**. The
+opening moves from uniform synthesis depth to three concrete obstacles:
+intermediate feature compatibility, tile boundaries and decision cost. The
+method addresses those with nested execution, pointwise adaptation, shared
+repair and a stopping predictor. Router-versus-dither analysis evaluates one
+component of that system rather than defining the entire paper's story.
 
-## How the narrative was revised
+Only DCVC-UF numerical experiments appear in the active manuscript and plot
+bundle. Other reconstruction networks have been removed from the results.
+Adaptive-codec and patch-exit papers remain relevant related work, with no
+unsubstantiated claim to have invented content-dependent computation.
 
-The opening moves from the reconstruction problem to the ambiguity in a
-headline compute saving, then introduces the experiment that resolves part
-of that ambiguity. Contributions name a mechanism, an experimentally
-isolated quantity and a measurement finding. They do not convert planned
-experiments into results. Each results paragraph states its finding before
-the protocol details needed to interpret it.
+The independent 2/4/6/8/10/12 study tests a second question: how much is lost
+by sharing one representation? Its training status, exact parameter counts
+and evaluation controls are explicit. A separate analytical sensitivity
+plot exposes assumptions for pending runtime measurements; it does not
+fabricate quality, bitrate, speedup observations or uncertainty intervals.
 
-The related-work section is organised by comparison axis: spatial capacity,
-adaptive compression, complete codec competition, practical execution and
-perception. Each group explains which design dimension is shared and what
-our evaluation measures. It does not rely on an unsupported “first” claim.
+## Narrative decisions
 
-Three primary-source examples informed this organisation, without borrowing
-their prose. [Shallow Decoders](https://openaccess.thecvf.com/content/ICCV2023/html/Yang_Computationally-Efficient_Neural_Image_Compression_with_Shallow_Decoders_ICCV_2023_paper.html)
-connects a decoder-design choice to the compute asymmetry it addresses.
-[DCVC-RT](https://arxiv.org/abs/2502.20762) makes execution constraints part of
-the problem formulation. [What Matters in Practical Learned Image Compression](https://arxiv.org/abs/2605.05148)
-organises design choices around quality and measured device runtime. The
-corresponding editorial choice here is to tie every claimed improvement to
-its comparison and measurement scope.
+The results proceed from the value of uniform depth to the total early-exit
+saving, the extra benefit of spatial allocation, its survival under a common
+measured loss cap, and the encoder work needed to obtain a decision. The
+paper finishes with the controlled depth study and the evidence needed for
+full codec execution. Detailed provenance audits sit in the supplement.
+
+Primary examples informing this structure include
+[Shallow Decoders](https://openaccess.thecvf.com/content/ICCV2023/html/Yang_Computationally-Efficient_Neural_Image_Compression_with_Shallow_Decoders_ICCV_2023_paper.html)
+for connecting a decoder design to compute asymmetry, and
+[DCVC-RT](https://arxiv.org/abs/2502.20762) for treating execution costs as
+part of the research question. Their prose and figures are not copied.
 
 ## Evidence-to-claim map
 
 | Claim | Direct evidence | Boundary |
 |---|---|---|
+| Uniform shared-exit depth has a measurable quality cost | Archived uniform-map error columns and a verified released-weight anchor | Padded RGB; not independent depth-model quality |
 | Conditional tile depths reduce modelled synthesis work | Recorded maps and cost vector; actual conditional implementation | Router, signalling and system latency are separate |
 | Learned allocation adds a budget-dependent margin | Paired common-cohort router–dither differences; sequence bootstrap | Per-frame source calibration; one codec/router checkpoint |
 | Spatial placement contains useful table information | Exact expected permutation at unchanged exit histogram | Table MSE, not new mixed reconstructions |
 | Quality targets need a common evaluation reference | Code trace, checkpoint comparison, exported losses | Historical execution hashes were not retained; both anchors need replay |
 | Source-error information has a measurable acquisition cost | Archived table-construction stage summaries | Pooled upper medians; no trial uncertainty or current end-to-end claim |
-| D2/D4/D6 quantify a useful capacity frontier | Training in progress | Final RD/time evidence is pending; same-recipe D12 needed |
+| D2/D4/D6 are designed to measure a capacity frontier | Training in progress | Final RD/time evidence is pending; same-recipe D12 needed |
 | A six-expert MLP can save net runtime | Proposed ablations and implementation path | Hypothesis; not an established result |
 
 ## Figure decisions

@@ -1,0 +1,420 @@
+{
+  "scope": "DCVC-UF intra only; CPU checkpoint metadata inspection and analytic capacity/sensitivity calculations",
+  "router": {
+    "lam": 1.3e-05,
+    "ckpt": "runs/RECIPE512/ckpt_PIN_e15.pth.tar",
+    "target": "ce_soft",
+    "bits_source": "noisy",
+    "tau_rel": 0.1,
+    "context": 0,
+    "r_stem": 48,
+    "r_lat": 32,
+    "hidden": 256,
+    "ckpt_epoch": 15,
+    "inputs": "stem,qp",
+    "with_bits": true
+  },
+  "router_stored_tensor_elements": 148182,
+  "router_training_record": {
+    "script": "scripts/train_router2.py",
+    "label": "ce_soft_6k",
+    "ckpt": "runs/RECIPE512/ckpt_PIN_e15.pth.tar",
+    "ckpt_epoch": 15,
+    "router_ckpt": "runs/RECIPE512/routers2/ablation_e15/ce_soft_6k.pth",
+    "inputs": "stem,qp",
+    "with_bits": true,
+    "router_params": 148176,
+    "lam": 1.3e-05,
+    "steps": 6000,
+    "batch_size": 6,
+    "crop": 512,
+    "lr": 0.001,
+    "alpha": 1.0,
+    "seed": 0,
+    "device": "cuda:5",
+    "cuda_visible_devices": null,
+    "gpu_name": "NVIDIA RTX A6000",
+    "tile_px": 256,
+    "split_depth": 2,
+    "num_exits": 6,
+    "heldout_agree_last50": 0.8100000214576721,
+    "heldout_agree_last250": 0.7910000190734864,
+    "heldout_tiles_per_step": 12,
+    "eval": {
+      "agree": 0.8066666722297668,
+      "stderr_across_frames": 0.0091854277998209,
+      "n_frames": 600,
+      "n_tiles": 2400,
+      "batches": 100,
+      "constant_best_agree": 0.34375,
+      "pred_hist": [
+        0.0,
+        0.0,
+        714.0,
+        648.0,
+        204.0,
+        834.0
+      ],
+      "oracle_hist": [
+        0.0,
+        0.0,
+        704.0,
+        611.0,
+        260.0,
+        825.0
+      ],
+      "note": "fresh draws from the same shuffled epoch, never trained on"
+    },
+    "wall_s": 2565.7357563972473,
+    "finished": "2026-09-05T07:00:34"
+  },
+  "shared_latent_training": {
+    "tag": "RECIPE512",
+    "config": {
+      "num_exits": 6,
+      "split_depth": 2,
+      "latent_patch": 16,
+      "latent_halo": 2,
+      "trunk_halo": 0,
+      "tile_coupling": false,
+      "tile_pad_mode": "replicate",
+      "seam_repair": "grid",
+      "adapter_kind": "scaled",
+      "adapter_expand": 4,
+      "full_frame_head": true,
+      "aux_weight": 1.0,
+      "aux_schedule": "constant",
+      "aux_warmup_epochs": 10,
+      "qp": 63
+    },
+    "recipe": "microsoft train_image.py, verbatim schedule",
+    "params_total": 45445398,
+    "params_adapters": 3104640,
+    "dataset": "/data10/shareddata/openimages/dcvc_train",
+    "dataset_size": 379614,
+    "batch_size": 8,
+    "epochs": 16,
+    "device": "0",
+    "rgb_patch": 256,
+    "tiles_per_256crop": 1,
+    "tiles_per_512crop": 4
+  },
+  "caveat": "Historical metadata and current code identify the inspected configuration; historical executable hashes were not captured at original run time.",
+  "parameters": {
+    "per_trunk_block": 1038720,
+    "fixed_synthesis": 1767168,
+    "non_synthesis": 27947520,
+    "rows": [
+      {
+        "depth": 2,
+        "decoder_parameters": 3844608,
+        "total_parameters": 31792128,
+        "training_status": "ongoing"
+      },
+      {
+        "depth": 4,
+        "decoder_parameters": 5922048,
+        "total_parameters": 33869568,
+        "training_status": "ongoing"
+      },
+      {
+        "depth": 6,
+        "decoder_parameters": 7999488,
+        "total_parameters": 35947008,
+        "training_status": "ongoing"
+      },
+      {
+        "depth": 8,
+        "decoder_parameters": 10076928,
+        "total_parameters": 38024448,
+        "training_status": "planned"
+      },
+      {
+        "depth": 10,
+        "decoder_parameters": 12154368,
+        "total_parameters": 40101888,
+        "training_status": "planned"
+      },
+      {
+        "depth": 12,
+        "decoder_parameters": 14231808,
+        "total_parameters": 42179328,
+        "training_status": "released reference; same-recipe control pending"
+      }
+    ],
+    "interpretation": "Exact architecture counts derived from the repeated block structure and verified D2/D4/D6 manifests; not trained quality or runtime."
+  },
+  "projection": {
+    "label": "ANALYTICAL SCENARIO \u2014 NOT MEASURED",
+    "equation": "T(d)/T(12) = (1-f) + f*d/12 + h; speedup is its reciprocal",
+    "assumptions": "The full-depth trunk consumes a hypothetical fraction f of baseline time; trunk work scales linearly with retained depth; h is extra overhead relative to full baseline time. No calibration to device timings.",
+    "excluded": "No predicted PSNR, bitrate, learned routing benefit, confidence interval, or measured speedup.",
+    "rows": [
+      {
+        "depth": 2,
+        "assumed_trunk_time_fraction": 0.5,
+        "assumed_extra_overhead_fraction": 0.0,
+        "relative_time": 0.5833333333333334,
+        "speedup": 1.7142857142857142
+      },
+      {
+        "depth": 4,
+        "assumed_trunk_time_fraction": 0.5,
+        "assumed_extra_overhead_fraction": 0.0,
+        "relative_time": 0.6666666666666666,
+        "speedup": 1.5
+      },
+      {
+        "depth": 6,
+        "assumed_trunk_time_fraction": 0.5,
+        "assumed_extra_overhead_fraction": 0.0,
+        "relative_time": 0.75,
+        "speedup": 1.3333333333333333
+      },
+      {
+        "depth": 8,
+        "assumed_trunk_time_fraction": 0.5,
+        "assumed_extra_overhead_fraction": 0.0,
+        "relative_time": 0.8333333333333333,
+        "speedup": 1.2000000000000002
+      },
+      {
+        "depth": 10,
+        "assumed_trunk_time_fraction": 0.5,
+        "assumed_extra_overhead_fraction": 0.0,
+        "relative_time": 0.9166666666666667,
+        "speedup": 1.0909090909090908
+      },
+      {
+        "depth": 12,
+        "assumed_trunk_time_fraction": 0.5,
+        "assumed_extra_overhead_fraction": 0.0,
+        "relative_time": 1.0,
+        "speedup": 1.0
+      },
+      {
+        "depth": 2,
+        "assumed_trunk_time_fraction": 0.5,
+        "assumed_extra_overhead_fraction": 0.03,
+        "relative_time": 0.6133333333333334,
+        "speedup": 1.6304347826086956
+      },
+      {
+        "depth": 4,
+        "assumed_trunk_time_fraction": 0.5,
+        "assumed_extra_overhead_fraction": 0.03,
+        "relative_time": 0.6966666666666667,
+        "speedup": 1.4354066985645932
+      },
+      {
+        "depth": 6,
+        "assumed_trunk_time_fraction": 0.5,
+        "assumed_extra_overhead_fraction": 0.03,
+        "relative_time": 0.78,
+        "speedup": 1.282051282051282
+      },
+      {
+        "depth": 8,
+        "assumed_trunk_time_fraction": 0.5,
+        "assumed_extra_overhead_fraction": 0.03,
+        "relative_time": 0.8633333333333333,
+        "speedup": 1.1583011583011584
+      },
+      {
+        "depth": 10,
+        "assumed_trunk_time_fraction": 0.5,
+        "assumed_extra_overhead_fraction": 0.03,
+        "relative_time": 0.9466666666666668,
+        "speedup": 1.056338028169014
+      },
+      {
+        "depth": 12,
+        "assumed_trunk_time_fraction": 0.5,
+        "assumed_extra_overhead_fraction": 0.03,
+        "relative_time": 1.03,
+        "speedup": 0.970873786407767
+      },
+      {
+        "depth": 2,
+        "assumed_trunk_time_fraction": 0.7,
+        "assumed_extra_overhead_fraction": 0.0,
+        "relative_time": 0.4166666666666667,
+        "speedup": 2.4
+      },
+      {
+        "depth": 4,
+        "assumed_trunk_time_fraction": 0.7,
+        "assumed_extra_overhead_fraction": 0.0,
+        "relative_time": 0.5333333333333333,
+        "speedup": 1.875
+      },
+      {
+        "depth": 6,
+        "assumed_trunk_time_fraction": 0.7,
+        "assumed_extra_overhead_fraction": 0.0,
+        "relative_time": 0.6499999999999999,
+        "speedup": 1.5384615384615388
+      },
+      {
+        "depth": 8,
+        "assumed_trunk_time_fraction": 0.7,
+        "assumed_extra_overhead_fraction": 0.0,
+        "relative_time": 0.7666666666666666,
+        "speedup": 1.3043478260869565
+      },
+      {
+        "depth": 10,
+        "assumed_trunk_time_fraction": 0.7,
+        "assumed_extra_overhead_fraction": 0.0,
+        "relative_time": 0.8833333333333334,
+        "speedup": 1.1320754716981132
+      },
+      {
+        "depth": 12,
+        "assumed_trunk_time_fraction": 0.7,
+        "assumed_extra_overhead_fraction": 0.0,
+        "relative_time": 0.9999999999999999,
+        "speedup": 1.0000000000000002
+      },
+      {
+        "depth": 2,
+        "assumed_trunk_time_fraction": 0.7,
+        "assumed_extra_overhead_fraction": 0.03,
+        "relative_time": 0.44666666666666666,
+        "speedup": 2.238805970149254
+      },
+      {
+        "depth": 4,
+        "assumed_trunk_time_fraction": 0.7,
+        "assumed_extra_overhead_fraction": 0.03,
+        "relative_time": 0.5633333333333334,
+        "speedup": 1.7751479289940828
+      },
+      {
+        "depth": 6,
+        "assumed_trunk_time_fraction": 0.7,
+        "assumed_extra_overhead_fraction": 0.03,
+        "relative_time": 0.6799999999999999,
+        "speedup": 1.4705882352941178
+      },
+      {
+        "depth": 8,
+        "assumed_trunk_time_fraction": 0.7,
+        "assumed_extra_overhead_fraction": 0.03,
+        "relative_time": 0.7966666666666666,
+        "speedup": 1.2552301255230125
+      },
+      {
+        "depth": 10,
+        "assumed_trunk_time_fraction": 0.7,
+        "assumed_extra_overhead_fraction": 0.03,
+        "relative_time": 0.9133333333333334,
+        "speedup": 1.0948905109489049
+      },
+      {
+        "depth": 12,
+        "assumed_trunk_time_fraction": 0.7,
+        "assumed_extra_overhead_fraction": 0.03,
+        "relative_time": 1.0299999999999998,
+        "speedup": 0.9708737864077672
+      },
+      {
+        "depth": 2,
+        "assumed_trunk_time_fraction": 0.9,
+        "assumed_extra_overhead_fraction": 0.0,
+        "relative_time": 0.24999999999999997,
+        "speedup": 4.000000000000001
+      },
+      {
+        "depth": 4,
+        "assumed_trunk_time_fraction": 0.9,
+        "assumed_extra_overhead_fraction": 0.0,
+        "relative_time": 0.39999999999999997,
+        "speedup": 2.5
+      },
+      {
+        "depth": 6,
+        "assumed_trunk_time_fraction": 0.9,
+        "assumed_extra_overhead_fraction": 0.0,
+        "relative_time": 0.55,
+        "speedup": 1.8181818181818181
+      },
+      {
+        "depth": 8,
+        "assumed_trunk_time_fraction": 0.9,
+        "assumed_extra_overhead_fraction": 0.0,
+        "relative_time": 0.7,
+        "speedup": 1.4285714285714286
+      },
+      {
+        "depth": 10,
+        "assumed_trunk_time_fraction": 0.9,
+        "assumed_extra_overhead_fraction": 0.0,
+        "relative_time": 0.85,
+        "speedup": 1.1764705882352942
+      },
+      {
+        "depth": 12,
+        "assumed_trunk_time_fraction": 0.9,
+        "assumed_extra_overhead_fraction": 0.0,
+        "relative_time": 1.0,
+        "speedup": 1.0
+      },
+      {
+        "depth": 2,
+        "assumed_trunk_time_fraction": 0.9,
+        "assumed_extra_overhead_fraction": 0.03,
+        "relative_time": 0.27999999999999997,
+        "speedup": 3.5714285714285716
+      },
+      {
+        "depth": 4,
+        "assumed_trunk_time_fraction": 0.9,
+        "assumed_extra_overhead_fraction": 0.03,
+        "relative_time": 0.42999999999999994,
+        "speedup": 2.3255813953488373
+      },
+      {
+        "depth": 6,
+        "assumed_trunk_time_fraction": 0.9,
+        "assumed_extra_overhead_fraction": 0.03,
+        "relative_time": 0.5800000000000001,
+        "speedup": 1.7241379310344827
+      },
+      {
+        "depth": 8,
+        "assumed_trunk_time_fraction": 0.9,
+        "assumed_extra_overhead_fraction": 0.03,
+        "relative_time": 0.73,
+        "speedup": 1.36986301369863
+      },
+      {
+        "depth": 10,
+        "assumed_trunk_time_fraction": 0.9,
+        "assumed_extra_overhead_fraction": 0.03,
+        "relative_time": 0.88,
+        "speedup": 1.1363636363636365
+      },
+      {
+        "depth": 12,
+        "assumed_trunk_time_fraction": 0.9,
+        "assumed_extra_overhead_fraction": 0.03,
+        "relative_time": 1.03,
+        "speedup": 0.970873786407767
+      }
+    ]
+  },
+  "hashes": {
+    "runs/RECIPE512/routers2/ablation_e15/ce_soft_6k.pth": "5b832c639fa7f857ef071276fd683e8e6150ca35e56b4470008a7d9dd79dda0f",
+    "results/router_e15/ce_soft_6k.json": "3e8b71dd5c606fad9c153ee4fab0c3dc325314a088d066e3c9e998c0ccdc7489",
+    "runs/RECIPE512/meta.json": "f6679dd82cd6ca3f33bc50d6dea19076ec91b0bbe3b909db4f0a0fb0fcb20f2f",
+    "scripts/train_router2.py": "d0761c66e727f9085dc9080e14c9a84a7cca6a56d5303b370f6fa4416bc3f740",
+    "flexuf/router/head2.py": "d24303888051d0be1b98b87f69414ffa652c6629e65fa6ab2c12536d46e3d50e",
+    "scripts/launch_recipe512.sh": "1d6c6102d60e6708c4e810cb1dbb2441d50f60e5174282bf103e24cbe1b1a05a",
+    "train_flexuf_image.py": "f82c5e25867b4a9b67d298d2216c80e68a50f927758cf3ecb392bdb0cdb1ab78",
+    "scripts/audit_manuscript_design.py": "0563deae9d438e975d5cbd8a090e9aa47c49d844ad7f8b53b297d5c62f50c267",
+    "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/runs/d2/manifest.json": "bb4ca6030acf022b64fde4283064da4f2b803b7a1e2b8fd6008f0012fac6ac47",
+    "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/runs/d4/manifest.json": "8af004a637526460afbb6d69938d57a1c3523ecbd493f483825e1f1ec7942689",
+    "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/runs/d6/manifest.json": "06084011acb7630489a0655c5970ed6687c8da2d6ed97eb5bcf47b8dc3a22400"
+  }
+}

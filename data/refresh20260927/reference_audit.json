@@ -176,6 +176,12 @@
       "max_absolute_difference": 0.24810922145843506
     }
   },
+  "warmstart_matches_official_release": {
+    "compared": 398,
+    "missing": [],
+    "changed": [],
+    "interpretation": "All inherited warm-start tensors match the archived official released D12 after exact key remapping; extra adapter/router parameters are outside this comparison."
+  },
   "selection_reference": "dump_router_lp.py loads reference_for(cfg) into a separate ref model; R is reference_frame_mse(ref.dec, y, q, padded_source)",
   "reporting_reference": "eval_rules_ctc.py uses net.dec.forward_full(y,q), after loading the fine-tuned e15 model, and crops it; raw field psnr_release is misleading",
   "implications": [
@@ -189,9 +195,12 @@
   "hashes": {
     "runs/RECIPE512/ckpt_PIN_e15.pth.tar": "91556d30bca41988755ff43dee3bc6d0cd2a0a4eda1d18d2891b168dc0a04ce9",
     "runs/warmstart/ckpt_warmstart.pth.tar": "dd2fc59955e13cf7c933ed7eaa0c5e418c2c7abb3da5ec263b27a63bfa428800",
+    "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/reference_d12/released_cvpr2026_image.pth.tar": "b3b900de23f30e4fc437010ddffe6a5413a56d6cfd97fb6235adbcd2b6973302",
     "flexplus/dump_router_lp.py": "74cf9cfc61c44d3c0123348d1b463b21886c6a34617ec268933913cb27f443c9",
     "flexplus/eval_rules_ctc.py": "2edf8d9248844990c99f8b5a35f767c94e4177ed20f929a6146f4a6e5447ccde",
-    "flexuf/backbone/decoder.py": "eba774cadc62e4542cfb5424a07cdf6dff432f2c4abad889a22e084e52bc9b90"
+    "flexuf/backbone/decoder.py": "eba774cadc62e4542cfb5424a07cdf6dff432f2c4abad889a22e084e52bc9b90",
+    "flexuf/backbone/warmstart.py": "5abb803acbbc204382419fc34d05a60775586334246e2a47976ef30bb58915ba",
+    "scripts/audit_paper_references.py": "fa128d536ac1bb712f29afc34ff67aaf59658608a687f9f2ea7458596394c010"
   },
   "caveat": "Hashes and weight comparison describe files present at audit time; historical evaluator code/checkpoint hashes were not recorded during execution."
 }

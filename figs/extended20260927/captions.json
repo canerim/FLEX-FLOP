@@ -8,7 +8,19 @@
     "caption": "CPU diagnostics of frozen source-error tables. (a) The largest missed saving among the enumerated fixed-router price paths is selected explicitly as a failure example, not as representative performance. Cost is monotone in the logit price but source error is not. (b) Enumerating score-line intersections and intervals within the archived price range improves only three paired plans at 0.05 dB and two at 0.1 dB; an additional previously infeasible case at 0.05 dB is omitted from paired gains. (c) Exact expectation over uniformly permuted assignments preserves each recorded map's exit histogram and MAC cost. The ordinate is 10 log10(expected shuffled MSE / recorded MSE), not expected PSNR; shading is a 95% sequence-cluster bootstrap interval. (d) Per-frame distribution for the router at 0.1 dB. All panels are padded-table diagnostics with source-calibrated controls. No new final-image or latency result is implied."
   },
   {
-    "name": "figS3_codec_bank_plan",
+    "name": "figS3_delivered_cap",
+    "caption": "Retrospective selection under a common achieved RGB-loss cap, with tolerance 0.0001 dB. Every policy chooses the lowest-cost candidate among its up to six archived nominal-budget maps whose final cropped output was actually measured. The evaluated fine-tuned e15 full-frame reconstruction is included as an explicit zero-loss, zero-saving fallback. All 265 frame\u2013QP pairs are retained. Panel b shows paired 95% sequence-cluster bootstrap intervals (5,000 draws). Candidates are discrete; connecting lines guide the eye and introduce no interpolated observations. This limited-pool source-aware diagnostic does not establish a held-out policy, a global optimum, released-reference quality or latency; costs of candidate evaluation and rejection are excluded."
+  },
+  {
+    "name": "figS4_codec_bank_plan",
     "caption": "Independent depth-reduced codecs and a proposed encoder-side routing path. D2, D4 and D6 are training under the pinned official recipe; D8 and D10 are planned; D12 is the released reference. An equally trained D12 control is required for a depth-only conclusion. Each expert owns its analysis transform, entropy model and synthesis transform. The proposed MLP selects an expert using information available before that expert is encoded. Grouped execution, control signalling and entropy state resets must be included in measurement. Network glyphs, block strips, queue sizes and stream segments are schematic, with no quantitative geometry or timing claim."
+  },
+  {
+    "name": "figS5_analytical_depth_scenarios",
+    "caption": "Analytical design-space illustration, not measured or forecast experimental results. Panel a gives exact architecture parameter counts from the repeated DCVC-UF trunk and verified D2/D4/D6 manifests. Panels b and c apply T(d)/T12=(1-f)+f*d/12+h at hypothetical trunk-time fractions f=0.5/0.7/0.9, with extra overhead h=0/0.03. Linear trunk-time scaling is assumed; these fractions are not fitted to hardware. Dashed open-marker curves are sensitivity scenarios, not measured speedups, confidence bands, PSNR or rate predictions. They illustrate the fixed-cost limit that future device measurements must resolve."
+  },
+  {
+    "name": "figS6_exit_depth_profile",
+    "caption": "Actual uniform-map DCVC-UF reconstruction profile from the archived source-error tables. Panel a reports mean padded RGB PSNR loss relative to the released-weight full-frame reference, against the stored decoder MAC model. Panels b and c compare per-tile errors between adjacent uniform-depth outputs: the frame median gain, within-frame IQR, and fraction with increased error. Frames have equal weight regardless of their tile count. Error bars are 95% sequence-cluster bootstrap intervals with five QPs grouped by sequence. Tile gains are context-dependent comparisons between two uniform maps, not causal one-tile interventions in mixed maps; no cropped quality or independent D2/D4/D6 result is inferred."
   }
 ]

@@ -1,8 +1,13 @@
 {
-  "isolated_copy": "/tmp/flex-paper-reproduction-f4rym2gf",
-  "inputs": "bundled data and figure scripts only",
+  "isolated_copy": "/tmp/flex-uf-reproduction-ygel54io",
+  "inputs": "bundled DCVC-UF data and scripts only",
   "gpu_used": false,
-  "byte_identical_artifacts": 29,
+  "byte_identical_artifacts": 38,
+  "byte_identical_generated_tex_files": [
+    "design_macros.tex",
+    "delivered_cap_table.tex",
+    "depth_capacity_table.tex"
+  ],
   "files": [
     "refresh20260927/fig1_shared_latent_system.pdf",
     "refresh20260927/fig1_shared_latent_system.png",
@@ -19,9 +24,9 @@
     "refresh20260927/fig5_spatial_decisions.pdf",
     "refresh20260927/fig5_spatial_decisions.png",
     "refresh20260927/fig5_spatial_decisions.svg",
-    "refresh20260927/fig6_scope_and_perception.pdf",
-    "refresh20260927/fig6_scope_and_perception.png",
-    "refresh20260927/fig6_scope_and_perception.svg",
+    "refresh20260927/fig6_depth_study_system.pdf",
+    "refresh20260927/fig6_depth_study_system.png",
+    "refresh20260927/fig6_depth_study_system.svg",
     "refresh20260927/figure_atlas.pdf",
     "extended20260927/extended_atlas.pdf",
     "extended20260927/figS1_reference_protocol.pdf",
@@ -30,8 +35,17 @@
     "extended20260927/figS2_control_and_assignment.pdf",
     "extended20260927/figS2_control_and_assignment.png",
     "extended20260927/figS2_control_and_assignment.svg",
-    "extended20260927/figS3_codec_bank_plan.pdf",
-    "extended20260927/figS3_codec_bank_plan.png",
-    "extended20260927/figS3_codec_bank_plan.svg"
+    "extended20260927/figS3_delivered_cap.pdf",
+    "extended20260927/figS3_delivered_cap.png",
+    "extended20260927/figS3_delivered_cap.svg",
+    "extended20260927/figS4_codec_bank_plan.pdf",
+    "extended20260927/figS4_codec_bank_plan.png",
+    "extended20260927/figS4_codec_bank_plan.svg",
+    "extended20260927/figS5_analytical_depth_scenarios.pdf",
+    "extended20260927/figS5_analytical_depth_scenarios.png",
+    "extended20260927/figS5_analytical_depth_scenarios.svg",
+    "extended20260927/figS6_exit_depth_profile.pdf",
+    "extended20260927/figS6_exit_depth_profile.png",
+    "extended20260927/figS6_exit_depth_profile.svg"
   ]
 }
