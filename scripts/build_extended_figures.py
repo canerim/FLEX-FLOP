@@ -180,7 +180,7 @@ def delivered(book):
     for rule in F.LABEL:
         rr=[r for r in d["summary"] if r["rule"]==rule]
         ax.plot([r["cap"] for r in rr],[r["mean"] for r in rr],color=F.COL[rule],marker=F.MARK[rule],label=F.LABEL[rule])
-    ax.set(ylabel="Decoder MAC saving (%)",ylim=(0,42),xlabel="Delivered RGB-loss cap (dB)")
+    ax.set(ylabel="Synthesis MAC saving (%)",ylim=(0,42),xlabel="Delivered RGB-loss cap (dB)")
     ax=axs[1];F.panel(ax,"b","The routing margin survives this control")
     rr=[r for r in d["contrasts"] if r["contrast"]=="router_minus_dither"]
     x=np.array([r["cap"] for r in rr]);y=np.array([r["mean"] for r in rr]);lo=np.array([r["lo"] for r in rr]);hi=np.array([r["hi"] for r in rr])
@@ -238,7 +238,7 @@ def exit_profile(book):
     for i,r in enumerate(rr):
         ax.errorbar(x[i],y[i],yerr=[[y[i]-lo[i]],[hi[i]-y[i]]],fmt="o",color=F.DEPTH[i],capsize=2,lw=.8)
         ax.annotate(f"{r['depth']} blocks",(x[i],y[i]),xytext=(4,7),textcoords="offset points",fontsize=6,color=F.INK)
-    ax.set(xlabel="Modelled decoder MAC saving (%)",ylabel="Padded RGB loss vs released (dB)",xlim=(-5,52),ylim=(0,.26))
+    ax.set(xlabel="Modelled synthesis MAC saving (%)",ylabel="Padded RGB loss vs released (dB)",xlim=(-5,52),ylim=(0,.26))
     ax=axs[1];F.panel(ax,"b","Extra depth has diminishing return")
     rr=d["incremental_summary"];x=np.arange(3)
     for key,col,mk,label in [('mean_within_frame_median',F.BLUE,'s','Mean frame median'),('mean_within_frame_iqr',F.TEAL,'o','Mean within-frame IQR')]:
@@ -255,7 +255,7 @@ def exit_profile(book):
     fig.text(.5,.13,'265 frame–QP pairs · equal frame weighting · 95% sequence-cluster intervals',ha='center',fontsize=6)
     fig.text(.5,.055,'Archived uniform reconstructions on padded RGB; these are shared exits, not independently trained shallow codecs.',ha='center',fontsize=6,color=F.MUTED)
     F.audit_and_save(fig,'figS6_exit_depth_profile',
-        'Actual uniform-map DCVC-UF reconstruction profile from the archived source-error tables. Panel a reports mean padded RGB PSNR loss relative to the released-weight full-frame reference, against the stored decoder MAC model. Panels b and c compare per-tile errors between adjacent uniform-depth outputs: the frame median gain, within-frame IQR, and fraction with increased error. Frames have equal weight regardless of their tile count. Error bars are 95% sequence-cluster bootstrap intervals with five QPs grouped by sequence. Tile gains are context-dependent comparisons between two uniform maps, not causal one-tile interventions in mixed maps; no cropped quality or independent D2/D4/D6 result is inferred.',book)
+        'Actual uniform-map DCVC-UF reconstruction profile from the archived source-error tables. Panel a reports mean padded RGB PSNR loss relative to the released-weight full-frame reference, against the stored synthesis MAC model. Panels b and c compare per-tile errors between adjacent uniform-depth outputs: the frame median gain, within-frame IQR, and fraction with increased error. Frames have equal weight regardless of their tile count. Error bars are 95% sequence-cluster bootstrap intervals with five QPs grouped by sequence. Tile gains are context-dependent comparisons between two uniform maps, not causal one-tile interventions in mixed maps; no cropped quality or independent D2/D4/D6 result is inferred.',book)
 
 
 def main():

@@ -144,8 +144,9 @@ For equal padded tiles, the arithmetic model is
  \label{eq:cost}
 \end{equation}
 Shared stem and output work, exit adapters and conditional depth are included
-in $c_k$. Router execution, signalling and general system overhead are
-outside this decoder MAC quantity. The four costs are approximately
+in $c_k$. Entropy-recovery networks, arithmetic coding, router execution,
+signalling and system overhead are outside this synthesis MAC quantity.
+The four costs are approximately
 $\{0.609,0.758,0.870,1.010\}$ relative to full-frame synthesis. In particular,
 a tiled all-deep map can cost more than the full-frame reference because repair
 is still executed.

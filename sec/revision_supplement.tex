@@ -213,7 +213,7 @@ cases remain in every reported aggregate.
 
 \begin{figure*}[t]
 \centering
-\includegraphics[width=\textwidth,trim=0 10 0 22,clip]{figs/crossfit20260927/fig_crossfit_budget_risk.pdf}
+\includegraphics[width=\textwidth,trim=0 14 0 22,clip]{figs/crossfit20260927/fig_crossfit_budget_risk.pdf}
 \caption{\textbf{A source-free control trades arithmetic savings against tail risk.}
 Controls are calibrated on other sequences, separately at each QP, using
 the training mean (solid) or 90th percentile (dashed). All 265 pairs are
@@ -293,7 +293,7 @@ is an explicit fallback with zero relative loss and zero MAC saving.
 The cheapest eligible candidate is selected; ties prefer lower loss.
 
 This keeps all 265 pairs at every cap. At 0.1\,dB, the retained maps save
-29.19\% of modelled decoder MACs for source-informed search, 27.75\% for
+29.19\% of modelled synthesis MACs for source-informed search, 27.75\% for
 the router, 24.81\% for dithering and 22.98\% for uniform depth.
 The router--dither difference is 2.93 percentage points, with a paired
 95\% sequence-cluster interval of [2.11,3.79]. Their mean achieved RGB
@@ -423,6 +423,37 @@ Epochs & RGB crop & Learning rate \\
 \bottomrule
 \end{tabular}
 \end{table}
+
+\paragraph{Synthesis versus complete neural-decoder arithmetic.}
+We trace every convolution in the pinned architecture, counting each use
+of the causal spatial prior. At $512\times512$, the unchanged neural
+entropy-recovery path costs 31.079\,GMac. D12 synthesis contributes
+56.915\,GMac, while D2 contributes 14.495\,GMac. Thus a 74.53\% synthesis
+reduction becomes a 48.21\% reduction when those fixed recovery networks
+are included (\cref{fig:depthmacs}). These are architectural counts, not
+trained-quality or timing results. Meta-tensor traces were checked against
+a real CPU D2 forward at $64\times64$; the repeated prior is counted three
+times. Biases, elementwise operations, rANS, memory movement and routing
+remain outside this Conv2d accounting.
+
+The native encoder also produces a reconstruction while its CPU entropy
+worker can run concurrently. Even including synthesis in an encoder MAC
+total therefore does not justify adding isolated stage times or converting
+MAC reduction into wall-time reduction. The same execution contract and
+precision must be used for every depth in a future paired timing study.
+
+\begin{figure*}[t]
+\centering
+\includegraphics[width=\textwidth,trim=0 14 0 24,clip]{figs/depthmacs20260927/fig_depth_mac_denominators.pdf}
+\caption{\textbf{The arithmetic denominator changes the apparent saving.}
+\textbf{a}, Synthesis varies with depth while neural entropy recovery stays
+fixed. \textbf{b}, The same architectural intervention under three
+accounting scopes. Counts use $512\times512$ input and one MAC per
+multiply--accumulate; they are not observed kernel times. D8/D10 are
+architecture-only controls. Encoder totals include reconstruction but omit
+rANS, elementwise work, transfers and control overhead.}
+\label{fig:depthmacs}
+\end{figure*}
 
 \paragraph{Isolating depth.}
 Released D12 is a useful deployment anchor, but a D12 trained with the same

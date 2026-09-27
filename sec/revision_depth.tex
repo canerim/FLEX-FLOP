@@ -58,8 +58,10 @@ measurements for unfinished models.
 
 \paragraph{A budget is also a scheduling problem.}
 Assigning patches independently does not make execution time additive.
-Patches selected for expert $k$ form a batch of size $n_k$; its measured
-latency is a function $\tau_k(n_k)$. A prospective cost model is
+With a batching implementation, patches selected for expert $k$ would form
+a batch of size $n_k$, with measured latency $\tau_k(n_k)$. The pinned
+native codec currently allocates batch-one buffers; grouped native execution
+is additional engineering, not an existing result. A prospective cost model is
 \begin{equation}
  T(\mathbf a)=T_{\rm select}+T_{\rm pack}
  +\sum_k\tau_k(n_k)+T_{\rm assemble},

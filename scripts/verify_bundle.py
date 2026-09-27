@@ -87,19 +87,35 @@ def main():
     assert "other_decoders" not in d and "perception" not in d
     figure_count=0
     min_font=float("inf")
-    for folder in ["refresh20260927","extended20260927"]:
+    for folder in ["refresh20260927","extended20260927","crossfit20260927","depthmacs20260927"]:
         path=ROOT/"figs"/folder
         for name, expected in json.loads((path/"artifact_manifest.json").read_text()).items():
             assert digest(path/name)==expected,f"Changed figure: {folder}/{name}"
             checked.append(str((path/name).relative_to(ROOT)))
-        for record in json.loads((path/"layout_audit.json").read_text()):
+        audit=(json.loads((path/'figure_evidence.json').read_text())['layout_audit'] if folder=='depthmacs20260927'
+               else json.loads((path/"layout_audit.json").read_text()))
+        for record in audit:
             assert not record["outside_canvas"],record["figure"]
             assert abs(record["width_mm"]-183)<1e-6
             assert record["height_mm"]<=170
             assert "<text" in (path/(record["figure"]+".svg")).read_text()
             min_font=min(min_font,*(t["size_pt"] for t in record["text"]))
             figure_count+=1
-    assert figure_count==13
+    assert figure_count==16
+    calibration_source=json.loads((ROOT/'figs/crossfit20260927/source_manifest.json').read_text())
+    assert calibration_source['analysis_sha256']==digest(ROOT/'data/crossfit20260927/analysis.json')
+    assert calibration_source['plot_script_sha256']==digest(ROOT/'scripts/plot_crossfit_control_20260927.py')
+    mac_source=json.loads((ROOT/'figs/depthmacs20260927/figure_evidence.json').read_text())
+    assert mac_source['analysis_sha256']==digest(ROOT/'data/depthmacs20260927/analysis.json')
+    assert mac_source['script_sha256']==digest(ROOT/'scripts/plot_depth_macs_20260927.py')
+    mac=json.loads((ROOT/'data/depthmacs20260927/analysis.json').read_text())
+    assert [r['depth'] for r in mac['rows']]==[2,4,6,8,10,12]
+    assert not mac['cuda_initialized']
+    for row in mac['rows']:
+        assert sum(r['macs'] for r in row['layers'])==row['encoder_with_reconstruction_macs']
+        assert row['neural_decoder_macs']==row['entropy_neural_macs']+row['synthesis_macs']
+        assert row['spatial_prior_calls']==3
+        assert row['entropy_neural_macs']==mac['rows'][0]['entropy_neural_macs']
     illustration=json.loads((ROOT/"figs/adaptive20260927/provenance.json").read_text())
     asset=ROOT/illustration["asset"]
     assert digest(asset)==illustration["sha256"],"Changed conceptual illustration"

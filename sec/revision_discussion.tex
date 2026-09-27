@@ -17,8 +17,8 @@ exits per expert would add another axis and is outside the current design.
 
 The principal empirical limitation is the gap between allocation evidence
 and a complete codec benchmark. Current controls use source calibration,
-reported mixed losses use the fine-tuned full-depth anchor, and MAC counts
-exclude routing and signalling. A sequence-disjoint control diagnostic in
+reported mixed losses use the fine-tuned full-depth anchor, and synthesis
+MAC counts exclude entropy recovery, routing and signalling. A sequence-disjoint control diagnostic in
 the supplement exposes the difference between mean loss and tail risk;
 common-reference final-image replay is still required before a practical
 guarantee can be claimed.
@@ -30,7 +30,7 @@ are also needed; RGB PSNR alone does not establish visual equivalence.
 FLEX-UF makes DCVC-UF synthesis a spatial allocation of computation.
 Its evaluated early-exit path shares a latent and prefix, lets tiles stop at
 different depths, and restores a complete image through aligned exits and
-full-frame repair. Recorded reconstructions show substantial decoder
+full-frame repair. Recorded reconstructions show substantial synthesis
 arithmetic savings, with a further, budget-dependent benefit from learned
 placement over dithering. The independent six-depth study extends the same
 allocation question to model selection. Matched rate--quality and complete
