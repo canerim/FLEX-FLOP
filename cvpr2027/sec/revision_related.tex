@@ -1,0 +1,39 @@
+\section{Related Work}
+\label{sec:related}
+
+\paragraph{Spatially adaptive reconstruction.}
+ClassSR routes super-resolution patches to networks of different
+capacity~\cite{kong2021classsr}; APE instead permits patches to exit a shared
+network at different depths~\cite{wang2022ape}. These are direct precedents
+for spatial capacity selection, so patch routing itself is not our novelty
+claim. We examine the additional constraints of a coded representation:
+which decision information is available at each endpoint, what must be
+signalled, and how a local assignment affects final reconstruction quality.
+
+\paragraph{Adaptive complexity in compression.}
+Slimmable compressive autoencoders provide multiple model
+widths~\cite{yang2021slimcae}. AdaNIC combines blockwise transform capacity
+with a routing agent~\cite{tao2023adanic}, while cgSlimDecoder selects
+decoder channel widths under complexity constraints~\cite{hu2023cgslim}.
+These methods already establish content- or complexity-dependent computation
+within learned compression. Our comparison focuses on depth allocation in
+the synthesis path of a fixed coded representation and on its incremental
+benefit over blind mixtures. A matched reproduction of these alternatives
+remains necessary for a claim of superiority over adaptive codec designs.
+
+\paragraph{Efficient synthesis and practical execution.}
+Shallow decoders investigate how computation can be shifted toward the
+encoder~\cite{yang2023shallow}. DCVC-RT distinguishes arithmetic cost from
+operational overhead, including memory traffic and function
+calls~\cite{jia2025dcvcrt}; DCVC-UF further develops a throughput-oriented
+video codec~\cite{li2026dcvcuf}. These results motivate reporting actual
+execution in addition to multiply--accumulates. Our scope is the supplied
+intra model, not DCVC-UF's inter-frame or chunk-coding performance.
+
+\paragraph{Distortion and perception.}
+Generative compression explicitly studies reconstruction fidelity and
+perceptual realism~\cite{mentzer2020,muckley2023illm}. A small PSNR change
+therefore cannot establish perceptual equivalence. We use archived
+non-DCVC experiments only to examine this limitation and the dependence on
+decoder architecture; they are not evidence of a perceptual guarantee for
+FLEX.

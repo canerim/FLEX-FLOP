@@ -1,0 +1,79 @@
+\section{Spatial Early Exit under a Quality Target}
+\label{sec:method}
+
+\subsection{Shared representation and conditional execution}
+Let $\hat y$ denote the decoded latent of a fixed analysis transform and
+entropy model. A full-frame upsampling stage and four shared trunk blocks
+produce features with 384 channels at one eighth of the RGB resolution.
+The pinned e15 configuration partitions this canvas into $32\times32$
+feature tiles, corresponding to $256\times256$ RGB regions. The remaining
+eight blocks are executed in pairs. Although the model exposes six nominal
+exit indices, the first two lie before the split and are clamped: inference
+has four distinct reachable depths, $\mathcal K=\{6,8,10,12\}$.
+
+Each active tile traverses the next pair of blocks. Tiles assigned to that
+depth pass through an exit-specific pointwise adapter and leave the active
+batch; the others continue. The adapted tiles are stitched into a feature
+canvas. A grid-conditioned repair and the shared output head reconstruct the
+image. The halo-free tiled trunk uses replicate padding. This reduces work
+only when the execution path actually removes departed tiles; evaluating all
+branches and masking their outputs would have different runtime behaviour.
+
+\subsection{Selection objective and its approximation}
+For tile $t$ and exit $k$, let $M_{t,k}$ be the source MSE measured from a
+candidate tiled reconstruction, and let $R$ be the source MSE of the full-depth
+reference. The search uses the table surrogate
+\begin{equation}
+ \widetilde\Delta(\mathbf k)=10\log_{10}
+ \frac{N^{-1}\sum_{t=1}^{N} M_{t,k_t}}{R}.
+ \label{eq:surrogate}
+\end{equation}
+The recorded cost $c_k$ is normalised to a full-frame reference decode. For
+equal padded tiles, the cost model gives
+\begin{equation}
+ C(\mathbf k)=N^{-1}\sum_t c_{k_t},\qquad
+ S(\mathbf k)=100\,[1-C(\mathbf k)].
+ \label{eq:cost}
+\end{equation}
+Source-informed selection chooses
+\begin{equation}
+ k_t(\lambda)=\arg\min_k\{M_{t,k}+\lambda c_k\},
+ \label{eq:search}
+\end{equation}
+with a per-frame search for the quality target. We call this procedure
+\emph{source-informed search}, rather than a certified global optimum of the
+final reconstruction problem.
+
+The distinction is substantive. Tables are selected on the padded RGB image;
+reported quality is measured on the final mixed reconstruction cropped to
+the source extent. In addition, full-frame repair and head operations couple
+neighbouring tiles. Consequently, $\widetilde\Delta$ is a selection surrogate,
+not an identity for delivered distortion. We report both the target and the
+measured loss and count violations explicitly.
+
+\subsection{Router and content-blind controls}
+The router projects intermediate synthesis features and latent/entropy-scale
+information, pools them per tile and predicts exit scores. Given log scores
+$\ell_{t,k}$, the recorded decision is
+\begin{equation}
+ k_t(\beta)=\arg\max_k\{\ell_{t,k}-\beta c_k\}.
+ \label{eq:router}
+\end{equation}
+The evaluated sweep fits $\beta$ separately on each source frame's table.
+This measures the attainable allocation with source calibration. Deployment
+with a fixed, held-out control parameter is a separate experiment.
+
+Uniform depth selects one reachable exit for the whole frame. Bayer dithering
+mixes two adjacent exits according to a fixed spatial ordering, with its
+mixture fraction selected under the same table-based quality target. It has
+no content predictor but can realise finer average costs than uniform depth.
+All four methods use the same checkpoint and per-exit cost vector.
+
+\subsection{Rate and decision information}
+Keeping the coded latent fixed does not make all routing modes byte-identical.
+Encoder-selected maps require a communicated decision representation. A
+source-calibrated decoder router also needs its control parameter to be
+communicated or otherwise reproduced. The curves in this study model decoder
+MACs and do not add router cost or decision signalling to that quantity.
+They therefore isolate allocation quality; a deployment comparison must
+add those costs and verify actual encoded bytes separately.
