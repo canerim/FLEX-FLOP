@@ -27,3 +27,9 @@ Select **main.tex** and **pdfLaTeX** in Overleaf. The active text is in
 `sec/revision_*.tex`; old sections remain inactive historical material.
 The original template documentation is preserved in
 [AUTHOR_KIT_README.md](AUTHOR_KIT_README.md).
+
+## Frozen epoch-20 actual-byte study
+
+The supplement now includes all100 DIV2K centre512 crops × D2/D4/D6/releasedD12 × five QPs (2,000 independent encode/decode checks). D2/D4/D6 are unfinished epoch20/105 checkpoints, not final models; releasedD12 has different training history. At0.2 actual payload bpp on99 common supported images, D6−D2 is0.1834dB RGB PSNR. The expanded coverage, actual-versus-estimated rate, feature associations and whole-crop allocation controls are in `data/research20260927`. The latter is an optimistic allocation diagnostic, not a trained patch router.
+
+`python scripts/build_research_figures.py` renders the portable new vector figures. `python scripts/reproduce_figures.py` verifies bit-identical artifact reproduction from the bundled data, without training checkpoints, source images or GPU. The full suite currently contains23 vector figure sets; the conceptual AI overview remains separately identified.

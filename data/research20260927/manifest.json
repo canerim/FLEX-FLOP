@@ -1,0 +1,34 @@
+{
+  "scope": "Completed CPU research and architecture diagnostics. Intermediate epoch20 is not a final converged depth-bank or runtime result. Source paths inside provenance are historical metadata; rendering requires only bundled data.",
+  "families": [
+    {
+      "folder": "div2k100_epoch020",
+      "script": "plot_reference_validation_20260927.py",
+      "data_file": "analysis.json",
+      "data_sha256": "beb6d0fbc54c95d5d43283ad7f1bae7057f599d9365a30e6efb3773a2a69ca66",
+      "plot_script_sha256": "df14ad5a1e7db5f2f4b906c45d74b706e5cf01412f08ae6335bce1cf2b0daad8"
+    },
+    {
+      "folder": "source_features",
+      "script": "plot_source_associations_20260927.py",
+      "data_file": "association.json",
+      "data_sha256": "c4805154bb212d9a58c340305c0da1b49266fe51dd1b2ff3ae03f14af6f32284",
+      "plot_script_sha256": "d433096944989d5dbfebd3d21bc2ea8f8fa8b1c413b9f8f185dc7a3a928a7722"
+    },
+    {
+      "folder": "depth_allocation",
+      "script": "plot_depth_allocation_20260927.py",
+      "data_file": "analysis.json",
+      "data_sha256": "0375d5269a8dce1bb9c139a4e5bd6de60549f999bd68f6cb3a1ff2633d5c9b8d",
+      "plot_script_sha256": "2fa039d022450e0315f5d6dc3ad35cd7e35fcf7aa0591512a9144fe01cf58b50"
+    },
+    {
+      "folder": "patch_geometry",
+      "script": "plot_patch_geometry_20260927.py",
+      "data_file": "analysis.json",
+      "data_sha256": "c1263d3455faeab02604dab10f794ec25cbe5f47e9b51a48308a446691e08efc",
+      "plot_script_sha256": "24f9375a1df4e8285f82fc290e80d0de6c659c2e9ea2016de7ac0945db2fbd00"
+    }
+  ],
+  "helper_sha256": "994fa1a554ee0e30eef788a04a13e259d762ddeb65f410fbe7f60755930d2eb5"
+}

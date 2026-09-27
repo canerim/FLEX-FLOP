@@ -14,14 +14,15 @@ are table targets, not final-image guarantees.}
 
 \section{Scope and Reproduction}
 
-This supplement records CPU analyses of the frozen evaluation archive and a
-prospective protocol for the ongoing depth study. The main manuscript uses
+This supplement records CPU analyses of the frozen evaluation archive,
+actual-byte evaluation of frozen interim depth models, and the protocol
+for the ongoing full-schedule depth study. The main manuscript uses
 the recorded mixed reconstructions of the shared-latent e15 codec. The new
 control-path and spatial-assignment analyses reuse its stored source-error
 tables. They produce candidate decisions for later replay, without executing
 the codec or measuring new inference times. The independent D2/D4/D6 training
-continues separately; no intermediate checkpoint is treated as a completed
-depth experiment.
+continues separately; interim measurements are explicitly labelled and
+do not stand in for a completed full-schedule depth experiment.
 
 The stand-alone paper repository contains the plotted source tables, source
 hash manifests, editable figure scripts and inspection results under
@@ -568,7 +569,8 @@ split at image level. Patches from the same image must stay in one split.
 The four fixed validation crops in the current training monitor are health
 checks; a broader intermediate evaluation should use the available 100
 DIV2K validation images, followed by the declared final Kodak/CTC/CLIC
-scope. This expanded evaluation is proposed and has not been completed.
+scope. The frozen epoch-20 DIV2K crop evaluation below is complete;
+the final trained-model, full-image and native-runtime study remains pending.
 
 Each codec needs a true-byte rate--distortion curve. Equal QP does not imply
 equal rate across independently learned codecs. Comparisons should use their
@@ -593,9 +595,12 @@ seeds. A content bootstrap at fixed weights measures a different source of
 variation and cannot replace those repeats.
 
 
-\section{Analytical Scenarios for the Pending Depth Measurements}
+\input{sec/revision_interim_depth}
 
-The independent depth study has no completed RD or latency frontier yet.
+\section{Analytical Scenarios for the Pending Runtime Measurements}
+
+The independent depth study has an interim CPU RD diagnostic, but no
+final trained-model RD or measured native-latency frontier yet.
 To make the design hypothesis inspectable, \cref{fig:scenario} separates
 exact architectural parameter counts from a hypothetical runtime model.
 For retained depth $d$, let $f$ be the assumed fraction of full-depth time

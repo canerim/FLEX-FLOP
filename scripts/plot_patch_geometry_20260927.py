@@ -1,0 +1,90 @@
+"""Exact geometry and Conv2d accounting; neither RD nor runtime projections."""
+import hashlib
+import json
+from pathlib import Path
+import numpy as np
+import matplotlib
+matplotlib.use('Agg')
+import matplotlib.pyplot as plt
+from matplotlib.patches import Rectangle,Patch
+from matplotlib.backends.backend_pdf import PdfPages
+try:
+    import paper_refresh_figures as F
+except ModuleNotFoundError:
+    import build_figures as F
+from research_figure_paths_20260927 import paths
+
+DATA,OUT=paths('patch_geometry')
+
+
+def native_comparison(data,book):
+    fig=plt.figure(figsize=(183*F.MM,87*F.MM))
+    for col,(key,title) in enumerate([
+        ('neural_decoder_macs_percent_of_full_d12','Neural decoder'),
+        ('encoder_with_reconstruction_macs_percent_of_full_d12','Encoder with reconstruction')]):
+        ax=fig.add_axes([.09+.49*col,.29,.365,.43]);F.panel(ax,chr(97+col),title)
+        selections=[(data['native_geometry_rows'],0,F.BLUE,'o','No halo'),
+            (data['native_geometry_rows'],32,F.TEAL,'s','Native-shaped halo32'),
+            (data['rows'],32,F.ORANGE,'^','Image-pad64 halo32 / either halo64')]
+        for rows,halo,color,marker,label in selections:
+            selected=[r for r in rows if r['halo']==halo]
+            ax.plot([r['depth'] for r in selected],[r[key] for r in selected],color=color,marker=marker,
+                ms=3.5,lw=1.1,label=label)
+        ax.axhline(100,color=F.INK,ls='--',lw=.75)
+        ax.set(xlabel='Synthesis trunk blocks',ylabel='Conv2d MACs / full-frame D12 (%)' if col==0 else '',
+            xticks=[2,4,6,8,10,12],ylim=(45,166))
+    handles,labels=ax.get_legend_handles_labels()
+    fig.legend(handles,labels,loc='lower center',bbox_to_anchor=(.5,.12),ncol=3,frameon=False,fontsize=5.8,columnspacing=1)
+    fig.text(.5,.96,'THE PADDING POLICY CHANGES THE COMPUTE ESTIMATE',ha='center',weight='bold',fontsize=8)
+    fig.text(.5,.855,'Four 256 cores · native image-pad16 / latent-pad4 versus CPU reference image-pad64',ha='center',fontsize=6.3,color=F.MUTED)
+    fig.text(.5,.032,'Layer-by-layer Conv2d trace · native-shaped means geometry only · no CUDA timing, stream or numerical parity claim',ha='center',fontsize=5.7,color=F.MUTED)
+    F.audit_and_save(fig,'fig_native_padding_cost',
+        'Architecture-only accounting for four256-square cores of a512 crop. Microsoft native allocation pads the image to16 and only the hyperanalysis latent to4; a288 input therefore has18-square main latent but20-square hyperanalysis input. We reproduce those shapes in a Conv2d trace, independently checkingD2/288 on realCPU against meta execution. TheFUFREF1 image-pad64 reference instead executes a320-square image for halo32. Halo64 is320-aligned and has identical geometry in both policies. The native-shaped trace givesD2 halo32 neural-decoder/encoder-with-reconstruction costs of67.82%/83.22% of fullD12; D6 gives92.22%/101.25%. These are not matched-quality or measured runtime comparisons; fused CUDA work and entropy coding are not counted.',book)
+
+
+def main():
+    source=DATA/'analysis.json';data=json.loads(source.read_text());F.OUT=OUT;F.AUDIT.clear();F.CAPTIONS.clear()
+    fig=plt.figure(figsize=(183*F.MM,127*F.MM))
+    for i,halo in enumerate((32,64)):
+        ax=fig.add_axes([.14+.49*i,.55,.26,.29]);F.panel(ax,chr(97+i),f'{halo}-pixel halo · {256+halo} → 320')
+        side=256+halo
+        ax.add_patch(Rectangle((0,0),320,320,facecolor='#E8ECEE',edgecolor=F.GREY,lw=.6,hatch='////'))
+        ax.add_patch(Rectangle((0,0),side,side,facecolor='#C7E0E0',edgecolor=F.BLUE,lw=.65))
+        ax.add_patch(Rectangle((halo,halo),256,256,facecolor='white',edgecolor=F.INK,lw=.8))
+        ax.text(halo+128,halo+118,'Retained core',ha='center',va='center',fontsize=7,color=F.INK)
+        ax.text(halo+128,halo+151,'256 × 256',ha='center',va='center',fontsize=6,color=F.MUTED)
+        ax.plot([0,halo],[-12,-12],color=F.BLUE,lw=.7)
+        for edge in (0,halo):ax.plot([edge,edge],[-17,-7],color=F.BLUE,lw=.7)
+        ax.text(halo/2,-28,str(halo),ha='center',fontsize=6,color=F.BLUE)
+        ax.text(160,352,'Same coded area: 320 × 320',ha='center',fontsize=6,color=F.MUTED)
+        ax.set(xlim=(-15,335),ylim=(365,-38),aspect='equal');ax.set_axis_off()
+    fields=[('neural_decoder_macs_percent_of_full_d12','Neural decoder'),('encoder_with_reconstruction_macs_percent_of_full_d12','Encoder with reconstruction')]
+    for col,(key,title) in enumerate(fields):
+        ax=fig.add_axes([.085+.49*col,.14,.365,.25]);F.panel(ax,chr(99+col),title)
+        for offset,halo,color in ((-.17,0,F.BLUE),(.17,32,F.ORANGE)):
+            rows=[r for r in data['rows'] if r['halo']==halo]
+            y=np.arange(len(rows))+offset;values=[r[key] for r in rows]
+            ax.barh(y,values,height=.3,color=color,zorder=2)
+            for yy,v in zip(y,values):ax.text(v+1.5,yy,f'{v:.1f}',va='center',fontsize=5.2,color=F.MUTED,bbox={'facecolor':'white','edgecolor':'none','pad':.3})
+        ax.axvline(100,color=F.INK,lw=.7,ls='--',zorder=3)
+        ax.set(yticks=range(6),yticklabels=[f'D{d}' for d in (2,4,6,8,10,12)],xlim=(0,175),xticks=[0,50,100,150],
+            xlabel='Conv2d MACs / full-frame D12 (%)')
+        ax.invert_yaxis();ax.grid(axis='y',visible=False);ax.grid(axis='x',color=F.GRID,lw=.5,zorder=0)
+    fig.legend(handles=[Patch(facecolor='#C7E0E0',edgecolor=F.BLUE,label='Actual source context'),
+        Patch(facecolor='#E8ECEE',edgecolor=F.GREY,hatch='////',label='Replicated padding')],
+        loc='center',bbox_to_anchor=(.5,.485),ncol=2,frameon=False,fontsize=6)
+    fig.legend(handles=[Patch(facecolor=F.BLUE,label='One 512 crop or four 256 cores'),
+        Patch(facecolor=F.ORANGE,label='Four patches with halo 32 or 64')],
+        loc='lower center',bbox_to_anchor=(.5,.038),ncol=2,frameon=False,fontsize=6)
+    fig.text(.5,.975,'CPU REFERENCE: PADDING AND DEPTH SAVING',ha='center',weight='bold',fontsize=8)
+    fig.text(.5,.922,'FUFREF1 image-pad64 geometry · bottom-right patch of a 2×2 grid',ha='center',fontsize=6.4,color=F.MUTED)
+    fig.text(.5,.009,'CPU image-pad64 accounting only · native image-pad16 / latent-pad4 differs · not runtime',ha='center',fontsize=5.8,color=F.MUTED)
+    with PdfPages(OUT/'patch_geometry_atlas.pdf',metadata=F.PDF_META) as book:
+        F.audit_and_save(fig,'fig_patch_geometry',
+            'FUFREF1 CPU image-pad64 scope only; native CUDA uses a different padding policy. Top: exact local geometry of the bottom-right256-square core in a512 crop. A32-pixel halo produces a288-square input padded on its bottom/right to320; a64-pixel halo uses320 source pixels directly. Both therefore code1.5625 times the full512 area across four patches. Bottom: Conv2d MACs relative to full-frameD12, including neural entropy recovery in the decoder and source analysis/hyperanalysis in encoder-with-reconstruction. Area scaling was checked by independent meta-tensor traces forD2/D12 at256 and320. Four256 calls share full512 arithmetic but may differ in overhead and rate. Entropy coding, transfers and call overhead are excluded; encoder branch overlap prevents interpreting arithmetic ratios as time ratios. D8/D10 are architectural counts only.',book)
+        native_comparison(data,book)
+    (OUT/'figure_evidence.json').write_text(json.dumps({'analysis_sha256':hashlib.sha256(source.read_bytes()).hexdigest(),
+        'script_sha256':hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),'captions':F.CAPTIONS,'layout_audit':F.AUDIT},indent=2)+'\n')
+
+
+if __name__=='__main__':main()
