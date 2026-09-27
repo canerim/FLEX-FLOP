@@ -18,7 +18,7 @@ available content at fixed trained weights, not training-seed uncertainty.
 We also repeat the budget trend on the same 204 pairs throughout to expose
 the effect of changing cohort membership.
 
-\subsection{How much does content prediction add?}
+\subsection{The incremental value of content prediction}
 At a 0.1\,dB target, source-informed search saves
 \MainOracleSaving\% of modelled decoder MACs, the router
 \MainRouterSaving\%, Bayer dithering \MainDitherSaving\%, and uniform depth
@@ -35,6 +35,16 @@ model. Near that ceiling, many maps assign almost every tile to the same
 exit, leaving little decision value for a content predictor. The fixed-cohort
 analysis retains the declining trend, and the QP breakdown shows that its
 location depends on the operating rate.
+
+A fixed-histogram diagnostic isolates spatial placement further. For each
+recorded map, we compute the exact expected table MSE after uniformly
+permuting its exit assignments. This preserves the number of tiles at every
+depth and hence its modelled cost. At 0.1\,dB, the router's placement improves
+the table statistic by 0.0213\,dB on average (95\% interval
+[0.0167, 0.0262]), while dithering gives 0.0007\,dB
+([$-0.0002$, 0.0017]). These are source-table diagnostics, with the derivation
+and fixed-histogram optimum in the supplement; final mixed reconstructions
+would need to be decoded separately.
 
 \begin{figure*}[t]
 \centering
@@ -54,10 +64,13 @@ The policies do not achieve exactly the same loss at the same nominal target
 (\cref{fig:quality}a). At 0.1\,dB, the router exceeds target plus
 $10^{-4}$\,dB in \MainRgbOver/\MainN\ cases in RGB and
 \MainYuvOver/\MainN\ cases in YUV 6:1:1. Maximum losses are
-\MainRgbMax\,dB and \MainYuvMax\,dB, respectively. Metric choice explains
-part of the discrepancy, but cannot explain away the RGB violations.
-The selection and reporting domains, along with cross-tile coupling, require
-an explicit verification step if a framewise guarantee is desired.
+\MainRgbMax\,dB and \MainYuvMax\,dB, respectively. These are crossings of the nominal numeric target in the exported metric,
+not a clean test of a common-reference constraint: selection uses a released
+anchor on padded RGB, while reporting uses the fine-tuned full-depth output
+on cropped images. Metric choice and cross-tile coupling are additional
+differences. The exported records cannot separate their contributions.
+A framewise guarantee requires the same anchor, support and metric in
+selection and final verification.
 
 \begin{figure*}[t]
 \centering
@@ -65,9 +78,11 @@ an explicit verification step if a framewise guarantee is desired.
 \caption{\textbf{Measure the reconstruction that is delivered.}
 \textbf{a}, Recorded mean RGB loss against MAC saving; connected segments
 guide the eye. \textbf{b}, Empirical loss distributions for the router at a
-0.1\,dB target. \textbf{c}, Violations among the 263 paired cases, measured
+0.1\,dB target. \textbf{c}, Losses above the nominal target among 263 paired cases, measured
 after cropping, with tolerance $10^{-4}$\,dB. The search used padded RGB
-tables; no verified fallback was applied in this archive.}
+tables with a released-weight anchor; reporting uses the fine-tuned e15
+full-depth anchor. Counts are not an isolated guarantee test. No verified
+fallback was applied in this archive.}
 \label{fig:quality}
 \end{figure*}
 
@@ -77,7 +92,7 @@ The historical QP32 benchmark recorded 1,347.65\,ms for six trial exits,
 1,023.26\,ms after deduplicating the four reachable outputs, and 336.87\,ms
 when a single tiled pass reused the common prefix (\cref{fig:decision}).
 The last change reduces table-construction time by approximately fourfold.
-These are isolated stage summaries over eight frames with three repetitions,
+These are the archived upper medians of 24 pooled trials over eight frames,
 not an end-to-end encoder speedup. The raw repetition distribution and device
 load history were not retained. Moreover, the archived GPU search timer can
 include pending reference-decode work, so we do not use it as an isolated

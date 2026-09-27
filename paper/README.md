@@ -1,5 +1,11 @@
 # Paper source
 
+**Current manuscript (27 September 2026):** use
+[`../cvpr2027/main.tex`](../cvpr2027/main.tex) and its compiled PDF. That subtree
+is published to `canerim/cvpr2027` for Overleaf. The files described below are
+the earlier research report, retained for reference; their measurement claims
+are superseded by the current manuscript and protocol supplement.
+
 `main.tex` is written for the official CVPR author kit. It looks for `cvpr.sty`
 and falls back to `cvpr_fallback.sty`, a minimal stand-in, so the source
 compiles on a machine without the kit installed.

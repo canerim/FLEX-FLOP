@@ -1,5 +1,13 @@
 # Encoder and decoder runtime of exit-map selection
 
+**Measurement-scope correction, 27 September 2026.** This is a historical
+stage-accounting report. The inspected benchmark replays encoder-captured
+symbols into neural decoding, estimates map length instead of parsing map
+bytes, and labels the fine-tuned e15 full path as “released”. The table below
+does not establish standalone bitstream-to-image latency or final quality
+for each regime. See [the runtime audit](../../RUNTIME_AUDIT_TR.md) and the
+current `main.tex` / `supplement.tex` for the corrected interpretation.
+
 DCVC-UF: all 53 CTC intra frames × qp [0, 16, 32, 48, 63] (265 frame-qp), NVIDIA RTX A6000 (shared; medians). Budget 0.1 dB per frame. Full report: `report.pdf`.
 
 | Regime | Encoder 1080p (ms) | × plain encode | extra, in synthesis passes | Decoder 1080p (ms) | of released | side info (% of bits) | saving % | worst dB | over budget |

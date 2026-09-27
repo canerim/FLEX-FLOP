@@ -1,0 +1,50 @@
+{
+  "scope": "Static current-source inspection; not a new timing or entropy correctness test",
+  "implication": "The archived full-runtime program times real entropy calls and neural replay stages, but does not feed decoded stream outputs into the neural reconstruction. Map parse is an ideal-length calculation.",
+  "evidence": [
+    {
+      "label": "entropy_decode_uses_encoder_indices",
+      "line": 74,
+      "end_line": 74,
+      "source": "ec.decoder.decode_y(idxs[k])"
+    },
+    {
+      "label": "neural_decode_reads_encoder_capture",
+      "line": 76,
+      "end_line": 76,
+      "source": "decoder_side(net, e, qp)"
+    },
+    {
+      "label": "full_synthesis_uses_e15_network",
+      "line": 78,
+      "end_line": 78,
+      "source": "net.dec.forward_full(y, q)"
+    },
+    {
+      "label": "ideal_map_length_evaluation",
+      "line": 97,
+      "end_line": 97,
+      "source": "kt_bits((k2 - j).tolist(), K - j)"
+    },
+    {
+      "label": "ideal_map_length_evaluation",
+      "line": 120,
+      "end_line": 120,
+      "source": "kt_bits((k2 - j).tolist(), K - j)"
+    },
+    {
+      "label": "r1_quality_copied_from_r2",
+      "line": 123,
+      "end_line": 123,
+      "source": "Q[\"saving_R1\"], Q[\"db_R1\"] = Q[\"saving_R2\"], Q[\"db_R2\"]"
+    }
+  ],
+  "caveat": "The historical executable's hash was not saved at run time. These hashes identify files inspected on 27 September 2026.",
+  "hashes": {
+    "flexplus/runtime_full_uf.py": "c0137d11151e0ad75dc8672fd594e7c5ffe593d47965644dbfce430f014ba6ce",
+    "flexuf/decodability.py": "1b665ce4330c1b36648665a62781a20953d731311d3f0127a1178703a5db3bde",
+    "flexplus/results/runtime_full_uf.json": "5e28bf73a022e10bb8604673b09f5a8221cb659d657012f325a6278f47480dd4",
+    "flexplus/results/encoder_time_v2.json": "1c4fa3b6b1a1841bcc1ac23189af3497e2f8caea6614e119479fc83e24099bf3",
+    "scripts/audit_runtime_scope.py": "da1bf16cc08e27c92301a0eb3b3ba65f0fdb94d4701339e69d39879700cfe669"
+  }
+}

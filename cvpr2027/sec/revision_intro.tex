@@ -38,8 +38,8 @@ source-calibrated protocol, and we label them accordingly.
 Three observations organise the study. First, routing adds a measurable but
 budget-dependent advantage over ordered dithering. At a 0.1\,dB target the
 paired gain is \MainPremium\ percentage points; at 0.3\,dB it is
-\LoosePremium\ points. Second, selecting a map from a tile-error table is
-not sufficient to guarantee the distortion of a cropped, mixed-depth image.
+\LoosePremium\ points. Second, selection and reporting use different reconstruction anchors and spatial
+supports, so a nominal table target cannot be read as a delivered guarantee.
 Third, source-informed decisions have an encoder cost: the required error
 table contains reconstructions, not merely cheap router logits.
 

@@ -1,0 +1,14 @@
+[
+  {
+    "name": "figS1_reference_protocol",
+    "caption": "Reference trace for the archived evaluation. Table construction loads the released-weight reference separately and evaluates padded RGB. The final evaluator loads the fine-tuned e15 codec and computes its own full-frame reconstruction before cropping; its exported psnr_release name is misleading. A CPU state-dict audit finds unchanged shared encoder/entropy tensors and changed inherited synthesis tensors. These results describe currently inspected code and weights; their hashes were not captured contemporaneously with the historical run. Quality against a common released reference cannot be recovered from the exported JSON alone. The diagram shows the two measurement paths, not newly decoded images."
+  },
+  {
+    "name": "figS2_control_and_assignment",
+    "caption": "CPU diagnostics of frozen source-error tables. (a) The largest missed saving among the enumerated fixed-router price paths is selected explicitly as a failure example, not as representative performance. Cost is monotone in the logit price but source error is not. (b) Enumerating score-line intersections and intervals within the archived price range improves only three paired plans at 0.05 dB and two at 0.1 dB; an additional previously infeasible case at 0.05 dB is omitted from paired gains. (c) Exact expectation over uniformly permuted assignments preserves each recorded map's exit histogram and MAC cost. The ordinate is 10 log10(expected shuffled MSE / recorded MSE), not expected PSNR; shading is a 95% sequence-cluster bootstrap interval. (d) Per-frame distribution for the router at 0.1 dB. All panels are padded-table diagnostics with source-calibrated controls. No new final-image or latency result is implied."
+  },
+  {
+    "name": "figS3_codec_bank_plan",
+    "caption": "Independent depth-reduced codecs and a proposed encoder-side routing path. D2, D4 and D6 are training under the pinned official recipe; D8 and D10 are planned; D12 is the released reference. An equally trained D12 control is required for a depth-only conclusion. Each expert owns its analysis transform, entropy model and synthesis transform. The proposed MLP selects an expert using information available before that expert is encoded. Grouped execution, control signalling and entropy state resets must be included in measurement. Network glyphs, block strips, queue sizes and stream segments are schematic, with no quantitative geometry or timing claim."
+  }
+]
