@@ -1,0 +1,381 @@
+{
+  "scope": "Architecture/geometry audit, not measured latency, quality, effective receptive field or a context-sufficiency guarantee",
+  "encoder_support": {
+    "latent_position_1d_formula": "[16*i-64,16*i+71] inclusive",
+    "width_pixels": 136,
+    "method": "Count7 depthwise3x3 spatial blocks after pixel_unshuffle8, then3x3 stride2 convolution; verify random-weight real-CPU input gradient bounding box",
+    "gradient_probe_latent_position": [
+      6,
+      6
+    ],
+    "input_shape": [
+      192,
+      192
+    ],
+    "observed_bbox_ymin_ymax_xmin_xmax": [
+      32,
+      167,
+      32,
+      167
+    ],
+    "limitation": "Only the analysis transform. Hyperprior, autoregressive spatial context and synthesis introduce additional dependencies. Nonzero gradient support in one random-weight probe is a structural check, not a trained effective receptive-field estimate."
+  },
+  "rows": [
+    {
+      "depth": 2,
+      "halo": 0,
+      "context_window_side": 256,
+      "padded_side": 256,
+      "coded_area_ratio": 1.0,
+      "window_start_coordinates": [
+        0,
+        256
+      ],
+      "all_starts_aligned_to_hyperlatent64": true,
+      "synthesis_macs": 14494728192,
+      "synthesis_macs_percent_of_full_d12": 25.46738334415719,
+      "neural_decoder_macs": 45573636096,
+      "neural_decoder_macs_percent_of_full_d12": 51.79188465444259,
+      "encoder_with_reconstruction_macs": 76685910016,
+      "encoder_with_reconstruction_macs_percent_of_full_d12": 64.3845620491147
+    },
+    {
+      "depth": 2,
+      "halo": 32,
+      "context_window_side": 288,
+      "padded_side": 320,
+      "coded_area_ratio": 1.5625,
+      "window_start_coordinates": [
+        0,
+        224
+      ],
+      "all_starts_aligned_to_hyperlatent64": false,
+      "synthesis_macs": 22648012800,
+      "synthesis_macs_percent_of_full_d12": 39.792786475245606,
+      "neural_decoder_macs": 71208806400,
+      "neural_decoder_macs_percent_of_full_d12": 80.92481977256655,
+      "encoder_with_reconstruction_macs": 119821734400,
+      "encoder_with_reconstruction_macs_percent_of_full_d12": 100.60087820174172
+    },
+    {
+      "depth": 2,
+      "halo": 64,
+      "context_window_side": 320,
+      "padded_side": 320,
+      "coded_area_ratio": 1.5625,
+      "window_start_coordinates": [
+        0,
+        192
+      ],
+      "all_starts_aligned_to_hyperlatent64": true,
+      "synthesis_macs": 22648012800,
+      "synthesis_macs_percent_of_full_d12": 39.792786475245606,
+      "neural_decoder_macs": 71208806400,
+      "neural_decoder_macs_percent_of_full_d12": 80.92481977256655,
+      "encoder_with_reconstruction_macs": 119821734400,
+      "encoder_with_reconstruction_macs_percent_of_full_d12": 100.60087820174172
+    },
+    {
+      "depth": 4,
+      "halo": 0,
+      "context_window_side": 256,
+      "padded_side": 256,
+      "coded_area_ratio": 1.0,
+      "window_start_coordinates": [
+        0,
+        256
+      ],
+      "all_starts_aligned_to_hyperlatent64": true,
+      "synthesis_macs": 22978756608,
+      "synthesis_macs_percent_of_full_d12": 40.37390667532575,
+      "neural_decoder_macs": 54057664512,
+      "neural_decoder_macs_percent_of_full_d12": 61.43350772355407,
+      "encoder_with_reconstruction_macs": 85169938432,
+      "encoder_with_reconstruction_macs_percent_of_full_d12": 71.50764963929176
+    },
+    {
+      "depth": 4,
+      "halo": 32,
+      "context_window_side": 288,
+      "padded_side": 320,
+      "coded_area_ratio": 1.5625,
+      "window_start_coordinates": [
+        0,
+        224
+      ],
+      "all_starts_aligned_to_hyperlatent64": false,
+      "synthesis_macs": 35904307200,
+      "synthesis_macs_percent_of_full_d12": 63.08422918019649,
+      "neural_decoder_macs": 84465100800,
+      "neural_decoder_macs_percent_of_full_d12": 95.98985581805324,
+      "encoder_with_reconstruction_macs": 133078028800,
+      "encoder_with_reconstruction_macs_percent_of_full_d12": 111.73070256139337
+    },
+    {
+      "depth": 4,
+      "halo": 64,
+      "context_window_side": 320,
+      "padded_side": 320,
+      "coded_area_ratio": 1.5625,
+      "window_start_coordinates": [
+        0,
+        192
+      ],
+      "all_starts_aligned_to_hyperlatent64": true,
+      "synthesis_macs": 35904307200,
+      "synthesis_macs_percent_of_full_d12": 63.08422918019649,
+      "neural_decoder_macs": 84465100800,
+      "neural_decoder_macs_percent_of_full_d12": 95.98985581805324,
+      "encoder_with_reconstruction_macs": 133078028800,
+      "encoder_with_reconstruction_macs_percent_of_full_d12": 111.73070256139337
+    },
+    {
+      "depth": 6,
+      "halo": 0,
+      "context_window_side": 256,
+      "padded_side": 256,
+      "coded_area_ratio": 1.0,
+      "window_start_coordinates": [
+        0,
+        256
+      ],
+      "all_starts_aligned_to_hyperlatent64": true,
+      "synthesis_macs": 31462785024,
+      "synthesis_macs_percent_of_full_d12": 55.28043000649431,
+      "neural_decoder_macs": 62541692928,
+      "neural_decoder_macs_percent_of_full_d12": 71.07513079266556,
+      "encoder_with_reconstruction_macs": 93653966848,
+      "encoder_with_reconstruction_macs_percent_of_full_d12": 78.63073722946882
+    },
+    {
+      "depth": 6,
+      "halo": 32,
+      "context_window_side": 288,
+      "padded_side": 320,
+      "coded_area_ratio": 1.5625,
+      "window_start_coordinates": [
+        0,
+        224
+      ],
+      "all_starts_aligned_to_hyperlatent64": false,
+      "synthesis_macs": 49160601600,
+      "synthesis_macs_percent_of_full_d12": 86.37567188514737,
+      "neural_decoder_macs": 97721395200,
+      "neural_decoder_macs_percent_of_full_d12": 111.05489186353994,
+      "encoder_with_reconstruction_macs": 146334323200,
+      "encoder_with_reconstruction_macs_percent_of_full_d12": 122.86052692104504
+    },
+    {
+      "depth": 6,
+      "halo": 64,
+      "context_window_side": 320,
+      "padded_side": 320,
+      "coded_area_ratio": 1.5625,
+      "window_start_coordinates": [
+        0,
+        192
+      ],
+      "all_starts_aligned_to_hyperlatent64": true,
+      "synthesis_macs": 49160601600,
+      "synthesis_macs_percent_of_full_d12": 86.37567188514737,
+      "neural_decoder_macs": 97721395200,
+      "neural_decoder_macs_percent_of_full_d12": 111.05489186353994,
+      "encoder_with_reconstruction_macs": 146334323200,
+      "encoder_with_reconstruction_macs_percent_of_full_d12": 122.86052692104504
+    },
+    {
+      "depth": 8,
+      "halo": 0,
+      "context_window_side": 256,
+      "padded_side": 256,
+      "coded_area_ratio": 1.0,
+      "window_start_coordinates": [
+        0,
+        256
+      ],
+      "all_starts_aligned_to_hyperlatent64": true,
+      "synthesis_macs": 39946813440,
+      "synthesis_macs_percent_of_full_d12": 70.18695333766287,
+      "neural_decoder_macs": 71025721344,
+      "neural_decoder_macs_percent_of_full_d12": 80.71675386177704,
+      "encoder_with_reconstruction_macs": 102137995264,
+      "encoder_with_reconstruction_macs_percent_of_full_d12": 85.75382481964589
+    },
+    {
+      "depth": 8,
+      "halo": 32,
+      "context_window_side": 288,
+      "padded_side": 320,
+      "coded_area_ratio": 1.5625,
+      "window_start_coordinates": [
+        0,
+        224
+      ],
+      "all_starts_aligned_to_hyperlatent64": false,
+      "synthesis_macs": 62416896000,
+      "synthesis_macs_percent_of_full_d12": 109.66711459009824,
+      "neural_decoder_macs": 110977689600,
+      "neural_decoder_macs_percent_of_full_d12": 126.11992790902661,
+      "encoder_with_reconstruction_macs": 159590617600,
+      "encoder_with_reconstruction_macs_percent_of_full_d12": 133.9903512806967
+    },
+    {
+      "depth": 8,
+      "halo": 64,
+      "context_window_side": 320,
+      "padded_side": 320,
+      "coded_area_ratio": 1.5625,
+      "window_start_coordinates": [
+        0,
+        192
+      ],
+      "all_starts_aligned_to_hyperlatent64": true,
+      "synthesis_macs": 62416896000,
+      "synthesis_macs_percent_of_full_d12": 109.66711459009824,
+      "neural_decoder_macs": 110977689600,
+      "neural_decoder_macs_percent_of_full_d12": 126.11992790902661,
+      "encoder_with_reconstruction_macs": 159590617600,
+      "encoder_with_reconstruction_macs_percent_of_full_d12": 133.9903512806967
+    },
+    {
+      "depth": 10,
+      "halo": 0,
+      "context_window_side": 256,
+      "padded_side": 256,
+      "coded_area_ratio": 1.0,
+      "window_start_coordinates": [
+        0,
+        256
+      ],
+      "all_starts_aligned_to_hyperlatent64": true,
+      "synthesis_macs": 48430841856,
+      "synthesis_macs_percent_of_full_d12": 85.09347666883144,
+      "neural_decoder_macs": 79509749760,
+      "neural_decoder_macs_percent_of_full_d12": 90.35837693088853,
+      "encoder_with_reconstruction_macs": 110622023680,
+      "encoder_with_reconstruction_macs_percent_of_full_d12": 92.87691240982294
+    },
+    {
+      "depth": 10,
+      "halo": 32,
+      "context_window_side": 288,
+      "padded_side": 320,
+      "coded_area_ratio": 1.5625,
+      "window_start_coordinates": [
+        0,
+        224
+      ],
+      "all_starts_aligned_to_hyperlatent64": false,
+      "synthesis_macs": 75673190400,
+      "synthesis_macs_percent_of_full_d12": 132.95855729504913,
+      "neural_decoder_macs": 124233984000,
+      "neural_decoder_macs_percent_of_full_d12": 141.1849639545133,
+      "encoder_with_reconstruction_macs": 172846912000,
+      "encoder_with_reconstruction_macs_percent_of_full_d12": 145.12017564034835
+    },
+    {
+      "depth": 10,
+      "halo": 64,
+      "context_window_side": 320,
+      "padded_side": 320,
+      "coded_area_ratio": 1.5625,
+      "window_start_coordinates": [
+        0,
+        192
+      ],
+      "all_starts_aligned_to_hyperlatent64": true,
+      "synthesis_macs": 75673190400,
+      "synthesis_macs_percent_of_full_d12": 132.95855729504913,
+      "neural_decoder_macs": 124233984000,
+      "neural_decoder_macs_percent_of_full_d12": 141.1849639545133,
+      "encoder_with_reconstruction_macs": 172846912000,
+      "encoder_with_reconstruction_macs_percent_of_full_d12": 145.12017564034835
+    },
+    {
+      "depth": 12,
+      "halo": 0,
+      "context_window_side": 256,
+      "padded_side": 256,
+      "coded_area_ratio": 1.0,
+      "window_start_coordinates": [
+        0,
+        256
+      ],
+      "all_starts_aligned_to_hyperlatent64": true,
+      "synthesis_macs": 56914870272,
+      "synthesis_macs_percent_of_full_d12": 100.0,
+      "neural_decoder_macs": 87993778176,
+      "neural_decoder_macs_percent_of_full_d12": 100.0,
+      "encoder_with_reconstruction_macs": 119106052096,
+      "encoder_with_reconstruction_macs_percent_of_full_d12": 100.0
+    },
+    {
+      "depth": 12,
+      "halo": 32,
+      "context_window_side": 288,
+      "padded_side": 320,
+      "coded_area_ratio": 1.5625,
+      "window_start_coordinates": [
+        0,
+        224
+      ],
+      "all_starts_aligned_to_hyperlatent64": false,
+      "synthesis_macs": 88929484800,
+      "synthesis_macs_percent_of_full_d12": 156.25,
+      "neural_decoder_macs": 137490278400,
+      "neural_decoder_macs_percent_of_full_d12": 156.25,
+      "encoder_with_reconstruction_macs": 186103206400,
+      "encoder_with_reconstruction_macs_percent_of_full_d12": 156.25
+    },
+    {
+      "depth": 12,
+      "halo": 64,
+      "context_window_side": 320,
+      "padded_side": 320,
+      "coded_area_ratio": 1.5625,
+      "window_start_coordinates": [
+        0,
+        192
+      ],
+      "all_starts_aligned_to_hyperlatent64": true,
+      "synthesis_macs": 88929484800,
+      "synthesis_macs_percent_of_full_d12": 156.25,
+      "neural_decoder_macs": 137490278400,
+      "neural_decoder_macs_percent_of_full_d12": 156.25,
+      "encoder_with_reconstruction_macs": 186103206400,
+      "encoder_with_reconstruction_macs_percent_of_full_d12": 156.25
+    }
+  ],
+  "trace_checks": [
+    {
+      "depth": 2,
+      "side": 256,
+      "meta_trace_matches_area_scaling": true
+    },
+    {
+      "depth": 2,
+      "side": 320,
+      "meta_trace_matches_area_scaling": true
+    },
+    {
+      "depth": 12,
+      "side": 256,
+      "meta_trace_matches_area_scaling": true
+    },
+    {
+      "depth": 12,
+      "side": 320,
+      "meta_trace_matches_area_scaling": true
+    }
+  ],
+  "upstream_commit": "cbdae87a5445114cdc7f48816da63ea80bdeac40",
+  "torch": "2.9.1+cu126",
+  "cuda_initialized": false,
+  "cost_scope": "Conv2d MACs only. Four independent patch calls can add launch/rANS/transfer/initialization overhead; these are excluded. Native encoder reconstruction and entropy coding overlap, so MAC ratios are not wall-time ratios.",
+  "source_sha256": {
+    "/home/can_karsal/FLEX-PLUS/scripts/audit_patch_geometry_20260927.py": "749be7bbba725c463618cc15d349c3cbba0ba715d4957c3dad504fdf4a080afb",
+    "/home/can_karsal/FLEX-PLUS/docs/research/2026-09-27-six-hour/depth_macs/analysis.json": "d0dca5d07bd1e29cfe9f1ae825a5f73f68c31ac053d34100d89687a20be91f28",
+    "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/upstream/src/models/image_model.py": "95ff7158ffa592b608f346f3585e6111380bee08e50096a1e7c0355acf01089e",
+    "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/upstream/src/layers/layers.py": "1de426819de5cb5d2f251218140d8807d5d8340fed643d57896cdb7a0c45e886"
+  }
+}

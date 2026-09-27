@@ -1,6 +1,6 @@
 """Fixed-depth patching control with real bytes and isolated causal decoding.
 
-Compares a 512 crop, four independent 256 cores, and 32-pixel context halos.
+Compares a 512 crop, four independent 256 cores, and 32/64-pixel context halos.
 This is not adaptive routing, not GPU timing, and not final trained-model RD.
 """
 from __future__ import annotations
@@ -70,7 +70,8 @@ def run(args):
     crops={r['image']:r for r in json.loads(crop_manifest.read_text())['images']}
     config={'schema':1,'scope':'Fixed-depth patching/halo control; CPU reference format; interim epoch20 except released D12',
             'images':IMAGES,'selection':'16 evenly spaced DIV2K validation IDs, predeclared independently of quality',
-            'depths':DEPTHS,'qps':QPS,'core_size':256,'halos':[0,32],
+            'depths':DEPTHS,'qps':QPS,'core_size':256,'halos':[0,32,64],
+            'halo64_amendment':'Added before any patch outcomes,2026-09-27T17:54UTC: 32 and64 context halos both pad to320 on this2x2 grid; compare useful context at the same coded area',
             'halo_protocol':'Clip context windows to the 512 crop; codec pads each window to a multiple of 64; retain only the 256 core; no blending',
             'rate_denominator':512*512,'rate_note':'Sum every coded patch payload and report research container separately; no model-map bits for fixed-depth control',
             'reference_manifest_sha256':file_sha(full/'manifest.json'),'crop_manifest_sha256':file_sha(crop_manifest),
@@ -123,7 +124,7 @@ def run(args):
                                 'full':{**fullmetrics,**{k:original[k] for k in ('payload_bytes','container_bytes','payload_bpp','container_bpp','estimated_bpp')}},
                                 'patch_variants':[]}
                         if qp==32 and image in ('0801.png','0880.png'):save_rgb(folder/(name+'_full.png'),fullrgb)
-                        for halo in (0,32):
+                        for halo in (0,32,64):
                             canvas=torch.empty_like(x);tiles=[];coverage=torch.zeros((512,512),dtype=torch.int32)
                             for row,y in enumerate((0,256)):
                                 for col,z in enumerate((0,256)):

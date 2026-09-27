@@ -167,3 +167,27 @@ Renk uzayı düzeltmesi takip eden commit ile yayımlanacak.
 - The corrected manuscript builds to 8 body pages plus references; supplement 12 pages. All 52 bundled vector-figure artifacts reproduce byte-for-byte; PDF/bundle verification passes. Reviewed rendered pages and delivered-quality figure.
 - Isolated SM86 native depth extension compiled successfully at 17:36:56 UTC (exit 0), without GPU use or modifying the training source/environment. GPU numerical parity and latency remain pending.
 - Expanded epoch-20 reference validation reached 1,400/2,000 cases at 17:42:56 UTC. No partial-cohort performance conclusion is drawn.
+
+## 17:47–17:52 UTC — fixed-control reconstruction replay
+
+- Started CPU-only QP32 actual mixed-image replay for all53 archived CTC first frames, mean/Q90 cross-fit calibration × router/dither/uniform (318 policy cases). The nominal target is fixed at0.1dB before replay.
+- Every map was frozen from disjoint-sequence controls and stored logits before any source image was opened; map construction also passes with M/R fields removed. Padded table loss and MAC accounting reproduce the stored cross-fit outcomes. No threshold filtering or per-source fallback.
+- Replay uses the immutable9e17209 shared decoder snapshot and strict e15 checkpoint loading; reports both corrected444-MSE and explicitRGB loss plus the separate611 metric. This is a neural reconstruction diagnostic, not a new bitstream or runtime result.
+- Metric-corrected publication pushed and remote-verified at4489e75cdf74799acf8961f81a5fb618f7b1d34d.
+- Added plotting scripts for the pending complete patch-control and whole-crop allocation analyses; no synthetic outcomes plotted.
+
+## 17:53–17:56 UTC — before-outcome halo64 amendment
+
+- Found a geometry-specific opportunity: on the2×2 grid, halo32 yields288-square windows padded to320; halo64 yields320-square windows without padding. Both have1.5625×full512 coded area, but different useful context and hyperlatent-grid alignment. No equal-rate or equal-runtime claim follows.
+- No patch output directory existed. Stopped only the owned waiting research queue after checking it had no child/completed commands; archived its state and original preflight. The2000-case reference evaluation and three trainings were untouched.
+- Added halo64 to the still-unstarted patch protocol. Analysis will retain common support across full/halo0/halo32/halo64 and show counts. Original primary geometry rationale remains documented.
+- Fresh engineering preflight independently decoded256/288/320 D2/QP32 streams exactly, checked seam areas/constant MSE and full stitching coverage; all passed. This smooth-input engineering check is not image-quality evidence.
+- Restarted the sequential queue with the new evaluator hash4cfea6600f0280ec41a405a7c82c02d568e803db143f7a78563a0c4069db6d60.
+- Started separate unmodified D12 native compilation with identical setup/toolchain/SM86 flags to support later stock-versus-patched GPU parity. NoGPU queried or used.
+
+## 17:58–18:03 UTC — geometry and representation-boundary audit
+
+- Verified the encoder's structural source support: one latent position depends on a136-pixel interval[16i−64,16i+71]. Seven depthwise3×3 blocks plus stride2 projection after unshuffle8 give this bound; a realCPU gradient probe reproduces bbox[32,167] in both axes. This is not the full-codec or trained effective receptive field.
+- Exact area-scaled Conv2d accounting verified by meta traces at256/320 forD2/D12. Four halo32/64 D2 patches use80.92% of full512 D12 neural-decoder MACs, but100.60% of encoder-with-reconstruction MACs. D6 uses111.05%/122.86%. These are architectural ratios, not matched-quality results or wall time.
+- Produced and visually reviewed the padding/context/MAC figure; corrected dimension-marker and data-label overlaps.
+- Related-work reinspection identified an important qualification: Spatial Competition (arXiv2605.13243v1,section2.2) processes same-mode connected regions continuously. Our fixed-depth patch reset control deliberately forces separate streams and must not be treated as an unavoidable cost of every possible bank implementation. Region coalescing is a required additional control, not a novel concept claimed here.

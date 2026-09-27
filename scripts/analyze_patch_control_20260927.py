@@ -10,7 +10,7 @@ from analyze_reference_validation_20260927 import sha,describe,quality_at,bd_rat
 ROOT=Path('/data10/shareddata/can_karsal/dcvcuf_depth_20260927/research')
 REPO=Path(__file__).resolve().parents[1]
 IMAGES=[f'{i:04d}.png' for i in np.rint(np.linspace(801,900,16)).astype(int)]
-DEPTHS=(2,6,12);QPS=(0,16,32,48,63);VARIANTS=('full','halo0','halo32')
+DEPTHS=(2,6,12);QPS=(0,16,32,48,63);VARIANTS=('full','halo0','halo32','halo64')
 FIELDS=('payload_bpp','container_bpp','estimated_bpp','psnr_rgb','mse_rgb',
         'seam_r4_mse','interior_r4_mse','seam_r16_mse','interior_r16_mse')
 
@@ -53,7 +53,7 @@ def analyze(folder):
                         raise ValueError('Patch decode or stream integrity failed')
                     if stream.stat().st_size!=tile['container_bytes'] or tile['container_bytes']!=tile['payload_bytes']+88:
                         raise ValueError('Patch byte accounting failed')
-                    expected=256 if value['halo']==0 else 288
+                    expected=256+value['halo']
                     if tile['bottom']-tile['top']!=expected or tile['right']-tile['left']!=expected:
                         raise ValueError('Unexpected context window')
                 if value['payload_bytes']!=sum(t['payload_bytes'] for t in tiles):raise ValueError('Payload sum mismatch')
@@ -79,7 +79,7 @@ def analyze(folder):
     for depth in DEPTHS:
         for qp in QPS:
             selected=[c for c in cases if (c['depth'],c['qp'])==(depth,qp)]
-            for halo in (0,32):
+            for halo in (0,32,64):
                 records=[]
                 for c in selected:
                     v=next(v for v in c['patch_variants'] if v['halo']==halo);f=c['full']
@@ -101,14 +101,16 @@ def analyze(folder):
                     values={i:{v:quality_at(groups[depth,i,v],rate,field,method) for v in VARIANTS} for i in IMAGES}
                     common=[i for i,v in values.items() if all(y is not None for y in v.values())]
                     comparisons=[]
-                    for variant in ('halo0','halo32'):
+                    for variant in ('halo0','halo32','halo64'):
                         delta={i:values[i][variant]-values[i]['full'] for i in common}
                         comparisons.append({'variant':variant,'delta_psnr_db':describe(list(delta.values())),'per_image_delta':delta})
                     recovery={i:values[i]['halo32']-values[i]['halo0'] for i in common}
+                    extra_context={i:values[i]['halo64']-values[i]['halo32'] for i in common}
                     matched.append({'depth':depth,'rate_field':field,'interpolator':method,'target_bpp':rate,
                         'images':common,'n':len(common),'comparisons':comparisons,'quality_per_image':values,
-                        'halo32_minus_halo0_db':describe(list(recovery.values()))})
-            for variant in ('halo0','halo32'):
+                        'halo32_minus_halo0_db':describe(list(recovery.values())),
+                        'halo64_minus_halo32_db':describe(list(extra_context.values()))})
+            for variant in ('halo0','halo32','halo64'):
                 values={}
                 for image in IMAGES:
                     q=[[r['psnr_rgb'] for r in groups[depth,image,v]] for v in VARIANTS]
@@ -119,26 +121,27 @@ def analyze(folder):
     return {'scope':'Interim fixed-depth patching control, not adaptive routing or a GPU benchmark',
         'cases':240,'images':IMAGES,'manifest':manifest,'source_files_sha256':sources,'rows':rows,
         'same_qp':same_qp,'matched_rate':matched,'bd_rate':bd,'analysis_script_sha256':sha(__file__),
-        'statistics':'5000 paired-image bootstrap draws, seed20260927; intervals conditional on16 selected images and frozen checkpoints, not training seeds. Matched-rate comparisons use common support across all3 patch variants within each depth; no extrapolation.',
+        'statistics':'5000 paired-image bootstrap draws, seed20260927; intervals conditional on16 selected images and frozen checkpoints, not training seeds. Matched-rate comparisons use common support across all4 full/patch variants within each depth; no extrapolation.',
         'seam_scope':'Same-QP MSE excess relative to the same model full512 image. Boundary-specific excess subtracts interior excess; this is a local distortion diagnostic, not a matched-rate causal seam estimate.',
         'compute_geometry':{'full_padded_pixels':262144,'halo0_padded_pixels':262144,'halo32_padded_pixels':409600,
-            'halo32_area_multiplier':1.5625,'note':'Coded spatial area only, not a runtime or MAC measurement'},
+            'halo32_area_multiplier':1.5625,'halo64_padded_pixels':409600,'halo64_area_multiplier':1.5625,'note':'Coded spatial area only, not a runtime or MAC measurement'},
         'header_note':'Full frame uses88 research-header bytes; four patches use352. The extra264bytes contribute0.008056640625bpp over512². No adaptive expert-map bits in this fixed-depth control.'}
 
 
 def report(data,out):
     lines=['# Sabit derinlikte patchleme: kalite, gerçek byte ve sınır hatası','',
         'Önceden belirlenen16 DIV2K merkez512 crop; D2/D6 epoch20, released D12; beş QP. CPU FP32 araştırma formatı. Router deneyi veya GPU hız ölçümü değil.',
-        '', '| Model | Payload bpp | Ortak görüntü | Halo0−full dB | Halo32−full dB |', '|---|---:|---:|---:|---:|']
+        '', '| Model | Payload bpp | Ortak görüntü | Halo0−full dB | Halo32−full dB | Halo64−full dB |', '|---|---:|---:|---:|---:|---:|']
     for r in data['matched_rate']:
         if (r['rate_field'],r['interpolator'])!=('payload_bpp','linear'):continue
         vals=[]
         for p in r['comparisons']:
             s=p['delta_psnr_db'];vals.append('—' if not s['n'] else f"{s['mean']:+.4f}")
         lines.append(f"| D{r['depth']} | {r['target_bpp']:.1f} | {r['n']}/16 | "+' | '.join(vals)+' |')
-    lines+=['', 'Ortak destek her modelde full/halo0/halo32 eğrilerinin kesişimidir. Derinlikler arasında kapsanan görüntüler farklı olabilir; bu tablo tek başına derinlik sıralaması için kullanılmaz.',
+    lines+=['', 'Ortak destek her modelde full/halo0/halo32/halo64 eğrilerinin kesişimidir. Derinlikler arasında kapsanan görüntüler farklı olabilir; bu tablo tek başına derinlik sıralaması için kullanılmaz.',
         'Paired görüntü bootstrap aralıkları ve lineer–PCHIP duyarlılığı analysis.json içindedir. Veriler küçük, önceden belirlenmiş bir ara kontroldür.',
         '', '32-pixel halo ile dört288×288 pencere, codec padding sonrası dört320×320 alan kodlar. Toplam kodlanan alan full512\'nin1,5625 katıdır. Bu geometrik oran hız oranı değildir.',
+        '64-pixel halo doğrudan320×320 pencere kullanır: 32-halo ile aynı kodlanan alan, daha fazla gerçek context. Bu varyant hiçbir patch sonucu görülmeden eklendi.',
         'Dört bağımsız stream toplam352 research-header byte taşır; full-frame88 byte. Extra264 byte =0,00805664bpp. Payload ve container ayrı raporlanır.',
         'Seam ölçümleri aynı QP\'de full-frame hatası çıkarılarak yapılır; kalite ve bitrate birlikte değişebilir. Aynı-bitrate global PSNR karşılaştırması yukarıdadır.']
     (out/'REPORT_TR.md').write_text('\n'.join(lines)+'\n')
