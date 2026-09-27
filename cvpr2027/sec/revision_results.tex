@@ -4,8 +4,8 @@
 \caption{\textbf{Early exit supplies the saving; spatial routing adds a budget-dependent margin.}
 \textbf{a}, Modelled decoder MAC reduction for four stopping rules.
 \textbf{b}, Paired advantages over Bayer dithering, with 95\% sequence-cluster
-intervals. \textbf{c}, Router--dither difference by QP and target.
-\textbf{d}, Repeating the comparison on the same 204 pairs retains the trend.
+intervals; the shaded row highlights 0.1\,dB. QP and fixed-cohort analyses
+are in the supplement.
 All curves use per-source calibration. MAC savings exclude router and
 signalling overhead and are not measured runtime reductions.}
 \label{fig:budget}
@@ -110,7 +110,7 @@ synthesis. MAC saving excludes the retrospective candidate-selection cost.}
 \caption{\textbf{The spatial-routing margin survives a common measured quality cap.}
 \textbf{a}, Lowest-cost eligible output within each policy's recorded
 candidate pool. \textbf{b}, Paired router--dither saving and 95\%
-sequence-cluster interval. \textbf{c}, Full-frame fallback counts.
+sequence-cluster interval. Full-frame fallback is included in both panels.
 All 265 pairs remain in every comparison. This is retrospective selection
 among actual reconstructions, with fine-tuned e15 as the common anchor;
 candidate-acquisition time and released-reference quality are not measured.}
@@ -126,15 +126,16 @@ margin declines from \MainPremium\ points at 0.1\,dB to
 \MediumPremium\ at 0.2\,dB, \LoosePremium\ at 0.3\,dB and
 \SaturatedPremium\ at 0.5\,dB. Under the delivered-cap protocol the margin
 similarly falls from 2.93 to 0.35 points between 0.1 and 0.3\,dB. The
-fixed-cohort result and QP breakdown in \cref{fig:budget} indicate that this
+fixed-cohort result and QP breakdown in the supplement indicate that this
 behaviour is not explained solely by a changing feasible subset.
 At the 0.1\,dB delivered cap, routing saves more in 170 pairs, less in 24,
 and ties in 71. At 0.5\,dB, 262 of 265 pairs tie; the residual gain comes
 from one sequence.
 
-The maps in \cref{fig:maps} make the mechanism visible. At the tighter
-target, the router spends different depths on different regions; under the
-relaxed target, the maps largely converge to the cheapest depth. The example
+The maps in \cref{fig:maps} make the mechanism visible. At the 0.1\,dB
+target, the router spends different depths on different regions. At
+0.3\,dB, search, routing and dithering all assign depth six on this frame,
+saving 39.1\% MACs at 0.201\,dB measured RGB loss. The example
 is chosen from the five archived thumbnails by proximity to the aggregate
 0.1\,dB routing margin. Its source luma gives spatial context; it is not a
 reconstruction crop or evidence of perceptual equivalence.
@@ -151,8 +152,8 @@ permuted maps through repair and the final head is a separate ablation.
 \begin{figure*}[t]
 \centering
 \includegraphics[width=\textwidth]{figs/refresh20260927/fig5_spatial_decisions.pdf}
-\caption{\textbf{Relaxing the quality budget removes the need for spatial differentiation.}
-Recorded exit maps at two targets on the same QP32 frame. Colour indicates
+\caption{\textbf{Adaptive depth changes where synthesis work is spent.}
+Recorded exit maps at the 0.1\,dB target on the same QP32 frame. Colour indicates
 total executed trunk depth; annotations give MAC saving and measured RGB
 loss. Source luma is shown only for spatial context. Maps are cropped to the
 valid image extent, and the example-selection rule is stated in the text.}

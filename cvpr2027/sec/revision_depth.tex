@@ -1,24 +1,12 @@
-\begin{figure*}[t]
-\centering
-\includegraphics[width=\textwidth]{figs/refresh20260927/fig6_depth_study_system.pdf}
-\caption{\textbf{The six-depth study separates early exit, model capacity and later routing.}
-\textbf{a}, The completed shared-latent experiment reuses one representation
-and nested synthesis. \textbf{b}, The planned capacity ladder trains complete
-DCVC-UF codecs with different retained synthesis depths; each owns its
-analysis and entropy parameters. \textbf{c}, A subsequent encoder-side
-selector can group patches by expert and transmit expert identity with the
-coded payload. D2/D4/D6 trainings are ongoing; D8/D10 and the routing stage
-are prospective. Geometry is schematic and encodes no predicted quality
-or throughput. A same-recipe D12 control complements the released reference.}
-\label{fig:depthsystem}
-\end{figure*}
-
-\section{A Controlled Six-Depth Study}
+\section{From Shared Exits to Model Selection}
 \label{sec:depth}
 
-Shared early exit trades representation reuse against specialised capacity.
-Our next study compares independently trained DCVC-UF codecs retaining
-2/4/6/8/10/12 synthesis blocks. Their encoder and entropy parameters also
+The early-exit result raises a second allocation question: how much
+reconstruction quality does sharing a representation and synthesis prefix
+cost compared with specialising each capacity? Our next study compares
+independently trained DCVC-UF codecs retaining 2/4/6/8/10/12 synthesis
+blocks. Following ClassSR's patch-to-network principle~\cite{kong2021classsr},
+a later selector will route each patch to one member of this bank. Their encoder and entropy parameters also
 learn, so their latents are not interchangeable exits of the current model.
 \Cref{tab:depth} reports exact capacity and experimental status; completed
 matched RD and latency results are pending.
@@ -49,8 +37,17 @@ execution settings. Four validation crops monitor health; final comparison
 requires common achieved RD, complete coded bytes and paired timing.
 Equal QP is not equal rate across codecs.
 
+\paragraph{Specialisation changes the decision path.}
+Unlike shared exits, separately trained codecs may learn different analysis
+transforms and entropy distributions. Choosing D4 after encoding with D12
+is therefore not a valid substitute for encoding with D4. The selector must
+act on cheap source-side features before the chosen codec runs; its training
+target should reflect reconstruction benefit, coded rate and measured cost,
+rather than a texture label alone. This is the compression-specific
+qualification to the ClassSR analogy.
+
 \paragraph{Later encoder-side selection.}
-The proposed MLP in \cref{fig:depthsystem} selects an expert before patch
+The proposed MLP in the upper path of \cref{fig:overview} selects an expert before patch
 encoding and transmits its identity. Controls are full-frame D12,
 patchwise D12, a validation-selected fixed expert and blind mixtures.
 Leave-one-expert-out tests measure patch-specific value. Training,
@@ -58,3 +55,20 @@ calibration and test images stay separate; timing includes grouping,
 entropy resets, signalling and fallback. The supplement's dashed runtime
 scenarios expose assumed fixed costs without inventing quality or speed
 measurements for unfinished models.
+
+\paragraph{A budget is also a scheduling problem.}
+Assigning patches independently does not make execution time additive.
+Patches selected for expert $k$ form a batch of size $n_k$; its measured
+latency is a function $\tau_k(n_k)$. A prospective cost model is
+\begin{equation}
+ T(\mathbf a)=T_{\rm select}+T_{\rm pack}
+ +\sum_k\tau_k(n_k)+T_{\rm assemble},
+ \label{eq:banktime}
+\end{equation}
+with entropy coding, signalling and memory movement charged to the
+appropriate stages. Small, fragmented expert batches may erase an
+arithmetic advantage. Shared early exit has a related effect: the surviving
+batch shrinks with depth. Comparing the two designs at matched quality,
+rate and hardware time will therefore test both representation reuse and
+execution efficiency. Their shared aim is adaptive computation; neither
+is assumed to dominate before these measurements.

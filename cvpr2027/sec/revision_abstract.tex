@@ -1,21 +1,21 @@
 \begin{abstract}
-A fast learned codec still spends the same synthesis depth on every image
-region. We introduce FLEX-UF, a spatial early-exit design for the intra
-decoder of DCVC-UF that makes this depth a local decision. A shared latent
-and full-frame stem feed a nested decoder; tiles leave through pointwise
-adapters, while a shared repair and reconstruction head restore a complete
-image. The design reuses computation across exits and preserves the learned
-representation. We study source-informed selection and learned routing
-against uniform depth and ordered dithering on 53 intra frames at five
-quality indices. At a nominal 0.1\,dB target, the router removes
-\MainRouterSaving\% of modelled decoder multiply--accumulates, including
-\MainPremium\ percentage points beyond dithering. A retrospective comparison
-under a common RGB-loss cap against fine-tuned full-depth synthesis retains
-a 2.93-point margin across all
-265 frame--quality pairs. The benefit contracts as the shallowest exit
-saturates, identifying when spatial adaptation is useful. These results
-establish an arithmetic--quality trade-off under source-calibrated control;
-complete bitstream latency remains to be measured. A controlled
-2/4/6/8/10/12-block study is specified to test how shared early exits compare
-with independently trained depth-reduced DCVC-UF codecs.
+A fast learned codec still applies the same synthesis depth to every image
+region. FLEX-UF studies a different allocation of computation: spend depth
+where it improves reconstruction, and stop elsewhere. We develop this
+principle in the intra model of DCVC-UF through spatial early exit. One
+coded representation feeds a shared stem and a nested synthesis path;
+tiles depart through exit adapters before a common repair and reconstruction
+head. This mechanism connects naturally to a complementary, ClassSR-inspired
+design that selects among independently trained 2/4/6/8/10/12-block codecs.
+We specify that controlled depth study while reporting completed results
+only for the shared-exit path. On 53 intra frames at five quality indices,
+learned routing removes \MainRouterSaving\% of modelled decoder
+multiply--accumulates at a nominal 0.1\,dB target, including \MainPremium\
+percentage points beyond ordered dithering. Retrospective selection under a
+common delivered RGB-loss cap retains a 2.93-point margin over all 265 pairs.
+The margin contracts as the cheapest exit saturates: adaptation is most
+valuable when regions benefit differently from additional depth.
+These results establish an arithmetic--quality trade-off under
+source-calibrated control; autonomous calibration, model-bank routing and
+complete-bitstream latency remain to be evaluated.
 \end{abstract}

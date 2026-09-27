@@ -9,7 +9,7 @@
   },
   {
     "name": "figS3_delivered_cap",
-    "caption": "Retrospective selection under a common achieved RGB-loss cap, with tolerance 0.0001 dB. Every policy chooses the lowest-cost candidate among its up to six archived nominal-budget maps whose final cropped output was actually measured. The evaluated fine-tuned e15 full-frame reconstruction is included as an explicit zero-loss, zero-saving fallback. All 265 frame\u2013QP pairs are retained. Panel b shows paired 95% sequence-cluster bootstrap intervals (5,000 draws). Candidates are discrete; connecting lines guide the eye and introduce no interpolated observations. This limited-pool source-aware diagnostic does not establish a held-out policy, a global optimum, released-reference quality or latency; costs of candidate evaluation and rejection are excluded."
+    "caption": "Retrospective selection under a common measured cropped RGB-loss cap with tolerance 0.0001 dB. Each policy selects the cheapest measured candidate from its up to six archived nominal-budget maps, with the evaluated e15 full-frame output as a zero-loss, zero-saving fallback. All 265 frame\u2013QP pairs remain at every cap. Panel b gives paired 95% sequence-cluster intervals over 5,000 draws. Joining lines guide the eye between discrete measured candidates. At 0.1 dB router/dither fallback counts are 1/2. This source-aware finite-pool analysis is not a held-out deployable policy, a global optimum, or a timing measurement; acquisition and rejection costs are excluded."
   },
   {
     "name": "figS4_codec_bank_plan",

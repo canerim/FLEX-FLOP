@@ -3,24 +3,34 @@
 FLEX-UF exposes two operating regimes. Tight quality constraints leave room
 for useful learned placement. Near the shallowest-exit ceiling, blind
 mixtures approach the same arithmetic cost, and routing overhead can outweigh
-the remaining margin. A practical stopping policy should therefore be chosen
-jointly with the quality budget and measured device cost.
+the remaining margin. The design implication is to allocate computation
+jointly over content and budget: a sophisticated selector is useful only
+where its decisions change the attainable quality--cost trade-off.
 
-The principal limitation is the gap between this allocation evidence and a
-complete codec benchmark. The current controls use source calibration,
-reported losses use the fine-tuned full-depth anchor, and MAC counts exclude
-routing and signalling. A common-reference quality replay and a held-out
+This principle connects early exit to the independent depth bank without
+requiring a cascade of both mechanisms. Shared exits reuse features and
+retain one payload; independent experts can specialise more freely but
+introduce separate representations, model residency and expert batching.
+The controlled study is intended to establish when those additional degrees
+of freedom justify their systems costs. Combining a bank with multiple
+exits per expert would add another axis and is outside the current design.
+
+The principal empirical limitation is the gap between allocation evidence
+and a complete codec benchmark. Current controls use source calibration,
+reported mixed losses use the fine-tuned full-depth anchor, and MAC counts
+exclude routing and signalling. A common-reference replay and a held-out
 control sweep are required before a practical guarantee can be claimed.
-Actual bytes and paired wall-clock timings must then include entropy work,
-packing, tile movement and fallbacks. Perceptual metrics and boundary crops
-also remain necessary; a small RGB PSNR loss alone does not prove visual
-indistinguishability.
+Actual bytes and paired wall-clock timings must include entropy work,
+packing, tile movement and fallbacks. Boundary crops and perceptual metrics
+are also needed; RGB PSNR alone does not establish visual equivalence.
 
 \section{Conclusion}
-We presented FLEX-UF, a DCVC-UF spatial early-exit design that combines a
-shared synthesis stem, conditional tile depth, pointwise adaptation and
+FLEX-UF makes DCVC-UF synthesis a spatial allocation of computation.
+Its evaluated early-exit path shares a latent and prefix, lets tiles stop at
+different depths, and restores a complete image through aligned exits and
 full-frame repair. Recorded reconstructions show substantial decoder
-arithmetic reductions and a further, budget-dependent gain from learned
-placement over dithering. A common delivered-loss analysis preserves that
-trend. Controlled depth and complete-bitstream experiments are the next
-tests of whether these arithmetic gains produce a practical codec speedup.
+arithmetic savings, with a further, budget-dependent benefit from learned
+placement over dithering. The independent six-depth study extends the same
+allocation question to model selection. Matched rate--quality and complete
+execution measurements will determine how the benefits of reuse and
+specialisation translate into practical codec efficiency.

@@ -1,77 +1,78 @@
 \begin{figure*}[t]
 \centering
-\includegraphics[width=\textwidth]{figs/refresh20260927/fig1_shared_latent_system.pdf}
-\caption{\textbf{FLEX-UF makes decoder depth a spatial decision.}
-\textbf{a}, A single decoded latent passes through four shared blocks before
-being partitioned into feature tiles. Stem statistics and QP feed the MLP;
-its scores and the source-calibrated control determine tile depth. \textbf{b}, Only surviving tiles
-traverse the remaining block pairs. Exit adapters feed a stitched canvas,
-grid repair and a common head. The four reachable depths are 6/8/10/12;
-blank cells denote tiles that have already left. The displayed occupancy is
-recorded for videoSRC05, QP32, at a 0.1\,dB target; tensor values are schematic.
-The independent 2/4/6/8/10/12 study in \cref{sec:depth} is a separate control.}
-\label{fig:system}
+\includegraphics[width=\textwidth]{figs/adaptive20260927/adaptive_overview.png}
+\caption{\textbf{One allocation principle, two ways to vary synthesis depth.}
+\emph{Top:} select a complete DCVC-UF codec before encoding a patch; the
+six-depth bank and its selector form the controlled, prospective study.
+\emph{Bottom:} select a stopping depth within one shared-latent decoder;
+this is the evaluated early-exit path. The paths are alternatives, not
+successive stages. AI-generated conceptual illustration: picture planes
+are illustrative, not dataset samples or reconstructed outputs. Exact
+execution and measured allocations appear in \cref{fig:system,fig:maps}.}
+\label{fig:overview}
 \end{figure*}
 
 \section{Introduction}
 \label{sec:intro}
 
-A reconstructed image contains regions with different demands on a decoder.
-A smooth background and a textured object pass through the same sequence of
-synthesis blocks, even when the additional depth has different value in the
-two regions. Modern learned codecs have made this sequence increasingly
-fast. Their next efficiency opportunity is therefore not only to execute
-each block faster, but to decide which regions need to execute it at all.
+An image does not demand the same reconstruction effort everywhere.
+Additional synthesis layers may recover detail in one region while changing
+another very little. Yet a conventional learned codec commits both regions
+to the same network depth. Faster operators reduce the price of this uniform
+computation; spatial adaptation asks a complementary question: \emph{where
+is the next unit of computation worth spending?}
 
-We study this opportunity in the intra model supplied with
-DCVC-UF~\cite{li2026dcvcuf}. Its synthesis transform offers a natural place
-to vary computation: a stack of twelve constant-width blocks between an
-upsampling stage and a reconstruction head. Removing later blocks reduces
-synthesis work without requiring a different coded latent. Yet simply
-truncating the stack is insufficient. Intermediate features were not trained
-to be final reconstructions; independent tile execution changes boundary
-context; and deciding where to stop can consume some of the work it saves.
-A useful early-exit codec must address these three issues together.
+We investigate this question in the intra model supplied with
+DCVC-UF~\cite{li2026dcvcuf}. Its synthesis transform contains twelve
+constant-width blocks between upsampling and reconstruction, providing a
+concrete axis along which to vary capacity. Our aim is to turn that fixed
+stack into an image-dependent allocation of work. The relevant signal is
+not visual complexity alone. A textured patch need not benefit most from
+the next block pair at every bitrate; allocation should reflect the
+reconstruction benefit of additional computation under the chosen quality
+constraint.
 
-FLEX-UF turns the synthesis stack into a nested spatial decoder
-(\cref{fig:system}). An initial full-frame stem preserves common context.
-Thereafter, each tile continues only as far as its assigned depth.
-Exit-specific pointwise adapters make intermediate features suitable for a
-common output space. A lightweight repair on the stitched feature canvas and
-a shared reconstruction head restore cross-tile communication near the
-output. This arrangement concentrates adaptive execution in the expensive
-trunk, while retaining a single analysis transform and entropy model.
+There are two natural ways to make this decision
+(\cref{fig:overview}). \emph{Across models}, a selector assigns each patch
+to a codec of suitable capacity, following the patch-to-network principle
+of ClassSR~\cite{kong2021classsr}. \emph{Within a model}, a stopping rule
+lets different patches leave a shared synthesis stack at different depths,
+related to adaptive patch exiting~\cite{wang2022ape}. Both approaches make
+computation spatially variable, but they make different commitments.
+Independent codecs can specialise their representations; nested exits reuse
+one representation and the computation already performed. FLEX-UF takes
+shared early exit as its first implemented and evaluated mechanism, and
+uses a controlled independent-depth study to investigate this trade-off.
 
-The stopping rule is deliberately separated from the execution mechanism.
-At the encoder, the source image can supervise a search over reconstruction
-error. At the decoder, a compact router can use already recovered features.
-The former provides a useful decision reference but requires trial
-reconstructions; the latter can avoid that acquisition cost only when its
-control is calibrated without the test source. We evaluate the current
-source-calibrated policy family and make the remaining deployment experiment
-explicit. This distinction lets the architecture be assessed without
-confusing an inexpensive score prediction with an inexpensive complete
-encoding procedure.
+Inside a codec, early exit requires more than attaching intermediate
+outputs. Features at different depths must support a common reconstruction;
+conditional tiles lose some spatial context; and choosing an exit can itself
+require expensive candidate decoding. FLEX-UF addresses execution with a
+full-frame stem, a shrinking batch of active tiles, pointwise exit adapters,
+and a shared repair and reconstruction head. Only surviving tiles traverse
+the next block pair. The frozen analysis and entropy path supplies one
+common latent, so synthesis effort can vary without independently encoding
+every candidate depth.
 
-Our experiments ask how much of the saving comes from early exit, and how
-much specifically comes from selecting its spatial locations. Uniform depth
-measures the first effect. Ordered dithering adds finer average costs
-without predicting which region benefits from deeper synthesis. Learned
-routing contributes a further \MainPremium\ percentage points at the
-0.1\,dB target, on top of a \MainDitherSaving\% blind-mixture saving.
-That contribution decreases near the ladder's arithmetic ceiling. The
-result is a useful design principle: content adaptation matters most where
-several depths remain competitive, rather than where nearly all tiles can
-already take the cheapest exit.
+We then separate the value of \emph{cheaper depth} from the value of
+\emph{content-dependent placement}. Uniform depth tests global truncation.
+Ordered dithering permits mixtures of depths without predicting where
+extra synthesis is useful. Learned routing improves on this stronger
+control by \MainPremium\ percentage points of decoder MAC saving at a
+nominal 0.1\,dB target, above dithering's \MainDitherSaving\% reduction.
+That increment shrinks near the shallowest-exit ceiling. This pattern
+locates the useful regime for adaptation: there must be both remaining
+compute to remove and meaningful differences in where deeper processing
+helps. A common delivered-loss analysis retains the same qualitative result.
 
-This paper makes three contributions. First, it develops a DCVC-UF spatial
-early-exit path with shared-prefix execution, pointwise exit adaptation and
-full-frame boundary repair. Second, it evaluates the quality--arithmetic
-frontier using common reconstructions, strong spatially blind controls and
-paired uncertainty estimates. Third, it characterises where spatial
-adaptation adds value: the learned margin contracts as the shallowest exit
-saturates, while obtaining the stopping decision has its own encoder cost.
-The completed evidence is confined to DCVC-UF intra decoding. A controlled
-six-depth study is specified to separate shared-exit adaptation from
-independent capacity; its ongoing trainings and analytical scenarios are
-kept separate from measured reconstruction results.
+Our contributions are threefold. First, we implement spatially conditional
+DCVC-UF synthesis with reusable prefixes, aligned exits and full-frame
+boundary repair. Second, we isolate its allocation benefit using common
+reconstructions, blind mixtures and paired uncertainty estimates, exposing
+the dependence on the quality budget. Third, we define a controlled
+six-depth comparison that links this measured early-exit mechanism to
+independent model selection while identifying their different rate,
+representation and execution costs. The independent trainings are ongoing;
+model-bank routing and complete codec speedups are not yet empirical claims.
+The reported stopping controls use source calibration, which is explicitly
+included in the interpretation of the present evidence.

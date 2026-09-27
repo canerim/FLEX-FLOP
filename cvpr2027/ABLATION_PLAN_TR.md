@@ -3,9 +3,11 @@
 27 Eylül 2026 · Yeni GPU/eğitim deneyleri öneridir; tamamlanan CPU tablo
 kontrolleri üçüncü bölümde açıkça ayrılmıştır.
 
-**Ana hikâye:** DCVC-UF sentezini bölgesel early exit ile azaltmak. Router bu
-yapının durma kararını veriyor; 2/4/6/8/10/12 bağımsız model kıyası daha sonra
-kapasite ve paylaşım etkisini ayıracak. Bütün sayısal deneyler DCVC-UF içinde
+**Ana hikâye:** DCVC-UF hesaplamasını bölge ve kalite bütçesine göre ayarlamak.
+Ölçülmüş ilk mekanizma model içi early exit; ikinci yol ClassSR benzeri
+2/4/6/8/10/12 bağımsız codec seçimi. Bunlar ardışık iki katman değil,
+aynı tahsis probleminin alternatif uygulamaları. Eş eğitimli kontroller
+kapasite uzmanlaşması ile paylaşımın etkisini ayıracak. Bütün sayısal deneyler DCVC-UF içinde
 kalacak. Ana başarı ölçütü aynı gerçekleşen kalite ve gerçek bitrate altında,
 karar/taşıma/entropy maliyetleri dahil pozitif süre kazancı.
 

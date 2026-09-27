@@ -14,6 +14,7 @@ try:
 except ModuleNotFoundError:
     import build_figures as F
 import matplotlib.pyplot as plt
+from matplotlib.lines import Line2D
 from matplotlib.backends.backend_pdf import PdfPages
 from matplotlib.patches import Rectangle, Polygon, Circle
 import numpy as np
@@ -173,33 +174,29 @@ def controls(book):
 
 def delivered(book):
     d=json.loads((DATA/"delivered_frontier_audit.json").read_text())
-    fig,axs=plt.subplots(1,3,figsize=(183*F.MM,78*F.MM))
-    fig.subplots_adjust(left=.072,right=.984,bottom=.28,top=.81,wspace=.39)
-    ax=axs[0];F.panel(ax,"a","Recorded outputs under a common cap")
+    fig,axs=plt.subplots(1,2,figsize=(183*F.MM,63*F.MM))
+    fig.subplots_adjust(left=.074,right=.975,bottom=.23,top=.76,wspace=.35)
+    ax=axs[0];F.panel(ax,"a","Compare outputs under the same loss cap")
     for rule in F.LABEL:
         rr=[r for r in d["summary"] if r["rule"]==rule]
         ax.plot([r["cap"] for r in rr],[r["mean"] for r in rr],color=F.COL[rule],marker=F.MARK[rule],label=F.LABEL[rule])
     ax.set(ylabel="Decoder MAC saving (%)",ylim=(0,42),xlabel="Delivered RGB-loss cap (dB)")
-    ax.legend(loc="lower right",fontsize=5.5,handlelength=1.1,labelspacing=.3)
-
-    ax=axs[1];F.panel(ax,"b","The routing margin persists")
+    ax=axs[1];F.panel(ax,"b","The routing margin survives this control")
     rr=[r for r in d["contrasts"] if r["contrast"]=="router_minus_dither"]
-    x=[r["cap"] for r in rr]
-    ax.fill_between(x,[r["lo"] for r in rr],[r["hi"] for r in rr],color=F.BLUE,alpha=.12,lw=0)
-    ax.plot(x,[r["mean"] for r in rr],color=F.BLUE,marker="s")
+    x=np.array([r["cap"] for r in rr]);y=np.array([r["mean"] for r in rr]);lo=np.array([r["lo"] for r in rr]);hi=np.array([r["hi"] for r in rr])
+    ax.plot(x,y,color=F.BLUE,lw=.8)
+    ax.errorbar(x,y,yerr=[y-lo,hi-y],fmt="s",color=F.BLUE,capsize=2,ms=3.3,lw=.9)
     ax.axhline(0,color=F.MUTED,lw=.6)
-    ax.set(ylabel="Router − dither (percentage points)",ylim=(-.2,4.2),xlabel="Delivered RGB-loss cap (dB)")
-    ax.text(.97,.90,"2.93 points at 0.1 dB\n95% CI: [2.11, 3.79]",transform=ax.transAxes,ha="right",va="top",fontsize=5.8,linespacing=1.4)
-
-    ax=axs[2];F.panel(ax,"c","Fallback is counted explicitly")
-    for rule in F.LABEL:
-        rr=[r for r in d["summary"] if r["rule"]==rule]
-        ax.plot([r["cap"] for r in rr],[r["fallbacks"] for r in rr],color=F.COL[rule],marker=F.MARK[rule],label=F.LABEL[rule])
-    ax.set(ylabel="Full-frame reference fallbacks / 265",xlabel="Delivered RGB-loss cap (dB)")
-    ax.legend(loc="upper right",fontsize=5.5,handlelength=1.1,labelspacing=.3)
-    fig.text(.5,.04,"265 frame–QP pairs throughout · fine-tuned e15 anchor · retrospective source-aware candidate selection",ha="center",fontsize=6)
+    ax.set(ylabel="Router − dither (percentage points)",ylim=(-.2,4.4),xlabel="Delivered RGB-loss cap (dB)")
+    ax.text(.96,.92,"2.93 pp at 0.1 dB\n95% CI [2.11, 3.79]",transform=ax.transAxes,ha="right",va="top",fontsize=7,linespacing=1.4)
+    for ax in axs:
+        ax.set_xlim(.035,.52)
+        ax.set_xticks([.05,.1,.2,.3,.5],[".05",".10",".20",".30",".50"])
+    handles=[Line2D([],[],color=F.COL[k],marker=F.MARK[k],label=F.LABEL[k]) for k in F.LABEL]
+    fig.legend(handles=handles,loc="upper center",bbox_to_anchor=(.52,1.01),ncol=4,fontsize=7,handlelength=1.8,columnspacing=2.1)
+    fig.text(.5,.035,"265 pairs at every cap · fine-tuned full-depth reference · retrospective selection with explicit fallback",ha="center",fontsize=6.5,color=F.MUTED)
     F.audit_and_save(fig,"figS3_delivered_cap",
-        "Retrospective selection under a common achieved RGB-loss cap, with tolerance 0.0001 dB. Every policy chooses the lowest-cost candidate among its up to six archived nominal-budget maps whose final cropped output was actually measured. The evaluated fine-tuned e15 full-frame reconstruction is included as an explicit zero-loss, zero-saving fallback. All 265 frame–QP pairs are retained. Panel b shows paired 95% sequence-cluster bootstrap intervals (5,000 draws). Candidates are discrete; connecting lines guide the eye and introduce no interpolated observations. This limited-pool source-aware diagnostic does not establish a held-out policy, a global optimum, released-reference quality or latency; costs of candidate evaluation and rejection are excluded.",book)
+        "Retrospective selection under a common measured cropped RGB-loss cap with tolerance 0.0001 dB. Each policy selects the cheapest measured candidate from its up to six archived nominal-budget maps, with the evaluated e15 full-frame output as a zero-loss, zero-saving fallback. All 265 frame–QP pairs remain at every cap. Panel b gives paired 95% sequence-cluster intervals over 5,000 draws. Joining lines guide the eye between discrete measured candidates. At 0.1 dB router/dither fallback counts are 1/2. This source-aware finite-pool analysis is not a held-out deployable policy, a global optimum, or a timing measurement; acquisition and rejection costs are excluded.",book)
 
 
 def scenarios(book):
