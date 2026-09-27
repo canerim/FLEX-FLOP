@@ -68,3 +68,18 @@ Geniş validation: `div2k100_reference_epoch020/progress.json` ve case/stream do
   beş QP. 256 ve 288 girişleri D2/QP32'de bağımsız decoder preflight'ını
   geçti. Seam-mask alanı ve sabit-hata metriği analitik doğrulandı.
   Yoğun CPU kullanımı nedeniyle deney geniş validation sonrasına bırakıldı.
+
+## 16:29 UTC — ilk yayın kaydı ve ortak epoch21
+
+Araştırma araçları ve ilk dört figür seti `e8e60f9` commit'iyle
+`canerim/FLEX-FLOP` deposunun `flex` dalına gönderildi; uzak SHA doğrulandı.
+Makale ekine sequence-disjoint kalibrasyon bölümü ve figürü eklendi.
+Ana PDF 8 metin + 1 kaynakça sayfasında kaldı; ek 12 sayfa olarak
+derlendi. Undefined reference veya overfull box yok. Figürlerin altı
+PDF/SVG/PNG çıktısı araştırma klasörüyle byte düzeyinde eşleşiyor.
+
+D6 epoch21 validation'ını tamamladı; `watch/epoch021_matched_observation.json`
+arşivlendi. Ortak 0,2 tahmini bpp'de D2/D4/D6 =
+34,02897 / 34,22206 / 34,25315 dB (dört crop). D6−D2 = 0,22418 dB.
+Geniş validation başlangıçta sabitlenen epoch20 ile devam ediyor; yeni
+checkpoint'e geçilerek farklı epoch'lar karıştırılmıyor.
