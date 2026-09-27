@@ -88,3 +88,12 @@ Native allocation also hardcodes batch one. A model-bank cost expression
 using `tau_k(n_k)` is prospective: real batching of multiple patch streams
 needs additional implementation and correctness checks. Serial patch calls
 must not be labelled a batched native codec benchmark.
+
+## Unmodified D12 compilation control
+
+`build_stock_isolated.py` also completed successfully with identical build
+setup,CUDA12.1/PyTorch-cu126 toolchain,CUTLASS revision andSM86 flags.
+`stock_compile_report.json` records its independent binary and log hashes.
+Both stock and patched modules remain isolated and uninstalled. This prepares
+a controlled future GPU comparison; neither module has been numerically
+validated or benchmarked on a GPU during this session.

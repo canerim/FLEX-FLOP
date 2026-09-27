@@ -119,6 +119,7 @@ def analyze(folder):
                 valid=[v['percent'] for v in values.values() if v['percent'] is not None]
                 bd.append({'depth':depth,'rate_field':field,'variant':variant,'summary':describe(valid),'per_image':values})
     return {'scope':'Interim fixed-depth patching control, not adaptive routing or a GPU benchmark',
+        'padding_scope':'FUFREF1 CPU image-pad64. Native image-pad16 plus latent-pad4 is different; halo32/64 equal-area result is specific to this reference protocol.',
         'cases':240,'images':IMAGES,'manifest':manifest,'source_files_sha256':sources,'rows':rows,
         'same_qp':same_qp,'matched_rate':matched,'bd_rate':bd,'analysis_script_sha256':sha(__file__),
         'statistics':'5000 paired-image bootstrap draws, seed20260927; intervals conditional on16 selected images and frozen checkpoints, not training seeds. Matched-rate comparisons use common support across all4 full/patch variants within each depth; no extrapolation.',

@@ -1,0 +1,74 @@
+{
+  "observed_utc": "2026-09-27T18:05:38.742942+00:00",
+  "co_tenant_start_utc": "2026-09-27T17:39:06+00:00",
+  "gpu_index": 6,
+  "other_pid": 3524738,
+  "other_owner": "cankan",
+  "action": "read-only observation; no process or training changes",
+  "models": {
+    "2": {
+      "before": {
+        "n": 83,
+        "median_seconds_per_step": 0.10969962231814862,
+        "mean_seconds_per_step": 0.11616268663111715,
+        "interval_utc": [
+          "2026-09-27T17:09:00",
+          "2026-09-27T17:39:00"
+        ]
+      },
+      "after": {
+        "n": 50,
+        "median_seconds_per_step": 0.12066418703878298,
+        "mean_seconds_per_step": 0.12059890085952356,
+        "interval_utc": [
+          "2026-09-27T17:44:00",
+          "2026-09-27T18:04:00"
+        ]
+      },
+      "median_slowdown_ratio": 1.0999507973585831
+    },
+    "4": {
+      "before": {
+        "n": 80,
+        "median_seconds_per_step": 0.11170299998717383,
+        "mean_seconds_per_step": 0.11883287548850058,
+        "interval_utc": [
+          "2026-09-27T17:09:00",
+          "2026-09-27T17:39:00"
+        ]
+      },
+      "after": {
+        "n": 50,
+        "median_seconds_per_step": 0.11763561657862737,
+        "mean_seconds_per_step": 0.11968647146327421,
+        "interval_utc": [
+          "2026-09-27T17:44:00",
+          "2026-09-27T18:04:00"
+        ]
+      },
+      "median_slowdown_ratio": 1.0531106290084846
+    },
+    "6": {
+      "before": {
+        "n": 74,
+        "median_seconds_per_step": 0.12175688765477388,
+        "mean_seconds_per_step": 0.1294854336845487,
+        "interval_utc": [
+          "2026-09-27T17:09:00",
+          "2026-09-27T17:39:00"
+        ]
+      },
+      "after": {
+        "n": 35,
+        "median_seconds_per_step": 0.1792103117890656,
+        "mean_seconds_per_step": 0.1691471314762852,
+        "interval_utc": [
+          "2026-09-27T17:44:00",
+          "2026-09-27T18:04:00"
+        ]
+      },
+      "median_slowdown_ratio": 1.4718700127847681
+    }
+  },
+  "interpretation": "Temporal association between shared-GPU occupancy and D6 slowdown; D2/D4 are contemporaneous controls. Not a randomized resource intervention or proof of exclusive causation."
+}

@@ -13,6 +13,31 @@ import paper_refresh_figures as F
 OUT=Path(__file__).resolve().parents[1]/'docs/research/2026-09-27-six-hour/patch_geometry'
 
 
+def native_comparison(data,book):
+    fig=plt.figure(figsize=(183*F.MM,87*F.MM))
+    for col,(key,title) in enumerate([
+        ('neural_decoder_macs_percent_of_full_d12','Neural decoder'),
+        ('encoder_with_reconstruction_macs_percent_of_full_d12','Encoder with reconstruction')]):
+        ax=fig.add_axes([.09+.49*col,.29,.365,.43]);F.panel(ax,chr(97+col),title)
+        selections=[(data['native_geometry_rows'],0,F.BLUE,'o','No halo'),
+            (data['native_geometry_rows'],32,F.TEAL,'s','Native-shaped halo32'),
+            (data['rows'],32,F.ORANGE,'^','Image-pad64 halo32 / either halo64')]
+        for rows,halo,color,marker,label in selections:
+            selected=[r for r in rows if r['halo']==halo]
+            ax.plot([r['depth'] for r in selected],[r[key] for r in selected],color=color,marker=marker,
+                ms=3.5,lw=1.1,label=label)
+        ax.axhline(100,color=F.INK,ls='--',lw=.75)
+        ax.set(xlabel='Synthesis trunk blocks',ylabel='Conv2d MACs / full-frame D12 (%)' if col==0 else '',
+            xticks=[2,4,6,8,10,12],ylim=(45,166))
+    handles,labels=ax.get_legend_handles_labels()
+    fig.legend(handles,labels,loc='lower center',bbox_to_anchor=(.5,.12),ncol=3,frameon=False,fontsize=5.8,columnspacing=1)
+    fig.text(.5,.96,'THE PADDING POLICY CHANGES THE COMPUTE ESTIMATE',ha='center',weight='bold',fontsize=8)
+    fig.text(.5,.855,'Four 256 cores · native image-pad16 / latent-pad4 versus CPU reference image-pad64',ha='center',fontsize=6.3,color=F.MUTED)
+    fig.text(.5,.032,'Layer-by-layer Conv2d trace · native-shaped means geometry only · no CUDA timing, stream or numerical parity claim',ha='center',fontsize=5.7,color=F.MUTED)
+    F.audit_and_save(fig,'fig_native_padding_cost',
+        'Architecture-only accounting for four256-square cores of a512 crop. Microsoft native allocation pads the image to16 and only the hyperanalysis latent to4; a288 input therefore has18-square main latent but20-square hyperanalysis input. We reproduce those shapes in a Conv2d trace, independently checkingD2/288 on realCPU against meta execution. TheFUFREF1 image-pad64 reference instead executes a320-square image for halo32. Halo64 is320-aligned and has identical geometry in both policies. The native-shaped trace givesD2 halo32 neural-decoder/encoder-with-reconstruction costs of67.82%/83.22% of fullD12; D6 gives92.22%/101.25%. These are not matched-quality or measured runtime comparisons; fused CUDA work and entropy coding are not counted.',book)
+
+
 def main():
     source=OUT/'analysis.json';data=json.loads(source.read_text());F.OUT=OUT;F.AUDIT.clear();F.CAPTIONS.clear()
     fig=plt.figure(figsize=(183*F.MM,127*F.MM))
@@ -47,12 +72,13 @@ def main():
     fig.legend(handles=[Patch(facecolor=F.BLUE,label='One 512 crop or four 256 cores'),
         Patch(facecolor=F.ORANGE,label='Four patches with halo 32 or 64')],
         loc='lower center',bbox_to_anchor=(.5,.038),ncol=2,frameon=False,fontsize=6)
-    fig.text(.5,.975,'PADDING CAN CONSUME THE DEPTH SAVING',ha='center',weight='bold',fontsize=8)
-    fig.text(.5,.922,'Bottom-right patch of a 2×2 grid · extra context need not mean extra padded area',ha='center',fontsize=6.4,color=F.MUTED)
-    fig.text(.5,.009,'Exact architecture/geometry accounting · no runtime, trained D8/D10 quality, or context-sufficiency claim',ha='center',fontsize=5.8,color=F.MUTED)
+    fig.text(.5,.975,'CPU REFERENCE: PADDING AND DEPTH SAVING',ha='center',weight='bold',fontsize=8)
+    fig.text(.5,.922,'FUFREF1 image-pad64 geometry · bottom-right patch of a 2×2 grid',ha='center',fontsize=6.4,color=F.MUTED)
+    fig.text(.5,.009,'CPU image-pad64 accounting only · native image-pad16 / latent-pad4 differs · not runtime',ha='center',fontsize=5.8,color=F.MUTED)
     with PdfPages(OUT/'patch_geometry_atlas.pdf',metadata=F.PDF_META) as book:
         F.audit_and_save(fig,'fig_patch_geometry',
-            'Top: exact local geometry of the bottom-right256-square core in a512 crop. A32-pixel halo produces a288-square input padded on its bottom/right to320; a64-pixel halo uses320 source pixels directly. Both therefore code1.5625 times the full512 area across four patches. Bottom: Conv2d MACs relative to full-frameD12, including neural entropy recovery in the decoder and source analysis/hyperanalysis in encoder-with-reconstruction. Area scaling was checked by independent meta-tensor traces forD2/D12 at256 and320. Four256 calls share full512 arithmetic but may differ in overhead and rate. Entropy coding, transfers and call overhead are excluded; encoder branch overlap prevents interpreting arithmetic ratios as time ratios. D8/D10 are architectural counts only.',book)
+            'FUFREF1 CPU image-pad64 scope only; native CUDA uses a different padding policy. Top: exact local geometry of the bottom-right256-square core in a512 crop. A32-pixel halo produces a288-square input padded on its bottom/right to320; a64-pixel halo uses320 source pixels directly. Both therefore code1.5625 times the full512 area across four patches. Bottom: Conv2d MACs relative to full-frameD12, including neural entropy recovery in the decoder and source analysis/hyperanalysis in encoder-with-reconstruction. Area scaling was checked by independent meta-tensor traces forD2/D12 at256 and320. Four256 calls share full512 arithmetic but may differ in overhead and rate. Entropy coding, transfers and call overhead are excluded; encoder branch overlap prevents interpreting arithmetic ratios as time ratios. D8/D10 are architectural counts only.',book)
+        native_comparison(data,book)
     (OUT/'figure_evidence.json').write_text(json.dumps({'analysis_sha256':hashlib.sha256(source.read_bytes()).hexdigest(),
         'script_sha256':hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),'captions':F.CAPTIONS,'layout_audit':F.AUDIT},indent=2)+'\n')
 

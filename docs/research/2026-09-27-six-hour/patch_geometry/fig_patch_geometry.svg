@@ -929,13 +929,13 @@ L 406.469966 219.6
    </g>
   </g>
   <g id="text_63">
-   <text style="font-weight: 700; font-size: 8px; font-family: 'Liberation Sans'; text-anchor: middle; fill: #183342" x="259.370079" y="9" transform="rotate(-0 259.370079 9)">PADDING CAN CONSUME THE DEPTH SAVING</text>
+   <text style="font-weight: 700; font-size: 8px; font-family: 'Liberation Sans'; text-anchor: middle; fill: #183342" x="259.370079" y="9" transform="rotate(-0 259.370079 9)">CPU REFERENCE: PADDING AND DEPTH SAVING</text>
   </g>
   <g id="text_64">
-   <text style="font-size: 6.4px; font-family: 'Liberation Sans'; text-anchor: middle; fill: #5a6c75" x="259.370079" y="28.08" transform="rotate(-0 259.370079 28.08)">Bottom-right patch of a 2×2 grid · extra context need not mean extra padded area</text>
+   <text style="font-size: 6.4px; font-family: 'Liberation Sans'; text-anchor: middle; fill: #5a6c75" x="259.370079" y="28.08" transform="rotate(-0 259.370079 28.08)">FUFREF1 image-pad64 geometry · bottom-right patch of a 2×2 grid</text>
   </g>
   <g id="text_65">
-   <text style="font-size: 5.8px; font-family: 'Liberation Sans'; text-anchor: middle; fill: #5a6c75" x="259.370079" y="356.76" transform="rotate(-0 259.370079 356.76)">Exact architecture/geometry accounting · no runtime, trained D8/D10 quality, or context-sufficiency claim</text>
+   <text style="font-size: 5.8px; font-family: 'Liberation Sans'; text-anchor: middle; fill: #5a6c75" x="259.370079" y="356.76" transform="rotate(-0 259.370079 356.76)">CPU image-pad64 accounting only · native image-pad16 / latent-pad4 differs · not runtime</text>
   </g>
   <g id="legend_1">
    <g id="patch_62">

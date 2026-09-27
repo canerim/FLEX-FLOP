@@ -1,4 +1,11 @@
-# Fixed-depth patching control
+# Fixed-depth patching control: CPU image-pad64 reference
+
+**Padding scope:** FUFREF1 pads the image to a multiple of64. Microsoft's native
+CUDA path instead pads the image to16 and the hyperanalysis latent to4.
+The equal-area halo32/64 claim below is specific to this CPU protocol.
+It must not be used as a native CUDA rate, quality or runtime result.
+A separateFUFREF2 engineering reference is being checked for native padding
+geometry; it still does not establish GPU numerical or wire-format parity.
 
 This experiment isolates the cost of independent patch coding before a model
 selector is introduced. It uses frozen epoch20 D2/D6 and released D12, five

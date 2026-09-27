@@ -191,3 +191,17 @@ Renk uzayı düzeltmesi takip eden commit ile yayımlanacak.
 - Exact area-scaled Conv2d accounting verified by meta traces at256/320 forD2/D12. Four halo32/64 D2 patches use80.92% of full512 D12 neural-decoder MACs, but100.60% of encoder-with-reconstruction MACs. D6 uses111.05%/122.86%. These are architectural ratios, not matched-quality results or wall time.
 - Produced and visually reviewed the padding/context/MAC figure; corrected dimension-marker and data-label overlaps.
 - Related-work reinspection identified an important qualification: Spatial Competition (arXiv2605.13243v1,section2.2) processes same-mode connected regions continuously. Our fixed-depth patch reset control deliberately forces separate streams and must not be treated as an unavoidable cost of every possible bank implementation. Region coalescing is a required additional control, not a novel concept claimed here.
+
+## 18:05–18:21 UTC — resource contention and native padding distinction
+
+- GPU6 gained another user's9.6GiB process at17:39:06UTC. D6 median window time increased121.8→179.2ms across fixed before/after windows (+47.2% step duration); D2/D4 increased10.0%/5.3%. This is an observational association, not randomized causal proof. No foreign process was modified; incident data archived.
+- Important scope correction: native Microsoft test_video requests image padding to16, while DMCIProxy pads only the hyperanalysis latent to4. FUFREF1 CPU research coding pads the whole image to64. The earlier equal-area halo32/64 calculation applies toFUFREF1, not native halo32. Updated research documentation and figure scope. The completed512 reference cohort is64-aligned, so this distinction does not change its geometry.
+- Added layer-by-layer native-shaped Conv2d traces and a realCPU D2/288 trace match. Native-shaped D2 halo32 costs67.82% neural-decoder and83.22% encoder-with-reconstruction MACs relative to full512 D12; D6 costs92.22%/101.25%. No CUDA timing or matched-quality claim.
+- Derived separateFUFREF2 sources without editing any runningFUFREF1 file: image-pad16 and replicate latent-pad4. Passed45/45 fresh-process decoding cases acrossD2/D6/releasedD12,3 QPs and5 geometries;27 aligned cases also reproduceFUFREF1 payload and reconstruction exactly. This is CPU FP32 engineering evidence only.
+- Queued a paired288-window padding-policy evaluation on the identical240-case patch cohort, to run after the primaryCPU-pad64 study. It reuses aligned full/core/halo64 evidence and measures only the changedhalo32 path; no image selection from outcomes.
+
+## 18:27 UTC — compilation pair and common epoch23
+
+- The unmodified stockD12 extension also compiled successfully with exactly the same isolated setup/toolchain/CUTLASS/SM86 configuration as the patched extension. Both binaries remain uninstalled; GPU parity and timings are still pending.
+- Training snapshot: D2 step627675 (completed26 epochs), D4 step608226 (completed25), D6 step556328 (completed23). All live, no nonfinite skips or watcher alerts. Archived the common completed epoch23 validation.
+- The large reference study reached1891/2000; actual-image shared-control replay reached25/53 sequences. Native-padding paired evaluator is waiting for the primary patch study.

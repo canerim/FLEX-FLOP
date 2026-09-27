@@ -1,0 +1,23 @@
+{
+  "format": "FUFREF2",
+  "scope": "CPU FP32 causal reference with native image-pad16 and replicate latent-pad4 geometry; not CUDA precision, skip-threshold, wire-format or latency parity",
+  "base_verification_sha256": "ae985f72b277eea5f83bd6bf301d34a49af8d97d323e31f1eec6ca0ccdeb628b",
+  "base_source_sha256": {
+    "reference_codec.py": "c549d92c4ff04fd84188e4aaa2c1a01f99a72d9237bb3965324f5bb95d85878e",
+    "model_io.py": "7722bc80487e252856a3a05ddfa017bb594e470bcdea9f47cc604550e639d655",
+    "decode_worker.py": "c1c25165b11a2c853e0f0a5ca553ab7e5405f1ae181480e9be8cbb084ad36119"
+  },
+  "derived_source_sha256": {
+    "model_io.py": "7722bc80487e252856a3a05ddfa017bb594e470bcdea9f47cc604550e639d655",
+    "reference_codec.py": "dcb2cfe184edd35151f45dc2ba539416fea65c8835aaae929b72a4e446101320",
+    "decode_worker.py": "c1c25165b11a2c853e0f0a5ca553ab7e5405f1ae181480e9be8cbb084ad36119"
+  },
+  "native_source_sha256": {
+    "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/upstream/test_video.py": "6597af5cb9a86b6be1d8d3ed8534b88e45c9ef882cc2de14d11ed07dee892d7b",
+    "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/upstream/src/layers/extensions/inference/dmci_proxy.cpp": "6abe04a1ba3ee1c5b0ac81327f93afdc5b72a83c7a8dc0c3459445492c6a2590",
+    "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/upstream/src/layers/extensions/inference/dmc_common.cpp": "169aa0b676e8c6f6b7760b63dde49e863aced3afe272890308830f8a7c4ae9ae"
+  },
+  "prepare_script_sha256": "d9fd125c0e4d2ab542cc97238b5cb54ccca2dd10f073da79b1bd05d19700f730",
+  "source_evidence": "test_video.py requests padding multiple16; DMCIProxy preallocates image dimensions to16 and pads latent dimensions to4; DMCCommon::pad_for_y uses replicate padding.",
+  "remaining_checks": "Fresh-process decoding on non64 shapes; parity withFUFREF1 at64-aligned sizes; native GPU correctness remains pending."
+}
