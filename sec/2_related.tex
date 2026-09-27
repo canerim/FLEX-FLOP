@@ -4,11 +4,49 @@
 \subsection{Learned Image and Video Compression}
 \label{sec:rw_nic}
 
+Learned image codecs pair an analysis and a synthesis transform with an entropy model over the quantized latent~\cite{balle2017}.
+Hyperpriors~\cite{balle2018} and autoregressive contexts~\cite{minnen2018,minnen2020channel,he2021checkerboard} made the entropy model the main source of rate savings, while attention~\cite{cheng2020}, uneven channel grouping~\cite{he2022elic} and transformer--CNN mixtures~\cite{liu2023tcm} strengthened the transforms.
+Generative decoders trade fidelity for realism~\cite{mentzer2020,muckley2023illm}.
+In video, DVC~\cite{lu2019dvc} introduced end-to-end residual coding and the DCVC family replaced it with conditional coding~\cite{li2021dcvc}, adding diverse contexts~\cite{li2023dcvcdc}, feature modulation~\cite{li2024dcvcfm}, real-time design~\cite{jia2025dcvcrt} and, most recently, chunk-based coding with a single wide-range intra model~\cite{li2026dcvcuf}.
+We build on the intra codec of DCVC-UF and keep its analysis transform, entropy model and bitstream exactly as released.
+
 \subsection{Decoder Complexity of Neural Codecs}
 \label{sec:rw_complexity}
+
+The cost of learned codecs has been reduced mostly by static design.
+Checkerboard and channel-wise contexts parallelize entropy decoding~\cite{he2021checkerboard,minnen2020channel}.
+EVC~\cite{wang2023evc} distills a large model into a light one with mask decay, Yang and Mandt~\cite{yang2023shallow} show that a shallow synthesis transform suffices when the encoder does more work, and DCVC-RT~\cite{jia2025dcvcrt} moves all latents to one low resolution.
+Slimmable codecs~\cite{yang2021slimcae}, building on slimmable networks~\cite{yu2019slimmable}, let one model run at several widths, but the width is chosen for the whole image.
+All of these fix the decoder's cost per pixel before the content is known; FLEX keeps the released decoder and lets the cost follow the content, tile by tile.
+Rate--distortion comparisons in this setting use the Bj{\o}ntegaard measure~\cite{bjontegaard2001}; we report it next to compute.
 
 \subsection{Dynamic Inference and Early Exiting}
 \label{sec:rw_dynamic}
 
+Dynamic networks allocate computation per input~\cite{han2022survey}.
+Early-exit networks attach classifiers at intermediate depths and stop once a prediction is confident~\cite{teerapittayanon2016,huang2018msdnet}; adaptive computation time learns when to halt~\cite{graves2016act}.
+Residual networks can instead skip blocks through learned gates~\cite{wang2018skipnet,veit2018} or a policy network~\cite{wu2018blockdrop}, and vision transformers can prune or halt tokens~\cite{rao2021dynamicvit,yin2022avit}.
+Spatially adaptive computation time~\cite{figurnov2017sact} and sparse dynamic convolutions~\cite{verelst2020} bring the decision down to spatial positions.
+These methods target recognition, where one output summarizes the image and an early decision costs accuracy.
+A decoder must produce every pixel, and an early exit in one region is visible as a local error or a seam.
+We keep the idea of exits along a shared trunk but make the decision per tile, repair the tile boundaries, and let the encoder, which sees the source, make it.
+
 \subsection{Region-Aware Adaptive Inference}
 \label{sec:rw_region}
+
+Region-aware super-resolution is the closest line of work.
+ClassSR~\cite{kong2021classsr} classifies sub-images by difficulty and sends each to one of several networks of different capacity.
+APE~\cite{wang2022ape} and ARM~\cite{chen2022arm} share weights across capacities and pick an exit or subnet per patch, AdaDSR~\cite{liu2020adadsr} adapts depth to local content, and PCSR~\cite{jeong2024pcsr} moves the decision to individual pixels.
+SMSR~\cite{wang2021smsr} and FADN~\cite{xie2021fadn} learn spatial masks that skip computation in flat or low-frequency regions.
+\Cref{fig:paradigms} places these approaches next to ours.
+Three differences follow from the compression setting.
+First, the super-resolution methods must infer difficulty from the low-resolution input, while a codec's encoder can measure the actual loss of each exit on the source and signal the choice, as standardized codecs signal partitions and modes~\cite{sullivan2012hevc,bross2021vvc}.
+Second, they decode patches independently and accept or blend the seams; we remove them with a learned repair at a known grid.
+Third, their budget is a model-level trade-off, whereas ours is a per-frame distortion budget measured against the released decoder, with the rate held fixed.
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\linewidth]{figs/paradigms.pdf}
+\caption{\textbf{Where compute adapts.} (a) A static decoder runs every block on every tile. (b) Early-exit networks stop once per input~\cite{teerapittayanon2016,huang2018msdnet}. (c) Region-aware SR sends patches to separate networks~\cite{kong2021classsr}. (d) FLEX shares one ladder, exits per tile, and reads the exit map from the bitstream.}
+\label{fig:paradigms}
+\end{figure}
