@@ -11,9 +11,10 @@ router saves \MainRouterSaving\% of modelled decoder multiply--accumulates at
 a 0.1\,dB target, compared with \MainDitherSaving\% for dithering on 263 common
 frame--quality pairs. The paired advantage is \MainPremium\ percentage points
 and falls to \LoosePremium\ points at a 0.3\,dB target as the exit ladder
-saturates. Evaluation of the final cropped images also reveals target-budget
-violations that tile-level calibration does not eliminate. Historical timing
-isolates a further cost: acquiring source-error tables at the encoder.
+saturates. A reference audit shows that selection and final reporting use
+different reconstruction anchors, preventing a delivered-quality guarantee
+from the nominal target alone. Historical timing isolates a further cost:
+acquiring source-error tables at the encoder.
 These findings identify where spatial routing adds value and which quality,
 signalling and execution costs must be included before arithmetic savings can
 be interpreted as practical acceleration.

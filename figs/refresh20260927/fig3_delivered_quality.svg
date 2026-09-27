@@ -6,7 +6,7 @@
   <rdf:RDF xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
    <cc:Work>
     <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
-    <dc:date>2026-09-27T13:50:55.486951</dc:date>
+    <dc:date>2026-09-27T00:00:00Z</dc:date>
     <dc:format>image/svg+xml</dc:format>
     <dc:creator>
      <cc:Agent>
@@ -1049,7 +1049,7 @@ L 336.720307 148.648819
     <text style="font-size: 6px; font-family: 'Liberation Sans'; fill: #18252e" transform="translate(265.618072 119.307346) rotate(-90)">0.1 dB target</text>
    </g>
    <g id="text_34">
-    <text style="font-size: 7px; font-family: 'Liberation Sans'; text-anchor: start; fill: #18252e" x="211.58804" y="28.162205" transform="rotate(-0 211.58804 28.162205)">A target is not a framewise guarantee</text>
+    <text style="font-size: 7px; font-family: 'Liberation Sans'; text-anchor: start; fill: #18252e" x="211.58804" y="28.162205" transform="rotate(-0 211.58804 28.162205)">Reporting differs from selection</text>
    </g>
    <g id="legend_2">
     <g id="line2d_47">
@@ -1137,7 +1137,7 @@ z
      </g>
     </g>
     <g id="text_42">
-     <text style="font-size: 6.5px; font-family: 'Liberation Sans'; text-anchor: middle; fill: #18252e" x="446.836701" y="169.011856" transform="rotate(-0 446.836701 169.011856)">Violations among 263 paired cases</text>
+     <text style="font-size: 6.5px; font-family: 'Liberation Sans'; text-anchor: middle; fill: #18252e" x="446.836701" y="169.011856" transform="rotate(-0 446.836701 169.011856)">Above target among 263 paired cases</text>
     </g>
    </g>
    <g id="matplotlib.axis_6">
@@ -1277,7 +1277,7 @@ z
     <text style="font-size: 6px; font-family: 'Liberation Sans'; text-anchor: start; fill: #18252e" x="424.754537" y="145.13398" transform="rotate(-0 424.754537 145.13398)">24</text>
    </g>
    <g id="text_56">
-    <text style="font-size: 7px; font-family: 'Liberation Sans'; text-anchor: start; fill: #18252e" x="384.270568" y="28.162205" transform="rotate(-0 384.270568 28.162205)">Count violations in the output metric</text>
+    <text style="font-size: 7px; font-family: 'Liberation Sans'; text-anchor: start; fill: #18252e" x="384.270568" y="28.162205" transform="rotate(-0 384.270568 28.162205)">Losses above the nominal target</text>
    </g>
    <g id="legend_3">
     <g id="PathCollection_3">

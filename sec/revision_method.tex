@@ -22,7 +22,7 @@ branches and masking their outputs would have different runtime behaviour.
 \subsection{Selection objective and its approximation}
 For tile $t$ and exit $k$, let $M_{t,k}$ be the source MSE measured from a
 candidate tiled reconstruction, and let $R$ be the source MSE of the full-depth
-reference. The search uses the table surrogate
+released-weight reference on the padded source. The search uses the table surrogate
 \begin{equation}
  \widetilde\Delta(\mathbf k)=10\log_{10}
  \frac{N^{-1}\sum_{t=1}^{N} M_{t,k_t}}{R}.
@@ -45,11 +45,16 @@ with a per-frame search for the quality target. We call this procedure
 final reconstruction problem.
 
 The distinction is substantive. Tables are selected on the padded RGB image;
-reported quality is measured on the final mixed reconstruction cropped to
-the source extent. In addition, full-frame repair and head operations couple
+reported loss uses the final mixed reconstruction and the full-frame
+\emph{fine-tuned e15} reconstruction, both cropped to the source extent.
+The two anchors differ in synthesis weights as well as spatial support;
+the supplement traces both evaluation paths and the checkpoint comparison.
+In addition, full-frame repair and head operations couple
 neighbouring tiles. Consequently, $\widetilde\Delta$ is a selection surrogate,
 not an identity for delivered distortion. We report both the target and the
-measured loss and count violations explicitly.
+measured loss and count crossings of the nominal threshold explicitly.
+These crossings do not isolate enforcement error under a common reference;
+that requires a new evaluation against both cropped anchors.
 
 \subsection{Router and content-blind controls}
 The router projects intermediate synthesis features and latent/entropy-scale
@@ -62,6 +67,9 @@ $\ell_{t,k}$, the recorded decision is
 The evaluated sweep fits $\beta$ separately on each source frame's table.
 This measures the attainable allocation with source calibration. Deployment
 with a fixed, held-out control parameter is a separate experiment.
+Increasing $\beta$ makes the selected cost non-increasing, but need not make
+source distortion monotone. The supplement audits the recorded bisection
+against the finite set of assignments along this control path.
 
 Uniform depth selects one reachable exit for the whole frame. Bayer dithering
 mixes two adjacent exits according to a fixed spatial ordering, with its

@@ -8,6 +8,14 @@ plausible and a saturation region where even an accurate predictor has little
 room to help. It also gives strong controls: uniform depth, ordered dithering,
 and source-informed selection should accompany every router comparison.
 
+The margin also sets an overhead budget. Under the explicit simplifying
+assumption that synthesis time is proportional to the recorded MAC model,
+the 0.1\,dB router--dither difference permits extra router work equivalent
+to only 3.40\% of the dither synthesis time before the advantage disappears.
+At 0.3\,dB that allowance falls to 0.62\%. These are compute-based
+break-even illustrations, not measured latency predictions; real grouped
+execution and memory traffic determine the actual margin.
+
 Three experimental gaps are decisive. First, quality must be verified on the
 final cropped reconstruction in the chosen metric, with a measured fallback
 for infeasible or over-budget plans. Second, a held-out, decoder-available

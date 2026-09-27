@@ -24,7 +24,9 @@
     "checkpoint": "runs/RECIPE512/ckpt_PIN_e15.pth.tar",
     "router": "runs/RECIPE512/routers2/ablation_e15/ce_soft_6k.pth",
     "budget_calibration": "Per-frame source-informed selection on padded RGB tables",
-    "measurement": "Actual mixed reconstructions cropped to the source extent",
+    "measurement": "Actual mixed reconstructions cropped to the source extent; losses relative to full-frame fine-tuned e15, despite raw field psnr_release",
+    "selection_reference": "Separate released-weight warm-start on padded source; differs from reporting anchor and support",
+    "over_target_counts": "Reported losses above nominal numeric target; not an isolated guarantee test under a common reference",
     "cost_scope": "Decoder MAC model; excludes router, signalling and runtime overhead",
     "inference": "No new GPU evaluation in this manuscript refresh"
   },

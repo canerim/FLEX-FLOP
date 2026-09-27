@@ -4,9 +4,11 @@
 \paragraph{Spatially adaptive reconstruction.}
 ClassSR routes super-resolution patches to networks of different
 capacity~\cite{kong2021classsr}; APE instead permits patches to exit a shared
-network at different depths~\cite{wang2022ape}. These are direct precedents
-for spatial capacity selection, so patch routing itself is not our novelty
-claim. We examine the additional constraints of a coded representation:
+network at different depths~\cite{wang2022ape}. RBQE also uses early exit
+to adapt the effort spent enhancing already compressed
+images~\cite{xing2020rbqe}. Building on spatial capacity selection, we
+examine early exit inside a learned synthesis transform and the constraints
+of its coded representation:
 which decision information is available at each endpoint, what must be
 signalled, and how a local assignment affects final reconstruction quality.
 
@@ -19,15 +21,26 @@ These methods already establish content- or complexity-dependent computation
 within learned compression. Our comparison focuses on depth allocation in
 the synthesis path of a fixed coded representation and on its incremental
 benefit over blind mixtures. A matched reproduction of these alternatives
-remains necessary for a claim of superiority over adaptive codec designs.
+is the next step in evaluating the broader adaptive-codec frontier.
+
+
+\paragraph{Spatial competition between complete codecs.}
+Blard et al.~\cite{blard2026spatial} select a specialized codec per region
+using source rate--distortion cost and transmit a mode map. This is a close
+precedent for our ongoing independent codec-bank direction, where each
+expert has its own encoder and entropy model. The present shared-latent
+experiment instead varies synthesis depth after one common representation.
+The two settings require different baselines and different signalling claims.
 
 \paragraph{Efficient synthesis and practical execution.}
 Shallow decoders investigate how computation can be shifted toward the
 encoder~\cite{yang2023shallow}. DCVC-RT distinguishes arithmetic cost from
 operational overhead, including memory traffic and function
 calls~\cite{jia2025dcvcrt}; DCVC-UF further develops a throughput-oriented
-video codec~\cite{li2026dcvcuf}. These results motivate reporting actual
-execution in addition to multiply--accumulates. Our scope is the supplied
+video codec~\cite{li2026dcvcuf}. Recent practical image-codec design also
+optimises perceptual performance against measured device
+runtime~\cite{tatwawadi2026practical}. These results motivate reporting actual
+execution alongside multiply--accumulates. Our scope is the supplied
 intra model, not DCVC-UF's inter-frame or chunk-coding performance.
 
 \paragraph{Distortion and perception.}
