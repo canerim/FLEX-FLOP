@@ -207,7 +207,7 @@ def architecture(d, book):
     arrow(ax, (139, 4.5), (146, 13), color=MUTED)
     tilemap(ax, 148, 13, 19, 11.9, m)
     text(ax, 157.5, 28, "Stitch → repair → head", ha="center", fontsize=6.5)
-    text(ax, 157.5, 9, "Canvas → RGB", ha="center", fontsize=6.5)
+    text(ax, 157.5, 9, "Canvas → image", ha="center", fontsize=6.5)
     text(ax, 4, 1.5, "Pointwise exit adapters; deepest exit uses identity", fontsize=6.2)
     audit_and_save(fig, "fig1_shared_latent_system",
         "Exact execution structure of the evaluated shared-latent early-exit path. Four full-frame stem blocks precede tile execution. The router consumes stem statistics and QP; its control is source-calibrated in the reported sweep. The actual videoSRC05 QP32 map at the 0.1 dB target leaves 40, 27, 7 and 3 tiles active at total depths 6, 8, 10 and 12. Blank cells have departed. Exit adapters write into a common canvas before full-frame repair and reconstruction. Tensor values are schematic; tile assignments and counts are recorded. Colours run from light teal at depth 6 to navy at depth 12.", book)
@@ -222,7 +222,7 @@ def budget(d, book):
         ax.plot(BUD,[r["mean"] for r in rr],color=COL[rule],marker=MARK[rule],label=LABEL[rule])
     ax.axhline(d["ceiling_pct"],color=MUTED,lw=.6,ls=(0,(3,2)))
     ax.text(.29,40.4,"39.12% ceiling",fontsize=6.5,color=MUTED)
-    ax.set(xlabel="Nominal RGB-loss target (dB)",ylabel="Synthesis MAC saving (%)",xlim=(.035,.52),ylim=(8,44))
+    ax.set(xlabel="Nominal 444-MSE target (dB)",ylabel="Synthesis MAC saving (%)",xlim=(.035,.52),ylim=(8,44))
     ax.set_xticks([.05,.1,.2,.3,.5],[".05",".10",".20",".30",".50"])
     ax=axs[1]; panel(ax,"b","Content adds value at tighter targets")
     ax.grid(False); ax.grid(axis="x",color=GRID,lw=.45)
@@ -277,7 +277,7 @@ def budget_detail(d, book):
                     color="white" if abs(mat[y,x]) > .65 * lim else INK)
     ax.set_xticks(range(6), [".05", ".10", ".15", ".20", ".30", ".50"])
     ax.set_yticks(range(5), [0, 16, 32, 48, 63])
-    ax.set(xlabel="Target RGB loss budget (dB)", ylabel="Quality index")
+    ax.set(xlabel="Target 444-MSE loss budget (dB)", ylabel="Quality index")
     ax.text(.5, -.30, "Cell: router − dither, percentage points", transform=ax.transAxes, ha="center", fontsize=6)
 
     ax = axs[1, 1]; panel(ax, "d", "The trend survives a fixed sample cohort")
@@ -288,7 +288,7 @@ def budget_detail(d, book):
     ax.set(ylim=(-.3, 3.2), ylabel="Router − dither (percentage points)")
     ax.legend(loc="upper right", fontsize=5.5, handlelength=1.3)
     for a in [axs[0, 0], axs[0, 1], axs[1, 1]]:
-        a.set(xlabel="Target RGB loss budget (dB)", xlim=(.03, .52))
+        a.set(xlabel="Target 444-MSE loss budget (dB)", xlim=(.03, .52))
         a.set_xticks([.05, .1, .2, .3, .5], [".05", ".10", ".20", ".30", ".50"])
     audit_and_save(fig, "fig7_budget_sensitivity",
         "The value of spatial routing depends on the quality budget. Means use the common feasible frame–QP pairs of all four rules at each budget: 204, 263, 265, 265, 265 and 265, respectively. These are 53 first intra frames at five QPs before exclusions. Shading in b shows paired 95% sequence-cluster bootstrap intervals (5,000 draws, fixed checkpoint). Panel c stratifies the paired premium by QP, and d keeps the same 204 pairs across all budgets. The cost is the synthesis MAC model and excludes routing/bitstream overhead. Per-frame source-informed calibration is used for all curves; target losses are not guarantees or exactly matched achieved losses.", book)
@@ -304,11 +304,11 @@ def quality(d, book):
         rs = [r for r in d["summary"] if r["rule"] == rule]
         ax.plot([r["rgb_mean"] for r in rs], [r["mean"] for r in rs],
                 marker=MARK[rule], color=COL[rule], label=LABEL[rule])
-    ax.set(xlabel="Mean delivered RGB loss (dB)", ylabel="Synthesis MAC saving (%)", ylim=(5, 42))
+    ax.set(xlabel="Mean delivered 444-MSE loss (dB)", ylabel="Synthesis MAC saving (%)", ylim=(5, 42))
     ax.legend(loc="lower right", fontsize=5.5, handlelength=1.1)
 
     ax = axs[1]; panel(ax, "b", "Reporting differs from selection")
-    for metric, c, marker, label in [("rgb_loss", BLUE, "o", "RGB"), ("yuv_loss", ORANGE, "s", "YUV 6:1:1")]:
+    for metric, c, marker, label in [("rgb_loss", BLUE, "o", "444-MSE"), ("yuv_loss", ORANGE, "s", "YUV 6:1:1")]:
         vals = np.sort([float(r[metric]) for r in samples if float(r["budget"]) == .1 and r["rule"] == "router"])
         ax.step(vals, np.arange(1, len(vals) + 1) / len(vals), where="post", color=c, label=label)
     ax.axvline(.1, color=INK, ls="--", lw=.7)
@@ -321,14 +321,14 @@ def quality(d, book):
     for i, metric in enumerate(["rgb_over", "yuv_over"]):
         yy = np.arange(4) + (i - .5) * .22
         ax.scatter([r[metric] for r in rs], yy, color=[BLUE, ORANGE][i], marker=["o", "s"][i], s=14,
-                   label=["RGB", "YUV 6:1:1"][i], zorder=3)
+                   label=["444-MSE", "YUV 6:1:1"][i], zorder=3)
         for y, r in zip(yy, rs):
             ax.text(r[metric] + 1.5, y, str(r[metric]), va="center", fontsize=6)
     ax.set_yticks(range(4), ["Search", "Router", "Dither", "Uniform"])
     ax.invert_yaxis(); ax.set(xlabel="Above target among 263 paired cases", xlim=(-2, max(r["yuv_over"] for r in rs) + 12))
     ax.legend(loc="lower right", fontsize=6)
     audit_and_save(fig, "fig3_delivered_quality",
-        "Selection and reporting use different domains and anchors. Panel a plots the recorded mean RGB loss against synthesis MAC savings; joining segments guide the eye. Panels b and c use the 263 common cases at a 0.1 dB target. Counts are reported losses above target + 0.0001 dB. Crucially, selection uses a separate released-weight reference on padded RGB, whereas exported losses use the cropped full-frame fine-tuned e15 output (the raw field psnr_release is misleading). These counts do not isolate budget-enforcement error under a common anchor. A new evaluation must measure both references on the same cropped support. No verified fallback was applied in the archive.", book)
+        "Selection and reporting use different domains and anchors. Panel a plots the recorded mean 444-MSE loss against synthesis MAC savings; joining segments guide the eye. Panels b and c use the 263 common cases at a 0.1 dB target. Counts are reported losses above target + 0.0001 dB. Crucially, selection uses a separate released-weight reference on padded YCbCr 4:4:4, whereas exported losses use the cropped full-frame fine-tuned e15 output (the raw field psnr_release is misleading). These counts do not isolate budget-enforcement error under a common anchor. A new evaluation must measure both references on the same cropped support. No verified fallback was applied in the archive.", book)
 
 
 def decision_cost(d, book):

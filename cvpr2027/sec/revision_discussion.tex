@@ -24,7 +24,8 @@ common-reference final-image replay is still required before a practical
 guarantee can be claimed.
 Actual bytes and paired wall-clock timings must include entropy work,
 packing, tile movement and fallbacks. Boundary crops and perceptual metrics
-are also needed; RGB PSNR alone does not establish visual equivalence.
+are also needed. The archived equal-channel YCbCr loss is not an RGB or
+perceptual-quality guarantee; those metrics require explicit evaluation.
 
 \section{Conclusion}
 FLEX-UF makes DCVC-UF synthesis a spatial allocation of computation.

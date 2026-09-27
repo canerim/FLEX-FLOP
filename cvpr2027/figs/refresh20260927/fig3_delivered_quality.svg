@@ -74,7 +74,7 @@ L 0 2.5
      </g>
     </g>
     <g id="text_4">
-     <text style="font-size: 7px; font-family: 'Liberation Sans'; text-anchor: middle; fill: #183342" x="101.471645" y="169.657413" transform="rotate(-0 101.471645 169.657413)">Mean delivered RGB loss (dB)</text>
+     <text style="font-size: 7px; font-family: 'Liberation Sans'; text-anchor: middle; fill: #183342" x="101.471645" y="169.657413" transform="rotate(-0 101.471645 169.657413)">Mean delivered 444-MSE loss (dB)</text>
     </g>
    </g>
    <g id="matplotlib.axis_2">
@@ -1061,7 +1061,7 @@ L 299.172494 131.255264
 " style="fill: none; stroke: #007f86; stroke-width: 1.1; stroke-linecap: square"/>
     </g>
     <g id="text_35">
-     <text style="font-size: 6px; font-family: 'Liberation Sans'; text-anchor: start; fill: #183342" x="303.972494" y="133.355264" transform="rotate(-0 303.972494 133.355264)">RGB</text>
+     <text style="font-size: 6px; font-family: 'Liberation Sans'; text-anchor: start; fill: #183342" x="303.972494" y="133.355264" transform="rotate(-0 303.972494 133.355264)">444-MSE</text>
     </g>
     <g id="line2d_48">
      <path d="M 287.172494 139.886124
@@ -1286,7 +1286,7 @@ z
      </g>
     </g>
     <g id="text_57">
-     <text style="font-size: 6px; font-family: 'Liberation Sans'; text-anchor: start; fill: #183342" x="476.655022" y="133.355264" transform="rotate(-0 476.655022 133.355264)">RGB</text>
+     <text style="font-size: 6px; font-family: 'Liberation Sans'; text-anchor: start; fill: #183342" x="476.655022" y="133.355264" transform="rotate(-0 476.655022 133.355264)">444-MSE</text>
     </g>
     <g id="PathCollection_4">
      <g>

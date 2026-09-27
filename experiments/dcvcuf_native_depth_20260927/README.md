@@ -1,4 +1,4 @@
-# Native depth support: prepared patch, not a validated GPU implementation
+# Native depth support: compiled patch, GPU validation pending
 
 The pinned upstream CUDA image decoder explicitly declares and invokes twelve
 trunk blocks. Truncating the Python `dec.dec_1` alone does not make the native
@@ -14,10 +14,11 @@ silently retain old parameter/buffer pointers. Coding before initialization and
 batch sizes other than one are rejected.
 
 The patch is **not applied to the training checkout**, installed in the active
-environment, compiled as a CUDA extension, or used for reported measurements.
+environment, or used for reported measurements. It has compiled successfully
+as an isolated CUDA extension; GPU numerical parity remains untested.
 The independently compiled, CUDA-free key parser accepts six valid depths and
 rejects 58 malformed states. `git apply --check` passes on the pinned clean
-revision. Those checks do not validate CUDA compilation or numerical parity.
+revision. The parser checks do not establish GPU numerical parity.
 
 ```bash
 python3 experiments/dcvcuf_native_depth_20260927/prepare_patch.py
@@ -29,7 +30,7 @@ Prepared source files and the helper executable are under
 `preparation_report.json` records source hashes and remaining GPU checks.
 The upstream revision is `cbdae87a5445114cdc7f48816da63ea80bdeac40`.
 
-## Isolated compilation attempt
+## Successful isolated compilation
 
 `build_isolated.py` was started on 27 September at16:57UTC. It archives the
 pinned source into a separate build directory, applies the draft there,
@@ -45,9 +46,10 @@ recorded in the build manifest. CUTLASS lists CUDA12.x compatibility in its
 Compilation alone cannot establish that this particular extension is
 correct under that toolchain.
 
-Inspect `research/native_depth_build_sm86/status.json` under the experiment
-root for completion; a final `compile_report.json` is written here when
-the attempt ends. A successful build still needs every GPU check below.
+The build completed at 17:36:56 UTC with return code zero.
+`compile_report.json` records the binary hash, toolchain, patch and build log.
+The training upstream remained unchanged. This is compilation evidence only;
+all GPU checks below remain pending.
 
 ## Required validation when training GPUs are available
 

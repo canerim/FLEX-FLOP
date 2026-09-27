@@ -57,20 +57,9 @@ scenarios expose assumed fixed costs without inventing quality or speed
 measurements for unfinished models.
 
 \paragraph{A budget is also a scheduling problem.}
-Assigning patches independently does not make execution time additive.
-With a batching implementation, patches selected for expert $k$ would form
-a batch of size $n_k$, with measured latency $\tau_k(n_k)$. The pinned
-native codec currently allocates batch-one buffers; grouped native execution
-is additional engineering, not an existing result. A prospective cost model is
-\begin{equation}
- T(\mathbf a)=T_{\rm select}+T_{\rm pack}
- +\sum_k\tau_k(n_k)+T_{\rm assemble},
- \label{eq:banktime}
-\end{equation}
-with entropy coding, signalling and memory movement charged to the
-appropriate stages. Small, fragmented expert batches may erase an
-arithmetic advantage. Shared early exit has a related effect: the surviving
-batch shrinks with depth. Comparing the two designs at matched quality,
-rate and hardware time will therefore test both representation reuse and
-execution efficiency. Their shared aim is adaptive computation; neither
-is assumed to dominate before these measurements.
+Expert latency depends on the number of assigned patches and their packing,
+not just on nominal model size. The pinned native codec allocates batch-one
+buffers; batched expert execution needs additional implementation. The
+supplement specifies a prospective grouped-runtime objective. Comparing
+shared exits with independent experts must charge entropy work, selection,
+transfers and assembly at matched achieved rate and quality.

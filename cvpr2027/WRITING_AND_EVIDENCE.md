@@ -43,7 +43,7 @@ part of the research question. Their prose and figures are not copied.
 
 | Claim | Direct evidence | Boundary |
 |---|---|---|
-| Uniform shared-exit depth has a measurable quality cost | Archived uniform-map error columns and a verified released-weight anchor | Padded RGB; not independent depth-model quality |
+| Uniform shared-exit depth has a measurable quality cost | Archived uniform-map error columns and a verified released-weight anchor | Padded YCbCr 4:4:4; not independent depth-model quality |
 | Conditional tile depths reduce modelled synthesis work | Recorded maps and cost vector; actual conditional implementation | Router, signalling and system latency are separate |
 | Learned allocation adds a budget-dependent margin | Paired common-cohort router–dither differences; sequence bootstrap | Per-frame source calibration; one codec/router checkpoint |
 | Spatial placement contains useful table information | Exact expected permutation at unchanged exit histogram | Table MSE, not new mixed reconstructions |

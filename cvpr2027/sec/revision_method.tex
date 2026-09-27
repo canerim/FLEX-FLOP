@@ -11,8 +11,12 @@ region. A common formulation is
  \label{eq:allocation}
 \end{equation}
 where $D$ is a distortion measure and $\mathcal C$ is the chosen compute
-cost. In our PSNR-loss experiments, the constraint uses the corresponding
-logarithmic ratio of reconstruction MSEs. The distortion belongs to the
+cost. The archived stopping loss is
+$\Delta_{444}=10\log_{10}[D_{444}(v,\hat v_{\mathbf a})/
+D_{444}(v,\hat v_{\rm ref})]$, where
+$D_{444}=\|v-\hat v\|_2^2/(3HW)$ uses equal-channel, unclipped
+YCbCr~4:4:4 tensors. The archive's field \texttt{db\_rgb} is misleading:
+no RGB conversion precedes this calculation. The distortion belongs to the
 \emph{assembled image}: spatial interactions can invalidate an additive
 tile-error approximation.
 
@@ -41,14 +45,14 @@ measured. The evaluated control is calibrated with source-error tables.}
 \subsection{A shared representation, a variable synthesis depth}
 Let $\hat y$ be the recovered latent of the fixed DCVC-UF analysis transform
 and entropy model. The synthesis network upsamples it by two and processes
-384-channel features at one eighth of the RGB resolution. We divide its
+384-channel features at one eighth of the image resolution. We divide its
 twelve trunk blocks into six consecutive pairs. A split index determines
 which pairs run on the full frame and which run conditionally on tiles.
 In the evaluated configuration, four blocks form the common stem and the
 remaining eight form a four-stage conditional suffix.
 
 The stem output is partitioned into $32\times32$ feature tiles, each
-covering $256\times256$ RGB pixels. For a tile assigned depth $k$, let
+covering $256\times256$ image pixels. For a tile assigned depth $k$, let
 $f_t^{(k)}$ be its feature after the corresponding block pair and let
 $A_k$ be its adapter. The complete image is reconstructed as
 \begin{equation}
@@ -59,7 +63,7 @@ $A_k$ be its adapter. The complete image is reconstructed as
 where $G$ is grid-conditioned repair, $q$ is the decoder's quality scaling,
 and $H$ is the common output head, including pixel shuffle. Adaptation acts
 on features before the shared head, so tiles with different stopping depths
-need not be stitched directly in RGB space.
+need not be stitched directly in image space.
 
 \paragraph{Reachable depth and actual execution.}
 Although the configuration contains six nominal exit indices, the first two
@@ -68,7 +72,7 @@ depths are $\mathcal K=\{6,8,10,12\}$. At each conditional stage the
 implementation gathers only the surviving tiles, executes the next block
 pair, and writes departing tiles through their adapters. A deeper tile
 reuses all computation already performed. Evaluating all four candidates
-and masking their RGB outputs would not implement this execution saving.
+and masking their reconstructions would not implement this execution saving.
 For the recorded example in \cref{fig:system}, the active population decreases
 from 40 to 27, seven and three tiles.
 
@@ -170,7 +174,7 @@ finite assignment path for both router and dither.
 
 \subsection{Quality references and decision information}
 
-The table target compares padded RGB candidate errors to a released-weight
+The table target compares padded YCbCr~4:4:4 candidate errors to a released-weight
 full-depth reference. Final reported loss instead compares the cropped mixed
 output to the cropped, fine-tuned e15 full-frame output. These anchors are
 not interchangeable: the encoder/entropy weights match, while inherited

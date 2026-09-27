@@ -7,7 +7,8 @@
 intervals; the shaded row highlights 0.1\,dB. QP and fixed-cohort analyses
 are in the supplement.
 All curves use per-source calibration. MAC savings exclude router and
-signalling overhead and are not measured runtime reductions.}
+signalling overhead and are not measured runtime reductions. Targets use
+the $\Delta_{444}$ MSE-ratio loss defined in \cref{sec:method}.}
 \label{fig:budget}
 \end{figure*}
 
@@ -29,7 +30,7 @@ sweep} compares maps selected under the same table target, retaining the
 common feasible cases of all four rules: 204 pairs at 0.05\,dB, 263 at
 0.1\,dB and 265 at each larger target. The \emph{delivered-cap analysis}
 reselects from the outputs already measured at those targets under a common
-cropped RGB-loss cap, with the full-frame e15 output as an explicit fallback.
+cropped YCbCr~4:4:4-loss cap, with the full-frame e15 output as an explicit fallback.
 It retains all 265 pairs at every cap. The second protocol is retrospective
 and source-aware; its cost omits acquiring and rejecting candidates.
 
@@ -42,13 +43,13 @@ sweep, avoiding changes of sample membership as the target relaxes.
 \subsection{The reconstruction value of depth}
 
 The stored uniform-exit reconstructions provide a direct depth control.
-Across all 265 pairs, their mean padded RGB losses against the released
+Across all 265 pairs, their mean padded YCbCr~4:4:4 losses against the released
 full-frame reference are \UniformLossSix/\UniformLossEight/\UniformLossTen/\UniformLossTwelve\,dB at 6/8/10/12 blocks.
 Their modelled MAC savings are 39.12/24.22/13.03/$-0.95$\%, respectively.
 Additional depth has diminishing average benefit and non-uniform local
 benefit: mean within-frame tile-gain IQRs are 0.075/0.034/0.024\,dB for
 successive block pairs. The supplement gives the distributions and paired
-intervals. These measurements concern actual uniform maps on padded RGB;
+intervals. These measurements concern actual uniform maps on padded YCbCr~4:4:4;
 they motivate spatial allocation but are not cropped mixed-map losses or
 results for independently trained shallow codecs.
 
@@ -76,13 +77,13 @@ The nominal target is an imperfect proxy for final quality because of the
 reference and support differences described in \cref{sec:method}. We
 therefore ask a narrower question using the reconstructions already in the
 archive: does the relative saving persist when all selected outputs must
-satisfy the same measured RGB-loss cap?
+satisfy the same measured YCbCr~4:4:4-loss cap?
 
 For each policy and frame--QP pair, we deduplicate the maps measured at the
 six nominal targets, retain those meeting the cap within $10^{-4}$\,dB, and
 choose the cheapest. The evaluated full-frame e15 output is available with
 zero relative loss and zero saving. No synthetic output or interpolated
-quality point is introduced. Repeated maps have identical recorded RGB
+quality point is introduced. Repeated maps have identical recorded YCbCr~4:4:4
 losses and MAC costs, which we check before deduplication.
 
 \Cref{tab:cap} reports the 0.1\,dB case. The router saves \CapRouterSaving\% versus
@@ -96,7 +97,7 @@ pool is not a global optimum.
 
 \begin{table}[t]
 \centering
-\caption{\textbf{Recorded outputs under a common 0.1\,dB RGB-loss cap.}
+\caption{\textbf{Recorded outputs under a common 0.1\,dB YCbCr~4:4:4-loss cap.}
 All 265 pairs are included. Loss is relative to cropped e15 full-frame
 synthesis. MAC saving excludes the retrospective candidate-selection cost.}
 \label{tab:cap}
@@ -135,7 +136,7 @@ from one sequence.
 The maps in \cref{fig:maps} make the mechanism visible. At the 0.1\,dB
 target, the router spends different depths on different regions. At
 0.3\,dB, search, routing and dithering all assign depth six on this frame,
-saving 39.1\% MACs at 0.201\,dB measured RGB loss. The example
+saving 39.1\% MACs at 0.201\,dB measured YCbCr~4:4:4 loss. The example
 is chosen from the five archived thumbnails by proximity to the aggregate
 0.1\,dB routing margin. Its source luma gives spatial context; it is not a
 reconstruction crop or evidence of perceptual equivalence.
@@ -154,7 +155,7 @@ permuted maps through repair and the final head is a separate ablation.
 \includegraphics[width=\textwidth]{figs/refresh20260927/fig5_spatial_decisions.pdf}
 \caption{\textbf{Adaptive depth changes where synthesis work is spent.}
 Recorded exit maps at the 0.1\,dB target on the same QP32 frame. Colour indicates
-total executed trunk depth; annotations give MAC saving and measured RGB
+total executed trunk depth; annotations give MAC saving and measured YCbCr~4:4:4
 loss. Source luma is shown only for spatial context. Maps are cropped to the
 valid image extent, and the example-selection rule is stated in the text.}
 \label{fig:maps}

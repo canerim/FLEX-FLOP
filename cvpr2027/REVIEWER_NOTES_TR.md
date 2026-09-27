@@ -1,3 +1,8 @@
+> Metrik düzeltmesi (27 Eylül): eski `db_rgb`, unclipped YCbCr 4:4:4
+> eş-kanal MSE oranıdır. RGB etiketi düzeltilmiştir; iki CPU replay kanıtı
+> ve ham anahtarların yorumu `METRICS.md` içinde. Aşağıdaki eski sayıların
+> tamamı kendi açıklanmış metrik/protokolüne koşulludur.
+
 # Revizyonun araştırma değerlendirmesi
 
 27 Eylül 2026. Ana makale DCVC-UF intra early exit üzerinde kuruldu. Bu not,
@@ -28,12 +33,12 @@ Bunların etkisini henüz ölçülmüş gibi göstermiyoruz.
 **2. Router gerçekten gerekli mi?** Early exit tasarrufunun çoğunu uniform
 ve dither sağlayabilir. Bu nedenle ana sonuç hem toplam tasarrufu hem dither
 üzerindeki ek payı veriyor. Nominal 0,1 dB'de ek pay 2,54 MAC puanı; aynı
-ölçülmüş RGB cap altında sınırlı aday havuzunda 2,93 puan. Gevşek bütçede pay
+ölçülmüş YCbCr 4:4:4 cap altında sınırlı aday havuzunda 2,93 puan. Gevşek bütçede pay
 küçülüyor. Sonraki karşılaştırmada ucuz içerik/entropy proxy'si ve router'ın
 kendi zamanı mutlaka bulunmalı.
 
 **3. Kalite kaybı hangi referansa göre?** Uniform-exit profilinin kaynağı padded
-RGB ve released ağırlıklı full-frame output. Mixed-output tablosunun referansı
+YCbCr 4:4:4 ve released ağırlıklı full-frame output. Mixed-output tablosunun referansı
 crop edilmiş fine-tuned e15 full-frame output. Bunları tek RD eğrisiymiş gibi
 birleştirmiyoruz. Yeni replay iki referansı aynı valid-pixel desteğinde ölçmeli.
 398 inherited warm-start tensor'ünün resmî release ile eşleşmesi, checkpoint

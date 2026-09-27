@@ -1,0 +1,33 @@
+{
+  "state": "compiled",
+  "started_utc": "2026-09-27T16:57:52.760195+00:00",
+  "pid": 3391201,
+  "upstream_commit": "cbdae87a5445114cdc7f48816da63ea80bdeac40",
+  "cutlass_tag": "v4.4.1",
+  "cutlass_commit": "4370102f9dacab813282e1d67722fceb0b90a019",
+  "patch_sha256": "87a23e73e22dba5d118cf005542b785cbb528dc6b98036feb612b417fa9a6d14",
+  "setup_sha256": "29f4fb82779ce6803313c318a9e35d3431f14621682fcb42fbb48caab8cc0536",
+  "command": [
+    "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/venv/bin/python",
+    "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/research/native_depth_build_sm86/source/src/layers/extensions/inference/setup_isolated.py",
+    "build_ext",
+    "--build-lib",
+    "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/research/native_depth_build_sm86/lib",
+    "--build-temp",
+    "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/research/native_depth_build_sm86/objects"
+  ],
+  "cuda_visible_devices": "",
+  "max_jobs": 1,
+  "target_sm": 86,
+  "nvcc_split_compile": 1,
+  "nvcc_version": "nvcc: NVIDIA (R) Cuda compiler driver\nCopyright (c) 2005-2023 NVIDIA Corporation\nBuilt on Tue_Feb__7_19:32:13_PST_2023\nCuda compilation tools, release 12.1, V12.1.66\nBuild cuda_12.1.r12.1/compiler.32415258_0",
+  "toolchain_note": "Local CUDA12.1 compiler against PyTorch2.9.1+cu126; minor-version mismatch recorded, not recipe-equivalent runtime evidence.",
+  "scope": "Compilation only. GPU correctness, released parity, and wall-time measurements remain pending.",
+  "returncode": 0,
+  "finished_utc": "2026-09-27T17:36:56.464600+00:00",
+  "artifacts": {
+    "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/research/native_depth_build_sm86/lib/inference_extensions_cuda.cpython-312-x86_64-linux-gnu.so": "38ab846dfbb36ae9da2d4da3ac8d5e210c2101052c5f8e1ae5f431dd82af235b"
+  },
+  "log_sha256": "7f96dcf7ccb651c0ab610bc967349bb49fb30daed9434b23ccf9ed41607ac72c",
+  "upstream_unmodified": true
+}

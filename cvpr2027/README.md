@@ -14,6 +14,8 @@ invented PSNR, bitrate or runtime results.
 - Generated conceptual overview and full prompts: [IMAGEGEN.md](IMAGEGEN.md).
 - Figure palette and visual rules: [FIGURE_STYLE.md](FIGURE_STYLE.md).
 - Runtime scope: [RUNTIME_AUDIT_TR.md](RUNTIME_AUDIT_TR.md).
+- Metric correction: [METRICS.md](METRICS.md). The archived `db_rgb` field
+  measures unclipped YCbCr 4:4:4 MSE-ratio loss; current plots use that label.
 - Sequence-disjoint scalar-calibration diagnostic: supplement S5 and
   [plot data](data/crossfit20260927/analysis.json). This uses archived padded
   error tables; it is not a new final-reconstruction or latency benchmark.

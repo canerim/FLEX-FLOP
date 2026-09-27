@@ -11,6 +11,12 @@ kapasite uzmanlaşması ile paylaşımın etkisini ayıracak. Bütün sayısal d
 kalacak. Ana başarı ölçütü aynı gerçekleşen kalite ve gerçek bitrate altında,
 karar/taşıma/entropy maliyetleri dahil pozitif süre kazancı.
 
+**Ölçüm düzeltmesi:** shared-exit arşivindeki `db_rgb`, RGB dönüşümü
+olmayan YCbCr4:4:4 MSE-oran kaybıdır. Padded seçim tabloları da bu uzaydadır.
+Ana figürler doğru etiketle güncellendi. Yeni RGB değerlendirmesi açık
+renk dönüşümü ve clipping sözleşmesi kullanmalı; eski cap sonuçları RGB
+altında ölçülmüş gibi yeniden adlandırılamaz. Kanıt: `METRICS.md`.
+
 ## 0. Önce early-exit mekanizmasını kanıtlayan ablasyonlar
 
 | Kod / öncelik | Tek değişken | Eşlenmiş kontrol ve çıktı | Yeniden eğitim? |
@@ -32,7 +38,7 @@ ile ölçüm yolunu sabitler; sonra E2/E3, yöntemin iki temel tasarım kararın
 sınar. Tüm kombinasyonların Kartezyen çarpımını çalıştırmak gereksizdir.
 
 **Şu an ölçülebilen derinlik etkisi:** mevcut shared-exit uniform
-rekonstrüksiyonlarında 6/8/10/12 blok için padded RGB kaybı, released tam
+rekonstrüksiyonlarında 6/8/10/12 blok için padded YCbCr 4:4:4 kaybı, released tam
 görüntüye göre ortalama 0,2045/0,0968/0,0605/0,0379 dB.
 MAC tasarrufu %39,12/%24,22/%13,03/−%0,95. Bu bir CPU arşiv analizidir;
 bağımsız sığ model sonucu veya cropped mixed-map kalite iddiası değildir.
@@ -126,7 +132,7 @@ aynı histogramlı shuffle ve optimum haritaları gerçekten decode etmek.
 
 Gerçek reconstruction kayıtlarında ikinci bir kontrol de tamamlandı:
 her politika için altı bütçede önceden decode edilmiş adaylar arasından,
-aynı **gerçekleşmiş RGB kaybı** sınırını karşılayan en ucuzu seçildi.
+aynı **gerçekleşmiş YCbCr 4:4:4 MSE-oran kaybı** sınırını karşılayan en ucuzu seçildi.
 Tam görüntü e15 referansı sıfır kayıplı/sıfır tasarruflu fallback olarak
 eklendi. Böylece her sınırda 265 çiftin tamamı korunuyor. 0,1 dB'de
 router–dither farkı 2,93 MAC puanı (%95 dizi bootstrap aralığı 2,11–3,79),

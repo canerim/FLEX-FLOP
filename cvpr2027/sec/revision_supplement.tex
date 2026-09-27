@@ -45,6 +45,44 @@ their difference in source quality. Its raw field named
 \texttt{psnr\_release} is consequently a fine-tuned full-depth reference
 in the inspected code (\cref{fig:anchors}).
 
+\paragraph{Metric provenance.}
+The legacy field \texttt{db\_rgb} is also misnamed. The CTC reader upsamples
+YCbCr~4:2:0 to 4:4:4 and centres the three planes. Synthesis returns this
+representation, and the evaluator computes equal-channel tensor MSE
+directly, before RGB conversion or clipping. Both the padded selection
+tables and the cropped MSE-ratio loss therefore use YCbCr~4:4:4.
+We label this quantity $\Delta_{444}$ or ``444-MSE loss'' throughout.
+The separately recorded 6:1:1 metric is a weighted average of plane PSNRs
+after chroma downsampling and clipping, not the same MSE ratio.
+
+Two fixed-map CPU replays with strict checkpoint loading reproduce the
+archived \texttt{db\_rgb} values within $1.1\times10^{-6}$\,dB
+(\cref{tab:metricproof}). Converting to RGB changes the result. These checks
+establish the interpretation of the inspected path; they are not a new
+265-pair RGB evaluation. Legacy JSON keys and historical annotations are
+preserved for traceability; \texttt{METRICS.md} records their corrected
+meaning and the replay hashes. The separate independent-depth validation
+explicitly converts reconstructions to RGB and must not be pooled with
+this legacy metric.
+
+\begin{table}[t]
+\centering
+\caption{\textbf{A field name does not establish the colour space.}
+QP32 router maps at the nominal 0.1\,dB target. Last column applies explicit
+YCbCr clipping and RGB conversion/clipping. Values are loss in dB relative
+to the same e15 full-frame output. These two cases are metric checks.}
+\label{tab:metricproof}
+\setlength{\tabcolsep}{3pt}
+\begin{tabular}{lrrr}
+\toprule
+Frame & Archived field & CPU $\Delta_{444}$ & RGB \\
+\midrule
+BasketballPass & 0.064751 & 0.064750 & 0.057855 \\
+BQMall & 0.077437 & 0.077436 & 0.077396 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
 A CPU comparison of the two state dictionaries finds 255 shared
 encoder/entropy tensors with no changes. All 143 inherited synthesis tensors
 that can be compared have changed, with a maximum absolute parameter
@@ -56,7 +94,7 @@ this comparison. This second check ties the inspected warm start to the
 released parameters without assuming that its filename proves provenance.
 
 This distinction limits the interpretation of threshold crossings. The
-recorded 7/263 RGB and 49/263 YUV losses above a nominal 0.1\,dB target combine
+recorded 7/263 YCbCr~4:4:4 and 49/263 YUV losses above a nominal 0.1\,dB target combine
 differences in reference, image support, metric and the influence of the
 shared repair/head. They do not identify the contribution of any single
 factor. The paired MAC accounting remains attached to the same recorded
@@ -72,11 +110,11 @@ should trigger an explicit fallback whose bytes and runtime are recorded.
 \centering
 \includegraphics[width=\textwidth]{figs/refresh20260927/fig3_delivered_quality.pdf}
 \caption{\textbf{Nominal targets and final reporting answer different questions.}
-\textbf{a}, Recorded average cropped RGB loss against MAC saving.
-\textbf{b}, Router RGB and YUV 6:1:1 loss distributions at a nominal
+\textbf{a}, Recorded average cropped YCbCr~4:4:4 loss against MAC saving.
+\textbf{b}, Router YCbCr~4:4:4 and YUV 6:1:1 loss distributions at a nominal
 0.1\,dB target. \textbf{c}, Counts above that numerical target, among the
 263 common cases and with $10^{-4}$\,dB tolerance. Selection uses a released
-reference on padded RGB; reporting uses cropped e15 full-frame synthesis.
+reference on padded YCbCr~4:4:4; reporting uses cropped e15 full-frame synthesis.
 The counts therefore do not isolate a common-reference guarantee failure.}
 \label{fig:nominalquality}
 \end{figure*}
@@ -97,7 +135,7 @@ paths and does not depict newly decoded images.}
 
 Each column of the archived source-error table was produced by decoding a
 uniform-depth map and measuring per-tile source MSE. Its equal-area tile
-average is therefore the padded RGB MSE of that actual uniform
+average is therefore the padded YCbCr~4:4:4 MSE of that actual uniform
 reconstruction. Comparing this mean to the separately evaluated released
 reference gives mean losses of 0.2045, 0.0968, 0.0605 and 0.0379\,dB for
 6/8/10/12 blocks over all 265 pairs. The corresponding modelled MAC savings
@@ -126,7 +164,7 @@ or a completed independent-codec depth ablation.
 \centering
 \includegraphics[width=\textwidth]{figs/extended20260927/figS6_exit_depth_profile.pdf}
 \caption{\textbf{The value of additional depth varies across regions.}
-\textbf{a}, Uniform-depth padded RGB quality against the released anchor
+\textbf{a}, Uniform-depth padded YCbCr~4:4:4 quality against the released anchor
 and the recorded MAC model. \textbf{b}, Mean frame-median tile improvement
 and mean within-frame IQR for adjacent depths. \textbf{c}, Mean fraction of
 tiles whose error increases. Error bars are 95\% sequence-cluster intervals.
@@ -282,12 +320,12 @@ final-image quality or latency.}
 \label{fig:control}
 \end{figure*}
 
-\section{A Common Cap on Delivered RGB Loss}
+\section{A Common Cap on Delivered YCbCr~4:4:4 Loss}
 
 The stored mixed reconstructions permit a second comparison under a common
 reporting anchor. For each frame--QP pair and policy, we collect its up to
 six archived nominal-budget maps, deduplicate identical maps, and retain
-only candidates whose measured cropped RGB loss meets the chosen cap,
+only candidates whose measured cropped YCbCr~4:4:4 loss meets the chosen cap,
 with tolerance $10^{-4}$\,dB. The evaluated full-frame e15 reconstruction
 is an explicit fallback with zero relative loss and zero MAC saving.
 The cheapest eligible candidate is selected; ties prefer lower loss.
@@ -296,7 +334,7 @@ This keeps all 265 pairs at every cap. At 0.1\,dB, the retained maps save
 29.19\% of modelled synthesis MACs for source-informed search, 27.75\% for
 the router, 24.81\% for dithering and 22.98\% for uniform depth.
 The router--dither difference is 2.93 percentage points, with a paired
-95\% sequence-cluster interval of [2.11,3.79]. Their mean achieved RGB
+95\% sequence-cluster interval of [2.11,3.79]. Their mean achieved YCbCr~4:4:4
 losses are 0.0786 and 0.0791\,dB, respectively. Full-frame fallback is
 selected for one router case, two search cases, two dither cases and
 eleven uniform cases. At a 0.3\,dB cap, the routing margin falls to
@@ -327,7 +365,7 @@ differences belong to one sequence. These checks are reproducible from
 \textbf{a}, Maximum saving among actually measured eligible outputs,
 including a full-frame e15 fallback. \textbf{b}, Paired router--dither
 difference with 95\% sequence-cluster intervals. \textbf{c}, Explicit
-fallback counts. All 265 pairs are retained, with RGB-loss tolerance
+fallback counts. All 265 pairs are retained, with YCbCr~4:4:4-loss tolerance
 $10^{-4}$\,dB. This retrospective source-aware comparison excludes the
 cost of candidate generation and makes no released-reference or latency claim.}
 \label{fig:deliveredcap}

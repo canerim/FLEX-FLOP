@@ -138,3 +138,32 @@ checkpoint'e geçilerek farklı epoch'lar karıştırılmıyor.
   Exact dynamic programming, üç görüntüde exhaustive aramayla doğrulandı.
   Henüz veri analizi çalışmadı; bu kaynak bilgili üst sınırdır, MLP veya
   görüntü-içi routing sonucu değildir.
+
+## 17:30–17:36 UTC — shared-exit renk uzayı hatası bulundu ve doğrulandı
+
+Eski `eval_rules_ctc_e15` içindeki `db_rgb` alanı RGB dönüşümü yapmıyor.
+CTC okuyucusunun centred YCbCr4:4:4 çıktısından doğrudan MSE alınıyor;
+`flexuf.eval` içindeki kaynak tabloları da aynı uzayda. Böylece önceki
+makaledeki RGB kaybı etiketinin yanlış olduğu saptandı.
+
+İki QP32 sabit router haritası, `9e17209` arşiv kodu ve temiz eski DCVC
+`819c219b` ile CPU'da yeniden çalıştırıldı; checkpoint strict yüklendi.
+BasketballPass ve BQMall'ın YCbCr444 kayıpları arşivdeki `db_rgb` alanını
+sırasıyla2,69e-7 ve1,04e-6dB farkla yeniden üretti. Açık RGB dönüşümü
+farklı değer veriyor. Kanıt `shared_metric_audit/analysis.json` içinde.
+
+Ana metin ve13 temel vektör figürün renk uzayı etiketleri düzeltildi;
+ham gözlemler değişmedi. `METRICS.md`, eski JSON isimlerinin düzeltilmiş
+anlamını kaydediyor. İki replay, tüm265 çiftin RGB değerlendirmesi diye
+sunulmuyor. Yeni bağımsız depth validation'ının explicit RGB dönüşümü
+zaten doğru; bu iki deneyin metrikleri karıştırılmıyor.
+
+Bu düzeltme öncesindeki maliyet ara sürümü araştırma `9e17209`, makale
+`db3cca5` olarak GitHub'a gönderildi ve uzak makale SHA'sı doğrulandı.
+Renk uzayı düzeltmesi takip eden commit ile yayımlanacak.
+
+## 17:43–17:45 UTC — metric correction and native compilation
+
+- The corrected manuscript builds to 8 body pages plus references; supplement 12 pages. All 52 bundled vector-figure artifacts reproduce byte-for-byte; PDF/bundle verification passes. Reviewed rendered pages and delivered-quality figure.
+- Isolated SM86 native depth extension compiled successfully at 17:36:56 UTC (exit 0), without GPU use or modifying the training source/environment. GPU numerical parity and latency remain pending.
+- Expanded epoch-20 reference validation reached 1,400/2,000 cases at 17:42:56 UTC. No partial-cohort performance conclusion is drawn.

@@ -375,7 +375,7 @@ z
     <text style="font-weight: 700; font-size: 6px; font-family: 'Liberation Sans'; text-anchor: start; fill: #183342" x="334.488189" y="75.253522" transform="rotate(-0 334.488189 75.253522)">Tile M (e15) + R (released)</text>
    </g>
    <g id="text_8">
-    <text style="font-size: 5.8px; font-family: 'Liberation Sans'; text-anchor: start; fill: #183342" x="334.488189" y="95.044284" transform="rotate(-0 334.488189 95.044284)">Reference: released / RGB</text>
+    <text style="font-size: 5.8px; font-family: 'Liberation Sans'; text-anchor: start; fill: #183342" x="334.488189" y="95.044284" transform="rotate(-0 334.488189 95.044284)">Reference: released / 444-MSE</text>
    </g>
    <g id="text_9">
     <text style="font-weight: 700; font-size: 6px; font-family: 'Liberation Sans'; text-anchor: start; fill: #bb7534" x="14.173228" y="148.954309" transform="rotate(-0 14.173228 148.954309)">REPORTING</text>
@@ -417,7 +417,7 @@ z
     <text style="font-weight: 700; font-size: 6px; font-family: 'Liberation Sans'; text-anchor: start; fill: #183342" x="334.488189" y="165.962183" transform="rotate(-0 334.488189 165.962183)">Final mixed reconstruction</text>
    </g>
    <g id="text_14">
-    <text style="font-size: 5.8px; font-family: 'Liberation Sans'; text-anchor: start; fill: #183342" x="334.488189" y="185.752945" transform="rotate(-0 334.488189 185.752945)">Reference: e15 full / RGB or YUV</text>
+    <text style="font-size: 5.8px; font-family: 'Liberation Sans'; text-anchor: start; fill: #183342" x="334.488189" y="185.752945" transform="rotate(-0 334.488189 185.752945)">Reference: e15 / 444-MSE or 6:1:1</text>
    </g>
    <g id="text_15">
     <text style="font-size: 6px; font-family: 'Liberation Sans'; text-anchor: start; fill: #183342" x="14.173228" y="253.836199" transform="rotate(-0 14.173228 253.836199)">CPU audit: 255 shared encoder/entropy tensors unchanged; 143/143 inherited synthesis tensors changed.</text>

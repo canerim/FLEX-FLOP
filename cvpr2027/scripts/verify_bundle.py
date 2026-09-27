@@ -4,6 +4,7 @@ import argparse
 import csv
 import hashlib
 import json
+import math
 from pathlib import Path
 import re
 import subprocess
@@ -85,6 +86,15 @@ def main():
         assert len(group)==summary["n"]
         assert abs(sum(r["padded_rgb_loss_db"] for r in group)/len(group)-summary["mean"])<1e-10
     assert "other_decoders" not in d and "perception" not in d
+    metric=json.loads((DATA/'metric_provenance.json').read_text())
+    assert digest(ROOT/metric['proof_file'])==metric['proof_sha256']
+    proof=json.loads((ROOT/metric['proof_file']).read_text())
+    assert proof['strict_checkpoint_load'] and not proof['cuda_initialized']
+    assert len(proof['rows'])==2
+    for row in proof['rows']:
+        value=row['unclipped_ycbcr444']
+        assert abs(10*math.log10(value['candidate_mse']/value['reference_mse'])-value['loss_db'])<1e-12
+        assert abs(value['loss_db']-row['archived_db_rgb'])<1.1e-6
     figure_count=0
     min_font=float("inf")
     for folder in ["refresh20260927","extended20260927","crossfit20260927","depthmacs20260927"]:
