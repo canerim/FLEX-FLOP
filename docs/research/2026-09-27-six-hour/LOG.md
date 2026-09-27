@@ -83,3 +83,58 @@ arşivlendi. Ortak 0,2 tahmini bpp'de D2/D4/D6 =
 34,02897 / 34,22206 / 34,25315 dB (dört crop). D6−D2 = 0,22418 dB.
 Geniş validation başlangıçta sabitlenen epoch20 ile devam ediyor; yeni
 checkpoint'e geçilerek farklı epoch'lar karıştırılmıyor.
+
+## 16:38–16:58 UTC — yayın doğrulaması ve native yürütme hazırlığı
+
+- Makale `ece71676b7bc2eb8d618eb632ec9ce8f7f98a961` subtree commit'iyle
+  `canerim/cvpr2027:main` dalına gönderildi. Araştırma deposu `3b258874`.
+  Uzak SHA'lar kontrol edildi. Temiz git archive kopyasında ana makale ve
+  ek yeniden derlendi; PDF metinleri ve yeniden üretilen kalibrasyon
+  figürlerinin hash'leri eşleşti. Overleaf arayüzünde pull yapılmış olduğu
+  iddia edilmiyor; GitHub tarafı güncel.
+- Geniş validation tamamlanınca analiz, kaynak-feature ilişkisi ve patch
+  kontrolünü sırayla çalıştıran CPU kuyruğu başlatıldı. Kod hash'leri
+  sabitlendi; hata halinde kuyruk durur. Eğitim GPU'larına dokunmaz.
+- 100 crop için önceden belirlenen RGB std, gradient ve Laplacian enerji
+  özellikleri çıkarıldı. Kaliteyle ilişki analizi henüz çalışmadı; ileride
+  üretilecek ilişki yalnız keşifsel olacak, router başarısı sayılmayacak.
+- Bağımsız decoder doğruluğunu anlatan vektör figür görsel olarak kontrol
+  edildi; ilk sürümdeki yazı çakışması giderildi. 36/36 taze süreç testi
+  figürde açıkça CPU FP32 ve özel research formatı olarak etiketli.
+- Native decoder'ın dört ayrı yerde 12 bloğu sabitlediği doğrulandı.
+  Ayrı kaynak kopyası için 2/4/6/8/10/12 blok desteği patch'i hazırlandı;
+  CPU C++ anahtar kontrolünde altı geçerli derinlik ve 58 hatalı state
+  sınandı. Henüz CUDA doğruluğu veya hız sonucu yok.
+- Released `compress` reconstruction üretirken CPU entropy coding ile
+  synthesis'i örtüştürüyor; encoder toplam süresi parça sürelerinin
+  toplamından çıkarılamaz. Native buffer'lar batch1; expert batching
+  mevcut işlev olarak sunulamaz. Bulgular encoder muhasebesine eklendi.
+- Microsoft'un belirttiği CUTLASS v4.4.1 ayrı dizine indirildi
+  (`4370102f9dacab813282e1d67722fceb0b90a019`). SM86 için GPU sorgusuz,
+  MAX_JOBS=1 ve nice19 ile ayrı native derleme başlatıldı. Kurulum yok;
+  CUDA12.1 derleyici/PyTorch cu126 farkı kaydedildi. Eğitim checkout'u
+  ve ortamı değişmedi. Derleme başarısı GPU parity sayılmayacak.
+- 16:56 UTC: D2 step580177 (24 epoch tamam), D4 step561528 (23 tamam),
+  D6 step519430 (21 tamam); üçü canlı, nonfinite0, alarm yok.
+
+## 17:16 UTC — ortak epoch22 ve aritmetik payda düzeltmesi
+
+- Ortak epoch22 validation arşivlendi. Dört monitor crop'ta0,2 tahmini bpp
+  için D2/D4/D6 =33,99101 /34,20393 /34,35236dB; D6−D2 =0,36135dB.
+  Eğitimler sağlıklı; geniş gerçek-stream değerlendirmesi sabit epoch20'de.
+- Altı mimarinin Conv2d MAC izi meta tensor ile çıkarıldı. D2/64×64 izi
+  gerçek CPU forward'ıyla katman bazında birebir eşleşti; spatial prior'ın
+  üç tekrarının tümü sayıldı.512×512'de sabit neural entropy recovery
+  31,079GMac. D12→D2 synthesis azalması%74,53; recovery dahil neural
+  decoder azalması%48,21. Encoder+reconstruction Conv2d azalması daha küçük.
+  Bu oranların hiçbiri wall-time ölçümü değil.
+- Makalenin eski `decoder MAC` etiketleri, gerçek kapsam olan `synthesis
+  MAC` olarak düzeltildi. Ölçülmüş arşiv sayıları değişmedi. Entropy recovery
+  ağlarının ana saving paydasına dahil olmadığı yöntem bölümünde açıklandı.
+  Yeni iki panelli vektör figür supplement'e eklendi; ana makale8+1 sayfa,
+  ek12 sayfa. Render'da görülen alt satır kırpma izi düzeltildi.
+- D4 seçeneğini kaldıran, aynı interpolated payload rate ve toplam neural
+  decoder MAC bütçesinde çalışan whole-crop allocation analizi hazırlandı.
+  Exact dynamic programming, üç görüntüde exhaustive aramayla doğrulandı.
+  Henüz veri analizi çalışmadı; bu kaynak bilgili üst sınırdır, MLP veya
+  görüntü-içi routing sonucu değildir.

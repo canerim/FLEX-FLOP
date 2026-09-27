@@ -1,0 +1,41 @@
+{
+  "status": "source_patch_prepared; full CUDA extension NOT compiled or executed",
+  "upstream_commit": "cbdae87a5445114cdc7f48816da63ea80bdeac40",
+  "original_sha256": {
+    "dmci_proxy.h": "44afb02fe62894377542a5f7336cb1595397df6bcaeb7f4eeb84612bb1f7b954",
+    "dmci_proxy.cpp": "6abe04a1ba3ee1c5b0ac81327f93afdc5b72a83c7a8dc0c3459445492c6a2590"
+  },
+  "patched_sha256": {
+    "dmci_proxy.h": "5a9cbde6ff02b7e3525c6c7c0ef3369c2b2b3fce1ad823b1d464405c95fe5794",
+    "dmci_proxy.cpp": "0680603b2c02862b2d4773fde91caf7dbb5519259f309c3199d0924d4e44ae24",
+    "depth_keys.h": "e19c772fd5e9ce6e4eb8f31398954de3617e3a7e56515d8b5f6df2ea530f6a97"
+  },
+  "patch_sha256": "87a23e73e22dba5d118cf005542b785cbb528dc6b98036feb612b417fa9a6d14",
+  "helper_check": {
+    "valid_depths": 6,
+    "rejected_states": 58,
+    "cuda_used": false
+  },
+  "compiler_command": [
+    "g++",
+    "-std=c++17",
+    "-O2",
+    "-Wall",
+    "-Wextra",
+    "-Werror",
+    "-I",
+    "/home/can_karsal/FLEX-PLUS/experiments/dcvcuf_native_depth_20260927",
+    "/home/can_karsal/FLEX-PLUS/experiments/dcvcuf_native_depth_20260927/check_depth_keys.cpp",
+    "-o",
+    "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/research/native_depth_draft/check_depth_keys"
+  ],
+  "upstream_unmodified": true,
+  "gpu_validation_required": [
+    "D12 stock-vs-patched native parity",
+    "D2/4/6/8/10/12 actual retained-block execution",
+    "Fresh decoder process with no compress initialization",
+    "Shape/QP changes and graph recapture",
+    "Serial expert-bank switching and output-lifetime checks",
+    "Actual bytes and paired end-to-end wall time"
+  ]
+}

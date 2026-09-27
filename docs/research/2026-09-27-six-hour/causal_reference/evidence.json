@@ -1,0 +1,463 @@
+{
+  "verification_sha256": "ae985f72b277eea5f83bd6bf301d34a49af8d97d323e31f1eec6ca0ccdeb628b",
+  "verification_path": "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/research/reference_verification_epoch020/verification.json",
+  "cases": 36,
+  "all_passed": true,
+  "script_sha256": "10a57e8478d01efd47b9810dfba89b8a62265fd134533c9dd3feccea86d9376c",
+  "caption": [
+    {
+      "name": "fig_causal_reference",
+      "caption": "The decoder reconstructs each spatial-prior stage using only its resident checkpoint, QP and previously decoded symbols. Lower-triangular dots mark available decoded groups; diagonal squares mark the current group. Four depths, three geometries and three QPs pass all 36 fresh-process checks, including official FP32-forward parity. The stream cartoon is schematic, not a byte-scale partition; the actual custom header is 88 bytes. Correctness is local to the specified CPU numerical convention, not a released-format or speed claim."
+    }
+  ],
+  "layout_audit": [
+    {
+      "figure": "fig_causal_reference",
+      "outside_canvas": [],
+      "text": [
+        {
+          "text": "a",
+          "size_pt": 7.0,
+          "bbox_px": [
+            25.360629921259843,
+            289.2295275590551,
+            6.0,
+            9.124077690972229
+          ]
+        },
+        {
+          "text": "\u25cf already recovered     \u25a0 current stage",
+          "size_pt": 6.0,
+          "bbox_px": [
+            108.41338582677167,
+            90.86299212598425,
+            129.0,
+            8.06689453125
+          ]
+        },
+        {
+          "text": "Checkpoint + QP provide the fixed starting state.",
+          "size_pt": 6.0,
+          "bbox_px": [
+            91.99151082677167,
+            74.31102362204726,
+            161.84375,
+            8.06689453125
+          ]
+        },
+        {
+          "text": "Recovered symbol groups",
+          "size_pt": 7.0,
+          "bbox_px": [
+            112.91338582677167,
+            98.43563359511703,
+            120.0,
+            9.124077690972214
+          ]
+        },
+        {
+          "text": "$\\hat z$",
+          "size_pt": 6.3,
+          "bbox_px": [
+            78.19291338582678,
+            114.2738361775823,
+            5.0,
+            9.8414306640625
+          ]
+        },
+        {
+          "text": "$\\hat y_0$",
+          "size_pt": 6.3,
+          "bbox_px": [
+            121.80314960629923,
+            113.1152668416448,
+            10.0,
+            11.0
+          ]
+        },
+        {
+          "text": "$\\hat y_1$",
+          "size_pt": 6.3,
+          "bbox_px": [
+            167.91338582677167,
+            113.1152668416448,
+            10.0,
+            11.0
+          ]
+        },
+        {
+          "text": "$\\hat y_2$",
+          "size_pt": 6.3,
+          "bbox_px": [
+            214.02362204724412,
+            113.1152668416448,
+            10.0,
+            11.0
+          ]
+        },
+        {
+          "text": "$\\hat y_3$",
+          "size_pt": 6.3,
+          "bbox_px": [
+            260.13385826771656,
+            113.1152668416448,
+            10.0,
+            11.0
+          ]
+        },
+        {
+          "text": "Decode $\\hat z$",
+          "size_pt": 6.3,
+          "bbox_px": [
+            14.776684164479441,
+            258.56014413908713,
+            38.0,
+            9.8414306640625
+          ]
+        },
+        {
+          "text": "Decode $\\hat y_0$",
+          "size_pt": 6.3,
+          "bbox_px": [
+            9.776684164479441,
+            227.30708661417324,
+            43.0,
+            11.0
+          ]
+        },
+        {
+          "text": "Decode $\\hat y_1$",
+          "size_pt": 6.3,
+          "bbox_px": [
+            9.776684164479441,
+            197.21259842519686,
+            43.0,
+            11.0
+          ]
+        },
+        {
+          "text": "Decode $\\hat y_2$",
+          "size_pt": 6.3,
+          "bbox_px": [
+            9.776684164479441,
+            167.1181102362205,
+            43.0,
+            11.0
+          ]
+        },
+        {
+          "text": "Decode $\\hat y_3$",
+          "size_pt": 6.3,
+          "bbox_px": [
+            9.776684164479441,
+            137.0236220472441,
+            43.0,
+            11.0
+          ]
+        },
+        {
+          "text": "Only decoded information enters the next stage",
+          "size_pt": 7.0,
+          "bbox_px": [
+            57.637795275590555,
+            289.90278482645726,
+            221.00000000000003,
+            9.124077690972229
+          ]
+        },
+        {
+          "text": "b",
+          "size_pt": 7.0,
+          "bbox_px": [
+            345.6826771653544,
+            287.3665354330709,
+            6.0,
+            9.124077690972229
+          ]
+        },
+        {
+          "text": "64 \u00d7 64",
+          "size_pt": 6.0,
+          "bbox_px": [
+            429.32378644977075,
+            282.9291338582677,
+            25.0,
+            7.820638020833314
+          ]
+        },
+        {
+          "text": "65 \u00d7 97",
+          "size_pt": 6.0,
+          "bbox_px": [
+            531.4566929133858,
+            282.9291338582677,
+            25.0,
+            7.820638020833314
+          ]
+        },
+        {
+          "text": "512 \u00d7 512",
+          "size_pt": 6.0,
+          "bbox_px": [
+            629.5895993770009,
+            282.9291338582677,
+            33.0,
+            7.820638020833314
+          ]
+        },
+        {
+          "text": "Equal reconstruction, latents and coder indexes\nOfficial FP32 forward parity also checked",
+          "size_pt": 6.0,
+          "bbox_px": [
+            464.95669291338584,
+            90.82161637754264,
+            158.0,
+            21.89778645833333
+          ]
+        },
+        {
+          "text": "QP within each input geometry",
+          "size_pt": 7.0,
+          "bbox_px": [
+            473.04263041338584,
+            129.25562025388916,
+            141.828125,
+            9.124077690972229
+          ]
+        },
+        {
+          "text": "0",
+          "size_pt": 6.3,
+          "bbox_px": [
+            405.27948429523235,
+            143.93525350041693,
+            5.0,
+            8.8414306640625
+          ]
+        },
+        {
+          "text": "32",
+          "size_pt": 6.3,
+          "bbox_px": [
+            436.82378644977075,
+            143.93525350041693,
+            10.0,
+            8.8414306640625
+          ]
+        },
+        {
+          "text": "63",
+          "size_pt": 6.3,
+          "bbox_px": [
+            470.8680886043091,
+            143.93525350041693,
+            10.0,
+            8.8414306640625
+          ]
+        },
+        {
+          "text": "0",
+          "size_pt": 6.3,
+          "bbox_px": [
+            507.41239075884744,
+            143.93525350041693,
+            5.0,
+            8.8414306640625
+          ]
+        },
+        {
+          "text": "32",
+          "size_pt": 6.3,
+          "bbox_px": [
+            538.9566929133858,
+            143.93525350041693,
+            10.0,
+            8.8414306640625
+          ]
+        },
+        {
+          "text": "63",
+          "size_pt": 6.3,
+          "bbox_px": [
+            573.0009950679242,
+            143.93525350041693,
+            10.0,
+            8.8414306640625
+          ]
+        },
+        {
+          "text": "0",
+          "size_pt": 6.3,
+          "bbox_px": [
+            609.5452972224625,
+            143.93525350041693,
+            5.0,
+            8.8414306640625
+          ]
+        },
+        {
+          "text": "32",
+          "size_pt": 6.3,
+          "bbox_px": [
+            641.0895993770009,
+            143.93525350041693,
+            10.0,
+            8.8414306640625
+          ]
+        },
+        {
+          "text": "63",
+          "size_pt": 6.3,
+          "bbox_px": [
+            675.1339015315393,
+            143.93525350041693,
+            10.0,
+            8.8414306640625
+          ]
+        },
+        {
+          "text": "D2",
+          "size_pt": 6.3,
+          "bbox_px": [
+            372.1940069991252,
+            255.25568219682987,
+            12.0,
+            8.8414306640625
+          ]
+        },
+        {
+          "text": "D4",
+          "size_pt": 6.3,
+          "bbox_px": [
+            372.1940069991252,
+            226.25305752491386,
+            12.0,
+            8.8414306640625
+          ]
+        },
+        {
+          "text": "D6",
+          "size_pt": 6.3,
+          "bbox_px": [
+            372.1940069991252,
+            197.25043285299785,
+            12.0,
+            8.8414306640625
+          ]
+        },
+        {
+          "text": "D12 release",
+          "size_pt": 6.3,
+          "bbox_px": [
+            334.1940069991252,
+            168.24780818108184,
+            50.0,
+            8.8414306640625
+          ]
+        },
+        {
+          "text": "36 fresh-process checks, all exact",
+          "size_pt": 7.0,
+          "bbox_px": [
+            389.05511811023626,
+            289.90278482645726,
+            155.99999999999994,
+            9.124077690972229
+          ]
+        },
+        {
+          "text": "PROCESS BOUNDARY",
+          "size_pt": 6.0,
+          "bbox_px": [
+            46.830708661417326,
+            63.09271320333006,
+            86.6875,
+            7.820638020833336
+          ]
+        },
+        {
+          "text": "Encoder",
+          "size_pt": 8.0,
+          "bbox_px": [
+            46.830708661417326,
+            34.49159660706474,
+            44.00000000000001,
+            10.427517361111107
+          ]
+        },
+        {
+          "text": "FUFREF1 stream",
+          "size_pt": 7.0,
+          "bbox_px": [
+            256.33897637795275,
+            52.44648561385882,
+            82.0,
+            9.124077690972221
+          ]
+        },
+        {
+          "text": "88-byte header",
+          "size_pt": 5.6,
+          "bbox_px": [
+            242.67352362204724,
+            18.99448818897638,
+            50.0,
+            8.0
+          ]
+        },
+        {
+          "text": "rANS payload",
+          "size_pt": 5.6,
+          "bbox_px": [
+            329.87372047244094,
+            18.99448818897638,
+            47.0,
+            8.0
+          ]
+        },
+        {
+          "text": "Isolated decoder",
+          "size_pt": 8.0,
+          "bbox_px": [
+            508.29330708661416,
+            34.49159660706474,
+            88.0,
+            10.427517361111107
+          ]
+        },
+        {
+          "text": "Model identity checked \u00b7 source analysis disabled",
+          "size_pt": 6.0,
+          "bbox_px": [
+            540.0629921259842,
+            62.84645669291339,
+            166.0,
+            8.06689453125
+          ]
+        },
+        {
+          "text": "CAUSAL DECODE \u00b7 CORRECTNESS BEFORE PERFORMANCE",
+          "size_pt": 8.0,
+          "bbox_px": [
+            196.33778297244095,
+            343.39002180391515,
+            327.79687499999994,
+            10.427517361111086
+          ]
+        },
+        {
+          "text": "CPU FP32 research format \u00b7 epoch20 D2/D4/D6 and released D12 \u00b7 no CUDA compatibility or latency claim",
+          "size_pt": 6.3,
+          "bbox_px": [
+            134.47840797244095,
+            316.8582677165354,
+            451.51562499999994,
+            9.0
+          ]
+        }
+      ],
+      "width_mm": 183.0,
+      "height_mm": 91.0
+    }
+  ]
+}

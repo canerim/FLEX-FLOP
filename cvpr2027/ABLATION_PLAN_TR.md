@@ -218,7 +218,9 @@ adapter kaldırma için de geçerlidir. Ana tabloda “retrained ablation” ve
 3. **Validation:** dört crop yalnız sağlık göstergesidir. Aynı epoch'taki
    modeller ve released referans için 100 DIV2K validation görüntüsü daha
    güçlü ara kontrol; final için tam Kodak-24 ve ilan edilen CTC/CLIC kapsamı.
-   Bu genişletilmiş validation henüz çalıştırılmış sonuç değildir.
+   Epoch20 D2/D4/D6 ve released D12 için 100 merkez512 crop × beş QP
+   gerçek payload/bağımsız decode değerlendirmesi 27 Eylül'de başlatıldı;
+   tamamlanan analiz ayrıca etiketlenecek. Bu, final105-epoch sonucu değildir.
 4. **Bitrate:** `(payload + hyperprior + model ID + QP/control + headers)`
    toplam bit / orijinal piksel sayısı. Altı expert için 3 bit kimlik alt
    düzeyde bir bileşendir; tam stream maliyeti değildir.
@@ -283,7 +285,7 @@ hedef cihazdaki patch/batch koşullarında ölçmek ve sınır artefaktlarını 
 incelemek gerekli. Bu çalışma bizim modele aktarılmış bir sonuç değil.
 
 
-## 8. Sonuca göre karar: hangi hipotezi ne zaman bırakacağız?
+## 9. Sonuca göre karar: hangi hipotezi ne zaman bırakacağız?
 
 | Gözlenecek sonuç | Araştırma kararı | Sonraki küçük kontrol |
 |---|---|---|

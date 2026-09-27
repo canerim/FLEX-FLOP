@@ -1,5 +1,6 @@
 """Publication-style figures for the explicitly limited CPU calibration audit."""
 import json
+import hashlib
 from pathlib import Path
 import numpy as np
 import matplotlib
@@ -37,7 +38,7 @@ def main():
                             mfc=F.COL[policy] if criterion=='mean' else 'white')
             ax.set(xlabel='Calibration target (table PSNR loss, dB)',xticks=[.05,.1,.15,.2,.3])
             ax.axvline(.1,color=F.GREY,lw=.6,ls=':',zorder=0)
-        axs[0].set(ylabel='Modelled decoder MAC saving (%)',ylim=(-3,42))
+        axs[0].set(ylabel='Modelled synthesis MAC saving (%)',ylim=(-3,42))
         axs[1].set(ylabel='Held-out target violations (%)',ylim=(0,53))
         handles=[Line2D([],[],color=F.COL[p],marker=F.MARK[p],label=F.LABEL[p]) for p in ('router','dither','uniform')]
         handles += [Line2D([],[],color=F.INK,ls='-',label='Mean calibration'),Line2D([],[],color=F.INK,ls='--',label='Q90 calibration')]
@@ -67,6 +68,10 @@ def main():
             'At a 0.1 dB table-loss target, held-out loss distributions differ substantially between training-mean and training-Q90 calibration. Curves are descriptive ECDFs of 265 correlated frame-QP observations, not confidence bands or final cropped reconstruction errors. No source-conditioned test fallback is applied.',book)
     (OUT/'figure_captions.json').write_text(json.dumps(F.CAPTIONS,indent=2)+'\n')
     (OUT/'layout_audit.json').write_text(json.dumps(F.AUDIT,indent=2)+'\n')
+    (OUT/'artifact_manifest.json').write_text(json.dumps({p.name:hashlib.sha256(p.read_bytes()).hexdigest()
+        for p in sorted(OUT.iterdir()) if p.suffix in ('.pdf','.svg','.png')},indent=2)+'\n')
+    (OUT/'source_manifest.json').write_text(json.dumps({'analysis_sha256':hashlib.sha256((DATA/'analysis.json').read_bytes()).hexdigest(),
+        'plot_script_sha256':hashlib.sha256(Path(__file__).read_bytes()).hexdigest()},indent=2)+'\n')
 
 
 if __name__=='__main__':main()

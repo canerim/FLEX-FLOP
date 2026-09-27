@@ -17,6 +17,9 @@ invented PSNR, bitrate or runtime results.
 - Sequence-disjoint scalar-calibration diagnostic: supplement S5 and
   [plot data](data/crossfit20260927/analysis.json). This uses archived padded
   error tables; it is not a new final-reconstruction or latency benchmark.
+- Architectural MAC accounting: [data](data/depthmacs20260927/analysis.json)
+  and supplement Figure S8 distinguish synthesis, neural entropy recovery
+  and encoder-plus-reconstruction costs. These are not runtime measurements.
 
 Select **main.tex** and **pdfLaTeX** in Overleaf. The active text is in
 `sec/revision_*.tex`; old sections remain inactive historical material.

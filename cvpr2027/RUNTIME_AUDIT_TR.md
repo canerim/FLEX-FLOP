@@ -44,7 +44,7 @@ Kod hash'leri bu inceleme anına ait; eski benchmark yürütme anında tutulmam�
 
 ## 3. Router overhead'ine ne kadar yer var?
 
-Kaydedilen decoder MAC saving oranlarına `S_router` ve `S_dither` diyelim.
+Kaydedilen synthesis MAC saving oranlarına `S_router` ve `S_dither` diyelim.
 **Yalnızca süre MAC ile orantılı varsayılırsa**, router'ın ek karar maliyeti
 tam decoder süresinin `(S_router - S_dither)/100` oranını aşmamalıdır.
 Bu varsayım altında dither synthesis süresine göre başa baş eşiği:

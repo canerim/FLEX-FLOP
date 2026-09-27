@@ -47,6 +47,28 @@ Birden fazla patch aynı expert'te gruplanırsa süre `sum_k tau_k(n_k)` ile
 Model ağırlıklarının GPU'da hazır olduğu resident-bank ölçümü ile expert
 yükleme/taşıma içeren cold-bank ölçümü ayrı tutulmalı.
 
+## Native DCVC-UF yolunda doğrulanan iki önemli ayrıntı
+
+Pinned `dmci_proxy.cpp` içindeki `compress`, analysis/prior sonrasında
+entropy worker'ını başlatıyor ve GPU'da synthesis'i çalıştırıyor. Worker,
+symbol aktarımı ve rANS coding yaparken synthesis ile kısmen örtüşebilir.
+Bu nedenle ayrı ölçülen synthesis ve entropy sürelerini toplamak encoder
+wall time'ı vermez. İdealize bir faz modeli `T_front + max(T_entropy_branch,
+T_synthesis) + T_sync` olabilir; paylaşılan GPU/transfer kaynakları nedeniyle
+bu bile ölçümün yerini tutmaz. Bu formüle henüz süre sayısı atanmadı.
+[Pinned native kaynak](https://github.com/microsoft/DCVC/blob/cbdae87a5445114cdc7f48816da63ea80bdeac40/src/layers/extensions/inference/dmci_proxy.cpp).
+
+Encoder reconstruction'ını üretmeyen standalone-image varyantı ayrıca
+incelenebilir. Ancak bunu yalnız sığ modele uygulayıp released D12'nin
+reconstruction üreten süresiyle kıyaslamak, depth etkisiyle yürütme
+sözleşmesini karıştırır. İki sözleşme de bütün modellerde aynı olmalı.
+
+İkinci ayrıntı: native buffer allocation batch=1 kabul ediyor. `tau_k(n_k)`
+ile gerçek expert batching henüz uygulanmış değil; seri patch çağrılarını
+batched codec diye raporlamayacağız. Global tensor pool nedeniyle eşzamanlı
+expert stream'leri ayrıca buffer sahipliği ve çıktı ömrü doğrulaması istiyor.
+Hazırlanan native depth patch'i bu nedenle batch1 sınırını açıkça koruyor.
+
 ## Net kazancın kabul ölçütü
 
 MLP'nin hedefi oracle ile aynı etiketi yüksek doğrulukla tahmin etmek
