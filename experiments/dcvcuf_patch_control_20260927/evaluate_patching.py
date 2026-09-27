@@ -31,8 +31,10 @@ IMAGES=[f'{i:04d}.png' for i in np.rint(np.linspace(801,900,16)).astype(int)]
 
 
 def metrics(rec,target):
-    error=(rec-target).square().mean(dim=1)[0]
-    mse=float(error.mean())
+    squared=(rec-target).square()
+    error=squared.mean(dim=1)[0]
+    # Match the frozen whole-frame evaluator's FP32 reduction order exactly.
+    mse=float(squared.mean())
     result={'mse_rgb':mse,'psnr_rgb':-10*math.log10(max(mse,1e-12))}
     for radius in (4,16):
         seam=torch.zeros((512,512),dtype=torch.bool)

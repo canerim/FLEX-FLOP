@@ -34,7 +34,8 @@ def receive(worker):
 
 
 def metrics(rec,target):
-    error=(rec-target).square().mean(1)[0];mse=float(error.mean())
+    squared=(rec-target).square()
+    error=squared.mean(1)[0];mse=float(squared.mean())
     r={'mse_rgb':mse,'psnr_rgb':-10*math.log10(max(mse,1e-12))}
     for radius in (4,16):
         seam=torch.zeros((512,512),dtype=torch.bool)

@@ -1,0 +1,12 @@
+{
+  "fixed_case": "D2 epoch20 DIV2K0801 QP16",
+  "reference_psnr_rgb": 31.46064730494234,
+  "old_channel_then_spatial_psnr_rgb": 31.46064659722612,
+  "corrected_direct_mean_psnr_rgb": 31.46064730494234,
+  "old_minus_reference_db": -7.077162216262423e-07,
+  "direct_mean_mse": 0.0007143898401409388,
+  "channel_then_spatial_mean_mse": 0.0007143899565562606,
+  "latent_hash_matches": true,
+  "corrected_global_metric_exact": true,
+  "scope": "FP32 reduction-order regression; no relaxation of decoder or quality parity tolerances. Original failed directory retained; all patch cases recomputed under the corrected script."
+}

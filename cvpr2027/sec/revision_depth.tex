@@ -9,7 +9,7 @@ blocks. Following ClassSR's patch-to-network principle~\cite{kong2021classsr},
 a later selector will route each patch to one member of this bank. Their encoder and entropy parameters also
 learn, so their latents are not interchangeable exits of the current model.
 \Cref{tab:depth} reports exact capacity and experimental status; completed
-matched RD and latency results are pending.
+final matched RD and latency results are pending.
 
 Each variant preserves the opening upsampler and output head. D2 removes
 73.0\% of D12's synthesis parameters but only 24.6\% of complete-codec
@@ -52,9 +52,10 @@ encoding and transmits its identity. Controls are full-frame D12,
 patchwise D12, a validation-selected fixed expert and blind mixtures.
 Leave-one-expert-out tests measure patch-specific value. Training,
 calibration and test images stay separate; timing includes grouping,
-entropy resets, signalling and fallback. The supplement's dashed runtime
-scenarios expose assumed fixed costs without inventing quality or speed
-measurements for unfinished models.
+entropy resets, signalling and fallback. A frozen epoch-20 diagnostic on 100 DIV2K centre crops gives D6 a
+0.183 dB mean RGB advantage over D2 at 0.2 actual payload bpp (99 images
+on common support). The supplement reports the full interim curves; these
+do not establish final quality or routed runtime.
 
 \paragraph{A budget is also a scheduling problem.}
 Expert latency depends on the number of assigned patches and their packing,

@@ -10,7 +10,7 @@ import tempfile
 
 ROOT=Path(__file__).resolve().parents[1]
 FOLDERS=('refresh20260927','extended20260927','crossfit20260927','depthmacs20260927')
-SCRIPTS=('build_figures.py','build_extended_figures.py','plot_crossfit_control_20260927.py','plot_depth_macs_20260927.py')
+SCRIPTS=('build_figures.py','build_extended_figures.py','plot_crossfit_control_20260927.py','plot_depth_macs_20260927.py','build_research_figures.py')
 
 
 def sha(path):return hashlib.sha256(path.read_bytes()).hexdigest()
@@ -26,7 +26,9 @@ def main():
         for script in SCRIPTS:
             subprocess.run([sys.executable,str(dest/'scripts'/script)],cwd=dest,env=env,check=True,
                 stdout=subprocess.DEVNULL)
-        for folder in FOLDERS:
+        research=json.loads((ROOT/'data/research20260927/manifest.json').read_text())
+        folders=FOLDERS+tuple('research20260927/'+f['folder'] for f in research['families'])
+        for folder in folders:
             expected=json.loads((ROOT/'figs'/folder/'artifact_manifest.json').read_text())
             actual=json.loads((dest/'figs'/folder/'artifact_manifest.json').read_text())
             if expected!=actual:raise AssertionError('Non-reproducible figure manifest: '+folder)
@@ -34,7 +36,7 @@ def main():
                 a=ROOT/'figs'/folder/name;b=dest/'figs'/folder/name
                 if sha(a)!=digest or sha(b)!=digest:raise AssertionError('Artifact mismatch: '+str(a))
                 compared.append({'file':str(a.relative_to(ROOT)),'sha256':digest,'byte_identical':True})
-    record={'scope':'Current16-set vector figure reproduction using only bundled data/scripts; no codec inference, training weights, source dataset or GPU.',
+    record={'scope':'Current vector figure reproduction using only bundled data/scripts; no codec inference, training weights, source dataset or GPU.',
         'artifact_count':len(compared),'all_byte_identical':True,'artifacts':compared,
         'scripts_sha256':{str((ROOT/'scripts'/name).relative_to(ROOT)):sha(ROOT/'scripts'/name) for name in SCRIPTS},
         'reproduction_script_sha256':sha(Path(__file__))}

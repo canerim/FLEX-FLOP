@@ -112,6 +112,48 @@ def main():
             min_font=min(min_font,*(t["size_pt"] for t in record["text"]))
             figure_count+=1
     assert figure_count==16
+    research=json.loads((ROOT/'data/research20260927/manifest.json').read_text())
+    assert digest(ROOT/'scripts/research_figure_paths_20260927.py')==research['helper_sha256']
+    research_inputs={}
+    for family in research['families']:
+        folder=family['folder'];source=ROOT/'data/research20260927'/folder/family['data_file']
+        assert digest(source)==family['data_sha256']
+        assert digest(ROOT/'scripts'/family['script'])==family['plot_script_sha256']
+        research_inputs[folder]=json.loads(source.read_text());checked.append(str(source.relative_to(ROOT)))
+        path=ROOT/'figs/research20260927'/folder
+        evidence=json.loads((path/'figure_evidence.json').read_text())
+        assert evidence.get('analysis_sha256',evidence.get('association_sha256'))==digest(source)
+        assert evidence['script_sha256']==family['plot_script_sha256']
+        for name,expected in json.loads((path/'artifact_manifest.json').read_text()).items():
+            assert digest(path/name)==expected,f'Changed research figure: {folder}/{name}'
+            checked.append(str((path/name).relative_to(ROOT)))
+        for record in evidence['layout_audit']:
+            assert not record['outside_canvas'],record['figure']
+            assert abs(record['width_mm']-183)<1e-6 and record['height_mm']<=170
+            assert '<text' in (path/(record['figure']+'.svg')).read_text()
+            min_font=min(min_font,*(t['size_pt'] for t in record['text']))
+            figure_count+=1
+    interim=research_inputs['div2k100_epoch020']
+    assert interim['n_cases']==len(interim['rows'])==2000 and interim['n_images']==100
+    assert interim['manifest']['epoch_shallow']==20
+    assert interim['manifest']['source_analysis_disabled_in_decoder']
+    assert len({(r['depth'],r['image'],r['qp']) for r in interim['rows']})==2000
+    for row in interim['rows']:
+        assert abs(row['container_bpp']-row['payload_bpp']-88*8/512**2)<1e-12
+        assert all(math.isfinite(row[k]) for k in ('payload_bpp','estimated_bpp','psnr_rgb'))
+    for row in interim['native_qp_means']:
+        selected=[r for r in interim['rows'] if (r['depth'],r['qp'])==(row['depth'],row['qp'])]
+        assert len(selected)==100
+        for field in ('psnr_rgb','payload_bpp'):
+            assert abs(sum(r[field] for r in selected)/100-row[field])<1e-10
+    associations=research_inputs['source_features']
+    assert len(associations['rows'])==18
+    assert associations['quality_analysis_sha256']==digest(ROOT/'data/research20260927/div2k100_epoch020/analysis.json')
+    for row in associations['rows']:
+        assert row['n']==len(row['images'])==len(row['feature_values'])==len(row['depth_gain_db'])
+    for cohort in research_inputs['depth_allocation']['results']:
+        assert len(cohort['curves'])==2*cohort['n']+1
+        assert all(r['d4_option_value_db']>=-1e-9 and r['placement_premium_db']>=-1e-9 for r in cohort['curves'])
     calibration_source=json.loads((ROOT/'figs/crossfit20260927/source_manifest.json').read_text())
     assert calibration_source['analysis_sha256']==digest(ROOT/'data/crossfit20260927/analysis.json')
     assert calibration_source['plot_script_sha256']==digest(ROOT/'scripts/plot_crossfit_control_20260927.py')
