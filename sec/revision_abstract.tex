@@ -10,9 +10,9 @@ design that selects among independently trained 2/4/6/8/10/12-block codecs.
 We specify that controlled depth study while reporting completed results
 only for the shared-exit path. On 53 intra frames at five quality indices,
 learned routing removes \MainRouterSaving\% of modelled synthesis
-multiply--accumulates at a nominal 0.1\,dB target, including \MainPremium\
+multiply--accumulates at a nominal 0.1\,dB YCbCr-MSE target, including \MainPremium\
 percentage points beyond ordered dithering. Retrospective selection under a
-common delivered RGB-loss cap retains a 2.93-point margin over all 265 pairs.
+common cropped-MSE cap retains a 2.93-point margin over all 265 pairs.
 The margin contracts as the cheapest exit saturates: adaptation is most
 valuable when regions benefit differently from additional depth.
 These results establish an arithmetic--quality trade-off under

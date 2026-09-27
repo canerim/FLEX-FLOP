@@ -116,13 +116,13 @@ def anchors(book):
         T(ax,87.5,y-13,support,ha="center",fontsize=6)
         A(ax,(100,y),(112,y),color=c)
         T(ax,118,y+2,output,weight="bold",fontsize=6)
-        T(ax,118,y-5,"Reference: released / RGB" if label=="SELECTION" else "Reference: e15 full / RGB or YUV",fontsize=5.8)
+        T(ax,118,y-5,"Reference: released / 444-MSE" if label=="SELECTION" else "Reference: e15 / 444-MSE or 6:1:1",fontsize=5.8)
     ax.plot([3,180],[20,20],color=F.GRID,lw=.5)
     e=d["groups"]["encoder_entropy"]; s=d["groups"]["decoder_inherited"]
     T(ax,5,14,f"CPU audit: {e['compared']} shared encoder/entropy tensors unchanged; {s['changed']}/{s['compared']} inherited synthesis tensors changed.",fontsize=6)
     T(ax,5,7,"Required comparison: reconstruct both anchors, use the same valid pixels and metric, then verify the selected output.",weight="bold",fontsize=6)
     F.audit_and_save(fig,"figS1_reference_protocol",
-        "Reference trace for the archived evaluation. Table construction loads the released-weight reference separately and evaluates padded RGB. The final evaluator loads the fine-tuned e15 codec and computes its own full-frame reconstruction before cropping; its exported psnr_release name is misleading. A CPU state-dict audit finds unchanged shared encoder/entropy tensors and changed inherited synthesis tensors. These results describe currently inspected code and weights; their hashes were not captured contemporaneously with the historical run. Quality against a common released reference cannot be recovered from the exported JSON alone. The diagram shows the two measurement paths, not newly decoded images.",book)
+        "Reference trace for the archived evaluation. Table construction loads the released-weight reference separately and evaluates padded YCbCr 4:4:4. The final evaluator loads the fine-tuned e15 codec and computes its own full-frame reconstruction before cropping; its exported psnr_release name is misleading. A CPU state-dict audit finds unchanged shared encoder/entropy tensors and changed inherited synthesis tensors. These results describe currently inspected code and weights; their hashes were not captured contemporaneously with the historical run. Quality against a common released reference cannot be recovered from the exported JSON alone. The diagram shows the two measurement paths, not newly decoded images.",book)
 
 
 def controls(book):
@@ -180,14 +180,14 @@ def delivered(book):
     for rule in F.LABEL:
         rr=[r for r in d["summary"] if r["rule"]==rule]
         ax.plot([r["cap"] for r in rr],[r["mean"] for r in rr],color=F.COL[rule],marker=F.MARK[rule],label=F.LABEL[rule])
-    ax.set(ylabel="Synthesis MAC saving (%)",ylim=(0,42),xlabel="Delivered RGB-loss cap (dB)")
+    ax.set(ylabel="Synthesis MAC saving (%)",ylim=(0,42),xlabel="Delivered 444-MSE cap (dB)")
     ax=axs[1];F.panel(ax,"b","The routing margin survives this control")
     rr=[r for r in d["contrasts"] if r["contrast"]=="router_minus_dither"]
     x=np.array([r["cap"] for r in rr]);y=np.array([r["mean"] for r in rr]);lo=np.array([r["lo"] for r in rr]);hi=np.array([r["hi"] for r in rr])
     ax.plot(x,y,color=F.BLUE,lw=.8)
     ax.errorbar(x,y,yerr=[y-lo,hi-y],fmt="s",color=F.BLUE,capsize=2,ms=3.3,lw=.9)
     ax.axhline(0,color=F.MUTED,lw=.6)
-    ax.set(ylabel="Router − dither (percentage points)",ylim=(-.2,4.4),xlabel="Delivered RGB-loss cap (dB)")
+    ax.set(ylabel="Router − dither (percentage points)",ylim=(-.2,4.4),xlabel="Delivered 444-MSE cap (dB)")
     ax.text(.96,.92,"2.93 pp at 0.1 dB\n95% CI [2.11, 3.79]",transform=ax.transAxes,ha="right",va="top",fontsize=7,linespacing=1.4)
     for ax in axs:
         ax.set_xlim(.035,.52)
@@ -196,7 +196,7 @@ def delivered(book):
     fig.legend(handles=handles,loc="upper center",bbox_to_anchor=(.52,1.01),ncol=4,fontsize=7,handlelength=1.8,columnspacing=2.1)
     fig.text(.5,.035,"265 pairs at every cap · fine-tuned full-depth reference · retrospective selection with explicit fallback",ha="center",fontsize=6.5,color=F.MUTED)
     F.audit_and_save(fig,"figS3_delivered_cap",
-        "Retrospective selection under a common measured cropped RGB-loss cap with tolerance 0.0001 dB. Each policy selects the cheapest measured candidate from its up to six archived nominal-budget maps, with the evaluated e15 full-frame output as a zero-loss, zero-saving fallback. All 265 frame–QP pairs remain at every cap. Panel b gives paired 95% sequence-cluster intervals over 5,000 draws. Joining lines guide the eye between discrete measured candidates. At 0.1 dB router/dither fallback counts are 1/2. This source-aware finite-pool analysis is not a held-out deployable policy, a global optimum, or a timing measurement; acquisition and rejection costs are excluded.",book)
+        "Retrospective selection under a common measured cropped 444-MSE cap with tolerance 0.0001 dB. Each policy selects the cheapest measured candidate from its up to six archived nominal-budget maps, with the evaluated e15 full-frame output as a zero-loss, zero-saving fallback. All 265 frame–QP pairs remain at every cap. Panel b gives paired 95% sequence-cluster intervals over 5,000 draws. Joining lines guide the eye between discrete measured candidates. At 0.1 dB router/dither fallback counts are 1/2. This source-aware finite-pool analysis is not a held-out deployable policy, a global optimum, or a timing measurement; acquisition and rejection costs are excluded.",book)
 
 
 def scenarios(book):
@@ -238,7 +238,7 @@ def exit_profile(book):
     for i,r in enumerate(rr):
         ax.errorbar(x[i],y[i],yerr=[[y[i]-lo[i]],[hi[i]-y[i]]],fmt="o",color=F.DEPTH[i],capsize=2,lw=.8)
         ax.annotate(f"{r['depth']} blocks",(x[i],y[i]),xytext=(4,7),textcoords="offset points",fontsize=6,color=F.INK)
-    ax.set(xlabel="Modelled synthesis MAC saving (%)",ylabel="Padded RGB loss vs released (dB)",xlim=(-5,52),ylim=(0,.26))
+    ax.set(xlabel="Modelled synthesis MAC saving (%)",ylabel="Padded 444-MSE loss vs released (dB)",xlim=(-5,52),ylim=(0,.26))
     ax=axs[1];F.panel(ax,"b","Extra depth has diminishing return")
     rr=d["incremental_summary"];x=np.arange(3)
     for key,col,mk,label in [('mean_within_frame_median',F.BLUE,'s','Mean frame median'),('mean_within_frame_iqr',F.TEAL,'o','Mean within-frame IQR')]:
@@ -253,9 +253,9 @@ def exit_profile(book):
     for i,v in enumerate(y):ax.text(i,.55,f'{v:.1f}%',ha='center',va='bottom',color='white',fontsize=6,weight='bold')
     ax.set(xticks=x,xticklabels=['6 → 8','8 → 10','10 → 12'],xlabel="Uniform-map depth transition",ylabel="Mean fraction of tiles with loss (%)",ylim=(0,17))
     fig.text(.5,.13,'265 frame–QP pairs · equal frame weighting · 95% sequence-cluster intervals',ha='center',fontsize=6)
-    fig.text(.5,.055,'Archived uniform reconstructions on padded RGB; these are shared exits, not independently trained shallow codecs.',ha='center',fontsize=6,color=F.MUTED)
+    fig.text(.5,.055,'Archived uniform reconstructions on padded YCbCr 4:4:4; these are shared exits, not independently trained shallow codecs.',ha='center',fontsize=6,color=F.MUTED)
     F.audit_and_save(fig,'figS6_exit_depth_profile',
-        'Actual uniform-map DCVC-UF reconstruction profile from the archived source-error tables. Panel a reports mean padded RGB PSNR loss relative to the released-weight full-frame reference, against the stored synthesis MAC model. Panels b and c compare per-tile errors between adjacent uniform-depth outputs: the frame median gain, within-frame IQR, and fraction with increased error. Frames have equal weight regardless of their tile count. Error bars are 95% sequence-cluster bootstrap intervals with five QPs grouped by sequence. Tile gains are context-dependent comparisons between two uniform maps, not causal one-tile interventions in mixed maps; no cropped quality or independent D2/D4/D6 result is inferred.',book)
+        'Actual uniform-map DCVC-UF reconstruction profile from the archived source-error tables. Panel a reports mean padded 444-MSE loss relative to the released-weight full-frame reference, against the stored synthesis MAC model. Panels b and c compare per-tile errors between adjacent uniform-depth outputs: the frame median gain, within-frame IQR, and fraction with increased error. Frames have equal weight regardless of their tile count. Error bars are 95% sequence-cluster bootstrap intervals with five QPs grouped by sequence. Tile gains are context-dependent comparisons between two uniform maps, not causal one-tile interventions in mixed maps; no cropped quality or independent D2/D4/D6 result is inferred.',book)
 
 
 def main():

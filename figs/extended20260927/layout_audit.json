@@ -74,12 +74,12 @@
         ]
       },
       {
-        "text": "Reference: released / RGB",
+        "text": "Reference: released / 444-MSE",
         "size_pt": 5.8,
         "bbox_px": [
           464.56692913385825,
           271.7429084944704,
-          91.0,
+          106.0,
           7.695285373263914
         ]
       },
@@ -134,12 +134,12 @@
         ]
       },
       {
-        "text": "Reference: e15 full / RGB or YUV",
+        "text": "Reference: e15 / 444-MSE or 6:1:1",
         "size_pt": 5.8,
         "bbox_px": [
           464.56692913385825,
           145.75865652596644,
-          112.859375,
+          116.0,
           7.695285373263914
         ]
       },
@@ -980,7 +980,7 @@
         ]
       },
       {
-        "text": "Delivered RGB-loss cap (dB)",
+        "text": "Delivered 444-MSE cap (dB)",
         "size_pt": 7.0,
         "bbox_px": [
           125.93106047914227,
@@ -1130,7 +1130,7 @@
         ]
       },
       {
-        "text": "Delivered RGB-loss cap (dB)",
+        "text": "Delivered 444-MSE cap (dB)",
         "size_pt": 7.0,
         "bbox_px": [
           498.8445300720389,
@@ -2474,13 +2474,13 @@
         ]
       },
       {
-        "text": "Padded RGB loss vs released (dB)",
+        "text": "Padded 444-MSE loss vs released (dB)",
         "size_pt": 7.0,
         "bbox_px": [
           20.22719090045385,
-          89.5787401574803,
+          79.0787401574803,
           9.124077690972236,
-          161.0
+          182.0
         ]
       },
       {
@@ -2924,12 +2924,12 @@
         ]
       },
       {
-        "text": "Archived uniform reconstructions on padded RGB; these are shared exits, not independently trained shallow codecs.",
+        "text": "Archived uniform reconstructions on padded YCbCr 4:4:4; these are shared exits, not independently trained shallow codecs.",
         "size_pt": 6.0,
         "bbox_px": [
-          166.23622047244095,
+          153.81434547244095,
           15.322834645669289,
-          387.99999999999994,
+          412.84374999999994,
           8.06689453125
         ]
       }

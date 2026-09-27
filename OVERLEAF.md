@@ -19,6 +19,11 @@ The active sections are `sec/revision_*.tex`. Earlier `sec/0_abstract.tex` throu
 by `main.tex`. The independent D2/D4/D6 training is ongoing; its intermediate
 validation values are not presented as final manuscript results.
 
+See `METRICS.md` for the colour-space correction: archived `db_rgb` and
+derived legacy fields are YCbCr4:4:4 MSE-ratio losses, not RGB losses.
+Current captions and axes use the corrected label. Historical raw keys
+and old JSON annotations remain traceable rather than being silently renamed.
+
 - Figure atlas: `figs/refresh20260927/figure_atlas.pdf`.
 - Protocol and planned codec-bank atlas: `figs/extended20260927/extended_atlas.pdf`.
 - Stand-alone protocol supplement: `supplement.tex` / `supplement.pdf`.

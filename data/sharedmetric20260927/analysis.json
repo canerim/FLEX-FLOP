@@ -1,0 +1,106 @@
+{
+  "finding": "Archived db_rgb and padded source-MSE tables use equal-channel unclipped YCbCr444 tensor MSE, not RGB MSE. The misleading field name must not determine the reported metric.",
+  "evidence": "Input reader upsamples source420 planes to444 and centres by0.5; synthesis returns that representation; evaluation subtracts tensors directly with no RGB conversion. Two fixed-map CPU replays verify the archived ratio within2e-4dB.",
+  "scope": "Two metric-provenance checks only; not a new full-cohort RGB evaluation, bitstream test or latency benchmark.",
+  "repo_commit": "9e172090e7508606ce02f8beb2bee351ca0875f5",
+  "upstream_commit": "819c219b24db34310bbd15c51a720aaaf5eb2e7d",
+  "checkpoint_config": {
+    "num_exits": 6,
+    "split_depth": 2,
+    "latent_patch": 16,
+    "latent_halo": 2,
+    "trunk_halo": 0,
+    "tile_coupling": false,
+    "tile_pad_mode": "replicate",
+    "seam_repair": "grid",
+    "adapter_kind": "scaled",
+    "adapter_expand": 4,
+    "full_frame_head": true,
+    "aux_weight": 1.0,
+    "aux_schedule": "constant",
+    "aux_warmup_epochs": 10,
+    "qp": 63
+  },
+  "strict_checkpoint_load": true,
+  "torch": "2.9.1+cu126",
+  "cuda_initialized": false,
+  "rows": [
+    {
+      "sequence": "BasketballPass_416x240_50.yuv",
+      "qp": 32,
+      "rule": "router",
+      "nominal_budget": 0.1,
+      "map": [
+        3,
+        3
+      ],
+      "archived_db_rgb": 0.06475067665285648,
+      "archived_db_611": 0.1295813668072796,
+      "unclipped_ycbcr444": {
+        "candidate_mse": 0.00023484368284698576,
+        "reference_mse": 0.0002313682925887406,
+        "loss_db": 0.0647504075454995
+      },
+      "unclipped_rgb": {
+        "candidate_mse": 0.0006917559076100588,
+        "reference_mse": 0.0006831549690105021,
+        "loss_db": 0.054336451367130174
+      },
+      "clipped_rgb": {
+        "candidate_mse": 0.000689138425514102,
+        "reference_mse": 0.0006800187984481454,
+        "loss_db": 0.05785547803682418
+      },
+      "yuv611_420_loss_db": 0.12958133090533863,
+      "direct_minus_archive_db": -2.691073569816016e-07,
+      "first_frame_bytes_sha256": "b7c881ceaea0b3c3e7126f38971947b714d6fe83185a5f90484a27aa61c644a6"
+    },
+    {
+      "sequence": "BQMall_832x480_60.yuv",
+      "qp": 32,
+      "rule": "router",
+      "nominal_budget": 0.1,
+      "map": [
+        3,
+        4,
+        3,
+        3,
+        3,
+        3,
+        4,
+        3
+      ],
+      "archived_db_rgb": 0.07743738277447881,
+      "archived_db_611": 0.08667157972273998,
+      "unclipped_ycbcr444": {
+        "candidate_mse": 0.0002458690432831645,
+        "reference_mse": 0.00024152395781129599,
+        "loss_db": 0.07743634536626076
+      },
+      "unclipped_rgb": {
+        "candidate_mse": 0.0007279004785232246,
+        "reference_mse": 0.0007150831515900791,
+        "loss_db": 0.07715459340952838
+      },
+      "clipped_rgb": {
+        "candidate_mse": 0.0007268966874107718,
+        "reference_mse": 0.0007140572997741401,
+        "loss_db": 0.07739626424496286
+      },
+      "yuv611_420_loss_db": 0.08667153544688233,
+      "direct_minus_archive_db": -1.0374082180519828e-06,
+      "first_frame_bytes_sha256": "c5dd0baab92676f491d9e8b9578d4fec651aaf425959418024347c6a117f3a60"
+    }
+  ],
+  "source_sha256": {
+    "/home/can_karsal/FLEX-PLUS/runs/RECIPE512/ckpt_PIN_e15.pth.tar": "91556d30bca41988755ff43dee3bc6d0cd2a0a4eda1d18d2891b168dc0a04ce9",
+    "/home/can_karsal/FLEX-PLUS/flexplus/results/eval_rules_ctc_e15.json": "66d767faa241e4c4578907b18031554706b1a5d4c64373000dbb2f0d260e9a5c",
+    "/home/can_karsal/FLEX-PLUS/scripts/audit_shared_metric_20260927.py": "d4a118dd679b286a59fd81e6fa1838a96e48149be9e476a01e53738c66e88b3e",
+    "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/research/shared_metric_audit/source/ctc_intra.py": "04635ec7a1236d2f53b6e3d2a7794d403f3a1cf57f1441b6daa2a98e3c5996a1",
+    "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/research/shared_metric_audit/source/flexuf/model.py": "f34e5f341770bd08cac37f503b51929de95f0b93d4b853a2aefd2bd5dac2535d",
+    "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/research/shared_metric_audit/source/flexuf/eval.py": "9e74feecf1e8bc829ac27795b78a9ceebfd85c2c74f12a9212932fd18ebb2d5e",
+    "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/research/shared_metric_audit/source/flexuf/backbone/decoder.py": "97ac8be7f6b6001d3d9650f17c25a7da98198ee3d25e413b00f1a6250788d6b9",
+    "/home/can_karsal/DCVC/src/utils/transforms.py": "85713c55f217f348d5824cf493e7df9cb8ce9402f27c9f34fd95a4b799aaab25",
+    "/home/can_karsal/DCVC/src/models/image_model.py": "95ff7158ffa592b608f346f3585e6111380bee08e50096a1e7c0355acf01089e"
+  }
+}

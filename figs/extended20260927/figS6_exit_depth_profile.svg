@@ -204,7 +204,7 @@ L 160.678454 47.796487
      </g>
     </g>
     <g id="text_14">
-     <text style="font-size: 7px; font-family: 'Liberation Sans'; text-anchor: middle; fill: #183342" x="20.359378" y="104.314961" transform="rotate(-90 20.359378 104.314961)">Padded RGB loss vs released (dB)</text>
+     <text style="font-size: 7px; font-family: 'Liberation Sans'; text-anchor: middle; fill: #183342" x="20.359378" y="104.314961" transform="rotate(-90 20.359378 104.314961)">Padded 444-MSE loss vs released (dB)</text>
     </g>
    </g>
    <g id="line2d_19">
@@ -1010,7 +1010,7 @@ L -2 -0
    <text style="font-size: 6px; font-family: 'Liberation Sans'; text-anchor: middle; fill: #183342" x="259.370079" y="197.291339" transform="rotate(-0 259.370079 197.291339)">265 frame–QP pairs · equal frame weighting · 95% sequence-cluster intervals</text>
   </g>
   <g id="text_58">
-   <text style="font-size: 6px; font-family: 'Liberation Sans'; text-anchor: middle; fill: #5a6c75" x="259.370079" y="214.299213" transform="rotate(-0 259.370079 214.299213)">Archived uniform reconstructions on padded RGB; these are shared exits, not independently trained shallow codecs.</text>
+   <text style="font-size: 6px; font-family: 'Liberation Sans'; text-anchor: middle; fill: #5a6c75" x="259.370079" y="214.299213" transform="rotate(-0 259.370079 214.299213)">Archived uniform reconstructions on padded YCbCr 4:4:4; these are shared exits, not independently trained shallow codecs.</text>
   </g>
  </g>
  <defs>

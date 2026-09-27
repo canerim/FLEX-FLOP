@@ -1,7 +1,7 @@
 [
   {
     "name": "figS1_reference_protocol",
-    "caption": "Reference trace for the archived evaluation. Table construction loads the released-weight reference separately and evaluates padded RGB. The final evaluator loads the fine-tuned e15 codec and computes its own full-frame reconstruction before cropping; its exported psnr_release name is misleading. A CPU state-dict audit finds unchanged shared encoder/entropy tensors and changed inherited synthesis tensors. These results describe currently inspected code and weights; their hashes were not captured contemporaneously with the historical run. Quality against a common released reference cannot be recovered from the exported JSON alone. The diagram shows the two measurement paths, not newly decoded images."
+    "caption": "Reference trace for the archived evaluation. Table construction loads the released-weight reference separately and evaluates padded YCbCr 4:4:4. The final evaluator loads the fine-tuned e15 codec and computes its own full-frame reconstruction before cropping; its exported psnr_release name is misleading. A CPU state-dict audit finds unchanged shared encoder/entropy tensors and changed inherited synthesis tensors. These results describe currently inspected code and weights; their hashes were not captured contemporaneously with the historical run. Quality against a common released reference cannot be recovered from the exported JSON alone. The diagram shows the two measurement paths, not newly decoded images."
   },
   {
     "name": "figS2_control_and_assignment",
@@ -9,7 +9,7 @@
   },
   {
     "name": "figS3_delivered_cap",
-    "caption": "Retrospective selection under a common measured cropped RGB-loss cap with tolerance 0.0001 dB. Each policy selects the cheapest measured candidate from its up to six archived nominal-budget maps, with the evaluated e15 full-frame output as a zero-loss, zero-saving fallback. All 265 frame\u2013QP pairs remain at every cap. Panel b gives paired 95% sequence-cluster intervals over 5,000 draws. Joining lines guide the eye between discrete measured candidates. At 0.1 dB router/dither fallback counts are 1/2. This source-aware finite-pool analysis is not a held-out deployable policy, a global optimum, or a timing measurement; acquisition and rejection costs are excluded."
+    "caption": "Retrospective selection under a common measured cropped 444-MSE cap with tolerance 0.0001 dB. Each policy selects the cheapest measured candidate from its up to six archived nominal-budget maps, with the evaluated e15 full-frame output as a zero-loss, zero-saving fallback. All 265 frame\u2013QP pairs remain at every cap. Panel b gives paired 95% sequence-cluster intervals over 5,000 draws. Joining lines guide the eye between discrete measured candidates. At 0.1 dB router/dither fallback counts are 1/2. This source-aware finite-pool analysis is not a held-out deployable policy, a global optimum, or a timing measurement; acquisition and rejection costs are excluded."
   },
   {
     "name": "figS4_codec_bank_plan",
@@ -21,6 +21,6 @@
   },
   {
     "name": "figS6_exit_depth_profile",
-    "caption": "Actual uniform-map DCVC-UF reconstruction profile from the archived source-error tables. Panel a reports mean padded RGB PSNR loss relative to the released-weight full-frame reference, against the stored synthesis MAC model. Panels b and c compare per-tile errors between adjacent uniform-depth outputs: the frame median gain, within-frame IQR, and fraction with increased error. Frames have equal weight regardless of their tile count. Error bars are 95% sequence-cluster bootstrap intervals with five QPs grouped by sequence. Tile gains are context-dependent comparisons between two uniform maps, not causal one-tile interventions in mixed maps; no cropped quality or independent D2/D4/D6 result is inferred."
+    "caption": "Actual uniform-map DCVC-UF reconstruction profile from the archived source-error tables. Panel a reports mean padded 444-MSE loss relative to the released-weight full-frame reference, against the stored synthesis MAC model. Panels b and c compare per-tile errors between adjacent uniform-depth outputs: the frame median gain, within-frame IQR, and fraction with increased error. Frames have equal weight regardless of their tile count. Error bars are 95% sequence-cluster bootstrap intervals with five QPs grouped by sequence. Tile gains are context-dependent comparisons between two uniform maps, not causal one-tile interventions in mixed maps; no cropped quality or independent D2/D4/D6 result is inferred."
   }
 ]

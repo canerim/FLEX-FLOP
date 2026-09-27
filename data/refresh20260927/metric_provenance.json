@@ -1,0 +1,14 @@
+{
+  "legacy_fields": [
+    "db_rgb",
+    "rgb_loss",
+    "rgb_mean",
+    "rgb_over",
+    "padded_rgb_loss_db"
+  ],
+  "correct_metric": "Equal-channel MSE ratio in unclipped centred YCbCr4:4:4; Delta444=10log10(MSE_candidate/MSE_reference)",
+  "legacy_annotations": "Historical keys and some old descriptive RGB annotations remain verbatim; METRICS.md supersedes their colour-space label.",
+  "proof_sha256": "85cac9563248ccf3ad28afb22272bab9cc5ea5ec26e8a831f396005100251eaa",
+  "proof_file": "data/sharedmetric20260927/analysis.json",
+  "scope": "Archived shared-exit tables and reconstructions only; independent depth reference RGB measurements use explicit conversion."
+}

@@ -9,7 +9,7 @@
   },
   {
     "name": "fig3_delivered_quality",
-    "caption": "Selection and reporting use different domains and anchors. Panel a plots the recorded mean RGB loss against synthesis MAC savings; joining segments guide the eye. Panels b and c use the 263 common cases at a 0.1 dB target. Counts are reported losses above target + 0.0001 dB. Crucially, selection uses a separate released-weight reference on padded RGB, whereas exported losses use the cropped full-frame fine-tuned e15 output (the raw field psnr_release is misleading). These counts do not isolate budget-enforcement error under a common anchor. A new evaluation must measure both references on the same cropped support. No verified fallback was applied in the archive."
+    "caption": "Selection and reporting use different domains and anchors. Panel a plots the recorded mean 444-MSE loss against synthesis MAC savings; joining segments guide the eye. Panels b and c use the 263 common cases at a 0.1 dB target. Counts are reported losses above target + 0.0001 dB. Crucially, selection uses a separate released-weight reference on padded YCbCr 4:4:4, whereas exported losses use the cropped full-frame fine-tuned e15 output (the raw field psnr_release is misleading). These counts do not isolate budget-enforcement error under a common anchor. A new evaluation must measure both references on the same cropped support. No verified fallback was applied in the archive."
   },
   {
     "name": "fig4_decision_cost",
