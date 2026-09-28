@@ -235,6 +235,20 @@ each of the 265 frame--QP pairs is evaluated exactly once per setting.
 The data have previously informed development, so this is a calibration
 diagnostic, not an untouched external test.
 
+\paragraph{Sequence identity does not establish content independence.}
+We subsequently screen all 1,378 first-frame pairs without using quality
+losses or router outputs. A fixed criterion combines a 63-bit low-frequency
+DCT fingerprint distance of at most six with centred $64\times64$ luma
+correlation of at least 0.98. Two pairs are flagged across folds:
+the 832- and 416-pixel-wide RaceHorses variants (distance 0, correlation
+0.99267), and \texttt{videoSRC17} with \texttt{Kimono1} (2, 0.98039).
+Different raw hashes do not exclude related visual content. These are
+screening candidates, not proof of exhaustive source or temporal identity.
+Conservatively joining them produces 51 proposed content groups for future
+splits. We do not change the existing folds or reselect their results after
+this audit; their scope remains sequence-disjoint development evidence,
+not content-independent generalisation.
+
 We search a fixed router grid of 4,097 prices in $[-256,256]$, which reaches
 both all-shallow and all-deep endpoints on every frame. Dither uses 385
 mixture controls from zero to three; uniform uses the four reachable depths.

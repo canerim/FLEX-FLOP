@@ -33,3 +33,5 @@ It is a separate experiment, with different checkpoints and protocol.
 Synthesis MAC reductions in the shared-exit plots exclude entropy recovery,
 router/signalling work and system overhead. No colour-space correction or
 MAC relabelling changes the absence of a complete codec latency benchmark.
+
+The 53-sequence collection is an archived evaluation corpus; “CTC” in local source names is not a claim of a single deduplicated official benchmark. The outcome-blind first-frame similarity audit flags two candidate pairs across the sequence folds. Their raw byte hashes differ. Future calibration should conservatively group related sources; the current sequence-disjoint diagnostics are not content-independent external-test evidence. See `data/research20260927/shared_crossfit_qp32/cohort_similarity_audit.json`.

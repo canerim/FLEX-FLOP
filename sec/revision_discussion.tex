@@ -20,7 +20,8 @@ and a complete codec benchmark. Current controls use source calibration,
 the five-QP mixed losses use the fine-tuned full-depth anchor, and synthesis
 MAC counts exclude entropy recovery, routing and signalling. Sequence-disjoint control and actual-image replay at QP32 expose the
 difference between mean loss and tail risk. The replay's paired routing
-margin remains unresolved; calibration on untouched data is still needed.
+margin remains unresolved; two similar-content pairs also cross its sequence
+folds. Content-grouped calibration on untouched data is still needed.
 Actual bytes and paired wall-clock timings must include entropy work,
 packing, tile movement and fallbacks. Independent-region controls also reveal a rate penalty for duplicated
 context. The archived equal-channel YCbCr loss is not an RGB or perceptual
@@ -32,7 +33,7 @@ Its evaluated early-exit path shares a latent and prefix, lets tiles stop at
 different depths, and restores a complete image through aligned exits and
 full-frame repair. Recorded reconstructions show substantial synthesis
 arithmetic savings, with a further, budget-dependent benefit from learned
-placement over dithering under source-calibrated control. The source-disjoint
+placement over dithering under source-calibrated control. The sequence-disjoint
 replay does not yet resolve that incremental benefit. The independent six-depth study extends the same
 allocation question to model selection. Matched rate--quality and complete
 execution measurements will determine how the benefits of reuse and

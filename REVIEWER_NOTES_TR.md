@@ -8,6 +8,8 @@ Bu güncelleme, aşağıdaki 27 Eylül araştırma notunu yeni ölçümlerle tam
 - **Bankanın maliyeti yalnız model seçimi değil.** Tam 800-region kontrolünde aynı piksel derinlikleri korunup komşu bölgeler birleştirildiğinde 0.2 payload bpp’de +0.5327/+0.4959 dB geliyor. QP32 payload azalması %13.05/%12.39. Bu yürütme biçimini kontrol etmeden router kapasitesi taramak yanlış değişkeni optimize edebilir. Coalescing’in kendisi yeni bir yöntem iddiası değil.
 - **Hız iddiası henüz yok.** 43-case/model native correctness matrisi hazırlanıp CPU checkpoint/CDF/binary preflight’ı geçti; CUDA tarafı meşgul eğitim GPU’larında çalıştırılmadı. CPU research byte-decode kanıtı, native GPU eşdeğerliği veya toplam süre kanıtı değildir.
 
+**İçerik ayrımı için ek bulgu:** 1.378 ilk-frame çiftinin kalite sonuçlarını kullanmayan fingerprint taraması, karşı fold’larda iki aday çift buldu: RaceHorses’ın iki çözünürlüğü ve videoSRC17–Kimono1. Ham hash’ler farklı olsa da benzer içerik kalabiliyor. Gelecek split için bu çiftleri korumacı biçimde birleştiren 51 içerik grubu önerildi; mevcut fold’lar ve sonuçlar değiştirilmedi. Sequence-disjoint demek content-independent demek değil.
+
 Makalenin en önemli sonraki üç deneyi: aynı codec ve gerçekleşmiş kalite altında native toplam süre; aynı eğitim bütçesinde adapter/repair karşılaştırması; dokunulmamış calibration/test ayrımında router–dither marjı. D8/D10 sayısını büyütmek bu soruların yerine geçmez.
 
 ---
