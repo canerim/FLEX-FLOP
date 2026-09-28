@@ -31,14 +31,14 @@ independent-capacity experiment in \cref{sec:depth}.
 
 \begin{figure*}[t]
 \centering
-\includegraphics[width=\textwidth]{figs/refresh20260927/fig1_shared_latent_system.pdf}
-\caption{\textbf{Actual early-exit execution reuses work and shrinks the tile batch.}
-\textbf{a}, Four shared stem blocks supply features for the MLP and
-conditional synthesis. \textbf{b}, The recorded videoSRC05 QP32 map leaves
-40, 27, 7 and 3 active tiles at depths 6/8/10/12; blank cells have exited.
-Adapters write departing features into one canvas before full-frame repair
-and the common output head. Tensor values are schematic; occupancy is
-measured. The evaluated control is calibrated with source-error tables.}
+\includegraphics[width=\textwidth]{figs/system20260928/shared_exit_mechanism.png}
+\caption{\textbf{Share the representation; spend further depth only on surviving tiles.}
+A four-block shared stem supplies the MLP with features and QP. Cost-adjusted
+scores select exits at total depths 6/8/10/12. Each departing feature passes
+through its adapter (identity at depth 12) into one canvas, followed by
+full-frame repair and reconstruction. The illustration follows the implemented
+connectivity; tensor contents and the output scene are conceptual, AI-generated
+artwork rather than measured reconstructions.}
 \label{fig:system}
 \end{figure*}
 

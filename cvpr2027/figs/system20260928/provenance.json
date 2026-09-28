@@ -1,0 +1,15 @@
+{
+  "asset": "figs/system20260928/shared_exit_mechanism.png",
+  "sha256": "db4685a9eaad4ef284590d683deab25fe0fcdf5b428bdee3055b9b6cb44aa68c",
+  "tool": "built-in image_gen via imagegen skill",
+  "scope": "Conceptual scientific illustration; synthetic scene/tensor planes, not measured image reconstruction or active tile counts. Architecture checked against implemented shared e15 path.",
+  "scientific_checks": [
+    "Four-block shared stem follows upsampling",
+    "Four exits6/8/10/12 each reaches shared feature canvas",
+    "First three pointwise adapters, deepest identity",
+    "Full-frame repair and reconstruction after stitching",
+    "QP enters MLP; beta adjusts scores afterward",
+    "No independent model bank or serial expert cascade"
+  ],
+  "figure1_unchanged": true
+}

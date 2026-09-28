@@ -30,22 +30,22 @@ DATA = ROOT / ("data/refresh20260927" if BUNDLED else "paper/data/refresh2026092
 OUT = ROOT / ("figs/refresh20260927" if BUNDLED else "paper/figures/refresh20260927")
 THUMBNAILS = DATA / "source_thumbnails.npz" if BUNDLED else ROOT / "flexplus/results/eval_rules_thumbs.npz"
 MM = 1 / 25.4
-INK, MUTED, GRID = "#183342", "#5A6C75", "#E2E9EB"
-BLUE, ORANGE, TEAL, GREY = "#007F86", "#BB7534", "#63527C", "#8999A3"
-DEPTH_ALL = ["#DCECEB", "#A8D4CE", "#60B1A8", "#2B8D8C", "#286777", "#244457"]
+INK, MUTED, GRID = "#20313E", "#586874", "#E5EAED"
+BLUE, ORANGE, TEAL, GREY = "#008A96", "#BF783D", "#79679A", "#81909C"
+DEPTH_ALL = ["#D8ECE7", "#A7D2C9", "#70B6AB", "#34968F", "#267382", "#244B68"]
 DEPTH = DEPTH_ALL[2:]
 COL = dict(oracle=TEAL, router=BLUE, dither=ORANGE, uniform=GREY)
 MARK = dict(oracle="o", router="s", dither="^", uniform="D")
 LABEL = dict(oracle="Source-informed search", router="Router", dither="Bayer dither", uniform="Uniform depth")
 BUD = [.05, .1, .15, .2, .3, .5]
 plt.rcParams.update({
-    "font.family": "Liberation Sans", "font.size": 7,
-    "axes.labelsize": 7, "axes.titlesize": 7.2, "xtick.labelsize": 6.3,
-    "ytick.labelsize": 6.3, "legend.fontsize": 6.3, "axes.linewidth": .55,
+    "font.family": "Liberation Sans", "font.size": 6.5,
+    "axes.labelsize": 6.5, "axes.titlesize": 7, "xtick.labelsize": 6,
+    "ytick.labelsize": 6, "legend.fontsize": 6, "axes.linewidth": .55,
     "axes.spines.top": False, "axes.spines.right": False,
     "xtick.major.width": .5, "ytick.major.width": .5,
     "xtick.major.size": 2.5, "ytick.major.size": 2.5,
-    "lines.linewidth": 1.1, "lines.markersize": 3,
+    "lines.linewidth": 1, "lines.markersize": 3.2,
     "figure.facecolor": "white", "axes.facecolor": "white",
     "savefig.facecolor": "white", "text.color": INK,
     "axes.labelcolor": INK, "xtick.color": MUTED, "ytick.color": MUTED,
@@ -68,9 +68,9 @@ def text(ax, x, y, s, **kw):
 
 
 def panel(ax, letter, title):
-    ax.text(-.14, 1.065, letter, transform=ax.transAxes, fontsize=7, weight="bold", va="bottom")
-    ax.set_title(title, loc="left", pad=9, fontsize=7)
-    ax.grid(axis="y", color=GRID, lw=.45, zorder=0)
+    ax.text(-.14, 1.065, letter, transform=ax.transAxes, fontsize=8, weight="bold", va="bottom")
+    ax.set_title(title, loc="left", pad=8, fontsize=6.7)
+    ax.grid(axis="y", color=GRID, lw=.35, zorder=0)
     ax.set_axisbelow(True)
 
 
@@ -82,8 +82,8 @@ def schematic(h):
 
 
 def heading(ax, x, y, letter, title):
-    text(ax, x, y, letter, weight="bold", fontsize=7)
-    text(ax, x + 4.5, y, title, weight="bold", fontsize=7)
+    text(ax, x, y, letter, weight="bold", fontsize=8)
+    text(ax, x + 4.5, y, title, weight="normal", fontsize=6.7)
 
 
 def arrow(ax, start, end, color=MUTED, lw=.8, curve=0, style="-", zorder=2):
@@ -95,19 +95,22 @@ def arrow(ax, start, end, color=MUTED, lw=.8, curve=0, style="-", zorder=2):
 
 
 def tensor(ax, x, y, w, h, color="#e5edf2", layers=3, grid=4):
+    tilt=min(1.3,h*.13)
     for i in reversed(range(layers)):
-        dx, dy = i * .8, i * .65
-        ax.add_patch(Rectangle((x + dx, y + dy), w, h, facecolor=color,
-                               edgecolor=MUTED, lw=.45, zorder=3))
-    for i in range(1, grid):
-        ax.plot([x + w * i / grid] * 2, [y, y + h], color="white", lw=.45, zorder=4)
-        ax.plot([x, x + w], [y + h * i / grid] * 2, color="white", lw=.45, zorder=4)
+        dx,dy=i*.75,i*.6
+        ax.add_patch(Polygon([(x+dx,y+dy),(x+dx+w,y+dy+tilt),(x+dx+w,y+dy+h+tilt),(x+dx,y+dy+h)],facecolor=color,edgecolor=MUTED,lw=.4,zorder=3))
+    for i in range(1,grid):
+        dx=w*i/grid;dy=tilt*i/grid
+        ax.plot([x+dx]*2,[y+dy,y+h+dy],color="white",lw=.45,zorder=4)
+        ax.plot([x,x+w],[y+h*i/grid,y+h*i/grid+tilt],color="white",lw=.45,zorder=4)
 
 
 def strip(ax, x, y, n, w=1.9, h=10, color=BLUE):
     for i in range(n):
-        ax.add_patch(Rectangle((x + i * (w + .7), y), w, h,
-                               facecolor=color, edgecolor="white", lw=.4))
+        xx=x+i*(w+.7)
+        ax.add_patch(Rectangle((xx,y),w,h,facecolor=color,edgecolor="white",lw=.35))
+        ax.add_patch(Polygon([(xx+w,y),(xx+w+.55,y+.55),(xx+w+.55,y+h+.55),(xx+w,y+h)],facecolor=INK,alpha=.7,lw=0))
+        ax.add_patch(Polygon([(xx,y+h),(xx+.55,y+h+.55),(xx+w+.55,y+h+.55),(xx+w,y+h)],facecolor=color,alpha=.5,lw=0))
 
 
 def tilemap(ax, x, y, w, h, exits, threshold=None, outline=True):
@@ -130,7 +133,38 @@ def depth_key(ax, x, y):
     text(ax, x + 60, y, "executed trunk blocks", fontsize=6)
 
 
+def compact_plot_canvas(fig):
+    """Remove duplicated poster headings, then trim only unused top canvas.
+
+    Physical axis, marker and text sizes are preserved. This changes layout,
+    never data coordinates, uncertainty bounds or a raster source image.
+    Explicit analytical/not-measured labels are retained.
+    """
+    removed=[]
+    for obj in list(fig.texts):
+        label=obj.get_text()
+        preserve=any(word in label.lower() for word in ('not measured','not measurements','assumption'))
+        if obj.get_position()[1]>=.84 and not preserve:
+            removed.append(label);obj.remove()
+    if not removed:return []
+    fig.canvas.draw();renderer=fig.canvas.get_renderer()
+    boxes=[ax.get_tightbbox(renderer) for ax in fig.axes if ax.get_visible()]
+    boxes += [obj.get_window_extent(renderer) for obj in [*fig.texts,*fig.legends] if obj.get_visible()]
+    high=max(box.y1 for box in boxes if box is not None)+2*MM*fig.dpi
+    factor=min(1,high/fig.bbox.height)
+    if factor<.98:
+        positions=[ax.get_position().bounds for ax in fig.axes]
+        texts=[obj.get_position() for obj in fig.texts]
+        anchors=[obj.get_bbox_to_anchor().transformed(fig.transFigure.inverted()).bounds for obj in fig.legends]
+        fig.set_size_inches(fig.get_figwidth(),fig.get_figheight()*factor)
+        for ax,(x,y,w,h) in zip(fig.axes,positions):ax.set_position([x,y/factor,w,h/factor])
+        for obj,(x,y) in zip(fig.texts,texts):obj.set_position((x,y/factor))
+        for obj,(x,y,w,h) in zip(fig.legends,anchors):obj.set_bbox_to_anchor((x,y/factor,w,h/factor),transform=fig.transFigure)
+    return removed
+
+
 def audit_and_save(fig, name, caption, book):
+    removed_headings=compact_plot_canvas(fig)
     fig.canvas.draw()
     renderer = fig.canvas.get_renderer()
     outside, text_boxes = [], []
@@ -159,7 +193,7 @@ def audit_and_save(fig, name, caption, book):
                                bbox_px=list(box.bounds)))
     if outside:
         raise RuntimeError(f"Text outside {name}: {outside}")
-    AUDIT.append(dict(figure=name, outside_canvas=outside, text=text_boxes,
+    AUDIT.append(dict(figure=name, outside_canvas=outside, text=text_boxes, duplicated_headings_moved_to_caption=removed_headings,
                       width_mm=fig.get_figwidth() / MM, height_mm=fig.get_figheight() / MM))
     for ext in ("pdf", "svg", "png"):
         metadata = PDF_META if ext == "pdf" else {"Date": "2026-09-27T00:00:00Z"} if ext == "svg" else None
@@ -214,31 +248,30 @@ def architecture(d, book):
 
 
 def budget(d, book):
-    fig, axs = plt.subplots(1, 2, figsize=(183 * MM, 65 * MM), gridspec_kw={"width_ratios":[1.08,1]})
-    fig.subplots_adjust(left=.074, right=.975, bottom=.23, top=.76, wspace=.35)
-    ax=axs[0]; panel(ax,"a","Depth supplies most of the saving")
+    fig,axs=plt.subplots(1,2,figsize=(183*MM,62*MM),gridspec_kw={"width_ratios":[1.12,1]})
+    fig.subplots_adjust(left=.076,right=.982,bottom=.26,top=.84,wspace=.36)
+    ax=axs[0];panel(ax,"a","Compute–quality trade-off")
     for rule in LABEL:
-        rr=[r for r in d["summary"] if r["rule"]==rule]
-        ax.plot(BUD,[r["mean"] for r in rr],color=COL[rule],marker=MARK[rule],label=LABEL[rule])
-    ax.axhline(d["ceiling_pct"],color=MUTED,lw=.6,ls=(0,(3,2)))
-    ax.text(.29,40.4,"39.12% ceiling",fontsize=6.5,color=MUTED)
-    ax.set(xlabel="Nominal 444-MSE target (dB)",ylabel="Synthesis MAC saving (%)",xlim=(.035,.52),ylim=(8,44))
-    ax.set_xticks([.05,.1,.2,.3,.5],[".05",".10",".20",".30",".50"])
-    ax=axs[1]; panel(ax,"b","Content adds value at tighter targets")
-    ax.grid(False); ax.grid(axis="x",color=GRID,lw=.45)
-    ax.axhspan(.55,1.45,color="#F0F5F4",zorder=0)
+        rows=[r for r in d["summary"] if r["rule"]==rule]
+        ax.plot(BUD,[r["mean"] for r in rows],color=COL[rule],marker=MARK[rule],ms=3.3,mew=.4,mec="white",lw=1)
+    ax.axhline(d["ceiling_pct"],color=MUTED,lw=.55,ls=(0,(3,2)))
+    ax.text(.515,40.1,"39.12% ceiling",ha="right",fontsize=5.7,color=MUTED)
+    ax.set(xlabel="Nominal 444-MSE target (dB)",ylabel="Synthesis MAC saving (%)",xlim=(.035,.53),ylim=(8,44),yticks=[10,20,30,40])
+    ax.set_xticks([.05,.1,.2,.3,.5],["0.05","0.10","0.20","0.30","0.50"])
+    ax=axs[1];panel(ax,"b","Increment over dithering")
+    ax.grid(False);ax.grid(axis="x",color=GRID,lw=.35)
+    ax.axhspan(.55,1.45,color="#EDF5F3",zorder=0)
     for name,c,marker,dy in [("oracle_minus_dither",TEAL,"o",-.13),("router_minus_dither",BLUE,"s",.13)]:
-        rr=[r for r in d["contrasts"] if r["contrast"]==name]
-        v=np.array([r["mean"] for r in rr]);lo=np.array([r["lo"] for r in rr]);hi=np.array([r["hi"] for r in rr])
-        ax.errorbar(v,np.arange(6)+dy,xerr=[v-lo,hi-v],fmt=marker,color=c,ms=3.3,lw=.9,capsize=2)
+        rows=[r for r in d["contrasts"] if r["contrast"]==name]
+        value=np.array([r["mean"] for r in rows]);lo=np.array([r["lo"] for r in rows]);hi=np.array([r["hi"] for r in rows])
+        ax.errorbar(value,np.arange(6)+dy,xerr=[value-lo,hi-value],fmt=marker,color=c,ms=3.4,mec="white",mew=.35,lw=.85,capsize=1.7)
     ax.axvline(0,color=MUTED,lw=.6)
-    ax.set_yticks(range(6),[".05",".10",".15",".20",".30",".50"])
-    ax.set(xlim=(-.4,7.6),ylim=(5.6,-.6),xlabel="Extra MAC saving over dither (pp)",ylabel="Nominal target (dB)")
-    handles=[Line2D([],[],color=COL[k],marker=MARK[k],label=LABEL[k]) for k in LABEL]
-    fig.legend(handles=handles,loc="upper center",bbox_to_anchor=(.52,1.01),ncol=4,fontsize=7,handlelength=1.8,columnspacing=2.1)
-    fig.text(.5,.035,"Paired 95% sequence intervals · source-calibrated controls · arithmetic savings, excluding routing and signalling",ha="center",fontsize=6.5,color=MUTED)
+    ax.set_yticks(range(6),["0.05","0.10","0.15","0.20","0.30","0.50"])
+    ax.set(xlim=(-.35,7.4),ylim=(5.55,-.55),xticks=[0,2,4,6],xlabel="Additional saving (percentage points)",ylabel="Nominal target (dB)")
+    handles=[Line2D([],[],color=COL[k],marker=MARK[k],lw=1,ms=3.2,label=LABEL[k]) for k in LABEL]
+    fig.legend(handles=handles,loc="lower center",bbox_to_anchor=(.51,.035),ncol=4,fontsize=6,handlelength=1.5,columnspacing=1.7)
     audit_and_save(fig,"fig2_budget_value",
-        "Compact nominal-budget comparison. Panel a separates total modelled decoder arithmetic saving from the additional value of spatial placement. Panel b reports the paired search-minus-dither and router-minus-dither means with 95% sequence-cluster bootstrap intervals; the shaded row is the 0.1 dB target. Common cohort sizes are 204, 263, 265, 265, 265 and 265. Colours and markers consistently identify four policies. Controls use per-frame source calibration; nominal targets do not guarantee final cropped quality. No measured runtime reduction is implied.",book)
+        "Nominal-budget comparison under source-calibrated control. Left: total modelled synthesis arithmetic saving; the horizontal guide is the shallow-exit ceiling. Right: paired search-minus-dither and router-minus-dither means with95% sequence-cluster bootstrap intervals. The shaded row marks0.1dB. Common cohort counts are204,263,265,265,265,265. Nominal targets are not final-image guarantees; routing, signalling and entropy work are excluded. Discrete points are joined only as guides.",book)
 
 
 def budget_detail(d, book):
@@ -275,7 +308,7 @@ def budget_detail(d, book):
         for x in range(6):
             ax.text(x, y, f"{mat[y,x]:.2f}", ha="center", va="center", fontsize=6,
                     color="white" if abs(mat[y,x]) > .65 * lim else INK)
-    ax.set_xticks(range(6), [".05", ".10", ".15", ".20", ".30", ".50"])
+    ax.set_xticks(range(6), ["0.05", "0.10", "0.15", "0.20", "0.30", "0.50"])
     ax.set_yticks(range(5), [0, 16, 32, 48, 63])
     ax.set(xlabel="Target 444-MSE loss budget (dB)", ylabel="Quality index")
     ax.text(.5, -.30, "Cell: router − dither, percentage points", transform=ax.transAxes, ha="center", fontsize=6)
@@ -289,7 +322,7 @@ def budget_detail(d, book):
     ax.legend(loc="upper right", fontsize=5.5, handlelength=1.3)
     for a in [axs[0, 0], axs[0, 1], axs[1, 1]]:
         a.set(xlabel="Target 444-MSE loss budget (dB)", xlim=(.03, .52))
-        a.set_xticks([.05, .1, .2, .3, .5], [".05", ".10", ".20", ".30", ".50"])
+        a.set_xticks([.05, .1, .2, .3, .5], ["0.05", "0.10", "0.20", "0.30", "0.50"])
     audit_and_save(fig, "fig7_budget_sensitivity",
         "The value of spatial routing depends on the quality budget. Means use the common feasible frame–QP pairs of all four rules at each budget: 204, 263, 265, 265, 265 and 265, respectively. These are 53 first intra frames at five QPs before exclusions. Shading in b shows paired 95% sequence-cluster bootstrap intervals (5,000 draws, fixed checkpoint). Panel c stratifies the paired premium by QP, and d keeps the same 204 pairs across all budgets. The cost is the synthesis MAC model and excludes routing/bitstream overhead. Per-frame source-informed calibration is used for all curves; target losses are not guarantees or exactly matched achieved losses.", book)
 
@@ -430,12 +463,12 @@ def depth_system(d, book):
         strip(ax,x,97,2,w=3,h=8,color=c)
         if i<3:arrow(ax,(x+8,101),(x+14,101),color=c)
         ax.plot([x+4,x+4,133],[96,88-i*2.6,88-i*2.6],color=c,lw=1.2)
+        arrow(ax,(133,88-i*2.6),(147,97+i*2),color=c)
         ax.scatter([x+4],[96],s=9,color=c,zorder=4)
         text(ax,x+4,109,str(6+2*i),ha="center",fontsize=6.3,weight="bold",color=c)
-    arrow(ax,(133,81),(147,98),color=BLUE)
     tensor(ax,150,96,15,11,DEPTH[0],grid=4)
     text(ax,157,90,"Common head",ha="center",fontsize=6.3)
-    text(ax,178,79,"MEASURED EXIT FAMILY",ha="right",color=BLUE,fontsize=5.8,weight="bold")
+    text(ax,178,79,"Measured exit family",ha="right",color=BLUE,fontsize=5.8,weight="bold")
     ax.plot([3,180],[75,75],color=GRID,lw=.7)
 
     heading(ax,3,70,"b","Independent depth controls: each codec learns its own representation")
@@ -446,7 +479,7 @@ def depth_system(d, book):
         ax.add_patch(Polygon([[x-8,58],[x+8,58],[x+3,54],[x-3,54]],fc=c,ec=MUTED,lw=.4))
         for j in range(3):ax.add_patch(Rectangle((x-3+j*2.2,50.5),1.5,2,fc=c,ec=MUTED,lw=.3))
         for j in range(depth):ax.add_patch(Rectangle((x-8+j*1.35,44),1.0,4.2,fc=c,ec=MUTED,lw=.3))
-        status="TRAINING" if depth<8 else "PLANNED" if depth<12 else "RELEASED"
+        status="Training" if depth<8 else "Planned" if depth<12 else "Released"
         text(ax,x,40,status,ha="center",fontsize=5.8,weight="bold",color=MUTED if depth in (8,10) else BLUE if depth<8 else INK)
         if depth in (8,10):ax.add_patch(Rectangle((x-10,43),21,16.5,fill=False,ec=MUTED,ls=(0,(2,2)),lw=.5))
     text(ax,3,34,"Same-recipe D12 is an additional control. The released anchor alone does not isolate depth.",fontsize=6.2)

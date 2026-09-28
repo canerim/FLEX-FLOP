@@ -168,10 +168,12 @@ def main():
         assert row['neural_decoder_macs']==row['entropy_neural_macs']+row['synthesis_macs']
         assert row['spatial_prior_calls']==3
         assert row['entropy_neural_macs']==mac['rows'][0]['entropy_neural_macs']
-    illustration=json.loads((ROOT/"figs/adaptive20260927/provenance.json").read_text())
-    asset=ROOT/illustration["asset"]
-    assert digest(asset)==illustration["sha256"],"Changed conceptual illustration"
-    checked.append(str(asset.relative_to(ROOT)))
+    for family in ('adaptive20260927','system20260928'):
+        illustration=json.loads((ROOT/'figs'/family/'provenance.json').read_text())
+        asset=ROOT/illustration['asset']
+        assert digest(asset)==illustration['sha256'],'Changed conceptual illustration'
+        checked.append(str(asset.relative_to(ROOT)))
+    assert digest(ROOT/'figs/adaptive20260927/adaptive_overview.png')=='45f15d5951b72c1ac8da6c34fd6593d271615a1922b7c3ebfc22b331fec09cf8','Protected Figure 1 changed'
     reports={}
     if args.check_pdfs:
         for name in ["main","supplement"]:
@@ -200,7 +202,7 @@ def main():
                 uniform_depth_summary_rows_checked=len(depth["uniform_summary"]),
                 analytical_scenarios_checked=len(design["projection"]["rows"]),
                 independently_instantiated_depths_checked=len(architecture["rows"]),
-                vector_figure_sets=figure_count,conceptual_ai_illustrations=1,min_figure_font_pt=min_font,
+                vector_figure_sets=figure_count,conceptual_ai_illustrations=2,min_figure_font_pt=min_font,
                 text_outside_canvas=0,compiled_documents=reports,
                 scope="Integrity and internal consistency of the supplied publication bundle, not historical-run reproduction or a new codec evaluation")
     print(json.dumps(result,indent=2))

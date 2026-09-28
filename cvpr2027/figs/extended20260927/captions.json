@@ -9,11 +9,11 @@
   },
   {
     "name": "figS3_delivered_cap",
-    "caption": "Retrospective selection under a common measured cropped 444-MSE cap with tolerance 0.0001 dB. Each policy selects the cheapest measured candidate from its up to six archived nominal-budget maps, with the evaluated e15 full-frame output as a zero-loss, zero-saving fallback. All 265 frame\u2013QP pairs remain at every cap. Panel b gives paired 95% sequence-cluster intervals over 5,000 draws. Joining lines guide the eye between discrete measured candidates. At 0.1 dB router/dither fallback counts are 1/2. This source-aware finite-pool analysis is not a held-out deployable policy, a global optimum, or a timing measurement; acquisition and rejection costs are excluded."
+    "caption": "Retrospective selection under a common cropped444-MSE cap, tolerance0.0001dB. All265 frame-QP pairs remain at every cap. Each policy selects its cheapest verified candidate from up to six archived maps, with an e15 dense fallback. Right: paired95% sequence-cluster intervals over5000 draws. Lines only join measured candidate operating points. Router/dither fallback counts at0.1dB are1/2. This is a finite-pool source-aware diagnostic, not a deployable held-out guarantee or measured runtime result."
   },
   {
     "name": "figS4_codec_bank_plan",
-    "caption": "Independent depth-reduced codecs and a proposed encoder-side routing path. D2, D4 and D6 are training under the pinned official recipe; D8 and D10 are planned; D12 is the released reference. An equally trained D12 control is required for a depth-only conclusion. Each expert owns its analysis transform, entropy model and synthesis transform. The proposed MLP selects an expert using information available before that expert is encoded. Grouped execution, control signalling and entropy state resets must be included in measurement. Network glyphs, block strips, queue sizes and stream segments are schematic, with no quantitative geometry or timing claim."
+    "caption": "Independent depth-reduced DCVC-UF codecs, with each expert's own analysis, entropy and synthesis weights. D2/D4/D6 are training, D8/D10 planned and D12 released; equal-training D12 is required for causal depth comparison. Lower lane is a prospective source-side selector and signalled model bank, not an implemented batched native codec. Network stacks and group sizes are illustrative. All system overheads must enter measurement."
   },
   {
     "name": "figS5_analytical_depth_scenarios",

@@ -5,7 +5,7 @@
   },
   {
     "name": "fig2_budget_value",
-    "caption": "Compact nominal-budget comparison. Panel a separates total modelled decoder arithmetic saving from the additional value of spatial placement. Panel b reports the paired search-minus-dither and router-minus-dither means with 95% sequence-cluster bootstrap intervals; the shaded row is the 0.1 dB target. Common cohort sizes are 204, 263, 265, 265, 265 and 265. Colours and markers consistently identify four policies. Controls use per-frame source calibration; nominal targets do not guarantee final cropped quality. No measured runtime reduction is implied."
+    "caption": "Nominal-budget comparison under source-calibrated control. Left: total modelled synthesis arithmetic saving; the horizontal guide is the shallow-exit ceiling. Right: paired search-minus-dither and router-minus-dither means with95% sequence-cluster bootstrap intervals. The shaded row marks0.1dB. Common cohort counts are204,263,265,265,265,265. Nominal targets are not final-image guarantees; routing, signalling and entropy work are excluded. Discrete points are joined only as guides."
   },
   {
     "name": "fig3_delivered_quality",

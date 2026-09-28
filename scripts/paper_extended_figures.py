@@ -38,59 +38,36 @@ def network(ax, x, y):
 
 
 def bank(book):
-    fig, ax = F.schematic(142)
-    H(ax, 3, 137, "a", "Independent codecs: depth changes the synthesis network, training changes the whole codec")
-    xs, depths = [13, 44, 75, 106, 137, 168], [2, 4, 6, 8, 10, 12]
-    for x, depth in zip(xs, depths):
-        planned = depth in [8, 10]
-        c = F.GREY if planned else F.ORANGE if depth == 12 else F.BLUE
-        T(ax, x, 129, f"D{depth}", ha="center", fontsize=8, weight="bold", color=c)
-        # An hourglass glyph gives each complete analysis/synthesis pair its
-        # own latent bottleneck; all dimensions here are schematic.
-        ax.add_patch(Polygon([[x-8,121],[x+8,121],[x+4,115],[x-4,115]],
-                             fc="white" if planned else c, alpha=1 if planned else .22, ec=c,
-                             hatch="///" if planned else None, lw=.6))
-        for i in range(4):
-            ax.add_patch(Rectangle((x - 3.7 + i*2, 110), 1.5, 2.5, fc=c, ec="white", lw=.3))
-        ax.add_patch(Polygon([[x-4,107],[x+4,107],[x+8,101],[x-8,101]],
-                             fc="white", ec=c, hatch="///" if planned else None, lw=.6))
-        for i in range(depth):
-            ax.add_patch(Rectangle((x - 8 + i * 1.35, 96), 1.0, 3.5, fc=c, ec="white", lw=.2))
-        T(ax, x, 92, f"{depth} synthesis blocks", ha="center", fontsize=5.8)
-        T(ax, x, 86, "PLANNED" if planned else "RELEASED" if depth == 12 else "TRAINING", ha="center",
-          color=c, weight="bold", fontsize=5.7)
-    T(ax, 5, 77, "D2 / D4 / D6: pinned official recipe, all codec weights learned jointly", fontsize=6)
-    T(ax, 5, 72, "A same-recipe D12 control is still needed to separate depth from training provenance.", fontsize=6)
-    ax.plot([3, 180], [67, 67], color=F.GRID, lw=.5)
-
-    H(ax, 3, 62, "b", "Proposed deployment: choose before encoding, group work by expert, transmit the choice")
-    # A small image plane, neural graph and batch stacks show physical objects,
-    # while the stream is a segment tape rather than another module rectangle.
-    F.tensor(ax, 5, 38, 15, 12, grid=3)
-    T(ax, 12.5, 33, "RGB patches", ha="center", fontsize=6)
-    A(ax, (23,44), (33,44))
-    network(ax, 37, 44)
-    T(ax, 42, 33, "Cheap MLP", ha="center", fontsize=6)
-    A(ax, (51,44), (61,44))
-    for i, (c, n) in enumerate([(F.BLUE,4),(F.TEAL,3),(F.ORANGE,2)]):
-        for j in reversed(range(n)):
-            ax.add_patch(Rectangle((65+i*6+j*.4,40+j*.7),4.3,7,fc=c,ec="white",lw=.4))
-    T(ax, 73, 33, "Group by expert", ha="center", fontsize=6)
-    A(ax, (83,44), (93,44))
-    F.strip(ax, 98, 41, 6, w=1.5, h=6, color=F.BLUE)
-    T(ax, 104, 33, "Selected codec", ha="center", fontsize=6)
-    A(ax, (113,44), (123,44))
-    for i, (w, c, label) in enumerate([(5,F.ORANGE,"ID"),(10,F.BLUE,"z"),(23,F.TEAL,"y")]):
-        x = [126,131,141][i]
-        ax.add_patch(Rectangle((x,40),w,8,fc=c,ec="white",lw=.5))
-        T(ax,x+w/2,44,label,ha="center",color="white",fontsize=6)
-    T(ax, 145, 33, "Control + coded payloads", ha="center", fontsize=6)
-    T(ax, 5, 25, "The decoder reads the expert ID and uses that expert's entropy model and synthesis transform.", fontsize=6)
-    ax.plot([3, 180], [19, 19], color=F.GRID, lw=.5)
-    T(ax, 5, 13, "Measure: full bytes · encoder + decoder wall time · final cropped quality · bank memory", weight="bold", fontsize=6)
-    T(ax, 5, 6, "Deployment is a proposed design. The glyphs and queues are schematic; they do not show measured routes or throughput.", fontsize=6)
-    F.audit_and_save(fig,"figS4_codec_bank_plan",
-        "Independent depth-reduced codecs and a proposed encoder-side routing path. D2, D4 and D6 are training under the pinned official recipe; D8 and D10 are planned; D12 is the released reference. An equally trained D12 control is required for a depth-only conclusion. Each expert owns its analysis transform, entropy model and synthesis transform. The proposed MLP selects an expert using information available before that expert is encoded. Grouped execution, control signalling and entropy state resets must be included in measurement. Network glyphs, block strips, queue sizes and stream segments are schematic, with no quantitative geometry or timing claim.",book)
+    fig,ax=F.schematic(111)
+    H(ax,3,106,"a","A separate representation at each capacity")
+    for x,depth in zip([16,46,76,106,136,166],[2,4,6,8,10,12]):
+        planned=depth in (8,10);color=F.DEPTH_ALL[depth//2-1]
+        T(ax,x,98,f"D{depth}",ha="center",fontsize=7,weight="bold")
+        ax.add_patch(Polygon([(x-7,93),(x+7,93),(x+3,89),(x-3,89)],fc="#EDF3F5",ec=F.MUTED,lw=.45))
+        F.tensor(ax,x-2.2,86,4.4,1.8,color=color,layers=1,grid=2)
+        for k in range(depth):
+            yy=76+k*.65
+            ax.add_patch(Polygon([(x-7,yy),(x,yy-1.5),(x+7,yy),(x,yy+1.5)],fc="white" if planned else color,ec=F.MUTED,lw=.3,hatch="//" if planned else None))
+        A(ax,(x,85.5),(x,76.5+depth*.65),color=F.MUTED,lw=.5)
+        T(ax,x,71,f"{depth} synthesis blocks",ha="center",fontsize=5.8)
+        T(ax,x,66,"Planned" if planned else "Released anchor" if depth==12 else "Training",ha="center",fontsize=5.8)
+    T(ax,5,59,"All codec weights learn jointly. A matched-training D12 is still required for a depth-only comparison.",fontsize=6)
+    ax.plot([3,180],[54,54],color=F.GRID,lw=.5)
+    H(ax,3,49,"b","Select before encoding; transmit the selected expert")
+    F.tensor(ax,5,31,15,10,grid=3);T(ax,12.5,26,"Source patches",ha="center",fontsize=6)
+    A(ax,(23,36),(32,36));network(ax,36,36);T(ax,41,26,"Cheap selector",ha="center",fontsize=6)
+    A(ax,(50,36),(60,36))
+    for i,(c,n) in enumerate([(F.BLUE,3),(F.TEAL,2),(F.ORANGE,2)]):F.tensor(ax,64+i*6,32,4,7,color=c,layers=n,grid=2)
+    T(ax,72,26,"Expert groups",ha="center",fontsize=6);A(ax,(83,36),(92,36))
+    F.strip(ax,96,33,6,w=1.5,h=6,color=F.BLUE);T(ax,103,26,"Selected codec",ha="center",fontsize=6)
+    A(ax,(111,36),(122,36))
+    for x,w,c,label in [(125,6,F.ORANGE,"ID"),(131,11,F.BLUE,"z"),(142,24,F.TEAL,"y")]:
+        ax.add_patch(Rectangle((x,32),w,8,fc=c,ec="white",lw=.5));T(ax,x+w/2,36,label,ha="center",color="white",fontsize=6)
+    T(ax,145,26,"Control + coded payloads",ha="center",fontsize=6)
+    T(ax,5,18,"The decoder uses the signalled expert's entropy model and synthesis; expert latents are not interchangeable.",fontsize=6)
+    T(ax,5,10,"Charge selection, grouping, entropy resets, assembly and resident model memory to the complete system.",fontsize=6)
+    T(ax,5,3,"Prospective deployment · glyphs show architecture, not measured routing, throughput or batch support",fontsize=5.7,color=F.MUTED)
+    F.audit_and_save(fig,"figS4_codec_bank_plan","Independent depth-reduced DCVC-UF codecs, with each expert's own analysis, entropy and synthesis weights. D2/D4/D6 are training, D8/D10 planned and D12 released; equal-training D12 is required for causal depth comparison. Lower lane is a prospective source-side selector and signalled model bank, not an implemented batched native codec. Network stacks and group sizes are illustrative. All system overheads must enter measurement.",book)
 
 
 def anchors(book):
@@ -174,36 +151,34 @@ def controls(book):
 
 def delivered(book):
     d=json.loads((DATA/"delivered_frontier_audit.json").read_text())
-    fig,axs=plt.subplots(1,2,figsize=(183*F.MM,63*F.MM))
-    fig.subplots_adjust(left=.074,right=.975,bottom=.23,top=.76,wspace=.35)
-    ax=axs[0];F.panel(ax,"a","Compare outputs under the same loss cap")
+    fig,axs=plt.subplots(1,2,figsize=(183*F.MM,61*F.MM))
+    fig.subplots_adjust(left=.076,right=.982,bottom=.26,top=.84,wspace=.36)
+    ax=axs[0];F.panel(ax,"a","A common delivered-loss cap")
     for rule in F.LABEL:
         rr=[r for r in d["summary"] if r["rule"]==rule]
-        ax.plot([r["cap"] for r in rr],[r["mean"] for r in rr],color=F.COL[rule],marker=F.MARK[rule],label=F.LABEL[rule])
-    ax.set(ylabel="Synthesis MAC saving (%)",ylim=(0,42),xlabel="Delivered 444-MSE cap (dB)")
-    ax=axs[1];F.panel(ax,"b","The routing margin survives this control")
+        ax.plot([r["cap"] for r in rr],[r["mean"] for r in rr],color=F.COL[rule],marker=F.MARK[rule],ms=3.3,mec="white",mew=.4,lw=1)
+    ax.set(ylabel="Synthesis MAC saving (%)",ylim=(0,42),yticks=[0,10,20,30,40],xlabel="Delivered 444-MSE cap (dB)")
+    ax=axs[1];F.panel(ax,"b","Router advantage after output verification")
     rr=[r for r in d["contrasts"] if r["contrast"]=="router_minus_dither"]
     x=np.array([r["cap"] for r in rr]);y=np.array([r["mean"] for r in rr]);lo=np.array([r["lo"] for r in rr]);hi=np.array([r["hi"] for r in rr])
-    ax.plot(x,y,color=F.BLUE,lw=.8)
-    ax.errorbar(x,y,yerr=[y-lo,hi-y],fmt="s",color=F.BLUE,capsize=2,ms=3.3,lw=.9)
-    ax.axhline(0,color=F.MUTED,lw=.6)
-    ax.set(ylabel="Router − dither (percentage points)",ylim=(-.2,4.4),xlabel="Delivered 444-MSE cap (dB)")
-    ax.text(.96,.92,"2.93 pp at 0.1 dB\n95% CI [2.11, 3.79]",transform=ax.transAxes,ha="right",va="top",fontsize=7,linespacing=1.4)
+    ax.plot(x,y,color=F.BLUE,lw=.85)
+    ax.errorbar(x,y,yerr=[y-lo,hi-y],fmt="s",color=F.BLUE,capsize=1.8,ms=3.4,mec="white",mew=.35,lw=.85)
+    ax.axhline(0,color=F.MUTED,lw=.55)
+    ax.set(ylabel="Additional saving (percentage points)",ylim=(-.2,4.4),yticks=[0,1,2,3,4],xlabel="Delivered 444-MSE cap (dB)")
+    ax.text(.96,.93,"2.93 pp at 0.1 dB\n95% CI 2.11–3.79",transform=ax.transAxes,ha="right",va="top",fontsize=6,linespacing=1.4)
     for ax in axs:
-        ax.set_xlim(.035,.52)
-        ax.set_xticks([.05,.1,.2,.3,.5],[".05",".10",".20",".30",".50"])
-    handles=[Line2D([],[],color=F.COL[k],marker=F.MARK[k],label=F.LABEL[k]) for k in F.LABEL]
-    fig.legend(handles=handles,loc="upper center",bbox_to_anchor=(.52,1.01),ncol=4,fontsize=7,handlelength=1.8,columnspacing=2.1)
-    fig.text(.5,.035,"265 pairs at every cap · fine-tuned full-depth reference · retrospective selection with explicit fallback",ha="center",fontsize=6.5,color=F.MUTED)
+        ax.set_xlim(.035,.53);ax.set_xticks([.05,.1,.2,.3,.5],["0.05","0.10","0.20","0.30","0.50"])
+    handles=[Line2D([],[],color=F.COL[k],marker=F.MARK[k],label=F.LABEL[k],ms=3.2,lw=1) for k in F.LABEL]
+    fig.legend(handles=handles,loc="lower center",bbox_to_anchor=(.51,.035),ncol=4,fontsize=6,handlelength=1.5,columnspacing=1.7)
     F.audit_and_save(fig,"figS3_delivered_cap",
-        "Retrospective selection under a common measured cropped 444-MSE cap with tolerance 0.0001 dB. Each policy selects the cheapest measured candidate from its up to six archived nominal-budget maps, with the evaluated e15 full-frame output as a zero-loss, zero-saving fallback. All 265 frame–QP pairs remain at every cap. Panel b gives paired 95% sequence-cluster intervals over 5,000 draws. Joining lines guide the eye between discrete measured candidates. At 0.1 dB router/dither fallback counts are 1/2. This source-aware finite-pool analysis is not a held-out deployable policy, a global optimum, or a timing measurement; acquisition and rejection costs are excluded.",book)
+        "Retrospective selection under a common cropped444-MSE cap, tolerance0.0001dB. All265 frame-QP pairs remain at every cap. Each policy selects its cheapest verified candidate from up to six archived maps, with an e15 dense fallback. Right: paired95% sequence-cluster intervals over5000 draws. Lines only join measured candidate operating points. Router/dither fallback counts at0.1dB are1/2. This is a finite-pool source-aware diagnostic, not a deployable held-out guarantee or measured runtime result.",book)
 
 
 def scenarios(book):
     d=json.loads((DATA/"design_audit.json").read_text())
     fig,axs=plt.subplots(1,3,figsize=(183*F.MM,85*F.MM))
     fig.subplots_adjust(left=.08,right=.98,bottom=.27,top=.75,wspace=.44)
-    fig.text(.5,.955,"DEPTH-STUDY DESIGN SPACE",ha="center",weight="bold",fontsize=8,color=F.INK)
+    fig.text(.5,.955,"Architectural capacity and explicit runtime assumptions",ha="center",weight="normal",fontsize=6.8,color=F.INK)
     fig.text(.5,.89,"Exact parameter counts  |  Analytical runtime scenarios — not measurements or fitted forecasts",ha="center",fontsize=6.5,color=F.MUTED)
     p=d["parameters"]["rows"];ds=[r["depth"] for r in p]
     ax=axs[0];F.panel(ax,"a","Capacity removed by depth")

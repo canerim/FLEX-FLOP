@@ -41,7 +41,7 @@ def main():
     axs[1].set(xticks=depths,xlabel='Retained synthesis blocks',ylabel='Conv2d MAC reduction from D12 (%)',ylim=(-3,82))
     axs[0].legend(loc='upper center',bbox_to_anchor=(.5,-.27),ncol=1,fontsize=6)
     axs[1].legend(loc='upper center',bbox_to_anchor=(.5,-.27),ncol=1,fontsize=6)
-    fig.text(.5,.96,'DEPTH SAVINGS DEPEND ON WHAT IS COUNTED',ha='center',weight='bold',fontsize=8)
+    fig.text(.5,.96,'Synthesis savings and complete neural cost',ha='center',weight='normal',fontsize=6.8)
     fig.text(.5,.025,'512 × 512 · architectural Conv2d traces · no latency inference · D8/D10 are architecture-only controls',
         ha='center',fontsize=6,color=F.MUTED)
     with PdfPages(OUT/'depth_macs_atlas.pdf',metadata=F.PDF_META) as book:
