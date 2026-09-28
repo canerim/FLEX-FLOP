@@ -89,14 +89,14 @@ connection rather than an additional learned adapter.
 
 Independent tile execution still removes context from the trunk's spatial
 operators. The conditional trunk uses replicate padding without a halo.
-After stitching, a depthwise spatial filter and pointwise mixing correct the
+After stitching, a depthwise spatial filter and pointwise mixing act on the
 full feature canvas. A learned gate indexed by position within the tile
 gives the repair access to the known boundary lattice. The head then operates
 on the complete canvas. This design spends a shared output-stage cost to
 recover boundary context instead of expanding every conditional block with
 overlapping halos. Whether that trade is favourable is an empirical question:
-repair removal, halo size and patch size belong in separate matched
-ablations, with retraining distinguished from an inference-only intervention.
+the supplement measures frozen-weight repair and adapter interventions.
+Matched retraining, halo size and patch size remain separate controls.
 
 \subsection{Training the exits and the stopping predictor}
 
@@ -182,6 +182,8 @@ synthesis weights have changed. Full-frame repair also couples neighbouring
 tiles. A table threshold therefore does not guarantee the same numerical
 loss after final reconstruction. We retain this distinction in the nominal
 sweep and add a retrospective common-reference delivered-loss comparison.
+A separate QP32 replay on all 53 frames measures the e15 full-frame RGB loss
+against released synthesis as 0.00908\,dB; details are in the supplement.
 
 The information path also determines the deployment cost. Encoder-selected
 maps require side information. A source-calibrated router needs its control

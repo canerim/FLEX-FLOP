@@ -120,3 +120,8 @@ geçti. İki görüntü × yedi geometri × üç QP ve bir tekrar, model başın
 43 GPU doğruluk vakası olarak hazır. 288×512 ve 512×288 birleşik-region
 boyutları da dahil. GPU doğruluğu, resident-expert switching ve timing
 henüz çalıştırılmadı; resmî eğitimlerin GPU'larına müdahale edilmedi.
+
+
+## 28 Eylül: shared-exit için sınırlı CPU bitstream doğruluğu
+
+Yeni FUFEXIT1 araştırma kabı, e15 kimliği ve iki-bit exit map ile FUFREF1 ortak entropy payload'ını birleştiriyor. Önceden seçilmiş BasketballPass/BQMall ilk frame/QP32 × dört sabit harita = 8/8 bağımsız decode kontrolü geçti. Kaynak encoder ve hyper-encoder çağrıları decoder sürecinde kapalı; reconstruction, latent, sembol ve index izleri tam eşleşti. Map değişince inner entropy byte dizisi değişmedi. İki frame'in map maliyeti 1/2 byte; dış ve iç kimlik başlıkları toplam176 byte. Bu açık araştırma formatı minimum signalling değildir. Native CUDA formatını, 53-frame kapsamını, predictor'ın otonom kalibrasyonunu veya performansını doğrulamaz; çalışma içinde tutulan CPU diagnostic süreleri yayınlanmış runtime sonucu olarak kullanılmaz.

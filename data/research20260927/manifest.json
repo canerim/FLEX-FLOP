@@ -34,9 +34,10 @@
       "script": "plot_crossfit_replay_20260927.py",
       "data_file": "analysis.json",
       "data_sha256": "5fc1cb221d6ef89c9c5f0754aeea942529ac42614595ec38cd4d7f3731a88253",
-      "plot_script_sha256": "79d10a5f4f2c9f9f969949c917a1277b7b6f35b214ae26b471b2e7a9a56ac9bd",
+      "plot_script_sha256": "d931b05ec564b8c1a1b8f28521c86641e35b8eb58eeec718ad34d61e2d479584",
       "auxiliary_files_sha256": {
-        "router_logit_audit.json": "767bd6745d2d4d54ed80186984dc5ba105f24e65126a9e571ebc76c0d42584cc"
+        "router_logit_audit.json": "767bd6745d2d4d54ed80186984dc5ba105f24e65126a9e571ebc76c0d42584cc",
+        "shared_stream_preflight.json": "d4e14aadedbf092e286d0329def71f80895904caaedee536fa4b30ca7e643ae3"
       }
     },
     {
@@ -54,11 +55,32 @@
       "plot_script_sha256": "b8fcc866b3150b3f556fa1b3fa7fb869f3b562e983ee6fd779bccc00ac0415a5"
     },
     {
+      "folder": "region_merge",
+      "script": "plot_region_merge_20260927.py",
+      "data_file": "analysis.json",
+      "data_sha256": "0911e7a86cd6a15fc9d2abd2c270c28dbfe40a5c7eef50ad46d01406a72b379f",
+      "plot_script_sha256": "0f5090d252d51f083d7b4ed09e3ef3e5dd6959e22b6cf534d5d754473c79f677"
+    },
+    {
       "folder": "native_execution",
       "script": "plot_native_execution_20260928.py",
       "data_file": "analysis.json",
       "data_sha256": "5bcfcc0fd71fab244fa612f059a322b19b37b67adf43254d0e8327fdd4495816",
-      "plot_script_sha256": "7367a4007d135705c9df50c3ea9472e4d2c811881082e4cbf22cad978f371ef3"
+      "plot_script_sha256": "f306c1c6136d3cd47f740603eaafbf6b56dee6b8e3f68e5e0c5debcf8624444a"
+    },
+    {
+      "folder": "component_interventions",
+      "script": "plot_component_interventions_20260928.py",
+      "data_file": "analysis.json",
+      "data_sha256": "fd48d1604d90ef5a05bc5e378427f93db68133386de72a39c9ba89ea7e07fcff",
+      "plot_script_sha256": "9b366a2f5663eb7c91c461f9da75d0e243e31ffa7e9becab5c7777ed51745316"
+    },
+    {
+      "folder": "released_anchor_qp32",
+      "script": "plot_released_anchor_20260928.py",
+      "data_file": "analysis.json",
+      "data_sha256": "3f31832a578590d37c5772068f0a1216760153c540c9c072e27ad0f09e86b23c",
+      "plot_script_sha256": "142fda5b94f76890f18047bab2a6b2d0cfe071314e454c45c78d3be0b9fdcaa1"
     }
   ],
   "helper_sha256": "994fa1a554ee0e30eef788a04a13e259d762ddeb65f410fbe7f60755930d2eb5"

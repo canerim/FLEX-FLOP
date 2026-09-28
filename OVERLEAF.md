@@ -60,8 +60,8 @@ FLEX research repository under `scripts/paper_refresh_data.py` and
 records/checkpoints. Source hashes captured during this revision are
 inspection provenance, not retrospective proof of historical execution.
 `figure_reproduction_report.json` records a separate reproduction using only
-the bundled data and scripts: all99 generated PDF/SVG/PNG artifacts across
-the29 vector figure sets were byte-identical. Calibration and
+the bundled data and scripts: all111 generated PDF/SVG/PNG artifacts across
+the32 vector figure sets were byte-identical. Calibration and
 arithmetic-denominator figures also have separate source and artifact
 manifests and are included in bundle verification.
 Figure 1 is a protected, unchanged AI overview. Figure 2 uses a new shared-exit

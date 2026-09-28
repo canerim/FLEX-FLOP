@@ -1,3 +1,17 @@
+# 28 Eylül 2026: tamamlanan kontrollerin yorumu
+
+Bu güncelleme, aşağıdaki 27 Eylül araştırma notunu yeni ölçümlerle tamamlar.
+
+- **Early-exit ile router katkısı ayrılıyor.** Kaynak-kalibre arşivdeki 2.93 puanlık delivered-cap marjı yerinde duruyor. Fakat 53-frame/QP32 gerçek replay’de sequence-disjoint mean/Q90 kontrolün router–dither MAC farkları +1.87 [−1.60, 5.19] ve +2.54 [−0.42, 5.54] puan. Pozitif deployable marj henüz çözülmüş değil; aynı nominal hedef aynı gerçekleşmiş kalite değil.
+- **Released referans boşluğu QP32’de kapandı.** Aynı valid-pixel RGB ve shared-pad256 CPU protokolünde released/e15 PSNR 34.71763/34.70855 dB. e15 drift’i +0.00908 [0.00785, 0.01033] dB. Aynı router çıktısının released’e göre mean/Q90 kaybı +0.09587/+0.06592 dB. Bu tek-QP karşılaştırma, bütün arşivi RGB veya native bitstream sonucuna dönüştürmez.
+- **Adapter etkisi büyük, repair etkisi küçük.** 212 sabit-ağırlık çıktısında adapter kapatmak +1.23091 dB, repair kapatmak +0.00208 dB kaybettiriyor. Sekiz yalnız-D12 frame dahil bütün örnekler tutuldu. Mimari gereklilik için eş eğitimli yeniden optimizasyon hâlâ gerekli.
+- **Bankanın maliyeti yalnız model seçimi değil.** Tam 800-region kontrolünde aynı piksel derinlikleri korunup komşu bölgeler birleştirildiğinde 0.2 payload bpp’de +0.5327/+0.4959 dB geliyor. QP32 payload azalması %13.05/%12.39. Bu yürütme biçimini kontrol etmeden router kapasitesi taramak yanlış değişkeni optimize edebilir. Coalescing’in kendisi yeni bir yöntem iddiası değil.
+- **Hız iddiası henüz yok.** 43-case/model native correctness matrisi hazırlanıp CPU checkpoint/CDF/binary preflight’ı geçti; CUDA tarafı meşgul eğitim GPU’larında çalıştırılmadı. CPU research byte-decode kanıtı, native GPU eşdeğerliği veya toplam süre kanıtı değildir.
+
+Makalenin en önemli sonraki üç deneyi: aynı codec ve gerçekleşmiş kalite altında native toplam süre; aynı eğitim bütçesinde adapter/repair karşılaştırması; dokunulmamış calibration/test ayrımında router–dither marjı. D8/D10 sayısını büyütmek bu soruların yerine geçmez.
+
+---
+
 > Metrik düzeltmesi (27 Eylül): eski `db_rgb`, unclipped YCbCr 4:4:4
 > eş-kanal MSE oranıdır. RGB etiketi düzeltilmiştir; iki CPU replay kanıtı
 > ve ham anahtarların yorumu `METRICS.md` içinde. Aşağıdaki eski sayıların
