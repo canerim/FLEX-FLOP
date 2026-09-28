@@ -17,10 +17,12 @@ are table targets, not final-image guarantees.}
 This supplement records CPU analyses of the frozen evaluation archive,
 actual-byte evaluation of frozen interim depth models, and the protocol
 for the ongoing full-schedule depth study. The main manuscript uses
-the recorded mixed reconstructions of the shared-latent e15 codec. The new
-control-path and spatial-assignment analyses reuse its stored source-error
-tables. They produce candidate decisions for later replay, without executing
-the codec or measuring new inference times. The independent D2/D4/D6 training
+the recorded mixed reconstructions of the shared-latent e15 codec.
+Control-path enumeration and the analytic permutation diagnostic reuse
+stored source-error tables without executing the codec. The fixed-control,
+released-reference and component-intervention sections instead report
+new CPU reconstructions. None of these analyses measures codec latency.
+The independent D2/D4/D6 training
 continues separately; interim measurements are explicitly labelled and
 do not stand in for a completed full-schedule depth experiment.
 

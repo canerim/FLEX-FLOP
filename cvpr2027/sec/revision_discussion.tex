@@ -28,11 +28,10 @@ temporal consistency or performance of DCVC-UF's chunk-based video path.
 
 \section{Conclusion}
 FLEX-UF makes synthesis depth a spatial decision inside DCVC-UF.
-A common latent and prefix support aligned early exits, while a shrinking
-tile batch turns stopping decisions into omitted block evaluations.
-The measured arithmetic savings have two sources: cheaper average depth
-and a smaller, budget-dependent increment from learned placement.
-Blind mixtures and fixed-control replay show why these must be evaluated
-separately. The independent-depth study extends the allocation question
-to codec selection; matched training and complete execution measurements
-will determine when specialisation justifies giving up shared computation.
+Aligned exits and a shrinking tile batch reuse a common representation
+while omitting later block evaluations. Most measured arithmetic saving
+comes from cheaper depth; learned placement adds a smaller,
+budget-dependent increment. Blind mixtures and fixed-control replay
+separate these effects. Matched training and complete execution measurements
+will determine when independent-depth experts justify giving up shared
+computation.

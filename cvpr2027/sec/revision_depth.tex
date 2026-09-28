@@ -14,13 +14,14 @@ The scratch runs preserve the pinned official 105-epoch
 recipe~\cite{microsoft2026training}, including all 384,795 Open Images
 train\_0/1/2 images, batch size 16 and FP32. Analysis and entropy weights
 learn alongside synthesis, so equal QP does not imply equal coded rate.
-A frozen epoch-20 diagnostic on 100 DIV2K centre crops uses 2,000 actual
-CPU bitstreams across D2/D4/D6 and released D12. At 0.2 payload bpp, D6
-exceeds D2 by 0.183\,dB RGB on the 99 images with common rate support.
-These interim curves establish a measurable depth frontier; final
-same-recipe D12 and matched shared-exit training are still required to
-attribute differences to depth or weight sharing. The supplement gives
-the schedule, counts and complete curves.
+Two fixed milestones, epochs 20 and 30, each evaluate 2,000 actual CPU
+bitstreams on 100 DIV2K centre crops across D2/D4/D6 and released D12.
+On the same 99 images at 0.2 payload bpp, D6's RGB advantage over D2
+changes from 0.183 to 0.107\,dB; its epoch-30 difference from D4 is
+unresolved. Depth ordering is therefore not stable at these unfinished
+checkpoints. The supplement reports both milestones. Final same-recipe
+D12 and matched shared-exit training remain necessary to isolate depth
+and weight sharing.
 
 \paragraph{The spatial cost of specialisation.}
 Patchwise expert selection also changes geometry and entropy boundaries.

@@ -9,6 +9,8 @@ anchor with different training provenance, not the control that isolates
 the effect of depth. All four models are evaluated at QPs 0, 16, 32, 48
 and 63: 2,000 encode/decode cases. No checkpoint is selected using these
 results. The study is an interim diagnostic, not the final depth ablation.
+We repeat the complete protocol at the fixed epoch-30 milestone below;
+the plotted geometry and allocation controls retain their epoch-20 weights.
 
 \paragraph{A causal CPU reference.}
 Each stream contains actual rANS payload. An encoder-independent process
@@ -97,6 +99,32 @@ each image's four-model common PSNR interval. Intervals resample images;
 no uncertainty from independent training seeds is represented.}
 \label{fig:interimbytes}
 \end{figure*}
+
+\paragraph{Milestone sensitivity.}
+The next fixed checkpoint at epoch 30 repeats all 2,000 encode/decode
+cases. The crop manifest, CPU backend and research format are unchanged;
+all 500 released-D12 measurements reproduce exactly. To compare depth
+ordering, \cref{tab:milestones} retains the same 99 images on common
+0.2-payload-bpp support across both milestones and all four models.
+D6's mean advantage over D4 changes from 0.0627\,dB to
+$-0.0045$\,dB, whose interval includes zero. Relative to their own
+epoch-20 curves, D2 and D4 gain 0.0259 and 0.0168\,dB while D6 loses
+0.0504\,dB on this support. These are descriptive checkpoint differences,
+not evidence that training a deeper model is intrinsically harmful.
+Both milestones are retained without quality-based checkpoint selection;
+neither establishes the final ordering after 105 epochs.
+
+\begin{table}[t]
+\centering
+\caption{\textbf{Intermediate depth ordering changes during training.}
+RGB PSNR differences at 0.2 actual payload bpp on the same 99 images.
+All three shallow models use the stated fixed epoch. Intervals are paired
+image-bootstrap intervals at fixed weights; they exclude training-seed
+uncertainty. No rate extrapolation is used.}
+\label{tab:milestones}
+\setlength{\tabcolsep}{3pt}
+\input{data/refresh20260927/depth_milestone_table}
+\end{table}
 
 \section{Does an Additional Expert Add an Additional Choice?}
 

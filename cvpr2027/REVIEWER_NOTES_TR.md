@@ -2,6 +2,8 @@
 
 Bu güncelleme, aşağıdaki 27 Eylül araştırma notunu yeni ölçümlerle tamamlar.
 
+- **Ara checkpoint sıralaması sabit değil.** Epoch-30 milestone'ı 2.000 gerçek-byte vakayla tamamlandı ve yeniden analizle doğrulandı. Her iki milestone'da aynı 99 görüntü/0.2 payload bpp desteğinde D6−D4, epoch 20'de +0.0627 dB iken epoch 30'da −0.0045 dB [%95 aralık −0.0172, +0.0087]. D6'nın D2'ye farkı +0.1071 dB. İki checkpoint de korunuyor; yalnız daha iyi görünen epoch 20'yi nihai derinlik sıralaması diye sunmuyoruz. Ana eğitim tarifi değiştirilmedi.
+
 - **Early-exit ile router katkısı ayrılıyor.** Kaynak-kalibre arşivdeki 2.93 puanlık delivered-cap marjı yerinde duruyor. Fakat 53-frame/QP32 gerçek replay’de sequence-disjoint mean/Q90 kontrolün router–dither MAC farkları +1.87 [−1.60, 5.19] ve +2.54 [−0.42, 5.54] puan. Pozitif deployable marj henüz çözülmüş değil; aynı nominal hedef aynı gerçekleşmiş kalite değil.
 - **Released referans boşluğu QP32’de kapandı.** Aynı valid-pixel RGB ve shared-pad256 CPU protokolünde released/e15 PSNR 34.71763/34.70855 dB. e15 drift’i +0.00908 [0.00785, 0.01033] dB. Aynı router çıktısının released’e göre mean/Q90 kaybı +0.09587/+0.06592 dB. Bu tek-QP karşılaştırma, bütün arşivi RGB veya native bitstream sonucuna dönüştürmez.
 - **Adapter etkisi büyük, repair etkisi küçük.** 212 sabit-ağırlık çıktısında adapter kapatmak +1.23091 dB, repair kapatmak +0.00208 dB kaybettiriyor. Sekiz yalnız-D12 frame dahil bütün örnekler tutuldu. Mimari gereklilik için eş eğitimli yeniden optimizasyon hâlâ gerekli.

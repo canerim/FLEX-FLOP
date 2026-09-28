@@ -1,16 +1,20 @@
 {
-  "script_sha256": "3168491715f0a0d5ac415e634564513fd06e1266def6d57349d05a168b567e78",
+  "script_sha256": "5cce8e33634631f3a5535b2a7f01f4103d6a9b9d41e3a9b60b5918a046509db7",
   "source_sha256": {
     "data/refresh20260927/delivered_frontier_audit.json": "dd3720c58a6bc64e63868e99f04e83fa9231b8a40f0f83299c8c78a1660d23ed",
     "data/refresh20260927/exit_depth_profile.json": "f0a16e14aa5b85d055ecb0cbfb3947812c51dc63a694d8cc8421dd6c5c899d35",
     "data/refresh20260927/design_audit.json": "73aaf074c05b96f78396d5cc22fd8a88e58b9c84356b6015322689f5740716e1",
-    "data/research20260927/shared_crossfit_qp32/analysis.json": "5fc1cb221d6ef89c9c5f0754aeea942529ac42614595ec38cd4d7f3731a88253"
+    "data/research20260927/shared_crossfit_qp32/analysis.json": "5fc1cb221d6ef89c9c5f0754aeea942529ac42614595ec38cd4d7f3731a88253",
+    "data/research20260927/div2k100_epoch020/analysis.json": "beb6d0fbc54c95d5d43283ad7f1bae7057f599d9365a30e6efb3773a2a69ca66",
+    "data/research20260927/div2k100_epoch030/analysis.json": "3585b402440655abb4266e76bdd4e63aeb17c0da81ff2e2527d77a8661b7837c"
   },
   "artifacts": {
     "design_macros.tex": "e5c8f06fc7f8ee52f74a16dae1c7ed643973dd4a15ff64a2d61e9f10a5aa599a",
     "delivered_cap_table.tex": "e863a6c2cd951650c543385cc75265bd7c6484eddb37cddaa133233606bc04cb",
     "depth_capacity_table.tex": "c571eedc881144758949b71713c7ac0c021c1d931fd6972bfce680e6e5278794",
-    "fixed_control_table.tex": "13916bbcfb20db113e24a8d6a558067e466d7f63d5ea59cb24de4c133d96f95e"
+    "fixed_control_table.tex": "13916bbcfb20db113e24a8d6a558067e466d7f63d5ea59cb24de4c133d96f95e",
+    "depth_milestone_table.tex": "088a24e1b61a7ac2e4ae3883df286e62f72a61d4eb7de7d3c03b8be94d2ee62e",
+    "depth_milestone_audit.json": "9bc982862a3ee58db516cd21d8aaa704788d0752ae58f7167c4981d241b80fef"
   },
-  "scope": "Three numerical tables and 22 macros generated only from bundled measured/architectural records."
+  "scope": "Four numerical tables, 22 macros and a fixed-milestone paired audit generated only from bundled measured/architectural records."
 }

@@ -1,0 +1,13 @@
+{
+  "fixed_epochs": [
+    20,
+    30
+  ],
+  "full_epoch30_analysis_reproduced_byte_identically": true,
+  "raw_cases_checked": 2000,
+  "same_crops_backend_format": true,
+  "released_anchor_rows_identical": 500,
+  "common_images_both_milestones_at_0_2_payload_bpp": 99,
+  "no_training_mutations": true,
+  "interpretation": "Two unfinished checkpoints; preserve both, do not select the better observed ordering. Epoch20 geometry controls retain their original weights."
+}

@@ -40,10 +40,11 @@ appear in the active manuscript.
 | The full-depth anchor has measurable drift | Aligned 53-frame QP32 released/e15 replay | CPU FP32, image-pad256, explicit RGB conversion; not the native CUDA path |
 | Adapters carry a large learned correction | 212 fixed-weight component interventions | Removing a module is not retraining without it; repair's small effect needs cost testing |
 | One entropy payload supports different maps | Eight stream-only CPU cases; same inner bytes and exact reconstruction | Two sources, four maps each; research headers and map bytes are charged |
-| Specialisation has a depth frontier and spatial overhead | Frozen epoch-20 true-byte curves and fixed-map geometry controls | Interim models; released D12 has a different training history |
+| Depth ordering is not fixed during unfinished training | Complete epoch-20 and epoch-30 true-byte studies; same 99-image matched-rate comparison | Both milestones retained; no best-checkpoint selection or convergence claim |
+| Specialisation introduces spatial overhead | Fixed-map geometry controls on frozen epoch-20 models | Geometry results stay attached to those weights; released D12 has a different training history |
 | A six-expert selector saves net runtime | Proposed study only | Requires matched training, achieved RD and complete execution measurements |
 
-Main-table numbers are generated from bundled JSON. Frame-bootstrap
+Numerical tables are generated from bundled JSON. Sequence- or image-bootstrap
 intervals are conditional on fixed weights and fitted controls; they do not
 cover training-seed, calibration-fit or external-domain uncertainty.
 Retrospective quality selection is described as source-aware, with its

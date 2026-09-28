@@ -82,7 +82,7 @@ all-deep map; this work count does not measure GPU time.}
 \label{fig:active}
 \end{figure}
 
-\subsection{Exit adaptation and boundary consistency}
+\subsection{Exit alignment and boundary context}
 
 An intermediate feature is not automatically compatible with the final head.
 The exit adapter supplies the missing transformation with pointwise residual
@@ -105,7 +105,8 @@ capacity.
 
 \subsection{Learning exits and their selector}
 
-The shared-latent model is initialised from released DCVC-UF weights.
+The evaluated shared-latent checkpoint, denoted e15, is initialised from
+released DCVC-UF weights.
 Analysis and entropy parameters remain frozen; the synthesis network,
 adapters and repair are fine-tuned. Training samples tile depths and applies
 reconstruction supervision through the mixed tiled path. Thus the adapters
