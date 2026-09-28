@@ -1,6 +1,6 @@
 # FLEX-UF figure system
 
-The figures share a 183 mm canvas width, Liberation Sans type, embedded
+The figures use 183 mm full-width and 89 mm single-column canvases, Liberation Sans type, embedded
 TrueType PDF fonts and editable SVG text. Quantitative plots and exact
 execution diagrams are generated from bundled source tables with Matplotlib.
 The protected opening overview and the shared-exit mechanism are separate AI-generated conceptual rasters,
@@ -19,8 +19,8 @@ segments to explain the computation.
 | Text and axes | Ink `#20313E` | Direct labels and explicit units |
 | Grid | Pale grey `#E5EAED` | Fine horizontal guides |
 
-Depth diagrams and maps use an ordered six-colour scale: `#D8ECE7`, `#A7D2C9`, `#70B6AB`,
-`#34968F`, `#267382`, `#244B68` for 2/4/6/8/10/12 blocks. The current
+Depth diagrams and maps use an ordered six-colour scale: `#6CB7A4`, `#46A49D`, `#278B92`,
+`#22738A`, `#245B7A`, `#243F5C` for 2/4/6/8/10/12 blocks. The current
 shared-exit maps use only the last four colours. Every map has a numerical
 key, so colour is not the sole carrier of depth information.
 
@@ -43,18 +43,28 @@ folder's `layout_audit.json`. Artifact hashes and an isolated CPU rebuild
 support reproducibility. PDF page layout is also reviewed after compilation;
 passing a text-bound check alone does not establish publication quality.
 
-The September 28 revision preserves Figure 1 byte for byte. Figure 2 follows
+The September 28 editorial revision preserves Figures 1 and 2 byte for byte. Figure 2 follows
 its layered scientific-illustration style while depicting the implemented
 shared-exit connectivity: stem and QP feed the MLP; beta adjusts its output
 scores; all four exits reach the common feature canvas. Its synthetic scene
 is not a qualitative codec result.
 
-Plots use 6.5 pt body/axis text, 6 pt ticks, bold 8 pt lower-case panel
-letters, restrained strokes and open white space at 183 mm width. Duplicate
-poster headings are moved to captions and unused top canvas is trimmed
-without changing physical axis, text or marker sizes. Explicit analytical
-assumptions remain visible. Smaller exceptional annotations are recorded
-in the layout audits; figures are inspected at compiled page scale.
+Plots have a 6.5 pt minimum visible text size, at least 7 pt axis labels,
+7.5 pt panel titles and bold 8 pt panel letters. The main comparison uses
+7 pt ticks and 7.5 pt axes. Repeated poster headings and long figure footnotes
+move into the exported captions; unused top and bottom canvas is removed
+without changing physical text, axis or marker sizes. Explicit analytical
+assumptions remain visible. Line styles and marker shapes supplement colour.
+All depths use one ordered palette; policy comparisons keep their separate
+teal/violet/amber/slate key.
+
+The new 89 mm execution diagram uses the recorded 5-by-8 router map,
+not a simulated population. Its rows show 40/27/7/3 active tiles, with
+13/20/4/3 departures. Colour identifies the executed stage, while pale cells
+have already exited. The compact delivered-cap plot replaces a duplicate
+full-width frontier in the main paper; the full comparison remains in the
+supplement. No numerical values, confidence intervals or reference anchors
+were changed for visual presentation.
 
 Design references: Nature's [panel preparation guide](https://research-figure-guide.nature.com/figures/building-and-exporting-figure-panels/)
 and [figure specifications](https://research-figure-guide.nature.com/figures/preparing-figures-our-specifications/).

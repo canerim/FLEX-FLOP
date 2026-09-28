@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="no"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
   "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-<svg xmlns:xlink="http://www.w3.org/1999/xlink" width="518.740157pt" height="198.414962pt" viewBox="0 0 518.740157 198.414962" xmlns="http://www.w3.org/2000/svg" version="1.1">
+<svg xmlns:xlink="http://www.w3.org/1999/xlink" width="518.740157pt" height="172.611025pt" viewBox="0 0 518.740157 172.611025" xmlns="http://www.w3.org/2000/svg" version="1.1">
  <metadata>
   <rdf:RDF xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
    <cc:Work>
@@ -21,8 +21,8 @@
  </defs>
  <g id="figure_1">
   <g id="patch_1">
-   <path d="M 0 198.414962
-L 518.740157 198.414962
+   <path d="M 0 172.611025
+L 518.740157 172.611025
 L 518.740157 0
 L 0 0
 z
@@ -50,8 +50,8 @@ L 0 2.5
       </g>
      </g>
      <g id="text_1">
-      <text style="font-size: 6px; font-family: 'Liberation Sans'; fill: #586874" transform="translate(57.70829 133.037558)">0.1</text>
-      <text style="font-size: 6px; font-family: 'Liberation Sans'; fill: #586874" transform="translate(55.121259 139.567831)">n=10</text>
+      <text style="font-size: 6.5px; font-family: 'Liberation Sans'; fill: #586874" transform="translate(57.36079 133.439047)">0.1</text>
+      <text style="font-size: 6.5px; font-family: 'Liberation Sans'; fill: #586874" transform="translate(54.558173 140.51351)">n=10</text>
      </g>
     </g>
     <g id="xtick_2">
@@ -61,8 +61,8 @@ L 0 2.5
       </g>
      </g>
      <g id="text_2">
-      <text style="font-size: 6px; font-family: 'Liberation Sans'; fill: #586874" transform="translate(102.171732 133.037558)">0.2</text>
-      <text style="font-size: 6px; font-family: 'Liberation Sans'; fill: #586874" transform="translate(99.584701 139.567831)">n=16</text>
+      <text style="font-size: 6.5px; font-family: 'Liberation Sans'; fill: #586874" transform="translate(101.824232 133.439047)">0.2</text>
+      <text style="font-size: 6.5px; font-family: 'Liberation Sans'; fill: #586874" transform="translate(99.021615 140.51351)">n=16</text>
      </g>
     </g>
     <g id="xtick_3">
@@ -72,12 +72,12 @@ L 0 2.5
       </g>
      </g>
      <g id="text_3">
-      <text style="font-size: 6px; font-family: 'Liberation Sans'; fill: #586874" transform="translate(146.635174 133.037558)">0.4</text>
-      <text style="font-size: 6px; font-family: 'Liberation Sans'; fill: #586874" transform="translate(144.048143 139.567831)">n=15</text>
+      <text style="font-size: 6.5px; font-family: 'Liberation Sans'; fill: #586874" transform="translate(146.287674 133.439047)">0.4</text>
+      <text style="font-size: 6.5px; font-family: 'Liberation Sans'; fill: #586874" transform="translate(143.485057 140.51351)">n=15</text>
      </g>
     </g>
     <g id="text_4">
-     <text style="font-size: 6.5px; font-family: 'Liberation Sans'; text-anchor: middle; fill: #20313e" x="106.341732" y="150.012411" transform="rotate(-0 106.341732 150.012411)">Actual payload rate (bpp)</text>
+     <text style="font-size: 7px; font-family: 'Liberation Sans'; text-anchor: middle; fill: #20313e" x="106.341732" y="151.464804" transform="rotate(-0 106.341732 151.464804)">Actual payload rate (bpp)</text>
     </g>
    </g>
    <g id="matplotlib.axis_2">
@@ -98,7 +98,7 @@ L -2.5 0
       </g>
      </g>
      <g id="text_5">
-      <text style="font-size: 6px; font-family: 'Liberation Sans'; text-anchor: end; fill: #586874" x="38.092913" y="109.210097" transform="rotate(-0 38.092913 109.210097)">−2.0</text>
+      <text style="font-size: 6.5px; font-family: 'Liberation Sans'; text-anchor: end; fill: #586874" x="38.092913" y="109.392104" transform="rotate(-0 38.092913 109.392104)">−2.0</text>
      </g>
     </g>
     <g id="ytick_2">
@@ -113,7 +113,7 @@ L 168.590551 86.748403
       </g>
      </g>
      <g id="text_6">
-      <text style="font-size: 6px; font-family: 'Liberation Sans'; text-anchor: end; fill: #586874" x="38.092913" y="88.932485" transform="rotate(-0 38.092913 88.932485)">−1.5</text>
+      <text style="font-size: 6.5px; font-family: 'Liberation Sans'; text-anchor: end; fill: #586874" x="38.092913" y="89.114492" transform="rotate(-0 38.092913 89.114492)">−1.5</text>
      </g>
     </g>
     <g id="ytick_3">
@@ -128,7 +128,7 @@ L 168.590551 66.470792
       </g>
      </g>
      <g id="text_7">
-      <text style="font-size: 6px; font-family: 'Liberation Sans'; text-anchor: end; fill: #586874" x="38.092913" y="68.654874" transform="rotate(-0 38.092913 68.654874)">−1.0</text>
+      <text style="font-size: 6.5px; font-family: 'Liberation Sans'; text-anchor: end; fill: #586874" x="38.092913" y="68.83688" transform="rotate(-0 38.092913 68.83688)">−1.0</text>
      </g>
     </g>
     <g id="ytick_4">
@@ -143,7 +143,7 @@ L 168.590551 46.19318
       </g>
      </g>
      <g id="text_8">
-      <text style="font-size: 6px; font-family: 'Liberation Sans'; text-anchor: end; fill: #586874" x="38.092913" y="48.377262" transform="rotate(-0 38.092913 48.377262)">−0.5</text>
+      <text style="font-size: 6.5px; font-family: 'Liberation Sans'; text-anchor: end; fill: #586874" x="38.092913" y="48.559269" transform="rotate(-0 38.092913 48.559269)">−0.5</text>
      </g>
     </g>
     <g id="ytick_5">
@@ -158,11 +158,11 @@ L 168.590551 25.915568
       </g>
      </g>
      <g id="text_9">
-      <text style="font-size: 6px; font-family: 'Liberation Sans'; text-anchor: end; fill: #586874" x="38.092913" y="28.09965" transform="rotate(-0 38.092913 28.09965)">0.0</text>
+      <text style="font-size: 6.5px; font-family: 'Liberation Sans'; text-anchor: end; fill: #586874" x="38.092913" y="28.281657" transform="rotate(-0 38.092913 28.281657)">0.0</text>
      </g>
     </g>
     <g id="text_10">
-     <text style="font-size: 6.5px; font-family: 'Liberation Sans'; text-anchor: middle; fill: #20313e" x="20.880618" y="71.025986" transform="rotate(-90 20.880618 71.025986)">RGB PSNR change from full frame (dB)</text>
+     <text style="font-size: 7px; font-family: 'Liberation Sans'; text-anchor: middle; fill: #20313e" x="19.788363" y="71.025986" transform="rotate(-90 19.788363 71.025986)">RGB PSNR change (dB)</text>
     </g>
    </g>
    <g id="LineCollection_1">
@@ -427,8 +427,8 @@ z
       </g>
      </g>
      <g id="text_13">
-      <text style="font-size: 6px; font-family: 'Liberation Sans'; fill: #586874" transform="translate(223.705141 133.037558)">0.1</text>
-      <text style="font-size: 6px; font-family: 'Liberation Sans'; fill: #586874" transform="translate(221.118109 139.567831)">n=10</text>
+      <text style="font-size: 6.5px; font-family: 'Liberation Sans'; fill: #586874" transform="translate(223.357641 133.439047)">0.1</text>
+      <text style="font-size: 6.5px; font-family: 'Liberation Sans'; fill: #586874" transform="translate(220.555023 140.51351)">n=10</text>
      </g>
     </g>
     <g id="xtick_5">
@@ -438,8 +438,8 @@ z
       </g>
      </g>
      <g id="text_14">
-      <text style="font-size: 6px; font-family: 'Liberation Sans'; fill: #586874" transform="translate(268.168583 133.037558)">0.2</text>
-      <text style="font-size: 6px; font-family: 'Liberation Sans'; fill: #586874" transform="translate(265.581551 139.567831)">n=16</text>
+      <text style="font-size: 6.5px; font-family: 'Liberation Sans'; fill: #586874" transform="translate(267.821083 133.439047)">0.2</text>
+      <text style="font-size: 6.5px; font-family: 'Liberation Sans'; fill: #586874" transform="translate(265.018465 140.51351)">n=16</text>
      </g>
     </g>
     <g id="xtick_6">
@@ -449,12 +449,12 @@ z
       </g>
      </g>
      <g id="text_15">
-      <text style="font-size: 6px; font-family: 'Liberation Sans'; fill: #586874" transform="translate(312.632025 133.037558)">0.4</text>
-      <text style="font-size: 6px; font-family: 'Liberation Sans'; fill: #586874" transform="translate(310.044993 139.567831)">n=15</text>
+      <text style="font-size: 6.5px; font-family: 'Liberation Sans'; fill: #586874" transform="translate(312.284525 133.439047)">0.4</text>
+      <text style="font-size: 6.5px; font-family: 'Liberation Sans'; fill: #586874" transform="translate(309.481908 140.51351)">n=15</text>
      </g>
     </g>
     <g id="text_16">
-     <text style="font-size: 6.5px; font-family: 'Liberation Sans'; text-anchor: middle; fill: #20313e" x="272.338583" y="150.012411" transform="rotate(-0 272.338583 150.012411)">Actual payload rate (bpp)</text>
+     <text style="font-size: 7px; font-family: 'Liberation Sans'; text-anchor: middle; fill: #20313e" x="272.338583" y="151.464804" transform="rotate(-0 272.338583 151.464804)">Actual payload rate (bpp)</text>
     </g>
    </g>
    <g id="matplotlib.axis_4">
@@ -470,7 +470,7 @@ L 334.587402 107.026015
       </g>
      </g>
      <g id="text_17">
-      <text style="font-size: 6px; font-family: 'Liberation Sans'; text-anchor: end; fill: #586874" x="204.089764" y="109.210097" transform="rotate(-0 204.089764 109.210097)">−2.0</text>
+      <text style="font-size: 6.5px; font-family: 'Liberation Sans'; text-anchor: end; fill: #586874" x="204.089764" y="109.392104" transform="rotate(-0 204.089764 109.392104)">−2.0</text>
      </g>
     </g>
     <g id="ytick_7">
@@ -485,7 +485,7 @@ L 334.587402 86.748403
       </g>
      </g>
      <g id="text_18">
-      <text style="font-size: 6px; font-family: 'Liberation Sans'; text-anchor: end; fill: #586874" x="204.089764" y="88.932485" transform="rotate(-0 204.089764 88.932485)">−1.5</text>
+      <text style="font-size: 6.5px; font-family: 'Liberation Sans'; text-anchor: end; fill: #586874" x="204.089764" y="89.114492" transform="rotate(-0 204.089764 89.114492)">−1.5</text>
      </g>
     </g>
     <g id="ytick_8">
@@ -500,7 +500,7 @@ L 334.587402 66.470792
       </g>
      </g>
      <g id="text_19">
-      <text style="font-size: 6px; font-family: 'Liberation Sans'; text-anchor: end; fill: #586874" x="204.089764" y="68.654874" transform="rotate(-0 204.089764 68.654874)">−1.0</text>
+      <text style="font-size: 6.5px; font-family: 'Liberation Sans'; text-anchor: end; fill: #586874" x="204.089764" y="68.83688" transform="rotate(-0 204.089764 68.83688)">−1.0</text>
      </g>
     </g>
     <g id="ytick_9">
@@ -515,7 +515,7 @@ L 334.587402 46.19318
       </g>
      </g>
      <g id="text_20">
-      <text style="font-size: 6px; font-family: 'Liberation Sans'; text-anchor: end; fill: #586874" x="204.089764" y="48.377262" transform="rotate(-0 204.089764 48.377262)">−0.5</text>
+      <text style="font-size: 6.5px; font-family: 'Liberation Sans'; text-anchor: end; fill: #586874" x="204.089764" y="48.559269" transform="rotate(-0 204.089764 48.559269)">−0.5</text>
      </g>
     </g>
     <g id="ytick_10">
@@ -530,7 +530,7 @@ L 334.587402 25.915568
       </g>
      </g>
      <g id="text_21">
-      <text style="font-size: 6px; font-family: 'Liberation Sans'; text-anchor: end; fill: #586874" x="204.089764" y="28.09965" transform="rotate(-0 204.089764 28.09965)">0.0</text>
+      <text style="font-size: 6.5px; font-family: 'Liberation Sans'; text-anchor: end; fill: #586874" x="204.089764" y="28.281657" transform="rotate(-0 204.089764 28.281657)">0.0</text>
      </g>
     </g>
    </g>
@@ -753,8 +753,8 @@ z
       </g>
      </g>
      <g id="text_24">
-      <text style="font-size: 6px; font-family: 'Liberation Sans'; fill: #586874" transform="translate(389.701991 133.037558)">0.1</text>
-      <text style="font-size: 6px; font-family: 'Liberation Sans'; fill: #586874" transform="translate(387.11496 139.567831)">n=12</text>
+      <text style="font-size: 6.5px; font-family: 'Liberation Sans'; fill: #586874" transform="translate(389.354491 133.439047)">0.1</text>
+      <text style="font-size: 6.5px; font-family: 'Liberation Sans'; fill: #586874" transform="translate(386.551874 140.51351)">n=12</text>
      </g>
     </g>
     <g id="xtick_8">
@@ -764,8 +764,8 @@ z
       </g>
      </g>
      <g id="text_25">
-      <text style="font-size: 6px; font-family: 'Liberation Sans'; fill: #586874" transform="translate(434.165433 133.037558)">0.2</text>
-      <text style="font-size: 6px; font-family: 'Liberation Sans'; fill: #586874" transform="translate(431.578402 139.567831)">n=16</text>
+      <text style="font-size: 6.5px; font-family: 'Liberation Sans'; fill: #586874" transform="translate(433.817933 133.439047)">0.2</text>
+      <text style="font-size: 6.5px; font-family: 'Liberation Sans'; fill: #586874" transform="translate(431.015316 140.51351)">n=16</text>
      </g>
     </g>
     <g id="xtick_9">
@@ -775,12 +775,12 @@ z
       </g>
      </g>
      <g id="text_26">
-      <text style="font-size: 6px; font-family: 'Liberation Sans'; fill: #586874" transform="translate(478.628875 133.037558)">0.4</text>
-      <text style="font-size: 6px; font-family: 'Liberation Sans'; fill: #586874" transform="translate(476.041844 139.567831)">n=15</text>
+      <text style="font-size: 6.5px; font-family: 'Liberation Sans'; fill: #586874" transform="translate(478.281375 133.439047)">0.4</text>
+      <text style="font-size: 6.5px; font-family: 'Liberation Sans'; fill: #586874" transform="translate(475.478758 140.51351)">n=15</text>
      </g>
     </g>
     <g id="text_27">
-     <text style="font-size: 6.5px; font-family: 'Liberation Sans'; text-anchor: middle; fill: #20313e" x="438.335433" y="150.012411" transform="rotate(-0 438.335433 150.012411)">Actual payload rate (bpp)</text>
+     <text style="font-size: 7px; font-family: 'Liberation Sans'; text-anchor: middle; fill: #20313e" x="438.335433" y="151.464804" transform="rotate(-0 438.335433 151.464804)">Actual payload rate (bpp)</text>
     </g>
    </g>
    <g id="matplotlib.axis_6">
@@ -796,7 +796,7 @@ L 500.584252 107.026015
       </g>
      </g>
      <g id="text_28">
-      <text style="font-size: 6px; font-family: 'Liberation Sans'; text-anchor: end; fill: #586874" x="370.086614" y="109.210097" transform="rotate(-0 370.086614 109.210097)">−2.0</text>
+      <text style="font-size: 6.5px; font-family: 'Liberation Sans'; text-anchor: end; fill: #586874" x="370.086614" y="109.392104" transform="rotate(-0 370.086614 109.392104)">−2.0</text>
      </g>
     </g>
     <g id="ytick_12">
@@ -811,7 +811,7 @@ L 500.584252 86.748403
       </g>
      </g>
      <g id="text_29">
-      <text style="font-size: 6px; font-family: 'Liberation Sans'; text-anchor: end; fill: #586874" x="370.086614" y="88.932485" transform="rotate(-0 370.086614 88.932485)">−1.5</text>
+      <text style="font-size: 6.5px; font-family: 'Liberation Sans'; text-anchor: end; fill: #586874" x="370.086614" y="89.114492" transform="rotate(-0 370.086614 89.114492)">−1.5</text>
      </g>
     </g>
     <g id="ytick_13">
@@ -826,7 +826,7 @@ L 500.584252 66.470792
       </g>
      </g>
      <g id="text_30">
-      <text style="font-size: 6px; font-family: 'Liberation Sans'; text-anchor: end; fill: #586874" x="370.086614" y="68.654874" transform="rotate(-0 370.086614 68.654874)">−1.0</text>
+      <text style="font-size: 6.5px; font-family: 'Liberation Sans'; text-anchor: end; fill: #586874" x="370.086614" y="68.83688" transform="rotate(-0 370.086614 68.83688)">−1.0</text>
      </g>
     </g>
     <g id="ytick_14">
@@ -841,7 +841,7 @@ L 500.584252 46.19318
       </g>
      </g>
      <g id="text_31">
-      <text style="font-size: 6px; font-family: 'Liberation Sans'; text-anchor: end; fill: #586874" x="370.086614" y="48.377262" transform="rotate(-0 370.086614 48.377262)">−0.5</text>
+      <text style="font-size: 6.5px; font-family: 'Liberation Sans'; text-anchor: end; fill: #586874" x="370.086614" y="48.559269" transform="rotate(-0 370.086614 48.559269)">−0.5</text>
      </g>
     </g>
     <g id="ytick_15">
@@ -856,7 +856,7 @@ L 500.584252 25.915568
       </g>
      </g>
      <g id="text_32">
-      <text style="font-size: 6px; font-family: 'Liberation Sans'; text-anchor: end; fill: #586874" x="370.086614" y="28.09965" transform="rotate(-0 370.086614 28.09965)">0.0</text>
+      <text style="font-size: 6.5px; font-family: 'Liberation Sans'; text-anchor: end; fill: #586874" x="370.086614" y="28.281657" transform="rotate(-0 370.086614 28.281657)">0.0</text>
      </g>
     </g>
    </g>
@@ -1062,9 +1062,6 @@ L 500.584252 122.219687
     <text style="font-size: 6.7px; font-family: 'Liberation Sans'; text-anchor: start; fill: #20313e" x="376.086614" y="11.832285" transform="rotate(-0 376.086614 11.832285)">D12 · released</text>
    </g>
   </g>
-  <g id="text_35">
-   <text style="font-size: 6px; font-family: 'Liberation Sans'; text-anchor: middle; fill: #586874" x="259.370079" y="190.081104" transform="rotate(-0 259.370079 190.081104)">Common full/halo0/halo32/halo64 support within each depth · no extrapolation · 95% image-bootstrap intervals</text>
-  </g>
   <g id="legend_1">
    <g id="line2d_124">
     <defs>
@@ -1081,11 +1078,11 @@ z
 " style="stroke: #bf783d"/>
     </defs>
     <g>
-     <use xlink:href="#m0d754b76b2" x="151.535871" y="161.371128" style="fill: #bf783d; stroke: #bf783d"/>
+     <use xlink:href="#m0d754b76b2" x="141.535332" y="161.223814" style="fill: #bf783d; stroke: #bf783d"/>
     </g>
    </g>
-   <g id="text_36">
-    <text style="font-size: 5.8px; font-family: 'Liberation Sans'; text-anchor: start; fill: #20313e" x="161.975871" y="163.401128" transform="rotate(-0 161.975871 163.401128)">Independent 256 cores</text>
+   <g id="text_35">
+    <text style="font-size: 6.5px; font-family: 'Liberation Sans'; text-anchor: start; fill: #20313e" x="151.975332" y="163.253814" transform="rotate(-0 151.975332 163.253814)">Independent 256 cores</text>
    </g>
    <g id="line2d_125">
     <defs>
@@ -1097,11 +1094,11 @@ z
 " style="stroke: #008a96; stroke-linejoin: miter"/>
     </defs>
     <g>
-     <use xlink:href="#m45db37ca7a" x="238.707152" y="161.371128" style="fill: #008a96; stroke: #008a96; stroke-linejoin: miter"/>
+     <use xlink:href="#m45db37ca7a" x="235.867285" y="161.223814" style="fill: #008a96; stroke: #008a96; stroke-linejoin: miter"/>
     </g>
    </g>
-   <g id="text_37">
-    <text style="font-size: 5.8px; font-family: 'Liberation Sans'; text-anchor: start; fill: #20313e" x="249.147152" y="163.401128" transform="rotate(-0 249.147152 163.401128)">32-pixel context halo</text>
+   <g id="text_36">
+    <text style="font-size: 6.5px; font-family: 'Liberation Sans'; text-anchor: start; fill: #20313e" x="246.307285" y="163.253814" transform="rotate(-0 246.307285 163.253814)">32-pixel context halo</text>
    </g>
    <g id="line2d_126">
     <defs>
@@ -1112,11 +1109,11 @@ z
 " style="stroke: #79679a; stroke-linejoin: miter"/>
     </defs>
     <g>
-     <use xlink:href="#m370d304016" x="319.743121" y="161.371128" style="fill: #79679a; stroke: #79679a; stroke-linejoin: miter"/>
+     <use xlink:href="#m370d304016" x="323.323457" y="161.223814" style="fill: #79679a; stroke: #79679a; stroke-linejoin: miter"/>
     </g>
    </g>
-   <g id="text_38">
-    <text style="font-size: 5.8px; font-family: 'Liberation Sans'; text-anchor: start; fill: #20313e" x="330.183121" y="163.401128" transform="rotate(-0 330.183121 163.401128)">64-pixel context halo</text>
+   <g id="text_37">
+    <text style="font-size: 6.5px; font-family: 'Liberation Sans'; text-anchor: start; fill: #20313e" x="333.763457" y="163.253814" transform="rotate(-0 333.763457 163.253814)">64-pixel context halo</text>
    </g>
   </g>
  </g>

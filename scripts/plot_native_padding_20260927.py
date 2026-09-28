@@ -41,7 +41,7 @@ def main():
                 if s['ci95'] is not None:bottom.vlines(x,*s['ci95'],color=F.BLUE,lw=.9)
             bottom.text(x,.96,f'n={row["n"]}',transform=bottom.get_xaxis_transform(),ha='center',va='top',fontsize=5.7,color=F.MUTED)
         top.set(xlabel='Mean payload (bpp)',ylabel='Mean RGB PSNR (dB)' if col==0 else '')
-        bottom.axhline(0,color=F.GREY,lw=.6);bottom.set(xticks=range(3),xticklabels=['0.1','0.2','0.4'],xlabel='Target payload (bpp)',ylabel='Native geometry − image pad64 (dB)' if col==0 else '',xlim=(-.4,2.4))
+        bottom.axhline(0,color=F.GREY,lw=.6);bottom.set(xticks=range(3),xticklabels=['0.1','0.2','0.4'],xlabel='Target payload (bpp)',ylabel='PSNR gain over image padding (dB)' if col==0 else '',xlim=(-.4,2.4))
         bottom.margins(y=.25)
     for axes in (top_axes,bottom_axes):
         low=min(ax.get_ylim()[0] for ax in axes);high=max(ax.get_ylim()[1] for ax in axes)

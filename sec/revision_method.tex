@@ -73,8 +73,20 @@ implementation gathers only the surviving tiles, executes the next block
 pair, and writes departing tiles through their adapters. A deeper tile
 reuses all computation already performed. Evaluating all four candidates
 and masking their reconstructions would not implement this execution saving.
-For the recorded router map at 0.1\,dB in \cref{fig:maps}, the active population decreases
-from 40 to 27, seven and three tiles.
+For the recorded router map at 0.1\,dB, the active population decreases
+from 40 to 27, seven and three tiles (\cref{fig:active}).
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\columnwidth]{figs/refresh20260927/fig8_active_tiles.pdf}
+\caption{\textbf{A spatial decision becomes a smaller workload.}
+The recorded videoSRC05 map at QP32 leaves fewer tiles active at each
+successive block pair. Coloured cells run the indicated stage at their
+padded spatial coordinates; pale cells have already exited. Departures feed the aligned canvas in
+\cref{fig:system}. The suffix evaluates 77 tile pairs versus 160 for an
+all-deep map; this work count does not measure GPU time.}
+\label{fig:active}
+\end{figure}
 
 \subsection{Exit adaptation and boundary consistency}
 

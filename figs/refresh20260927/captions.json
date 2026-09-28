@@ -17,7 +17,11 @@
   },
   {
     "name": "fig5_spatial_decisions",
-    "caption": "Recorded exit assignments at a nominal 0.1 dB target for videoSRC05 QP32. The source-luma thumbnail is archived evaluator data, not generated imagery or a reconstructed output. Maps are cropped to the valid image extent. Depth colours match the execution diagram. This frame was chosen from five available thumbnails by proximity to the aggregate routing margin. Quality and MAC annotations are recorded mixed-output measurements and modelled arithmetic, respectively. At 0.3 dB the search, router and dither maps for this frame all take depth 6; repeated identical maps are omitted."
+    "caption": "Recorded exit assignments at a nominal 0.1 dB target for videoSRC05 QP32: a source luma, b learned router, c Bayer dither, d source-informed search. The source thumbnail is archived evaluator data, not generated imagery or a reconstructed output. Maps are cropped to the valid image extent. Depth colours match the execution trace. The constant uniform-depth8 map is omitted from the display; its recorded result is24.2% synthesis MAC saving and0.082dB loss. This frame was chosen from five available thumbnails by proximity to the aggregate routing margin. Quality and MAC annotations are recorded mixed-output measurements and modelled arithmetic, respectively. At0.3dB the search, router and dither maps all take depth6; repeated identical maps are omitted."
+  },
+  {
+    "name": "fig8_active_tiles",
+    "caption": "Measured-map execution trace for videoSRC05 at QP32 and nominal 0.1 dB source-calibrated control. Rows retain the original 5 by 8 padded tile coordinates. Active populations at total depth 6, 8, 10 and 12 are 40, 27, 7 and 3; departures are 13, 20, 4 and 3. Pale cells have already exited. This shows which tiles enter each block pair, not a GPU schedule, timing or batch-size benchmark. All departures use the adapters and common canvas in Figure 2."
   },
   {
     "name": "fig6_depth_study_system",
