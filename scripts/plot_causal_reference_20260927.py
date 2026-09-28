@@ -62,7 +62,7 @@ def main():
     bottom.add_patch(FancyArrowPatch((57,3.7),(68,3.7),arrowstyle='-|>',mutation_scale=7,color=F.MUTED,lw=.8))
     bottom.text(70,3.4,'Isolated decoder',fontsize=8,weight='bold')
     bottom.text(100,8,'Model identity checked · source analysis disabled',ha='right',fontsize=6,color=F.MUTED)
-    fig.text(.5,.965,'CAUSAL DECODE · CORRECTNESS BEFORE PERFORMANCE',ha='center',weight='bold',fontsize=8)
+    fig.text(.5,.965,'Causal decoding and stream integrity',ha='center',weight='normal',fontsize=6.8)
     fig.text(.5,.89,'CPU FP32 research format · epoch20 D2/D4/D6 and released D12 · no CUDA compatibility or latency claim',ha='center',fontsize=6.3,color=F.MUTED)
     with PdfPages(OUT/'causal_reference_atlas.pdf',metadata=F.PDF_META) as book:
         F.audit_and_save(fig,'fig_causal_reference',

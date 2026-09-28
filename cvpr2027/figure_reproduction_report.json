@@ -1,6 +1,6 @@
 {
   "scope": "Current vector figure reproduction using only bundled data/scripts; no codec inference, training weights, source dataset or GPU.",
-  "artifact_count": 77,
+  "artifact_count": 99,
   "all_byte_identical": true,
   "artifacts": [
     {
@@ -387,6 +387,116 @@
       "file": "figs/research20260927/patch_geometry/patch_geometry_atlas.pdf",
       "sha256": "973f2a76f9d50a7d299426dc95fdca057f7d5aa5404e89a31d9859d70f2961dc",
       "byte_identical": true
+    },
+    {
+      "file": "figs/research20260927/shared_crossfit_qp32/crossfit_replay_atlas.pdf",
+      "sha256": "9ee266a32b17470f042b0e5117d85bd5c404b7c3dc59fb521f105168c209fd54",
+      "byte_identical": true
+    },
+    {
+      "file": "figs/research20260927/shared_crossfit_qp32/fig_crossfit_actual_replay.pdf",
+      "sha256": "9ee266a32b17470f042b0e5117d85bd5c404b7c3dc59fb521f105168c209fd54",
+      "byte_identical": true
+    },
+    {
+      "file": "figs/research20260927/shared_crossfit_qp32/fig_crossfit_actual_replay.png",
+      "sha256": "9bc8dc3068f231ec4546cff427c9190850d89ee521c93c8c2e24c6b5a56be353",
+      "byte_identical": true
+    },
+    {
+      "file": "figs/research20260927/shared_crossfit_qp32/fig_crossfit_actual_replay.svg",
+      "sha256": "4a46952ac057fd9d36fc47fcc9e0b6a1f23a8404b0d3b9d78345a7072eaada7e",
+      "byte_identical": true
+    },
+    {
+      "file": "figs/research20260927/native_padding/fig_native_padding_rd.pdf",
+      "sha256": "7d86b1285afd6c00f27ba086e345508d80d7266daad0311baa6103cbacc12dfe",
+      "byte_identical": true
+    },
+    {
+      "file": "figs/research20260927/native_padding/fig_native_padding_rd.png",
+      "sha256": "3527c4598be63e75c27dba234e922a5732eefa0307e991d74c6cbeb830564a4e",
+      "byte_identical": true
+    },
+    {
+      "file": "figs/research20260927/native_padding/fig_native_padding_rd.svg",
+      "sha256": "9d8ebb9f2ccc8492a719e8e9e97d08bafb255e65035336cbf8ac35b6e8947053",
+      "byte_identical": true
+    },
+    {
+      "file": "figs/research20260927/native_padding/native_padding_atlas.pdf",
+      "sha256": "7d86b1285afd6c00f27ba086e345508d80d7266daad0311baa6103cbacc12dfe",
+      "byte_identical": true
+    },
+    {
+      "file": "figs/research20260927/patch_control_epoch020/fig_patch_matched_rate.pdf",
+      "sha256": "d4e4bf9d8d62a4fb1066fec335583286fdec3c4797f8ab06008c50c6929dc71f",
+      "byte_identical": true
+    },
+    {
+      "file": "figs/research20260927/patch_control_epoch020/fig_patch_matched_rate.png",
+      "sha256": "4e9dc8737dd3721fc9a6615b6dfa2e89367642011b3a4cfe0f24cb72b4abf7ec",
+      "byte_identical": true
+    },
+    {
+      "file": "figs/research20260927/patch_control_epoch020/fig_patch_matched_rate.svg",
+      "sha256": "5c62ab3cbe5af6820371b6061a4f05313b2e86f9bccb8082150543487b1d452f",
+      "byte_identical": true
+    },
+    {
+      "file": "figs/research20260927/patch_control_epoch020/fig_patch_mechanism.pdf",
+      "sha256": "d81a5d3ce4799c5bae53d4c91610c1bb9de8095e4535199576b5a974a721f72d",
+      "byte_identical": true
+    },
+    {
+      "file": "figs/research20260927/patch_control_epoch020/fig_patch_mechanism.png",
+      "sha256": "4f06fc658f9a992c3474047998b0d1eb3086e55b8fad70ea9349e4fa2119e4e4",
+      "byte_identical": true
+    },
+    {
+      "file": "figs/research20260927/patch_control_epoch020/fig_patch_mechanism.svg",
+      "sha256": "bd198491faced2191d6eecf6ad760ec3f392e1c1f1bc7b89d631c1a9359f171c",
+      "byte_identical": true
+    },
+    {
+      "file": "figs/research20260927/patch_control_epoch020/fig_patch_visual_check.pdf",
+      "sha256": "216eff5fffa3e46074f82a66255171a905fefd8470c9808ad5aa3436c425a466",
+      "byte_identical": true
+    },
+    {
+      "file": "figs/research20260927/patch_control_epoch020/fig_patch_visual_check.png",
+      "sha256": "bf4008f85eca3b28aee2a28e60e4c3cce74add8fd89e821329a4e4ca6ee68488",
+      "byte_identical": true
+    },
+    {
+      "file": "figs/research20260927/patch_control_epoch020/fig_patch_visual_check.svg",
+      "sha256": "baf9e2344389005607b4a68203c5f4f781458e651d5abd295db33e36b318ef3c",
+      "byte_identical": true
+    },
+    {
+      "file": "figs/research20260927/patch_control_epoch020/patch_control_atlas.pdf",
+      "sha256": "f4954ce9797676f28ab61b889a9d65fd52b2c50f2bff6aabb3ff72eb58bac8c8",
+      "byte_identical": true
+    },
+    {
+      "file": "figs/research20260927/native_execution/fig_native_encoder_dependencies.pdf",
+      "sha256": "12f821d2384ad5eb8eca4829bbf2003d8dc4300d4ac61843931091547ec3e9dc",
+      "byte_identical": true
+    },
+    {
+      "file": "figs/research20260927/native_execution/fig_native_encoder_dependencies.png",
+      "sha256": "0437002a80a111c05bd69ff13f1ff92f254a89737a308571d0bc34b747b982e9",
+      "byte_identical": true
+    },
+    {
+      "file": "figs/research20260927/native_execution/fig_native_encoder_dependencies.svg",
+      "sha256": "f768342053a9864e8c81f6cc6f31e7cec3efc6d7287152ea8bb5bee8ddd6cd36",
+      "byte_identical": true
+    },
+    {
+      "file": "figs/research20260927/native_execution/native_execution_atlas.pdf",
+      "sha256": "12f821d2384ad5eb8eca4829bbf2003d8dc4300d4ac61843931091547ec3e9dc",
+      "byte_identical": true
     }
   ],
   "scripts_sha256": {
@@ -394,7 +504,7 @@
     "scripts/build_extended_figures.py": "c6be783c3e065c8676c6ac89d402cf2a6f328439fedfd3997fef103af590669a",
     "scripts/plot_crossfit_control_20260927.py": "eadfdc0510405cf9b581c3ab446a45973310cb19f9a761efb49ff473ac0df49a",
     "scripts/plot_depth_macs_20260927.py": "aeeec0a33efd022135e43913d98585ecd5880be931318ff3cae740798e41cd4d",
-    "scripts/build_research_figures.py": "b2c4ceaac8e1abb6787f8616f665b3923ff700768371421ec8f5df4137077989"
+    "scripts/build_research_figures.py": "b9e17085be4dd47743c17166c437675ef827db087f2d7840d7b65e14735a9994"
   },
   "reproduction_script_sha256": "e989614f4b8d21e131668bd594edc807d4e700b7430be50f5768b59ee0ba4b9c"
 }

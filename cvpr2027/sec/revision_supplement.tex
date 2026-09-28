@@ -252,7 +252,7 @@ cases remain in every reported aggregate.
 
 \begin{figure*}[t]
 \centering
-\includegraphics[width=\textwidth,trim=0 14 0 22,clip]{figs/crossfit20260927/fig_crossfit_budget_risk.pdf}
+\includegraphics[width=\textwidth]{figs/crossfit20260927/fig_crossfit_budget_risk.pdf}
 \caption{\textbf{A source-free control trades arithmetic savings against tail risk.}
 Controls are calibrated on other sequences, separately at each QP, using
 the training mean (solid) or 90th percentile (dashed). All 265 pairs are
@@ -268,6 +268,8 @@ a bound on the frequency of large losses, and encoder-side verification of
 every frame are different contracts. Our table result supports investigating
 source-free control, but repair, cropping and reference alignment still
 require final-reconstruction replay before a delivered-quality claim.
+\Cref{sec:actualreplay} performs this replay at the predeclared QP32; it
+also reports the unresolved paired routing margin.
 
 \section{Separating the Histogram from Spatial Placement}
 
@@ -483,7 +485,7 @@ precision must be used for every depth in a future paired timing study.
 
 \begin{figure*}[t]
 \centering
-\includegraphics[width=\textwidth,trim=0 14 0 24,clip]{figs/depthmacs20260927/fig_depth_mac_denominators.pdf}
+\includegraphics[width=\textwidth]{figs/depthmacs20260927/fig_depth_mac_denominators.pdf}
 \caption{\textbf{The arithmetic denominator changes the apparent saving.}
 \textbf{a}, Synthesis varies with depth while neural entropy recovery stays
 fixed. \textbf{b}, The same architectural intervention under three
@@ -663,3 +665,5 @@ upper medians over 24 pooled trials, without invented uncertainty bars.
 different information. This is a stage analysis, not an end-to-end speedup.}
 \label{fig:encoderstages}
 \end{figure*}
+
+\input{sec/revision_spatial_controls}

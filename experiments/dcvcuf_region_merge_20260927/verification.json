@@ -1,0 +1,31 @@
+{
+  "all_profiles_exact": true,
+  "profiles": 10,
+  "source_sha256": {
+    "decode_worker.py": "576507ecd736e94a45ea3dcaddd0842bdf979819fecce9b4938ea32b5f1e3067",
+    "evaluate.py": "906665cc2250ae1101a4dffec496eba7221774499081195e41b9760b5610acf3",
+    "layout.py": "532e25a1f685f219636daea22a9aabf3cf059e785bb307db1ef8b928900d41ef"
+  },
+  "layout_checks": {
+    "profiles": 10,
+    "core_coverage_exact": true,
+    "equal_depth_pixel_counts": true,
+    "merged_maps_unchanged": true,
+    "component_counts": [
+      4,
+      4,
+      4,
+      4,
+      2,
+      2,
+      4,
+      4,
+      2,
+      2
+    ],
+    "malformed_containers_rejected": 7
+  },
+  "cuda_initialized": false,
+  "completed_utc": "2026-09-28T00:06:25.759048+00:00",
+  "scope": "One predeclared image/QP engineering proof, not comparative quality evidence"
+}

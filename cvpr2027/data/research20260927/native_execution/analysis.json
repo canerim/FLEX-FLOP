@@ -1,0 +1,51 @@
+{
+  "scope": "Static dependency and resource audit of pinned native source; no CUDA execution, latency or overlap measurement.",
+  "upstream_commit": "cbdae87a5445114cdc7f48816da63ea80bdeac40",
+  "source_sha256": {
+    "src/layers/extensions/inference/dmci_proxy.cpp": "6abe04a1ba3ee1c5b0ac81327f93afdc5b72a83c7a8dc0c3459445492c6a2590",
+    "src/layers/extensions/inference/memory_pool.h": "0e5bf89c9cc7cbfb10d88733dd439278a07aad89b0f2cc058b5d0ed189600441",
+    "src/models/image_model.py": "95ff7158ffa592b608f346f3585e6111380bee08e50096a1e7c0355acf01089e"
+  },
+  "source_anchors": {
+    "run(lambda_enc_0, m_gexec_enc_0, m_qp);": 396,
+    "cudaEventRecord(m_event_y, stream)": 399,
+    "m_pending_work = DMCWorkType::Encode;": 403,
+    "run(lambda_enc_1, m_gexec_enc_1, m_qp);": 412,
+    "m_cv_result.wait(lk,": 416,
+    "m_entropy_encoder.get_encoded_stream()": 418,
+    "cudaStreamWaitEvent(at::cuda::getCurrentCUDAStream(), m_event_y)": 820,
+    "cudaMemcpyAsync(m_y_to_encode[i]->data()": 829,
+    "cudaStreamSynchronize(at::cuda::getCurrentCUDAStream())": 833,
+    "m_entropy_encoder.encode_y(": 840,
+    "m_entropy_encoder.encode_z(": 844,
+    "m_entropy_encoder.flush();": 845
+  },
+  "encoder_dependencies": [
+    "source pad/unshuffle",
+    "analysis/hyperanalysis + prior + quantized latent",
+    "event_y + notify worker",
+    "main-stream synthesis overlaps potential worker-stream index gather/D2H and CPU rANS",
+    "wait for entropy worker result",
+    "return payload and GPU reconstruction tensor",
+    "caller CUDA synchronization for complete wall time"
+  ],
+  "worker_dependencies": [
+    "wait event_y",
+    "GPU conditional symbol gather, reverse stages3,2,1,0",
+    "device-to-host copies",
+    "worker stream synchronization",
+    "CPU encode_y, encode_z,flush",
+    "signal m_result_ready"
+  ],
+  "timing_rule": "Charge synchronized elapsed time around the complete API workload. Do not sum separately measured stage times; include output transfer only if the selected deployment contract requires it.",
+  "model_bank_rule": "Count source feature extraction, predictor, grouping, model selection, entropy work, region assembly, headers and memory. Mode-map selection does not make independently learned latent representations interchangeable.",
+  "pool_observation": "TensorPool is a global object. Acquire/release is mutex-protected, but buffer reuse and cached CUDA graphs require explicit multi-proxy/output-lifetime correctness tests. Static inspection alone does not prove a race or invalid output.",
+  "remaining_checks": [
+    "stock versus patchedD12 numeric/payload parity",
+    "fresh decoder-only initialization",
+    "D2/D4/D6 shape/QP recapture",
+    "resident expert switching and output lifetime",
+    "serial and grouped scheduling latency under the same metric contract"
+  ],
+  "analysis_script_sha256": "de7b4aa7f03d79eb587e8f30a7168f54f21da67f14c324af02c2288016062c36"
+}

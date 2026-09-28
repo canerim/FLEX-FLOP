@@ -97,3 +97,33 @@ setup,CUDA12.1/PyTorch-cu126 toolchain,CUTLASS revision andSM86 flags.
 Both stock and patched modules remain isolated and uninstalled. This prepares
 a controlled future GPU comparison; neither module has been numerically
 validated or benchmarked on a GPU during this session.
+
+## Prepared correctness harness (28 September)
+
+`validate_native.py` defaults to a CPU-only preflight. It hashes the isolated
+stock/patched binaries, strictly loads D2/D4/D6/releasedD12, verifies retained
+block prefixes and constructs CDFs before any FP16 conversion. The current
+CPU proof is in `cpu_preflight_20260928.json`; no CUDA context was initialized.
+
+The explicit GPU mode requires an idle allocated SM86 GPU and a fresh output
+directory. It checks occupancy before every worker and never stops another
+process. It is **prepared but not GPU-tested**. The fixed matrix is two source
+crops ×seven geometries ×three QPs, plus the first case repeated after shape
+and QP recapture (43 cases per model). The geometry grid includes the
+288×512 and 512×288 rectangles used by the region-coalescing control.
+StockD12, patchedD12 and patchedD2/D4/D6 use separate
+processes. A source-free decoder worker receives only bytes and required
+metadata; encoder functions are disabled. Reconstructions are copied to CPU
+before another native call, avoiding global-pool alias comparisons. The
+harness requires exact independent reconstruction, repeated-case equality
+and exact stock/patchedD12 payload equality. It does not test resident-expert
+switching, grouped execution, native stream framing or latency.
+
+CPU-only command:
+
+```bash
+python experiments/dcvcuf_native_depth_20260927/validate_native.py --preflight
+```
+
+All study GPUs were occupied by the official training during preparation;
+GPU correctness mode was not launched.

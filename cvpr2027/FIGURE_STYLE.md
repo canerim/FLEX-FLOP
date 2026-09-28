@@ -5,8 +5,8 @@ TrueType PDF fonts and editable SVG text. Quantitative plots and exact
 execution diagrams are generated from bundled source tables with Matplotlib.
 The protected opening overview and the shared-exit mechanism are separate AI-generated conceptual rasters,
 labelled as such in their captions; neither contains experimental reconstructions.
-Their prompts and provenance are recorded in `IMAGEGEN.md`. The data figures
-use only archived source-luma thumbnails as raster content. Diagrams use tensor planes, nested block
+Their prompts and provenance are recorded in `IMAGEGEN.md`. The data figures use archived source-luma thumbnails and explicitly
+identified, predeclared RGB reconstruction windows as raster content. Diagrams use tensor planes, nested block
 strips, active-tile grids, feature joins, expert queues and coded-stream
 segments to explain the computation.
 
@@ -19,7 +19,7 @@ segments to explain the computation.
 | Text and axes | Ink `#20313E` | Direct labels and explicit units |
 | Grid | Pale grey `#E5EAED` | Fine horizontal guides |
 
-Depth uses an ordered six-colour scale: `#D8ECE7`, `#A7D2C9`, `#70B6AB`,
+Depth diagrams and maps use an ordered six-colour scale: `#D8ECE7`, `#A7D2C9`, `#70B6AB`,
 `#34968F`, `#267382`, `#244B68` for 2/4/6/8/10/12 blocks. The current
 shared-exit maps use only the last four colours. Every map has a numerical
 key, so colour is not the sole carrier of depth information.

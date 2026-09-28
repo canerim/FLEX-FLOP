@@ -73,7 +73,7 @@ implementation gathers only the surviving tiles, executes the next block
 pair, and writes departing tiles through their adapters. A deeper tile
 reuses all computation already performed. Evaluating all four candidates
 and masking their reconstructions would not implement this execution saving.
-For the recorded example in \cref{fig:system}, the active population decreases
+For the recorded router map at 0.1\,dB in \cref{fig:maps}, the active population decreases
 from 40 to 27, seven and three tiles.
 
 \subsection{Exit adaptation and boundary consistency}
@@ -120,8 +120,8 @@ the new full 105-epoch official-recipe depth study in \cref{sec:depth}.
 The supplement records the available training provenance and its limits.
 
 The evaluated stopping predictor uses a 384-to-48 pointwise stem projection,
-per-tile mean and standard deviation, and the normalised QP. A two-layer
-256-unit MLP predicts exit scores. Inspection of the actual router checkpoint
+per-tile mean and standard deviation, and the normalised QP. An MLP with two
+256-unit hidden layers predicts exit scores. Inspection of the actual router checkpoint
 shows that its live inputs are \emph{stem and QP}; the more general
 implementation contains latent, entropy-scale and bit-feature branches, but
 these do not supply content information in this run. This distinction is

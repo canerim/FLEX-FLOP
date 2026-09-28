@@ -57,13 +57,17 @@ every candidate depth.
 We then separate the value of \emph{cheaper depth} from the value of
 \emph{content-dependent placement}. Uniform depth tests global truncation.
 Ordered dithering permits mixtures of depths without predicting where
-extra synthesis is useful. Learned routing improves on this stronger
-control by \MainPremium\ percentage points of synthesis MAC saving at a
+extra synthesis is useful. Under source-calibrated control, learned routing
+improves on this stronger baseline by \MainPremium\ percentage points of synthesis MAC saving at a
 nominal 0.1\,dB target, above dithering's \MainDitherSaving\% reduction.
 That increment shrinks near the shallowest-exit ceiling. This pattern
 locates the useful regime for adaptation: there must be both remaining
 compute to remove and meaningful differences in where deeper processing
 helps. A common delivered-loss analysis retains the same qualitative result.
+A separate QP32 replay with sequence-disjoint controls tests the harder
+deployment question: its paired routing margin remains statistically
+unresolved. We therefore distinguish evidence for useful allocation from
+evidence that a deployable selector reliably captures that value.
 
 We contribute a spatially conditional DCVC-UF synthesis path with reusable
 prefixes, aligned exits and full-frame boundary repair, and a controlled

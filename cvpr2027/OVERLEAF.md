@@ -4,7 +4,7 @@ Overleaf main document: **`main.tex`**, compiler **pdfLaTeX**. This repository's
 root is the `cvpr2027/` subtree of the FLEX-PLUS research workspace.
 
 The 28 September 2026 adaptive-system revision contains a DCVC-UF manuscript,
-23 editable vector figure sets, two generated conceptual illustrations,
+27 editable vector figure sets, two generated conceptual illustrations,
 paired source tables, generated numerical macros and hash manifests.
 Shared early exit is evaluated; independent model-bank routing remains
 prospective. Build with:
@@ -60,8 +60,8 @@ FLEX research repository under `scripts/paper_refresh_data.py` and
 records/checkpoints. Source hashes captured during this revision are
 inspection provenance, not retrospective proof of historical execution.
 `figure_reproduction_report.json` records a separate reproduction using only
-the bundled data and scripts: all77 generated PDF/SVG/PNG artifacts across
-the23 vector figure sets were byte-identical. Calibration and
+the bundled data and scripts: all99 generated PDF/SVG/PNG artifacts across
+the29 vector figure sets were byte-identical. Calibration and
 arithmetic-denominator figures also have separate source and artifact
 manifests and are included in bundle verification.
 Figure 1 is a protected, unchanged AI overview. Figure 2 uses a new shared-exit

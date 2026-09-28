@@ -119,6 +119,9 @@ def main():
         folder=family['folder'];source=ROOT/'data/research20260927'/folder/family['data_file']
         assert digest(source)==family['data_sha256']
         assert digest(ROOT/'scripts'/family['script'])==family['plot_script_sha256']
+        for name,expected in family.get('auxiliary_files_sha256',{}).items():
+            assert digest(source.parent/name)==expected
+            checked.append(str((source.parent/name).relative_to(ROOT)))
         research_inputs[folder]=json.loads(source.read_text());checked.append(str(source.relative_to(ROOT)))
         path=ROOT/'figs/research20260927'/folder
         evidence=json.loads((path/'figure_evidence.json').read_text())
@@ -154,6 +157,54 @@ def main():
     for cohort in research_inputs['depth_allocation']['results']:
         assert len(cohort['curves'])==2*cohort['n']+1
         assert all(r['d4_option_value_db']>=-1e-9 and r['placement_premium_db']>=-1e-9 for r in cohort['curves'])
+    if 'shared_crossfit_qp32' in research_inputs:
+        replay=research_inputs['shared_crossfit_qp32'];rows=replay['rows']
+        assert len(rows)==318 and len({(r['sequence'],r['criterion'],r['policy']) for r in rows})==318
+        assert all(r['qp']==32 and r['budget']==.1 for r in rows)
+        for summary in replay['summaries']:
+            selected=[r for r in rows if (r['criterion'],r['policy'])==(summary['criterion'],summary['policy'])]
+            assert len(selected)==summary['n']==53
+            for metric,stats in summary['metrics'].items():
+                assert abs(sum(r[metric] for r in selected)/53-stats['mean'])<1e-10
+            for metric,count in summary['above_nominal_target'].items():
+                assert sum(r[metric]>.1+replay['nominal_exceedance_tolerance_db'] for r in selected)==count
+        router_path=ROOT/'data/research20260927/shared_crossfit_qp32/router_logit_audit.json'
+        if router_path.exists():
+            router=json.loads(router_path.read_text())
+            assert len(router['rows'])==53
+            for row in router['rows']:
+                assert sum(r['macs'] for r in row['router_layers'])==row['router_conv_linear_macs']
+                for comparison in row['comparisons']:
+                    replay_row=next(r for r in rows if (r['sequence'],r['criterion'],r['policy'])==(row['sequence'],comparison['criterion'],'router'))
+                    assert comparison['archived_map']==replay_row['map']
+                    assert comparison['changed_tiles']==sum(a!=b for a,b in zip(comparison['fresh_map'],comparison['archived_map']))
+    if 'patch_control_epoch020' in research_inputs:
+        patch=research_inputs['patch_control_epoch020'];rows=patch['rows']
+        assert patch['cases']==240 and len(rows)==960 and len(patch['images'])==16
+        assert len({(r['depth'],r['image'],r['qp'],r['variant']) for r in rows})==960
+        for row in rows:
+            headers=88 if row['variant']=='full' else 352
+            assert abs(row['container_bpp']-row['payload_bpp']-headers*8/512**2)<1e-12
+            assert abs(row['psnr_rgb']+10*math.log10(row['mse_rgb']))<1e-9
+        windows=ROOT/'data/research20260927/patch_control_epoch020'
+        assert digest(windows/'qualitative_windows.npz')==json.loads((windows/'qualitative_windows.json').read_text())['asset_sha256']
+        checked.extend(str((windows/name).relative_to(ROOT)) for name in ('qualitative_windows.npz','qualitative_windows.json'))
+    if 'native_padding' in research_inputs:
+        padding=research_inputs['native_padding']
+        assert padding['n_cases']==240 and len(padding['rows'])==1200
+    if 'region_merge' in research_inputs:
+        bank=research_inputs['region_merge'];rows=bank['rows']
+        assert bank['n_cases']==80 and bank['n_profiles']==len(rows)==800
+        assert len({(r['image'],r['qp'],r['profile']) for r in rows})==800
+        for row in rows:
+            count=row['n_regions']
+            assert row['container_bytes']==row['payload_bytes']+88*count+12+4*count
+            assert count==(2 if row['merged'] else 4)
+    if 'component_interventions' in research_inputs:
+        intervention=research_inputs['component_interventions']
+        assert intervention['n_sequences']==len(intervention['cases'])==53
+        assert intervention['n_outputs']==sum(len(r['rows']) for r in intervention['cases'])==212
+        assert all(r['head_replay_exact']==[True,True] and r['baseline_matches_complete_replay'] for r in intervention['cases'])
     calibration_source=json.loads((ROOT/'figs/crossfit20260927/source_manifest.json').read_text())
     assert calibration_source['analysis_sha256']==digest(ROOT/'data/crossfit20260927/analysis.json')
     assert calibration_source['plot_script_sha256']==digest(ROOT/'scripts/plot_crossfit_control_20260927.py')

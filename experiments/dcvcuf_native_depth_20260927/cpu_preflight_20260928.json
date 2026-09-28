@@ -1,0 +1,209 @@
+{
+  "state": "cpu_preflight_complete",
+  "completed_utc": "2026-09-28T01:26:48.991889+00:00",
+  "binaries": {
+    "stock": {
+      "path": "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/research/native_stock_build_sm86/lib/inference_extensions_cuda.cpython-312-x86_64-linux-gnu.so",
+      "sha256": "e0c82eac069480b0e076ad1c8d6753e67040c2d6678b0dba3b8bc8d2e95bd9c5",
+      "setup_sha256": "29f4fb82779ce6803313c318a9e35d3431f14621682fcb42fbb48caab8cc0536"
+    },
+    "patched": {
+      "path": "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/research/native_depth_build_sm86/lib/inference_extensions_cuda.cpython-312-x86_64-linux-gnu.so",
+      "sha256": "38ab846dfbb36ae9da2d4da3ac8d5e210c2101052c5f8e1ae5f431dd82af235b",
+      "setup_sha256": "29f4fb82779ce6803313c318a9e35d3431f14621682fcb42fbb48caab8cc0536"
+    }
+  },
+  "models": [
+    {
+      "depth": 2,
+      "checkpoint": {
+        "path": "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/runs/d2/weights_epoch020.pt",
+        "sha256": "5e1c97f8b72f2e7ca71409aca9a88edd92d04e344e9202974bc26cc8d106777d",
+        "depth": 2,
+        "upstream_commit": "cbdae87a5445114cdc7f48816da63ea80bdeac40",
+        "parameters": 31792128,
+        "epoch": 20,
+        "global_step": null,
+        "model_source_sha256": "95ff7158ffa592b608f346f3585e6111380bee08e50096a1e7c0355acf01089e",
+        "common_source_sha256": "e309a7144514836f29453f8d1fe65df8f7ab72d17ed1efea08ac35ee9f67469a"
+      },
+      "retained_blocks_verified": 2,
+      "cdf": {
+        "gaussian_encoder.quantized_cdf": {
+          "shape": [
+            128,
+            19
+          ],
+          "dtype": "torch.int32",
+          "sha256": "712894be548cb9076bd58cf9ed826f173cae12b91a033c26919d6a24fdf176d4"
+        },
+        "gaussian_encoder.cdf_length": {
+          "shape": [
+            128
+          ],
+          "dtype": "torch.int32",
+          "sha256": "ec89e77281dd367055c063a73f86a7e2af939cdfcc2bb44bc0ce156e95952abf"
+        },
+        "bit_estimator_z.quantized_cdf": {
+          "shape": [
+            8192,
+            19
+          ],
+          "dtype": "torch.int32",
+          "sha256": "537f5b122db7b3b14b0ca02a802c3c320df8aefd42937d0309395e09c1f61134"
+        },
+        "bit_estimator_z.cdf_length": {
+          "shape": [
+            8192
+          ],
+          "dtype": "torch.int32",
+          "sha256": "5dd3cac71f272f6a03e4433860fa50d64491549d47ae7154654fb2d8e9cf7194"
+        }
+      }
+    },
+    {
+      "depth": 4,
+      "checkpoint": {
+        "path": "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/runs/d4/weights_epoch020.pt",
+        "sha256": "56b4685a96838a35798a4bcad69629c2a36a04723ed839436f3fefed22f97590",
+        "depth": 4,
+        "upstream_commit": "cbdae87a5445114cdc7f48816da63ea80bdeac40",
+        "parameters": 33869568,
+        "epoch": 20,
+        "global_step": null,
+        "model_source_sha256": "95ff7158ffa592b608f346f3585e6111380bee08e50096a1e7c0355acf01089e",
+        "common_source_sha256": "e309a7144514836f29453f8d1fe65df8f7ab72d17ed1efea08ac35ee9f67469a"
+      },
+      "retained_blocks_verified": 4,
+      "cdf": {
+        "gaussian_encoder.quantized_cdf": {
+          "shape": [
+            128,
+            19
+          ],
+          "dtype": "torch.int32",
+          "sha256": "712894be548cb9076bd58cf9ed826f173cae12b91a033c26919d6a24fdf176d4"
+        },
+        "gaussian_encoder.cdf_length": {
+          "shape": [
+            128
+          ],
+          "dtype": "torch.int32",
+          "sha256": "ec89e77281dd367055c063a73f86a7e2af939cdfcc2bb44bc0ce156e95952abf"
+        },
+        "bit_estimator_z.quantized_cdf": {
+          "shape": [
+            8192,
+            19
+          ],
+          "dtype": "torch.int32",
+          "sha256": "40551bc15245f961003e9bf3d4b652ae64b3ac8ebbd29911b670f32640409f2a"
+        },
+        "bit_estimator_z.cdf_length": {
+          "shape": [
+            8192
+          ],
+          "dtype": "torch.int32",
+          "sha256": "f83c26574f0504ca599d205d984088b04dcb9ae8fd0b8a7623da76ad684407f9"
+        }
+      }
+    },
+    {
+      "depth": 6,
+      "checkpoint": {
+        "path": "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/runs/d6/weights_epoch020.pt",
+        "sha256": "55f91bb36338ff4e847eb422e0475353685846f3e7b4dab03ac8a3e13194b997",
+        "depth": 6,
+        "upstream_commit": "cbdae87a5445114cdc7f48816da63ea80bdeac40",
+        "parameters": 35947008,
+        "epoch": 20,
+        "global_step": null,
+        "model_source_sha256": "95ff7158ffa592b608f346f3585e6111380bee08e50096a1e7c0355acf01089e",
+        "common_source_sha256": "e309a7144514836f29453f8d1fe65df8f7ab72d17ed1efea08ac35ee9f67469a"
+      },
+      "retained_blocks_verified": 6,
+      "cdf": {
+        "gaussian_encoder.quantized_cdf": {
+          "shape": [
+            128,
+            19
+          ],
+          "dtype": "torch.int32",
+          "sha256": "712894be548cb9076bd58cf9ed826f173cae12b91a033c26919d6a24fdf176d4"
+        },
+        "gaussian_encoder.cdf_length": {
+          "shape": [
+            128
+          ],
+          "dtype": "torch.int32",
+          "sha256": "ec89e77281dd367055c063a73f86a7e2af939cdfcc2bb44bc0ce156e95952abf"
+        },
+        "bit_estimator_z.quantized_cdf": {
+          "shape": [
+            8192,
+            19
+          ],
+          "dtype": "torch.int32",
+          "sha256": "6e0720d4e6e6b9be37397a77d8dd1863bee026ce45c77dbb92d5ff64db104904"
+        },
+        "bit_estimator_z.cdf_length": {
+          "shape": [
+            8192
+          ],
+          "dtype": "torch.int32",
+          "sha256": "32bb5906f52a1f5049fb8208be5505faa6df92c2976c352a61ef27f61018a2cf"
+        }
+      }
+    },
+    {
+      "depth": 12,
+      "checkpoint": {
+        "path": "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/reference_d12/released_cvpr2026_image.pth.tar",
+        "sha256": "b3b900de23f30e4fc437010ddffe6a5413a56d6cfd97fb6235adbcd2b6973302",
+        "depth": 12,
+        "upstream_commit": "cbdae87a5445114cdc7f48816da63ea80bdeac40",
+        "parameters": 42179328,
+        "epoch": null,
+        "global_step": null,
+        "model_source_sha256": "95ff7158ffa592b608f346f3585e6111380bee08e50096a1e7c0355acf01089e",
+        "common_source_sha256": "e309a7144514836f29453f8d1fe65df8f7ab72d17ed1efea08ac35ee9f67469a"
+      },
+      "retained_blocks_verified": 12,
+      "cdf": {
+        "gaussian_encoder.quantized_cdf": {
+          "shape": [
+            128,
+            19
+          ],
+          "dtype": "torch.int32",
+          "sha256": "712894be548cb9076bd58cf9ed826f173cae12b91a033c26919d6a24fdf176d4"
+        },
+        "gaussian_encoder.cdf_length": {
+          "shape": [
+            128
+          ],
+          "dtype": "torch.int32",
+          "sha256": "ec89e77281dd367055c063a73f86a7e2af939cdfcc2bb44bc0ce156e95952abf"
+        },
+        "bit_estimator_z.quantized_cdf": {
+          "shape": [
+            8192,
+            19
+          ],
+          "dtype": "torch.int32",
+          "sha256": "1c4ab9e41076ced1e54a8cbe35f3dc0af4174781d5e652c4569cbb96a59c5a90"
+        },
+        "bit_estimator_z.cdf_length": {
+          "shape": [
+            8192
+          ],
+          "dtype": "torch.int32",
+          "sha256": "b52483c642da3ca6e4491e7f3223f1ff1493953d9da4e2f146b04fd3e7e4d7c8"
+        }
+      }
+    }
+  ],
+  "cuda_initialized": false,
+  "script_sha256": "f9d53d1c8f1ada52217ff166e7a53ad03e5ce5eda8cd8b2dbef031f5e7dab98d",
+  "scope": "Strict model/prefix/CDF/binary preparation only. GPU exactness, graph recapture, residency and runtime are not tested."
+}

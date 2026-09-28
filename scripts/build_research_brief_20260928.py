@@ -1,0 +1,137 @@
+"""Create a two-page Turkish decision brief from completed, auditable results."""
+import datetime,hashlib,json,subprocess
+from pathlib import Path
+ROOT=Path(__file__).resolve().parents[1]
+OUT=ROOT/'docs/research/2026-09-27-six-hour'
+SERVER=Path('/data10/shareddata/can_karsal/dcvcuf_depth_20260927')
+
+
+def load(folder):return json.loads((OUT/folder/'analysis.json').read_text())
+def ci(stats):return f"{stats['mean']:+.3f} [{stats['ci95'][0]:+.3f}, {stats['ci95'][1]:+.3f}]"
+
+
+def main():
+    replay=load('shared_crossfit_qp32');padding=load('native_padding');merge=load('region_merge');components=load('component_interventions')
+    logit=load('router_logit_replay')
+    mean=next(r for r in replay['paired_router_dither'] if r['criterion']=='mean')['summaries']['saving_points']
+    native=next(r for r in padding['matched_rate'] if (r['depth'],r['target_bpp'],r['rate_field'],r['interpolator'])==(6,.2,'payload_bpp','linear'))
+    merged={p:next(r for r in merge['matched_rate'] if (r['pattern'],r['target_bpp'],r['rate_field'],r['interpolator'])==(p,.2,'payload_bpp','linear')) for p in ('vertical','horizontal')}
+    effect={r['variant']:r['metrics']['psnr_loss_db'] for r in components['summaries']}
+    # Capture the monitor's observation timestamp, not an invented current epoch.
+    watch=json.loads((SERVER/'watch/latest.json').read_text())
+    now=datetime.datetime.now(datetime.timezone.utc).strftime('%Y-%m-%d %H:%M UTC')
+    sources={str(OUT/f/'analysis.json'):hashlib.sha256((OUT/f/'analysis.json').read_bytes()).hexdigest() for f in ('shared_crossfit_qp32','native_padding','region_merge','component_interventions','router_logit_replay')}
+    evidence={'generated_utc':now,'source_sha256':sources,'training_monitor_snapshot':watch,
+        'scope':'Interim measurements and research decisions. No invented experiments, native timing, completed105epoch training or untouched-test claims.'}
+    (OUT/'RESEARCH_BRIEF_TR_sources.json').write_text(json.dumps(evidence,indent=2)+'\n')
+    rows=[
+        r'Router $-$ dithering & '+ci(mean)+r' MAC puanı & QP32, 53 sequence; CI sıfırı içeriyor.\\',
+        r'Padding yeri & '+ci(native['native_minus_pad64_psnr_db'])+r' dB & D6, 0.2 payload bpp; 16 görüntü.\\',
+        r'Halo32 $-$ full-frame & '+ci(native['versus_full']['halo32_native_shape'])+r' dB & Düzeltilmiş geometri; context maliyeti sürüyor.\\',
+        r'Bölge birleştirme & '+f"{merged['vertical']['phase_averaged_gain_db']['mean']:+.3f} / {merged['horizontal']['phase_averaged_gain_db']['mean']:+.3f}"+r' dB & Dikey/yatay; aynı piksel derinlikleri, 0.2 bpp.\\',
+        r'Repair / adapter kapalı & '+f"{effect['repair_identity']['mean']:+.3f} / {effect['adapters_identity']['mean']:+.3f}"+r' dB kayıp & 53 frame; ağırlıklar sabit, yeniden eğitim yok.\\']
+    paper=ROOT/'cvpr2027'
+    text=r'''\documentclass[10pt,a4paper]{article}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern,geometry,graphicx,booktabs,array,xcolor,hyperref}
+\geometry{margin=16mm}
+\definecolor{ink}{HTML}{20313E}\definecolor{teal}{HTML}{008A96}
+\hypersetup{colorlinks=true,urlcolor=teal}
+\setlength{\parindent}{0pt}\setlength{\parskip}{5pt}
+\renewcommand{\arraystretch}{1.25}
+\pagestyle{plain}
+\begin{document}\color{ink}
+{\Large\bfseries FLEX-UF: araştırma durumu ve sonraki kararlar}\\[3pt]
+{\small 28 Eylül 2026 \quad Güncelleme: '''+now+r'''}
+
+\textbf{Ana hikâye.} DCVC-UF'de her bölgeye aynı synthesis derinliğini vermek
+yerine, ek hesaplamanın faydalı olduğu yere derinlik ayırıyoruz. Mevcut
+uygulama ortak latent üzerinde early exit; 2/4/6/8/10/12 bağımsız codec
+bankası aynı sorunun farklı bir uygulaması. Banka ile early exit ardışık
+iki aşama değil. Resmî D2/D4/D6 eğitimleri devam ediyor; 105 epoch tarifi
+ve train\_0/1/2 kapsamı kısaltılmadı.
+
+\textbf{Tamamlanan kontroller.} Epoch 20'de 100 DIV2K görüntüsü, dört model
+ve beş QP için 2.000 gerçek-byte/bağımsız-decode kontrolü var.
+0.2 payload bpp'de D6--D2 farkı 0.1834 dB (99 ortak görüntü).
+Released D12 başka eğitim geçmişine sahip; bu karşılaştırma nihai,
+eş-eğitimli bir depth ablasyonu değil.
+
+{\small
+\begin{tabular}{@{}p{35mm}p{57mm}p{76mm}@{}}\toprule
+Kontrol & Ölçülmüş fark & Kapsam ve yorum\\\midrule
+'''+ '\n'.join(rows)+r'''
+\bottomrule\end{tabular}}
+
+\textbf{Router'ın değeri henüz dış testte kanıtlanmış değil.}
+Kaynak görüntüyle kalibre edilen analizde pozitif marj var. Sequence-disjoint
+kontrollerle gerçek görüntü tekrarında ortalama/Q90 farklarının güven
+aralıkları sıfırı içeriyor; aynı nominal bütçe de aynı gerçekleşmiş kalite
+demek değil. CPU'da yeniden hesaplanan router her iki sabit kontrolde
+1.765/1.765 tile kararını tekrar üretti; bu, bütün QP ve eşikler için garanti değil.
+
+\begin{center}
+\includegraphics[width=\linewidth]{'''+str(paper/'figs/research20260927/shared_crossfit_qp32/fig_crossfit_actual_replay.pdf')+r'''}
+\end{center}
+{\footnotesize QP32'de tüm 53 sequence korunur. CI'lar sabit checkpoint ve bu
+geliştirme kümesine koşulludur; training-seed belirsizliğini içermez.
+RGB ile eski 444-MSE metriği ayrı raporlanır.}
+
+\newpage
+{\Large\bfseries Bir sonraki iyi deney neyi değiştirmeli?}
+
+\textbf{Önce uygulama maliyetini düzelt.} Padding kontrolü yaklaşık çeyrek
+dB geri kazandırıyor ama tekrarlanan context'in eşit-rate kaybını silmiyor.
+Aynı expert'e atanmış komşuları birleştirmek, pixel-depth haritasını
+değiştirmeden ayrı region sayısını azaltıyor. Sabit D2/D6 haritasında neural
+decoder Conv2d MAC maliyeti \%12.44 azalıyor; bu oran bir runtime sonucu değil.
+Bitstream başlıkları ve birleşme sonrası gerçek RD ayrıca ölçülmeli.
+
+\begin{center}
+\includegraphics[width=\linewidth]{'''+str(paper/'figs/research20260927/native_execution/fig_native_encoder_dependencies.pdf')+r'''}
+\end{center}
+{\footnotesize Kaynak kodundan çıkarılmış işlem bağımlılıkları; çizgi uzunlukları
+süreyi göstermez. Native encoder synthesis ile entropy worker'ı örtüştürebilir.
+Tam süre, bütün çıktı tamamlandıktan sonra ölçülür; aşama süreleri toplanmaz.}
+
+\textbf{Öncelik sırası}
+\begin{enumerate}\setlength{\itemsep}{2pt}
+\item \textbf{Native doğruluk ve toplam süre:} stock/patched D12 eşleşmesi,
+yalnız bitstream alan yeni decoder süreci, D2/D4/D6 shape/QP geçişleri.
+Ardından aynı GPU'da uniform, Bayer ve router; seçim, entropy, taşıma,
+gruplama ve assembly dahil. Eğitim GPU'ları meşgulken timing yapma.
+\item \textbf{Adapter ve repair için eş eğitimli kontroller:} mevcut
+identity müdahalesi checkpoint bağımlılığını gösterir. Bileşenin gerekliliği
+için aynı veri, update ve seed ile yeniden eğitim gerekir.
+\item \textbf{Kalibrasyon ve test ayrımı:} router training, calibration ve
+test görüntü/sequence kimlikleri ayrılmalı. İncelenen DIV2K/CTC kümeleri
+artık dokunulmamış test sayılamaz. Achieved-quality ve tail-risk birlikte raporlanmalı.
+\item \textbf{Kapasite kontrolü:} released D12 yanında aynı tarifli D12-scratch.
+Sonra D8/D10 ve leave-one-expert-out; altı expert'in gerekli olduğu varsayılmamalı.
+\item \textbf{Yeni predictor hedefi:} expert-ID doğruluğu yerine ek derinliğin
+RD faydasını tahmin et. Sınır cezası ve region merging'i aynı histogram/map
+kontrolleriyle sınayarak ucuz seçimin net faydasını ölç.
+\end{enumerate}
+
+\textbf{Makale teslimi.} Figure 1 byte düzeyinde korunur. Diğer figürlerde
+ortak palet, fiziksel panel ölçüsü, açık metrik/ünite, paired CI ve
+taşınabilir vector kaynakları kullanılır. Yeni Figure 2 kavramsal AI
+illüstrasyonudur; ölçülmüş çıktı değildir. Ana metin 8 sayfa + kaynakça,
+detaylı kontroller ekte. Eksik deneylere tahmini sonuç yazılmaz.
+
+{\footnotesize Kanıt dosyaları: \texttt{RESEARCH\_BRIEF\_TR\_sources.json};
+tam plan: \texttt{DECISIONS\_AFTER\_CONTROLS\_TR.md}.
+Paper ve figürler: \href{https://github.com/canerim/cvpr2027}{canerim/cvpr2027}.
+Bu rapor native hızlanma veya tamamlanmış final training iddiası taşımaz.}
+\end{document}
+'''
+    target=OUT/'RESEARCH_BRIEF_TR.tex';target.write_text(text)
+    with (OUT/'RESEARCH_BRIEF_TR_build.log').open('w') as log:
+        subprocess.run(['pdflatex','-interaction=nonstopmode','-halt-on-error',target.name],cwd=OUT,stdout=log,stderr=subprocess.STDOUT,check=True)
+    info=subprocess.check_output(['pdfinfo',str(target.with_suffix('.pdf'))],text=True)
+    if not any(line.split()==['Pages:','2'] for line in info.splitlines()):raise ValueError('Brief must fit exactly two pages')
+    print(target.with_suffix('.pdf'))
+
+
+if __name__=='__main__':main()

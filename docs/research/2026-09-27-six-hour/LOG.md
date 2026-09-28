@@ -221,3 +221,25 @@ The prior CPU research processes were absent at00:02UTC after records stopped ne
 Figure1 is protected by SHA25645f15d5951b72c1ac8da6c34fd6593d271615a1922b7c3ebfc22b331fec09cf8. A new conceptual Figure2 uses built-in image generation with two saved prompts; the final edit moves beta after MLP scores and retains all four exit-to-canvas paths. Quantitative figures remain generated from recorded data. Common typography, palette, compact canvases and layered vector glyphs were applied to all23 vector figure sets. The initial77-artifact clean reproduction was byte-identical; final small label/connectivity edits are being rechecked. Main text remains8pages plus references; the compact supplement is15pages.
 
 Training at00:23UTC: D2step821267/currentepoch35; D4step795618/currentepoch34; D6step664724/currentepoch28; no nonfinite values or alerts. Four-crop health readings remain separate from full100-image epoch20 actual-payload evidence. The region analyzer averages complementary phases within image and requires the complete80×10 profile grid before producing comparisons.
+
+##2026-09-28 00:48–00:54UTC — two complete outcome studies
+
+Primary patch control completed240/240 with independent stream-decoder checks. AtD6/0.2payloadbpp, n16, core-only−0.06110dB, halo32−1.29140dB, halo64−1.66658dB versus same-model full512. SameQP32 halo32 adds39.72% payload with+0.00198dB; halo64 adds57.62% with−0.00374dB. Header-inclusive comparisons are separate and may have different common support. This exposes a context-transmission cost, not adaptive-router performance. Native-padding prerequisite automatically began at00:48:42UTC; region merge remains queued.
+
+Fixed-control actual image replay completed53sequences/318policycases atQP32. Mean router/dither saving25.675/23.802%, RGB loss0.08679/0.08814dB; Q90saving16.741/14.204%, RGBloss0.05684/0.05636. Paired saving CIs include zero under both controls:1.87pp[−1.60,5.19],2.54pp[−0.42,5.54]. No resolved positive routing premium or equal-quality frontier is claimed. Actual padded-table discrepancy maxabs0.00039555dB. Allcases retained, development-corpus scope.
+
+Region rectangular-cost audit also completed, two real-CPU/meta checks passed. Samepixeldepths with4→2regions reduces neuraldecoderMACs12.43835%, encoder+reconstruction11.98843%; no latency claim. Native correctness harness CPU preflight passed4strictmodels with CUDAuninitialized; GPU branch remains untested and was not launched.
+
+Firstfigurepublication: parentd7b33e0, public6dcb7da6d87a21468848fbabc6ba27115a2c3e85, both remote-confirmed. Clean archive builds and checks passed. A subsequent review found two obsolete LaTeX trim settings from the old canvases; they are removed in the pending result update.
+
+## 28 September, 01:20–01:32 UTC: completed controls and publication update
+
+All 240 native-shaped padding cases completed. D6 at 0.2 payload bpp, all16 common images: moving image padding to the latent improves RGB PSNR by0.26522dB [0.23540,0.29515]; the native-shaped halo32 path remains1.02617dB below full-frame D6. AtQP32 it reduces payload by6.0279% versus image-pad64. No CUDA output or latency equivalence is asserted.
+
+Fresh CPU router inference completed all53 QP32 sequences: both frozen mean/Q90 controls reproduce all1765 tile decisions; maximum absolute log-probability difference from the historical GPU archive is0.0226574. Executed Conv2d/Linear router cost is289.71484375MAC/padded pixel, excluding non-convolutional work and source encoding.
+
+The supplementary actual-reconstruction section reports unresolved paired router–dither margins, independent-region RD costs, padding location, and source-derived native stream dependencies. Main abstract/intro/conclusion explicitly distinguish source-calibrated allocation from the unresolved cross-fit margin. Obsolete LaTeX figure trims removed; an old Figure2/example cross-reference corrected to the actual depth-map figure. Native correctness matrix extended to43cases per model including288×512/512×288; CPU checkpoint/CDF/binary preflight rerun, no GPU execution.
+
+Fixed-map region coalescing started after the completed prerequisite. A separately predeclared53-frame/QP32 frozen-component2×2 intervention is running on CPU: original, repair identity, adapters identity, both identity, with unchanged Q90 router maps. It verifies original-output agreement and exact cached repair/head replay. This is not a retrained component ablation; no partial-outcome claims made.
+
+Portable figure suite:29 vector sets,99 byte-identically reproduced PDF/SVG/PNG artifacts and two separately identified AI illustrations. Figure1 checksum remains protected. Main9pages including references; supplementary pagination is checked after each content update.
