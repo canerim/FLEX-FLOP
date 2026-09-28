@@ -47,6 +47,13 @@ def main():
             extra=target/'shared_stream_preflight.json';shutil.copy2(SOURCE/'shared_stream_preflight/analysis.json',extra)
             proof=json.loads(extra.read_text());assert proof['all_exact'] and len(proof['cases'])==8
             entry.setdefault('auxiliary_files_sha256',{})[extra.name]=sha(extra)
+        if folder=='shared_crossfit_qp32' and (SOURCE/'cohort_similarity/analysis.json').exists():
+            extra=target/'cohort_similarity_audit.json';shutil.copy2(SOURCE/'cohort_similarity/analysis.json',extra)
+            proof=json.loads(extra.read_text());assert len(proof['pairs'])==1378 and len(proof['fingerprints'])==53
+            entry.setdefault('auxiliary_files_sha256',{})[extra.name]=sha(extra)
+            for name in ('cluster_sensitivity.json','proposed_content_groups.json'):
+                extra=target/name;shutil.copy2(SOURCE/'cohort_similarity'/name,extra)
+                entry['auxiliary_files_sha256'][extra.name]=sha(extra)
         families.append(entry)
     helper='research_figure_paths_20260927.py';shutil.copy2(ROOT/'scripts'/helper,PAPER/'scripts'/helper)
     record={'scope':'Completed CPU research and architecture diagnostics. Intermediate epoch20 is not a final converged depth-bank or runtime result. Source paths inside provenance are historical metadata; rendering requires only bundled data.', 'families':families,'helper_sha256':sha(PAPER/'scripts'/helper)}

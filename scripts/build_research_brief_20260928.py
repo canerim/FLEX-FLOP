@@ -14,6 +14,7 @@ def main():
     replay=load('shared_crossfit_qp32');padding=load('native_padding');merge=load('region_merge');components=load('component_interventions')
     logit=load('router_logit_replay');released=load('released_anchor_qp32')
     stream=load('shared_stream_preflight');assert stream['all_exact'] and len(stream['cases'])==8
+    cohort=load('cohort_similarity');assert len(cohort['similarity_candidates'])==2
     mean=next(r for r in replay['paired_router_dither'] if r['criterion']=='mean')['summaries']['saving_points']
     native=next(r for r in padding['matched_rate'] if (r['depth'],r['target_bpp'],r['rate_field'],r['interpolator'])==(6,.2,'payload_bpp','linear'))
     merged={p:next(r for r in merge['matched_rate'] if (r['pattern'],r['target_bpp'],r['rate_field'],r['interpolator'])==(p,.2,'payload_bpp','linear')) for p in ('vertical','horizontal')}
@@ -21,7 +22,9 @@ def main():
     # Capture the monitor's observation timestamp, not an invented current epoch.
     watch=json.loads((SERVER/'watch/latest.json').read_text())
     now=datetime.datetime.now(datetime.timezone.utc).strftime('%Y-%m-%d %H:%M UTC')
-    sources={str(OUT/f/'analysis.json'):hashlib.sha256((OUT/f/'analysis.json').read_bytes()).hexdigest() for f in ('shared_crossfit_qp32','native_padding','region_merge','component_interventions','router_logit_replay','released_anchor_qp32','shared_stream_preflight')}
+    sources={str(OUT/f/'analysis.json'):hashlib.sha256((OUT/f/'analysis.json').read_bytes()).hexdigest() for f in ('shared_crossfit_qp32','native_padding','region_merge','component_interventions','router_logit_replay','released_anchor_qp32','shared_stream_preflight','cohort_similarity')}
+    for name in ('cluster_sensitivity.json','proposed_content_groups.json'):
+        path=OUT/'cohort_similarity'/name;sources[str(path)]=hashlib.sha256(path.read_bytes()).hexdigest()
     evidence={'generated_utc':now,'source_sha256':sources,'training_monitor_snapshot':watch,
         'scope':'Interim measurements and research decisions. No invented experiments, native timing, completed105epoch training or untouched-test claims.'}
     (OUT/'RESEARCH_BRIEF_TR_sources.json').write_text(json.dumps(evidence,indent=2)+'\n')
@@ -74,6 +77,8 @@ kontrollerle gerçek görüntü tekrarında ortalama/Q90 farklarının güven
 aralıkları sıfırı içeriyor; aynı nominal bütçe de aynı gerçekleşmiş kalite
 demek değil. CPU'da yeniden hesaplanan router her iki sabit kontrolde
 1.765/1.765 tile kararını tekrar üretti; bu, bütün QP ve eşikler için garanti değil.
+İçerik taraması karşı fold'larda iki benzer çift buldu. Bunları birlikte
+tutan 51-gruplu bootstrap da router marjını çözmüyor; mevcut fold'lar değiştirilmedi.
 
 \begin{center}
 \includegraphics[width=\linewidth]{'''+str(paper/'figs/research20260927/shared_crossfit_qp32/fig_crossfit_actual_replay.pdf')+r'''}

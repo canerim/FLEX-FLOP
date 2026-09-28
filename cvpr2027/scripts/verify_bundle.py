@@ -209,6 +209,37 @@ def main():
             for name in {r['sequence'] for r in stream['cases']}:
                 group=[r for r in stream['cases'] if r['sequence']==name]
                 assert len(group)==4 and len({r['inner_stream_sha256'] for r in group})==1
+    cohort_path=ROOT/'data/research20260927/shared_crossfit_qp32/cohort_similarity_audit.json'
+    if cohort_path.exists():
+        cohort=json.loads(cohort_path.read_text());fp={r['sequence']:r for r in cohort['fingerprints']}
+        assert len(fp)==53 and len(cohort['pairs'])==1378
+        assert len({(r['first'],r['second']) for r in cohort['pairs']})==1378
+        candidates=[]
+        for pair in cohort['pairs']:
+            a,b=fp[pair['first']],fp[pair['second']]
+            assert len(a['phash63_bits'])==len(b['phash63_bits'])==63
+            assert pair['phash_hamming']==sum(x!=y for x,y in zip(a['phash63_bits'],b['phash63_bits']))
+            assert pair['folds']==[a['fold'],b['fold']]
+            expected=pair['phash_hamming']<=6 and pair['luma_correlation'] is not None and pair['luma_correlation']>=.98
+            assert pair['similarity_candidate']==expected
+            if expected:candidates.append(pair)
+        assert candidates==cohort['similarity_candidates'] and len(candidates)==2
+        assert all(p['crosses_folds'] and not p['same_raw_frame'] for p in candidates)
+        groups_path=cohort_path.parent/'proposed_content_groups.json'
+        groups=json.loads(groups_path.read_text())
+        assert groups['n_groups']==len(groups['groups'])==51
+        assert sorted(n for g in groups['groups'] for n in g)==sorted(fp)
+        membership={n:i for i,g in enumerate(groups['groups']) for n in g}
+        assert all(membership[p['first']]==membership[p['second']] for p in candidates)
+        sensitivity=json.loads((cohort_path.parent/'cluster_sensitivity.json').read_text())
+        assert sensitivity['source_sha256']['groups']==digest(groups_path)
+        assert sensitivity['source_sha256']['replay']==digest(cohort_path.parent/'analysis.json')
+        assert len(sensitivity['rows'])==8
+        for row in sensitivity['rows']:
+            assert set(row['per_sequence'])==set(fp)
+            assert abs(sum(row['per_sequence'].values())/53-row['mean'])<1e-10
+            if row['metric'].endswith('saving_points'):
+                assert row['cluster_ci95'][0]<0<row['cluster_ci95'][1]
     if 'patch_control_epoch020' in research_inputs:
         patch=research_inputs['patch_control_epoch020'];rows=patch['rows']
         assert patch['cases']==240 and len(rows)==960 and len(patch['images'])==16
