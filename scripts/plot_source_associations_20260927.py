@@ -47,7 +47,7 @@ def main():
     if len(xx) and (xx>0).all():right.set_xscale('log')
     right.set(xlabel='Source RGB gradient energy',ylabel='D6 − D2 RGB PSNR (dB)')
     right.text(.97,.96,f'n={r["n"]}',transform=right.transAxes,ha='right',va='top',fontsize=6,color=F.MUTED)
-    fig.text(.5,.96,'VISUAL COMPLEXITY IS A HYPOTHESIS TO TEST',ha='center',weight='bold',fontsize=8)
+    fig.text(.5,.96,'Source complexity and incremental depth benefit',ha='center',weight='normal',fontsize=6.8)
     fig.text(.5,.88,'Source-only statistics versus additional-depth benefit · frozen epoch20 models',ha='center',fontsize=6.5,color=F.MUTED)
     fig.text(.5,.035,'Exploratory association · no trained router, significance selection, causal claim or held-out prediction',ha='center',fontsize=6,color=F.MUTED)
     with PdfPages(OUT/'source_associations_atlas.pdf',metadata=F.PDF_META) as book:

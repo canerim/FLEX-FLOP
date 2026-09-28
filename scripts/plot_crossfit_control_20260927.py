@@ -43,7 +43,7 @@ def main():
         handles=[Line2D([],[],color=F.COL[p],marker=F.MARK[p],label=F.LABEL[p]) for p in ('router','dither','uniform')]
         handles += [Line2D([],[],color=F.INK,ls='-',label='Mean calibration'),Line2D([],[],color=F.INK,ls='--',label='Q90 calibration')]
         fig.legend(handles=handles,loc='lower center',bbox_to_anchor=(.5,.085),ncol=5,handlelength=1.6,columnspacing=1.2,fontsize=6)
-        fig.text(.5,.96,'SOURCE-FREE CONTROL · SEQUENCE CROSS-FIT DIAGNOSTIC',ha='center',weight='bold',fontsize=8)
+        fig.text(.5,.96,'Sequence cross-fitting: compute and risk',ha='center',weight='normal',fontsize=6.8)
         fig.text(.5,.025,'Padded source-error tables · fixed model · 53 sequences × 5 QPs · no final reconstruction or latency claim',ha='center',fontsize=6.2,color=F.MUTED)
         F.audit_and_save(fig,'fig_crossfit_budget_risk',
             'Five-fold sequence-disjoint calibration of a fixed router, Bayer dither and uniform depth. Solid lines fit the training mean; dashed lines fit its 90th percentile. Every frame-QP remains, including outcomes from infeasible calibration groups. The 0.05 dB Q90 target is infeasible for groups covering 159/265 held-out cases in each policy. These are padded source-error table diagnostics, not delivered mixed-image quality or an untouched test set.',book)
@@ -62,7 +62,7 @@ def main():
                 row=next(r for r in summaries if r['criterion']==criterion and r['policy']==policy and r['budget']==.1)
                 ax.text(.97,yy,f"{F.LABEL[policy]}: {row['violations']}/265 exceed",transform=ax.transAxes,ha='right',fontsize=6,color=F.COL[policy])
         axs[0].legend(loc='lower center',bbox_to_anchor=(1.16,-.39),ncol=3,fontsize=6.5)
-        fig.text(.5,.96,'THE SAME 0.1 dB TARGET PRODUCES DIFFERENT TAIL RISKS',ha='center',weight='bold',fontsize=8)
+        fig.text(.5,.96,'Final distributions at a nominal 0.1 dB target',ha='center',weight='normal',fontsize=6.8)
         fig.text(.5,.025,'All 265 cases retained · vertical line: target · horizontal line: 90% · descriptive distributions, not confidence bands',ha='center',fontsize=6,color=F.MUTED)
         F.audit_and_save(fig,'fig_crossfit_loss_distribution',
             'At a 0.1 dB table-loss target, held-out loss distributions differ substantially between training-mean and training-Q90 calibration. Curves are descriptive ECDFs of 265 correlated frame-QP observations, not confidence bands or final cropped reconstruction errors. No source-conditioned test fallback is applied.',book)

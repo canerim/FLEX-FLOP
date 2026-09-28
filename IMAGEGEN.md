@@ -27,3 +27,14 @@ Make one precise connectivity correction to this publication concept illustratio
 ## Final cleanup prompt
 
 Make ONLY this tiny surgical correction: erase the OUTERMOST orange dashed arc that runs from the Selector across the very top of the upper lane and directly into the patch-assembly grid at the far right. That arc bypasses all six codecs and is scientifically incorrect. Erase that bypass arc and its downward arrowhead completely, replacing those pixels with the original plain white background. Keep the six selector-to-codec routes and the six codec-to-assembly output routes. Keep every other part of the image unchanged, especially the entire lower early-exit lane, all text, all six codec stacks, all source/output illustrative images, typography, colours, and precise dimensions. Do not add any new connection or label.
+
+## September 28 mechanism illustration
+
+Built-in image_gen produced `figs/system20260928/shared_exit_mechanism.png`
+(2172 ×724 pixels). The full generation and connectivity-correction prompts
+are in [PROMPTS.md](figs/system20260928/PROMPTS.md); the file hash and
+architecture checks are in [provenance.json](figs/system20260928/provenance.json).
+The beta control enters after MLP scores, and every exit connects to the
+stitched feature canvas. This asset is conceptual, not measured imagery.
+The original Figure 1 asset is protected by an explicit hash assertion in
+`verify_bundle.py` and has not been edited in this revision.

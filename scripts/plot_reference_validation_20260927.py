@@ -67,7 +67,7 @@ def render(data,out):
         axs[1].set(xlabel='Target payload rate (bits/pixel)',ylabel='PSNR gain relative to D2 (dB)',
             xticks=range(3),xticklabels=[f'{r:.1f}\nn={matched(data,r)["common_n"]}' for r in rates],xlim=(-.45,2.45))
         fig.legend(*axs[0].get_legend_handles_labels(),loc='lower center',bbox_to_anchor=(.5,.08),ncol=4,fontsize=6.3)
-        fig.text(.5,.96,'REAL BITSTREAMS · FROZEN INTERIM MODELS',ha='center',weight='bold',fontsize=8)
+        fig.text(.5,.96,'Actual coded rate · frozen epoch-20 models',ha='center',weight='normal',fontsize=6.8)
         footer(fig,'100 DIV2K centre crops · CPU FP32 · D12 has different training provenance · paired-image 95% intervals')
         F.audit_and_save(fig,'fig_reference_rd',
             'Left: means across all 100 crops at each of five native QPs, joined only as visual guides. Right: per-image log-rate linear interpolation and paired quality differences on the four-model common support at each rate; n is explicit and can change with rate. Whiskers are 95% image-bootstrap intervals conditional on the frozen checkpoints and included cohort. D2/D4/D6 are epoch20 of105; D12 is released and is not a matched-training causal depth control. Rates are actual rANS payload, excluding the custom research header.',book)
@@ -97,7 +97,7 @@ def render(data,out):
         axs[1].legend(loc='lower center',bbox_to_anchor=(.5,-.43),ncol=2,fontsize=5.8)
         axs[0].legend(handles=[Line2D([],[],color=F.ORANGE,marker='o',ls='none',label='Original four'),
             Line2D([],[],color=F.BLUE,marker='s',ls='none',label='Additional 96')],loc='lower center',bbox_to_anchor=(.5,-.43),ncol=2,fontsize=5.8)
-        fig.text(.5,.96,'VALIDATION COVERAGE · NO EXTRAPOLATION',ha='center',weight='bold',fontsize=8)
+        fig.text(.5,.96,'Validation coverage',ha='center',weight='normal',fontsize=6.8)
         footer(fig,'Means use common supported images · no interval estimated for the four-crop subset · cohorts vary with bitrate')
         F.audit_and_save(fig,'fig_reference_coverage',
             'At0.2 actual payload bpp, compare the original monitor images0801–0804 with the remaining validation images, restricting both groups to the four-model common support. The small monitor subset receives no confidence interval. The coverage panel reports pairwise and four-model shared support at each rate, preventing silent extrapolation or an implicit claim that every rate uses all100 images.',book)
@@ -121,7 +121,7 @@ def render(data,out):
         axs[1].axhline(0,color=F.GREY,lw=.7)
         axs[1].set(xticks=range(3),xticklabels=[f'D{d}\nn='+str(next(r['summary']['n'] for r in data['bd_rate_vs_released_d12'] if (r['rate_field'],r['depth'])==('payload_bpp',d))) for d in (2,4,6)],
             ylabel='BD-rate relative to released D12 (%)',xlim=(-.5,2.5))
-        fig.text(.5,.96,'RATE ACCOUNTING · PAYLOAD IS THE MEASURED QUANTITY',ha='center',weight='bold',fontsize=8)
+        fig.text(.5,.96,'Actual payload and the released-model gap',ha='center',weight='normal',fontsize=6.8)
         footer(fig,'Header excluded · BD-rate uses each image’s four-model common PSNR interval · interim vs released comparison')
         F.audit_and_save(fig,'fig_reference_rate_accounting',
             'Left: mean actual rANS payload minus estimated entropy with pointwise95% image-bootstrap intervals. Right: average per-image BD-rate relative to releasedD12; PCHIP log-rate integration is restricted to each image’s four-model common PSNR interval, and nonmonotone curves are rejected. n reports valid images. The custom88-byte header contributes an additional0.00268555bpp per512crop and is not included here. The released gap mixes depth, training progress and provenance.',book)

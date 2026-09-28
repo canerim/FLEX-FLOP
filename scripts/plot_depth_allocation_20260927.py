@@ -36,7 +36,7 @@ def main():
         middle=curves[row['n']]['allowed_mean_neural_decoder_gmac']
         for ax in (top,bottom):
             ax.axvline(middle,color=F.GREY,lw=.6,ls=':')
-            ax.set(xlabel='Allowed neural decoder GMAC / crop',xticks=[46,54,62],xlim=(x[0],x[-1]))
+            ax.set(xlabel='Neural decoder cost (GMAC/crop)',xticks=[46,54,62],xlim=(x[0],x[-1]))
         top.set_ylabel('Pooled-crop RGB PSNR (dB)' if col==0 else '')
         bottom.set_ylabel('Conditional PSNR advantage (dB)' if col==0 else '')
         bottom.set_ylim(bottom=-.002)
@@ -45,7 +45,7 @@ def main():
     fig.legend(handles=handles,loc='lower center',bbox_to_anchor=(.5,.105),ncol=3,frameon=False,fontsize=5.7,columnspacing=1.1)
     handles=[plt.Line2D([],[],color=c,lw=1.2,label=l) for c,l in [(F.ORANGE,'Adding D4: three-depth minus two-depth optimum'),(F.BLUE,'Placement: three-depth optimum minus blind expectation')]]
     fig.legend(handles=handles,loc='lower center',bbox_to_anchor=(.5,.063),ncol=2,frameon=False,fontsize=5.7,columnspacing=1.1)
-    fig.text(.5,.965,'DO WE NEED THE MIDDLE EXPERT?',ha='center',weight='bold',fontsize=8)
+    fig.text(.5,.965,'The value of an intermediate expert',ha='center',weight='normal',fontsize=6.8)
     fig.text(.5,.9,'Exact allocation on whole 512 crops · matched epoch20 D2/D4/D6 · common actual-rate support',ha='center',fontsize=6.4,color=F.MUTED)
     fig.text(.5,.018,'Source-informed interpolated bound · single seed · conditional diagnostics · no within-image routing or latency claim',ha='center',fontsize=5.9,color=F.MUTED)
     with PdfPages(OUT/'allocation_atlas.pdf',metadata=F.PDF_META) as book:

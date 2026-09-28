@@ -35,7 +35,7 @@ def native_comparison(data,book):
             xticks=[2,4,6,8,10,12],ylim=(45,166))
     handles,labels=ax.get_legend_handles_labels()
     fig.legend(handles,labels,loc='lower center',bbox_to_anchor=(.5,.12),ncol=3,frameon=False,fontsize=5.8,columnspacing=1)
-    fig.text(.5,.96,'THE PADDING POLICY CHANGES THE COMPUTE ESTIMATE',ha='center',weight='bold',fontsize=8)
+    fig.text(.5,.96,'Padding policy and architectural cost',ha='center',weight='normal',fontsize=6.8)
     fig.text(.5,.855,'Four 256 cores · native image-pad16 / latent-pad4 versus CPU reference image-pad64',ha='center',fontsize=6.3,color=F.MUTED)
     fig.text(.5,.032,'Layer-by-layer Conv2d trace · native-shaped means geometry only · no CUDA timing, stream or numerical parity claim',ha='center',fontsize=5.7,color=F.MUTED)
     F.audit_and_save(fig,'fig_native_padding_cost',
@@ -76,7 +76,7 @@ def main():
     fig.legend(handles=[Patch(facecolor=F.BLUE,label='One 512 crop or four 256 cores'),
         Patch(facecolor=F.ORANGE,label='Four patches with halo 32 or 64')],
         loc='lower center',bbox_to_anchor=(.5,.038),ncol=2,frameon=False,fontsize=6)
-    fig.text(.5,.975,'CPU REFERENCE: PADDING AND DEPTH SAVING',ha='center',weight='bold',fontsize=8)
+    fig.text(.5,.975,'Source context, padding and depth',ha='center',weight='normal',fontsize=6.8)
     fig.text(.5,.922,'FUFREF1 image-pad64 geometry · bottom-right patch of a 2×2 grid',ha='center',fontsize=6.4,color=F.MUTED)
     fig.text(.5,.009,'CPU image-pad64 accounting only · native image-pad16 / latent-pad4 differs · not runtime',ha='center',fontsize=5.8,color=F.MUTED)
     with PdfPages(OUT/'patch_geometry_atlas.pdf',metadata=F.PDF_META) as book:
