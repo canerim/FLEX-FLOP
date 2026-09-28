@@ -13,6 +13,7 @@ OUT=ROOT/'cohort_similarity'
 
 def main():
     paths={k:ROOT/v for k,v in {'groups':'cohort_similarity/proposed_content_groups.json','replay':'shared_crossfit_qp32/analysis.json','components':'component_interventions/analysis.json','anchor':'released_anchor_qp32/analysis.json'}.items()}
+    paths['delivered']=Path(__file__).resolve().parents[1]/'cvpr2027/data/refresh20260927/delivered_frontier_audit.json'
     inputs={k:json.loads(p.read_text()) for k,p in paths.items()};groups=inputs['groups']['groups']
     names=sorted(n for group in groups for n in group)
     if len(groups)!=51 or len(names)!=53 or len(set(names))!=53:raise ValueError('Expected conservative51-group partition')
@@ -22,6 +23,15 @@ def main():
         for field,unit in [('saving_points','percentage points'),('cropped_rgb_loss_db','dB')]:
             values={n:lookup[n,'router'][field]-lookup[n,'dither'][field] for n in names}
             specs.append((criterion+'_router_minus_dither_'+field,unit,values))
+    # Extend the same post-hoc grouping check to every published delivered cap,
+    # retaining all five QPs within each sequence before cluster resampling.
+    delivered=inputs['delivered']
+    for cap in sorted({r['cap'] for r in delivered['rows']}):
+        lookup={(r['sequence'],r['qp'],r['rule']):r for r in delivered['rows'] if r['cap']==cap}
+        values={n:float(np.mean([lookup[n,q,'router']['saving']-lookup[n,q,'dither']['saving'] for q in (0,16,32,48,63)])) for n in names}
+        primary=next(r for r in delivered['contrasts'] if r['cap']==cap and r['contrast']=='router_minus_dither')
+        if abs(np.mean(list(values.values()))-primary['mean'])>1e-10:raise ValueError('Five-QP primary contrast changed')
+        specs.append((f'delivered_cap_{cap:g}_router_minus_dither_saving_points','percentage points',values))
     specs.append(('e15_full_rgb_loss_vs_released_db','dB',{r['sequence']:r['e15_full_rgb_loss_vs_released_db'] for r in inputs['anchor']['cases']}))
     for variant in ('repair_identity','adapters_identity','both_identity'):
         specs.append((variant+'_psnr_loss_db','dB',{r['sequence']:r['psnr_loss_db'] for r in inputs['components']['contrasts'] if r['variant']==variant}))

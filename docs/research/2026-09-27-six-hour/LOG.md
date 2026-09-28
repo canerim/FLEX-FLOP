@@ -273,3 +273,5 @@ An outcome-blind first-frame audit compares all1378 pairs in the53-sequence arch
 Publication9e3e02cc95f1e711ac9a0825bc44b7e009071595 was pushed and remote-verified after a clean archive build. This subsequent scope clarification is being prepared as a follow-up publication commit; figure data and measured performance are unchanged.
 
 The paired saving sensitivity with51 conservative content clusters retains the same point estimates and gives95% intervals[−1.9088,5.5184] and[−0.6394,5.6156] under mean/Q90. Both include zero. Five thousand group draws, seed20260928, include all members of each sampled group; no policy/fold re-selection. Component and released-anchor cluster sensitivities are also retained in the full audit.
+
+The same post-hoc grouping sensitivity was extended to all six published delivered caps, with all five QPs retained within sequence. At0.1dB, the2.93449-point source-aware margin has51-group interval[2.10650,3.78984]; its allocation interpretation remains unchanged. This does not make retrospective source-aware selection deployable. At0.5dB the interval includes zero. All14 sensitivity endpoints are retained, not only favourable ones.

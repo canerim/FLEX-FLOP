@@ -25,3 +25,14 @@ Politika veya fold yeniden seçilmeden, 51 grubu üye sequence’leriyle birlikt
 | repair_identity_psnr_loss_db | +0.00208 | [+0.00065, +0.00364] |
 | adapters_identity_psnr_loss_db | +1.23091 | [+0.86338, +1.65070] |
 | both_identity_psnr_loss_db | +1.25384 | [+0.87853, +1.68522] |
+
+Aynı duyarlılık kontrolü kaynak-bilgili delivered-cap analizinin altı cap değerine de uygulandı. Her sequence’in beş QP’si birlikte tutuldu; mevcut aday seçimi değiştirilmedi.
+
+| Cap | Router–dither puan farkı | 51-gruplu %95 aralık |
+|---|---:|---|
+| 0.05 | +2.02425 | [+1.27713, +2.77545] |
+| 0.1 | +2.93449 | [+2.10650, +3.78984] |
+| 0.15 | +1.98843 | [+1.47023, +2.57453] |
+| 0.2 | +1.24245 | [+0.78358, +1.75952] |
+| 0.3 | +0.34928 | [+0.11170, +0.65478] |
+| 0.5 | +0.01969 | [+0.00000, +0.06138] |

@@ -234,11 +234,11 @@ def main():
         sensitivity=json.loads((cohort_path.parent/'cluster_sensitivity.json').read_text())
         assert sensitivity['source_sha256']['groups']==digest(groups_path)
         assert sensitivity['source_sha256']['replay']==digest(cohort_path.parent/'analysis.json')
-        assert len(sensitivity['rows'])==8
+        assert len(sensitivity['rows'])==14
         for row in sensitivity['rows']:
             assert set(row['per_sequence'])==set(fp)
             assert abs(sum(row['per_sequence'].values())/53-row['mean'])<1e-10
-            if row['metric'].endswith('saving_points'):
+            if row['metric'] in ('mean_router_minus_dither_saving_points','q90_router_minus_dither_saving_points'):
                 assert row['cluster_ci95'][0]<0<row['cluster_ci95'][1]
     if 'patch_control_epoch020' in research_inputs:
         patch=research_inputs['patch_control_epoch020'];rows=patch['rows']
