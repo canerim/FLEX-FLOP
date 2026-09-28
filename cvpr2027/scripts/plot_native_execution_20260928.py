@@ -18,7 +18,7 @@ def main():
     source=DATA/'analysis.json';data=json.loads(source.read_text())
     if 'Static dependency' not in data['scope']:raise ValueError('Source-audit input required')
     F.OUT=OUT;F.AUDIT.clear();F.CAPTIONS.clear()
-    fig,ax=F.schematic(79);ax.set_xlim(0,183);ax.set_ylim(0,79)
+    fig,ax=F.schematic(65);ax.set_xlim(0,183);ax.set_ylim(0,79)
     F.heading(ax,3,75,'a','One API call contains overlapping work')
     lanes=[(59,'GPU main',F.BLUE),(39,'GPU worker',F.TEAL),(20,'CPU worker',F.ORANGE)]
     for y,label,c in lanes:

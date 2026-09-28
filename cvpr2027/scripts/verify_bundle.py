@@ -96,6 +96,7 @@ def main():
         assert abs(10*math.log10(value['candidate_mse']/value['reference_mse'])-value['loss_db'])<1e-12
         assert abs(value['loss_db']-row['archived_db_rgb'])<1.1e-6
     figure_count=0
+    figure_panels={}
     min_font=float("inf")
     for folder in ["refresh20260927","extended20260927","crossfit20260927","depthmacs20260927"]:
         path=ROOT/"figs"/folder
@@ -105,6 +106,7 @@ def main():
         audit=(json.loads((path/'figure_evidence.json').read_text())['layout_audit'] if folder=='depthmacs20260927'
                else json.loads((path/"layout_audit.json").read_text()))
         for record in audit:
+            figure_panels[record['figure']]={t['text'] for t in record['text'] if re.fullmatch('[a-f]',t['text'])}
             assert not record["outside_canvas"],record["figure"]
             assert abs(record["width_mm"]-183)<1e-6
             assert record["height_mm"]<=170
@@ -131,11 +133,26 @@ def main():
             assert digest(path/name)==expected,f'Changed research figure: {folder}/{name}'
             checked.append(str((path/name).relative_to(ROOT)))
         for record in evidence['layout_audit']:
+            figure_panels[record['figure']]={t['text'] for t in record['text'] if re.fullmatch('[a-f]',t['text'])}
             assert not record['outside_canvas'],record['figure']
             assert abs(record['width_mm']-183)<1e-6 and record['height_mm']<=170
             assert '<text' in (path/(record['figure']+'.svg')).read_text()
             min_font=min(min_font,*(t['size_pt'] for t in record['text']))
             figure_count+=1
+    caption_panels_checked=0
+    for tex in (ROOT/'sec').glob('revision*.tex'):
+        for block in re.findall(r'\\begin\{figure\*?\}.*?\\end\{figure\*?\}',tex.read_text(),re.S):
+            graphic=re.search(r'\\includegraphics(?:\[[^]]*\])?\{([^}]+)\}',block)
+            if not graphic or Path(graphic[1]).suffix!='.pdf':continue
+            name=Path(graphic[1]).stem
+            assert name in figure_panels,f'Unaudited vector figure in {tex.name}: {name}'
+            cited=set()
+            for spec in re.findall(r'\\textbf\{([a-f](?:(?:--|,)[a-f])?)\}',block):
+                if '--' in spec:
+                    first,last=spec.split('--');cited.update(chr(i) for i in range(ord(first),ord(last)+1))
+                else:cited.update(spec.split(','))
+            assert cited.issubset(figure_panels[name]),f'Caption references a missing panel: {tex.name}/{name}'
+            caption_panels_checked+=1
     interim=research_inputs['div2k100_epoch020']
     assert interim['n_cases']==len(interim['rows'])==2000 and interim['n_images']==100
     assert interim['manifest']['epoch_shallow']==20
@@ -178,6 +195,20 @@ def main():
                     replay_row=next(r for r in rows if (r['sequence'],r['criterion'],r['policy'])==(row['sequence'],comparison['criterion'],'router'))
                     assert comparison['archived_map']==replay_row['map']
                     assert comparison['changed_tiles']==sum(a!=b for a,b in zip(comparison['fresh_map'],comparison['archived_map']))
+        stream_path=ROOT/'data/research20260927/shared_crossfit_qp32/shared_stream_preflight.json'
+        if stream_path.exists():
+            stream=json.loads(stream_path.read_text())
+            assert stream['all_exact'] and not stream['cuda_initialized']
+            assert len(stream['cases'])==8 and len(stream['malformed_rejections'])==7
+            assert stream['decoder_ready']['identities']['source_analysis_disabled']
+            assert stream['identities']['front_tensors_equal']==255
+            for row in stream['cases']:
+                assert row['reconstruction_exact'] and row['latents_symbols_indexes_exact'] and row['source_analysis_disabled']
+                assert row['container_bytes']==sum(row[k] for k in ('map_bytes','outer_header_bytes','inner_header_bytes','payload_bytes'))
+                assert row['map_bytes']==(len(row['map'])+3)//4
+            for name in {r['sequence'] for r in stream['cases']}:
+                group=[r for r in stream['cases'] if r['sequence']==name]
+                assert len(group)==4 and len({r['inner_stream_sha256'] for r in group})==1
     if 'patch_control_epoch020' in research_inputs:
         patch=research_inputs['patch_control_epoch020'];rows=patch['rows']
         assert patch['cases']==240 and len(rows)==960 and len(patch['images'])==16
@@ -192,6 +223,10 @@ def main():
     if 'native_padding' in research_inputs:
         padding=research_inputs['native_padding']
         assert padding['n_cases']==240 and len(padding['rows'])==1200
+        for row in padding['matched_rate']:
+            values=list(row['per_image_native_minus_pad64_db'].values())
+            assert len(values)==row['n']==row['native_minus_pad64_psnr_db']['n']
+            if values:assert abs(sum(values)/len(values)-row['native_minus_pad64_psnr_db']['mean'])<1e-10
     if 'region_merge' in research_inputs:
         bank=research_inputs['region_merge'];rows=bank['rows']
         assert bank['n_cases']==80 and bank['n_profiles']==len(rows)==800
@@ -200,11 +235,29 @@ def main():
             count=row['n_regions']
             assert row['container_bytes']==row['payload_bytes']+88*count+12+4*count
             assert count==(2 if row['merged'] else 4)
+        for row in bank['matched_rate']:
+            values=list(row['per_image_gain_db'].values())
+            assert len(values)==row['n']==row['phase_averaged_gain_db']['n']
+            if values:assert abs(sum(values)/len(values)-row['phase_averaged_gain_db']['mean'])<1e-10
     if 'component_interventions' in research_inputs:
         intervention=research_inputs['component_interventions']
         assert intervention['n_sequences']==len(intervention['cases'])==53
         assert intervention['n_outputs']==sum(len(r['rows']) for r in intervention['cases'])==212
         assert all(r['head_replay_exact']==[True,True] and r['baseline_matches_complete_replay'] for r in intervention['cases'])
+        for summary in intervention['summaries']:
+            selected=[r for r in intervention['contrasts'] if r['variant']==summary['variant']]
+            assert len(selected)==53
+            for metric,stats in summary['metrics'].items():assert abs(sum(r[metric] for r in selected)/53-stats['mean'])<1e-10
+    if 'released_anchor_qp32' in research_inputs:
+        anchors=research_inputs['released_anchor_qp32']
+        assert anchors['n_sequences']==len(anchors['cases'])==53
+        assert anchors['n_policy_cases']==len(anchors['policy_rows'])==318
+        for case in anchors['cases']:
+            assert abs(case['released_cropped_rgb_psnr']-case['e15_cropped_rgb_psnr']-case['e15_full_rgb_loss_vs_released_db'])<1e-10
+        for summary in anchors['policy_summaries']:
+            selected=[r for r in anchors['policy_rows'] if (r['criterion'],r['policy'])==(summary['criterion'],summary['policy'])]
+            assert len(selected)==53
+            for metric,stats in summary['metrics'].items():assert abs(sum(r[metric] for r in selected)/53-stats['mean'])<1e-10
     calibration_source=json.loads((ROOT/'figs/crossfit20260927/source_manifest.json').read_text())
     assert calibration_source['analysis_sha256']==digest(ROOT/'data/crossfit20260927/analysis.json')
     assert calibration_source['plot_script_sha256']==digest(ROOT/'scripts/plot_crossfit_control_20260927.py')
@@ -246,7 +299,7 @@ def main():
             reports[name]=dict(pages=len(pages),all_fonts_embedded=True,unresolved_references=0,near_blank_pages=0,
                                reference_start_page=reference_page,
                                sha256=digest(ROOT/(name+".pdf")))
-    result=dict(bundled_files_checked=len(checked),summary_rows_checked=len(d["summary"]),
+    result=dict(bundled_files_checked=len(checked),caption_panels_checked=caption_panels_checked,summary_rows_checked=len(d["summary"]),
                 paired_samples=len(samples),delivered_cap_summary_rows_checked=len(cap_data["summary"]),
                 delivered_cap_influence_contrasts_checked=len(influence["rows"]),
                 released_warmstart_tensors_matched=reference["compared"],

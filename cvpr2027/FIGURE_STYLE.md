@@ -10,7 +10,7 @@ identified, predeclared RGB reconstruction windows as raster content. Diagrams u
 strips, active-tile grids, feature joins, expert queues and coded-stream
 segments to explain the computation.
 
-| Meaning | Colour | Additional cue |
+| Meaning | Colour | Cue in the budget comparison |
 |---|---|---|
 | Learned router / adaptive path | Teal `#008A96` | Square marker |
 | Source-informed search | Muted violet `#79679A` | Circle marker |
@@ -24,9 +24,12 @@ Depth diagrams and maps use an ordered six-colour scale: `#D8ECE7`, `#A7D2C9`, `
 shared-exit maps use only the last four colours. Every map has a numerical
 key, so colour is not the sole carrier of depth information.
 
-Measured reconstructions use filled markers. Bootstrap bands are labelled
-with their resampling unit. Analytical runtime scenarios use dashed lines,
-open markers and an explicit **not measured** heading. Training/planned
+Markers distinguish policies or calibration variants according to each
+figure's explicit key. In the fixed-control replay, filled circles denote
+mean calibration and hollow squares denote Q90; both are measured outputs.
+Bootstrap bands are labelled with their resampling unit. Analytical runtime
+scenarios use dashed lines, open markers and an explicit **not measured**
+heading, so fill alone never identifies a measurement. Training/planned
 status is printed in the depth diagram; no inferred performance is encoded
 by network width, queue occupancy or diagram geometry.
 

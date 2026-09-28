@@ -7,12 +7,13 @@ SERVER=Path('/data10/shareddata/can_karsal/dcvcuf_depth_20260927')
 
 
 def load(folder):return json.loads((OUT/folder/'analysis.json').read_text())
-def ci(stats):return f"{stats['mean']:+.3f} [{stats['ci95'][0]:+.3f}, {stats['ci95'][1]:+.3f}]"
+def ci(stats):return f"${stats['mean']:+.3f}\\,[{stats['ci95'][0]:+.3f}, {stats['ci95'][1]:+.3f}]$"
 
 
 def main():
     replay=load('shared_crossfit_qp32');padding=load('native_padding');merge=load('region_merge');components=load('component_interventions')
-    logit=load('router_logit_replay')
+    logit=load('router_logit_replay');released=load('released_anchor_qp32')
+    stream=load('shared_stream_preflight');assert stream['all_exact'] and len(stream['cases'])==8
     mean=next(r for r in replay['paired_router_dither'] if r['criterion']=='mean')['summaries']['saving_points']
     native=next(r for r in padding['matched_rate'] if (r['depth'],r['target_bpp'],r['rate_field'],r['interpolator'])==(6,.2,'payload_bpp','linear'))
     merged={p:next(r for r in merge['matched_rate'] if (r['pattern'],r['target_bpp'],r['rate_field'],r['interpolator'])==(p,.2,'payload_bpp','linear')) for p in ('vertical','horizontal')}
@@ -20,11 +21,12 @@ def main():
     # Capture the monitor's observation timestamp, not an invented current epoch.
     watch=json.loads((SERVER/'watch/latest.json').read_text())
     now=datetime.datetime.now(datetime.timezone.utc).strftime('%Y-%m-%d %H:%M UTC')
-    sources={str(OUT/f/'analysis.json'):hashlib.sha256((OUT/f/'analysis.json').read_bytes()).hexdigest() for f in ('shared_crossfit_qp32','native_padding','region_merge','component_interventions','router_logit_replay')}
+    sources={str(OUT/f/'analysis.json'):hashlib.sha256((OUT/f/'analysis.json').read_bytes()).hexdigest() for f in ('shared_crossfit_qp32','native_padding','region_merge','component_interventions','router_logit_replay','released_anchor_qp32','shared_stream_preflight')}
     evidence={'generated_utc':now,'source_sha256':sources,'training_monitor_snapshot':watch,
         'scope':'Interim measurements and research decisions. No invented experiments, native timing, completed105epoch training or untouched-test claims.'}
     (OUT/'RESEARCH_BRIEF_TR_sources.json').write_text(json.dumps(evidence,indent=2)+'\n')
     rows=[
+        r'e15 $-$ released referans & '+ci(released['anchor_summaries']['e15_full_rgb_loss_vs_released_db'])+r' dB kayıp & Aynı 53 frame, QP32 ve geçerli piksel alanı.\\',
         r'Router $-$ dithering & '+ci(mean)+r' MAC puanı & QP32, 53 sequence; CI sıfırı içeriyor.\\',
         r'Padding yeri & '+ci(native['native_minus_pad64_psnr_db'])+r' dB & D6, 0.2 payload bpp; 16 görüntü.\\',
         r'Halo32 $-$ full-frame & '+ci(native['versus_full']['halo32_native_shape'])+r' dB & Düzeltilmiş geometri; context maliyeti sürüyor.\\',
@@ -53,10 +55,12 @@ iki aşama değil. Resmî D2/D4/D6 eğitimleri devam ediyor; 105 epoch tarifi
 ve train\_0/1/2 kapsamı kısaltılmadı.
 
 \textbf{Tamamlanan kontroller.} Epoch 20'de 100 DIV2K görüntüsü, dört model
-ve beş QP için 2.000 gerçek-byte/bağımsız-decode kontrolü var.
+ve beş QP için 2.000 kodlama ve bağımsız çözme kontrolü var.
 0.2 payload bpp'de D6--D2 farkı 0.1834 dB (99 ortak görüntü).
 Released D12 başka eğitim geçmişine sahip; bu karşılaştırma nihai,
 eş-eğitimli bir depth ablasyonu değil.
+Shared early-exit için iki frame ve dört haritada, yalnız bitstream alan
+ayrı CPU decoder'ın 8/8 çıktısı encoder ile birebir eşleşti; bu native test değil.
 
 {\small
 \begin{tabular}{@{}p{35mm}p{57mm}p{76mm}@{}}\toprule
@@ -86,7 +90,8 @@ dB geri kazandırıyor ama tekrarlanan context'in eşit-rate kaybını silmiyor.
 Aynı expert'e atanmış komşuları birleştirmek, pixel-depth haritasını
 değiştirmeden ayrı region sayısını azaltıyor. Sabit D2/D6 haritasında neural
 decoder Conv2d MAC maliyeti \%12.44 azalıyor; bu oran bir runtime sonucu değil.
-Bitstream başlıkları ve birleşme sonrası gerçek RD ayrıca ölçülmeli.
+Gerçek-byte kontrolünde region başlıkları 380'den 196 byte'a düşüyor;
+eşit-rate kalite kazancı yukarıda ölçüldü. Native toplam süre henüz ölçülmedi.
 
 \begin{center}
 \includegraphics[width=\linewidth]{'''+str(paper/'figs/research20260927/native_execution/fig_native_encoder_dependencies.pdf')+r'''}

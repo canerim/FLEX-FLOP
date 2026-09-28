@@ -1,0 +1,105 @@
+{
+  "recorded_utc": "2026-09-28T01:49:18.286605+00:00",
+  "earliest_finish_utc": "2026-09-28T03:06:18+00:00",
+  "root_commit": "59b7461ee85107bc3ba068a29920301db19ab8f0",
+  "public_commit": "8ab837504885489e5bf27df42efaa7743c2e04c1",
+  "public_branch": "publication-controls-20260928",
+  "protected_figure1_sha256": "45f15d5951b72c1ac8da6c34fd6593d271615a1922b7c3ebfc22b331fec09cf8",
+  "jobs": {
+    "patch_control_epoch020": {
+      "state": "complete",
+      "started_utc": "2026-09-28T00:03:12.239747+00:00",
+      "pid": 487813,
+      "completed": 240,
+      "total": 240,
+      "depth": 12,
+      "image": "0900.png",
+      "qp": 63,
+      "updated_utc": "2026-09-28T00:48:31.746754+00:00",
+      "elapsed_seconds": 2719.5068224938586,
+      "finished_utc": "2026-09-28T00:48:32.326726+00:00"
+    },
+    "patch_native_shape_epoch020": {
+      "state": "complete",
+      "started_utc": "2026-09-28T00:03:12.281475+00:00",
+      "pid": 487815,
+      "completed": 240,
+      "total": 240,
+      "script_sha256": "b28ae212f6136d51b1d4059f7e375257504ea969c820d7518627c2837bc29a80",
+      "scope": "CPU padding-policy ablation only; not CUDA runtime or wire compatibility",
+      "legacy_completed": 239,
+      "updated_utc": "2026-09-28T01:19:34.561000+00:00",
+      "depth": 12,
+      "image": "0900.png",
+      "qp": 63,
+      "elapsed_seconds": 1852.1302686007693,
+      "finished_utc": "2026-09-28T01:19:35.100273+00:00"
+    },
+    "shared_crossfit_qp32": {
+      "state": "complete",
+      "pid": 487814,
+      "started_utc": "2026-09-28T00:03:14.080838+00:00",
+      "completed_sequences": 53,
+      "total_sequences": 53,
+      "completed_policy_cases": 318,
+      "sequence": "videoSRC30_1920x1080_30.yuv",
+      "updated_utc": "2026-09-28T00:48:40.676233+00:00",
+      "elapsed_seconds": 2726.595208130777,
+      "finished_utc": "2026-09-28T00:48:40.916890+00:00"
+    },
+    "router_logit_replay_qp32": {
+      "state": "complete",
+      "pid": 661099,
+      "started_utc": "2026-09-28T00:57:52.761371+00:00",
+      "completed": 53,
+      "total": 53,
+      "sequence": "videoSRC30_1920x1080_30.yuv",
+      "updated_utc": "2026-09-28T01:20:15.956445+00:00",
+      "finished_utc": "2026-09-28T01:20:15.956908+00:00",
+      "cuda_initialized": false
+    },
+    "region_merge_epoch020": {
+      "state": "running",
+      "pid": 499248,
+      "started_utc": "2026-09-28T00:07:32.919474+00:00",
+      "completed": 71,
+      "total": 80,
+      "source_sha256": {
+        "decode_worker.py": "576507ecd736e94a45ea3dcaddd0842bdf979819fecce9b4938ea32b5f1e3067",
+        "evaluate.py": "906665cc2250ae1101a4dffec496eba7221774499081195e41b9760b5610acf3",
+        "layout.py": "532e25a1f685f219636daea22a9aabf3cf059e785bb307db1ef8b928900d41ef"
+      },
+      "native_padding_completed": 240,
+      "updated_utc": "2026-09-28T01:49:16.937219+00:00",
+      "image": "0893.png",
+      "qp": 0
+    },
+    "component_interventions_qp32": {
+      "state": "running",
+      "pid": 714210,
+      "started_utc": "2026-09-28T01:15:43.907997+00:00",
+      "completed": 35,
+      "total": 53,
+      "sequence": "videoSRC12_1920x1080_30.yuv",
+      "updated_utc": "2026-09-28T01:48:07.848843+00:00"
+    },
+    "released_anchor_qp32": {
+      "state": "running",
+      "pid": 798537,
+      "started_utc": "2026-09-28T01:38:20.585717+00:00",
+      "completed": 20,
+      "total": 53,
+      "sequence": "ParkScene_1920x1080_24.yuv",
+      "updated_utc": "2026-09-28T01:48:41.638230+00:00"
+    }
+  },
+  "remaining": [
+    "Analyze complete region_merge_epoch020; render and inspect figure; integrate exact results",
+    "Analyze complete component_interventions_qp32; render and inspect; label frozen intervention not retrained ablation",
+    "Analyze complete released_anchor_qp32; render and inspect; compare common-support anchors",
+    "Build two-page RESEARCH_BRIEF_TR after all complete inputs",
+    "Bundle completed families, verify/reproduce, clean-archive compile, publish authorized remotes",
+    "Monitor official trainings and capture final epochs; do not stop them or execute native CUDA on busy GPUs",
+    "Remain active through03:06:18UTC, then complete goal only if requirements achieved"
+  ]
+}

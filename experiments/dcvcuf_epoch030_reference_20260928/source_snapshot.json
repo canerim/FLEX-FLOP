@@ -1,0 +1,24 @@
+{
+  "source_directory": "/home/can_karsal/FLEX-PLUS/experiments/dcvcuf_reference_20260927",
+  "scope": "Separate fixed epoch30 milestone clone; the original epoch20 codec and all completed evidence are untouched. Only checkpoint/verification/output epoch defaults changed.",
+  "source_sha256": {
+    "reference_codec.py": "c549d92c4ff04fd84188e4aaa2c1a01f99a72d9237bb3965324f5bb95d85878e",
+    "evaluate_validation.py": "529b56bf99512a99ce5001cf7d02918dfad3f4c07d04ab0f6fc0b977f9cfc7f7",
+    "decode_worker.py": "c1c25165b11a2c853e0f0a5ca553ab7e5405f1ae181480e9be8cbb084ad36119",
+    "decode_file.py": "9d6954099d053b9cae13e7fe3326a63997aec83dd3da880d60bc3acd127afdba",
+    "build_entropy.py": "f2275082661d974ed8673df82598ead52f4f0937adfeb64d4099343b2402f719",
+    "model_io.py": "7722bc80487e252856a3a05ddfa017bb594e470bcdea9f47cc604550e639d655",
+    "prepare_validation.py": "09db58490f139e626c9a1992b189d63f07fc227be5b02601066981f8a0ca5a73",
+    "verify_reference.py": "d8a7bb95f1264216085f1bb81ed1cfc4e60e72f2db7ef2f277ffd18ecb6e3787"
+  },
+  "milestone_sha256": {
+    "reference_codec.py": "c549d92c4ff04fd84188e4aaa2c1a01f99a72d9237bb3965324f5bb95d85878e",
+    "evaluate_validation.py": "1877cada4fb3ecd6843cc753918dd570039d9502537636d95a8eec0ce325c994",
+    "decode_worker.py": "c1c25165b11a2c853e0f0a5ca553ab7e5405f1ae181480e9be8cbb084ad36119",
+    "decode_file.py": "9d6954099d053b9cae13e7fe3326a63997aec83dd3da880d60bc3acd127afdba",
+    "build_entropy.py": "f2275082661d974ed8673df82598ead52f4f0937adfeb64d4099343b2402f719",
+    "model_io.py": "7722bc80487e252856a3a05ddfa017bb594e470bcdea9f47cc604550e639d655",
+    "prepare_validation.py": "09db58490f139e626c9a1992b189d63f07fc227be5b02601066981f8a0ca5a73",
+    "verify_reference.py": "c176191658d4a1a3fc3867c13824184725c842e56018b4844cb381c929b15d46"
+  }
+}

@@ -17,6 +17,18 @@ Ana figürler doğru etiketle güncellendi. Yeni RGB değerlendirmesi açık
 renk dönüşümü ve clipping sözleşmesi kullanmalı; eski cap sonuçları RGB
 altında ölçülmüş gibi yeniden adlandırılamaz. Kanıt: `METRICS.md`.
 
+## 28 Eylül: tamamlanan kontrollerin değiştirdiği öncelik
+
+- QP32 gerçek-output replay: 53 sequence, 318 sabit-policy çıktı. Mean ve Q90 router–dither marjlarının paired CI'ları sıfırı içeriyor. Dış testte üstünlük henüz kanıtlanmadı.
+- Padding konumu: D6/0.2 payload bpp'de +0.2652 dB iyileşme; buna rağmen native-shaped halo32 full-frame D6'dan 1.0262 dB geride. Native CUDA değil, CPU geometri kontrolü.
+- Aynı piksel derinlikleriyle region coalescing: 800 çıktı. QP32'de %12.39–13.05 daha az payload; 0.2 payload bpp'de +0.4959–0.5327 dB. Neural decoder MAC −%12.44, duvar saati henüz ölçülmedi. İki faz her görüntü içinde ortalandı.
+
+Bu sonuçlar, bankada predictor taramasından önce fixed-map merge/no-merge
+ve gerçek codec timing yoluna öncelik vermeyi destekliyor. Birleştirme
+tek başına yenilik iddiası değil; context ve entropy reset maliyetini görünür
+kılan bir mühendislik kontrolü. Veri `data/research20260927`, figürler
+`figs/research20260927` içindeki tamamlanan çalışma ailelerinde yer alıyor.
+
 ## 0. Önce early-exit mekanizmasını kanıtlayan ablasyonlar
 
 | Kod / öncelik | Tek değişken | Eşlenmiş kontrol ve çıktı | Yeniden eğitim? |
@@ -307,3 +319,10 @@ incelemek gerekli. Bu çalışma bizim modele aktarılmış bir sonuç değil.
 Bunlar önceden belirlenen yorumlama kurallarıdır; tablodaki koşulların
 ölçülmüş olduğu anlamına gelmez. Bir bileşenin olumsuz sonucu bütün early-exit
 hikâyesini geçersiz kılmaz; hangi bileşenin gerçekten katkı sunduğunu daraltır.
+
+
+## 28 Eylül ek kontrolü: öğrenilmiş bileşene bağımlılık
+
+53 CTC ilk frame/QP32 ve aynı Q90 router haritalarında 2×2 identity müdahalesi tamamlandı (212 çıktı). Repair kapalıyken ortalama RGB PSNR kaybı 0.00208 dB [0.00060, 0.00363]; adapter kapalıyken 1.23091 dB [0.87647, 1.65824]; ikisi kapalıyken 1.25384 dB [0.88940, 1.69151]. Tüm görüntüler ve yalnız D12 kullanan sekiz frame korunmuştur. Buradan “adapter zorunludur” veya “repair ücretsizdir” sonucu çıkmaz: kalan ağırlıklar yeniden optimize edilmedi. E2/E3 için sıradaki adım aynı veri, update, seed ve hedeflerle yeniden eğitim; ardından tam decoder süresi ve seam/interior farkı.
+
+Epoch30 için sonraki 100-görüntü gerçek-byte değerlendirmesi, üç model de sabit milestone'a ulaşınca otomatik başlayacak biçimde kuyruğa alındı. Henüz sonuç değildir; epoch20 sonucu yerine gösterilmez. Resmî 105-epoch eğitimler değiştirilmedi.

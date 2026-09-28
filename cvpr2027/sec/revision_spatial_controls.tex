@@ -42,6 +42,25 @@ differences from mixed-head interactions, nor validate entropy-stream
 decodability. The experiment reconstructs neural outputs on CPU; it is
 neither a native GPU bitstream test nor a latency measurement.
 
+\paragraph{A bounded stream-only decoder check.}
+A separate engineering preflight uses the first BasketballPass and BQMall
+frames at QP32, fixed before execution. Each uses its archived mean/Q90
+router map, an all-deep map and a cyclic 6/8/10/12 map: eight cases.
+A versioned CPU research container carries the valid dimensions, e15
+checkpoint identity and two-bit exit indices around the common FUFREF1
+entropy stream. A separate decoder process accepts only stream/output
+paths; source analysis and hyperanalysis calls are disabled. All eight
+cropped reconstructions, recovered latents, symbols and entropy indexes
+match encoder-side reconstruction exactly. Seven malformed-stream checks
+also pass.
+
+For each frame, all four maps retain identical inner entropy bytes.
+BasketballPass and BQMall carry 2,198 and 10,954 entropy-payload bytes,
+plus 1 and 2 map bytes, respectively; each adds 176 bytes of explicit
+research headers. These headers are not a minimum production format.
+This small CPU check establishes neither native CUDA interoperability nor
+53-frame bitstream coverage, autonomous map selection or deployment speed.
+
 \paragraph{Recompute the predictor, not only its saved decisions.}
 A second CPU audit reloads the frozen codec and router checkpoints and
 recomputes source analysis, shared-stem features and router logits on all
@@ -68,6 +87,96 @@ Mean and Q90 controls use a different calibration reference and metric from
 the cropped RGB report. The paired router--dither saving intervals include
 zero under both controls.}
 \label{fig:actualreplay}
+\end{figure*}
+
+\subsection{The released decoder is a separate quality anchor}
+\label{sec:releasedanchor}
+We now close the reference gap on the same 53 QP32 frames. A strictly loaded
+stock DMCI decoder uses the official released D12 weights. Before reusing
+the latent, we verify exact equality of all 255 analysis, entropy and quality
+scale tensors with e15. The first frame additionally requires exact agreement
+between stock synthesis and its remapped warm-start implementation.
+Input padding and valid-pixel support are identical to the shared-exit replay:
+replicate to multiples of 256, then crop before scoring. This is CPU FP32
+neural reconstruction, not the native image-pad16 CUDA bitstream path.
+
+Released D12 reaches a mean RGB PSNR of 34.71763\,dB, compared with
+34.70855\,dB for e15 full-frame synthesis. The paired e15 loss is
+0.00908\,dB, with a 95\% sequence-bootstrap interval of
+$[0.00785,0.01033]$\,dB. We then express all 318 fixed-policy outputs against
+this released reference without changing their maps, reconstruction errors
+or costs (\cref{fig:releasedanchor}). Mean-control router and dither lose
+0.09587 and 0.09722\,dB RGB PSNR relative to released D12; their Q90 losses
+are 0.06592 and 0.06544\,dB. The counts above 0.1\,dB become 20/20 under
+mean control and 7/5 under Q90, each out of 53.
+
+Changing the common reference adds the same per-image offset to every
+policy's loss. It changes absolute quality and threshold counts, but cannot
+change the paired router--dither loss or MAC difference. The original
+controls were calibrated on padded 444 errors, so these cropped RGB counts
+are a reference-alignment diagnostic, not a failed RGB guarantee that the
+policy was trained to provide. The result closes this particular QP32
+comparison; it does not replace the five-QP archive with a new metric or
+establish native deployed quality and latency.
+
+\begin{figure*}[t]
+\centering
+\includegraphics[width=\textwidth]{figs/research20260927/released_anchor_qp32/fig_released_anchor.pdf}
+\caption{\textbf{Measure the anchor before interpreting the loss budget.}
+The same 53 first frames, QP32, valid-pixel support and CPU FP32 reconstruction.
+\textbf{a}, e15 full-frame and six fixed policies relative to released D12;
+points and intervals show means and paired 95\% sequence-bootstrap intervals.
+Filled circles use mean control and hollow squares Q90; the dark full-frame
+point measures anchor drift. The dashed 0.1\,dB line is a numerical reference.
+\textbf{b}, Per-sequence e15 drift under equal-channel unclipped 444 and
+converted/clipped RGB. The diagonal denotes metric agreement. No output or
+policy is reselected when the reference changes.}
+\label{fig:releasedanchor}
+\end{figure*}
+
+\subsection{Which learned components carry the reconstruction?}
+\label{sec:componentinterventions}
+A component can look dispensable in an architecture diagram yet carry a
+substantial learned correction. We hold the e15 weights and all 53 Q90
+router maps fixed, then replace the exit adapters, the full-frame repair,
+or both with identity. The unchanged trained path and a cached-canvas
+replay through repair and the output head are checked exactly before scoring.
+This produces a complete $2\times2$ intervention with 212 outputs at QP32.
+The maps contain 403/582/369/411 tiles at depths 6/8/10/12; 45 of the
+53 images use at least one early exit. All images, including the eight
+with only the deepest exit, remain in the analysis.
+
+Removing adapters loses 1.2309\,dB RGB PSNR on average, with a paired
+95\% sequence-bootstrap interval of $[0.8765,1.6582]$\,dB.
+Removing repair loses 0.00208\,dB $[0.00060,0.00363]$; removing both loses
+1.2538\,dB $[0.8894,1.6915]$ (\cref{fig:componentinterventions}).
+These are sensitivities of the trained checkpoint, not comparisons with
+networks retrained without these components. In particular, the large
+adapter penalty does not establish that the same quality is unattainable
+with a different, jointly optimised exit head.
+
+We also partition valid pixels into an 8-pixel-wide band around internal
+256-pixel grid boundaries and its complement. Removing repair increases
+mean within-sequence relative MSE by 0.192\% in the band and 0.039\% in the
+interior. Adapter removal changes these by 37.92\% and 43.74\%, respectively:
+its effect is not confined to seams. The joint PSNR penalty exceeds the sum
+of the separate penalties by 0.02085\,dB $[0.01049,0.03430]$ on average;
+this interaction depends on the dB scale. The small repair benefit motivates
+an equal-training-budget comparison of repair capacity and end-to-end cost,
+rather than treating a full-frame repair stage as free.
+
+\begin{figure*}[t]
+\centering
+\includegraphics[width=\textwidth]{figs/research20260927/component_interventions/fig_component_interventions.pdf}
+\caption{\textbf{Separate learned dependence from architectural necessity.}
+Fixed QP32, checkpoint and Q90 exit maps on all 53 first frames.
+\textbf{a}, RGB PSNR loss after identity substitution: individual sequences,
+means and paired 95\% bootstrap intervals. \textbf{b}, Relative MSE change
+in boundary and interior pixels, averaged within sequence before aggregation.
+\textbf{c}, Joint-minus-summed individual PSNR penalties. This is a
+frozen-weight sensitivity test; it measures neither retrained alternatives
+nor runtime.}
+\label{fig:componentinterventions}
 \end{figure*}
 
 \section{The Cost of Independent Spatial Regions}
@@ -195,6 +304,58 @@ that depth; $n$ denotes supported images out of 16, with no extrapolation.
 The latent-padding implementation uses CPU FP32 research streams;
 ``native geometry'' does not denote native CUDA output or latency.}
 \label{fig:nativepadding}
+\end{figure*}
+
+\subsection{Keep the depth map; change how regions are encoded}
+We next hold every pixel's expert assignment fixed while changing the
+independent coding regions. The same 16 images and five QPs use D2/D6
+at epoch 20 with a 50/50 pixel split. Both complementary phases of vertical
+halves, horizontal halves and a checkerboard are retained. Vertical and
+horizontal maps each have two implementations: four independent cores or
+two coalesced regions. With the two checkerboard phases, this gives ten
+profiles per image--QP pair and 800 checked outputs. The decoder receives
+only the fixed-profile research container and resident model weights.
+
+Coalescing removes a coding boundary without reassigning any source pixel.
+At QP32, mean payload falls by 13.05\% for vertical halves and 12.39\% for
+horizontal halves. Mean RGB PSNR changes are $-0.00045$ and $-0.00100$\,dB;
+their paired intervals include zero. These small averages do not establish
+per-image equivalence. At 0.2 payload bpp, all 16 images are supported, and
+coalescing improves PSNR by 0.5327\,dB $[0.4391,0.6291]$ for vertical maps
+and 0.4959\,dB $[0.4121,0.5748]$ for horizontal maps
+(\cref{fig:regionmerge}). We average the two phases within each image
+before bootstrapping images, rather than counting 32 independent samples.
+
+The complete-container gains at 0.2\,bpp are 0.6401 and 0.6084\,dB.
+Our explicit FUFBNK1 framing costs 12 bytes plus four length bytes per
+embedded region; each FUFREF2 component also carries an 88-byte header.
+Thus non-payload bytes fall from 380 to 196 when four regions become two.
+This is a verifiable research format, not a minimal production format, so
+its header benefit must remain separate from the entropy-payload result.
+
+Layer-wise Conv2d tracing gives a 12.44\% reduction in neural-decoder MACs
+and 11.99\% in encoder-plus-reconstruction MACs for this geometry. These are
+arithmetic reductions, not measured latency. Region shape, duplicated context
+and entropy resets change together. Connected-region coding also has prior
+precedent~\cite{blard2026spatial}; the control is not a standalone novelty
+claim. Its practical conclusion is narrower: the same depth decisions can
+have materially different rate--distortion and compute costs depending on
+how they are executed.
+
+\begin{figure*}[t]
+\centering
+\includegraphics[width=\textwidth]{figs/research20260927/region_merge/fig_region_merge.pdf}
+\caption{\textbf{Better region execution without a better selector.}
+\textbf{a}, One phase of the fixed depth-map control; every pixel keeps its
+D2 or D6 assignment. \textbf{b}, Same-QP relative payload change after
+coalescing. \textbf{c,d}, RGB PSNR gain at matched payload and complete-container
+rate, on shared vertical scales. Complementary phases are averaged within
+image before 95\% paired-image bootstrap intervals. Counts show the common
+support of both phases and implementations, without extrapolation.
+The 800 outputs include unmerged checkerboards; those have no adjacent
+same-depth regions to combine. CPU FP32 research streams and epoch-20 weights
+are used throughout; this is neither learned routing nor a runtime benchmark.}
+\label{fig:regionmerge}
 \end{figure*}
 
 \begin{figure*}[t]

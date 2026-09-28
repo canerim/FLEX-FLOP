@@ -1,6 +1,6 @@
 {
   "scope": "Current vector figure reproduction using only bundled data/scripts; no codec inference, training weights, source dataset or GPU.",
-  "artifact_count": 99,
+  "artifact_count": 111,
   "all_byte_identical": true,
   "artifacts": [
     {
@@ -390,22 +390,22 @@
     },
     {
       "file": "figs/research20260927/shared_crossfit_qp32/crossfit_replay_atlas.pdf",
-      "sha256": "9ee266a32b17470f042b0e5117d85bd5c404b7c3dc59fb521f105168c209fd54",
+      "sha256": "35a58ccff57caf5f6e967c11dbd919dda442f7e9c45f078d9a0ead24d9f1a739",
       "byte_identical": true
     },
     {
       "file": "figs/research20260927/shared_crossfit_qp32/fig_crossfit_actual_replay.pdf",
-      "sha256": "9ee266a32b17470f042b0e5117d85bd5c404b7c3dc59fb521f105168c209fd54",
+      "sha256": "35a58ccff57caf5f6e967c11dbd919dda442f7e9c45f078d9a0ead24d9f1a739",
       "byte_identical": true
     },
     {
       "file": "figs/research20260927/shared_crossfit_qp32/fig_crossfit_actual_replay.png",
-      "sha256": "9bc8dc3068f231ec4546cff427c9190850d89ee521c93c8c2e24c6b5a56be353",
+      "sha256": "f07c0666be0d3e91e9ddb59e07b5a6646cb2479188b2cb182f52ce3e97d66f0a",
       "byte_identical": true
     },
     {
       "file": "figs/research20260927/shared_crossfit_qp32/fig_crossfit_actual_replay.svg",
-      "sha256": "4a46952ac057fd9d36fc47fcc9e0b6a1f23a8404b0d3b9d78345a7072eaada7e",
+      "sha256": "a416677ade0b149dcd61b624431c8ce178e2187b7f1c459970cc9e4bf5ed1884",
       "byte_identical": true
     },
     {
@@ -479,23 +479,83 @@
       "byte_identical": true
     },
     {
+      "file": "figs/research20260927/region_merge/fig_region_merge.pdf",
+      "sha256": "b5c0f3d047c90a06f5cbf3f50736d9ea7b9dfedeace471ae257f05c5148935c5",
+      "byte_identical": true
+    },
+    {
+      "file": "figs/research20260927/region_merge/fig_region_merge.png",
+      "sha256": "07fb9ae075bba66d40aa2a51079a6919cd881bcc853d8819e12268c808e05b78",
+      "byte_identical": true
+    },
+    {
+      "file": "figs/research20260927/region_merge/fig_region_merge.svg",
+      "sha256": "da51f2eed45cdd2aba60cde513fac461fca4783432f389dce98769b21cee211e",
+      "byte_identical": true
+    },
+    {
+      "file": "figs/research20260927/region_merge/region_merge_atlas.pdf",
+      "sha256": "b5c0f3d047c90a06f5cbf3f50736d9ea7b9dfedeace471ae257f05c5148935c5",
+      "byte_identical": true
+    },
+    {
       "file": "figs/research20260927/native_execution/fig_native_encoder_dependencies.pdf",
-      "sha256": "12f821d2384ad5eb8eca4829bbf2003d8dc4300d4ac61843931091547ec3e9dc",
+      "sha256": "96e5aa9db59e5e2b773e7b5ccfdcca61fec6e9edf4bb03f7cdbdc825743d4250",
       "byte_identical": true
     },
     {
       "file": "figs/research20260927/native_execution/fig_native_encoder_dependencies.png",
-      "sha256": "0437002a80a111c05bd69ff13f1ff92f254a89737a308571d0bc34b747b982e9",
+      "sha256": "b2c2e7315af192972b21c3b45dd6be595a58b5b10c8df426779287130abeaaa3",
       "byte_identical": true
     },
     {
       "file": "figs/research20260927/native_execution/fig_native_encoder_dependencies.svg",
-      "sha256": "f768342053a9864e8c81f6cc6f31e7cec3efc6d7287152ea8bb5bee8ddd6cd36",
+      "sha256": "3259126748aa9adbe592f38291588cb430305cf535eb05419466d91343c16a7c",
       "byte_identical": true
     },
     {
       "file": "figs/research20260927/native_execution/native_execution_atlas.pdf",
-      "sha256": "12f821d2384ad5eb8eca4829bbf2003d8dc4300d4ac61843931091547ec3e9dc",
+      "sha256": "96e5aa9db59e5e2b773e7b5ccfdcca61fec6e9edf4bb03f7cdbdc825743d4250",
+      "byte_identical": true
+    },
+    {
+      "file": "figs/research20260927/component_interventions/component_interventions_atlas.pdf",
+      "sha256": "d4a5bf2e5ed11c550135a18b6a0d90b56fe8e2bddb982da90470214e5bbed552",
+      "byte_identical": true
+    },
+    {
+      "file": "figs/research20260927/component_interventions/fig_component_interventions.pdf",
+      "sha256": "d4a5bf2e5ed11c550135a18b6a0d90b56fe8e2bddb982da90470214e5bbed552",
+      "byte_identical": true
+    },
+    {
+      "file": "figs/research20260927/component_interventions/fig_component_interventions.png",
+      "sha256": "9fea97dec1821a52289ec616ae56207cfde96700b0f37ef50b243095f2bd719a",
+      "byte_identical": true
+    },
+    {
+      "file": "figs/research20260927/component_interventions/fig_component_interventions.svg",
+      "sha256": "fef67984b6806a40c027fc0ac3e5f68064d6f3f3197bc013064c87e011247fb5",
+      "byte_identical": true
+    },
+    {
+      "file": "figs/research20260927/released_anchor_qp32/fig_released_anchor.pdf",
+      "sha256": "ede6ca59887238c8bd18b110981f1bda8c5dfcf6d28c725543908e78218bcc0a",
+      "byte_identical": true
+    },
+    {
+      "file": "figs/research20260927/released_anchor_qp32/fig_released_anchor.png",
+      "sha256": "f879596b043df679396eaa8f9f8782f196d22971182e476e5f2f6ac5ef92bbec",
+      "byte_identical": true
+    },
+    {
+      "file": "figs/research20260927/released_anchor_qp32/fig_released_anchor.svg",
+      "sha256": "f65d63aa34b109b440443324186582f3030ee7d5306ab72b1c3fefb5781ad0eb",
+      "byte_identical": true
+    },
+    {
+      "file": "figs/research20260927/released_anchor_qp32/released_anchor_atlas.pdf",
+      "sha256": "ede6ca59887238c8bd18b110981f1bda8c5dfcf6d28c725543908e78218bcc0a",
       "byte_identical": true
     }
   ],

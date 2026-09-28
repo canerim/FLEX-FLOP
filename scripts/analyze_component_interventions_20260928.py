@@ -19,7 +19,7 @@ def main():
         if sha(path)!=digest:raise ValueError('Source provenance changed')
     paths=sorted((SOURCE/'cases').glob('*.json'));cases=[json.loads(p.read_text()) for p in paths]
     if len(cases)!=53 or {c['sequence'] for c in cases}!=set(manifest['names']):raise ValueError('Cohort incomplete')
-    contrasts=[];interactions=[]
+    contrasts=[];interactions=[];depth_histogram={str(k):0 for k in (6,8,10,12)}
     for case in cases:
         if not case['baseline_matches_complete_replay'] or case['head_replay_exact']!=[True,True]:raise ValueError('Exact path check failed')
         lookup={r['variant']:r for r in case['rows']}
@@ -27,6 +27,9 @@ def main():
         n=case['height']*case['width'];nb=case['boundary_pixels'];ni=case['interior_pixels']
         if nb+ni!=n or min(nb,ni)<=0:raise ValueError('Support partition differs')
         base=lookup['trained']
+        for index in case['map']:depth_histogram[str(2*(index+1))]+=1
+        if all(index==5 for index in case['map']):
+            assert lookup['adapters_identity']['mse_rgb']==base['mse_rgb'],'Inactive adapters changed output'
         for row in lookup.values():
             if abs(row['psnr_rgb']+10*math.log10(row['mse_rgb']))>1e-10:raise ValueError('PSNR identity fails')
             weighted=(row['boundary_mse_rgb']*nb+row['interior_mse_rgb']*ni)/n
@@ -45,6 +48,7 @@ def main():
     keys=[k for k in contrasts[0] if k not in ('sequence','variant')]
     summary=[{'variant':variant,'metrics':{k:describe([r[k] for r in contrasts if r['variant']==variant]) for k in keys}} for variant in VARIANTS]
     result={'scope':manifest['scope'],'manifest':manifest,'n_sequences':53,'n_outputs':212,'cases':cases,'contrasts':contrasts,'summaries':summary,
+        'map_coverage':{'tile_depth_histogram':depth_histogram,'frames_with_any_early_exit':sum(any(k<5 for k in c['map']) for c in cases),'total_tiles':sum(depth_histogram.values())},
         'interaction':{'definition':'Joint identity-substitution PSNR loss minus the sum of the two individual losses, in dB; interaction is metric-scale dependent.',
             'per_sequence':interactions,'summary':describe([r['joint_minus_sum_loss_db'] for r in interactions])},
         'statistics':'5000 paired-sequence bootstrap draws, seed20260927; equal sequence weight. Intervals conditional on fixed checkpoint, QP, archived maps and development cohort; no training-seed uncertainty.',

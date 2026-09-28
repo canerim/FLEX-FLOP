@@ -40,7 +40,7 @@ def main():
         values=sorted(r['actual_minus_table_padded_loss_db'] for r in d['rows'] if (r['criterion'],r['policy'])==(c,p))
         axes[3].plot(np.array(values)*1e4,np.arange(1,54)/53,color=color,ls='-' if c=='mean' else '--',lw=.9)
     axes[0].set(xlabel='Final cropped RGB loss (dB)',ylabel='Synthesis MAC saving (%)')
-    axes[1].axhline(0,color=F.GREY,lw=.6);axes[1].set(xticks=range(3),xticklabels=['Router','Dither','Uniform'],ylabel=r'RGB loss − 444 loss ($10^{-3}$ dB)',xlim=(-.45,2.45))
+    axes[1].axhline(0,color=F.GREY,lw=.6);axes[1].set(xticks=range(3),xticklabels=['Router','Dither','Uniform'],ylabel=r'RGB − 444 loss ($10^{-3}$ dB)',xlim=(-.45,2.45))
     axes[2].set(xticks=range(3),xticklabels=['Router','Dither','Uniform'],ylabel='Frames above 0.1 dB RGB loss',ylim=(0,57),yticks=[0,15,30,45,53],xlim=(-.45,2.45))
     axes[3].axvline(0,color=F.GREY,lw=.6);axes[3].set(xlabel=r'Actual − table padded loss ($10^{-4}$ dB)',ylabel='Cumulative fraction',ylim=(0,1.04))
     handles=[Line2D([],[],color=c,lw=1.2,label=p.title()) for p,c in COLORS.items()]

@@ -102,10 +102,12 @@ factor. The paired MAC accounting remains attached to the same recorded
 maps, but the exact quality gap to the cropped released decoder cannot be
 recovered from the exported JSON alone.
 
-The required replay should retain both full-depth anchors, the padded and
-valid-pixel errors, and the final mixed reconstruction. Selection and final
-verification must use the same declared reference and metric. A failed plan
-should trigger an explicit fallback whose bytes and runtime are recorded.
+The completed QP32 replay in \cref{sec:releasedanchor} retains both
+full-depth anchors and explicitly computes valid-pixel RGB errors on all
+53 frames. It closes this reference gap at that QP without relabelling the
+five-QP archive. Selection and final verification must still declare the
+same reference and metric; any deployment fallback must include its bytes
+and runtime.
 
 \begin{figure*}[t]
 \centering
@@ -367,8 +369,8 @@ differences belong to one sequence. These checks are reproducible from
 \caption{\textbf{Controlling delivered loss within the recorded candidate pool.}
 \textbf{a}, Maximum saving among actually measured eligible outputs,
 including a full-frame e15 fallback. \textbf{b}, Paired router--dither
-difference with 95\% sequence-cluster intervals. \textbf{c}, Explicit
-fallback counts. All 265 pairs are retained, with YCbCr~4:4:4-loss tolerance
+difference with 95\% sequence-cluster intervals. All 265 pairs are retained,
+including explicit fallbacks, with YCbCr~4:4:4-loss tolerance
 $10^{-4}$\,dB. This retrospective source-aware comparison excludes the
 cost of candidate generation and makes no released-reference or latency claim.}
 \label{fig:deliveredcap}
@@ -519,8 +521,8 @@ alone.
 \paragraph{A concrete router hypothesis.}
 A lightweight encoder-side predictor can estimate each expert's distortion
 and rate relative to a cheap reference. Let $z_{t,k}$ indicate the expert
-assigned to patch $t$ and $n_k=\sum_t z_{t,k}$. For measured grouped-runtime
-tables $\tau_k(n_k)$, a proposed system objective is
+assigned to patch $t$ and $n_k=\sum_t z_{t,k}$. For equal-shaped patches and
+measured grouped-runtime tables $\tau_k(n_k)$, a proposed system objective is
 \begin{equation}
  \widehat J=\sum_{t,k}z_{t,k}(\widehat D_{t,k}+\lambda\widehat R_{t,k})
  +\mu\sum_k\tau_k(n_k).
@@ -534,6 +536,17 @@ predicted RD change and the measured marginal time
 $\tau_k(n_k-1)-\tau_k(n_k)+\tau_j(n_j+1)-\tau_j(n_j)$.
 The number of passes and decision-time limit should be fixed on validation
 images. Any improvement must include this extra control work.
+
+Patch counts alone cease to describe the workload when neighbouring regions
+are coalesced or frame edges create smaller windows. Then the assignment
+induces a set of coded regions, each with its own shape and context. Runtime
+tables must condition on expert, shape, QP and the validated execution mode;
+packing regions of different shapes into a hypothetical common batch is not
+an implemented optimisation. Region construction also changes repeated
+context, entropy resets and headers. Accordingly, the fixed-map merge control
+separates these execution choices from prediction accuracy. A same-histogram
+spatial shuffle is a useful additional control: equal expert frequencies need
+not imply equal grouping opportunities or equal codec cost.
 
 Regression or regret-weighted training should be compared against ordinary
 exit-label cross-entropy. A second-stage top-two verification can be

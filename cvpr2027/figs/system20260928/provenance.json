@@ -1,6 +1,6 @@
 {
   "asset": "figs/system20260928/shared_exit_mechanism.png",
-  "sha256": "db4685a9eaad4ef284590d683deab25fe0fcdf5b428bdee3055b9b6cb44aa68c",
+  "sha256": "abc06d7d677d82934f3aba8c0e50effb0300ab68c4cfbc898cf8cd28caea739a",
   "tool": "built-in image_gen via imagegen skill",
   "scope": "Conceptual scientific illustration; synthetic scene/tensor planes, not measured image reconstruction or active tile counts. Architecture checked against implemented shared e15 path.",
   "scientific_checks": [
@@ -11,5 +11,13 @@
     "QP enters MLP; beta adjusts scores afterward",
     "No independent model bank or serial expert cascade"
   ],
-  "figure1_unchanged": true
+  "figure1_unchanged": true,
+  "previous_published_sha256": "db4685a9eaad4ef284590d683deab25fe0fcdf5b428bdee3055b9b6cb44aa68c",
+  "source_generated_file": "/home/can_karsal/.codex/generated_images/01a0d246-2ca0-7c00-894f-0e421a52da42/exec-90d46f95-0b5d-4a03-b792-1e40665cb939.png",
+  "typography_revision": "Larger relative annotations, shortened labels and removed redundant bottom note. Enlarged candidate lost one stem slab and was rejected; local correction restored exactly one upsampling plus four shared trunk slabs.",
+  "typography_prompts": "figs/system20260928/TYPOGRAPHY_PROMPTS.md",
+  "pixel_dimensions": [
+    2172,
+    724
+  ]
 }

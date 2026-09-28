@@ -1,0 +1,158 @@
+{
+  "generated_utc": "2026-09-28 02:36 UTC",
+  "source_sha256": {
+    "/home/can_karsal/FLEX-PLUS/docs/research/2026-09-27-six-hour/shared_crossfit_qp32/analysis.json": "5fc1cb221d6ef89c9c5f0754aeea942529ac42614595ec38cd4d7f3731a88253",
+    "/home/can_karsal/FLEX-PLUS/docs/research/2026-09-27-six-hour/native_padding/analysis.json": "5668f6eb771e77fe740157dfb2fe95b7d17a2ae2f7fd628a0c2b283dfd2346f6",
+    "/home/can_karsal/FLEX-PLUS/docs/research/2026-09-27-six-hour/region_merge/analysis.json": "0911e7a86cd6a15fc9d2abd2c270c28dbfe40a5c7eef50ad46d01406a72b379f",
+    "/home/can_karsal/FLEX-PLUS/docs/research/2026-09-27-six-hour/component_interventions/analysis.json": "fd48d1604d90ef5a05bc5e378427f93db68133386de72a39c9ba89ea7e07fcff",
+    "/home/can_karsal/FLEX-PLUS/docs/research/2026-09-27-six-hour/router_logit_replay/analysis.json": "767bd6745d2d4d54ed80186984dc5ba105f24e65126a9e571ebc76c0d42584cc",
+    "/home/can_karsal/FLEX-PLUS/docs/research/2026-09-27-six-hour/released_anchor_qp32/analysis.json": "3f31832a578590d37c5772068f0a1216760153c540c9c072e27ad0f09e86b23c",
+    "/home/can_karsal/FLEX-PLUS/docs/research/2026-09-27-six-hour/shared_stream_preflight/analysis.json": "d4e14aadedbf092e286d0329def71f80895904caaedee536fa4b30ca7e643ae3"
+  },
+  "training_monitor_snapshot": {
+    "timestamp": "2026-09-28T02:35:09.860638+00:00",
+    "watch_pid": 678641,
+    "runs": {
+      "2": {
+        "depth": 2,
+        "gpu": 1,
+        "pid": 274119,
+        "state": "running",
+        "process_alive": true,
+        "global_step": 888165,
+        "epochs_completed": 36.93147324213065,
+        "progress_percent": 35.17283165917205,
+        "status_age_seconds": 9.154329299926758,
+        "last_progress_unix": 1790562909.8606384,
+        "progress_age_seconds": 0.0,
+        "step_seconds": 0.1192507208736303,
+        "nonfinite_skips": 0,
+        "checkpoint": {
+          "bytes": 381905665,
+          "age_seconds": 26.899022817611694
+        },
+        "validation_step": 865764,
+        "validation_epoch": 36,
+        "validation_lag_epochs": 0,
+        "validation_failure_unresolved": false,
+        "recipe_mismatches": [],
+        "final_outputs_ready": false,
+        "eta_hours_estimate": 77.84256161066975,
+        "alerts": []
+      },
+      "4": {
+        "depth": 4,
+        "gpu": 3,
+        "pid": 274121,
+        "state": "running",
+        "process_alive": true,
+        "global_step": 861916,
+        "epochs_completed": 35.839993346916714,
+        "progress_percent": 34.133326997063534,
+        "status_age_seconds": 4.6901514530181885,
+        "last_progress_unix": 1790562909.8606384,
+        "progress_age_seconds": 0.0,
+        "step_seconds": 0.11439814725425095,
+        "nonfinite_skips": 0,
+        "checkpoint": {
+          "bytes": 406859681,
+          "age_seconds": 213.1599361896515
+        },
+        "validation_step": 841715,
+        "validation_epoch": 35,
+        "validation_lag_epochs": 0,
+        "validation_failure_unresolved": false,
+        "recipe_mismatches": [],
+        "final_outputs_ready": false,
+        "eta_hours_estimate": 78.87214190950554,
+        "alerts": []
+      },
+      "6": {
+        "depth": 6,
+        "gpu": 6,
+        "pid": 274120,
+        "state": "running",
+        "process_alive": true,
+        "global_step": 704622,
+        "epochs_completed": 29.29943032974344,
+        "progress_percent": 27.90421936166042,
+        "status_age_seconds": 24.32268238067627,
+        "last_progress_unix": 1790562909.8606384,
+        "progress_age_seconds": 0.0,
+        "step_seconds": 0.19558356069540606,
+        "nonfinite_skips": 0,
+        "checkpoint": {
+          "bytes": 431813697,
+          "age_seconds": 144.63138031959534
+        },
+        "validation_step": 697421,
+        "validation_epoch": 29,
+        "validation_lag_epochs": 0,
+        "validation_failure_unresolved": false,
+        "recipe_mismatches": [],
+        "final_outputs_ready": false,
+        "eta_hours_estimate": 127.39845219461894,
+        "alerts": []
+      }
+    },
+    "alerts": [],
+    "automatic_training_mutations": false,
+    "checkpoint_integrity": {
+      "timestamp": "2026-09-28T01:45:03.668843+00:00",
+      "device": "cpu",
+      "runs": {
+        "2": {
+          "path": "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/runs/d2/resume.pt",
+          "ok": true,
+          "global_step": 862000,
+          "epoch": 35,
+          "decoder_indices": [
+            0,
+            1,
+            2
+          ],
+          "nonfinite_tensor_keys": []
+        },
+        "4": {
+          "path": "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/runs/d4/resume.pt",
+          "ok": true,
+          "global_step": 836000,
+          "epoch": 34,
+          "decoder_indices": [
+            0,
+            1,
+            2,
+            3,
+            4
+          ],
+          "nonfinite_tensor_keys": []
+        },
+        "6": {
+          "path": "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/runs/d6/resume.pt",
+          "ok": true,
+          "global_step": 688000,
+          "epoch": 28,
+          "decoder_indices": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6
+          ],
+          "nonfinite_tensor_keys": []
+        }
+      },
+      "ok": true
+    },
+    "snapshot_hashes_verified": true,
+    "disk_free_gib": {
+      "/data10/shareddata/can_karsal/dcvcuf_depth_20260927": 3989.435691833496,
+      "/home/can_karsal/FLEX-PLUS/experiments/dcvcuf_depth_official_20260927": 111.79812622070312
+    },
+    "gpu_csv": "1, 92, 5348, 67\n3, 96, 6236, 68\n6, 99, 15990, 75",
+    "final_analysis_state": "pending"
+  },
+  "scope": "Interim measurements and research decisions. No invented experiments, native timing, completed105epoch training or untouched-test claims."
+}

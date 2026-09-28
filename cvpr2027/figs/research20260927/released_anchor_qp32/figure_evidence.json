@@ -1,0 +1,361 @@
+{
+  "analysis_sha256": "3f31832a578590d37c5772068f0a1216760153c540c9c072e27ad0f09e86b23c",
+  "script_sha256": "142fda5b94f76890f18047bab2a6b2d0cfe071314e454c45c78d3be0b9fdcaa1",
+  "captions": [
+    {
+      "name": "fig_released_anchor",
+      "caption": "All53 CTC first frames atQP32, using the same replicate-to256 input padding and cropped valid support as the shared-exit replay. Stock DMCI synthesis strictly loads the official releasedD12; all255 analysis/entropy tensors match e15 before latent reuse and the first frame verifies exact stock-versus-remapped synthesis. Panel a reports e15 full-frame and all six fixed-policy outputs against the same released RGB anchor. Means and paired95% sequence-bootstrap intervals are conditional on this development corpus and checkpoints. Filled points use mean control and hollow points Q90; the full-frame point is a reference-drift control. The dashed0.1 line is a numerical comparison, not an RGB guarantee under the original padded444 calibration. Panel b shows per-sequence e15-versus-released anchor drift in444 and explicitly converted/clippedRGB; dashed diagonal denotes metric agreement. Positive loss means lower PSNR than released. This reconstruction audit is neither a native CUDA bitstream benchmark nor a final depth-bank result."
+    }
+  ],
+  "layout_audit": [
+    {
+      "figure": "fig_released_anchor",
+      "outside_canvas": [],
+      "text": [
+        {
+          "text": "a",
+          "size_pt": 8.0,
+          "bbox_px": [
+            109.8,
+            273.5919291338583,
+            6.0,
+            10.427517361111086
+          ]
+        },
+        {
+          "text": "RGB PSNR loss versus released D12 (dB)",
+          "size_pt": 6.5,
+          "bbox_px": [
+            177.57480314960634,
+            40.82590616114393,
+            178.0,
+            9.0
+          ]
+        },
+        {
+          "text": "0.00",
+          "size_pt": 6.0,
+          "bbox_px": [
+            148.2290622763064,
+            55.381461716699484,
+            14.0,
+            7.820638020833336
+          ]
+        },
+        {
+          "text": "0.02",
+          "size_pt": 6.0,
+          "bbox_px": [
+            187.45353738230065,
+            55.381461716699484,
+            14.0,
+            7.820638020833336
+          ]
+        },
+        {
+          "text": "0.04",
+          "size_pt": 6.0,
+          "bbox_px": [
+            226.6780124882949,
+            55.381461716699484,
+            14.0,
+            7.820638020833336
+          ]
+        },
+        {
+          "text": "0.06",
+          "size_pt": 6.0,
+          "bbox_px": [
+            265.9024875942892,
+            55.381461716699484,
+            14.0,
+            7.820638020833336
+          ]
+        },
+        {
+          "text": "0.08",
+          "size_pt": 6.0,
+          "bbox_px": [
+            305.12696270028346,
+            55.381461716699484,
+            14.0,
+            7.820638020833336
+          ]
+        },
+        {
+          "text": "0.10",
+          "size_pt": 6.0,
+          "bbox_px": [
+            344.3514378062777,
+            55.381461716699484,
+            14.0,
+            7.820638020833336
+          ]
+        },
+        {
+          "text": "e15 full frame",
+          "size_pt": 6.0,
+          "bbox_px": [
+            89.76115485564304,
+            240.66228431040847,
+            46.0,
+            7.820638020833343
+          ]
+        },
+        {
+          "text": "Router \u00b7 mean",
+          "size_pt": 6.0,
+          "bbox_px": [
+            87.76115485564304,
+            214.3116718869614,
+            48.0,
+            7.820638020833343
+          ]
+        },
+        {
+          "text": "Dither \u00b7 mean",
+          "size_pt": 6.0,
+          "bbox_px": [
+            89.76115485564304,
+            187.96105946351432,
+            46.0,
+            7.820638020833343
+          ]
+        },
+        {
+          "text": "Uniform \u00b7 mean",
+          "size_pt": 6.0,
+          "bbox_px": [
+            82.76115485564304,
+            161.61044704006727,
+            53.0,
+            7.820638020833343
+          ]
+        },
+        {
+          "text": "Router \u00b7 Q90",
+          "size_pt": 6.0,
+          "bbox_px": [
+            92.76115485564304,
+            135.0135781062035,
+            43.0,
+            8.06689453125
+          ]
+        },
+        {
+          "text": "Dither \u00b7 Q90",
+          "size_pt": 6.0,
+          "bbox_px": [
+            94.76115485564304,
+            108.66296568275646,
+            41.0,
+            8.06689453125
+          ]
+        },
+        {
+          "text": "Uniform \u00b7 Q90",
+          "size_pt": 6.0,
+          "bbox_px": [
+            87.76115485564304,
+            82.31235325930939,
+            48.0,
+            8.06689453125
+          ]
+        },
+        {
+          "text": "One released reference for every output",
+          "size_pt": 6.7,
+          "bbox_px": [
+            144.09448818897638,
+            270.3709536307962,
+            165.99999999999997,
+            9.0
+          ]
+        },
+        {
+          "text": "b",
+          "size_pt": 8.0,
+          "bbox_px": [
+            461.6787401574803,
+            273.5919291338583,
+            7.0,
+            10.427517361111086
+          ]
+        },
+        {
+          "text": "e15 444 loss versus released (dB)",
+          "size_pt": 6.5,
+          "bbox_px": [
+            519.7874015748032,
+            40.82590616114393,
+            142.0,
+            9.0
+          ]
+        },
+        {
+          "text": "0.000",
+          "size_pt": 6.0,
+          "bbox_px": [
+            501.6753239249135,
+            55.381461716699484,
+            18.0,
+            7.820638020833336
+          ]
+        },
+        {
+          "text": "0.005",
+          "size_pt": 6.0,
+          "bbox_px": [
+            536.2654307289032,
+            55.381461716699484,
+            18.0,
+            7.820638020833336
+          ]
+        },
+        {
+          "text": "0.010",
+          "size_pt": 6.0,
+          "bbox_px": [
+            570.8555375328929,
+            55.381461716699484,
+            18.0,
+            7.820638020833336
+          ]
+        },
+        {
+          "text": "0.015",
+          "size_pt": 6.0,
+          "bbox_px": [
+            605.4456443368825,
+            55.381461716699484,
+            18.0,
+            7.820638020833336
+          ]
+        },
+        {
+          "text": "0.020",
+          "size_pt": 6.0,
+          "bbox_px": [
+            640.0357511408722,
+            55.381461716699484,
+            18.0,
+            7.820638020833336
+          ]
+        },
+        {
+          "text": "0.025",
+          "size_pt": 6.0,
+          "bbox_px": [
+            674.6258579448619,
+            55.381461716699484,
+            18.0,
+            7.820638020833336
+          ]
+        },
+        {
+          "text": "e15 RGB loss versus released (dB)",
+          "size_pt": 6.5,
+          "bbox_px": [
+            449.03237095363085,
+            92.89763779527561,
+            9.0,
+            147.0
+          ]
+        },
+        {
+          "text": "0.000",
+          "size_pt": 6.0,
+          "bbox_px": [
+            463.5879265091864,
+            86.26694544076626,
+            18.0,
+            7.820638020833329
+          ]
+        },
+        {
+          "text": "0.005",
+          "size_pt": 6.0,
+          "bbox_px": [
+            463.5879265091864,
+            118.79811731594701,
+            18.0,
+            7.820638020833329
+          ]
+        },
+        {
+          "text": "0.010",
+          "size_pt": 6.0,
+          "bbox_px": [
+            463.5879265091864,
+            151.32928919112774,
+            18.0,
+            7.820638020833343
+          ]
+        },
+        {
+          "text": "0.015",
+          "size_pt": 6.0,
+          "bbox_px": [
+            463.5879265091864,
+            183.8604610663085,
+            18.0,
+            7.820638020833343
+          ]
+        },
+        {
+          "text": "0.020",
+          "size_pt": 6.0,
+          "bbox_px": [
+            463.5879265091864,
+            216.39163294148926,
+            18.0,
+            7.820638020833343
+          ]
+        },
+        {
+          "text": "0.025",
+          "size_pt": 6.0,
+          "bbox_px": [
+            463.5879265091864,
+            248.92280481667,
+            18.0,
+            7.820638020833371
+          ]
+        },
+        {
+          "text": "Fine-tuning changes the anchor",
+          "size_pt": 6.7,
+          "bbox_px": [
+            489.9212598425197,
+            270.3709536307962,
+            131.0,
+            9.0
+          ]
+        },
+        {
+          "text": "53 frames \u00b7 QP32 \u00b7 cropped valid support \u00b7 CPU FP32 \u00b7 paired 95% intervals conditional on fixed checkpoints",
+          "size_pt": 5.7,
+          "bbox_px": [
+            178.73622047244095,
+            29.10236220472441,
+            362.99999999999994,
+            8.000000000000004
+          ]
+        },
+        {
+          "text": "The same output can have a different reported loss when its reference changes; paired policy differences remain unchanged",
+          "size_pt": 5.6,
+          "bbox_px": [
+            153.87684547244095,
+            11.996062992125983,
+            412.71874999999994,
+            8.000000000000002
+          ]
+        }
+      ],
+      "duplicated_headings_moved_to_caption": [],
+      "width_mm": 183.0,
+      "height_mm": 79.0
+    }
+  ]
+}
