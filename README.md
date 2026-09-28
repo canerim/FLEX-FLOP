@@ -51,14 +51,24 @@ controls and plotted epoch-20 curves retain their original checkpoints.
 `python scripts/build_research_figures.py` renders the portable vector
 figures. `python scripts/reproduce_figures.py` checks byte-identical
 reproduction from bundled data without checkpoints, source images or GPU.
-The suite contains 34 vector figure sets, with two separately identified
+The suite contains 38 vector figure sets, with two separately identified
 conceptual AI illustrations. Figures 1 and 2 and their captions are
-preserved. A new single-column active-tile execution trace and compact
-paired-increment plot complement the main results. Four numerical tables,
-22 evidence macros and a paired milestone audit are also generated and
-checked from bundled JSON.
+preserved. The revised main figures include an oblique active-tile trace, measured
+3D budget trajectories and eight source groups with five recorded maps each.
+No tables are typeset in the main paper or supplement: evidence is plotted.
+`build_editorial_figures.py` renders the four added evidence plots. Numerical
+exports, 22 macros and the paired milestone audit remain checked against
+bundled JSON; unused table-form exports are retained only as audit artifacts.
 
 ## Fixed-policy and spatial-region controls
+
+The fixed-Q90 placement intervention completes 424 map cases on all 53 QP32
+frames, preserving depth histograms within equal valid-tile extents. Original
+router placement gains 0.01393 dB against the mean MSE of three shuffled maps;
+dithering gains 0.00036 dB. The intervals condition on those sampled
+permutations. This supports spatial placement value without establishing a
+net-runtime or external-test advantage. Complete records are bundled as
+`data/research20260927/shared_crossfit_qp32/placement_replay.json`.
 
 The fixed-control replay, now summarised in main Table 2, retains all 53 QP32 frames and all 318 fixed-policy outputs. Both paired router-minus-dither confidence intervals include zero. Fresh CPU router inference reproduces all 1,765 tile choices under each of the two fixed controls; log-probabilities themselves are not bit-identical across the historical GPU and CPU paths.
 

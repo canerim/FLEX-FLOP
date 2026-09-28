@@ -175,24 +175,8 @@ def delivered(book):
 
 
 def delivered_compact(book):
-    d=json.loads((DATA/'delivered_frontier_audit.json').read_text())
-    rows=[r for r in d['contrasts'] if r['contrast']=='router_minus_dither']
-    fig,ax=plt.subplots(figsize=(89*F.MM,66*F.MM))
-    fig.subplots_adjust(left=.22,right=.96,bottom=.20,top=.76)
-    fig.text(.04,.94,'Extra saving from spatial placement',fontsize=8,weight='bold',va='top')
-    fig.text(.04,.855,'Router − Bayer dither · paired 95% CI',fontsize=7,color=F.MUTED)
-    ax.axhspan(.6,1.4,color='#EDF5F3',zorder=0)
-    ax.axvline(0,color=F.MUTED,lw=.6)
-    values=np.array([r['mean'] for r in rows]);lo=np.array([r['lo'] for r in rows]);hi=np.array([r['hi'] for r in rows])
-    ax.errorbar(values,np.arange(len(rows)),xerr=[values-lo,hi-values],fmt='o',
-        color=F.BLUE,ms=4.5,mec='white',mew=.5,lw=1.15,capsize=2.5,zorder=3)
-    ax.set_yticks(range(len(rows)),[f"{r['cap']:.2f}" for r in rows])
-    ax.set(xlim=(-.3,4.3),ylim=(5.6,-.6),xticks=[0,1,2,3,4],
-        xlabel='Additional MAC saving (percentage points)',ylabel='Delivered quality-loss cap (dB)')
-    ax.tick_params(labelsize=7);ax.xaxis.label.set_size(7);ax.yaxis.label.set_size(7)
-    ax.grid(axis='x',color=F.GRID,lw=.4);ax.set_axisbelow(True)
-    F.audit_and_save(fig,'figS7_delivered_increment',
-        'Single-column paired allocation contrast under a common measured, cropped YCbCr 4:4:4-loss cap. Every point retains all265 frame-QP pairs and uses a full-frame fallback where needed. Horizontal intervals are paired95% sequence-cluster bootstrap intervals. The highlighted0.1dB row is2.93449 percentage points. Retrospective source-aware selection; not autonomous control or runtime.',book)
+    from editorial_visuals_20260928 import delivered as render
+    render(F,book)
 
 
 def scenarios(book):

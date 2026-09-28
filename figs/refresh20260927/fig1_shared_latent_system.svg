@@ -2217,7 +2217,7 @@ z
     <text style="font-weight: 700; font-size: 8px; font-family: 'Liberation Sans'; text-anchor: start; fill: #20313e" x="8.503937" y="13.408895" transform="rotate(-0 8.503937 13.408895)">a</text>
    </g>
    <g id="text_2">
-    <text style="font-size: 6.7px; font-family: 'Liberation Sans'; text-anchor: start; fill: #20313e" x="21.259843" y="13.072469" transform="rotate(-0 21.259843 13.072469)">Recover once; assign a stopping depth to each tile</text>
+    <text style="font-size: 7px; font-family: 'Liberation Sans'; text-anchor: start; fill: #20313e" x="21.259843" y="13.150106" transform="rotate(-0 21.259843 13.150106)">Recover once; assign a stopping depth to each tile</text>
    </g>
    <g id="patch_268">
     <path d="M 18.425197 53.291339
@@ -2244,10 +2244,10 @@ z
 " clip-path="url(#pf96358c58c)" style="fill: #e7eef2; stroke: #586874; stroke-width: 0.4; stroke-linejoin: miter"/>
    </g>
    <g id="text_3">
-    <text style="font-size: 6.5px; font-family: 'Liberation Sans'; text-anchor: middle; fill: #20313e" x="34.015748" y="69.713625" transform="rotate(-0 34.015748 69.713625)">Latent</text>
+    <text style="font-size: 7px; font-family: 'Liberation Sans'; text-anchor: middle; fill: #20313e" x="34.015748" y="69.84302" transform="rotate(-0 34.015748 69.84302)">Latent</text>
    </g>
    <g id="text_4">
-    <text style="font-size: 6.5px; font-family: 'Liberation Sans'; text-anchor: middle; fill: #20313e" x="104.88189" y="69.713625" transform="rotate(-0 104.88189 69.713625)">Upsample + stem</text>
+    <text style="font-size: 7px; font-family: 'Liberation Sans'; text-anchor: middle; fill: #20313e" x="104.88189" y="69.84302" transform="rotate(-0 104.88189 69.84302)">Upsample + stem</text>
    </g>
    <g id="patch_271">
     <path d="M 174.330709 53.291339
@@ -2274,43 +2274,43 @@ z
 " clip-path="url(#pf96358c58c)" style="fill: #e5edf2; stroke: #586874; stroke-width: 0.4; stroke-linejoin: miter"/>
    </g>
    <g id="text_5">
-    <text style="font-size: 6.5px; font-family: 'Liberation Sans'; text-anchor: middle; fill: #20313e" x="189.92126" y="69.713625" transform="rotate(-0 189.92126 69.713625)">384-channel features</text>
+    <text style="font-size: 7px; font-family: 'Liberation Sans'; text-anchor: middle; fill: #20313e" x="189.92126" y="69.84302" transform="rotate(-0 189.92126 69.84302)">384-channel features</text>
    </g>
    <g id="text_6">
     <text style="font-size: 7px; font-family: 'Liberation Sans'; text-anchor: middle; fill: #008a96" x="300.472441" y="38.661917" transform="rotate(-0 300.472441 38.661917)">Pool + QP → MLP</text>
    </g>
    <g id="text_7">
-    <text style="font-size: 6.5px; font-family: 'Liberation Sans'; text-anchor: middle; fill: #20313e" x="300.472441" y="55.540397" transform="rotate(-0 300.472441 55.540397)">Scores + control β</text>
+    <text style="font-size: 7px; font-family: 'Liberation Sans'; text-anchor: middle; fill: #20313e" x="300.472441" y="55.669791" transform="rotate(-0 300.472441 55.669791)">Scores + control β</text>
    </g>
    <g id="text_8">
-    <text style="font-size: 6.5px; font-family: 'Liberation Sans'; text-anchor: middle; fill: #20313e" x="445.03937" y="72.548271" transform="rotate(-0 445.03937 72.548271)">Depth map</text>
+    <text style="font-size: 7px; font-family: 'Liberation Sans'; text-anchor: middle; fill: #20313e" x="445.03937" y="72.677665" transform="rotate(-0 445.03937 72.677665)">Depth map</text>
    </g>
    <g id="text_9">
     <text style="font-weight: 700; font-size: 8px; font-family: 'Liberation Sans'; text-anchor: start; fill: #20313e" x="8.503937" y="92.778974" transform="rotate(-0 8.503937 92.778974)">b</text>
    </g>
    <g id="text_10">
-    <text style="font-size: 6.7px; font-family: 'Liberation Sans'; text-anchor: start; fill: #20313e" x="21.259843" y="92.442548" transform="rotate(-0 21.259843 92.442548)">Continue only the surviving tiles</text>
+    <text style="font-size: 7px; font-family: 'Liberation Sans'; text-anchor: start; fill: #20313e" x="21.259843" y="92.520185" transform="rotate(-0 21.259843 92.520185)">Continue only the surviving tiles</text>
    </g>
    <g id="text_11">
-    <text style="font-size: 6.5px; font-family: 'Liberation Sans'; text-anchor: middle; fill: #20313e" x="48.188976" y="146.249058" transform="rotate(-0 48.188976 146.249058)">40/40 · depth 6</text>
+    <text style="font-size: 7px; font-family: 'Liberation Sans'; text-anchor: middle; fill: #20313e" x="48.188976" y="146.378453" transform="rotate(-0 48.188976 146.378453)">40/40 · depth 6</text>
    </g>
    <g id="text_12">
-    <text style="font-size: 6.5px; font-family: 'Liberation Sans'; text-anchor: middle; fill: #20313e" x="138.897638" y="146.249058" transform="rotate(-0 138.897638 146.249058)">27/40 · depth 8</text>
+    <text style="font-size: 7px; font-family: 'Liberation Sans'; text-anchor: middle; fill: #20313e" x="138.897638" y="146.378453" transform="rotate(-0 138.897638 146.378453)">27/40 · depth 8</text>
    </g>
    <g id="text_13">
-    <text style="font-size: 6.5px; font-family: 'Liberation Sans'; text-anchor: middle; fill: #20313e" x="229.606299" y="146.249058" transform="rotate(-0 229.606299 146.249058)">7/40 · depth 10</text>
+    <text style="font-size: 7px; font-family: 'Liberation Sans'; text-anchor: middle; fill: #20313e" x="229.606299" y="146.378453" transform="rotate(-0 229.606299 146.378453)">7/40 · depth 10</text>
    </g>
    <g id="text_14">
-    <text style="font-size: 6.5px; font-family: 'Liberation Sans'; text-anchor: middle; fill: #20313e" x="320.314961" y="146.249058" transform="rotate(-0 320.314961 146.249058)">3/40 · depth 12</text>
+    <text style="font-size: 7px; font-family: 'Liberation Sans'; text-anchor: middle; fill: #20313e" x="320.314961" y="146.378453" transform="rotate(-0 320.314961 146.378453)">3/40 · depth 12</text>
    </g>
    <g id="text_15">
-    <text style="font-size: 6.5px; font-family: 'Liberation Sans'; text-anchor: middle; fill: #20313e" x="446.456693" y="92.39079" transform="rotate(-0 446.456693 92.39079)">Stitch → repair → head</text>
+    <text style="font-size: 7px; font-family: 'Liberation Sans'; text-anchor: middle; fill: #20313e" x="446.456693" y="92.520185" transform="rotate(-0 446.456693 92.520185)">Stitch → repair → head</text>
    </g>
    <g id="text_16">
-    <text style="font-size: 6.5px; font-family: 'Liberation Sans'; text-anchor: middle; fill: #20313e" x="446.456693" y="146.249058" transform="rotate(-0 446.456693 146.249058)">Canvas → image</text>
+    <text style="font-size: 7px; font-family: 'Liberation Sans'; text-anchor: middle; fill: #20313e" x="446.456693" y="146.378453" transform="rotate(-0 446.456693 146.378453)">Canvas → image</text>
    </g>
    <g id="text_17">
-    <text style="font-size: 6.5px; font-family: 'Liberation Sans'; text-anchor: start; fill: #20313e" x="11.338583" y="167.508901" transform="rotate(-0 11.338583 167.508901)">Pointwise exit adapters; deepest exit uses identity</text>
+    <text style="font-size: 7px; font-family: 'Liberation Sans'; text-anchor: start; fill: #20313e" x="11.338583" y="167.638295" transform="rotate(-0 11.338583 167.638295)">Pointwise exit adapters; deepest exit uses identity</text>
    </g>
    <g id="line2d_7">
     <path d="M 23.385827 55.955906

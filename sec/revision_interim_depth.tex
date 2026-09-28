@@ -104,7 +104,7 @@ no uncertainty from independent training seeds is represented.}
 The next fixed checkpoint at epoch 30 repeats all 2,000 encode/decode
 cases. The crop manifest, CPU backend and research format are unchanged;
 all 500 released-D12 measurements reproduce exactly. To compare depth
-ordering, \cref{tab:milestones} retains the same 99 images on common
+ordering, \cref{fig:milestones} retains the same 99 images on common
 0.2-payload-bpp support across both milestones and all four models.
 D6's mean advantage over D4 changes from 0.0627\,dB to
 $-0.0045$\,dB, whose interval includes zero. Relative to their own
@@ -114,17 +114,12 @@ not evidence that training a deeper model is intrinsically harmful.
 Both milestones are retained without quality-based checkpoint selection;
 neither establishes the final ordering after 105 epochs.
 
-\begin{table}[t]
+\begin{figure}[t]
 \centering
-\caption{\textbf{Intermediate depth ordering changes during training.}
-RGB PSNR differences at 0.2 actual payload bpp on the same 99 images.
-All three shallow models use the stated fixed epoch. Intervals are paired
-image-bootstrap intervals at fixed weights; they exclude training-seed
-uncertainty. No rate extrapolation is used.}
-\label{tab:milestones}
-\setlength{\tabcolsep}{3pt}
-\input{data/refresh20260927/depth_milestone_table}
-\end{table}
+\includegraphics[width=\columnwidth]{figs/editorial20260928/fig_depth_milestones.pdf}
+\caption{\textbf{Intermediate depth ordering changes during training.} Paired RGB PSNR differences at 0.2 actual payload bpp on the same 99 images. Epochs 20 and 30 are retained without quality-based selection. Intervals are 95\% image-bootstrap intervals at fixed weights, excluding training-seed uncertainty. No rate extrapolation.}
+\label{fig:milestones}
+\end{figure}
 
 \section{Does an Additional Expert Add an Additional Choice?}
 

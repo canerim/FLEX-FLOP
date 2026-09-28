@@ -40,7 +40,8 @@
         "shared_stream_preflight.json": "d4e14aadedbf092e286d0329def71f80895904caaedee536fa4b30ca7e643ae3",
         "cohort_similarity_audit.json": "28562713bd1e5eda63245a449e7f82a7777afcba7ba73a0f95ef41a46713d8b6",
         "cluster_sensitivity.json": "699d849d7196706a14a29ed1eab728b2cab8f2f540bbf85082e232204b730e40",
-        "proposed_content_groups.json": "e003b1c8170f49d4f37bc1d0a57994de2dc7337507e11dab8975cb3104779578"
+        "proposed_content_groups.json": "e003b1c8170f49d4f37bc1d0a57994de2dc7337507e11dab8975cb3104779578",
+        "placement_replay.json": "ac7205b0ace2587d72e2d9ae7c4fd1d1fd78db0dd04b55e3a346910981adbcd6"
       }
     },
     {
@@ -76,7 +77,10 @@
       "script": "plot_component_interventions_20260928.py",
       "data_file": "analysis.json",
       "data_sha256": "fd48d1604d90ef5a05bc5e378427f93db68133386de72a39c9ba89ea7e07fcff",
-      "plot_script_sha256": "9b366a2f5663eb7c91c461f9da75d0e243e31ffa7e9becab5c7777ed51745316"
+      "plot_script_sha256": "9b366a2f5663eb7c91c461f9da75d0e243e31ffa7e9becab5c7777ed51745316",
+      "auxiliary_files_sha256": {
+        "uniform_context_smoke.json": "8ff99fabfb8bf36403f73de93b52fc8628f9c1959b63855657f17df3b1d23f4b"
+      }
     },
     {
       "folder": "released_anchor_qp32",

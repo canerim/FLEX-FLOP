@@ -9,8 +9,8 @@ import sys
 import tempfile
 
 ROOT=Path(__file__).resolve().parents[1]
-FOLDERS=('refresh20260927','extended20260927','crossfit20260927','depthmacs20260927')
-SCRIPTS=('build_evidence_tables.py','build_figures.py','build_extended_figures.py','plot_crossfit_control_20260927.py','plot_depth_macs_20260927.py','build_research_figures.py')
+FOLDERS=('refresh20260927','extended20260927','crossfit20260927','depthmacs20260927','editorial20260928')
+SCRIPTS=('build_evidence_tables.py','build_figures.py','build_extended_figures.py','plot_crossfit_control_20260927.py','plot_depth_macs_20260927.py','build_research_figures.py','build_editorial_figures.py')
 
 
 def sha(path):return hashlib.sha256(path.read_bytes()).hexdigest()
@@ -47,7 +47,7 @@ def main():
     record={'scope':'Current vector figure reproduction using only bundled data/scripts; no codec inference, training weights, source dataset or GPU.',
         'artifact_count':len(compared),'all_byte_identical':True,'artifacts':compared,
         'evidence_text_artifact_count':len(tables),'evidence_text_artifacts':tables,
-        'scripts_sha256':{str((ROOT/'scripts'/name).relative_to(ROOT)):sha(ROOT/'scripts'/name) for name in SCRIPTS},
+        'scripts_sha256':{str((ROOT/'scripts'/name).relative_to(ROOT)):sha(ROOT/'scripts'/name) for name in SCRIPTS+('editorial_visuals_20260928.py',)},
         'reproduction_script_sha256':sha(Path(__file__))}
     print(json.dumps(record,indent=2))
 

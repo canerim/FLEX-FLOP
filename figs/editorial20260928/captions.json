@@ -1,0 +1,18 @@
+[
+  {
+    "name": "fig_fixed_control",
+    "caption": "Actual cropped RGB losses and synthesis MAC savings for fixed mean/Q90 controls on all53 QP32 frames, e15 full-frame reference. Labels count losses above0.10dB. Controls are fitted on other sequence folds, on development-used data. Equal calibration targets do not imply matched achieved quality. No quality fallback."
+  },
+  {
+    "name": "fig_metric_proof",
+    "caption": "Two QP32 nominal0.10dB router cases. Archived field and actual CPU unclipped YCbCr444 losses agree within1.1e-6dB. Explicit clipping and RGB conversion change the metric. All are losses relative to e15 full-frame synthesis. Two metric checks, not a pooled quality evaluation."
+  },
+  {
+    "name": "fig_official_schedule",
+    "caption": "Unshortened105-epoch upstream image-training schedule, zero-based epoch boundaries. Both panels have independently scaled horizontal axes; right panel magnifies the final15epochs. Same seven stages apply to D2/D4/D6. This depicts the protocol, not measured training performance."
+  },
+  {
+    "name": "fig_depth_milestones",
+    "caption": "Epoch20 and30 depth comparisons at0.2 actual payload bpp, same99images on common support. Means and paired95% image-bootstrap intervals at fixed weights; no extrapolation, checkpoint selection or training-seed uncertainty. These are intermediate milestones, not final105-epoch rankings."
+  }
+]

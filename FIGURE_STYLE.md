@@ -49,9 +49,10 @@ shared-exit connectivity: stem and QP feed the MLP; beta adjusts its output
 scores; all four exits reach the common feature canvas. Its synthetic scene
 is not a qualitative codec result.
 
-Plots have a 6.5 pt minimum visible text size, at least 7 pt axis labels,
-7.5 pt panel titles and bold 8 pt panel letters. The main comparison uses
-7 pt ticks and 7.5 pt axes. Repeated poster headings and long figure footnotes
+Plots export with at least 7 pt text, 7.5 pt axis labels,
+8 pt panel titles and bold 8 pt panel letters. The 7 pt export floor stays
+above 6.5 pt after scaling to the actual CVPR column widths; the verifier
+checks this scaling explicitly. Repeated poster headings and long figure footnotes
 move into the exported captions; unused top and bottom canvas is removed
 without changing physical text, axis or marker sizes. Explicit analytical
 assumptions remain visible. Line styles and marker shapes supplement colour.
@@ -70,3 +71,11 @@ Design references: Nature's [panel preparation guide](https://research-figure-gu
 and [figure specifications](https://research-figure-guide.nature.com/figures/preparing-figures-our-specifications/).
 These inform visual decisions; they are not a claim of journal endorsement
 or a replacement for CVPR submission requirements.
+
+The second September 28 revision replaces all manuscript tables with plots.
+Figure 3 uses oblique planes preserving real tile positions; Figure 4a uses
+orthographic 3D, a categorical policy axis and only six measured points per
+policy. Connecting curtains are guides, not fitted surfaces. Figure 6 contains
+eight source groups selected by class quotas and name hashes, with source
+luma plus five recorded maps per group; infeasible maps remain as N/A.
+Gallery images are spatial context rather than reconstructed quality results.

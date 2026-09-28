@@ -1,0 +1,2365 @@
+{
+  "manifest": {
+    "scope": "Actual QP32 placement intervention at fixed depth histograms.\n\nPredeclared before execution: all53 completed cross-fit QP32 frames, Q90\nrouter and Bayer maps, three deterministic spatial permutations per map, stratified by valid tile extent.\nSame permutation indices for both policies on each frame. No outcome-based\nmap choice or exclusions. Frozen e15 CPU neural replay, no timing/stream claim.\n",
+    "source_sha256": {
+      "/home/can_karsal/FLEX-PLUS/scripts/evaluate_placement_replay_20260928.py": "ec8407a500ce08f13fbe1f4251d88bde06b42cbccbd85bf48d023ddc1356496e",
+      "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/research/shared_crossfit_qp32/manifest.json": "52198b9b7350d9e8aa78b8af084de59e72feefecb24796855894cf1174b4d28c",
+      "/home/can_karsal/FLEX-PLUS/runs/RECIPE512/ckpt_PIN_e15.pth.tar": "91556d30bca41988755ff43dee3bc6d0cd2a0a4eda1d18d2891b168dc0a04ce9",
+      "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/research/shared_crossfit_qp32/cases/00.json": "248b409ca6097dc5c1266003fb8f3faccbd5c8e6a338aceb17cbcf1c3f512170",
+      "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/research/shared_crossfit_qp32/cases/01.json": "2d83852155dd874daf0bd515781e1d31009fe64ff3c29ad7e735edcf773d5ca5",
+      "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/research/shared_crossfit_qp32/cases/02.json": "1498a0bdfcf71ca04c075f2d9c364d4b044db130a2b4ca1d6f87b3a9a4ca9172",
+      "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/research/shared_crossfit_qp32/cases/03.json": "c7ada1876d7b1e94fec0989aefdd6d0e002b14f2190b47cc0665ed057a61d57e",
+      "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/research/shared_crossfit_qp32/cases/04.json": "af1892b3589aaf9a1688381f140f67ca36fad6fdf061e3a86538a34c8837cc01",
+      "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/research/shared_crossfit_qp32/cases/05.json": "4639a46b77d1f8b16e0667fff81ce663e0ca9ab2ea1bb731ae2c90ec1ecfca7a",
+      "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/research/shared_crossfit_qp32/cases/06.json": "a96e1ad54ac8048ccd884a36a592eb05e4cae52b042b09087d99739628f12e44",
+      "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/research/shared_crossfit_qp32/cases/07.json": "28bb80307b6f2b28e98922ed1417f209da4647abad0a68bcfd7c750cb0bc2dc7",
+      "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/research/shared_crossfit_qp32/cases/08.json": "6c763f0d141b1f9ca6d5b091c5d2f32f743dc948ba2efcb5f9a05ce82a3d11bf",
+      "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/research/shared_crossfit_qp32/cases/09.json": "dd78b40e56c7a5114f9fd818a6e7201e627f972014873bb90b1cd04cf87721f9",
+      "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/research/shared_crossfit_qp32/cases/10.json": "f71e222b72d2954f95a259bfd3c616e6b97e289134bf3607261f106470bddbeb",
+      "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/research/shared_crossfit_qp32/cases/11.json": "5bab170d1724252cd999f74d7433f0753cb352cf48e461cd15e929995bc5b971",
+      "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/research/shared_crossfit_qp32/cases/12.json": "212d216d59854c457b5e1cd3354e53f75e7a3693946a37544f93b60a07b71490",
+      "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/research/shared_crossfit_qp32/cases/13.json": "219e757f946b920298c6ca5d183410c3ea8a7523d3a100c3a43f1514837b1ac2",
+      "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/research/shared_crossfit_qp32/cases/14.json": "55cde00fbe824904e5a26cd5338edbb836df3e12755ceb01d5ec954048c7972e",
+      "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/research/shared_crossfit_qp32/cases/15.json": "8d058a0146b7e6d4cb1d26b2ebd2715d40344b302c9f4a6503009f1ec3e85f6a",
+      "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/research/shared_crossfit_qp32/cases/16.json": "7e20759a2a2aeddf5812079909bae1fa2426a6f87f2ee6ff7c8b7fdd728fe623",
+      "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/research/shared_crossfit_qp32/cases/17.json": "9c819948b8e08e6dbb5e652dceaf9d2d6c740e511d6ed3efcf20ae410332cde8",
+      "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/research/shared_crossfit_qp32/cases/18.json": "c352083ca89c4f19200cd309bc67badf42926efcfefa33e70cd67c5823a14c37",
+      "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/research/shared_crossfit_qp32/cases/19.json": "f96cad5fab82d7fff96e19a6ea68a011a38ea75b8edb525b1539137711e92724",
+      "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/research/shared_crossfit_qp32/cases/20.json": "2407f23f957517b015d8349f9d9d5092c048953765b85290a1aa9024acb30ef5",
+      "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/research/shared_crossfit_qp32/cases/21.json": "399a687895b866edb65f754483c2fe945130c18fa673e76fcf7805caec7b2d5c",
+      "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/research/shared_crossfit_qp32/cases/22.json": "91bd1b0539f81cc4dc6610c58b9eb1c970a4236ba4aaee3c8d59b23f448c2890",
+      "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/research/shared_crossfit_qp32/cases/23.json": "318d2a14cfe168a90b761b678cb1e47e73e76a5516d26830027de5238aec6cac",
+      "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/research/shared_crossfit_qp32/cases/24.json": "c0503b2042058b5f284c591b4433c96aec4ebe865d947fdb77df186f903e2a7b",
+      "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/research/shared_crossfit_qp32/cases/25.json": "dbae3850293df69f9a0afd563137918623c7bca6bce437e47152c7b9374aa641",
+      "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/research/shared_crossfit_qp32/cases/26.json": "a08bba7b7d5236477eff3aa45c52175ff50e50f50382e857ba150085b65fad90",
+      "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/research/shared_crossfit_qp32/cases/27.json": "57176ed096c607b050bf5edc862cd6f032284bd3f15e842142019a27d591ad52",
+      "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/research/shared_crossfit_qp32/cases/28.json": "30527d15f7a9b58b969ea6a686980a0f9e952c4beb3f62ca75c24c89cf5155a9",
+      "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/research/shared_crossfit_qp32/cases/29.json": "07c8455b87da89581aa58962d254dbb4a0aacaa6f870fbb52946e5a13ba316c5",
+      "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/research/shared_crossfit_qp32/cases/30.json": "f6c5cafd5c545294954e675f092190b781b0f4feb83f8733f00fa9efbcecd240",
+      "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/research/shared_crossfit_qp32/cases/31.json": "96a90c8f79b12a567ba79097fff804298b879013fe1f083c4af01ab1df221a4a",
+      "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/research/shared_crossfit_qp32/cases/32.json": "69c38761e5ed8711aacbd7093d5c0ae0a4a93c31fe4b65b649539542d0bc0253",
+      "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/research/shared_crossfit_qp32/cases/33.json": "d04b2a314a1f46ae6e1fceaa5e50f369ce2f31100e4974480536abea99f14f78",
+      "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/research/shared_crossfit_qp32/cases/34.json": "a41271324e39cd0aa143d826a144c65c02b1095ac4efebe3601d441a0e5460e6",
+      "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/research/shared_crossfit_qp32/cases/35.json": "30cf5bb4f57ce87a5719fdd02a4bd93cc64b10da45ec06b9395b5ac4bc982014",
+      "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/research/shared_crossfit_qp32/cases/36.json": "7ac78575653df663fb8df7b1121db0863764832204caa64df64a7a1e0708dd00",
+      "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/research/shared_crossfit_qp32/cases/37.json": "909b1ad9301f0127d5847379a1e0938b60475496860fec7bea781dad9834ca9a",
+      "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/research/shared_crossfit_qp32/cases/38.json": "5fa050ac3ec0b8aa48ac3116a93eeb8e2ecbb9b5a2c98a6d772790590a92345d",
+      "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/research/shared_crossfit_qp32/cases/39.json": "f836bdb947cc4afaa78effb5608e8f762f3032072d1d906c5571cf1d31ddd1ef",
+      "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/research/shared_crossfit_qp32/cases/40.json": "330e7a6ffa09b3bd4fcbd716b534ced9c79df972315e5f3a8508239ef3fc8969",
+      "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/research/shared_crossfit_qp32/cases/41.json": "26e73789a7beaa6bae7534f8d985e8795a7956c3296da604a8935fd8c63b089f",
+      "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/research/shared_crossfit_qp32/cases/42.json": "2c207e995ecba70b72080ab134012be07785b787500f6e3d412cda7074024126",
+      "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/research/shared_crossfit_qp32/cases/43.json": "83f729384573a58c785b7f2ff0a287b5acd19d1c6837ce4a3b19652588a37ddb",
+      "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/research/shared_crossfit_qp32/cases/44.json": "b2c414fedc68b306434e30f9eb16a16b0acf9c2cee10524efcc58044efa8a688",
+      "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/research/shared_crossfit_qp32/cases/45.json": "22a2042df77f0589d79555adec7a5ef25b6e0af2e47299bbab20e25adea43aa7",
+      "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/research/shared_crossfit_qp32/cases/46.json": "13bcfc2d75c379a331c9b0499ad3bc635b57cfc521168b70f5dad9b2d974d890",
+      "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/research/shared_crossfit_qp32/cases/47.json": "04bc169f183d7c41eda262ae95b3346db44c48f22c6b2cd72c4b04d500aa4c57",
+      "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/research/shared_crossfit_qp32/cases/48.json": "382c569c2dbc3aa462d79ad018ebae62091cc8ecd8cfd60f668e79acdcdf6699",
+      "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/research/shared_crossfit_qp32/cases/49.json": "a84784b40469959e1eb9101437e4aa430d39f162384ff9a59583a6f84f9113ba",
+      "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/research/shared_crossfit_qp32/cases/50.json": "e3be056486a1b9e878a6f3992d87eb2a27bff50f35ed001beb72724f278e5d02",
+      "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/research/shared_crossfit_qp32/cases/51.json": "dff9bc1092486390ec0b9d0f207153b7c5d399d9acf741786e62707445890bea",
+      "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/research/shared_crossfit_qp32/cases/52.json": "a8fe828655dfb0e3b8376d8f7c0a237dc96ce85bf43f3dec8f47fa6cef64a151"
+    },
+    "upstream_commit": "819c219b24db34310bbd15c51a720aaaf5eb2e7d",
+    "names": [
+      "Beauty_1920x1080_120fps_420_8bit_YUV.yuv",
+      "Bosphorus_1920x1080_120fps_420_8bit_YUV.yuv",
+      "HoneyBee_1920x1080_120fps_420_8bit_YUV.yuv",
+      "Jockey_1920x1080_120fps_420_8bit_YUV.yuv",
+      "ReadySteadyGo_1920x1080_120fps_420_8bit_YUV.yuv",
+      "ShakeNDry_1920x1080_120fps_420_8bit_YUV.yuv",
+      "YachtRide_1920x1080_120fps_420_8bit_YUV.yuv",
+      "videoSRC01_1920x1080_30.yuv",
+      "videoSRC02_1920x1080_30.yuv",
+      "videoSRC03_1920x1080_30.yuv",
+      "videoSRC04_1920x1080_30.yuv",
+      "videoSRC05_1920x1080_25.yuv",
+      "videoSRC06_1920x1080_25.yuv",
+      "videoSRC07_1920x1080_25.yuv",
+      "videoSRC08_1920x1080_25.yuv",
+      "videoSRC09_1920x1080_25.yuv",
+      "videoSRC10_1920x1080_30.yuv",
+      "videoSRC11_1920x1080_30.yuv",
+      "videoSRC12_1920x1080_30.yuv",
+      "videoSRC13_1920x1080_30.yuv",
+      "videoSRC14_1920x1080_30.yuv",
+      "videoSRC15_1920x1080_30.yuv",
+      "videoSRC16_1920x1080_30.yuv",
+      "videoSRC17_1920x1080_24.yuv",
+      "videoSRC18_1920x1080_25.yuv",
+      "videoSRC19_1920x1080_30.yuv",
+      "videoSRC20_1920x1080_25.yuv",
+      "videoSRC21_1920x1080_24.yuv",
+      "videoSRC22_1920x1080_24.yuv",
+      "videoSRC23_1920x1080_24.yuv",
+      "videoSRC24_1920x1080_24.yuv",
+      "videoSRC25_1920x1080_24.yuv",
+      "videoSRC26_1920x1080_30.yuv",
+      "videoSRC27_1920x1080_30.yuv",
+      "videoSRC28_1920x1080_30.yuv",
+      "videoSRC29_1920x1080_24.yuv",
+      "videoSRC30_1920x1080_30.yuv",
+      "BQTerrace_1920x1080_60.yuv",
+      "BasketballDrive_1920x1080_50.yuv",
+      "Cactus_1920x1080_50.yuv",
+      "Kimono1_1920x1080_24.yuv",
+      "ParkScene_1920x1080_24.yuv",
+      "FourPeople_1280x720_60.yuv",
+      "Johnny_1280x720_60.yuv",
+      "KristenAndSara_1280x720_60.yuv",
+      "BQMall_832x480_60.yuv",
+      "BasketballDrill_832x480_50.yuv",
+      "PartyScene_832x480_50.yuv",
+      "RaceHorses_832x480_30.yuv",
+      "BasketballPass_416x240_50.yuv",
+      "BlowingBubbles_416x240_50.yuv",
+      "BQSquare_416x240_60.yuv",
+      "RaceHorses_416x240_30.yuv"
+    ],
+    "qp": 32,
+    "criterion": "q90",
+    "nominal_budget_db": 0.1,
+    "policies": [
+      "router",
+      "dither"
+    ],
+    "permutation_seeds": [
+      202609280,
+      202609281,
+      202609282
+    ],
+    "permutation": "Permute within strata of identical valid tile height and width. Python Random seed is int(SHA256(sequence+colon+seed),16). Same indices for both policies.",
+    "primary": "For each sequence/policy, 10log10(mean of three shuffled RGB MSEs / original RGB MSE). Then equal-sequence average. Positive means original placement is better. Sequence bootstrap conditional on the three sampled permutations.",
+    "secondary": "Mean per-permutation PSNR loss; unclipped444 counterparts; paired router-minus-dither placement gain.",
+    "metric": "Same conversion as original replay: source ycbcr2rgb(x+0.5,clamp=True); reconstruction ycbcr2rgb(crop.clamp(-0.5,0.5)+0.5,clamp=True). Also raw equal-channel444 MSE.",
+    "geometry": "Preserve depth histograms separately within each valid-height/valid-width stratum of the padded256 grid. Thus depth counts and depth-weighted valid area both stay fixed. Reconstruction interactions and boundary locations can still change.",
+    "limitation": "Development-used cohort, fixed Q90 controls and checkpoint, onlyQP32, three Monte Carlo permutations. No retraining, source-informed reselection, actual bitstream or latency. Conditional uncertainty is not external generalisation or exhaustive permutation expectation.",
+    "python": "3.12.14 (main, Sep 24 2026, 17:57:43) [Clang 22.1.3 ]",
+    "torch": "2.9.1+cu126"
+  },
+  "n_sequences": 53,
+  "n_map_cases": 424,
+  "n_distinct_reconstructions": 373,
+  "per_sequence": [
+    {
+      "sequence": "BQMall_832x480_60.yuv",
+      "policy": "router",
+      "rgb_placement_gain_db": 0.0,
+      "rgb_mean_permutation_loss_db": 0.0,
+      "444_placement_gain_db": 0.0,
+      "444_mean_permutation_loss_db": 0.0
+    },
+    {
+      "sequence": "BQMall_832x480_60.yuv",
+      "policy": "dither",
+      "rgb_placement_gain_db": -0.0008030553666424954,
+      "rgb_mean_permutation_loss_db": -0.0008030566079827256,
+      "444_placement_gain_db": -0.0008942538458450666,
+      "444_mean_permutation_loss_db": -0.0008942544590790062
+    },
+    {
+      "sequence": "BQSquare_416x240_60.yuv",
+      "policy": "router",
+      "rgb_placement_gain_db": 0.0,
+      "rgb_mean_permutation_loss_db": 0.0,
+      "444_placement_gain_db": 0.0,
+      "444_mean_permutation_loss_db": 0.0
+    },
+    {
+      "sequence": "BQSquare_416x240_60.yuv",
+      "policy": "dither",
+      "rgb_placement_gain_db": 0.0,
+      "rgb_mean_permutation_loss_db": 0.0,
+      "444_placement_gain_db": 0.0,
+      "444_mean_permutation_loss_db": 0.0
+    },
+    {
+      "sequence": "BQTerrace_1920x1080_60.yuv",
+      "policy": "router",
+      "rgb_placement_gain_db": 0.011528276076801434,
+      "rgb_mean_permutation_loss_db": 0.011526221966269132,
+      "444_placement_gain_db": 0.012412349344964584,
+      "444_mean_permutation_loss_db": 0.01241091822615808
+    },
+    {
+      "sequence": "BQTerrace_1920x1080_60.yuv",
+      "policy": "dither",
+      "rgb_placement_gain_db": 0.0009825074430168561,
+      "rgb_mean_permutation_loss_db": 0.0009823763201211937,
+      "444_placement_gain_db": 0.001011319266165039,
+      "444_mean_permutation_loss_db": 0.0010112503446922903
+    },
+    {
+      "sequence": "BasketballDrill_832x480_50.yuv",
+      "policy": "router",
+      "rgb_placement_gain_db": 0.0,
+      "rgb_mean_permutation_loss_db": 0.0,
+      "444_placement_gain_db": 0.0,
+      "444_mean_permutation_loss_db": 0.0
+    },
+    {
+      "sequence": "BasketballDrill_832x480_50.yuv",
+      "policy": "dither",
+      "rgb_placement_gain_db": -0.0007880891196341386,
+      "rgb_mean_permutation_loss_db": -0.0007881248764550612,
+      "444_placement_gain_db": -0.00078312464740324,
+      "444_mean_permutation_loss_db": -0.0007831599551250888
+    },
+    {
+      "sequence": "BasketballDrive_1920x1080_50.yuv",
+      "policy": "router",
+      "rgb_placement_gain_db": 0.008559007127766029,
+      "rgb_mean_permutation_loss_db": 0.008558833470558259,
+      "444_placement_gain_db": 0.00886195632110074,
+      "444_mean_permutation_loss_db": 0.008861837472888384
+    },
+    {
+      "sequence": "BasketballDrive_1920x1080_50.yuv",
+      "policy": "dither",
+      "rgb_placement_gain_db": -0.001529249160092281,
+      "rgb_mean_permutation_loss_db": -0.0015292585673247208,
+      "444_placement_gain_db": -0.0015037753184913257,
+      "444_mean_permutation_loss_db": -0.001503815311740591
+    },
+    {
+      "sequence": "BasketballPass_416x240_50.yuv",
+      "policy": "router",
+      "rgb_placement_gain_db": 0.0,
+      "rgb_mean_permutation_loss_db": 0.0,
+      "444_placement_gain_db": 0.0,
+      "444_mean_permutation_loss_db": 0.0
+    },
+    {
+      "sequence": "BasketballPass_416x240_50.yuv",
+      "policy": "dither",
+      "rgb_placement_gain_db": 0.0,
+      "rgb_mean_permutation_loss_db": 0.0,
+      "444_placement_gain_db": 0.0,
+      "444_mean_permutation_loss_db": 0.0
+    },
+    {
+      "sequence": "Beauty_1920x1080_120fps_420_8bit_YUV.yuv",
+      "policy": "router",
+      "rgb_placement_gain_db": 0.01191307930974445,
+      "rgb_mean_permutation_loss_db": 0.011909485748393516,
+      "444_placement_gain_db": 0.012176617143096327,
+      "444_mean_permutation_loss_db": 0.012172658295952135
+    },
+    {
+      "sequence": "Beauty_1920x1080_120fps_420_8bit_YUV.yuv",
+      "policy": "dither",
+      "rgb_placement_gain_db": 0.0009695744612135259,
+      "rgb_mean_permutation_loss_db": 0.0009689908117656194,
+      "444_placement_gain_db": 0.0007705598894086641,
+      "444_mean_permutation_loss_db": 0.000769961272046735
+    },
+    {
+      "sequence": "BlowingBubbles_416x240_50.yuv",
+      "policy": "router",
+      "rgb_placement_gain_db": 0.0,
+      "rgb_mean_permutation_loss_db": 0.0,
+      "444_placement_gain_db": 0.0,
+      "444_mean_permutation_loss_db": 0.0
+    },
+    {
+      "sequence": "BlowingBubbles_416x240_50.yuv",
+      "policy": "dither",
+      "rgb_placement_gain_db": 0.0,
+      "rgb_mean_permutation_loss_db": 0.0,
+      "444_placement_gain_db": 0.0,
+      "444_mean_permutation_loss_db": 0.0
+    },
+    {
+      "sequence": "Bosphorus_1920x1080_120fps_420_8bit_YUV.yuv",
+      "policy": "router",
+      "rgb_placement_gain_db": 0.004443191667081532,
+      "rgb_mean_permutation_loss_db": 0.004443076604765209,
+      "444_placement_gain_db": 0.004270637526189796,
+      "444_mean_permutation_loss_db": 0.0042705820624814135
+    },
+    {
+      "sequence": "Bosphorus_1920x1080_120fps_420_8bit_YUV.yuv",
+      "policy": "dither",
+      "rgb_placement_gain_db": -0.0016852564769064208,
+      "rgb_mean_permutation_loss_db": -0.001685696052355885,
+      "444_placement_gain_db": -0.0010854024060980942,
+      "444_mean_permutation_loss_db": -0.001085676712108914
+    },
+    {
+      "sequence": "Cactus_1920x1080_50.yuv",
+      "policy": "router",
+      "rgb_placement_gain_db": 0.012335704434035517,
+      "rgb_mean_permutation_loss_db": 0.01233536455572854,
+      "444_placement_gain_db": 0.012538140133098907,
+      "444_mean_permutation_loss_db": 0.012537647773464057
+    },
+    {
+      "sequence": "Cactus_1920x1080_50.yuv",
+      "policy": "dither",
+      "rgb_placement_gain_db": 0.001322642497022845,
+      "rgb_mean_permutation_loss_db": 0.001322537629982424,
+      "444_placement_gain_db": 0.0008893260367049673,
+      "444_mean_permutation_loss_db": 0.0008891948446897718
+    },
+    {
+      "sequence": "FourPeople_1280x720_60.yuv",
+      "policy": "router",
+      "rgb_placement_gain_db": 0.02101970343247843,
+      "rgb_mean_permutation_loss_db": 0.021019376905693037,
+      "444_placement_gain_db": 0.023085338804511947,
+      "444_mean_permutation_loss_db": 0.023085222923869914
+    },
+    {
+      "sequence": "FourPeople_1280x720_60.yuv",
+      "policy": "dither",
+      "rgb_placement_gain_db": 0.005497092915172036,
+      "rgb_mean_permutation_loss_db": 0.005496177944105581,
+      "444_placement_gain_db": 0.005111427223021037,
+      "444_mean_permutation_loss_db": 0.005110669204605784
+    },
+    {
+      "sequence": "HoneyBee_1920x1080_120fps_420_8bit_YUV.yuv",
+      "policy": "router",
+      "rgb_placement_gain_db": 0.0024814616576463236,
+      "rgb_mean_permutation_loss_db": 0.002481445653256054,
+      "444_placement_gain_db": 0.0030993170246815128,
+      "444_mean_permutation_loss_db": 0.0030993031108355507
+    },
+    {
+      "sequence": "HoneyBee_1920x1080_120fps_420_8bit_YUV.yuv",
+      "policy": "dither",
+      "rgb_placement_gain_db": -0.0026112864457430484,
+      "rgb_mean_permutation_loss_db": -0.002611291438715999,
+      "444_placement_gain_db": -0.0024326858695062777,
+      "444_mean_permutation_loss_db": -0.0024326921022725877
+    },
+    {
+      "sequence": "Jockey_1920x1080_120fps_420_8bit_YUV.yuv",
+      "policy": "router",
+      "rgb_placement_gain_db": 0.01639576696052267,
+      "rgb_mean_permutation_loss_db": 0.016395086334207828,
+      "444_placement_gain_db": 0.01698187866203528,
+      "444_mean_permutation_loss_db": 0.016980999051373232
+    },
+    {
+      "sequence": "Jockey_1920x1080_120fps_420_8bit_YUV.yuv",
+      "policy": "dither",
+      "rgb_placement_gain_db": -0.0003649806809828142,
+      "rgb_mean_permutation_loss_db": -0.00036526001675131264,
+      "444_placement_gain_db": -2.152015239289172e-05,
+      "444_mean_permutation_loss_db": -2.171986286299172e-05
+    },
+    {
+      "sequence": "Johnny_1280x720_60.yuv",
+      "policy": "router",
+      "rgb_placement_gain_db": 0.039353929943805495,
+      "rgb_mean_permutation_loss_db": 0.039308787977098074,
+      "444_placement_gain_db": 0.0438147400530841,
+      "444_mean_permutation_loss_db": 0.04376340266136499
+    },
+    {
+      "sequence": "Johnny_1280x720_60.yuv",
+      "policy": "dither",
+      "rgb_placement_gain_db": 0.003712144035858944,
+      "rgb_mean_permutation_loss_db": 0.003711275346011318,
+      "444_placement_gain_db": 0.0037363491562346788,
+      "444_mean_permutation_loss_db": 0.003735472990633261
+    },
+    {
+      "sequence": "Kimono1_1920x1080_24.yuv",
+      "policy": "router",
+      "rgb_placement_gain_db": 0.012807649876918159,
+      "rgb_mean_permutation_loss_db": 0.012805626550983912,
+      "444_placement_gain_db": 0.01421630850408125,
+      "444_mean_permutation_loss_db": 0.014213001899855943
+    },
+    {
+      "sequence": "Kimono1_1920x1080_24.yuv",
+      "policy": "dither",
+      "rgb_placement_gain_db": 0.0034932945943138964,
+      "rgb_mean_permutation_loss_db": 0.0034926051649477245,
+      "444_placement_gain_db": 0.003803318023112399,
+      "444_mean_permutation_loss_db": 0.0038023972366239387
+    },
+    {
+      "sequence": "KristenAndSara_1280x720_60.yuv",
+      "policy": "router",
+      "rgb_placement_gain_db": 0.08640290652637826,
+      "rgb_mean_permutation_loss_db": 0.08622130425445011,
+      "444_placement_gain_db": 0.08442353851334825,
+      "444_mean_permutation_loss_db": 0.08425050775152122
+    },
+    {
+      "sequence": "KristenAndSara_1280x720_60.yuv",
+      "policy": "dither",
+      "rgb_placement_gain_db": 0.0013003503361972782,
+      "rgb_mean_permutation_loss_db": 0.0012911287399957876,
+      "444_placement_gain_db": 0.0025245512463582557,
+      "444_mean_permutation_loss_db": 0.0025153814590911545
+    },
+    {
+      "sequence": "ParkScene_1920x1080_24.yuv",
+      "policy": "router",
+      "rgb_placement_gain_db": 0.012070551343579084,
+      "rgb_mean_permutation_loss_db": 0.01206898308157394,
+      "444_placement_gain_db": 0.012939144294046632,
+      "444_mean_permutation_loss_db": 0.012937617970249301
+    },
+    {
+      "sequence": "ParkScene_1920x1080_24.yuv",
+      "policy": "dither",
+      "rgb_placement_gain_db": -0.004714570577656651,
+      "rgb_mean_permutation_loss_db": -0.004714620481584352,
+      "444_placement_gain_db": -0.005296079709709456,
+      "444_mean_permutation_loss_db": -0.0052961364578252524
+    },
+    {
+      "sequence": "PartyScene_832x480_50.yuv",
+      "policy": "router",
+      "rgb_placement_gain_db": 0.0,
+      "rgb_mean_permutation_loss_db": 0.0,
+      "444_placement_gain_db": 0.0,
+      "444_mean_permutation_loss_db": 0.0
+    },
+    {
+      "sequence": "PartyScene_832x480_50.yuv",
+      "policy": "dither",
+      "rgb_placement_gain_db": -0.0005708824071901366,
+      "rgb_mean_permutation_loss_db": -0.0005709574664311606,
+      "444_placement_gain_db": -0.0004808596910715391,
+      "444_mean_permutation_loss_db": -0.00048091294266198727
+    },
+    {
+      "sequence": "RaceHorses_416x240_30.yuv",
+      "policy": "router",
+      "rgb_placement_gain_db": 0.0,
+      "rgb_mean_permutation_loss_db": 0.0,
+      "444_placement_gain_db": 0.0,
+      "444_mean_permutation_loss_db": 0.0
+    },
+    {
+      "sequence": "RaceHorses_416x240_30.yuv",
+      "policy": "dither",
+      "rgb_placement_gain_db": 0.0,
+      "rgb_mean_permutation_loss_db": 0.0,
+      "444_placement_gain_db": 0.0,
+      "444_mean_permutation_loss_db": 0.0
+    },
+    {
+      "sequence": "RaceHorses_832x480_30.yuv",
+      "policy": "router",
+      "rgb_placement_gain_db": 0.0016916905834418205,
+      "rgb_mean_permutation_loss_db": 0.0016915246671026193,
+      "444_placement_gain_db": 0.0016079053599912148,
+      "444_mean_permutation_loss_db": 0.0016077532086271943
+    },
+    {
+      "sequence": "RaceHorses_832x480_30.yuv",
+      "policy": "dither",
+      "rgb_placement_gain_db": 0.0017340648717606032,
+      "rgb_mean_permutation_loss_db": 0.0017338803124584423,
+      "444_placement_gain_db": 0.0018512592179942779,
+      "444_mean_permutation_loss_db": 0.0018510462876957605
+    },
+    {
+      "sequence": "ReadySteadyGo_1920x1080_120fps_420_8bit_YUV.yuv",
+      "policy": "router",
+      "rgb_placement_gain_db": 0.013115067106078675,
+      "rgb_mean_permutation_loss_db": 0.013114775760436176,
+      "444_placement_gain_db": 0.014298466225973246,
+      "444_mean_permutation_loss_db": 0.014297923699567434
+    },
+    {
+      "sequence": "ReadySteadyGo_1920x1080_120fps_420_8bit_YUV.yuv",
+      "policy": "dither",
+      "rgb_placement_gain_db": 0.0008688648458299307,
+      "rgb_mean_permutation_loss_db": 0.0008685822006461507,
+      "444_placement_gain_db": 0.0013583731740290535,
+      "444_mean_permutation_loss_db": 0.0013579619870876492
+    },
+    {
+      "sequence": "ShakeNDry_1920x1080_120fps_420_8bit_YUV.yuv",
+      "policy": "router",
+      "rgb_placement_gain_db": 0.00033560511371480444,
+      "rgb_mean_permutation_loss_db": 0.0003356049314346635,
+      "444_placement_gain_db": 0.0002746062002227954,
+      "444_mean_permutation_loss_db": 0.00027460566906323627
+    },
+    {
+      "sequence": "ShakeNDry_1920x1080_120fps_420_8bit_YUV.yuv",
+      "policy": "dither",
+      "rgb_placement_gain_db": -1.8435314989469694e-05,
+      "rgb_mean_permutation_loss_db": -1.845729448764518e-05,
+      "444_placement_gain_db": -9.389585319945997e-05,
+      "444_mean_permutation_loss_db": -9.390669658570918e-05
+    },
+    {
+      "sequence": "YachtRide_1920x1080_120fps_420_8bit_YUV.yuv",
+      "policy": "router",
+      "rgb_placement_gain_db": 0.016458881377128053,
+      "rgb_mean_permutation_loss_db": 0.016458794324297785,
+      "444_placement_gain_db": 0.01675349857764604,
+      "444_mean_permutation_loss_db": 0.016753475540425708
+    },
+    {
+      "sequence": "YachtRide_1920x1080_120fps_420_8bit_YUV.yuv",
+      "policy": "dither",
+      "rgb_placement_gain_db": -0.0006070122078622495,
+      "rgb_mean_permutation_loss_db": -0.0006071115282185675,
+      "444_placement_gain_db": -0.0004053875026984366,
+      "444_mean_permutation_loss_db": -0.00040555084681948846
+    },
+    {
+      "sequence": "videoSRC01_1920x1080_30.yuv",
+      "policy": "router",
+      "rgb_placement_gain_db": 0.003320708799794003,
+      "rgb_mean_permutation_loss_db": 0.003319811405873077,
+      "444_placement_gain_db": 0.0030934353900188873,
+      "444_mean_permutation_loss_db": 0.003092106473028445
+    },
+    {
+      "sequence": "videoSRC01_1920x1080_30.yuv",
+      "policy": "dither",
+      "rgb_placement_gain_db": -0.0003889149144115594,
+      "rgb_mean_permutation_loss_db": -0.00038891532345372093,
+      "444_placement_gain_db": -0.00017090946649992697,
+      "444_mean_permutation_loss_db": -0.00017091609811451428
+    },
+    {
+      "sequence": "videoSRC02_1920x1080_30.yuv",
+      "policy": "router",
+      "rgb_placement_gain_db": 0.04138656863363084,
+      "rgb_mean_permutation_loss_db": 0.04138135928836147,
+      "444_placement_gain_db": 0.04149755508219767,
+      "444_mean_permutation_loss_db": 0.04149299138223466
+    },
+    {
+      "sequence": "videoSRC02_1920x1080_30.yuv",
+      "policy": "dither",
+      "rgb_placement_gain_db": 0.0014539574606208896,
+      "rgb_mean_permutation_loss_db": 0.0014538493127516196,
+      "444_placement_gain_db": 0.0016008486160007155,
+      "444_mean_permutation_loss_db": 0.0016007245810836096
+    },
+    {
+      "sequence": "videoSRC03_1920x1080_30.yuv",
+      "policy": "router",
+      "rgb_placement_gain_db": 0.02086361473965365,
+      "rgb_mean_permutation_loss_db": 0.020863441722461556,
+      "444_placement_gain_db": 0.022349622508195496,
+      "444_mean_permutation_loss_db": 0.022349337341202688
+    },
+    {
+      "sequence": "videoSRC03_1920x1080_30.yuv",
+      "policy": "dither",
+      "rgb_placement_gain_db": 0.003537844313484968,
+      "rgb_mean_permutation_loss_db": 0.003537120407850642,
+      "444_placement_gain_db": 0.0033472348427032173,
+      "444_mean_permutation_loss_db": 0.0033463588585833305
+    },
+    {
+      "sequence": "videoSRC04_1920x1080_30.yuv",
+      "policy": "router",
+      "rgb_placement_gain_db": 0.00833639272336039,
+      "rgb_mean_permutation_loss_db": 0.008336334701317205,
+      "444_placement_gain_db": 0.00867233751757343,
+      "444_mean_permutation_loss_db": 0.008672296596166217
+    },
+    {
+      "sequence": "videoSRC04_1920x1080_30.yuv",
+      "policy": "dither",
+      "rgb_placement_gain_db": 0.00017895971276433537,
+      "rgb_mean_permutation_loss_db": 0.00017891043817133256,
+      "444_placement_gain_db": -0.00012350033159577343,
+      "444_mean_permutation_loss_db": -0.0001235467112800162
+    },
+    {
+      "sequence": "videoSRC05_1920x1080_25.yuv",
+      "policy": "router",
+      "rgb_placement_gain_db": 8.94111425468704e-05,
+      "rgb_mean_permutation_loss_db": 8.923716547067171e-05,
+      "444_placement_gain_db": -0.00016311614632458888,
+      "444_mean_permutation_loss_db": -0.0001633752183516227
+    },
+    {
+      "sequence": "videoSRC05_1920x1080_25.yuv",
+      "policy": "dither",
+      "rgb_placement_gain_db": 0.0007946177270735359,
+      "rgb_mean_permutation_loss_db": 0.0007945585241972706,
+      "444_placement_gain_db": 0.0008956335398785599,
+      "444_mean_permutation_loss_db": 0.0008955743150295611
+    },
+    {
+      "sequence": "videoSRC06_1920x1080_25.yuv",
+      "policy": "router",
+      "rgb_placement_gain_db": -1.1632399400193294e-05,
+      "rgb_mean_permutation_loss_db": -1.1632969849556383e-05,
+      "444_placement_gain_db": -5.202833497357223e-05,
+      "444_mean_permutation_loss_db": -5.2028634878950726e-05
+    },
+    {
+      "sequence": "videoSRC06_1920x1080_25.yuv",
+      "policy": "dither",
+      "rgb_placement_gain_db": 0.00022796591796736017,
+      "rgb_mean_permutation_loss_db": 0.00022793378722791351,
+      "444_placement_gain_db": -8.071109084367046e-06,
+      "444_mean_permutation_loss_db": -8.0944261214774e-06
+    },
+    {
+      "sequence": "videoSRC07_1920x1080_25.yuv",
+      "policy": "router",
+      "rgb_placement_gain_db": 0.0054216486021026345,
+      "rgb_mean_permutation_loss_db": 0.005421345031584632,
+      "444_placement_gain_db": 0.005200682755157194,
+      "444_mean_permutation_loss_db": 0.005200302849704902
+    },
+    {
+      "sequence": "videoSRC07_1920x1080_25.yuv",
+      "policy": "dither",
+      "rgb_placement_gain_db": 0.0008402813372881282,
+      "rgb_mean_permutation_loss_db": 0.0008401103910400815,
+      "444_placement_gain_db": 0.0012418798399661275,
+      "444_mean_permutation_loss_db": 0.0012416871438009004
+    },
+    {
+      "sequence": "videoSRC08_1920x1080_25.yuv",
+      "policy": "router",
+      "rgb_placement_gain_db": 0.0022902999173476735,
+      "rgb_mean_permutation_loss_db": 0.0022896447240999614,
+      "444_placement_gain_db": 0.001984011209658786,
+      "444_mean_permutation_loss_db": 0.0019831435391999773
+    },
+    {
+      "sequence": "videoSRC08_1920x1080_25.yuv",
+      "policy": "dither",
+      "rgb_placement_gain_db": -1.0640776332378706e-05,
+      "rgb_mean_permutation_loss_db": -1.0642185606569206e-05,
+      "444_placement_gain_db": 0.0008610628003767195,
+      "444_mean_permutation_loss_db": 0.0008610359844269167
+    },
+    {
+      "sequence": "videoSRC09_1920x1080_25.yuv",
+      "policy": "router",
+      "rgb_placement_gain_db": 0.0,
+      "rgb_mean_permutation_loss_db": 0.0,
+      "444_placement_gain_db": 0.0,
+      "444_mean_permutation_loss_db": 0.0
+    },
+    {
+      "sequence": "videoSRC09_1920x1080_25.yuv",
+      "policy": "dither",
+      "rgb_placement_gain_db": -0.0009562895101719107,
+      "rgb_mean_permutation_loss_db": -0.0009563390372273763,
+      "444_placement_gain_db": -0.0004761028685283132,
+      "444_mean_permutation_loss_db": -0.00047612467774398964
+    },
+    {
+      "sequence": "videoSRC10_1920x1080_30.yuv",
+      "policy": "router",
+      "rgb_placement_gain_db": 0.03739710499349412,
+      "rgb_mean_permutation_loss_db": 0.03738671455975346,
+      "444_placement_gain_db": 0.03929503898266927,
+      "444_mean_permutation_loss_db": 0.03928438602207605
+    },
+    {
+      "sequence": "videoSRC10_1920x1080_30.yuv",
+      "policy": "dither",
+      "rgb_placement_gain_db": 0.004942659025378904,
+      "rgb_mean_permutation_loss_db": 0.004939888280936553,
+      "444_placement_gain_db": 0.004953914341518918,
+      "444_mean_permutation_loss_db": 0.0049516290476642666
+    },
+    {
+      "sequence": "videoSRC11_1920x1080_30.yuv",
+      "policy": "router",
+      "rgb_placement_gain_db": 0.015257103474814297,
+      "rgb_mean_permutation_loss_db": 0.015255244805618373,
+      "444_placement_gain_db": 0.0161274140325108,
+      "444_mean_permutation_loss_db": 0.016125774697733485
+    },
+    {
+      "sequence": "videoSRC11_1920x1080_30.yuv",
+      "policy": "dither",
+      "rgb_placement_gain_db": -0.0004188166127362073,
+      "rgb_mean_permutation_loss_db": -0.00041905095404173696,
+      "444_placement_gain_db": 0.00014625235764698617,
+      "444_mean_permutation_loss_db": 0.0001460029342510475
+    },
+    {
+      "sequence": "videoSRC12_1920x1080_30.yuv",
+      "policy": "router",
+      "rgb_placement_gain_db": 0.022714896257602167,
+      "rgb_mean_permutation_loss_db": 0.022713207740061598,
+      "444_placement_gain_db": 0.023373512126672547,
+      "444_mean_permutation_loss_db": 0.023371757558340044
+    },
+    {
+      "sequence": "videoSRC12_1920x1080_30.yuv",
+      "policy": "dither",
+      "rgb_placement_gain_db": -0.00569901955693493,
+      "rgb_mean_permutation_loss_db": -0.005699385168646387,
+      "444_placement_gain_db": -0.007041097966812593,
+      "444_mean_permutation_loss_db": -0.007041522122399022
+    },
+    {
+      "sequence": "videoSRC13_1920x1080_30.yuv",
+      "policy": "router",
+      "rgb_placement_gain_db": 0.05535395082781388,
+      "rgb_mean_permutation_loss_db": 0.05534666937654822,
+      "444_placement_gain_db": 0.05562385919811884,
+      "444_mean_permutation_loss_db": 0.055616244415882206
+    },
+    {
+      "sequence": "videoSRC13_1920x1080_30.yuv",
+      "policy": "dither",
+      "rgb_placement_gain_db": -0.00525272276716354,
+      "rgb_mean_permutation_loss_db": -0.005253043070591987,
+      "444_placement_gain_db": -0.004843494611520351,
+      "444_mean_permutation_loss_db": -0.004843824840109908
+    },
+    {
+      "sequence": "videoSRC14_1920x1080_30.yuv",
+      "policy": "router",
+      "rgb_placement_gain_db": 0.0183627482238978,
+      "rgb_mean_permutation_loss_db": 0.018362649173213497,
+      "444_placement_gain_db": 0.019208603945392075,
+      "444_mean_permutation_loss_db": 0.0192085427160846
+    },
+    {
+      "sequence": "videoSRC14_1920x1080_30.yuv",
+      "policy": "dither",
+      "rgb_placement_gain_db": 0.004914925913507765,
+      "rgb_mean_permutation_loss_db": 0.0049141771657150715,
+      "444_placement_gain_db": 0.0051024713289249905,
+      "444_mean_permutation_loss_db": 0.0051016908277658375
+    },
+    {
+      "sequence": "videoSRC15_1920x1080_30.yuv",
+      "policy": "router",
+      "rgb_placement_gain_db": 0.0058962436124968005,
+      "rgb_mean_permutation_loss_db": 0.00589618673904022,
+      "444_placement_gain_db": 0.006229911021151802,
+      "444_mean_permutation_loss_db": 0.0062298233064819524
+    },
+    {
+      "sequence": "videoSRC15_1920x1080_30.yuv",
+      "policy": "dither",
+      "rgb_placement_gain_db": 0.00013758883144733542,
+      "rgb_mean_permutation_loss_db": 0.0001374868957499735,
+      "444_placement_gain_db": -0.0001896012321366529,
+      "444_mean_permutation_loss_db": -0.00018971085222636093
+    },
+    {
+      "sequence": "videoSRC16_1920x1080_30.yuv",
+      "policy": "router",
+      "rgb_placement_gain_db": 0.004772775022935444,
+      "rgb_mean_permutation_loss_db": 0.004771789538316523,
+      "444_placement_gain_db": 0.006248064679495452,
+      "444_mean_permutation_loss_db": 0.006247086731281306
+    },
+    {
+      "sequence": "videoSRC16_1920x1080_30.yuv",
+      "policy": "dither",
+      "rgb_placement_gain_db": -0.0012368442530915496,
+      "rgb_mean_permutation_loss_db": -0.0012368515614768491,
+      "444_placement_gain_db": -0.0005681197489480635,
+      "444_mean_permutation_loss_db": -0.0005681220221191357
+    },
+    {
+      "sequence": "videoSRC17_1920x1080_24.yuv",
+      "policy": "router",
+      "rgb_placement_gain_db": 0.020436397959413558,
+      "rgb_mean_permutation_loss_db": 0.020436237422591513,
+      "444_placement_gain_db": 0.023308023018267978,
+      "444_mean_permutation_loss_db": 0.023307538331954796
+    },
+    {
+      "sequence": "videoSRC17_1920x1080_24.yuv",
+      "policy": "dither",
+      "rgb_placement_gain_db": 0.006922206498959409,
+      "rgb_mean_permutation_loss_db": 0.006921662512827643,
+      "444_placement_gain_db": 0.0077339462450942914,
+      "444_mean_permutation_loss_db": 0.00773283525775201
+    },
+    {
+      "sequence": "videoSRC18_1920x1080_25.yuv",
+      "policy": "router",
+      "rgb_placement_gain_db": 0.007972780156058946,
+      "rgb_mean_permutation_loss_db": 0.007971535976643558,
+      "444_placement_gain_db": 0.007983397792447264,
+      "444_mean_permutation_loss_db": 0.007982291451531787
+    },
+    {
+      "sequence": "videoSRC18_1920x1080_25.yuv",
+      "policy": "dither",
+      "rgb_placement_gain_db": 0.0005580019249431182,
+      "rgb_mean_permutation_loss_db": 0.0005572052258203439,
+      "444_placement_gain_db": 0.0006140667323609931,
+      "444_mean_permutation_loss_db": 0.0006131064979226751
+    },
+    {
+      "sequence": "videoSRC19_1920x1080_30.yuv",
+      "policy": "router",
+      "rgb_placement_gain_db": 0.018397789634692758,
+      "rgb_mean_permutation_loss_db": 0.018397261994267142,
+      "444_placement_gain_db": 0.019337834546034983,
+      "444_mean_permutation_loss_db": 0.019337074966554835
+    },
+    {
+      "sequence": "videoSRC19_1920x1080_30.yuv",
+      "policy": "dither",
+      "rgb_placement_gain_db": 0.0021454670378128456,
+      "rgb_mean_permutation_loss_db": 0.002144314841953983,
+      "444_placement_gain_db": 0.0025637969829259318,
+      "444_mean_permutation_loss_db": 0.0025624069549456834
+    },
+    {
+      "sequence": "videoSRC20_1920x1080_25.yuv",
+      "policy": "router",
+      "rgb_placement_gain_db": 0.018140554996531465,
+      "rgb_mean_permutation_loss_db": 0.01814021135539284,
+      "444_placement_gain_db": 0.019708612869762093,
+      "444_mean_permutation_loss_db": 0.01970818995814599
+    },
+    {
+      "sequence": "videoSRC20_1920x1080_25.yuv",
+      "policy": "dither",
+      "rgb_placement_gain_db": 0.004267141987156503,
+      "rgb_mean_permutation_loss_db": 0.004266238965468063,
+      "444_placement_gain_db": 0.004372909771912847,
+      "444_mean_permutation_loss_db": 0.004371938041293708
+    },
+    {
+      "sequence": "videoSRC21_1920x1080_24.yuv",
+      "policy": "router",
+      "rgb_placement_gain_db": 0.0,
+      "rgb_mean_permutation_loss_db": 0.0,
+      "444_placement_gain_db": 0.0,
+      "444_mean_permutation_loss_db": 0.0
+    },
+    {
+      "sequence": "videoSRC21_1920x1080_24.yuv",
+      "policy": "dither",
+      "rgb_placement_gain_db": 0.003250107742568536,
+      "rgb_mean_permutation_loss_db": 0.003248772657521148,
+      "444_placement_gain_db": 0.005057643141303894,
+      "444_mean_permutation_loss_db": 0.005054694633162551
+    },
+    {
+      "sequence": "videoSRC22_1920x1080_24.yuv",
+      "policy": "router",
+      "rgb_placement_gain_db": 0.013469835348883817,
+      "rgb_mean_permutation_loss_db": 0.013469300399663544,
+      "444_placement_gain_db": 0.013645981983810652,
+      "444_mean_permutation_loss_db": 0.013645449605876986
+    },
+    {
+      "sequence": "videoSRC22_1920x1080_24.yuv",
+      "policy": "dither",
+      "rgb_placement_gain_db": -0.0010333207029177764,
+      "rgb_mean_permutation_loss_db": -0.0010333251951838798,
+      "444_placement_gain_db": -0.0012453262250441044,
+      "444_mean_permutation_loss_db": -0.0012453331555864193
+    },
+    {
+      "sequence": "videoSRC23_1920x1080_24.yuv",
+      "policy": "router",
+      "rgb_placement_gain_db": 0.017053604351223467,
+      "rgb_mean_permutation_loss_db": 0.017051815486174574,
+      "444_placement_gain_db": 0.018316551859765568,
+      "444_mean_permutation_loss_db": 0.018315028943840263
+    },
+    {
+      "sequence": "videoSRC23_1920x1080_24.yuv",
+      "policy": "dither",
+      "rgb_placement_gain_db": -0.0008430609204450796,
+      "rgb_mean_permutation_loss_db": -0.0008430671358679332,
+      "444_placement_gain_db": -0.0010493552838215746,
+      "444_mean_permutation_loss_db": -0.00104936641815738
+    },
+    {
+      "sequence": "videoSRC24_1920x1080_24.yuv",
+      "policy": "router",
+      "rgb_placement_gain_db": 0.07883256218323131,
+      "rgb_mean_permutation_loss_db": 0.07878476307217014,
+      "444_placement_gain_db": 0.07900973663684045,
+      "444_mean_permutation_loss_db": 0.07895349946527476
+    },
+    {
+      "sequence": "videoSRC24_1920x1080_24.yuv",
+      "policy": "dither",
+      "rgb_placement_gain_db": 0.0012188578025917134,
+      "rgb_mean_permutation_loss_db": 0.001215529293236697,
+      "444_placement_gain_db": 0.002765335266383869,
+      "444_mean_permutation_loss_db": 0.0027627820864241158
+    },
+    {
+      "sequence": "videoSRC25_1920x1080_24.yuv",
+      "policy": "router",
+      "rgb_placement_gain_db": 0.0,
+      "rgb_mean_permutation_loss_db": 0.0,
+      "444_placement_gain_db": 0.0,
+      "444_mean_permutation_loss_db": 0.0
+    },
+    {
+      "sequence": "videoSRC25_1920x1080_24.yuv",
+      "policy": "dither",
+      "rgb_placement_gain_db": -0.0002904374934754752,
+      "rgb_mean_permutation_loss_db": -0.000290692990863547,
+      "444_placement_gain_db": -0.00015412657844159777,
+      "444_mean_permutation_loss_db": -0.00015440014369700843
+    },
+    {
+      "sequence": "videoSRC26_1920x1080_30.yuv",
+      "policy": "router",
+      "rgb_placement_gain_db": 0.02664619960886376,
+      "rgb_mean_permutation_loss_db": 0.02664596218938577,
+      "444_placement_gain_db": 0.02643677163741049,
+      "444_mean_permutation_loss_db": 0.026436346143889084
+    },
+    {
+      "sequence": "videoSRC26_1920x1080_30.yuv",
+      "policy": "dither",
+      "rgb_placement_gain_db": -0.0021056776595264758,
+      "rgb_mean_permutation_loss_db": -0.0021060220228678243,
+      "444_placement_gain_db": -0.0026258517683129916,
+      "444_mean_permutation_loss_db": -0.0026261705717494335
+    },
+    {
+      "sequence": "videoSRC27_1920x1080_30.yuv",
+      "policy": "router",
+      "rgb_placement_gain_db": 0.007271448036387163,
+      "rgb_mean_permutation_loss_db": 0.007271338738293844,
+      "444_placement_gain_db": 0.006665979705759816,
+      "444_mean_permutation_loss_db": 0.006665970879824491
+    },
+    {
+      "sequence": "videoSRC27_1920x1080_30.yuv",
+      "policy": "dither",
+      "rgb_placement_gain_db": -0.0007204569430016509,
+      "rgb_mean_permutation_loss_db": -0.0007205163890544775,
+      "444_placement_gain_db": -0.0008641691412405834,
+      "444_mean_permutation_loss_db": -0.0008641840340340469
+    },
+    {
+      "sequence": "videoSRC28_1920x1080_30.yuv",
+      "policy": "router",
+      "rgb_placement_gain_db": 0.0050338926594314885,
+      "rgb_mean_permutation_loss_db": 0.005033537561340198,
+      "444_placement_gain_db": 0.0055627927597881825,
+      "444_mean_permutation_loss_db": 0.00556240408128997
+    },
+    {
+      "sequence": "videoSRC28_1920x1080_30.yuv",
+      "policy": "dither",
+      "rgb_placement_gain_db": -0.0001856331154794527,
+      "rgb_mean_permutation_loss_db": -0.00018567358313567584,
+      "444_placement_gain_db": -0.0001579070308273119,
+      "444_mean_permutation_loss_db": -0.00015796793067466728
+    },
+    {
+      "sequence": "videoSRC29_1920x1080_24.yuv",
+      "policy": "router",
+      "rgb_placement_gain_db": 0.007645226159993202,
+      "rgb_mean_permutation_loss_db": 0.007641804659928712,
+      "444_placement_gain_db": 0.005803939416455989,
+      "444_mean_permutation_loss_db": 0.005801212991018198
+    },
+    {
+      "sequence": "videoSRC29_1920x1080_24.yuv",
+      "policy": "dither",
+      "rgb_placement_gain_db": -0.0018300375132627369,
+      "rgb_mean_permutation_loss_db": -0.0018311022259129928,
+      "444_placement_gain_db": -0.003694855285935443,
+      "444_mean_permutation_loss_db": -0.00369563719048112
+    },
+    {
+      "sequence": "videoSRC30_1920x1080_30.yuv",
+      "policy": "router",
+      "rgb_placement_gain_db": 0.004780860119034076,
+      "rgb_mean_permutation_loss_db": 0.004780565915378408,
+      "444_placement_gain_db": 0.004875950533926799,
+      "444_mean_permutation_loss_db": 0.004875511901459617
+    },
+    {
+      "sequence": "videoSRC30_1920x1080_30.yuv",
+      "policy": "dither",
+      "rgb_placement_gain_db": -0.0016231780737784602,
+      "rgb_mean_permutation_loss_db": -0.0016232693714030098,
+      "444_placement_gain_db": -0.002176145605367027,
+      "444_mean_permutation_loss_db": -0.0021762062706193754
+    }
+  ],
+  "paired_contrasts": [
+    {
+      "sequence": "BQMall_832x480_60.yuv",
+      "rgb_placement_gain_db": 0.0008030553666424954,
+      "rgb_mean_permutation_loss_db": 0.0008030566079827256,
+      "444_placement_gain_db": 0.0008942538458450666,
+      "444_mean_permutation_loss_db": 0.0008942544590790062
+    },
+    {
+      "sequence": "BQSquare_416x240_60.yuv",
+      "rgb_placement_gain_db": 0.0,
+      "rgb_mean_permutation_loss_db": 0.0,
+      "444_placement_gain_db": 0.0,
+      "444_mean_permutation_loss_db": 0.0
+    },
+    {
+      "sequence": "BQTerrace_1920x1080_60.yuv",
+      "rgb_placement_gain_db": 0.010545768633784577,
+      "rgb_mean_permutation_loss_db": 0.010543845646147939,
+      "444_placement_gain_db": 0.011401030078799546,
+      "444_mean_permutation_loss_db": 0.01139966788146579
+    },
+    {
+      "sequence": "BasketballDrill_832x480_50.yuv",
+      "rgb_placement_gain_db": 0.0007880891196341386,
+      "rgb_mean_permutation_loss_db": 0.0007881248764550612,
+      "444_placement_gain_db": 0.00078312464740324,
+      "444_mean_permutation_loss_db": 0.0007831599551250888
+    },
+    {
+      "sequence": "BasketballDrive_1920x1080_50.yuv",
+      "rgb_placement_gain_db": 0.01008825628785831,
+      "rgb_mean_permutation_loss_db": 0.01008809203788298,
+      "444_placement_gain_db": 0.010365731639592066,
+      "444_mean_permutation_loss_db": 0.010365652784628974
+    },
+    {
+      "sequence": "BasketballPass_416x240_50.yuv",
+      "rgb_placement_gain_db": 0.0,
+      "rgb_mean_permutation_loss_db": 0.0,
+      "444_placement_gain_db": 0.0,
+      "444_mean_permutation_loss_db": 0.0
+    },
+    {
+      "sequence": "Beauty_1920x1080_120fps_420_8bit_YUV.yuv",
+      "rgb_placement_gain_db": 0.010943504848530924,
+      "rgb_mean_permutation_loss_db": 0.010940494936627897,
+      "444_placement_gain_db": 0.011406057253687664,
+      "444_mean_permutation_loss_db": 0.0114026970239054
+    },
+    {
+      "sequence": "BlowingBubbles_416x240_50.yuv",
+      "rgb_placement_gain_db": 0.0,
+      "rgb_mean_permutation_loss_db": 0.0,
+      "444_placement_gain_db": 0.0,
+      "444_mean_permutation_loss_db": 0.0
+    },
+    {
+      "sequence": "Bosphorus_1920x1080_120fps_420_8bit_YUV.yuv",
+      "rgb_placement_gain_db": 0.006128448143987953,
+      "rgb_mean_permutation_loss_db": 0.006128772657121094,
+      "444_placement_gain_db": 0.00535603993228789,
+      "444_mean_permutation_loss_db": 0.005356258774590328
+    },
+    {
+      "sequence": "Cactus_1920x1080_50.yuv",
+      "rgb_placement_gain_db": 0.011013061937012672,
+      "rgb_mean_permutation_loss_db": 0.011012826925746115,
+      "444_placement_gain_db": 0.01164881409639394,
+      "444_mean_permutation_loss_db": 0.011648452928774285
+    },
+    {
+      "sequence": "FourPeople_1280x720_60.yuv",
+      "rgb_placement_gain_db": 0.015522610517306393,
+      "rgb_mean_permutation_loss_db": 0.015523198961587457,
+      "444_placement_gain_db": 0.01797391158149091,
+      "444_mean_permutation_loss_db": 0.01797455371926413
+    },
+    {
+      "sequence": "HoneyBee_1920x1080_120fps_420_8bit_YUV.yuv",
+      "rgb_placement_gain_db": 0.005092748103389372,
+      "rgb_mean_permutation_loss_db": 0.005092737091972053,
+      "444_placement_gain_db": 0.005532002894187791,
+      "444_mean_permutation_loss_db": 0.005531995213108138
+    },
+    {
+      "sequence": "Jockey_1920x1080_120fps_420_8bit_YUV.yuv",
+      "rgb_placement_gain_db": 0.016760747641505484,
+      "rgb_mean_permutation_loss_db": 0.01676034635095914,
+      "444_placement_gain_db": 0.01700339881442817,
+      "444_mean_permutation_loss_db": 0.017002718914236225
+    },
+    {
+      "sequence": "Johnny_1280x720_60.yuv",
+      "rgb_placement_gain_db": 0.035641785907946553,
+      "rgb_mean_permutation_loss_db": 0.03559751263108676,
+      "444_placement_gain_db": 0.04007839089684942,
+      "444_mean_permutation_loss_db": 0.04002792967073173
+    },
+    {
+      "sequence": "Kimono1_1920x1080_24.yuv",
+      "rgb_placement_gain_db": 0.009314355282604263,
+      "rgb_mean_permutation_loss_db": 0.009313021386036187,
+      "444_placement_gain_db": 0.01041299048096885,
+      "444_mean_permutation_loss_db": 0.010410604663232004
+    },
+    {
+      "sequence": "KristenAndSara_1280x720_60.yuv",
+      "rgb_placement_gain_db": 0.08510255619018098,
+      "rgb_mean_permutation_loss_db": 0.08493017551445432,
+      "444_placement_gain_db": 0.08189898726698999,
+      "444_mean_permutation_loss_db": 0.08173512629243007
+    },
+    {
+      "sequence": "ParkScene_1920x1080_24.yuv",
+      "rgb_placement_gain_db": 0.016785121921235734,
+      "rgb_mean_permutation_loss_db": 0.016783603563158292,
+      "444_placement_gain_db": 0.018235224003756087,
+      "444_mean_permutation_loss_db": 0.018233754428074553
+    },
+    {
+      "sequence": "PartyScene_832x480_50.yuv",
+      "rgb_placement_gain_db": 0.0005708824071901366,
+      "rgb_mean_permutation_loss_db": 0.0005709574664311606,
+      "444_placement_gain_db": 0.0004808596910715391,
+      "444_mean_permutation_loss_db": 0.00048091294266198727
+    },
+    {
+      "sequence": "RaceHorses_416x240_30.yuv",
+      "rgb_placement_gain_db": 0.0,
+      "rgb_mean_permutation_loss_db": 0.0,
+      "444_placement_gain_db": 0.0,
+      "444_mean_permutation_loss_db": 0.0
+    },
+    {
+      "sequence": "RaceHorses_832x480_30.yuv",
+      "rgb_placement_gain_db": -4.2374288318782665e-05,
+      "rgb_mean_permutation_loss_db": -4.235564535582303e-05,
+      "444_placement_gain_db": -0.0002433538580030631,
+      "444_mean_permutation_loss_db": -0.00024329307906856626
+    },
+    {
+      "sequence": "ReadySteadyGo_1920x1080_120fps_420_8bit_YUV.yuv",
+      "rgb_placement_gain_db": 0.012246202260248744,
+      "rgb_mean_permutation_loss_db": 0.012246193559790026,
+      "444_placement_gain_db": 0.012940093051944193,
+      "444_mean_permutation_loss_db": 0.012939961712479785
+    },
+    {
+      "sequence": "ShakeNDry_1920x1080_120fps_420_8bit_YUV.yuv",
+      "rgb_placement_gain_db": 0.00035404042870427414,
+      "rgb_mean_permutation_loss_db": 0.0003540622259223087,
+      "444_placement_gain_db": 0.0003685020534222554,
+      "444_mean_permutation_loss_db": 0.00036851236564894546
+    },
+    {
+      "sequence": "YachtRide_1920x1080_120fps_420_8bit_YUV.yuv",
+      "rgb_placement_gain_db": 0.0170658935849903,
+      "rgb_mean_permutation_loss_db": 0.017065905852516352,
+      "444_placement_gain_db": 0.017158886080344476,
+      "444_mean_permutation_loss_db": 0.017159026387245195
+    },
+    {
+      "sequence": "videoSRC01_1920x1080_30.yuv",
+      "rgb_placement_gain_db": 0.0037096237142055623,
+      "rgb_mean_permutation_loss_db": 0.003708726729326798,
+      "444_placement_gain_db": 0.0032643448565188144,
+      "444_mean_permutation_loss_db": 0.0032630225711429593
+    },
+    {
+      "sequence": "videoSRC02_1920x1080_30.yuv",
+      "rgb_placement_gain_db": 0.03993261117300995,
+      "rgb_mean_permutation_loss_db": 0.03992750997560986,
+      "444_placement_gain_db": 0.03989670646619695,
+      "444_mean_permutation_loss_db": 0.03989226680115105
+    },
+    {
+      "sequence": "videoSRC03_1920x1080_30.yuv",
+      "rgb_placement_gain_db": 0.01732577042616868,
+      "rgb_mean_permutation_loss_db": 0.017326321314610912,
+      "444_placement_gain_db": 0.01900238766549228,
+      "444_mean_permutation_loss_db": 0.019002978482619358
+    },
+    {
+      "sequence": "videoSRC04_1920x1080_30.yuv",
+      "rgb_placement_gain_db": 0.008157433010596056,
+      "rgb_mean_permutation_loss_db": 0.008157424263145873,
+      "444_placement_gain_db": 0.008795837849169204,
+      "444_mean_permutation_loss_db": 0.008795843307446233
+    },
+    {
+      "sequence": "videoSRC05_1920x1080_25.yuv",
+      "rgb_placement_gain_db": -0.0007052065845266655,
+      "rgb_mean_permutation_loss_db": -0.0007053213587265988,
+      "444_placement_gain_db": -0.0010587496862031489,
+      "444_mean_permutation_loss_db": -0.0010589495333811838
+    },
+    {
+      "sequence": "videoSRC06_1920x1080_25.yuv",
+      "rgb_placement_gain_db": -0.00023959831736755345,
+      "rgb_mean_permutation_loss_db": -0.0002395667570774699,
+      "444_placement_gain_db": -4.395722588920518e-05,
+      "444_mean_permutation_loss_db": -4.393420875747333e-05
+    },
+    {
+      "sequence": "videoSRC07_1920x1080_25.yuv",
+      "rgb_placement_gain_db": 0.0045813672648145065,
+      "rgb_mean_permutation_loss_db": 0.0045812346405445506,
+      "444_placement_gain_db": 0.003958802915191066,
+      "444_mean_permutation_loss_db": 0.003958615705904002
+    },
+    {
+      "sequence": "videoSRC08_1920x1080_25.yuv",
+      "rgb_placement_gain_db": 0.0023009406936800522,
+      "rgb_mean_permutation_loss_db": 0.0023002869097065305,
+      "444_placement_gain_db": 0.0011229484092820665,
+      "444_mean_permutation_loss_db": 0.0011221075547730606
+    },
+    {
+      "sequence": "videoSRC09_1920x1080_25.yuv",
+      "rgb_placement_gain_db": 0.0009562895101719107,
+      "rgb_mean_permutation_loss_db": 0.0009563390372273763,
+      "444_placement_gain_db": 0.0004761028685283132,
+      "444_mean_permutation_loss_db": 0.00047612467774398964
+    },
+    {
+      "sequence": "videoSRC10_1920x1080_30.yuv",
+      "rgb_placement_gain_db": 0.03245444596811522,
+      "rgb_mean_permutation_loss_db": 0.032446826278816905,
+      "444_placement_gain_db": 0.03434112464115035,
+      "444_mean_permutation_loss_db": 0.03433275697441178
+    },
+    {
+      "sequence": "videoSRC11_1920x1080_30.yuv",
+      "rgb_placement_gain_db": 0.015675920087550504,
+      "rgb_mean_permutation_loss_db": 0.01567429575966011,
+      "444_placement_gain_db": 0.01598116167486381,
+      "444_mean_permutation_loss_db": 0.015979771763482437
+    },
+    {
+      "sequence": "videoSRC12_1920x1080_30.yuv",
+      "rgb_placement_gain_db": 0.028413915814537095,
+      "rgb_mean_permutation_loss_db": 0.028412592908707984,
+      "444_placement_gain_db": 0.030414610093485138,
+      "444_mean_permutation_loss_db": 0.030413279680739067
+    },
+    {
+      "sequence": "videoSRC13_1920x1080_30.yuv",
+      "rgb_placement_gain_db": 0.06060667359497742,
+      "rgb_mean_permutation_loss_db": 0.06059971244714021,
+      "444_placement_gain_db": 0.06046735380963919,
+      "444_mean_permutation_loss_db": 0.060460069255992115
+    },
+    {
+      "sequence": "videoSRC14_1920x1080_30.yuv",
+      "rgb_placement_gain_db": 0.013447822310390036,
+      "rgb_mean_permutation_loss_db": 0.013448472007498425,
+      "444_placement_gain_db": 0.014106132616467084,
+      "444_mean_permutation_loss_db": 0.014106851888318762
+    },
+    {
+      "sequence": "videoSRC15_1920x1080_30.yuv",
+      "rgb_placement_gain_db": 0.005758654781049465,
+      "rgb_mean_permutation_loss_db": 0.005758699843290247,
+      "444_placement_gain_db": 0.006419512253288455,
+      "444_mean_permutation_loss_db": 0.006419534158708313
+    },
+    {
+      "sequence": "videoSRC16_1920x1080_30.yuv",
+      "rgb_placement_gain_db": 0.006009619276026994,
+      "rgb_mean_permutation_loss_db": 0.006008641099793372,
+      "444_placement_gain_db": 0.006816184428443516,
+      "444_mean_permutation_loss_db": 0.0068152087534004415
+    },
+    {
+      "sequence": "videoSRC17_1920x1080_24.yuv",
+      "rgb_placement_gain_db": 0.013514191460454149,
+      "rgb_mean_permutation_loss_db": 0.01351457490976387,
+      "444_placement_gain_db": 0.015574076773173687,
+      "444_mean_permutation_loss_db": 0.015574703074202785
+    },
+    {
+      "sequence": "videoSRC18_1920x1080_25.yuv",
+      "rgb_placement_gain_db": 0.007414778231115827,
+      "rgb_mean_permutation_loss_db": 0.007414330750823214,
+      "444_placement_gain_db": 0.007369331060086271,
+      "444_mean_permutation_loss_db": 0.007369184953609112
+    },
+    {
+      "sequence": "videoSRC19_1920x1080_30.yuv",
+      "rgb_placement_gain_db": 0.016252322596879913,
+      "rgb_mean_permutation_loss_db": 0.01625294715231316,
+      "444_placement_gain_db": 0.01677403756310905,
+      "444_mean_permutation_loss_db": 0.01677466801160915
+    },
+    {
+      "sequence": "videoSRC20_1920x1080_25.yuv",
+      "rgb_placement_gain_db": 0.013873413009374962,
+      "rgb_mean_permutation_loss_db": 0.013873972389924778,
+      "444_placement_gain_db": 0.015335703097849245,
+      "444_mean_permutation_loss_db": 0.015336251916852284
+    },
+    {
+      "sequence": "videoSRC21_1920x1080_24.yuv",
+      "rgb_placement_gain_db": -0.003250107742568536,
+      "rgb_mean_permutation_loss_db": -0.003248772657521148,
+      "444_placement_gain_db": -0.005057643141303894,
+      "444_mean_permutation_loss_db": -0.005054694633162551
+    },
+    {
+      "sequence": "videoSRC22_1920x1080_24.yuv",
+      "rgb_placement_gain_db": 0.014503156051801594,
+      "rgb_mean_permutation_loss_db": 0.014502625594847423,
+      "444_placement_gain_db": 0.014891308208854757,
+      "444_mean_permutation_loss_db": 0.014890782761463406
+    },
+    {
+      "sequence": "videoSRC23_1920x1080_24.yuv",
+      "rgb_placement_gain_db": 0.017896665271668548,
+      "rgb_mean_permutation_loss_db": 0.01789488262204251,
+      "444_placement_gain_db": 0.019365907143587144,
+      "444_mean_permutation_loss_db": 0.019364395361997643
+    },
+    {
+      "sequence": "videoSRC24_1920x1080_24.yuv",
+      "rgb_placement_gain_db": 0.0776137043806396,
+      "rgb_mean_permutation_loss_db": 0.07756923377893345,
+      "444_placement_gain_db": 0.07624440137045659,
+      "444_mean_permutation_loss_db": 0.07619071737885065
+    },
+    {
+      "sequence": "videoSRC25_1920x1080_24.yuv",
+      "rgb_placement_gain_db": 0.0002904374934754752,
+      "rgb_mean_permutation_loss_db": 0.000290692990863547,
+      "444_placement_gain_db": 0.00015412657844159777,
+      "444_mean_permutation_loss_db": 0.00015440014369700843
+    },
+    {
+      "sequence": "videoSRC26_1920x1080_30.yuv",
+      "rgb_placement_gain_db": 0.028751877268390236,
+      "rgb_mean_permutation_loss_db": 0.028751984212253594,
+      "444_placement_gain_db": 0.029062623405723482,
+      "444_mean_permutation_loss_db": 0.029062516715638517
+    },
+    {
+      "sequence": "videoSRC27_1920x1080_30.yuv",
+      "rgb_placement_gain_db": 0.007991904979388814,
+      "rgb_mean_permutation_loss_db": 0.007991855127348322,
+      "444_placement_gain_db": 0.007530148847000399,
+      "444_mean_permutation_loss_db": 0.007530154913858538
+    },
+    {
+      "sequence": "videoSRC28_1920x1080_30.yuv",
+      "rgb_placement_gain_db": 0.005219525774910941,
+      "rgb_mean_permutation_loss_db": 0.005219211144475874,
+      "444_placement_gain_db": 0.005720699790615494,
+      "444_mean_permutation_loss_db": 0.005720372011964637
+    },
+    {
+      "sequence": "videoSRC29_1920x1080_24.yuv",
+      "rgb_placement_gain_db": 0.009475263673255938,
+      "rgb_mean_permutation_loss_db": 0.009472906885841705,
+      "444_placement_gain_db": 0.009498794702391431,
+      "444_mean_permutation_loss_db": 0.009496850181499318
+    },
+    {
+      "sequence": "videoSRC30_1920x1080_30.yuv",
+      "rgb_placement_gain_db": 0.006404038192812536,
+      "rgb_mean_permutation_loss_db": 0.006403835286781418,
+      "444_placement_gain_db": 0.0070520961392938255,
+      "444_mean_permutation_loss_db": 0.007051718172078992
+    }
+  ],
+  "summaries": {
+    "router": {
+      "rgb_placement_gain_db": {
+        "sequence_bootstrap": {
+          "n": 53,
+          "mean": 0.01392538600609351,
+          "median": 0.00833639272336039,
+          "min": -1.1632399400193294e-05,
+          "max": 0.08640290652637826,
+          "ci95": [
+            0.009490152017217784,
+            0.01930297194832843
+          ]
+        },
+        "content_cluster_sensitivity": {
+          "n": 53,
+          "mean": 0.01392538600609351,
+          "median": 0.00833639272336039,
+          "min": -1.1632399400193294e-05,
+          "max": 0.08640290652637826,
+          "ci95": [
+            0.009568772772827422,
+            0.019253780071516752
+          ]
+        }
+      },
+      "rgb_mean_permutation_loss_db": {
+        "sequence_bootstrap": {
+          "n": 53,
+          "mean": 0.013919257180365094,
+          "median": 0.008336334701317205,
+          "min": -1.1632969849556383e-05,
+          "max": 0.08622130425445011,
+          "ci95": [
+            0.009487801250218933,
+            0.019289093627086636
+          ]
+        },
+        "content_cluster_sensitivity": {
+          "n": 53,
+          "mean": 0.013919257180365094,
+          "median": 0.008336334701317205,
+          "min": -1.1632969849556383e-05,
+          "max": 0.08622130425445011,
+          "ci95": [
+            0.00956715248041262,
+            0.01924457278372441
+          ]
+        }
+      },
+      "444_placement_gain_db": {
+        "sequence_bootstrap": {
+          "n": 53,
+          "mean": 0.014360356970110509,
+          "median": 0.00867233751757343,
+          "min": -0.00016311614632458888,
+          "max": 0.08442353851334825,
+          "ci95": [
+            0.00984002202206391,
+            0.019725617625412993
+          ]
+        },
+        "content_cluster_sensitivity": {
+          "n": 53,
+          "mean": 0.014360356970110509,
+          "median": 0.00867233751757343,
+          "min": -0.00016311614632458888,
+          "max": 0.08442353851334825,
+          "ci95": [
+            0.009942107713240667,
+            0.019718707293832544
+          ]
+        }
+      },
+      "444_mean_permutation_loss_db": {
+        "sequence_bootstrap": {
+          "n": 53,
+          "mean": 0.014354082373859331,
+          "median": 0.008672296596166217,
+          "min": -0.0001633752183516227,
+          "max": 0.08425050775152122,
+          "ci95": [
+            0.009838995996382481,
+            0.019716771598193298
+          ]
+        },
+        "content_cluster_sensitivity": {
+          "n": 53,
+          "mean": 0.014354082373859331,
+          "median": 0.008672296596166217,
+          "min": -0.0001633752183516227,
+          "max": 0.08425050775152122,
+          "ci95": [
+            0.00994118404526213,
+            0.01970421279546325
+          ]
+        }
+      }
+    },
+    "dither": {
+      "rgb_placement_gain_db": {
+        "sequence_bootstrap": {
+          "n": 53,
+          "mean": 0.0003581745408211769,
+          "median": 0.0,
+          "min": -0.00569901955693493,
+          "max": 0.006922206498959409,
+          "ci95": [
+            -0.0003142735191710901,
+            0.001049773521076609
+          ]
+        },
+        "content_cluster_sensitivity": {
+          "n": 53,
+          "mean": 0.0003581745408211769,
+          "median": 0.0,
+          "min": -0.00569901955693493,
+          "max": 0.006922206498959409,
+          "ci95": [
+            -0.0003340404885622359,
+            0.0010652699204383382
+          ]
+        }
+      },
+      "rgb_mean_permutation_loss_db": {
+        "sequence_bootstrap": {
+          "n": 53,
+          "mean": 0.00035761476650681464,
+          "median": 0.0,
+          "min": -0.005699385168646387,
+          "max": 0.006921662512827643,
+          "ci95": [
+            -0.0003147117709171992,
+            0.0010492269110662434
+          ]
+        },
+        "content_cluster_sensitivity": {
+          "n": 53,
+          "mean": 0.00035761476650681464,
+          "median": 0.0,
+          "min": -0.005699385168646387,
+          "max": 0.006921662512827643,
+          "ci95": [
+            -0.00033450695703606567,
+            0.001064424407338492
+          ]
+        }
+      },
+      "444_placement_gain_db": {
+        "sequence_bootstrap": {
+          "n": 53,
+          "mean": 0.00045146905263196164,
+          "median": 0.0,
+          "min": -0.007041097966812593,
+          "max": 0.0077339462450942914,
+          "ci95": [
+            -0.00029778246629907505,
+            0.0012076020555874564
+          ]
+        },
+        "content_cluster_sensitivity": {
+          "n": 53,
+          "mean": 0.00045146905263196164,
+          "median": 0.0,
+          "min": -0.007041097966812593,
+          "max": 0.0077339462450942914,
+          "ci95": [
+            -0.0003348798911107736,
+            0.001207535152001667
+          ]
+        }
+      },
+      "444_mean_permutation_loss_db": {
+        "sequence_bootstrap": {
+          "n": 53,
+          "mean": 0.0004508839618693787,
+          "median": 0.0,
+          "min": -0.007041522122399022,
+          "max": 0.00773283525775201,
+          "ci95": [
+            -0.00029842511130780683,
+            0.001206989337365095
+          ]
+        },
+        "content_cluster_sensitivity": {
+          "n": 53,
+          "mean": 0.0004508839618693787,
+          "median": 0.0,
+          "min": -0.007041522122399022,
+          "max": 0.00773283525775201,
+          "ci95": [
+            -0.0003352189987062255,
+            0.0012069222746842485
+          ]
+        }
+      }
+    },
+    "router_minus_dither": {
+      "rgb_placement_gain_db": {
+        "sequence_bootstrap": {
+          "n": 53,
+          "mean": 0.013567211465272335,
+          "median": 0.009314355282604263,
+          "min": -0.003250107742568536,
+          "max": 0.08510255619018098,
+          "ci95": [
+            0.009203502208981034,
+            0.018968928840472087
+          ]
+        },
+        "content_cluster_sensitivity": {
+          "n": 53,
+          "mean": 0.013567211465272335,
+          "median": 0.009314355282604263,
+          "min": -0.003250107742568536,
+          "max": 0.08510255619018098,
+          "ci95": [
+            0.009232008524826365,
+            0.018826029724394983
+          ]
+        }
+      },
+      "rgb_mean_permutation_loss_db": {
+        "sequence_bootstrap": {
+          "n": 53,
+          "mean": 0.013561642413858278,
+          "median": 0.009313021386036187,
+          "min": -0.003248772657521148,
+          "max": 0.08493017551445432,
+          "ci95": [
+            0.009202161207314733,
+            0.018958201944630552
+          ]
+        },
+        "content_cluster_sensitivity": {
+          "n": 53,
+          "mean": 0.013561642413858278,
+          "median": 0.009313021386036187,
+          "min": -0.003248772657521148,
+          "max": 0.08493017551445432,
+          "ci95": [
+            0.00923085166882311,
+            0.01881309346752733
+          ]
+        }
+      },
+      "444_placement_gain_db": {
+        "sequence_bootstrap": {
+          "n": 53,
+          "mean": 0.01390888791747855,
+          "median": 0.009498794702391431,
+          "min": -0.005057643141303894,
+          "max": 0.08189898726698999,
+          "ci95": [
+            0.009548084893731226,
+            0.01918789645912473
+          ]
+        },
+        "content_cluster_sensitivity": {
+          "n": 53,
+          "mean": 0.01390888791747855,
+          "median": 0.009498794702391431,
+          "min": -0.005057643141303894,
+          "max": 0.08189898726698999,
+          "ci95": [
+            0.009573605354643222,
+            0.019084493808743167
+          ]
+        }
+      },
+      "444_mean_permutation_loss_db": {
+        "sequence_bootstrap": {
+          "n": 53,
+          "mean": 0.013903198411989951,
+          "median": 0.009496850181499318,
+          "min": -0.005054694633162551,
+          "max": 0.08173512629243007,
+          "ci95": [
+            0.00954761688750425,
+            0.019176728642909775
+          ]
+        },
+        "content_cluster_sensitivity": {
+          "n": 53,
+          "mean": 0.013903198411989951,
+          "median": 0.009496850181499318,
+          "min": -0.005054694633162551,
+          "max": 0.08173512629243007,
+          "ci95": [
+            0.009572139680692137,
+            0.019072983503430993
+          ]
+        }
+      }
+    }
+  },
+  "invariant_maps": [
+    {
+      "sequence": "BQMall_832x480_60.yuv",
+      "policy": "router",
+      "unchanged_permutations": 3,
+      "all_sampled_maps_identical": true
+    },
+    {
+      "sequence": "BQMall_832x480_60.yuv",
+      "policy": "dither",
+      "unchanged_permutations": 0,
+      "all_sampled_maps_identical": false
+    },
+    {
+      "sequence": "BQSquare_416x240_60.yuv",
+      "policy": "router",
+      "unchanged_permutations": 3,
+      "all_sampled_maps_identical": true
+    },
+    {
+      "sequence": "BQSquare_416x240_60.yuv",
+      "policy": "dither",
+      "unchanged_permutations": 3,
+      "all_sampled_maps_identical": true
+    },
+    {
+      "sequence": "BQTerrace_1920x1080_60.yuv",
+      "policy": "router",
+      "unchanged_permutations": 0,
+      "all_sampled_maps_identical": false
+    },
+    {
+      "sequence": "BQTerrace_1920x1080_60.yuv",
+      "policy": "dither",
+      "unchanged_permutations": 0,
+      "all_sampled_maps_identical": false
+    },
+    {
+      "sequence": "BasketballDrill_832x480_50.yuv",
+      "policy": "router",
+      "unchanged_permutations": 3,
+      "all_sampled_maps_identical": true
+    },
+    {
+      "sequence": "BasketballDrill_832x480_50.yuv",
+      "policy": "dither",
+      "unchanged_permutations": 1,
+      "all_sampled_maps_identical": false
+    },
+    {
+      "sequence": "BasketballDrive_1920x1080_50.yuv",
+      "policy": "router",
+      "unchanged_permutations": 0,
+      "all_sampled_maps_identical": false
+    },
+    {
+      "sequence": "BasketballDrive_1920x1080_50.yuv",
+      "policy": "dither",
+      "unchanged_permutations": 0,
+      "all_sampled_maps_identical": false
+    },
+    {
+      "sequence": "BasketballPass_416x240_50.yuv",
+      "policy": "router",
+      "unchanged_permutations": 3,
+      "all_sampled_maps_identical": true
+    },
+    {
+      "sequence": "BasketballPass_416x240_50.yuv",
+      "policy": "dither",
+      "unchanged_permutations": 3,
+      "all_sampled_maps_identical": true
+    },
+    {
+      "sequence": "Beauty_1920x1080_120fps_420_8bit_YUV.yuv",
+      "policy": "router",
+      "unchanged_permutations": 0,
+      "all_sampled_maps_identical": false
+    },
+    {
+      "sequence": "Beauty_1920x1080_120fps_420_8bit_YUV.yuv",
+      "policy": "dither",
+      "unchanged_permutations": 0,
+      "all_sampled_maps_identical": false
+    },
+    {
+      "sequence": "BlowingBubbles_416x240_50.yuv",
+      "policy": "router",
+      "unchanged_permutations": 3,
+      "all_sampled_maps_identical": true
+    },
+    {
+      "sequence": "BlowingBubbles_416x240_50.yuv",
+      "policy": "dither",
+      "unchanged_permutations": 3,
+      "all_sampled_maps_identical": true
+    },
+    {
+      "sequence": "Bosphorus_1920x1080_120fps_420_8bit_YUV.yuv",
+      "policy": "router",
+      "unchanged_permutations": 0,
+      "all_sampled_maps_identical": false
+    },
+    {
+      "sequence": "Bosphorus_1920x1080_120fps_420_8bit_YUV.yuv",
+      "policy": "dither",
+      "unchanged_permutations": 0,
+      "all_sampled_maps_identical": false
+    },
+    {
+      "sequence": "Cactus_1920x1080_50.yuv",
+      "policy": "router",
+      "unchanged_permutations": 0,
+      "all_sampled_maps_identical": false
+    },
+    {
+      "sequence": "Cactus_1920x1080_50.yuv",
+      "policy": "dither",
+      "unchanged_permutations": 0,
+      "all_sampled_maps_identical": false
+    },
+    {
+      "sequence": "FourPeople_1280x720_60.yuv",
+      "policy": "router",
+      "unchanged_permutations": 0,
+      "all_sampled_maps_identical": false
+    },
+    {
+      "sequence": "FourPeople_1280x720_60.yuv",
+      "policy": "dither",
+      "unchanged_permutations": 0,
+      "all_sampled_maps_identical": false
+    },
+    {
+      "sequence": "HoneyBee_1920x1080_120fps_420_8bit_YUV.yuv",
+      "policy": "router",
+      "unchanged_permutations": 0,
+      "all_sampled_maps_identical": false
+    },
+    {
+      "sequence": "HoneyBee_1920x1080_120fps_420_8bit_YUV.yuv",
+      "policy": "dither",
+      "unchanged_permutations": 0,
+      "all_sampled_maps_identical": false
+    },
+    {
+      "sequence": "Jockey_1920x1080_120fps_420_8bit_YUV.yuv",
+      "policy": "router",
+      "unchanged_permutations": 0,
+      "all_sampled_maps_identical": false
+    },
+    {
+      "sequence": "Jockey_1920x1080_120fps_420_8bit_YUV.yuv",
+      "policy": "dither",
+      "unchanged_permutations": 0,
+      "all_sampled_maps_identical": false
+    },
+    {
+      "sequence": "Johnny_1280x720_60.yuv",
+      "policy": "router",
+      "unchanged_permutations": 0,
+      "all_sampled_maps_identical": false
+    },
+    {
+      "sequence": "Johnny_1280x720_60.yuv",
+      "policy": "dither",
+      "unchanged_permutations": 1,
+      "all_sampled_maps_identical": false
+    },
+    {
+      "sequence": "Kimono1_1920x1080_24.yuv",
+      "policy": "router",
+      "unchanged_permutations": 0,
+      "all_sampled_maps_identical": false
+    },
+    {
+      "sequence": "Kimono1_1920x1080_24.yuv",
+      "policy": "dither",
+      "unchanged_permutations": 0,
+      "all_sampled_maps_identical": false
+    },
+    {
+      "sequence": "KristenAndSara_1280x720_60.yuv",
+      "policy": "router",
+      "unchanged_permutations": 0,
+      "all_sampled_maps_identical": false
+    },
+    {
+      "sequence": "KristenAndSara_1280x720_60.yuv",
+      "policy": "dither",
+      "unchanged_permutations": 0,
+      "all_sampled_maps_identical": false
+    },
+    {
+      "sequence": "ParkScene_1920x1080_24.yuv",
+      "policy": "router",
+      "unchanged_permutations": 0,
+      "all_sampled_maps_identical": false
+    },
+    {
+      "sequence": "ParkScene_1920x1080_24.yuv",
+      "policy": "dither",
+      "unchanged_permutations": 0,
+      "all_sampled_maps_identical": false
+    },
+    {
+      "sequence": "PartyScene_832x480_50.yuv",
+      "policy": "router",
+      "unchanged_permutations": 3,
+      "all_sampled_maps_identical": true
+    },
+    {
+      "sequence": "PartyScene_832x480_50.yuv",
+      "policy": "dither",
+      "unchanged_permutations": 2,
+      "all_sampled_maps_identical": false
+    },
+    {
+      "sequence": "RaceHorses_416x240_30.yuv",
+      "policy": "router",
+      "unchanged_permutations": 3,
+      "all_sampled_maps_identical": true
+    },
+    {
+      "sequence": "RaceHorses_416x240_30.yuv",
+      "policy": "dither",
+      "unchanged_permutations": 3,
+      "all_sampled_maps_identical": true
+    },
+    {
+      "sequence": "RaceHorses_832x480_30.yuv",
+      "policy": "router",
+      "unchanged_permutations": 1,
+      "all_sampled_maps_identical": false
+    },
+    {
+      "sequence": "RaceHorses_832x480_30.yuv",
+      "policy": "dither",
+      "unchanged_permutations": 1,
+      "all_sampled_maps_identical": false
+    },
+    {
+      "sequence": "ReadySteadyGo_1920x1080_120fps_420_8bit_YUV.yuv",
+      "policy": "router",
+      "unchanged_permutations": 0,
+      "all_sampled_maps_identical": false
+    },
+    {
+      "sequence": "ReadySteadyGo_1920x1080_120fps_420_8bit_YUV.yuv",
+      "policy": "dither",
+      "unchanged_permutations": 0,
+      "all_sampled_maps_identical": false
+    },
+    {
+      "sequence": "ShakeNDry_1920x1080_120fps_420_8bit_YUV.yuv",
+      "policy": "router",
+      "unchanged_permutations": 0,
+      "all_sampled_maps_identical": false
+    },
+    {
+      "sequence": "ShakeNDry_1920x1080_120fps_420_8bit_YUV.yuv",
+      "policy": "dither",
+      "unchanged_permutations": 0,
+      "all_sampled_maps_identical": false
+    },
+    {
+      "sequence": "YachtRide_1920x1080_120fps_420_8bit_YUV.yuv",
+      "policy": "router",
+      "unchanged_permutations": 0,
+      "all_sampled_maps_identical": false
+    },
+    {
+      "sequence": "YachtRide_1920x1080_120fps_420_8bit_YUV.yuv",
+      "policy": "dither",
+      "unchanged_permutations": 0,
+      "all_sampled_maps_identical": false
+    },
+    {
+      "sequence": "videoSRC01_1920x1080_30.yuv",
+      "policy": "router",
+      "unchanged_permutations": 0,
+      "all_sampled_maps_identical": false
+    },
+    {
+      "sequence": "videoSRC01_1920x1080_30.yuv",
+      "policy": "dither",
+      "unchanged_permutations": 0,
+      "all_sampled_maps_identical": false
+    },
+    {
+      "sequence": "videoSRC02_1920x1080_30.yuv",
+      "policy": "router",
+      "unchanged_permutations": 0,
+      "all_sampled_maps_identical": false
+    },
+    {
+      "sequence": "videoSRC02_1920x1080_30.yuv",
+      "policy": "dither",
+      "unchanged_permutations": 0,
+      "all_sampled_maps_identical": false
+    },
+    {
+      "sequence": "videoSRC03_1920x1080_30.yuv",
+      "policy": "router",
+      "unchanged_permutations": 0,
+      "all_sampled_maps_identical": false
+    },
+    {
+      "sequence": "videoSRC03_1920x1080_30.yuv",
+      "policy": "dither",
+      "unchanged_permutations": 0,
+      "all_sampled_maps_identical": false
+    },
+    {
+      "sequence": "videoSRC04_1920x1080_30.yuv",
+      "policy": "router",
+      "unchanged_permutations": 0,
+      "all_sampled_maps_identical": false
+    },
+    {
+      "sequence": "videoSRC04_1920x1080_30.yuv",
+      "policy": "dither",
+      "unchanged_permutations": 0,
+      "all_sampled_maps_identical": false
+    },
+    {
+      "sequence": "videoSRC05_1920x1080_25.yuv",
+      "policy": "router",
+      "unchanged_permutations": 0,
+      "all_sampled_maps_identical": false
+    },
+    {
+      "sequence": "videoSRC05_1920x1080_25.yuv",
+      "policy": "dither",
+      "unchanged_permutations": 0,
+      "all_sampled_maps_identical": false
+    },
+    {
+      "sequence": "videoSRC06_1920x1080_25.yuv",
+      "policy": "router",
+      "unchanged_permutations": 1,
+      "all_sampled_maps_identical": false
+    },
+    {
+      "sequence": "videoSRC06_1920x1080_25.yuv",
+      "policy": "dither",
+      "unchanged_permutations": 0,
+      "all_sampled_maps_identical": false
+    },
+    {
+      "sequence": "videoSRC07_1920x1080_25.yuv",
+      "policy": "router",
+      "unchanged_permutations": 0,
+      "all_sampled_maps_identical": false
+    },
+    {
+      "sequence": "videoSRC07_1920x1080_25.yuv",
+      "policy": "dither",
+      "unchanged_permutations": 0,
+      "all_sampled_maps_identical": false
+    },
+    {
+      "sequence": "videoSRC08_1920x1080_25.yuv",
+      "policy": "router",
+      "unchanged_permutations": 0,
+      "all_sampled_maps_identical": false
+    },
+    {
+      "sequence": "videoSRC08_1920x1080_25.yuv",
+      "policy": "dither",
+      "unchanged_permutations": 0,
+      "all_sampled_maps_identical": false
+    },
+    {
+      "sequence": "videoSRC09_1920x1080_25.yuv",
+      "policy": "router",
+      "unchanged_permutations": 3,
+      "all_sampled_maps_identical": true
+    },
+    {
+      "sequence": "videoSRC09_1920x1080_25.yuv",
+      "policy": "dither",
+      "unchanged_permutations": 0,
+      "all_sampled_maps_identical": false
+    },
+    {
+      "sequence": "videoSRC10_1920x1080_30.yuv",
+      "policy": "router",
+      "unchanged_permutations": 0,
+      "all_sampled_maps_identical": false
+    },
+    {
+      "sequence": "videoSRC10_1920x1080_30.yuv",
+      "policy": "dither",
+      "unchanged_permutations": 0,
+      "all_sampled_maps_identical": false
+    },
+    {
+      "sequence": "videoSRC11_1920x1080_30.yuv",
+      "policy": "router",
+      "unchanged_permutations": 0,
+      "all_sampled_maps_identical": false
+    },
+    {
+      "sequence": "videoSRC11_1920x1080_30.yuv",
+      "policy": "dither",
+      "unchanged_permutations": 0,
+      "all_sampled_maps_identical": false
+    },
+    {
+      "sequence": "videoSRC12_1920x1080_30.yuv",
+      "policy": "router",
+      "unchanged_permutations": 0,
+      "all_sampled_maps_identical": false
+    },
+    {
+      "sequence": "videoSRC12_1920x1080_30.yuv",
+      "policy": "dither",
+      "unchanged_permutations": 0,
+      "all_sampled_maps_identical": false
+    },
+    {
+      "sequence": "videoSRC13_1920x1080_30.yuv",
+      "policy": "router",
+      "unchanged_permutations": 0,
+      "all_sampled_maps_identical": false
+    },
+    {
+      "sequence": "videoSRC13_1920x1080_30.yuv",
+      "policy": "dither",
+      "unchanged_permutations": 0,
+      "all_sampled_maps_identical": false
+    },
+    {
+      "sequence": "videoSRC14_1920x1080_30.yuv",
+      "policy": "router",
+      "unchanged_permutations": 0,
+      "all_sampled_maps_identical": false
+    },
+    {
+      "sequence": "videoSRC14_1920x1080_30.yuv",
+      "policy": "dither",
+      "unchanged_permutations": 0,
+      "all_sampled_maps_identical": false
+    },
+    {
+      "sequence": "videoSRC15_1920x1080_30.yuv",
+      "policy": "router",
+      "unchanged_permutations": 0,
+      "all_sampled_maps_identical": false
+    },
+    {
+      "sequence": "videoSRC15_1920x1080_30.yuv",
+      "policy": "dither",
+      "unchanged_permutations": 0,
+      "all_sampled_maps_identical": false
+    },
+    {
+      "sequence": "videoSRC16_1920x1080_30.yuv",
+      "policy": "router",
+      "unchanged_permutations": 0,
+      "all_sampled_maps_identical": false
+    },
+    {
+      "sequence": "videoSRC16_1920x1080_30.yuv",
+      "policy": "dither",
+      "unchanged_permutations": 0,
+      "all_sampled_maps_identical": false
+    },
+    {
+      "sequence": "videoSRC17_1920x1080_24.yuv",
+      "policy": "router",
+      "unchanged_permutations": 0,
+      "all_sampled_maps_identical": false
+    },
+    {
+      "sequence": "videoSRC17_1920x1080_24.yuv",
+      "policy": "dither",
+      "unchanged_permutations": 0,
+      "all_sampled_maps_identical": false
+    },
+    {
+      "sequence": "videoSRC18_1920x1080_25.yuv",
+      "policy": "router",
+      "unchanged_permutations": 0,
+      "all_sampled_maps_identical": false
+    },
+    {
+      "sequence": "videoSRC18_1920x1080_25.yuv",
+      "policy": "dither",
+      "unchanged_permutations": 0,
+      "all_sampled_maps_identical": false
+    },
+    {
+      "sequence": "videoSRC19_1920x1080_30.yuv",
+      "policy": "router",
+      "unchanged_permutations": 0,
+      "all_sampled_maps_identical": false
+    },
+    {
+      "sequence": "videoSRC19_1920x1080_30.yuv",
+      "policy": "dither",
+      "unchanged_permutations": 0,
+      "all_sampled_maps_identical": false
+    },
+    {
+      "sequence": "videoSRC20_1920x1080_25.yuv",
+      "policy": "router",
+      "unchanged_permutations": 0,
+      "all_sampled_maps_identical": false
+    },
+    {
+      "sequence": "videoSRC20_1920x1080_25.yuv",
+      "policy": "dither",
+      "unchanged_permutations": 0,
+      "all_sampled_maps_identical": false
+    },
+    {
+      "sequence": "videoSRC21_1920x1080_24.yuv",
+      "policy": "router",
+      "unchanged_permutations": 3,
+      "all_sampled_maps_identical": true
+    },
+    {
+      "sequence": "videoSRC21_1920x1080_24.yuv",
+      "policy": "dither",
+      "unchanged_permutations": 0,
+      "all_sampled_maps_identical": false
+    },
+    {
+      "sequence": "videoSRC22_1920x1080_24.yuv",
+      "policy": "router",
+      "unchanged_permutations": 0,
+      "all_sampled_maps_identical": false
+    },
+    {
+      "sequence": "videoSRC22_1920x1080_24.yuv",
+      "policy": "dither",
+      "unchanged_permutations": 0,
+      "all_sampled_maps_identical": false
+    },
+    {
+      "sequence": "videoSRC23_1920x1080_24.yuv",
+      "policy": "router",
+      "unchanged_permutations": 0,
+      "all_sampled_maps_identical": false
+    },
+    {
+      "sequence": "videoSRC23_1920x1080_24.yuv",
+      "policy": "dither",
+      "unchanged_permutations": 0,
+      "all_sampled_maps_identical": false
+    },
+    {
+      "sequence": "videoSRC24_1920x1080_24.yuv",
+      "policy": "router",
+      "unchanged_permutations": 0,
+      "all_sampled_maps_identical": false
+    },
+    {
+      "sequence": "videoSRC24_1920x1080_24.yuv",
+      "policy": "dither",
+      "unchanged_permutations": 0,
+      "all_sampled_maps_identical": false
+    },
+    {
+      "sequence": "videoSRC25_1920x1080_24.yuv",
+      "policy": "router",
+      "unchanged_permutations": 3,
+      "all_sampled_maps_identical": true
+    },
+    {
+      "sequence": "videoSRC25_1920x1080_24.yuv",
+      "policy": "dither",
+      "unchanged_permutations": 0,
+      "all_sampled_maps_identical": false
+    },
+    {
+      "sequence": "videoSRC26_1920x1080_30.yuv",
+      "policy": "router",
+      "unchanged_permutations": 0,
+      "all_sampled_maps_identical": false
+    },
+    {
+      "sequence": "videoSRC26_1920x1080_30.yuv",
+      "policy": "dither",
+      "unchanged_permutations": 0,
+      "all_sampled_maps_identical": false
+    },
+    {
+      "sequence": "videoSRC27_1920x1080_30.yuv",
+      "policy": "router",
+      "unchanged_permutations": 0,
+      "all_sampled_maps_identical": false
+    },
+    {
+      "sequence": "videoSRC27_1920x1080_30.yuv",
+      "policy": "dither",
+      "unchanged_permutations": 0,
+      "all_sampled_maps_identical": false
+    },
+    {
+      "sequence": "videoSRC28_1920x1080_30.yuv",
+      "policy": "router",
+      "unchanged_permutations": 0,
+      "all_sampled_maps_identical": false
+    },
+    {
+      "sequence": "videoSRC28_1920x1080_30.yuv",
+      "policy": "dither",
+      "unchanged_permutations": 0,
+      "all_sampled_maps_identical": false
+    },
+    {
+      "sequence": "videoSRC29_1920x1080_24.yuv",
+      "policy": "router",
+      "unchanged_permutations": 0,
+      "all_sampled_maps_identical": false
+    },
+    {
+      "sequence": "videoSRC29_1920x1080_24.yuv",
+      "policy": "dither",
+      "unchanged_permutations": 0,
+      "all_sampled_maps_identical": false
+    },
+    {
+      "sequence": "videoSRC30_1920x1080_30.yuv",
+      "policy": "router",
+      "unchanged_permutations": 0,
+      "all_sampled_maps_identical": false
+    },
+    {
+      "sequence": "videoSRC30_1920x1080_30.yuv",
+      "policy": "dither",
+      "unchanged_permutations": 0,
+      "all_sampled_maps_identical": false
+    }
+  ],
+  "statistics": {
+    "draws": 5000,
+    "seed": 20260928,
+    "weighting": "Equal sequence weight, paired policies and all permutations kept together.",
+    "cluster_sensitivity": "Resample 51 pre-existing candidate-content groups, retaining their members; sequence-weighted point estimate unchanged. This sensitivity analysis does not change the fitted folds.",
+    "interval_scope": "Conditional on these three permutations, fixed Q90 controls, checkpoint and development-used cohort. Does not quantify permutation Monte Carlo error or independent generalisation."
+  },
+  "provenance": {
+    "/home/can_karsal/FLEX-PLUS/scripts/analyze_placement_replay_20260928.py": "55d48bb20a1131c026617da037a6666359791cd4945096aba99b2ffe20575d95",
+    "/home/can_karsal/FLEX-PLUS/cvpr2027/data/research20260927/shared_crossfit_qp32/proposed_content_groups.json": "e003b1c8170f49d4f37bc1d0a57994de2dc7337507e11dab8975cb3104779578",
+    "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/research/placement_replay_qp32/manifest.json": "27572ea9a8c349a235a3dbb4106db7670dd1f6c27391abefddab255d8bb5ae24",
+    "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/research/placement_replay_qp32/progress.json": "183eb67e83cc25c9aaafb09b845cfd763053e12d828b1abdfcbf948151ee105b",
+    "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/research/placement_replay_qp32/cases/00.json": "bd89e1142b152ceddffdd23a988ab6d68afaf5b857cd40bda7c8dfb8d26b77af",
+    "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/research/placement_replay_qp32/cases/01.json": "5ba6d72011583037208b9431b4c02cef5ee5e41419bd85324843ab39a26b28be",
+    "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/research/placement_replay_qp32/cases/02.json": "f66b7a995da2bfae07cbfcd757713ab0b89e5f0fca3f85a4dd6d09a249f7692e",
+    "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/research/placement_replay_qp32/cases/03.json": "122a5ce8a8d33392ae16fbea0ff3ff00ce576c38344ead27e148a36426aecb00",
+    "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/research/placement_replay_qp32/cases/04.json": "1a250c94d865cdbb91184e2c892d84f87471bd1c61a70485ec4ae7d72f890d0f",
+    "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/research/placement_replay_qp32/cases/05.json": "44ae4fe0f9be15e1ad79e904f37e1f6232948344cac7b3b0a00e1a6c65a0aed0",
+    "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/research/placement_replay_qp32/cases/06.json": "c6c57a956077a1a186fe45d368f5fa8f4c00e0bbaf6f3e74c831e500542ea329",
+    "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/research/placement_replay_qp32/cases/07.json": "263c68c04763b7dfcb8c86c877598ee5b5b19e2a80b549a1cb75ce9df0b1545e",
+    "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/research/placement_replay_qp32/cases/08.json": "49e531738f9e7f39a234bc3fc7c9d5e6ab758c6c2ccda852e2909a18a0821a84",
+    "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/research/placement_replay_qp32/cases/09.json": "d231c6d8699478df7f9b7e1352a7dbd94e8eca54122b0b892dc3ad16ed7f6bee",
+    "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/research/placement_replay_qp32/cases/10.json": "79d926f6b5db38d6898e9b5c4a5b370bd534f2d616b36ed53839abc9654cefe8",
+    "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/research/placement_replay_qp32/cases/11.json": "56736083a61e157dd836da02735b4c096b4d77d4d39597094558b83c14f86036",
+    "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/research/placement_replay_qp32/cases/12.json": "d9347a591ba257a1c2a7828433e010f85eda0dae1ad997d3717b2347f47c0930",
+    "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/research/placement_replay_qp32/cases/13.json": "8cc5deaffb0f259822106e224f9ca8b239ddbb9d1eedb57407b7f0668056e2b3",
+    "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/research/placement_replay_qp32/cases/14.json": "5d1551ce55b547a7e98eb2d2d71de5512926076aae9b60bd0ab9fbfd55c1502f",
+    "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/research/placement_replay_qp32/cases/15.json": "bf44bc5938a49b16d616eb5ccb387d43cafbdaa361b65069ac29cac120f07e38",
+    "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/research/placement_replay_qp32/cases/16.json": "a0cd627aa0ce8d42ff2732401778efc61450c804ce5b8b8ec0e25fcbc98867d0",
+    "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/research/placement_replay_qp32/cases/17.json": "aa6f8aef1ad8c3499b0a0293cb2a4121e0fd99172e501a56dab9b98ec98278ed",
+    "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/research/placement_replay_qp32/cases/18.json": "1e43bb117692c4b53e5ee097e3e30f59098b6aad1be853f3bc3a4df457a5d902",
+    "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/research/placement_replay_qp32/cases/19.json": "3532dd4c5832a694680c4b8596bf79bcbd487c52f32b963b6cbaaa1545c1d50c",
+    "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/research/placement_replay_qp32/cases/20.json": "eff8f7efaa00dd667c3522134bc6750fa04a1438164ec159ee5adee0831419e9",
+    "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/research/placement_replay_qp32/cases/21.json": "83a324898e17a9b7a9674ea6092b04b882b0715515b200a37dce7cb76d3c633f",
+    "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/research/placement_replay_qp32/cases/22.json": "e576bcdf3ba20deb5138fcad0d8e11c38d46b25b9d5d4e3ed8fc2bc2d8a96be0",
+    "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/research/placement_replay_qp32/cases/23.json": "15ccc85992f78a7ed37d23aad1a199b14fd859b8c248c9edc1c1e5be2f4a4438",
+    "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/research/placement_replay_qp32/cases/24.json": "bace0e3e94fd28c6ffabcc09d42a85f21942f577adfddc43d7a984c9cf2d975a",
+    "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/research/placement_replay_qp32/cases/25.json": "8640b18acce703911f273c41281c1904bdf06bd6fc0294bb7832a31b19d5c43f",
+    "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/research/placement_replay_qp32/cases/26.json": "f879600c664b1244015b02b8c3b2a9a82822db8578338453a2ca3d524f1a0da6",
+    "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/research/placement_replay_qp32/cases/27.json": "08c3eb3b749af8af63cb77e31732badf8bf4c62c33f3cc1bdd9650364d964b11",
+    "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/research/placement_replay_qp32/cases/28.json": "bb97b458c88a17f2c02b0a8bb8e40eb99a6b76fb7bde48bf846c62592aef9236",
+    "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/research/placement_replay_qp32/cases/29.json": "688fce1dfbeb7b81f75f8cfd7799a3d1e1b93491b1ec2a716b96292933617a7c",
+    "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/research/placement_replay_qp32/cases/30.json": "4552f49ed932821fe590efdba40451e2c7596a8ef3220ca746af82cb40fbdab3",
+    "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/research/placement_replay_qp32/cases/31.json": "8182d2b12a87e04155729a4b580769908a063c88069e8e09157969ed10aafc85",
+    "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/research/placement_replay_qp32/cases/32.json": "cea5d4a268f0aaab89ae8c12b0ef0124dea7d8ed7200655b7af241aa29ac238e",
+    "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/research/placement_replay_qp32/cases/33.json": "5488d906f1f178c934f2748b579eaca93ce6fc5a1bded00266105989ff42c017",
+    "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/research/placement_replay_qp32/cases/34.json": "59d45b41b4a108829a08581b2c066f03ef71506cdfe9c9f639b68ee94f88d392",
+    "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/research/placement_replay_qp32/cases/35.json": "9cfa7a37ac057d017579d15b2ef3b282f357daef0361382c853dacdea970219b",
+    "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/research/placement_replay_qp32/cases/36.json": "3ab0fe9dc7e274cfe5207cc12d442c47b884a9c928a5b25db5c9dd13d0dd3802",
+    "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/research/placement_replay_qp32/cases/37.json": "8384d7eb40e5d194ae249293ab92eac5674180f449c0676a086d5eb1bf182980",
+    "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/research/placement_replay_qp32/cases/38.json": "27f4aad424790ac3e211697cdf940a2aa5f87a9b9a29f1af3c54bdda425d1589",
+    "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/research/placement_replay_qp32/cases/39.json": "54112315f43e283596a89e0a11d9713b15b5b72a86a798ea193951b9e3769633",
+    "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/research/placement_replay_qp32/cases/40.json": "c60d13c074ac42090e2038cbe040df7d56e409382ba6c08e9b9e6362f3e15865",
+    "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/research/placement_replay_qp32/cases/41.json": "f85d92e1e0e8af4a0e08d24990fe355b795a97a8e032ee53bb572d516719d869",
+    "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/research/placement_replay_qp32/cases/42.json": "c8854b81d458e74411c6324dc60589e791cdc81fb8787d435fbcdb7082b5ecd8",
+    "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/research/placement_replay_qp32/cases/43.json": "9e0de6376a15a9ccdbf8a6dc95c31541ab8a78c09c61b724ecf92c1a8ea2f10e",
+    "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/research/placement_replay_qp32/cases/44.json": "2a55d4a3a94c614abb2beabb516a62a7cc88251fce4ad0b059a60053e1967cb4",
+    "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/research/placement_replay_qp32/cases/45.json": "155f5f2794ff2aa6d87ec1ba4320cd37ebe329b9ea07b8f230fa34809eda8bca",
+    "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/research/placement_replay_qp32/cases/46.json": "0843fe4efc581563122b96a73de51851e9d4682c98f4713fb59ef0765f8a16fb",
+    "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/research/placement_replay_qp32/cases/47.json": "9318dc58f1857cf3c9b4de3bd27f486aee02795597fe1780f253bc596b12584d",
+    "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/research/placement_replay_qp32/cases/48.json": "f8fdcba7aff3731ea4568d2e41641f523ffe2d009bc3c72e0399dd864b5d0d32",
+    "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/research/placement_replay_qp32/cases/49.json": "bc25f743146a34abc8a3188e0cede12a901ab0cdfab6f8a8968dc3a21bed6593",
+    "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/research/placement_replay_qp32/cases/50.json": "aa086522dae8b0d7ec09fae1f49794032138db9b0f4d8c5edb049a56e58f1778",
+    "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/research/placement_replay_qp32/cases/51.json": "8f27b5a8790c6bb99967769657bdaf4c8967df1d024160609eacd4da9202efb4",
+    "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/research/placement_replay_qp32/cases/52.json": "0339d902d1ea3c0db972a9bbecf689a5af331961341078318e61e8e75703cd70"
+  }
+}

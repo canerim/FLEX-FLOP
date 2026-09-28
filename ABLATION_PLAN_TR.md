@@ -73,8 +73,10 @@ kalibrasyonu etkisini tek başına ayırmaz.
 | Router hangi bütçede açılmalı? | Hep MLP / validation-fixed policy gate | Gate girdisi yalnız QP ve talep edilen bütçe; test kalite hatası kullanılmaz | Gevşek bütçede blind policy aynı kalite ve daha düşük toplam süre verebilir. |
 
 Permutation protokolü 28 Eylül editoryal çalışmasında, yeni sonuçlar
-incelenmeden sabitlendi; CPU çalışmasının tamamlanması ve bütün örneklerin
-doğrulanması beklenir. Bu kontrol yeniden eğitim, dış test veya gecikme
+incelenmeden sabitlendi; 53 kaynak ve 424 harita vakası tamamlandı, bütün
+orijinal haritalar önceki replay'i yeniden üretti. Router yerleştirme kazancı
+0.01393 dB [0.00949, 0.01930], dither 0.00036 dB [−0.00031, 0.00105].
+Aralıklar üç örneklenmiş permütasyona koşulludur. Bu kontrol yeniden eğitim, dış test veya gecikme
 benchmark'ı değildir. Karıştırma valid yüksekliği/genişliği aynı tile'lar
 arasında yapılır; böylece yalnız padded histogram değil, her derinliğin
 kapladığı geçerli piksel alanı da korunur. Üç permutation, tüm olası
