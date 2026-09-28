@@ -19,6 +19,7 @@ altında ölçülmüş gibi yeniden adlandırılamaz. Kanıt: `METRICS.md`.
 
 ## 28 Eylül: tamamlanan kontrollerin değiştirdiği öncelik
 
+- Sabit-ağırlık adapter/repair kontrolü: 212 çıktı tamamlandı. Adapter identity kaybı 1.2309 dB, repair identity kaybı 0.00208 dB; eş eğitimli yeniden optimizasyon hâlâ eksik. İki kaynak × dört map shared-stream CPU kontrolünde 8/8 birebir decode var; native hız iddiası yok.
 - QP32 gerçek-output replay: 53 sequence, 318 sabit-policy çıktı. Mean ve Q90 router–dither marjlarının paired CI'ları sıfırı içeriyor. Dış testte üstünlük henüz kanıtlanmadı.
 - Padding konumu: D6/0.2 payload bpp'de +0.2652 dB iyileşme; buna rağmen native-shaped halo32 full-frame D6'dan 1.0262 dB geride. Native CUDA değil, CPU geometri kontrolü.
 - Aynı piksel derinlikleriyle region coalescing: 800 çıktı. QP32'de %12.39–13.05 daha az payload; 0.2 payload bpp'de +0.4959–0.5327 dB. Neural decoder MAC −%12.44, duvar saati henüz ölçülmedi. İki faz her görüntü içinde ortalandı.
@@ -36,13 +37,15 @@ kılan bir mühendislik kontrolü. Veri `data/research20260927`, figürler
 | E0 / P0 | Tam görüntü ve bütün patch'ler 12 blok | Aynı e15 ağırlıkları ve ayrı released referans; crop sonrası RGB/YUV kaybı, gerçek süre | İlk teşhis için hayır |
 | E1 / P0 | Uniform / Bayer / MLP / kaynak bilgili seçim | Aynı aday derinlikler ve hedef; gerçekleşmiş kalite, fallback, MAC ve tam süre | Predictor gerektiğinde ayrı; codec sabit |
 | E2 / P0 | 1×1 / pointwise FFN / depth-scaled adapter | Aynı eğitim adımı ve veri; her exit'in RD ve süresi | Evet; adapter kapatmak aynı ablasyon değildir |
-| E3 / P0 | Repair yok / depthwise / grid-gated repair | Aynı patch ve eğitim; boundary bandı ile interior MSE ayrı, final görüntü | Evet; ayrıca mevcut modelde kapatma hassasiyet testi yapılabilir |
+| E3 / P0 | Repair yok / depthwise / grid-gated repair | Aynı patch ve eğitim; boundary bandı ile interior MSE ayrı, final görüntü | Evet; mevcut modelde kapatma hassasiyet testi tamamlandı |
 | E4 / P1 | Full-frame head / patch head | Head dışındaki ayarlar aynı; boundary hatası, halo dahil hesap | Evet |
 | E5 / P1 | Full-frame exit eğitimi / random mixed-tile eğitimi | Aynı güncelleme sayısı ve ortak test yolu; train–deploy farkı | Evet |
 | E6 / P1 | Distillation kapalı / adjacent / deepest | Anchor sabit; sığ exit kalitesi ve deepest drift birlikte | Evet |
 | E7 / P1 | Anchor kapalı / mevcut batch-mean / per-sample lambda | QP bazlı released-reference drift; sığ exit frontier'ı | Evet |
 | E8 / P1 | Shared stem 2/4/6 blok | Gerçekte erişilebilir exit sayısı, aynı hedef altında MAC ve wall time | Evet; ortak minimum derinlikte de karşılaştır |
 | E9 / P1 | 128/256/512 RGB patch ve halo | Repair/head sabit; seam yoğunluğu, side bits, batch doluluğu | Eşleşmiş eğitim tercih edilir |
+| E10 / P1 | Soft exit-label CE / signed incremental-MSE regression | Aynı codec, predictor özellikleri, update sayısı ve calibration split; her bütçede gerçekleşmiş kalite | Yalnız predictor; kapasite farkı ayrıca raporlanır |
+| E11 / P1 | Her bütçede MLP / validation üzerinde seçilmiş uniform–Bayer–MLP politikası | Aynı kalite sözleşmesi; seçim test görüntüsünün hatasına bakmaz | Codec sabit; switching kontrolü validation üzerinde |
 
 Bu tabloda “yeniden eğitim” yazan kollar şu anda başlatılmış değildir.
 Sağlıklı D2/D4/D6 koşuları aynı protokolle devam eder. İlk küçük tarama E0/E1
@@ -58,6 +61,30 @@ Sonraki iki bloğun tile bazlı katkısı da tekdüze değil: 6→8, 8→10 ve 1
 geçişlerinde görüntü içindeki tile kazançlarının ortalama IQR'ı 0,0748/0,0340/0,0238 dB.
 Bu sonuç early exit için mekânsal fırsatı gösterir; boundary ve kaynak
 kalibrasyonu etkisini tek başına ayırmaz.
+
+## 28 Eylül: hangi sonuç hangi iddiayı değiştirecek?
+
+| Soru | Ana karşılaştırma | Önceden sabitlenecekler | Başarısız sonuç da ne öğretir? |
+|---|---|---|---|
+| Yerleştirme mi, yalnız derinlik histogramı mı? | Aynı map ile histogramı koruyan permutation; gerçek mixed rekonstrüksiyon | QP32/Q90, tüm 53 kaynak, üç seed; aynı valid tile boyutu içinde karıştırma | Pozitif table association, gerçek head sonrası korunmayabilir. Sıfır sonuç router'ın her bütçede yararsız olduğunu göstermez. |
+| Repair maliyetini hak ediyor mu? | Repair yok / küçük spatial repair / mevcut grid repair; eş eğitim | Aynı init, veri, adım, patch ve anchor; bütün karşılaştırmalarda gerçek süre | 0.00208 dB frozen-weight katkı, pahalı bir repair'i zorunlu kılmaz. Daha ucuz tasarım seçilebilir. |
+| Predictor ne öğrenmeli? | Mevcut soft-label skorları / APE'den esinlenen ek MSE kazancı | Aynı giriş ve eğitim bütçesi; negatif katman faydası yasaklanmaz | İyileşme yoksa yeni loss eklemek yerine daha basit predictor korunur. |
+| Router hangi bütçede açılmalı? | Hep MLP / validation-fixed policy gate | Gate girdisi yalnız QP ve talep edilen bütçe; test kalite hatası kullanılmaz | Gevşek bütçede blind policy aynı kalite ve daha düşük toplam süre verebilir. |
+
+Permutation protokolü 28 Eylül editoryal çalışmasında, yeni sonuçlar
+incelenmeden sabitlendi; CPU çalışmasının tamamlanması ve bütün örneklerin
+doğrulanması beklenir. Bu kontrol yeniden eğitim, dış test veya gecikme
+benchmark'ı değildir. Karıştırma valid yüksekliği/genişliği aynı tile'lar
+arasında yapılır; böylece yalnız padded histogram değil, her derinliğin
+kapladığı geçerli piksel alanı da korunur. Üç permutation, tüm olası
+haritaların tam beklentisini hesaplamaz.
+
+**Deneylerin yürütme sırası:** mevcut resmî eğitimleri tamamla; paralelde
+CPU kontrol ve split tanımını hazırla. Boş cihaz geldiğinde önce native
+bitstream eşdeğerliği, sonra aynı cihazda toplam süre. Bu yol doğrulanınca
+kritik adapter/repair retraining kolları ve predictor karşılaştırması.
+D8/D10 veya uzun hiperparametre taramaları, temel runtime ve generalisation
+sorularının yerine geçmez. Hiçbir öneri ana 105-epoch tarifi kısaltmaz.
 
 ## 1. Önce iki sistemi birbirinden ayırıyoruz
 

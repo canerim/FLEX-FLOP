@@ -1,40 +1,38 @@
 \section{Discussion}
 
-FLEX-UF exposes two operating regimes. Tight quality constraints leave room
-for useful learned placement. Near the shallowest-exit ceiling, blind
-mixtures approach the same arithmetic cost, and routing overhead can outweigh
-the remaining margin. The design implication is to allocate computation
-jointly over content and budget: a sophisticated selector is useful only
-where its decisions change the attainable quality--cost trade-off.
+\paragraph{Adaptation should pay for the decisions it changes.}
+FLEX-UF identifies a budget-dependent role for spatial allocation.
+Under source calibration, tight quality targets leave room for useful
+placement. Near the shallowest-exit ceiling, a blind mixture reaches
+nearly the same arithmetic saving. This motivates a budget-conditioned choice between fixed, blind and
+learned policies, with its switching rule fixed on validation data.
 
-This principle connects early exit to the independent depth bank without
-requiring a cascade of both mechanisms. Shared exits reuse features and
-retain one payload; independent experts can specialise more freely but
-introduce separate representations, model residency and expert batching.
-The controlled study is intended to establish when those additional degrees
-of freedom justify their systems costs. Combining a bank with multiple
-exits per expert would add another axis and is outside the current design.
+\paragraph{Reuse and specialisation are different commitments.}
+Shared exits retain one representation and the work already performed;
+independent experts can adapt their encoders and synthesis capacity more
+freely. The bank adds model residency, entropy boundaries and occupancy-dependent
+execution costs. Its quality must be paired with those costs, not with
+shared-prefix arithmetic. Multiple exits inside each expert are outside
+the present design.
 
-The principal empirical limitation is the gap between allocation evidence
-and a complete codec benchmark. Current controls use source calibration,
-the five-QP mixed losses use the fine-tuned full-depth anchor, and synthesis
-MAC counts exclude entropy recovery, routing and signalling. Sequence-disjoint control and actual-image replay at QP32 expose the
-difference between mean loss and tail risk. The replay's paired routing
-margin remains unresolved; two similar-content pairs also cross its sequence
-folds. Content-grouped calibration on untouched data is still needed.
-Actual bytes and paired wall-clock timings must include entropy work,
-packing, tile movement and fallbacks. Independent-region controls also reveal a rate penalty for duplicated
-context. The archived equal-channel YCbCr loss is not an RGB or perceptual
-guarantee; the explicit QP32 RGB replay does not replace a full metric study.
+\paragraph{The remaining evidence gap.}
+The source-calibrated study measures available allocation value, while
+the fixed-control replay leaves the routing increment unresolved.
+Content-grouped calibration on untouched images is the next test of that
+increment. Native bitstreams and paired wall-clock measurements must then
+include entropy work, prediction, tile movement, grouping and fallback.
+The current confidence intervals cover sample variation at fixed weights,
+not independent training seeds. Results are confined to intra reconstruction:
+YCbCr-MSE and RGB diagnostics do not establish perceptual equivalence,
+temporal consistency or performance of DCVC-UF's chunk-based video path.
 
 \section{Conclusion}
-FLEX-UF makes DCVC-UF synthesis a spatial allocation of computation.
-Its evaluated early-exit path shares a latent and prefix, lets tiles stop at
-different depths, and restores a complete image through aligned exits and
-full-frame repair. Recorded reconstructions show substantial synthesis
-arithmetic savings, with a further, budget-dependent benefit from learned
-placement over dithering under source-calibrated control. The sequence-disjoint
-replay does not yet resolve that incremental benefit. The independent six-depth study extends the same
-allocation question to model selection. Matched rate--quality and complete
-execution measurements will determine how the benefits of reuse and
-specialisation translate into practical codec efficiency.
+FLEX-UF makes synthesis depth a spatial decision inside DCVC-UF.
+A common latent and prefix support aligned early exits, while a shrinking
+tile batch turns stopping decisions into omitted block evaluations.
+The measured arithmetic savings have two sources: cheaper average depth
+and a smaller, budget-dependent increment from learned placement.
+Blind mixtures and fixed-control replay show why these must be evaluated
+separately. The independent-depth study extends the allocation question
+to codec selection; matched training and complete execution measurements
+will determine when specialisation justifies giving up shared computation.

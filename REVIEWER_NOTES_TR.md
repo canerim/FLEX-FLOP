@@ -44,7 +44,7 @@ iddialar değil. Ana metin bunları söylemiyor.
 Bizim anlatımız, bunun coded latent üzerinde nested synthesis olarak kurulması,
 exit-feature uyumu ve sınır bağlamının birlikte ele alınması. Bilimsel ayrımı
 güçlendirecek kontrol, adapter/repair/mixed-tile eğitim ablasyonlarıdır.
-Bunların etkisini henüz ölçülmüş gibi göstermiyoruz.
+Sabit ağırlıkta adapter/repair müdahaleleri tamamlandı; bunlar eş eğitimli mimari ablasyonunun yerine geçmiyor. APE ortak reconstruction tail kullanıyor ve Swift neural codec içinde erken çıkış içeriyor; yenilik iddiası bu mekanizmaların genel varlığına dayanmamalı. Ayrıntı: `RELATED_WORK_AUDIT.md`.
 
 **2. Router gerçekten gerekli mi?** Early exit tasarrufunun çoğunu uniform
 ve dither sağlayabilir. Bu nedenle ana sonuç hem toplam tasarrufu hem dither
@@ -56,7 +56,7 @@ kendi zamanı mutlaka bulunmalı.
 **3. Kalite kaybı hangi referansa göre?** Uniform-exit profilinin kaynağı padded
 YCbCr 4:4:4 ve released ağırlıklı full-frame output. Mixed-output tablosunun referansı
 crop edilmiş fine-tuned e15 full-frame output. Bunları tek RD eğrisiymiş gibi
-birleştirmiyoruz. Yeni replay iki referansı aynı valid-pixel desteğinde ölçmeli.
+birleştirmiyoruz. Tamamlanan QP32 replay iki referansı aynı valid-pixel desteğinde karşılaştırıyor; beş QP ve native çalışma yolu için genelleme yapmıyoruz.
 398 inherited warm-start tensor'ünün resmî release ile eşleşmesi, checkpoint
 kimliğini destekliyor; cropped kalite farkını hesaplamanın yerine geçmiyor.
 
@@ -68,7 +68,7 @@ kalibrasyonu ve test ayrımını yeniden kurmak, deployment deneyinin P0 işi.
 **5. MAC neden ms değil?** Conditional tile yürütmesi gerçek olsa da entropy,
 routing, packing ve GPU doluluk etkileri MAC toplamına indirgenmiyor. Eski
 runtime kaydının bazı aşamaları encoder tensor'lerinin yeniden yürütümüydü.
-Yeni codec ölçümünde decoder görüntüyü yalnız bytestream'den çözmeli. Mevcut
+Sekiz CPU shared-stream vakasında decoder yalnız bytestream ile birebir çıktı üretiyor. Native GPU doğruluğu ve tam codec zamanı ayrıca ölçülmeli. Mevcut
 rakamlar bu eksikliği kapatan bir uçtan uca benchmark gibi kullanılmıyor.
 
 **6. Sığ bağımsız modeller early exit ile aynı mı?** Hayır. D2/D4/D6 bütün
@@ -120,7 +120,7 @@ zamanlama veya held-out calibration sonucu üretilmedi.
 
 ## İlgili çalışmalardan hangi kontrolü almalıyız?
 
-[APE](https://www.ecva.net/papers/eccv_2022/papers_ECCV/html/2021_ECCV_2022_paper.php),
+[APE](https://www.ecva.net/papers/eccv_2022/papers_ECCV/papers/136780286.pdf),
 patch'in ek derinlikten göreceği faydayı tahmin ederek durma kararı veriyor.
 Bu nedenle “karmaşık patch derine gitsin” tek başına yeni katkı sayılmaz.
 DCVC-UF üzerinde exit-label CE'ye karşı marjinal distortion kazancı tahmini

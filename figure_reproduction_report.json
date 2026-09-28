@@ -589,12 +589,36 @@
       "byte_identical": true
     }
   ],
+  "evidence_text_artifact_count": 4,
+  "evidence_text_artifacts": [
+    {
+      "file": "data/refresh20260927/design_macros.tex",
+      "sha256": "e5c8f06fc7f8ee52f74a16dae1c7ed643973dd4a15ff64a2d61e9f10a5aa599a",
+      "byte_identical": true
+    },
+    {
+      "file": "data/refresh20260927/delivered_cap_table.tex",
+      "sha256": "e863a6c2cd951650c543385cc75265bd7c6484eddb37cddaa133233606bc04cb",
+      "byte_identical": true
+    },
+    {
+      "file": "data/refresh20260927/depth_capacity_table.tex",
+      "sha256": "c571eedc881144758949b71713c7ac0c021c1d931fd6972bfce680e6e5278794",
+      "byte_identical": true
+    },
+    {
+      "file": "data/refresh20260927/fixed_control_table.tex",
+      "sha256": "13916bbcfb20db113e24a8d6a558067e466d7f63d5ea59cb24de4c133d96f95e",
+      "byte_identical": true
+    }
+  ],
   "scripts_sha256": {
+    "scripts/build_evidence_tables.py": "3168491715f0a0d5ac415e634564513fd06e1266def6d57349d05a168b567e78",
     "scripts/build_figures.py": "49f44bf07d917c735a1132600da6f154b9be77882582a241fa22a01e1ba4932a",
     "scripts/build_extended_figures.py": "60fcedd5f2251480ac6ac424deba5241e26f1d22f07433bd18092ea62f83e35b",
     "scripts/plot_crossfit_control_20260927.py": "eadfdc0510405cf9b581c3ab446a45973310cb19f9a761efb49ff473ac0df49a",
     "scripts/plot_depth_macs_20260927.py": "c1fc7b40b7599188f2004d9e595454649ab8ef338737c4f85bb39865c36603d8",
     "scripts/build_research_figures.py": "b9e17085be4dd47743c17166c437675ef827db087f2d7840d7b65e14735a9994"
   },
-  "reproduction_script_sha256": "e989614f4b8d21e131668bd594edc807d4e700b7430be50f5768b59ee0ba4b9c"
+  "reproduction_script_sha256": "52297581eca92ad748baa7795d80b0e436e24dcdf5c088b0249077e284eeb282"
 }

@@ -4,7 +4,7 @@ Overleaf main document: **`main.tex`**, compiler **pdfLaTeX**. This repository's
 root is the `cvpr2027/` subtree of the FLEX-PLUS research workspace.
 
 The 28 September 2026 adaptive-system revision contains a DCVC-UF manuscript,
-27 editable vector figure sets, two generated conceptual illustrations,
+34 editable vector figure sets, two generated conceptual illustrations,
 paired source tables, generated numerical macros and hash manifests.
 Shared early exit is evaluated; independent model-bank routing remains
 prospective. Build with:
@@ -38,6 +38,7 @@ and old JSON annotations remain traceable rather than being silently renamed.
 - Palette, typography and evidence styles: `FIGURE_STYLE.md`.
 - Runtime scope and required full-bitstream benchmark: `RUNTIME_AUDIT_TR.md`.
 - Evidence and editorial decisions: `WRITING_AND_EVIDENCE.md`.
+- Primary-source related-work comparison: `RELATED_WORK_AUDIT.md`.
 
 To regenerate figures on a CPU Python environment with Liberation Sans fonts:
 
@@ -60,12 +61,13 @@ FLEX research repository under `scripts/paper_refresh_data.py` and
 records/checkpoints. Source hashes captured during this revision are
 inspection provenance, not retrospective proof of historical execution.
 `figure_reproduction_report.json` records a separate reproduction using only
-the bundled data and scripts: all111 generated PDF/SVG/PNG artifacts across
-the32 vector figure sets were byte-identical. Calibration and
+the bundled data and scripts: all 117 generated PDF/SVG/PNG artifacts across
+the 34 vector figure sets, plus four generated table/macro files, are checked for byte-identical reproduction. Calibration and
 arithmetic-denominator figures also have separate source and artifact
 manifests and are included in bundle verification.
-Figure 1 is a protected, unchanged AI overview. Figure 2 uses a new shared-exit
-mechanism illustration in the same visual style. Both have provenance hashes
+Figures 1 and 2 are protected conceptual illustrations; both remain unchanged
+in the September 28 editorial revision. A new measured-map, single-column
+active-tile diagram is Figure 3. Both have provenance hashes
 and full prompt records in `IMAGEGEN.md`; CPU scripts do not regenerate them.
 `verification_report.json` records data consistency, PDF references, font
 embedding and page checks. The checks do not rerun the historical codec.
