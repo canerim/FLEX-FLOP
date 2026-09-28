@@ -23,6 +23,13 @@ def main():
     ap.add_argument("--check-pdfs",action="store_true",help="Also inspect compiled PDFs with Poppler tools")
     args=ap.parse_args()
     checked=[]
+    table_manifest=json.loads((DATA/'evidence_tables_manifest.json').read_text())
+    assert table_manifest['script_sha256']==digest(ROOT/'scripts/build_evidence_tables.py')
+    for name,expected in table_manifest['source_sha256'].items():
+        assert digest(ROOT/name)==expected,f'Changed numerical table input: {name}'
+    for name,expected in table_manifest['artifacts'].items():
+        assert digest(DATA/name)==expected,f'Changed generated numerical table/macro: {name}'
+        checked.append(str((DATA/name).relative_to(ROOT)))
     for name, expected in json.loads((DATA/"bundle_manifest.json").read_text()).items():
         assert digest(DATA/name)==expected,f"Changed bundled source: {name}"
         checked.append(str((DATA/name).relative_to(ROOT)))
@@ -333,7 +340,7 @@ def main():
             reports[name]=dict(pages=len(pages),all_fonts_embedded=True,unresolved_references=0,near_blank_pages=0,
                                reference_start_page=reference_page,
                                sha256=digest(ROOT/(name+".pdf")))
-    result=dict(bundled_files_checked=len(checked),caption_panels_checked=caption_panels_checked,summary_rows_checked=len(d["summary"]),
+    result=dict(bundled_files_checked=len(checked),evidence_text_artifacts_checked=len(table_manifest['artifacts']),caption_panels_checked=caption_panels_checked,summary_rows_checked=len(d["summary"]),
                 paired_samples=len(samples),delivered_cap_summary_rows_checked=len(cap_data["summary"]),
                 delivered_cap_influence_contrasts_checked=len(influence["rows"]),
                 released_warmstart_tensors_matched=reference["compared"],

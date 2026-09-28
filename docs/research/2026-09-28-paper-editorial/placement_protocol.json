@@ -1,0 +1,8 @@
+{
+  "declared_utc": "2026-09-28T06:39:06.282442+00:00",
+  "script_sha256": "ec8407a500ce08f13fbe1f4251d88bde06b42cbccbd85bf48d023ddc1356496e",
+  "protocol": "All53 original QP32 frames; fixed Q90 router and Bayer maps; three deterministic permutations within identical valid tile extent strata; same permutation for paired policies; all maps and all sequences retained. Primary loss: log ratio of mean shuffled RGB MSE to original RGB MSE, averaged equally over sequences. Conditional paired sequence bootstrap. No outcome inspection used to select this design.",
+  "intended_cases": 424,
+  "gpu": false,
+  "root": "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/research/placement_replay_qp32"
+}

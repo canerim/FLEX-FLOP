@@ -1,66 +1,36 @@
-\section{From Shared Exits to Model Selection}
+\section{From Shared Exits to Independent Depths}
 \label{sec:depth}
 
-The early-exit result raises a second allocation question: how much
-reconstruction quality does sharing a representation and synthesis prefix
-cost compared with specialising each capacity? Our next study compares
-independently trained DCVC-UF codecs retaining 2/4/6/8/10/12 synthesis
-blocks. Following ClassSR's patch-to-network principle~\cite{kong2021classsr},
-a later selector will route each patch to one member of this bank. Their encoder and entropy parameters also
-learn, so their latents are not interchangeable exits of the current model.
-\Cref{tab:depth} reports exact capacity and experimental status; completed
-final matched RD and latency results are pending.
+Shared early exit commits every region to one encoded representation.
+An independent codec can specialise its representation for a smaller
+synthesis network, but forfeits that reuse. This motivates our complementary
+2/4/6/8/10/12-block DCVC-UF bank (\cref{fig:overview}), where a later
+ClassSR-inspired selector will choose a codec before encoding each region.
+D2/D4/D6 are training; D8/D10 are planned and D12 is the released anchor.
+No six-expert routing result is claimed.
 
-Each variant preserves the opening upsampler and output head. D2 removes
-73.0\% of D12's synthesis parameters but only 24.6\% of complete-codec
-parameters, because analysis and entropy capacity remain. A same-recipe
-D12 trained from scratch must complement the released anchor to isolate
-depth from training provenance. Likewise, attributing a gap between this
-bank and the older e15 fine-tuning run specifically to weight sharing
-requires matched data, initialisation and optimisation controls.
+\paragraph{A controlled capacity frontier.}
+The scratch runs preserve the pinned official 105-epoch
+recipe~\cite{microsoft2026training}, including all 384,795 Open Images
+train\_0/1/2 images, batch size 16 and FP32. Analysis and entropy weights
+learn alongside synthesis, so equal QP does not imply equal coded rate.
+A frozen epoch-20 diagnostic on 100 DIV2K centre crops uses 2,000 actual
+CPU bitstreams across D2/D4/D6 and released D12. At 0.2 payload bpp, D6
+exceeds D2 by 0.183\,dB RGB on the 99 images with common rate support.
+These interim curves establish a measurable depth frontier; final
+same-recipe D12 and matched shared-exit training are still required to
+attribute differences to depth or weight sharing. The supplement gives
+the schedule, counts and complete curves.
 
-\begin{table}[t]
-\centering
-\caption{\textbf{DCVC-UF capacity controls, not quality predictions.}
-Parameter counts are architectural. Final matched RD and timing are pending
-for the controlled depth experiment. All figures are in millions.}
-\label{tab:depth}
-\setlength{\tabcolsep}{4pt}
-\input{data/refresh20260927/depth_capacity_table}
-\end{table}
-
-\paragraph{Training and evaluation.}
-The independent runs retain the pinned official 105-epoch
-recipe~\cite{microsoft2026training}, all 384,795 Open Images train\_0/1/2
-images, batch size 16 and FP32. The supplement records the schedule and
-execution settings. Four validation crops monitor health; final comparison
-requires common achieved RD, complete coded bytes and paired timing.
-Equal QP is not equal rate across codecs.
-
-\paragraph{Specialisation changes the decision path.}
-Unlike shared exits, separately trained codecs may learn different analysis
-transforms and entropy distributions. Choosing D4 after encoding with D12
-is therefore not a valid substitute for encoding with D4. The selector must
-act on cheap source-side features before the chosen codec runs; its training
-target should reflect reconstruction benefit, coded rate and measured cost,
-rather than a texture label alone. This is the compression-specific
-qualification to the ClassSR analogy.
-
-\paragraph{Later encoder-side selection.}
-The proposed MLP in the upper path of \cref{fig:overview} selects an expert before patch
-encoding and transmits its identity. Controls are full-frame D12,
-patchwise D12, a validation-selected fixed expert and blind mixtures.
-Leave-one-expert-out tests measure patch-specific value. Training,
-calibration and test images stay separate; timing includes grouping,
-entropy resets, signalling and fallback. A frozen epoch-20 diagnostic on 100 DIV2K centre crops gives D6 a
-0.183 dB mean RGB advantage over D2 at 0.2 actual payload bpp (99 images
-on common support). The supplement reports the full interim curves; these
-do not establish final quality or routed runtime.
-
-\paragraph{A budget is also a scheduling problem.}
-Expert latency depends on the number of assigned patches and their packing,
-not just on nominal model size. The pinned native codec allocates batch-one
-buffers; batched expert execution needs additional implementation. The
-supplement specifies a prospective grouped-runtime objective. Comparing
-shared exits with independent experts must charge entropy work, selection,
-transfers and assembly at matched achieved rate and quality.
+\paragraph{The spatial cost of specialisation.}
+Patchwise expert selection also changes geometry and entropy boundaries.
+With identical D6 weights, independently coded regions lose quality at
+matched rate; increasing context alone does not remove their rate cost.
+In a separate fixed D2/D6 assignment, merging compatible neighbouring
+regions improves matched-rate quality while retaining the same per-pixel
+depth map. These controls, detailed in the supplement, make patchwise D12
+and blind expert mixtures essential baselines before a selector receives
+credit. The eventual comparison must match achieved rate and quality,
+charge signalling and grouping, and measure the effect of expert occupancy
+on latency. It will test when independent specialisation is worth more
+than shared-prefix reuse.

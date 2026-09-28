@@ -420,6 +420,18 @@ standard deviation, and the QP is divided by 63. Checkpoint inspection is
 recorded in \texttt{design\_audit.json}. This corrects the broader description
 one would obtain by reading the router class defaults alone.
 
+For tile errors $M_{t,k}$, exit costs $c_k$ and
+$L_{t,k}=M_{t,k}+\lambda_c c_k$, the softened target is
+\begin{equation}
+ p^*_{t,k}\propto\exp\!\left[-\frac{L_{t,k}-\min_j L_{t,j}}
+ {\tau\,\max(\max_j L_{t,j}-\min_j L_{t,j},\epsilon)}\right].
+ \label{eq:softtarget}
+\end{equation}
+The range normalisation controls the sharpness separately for each tile;
+$\lambda_c=1.3\times10^{-5}$ and $\tau=0.1$. This target is combined with
+the recorded regret term. It supervises a relative exit preference and
+does not calibrate the assembled image's loss.
+
 The companion run record matches the checkpoint path, codec epoch, live
 inputs and stored evaluation statistics. It records 6,000 updates, batch
 size six, 512-pixel crops, seed zero, initial learning rate $10^{-3}$ and a
@@ -440,6 +452,17 @@ alongside the decoder. Each model consequently has its own representation,
 distinct from the shared-latent exits evaluated in the main paper.
 \Cref{fig:bank} shows a possible later deployment path, not an implemented
 six-expert result.
+
+\begin{table}[t]
+\centering
+\caption{\textbf{The independent DCVC-UF capacity controls.}
+Architectural parameter counts in millions; synthesis includes the
+upsampler and output head. D8/D10 are planned, and released D12 has a
+different training history from the ongoing scratch runs.}
+\label{tab:depth}
+\setlength{\tabcolsep}{4pt}
+\input{data/refresh20260927/depth_capacity_table}
+\end{table}
 
 \paragraph{The pinned training protocol.}
 The source is Microsoft's image-training recipe at commit

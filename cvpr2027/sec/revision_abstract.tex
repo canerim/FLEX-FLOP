@@ -1,23 +1,22 @@
 \begin{abstract}
-A fast learned codec still applies the same synthesis depth to every image
-region. FLEX-UF studies a different allocation of computation: spend depth
-where it improves reconstruction, and stop elsewhere. We develop this
-principle in the intra model of DCVC-UF through spatial early exit. One
-coded representation feeds a shared stem and a nested synthesis path;
-tiles depart through exit adapters before a common repair and reconstruction
-head. This mechanism connects naturally to a complementary, ClassSR-inspired
-design that selects among independently trained 2/4/6/8/10/12-block codecs.
-We report shared-exit results and a frozen epoch-20 depth diagnostic
-with actual coded bytes; final model-bank evaluation remains ongoing. On 53 intra frames at five quality indices,
-learned routing removes \MainRouterSaving\% of modelled synthesis
-multiply--accumulates at a nominal 0.1\,dB YCbCr-MSE target, including \MainPremium\
-percentage points beyond ordered dithering under source-calibrated control.
-Retrospective selection under a
-common cropped-MSE cap retains a 2.93-point margin over all 265 pairs.
-The margin contracts as the cheapest exit saturates: adaptation is most
-valuable when regions benefit differently from additional depth.
-A QP32 replay with sequence-disjoint controls leaves the paired routing
-margin unresolved. The results establish an arithmetic--quality trade-off
-and delimit its deployment gap: external calibration, model-bank routing
-and complete-bitstream latency remain to be evaluated.
+The benefit of another decoder layer varies across an image, yet DCVC-UF
+applies the same synthesis depth everywhere. We introduce FLEX-UF, a
+spatial early-exit extension of its intra model. A shared coded
+representation and synthesis prefix feed tiles that stop at different
+depths. Exit adapters assemble their features for one full-frame repair
+and reconstruction head; only surviving tiles execute later blocks.
+We evaluate two distinct sources of efficiency: reducing average depth
+and choosing where to retain it. Across 53 intra frames at five quality
+indices, learned routing saves \MainRouterSaving\% of modelled synthesis
+multiply--accumulates at a nominal 0.1\,dB YCbCr-MSE target under
+per-source calibration. Of this saving, \MainPremium\ percentage points
+exceed ordered dithering, which mixes depths without predicting their
+spatial value. Retrospective selection under a common measured-loss cap
+retains a 2.93-point margin over all 265 pairs. This margin contracts as
+the shallowest exit saturates. Fixing controls on other sequences removes
+per-source calibration, but a QP32 reconstruction replay does not yet
+resolve the paired routing advantage. These results identify where
+adaptive depth can add value while separating arithmetic savings from
+unmeasured codec latency. An ongoing independent-depth study extends
+the same allocation question from shared exits to codec selection.
 \end{abstract}

@@ -1,5 +1,6 @@
 """Generate manuscript numbers and compact tables from bundled DCVC-UF data."""
 from pathlib import Path
+import hashlib
 import json
 ROOT=Path(__file__).resolve().parents[1]
 DATA=ROOT/'data/refresh20260927'
@@ -30,13 +31,43 @@ def main():
         r=rows[rule];table.append(f"{label} & {r['mean']:.2f} & {r['mean_loss']:.4f} & {r['fallbacks']} \\\\")
     table += [r'\bottomrule',r'\end{tabular}']
     (DATA/'delivered_cap_table.tex').write_text(header+'\n'.join(table)+'\n')
-    table=[r'\begin{tabular}{lrrl}',r'\toprule',r'Depth & Decoder & Complete codec & Status \\',r'\midrule']
+    table=[r'\begin{tabular}{lrrl}',r'\toprule',r'Depth & Synthesis & Complete codec & Status \\',r'\midrule']
     for r in design['parameters']['rows']:
         status='Training' if r['depth']<8 else 'Planned' if r['depth']<12 else 'Released anchor'
         table.append(f"D{r['depth']} & {r['decoder_parameters']/1e6:.2f} & {r['total_parameters']/1e6:.2f} & {status} \\\\")
     table += [r'\bottomrule',r'\end{tabular}']
     (DATA/'depth_capacity_table.tex').write_text(header+'\n'.join(table)+'\n')
-    print('Generated 22 evidence macros and two data-backed tables; no forecast results.')
+    replay=json.loads((ROOT/'data/research20260927/shared_crossfit_qp32/analysis.json').read_text())
+    rows={(r['criterion'],r['policy']):r for r in replay['summaries']}
+    table=[r'\begin{tabular}{llrrr}',r'\toprule',
+           r'Control & Policy & MAC saved & RGB loss & $>0.1$ \\',
+           r' & & (\%) & (dB) & (/53) \\',r'\midrule']
+    for criterion,label in [('mean','Mean'),('q90','Q90')]:
+        for i,(policy,name) in enumerate([('uniform','Uniform'),('dither','Dither'),('router','Router')]):
+            r=rows[criterion,policy];m=r['metrics'];assert r['n']==53
+            values=[label if i==0 else '',name,
+                    f"{m['saving_points']['mean']:.2f}",
+                    f"{m['cropped_rgb_loss_db']['mean']:.4f}",
+                    str(r['above_nominal_target']['cropped_rgb_loss_db'])]
+            table.append(' & '.join(values)+r' \\')
+        if criterion=='mean':table.append(r'\midrule')
+    table += [r'\bottomrule',r'\end{tabular}']
+    (DATA/'fixed_control_table.tex').write_text(header+'\n'.join(table)+'\n')
+    sources=[DATA/'delivered_frontier_audit.json',DATA/'exit_depth_profile.json',
+             DATA/'design_audit.json',ROOT/'data/research20260927/shared_crossfit_qp32/analysis.json']
+    artifacts=['design_macros.tex','delivered_cap_table.tex','depth_capacity_table.tex','fixed_control_table.tex']
+    digest=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
+    manifest={'script_sha256':digest(Path(__file__)),
+              'source_sha256':{str(p.relative_to(ROOT)):digest(p) for p in sources},
+              'artifacts':{name:digest(DATA/name) for name in artifacts},
+              'scope':'Three numerical tables and 22 macros generated only from bundled measured/architectural records.'}
+    (DATA/'evidence_tables_manifest.json').write_text(json.dumps(manifest,indent=2)+'\n')
+    # Update generated artifacts only; never rebaseline the measured source hashes.
+    bundle=json.loads((DATA/'bundle_manifest.json').read_text())
+    for name in artifacts+['evidence_tables_manifest.json']:
+        bundle[name]=digest(DATA/name)
+    (DATA/'bundle_manifest.json').write_text(json.dumps(bundle,indent=2)+'\n')
+    print('Generated 22 evidence macros and three data-backed tables; no forecast results.')
 
 
 if __name__=='__main__':main()

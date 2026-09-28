@@ -15,66 +15,65 @@ execution and measured allocations appear in \cref{fig:system,fig:maps}.}
 \section{Introduction}
 \label{sec:intro}
 
-An image does not demand the same reconstruction effort everywhere.
-Additional synthesis layers may recover detail in one region while changing
-another very little. Yet a conventional learned codec commits both regions
-to the same network depth. Faster operators reduce the price of this uniform
-computation; spatial adaptation asks a complementary question: \emph{where
-is the next unit of computation worth spending?}
+Consider two regions decoded from the same image. In one, another pair of
+synthesis blocks improves reconstruction; in the other, it changes little.
+A fixed-depth decoder pays for both. Efficient operators make this work
+cheaper, but leave the allocation unchanged. Spatial early exit asks a
+complementary question: \emph{where is further decoding worth its cost?}
 
 We investigate this question in the intra model supplied with
 DCVC-UF~\cite{li2026dcvcuf}. Its synthesis transform contains twelve
 constant-width blocks between upsampling and reconstruction, providing a
-concrete axis along which to vary capacity. Our aim is to turn that fixed
-stack into an image-dependent allocation of work. The relevant signal is
-not visual complexity alone. A textured patch need not benefit most from
-the next block pair at every bitrate; allocation should reflect the
-reconstruction benefit of additional computation under the chosen quality
-constraint.
+concrete axis along which to vary capacity. We turn this fixed stack into
+an image-dependent allocation of depth. Following the incremental-benefit
+view of adaptive patch exiting~\cite{wang2022ape}, a useful decision reflects
+what additional processing can recover, rather than texture alone. In a
+codec, that benefit also depends on the information preserved at the chosen
+rate: a visually complex region need not justify the deepest reconstruction.
 
 There are two natural ways to make this decision
 (\cref{fig:overview}). \emph{Across models}, a selector assigns each patch
 to a codec of suitable capacity, following the patch-to-network principle
-of ClassSR~\cite{kong2021classsr}. \emph{Within a model}, a stopping rule
-lets different patches leave a shared synthesis stack at different depths,
-related to adaptive patch exiting~\cite{wang2022ape}. Both approaches make
-computation spatially variable, but they make different commitments.
-Independent codecs can specialise their representations; nested exits reuse
-one representation and the computation already performed. FLEX-UF takes
-shared early exit as its first implemented and evaluated mechanism, and
-uses a controlled independent-depth study to investigate this trade-off.
+of ClassSR~\cite{kong2021classsr}. \emph{Within a model}, different patches
+leave a shared synthesis stack at different depths. The distinction is
+where the commitment is made. An independent codec is chosen before
+encoding and can learn its own representation; an exit is chosen after
+one representation has been recovered and reuses its synthesis prefix.
+FLEX-UF implements and evaluates the latter. The six-depth bank is a
+complementary study of how specialisation trades against this reuse.
 
 Inside a codec, early exit requires more than attaching intermediate
 outputs. Features at different depths must support a common reconstruction;
 conditional tiles lose some spatial context; and choosing an exit can itself
 require expensive candidate decoding. FLEX-UF addresses execution with a
 full-frame stem, a shrinking batch of active tiles, pointwise exit adapters,
-and a shared repair and reconstruction head. Only surviving tiles traverse
-the next block pair. The frozen analysis and entropy path supplies one
-common latent, so synthesis effort can vary without independently encoding
-every candidate depth.
+and a shared repair and reconstruction head. Exited tiles leave the active
+batch, making the conditional path an actual reduction in executed blocks.
+The frozen analysis and entropy path supplies one common latent; its
+payload can support different stopping maps without re-encoding the image.
 
-We then separate the value of \emph{cheaper depth} from the value of
+We separate the value of \emph{cheaper depth} from the value of
 \emph{content-dependent placement}. Uniform depth tests global truncation.
 Ordered dithering permits mixtures of depths without predicting where
 extra synthesis is useful. Under source-calibrated control, learned routing
-improves on this stronger baseline by \MainPremium\ percentage points of synthesis MAC saving at a
-nominal 0.1\,dB target, above dithering's \MainDitherSaving\% reduction.
-That increment shrinks near the shallowest-exit ceiling. This pattern
-locates the useful regime for adaptation: there must be both remaining
-compute to remove and meaningful differences in where deeper processing
-helps. A common delivered-loss analysis retains the same qualitative result.
-A separate QP32 replay with sequence-disjoint controls tests the harder
-deployment question: its paired routing margin remains statistically
-unresolved. We therefore distinguish evidence for useful allocation from
-evidence that a deployable selector reliably captures that value.
+improves on this stronger baseline by \MainPremium\ percentage points of
+synthesis MAC saving at a nominal 0.1\,dB target, above dithering's
+\MainDitherSaving\% reduction. That increment shrinks near the shallowest-exit
+ceiling. Adaptation has most room to help when extra depth still matters
+but does not matter equally everywhere. A common delivered-loss analysis
+retains this pattern. A separate QP32 replay fixes controls on other
+sequences; its paired routing margin remains statistically unresolved.
+This separates evidence for useful allocation from evidence that a
+source-independent stopping control reliably captures that value.
 
-We contribute a spatially conditional DCVC-UF synthesis path with reusable
-prefixes, aligned exits and full-frame boundary repair, and a controlled
-evaluation that separates cheaper depth from useful spatial placement.
-Blind mixtures, paired uncertainty estimates and a common measured-loss
-cap expose when learned allocation adds value and when its margin contracts.
-The six-depth independent-codec study then tests the complementary cost of
-specialisation; its ongoing training is not counted as a completed routing
-result. The present stopping controls use source calibration. Autonomous
-selection and complete codec speedups require the next experimental stage.
+Our contribution has two parts. First, we provide a spatially conditional
+DCVC-UF synthesis path with a shared latent, reusable prefixes and
+feature-aligned exits. Second, we evaluate the value of learned placement
+against uniform depth and blind mixtures, then test how that conclusion
+changes under a common measured-loss cap and fixed controls. This connects
+the architecture to a falsifiable efficiency claim: routing should earn
+its additional cost through better allocation, rather than through the
+availability of shallow exits alone. Frozen-weight interventions and a
+separate-stream decoding check probe the mechanism. The independent-depth
+study remains ongoing; the present evidence establishes synthesis
+arithmetic savings, while complete codec speedups require measured execution.
