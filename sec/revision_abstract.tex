@@ -11,11 +11,13 @@ We report shared-exit results and a frozen epoch-20 depth diagnostic
 with actual coded bytes; final model-bank evaluation remains ongoing. On 53 intra frames at five quality indices,
 learned routing removes \MainRouterSaving\% of modelled synthesis
 multiply--accumulates at a nominal 0.1\,dB YCbCr-MSE target, including \MainPremium\
-percentage points beyond ordered dithering. Retrospective selection under a
+percentage points beyond ordered dithering under source-calibrated control.
+Retrospective selection under a
 common cropped-MSE cap retains a 2.93-point margin over all 265 pairs.
 The margin contracts as the cheapest exit saturates: adaptation is most
 valuable when regions benefit differently from additional depth.
-These results establish an arithmetic--quality trade-off under
-source-calibrated control; autonomous calibration, model-bank routing and
-complete-bitstream latency remain to be evaluated.
+A QP32 replay with sequence-disjoint controls leaves the paired routing
+margin unresolved. The results establish an arithmetic--quality trade-off
+and delimit its deployment gap: external calibration, model-bank routing
+and complete-bitstream latency remain to be evaluated.
 \end{abstract}

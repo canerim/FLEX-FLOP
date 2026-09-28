@@ -46,7 +46,7 @@ Kod hash'leri bu inceleme anına ait; eski benchmark yürütme anında tutulmam�
 
 Kaydedilen synthesis MAC saving oranlarına `S_router` ve `S_dither` diyelim.
 **Yalnızca süre MAC ile orantılı varsayılırsa**, router'ın ek karar maliyeti
-tam decoder süresinin `(S_router - S_dither)/100` oranını aşmamalıdır.
+full-frame synthesis süresinin `(S_router - S_dither)/100` oranını aşmamalıdır.
 Bu varsayım altında dither synthesis süresine göre başa baş eşiği:
 
 `ek maliyet / T_dither < (S_router - S_dither) / (100 - S_dither)`.
@@ -91,3 +91,32 @@ Mevcut eğitim sonrası `paired_runtime.py` bu uçtan uca testi çözmüyor: o
 script açıkça analysis/synthesis modüllerinin neural süresini ölçmek için
 hazırlandı. Yararlı bir kapasite kontrolü, fakat bankalı codec'in son hız
 iddiası için yukarıdaki byte akışı yine gerekli.
+
+## 5. 28 Eylül: gerçek yürütülen router ve native encoder bağımlılıkları
+
+53 CTC/QP32 frame üzerinde frozen checkpoint'ten yeniden hesaplanan router,
+mean ve Q90 kontrollerinin her birinde 1.765 tile kararının tamamını tekrar
+üretti. CPU/GPU log olasılıkları birebir eşit değil; en büyük mutlak fark
+0,02266. Dolayısıyla yalnız bu iki kontrolün karar eşitliği doğrulandı.
+
+Forward hook'ları gerçek yürütülen `proj_stem` ile üç Linear katmanını saydı:
+289,715 MAC/padded-image-pixel. Latent/scale ve bit feature'ları bu run'da
+görüntüye bağlı bilgi taşımıyor; checkpoint mimarisindeki sabit girdiler
+MLP boyutunda korunuyor. Pooling, LayerNorm, aktivasyon, karar, taşıma ve
+dispatch bu sayıya dahil değil. Küçük MAC sayısı, küçük duvar saati maliyetini
+tek başına kanıtlamaz. Ayrıntı: `data/research20260927/shared_crossfit_qp32/router_logit_audit.json`.
+
+Pinned native DCVC-UF kaynak kodunda latent hazır olduğunda kaydedilen CUDA
+event'i entropy worker'ını serbest bırakıyor. Ana akışta synthesis yürürken
+worker kendi CUDA stream'inde sembolleri topluyor, host'a aktarıyor ve CPU'da
+rANS bitstream'ini bitiriyor. `compress` worker'ı bekliyor; GPU reconstruction'ın
+tamamlanmasını ölçmek için çağıran tarafta CUDA synchronization da gerekiyor.
+Bu bağımlılıklar örtüşmeye izin verir; gerçekleşen örtüşme henüz ölçülmedi.
+Bu nedenle modül sürelerini toplayarak encoder latency üretmeyiz.
+Kaynak diyagramı: `figs/research20260927/native_execution/fig_native_encoder_dependencies.pdf`.
+
+Native correctness harness'inin dört checkpoint/CDF/binary CPU preflight'ı
+geçti. İki görüntü × yedi geometri × üç QP ve bir tekrar, model başına
+43 GPU doğruluk vakası olarak hazır. 288×512 ve 512×288 birleşik-region
+boyutları da dahil. GPU doğruluğu, resident-expert switching ve timing
+henüz çalıştırılmadı; resmî eğitimlerin GPU'larına müdahale edilmedi.

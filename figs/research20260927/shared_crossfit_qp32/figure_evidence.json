@@ -1,0 +1,664 @@
+{
+  "analysis_sha256": "5fc1cb221d6ef89c9c5f0754aeea942529ac42614595ec38cd4d7f3731a88253",
+  "script_sha256": "79d10a5f4f2c9f9f969949c917a1277b7b6f35b214ae26b471b2e7a9a56ac9bd",
+  "captions": [
+    {
+      "name": "fig_crossfit_actual_replay",
+      "caption": "All six fixed control/policy combinations replayed on every sequence. Controls are cross-fitted across sequences, while router weights are fixed. Panel a reports achieved explicitly converted/clipped RGB loss against e15 full-frame synthesis and architectural synthesis MAC saving, with conditional paired-sequence bootstrap intervals. It is not an equal-quality frontier. The paired router-minus-dither saving intervals include zero: mean control1.87pp[\u22121.60,5.19], Q90control2.54pp[\u22120.42,5.54]; these53-sequence results do not establish a positive allocation premium. Panel b reports paired RGB-minus-unclipped444 losses on identical cropped support and reference. Panel c counts RGB losses above the same numeric nominal threshold; control calibration used a different metric, support and reference, so this does not isolate a calibration error. Panel d compares actual padded loss against archived scalar R with the table prediction; backend and historical implementation effects are not separated from mixed-map effects. All53 sequences, including infeasible calibration cases, remain included. This is development-corpus neural replay, not a causal bitstream or native runtime benchmark."
+    }
+  ],
+  "layout_audit": [
+    {
+      "figure": "fig_crossfit_actual_replay",
+      "outside_canvas": [],
+      "text": [
+        {
+          "text": "a",
+          "size_pt": 8.0,
+          "bbox_px": [
+            20.317322834645672,
+            386.1877952755905,
+            6.0,
+            10.427517361111086
+          ]
+        },
+        {
+          "text": "Final cropped RGB loss (dB)",
+          "size_pt": 6.5,
+          "bbox_px": [
+            131.4251968503937,
+            245.70779592492346,
+            119.0,
+            9.0
+          ]
+        },
+        {
+          "text": "0.05",
+          "size_pt": 6.0,
+          "bbox_px": [
+            82.73335532204726,
+            260.263351480479,
+            14.0,
+            7.820638020833314
+          ]
+        },
+        {
+          "text": "0.06",
+          "size_pt": 6.0,
+          "bbox_px": [
+            123.5179811023009,
+            260.263351480479,
+            14.0,
+            7.820638020833314
+          ]
+        },
+        {
+          "text": "0.07",
+          "size_pt": 6.0,
+          "bbox_px": [
+            164.30260688255458,
+            260.263351480479,
+            14.0,
+            7.820638020833314
+          ]
+        },
+        {
+          "text": "0.08",
+          "size_pt": 6.0,
+          "bbox_px": [
+            205.08723266280822,
+            260.263351480479,
+            14.0,
+            7.820638020833314
+          ]
+        },
+        {
+          "text": "0.09",
+          "size_pt": 6.0,
+          "bbox_px": [
+            245.87185844306185,
+            260.263351480479,
+            14.0,
+            7.820638020833314
+          ]
+        },
+        {
+          "text": "0.10",
+          "size_pt": 6.0,
+          "bbox_px": [
+            286.6564842233155,
+            260.263351480479,
+            14.0,
+            7.820638020833314
+          ]
+        },
+        {
+          "text": "Synthesis MAC saving (%)",
+          "size_pt": 6.5,
+          "bbox_px": [
+            26.74890638670166,
+            271.95275590551176,
+            9.000000000000004,
+            112.0
+          ]
+        },
+        {
+          "text": "15",
+          "size_pt": 6.0,
+          "bbox_px": [
+            41.30446194225722,
+            287.8441491797222,
+            8.0,
+            7.820638020833314
+          ]
+        },
+        {
+          "text": "20",
+          "size_pt": 6.0,
+          "bbox_px": [
+            41.30446194225722,
+            317.0611158703241,
+            8.0,
+            7.820638020833314
+          ]
+        },
+        {
+          "text": "25",
+          "size_pt": 6.0,
+          "bbox_px": [
+            41.30446194225722,
+            346.27808256092607,
+            8.0,
+            7.820638020833314
+          ]
+        },
+        {
+          "text": "Achieved quality and synthesis arithmetic",
+          "size_pt": 6.7,
+          "bbox_px": [
+            57.637795275590555,
+            388.599300087489,
+            173.0,
+            9.0
+          ]
+        },
+        {
+          "text": "b",
+          "size_pt": 8.0,
+          "bbox_px": [
+            380.55354330708656,
+            386.1877952755905,
+            7.0,
+            10.427517361111086
+          ]
+        },
+        {
+          "text": "Router",
+          "size_pt": 6.0,
+          "bbox_px": [
+            447.73907140917726,
+            260.263351480479,
+            23.0,
+            7.820638020833314
+          ]
+        },
+        {
+          "text": "Dither",
+          "size_pt": 6.0,
+          "bbox_px": [
+            540.6614173228346,
+            260.263351480479,
+            21.0,
+            7.820638020833314
+          ]
+        },
+        {
+          "text": "Uniform",
+          "size_pt": 6.0,
+          "bbox_px": [
+            629.0837632364919,
+            260.263351480479,
+            28.0,
+            7.820638020833314
+          ]
+        },
+        {
+          "text": "RGB loss \u2212 444 loss ($10^{-3}$ dB)",
+          "size_pt": 6.5,
+          "bbox_px": [
+            383.9851268591426,
+            264.95275590551176,
+            11.0,
+            126.0
+          ]
+        },
+        {
+          "text": "\u22123",
+          "size_pt": 6.0,
+          "bbox_px": [
+            400.54068241469815,
+            294.4006445059394,
+            9.0,
+            7.820638020833314
+          ]
+        },
+        {
+          "text": "\u22122",
+          "size_pt": 6.0,
+          "bbox_px": [
+            400.54068241469815,
+            319.6057492876565,
+            9.0,
+            7.820638020833314
+          ]
+        },
+        {
+          "text": "\u22121",
+          "size_pt": 6.0,
+          "bbox_px": [
+            400.54068241469815,
+            344.81085406937365,
+            9.0,
+            7.820638020833314
+          ]
+        },
+        {
+          "text": "0",
+          "size_pt": 6.0,
+          "bbox_px": [
+            405.54068241469815,
+            370.01595885109083,
+            4.0,
+            7.820638020833314
+          ]
+        },
+        {
+          "text": "Same images, different colour metrics",
+          "size_pt": 6.7,
+          "bbox_px": [
+            417.87401574803147,
+            388.599300087489,
+            158.82812500000006,
+            9.0
+          ]
+        },
+        {
+          "text": "c",
+          "size_pt": 8.0,
+          "bbox_px": [
+            20.317322834645672,
+            217.52637795275592,
+            6.0,
+            10.427517361111114
+          ]
+        },
+        {
+          "text": "17",
+          "size_pt": 5.5,
+          "bbox_px": [
+            83.0529459679609,
+            138.69700188409965,
+            8.0,
+            7.6075981987847285
+          ]
+        },
+        {
+          "text": "16",
+          "size_pt": 5.5,
+          "bbox_px": [
+            174.9752918816182,
+            136.88874107459557,
+            8.0,
+            7.6075981987847285
+          ]
+        },
+        {
+          "text": "14",
+          "size_pt": 5.5,
+          "bbox_px": [
+            266.89763779527556,
+            133.27221945558742,
+            8.0,
+            7.6075981987847285
+          ]
+        },
+        {
+          "text": "4",
+          "size_pt": 5.5,
+          "bbox_px": [
+            108.95275590551181,
+            115.18961136054668,
+            4.0,
+            7.6075981987847285
+          ]
+        },
+        {
+          "text": "2",
+          "size_pt": 5.5,
+          "bbox_px": [
+            200.87510181916912,
+            111.57308974153852,
+            4.0,
+            7.6075981987847285
+          ]
+        },
+        {
+          "text": "2",
+          "size_pt": 5.5,
+          "bbox_px": [
+            292.79744773282647,
+            111.57308974153852,
+            4.0,
+            7.6075981987847285
+          ]
+        },
+        {
+          "text": "Router",
+          "size_pt": 6.0,
+          "bbox_px": [
+            87.50285093673635,
+            91.60193415764437,
+            23.0,
+            7.820638020833329
+          ]
+        },
+        {
+          "text": "Dither",
+          "size_pt": 6.0,
+          "bbox_px": [
+            180.42519685039366,
+            91.60193415764437,
+            21.0,
+            7.820638020833329
+          ]
+        },
+        {
+          "text": "Uniform",
+          "size_pt": 6.0,
+          "bbox_px": [
+            268.847542764051,
+            91.60193415764437,
+            28.0,
+            7.820638020833329
+          ]
+        },
+        {
+          "text": "Frames above 0.1 dB RGB loss",
+          "size_pt": 6.5,
+          "bbox_px": [
+            26.849017606319713,
+            92.79133858267716,
+            8.899888780381957,
+            133.0
+          ]
+        },
+        {
+          "text": "0",
+          "size_pt": 6.0,
+          "bbox_px": [
+            45.30446194225722,
+            102.9687147566027,
+            4.0,
+            7.820638020833329
+          ]
+        },
+        {
+          "text": "15",
+          "size_pt": 6.0,
+          "bbox_px": [
+            41.30446194225722,
+            130.0926268991638,
+            8.0,
+            7.820638020833343
+          ]
+        },
+        {
+          "text": "30",
+          "size_pt": 6.0,
+          "bbox_px": [
+            41.30446194225722,
+            157.21653904172493,
+            8.0,
+            7.820638020833343
+          ]
+        },
+        {
+          "text": "45",
+          "size_pt": 6.0,
+          "bbox_px": [
+            41.30446194225722,
+            184.34045118428608,
+            8.0,
+            7.820638020833343
+          ]
+        },
+        {
+          "text": "53",
+          "size_pt": 6.0,
+          "bbox_px": [
+            41.30446194225722,
+            198.80653766031867,
+            8.0,
+            7.820638020833343
+          ]
+        },
+        {
+          "text": "Nominal target is not a per-image bound",
+          "size_pt": 6.7,
+          "bbox_px": [
+            57.637795275590555,
+            219.93788276465443,
+            167.0,
+            9.0
+          ]
+        },
+        {
+          "text": "d",
+          "size_pt": 8.0,
+          "bbox_px": [
+            380.55354330708656,
+            217.52637795275592,
+            7.0,
+            10.427517361111114
+          ]
+        },
+        {
+          "text": "Actual \u2212 table padded loss ($10^{-4}$ dB)",
+          "size_pt": 6.5,
+          "bbox_px": [
+            476.1614173228346,
+            75.04637860208881,
+            150.0,
+            11.0
+          ]
+        },
+        {
+          "text": "\u22124",
+          "size_pt": 6.0,
+          "bbox_px": [
+            423.7789992373432,
+            91.60193415764437,
+            9.0,
+            7.820638020833329
+          ]
+        },
+        {
+          "text": "\u22123",
+          "size_pt": 6.0,
+          "bbox_px": [
+            462.2280180565656,
+            91.60193415764437,
+            9.0,
+            7.820638020833329
+          ]
+        },
+        {
+          "text": "\u22122",
+          "size_pt": 6.0,
+          "bbox_px": [
+            500.67703687578796,
+            91.60193415764437,
+            9.0,
+            7.820638020833329
+          ]
+        },
+        {
+          "text": "\u22121",
+          "size_pt": 6.0,
+          "bbox_px": [
+            539.1260556950103,
+            91.60193415764437,
+            9.0,
+            7.820638020833329
+          ]
+        },
+        {
+          "text": "0",
+          "size_pt": 6.0,
+          "bbox_px": [
+            580.0750745142327,
+            91.60193415764437,
+            4.0,
+            7.820638020833329
+          ]
+        },
+        {
+          "text": "1",
+          "size_pt": 6.0,
+          "bbox_px": [
+            618.5240933334551,
+            91.60193415764437,
+            4.0,
+            7.820638020833329
+          ]
+        },
+        {
+          "text": "2",
+          "size_pt": 6.0,
+          "bbox_px": [
+            656.9731121526775,
+            91.60193415764437,
+            4.0,
+            7.820638020833329
+          ]
+        },
+        {
+          "text": "Cumulative fraction",
+          "size_pt": 6.5,
+          "bbox_px": [
+            385.08523807876065,
+            118.79133858267716,
+            8.899888780381957,
+            81.0
+          ]
+        },
+        {
+          "text": "0.0",
+          "size_pt": 6.0,
+          "bbox_px": [
+            399.54068241469815,
+            102.9687147566027,
+            10.0,
+            7.820638020833329
+          ]
+        },
+        {
+          "text": "0.2",
+          "size_pt": 6.0,
+          "bbox_px": [
+            399.54068241469815,
+            122.79003516847429,
+            10.0,
+            7.820638020833329
+          ]
+        },
+        {
+          "text": "0.4",
+          "size_pt": 6.0,
+          "bbox_px": [
+            399.54068241469815,
+            142.61135558034587,
+            10.0,
+            7.820638020833343
+          ]
+        },
+        {
+          "text": "0.6",
+          "size_pt": 6.0,
+          "bbox_px": [
+            399.54068241469815,
+            162.43267599221747,
+            10.0,
+            7.820638020833343
+          ]
+        },
+        {
+          "text": "0.8",
+          "size_pt": 6.0,
+          "bbox_px": [
+            399.54068241469815,
+            182.25399640408907,
+            10.0,
+            7.820638020833343
+          ]
+        },
+        {
+          "text": "1.0",
+          "size_pt": 6.0,
+          "bbox_px": [
+            399.54068241469815,
+            202.07531681596063,
+            10.0,
+            7.820638020833343
+          ]
+        },
+        {
+          "text": "Replaying the archived table quantity",
+          "size_pt": 6.7,
+          "bbox_px": [
+            417.87401574803147,
+            219.93788276465443,
+            154.00000000000006,
+            9.0
+          ]
+        },
+        {
+          "text": "Matched controls do not imply matched achieved quality \u00b7 cropped losses use the same e15 dense anchor",
+          "size_pt": 6.0,
+          "bbox_px": [
+            183.73622047244095,
+            16.740157480314963,
+            352.99999999999994,
+            8.06689453125
+          ]
+        },
+        {
+          "text": "CPU neural replay \u00b7 source RGB derived from YCbCr420 \u00b7 no bitstream, native latency or external-test claim",
+          "size_pt": 5.8,
+          "bbox_px": [
+            177.30653297244095,
+            5.02755905511811,
+            365.85937499999994,
+            8.0
+          ]
+        },
+        {
+          "text": "Router",
+          "size_pt": 5.8,
+          "bbox_px": [
+            214.34733158355206,
+            47.3775492724054,
+            23.0,
+            7.695285373263893
+          ]
+        },
+        {
+          "text": "Dither",
+          "size_pt": 5.8,
+          "bbox_px": [
+            271.1806649168854,
+            47.3775492724054,
+            21.0,
+            7.695285373263893
+          ]
+        },
+        {
+          "text": "Uniform",
+          "size_pt": 5.8,
+          "bbox_px": [
+            326.0139982502187,
+            47.3775492724054,
+            28.0,
+            7.695285373263893
+          ]
+        },
+        {
+          "text": "Mean calibration",
+          "size_pt": 5.8,
+          "bbox_px": [
+            387.8473315835521,
+            47.3775492724054,
+            56.0,
+            7.695285373263893
+          ]
+        },
+        {
+          "text": "Q90 calibration",
+          "size_pt": 5.8,
+          "bbox_px": [
+            477.68066491688535,
+            47.072834645669296,
+            51.0,
+            8.0
+          ]
+        }
+      ],
+      "duplicated_headings_moved_to_caption": [
+        "Fixed controls, actual reconstructions",
+        "All 53 CTC first frames \u00b7 QP32 \u00b7 nominal 0.1 dB control \u00b7 318 policy replays"
+      ],
+      "width_mm": 183.0,
+      "height_mm": 102.99022222222222
+    }
+  ]
+}

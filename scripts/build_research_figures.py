@@ -9,6 +9,8 @@ def main():
     for family in manifest['families']:
         folder=family['folder'];source=ROOT/'data/research20260927'/folder/family['data_file'];script=ROOT/'scripts'/family['script']
         assert sha(source)==family['data_sha256'];assert sha(script)==family['plot_script_sha256']
+        for name,digest in family.get('auxiliary_files_sha256',{}).items():
+            assert sha(source.parent/name)==digest
         subprocess.run([sys.executable,str(script)],cwd=ROOT,check=True)
         output=ROOT/'figs/research20260927'/folder
         artifacts={p.name:sha(p) for p in sorted(output.iterdir()) if p.suffix in ('.pdf','.svg','.png')}

@@ -28,6 +28,37 @@
       "data_file": "analysis.json",
       "data_sha256": "c1263d3455faeab02604dab10f794ec25cbe5f47e9b51a48308a446691e08efc",
       "plot_script_sha256": "8bbba51515c65dc981b640aa89961071ff7af216a03a2b718a9fb3ef61fb531e"
+    },
+    {
+      "folder": "shared_crossfit_qp32",
+      "script": "plot_crossfit_replay_20260927.py",
+      "data_file": "analysis.json",
+      "data_sha256": "5fc1cb221d6ef89c9c5f0754aeea942529ac42614595ec38cd4d7f3731a88253",
+      "plot_script_sha256": "79d10a5f4f2c9f9f969949c917a1277b7b6f35b214ae26b471b2e7a9a56ac9bd",
+      "auxiliary_files_sha256": {
+        "router_logit_audit.json": "767bd6745d2d4d54ed80186984dc5ba105f24e65126a9e571ebc76c0d42584cc"
+      }
+    },
+    {
+      "folder": "native_padding",
+      "script": "plot_native_padding_20260927.py",
+      "data_file": "analysis.json",
+      "data_sha256": "5668f6eb771e77fe740157dfb2fe95b7d17a2ae2f7fd628a0c2b283dfd2346f6",
+      "plot_script_sha256": "1c88bd2151153dee5e3b0cd5b87f6cf00a1ee941bc892caae669da558845353e"
+    },
+    {
+      "folder": "patch_control_epoch020",
+      "script": "plot_patch_control_20260927.py",
+      "data_file": "analysis.json",
+      "data_sha256": "5fd05c4f16ad274b92df2fd499ed8d9df460acfe8fe0bbe011c65f3a3639fe88",
+      "plot_script_sha256": "b8fcc866b3150b3f556fa1b3fa7fb869f3b562e983ee6fd779bccc00ac0415a5"
+    },
+    {
+      "folder": "native_execution",
+      "script": "plot_native_execution_20260928.py",
+      "data_file": "analysis.json",
+      "data_sha256": "5bcfcc0fd71fab244fa612f059a322b19b37b67adf43254d0e8327fdd4495816",
+      "plot_script_sha256": "7367a4007d135705c9df50c3ea9472e4d2c811881082e4cbf22cad978f371ef3"
     }
   ],
   "helper_sha256": "994fa1a554ee0e30eef788a04a13e259d762ddeb65f410fbe7f60755930d2eb5"

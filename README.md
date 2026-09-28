@@ -32,4 +32,10 @@ The original template documentation is preserved in
 
 The supplement now includes all100 DIV2K centre512 crops × D2/D4/D6/releasedD12 × five QPs (2,000 independent encode/decode checks). D2/D4/D6 are unfinished epoch20/105 checkpoints, not final models; releasedD12 has different training history. At0.2 actual payload bpp on99 common supported images, D6−D2 is0.1834dB RGB PSNR. The expanded coverage, actual-versus-estimated rate, feature associations and whole-crop allocation controls are in `data/research20260927`. The latter is an optimistic allocation diagnostic, not a trained patch router.
 
-`python scripts/build_research_figures.py` renders the portable new vector figures. `python scripts/reproduce_figures.py` verifies bit-identical artifact reproduction from the bundled data, without training checkpoints, source images or GPU. The full suite currently contains23 vector figure sets; the two conceptual AI illustrations remain separately identified. Figure 1 is preserved exactly in the September 28 redesign.
+`python scripts/build_research_figures.py` renders the portable new vector figures. `python scripts/reproduce_figures.py` verifies bit-identical artifact reproduction from the bundled data, without training checkpoints, source images or GPU. The full suite currently contains29 vector figure sets; the two conceptual AI illustrations remain separately identified. Figure 1 is preserved exactly in the September 28 redesign.
+
+## Fixed-policy and spatial-region controls
+
+The supplementary replay retains all 53 QP32 frames and all 318 fixed-policy outputs. Both paired router-minus-dither confidence intervals include zero. Fresh CPU router inference reproduces all 1,765 tile choices under each of the two fixed controls; log-probabilities themselves are not bit-identical across the historical GPU and CPU paths.
+
+The independent-region control retains 240 model–image–QP cases, with actual research-stream bytes and independent decoding. Moving padding from the source image to the latent recovers 0.2652 dB for D6 at 0.2 payload bpp, but independently coded halo32 regions still lose 1.0262 dB against full-frame D6. These are interim CPU geometry results, not native CUDA timings. A source-derived stream-dependency diagram explains why encoder stage times must not simply be added.
