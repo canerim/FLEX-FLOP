@@ -1,0 +1,325 @@
+{
+  "recorded_utc": "2026-09-28T02:59:38.235254+00:00",
+  "earliest_finish_utc": "2026-09-28T03:06:18+00:00",
+  "goal_still_active": true,
+  "parent_commit": "fc2a063f5afcf2395609bec3a8f0858a363f65df",
+  "publication_commit": "ffce09464dd2cfef8a63e5332bffa85e28013d29",
+  "publication_remote": "canerim/cvpr2027 main",
+  "completed_research": {
+    "patch_control_epoch020": {
+      "state": "complete",
+      "started_utc": "2026-09-28T00:03:12.239747+00:00",
+      "pid": 487813,
+      "completed": 240,
+      "total": 240,
+      "depth": 12,
+      "image": "0900.png",
+      "qp": 63,
+      "updated_utc": "2026-09-28T00:48:31.746754+00:00",
+      "elapsed_seconds": 2719.5068224938586,
+      "finished_utc": "2026-09-28T00:48:32.326726+00:00"
+    },
+    "shared_crossfit_qp32": {
+      "state": "complete",
+      "pid": 487814,
+      "started_utc": "2026-09-28T00:03:14.080838+00:00",
+      "completed_sequences": 53,
+      "total_sequences": 53,
+      "completed_policy_cases": 318,
+      "sequence": "videoSRC30_1920x1080_30.yuv",
+      "updated_utc": "2026-09-28T00:48:40.676233+00:00",
+      "elapsed_seconds": 2726.595208130777,
+      "finished_utc": "2026-09-28T00:48:40.916890+00:00"
+    },
+    "patch_native_shape_epoch020": {
+      "state": "complete",
+      "started_utc": "2026-09-28T00:03:12.281475+00:00",
+      "pid": 487815,
+      "completed": 240,
+      "total": 240,
+      "script_sha256": "b28ae212f6136d51b1d4059f7e375257504ea969c820d7518627c2837bc29a80",
+      "scope": "CPU padding-policy ablation only; not CUDA runtime or wire compatibility",
+      "legacy_completed": 239,
+      "updated_utc": "2026-09-28T01:19:34.561000+00:00",
+      "depth": 12,
+      "image": "0900.png",
+      "qp": 63,
+      "elapsed_seconds": 1852.1302686007693,
+      "finished_utc": "2026-09-28T01:19:35.100273+00:00"
+    },
+    "region_merge_epoch020": {
+      "state": "complete",
+      "pid": 499248,
+      "started_utc": "2026-09-28T00:07:32.919474+00:00",
+      "completed": 80,
+      "total": 80,
+      "source_sha256": {
+        "decode_worker.py": "576507ecd736e94a45ea3dcaddd0842bdf979819fecce9b4938ea32b5f1e3067",
+        "evaluate.py": "906665cc2250ae1101a4dffec496eba7221774499081195e41b9760b5610acf3",
+        "layout.py": "532e25a1f685f219636daea22a9aabf3cf059e785bb307db1ef8b928900d41ef"
+      },
+      "native_padding_completed": 240,
+      "updated_utc": "2026-09-28T01:53:11.826566+00:00",
+      "image": "0900.png",
+      "qp": 63,
+      "finished_utc": "2026-09-28T01:53:12.345220+00:00"
+    },
+    "router_logit_replay_qp32": {
+      "state": "complete",
+      "pid": 661099,
+      "started_utc": "2026-09-28T00:57:52.761371+00:00",
+      "completed": 53,
+      "total": 53,
+      "sequence": "videoSRC30_1920x1080_30.yuv",
+      "updated_utc": "2026-09-28T01:20:15.956445+00:00",
+      "finished_utc": "2026-09-28T01:20:15.956908+00:00",
+      "cuda_initialized": false
+    },
+    "component_interventions_qp32": {
+      "state": "complete",
+      "pid": 714210,
+      "started_utc": "2026-09-28T01:15:43.907997+00:00",
+      "completed": 53,
+      "total": 53,
+      "sequence": "videoSRC30_1920x1080_30.yuv",
+      "updated_utc": "2026-09-28T02:08:45.156996+00:00",
+      "cuda_initialized": false,
+      "finished_utc": "2026-09-28T02:08:45.317557+00:00"
+    },
+    "released_anchor_qp32": {
+      "state": "complete",
+      "pid": 798537,
+      "started_utc": "2026-09-28T01:38:20.585717+00:00",
+      "completed": 53,
+      "total": 53,
+      "sequence": "videoSRC30_1920x1080_30.yuv",
+      "updated_utc": "2026-09-28T02:14:55.093123+00:00",
+      "finished_utc": "2026-09-28T02:14:55.563840+00:00",
+      "cuda_initialized": false
+    },
+    "shared_stream_preflight": {
+      "state": "complete",
+      "pid": 963379,
+      "started_utc": "2026-09-28T02:28:13.703924+00:00",
+      "completed": 8,
+      "total": 8,
+      "sequence": "BQMall_832x480_60.yuv",
+      "profile": "cyclic",
+      "updated_utc": "2026-09-28T02:29:17.215465+00:00",
+      "finished_utc": "2026-09-28T02:29:18.370771+00:00",
+      "all_exact": true,
+      "cuda_initialized": false
+    }
+  },
+  "training_monitor": {
+    "timestamp": "2026-09-28T02:55:15.284217+00:00",
+    "watch_pid": 678641,
+    "runs": {
+      "2": {
+        "depth": 2,
+        "gpu": 1,
+        "pid": 274119,
+        "state": "running",
+        "process_alive": true,
+        "global_step": 899014,
+        "epochs_completed": 37.38259387084702,
+        "progress_percent": 35.602470353187634,
+        "status_age_seconds": 9.705609321594238,
+        "last_progress_unix": 1790564115.2842174,
+        "progress_age_seconds": 0.0,
+        "step_seconds": 0.10767629351032278,
+        "nonfinite_skips": 0,
+        "checkpoint": {
+          "bytes": 381905665,
+          "age_seconds": 112.76806306838989
+        },
+        "validation_step": 889813,
+        "validation_epoch": 37,
+        "validation_lag_epochs": 0,
+        "validation_failure_unresolved": false,
+        "recipe_mismatches": [],
+        "final_outputs_ready": false,
+        "eta_hours_estimate": 72.25498210692511,
+        "alerts": []
+      },
+      "4": {
+        "depth": 4,
+        "gpu": 3,
+        "pid": 274121,
+        "state": "running",
+        "process_alive": true,
+        "global_step": 872565,
+        "epochs_completed": 36.282797621522725,
+        "progress_percent": 34.55504535383117,
+        "status_age_seconds": 1.4992122650146484,
+        "last_progress_unix": 1790564115.2842174,
+        "progress_age_seconds": 0.0,
+        "step_seconds": 0.11471435717803737,
+        "nonfinite_skips": 0,
+        "checkpoint": {
+          "bytes": 406859681,
+          "age_seconds": 64.20172071456909
+        },
+        "validation_step": 865764,
+        "validation_epoch": 36,
+        "validation_lag_epochs": 0,
+        "validation_failure_unresolved": false,
+        "recipe_mismatches": [],
+        "final_outputs_ready": false,
+        "eta_hours_estimate": 78.67890199998898,
+        "alerts": []
+      },
+      "6": {
+        "depth": 6,
+        "gpu": 6,
+        "pid": 274120,
+        "state": "running",
+        "process_alive": true,
+        "global_step": 710822,
+        "epochs_completed": 29.557237307164538,
+        "progress_percent": 28.14974981634718,
+        "status_age_seconds": 30.010003328323364,
+        "last_progress_unix": 1790564115.2842174,
+        "progress_age_seconds": 0.0,
+        "step_seconds": 0.19339366558473559,
+        "nonfinite_skips": 0,
+        "checkpoint": {
+          "bytes": 431813697,
+          "age_seconds": 187.5470278263092
+        },
+        "validation_step": 697421,
+        "validation_epoch": 29,
+        "validation_lag_epochs": 0,
+        "validation_failure_unresolved": false,
+        "recipe_mismatches": [],
+        "final_outputs_ready": false,
+        "eta_hours_estimate": 125.95795354373323,
+        "alerts": []
+      }
+    },
+    "alerts": [],
+    "automatic_training_mutations": false,
+    "checkpoint_integrity": {
+      "timestamp": "2026-09-28T02:45:12.563715+00:00",
+      "device": "cpu",
+      "runs": {
+        "2": {
+          "path": "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/runs/d2/resume.pt",
+          "ok": true,
+          "global_step": 892000,
+          "epoch": 37,
+          "decoder_indices": [
+            0,
+            1,
+            2
+          ],
+          "nonfinite_tensor_keys": []
+        },
+        "4": {
+          "path": "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/runs/d4/resume.pt",
+          "ok": true,
+          "global_step": 866000,
+          "epoch": 36,
+          "decoder_indices": [
+            0,
+            1,
+            2,
+            3,
+            4
+          ],
+          "nonfinite_tensor_keys": []
+        },
+        "6": {
+          "path": "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/runs/d6/resume.pt",
+          "ok": true,
+          "global_step": 706000,
+          "epoch": 29,
+          "decoder_indices": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6
+          ],
+          "nonfinite_tensor_keys": []
+        }
+      },
+      "ok": true
+    },
+    "snapshot_hashes_verified": true,
+    "disk_free_gib": {
+      "/data10/shareddata/can_karsal/dcvcuf_depth_20260927": 3989.435531616211,
+      "/home/can_karsal/FLEX-PLUS/experiments/dcvcuf_depth_official_20260927": 111.4294548034668
+    },
+    "gpu_csv": "1, 97, 5348, 69\n3, 97, 6236, 67\n6, 100, 15990, 74",
+    "final_analysis_state": "pending"
+  },
+  "epoch030_queue": {
+    "state": "waiting_epoch030",
+    "pid": 895582,
+    "started_utc": "2026-09-28T02:08:39.856621+00:00",
+    "target_epoch": 30,
+    "models": {
+      "2": {
+        "checkpoint_exists": true,
+        "validation": "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/runs/d2/validation/step_000721470.json"
+      },
+      "4": {
+        "checkpoint_exists": true,
+        "validation": "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/runs/d4/validation/step_000721470.json"
+      },
+      "6": {
+        "checkpoint_exists": false,
+        "validation": null
+      }
+    },
+    "updated_utc": "2026-09-28T02:58:40.875096+00:00"
+  },
+  "queued_code_hashes_unchanged": true,
+  "next_native_protocol": "NEXT_NATIVE_EXPERIMENT_TR.md",
+  "clean_publication_verification": {
+    "bundled_files_checked": 153,
+    "caption_panels_checked": 28,
+    "summary_rows_checked": 24,
+    "paired_samples": 6108,
+    "delivered_cap_summary_rows_checked": 24,
+    "delivered_cap_influence_contrasts_checked": 6,
+    "released_warmstart_tensors_matched": 398,
+    "uniform_depth_summary_rows_checked": 24,
+    "analytical_scenarios_checked": 36,
+    "independently_instantiated_depths_checked": 6,
+    "vector_figure_sets": 32,
+    "conceptual_ai_illustrations": 2,
+    "min_figure_font_pt": 5.2,
+    "text_outside_canvas": 0,
+    "compiled_documents": {
+      "main": {
+        "pages": 9,
+        "all_fonts_embedded": true,
+        "unresolved_references": 0,
+        "near_blank_pages": 0,
+        "reference_start_page": 9,
+        "sha256": "b45cdf5d13d005843ae1f542485d7084209938323da39fe301121812f3dcbcdc"
+      },
+      "supplement": {
+        "pages": 23,
+        "all_fonts_embedded": true,
+        "unresolved_references": 0,
+        "near_blank_pages": 0,
+        "reference_start_page": 23,
+        "sha256": "d6c1b932568900e148441ddebc0a4739dfddf6e9e7b8b9e5e7d5d262aff992aa"
+      }
+    },
+    "scope": "Integrity and internal consistency of the supplied publication bundle, not historical-run reproduction or a new codec evaluation"
+  },
+  "paper_pages": {
+    "main": 9,
+    "supplement": 23
+  },
+  "brief_pages": 2,
+  "vector_sets": 32,
+  "reproduced_artifacts": 111,
+  "fig1_sha256": "45f15d5951b72c1ac8da6c34fd6593d271615a1922b7c3ebfc22b331fec09cf8"
+}

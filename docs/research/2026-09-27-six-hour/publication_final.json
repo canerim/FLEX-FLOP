@@ -1,0 +1,209 @@
+{
+  "recorded_utc": "2026-09-28T03:04:56.949406+00:00",
+  "publication_commit": "ffce09464dd2cfef8a63e5332bffa85e28013d29",
+  "figure1_sha256": "45f15d5951b72c1ac8da6c34fd6593d271615a1922b7c3ebfc22b331fec09cf8",
+  "watch": {
+    "timestamp": "2026-09-28T03:00:15.395672+00:00",
+    "watch_pid": 678641,
+    "runs": {
+      "2": {
+        "depth": 2,
+        "gpu": 1,
+        "pid": 274119,
+        "state": "running",
+        "process_alive": true,
+        "global_step": 901814,
+        "epochs_completed": 37.499022828392036,
+        "progress_percent": 35.713355074659084,
+        "status_age_seconds": 9.106665849685669,
+        "last_progress_unix": 1790564415.3956718,
+        "progress_age_seconds": 0.0,
+        "step_seconds": 0.10721664192372313,
+        "nonfinite_skips": 0,
+        "checkpoint": {
+          "bytes": 381905665,
+          "age_seconds": 202.62829613685608
+        },
+        "validation_step": 889813,
+        "validation_epoch": 37,
+        "validation_lag_epochs": 0,
+        "validation_failure_unresolved": false,
+        "recipe_mismatches": [],
+        "final_outputs_ready": false,
+        "eta_hours_estimate": 71.96396535927087,
+        "alerts": []
+      },
+      "4": {
+        "depth": 4,
+        "gpu": 3,
+        "pid": 274121,
+        "state": "running",
+        "process_alive": true,
+        "global_step": 875165,
+        "epochs_completed": 36.39091022495738,
+        "progress_percent": 34.658009738054645,
+        "status_age_seconds": 11.351566791534424,
+        "last_progress_unix": 1790564415.3956718,
+        "progress_age_seconds": 0.0,
+        "step_seconds": 0.11449819233020146,
+        "nonfinite_skips": 0,
+        "checkpoint": {
+          "bytes": 406859681,
+          "age_seconds": 138.6001114845276
+        },
+        "validation_step": 865764,
+        "validation_epoch": 36,
+        "validation_lag_epochs": 0,
+        "validation_failure_unresolved": false,
+        "recipe_mismatches": [],
+        "final_outputs_ready": false,
+        "eta_hours_estimate": 78.49697838768478,
+        "alerts": []
+      },
+      "6": {
+        "depth": 6,
+        "gpu": 6,
+        "pid": 274120,
+        "state": "running",
+        "process_alive": true,
+        "global_step": 712422,
+        "epochs_completed": 29.623768140047403,
+        "progress_percent": 28.213112514330863,
+        "status_age_seconds": 22.741232872009277,
+        "last_progress_unix": 1790564415.3956718,
+        "progress_age_seconds": 0.0,
+        "step_seconds": 0.1937814665643188,
+        "nonfinite_skips": 0,
+        "checkpoint": {
+          "bytes": 431813697,
+          "age_seconds": 103.92154812812805
+        },
+        "validation_step": 697421,
+        "validation_epoch": 29,
+        "validation_lag_epochs": 0,
+        "validation_failure_unresolved": false,
+        "recipe_mismatches": [],
+        "final_outputs_ready": false,
+        "eta_hours_estimate": 126.0672718465603,
+        "alerts": []
+      }
+    },
+    "alerts": [],
+    "automatic_training_mutations": false,
+    "checkpoint_integrity": {
+      "timestamp": "2026-09-28T02:45:12.563715+00:00",
+      "device": "cpu",
+      "runs": {
+        "2": {
+          "path": "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/runs/d2/resume.pt",
+          "ok": true,
+          "global_step": 892000,
+          "epoch": 37,
+          "decoder_indices": [
+            0,
+            1,
+            2
+          ],
+          "nonfinite_tensor_keys": []
+        },
+        "4": {
+          "path": "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/runs/d4/resume.pt",
+          "ok": true,
+          "global_step": 866000,
+          "epoch": 36,
+          "decoder_indices": [
+            0,
+            1,
+            2,
+            3,
+            4
+          ],
+          "nonfinite_tensor_keys": []
+        },
+        "6": {
+          "path": "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/runs/d6/resume.pt",
+          "ok": true,
+          "global_step": 706000,
+          "epoch": 29,
+          "decoder_indices": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6
+          ],
+          "nonfinite_tensor_keys": []
+        }
+      },
+      "ok": true
+    },
+    "snapshot_hashes_verified": true,
+    "disk_free_gib": {
+      "/data10/shareddata/can_karsal/dcvcuf_depth_20260927": 3989.4354934692383,
+      "/home/can_karsal/FLEX-PLUS/experiments/dcvcuf_depth_official_20260927": 111.28865051269531
+    },
+    "gpu_csv": "1, 79, 5348, 68\n3, 96, 6236, 68\n6, 96, 15990, 74",
+    "final_analysis_state": "pending"
+  },
+  "epoch030_queue": {
+    "state": "waiting_epoch030",
+    "pid": 895582,
+    "started_utc": "2026-09-28T02:08:39.856621+00:00",
+    "target_epoch": 30,
+    "models": {
+      "2": {
+        "checkpoint_exists": true,
+        "validation": "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/runs/d2/validation/step_000721470.json"
+      },
+      "4": {
+        "checkpoint_exists": true,
+        "validation": "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/runs/d4/validation/step_000721470.json"
+      },
+      "6": {
+        "checkpoint_exists": false,
+        "validation": null
+      }
+    },
+    "updated_utc": "2026-09-28T03:04:40.986197+00:00"
+  },
+  "queue_process_alive": true,
+  "clean_archive_verification": {
+    "bundled_files_checked": 153,
+    "caption_panels_checked": 28,
+    "summary_rows_checked": 24,
+    "paired_samples": 6108,
+    "delivered_cap_summary_rows_checked": 24,
+    "delivered_cap_influence_contrasts_checked": 6,
+    "released_warmstart_tensors_matched": 398,
+    "uniform_depth_summary_rows_checked": 24,
+    "analytical_scenarios_checked": 36,
+    "independently_instantiated_depths_checked": 6,
+    "vector_figure_sets": 32,
+    "conceptual_ai_illustrations": 2,
+    "min_figure_font_pt": 5.2,
+    "text_outside_canvas": 0,
+    "compiled_documents": {
+      "main": {
+        "pages": 9,
+        "all_fonts_embedded": true,
+        "unresolved_references": 0,
+        "near_blank_pages": 0,
+        "reference_start_page": 9,
+        "sha256": "b45cdf5d13d005843ae1f542485d7084209938323da39fe301121812f3dcbcdc"
+      },
+      "supplement": {
+        "pages": 23,
+        "all_fonts_embedded": true,
+        "unresolved_references": 0,
+        "near_blank_pages": 0,
+        "reference_start_page": 23,
+        "sha256": "d6c1b932568900e148441ddebc0a4739dfddf6e9e7b8b9e5e7d5d262aff992aa"
+      }
+    },
+    "scope": "Integrity and internal consistency of the supplied publication bundle, not historical-run reproduction or a new codec evaluation"
+  },
+  "overleaf_scope": "GitHub source remote verified; Overleaf UI not inspected",
+  "minimum_finish_utc": "2026-09-28T03:06:18+00:00"
+}
