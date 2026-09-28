@@ -2,7 +2,8 @@
 \centering
 \includegraphics[width=\textwidth]{figs/refresh20260927/fig2_budget_value.pdf}
 \caption{\textbf{Early exit supplies the saving; spatial routing adds a budget-dependent margin.}
-\textbf{a}, Modelled synthesis MAC reduction for four stopping rules.
+\textbf{a}, Measured operating points shown in orthographic 3D; the
+policy axis is categorical and ribbons only guide the eye.
 \textbf{b}, Paired advantages over Bayer dithering, with 95\% sequence-cluster
 intervals; the shaded row highlights 0.1\,dB. QP and fixed-cohort analyses
 are in the supplement.
@@ -16,14 +17,12 @@ the $\Delta_{444}$ MSE-ratio loss defined in \cref{sec:method}.}
 \label{sec:experiments}
 
 \subsection{Evaluation protocol}
-We evaluate the first intra frame of 53 video sequences at QP values
-$\{0,16,32,48,63\}$, giving 265 frame--QP pairs. Every policy uses the same
-pinned e15 shared-latent checkpoint, the same tile geometry and the same
-per-exit cost vector. The learned rule uses one fixed router checkpoint.
-Six target budgets span 0.05--0.5\,dB. The source-calibrated archive contains actual mixed reconstructions.
-Additional CPU experiments test fixed controls, the released reference and
-component dependence. Every numerical decoder comparison concerns DCVC-UF;
-no experiment here measures complete GPU codec latency.
+We evaluate the first intra frame of 53 sequences at QPs
+$\{0,16,32,48,63\}$: 265 frame--QP pairs, six targets from 0.05 to
+0.5\,dB, and identical e15 weights, tile geometry and exit costs for all
+policies. The archive contains actual mixed reconstructions. Additional
+CPU replays test fixed controls, reference drift and component dependence.
+All decoder comparisons concern DCVC-UF; complete GPU latency is unmeasured.
 
 Two complementary protocols answer different questions. The \emph{nominal
 sweep} compares maps selected under the same table target, retaining the
@@ -76,7 +75,7 @@ maps have identical recorded losses and costs. The evaluated e15 full-frame
 output supplies a zero-loss, zero-saving fallback; no quality point is
 interpolated.
 
-\Cref{tab:cap} reports the 0.1\,dB case. The router saves \CapRouterSaving\% versus
+\Cref{fig:deliveredcap} reports the 0.1\,dB case. The router saves \CapRouterSaving\% versus
 \CapDitherSaving\% for dithering, a \CapMainGain-point paired difference [\CapMainLow,\CapMainHigh]. Their
 mean achieved losses are also close: \CapRouterLoss{} and \CapDitherLoss\,dB. Only one router
 case uses the full-frame fallback, compared with two dither cases.
@@ -84,23 +83,16 @@ The margin survives a common measured cap. Selection remains retrospective
 and source-aware, omits candidate-acquisition cost, and searches only the
 recorded outputs.
 
-\begin{table}[t]
-\centering
-\caption{\textbf{Recorded outputs under a common 0.1\,dB YCbCr~4:4:4-loss cap.}
-All 265 pairs are included. Loss is relative to cropped e15 full-frame
-synthesis. MAC saving excludes the retrospective candidate-selection cost.}
-\label{tab:cap}
-\setlength{\tabcolsep}{3.5pt}
-\input{data/refresh20260927/delivered_cap_table}
-\end{table}
 
 \begin{figure}[t]
 \centering
 \includegraphics[width=\columnwidth]{figs/extended20260927/figS7_delivered_increment.pdf}
 \caption{\textbf{Placement matters most before the cheap exit saturates.}
-Paired router--dither MAC-saving differences under a common measured
-YCbCr~4:4:4-loss cap, with 95\% sequence-cluster intervals.
-All 265 pairs remain; e15 full-frame is the fallback.
+\textbf{a}, Achieved mean loss and MAC saving for all four policies at the
+0.1\,dB cap. \textbf{b}, Paired router--dither saving differences across
+measured YCbCr~4:4:4-loss caps, with 95\% sequence-cluster intervals.
+All 265 pairs remain; uniform/dither/router/search use the e15 full-frame
+fallback 11/2/1/2 times.
 Selection is retrospective and source-aware.}
 \label{fig:deliveredcap}
 \end{figure}
@@ -120,45 +112,45 @@ At the 0.1\,dB delivered cap, routing saves more in 170 pairs, less in 24,
 and ties in 71. At 0.5\,dB, 262 of 265 pairs tie; the residual gain comes
 from one sequence.
 
-The maps in \cref{fig:maps} make the mechanism visible. At the 0.1\,dB
-target, the router spends different depths on different regions. At
-0.3\,dB, search, routing and dithering all assign depth six on this frame,
-saving 39.1\% MACs at 0.201\,dB measured YCbCr~4:4:4 loss. We select this example from the five archived thumbnails by proximity to
-the aggregate 0.1\,dB margin. Source luma supplies context, not a visual
-quality comparison.
+The eight sources in \cref{fig:maps} show how routing changes with
+content and budget. Relaxing the target admits more shallow exits, while
+routing, dithering and source search spend depth differently. A fixed
+sequence-name hash and dataset quotas select sources without using outcomes;
+infeasible cases remain. Luma supplies spatial context, not quality evidence.
 
-A histogram-preserving diagnostic further separates spatial placement from
-exit proportions. Randomly permuting a map leaves its cost unchanged. We
-compute the exact expected table MSE under that permutation and compare it
-with the recorded assignment. At 0.1\,dB, the router's mean placement gain
-is 0.0213\,dB [0.0167,0.0262], whereas dithering's is 0.0007\,dB
-[$-0.0002$,0.0017]. This table-based association holds the histogram fixed; replaying permuted
-maps through the final head remains a separate ablation.
+A reconstruction intervention isolates placement from exit proportions.
+For every QP32 Q90 map, we replay three permutations within equal
+valid-tile extents, preserving depth counts and depth-weighted valid area:
+53 frames and two policies give 424 map cases. Relative to the mean
+shuffled RGB MSE, original router placement gains 0.0139\,dB
+[0.0095,0.0193]; dithering's gain is 0.0004\,dB [$-0.0003$,0.0010].
+Unchanged maps remain included. These intervals condition on three sampled
+permutations and the fixed development cohort. The intervention supports
+spatial value, not a net-runtime or external-test advantage.
 
 \begin{figure*}[t]
 \centering
 \includegraphics[width=\textwidth]{figs/refresh20260927/fig5_spatial_decisions.pdf}
-\caption{\textbf{Adaptive depth changes where synthesis work is spent.}
-\textbf{a}, Source luma for spatial context. \textbf{b--d}, Recorded router,
-Bayer and source-search maps at the 0.1\,dB target, QP32.
-Colour gives exit depth; annotations give synthesis MAC saving and cropped
-YCbCr~4:4:4 loss. Uniform depth eight gives 24.2\% saving and 0.082\,dB loss.
-Maps use valid image extent; the text states the example-selection rule.}
+\caption{\textbf{Adaptive computation across content and budget.}
+\textbf{a--h}, Eight sources selected by sequence-name hash within fixed
+dataset quotas. Each row shows source luma, router maps at nominal
+0.05/0.10/0.30\,dB, and dithering/source-search maps at 0.10\,dB.
+Colours encode executed depth on valid image extent; N/A retains infeasible
+cases. All maps are recorded at QP32 with source-calibrated controls.
+Source thumbnails show content, not reconstruction quality.}
 \label{fig:maps}
 \end{figure*}
 
 \subsection{Fixed controls test the routing advantage}
 \label{sec:fixedcontrol}
 
-Source-calibrated allocation gives the selector information that a cheap
-stopping rule would ideally avoid. We therefore fit its scalar control on
-four sequence folds and apply it to the fifth, keeping all QPs of each
-sequence together. Calibration minimises compute subject to a mean or
-90th-percentile (Q90) table-loss target. We then replay every fixed map
-at QP32 through the actual network: 53 frames, three policies and two
-controls give 318 reconstructions, with no quality-based fallback.
+To remove per-source calibration, we fit each scalar control on four
+sequence folds and apply it to the fifth, keeping all QPs together.
+Calibration minimises compute under a mean or 90th-percentile (Q90)
+table-loss target. Actual QP32 replay gives 318 reconstructions:
+53 frames, three policies and two controls, with no quality fallback.
 
-\Cref{tab:fixedcontrol} reports cropped RGB loss against e15 full-frame
+\Cref{fig:fixedcontrol} reports cropped RGB loss against e15 full-frame
 synthesis. Q90 calibration lowers the observed frequency of losses above
 0.1\,dB, at the cost of less arithmetic saving. The router--dither saving
 difference is 1.87 points under mean control, with a paired 95\% interval
@@ -167,17 +159,17 @@ $[-0.42,5.54]$. Both include zero, and the policies do not have exactly
 matched achieved quality. Thus the source-calibrated margin has not yet
 been established for fixed controls.
 
-\begin{table}[t]
+\begin{figure}[t]
 \centering
-\caption{\textbf{Fixed controls trade average saving against quality risk.}
-Actual CPU reconstructions on all 53 QP32 frames. Controls are fitted to
-padded 444 loss on other sequences; the table reports cropped RGB loss
-against e15 full-frame. Equal calibration targets do not imply equal
-achieved quality. The final column counts losses above 0.1\,dB.}
-\label{tab:fixedcontrol}
-\setlength{\tabcolsep}{3pt}
-\input{data/refresh20260927/fixed_control_table}
-\end{table}
+\includegraphics[width=\columnwidth]{figs/editorial20260928/fig_fixed_control.pdf}
+\caption{\textbf{Fixed controls trade saving against quality risk.}
+Actual reconstructions on all 53 QP32 frames. Colour identifies the policy;
+filled circles and open squares denote mean and Q90 calibration.
+Labels count RGB losses above 0.1\,dB. Axes report achieved RGB loss
+against e15 full-frame and modelled synthesis MAC saving.
+Controls fitted on other sequence folds do not match achieved quality.}
+\label{fig:fixedcontrol}
+\end{figure}
 
 This is a calibration diagnostic on development-used data, not an untouched
 test set. Two similar-content pairs cross the sequence folds; grouping them
@@ -219,10 +211,8 @@ medians pool 24 trials over eight frames; raw timing distributions and
 device load were not retained. They indicate the cost of acquiring decision
 information, not an end-to-end speedup. The supplement details the stages.
 
-A fixed-control predictor can avoid this table, but the evaluated
-source-calibrated router cannot: its per-frame $\beta$ uses the same error
-information. The next latency experiment must compare full decision paths,
-including feature generation, calibration, signalling, conditional execution
-and final verification. At a loose quality budget, where the router and blind
-maps nearly coincide, even small additional overhead may remove the practical
-benefit of content prediction.
+A fixed-control predictor can avoid the error table; the source-calibrated
+router cannot, because its per-frame $\beta$ uses the same information.
+Latency comparisons must charge feature generation, calibration, signalling,
+conditional execution and verification. Where learned and blind maps nearly
+coincide, even small prediction overhead can erase the benefit.

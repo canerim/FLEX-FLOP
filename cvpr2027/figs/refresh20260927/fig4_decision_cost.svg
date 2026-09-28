@@ -1576,7 +1576,7 @@ L 510.23622 132.641868
     <text style="font-weight: 700; font-size: 8px; font-family: 'Liberation Sans'; text-anchor: start; fill: #20313e" x="8.503937" y="13.311149" transform="rotate(-0 8.503937 13.311149)">a</text>
    </g>
    <g id="text_2">
-    <text style="font-size: 6.7px; font-family: 'Liberation Sans'; text-anchor: start; fill: #20313e" x="21.259843" y="12.974723" transform="rotate(-0 21.259843 12.974723)">The source is available at the encoder, but the error table must be computed</text>
+    <text style="font-size: 7px; font-family: 'Liberation Sans'; text-anchor: start; fill: #20313e" x="21.259843" y="13.05236" transform="rotate(-0 21.259843 13.05236)">The source is available at the encoder, but the error table must be computed</text>
    </g>
    <g id="patch_190">
     <path d="M 24.094488 71.491719
@@ -1603,66 +1603,66 @@ z
 " clip-path="url(#pecdd3d0e9f)" style="fill: #e5edf2; stroke: #586874; stroke-width: 0.4; stroke-linejoin: miter"/>
    </g>
    <g id="text_3">
-    <text style="font-size: 6.5px; font-family: 'Liberation Sans'; text-anchor: middle; fill: #20313e" x="36.850394" y="87.112485" transform="rotate(-0 36.850394 87.112485)">Latent</text>
+    <text style="font-size: 7px; font-family: 'Liberation Sans'; text-anchor: middle; fill: #20313e" x="36.850394" y="87.241879" transform="rotate(-0 36.850394 87.241879)">Latent</text>
    </g>
    <g id="text_4">
-    <text style="font-size: 6.5px; font-family: 'Liberation Sans'; text-anchor: middle; fill: #20313e" x="136.062992" y="33.15647" transform="rotate(-0 136.062992 33.15647)">Repeated tiled decodes</text>
+    <text style="font-size: 7px; font-family: 'Liberation Sans'; text-anchor: middle; fill: #20313e" x="136.062992" y="33.285865" transform="rotate(-0 136.062992 33.285865)">Repeated tiled decodes</text>
    </g>
    <g id="text_5">
-    <text style="font-size: 6.5px; font-family: 'Liberation Sans'; text-anchor: middle; fill: #20313e" x="136.062992" y="89.360652" transform="rotate(-0 136.062992 89.360652)">Shared work repeats</text>
+    <text style="font-size: 7px; font-family: 'Liberation Sans'; text-anchor: middle; fill: #20313e" x="136.062992" y="89.490046" transform="rotate(-0 136.062992 89.490046)">Shared work repeats</text>
    </g>
    <g id="text_6">
-    <text style="font-size: 6.5px; font-family: 'Liberation Sans'; text-anchor: middle; fill: #20313e" x="246.614173" y="62.382645" transform="rotate(-0 246.614173 62.382645)">M[t,k]</text>
+    <text style="font-size: 7px; font-family: 'Liberation Sans'; text-anchor: middle; fill: #20313e" x="246.614173" y="62.512039" transform="rotate(-0 246.614173 62.512039)">M[t,k]</text>
    </g>
    <g id="text_7">
-    <text style="font-size: 6.5px; font-family: 'Liberation Sans'; text-anchor: middle; fill: #20313e" x="246.614173" y="87.112485" transform="rotate(-0 246.614173 87.112485)">Source error table</text>
+    <text style="font-size: 7px; font-family: 'Liberation Sans'; text-anchor: middle; fill: #20313e" x="246.614173" y="87.241879" transform="rotate(-0 246.614173 87.241879)">Source error table</text>
    </g>
    <g id="text_8">
-    <text style="font-size: 6.5px; font-family: 'Liberation Sans'; text-anchor: middle; fill: #20313e" x="348.661417" y="51.141809" transform="rotate(-0 348.661417 51.141809)">Budget search</text>
+    <text style="font-size: 7px; font-family: 'Liberation Sans'; text-anchor: middle; fill: #20313e" x="348.661417" y="51.271203" transform="rotate(-0 348.661417 51.271203)">Budget search</text>
    </g>
    <g id="text_9">
-    <text style="font-size: 6.5px; font-family: 'Liberation Sans'; text-anchor: middle; fill: #20313e" x="348.661417" y="87.112485" transform="rotate(-0 348.661417 87.112485)">Choose λ / β / mixture</text>
+    <text style="font-size: 7px; font-family: 'Liberation Sans'; text-anchor: middle; fill: #20313e" x="348.661417" y="87.241879" transform="rotate(-0 348.661417 87.241879)">Choose λ / β / mixture</text>
    </g>
    <g id="text_10">
-    <text style="font-size: 6.5px; font-family: 'Liberation Sans'; text-anchor: middle; fill: #20313e" x="464.88189" y="51.141809" transform="rotate(-0 464.88189 51.141809)">Mixed reconstruction</text>
+    <text style="font-size: 7px; font-family: 'Liberation Sans'; text-anchor: middle; fill: #20313e" x="464.88189" y="51.271203" transform="rotate(-0 464.88189 51.271203)">Mixed reconstruction</text>
    </g>
    <g id="text_11">
-    <text style="font-size: 6.5px; font-family: 'Liberation Sans'; text-anchor: middle; fill: #20313e" x="464.88189" y="87.112485" transform="rotate(-0 464.88189 87.112485)">Measure delivered loss</text>
+    <text style="font-size: 7px; font-family: 'Liberation Sans'; text-anchor: middle; fill: #20313e" x="464.88189" y="87.241879" transform="rotate(-0 464.88189 87.241879)">Measure delivered loss</text>
    </g>
    <g id="text_12">
-    <text style="font-weight: 700; font-size: 6.5px; font-family: 'Liberation Sans'; text-anchor: start; fill: #20313e" x="19.84252" y="107.34599" transform="rotate(-0 19.84252 107.34599)">One-pass alternative</text>
+    <text style="font-weight: 700; font-size: 7px; font-family: 'Liberation Sans'; text-anchor: start; fill: #20313e" x="19.84252" y="107.475384" transform="rotate(-0 19.84252 107.475384)">One-pass alternative</text>
    </g>
    <g id="text_13">
-    <text style="font-size: 6.5px; font-family: 'Liberation Sans'; text-anchor: start; fill: #20313e" x="246.614173" y="114.090492" transform="rotate(-0 246.614173 114.090492)">Tap four distinct tiled exits; reuse the prefix</text>
+    <text style="font-size: 7px; font-family: 'Liberation Sans'; text-anchor: start; fill: #20313e" x="246.614173" y="114.219886" transform="rotate(-0 246.614173 114.219886)">Tap four distinct tiled exits; reuse the prefix</text>
    </g>
    <g id="text_14">
     <text style="font-weight: 700; font-size: 8px; font-family: 'Liberation Sans'; text-anchor: start; fill: #20313e" x="8.503937" y="145.953017" transform="rotate(-0 8.503937 145.953017)">b</text>
    </g>
    <g id="text_15">
-    <text style="font-size: 6.7px; font-family: 'Liberation Sans'; text-anchor: start; fill: #20313e" x="21.259843" y="145.616591" transform="rotate(-0 21.259843 145.616591)">Recorded table construction time</text>
+    <text style="font-size: 7px; font-family: 'Liberation Sans'; text-anchor: start; fill: #20313e" x="21.259843" y="145.694228" transform="rotate(-0 21.259843 145.694228)">Recorded table construction time</text>
    </g>
    <g id="text_16">
     <text style="font-weight: 700; font-size: 8px; font-family: 'Liberation Sans'; text-anchor: start; fill: #20313e" x="314.645669" y="145.953017" transform="rotate(-0 314.645669 145.953017)">c</text>
    </g>
    <g id="text_17">
-    <text style="font-size: 6.7px; font-family: 'Liberation Sans'; text-anchor: start; fill: #20313e" x="327.401575" y="145.616591" transform="rotate(-0 327.401575 145.616591)">Calibration changes the cost</text>
+    <text style="font-size: 7px; font-family: 'Liberation Sans'; text-anchor: start; fill: #20313e" x="327.401575" y="145.694228" transform="rotate(-0 327.401575 145.694228)">Calibration changes the cost</text>
    </g>
    <g id="text_18">
-    <text style="font-weight: 700; font-size: 6.5px; font-family: 'Liberation Sans'; text-anchor: start; fill: #20313e" x="328.818898" y="165.798339" transform="rotate(-0 328.818898 165.798339)">Fixed validation-selected β</text>
+    <text style="font-weight: 700; font-size: 7px; font-family: 'Liberation Sans'; text-anchor: start; fill: #20313e" x="328.818898" y="165.927733" transform="rotate(-0 328.818898 165.927733)">Fixed validation-selected β</text>
    </g>
    <g id="text_19">
-    <text style="font-size: 6.5px; font-family: 'Liberation Sans'; fill: #20313e" transform="translate(328.818898 177.601549)">Router uses decoded features.</text>
-    <text style="font-size: 6.5px; font-family: 'Liberation Sans'; fill: #20313e" transform="translate(328.818898 186.109313)">No per-frame source table is required.</text>
+    <text style="font-size: 7px; font-family: 'Liberation Sans'; fill: #20313e" transform="translate(328.818898 177.428332)">Router uses decoded features.</text>
+    <text style="font-size: 7px; font-family: 'Liberation Sans'; fill: #20313e" transform="translate(328.818898 186.590539)">No per-frame source table is required.</text>
    </g>
    <g id="text_20">
-    <text style="font-weight: 700; font-size: 6.5px; font-family: 'Liberation Sans'; text-anchor: start; fill: #20313e" x="328.818898" y="208.513516" transform="rotate(-0 328.818898 208.513516)">Per-frame source-calibrated β</text>
+    <text style="font-weight: 700; font-size: 7px; font-family: 'Liberation Sans'; text-anchor: start; fill: #20313e" x="328.818898" y="208.642911" transform="rotate(-0 328.818898 208.642911)">Per-frame source-calibrated β</text>
    </g>
    <g id="text_21">
-    <text style="font-size: 6.5px; font-family: 'Liberation Sans'; fill: #20313e" transform="translate(328.818898 219.674344)">The plotted budget sweep uses M[t,k].</text>
-    <text style="font-size: 6.5px; font-family: 'Liberation Sans'; fill: #20313e" transform="translate(328.818898 229.466874)">A fast router does not remove that cost.</text>
+    <text style="font-size: 7px; font-family: 'Liberation Sans'; fill: #20313e" transform="translate(328.818898 219.451713)">The plotted budget sweep uses M[t,k].</text>
+    <text style="font-size: 7px; font-family: 'Liberation Sans'; fill: #20313e" transform="translate(328.818898 229.997513)">A fast router does not remove that cost.</text>
    </g>
    <g id="text_22">
-    <text style="font-size: 6.5px; font-family: 'Liberation Sans'; text-anchor: start; fill: #20313e" x="19.84252" y="253.476861" transform="rotate(-0 19.84252 253.476861)">Historical timing: 8 frames × 3 repetitions at QP32. No new end-to-end latency measurement.</text>
+    <text style="font-size: 7px; font-family: 'Liberation Sans'; text-anchor: start; fill: #20313e" x="19.84252" y="253.606256" transform="rotate(-0 19.84252 253.606256)">Historical timing: 8 frames × 3 repetitions at QP32. No new end-to-end latency measurement.</text>
    </g>
    <g id="line2d_3">
     <path d="M 31.181102 73.215314
@@ -1712,7 +1712,7 @@ L 0 2.5
       </g>
      </g>
      <g id="text_23">
-      <text style="font-size: 6.5px; font-family: 'Liberation Sans'; text-anchor: middle; fill: #586874" x="54.467717" y="232.401469" transform="rotate(-0 54.467717 232.401469)">0</text>
+      <text style="font-size: 7px; font-family: 'Liberation Sans'; text-anchor: middle; fill: #586874" x="54.467717" y="232.765483" transform="rotate(-0 54.467717 232.765483)">0</text>
      </g>
     </g>
     <g id="xtick_2">
@@ -1727,7 +1727,7 @@ L 82.302554 157.776378
       </g>
      </g>
      <g id="text_24">
-      <text style="font-size: 6.5px; font-family: 'Liberation Sans'; text-anchor: middle; fill: #586874" x="82.302554" y="232.401469" transform="rotate(-0 82.302554 232.401469)">200</text>
+      <text style="font-size: 7px; font-family: 'Liberation Sans'; text-anchor: middle; fill: #586874" x="82.302554" y="232.765483" transform="rotate(-0 82.302554 232.765483)">200</text>
      </g>
     </g>
     <g id="xtick_3">
@@ -1742,7 +1742,7 @@ L 110.137392 157.776378
       </g>
      </g>
      <g id="text_25">
-      <text style="font-size: 6.5px; font-family: 'Liberation Sans'; text-anchor: middle; fill: #586874" x="110.137392" y="232.401469" transform="rotate(-0 110.137392 232.401469)">400</text>
+      <text style="font-size: 7px; font-family: 'Liberation Sans'; text-anchor: middle; fill: #586874" x="110.137392" y="232.765483" transform="rotate(-0 110.137392 232.765483)">400</text>
      </g>
     </g>
     <g id="xtick_4">
@@ -1757,7 +1757,7 @@ L 137.97223 157.776378
       </g>
      </g>
      <g id="text_26">
-      <text style="font-size: 6.5px; font-family: 'Liberation Sans'; text-anchor: middle; fill: #586874" x="137.97223" y="232.401469" transform="rotate(-0 137.97223 232.401469)">600</text>
+      <text style="font-size: 7px; font-family: 'Liberation Sans'; text-anchor: middle; fill: #586874" x="137.97223" y="232.765483" transform="rotate(-0 137.97223 232.765483)">600</text>
      </g>
     </g>
     <g id="xtick_5">
@@ -1772,7 +1772,7 @@ L 165.807067 157.776378
       </g>
      </g>
      <g id="text_27">
-      <text style="font-size: 6.5px; font-family: 'Liberation Sans'; text-anchor: middle; fill: #586874" x="165.807067" y="232.401469" transform="rotate(-0 165.807067 232.401469)">800</text>
+      <text style="font-size: 7px; font-family: 'Liberation Sans'; text-anchor: middle; fill: #586874" x="165.807067" y="232.765483" transform="rotate(-0 165.807067 232.765483)">800</text>
      </g>
     </g>
     <g id="xtick_6">
@@ -1787,7 +1787,7 @@ L 193.641905 157.776378
       </g>
      </g>
      <g id="text_28">
-      <text style="font-size: 6.5px; font-family: 'Liberation Sans'; text-anchor: middle; fill: #586874" x="193.641905" y="232.401469" transform="rotate(-0 193.641905 232.401469)">1000</text>
+      <text style="font-size: 7px; font-family: 'Liberation Sans'; text-anchor: middle; fill: #586874" x="193.641905" y="232.765483" transform="rotate(-0 193.641905 232.765483)">1000</text>
      </g>
     </g>
     <g id="xtick_7">
@@ -1802,7 +1802,7 @@ L 221.476743 157.776378
       </g>
      </g>
      <g id="text_29">
-      <text style="font-size: 6.5px; font-family: 'Liberation Sans'; text-anchor: middle; fill: #586874" x="221.476743" y="232.401469" transform="rotate(-0 221.476743 232.401469)">1200</text>
+      <text style="font-size: 7px; font-family: 'Liberation Sans'; text-anchor: middle; fill: #586874" x="221.476743" y="232.765483" transform="rotate(-0 221.476743 232.765483)">1200</text>
      </g>
     </g>
     <g id="xtick_8">
@@ -1817,7 +1817,7 @@ L 249.311581 157.776378
       </g>
      </g>
      <g id="text_30">
-      <text style="font-size: 6.5px; font-family: 'Liberation Sans'; text-anchor: middle; fill: #586874" x="249.311581" y="232.401469" transform="rotate(-0 249.311581 232.401469)">1400</text>
+      <text style="font-size: 7px; font-family: 'Liberation Sans'; text-anchor: middle; fill: #586874" x="249.311581" y="232.765483" transform="rotate(-0 249.311581 232.765483)">1400</text>
      </g>
     </g>
     <g id="xtick_9">
@@ -1832,11 +1832,11 @@ L 277.146418 157.776378
       </g>
      </g>
      <g id="text_31">
-      <text style="font-size: 6.5px; font-family: 'Liberation Sans'; text-anchor: middle; fill: #586874" x="277.146418" y="232.401469" transform="rotate(-0 277.146418 232.401469)">1600</text>
+      <text style="font-size: 7px; font-family: 'Liberation Sans'; text-anchor: middle; fill: #586874" x="277.146418" y="232.765483" transform="rotate(-0 277.146418 232.765483)">1600</text>
      </g>
     </g>
     <g id="text_32">
-     <text style="font-size: 7px; font-family: 'Liberation Sans'; text-anchor: middle; fill: #20313e" x="168.590551" y="242.86558" transform="rotate(-0 168.590551 242.86558)">Recorded stage time (ms)</text>
+     <text style="font-size: 7.5px; font-family: 'Liberation Sans'; text-anchor: middle; fill: #20313e" x="168.590551" y="243.698832" transform="rotate(-0 168.590551 243.698832)">Recorded stage time (ms)</text>
     </g>
    </g>
    <g id="matplotlib.axis_2">
@@ -1852,7 +1852,7 @@ L -2.5 0
       </g>
      </g>
      <g id="text_33">
-      <text style="font-size: 6.5px; font-family: 'Liberation Sans'; text-anchor: end; fill: #586874" x="48.467717" y="169.039532" transform="rotate(-0 48.467717 169.039532)">6 trials</text>
+      <text style="font-size: 7px; font-family: 'Liberation Sans'; text-anchor: end; fill: #586874" x="48.467717" y="169.221539" transform="rotate(-0 48.467717 169.221539)">6 trials</text>
      </g>
     </g>
     <g id="ytick_2">
@@ -1862,7 +1862,7 @@ L -2.5 0
       </g>
      </g>
      <g id="text_34">
-      <text style="font-size: 6.5px; font-family: 'Liberation Sans'; text-anchor: end; fill: #586874" x="48.467717" y="192.088924" transform="rotate(-0 48.467717 192.088924)">4 unique exits</text>
+      <text style="font-size: 7px; font-family: 'Liberation Sans'; text-anchor: end; fill: #586874" x="48.467717" y="192.27093" transform="rotate(-0 48.467717 192.27093)">4 unique exits</text>
      </g>
     </g>
     <g id="ytick_3">
@@ -1872,7 +1872,7 @@ L -2.5 0
       </g>
      </g>
      <g id="text_35">
-      <text style="font-size: 6.5px; font-family: 'Liberation Sans'; text-anchor: end; fill: #586874" x="48.467717" y="215.138315" transform="rotate(-0 48.467717 215.138315)">1 shared pass</text>
+      <text style="font-size: 7px; font-family: 'Liberation Sans'; text-anchor: end; fill: #586874" x="48.467717" y="215.320322" transform="rotate(-0 48.467717 215.320322)">1 shared pass</text>
      </g>
     </g>
    </g>
@@ -1911,13 +1911,13 @@ L 282.713386 221.669291
 " style="fill: none; stroke: #000000; stroke-width: 0.55; stroke-linejoin: miter; stroke-linecap: square"/>
    </g>
    <g id="text_36">
-    <text style="font-size: 6.5px; font-family: 'Liberation Sans'; text-anchor: start; fill: #20313e" x="245.087278" y="168.355572" transform="rotate(-0 245.087278 168.355572)">1,348</text>
+    <text style="font-size: 7px; font-family: 'Liberation Sans'; text-anchor: start; fill: #20313e" x="245.087278" y="168.484967" transform="rotate(-0 245.087278 168.484967)">1,348</text>
    </g>
    <g id="text_37">
-    <text style="font-size: 6.5px; font-family: 'Liberation Sans'; text-anchor: start; fill: #20313e" x="199.940602" y="191.404964" transform="rotate(-0 199.940602 191.404964)">1,023</text>
+    <text style="font-size: 7px; font-family: 'Liberation Sans'; text-anchor: start; fill: #20313e" x="199.940602" y="191.534358" transform="rotate(-0 199.940602 191.534358)">1,023</text>
    </g>
    <g id="text_38">
-    <text style="font-size: 6.5px; font-family: 'Liberation Sans'; text-anchor: start; fill: #20313e" x="104.413283" y="214.454355" transform="rotate(-0 104.413283 214.454355)">337</text>
+    <text style="font-size: 7px; font-family: 'Liberation Sans'; text-anchor: start; fill: #20313e" x="104.413283" y="214.58375" transform="rotate(-0 104.413283 214.58375)">337</text>
    </g>
   </g>
  </g>

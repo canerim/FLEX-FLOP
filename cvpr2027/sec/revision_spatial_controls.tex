@@ -187,6 +187,17 @@ nor runtime.}
 \label{fig:componentinterventions}
 \end{figure*}
 
+\paragraph{A uniform-depth context check.}
+On two fixed DIV2K centre768 crops (0801 and 0880), we compare full-frame
+suffix features with 32-cell cores carrying $k-4$ feature cells of halo
+at each depth $k\in\{6,8,10,12\}$. Windows stop at the true image boundary,
+preserving stock zero padding at every layer. After assembly, both paths
+use the same adapter/head without repair. At QP32 in CPU FP32, all eight
+feature and output comparisons have zero maximum absolute difference.
+This bounded numerical check supports the context construction; it does
+not establish mixed-map equivalence, reduced runtime or a quality gain
+for the deployed replicate-padding and repair path.
+
 \section{The Cost of Independent Spatial Regions}
 \label{sec:patchcontrol}
 

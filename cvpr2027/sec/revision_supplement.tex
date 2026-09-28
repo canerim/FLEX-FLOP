@@ -60,7 +60,7 @@ after chroma downsampling and clipping, not the same MSE ratio.
 
 Two fixed-map CPU replays with strict checkpoint loading reproduce the
 archived \texttt{db\_rgb} values within $1.1\times10^{-6}$\,dB
-(\cref{tab:metricproof}). Converting to RGB changes the result. These checks
+(\cref{fig:metricproof}). Converting to RGB changes the result. These checks
 establish the interpretation of the inspected path; they are not a new
 265-pair RGB evaluation. Legacy JSON keys and historical annotations are
 preserved for traceability; \texttt{METRICS.md} records their corrected
@@ -68,23 +68,12 @@ meaning and the replay hashes. The separate independent-depth validation
 explicitly converts reconstructions to RGB and must not be pooled with
 this legacy metric.
 
-\begin{table}[t]
+\begin{figure}[t]
 \centering
-\caption{\textbf{A field name does not establish the colour space.}
-QP32 router maps at the nominal 0.1\,dB target. Last column applies explicit
-YCbCr clipping and RGB conversion/clipping. Values are loss in dB relative
-to the same e15 full-frame output. These two cases are metric checks.}
-\label{tab:metricproof}
-\setlength{\tabcolsep}{3pt}
-\begin{tabular}{lrrr}
-\toprule
-Frame & Archived field & CPU $\Delta_{444}$ & RGB \\
-\midrule
-BasketballPass & 0.064751 & 0.064750 & 0.057855 \\
-BQMall & 0.077437 & 0.077436 & 0.077396 \\
-\bottomrule
-\end{tabular}
-\end{table}
+\includegraphics[width=\columnwidth]{figs/editorial20260928/fig_metric_proof.pdf}
+\caption{\textbf{The archived field measures 444 loss, not RGB loss.} Two QP32 router maps at the nominal 0.1\,dB target. The archived value agrees with CPU unclipped YCbCr~4:4:4 replay; explicit clipping and RGB conversion change the result. Losses are relative to e15 full-frame. These are two metric checks.}
+\label{fig:metricproof}
+\end{figure}
 
 A CPU comparison of the two state dictionaries finds 255 shared
 encoder/entropy tensors with no changes. All 143 inherited synthesis tensors
@@ -323,8 +312,35 @@ bound on placement value. The router's mean regret to that optimum is
 0.0044\,dB at the 0.1\,dB target. Every source-search map attains its own
 fixed-histogram optimum, as expected for a separable Lagrangian minimiser.
 The optimum still requires the complete source table and carries the same
-information-acquisition cost. Replaying shuffled and optimal maps through
-the mixed decoder is the next required ablation.
+information-acquisition cost. These exact table expectations are distinct
+from the following finite-permutation reconstruction intervention.
+
+\paragraph{Actual reconstruction at unchanged depth proportions.}
+We replay all 53 QP32 frames using the fixed Q90 router and dither maps.
+Each original map is paired with three predetermined permutations,
+using seeds 202609280--202609282 and identical permutation indices for
+both policies on a frame. Assignments are shuffled only within strata of
+equal valid tile height and width. This preserves both padded depth counts
+and the valid-pixel area assigned to each depth. All 424 map cases are
+retained, including unchanged maps; caching identical maps requires 373
+distinct reconstructions. Original-map MSE reproduces the earlier CPU replay.
+
+For sequence $i$ and policy $p$, we compute
+\begin{equation}
+ G_{i,p}=10\log_{10}\!\left[
+ \frac{\frac13\sum_{s=1}^{3}D^{\rm RGB}_{i,p,s}}
+ {D^{\rm RGB}_{i,p,\mathrm{original}}}\right],
+\end{equation}
+then average sequences equally. Router and dither gains are 0.01393\,dB
+[0.00949,0.01930] and 0.00036\,dB [$-0.00031$,0.00105], respectively.
+Their paired difference is 0.01357\,dB [0.00920,0.01897]; resampling the
+51 candidate-content groups gives [0.00923,0.01883]. The intervals use
+5,000 paired draws and condition on the three sampled permutations.
+They exclude permutation Monte Carlo uncertainty and training variation.
+This intervention measures placement within each policy's own depth
+distribution. It neither matches the two policies' achieved RD nor repairs
+the development-used calibration split. Table-optimal-map replay remains
+unevaluated; no bitstream or latency claim follows from these neural outputs.
 
 \begin{figure*}[t]
 \centering
@@ -455,16 +471,7 @@ distinct from the shared-latent exits evaluated in the main paper.
 \Cref{fig:bank} shows a possible later deployment path, not an implemented
 six-expert result.
 
-\begin{table}[t]
-\centering
-\caption{\textbf{The independent DCVC-UF capacity controls.}
-Architectural parameter counts in millions; synthesis includes the
-upsampler and output head. D8/D10 are planned, and released D12 has a
-different training history from the ongoing scratch runs.}
-\label{tab:depth}
-\setlength{\tabcolsep}{4pt}
-\input{data/refresh20260927/depth_capacity_table}
-\end{table}
+Architectural parameter counts for all six depths are plotted in \cref{fig:scenario}a. D8/D10 remain planned; released D12 has a different training history from the ongoing scratch runs.
 
 \paragraph{The pinned training protocol.}
 The source is Microsoft's image-training recipe at commit
@@ -475,7 +482,7 @@ seed 42, Xavier initialisation, batch size 16, AdamW with the upstream
 defaults, and gradient clipping at norm 0.1. QP is sampled from 0--63 with
 logarithmic $\lambda$ interpolation from 10 to 2048. The original loss,
 including its literal 0.0833 coefficient, and the upstream crop, flip and
-colour transforms are retained. \Cref{tab:training} records the full
+colour transforms are retained. \Cref{fig:training} records the full
 105-epoch schedule. There are 24,049 batches per epoch and 2,525,145 scheduled updates
 per model. With the official shuffled \texttt{drop\_last=True}, eleven
 images per epoch do not enter a batch; no image is permanently excluded
@@ -489,26 +496,12 @@ Compilation can change floating-point operation order, so protocol parity
 does not imply bitwise-identical training trajectories. Checkpoint manifests
 retain the execution mode and source hashes.
 
-\begin{table}[t]
+\begin{figure*}[t]
 \centering
-\caption{\textbf{Unshortened official image-training schedule.}
-Epoch indices are zero-based. Each row applies to D2, D4 and D6; the
-architectural intervention is the retained synthesis depth.}
-\label{tab:training}
-\begin{tabular}{lrr}
-\toprule
-Epochs & RGB crop & Learning rate \\
-\midrule
-0--44 & $256^2$ & $2\times10^{-4}$ \\
-45--69 & $256^2$ & $5\times10^{-5}$ \\
-70--89 & $256^2$ & $10^{-5}$ \\
-90--94 & $512^2$ & $2\times10^{-4}$ \\
-95--98 & $512^2$ & $5\times10^{-5}$ \\
-99--102 & $512^2$ & $10^{-5}$ \\
-103--104 & $512^2$ & $10^{-6}$ \\
-\bottomrule
-\end{tabular}
-\end{table}
+\includegraphics[width=\textwidth]{figs/editorial20260928/fig_official_schedule.pdf}
+\caption{\textbf{The full official schedule is retained.} \textbf{a}, First 90 epochs with $256^2$ crops. \textbf{b}, Final 15 epochs with $512^2$ crops, on a separately expanded epoch axis. Zero-based boundaries delimit the seven learning-rate stages; the protocol applies to D2/D4/D6. These are prescribed settings, not learning curves.}
+\label{fig:training}
+\end{figure*}
 
 \paragraph{Synthesis versus complete neural-decoder arithmetic.}
 We trace every convolution in the pinned architecture, counting each use

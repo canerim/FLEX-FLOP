@@ -1,0 +1,754 @@
+{
+  "manifest": {
+    "scope": "Bounded uniform-depth context check; not a mixed-map or runtime benchmark.\n\nTwo fixed DIV2K sources (0801, 0880), centre768 crops, QP32, e15 CPU FP32.\nFor each reachable depth, compare full-frame suffix features with independent\ncore32 windows carrying k-4 feature cells of context. Windows are clipped at\nthe true feature-image boundary; stock zero padding therefore occurs at the\ncorrect global boundary on every layer. No outside-image feature band is\ninvented. The shared adapter/head is evaluated after assembly, without repair.\nPrimary tolerance is atol=rtol=1e-4 on features and unclipped444 outputs.\nThis numerical check does not claim bitwise equality or trained quality gains.\n",
+    "images": [
+      "0801.png",
+      "0880.png"
+    ],
+    "depths": [
+      6,
+      8,
+      10,
+      12
+    ],
+    "crop": "centre768, no resize, RGB to centred YCbCr444",
+    "qp": 32,
+    "source_sha256": {
+      "/home/can_karsal/FLEX-PLUS/scripts/replay_crossfit_images_20260927.py": "1c90c2c5b91c21e71a3cc3c9089604e1e4e0e6e551daaf327a78c37ab853b7f4",
+      "/home/can_karsal/FLEX-PLUS/runs/RECIPE512/ckpt_PIN_e15.pth.tar": "91556d30bca41988755ff43dee3bc6d0cd2a0a4eda1d18d2891b168dc0a04ce9",
+      "/home/can_karsal/FLEX-PLUS/flexplus/results/router_dump_e15_ce_soft.pt": "7437d9e6e504419ce3cde8c5da9724197cfd89402bcced9f3992dc43d2d1198d",
+      "/home/can_karsal/FLEX-PLUS/docs/research/2026-09-27-six-hour/crossfit_control/analysis.json": "d7db27b5b950d6bee529075066b871cd040cde7d05530f92695e3c23f3d6ca6a",
+      "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/research/shared_metric_audit/source/ctc_intra.py": "04635ec7a1236d2f53b6e3d2a7794d403f3a1cf57f1441b6daa2a98e3c5996a1",
+      "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/research/shared_metric_audit/source/flexuf/losses.py": "4307b4867fcf4c7a762cc82605b8dcd8963010f13a6ccc93a1020b5b3e0a56e2",
+      "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/research/shared_metric_audit/source/flexuf/eval.py": "9e74feecf1e8bc829ac27795b78a9ceebfd85c2c74f12a9212932fd18ebb2d5e",
+      "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/research/shared_metric_audit/source/flexuf/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/research/shared_metric_audit/source/flexuf/cost.py": "bdfdd84cef1c71e0da219784276eab29549edca871c8e9ad6d67f1c7171a6e56",
+      "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/research/shared_metric_audit/source/flexuf/beta.py": "a052b597384df71ece7020b88c51864b18e3d707f023e78c13a9b1cda89c0d48",
+      "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/research/shared_metric_audit/source/flexuf/model.py": "f34e5f341770bd08cac37f503b51929de95f0b93d4b853a2aefd2bd5dac2535d",
+      "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/research/shared_metric_audit/source/flexuf/config.py": "387fe63143c584acbc167c72a7181ad7e781594e52738e815f936b885345a6da",
+      "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/research/shared_metric_audit/source/flexuf/measure.py": "9eef2e46e5ed4578f171d03abde02fbbdf5469fa1ec1cfe59be94565a42dfc85",
+      "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/research/shared_metric_audit/source/flexuf/reference.py": "1d16ca1fee94f8cd6102fd057211759d8728aa9bd5320a1d5ce1cc9bac3215a9",
+      "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/research/shared_metric_audit/source/flexuf/backbone/warmstart.py": "5abb803acbbc204382419fc34d05a60775586334246e2a47976ef30bb58915ba",
+      "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/research/shared_metric_audit/source/flexuf/backbone/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/research/shared_metric_audit/source/flexuf/backbone/decoder.py": "97ac8be7f6b6001d3d9650f17c25a7da98198ee3d25e413b00f1a6250788d6b9",
+      "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/research/shared_metric_audit/source/flexuf/backbone/padding.py": "3c85ebc8fac6325758814d38f5c4c6ed538a90d9bc384f2f0bf9bdca8ae45c6c",
+      "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/research/shared_metric_audit/source/flexuf/backbone/coupling.py": "c5265a7580db05636a7d7cd45c3ae0a8c91b90b1f2528d9ea17f493563a23dce",
+      "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/research/shared_metric_audit/source/flexuf/router/losses.py": "cd6cd7bb4208978a9bd3fe186103543219e1471d69387cd648954d51536c468d",
+      "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/research/shared_metric_audit/source/flexuf/router/head2.py": "68aedef8eef51deee73e8d8b9e6fe95ee597ae3113661172abd2a3e43252e4eb",
+      "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/research/shared_metric_audit/source/flexuf/router/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/research/shared_metric_audit/source/flexuf/router/router.py": "30683bf5e35ed1cb2dde9ed9c81b47622cbc5a3e181cccaa676aa4f466dc5d3f",
+      "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/research/shared_metric_audit/source/flexuf/router/head.py": "2a805f476f1d7cf11bf7bc3fa01ac001bffe152647a24e025228de8972a00855",
+      "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/research/shared_metric_audit/source/flexuf/train/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "/home/can_karsal/DCVC/src/utils/transforms.py": "85713c55f217f348d5824cf493e7df9cb8ce9402f27c9f34fd95a4b799aaab25",
+      "/home/can_karsal/FLEX-PLUS/scripts/check_uniform_context_20260928.py": "4bd443d34dc265b78ff660f6b2df31d1ff2774640d7af0ddd3cba1f467ccd552",
+      "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/research/div2k100_center512_rgb/manifest.json": "51c651d1a12db500cbeda3566cf0e6fbf1b6c3add9d9ddf51bb529ee868b034a",
+      "/home/can_karsal/FLEX-PLUS/data/DIV2K_valid_HR/0801.png": "ab5cf6a1cac2d1c2d0792dbd274fd2e53e42118ab6537771a825fd87aa28a60c",
+      "/home/can_karsal/FLEX-PLUS/data/DIV2K_valid_HR/0880.png": "db5773c6e460824c5132c23917492fda7acd370c87e9ae6293a0103fee2b642d"
+    },
+    "upstream_commit": "819c219b24db34310bbd15c51a720aaaf5eb2e7d",
+    "started_utc": "2026-09-28T07:18:33.905307+00:00",
+    "torch": "2.9.1+cu126",
+    "threads": 2
+  },
+  "rows": [
+    {
+      "image": "0801.png",
+      "depth": 6,
+      "feature_halo": 2,
+      "crop_pixel_sha256": "c23a64c1a4de3a57654b3b66623642436dd60c867e495020ef5c18597117f17b",
+      "windows": [
+        [
+          0,
+          0,
+          34,
+          34
+        ],
+        [
+          0,
+          30,
+          34,
+          66
+        ],
+        [
+          0,
+          62,
+          34,
+          96
+        ],
+        [
+          30,
+          0,
+          66,
+          34
+        ],
+        [
+          30,
+          30,
+          66,
+          66
+        ],
+        [
+          30,
+          62,
+          66,
+          96
+        ],
+        [
+          62,
+          0,
+          96,
+          34
+        ],
+        [
+          62,
+          30,
+          96,
+          66
+        ],
+        [
+          62,
+          62,
+          96,
+          96
+        ]
+      ],
+      "feature_check": {
+        "max_abs": 0.0,
+        "rms": 0.0,
+        "reference_max_abs": 6.912347316741943,
+        "within_declared_tolerance": true
+      },
+      "output444_check": {
+        "max_abs": 0.0,
+        "rms": 0.0,
+        "reference_max_abs": 0.5077095627784729,
+        "within_declared_tolerance": true
+      },
+      "zero_overlap_stock_padding_feature_difference": {
+        "max_abs": 0.4238102436065674,
+        "rms": 0.01417569164186716,
+        "reference_max_abs": 6.912347316741943,
+        "within_declared_tolerance": false
+      },
+      "zero_overlap_stock_padding_output_difference": {
+        "max_abs": 0.04039260745048523,
+        "rms": 0.0005956933018751442,
+        "reference_max_abs": 0.5077095627784729,
+        "within_declared_tolerance": false
+      },
+      "zero_overlap_control_scope": "No overlap, stock zero padding, no repair. This is not the deployed replicate-padding+repair path."
+    },
+    {
+      "image": "0801.png",
+      "depth": 8,
+      "feature_halo": 4,
+      "crop_pixel_sha256": "c23a64c1a4de3a57654b3b66623642436dd60c867e495020ef5c18597117f17b",
+      "windows": [
+        [
+          0,
+          0,
+          36,
+          36
+        ],
+        [
+          0,
+          28,
+          36,
+          68
+        ],
+        [
+          0,
+          60,
+          36,
+          96
+        ],
+        [
+          28,
+          0,
+          68,
+          36
+        ],
+        [
+          28,
+          28,
+          68,
+          68
+        ],
+        [
+          28,
+          60,
+          68,
+          96
+        ],
+        [
+          60,
+          0,
+          96,
+          36
+        ],
+        [
+          60,
+          28,
+          96,
+          68
+        ],
+        [
+          60,
+          60,
+          96,
+          96
+        ]
+      ],
+      "feature_check": {
+        "max_abs": 0.0,
+        "rms": 0.0,
+        "reference_max_abs": 6.856466293334961,
+        "within_declared_tolerance": true
+      },
+      "output444_check": {
+        "max_abs": 0.0,
+        "rms": 0.0,
+        "reference_max_abs": 0.49986007809638977,
+        "within_declared_tolerance": true
+      },
+      "zero_overlap_stock_padding_feature_difference": {
+        "max_abs": 0.6274785995483398,
+        "rms": 0.014570126309990883,
+        "reference_max_abs": 6.856466293334961,
+        "within_declared_tolerance": false
+      },
+      "zero_overlap_stock_padding_output_difference": {
+        "max_abs": 0.04348292574286461,
+        "rms": 0.0006987401284277439,
+        "reference_max_abs": 0.49986007809638977,
+        "within_declared_tolerance": false
+      },
+      "zero_overlap_control_scope": "No overlap, stock zero padding, no repair. This is not the deployed replicate-padding+repair path."
+    },
+    {
+      "image": "0801.png",
+      "depth": 10,
+      "feature_halo": 6,
+      "crop_pixel_sha256": "c23a64c1a4de3a57654b3b66623642436dd60c867e495020ef5c18597117f17b",
+      "windows": [
+        [
+          0,
+          0,
+          38,
+          38
+        ],
+        [
+          0,
+          26,
+          38,
+          70
+        ],
+        [
+          0,
+          58,
+          38,
+          96
+        ],
+        [
+          26,
+          0,
+          70,
+          38
+        ],
+        [
+          26,
+          26,
+          70,
+          70
+        ],
+        [
+          26,
+          58,
+          70,
+          96
+        ],
+        [
+          58,
+          0,
+          96,
+          38
+        ],
+        [
+          58,
+          26,
+          96,
+          70
+        ],
+        [
+          58,
+          58,
+          96,
+          96
+        ]
+      ],
+      "feature_check": {
+        "max_abs": 0.0,
+        "rms": 0.0,
+        "reference_max_abs": 6.958050727844238,
+        "within_declared_tolerance": true
+      },
+      "output444_check": {
+        "max_abs": 0.0,
+        "rms": 0.0,
+        "reference_max_abs": 0.4975350797176361,
+        "within_declared_tolerance": true
+      },
+      "zero_overlap_stock_padding_feature_difference": {
+        "max_abs": 0.5628498792648315,
+        "rms": 0.014168456196784973,
+        "reference_max_abs": 6.958050727844238,
+        "within_declared_tolerance": false
+      },
+      "zero_overlap_stock_padding_output_difference": {
+        "max_abs": 0.04396657645702362,
+        "rms": 0.00077272136695683,
+        "reference_max_abs": 0.4975350797176361,
+        "within_declared_tolerance": false
+      },
+      "zero_overlap_control_scope": "No overlap, stock zero padding, no repair. This is not the deployed replicate-padding+repair path."
+    },
+    {
+      "image": "0801.png",
+      "depth": 12,
+      "feature_halo": 8,
+      "crop_pixel_sha256": "c23a64c1a4de3a57654b3b66623642436dd60c867e495020ef5c18597117f17b",
+      "windows": [
+        [
+          0,
+          0,
+          40,
+          40
+        ],
+        [
+          0,
+          24,
+          40,
+          72
+        ],
+        [
+          0,
+          56,
+          40,
+          96
+        ],
+        [
+          24,
+          0,
+          72,
+          40
+        ],
+        [
+          24,
+          24,
+          72,
+          72
+        ],
+        [
+          24,
+          56,
+          72,
+          96
+        ],
+        [
+          56,
+          0,
+          96,
+          40
+        ],
+        [
+          56,
+          24,
+          96,
+          72
+        ],
+        [
+          56,
+          56,
+          96,
+          96
+        ]
+      ],
+      "feature_check": {
+        "max_abs": 0.0,
+        "rms": 0.0,
+        "reference_max_abs": 6.930484771728516,
+        "within_declared_tolerance": true
+      },
+      "output444_check": {
+        "max_abs": 0.0,
+        "rms": 0.0,
+        "reference_max_abs": 0.49661895632743835,
+        "within_declared_tolerance": true
+      },
+      "zero_overlap_stock_padding_feature_difference": {
+        "max_abs": 0.4139251708984375,
+        "rms": 0.011763055808842182,
+        "reference_max_abs": 6.930484771728516,
+        "within_declared_tolerance": false
+      },
+      "zero_overlap_stock_padding_output_difference": {
+        "max_abs": 0.04526941478252411,
+        "rms": 0.0007648943574167788,
+        "reference_max_abs": 0.49661895632743835,
+        "within_declared_tolerance": false
+      },
+      "zero_overlap_control_scope": "No overlap, stock zero padding, no repair. This is not the deployed replicate-padding+repair path."
+    },
+    {
+      "image": "0880.png",
+      "depth": 6,
+      "feature_halo": 2,
+      "crop_pixel_sha256": "423001d3df0e3aa5f9d175fb95c02fca815dc1d13c9010970abb5a4a36d7c5da",
+      "windows": [
+        [
+          0,
+          0,
+          34,
+          34
+        ],
+        [
+          0,
+          30,
+          34,
+          66
+        ],
+        [
+          0,
+          62,
+          34,
+          96
+        ],
+        [
+          30,
+          0,
+          66,
+          34
+        ],
+        [
+          30,
+          30,
+          66,
+          66
+        ],
+        [
+          30,
+          62,
+          66,
+          96
+        ],
+        [
+          62,
+          0,
+          96,
+          34
+        ],
+        [
+          62,
+          30,
+          96,
+          66
+        ],
+        [
+          62,
+          62,
+          96,
+          96
+        ]
+      ],
+      "feature_check": {
+        "max_abs": 0.0,
+        "rms": 0.0,
+        "reference_max_abs": 5.660967826843262,
+        "within_declared_tolerance": true
+      },
+      "output444_check": {
+        "max_abs": 0.0,
+        "rms": 0.0,
+        "reference_max_abs": 0.49958911538124084,
+        "within_declared_tolerance": true
+      },
+      "zero_overlap_stock_padding_feature_difference": {
+        "max_abs": 0.5018796920776367,
+        "rms": 0.014726342633366585,
+        "reference_max_abs": 5.660967826843262,
+        "within_declared_tolerance": false
+      },
+      "zero_overlap_stock_padding_output_difference": {
+        "max_abs": 0.03625224530696869,
+        "rms": 0.0007442398346029222,
+        "reference_max_abs": 0.49958911538124084,
+        "within_declared_tolerance": false
+      },
+      "zero_overlap_control_scope": "No overlap, stock zero padding, no repair. This is not the deployed replicate-padding+repair path."
+    },
+    {
+      "image": "0880.png",
+      "depth": 8,
+      "feature_halo": 4,
+      "crop_pixel_sha256": "423001d3df0e3aa5f9d175fb95c02fca815dc1d13c9010970abb5a4a36d7c5da",
+      "windows": [
+        [
+          0,
+          0,
+          36,
+          36
+        ],
+        [
+          0,
+          28,
+          36,
+          68
+        ],
+        [
+          0,
+          60,
+          36,
+          96
+        ],
+        [
+          28,
+          0,
+          68,
+          36
+        ],
+        [
+          28,
+          28,
+          68,
+          68
+        ],
+        [
+          28,
+          60,
+          68,
+          96
+        ],
+        [
+          60,
+          0,
+          96,
+          36
+        ],
+        [
+          60,
+          28,
+          96,
+          68
+        ],
+        [
+          60,
+          60,
+          96,
+          96
+        ]
+      ],
+      "feature_check": {
+        "max_abs": 0.0,
+        "rms": 0.0,
+        "reference_max_abs": 5.663575649261475,
+        "within_declared_tolerance": true
+      },
+      "output444_check": {
+        "max_abs": 0.0,
+        "rms": 0.0,
+        "reference_max_abs": 0.49730873107910156,
+        "within_declared_tolerance": true
+      },
+      "zero_overlap_stock_padding_feature_difference": {
+        "max_abs": 0.6464475393295288,
+        "rms": 0.01458683516830206,
+        "reference_max_abs": 5.663575649261475,
+        "within_declared_tolerance": false
+      },
+      "zero_overlap_stock_padding_output_difference": {
+        "max_abs": 0.04628103971481323,
+        "rms": 0.000841026718262583,
+        "reference_max_abs": 0.49730873107910156,
+        "within_declared_tolerance": false
+      },
+      "zero_overlap_control_scope": "No overlap, stock zero padding, no repair. This is not the deployed replicate-padding+repair path."
+    },
+    {
+      "image": "0880.png",
+      "depth": 10,
+      "feature_halo": 6,
+      "crop_pixel_sha256": "423001d3df0e3aa5f9d175fb95c02fca815dc1d13c9010970abb5a4a36d7c5da",
+      "windows": [
+        [
+          0,
+          0,
+          38,
+          38
+        ],
+        [
+          0,
+          26,
+          38,
+          70
+        ],
+        [
+          0,
+          58,
+          38,
+          96
+        ],
+        [
+          26,
+          0,
+          70,
+          38
+        ],
+        [
+          26,
+          26,
+          70,
+          70
+        ],
+        [
+          26,
+          58,
+          70,
+          96
+        ],
+        [
+          58,
+          0,
+          96,
+          38
+        ],
+        [
+          58,
+          26,
+          96,
+          70
+        ],
+        [
+          58,
+          58,
+          96,
+          96
+        ]
+      ],
+      "feature_check": {
+        "max_abs": 0.0,
+        "rms": 0.0,
+        "reference_max_abs": 5.634524345397949,
+        "within_declared_tolerance": true
+      },
+      "output444_check": {
+        "max_abs": 0.0,
+        "rms": 0.0,
+        "reference_max_abs": 0.49652183055877686,
+        "within_declared_tolerance": true
+      },
+      "zero_overlap_stock_padding_feature_difference": {
+        "max_abs": 0.5943721532821655,
+        "rms": 0.013882928527891636,
+        "reference_max_abs": 5.634524345397949,
+        "within_declared_tolerance": false
+      },
+      "zero_overlap_stock_padding_output_difference": {
+        "max_abs": 0.05314794182777405,
+        "rms": 0.0009328255546279252,
+        "reference_max_abs": 0.49652183055877686,
+        "within_declared_tolerance": false
+      },
+      "zero_overlap_control_scope": "No overlap, stock zero padding, no repair. This is not the deployed replicate-padding+repair path."
+    },
+    {
+      "image": "0880.png",
+      "depth": 12,
+      "feature_halo": 8,
+      "crop_pixel_sha256": "423001d3df0e3aa5f9d175fb95c02fca815dc1d13c9010970abb5a4a36d7c5da",
+      "windows": [
+        [
+          0,
+          0,
+          40,
+          40
+        ],
+        [
+          0,
+          24,
+          40,
+          72
+        ],
+        [
+          0,
+          56,
+          40,
+          96
+        ],
+        [
+          24,
+          0,
+          72,
+          40
+        ],
+        [
+          24,
+          24,
+          72,
+          72
+        ],
+        [
+          24,
+          56,
+          72,
+          96
+        ],
+        [
+          56,
+          0,
+          96,
+          40
+        ],
+        [
+          56,
+          24,
+          96,
+          72
+        ],
+        [
+          56,
+          56,
+          96,
+          96
+        ]
+      ],
+      "feature_check": {
+        "max_abs": 0.0,
+        "rms": 0.0,
+        "reference_max_abs": 5.676628589630127,
+        "within_declared_tolerance": true
+      },
+      "output444_check": {
+        "max_abs": 0.0,
+        "rms": 0.0,
+        "reference_max_abs": 0.49650776386260986,
+        "within_declared_tolerance": true
+      },
+      "zero_overlap_stock_padding_feature_difference": {
+        "max_abs": 0.4028576612472534,
+        "rms": 0.011837659403681755,
+        "reference_max_abs": 5.676628589630127,
+        "within_declared_tolerance": false
+      },
+      "zero_overlap_stock_padding_output_difference": {
+        "max_abs": 0.05275699496269226,
+        "rms": 0.000916164368391037,
+        "reference_max_abs": 0.49650776386260986,
+        "within_declared_tolerance": false
+      },
+      "zero_overlap_control_scope": "No overlap, stock zero padding, no repair. This is not the deployed replicate-padding+repair path."
+    }
+  ],
+  "state": "complete",
+  "finished_utc": "2026-09-28T07:19:19.289613+00:00",
+  "cuda_initialized": false
+}

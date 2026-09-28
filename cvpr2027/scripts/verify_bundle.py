@@ -105,7 +105,7 @@ def main():
     figure_count=0
     figure_panels={}
     min_font=float("inf")
-    for folder in ["refresh20260927","extended20260927","crossfit20260927","depthmacs20260927"]:
+    for folder in ["refresh20260927","extended20260927","crossfit20260927","depthmacs20260927","editorial20260928"]:
         path=ROOT/"figs"/folder
         for name, expected in json.loads((path/"artifact_manifest.json").read_text()).items():
             assert digest(path/name)==expected,f"Changed figure: {folder}/{name}"
@@ -113,15 +113,21 @@ def main():
         audit=(json.loads((path/'figure_evidence.json').read_text())['layout_audit'] if folder=='depthmacs20260927'
                else json.loads((path/"layout_audit.json").read_text()))
         for record in audit:
-            figure_panels[record['figure']]={t['text'] for t in record['text'] if re.fullmatch('[a-f]',t['text'])}
+            figure_panels[record['figure']]={t['text'] for t in record['text'] if re.fullmatch('[a-z]',t['text'])}
             assert not record["outside_canvas"],record["figure"]
-            expected_width=89 if record['figure'] in {'fig8_active_tiles','figS7_delivered_increment'} else 183
+            expected_width=89 if record['figure'] in {'fig8_active_tiles','figS7_delivered_increment','fig_fixed_control','fig_metric_proof','fig_depth_milestones'} else 183
             assert abs(record["width_mm"]-expected_width)<1e-6
             assert record["height_mm"]<=170
             assert "<text" in (path/(record["figure"]+".svg")).read_text()
             min_font=min(min_font,*(t["size_pt"] for t in record["text"]))
             figure_count+=1
-    assert figure_count==18
+    assert figure_count==22
+    for name,expected in json.loads((ROOT/'data/gallery20260928/manifest.json').read_text()).items():
+        assert digest(ROOT/'data/gallery20260928'/name)==expected
+    for name,expected in json.loads((ROOT/'figs/editorial20260928/source_manifest.json').read_text()).items():
+        assert digest(ROOT/name)==expected
+    for source in (ROOT/'sec').glob('revision*.tex'):
+        assert r'\begin{table' not in source.read_text(), 'Active manuscript table: '+source.name
     research=json.loads((ROOT/'data/research20260927/manifest.json').read_text())
     assert digest(ROOT/'scripts/research_figure_paths_20260927.py')==research['helper_sha256']
     research_inputs={}
@@ -141,13 +147,16 @@ def main():
             assert digest(path/name)==expected,f'Changed research figure: {folder}/{name}'
             checked.append(str((path/name).relative_to(ROOT)))
         for record in evidence['layout_audit']:
-            figure_panels[record['figure']]={t['text'] for t in record['text'] if re.fullmatch('[a-f]',t['text'])}
+            figure_panels[record['figure']]={t['text'] for t in record['text'] if re.fullmatch('[a-z]',t['text'])}
             assert not record['outside_canvas'],record['figure']
             assert abs(record['width_mm']-183)<1e-6 and record['height_mm']<=170
             assert '<text' in (path/(record['figure']+'.svg')).read_text()
             min_font=min(min_font,*(t['size_pt'] for t in record['text']))
             figure_count+=1
-    assert min_font>=6.5,f'Figure text below the editorial readability floor: {min_font}'
+    assert min_font>=7,f'Figure text below the export readability floor: {min_font}'
+    # CVPR uses 6.875 in text width and 0.3125 in column separation.
+    cvpr_min_font=min_font*min(6.875*25.4/183,((6.875-.3125)/2)*25.4/89)
+    assert cvpr_min_font>=6.5,'Figure text too small after CVPR column scaling'
     caption_panels_checked=0
     for tex in (ROOT/'sec').glob('revision*.tex'):
         for block in re.findall(r'\\begin\{figure\*?\}.*?\\end\{figure\*?\}',tex.read_text(),re.S):
@@ -156,7 +165,7 @@ def main():
             name=Path(graphic[1]).stem
             assert name in figure_panels,f'Unaudited vector figure in {tex.name}: {name}'
             cited=set()
-            for spec in re.findall(r'\\textbf\{([a-f](?:(?:--|,)[a-f])?)\}',block):
+            for spec in re.findall(r'\\textbf\{([a-z](?:(?:--|,)[a-z])?)\}',block):
                 if '--' in spec:
                     first,last=spec.split('--');cited.update(chr(i) for i in range(ord(first),ord(last)+1))
                 else:cited.update(spec.split(','))
@@ -348,6 +357,7 @@ def main():
                 analytical_scenarios_checked=len(design["projection"]["rows"]),
                 independently_instantiated_depths_checked=len(architecture["rows"]),
                 vector_figure_sets=figure_count,conceptual_ai_illustrations=2,min_figure_font_pt=min_font,
+                min_figure_font_after_cvpr_scaling_pt=cvpr_min_font,
                 text_outside_canvas=0,compiled_documents=reports,
                 scope="Integrity and internal consistency of the supplied publication bundle, not historical-run reproduction or a new codec evaluation")
     print(json.dumps(result,indent=2))

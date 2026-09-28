@@ -44,7 +44,8 @@ appear in the active manuscript.
 | Specialisation introduces spatial overhead | Fixed-map geometry controls on frozen epoch-20 models | Geometry results stay attached to those weights; released D12 has a different training history |
 | A six-expert selector saves net runtime | Proposed study only | Requires matched training, achieved RD and complete execution measurements |
 
-Numerical tables are generated from bundled JSON. Sequence- or image-bootstrap
+The paper and supplement contain no typeset tables. Numerical exports and
+plotted comparisons are generated from bundled JSON. Sequence- or image-bootstrap
 intervals are conditional on fixed weights and fitted controls; they do not
 cover training-seed, calibration-fit or external-domain uncertainty.
 Retrospective quality selection is described as source-aware, with its
@@ -56,7 +57,8 @@ Figures 1 and 2 and their captions are protected. Other vector figures use
 consistent policy colours, an ordered depth palette, explicit units and
 embedded fonts. The main active-tile diagram and paired-cap plot use an
 89 mm column; wider multi-panel figures use 183 mm. The exported text floor
-is 6.5 pt, with larger axes and panel titles. Redundant on-figure prose is
+is 7 pt, retaining at least 6.5 pt after CVPR column scaling, with larger
+axes and panel titles. Redundant on-figure prose is
 moved into captions. Measured points, architectural counts and analytical
 assumptions remain visibly distinct.
 

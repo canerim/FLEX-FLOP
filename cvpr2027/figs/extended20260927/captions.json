@@ -13,7 +13,7 @@
   },
   {
     "name": "figS7_delivered_increment",
-    "caption": "Single-column paired allocation contrast under a common measured, cropped YCbCr 4:4:4-loss cap. Every point retains all265 frame-QP pairs and uses a full-frame fallback where needed. Horizontal intervals are paired95% sequence-cluster bootstrap intervals. The highlighted0.1dB row is2.93449 percentage points. Retrospective source-aware selection; not autonomous control or runtime. Figure notes: Extra saving from spatial placement Router \u2212 Bayer dither \u00b7 paired 95% CI"
+    "caption": "a: All four policies under a common 0.10 dB delivered 444-loss cap; axes show actual mean loss and modelled synthesis MAC saving. Fallback counts uniform/dither/router/search: 11/2/1/2 of265. b: Router-minus-dither paired saving, 95% sequence-cluster intervals across six caps, all265 frame-QP pairs retained. Source-aware retrospective candidate selection, not autonomous control or runtime."
   },
   {
     "name": "figS4_codec_bank_plan",

@@ -5,7 +5,7 @@
   },
   {
     "name": "fig2_budget_value",
-    "caption": "Nominal-budget comparison under source-calibrated control. Left: total modelled synthesis arithmetic saving; the horizontal guide is the shallow-exit ceiling. Right: paired search-minus-dither and router-minus-dither means with95% sequence-cluster bootstrap intervals. The shaded row marks0.1dB. Common cohort counts are204,263,265,265,265,265. Nominal targets are not final-image guarantees; routing, signalling and entropy work are excluded. Discrete points are joined only as guides."
+    "caption": "a: Orthographic 3D display of six measured nominal-budget operating points per policy. Policy is a categorical axis; translucent curtains and segments are guides, not an interpolated surface. b: paired search-minus-dither and router-minus-dither means with 95% sequence-cluster intervals. Common cohort counts 204,263,265,265,265,265. Source-calibrated controls; nominal targets are not final-output guarantees. Synthesis MAC saving excludes routing, entropy and signalling; not latency."
   },
   {
     "name": "fig3_delivered_quality",
@@ -17,11 +17,11 @@
   },
   {
     "name": "fig5_spatial_decisions",
-    "caption": "Recorded exit assignments at a nominal 0.1 dB target for videoSRC05 QP32: a source luma, b learned router, c Bayer dither, d source-informed search. The source thumbnail is archived evaluator data, not generated imagery or a reconstructed output. Maps are cropped to the valid image extent. Depth colours match the execution trace. The constant uniform-depth8 map is omitted from the display; its recorded result is24.2% synthesis MAC saving and0.082dB loss. This frame was chosen from five available thumbnails by proximity to the aggregate routing margin. Quality and MAC annotations are recorded mixed-output measurements and modelled arithmetic, respectively. At0.3dB the search, router and dither maps all take depth6; repeated identical maps are omitted."
+    "caption": "Eight sources, six views each: source luma; router nominal targets 0.05/0.10/0.30 dB; Bayer dither and source-informed search at 0.10 dB. a\u2013h are source groups, selected by fixed class quotas and sequence-name hash before inspecting outcomes. Recorded QP32 maps, cropped to valid frame extent; missing/infeasible maps retained as N/A. Luma images supply spatial context, not reconstructions or evidence of visual quality. Colours show 6/8/10/12 executed blocks. All controls here are source-calibrated."
   },
   {
     "name": "fig8_active_tiles",
-    "caption": "Measured-map execution trace for videoSRC05 at QP32 and nominal 0.1 dB source-calibrated control. Rows retain the original 5 by 8 padded tile coordinates. Active populations at total depth 6, 8, 10 and 12 are 40, 27, 7 and 3; departures are 13, 20, 4 and 3. Pale cells have already exited. This shows which tiles enter each block pair, not a GPU schedule, timing or batch-size benchmark. All departures use the adapters and common canvas in Figure 2."
+    "caption": "Measured-map spatial execution for videoSRC05, QP32, nominal 0.1 dB source-calibrated control. Oblique feature planes retain the 5-by-8 tile coordinates: active populations 40/27/7/3 at total depths 6/8/10/12. Departures 13/20/4/3 pass through exit adapters to the shared canvas; I denotes the identity at depth12. Pale positions no longer execute. The four suffix block pairs perform 77 tile-pair evaluations rather than 160 for a dense 12-block pass. This excludes stem/head/adapter cost and is not a GPU timing or batching benchmark."
   },
   {
     "name": "fig6_depth_study_system",

@@ -1,6 +1,6 @@
 # Early exit'te bağlamı hangi kontrol ayırır?
 
-28 Eylül 2026 · Mimari inceleme ve deney tasarımı; yeni kalite veya süre sonucu değildir.
+28 Eylül 2026 · Mimari inceleme, sınırlı sayısal eşdeğerlik kontrolü ve deney tasarımı; yeni RD veya süre sonucu değildir.
 
 Mevcut sistemde ortak stem tam görüntü üzerinde çalışır. Bu yüzden tile
 özellikleri başlangıçta zaten görüntü bağlamı taşır. Fakat conditional
@@ -42,9 +42,31 @@ ve bias etkileri de aynı olmalıdır. [Kim ve arkadaşları, CVPR 2026](https:/
 Mevcut replicate-halo helper'ını açmak, o tam protokolü uygulamakla aynı şey
 olarak sunulmamalıdır.
 
-## En küçük karşılaştırma
+## Tamamlanan küçük sayısal kontrol
 
-Önce aynı e15 ağırlıklarıyla her uniform reachable depth için tam görüntü
+DIV2K 0801 ve 0880'ın önceden sabitlenmiş 768×768 merkez crop'larında,
+QP32/e15/CPU FP32 ile her reachable depth kontrol edildi. Feature canvas
+96×96: 3×3 tile düzeni hem iç tile'ı hem gerçek görüntü kenarlarını içeriyor.
+Halo penceresi global sınırda kesildi; dışarıya feature uydurmak yerine
+her katmanın orijinal zero padding'i doğru global kenarda uygulandı.
+Ortak adapter/head assembly sonrasında çalıştı; repair iki yolda da yoktu.
+
+Sekiz vakanın tamamında full-frame ile context-preserving tiled feature
+ve unclipped444 output arasındaki maksimum mutlak fark **0** çıktı.
+Önceden tanımlanmış tolerans `atol=rtol=1e-4` idi. Gözlenen sıfır fark,
+bütün backend/precision/shape kombinasyonları için bitwise garanti değildir.
+Kontrol kolundaki halo'suz **stock-zero-padding** yolunda çıktı farkı sıfır
+değildi; bu kol mevcut replicate-padding+repair deployment yolu değildir.
+
+Kayıt: [uniform_context_smoke.json](data/research20260927/component_interventions/uniform_context_smoke.json).
+Kod: [check_uniform_context_20260928.py](https://github.com/canerim/FLEX-FLOP/blob/flex/scripts/check_uniform_context_20260928.py).
+Bu kontrol gerçek bitstream, mixed-map kalite ablasyonu veya runtime ölçümü
+sayılmaz; yalnız uniform-depth bağlam referansını sınar.
+
+## Sonraki karşılaştırma
+
+İlk küçük kontrolün ardından farklı çözünürlük ve sınır geometrilerinde,
+aynı e15 ağırlıklarıyla her uniform reachable depth için tam görüntü
 özelliklerini üret. Bunu yeterli halo ve katman başına doğru sınır işlemiyle
 oluşturulan tiled özelliklerle, adapter öncesinde ve head sonrasında
 karşılaştır. Maksimum mutlak tensor farkını, cropped RGB/444 hatasını ve
