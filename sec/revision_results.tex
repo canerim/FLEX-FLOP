@@ -190,7 +190,7 @@ offset without changing their paired differences. The supplement gives the split
 \subsection{Checking the mechanism}
 \label{sec:mechanismchecks}
 
-\paragraph{Do exits need learned alignment?}
+\paragraph{Exit alignment and repair.}
 With the checkpoint and 53 Q90 maps fixed, we replace adapters, repair,
 or both by identity and retain all images. Adapter removal costs
 1.2309\,dB mean RGB PSNR, with a paired 95\% interval of
@@ -201,7 +201,7 @@ benefit motivates a matched-retraining and timing comparison before
 increasing its capacity. These interventions measure dependence of fixed
 weights, not the best performance attainable without each module.
 
-\paragraph{Can the decoder operate from a stream alone?}
+\paragraph{Stream-only reconstruction.}
 A separate CPU decoder receives the common entropy payload and explicit
 two-bit exit indices. On two predeclared QP32 frames with four maps each,
 all eight images, latents, symbols and entropy indexes match encoder-side

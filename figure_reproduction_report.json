@@ -589,7 +589,7 @@
       "byte_identical": true
     }
   ],
-  "evidence_text_artifact_count": 4,
+  "evidence_text_artifact_count": 6,
   "evidence_text_artifacts": [
     {
       "file": "data/refresh20260927/design_macros.tex",
@@ -610,10 +610,20 @@
       "file": "data/refresh20260927/fixed_control_table.tex",
       "sha256": "13916bbcfb20db113e24a8d6a558067e466d7f63d5ea59cb24de4c133d96f95e",
       "byte_identical": true
+    },
+    {
+      "file": "data/refresh20260927/depth_milestone_table.tex",
+      "sha256": "088a24e1b61a7ac2e4ae3883df286e62f72a61d4eb7de7d3c03b8be94d2ee62e",
+      "byte_identical": true
+    },
+    {
+      "file": "data/refresh20260927/depth_milestone_audit.json",
+      "sha256": "9bc982862a3ee58db516cd21d8aaa704788d0752ae58f7167c4981d241b80fef",
+      "byte_identical": true
     }
   ],
   "scripts_sha256": {
-    "scripts/build_evidence_tables.py": "3168491715f0a0d5ac415e634564513fd06e1266def6d57349d05a168b567e78",
+    "scripts/build_evidence_tables.py": "5cce8e33634631f3a5535b2a7f01f4103d6a9b9d41e3a9b60b5918a046509db7",
     "scripts/build_figures.py": "49f44bf07d917c735a1132600da6f154b9be77882582a241fa22a01e1ba4932a",
     "scripts/build_extended_figures.py": "60fcedd5f2251480ac6ac424deba5241e26f1d22f07433bd18092ea62f83e35b",
     "scripts/plot_crossfit_control_20260927.py": "eadfdc0510405cf9b581c3ab446a45973310cb19f9a761efb49ff473ac0df49a",

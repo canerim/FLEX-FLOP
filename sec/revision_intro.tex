@@ -66,14 +66,10 @@ sequences; its paired routing margin remains statistically unresolved.
 This separates evidence for useful allocation from evidence that a
 source-independent stopping control reliably captures that value.
 
-Our contribution has two parts. First, we provide a spatially conditional
-DCVC-UF synthesis path with a shared latent, reusable prefixes and
-feature-aligned exits. Second, we evaluate the value of learned placement
-against uniform depth and blind mixtures, then test how that conclusion
-changes under a common measured-loss cap and fixed controls. This connects
-the architecture to a falsifiable efficiency claim: routing should earn
-its additional cost through better allocation, rather than through the
-availability of shallow exits alone. Frozen-weight interventions and a
-separate-stream decoding check probe the mechanism. The independent-depth
-study remains ongoing; the present evidence establishes synthesis
-arithmetic savings, while complete codec speedups require measured execution.
+We contribute a spatially conditional DCVC-UF synthesis path and a
+controlled evaluation of learned placement. Uniform depth, blind mixtures,
+a common measured-loss cap and fixed-control replay distinguish the
+architecture's saving from the selector's value. Frozen-weight interventions
+and a stream-only decoding check probe the mechanism. The independent-depth
+study extends this allocation question to codec selection; complete codec
+speedups remain a question for measured execution.

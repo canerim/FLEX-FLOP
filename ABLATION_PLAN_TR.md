@@ -1,7 +1,7 @@
 # DCVC-UF derinlik ve yönlendirme çalışması: öncelikli ablasyon planı
 
-27 Eylül 2026 · Yeni GPU/eğitim deneyleri öneridir; tamamlanan CPU tablo
-kontrolleri üçüncü bölümde açıkça ayrılmıştır.
+28 Eylül 2026 · Yeni GPU/eğitim deneyleri öneridir; tamamlanan CPU tablo
+analizleri ile gerçek-output replay kontrolleri aşağıda ayrı belirtilmiştir.
 
 **Ana hikâye:** DCVC-UF hesaplamasını bölge ve kalite bütçesine göre ayarlamak.
 Ölçülmüş ilk mekanizma model içi early exit; ikinci yol ClassSR benzeri
@@ -19,6 +19,7 @@ altında ölçülmüş gibi yeniden adlandırılamaz. Kanıt: `METRICS.md`.
 
 ## 28 Eylül: tamamlanan kontrollerin değiştirdiği öncelik
 
+- Epoch-30 gerçek-byte milestone: 2.000 vaka tamamlandı. Aynı 99 görüntü ve 0.2 payload bpp'de D6−D4 −0.0045 dB [−0.0172, +0.0087]; epoch-20'nin +0.0627 dB sıralaması sabit değil. Nihai derinlik kıyası için 105 epoch'u tamamlamak ve D12-scratch kontrolü kritik; en iyi ara checkpoint'i seçmek bu soruyu çözmez.
 - Sabit-ağırlık adapter/repair kontrolü: 212 çıktı tamamlandı. Adapter identity kaybı 1.2309 dB, repair identity kaybı 0.00208 dB; eş eğitimli yeniden optimizasyon hâlâ eksik. İki kaynak × dört map shared-stream CPU kontrolünde 8/8 birebir decode var; native hız iddiası yok.
 - QP32 gerçek-output replay: 53 sequence, 318 sabit-policy çıktı. Mean ve Q90 router–dither marjlarının paired CI'ları sıfırı içeriyor. Dış testte üstünlük henüz kanıtlanmadı.
 - Padding konumu: D6/0.2 payload bpp'de +0.2652 dB iyileşme; buna rağmen native-shaped halo32 full-frame D6'dan 1.0262 dB geride. Native CUDA değil, CPU geometri kontrolü.
@@ -85,6 +86,10 @@ bitstream eşdeğerliği, sonra aynı cihazda toplam süre. Bu yol doğrulanınc
 kritik adapter/repair retraining kolları ve predictor karşılaştırması.
 D8/D10 veya uzun hiperparametre taramaları, temel runtime ve generalisation
 sorularının yerine geçmez. Hiçbir öneri ana 105-epoch tarifi kısaltmaz.
+
+Exact-context ile öğrenilmiş repair arasındaki ayrım ve depth bazlı halo
+desteği hesabı: [CONTEXT_CONTROL_TR.md](CONTEXT_CONTROL_TR.md). Bu geometrik
+hesap hız ölçümü değildir.
 
 ## 1. Önce iki sistemi birbirinden ayırıyoruz
 
@@ -187,8 +192,10 @@ grupta seçildi. 0,1 dB ortalama hedefinde router/dither tasarrufu
 kaybını sınırlayınca tasarruf %17,586/%15,558, aşım 32/265 ve 29/265 oluyor.
 Bu, padded kaynak-hata tablosudur; veri daha önce geliştirmede incelendi.
 Dolayısıyla final mixed reconstruction, dış test başarısı veya kare başına
-garanti sayılmaz. Sonraki R1 deneyi seçilmiş kontrolleri final görüntüde
-decode etmeli ve ortalama hedef ile tail-risk hedefini ayrı raporlamalı.
+garanti sayılmaz. QP32 için bu kontrollerin final görüntü replay'i daha
+sonra tamamlandı: 53 kaynak × 3 politika × 2 kontrol = 318 çıktı. Bulgular
+üstteki 28 Eylül özetinde ve ana metnin sabit-kontrol tablosunda yer alıyor.
+Diğer QP'lerin gerçek-output replay'i ve bağımsız içerik ayrımı hâlâ gerekli.
 Veri: `data/crossfit20260927/analysis.json`; supplement S5.
 
 ## 4. Denemeye değer somut yöntem: kazanç ve maliyeti tahmin eden router

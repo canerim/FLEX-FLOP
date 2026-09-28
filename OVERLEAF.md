@@ -62,7 +62,7 @@ records/checkpoints. Source hashes captured during this revision are
 inspection provenance, not retrospective proof of historical execution.
 `figure_reproduction_report.json` records a separate reproduction using only
 the bundled data and scripts: all 117 generated PDF/SVG/PNG artifacts across
-the 34 vector figure sets, plus four generated table/macro files, are checked for byte-identical reproduction. Calibration and
+the 34 vector figure sets, plus six generated table/macro/audit files, are checked for byte-identical reproduction. Calibration and
 arithmetic-denominator figures also have separate source and artifact
 manifests and are included in bundle verification.
 Figures 1 and 2 are protected conceptual illustrations; both remain unchanged

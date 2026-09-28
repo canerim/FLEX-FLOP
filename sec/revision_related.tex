@@ -18,8 +18,9 @@ ClassSR learns to assign super-resolution patches to networks of different
 capacity~\cite{kong2021classsr}. APE instead lets patches leave a multi-exit
 network according to predicted incremental reconstruction
 benefit~\cite{wang2022ape}; it already shares the reconstruction tail across
-exits. RBQE uses early termination for quality enhancement of compressed
-images~\cite{xing2020rbqe}. Swift also introduces compute-dependent
+exits. AdaRevD predicts patch difficulty to choose a deblurring
+sub-decoder~\cite{mao2024adarevd}; RBQE terminates compressed-image
+enhancement early~\cite{xing2020rbqe}. Swift introduces compute-dependent
 early exits in a layered neural video decoder, with different output
 resolutions~\cite{dasari2022swift}. FLEX-UF addresses the codec-specific case within
 DCVC-UF synthesis at fixed output resolution: one entropy-decoded latent
@@ -51,3 +52,10 @@ varies synthesis depth and investigates selection before candidate encoding;
 the evaluated shared-exit path instead retains one representation. These
 distinctions separate specialisation, capacity and representation reuse,
 which cannot be inferred from a comparison of model sizes alone.
+
+\paragraph{Preserving context across blocks.}
+Kim et al. derive overlap and boundary rules that preserve full-image
+CNN reconstruction~\cite{kim2026blockwise}. FLEX-UF instead accepts
+context loss in its zero-halo suffix and learns a common repair/head.
+Its tiled all-deep output must therefore be evaluated separately from
+full-frame synthesis.

@@ -9,6 +9,7 @@ invented PSNR, bitrate or runtime results.
 - Main document: [main.tex](main.tex) / [main.pdf](main.pdf).
 - Supplement: [supplement.tex](supplement.tex) / [supplement.pdf](supplement.pdf).
 - Overleaf and reproduction instructions: [OVERLEAF.md](OVERLEAF.md).
+- Context-preserving versus learned-repair control: [CONTEXT_CONTROL_TR.md](CONTEXT_CONTROL_TR.md).
 - Prioritised ablations: [ABLATION_PLAN_TR.md](ABLATION_PLAN_TR.md).
 - Research assessment and reviewer questions: [REVIEWER_NOTES_TR.md](REVIEWER_NOTES_TR.md).
 - Generated conceptual overview and full prompts: [IMAGEGEN.md](IMAGEGEN.md).
@@ -29,7 +30,7 @@ Select **main.tex** and **pdfLaTeX** in Overleaf. The active text is in
 The original template documentation is preserved in
 [AUTHOR_KIT_README.md](AUTHOR_KIT_README.md).
 
-## Frozen epoch-20 actual-byte study
+## Fixed epoch-20 and epoch-30 actual-byte studies
 
 The supplement includes 100 DIV2K centre crops of 512 × 512 pixels, four
 models (D2/D4/D6 and released D12), and five QPs: 2,000 independent
@@ -40,14 +41,22 @@ RGB PSNR. True-byte curves, feature associations and whole-crop allocation
 controls are in `data/research20260927`. The allocation control is an
 optimistic diagnostic, not a trained patch router.
 
+The predeclared epoch-30 milestone repeats all 2,000 cases. The same 99-image,
+0.2-payload-bpp comparison gives D6−D2 = 0.1071 dB and D6−D4 = −0.0045 dB
+(95% paired interval −0.0172 to +0.0087). The ordering is not stable during
+unfinished training. Both milestones remain in the supplement; geometry
+controls and plotted epoch-20 curves retain their original checkpoints.
+`data/refresh20260927/depth_milestone_audit.json` records the paired check.
+
 `python scripts/build_research_figures.py` renders the portable vector
 figures. `python scripts/reproduce_figures.py` checks byte-identical
 reproduction from bundled data without checkpoints, source images or GPU.
 The suite contains 34 vector figure sets, with two separately identified
 conceptual AI illustrations. Figures 1 and 2 and their captions are
 preserved. A new single-column active-tile execution trace and compact
-paired-increment plot complement the main results. Three numerical tables
-and 22 evidence macros are also generated and checked from bundled JSON.
+paired-increment plot complement the main results. Four numerical tables,
+22 evidence macros and a paired milestone audit are also generated and
+checked from bundled JSON.
 
 ## Fixed-policy and spatial-region controls
 
