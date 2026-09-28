@@ -49,7 +49,7 @@ def matched(data,book):
                 halo=int(p['variant'][4:]);ci(ax,pos+OFFSETS[halo],p['delta_psnr_db'],COLORS[halo], MARKERS[halo])
         ax.axhline(0,color=F.GREY,lw=.8,ls='--')
         ax.set(xticks=range(len(rows)),xticklabels=[f"{r['target_bpp']:.1f}\nn={r['n']}" for r in rows],
-            xlabel='Actual payload rate (bpp)',ylabel='RGB PSNR change from full frame (dB)' if column==0 else '')
+            xlabel='Actual payload rate (bpp)',ylabel='RGB PSNR change (dB)' if column==0 else '')
         ax.set_xlim(-.4,2.4);ax.set_ylim(lower-.12,.15)
     handles=[plt.Line2D([],[],color=COLORS[h],marker=MARKERS[h],ls='none',label=LABELS[h]) for h in (0,32,64)]
     fig.legend(handles=handles,loc='lower center',bbox_to_anchor=(.51,.12),ncol=3,frameon=False,fontsize=5.8)

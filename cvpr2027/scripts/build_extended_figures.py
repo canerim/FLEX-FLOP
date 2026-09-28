@@ -38,7 +38,7 @@ def network(ax, x, y):
 
 
 def bank(book):
-    fig,ax=F.schematic(111)
+    fig,ax=F.schematic(111,86)
     H(ax,3,106,"a","A separate representation at each capacity")
     for x,depth in zip([16,46,76,106,136,166],[2,4,6,8,10,12]):
         planned=depth in (8,10);color=F.DEPTH_ALL[depth//2-1]
@@ -51,7 +51,7 @@ def bank(book):
         A(ax,(x,85.5),(x,76.5+depth*.65),color=F.MUTED,lw=.5)
         T(ax,x,71,f"{depth} synthesis blocks",ha="center",fontsize=5.8)
         T(ax,x,66,"Planned" if planned else "Released anchor" if depth==12 else "Training",ha="center",fontsize=5.8)
-    T(ax,5,59,"All codec weights learn jointly. A matched-training D12 is still required for a depth-only comparison.",fontsize=6)
+    T(ax,5,59,"Each codec learns its own weights end to end. Matched-training D12 is needed to isolate depth.",fontsize=6)
     ax.plot([3,180],[54,54],color=F.GRID,lw=.5)
     H(ax,3,49,"b","Select before encoding; transmit the selected expert")
     F.tensor(ax,5,31,15,10,grid=3);T(ax,12.5,26,"Source patches",ha="center",fontsize=6)
@@ -72,7 +72,7 @@ def bank(book):
 
 def anchors(book):
     d=json.loads((DATA/"reference_audit.json").read_text())
-    fig,ax=F.schematic(103)
+    fig,ax=F.schematic(103,78)
     H(ax,3,98,"a","Selection and reporting use different reconstruction anchors and image support")
     specs=[(75,"SELECTION",F.BLUE,"e15 candidates +\nreleased full reference","Padded source","Tile M (e15) + R (released)"),
            (43,"REPORTING",F.ORANGE,"e15 mixed + full","Crop to original extent","Final mixed reconstruction")]
@@ -174,6 +174,27 @@ def delivered(book):
         "Retrospective selection under a common cropped444-MSE cap, tolerance0.0001dB. All265 frame-QP pairs remain at every cap. Each policy selects its cheapest verified candidate from up to six archived maps, with an e15 dense fallback. Right: paired95% sequence-cluster intervals over5000 draws. Lines only join measured candidate operating points. Router/dither fallback counts at0.1dB are1/2. This is a finite-pool source-aware diagnostic, not a deployable held-out guarantee or measured runtime result.",book)
 
 
+def delivered_compact(book):
+    d=json.loads((DATA/'delivered_frontier_audit.json').read_text())
+    rows=[r for r in d['contrasts'] if r['contrast']=='router_minus_dither']
+    fig,ax=plt.subplots(figsize=(89*F.MM,66*F.MM))
+    fig.subplots_adjust(left=.22,right=.96,bottom=.20,top=.76)
+    fig.text(.04,.94,'Extra saving from spatial placement',fontsize=8,weight='bold',va='top')
+    fig.text(.04,.855,'Router − Bayer dither · paired 95% CI',fontsize=7,color=F.MUTED)
+    ax.axhspan(.6,1.4,color='#EDF5F3',zorder=0)
+    ax.axvline(0,color=F.MUTED,lw=.6)
+    values=np.array([r['mean'] for r in rows]);lo=np.array([r['lo'] for r in rows]);hi=np.array([r['hi'] for r in rows])
+    ax.errorbar(values,np.arange(len(rows)),xerr=[values-lo,hi-values],fmt='o',
+        color=F.BLUE,ms=4.5,mec='white',mew=.5,lw=1.15,capsize=2.5,zorder=3)
+    ax.set_yticks(range(len(rows)),[f"{r['cap']:.2f}" for r in rows])
+    ax.set(xlim=(-.3,4.3),ylim=(5.6,-.6),xticks=[0,1,2,3,4],
+        xlabel='Additional MAC saving (percentage points)',ylabel='Delivered quality-loss cap (dB)')
+    ax.tick_params(labelsize=7);ax.xaxis.label.set_size(7);ax.yaxis.label.set_size(7)
+    ax.grid(axis='x',color=F.GRID,lw=.4);ax.set_axisbelow(True)
+    F.audit_and_save(fig,'figS7_delivered_increment',
+        'Single-column paired allocation contrast under a common measured, cropped YCbCr 4:4:4-loss cap. Every point retains all265 frame-QP pairs and uses a full-frame fallback where needed. Horizontal intervals are paired95% sequence-cluster bootstrap intervals. The highlighted0.1dB row is2.93449 percentage points. Retrospective source-aware selection; not autonomous control or runtime.',book)
+
+
 def scenarios(book):
     d=json.loads((DATA/"design_audit.json").read_text())
     fig,axs=plt.subplots(1,3,figsize=(183*F.MM,85*F.MM))
@@ -236,7 +257,7 @@ def exit_profile(book):
 def main():
     F.OUT.mkdir(parents=True,exist_ok=True)
     with PdfPages(F.OUT/"extended_atlas.pdf", metadata=F.PDF_META) as book:
-        anchors(book); controls(book); delivered(book); bank(book); scenarios(book); exit_profile(book)
+        anchors(book); controls(book); delivered(book); delivered_compact(book); bank(book); scenarios(book); exit_profile(book)
     (F.OUT/"captions.json").write_text(json.dumps(F.CAPTIONS,indent=2)+"\n")
     (F.OUT/"layout_audit.json").write_text(json.dumps(F.AUDIT,indent=2)+"\n")
     (F.OUT/"artifact_manifest.json").write_text(json.dumps({p.name:hashlib.sha256(p.read_bytes()).hexdigest()

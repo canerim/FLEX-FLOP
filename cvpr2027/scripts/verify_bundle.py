@@ -108,12 +108,13 @@ def main():
         for record in audit:
             figure_panels[record['figure']]={t['text'] for t in record['text'] if re.fullmatch('[a-f]',t['text'])}
             assert not record["outside_canvas"],record["figure"]
-            assert abs(record["width_mm"]-183)<1e-6
+            expected_width=89 if record['figure'] in {'fig8_active_tiles','figS7_delivered_increment'} else 183
+            assert abs(record["width_mm"]-expected_width)<1e-6
             assert record["height_mm"]<=170
             assert "<text" in (path/(record["figure"]+".svg")).read_text()
             min_font=min(min_font,*(t["size_pt"] for t in record["text"]))
             figure_count+=1
-    assert figure_count==16
+    assert figure_count==18
     research=json.loads((ROOT/'data/research20260927/manifest.json').read_text())
     assert digest(ROOT/'scripts/research_figure_paths_20260927.py')==research['helper_sha256']
     research_inputs={}
@@ -139,6 +140,7 @@ def main():
             assert '<text' in (path/(record['figure']+'.svg')).read_text()
             min_font=min(min_font,*(t['size_pt'] for t in record['text']))
             figure_count+=1
+    assert min_font>=6.5,f'Figure text below the editorial readability floor: {min_font}'
     caption_panels_checked=0
     for tex in (ROOT/'sec').glob('revision*.tex'):
         for block in re.findall(r'\\begin\{figure\*?\}.*?\\end\{figure\*?\}',tex.read_text(),re.S):
@@ -309,6 +311,7 @@ def main():
         assert digest(asset)==illustration['sha256'],'Changed conceptual illustration'
         checked.append(str(asset.relative_to(ROOT)))
     assert digest(ROOT/'figs/adaptive20260927/adaptive_overview.png')=='45f15d5951b72c1ac8da6c34fd6593d271615a1922b7c3ebfc22b331fec09cf8','Protected Figure 1 changed'
+    assert digest(ROOT/'figs/system20260928/shared_exit_mechanism.png')=='abc06d7d677d82934f3aba8c0e50effb0300ab68c4cfbc898cf8cd28caea739a','Protected Figure 2 changed'
     reports={}
     if args.check_pdfs:
         for name in ["main","supplement"]:

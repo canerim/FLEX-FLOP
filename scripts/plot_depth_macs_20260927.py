@@ -25,20 +25,20 @@ def main():
     F.OUT=OUT;F.AUDIT.clear();F.CAPTIONS.clear()
     fig,axs=plt.subplots(1,2,figsize=(183*F.MM,76*F.MM))
     fig.subplots_adjust(left=.08,right=.98,bottom=.32,top=.78,wspace=.29)
-    F.panel(axs[0],'a','The prior remains when synthesis gets smaller')
-    F.panel(axs[1],'b','A smaller denominator inflates the saving')
+    F.panel(axs[0],'a','Entropy recovery is a fixed cost')
+    F.panel(axs[1],'b','Accounting scope changes the saving')
     depths=np.array([r['depth'] for r in rows]);synthesis=np.array([r['synthesis_macs'] for r in rows])/1e9
     prior=np.array([r['entropy_neural_macs'] for r in rows])/1e9
     axs[0].bar(depths,prior,1.28,color=F.GREY,label='Neural entropy recovery')
     axs[0].bar(depths,synthesis,1.28,bottom=prior,color=F.BLUE,label='Synthesis transform')
-    axs[0].set(xticks=depths,xlabel='Retained synthesis blocks',ylabel='Neural decoder Conv2d cost (GMac)',ylim=(0,100))
+    axs[0].set(xticks=depths,xlabel='Retained synthesis blocks',ylabel='Neural decoder cost (GMAC)',ylim=(0,100))
     for d,total in zip(depths,prior+synthesis):axs[0].text(d,total+2,f'{total:.1f}',ha='center',fontsize=6,color=F.MUTED)
     for key,color,marker,label in [('synthesis_macs',F.ORANGE,'o','Synthesis only'),
             ('neural_decoder_macs',F.BLUE,'s','Neural decoder'),
             ('encoder_with_reconstruction_macs',F.INK,'^','Encoder + reconstruction')]:
         values=[r[key+'_saving_vs_d12_percent'] for r in rows]
         axs[1].plot(depths,values,color=color,marker=marker,label=label)
-    axs[1].set(xticks=depths,xlabel='Retained synthesis blocks',ylabel='Conv2d MAC reduction from D12 (%)',ylim=(-3,82))
+    axs[1].set(xticks=depths,xlabel='Retained synthesis blocks',ylabel='MAC saving from D12 (%)',ylim=(-3,82))
     axs[0].legend(loc='upper center',bbox_to_anchor=(.5,-.27),ncol=1,fontsize=6)
     axs[1].legend(loc='upper center',bbox_to_anchor=(.5,-.27),ncol=1,fontsize=6)
     fig.text(.5,.96,'Synthesis savings and complete neural cost',ha='center',weight='normal',fontsize=6.8)

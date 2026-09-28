@@ -32,7 +32,7 @@ THUMBNAILS = DATA / "source_thumbnails.npz" if BUNDLED else ROOT / "flexplus/res
 MM = 1 / 25.4
 INK, MUTED, GRID = "#20313E", "#586874", "#E5EAED"
 BLUE, ORANGE, TEAL, GREY = "#008A96", "#BF783D", "#79679A", "#81909C"
-DEPTH_ALL = ["#D8ECE7", "#A7D2C9", "#70B6AB", "#34968F", "#267382", "#244B68"]
+DEPTH_ALL = ["#6CB7A4", "#46A49D", "#278B92", "#22738A", "#245B7A", "#243F5C"]
 DEPTH = DEPTH_ALL[2:]
 COL = dict(oracle=TEAL, router=BLUE, dither=ORANGE, uniform=GREY)
 MARK = dict(oracle="o", router="s", dither="^", uniform="D")
@@ -74,8 +74,8 @@ def panel(ax, letter, title):
     ax.set_axisbelow(True)
 
 
-def schematic(h):
-    fig = plt.figure(figsize=(183 * MM, h * MM))
+def schematic(h, display_h=None):
+    fig = plt.figure(figsize=(183 * MM, (h if display_h is None else display_h) * MM))
     ax = fig.add_axes([0, 0, 1, 1], xlim=(0, 183), ylim=(0, h))
     ax.axis("off")
     return fig, ax
@@ -144,27 +144,48 @@ def compact_plot_canvas(fig):
     for obj in list(fig.texts):
         label=obj.get_text()
         preserve=any(word in label.lower() for word in ('not measured','not measurements','assumption'))
-        if obj.get_position()[1]>=.84 and not preserve:
+        y=obj.get_position()[1]
+        if (y>=.84 or (y<=.12 and len(label)>85)) and not preserve:
             removed.append(label);obj.remove()
     if not removed:return []
     fig.canvas.draw();renderer=fig.canvas.get_renderer()
     boxes=[ax.get_tightbbox(renderer) for ax in fig.axes if ax.get_visible()]
     boxes += [obj.get_window_extent(renderer) for obj in [*fig.texts,*fig.legends] if obj.get_visible()]
     high=max(box.y1 for box in boxes if box is not None)+2*MM*fig.dpi
-    factor=min(1,high/fig.bbox.height)
+    low=max(0,min(box.y0 for box in boxes if box is not None)-2*MM*fig.dpi)
+    old_height=fig.bbox.height
+    shift=low/old_height
+    factor=min(1,(high-low)/old_height)
     if factor<.98:
         positions=[ax.get_position().bounds for ax in fig.axes]
         texts=[obj.get_position() for obj in fig.texts]
         anchors=[obj.get_bbox_to_anchor().transformed(fig.transFigure.inverted()).bounds for obj in fig.legends]
         fig.set_size_inches(fig.get_figwidth(),fig.get_figheight()*factor)
-        for ax,(x,y,w,h) in zip(fig.axes,positions):ax.set_position([x,y/factor,w,h/factor])
-        for obj,(x,y) in zip(fig.texts,texts):obj.set_position((x,y/factor))
-        for obj,(x,y,w,h) in zip(fig.legends,anchors):obj.set_bbox_to_anchor((x,y/factor,w,h/factor),transform=fig.transFigure)
+        for ax,(x,y,w,h) in zip(fig.axes,positions):ax.set_position([x,(y-shift)/factor,w,h/factor])
+        for obj,(x,y) in zip(fig.texts,texts):obj.set_position((x,(y-shift)/factor))
+        for obj,(x,y,w,h) in zip(fig.legends,anchors):obj.set_bbox_to_anchor((x,(y-shift)/factor,w,h/factor),transform=fig.transFigure)
     return removed
 
 
 def audit_and_save(fig, name, caption, book):
+    # Set a physical-size readability floor before measuring the final canvas.
+    # Data, confidence intervals and axis limits are deliberately untouched.
+    fig.canvas.draw()  # Materialise lazy tick labels before inspecting their text.
+    for ax in fig.axes:
+        for axis_name,axis in [('x',ax.xaxis),('y',ax.yaxis)]:
+            size=max([6.5]+[t.label1.get_fontsize() for t in axis.get_major_ticks()])
+            ax.tick_params(axis=axis_name,which='both',labelsize=size)
+    for obj in fig.findobj(Text):
+        if obj.get_text().strip() and obj.get_fontsize()<6.5:
+            obj.set_fontsize(6.5)
+    for ax in fig.axes:
+        if ax.axison:
+            ax.xaxis.label.set_fontsize(max(7,ax.xaxis.label.get_fontsize()))
+            ax.yaxis.label.set_fontsize(max(7,ax.yaxis.label.get_fontsize()))
+            if ax.title.get_text():ax.title.set_fontsize(max(7.5,ax.title.get_fontsize()))
     removed_headings=compact_plot_canvas(fig)
+    if removed_headings:
+        caption += ' Figure notes: ' + ' '.join(removed_headings)
     fig.canvas.draw()
     renderer = fig.canvas.get_renderer()
     outside, text_boxes = [], []
@@ -248,15 +269,16 @@ def architecture(d, book):
 
 
 def budget(d, book):
-    fig,axs=plt.subplots(1,2,figsize=(183*MM,62*MM),gridspec_kw={"width_ratios":[1.12,1]})
-    fig.subplots_adjust(left=.076,right=.982,bottom=.26,top=.84,wspace=.36)
+    fig,axs=plt.subplots(1,2,figsize=(183*MM,65*MM),gridspec_kw={"width_ratios":[1.08,1]})
+    fig.subplots_adjust(left=.078,right=.975,bottom=.27,top=.85,wspace=.39)
     ax=axs[0];panel(ax,"a","Compute–quality trade-off")
+    ax.axvspan(.092,.108,color="#EDF5F3",zorder=0)
     for rule in LABEL:
         rows=[r for r in d["summary"] if r["rule"]==rule]
-        ax.plot(BUD,[r["mean"] for r in rows],color=COL[rule],marker=MARK[rule],ms=3.3,mew=.4,mec="white",lw=1)
+        ax.plot(BUD,[r["mean"] for r in rows],color=COL[rule],marker=MARK[rule],ms=4,mew=.45,mec="white",lw=1.15)
     ax.axhline(d["ceiling_pct"],color=MUTED,lw=.55,ls=(0,(3,2)))
-    ax.text(.515,40.1,"39.12% ceiling",ha="right",fontsize=5.7,color=MUTED)
-    ax.set(xlabel="Nominal 444-MSE target (dB)",ylabel="Synthesis MAC saving (%)",xlim=(.035,.53),ylim=(8,44),yticks=[10,20,30,40])
+    ax.text(.515,40.6,"39.12% ceiling",ha="right",fontsize=7,color=MUTED)
+    ax.set(xlabel="Nominal quality-loss target (dB)",ylabel="Synthesis MAC saving (%)",xlim=(.035,.53),ylim=(8,44),yticks=[10,20,30,40])
     ax.set_xticks([.05,.1,.2,.3,.5],["0.05","0.10","0.20","0.30","0.50"])
     ax=axs[1];panel(ax,"b","Increment over dithering")
     ax.grid(False);ax.grid(axis="x",color=GRID,lw=.35)
@@ -264,12 +286,16 @@ def budget(d, book):
     for name,c,marker,dy in [("oracle_minus_dither",TEAL,"o",-.13),("router_minus_dither",BLUE,"s",.13)]:
         rows=[r for r in d["contrasts"] if r["contrast"]==name]
         value=np.array([r["mean"] for r in rows]);lo=np.array([r["lo"] for r in rows]);hi=np.array([r["hi"] for r in rows])
-        ax.errorbar(value,np.arange(6)+dy,xerr=[value-lo,hi-value],fmt=marker,color=c,ms=3.4,mec="white",mew=.35,lw=.85,capsize=1.7)
+        ax.errorbar(value,np.arange(6)+dy,xerr=[value-lo,hi-value],fmt=marker,color=c,ms=4,mec="white",mew=.4,lw=1,capsize=2)
     ax.axvline(0,color=MUTED,lw=.6)
     ax.set_yticks(range(6),["0.05","0.10","0.15","0.20","0.30","0.50"])
     ax.set(xlim=(-.35,7.4),ylim=(5.55,-.55),xticks=[0,2,4,6],xlabel="Additional saving (percentage points)",ylabel="Nominal target (dB)")
-    handles=[Line2D([],[],color=COL[k],marker=MARK[k],lw=1,ms=3.2,label=LABEL[k]) for k in LABEL]
-    fig.legend(handles=handles,loc="lower center",bbox_to_anchor=(.51,.035),ncol=4,fontsize=6,handlelength=1.5,columnspacing=1.7)
+    for ax in axs:
+        ax.tick_params(labelsize=7)
+        ax.xaxis.label.set_size(7.5);ax.yaxis.label.set_size(7.5)
+        ax.title.set_size(8)
+    handles=[Line2D([],[],color=COL[k],marker=MARK[k],lw=1.15,ms=4,label=LABEL[k]) for k in LABEL]
+    fig.legend(handles=handles,loc="lower center",bbox_to_anchor=(.51,.025),ncol=4,fontsize=7,handlelength=1.5,columnspacing=1.5)
     audit_and_save(fig,"fig2_budget_value",
         "Nominal-budget comparison under source-calibrated control. Left: total modelled synthesis arithmetic saving; the horizontal guide is the shallow-exit ceiling. Right: paired search-minus-dither and router-minus-dither means with95% sequence-cluster bootstrap intervals. The shaded row marks0.1dB. Common cohort counts are204,263,265,265,265,265. Nominal targets are not final-image guarantees; routing, signalling and entropy work are excluded. Discrete points are joined only as guides.",book)
 
@@ -356,7 +382,7 @@ def quality(d, book):
         ax.scatter([r[metric] for r in rs], yy, color=[BLUE, ORANGE][i], marker=["o", "s"][i], s=14,
                    label=["444-MSE", "YUV 6:1:1"][i], zorder=3)
         for y, r in zip(yy, rs):
-            ax.text(r[metric] + 1.5, y, str(r[metric]), va="center", fontsize=6)
+            ax.annotate(str(r[metric]),(r[metric],y),xytext=(5,0),textcoords='offset points',va='center',fontsize=6.5)
     ax.set_yticks(range(4), ["Search", "Router", "Dither", "Uniform"])
     ax.invert_yaxis(); ax.set(xlabel="Above target among 263 paired cases", xlim=(-2, max(r["yuv_over"] for r in rs) + 12))
     ax.legend(loc="lower right", fontsize=6)
@@ -365,7 +391,7 @@ def quality(d, book):
 
 
 def decision_cost(d, book):
-    fig, ax = schematic(116)
+    fig, ax = schematic(116,92)
     heading(ax, 3, 111, "a", "The source is available at the encoder, but the error table must be computed")
     # Alternative execution traces: shared latent, not six independent encodes.
     tensor(ax, 7, 83, 12, 12, grid=3)
@@ -411,7 +437,7 @@ def decision_cost(d, book):
     p.set(xlim=(0, 1640), xlabel="Recorded stage time (ms)")
     p.grid(axis="x", color=GRID, lw=.45); p.set_axisbelow(True)
     heading(ax, 111, 52, "c", "Calibration changes the cost")
-    text(ax, 116, 43, "Fixed, held-out β", weight="bold", fontsize=6)
+    text(ax, 116, 43, "Fixed validation-selected β", weight="bold", fontsize=6)
     text(ax, 116, 36, "Router uses decoded features.\nNo per-frame source table is required.", fontsize=6, linespacing=1.5)
     text(ax, 116, 24, "Per-frame source-calibrated β", weight="bold", fontsize=6)
     text(ax, 116, 17, "The plotted budget sweep uses M[t,k].\nA fast router does not remove that cost.", fontsize=6, linespacing=1.5)
@@ -420,30 +446,63 @@ def decision_cost(d, book):
         "The encoder pays to acquire source-error information. The upper trace is schematic; the table and search stages are distinct from latent creation. In the archived benchmark, six trial exits contain only four distinct reachable outputs. The reported table-construction statistic decreases from 1,347.65 ms to 336.87 ms with a shared tiled pass. Bars use the archived upper median of 24 pooled trials (eight frames × three repeats, QP32); raw trial distributions and a contemporaneous load log are unavailable, so no uncertainty bars are invented. The archived GPU search timer can include pending reference-decode work and is excluded here. These stage measurements establish neither end-to-end encode latency nor a router speedup. The source-calibrated budget curves require information unavailable to an autonomous decoder.", book)
 
 
+def active_tiles(d, book):
+    """Single-column execution trace; every coloured cell is a recorded tile."""
+    ex=d['example'];m=np.asarray(ex['rules']['router']['0.1']['map']).reshape(ex['grid'])
+    depths=2*(m+1);stages=[6,8,10,12]
+    counts=[int((depths>=k).sum()) for k in stages]
+    departures=[int((depths==k).sum()) for k in stages]
+    assert counts==[40,27,7,3] and sum(departures)==40
+    fig=plt.figure(figsize=(89*MM,64*MM))
+    ax=fig.add_axes([0,0,1,1],xlim=(0,89),ylim=(0,64));ax.axis('off')
+    text(ax,3,60,'Only surviving tiles run the next block pair',fontsize=8,weight='bold')
+    text(ax,3,55,'Executed depth',fontsize=7,color=MUTED)
+    text(ax,39,55,'Active spatial tiles',fontsize=7,color=MUTED)
+    text(ax,82,55,'Exit',fontsize=7,color=MUTED,ha='center')
+    for i,(k,n,leave) in enumerate(zip(stages,counts,departures)):
+        y=43-i*11.5
+        text(ax,4,y+2,str(k),fontsize=13,weight='bold',color=DEPTH[i])
+        text(ax,18,y+3,str(n),fontsize=10,weight='bold')
+        text(ax,18,y-1.8,'tiles',fontsize=6.8,color=MUTED)
+        # Cells retain their original spatial coordinates; blank cells have exited.
+        for row in range(m.shape[0]):
+            for col in range(m.shape[1]):
+                live=depths[row,col]>=k
+                ax.add_patch(Rectangle((40+col*3.6,y+5-row*1.85),3.1,1.4,
+                    facecolor=DEPTH[i] if live else '#F0F3F4',
+                    edgecolor='none'))
+        arrow(ax,(71,y+2),(77,y+2),color=DEPTH[i],lw=.9)
+        text(ax,82,y+2,str(leave),fontsize=10,weight='bold',ha='center',color=DEPTH[i])
+        if i<3:
+            arrow(ax,(12,y-4),(12,y-8),color=MUTED,lw=.75)
+    audit_and_save(fig,'fig8_active_tiles',
+        'Measured-map execution trace for videoSRC05 at QP32 and nominal 0.1 dB source-calibrated control. Rows retain the original 5 by 8 padded tile coordinates. Active populations at total depth 6, 8, 10 and 12 are 40, 27, 7 and 3; departures are 13, 20, 4 and 3. Pale cells have already exited. This shows which tiles enter each block pair, not a GPU schedule, timing or batch-size benchmark. All departures use the adapters and common canvas in Figure 2.',book)
+
+
 def maps(d, book):
-    fig, ax = schematic(49)
+    fig, ax = schematic(50)
     ex=d["example"];mshape=ex["grid"];H,W=ex["hw"]
     thumbs=np.load(THUMBNAILS)
-    heading(ax,3,45,"a","One source, four allocations at the 0.1 dB target")
-    xs=[4,40,76,112,148]; width=30
-    for x,label in zip(xs,["Source luma","Search","Router","Bayer dither","Uniform"]):
-        text(ax,x+width/2,38,label,ha="center",weight="bold",fontsize=7)
+    xs=[4,49,94,139]; width=40
+    for x,letter,label in zip(xs,'abcd',["Source luma","Router","Bayer dither","Source-informed search"]):
+        text(ax,x,45,letter,weight='bold',fontsize=8)
+        text(ax,x+width/2,45,label,ha="center",weight="bold",fontsize=8)
     y=18
     ax.imshow(thumbs[str(ex["index"])],cmap="gray",vmin=0,vmax=255,extent=(xs[0],xs[0]+width,y,y+width*H/W),zorder=1)
     text(ax,xs[0]+width/2,14,ex["seq"].split("_")[0],ha="center",fontsize=6.5)
     text(ax,xs[0]+width/2,10,"QP32",ha="center",fontsize=6.5)
-    for x,rule in zip(xs[1:],LABEL):
+    for x,rule in zip(xs[1:],['router','dither','oracle']):
         v=ex["rules"][rule]["0.1"];m=np.array(v["map"]).reshape(mshape)
         for iy in range(mshape[0]):
             for ix in range(mshape[1]):
                 left,right=ix*256,min((ix+1)*256,W);top,bottom=iy*256,min((iy+1)*256,H)
                 if right<=left or bottom<=top:continue
                 ax.add_patch(Rectangle((x+left/W*width,y+(H-bottom)/W*width),(right-left)/W*width,(bottom-top)/W*width,facecolor=DEPTH[int(m[iy,ix])-2],edgecolor="white",lw=.4))
-        text(ax,x+width/2,14,f"{v['saving']:.1f}% MAC saved",ha="center",fontsize=6.5)
-        text(ax,x+width/2,10,f"{v['db_rgb']:.3f} dB loss",ha="center",fontsize=6.5)
-    depth_key(ax,40,3)
+        text(ax,x+width/2,14,f"{v['saving']:.1f}% MAC saved",ha="center",fontsize=7)
+        text(ax,x+width/2,10,f"{v['db_rgb']:.3f} dB loss",ha="center",fontsize=7)
+    depth_key(ax,49,3)
     audit_and_save(fig,"fig5_spatial_decisions",
-        "Recorded exit assignments at a nominal 0.1 dB target for videoSRC05 QP32. The source-luma thumbnail is archived evaluator data, not generated imagery or a reconstructed output. Maps are cropped to the valid image extent. Depth colours match the execution diagram. This frame was chosen from five available thumbnails by proximity to the aggregate routing margin. Quality and MAC annotations are recorded mixed-output measurements and modelled arithmetic, respectively. At 0.3 dB the search, router and dither maps for this frame all take depth 6; repeated identical maps are omitted.",book)
+        "Recorded exit assignments at a nominal 0.1 dB target for videoSRC05 QP32: a source luma, b learned router, c Bayer dither, d source-informed search. The source thumbnail is archived evaluator data, not generated imagery or a reconstructed output. Maps are cropped to the valid image extent. Depth colours match the execution trace. The constant uniform-depth8 map is omitted from the display; its recorded result is24.2% synthesis MAC saving and0.082dB loss. This frame was chosen from five available thumbnails by proximity to the aggregate routing margin. Quality and MAC annotations are recorded mixed-output measurements and modelled arithmetic, respectively. At0.3dB the search, router and dither maps all take depth6; repeated identical maps are omitted.",book)
 
 
 def depth_system(d, book):
@@ -531,6 +590,7 @@ def main():
         quality(d, book)
         decision_cost(d, book)
         maps(d, book)
+        active_tiles(d, book)
         depth_system(d, book)
         budget_detail(d, book)
     (OUT / "captions.json").write_text(json.dumps(CAPTIONS, indent=2) + "\n")

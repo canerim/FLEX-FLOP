@@ -4,7 +4,7 @@
   "captions": [
     {
       "name": "fig_component_interventions",
-      "caption": "Frozen e15 checkpoint, all53 CTC first frames atQP32, the same pre-existing Q90 router map per frame. Repair, adapters, or both are replaced by identity without retraining or map reselection. Positive PSNR loss in panel a means that intervention harms the trained reconstruction. Open points are individual sequences; black points and intervals show means and5000 paired-sequence bootstrap95% intervals conditional on the fixed weights and development corpus. Panel b averages within-sequence relative RGB MSE changes in an8-pixel-wide band around internal256-pixel tile boundaries and in the remaining valid pixels, with paired95% intervals. The outer image perimeter is not a tile boundary. Panel c shows the distribution of joint PSNR loss minus the sum of the two separate losses; this interaction depends on the metric scale. Exact repair/head replay and the unchanged trained baseline are verified before measurement. These interventions measure dependence of this checkpoint on learned modules, not the quality attainable by separately optimized alternatives, a runtime benefit, or external-test generalization."
+      "caption": "Frozen e15 checkpoint, all53 CTC first frames atQP32, the same pre-existing Q90 router map per frame. Repair, adapters, or both are replaced by identity without retraining or map reselection. Positive PSNR loss in panel a means that intervention harms the trained reconstruction. Open points are individual sequences; black points and intervals show means and5000 paired-sequence bootstrap95% intervals conditional on the fixed weights and development corpus. Panel b averages within-sequence relative RGB MSE changes in an8-pixel-wide band around internal256-pixel tile boundaries and in the remaining valid pixels, with paired95% intervals. The outer image perimeter is not a tile boundary. Panel c shows the distribution of joint PSNR loss minus the sum of the two separate losses; this interaction depends on the metric scale. Exact repair/head replay and the unchanged trained baseline are verified before measurement. These interventions measure dependence of this checkpoint on learned modules, not the quality attainable by separately optimized alternatives, a runtime benefit, or external-test generalization. Figure notes: Same 53 frames, QP32 and fixed Q90 router maps \u00b7 dots: sequences \u00b7 black means and paired 95% intervals Weights are frozen: removing a trained component is not a retraining ablation or a runtime measurement"
     }
   ],
   "layout_audit": [
@@ -17,149 +17,149 @@
           "size_pt": 8.0,
           "bbox_px": [
             28.818897637795267,
-            262.7893700787402,
+            231.70170084635419,
             6.0,
-            10.427517361111086
+            10.427517361111114
           ]
         },
         {
           "text": "Repair mean\n+0.0021 dB",
-          "size_pt": 5.5,
+          "size_pt": 6.5,
           "bbox_px": [
-            57.766591676040505,
-            102.03038961993865,
-            44.0,
-            17.897772894965286
+            53.266591676040505,
+            70.94272038755265,
+            53.0,
+            20.606458875868057
           ]
         },
         {
           "text": "Replaced by identity",
-          "size_pt": 6.5,
+          "size_pt": 7.0,
           "bbox_px": [
-            101.59448818897638,
-            51.95760240663277,
-            85.0,
-            9.0
+            97.09448818897638,
+            19.812750014524546,
+            94.0,
+            9.124077690972221
           ]
         },
         {
           "text": "Repair",
-          "size_pt": 6.0,
+          "size_pt": 6.5,
           "bbox_px": [
-            68.2665916760405,
-            66.51315796218833,
-            23.0,
-            8.06689453125
+            66.2665916760405,
+            34.492383261052325,
+            27.0,
+            9.0
           ]
         },
         {
           "text": "Adapters",
-          "size_pt": 6.0,
+          "size_pt": 6.5,
           "bbox_px": [
-            129.0944881889764,
-            66.51315796218833,
-            30.0,
-            8.06689453125
+            125.59448818897641,
+            34.492383261052325,
+            37.0,
+            9.0
           ]
         },
         {
           "text": "Both",
-          "size_pt": 6.0,
+          "size_pt": 6.5,
           "bbox_px": [
-            200.92238470191228,
-            66.759414472605,
-            15.0,
-            7.820638020833329
+            198.92238470191228,
+            34.59249448067038,
+            19.0,
+            8.899888780381943
           ]
         },
         {
           "text": "RGB PSNR loss from trained model (dB)",
-          "size_pt": 6.5,
+          "size_pt": 7.0,
           "bbox_px": [
-            27.14654418197724,
-            82.36220472440948,
-            9.000000000000014,
-            170.0
+            26.02246649100502,
+            43.77453549202346,
+            9.124077690972236,
+            185.0
           ]
         },
         {
           "text": "0",
-          "size_pt": 6.0,
+          "size_pt": 6.5,
           "bbox_px": [
-            41.702099737532805,
-            86.15387051389924,
-            4.0,
-            7.820638020833329
+            40.702099737532805,
+            54.45350325633962,
+            5.0,
+            8.899888780381943
           ]
         },
         {
           "text": "1",
-          "size_pt": 6.0,
+          "size_pt": 6.5,
           "bbox_px": [
-            41.702099737532805,
-            106.31628569722848,
-            4.0,
-            7.820638020833329
+            40.702099737532805,
+            74.61591843966886,
+            5.0,
+            8.899888780381943
           ]
         },
         {
           "text": "2",
-          "size_pt": 6.0,
+          "size_pt": 6.5,
           "bbox_px": [
-            41.702099737532805,
-            126.47870088055772,
-            4.0,
-            7.820638020833329
+            40.702099737532805,
+            94.7783336229981,
+            5.0,
+            8.899888780381943
           ]
         },
         {
           "text": "3",
-          "size_pt": 6.0,
+          "size_pt": 6.5,
           "bbox_px": [
-            41.702099737532805,
-            146.64111606388693,
-            4.0,
-            7.820638020833343
+            40.702099737532805,
+            114.94074880632733,
+            5.0,
+            8.899888780381943
           ]
         },
         {
           "text": "4",
-          "size_pt": 6.0,
+          "size_pt": 6.5,
           "bbox_px": [
-            41.702099737532805,
-            166.80353124721617,
-            4.0,
-            7.820638020833343
+            40.702099737532805,
+            135.10316398965657,
+            5.0,
+            8.899888780381957
           ]
         },
         {
           "text": "5",
-          "size_pt": 6.0,
+          "size_pt": 6.5,
           "bbox_px": [
-            41.702099737532805,
-            186.96594643054542,
-            4.0,
-            7.820638020833343
+            40.702099737532805,
+            155.2655791729858,
+            5.0,
+            8.899888780381957
           ]
         },
         {
           "text": "6",
-          "size_pt": 6.0,
+          "size_pt": 6.5,
           "bbox_px": [
-            41.702099737532805,
-            207.12836161387466,
-            4.0,
-            7.820638020833343
+            40.702099737532805,
+            175.42799435631505,
+            5.0,
+            8.899888780381957
           ]
         },
         {
           "text": "7",
-          "size_pt": 6.0,
+          "size_pt": 6.5,
           "bbox_px": [
-            41.702099737532805,
-            227.2907767972039,
-            4.0,
-            7.820638020833343
+            40.702099737532805,
+            195.5904095396443,
+            5.0,
+            8.899888780381957
           ]
         },
         {
@@ -167,7 +167,7 @@
           "size_pt": 6.7,
           "bbox_px": [
             54.03543307086614,
-            260.9221347331584,
+            229.83446550077238,
             122.0,
             9.0
           ]
@@ -177,139 +177,139 @@
           "size_pt": 8.0,
           "bbox_px": [
             273.7795275590551,
-            262.7893700787402,
+            231.70170084635419,
             7.0,
-            10.427517361111086
+            10.427517361111114
           ]
         },
         {
           "text": "Replaced by identity",
-          "size_pt": 6.5,
+          "size_pt": 7.0,
           "bbox_px": [
-            346.5551181102362,
-            51.95760240663277,
-            85.0,
-            9.0
+            342.0551181102362,
+            19.812750014524546,
+            94.0,
+            9.124077690972221
           ]
         },
         {
           "text": "Repair",
-          "size_pt": 6.0,
+          "size_pt": 6.5,
           "bbox_px": [
-            313.22722159730034,
-            66.51315796218833,
-            23.0,
-            8.06689453125
+            311.22722159730034,
+            34.492383261052325,
+            27.0,
+            9.0
           ]
         },
         {
           "text": "Adapters",
-          "size_pt": 6.0,
+          "size_pt": 6.5,
           "bbox_px": [
-            374.0551181102362,
-            66.51315796218833,
-            30.0,
-            8.06689453125
+            370.5551181102362,
+            34.492383261052325,
+            37.0,
+            9.0
           ]
         },
         {
           "text": "Both",
-          "size_pt": 6.0,
+          "size_pt": 6.5,
           "bbox_px": [
-            445.88301462317213,
-            66.759414472605,
-            15.0,
-            7.820638020833329
+            443.88301462317213,
+            34.59249448067038,
+            19.0,
+            8.899888780381943
           ]
         },
         {
           "text": "MSE increase from trained model (%)",
-          "size_pt": 6.5,
+          "size_pt": 7.0,
           "bbox_px": [
-            268.1071741032371,
-            89.36220472440948,
-            9.0,
-            156.0
+            265.9830964122649,
+            50.77453549202346,
+            9.124077690972229,
+            171.0
           ]
         },
         {
           "text": "0",
-          "size_pt": 6.0,
+          "size_pt": 6.5,
           "bbox_px": [
-            286.66272965879267,
-            85.79046918047237,
-            4.0,
-            7.820638020833329
+            285.66272965879267,
+            54.09010192291275,
+            5.0,
+            8.899888780381943
           ]
         },
         {
           "text": "10",
-          "size_pt": 6.0,
+          "size_pt": 6.5,
           "bbox_px": [
-            282.66272965879267,
-            107.42604271520263,
-            8.0,
-            7.820638020833329
+            280.66272965879267,
+            75.725675457643,
+            10.0,
+            8.899888780381943
           ]
         },
         {
           "text": "20",
-          "size_pt": 6.0,
+          "size_pt": 6.5,
           "bbox_px": [
-            282.66272965879267,
-            129.06161624993288,
-            8.0,
-            7.820638020833343
+            280.66272965879267,
+            97.36124899237326,
+            10.0,
+            8.899888780381943
           ]
         },
         {
           "text": "30",
-          "size_pt": 6.0,
+          "size_pt": 6.5,
           "bbox_px": [
-            282.66272965879267,
-            150.69718978466315,
-            8.0,
-            7.820638020833343
+            280.66272965879267,
+            118.99682252710353,
+            10.0,
+            8.899888780381943
           ]
         },
         {
           "text": "40",
-          "size_pt": 6.0,
+          "size_pt": 6.5,
           "bbox_px": [
-            282.66272965879267,
-            172.3327633193934,
-            8.0,
-            7.820638020833343
+            280.66272965879267,
+            140.6323960618338,
+            10.0,
+            8.899888780381957
           ]
         },
         {
           "text": "50",
-          "size_pt": 6.0,
+          "size_pt": 6.5,
           "bbox_px": [
-            282.66272965879267,
-            193.96833685412363,
-            8.0,
-            7.820638020833343
+            280.66272965879267,
+            162.26796959656403,
+            10.0,
+            8.899888780381957
           ]
         },
         {
           "text": "60",
-          "size_pt": 6.0,
+          "size_pt": 6.5,
           "bbox_px": [
-            282.66272965879267,
-            215.6039103888539,
-            8.0,
-            7.820638020833343
+            280.66272965879267,
+            183.9035431312943,
+            10.0,
+            8.899888780381957
           ]
         },
         {
           "text": "70",
-          "size_pt": 6.0,
+          "size_pt": 6.5,
           "bbox_px": [
-            282.66272965879267,
-            237.23948392358417,
-            8.0,
-            7.820638020833343
+            280.66272965879267,
+            205.53911666602454,
+            10.0,
+            8.899888780381957
           ]
         },
         {
@@ -317,29 +317,29 @@
           "size_pt": 6.7,
           "bbox_px": [
             298.996062992126,
-            260.9221347331584,
+            229.83446550077238,
             126.0,
             9.0
           ]
         },
         {
           "text": "Boundary",
-          "size_pt": 5.6,
+          "size_pt": 6.5,
           "bbox_px": [
             327.77384076990376,
-            236.8110236220473,
-            32.0,
-            8.0
+            204.72335438966127,
+            39.0,
+            9.0
           ]
         },
         {
           "text": "Interior",
-          "size_pt": 5.6,
+          "size_pt": 6.5,
           "bbox_px": [
             327.77384076990376,
-            225.28530747621394,
-            24.0,
-            7.636827256944457
+            191.93457672039042,
+            29.0,
+            8.899888780381957
           ]
         },
         {
@@ -347,89 +347,89 @@
           "size_pt": 8.0,
           "bbox_px": [
             534.5905511811025,
-            262.7893700787402,
+            231.70170084635419,
             6.0,
-            10.427517361111086
+            10.427517361111114
           ]
         },
         {
           "text": "Joint \u2212 summed individual\nPSNR losses (dB)",
-          "size_pt": 6.5,
+          "size_pt": 7.0,
           "bbox_px": [
-            572.8110236220473,
-            40.59740004118139,
-            108.0,
-            20.606458875868057
+            567.3110236220473,
+            7.874015748031493,
+            119.0,
+            21.162923177083332
           ]
         },
         {
           "text": "0.0",
-          "size_pt": 6.0,
+          "size_pt": 6.5,
           "bbox_px": [
-            567.5945703860224,
-            66.759414472605,
-            10.0,
-            7.820638020833329
+            566.0945703860224,
+            34.59249448067038,
+            13.0,
+            8.899888780381943
           ]
         },
         {
           "text": "0.1",
-          "size_pt": 6.0,
+          "size_pt": 6.5,
           "bbox_px": [
-            617.333574478202,
-            66.759414472605,
-            10.0,
-            7.820638020833329
+            615.833574478202,
+            34.59249448067038,
+            13.0,
+            8.899888780381943
           ]
         },
         {
           "text": "0.2",
-          "size_pt": 6.0,
+          "size_pt": 6.5,
           "bbox_px": [
-            667.0725785703816,
-            66.759414472605,
-            10.0,
-            7.820638020833329
+            665.5725785703816,
+            34.59249448067038,
+            13.0,
+            8.899888780381943
           ]
         },
         {
           "text": "Fraction of sequences",
-          "size_pt": 6.5,
+          "size_pt": 7.0,
           "bbox_px": [
-            521.8748906386702,
-            120.86220472440948,
-            9.0,
-            93.0
+            518.750812947698,
+            84.77453549202346,
+            9.124077690972172,
+            103.0
           ]
         },
         {
           "text": "0.0",
-          "size_pt": 6.0,
+          "size_pt": 6.5,
           "bbox_px": [
-            536.4304461942257,
-            78.12619507156333,
-            10.0,
-            7.820638020833329
+            533.4304461942257,
+            46.42582781400371,
+            13.0,
+            8.899888780381943
           ]
         },
         {
           "text": "0.5",
-          "size_pt": 6.0,
+          "size_pt": 6.5,
           "bbox_px": [
-            536.4304461942257,
-            160.91915477512978,
-            10.0,
-            7.820638020833343
+            533.4304461942257,
+            129.21878751757015,
+            13.0,
+            8.899888780381957
           ]
         },
         {
           "text": "1.0",
-          "size_pt": 6.0,
+          "size_pt": 6.5,
           "bbox_px": [
-            536.4304461942257,
-            243.71211447869624,
-            10.0,
-            7.820638020833343
+            533.4304461942257,
+            212.01174722113663,
+            13.0,
+            8.899888780381957
           ]
         },
         {
@@ -437,35 +437,18 @@
           "size_pt": 6.7,
           "bbox_px": [
             554.7637795275591,
-            260.9221347331584,
+            229.83446550077238,
             130.0,
             9.0
           ]
-        },
-        {
-          "text": "Same 53 frames, QP32 and fixed Q90 router maps \u00b7 dots: sequences \u00b7 black means and paired 95% intervals",
-          "size_pt": 5.8,
-          "bbox_px": [
-            178.23622047244095,
-            31.77952755905512,
-            363.99999999999994,
-            8.0
-          ]
-        },
-        {
-          "text": "Weights are frozen: removing a trained component is not a retraining ablation or a runtime measurement",
-          "size_pt": 5.8,
-          "bbox_px": [
-            185.30653297244095,
-            11.818897637795274,
-            349.85937499999994,
-            8.0
-          ]
         }
       ],
-      "duplicated_headings_moved_to_caption": [],
+      "duplicated_headings_moved_to_caption": [
+        "Same 53 frames, QP32 and fixed Q90 router maps \u00b7 dots: sequences \u00b7 black means and paired 95% intervals",
+        "Weights are frozen: removing a trained component is not a retraining ablation or a runtime measurement"
+      ],
       "width_mm": 183.0,
-      "height_mm": 78.0
+      "height_mm": 63.50082142469617
     }
   ]
 }

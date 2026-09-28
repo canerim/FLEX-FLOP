@@ -1,10 +1,10 @@
 [
   {
     "name": "fig_crossfit_budget_risk",
-    "caption": "Five-fold sequence-disjoint calibration of a fixed router, Bayer dither and uniform depth. Solid lines fit the training mean; dashed lines fit its 90th percentile. Every frame-QP remains, including outcomes from infeasible calibration groups. The 0.05 dB Q90 target is infeasible for groups covering 159/265 held-out cases in each policy. These are padded source-error table diagnostics, not delivered mixed-image quality or an untouched test set."
+    "caption": "Five-fold sequence-disjoint calibration of a fixed router, Bayer dither and uniform depth. Solid lines fit the training mean; dashed lines fit its 90th percentile. Every frame-QP remains, including outcomes from infeasible calibration groups. The 0.05 dB Q90 target is infeasible for groups covering 159/265 held-out cases in each policy. These are padded source-error table diagnostics, not delivered mixed-image quality or an untouched test set. Figure notes: Sequence cross-fitting: compute and risk Padded source-error tables \u00b7 fixed model \u00b7 53 sequences \u00d7 5 QPs \u00b7 no final reconstruction or latency claim"
   },
   {
     "name": "fig_crossfit_loss_distribution",
-    "caption": "At a 0.1 dB table-loss target, held-out loss distributions differ substantially between training-mean and training-Q90 calibration. Curves are descriptive ECDFs of 265 correlated frame-QP observations, not confidence bands or final cropped reconstruction errors. No source-conditioned test fallback is applied."
+    "caption": "At a 0.1 dB table-loss target, held-out loss distributions differ substantially between training-mean and training-Q90 calibration. Curves are descriptive ECDFs of 265 correlated frame-QP observations, not confidence bands or final cropped reconstruction errors. No source-conditioned test fallback is applied. Figure notes: Final distributions at a nominal 0.1 dB target All 265 cases retained \u00b7 vertical line: target \u00b7 horizontal line: 90% \u00b7 descriptive distributions, not confidence bands"
   }
 ]

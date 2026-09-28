@@ -494,13 +494,13 @@ z
     <text style="font-size: 6.7px; font-family: 'Liberation Sans'; text-anchor: start; fill: #20313e" x="21.259843" y="11.0631" transform="rotate(-0 21.259843 11.0631)">One API call contains overlapping work</text>
    </g>
    <g id="text_3">
-    <text style="font-weight: 700; font-size: 6.2px; font-family: 'Liberation Sans'; text-anchor: start; fill: #008a96" x="8.503937" y="48.25056" transform="rotate(-0 8.503937 48.25056)">GPU main</text>
+    <text style="font-weight: 700; font-size: 6.5px; font-family: 'Liberation Sans'; text-anchor: start; fill: #008a96" x="8.503937" y="48.328197" transform="rotate(-0 8.503937 48.328197)">GPU main</text>
    </g>
    <g id="text_4">
-    <text style="font-weight: 700; font-size: 6.2px; font-family: 'Liberation Sans'; text-anchor: start; fill: #79679a" x="8.503937" y="94.896628" transform="rotate(-0 8.503937 94.896628)">GPU worker</text>
+    <text style="font-weight: 700; font-size: 6.5px; font-family: 'Liberation Sans'; text-anchor: start; fill: #79679a" x="8.503937" y="94.974265" transform="rotate(-0 8.503937 94.974265)">GPU worker</text>
    </g>
    <g id="text_5">
-    <text style="font-weight: 700; font-size: 6.2px; font-family: 'Liberation Sans'; text-anchor: start; fill: #bf783d" x="8.503937" y="139.210393" transform="rotate(-0 8.503937 139.210393)">CPU worker</text>
+    <text style="font-weight: 700; font-size: 6.5px; font-family: 'Liberation Sans'; text-anchor: start; fill: #bf783d" x="8.503937" y="139.288029" transform="rotate(-0 8.503937 139.288029)">CPU worker</text>
    </g>
    <g id="patch_51">
     <path d="M 92.125984 53.176517
@@ -527,16 +527,16 @@ z
 " clip-path="url(#p0f15e67fcc)" style="fill: #d8ece7; stroke: #586874; stroke-width: 0.4; stroke-linejoin: miter"/>
    </g>
    <g id="text_6">
-    <text style="font-size: 5.8px; font-family: 'Liberation Sans'; text-anchor: middle; fill: #20313e" x="155.905512" y="69.137775" transform="rotate(-0 155.905512 69.137775)">Analysis + priors</text>
+    <text style="font-size: 6.5px; font-family: 'Liberation Sans'; text-anchor: middle; fill: #20313e" x="155.905512" y="69.318927" transform="rotate(-0 155.905512 69.318927)">Analysis + priors</text>
    </g>
    <g id="text_7">
-    <text style="font-size: 5.8px; font-family: 'Liberation Sans'; text-anchor: middle; fill: #586874" x="155.905512" y="78.466989" transform="rotate(-0 155.905512 78.466989)">Quantised latent</text>
+    <text style="font-size: 6.5px; font-family: 'Liberation Sans'; text-anchor: middle; fill: #586874" x="155.905512" y="78.648141" transform="rotate(-0 155.905512 78.648141)">Quantised latent</text>
    </g>
    <g id="text_8">
-    <text style="font-size: 6px; font-family: 'Liberation Sans'; text-anchor: middle; fill: #20313e" x="215.433071" y="31.872679" transform="rotate(-0 215.433071 31.872679)">event_y</text>
+    <text style="font-size: 6.5px; font-family: 'Liberation Sans'; text-anchor: middle; fill: #20313e" x="215.433071" y="32.002073" transform="rotate(-0 215.433071 32.002073)">event_y</text>
    </g>
    <g id="text_9">
-    <text style="font-size: 5.8px; font-family: 'Liberation Sans'; text-anchor: middle; fill: #20313e" x="286.299213" y="69.137775" transform="rotate(-0 286.299213 69.137775)">Synthesis</text>
+    <text style="font-size: 6.5px; font-family: 'Liberation Sans'; text-anchor: middle; fill: #20313e" x="286.299213" y="69.318927" transform="rotate(-0 286.299213 69.318927)">Synthesis</text>
    </g>
    <g id="patch_54">
     <path d="M 358.582677 53.176517
@@ -544,7 +544,7 @@ L 378.425197 51.054121
 L 378.425197 34.727998
 L 358.582677 36.850394
 z
-" clip-path="url(#p0f15e67fcc)" style="fill: #70b6ab; stroke: #586874; stroke-width: 0.4; stroke-linejoin: miter"/>
+" clip-path="url(#p0f15e67fcc)" style="fill: #278b92; stroke: #586874; stroke-width: 0.4; stroke-linejoin: miter"/>
    </g>
    <g id="patch_55">
     <path d="M 356.456693 54.5759
@@ -552,7 +552,7 @@ L 376.299213 52.453503
 L 376.299213 36.12738
 L 356.456693 38.249776
 z
-" clip-path="url(#p0f15e67fcc)" style="fill: #70b6ab; stroke: #586874; stroke-width: 0.4; stroke-linejoin: miter"/>
+" clip-path="url(#p0f15e67fcc)" style="fill: #278b92; stroke: #586874; stroke-width: 0.4; stroke-linejoin: miter"/>
    </g>
    <g id="patch_56">
     <path d="M 354.330709 55.975282
@@ -560,32 +560,32 @@ L 374.173228 53.852885
 L 374.173228 37.526762
 L 354.330709 39.649158
 z
-" clip-path="url(#p0f15e67fcc)" style="fill: #70b6ab; stroke: #586874; stroke-width: 0.4; stroke-linejoin: miter"/>
+" clip-path="url(#p0f15e67fcc)" style="fill: #278b92; stroke: #586874; stroke-width: 0.4; stroke-linejoin: miter"/>
    </g>
    <g id="text_10">
-    <text style="font-size: 5.8px; font-family: 'Liberation Sans'; text-anchor: middle; fill: #20313e" x="368.503937" y="69.137775" transform="rotate(-0 368.503937 69.137775)">GPU output</text>
+    <text style="font-size: 6.5px; font-family: 'Liberation Sans'; text-anchor: middle; fill: #20313e" x="368.503937" y="69.318927" transform="rotate(-0 368.503937 69.318927)">GPU output</text>
    </g>
    <g id="text_11">
-    <text style="font-size: 5.8px; font-family: 'Liberation Sans'; text-anchor: middle; fill: #20313e" x="280.629921" y="111.119236" transform="rotate(-0 280.629921 111.119236)">Index gather</text>
+    <text style="font-size: 6.5px; font-family: 'Liberation Sans'; text-anchor: middle; fill: #20313e" x="280.629921" y="111.300389" transform="rotate(-0 280.629921 111.300389)">Index gather</text>
    </g>
    <g id="text_12">
-    <text style="font-size: 5.8px; font-family: 'Liberation Sans'; text-anchor: middle; fill: #20313e" x="345.826772" y="111.119236" transform="rotate(-0 345.826772 111.119236)">D2H + sync</text>
+    <text style="font-size: 6.5px; font-family: 'Liberation Sans'; text-anchor: middle; fill: #20313e" x="345.826772" y="111.300389" transform="rotate(-0 345.826772 111.300389)">D2H + sync</text>
    </g>
    <g id="text_13">
-    <text style="font-size: 5.8px; font-family: 'Liberation Sans'; text-anchor: middle; fill: #20313e" x="413.858268" y="157.765304" transform="rotate(-0 413.858268 157.765304)">rANS + flush</text>
+    <text style="font-size: 6.5px; font-family: 'Liberation Sans'; text-anchor: middle; fill: #20313e" x="413.858268" y="157.946457" transform="rotate(-0 413.858268 157.946457)">rANS + flush</text>
    </g>
    <g id="text_14">
-    <text style="font-weight: 700; font-size: 6px; font-family: 'Liberation Sans'; text-anchor: end; fill: #20313e" x="467.716535" y="29.540375" transform="rotate(-0 467.716535 29.540375)">Wait + synchronize</text>
+    <text style="font-weight: 700; font-size: 6.5px; font-family: 'Liberation Sans'; text-anchor: end; fill: #20313e" x="467.716535" y="29.66977" transform="rotate(-0 467.716535 29.66977)">Wait + synchronize</text>
    </g>
    <g id="text_15">
-    <text style="font-size: 5.4px; font-family: 'Liberation Sans'; text-anchor: end; fill: #586874" x="467.716535" y="38.714315" transform="rotate(-0 467.716535 38.714315)">Complete wall-time boundary</text>
+    <text style="font-size: 6.5px; font-family: 'Liberation Sans'; text-anchor: end; fill: #586874" x="467.716535" y="38.998983" transform="rotate(-0 467.716535 38.998983)">Complete wall-time boundary</text>
    </g>
    <g id="text_16">
-    <text style="font-size: 5.8px; font-family: 'Liberation Sans'; fill: #586874" transform="translate(99.212598 118.969406)">Worker waits for ready symbols;</text>
-    <text style="font-size: 5.8px; font-family: 'Liberation Sans'; fill: #586874" transform="translate(99.212598 126.589835)">its CUDA stream can overlap synthesis.</text>
+    <text style="font-size: 6.5px; font-family: 'Liberation Sans'; fill: #586874" transform="translate(99.212598 118.690568)">Worker waits for ready symbols;</text>
+    <text style="font-size: 6.5px; font-family: 'Liberation Sans'; fill: #586874" transform="translate(99.212598 127.230704)">its CUDA stream can overlap synthesis.</text>
    </g>
    <g id="text_17">
-    <text style="font-size: 5.8px; font-family: 'Liberation Sans'; text-anchor: start; fill: #586874" x="8.503937" y="174.091428" transform="rotate(-0 8.503937 174.091428)">Dependency order only · positions and segment lengths do not represent elapsed time</text>
+    <text style="font-size: 6.5px; font-family: 'Liberation Sans'; text-anchor: start; fill: #586874" x="8.503937" y="174.27258" transform="rotate(-0 8.503937 174.27258)">Dependency order only · positions and segment lengths do not represent elapsed time</text>
    </g>
    <g id="line2d_7">
     <path d="M 94.488189 55.267816

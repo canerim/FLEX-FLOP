@@ -18,7 +18,7 @@ from research_figure_paths_20260927 import paths
 
 DEFAULT,DEFAULT_OUT=paths('div2k100_epoch020')
 DEPTHS=(2,4,6,12)
-COLORS={2:'#A66C32',4:'#709F95',6:'#007F86',12:'#244457'}
+COLORS={depth:F.DEPTH_ALL[depth//2-1] for depth in DEPTHS}
 MARKERS={2:'o',4:'s',6:'^',12:'D'}
 
 

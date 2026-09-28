@@ -105,19 +105,16 @@ synthesis. MAC saving excludes the retrospective candidate-selection cost.}
 \input{data/refresh20260927/delivered_cap_table}
 \end{table}
 
-\begin{figure*}[t]
+\begin{figure}[t]
 \centering
-\includegraphics[width=\textwidth]{figs/extended20260927/figS3_delivered_cap.pdf}
-\caption{\textbf{The spatial-routing margin survives a common measured quality cap.}
-\textbf{a}, Lowest-cost eligible output within each policy's recorded
-candidate pool. \textbf{b}, Paired router--dither saving and 95\%
-sequence-cluster interval. Full-frame fallback is included in both panels.
-All 265 pairs remain in every comparison. This is retrospective selection
-among actual reconstructions, with fine-tuned e15 as the common anchor;
-candidate-acquisition time and released-reference quality are outside this
-five-QP analysis. A separate QP32 reference replay is reported in the supplement.}
+\includegraphics[width=\columnwidth]{figs/extended20260927/figS7_delivered_increment.pdf}
+\caption{\textbf{Placement matters most before the cheap exit saturates.}
+Paired router--dither MAC-saving differences under a common measured
+YCbCr~4:4:4-loss cap, with 95\% sequence-cluster intervals.
+All 265 pairs remain; e15 full-frame is the fallback.
+Selection is retrospective and source-aware.}
 \label{fig:deliveredcap}
-\end{figure*}
+\end{figure}
 
 \subsection{Why the routing margin contracts}
 
@@ -155,10 +152,11 @@ permuted maps through repair and the final head is a separate ablation.
 \centering
 \includegraphics[width=\textwidth]{figs/refresh20260927/fig5_spatial_decisions.pdf}
 \caption{\textbf{Adaptive depth changes where synthesis work is spent.}
-Recorded exit maps at the 0.1\,dB target on the same QP32 frame. Colour indicates
-total executed trunk depth; annotations give MAC saving and measured YCbCr~4:4:4
-loss. Source luma is shown only for spatial context. Maps are cropped to the
-valid image extent, and the example-selection rule is stated in the text.}
+\textbf{a}, Source luma for spatial context. \textbf{b--d}, Recorded router,
+Bayer and source-search maps at the 0.1\,dB target, QP32.
+Colour gives exit depth; annotations give synthesis MAC saving and cropped
+YCbCr~4:4:4 loss. Uniform depth eight gives 24.2\% saving and 0.082\,dB loss.
+Maps use valid image extent; the text states the example-selection rule.}
 \label{fig:maps}
 \end{figure*}
 
