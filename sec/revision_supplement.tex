@@ -367,6 +367,10 @@ obtaining those candidates nor establishes an autonomous policy. Its finite
 candidate pools are not exhaustive, and its reference is fine-tuned e15,
 not the released model. Within those boundaries, the observed routing
 margin survives both a common delivered-loss cap and explicit fallbacks.
+The post-hoc 51-content-group bootstrap described above also retains the
+0.1\,dB margin: 2.9345 points with interval $[2.1065,3.7898]$, keeping all
+five QPs of every sampled sequence together. This checks sensitivity to the
+flagged content pairs; it does not remove source-aware candidate selection.
 
 A descriptive influence check removes each sequence with all five QPs.
 At 0.1\,dB, the remaining mean router--dither margin ranges from 2.80 to
