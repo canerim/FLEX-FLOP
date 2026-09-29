@@ -1,5 +1,13 @@
 # DCVC-UF derinlik ve yönlendirme çalışması: öncelikli ablasyon planı
 
+**29 Eylül güncellemesi:** uygulanabilir altı ana early-exit kontrolü,
+ayrı model-bank deneyleri, YUV/risk/timing sözleşmesi ve hazırlanmış
+318 harita için [güncel protokol](ABLATION_PROTOCOL_20260929_TR.md).
+Birincil kaynak okuması ve aktarım sınırları:
+[literatür notu](LITERATURE_ABLATIONS_20260929_TR.md).
+Aşağıdaki 28 Eylül metni önceki araştırma kaydı olarak korunmuştur;
+“bir sonraki kontrol” ifadelerinin güncel durumu yeni protokoldedir.
+
 28 Eylül 2026 · Yeni GPU/eğitim deneyleri öneridir; tamamlanan CPU tablo
 analizleri ile gerçek-output replay kontrolleri aşağıda ayrı belirtilmiştir.
 
