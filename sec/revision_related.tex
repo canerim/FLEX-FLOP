@@ -2,16 +2,13 @@
 \label{sec:related}
 
 \paragraph{Making learned decoding cheaper.}
-Shallow synthesis transforms reduce decoder computation globally;
-stronger analysis or iterative encoding can compensate for some of the
-lost reconstruction capacity~\cite{yang2023shallow}. DCVC-RT instead
-emphasises operational costs such as memory traffic and function
-calls~\cite{jia2025dcvcrt}, while DCVC-UF increases video throughput with
-chunk-based coding and streamlined entropy interaction~\cite{li2026dcvcuf}.
-We modify only DCVC-UF's intra synthesis transform. These approaches
-motivate two controls in our study: a fixed shallow decoder isolates the
-value of adaptation, and full execution measurements are required before
-arithmetic reduction can be called acceleration.
+Shallow synthesis reduces decoder computation, with stronger analysis
+or iterative encoding compensating for lost capacity~\cite{yang2023shallow}.
+DCVC-RT emphasises memory traffic and function calls~\cite{jia2025dcvcrt};
+DCVC-UF combines chunk-based video coding with streamlined entropy
+interaction~\cite{li2026dcvcuf}. We modify its intra synthesis transform.
+A fixed shallow decoder controls for adaptation, while complete execution
+measurements distinguish arithmetic reduction from acceleration.
 
 \paragraph{Choosing a network or choosing an exit.}
 ClassSR learns to assign super-resolution patches to networks of different
@@ -22,36 +19,34 @@ exits. AdaRevD predicts patch difficulty to choose a deblurring
 sub-decoder~\cite{mao2024adarevd}; RBQE terminates compressed-image
 enhancement early~\cite{xing2020rbqe}. Swift introduces compute-dependent
 early exits in a layered neural video decoder, with different output
-resolutions~\cite{dasari2022swift}. FLEX-UF addresses the codec-specific case within
-DCVC-UF synthesis at fixed output resolution: one entropy-decoded latent
-feeds conditional feature
-tiles, exit-specific adapters align those features, and reconstruction
-occurs after full-frame assembly. Our proposed independent-depth bank
-follows the ClassSR allocation principle, but selecting a codec also
-selects an analysis transform and entropy model.
+resolutions~\cite{dasari2022swift}. FLEX-UF retains one entropy-decoded latent
+and fixed output resolution: adapters align conditional feature tiles
+before full-frame reconstruction. The proposed independent-depth bank
+also selects the analysis transform and entropy model.
 
 \paragraph{Adaptive capacity inside a codec.}
 Slimmable compressive autoencoders jointly optimise rate and distortion
-at multiple network widths~\cite{yang2021slimcae}. AdaNIC is the closest
-spatial-capacity precedent: blockwise spatially adaptive operators and a
-router vary transform width within an image~\cite{tao2023adanic}.
-For video, cgSlimDecoder learns channel allocations across decoder
-modules under complexity constraints~\cite{hu2023cgslim}. FLEX-UF varies
+at multiple network widths~\cite{yang2021slimcae}. ELFIC allocates decoding
+complexity per instance~\cite{zhang2023elfic}; ABC adapts backbone and
+autoregressive structure to content and computational budgets~\cite{zhang2025abc}.
+AdaNIC varies transform width spatially through blockwise operators
+and a router~\cite{tao2023adanic}.
+For video, cgSlimDecoder allocates decoder channels under complexity
+constraints~\cite{hu2023cgslim}. MixCompress routes among different-depth
+experts using only the rate embedding, allowing assignments to be
+cached independently of image content~\cite{ta2026mixcompress}. FLEX-UF varies
 \emph{depth} through nested, constant-width synthesis blocks and executes
-later stages on a shrinking tile batch. Its evaluation asks an additional
-question: how much of the saving requires content-aware placement after
-blind mixtures have already reduced the average depth?
+later stages on a shrinking tile batch. We measure the spatial placement
+premium over blind mixtures that already reduce average depth.
 
 \paragraph{Spatial selection among complete codecs.}
 Blard et al. train content-specialised codecs of the same architecture,
 search their regional rate--distortion costs, and signal a mode
-map~\cite{blard2026spatial}. Their method also processes connected regions
-of one mode jointly. Our region-merging diagnostic therefore tests an
-existing strategy in DCVC-UF, rather than introducing it. The planned bank
-varies synthesis depth and investigates selection before candidate encoding;
-the evaluated shared-exit path instead retains one representation. These
-distinctions separate specialisation, capacity and representation reuse,
-which cannot be inferred from a comparison of model sizes alone.
+map~\cite{blard2026spatial}. They also process connected same-mode regions
+jointly; our merging diagnostic tests this existing strategy in DCVC-UF.
+The planned bank varies synthesis depth and investigates selection before
+candidate encoding. Shared exit retains one representation, separating
+representation reuse from independent-expert specialisation.
 
 \paragraph{Preserving context across blocks.}
 Kim et al. derive overlap and boundary rules that preserve full-image

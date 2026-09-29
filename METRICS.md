@@ -26,9 +26,14 @@ pairs. Evidence, strict-load status, source hashes and both numerical
 conventions are in [the metric audit](data/sharedmetric20260927/analysis.json).
 The source reader, model and evaluator chain is described in supplement S2.
 
-The independent epoch20 D2/D4/D6/released-D12 CPU reference study uses
-explicit RGB conversion and reports RGB PSNR under its own manifest.
-It is a separate experiment, with different checkpoints and protocol.
+The independent epoch20/30 D2/D4/D6/released-D12 CPU reference studies use
+explicit RGB conversion and report RGB PSNR under their own manifests.
+Their `psnr_yuv611` is the weighted average of per-plane PSNRs on clipped
+YCbCr **4:4:4**, unlike the shared-exit `db_611` **4:2:0** path above.
+They are separate experiments, with different checkpoints and protocols.
+The 29 September bank-label audit preserves this distinction. Future
+cross-family YUV comparisons must freeze a common conversion, chroma,
+clipping and crop contract; existing results cannot simply be relabelled.
 
 Synthesis MAC reductions in the shared-exit plots exclude entropy recovery,
 router/signalling work and system overhead. No colour-space correction or

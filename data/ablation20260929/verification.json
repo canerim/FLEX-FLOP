@@ -1,0 +1,9 @@
+{
+  "portable_audit_reproduction_byte_identical": true,
+  "fragmentation_map_reproduction_byte_identical": true,
+  "smoke_plan_hash_matches": true,
+  "smoke_cases": 12,
+  "baseline_outputs_reproduced": 4,
+  "cuda_initialized": false,
+  "scope": "New ablation artifacts only; no full-cohort decode, new training, or GPU timing."
+}
