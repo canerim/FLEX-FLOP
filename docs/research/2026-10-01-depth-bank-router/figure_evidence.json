@@ -1,0 +1,429 @@
+{
+  "generated_at_utc": "2026-10-01T21:51:01.324115+00:00",
+  "metric": "weighted mean of plane PSNR: (6Y+U+V)/8; YCbCr 4:4:4",
+  "rate": "deterministic entropy estimate, not actual bytes",
+  "kodak": {
+    "n_images": 24,
+    "final_depths": [
+      2,
+      4
+    ],
+    "released_anchor": 12,
+    "paired_yuv_vs_released": {
+      "0.1": {
+        "n_images": 24,
+        "differences": {
+          "2": {
+            "mean_db": -0.27284353494683344,
+            "image_bootstrap_95ci_db": [
+              -0.3127056198158987,
+              -0.23621587678700495
+            ]
+          },
+          "4": {
+            "mean_db": -0.16151115148099673,
+            "image_bootstrap_95ci_db": [
+              -0.18541402183347216,
+              -0.1381261330179609
+            ]
+          }
+        }
+      },
+      "0.2": {
+        "n_images": 24,
+        "differences": {
+          "2": {
+            "mean_db": -0.2773605071469543,
+            "image_bootstrap_95ci_db": [
+              -0.3262474758500022,
+              -0.23183937074853836
+            ]
+          },
+          "4": {
+            "mean_db": -0.15735867654256452,
+            "image_bootstrap_95ci_db": [
+              -0.18483703855150801,
+              -0.13066057693804095
+            ]
+          }
+        }
+      },
+      "0.4": {
+        "n_images": 23,
+        "differences": {
+          "2": {
+            "mean_db": -0.28423725945095846,
+            "image_bootstrap_95ci_db": [
+              -0.32572954526342424,
+              -0.2473822659601684
+            ]
+          },
+          "4": {
+            "mean_db": -0.1596068895193859,
+            "image_bootstrap_95ci_db": [
+              -0.18143562949180309,
+              -0.1393183816060447
+            ]
+          }
+        }
+      }
+    }
+  },
+  "training": {
+    "history": {
+      "2": {
+        "sampled": [
+          {
+            "epoch": 1,
+            "psnr_yuv611_db": 35.066505467297944
+          },
+          {
+            "epoch": 11,
+            "psnr_yuv611_db": 37.11118552034765
+          },
+          {
+            "epoch": 22,
+            "psnr_yuv611_db": 37.20516303151308
+          },
+          {
+            "epoch": 33,
+            "psnr_yuv611_db": 37.34497323024877
+          },
+          {
+            "epoch": 44,
+            "psnr_yuv611_db": 37.35544147344707
+          },
+          {
+            "epoch": 45,
+            "psnr_yuv611_db": 37.34774542960427
+          },
+          {
+            "epoch": 57,
+            "psnr_yuv611_db": 37.67999896730143
+          },
+          {
+            "epoch": 69,
+            "psnr_yuv611_db": 37.70138399975804
+          },
+          {
+            "epoch": 70,
+            "psnr_yuv611_db": 37.66468398415906
+          },
+          {
+            "epoch": 79,
+            "psnr_yuv611_db": 37.78761969960502
+          },
+          {
+            "epoch": 89,
+            "psnr_yuv611_db": 37.79899739499844
+          },
+          {
+            "epoch": 90,
+            "psnr_yuv611_db": 37.805191175221424
+          },
+          {
+            "epoch": 94,
+            "psnr_yuv611_db": 37.44649540780984
+          },
+          {
+            "epoch": 95,
+            "psnr_yuv611_db": 37.51100735675496
+          },
+          {
+            "epoch": 99,
+            "psnr_yuv611_db": 37.769249474914425
+          },
+          {
+            "epoch": 100,
+            "psnr_yuv611_db": 37.827130140819726
+          },
+          {
+            "epoch": 103,
+            "psnr_yuv611_db": 37.824445564752125
+          },
+          {
+            "epoch": 105,
+            "psnr_yuv611_db": 37.84700359815215
+          }
+        ],
+        "last_supported_epoch": 105
+      },
+      "4": {
+        "sampled": [
+          {
+            "epoch": 1,
+            "psnr_yuv611_db": 34.891618395857
+          },
+          {
+            "epoch": 11,
+            "psnr_yuv611_db": 37.24228356842147
+          },
+          {
+            "epoch": 22,
+            "psnr_yuv611_db": 37.36066805783495
+          },
+          {
+            "epoch": 33,
+            "psnr_yuv611_db": 37.4941918029551
+          },
+          {
+            "epoch": 44,
+            "psnr_yuv611_db": 37.45319266991257
+          },
+          {
+            "epoch": 45,
+            "psnr_yuv611_db": 37.47241277654375
+          },
+          {
+            "epoch": 57,
+            "psnr_yuv611_db": 37.77239591059514
+          },
+          {
+            "epoch": 69,
+            "psnr_yuv611_db": 37.868063086827874
+          },
+          {
+            "epoch": 70,
+            "psnr_yuv611_db": 37.850712752424926
+          },
+          {
+            "epoch": 79,
+            "psnr_yuv611_db": 37.958886889612415
+          },
+          {
+            "epoch": 89,
+            "psnr_yuv611_db": 37.95831480085951
+          },
+          {
+            "epoch": 90,
+            "psnr_yuv611_db": 37.95753833272496
+          },
+          {
+            "epoch": 94,
+            "psnr_yuv611_db": 37.664347404131796
+          },
+          {
+            "epoch": 95,
+            "psnr_yuv611_db": 37.657425482936574
+          },
+          {
+            "epoch": 99,
+            "psnr_yuv611_db": 37.90332670275974
+          },
+          {
+            "epoch": 100,
+            "psnr_yuv611_db": 37.97269312418405
+          },
+          {
+            "epoch": 103,
+            "psnr_yuv611_db": 37.966135551339775
+          },
+          {
+            "epoch": 105,
+            "psnr_yuv611_db": 37.98799490181058
+          }
+        ],
+        "last_supported_epoch": 105
+      },
+      "6": {
+        "sampled": [
+          {
+            "epoch": 1,
+            "psnr_yuv611_db": 34.8432719592098
+          },
+          {
+            "epoch": 6,
+            "psnr_yuv611_db": 36.955778184097056
+          },
+          {
+            "epoch": 11,
+            "psnr_yuv611_db": 37.231136514228595
+          },
+          {
+            "epoch": 16,
+            "psnr_yuv611_db": 37.41190327390261
+          },
+          {
+            "epoch": 22,
+            "psnr_yuv611_db": 37.53181782481755
+          },
+          {
+            "epoch": 27,
+            "psnr_yuv611_db": 37.55458298635359
+          },
+          {
+            "epoch": 33,
+            "psnr_yuv611_db": 37.52746302660474
+          },
+          {
+            "epoch": 44,
+            "psnr_yuv611_db": 37.53087589775379
+          },
+          {
+            "epoch": 45,
+            "psnr_yuv611_db": 37.53050970093706
+          },
+          {
+            "epoch": 51,
+            "psnr_yuv611_db": 37.89378832375277
+          },
+          {
+            "epoch": 57,
+            "psnr_yuv611_db": 37.891941170990044
+          },
+          {
+            "epoch": 63,
+            "psnr_yuv611_db": 37.93488036248399
+          },
+          {
+            "epoch": 69,
+            "psnr_yuv611_db": 37.93745234347427
+          },
+          {
+            "epoch": 70,
+            "psnr_yuv611_db": 37.92784455377337
+          },
+          {
+            "epoch": 79,
+            "psnr_yuv611_db": 38.004960474582234
+          },
+          {
+            "epoch": 89,
+            "psnr_yuv611_db": 38.019389691582404
+          },
+          {
+            "epoch": 90,
+            "psnr_yuv611_db": 38.020366431830546
+          },
+          {
+            "epoch": 94,
+            "psnr_yuv611_db": 37.69834316732451
+          }
+        ],
+        "last_supported_epoch": 94
+      },
+      "8": {
+        "sampled": [
+          {
+            "epoch": 1,
+            "psnr_yuv611_db": 34.631996517315024
+          },
+          {
+            "epoch": 2,
+            "psnr_yuv611_db": 35.56867372527905
+          },
+          {
+            "epoch": 3,
+            "psnr_yuv611_db": 36.360097796620906
+          }
+        ],
+        "last_supported_epoch": 3
+      },
+      "10": {
+        "sampled": [],
+        "last_supported_epoch": null
+      }
+    },
+    "status": {
+      "2": {
+        "state": "complete",
+        "fractional_epoch": 105.0
+      },
+      "4": {
+        "state": "complete",
+        "fractional_epoch": 105.0
+      },
+      "6": {
+        "state": "running",
+        "fractional_epoch": 94.88989147157886
+      },
+      "8": {
+        "state": "running",
+        "fractional_epoch": 3.573870015385255
+      },
+      "10": {
+        "state": "running",
+        "fractional_epoch": 0.20795043452950226
+      },
+      "12": {
+        "state": "queued"
+      }
+    }
+  },
+  "sources_sha256": {
+    "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/runs/d2/kodak_final.json": "4b4f2c41697919fd40cc878287bf560cb7380cced20cf6acf54072a438188249",
+    "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/runs/d4/kodak_final.json": "aa3879526b5ec37a11ce3c8da2822bdb57316751e97987e0c3faa6e2a58a3387",
+    "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/reference_d12/kodak.json": "b374096af3fa6244b6eed6363c019787b4e7ce976e1e8386a14f2e812862b210",
+    "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/runs/d2/status.json": "5295ba17325484823eaaa8bbad7177f67bb0feb47e86242bf56a271bf1913540",
+    "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/runs/d2/validation/step_000024049.json": "c2f2ec00d7f0434e9a8e5255c88edd26ccd733f3e1490fb611a415747e5667c1",
+    "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/runs/d2/validation/step_000264539.json": "c3cb14a6ebcc07f9f5033ba811e1161253ac7bb94499d90c04c3968518bb8449",
+    "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/runs/d2/validation/step_000529078.json": "a46f65cc896f1c8d780e719a397b77c09512cfedb3baba9cda65a7baa5105a0a",
+    "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/runs/d2/validation/step_000793617.json": "e92d0973d50445744ca0884283807a034216e06ce3273af568a6af7e7b4c690b",
+    "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/runs/d2/validation/step_001058156.json": "2db945069493012537b276e2a45ae7fe5c854fd65af80086de5a69f89ba18c03",
+    "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/runs/d2/validation/step_001082205.json": "4afa9ec12e9e6d392f9660343f85129349b8125306403c12fc178cbfb01ce74c",
+    "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/runs/d2/validation/step_001370793.json": "9fadaa829973851aa57f05736bdce739e8aef3cf77cb4e00393cb6416021819d",
+    "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/runs/d2/validation/step_001659381.json": "fa0e59a8ad30814f2498753ee08757362738d0b3f3db6c299ef171f62efaaefc",
+    "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/runs/d2/validation/step_001683430.json": "e5afcafe29d84906a12c8305cd259dd2d68a8958acec9868b89c50933e6d1690",
+    "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/runs/d2/validation/step_001899871.json": "0993445236db89d3d8d1a6f832d2d25935163dd2381e97be7f18879ff785e34b",
+    "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/runs/d2/validation/step_002140361.json": "4463d06ba49fb161f6e8df5ff9fd457c7c543277f5c8ed7b41540c7462c5a1c0",
+    "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/runs/d2/validation/step_002164410.json": "a9cc41c2ba27d9e13bff9f84bb780e24fbd9224ae9604e0acdd92af39e9d5453",
+    "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/runs/d2/validation/step_002260606.json": "0c6030c60af90759240f528614bad1e1ccf2cc522c8c02efa16f27b8d5900041",
+    "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/runs/d2/validation/step_002284655.json": "52498542a0abd046efd2cfcf08bb8a282afacc2c68fb761242887b32fc3a93a5",
+    "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/runs/d2/validation/step_002380851.json": "b78e38743d00a7715fb51a4700dddcacec4a53fea3f564901ba585bc225f83c4",
+    "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/runs/d2/validation/step_002404900.json": "fbeba309f52380e638113587217f094bb4dde19c37cd61dc9077b176385e5218",
+    "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/runs/d2/validation/step_002477047.json": "d1cb23aaa4c284e6f309005ded02831ae5604d71ce24caa2e3f399b30887278f",
+    "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/runs/d2/validation/step_002525145.json": "110aacbe093e088584056d87bb02ff98218b32d291f43828a5257ca9a34b069a",
+    "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/runs/d4/status.json": "9a375d10ca9edc711dc066e1c61f127daaba4e8d377e340002639d7dd3bf45e0",
+    "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/runs/d4/validation/step_000024049.json": "486893167f20d439542c46469af1f36944db9043d14bbd8a0fc0c4a7a9b318f0",
+    "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/runs/d4/validation/step_000264539.json": "23f9c552039ff6ee57dae820ed735eddeb0c37f577e872d13cd015ea74f34d10",
+    "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/runs/d4/validation/step_000529078.json": "3daa5d6242ff45dc754027d5713e8d9089df86a59b9d6bd84eab60c74e46e458",
+    "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/runs/d4/validation/step_000793617.json": "cb8d0b844266cca9393d5e62d4d8896fd5a3cfc0f3526d6aead15d49249beef5",
+    "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/runs/d4/validation/step_001058156.json": "767c40ec1af5f70eda90bcb152dbe1ee8fecf37e90c3dc0123d19d4f10c65b51",
+    "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/runs/d4/validation/step_001082205.json": "26c08b1f7bdd528ed4f939b8b6b353554c5eb3febb40306719115103470fc23f",
+    "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/runs/d4/validation/step_001370793.json": "2fea3b87d3eac287b705f995415a55b32259343e64ea71cc05ea1e9a1cdb1e60",
+    "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/runs/d4/validation/step_001659381.json": "30a87d2b1c933fbf2c0a29851e56f4c3cb5fc2f5918363029684b6718cdbac66",
+    "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/runs/d4/validation/step_001683430.json": "40ae9d702838b4f7d61ded5c2ac5077a8e8b2eb768375efafb75aac859efee06",
+    "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/runs/d4/validation/step_001899871.json": "683582e2ddb2127a988ecbc0962137c8a3e9df5cb6786241f75627fd6bc8fe06",
+    "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/runs/d4/validation/step_002140361.json": "9778f71f361d72f01afdf22533893ad238c5db64c095c53a200d0a3c90dd3c06",
+    "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/runs/d4/validation/step_002164410.json": "7e33092d426b8cb9fa395440e5792fc9d0a3428c19f0efd3a7fba896d8a6657d",
+    "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/runs/d4/validation/step_002260606.json": "3436d1ca0ab447aacf500356b0a65baf3656026f550a7634b0e5cef73af93928",
+    "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/runs/d4/validation/step_002284655.json": "32a6c5a36dd09412da96d3c516a3e91c39614f41874dab9256cebe034164bc00",
+    "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/runs/d4/validation/step_002380851.json": "e6f97dacc13504908602184f355b3e7a389181abc39214dda2efc4dfb3342a32",
+    "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/runs/d4/validation/step_002404900.json": "9a214f4a07c8d4abbd08a548ebc221dd3d7c31336a3debd217196e741167e5cd",
+    "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/runs/d4/validation/step_002477047.json": "389d86eba62ddd0eccb3203be1c0bda6d8b91ee36b5f17bffa5683c5cce94b31",
+    "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/runs/d4/validation/step_002525145.json": "0882becd697de180570b1a357636e9ae59221336970cdf3f8e39f892d3ad6179",
+    "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/runs/d6/status.json": "d67ab72732df1a1d07feecb1dc7602d6c13ca9655d90d07da0ee95813b9a83d4",
+    "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/runs/d6/validation/step_000024049.json": "b41534ccba45a9948b93fbd0a8fceb787ccfe9cb7b031eb0270bb70e4a3715da",
+    "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/runs/d6/validation/step_000144294.json": "b970b21fb17813137c442ce854cd8f0ccd5dcf6b8ecc813b22587bf2af24d273",
+    "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/runs/d6/validation/step_000264539.json": "8afeda0c54e0913a023797c999c4fb8949edd7f77ed29b7a47ccdaef4b565573",
+    "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/runs/d6/validation/step_000384784.json": "1ec24b99396b3228db1aae1ca0d93fde770a914cf432e31f18081f7ac9a21785",
+    "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/runs/d6/validation/step_000529078.json": "2d23495b16335b9a16ee150c816b02badb81169a20f02065a7ec3faa39b7b941",
+    "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/runs/d6/validation/step_000649323.json": "dba3cf40c0204f4ec465620340682d87e993ab15ea021080d9aa3cf9d83a5666",
+    "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/runs/d6/validation/step_000793617.json": "a5dcdef4b9e63fef04b79de950e8bf08ad06113d5ef9ccc7272004cae5a5e00e",
+    "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/runs/d6/validation/step_001058156.json": "430d4e784663a981afe1c0f7cb27a00caf442754c4549da6ea7ad74879b3ac5a",
+    "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/runs/d6/validation/step_001082205.json": "10dbbd80320a32fc3e23bdf510890cb14d06c337d77a0c733b6c7cb84a173637",
+    "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/runs/d6/validation/step_001226499.json": "8692f7c122c0bca0713911bf0b04ec84751ec5917f17a05c18b0a3b5b69f2c2f",
+    "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/runs/d6/validation/step_001370793.json": "c6ae4f886e2bcca1ee29dc06637dcf2c3a5d6bee41102ad679e9425981592494",
+    "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/runs/d6/validation/step_001515087.json": "d6446d05642b49bd88537346a5ea80b0f2aba57292c4f3b90b79122633f8f7fd",
+    "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/runs/d6/validation/step_001659381.json": "f2db432ca2d7049536871d83d67c024498b4708c5991e066b2d6f302102a3ee5",
+    "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/runs/d6/validation/step_001683430.json": "5ce5ef68cd3a4d70a06a5a9d571838dbef74479fc481068f7da0513c14fde0ed",
+    "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/runs/d6/validation/step_001899871.json": "a3ceac0a9eb0389341ebffbbf19a3ddbc6d7b6023496ef75bd8a9b77536cbc05",
+    "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/runs/d6/validation/step_002140361.json": "774f042c4be79a871438dac4b2b288cbb7fd87b3f6e75ae1a6207411b8d19ff2",
+    "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/runs/d6/validation/step_002164410.json": "94f5fe5585245caa9b0f44511fe5cea112901fd21ae1c5569eb88caa3ba029f3",
+    "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/runs/d6/validation/step_002260606.json": "6117f59cf76658dcc3bf12bdd189de3061bfc3f794c9d4d642cb54bc51481990",
+    "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/runs/d8/status.json": "f59711df80b6630193ea1e731d9f0cd9ab3e4bccf126fcbcdcc0cd26bbfcf477",
+    "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/runs/d8/validation/step_000024049.json": "bb18cf71286491090ac76797ba82225475c467dd6727f76e5ab4b79cbfebba6a",
+    "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/runs/d8/validation/step_000048098.json": "ef0ff2758332121b42cd81a299ffed673f0f4372d67d35748e703757d6d5c70a",
+    "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/runs/d8/validation/step_000072147.json": "3a7eccf8dd180e95adbafa75b10407b264b06a7638a945b74c288118516f1548",
+    "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/runs/d10/status.json": "04fc0cc57662d604e04fa5557eab26aaf502c7cd411a4927a1b9c13d4c09d204",
+    "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/runs/d2/manifest.json": "bb4ca6030acf022b64fde4283064da4f2b803b7a1e2b8fd6008f0012fac6ac47",
+    "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/runs/d4/manifest.json": "8af004a637526460afbb6d69938d57a1c3523ecbd493f483825e1f1ec7942689",
+    "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/runs/d6/manifest.json": "06084011acb7630489a0655c5970ed6687c8da2d6ed97eb5bcf47b8dc3a22400",
+    "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/runs/d8/manifest.json": "a17ada4d4abc1e618cad547c02b74ce8f4a9265b2799193a0bfda90d3b2e68b3",
+    "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/runs/d10/manifest.json": "31a22739c79f031b515fbc27d0d1bdb680653975c5a03294934e21c4162853d7",
+    "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/reference_d12/neural_runtime.json": "e569b50e5bb5b447e63328e010f2e9a92f58c67f4646c6c7356c45775dfbf716"
+  },
+  "gpu_inference_performed": false,
+  "training_process_modified": false,
+  "diagrams_are_schematic": true
+}
