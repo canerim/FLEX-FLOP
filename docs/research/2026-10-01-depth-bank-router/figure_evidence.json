@@ -1,5 +1,5 @@
 {
-  "generated_at_utc": "2026-10-01T21:51:01.324115+00:00",
+  "generated_at_utc": "2026-10-01T22:00:24.096184+00:00",
   "metric": "weighted mean of plane PSNR: (6Y+U+V)/8; YCbCr 4:4:4",
   "rate": "deterministic entropy estimate, not actual bytes",
   "kodak": {
@@ -335,15 +335,15 @@
       },
       "6": {
         "state": "running",
-        "fractional_epoch": 94.88989147157886
+        "fractional_epoch": 94.94810595035136
       },
       "8": {
         "state": "running",
-        "fractional_epoch": 3.573870015385255
+        "fractional_epoch": 3.7568298058131315
       },
       "10": {
         "state": "running",
-        "fractional_epoch": 0.20795043452950226
+        "fractional_epoch": 0.3160630379641565
       },
       "12": {
         "state": "queued"
@@ -392,7 +392,7 @@
     "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/runs/d4/validation/step_002404900.json": "9a214f4a07c8d4abbd08a548ebc221dd3d7c31336a3debd217196e741167e5cd",
     "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/runs/d4/validation/step_002477047.json": "389d86eba62ddd0eccb3203be1c0bda6d8b91ee36b5f17bffa5683c5cce94b31",
     "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/runs/d4/validation/step_002525145.json": "0882becd697de180570b1a357636e9ae59221336970cdf3f8e39f892d3ad6179",
-    "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/runs/d6/status.json": "d67ab72732df1a1d07feecb1dc7602d6c13ca9655d90d07da0ee95813b9a83d4",
+    "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/runs/d6/status.json": "7a0c9493b4de748c48899462df48952add15a80106948001f966dcf48b2bcc55",
     "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/runs/d6/validation/step_000024049.json": "b41534ccba45a9948b93fbd0a8fceb787ccfe9cb7b031eb0270bb70e4a3715da",
     "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/runs/d6/validation/step_000144294.json": "b970b21fb17813137c442ce854cd8f0ccd5dcf6b8ecc813b22587bf2af24d273",
     "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/runs/d6/validation/step_000264539.json": "8afeda0c54e0913a023797c999c4fb8949edd7f77ed29b7a47ccdaef4b565573",
@@ -411,11 +411,11 @@
     "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/runs/d6/validation/step_002140361.json": "774f042c4be79a871438dac4b2b288cbb7fd87b3f6e75ae1a6207411b8d19ff2",
     "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/runs/d6/validation/step_002164410.json": "94f5fe5585245caa9b0f44511fe5cea112901fd21ae1c5569eb88caa3ba029f3",
     "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/runs/d6/validation/step_002260606.json": "6117f59cf76658dcc3bf12bdd189de3061bfc3f794c9d4d642cb54bc51481990",
-    "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/runs/d8/status.json": "f59711df80b6630193ea1e731d9f0cd9ab3e4bccf126fcbcdcc0cd26bbfcf477",
+    "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/runs/d8/status.json": "2aa885e1d49c6e00e3dafa129362cbe207732c72f97777eec6bddde2b726a083",
     "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/runs/d8/validation/step_000024049.json": "bb18cf71286491090ac76797ba82225475c467dd6727f76e5ab4b79cbfebba6a",
     "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/runs/d8/validation/step_000048098.json": "ef0ff2758332121b42cd81a299ffed673f0f4372d67d35748e703757d6d5c70a",
     "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/runs/d8/validation/step_000072147.json": "3a7eccf8dd180e95adbafa75b10407b264b06a7638a945b74c288118516f1548",
-    "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/runs/d10/status.json": "04fc0cc57662d604e04fa5557eab26aaf502c7cd411a4927a1b9c13d4c09d204",
+    "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/runs/d10/status.json": "08caf5cfc34ee40797484c7ddb3f648bd923c513c653ad9549789bae05c8831f",
     "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/runs/d2/manifest.json": "bb4ca6030acf022b64fde4283064da4f2b803b7a1e2b8fd6008f0012fac6ac47",
     "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/runs/d4/manifest.json": "8af004a637526460afbb6d69938d57a1c3523ecbd493f483825e1f1ec7942689",
     "/data10/shareddata/can_karsal/dcvcuf_depth_20260927/runs/d6/manifest.json": "06084011acb7630489a0655c5970ed6687c8da2d6ed97eb5bcf47b8dc3a22400",

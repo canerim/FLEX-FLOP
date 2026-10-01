@@ -1,6 +1,6 @@
 # DCVC-UF derinlik bankası: ölçülen durum ve router tasarımı
 
-**Veri kesiti:** 1 Ekim 2026, yaklaşık 23:47 Berlin. Bu dizindeki dört figür PDF ve SVG olarak vektördür; PNG önizlemeleri de vardır. [Kaynak ve SHA-256 kaydı](figure_evidence.json) ile [yalnız CPU kullanan çizim betiği](make_figures.py) yeniden üretimi sağlar. Betik çalışan eğitimlere dokunmaz.
+**Veri kesiti:** 1 Ekim 2026, yaklaşık 23:50 Berlin. Bu dizindeki dört figür PDF ve SVG olarak vektördür; PNG önizlemeleri de vardır. [Kaynak ve SHA-256 kaydı](figure_evidence.json) ile [yalnız CPU kullanan çizim betiği](make_figures.py) yeniden üretimi sağlar. Betik çalışan eğitimlere dokunmaz. Router'ın tam loss ve eğitim tarifi: [ROUTER_TRAIN_PROTOCOL_20261001.md](ROUTER_TRAIN_PROTOCOL_20261001.md).
 
 | Figür | İçerik | Vektör | Önizleme |
 |---|---|---|---|
@@ -25,7 +25,7 @@ Burada eğitilecek router **altı bağımsız codec arasında patch seçicidir**
 
 Pratik akış: görüntüyü sabit tile'lara böl → kaynak tile ve hedef bütçeden ucuz özellikler hesapla → MLP ile her derinliğin beklenen bayt, Y/U/V hata ve süre değerini tahmin et → bütçeye uyan model haritasını seç → tile'ları seçilen modele göre grupla ve **yalnız seçilen codec'i** çalıştır → model kimliği/QP/uzunluk bilgisiyle stream'i yaz → decoder bu kimliği okuyup ilgili codec'i çalıştırır → tile'ları birleştirir. Bir tile için diğer beş codec'in encoder'ını çalıştırmak online ana yöntem değildir.
 
-Başlangıç MLP'si somut olarak `8×8` luma havuzlaması (64 özellik), YUV ortalama/standart sapma (6), gradyan yön/enerji özeti (8), yüksek frekans/saturasyon özeti (4) ve QP (1) alabilir: **83 özellik → 128 → 64 → 6×5** çıktı, yaklaşık 20 bin ağırlık. Çıktılar her expert için `log(bytes)`, `log(SSE_Y)`, `log(SSE_U)`, `log(SSE_V)` ve kalibre edilmiş süre/hız tahminidir. Router bütçeyi sonuç başlığına katmak yerine karar aşamasında kullanır; böylece bir MLP farklı kalite/hız bütçelerine hizmet eder. Bu mimari **öneridir, eğitilmiş veya ölçülmüş bir router sonucu değildir**. Daha basit varyans/LUT özellikleri ve daha küçük ağlar ablasyonla karşılaştırılır. Özellik çıkarma süresi ayrıca ölçülür.
+Başlangıç MLP'si somut olarak `8×8` luma havuzlaması (64 özellik), YUV ortalama/standart sapma (6), gradyan yön/enerji özeti (8), yüksek frekans/saturasyon özeti (4) ve QP (1) alabilir: **83 özellik → 128 → 64 → 6×4** çıktı, yaklaşık 20 bin ağırlık. Çıktılar her expert için `log(bytes)`, `log(SSE_Y)`, `log(SSE_U)`, `log(SSE_V)` olur. Süre, cihazda ölçülmüş expert/batch-boyu lookup tablosundan gelir: tek tile'ın GPU süresi gerçek gruplu yürütme süresi için gürültülü bir hedef olur. Router bütçeyi sonuç başlığına katmak yerine karar aşamasında kullanır; böylece bir MLP farklı kalite/hız bütçelerine hizmet eder. Bu mimari **öneridir, eğitilmiş veya ölçülmüş bir router sonucu değildir**. Daha basit varyans/LUT özellikleri ve daha küçük ağlar ablasyonla karşılaştırılır. Özellik çıkarma süresi ayrıca ölçülür.
 
 ### Eğitim hedefi ve gerçek kalite hesabı
 

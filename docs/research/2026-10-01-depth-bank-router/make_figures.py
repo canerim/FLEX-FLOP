@@ -413,7 +413,7 @@ def plot_training_diagram(output: Path) -> None:
 
     # ONLINE: cheap source statistics -> MLP -> predicted six cost vectors -> one execution.
     ax.text(6.33, 4.22, "02   DEPLOYED DECISION", color=COLORS[6], fontweight="bold", fontsize=9.2)
-    for ix, label in enumerate(("pixels", "texture", "QP", "budget")):
+    for ix, label in enumerate(("luma", "texture", "color", "QP")):
         box(ax, 6.35+ix*.74, 3.25, .64, .38, "#E8EDF0", radius=.07)
         ax.text(6.67+ix*.74, 3.44, label, ha="center", va="center", color=MUTED, fontsize=7.3)
     arrow(ax, 9.38, 3.44, 9.68, 3.44, color=INK, lw=1.15)
@@ -428,8 +428,10 @@ def plot_training_diagram(output: Path) -> None:
             alpha=.62 if depth != 4 else 1)
     ax.text(10.62, 1.13, "one selected\ncodec path", color=INK,
             fontsize=8.2, ha="left", fontweight="bold")
-    ax.text(6.36, 2.58, "predict  R̂ₖ, ŜYₖ, ŜUₖ, ŜVₖ, T̂ₖ  for each expert k",
-            color=INK, fontsize=8.8)
+    ax.text(6.36, 2.65, "MLP predicts  R̂ₖ, ŜYₖ, ŜUₖ, ŜVₖ  for each expert k",
+            color=INK, fontsize=8.4)
+    ax.text(6.36, 2.37, "time comes from a device / batch-size lookup",
+            color=MUTED, fontsize=7.7)
     ax.text(6.36, 2.10, "score = predicted distortion + λ·rate + β·time",
             color=COLORS[6], fontsize=9.2, fontweight="bold")
     ax.text(6.36, 1.57, "calibrate on held-out images; penalize mode-map fragmentation",
