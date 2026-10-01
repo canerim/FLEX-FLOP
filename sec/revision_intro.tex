@@ -15,61 +15,70 @@ execution and measured allocations appear in \cref{fig:system,fig:maps}.}
 \section{Introduction}
 \label{sec:intro}
 
-Consider two regions decoded from the same image. In one, another pair of
-synthesis blocks improves reconstruction; in the other, it changes little.
-A fixed-depth decoder pays for both. Efficient operators make this work
-cheaper, but leave the allocation unchanged. Spatial early exit asks a
-complementary question: \emph{where is further decoding worth its cost?}
+Efficient decoding is important for practical learned image compression.
+Previous work has reduced decoder computation through shallow synthesis
+transforms~\cite{yang2023shallow}, adaptive network width~\cite{hu2023cgslimdecoder}, and spatially dynamic
+transforms~\cite{tao2023adanic}. Recent neural codecs further improve
+practical efficiency by reducing memory traffic and function-call
+overhead~\cite{jia2025dcvcrt} and simplifying entropy coding and
+reconstruction~\cite{li2026dcvcuf}. These approaches make decoding
+cheaper, but most computation is still determined by a fixed decoder
+architecture.
 
-We investigate this question in the intra model supplied with
-DCVC-UF~\cite{li2026dcvcuf}. Its synthesis transform contains twelve
-constant-width blocks between upsampling and reconstruction, providing a
-concrete axis along which to vary capacity. We turn this fixed stack into
-an image-dependent allocation of depth. Following the incremental-benefit
-view of adaptive patch exiting~\cite{wang2022ape}, a useful decision reflects
-what additional processing can recover, rather than texture alone. In a
-codec, that benefit also depends on the information preserved at the chosen
-rate: a visually complex region need not justify the deepest reconstruction.
+The benefit of additional decoding, however, varies across an image.
+Some regions improve substantially with deeper synthesis, while others
+change little. Similar spatial variation has been exploited in
+super-resolution by assigning patches to networks of different
+capacities~\cite{kong2021classsr} or allowing them to exit at different
+depths~\cite{wang2022ape}. Learned image compression introduces an
+additional constraint: the reconstruction network operates on a coded
+representation, making the choice of decoder capacity dependent on both
+the synthesis transform and the representation it receives.
 
-There are two natural ways to make this decision
-(\cref{fig:overview}). \emph{Across models}, a selector assigns each patch
-to a codec of suitable capacity, following the patch-to-network principle
-of ClassSR~\cite{kong2021classsr}. \emph{Within a model}, different patches
-leave a shared synthesis stack at different depths. The distinction is
-where the commitment is made. An independent codec is chosen before
-encoding and can learn its own representation; an exit is chosen after
-one representation has been recovered and reuses its synthesis prefix.
-FLEX-UF implements and evaluates the latter. The six-depth bank is a
-complementary study of how specialisation trades against this reuse.
+We propose \textbf{RegLIC}, a region-adaptive framework that assigns
+different synthesis depths to different image regions. We study RegLIC
+using the intra model of DCVC-UF~\cite{li2026dcvcuf}. DCVC-UF provides
+a useful basis for this study because its synthesis transform contains
+twelve constant-width blocks between upsampling and reconstruction.
+This exposes decoder depth as a direct computation axis while retaining
+the same feature width and synthesis structure. RegLIC uses this axis to
+spend additional synthesis computation only on regions that benefit from
+deeper processing.
 
-Inside a codec, early exit requires more than attaching intermediate
-outputs. Features at different depths must support a common reconstruction;
-conditional tiles lose some spatial context; and choosing an exit can itself
-require expensive candidate decoding. FLEX-UF addresses execution with a
-full-frame stem, a shrinking batch of active tiles, pointwise exit adapters,
-and a shared repair and reconstruction head. Exited tiles leave the active
-batch, making the conditional path an actual reduction in executed blocks.
-The frozen analysis and entropy path supplies one common latent; its
-payload can support different stopping maps without re-encoding the image.
+We investigate two forms of region-adaptive depth
+(\cref{fig:overview}). In the first, regions exit a shared synthesis
+network at different depths. A common coded representation and synthesis
+prefix are reused across all regions, while only surviving regions
+execute later blocks. In the second, regions are assigned to independently
+trained codecs with different decoder depths. Each codec learns its own
+analysis, entropy, and synthesis transforms, allowing the coded
+representation itself to specialize to decoder complexity. These two
+settings compare shared computation with independent depth specialization
+under the same spatial allocation principle.
 
-We separate the value of \emph{cheaper depth} from the value of
-\emph{content-dependent placement}. Uniform depth tests global truncation.
-Ordered dithering permits mixtures of depths without predicting where
-extra synthesis is useful. Under source-calibrated control, learned routing
-improves on this stronger baseline by \MainPremium\ percentage points of
-synthesis MAC saving at a nominal 0.1\,dB target, above dithering's
-\MainDitherSaving\% reduction. That increment shrinks near the shallowest-exit
-ceiling. Adaptation has most room to help when extra depth still matters
-but does not matter equally everywhere. A common delivered-loss analysis
-retains this pattern. A separate QP32 replay fixes controls on other
-sequences; its paired routing margin remains statistically unresolved.
-This separates evidence for useful allocation from evidence that a
-source-independent stopping control reliably captures that value.
+For shared early exit, RegLIC divides the DCVC-UF synthesis transform
+into a full-frame stem followed by conditional stages. Exited regions
+are removed from subsequent computation, progressively reducing the
+active workload. Exit adapters align features produced at different
+depths before they are assembled and processed by a shared full-frame
+reconstruction head. This allows one coded representation to support
+different synthesis depths across an image without evaluating every
+candidate depth.
 
-We contribute a spatially conditional DCVC-UF synthesis path and a
-controlled evaluation of learned placement. Uniform depth, blind mixtures,
-a common measured-loss cap and fixed-control replay distinguish the
-architecture's saving from the selector's value. Frozen-weight interventions
-and a stream-only decoding check probe the mechanism. The independent-depth
-study extends this allocation question to codec selection; complete codec
-speedups remain a question for measured execution.
+Our key contributions are as follows:
+\begin{itemize}
+    \item We propose \textbf{RegLIC}, a region-adaptive learned image
+    compression framework that allocates synthesis depth spatially. We
+    study both shared early exits and selection among independently
+    trained codecs with different decoder depths.
+
+    \item We develop a shared-latent early-exit design for DCVC-UF that
+    executes deeper synthesis blocks only for surviving regions and
+    reconstructs features from different depths through a common output
+    path.
+
+    \item We demonstrate that region-adaptive depth reduces synthesis
+    computation while preserving reconstruction quality, and isolate the
+    benefit of spatial depth allocation from the reduction obtained by
+    using shallower decoding alone.
+\end{itemize}

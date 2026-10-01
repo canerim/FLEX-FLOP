@@ -1,22 +1,3 @@
 \begin{abstract}
-The benefit of another decoder layer varies across an image, yet DCVC-UF
-applies the same synthesis depth everywhere. We introduce FLEX-UF, a
-spatial early-exit extension of its intra model. A shared coded
-representation and synthesis prefix feed tiles that stop at different
-depths. Exit adapters assemble their features for one full-frame repair
-and reconstruction head; only surviving tiles execute later blocks.
-We evaluate two distinct sources of efficiency: reducing average depth
-and choosing where to retain it. Across 53 intra frames at five quality
-indices, learned routing saves \MainRouterSaving\% of modelled synthesis
-multiply--accumulates at a nominal 0.1\,dB YCbCr-MSE target under
-per-source calibration. Of this saving, \MainPremium\ percentage points
-exceed ordered dithering, which mixes depths without predicting their
-spatial value. Retrospective selection under a common measured-loss cap
-retains a 2.93-point margin over all 265 pairs. This margin contracts as
-the shallowest exit saturates. Fixing controls on other sequences removes
-per-source calibration, but a QP32 reconstruction replay does not yet
-resolve the paired routing advantage. These results identify where
-adaptive depth can add value while separating arithmetic savings from
-unmeasured codec latency. An ongoing independent-depth study extends
-the same allocation question from shared exits to codec selection.
+Neural image codecs typically decode an entire image with a fixed network depth, although the benefit of additional decoding layers can vary substantially across image regions. This paper introduces a spatially adaptive coding framework designed to exploit this variation. Instead of assigning the same synthesis complexity everywhere, our approach allocates decoder depth according to the reconstruction needs of individual regions. We investigate this idea in two forms. The first introduces spatial early exits into a shared decoder, where regions stop at different synthesis depths while reusing a common coded representation. The second selects among independently trained codecs with different decoder depths, allowing both the representation and synthesis network to adapt to each region. In this way, additional computation is spent only on regions where deeper decoding is useful. Building on these designs, we present \textbf{DepthLIC}, a learned image compression framework that turns decoder depth from a fixed architectural choice into a spatially adaptive coding decision.
 \end{abstract}
