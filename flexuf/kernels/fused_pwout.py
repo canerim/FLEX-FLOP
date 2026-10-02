@@ -57,7 +57,10 @@ def pointwise_add(x: torch.Tensor, conv: nn.Conv2d,
             x.shape != residual.shape or conv.in_channels != conv.out_channels or
             conv.in_channels != x.shape[1] or conv.bias is None or
             conv.weight.device != x.device or conv.bias.device != x.device or
+            conv.weight.dtype != x.dtype or conv.bias.dtype != x.dtype or
             not conv.weight.is_contiguous() or conv.kernel_size != (1,1) or
+            conv.groups != 1 or conv.stride != (1,1) or
+            conv.dilation != (1,1) or conv.padding != (0,0) or
             torch.cuda.get_device_capability(x.device)[0] < 8):
         raise ValueError('unsupported pointwise-add shape/layout')
     n,c,h,w=x.shape
@@ -76,7 +79,10 @@ def pointwise_wsilu(x: torch.Tensor, conv: nn.Conv2d) -> torch.Tensor:
             conv.in_channels != conv.out_channels or conv.in_channels != x.shape[1] or
             conv.bias is None or conv.weight.device != x.device or
             conv.bias.device != x.device or not conv.weight.is_contiguous() or
-            conv.kernel_size != (1,1) or torch.cuda.get_device_capability(x.device)[0] < 8):
+            conv.weight.dtype != x.dtype or conv.bias.dtype != x.dtype or
+            conv.kernel_size != (1,1) or conv.groups != 1 or
+            conv.stride != (1,1) or conv.dilation != (1,1) or
+            conv.padding != (0,0) or torch.cuda.get_device_capability(x.device)[0] < 8):
         raise ValueError('unsupported pointwise-activation shape/layout')
     n,c,h,w=x.shape
     y=torch.empty_like(x)

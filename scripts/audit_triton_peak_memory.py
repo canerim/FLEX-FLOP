@@ -7,6 +7,7 @@ process' CUDACachingAllocator reservation or other GPU users' memory.
 """
 from __future__ import annotations
 
+import argparse
 import copy
 import json
 from pathlib import Path
@@ -24,10 +25,14 @@ from flexuf.model import FlexUFIntra,load_flexuf_state
 
 
 def main():
-    torch.cuda.set_device(0)
+    p=argparse.ArgumentParser()
+    p.add_argument('--gpu',type=int,default=0)
+    p.add_argument('--out',default='results/triton_early_exit_peak_memory.json')
+    a=p.parse_args()
+    torch.cuda.set_device(a.gpu)
     torch.backends.cudnn.allow_tf32=False
     torch.backends.cuda.matmul.allow_tf32=False
-    dev=torch.device('cuda:0')
+    dev=torch.device(f'cuda:{a.gpu}')
     ck=torch.load(ROOT/'runs/RECIPE512/ckpt_PIN_e15.pth.tar',map_location='cpu',weights_only=False)
     cfg=FlexUFConfig(**ck['config'])
     net=FlexUFIntra(cfg).to(dev).eval();load_flexuf_state(net,ck)
@@ -60,7 +65,8 @@ def main():
     result={'scope':'single CTC QP32 decode; incremental active allocator peak, not reserved GPU memory',
             'device':torch.cuda.get_device_name(dev),'shape_rgb':[1280,2048],
             'map_hist':row['rules']['router']['0.1']['hist'],'metrics':metrics}
-    out=ROOT/'results/triton_early_exit_peak_memory.json'
+    out=ROOT/a.out
+    out.parent.mkdir(parents=True,exist_ok=True)
     out.write_text(json.dumps(result,indent=2)+'\n')
     print(json.dumps(result,indent=2))
 

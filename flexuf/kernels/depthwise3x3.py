@@ -54,6 +54,7 @@ def depthwise3x3(x:torch.Tensor,conv:nn.Conv2d) -> torch.Tensor:
     if (not x.is_cuda or x.ndim!=4 or x.dtype!=torch.float32 or
             not x.is_contiguous() or conv.weight.device!=x.device or
             conv.bias is None or conv.bias.device!=x.device or
+            conv.weight.dtype!=x.dtype or conv.bias.dtype!=x.dtype or
             not conv.weight.is_contiguous() or conv.kernel_size!=(3,3) or
             conv.stride!=(1,1) or conv.dilation!=(1,1) or
             conv.padding!=(1,1) or conv.groups!=x.shape[1] or

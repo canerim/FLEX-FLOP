@@ -10,7 +10,7 @@ sys.path[:0] = [str(Path(__file__).resolve().parents[1]), str(Path.home() / 'DCV
 
 from src.layers.layers import DepthConvBlock
 from flexuf.kernels.fused_ffn import install_fused_ffn
-from flexuf.kernels.fused_pwout import FusedTrunkBlock
+from flexuf.kernels.fused_pwout import FusedTrunkBlock, pointwise_add
 from flexuf.kernels.wsilu_chunkadd import install_fused_plain_wsilu
 from flexuf.kernels import enable_fast_inference
 from flexuf.backbone.decoder import MultiExitIntraDecoder
@@ -72,6 +72,14 @@ def test_cuda_trunk_really_dispatches_fused_kernels(monkeypatch):
     with torch.inference_mode():
         fused(torch.randn(1,384,4,4,device='cuda'))
     assert calls=={'pointwise':1,'depthwise':1}
+
+
+@pytest.mark.skipif(not torch.cuda.is_available(), reason='CUDA unavailable')
+def test_pointwise_rejects_grouped_convolution():
+    x=torch.randn(1,4,4,4,device='cuda')
+    grouped=torch.nn.Conv2d(4,4,1,groups=2).cuda().eval()
+    with pytest.raises(ValueError,match='unsupported'):
+        pointwise_add(x,grouped,x)
 
 
 @pytest.mark.parametrize('in_ch,out_ch,shortcut',[(384,192,False),(384,384,True)])

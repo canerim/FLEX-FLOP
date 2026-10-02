@@ -54,8 +54,11 @@ def fused_expand_activate_reduce(x: torch.Tensor, conv: nn.Conv2d) -> torch.Tens
     if (not x.is_cuda or not x.is_contiguous() or x.dtype != torch.float32 or
             x.ndim != 4 or not conv.weight.is_contiguous() or conv.bias is None or
             conv.weight.device != x.device or conv.bias.device != x.device or
+            conv.weight.dtype != x.dtype or conv.bias.dtype != x.dtype or
             conv.in_channels != x.shape[1] or conv.out_channels % 4 or
-            conv.kernel_size != (1,1) or
+            conv.kernel_size != (1,1) or conv.groups != 1 or
+            conv.stride != (1,1) or conv.dilation != (1,1) or
+            conv.padding != (0,0) or
             torch.cuda.get_device_capability(x.device)[0] < 8):
         raise ValueError('unsupported fused FFN shape/layout')
     n, ci, h, w = x.shape

@@ -1,0 +1,28 @@
+{
+  "scope": "single CTC QP32 decode; incremental active allocator peak, not reserved GPU memory",
+  "device": "NVIDIA RTX A6000",
+  "shape_rgb": [
+    1280,
+    2048
+  ],
+  "map_hist": [
+    0,
+    0,
+    13,
+    20,
+    4,
+    3
+  ],
+  "metrics": {
+    "masked_stock": {
+      "active_before_bytes": 327438848,
+      "incremental_peak_bytes": 1069548544,
+      "output_bytes": 31457280
+    },
+    "sorted_fused_full": {
+      "active_before_bytes": 327438848,
+      "incremental_peak_bytes": 692062208,
+      "output_bytes": 31457280
+    }
+  }
+}
