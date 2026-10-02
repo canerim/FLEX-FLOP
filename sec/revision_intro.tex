@@ -12,15 +12,11 @@ representation?
 
 \begin{figure}[t]
 \centering
-\includegraphics[width=\columnwidth]{figs/reglic_intro/reglic_intro.pdf}
-\caption{\textbf{Depth is a spatial decision.} \textbf{Top:} a schematic
-tile field illustrates that the value of additional synthesis can vary
-within one image; colours are conceptual, not measured tile errors.
-\textbf{Bottom:} at a nominal 0.1\,dB $\Delta_{444}$ target, learned
-routing saves \MainRouterSaving\% of \emph{modelled synthesis MACs},
-versus \MainDitherSaving\% for ordered dithering
-(\MainPremium{}-point difference). These source-calibrated results are
-not end-to-end latency measurements.}
+\includegraphics[width=\columnwidth]{figs/reglic_intro/reglic_concept_20261002.png}
+\caption{\textbf{One image, unequal decoder depth.}
+A conceptual cutaway shows regions sharing one coded representation
+while using different amounts of synthesis. This is an illustration,
+not a measured allocation or reconstruction.}
 \label{fig:intro}
 \end{figure}
 
@@ -62,13 +58,13 @@ Separating the benefit of shallow decoding from the benefit of
 Uniform exits and ordered dithering already reduce average depth;
 the latter mixes depths without predicting which locations need them.
 At a nominal 0.1\,dB YCbCr-MSE-ratio target across 53 intra frames and
-five QPs, routing saves \MainRouterSaving\% of modelled synthesis MACs,
-\MainPremium\ percentage points more than dithering under
-per-source calibration (\cref{fig:intro}). A retrospective common
-delivered-loss cap retains a margin, but when controls are fitted on
-other sequences, the QP32 paired advantage is unresolved. The
-arithmetic saving is consequently established more strongly than a
-source-independent routing gain or complete-codec speedup.
+five QPs, spatial early exit saves \MainRouterSaving\% of modelled
+synthesis MACs under per-source calibration. The value of learned
+placement beyond simply using less depth is smaller and depends on the
+quality budget. When controls are fitted on other sequences, its QP32
+paired advantage remains unresolved. The arithmetic saving is thus
+established more strongly than a source-independent routing gain or a
+complete-codec speedup.
 
 Our contributions are a conditional DCVC-UF synthesis path with
 executed tile exits; a controlled comparison that isolates spatial

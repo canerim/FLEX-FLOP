@@ -22,7 +22,7 @@ It identifies the testable distinction: conditional synthesis depth
 with one coded latent, executed tile exits and a shared output path.
 
 The model bank is described as a complementary study, with no reported
-six-way router result. The 27.97% versus 25.43% figure comes from a
-source-calibrated *synthesis-MAC model*. The text explicitly separates
-that result from unresolved fixed-control routing and unmeasured
+six-way router result. The introduction illustration carries no numerical result. The reported
+27.97% synthesis-MAC saving comes from a source-calibrated model; the
+text separates it from unresolved fixed-control routing and unmeasured
 end-to-end latency.

@@ -38,6 +38,6 @@ The beta control enters after MLP scores, and every exit connects to the
 stitched feature canvas. This asset is conceptual, not measured imagery.
 The former Figure 1 asset is protected by an explicit hash assertion in
 `verify_bundle.py`. It remains an archival conceptual asset; the active
-RegLIC introduction uses `figs/reglic_intro/reglic_intro.pdf`.
+RegLIC introduction uses `figs/reglic_intro/reglic_concept_20261002.png`.
 
 A publication-size typography pass enlarged annotations and removed the redundant bottom note. The accepted refinement retains the exact stem and exit counts; prompts and the rejected intermediate count issue are recorded in [TYPOGRAPHY_PROMPTS.md](figs/system20260928/TYPOGRAPHY_PROMPTS.md). The generated source is retained unchanged outside the repository; the published file is a direct copy.
