@@ -1,22 +1,19 @@
 \begin{abstract}
-The benefit of another decoder layer varies across an image, yet DCVC-UF
-applies the same synthesis depth everywhere. We introduce FLEX-UF, a
-spatial early-exit extension of its intra model. A shared coded
-representation and synthesis prefix feed tiles that stop at different
-depths. Exit adapters assemble their features for one full-frame repair
-and reconstruction head; only surviving tiles execute later blocks.
-We evaluate two distinct sources of efficiency: reducing average depth
-and choosing where to retain it. Across 53 intra frames at five quality
-indices, learned routing saves \MainRouterSaving\% of modelled synthesis
-multiply--accumulates at a nominal 0.1\,dB YCbCr-MSE target under
-per-source calibration. Of this saving, \MainPremium\ percentage points
-exceed ordered dithering, which mixes depths without predicting their
-spatial value. Retrospective selection under a common measured-loss cap
-retains a 2.93-point margin over all 265 pairs. This margin contracts as
-the shallowest exit saturates. Fixing controls on other sequences removes
-per-source calibration, but a QP32 reconstruction replay does not yet
-resolve the paired routing advantage. These results identify where
-adaptive depth can add value while separating arithmetic savings from
-unmeasured codec latency. An ongoing independent-depth study extends
-the same allocation question from shared exits to codec selection.
+Learned image codecs usually apply one decoder depth to an entire image,
+although the benefit of additional synthesis varies across regions.
+We introduce \textbf{RegLIC}, a region-adaptive depth framework studied
+with the DCVC-UF intra codec. Its evaluated shared-exit path recovers one
+latent, executes later synthesis blocks only on surviving tiles, and
+assembles mixed-depth features through adapters and a common
+reconstruction head. Across 53 intra frames and five quality indices,
+learned routing saves \MainRouterSaving\% of modelled synthesis MACs at
+a nominal 0.1\,dB YCbCr-MSE-ratio target under per-source calibration;
+\MainPremium\ percentage points exceed ordered dithering, which mixes
+depths without content-dependent placement. A retrospective common
+delivered-loss cap preserves a routing margin, whereas a fixed-control
+QP32 replay does not yet resolve its paired advantage. We also define a
+complementary 2/4/6/8/10/12-block codec bank to study independent
+representation specialisation; its router is not part of the reported
+results. These controls distinguish savings from shallower decoding,
+spatial allocation, and the still-unmeasured effect on full-codec latency.
 \end{abstract}

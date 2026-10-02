@@ -1,75 +1,79 @@
-\begin{figure*}[t]
-\centering
-\includegraphics[width=\textwidth]{figs/adaptive20260927/adaptive_overview.png}
-\caption{\textbf{One allocation principle, two ways to vary synthesis depth.}
-\emph{Top:} select a complete DCVC-UF codec before encoding a patch; the
-six-depth bank and its selector form the controlled, prospective study.
-\emph{Bottom:} select a stopping depth within one shared-latent decoder;
-this is the evaluated early-exit path. The paths are alternatives, not
-successive stages. AI-generated conceptual illustration: picture planes
-are illustrative, not dataset samples or reconstructed outputs. Exact
-execution and measured allocations appear in \cref{fig:system,fig:maps}.}
-\label{fig:overview}
-\end{figure*}
-
 \section{Introduction}
 \label{sec:intro}
 
-Consider two regions decoded from the same image. In one, another pair of
-synthesis blocks improves reconstruction; in the other, it changes little.
-A fixed-depth decoder pays for both. Efficient operators make this work
-cheaper, but leave the allocation unchanged. Spatial early exit asks a
-complementary question: \emph{where is further decoding worth its cost?}
+A learned codec normally spends the same synthesis computation on every
+part of an image. Yet another pair of decoder blocks may recover visible
+structure in one region and change almost nothing in its neighbour.
+Making each block faster lowers the cost of both regions; deciding
+\emph{where the blocks run} addresses a different inefficiency. This is
+the question behind \textbf{RegLIC}: can a codec allocate reconstruction
+capacity locally without giving up the compression benefits of a shared
+representation?
 
-We investigate this question in the intra model supplied with
-DCVC-UF~\cite{li2026dcvcuf}. Its synthesis transform contains twelve
-constant-width blocks between upsampling and reconstruction, providing a
-concrete axis along which to vary capacity. We turn this fixed stack into
-an image-dependent allocation of depth. Following the incremental-benefit
-view of adaptive patch exiting~\cite{wang2022ape}, a useful decision reflects
-what additional processing can recover, rather than texture alone. In a
-codec, that benefit also depends on the information preserved at the chosen
-rate: a visually complex region need not justify the deepest reconstruction.
+\begin{figure}[t]
+\centering
+\includegraphics[width=\columnwidth]{figs/reglic_intro/reglic_intro.pdf}
+\caption{\textbf{Depth is a spatial decision.} \textbf{Top:} a schematic
+tile field illustrates that the value of additional synthesis can vary
+within one image; colours are conceptual, not measured tile errors.
+\textbf{Bottom:} at a nominal 0.1\,dB $\Delta_{444}$ target, learned
+routing saves \MainRouterSaving\% of \emph{modelled synthesis MACs},
+versus \MainDitherSaving\% for ordered dithering
+(\MainPremium{}-point difference). These source-calibrated results are
+not end-to-end latency measurements.}
+\label{fig:intro}
+\end{figure}
 
-There are two natural ways to make this decision
-(\cref{fig:overview}). \emph{Across models}, a selector assigns each patch
-to a codec of suitable capacity, following the patch-to-network principle
-of ClassSR~\cite{kong2021classsr}. \emph{Within a model}, different patches
-leave a shared synthesis stack at different depths. The distinction is
-where the commitment is made. An independent codec is chosen before
-encoding and can learn its own representation; an exit is chosen after
-one representation has been recovered and reuses its synthesis prefix.
-FLEX-UF implements and evaluates the latter. The six-depth bank is a
-complementary study of how specialisation trades against this reuse.
+Spatial capacity selection is established in restoration: ClassSR
+assigns super-resolution patches to networks of different sizes
+\cite{kong2021classsr}, while APE lets patches leave a shared network
+according to predicted incremental benefit~\cite{wang2022ape}.
+AdaNIC brings spatially dynamic transforms to image compression
+\cite{tao2023adanic}. For a codec, however, decoder depth is coupled to
+the coded representation and the rate at which it was produced. A
+visually complex patch need not benefit from a deeper decoder if its
+bitstream carries little recoverable detail. The relevant quantity is
+therefore the \emph{marginal reconstruction gain} of more synthesis,
+relative to its computation and coding cost.
 
-Inside a codec, early exit requires more than attaching intermediate
-outputs. Features at different depths must support a common reconstruction;
-conditional tiles lose some spatial context; and choosing an exit can itself
-require expensive candidate decoding. FLEX-UF addresses execution with a
-full-frame stem, a shrinking batch of active tiles, pointwise exit adapters,
-and a shared repair and reconstruction head. Exited tiles leave the active
-batch, making the conditional path an actual reduction in executed blocks.
-The frozen analysis and entropy path supplies one common latent; its
-payload can support different stopping maps without re-encoding the image.
+We study this allocation in the intra model of DCVC-UF
+\cite{li2026dcvcuf}. Its twelve constant-width synthesis blocks expose
+depth as a clean capacity axis without changing feature width. RegLIC
+has two complementary realisations. In the
+\emph{shared-exit} path, every region uses the same coded latent and
+decoder prefix, then exits after a chosen block pair. In the
+\emph{independent-depth} path, a selector chooses a complete 2/4/6/8/10/12-
+block codec before encoding a region, allowing its analysis and entropy
+models to specialise as well. The latter trades representation reuse
+for specialised coding and introduces region-boundary and signalling
+costs. We evaluate the shared-exit path here; the independently trained
+bank is an ongoing capacity study, not a demonstrated routed system.
 
-We separate the value of \emph{cheaper depth} from the value of
-\emph{content-dependent placement}. Uniform depth tests global truncation.
-Ordered dithering permits mixtures of depths without predicting where
-extra synthesis is useful. Under source-calibrated control, learned routing
-improves on this stronger baseline by \MainPremium\ percentage points of
-synthesis MAC saving at a nominal 0.1\,dB target, above dithering's
-\MainDitherSaving\% reduction. That increment shrinks near the shallowest-exit
-ceiling. Adaptation has most room to help when extra depth still matters
-but does not matter equally everywhere. A common delivered-loss analysis
-retains this pattern. A separate QP32 replay fixes controls on other
-sequences; its paired routing margin remains statistically unresolved.
-This separates evidence for useful allocation from evidence that a
-source-independent stopping control reliably captures that value.
+The evaluated design must actually \emph{skip} computation: computing
+every depth and choosing an output afterwards would save no decoding
+work. A full-frame stem supplies a common latent feature canvas;
+conditional block pairs process a shrinking batch of active tiles.
+Exit adapters align features from different depths before a shared
+full-frame repair and reconstruction head. This preserves a common
+output path while allowing each tile to stop at a different depth.
 
-We contribute a spatially conditional DCVC-UF synthesis path and a
-controlled evaluation of learned placement. Uniform depth, blind mixtures,
-a common measured-loss cap and fixed-control replay distinguish the
-architecture's saving from the selector's value. Frozen-weight interventions
-and a stream-only decoding check probe the mechanism. The independent-depth
-study extends this allocation question to codec selection; complete codec
-speedups remain a question for measured execution.
+Separating the benefit of shallow decoding from the benefit of
+\emph{placing} deeper computation is central to the evaluation.
+Uniform exits and ordered dithering already reduce average depth;
+the latter mixes depths without predicting which locations need them.
+At a nominal 0.1\,dB YCbCr-MSE-ratio target across 53 intra frames and
+five QPs, routing saves \MainRouterSaving\% of modelled synthesis MACs,
+\MainPremium\ percentage points more than dithering under
+per-source calibration (\cref{fig:intro}). A retrospective common
+delivered-loss cap retains a margin, but when controls are fitted on
+other sequences, the QP32 paired advantage is unresolved. The
+arithmetic saving is consequently established more strongly than a
+source-independent routing gain or complete-codec speedup.
+
+Our contributions are a conditional DCVC-UF synthesis path with
+executed tile exits; a controlled comparison that isolates spatial
+placement from cheaper average depth; and a depth-bank protocol that
+tests the separate question of whether independent representation
+specialisation can repay its coding and boundary costs. Together they
+turn synthesis depth from a fixed architectural choice into an
+explicit, measurable spatial allocation problem.
