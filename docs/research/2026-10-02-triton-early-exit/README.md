@@ -20,6 +20,10 @@ Hızlı yolun profilinde FFN ve diğer noktasal matris çarpımları baskın kal
 
 Noktasal kernel'in `BM×BN` blok boyutları ve FFN'in aktif-tile sayısına göre `BM` seçenekleri de tarandı. Noktasal küçük-batch için `32×64` kimi kısa ölçümde daha hızlı görünse de eşlenik tekrarlar yalnız yaklaşık %2 fark gösterdi; tam karede mevcut `64×64` daha iyi. FFN için 3–160 tile arasında `BM=64` tüm ölçülen boyutlarda en iyi medyana sahipti. Bu yüzden kernel ayarını dinamikleştirmedik. [Noktasal blok taraması](../../../results/triton_pointwise_tuning_shared.json) · [FFN tile taraması](../../../results/triton_ffn_smallbatch_tuning_shared.json).
 
+Tek-pass `tf32` hassasiyeti, mevcut üç-pass `tf32x3` yerine denendi: 40 tile FFN ve noktasal projeksiyonda yaklaşık **%17–18 daha kısa süre**, 40.960-piksel ortak gövdede yalnız **%0–4** kazanç sağladı. Ham kernel çıktı farkı yaklaşık **8×10⁻⁶**'ya yükseldi. Tüm decoder kalite ve hızını ölçmeden bu modu açmak doğru olmaz; mevcut yol `tf32x3` olarak bırakıldı. [Ham hassasiyet mikro kaydı](../../../results/triton_tf32_precision_micro_shared.json).
+
+2× upsample ve 8× RGB çıkışındaki pixel shuffle için ayrı Triton kopyalama da ölçüldü. 2×'te kazanç yalnız **0,024 ms**, 8×'te ölçülebilir kazanç yok; ek kernel kalıcı koda alınmadı. [Ham ölçüm](../../../results/triton_pixel_shuffle_micro_shared.json).
+
 Tile'ları derinliğe göre sıralayan var olan yol opt-in olarak açılıyor; aynı tile'lar aynı ağırlıklardan geçiyor. Mode-map CPU'da ayrıştırılıyorsa [host-planned yürütme](../../../flexuf/kernels/planned_decoder.py) ayrıca mevcut; küçük/yoğun haritalarda etkisi birkaç ms ve bu aşamanın ana hız kazanımı değil. Kerneller A6000/SM86 float32 NCHW yolunda denenmiş; autograd, CPU, half ve desteklenmeyen yerleşimlerde stock PyTorch yoluna düşer. Opt-in API `enable_fast_inference(net.dec)` yalnız **checkpoint yüklenip `eval()` çağrıldıktan sonra** kullanılmalı. Bu dönüşüm inference modül ağacını değiştirir; dönüştürülmüş modülün `state_dict`'i eğitim checkpoint'i olarak saklanmamalı.
 
 ## Eşlenik 1080p aşama ölçümü
