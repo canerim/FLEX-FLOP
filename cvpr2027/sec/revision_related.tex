@@ -27,9 +27,11 @@ ABC adapts structure to content and budget~\cite{zhang2025abc}.
 AdaNIC routes spatial transform capacity~\cite{tao2023adanic}, and
 cgSlimDecoder allocates video-decoder channels~\cite{hu2023cgslim}.
 MixCompress selects depth experts using rate embeddings rather than
-image content~\cite{ta2026mixcompress}. RegLIC uses constant-width
-synthesis depth and compares learned placement against blind mixtures
-with the same available depths.
+image content~\cite{ta2026mixcompress}. MoECodec routes content-dependent
+token experts and regularises their spatial coherence~\cite{zhao2026moecodec}.
+RegLIC instead varies constant-width synthesis depth after a shared
+entropy-decoded latent and compares learned placement against blind
+mixtures with the same available depths.
 
 \paragraph{Independent codecs and region boundaries.}
 Blard et al. select among content-specialised complete codecs and
