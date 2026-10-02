@@ -50,3 +50,15 @@ def test_installer_is_idempotent():
     dec=MultiExitIntraDecoder(FlexUFConfig(adapter_kind='scaled')).eval()
     assert install_fused_adapters(dec)==dec.cfg.num_exits-1
     assert install_fused_adapters(dec)==0
+
+
+@pytest.mark.skipif(not torch.cuda.is_available(),reason='CUDA unavailable')
+def test_nonstandard_adapter_expansion_stays_on_stock_path():
+    torch.manual_seed(19)
+    stock=FFNAdapter(384,expand=2).cuda().eval()
+    fused=FusedAdapter(copy.deepcopy(stock))
+    x=torch.randn(1,384,4,4,device='cuda')*.1
+    with torch.inference_mode():
+        assert torch.equal(stock(x),fused(x))
+    dec=MultiExitIntraDecoder(FlexUFConfig(adapter_kind='ffn',adapter_expand=2)).eval()
+    assert install_fused_adapters(dec)==0
