@@ -1,10 +1,12 @@
 # RegLIC figure system
 
-The figures use 183 mm full-width and 89 mm single-column canvases, Liberation Sans type, embedded
+The main figure system uses 183 mm full-width and 89 mm single-column canvases, Liberation Sans type, embedded
 TrueType PDF fonts and editable SVG text. Quantitative plots and exact
 execution diagrams are generated from bundled source tables with Matplotlib.
-The protected opening overview and the shared-exit mechanism are separate AI-generated conceptual rasters,
-labelled as such in their captions; neither contains experimental reconstructions.
+The new introduction figure uses a compact 89 mm canvas and DejaVu Sans.
+The former opening overview is retained as an archival conceptual asset;
+the active shared-exit mechanism is an AI-generated conceptual raster,
+labelled as such in its caption. Neither contains experimental reconstructions.
 Their prompts and provenance are recorded in `IMAGEGEN.md`. The data figures use archived source-luma thumbnails and explicitly
 identified, predeclared RGB reconstruction windows as raster content. Diagrams use tensor planes, nested block
 strips, active-tile grids, feature joins, expert queues and coded-stream
@@ -43,8 +45,9 @@ folder's `layout_audit.json`. Artifact hashes and an isolated CPU rebuild
 support reproducibility. PDF page layout is also reviewed after compilation;
 passing a text-bound check alone does not establish publication quality.
 
-The September 28 editorial revision preserves Figures 1 and 2 byte for byte. Figure 2 follows
-its layered scientific-illustration style while depicting the implemented
+The September 28 editorial revision preserved its then-current Figures 1 and 2.
+The October 2 RegLIC revision replaces the opening figure with the compact
+single-column schematic/measured comparison; the system figure depicts the implemented
 shared-exit connectivity: stem and QP feed the MLP; beta adjusts its output
 scores; all four exits reach the common feature canvas. Its synthetic scene
 is not a qualitative codec result.

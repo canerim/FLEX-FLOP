@@ -51,9 +51,10 @@ controls and plotted epoch-20 curves retain their original checkpoints.
 `python scripts/build_research_figures.py` renders the portable vector
 figures. `python scripts/reproduce_figures.py` checks byte-identical
 reproduction from bundled data without checkpoints, source images or GPU.
-The suite contains 38 vector figure sets, with two separately identified
-conceptual AI illustrations. Figures 1 and 2 and their captions are
-preserved. The revised main figures include an oblique active-tile trace, measured
+The suite contains portable vector figures and separately identified
+conceptual AI illustrations. The current Figure 1 is a compact, reproducible
+RegLIC introduction figure; its upper tile field is schematic and its lower
+comparison uses pinned measured MAC-accounting values. The revised main figures include an oblique active-tile trace, measured
 3D budget trajectories and eight source groups with five recorded maps each.
 No tables are typeset in the main paper or supplement: evidence is plotted.
 `build_editorial_figures.py` renders the four added evidence plots. Numerical
