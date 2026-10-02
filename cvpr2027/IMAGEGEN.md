@@ -40,6 +40,7 @@ The former Figure 1 asset is protected by an explicit hash assertion in
 `verify_bundle.py`. It remains an archival combined-system illustration.
 The page-2 standalone independent-bank figure is documented in
 `figs/system20261002/README.md`; the active RegLIC introduction uses
-`figs/reglic_intro/reglic_concept_20261002.png`.
+`figs/reglic_intro/intro_evidence.pdf`, generated from archived source luma and
+measured QP32 early-exit maps (see `figs/reglic_intro/README.md`).
 
 A publication-size typography pass enlarged annotations and removed the redundant bottom note. The accepted refinement retains the exact stem and exit counts; prompts and the rejected intermediate count issue are recorded in [TYPOGRAPHY_PROMPTS.md](figs/system20260928/TYPOGRAPHY_PROMPTS.md). The generated source is retained unchanged outside the repository; the published file is a direct copy.
