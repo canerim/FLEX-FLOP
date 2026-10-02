@@ -49,7 +49,7 @@ Deney ortamı **PyTorch 2.6.0+cu124, Triton 3.2.0, NVIDIA RTX A6000 (SM86)**. Ç
 
 Sayılar tek GPU üzerinde aynı zaman aralığında alınmış; GPU'daki D12 eğitimi çalışma yükü ve frekansı değiştirebilir. Bu yüzden ham kayıtlar korunuyor; 282,3/117,0 bölümü ile eşlenik oran medyanının küçük farkı doğal. İlk adayın kullanıldığı beş CTC/QP durumunda kaliteyi ayrıca denetledik, ancak son adapter füzyonunun **performans zamanlaması yalnız bu bir CTC/QP işletim noktasında** yapıldı. Başka QP'lere 2,40× genellemesi yapılmamalı.
 
-Aynı CTC/haritada tek geçişli PyTorch aktif ayırıcı tepe belleği denetimi, mevcut maskeli yol için **1.070 MB**, opt-in hızlı yol için **692 MB** ek tepe ayırımı gösterdi (**%35,3 daha az**). Son depthwise sürümünde bu iki tepe değeri değişmedi. Bunlar model/latent zaten bellekteyken decode sırasında eklenen aktif tensor baytlarıdır; CUDA rezervasyonu, başka süreçlerin VRAM'i ve cuDNN'in PyTorch dışı belleği değildir. [İlk kayıt](../../../results/triton_early_exit_peak_memory.json) · [Son sürüm kaydı](../../../results/triton_early_exit_peak_memory_depthwise.json).
+Aynı CTC/haritada tek geçişli PyTorch aktif ayırıcı tepe belleği denetimi, mevcut maskeli yol için **1.070 MB**, opt-in hızlı yol için **692 MB** ek tepe ayırımı gösterdi (**%35,3 daha az**). Depthwise ve seam füzyonları eklendikten sonra bu iki tepe değeri değişmedi. Bunlar model/latent zaten bellekteyken decode sırasında eklenen aktif tensor baytlarıdır; CUDA rezervasyonu, başka süreçlerin VRAM'i ve cuDNN'in PyTorch dışı belleği değildir. [İlk kayıt](../../../results/triton_early_exit_peak_memory.json) · [son sürüm kaydı](../../../results/triton_early_exit_peak_memory_seam.json).
 
 ## Çıktı doğruluğu
 
