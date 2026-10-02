@@ -50,6 +50,30 @@ def test_cuda_trunk_matches_stock():
     assert torch.allclose(a,b,atol=5e-6,rtol=2e-6)
 
 
+@pytest.mark.skipif(not torch.cuda.is_available(), reason='CUDA unavailable')
+def test_cuda_trunk_really_dispatches_fused_kernels(monkeypatch):
+    import flexuf.kernels.fused_pwout as pw
+    import flexuf.kernels.depthwise3x3 as dw
+    _,fused=_pair('cuda')
+    calls={'pointwise':0,'depthwise':0}
+    real_pw=pw.pointwise_wsilu
+    real_dw=dw.depthwise3x3
+
+    def measured_pw(*args):
+        calls['pointwise']+=1
+        return real_pw(*args)
+
+    def measured_dw(*args):
+        calls['depthwise']+=1
+        return real_dw(*args)
+
+    monkeypatch.setattr(pw,'pointwise_wsilu',measured_pw)
+    monkeypatch.setattr(dw,'depthwise3x3',measured_dw)
+    with torch.inference_mode():
+        fused(torch.randn(1,384,4,4,device='cuda'))
+    assert calls=={'pointwise':1,'depthwise':1}
+
+
 @pytest.mark.parametrize('in_ch,out_ch,shortcut',[(384,192,False),(384,384,True)])
 def test_boundary_block_fallback_matches_stock_on_cpu(in_ch,out_ch,shortcut):
     torch.manual_seed(50)
