@@ -83,9 +83,10 @@ class FusedWSiLUChunkAdd(nn.Module):
     def __init__(self, original: nn.Module):
         super().__init__()
         self.original = original
+        self.train(original.training)
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
-        if (triton is None or not x.is_cuda or not x.is_contiguous() or
+        if (triton is None or self.training or not x.is_cuda or not x.is_contiguous() or
                 x.dtype != torch.float32 or
                 torch.is_grad_enabled() and x.requires_grad):
             return self.original(x)
@@ -98,9 +99,10 @@ class FusedWSiLU(nn.Module):
     def __init__(self, original: nn.Module):
         super().__init__()
         self.original = original
+        self.train(original.training)
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
-        if (triton is None or not x.is_cuda or not x.is_contiguous() or
+        if (triton is None or self.training or not x.is_cuda or not x.is_contiguous() or
                 x.dtype != torch.float32 or
                 torch.is_grad_enabled() and x.requires_grad):
             return self.original(x)

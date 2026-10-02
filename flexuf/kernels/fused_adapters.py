@@ -13,6 +13,7 @@ class FusedAdapter(nn.Module):
     def __init__(self, original: nn.Module):
         super().__init__()
         self.original=original
+        self.train(original.training)
 
     def forward(self,x):
         if (triton is None or self.training or torch.is_grad_enabled() or

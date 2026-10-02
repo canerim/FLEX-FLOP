@@ -24,13 +24,14 @@ def enable_fast_inference(decoder, *, sort_tiles: bool = True) -> dict[str, int]
             cfg.tile_pad_mode not in ('zeros', 'replicate')):
         raise NotImplementedError('fast kernels are audited for zero-halo, uncoupled, full-head e15 geometry')
     from .fused_ffn import install_fused_ffn
-    from .fused_pwout import install_fused_trunk_blocks
+    from .fused_pwout import install_fused_trunk_blocks, install_fused_boundary_blocks
     from .fused_adapters import install_fused_adapters
     from .wsilu_chunkadd import install_fused_plain_wsilu
 
     counts = {'fused_ffn': install_fused_ffn(decoder),
               'fused_plain_wsilu': install_fused_plain_wsilu(decoder)}
     counts['fused_trunk_blocks'] = install_fused_trunk_blocks(decoder)
+    counts['fused_boundary_blocks'] = install_fused_boundary_blocks(decoder)
     counts['fused_adapters'] = install_fused_adapters(decoder)
     if sort_tiles:
         decoder.cfg = replace(decoder.cfg, sorted_tiles=True)

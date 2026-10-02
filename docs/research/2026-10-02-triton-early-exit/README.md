@@ -14,6 +14,8 @@ Microsoft DCVC-UF `DepthConvBlock` içindeki 1×1 noktasal kanallandırma hesab�
 2. FFN'in ilk 1×1 genişletmesi + aktivasyon + dört kanallı indirgemesi için `tl.dot(..., input_precision='tf32x3')` ve yalnız C kanallı çıktı. İkinci 1×1 projeksiyon residual toplamıyla aynı kernel'de.
 3. Her 384-kanallı trunk bloğunda ilk 1×1 + WSiLU ve üçüncü 1×1 + residual toplamı ayrıca birleşik. FFN ve 1×1 early-exit adapter'ları da aynı parçaları kullanıyor.
 
+Ek olarak aynı noktasal epilog, 384→192 kanallı RGB başındaki blok ve ortak upsample bloğuna uygulandı. Sarmalayıcılar mevcut `eval()` durumunu devralıyor; bu, sonradan eklenen PyTorch modüllerinin varsayılan eğitim moduna dönmesini önler. Eğitim moduna tekrar geçirilirse stock yol çalışır.
+
 Tile'ları derinliğe göre sıralayan var olan yol opt-in olarak açılıyor; aynı tile'lar aynı ağırlıklardan geçiyor. Mode-map CPU'da ayrıştırılıyorsa [host-planned yürütme](../../../flexuf/kernels/planned_decoder.py) ayrıca mevcut; küçük/yoğun haritalarda etkisi birkaç ms ve bu aşamanın ana hız kazanımı değil. Kerneller A6000/SM86 float32 NCHW yolunda denenmiş; autograd, CPU, half ve desteklenmeyen yerleşimlerde stock PyTorch yoluna düşer. Opt-in API `enable_fast_inference(net.dec)` yalnız **checkpoint yüklenip `eval()` çağrıldıktan sonra** kullanılmalı. Bu dönüşüm inference modül ağacını değiştirir; dönüştürülmüş modülün `state_dict`'i eğitim checkpoint'i olarak saklanmamalı.
 
 ## Eşlenik 1080p aşama ölçümü
@@ -37,7 +39,9 @@ Aynı CTC/haritada tek geçişli PyTorch aktif ayırıcı tepe belleği denetimi
 
 Beş CTC ilk-kare/gerçek arşiv haritası: `videoSRC05` QP 0/32/63, `videoSRC01` QP32 (tümü D6), `videoSRC10` QP32 (D10/D12 ağırlıklı). TF32 kapalı, Microsoft'un YUV 6:1:1 PSNR hesabı ve kaynağın gerçek 4:2:0 düzlemleri kullanıldı. Stock maskeli decoder'a göre en büyük ham örnek farkı **6,26×10⁻⁷**, en büyük mutlak YUV PSNR farkı **1,31×10⁻⁷ dB**. Sıralama ve CPU plan yolu tek başına bit-exact; `tl.dot(tf32x3)` füzyonundan sonra tüm çıktı bit-exact **değil**, ama ölçülen fark FP32 yuvarlama düzeyinde. [Ham sonuç](../../../results/triton_early_exit_quality_audit.json).
 
-Kod düzeyinde **30 hedefli test** geçti: şekil, dtype/CPU/autograd fallback, installer idempotence, karışık haritanın tam rekonstrüksiyon eşitliği, noktasal/trunk/adapter füzyonları ve kohort özetinin kapsam koşulları. Canlı D6/D8/D10/D12 eğitim dosyaları, supervisor süreçleri ve checkpoint'leri değiştirilmedi. Kısa GPU testleri D12'nin anlık adım süresini geçici artırdı; kontrol sonrası normal pencere hızına döndü. Daha uzun GPU zamanlamasını eğitim sürerken durdurduk.
+Kod düzeyinde **33 hedefli test** geçti: şekil, dtype/CPU/autograd fallback, installer idempotence, karışık haritanın tam rekonstrüksiyon eşitliği, noktasal/trunk/adapter/baş füzyonları ve kohort özetinin kapsam koşulları. Canlı D6/D8/D10/D12 eğitim dosyaları, supervisor süreçleri ve checkpoint'leri değiştirilmedi. Kısa GPU testleri D12'nin anlık adım süresini geçici artırdı; kontrol sonrası normal pencere hızına döndü. Daha uzun GPU zamanlamasını eğitim sürerken durdurduk.
+
+Baş füzyonlu sürümün **aynı** `videoSRC05`, QP32, 1080p/2048×1280, 40-tile haritasında kısa paylaşılan-GPU tekrarı stock **286,1 ms**, hızlı **115,1 ms**, eşlenik medyan **2,46×** verdi. Çıktı farkı en çok 4,47×10⁻⁷, YUV farkı −2,11×10⁻⁷ dB. Önceki 117,0 ms ile 115,1 ms arasındaki küçük fark bu paylaşılan GPU'da güvenilir ek-kazanç kanıtı sayılmamalı; yalnız tam sistemin doğru çalıştığını gösterir. [Ham kayıt](../../../results/triton_ctc_src05_qp32_boundary_shared.jsonl). Farklı bir CTC dizisinin QP0 ve tamamen D6 haritasında kısa smoke testi **206,7 → 99,8 ms** verdi; yalnız iki zaman tekrarı içerir ve genelleme amacı taşımaz. [Ham kayıt](../../../results/triton_ctc_cohort_shared_smoke.jsonl).
 
 ## Çalıştırma ve kalan doğrulama
 

@@ -23,7 +23,10 @@ def _pair(device):
     altered=copy.deepcopy(stock)
     assert install_fused_ffn(altered)==1
     install_fused_plain_wsilu(altered)
-    return stock,FusedTrunkBlock(altered)
+    wrapped=FusedTrunkBlock(altered)
+    assert not wrapped.training
+    assert not wrapped.original.ffn[0].training
+    return stock,wrapped
 
 
 def test_cpu_and_autograd_fallback():
@@ -47,11 +50,39 @@ def test_cuda_trunk_matches_stock():
     assert torch.allclose(a,b,atol=5e-6,rtol=2e-6)
 
 
+@pytest.mark.parametrize('in_ch,out_ch,shortcut',[(384,192,False),(384,384,True)])
+def test_boundary_block_fallback_matches_stock_on_cpu(in_ch,out_ch,shortcut):
+    torch.manual_seed(50)
+    stock=DepthConvBlock(in_ch,out_ch,shortcut=shortcut).eval()
+    fused=FusedTrunkBlock(copy.deepcopy(stock)).eval()
+    x=torch.randn(1,in_ch,2,2)
+    with torch.inference_mode():
+        assert torch.equal(stock(x),fused(x))
+
+
+@pytest.mark.skipif(not torch.cuda.is_available(), reason='CUDA unavailable')
+def test_cuda_boundary_blocks_match_stock():
+    torch.backends.cudnn.allow_tf32=False
+    torch.backends.cuda.matmul.allow_tf32=False
+    torch.manual_seed(51)
+    for in_ch,out_ch,shortcut in ((384,192,False),(384,384,True)):
+        stock=DepthConvBlock(in_ch,out_ch,shortcut=shortcut).cuda().eval()
+        fused=copy.deepcopy(stock)
+        assert install_fused_ffn(fused)==1
+        fused=FusedTrunkBlock(fused).eval()
+        x=torch.randn(2,in_ch,8,8,device='cuda')*.1
+        with torch.inference_mode():
+            a,b=stock(x),fused(x)
+        assert torch.allclose(a,b,atol=5e-6,rtol=2e-6)
+
+
 def test_public_api_is_opt_in_and_idempotent():
     dec=MultiExitIntraDecoder(FlexUFConfig()).eval()
     before={id(p):p.detach().clone() for p in dec.parameters()}
     counts=enable_fast_inference(dec)
     assert counts['fused_trunk_blocks']==12
+    assert counts['fused_boundary_blocks']==2
+    assert all(not module.training for module in dec.modules())
     assert counts['fused_ffn']>=12
     assert counts['fused_adapters']==dec.cfg.num_exits-1
     assert dec.cfg.sorted_tiles
@@ -59,7 +90,8 @@ def test_public_api_is_opt_in_and_idempotent():
     assert set(before)==set(after)
     assert all(torch.equal(value,after[key]) for key,value in before.items())
     assert enable_fast_inference(dec)=={'fused_ffn':0,'fused_plain_wsilu':0,
-                                        'fused_trunk_blocks':0,'fused_adapters':0}
+                                        'fused_trunk_blocks':0,'fused_boundary_blocks':0,
+                                        'fused_adapters':0}
 
 
 def test_public_api_rejects_live_training_model():

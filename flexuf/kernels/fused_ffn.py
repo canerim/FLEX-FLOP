@@ -73,6 +73,7 @@ class FusedFirstPointwise(nn.Module):
         super().__init__()
         self.conv = conv
         self.activation = activation
+        self.train(conv.training)
 
     def forward(self, x):
         if (triton is None or self.training or not x.is_cuda or not x.is_contiguous() or

@@ -70,6 +70,8 @@ def main():
     p.add_argument('--gpu',type=int,required=True,help='CUDA-visible GPU index')
     p.add_argument('--repeats',type=int,default=12)
     p.add_argument('--max-cases',type=int,default=0)
+    p.add_argument('--sequence',default=None,help='Restrict to one named CTC sequence')
+    p.add_argument('--qp',type=int,choices=(0,16,32,48,63),default=None)
     p.add_argument('--out',default='results/triton_ctc_cohort.jsonl')
     p.add_argument('--dry-run',action='store_true')
     p.add_argument('--resume',action='store_true')
@@ -80,6 +82,12 @@ def main():
     rows=json.loads((ROOT/'flexplus/results/eval_rules_ctc_e15.json').read_text())['rows']
     pairs=[(r['seq'],r['qp']) for r in rows]
     assert len(pairs)==len(set(pairs))==265
+    if a.sequence is not None:
+        pairs=[pair for pair in pairs if pair[0]==a.sequence]
+    if a.qp is not None:
+        pairs=[pair for pair in pairs if pair[1]==a.qp]
+    if not pairs:
+        raise ValueError('no CTC sequence/QP matches the filters')
     seqs={s['name']:s for s in C.discover([])[0]}
     assert all(name in seqs for name,_ in pairs)
     if a.max_cases:

@@ -90,6 +90,7 @@ class FusedTrunkBlock(nn.Module):
     def __init__(self, original: nn.Module):
         super().__init__()
         self.original=original
+        self.train(original.training)
 
     def forward(self,x):
         block=self.original
@@ -97,15 +98,19 @@ class FusedTrunkBlock(nn.Module):
                 not x.is_contiguous() or x.dtype != torch.float32 or
                 torch.cuda.get_device_capability(x.device)[0] < 8):
             return block(x)
-        a=pointwise_wsilu(x,block.dc[0])
+        adapted=block.adaptor(x) if block.adaptor is not None else x
+        if not adapted.is_contiguous():
+            return block(x)
+        a=pointwise_wsilu(adapted,block.dc[0])
         b=block.dc[2](a)
         if not b.is_contiguous():
             return block(x)
-        mid=pointwise_add(b,block.dc[3],x)
+        mid=pointwise_add(b,block.dc[3],adapted)
         hidden=block.ffn[0](mid)  # already fused expand + WSiLU + chunk-add
         if not hidden.is_contiguous():
             return block(x)
-        return pointwise_add(hidden,block.ffn[2],mid)
+        out=pointwise_add(hidden,block.ffn[2],mid)
+        return out+adapted if block.shortcut else out
 
 
 def install_fused_trunk_blocks(decoder: nn.Module) -> int:
@@ -123,4 +128,22 @@ def install_fused_trunk_blocks(decoder: nn.Module) -> int:
                     block.ffn[2].in_channels==block.ffn[2].out_channels):
                 group[idx]=FusedTrunkBlock(block)
                 count+=1
+    return count
+
+
+def install_fused_boundary_blocks(decoder: nn.Module) -> int:
+    """Also fuse the shared upsample block and the RGB head block."""
+    from .fused_ffn import FusedFirstPointwise
+    if decoder.training:
+        raise ValueError('inference-only; call eval()')
+    count=0
+    for parent,key in ((decoder.upsample,'conv'),(decoder,'head')):
+        block=getattr(parent,key)
+        if isinstance(block,FusedTrunkBlock):
+            continue
+        if not (isinstance(block.ffn[0],FusedFirstPointwise) and
+                block.ffn[2].in_channels==block.ffn[2].out_channels):
+            continue
+        setattr(parent,key,FusedTrunkBlock(block))
+        count+=1
     return count
