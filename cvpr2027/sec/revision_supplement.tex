@@ -514,6 +514,8 @@ D2 by 0.118\,dB RGB PSNR [0.095, 0.143] and 0.120\,dB YUV 6:1:1 PSNR
 [0.097, 0.145]. Released D12 exceeds D4 by 0.155\,dB RGB [0.126, 0.186]
 and 0.157\,dB YUV 6:1:1 [0.131, 0.185]. Intervals use 5,000 paired
 Kodak-image bootstrap draws; they exclude training-seed variability.
+At 0.2 estimated bpp, both RGB contrasts are positive on each of the
+24 images, rather than arising from a few large gains.
 \Cref{fig:finalkodak} shows the three declared rate points. All 24 images
 support 0.1/0.2 bpp, and 23 support 0.4 bpp across all three models.
 These are deterministic entropy estimates, not actual payload lengths;
