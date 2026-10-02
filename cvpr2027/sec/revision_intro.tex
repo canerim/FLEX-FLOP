@@ -20,6 +20,19 @@ not a measured allocation or reconstruction.}
 \label{fig:intro}
 \end{figure}
 
+\begin{figure*}[t]
+\centering
+\includegraphics[width=\textwidth,trim={0 380bp 0 0},clip]{figs/adaptive20260927/adaptive_overview.png}
+\caption{\textbf{Independent-depth codec bank.}
+A selector assigns a source region to one of six complete DCVC-UF codecs
+\emph{before encoding}; each depth learns its own analysis, entropy and
+synthesis transforms. Decoded regions are assembled into an image.
+This is a conceptual design under study, not a measured six-way router
+or an additional stage of the shared early-exit path in
+\cref{fig:system}.}
+\label{fig:bank-system}
+\end{figure*}
+
 Spatial capacity selection is established in restoration: ClassSR
 assigns super-resolution patches to networks of different sizes
 \cite{kong2021classsr}, while APE lets patches leave a shared network
@@ -35,7 +48,7 @@ relative to its computation and coding cost.
 We study this allocation in the intra model of DCVC-UF
 \cite{li2026dcvcuf}. Its twelve constant-width synthesis blocks expose
 depth as a clean capacity axis without changing feature width. RegLIC
-has two complementary realisations. In the
+has two complementary realisations (\cref{fig:bank-system,fig:system}). In the
 \emph{shared-exit} path, every region uses the same coded latent and
 decoder prefix, then exits after a chosen block pair. In the
 \emph{independent-depth} path, a selector chooses a complete 2/4/6/8/10/12-

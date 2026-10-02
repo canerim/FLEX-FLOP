@@ -65,8 +65,8 @@ the bundled data and scripts: all 117 generated PDF/SVG/PNG artifacts across
 the 34 vector figure sets, plus six generated table/macro/audit files, are checked for byte-identical reproduction. Calibration and
 arithmetic-denominator figures also have separate source and artifact
 manifests and are included in bundle verification.
-The former wide conceptual overview remains in the repository as an archival
-asset. The active opening Figure 1 is the conceptual RegLIC illustration in
+The original wide conceptual overview supplies the cropped independent-bank
+diagram on page 2. The active opening Figure 1 is the conceptual RegLIC illustration in
 `figs/reglic_intro/`. The shared-exit
 mechanism remains a conceptual illustration with its generation
 provenance in `IMAGEGEN.md`; CPU scripts do not regenerate that raster.
