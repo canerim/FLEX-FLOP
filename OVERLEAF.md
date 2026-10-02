@@ -65,11 +65,11 @@ the bundled data and scripts: all 117 generated PDF/SVG/PNG artifacts across
 the 34 vector figure sets, plus six generated table/macro/audit files, are checked for byte-identical reproduction. Calibration and
 arithmetic-denominator figures also have separate source and artifact
 manifests and are included in bundle verification.
-The original wide conceptual overview supplies the cropped independent-bank
-diagram on page 2. The active opening Figure 1 is the conceptual RegLIC illustration in
-`figs/reglic_intro/`. The shared-exit
-mechanism remains a conceptual illustration with its generation
-provenance in `IMAGEGEN.md`; CPU scripts do not regenerate that raster.
+The active opening Figure 1 is the conceptual RegLIC illustration in
+`figs/reglic_intro/`. Page 2 has a separate full-size independent-bank
+system figure from `figs/system20261002/`; the shared early-exit
+mechanism appears later. Both system figures are conceptual rasters with
+provenance in their figure folders; CPU scripts do not regenerate them.
 `verification_report.json` records data consistency, PDF references, font
 embedding and page checks. The checks do not rerun the historical codec.
 

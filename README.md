@@ -54,7 +54,7 @@ reproduction from bundled data without checkpoints, source images or GPU.
 The suite contains portable vector figures and separately identified
 conceptual AI illustrations. The current Figure 1 is a compact, text-free
 RegLIC illustration of spatially variable synthesis depth. Figure 2
-restores the independent-depth bank on page 2; a separate early-exit
+shows a full-size independent-depth bank on page 2; a separate early-exit
 system diagram appears in the method section. The remaining main figures
 include an active-tile trace, measured budget trajectories and eight
 source groups with recorded maps.

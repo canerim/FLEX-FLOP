@@ -4,9 +4,9 @@ The main figure system uses 183 mm full-width and 89 mm single-column canvases, 
 TrueType PDF fonts and editable SVG text. Quantitative plots and exact
 execution diagrams are generated from bundled source tables with Matplotlib.
 The new introduction figure is a text-free conceptual raster at column width.
-The original opening overview supplies the cropped independent-bank system
-diagram on page 2. The active shared-exit mechanism is an AI-generated conceptual raster,
-labelled as such in its caption. Neither contains experimental reconstructions.
+The page-2 independent-bank and later shared-exit system figures are
+separate AI-generated conceptual rasters, labelled as such in their captions.
+Neither contains experimental reconstructions.
 Their prompts and provenance are recorded in `IMAGEGEN.md`. The data figures use archived source-luma thumbnails and explicitly
 identified, predeclared RGB reconstruction windows as raster content. Diagrams use tensor planes, nested block
 strips, active-tile grids, feature joins, expert queues and coded-stream

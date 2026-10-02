@@ -23,14 +23,14 @@ not a measured allocation or reconstruction.}
 
 \begin{figure*}[t]
 \centering
-\includegraphics[width=\textwidth,trim={0 380bp 0 0},clip]{figs/adaptive20260927/adaptive_overview.png}
+\includegraphics[width=\textwidth]{figs/system20261002/independent_codec_bank.png}
 \caption{\textbf{Independent-depth codec bank.}
-A selector assigns a source region to one of six complete DCVC-UF codecs
-\emph{before encoding}; each depth learns its own analysis, entropy and
-synthesis transforms. Decoded regions are assembled into an image.
-This is a conceptual design under study, not a measured six-way router
-or an additional stage of the shared early-exit path in
-\cref{fig:system}.}
+A selector assigns each source region to \emph{one} of six complete
+DCVC-UF codecs before encoding; each path has independent analysis,
+entropy and synthesis weights. Routes depict alternatives, not six
+executions per region. Decoded regions are assembled into an image.
+The six-way selector is conceptual and has no reported measurements;
+it is separate from the shared early-exit path in \cref{fig:system}.}
 \label{fig:bank-system}
 \end{figure*}
 
