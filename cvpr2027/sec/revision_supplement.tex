@@ -468,10 +468,13 @@ blocks of the DCVC-UF intra architecture and trains each complete codec
 under the pinned official recipe. The encoder and entropy weights learn
 alongside the decoder. Each model consequently has its own representation,
 distinct from the shared-latent exits evaluated in the main paper.
-\Cref{fig:bank} shows a possible later deployment path, not an implemented
-six-expert result.
+The six-expert selector remains a proposed deployment path, not an
+implemented result.
 
-Architectural parameter counts for all six depths are plotted in \cref{fig:scenario}a. D8/D10 remain planned; released D12 has a different training history from the ongoing scratch runs.
+Architectural parameter counts for all six depths are plotted in
+\cref{fig:scenario}a. Only D2/D4 have completed all 105 epochs in the
+final Kodak comparison below; released D12 has a different training
+history from the scratch runs.
 
 \paragraph{The pinned training protocol.}
 The source is Microsoft's image-training recipe at commit
@@ -501,6 +504,34 @@ retain the execution mode and source hashes.
 \includegraphics[width=\textwidth]{figs/editorial20260928/fig_official_schedule.pdf}
 \caption{\textbf{The full official schedule is retained.} \textbf{a}, First 90 epochs with $256^2$ crops. \textbf{b}, Final 15 epochs with $512^2$ crops, on a separately expanded epoch axis. Zero-based boundaries delimit the seven learning-rate stages; the protocol applies to D2/D4/D6. These are prescribed settings, not learning curves.}
 \label{fig:training}
+\end{figure*}
+
+\paragraph{Finished D2/D4 at matched estimated rate.}
+Both completed models were evaluated on the same 24 full-resolution Kodak
+images and five QPs. Per image, we linearly interpolate PSNR in log
+\emph{estimated} bpp, without extrapolation. At 0.2 bpp, D4 improves on
+D2 by 0.118\,dB RGB PSNR [0.095, 0.143] and 0.120\,dB YUV 6:1:1 PSNR
+[0.097, 0.145]. Released D12 exceeds D4 by 0.155\,dB RGB [0.126, 0.186]
+and 0.157\,dB YUV 6:1:1 [0.131, 0.185]. Intervals use 5,000 paired
+Kodak-image bootstrap draws; they exclude training-seed variability.
+\Cref{fig:finalkodak} shows the three declared rate points. All 24 images
+support 0.1/0.2 bpp, and 23 support 0.4 bpp across all three models.
+These are deterministic entropy estimates, not actual payload lengths;
+the released model is a historical reference rather than the matched
+scratch D12 control. The two final models narrow their gap to the release,
+but this comparison alone cannot attribute the remaining gap to depth.
+
+\begin{figure*}[t]
+\centering
+\includegraphics[width=.78\textwidth]{figs/depth_final_20261002/paired_kodak.pdf}
+\caption{\textbf{Completed D2/D4 codec quality at matched estimated rate.}
+Image-paired PSNR differences on Kodak after the full 105-epoch official
+recipe, alongside the released D12 anchor. Rates are interpolated per image
+in log estimated bpp on common support. Bars show 95\% paired-image
+bootstrap intervals ($n=24$ at 0.1/0.2 bpp; $n=23$ at 0.4 bpp).
+YUV uses the upstream 6:1:1 metric. No actual-bitstream or same-recipe
+D12 result is implied.}
+\label{fig:finalkodak}
 \end{figure*}
 
 \paragraph{Synthesis versus complete neural-decoder arithmetic.}
@@ -599,19 +630,6 @@ The testable direction here is depth-heterogeneous selection with measured
 rate--distortion--time costs and reduced encoder search. Practical codec
 studies motivate including device execution and perceptual
 assessment~\cite{jia2025dcvcrt,tatwawadi2026practical}.
-
-\begin{figure*}[t]
-\centering
-\includegraphics[width=\textwidth]{figs/extended20260927/figS4_codec_bank_plan.pdf}
-\caption{\textbf{An independent codec bank is a separate experimental system.}
-Training status is shown as of 27 September 2026. D2/D4/D6 are in progress,
-D8/D10 are planned, and D12 is the released reference. Each expert owns its
-analysis, entropy and synthesis parameters. The proposed encoder-side MLP
-selects an expert before encoding; the decoder receives the expert ID.
-Queues, network shapes and stream segments are schematic. No throughput or
-quality result is encoded by their geometry.}
-\label{fig:bank}
-\end{figure*}
 
 \section{Evaluation Contract for the Next Stage}
 

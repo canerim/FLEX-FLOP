@@ -1,28 +1,24 @@
 \section{From Shared Exits to Independent Depths}
 \label{sec:depth}
 
-Shared early exit commits every region to one encoded representation.
-An independent codec can specialise its representation for a smaller
-synthesis network, but forfeits that reuse. This motivates our complementary
-2/4/6/8/10/12-block DCVC-UF bank (\cref{fig:bank-system}), where a later
-ClassSR-inspired selector will choose a codec before encoding each region.
-Only pinned D2/D4/D6 interim milestones are analysed here; D8/D10 and
-final matched models remain outside this comparison. D12 is the released
-anchor. No six-expert routing result is claimed.
+Shared early exit uses one coded representation. Our complementary
+2/4/6/8/10/12-block DCVC-UF bank instead allows each codec to learn
+its own analysis and entropy model (\cref{fig:bank-system}). D2/D4 have
+completed training; D6/D8/D10 and scratch D12 are not final here. No
+six-expert routing result is claimed.
 
 \paragraph{A controlled capacity frontier.}
-The scratch runs preserve the pinned official 105-epoch
-recipe~\cite{microsoft2026training}, including all 384,795 Open Images
-train\_0/1/2 images, batch size 16 and FP32. Analysis and entropy weights
-learn alongside synthesis, so equal QP does not imply equal coded rate.
-Two fixed milestones, epochs 20 and 30, each evaluate 2,000 actual CPU
-bitstreams on 100 DIV2K centre crops across D2/D4/D6 and released D12.
-On the same 99 images at 0.2 payload bpp, D6's RGB advantage over D2
-changes from 0.183 to 0.107\,dB; its epoch-30 difference from D4 is
-unresolved. Depth ordering is therefore not stable at these unfinished
-checkpoints. The supplement reports both milestones. Final same-recipe
-D12 and matched shared-exit training remain necessary to isolate depth
-and weight sharing.
+The scratch models follow the official 105-epoch recipe on all 384,795
+Open Images train\_0/1/2 images~\cite{microsoft2026training}. At fixed
+DIV2K epoch-20/30 milestones, 2,000 actual bitstreams per milestone
+show D6's RGB advantage over D2 at 0.2 payload bpp changing from
+0.183 to 0.107\,dB; D6 versus D4 at epoch 30 is unresolved.
+A separate final Kodak evaluation at 0.2 \emph{estimated} bpp finds D4
+0.118\,dB [0.095, 0.143] above D2 on 24 paired images. Released D12
+adds 0.155\,dB [0.126, 0.186] over D4, but has a different training
+history. The supplement gives YUV results, rate sweeps and protocol
+limits. Same-recipe D12 and matched shared-exit training are needed
+to isolate depth and weight sharing.
 
 \paragraph{The spatial cost of specialisation.}
 Patchwise expert selection also changes geometry and entropy boundaries.
