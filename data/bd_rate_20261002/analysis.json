@@ -1,0 +1,1468 @@
+{
+  "source_sha256": {
+    "data/depth_final_20261002/d2_epoch105_kodak.json": "4b4f2c41697919fd40cc878287bf560cb7380cced20cf6acf54072a438188249",
+    "data/depth_final_20261002/d4_epoch105_kodak.json": "aa3879526b5ec37a11ce3c8da2822bdb57316751e97987e0c3faa6e2a58a3387",
+    "data/depth_final_20261002/released_d12_kodak.json": "b374096af3fa6244b6eed6363c019787b4e7ce976e1e8386a14f2e812862b210",
+    "data/bd_rate_20261002/eval_rules_ctc_e15.json": "66d767faa241e4c4578907b18031554706b1a5d4c64373000dbb2f0d260e9a5c",
+    "data/bd_rate_20261002/real_bitstream_ctc.json": "23b97bbb2f47218ae3f5871ea3177fe1324c50a5175cb36d78983e8507bf4bba"
+  },
+  "bootstrap": "5000 image/sequence-cluster draws, seed 20261002; fixed trained weights; no training-seed uncertainty.",
+  "independent": {
+    "scope": "24 full-resolution Kodak images; final epoch-105 D2/D4 versus historical released D12.",
+    "rate": "Deterministic entropy estimate, not emitted bitstream/container bytes.",
+    "bd_definition": "Mean of per-image PCHIP BD-rate percentages on the three-model common PSNR interval; never population-mean-curve BD-rate.",
+    "bd": [
+      {
+        "metric": "psnr_rgb",
+        "model": "D2",
+        "n_images": 24,
+        "mean_pct": 7.466722938752831,
+        "ci95_pct": [
+          6.538108851180251,
+          8.388648902576724
+        ],
+        "per_image_pct": {
+          "kodim01.png": 4.756623987034487,
+          "kodim02.png": 7.0896101544104955,
+          "kodim03.png": 10.742055853396169,
+          "kodim04.png": 8.959657188495065,
+          "kodim05.png": 8.6812456239577,
+          "kodim06.png": 5.373801758267958,
+          "kodim07.png": 10.393778996709269,
+          "kodim08.png": 10.562354246015328,
+          "kodim09.png": 8.49783708574197,
+          "kodim10.png": 11.579500991281044,
+          "kodim11.png": 5.527790694569281,
+          "kodim12.png": 7.6600300125115375,
+          "kodim13.png": 2.3810844423357413,
+          "kodim14.png": 6.178080835308168,
+          "kodim15.png": 8.899042807424943,
+          "kodim16.png": 5.240630871722606,
+          "kodim17.png": 6.510374886467658,
+          "kodim18.png": 5.1201130135646595,
+          "kodim19.png": 9.151697707440885,
+          "kodim20.png": 9.24582079366585,
+          "kodim21.png": 4.4252649508121955,
+          "kodim22.png": 6.338314435059041,
+          "kodim23.png": 6.61590451879821,
+          "kodim24.png": 9.270734675077662
+        }
+      },
+      {
+        "metric": "psnr_rgb",
+        "model": "D4",
+        "n_images": 24,
+        "mean_pct": 4.136745163445069,
+        "ci95_pct": [
+          3.6023248592128865,
+          4.665284598035333
+        ],
+        "per_image_pct": {
+          "kodim01.png": 2.5310413645454033,
+          "kodim02.png": 3.3474435218158,
+          "kodim03.png": 5.385316695786313,
+          "kodim04.png": 4.32525429293011,
+          "kodim05.png": 5.051141044982647,
+          "kodim06.png": 3.5296703507102496,
+          "kodim07.png": 5.026782278965846,
+          "kodim08.png": 6.2286074137245535,
+          "kodim09.png": 4.502389272557713,
+          "kodim10.png": 7.064789830567795,
+          "kodim11.png": 3.6721809020195053,
+          "kodim12.png": 4.897835581495889,
+          "kodim13.png": 1.2626616384371456,
+          "kodim14.png": 3.1238397224493513,
+          "kodim15.png": 5.326767347945574,
+          "kodim16.png": 2.6438787213046893,
+          "kodim17.png": 3.8047499884067806,
+          "kodim18.png": 2.454545320802504,
+          "kodim19.png": 5.6280254234074025,
+          "kodim20.png": 4.980155862551374,
+          "kodim21.png": 2.60826162364562,
+          "kodim22.png": 3.19259943869874,
+          "kodim23.png": 4.178697079520243,
+          "kodim24.png": 4.515249205410407
+        }
+      },
+      {
+        "metric": "psnr_yuv611",
+        "model": "D2",
+        "n_images": 24,
+        "mean_pct": 7.99009665331448,
+        "ci95_pct": [
+          7.091252716444071,
+          8.84455974885338
+        ],
+        "per_image_pct": {
+          "kodim01.png": 7.0860191178629535,
+          "kodim02.png": 8.32283773716611,
+          "kodim03.png": 11.892790975314034,
+          "kodim04.png": 10.092242092066503,
+          "kodim05.png": 8.612920812807264,
+          "kodim06.png": 6.344563239115161,
+          "kodim07.png": 10.200415614792785,
+          "kodim08.png": 11.241162085771869,
+          "kodim09.png": 9.469016363026755,
+          "kodim10.png": 10.943569260955751,
+          "kodim11.png": 6.320282048141104,
+          "kodim12.png": 8.40968965540311,
+          "kodim13.png": 2.910739236891734,
+          "kodim14.png": 6.857974132778404,
+          "kodim15.png": 8.702425391572469,
+          "kodim16.png": 7.023171700598679,
+          "kodim17.png": 7.355556364729772,
+          "kodim18.png": 4.7466979528263,
+          "kodim19.png": 9.077199038712413,
+          "kodim20.png": 9.377963979485529,
+          "kodim21.png": 4.552371564958619,
+          "kodim22.png": 6.334860766509823,
+          "kodim23.png": 6.6684923521894826,
+          "kodim24.png": 9.21935819587089
+        }
+      },
+      {
+        "metric": "psnr_yuv611",
+        "model": "D4",
+        "n_images": 24,
+        "mean_pct": 4.542031576648282,
+        "ci95_pct": [
+          4.085615866562273,
+          4.993775578060085
+        ],
+        "per_image_pct": {
+          "kodim01.png": 4.085147300728797,
+          "kodim02.png": 4.0774707447168375,
+          "kodim03.png": 6.08894582727074,
+          "kodim04.png": 4.446137463259695,
+          "kodim05.png": 4.786889802565912,
+          "kodim06.png": 4.174141894395995,
+          "kodim07.png": 5.110255523725652,
+          "kodim08.png": 6.53038665543172,
+          "kodim09.png": 5.046656617162208,
+          "kodim10.png": 6.701346268147194,
+          "kodim11.png": 4.540517011671074,
+          "kodim12.png": 5.463552967927431,
+          "kodim13.png": 1.9925811409680927,
+          "kodim14.png": 3.525311133758803,
+          "kodim15.png": 5.119976384274103,
+          "kodim16.png": 3.6182733485925302,
+          "kodim17.png": 4.824589490309655,
+          "kodim18.png": 2.2929723584092403,
+          "kodim19.png": 5.570490486689236,
+          "kodim20.png": 5.444965837192817,
+          "kodim21.png": 3.023038469280526,
+          "kodim22.png": 3.418759209381301,
+          "kodim23.png": 4.245647019699932,
+          "kodim24.png": 4.8807048839992735
+        }
+      }
+    ],
+    "local_rate_tax": [
+      {
+        "metric": "psnr_rgb",
+        "model": "D2",
+        "reference_qp": 0,
+        "n_images": 0,
+        "mean_pct": null,
+        "ci95_pct": null,
+        "images": []
+      },
+      {
+        "metric": "psnr_rgb",
+        "model": "D4",
+        "reference_qp": 0,
+        "n_images": 0,
+        "mean_pct": null,
+        "ci95_pct": null,
+        "images": []
+      },
+      {
+        "metric": "psnr_rgb",
+        "model": "D2",
+        "reference_qp": 16,
+        "n_images": 24,
+        "mean_pct": 9.491310326048971,
+        "ci95_pct": [
+          8.415438051500864,
+          10.562652546718827
+        ],
+        "images": [
+          "kodim01.png",
+          "kodim02.png",
+          "kodim03.png",
+          "kodim04.png",
+          "kodim05.png",
+          "kodim06.png",
+          "kodim07.png",
+          "kodim08.png",
+          "kodim09.png",
+          "kodim10.png",
+          "kodim11.png",
+          "kodim12.png",
+          "kodim13.png",
+          "kodim14.png",
+          "kodim15.png",
+          "kodim16.png",
+          "kodim17.png",
+          "kodim18.png",
+          "kodim19.png",
+          "kodim20.png",
+          "kodim21.png",
+          "kodim22.png",
+          "kodim23.png",
+          "kodim24.png"
+        ]
+      },
+      {
+        "metric": "psnr_rgb",
+        "model": "D4",
+        "reference_qp": 16,
+        "n_images": 24,
+        "mean_pct": 5.18766083588016,
+        "ci95_pct": [
+          4.549760873125854,
+          5.796094092466175
+        ],
+        "images": [
+          "kodim01.png",
+          "kodim02.png",
+          "kodim03.png",
+          "kodim04.png",
+          "kodim05.png",
+          "kodim06.png",
+          "kodim07.png",
+          "kodim08.png",
+          "kodim09.png",
+          "kodim10.png",
+          "kodim11.png",
+          "kodim12.png",
+          "kodim13.png",
+          "kodim14.png",
+          "kodim15.png",
+          "kodim16.png",
+          "kodim17.png",
+          "kodim18.png",
+          "kodim19.png",
+          "kodim20.png",
+          "kodim21.png",
+          "kodim22.png",
+          "kodim23.png",
+          "kodim24.png"
+        ]
+      },
+      {
+        "metric": "psnr_rgb",
+        "model": "D2",
+        "reference_qp": 32,
+        "n_images": 24,
+        "mean_pct": 7.584352439400003,
+        "ci95_pct": [
+          6.645711863836944,
+          8.57774194495191
+        ],
+        "images": [
+          "kodim01.png",
+          "kodim02.png",
+          "kodim03.png",
+          "kodim04.png",
+          "kodim05.png",
+          "kodim06.png",
+          "kodim07.png",
+          "kodim08.png",
+          "kodim09.png",
+          "kodim10.png",
+          "kodim11.png",
+          "kodim12.png",
+          "kodim13.png",
+          "kodim14.png",
+          "kodim15.png",
+          "kodim16.png",
+          "kodim17.png",
+          "kodim18.png",
+          "kodim19.png",
+          "kodim20.png",
+          "kodim21.png",
+          "kodim22.png",
+          "kodim23.png",
+          "kodim24.png"
+        ]
+      },
+      {
+        "metric": "psnr_rgb",
+        "model": "D4",
+        "reference_qp": 32,
+        "n_images": 24,
+        "mean_pct": 4.45827594269313,
+        "ci95_pct": [
+          3.8600756465738097,
+          5.1078724666841175
+        ],
+        "images": [
+          "kodim01.png",
+          "kodim02.png",
+          "kodim03.png",
+          "kodim04.png",
+          "kodim05.png",
+          "kodim06.png",
+          "kodim07.png",
+          "kodim08.png",
+          "kodim09.png",
+          "kodim10.png",
+          "kodim11.png",
+          "kodim12.png",
+          "kodim13.png",
+          "kodim14.png",
+          "kodim15.png",
+          "kodim16.png",
+          "kodim17.png",
+          "kodim18.png",
+          "kodim19.png",
+          "kodim20.png",
+          "kodim21.png",
+          "kodim22.png",
+          "kodim23.png",
+          "kodim24.png"
+        ]
+      },
+      {
+        "metric": "psnr_rgb",
+        "model": "D2",
+        "reference_qp": 48,
+        "n_images": 24,
+        "mean_pct": 6.272064835325222,
+        "ci95_pct": [
+          5.379769125703699,
+          7.1986745131220315
+        ],
+        "images": [
+          "kodim01.png",
+          "kodim02.png",
+          "kodim03.png",
+          "kodim04.png",
+          "kodim05.png",
+          "kodim06.png",
+          "kodim07.png",
+          "kodim08.png",
+          "kodim09.png",
+          "kodim10.png",
+          "kodim11.png",
+          "kodim12.png",
+          "kodim13.png",
+          "kodim14.png",
+          "kodim15.png",
+          "kodim16.png",
+          "kodim17.png",
+          "kodim18.png",
+          "kodim19.png",
+          "kodim20.png",
+          "kodim21.png",
+          "kodim22.png",
+          "kodim23.png",
+          "kodim24.png"
+        ]
+      },
+      {
+        "metric": "psnr_rgb",
+        "model": "D4",
+        "reference_qp": 48,
+        "n_images": 24,
+        "mean_pct": 3.3415184609580257,
+        "ci95_pct": [
+          2.8141093542321967,
+          3.8750450418767866
+        ],
+        "images": [
+          "kodim01.png",
+          "kodim02.png",
+          "kodim03.png",
+          "kodim04.png",
+          "kodim05.png",
+          "kodim06.png",
+          "kodim07.png",
+          "kodim08.png",
+          "kodim09.png",
+          "kodim10.png",
+          "kodim11.png",
+          "kodim12.png",
+          "kodim13.png",
+          "kodim14.png",
+          "kodim15.png",
+          "kodim16.png",
+          "kodim17.png",
+          "kodim18.png",
+          "kodim19.png",
+          "kodim20.png",
+          "kodim21.png",
+          "kodim22.png",
+          "kodim23.png",
+          "kodim24.png"
+        ]
+      },
+      {
+        "metric": "psnr_rgb",
+        "model": "D2",
+        "reference_qp": 63,
+        "n_images": 21,
+        "mean_pct": 4.403071455001844,
+        "ci95_pct": [
+          3.4380631055575144,
+          5.389614788356593
+        ],
+        "images": [
+          "kodim01.png",
+          "kodim02.png",
+          "kodim03.png",
+          "kodim04.png",
+          "kodim06.png",
+          "kodim08.png",
+          "kodim09.png",
+          "kodim10.png",
+          "kodim11.png",
+          "kodim12.png",
+          "kodim13.png",
+          "kodim14.png",
+          "kodim15.png",
+          "kodim16.png",
+          "kodim17.png",
+          "kodim18.png",
+          "kodim19.png",
+          "kodim20.png",
+          "kodim21.png",
+          "kodim22.png",
+          "kodim23.png"
+        ]
+      },
+      {
+        "metric": "psnr_rgb",
+        "model": "D4",
+        "reference_qp": 63,
+        "n_images": 21,
+        "mean_pct": 2.2781335456610705,
+        "ci95_pct": [
+          1.6523737151988722,
+          2.8754163317609676
+        ],
+        "images": [
+          "kodim01.png",
+          "kodim02.png",
+          "kodim03.png",
+          "kodim04.png",
+          "kodim06.png",
+          "kodim08.png",
+          "kodim09.png",
+          "kodim10.png",
+          "kodim11.png",
+          "kodim12.png",
+          "kodim13.png",
+          "kodim14.png",
+          "kodim15.png",
+          "kodim16.png",
+          "kodim17.png",
+          "kodim18.png",
+          "kodim19.png",
+          "kodim20.png",
+          "kodim21.png",
+          "kodim22.png",
+          "kodim23.png"
+        ]
+      },
+      {
+        "metric": "psnr_yuv611",
+        "model": "D2",
+        "reference_qp": 0,
+        "n_images": 1,
+        "mean_pct": 20.077525583609066,
+        "ci95_pct": null,
+        "images": [
+          "kodim03.png"
+        ]
+      },
+      {
+        "metric": "psnr_yuv611",
+        "model": "D4",
+        "reference_qp": 0,
+        "n_images": 1,
+        "mean_pct": 13.242259485509992,
+        "ci95_pct": null,
+        "images": [
+          "kodim03.png"
+        ]
+      },
+      {
+        "metric": "psnr_yuv611",
+        "model": "D2",
+        "reference_qp": 16,
+        "n_images": 24,
+        "mean_pct": 10.129424335289302,
+        "ci95_pct": [
+          8.988142863193023,
+          11.256653159304323
+        ],
+        "images": [
+          "kodim01.png",
+          "kodim02.png",
+          "kodim03.png",
+          "kodim04.png",
+          "kodim05.png",
+          "kodim06.png",
+          "kodim07.png",
+          "kodim08.png",
+          "kodim09.png",
+          "kodim10.png",
+          "kodim11.png",
+          "kodim12.png",
+          "kodim13.png",
+          "kodim14.png",
+          "kodim15.png",
+          "kodim16.png",
+          "kodim17.png",
+          "kodim18.png",
+          "kodim19.png",
+          "kodim20.png",
+          "kodim21.png",
+          "kodim22.png",
+          "kodim23.png",
+          "kodim24.png"
+        ]
+      },
+      {
+        "metric": "psnr_yuv611",
+        "model": "D4",
+        "reference_qp": 16,
+        "n_images": 24,
+        "mean_pct": 5.712251113939229,
+        "ci95_pct": [
+          5.1722915991790215,
+          6.244012822195134
+        ],
+        "images": [
+          "kodim01.png",
+          "kodim02.png",
+          "kodim03.png",
+          "kodim04.png",
+          "kodim05.png",
+          "kodim06.png",
+          "kodim07.png",
+          "kodim08.png",
+          "kodim09.png",
+          "kodim10.png",
+          "kodim11.png",
+          "kodim12.png",
+          "kodim13.png",
+          "kodim14.png",
+          "kodim15.png",
+          "kodim16.png",
+          "kodim17.png",
+          "kodim18.png",
+          "kodim19.png",
+          "kodim20.png",
+          "kodim21.png",
+          "kodim22.png",
+          "kodim23.png",
+          "kodim24.png"
+        ]
+      },
+      {
+        "metric": "psnr_yuv611",
+        "model": "D2",
+        "reference_qp": 32,
+        "n_images": 24,
+        "mean_pct": 8.192325112660523,
+        "ci95_pct": [
+          7.261884044666483,
+          9.108248436501388
+        ],
+        "images": [
+          "kodim01.png",
+          "kodim02.png",
+          "kodim03.png",
+          "kodim04.png",
+          "kodim05.png",
+          "kodim06.png",
+          "kodim07.png",
+          "kodim08.png",
+          "kodim09.png",
+          "kodim10.png",
+          "kodim11.png",
+          "kodim12.png",
+          "kodim13.png",
+          "kodim14.png",
+          "kodim15.png",
+          "kodim16.png",
+          "kodim17.png",
+          "kodim18.png",
+          "kodim19.png",
+          "kodim20.png",
+          "kodim21.png",
+          "kodim22.png",
+          "kodim23.png",
+          "kodim24.png"
+        ]
+      },
+      {
+        "metric": "psnr_yuv611",
+        "model": "D4",
+        "reference_qp": 32,
+        "n_images": 24,
+        "mean_pct": 4.623137277069693,
+        "ci95_pct": [
+          4.024406749715904,
+          5.2019162602036095
+        ],
+        "images": [
+          "kodim01.png",
+          "kodim02.png",
+          "kodim03.png",
+          "kodim04.png",
+          "kodim05.png",
+          "kodim06.png",
+          "kodim07.png",
+          "kodim08.png",
+          "kodim09.png",
+          "kodim10.png",
+          "kodim11.png",
+          "kodim12.png",
+          "kodim13.png",
+          "kodim14.png",
+          "kodim15.png",
+          "kodim16.png",
+          "kodim17.png",
+          "kodim18.png",
+          "kodim19.png",
+          "kodim20.png",
+          "kodim21.png",
+          "kodim22.png",
+          "kodim23.png",
+          "kodim24.png"
+        ]
+      },
+      {
+        "metric": "psnr_yuv611",
+        "model": "D2",
+        "reference_qp": 48,
+        "n_images": 24,
+        "mean_pct": 6.707360804132848,
+        "ci95_pct": [
+          5.898931226984895,
+          7.532372803441289
+        ],
+        "images": [
+          "kodim01.png",
+          "kodim02.png",
+          "kodim03.png",
+          "kodim04.png",
+          "kodim05.png",
+          "kodim06.png",
+          "kodim07.png",
+          "kodim08.png",
+          "kodim09.png",
+          "kodim10.png",
+          "kodim11.png",
+          "kodim12.png",
+          "kodim13.png",
+          "kodim14.png",
+          "kodim15.png",
+          "kodim16.png",
+          "kodim17.png",
+          "kodim18.png",
+          "kodim19.png",
+          "kodim20.png",
+          "kodim21.png",
+          "kodim22.png",
+          "kodim23.png",
+          "kodim24.png"
+        ]
+      },
+      {
+        "metric": "psnr_yuv611",
+        "model": "D4",
+        "reference_qp": 48,
+        "n_images": 24,
+        "mean_pct": 3.674353712681318,
+        "ci95_pct": [
+          3.1748317788401903,
+          4.17366647290708
+        ],
+        "images": [
+          "kodim01.png",
+          "kodim02.png",
+          "kodim03.png",
+          "kodim04.png",
+          "kodim05.png",
+          "kodim06.png",
+          "kodim07.png",
+          "kodim08.png",
+          "kodim09.png",
+          "kodim10.png",
+          "kodim11.png",
+          "kodim12.png",
+          "kodim13.png",
+          "kodim14.png",
+          "kodim15.png",
+          "kodim16.png",
+          "kodim17.png",
+          "kodim18.png",
+          "kodim19.png",
+          "kodim20.png",
+          "kodim21.png",
+          "kodim22.png",
+          "kodim23.png",
+          "kodim24.png"
+        ]
+      },
+      {
+        "metric": "psnr_yuv611",
+        "model": "D2",
+        "reference_qp": 63,
+        "n_images": 23,
+        "mean_pct": 4.459688960546485,
+        "ci95_pct": [
+          3.54686676649224,
+          5.353415252699543
+        ],
+        "images": [
+          "kodim01.png",
+          "kodim02.png",
+          "kodim03.png",
+          "kodim04.png",
+          "kodim05.png",
+          "kodim06.png",
+          "kodim08.png",
+          "kodim09.png",
+          "kodim10.png",
+          "kodim11.png",
+          "kodim12.png",
+          "kodim13.png",
+          "kodim14.png",
+          "kodim15.png",
+          "kodim16.png",
+          "kodim17.png",
+          "kodim18.png",
+          "kodim19.png",
+          "kodim20.png",
+          "kodim21.png",
+          "kodim22.png",
+          "kodim23.png",
+          "kodim24.png"
+        ]
+      },
+      {
+        "metric": "psnr_yuv611",
+        "model": "D4",
+        "reference_qp": 63,
+        "n_images": 23,
+        "mean_pct": 2.431286378724269,
+        "ci95_pct": [
+          1.850808247599471,
+          2.986467626240178
+        ],
+        "images": [
+          "kodim01.png",
+          "kodim02.png",
+          "kodim03.png",
+          "kodim04.png",
+          "kodim05.png",
+          "kodim06.png",
+          "kodim08.png",
+          "kodim09.png",
+          "kodim10.png",
+          "kodim11.png",
+          "kodim12.png",
+          "kodim13.png",
+          "kodim14.png",
+          "kodim15.png",
+          "kodim16.png",
+          "kodim17.png",
+          "kodim18.png",
+          "kodim19.png",
+          "kodim20.png",
+          "kodim21.png",
+          "kodim22.png",
+          "kodim23.png",
+          "kodim24.png"
+        ]
+      }
+    ]
+  },
+  "shared_exit": {
+    "scope": "51 complete five-QP CTC first-frame sequences; e15 full-frame versus archived 0.1 dB source-calibrated uniform/dither/router/oracle reconstructions.",
+    "rate": "Round-tripped e15 rANS latent payload only. Every policy reuses the same rate per frame/QP; mode map, calibration and container bits are absent.",
+    "bd_definition": "Mean per-sequence PCHIP BD-rate equivalent versus e15 full-frame; five-policy common PSNR interval. This is not complete-codec BD-rate or a deployable router result.",
+    "n_sequences": 51,
+    "excluded_sequences": [
+      "BQSquare_416x240_60.yuv",
+      "PartyScene_832x480_50.yuv"
+    ],
+    "policy": [
+      {
+        "policy": "uniform",
+        "n_sequences": 51,
+        "bd_proxy_mean_pct": 1.8985981816279707,
+        "bd_proxy_ci95_pct": [
+          1.7484583802087297,
+          2.0616755673026326
+        ],
+        "mac_saving_mean_pct": 21.2468604480519,
+        "mac_saving_ci95_pct": [
+          19.053586819008284,
+          23.410566695180595
+        ],
+        "per_sequence_bd_proxy_pct": {
+          "BQMall_832x480_60.yuv": 1.7401760266194846,
+          "BQTerrace_1920x1080_60.yuv": 2.409415696734976,
+          "BasketballDrill_832x480_50.yuv": 3.660273432967228,
+          "BasketballDrive_1920x1080_50.yuv": 2.9783353255937266,
+          "BasketballPass_416x240_50.yuv": 2.6565202773335446,
+          "Beauty_1920x1080_120fps_420_8bit_YUV.yuv": 2.590705383672341,
+          "BlowingBubbles_416x240_50.yuv": 1.7002964373118636,
+          "Bosphorus_1920x1080_120fps_420_8bit_YUV.yuv": 1.8654712822156996,
+          "Cactus_1920x1080_50.yuv": 2.5432675510273137,
+          "FourPeople_1280x720_60.yuv": 1.5077163275399927,
+          "HoneyBee_1920x1080_120fps_420_8bit_YUV.yuv": 1.2198836017896044,
+          "Jockey_1920x1080_120fps_420_8bit_YUV.yuv": 1.6360555795264866,
+          "Johnny_1280x720_60.yuv": 2.111354450329548,
+          "Kimono1_1920x1080_24.yuv": 1.541573244805884,
+          "KristenAndSara_1280x720_60.yuv": 1.6100814838758934,
+          "ParkScene_1920x1080_24.yuv": 1.9404640879152133,
+          "RaceHorses_416x240_30.yuv": 1.6571957895047729,
+          "RaceHorses_832x480_30.yuv": 1.7720151289055828,
+          "ReadySteadyGo_1920x1080_120fps_420_8bit_YUV.yuv": 1.3908140299503318,
+          "ShakeNDry_1920x1080_120fps_420_8bit_YUV.yuv": 1.4095878859605582,
+          "YachtRide_1920x1080_120fps_420_8bit_YUV.yuv": 1.7579119752454933,
+          "videoSRC01_1920x1080_30.yuv": 2.6722606022542084,
+          "videoSRC02_1920x1080_30.yuv": 1.2329749768558982,
+          "videoSRC03_1920x1080_30.yuv": 1.7914011991843382,
+          "videoSRC04_1920x1080_30.yuv": 1.7355149126298972,
+          "videoSRC05_1920x1080_25.yuv": 3.3980746403458393,
+          "videoSRC06_1920x1080_25.yuv": 1.4608195077585457,
+          "videoSRC07_1920x1080_25.yuv": 2.731631152729305,
+          "videoSRC08_1920x1080_25.yuv": 2.721880946729667,
+          "videoSRC09_1920x1080_25.yuv": 1.538818594987882,
+          "videoSRC10_1920x1080_30.yuv": 1.6745588831291531,
+          "videoSRC11_1920x1080_30.yuv": 1.7922924660036432,
+          "videoSRC12_1920x1080_30.yuv": 1.658359198906263,
+          "videoSRC13_1920x1080_30.yuv": 2.258830518032436,
+          "videoSRC14_1920x1080_30.yuv": 1.4537417277566098,
+          "videoSRC15_1920x1080_30.yuv": 2.3554425010219395,
+          "videoSRC16_1920x1080_30.yuv": 1.6330852593755187,
+          "videoSRC17_1920x1080_24.yuv": 1.29641899258846,
+          "videoSRC18_1920x1080_25.yuv": 1.764587340232763,
+          "videoSRC19_1920x1080_30.yuv": 1.5622703001162943,
+          "videoSRC20_1920x1080_25.yuv": 1.9100499658602264,
+          "videoSRC21_1920x1080_24.yuv": 1.1883634816784465,
+          "videoSRC22_1920x1080_24.yuv": 1.4745116203228528,
+          "videoSRC23_1920x1080_24.yuv": 1.5886218787341433,
+          "videoSRC24_1920x1080_24.yuv": 1.2194461983108722,
+          "videoSRC25_1920x1080_24.yuv": 1.4150769825423704,
+          "videoSRC26_1920x1080_30.yuv": 1.6862266513482542,
+          "videoSRC27_1920x1080_30.yuv": 2.28829838884611,
+          "videoSRC28_1920x1080_30.yuv": 2.358122479465701,
+          "videoSRC29_1920x1080_24.yuv": 1.460241354595981,
+          "videoSRC30_1920x1080_30.yuv": 1.8074695418573514
+        }
+      },
+      {
+        "policy": "dither",
+        "n_sequences": 51,
+        "bd_proxy_mean_pct": 2.3816619165069004,
+        "bd_proxy_ci95_pct": [
+          2.204932513311095,
+          2.5646903999968917
+        ],
+        "mac_saving_mean_pct": 25.62500856573286,
+        "mac_saving_ci95_pct": [
+          23.49770576756667,
+          27.662406937446857
+        ],
+        "per_sequence_bd_proxy_pct": {
+          "BQMall_832x480_60.yuv": 2.3257702074820052,
+          "BQTerrace_1920x1080_60.yuv": 3.1568732483488358,
+          "BasketballDrill_832x480_50.yuv": 4.4585867890181845,
+          "BasketballDrive_1920x1080_50.yuv": 3.615221090473618,
+          "BasketballPass_416x240_50.yuv": 3.086512926523941,
+          "Beauty_1920x1080_120fps_420_8bit_YUV.yuv": 2.590705383672341,
+          "BlowingBubbles_416x240_50.yuv": 1.785257831192014,
+          "Bosphorus_1920x1080_120fps_420_8bit_YUV.yuv": 2.431423029702931,
+          "Cactus_1920x1080_50.yuv": 3.0475211696094613,
+          "FourPeople_1280x720_60.yuv": 1.7992232707651423,
+          "HoneyBee_1920x1080_120fps_420_8bit_YUV.yuv": 1.4038120603196178,
+          "Jockey_1920x1080_120fps_420_8bit_YUV.yuv": 1.9833784859694443,
+          "Johnny_1280x720_60.yuv": 2.6002962695594207,
+          "Kimono1_1920x1080_24.yuv": 1.7093797738308842,
+          "KristenAndSara_1280x720_60.yuv": 1.8674364441480815,
+          "ParkScene_1920x1080_24.yuv": 2.2128993561447357,
+          "RaceHorses_416x240_30.yuv": 1.815387045966995,
+          "RaceHorses_832x480_30.yuv": 2.382338119484799,
+          "ReadySteadyGo_1920x1080_120fps_420_8bit_YUV.yuv": 1.9725249018217044,
+          "ShakeNDry_1920x1080_120fps_420_8bit_YUV.yuv": 1.7381386938241206,
+          "YachtRide_1920x1080_120fps_420_8bit_YUV.yuv": 2.118398763073354,
+          "videoSRC01_1920x1080_30.yuv": 2.845097601722703,
+          "videoSRC02_1920x1080_30.yuv": 1.5621902369829144,
+          "videoSRC03_1920x1080_30.yuv": 2.197694835837507,
+          "videoSRC04_1920x1080_30.yuv": 2.2103889413067024,
+          "videoSRC05_1920x1080_25.yuv": 3.869551981230853,
+          "videoSRC06_1920x1080_25.yuv": 1.4608195077585457,
+          "videoSRC07_1920x1080_25.yuv": 3.7461115321957026,
+          "videoSRC08_1920x1080_25.yuv": 2.826556611375119,
+          "videoSRC09_1920x1080_25.yuv": 2.071615976539742,
+          "videoSRC10_1920x1080_30.yuv": 1.9445274884721784,
+          "videoSRC11_1920x1080_30.yuv": 2.8887926360911007,
+          "videoSRC12_1920x1080_30.yuv": 2.665711321341674,
+          "videoSRC13_1920x1080_30.yuv": 2.8551352053564463,
+          "videoSRC14_1920x1080_30.yuv": 2.1234626256266216,
+          "videoSRC15_1920x1080_30.yuv": 3.4593384571660413,
+          "videoSRC16_1920x1080_30.yuv": 2.4494773490266972,
+          "videoSRC17_1920x1080_24.yuv": 1.7587991520587671,
+          "videoSRC18_1920x1080_25.yuv": 2.2214303708721452,
+          "videoSRC19_1920x1080_30.yuv": 2.26402296477526,
+          "videoSRC20_1920x1080_25.yuv": 2.357582098883555,
+          "videoSRC21_1920x1080_24.yuv": 1.5554891242962265,
+          "videoSRC22_1920x1080_24.yuv": 1.983735256147634,
+          "videoSRC23_1920x1080_24.yuv": 2.044775051112681,
+          "videoSRC24_1920x1080_24.yuv": 1.527378372837358,
+          "videoSRC25_1920x1080_24.yuv": 2.0431507032121443,
+          "videoSRC26_1920x1080_30.yuv": 2.0088131201840063,
+          "videoSRC27_1920x1080_30.yuv": 2.7886308484449907,
+          "videoSRC28_1920x1080_30.yuv": 3.03663549558973,
+          "videoSRC29_1920x1080_24.yuv": 1.9411486320089506,
+          "videoSRC30_1920x1080_30.yuv": 2.6556093824662894
+        }
+      },
+      {
+        "policy": "router",
+        "n_sequences": 51,
+        "bd_proxy_mean_pct": 2.2614038990818597,
+        "bd_proxy_ci95_pct": [
+          2.1138386317384854,
+          2.4094906163190837
+        ],
+        "mac_saving_mean_pct": 28.22035589444092,
+        "mac_saving_ci95_pct": [
+          26.35175103957162,
+          30.073172959456453
+        ],
+        "per_sequence_bd_proxy_pct": {
+          "BQMall_832x480_60.yuv": 2.1851505727381606,
+          "BQTerrace_1920x1080_60.yuv": 2.744994143245808,
+          "BasketballDrill_832x480_50.yuv": 2.709047003798166,
+          "BasketballDrive_1920x1080_50.yuv": 3.1032290616173235,
+          "BasketballPass_416x240_50.yuv": 2.8300794054806615,
+          "Beauty_1920x1080_120fps_420_8bit_YUV.yuv": 2.590705383672341,
+          "BlowingBubbles_416x240_50.yuv": 1.7950521759944764,
+          "Bosphorus_1920x1080_120fps_420_8bit_YUV.yuv": 2.4076986863729704,
+          "Cactus_1920x1080_50.yuv": 2.847520155428906,
+          "FourPeople_1280x720_60.yuv": 1.8725242139931473,
+          "HoneyBee_1920x1080_120fps_420_8bit_YUV.yuv": 1.3206016632258677,
+          "Jockey_1920x1080_120fps_420_8bit_YUV.yuv": 1.8576751865824142,
+          "Johnny_1280x720_60.yuv": 2.555961119929676,
+          "Kimono1_1920x1080_24.yuv": 1.670388496179578,
+          "KristenAndSara_1280x720_60.yuv": 1.9551190651240138,
+          "ParkScene_1920x1080_24.yuv": 2.1612948518083224,
+          "RaceHorses_416x240_30.yuv": 1.815387045966995,
+          "RaceHorses_832x480_30.yuv": 2.154319189233995,
+          "ReadySteadyGo_1920x1080_120fps_420_8bit_YUV.yuv": 1.8514094681213369,
+          "ShakeNDry_1920x1080_120fps_420_8bit_YUV.yuv": 1.7465935190582962,
+          "YachtRide_1920x1080_120fps_420_8bit_YUV.yuv": 2.0254826428070776,
+          "videoSRC01_1920x1080_30.yuv": 2.8425401443115237,
+          "videoSRC02_1920x1080_30.yuv": 1.5563878567593064,
+          "videoSRC03_1920x1080_30.yuv": 2.1671934453469786,
+          "videoSRC04_1920x1080_30.yuv": 2.1611031880697738,
+          "videoSRC05_1920x1080_25.yuv": 3.2399072211909283,
+          "videoSRC06_1920x1080_25.yuv": 1.4608195077585457,
+          "videoSRC07_1920x1080_25.yuv": 3.769285004581054,
+          "videoSRC08_1920x1080_25.yuv": 2.8069999022013197,
+          "videoSRC09_1920x1080_25.yuv": 1.9867222500344017,
+          "videoSRC10_1920x1080_30.yuv": 1.9975157115355433,
+          "videoSRC11_1920x1080_30.yuv": 2.954130654323428,
+          "videoSRC12_1920x1080_30.yuv": 2.682794845287497,
+          "videoSRC13_1920x1080_30.yuv": 3.0306981029784557,
+          "videoSRC14_1920x1080_30.yuv": 2.0155225828322982,
+          "videoSRC15_1920x1080_30.yuv": 3.308978748783635,
+          "videoSRC16_1920x1080_30.yuv": 2.365475248921663,
+          "videoSRC17_1920x1080_24.yuv": 1.7038505022950894,
+          "videoSRC18_1920x1080_25.yuv": 1.9059777379219736,
+          "videoSRC19_1920x1080_30.yuv": 2.2420800641235084,
+          "videoSRC20_1920x1080_25.yuv": 1.90671754972917,
+          "videoSRC21_1920x1080_24.yuv": 1.5705433359602672,
+          "videoSRC22_1920x1080_24.yuv": 1.9323463980291147,
+          "videoSRC23_1920x1080_24.yuv": 1.9013728985512204,
+          "videoSRC24_1920x1080_24.yuv": 1.4124979220736316,
+          "videoSRC25_1920x1080_24.yuv": 2.0124198943985165,
+          "videoSRC26_1920x1080_30.yuv": 1.9350127340170116,
+          "videoSRC27_1920x1080_30.yuv": 2.83037672875364,
+          "videoSRC28_1920x1080_30.yuv": 2.9749998300427305,
+          "videoSRC29_1920x1080_24.yuv": 1.9215176126466789,
+          "videoSRC30_1920x1080_30.yuv": 2.5355781793364147
+        }
+      },
+      {
+        "policy": "oracle",
+        "n_sequences": 51,
+        "bd_proxy_mean_pct": 2.343845571373336,
+        "bd_proxy_ci95_pct": [
+          2.179056157065999,
+          2.5153823856915425
+        ],
+        "mac_saving_mean_pct": 29.85005199714424,
+        "mac_saving_ci95_pct": [
+          28.231256159312196,
+          31.462290905786105
+        ],
+        "per_sequence_bd_proxy_pct": {
+          "BQMall_832x480_60.yuv": 2.26136998298266,
+          "BQTerrace_1920x1080_60.yuv": 2.8789543282058516,
+          "BasketballDrill_832x480_50.yuv": 4.376327150704483,
+          "BasketballDrive_1920x1080_50.yuv": 3.413537142794252,
+          "BasketballPass_416x240_50.yuv": 3.0282431509522456,
+          "Beauty_1920x1080_120fps_420_8bit_YUV.yuv": 2.590705383672341,
+          "BlowingBubbles_416x240_50.yuv": 1.7950521759944764,
+          "Bosphorus_1920x1080_120fps_420_8bit_YUV.yuv": 2.41296918885812,
+          "Cactus_1920x1080_50.yuv": 2.8562623418473936,
+          "FourPeople_1280x720_60.yuv": 1.8567813157000554,
+          "HoneyBee_1920x1080_120fps_420_8bit_YUV.yuv": 1.4001335102678163,
+          "Jockey_1920x1080_120fps_420_8bit_YUV.yuv": 1.936893194836491,
+          "Johnny_1280x720_60.yuv": 2.505439318218008,
+          "Kimono1_1920x1080_24.yuv": 1.6821696937577302,
+          "KristenAndSara_1280x720_60.yuv": 1.967401960210175,
+          "ParkScene_1920x1080_24.yuv": 2.1297799432380717,
+          "RaceHorses_416x240_30.yuv": 1.815387045966995,
+          "RaceHorses_832x480_30.yuv": 2.368511146364436,
+          "ReadySteadyGo_1920x1080_120fps_420_8bit_YUV.yuv": 1.896640589757415,
+          "ShakeNDry_1920x1080_120fps_420_8bit_YUV.yuv": 1.750876912771359,
+          "YachtRide_1920x1080_120fps_420_8bit_YUV.yuv": 2.1776072566482543,
+          "videoSRC01_1920x1080_30.yuv": 2.8425401443115237,
+          "videoSRC02_1920x1080_30.yuv": 1.6692760603281707,
+          "videoSRC03_1920x1080_30.yuv": 2.2186647626717133,
+          "videoSRC04_1920x1080_30.yuv": 2.1444798896175707,
+          "videoSRC05_1920x1080_25.yuv": 3.58511259082925,
+          "videoSRC06_1920x1080_25.yuv": 1.4608195077585457,
+          "videoSRC07_1920x1080_25.yuv": 3.7468477790879855,
+          "videoSRC08_1920x1080_25.yuv": 2.8283531026284656,
+          "videoSRC09_1920x1080_25.yuv": 2.008283050233061,
+          "videoSRC10_1920x1080_30.yuv": 1.9565773825606112,
+          "videoSRC11_1920x1080_30.yuv": 2.9442348126937983,
+          "videoSRC12_1920x1080_30.yuv": 2.6759803005841385,
+          "videoSRC13_1920x1080_30.yuv": 2.698249817160656,
+          "videoSRC14_1920x1080_30.yuv": 2.03840187725861,
+          "videoSRC15_1920x1080_30.yuv": 3.380419912302049,
+          "videoSRC16_1920x1080_30.yuv": 2.3989657895859993,
+          "videoSRC17_1920x1080_24.yuv": 1.6899326060327564,
+          "videoSRC18_1920x1080_25.yuv": 2.172599098362556,
+          "videoSRC19_1920x1080_30.yuv": 2.227943848175181,
+          "videoSRC20_1920x1080_25.yuv": 2.0979538896713867,
+          "videoSRC21_1920x1080_24.yuv": 1.616001662464146,
+          "videoSRC22_1920x1080_24.yuv": 1.9400822047311077,
+          "videoSRC23_1920x1080_24.yuv": 1.9860113681235783,
+          "videoSRC24_1920x1080_24.yuv": 1.6375106442181666,
+          "videoSRC25_1920x1080_24.yuv": 2.2538734069679776,
+          "videoSRC26_1920x1080_30.yuv": 1.9797545211076708,
+          "videoSRC27_1920x1080_30.yuv": 2.804852743992312,
+          "videoSRC28_1920x1080_30.yuv": 2.938127638793344,
+          "videoSRC29_1920x1080_24.yuv": 1.9561755239230854,
+          "videoSRC30_1920x1080_30.yuv": 2.537055470116097
+        }
+      }
+    ],
+    "qp": [
+      {
+        "policy": "uniform",
+        "qp": 0,
+        "n_sequences": 51,
+        "mean_loss_db": 0.06850341523159273,
+        "loss_ci95_db": [
+          0.06229792648334807,
+          0.07542640593867218
+        ],
+        "mean_mac_saving_pct": 27.230985608755372,
+        "saving_ci95_pct": [
+          24.709230047814984,
+          29.64436410104525
+        ]
+      },
+      {
+        "policy": "uniform",
+        "qp": 16,
+        "n_sequences": 51,
+        "mean_loss_db": 0.07752387495267192,
+        "loss_ci95_db": [
+          0.07189043307651764,
+          0.08328269279052379
+        ],
+        "mean_mac_saving_pct": 25.403548221962126,
+        "saving_ci95_pct": [
+          22.99153582722533,
+          27.797346138486674
+        ]
+      },
+      {
+        "policy": "uniform",
+        "qp": 32,
+        "n_sequences": 51,
+        "mean_loss_db": 0.069221593199939,
+        "loss_ci95_db": [
+          0.06349640507769695,
+          0.07518828883641178
+        ],
+        "mean_mac_saving_pct": 19.590811168446262,
+        "saving_ci95_pct": [
+          16.994944623872346,
+          22.20489219123242
+        ]
+      },
+      {
+        "policy": "uniform",
+        "qp": 48,
+        "n_sequences": 51,
+        "mean_loss_db": 0.06631581440886915,
+        "loss_ci95_db": [
+          0.06023858233415015,
+          0.07285071177610779
+        ],
+        "mean_mac_saving_pct": 17.6532319947785,
+        "saving_ci95_pct": [
+          15.003554192828197,
+          20.24953255174206
+        ]
+      },
+      {
+        "policy": "uniform",
+        "qp": 63,
+        "n_sequences": 51,
+        "mean_loss_db": 0.0676785277499223,
+        "loss_ci95_db": [
+          0.05701248611291091,
+          0.08140165093872923
+        ],
+        "mean_mac_saving_pct": 16.355725246317245,
+        "saving_ci95_pct": [
+          13.230781111062742,
+          19.48066938157175
+        ]
+      },
+      {
+        "policy": "dither",
+        "qp": 0,
+        "n_sequences": 51,
+        "mean_loss_db": 0.08990972279748305,
+        "loss_ci95_db": [
+          0.08317490080219056,
+          0.09629674228190585
+        ],
+        "mean_mac_saving_pct": 32.35734197146752,
+        "saving_ci95_pct": [
+          30.345876648802967,
+          34.15218434044543
+        ]
+      },
+      {
+        "policy": "dither",
+        "qp": 16,
+        "n_sequences": 51,
+        "mean_loss_db": 0.09443685219549022,
+        "loss_ci95_db": [
+          0.08849259122523191,
+          0.10081193397354628
+        ],
+        "mean_mac_saving_pct": 29.26836048076355,
+        "saving_ci95_pct": [
+          27.018589337545087,
+          31.380637583268037
+        ]
+      },
+      {
+        "policy": "dither",
+        "qp": 32,
+        "n_sequences": 51,
+        "mean_loss_db": 0.08966821802586242,
+        "loss_ci95_db": [
+          0.08340259003987203,
+          0.09579040835861509
+        ],
+        "mean_mac_saving_pct": 24.475442624949164,
+        "saving_ci95_pct": [
+          22.012891869164175,
+          26.899259112824023
+        ]
+      },
+      {
+        "policy": "dither",
+        "qp": 48,
+        "n_sequences": 51,
+        "mean_loss_db": 0.08377436274688356,
+        "loss_ci95_db": [
+          0.07693498651280752,
+          0.09168533320127314
+        ],
+        "mean_mac_saving_pct": 21.484354815257138,
+        "saving_ci95_pct": [
+          18.97044850579079,
+          24.012305871674826
+        ]
+      },
+      {
+        "policy": "dither",
+        "qp": 63,
+        "n_sequences": 51,
+        "mean_loss_db": 0.08604937278818936,
+        "loss_ci95_db": [
+          0.07542576683785643,
+          0.09968395026584868
+        ],
+        "mean_mac_saving_pct": 20.5395429362269,
+        "saving_ci95_pct": [
+          17.721196414501062,
+          23.453862729244953
+        ]
+      },
+      {
+        "policy": "router",
+        "qp": 0,
+        "n_sequences": 51,
+        "mean_loss_db": 0.08824339952395914,
+        "loss_ci95_db": [
+          0.08179779463784437,
+          0.0946434988616972
+        ],
+        "mean_mac_saving_pct": 34.42214063374825,
+        "saving_ci95_pct": [
+          32.96254452028208,
+          35.85425721917277
+        ]
+      },
+      {
+        "policy": "router",
+        "qp": 16,
+        "n_sequences": 51,
+        "mean_loss_db": 0.09239036039304721,
+        "loss_ci95_db": [
+          0.08629375241061488,
+          0.09883631646252354
+        ],
+        "mean_mac_saving_pct": 32.120950384662045,
+        "saving_ci95_pct": [
+          30.448456100583854,
+          33.81591116271766
+        ]
+      },
+      {
+        "policy": "router",
+        "qp": 32,
+        "n_sequences": 51,
+        "mean_loss_db": 0.08771630763176491,
+        "loss_ci95_db": [
+          0.08210102782819811,
+          0.09324333662053783
+        ],
+        "mean_mac_saving_pct": 27.898588369484823,
+        "saving_ci95_pct": [
+          25.756706924682934,
+          29.991081245560082
+        ]
+      },
+      {
+        "policy": "router",
+        "qp": 48,
+        "n_sequences": 51,
+        "mean_loss_db": 0.07667224812989239,
+        "loss_ci95_db": [
+          0.0717895446539081,
+          0.0810702849386961
+        ],
+        "mean_mac_saving_pct": 24.345788567089567,
+        "saving_ci95_pct": [
+          21.949143457062103,
+          26.79200044361984
+        ]
+      },
+      {
+        "policy": "router",
+        "qp": 63,
+        "n_sequences": 51,
+        "mean_loss_db": 0.07320967856636332,
+        "loss_ci95_db": [
+          0.06610979782724695,
+          0.08387620816235643
+        ],
+        "mean_mac_saving_pct": 22.314311517219917,
+        "saving_ci95_pct": [
+          19.482920892974906,
+          25.177636197969026
+        ]
+      },
+      {
+        "policy": "oracle",
+        "qp": 0,
+        "n_sequences": 51,
+        "mean_loss_db": 0.08964113918642673,
+        "loss_ci95_db": [
+          0.08315330626917299,
+          0.09561431990968755
+        ],
+        "mean_mac_saving_pct": 35.00777581645772,
+        "saving_ci95_pct": [
+          33.650533333225965,
+          36.21256912752889
+        ]
+      },
+      {
+        "policy": "oracle",
+        "qp": 16,
+        "n_sequences": 51,
+        "mean_loss_db": 0.09312105544183877,
+        "loss_ci95_db": [
+          0.0873942803544007,
+          0.09896695475269492
+        ],
+        "mean_mac_saving_pct": 32.62316831381492,
+        "saving_ci95_pct": [
+          30.920904495284642,
+          34.19969595506105
+        ]
+      },
+      {
+        "policy": "oracle",
+        "qp": 32,
+        "n_sequences": 51,
+        "mean_loss_db": 0.08906594298195818,
+        "loss_ci95_db": [
+          0.08325674762743102,
+          0.09482123766533143
+        ],
+        "mean_mac_saving_pct": 29.16103138837939,
+        "saving_ci95_pct": [
+          27.29080114279892,
+          30.9700983297445
+        ]
+      },
+      {
+        "policy": "oracle",
+        "qp": 48,
+        "n_sequences": 51,
+        "mean_loss_db": 0.08210300217400801,
+        "loss_ci95_db": [
+          0.07527105730053922,
+          0.08938501092407816
+        ],
+        "mean_mac_saving_pct": 26.789660093441505,
+        "saving_ci95_pct": [
+          24.642748693892965,
+          28.882078498261034
+        ]
+      },
+      {
+        "policy": "oracle",
+        "qp": 63,
+        "n_sequences": 51,
+        "mean_loss_db": 0.08506943360921285,
+        "loss_ci95_db": [
+          0.07411582754188079,
+          0.09897371152358123
+        ],
+        "mean_mac_saving_pct": 25.668624373627644,
+        "saving_ci95_pct": [
+          23.382941472618022,
+          27.966504176019455
+        ]
+      }
+    ],
+    "paired_router_minus_dither": [
+      {
+        "qp": 0,
+        "contrast": "router_minus_dither_loss_db",
+        "mean": -0.001666323273523917,
+        "ci95": [
+          -0.0030569275051685746,
+          -0.00034566040811182425
+        ]
+      },
+      {
+        "qp": 16,
+        "contrast": "router_minus_dither_loss_db",
+        "mean": -0.002046491802443015,
+        "ci95": [
+          -0.0033771060497344058,
+          -0.0007761783444503824
+        ]
+      },
+      {
+        "qp": 32,
+        "contrast": "router_minus_dither_loss_db",
+        "mean": -0.001951910394097504,
+        "ci95": [
+          -0.004319279984501011,
+          3.846476015479164e-05
+        ]
+      },
+      {
+        "qp": 48,
+        "contrast": "router_minus_dither_loss_db",
+        "mean": -0.007102114616991173,
+        "ci95": [
+          -0.012178204764918982,
+          -0.0034944826862839977
+        ]
+      },
+      {
+        "qp": 63,
+        "contrast": "router_minus_dither_loss_db",
+        "mean": -0.012839694221826048,
+        "ci95": [
+          -0.02271325977063446,
+          -0.005893917156042469
+        ]
+      },
+      {
+        "qp": 0,
+        "contrast": "router_minus_dither_saving_pctpt",
+        "mean": 2.064798662280725,
+        "ci95": [
+          1.374416159137207,
+          2.796628843725117
+        ]
+      },
+      {
+        "qp": 16,
+        "contrast": "router_minus_dither_saving_pctpt",
+        "mean": 2.852589903898488,
+        "ci95": [
+          2.0894770988938847,
+          3.723902640535549
+        ]
+      },
+      {
+        "qp": 32,
+        "contrast": "router_minus_dither_saving_pctpt",
+        "mean": 3.423145744535658,
+        "ci95": [
+          2.526266512333179,
+          4.382402656198132
+        ]
+      },
+      {
+        "qp": 48,
+        "contrast": "router_minus_dither_saving_pctpt",
+        "mean": 2.861433751832427,
+        "ci95": [
+          1.8704380241094845,
+          3.8996377314130446
+        ]
+      },
+      {
+        "qp": 63,
+        "contrast": "router_minus_dither_saving_pctpt",
+        "mean": 1.7747685809930172,
+        "ci95": [
+          0.578450169414282,
+          2.811629974812851
+        ]
+      }
+    ],
+    "paired_router_minus_dither_bd_proxy": {
+      "mean_pctpt": -0.12025801742504051,
+      "ci95_pctpt": [
+        -0.21017758742209106,
+        -0.05785908116753789
+      ]
+    }
+  }
+}
