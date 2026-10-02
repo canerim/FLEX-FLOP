@@ -51,10 +51,12 @@ def pointwise_add(x: torch.Tensor, conv: nn.Conv2d,
                   residual: torch.Tensor) -> torch.Tensor:
     if triton is None:
         raise RuntimeError('Triton unavailable')
-    if (not x.is_cuda or not x.is_contiguous() or not residual.is_contiguous() or
+    if (not x.is_cuda or x.ndim != 4 or not x.is_contiguous() or
+            not residual.is_contiguous() or residual.device != x.device or
             x.dtype != torch.float32 or residual.dtype != torch.float32 or
             x.shape != residual.shape or conv.in_channels != conv.out_channels or
             conv.in_channels != x.shape[1] or conv.bias is None or
+            conv.weight.device != x.device or conv.bias.device != x.device or
             not conv.weight.is_contiguous() or conv.kernel_size != (1,1) or
             torch.cuda.get_device_capability(x.device)[0] < 8):
         raise ValueError('unsupported pointwise-add shape/layout')
@@ -69,9 +71,11 @@ def pointwise_add(x: torch.Tensor, conv: nn.Conv2d,
 def pointwise_wsilu(x: torch.Tensor, conv: nn.Conv2d) -> torch.Tensor:
     if triton is None:
         raise RuntimeError('Triton unavailable')
-    if (not x.is_cuda or not x.is_contiguous() or x.dtype != torch.float32 or
+    if (not x.is_cuda or x.ndim != 4 or not x.is_contiguous() or
+            x.dtype != torch.float32 or
             conv.in_channels != conv.out_channels or conv.in_channels != x.shape[1] or
-            conv.bias is None or not conv.weight.is_contiguous() or
+            conv.bias is None or conv.weight.device != x.device or
+            conv.bias.device != x.device or not conv.weight.is_contiguous() or
             conv.kernel_size != (1,1) or torch.cuda.get_device_capability(x.device)[0] < 8):
         raise ValueError('unsupported pointwise-activation shape/layout')
     n,c,h,w=x.shape
@@ -89,20 +93,26 @@ class FusedTrunkBlock(nn.Module):
 
     def forward(self,x):
         block=self.original
-        if (triton is None or torch.is_grad_enabled() or not x.is_cuda or
+        if (triton is None or self.training or torch.is_grad_enabled() or not x.is_cuda or
                 not x.is_contiguous() or x.dtype != torch.float32 or
                 torch.cuda.get_device_capability(x.device)[0] < 8):
             return block(x)
         a=pointwise_wsilu(x,block.dc[0])
         b=block.dc[2](a)
+        if not b.is_contiguous():
+            return block(x)
         mid=pointwise_add(b,block.dc[3],x)
         hidden=block.ffn[0](mid)  # already fused expand + WSiLU + chunk-add
+        if not hidden.is_contiguous():
+            return block(x)
         return pointwise_add(hidden,block.ffn[2],mid)
 
 
 def install_fused_trunk_blocks(decoder: nn.Module) -> int:
     """Wrap 384-channel suffix/stem blocks, after install_fused_ffn."""
     from .fused_ffn import FusedFirstPointwise
+    if decoder.training:
+        raise ValueError('inference-only; call eval()')
     count=0
     for group in decoder.groups:
         for idx,block in enumerate(group):

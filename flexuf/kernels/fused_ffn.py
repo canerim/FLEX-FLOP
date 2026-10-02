@@ -53,6 +53,7 @@ def fused_expand_activate_reduce(x: torch.Tensor, conv: nn.Conv2d) -> torch.Tens
         raise RuntimeError('Triton unavailable')
     if (not x.is_cuda or not x.is_contiguous() or x.dtype != torch.float32 or
             x.ndim != 4 or not conv.weight.is_contiguous() or conv.bias is None or
+            conv.weight.device != x.device or conv.bias.device != x.device or
             conv.in_channels != x.shape[1] or conv.out_channels % 4 or
             conv.kernel_size != (1,1) or
             torch.cuda.get_device_capability(x.device)[0] < 8):
@@ -74,7 +75,7 @@ class FusedFirstPointwise(nn.Module):
         self.activation = activation
 
     def forward(self, x):
-        if (triton is None or not x.is_cuda or not x.is_contiguous() or
+        if (triton is None or self.training or not x.is_cuda or not x.is_contiguous() or
                 x.dtype != torch.float32 or torch.is_grad_enabled() or
                 torch.cuda.get_device_capability(x.device)[0] < 8):
             return self.activation(self.conv(x))

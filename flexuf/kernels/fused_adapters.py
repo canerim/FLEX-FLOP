@@ -15,7 +15,8 @@ class FusedAdapter(nn.Module):
         self.original=original
 
     def forward(self,x):
-        if (triton is None or torch.is_grad_enabled() or not x.is_cuda or not x.is_contiguous() or
+        if (triton is None or self.training or torch.is_grad_enabled() or
+                not x.is_cuda or not x.is_contiguous() or
                 x.dtype != torch.float32 or
                 torch.cuda.get_device_capability(x.device)[0] < 8):
             return self.original(x)

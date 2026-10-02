@@ -49,11 +49,15 @@ def test_cuda_trunk_matches_stock():
 
 def test_public_api_is_opt_in_and_idempotent():
     dec=MultiExitIntraDecoder(FlexUFConfig()).eval()
+    before={id(p):p.detach().clone() for p in dec.parameters()}
     counts=enable_fast_inference(dec)
     assert counts['fused_trunk_blocks']==12
     assert counts['fused_ffn']>=12
     assert counts['fused_adapters']==dec.cfg.num_exits-1
     assert dec.cfg.sorted_tiles
+    after={id(p):p for p in dec.parameters()}
+    assert set(before)==set(after)
+    assert all(torch.equal(value,after[key]) for key,value in before.items())
     assert enable_fast_inference(dec)=={'fused_ffn':0,'fused_plain_wsilu':0,
                                         'fused_trunk_blocks':0,'fused_adapters':0}
 
