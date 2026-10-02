@@ -1,56 +1,42 @@
 \section{Related Work}
 \label{sec:related}
 
-\paragraph{Making learned decoding cheaper.}
-Shallow synthesis reduces decoder computation, with stronger analysis
-or iterative encoding compensating for lost capacity~\cite{yang2023shallow}.
-DCVC-RT emphasises memory traffic and function calls~\cite{jia2025dcvcrt};
-DCVC-UF combines chunk-based video coding with streamlined entropy
-interaction~\cite{li2026dcvcuf}. We modify its intra synthesis transform.
-A fixed shallow decoder controls for adaptation, while complete execution
-measurements distinguish arithmetic reduction from acceleration.
+\paragraph{Reducing codec complexity.}
+Shallow synthesis trades decoder work for stronger analysis or iterative
+encoding~\cite{yang2023shallow}. DCVC-RT attacks memory traffic and
+function-call overhead~\cite{jia2025dcvcrt}; DCVC-UF streamlines
+entropy interaction~\cite{li2026dcvcuf}. Our intra extension instead
+asks which regions merit additional synthesis. Modelled MACs and
+complete execution time are reported separately.
 
-\paragraph{Choosing a network or choosing an exit.}
-ClassSR learns to assign super-resolution patches to networks of different
-capacity~\cite{kong2021classsr}. APE instead lets patches leave a multi-exit
-network according to predicted incremental reconstruction
-benefit~\cite{wang2022ape}; it already shares the reconstruction tail across
-exits. AdaRevD predicts patch difficulty to choose a deblurring
-sub-decoder~\cite{mao2024adarevd}; RBQE terminates compressed-image
-enhancement early~\cite{xing2020rbqe}. Swift introduces compute-dependent
-early exits in a layered neural video decoder, with different output
-resolutions~\cite{dasari2022swift}. RegLIC retains one entropy-decoded latent
-and fixed output resolution: adapters align conditional feature tiles
-before full-frame reconstruction. The proposed independent-depth bank
-also selects the analysis transform and entropy model.
+\paragraph{Spatial network selection and early exit.}
+ClassSR assigns restoration patches to networks of different
+capacity~\cite{kong2021classsr}; APE predicts the incremental value of
+later layers in a shared multi-exit network~\cite{wang2022ape}.
+AdaRevD routes deblurring patches~\cite{mao2024adarevd}, and RBQE
+terminates enhancement early~\cite{xing2020rbqe}. Swift provides
+compute-dependent exits in layered video decoding, at different output
+resolutions~\cite{dasari2022swift}. RegLIC's evaluated path retains one
+entropy-decoded latent and a fixed output resolution while processing
+only surviving tiles through later blocks.
 
-\paragraph{Adaptive capacity inside a codec.}
-Slimmable compressive autoencoders jointly optimise rate and distortion
-at multiple network widths~\cite{yang2021slimcae}. ELFIC allocates decoding
-complexity per instance~\cite{zhang2023elfic}; ABC adapts backbone and
-autoregressive structure to content and computational budgets~\cite{zhang2025abc}.
-AdaNIC varies transform width spatially through blockwise operators
-and a router~\cite{tao2023adanic}.
-For video, cgSlimDecoder allocates decoder channels under complexity
-constraints~\cite{hu2023cgslim}. MixCompress routes among different-depth
-experts using only the rate embedding, allowing assignments to be
-cached independently of image content~\cite{ta2026mixcompress}. RegLIC varies
-\emph{depth} through nested, constant-width synthesis blocks and executes
-later stages on a shrinking tile batch. We measure the spatial placement
-premium over blind mixtures that already reduce average depth.
+\paragraph{Adaptive learned compression.}
+Slimmable autoencoders optimise multiple widths~\cite{yang2021slimcae};
+ELFIC selects per-instance decode complexity~\cite{zhang2023elfic};
+ABC adapts structure to content and budget~\cite{zhang2025abc}.
+AdaNIC routes spatial transform capacity~\cite{tao2023adanic}, and
+cgSlimDecoder allocates video-decoder channels~\cite{hu2023cgslim}.
+MixCompress selects depth experts using rate embeddings rather than
+image content~\cite{ta2026mixcompress}. RegLIC uses constant-width
+synthesis depth and compares learned placement against blind mixtures
+with the same available depths.
 
-\paragraph{Spatial selection among complete codecs.}
-Blard et al. train content-specialised codecs of the same architecture,
-search their regional rate--distortion costs, and signal a mode
-map~\cite{blard2026spatial}. They also process connected same-mode regions
-jointly; our merging diagnostic tests this existing strategy in DCVC-UF.
-The planned bank varies synthesis depth and investigates selection before
-candidate encoding. Shared exit retains one representation, separating
-representation reuse from independent-expert specialisation.
-
-\paragraph{Preserving context across blocks.}
-Kim et al. derive overlap and boundary rules that preserve full-image
-CNN reconstruction~\cite{kim2026blockwise}. RegLIC instead accepts
-context loss in its zero-halo suffix and learns a common repair/head.
-Its tiled all-deep output must therefore be evaluated separately from
-full-frame synthesis.
+\paragraph{Independent codecs and region boundaries.}
+Blard et al. select among content-specialised complete codecs and
+jointly process connected same-mode regions~\cite{blard2026spatial}.
+Our prospective bank instead varies synthesis depth and chooses a
+codec before encoding; shared exit holds the representation fixed.
+Boundary context matters in either case. Kim et al. preserve full-image
+CNN reconstruction using overlap rules~\cite{kim2026blockwise};
+our zero-halo conditional suffix accepts context loss and learns
+full-frame repair, so tiled and full-frame controls remain distinct.
