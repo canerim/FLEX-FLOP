@@ -105,7 +105,7 @@ def main():
     if a.dry_run:
         print(json.dumps({'cases_total':len(pairs),'already_complete':len(completed),
                           'to_run':len(todo),'sequences':len({s for s,_ in pairs}),
-                          'qp':[0,16,32,48,63],
+                          'qp':sorted({q for _,q in pairs}),
                           'missing_router_maps':sum(r['rules']['router']['0.1'] is None
                                                     for r in rows if (r['seq'],r['qp']) in pairs)},indent=2))
         return

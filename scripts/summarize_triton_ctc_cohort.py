@@ -2,7 +2,6 @@
 from __future__ import annotations
 
 import argparse
-from collections import defaultdict
 import json
 from pathlib import Path
 
@@ -49,12 +48,17 @@ def summarize(rows, *, complete=True):
         overall_wall=None
     by_qp={str(q):ratio_and_ci([r for r in rows if r['qp']==q],rng)
            for q in QPS if any(r['qp']==q for r in rows)}
+    router_rows=[r for r in rows if not r['dense_fallback']]
+    router_only=ratio_and_ci(router_rows,np.random.default_rng(20261002)) if router_rows else None
+    fallback_rows=[r for r in rows if r['dense_fallback']]
+    fallback_only=ratio_and_ci(fallback_rows,np.random.default_rng(20261002)) if fallback_rows else None
     return {'scope':'decoder synthesis only, isolated GPU if preflight was not overridden',
             'n_frame_qp':len(rows),'n_sequences':len(seqs),
             'dense_fallbacks':sum(bool(r['dense_fallback']) for r in rows),
             'max_abs_output_error':max(r['max_abs_output_error'] for r in rows),
             'max_abs_delta_yuv611_db':max(abs(r['delta_yuv611_db']) for r in rows),
             'overall':overall,'overall_wall':overall_wall,'by_qp':by_qp,
+            'router_only':router_only,'dense_fallback_only':fallback_only,
             'bootstrap':'5000 sequence-cluster resamples, seed 20261002; fixed checkpoint and maps'}
 
 

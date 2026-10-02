@@ -50,6 +50,16 @@ def test_partial_summary_keeps_each_sequence_as_one_bootstrap_cluster():
     assert result['by_qp']['0']['ratio'] == pytest.approx(12 / 4)
 
 
+def test_dense_fallbacks_are_not_misreported_as_router_cases():
+    rows=[_row('routed',0,2,1),_row('dense',0,9,3)]
+    rows[1]['dense_fallback']=True
+    result=summary.summarize(rows,complete=False)
+    assert result['dense_fallbacks']==1
+    assert result['router_only']['ratio']==pytest.approx(2)
+    assert result['dense_fallback_only']['ratio']==pytest.approx(3)
+    assert result['overall']['ratio']==pytest.approx(11/4)
+
+
 def test_wall_clock_ratio_is_reported_separately_from_cuda_events():
     rows = [_row('one', 0, 2, 1), _row('two', 0, 4, 2)]
     for row in rows:
