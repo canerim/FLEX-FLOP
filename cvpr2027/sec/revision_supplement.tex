@@ -167,6 +167,19 @@ change together, and independent shallow codecs are not represented.}
 \label{fig:exitprofile}
 \end{figure*}
 
+\begin{figure}[ht]
+\centering
+\includegraphics[width=\columnwidth]{figs/qp_depth_20261002/qp_depth_gain.pdf}
+\caption{\textbf{Marginal synthesis depth depends on quality index.}
+Each point averages the within-frame median tile gain across 53 sequences
+for two adjacent uniform-depth outputs on padded YCbCr~4:4:4.
+Bars are paired 95\% sequence-cluster intervals from 5,000 draws.
+Neighbouring tiles change depth together; these are diagnostic comparisons,
+not isolated tile interventions or independent codec-bank results.}
+\label{fig:qpdepth}
+\end{figure}
+
+\newpage
 \paragraph{Quality-index interaction.}
 The value of depth also changes across the five encoded quality indices
 (\cref{fig:qpdepth}). The mean frame-median gain from blocks 6 to 8 rises
@@ -178,17 +191,7 @@ This is evidence for conditioning a depth decision on QP, but these
 uniform-map comparisons cannot quantify the gain of a learned spatial
 selector or the latency of conditional execution.
 
-\begin{figure}[t]
-\centering
-\includegraphics[width=\columnwidth]{figs/qp_depth_20261002/qp_depth_gain.pdf}
-\caption{\textbf{Marginal synthesis depth depends on quality index.}
-Each point averages the within-frame median tile gain across 53 sequences
-for two adjacent uniform-depth outputs on padded YCbCr~4:4:4.
-Bars are paired 95\% sequence-cluster intervals from 5,000 draws.
-Neighbouring tiles change depth together; these are diagnostic comparisons,
-not isolated tile interventions or independent codec-bank results.}
-\label{fig:qpdepth}
-\end{figure}
+
 
 \section{Auditing the Scalar Control Search}
 
