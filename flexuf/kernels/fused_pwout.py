@@ -102,7 +102,12 @@ class FusedTrunkBlock(nn.Module):
         if not adapted.is_contiguous():
             return block(x)
         a=pointwise_wsilu(adapted,block.dc[0])
-        b=block.dc[2](a)
+        from .depthwise3x3 import depthwise3x3
+        dw=block.dc[2]
+        if (dw.padding_mode not in ('zeros','replicate') or
+                dw.padding!=(1,1) or dw.stride!=(1,1)):
+            return block(x)
+        b=depthwise3x3(a,dw)
         if not b.is_contiguous():
             return block(x)
         mid=pointwise_add(b,block.dc[3],adapted)
