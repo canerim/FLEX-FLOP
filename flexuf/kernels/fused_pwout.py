@@ -104,24 +104,21 @@ class FusedTrunkBlock(nn.Module):
                 not x.is_contiguous() or x.dtype != torch.float32 or
                 torch.cuda.get_device_capability(x.device)[0] < 8):
             return block(x)
-        adapted=block.adaptor(x) if block.adaptor is not None else x
-        if not adapted.is_contiguous():
+        try:
+            adapted=block.adaptor(x) if block.adaptor is not None else x
+            if not adapted.is_contiguous():
+                return block(x)
+            a=pointwise_wsilu(adapted,block.dc[0])
+            from .depthwise3x3 import depthwise3x3
+            b=depthwise3x3(a,block.dc[2])
+            mid=pointwise_add(b,block.dc[3],adapted)
+            hidden=block.ffn[0](mid)  # already fused expand + WSiLU + chunk-add
+            if not hidden.is_contiguous():
+                return block(x)
+            out=pointwise_add(hidden,block.ffn[2],mid)
+            return out+adapted if block.shortcut else out
+        except ValueError:
             return block(x)
-        a=pointwise_wsilu(adapted,block.dc[0])
-        from .depthwise3x3 import depthwise3x3
-        dw=block.dc[2]
-        if (dw.padding_mode not in ('zeros','replicate') or
-                dw.padding!=(1,1) or dw.stride!=(1,1)):
-            return block(x)
-        b=depthwise3x3(a,dw)
-        if not b.is_contiguous():
-            return block(x)
-        mid=pointwise_add(b,block.dc[3],adapted)
-        hidden=block.ffn[0](mid)  # already fused expand + WSiLU + chunk-add
-        if not hidden.is_contiguous():
-            return block(x)
-        out=pointwise_add(hidden,block.ffn[2],mid)
-        return out+adapted if block.shortcut else out
 
 
 def install_fused_trunk_blocks(decoder: nn.Module) -> int:

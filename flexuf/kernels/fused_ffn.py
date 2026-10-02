@@ -83,7 +83,10 @@ class FusedFirstPointwise(nn.Module):
                 x.dtype != torch.float32 or torch.is_grad_enabled() or
                 torch.cuda.get_device_capability(x.device)[0] < 8):
             return self.activation(self.conv(x))
-        return fused_expand_activate_reduce(x, self.conv)
+        try:
+            return fused_expand_activate_reduce(x, self.conv)
+        except ValueError:
+            return self.activation(self.conv(x))
 
 
 def install_fused_ffn(decoder: nn.Module) -> int:

@@ -84,10 +84,11 @@ class FusedGridSeamRepair(nn.Module):
                 not x.is_cuda or not x.is_contiguous() or x.dtype!=torch.float32 or
                 torch.cuda.get_device_capability(x.device)[0]<8):
             return a(x)
-        if a.dw.padding_mode not in ('zeros','replicate'):
+        try:
+            h=depthwise3x3(x,a.dw,activate=True)
+            return gated_projection(h,a.pw,a.gate,x,a.patch)
+        except ValueError:
             return a(x)
-        h=depthwise3x3(x,a.dw,activate=True)
-        return gated_projection(h,a.pw,a.gate,x,a.patch)
 
 
 def install_fused_grid_seam(decoder:nn.Module) -> int:

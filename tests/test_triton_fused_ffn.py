@@ -59,3 +59,15 @@ def test_cuda_grad_mode_uses_original_conv():
     a.sum().backward()
     b.sum().backward()
     assert torch.equal(stock.ffn[0].weight.grad, fused.ffn[0].conv.weight.grad)
+
+
+@pytest.mark.skipif(not torch.cuda.is_available(), reason='CUDA unavailable')
+def test_grouped_ffn_convolution_falls_back_without_error():
+    torch.manual_seed(4)
+    stock=DepthConvBlock(384,384).cuda().eval()
+    stock.ffn[0]=torch.nn.Conv2d(384,1536,1,groups=2).cuda().eval()
+    fused=copy.deepcopy(stock)
+    assert install_fused_ffn(fused)==1
+    x=torch.randn(1,384,4,4,device='cuda')*.1
+    with torch.inference_mode():
+        assert torch.equal(stock(x),fused(x))
