@@ -136,3 +136,22 @@ def test_public_api_rejects_untested_geometry():
     dec=MultiExitIntraDecoder(FlexUFConfig(tile_coupling=True)).eval()
     with pytest.raises(NotImplementedError,match='zero-halo'):
         enable_fast_inference(dec)
+
+
+@pytest.mark.skipif(not torch.cuda.is_available(),reason='CUDA unavailable')
+def test_public_api_matches_mixed_exit_reconstruction():
+    torch.backends.cudnn.allow_tf32=False
+    torch.backends.cuda.matmul.allow_tf32=False
+    torch.manual_seed(53)
+    cfg=FlexUFConfig(latent_patch=4,tile_pad_mode='replicate',seam_repair='grid')
+    stock=MultiExitIntraDecoder(cfg).cuda().eval()
+    fast=copy.deepcopy(stock)
+    enable_fast_inference(fast)
+    y=torch.randn(1,256,16,16,device='cuda')*.03
+    q=torch.ones(1,384,1,1,device='cuda')
+    modes=torch.tensor([2,3,4,5]*4,device='cuda')
+    with torch.inference_mode():
+        ref=stock(y,q,exit_map=modes)
+        out=fast(y,q,exit_map=modes)
+    assert ref.shape==out.shape
+    assert torch.allclose(ref,out,atol=5e-6,rtol=2e-6)

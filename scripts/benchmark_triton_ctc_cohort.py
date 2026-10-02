@@ -10,6 +10,7 @@ from __future__ import annotations
 import argparse
 import copy
 from datetime import datetime, timezone
+import hashlib
 import json
 import os
 from pathlib import Path
@@ -21,6 +22,7 @@ import time
 
 import torch
 import torch.nn.functional as F
+import triton
 
 ROOT=Path(__file__).resolve().parents[1]
 sys.path[:0]=[str(ROOT),str(Path.home()/'DCVC')]
@@ -28,6 +30,14 @@ import ctc_intra as C
 from flexuf.config import FlexUFConfig
 from flexuf.kernels import enable_fast_inference
 from flexuf.model import FlexUFIntra,load_flexuf_state
+
+
+def sha256_file(path):
+    digest=hashlib.sha256()
+    with path.open('rb') as stream:
+        for chunk in iter(lambda:stream.read(1024*1024),b''):
+            digest.update(chunk)
+    return digest.hexdigest()
 
 
 def gpu_uuid_for_visible_index(index):
@@ -96,10 +106,12 @@ def main():
     if out.exists() and not a.resume and not a.dry_run:
         raise FileExistsError(f'{out} exists; pass --resume or choose a new --out')
     completed=set()
+    prior_records=[]
     if a.resume and out.exists():
         for line in out.read_text().splitlines():
             if line.strip():
                 rec=json.loads(line)
+                prior_records.append(rec)
                 completed.add((rec['sequence'],rec['qp']))
     todo=[pair for pair in pairs if pair not in completed]
     if a.dry_run:
@@ -115,6 +127,25 @@ def main():
     uuid=gpu_uuid_for_visible_index(a.gpu)
     if not a.allow_shared:
         assert_gpu_exclusive(uuid)
+    provenance={name:sha256_file(ROOT/path) for name,path in {
+        'checkpoint':'runs/RECIPE512/ckpt_PIN_e15.pth.tar',
+        'router_archive':'flexplus/results/eval_rules_ctc_e15.json',
+        'decoder_source':'flexuf/backbone/decoder.py',
+        'model_source':'flexuf/model.py',
+        'ctc_source':'ctc_intra.py',
+        'kernel_api':'flexuf/kernels/__init__.py',
+        'kernel_ffn':'flexuf/kernels/fused_ffn.py',
+        'kernel_pointwise':'flexuf/kernels/fused_pwout.py',
+        'kernel_depthwise':'flexuf/kernels/depthwise3x3.py',
+        'kernel_activation':'flexuf/kernels/wsilu_chunkadd.py',
+        'kernel_adapter':'flexuf/kernels/fused_adapters.py',
+    }.items()}
+    if any(rec.get('provenance_sha256')!=provenance for rec in prior_records):
+        raise RuntimeError('resume file has missing or different source/checkpoint hashes; choose a new --out')
+    if any(rec.get('gpu_uuid')!=uuid or rec.get('repeats')!=a.repeats or
+           rec.get('gpu_exclusive_preflight')!=(not a.allow_shared)
+           for rec in prior_records):
+        raise RuntimeError('resume file changes GPU, repeats, or exclusivity; choose a new --out')
     torch.cuda.set_device(a.gpu)
     torch.backends.cudnn.allow_tf32=False
     torch.backends.cuda.matmul.allow_tf32=False
@@ -186,9 +217,16 @@ def main():
                     'max_abs_output_error':max_error,
                     'delta_yuv611_db':psnr_fast-psnr_stock,
                     'fused_counts':counts,'gpu_uuid':uuid,
+                    'repeats':a.repeats,
+                    'gpu_exclusive_preflight':not a.allow_shared,
+                    'software_versions':{'torch':torch.__version__,
+                                         'triton':triton.__version__,
+                                         'cuda':torch.version.cuda},
+                    'provenance_sha256':provenance,
                     'scope':'synthesis only, TF32 disabled, dedicated GPU required unless allow-shared'}
             stream.write(json.dumps(record)+'\n')
             stream.flush()
+            os.fsync(stream.fileno())
             if idx%10==0 or idx==len(todo)-1:
                 print(f'{idx+1}/{len(todo)} {name} qp{qp} '
                       f'{record["paired_speedup_median"]:.2f}x',flush=True)
