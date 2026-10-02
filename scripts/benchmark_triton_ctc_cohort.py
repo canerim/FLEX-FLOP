@@ -139,6 +139,7 @@ def main():
         'kernel_depthwise':'flexuf/kernels/depthwise3x3.py',
         'kernel_activation':'flexuf/kernels/wsilu_chunkadd.py',
         'kernel_adapter':'flexuf/kernels/fused_adapters.py',
+        'kernel_seam':'flexuf/kernels/fused_seam.py',
     }.items()}
     if any(rec.get('provenance_sha256')!=provenance for rec in prior_records):
         raise RuntimeError('resume file has missing or different source/checkpoint hashes; choose a new --out')

@@ -123,7 +123,7 @@ def test_public_api_is_opt_in_and_idempotent():
     assert all(torch.equal(value,after[key]) for key,value in before.items())
     assert enable_fast_inference(dec)=={'fused_ffn':0,'fused_plain_wsilu':0,
                                         'fused_trunk_blocks':0,'fused_boundary_blocks':0,
-                                        'fused_adapters':0}
+                                        'fused_adapters':0,'fused_grid_seam':0}
 
 
 def test_public_api_rejects_live_training_model():

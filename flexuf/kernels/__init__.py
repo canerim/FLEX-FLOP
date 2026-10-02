@@ -26,6 +26,7 @@ def enable_fast_inference(decoder, *, sort_tiles: bool = True) -> dict[str, int]
     from .fused_ffn import install_fused_ffn
     from .fused_pwout import install_fused_trunk_blocks, install_fused_boundary_blocks
     from .fused_adapters import install_fused_adapters
+    from .fused_seam import install_fused_grid_seam
     from .wsilu_chunkadd import install_fused_plain_wsilu
 
     counts = {'fused_ffn': install_fused_ffn(decoder),
@@ -33,6 +34,7 @@ def enable_fast_inference(decoder, *, sort_tiles: bool = True) -> dict[str, int]
     counts['fused_trunk_blocks'] = install_fused_trunk_blocks(decoder)
     counts['fused_boundary_blocks'] = install_fused_boundary_blocks(decoder)
     counts['fused_adapters'] = install_fused_adapters(decoder)
+    counts['fused_grid_seam'] = install_fused_grid_seam(decoder)
     if sort_tiles:
         decoder.cfg = replace(decoder.cfg, sorted_tiles=True)
     return counts

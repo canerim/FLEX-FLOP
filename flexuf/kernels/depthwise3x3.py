@@ -21,6 +21,7 @@ if triton is not None:
     def _depthwise3x3(X,W,B,Y,
                       C:tl.constexpr,H:tl.constexpr,WIDTH:tl.constexpr,
                       TOTAL:tl.constexpr,REPLICATE:tl.constexpr,
+                      ACTIVATE:tl.constexpr,
                       BLOCK:tl.constexpr):
         idx=tl.program_id(0)*BLOCK+tl.arange(0,BLOCK)
         ok=idx<TOTAL
@@ -45,10 +46,12 @@ if triton is not None:
                 value=tl.load(X+channel_base+yload*WIDTH+xload,mask,0)
                 weight=tl.load(W+ch*9+dy*3+dx,ok,0)
                 acc=tl.fma(value,weight,acc)
+        if ACTIVATE:
+            acc=acc*tl.sigmoid(4.0*acc)
         tl.store(Y+idx,acc,ok)
 
 
-def depthwise3x3(x:torch.Tensor,conv:nn.Conv2d) -> torch.Tensor:
+def depthwise3x3(x:torch.Tensor,conv:nn.Conv2d,*,activate:bool=False) -> torch.Tensor:
     if triton is None:
         raise RuntimeError('Triton unavailable')
     if (not x.is_cuda or x.ndim!=4 or x.dtype!=torch.float32 or
@@ -66,5 +69,5 @@ def depthwise3x3(x:torch.Tensor,conv:nn.Conv2d) -> torch.Tensor:
     total=n*c*h*w
     _depthwise3x3[(triton.cdiv(total,256),)](
         x,conv.weight,conv.bias,y,c,h,w,total,
-        conv.padding_mode=='replicate',256,num_warps=4)
+        conv.padding_mode=='replicate',activate,256,num_warps=4)
     return y
