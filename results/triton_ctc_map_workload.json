@@ -1,0 +1,137 @@
+{
+  "scope": "archived source-calibrated router maps; CPU-only workload audit, not latency",
+  "n_rows": 265,
+  "n_sequences": 53,
+  "by_qp": {
+    "0": {
+      "n_cases": 53,
+      "n_routed_cases": 53,
+      "n_dense_fallback_cases": 0,
+      "aggregate_hist": [
+        0,
+        0,
+        1388,
+        263,
+        100,
+        14
+      ],
+      "total_tiles": 1765,
+      "exit_fraction": [
+        0.0,
+        0.0,
+        0.7864022662889518,
+        0.1490084985835694,
+        0.056657223796033995,
+        0.00793201133144476
+      ],
+      "mean_retained_blocks": 6.572237960339943,
+      "mean_suffix_blocks_per_tile": 2.5722379603399435,
+      "mean_map_entropy_bits_per_tile": 0.6463930829315967,
+      "all_one_exit_maps": 17
+    },
+    "16": {
+      "n_cases": 53,
+      "n_routed_cases": 53,
+      "n_dense_fallback_cases": 0,
+      "aggregate_hist": [
+        0,
+        0,
+        1178,
+        463,
+        96,
+        28
+      ],
+      "total_tiles": 1765,
+      "exit_fraction": [
+        0.0,
+        0.0,
+        0.6674220963172804,
+        0.2623229461756374,
+        0.054390934844192634,
+        0.01586402266288952
+      ],
+      "mean_retained_blocks": 6.837393767705382,
+      "mean_suffix_blocks_per_tile": 2.8373937677053824,
+      "mean_map_entropy_bits_per_tile": 0.7635638524240871,
+      "all_one_exit_maps": 14
+    },
+    "32": {
+      "n_cases": 53,
+      "n_routed_cases": 53,
+      "n_dense_fallback_cases": 0,
+      "aggregate_hist": [
+        0,
+        0,
+        892,
+        542,
+        233,
+        98
+      ],
+      "total_tiles": 1765,
+      "exit_fraction": [
+        0.0,
+        0.0,
+        0.5053824362606232,
+        0.30708215297450425,
+        0.1320113314447592,
+        0.055524079320113315
+      ],
+      "mean_retained_blocks": 7.475354107648725,
+      "mean_suffix_blocks_per_tile": 3.4753541076487253,
+      "mean_map_entropy_bits_per_tile": 1.0192675316292583,
+      "all_one_exit_maps": 7
+    },
+    "48": {
+      "n_cases": 53,
+      "n_routed_cases": 53,
+      "n_dense_fallback_cases": 0,
+      "aggregate_hist": [
+        0,
+        0,
+        685,
+        655,
+        234,
+        191
+      ],
+      "total_tiles": 1765,
+      "exit_fraction": [
+        0.0,
+        0.0,
+        0.3881019830028329,
+        0.37110481586402266,
+        0.13257790368271954,
+        0.10821529745042494
+      ],
+      "mean_retained_blocks": 7.921813031161473,
+      "mean_suffix_blocks_per_tile": 3.921813031161473,
+      "mean_map_entropy_bits_per_tile": 1.0870323276259233,
+      "all_one_exit_maps": 7
+    },
+    "63": {
+      "n_cases": 53,
+      "n_routed_cases": 51,
+      "n_dense_fallback_cases": 2,
+      "aggregate_hist": [
+        0,
+        0,
+        657,
+        539,
+        249,
+        310
+      ],
+      "total_tiles": 1755,
+      "exit_fraction": [
+        0.0,
+        0.0,
+        0.37435897435897436,
+        0.3071225071225071,
+        0.14188034188034188,
+        0.17663817663817663
+      ],
+      "mean_retained_blocks": 8.241595441595441,
+      "mean_suffix_blocks_per_tile": 4.241595441595441,
+      "mean_map_entropy_bits_per_tile": 1.1200249612138082,
+      "all_one_exit_maps": 7
+    }
+  }
+}

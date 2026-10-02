@@ -4,7 +4,11 @@
 
 ![Erken çıkış kernel aşamaları ve gerçek router haritası](latency_map.png)
 
+![CTC router haritalarının QP'ye göre derinlik dağılımı](ctc_workload.png)
+
 [Vektör figür](latency_map.pdf) · [Ham eşlenik zamanlar](../../../results/triton_early_exit_paired_videoSRC05_qp32.json) · [Beş durumluk kalite denetimi](../../../results/triton_early_exit_quality_audit.json)
+
+Arşivdeki 53 CTC dizisi × 5 QP haritasının CPU denetiminde D6 tile payı QP0'da **%79**, QP63'te **%37**; ortalama korunan blok sayısı **6,57 → 8,24**. Yük QP ile belirgin biçimde değiştiği için tek QP32 hız noktasını bütün işletim aralığına yaymıyoruz. QP63'te iki küçük dizinin haritası yok; grafikte çıkarıldı ve tam kohort özetinde ayrı yoğun-fallback grubu olacak. [Vektör figür](ctc_workload.pdf) · [Ham harita yükü](../../../results/triton_ctc_map_workload.json).
 
 ## Ne değişti?
 
