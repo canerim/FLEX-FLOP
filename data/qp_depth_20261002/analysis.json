@@ -1,0 +1,199 @@
+{
+  "scope": "Archived uniform-exit output comparisons over 53 sequences \u00d7 5 QPs; 265 frame-QP cases, not independent codecs or mixed-map causal tile interventions.",
+  "metric": "Mean over frames of within-frame median 10log10(MSE_shallow/MSE_deep) on padded YCbCr 4:4:4 network input; historical source calls it RGB.",
+  "bootstrap": "5000 paired sequence-cluster draws, seed 20261002; QPs and stages grouped within sequence.",
+  "source_sha256": "f0a16e14aa5b85d055ecb0cbfb3947812c51dc63a694d8cc8421dd6c5c899d35",
+  "records": [
+    {
+      "from_depth": 6,
+      "to_depth": 8,
+      "qp": 0,
+      "n_sequences": 53,
+      "mean_frame_median_gain_db": 0.06650663888828712,
+      "ci95_db": [
+        0.05683146384574662,
+        0.0760961902902635
+      ]
+    },
+    {
+      "from_depth": 6,
+      "to_depth": 8,
+      "qp": 16,
+      "n_sequences": 53,
+      "mean_frame_median_gain_db": 0.08070789742893177,
+      "ci95_db": [
+        0.07043470450677762,
+        0.09179334153912785
+      ]
+    },
+    {
+      "from_depth": 6,
+      "to_depth": 8,
+      "qp": 32,
+      "n_sequences": 53,
+      "mean_frame_median_gain_db": 0.10230506571682701,
+      "ci95_db": [
+        0.0901857814798538,
+        0.1148273093783417
+      ]
+    },
+    {
+      "from_depth": 6,
+      "to_depth": 8,
+      "qp": 48,
+      "n_sequences": 53,
+      "mean_frame_median_gain_db": 0.11546260799533739,
+      "ci95_db": [
+        0.10049360338220048,
+        0.1307407934667697
+      ]
+    },
+    {
+      "from_depth": 6,
+      "to_depth": 8,
+      "qp": 63,
+      "n_sequences": 53,
+      "mean_frame_median_gain_db": 0.13151045345889728,
+      "ci95_db": [
+        0.11158806378422663,
+        0.1526164537717493
+      ]
+    },
+    {
+      "from_depth": 8,
+      "to_depth": 10,
+      "qp": 0,
+      "n_sequences": 53,
+      "mean_frame_median_gain_db": 0.015868452336502643,
+      "ci95_db": [
+        0.011964508045707,
+        0.019446591422910373
+      ]
+    },
+    {
+      "from_depth": 8,
+      "to_depth": 10,
+      "qp": 16,
+      "n_sequences": 53,
+      "mean_frame_median_gain_db": 0.02262123552303582,
+      "ci95_db": [
+        0.018749667649632255,
+        0.026848428310262875
+      ]
+    },
+    {
+      "from_depth": 8,
+      "to_depth": 10,
+      "qp": 32,
+      "n_sequences": 53,
+      "mean_frame_median_gain_db": 0.03348897869346078,
+      "ci95_db": [
+        0.028920677275537193,
+        0.038312752041967574
+      ]
+    },
+    {
+      "from_depth": 8,
+      "to_depth": 10,
+      "qp": 48,
+      "n_sequences": 53,
+      "mean_frame_median_gain_db": 0.03944476836903059,
+      "ci95_db": [
+        0.03387223500739729,
+        0.04537635110356815
+      ]
+    },
+    {
+      "from_depth": 8,
+      "to_depth": 10,
+      "qp": 63,
+      "n_sequences": 53,
+      "mean_frame_median_gain_db": 0.04877907819034942,
+      "ci95_db": [
+        0.040766454224449696,
+        0.057468890782964605
+      ]
+    },
+    {
+      "from_depth": 10,
+      "to_depth": 12,
+      "qp": 0,
+      "n_sequences": 53,
+      "mean_frame_median_gain_db": 0.016698185096049683,
+      "ci95_db": [
+        0.01432400249717764,
+        0.019465009696889777
+      ]
+    },
+    {
+      "from_depth": 10,
+      "to_depth": 12,
+      "qp": 16,
+      "n_sequences": 53,
+      "mean_frame_median_gain_db": 0.021636942913492038,
+      "ci95_db": [
+        0.01887450607263138,
+        0.024764100992399538
+      ]
+    },
+    {
+      "from_depth": 10,
+      "to_depth": 12,
+      "qp": 32,
+      "n_sequences": 53,
+      "mean_frame_median_gain_db": 0.021892226789054312,
+      "ci95_db": [
+        0.017747236936978644,
+        0.026299406714811537
+      ]
+    },
+    {
+      "from_depth": 10,
+      "to_depth": 12,
+      "qp": 48,
+      "n_sequences": 53,
+      "mean_frame_median_gain_db": 0.023155511045046834,
+      "ci95_db": [
+        0.018709625324915116,
+        0.028070486949521935
+      ]
+    },
+    {
+      "from_depth": 10,
+      "to_depth": 12,
+      "qp": 63,
+      "n_sequences": 53,
+      "mean_frame_median_gain_db": 0.02319767357824959,
+      "ci95_db": [
+        0.015883973113742643,
+        0.031282692359671196
+      ]
+    }
+  ],
+  "qp63_minus_qp0": [
+    {
+      "from_depth": 6,
+      "qp63_minus_qp0_mean_db": 0.06500381457061015,
+      "ci95_db": [
+        0.04665155775174057,
+        0.08439485904266461
+      ]
+    },
+    {
+      "from_depth": 8,
+      "qp63_minus_qp0_mean_db": 0.03291062585384677,
+      "ci95_db": [
+        0.024691767681235727,
+        0.04162612647853277
+      ]
+    },
+    {
+      "from_depth": 10,
+      "qp63_minus_qp0_mean_db": 0.006499488482199905,
+      "ci95_db": [
+        -0.0009328709952824222,
+        0.014452273295576799
+      ]
+    }
+  ]
+}
