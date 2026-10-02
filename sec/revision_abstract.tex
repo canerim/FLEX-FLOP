@@ -1,3 +1,19 @@
 \begin{abstract}
-Neural image codecs typically decode an entire image with a fixed network depth, although the benefit of additional decoding layers can vary substantially across image regions. This paper introduces a spatially adaptive coding framework designed to exploit this variation. Instead of assigning the same synthesis complexity everywhere, our approach allocates decoder depth according to the reconstruction needs of individual regions. We investigate this idea in two forms. The first introduces spatial early exits into a shared decoder, where regions stop at different synthesis depths while reusing a common coded representation. The second selects among independently trained codecs with different decoder depths, allowing both the representation and synthesis network to adapt to each region. In this way, additional computation is spent only on regions where deeper decoding is useful. Building on these designs, we present \textbf{DepthLIC}, a learned image compression framework that turns decoder depth from a fixed architectural choice into a spatially adaptive coding decision.
+Learned image codecs usually apply one decoder depth to an entire image,
+although the benefit of additional synthesis varies across regions.
+We introduce \textbf{RegLIC}, a region-adaptive depth framework studied
+with the DCVC-UF intra codec. Its evaluated shared-exit path recovers one
+latent, executes later synthesis blocks only on surviving tiles, and
+assembles mixed-depth features through adapters and a common
+reconstruction head. Across 53 intra frames and five quality indices,
+learned routing saves \MainRouterSaving\% of modelled synthesis MACs at
+a nominal 0.1\,dB YCbCr-MSE-ratio target under per-source calibration;
+\MainPremium\ percentage points exceed ordered dithering, which mixes
+depths without content-dependent placement. A retrospective common
+delivered-loss cap preserves a routing margin, whereas a fixed-control
+QP32 replay does not yet resolve its paired advantage. We also define a
+complementary 2/4/6/8/10/12-block codec bank to study independent
+representation specialisation; its router is not part of the reported
+results. These controls distinguish savings from shallower decoding,
+spatial allocation, and the still-unmeasured effect on full-codec latency.
 \end{abstract}

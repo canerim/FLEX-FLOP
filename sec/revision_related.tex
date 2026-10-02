@@ -19,7 +19,7 @@ exits. AdaRevD predicts patch difficulty to choose a deblurring
 sub-decoder~\cite{mao2024adarevd}; RBQE terminates compressed-image
 enhancement early~\cite{xing2020rbqe}. Swift introduces compute-dependent
 early exits in a layered neural video decoder, with different output
-resolutions~\cite{dasari2022swift}. FLEX-UF retains one entropy-decoded latent
+resolutions~\cite{dasari2022swift}. RegLIC retains one entropy-decoded latent
 and fixed output resolution: adapters align conditional feature tiles
 before full-frame reconstruction. The proposed independent-depth bank
 also selects the analysis transform and entropy model.
@@ -34,7 +34,7 @@ and a router~\cite{tao2023adanic}.
 For video, cgSlimDecoder allocates decoder channels under complexity
 constraints~\cite{hu2023cgslim}. MixCompress routes among different-depth
 experts using only the rate embedding, allowing assignments to be
-cached independently of image content~\cite{ta2026mixcompress}. FLEX-UF varies
+cached independently of image content~\cite{ta2026mixcompress}. RegLIC varies
 \emph{depth} through nested, constant-width synthesis blocks and executes
 later stages on a shrinking tile batch. We measure the spatial placement
 premium over blind mixtures that already reduce average depth.
@@ -50,7 +50,7 @@ representation reuse from independent-expert specialisation.
 
 \paragraph{Preserving context across blocks.}
 Kim et al. derive overlap and boundary rules that preserve full-image
-CNN reconstruction~\cite{kim2026blockwise}. FLEX-UF instead accepts
+CNN reconstruction~\cite{kim2026blockwise}. RegLIC instead accepts
 context loss in its zero-halo suffix and learns a common repair/head.
 Its tiled all-deep output must therefore be evaluated separately from
 full-frame synthesis.

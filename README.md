@@ -1,4 +1,4 @@
-# FLEX-UF: Spatially Adaptive Early Exit in DCVC-UF
+# RegLIC: Region-Adaptive Learned Image Compression
 
 The active manuscript studies **spatially adaptive DCVC-UF computation**.
 Its evaluated mechanism is shared-latent early exit; the complementary

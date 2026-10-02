@@ -1,4 +1,4 @@
-# FLEX-UF figure system
+# RegLIC figure system
 
 The figures use 183 mm full-width and 89 mm single-column canvases, Liberation Sans type, embedded
 TrueType PDF fonts and editable SVG text. Quantitative plots and exact
