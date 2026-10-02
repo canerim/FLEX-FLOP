@@ -69,6 +69,8 @@ Depthwise eklenmiş ara sürümde **aynı** `videoSRC05`/QP32 haritası için k�
 
 Seam füzyonunu da içeren sürümde aynı noktada kısa makro ölçüm **308,8 → 113,3 ms**, medyan eşlenik oran **2,69×** verdi; burada stock kolun farklı GPU yükünde yavaşlaması oranı artırmıştır. Bu değeri ek-kazanç iddiası olarak kullanmıyoruz; yukarıdaki doğrudan seam ablation'ı esas alıyoruz. Beş CTC/QP durumunda son sürümün stock'a göre en büyük ham örnek farkı **6,26×10⁻⁷**, en büyük mutlak YUV farkı **2,09×10⁻⁷ dB**. [Makro ham kayıt](../../../results/triton_ctc_src05_qp32_fused_seam_shared.jsonl) · [son kalite denetimi](../../../results/triton_early_exit_quality_seam_audit.json).
 
+**Uçtan uca sınır:** önceki [tam codec zaman kaydında](../../../flexplus/results/runtime_full_uf.json) QP32'de entropi çözme + latent üretmenin ayrı medyanı yaklaşık **194,5 ms**, routed sentezin ayrı medyanı **315,0 ms** idi. Sentezin tüm QP32 dizilerinde 2,56× hızlandığı *varsayılsaydı*, Amdahl hesabı `(194,5+315)/(194,5+315/2,56) ≈ 1,60×` toplam decoder hızlanması verirdi. Bu yalnız temsili bir hesaptır: eski kayıt farklı GPU yüküyle alındı ve 2,56× yalnız bir karede ölçüldü. Gerçek uçtan uca kazanç için ayrı bitstream/kohort benchmarkı gerekiyor.
+
 ## Çalıştırma ve kalan doğrulama
 
 ```python
