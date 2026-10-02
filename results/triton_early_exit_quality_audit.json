@@ -1,0 +1,99 @@
+{
+  "timestamp_utc": "2026-10-02T18:36:03.937788+00:00",
+  "scope": "real CTC first frames, archived source-calibrated router maps, output equivalence only; no runtime claim",
+  "tf32_enabled": false,
+  "checkpoint": "runs/RECIPE512/ckpt_PIN_e15.pth.tar",
+  "fused_counts": {
+    "fused_ffn": 14,
+    "fused_plain_wsilu": 15,
+    "fused_trunk_blocks": 12,
+    "fused_adapters": 5
+  },
+  "cases": [
+    {
+      "sequence": "videoSRC05_1920x1080_25.yuv",
+      "qp": 0,
+      "hist": [
+        0,
+        0,
+        15,
+        14,
+        9,
+        2
+      ],
+      "max_abs_raw": 5.960464477539062e-07,
+      "mse_raw": 2.2632472593497833e-15,
+      "stock_yuv611_db": 32.77108623618923,
+      "fast_yuv611_db": 32.77108625332554,
+      "delta_yuv611_db": 1.7136315477728203e-08
+    },
+    {
+      "sequence": "videoSRC01_1920x1080_30.yuv",
+      "qp": 32,
+      "hist": [
+        0,
+        0,
+        40,
+        0,
+        0,
+        0
+      ],
+      "max_abs_raw": 4.172325134277344e-07,
+      "mse_raw": 1.9562638845399853e-15,
+      "stock_yuv611_db": 41.729348143352254,
+      "fast_yuv611_db": 41.729348135874126,
+      "delta_yuv611_db": -7.478128338789247e-09
+    },
+    {
+      "sequence": "videoSRC05_1920x1080_25.yuv",
+      "qp": 32,
+      "hist": [
+        0,
+        0,
+        13,
+        20,
+        4,
+        3
+      ],
+      "max_abs_raw": 4.470348358154297e-07,
+      "mse_raw": 1.16320048855294e-15,
+      "stock_yuv611_db": 37.62111131981216,
+      "fast_yuv611_db": 37.62111118897128,
+      "delta_yuv611_db": -1.3084088124060145e-07
+    },
+    {
+      "sequence": "videoSRC10_1920x1080_30.yuv",
+      "qp": 32,
+      "hist": [
+        0,
+        0,
+        0,
+        0,
+        17,
+        23
+      ],
+      "max_abs_raw": 6.258487701416016e-07,
+      "mse_raw": 2.0074056163128318e-15,
+      "stock_yuv611_db": 38.6535297388496,
+      "fast_yuv611_db": 38.65352963058165,
+      "delta_yuv611_db": -1.0826794749618784e-07
+    },
+    {
+      "sequence": "videoSRC05_1920x1080_25.yuv",
+      "qp": 63,
+      "hist": [
+        0,
+        0,
+        21,
+        16,
+        0,
+        3
+      ],
+      "max_abs_raw": 3.5762786865234375e-07,
+      "mse_raw": 7.608043050095429e-16,
+      "stock_yuv611_db": 41.092593044446225,
+      "fast_yuv611_db": 41.092592995380265,
+      "delta_yuv611_db": -4.906596018372511e-08
+    }
+  ]
+}
