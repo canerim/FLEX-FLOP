@@ -2,7 +2,7 @@
   "schema": 1,
   "checked_utc_date": "2026-10-03",
   "published_branch": "proof/early-exit-vs-released-20261003",
-  "checked_commit": "170ba6b61edd7c728ca4f3f60d96f342990600a7",
+  "checked_commit": "92b47a0c79928b1904687d5cf86ee2b0fa35b822",
   "public_https_repository_status": 200,
   "public_lfs_download": {
     "method": "anonymous Git LFS batch download from github.com, streamed independently of local Git LFS cache",
@@ -10,6 +10,8 @@
     "released_d12": {"bytes": 168845375, "sha256": "b3b900de23f30e4fc437010ddffe6a5413a56d6cfd97fb6235adbcd2b6973302", "verified": true}
   },
   "clean_checkout_cpu_tests": {
+    "microsoft_source_cloned_anonymously_with_sparse_checkout": true,
+    "microsoft_pinned_commit": "cbdae87a5445114cdc7f48816da63ea80bdeac40",
     "pinned_entropy_extension_compiled": true,
     "all_three_checkpoint_hashes_verified": true,
     "stem_qp_router_loaded": true,
