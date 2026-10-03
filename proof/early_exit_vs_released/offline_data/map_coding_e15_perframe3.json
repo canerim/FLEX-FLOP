@@ -1,0 +1,939 @@
+{
+  "ckpt": "runs/RECIPE512/ckpt_PIN_e15.pth.tar",
+  "router2": "runs/RECIPE512/routers2/v3_masked_lam1.3e-5.pth",
+  "budget_db": 0.1,
+  "n_frames": 53,
+  "router_compute_share_pct": 0.16288874189707633,
+  "rows": [
+    {
+      "kind": "B_perframe_beta",
+      "qp": 0,
+      "saving_pct_vs_release": 34.24509028313396,
+      "frames_over_budget": 0,
+      "n_frames": 53,
+      "extra_bits_per_frame": 8.0,
+      "db_mean": 0.08601144694369117,
+      "db_max": 0.09994445743722533
+    },
+    {
+      "kind": "A_perframe",
+      "qp": 0,
+      "saving_pct_vs_release": 34.96684353306608,
+      "frames_over_budget": 0,
+      "n_frames": 53,
+      "extra_bits_per_frame": 0.0,
+      "db_mean": 0.0858531325382292,
+      "db_max": 0.0999429396136439
+    },
+    {
+      "kind": "bits",
+      "qp": 0,
+      "rho": 1.0,
+      "tiles_per_frame": 33.301886792452834,
+      "overridden_per_frame": 33.301886792452834,
+      "router_agrees_on_signalled": 0.9229461756373938,
+      "bits_paper_3": 99.90566037735849,
+      "bits_uniform": 66.60377358490567,
+      "bits_router_context": {
+        "1.0": 180.63962144671746,
+        "1.5": 133.88797103234057,
+        "2.0": 112.09058419713435,
+        "3.0": 92.26328223606326,
+        "5.0": 78.8316403514934,
+        "10.0": 71.12510439134994
+      },
+      "best_T": 10.0,
+      "decoder_pays_router_pct": 0.16288874189707633
+    },
+    {
+      "kind": "search",
+      "qp": 0,
+      "top_m": 1,
+      "lam": 1.0,
+      "saving_pct_vs_release": 35.18597517373427,
+      "db_vs_uf": 0.09997680046121185
+    },
+    {
+      "kind": "search",
+      "qp": 0,
+      "top_m": 2,
+      "lam": 8.857845750753768e-05,
+      "saving_pct_vs_release": 35.90023843747265,
+      "db_vs_uf": 0.0998993726921672
+    },
+    {
+      "kind": "search",
+      "qp": 0,
+      "top_m": 3,
+      "lam": 9.066754500963725e-05,
+      "saving_pct_vs_release": 35.888925588355875,
+      "db_vs_uf": 0.09999426170515846
+    },
+    {
+      "kind": "search",
+      "qp": 0,
+      "top_m": 4,
+      "lam": 9.041641533258284e-05,
+      "saving_pct_vs_release": 35.89595713705387,
+      "db_vs_uf": 0.09994689358468607
+    },
+    {
+      "kind": "binary_refine",
+      "qp": 0,
+      "lam": 8.857845750753768e-05,
+      "saving_pct_vs_release": 35.90023843747265,
+      "db_vs_uf": 0.0998993726921672,
+      "p_second": 0.06742209631728045,
+      "bits_per_frame": 11.863095533060127,
+      "tiles_per_frame": 33.301886792452834
+    },
+    {
+      "kind": "D2_perframe",
+      "qp": 0,
+      "saving_pct_vs_release": 34.2421079141249,
+      "frames_over_budget": 4,
+      "n_frames": 53,
+      "bits_kt_per_frame": 18.622747732277755,
+      "db_mean": 0.08554631789909216,
+      "db_max": 0.12335942002233244
+    },
+    {
+      "kind": "binary_refine_ctx",
+      "qp": 0,
+      "bits_kt_iid": 11.65578980085513,
+      "bits_kt_ctx3": 12.175317449611159,
+      "bits_iid": 11.863095533060127,
+      "bits_ctx_same": 10.965568556468304,
+      "bits_ctx_heldout": 11.491697088767078,
+      "bits_iid_heldout_frames": 8.968333133321348,
+      "p_flip_by_ctx": [
+        0.047906091370558374,
+        0.21551724137931033,
+        0.4166666666666667
+      ]
+    },
+    {
+      "kind": "ternary_refine",
+      "qp": 0,
+      "lam": 9.066754500963725e-05,
+      "saving_pct_vs_release": 35.888925588355875,
+      "db_vs_uf": 0.09999426170515846,
+      "bits_kt_per_frame": 15.61713247553859,
+      "pick_hist": [
+        1632,
+        112,
+        21
+      ]
+    },
+    {
+      "kind": "D2_fallbackA_perframe",
+      "qp": 0,
+      "saving_pct_vs_release": 34.30823229488438,
+      "frames_over_budget": 0,
+      "frames_fallback": 4,
+      "n_frames": 53,
+      "bits_per_frame": 23.80496852106894
+    },
+    {
+      "kind": "A_perframe_ktbits",
+      "qp": 0,
+      "bits_kt4_per_frame": 26.974834031098624,
+      "bits_uniform_per_frame": 66.60377358490567
+    },
+    {
+      "kind": "C_perframe",
+      "qp": 0,
+      "rho": 0.1,
+      "saving_pct_vs_release": 34.06713611769327,
+      "frames_over_budget": 13,
+      "n_frames": 53,
+      "bits_per_frame": 22.392445041646422
+    },
+    {
+      "kind": "C_perframe",
+      "qp": 0,
+      "rho": 0.2,
+      "saving_pct_vs_release": 33.74033228500935,
+      "frames_over_budget": 9,
+      "n_frames": 53,
+      "bits_per_frame": 37.30729931440364
+    },
+    {
+      "kind": "C_perframe",
+      "qp": 0,
+      "rho": 0.35,
+      "saving_pct_vs_release": 34.32990803003412,
+      "frames_over_budget": 4,
+      "n_frames": 53,
+      "bits_per_frame": 54.473576106733546
+    },
+    {
+      "kind": "D3_perframe",
+      "qp": 0,
+      "saving_pct_vs_release": 34.47303880030355,
+      "frames_over_budget": 0,
+      "n_frames": 53,
+      "bits_kt_per_frame": 26.505701690322496
+    },
+    {
+      "kind": "bits_heldout_T",
+      "qp": 0,
+      "rho": 0.1,
+      "T": 10.0,
+      "bits_router_context": 23.5141658208974,
+      "bits_uniform": 22.582729704018597
+    },
+    {
+      "kind": "bits_heldout_T",
+      "qp": 0,
+      "rho": 1.0,
+      "T": 10.0,
+      "bits_router_context": 71.36587375860948,
+      "bits_uniform": 67.3076923076923
+    },
+    {
+      "kind": "B_perframe_beta",
+      "qp": 16,
+      "saving_pct_vs_release": 31.266748861142933,
+      "frames_over_budget": 0,
+      "n_frames": 53,
+      "extra_bits_per_frame": 8.0,
+      "db_mean": 0.0915180393872835,
+      "db_max": 0.09983517278346525
+    },
+    {
+      "kind": "A_perframe",
+      "qp": 16,
+      "saving_pct_vs_release": 32.29140380643449,
+      "frames_over_budget": 0,
+      "n_frames": 53,
+      "extra_bits_per_frame": 0.0,
+      "db_mean": 0.09257594797406588,
+      "db_max": 0.10000972334941093
+    },
+    {
+      "kind": "bits",
+      "qp": 16,
+      "rho": 1.0,
+      "tiles_per_frame": 33.301886792452834,
+      "overridden_per_frame": 33.301886792452834,
+      "router_agrees_on_signalled": 0.8776203966005666,
+      "bits_paper_3": 99.90566037735849,
+      "bits_uniform": 66.60377358490567,
+      "bits_router_context": {
+        "1.0": 103.32360717949193,
+        "1.5": 78.96704904151254,
+        "2.0": 68.61360784444325,
+        "3.0": 60.80403262109689,
+        "5.0": 58.03670099996171,
+        "10.0": 59.67429061205882
+      },
+      "best_T": 5.0,
+      "decoder_pays_router_pct": 0.16288874189707633
+    },
+    {
+      "kind": "search",
+      "qp": 16,
+      "top_m": 1,
+      "lam": 1.0,
+      "saving_pct_vs_release": 30.984863020339102,
+      "db_vs_uf": 0.09999604024133592
+    },
+    {
+      "kind": "search",
+      "qp": 16,
+      "top_m": 2,
+      "lam": 3.315180765639438e-05,
+      "saving_pct_vs_release": 31.965151148022347,
+      "db_vs_uf": 0.09998614376164833
+    },
+    {
+      "kind": "search",
+      "qp": 16,
+      "top_m": 3,
+      "lam": 3.475572702882259e-05,
+      "saving_pct_vs_release": 32.07893180397322,
+      "db_vs_uf": 0.09959913688307663
+    },
+    {
+      "kind": "search",
+      "qp": 16,
+      "top_m": 4,
+      "lam": 3.475572702882259e-05,
+      "saving_pct_vs_release": 32.10749569928871,
+      "db_vs_uf": 0.099640276037016
+    },
+    {
+      "kind": "binary_refine",
+      "qp": 16,
+      "lam": 3.315180765639438e-05,
+      "saving_pct_vs_release": 31.965151148022347,
+      "db_vs_uf": 0.09998614376164833,
+      "p_second": 0.10424929178470255,
+      "bits_per_frame": 16.06225233975006,
+      "tiles_per_frame": 33.301886792452834
+    },
+    {
+      "kind": "D2_perframe",
+      "qp": 16,
+      "saving_pct_vs_release": 31.01170238553454,
+      "frames_over_budget": 5,
+      "n_frames": 53,
+      "bits_kt_per_frame": 22.23866846707051,
+      "db_mean": 0.09080900890867347,
+      "db_max": 0.1306304041269492
+    },
+    {
+      "kind": "binary_refine_ctx",
+      "qp": 16,
+      "bits_kt_iid": 16.287742781237448,
+      "bits_kt_ctx3": 16.9190459666609,
+      "bits_iid": 16.06225233975006,
+      "bits_ctx_same": 15.50916612159419,
+      "bits_ctx_heldout": 16.091969919004313,
+      "bits_iid_heldout_frames": 13.822280108750439,
+      "p_flip_by_ctx": [
+        0.08293838862559241,
+        0.20114942528735633,
+        0.35
+      ]
+    },
+    {
+      "kind": "ternary_refine",
+      "qp": 16,
+      "lam": 3.475572702882259e-05,
+      "saving_pct_vs_release": 32.07893180397322,
+      "db_vs_uf": 0.09959913688307663,
+      "bits_kt_per_frame": 21.980763983633857,
+      "pick_hist": [
+        1550,
+        163,
+        52
+      ]
+    },
+    {
+      "kind": "D2_fallbackA_perframe",
+      "qp": 16,
+      "saving_pct_vs_release": 31.089219125757687,
+      "frames_over_budget": 0,
+      "frames_fallback": 5,
+      "n_frames": 53,
+      "bits_per_frame": 27.004494648583986
+    },
+    {
+      "kind": "A_perframe_ktbits",
+      "qp": 16,
+      "bits_kt4_per_frame": 34.88385390373633,
+      "bits_uniform_per_frame": 66.60377358490567
+    },
+    {
+      "kind": "C_perframe",
+      "qp": 16,
+      "rho": 0.1,
+      "saving_pct_vs_release": 30.2218505356007,
+      "frames_over_budget": 15,
+      "n_frames": 53,
+      "bits_per_frame": 22.392445041646422
+    },
+    {
+      "kind": "C_perframe",
+      "qp": 16,
+      "rho": 0.2,
+      "saving_pct_vs_release": 30.217892899649208,
+      "frames_over_budget": 10,
+      "n_frames": 53,
+      "bits_per_frame": 37.30729931440364
+    },
+    {
+      "kind": "C_perframe",
+      "qp": 16,
+      "rho": 0.35,
+      "saving_pct_vs_release": 31.220031865183923,
+      "frames_over_budget": 3,
+      "n_frames": 53,
+      "bits_per_frame": 54.473576106733546
+    },
+    {
+      "kind": "D3_perframe",
+      "qp": 16,
+      "saving_pct_vs_release": 31.761969328872322,
+      "frames_over_budget": 0,
+      "n_frames": 53,
+      "bits_kt_per_frame": 31.33700830333649
+    },
+    {
+      "kind": "bits_heldout_T",
+      "qp": 16,
+      "rho": 0.1,
+      "T": 10.0,
+      "bits_router_context": 22.66789438853433,
+      "bits_uniform": 22.582729704018597
+    },
+    {
+      "kind": "bits_heldout_T",
+      "qp": 16,
+      "rho": 1.0,
+      "T": 5.0,
+      "bits_router_context": 56.98577579168173,
+      "bits_uniform": 67.3076923076923
+    },
+    {
+      "kind": "B_perframe_beta",
+      "qp": 32,
+      "saving_pct_vs_release": 26.749748509830905,
+      "frames_over_budget": 0,
+      "n_frames": 53,
+      "extra_bits_per_frame": 8.0,
+      "db_mean": 0.09335060423799527,
+      "db_max": 0.09998847409033576
+    },
+    {
+      "kind": "A_perframe",
+      "qp": 32,
+      "saving_pct_vs_release": 28.393356305248336,
+      "frames_over_budget": 0,
+      "n_frames": 53,
+      "extra_bits_per_frame": 0.0,
+      "db_mean": 0.09474252212807244,
+      "db_max": 0.10018376098694678
+    },
+    {
+      "kind": "bits",
+      "qp": 32,
+      "rho": 1.0,
+      "tiles_per_frame": 33.301886792452834,
+      "overridden_per_frame": 33.301886792452834,
+      "router_agrees_on_signalled": 0.7943342776203967,
+      "bits_paper_3": 99.90566037735849,
+      "bits_uniform": 66.60377358490567,
+      "bits_router_context": {
+        "1.0": 38.102076770164,
+        "1.5": 32.992914800037944,
+        "2.0": 32.07649267517593,
+        "3.0": 33.799499701357114,
+        "5.0": 39.37483787536621,
+        "10.0": 48.68983173370361
+      },
+      "best_T": 2.0,
+      "decoder_pays_router_pct": 0.16288874189707633
+    },
+    {
+      "kind": "search",
+      "qp": 32,
+      "top_m": 1,
+      "lam": 1.0,
+      "saving_pct_vs_release": 25.502379098028506,
+      "db_vs_uf": 0.09997582664045523
+    },
+    {
+      "kind": "search",
+      "qp": 32,
+      "top_m": 2,
+      "lam": 1.3745953310716728e-05,
+      "saving_pct_vs_release": 27.0440140985093,
+      "db_vs_uf": 0.09994960210795673
+    },
+    {
+      "kind": "search",
+      "qp": 32,
+      "top_m": 3,
+      "lam": 1.3719828075409168e-05,
+      "saving_pct_vs_release": 27.29733113972646,
+      "db_vs_uf": 0.09994414104324467
+    },
+    {
+      "kind": "search",
+      "qp": 32,
+      "top_m": 4,
+      "lam": 1.3719828075409168e-05,
+      "saving_pct_vs_release": 27.313147063525218,
+      "db_vs_uf": 0.09983579427847322
+    },
+    {
+      "kind": "binary_refine",
+      "qp": 32,
+      "lam": 1.3745953310716728e-05,
+      "saving_pct_vs_release": 27.0440140985093,
+      "db_vs_uf": 0.09994960210795673,
+      "p_second": 0.17790368271954674,
+      "bits_per_frame": 22.49441025371718,
+      "tiles_per_frame": 33.301886792452834
+    },
+    {
+      "kind": "D2_perframe",
+      "qp": 32,
+      "saving_pct_vs_release": 26.246278084495046,
+      "frames_over_budget": 7,
+      "n_frames": 53,
+      "bits_kt_per_frame": 25.63070932546116,
+      "db_mean": 0.0910008108858464,
+      "db_max": 0.13755920965781154
+    },
+    {
+      "kind": "binary_refine_ctx",
+      "qp": 32,
+      "bits_kt_iid": 21.660835774133425,
+      "bits_kt_ctx3": 22.40670563545524,
+      "bits_iid": 22.49441025371718,
+      "bits_ctx_same": 21.024781748396578,
+      "bits_ctx_heldout": 20.908815231546306,
+      "bits_iid_heldout_frames": 18.0151453198896,
+      "p_flip_by_ctx": [
+        0.11867704280155641,
+        0.32109004739336494,
+        0.45081967213114754
+      ]
+    },
+    {
+      "kind": "ternary_refine",
+      "qp": 32,
+      "lam": 1.3719828075409168e-05,
+      "saving_pct_vs_release": 27.29733113972646,
+      "db_vs_uf": 0.09994414104324467,
+      "bits_kt_per_frame": 30.258121120062444,
+      "pick_hist": [
+        1404,
+        268,
+        93
+      ]
+    },
+    {
+      "kind": "D2_fallbackA_perframe",
+      "qp": 32,
+      "saving_pct_vs_release": 26.299370978059518,
+      "frames_over_budget": 0,
+      "frames_fallback": 7,
+      "n_frames": 53,
+      "bits_per_frame": 32.45054955987659
+    },
+    {
+      "kind": "A_perframe_ktbits",
+      "qp": 32,
+      "bits_kt4_per_frame": 44.82706637892822,
+      "bits_uniform_per_frame": 66.60377358490567
+    },
+    {
+      "kind": "C_perframe",
+      "qp": 32,
+      "rho": 0.1,
+      "saving_pct_vs_release": 25.37702160156099,
+      "frames_over_budget": 18,
+      "n_frames": 53,
+      "bits_per_frame": 22.392445041646422
+    },
+    {
+      "kind": "C_perframe",
+      "qp": 32,
+      "rho": 0.2,
+      "saving_pct_vs_release": 25.81950028082211,
+      "frames_over_budget": 8,
+      "n_frames": 53,
+      "bits_per_frame": 37.30729931440364
+    },
+    {
+      "kind": "C_perframe",
+      "qp": 32,
+      "rho": 0.35,
+      "saving_pct_vs_release": 26.97641260313639,
+      "frames_over_budget": 6,
+      "n_frames": 53,
+      "bits_per_frame": 54.473576106733546
+    },
+    {
+      "kind": "D3_perframe",
+      "qp": 32,
+      "saving_pct_vs_release": 28.03896886092413,
+      "frames_over_budget": 1,
+      "n_frames": 53,
+      "bits_kt_per_frame": 39.37246308785917
+    },
+    {
+      "kind": "bits_heldout_T",
+      "qp": 32,
+      "rho": 0.1,
+      "T": 10.0,
+      "bits_router_context": 21.701126515778984,
+      "bits_uniform": 22.582729704018597
+    },
+    {
+      "kind": "bits_heldout_T",
+      "qp": 32,
+      "rho": 1.0,
+      "T": 2.0,
+      "bits_router_context": 31.257371713264057,
+      "bits_uniform": 67.3076923076923
+    },
+    {
+      "kind": "B_perframe_beta",
+      "qp": 48,
+      "saving_pct_vs_release": 23.80545596001384,
+      "frames_over_budget": 0,
+      "n_frames": 53,
+      "extra_bits_per_frame": 8.0,
+      "db_mean": 0.09359037362337712,
+      "db_max": 0.10002743098588658
+    },
+    {
+      "kind": "A_perframe",
+      "qp": 48,
+      "saving_pct_vs_release": 26.00513629193576,
+      "frames_over_budget": 0,
+      "n_frames": 53,
+      "extra_bits_per_frame": 0.0,
+      "db_mean": 0.0932738709409548,
+      "db_max": 0.1000557630540726
+    },
+    {
+      "kind": "bits",
+      "qp": 48,
+      "rho": 1.0,
+      "tiles_per_frame": 33.301886792452834,
+      "overridden_per_frame": 33.301886792452834,
+      "router_agrees_on_signalled": 0.7059490084985836,
+      "bits_paper_3": 99.90566037735849,
+      "bits_uniform": 66.60377358490567,
+      "bits_router_context": {
+        "1.0": 37.61733499648396,
+        "1.5": 30.99876644935037,
+        "2.0": 29.104477058358068,
+        "3.0": 29.711344958195145,
+        "5.0": 34.731491255872655,
+        "10.0": 44.6758234995716
+      },
+      "best_T": 2.0,
+      "decoder_pays_router_pct": 0.16288874189707633
+    },
+    {
+      "kind": "search",
+      "qp": 48,
+      "top_m": 1,
+      "lam": 1.0,
+      "saving_pct_vs_release": 22.92939210837742,
+      "db_vs_uf": 0.0999704741011813
+    },
+    {
+      "kind": "search",
+      "qp": 48,
+      "top_m": 2,
+      "lam": 7.885772447480122e-06,
+      "saving_pct_vs_release": 25.38194127802579,
+      "db_vs_uf": 0.09997231722370072
+    },
+    {
+      "kind": "search",
+      "qp": 48,
+      "top_m": 3,
+      "lam": 7.787689810355956e-06,
+      "saving_pct_vs_release": 25.958547052347434,
+      "db_vs_uf": 0.09994426211517937
+    },
+    {
+      "kind": "search",
+      "qp": 48,
+      "top_m": 4,
+      "lam": 7.65516551837122e-06,
+      "saving_pct_vs_release": 26.034537463817955,
+      "db_vs_uf": 0.09995903974434114
+    },
+    {
+      "kind": "binary_refine",
+      "qp": 48,
+      "lam": 7.885772447480122e-06,
+      "saving_pct_vs_release": 25.38194127802579,
+      "db_vs_uf": 0.09997231722370072,
+      "p_second": 0.2413597733711048,
+      "bits_per_frame": 26.55140225649753,
+      "tiles_per_frame": 33.301886792452834
+    },
+    {
+      "kind": "D2_perframe",
+      "qp": 48,
+      "saving_pct_vs_release": 24.049144039559923,
+      "frames_over_budget": 3,
+      "n_frames": 53,
+      "bits_kt_per_frame": 27.885234374037324,
+      "db_mean": 0.09028217243270091,
+      "db_max": 0.1594939072515186
+    },
+    {
+      "kind": "binary_refine_ctx",
+      "qp": 48,
+      "bits_kt_iid": 24.7012730623233,
+      "bits_kt_ctx3": 25.286023472723468,
+      "bits_iid": 26.55140225649753,
+      "bits_ctx_same": 24.59768677223802,
+      "bits_ctx_heldout": 24.207903477425095,
+      "bits_iid_heldout_frames": 20.209719696347477,
+      "p_flip_by_ctx": [
+        0.15499573014517506,
+        0.3845338983050847,
+        0.516
+      ]
+    },
+    {
+      "kind": "ternary_refine",
+      "qp": 48,
+      "lam": 7.787689810355956e-06,
+      "saving_pct_vs_release": 25.958547052347434,
+      "db_vs_uf": 0.09994426211517937,
+      "bits_kt_per_frame": 36.1588963966476,
+      "pick_hist": [
+        1269,
+        313,
+        183
+      ]
+    },
+    {
+      "kind": "D2_fallbackA_perframe",
+      "qp": 48,
+      "saving_pct_vs_release": 23.980856235118292,
+      "frames_over_budget": 0,
+      "frames_fallback": 3,
+      "n_frames": 53,
+      "bits_per_frame": 31.65200914131308
+    },
+    {
+      "kind": "A_perframe_ktbits",
+      "qp": 48,
+      "bits_kt4_per_frame": 49.82651731422197,
+      "bits_uniform_per_frame": 66.60377358490567
+    },
+    {
+      "kind": "C_perframe",
+      "qp": 48,
+      "rho": 0.1,
+      "saving_pct_vs_release": 22.80641969739367,
+      "frames_over_budget": 18,
+      "n_frames": 53,
+      "bits_per_frame": 22.392445041646422
+    },
+    {
+      "kind": "C_perframe",
+      "qp": 48,
+      "rho": 0.2,
+      "saving_pct_vs_release": 23.417728420519488,
+      "frames_over_budget": 11,
+      "n_frames": 53,
+      "bits_per_frame": 37.30729931440364
+    },
+    {
+      "kind": "C_perframe",
+      "qp": 48,
+      "rho": 0.35,
+      "saving_pct_vs_release": 24.46373674199367,
+      "frames_over_budget": 5,
+      "n_frames": 53,
+      "bits_per_frame": 54.473576106733546
+    },
+    {
+      "kind": "D3_perframe",
+      "qp": 48,
+      "saving_pct_vs_release": 25.480699720068806,
+      "frames_over_budget": 0,
+      "n_frames": 53,
+      "bits_kt_per_frame": 42.79268456129297
+    },
+    {
+      "kind": "bits_heldout_T",
+      "qp": 48,
+      "rho": 0.1,
+      "T": 5.0,
+      "bits_router_context": 21.549852171683167,
+      "bits_uniform": 22.582729704018597
+    },
+    {
+      "kind": "bits_heldout_T",
+      "qp": 48,
+      "rho": 1.0,
+      "T": 2.0,
+      "bits_router_context": 28.84539275079106,
+      "bits_uniform": 67.3076923076923
+    },
+    {
+      "kind": "B_perframe_beta",
+      "qp": 63,
+      "saving_pct_vs_release": 21.035121027974473,
+      "frames_over_budget": 2,
+      "n_frames": 53,
+      "extra_bits_per_frame": 8.0,
+      "db_mean": 0.09479456923353596,
+      "db_max": 0.13873926238596299
+    },
+    {
+      "kind": "A_perframe",
+      "qp": 63,
+      "saving_pct_vs_release": 24.843632725049865,
+      "frames_over_budget": 1,
+      "n_frames": 53,
+      "extra_bits_per_frame": 0.0,
+      "db_mean": 0.09615792205875018,
+      "db_max": 0.13873926238596299
+    },
+    {
+      "kind": "bits",
+      "qp": 63,
+      "rho": 1.0,
+      "tiles_per_frame": 33.301886792452834,
+      "overridden_per_frame": 33.301886792452834,
+      "router_agrees_on_signalled": 0.6147308781869688,
+      "bits_paper_3": 99.90566037735849,
+      "bits_uniform": 66.60377358490567,
+      "bits_router_context": {
+        "1.0": 61.06096762471683,
+        "1.5": 45.95610751466439,
+        "2.0": 39.64908350849489,
+        "3.0": 35.69709839657793,
+        "5.0": 37.14229991863359,
+        "10.0": 44.880971440729105
+      },
+      "best_T": 3.0,
+      "decoder_pays_router_pct": 0.16288874189707633
+    },
+    {
+      "kind": "search",
+      "qp": 63,
+      "top_m": 1,
+      "lam": 1.0,
+      "saving_pct_vs_release": 19.496632859391987,
+      "db_vs_uf": 0.09980445273466548
+    },
+    {
+      "kind": "search",
+      "qp": 63,
+      "top_m": 2,
+      "lam": 4.661407956518815e-06,
+      "saving_pct_vs_release": 23.789273905304242,
+      "db_vs_uf": 0.09994232260077349
+    },
+    {
+      "kind": "search",
+      "qp": 63,
+      "top_m": 3,
+      "lam": 4.780566314366297e-06,
+      "saving_pct_vs_release": 24.653208705614198,
+      "db_vs_uf": 0.09996133482189111
+    },
+    {
+      "kind": "search",
+      "qp": 63,
+      "top_m": 4,
+      "lam": 4.645103445000132e-06,
+      "saving_pct_vs_release": 24.809723755098737,
+      "db_vs_uf": 0.0999507222781485
+    },
+    {
+      "kind": "binary_refine",
+      "qp": 63,
+      "lam": 4.661407956518815e-06,
+      "saving_pct_vs_release": 23.789273905304242,
+      "db_vs_uf": 0.09994232260077349,
+      "p_second": 0.3495750708215297,
+      "bits_per_frame": 31.093571574357497,
+      "tiles_per_frame": 33.301886792452834
+    },
+    {
+      "kind": "D2_perframe",
+      "qp": 63,
+      "saving_pct_vs_release": 21.602230545305865,
+      "frames_over_budget": 4,
+      "n_frames": 53,
+      "bits_kt_per_frame": 28.158753766473975,
+      "db_mean": 0.08829131847252925,
+      "db_max": 0.13873926238596299
+    },
+    {
+      "kind": "binary_refine_ctx",
+      "qp": 63,
+      "bits_kt_iid": 25.964720474057852,
+      "bits_kt_ctx3": 26.263058730199667,
+      "bits_iid": 31.093571574357497,
+      "bits_ctx_same": 25.70756191111034,
+      "bits_ctx_heldout": 25.055632424727335,
+      "bits_iid_heldout_frames": 21.531510435194903,
+      "p_flip_by_ctx": [
+        0.15654450261780103,
+        0.5026690391459074,
+        0.7430278884462151
+      ]
+    },
+    {
+      "kind": "ternary_refine",
+      "qp": 63,
+      "lam": 4.780566314366297e-06,
+      "saving_pct_vs_release": 24.653208705614198,
+      "db_vs_uf": 0.09996133482189111,
+      "bits_kt_per_frame": 39.17850310578095,
+      "pick_hist": [
+        1099,
+        416,
+        250
+      ]
+    },
+    {
+      "kind": "D2_fallbackA_perframe",
+      "qp": 63,
+      "saving_pct_vs_release": 21.9363372965139,
+      "frames_over_budget": 1,
+      "frames_fallback": 4,
+      "n_frames": 53,
+      "bits_per_frame": 31.88226255996383
+    },
+    {
+      "kind": "A_perframe_ktbits",
+      "qp": 63,
+      "bits_kt4_per_frame": 51.09344920371863,
+      "bits_uniform_per_frame": 66.60377358490567
+    },
+    {
+      "kind": "C_perframe",
+      "qp": 63,
+      "rho": 0.1,
+      "saving_pct_vs_release": 19.757553834781216,
+      "frames_over_budget": 15,
+      "n_frames": 53,
+      "bits_per_frame": 22.392445041646422
+    },
+    {
+      "kind": "C_perframe",
+      "qp": 63,
+      "rho": 0.2,
+      "saving_pct_vs_release": 20.486149204048232,
+      "frames_over_budget": 12,
+      "n_frames": 53,
+      "bits_per_frame": 37.30729931440364
+    },
+    {
+      "kind": "C_perframe",
+      "qp": 63,
+      "rho": 0.35,
+      "saving_pct_vs_release": 22.086165604547393,
+      "frames_over_budget": 3,
+      "n_frames": 53,
+      "bits_per_frame": 54.473576106733546
+    },
+    {
+      "kind": "D3_perframe",
+      "qp": 63,
+      "saving_pct_vs_release": 23.854264966542875,
+      "frames_over_budget": 1,
+      "n_frames": 53,
+      "bits_kt_per_frame": 43.92230742294697
+    },
+    {
+      "kind": "bits_heldout_T",
+      "qp": 63,
+      "rho": 0.1,
+      "T": 10.0,
+      "bits_router_context": 21.735884599874428,
+      "bits_uniform": 22.582729704018597
+    },
+    {
+      "kind": "bits_heldout_T",
+      "qp": 63,
+      "rho": 1.0,
+      "T": 3.0,
+      "bits_router_context": 34.47067747838222,
+      "bits_uniform": 67.3076923076923
+    }
+  ]
+}

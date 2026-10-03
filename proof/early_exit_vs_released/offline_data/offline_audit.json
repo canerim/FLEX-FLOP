@@ -2,7 +2,10 @@
   "schema": 1,
   "gpu_used": false,
   "routing_source_sha256": "b4f1c074c78b802234acfafccf218b85fcf3d6d704c327dbb27c18578bfd711f",
+  "routing_raw_qp_rows_sha256": "1e13761e2ef4ba9cc5fce32598dbf6989ebe58274d4f81f8d80c6ca70aa5be39",
+  "routing_generator_sha256": "e7743a2113f56d8d0211c8481e813b587f01aa6ab7d49dc04167823aa88f17c6",
   "seam_source_sha256": "8278e4f31dd26d6b627533f83be870f42a55eb00207b16adefa28ff691eb98e0",
+  "seam_generator_sha256": "452368a7a878917b717fe1606e9179dcf77521bec4d0a168c95e814fd7979054",
   "budget_rule": "per-frame 0.1 dB proxy from existing true-decode verified routing sweep; 265 frame-QP cases",
   "side_bits_scope": "estimated adaptive code lengths, not emitted map bytes",
   "saving_scope": "analytical cost model, not measured latency",
@@ -80,75 +83,95 @@
       ]
     }
   ],
-  "seam_scope": "whole-frame PSNR gap; cannot isolate border-band distortion from these records",
+  "seam_scope": "whole-frame PSNR gap under all-deep or RANDOM mixed exits; routed is only a source-file label and does NOT mean a trained router; cannot isolate border-band distortion",
   "seam": [
     {
       "qp": 0,
       "arm": "deepest",
+      "source_arm_label": "deepest",
       "n_frames": 53,
+      "map_source": "all tiles at deepest exit",
       "median_full_frame_gap_to_released_db": 0.025261162228410683,
       "median_repair_gain_db": 0.0019366769009216966
     },
     {
       "qp": 0,
-      "arm": "routed",
+      "arm": "random_mixed",
+      "source_arm_label": "routed",
       "n_frames": 53,
+      "map_source": "random uniform exit IDs, seeded by frame and QP; NOT learned router",
       "median_full_frame_gap_to_released_db": 0.05936042228919547,
       "median_repair_gain_db": 0.002183947501464445
     },
     {
       "qp": 16,
       "arm": "deepest",
+      "source_arm_label": "deepest",
       "n_frames": 53,
+      "map_source": "all tiles at deepest exit",
       "median_full_frame_gap_to_released_db": 0.029311962003923497,
       "median_repair_gain_db": 0.001673788374084495
     },
     {
       "qp": 16,
-      "arm": "routed",
+      "arm": "random_mixed",
+      "source_arm_label": "routed",
       "n_frames": 53,
+      "map_source": "random uniform exit IDs, seeded by frame and QP; NOT learned router",
       "median_full_frame_gap_to_released_db": 0.08932365082939953,
       "median_repair_gain_db": 0.0017518524415791603
     },
     {
       "qp": 32,
       "arm": "deepest",
+      "source_arm_label": "deepest",
       "n_frames": 53,
+      "map_source": "all tiles at deepest exit",
       "median_full_frame_gap_to_released_db": 0.03085755676652724,
       "median_repair_gain_db": 0.0021432409407680098
     },
     {
       "qp": 32,
-      "arm": "routed",
+      "arm": "random_mixed",
+      "source_arm_label": "routed",
       "n_frames": 53,
+      "map_source": "random uniform exit IDs, seeded by frame and QP; NOT learned router",
       "median_full_frame_gap_to_released_db": 0.1003670349274941,
       "median_repair_gain_db": 0.0025153292449360265
     },
     {
       "qp": 48,
       "arm": "deepest",
+      "source_arm_label": "deepest",
       "n_frames": 53,
+      "map_source": "all tiles at deepest exit",
       "median_full_frame_gap_to_released_db": 0.026537150119402497,
       "median_repair_gain_db": 0.0029419779096855336
     },
     {
       "qp": 48,
-      "arm": "routed",
+      "arm": "random_mixed",
+      "source_arm_label": "routed",
       "n_frames": 53,
+      "map_source": "random uniform exit IDs, seeded by frame and QP; NOT learned router",
       "median_full_frame_gap_to_released_db": 0.10558846571993286,
       "median_repair_gain_db": 0.003558720841461138
     },
     {
       "qp": 63,
       "arm": "deepest",
+      "source_arm_label": "deepest",
       "n_frames": 53,
+      "map_source": "all tiles at deepest exit",
       "median_full_frame_gap_to_released_db": 0.025925620225081047,
       "median_repair_gain_db": 0.003779379347172096
     },
     {
       "qp": 63,
-      "arm": "routed",
+      "arm": "random_mixed",
+      "source_arm_label": "routed",
       "n_frames": 53,
+      "map_source": "random uniform exit IDs, seeded by frame and QP; NOT learned router",
       "median_full_frame_gap_to_released_db": 0.11596792923480592,
       "median_repair_gain_db": 0.004339379246502517
     }

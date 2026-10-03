@@ -125,8 +125,11 @@ clocks, temperature, power limit, thread count and raw paired samples.
 
 The [research note](RESEARCH_20261003.md) gives the GPU-free experiment priorities
 and the reasons for each runtime control. `offline_audit.py` recomputes its
-budget-reliability and whole-frame seam summaries from the tracked source JSONs
-without importing Torch or touching a GPU.
+budget-reliability from the tracked **raw per-QP experiment rows** and verifies
+the published aggregate; it separately summarizes the tracked seam JSON,
+without importing Torch or touching a GPU. The seam JSON's source column named
+`routed` is a **random mixed-exit stress test**, as its pinned generator shows;
+it is not a learned-router quality result.
 
 `benchmark.py` compares the Microsoft released synthesis network to the trained e15 early-exit network, with and without the inference-only Triton patches. The source is the first `videoSRC05` CTC frame, padded identically. QP and the archived budget-0.1 router map are fixed for each run. All arms decode **one identical latent**; the script refuses to proceed unless every non-decoder checkpoint tensor in e15 equals the released tensor exactly. This isolates synthesis. The result does not include analysis encoding, hyperprior/rANS, router decision, stream I/O, or network transfer. It is therefore a decoder-synthesis speedup, not an end-to-end codec speedup.
 
