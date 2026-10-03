@@ -50,6 +50,7 @@ def main():
     subprocess.run([sys.executable, str(REPO/'proof/depth_bitstream/build_entropy.py'),
                     '--upstream', str(args.upstream), '--out', str(args.extension)], check=True)
     smoke = None
+    shared_tensors_exact = None
     if not args.skip_cpu_smoke:
         import numpy as np
         from PIL import Image
@@ -60,6 +61,23 @@ def main():
         torch.set_num_threads(1)
         net, info = load_model(HERE/'artifacts/released_cvpr2026_image.pth.tar',
                                12, args.upstream)
+        sys.path.insert(0, str(REPO))
+        from flexuf.config import FlexUFConfig
+        from flexuf.model import FlexUFIntra, load_flexuf_state
+        e15_checkpoint = torch.load(HERE/'artifacts/e15_epoch15.pth.tar',
+                                    map_location='cpu', weights_only=False)
+        e15 = FlexUFIntra(FlexUFConfig(**e15_checkpoint['config'])).eval()
+        load_flexuf_state(e15, e15_checkpoint)
+        release_state = net.state_dict()
+        shared = {name: value for name, value in release_state.items()
+                  if not name.startswith('dec.')}
+        unequal = [name for name, value in shared.items()
+                   if name not in e15.state_dict() or
+                   not torch.equal(value, e15.state_dict()[name])]
+        if unequal:
+            raise RuntimeError(f'Released/e15 shared weights differ: {unequal[:5]}')
+        shared_tensors_exact = len(shared)
+        del e15, e15_checkpoint
         from src.utils.transforms import rgb2ycbcr_np
         codec = ReferenceCodec(net, info['sha256'], args.extension)
         image = REPO/'data/kodak/kodim01.png'
@@ -80,6 +98,7 @@ def main():
         'upstream': str(args.upstream.resolve()), 'commit': head,
         'extension': str(args.extension.resolve()),
         'checkpoint_sha256': EXPECTED,
+        'shared_nondecoder_tensors_exact': shared_tensors_exact,
         'cpu_smoke': smoke,
     }
     print(json.dumps(record, indent=2))

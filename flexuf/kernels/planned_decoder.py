@@ -32,12 +32,34 @@ def make_tile_plan(exit_map_cpu, *, n_tiles: int, split_depth: int,
     em = torch.as_tensor(exit_map_cpu, dtype=torch.long, device='cpu')
     if em.shape != (n_tiles,):
         raise ValueError(f'exit_map shape {tuple(em.shape)}, expected ({n_tiles},)')
-    em = em.clamp(min=split_depth, max=num_exits-1)
-    order_cpu = torch.argsort(em, descending=True, stable=True)
-    sorted_em = em[order_cpu]
-    inverse_cpu = torch.empty_like(order_cpu)
-    inverse_cpu[order_cpu] = torch.arange(n_tiles)
-    bounds = tuple(int((sorted_em > g).sum()) for g in range(split_depth, num_exits))
+    if n_tiles <= 64:
+        # Maps for the predeclared CTC cohort contain 8--40 tiles. A stable
+        # bucket pass avoids several small CPU tensor kernels and dispatches;
+        # the histogram gives all suffix survivor bounds in the same pass.
+        buckets = [[] for _ in range(num_exits)]
+        for tile, value in enumerate(em.tolist()):
+            buckets[min(num_exits - 1, max(split_depth, value))].append(tile)
+        order = [tile for mode in range(num_exits - 1, split_depth - 1, -1)
+                 for tile in buckets[mode]]
+        inverse = [0] * n_tiles
+        for rank, tile in enumerate(order):
+            inverse[tile] = rank
+        survivors = n_tiles
+        bound_list = []
+        for mode in range(split_depth, num_exits):
+            survivors -= len(buckets[mode])
+            bound_list.append(survivors)
+        order_cpu = torch.tensor(order, dtype=torch.long)
+        inverse_cpu = torch.tensor(inverse, dtype=torch.long)
+        bounds = tuple(bound_list)
+    else:
+        em = em.clamp(min=split_depth, max=num_exits-1)
+        order_cpu = torch.argsort(em, descending=True, stable=True)
+        sorted_em = em[order_cpu]
+        inverse_cpu = torch.empty_like(order_cpu)
+        inverse_cpu[order_cpu] = torch.arange(n_tiles)
+        bounds = tuple(int((sorted_em > g).sum())
+                       for g in range(split_depth, num_exits))
     return TilePlan(order_cpu.to(device, non_blocking=True),
                     inverse_cpu.to(device, non_blocking=True), bounds, n_tiles)
 

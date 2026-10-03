@@ -1,0 +1,35 @@
+{
+  "schema": 1,
+  "gpu_used": false,
+  "torch": "2.9.1+cu126",
+  "cpu": "AMD EPYC 7443 24-Core Processor",
+  "exact_maps": 4500,
+  "cases": {
+    "8": {
+      "reference_us": 85.109,
+      "planned_us": 24.073999999999998,
+      "host_plan_speedup": 3.5353078009470797
+    },
+    "15": {
+      "reference_us": 74.4995,
+      "planned_us": 22.025,
+      "host_plan_speedup": 3.3824971623155506
+    },
+    "40": {
+      "reference_us": 71.4845,
+      "planned_us": 30.1645,
+      "host_plan_speedup": 2.3698221419217953
+    },
+    "80": {
+      "reference_us": 60.684,
+      "planned_us": 68.19399999999999,
+      "host_plan_speedup": 0.8898730093556619
+    },
+    "135": {
+      "reference_us": 57.4645,
+      "planned_us": 63.939,
+      "host_plan_speedup": 0.8987394235130359
+    }
+  },
+  "scope": "CPU route ordering/planning only; excludes H2D, GPU synthesis and full decode"
+}

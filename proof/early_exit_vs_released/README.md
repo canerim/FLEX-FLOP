@@ -33,8 +33,10 @@ proof/early_exit_vs_released/.local/venv/bin/python \
 ```
 
 `bootstrap.py` checks all three artifact hashes, sparse-clones Microsoft DCVC
-at commit `cbdae87a5445114cdc7f48816da63ea80bdeac40`, and builds the pinned
-CPU rANS extension locally. `bitstream_benchmark.py prepare --image PNG --qp 32
+at commit `cbdae87a5445114cdc7f48816da63ea80bdeac40`, builds the pinned
+CPU rANS extension locally, verifies exact equality of all 255 shared
+released/e15 nondecoder tensors, and re-encodes/decodes a fixed Kodak stream.
+`bitstream_benchmark.py prepare --image PNG --qp 32
 --out FRAME.fufref2` can encode another RGB PNG whose dimensions are multiples
 of 256. Benchmark output contains paired raw timings, checkpoint and stream
 hashes, router exit counts, output equivalence, source quality, GPU occupancy
@@ -162,6 +164,12 @@ host planning and pointwise activations have no convolution MAC count. A CPU
 forward-hook test checks the released model's analytic formula. This audit
 must be used instead of multiplying the nominal source resolution by the
 decoder's per-pixel MACs, because the benchmark pads to whole tiles first.
+
+`host_plan_audit.py` is a CPU-only check of the small-map bucket planner used by
+the inference path. It compares stable tile order, inverse permutation and
+suffix boundaries against the original tensor-sort implementation on 4,500
+random maps, then measures CPU planning dispatch time. Its result is **only** a
+host-plan microbenchmark; the paired bitstream test measures actual codec time.
 
 Open the local address printed by the server and enter the printed run token. The browser shows a live comparison after each paired block. The server accepts only fixed workloads and starts at most one benchmark at a time. It binds to loopback by default; a public deployment should place it behind authentication and use `PROOF_RUN_TOKEN` for the run endpoint. Do not expose an unauthenticated GPU benchmark endpoint on a shared server.
 
