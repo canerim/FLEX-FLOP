@@ -219,6 +219,10 @@ def benchmark(args):
         else:
             raise ValueError(kind)
         image = image[:, :, :meta['height'], :meta['width']]
+        if args.host_output:
+            # Include the transfer needed by a caller consuming decoded pixels
+            # outside CUDA. The returned CPU tensor is a materialized output.
+            image = image.contiguous().cpu()
         return image, trace, route
 
     kinds = ('released_stock', 'released_triton', 'e15_stock', 'e15_triton')
@@ -264,7 +268,8 @@ def benchmark(args):
             if list(raw.shape[:2]) != [meta['height'], meta['width']]:
                 raise ValueError('Source image geometry differs from the stream')
             target = torch.from_numpy(rgb2ycbcr_np(raw.astype(np.float32)/255)-.5)
-            target = target.permute(2,0,1)[None].to(device)
+            target = target.permute(2,0,1)[None].to(
+                'cpu' if args.host_output else device)
             quality = {}
             for kind in kinds:
                 per_channel = (outputs[kind][0]-target).square().mean(dim=(0,2,3))
@@ -302,8 +307,13 @@ def benchmark(args):
         'claim_eligible': True,
         'scope': ('RGB image -> CPU research encoder -> FUFREF2 bytes -> independent CPU rANS/hyperprior decode -> GPU copy -> decoder-side router (e15) -> GPU synthesis -> output tensor; excludes disk I/O and model loading; not Microsoft native CUDA stream'
                   if args.include_encoder else
-                  'In-memory FUFREF2 bitstream -> independent CPU rANS/hyperprior decode -> GPU copy -> decoder-side router (e15) -> GPU synthesis -> output tensor; excludes encoder, disk I/O, model loading; not Microsoft native CUDA stream'),
+                  'In-memory FUFREF2 bitstream -> independent CPU rANS/hyperprior decode -> GPU copy -> decoder-side router (e15) -> GPU synthesis -> output tensor; excludes encoder, disk I/O, model loading; not Microsoft native CUDA stream') +
+                  ('; includes GPU-to-CPU image transfer' if args.host_output else
+                   '; output remains on GPU'),
         'include_encoder': args.include_encoder,
+        'host_output': args.host_output,
+        'output_boundary': ('CPU YCbCr image tensor, GPU-to-CPU transfer timed'
+                            if args.host_output else 'GPU YCbCr image tensor'),
         'stream_sha256': digest(args.stream), 'stream_bytes': len(data),
         'source_sha256': digest(args.source) if args.source else None,
         'shape': [meta['height'], meta['width']], 'qp': meta['qp'],
@@ -363,6 +373,8 @@ def main():
     b.add_argument('--source', type=Path, help='Original RGB PNG for YUV 6:1:1 PSNR in 4:4:4')
     b.add_argument('--include-encoder', action='store_true',
                    help='Time a fresh CPU image encoder in every paired arm')
+    b.add_argument('--host-output', action='store_true',
+                   help='Include GPU-to-CPU transfer of the decoded image tensor')
     b.add_argument('--save-recon-dir', type=Path,
                    help='Write released/e15 reconstruction PNGs outside timed blocks')
     b.add_argument('--e15', type=Path, default=DEFAULT_E15)

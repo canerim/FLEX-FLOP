@@ -27,6 +27,7 @@ proof/early_exit_vs_released/.local/venv/bin/python \
   proof/early_exit_vs_released/bitstream_benchmark.py benchmark \
   --stream proof/early_exit_vs_released/results/kodim01_qp32.fufref2 \
   --source data/kodak/kodim01.png --gpu 0 --blocks 20 \
+  --host-output \
   --save-recon-dir proof/early_exit_vs_released/results/reconstructions \
   --out proof/early_exit_vs_released/results/kodim01_reproduced.json
 ```
@@ -45,6 +46,9 @@ stream was emitted from the tracked Kodak image, is 16,627 bytes, and has SHA-25
 The [public reproducibility check](PUBLIC_REPRO_CHECK_20261003.json) records a
 separate clean checkout and unauthenticated HTTPS download of both LFS weights.
 
+`--host-output` includes materializing the decoded YCbCr tensor in CPU memory
+inside each timed arm. Omitting it measures an output tensor that stays on the
+GPU. PNG serialization and file I/O remain outside timing in both cases.
 For the stricter image-to-image question, add `--include-encoder --blocks 5` to
 the benchmark command. Each paired arm then independently encodes the source
 PNG into the same checked bytes before decoding. This is substantially slower
@@ -58,10 +62,12 @@ and decoded-latent hashes before GPU results are observed. After setup:
 
 ```bash
 proof/early_exit_vs_released/.local/venv/bin/python \
-  proof/early_exit_vs_released/run_bitstream_cohort.py --gpu 0 --blocks 20
+  proof/early_exit_vs_released/run_bitstream_cohort.py --gpu 0 --blocks 20 \
+  --host-output
 proof/early_exit_vs_released/.local/venv/bin/python \
   proof/early_exit_vs_released/run_bitstream_cohort.py --gpu 0 --blocks 5 \
-  --include-encoder --out proof/early_exit_vs_released/results/roundtrip_cohort
+  --include-encoder --host-output \
+  --out proof/early_exit_vs_released/results/roundtrip_cohort
 ```
 
 `prepare_bitstream_cohort.py` regenerates all nine streams on CPU and refuses
@@ -70,11 +76,12 @@ raw paired samples; its aggregate is the median of the nine *case medians*,
 with the observed case range. Three images are a fixed workload set, not a
 population confidence interval or a Kodak-wide claim. The idle-GPU watcher on
 the research server queues matched-kernel synthesis, this bytes-to-image
-cohort and then the full image roundtrip cohort, in that order.
+cohort and then the full image roundtrip cohort with CPU outputs, in that order.
 
 **Meaning of the numbers:** the fresh-clone test starts with in-memory
 `FUFREF2` bytes; each arm independently does CPU rANS and hyperprior decode,
-copies the latent to the GPU, then synthesizes the image. The e15 arm also runs
+copies the latent to the GPU, then synthesizes the image. With `--host-output`,
+the timed operation also transfers the complete output image to the CPU. The e15 arm also runs
 its stem+QP router on the decoder side and reuses that stem during synthesis.
 This is a genuine bytes-to-output decoder test for the **research wire format**.
 The encoder, disk I/O and model load are outside timed blocks. `prepare` reports

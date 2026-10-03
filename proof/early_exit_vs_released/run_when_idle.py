@@ -54,6 +54,8 @@ def main() -> int:
                         help="Pinned FUFREF2 entropy extension directory")
     parser.add_argument("--roundtrip-after", action="store_true",
                         help="Also time full image->bytes->image after the decoder test")
+    parser.add_argument("--host-output", action="store_true",
+                        help="Include GPU-to-CPU output transfer in the bitstream cohorts")
     args = parser.parse_args()
     if min(args.hours, args.stable_minutes, args.poll_seconds) <= 0:
         parser.error("time limits must be positive")
@@ -95,6 +97,8 @@ def main() -> int:
                            '--out', str(folder/f'{phase}_idle_gpu{candidate}')]
                 if bitstream_done:
                     command += ['--include-encoder']
+                if args.host_output:
+                    command += ['--host-output']
             else:
                 command = [sys.executable, str(HERE / "run_cohort.py"),
                            "--gpu", str(candidate), "--blocks", str(args.blocks),

@@ -27,6 +27,8 @@ def main():
     parser.add_argument('--blocks', type=int, default=20)
     parser.add_argument('--warmup', type=int, default=3)
     parser.add_argument('--include-encoder', action='store_true')
+    parser.add_argument('--host-output', action='store_true',
+                        help='Time transfer of decoded image tensors back to CPU')
     parser.add_argument('--upstream', type=Path, default=DEFAULT_UPSTREAM)
     parser.add_argument('--release', type=Path, default=DEFAULT_RELEASE)
     parser.add_argument('--extension', type=Path, default=DEFAULT_EXTENSION)
@@ -65,6 +67,7 @@ def main():
             old = json.loads(out.read_text())
             reuse = bool(old.get('claim_eligible') and
                          old.get('include_encoder') == args.include_encoder and
+                         old.get('host_output') == args.host_output and
                          old.get('stream_sha256') == row['stream_sha256'] and
                          old.get('source_sha256') == row['image_sha256'] and
                          old.get('gpu_index') == args.gpu and
@@ -93,6 +96,8 @@ def main():
                        '--warmup', str(args.warmup), '--out', str(out)]
             if args.include_encoder:
                 command.append('--include-encoder')
+            if args.host_output:
+                command.append('--host-output')
             print(json.dumps({'case': out.name, 'event': 'start'}), flush=True)
             subprocess.run(command, check=True)
         result = json.loads(out.read_text())
@@ -120,7 +125,9 @@ def main():
         'schema': 1, 'timestamp_utc': datetime.now(timezone.utc).isoformat(),
         'claim_eligible': True, 'scope': ('full CPU research image->bytes->GPU image'
                                          if args.include_encoder else
-                                         'CPU research bytes->GPU image'),
+                                         'CPU research bytes->GPU image') +
+                                         ('->CPU image tensor' if args.host_output else ''),
+        'host_output': args.host_output,
         'manifest_sha256': digest(args.manifest), 'cases': len(results),
         'gpu_index': args.gpu, 'blocks_per_case': args.blocks,
         'median_of_case_medians_matched_triton': statistics.median(values),
