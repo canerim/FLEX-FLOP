@@ -1,0 +1,45 @@
+{
+  "timestamp_utc": "2026-10-03T12:20:06.734843+00:00",
+  "checkpoint_identities": {
+    "released_d12": {
+      "filename": "released_cvpr2026_image.pth.tar",
+      "sha256": "b3b900de23f30e4fc437010ddffe6a5413a56d6cfd97fb6235adbcd2b6973302",
+      "epoch": null,
+      "global_step": null,
+      "state_tensors": 398
+    },
+    "e15_shared_early_exit": {
+      "filename": "ckpt_PIN_e15.pth.tar",
+      "sha256": "91556d30bca41988755ff43dee3bc6d0cd2a0a4eda1d18d2891b168dc0a04ce9",
+      "epoch": 15,
+      "global_step": null,
+      "state_tensors": 427
+    },
+    "independent_d2": {
+      "filename": "ckpt.pth.tar",
+      "sha256": "2d8019db955cbc786bbd1f51fa7dad5a636025a623232e76598fab5d60d9e066",
+      "epoch": 105,
+      "global_step": null,
+      "state_tensors": 298
+    },
+    "independent_d4": {
+      "filename": "ckpt.pth.tar",
+      "sha256": "4e0e9c0fcbe6f690d6a7985444057a4f8d6211acd28cc511fb6439885c138815",
+      "epoch": 105,
+      "global_step": null,
+      "state_tensors": 318
+    },
+    "independent_d6": {
+      "filename": "ckpt.pth.tar",
+      "sha256": "9f748b667f070c708741c31f46f673a7c2876b7f8f4f48cb32c6e8cf6ff75861",
+      "epoch": 105,
+      "global_step": null,
+      "state_tensors": 338
+    }
+  },
+  "released_e15_shared_nondecoder_tensors_exact": 255,
+  "released_e15_shared_nondecoder_mismatches": [],
+  "claim": "e15 and released D12 have exact analysis/hyperprior/entropy/quality-scale tensors; synthesis differs",
+  "upstream_commit": "cbdae87a5445114cdc7f48816da63ea80bdeac40",
+  "dataset": "Kodak 24 original PNGs, source hashes in bitstream manifest"
+}

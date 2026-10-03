@@ -2,12 +2,14 @@
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import math
 from pathlib import Path
 
 import numpy as np
 from scipy.interpolate import PchipInterpolator
+from reference_codec import parse_container
 
 DEPTHS = (2, 4, 6, 12)
 QPS = (0, 16, 32, 48, 63)
@@ -37,6 +39,20 @@ def analyze(folder):
             raise RuntimeError(f'D{depth} has missing or duplicate cases')
         if any(r['depth'] != depth or not r['exact_isolated_decode'] for r in rows):
             raise RuntimeError(f'D{depth} decode verification failed')
+        for row in rows:
+            if (row['source_sha256'] != manifest['source_sha256'][row['image']] or
+                    row['checkpoint_sha256'] != manifest['checkpoint_sha256'][str(depth)]):
+                raise RuntimeError('Source or checkpoint identity differs from frozen manifest')
+            stream_path = folder/f'd{depth}'/'streams'/f'{Path(row["image"]).stem}_qp{row["qp"]:02d}.fufref2'
+            stream = stream_path.read_bytes()
+            if hashlib.sha256(stream).hexdigest() != row['stream_sha256']:
+                raise RuntimeError(f'Stream hash differs: {stream_path}')
+            parsed = parse_container(stream, depth, row['checkpoint_sha256'])
+            if (parsed['height'], parsed['width'], parsed['qp']) != (row['h'], row['w'], row['qp']):
+                raise RuntimeError(f'Stream metadata differs: {stream_path}')
+            if (parsed['payload_bytes'] != row['payload_bytes'] or len(stream) != row['container_bytes'] or
+                    not math.isclose(row['payload_bpp'], 8*parsed['payload_bytes']/(row['h']*row['w']), rel_tol=1e-12)):
+                raise RuntimeError(f'Rate does not match emitted bytes: {stream_path}')
         by[depth] = {image: [r for r in rows if r['image'] == image]
                      for image in sorted({r['image'] for r in rows})}
         if len(by[depth]) != 24 or any({r['qp'] for r in curve_rows} != set(QPS)
