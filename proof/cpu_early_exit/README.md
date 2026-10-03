@@ -7,6 +7,12 @@ PSNR are measured against the source image after putting the model's centered
 YCbCr output back on the 0–1 scale. Latency excludes entropy decode, image
 loading, disk I/O and model loading; it is not a full codec speedup.
 
+The [three-arm protocol](THREE_ARM_PROTOCOL.md) locks the released-versus-
+RegLIC comparison to the same optimized backend and isolates any future
+custom-fusion gain. `matched_routed_cpu.py` is the CPU correctness control
+that includes the actual router and tile assembly. Run it with `--blocks 0`
+while training occupies the host; nonzero timing blocks refuse a loaded CPU.
+
 `released` is Microsoft's released D12 decoder. `e15_exit0` and `e15_deep`
 export fixed uniform exits of the early-exit checkpoint. These do **not**
 include decoder-side routing, per-tile variable depth, patch assembly or seam

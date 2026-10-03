@@ -1,0 +1,67 @@
+{
+  "schema": 1,
+  "scope": "Same decoded FUFREF2 latent -> CPU synthesis; e15 includes router and patch assembly; entropy, model loading and disk I/O excluded",
+  "backend": "PyTorch CPU FP32 for all arms; no custom fusion or ONNX EP",
+  "claim_eligible": false,
+  "loadavg_1m": 198.986328125,
+  "threads": 1,
+  "stream_sha256": "ae06007c9ebef84894b8aacaaf7d551a9a062076aac97590586a42652d609ceb",
+  "latent_sha256": "3bb29024361fa50510ecf5b746e333d1e885b215d1da0c21e83837aca336f21c",
+  "released_sha256": "b3b900de23f30e4fc437010ddffe6a5413a56d6cfd97fb6235adbcd2b6973302",
+  "e15_sha256": "91556d30bca41988755ff43dee3bc6d0cd2a0a4eda1d18d2891b168dc0a04ce9",
+  "router_sha256": "5b832c639fa7f857ef071276fd683e8e6150ca35e56b4470008a7d9dd79dda0f",
+  "calibration_sha256": "d6d64c327bbee6cb81681ccea6bf0f06295ad5944fb08b15249e5de269bc05f5",
+  "shared_nondecoder_tensors_exact": 255,
+  "qp": 32,
+  "shape": [
+    512,
+    768
+  ],
+  "route_counts": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    6
+  ],
+  "e15_released_max_abs": 0.08319994807243347,
+  "quality": {
+    "released_cpu": {
+      "y_cb_cr": [
+        28.492530090668332,
+        45.855940486352544,
+        44.272900022389116
+      ],
+      "yuv_6_1_1": 32.63550263159396
+    },
+    "e15_routed_cpu": {
+      "y_cb_cr": [
+        28.478001819696388,
+        45.758824216761184,
+        44.1491124906561
+      ],
+      "yuv_6_1_1": 32.59699345319945
+    },
+    "e15_all_deep_cpu": {
+      "y_cb_cr": [
+        28.478001819696388,
+        45.758824216761184,
+        44.1491124906561
+      ],
+      "yuv_6_1_1": 32.59699345319945
+    }
+  },
+  "timing_ms_raw": {
+    "released_cpu": [],
+    "e15_routed_cpu": [],
+    "e15_all_deep_cpu": []
+  },
+  "timing_ms_median": {
+    "released_cpu": null,
+    "e15_routed_cpu": null,
+    "e15_all_deep_cpu": null
+  },
+  "block_orders": [],
+  "limitations": "FUFREF2 research stream; fixed-QP beta; CPU smoke or synthesis timing only"
+}
