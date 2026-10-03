@@ -45,12 +45,16 @@ def summarize(paths):
         if count < 20 or any(len(samples[arm]) != count for arm in ARMS):
             raise ValueError('Missing paired repetitions')
         if all(matched):
-            if (row.get('schema', 0) < 2 or
+            if (row.get('schema', 0) < 3 or
                     row.get('released_triton_patches') !=
                     {'fused_ffn': 14, 'fused_plain_wsilu': 14, 'fused_blocks': 14} or
-                    len(samples['released_d12_triton']) != count or
+                    any(len(samples.get(arm, [])) != count for arm in
+                        ('released_d12_triton', 'e15_all_deep_stock',
+                         'e15_all_deep_triton')) or
                     row['released_stock_vs_triton_max_abs'] is None or
-                    row['released_stock_vs_triton_max_abs'] > 1e-4):
+                    row['released_stock_vs_triton_max_abs'] > 1e-4 or
+                    row.get('e15_all_deep_stock_vs_triton_max_abs') is None or
+                    row['e15_all_deep_stock_vs_triton_max_abs'] > 1e-4):
                 raise ValueError('Missing or invalid matched released-D12 control')
         ratios = []
         for i in range(count):
@@ -69,17 +73,29 @@ def summarize(paths):
                        'released_yuv611_db': row['quality_yuv611_db']['released_d12'],
                        'e15_yuv611_db': row['quality_yuv611_db']['e15_triton']}
         if all(matched):
-            paired = [samples['released_d12_triton'][i]['wall_ms'] /
-                      samples['e15_triton'][i]['wall_ms'] for i in range(count)]
-            if any(not math.isfinite(x) or x <= 0 for x in paired):
-                raise ValueError('Invalid matched-kernel timing')
-            if not math.isclose(statistics.median(paired),
-                                row['median_speedup_released_triton_vs_e15_triton_wall'],
-                                rel_tol=1e-9):
-                raise ValueError('Saved matched speedup disagrees with raw samples')
-            case['paired_median_speedup_matched_kernels'] = statistics.median(paired)
+            comparisons = (
+                ('released_d12_triton', 'e15_triton',
+                 'median_speedup_released_triton_vs_e15_triton_wall',
+                 'paired_median_speedup_matched_kernels'),
+                ('e15_all_deep_stock', 'e15_stock',
+                 'median_speedup_e15_all_deep_vs_routed_stock_wall',
+                 'paired_median_speedup_routing_stock'),
+                ('e15_all_deep_triton', 'e15_triton',
+                 'median_speedup_e15_all_deep_vs_routed_triton_wall',
+                 'paired_median_speedup_routing_triton'),
+            )
+            for numerator, denominator, saved, result_key in comparisons:
+                paired = [samples[numerator][i]['wall_ms'] /
+                          samples[denominator][i]['wall_ms'] for i in range(count)]
+                if any(not math.isfinite(x) or x <= 0 for x in paired):
+                    raise ValueError('Invalid matched-kernel timing')
+                if not math.isclose(statistics.median(paired), row[saved], rel_tol=1e-9):
+                    raise ValueError(f'Saved {saved} disagrees with raw samples')
+                case[result_key] = statistics.median(paired)
             case['released_triton_median_ms'] = statistics.median(
                 x['wall_ms'] for x in samples['released_d12_triton'])
+            case['e15_all_deep_triton_median_ms'] = statistics.median(
+                x['wall_ms'] for x in samples['e15_all_deep_triton'])
         result.append(case)
     medians = [r['paired_median_speedup'] for r in result]
     per_sequence = {sequence: statistics.median(r['paired_median_speedup'] for r in result
@@ -97,6 +113,10 @@ def summarize(paths):
         values = [r['paired_median_speedup_matched_kernels'] for r in result]
         summary['matched_kernels_median_of_scenario_paired_medians'] = statistics.median(values)
         summary['matched_kernels_scenario_range'] = [min(values), max(values)]
+        summary['routing_stock_median_of_scenario_paired_medians'] = statistics.median(
+            r['paired_median_speedup_routing_stock'] for r in result)
+        summary['routing_triton_median_of_scenario_paired_medians'] = statistics.median(
+            r['paired_median_speedup_routing_triton'] for r in result)
     return summary
 
 

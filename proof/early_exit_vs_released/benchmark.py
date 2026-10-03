@@ -136,17 +136,25 @@ def main():
         if a.matched_kernels:
             released_fast = copy.deepcopy(released.dec).eval()
             released_patches = enable_fast_released_inference(released_fast)
+            all_deep_cpu = torch.full_like(map_cpu, cfg.num_exits - 1)
             arms['released_d12_triton'] = lambda: released_fast(y, q)
+            arms['e15_all_deep_stock'] = lambda: forward_with_cpu_map(stock, y, q, all_deep_cpu)
+            arms['e15_all_deep_triton'] = lambda: forward_with_cpu_map(fast, y, q, all_deep_cpu)
         outputs = {name: fn() for name, fn in arms.items()}
         torch.cuda.synchronize()
         max_abs = float((outputs['e15_stock']-outputs['e15_triton']).abs().max())
         if max_abs > 1e-4:
             raise RuntimeError(f'Optimized e15 output differs by {max_abs}')
         release_max_abs = None
+        all_deep_max_abs = None
         if a.matched_kernels:
             release_max_abs = float((outputs['released_d12']-outputs['released_d12_triton']).abs().max())
             if release_max_abs > 1e-4:
                 raise RuntimeError(f'Optimized released D12 output differs by {release_max_abs}')
+            all_deep_max_abs = float((outputs['e15_all_deep_stock']-
+                                      outputs['e15_all_deep_triton']).abs().max())
+            if all_deep_max_abs > 1e-4:
+                raise RuntimeError(f'Optimized all-deep e15 output differs by {all_deep_max_abs}')
         quality = {name: C.psnr_611_420(out[:, :, :seq['h'], :seq['w']], planes[0]) for name, out in outputs.items()}
         for _ in range(a.warmup):
             for fn in arms.values():
@@ -155,7 +163,8 @@ def main():
         emit({'type': 'ready', 'gpu': a.gpu, 'diagnostic_shared_gpu': diagnostic,
               'quality_yuv611_db': quality, 'shared_tensors_exact': len(shared),
               'e15_stock_vs_triton_max_abs': max_abs,
-              'released_stock_vs_triton_max_abs': release_max_abs})
+              'released_stock_vs_triton_max_abs': release_max_abs,
+              'e15_all_deep_stock_vs_triton_max_abs': all_deep_max_abs})
         samples = {name: [] for name in arms}
         rng = random.Random(20261003)
         interference = []
@@ -181,8 +190,12 @@ def main():
     stock_pairs = [samples['released_d12'][i]['wall_ms']/samples['e15_stock'][i]['wall_ms'] for i in range(a.blocks)]
     matched_pairs = ([samples['released_d12_triton'][i]['wall_ms']/samples['e15_triton'][i]['wall_ms']
                       for i in range(a.blocks)] if a.matched_kernels else None)
+    skip_stock_pairs = ([samples['e15_all_deep_stock'][i]['wall_ms']/samples['e15_stock'][i]['wall_ms']
+                         for i in range(a.blocks)] if a.matched_kernels else None)
+    skip_fast_pairs = ([samples['e15_all_deep_triton'][i]['wall_ms']/samples['e15_triton'][i]['wall_ms']
+                        for i in range(a.blocks)] if a.matched_kernels else None)
     result = {
-        'schema': 2 if a.matched_kernels else 1,
+        'schema': 3 if a.matched_kernels else 1,
         'timestamp_utc': datetime.now(timezone.utc).isoformat(),
         'claim_eligible': not diagnostic,
         'scope': 'FP32 PyTorch synthesis from identical released/e15 latent; wall time includes host tile planning, CUDA time also recorded; no encoder, entropy coder, router inference or transfers',
@@ -199,14 +212,21 @@ def main():
         'shared_tensors_exact': len(shared), 'quality_yuv611_db': quality,
         'e15_stock_vs_triton_max_abs': max_abs,
         'released_stock_vs_triton_max_abs': release_max_abs,
+        'e15_all_deep_stock_vs_triton_max_abs': all_deep_max_abs,
         'samples': samples, 'speedup_wall_paired': pairs,
         'speedup_wall_released_vs_e15_stock_paired': stock_pairs,
         'speedup_wall_released_triton_vs_e15_triton_paired': matched_pairs,
+        'speedup_wall_e15_all_deep_vs_routed_stock_paired': skip_stock_pairs,
+        'speedup_wall_e15_all_deep_vs_routed_triton_paired': skip_fast_pairs,
         'gpu_interference_during_blocks': interference,
         'median_speedup_wall': statistics.median(pairs),
         'median_speedup_released_vs_e15_stock_wall': statistics.median(stock_pairs),
         'median_speedup_released_triton_vs_e15_triton_wall':
             statistics.median(matched_pairs) if matched_pairs is not None else None,
+        'median_speedup_e15_all_deep_vs_routed_stock_wall':
+            statistics.median(skip_stock_pairs) if skip_stock_pairs is not None else None,
+        'median_speedup_e15_all_deep_vs_routed_triton_wall':
+            statistics.median(skip_fast_pairs) if skip_fast_pairs is not None else None,
         'median_wall_ms': {k: statistics.median(vv['wall_ms'] for vv in vals) for k, vals in samples.items()},
         'gpu_occupants_before': occupied, 'gpu_occupants_after': post_occupants,
     }
