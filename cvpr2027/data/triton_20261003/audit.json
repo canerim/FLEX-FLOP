@@ -1,0 +1,149 @@
+{
+  "scope": "shared A6000 GPU, real CTC videoSRC05 QP32 archived router map; decoder synthesis only",
+  "source_sha256": {
+    "stages": "6eda3c93582b285243c19f87a86b35c3d90e0f70456cf3f61bc19c75b75e0baf",
+    "depthwise_macro": "dda91c96777c133b8b794d113d6070834c07fe6d21100cc0c5482bb644e08ffe",
+    "final_macro": "58ed3d30dea8bb09790ca23173f5d402c676a849b7b5d78a03cccb24c46c531d",
+    "seam_ablation": "0ad63055728783f6362666df5937f496f07e0ce3ad8b2dca53f7051cde561ad6",
+    "quality": "94398a14cddbcb487c8f3ceb938f94e0e84fd320b62a39937b5a5799ce52519f",
+    "memory": "f50ac639cb8d6ee8ce8bf57186d15aa558c153707c1a64b4bab4b2020de2e1b2",
+    "map_workload": "f10797740c72444fefe486d8a6e1fcfb932bff9ee271f78303e0761a541859a7"
+  },
+  "device": "NVIDIA RTX A6000",
+  "tf32_enabled": false,
+  "valid_hw": [
+    1080,
+    1920
+  ],
+  "padded_hw": [
+    1280,
+    2048
+  ],
+  "map_hist": [
+    0,
+    0,
+    13,
+    20,
+    4,
+    3
+  ],
+  "stages": [
+    {
+      "stage": "masked_stock",
+      "label": "Masked stock",
+      "median_ms": 282.3203887939453,
+      "samples_ms": [
+        291.9935302734375,
+        290.2528076171875,
+        282.72332763671875,
+        273.68243408203125,
+        281.3440856933594,
+        281.9174499511719
+      ]
+    },
+    {
+      "stage": "sorted_stock",
+      "label": "Sorted tiles",
+      "median_ms": 253.961669921875,
+      "samples_ms": [
+        250.5727996826172,
+        248.911865234375,
+        260.86785888671875,
+        253.31610107421875,
+        260.1185302734375,
+        254.60723876953125
+      ]
+    },
+    {
+      "stage": "sorted_fused",
+      "label": "Fused activations",
+      "median_ms": 176.48839569091797,
+      "samples_ms": [
+        170.16114807128906,
+        174.06361389160156,
+        179.61581420898438,
+        171.6346893310547,
+        180.80870056152344,
+        178.91317749023438
+      ]
+    },
+    {
+      "stage": "sorted_ffn",
+      "label": "Fused FFN",
+      "median_ms": 159.26128387451172,
+      "samples_ms": [
+        151.9667205810547,
+        149.58387756347656,
+        159.39193725585938,
+        160.58572387695312,
+        160.6973419189453,
+        159.13063049316406
+      ]
+    },
+    {
+      "stage": "sorted_trunk",
+      "label": "Fused trunk",
+      "median_ms": 128.1814079284668,
+      "samples_ms": [
+        134.10508728027344,
+        132.86912536621094,
+        124.0811538696289,
+        132.04307556152344,
+        124.18867492675781,
+        124.31974029541016
+      ]
+    },
+    {
+      "stage": "sorted_full",
+      "label": "Fused adapters",
+      "median_ms": 117.02207946777344,
+      "samples_ms": [
+        125.06543731689453,
+        118.18265533447266,
+        114.71871948242188,
+        115.37385559082031,
+        123.93472290039062,
+        115.86150360107422
+      ]
+    }
+  ],
+  "stage_paired_speedup": {
+    "n": 6,
+    "median": 2.4026817965878124,
+    "min": 2.2700989610432463,
+    "max": 2.4644916619736144
+  },
+  "depthwise_macro": {
+    "n": 4,
+    "stock_median_ms": 287.23692321777344,
+    "fast_median_ms": 112.09830474853516,
+    "paired_speedup_median": 2.558311252090787,
+    "wall_stock_median_ms": 289.48174323886633,
+    "wall_fast_median_ms": 114.5892022177577
+  },
+  "final_macro": {
+    "n": 4,
+    "stock_median_ms": 308.8095703125,
+    "fast_median_ms": 113.27897644042969,
+    "paired_speedup_median": 2.6856984304687055,
+    "gpu_exclusive_preflight": false,
+    "interpretation": "stock drift prevents an incremental-gain claim"
+  },
+  "seam_ablation": {
+    "n": 16,
+    "stock_median_ms": 116.79780578613281,
+    "fast_median_ms": 114.82368087768555,
+    "paired_speedup_median": 1.0351365310014735
+  },
+  "fidelity": {
+    "n_ctc_qp": 5,
+    "max_abs_raw": 6.258487701416016e-07,
+    "max_abs_yuv611_delta_db": 2.0868132111218074e-07
+  },
+  "incremental_peak_memory": {
+    "stock_bytes": 1069548544,
+    "fast_bytes": 692062208,
+    "saving_pct": 35.29398811467131
+  },
+  "claim_boundary": "exploratory shared-GPU synthesis timing; no exclusive 53x5 or end-to-end codec benchmark"
+}

@@ -5,9 +5,15 @@ Its evaluated mechanism is shared-latent early exit; the complementary
 ClassSR-inspired 2/4/6/8/10/12 independent-codec bank is a controlled study
 with ongoing training and prospective routing. Unfinished experiments are not assigned
 invented PSNR, bitrate or runtime results.
+The D2/D4/D6 codecs have completed the official 105-epoch schedule;
+D8/D10/scratch D12 continue. A separate exploratory A6000 test measures
+shared-exit synthesis only, with its full scope in the supplement.
 
 - Main document: [main.tex](main.tex) / [main.pdf](main.pdf).
 - Supplement: [supplement.tex](supplement.tex) / [supplement.pdf](supplement.pdf).
+- Two-page GPU-kernel report: [kernel_report.tex](kernel_report.tex) / [kernel_report.pdf](kernel_report.pdf).
+- Final Kodak depth comparison: [audited data](data/depth_final_20261003/analysis.json).
+- GPU synthesis records and audit: [data](data/triton_20261003/audit.json).
 - Overleaf and reproduction instructions: [OVERLEAF.md](OVERLEAF.md).
 - Context-preserving versus learned-repair control: [CONTEXT_CONTROL_TR.md](CONTEXT_CONTROL_TR.md).
 - Prioritised ablations: [ABLATION_PLAN_TR.md](ABLATION_PLAN_TR.md).

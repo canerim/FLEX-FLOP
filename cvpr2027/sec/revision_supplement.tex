@@ -21,10 +21,10 @@ the recorded mixed reconstructions of the shared-latent e15 codec.
 Control-path enumeration and the analytic permutation diagnostic reuse
 stored source-error tables without executing the codec. The fixed-control,
 released-reference and component-intervention sections instead report
-new CPU reconstructions. None of these analyses measures codec latency.
-The independent D2/D4/D6 training
-continues separately; interim measurements are explicitly labelled and
-do not stand in for a completed full-schedule depth experiment.
+new CPU reconstructions. The separate GPU-kernel section measures one routed
+synthesis case, not complete-codec latency. Independent D2/D4/D6 training
+has completed; D8/D10/scratch D12 remain in progress. Interim measurements
+are labelled and do not stand in for completed full-schedule results.
 
 The stand-alone paper repository contains the plotted source tables, source
 hash manifests, editable figure scripts and inspection results under
@@ -498,7 +498,7 @@ The six-expert selector remains a proposed deployment path, not an
 implemented result.
 
 Architectural parameter counts for all six depths are plotted in
-\cref{fig:scenario}a. Only D2/D4 have completed all 105 epochs in the
+\cref{fig:scenario}a. D2/D4/D6 have completed all 105 epochs in the
 final Kodak comparison below; released D12 has a different training
 history from the scratch runs.
 
@@ -532,33 +532,31 @@ retain the execution mode and source hashes.
 \label{fig:training}
 \end{figure*}
 
-\paragraph{Finished D2/D4 at matched estimated rate.}
-Both completed models were evaluated on the same 24 full-resolution Kodak
-images and five QPs. Per image, we linearly interpolate PSNR in log
-\emph{estimated} bpp, without extrapolation. At 0.2 bpp, D4 improves on
-D2 by 0.118\,dB RGB PSNR [0.095, 0.143] and 0.120\,dB YUV 6:1:1 PSNR
-[0.097, 0.145]. Released D12 exceeds D4 by 0.155\,dB RGB [0.126, 0.186]
-and 0.157\,dB YUV 6:1:1 [0.131, 0.185]. Intervals use 5,000 paired
-Kodak-image bootstrap draws; they exclude training-seed variability.
-At 0.2 estimated bpp, both RGB contrasts are positive on each of the
-24 images, rather than arising from a few large gains.
-\Cref{fig:finalkodak} shows the three declared rate points. All 24 images
-support 0.1/0.2 bpp, and 23 support 0.4 bpp across all three models.
-These are deterministic entropy estimates, not actual payload lengths;
-the released model is a historical reference rather than the matched
-scratch D12 control. The two final models narrow their gap to the release,
-but this comparison alone cannot attribute the remaining gap to depth.
+\paragraph{Finished D2/D4/D6 at matched estimated rate.}
+All three completed models were evaluated on the same 24 full-resolution
+Kodak images and five QPs. For each image, monotone PCHIP interpolation in
+log \emph{estimated} bpp aligns quality without extrapolation. At 0.2 bpp,
+D4 improves on D2 by 0.116\,dB RGB PSNR [0.094, 0.139], while D6 improves
+on D4 by 0.064\,dB [0.052, 0.077]. The corresponding YUV 6:1:1 gains are
+0.120\,dB [0.096, 0.143] and 0.058\,dB [0.045, 0.071]. Against the
+released D12, image-mean YUV BD-rate costs over the common four-model
+PSNR interval are +7.99\% [7.11, 8.82] for D2, +4.54\% [4.06, 5.01]
+for D4, and +2.79\% [2.43, 3.15] for D6. Intervals use 5,000 paired
+Kodak-image bootstrap draws and exclude training-seed variability.
+\Cref{fig:finalkodak} depicts this capacity trend. Rates are deterministic
+entropy estimates, not emitted bitstream lengths; released D12 is a
+historical reference rather than the matched scratch D12 control. The
+comparison cannot attribute the entire gap to depth.
 
 \begin{figure*}[t]
 \centering
-\includegraphics[width=.78\textwidth]{figs/depth_final_20261002/paired_kodak.pdf}
-\caption{\textbf{Completed D2/D4 codec quality at matched estimated rate.}
-Image-paired PSNR differences on Kodak after the full 105-epoch official
-recipe, alongside the released D12 anchor. Rates are interpolated per image
-in log estimated bpp on common support. Bars show 95\% paired-image
-bootstrap intervals ($n=24$ at 0.1/0.2 bpp; $n=23$ at 0.4 bpp).
-YUV uses the upstream 6:1:1 metric. No actual-bitstream or same-recipe
-D12 result is implied.}
+\includegraphics[width=.78\textwidth]{figs/depth_final_20261003/kodak_three.pdf}
+\caption{\textbf{The completed independent codecs approach the release as
+depth grows.} Left, per-image YUV 6:1:1 BD-rate cost on the four-model common
+PSNR interval; bars are 95\% paired-image bootstrap intervals ($n=24$).
+Right, mean five-QP operating points on Kodak24. Rates are deterministic
+entropy estimates, not actual bitstreams. Released D12 differs in training
+history from the three scratch models.}
 \label{fig:finalkodak}
 \end{figure*}
 

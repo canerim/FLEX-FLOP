@@ -3,8 +3,8 @@
 
 Shared early exit uses one coded representation. Our complementary
 2/4/6/8/10/12-block DCVC-UF bank instead allows each codec to learn
-its own analysis and entropy model (\cref{fig:bank-system}). D2/D4 have
-completed training; D6/D8/D10 and scratch D12 are not final here. No
+its own analysis and entropy model (\cref{fig:bank-system}). D2/D4/D6 have
+completed training; D8/D10 and scratch D12 are not final here. No
 six-expert routing result is claimed.
 
 \paragraph{A controlled capacity frontier.}
@@ -14,10 +14,12 @@ DIV2K epoch-20/30 milestones, 2,000 actual bitstreams per milestone
 show D6's RGB advantage over D2 at 0.2 payload bpp changing from
 0.183 to 0.107\,dB; D6 versus D4 at epoch 30 is unresolved.
 A separate final Kodak evaluation at 0.2 \emph{estimated} bpp finds D4
-0.118\,dB [0.095, 0.143] above D2 on 24 paired images. Released D12
-adds 0.155\,dB [0.126, 0.186] over D4, but has a different training
-history. The supplement gives YUV results, rate sweeps and protocol
-limits. Same-recipe D12 and matched shared-exit training are needed
+0.116\,dB [0.094, 0.139] above D2 and D6 another 0.064\,dB
+[0.052, 0.077] above D4 on 24 paired images. Against the released D12,
+their image-mean YUV 6:1:1 BD-rate costs are +7.99, +4.54 and +2.79\%,
+respectively, on four-model common support. The release has a different
+training history and rates are entropy estimates. The supplement gives
+paired uncertainty and protocol limits. Same-recipe D12 and matched shared-exit training are needed
 to isolate depth and weight sharing.
 
 \paragraph{The spatial cost of specialisation.}

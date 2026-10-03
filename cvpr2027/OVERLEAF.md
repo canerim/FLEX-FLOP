@@ -16,8 +16,10 @@ latexmk -pdf -interaction=nonstopmode -halt-on-error supplement.tex
 
 The active sections are `sec/revision_*.tex`. Earlier `sec/0_abstract.tex` through
 `sec/5_conclusion.tex` remain in the repository for reference and are not included
-by `main.tex`. The independent D2/D4/D6 training is ongoing; its intermediate
-validation values are not presented as final manuscript results.
+by `main.tex`. Independent D2/D4/D6 training has completed; the final
+Kodak results are now distinguished from the older intermediate studies.
+D8/D10/scratch D12 remain in training. The two-page GPU-kernel extract is
+`kernel_report.tex` and the same text is included in `supplement.tex`.
 
 See `METRICS.md` for the colour-space correction: archived `db_rgb` and
 derived legacy fields are YCbCr4:4:4 MSE-ratio losses, not RGB losses.
