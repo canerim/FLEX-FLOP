@@ -14,6 +14,7 @@ import sys
 import time
 
 HERE = Path(__file__).resolve().parent
+from bitstream_benchmark import DEFAULT_EXTENSION
 
 
 def emit(log: Path, event: dict) -> None:
@@ -44,20 +45,20 @@ def main() -> int:
     parser.add_argument("--stable-minutes", type=float, default=5)
     parser.add_argument("--poll-seconds", type=float, default=60)
     parser.add_argument("--blocks", type=int, default=20)
-    parser.add_argument("--bitstream-stream", type=Path,
-                        help="After the matched synthesis cohort, run paired bytes-to-image decode")
-    parser.add_argument("--bitstream-source", type=Path,
-                        help="Original PNG for bytes-to-image quality reporting")
+    parser.add_argument("--bitstream-cohort", action="store_true",
+                        help="After matched synthesis, run nine predeclared Kodak bitstream cases")
+    parser.add_argument("--bitstream-manifest", type=Path,
+                        default=HERE/'results/bitstream_kodak3x3/manifest.json')
     parser.add_argument("--extension", type=Path,
-                        default=Path('/data10/shareddata/can_karsal/dcvcuf_depth_20260927/research/reference_entropy_v1'),
+                        default=DEFAULT_EXTENSION,
                         help="Pinned FUFREF2 entropy extension directory")
     parser.add_argument("--roundtrip-after", action="store_true",
                         help="Also time full image->bytes->image after the decoder test")
     args = parser.parse_args()
     if min(args.hours, args.stable_minutes, args.poll_seconds) <= 0:
         parser.error("time limits must be positive")
-    if args.roundtrip_after and (args.bitstream_stream is None or args.bitstream_source is None):
-        parser.error("roundtrip requires bitstream stream and source image")
+    if args.roundtrip_after and not args.bitstream_cohort:
+        parser.error("roundtrip requires --bitstream-cohort")
     folder = HERE / "results"
     folder.mkdir(parents=True, exist_ok=True)
     log = folder / "matched_idle_watcher.jsonl"
@@ -86,14 +87,12 @@ def main() -> int:
             emit(log, {"event": f"{phase}_start", "gpu": candidate})
             output = folder / f"{phase}_idle_gpu{candidate}.log"
             if matched_done:
-                command = [sys.executable, str(HERE / 'bitstream_benchmark.py'),
+                command = [sys.executable, str(HERE / 'run_bitstream_cohort.py'),
                            '--extension', str(args.extension),
-                           'benchmark', '--gpu', str(candidate),
-                           '--stream', str(args.bitstream_stream),
+                           '--manifest', str(args.bitstream_manifest),
+                           '--gpu', str(candidate),
                            '--blocks', str(5 if bitstream_done else args.blocks),
-                           '--out', str(folder/f'kodim01_qp32_{phase}_idle.json')]
-                if args.bitstream_source:
-                    command += ['--source', str(args.bitstream_source)]
+                           '--out', str(folder/f'{phase}_idle_gpu{candidate}')]
                 if bitstream_done:
                     command += ['--include-encoder']
             else:
@@ -108,7 +107,7 @@ def main() -> int:
                 if phase == 'roundtrip' or (phase == 'bitstream' and not args.roundtrip_after):
                     return 0
                 if phase == 'cohort':
-                    if args.bitstream_stream is None:
+                    if not args.bitstream_cohort:
                         return 0
                     matched_done = True
                 elif phase == 'bitstream':

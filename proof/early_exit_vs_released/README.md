@@ -49,6 +49,27 @@ PNG into the same checked bytes before decoding. This is substantially slower
 to measure because the research encoder runs on CPU; report it separately from
 the bytes-to-image decoder result.
 
+For a predeclared cross-content check, nine tracked streams cover Kodak
+`kodim01`, `kodim13`, `kodim24` at QP 16/32/48. The
+[`manifest.json`](results/bitstream_kodak3x3/manifest.json) fixes source, stream
+and decoded-latent hashes before GPU results are observed. After setup:
+
+```bash
+proof/early_exit_vs_released/.local/venv/bin/python \
+  proof/early_exit_vs_released/run_bitstream_cohort.py --gpu 0 --blocks 20
+proof/early_exit_vs_released/.local/venv/bin/python \
+  proof/early_exit_vs_released/run_bitstream_cohort.py --gpu 0 --blocks 5 \
+  --include-encoder --out proof/early_exit_vs_released/results/roundtrip_cohort
+```
+
+`prepare_bitstream_cohort.py` regenerates all nine streams on CPU and refuses
+an existing file with different bytes. The runner records every case and its
+raw paired samples; its aggregate is the median of the nine *case medians*,
+with the observed case range. Three images are a fixed workload set, not a
+population confidence interval or a Kodak-wide claim. The idle-GPU watcher on
+the research server queues matched-kernel synthesis, this bytes-to-image
+cohort and then the full image roundtrip cohort, in that order.
+
 **Meaning of the numbers:** the fresh-clone test starts with in-memory
 `FUFREF2` bytes; each arm independently does CPU rANS and hyperprior decode,
 copies the latent to the GPU, then synthesizes the image. The e15 arm also runs

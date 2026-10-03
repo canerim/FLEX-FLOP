@@ -1,0 +1,156 @@
+{
+  "schema": 1,
+  "timestamp_utc": "2026-10-03T20:31:38.214677+00:00",
+  "scope": "Predeclared Kodak3x3 real FUFREF2 research byte streams, not native Microsoft CUDA format",
+  "images": [
+    "kodim01.png",
+    "kodim13.png",
+    "kodim24.png"
+  ],
+  "qps": [
+    16,
+    32,
+    48
+  ],
+  "cases": 9,
+  "released_checkpoint_sha256": "b3b900de23f30e4fc437010ddffe6a5413a56d6cfd97fb6235adbcd2b6973302",
+  "extension_manifest_sha256": "2729dd9d0be76a025554cddfa47363da170aaf8c818c18aa70c60f18db23d6f1",
+  "source_script_sha256": "1a6ff5959eb57fc20f175f645f198347999b08275712f31cfc31ca08a0e11e76",
+  "rows": [
+    {
+      "image": "kodim01.png",
+      "image_sha256": "a56e27cbf5f843c048b6af1d6e090760e9c92fadba88b7dee0205918a37523bd",
+      "qp": 16,
+      "shape": [
+        512,
+        768
+      ],
+      "stream": "proof/early_exit_vs_released/results/bitstream_kodak3x3/kodim01_qp16.fufref2",
+      "stream_sha256": "25ec54029c8b99c064ade3d48db2e9c85dbcf27e825280084002527f8b673433",
+      "stream_bytes": 5036,
+      "payload_bytes": 4948,
+      "latent_sha256": "c11d43c6cd928e7f489481346ff9dece692ba82e117d530023ab1495781f7bca",
+      "cpu_encoder_seconds_single_pass": 3.541441770270467
+    },
+    {
+      "image": "kodim01.png",
+      "image_sha256": "a56e27cbf5f843c048b6af1d6e090760e9c92fadba88b7dee0205918a37523bd",
+      "qp": 32,
+      "shape": [
+        512,
+        768
+      ],
+      "stream": "proof/early_exit_vs_released/results/bitstream_kodak3x3/kodim01_qp32.fufref2",
+      "stream_sha256": "ae06007c9ebef84894b8aacaaf7d551a9a062076aac97590586a42652d609ceb",
+      "stream_bytes": 16627,
+      "payload_bytes": 16539,
+      "latent_sha256": "3bb29024361fa50510ecf5b746e333d1e885b215d1da0c21e83837aca336f21c",
+      "cpu_encoder_seconds_single_pass": 3.095522578805685
+    },
+    {
+      "image": "kodim01.png",
+      "image_sha256": "a56e27cbf5f843c048b6af1d6e090760e9c92fadba88b7dee0205918a37523bd",
+      "qp": 48,
+      "shape": [
+        512,
+        768
+      ],
+      "stream": "proof/early_exit_vs_released/results/bitstream_kodak3x3/kodim01_qp48.fufref2",
+      "stream_sha256": "734ba0881ef11e9f855d944d492f5481020be765ee727488a15c539a0512baec",
+      "stream_bytes": 42711,
+      "payload_bytes": 42623,
+      "latent_sha256": "6745e5d07ae84dcec5acf9969ebcd811ec69948b9534cfafbbaaf7d36b5188dc",
+      "cpu_encoder_seconds_single_pass": 3.149743583984673
+    },
+    {
+      "image": "kodim13.png",
+      "image_sha256": "bc34a3ce58dea09dce1704c997171602de90cb34d0c8503a988b77f473d39b08",
+      "qp": 16,
+      "shape": [
+        512,
+        768
+      ],
+      "stream": "proof/early_exit_vs_released/results/bitstream_kodak3x3/kodim13_qp16.fufref2",
+      "stream_sha256": "9d5aa8635d795ba0f7238eb59b91f5dc1a8ec12d80033bc0f0376fc46d6ca7bd",
+      "stream_bytes": 10508,
+      "payload_bytes": 10420,
+      "latent_sha256": "ff8b2cef17b578e453af1ec7f11ce9628d1b5c506be71afffb7d54772b9344ae",
+      "cpu_encoder_seconds_single_pass": 2.925458734855056
+    },
+    {
+      "image": "kodim13.png",
+      "image_sha256": "bc34a3ce58dea09dce1704c997171602de90cb34d0c8503a988b77f473d39b08",
+      "qp": 32,
+      "shape": [
+        512,
+        768
+      ],
+      "stream": "proof/early_exit_vs_released/results/bitstream_kodak3x3/kodim13_qp32.fufref2",
+      "stream_sha256": "76883eb68ca1cf48d84edfa8bfd9f0f1bcfb2001d204e637f81f5e08d07bb875",
+      "stream_bytes": 30247,
+      "payload_bytes": 30159,
+      "latent_sha256": "93f518d0bf5be94309ffb60bfc4146bf828cb2fa982ed30d39238adb1dc309de",
+      "cpu_encoder_seconds_single_pass": 3.372264043428004
+    },
+    {
+      "image": "kodim13.png",
+      "image_sha256": "bc34a3ce58dea09dce1704c997171602de90cb34d0c8503a988b77f473d39b08",
+      "qp": 48,
+      "shape": [
+        512,
+        768
+      ],
+      "stream": "proof/early_exit_vs_released/results/bitstream_kodak3x3/kodim13_qp48.fufref2",
+      "stream_sha256": "93c6aa9f0026e7e6bc06ed5fa287689f332226bd3b578af7ec614a06a68dc29f",
+      "stream_bytes": 65509,
+      "payload_bytes": 65421,
+      "latent_sha256": "bf47c2f953bf70fbc452b2bfb98a880d558cd8a74b27b7e2c0d22f0dfb30dbc7",
+      "cpu_encoder_seconds_single_pass": 3.0531376898288727
+    },
+    {
+      "image": "kodim24.png",
+      "image_sha256": "1071c68372cc5a01435c2c225a5cf7d4bb803846ec08bb6b3d6721b156d7cb96",
+      "qp": 16,
+      "shape": [
+        512,
+        768
+      ],
+      "stream": "proof/early_exit_vs_released/results/bitstream_kodak3x3/kodim24_qp16.fufref2",
+      "stream_sha256": "1ac9f13ac1ea19b497799821fda050f3def2d460f9daba18ea31e52e8f122a77",
+      "stream_bytes": 6560,
+      "payload_bytes": 6472,
+      "latent_sha256": "b2b1db2fc6fa5cbb151e7723b195b29f6b6bbf96a2f811bddd77c52b6bcf2609",
+      "cpu_encoder_seconds_single_pass": 2.9820641921833158
+    },
+    {
+      "image": "kodim24.png",
+      "image_sha256": "1071c68372cc5a01435c2c225a5cf7d4bb803846ec08bb6b3d6721b156d7cb96",
+      "qp": 32,
+      "shape": [
+        512,
+        768
+      ],
+      "stream": "proof/early_exit_vs_released/results/bitstream_kodak3x3/kodim24_qp32.fufref2",
+      "stream_sha256": "fea62dfe37196caceee4dfe00fd72ec2d521f76ff5b9810e715ea93fa27b545d",
+      "stream_bytes": 16599,
+      "payload_bytes": 16511,
+      "latent_sha256": "dd24ea6f880bdd34ceaaa2e577e12f081e7a774ad83dbdb261d30f247292d2f6",
+      "cpu_encoder_seconds_single_pass": 3.1632547173649073
+    },
+    {
+      "image": "kodim24.png",
+      "image_sha256": "1071c68372cc5a01435c2c225a5cf7d4bb803846ec08bb6b3d6721b156d7cb96",
+      "qp": 48,
+      "shape": [
+        512,
+        768
+      ],
+      "stream": "proof/early_exit_vs_released/results/bitstream_kodak3x3/kodim24_qp48.fufref2",
+      "stream_sha256": "80eabcd1ca6c84eefe3c3f483d5cfff80d6ab35c3d95527a1471446b9d910b72",
+      "stream_bytes": 34426,
+      "payload_bytes": 34338,
+      "latent_sha256": "b4c10abf52951f40ed7a320e51afc5a8547ddb9cc1b6b8e5c4e6676e4f9ccca1",
+      "cpu_encoder_seconds_single_pass": 3.3168418975546956
+    }
+  ]
+}
