@@ -162,6 +162,8 @@ def main():
         for block in range(a.blocks):
             others = [pid for pid in gpu_occupants(a.gpu) if pid != os.getpid()]
             if others:
+                if not a.allow_shared_diagnostic:
+                    raise RuntimeError(f'GPU became shared during block {block+1}: {others}')
                 diagnostic = True
                 interference.append({'block': block+1, 'pids': others})
             order = list(arms)

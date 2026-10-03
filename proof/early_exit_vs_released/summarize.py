@@ -45,7 +45,10 @@ def summarize(paths):
         if count < 20 or any(len(samples[arm]) != count for arm in ARMS):
             raise ValueError('Missing paired repetitions')
         if all(matched):
-            if (len(samples['released_d12_triton']) != count or
+            if (row.get('schema', 0) < 2 or
+                    row.get('released_triton_patches') !=
+                    {'fused_ffn': 14, 'fused_plain_wsilu': 14, 'fused_blocks': 14} or
+                    len(samples['released_d12_triton']) != count or
                     row['released_stock_vs_triton_max_abs'] is None or
                     row['released_stock_vs_triton_max_abs'] > 1e-4):
                 raise ValueError('Missing or invalid matched released-D12 control')
@@ -70,6 +73,10 @@ def summarize(paths):
                       samples['e15_triton'][i]['wall_ms'] for i in range(count)]
             if any(not math.isfinite(x) or x <= 0 for x in paired):
                 raise ValueError('Invalid matched-kernel timing')
+            if not math.isclose(statistics.median(paired),
+                                row['median_speedup_released_triton_vs_e15_triton_wall'],
+                                rel_tol=1e-9):
+                raise ValueError('Saved matched speedup disagrees with raw samples')
             case['paired_median_speedup_matched_kernels'] = statistics.median(paired)
             case['released_triton_median_ms'] = statistics.median(
                 x['wall_ms'] for x in samples['released_d12_triton'])
