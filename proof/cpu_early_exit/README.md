@@ -13,6 +13,31 @@ custom-fusion gain. `matched_routed_cpu.py` is the CPU correctness control
 that includes the actual router and tile assembly. Run it with `--blocks 0`
 while training occupies the host; nonzero timing blocks refuse a loaded CPU.
 
+The [Kodak3x3 routed audit](results/kodak3x3_routed) runs three predeclared
+images at QP 16/32/48 from real research bitstreams. Its
+[`plot_qp_cohort.py`](plot_qp_cohort.py) verifies source and stream hashes,
+computes the project's frame-level synthesis MAC model, and regenerates the
+three-panel figure in `cvpr2027/figs/cpu_qp/fig_cpu_qp_route_quality_mac.pdf`:
+
+```bash
+python proof/cpu_early_exit/plot_qp_cohort.py \
+  --cohort proof/cpu_early_exit/results/kodak3x3_routed
+```
+
+Across the three images, QP16 uses exits 3/4 at 66.7/33.3% and saves 20.5%
+analytical synthesis MAC at 0.074 dB mean YUV 4:4:4 loss. QP32 and QP48
+use the deepest exit for 83.3% and 88.9% of tiles, saving 2.6% and 1.2%.
+The analytic MAC model includes adapters and seam repair but excludes the
+router. None of these are CPU latency measurements. The full raw records and
+manifest hashes are checked by the plot generator.
+
+`run_when_idle.py` waits for five consecutive one-minute load checks below
+its threshold, then records paired released/routed/all-deep PyTorch CPU
+latencies at 1/2/4/8 threads over all nine streams. It pins each child to
+node-0 CPUs and uses low scheduling priority; the benchmark aborts if the
+host becomes loaded. This is the shared-backend CPU control, not the final
+oneDNN or custom-fusion arm.
+
 `released` is Microsoft's released D12 decoder. `e15_exit0` and `e15_deep`
 export fixed uniform exits of the early-exit checkpoint. These do **not**
 include decoder-side routing, per-tile variable depth, patch assembly or seam

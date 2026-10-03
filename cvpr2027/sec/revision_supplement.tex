@@ -191,6 +191,36 @@ This is evidence for conditioning a depth decision on QP, but these
 uniform-map comparisons cannot quantify the gain of a learned spatial
 selector or the latency of conditional execution.
 
+\begin{figure*}[t]
+\centering
+\includegraphics[width=\textwidth]{figs/cpu_qp/fig_cpu_qp_route_quality_mac.pdf}
+\caption{\textbf{From coded latent to exit choice across QP.}
+Nine predeclared Kodak research bitstreams (three images, QP 16/32/48)
+are entropy-decoded before the same decoder-side head routes six
+$256\times256$ tiles per image. \textbf{a}, pooled exit distribution;
+\textbf{b}, YUV 4:4:4 PSNR loss against released D12, with 6:1:1 channel
+weights; \textbf{c}, analytical synthesis MAC saving against released D12,
+including adapters and grid repair but excluding router work. Points are
+individual images; lines are three-image means. Negative saving means
+all-deep tiling paid repair overhead. The fixed QP-only multiplier was
+calibrated elsewhere; this small audit gives neither a per-image guarantee
+nor a measured CPU latency. FUFREF2 is a research stream, not the native
+CUDA wire format.}
+\label{fig:cpu-qp-route}
+\end{figure*}
+
+\paragraph{Bitstream-level routed decisions.}
+\Cref{fig:cpu-qp-route} follows the entropy-decoded latent through the
+decoder-side router, six-tile reconstruction, and seam repair. At QP16,
+exits 3/4 take 66.7/33.3\% of tiles: mean synthesis MAC saving is
+20.5\% at 0.074\,dB weighted YUV PSNR loss. At QP32/48, 83.3/88.9\%
+reach the deepest exit and mean saving drops to 2.6/1.2\%. One QP32
+image sends all six tiles deep. The largest observed loss among the nine
+images is 0.086\,dB. These PSNR differences use released D12 as the
+reference and are distinct from the main sweep's $\Delta_{444}$ against
+the e15 full-frame output. Router MACs are excluded, and no latency was
+measured on this loaded host.
+
 
 
 \section{Auditing the Scalar Control Search}

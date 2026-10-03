@@ -1,0 +1,77 @@
+{
+  "schema": 1,
+  "scope": "Same decoded FUFREF2 latent -> CPU synthesis; e15 includes router and patch assembly; entropy, model loading and disk I/O excluded",
+  "backend": "PyTorch CPU FP32 for all arms; no custom fusion or ONNX EP",
+  "claim_eligible": false,
+  "git_commit": "0c148acffe13b0b0b0a7700913f8dee964b1e0c7",
+  "tracked_code_changes": "",
+  "script_sha256": "f1afd02e8d4c657dbf9393a95d3aa42329dc9fbbfea07e12123b73ff16ee6f9e",
+  "loadavg_1m_before_after": [
+    199.2509765625,
+    208.3525390625
+  ],
+  "affinity_cpus": [
+    0
+  ],
+  "threads": 1,
+  "stream_sha256": "9d5aa8635d795ba0f7238eb59b91f5dc1a8ec12d80033bc0f0376fc46d6ca7bd",
+  "latent_sha256": "ff8b2cef17b578e453af1ec7f11ce9628d1b5c506be71afffb7d54772b9344ae",
+  "source_sha256": "bc34a3ce58dea09dce1704c997171602de90cb34d0c8503a988b77f473d39b08",
+  "released_sha256": "b3b900de23f30e4fc437010ddffe6a5413a56d6cfd97fb6235adbcd2b6973302",
+  "e15_sha256": "91556d30bca41988755ff43dee3bc6d0cd2a0a4eda1d18d2891b168dc0a04ce9",
+  "router_sha256": "5b832c639fa7f857ef071276fd683e8e6150ca35e56b4470008a7d9dd79dda0f",
+  "calibration_sha256": "d6d64c327bbee6cb81681ccea6bf0f06295ad5944fb08b15249e5de269bc05f5",
+  "shared_nondecoder_tensors_exact": 255,
+  "qp": 16,
+  "shape": [
+    512,
+    768
+  ],
+  "route_counts": [
+    0,
+    0,
+    0,
+    4,
+    2,
+    0
+  ],
+  "e15_released_max_abs": 0.10918427258729935,
+  "quality": {
+    "released_cpu": {
+      "y_cb_cr": [
+        23.528189646549208,
+        38.70642844361137,
+        41.72672516548117
+      ],
+      "yuv_6_1_1": 27.700286436048472
+    },
+    "e15_routed_cpu": {
+      "y_cb_cr": [
+        23.511957662798693,
+        38.55807323691779,
+        41.52705956570767
+      ],
+      "yuv_6_1_1": 27.6446098474272
+    },
+    "e15_all_deep_cpu": {
+      "y_cb_cr": [
+        23.523345586552423,
+        38.65551333414644,
+        41.66919002086004
+      ],
+      "yuv_6_1_1": 27.683097109290127
+    }
+  },
+  "timing_ms_raw": {
+    "released_cpu": [],
+    "e15_routed_cpu": [],
+    "e15_all_deep_cpu": []
+  },
+  "timing_ms_median": {
+    "released_cpu": null,
+    "e15_routed_cpu": null,
+    "e15_all_deep_cpu": null
+  },
+  "block_orders": [],
+  "limitations": "FUFREF2 research stream; fixed-QP beta; CPU smoke or synthesis timing only"
+}

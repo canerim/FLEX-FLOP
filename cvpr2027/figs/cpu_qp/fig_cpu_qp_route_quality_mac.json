@@ -1,0 +1,283 @@
+{
+  "schema": 1,
+  "scope": "Kodak RGB -> YCbCr 4:4:4, FUFREF2 research stream, synthesis-only quality and analytical synthesis MAC excluding router; no CPU latency",
+  "manifest": "/home/can_karsal/FLEX-PLUS/proof/early_exit_vs_released/results/bitstream_kodak3x3/manifest.json",
+  "checkpoint": "/home/can_karsal/FLEX-PLUS/proof/early_exit_vs_released/artifacts/e15_epoch15.pth.tar",
+  "manifest_sha256": "91000ab19dd1ade955338a50c5eecd75361065e8594c8d2b4b66b04786f20652",
+  "checkpoint_sha256": "91556d30bca41988755ff43dee3bc6d0cd2a0a4eda1d18d2891b168dc0a04ce9",
+  "cost_model_sha256": "bdfdd84cef1c71e0da219784276eab29549edca871c8e9ad6d67f1c7171a6e56",
+  "plot_script_sha256": "13bf92453e371a39422a2e939f9530b285af5127d828f2d949bd083ef8e8bbe8",
+  "qps": [
+    16,
+    32,
+    48
+  ],
+  "images": [
+    "kodim01.png",
+    "kodim13.png",
+    "kodim24.png"
+  ],
+  "per_qp": {
+    "16": {
+      "exit_share": [
+        0.0,
+        0.0,
+        0.0,
+        0.6666666666666666,
+        0.3333333333333333,
+        0.0
+      ],
+      "quality_loss_db_mean": 0.07417818773199158,
+      "mac_saved_pct_mean": 20.487592212560312,
+      "quality_loss_db_range": [
+        0.055676588621270895,
+        0.08460470980240586
+      ],
+      "mac_saved_pct_range": [
+        18.62244764189177,
+        22.35273877005034
+      ]
+    },
+    "32": {
+      "exit_share": [
+        0.0,
+        0.0,
+        0.0,
+        0.1111111111111111,
+        0.05555555555555555,
+        0.8333333333333334
+      ],
+      "quality_loss_db_mean": 0.04348497043050514,
+      "mac_saved_pct_mean": 2.6223327638730773,
+      "quality_loss_db_range": [
+        0.03850917839450574,
+        0.053322283369247714
+      ],
+      "mac_saved_pct_range": [
+        -0.9507193245465118,
+        5.573670657676988
+      ]
+    },
+    "48": {
+      "exit_share": [
+        0.0,
+        0.0,
+        0.0,
+        0.05555555555555555,
+        0.05555555555555555,
+        0.8888888888888888
+      ],
+      "quality_loss_db_mean": 0.06578020429330185,
+      "mac_saved_pct_mean": 1.2240753493731586,
+      "quality_loss_db_range": [
+        0.05087807702818026,
+        0.08585962761018351
+      ],
+      "mac_saved_pct_range": [
+        -0.9507193245465118,
+        3.2440469584887555
+      ]
+    }
+  },
+  "rows": [
+    {
+      "image": "kodim01.png",
+      "qp": 16,
+      "route_counts": [
+        0,
+        0,
+        0,
+        5,
+        1,
+        0
+      ],
+      "tiles": 6,
+      "released_yuv611_db": 29.589006215998275,
+      "routed_yuv611_db": 29.50440150619587,
+      "all_deep_yuv611_db": 29.550250015158078,
+      "quality_loss_db": 0.08460470980240586,
+      "relative_mac": 0.7764726122994966,
+      "mac_saved_pct": 22.35273877005034,
+      "stream_sha256": "25ec54029c8b99c064ade3d48db2e9c85dbcf27e825280084002527f8b673433",
+      "run_commit": "0c148acffe13b0b0b0a7700913f8dee964b1e0c7",
+      "run_script_sha256": "f1afd02e8d4c657dbf9393a95d3aa42329dc9fbbfea07e12123b73ff16ee6f9e"
+    },
+    {
+      "image": "kodim01.png",
+      "qp": 32,
+      "route_counts": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        6
+      ],
+      "tiles": 6,
+      "released_yuv611_db": 32.63550263159396,
+      "routed_yuv611_db": 32.59699345319945,
+      "all_deep_yuv611_db": 32.59699345319945,
+      "quality_loss_db": 0.03850917839450574,
+      "relative_mac": 1.0095071932454651,
+      "mac_saved_pct": -0.9507193245465118,
+      "stream_sha256": "ae06007c9ebef84894b8aacaaf7d551a9a062076aac97590586a42652d609ceb",
+      "run_commit": "0c148acffe13b0b0b0a7700913f8dee964b1e0c7",
+      "run_script_sha256": "f1afd02e8d4c657dbf9393a95d3aa42329dc9fbbfea07e12123b73ff16ee6f9e"
+    },
+    {
+      "image": "kodim01.png",
+      "qp": 48,
+      "route_counts": [
+        0,
+        0,
+        0,
+        0,
+        1,
+        5
+      ],
+      "tiles": 6,
+      "released_yuv611_db": 36.546446861082366,
+      "routed_yuv611_db": 36.485843952840824,
+      "all_deep_yuv611_db": 36.488499719086235,
+      "quality_loss_db": 0.0606029082415418,
+      "relative_mac": 0.9862110158582277,
+      "mac_saved_pct": 1.378898414177232,
+      "stream_sha256": "734ba0881ef11e9f855d944d492f5481020be765ee727488a15c539a0512baec",
+      "run_commit": "0c148acffe13b0b0b0a7700913f8dee964b1e0c7",
+      "run_script_sha256": "f1afd02e8d4c657dbf9393a95d3aa42329dc9fbbfea07e12123b73ff16ee6f9e"
+    },
+    {
+      "image": "kodim13.png",
+      "qp": 16,
+      "route_counts": [
+        0,
+        0,
+        0,
+        4,
+        2,
+        0
+      ],
+      "tiles": 6,
+      "released_yuv611_db": 27.700286436048472,
+      "routed_yuv611_db": 27.6446098474272,
+      "all_deep_yuv611_db": 27.683097109290127,
+      "quality_loss_db": 0.055676588621270895,
+      "relative_mac": 0.7951240977426118,
+      "mac_saved_pct": 20.487590225738817,
+      "stream_sha256": "9d5aa8635d795ba0f7238eb59b91f5dc1a8ec12d80033bc0f0376fc46d6ca7bd",
+      "run_commit": "0c148acffe13b0b0b0a7700913f8dee964b1e0c7",
+      "run_script_sha256": "f1afd02e8d4c657dbf9393a95d3aa42329dc9fbbfea07e12123b73ff16ee6f9e"
+    },
+    {
+      "image": "kodim13.png",
+      "qp": 32,
+      "route_counts": [
+        0,
+        0,
+        0,
+        1,
+        0,
+        5
+      ],
+      "tiles": 6,
+      "released_yuv611_db": 31.123260749453497,
+      "routed_yuv611_db": 31.084637299925735,
+      "all_deep_yuv611_db": 31.090813538212437,
+      "quality_loss_db": 0.03862344952776198,
+      "relative_mac": 0.9675595304151124,
+      "mac_saved_pct": 3.2440469584887555,
+      "stream_sha256": "76883eb68ca1cf48d84edfa8bfd9f0f1bcfb2001d204e637f81f5e08d07bb875",
+      "run_commit": "0c148acffe13b0b0b0a7700913f8dee964b1e0c7",
+      "run_script_sha256": "f1afd02e8d4c657dbf9393a95d3aa42329dc9fbbfea07e12123b73ff16ee6f9e"
+    },
+    {
+      "image": "kodim13.png",
+      "qp": 48,
+      "route_counts": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        6
+      ],
+      "tiles": 6,
+      "released_yuv611_db": 35.0216551230177,
+      "routed_yuv611_db": 34.97077704598952,
+      "all_deep_yuv611_db": 34.97077704598952,
+      "quality_loss_db": 0.05087807702818026,
+      "relative_mac": 1.0095071932454651,
+      "mac_saved_pct": -0.9507193245465118,
+      "stream_sha256": "93c6aa9f0026e7e6bc06ed5fa287689f332226bd3b578af7ec614a06a68dc29f",
+      "run_commit": "0c148acffe13b0b0b0a7700913f8dee964b1e0c7",
+      "run_script_sha256": "f1afd02e8d4c657dbf9393a95d3aa42329dc9fbbfea07e12123b73ff16ee6f9e"
+    },
+    {
+      "image": "kodim24.png",
+      "qp": 16,
+      "route_counts": [
+        0,
+        0,
+        0,
+        3,
+        3,
+        0
+      ],
+      "tiles": 6,
+      "released_yuv611_db": 29.686991093011212,
+      "routed_yuv611_db": 29.604737828238914,
+      "all_deep_yuv611_db": 29.653965935680244,
+      "quality_loss_db": 0.082253264772298,
+      "relative_mac": 0.8137755235810823,
+      "mac_saved_pct": 18.62244764189177,
+      "stream_sha256": "1ac9f13ac1ea19b497799821fda050f3def2d460f9daba18ea31e52e8f122a77",
+      "run_commit": "0c148acffe13b0b0b0a7700913f8dee964b1e0c7",
+      "run_script_sha256": "f1afd02e8d4c657dbf9393a95d3aa42329dc9fbbfea07e12123b73ff16ee6f9e"
+    },
+    {
+      "image": "kodim24.png",
+      "qp": 32,
+      "route_counts": [
+        0,
+        0,
+        0,
+        1,
+        1,
+        4
+      ],
+      "tiles": 6,
+      "released_yuv611_db": 33.057339901762994,
+      "routed_yuv611_db": 33.004017618393746,
+      "all_deep_yuv611_db": 33.00987633333115,
+      "quality_loss_db": 0.053322283369247714,
+      "relative_mac": 0.9442632934232301,
+      "mac_saved_pct": 5.573670657676988,
+      "stream_sha256": "fea62dfe37196caceee4dfe00fd72ec2d521f76ff5b9810e715ea93fa27b545d",
+      "run_commit": "0c148acffe13b0b0b0a7700913f8dee964b1e0c7",
+      "run_script_sha256": "f1afd02e8d4c657dbf9393a95d3aa42329dc9fbbfea07e12123b73ff16ee6f9e"
+    },
+    {
+      "image": "kodim24.png",
+      "qp": 48,
+      "route_counts": [
+        0,
+        0,
+        0,
+        1,
+        0,
+        5
+      ],
+      "tiles": 6,
+      "released_yuv611_db": 36.722871481746225,
+      "routed_yuv611_db": 36.63701185413604,
+      "all_deep_yuv611_db": 36.645724163821924,
+      "quality_loss_db": 0.08585962761018351,
+      "relative_mac": 0.9675595304151124,
+      "mac_saved_pct": 3.2440469584887555,
+      "stream_sha256": "80eabcd1ca6c84eefe3c3f483d5cfff80d6ab35c3d95527a1471446b9d910b72",
+      "run_commit": "0c148acffe13b0b0b0a7700913f8dee964b1e0c7",
+      "run_script_sha256": "f1afd02e8d4c657dbf9393a95d3aa42329dc9fbbfea07e12123b73ff16ee6f9e"
+    }
+  ],
+  "latency_status": "unmeasured; host loaded during cohort quality run"
+}
