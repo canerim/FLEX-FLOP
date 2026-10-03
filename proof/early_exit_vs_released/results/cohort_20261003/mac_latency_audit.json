@@ -1,0 +1,252 @@
+{
+  "definition": "convolution MACs only, exact padded frame and archived tile map",
+  "block_macs_per_feature_pixel": 1035648,
+  "incorrect_8c2_plus_9c_per_feature_pixel": 1183104,
+  "cost_model_block_overpricing_fraction": 0.1423804226918799,
+  "median_routed_conv_mac_saving_fraction": 0.24349532271213603,
+  "rows": [
+    {
+      "sequence": "BQMall_832x480_60.yuv",
+      "qp": 16,
+      "padded_shape": [
+        512,
+        1024
+      ],
+      "tile_counts": [
+        0,
+        0,
+        2,
+        6,
+        0,
+        0
+      ],
+      "released_conv_macs": 113829740544,
+      "e15_routed_conv_macs": 82927681536,
+      "e15_all_deep_tiled_conv_macs": 115066011648,
+      "e15_routed_conv_mac_saving_fraction": 0.27147614375924056,
+      "e15_routed_vs_all_deep_conv_mac_saving_fraction": 0.27930341594105823,
+      "average_trunk_blocks_per_tile": 7.5,
+      "released_vs_e15_stock_time_ratio": 1.2992007969704518,
+      "released_vs_e15_triton_time_ratio": 2.8515143030196066,
+      "released_stock_wall_ms": 30.457273,
+      "e15_stock_wall_ms": 23.3457395,
+      "e15_triton_wall_ms": 10.6327635
+    },
+    {
+      "sequence": "BQMall_832x480_60.yuv",
+      "qp": 32,
+      "padded_shape": [
+        512,
+        1024
+      ],
+      "tile_counts": [
+        0,
+        0,
+        0,
+        6,
+        2,
+        0
+      ],
+      "released_conv_macs": 113829740544,
+      "e15_routed_conv_macs": 90203750400,
+      "e15_all_deep_tiled_conv_macs": 115066011648,
+      "e15_routed_conv_mac_saving_fraction": 0.20755551256718852,
+      "e15_routed_vs_all_deep_conv_mac_saving_fraction": 0.2160695490520388,
+      "average_trunk_blocks_per_tile": 8.5,
+      "released_vs_e15_stock_time_ratio": 1.1950581014736503,
+      "released_vs_e15_triton_time_ratio": 2.66096917035524,
+      "released_stock_wall_ms": 30.383954,
+      "e15_stock_wall_ms": 25.3682675,
+      "e15_triton_wall_ms": 11.412057
+    },
+    {
+      "sequence": "BQMall_832x480_60.yuv",
+      "qp": 48,
+      "padded_shape": [
+        512,
+        1024
+      ],
+      "tile_counts": [
+        0,
+        0,
+        0,
+        4,
+        2,
+        2
+      ],
+      "released_conv_macs": 113829740544,
+      "e15_routed_conv_macs": 97177829376,
+      "e15_all_deep_tiled_conv_macs": 115066011648,
+      "e15_routed_conv_mac_saving_fraction": 0.1462878777410841,
+      "e15_routed_vs_all_deep_conv_mac_saving_fraction": 0.15546017469278406,
+      "average_trunk_blocks_per_tile": 9.5,
+      "released_vs_e15_stock_time_ratio": 1.104376442417367,
+      "released_vs_e15_triton_time_ratio": 2.485988647775355,
+      "released_stock_wall_ms": 30.347834,
+      "e15_stock_wall_ms": 27.382239499999997,
+      "e15_triton_wall_ms": 12.203685499999999
+    },
+    {
+      "sequence": "FourPeople_1280x720_60.yuv",
+      "qp": 16,
+      "padded_shape": [
+        768,
+        1280
+      ],
+      "tile_counts": [
+        0,
+        0,
+        7,
+        6,
+        2,
+        0
+      ],
+      "released_conv_macs": 213430763520,
+      "e15_routed_conv_macs": 151630184448,
+      "e15_all_deep_tiled_conv_macs": 215748771840,
+      "e15_routed_conv_mac_saving_fraction": 0.28955797211590273,
+      "e15_routed_vs_all_deep_conv_mac_saving_fraction": 0.2971909728392361,
+      "average_trunk_blocks_per_tile": 7.333333333333333,
+      "released_vs_e15_stock_time_ratio": 1.328159372180493,
+      "released_vs_e15_triton_time_ratio": 3.003297287331615,
+      "released_stock_wall_ms": 55.7117315,
+      "e15_stock_wall_ms": 41.874276,
+      "e15_triton_wall_ms": 18.512760999999998
+    },
+    {
+      "sequence": "FourPeople_1280x720_60.yuv",
+      "qp": 32,
+      "padded_shape": [
+        768,
+        1280
+      ],
+      "tile_counts": [
+        0,
+        0,
+        6,
+        3,
+        0,
+        6
+      ],
+      "released_conv_macs": 213430763520,
+      "e15_routed_conv_macs": 171639373824,
+      "e15_all_deep_tiled_conv_macs": 215748771840,
+      "e15_routed_conv_mac_saving_fraction": 0.1958077130342264,
+      "e15_routed_vs_all_deep_conv_mac_saving_fraction": 0.20444796806867427,
+      "average_trunk_blocks_per_tile": 8.8,
+      "released_vs_e15_stock_time_ratio": 1.184945576403663,
+      "released_vs_e15_triton_time_ratio": 2.656085359079732,
+      "released_stock_wall_ms": 56.146973,
+      "e15_stock_wall_ms": 47.555237,
+      "e15_triton_wall_ms": 21.025374499999998
+    },
+    {
+      "sequence": "FourPeople_1280x720_60.yuv",
+      "qp": 48,
+      "padded_shape": [
+        768,
+        1280
+      ],
+      "tile_counts": [
+        0,
+        0,
+        0,
+        9,
+        1,
+        5
+      ],
+      "released_conv_macs": 213430763520,
+      "e15_routed_conv_macs": 182395404288,
+      "e15_all_deep_tiled_conv_macs": 215748771840,
+      "e15_routed_conv_mac_saving_fraction": 0.14541183623274512,
+      "e15_routed_vs_all_deep_conv_mac_saving_fraction": 0.15459354538868464,
+      "average_trunk_blocks_per_tile": 9.466666666666667,
+      "released_vs_e15_stock_time_ratio": 1.1103748975426642,
+      "released_vs_e15_triton_time_ratio": 2.5289514411356757,
+      "released_stock_wall_ms": 55.824546,
+      "e15_stock_wall_ms": 50.2428835,
+      "e15_triton_wall_ms": 22.029165499999998
+    },
+    {
+      "sequence": "videoSRC05_1920x1080_25.yuv",
+      "qp": 16,
+      "padded_shape": [
+        1280,
+        2048
+      ],
+      "tile_counts": [
+        0,
+        0,
+        15,
+        21,
+        4,
+        0
+      ],
+      "released_conv_macs": 569148702720,
+      "e15_routed_conv_macs": 410101481472,
+      "e15_all_deep_tiled_conv_macs": 575330058240,
+      "e15_routed_conv_mac_saving_fraction": 0.27944756877754906,
+      "e15_routed_vs_all_deep_conv_mac_saving_fraction": 0.28718919583908575,
+      "average_trunk_blocks_per_tile": 7.45,
+      "released_vs_e15_stock_time_ratio": 1.3233414560194097,
+      "released_vs_e15_triton_time_ratio": 2.916758032496584,
+      "released_stock_wall_ms": 146.360005,
+      "e15_stock_wall_ms": 110.976923,
+      "e15_triton_wall_ms": 50.132185
+    },
+    {
+      "sequence": "videoSRC05_1920x1080_25.yuv",
+      "qp": 32,
+      "padded_shape": [
+        1280,
+        2048
+      ],
+      "tile_counts": [
+        0,
+        0,
+        13,
+        20,
+        4,
+        3
+      ],
+      "released_conv_macs": 569148702720,
+      "e15_routed_conv_macs": 424804614144,
+      "e15_all_deep_tiled_conv_macs": 575330058240,
+      "e15_routed_conv_mac_saving_fraction": 0.2536140166641334,
+      "e15_routed_vs_all_deep_conv_mac_saving_fraction": 0.2616331998305015,
+      "average_trunk_blocks_per_tile": 7.85,
+      "released_vs_e15_stock_time_ratio": 1.2777407094961015,
+      "released_vs_e15_triton_time_ratio": 2.8043416379288013,
+      "released_stock_wall_ms": 146.496118,
+      "e15_stock_wall_ms": 114.9455385,
+      "e15_triton_wall_ms": 52.1604975
+    },
+    {
+      "sequence": "videoSRC05_1920x1080_25.yuv",
+      "qp": 48,
+      "padded_shape": [
+        1280,
+        2048
+      ],
+      "tile_counts": [
+        0,
+        0,
+        14,
+        19,
+        0,
+        7
+      ],
+      "released_conv_macs": 569148702720,
+      "e15_routed_conv_macs": 430563655680,
+      "e15_all_deep_tiled_conv_macs": 575330058240,
+      "e15_routed_conv_mac_saving_fraction": 0.24349532271213603,
+      "e15_routed_vs_all_deep_conv_mac_saving_fraction": 0.25162322129119563,
+      "average_trunk_blocks_per_tile": 8.0,
+      "released_vs_e15_stock_time_ratio": 1.2617683704907885,
+      "released_vs_e15_triton_time_ratio": 2.757559110597332,
+      "released_stock_wall_ms": 146.566977,
+      "e15_stock_wall_ms": 116.431341,
+      "e15_triton_wall_ms": 53.0885095
+    }
+  ]
+}

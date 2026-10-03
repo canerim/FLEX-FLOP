@@ -21,6 +21,13 @@ waiting and expires after 24 hours by default. The benchmark aborts if another
 compute process arrives during its paired measurements. The watcher's JSONL
 and run log are written under `results/`.
 
+`mac_latency_audit.py` reconciles the recorded padded shapes and tile maps with
+convolution MACs. It includes the trained early-exit adapters and seam repair;
+host planning and pointwise activations have no convolution MAC count. A CPU
+forward-hook test checks the released model's analytic formula. This audit
+must be used instead of multiplying the nominal source resolution by the
+decoder's per-pixel MACs, because the benchmark pads to whole tiles first.
+
 Open the local address printed by the server and enter the printed run token. The browser shows a live comparison after each paired block. The server accepts only fixed workloads and starts at most one benchmark at a time. It binds to loopback by default; a public deployment should place it behind authentication and use `PROOF_RUN_TOKEN` for the run endpoint. Do not expose an unauthenticated GPU benchmark endpoint on a shared server.
 
 The prior e15-vs-e15 kernel audit lives in [`cvpr2027/data/triton_20261003`](../../cvpr2027/data/triton_20261003/README.md). Its shared-GPU timings cannot establish the released comparison.
