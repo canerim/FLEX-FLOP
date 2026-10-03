@@ -1,0 +1,156 @@
+{
+  "schema": 1,
+  "gpu_used": false,
+  "routing_source_sha256": "b4f1c074c78b802234acfafccf218b85fcf3d6d704c327dbb27c18578bfd711f",
+  "seam_source_sha256": "8278e4f31dd26d6b627533f83be870f42a55eb00207b16adefa28ff691eb98e0",
+  "budget_rule": "per-frame 0.1 dB proxy from existing true-decode verified routing sweep; 265 frame-QP cases",
+  "side_bits_scope": "estimated adaptive code lengths, not emitted map bytes",
+  "saving_scope": "analytical cost model, not measured latency",
+  "points": {
+    "B_signalled_beta": {
+      "analytical_saving_pct_vs_released": 27.420432928419224,
+      "estimated_side_bits_per_frame": 8.0,
+      "frames_over_0_1db": 2,
+      "violation_fraction": 0.007547169811320755
+    },
+    "D2": {
+      "analytical_saving_pct_vs_released": 27.430292593804054,
+      "estimated_side_bits_per_frame": 24.507222733064147,
+      "frames_over_0_1db": 23,
+      "violation_fraction": 0.08679245283018867
+    },
+    "D2_fallback_A": {
+      "analytical_saving_pct_vs_released": 27.522803186066756,
+      "estimated_side_bits_per_frame": 29.358856886161284,
+      "frames_over_0_1db": 1,
+      "violation_fraction": 0.0037735849056603774
+    },
+    "D3": {
+      "analytical_saving_pct_vs_released": 28.721788335342335,
+      "estimated_side_bits_per_frame": 36.786033013151616,
+      "frames_over_0_1db": 2,
+      "violation_fraction": 0.007547169811320755
+    },
+    "A_kt4": {
+      "analytical_saving_pct_vs_released": 29.300074532346905,
+      "estimated_side_bits_per_frame": 41.521144166340754,
+      "frames_over_0_1db": 1,
+      "violation_fraction": 0.0037735849056603774
+    },
+    "C_rho0.1": {
+      "analytical_saving_pct_vs_released": 26.44599635740597,
+      "estimated_side_bits_per_frame": 22.392445041646422,
+      "frames_over_0_1db": 79,
+      "violation_fraction": 0.2981132075471698
+    },
+    "C_rho0.2": {
+      "analytical_saving_pct_vs_released": 26.736320618009678,
+      "estimated_side_bits_per_frame": 37.30729931440364,
+      "frames_over_0_1db": 50,
+      "violation_fraction": 0.18867924528301888
+    },
+    "C_rho0.35": {
+      "analytical_saving_pct_vs_released": 27.8152509689791,
+      "estimated_side_bits_per_frame": 54.473576106733546,
+      "frames_over_0_1db": 21,
+      "violation_fraction": 0.07924528301886792
+    }
+  },
+  "dominated": [
+    {
+      "point": "C_rho0.1",
+      "dominated_by": [
+        "B_signalled_beta"
+      ]
+    },
+    {
+      "point": "C_rho0.2",
+      "dominated_by": [
+        "B_signalled_beta",
+        "D2",
+        "D2_fallback_A",
+        "D3"
+      ]
+    },
+    {
+      "point": "C_rho0.35",
+      "dominated_by": [
+        "A_kt4",
+        "D3"
+      ]
+    }
+  ],
+  "seam_scope": "whole-frame PSNR gap; cannot isolate border-band distortion from these records",
+  "seam": [
+    {
+      "qp": 0,
+      "arm": "deepest",
+      "n_frames": 53,
+      "median_full_frame_gap_to_released_db": 0.025261162228410683,
+      "median_repair_gain_db": 0.0019366769009216966
+    },
+    {
+      "qp": 0,
+      "arm": "routed",
+      "n_frames": 53,
+      "median_full_frame_gap_to_released_db": 0.05936042228919547,
+      "median_repair_gain_db": 0.002183947501464445
+    },
+    {
+      "qp": 16,
+      "arm": "deepest",
+      "n_frames": 53,
+      "median_full_frame_gap_to_released_db": 0.029311962003923497,
+      "median_repair_gain_db": 0.001673788374084495
+    },
+    {
+      "qp": 16,
+      "arm": "routed",
+      "n_frames": 53,
+      "median_full_frame_gap_to_released_db": 0.08932365082939953,
+      "median_repair_gain_db": 0.0017518524415791603
+    },
+    {
+      "qp": 32,
+      "arm": "deepest",
+      "n_frames": 53,
+      "median_full_frame_gap_to_released_db": 0.03085755676652724,
+      "median_repair_gain_db": 0.0021432409407680098
+    },
+    {
+      "qp": 32,
+      "arm": "routed",
+      "n_frames": 53,
+      "median_full_frame_gap_to_released_db": 0.1003670349274941,
+      "median_repair_gain_db": 0.0025153292449360265
+    },
+    {
+      "qp": 48,
+      "arm": "deepest",
+      "n_frames": 53,
+      "median_full_frame_gap_to_released_db": 0.026537150119402497,
+      "median_repair_gain_db": 0.0029419779096855336
+    },
+    {
+      "qp": 48,
+      "arm": "routed",
+      "n_frames": 53,
+      "median_full_frame_gap_to_released_db": 0.10558846571993286,
+      "median_repair_gain_db": 0.003558720841461138
+    },
+    {
+      "qp": 63,
+      "arm": "deepest",
+      "n_frames": 53,
+      "median_full_frame_gap_to_released_db": 0.025925620225081047,
+      "median_repair_gain_db": 0.003779379347172096
+    },
+    {
+      "qp": 63,
+      "arm": "routed",
+      "n_frames": 53,
+      "median_full_frame_gap_to_released_db": 0.11596792923480592,
+      "median_repair_gain_db": 0.004339379246502517
+    }
+  ]
+}

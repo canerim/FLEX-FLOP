@@ -1,0 +1,438 @@
+{
+  "checkpoint": "runs/RECIPE512/ckpt_PIN_e15.pth.tar",
+  "frames": "53 CTC intra, 1080p, YUV 6:1:1",
+  "budget_db": 0.1,
+  "decoder_side_agreement": {
+    "e15_alpha0": {
+      "agree": 0.76541668176651,
+      "stderr": 0.0104063106700778,
+      "inputs": "stem,latent,scales,qp",
+      "context": 0
+    },
+    "e15_alpha3": {
+      "agree": 0.7645833492279053,
+      "stderr": 0.01042500976473093,
+      "inputs": "stem,latent,scales,qp",
+      "context": 0
+    },
+    "base_12k": {
+      "agree": 0.7691667079925537,
+      "stderr": 0.010133305564522743,
+      "inputs": "stem,qp",
+      "context": 0
+    },
+    "bits_only_6k": {
+      "agree": 0.5233333706855774,
+      "stderr": 0.012177770026028156,
+      "inputs": "bits,qp",
+      "context": 0
+    },
+    "cap_base_6k": {
+      "agree": 0.8004167079925537,
+      "stderr": 0.009348920546472073,
+      "inputs": "stem,qp",
+      "context": 0
+    },
+    "cap_base_6k_s1": {
+      "agree": 0.7895833253860474,
+      "stderr": 0.009545514360070229,
+      "inputs": "stem,qp",
+      "context": 0
+    },
+    "cap_large_all": {
+      "agree": 0.7516666650772095,
+      "stderr": 0.010282370261847973,
+      "inputs": "stem,latent,scales,qp",
+      "context": 0
+    },
+    "cap_small_6k": {
+      "agree": 0.7891666889190674,
+      "stderr": 0.010105809196829796,
+      "inputs": "stem,qp",
+      "context": 0
+    },
+    "cap_small_stem": {
+      "agree": 0.7762500047683716,
+      "stderr": 0.010183904320001602,
+      "inputs": "stem,qp",
+      "context": 0
+    },
+    "cap_small_stem_s1": {
+      "agree": 0.7820833325386047,
+      "stderr": 0.009574254974722862,
+      "inputs": "stem,qp",
+      "context": 0
+    },
+    "cap_tiny_stem": {
+      "agree": 0.768333375453949,
+      "stderr": 0.010654477402567863,
+      "inputs": "stem,qp",
+      "context": 0
+    },
+    "ce_bits_6k": {
+      "agree": 0.7866666913032532,
+      "stderr": 0.010052495636045933,
+      "inputs": "stem,bits,qp",
+      "context": 0
+    },
+    "ce_soft_6k": {
+      "agree": 0.8066666722297668,
+      "stderr": 0.0091854277998209,
+      "inputs": "stem,qp",
+      "context": 0
+    },
+    "ce_soft_6k_s1": {
+      "agree": 0.7816666960716248,
+      "stderr": 0.009621861390769482,
+      "inputs": "stem,qp",
+      "context": 0
+    },
+    "ce_soft_tau0.05_6k": {
+      "agree": 0.8070833683013916,
+      "stderr": 0.009228351525962353,
+      "inputs": "stem,qp",
+      "context": 0
+    },
+    "ce_soft_tau0.3_6k": {
+      "agree": 0.8025000095367432,
+      "stderr": 0.009320433251559734,
+      "inputs": "stem,qp",
+      "context": 0
+    },
+    "e15_ctx3": {
+      "agree": 0.7458333373069763,
+      "stderr": 0.01048219483345747,
+      "inputs": "stem,latent,scales,qp",
+      "context": 0
+    },
+    "crop1024_6k": {
+      "agree": 0.7799999713897705,
+      "stderr": 0.01167133916169405,
+      "inputs": "stem,qp",
+      "context": 0
+    },
+    "e15_latent_qp": {
+      "agree": 0.7308333516120911,
+      "stderr": 0.011162230744957924,
+      "inputs": "latent,qp",
+      "context": 0
+    },
+    "e15_scales_qp": {
+      "agree": 0.7041667103767395,
+      "stderr": 0.011881859973073006,
+      "inputs": "scales,qp",
+      "context": 0
+    },
+    "e15_stem_latent_scales_qp": {
+      "agree": 0.76500004529953,
+      "stderr": 0.010449017398059368,
+      "inputs": "stem,latent,scales,qp",
+      "context": 0
+    },
+    "e15_stem_qp": {
+      "agree": 0.7662500143051147,
+      "stderr": 0.010370710864663124,
+      "inputs": "stem,qp",
+      "context": 0
+    },
+    "v3_logmse_6k": {
+      "agree": 0.34375,
+      "stderr": 0.01534830778837204,
+      "inputs": "stem,qp",
+      "context": 0
+    },
+    "v3_rel_6k": {
+      "agree": 0.10833333432674408,
+      "stderr": 0.008143355138599873,
+      "inputs": "stem,qp",
+      "context": 0
+    }
+  },
+  "mean_budget_rule": {
+    "v3_seed0": {
+      "router_share_pct": 0.16288874189707633,
+      "B": 26.656959710077178,
+      "A": 29.232172223756898,
+      "D2": 28.65323503156979,
+      "D2_bits_kt": 20.054072378521433
+    },
+    "seed1": {
+      "router_share_pct": 0.16288874189707633,
+      "B": 26.20059146165949,
+      "A": 29.232172223756898,
+      "D2": 28.555122120021533,
+      "D2_bits_kt": 20.20716754190655
+    },
+    "seed2": {
+      "router_share_pct": 0.16288874189707633,
+      "B": 26.159165333847838,
+      "A": 29.232172223756898,
+      "D2": 28.522703063758925,
+      "D2_bits_kt": 20.53787227619306
+    },
+    "seed3": {
+      "router_share_pct": 0.16288874189707633,
+      "B": 26.152772814418796,
+      "A": 29.232172223756898,
+      "D2": 28.489760836161416,
+      "D2_bits_kt": 20.48818541836727
+    },
+    "cap_small_stem": {
+      "router_share_pct": 0.06653276888477312,
+      "B": 26.338203565538077,
+      "A": 29.232172223756898,
+      "D2": 28.574919952944914,
+      "D2_bits_kt": 20.256550936607553
+    },
+    "cap_small_stem_s1": {
+      "router_share_pct": 0.06653276888477312,
+      "B": 26.50623519956293,
+      "A": 29.232172223756898,
+      "D2": 28.57903622722078,
+      "D2_bits_kt": 20.404039172611817
+    },
+    "cap_tiny_stem": {
+      "router_share_pct": 0.033219605767958724,
+      "B": 26.558496589284566,
+      "A": 29.232172223756898,
+      "D2": 28.651282312089087,
+      "D2_bits_kt": 20.671232559099746
+    },
+    "inputs_stem_qp": {
+      "router_share_pct": 0.13343976716496891,
+      "B": 26.365160567326402,
+      "A": 29.232172223756898,
+      "D2": 28.50363633179893,
+      "D2_bits_kt": 20.418900009456934
+    },
+    "cap_small_6k": {
+      "router_share_pct": 0.06653276888477312,
+      "B": 26.639368359056434,
+      "A": 29.232172223756898,
+      "D2": 28.73922344014682,
+      "D2_bits_kt": 20.182794617422402
+    },
+    "cap_base_6k": {
+      "router_share_pct": 0.13343976716496891,
+      "B": 26.63128736645999,
+      "A": 29.232172223756898,
+      "D2": 28.661757422813867,
+      "D2_bits_kt": 19.856955960211184
+    },
+    "cap_base_6k_s1": {
+      "router_share_pct": 0.13343976716496891,
+      "B": 26.72386302900093,
+      "A": 29.232172223756898,
+      "D2": 28.628414562034195,
+      "D2_bits_kt": 19.57765287609092
+    },
+    "base_12k": {
+      "router_share_pct": 0.13343976716496891,
+      "B": 26.825626421395373,
+      "A": 29.232172223756898,
+      "D2": 28.688201642007233,
+      "D2_bits_kt": 19.509256826296802
+    },
+    "ce_soft_6k": {
+      "router_share_pct": 0.13343976716496891,
+      "B": 27.236324848739642,
+      "A": 29.232172223756898,
+      "D2": 28.771308128309737,
+      "D2_bits_kt": 21.070375939928066
+    },
+    "ce_bits_6k": {
+      "router_share_pct": 0.133,
+      "B": 26.52604686136066,
+      "A": 29.232172223756898,
+      "D2": 28.668442947027817,
+      "D2_bits_kt": 20.32242224855309
+    },
+    "bits_only_6k": {
+      "router_share_pct": 0.133,
+      "B": 24.94018692387275,
+      "A": 29.232172223756898,
+      "D2": 28.192147291399397,
+      "D2_bits_kt": 29.49668349013779
+    },
+    "crop1024_6k": {
+      "router_share_pct": 0.13343976716496891,
+      "B": 26.363342378245246,
+      "A": 29.232172223756898,
+      "D2": 28.50046426257326,
+      "D2_bits_kt": 19.731025418903172
+    },
+    "ce_soft_6k_s1": {
+      "router_share_pct": 0.13343976716496891,
+      "B": 27.13011411762916,
+      "A": 29.232172223756898,
+      "D2": 28.760316671936053,
+      "D2_bits_kt": 20.65672368534109
+    },
+    "ce_soft_tau0.05_6k": {
+      "router_share_pct": 0.13343976716496891,
+      "B": 26.753667623112822,
+      "A": 29.232172223756898,
+      "D2": 28.55050146216945,
+      "D2_bits_kt": 20.374637462621013
+    },
+    "ce_soft_tau0.3_6k": {
+      "router_share_pct": 0.13343976716496891,
+      "B": 27.270219423606747,
+      "A": 29.232172223756898,
+      "D2": 28.88227299336446,
+      "D2_bits_kt": 21.681464919545704
+    },
+    "_parameter_free": {
+      "raterank_noisy_bits": {
+        "B": 27.43148347116866,
+        "A": 29.232172223756898,
+        "params": 0,
+        "router_share_pct": 0.0,
+        "footing": "alpha,c fitted leave-one-sequence-out on the CTC oracle tables; the trained heads never saw CTC"
+      },
+      "raterank_decoder_bits": {
+        "B": 28.078252729379905,
+        "A": 29.232172223756898,
+        "params": 0,
+        "router_share_pct": 0.0,
+        "footing": "alpha,c fitted leave-one-sequence-out on the CTC oracle tables; the trained heads never saw CTC"
+      },
+      "raterank_decoder_bits_TRAINFIT": {
+        "B": 27.507114342923433,
+        "A": 29.232172223756898,
+        "params": 0,
+        "router_share_pct": 0.0,
+        "footing": "alpha,c,lphi fitted on 300 openimages training crops, tested on CTC -- the head's own footing"
+      }
+    }
+  },
+  "decoder_side_hedge": {
+    "hedge0.5": {
+      "B": 26.621288399472437,
+      "all_feasible": true,
+      "per_qp": {
+        "0": 35.01325245268041,
+        "16": 30.762155506791817,
+        "32": 25.252422477660197,
+        "48": 22.761587445287095,
+        "63": 19.31702411494266
+      }
+    }
+  },
+  "ensemble_two_seeds_agreement": {
+    "heads": [
+      "runs/RECIPE512/routers2/ablation_e15/cap_base_6k.pth",
+      "runs/RECIPE512/routers2/ablation_e15/cap_base_6k_s1.pth"
+    ],
+    "agree": {
+      "0": [
+        0.7816666960716248,
+        0.009800929576158524
+      ],
+      "1": [
+        0.7820833325386047,
+        0.009592401795089245
+      ],
+      "ens_logit": [
+        0.7829166650772095,
+        0.009623895399272442
+      ],
+      "ens_prob": [
+        0.7829166650772095,
+        0.009623895399272442
+      ]
+    }
+  },
+  "per_frame_budget_rule": {
+    "B_signalled_beta": {
+      "saving": 27.420432928419224,
+      "bits": 8.0,
+      "frames_over": 2
+    },
+    "D2": {
+      "saving": 27.430292593804054,
+      "bits": 24.507222733064147,
+      "frames_over": 23
+    },
+    "D2_fallback_A": {
+      "saving": 27.522803186066756,
+      "bits": 29.358856886161284,
+      "frames_over": 1
+    },
+    "D3": {
+      "saving": 28.721788335342335,
+      "bits": 36.786033013151616,
+      "frames_over": 2
+    },
+    "A_kt4": {
+      "saving": 29.300074532346905,
+      "bits": 41.521144166340754,
+      "bits_flat": 66.6,
+      "frames_over": 1
+    },
+    "C_rho0.1": {
+      "saving": 26.44599635740597,
+      "bits": 22.392445041646422,
+      "frames_over": 79
+    },
+    "C_rho0.2": {
+      "saving": 26.736320618009678,
+      "bits": 37.30729931440364,
+      "frames_over": 50
+    },
+    "C_rho0.35": {
+      "saving": 27.8152509689791,
+      "bits": 54.473576106733546,
+      "frames_over": 21
+    }
+  },
+  "per_frame_budget_rule_raterank_trainfit": {
+    "B_signalled_beta": {
+      "saving": 27.509202597276218,
+      "bits": 8.0,
+      "frames_over": 2
+    },
+    "D3": {
+      "saving": 28.288337869464225,
+      "bits": 44.703440354425936,
+      "frames_over": 6
+    },
+    "A_kt4": {
+      "saving": 29.300074532346905,
+      "bits": 41.521144166340754,
+      "frames_over": 1
+    },
+    "C_rho0.1": {
+      "saving": 27.963334052067882,
+      "bits": 22.392445041646422,
+      "frames_over": 76
+    },
+    "C_rho0.2": {
+      "saving": 28.625416283337575,
+      "bits": 37.30729931440364,
+      "frames_over": 56
+    },
+    "C_rho0.35": {
+      "saving": 28.737701042643135,
+      "bits": 54.473576106733546,
+      "frames_over": 19
+    }
+  },
+  "findings": [
+    "stem alone equals all inputs (0.766 vs 0.765); latent and scales add nothing",
+    "regret weight irrelevant: alpha 0/1/3 -> 0.7654/0.7650/0.7646",
+    "smaller head better on two seeds: 47k params 0.776/0.782 > 148k 0.766 > large(1.2M) 0.752 > ctx3(430k) 0.746; on budget all within the seed band; router share 0.163 -> 0.067%",
+    "spatial context helps neither the router (ctx3 -0.02) nor the flag coder (KT-ctx 101-105% of iid)",
+    "D2 beats C under the MEAN budget rule (28.65 @ 20 bits vs C 27.5 at equal bits) but collapses to B under the PER-FRAME rule (23/265 frames unreachable)",
+    "under the per-frame rule: A adaptively coded (KT-4) costs 41.5 bits, not 66.6, and is the best point; D3 is the only useful intermediate (28.72 @ 36.8); C is dominated",
+    "D is 3.4x less seed-sensitive than B (0.07 vs 0.24)",
+    "regression heads (log-MSE, relative log-MSE) collapse to one exit (0.34 / 0.11 agreement): the decision lives in differences ~1e-5 that a 10% regression error swamps; CE learns the decision directly",
+    "two-seed ensemble of the paper-size head: +0.1 agreement, within noise",
+    "decoder-side uncertainty hedge (deeper of top-2 when max prob < 0.5), beta re-bisected: B 35.01/30.76/25.25/22.76/19.32 vs 35.02/30.82/25.34/22.77/19.33 -- nothing",
+    "the parameter-free rank-1 bit surrogate, computed from DECODER-side symbols round(y_res)=y_q, delivers B=28.08% (mean rule) -- above every trained head (26.3-26.7) -- with zero parameters; its two scalars per qp are fitted LOSO on CTC, which the heads never saw",
+    "6000 steps lift the 47k head to 0.789 (from 0.776/0.782 at 3000); the base head at 6000 steps decides whether the capacity ordering was optimisation",
+    "6000 steps: base head 0.800 > small head 0.789 -> the 3000-step capacity ordering was optimisation, not size; on budget all heads sit in the seed band regardless",
+    "per-frame rule, parameter-free predictor: B_pf 27.51 (head 27.42) -- a table replaces the router for configuration B; for D3 the head's sharper shortlist still helps (28.72 @ 36.8 vs 28.29 @ 44.7)",
+    "on the head's own footing (fitted on training crops, tested on CTC) the parameter-free rule gives B=27.51%: still 0.85 above the trained head (26.66); the LOSO figure (28.08) carried 0.57 of test-set advantage; the shortfall is at q63 (19.52 vs 21.56)"
+  ]
+}
