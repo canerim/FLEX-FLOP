@@ -19,6 +19,18 @@ At the same QP, released D12 has a mean **0.104 dB** higher YUV 6:1:1 PSNR acros
 
 The nine-case median released/e15 **stock** ratio is 1.262×. The median e15 stock/e15+Triton ratio is 2.220×. These are different comparisons from the earlier shared-GPU e15 masked-stock audit and should not be multiplied as if from one experiment.
 
+**Pending full decoder/codec result:** the public [bitstream protocol](early_exit_vs_released/README.md)
+predeclares Kodak `01/13/24 × QP16/32/48` and times independent
+research-bitstream decode, routing, synthesis and optional CPU output transfer;
+the image→bitstream→image arm additionally times encoding. It includes six
+stock/Triton and routed/all-deep controls. The clean Git checkout at commit
+`5800512` passed checkpoint SHA, pinned Microsoft source/CPU rANS build,
+deterministic stream and latent hashes, all 255 shared weights, nine stream
+hashes, and a 4,500-map CPU planner equivalence check. **No paired idle-GPU
+bitstream result exists yet**, so the 2.758× synthesis-only figure above must
+not be promoted to a full decoder or codec speedup. The server watcher waits for
+five minutes with no compute PID before beginning GPU measurements.
+
 ## Independent D2/D4/D6 actual-byte Kodak BD-rate
 
 All four codecs (three final epoch-105 depths and released D12) emitted and independently decoded **24 Kodak images × five QPs = 480 complete bitstreams**. Payload bytes, full container bytes, stream SHA-256, per-stage entropy symbols/indexes, reconstructed latent and image equality are recorded for every case. [`analysis.json`](depth_bitstream/results/kodak_final_verified/analysis.json), [`case records and streams`](depth_bitstream/results/kodak_final_verified/) and [`RD/BD-rate figure`](depth_bitstream/results/kodak_final_verified/actual_byte_rd.pdf) are in Git.
