@@ -105,6 +105,7 @@ def main():
             'result': str(out.relative_to(REPO)),
             'stream_sha256': row['stream_sha256'],
             'stream_bytes': row['stream_bytes'],
+            'router_calibration_scope': result['router_calibration_scope'],
             'median_ms': result['median_ms'],
             'speedup_stock_pair_median':
                 statistics.median(result['paired_speedups']['stock_vs_stock']),

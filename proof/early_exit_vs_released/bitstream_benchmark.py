@@ -14,6 +14,7 @@ import hashlib
 import json
 import os
 from pathlib import Path
+import platform
 import random
 import statistics
 import subprocess
@@ -76,6 +77,24 @@ def gpu_occupants(gpu):
         ['nvidia-smi', '--query-compute-apps=pid,gpu_uuid', '--format=csv,noheader'],
         text=True)
     return sorted({int(line.split(',')[0]) for line in raw.splitlines() if uuid in line})
+
+
+def hardware_snapshot(gpu):
+    query = ['nvidia-smi', '--query-gpu=index,uuid,name,driver_version,power.limit,clocks.sm,clocks.mem,temperature.gpu',
+             '--format=csv,noheader']
+    gpu_row = subprocess.check_output(query, text=True).splitlines()[gpu].strip()
+    cpu_model = None
+    cpuinfo = Path('/proc/cpuinfo')
+    if cpuinfo.exists():
+        for line in cpuinfo.read_text().splitlines():
+            if line.startswith('model name'):
+                cpu_model = line.split(':', 1)[1].strip()
+                break
+    return {'gpu_query_fields': ['index', 'uuid', 'name', 'driver_version',
+                                 'power.limit', 'clocks.sm', 'clocks.mem',
+                                 'temperature.gpu'],
+            'gpu_query_row': gpu_row, 'cpu_model': cpu_model,
+            'platform': platform.platform()}
 
 
 def load_codec(args):
@@ -143,7 +162,7 @@ def load_router(args, cfg, device):
         raise RuntimeError('Router checkpoint differs from the beta calibration')
     rows = calibration['rows']
     beta = {int(r['qp']): float(r['beta']) for r in rows if r['kind'] == 'B'}
-    return head, exit_costs(cfg, 'head').to(device), beta
+    return head, exit_costs(cfg, 'head').to(device), beta, calibration['calibration']
 
 
 def benchmark(args):
@@ -161,6 +180,7 @@ def benchmark(args):
     before = gpu_occupants(args.gpu)
     if before:
         raise RuntimeError(f'GPU {args.gpu} is occupied by compute PIDs {before}; refusing benchmark')
+    hardware_before = hardware_snapshot(args.gpu)
     torch.set_num_threads(1)
     torch.cuda.set_device(args.gpu)
     torch.backends.cudnn.allow_tf32 = False
@@ -210,7 +230,7 @@ def benchmark(args):
     e15_patches = enable_fast_inference(fast_e15, sort_tiles=True)
     fast_released = copy.deepcopy(released.dec).eval()
     released_patches = enable_fast_released_inference(fast_released)
-    head, cost, beta = load_router(args, cfg, device)
+    head, cost, beta, calibration_scope = load_router(args, cfg, device)
 
     def run(kind, *, audit=False):
         # Each arm independently executes the requested boundary. No latent or
@@ -339,6 +359,7 @@ def benchmark(args):
     after = [pid for pid in gpu_occupants(args.gpu) if pid != os.getpid()]
     if after:
         raise RuntimeError(f'GPU contention after benchmark: {after}')
+    hardware_after = hardware_snapshot(args.gpu)
     git_commit, tracked_changes = tracked_code_state()
     result = {
         'schema': 1, 'timestamp_utc': datetime.now(timezone.utc).isoformat(),
@@ -361,6 +382,7 @@ def benchmark(args):
         'checkpoint_sha256': {'released': digest(args.release), 'e15': digest(args.e15),
                               'router': digest(args.router)},
         'calibration_sha256': digest(args.calibration),
+        'router_calibration_scope': calibration_scope,
         'shared_nondecoder_tensors_exact': len(shared),
         'latent_sha256': next(iter(latent_hashes)),
         'triton_max_abs_errors': errors, 'e15_vs_released_mse': mse,
@@ -371,6 +393,7 @@ def benchmark(args):
         'route_counts': route_counts, 'gpu': torch.cuda.get_device_name(device),
         'gpu_index': args.gpu, 'gpu_occupants_before': before,
         'gpu_occupants_after': after,
+        'hardware_before': hardware_before, 'hardware_after': hardware_after,
         'torch': torch.__version__, 'cuda': torch.version.cuda,
         'triton': __import__('triton').__version__,
         'fp32_tf32_disabled': True, 'threads': torch.get_num_threads(),

@@ -63,6 +63,12 @@ the exit decisions within one model and scheduler. Released-Triton versus
 routed-e15-Triton uses matched inference fusion on both architectures. Neither
 ratio is inferred from MAC counts.
 
+The routed e15 bitstream proof uses a **fixed beta per QP** calibrated on the
+mean CTC budget. It is a concrete decoder-side operating point with no
+per-image exit map or beta carried in `FUFREF2`. Its Kodak PSNR must be read from
+the output JSON; it does **not** inherit the 0.1 dB per-frame bound or the
+8-bit/frame beta cost of the separate signalled-beta routing audit.
+
 Each result records SHA-256 for the codec, router, decoder and Triton source
 files, plus its Git commit. A speed result is claim-eligible only when these
 tracked implementation files match that commit. The research server runs the
@@ -103,6 +109,17 @@ CPU encoder time separately. The format is not Microsoft's native CUDA stream;
 results may not be called native DCVC-UF throughput. Kodak quality is YUV 6:1:1
 PSNR in 4:4:4, which is distinct from the CTC YUV420 metric. The existing
 2.758× number below remains synthesis-only until the new paired result exists.
+
+| Boundary | Command | Included in wall time |
+|---|---|---|
+| Decoder to GPU image | `benchmark --stream ...` | CPU entropy/hyperprior, H2D, router, synthesis |
+| Decoder to CPU image | add `--host-output` | Above plus D2H image transfer |
+| RGB image to CPU image | add `--include-encoder --host-output --source ...` | CPU research encoder plus the decoder path |
+
+All three start from in-memory input and end at an image tensor. PNG
+serialization, disk I/O, model loading and the Microsoft native CUDA wire are
+outside these measurements. The JSON also records CPU/GPU models, driver,
+clocks, temperature, power limit, thread count and raw paired samples.
 
 The [research note](RESEARCH_20261003.md) gives the GPU-free experiment priorities
 and the reasons for each runtime control. `offline_audit.py` recomputes its
