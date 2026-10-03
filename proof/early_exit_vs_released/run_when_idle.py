@@ -70,7 +70,11 @@ def main() -> int:
     matched_done = False
     bitstream_done = False
     emit(log, {"event": "started", "hours": args.hours,
-               "stable_minutes": args.stable_minutes})
+               "stable_minutes": args.stable_minutes,
+               "blocks": args.blocks,
+               "bitstream_cohort": args.bitstream_cohort,
+               "roundtrip_after": args.roundtrip_after,
+               "host_output": args.host_output})
     while time.monotonic() < deadline:
         try:
             free = unused_gpus()

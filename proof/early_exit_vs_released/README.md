@@ -55,6 +55,20 @@ PNG into the same checked bytes before decoding. This is substantially slower
 to measure because the research encoder runs on CPU; report it separately from
 the bytes-to-image decoder result.
 
+The public bitstream benchmark has six arms: released stock/Triton, routed e15
+stock/Triton, and **all-deep e15** stock/Triton. The all-deep arm runs the same
+decoder-side router and shared stem as routed e15, then forces every tile to its
+deepest exit. Its paired ratio with routed e15 isolates the compute saved by
+the exit decisions within one model and scheduler. Released-Triton versus
+routed-e15-Triton uses matched inference fusion on both architectures. Neither
+ratio is inferred from MAC counts.
+
+Each result records SHA-256 for the codec, router, decoder and Triton source
+files, plus its Git commit. A speed result is claim-eligible only when these
+tracked implementation files match that commit. The research server runs the
+idle-GPU cohort from a separate clean worktree so unrelated experiments in the
+main working tree cannot silently change the reported implementation.
+
 For a predeclared cross-content check, nine tracked streams cover Kodak
 `kodim01`, `kodim13`, `kodim24` at QP 16/32/48. The
 [`manifest.json`](results/bitstream_kodak3x3/manifest.json) fixes source, stream
@@ -100,6 +114,11 @@ without importing Torch or touching a GPU.
 **Interpretation of the existing 2.758× result:** released D12 runs with stock PyTorch operators, while the fastest e15 arm uses custom Triton fusion. The nine-workload median released/e15-stock paired speedup is 1.262×; that PyTorch comparison still includes tile scheduling, so it is not a pure architecture ablation. MAC reduction alone cannot be credited with the full 2.758×. This repo now has a `--matched-kernels` control that applies the same FFN, pointwise, depthwise and activation fusions to the released D12 structure. It also runs e15 with **all tiles at full depth** under both PyTorch and Triton, giving a within-model, within-scheduler measurement of the saving from early exits. The existing 2.758× measurements predate these controls; no matched-kernel or isolated early-exit speedup is claimed until a new idle-GPU cohort is recorded. The D12 installer has passed a CPU output-equivalence check, but its GPU output and speed still require measurement.
 
 Each arm receives warmup, then twenty or more interleaved randomized paired blocks. CUDA-event and synchronized wall times are saved for every block. The wall-time median of the per-block released/e15+Triton ratios is the main speedup. The output includes all raw observations, PSNR on the valid YUV420 source, patch output error, CUDA/PyTorch versions, model hashes and map counts. The script **fails closed if another process is on the selected GPU**. A diagnostic override exists for development, but the resulting JSON explicitly marks it ineligible for a speedup claim. `summarize.py` requires all nine combinations of three fixed first frames (1080p, 720p, 480p) and QP 16/32/48 on an idle GPU before producing a cohort-level number. QPs from one frame are correlated, so the cohort reports the observed workload range rather than a population confidence interval.
+
+The following older CTC synthesis commands are **server-local**: they need the
+licensed/raw CTC YUV files and server checkpoint paths used by `benchmark.py`.
+They are not part of the fresh-clone path above. The tracked Kodak bitstream
+cohort is the public reproduction target.
 
 ```bash
 cd /home/can_karsal/FLEX-PLUS

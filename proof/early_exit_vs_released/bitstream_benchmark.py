@@ -32,10 +32,40 @@ DEFAULT_E15 = HERE/'artifacts/e15_epoch15.pth.tar'
 DEFAULT_ROUTER = HERE/'artifacts/router_stem_qp.pth'
 sys.path[:0] = [str(REPO), str(DEPTH_PROOF)]
 
+CODE_FILES = (
+    'proof/early_exit_vs_released/bitstream_benchmark.py',
+    'proof/depth_bitstream/reference_codec.py',
+    'proof/depth_bitstream/model_io.py',
+    'flexuf/kernels/planned_decoder.py',
+    'flexuf/kernels/released_decoder.py',
+    'flexuf/kernels/fused_ffn.py',
+    'flexuf/kernels/fused_pwout.py',
+    'flexuf/kernels/depthwise3x3.py',
+    'flexuf/kernels/wsilu_chunkadd.py',
+    'flexuf/backbone/decoder.py',
+    'flexuf/router/head2.py',
+    'flexuf/model.py',
+    'flexuf/cost.py',
+    'flexuf/config.py',
+)
+
 
 def digest(path):
     with Path(path).open('rb') as handle:
         return hashlib.file_digest(handle, 'sha256').hexdigest()
+
+
+def code_digests():
+    return {name: digest(REPO/name) for name in CODE_FILES}
+
+
+def tracked_code_state():
+    commit = subprocess.check_output(
+        ['git', '-C', str(REPO), 'rev-parse', 'HEAD'], text=True).strip()
+    changes = subprocess.check_output(
+        ['git', '-C', str(REPO), 'status', '--porcelain',
+         '--untracked-files=no', '--', *CODE_FILES], text=True).strip()
+    return commit, changes
 
 
 def gpu_occupants(gpu):
@@ -194,7 +224,7 @@ def benchmark(args):
         route = None
         stem = None
         if kind.startswith('e15_'):
-            decoder = stock_e15 if kind == 'e15_stock' else fast_e15
+            decoder = stock_e15 if kind.endswith('_stock') else fast_e15
             stem = decoder.upsample(y)
             for group in decoder.groups[:cfg.split_depth]:
                 stem = group(stem)
@@ -208,13 +238,15 @@ def benchmark(args):
             scores = F.log_softmax(logits[:, cfg.split_depth:], dim=1).double()
             scores = scores - beta[meta['qp']] * cost[cfg.split_depth:].double()[None, :]
             route = (scores.argmax(1) + cfg.split_depth).cpu()
+            if kind.startswith('e15_all_deep_'):
+                route = torch.full_like(route, cfg.num_exits - 1)
         if kind == 'released_stock':
             image = released.dec(y, q)
         elif kind == 'released_triton':
             image = fast_released(y, q)
-        elif kind == 'e15_stock':
+        elif kind in ('e15_stock', 'e15_all_deep_stock'):
             image = forward_from_stem_with_cpu_map(stock_e15, stem, q, route)
-        elif kind == 'e15_triton':
+        elif kind in ('e15_triton', 'e15_all_deep_triton'):
             image = forward_from_stem_with_cpu_map(fast_e15, stem, q, route)
         else:
             raise ValueError(kind)
@@ -225,7 +257,8 @@ def benchmark(args):
             image = image.contiguous().cpu()
         return image, trace, route
 
-    kinds = ('released_stock', 'released_triton', 'e15_stock', 'e15_triton')
+    kinds = ('released_stock', 'released_triton', 'e15_stock', 'e15_triton',
+             'e15_all_deep_stock', 'e15_all_deep_triton')
     with torch.inference_mode():
         outputs = {kind: run(kind, audit=True) for kind in kinds}
         torch.cuda.synchronize()
@@ -235,11 +268,14 @@ def benchmark(args):
         errors = {
             'released_stock_vs_triton': float((outputs['released_stock'][0]-outputs['released_triton'][0]).abs().max()),
             'e15_stock_vs_triton': float((outputs['e15_stock'][0]-outputs['e15_triton'][0]).abs().max()),
+            'e15_all_deep_stock_vs_triton': float((outputs['e15_all_deep_stock'][0]-outputs['e15_all_deep_triton'][0]).abs().max()),
         }
         if max(errors.values()) > 1e-4:
             raise RuntimeError(f'Triton output equivalence failed: {errors}')
         if not torch.equal(outputs['e15_stock'][2], outputs['e15_triton'][2]):
             raise RuntimeError('Router made different mode decisions')
+        if not torch.equal(outputs['e15_all_deep_stock'][2], outputs['e15_all_deep_triton'][2]):
+            raise RuntimeError('All-deep controls used different mode maps')
         route_counts = torch.bincount(outputs['e15_stock'][2], minlength=cfg.num_exits).tolist()
         ref = outputs['released_stock'][0]
         mse = float((outputs['e15_stock'][0]-ref).square().mean())
@@ -249,7 +285,8 @@ def benchmark(args):
             from src.utils.transforms import ycbcr2rgb
             args.save_recon_dir.mkdir(parents=True, exist_ok=True)
             saved_reconstructions = {}
-            for kind in ('released_stock', 'e15_stock', 'e15_triton'):
+            for kind in ('released_stock', 'e15_stock', 'e15_triton',
+                         'e15_all_deep_stock'):
                 rgb = ycbcr2rgb(outputs[kind][0].clamp(-.5,.5)+.5,
                                 clamp=True)[0]
                 pixels = (rgb.permute(1,2,0).mul(255).add(.5)
@@ -302,9 +339,13 @@ def benchmark(args):
     after = [pid for pid in gpu_occupants(args.gpu) if pid != os.getpid()]
     if after:
         raise RuntimeError(f'GPU contention after benchmark: {after}')
+    git_commit, tracked_changes = tracked_code_state()
     result = {
         'schema': 1, 'timestamp_utc': datetime.now(timezone.utc).isoformat(),
-        'claim_eligible': True,
+        'claim_eligible': not bool(tracked_changes),
+        'git_commit': git_commit,
+        'tracked_code_clean': not bool(tracked_changes),
+        'tracked_code_changes': tracked_changes,
         'scope': ('RGB image -> CPU research encoder -> FUFREF2 bytes -> independent CPU rANS/hyperprior decode -> GPU copy -> decoder-side router (e15) -> GPU synthesis -> output tensor; excludes disk I/O and model loading; not Microsoft native CUDA stream'
                   if args.include_encoder else
                   'In-memory FUFREF2 bitstream -> independent CPU rANS/hyperprior decode -> GPU copy -> decoder-side router (e15) -> GPU synthesis -> output tensor; excludes encoder, disk I/O, model loading; not Microsoft native CUDA stream') +
@@ -336,11 +377,7 @@ def benchmark(args):
         'blocks': args.blocks, 'warmup': args.warmup,
         'upstream_commit': info['upstream_commit'],
         'extension_manifest_sha256': digest(args.extension/'build_manifest.json'),
-        'code_sha256': {
-            'benchmark': digest(__file__),
-            'reference_codec': digest(DEPTH_PROOF/'reference_codec.py'),
-            'planned_decoder': digest(REPO/'flexuf/kernels/planned_decoder.py'),
-        },
+        'code_sha256': code_digests(),
         'e15_patches': e15_patches,
         'released_patches': released_patches,
         'arm_orders': orders,
@@ -349,6 +386,8 @@ def benchmark(args):
         'paired_speedups': {
             'stock_vs_stock': [a/b for a,b in zip(samples['released_stock'],samples['e15_stock'])],
             'matched_triton': [a/b for a,b in zip(samples['released_triton'],samples['e15_triton'])],
+            'same_model_early_exit_stock': [a/b for a,b in zip(samples['e15_all_deep_stock'],samples['e15_stock'])],
+            'same_model_early_exit_triton': [a/b for a,b in zip(samples['e15_all_deep_triton'],samples['e15_triton'])],
         },
     }
     args.out.parent.mkdir(parents=True, exist_ok=True)

@@ -14,7 +14,7 @@ REPO = HERE.parents[1]
 sys.path.insert(0, str(HERE))
 from bitstream_benchmark import (DEFAULT_E15, DEFAULT_EXTENSION,
                                  DEFAULT_RELEASE, DEFAULT_ROUTER,
-                                 DEFAULT_UPSTREAM, digest)
+                                 DEFAULT_UPSTREAM, code_digests, digest)
 
 
 def main():
@@ -83,10 +83,7 @@ def main():
                          digest(DEFAULT_ROUTER) and
                          old.get('calibration_sha256') ==
                          digest(HERE/'router_calibration.json') and
-                         old.get('code_sha256', {}).get('benchmark') ==
-                         digest(HERE/'bitstream_benchmark.py') and
-                         old.get('code_sha256', {}).get('planned_decoder') ==
-                         digest(REPO/'flexuf/kernels/planned_decoder.py'))
+                         old.get('code_sha256') == code_digests())
         if not reuse:
             command = [sys.executable, str(HERE/'bitstream_benchmark.py'),
                        '--upstream', str(args.upstream), '--release', str(args.release),
@@ -113,6 +110,10 @@ def main():
                 statistics.median(result['paired_speedups']['stock_vs_stock']),
             'speedup_matched_triton_pair_median':
                 statistics.median(result['paired_speedups']['matched_triton']),
+            'speedup_same_model_early_exit_stock_pair_median':
+                statistics.median(result['paired_speedups']['same_model_early_exit_stock']),
+            'speedup_same_model_early_exit_triton_pair_median':
+                statistics.median(result['paired_speedups']['same_model_early_exit_triton']),
             'released_minus_e15_yuv611_444_db':
                 result['released_minus_e15_yuv611_444_db'],
             'route_counts': result['route_counts'],
@@ -121,6 +122,8 @@ def main():
                           'matched_triton_speedup':
                           results[-1]['speedup_matched_triton_pair_median']}), flush=True)
     values = [r['speedup_matched_triton_pair_median'] for r in results]
+    within_model = [r['speedup_same_model_early_exit_triton_pair_median']
+                    for r in results]
     summary = {
         'schema': 1, 'timestamp_utc': datetime.now(timezone.utc).isoformat(),
         'claim_eligible': True, 'scope': ('full CPU research image->bytes->GPU image'
@@ -132,6 +135,10 @@ def main():
         'gpu_index': args.gpu, 'blocks_per_case': args.blocks,
         'median_of_case_medians_matched_triton': statistics.median(values),
         'observed_case_median_range_matched_triton': [min(values), max(values)],
+        'median_of_case_medians_same_model_early_exit_triton':
+            statistics.median(within_model),
+        'observed_case_median_range_same_model_early_exit_triton':
+            [min(within_model), max(within_model)],
         'rows': results,
         'inference_limit': 'Three predeclared Kodak images times three QPs; range is observed workload variation, not a population confidence interval',
     }
