@@ -85,10 +85,7 @@ def main():
     from flexuf.config import FlexUFConfig
     from flexuf.model import FlexUFIntra, load_flexuf_state
     from flexuf.kernels.planned_decoder import forward_with_cpu_map
-    from flexuf.kernels.wsilu_chunkadd import install_fused_plain_wsilu, install_fused_wsilu
-    from flexuf.kernels.fused_ffn import install_fused_ffn
-    from flexuf.kernels.fused_pwout import install_fused_trunk_blocks
-    from flexuf.kernels.fused_adapters import install_fused_adapters
+    from flexuf.kernels import enable_fast_inference
     torch.set_num_threads(2)
     torch.cuda.set_device(a.gpu)
     torch.backends.cudnn.allow_tf32 = False
@@ -123,14 +120,7 @@ def main():
         stock = copy.deepcopy(e15.dec).eval()
         fast = copy.deepcopy(e15.dec).eval()
         stock.cfg = replace(cfg, sorted_tiles=True)
-        fast.cfg = replace(cfg, sorted_tiles=True)
-        patches = {
-            'chunkadd': install_fused_wsilu(fast),
-            'wsilu': install_fused_plain_wsilu(fast),
-            'ffn': install_fused_ffn(fast),
-            'trunk': install_fused_trunk_blocks(fast),
-            'adapters': install_fused_adapters(fast),
-        }
+        patches = enable_fast_inference(fast, sort_tiles=True)
         arms = {
             'released_d12': lambda: released.dec(y, q),
             'e15_stock': lambda: forward_with_cpu_map(stock, y, q, map_cpu),

@@ -7,6 +7,7 @@ Each arm receives warmup, then twenty or more interleaved randomized paired bloc
 ```bash
 cd /home/can_karsal/FLEX-PLUS
 .venv/bin/python proof/early_exit_vs_released/benchmark.py --gpu 0 --qp 32 --blocks 20
+.venv/bin/python proof/early_exit_vs_released/run_cohort.py --gpu 0 --blocks 20
 .venv/bin/python proof/early_exit_vs_released/server.py
 ```
 
