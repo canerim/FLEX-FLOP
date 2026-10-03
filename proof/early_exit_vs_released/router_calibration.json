@@ -1,0 +1,15 @@
+{
+  "schema": 1,
+  "source": "flexplus/results/map_coding_e15_ce_soft_6k.json",
+  "source_sha256": "37e2fb3a2e908d6ed0c57f3f1a2628b2beede0a116b3c18b197293c3c4502106",
+  "router_checkpoint_sha256": "5b832c639fa7f857ef071276fd683e8e6150ca35e56b4470008a7d9dd79dda0f",
+  "budget_db": 0.1,
+  "calibration": "fixed per-QP beta from the 53-CTC-frame mean-budget B sweep; not a per-frame guarantee and not calibrated on Kodak",
+  "rows": [
+    {"kind": "B", "qp": 0, "beta": 30.677844047546365},
+    {"kind": "B", "qp": 16, "beta": 14.022931575775123},
+    {"kind": "B", "qp": 32, "beta": -3.7646704912185776},
+    {"kind": "B", "qp": 48, "beta": -18.459519386291518},
+    {"kind": "B", "qp": 63, "beta": -23.517197608947768}
+  ]
+}

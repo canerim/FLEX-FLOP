@@ -1,5 +1,57 @@
 # e15 early exit versus released D12
 
+## Reproduce from a fresh clone
+
+The proof branch contains the released D12 and e15 checkpoints as Git LFS
+objects and the 585-KB decoder-side router checkpoint in ordinary Git. The
+checkpoint SHA-256 values are checked before building or benchmarking. On a
+Linux NVIDIA GPU with a CUDA 12.6-compatible driver, Python 3.12, `g++`, Git
+and Git LFS:
+
+```bash
+git clone --branch proof/early-exit-vs-released-20261003 \
+  https://github.com/canerim/FLEX-FLOP.git
+cd FLEX-FLOP
+git lfs pull
+python3.12 -m venv proof/early_exit_vs_released/.local/venv
+proof/early_exit_vs_released/.local/venv/bin/python -m pip install --upgrade pip
+proof/early_exit_vs_released/.local/venv/bin/python -m pip install \
+  torch==2.9.1 --index-url https://download.pytorch.org/whl/cu126
+proof/early_exit_vs_released/.local/venv/bin/python -m pip install \
+  numpy==2.2.6 pillow==11.3.0 pybind11==3.1.0
+proof/early_exit_vs_released/.local/venv/bin/python \
+  proof/early_exit_vs_released/bootstrap.py
+proof/early_exit_vs_released/.local/venv/bin/python \
+  proof/early_exit_vs_released/bitstream_benchmark.py benchmark \
+  --stream proof/early_exit_vs_released/results/kodim01_qp32.fufref2 \
+  --source data/kodak/kodim01.png --gpu 0 --blocks 20 \
+  --out proof/early_exit_vs_released/results/kodim01_reproduced.json
+```
+
+`bootstrap.py` checks all three artifact hashes, sparse-clones Microsoft DCVC
+at commit `cbdae87a5445114cdc7f48816da63ea80bdeac40`, and builds the pinned
+CPU rANS extension locally. `bitstream_benchmark.py prepare --image PNG --qp 32
+--out FRAME.fufref2` can encode another RGB PNG whose dimensions are multiples
+of 256. Benchmark output contains paired raw timings, checkpoint and stream
+hashes, router exit counts, output equivalence, source quality, GPU occupancy
+checks, and code/environment identities. It refuses an occupied GPU. The sample
+stream was emitted from the tracked Kodak image, is 16,627 bytes, and has SHA-256
+`ae06007c9ebef84894b8aacaaf7d551a9a062076aac97590586a42652d609ceb`.
+
+**Meaning of the numbers:** the fresh-clone test starts with in-memory
+`FUFREF2` bytes; each arm independently does CPU rANS and hyperprior decode,
+copies the latent to the GPU, then synthesizes the image. The e15 arm also runs
+its stem+QP router on the decoder side and reuses that stem during synthesis.
+This is a genuine bytes-to-output decoder test for the **research wire format**.
+The encoder, disk I/O and model load are outside timed blocks. `prepare` reports
+CPU encoder time separately. The format is not Microsoft's native CUDA stream;
+results may not be called native DCVC-UF throughput. Kodak quality is YUV 6:1:1
+PSNR in 4:4:4, which is distinct from the CTC YUV420 metric. The existing
+2.758× number below remains synthesis-only until the new paired result exists.
+
+The [research note](RESEARCH_20261003.md) gives the GPU-free experiment priorities
+and the reasons for each runtime control.
+
 `benchmark.py` compares the Microsoft released synthesis network to the trained e15 early-exit network, with and without the inference-only Triton patches. The source is the first `videoSRC05` CTC frame, padded identically. QP and the archived budget-0.1 router map are fixed for each run. All arms decode **one identical latent**; the script refuses to proceed unless every non-decoder checkpoint tensor in e15 equals the released tensor exactly. This isolates synthesis. The result does not include analysis encoding, hyperprior/rANS, router decision, stream I/O, or network transfer. It is therefore a decoder-synthesis speedup, not an end-to-end codec speedup.
 
 **Interpretation of the existing 2.758× result:** released D12 runs with stock PyTorch operators, while the fastest e15 arm uses custom Triton fusion. The nine-workload median released/e15-stock paired speedup is 1.262×; that PyTorch comparison still includes tile scheduling, so it is not a pure architecture ablation. MAC reduction alone cannot be credited with the full 2.758×. This repo now has a `--matched-kernels` control that applies the same FFN, pointwise, depthwise and activation fusions to the released D12 structure. It also runs e15 with **all tiles at full depth** under both PyTorch and Triton, giving a within-model, within-scheduler measurement of the saving from early exits. The existing 2.758× measurements predate these controls; no matched-kernel or isolated early-exit speedup is claimed until a new idle-GPU cohort is recorded. The D12 installer has passed a CPU output-equivalence check, but its GPU output and speed still require measurement.

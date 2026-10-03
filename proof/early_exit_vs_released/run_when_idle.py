@@ -44,6 +44,13 @@ def main() -> int:
     parser.add_argument("--stable-minutes", type=float, default=5)
     parser.add_argument("--poll-seconds", type=float, default=60)
     parser.add_argument("--blocks", type=int, default=20)
+    parser.add_argument("--bitstream-stream", type=Path,
+                        help="After the matched synthesis cohort, run paired bytes-to-image decode")
+    parser.add_argument("--bitstream-source", type=Path,
+                        help="Original PNG for bytes-to-image quality reporting")
+    parser.add_argument("--extension", type=Path,
+                        default=Path('/data10/shareddata/can_karsal/dcvcuf_depth_20260927/research/reference_entropy_v1'),
+                        help="Pinned FUFREF2 entropy extension directory")
     args = parser.parse_args()
     if min(args.hours, args.stable_minutes, args.poll_seconds) <= 0:
         parser.error("time limits must be positive")
@@ -53,6 +60,7 @@ def main() -> int:
     deadline = time.monotonic() + args.hours * 3600
     candidate = None
     candidate_since = None
+    matched_done = False
     emit(log, {"event": "started", "hours": args.hours,
                "stable_minutes": args.stable_minutes})
     while time.monotonic() < deadline:
@@ -68,17 +76,30 @@ def main() -> int:
             if candidate is not None:
                 emit(log, {"event": "candidate", "gpu": candidate})
         if candidate is not None and now - candidate_since >= args.stable_minutes * 60:
-            emit(log, {"event": "cohort_start", "gpu": candidate})
-            output = folder / f"matched_idle_gpu{candidate}.log"
-            command = [sys.executable, str(HERE / "run_cohort.py"),
-                       "--gpu", str(candidate), "--blocks", str(args.blocks),
-                       "--matched-kernels"]
+            phase = 'bitstream' if matched_done else 'cohort'
+            emit(log, {"event": f"{phase}_start", "gpu": candidate})
+            output = folder / f"{phase}_idle_gpu{candidate}.log"
+            if matched_done:
+                command = [sys.executable, str(HERE / 'bitstream_benchmark.py'),
+                           '--extension', str(args.extension),
+                           'benchmark', '--gpu', str(candidate),
+                           '--stream', str(args.bitstream_stream),
+                           '--blocks', str(args.blocks),
+                           '--out', str(folder/'kodim01_qp32_bitstream_idle.json')]
+                if args.bitstream_source:
+                    command += ['--source', str(args.bitstream_source)]
+            else:
+                command = [sys.executable, str(HERE / "run_cohort.py"),
+                           "--gpu", str(candidate), "--blocks", str(args.blocks),
+                           "--matched-kernels"]
             with output.open("a") as stream:
                 result = subprocess.run(command, stdout=stream, stderr=subprocess.STDOUT)
-            emit(log, {"event": "cohort_end", "gpu": candidate,
+            emit(log, {"event": f"{phase}_end", "gpu": candidate,
                        "returncode": result.returncode, "log": str(output)})
             if result.returncode == 0:
-                return 0
+                if matched_done or args.bitstream_stream is None:
+                    return 0
+                matched_done = True
             candidate = None
             candidate_since = None
         time.sleep(args.poll_seconds)

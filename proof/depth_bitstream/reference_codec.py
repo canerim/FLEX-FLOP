@@ -45,7 +45,8 @@ def install_entropy_path(folder):
     """Expose only the explicitly hashed isolated build in this process."""
     folder=Path(folder).resolve()
     meta=json.loads((folder/'build_manifest.json').read_text())
-    target=Path(meta['module_path']).resolve()
+    target=Path(meta['module_path'])
+    target=(target if target.is_absolute() else folder/target).resolve()
     if target.parent!=folder or sha(target.read_bytes())!=meta['module_sha256']:
         raise ValueError('Entropy extension binary differs from its build manifest')
     present=sys.modules.get('MLCodec_extensions_cpp')
@@ -227,6 +228,22 @@ class ReferenceCodec:
     @torch.inference_mode()
     def decode(self,stream):
         """No image, encoder outputs, encoder-side scales or symbol indexes accepted."""
+        y_hat, q_dec, meta = self.decode_latent(stream)
+        h, w = meta['height'], meta['width']
+        started = time.perf_counter()
+        recon=self.net.dec(y_hat,q_dec)[:,:,:h,:w]
+        meta['cpu_synthesis_seconds'] = time.perf_counter()-started
+        meta['cpu_decode_seconds'] += meta['cpu_synthesis_seconds']
+        return recon, meta
+
+    @torch.inference_mode()
+    def decode_latent(self,stream,*,audit=True):
+        """Decode real rANS bytes through the shared analysis/entropy path.
+
+        The returned latent and synthesis quantizer are CPU tensors.  Keeping
+        this boundary explicit permits paired full-decoder timing without
+        passing encoder-side tensors to either arm.
+        """
         meta=parse_container(stream,self.depth,self.checkpoint_sha256)
         h,w,qp=meta['height'],meta['width'],meta['qp']
         hp,wp=((h+15)//16)*16,((w+15)//16)*16
@@ -254,12 +271,15 @@ class ReferenceCodec:
             y_q=recover_quarter(symbols,mask)
             y_part=y_q+means*mask
             so_far=y_part if stage==0 else so_far+y_part
-            trace.append({'stage':stage,'symbols':flat.size,'symbols_sha256':sha(flat.tobytes()),
-                          'indexes_sha256':sha(indexes.tobytes())})
+            if audit:
+                trace.append({'stage':stage,'symbols':flat.size,'symbols_sha256':sha(flat.tobytes()),
+                              'indexes_sha256':sha(indexes.tobytes())})
         q=self._qp(qp)
         y_hat=so_far*self.net.index_select_dim0(self.net.q_scale_y_dec,q)
-        recon=self.net.dec(y_hat,self.net.index_select_dim0(self.net.q_scale_dec,q))[:,:,:h,:w]
-        return recon,{'z_hat_sha256':tensor_hash(z_hat+0.0),'y_hat_sha256':tensor_hash(y_hat),'stages':trace,
+        q_dec=self.net.index_select_dim0(self.net.q_scale_dec,q)
+        return y_hat,q_dec,{'height':h,'width':w,'qp':qp,
+                      'z_hat_sha256':tensor_hash(z_hat+0.0) if audit else None,
+                      'y_hat_sha256':tensor_hash(y_hat) if audit else None,'stages':trace,
                       'cpu_decode_seconds':time.perf_counter()-started,
                       'timing_scope':'CPU research implementation including diagnostic work; not deployment latency',
                       'header_bytes':meta['header_bytes'],'payload_bytes':meta['payload_bytes']}

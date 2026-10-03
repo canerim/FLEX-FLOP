@@ -56,6 +56,23 @@ def forward_with_cpu_map(decoder, y_hat: torch.Tensor, quant_step: torch.Tensor,
     feat = decoder.upsample(y_hat)
     for g in range(j):
         feat = decoder.groups[g](feat)
+    return forward_from_stem_with_cpu_map(decoder, feat, quant_step, exit_map_cpu)
+
+
+def forward_from_stem_with_cpu_map(decoder, feat: torch.Tensor,
+                                   quant_step: torch.Tensor, exit_map_cpu) -> torch.Tensor:
+    """Route from a stem already computed by the decoder-side router.
+
+    The router reads this exact tensor, so recomputing the upsample and shared
+    groups inside synthesis would duplicate several expensive blocks. The
+    helper also makes the reuse explicit in bitstream-to-image timing.
+    """
+    cfg = decoder.cfg
+    if decoder.training or torch.is_grad_enabled():
+        raise ValueError('planned decoder is inference-only; use eval() and inference_mode()')
+    if feat.shape[0] != 1 or cfg.tile_coupling or cfg.trunk_halo != 0 or not cfg.full_frame_head:
+        raise ValueError('unsupported shared-stem routing geometry')
+    K, j, Fp = cfg.num_exits, cfg.split_depth, cfg.feature_patch
     if j >= K:
         return decoder._apply_head(feat, quant_step)
 
