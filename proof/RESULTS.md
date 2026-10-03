@@ -5,6 +5,7 @@
 **Result:** on nine fixed first-frame CTC workloads (480p/720p/1080p × QP 16/32/48), the median of paired released-D12/e15+Triton decoder-synthesis speedups is **2.758×** on an otherwise idle NVIDIA RTX A6000. The nine workload medians span **2.486×–3.003×**. Each uses 20 randomized paired blocks after warmup. All nine JSON files record empty competing-GPU-process lists before, during and after timing. The checkpoint hashes are identical across the nine cases, and all **255 non-decoder released/e15 tensors match exactly**. The e15 stock versus Triton output differs by at most a few 10⁻⁷ per case. [`cohort_summary.json`](early_exit_vs_released/results/cohort_20261003/cohort_summary.json), [`raw cases`](early_exit_vs_released/results/cohort_20261003/) and [`figure`](early_exit_vs_released/results/cohort_20261003/speedup_audit.pdf) are the audit trail.
 
 **Implementation-control caveat:** the released D12 arm uses stock PyTorch operators, whereas the fastest e15 arm uses inference-only Triton fusions. The median released/e15-stock speedup is **1.262×** across the nine workloads; the full **2.758×** must not be described as an early-exit-only or MAC-only gain. A matched-kernel released-D12 arm has been implemented but has no idle-GPU measurement yet.
+The [`latency decomposition`](early_exit_vs_released/results/cohort_20261003/latency_decomposition.pdf) plots all three measured arms and makes this distinction visible.
 
 | First CTC frame | QP16 | QP32 | QP48 | Released / e15+Triton wall ms at QP32 |
 |---|---:|---:|---:|---:|
