@@ -71,6 +71,8 @@ def main():
     p.add_argument('--blocks', type=int, default=20)
     p.add_argument('--warmup', type=int, default=4)
     p.add_argument('--allow-shared-diagnostic', action='store_true')
+    p.add_argument('--matched-kernels', action='store_true',
+                   help='Also benchmark released D12 with the same fused Triton operators')
     p.add_argument('--out', type=Path, default=ROOT / 'proof/early_exit_vs_released/results/latest.json')
     a = p.parse_args()
     if a.blocks < 5 or a.warmup < 2:
@@ -89,6 +91,7 @@ def main():
     from flexuf.model import FlexUFIntra, load_flexuf_state
     from flexuf.kernels.planned_decoder import forward_with_cpu_map
     from flexuf.kernels import enable_fast_inference
+    from flexuf.kernels.released_decoder import enable_fast_released_inference
     torch.set_num_threads(2)
     torch.cuda.set_device(a.gpu)
     torch.backends.cudnn.allow_tf32 = False
@@ -129,11 +132,21 @@ def main():
             'e15_stock': lambda: forward_with_cpu_map(stock, y, q, map_cpu),
             'e15_triton': lambda: forward_with_cpu_map(fast, y, q, map_cpu),
         }
+        released_patches = None
+        if a.matched_kernels:
+            released_fast = copy.deepcopy(released.dec).eval()
+            released_patches = enable_fast_released_inference(released_fast)
+            arms['released_d12_triton'] = lambda: released_fast(y, q)
         outputs = {name: fn() for name, fn in arms.items()}
         torch.cuda.synchronize()
         max_abs = float((outputs['e15_stock']-outputs['e15_triton']).abs().max())
         if max_abs > 1e-4:
             raise RuntimeError(f'Optimized e15 output differs by {max_abs}')
+        release_max_abs = None
+        if a.matched_kernels:
+            release_max_abs = float((outputs['released_d12']-outputs['released_d12_triton']).abs().max())
+            if release_max_abs > 1e-4:
+                raise RuntimeError(f'Optimized released D12 output differs by {release_max_abs}')
         quality = {name: C.psnr_611_420(out[:, :, :seq['h'], :seq['w']], planes[0]) for name, out in outputs.items()}
         for _ in range(a.warmup):
             for fn in arms.values():
@@ -141,7 +154,8 @@ def main():
         torch.cuda.synchronize()
         emit({'type': 'ready', 'gpu': a.gpu, 'diagnostic_shared_gpu': diagnostic,
               'quality_yuv611_db': quality, 'shared_tensors_exact': len(shared),
-              'e15_stock_vs_triton_max_abs': max_abs})
+              'e15_stock_vs_triton_max_abs': max_abs,
+              'released_stock_vs_triton_max_abs': release_max_abs})
         samples = {name: [] for name in arms}
         rng = random.Random(20261003)
         interference = []
@@ -163,12 +177,16 @@ def main():
         diagnostic = True
     pairs = [samples['released_d12'][i]['wall_ms']/samples['e15_triton'][i]['wall_ms'] for i in range(a.blocks)]
     stock_pairs = [samples['released_d12'][i]['wall_ms']/samples['e15_stock'][i]['wall_ms'] for i in range(a.blocks)]
+    matched_pairs = ([samples['released_d12_triton'][i]['wall_ms']/samples['e15_triton'][i]['wall_ms']
+                      for i in range(a.blocks)] if a.matched_kernels else None)
     result = {
-        'schema': 1, 'timestamp_utc': datetime.now(timezone.utc).isoformat(),
+        'schema': 2 if a.matched_kernels else 1,
+        'timestamp_utc': datetime.now(timezone.utc).isoformat(),
         'claim_eligible': not diagnostic,
         'scope': 'FP32 PyTorch synthesis from identical released/e15 latent; wall time includes host tile planning, CUDA time also recorded; no encoder, entropy coder, router inference or transfers',
         'device': torch.cuda.get_device_name(device), 'gpu_index': a.gpu,
         'torch': torch.__version__, 'triton_patches': patches,
+        'released_triton_patches': released_patches,
         'benchmark_sha256': sha(__file__),
         'sequence': seq['name'], 'qp': a.qp, 'budget': a.budget,
         'first_frame_sha256': first_frame_sha(seq['path'], seq['w'], seq['h']),
@@ -178,11 +196,15 @@ def main():
         'checkpoint_sha256': {'released_d12': sha(RELEASE), 'e15': sha(E15)},
         'shared_tensors_exact': len(shared), 'quality_yuv611_db': quality,
         'e15_stock_vs_triton_max_abs': max_abs,
+        'released_stock_vs_triton_max_abs': release_max_abs,
         'samples': samples, 'speedup_wall_paired': pairs,
         'speedup_wall_released_vs_e15_stock_paired': stock_pairs,
+        'speedup_wall_released_triton_vs_e15_triton_paired': matched_pairs,
         'gpu_interference_during_blocks': interference,
         'median_speedup_wall': statistics.median(pairs),
         'median_speedup_released_vs_e15_stock_wall': statistics.median(stock_pairs),
+        'median_speedup_released_triton_vs_e15_triton_wall':
+            statistics.median(matched_pairs) if matched_pairs is not None else None,
         'median_wall_ms': {k: statistics.median(vv['wall_ms'] for vv in vals) for k, vals in samples.items()},
         'gpu_occupants_before': occupied, 'gpu_occupants_after': post_occupants,
     }

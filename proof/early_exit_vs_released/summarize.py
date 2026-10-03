@@ -26,6 +26,9 @@ def summarize(paths):
             raise ValueError(f'{field} varies between runs')
     if len({r['device'] for r in rows}) != 1:
         raise ValueError('Mixed GPU types')
+    matched = ['released_d12_triton' in r['samples'] for r in rows]
+    if any(matched) and not all(matched):
+        raise ValueError('Cannot mix matched-kernel and stock-only runs')
     for sequence in SEQUENCES:
         group = [r for r in rows if r['sequence'].startswith(sequence)]
         for field in ('first_frame_sha256', 'source_shape', 'padded_shape'):
@@ -41,6 +44,11 @@ def summarize(paths):
         count = len(samples['released_d12'])
         if count < 20 or any(len(samples[arm]) != count for arm in ARMS):
             raise ValueError('Missing paired repetitions')
+        if all(matched):
+            if (len(samples['released_d12_triton']) != count or
+                    row['released_stock_vs_triton_max_abs'] is None or
+                    row['released_stock_vs_triton_max_abs'] > 1e-4):
+                raise ValueError('Missing or invalid matched released-D12 control')
         ratios = []
         for i in range(count):
             release = samples['released_d12'][i]['wall_ms']
@@ -51,17 +59,26 @@ def summarize(paths):
         median = statistics.median(ratios)
         if not math.isclose(median, row['median_speedup_wall'], rel_tol=1e-9):
             raise ValueError('Saved speedup disagrees with raw samples')
-        result.append({'sequence': row['sequence'], 'qp': row['qp'],
+        case = {'sequence': row['sequence'], 'qp': row['qp'],
                        'paired_median_speedup': median,
                        'released_median_ms': statistics.median(x['wall_ms'] for x in samples['released_d12']),
                        'e15_triton_median_ms': statistics.median(x['wall_ms'] for x in samples['e15_triton']),
                        'released_yuv611_db': row['quality_yuv611_db']['released_d12'],
-                       'e15_yuv611_db': row['quality_yuv611_db']['e15_triton']})
+                       'e15_yuv611_db': row['quality_yuv611_db']['e15_triton']}
+        if all(matched):
+            paired = [samples['released_d12_triton'][i]['wall_ms'] /
+                      samples['e15_triton'][i]['wall_ms'] for i in range(count)]
+            if any(not math.isfinite(x) or x <= 0 for x in paired):
+                raise ValueError('Invalid matched-kernel timing')
+            case['paired_median_speedup_matched_kernels'] = statistics.median(paired)
+            case['released_triton_median_ms'] = statistics.median(
+                x['wall_ms'] for x in samples['released_d12_triton'])
+        result.append(case)
     medians = [r['paired_median_speedup'] for r in result]
     per_sequence = {sequence: statistics.median(r['paired_median_speedup'] for r in result
                                                 if r['sequence'].startswith(sequence))
                     for sequence in SEQUENCES}
-    return {'scope': 'decoder synthesis only, nine first-frame workloads, isolated GPU',
+    summary = {'scope': 'decoder synthesis only, nine first-frame workloads, isolated GPU',
             'device': rows[0]['device'], 'checkpoint_sha256': rows[0]['checkpoint_sha256'],
             'median_of_scenario_paired_medians': statistics.median(medians),
             'min_scenario_paired_median': min(medians),
@@ -69,6 +86,11 @@ def summarize(paths):
             'per_sequence_median_of_qps': per_sequence,
             'uncertainty_note': 'Three source frames with correlated QPs; report workload range and raw paired samples, not a population confidence interval.',
             'cases': sorted(result, key=lambda r: (r['sequence'], r['qp']))}
+    if all(matched):
+        values = [r['paired_median_speedup_matched_kernels'] for r in result]
+        summary['matched_kernels_median_of_scenario_paired_medians'] = statistics.median(values)
+        summary['matched_kernels_scenario_range'] = [min(values), max(values)]
+    return summary
 
 
 def main():

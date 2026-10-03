@@ -15,6 +15,7 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--gpu', type=int, required=True)
     parser.add_argument('--blocks', type=int, default=20)
+    parser.add_argument('--matched-kernels', action='store_true')
     parser.add_argument('--out', type=Path, default=None)
     args = parser.parse_args()
     folder = args.out or HERE/'results'/('cohort_'+datetime.now(timezone.utc).strftime('%Y%m%dT%H%M%SZ'))
@@ -26,6 +27,8 @@ def main():
             command = [sys.executable, str(HERE/'benchmark.py'), '--gpu', str(args.gpu),
                        '--sequence', sequence, '--qp', str(qp), '--blocks', str(args.blocks),
                        '--out', str(output)]
+            if args.matched_kernels:
+                command.append('--matched-kernels')
             with (folder/f'{sequence}_qp{qp}.jsonl').open('w') as log:
                 status = subprocess.run(command, cwd=ROOT, stdout=log, stderr=subprocess.STDOUT)
             if status.returncode:
