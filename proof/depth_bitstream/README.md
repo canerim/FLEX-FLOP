@@ -4,6 +4,8 @@
 
 `analyze.py` will refuse to output a BD-rate until all 480 cases and their isolated-decode checks have finished. It integrates PCHIP log-rate curves per Kodak image on the four-model common PSNR interval and averages 24 image percentages. It reports both RGB and YUV 6:1:1 PSNR with a paired-image bootstrap interval. Missing support or non-monotonic curves cause a failure instead of extrapolation.
 
+The primary BD-rate uses emitted rANS payload bytes. A second sensitivity calculation includes all bytes of the 88-byte research container, including its two 32-byte integrity hashes; that header is an audit feature, not optimized production overhead. Both calculations use the same common PSNR interval.
+
 After analysis, `plot.py` produces a vector PDF and 300-dpi PNG: actual-payload Kodak RD curves and per-image BD-rate means with paired-image confidence intervals. The plotted mean RD curves are visual context; they are not used to calculate BD-rate.
 
 ```bash

@@ -51,7 +51,8 @@ def analyze(folder):
             if (parsed['height'], parsed['width'], parsed['qp']) != (row['h'], row['w'], row['qp']):
                 raise RuntimeError(f'Stream metadata differs: {stream_path}')
             if (parsed['payload_bytes'] != row['payload_bytes'] or len(stream) != row['container_bytes'] or
-                    not math.isclose(row['payload_bpp'], 8*parsed['payload_bytes']/(row['h']*row['w']), rel_tol=1e-12)):
+                    not math.isclose(row['payload_bpp'], 8*parsed['payload_bytes']/(row['h']*row['w']), rel_tol=1e-12) or
+                    not math.isclose(row['container_bpp'], 8*len(stream)/(row['h']*row['w']), rel_tol=1e-12)):
                 raise RuntimeError(f'Rate does not match emitted bytes: {stream_path}')
         by[depth] = {image: [r for r in rows if r['image'] == image]
                      for image in sorted({r['image'] for r in rows})}
@@ -63,20 +64,23 @@ def analyze(folder):
         raise RuntimeError('Image identities differ between codecs')
     rng = np.random.default_rng(20261003)
     output = {'scope': 'Kodak24 x five QPs x D2/D4/D6/released D12; exact isolated decode',
-              'wire_format': manifest['wire_scope'], 'rate_definition': 'actual emitted rANS payload bytes',
+              'wire_format': manifest['wire_scope'], 'rate_definition': 'actual emitted rANS payload bytes; full research-container bytes as sensitivity',
               'method': 'per-image PCHIP integration in log-rate on each image four-model common PSNR support; arithmetic mean of image BD-rates; no extrapolation',
               'metrics': {}, 'qp_means': {}}
     for depth in DEPTHS:
         output['qp_means'][f'D{depth}'] = {str(qp): {
             'payload_bpp': float(np.mean([r['payload_bpp'] for rs in by[depth].values() for r in rs if r['qp'] == qp])),
+            'container_bpp': float(np.mean([r['container_bpp'] for rs in by[depth].values() for r in rs if r['qp'] == qp])),
             'psnr_rgb': float(np.mean([r['psnr_rgb'] for rs in by[depth].values() for r in rs if r['qp'] == qp])),
             'psnr_yuv611': float(np.mean([r['psnr_yuv611'] for rs in by[depth].values() for r in rs if r['qp'] == qp]))
         } for qp in QPS}
     for metric in METRICS:
         per = {d: {} for d in DEPTHS if d != 12}
+        container_per = {d: {} for d in DEPTHS if d != 12}
         supports = {}
         for image in images:
             cs = {depth: curve(by[depth][image], metric, 'payload_bpp') for depth in DEPTHS}
+            container_cs = {depth: curve(by[depth][image], metric, 'container_bpp') for depth in DEPTHS}
             low = max(c[0][0] for c in cs.values())
             high = min(c[0][-1] for c in cs.values())
             if high <= low:
@@ -85,13 +89,19 @@ def analyze(folder):
             for depth in per:
                 delta = (cs[depth][1].integrate(low, high)-cs[12][1].integrate(low, high))/(high-low)
                 per[depth][image] = 100*math.expm1(delta)
-        output['metrics'][metric] = {'common_psnr_support_db': supports, 'bd_rate_vs_released_d12': {}}
-        for depth, cases in per.items():
-            vals = np.array([cases[image] for image in images])
-            draws = vals[rng.integers(0, len(vals), (5000, len(vals)))].mean(axis=1)
-            output['metrics'][metric]['bd_rate_vs_released_d12'][f'D{depth}'] = {
-                'mean_pct': float(vals.mean()), 'image_bootstrap_ci95_pct': [float(v) for v in np.quantile(draws, (.025,.975))],
-                'n_images': len(vals), 'per_image_pct': cases}
+                container_delta = (container_cs[depth][1].integrate(low, high)-container_cs[12][1].integrate(low, high))/(high-low)
+                container_per[depth][image] = 100*math.expm1(container_delta)
+        output['metrics'][metric] = {'common_psnr_support_db': supports, 'bd_rate_vs_released_d12': {},
+                                     'container_bd_rate_vs_released_d12': {}}
+        for field, cases_by_depth in (('bd_rate_vs_released_d12', per),
+                                      ('container_bd_rate_vs_released_d12', container_per)):
+            for depth, cases in cases_by_depth.items():
+                vals = np.array([cases[image] for image in images])
+                draws = vals[rng.integers(0, len(vals), (5000, len(vals)))].mean(axis=1)
+                output['metrics'][metric][field][f'D{depth}'] = {
+                    'mean_pct': float(vals.mean()),
+                    'image_bootstrap_ci95_pct': [float(v) for v in np.quantile(draws, (.025,.975))],
+                    'n_images': len(vals), 'per_image_pct': cases}
     return output
 
 
