@@ -1,0 +1,79 @@
+"""Recompute a nine-scenario released/e15 speed claim from raw idle-GPU trials."""
+from __future__ import annotations
+
+import argparse
+import json
+import math
+from pathlib import Path
+import statistics
+
+import numpy as np
+
+SEQUENCES = ('videoSRC05', 'FourPeople', 'BQMall')
+QPS = (16, 32, 48)
+ARMS = ('released_d12', 'e15_stock', 'e15_triton')
+
+
+def summarize(paths):
+    rows = [json.loads(Path(path).read_text()) for path in paths]
+    if len(rows) != 9:
+        raise ValueError('Nine independently recorded scenario runs required')
+    keys = {(r['sequence'].split('_')[0], r['qp']) for r in rows}
+    if keys != {(seq, qp) for seq in SEQUENCES for qp in QPS}:
+        raise ValueError('Expected 3 specified sequences x QP 16/32/48, once each')
+    if len({tuple(sorted(r['checkpoint_sha256'].items())) for r in rows}) != 1:
+        raise ValueError('Checkpoint identities vary between runs')
+    if len({r['device'] for r in rows}) != 1:
+        raise ValueError('Mixed GPU types')
+    result = []
+    for row in rows:
+        if not row['claim_eligible'] or row['gpu_occupants_before'] or row['gpu_occupants_after'] or row['gpu_interference_during_blocks']:
+            raise ValueError(f'Shared GPU in {row["sequence"]}/QP{row["qp"]}')
+        if row['shared_tensors_exact'] != 255 or row['e15_stock_vs_triton_max_abs'] > 1e-4:
+            raise ValueError('Model or optimized output check failed')
+        samples = row['samples']
+        count = len(samples['released_d12'])
+        if count < 20 or any(len(samples[arm]) != count for arm in ARMS):
+            raise ValueError('Missing paired repetitions')
+        ratios = []
+        for i in range(count):
+            release = samples['released_d12'][i]['wall_ms']
+            fast = samples['e15_triton'][i]['wall_ms']
+            if not math.isfinite(release/fast) or min(release, fast) <= 0:
+                raise ValueError('Invalid timing')
+            ratios.append(release/fast)
+        median = statistics.median(ratios)
+        if not math.isclose(median, row['median_speedup_wall'], rel_tol=1e-9):
+            raise ValueError('Saved speedup disagrees with raw samples')
+        result.append({'sequence': row['sequence'], 'qp': row['qp'],
+                       'paired_median_speedup': median,
+                       'released_median_ms': statistics.median(x['wall_ms'] for x in samples['released_d12']),
+                       'e15_triton_median_ms': statistics.median(x['wall_ms'] for x in samples['e15_triton']),
+                       'released_yuv611_db': row['quality_yuv611_db']['released_d12'],
+                       'e15_yuv611_db': row['quality_yuv611_db']['e15_triton']})
+    medians = np.array([r['paired_median_speedup'] for r in result])
+    rng = np.random.default_rng(20261003)
+    # Scenario bootstrap quantifies workload selection only, not system variation.
+    draws = np.median(medians[rng.integers(0, 9, (5000, 9))], axis=1)
+    return {'scope': 'decoder synthesis only, nine first-frame workloads, isolated GPU',
+            'device': rows[0]['device'], 'checkpoint_sha256': rows[0]['checkpoint_sha256'],
+            'median_of_scenario_paired_medians': float(np.median(medians)),
+            'min_scenario_paired_median': float(np.min(medians)),
+            'max_scenario_paired_median': float(np.max(medians)),
+            'scenario_bootstrap_ci95': [float(v) for v in np.quantile(draws, (.025,.975))],
+            'cases': sorted(result, key=lambda r: (r['sequence'], r['qp']))}
+
+
+def main():
+    p = argparse.ArgumentParser()
+    p.add_argument('results', nargs=9, type=Path)
+    p.add_argument('--out', type=Path, default=Path(__file__).parent/'results/cohort_summary.json')
+    args = p.parse_args()
+    summary = summarize(args.results)
+    args.out.parent.mkdir(parents=True, exist_ok=True)
+    args.out.write_text(json.dumps(summary, indent=2, allow_nan=False)+'\n')
+    print(json.dumps(summary, indent=2))
+
+
+if __name__ == '__main__':
+    main()
