@@ -12,7 +12,7 @@ ROOT = Path('/data10/shareddata/can_karsal/dcvcuf_depth_20260927')
 D6 = ROOT / 'runs/d6'
 RUN = ROOT / 'runs/d2_distilled_released'
 HERE = Path(__file__).resolve().parent
-GPU = '6'
+GPU_ORDER = ('6', '7', '1', '3', '0', '2', '4', '5')
 STOP = False
 
 
@@ -33,12 +33,19 @@ def event(kind, **fields):
     print(json.dumps(row), flush=True)
 
 
-def gpu_free():
+def gpu_free(gpu):
     info = subprocess.check_output(
-        ['nvidia-smi', '--id=' + GPU, '--query-gpu=memory.used,utilization.gpu',
+        ['nvidia-smi', '--id=' + gpu, '--query-gpu=memory.used,utilization.gpu',
          '--format=csv,noheader,nounits'], text=True).strip()
     memory, utilization = map(int, info.split(','))
     return memory < 512 and utilization < 10, memory, utilization
+
+
+def first_free_gpu():
+    for gpu in GPU_ORDER:
+        if gpu_free(gpu)[0]:
+            return gpu
+    return None
 
 
 def d6_finished():
@@ -53,20 +60,23 @@ def main():
     for sig in (signal.SIGINT, signal.SIGTERM):
         signal.signal(sig, on_stop)
     RUN.mkdir(parents=True, exist_ok=True)
-    event('armed', gpu=GPU, prerequisite='D6 final checkpoint + complete status + idle GPU')
+    event('armed', gpu_priority=GPU_ORDER,
+          prerequisite='D6 final checkpoint + complete status + idle GPU')
     while not STOP:
         ready = d6_finished()
-        free, memory, utilization = gpu_free()
-        if ready and free:
+        gpu = first_free_gpu() if ready else None
+        if ready and gpu is not None:
             break
         if int(time.monotonic()) % 600 < 60:
-            event('waiting', d6_complete=ready, gpu_memory_mib=memory,
-                  gpu_utilization_pct=utilization)
+            _, memory, utilization = gpu_free('6')
+            event('waiting', d6_complete=ready, preferred_gpu_memory_mib=memory,
+                  preferred_gpu_utilization_pct=utilization)
         time.sleep(60)
     if STOP:
         event('stopped_before_launch')
         return
-    env = dict(os.environ, CUDA_VISIBLE_DEVICES=GPU, OMP_NUM_THREADS='4',
+    event('gpu_selected', gpu=gpu)
+    env = dict(os.environ, CUDA_VISIBLE_DEVICES=gpu, OMP_NUM_THREADS='4',
                OPENBLAS_NUM_THREADS='1', MKL_NUM_THREADS='4', PYTHONUNBUFFERED='1',
                TORCHINDUCTOR_COMPILE_THREADS='4',
                TORCHINDUCTOR_CACHE_DIR=str(ROOT/'inductor_d2_distilled'))
@@ -78,7 +88,11 @@ def main():
                 continue
         smoke_cmd = [exe, '-u', str(HERE/'train.py'), '--save-dir', str(smoke_dir),
                      '--smoke', '--smoke-steps', '1', '--smoke-patch', str(patch), '--compile']
-        event('preflight_start', patch=patch)
+        while not STOP and not gpu_free(gpu)[0]:
+            time.sleep(60)
+        if STOP:
+            return
+        event('preflight_start', patch=patch, gpu=gpu)
         smoke_dir.mkdir(parents=True, exist_ok=True)
         with (smoke_dir/'train.log').open('a', buffering=1) as log:
             subprocess.run(smoke_cmd, env=env, stdout=log, stderr=subprocess.STDOUT, check=True)
@@ -87,7 +101,7 @@ def main():
     for attempt in range(3):
         if STOP:
             return
-        while not STOP and not gpu_free()[0]:
+        while not STOP and not gpu_free(gpu)[0]:
             time.sleep(60)
         if STOP:
             return

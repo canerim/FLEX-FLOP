@@ -1,7 +1,9 @@
 # Released-output D2 distillation
 
 This experiment begins **after** the independent D6 run reaches `state=complete`,
-writes its final checkpoint, and GPU 6 is idle. It does not modify the D6 run.
+writes its final checkpoint, and an A6000 is idle. GPU 6 has priority; if another
+user occupies it, the supervisor waits for another truly idle GPU. It does not
+modify the D6 run or interrupt any active GPU job.
 
 The student starts from the completed D2 epoch-105 checkpoint. The teacher is
 Microsoft's released DCVC-UF-Intra D12 image checkpoint, loaded strictly into
@@ -23,7 +25,7 @@ is evaluated in microbatches of 16 at 256px and 4 at 512px to control memory;
 this does not change the student batch size.
 
 The supervisor runs one-step compiled smoke checks at both patch sizes after
-GPU 6 is free, then starts the full training. If either smoke check fails, the
+a GPU is free, then starts the full training. If either smoke check fails, the
 full job does not start. Training uses atomic resume checkpoints and bounded
 retries, with the data/checkpoint/source hashes in the manifest. At completion,
 the supervisor runs the same full-resolution 24-image Kodak diagnostic as the
