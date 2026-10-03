@@ -1,0 +1,75 @@
+{
+  "scope": "Fixed FUFREF2 stream -> already entropy-decoded latent -> YCbCr synthesis; excludes entropy and IO",
+  "claim_eligible": false,
+  "stream_sha256": "ae06007c9ebef84894b8aacaaf7d551a9a062076aac97590586a42652d609ceb",
+  "checkpoint": {
+    "path": "/home/can_karsal/FLEX-PLUS/proof/early_exit_vs_released/artifacts/released_cvpr2026_image.pth.tar",
+    "sha256": "b3b900de23f30e4fc437010ddffe6a5413a56d6cfd97fb6235adbcd2b6973302",
+    "depth": 12,
+    "upstream_commit": "cbdae87a5445114cdc7f48816da63ea80bdeac40",
+    "parameters": 42179328,
+    "epoch": null,
+    "global_step": null,
+    "model_source_sha256": "95ff7158ffa592b608f346f3585e6111380bee08e50096a1e7c0355acf01089e",
+    "common_source_sha256": "e309a7144514836f29453f8d1fe65df8f7ab72d17ed1efea08ac35ee9f67469a"
+  },
+  "variant": {
+    "variant": "e15_exit0",
+    "e15_sha256": "91556d30bca41988755ff43dee3bc6d0cd2a0a4eda1d18d2891b168dc0a04ce9",
+    "exit_idx": 0
+  },
+  "model_sha256": "51de7fe189d8461789d59a79304f0367397c28a9680dd47dd38c93587d398ccb",
+  "quant_model_sha256": null,
+  "source_sha256": "a56e27cbf5f843c048b6af1d6e090760e9c92fadba88b7dee0205918a37523bd",
+  "threads": 1,
+  "torch_channels_last": false,
+  "torch_mkldnn_available": true,
+  "providers": {
+    "onnx_fp32": [
+      "CPUExecutionProvider"
+    ]
+  },
+  "hardware": {
+    "cpu": "x86_64",
+    "machine": "Linux-6.8.0-124-generic-x86_64-with-glibc2.35",
+    "avx2": true,
+    "avx512f": false,
+    "loadavg": [
+      91.19775390625,
+      106.87060546875,
+      102.9453125
+    ],
+    "logical_cpus": 96,
+    "affinity_cpus": [
+      0
+    ]
+  },
+  "results": {
+    "torch_mkldnn": {
+      "yuv_psnr_db": [
+        28.06652047922526,
+        43.95344320169451,
+        41.842442580496915
+      ],
+      "yuv_6_1_1_psnr_db": 31.774376082192873,
+      "max_abs_vs_torch": 0.0,
+      "latency_ms_raw": [
+        1725.750683
+      ],
+      "median_ms": 1725.750683
+    },
+    "onnx_fp32": {
+      "yuv_psnr_db": [
+        28.06652047603611,
+        43.95344310501425,
+        41.84244248708254
+      ],
+      "yuv_6_1_1_psnr_db": 31.77437605603918,
+      "max_abs_vs_torch": 4.76837158203125e-07,
+      "latency_ms_raw": [
+        1045.265804
+      ],
+      "median_ms": 1045.265804
+    }
+  }
+}

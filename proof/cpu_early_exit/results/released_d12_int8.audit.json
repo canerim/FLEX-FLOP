@@ -1,0 +1,25 @@
+{
+  "source_model_sha256": "638ced13056e38756bc96fcdcd116e2ca40221ca823781d86d02d88bf5d251c5",
+  "quant_model_sha256": "61f5b1e0c0816a14e478b206c92ee65ed5842978424f6e64fe0d1c30e9e7441b",
+  "calibration_streams": [
+    {
+      "path": "proof/early_exit_vs_released/results/bitstream_kodak3x3/kodim01_qp16.fufref2",
+      "sha256": "25ec54029c8b99c064ade3d48db2e9c85dbcf27e825280084002527f8b673433"
+    },
+    {
+      "path": "proof/early_exit_vs_released/results/bitstream_kodak3x3/kodim13_qp32.fufref2",
+      "sha256": "76883eb68ca1cf48d84edfa8bfd9f0f1bcfb2001d204e637f81f5e08d07bb875"
+    },
+    {
+      "path": "proof/early_exit_vs_released/results/bitstream_kodak3x3/kodim24_qp48.fufref2",
+      "sha256": "80eabcd1ca6c84eefe3c3f483d5cfff80d6ab35c3d95527a1471446b9d910b72"
+    }
+  ],
+  "format": "QDQ S8S8",
+  "ops": [
+    "Conv"
+  ],
+  "per_channel": true,
+  "reduce_range": true,
+  "warning": "Calibration on nine Kodak frames is a smoke test, not a representative production calibration set."
+}

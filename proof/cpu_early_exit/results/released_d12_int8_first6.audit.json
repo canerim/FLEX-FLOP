@@ -1,0 +1,56 @@
+{
+  "source_model_sha256": "638ced13056e38756bc96fcdcd116e2ca40221ca823781d86d02d88bf5d251c5",
+  "quant_model_sha256": "62e2aec575b38f623d6a078bcdc401d283b0d13809623dce29775cf52fb880a5",
+  "calibration_streams": [
+    {
+      "path": "proof/early_exit_vs_released/results/bitstream_kodak3x3/kodim01_qp16.fufref2",
+      "sha256": "25ec54029c8b99c064ade3d48db2e9c85dbcf27e825280084002527f8b673433"
+    },
+    {
+      "path": "proof/early_exit_vs_released/results/bitstream_kodak3x3/kodim13_qp32.fufref2",
+      "sha256": "76883eb68ca1cf48d84edfa8bfd9f0f1bcfb2001d204e637f81f5e08d07bb875"
+    },
+    {
+      "path": "proof/early_exit_vs_released/results/bitstream_kodak3x3/kodim24_qp48.fufref2",
+      "sha256": "80eabcd1ca6c84eefe3c3f483d5cfff80d6ab35c3d95527a1471446b9d910b72"
+    }
+  ],
+  "format": "QDQ S8S8",
+  "ops": [
+    "Conv"
+  ],
+  "per_channel": true,
+  "selection": "first6_pointwise",
+  "selected_nodes": [
+    "/dec_1/dec_1.0/conv/dc/dc.0/Conv",
+    "/dec_1/dec_1.0/conv/dc/dc.3/Conv",
+    "/dec_1/dec_1.0/conv/ffn/ffn.0/Conv",
+    "/dec_1/dec_1.0/conv/ffn/ffn.2/Conv",
+    "/dec_1/dec_1.1/dc/dc.0/Conv",
+    "/dec_1/dec_1.1/dc/dc.3/Conv",
+    "/dec_1/dec_1.1/ffn/ffn.0/Conv",
+    "/dec_1/dec_1.1/ffn/ffn.2/Conv",
+    "/dec_1/dec_1.2/dc/dc.0/Conv",
+    "/dec_1/dec_1.2/dc/dc.3/Conv",
+    "/dec_1/dec_1.2/ffn/ffn.0/Conv",
+    "/dec_1/dec_1.2/ffn/ffn.2/Conv",
+    "/dec_1/dec_1.3/dc/dc.0/Conv",
+    "/dec_1/dec_1.3/dc/dc.3/Conv",
+    "/dec_1/dec_1.3/ffn/ffn.0/Conv",
+    "/dec_1/dec_1.3/ffn/ffn.2/Conv",
+    "/dec_1/dec_1.4/dc/dc.0/Conv",
+    "/dec_1/dec_1.4/dc/dc.3/Conv",
+    "/dec_1/dec_1.4/ffn/ffn.0/Conv",
+    "/dec_1/dec_1.4/ffn/ffn.2/Conv",
+    "/dec_1/dec_1.5/dc/dc.0/Conv",
+    "/dec_1/dec_1.5/dc/dc.3/Conv",
+    "/dec_1/dec_1.5/ffn/ffn.0/Conv",
+    "/dec_1/dec_1.5/ffn/ffn.2/Conv",
+    "/dec_1/dec_1.6/dc/dc.0/Conv",
+    "/dec_1/dec_1.6/dc/dc.3/Conv",
+    "/dec_1/dec_1.6/ffn/ffn.0/Conv",
+    "/dec_1/dec_1.6/ffn/ffn.2/Conv"
+  ],
+  "reduce_range": true,
+  "warning": "Kodak smoke calibration is not a representative production calibration set."
+}

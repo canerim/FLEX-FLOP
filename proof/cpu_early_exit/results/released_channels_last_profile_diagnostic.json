@@ -1,0 +1,168 @@
+{
+  "scope": "One instrumented PyTorch CPU decoder synthesis; operator priority only, not latency",
+  "variant": {
+    "variant": "released"
+  },
+  "checkpoint": {
+    "path": "/home/can_karsal/FLEX-PLUS/proof/early_exit_vs_released/artifacts/released_cvpr2026_image.pth.tar",
+    "sha256": "b3b900de23f30e4fc437010ddffe6a5413a56d6cfd97fb6235adbcd2b6973302",
+    "depth": 12,
+    "upstream_commit": "cbdae87a5445114cdc7f48816da63ea80bdeac40",
+    "parameters": 42179328,
+    "epoch": null,
+    "global_step": null,
+    "model_source_sha256": "95ff7158ffa592b608f346f3585e6111380bee08e50096a1e7c0355acf01089e",
+    "common_source_sha256": "e309a7144514836f29453f8d1fe65df8f7ab72d17ed1efea08ac35ee9f67469a"
+  },
+  "stream_sha256": "ae06007c9ebef84894b8aacaaf7d551a9a062076aac97590586a42652d609ceb",
+  "threads": 1,
+  "hardware": {
+    "cpu": "x86_64",
+    "machine": "Linux-6.8.0-124-generic-x86_64-with-glibc2.35",
+    "avx2": true,
+    "avx512f": false,
+    "loadavg": [
+      91.0,
+      108.037109375,
+      103.1943359375
+    ],
+    "logical_cpus": 96,
+    "affinity_cpus": [
+      0
+    ]
+  },
+  "operators": [
+    {
+      "operator": "aten::_slow_conv2d_forward",
+      "count": 58,
+      "self_cpu_time_ms": 2069.995553000001,
+      "total_cpu_time_ms": 2646.6592670000023
+    },
+    {
+      "operator": "aten::mul",
+      "count": 57,
+      "self_cpu_time_ms": 1026.709800000004,
+      "total_cpu_time_ms": 1027.5878030000033
+    },
+    {
+      "operator": "aten::sigmoid",
+      "count": 28,
+      "self_cpu_time_ms": 606.5032700000005,
+      "total_cpu_time_ms": 606.5032700000005
+    },
+    {
+      "operator": "aten::add",
+      "count": 71,
+      "self_cpu_time_ms": 590.2921789999951,
+      "total_cpu_time_ms": 590.2921789999951
+    },
+    {
+      "operator": "aten::copy_",
+      "count": 85,
+      "self_cpu_time_ms": 574.1952100000004,
+      "total_cpu_time_ms": 574.1952100000004
+    },
+    {
+      "operator": "aten::mkldnn_convolution",
+      "count": 14,
+      "self_cpu_time_ms": 138.62219900000048,
+      "total_cpu_time_ms": 138.93438599999948
+    },
+    {
+      "operator": "aten::pixel_shuffle",
+      "count": 2,
+      "self_cpu_time_ms": 6.102993000001188,
+      "total_cpu_time_ms": 6.494689000000144
+    },
+    {
+      "operator": "aten::resize_",
+      "count": 74,
+      "self_cpu_time_ms": 1.9114469999974486,
+      "total_cpu_time_ms": 1.9114469999974486
+    },
+    {
+      "operator": "aten::_convolution",
+      "count": 72,
+      "self_cpu_time_ms": 1.407113000000627,
+      "total_cpu_time_ms": 2787.7227729999995
+    },
+    {
+      "operator": "aten::conv2d",
+      "count": 72,
+      "self_cpu_time_ms": 0.7799799999968563,
+      "total_cpu_time_ms": 2789.2717179999986
+    },
+    {
+      "operator": "aten::convolution",
+      "count": 72,
+      "self_cpu_time_ms": 0.7689650000017918,
+      "total_cpu_time_ms": 2788.491738000001
+    },
+    {
+      "operator": "aten::as_strided",
+      "count": 172,
+      "self_cpu_time_ms": 0.6431200000031615,
+      "total_cpu_time_ms": 0.6431200000031615
+    },
+    {
+      "operator": "aten::thnn_conv2d",
+      "count": 58,
+      "self_cpu_time_ms": 0.6395179999973625,
+      "total_cpu_time_ms": 2647.2987849999995
+    },
+    {
+      "operator": "aten::_to_copy",
+      "count": 28,
+      "self_cpu_time_ms": 0.3764369999993869,
+      "total_cpu_time_ms": 0.7624860000006375
+    },
+    {
+      "operator": "aten::slice",
+      "count": 56,
+      "self_cpu_time_ms": 0.3366280000046827,
+      "total_cpu_time_ms": 0.44560800000245215
+    },
+    {
+      "operator": "aten::empty",
+      "count": 74,
+      "self_cpu_time_ms": 0.31826999999801664,
+      "total_cpu_time_ms": 0.31826999999801664
+    },
+    {
+      "operator": "aten::view",
+      "count": 57,
+      "self_cpu_time_ms": 0.30369799999979297,
+      "total_cpu_time_ms": 0.30369799999979297
+    },
+    {
+      "operator": "aten::reshape",
+      "count": 57,
+      "self_cpu_time_ms": 0.21202599999872837,
+      "total_cpu_time_ms": 0.5157239999985214
+    },
+    {
+      "operator": "aten::detach",
+      "count": 58,
+      "self_cpu_time_ms": 0.15740600000053906,
+      "total_cpu_time_ms": 0.15740600000053906
+    },
+    {
+      "operator": "aten::empty_strided",
+      "count": 28,
+      "self_cpu_time_ms": 0.12144899999996414,
+      "total_cpu_time_ms": 0.12144899999996414
+    },
+    {
+      "operator": "aten::to",
+      "count": 28,
+      "self_cpu_time_ms": 0.11551699999870471,
+      "total_cpu_time_ms": 0.8780029999993422
+    },
+    {
+      "operator": "aten::_nnpack_available",
+      "count": 58,
+      "self_cpu_time_ms": 0.08248899999988936,
+      "total_cpu_time_ms": 0.08248899999988936
+    }
+  ]
+}
