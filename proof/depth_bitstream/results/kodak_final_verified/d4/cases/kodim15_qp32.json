@@ -1,0 +1,48 @@
+{
+  "image": "kodim15.png",
+  "qp": 32,
+  "depth": 4,
+  "h": 512,
+  "w": 768,
+  "source_sha256": "7538cbb80cb9103606c48b806eae57d56c885c7f90b9b3be70a41160f9cbb683",
+  "checkpoint_sha256": "4e0e9c0fcbe6f690d6a7985444057a4f8d6211acd28cc511fb6439885c138815",
+  "stream_sha256": "c4f0f0e97e2770d4108f3210b59d997fbad3efba78225abd2c11f84cb0f4e9b0",
+  "payload_bytes": 6115,
+  "container_bytes": 6203,
+  "payload_bpp": 0.12440999348958333,
+  "container_bpp": 0.12620035807291666,
+  "estimated_bpp_diagnostic_only": 0.12398231650392215,
+  "psnr_rgb": 32.353609945524255,
+  "psnr_yuv611": 35.63870519582633,
+  "psnr_y": 33.19977705599639,
+  "psnr_u": 45.42352320528337,
+  "psnr_v": 40.48745602534895,
+  "exact_isolated_decode": true,
+  "entropy_trace": [
+    {
+      "stage": 0,
+      "symbols": 98304,
+      "symbols_sha256": "d29b4f73c617c23fe358aef2a7380eae04aeb18a1fdfd1203c543e995c895421",
+      "indexes_sha256": "e5f52e590ec2a168e403803b4417a88b36e191de3aa464e3e2359965b8700144"
+    },
+    {
+      "stage": 1,
+      "symbols": 98304,
+      "symbols_sha256": "f4bcaf5db31cc39935717ef55989b2002615feb20373903a0635a2923ceeeed2",
+      "indexes_sha256": "967e48a59a9030794ec1d05cfad8ad1676ff12d5a084de939ebb9a58d192ee1b"
+    },
+    {
+      "stage": 2,
+      "symbols": 98304,
+      "symbols_sha256": "607fda17e8ff0da7cae9dcd9099489504cb2a62053730f3551c1ad063bc96295",
+      "indexes_sha256": "eb4e02078b8b8d730dc6bd1385760763450155a9b9ea5b5150d8a1b783238c10"
+    },
+    {
+      "stage": 3,
+      "symbols": 98304,
+      "symbols_sha256": "71a1948135083d052d6ff325a336c0bc5902f2324ad63e34c547ca8a411db8ec",
+      "indexes_sha256": "9822a6c52461b0c61550da5cffdc3d2ee6cefe461e6c6f73bc0157e6c3b1b434"
+    }
+  ],
+  "finished_utc": "2026-10-03T12:21:07.045078+00:00"
+}
