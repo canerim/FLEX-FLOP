@@ -1,0 +1,100 @@
+{
+  "scope": "decoder synthesis only, nine first-frame workloads, isolated GPU",
+  "device": "NVIDIA RTX A6000",
+  "checkpoint_sha256": {
+    "released_d12": "b3b900de23f30e4fc437010ddffe6a5413a56d6cfd97fb6235adbcd2b6973302",
+    "e15": "91556d30bca41988755ff43dee3bc6d0cd2a0a4eda1d18d2891b168dc0a04ce9"
+  },
+  "median_of_scenario_paired_medians": 2.757559110597332,
+  "min_scenario_paired_median": 2.485988647775355,
+  "max_scenario_paired_median": 3.003297287331615,
+  "per_sequence_median_of_qps": {
+    "videoSRC05": 2.8043416379288013,
+    "FourPeople": 2.656085359079732,
+    "BQMall": 2.66096917035524
+  },
+  "uncertainty_note": "Three source frames with correlated QPs; report workload range and raw paired samples, not a population confidence interval.",
+  "cases": [
+    {
+      "sequence": "BQMall_832x480_60.yuv",
+      "qp": 16,
+      "paired_median_speedup": 2.8515143030196066,
+      "released_median_ms": 30.457273,
+      "e15_triton_median_ms": 10.6327635,
+      "released_yuv611_db": 31.536669502964045,
+      "e15_yuv611_db": 31.43346675840684
+    },
+    {
+      "sequence": "BQMall_832x480_60.yuv",
+      "qp": 32,
+      "paired_median_speedup": 2.66096917035524,
+      "released_median_ms": 30.383954,
+      "e15_triton_median_ms": 11.412057,
+      "released_yuv611_db": 34.780289741819495,
+      "e15_yuv611_db": 34.680787793691685
+    },
+    {
+      "sequence": "BQMall_832x480_60.yuv",
+      "qp": 48,
+      "paired_median_speedup": 2.485988647775355,
+      "released_median_ms": 30.347834,
+      "e15_triton_median_ms": 12.203685499999999,
+      "released_yuv611_db": 38.039208138182616,
+      "e15_yuv611_db": 37.92838497354346
+    },
+    {
+      "sequence": "FourPeople_1280x720_60.yuv",
+      "qp": 16,
+      "paired_median_speedup": 3.003297287331615,
+      "released_median_ms": 55.7117315,
+      "e15_triton_median_ms": 18.512760999999998,
+      "released_yuv611_db": 35.480020583518076,
+      "e15_yuv611_db": 35.36881311859286
+    },
+    {
+      "sequence": "FourPeople_1280x720_60.yuv",
+      "qp": 32,
+      "paired_median_speedup": 2.656085359079732,
+      "released_median_ms": 56.146973,
+      "e15_triton_median_ms": 21.025374499999998,
+      "released_yuv611_db": 38.903416215601496,
+      "e15_yuv611_db": 38.80157901383779
+    },
+    {
+      "sequence": "FourPeople_1280x720_60.yuv",
+      "qp": 48,
+      "paired_median_speedup": 2.5289514411356757,
+      "released_median_ms": 55.824546,
+      "e15_triton_median_ms": 22.029165499999998,
+      "released_yuv611_db": 41.83855512000552,
+      "e15_yuv611_db": 41.74090945916514
+    },
+    {
+      "sequence": "videoSRC05_1920x1080_25.yuv",
+      "qp": 16,
+      "paired_median_speedup": 2.916758032496584,
+      "released_median_ms": 146.360005,
+      "e15_triton_median_ms": 50.132185,
+      "released_yuv611_db": 35.46132864269456,
+      "e15_yuv611_db": 35.35732109062802
+    },
+    {
+      "sequence": "videoSRC05_1920x1080_25.yuv",
+      "qp": 32,
+      "paired_median_speedup": 2.8043416379288013,
+      "released_median_ms": 146.496118,
+      "e15_triton_median_ms": 52.1604975,
+      "released_yuv611_db": 37.72647240079788,
+      "e15_yuv611_db": 37.62111111113084
+    },
+    {
+      "sequence": "videoSRC05_1920x1080_25.yuv",
+      "qp": 48,
+      "paired_median_speedup": 2.757559110597332,
+      "released_median_ms": 146.566977,
+      "e15_triton_median_ms": 53.0885095,
+      "released_yuv611_db": 39.59246024712992,
+      "e15_yuv611_db": 39.4905733041019
+    }
+  ]
+}

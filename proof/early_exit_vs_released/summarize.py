@@ -7,8 +7,6 @@ import math
 from pathlib import Path
 import statistics
 
-import numpy as np
-
 SEQUENCES = ('videoSRC05', 'FourPeople', 'BQMall')
 QPS = (16, 32, 48)
 ARMS = ('released_d12', 'e15_stock', 'e15_triton')
@@ -23,8 +21,16 @@ def summarize(paths):
         raise ValueError('Expected 3 specified sequences x QP 16/32/48, once each')
     if len({tuple(sorted(r['checkpoint_sha256'].items())) for r in rows}) != 1:
         raise ValueError('Checkpoint identities vary between runs')
+    for field in ('benchmark_sha256', 'archived_maps_sha256', 'torch'):
+        if len({r[field] for r in rows}) != 1:
+            raise ValueError(f'{field} varies between runs')
     if len({r['device'] for r in rows}) != 1:
         raise ValueError('Mixed GPU types')
+    for sequence in SEQUENCES:
+        group = [r for r in rows if r['sequence'].startswith(sequence)]
+        for field in ('first_frame_sha256', 'source_shape', 'padded_shape'):
+            if len({json.dumps(r[field], sort_keys=True) for r in group}) != 1:
+                raise ValueError(f'{field} differs across {sequence} QPs')
     result = []
     for row in rows:
         if not row['claim_eligible'] or row['gpu_occupants_before'] or row['gpu_occupants_after'] or row['gpu_interference_during_blocks']:
@@ -51,16 +57,17 @@ def summarize(paths):
                        'e15_triton_median_ms': statistics.median(x['wall_ms'] for x in samples['e15_triton']),
                        'released_yuv611_db': row['quality_yuv611_db']['released_d12'],
                        'e15_yuv611_db': row['quality_yuv611_db']['e15_triton']})
-    medians = np.array([r['paired_median_speedup'] for r in result])
-    rng = np.random.default_rng(20261003)
-    # Scenario bootstrap quantifies workload selection only, not system variation.
-    draws = np.median(medians[rng.integers(0, 9, (5000, 9))], axis=1)
+    medians = [r['paired_median_speedup'] for r in result]
+    per_sequence = {sequence: statistics.median(r['paired_median_speedup'] for r in result
+                                                if r['sequence'].startswith(sequence))
+                    for sequence in SEQUENCES}
     return {'scope': 'decoder synthesis only, nine first-frame workloads, isolated GPU',
             'device': rows[0]['device'], 'checkpoint_sha256': rows[0]['checkpoint_sha256'],
-            'median_of_scenario_paired_medians': float(np.median(medians)),
-            'min_scenario_paired_median': float(np.min(medians)),
-            'max_scenario_paired_median': float(np.max(medians)),
-            'scenario_bootstrap_ci95': [float(v) for v in np.quantile(draws, (.025,.975))],
+            'median_of_scenario_paired_medians': statistics.median(medians),
+            'min_scenario_paired_median': min(medians),
+            'max_scenario_paired_median': max(medians),
+            'per_sequence_median_of_qps': per_sequence,
+            'uncertainty_note': 'Three source frames with correlated QPs; report workload range and raw paired samples, not a population confidence interval.',
             'cases': sorted(result, key=lambda r: (r['sequence'], r['qp']))}
 
 
