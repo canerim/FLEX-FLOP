@@ -133,7 +133,7 @@ def train(args):
     optimizer = torch.optim.AdamW(net.parameters(), lr=1e-4)
     runner = StudentRD(net)
     if args.compile:
-        runner = compile_preserving_rng(net)
+        runner = compile_preserving_rng(runner)
     manifest = {**recipe(), 'depth': args.depth, 'seed': 42,
                 'official_reference_recipe': recipe(),
                 'loss': 'unmodified upstream RD loss + auxiliary released-output MSE',
