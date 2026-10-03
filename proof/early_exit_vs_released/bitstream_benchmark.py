@@ -65,6 +65,8 @@ def prepare(args):
     codec, info = load_codec(args)
     from src.utils.transforms import rgb2ycbcr_np
     source = np.asarray(Image.open(args.image).convert('RGB'))
+    if source.shape[0] % 256 or source.shape[1] % 256:
+        raise ValueError('Early-exit inference requires image height and width divisible by 256')
     x = torch.from_numpy(rgb2ycbcr_np(source.astype(np.float32) / 255) - .5)
     x = x.permute(2, 0, 1)[None].contiguous()
     encoded = codec.encode(x, args.qp)
@@ -237,6 +239,21 @@ def benchmark(args):
         route_counts = torch.bincount(outputs['e15_stock'][2], minlength=cfg.num_exits).tolist()
         ref = outputs['released_stock'][0]
         mse = float((outputs['e15_stock'][0]-ref).square().mean())
+        saved_reconstructions = None
+        if args.save_recon_dir is not None:
+            from PIL import Image
+            from src.utils.transforms import ycbcr2rgb
+            args.save_recon_dir.mkdir(parents=True, exist_ok=True)
+            saved_reconstructions = {}
+            for kind in ('released_stock', 'e15_stock', 'e15_triton'):
+                rgb = ycbcr2rgb(outputs[kind][0].clamp(-.5,.5)+.5,
+                                clamp=True)[0]
+                pixels = (rgb.permute(1,2,0).mul(255).add(.5)
+                          .clamp(0,255).byte().cpu().numpy())
+                path = args.save_recon_dir/f'{args.stream.stem}_{kind}.png'
+                Image.fromarray(pixels).save(path)
+                saved_reconstructions[kind] = {'path': str(path),
+                                               'sha256': digest(path)}
         quality = None
         if args.source is not None:
             import math
@@ -297,6 +314,9 @@ def benchmark(args):
         'latent_sha256': next(iter(latent_hashes)),
         'triton_max_abs_errors': errors, 'e15_vs_released_mse': mse,
         'quality_yuv611_444_db': quality,
+        'saved_reconstructions': saved_reconstructions,
+        'released_minus_e15_yuv611_444_db':
+            (quality['released_stock']-quality['e15_stock']) if quality else None,
         'route_counts': route_counts, 'gpu': torch.cuda.get_device_name(device),
         'gpu_index': args.gpu, 'gpu_occupants_before': before,
         'gpu_occupants_after': after,
@@ -343,6 +363,8 @@ def main():
     b.add_argument('--source', type=Path, help='Original RGB PNG for YUV 6:1:1 PSNR in 4:4:4')
     b.add_argument('--include-encoder', action='store_true',
                    help='Time a fresh CPU image encoder in every paired arm')
+    b.add_argument('--save-recon-dir', type=Path,
+                   help='Write released/e15 reconstruction PNGs outside timed blocks')
     b.add_argument('--e15', type=Path, default=DEFAULT_E15)
     b.add_argument('--router', type=Path, default=DEFAULT_ROUTER)
     b.add_argument('--calibration', type=Path, default=HERE/'router_calibration.json')

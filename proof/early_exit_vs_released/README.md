@@ -25,6 +25,7 @@ proof/early_exit_vs_released/.local/venv/bin/python \
   proof/early_exit_vs_released/bitstream_benchmark.py benchmark \
   --stream proof/early_exit_vs_released/results/kodim01_qp32.fufref2 \
   --source data/kodak/kodim01.png --gpu 0 --blocks 20 \
+  --save-recon-dir proof/early_exit_vs_released/results/reconstructions \
   --out proof/early_exit_vs_released/results/kodim01_reproduced.json
 ```
 
@@ -34,7 +35,9 @@ CPU rANS extension locally. `bitstream_benchmark.py prepare --image PNG --qp 32
 --out FRAME.fufref2` can encode another RGB PNG whose dimensions are multiples
 of 256. Benchmark output contains paired raw timings, checkpoint and stream
 hashes, router exit counts, output equivalence, source quality, GPU occupancy
-checks, and code/environment identities. It refuses an occupied GPU. The sample
+checks, and code/environment identities. The optional PNG files show the actual
+released and early-exit outputs and are written outside timed blocks. It refuses
+an occupied GPU. The sample
 stream was emitted from the tracked Kodak image, is 16,627 bytes, and has SHA-256
 `ae06007c9ebef84894b8aacaaf7d551a9a062076aac97590586a42652d609ceb`.
 The [public reproducibility check](PUBLIC_REPRO_CHECK_20261003.json) records a
