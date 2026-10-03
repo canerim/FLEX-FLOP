@@ -3,10 +3,20 @@
   "scope": "Same decoded FUFREF2 latent -> CPU synthesis; e15 includes router and patch assembly; entropy, model loading and disk I/O excluded",
   "backend": "PyTorch CPU FP32 for all arms; no custom fusion or ONNX EP",
   "claim_eligible": false,
-  "loadavg_1m": 203.478515625,
+  "git_commit": "0c148acffe13b0b0b0a7700913f8dee964b1e0c7",
+  "tracked_code_changes": "",
+  "script_sha256": "f1afd02e8d4c657dbf9393a95d3aa42329dc9fbbfea07e12123b73ff16ee6f9e",
+  "loadavg_1m_before_after": [
+    203.75732421875,
+    199.181640625
+  ],
+  "affinity_cpus": [
+    0
+  ],
   "threads": 1,
   "stream_sha256": "25ec54029c8b99c064ade3d48db2e9c85dbcf27e825280084002527f8b673433",
   "latent_sha256": "c11d43c6cd928e7f489481346ff9dece692ba82e117d530023ab1495781f7bca",
+  "source_sha256": "a56e27cbf5f843c048b6af1d6e090760e9c92fadba88b7dee0205918a37523bd",
   "released_sha256": "b3b900de23f30e4fc437010ddffe6a5413a56d6cfd97fb6235adbcd2b6973302",
   "e15_sha256": "91556d30bca41988755ff43dee3bc6d0cd2a0a4eda1d18d2891b168dc0a04ce9",
   "router_sha256": "5b832c639fa7f857ef071276fd683e8e6150ca35e56b4470008a7d9dd79dda0f",
