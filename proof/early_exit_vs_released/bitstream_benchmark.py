@@ -137,6 +137,20 @@ def benchmark(args):
     codec, info = load_codec(args)
     data = args.stream.read_bytes()
     meta = parse_container(data, 12, info['sha256'])
+    source_cpu = None
+    if args.include_encoder:
+        if args.source is None:
+            raise ValueError('--include-encoder requires --source')
+        import numpy as np
+        from PIL import Image
+        from src.utils.transforms import rgb2ycbcr_np
+        raw = np.asarray(Image.open(args.source).convert('RGB'))
+        if list(raw.shape[:2]) != [meta['height'], meta['width']]:
+            raise ValueError('Source image geometry differs from the stream')
+        source_cpu = torch.from_numpy(rgb2ycbcr_np(raw.astype(np.float32)/255)-.5)
+        source_cpu = source_cpu.permute(2,0,1)[None].contiguous()
+        if codec.encode(source_cpu, meta['qp'], audit=False, reconstruct=False).stream != data:
+            raise RuntimeError('Source encoder did not reproduce the supplied stream')
     if meta['qp'] not in (0, 16, 32, 48, 63):
         raise ValueError('Router beta is calibrated only at QPs 0,16,32,48,63')
     if meta['height'] % 256 or meta['width'] % 256:
@@ -167,8 +181,12 @@ def benchmark(args):
     head, cost, beta = load_router(args, cfg, device)
 
     def run(kind, *, audit=False):
-        # Every arm starts from bytes. No latent or encoder tensor is shared.
-        y_cpu, q_cpu, trace = codec.decode_latent(data, audit=audit)
+        # Each arm independently executes the requested boundary. No latent or
+        # encoder-side tensor is shared, and output is always synthesized.
+        stream = (codec.encode(source_cpu, meta['qp'], audit=False,
+                               reconstruct=False).stream
+                  if args.include_encoder else data)
+        y_cpu, q_cpu, trace = codec.decode_latent(stream, audit=audit)
         y = y_cpu.to(device)
         q = q_cpu.to(device)
         route = None
@@ -183,8 +201,10 @@ def benchmark(args):
             # latent supplies the scales tensor's shape without allocation.
             logits = head(stem, y, y, qp,
                           cfg.feature_patch, cfg.latent_patch)
-            scores = F.log_softmax(logits[:, cfg.split_depth:], dim=1)
-            scores = scores - beta[meta['qp']] * cost[cfg.split_depth:][None, :]
+            # Match the archived calibration's FP32 softmax followed by FP64
+            # beta/cost comparison; a near-tie can otherwise flip an exit.
+            scores = F.log_softmax(logits[:, cfg.split_depth:], dim=1).double()
+            scores = scores - beta[meta['qp']] * cost[cfg.split_depth:].double()[None, :]
             route = (scores.argmax(1) + cfg.split_depth).cpu()
         if kind == 'released_stock':
             image = released.dec(y, q)
@@ -263,7 +283,10 @@ def benchmark(args):
     result = {
         'schema': 1, 'timestamp_utc': datetime.now(timezone.utc).isoformat(),
         'claim_eligible': True,
-        'scope': 'In-memory FUFREF2 bitstream -> independent CPU rANS/hyperprior decode -> GPU copy -> decoder-side router (e15) -> GPU synthesis -> output tensor; excludes encoder, disk I/O, model loading; not Microsoft native CUDA stream',
+        'scope': ('RGB image -> CPU research encoder -> FUFREF2 bytes -> independent CPU rANS/hyperprior decode -> GPU copy -> decoder-side router (e15) -> GPU synthesis -> output tensor; excludes disk I/O and model loading; not Microsoft native CUDA stream'
+                  if args.include_encoder else
+                  'In-memory FUFREF2 bitstream -> independent CPU rANS/hyperprior decode -> GPU copy -> decoder-side router (e15) -> GPU synthesis -> output tensor; excludes encoder, disk I/O, model loading; not Microsoft native CUDA stream'),
+        'include_encoder': args.include_encoder,
         'stream_sha256': digest(args.stream), 'stream_bytes': len(data),
         'source_sha256': digest(args.source) if args.source else None,
         'shape': [meta['height'], meta['width']], 'qp': meta['qp'],
@@ -318,6 +341,8 @@ def main():
     b = commands.add_parser('benchmark', help='Time independent bitstream -> image decodes')
     b.add_argument('--stream', type=Path, required=True)
     b.add_argument('--source', type=Path, help='Original RGB PNG for YUV 6:1:1 PSNR in 4:4:4')
+    b.add_argument('--include-encoder', action='store_true',
+                   help='Time a fresh CPU image encoder in every paired arm')
     b.add_argument('--e15', type=Path, default=DEFAULT_E15)
     b.add_argument('--router', type=Path, default=DEFAULT_ROUTER)
     b.add_argument('--calibration', type=Path, default=HERE/'router_calibration.json')

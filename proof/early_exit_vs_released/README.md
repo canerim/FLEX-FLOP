@@ -18,7 +18,7 @@ proof/early_exit_vs_released/.local/venv/bin/python -m pip install --upgrade pip
 proof/early_exit_vs_released/.local/venv/bin/python -m pip install \
   torch==2.9.1 --index-url https://download.pytorch.org/whl/cu126
 proof/early_exit_vs_released/.local/venv/bin/python -m pip install \
-  numpy==2.2.6 pillow==11.3.0 pybind11==3.1.0
+  numpy==2.2.6 scipy==1.18.1 pillow==11.3.0 pybind11==3.1.0
 proof/early_exit_vs_released/.local/venv/bin/python \
   proof/early_exit_vs_released/bootstrap.py
 proof/early_exit_vs_released/.local/venv/bin/python \
@@ -37,6 +37,14 @@ hashes, router exit counts, output equivalence, source quality, GPU occupancy
 checks, and code/environment identities. It refuses an occupied GPU. The sample
 stream was emitted from the tracked Kodak image, is 16,627 bytes, and has SHA-256
 `ae06007c9ebef84894b8aacaaf7d551a9a062076aac97590586a42652d609ceb`.
+The [public reproducibility check](PUBLIC_REPRO_CHECK_20261003.json) records a
+separate clean checkout and unauthenticated HTTPS download of both LFS weights.
+
+For the stricter image-to-image question, add `--include-encoder --blocks 5` to
+the benchmark command. Each paired arm then independently encodes the source
+PNG into the same checked bytes before decoding. This is substantially slower
+to measure because the research encoder runs on CPU; report it separately from
+the bytes-to-image decoder result.
 
 **Meaning of the numbers:** the fresh-clone test starts with in-memory
 `FUFREF2` bytes; each arm independently does CPU rANS and hyperprior decode,

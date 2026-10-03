@@ -1,0 +1,26 @@
+{
+  "schema": 1,
+  "checked_utc_date": "2026-10-03",
+  "published_branch": "proof/early-exit-vs-released-20261003",
+  "checked_commit": "170ba6b61edd7c728ca4f3f60d96f342990600a7",
+  "public_https_repository_status": 200,
+  "public_lfs_download": {
+    "method": "anonymous Git LFS batch download from github.com, streamed independently of local Git LFS cache",
+    "e15_epoch15": {"bytes": 181941503, "sha256": "91556d30bca41988755ff43dee3bc6d0cd2a0a4eda1d18d2891b168dc0a04ce9", "verified": true},
+    "released_d12": {"bytes": 168845375, "sha256": "b3b900de23f30e4fc437010ddffe6a5413a56d6cfd97fb6235adbcd2b6973302", "verified": true}
+  },
+  "clean_checkout_cpu_tests": {
+    "pinned_entropy_extension_compiled": true,
+    "all_three_checkpoint_hashes_verified": true,
+    "stem_qp_router_loaded": true,
+    "kodim01_qp32_reencoded_stream_sha256": "ae06007c9ebef84894b8aacaaf7d551a9a062076aac97590586a42652d609ceb",
+    "reencoded_stream_matches_tracked_sample": true,
+    "decoder_latent_sha256": "3bb29024361fa50510ecf5b746e333d1e885b215d1da0c21e83837aca336f21c"
+  },
+  "shared_stem_cpu_exactness": {
+    "256px_uniform_exit_ids": [2, 3, 4, 5],
+    "512px_mixed_map": [2, 5, 3, 4],
+    "max_abs_error": 0.0
+  },
+  "gpu_speed_claim": "pending an idle-GPU matched-kernel and bitstream-to-image paired cohort; no speedup is inferred from the CPU reproducibility checks"
+}

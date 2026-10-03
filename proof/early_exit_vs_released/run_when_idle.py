@@ -51,9 +51,13 @@ def main() -> int:
     parser.add_argument("--extension", type=Path,
                         default=Path('/data10/shareddata/can_karsal/dcvcuf_depth_20260927/research/reference_entropy_v1'),
                         help="Pinned FUFREF2 entropy extension directory")
+    parser.add_argument("--roundtrip-after", action="store_true",
+                        help="Also time full image->bytes->image after the decoder test")
     args = parser.parse_args()
     if min(args.hours, args.stable_minutes, args.poll_seconds) <= 0:
         parser.error("time limits must be positive")
+    if args.roundtrip_after and (args.bitstream_stream is None or args.bitstream_source is None):
+        parser.error("roundtrip requires bitstream stream and source image")
     folder = HERE / "results"
     folder.mkdir(parents=True, exist_ok=True)
     log = folder / "matched_idle_watcher.jsonl"
@@ -61,6 +65,7 @@ def main() -> int:
     candidate = None
     candidate_since = None
     matched_done = False
+    bitstream_done = False
     emit(log, {"event": "started", "hours": args.hours,
                "stable_minutes": args.stable_minutes})
     while time.monotonic() < deadline:
@@ -76,7 +81,8 @@ def main() -> int:
             if candidate is not None:
                 emit(log, {"event": "candidate", "gpu": candidate})
         if candidate is not None and now - candidate_since >= args.stable_minutes * 60:
-            phase = 'bitstream' if matched_done else 'cohort'
+            phase = ('cohort' if not matched_done else
+                     'bitstream' if not bitstream_done else 'roundtrip')
             emit(log, {"event": f"{phase}_start", "gpu": candidate})
             output = folder / f"{phase}_idle_gpu{candidate}.log"
             if matched_done:
@@ -84,10 +90,12 @@ def main() -> int:
                            '--extension', str(args.extension),
                            'benchmark', '--gpu', str(candidate),
                            '--stream', str(args.bitstream_stream),
-                           '--blocks', str(args.blocks),
-                           '--out', str(folder/'kodim01_qp32_bitstream_idle.json')]
+                           '--blocks', str(5 if bitstream_done else args.blocks),
+                           '--out', str(folder/f'kodim01_qp32_{phase}_idle.json')]
                 if args.bitstream_source:
                     command += ['--source', str(args.bitstream_source)]
+                if bitstream_done:
+                    command += ['--include-encoder']
             else:
                 command = [sys.executable, str(HERE / "run_cohort.py"),
                            "--gpu", str(candidate), "--blocks", str(args.blocks),
@@ -97,9 +105,14 @@ def main() -> int:
             emit(log, {"event": f"{phase}_end", "gpu": candidate,
                        "returncode": result.returncode, "log": str(output)})
             if result.returncode == 0:
-                if matched_done or args.bitstream_stream is None:
+                if phase == 'roundtrip' or (phase == 'bitstream' and not args.roundtrip_after):
                     return 0
-                matched_done = True
+                if phase == 'cohort':
+                    if args.bitstream_stream is None:
+                        return 0
+                    matched_done = True
+                elif phase == 'bitstream':
+                    bitstream_done = True
             candidate = None
             candidate_since = None
         time.sleep(args.poll_seconds)

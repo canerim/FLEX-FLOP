@@ -133,7 +133,7 @@ def scale_indexes(values,gaussian):
 @dataclass
 class Encoded:
     stream: bytes
-    reconstruction: torch.Tensor
+    reconstruction: torch.Tensor | None
     diagnostics: dict
 
 
@@ -167,7 +167,7 @@ class ReferenceCodec:
         return self.net.y_spatial_prior(adapter(torch.cat((so_far,reduced),1))).chunk(2,1)
 
     @torch.inference_mode()
-    def encode(self,x,qp):
+    def encode(self,x,qp,*,audit=True,reconstruct=True):
         if not isinstance(qp,int) or not 0<=qp<64:raise ValueError('QP must be 0..63')
         if x.ndim!=4 or x.shape[:2]!=(1,3) or x.device.type!='cpu' or x.dtype!=torch.float32:
             raise ValueError('Expected one CPU FP32 NCHW centred YCbCr image')
@@ -197,10 +197,13 @@ class ReferenceCodec:
             packs.append(np.ascontiguousarray(packed))
             y_part=y_q+mu
             so_far=y_part if stage==0 else so_far+y_part
-            symbols.append(y_q);all_scales.append(scales*mask)
-            trace.append({'stage':stage,'symbols':flat.size,'symbols_sha256':sha(flat.tobytes()),
-                          'indexes_sha256':sha(indexes.tobytes()),'nonpositive_scales':int((quarter_values(scales*mask)<=0).sum())})
-        y_hat=so_far*yq_dec
+            if audit:
+                symbols.append(y_q);all_scales.append(scales*mask)
+            if audit:
+                trace.append({'stage':stage,'symbols':flat.size,'symbols_sha256':sha(flat.tobytes()),
+                              'indexes_sha256':sha(indexes.tobytes()),
+                              'nonpositive_scales':int((quarter_values(scales*mask)<=0).sum())})
+        y_hat=so_far*yq_dec if audit or reconstruct else None
         ec=self.net.entropy_coder
         ec.encoder.reset()
         # rANS is a stack: submit y3,y2,y1,y0,z so the decoder reads z,y0,y1,y2,y3.
@@ -208,21 +211,28 @@ class ReferenceCodec:
         ec.encoder.encode_z(z_flat,qp*self.net.z_channel,self.net.z_channel)
         ec.encoder.flush()
         payload=ec.encoder.get_encoded_stream().tobytes()
-        recon=self.net.dec(y_hat,q_dec)[:,:,:h,:w]
+        recon=self.net.dec(y_hat,q_dec)[:,:,:h,:w] if reconstruct else None
         # Diagnostic rate on exactly these quantized symbols, matching deterministic validation.
-        sum_symbols=(symbols[0]+symbols[1])+(symbols[2]+symbols[3])
-        sum_scales=(all_scales[0]+all_scales[1])+(all_scales[2]+all_scales[3])
-        bits_y=float(self.net.get_y_bits(sum_symbols,sum_scales).sum())
-        bits_z=float(self.net.get_z_bits(z_hat,self._qp(qp)).sum())
+        if audit:
+            sum_symbols=(symbols[0]+symbols[1])+(symbols[2]+symbols[3])
+            sum_scales=(all_scales[0]+all_scales[1])+(all_scales[2]+all_scales[3])
+            bits_y=float(self.net.get_y_bits(sum_symbols,sum_scales).sum())
+            bits_z=float(self.net.get_z_bits(z_hat,self._qp(qp)).sum())
+        else:
+            bits_y=bits_z=None
         stream=make_container(payload,h,w,self.depth,qp,self.checkpoint_sha256)
         diagnostics={'depth':self.depth,'qp':qp,'height':h,'width':w,'header_bytes':HEADER.size,
                      'payload_bytes':len(payload),'container_bytes':len(stream),
                      'payload_bpp':len(payload)*8/(h*w),'container_bpp':len(stream)*8/(h*w),
-                     'estimated_bpp':(bits_y+bits_z)/(h*w),'estimated_bits_y':bits_y,'estimated_bits_z':bits_z,
-                     'z_hat_sha256':tensor_hash(z_hat+0.0),'y_hat_sha256':tensor_hash(y_hat),
+                     'estimated_bpp':(bits_y+bits_z)/(h*w) if audit else None,
+                     'estimated_bits_y':bits_y,'estimated_bits_z':bits_z,
+                     'z_hat_sha256':tensor_hash(z_hat+0.0) if audit else None,
+                     'y_hat_sha256':tensor_hash(y_hat) if audit else None,
                      'z_symbols':z_flat.size,'stages':trace,
                      'cpu_encode_and_diagnostic_seconds':time.perf_counter()-started,
-                     'timing_scope':'CPU research implementation including diagnostic work; not deployment latency'}
+                     'timing_scope':('CPU research implementation including diagnostic work; not deployment latency'
+                                     if audit or reconstruct else
+                                     'CPU research entropy encoder only; not deployment latency')}
         return Encoded(stream,recon,diagnostics)
 
     @torch.inference_mode()

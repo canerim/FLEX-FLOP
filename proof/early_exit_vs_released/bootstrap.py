@@ -29,6 +29,8 @@ def main():
                         default=HERE/'.local/DCVC',
                         help='Existing pinned DCVC checkout, or destination for clone')
     parser.add_argument('--extension', type=Path, default=HERE/'.local/entropy')
+    parser.add_argument('--skip-cpu-smoke', action='store_true',
+                        help='Skip deterministic Kodak stream/latent re-encoding check')
     args = parser.parse_args()
     for name, digest in EXPECTED.items():
         path = HERE/'artifacts'/name
@@ -47,10 +49,38 @@ def main():
         raise RuntimeError(f'DCVC must be at {COMMIT}; found {head}')
     subprocess.run([sys.executable, str(REPO/'proof/depth_bitstream/build_entropy.py'),
                     '--upstream', str(args.upstream), '--out', str(args.extension)], check=True)
+    smoke = None
+    if not args.skip_cpu_smoke:
+        import numpy as np
+        from PIL import Image
+        import torch
+        sys.path.insert(0, str(REPO/'proof/depth_bitstream'))
+        from model_io import load_model
+        from reference_codec import ReferenceCodec
+        torch.set_num_threads(1)
+        net, info = load_model(HERE/'artifacts/released_cvpr2026_image.pth.tar',
+                               12, args.upstream)
+        from src.utils.transforms import rgb2ycbcr_np
+        codec = ReferenceCodec(net, info['sha256'], args.extension)
+        image = REPO/'data/kodak/kodim01.png'
+        raw = np.asarray(Image.open(image).convert('RGB'))
+        x = torch.from_numpy(rgb2ycbcr_np(raw.astype(np.float32)/255)-.5)
+        x = x.permute(2,0,1)[None].contiguous()
+        sample = HERE/'results/kodim01_qp32.fufref2'
+        encoded = codec.encode(x, 32, audit=False, reconstruct=False)
+        if encoded.stream != sample.read_bytes():
+            raise RuntimeError('Kodak re-encoding differs from tracked bitstream')
+        _, _, trace = codec.decode_latent(encoded.stream)
+        expected_latent = '3bb29024361fa50510ecf5b746e333d1e885b215d1da0c21e83837aca336f21c'
+        if trace['y_hat_sha256'] != expected_latent:
+            raise RuntimeError('Decoded Kodak latent differs from reference hash')
+        smoke = {'sample_stream_sha256': sha(sample),
+                 'latent_sha256': trace['y_hat_sha256'], 'passed': True}
     record = {
         'upstream': str(args.upstream.resolve()), 'commit': head,
         'extension': str(args.extension.resolve()),
         'checkpoint_sha256': EXPECTED,
+        'cpu_smoke': smoke,
     }
     print(json.dumps(record, indent=2))
 
