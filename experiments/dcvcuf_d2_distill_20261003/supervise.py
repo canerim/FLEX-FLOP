@@ -48,6 +48,18 @@ def first_free_gpu():
     return None
 
 
+def await_idle_gpu(current):
+    while not STOP:
+        if gpu_free(current)[0]:
+            return current
+        alternative = first_free_gpu()
+        if alternative is not None:
+            event('gpu_reselected', previous=current, gpu=alternative)
+            return alternative
+        time.sleep(60)
+    return None
+
+
 def d6_finished():
     status = D6 / 'status.json'
     if not status.exists() or not (D6 / 'ckpt.pth.tar').exists():
@@ -88,10 +100,10 @@ def main():
                 continue
         smoke_cmd = [exe, '-u', str(HERE/'train.py'), '--save-dir', str(smoke_dir),
                      '--smoke', '--smoke-steps', '1', '--smoke-patch', str(patch), '--compile']
-        while not STOP and not gpu_free(gpu)[0]:
-            time.sleep(60)
-        if STOP:
+        gpu = await_idle_gpu(gpu)
+        if gpu is None:
             return
+        env['CUDA_VISIBLE_DEVICES'] = gpu
         event('preflight_start', patch=patch, gpu=gpu)
         smoke_dir.mkdir(parents=True, exist_ok=True)
         with (smoke_dir/'train.log').open('a', buffering=1) as log:
@@ -101,10 +113,10 @@ def main():
     for attempt in range(3):
         if STOP:
             return
-        while not STOP and not gpu_free(gpu)[0]:
-            time.sleep(60)
-        if STOP:
+        gpu = await_idle_gpu(gpu)
+        if gpu is None:
             return
+        env['CUDA_VISIBLE_DEVICES'] = gpu
         event('launch', attempt=attempt + 1, command=command)
         with (RUN/'train.log').open('a', buffering=1) as log:
             child = subprocess.Popen(command, env=env, stdout=log, stderr=subprocess.STDOUT)
