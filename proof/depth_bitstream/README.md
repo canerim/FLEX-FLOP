@@ -4,6 +4,8 @@
 
 `analyze.py` will refuse to output a BD-rate until all 480 cases and their isolated-decode checks have finished. It integrates PCHIP log-rate curves per Kodak image on the four-model common PSNR interval and averages 24 image percentages. It reports both RGB and YUV 6:1:1 PSNR with a paired-image bootstrap interval. Missing support or non-monotonic curves cause a failure instead of extrapolation.
 
+After analysis, `plot.py` produces a vector PDF and 300-dpi PNG: actual-payload Kodak RD curves and per-image BD-rate means with paired-image confidence intervals. The plotted mean RD curves are visual context; they are not used to calculate BD-rate.
+
 ```bash
 cd /home/can_karsal/FLEX-PLUS
 OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 \
@@ -11,6 +13,8 @@ OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 \
   proof/depth_bitstream/evaluate.py
 /data10/shareddata/can_karsal/dcvcuf_depth_20260927/venv/bin/python \
   proof/depth_bitstream/analyze.py
+/data10/shareddata/can_karsal/dcvcuf_depth_20260927/venv/bin/python \
+  proof/depth_bitstream/plot.py
 ```
 
 The evaluator is resumable and records source, checkpoint, code and stream hashes. The `--max-cases` option is only a smoke test and marks the run partial. A native-CUDA-format RD comparison would be a separate protocol because the native and CPU research coders have different wire and numeric conventions.
