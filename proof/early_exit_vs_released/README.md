@@ -22,6 +22,8 @@ proof/early_exit_vs_released/.local/venv/bin/python -m pip install \
 proof/early_exit_vs_released/.local/venv/bin/python \
   proof/early_exit_vs_released/bootstrap.py
 proof/early_exit_vs_released/.local/venv/bin/python \
+  proof/early_exit_vs_released/run_bitstream_cohort.py --verify-only
+proof/early_exit_vs_released/.local/venv/bin/python \
   proof/early_exit_vs_released/bitstream_benchmark.py benchmark \
   --stream proof/early_exit_vs_released/results/kodim01_qp32.fufref2 \
   --source data/kodak/kodim01.png --gpu 0 --blocks 20 \
@@ -101,8 +103,12 @@ cd /home/can_karsal/FLEX-PLUS
 `run_when_idle.py` can wait for a completely unused GPU (no compute process,
 under 256 MiB allocated, under 5% utilization) for five continuous minutes,
 then run the matched-kernel cohort once. It polls only `nvidia-smi` while
-waiting and expires after 24 hours by default. The benchmark aborts if another
-compute process arrives during its paired measurements. The watcher's JSONL
+waiting and expires after 24 hours by default. The server watcher currently
+has a 120-hour deadline and then runs the nine-case bytes-to-image and full
+roundtrip cohorts. Each cohort resumes only cases whose raw result, hashes,
+device and code version match. The benchmark aborts if another compute
+process arrives during its paired measurements; a systematic error stops the
+watcher instead of repeatedly occupying the GPU. The watcher's JSONL
 and run log are written under `results/`.
 
 `mac_latency_audit.py` reconciles the recorded padded shapes and tile maps with

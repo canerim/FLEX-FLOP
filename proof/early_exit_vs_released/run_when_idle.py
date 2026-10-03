@@ -98,11 +98,26 @@ def main() -> int:
             else:
                 command = [sys.executable, str(HERE / "run_cohort.py"),
                            "--gpu", str(candidate), "--blocks", str(args.blocks),
-                           "--matched-kernels"]
+                           "--matched-kernels", "--resume",
+                           "--out", str(folder/f'matched_idle_gpu{candidate}_cases')]
             with output.open("a") as stream:
                 result = subprocess.run(command, stdout=stream, stderr=subprocess.STDOUT)
             emit(log, {"event": f"{phase}_end", "gpu": candidate,
                        "returncode": result.returncode, "log": str(output)})
+            if result.returncode != 0:
+                try:
+                    still_free = candidate in unused_gpus()
+                except (OSError, subprocess.CalledProcessError, ValueError):
+                    still_free = True  # stop rather than risk repeated GPU work
+                if still_free:
+                    emit(log, {"event": "aborted_after_failure", "phase": phase,
+                               "gpu": candidate, "log": str(output)})
+                    return result.returncode
+                # Another workload arrived while measuring. Wait for a new
+                # five-minute idle window rather than interfering with it.
+                candidate = None
+                candidate_since = None
+                continue
             if result.returncode == 0:
                 if phase == 'roundtrip' or (phase == 'bitstream' and not args.roundtrip_after):
                     return 0

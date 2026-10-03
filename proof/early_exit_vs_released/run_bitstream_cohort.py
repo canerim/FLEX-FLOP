@@ -12,7 +12,8 @@ import sys
 HERE = Path(__file__).resolve().parent
 REPO = HERE.parents[1]
 sys.path.insert(0, str(HERE))
-from bitstream_benchmark import (DEFAULT_EXTENSION, DEFAULT_RELEASE,
+from bitstream_benchmark import (DEFAULT_E15, DEFAULT_EXTENSION,
+                                 DEFAULT_RELEASE, DEFAULT_ROUTER,
                                  DEFAULT_UPSTREAM, digest)
 
 
@@ -20,7 +21,9 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--manifest', type=Path,
                         default=HERE/'results/bitstream_kodak3x3/manifest.json')
-    parser.add_argument('--gpu', type=int, required=True)
+    parser.add_argument('--gpu', type=int)
+    parser.add_argument('--verify-only', action='store_true',
+                        help='Check the nine source/stream hashes without touching a GPU')
     parser.add_argument('--blocks', type=int, default=20)
     parser.add_argument('--warmup', type=int, default=3)
     parser.add_argument('--include-encoder', action='store_true')
@@ -37,6 +40,18 @@ def main():
         raise RuntimeError('Unexpected or incomplete predeclared cohort')
     if args.blocks < 5:
         parser.error('Need at least five paired blocks per case')
+    if not args.verify_only and args.gpu is None:
+        parser.error('--gpu is required unless --verify-only is selected')
+    if args.verify_only:
+        for row in manifest['rows']:
+            stream = REPO/row['stream']
+            source = REPO/'data/kodak'/row['image']
+            if digest(stream) != row['stream_sha256'] or digest(source) != row['image_sha256']:
+                raise RuntimeError(f'Predeclared input changed: {stream}')
+        print(json.dumps({'verified_cases': len(manifest['rows']),
+                          'manifest_sha256': digest(args.manifest),
+                          'gpu_used': False}))
+        return
     args.out.mkdir(parents=True, exist_ok=True)
     results = []
     for row in manifest['rows']:
@@ -59,6 +74,12 @@ def main():
                          digest(args.extension/'build_manifest.json') and
                          old.get('checkpoint_sha256', {}).get('released') ==
                          digest(args.release) and
+                         old.get('checkpoint_sha256', {}).get('e15') ==
+                         digest(DEFAULT_E15) and
+                         old.get('checkpoint_sha256', {}).get('router') ==
+                         digest(DEFAULT_ROUTER) and
+                         old.get('calibration_sha256') ==
+                         digest(HERE/'router_calibration.json') and
                          old.get('code_sha256', {}).get('benchmark') ==
                          digest(HERE/'bitstream_benchmark.py') and
                          old.get('code_sha256', {}).get('planned_decoder') ==

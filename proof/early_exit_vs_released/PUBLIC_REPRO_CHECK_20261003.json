@@ -19,6 +19,12 @@
     "reencoded_stream_matches_tracked_sample": true,
     "decoder_latent_sha256": "3bb29024361fa50510ecf5b746e333d1e885b215d1da0c21e83837aca336f21c"
   },
+  "kodak3x3_cpu_manifest_check": {
+    "cases": 9,
+    "manifest_sha256": "91000ab19dd1ade955338a50c5eecd75361065e8594c8d2b4b66b04786f20652",
+    "all_source_and_stream_hashes_verified": true,
+    "gpu_used": false
+  },
   "shared_stem_cpu_exactness": {
     "256px_uniform_exit_ids": [2, 3, 4, 5],
     "512px_mixed_map": [2, 5, 3, 4],
