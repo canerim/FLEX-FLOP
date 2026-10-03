@@ -100,7 +100,8 @@ def export(args):
                                    sess_options=ort.SessionOptions())
     got = session.run(None, {'latent': y.numpy(), 'q_dec': q.numpy()})[0]
     delta = float(abs(got - expected).max())
-    report = {'model': str(args.model), 'model_sha256': sha(args.model),
+    report = {'script_sha256': sha(Path(__file__)),
+              'model': str(args.model), 'model_sha256': sha(args.model),
               'stream': str(args.stream), 'stream_sha256': sha(args.stream),
               'checkpoint': identity, 'variant': variant, 'latent_shape': list(y.shape),
               'q_shape': list(q.shape), 'output_shape': list(got.shape),
@@ -158,7 +159,8 @@ def quantize(args):
                     reduce_range=args.reduce_range, op_types_to_quantize=['Conv'],
                     nodes_to_quantize=nodes,
                     calibrate_method=CalibrationMethod.MinMax)
-    report = {'source_model_sha256': sha(args.model),
+    report = {'script_sha256': sha(Path(__file__)),
+              'source_model_sha256': sha(args.model),
               'quant_model_sha256': sha(args.quant_model),
               'calibration_streams': identities, 'format': 'QDQ S8S8',
               'ops': ['Conv'], 'per_channel': args.per_channel,
@@ -244,7 +246,8 @@ def benchmark(args):
                          'latency_ms_raw': times[name],
                          'median_ms': statistics.median(times[name])}
     load_after = os.getloadavg()[0]
-    report = {'scope': 'Fixed FUFREF2 stream -> already entropy-decoded latent -> YCbCr synthesis; excludes entropy and IO',
+    report = {'script_sha256': sha(Path(__file__)),
+              'scope': 'Fixed FUFREF2 stream -> already entropy-decoded latent -> YCbCr synthesis; excludes entropy and IO',
               'claim_eligible': bool(args.enforce_idle and args.warmup >= 5 and
                                      args.repeats >= 30 and load_after <= args.max_load),
               'load_1m_before_after': [load_before, load_after],
@@ -279,7 +282,8 @@ def profile(args):
              'total_cpu_time_ms': event.cpu_time_total / 1000}
             for event in prof.key_averages()]
     rows.sort(key=lambda row: row['self_cpu_time_ms'], reverse=True)
-    report = {'scope': 'One instrumented PyTorch CPU decoder synthesis; operator priority only, not latency',
+    report = {'script_sha256': sha(Path(__file__)),
+              'scope': 'One instrumented PyTorch CPU decoder synthesis; operator priority only, not latency',
               'variant': variant, 'checkpoint': identity, 'stream_sha256': sha(args.stream),
               'threads': args.threads, 'hardware': hardware(), 'operators': rows}
     args.out.parent.mkdir(parents=True, exist_ok=True)
@@ -318,7 +322,7 @@ def main():
         export(args)
     elif args.command == 'quantize':
         if not args.calibration_stream:
-            args.calibration_stream = sorted((PROOF/'results/bitstream_kodak3x3').glob('*.fufref2'))
+            raise ValueError('Pass explicit --calibration-stream paths; keep evaluation images disjoint')
         quantize(args)
     elif args.command == 'benchmark':
         benchmark(args)

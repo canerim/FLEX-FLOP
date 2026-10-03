@@ -1,4 +1,5 @@
 {
+  "script_sha256": "f64ab85a3428f12f359e0acce5e7e5519d23628a20c75617b415457f255ec923",
   "model": "/tmp/flexplus-cpu/released_d12.onnx",
   "model_sha256": "638ced13056e38756bc96fcdcd116e2ca40221ca823781d86d02d88bf5d251c5",
   "stream": "/home/can_karsal/FLEX-PLUS/proof/early_exit_vs_released/results/kodim01_qp32.fufref2",
@@ -13,6 +14,9 @@
     "global_step": null,
     "model_source_sha256": "95ff7158ffa592b608f346f3585e6111380bee08e50096a1e7c0355acf01089e",
     "common_source_sha256": "e309a7144514836f29453f8d1fe65df8f7ab72d17ed1efea08ac35ee9f67469a"
+  },
+  "variant": {
+    "variant": "released"
   },
   "latent_shape": [
     1,
@@ -41,14 +45,14 @@
   "ort": "1.24.2",
   "onnx": "1.19.1",
   "hardware": {
-    "cpu": "x86_64",
+    "cpu": "AMD EPYC 7443 24-Core Processor",
     "machine": "Linux-6.8.0-124-generic-x86_64-with-glibc2.35",
     "avx2": true,
     "avx512f": false,
     "loadavg": [
-      99.2255859375,
-      94.91259765625,
-      95.3310546875
+      119.19921875,
+      105.90234375,
+      103.45361328125
     ],
     "logical_cpus": 96,
     "affinity_cpus": [

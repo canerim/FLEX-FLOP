@@ -40,6 +40,8 @@ python proof/cpu_early_exit/bench.py quantize \
   --extension proof/early_exit_vs_released/.local/entropy \
   --model /tmp/cpu/released_d12.onnx \
   --quant-model /tmp/cpu/released_d12_int8.onnx \
+  --calibration-stream proof/early_exit_vs_released/results/bitstream_kodak3x3/kodim13_qp16.fufref2 \
+  --calibration-stream proof/early_exit_vs_released/results/bitstream_kodak3x3/kodim24_qp48.fufref2 \
   --per-channel --reduce-range
 python proof/cpu_early_exit/bench.py benchmark \
   --upstream proof/early_exit_vs_released/.local/DCVC \
@@ -55,8 +57,9 @@ The default quantizer is static QDQ S8S8, Conv only. `--reduce-range` and
 (AVX2, no AVX-512 VNNI), not a quality guarantee. For selective experiments,
 `--quant-selection trunk_pointwise` quantizes only the main 1×1 trunk
 convolutions, and `first6_pointwise` limits those to the first six positions.
-Use a different `--quant-model` path for each candidate. The default Kodak
-calibration set is small and serves only as a smoke test; an INT8 result needs
+Use a different `--quant-model` path for each candidate. Calibration streams
+must be supplied explicitly and come from images disjoint from evaluation.
+Two Kodak streams serve only as a smoke test; an INT8 result needs
 representative held-out calibration and validation images across QPs before
 it can support a paper claim.
 

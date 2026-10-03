@@ -1,0 +1,94 @@
+{
+  "script_sha256": "f64ab85a3428f12f359e0acce5e7e5519d23628a20c75617b415457f255ec923",
+  "scope": "Fixed FUFREF2 stream -> already entropy-decoded latent -> YCbCr synthesis; excludes entropy and IO",
+  "claim_eligible": false,
+  "load_1m_before_after": [
+    119.72314453125,
+    119.76708984375
+  ],
+  "stream_sha256": "ae06007c9ebef84894b8aacaaf7d551a9a062076aac97590586a42652d609ceb",
+  "checkpoint": {
+    "path": "/home/can_karsal/FLEX-PLUS/proof/early_exit_vs_released/artifacts/released_cvpr2026_image.pth.tar",
+    "sha256": "b3b900de23f30e4fc437010ddffe6a5413a56d6cfd97fb6235adbcd2b6973302",
+    "depth": 12,
+    "upstream_commit": "cbdae87a5445114cdc7f48816da63ea80bdeac40",
+    "parameters": 42179328,
+    "epoch": null,
+    "global_step": null,
+    "model_source_sha256": "95ff7158ffa592b608f346f3585e6111380bee08e50096a1e7c0355acf01089e",
+    "common_source_sha256": "e309a7144514836f29453f8d1fe65df8f7ab72d17ed1efea08ac35ee9f67469a"
+  },
+  "variant": {
+    "variant": "released"
+  },
+  "model_sha256": "638ced13056e38756bc96fcdcd116e2ca40221ca823781d86d02d88bf5d251c5",
+  "quant_model_sha256": "8df13c0ef005bca0973a68655c08e3a422f1c1fb2a71992bc140382fa1e90ead",
+  "source_sha256": "a56e27cbf5f843c048b6af1d6e090760e9c92fadba88b7dee0205918a37523bd",
+  "threads": 1,
+  "torch_channels_last": false,
+  "torch_mkldnn_available": true,
+  "providers": {
+    "onnx_fp32": [
+      "CPUExecutionProvider"
+    ],
+    "onnx_int8": [
+      "CPUExecutionProvider"
+    ]
+  },
+  "hardware": {
+    "cpu": "AMD EPYC 7443 24-Core Processor",
+    "machine": "Linux-6.8.0-124-generic-x86_64-with-glibc2.35",
+    "avx2": true,
+    "avx512f": false,
+    "loadavg": [
+      119.76708984375,
+      107.11376953125,
+      103.9208984375
+    ],
+    "logical_cpus": 96,
+    "affinity_cpus": [
+      0
+    ]
+  },
+  "results": {
+    "torch_cpu_fp32": {
+      "yuv_psnr_db": [
+        28.492529733457612,
+        45.85594042023705,
+        44.2729004222121
+      ],
+      "yuv_6_1_1_psnr_db": 32.63550240539935,
+      "max_abs_vs_torch": 0.0,
+      "latency_ms_raw": [
+        4425.679105
+      ],
+      "median_ms": 4425.679105
+    },
+    "onnx_fp32": {
+      "yuv_psnr_db": [
+        28.49252971376182,
+        45.85594045498378,
+        44.27290052697059
+      ],
+      "yuv_6_1_1_psnr_db": 32.63550240806566,
+      "max_abs_vs_torch": 4.3213367462158203e-07,
+      "latency_ms_raw": [
+        3042.798361
+      ],
+      "median_ms": 3042.798361
+    },
+    "onnx_int8": {
+      "yuv_psnr_db": [
+        27.689059898264446,
+        41.0472840899033,
+        41.950842191612125
+      ],
+      "yuv_6_1_1_psnr_db": 31.141560708887766,
+      "max_abs_vs_torch": 0.13622891902923584,
+      "latency_ms_raw": [
+        3684.816937
+      ],
+      "median_ms": 3684.816937
+    }
+  }
+}

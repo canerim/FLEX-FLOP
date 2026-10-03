@@ -1,0 +1,23 @@
+{
+  "source_model_sha256": "638ced13056e38756bc96fcdcd116e2ca40221ca823781d86d02d88bf5d251c5",
+  "quant_model_sha256": "8df13c0ef005bca0973a68655c08e3a422f1c1fb2a71992bc140382fa1e90ead",
+  "calibration_streams": [
+    {
+      "path": "proof/early_exit_vs_released/results/bitstream_kodak3x3/kodim13_qp16.fufref2",
+      "sha256": "9d5aa8635d795ba0f7238eb59b91f5dc1a8ec12d80033bc0f0376fc46d6ca7bd"
+    },
+    {
+      "path": "proof/early_exit_vs_released/results/bitstream_kodak3x3/kodim24_qp48.fufref2",
+      "sha256": "80eabcd1ca6c84eefe3c3f483d5cfff80d6ab35c3d95527a1471446b9d910b72"
+    }
+  ],
+  "format": "QDQ S8S8",
+  "ops": [
+    "Conv"
+  ],
+  "per_channel": true,
+  "selection": "all_conv",
+  "selected_nodes": null,
+  "reduce_range": true,
+  "warning": "Kodak smoke calibration is not a representative production calibration set."
+}
