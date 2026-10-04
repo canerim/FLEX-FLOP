@@ -12,6 +12,35 @@ are table targets, not final-image guarantees.}
 \label{fig:suppbudgetsensitivity}
 \end{figure*}
 
+\begin{figure*}[t]
+\centering
+\includegraphics[width=\textwidth]{figs/bd_rate_budget_20261005/bd_rate_budget_sweep.pdf}
+\caption{\textbf{Rate-equivalent cost and compute saving across six nominal
+early-exit budgets.} The same 25 CTC first-frame sequences have all five QPs
+and all four policies at every target. \textbf{a}, Sequence-mean YUV 6:1:1
+BD-rate \emph{proxy} against dense e15, using actual round-tripped latent
+payload bytes but excluding exit-map and container bits. \textbf{b},
+Analytical synthesis MAC saving, excluding control and execution overhead.
+\textbf{c}, Paired router-minus-dither margins with 95\% sequence-cluster
+bootstrap bands. Policies use source-informed calibration; neither the
+budget nor the BD proxy establishes deployable full-codec performance.}
+\label{fig:budget-bd-proxy}
+\end{figure*}
+
+On this fixed cohort the router-minus-dither MAC margin is 2.12, 2.39,
+1.28, 0.32, 0, and 0 percentage points as the nominal target moves from
+0.05 to 0.50\,dB (\cref{fig:budget-bd-proxy}). Its paired BD-proxy
+differences are $-0.050$, $-0.085$, $-0.036$, $-0.015$, 0, and 0 points;
+the 0.05\,dB 95\% interval includes zero. At the two loose targets all
+four policies reach the same archived maps on these 25 sequences. Using
+every five-QP-complete sequence separately at each target instead yields
+25/51/53/53/53/53 sequences and router-minus-dither MAC margins of
+2.12/2.60/2.02/1.31/0.38/0.02 points. The fixed-cohort panel prevents
+changes in sequence membership from masquerading as a budget effect;
+the per-budget cohort retains the broader 0.10\,dB result. The separate
+depth-bank Kodak BD-rate estimates use independent networks and estimated
+entropy rates and must not be pooled with this shared-latent BD proxy.
+
 \section{Scope and Reproduction}
 
 This supplement records CPU analyses of the frozen evaluation archive,
