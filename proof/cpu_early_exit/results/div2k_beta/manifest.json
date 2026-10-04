@@ -1,0 +1,842 @@
+{
+  "schema": 1,
+  "scope": "DIV2K validation original PNG -> deterministic centred 768x512 RGB crop -> centred YCbCr444 -> FUFREF2 -> e15 assembled output; CPU FP32 untimed",
+  "selection": "SHA256(filename) order of all 100 DIV2K valid PNGs; first 24 calibration, next 24 validation; fixed before codec evaluation",
+  "qps": [
+    0,
+    16,
+    32,
+    48,
+    63
+  ],
+  "target_delta444_db_mean": 0.1,
+  "candidate_rule": "Global beta grid -50..60 inclusive in steps of 5, plus exact CTC baseline beta at each QP and exact QP16 beta; no Kodak-derived candidates",
+  "candidates": {
+    "0": [
+      -50.0,
+      -45.0,
+      -40.0,
+      -35.0,
+      -30.0,
+      -25.0,
+      -20.0,
+      -15.0,
+      -10.0,
+      -5.0,
+      0.0,
+      5.0,
+      10.0,
+      14.022931575775123,
+      15.0,
+      20.0,
+      25.0,
+      30.0,
+      30.677844047546365,
+      35.0,
+      40.0,
+      45.0,
+      50.0,
+      55.0,
+      60.0
+    ],
+    "16": [
+      -50.0,
+      -45.0,
+      -40.0,
+      -35.0,
+      -30.0,
+      -25.0,
+      -20.0,
+      -15.0,
+      -10.0,
+      -5.0,
+      0.0,
+      5.0,
+      10.0,
+      14.022931575775123,
+      15.0,
+      20.0,
+      25.0,
+      30.0,
+      35.0,
+      40.0,
+      45.0,
+      50.0,
+      55.0,
+      60.0
+    ],
+    "32": [
+      -50.0,
+      -45.0,
+      -40.0,
+      -35.0,
+      -30.0,
+      -25.0,
+      -20.0,
+      -15.0,
+      -10.0,
+      -5.0,
+      -3.7646704912185776,
+      0.0,
+      5.0,
+      10.0,
+      14.022931575775123,
+      15.0,
+      20.0,
+      25.0,
+      30.0,
+      35.0,
+      40.0,
+      45.0,
+      50.0,
+      55.0,
+      60.0
+    ],
+    "48": [
+      -50.0,
+      -45.0,
+      -40.0,
+      -35.0,
+      -30.0,
+      -25.0,
+      -20.0,
+      -18.459519386291518,
+      -15.0,
+      -10.0,
+      -5.0,
+      0.0,
+      5.0,
+      10.0,
+      14.022931575775123,
+      15.0,
+      20.0,
+      25.0,
+      30.0,
+      35.0,
+      40.0,
+      45.0,
+      50.0,
+      55.0,
+      60.0
+    ],
+    "63": [
+      -50.0,
+      -45.0,
+      -40.0,
+      -35.0,
+      -30.0,
+      -25.0,
+      -23.517197608947768,
+      -20.0,
+      -15.0,
+      -10.0,
+      -5.0,
+      0.0,
+      5.0,
+      10.0,
+      14.022931575775123,
+      15.0,
+      20.0,
+      25.0,
+      30.0,
+      35.0,
+      40.0,
+      45.0,
+      50.0,
+      55.0,
+      60.0
+    ]
+  },
+  "ctc_beta": {
+    "0": 30.677844047546365,
+    "16": 14.022931575775123,
+    "32": -3.7646704912185776,
+    "48": -18.459519386291518,
+    "63": -23.517197608947768
+  },
+  "calibration_checkpoint_sha256": "5b832c639fa7f857ef071276fd683e8e6150ca35e56b4470008a7d9dd79dda0f",
+  "calibration_json_sha256": "d6d64c327bbee6cb81681ccea6bf0f06295ad5944fb08b15249e5de269bc05f5",
+  "released_sha256": "b3b900de23f30e4fc437010ddffe6a5413a56d6cfd97fb6235adbcd2b6973302",
+  "e15_sha256": "91556d30bca41988755ff43dee3bc6d0cd2a0a4eda1d18d2891b168dc0a04ce9",
+  "router_sha256": "5b832c639fa7f857ef071276fd683e8e6150ca35e56b4470008a7d9dd79dda0f",
+  "cost_model_sha256": "bdfdd84cef1c71e0da219784276eab29549edca871c8e9ad6d67f1c7171a6e56",
+  "script_sha256": "e33a75b27b9411499329c59401a61a27f6b10787f3afc3dbab4bc7d076a731fb",
+  "rows": {
+    "calibration": [
+      {
+        "image": "0807.png",
+        "source_sha256": "4a2493d918862f703f783dc675bacbae5bd7698aa58f81ddb8bb71cf39ac173a",
+        "source_size_wh": [
+          2040,
+          1128
+        ],
+        "crop_xywh": [
+          636,
+          308,
+          768,
+          512
+        ]
+      },
+      {
+        "image": "0814.png",
+        "source_sha256": "2fec903d11d2a79070268a4316c100f8314eaadd8f8a65cce152f14826f04876",
+        "source_size_wh": [
+          2040,
+          1356
+        ],
+        "crop_xywh": [
+          636,
+          422,
+          768,
+          512
+        ]
+      },
+      {
+        "image": "0816.png",
+        "source_sha256": "87b7b2a666c92efdb24eadf67bc0c68bce5560ee89bd0532f50f94d8cf88b434",
+        "source_size_wh": [
+          2040,
+          1356
+        ],
+        "crop_xywh": [
+          636,
+          422,
+          768,
+          512
+        ]
+      },
+      {
+        "image": "0853.png",
+        "source_sha256": "854189ea5c2a325324500c6cf7168e0b78d30b09606eb5a59f938a5ae69139fe",
+        "source_size_wh": [
+          2040,
+          1356
+        ],
+        "crop_xywh": [
+          636,
+          422,
+          768,
+          512
+        ]
+      },
+      {
+        "image": "0808.png",
+        "source_sha256": "956528ab3e0fadad1ed8ce93f93a30bf9f58c36ffa9dd775e2ad362ffdcf5ace",
+        "source_size_wh": [
+          2040,
+          1356
+        ],
+        "crop_xywh": [
+          636,
+          422,
+          768,
+          512
+        ]
+      },
+      {
+        "image": "0838.png",
+        "source_sha256": "01e42bb5efb35d97a9931fc421f793e3c12d0922a3df288bbfd148b6a82a145b",
+        "source_size_wh": [
+          2040,
+          1356
+        ],
+        "crop_xywh": [
+          636,
+          422,
+          768,
+          512
+        ]
+      },
+      {
+        "image": "0840.png",
+        "source_sha256": "e023c2b2628b7d897d69150baa40be6ceda9fe0e45a0d51348011c6a47b44d86",
+        "source_size_wh": [
+          2040,
+          1356
+        ],
+        "crop_xywh": [
+          636,
+          422,
+          768,
+          512
+        ]
+      },
+      {
+        "image": "0818.png",
+        "source_sha256": "8679d88891d7e8491fd61abded2c6864d90f5c1817b300f5d5796d05bb11488f",
+        "source_size_wh": [
+          2040,
+          1536
+        ],
+        "crop_xywh": [
+          636,
+          512,
+          768,
+          512
+        ]
+      },
+      {
+        "image": "0895.png",
+        "source_sha256": "a1c0888648fed4eb909c6e7f5f5db220ae98861294ebfdfa14b2c72567e96b2b",
+        "source_size_wh": [
+          2040,
+          1284
+        ],
+        "crop_xywh": [
+          636,
+          386,
+          768,
+          512
+        ]
+      },
+      {
+        "image": "0861.png",
+        "source_sha256": "c6fe192a3f1b702948e99c483f04edfb362d2d218082a12457a5b0f09219ffc6",
+        "source_size_wh": [
+          2040,
+          1356
+        ],
+        "crop_xywh": [
+          636,
+          422,
+          768,
+          512
+        ]
+      },
+      {
+        "image": "0828.png",
+        "source_sha256": "a62013e252fa503920f54b9b1eff9babd501c742d2c82c97d7c22394493ffa12",
+        "source_size_wh": [
+          2040,
+          1356
+        ],
+        "crop_xywh": [
+          636,
+          422,
+          768,
+          512
+        ]
+      },
+      {
+        "image": "0872.png",
+        "source_sha256": "028ca10affee013698c7f15068fe4813a9d7b2c24f2bd40dac68305774a5577a",
+        "source_size_wh": [
+          2040,
+          1356
+        ],
+        "crop_xywh": [
+          636,
+          422,
+          768,
+          512
+        ]
+      },
+      {
+        "image": "0887.png",
+        "source_sha256": "a0a893c9417fcd04067bf254512801f92ae7c795b686e05f7389853c9fb78b11",
+        "source_size_wh": [
+          2040,
+          1356
+        ],
+        "crop_xywh": [
+          636,
+          422,
+          768,
+          512
+        ]
+      },
+      {
+        "image": "0896.png",
+        "source_sha256": "367c698aa344cea6e790239f04bae168ef204ae771f6ea05285e5255fad2f84f",
+        "source_size_wh": [
+          2040,
+          1356
+        ],
+        "crop_xywh": [
+          636,
+          422,
+          768,
+          512
+        ]
+      },
+      {
+        "image": "0836.png",
+        "source_sha256": "d056c4afc22367640c8ec7a1b84c06eaa7405e29363f0e75ea824e15aec149d0",
+        "source_size_wh": [
+          2040,
+          1536
+        ],
+        "crop_xywh": [
+          636,
+          512,
+          768,
+          512
+        ]
+      },
+      {
+        "image": "0863.png",
+        "source_sha256": "5e98cca0fbeb2e649fa36a41a06240ce4ec4b05aa23859da13797f8ded0d5c1f",
+        "source_size_wh": [
+          1500,
+          2040
+        ],
+        "crop_xywh": [
+          366,
+          764,
+          768,
+          512
+        ]
+      },
+      {
+        "image": "0877.png",
+        "source_sha256": "4e0fb583729accf7b93e07b2b81ce8d919f6490cee2d1f90db90b60095a59165",
+        "source_size_wh": [
+          2040,
+          1152
+        ],
+        "crop_xywh": [
+          636,
+          320,
+          768,
+          512
+        ]
+      },
+      {
+        "image": "0869.png",
+        "source_sha256": "68a693195536fc94bc34ce7ff0e041990916fed73164a7c2dce00098a178ac75",
+        "source_size_wh": [
+          1356,
+          2040
+        ],
+        "crop_xywh": [
+          294,
+          764,
+          768,
+          512
+        ]
+      },
+      {
+        "image": "0810.png",
+        "source_sha256": "6940c660b97d2c5f1113101c3e6360d1d6886743c5796cad52224b8076b903f8",
+        "source_size_wh": [
+          2040,
+          1536
+        ],
+        "crop_xywh": [
+          636,
+          512,
+          768,
+          512
+        ]
+      },
+      {
+        "image": "0882.png",
+        "source_sha256": "573345fb42061a43fe8f1c0b3b9faf57cdd77189782a4d89b78c31e421f19115",
+        "source_size_wh": [
+          2040,
+          1356
+        ],
+        "crop_xywh": [
+          636,
+          422,
+          768,
+          512
+        ]
+      },
+      {
+        "image": "0850.png",
+        "source_sha256": "1d026bda033ce6fa0db97aa3ec120f3609663f4d0aaf2f9d8e677fdbe235ab03",
+        "source_size_wh": [
+          2040,
+          1356
+        ],
+        "crop_xywh": [
+          636,
+          422,
+          768,
+          512
+        ]
+      },
+      {
+        "image": "0820.png",
+        "source_sha256": "2617cfc25dd5442cc017bd17aa24ecae4751b1e5ed6013e8adddb727617bcd5b",
+        "source_size_wh": [
+          2040,
+          1356
+        ],
+        "crop_xywh": [
+          636,
+          422,
+          768,
+          512
+        ]
+      },
+      {
+        "image": "0876.png",
+        "source_sha256": "9d5a819847876bb0061bf1fd42b8bd97e8aef89d1f5fb09b1669b7e9546a25f1",
+        "source_size_wh": [
+          2040,
+          1356
+        ],
+        "crop_xywh": [
+          636,
+          422,
+          768,
+          512
+        ]
+      },
+      {
+        "image": "0854.png",
+        "source_sha256": "f77817c7a5d940baf174efa61d2fbf40354a08ade7a151e155ce62bd2481eca8",
+        "source_size_wh": [
+          2040,
+          1068
+        ],
+        "crop_xywh": [
+          636,
+          278,
+          768,
+          512
+        ]
+      }
+    ],
+    "validation": [
+      {
+        "image": "0844.png",
+        "source_sha256": "93da0f98885573c518891c5eb6004818436ae36cf1ed894cfef853e131d9d86d",
+        "source_size_wh": [
+          1356,
+          2040
+        ],
+        "crop_xywh": [
+          294,
+          764,
+          768,
+          512
+        ]
+      },
+      {
+        "image": "0892.png",
+        "source_sha256": "7fb05e491f00963e64b53a0f3f7a3d1af51f1434e7fd4898d4b84c479e1f66f9",
+        "source_size_wh": [
+          2040,
+          1284
+        ],
+        "crop_xywh": [
+          636,
+          386,
+          768,
+          512
+        ]
+      },
+      {
+        "image": "0891.png",
+        "source_sha256": "8e36e76f3675831c87b2e645e70ef33513b898dc09beb20b0bdcc61cc6d63bed",
+        "source_size_wh": [
+          1668,
+          2040
+        ],
+        "crop_xywh": [
+          450,
+          764,
+          768,
+          512
+        ]
+      },
+      {
+        "image": "0819.png",
+        "source_sha256": "fcbc6cb7e7cdb717e94d8c8eaf659d6b2bfa513aa133c0d2c4a8e2aa96092529",
+        "source_size_wh": [
+          2040,
+          1356
+        ],
+        "crop_xywh": [
+          636,
+          422,
+          768,
+          512
+        ]
+      },
+      {
+        "image": "0871.png",
+        "source_sha256": "777df9ed736ff3ccc73388e90de36e131c002dfac64767f3b8ebccdd2cd5f058",
+        "source_size_wh": [
+          2040,
+          1356
+        ],
+        "crop_xywh": [
+          636,
+          422,
+          768,
+          512
+        ]
+      },
+      {
+        "image": "0897.png",
+        "source_sha256": "dca63f56dba4a2a2c6b920c4b0406c6c6459d8f7ffb0d20322f51fbbc8f14b38",
+        "source_size_wh": [
+          2040,
+          1368
+        ],
+        "crop_xywh": [
+          636,
+          428,
+          768,
+          512
+        ]
+      },
+      {
+        "image": "0839.png",
+        "source_sha256": "818abf16ba0aacc3fb6737c5ddd7c2188ca7321b6b28b7f4ba1898627387dee7",
+        "source_size_wh": [
+          2040,
+          1356
+        ],
+        "crop_xywh": [
+          636,
+          422,
+          768,
+          512
+        ]
+      },
+      {
+        "image": "0833.png",
+        "source_sha256": "2e9668b3a318284ec90c9bbdd940317ecd2f7b95314e68c48c94d2380fad679a",
+        "source_size_wh": [
+          2040,
+          1548
+        ],
+        "crop_xywh": [
+          636,
+          518,
+          768,
+          512
+        ]
+      },
+      {
+        "image": "0849.png",
+        "source_sha256": "1d576e20f4720050d0b7af5295b323c342a5284ed75a8ce3bae6e0cb46c89eb6",
+        "source_size_wh": [
+          2040,
+          1356
+        ],
+        "crop_xywh": [
+          636,
+          422,
+          768,
+          512
+        ]
+      },
+      {
+        "image": "0881.png",
+        "source_sha256": "d2fba016ee3cee2395b677524d7ae2b2f6750cea1a6df4edc41f2977bd5d1b7c",
+        "source_size_wh": [
+          2040,
+          1260
+        ],
+        "crop_xywh": [
+          636,
+          374,
+          768,
+          512
+        ]
+      },
+      {
+        "image": "0823.png",
+        "source_sha256": "8db26bddf2ac9975e5227be3eb1180f6377145eee5dca1e421100014cbd7ef6e",
+        "source_size_wh": [
+          2040,
+          1284
+        ],
+        "crop_xywh": [
+          636,
+          386,
+          768,
+          512
+        ]
+      },
+      {
+        "image": "0898.png",
+        "source_sha256": "4cd6696b8e59615ceacff729181dd9b0cc5ea936ea9a57e089bb1fe4fe87c347",
+        "source_size_wh": [
+          2040,
+          1356
+        ],
+        "crop_xywh": [
+          636,
+          422,
+          768,
+          512
+        ]
+      },
+      {
+        "image": "0830.png",
+        "source_sha256": "4eb18566ab01447a06daf0314a3711aa78cea5ca0eaa47cfedafbceeb6dd0a3e",
+        "source_size_wh": [
+          2040,
+          816
+        ],
+        "crop_xywh": [
+          636,
+          152,
+          768,
+          512
+        ]
+      },
+      {
+        "image": "0813.png",
+        "source_sha256": "71c06a2c36979345c99c887e7bd6aebfd0bd1648d93b7bd15f56c65e1291b37e",
+        "source_size_wh": [
+          2040,
+          1464
+        ],
+        "crop_xywh": [
+          636,
+          476,
+          768,
+          512
+        ]
+      },
+      {
+        "image": "0803.png",
+        "source_sha256": "4b0148a9a1ff877ad9f76e65736a50cc36e10822b5d8ccd2abb2988ff4e1782b",
+        "source_size_wh": [
+          2040,
+          1536
+        ],
+        "crop_xywh": [
+          636,
+          512,
+          768,
+          512
+        ]
+      },
+      {
+        "image": "0827.png",
+        "source_sha256": "e8cfa94ed77a021b63da63406940de3a830fe1217e752b5929d50602a1aaa407",
+        "source_size_wh": [
+          2040,
+          1536
+        ],
+        "crop_xywh": [
+          636,
+          512,
+          768,
+          512
+        ]
+      },
+      {
+        "image": "0835.png",
+        "source_sha256": "263cfd9c7d2eee15b29250e6d0dc366ed680feb222de3f8c2fb5c6bd304608e4",
+        "source_size_wh": [
+          1620,
+          2040
+        ],
+        "crop_xywh": [
+          426,
+          764,
+          768,
+          512
+        ]
+      },
+      {
+        "image": "0889.png",
+        "source_sha256": "a8f73c42065e3193c4deb883dcb3bc432a3f838e9be5bacea708ee39eb2c6e04",
+        "source_size_wh": [
+          2040,
+          1356
+        ],
+        "crop_xywh": [
+          636,
+          422,
+          768,
+          512
+        ]
+      },
+      {
+        "image": "0859.png",
+        "source_sha256": "3ada872de7c5def1d408920385db278b1ff3a5a0cfcab83105a789ff540a1827",
+        "source_size_wh": [
+          2040,
+          1356
+        ],
+        "crop_xywh": [
+          636,
+          422,
+          768,
+          512
+        ]
+      },
+      {
+        "image": "0804.png",
+        "source_sha256": "16b5fdbe808b868bed0be32f235208a1716d44e271a37b79cbc77ab53d2f6bdb",
+        "source_size_wh": [
+          2040,
+          1200
+        ],
+        "crop_xywh": [
+          636,
+          344,
+          768,
+          512
+        ]
+      },
+      {
+        "image": "0852.png",
+        "source_sha256": "47f4db4100055a954606d789dfe183612ea7e196a06b2e7bc4bd39c3522628ee",
+        "source_size_wh": [
+          2040,
+          1152
+        ],
+        "crop_xywh": [
+          636,
+          320,
+          768,
+          512
+        ]
+      },
+      {
+        "image": "0900.png",
+        "source_sha256": "06717f2a8f5d21fcec9a9229a7ecaab44dec0343406a59464382f5c4fdea3023",
+        "source_size_wh": [
+          2040,
+          1152
+        ],
+        "crop_xywh": [
+          636,
+          320,
+          768,
+          512
+        ]
+      },
+      {
+        "image": "0890.png",
+        "source_sha256": "67069da53af2b4f5237030631b0b5e087b8014d7b0f59917d96924aca1ab433c",
+        "source_size_wh": [
+          2040,
+          1368
+        ],
+        "crop_xywh": [
+          636,
+          428,
+          768,
+          512
+        ]
+      },
+      {
+        "image": "0824.png",
+        "source_sha256": "484316545f6b08655d30faa1bc5f29eb6821d049b62bb528319b504790c188e2",
+        "source_size_wh": [
+          2040,
+          1356
+        ],
+        "crop_xywh": [
+          636,
+          422,
+          768,
+          512
+        ]
+      }
+    ]
+  }
+}
