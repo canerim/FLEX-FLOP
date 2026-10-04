@@ -1,0 +1,22 @@
+{
+  "schema": 1,
+  "image": "kodim05.png",
+  "qp": 48,
+  "scan_manifest_sha256": "e0db0156dff748377370acd6ee6b7efc1206ae41f5e617b0346d46068823f489",
+  "scan_result_sha256": "3c93176d56d77c65b2c37a1216ac65e224b1b3784f8683a3a8615a2592a988d9",
+  "stream_sha256": "487a81ef7e3b63b8f66daef8af73c4a148a4359694fb17fc0a77f2ae8b2a962f",
+  "calibrated_beta": -18.459519386291518,
+  "fixed_beta": 14.022931575775123,
+  "same_route_as_calibrated": false,
+  "released_yuv611_db": 36.575498929034794,
+  "calibrated_yuv611_db": 36.47828741436223,
+  "fixed_beta_yuv611_db": 36.38383212708367,
+  "calibrated_loss_db": 0.09721151467256561,
+  "fixed_beta_loss_db": 0.19166680195112207,
+  "e15_full_mse444": 0.00015474836982320994,
+  "calibrated_delta444_db": 0.04969899938998116,
+  "fixed_beta_delta444_db": 0.14408800121285964,
+  "calibrated_mac_saved_pct": -0.9507193245465118,
+  "fixed_beta_mac_saved_pct": 16.757299097580248,
+  "cpu_timing": null
+}

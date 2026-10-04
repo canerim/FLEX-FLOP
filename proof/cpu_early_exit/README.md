@@ -31,6 +31,34 @@ The analytic MAC model includes adapters and seam repair but excludes the
 router. None of these are CPU latency measurements. The full raw records and
 manifest hashes are checked by the plot generator.
 
+The 3x3 check is superseded for allocation claims by the complete
+[Kodak24 x QP5 audit](results/kodak24_qp5): 120 independently decodable
+FUFREF2 streams, source/stream hashes, decoder-side router decisions,
+assembled reconstructions and analytical MAC records. The matched
+[fixed-beta quality replay](results/kodak24_fixed_beta_quality) recomputes
+the QP16-beta counterfactual from those same bytes and also measures both
+policies against e15 full-frame output using the paper's equal-channel
+YCbCr 4:4:4 MSE-ratio loss (`Delta444`). Rebuild the summary and vector plot:
+
+```bash
+python proof/cpu_early_exit/summarize_kodak_full_scan.py \
+  --cohort proof/cpu_early_exit/results/kodak24_qp5 \
+  --fixed-cohort proof/cpu_early_exit/results/kodak24_fixed_beta_quality \
+  --out-prefix cvpr2027/figs/kodak24_qp/fig_kodak24_qp_policy
+```
+
+With equal weight for each image and QP, the CTC-calibrated policy saves
+17.16% analytical synthesis MAC at 0.0565 dB mean Delta444. Holding beta
+at its QP16 value saves 26.82% but costs 0.1223 dB. Respectively 14/120
+and 55/120 frame--QP cases exceed the *descriptive* 0.1 dB threshold;
+the CTC calibration only targeted mean loss, not per-image feasibility.
+The separate released-D12-relative weighted YUV PSNR differences are
+not the same metric and cannot be used to evaluate that target. Holding
+beta fixed does not remove QP from the router head or latent statistics.
+These numbers are analytical synthesis MAC and reconstruction quality,
+not CPU or full-codec speedups. The [audit note](../../docs/research/2026-10-04-kodak24-router-transfer/REPORT.md)
+separates the CTC nominal sweep from this external control-transfer test.
+
 `run_when_idle.py` waits for five consecutive one-minute load checks below
 its threshold, then records paired released/routed/all-deep PyTorch CPU
 latencies at 1/2/4/8 threads over all nine streams. It pins each child to

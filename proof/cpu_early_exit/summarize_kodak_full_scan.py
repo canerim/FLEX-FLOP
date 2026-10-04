@@ -221,8 +221,6 @@ def main():
         axes[2].plot(x, [per_qp[str(q)]['fixed_beta_delta444_db_mean'] for q in qps],
                      '--s', color='#9A694B', lw=1.2, ms=3.8, zorder=4,
                      label='fixed β (QP16)')
-        axes[2].legend(loc='upper center', bbox_to_anchor=(.5, -.21), ncol=2,
-                       frameon=False, fontsize=6.7, columnspacing=.7)
         axes[2].axhline(.1, color='#BB7D56', lw=.8, linestyle=':', zorder=1)
     axes[2].set_ylabel('Δ444 vs e15 full (dB)' if fixed_cases else 'YUV PSNR loss (dB)')
     axes[2].set_title('c  Quality cost', loc='left', fontweight='bold', fontsize=9)
