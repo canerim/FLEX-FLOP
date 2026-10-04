@@ -22,6 +22,28 @@ def sha(path: Path) -> str:
     return hashlib.sha256(path.read_bytes()).hexdigest()
 
 
+def exact_reconstruct(dec, cfg, stem, q, route):
+    """Sufficient clipped context for a prescribed tile exit map."""
+    import torch
+    _, _, h, w = stem.shape
+    side = cfg.feature_patch
+    assert h % side == 0 and w % side == 0
+    nh, nw = h // side, w // side
+    assert len(route) == nh * nw
+    canvas = torch.empty_like(stem)
+    for tile, mode in enumerate(route):
+        top, left = (tile // nw) * side, (tile % nw) * side
+        halo = (mode - cfg.split_depth + 1) * cfg.blocks_per_exit
+        t, l = max(0, top - halo), max(0, left - halo)
+        b, r = min(h, top + side + halo), min(w, left + side + halo)
+        work = stem[:, :, t:b, l:r].contiguous()
+        for group in range(cfg.split_depth, mode + 1):
+            work = dec.groups[group](work)
+        work = dec._at_exit(work, mode)
+        canvas[:, :, top:top + side, left:left + side] = work[:, :, top-t:top-t+side, left-l:left-l+side]
+    return dec._apply_head(canvas, q)
+
+
 def main() -> None:
     p = argparse.ArgumentParser(description=__doc__)
     p.add_argument('--manifest', type=Path, default=HERE/'results/div2k_beta/manifest.json')
@@ -84,25 +106,6 @@ def main() -> None:
     load_flexuf_state(model, ckpt)
     dec = model.dec
 
-    def exact(stem, q, route):
-        _, _, h, w = stem.shape
-        side = cfg.feature_patch
-        assert h % side == 0 and w % side == 0
-        nh, nw = h // side, w // side
-        assert len(route) == nh * nw
-        canvas = torch.empty_like(stem)
-        for tile, mode in enumerate(route):
-            top, left = (tile // nw) * side, (tile % nw) * side
-            halo = (mode - cfg.split_depth + 1) * cfg.blocks_per_exit
-            t, l = max(0, top - halo), max(0, left - halo)
-            b, r = min(h, top + side + halo), min(w, left + side + halo)
-            work = stem[:, :, t:b, l:r].contiguous()
-            for group in range(cfg.split_depth, mode + 1):
-                work = dec.groups[group](work)
-            work = dec._at_exit(work, mode)
-            canvas[:, :, top:top + side, left:left + side] = work[:, :, top-t:top-t+side, left-l:left-l+side]
-        return dec._apply_head(canvas, q)
-
     args.output.parent.mkdir(parents=True, exist_ok=True)
     with torch.inference_mode():
         for image in fixed:
@@ -138,7 +141,7 @@ def main() -> None:
                 for group in dec.groups[:cfg.split_depth]:
                     stem = group(stem)
                 route = chosen['exit_map']
-                exact_output = exact(stem, q, route)
+                exact_output = exact_reconstruct(dec, cfg, stem, q, route)
                 if all(mode == cfg.num_exits - 1 for mode in route):
                     if not torch.allclose(exact_output, reference, atol=1e-4, rtol=1e-4):
                         raise RuntimeError(f'Uniform deep exact context differs from full frame: {case_path}')

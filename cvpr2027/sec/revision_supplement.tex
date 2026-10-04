@@ -447,6 +447,17 @@ code recomputes overlaps, while an efficient shared sparse implementation
 has not been built. All comparisons here use e15 full-frame centred
 YCbCr444, not released-decoder YUV611 or full-codec BD-rate.
 
+A source-informed diagnostic clarifies the depth headroom in the 24
+persistent violations: uniformly raising all six tile exits by one group
+recovers 22 cases below 0.1\,dB, and two more require a second group.
+If one could identify those cases from decoder-available evidence, this
+fallback would leave 17.89\% mean \emph{ideal} cohort MAC saving, versus
+14.96\% from sending every violating case to all-deep. These numbers use
+ground-truth image error to choose when to stop, so they are \emph{oracle
+bounds}, not a trained router, a prospective held-out result, or measured
+runtime. They motivate a calibrated risk signal and targeted capacity
+increase rather than a blanket all-deep fallback.
+
 \begin{figure*}[t]
 \centering
 \includegraphics[width=0.91\textwidth]{figs/div2k_beta_transfer/fig_exact_context_validation.pdf}

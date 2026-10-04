@@ -1,0 +1,19 @@
+{
+  "schema": 1,
+  "scope": "Source-informed oracle with reference-error feedback; unattainable deployment upper bound; ideal synthesis arithmetic only",
+  "cases": 120,
+  "baseline_violations": 24,
+  "base_mean_ideal_saving_pct": 20.551963339532424,
+  "all_deep_on_failures_mean_ideal_saving_pct": 14.95561541224398,
+  "uniform_increment_on_failures_mean_ideal_saving_pct": 17.887042526939023,
+  "uniform_increment_counts_on_failures": {
+    "1": 22,
+    "2": 2,
+    "3": 0
+  },
+  "uniform_final_over_0p1_count": 0,
+  "uniform_final_mean_delta444_db": 0.04386159856676889,
+  "additional_ideal_saving_vs_all_deep_fallback_pct_points": 2.931427114695044,
+  "source_feedback_required": true,
+  "latency_measured": false
+}

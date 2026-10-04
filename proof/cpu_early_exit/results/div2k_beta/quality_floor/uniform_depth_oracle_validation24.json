@@ -1,0 +1,1046 @@
+{
+  "schema": 1,
+  "scope": "Source-informed uniform depth increase on exact-context validation failures; nondeployable oracle; ideal shared MAC only, no latency",
+  "selection": "For each violating fixed route, raise every tile by 1, then 2, then 3 exits (clip to deepest); stop at first Delta444 <=0.1 dB",
+  "provenance": {
+    "base_sha256": "e5832a42cdf1f1399b62c580bef64320b91ac7869e5a842cf87422f5c48c9a9f",
+    "e15_sha256": "91556d30bca41988755ff43dee3bc6d0cd2a0a4eda1d18d2891b168dc0a04ce9",
+    "release_sha256": "b3b900de23f30e4fc437010ddffe6a5413a56d6cfd97fb6235adbcd2b6973302"
+  },
+  "rows": [
+    {
+      "image": "0844.png",
+      "qp": 0,
+      "base_exit_map": [
+        2,
+        2,
+        2,
+        2,
+        3,
+        2
+      ],
+      "base_exact_context_delta444_db": 0.22832215226357852,
+      "base_ideal_shared_saving_pct": 37.229323740770035,
+      "trials": [
+        {
+          "uniform_increment": 1,
+          "exit_map": [
+            3,
+            3,
+            3,
+            3,
+            4,
+            3
+          ],
+          "exact_context_delta444_db": 0.07311480379007064,
+          "ideal_shared_saving_pct": 22.94195383922292
+        }
+      ],
+      "chosen": {
+        "uniform_increment": 1,
+        "exit_map": [
+          3,
+          3,
+          3,
+          3,
+          4,
+          3
+        ],
+        "exact_context_delta444_db": 0.07311480379007064,
+        "ideal_shared_saving_pct": 22.94195383922292
+      }
+    },
+    {
+      "image": "0844.png",
+      "qp": 16,
+      "base_exit_map": [
+        2,
+        2,
+        2,
+        2,
+        3,
+        3
+      ],
+      "base_exact_context_delta444_db": 0.1999695875554205,
+      "base_ideal_shared_saving_pct": 34.750944834520034,
+      "trials": [
+        {
+          "uniform_increment": 1,
+          "exit_map": [
+            3,
+            3,
+            3,
+            3,
+            4,
+            4
+          ],
+          "exact_context_delta444_db": 0.09958203460876244,
+          "ideal_shared_saving_pct": 21.082871698092486
+        }
+      ],
+      "chosen": {
+        "uniform_increment": 1,
+        "exit_map": [
+          3,
+          3,
+          3,
+          3,
+          4,
+          4
+        ],
+        "exact_context_delta444_db": 0.09958203460876244,
+        "ideal_shared_saving_pct": 21.082871698092486
+      }
+    },
+    {
+      "image": "0844.png",
+      "qp": 32,
+      "base_exit_map": [
+        2,
+        2,
+        2,
+        2,
+        3,
+        3
+      ],
+      "base_exact_context_delta444_db": 0.2630199460754156,
+      "base_ideal_shared_saving_pct": 34.750944834520034,
+      "trials": [
+        {
+          "uniform_increment": 1,
+          "exit_map": [
+            3,
+            3,
+            3,
+            3,
+            4,
+            4
+          ],
+          "exact_context_delta444_db": 0.15746520227854438,
+          "ideal_shared_saving_pct": 21.082871698092486
+        },
+        {
+          "uniform_increment": 2,
+          "exit_map": [
+            4,
+            4,
+            4,
+            4,
+            5,
+            5
+          ],
+          "exact_context_delta444_db": 0.026661275770166484,
+          "ideal_shared_saving_pct": 8.96304047446378
+        }
+      ],
+      "chosen": {
+        "uniform_increment": 2,
+        "exit_map": [
+          4,
+          4,
+          4,
+          4,
+          5,
+          5
+        ],
+        "exact_context_delta444_db": 0.026661275770166484,
+        "ideal_shared_saving_pct": 8.96304047446378
+      }
+    },
+    {
+      "image": "0844.png",
+      "qp": 48,
+      "base_exit_map": [
+        2,
+        2,
+        2,
+        2,
+        3,
+        3
+      ],
+      "base_exact_context_delta444_db": 0.46465230063386875,
+      "base_ideal_shared_saving_pct": 34.750944834520034,
+      "trials": [
+        {
+          "uniform_increment": 1,
+          "exit_map": [
+            3,
+            3,
+            3,
+            3,
+            4,
+            4
+          ],
+          "exact_context_delta444_db": 0.2729752499731579,
+          "ideal_shared_saving_pct": 21.082871698092486
+        },
+        {
+          "uniform_increment": 2,
+          "exit_map": [
+            4,
+            4,
+            4,
+            4,
+            5,
+            5
+          ],
+          "exact_context_delta444_db": 0.02092312387590313,
+          "ideal_shared_saving_pct": 8.96304047446378
+        }
+      ],
+      "chosen": {
+        "uniform_increment": 2,
+        "exit_map": [
+          4,
+          4,
+          4,
+          4,
+          5,
+          5
+        ],
+        "exact_context_delta444_db": 0.02092312387590313,
+        "ideal_shared_saving_pct": 8.96304047446378
+      }
+    },
+    {
+      "image": "0844.png",
+      "qp": 63,
+      "base_exit_map": [
+        2,
+        2,
+        2,
+        2,
+        5,
+        5
+      ],
+      "base_exact_context_delta444_db": 0.15168538592801434,
+      "base_ideal_shared_saving_pct": 24.160831712596696,
+      "trials": [
+        {
+          "uniform_increment": 1,
+          "exit_map": [
+            3,
+            3,
+            3,
+            3,
+            5,
+            5
+          ],
+          "exact_context_delta444_db": 0.06921935628545818,
+          "ideal_shared_saving_pct": 15.578095167457807
+        }
+      ],
+      "chosen": {
+        "uniform_increment": 1,
+        "exit_map": [
+          3,
+          3,
+          3,
+          3,
+          5,
+          5
+        ],
+        "exact_context_delta444_db": 0.06921935628545818,
+        "ideal_shared_saving_pct": 15.578095167457807
+      }
+    },
+    {
+      "image": "0892.png",
+      "qp": 0,
+      "base_exit_map": [
+        3,
+        3,
+        2,
+        2,
+        3,
+        3
+      ],
+      "base_exact_context_delta444_db": 0.18742814210628772,
+      "base_ideal_shared_saving_pct": 29.683794226881155,
+      "trials": [
+        {
+          "uniform_increment": 1,
+          "exit_map": [
+            4,
+            4,
+            3,
+            3,
+            4,
+            4
+          ],
+          "exact_context_delta444_db": 0.07425161926336388,
+          "ideal_shared_saving_pct": 17.25431462069269
+        }
+      ],
+      "chosen": {
+        "uniform_increment": 1,
+        "exit_map": [
+          4,
+          4,
+          3,
+          3,
+          4,
+          4
+        ],
+        "exact_context_delta444_db": 0.07425161926336388,
+        "ideal_shared_saving_pct": 17.25431462069269
+      }
+    },
+    {
+      "image": "0892.png",
+      "qp": 16,
+      "base_exit_map": [
+        3,
+        3,
+        3,
+        4,
+        4,
+        4
+      ],
+      "base_exact_context_delta444_db": 0.10611551444113634,
+      "base_ideal_shared_saving_pct": 19.223789556962036,
+      "trials": [
+        {
+          "uniform_increment": 1,
+          "exit_map": [
+            4,
+            4,
+            4,
+            5,
+            5,
+            5
+          ],
+          "exact_context_delta444_db": 0.027375095825642112,
+          "ideal_shared_saving_pct": 6.6394857594936685
+        }
+      ],
+      "chosen": {
+        "uniform_increment": 1,
+        "exit_map": [
+          4,
+          4,
+          4,
+          5,
+          5,
+          5
+        ],
+        "exact_context_delta444_db": 0.027375095825642112,
+        "ideal_shared_saving_pct": 6.6394857594936685
+      }
+    },
+    {
+      "image": "0892.png",
+      "qp": 32,
+      "base_exit_map": [
+        3,
+        3,
+        3,
+        4,
+        4,
+        4
+      ],
+      "base_exact_context_delta444_db": 0.17653276171420118,
+      "base_ideal_shared_saving_pct": 19.223789556962036,
+      "trials": [
+        {
+          "uniform_increment": 1,
+          "exit_map": [
+            4,
+            4,
+            4,
+            5,
+            5,
+            5
+          ],
+          "exact_context_delta444_db": 0.047583543934330154,
+          "ideal_shared_saving_pct": 6.6394857594936685
+        }
+      ],
+      "chosen": {
+        "uniform_increment": 1,
+        "exit_map": [
+          4,
+          4,
+          4,
+          5,
+          5,
+          5
+        ],
+        "exact_context_delta444_db": 0.047583543934330154,
+        "ideal_shared_saving_pct": 6.6394857594936685
+      }
+    },
+    {
+      "image": "0892.png",
+      "qp": 48,
+      "base_exit_map": [
+        3,
+        4,
+        3,
+        4,
+        4,
+        4
+      ],
+      "base_exact_context_delta444_db": 0.2747631579624197,
+      "base_ideal_shared_saving_pct": 17.25431462069269,
+      "trials": [
+        {
+          "uniform_increment": 1,
+          "exit_map": [
+            4,
+            5,
+            4,
+            5,
+            5,
+            5
+          ],
+          "exact_context_delta444_db": 0.055031737234964476,
+          "ideal_shared_saving_pct": 4.205538249384677
+        }
+      ],
+      "chosen": {
+        "uniform_increment": 1,
+        "exit_map": [
+          4,
+          5,
+          4,
+          5,
+          5,
+          5
+        ],
+        "exact_context_delta444_db": 0.055031737234964476,
+        "ideal_shared_saving_pct": 4.205538249384677
+      }
+    },
+    {
+      "image": "0891.png",
+      "qp": 0,
+      "base_exit_map": [
+        3,
+        3,
+        3,
+        3,
+        2,
+        3
+      ],
+      "base_exact_context_delta444_db": 0.12728953017702352,
+      "base_ideal_shared_saving_pct": 27.315808115770047,
+      "trials": [
+        {
+          "uniform_increment": 1,
+          "exit_map": [
+            4,
+            4,
+            4,
+            4,
+            3,
+            4
+          ],
+          "exact_context_delta444_db": 0.046603404608945645,
+          "ideal_shared_saving_pct": 15.50562527470113
+        }
+      ],
+      "chosen": {
+        "uniform_increment": 1,
+        "exit_map": [
+          4,
+          4,
+          4,
+          4,
+          3,
+          4
+        ],
+        "exact_context_delta444_db": 0.046603404608945645,
+        "ideal_shared_saving_pct": 15.50562527470113
+      }
+    },
+    {
+      "image": "0819.png",
+      "qp": 48,
+      "base_exit_map": [
+        3,
+        3,
+        3,
+        3,
+        3,
+        3
+      ],
+      "base_exact_context_delta444_db": 0.14101902927887022,
+      "base_ideal_shared_saving_pct": 25.16860759493671,
+      "trials": [
+        {
+          "uniform_increment": 1,
+          "exit_map": [
+            4,
+            4,
+            4,
+            4,
+            4,
+            4
+          ],
+          "exact_context_delta444_db": 0.073866469046976,
+          "ideal_shared_saving_pct": 13.977721518987341
+        }
+      ],
+      "chosen": {
+        "uniform_increment": 1,
+        "exit_map": [
+          4,
+          4,
+          4,
+          4,
+          4,
+          4
+        ],
+        "exact_context_delta444_db": 0.073866469046976,
+        "ideal_shared_saving_pct": 13.977721518987341
+      }
+    },
+    {
+      "image": "0871.png",
+      "qp": 0,
+      "base_exit_map": [
+        2,
+        2,
+        2,
+        2,
+        2,
+        2
+      ],
+      "base_exact_context_delta444_db": 0.12113811234412046,
+      "base_ideal_shared_saving_pct": 40.075274261603376,
+      "trials": [
+        {
+          "uniform_increment": 1,
+          "exit_map": [
+            3,
+            3,
+            3,
+            3,
+            3,
+            3
+          ],
+          "exact_context_delta444_db": 0.033075916613393194,
+          "ideal_shared_saving_pct": 25.16860759493671
+        }
+      ],
+      "chosen": {
+        "uniform_increment": 1,
+        "exit_map": [
+          3,
+          3,
+          3,
+          3,
+          3,
+          3
+        ],
+        "exact_context_delta444_db": 0.033075916613393194,
+        "ideal_shared_saving_pct": 25.16860759493671
+      }
+    },
+    {
+      "image": "0871.png",
+      "qp": 48,
+      "base_exit_map": [
+        3,
+        5,
+        3,
+        3,
+        3,
+        3
+      ],
+      "base_exact_context_delta444_db": 0.13674999076304875,
+      "base_ideal_shared_saving_pct": 19.736469870780592,
+      "trials": [
+        {
+          "uniform_increment": 1,
+          "exit_map": [
+            4,
+            5,
+            4,
+            4,
+            4,
+            4
+          ],
+          "exact_context_delta444_db": 0.08357378474415572,
+          "ideal_shared_saving_pct": 11.286595189433902
+        }
+      ],
+      "chosen": {
+        "uniform_increment": 1,
+        "exit_map": [
+          4,
+          5,
+          4,
+          4,
+          4,
+          4
+        ],
+        "exact_context_delta444_db": 0.08357378474415572,
+        "ideal_shared_saving_pct": 11.286595189433902
+      }
+    },
+    {
+      "image": "0833.png",
+      "qp": 0,
+      "base_exit_map": [
+        2,
+        2,
+        3,
+        2,
+        2,
+        2
+      ],
+      "base_exact_context_delta444_db": 0.13955047201403903,
+      "base_ideal_shared_saving_pct": 37.35184761229782,
+      "trials": [
+        {
+          "uniform_increment": 1,
+          "exit_map": [
+            3,
+            3,
+            4,
+            3,
+            3,
+            3
+          ],
+          "exact_context_delta444_db": 0.04096568083967162,
+          "ideal_shared_saving_pct": 23.064477710750698
+        }
+      ],
+      "chosen": {
+        "uniform_increment": 1,
+        "exit_map": [
+          3,
+          3,
+          4,
+          3,
+          3,
+          3
+        ],
+        "exact_context_delta444_db": 0.04096568083967162,
+        "ideal_shared_saving_pct": 23.064477710750698
+      }
+    },
+    {
+      "image": "0898.png",
+      "qp": 32,
+      "base_exit_map": [
+        3,
+        3,
+        5,
+        4,
+        4,
+        3
+      ],
+      "base_exact_context_delta444_db": 0.11530919440016421,
+      "base_ideal_shared_saving_pct": 16.138403244769695,
+      "trials": [
+        {
+          "uniform_increment": 1,
+          "exit_map": [
+            4,
+            4,
+            5,
+            5,
+            5,
+            4
+          ],
+          "exact_context_delta444_db": 0.03540487486363097,
+          "ideal_shared_saving_pct": 6.418700169215907
+        }
+      ],
+      "chosen": {
+        "uniform_increment": 1,
+        "exit_map": [
+          4,
+          4,
+          5,
+          5,
+          5,
+          4
+        ],
+        "exact_context_delta444_db": 0.03540487486363097,
+        "ideal_shared_saving_pct": 6.418700169215907
+      }
+    },
+    {
+      "image": "0803.png",
+      "qp": 0,
+      "base_exit_map": [
+        2,
+        3,
+        3,
+        3,
+        3,
+        3
+      ],
+      "base_exact_context_delta444_db": 0.16945868655351842,
+      "base_ideal_shared_saving_pct": 27.426200910908925,
+      "trials": [
+        {
+          "uniform_increment": 1,
+          "exit_map": [
+            3,
+            4,
+            4,
+            4,
+            4,
+            4
+          ],
+          "exact_context_delta444_db": 0.0635050237440833,
+          "ideal_shared_saving_pct": 15.61601806984002
+        }
+      ],
+      "chosen": {
+        "uniform_increment": 1,
+        "exit_map": [
+          3,
+          4,
+          4,
+          4,
+          4,
+          4
+        ],
+        "exact_context_delta444_db": 0.0635050237440833,
+        "ideal_shared_saving_pct": 15.61601806984002
+      }
+    },
+    {
+      "image": "0803.png",
+      "qp": 16,
+      "base_exit_map": [
+        3,
+        3,
+        4,
+        3,
+        3,
+        3
+      ],
+      "base_exact_context_delta444_db": 0.13327238858953092,
+      "base_ideal_shared_saving_pct": 23.064477710750698,
+      "trials": [
+        {
+          "uniform_increment": 1,
+          "exit_map": [
+            4,
+            4,
+            5,
+            4,
+            4,
+            4
+          ],
+          "exact_context_delta444_db": 0.047373783398495795,
+          "ideal_shared_saving_pct": 11.40911906096168
+        }
+      ],
+      "chosen": {
+        "uniform_increment": 1,
+        "exit_map": [
+          4,
+          4,
+          5,
+          4,
+          4,
+          4
+        ],
+        "exact_context_delta444_db": 0.047373783398495795,
+        "ideal_shared_saving_pct": 11.40911906096168
+      }
+    },
+    {
+      "image": "0803.png",
+      "qp": 32,
+      "base_exit_map": [
+        3,
+        3,
+        3,
+        3,
+        3,
+        3
+      ],
+      "base_exact_context_delta444_db": 0.18481596028836333,
+      "base_ideal_shared_saving_pct": 25.16860759493671,
+      "trials": [
+        {
+          "uniform_increment": 1,
+          "exit_map": [
+            4,
+            4,
+            4,
+            4,
+            4,
+            4
+          ],
+          "exact_context_delta444_db": 0.07022763857792635,
+          "ideal_shared_saving_pct": 13.977721518987341
+        }
+      ],
+      "chosen": {
+        "uniform_increment": 1,
+        "exit_map": [
+          4,
+          4,
+          4,
+          4,
+          4,
+          4
+        ],
+        "exact_context_delta444_db": 0.07022763857792635,
+        "ideal_shared_saving_pct": 13.977721518987341
+      }
+    },
+    {
+      "image": "0803.png",
+      "qp": 48,
+      "base_exit_map": [
+        3,
+        3,
+        3,
+        3,
+        3,
+        3
+      ],
+      "base_exact_context_delta444_db": 0.21958726014167537,
+      "base_ideal_shared_saving_pct": 25.16860759493671,
+      "trials": [
+        {
+          "uniform_increment": 1,
+          "exit_map": [
+            4,
+            4,
+            4,
+            4,
+            4,
+            4
+          ],
+          "exact_context_delta444_db": 0.08074284277761778,
+          "ideal_shared_saving_pct": 13.977721518987341
+        }
+      ],
+      "chosen": {
+        "uniform_increment": 1,
+        "exit_map": [
+          4,
+          4,
+          4,
+          4,
+          4,
+          4
+        ],
+        "exact_context_delta444_db": 0.08074284277761778,
+        "ideal_shared_saving_pct": 13.977721518987341
+      }
+    },
+    {
+      "image": "0803.png",
+      "qp": 63,
+      "base_exit_map": [
+        3,
+        3,
+        5,
+        3,
+        3,
+        3
+      ],
+      "base_exact_context_delta444_db": 0.21062720229371887,
+      "base_ideal_shared_saving_pct": 20.161057544391703,
+      "trials": [
+        {
+          "uniform_increment": 1,
+          "exit_map": [
+            4,
+            4,
+            5,
+            4,
+            4,
+            4
+          ],
+          "exact_context_delta444_db": 0.08091810318985011,
+          "ideal_shared_saving_pct": 11.40911906096168
+        }
+      ],
+      "chosen": {
+        "uniform_increment": 1,
+        "exit_map": [
+          4,
+          4,
+          5,
+          4,
+          4,
+          4
+        ],
+        "exact_context_delta444_db": 0.08091810318985011,
+        "ideal_shared_saving_pct": 11.40911906096168
+      }
+    },
+    {
+      "image": "0827.png",
+      "qp": 0,
+      "base_exit_map": [
+        2,
+        2,
+        2,
+        2,
+        2,
+        2
+      ],
+      "base_exact_context_delta444_db": 0.10384204118517681,
+      "base_ideal_shared_saving_pct": 40.075274261603376,
+      "trials": [
+        {
+          "uniform_increment": 1,
+          "exit_map": [
+            3,
+            3,
+            3,
+            3,
+            3,
+            3
+          ],
+          "exact_context_delta444_db": 0.03333862850378179,
+          "ideal_shared_saving_pct": 25.16860759493671
+        }
+      ],
+      "chosen": {
+        "uniform_increment": 1,
+        "exit_map": [
+          3,
+          3,
+          3,
+          3,
+          3,
+          3
+        ],
+        "exact_context_delta444_db": 0.03333862850378179,
+        "ideal_shared_saving_pct": 25.16860759493671
+      }
+    },
+    {
+      "image": "0827.png",
+      "qp": 48,
+      "base_exit_map": [
+        2,
+        2,
+        2,
+        2,
+        3,
+        2
+      ],
+      "base_exact_context_delta444_db": 0.12049978626709887,
+      "base_ideal_shared_saving_pct": 37.229323740770035,
+      "trials": [
+        {
+          "uniform_increment": 1,
+          "exit_map": [
+            3,
+            3,
+            3,
+            3,
+            4,
+            3
+          ],
+          "exact_context_delta444_db": 0.04725771518374708,
+          "ideal_shared_saving_pct": 22.94195383922292
+        }
+      ],
+      "chosen": {
+        "uniform_increment": 1,
+        "exit_map": [
+          3,
+          3,
+          3,
+          3,
+          4,
+          3
+        ],
+        "exact_context_delta444_db": 0.04725771518374708,
+        "ideal_shared_saving_pct": 22.94195383922292
+      }
+    },
+    {
+      "image": "0827.png",
+      "qp": 63,
+      "base_exit_map": [
+        2,
+        3,
+        2,
+        2,
+        2,
+        2
+      ],
+      "base_exact_context_delta444_db": 0.12330187404672743,
+      "base_ideal_shared_saving_pct": 37.229323740770035,
+      "trials": [
+        {
+          "uniform_increment": 1,
+          "exit_map": [
+            3,
+            4,
+            3,
+            3,
+            3,
+            3
+          ],
+          "exact_context_delta444_db": 0.056920988127403135,
+          "ideal_shared_saving_pct": 22.94195383922292
+        }
+      ],
+      "chosen": {
+        "uniform_increment": 1,
+        "exit_map": [
+          3,
+          4,
+          3,
+          3,
+          3,
+          3
+        ],
+        "exact_context_delta444_db": 0.056920988127403135,
+        "ideal_shared_saving_pct": 22.94195383922292
+      }
+    },
+    {
+      "image": "0889.png",
+      "qp": 48,
+      "base_exit_map": [
+        4,
+        4,
+        4,
+        3,
+        3,
+        3
+      ],
+      "base_exact_context_delta444_db": 0.12569270882470157,
+      "base_ideal_shared_saving_pct": 19.223789556962036,
+      "trials": [
+        {
+          "uniform_increment": 1,
+          "exit_map": [
+            5,
+            5,
+            5,
+            4,
+            4,
+            4
+          ],
+          "exact_context_delta444_db": 0.026693957603498644,
+          "ideal_shared_saving_pct": 6.6394857594936685
+        }
+      ],
+      "chosen": {
+        "uniform_increment": 1,
+        "exit_map": [
+          5,
+          5,
+          5,
+          4,
+          4,
+          4
+        ],
+        "exact_context_delta444_db": 0.026693957603498644,
+        "ideal_shared_saving_pct": 6.6394857594936685
+      }
+    }
+  ]
+}

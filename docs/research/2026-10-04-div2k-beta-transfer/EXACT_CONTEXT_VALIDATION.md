@@ -87,6 +87,23 @@ decoder capacity. A future policy would need decoder-visible risk prediction
 and targeted depth changes, validated on a fresh split; the current
 route-only risk predictor did not give sufficient held-out discrimination.
 
+## Source-informed depth fallback bound
+
+As a diagnostic upper bound, for each of the 24 remaining violations we
+reconstructed the same real bitstream with every tile raised by one exit
+group, then by two only if needed. This uses the source image to decide when
+to stop and **cannot be deployed as a decoder policy**. Twenty-two of the 24
+cases cross below 0.1 dB after one uniform increment; only 0844/QP32 and
+0844/QP48 need two. None needs all-deep. Applied only to these 24 failures,
+the hypothetical cohort mean ideal shared-context saving is **17.89%** with
+zero threshold violations. For comparison, switching those failures to
+all-deep would leave **14.96%** ideal mean saving, while retaining the
+original route on all cases gives **20.55%** ideal saving and 24 violations.
+These are analytical MAC bounds, not implemented sparse runtime or a router
+result. They show that a targeted depth fallback has more arithmetic headroom
+than an all-deep fallback, but the router still needs a reliable
+decoder-visible risk signal and a new held-out evaluation.
+
 ![Full validation quality versus ideal arithmetic](../../../proof/cpu_early_exit/results/div2k_beta/quality_floor/validation24/exact_context_pilot.png)
 
 ## Reproduce
@@ -99,3 +116,8 @@ paths. The experiment is resumable by case. Then run
 `CUDA_VISIBLE_DEVICES=''`, `OMP_NUM_THREADS=1`, and `MKL_NUM_THREADS=1`;
 run with a low process priority while the official D8/D10/D12 trainings
 continue untouched.
+
+For the diagnostic bound, run `audit_uniform_depth_oracle.py` against the
+completed 120-case JSON, then `summarize_uniform_depth_oracle.py`. This
+explicitly consumes source-image error and must not be used as an inference
+policy or as an unbiased new validation result.
