@@ -1,4 +1,4 @@
-"""CPU-only counterfactual: exact feature context for DIV2K 0828 routed tiles.
+"""CPU-only counterfactual: exact feature context for one DIV2K routed case.
 
 This is an ablation, not the shipped decoder. Windows are clipped to the true
 frame boundary and use stock zero padding; each core has enough feature context
@@ -122,6 +122,15 @@ def main() -> None:
         controls = {}
         for name, em in [('all_deep', deep), ('primary_route', route)]:
             no_context = forward_from_stem_with_cpu_map(dec, stem, q, em)
+            original_repair = dec.seam_repair
+            try:
+                dec.seam_repair = None
+                zero_halo_replicate_no_repair = forward_from_stem_with_cpu_map(dec, stem, q, em)
+                dec.cfg = replace(cfg, tile_pad_mode='zeros')
+                zero_halo_zero_no_repair = forward_from_stem_with_cpu_map(dec, stem, q, em)
+            finally:
+                dec.cfg = cfg
+                dec.seam_repair = original_repair
             context, areas, windows = context_reconstruct(stem, em, repair=False)
             context_repair, _, _ = context_reconstruct(stem, em, repair=True)
             no_context_db = quality(no_context, ref_mse)
@@ -132,6 +141,8 @@ def main() -> None:
             controls[name] = {
                 'exit_map': em.tolist(),
                 'zero_halo_deployed_delta444_db': no_context_db,
+                'zero_halo_replicate_no_repair_delta444_db': quality(zero_halo_replicate_no_repair, ref_mse),
+                'zero_halo_zero_no_repair_delta444_db': quality(zero_halo_zero_no_repair, ref_mse),
                 'exact_context_no_repair_delta444_db': context_db,
                 'exact_context_with_repair_delta444_db': repaired_db,
                 'exact_context_vs_full_max_abs': float((context - reference).abs().max()) if name == 'all_deep' else None,
@@ -165,7 +176,7 @@ def main() -> None:
             dec.cfg, dec.seam_repair = original_cfg, original_repair
     result = {
         'schema': 1,
-        'scope': 'CPU FP32, DIV2K 0828 crop, released analysis/entropy stream, e15 synthesis; exact-context counterfactual; no latency measured',
+        'scope': 'CPU FP32, DIV2K centre crop, released analysis/entropy stream, e15 synthesis; exact-context counterfactual; no latency measured',
         'case_sha256': digest(args.case), 'stream_sha256': digest(args.stream),
         'source_sha256': digest(source_path), 'e15_sha256': digest(args.e15),
         'release_sha256': digest(args.release), 'policy_sha256': digest(args.policy),

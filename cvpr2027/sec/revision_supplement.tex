@@ -353,6 +353,14 @@ also assembles and gathers halo buffers, so low arithmetic overhead is not
 evidence of low wall-clock overhead. Retaining the old seam-repair weights
 can worsen the coupled result (QP63: 0.149 versus 0.099\,dB); a coupled
 decoder is a new variant requiring broader quality and matched latency tests.
+Indeed, two post-hoc validation stress cases give a counterexample to
+deploying coupling as a global switch. On 0898/QP48, four of six tiles are
+deepest, yet coupling without repair raises loss from 0.165 to 0.365\,dB
+against an otherwise matched zero-padding/no-repair control. On the shallow
+0844/QP48 map it barely changes loss (0.573 to 0.572\,dB). These cases were
+selected after inspecting validation failures; they establish a failure
+mode, not its frequency. The mixed-depth neighbour state needs a new
+boundary rule or separately validated fallback.
 
 \begin{figure*}[t]
 \centering

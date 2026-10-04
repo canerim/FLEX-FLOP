@@ -50,6 +50,12 @@ neighbour's activation as context for a deeper tile, which explains why it
 does not match the exact-context reconstruction even though both match the
 uniform all-deep control.
 
+Subsequent post-hoc held-out stress checks show that this apparent gain does
+**not** generalise automatically: on `0898/QP48`, coupling adds 0.2001 dB
+relative to the matched zero-pad/no-repair control. See
+[MIXED_COUPLING_STRESS.md](MIXED_COUPLING_STRESS.md). The coupler is therefore
+only a diagnostic here, not a safe drop-in deployment choice.
+
 **Next controlled test:** replay coupled/no-repair and the frozen router on a
 disjoint multi-image cohort, report QP-stratified quality tails and analytical
 MAC, then benchmark decoder latency with a matched released/e15 backend when

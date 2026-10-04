@@ -1,14 +1,14 @@
 {
   "schema": 1,
   "scope": "CPU FP32, DIV2K centre crop, released analysis/entropy stream, e15 synthesis; exact-context counterfactual; no latency measured",
-  "case_sha256": "897707703fceebe93a2b3e7e1367fefcf61524221a26da6c233d421ffef81cbc",
-  "stream_sha256": "ec4acbae7f2e09ea414d72c90743438f2f9e88fd9fcc9da925986c069cabd504",
-  "source_sha256": "a62013e252fa503920f54b9b1eff9babd501c742d2c82c97d7c22394493ffa12",
+  "case_sha256": "2c660a5df3328f2f689bffa023aaae92ccdd9601c8890a0fe1d0b3d3e21ccf01",
+  "stream_sha256": "3999125a07cfac43ff6d29949f26aacf20f4eb687ff51541dfdecc183897b910",
+  "source_sha256": "4cd6696b8e59615ceacff729181dd9b0cc5ea936ea9a57e089bb1fe4fe87c347",
   "e15_sha256": "91556d30bca41988755ff43dee3bc6d0cd2a0a4eda1d18d2891b168dc0a04ce9",
   "release_sha256": "b3b900de23f30e4fc437010ddffe6a5413a56d6cfd97fb6235adbcd2b6973302",
   "policy_sha256": "80f0a2f1d9cdda4931a956878a07df05c646e9c6a621c48d0593d3a10a1c5e47",
-  "image": "0828.png",
-  "qp": 63,
+  "image": "0898.png",
+  "qp": 48,
   "crop_xywh": [
     636,
     422,
@@ -18,7 +18,7 @@
   "feature_patch": 32,
   "split_depth": 2,
   "blocks_per_exit": 2,
-  "zero_halo_cached_primary_delta444_db": 0.1565408045038452,
+  "zero_halo_cached_primary_delta444_db": 0.10799930861970353,
   "controls": {
     "all_deep": {
       "exit_map": [
@@ -29,11 +29,11 @@
         5,
         5
       ],
-      "zero_halo_deployed_delta444_db": 0.14516776894354005,
-      "zero_halo_replicate_no_repair_delta444_db": 0.11624591474091077,
-      "zero_halo_zero_no_repair_delta444_db": 0.14454092179878436,
+      "zero_halo_deployed_delta444_db": 0.055903247592755,
+      "zero_halo_replicate_no_repair_delta444_db": 0.11997228714553566,
+      "zero_halo_zero_no_repair_delta444_db": 0.11557925275029618,
       "exact_context_no_repair_delta444_db": 0.0,
-      "exact_context_with_repair_delta444_db": 0.050984746402127315,
+      "exact_context_with_repair_delta444_db": 0.05614486744624252,
       "exact_context_vs_full_max_abs": 0.0,
       "per_suffix_group_feature_cell_areas": [
         10240,
@@ -86,42 +86,42 @@
         ]
       ],
       "canvas_coupled_no_repair_delta444_db": 0.0,
-      "canvas_coupled_with_repair_delta444_db": 0.050984746402127315,
+      "canvas_coupled_with_repair_delta444_db": 0.05614486744624252,
       "canvas_coupled_no_repair_vs_full_max_abs": 0.0
     },
     "primary_route": {
       "exit_map": [
-        5,
-        5,
-        5,
         3,
         5,
-        5
+        5,
+        5,
+        5,
+        3
       ],
-      "zero_halo_deployed_delta444_db": 0.1565408045038452,
-      "zero_halo_replicate_no_repair_delta444_db": 0.12805552870643971,
-      "zero_halo_zero_no_repair_delta444_db": 0.1587110150714352,
-      "exact_context_no_repair_delta444_db": 0.015881781862401217,
-      "exact_context_with_repair_delta444_db": 0.06612573678212122,
+      "zero_halo_deployed_delta444_db": 0.10799930861970353,
+      "zero_halo_replicate_no_repair_delta444_db": 0.16510260946779207,
+      "zero_halo_zero_no_repair_delta444_db": 0.16505211770826922,
+      "exact_context_no_repair_delta444_db": 0.06132863480325963,
+      "exact_context_with_repair_delta444_db": 0.11003110056713476,
       "exact_context_vs_full_max_abs": null,
       "per_suffix_group_feature_cell_areas": [
-        9936,
-        9936,
-        8640,
-        8640
+        9632,
+        9632,
+        7040,
+        7040
       ],
       "zero_halo_suffix_feature_cell_areas": [
         6144,
         6144,
-        5120,
-        5120
+        4096,
+        4096
       ],
       "tile_windows_tlbr": [
         [
           0,
           0,
-          40,
-          40
+          36,
+          36
         ],
         [
           0,
@@ -136,10 +136,10 @@
           96
         ],
         [
-          28,
+          24,
           0,
           64,
-          36
+          40
         ],
         [
           24,
@@ -148,14 +148,14 @@
           72
         ],
         [
-          24,
-          56,
+          28,
+          60,
           64,
           96
         ]
       ],
-      "canvas_coupled_no_repair_delta444_db": 0.0991392370960203,
-      "canvas_coupled_with_repair_delta444_db": 0.1493432533237261,
+      "canvas_coupled_no_repair_delta444_db": 0.36513042966856946,
+      "canvas_coupled_with_repair_delta444_db": 0.41305556257329734,
       "canvas_coupled_no_repair_vs_full_max_abs": null
     }
   }
