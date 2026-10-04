@@ -310,6 +310,12 @@ An outcome-informed oracle restricted to the same finite scalar-price grid
 reduces the calibration threshold failures from 34 to those five cases,
 while saving 21.60\% mean synthesis MAC versus the fixed primary policy's
 20.73\%. It consults source reconstruction quality and is not deployable.
+Of the primary policy's 34 calibration violations, 29 are below threshold
+under tiled all-deep decoding; an ideal source-informed binary fallback
+would remove those 29 but lower mean saving to 13.48\%. The candidate-grid
+oracle retains 21.60\% because it chooses cheaper feasible maps rather
+than always sending a risky frame to all-deep. This gap is a motivation for
+a decoder-available risk signal, not a measured router result.
 Conversely, a fixed per-QP Q90 calibration rule reduces mean saving to
 11.20\% on these calibration cases. These are explanatory calibration
 ablations, not external transfer results. They show why simply tightening

@@ -5,6 +5,9 @@
   "cases": 120,
   "all_deep_floor_over_0p1_count": 5,
   "primary_over_0p1_count": 34,
+  "primary_violations_fixable_by_all_deep_count": 29,
+  "source_informed_binary_fallback_over_0p1_count": 5,
+  "source_informed_binary_fallback_mean_mac_saved_pct": 13.477827265563144,
   "no_feasible_beta_cases": [
     [
       "0828.png",
@@ -68,7 +71,7 @@
     }
   },
   "q90_rule_mean_mac_saved_pct_on_calibration": 11.20338272770498,
-  "metric_note": "Delta444 relative to e15 full frame; all-deep tiled floor includes seam repair. Candidate oracle consults source quality and is not deployable. Q90 rule is calibration-only exploratory.",
+  "metric_note": "Delta444 relative to e15 full frame; all-deep tiled floor includes seam repair. Binary fallback and candidate oracle consult source quality and are not deployable. Q90 rule is calibration-only exploratory.",
   "rows": [
     {
       "image": "0807.png",
@@ -77,6 +80,9 @@
       "all_deep_mac_saved_pct": -0.9507193245465118,
       "selected_delta444_db": 0.04349723068292245,
       "selected_mac_saved_pct": 26.702334078354173,
+      "fixable_by_all_deep_tiled": false,
+      "source_informed_binary_fallback_delta444_db": 0.04349723068292245,
+      "source_informed_binary_fallback_mac_saved_pct": 26.702334078354173,
       "has_feasible_scalar_beta": true,
       "source_informed_candidate_oracle_delta444_db": 0.085086909208537,
       "source_informed_candidate_oracle_mac_saved_pct": 36.64011219362669
@@ -88,6 +94,9 @@
       "all_deep_mac_saved_pct": -0.9507193245465118,
       "selected_delta444_db": 0.010024305632066468,
       "selected_mac_saved_pct": -0.9507193245465118,
+      "fixable_by_all_deep_tiled": false,
+      "source_informed_binary_fallback_delta444_db": 0.010024305632066468,
+      "source_informed_binary_fallback_mac_saved_pct": -0.9507193245465118,
       "has_feasible_scalar_beta": true,
       "source_informed_candidate_oracle_delta444_db": 0.010024305632066468,
       "source_informed_candidate_oracle_mac_saved_pct": -0.9507193245465118
@@ -99,6 +108,9 @@
       "all_deep_mac_saved_pct": -0.9507193245465118,
       "selected_delta444_db": 0.022295460122469052,
       "selected_mac_saved_pct": -0.9507193245465118,
+      "fixable_by_all_deep_tiled": false,
+      "source_informed_binary_fallback_delta444_db": 0.022295460122469052,
+      "source_informed_binary_fallback_mac_saved_pct": -0.9507193245465118,
       "has_feasible_scalar_beta": true,
       "source_informed_candidate_oracle_delta444_db": 0.022295460122469052,
       "source_informed_candidate_oracle_mac_saved_pct": -0.9507193245465118
@@ -110,6 +122,9 @@
       "all_deep_mac_saved_pct": -0.9507193245465118,
       "selected_delta444_db": 0.032426121707936274,
       "selected_mac_saved_pct": -0.9507193245465118,
+      "fixable_by_all_deep_tiled": false,
+      "source_informed_binary_fallback_delta444_db": 0.032426121707936274,
+      "source_informed_binary_fallback_mac_saved_pct": -0.9507193245465118,
       "has_feasible_scalar_beta": true,
       "source_informed_candidate_oracle_delta444_db": 0.032426121707936274,
       "source_informed_candidate_oracle_mac_saved_pct": -0.9507193245465118
@@ -121,6 +136,9 @@
       "all_deep_mac_saved_pct": -0.9507193245465118,
       "selected_delta444_db": 0.03701272819710791,
       "selected_mac_saved_pct": -0.9507193245465118,
+      "fixable_by_all_deep_tiled": false,
+      "source_informed_binary_fallback_delta444_db": 0.03701272819710791,
+      "source_informed_binary_fallback_mac_saved_pct": -0.9507193245465118,
       "has_feasible_scalar_beta": true,
       "source_informed_candidate_oracle_delta444_db": 0.03701272819710791,
       "source_informed_candidate_oracle_mac_saved_pct": -0.9507193245465118
@@ -132,6 +150,9 @@
       "all_deep_mac_saved_pct": -0.9507193245465118,
       "selected_delta444_db": 0.0733175402069382,
       "selected_mac_saved_pct": 31.671221645874315,
+      "fixable_by_all_deep_tiled": false,
+      "source_informed_binary_fallback_delta444_db": 0.0733175402069382,
+      "source_informed_binary_fallback_mac_saved_pct": 31.671221645874315,
       "has_feasible_scalar_beta": true,
       "source_informed_candidate_oracle_delta444_db": 0.09564166286915644,
       "source_informed_candidate_oracle_mac_saved_pct": 34.1556669197505
@@ -143,6 +164,9 @@
       "all_deep_mac_saved_pct": -0.9507193245465118,
       "selected_delta444_db": 0.05722011481796306,
       "selected_mac_saved_pct": 21.106888445419603,
+      "fixable_by_all_deep_tiled": false,
+      "source_informed_binary_fallback_delta444_db": 0.05722011481796306,
+      "source_informed_binary_fallback_mac_saved_pct": 21.106888445419603,
       "has_feasible_scalar_beta": true,
       "source_informed_candidate_oracle_delta444_db": 0.09790152266538123,
       "source_informed_candidate_oracle_mac_saved_pct": 26.702334078354173
@@ -154,6 +178,9 @@
       "all_deep_mac_saved_pct": -0.9507193245465118,
       "selected_delta444_db": 0.08298832181260726,
       "selected_mac_saved_pct": 21.106888445419603,
+      "fixable_by_all_deep_tiled": false,
+      "source_informed_binary_fallback_delta444_db": 0.08298832181260726,
+      "source_informed_binary_fallback_mac_saved_pct": 21.106888445419603,
       "has_feasible_scalar_beta": true,
       "source_informed_candidate_oracle_delta444_db": 0.08298832181260726,
       "source_informed_candidate_oracle_mac_saved_pct": 21.106888445419603
@@ -165,6 +192,9 @@
       "all_deep_mac_saved_pct": -0.9507193245465118,
       "selected_delta444_db": 0.09303620911201639,
       "selected_mac_saved_pct": 16.60247305254393,
+      "fixable_by_all_deep_tiled": false,
+      "source_informed_binary_fallback_delta444_db": 0.09303620911201639,
+      "source_informed_binary_fallback_mac_saved_pct": 16.60247305254393,
       "has_feasible_scalar_beta": true,
       "source_informed_candidate_oracle_delta444_db": 0.09303620911201639,
       "source_informed_candidate_oracle_mac_saved_pct": 16.60247305254393
@@ -176,6 +206,9 @@
       "all_deep_mac_saved_pct": -0.9507193245465118,
       "selected_delta444_db": 0.08604959240474783,
       "selected_mac_saved_pct": 9.923260005516344,
+      "fixable_by_all_deep_tiled": false,
+      "source_informed_binary_fallback_delta444_db": 0.08604959240474783,
+      "source_informed_binary_fallback_mac_saved_pct": 9.923260005516344,
       "has_feasible_scalar_beta": true,
       "source_informed_candidate_oracle_delta444_db": 0.08604959240474783,
       "source_informed_candidate_oracle_mac_saved_pct": 9.923260005516344
@@ -187,6 +220,9 @@
       "all_deep_mac_saved_pct": -0.9507193245465118,
       "selected_delta444_db": 0.033408915056544,
       "selected_mac_saved_pct": 39.12455746750288,
+      "fixable_by_all_deep_tiled": false,
+      "source_informed_binary_fallback_delta444_db": 0.033408915056544,
+      "source_informed_binary_fallback_mac_saved_pct": 39.12455746750288,
       "has_feasible_scalar_beta": true,
       "source_informed_candidate_oracle_delta444_db": 0.033408915056544,
       "source_informed_candidate_oracle_mac_saved_pct": 39.12455746750288
@@ -198,6 +234,9 @@
       "all_deep_mac_saved_pct": -0.9507193245465118,
       "selected_delta444_db": 0.0332380777008735,
       "selected_mac_saved_pct": 36.64011219362669,
+      "fixable_by_all_deep_tiled": false,
+      "source_informed_binary_fallback_delta444_db": 0.0332380777008735,
+      "source_informed_binary_fallback_mac_saved_pct": 36.64011219362669,
       "has_feasible_scalar_beta": true,
       "source_informed_candidate_oracle_delta444_db": 0.03735847020378192,
       "source_informed_candidate_oracle_mac_saved_pct": 39.12455746750288
@@ -209,6 +248,9 @@
       "all_deep_mac_saved_pct": -0.9507193245465118,
       "selected_delta444_db": 0.04200784449896886,
       "selected_mac_saved_pct": 39.12455746750288,
+      "fixable_by_all_deep_tiled": false,
+      "source_informed_binary_fallback_delta444_db": 0.04200784449896886,
+      "source_informed_binary_fallback_mac_saved_pct": 39.12455746750288,
       "has_feasible_scalar_beta": true,
       "source_informed_candidate_oracle_delta444_db": 0.04200784449896886,
       "source_informed_candidate_oracle_mac_saved_pct": 39.12455746750288
@@ -220,6 +262,9 @@
       "all_deep_mac_saved_pct": -0.9507193245465118,
       "selected_delta444_db": 0.05371435235867043,
       "selected_mac_saved_pct": 39.12455746750288,
+      "fixable_by_all_deep_tiled": false,
+      "source_informed_binary_fallback_delta444_db": 0.05371435235867043,
+      "source_informed_binary_fallback_mac_saved_pct": 39.12455746750288,
       "has_feasible_scalar_beta": true,
       "source_informed_candidate_oracle_delta444_db": 0.05371435235867043,
       "source_informed_candidate_oracle_mac_saved_pct": 39.12455746750288
@@ -231,6 +276,9 @@
       "all_deep_mac_saved_pct": -0.9507193245465118,
       "selected_delta444_db": 0.08679908058913219,
       "selected_mac_saved_pct": 39.12455746750288,
+      "fixable_by_all_deep_tiled": false,
+      "source_informed_binary_fallback_delta444_db": 0.08679908058913219,
+      "source_informed_binary_fallback_mac_saved_pct": 39.12455746750288,
       "has_feasible_scalar_beta": true,
       "source_informed_candidate_oracle_delta444_db": 0.08679908058913219,
       "source_informed_candidate_oracle_mac_saved_pct": 39.12455746750288
@@ -242,6 +290,9 @@
       "all_deep_mac_saved_pct": -0.9507193245465118,
       "selected_delta444_db": 0.15459479211015614,
       "selected_mac_saved_pct": 29.186777862114244,
+      "fixable_by_all_deep_tiled": true,
+      "source_informed_binary_fallback_delta444_db": 0.0290521194812775,
+      "source_informed_binary_fallback_mac_saved_pct": -0.9507193245465118,
       "has_feasible_scalar_beta": true,
       "source_informed_candidate_oracle_delta444_db": 0.0717766481563819,
       "source_informed_candidate_oracle_mac_saved_pct": 16.757299097580248
@@ -253,6 +304,9 @@
       "all_deep_mac_saved_pct": -0.9507193245465118,
       "selected_delta444_db": 0.12098697281536774,
       "selected_mac_saved_pct": 16.757299097580248,
+      "fixable_by_all_deep_tiled": true,
+      "source_informed_binary_fallback_delta444_db": 0.027671583762716195,
+      "source_informed_binary_fallback_mac_saved_pct": -0.9507193245465118,
       "has_feasible_scalar_beta": true,
       "source_informed_candidate_oracle_delta444_db": 0.09847727260582174,
       "source_informed_candidate_oracle_mac_saved_pct": 13.0270020089572
@@ -264,6 +318,9 @@
       "all_deep_mac_saved_pct": -0.9507193245465118,
       "selected_delta444_db": 0.1549454161296467,
       "selected_mac_saved_pct": 16.757299097580248,
+      "fixable_by_all_deep_tiled": true,
+      "source_informed_binary_fallback_delta444_db": 0.030921970442535973,
+      "source_informed_binary_fallback_mac_saved_pct": -0.9507193245465118,
       "has_feasible_scalar_beta": true,
       "source_informed_candidate_oracle_delta444_db": 0.05831245143066087,
       "source_informed_candidate_oracle_mac_saved_pct": 3.7085221133654644
@@ -275,6 +332,9 @@
       "all_deep_mac_saved_pct": -0.9507193245465118,
       "selected_delta444_db": 0.0914290707565581,
       "selected_mac_saved_pct": 8.367763551277452,
+      "fixable_by_all_deep_tiled": false,
+      "source_informed_binary_fallback_delta444_db": 0.0914290707565581,
+      "source_informed_binary_fallback_mac_saved_pct": 8.367763551277452,
       "has_feasible_scalar_beta": true,
       "source_informed_candidate_oracle_delta444_db": 0.0914290707565581,
       "source_informed_candidate_oracle_mac_saved_pct": 8.367763551277452
@@ -286,6 +346,9 @@
       "all_deep_mac_saved_pct": -0.9507193245465118,
       "selected_delta444_db": 0.04191478840324016,
       "selected_mac_saved_pct": -0.9507193245465118,
+      "fixable_by_all_deep_tiled": false,
+      "source_informed_binary_fallback_delta444_db": 0.04191478840324016,
+      "source_informed_binary_fallback_mac_saved_pct": -0.9507193245465118,
       "has_feasible_scalar_beta": true,
       "source_informed_candidate_oracle_delta444_db": 0.05582306561168955,
       "source_informed_candidate_oracle_mac_saved_pct": 1.3789043746417096
@@ -297,6 +360,9 @@
       "all_deep_mac_saved_pct": -0.9507193245465118,
       "selected_delta444_db": 0.030872485206205644,
       "selected_mac_saved_pct": 31.671221645874315,
+      "fixable_by_all_deep_tiled": false,
+      "source_informed_binary_fallback_delta444_db": 0.030872485206205644,
+      "source_informed_binary_fallback_mac_saved_pct": 31.671221645874315,
       "has_feasible_scalar_beta": true,
       "source_informed_candidate_oracle_delta444_db": 0.04272403604916473,
       "source_informed_candidate_oracle_mac_saved_pct": 39.12455746750288
@@ -308,6 +374,9 @@
       "all_deep_mac_saved_pct": -0.9507193245465118,
       "selected_delta444_db": 0.020739082412366674,
       "selected_mac_saved_pct": 16.757299097580248,
+      "fixable_by_all_deep_tiled": false,
+      "source_informed_binary_fallback_delta444_db": 0.020739082412366674,
+      "source_informed_binary_fallback_mac_saved_pct": 16.757299097580248,
       "has_feasible_scalar_beta": true,
       "source_informed_candidate_oracle_delta444_db": 0.06480426283727453,
       "source_informed_candidate_oracle_mac_saved_pct": 36.64011219362669
@@ -319,6 +388,9 @@
       "all_deep_mac_saved_pct": -0.9507193245465118,
       "selected_delta444_db": 0.04750744286818689,
       "selected_mac_saved_pct": 16.757299097580248,
+      "fixable_by_all_deep_tiled": false,
+      "source_informed_binary_fallback_delta444_db": 0.04750744286818689,
+      "source_informed_binary_fallback_mac_saved_pct": 16.757299097580248,
       "has_feasible_scalar_beta": true,
       "source_informed_candidate_oracle_delta444_db": 0.08559624377146817,
       "source_informed_candidate_oracle_mac_saved_pct": 29.186777862114244
@@ -330,6 +402,9 @@
       "all_deep_mac_saved_pct": -0.9507193245465118,
       "selected_delta444_db": 0.04161810603183259,
       "selected_mac_saved_pct": 3.7085221133654644,
+      "fixable_by_all_deep_tiled": false,
+      "source_informed_binary_fallback_delta444_db": 0.04161810603183259,
+      "source_informed_binary_fallback_mac_saved_pct": 3.7085221133654644,
       "has_feasible_scalar_beta": true,
       "source_informed_candidate_oracle_delta444_db": 0.04161810603183259,
       "source_informed_candidate_oracle_mac_saved_pct": 3.7085221133654644
@@ -341,6 +416,9 @@
       "all_deep_mac_saved_pct": -0.9507193245465118,
       "selected_delta444_db": 0.038643099334602374,
       "selected_mac_saved_pct": -0.9507193245465118,
+      "fixable_by_all_deep_tiled": false,
+      "source_informed_binary_fallback_delta444_db": 0.038643099334602374,
+      "source_informed_binary_fallback_mac_saved_pct": -0.9507193245465118,
       "has_feasible_scalar_beta": true,
       "source_informed_candidate_oracle_delta444_db": 0.0689470704313933,
       "source_informed_candidate_oracle_mac_saved_pct": 3.7085221133654644
@@ -352,6 +430,9 @@
       "all_deep_mac_saved_pct": -0.9507193245465118,
       "selected_delta444_db": 0.14957235181351625,
       "selected_mac_saved_pct": 39.12455746750288,
+      "fixable_by_all_deep_tiled": true,
+      "source_informed_binary_fallback_delta444_db": 0.021682988829196906,
+      "source_informed_binary_fallback_mac_saved_pct": -0.9507193245465118,
       "has_feasible_scalar_beta": true,
       "source_informed_candidate_oracle_delta444_db": 0.08668250128177371,
       "source_informed_candidate_oracle_mac_saved_pct": 24.83718553404265
@@ -363,6 +444,9 @@
       "all_deep_mac_saved_pct": -0.9507193245465118,
       "selected_delta444_db": 0.08960077929296484,
       "selected_mac_saved_pct": 39.12455746750288,
+      "fixable_by_all_deep_tiled": false,
+      "source_informed_binary_fallback_delta444_db": 0.08960077929296484,
+      "source_informed_binary_fallback_mac_saved_pct": 39.12455746750288,
       "has_feasible_scalar_beta": true,
       "source_informed_candidate_oracle_delta444_db": 0.08960077929296484,
       "source_informed_candidate_oracle_mac_saved_pct": 39.12455746750288
@@ -374,6 +458,9 @@
       "all_deep_mac_saved_pct": -0.9507193245465118,
       "selected_delta444_db": 0.05871069897860255,
       "selected_mac_saved_pct": 39.12455746750288,
+      "fixable_by_all_deep_tiled": false,
+      "source_informed_binary_fallback_delta444_db": 0.05871069897860255,
+      "source_informed_binary_fallback_mac_saved_pct": 39.12455746750288,
       "has_feasible_scalar_beta": true,
       "source_informed_candidate_oracle_delta444_db": 0.05871069897860255,
       "source_informed_candidate_oracle_mac_saved_pct": 39.12455746750288
@@ -385,6 +472,9 @@
       "all_deep_mac_saved_pct": -0.9507193245465118,
       "selected_delta444_db": 0.048553085323170125,
       "selected_mac_saved_pct": 39.12455746750288,
+      "fixable_by_all_deep_tiled": false,
+      "source_informed_binary_fallback_delta444_db": 0.048553085323170125,
+      "source_informed_binary_fallback_mac_saved_pct": 39.12455746750288,
       "has_feasible_scalar_beta": true,
       "source_informed_candidate_oracle_delta444_db": 0.048553085323170125,
       "source_informed_candidate_oracle_mac_saved_pct": 39.12455746750288
@@ -396,6 +486,9 @@
       "all_deep_mac_saved_pct": -0.9507193245465118,
       "selected_delta444_db": 0.05324131442363751,
       "selected_mac_saved_pct": 39.12455746750288,
+      "fixable_by_all_deep_tiled": false,
+      "source_informed_binary_fallback_delta444_db": 0.05324131442363751,
+      "source_informed_binary_fallback_mac_saved_pct": 39.12455746750288,
       "has_feasible_scalar_beta": true,
       "source_informed_candidate_oracle_delta444_db": 0.05324131442363751,
       "source_informed_candidate_oracle_mac_saved_pct": 39.12455746750288
@@ -407,6 +500,9 @@
       "all_deep_mac_saved_pct": -0.9507193245465118,
       "selected_delta444_db": 0.02861852197050299,
       "selected_mac_saved_pct": 39.12455746750288,
+      "fixable_by_all_deep_tiled": false,
+      "source_informed_binary_fallback_delta444_db": 0.02861852197050299,
+      "source_informed_binary_fallback_mac_saved_pct": 39.12455746750288,
       "has_feasible_scalar_beta": true,
       "source_informed_candidate_oracle_delta444_db": 0.02861852197050299,
       "source_informed_candidate_oracle_mac_saved_pct": 39.12455746750288
@@ -418,6 +514,9 @@
       "all_deep_mac_saved_pct": -0.9507193245465118,
       "selected_delta444_db": 0.026250968778939336,
       "selected_mac_saved_pct": 26.702334078354173,
+      "fixable_by_all_deep_tiled": false,
+      "source_informed_binary_fallback_delta444_db": 0.026250968778939336,
+      "source_informed_binary_fallback_mac_saved_pct": 26.702334078354173,
       "has_feasible_scalar_beta": true,
       "source_informed_candidate_oracle_delta444_db": 0.04749522939057129,
       "source_informed_candidate_oracle_mac_saved_pct": 39.12455746750288
@@ -429,6 +528,9 @@
       "all_deep_mac_saved_pct": -0.9507193245465118,
       "selected_delta444_db": 0.05378021922829444,
       "selected_mac_saved_pct": 34.1556669197505,
+      "fixable_by_all_deep_tiled": false,
+      "source_informed_binary_fallback_delta444_db": 0.05378021922829444,
+      "source_informed_binary_fallback_mac_saved_pct": 34.1556669197505,
       "has_feasible_scalar_beta": true,
       "source_informed_candidate_oracle_delta444_db": 0.07566052475422876,
       "source_informed_candidate_oracle_mac_saved_pct": 39.12455746750288
@@ -440,6 +542,9 @@
       "all_deep_mac_saved_pct": -0.9507193245465118,
       "selected_delta444_db": 0.11233353853896481,
       "selected_mac_saved_pct": 36.64011219362669,
+      "fixable_by_all_deep_tiled": true,
+      "source_informed_binary_fallback_delta444_db": 0.02022833392008637,
+      "source_informed_binary_fallback_mac_saved_pct": -0.9507193245465118,
       "has_feasible_scalar_beta": true,
       "source_informed_candidate_oracle_delta444_db": 0.0999521233578009,
       "source_informed_candidate_oracle_mac_saved_pct": 34.1556669197505
@@ -451,6 +556,9 @@
       "all_deep_mac_saved_pct": -0.9507193245465118,
       "selected_delta444_db": 0.15549680002705843,
       "selected_mac_saved_pct": 36.64011219362669,
+      "fixable_by_all_deep_tiled": true,
+      "source_informed_binary_fallback_delta444_db": 0.023096852088006395,
+      "source_informed_binary_fallback_mac_saved_pct": -0.9507193245465118,
       "has_feasible_scalar_beta": true,
       "source_informed_candidate_oracle_delta444_db": 0.07443826075949647,
       "source_informed_candidate_oracle_mac_saved_pct": 22.35273877005034
@@ -462,6 +570,9 @@
       "all_deep_mac_saved_pct": -0.9507193245465118,
       "selected_delta444_db": 0.04619408324104386,
       "selected_mac_saved_pct": 26.702334078354173,
+      "fixable_by_all_deep_tiled": false,
+      "source_informed_binary_fallback_delta444_db": 0.04619408324104386,
+      "source_informed_binary_fallback_mac_saved_pct": 26.702334078354173,
       "has_feasible_scalar_beta": true,
       "source_informed_candidate_oracle_delta444_db": 0.08490558032968173,
       "source_informed_candidate_oracle_mac_saved_pct": 39.12455746750288
@@ -473,6 +584,9 @@
       "all_deep_mac_saved_pct": -0.9507193245465118,
       "selected_delta444_db": 0.08713196212806465,
       "selected_mac_saved_pct": 18.62244764189177,
+      "fixable_by_all_deep_tiled": false,
+      "source_informed_binary_fallback_delta444_db": 0.08713196212806465,
+      "source_informed_binary_fallback_mac_saved_pct": 18.62244764189177,
       "has_feasible_scalar_beta": true,
       "source_informed_candidate_oracle_delta444_db": 0.08713196212806465,
       "source_informed_candidate_oracle_mac_saved_pct": 18.62244764189177
@@ -484,6 +598,9 @@
       "all_deep_mac_saved_pct": -0.9507193245465118,
       "selected_delta444_db": 0.07931151871889425,
       "selected_mac_saved_pct": 9.768433960480028,
+      "fixable_by_all_deep_tiled": false,
+      "source_informed_binary_fallback_delta444_db": 0.07931151871889425,
+      "source_informed_binary_fallback_mac_saved_pct": 9.768433960480028,
       "has_feasible_scalar_beta": true,
       "source_informed_candidate_oracle_delta444_db": 0.07931151871889425,
       "source_informed_candidate_oracle_mac_saved_pct": 9.768433960480028
@@ -495,6 +612,9 @@
       "all_deep_mac_saved_pct": -0.9507193245465118,
       "selected_delta444_db": 0.04407094256481774,
       "selected_mac_saved_pct": -0.9507193245465118,
+      "fixable_by_all_deep_tiled": false,
+      "source_informed_binary_fallback_delta444_db": 0.04407094256481774,
+      "source_informed_binary_fallback_mac_saved_pct": -0.9507193245465118,
       "has_feasible_scalar_beta": true,
       "source_informed_candidate_oracle_delta444_db": 0.09367721208631888,
       "source_informed_candidate_oracle_mac_saved_pct": 7.438813241524034
@@ -506,6 +626,9 @@
       "all_deep_mac_saved_pct": -0.9507193245465118,
       "selected_delta444_db": 0.046639184822829256,
       "selected_mac_saved_pct": -0.9507193245465118,
+      "fixable_by_all_deep_tiled": false,
+      "source_informed_binary_fallback_delta444_db": 0.046639184822829256,
+      "source_informed_binary_fallback_mac_saved_pct": -0.9507193245465118,
       "has_feasible_scalar_beta": true,
       "source_informed_candidate_oracle_delta444_db": 0.09988712292772112,
       "source_informed_candidate_oracle_mac_saved_pct": 7.438813241524034
@@ -517,6 +640,9 @@
       "all_deep_mac_saved_pct": -0.9507193245465118,
       "selected_delta444_db": 0.02028363935539851,
       "selected_mac_saved_pct": 36.64011219362669,
+      "fixable_by_all_deep_tiled": false,
+      "source_informed_binary_fallback_delta444_db": 0.02028363935539851,
+      "source_informed_binary_fallback_mac_saved_pct": 36.64011219362669,
       "has_feasible_scalar_beta": true,
       "source_informed_candidate_oracle_delta444_db": 0.026107774186220983,
       "source_informed_candidate_oracle_mac_saved_pct": 39.12455746750288
@@ -528,6 +654,9 @@
       "all_deep_mac_saved_pct": -0.9507193245465118,
       "selected_delta444_db": 0.021564325060178753,
       "selected_mac_saved_pct": 24.83718553404265,
+      "fixable_by_all_deep_tiled": false,
+      "source_informed_binary_fallback_delta444_db": 0.021564325060178753,
+      "source_informed_binary_fallback_mac_saved_pct": 24.83718553404265,
       "has_feasible_scalar_beta": true,
       "source_informed_candidate_oracle_delta444_db": 0.045565850062133345,
       "source_informed_candidate_oracle_mac_saved_pct": 39.12455746750288
@@ -539,6 +668,9 @@
       "all_deep_mac_saved_pct": -0.9507193245465118,
       "selected_delta444_db": 0.03994571966667618,
       "selected_mac_saved_pct": 22.352744730514818,
+      "fixable_by_all_deep_tiled": false,
+      "source_informed_binary_fallback_delta444_db": 0.03994571966667618,
+      "source_informed_binary_fallback_mac_saved_pct": 22.352744730514818,
       "has_feasible_scalar_beta": true,
       "source_informed_candidate_oracle_delta444_db": 0.06902739552058423,
       "source_informed_candidate_oracle_mac_saved_pct": 34.1556669197505
@@ -550,6 +682,9 @@
       "all_deep_mac_saved_pct": -0.9507193245465118,
       "selected_delta444_db": 0.04642744997084641,
       "selected_mac_saved_pct": 13.963206203979784,
+      "fixable_by_all_deep_tiled": false,
+      "source_informed_binary_fallback_delta444_db": 0.04642744997084641,
+      "source_informed_binary_fallback_mac_saved_pct": 13.963206203979784,
       "has_feasible_scalar_beta": true,
       "source_informed_candidate_oracle_delta444_db": 0.08154505363256222,
       "source_informed_candidate_oracle_mac_saved_pct": 20.487596186203294
@@ -561,6 +696,9 @@
       "all_deep_mac_saved_pct": -0.9507193245465118,
       "selected_delta444_db": 0.05619172787406493,
       "selected_mac_saved_pct": 7.438813241524034,
+      "fixable_by_all_deep_tiled": false,
+      "source_informed_binary_fallback_delta444_db": 0.05619172787406493,
+      "source_informed_binary_fallback_mac_saved_pct": 7.438813241524034,
       "has_feasible_scalar_beta": true,
       "source_informed_candidate_oracle_delta444_db": 0.09727801146639291,
       "source_informed_candidate_oracle_mac_saved_pct": 16.447652967972093
@@ -572,6 +710,9 @@
       "all_deep_mac_saved_pct": -0.9507193245465118,
       "selected_delta444_db": 0.04473897039682432,
       "selected_mac_saved_pct": 24.217887314361864,
+      "fixable_by_all_deep_tiled": false,
+      "source_informed_binary_fallback_delta444_db": 0.04473897039682432,
+      "source_informed_binary_fallback_mac_saved_pct": 24.217887314361864,
       "has_feasible_scalar_beta": true,
       "source_informed_candidate_oracle_delta444_db": 0.0921027537513968,
       "source_informed_candidate_oracle_mac_saved_pct": 36.64011219362669
@@ -583,6 +724,9 @@
       "all_deep_mac_saved_pct": -0.9507193245465118,
       "selected_delta444_db": 0.03449673640440096,
       "selected_mac_saved_pct": 10.697381290001207,
+      "fixable_by_all_deep_tiled": false,
+      "source_informed_binary_fallback_delta444_db": 0.03449673640440096,
+      "source_informed_binary_fallback_mac_saved_pct": 10.697381290001207,
       "has_feasible_scalar_beta": true,
       "source_informed_candidate_oracle_delta444_db": 0.09204705783219855,
       "source_informed_candidate_oracle_mac_saved_pct": 26.702334078354173
@@ -594,6 +738,9 @@
       "all_deep_mac_saved_pct": -0.9507193245465118,
       "selected_delta444_db": 0.06574965217105874,
       "selected_mac_saved_pct": 8.367763551277452,
+      "fixable_by_all_deep_tiled": false,
+      "source_informed_binary_fallback_delta444_db": 0.06574965217105874,
+      "source_informed_binary_fallback_mac_saved_pct": 8.367763551277452,
       "has_feasible_scalar_beta": true,
       "source_informed_candidate_oracle_delta444_db": 0.06574965217105874,
       "source_informed_candidate_oracle_mac_saved_pct": 8.367763551277452
@@ -605,6 +752,9 @@
       "all_deep_mac_saved_pct": -0.9507193245465118,
       "selected_delta444_db": 0.03675476768534489,
       "selected_mac_saved_pct": -0.9507193245465118,
+      "fixable_by_all_deep_tiled": false,
+      "source_informed_binary_fallback_delta444_db": 0.03675476768534489,
+      "source_informed_binary_fallback_mac_saved_pct": -0.9507193245465118,
       "has_feasible_scalar_beta": true,
       "source_informed_candidate_oracle_delta444_db": 0.06340036858550309,
       "source_informed_candidate_oracle_mac_saved_pct": 3.7085221133654644
@@ -616,6 +766,9 @@
       "all_deep_mac_saved_pct": -0.9507193245465118,
       "selected_delta444_db": 0.05705986201718191,
       "selected_mac_saved_pct": -0.9507193245465118,
+      "fixable_by_all_deep_tiled": false,
+      "source_informed_binary_fallback_delta444_db": 0.05705986201718191,
+      "source_informed_binary_fallback_mac_saved_pct": -0.9507193245465118,
       "has_feasible_scalar_beta": true,
       "source_informed_candidate_oracle_delta444_db": 0.09730312615920464,
       "source_informed_candidate_oracle_mac_saved_pct": 3.7085221133654644
@@ -627,6 +780,9 @@
       "all_deep_mac_saved_pct": -0.9507193245465118,
       "selected_delta444_db": 0.7918083678455878,
       "selected_mac_saved_pct": 26.702334078354173,
+      "fixable_by_all_deep_tiled": false,
+      "source_informed_binary_fallback_delta444_db": 0.7918083678455878,
+      "source_informed_binary_fallback_mac_saved_pct": 26.702334078354173,
       "has_feasible_scalar_beta": false,
       "source_informed_candidate_oracle_delta444_db": 0.1148300636332754,
       "source_informed_candidate_oracle_mac_saved_pct": -0.9507193245465118
@@ -638,6 +794,9 @@
       "all_deep_mac_saved_pct": -0.9507193245465118,
       "selected_delta444_db": 0.17224640716424625,
       "selected_mac_saved_pct": 3.2440469584887555,
+      "fixable_by_all_deep_tiled": false,
+      "source_informed_binary_fallback_delta444_db": 0.17224640716424625,
+      "source_informed_binary_fallback_mac_saved_pct": 3.2440469584887555,
       "has_feasible_scalar_beta": false,
       "source_informed_candidate_oracle_delta444_db": 0.16364698629252866,
       "source_informed_candidate_oracle_mac_saved_pct": -0.9507193245465118
@@ -649,6 +808,9 @@
       "all_deep_mac_saved_pct": -0.9507193245465118,
       "selected_delta444_db": 0.16218691303970192,
       "selected_mac_saved_pct": 3.2440469584887555,
+      "fixable_by_all_deep_tiled": false,
+      "source_informed_binary_fallback_delta444_db": 0.16218691303970192,
+      "source_informed_binary_fallback_mac_saved_pct": 3.2440469584887555,
       "has_feasible_scalar_beta": false,
       "source_informed_candidate_oracle_delta444_db": 0.15166026470244331,
       "source_informed_candidate_oracle_mac_saved_pct": -0.9507193245465118
@@ -660,6 +822,9 @@
       "all_deep_mac_saved_pct": -0.9507193245465118,
       "selected_delta444_db": 0.15275492058925527,
       "selected_mac_saved_pct": 3.2440469584887555,
+      "fixable_by_all_deep_tiled": false,
+      "source_informed_binary_fallback_delta444_db": 0.15275492058925527,
+      "source_informed_binary_fallback_mac_saved_pct": 3.2440469584887555,
       "has_feasible_scalar_beta": false,
       "source_informed_candidate_oracle_delta444_db": 0.14375507576778135,
       "source_informed_candidate_oracle_mac_saved_pct": -0.9507193245465118
@@ -671,6 +836,9 @@
       "all_deep_mac_saved_pct": -0.9507193245465118,
       "selected_delta444_db": 0.1565408045038452,
       "selected_mac_saved_pct": 3.2440469584887555,
+      "fixable_by_all_deep_tiled": false,
+      "source_informed_binary_fallback_delta444_db": 0.1565408045038452,
+      "source_informed_binary_fallback_mac_saved_pct": 3.2440469584887555,
       "has_feasible_scalar_beta": false,
       "source_informed_candidate_oracle_delta444_db": 0.14516776894354005,
       "source_informed_candidate_oracle_mac_saved_pct": -0.9507193245465118
@@ -682,6 +850,9 @@
       "all_deep_mac_saved_pct": -0.9507193245465118,
       "selected_delta444_db": 0.019117348651942926,
       "selected_mac_saved_pct": 24.217887314361864,
+      "fixable_by_all_deep_tiled": false,
+      "source_informed_binary_fallback_delta444_db": 0.019117348651942926,
+      "source_informed_binary_fallback_mac_saved_pct": 24.217887314361864,
       "has_feasible_scalar_beta": true,
       "source_informed_candidate_oracle_delta444_db": 0.05142119174611012,
       "source_informed_candidate_oracle_mac_saved_pct": 39.12455746750288
@@ -693,6 +864,9 @@
       "all_deep_mac_saved_pct": -0.9507193245465118,
       "selected_delta444_db": 0.022914709943605543,
       "selected_mac_saved_pct": 16.757299097580248,
+      "fixable_by_all_deep_tiled": false,
+      "source_informed_binary_fallback_delta444_db": 0.022914709943605543,
+      "source_informed_binary_fallback_mac_saved_pct": 16.757299097580248,
       "has_feasible_scalar_beta": true,
       "source_informed_candidate_oracle_delta444_db": 0.04940749963060238,
       "source_informed_candidate_oracle_mac_saved_pct": 29.186777862114244
@@ -704,6 +878,9 @@
       "all_deep_mac_saved_pct": -0.9507193245465118,
       "selected_delta444_db": 0.044378210281992424,
       "selected_mac_saved_pct": 16.757299097580248,
+      "fixable_by_all_deep_tiled": false,
+      "source_informed_binary_fallback_delta444_db": 0.044378210281992424,
+      "source_informed_binary_fallback_mac_saved_pct": 16.757299097580248,
       "has_feasible_scalar_beta": true,
       "source_informed_candidate_oracle_delta444_db": 0.07642289698376853,
       "source_informed_candidate_oracle_mac_saved_pct": 26.702334078354173
@@ -715,6 +892,9 @@
       "all_deep_mac_saved_pct": -0.9507193245465118,
       "selected_delta444_db": 0.03226976252475189,
       "selected_mac_saved_pct": 5.573664697212511,
+      "fixable_by_all_deep_tiled": false,
+      "source_informed_binary_fallback_delta444_db": 0.03226976252475189,
+      "source_informed_binary_fallback_mac_saved_pct": 5.573664697212511,
       "has_feasible_scalar_beta": true,
       "source_informed_candidate_oracle_delta444_db": 0.07958551057319432,
       "source_informed_candidate_oracle_mac_saved_pct": 14.892150553268724
@@ -726,6 +906,9 @@
       "all_deep_mac_saved_pct": -0.9507193245465118,
       "selected_delta444_db": 0.03663469136663307,
       "selected_mac_saved_pct": 3.2440469584887555,
+      "fixable_by_all_deep_tiled": false,
+      "source_informed_binary_fallback_delta444_db": 0.03663469136663307,
+      "source_informed_binary_fallback_mac_saved_pct": 3.2440469584887555,
       "has_feasible_scalar_beta": true,
       "source_informed_candidate_oracle_delta444_db": 0.09515759176233549,
       "source_informed_candidate_oracle_mac_saved_pct": 10.232909115356737
@@ -737,6 +920,9 @@
       "all_deep_mac_saved_pct": -0.9507193245465118,
       "selected_delta444_db": 0.032176337658283996,
       "selected_mac_saved_pct": 24.217887314361864,
+      "fixable_by_all_deep_tiled": false,
+      "source_informed_binary_fallback_delta444_db": 0.032176337658283996,
+      "source_informed_binary_fallback_mac_saved_pct": 24.217887314361864,
       "has_feasible_scalar_beta": true,
       "source_informed_candidate_oracle_delta444_db": 0.08332095699321945,
       "source_informed_candidate_oracle_mac_saved_pct": 39.12455746750288
@@ -748,6 +934,9 @@
       "all_deep_mac_saved_pct": -0.9507193245465118,
       "selected_delta444_db": 0.04454393053989567,
       "selected_mac_saved_pct": 16.757299097580248,
+      "fixable_by_all_deep_tiled": false,
+      "source_informed_binary_fallback_delta444_db": 0.04454393053989567,
+      "source_informed_binary_fallback_mac_saved_pct": 16.757299097580248,
       "has_feasible_scalar_beta": true,
       "source_informed_candidate_oracle_delta444_db": 0.06539860971500557,
       "source_informed_candidate_oracle_mac_saved_pct": 26.702334078354173
@@ -759,6 +948,9 @@
       "all_deep_mac_saved_pct": -0.9507193245465118,
       "selected_delta444_db": 0.08788590682288244,
       "selected_mac_saved_pct": 16.757299097580248,
+      "fixable_by_all_deep_tiled": false,
+      "source_informed_binary_fallback_delta444_db": 0.08788590682288244,
+      "source_informed_binary_fallback_mac_saved_pct": 16.757299097580248,
       "has_feasible_scalar_beta": true,
       "source_informed_candidate_oracle_delta444_db": 0.08788590682288244,
       "source_informed_candidate_oracle_mac_saved_pct": 16.757299097580248
@@ -770,6 +962,9 @@
       "all_deep_mac_saved_pct": -0.9507193245465118,
       "selected_delta444_db": 0.07532667461007189,
       "selected_mac_saved_pct": 7.903288396400743,
+      "fixable_by_all_deep_tiled": false,
+      "source_informed_binary_fallback_delta444_db": 0.07532667461007189,
+      "source_informed_binary_fallback_mac_saved_pct": 7.903288396400743,
       "has_feasible_scalar_beta": true,
       "source_informed_candidate_oracle_delta444_db": 0.07532667461007189,
       "source_informed_candidate_oracle_mac_saved_pct": 7.903288396400743
@@ -781,6 +976,9 @@
       "all_deep_mac_saved_pct": -0.9507193245465118,
       "selected_delta444_db": 0.05134939441447686,
       "selected_mac_saved_pct": -0.9507193245465118,
+      "fixable_by_all_deep_tiled": false,
+      "source_informed_binary_fallback_delta444_db": 0.05134939441447686,
+      "source_informed_binary_fallback_mac_saved_pct": -0.9507193245465118,
       "has_feasible_scalar_beta": true,
       "source_informed_candidate_oracle_delta444_db": 0.07577166931204123,
       "source_informed_candidate_oracle_mac_saved_pct": 3.2440469584887555
@@ -792,6 +990,9 @@
       "all_deep_mac_saved_pct": -0.9507193245465118,
       "selected_delta444_db": 0.22054901878298272,
       "selected_mac_saved_pct": 39.12455746750288,
+      "fixable_by_all_deep_tiled": true,
+      "source_informed_binary_fallback_delta444_db": 0.033003706046545324,
+      "source_informed_binary_fallback_mac_saved_pct": -0.9507193245465118,
       "has_feasible_scalar_beta": true,
       "source_informed_candidate_oracle_delta444_db": 0.07999795801451841,
       "source_informed_candidate_oracle_mac_saved_pct": 24.217887314361864
@@ -803,6 +1004,9 @@
       "all_deep_mac_saved_pct": -0.9507193245465118,
       "selected_delta444_db": 0.11772257798355522,
       "selected_mac_saved_pct": 31.671221645874315,
+      "fixable_by_all_deep_tiled": true,
+      "source_informed_binary_fallback_delta444_db": 0.027149586442703832,
+      "source_informed_binary_fallback_mac_saved_pct": -0.9507193245465118,
       "has_feasible_scalar_beta": true,
       "source_informed_candidate_oracle_delta444_db": 0.08237712086569784,
       "source_informed_candidate_oracle_mac_saved_pct": 24.217887314361864
@@ -814,6 +1018,9 @@
       "all_deep_mac_saved_pct": -0.9507193245465118,
       "selected_delta444_db": 0.15831682460133412,
       "selected_mac_saved_pct": 34.1556669197505,
+      "fixable_by_all_deep_tiled": true,
+      "source_informed_binary_fallback_delta444_db": 0.03343361446952179,
+      "source_informed_binary_fallback_mac_saved_pct": -0.9507193245465118,
       "has_feasible_scalar_beta": true,
       "source_informed_candidate_oracle_delta444_db": 0.09132615948372913,
       "source_informed_candidate_oracle_mac_saved_pct": 20.642416270775133
@@ -825,6 +1032,9 @@
       "all_deep_mac_saved_pct": -0.9507193245465118,
       "selected_delta444_db": 0.20195876329206103,
       "selected_mac_saved_pct": 39.12455746750288,
+      "fixable_by_all_deep_tiled": true,
+      "source_informed_binary_fallback_delta444_db": 0.023293138991365533,
+      "source_informed_binary_fallback_mac_saved_pct": -0.9507193245465118,
       "has_feasible_scalar_beta": true,
       "source_informed_candidate_oracle_delta444_db": 0.08599578560548009,
       "source_informed_candidate_oracle_mac_saved_pct": 20.023121031326585
@@ -836,6 +1046,9 @@
       "all_deep_mac_saved_pct": -0.9507193245465118,
       "selected_delta444_db": 0.16736874897593926,
       "selected_mac_saved_pct": 36.64011219362669,
+      "fixable_by_all_deep_tiled": true,
+      "source_informed_binary_fallback_delta444_db": 0.017535960174805246,
+      "source_informed_binary_fallback_mac_saved_pct": -0.9507193245465118,
       "has_feasible_scalar_beta": true,
       "source_informed_candidate_oracle_delta444_db": 0.06995997906912589,
       "source_informed_candidate_oracle_mac_saved_pct": 15.828351768059068
@@ -847,6 +1060,9 @@
       "all_deep_mac_saved_pct": -0.9507193245465118,
       "selected_delta444_db": 0.06905923344760627,
       "selected_mac_saved_pct": 24.217887314361864,
+      "fixable_by_all_deep_tiled": false,
+      "source_informed_binary_fallback_delta444_db": 0.06905923344760627,
+      "source_informed_binary_fallback_mac_saved_pct": 24.217887314361864,
       "has_feasible_scalar_beta": true,
       "source_informed_candidate_oracle_delta444_db": 0.06905923344760627,
       "source_informed_candidate_oracle_mac_saved_pct": 24.217887314361864
@@ -858,6 +1074,9 @@
       "all_deep_mac_saved_pct": -0.9507193245465118,
       "selected_delta444_db": 0.043795393269492874,
       "selected_mac_saved_pct": 14.892150553268724,
+      "fixable_by_all_deep_tiled": false,
+      "source_informed_binary_fallback_delta444_db": 0.043795393269492874,
+      "source_informed_binary_fallback_mac_saved_pct": 14.892150553268724,
       "has_feasible_scalar_beta": true,
       "source_informed_candidate_oracle_delta444_db": 0.09279109511648956,
       "source_informed_candidate_oracle_mac_saved_pct": 29.186777862114244
@@ -869,6 +1088,9 @@
       "all_deep_mac_saved_pct": -0.9507193245465118,
       "selected_delta444_db": 0.08517859857785555,
       "selected_mac_saved_pct": 16.757299097580248,
+      "fixable_by_all_deep_tiled": false,
+      "source_informed_binary_fallback_delta444_db": 0.08517859857785555,
+      "source_informed_binary_fallback_mac_saved_pct": 16.757299097580248,
       "has_feasible_scalar_beta": true,
       "source_informed_candidate_oracle_delta444_db": 0.08517859857785555,
       "source_informed_candidate_oracle_mac_saved_pct": 16.757299097580248
@@ -880,6 +1102,9 @@
       "all_deep_mac_saved_pct": -0.9507193245465118,
       "selected_delta444_db": 0.08182363717156443,
       "selected_mac_saved_pct": 12.09805765966826,
+      "fixable_by_all_deep_tiled": false,
+      "source_informed_binary_fallback_delta444_db": 0.08182363717156443,
+      "source_informed_binary_fallback_mac_saved_pct": 12.09805765966826,
       "has_feasible_scalar_beta": true,
       "source_informed_candidate_oracle_delta444_db": 0.08182363717156443,
       "source_informed_candidate_oracle_mac_saved_pct": 12.09805765966826
@@ -891,6 +1116,9 @@
       "all_deep_mac_saved_pct": -0.9507193245465118,
       "selected_delta444_db": 0.0614018035182296,
       "selected_mac_saved_pct": 5.573664697212511,
+      "fixable_by_all_deep_tiled": false,
+      "source_informed_binary_fallback_delta444_db": 0.0614018035182296,
+      "source_informed_binary_fallback_mac_saved_pct": 5.573664697212511,
       "has_feasible_scalar_beta": true,
       "source_informed_candidate_oracle_delta444_db": 0.0796871434388992,
       "source_informed_candidate_oracle_mac_saved_pct": 9.768433960480028
@@ -902,6 +1130,9 @@
       "all_deep_mac_saved_pct": -0.9507193245465118,
       "selected_delta444_db": 0.07131919303803887,
       "selected_mac_saved_pct": 39.12455746750288,
+      "fixable_by_all_deep_tiled": false,
+      "source_informed_binary_fallback_delta444_db": 0.07131919303803887,
+      "source_informed_binary_fallback_mac_saved_pct": 39.12455746750288,
       "has_feasible_scalar_beta": true,
       "source_informed_candidate_oracle_delta444_db": 0.07131919303803887,
       "source_informed_candidate_oracle_mac_saved_pct": 39.12455746750288
@@ -913,6 +1144,9 @@
       "all_deep_mac_saved_pct": -0.9507193245465118,
       "selected_delta444_db": 0.038387472204254994,
       "selected_mac_saved_pct": 36.64011219362669,
+      "fixable_by_all_deep_tiled": false,
+      "source_informed_binary_fallback_delta444_db": 0.038387472204254994,
+      "source_informed_binary_fallback_mac_saved_pct": 36.64011219362669,
       "has_feasible_scalar_beta": true,
       "source_informed_candidate_oracle_delta444_db": 0.04115163279167684,
       "source_informed_candidate_oracle_mac_saved_pct": 39.12455746750288
@@ -924,6 +1158,9 @@
       "all_deep_mac_saved_pct": -0.9507193245465118,
       "selected_delta444_db": 0.054263855097375156,
       "selected_mac_saved_pct": 39.12455746750288,
+      "fixable_by_all_deep_tiled": false,
+      "source_informed_binary_fallback_delta444_db": 0.054263855097375156,
+      "source_informed_binary_fallback_mac_saved_pct": 39.12455746750288,
       "has_feasible_scalar_beta": true,
       "source_informed_candidate_oracle_delta444_db": 0.054263855097375156,
       "source_informed_candidate_oracle_mac_saved_pct": 39.12455746750288
@@ -935,6 +1172,9 @@
       "all_deep_mac_saved_pct": -0.9507193245465118,
       "selected_delta444_db": 0.11730848369884354,
       "selected_mac_saved_pct": 39.12455746750288,
+      "fixable_by_all_deep_tiled": true,
+      "source_informed_binary_fallback_delta444_db": 0.012040936105790684,
+      "source_informed_binary_fallback_mac_saved_pct": -0.9507193245465118,
       "has_feasible_scalar_beta": true,
       "source_informed_candidate_oracle_delta444_db": 0.07191240807319023,
       "source_informed_candidate_oracle_mac_saved_pct": 29.186777862114244
@@ -946,6 +1186,9 @@
       "all_deep_mac_saved_pct": -0.9507193245465118,
       "selected_delta444_db": 0.18397659316143775,
       "selected_mac_saved_pct": 39.12455746750288,
+      "fixable_by_all_deep_tiled": true,
+      "source_informed_binary_fallback_delta444_db": 0.015759041875513528,
+      "source_informed_binary_fallback_mac_saved_pct": -0.9507193245465118,
       "has_feasible_scalar_beta": true,
       "source_informed_candidate_oracle_delta444_db": 0.07433038044262807,
       "source_informed_candidate_oracle_mac_saved_pct": 18.1579754672473
@@ -957,6 +1200,9 @@
       "all_deep_mac_saved_pct": -0.9507193245465118,
       "selected_delta444_db": 0.1713693113593095,
       "selected_mac_saved_pct": 39.12455746750288,
+      "fixable_by_all_deep_tiled": true,
+      "source_informed_binary_fallback_delta444_db": 0.029862755024025172,
+      "source_informed_binary_fallback_mac_saved_pct": -0.9507193245465118,
       "has_feasible_scalar_beta": true,
       "source_informed_candidate_oracle_delta444_db": 0.0710279879942618,
       "source_informed_candidate_oracle_mac_saved_pct": 24.217887314361864
@@ -968,6 +1214,9 @@
       "all_deep_mac_saved_pct": -0.9507193245465118,
       "selected_delta444_db": 0.11537481774954726,
       "selected_mac_saved_pct": 31.671221645874315,
+      "fixable_by_all_deep_tiled": true,
+      "source_informed_binary_fallback_delta444_db": 0.027085535419308936,
+      "source_informed_binary_fallback_mac_saved_pct": -0.9507193245465118,
       "has_feasible_scalar_beta": true,
       "source_informed_candidate_oracle_delta444_db": 0.09256848083251631,
       "source_informed_candidate_oracle_mac_saved_pct": 29.186777862114244
@@ -979,6 +1228,9 @@
       "all_deep_mac_saved_pct": -0.9507193245465118,
       "selected_delta444_db": 0.18523250465500438,
       "selected_mac_saved_pct": 36.64011219362669,
+      "fixable_by_all_deep_tiled": true,
+      "source_informed_binary_fallback_delta444_db": 0.0303271717031453,
+      "source_informed_binary_fallback_mac_saved_pct": -0.9507193245465118,
       "has_feasible_scalar_beta": true,
       "source_informed_candidate_oracle_delta444_db": 0.09392055517144393,
       "source_informed_candidate_oracle_mac_saved_pct": 24.217887314361864
@@ -990,6 +1242,9 @@
       "all_deep_mac_saved_pct": -0.9507193245465118,
       "selected_delta444_db": 0.2648497714738067,
       "selected_mac_saved_pct": 39.12455746750288,
+      "fixable_by_all_deep_tiled": true,
+      "source_informed_binary_fallback_delta444_db": 0.032960438285710776,
+      "source_informed_binary_fallback_mac_saved_pct": -0.9507193245465118,
       "has_feasible_scalar_beta": true,
       "source_informed_candidate_oracle_delta444_db": 0.06776427198670243,
       "source_informed_candidate_oracle_mac_saved_pct": 11.633582504791551
@@ -1001,6 +1256,9 @@
       "all_deep_mac_saved_pct": -0.9507193245465118,
       "selected_delta444_db": 0.26231170242190466,
       "selected_mac_saved_pct": 36.64011219362669,
+      "fixable_by_all_deep_tiled": true,
+      "source_informed_binary_fallback_delta444_db": 0.037287852441701,
+      "source_informed_binary_fallback_mac_saved_pct": -0.9507193245465118,
       "has_feasible_scalar_beta": true,
       "source_informed_candidate_oracle_delta444_db": 0.07367750956282318,
       "source_informed_candidate_oracle_mac_saved_pct": 11.633582504791551
@@ -1012,6 +1270,9 @@
       "all_deep_mac_saved_pct": -0.9507193245465118,
       "selected_delta444_db": 0.03246858220461144,
       "selected_mac_saved_pct": 26.702334078354173,
+      "fixable_by_all_deep_tiled": false,
+      "source_informed_binary_fallback_delta444_db": 0.03246858220461144,
+      "source_informed_binary_fallback_mac_saved_pct": 26.702334078354173,
       "has_feasible_scalar_beta": true,
       "source_informed_candidate_oracle_delta444_db": 0.04404860868652752,
       "source_informed_candidate_oracle_mac_saved_pct": 34.1556669197505
@@ -1023,6 +1284,9 @@
       "all_deep_mac_saved_pct": -0.9507193245465118,
       "selected_delta444_db": 0.04545855532584414,
       "selected_mac_saved_pct": 16.757299097580248,
+      "fixable_by_all_deep_tiled": false,
+      "source_informed_binary_fallback_delta444_db": 0.04545855532584414,
+      "source_informed_binary_fallback_mac_saved_pct": 16.757299097580248,
       "has_feasible_scalar_beta": true,
       "source_informed_candidate_oracle_delta444_db": 0.0872760758479727,
       "source_informed_candidate_oracle_mac_saved_pct": 29.186777862114244
@@ -1034,6 +1298,9 @@
       "all_deep_mac_saved_pct": -0.9507193245465118,
       "selected_delta444_db": 0.07958794343737205,
       "selected_mac_saved_pct": 14.892150553268724,
+      "fixable_by_all_deep_tiled": false,
+      "source_informed_binary_fallback_delta444_db": 0.07958794343737205,
+      "source_informed_binary_fallback_mac_saved_pct": 14.892150553268724,
       "has_feasible_scalar_beta": true,
       "source_informed_candidate_oracle_delta444_db": 0.07958794343737205,
       "source_informed_candidate_oracle_mac_saved_pct": 14.892150553268724
@@ -1045,6 +1312,9 @@
       "all_deep_mac_saved_pct": -0.9507193245465118,
       "selected_delta444_db": 0.07805295277163674,
       "selected_mac_saved_pct": 10.232909115356737,
+      "fixable_by_all_deep_tiled": false,
+      "source_informed_binary_fallback_delta444_db": 0.07805295277163674,
+      "source_informed_binary_fallback_mac_saved_pct": 10.232909115356737,
       "has_feasible_scalar_beta": true,
       "source_informed_candidate_oracle_delta444_db": 0.09485429971677868,
       "source_informed_candidate_oracle_mac_saved_pct": 12.56252983431273
@@ -1056,6 +1326,9 @@
       "all_deep_mac_saved_pct": -0.9507193245465118,
       "selected_delta444_db": 0.041605662899923825,
       "selected_mac_saved_pct": -0.9507193245465118,
+      "fixable_by_all_deep_tiled": false,
+      "source_informed_binary_fallback_delta444_db": 0.041605662899923825,
+      "source_informed_binary_fallback_mac_saved_pct": -0.9507193245465118,
       "has_feasible_scalar_beta": true,
       "source_informed_candidate_oracle_delta444_db": 0.06154300557754718,
       "source_informed_candidate_oracle_mac_saved_pct": 3.2440469584887555
@@ -1067,6 +1340,9 @@
       "all_deep_mac_saved_pct": -0.9507193245465118,
       "selected_delta444_db": 0.03221433687403365,
       "selected_mac_saved_pct": 39.12455746750288,
+      "fixable_by_all_deep_tiled": false,
+      "source_informed_binary_fallback_delta444_db": 0.03221433687403365,
+      "source_informed_binary_fallback_mac_saved_pct": 39.12455746750288,
       "has_feasible_scalar_beta": true,
       "source_informed_candidate_oracle_delta444_db": 0.03221433687403365,
       "source_informed_candidate_oracle_mac_saved_pct": 39.12455746750288
@@ -1078,6 +1354,9 @@
       "all_deep_mac_saved_pct": -0.9507193245465118,
       "selected_delta444_db": 0.054943807713982794,
       "selected_mac_saved_pct": 22.352744730514818,
+      "fixable_by_all_deep_tiled": false,
+      "source_informed_binary_fallback_delta444_db": 0.054943807713982794,
+      "source_informed_binary_fallback_mac_saved_pct": 22.352744730514818,
       "has_feasible_scalar_beta": true,
       "source_informed_candidate_oracle_delta444_db": 0.0787199262773299,
       "source_informed_candidate_oracle_mac_saved_pct": 31.671221645874315
@@ -1089,6 +1368,9 @@
       "all_deep_mac_saved_pct": -0.9507193245465118,
       "selected_delta444_db": 0.10487373834448238,
       "selected_mac_saved_pct": 24.83718553404265,
+      "fixable_by_all_deep_tiled": true,
+      "source_informed_binary_fallback_delta444_db": 0.021898913879074586,
+      "source_informed_binary_fallback_mac_saved_pct": -0.9507193245465118,
       "has_feasible_scalar_beta": true,
       "source_informed_candidate_oracle_delta444_db": 0.07715443292359264,
       "source_informed_candidate_oracle_mac_saved_pct": 16.757299097580248
@@ -1100,6 +1382,9 @@
       "all_deep_mac_saved_pct": -0.9507193245465118,
       "selected_delta444_db": 0.15250065697156415,
       "selected_mac_saved_pct": 27.32162931780272,
+      "fixable_by_all_deep_tiled": true,
+      "source_informed_binary_fallback_delta444_db": 0.03005380138454971,
+      "source_informed_binary_fallback_mac_saved_pct": -0.9507193245465118,
       "has_feasible_scalar_beta": true,
       "source_informed_candidate_oracle_delta444_db": 0.09537257713219713,
       "source_informed_candidate_oracle_mac_saved_pct": 16.912119182152086
@@ -1111,6 +1396,9 @@
       "all_deep_mac_saved_pct": -0.9507193245465118,
       "selected_delta444_db": 0.1430585813531602,
       "selected_mac_saved_pct": 19.396562965912157,
+      "fixable_by_all_deep_tiled": true,
+      "source_informed_binary_fallback_delta444_db": 0.040479912901302324,
+      "source_informed_binary_fallback_mac_saved_pct": -0.9507193245465118,
       "has_feasible_scalar_beta": true,
       "source_informed_candidate_oracle_delta444_db": 0.07082155403431259,
       "source_informed_candidate_oracle_mac_saved_pct": 9.923260005516344
@@ -1122,6 +1410,9 @@
       "all_deep_mac_saved_pct": -0.9507193245465118,
       "selected_delta444_db": 0.03940242969478766,
       "selected_mac_saved_pct": 26.702334078354173,
+      "fixable_by_all_deep_tiled": false,
+      "source_informed_binary_fallback_delta444_db": 0.03940242969478766,
+      "source_informed_binary_fallback_mac_saved_pct": 26.702334078354173,
       "has_feasible_scalar_beta": true,
       "source_informed_candidate_oracle_delta444_db": 0.07575779357498641,
       "source_informed_candidate_oracle_mac_saved_pct": 39.12455746750288
@@ -1133,6 +1424,9 @@
       "all_deep_mac_saved_pct": -0.9507193245465118,
       "selected_delta444_db": 0.03490949272347775,
       "selected_mac_saved_pct": 24.217887314361864,
+      "fixable_by_all_deep_tiled": false,
+      "source_informed_binary_fallback_delta444_db": 0.03490949272347775,
+      "source_informed_binary_fallback_mac_saved_pct": 24.217887314361864,
       "has_feasible_scalar_beta": true,
       "source_informed_candidate_oracle_delta444_db": 0.08810208466442558,
       "source_informed_candidate_oracle_mac_saved_pct": 39.12455746750288
@@ -1144,6 +1438,9 @@
       "all_deep_mac_saved_pct": -0.9507193245465118,
       "selected_delta444_db": 0.09307215896016575,
       "selected_mac_saved_pct": 24.217887314361864,
+      "fixable_by_all_deep_tiled": false,
+      "source_informed_binary_fallback_delta444_db": 0.09307215896016575,
+      "source_informed_binary_fallback_mac_saved_pct": 24.217887314361864,
       "has_feasible_scalar_beta": true,
       "source_informed_candidate_oracle_delta444_db": 0.09307215896016575,
       "source_informed_candidate_oracle_mac_saved_pct": 24.217887314361864
@@ -1155,6 +1452,9 @@
       "all_deep_mac_saved_pct": -0.9507193245465118,
       "selected_delta444_db": 0.12184730351357087,
       "selected_mac_saved_pct": 22.972039969963365,
+      "fixable_by_all_deep_tiled": true,
+      "source_informed_binary_fallback_delta444_db": 0.0184813632477748,
+      "source_informed_binary_fallback_mac_saved_pct": -0.9507193245465118,
       "has_feasible_scalar_beta": true,
       "source_informed_candidate_oracle_delta444_db": 0.07806225912161724,
       "source_informed_candidate_oracle_mac_saved_pct": 14.582498463196092
@@ -1166,6 +1466,9 @@
       "all_deep_mac_saved_pct": -0.9507193245465118,
       "selected_delta444_db": 0.12599721962029858,
       "selected_mac_saved_pct": 14.11802926878386,
+      "fixable_by_all_deep_tiled": true,
+      "source_informed_binary_fallback_delta444_db": 0.034112232792846635,
+      "source_informed_binary_fallback_mac_saved_pct": -0.9507193245465118,
       "has_feasible_scalar_beta": true,
       "source_informed_candidate_oracle_delta444_db": 0.0676780153969905,
       "source_informed_candidate_oracle_mac_saved_pct": 7.438813241524034
@@ -1177,6 +1480,9 @@
       "all_deep_mac_saved_pct": -0.9507193245465118,
       "selected_delta444_db": 0.12735916001482017,
       "selected_mac_saved_pct": 31.671221645874315,
+      "fixable_by_all_deep_tiled": true,
+      "source_informed_binary_fallback_delta444_db": 0.04428706052779048,
+      "source_informed_binary_fallback_mac_saved_pct": -0.9507193245465118,
       "has_feasible_scalar_beta": true,
       "source_informed_candidate_oracle_delta444_db": 0.07103840354901561,
       "source_informed_candidate_oracle_mac_saved_pct": 18.62244764189177
@@ -1188,6 +1494,9 @@
       "all_deep_mac_saved_pct": -0.9507193245465118,
       "selected_delta444_db": 0.09197292625414812,
       "selected_mac_saved_pct": 18.62244764189177,
+      "fixable_by_all_deep_tiled": false,
+      "source_informed_binary_fallback_delta444_db": 0.09197292625414812,
+      "source_informed_binary_fallback_mac_saved_pct": 18.62244764189177,
       "has_feasible_scalar_beta": true,
       "source_informed_candidate_oracle_delta444_db": 0.09197292625414812,
       "source_informed_candidate_oracle_mac_saved_pct": 18.62244764189177
@@ -1199,6 +1508,9 @@
       "all_deep_mac_saved_pct": -0.9507193245465118,
       "selected_delta444_db": 0.12019393915865852,
       "selected_mac_saved_pct": 18.62244764189177,
+      "fixable_by_all_deep_tiled": true,
+      "source_informed_binary_fallback_delta444_db": 0.04598777515175858,
+      "source_informed_binary_fallback_mac_saved_pct": -0.9507193245465118,
       "has_feasible_scalar_beta": true,
       "source_informed_candidate_oracle_delta444_db": 0.07152234685521316,
       "source_informed_candidate_oracle_mac_saved_pct": 11.633582504791551
@@ -1210,6 +1522,9 @@
       "all_deep_mac_saved_pct": -0.9507193245465118,
       "selected_delta444_db": 0.09605485593469501,
       "selected_mac_saved_pct": 11.633582504791551,
+      "fixable_by_all_deep_tiled": false,
+      "source_informed_binary_fallback_delta444_db": 0.09605485593469501,
+      "source_informed_binary_fallback_mac_saved_pct": 11.633582504791551,
       "has_feasible_scalar_beta": true,
       "source_informed_candidate_oracle_delta444_db": 0.09605485593469501,
       "source_informed_candidate_oracle_mac_saved_pct": 11.633582504791551
@@ -1221,6 +1536,9 @@
       "all_deep_mac_saved_pct": -0.9507193245465118,
       "selected_delta444_db": 0.1128041055496952,
       "selected_mac_saved_pct": 7.438813241524034,
+      "fixable_by_all_deep_tiled": true,
+      "source_informed_binary_fallback_delta444_db": 0.07500859042155743,
+      "source_informed_binary_fallback_mac_saved_pct": -0.9507193245465118,
       "has_feasible_scalar_beta": true,
       "source_informed_candidate_oracle_delta444_db": 0.09245028738918987,
       "source_informed_candidate_oracle_mac_saved_pct": 3.2440469584887555
@@ -1232,6 +1550,9 @@
       "all_deep_mac_saved_pct": -0.9507193245465118,
       "selected_delta444_db": 0.07311448106908078,
       "selected_mac_saved_pct": 29.186777862114244,
+      "fixable_by_all_deep_tiled": false,
+      "source_informed_binary_fallback_delta444_db": 0.07311448106908078,
+      "source_informed_binary_fallback_mac_saved_pct": 29.186777862114244,
       "has_feasible_scalar_beta": true,
       "source_informed_candidate_oracle_delta444_db": 0.08346298903043385,
       "source_informed_candidate_oracle_mac_saved_pct": 31.671221645874315
@@ -1243,6 +1564,9 @@
       "all_deep_mac_saved_pct": -0.9507193245465118,
       "selected_delta444_db": 0.0768282564948514,
       "selected_mac_saved_pct": 22.35273877005034,
+      "fixable_by_all_deep_tiled": false,
+      "source_informed_binary_fallback_delta444_db": 0.0768282564948514,
+      "source_informed_binary_fallback_mac_saved_pct": 22.35273877005034,
       "has_feasible_scalar_beta": true,
       "source_informed_candidate_oracle_delta444_db": 0.08602777408028005,
       "source_informed_candidate_oracle_mac_saved_pct": 24.217887314361864
@@ -1254,6 +1578,9 @@
       "all_deep_mac_saved_pct": -0.9507193245465118,
       "selected_delta444_db": 0.11143387441235247,
       "selected_mac_saved_pct": 22.35273877005034,
+      "fixable_by_all_deep_tiled": true,
+      "source_informed_binary_fallback_delta444_db": 0.035674936318705504,
+      "source_informed_binary_fallback_mac_saved_pct": -0.9507193245465118,
       "has_feasible_scalar_beta": true,
       "source_informed_candidate_oracle_delta444_db": 0.09341348245694324,
       "source_informed_candidate_oracle_mac_saved_pct": 18.62244764189177
@@ -1265,6 +1592,9 @@
       "all_deep_mac_saved_pct": -0.9507193245465118,
       "selected_delta444_db": 0.16555172216803912,
       "selected_mac_saved_pct": 22.35273877005034,
+      "fixable_by_all_deep_tiled": true,
+      "source_informed_binary_fallback_delta444_db": 0.04731656129646698,
+      "source_informed_binary_fallback_mac_saved_pct": -0.9507193245465118,
       "has_feasible_scalar_beta": true,
       "source_informed_candidate_oracle_delta444_db": 0.09149029129028859,
       "source_informed_candidate_oracle_mac_saved_pct": 11.633582504791551
@@ -1276,6 +1606,9 @@
       "all_deep_mac_saved_pct": -0.9507193245465118,
       "selected_delta444_db": 0.13739668372054956,
       "selected_mac_saved_pct": 13.963206203979784,
+      "fixable_by_all_deep_tiled": true,
+      "source_informed_binary_fallback_delta444_db": 0.04662255077538281,
+      "source_informed_binary_fallback_mac_saved_pct": -0.9507193245465118,
       "has_feasible_scalar_beta": true,
       "source_informed_candidate_oracle_delta444_db": 0.08445377078227712,
       "source_informed_candidate_oracle_mac_saved_pct": 7.438813241524034
@@ -1287,6 +1620,9 @@
       "all_deep_mac_saved_pct": -0.9507193245465118,
       "selected_delta444_db": 0.01569365692530873,
       "selected_mac_saved_pct": 29.186777862114244,
+      "fixable_by_all_deep_tiled": false,
+      "source_informed_binary_fallback_delta444_db": 0.01569365692530873,
+      "source_informed_binary_fallback_mac_saved_pct": 29.186777862114244,
       "has_feasible_scalar_beta": true,
       "source_informed_candidate_oracle_delta444_db": 0.03560678115393444,
       "source_informed_candidate_oracle_mac_saved_pct": 39.12455746750288
@@ -1298,6 +1634,9 @@
       "all_deep_mac_saved_pct": -0.9507193245465118,
       "selected_delta444_db": 0.02784464534696326,
       "selected_mac_saved_pct": 20.487596186203294,
+      "fixable_by_all_deep_tiled": false,
+      "source_informed_binary_fallback_delta444_db": 0.02784464534696326,
+      "source_informed_binary_fallback_mac_saved_pct": 20.487596186203294,
       "has_feasible_scalar_beta": true,
       "source_informed_candidate_oracle_delta444_db": 0.0761802255160953,
       "source_informed_candidate_oracle_mac_saved_pct": 39.12455746750288
@@ -1309,6 +1648,9 @@
       "all_deep_mac_saved_pct": -0.9507193245465118,
       "selected_delta444_db": 0.05262028530998431,
       "selected_mac_saved_pct": 16.757299097580248,
+      "fixable_by_all_deep_tiled": false,
+      "source_informed_binary_fallback_delta444_db": 0.05262028530998431,
+      "source_informed_binary_fallback_mac_saved_pct": 16.757299097580248,
       "has_feasible_scalar_beta": true,
       "source_informed_candidate_oracle_delta444_db": 0.09303311018823554,
       "source_informed_candidate_oracle_mac_saved_pct": 29.186777862114244
@@ -1320,6 +1662,9 @@
       "all_deep_mac_saved_pct": -0.9507193245465118,
       "selected_delta444_db": 0.03771549988617026,
       "selected_mac_saved_pct": 3.7085221133654644,
+      "fixable_by_all_deep_tiled": false,
+      "source_informed_binary_fallback_delta444_db": 0.03771549988617026,
+      "source_informed_binary_fallback_mac_saved_pct": 3.7085221133654644,
       "has_feasible_scalar_beta": true,
       "source_informed_candidate_oracle_delta444_db": 0.08383450371978257,
       "source_informed_candidate_oracle_mac_saved_pct": 10.697381290001207
@@ -1331,6 +1676,9 @@
       "all_deep_mac_saved_pct": -0.9507193245465118,
       "selected_delta444_db": 0.029507148301901272,
       "selected_mac_saved_pct": -0.9507193245465118,
+      "fixable_by_all_deep_tiled": false,
+      "source_informed_binary_fallback_delta444_db": 0.029507148301901272,
+      "source_informed_binary_fallback_mac_saved_pct": -0.9507193245465118,
       "has_feasible_scalar_beta": true,
       "source_informed_candidate_oracle_delta444_db": 0.09206183784110518,
       "source_informed_candidate_oracle_mac_saved_pct": 6.03813985208922
@@ -1342,6 +1690,9 @@
       "all_deep_mac_saved_pct": -0.9507193245465118,
       "selected_delta444_db": 0.026583147891237162,
       "selected_mac_saved_pct": 29.186777862114244,
+      "fixable_by_all_deep_tiled": false,
+      "source_informed_binary_fallback_delta444_db": 0.026583147891237162,
+      "source_informed_binary_fallback_mac_saved_pct": 29.186777862114244,
       "has_feasible_scalar_beta": true,
       "source_informed_candidate_oracle_delta444_db": 0.04500592064608831,
       "source_informed_candidate_oracle_mac_saved_pct": 39.12455746750288
@@ -1353,6 +1704,9 @@
       "all_deep_mac_saved_pct": -0.9507193245465118,
       "selected_delta444_db": 0.025944050703988898,
       "selected_mac_saved_pct": 20.487590225738817,
+      "fixable_by_all_deep_tiled": false,
+      "source_informed_binary_fallback_delta444_db": 0.025944050703988898,
+      "source_informed_binary_fallback_mac_saved_pct": 20.487590225738817,
       "has_feasible_scalar_beta": true,
       "source_informed_candidate_oracle_delta444_db": 0.0726667811942319,
       "source_informed_candidate_oracle_mac_saved_pct": 39.12455746750288
@@ -1364,6 +1718,9 @@
       "all_deep_mac_saved_pct": -0.9507193245465118,
       "selected_delta444_db": 0.038123924827608534,
       "selected_mac_saved_pct": 18.62244764189177,
+      "fixable_by_all_deep_tiled": false,
+      "source_informed_binary_fallback_delta444_db": 0.038123924827608534,
+      "source_informed_binary_fallback_mac_saved_pct": 18.62244764189177,
       "has_feasible_scalar_beta": true,
       "source_informed_candidate_oracle_delta444_db": 0.0986562715895724,
       "source_informed_candidate_oracle_mac_saved_pct": 36.64011219362669
@@ -1375,6 +1732,9 @@
       "all_deep_mac_saved_pct": -0.9507193245465118,
       "selected_delta444_db": 0.059016099957913,
       "selected_mac_saved_pct": 14.892150553268724,
+      "fixable_by_all_deep_tiled": false,
+      "source_informed_binary_fallback_delta444_db": 0.059016099957913,
+      "source_informed_binary_fallback_mac_saved_pct": 14.892150553268724,
       "has_feasible_scalar_beta": true,
       "source_informed_candidate_oracle_delta444_db": 0.0945069396957216,
       "source_informed_candidate_oracle_mac_saved_pct": 24.217887314361864
@@ -1386,6 +1746,9 @@
       "all_deep_mac_saved_pct": -0.9507193245465118,
       "selected_delta444_db": 0.02245666522799944,
       "selected_mac_saved_pct": -0.9507193245465118,
+      "fixable_by_all_deep_tiled": false,
+      "source_informed_binary_fallback_delta444_db": 0.02245666522799944,
+      "source_informed_binary_fallback_mac_saved_pct": -0.9507193245465118,
       "has_feasible_scalar_beta": true,
       "source_informed_candidate_oracle_delta444_db": 0.07108567948904915,
       "source_informed_candidate_oracle_mac_saved_pct": 7.903288396400743

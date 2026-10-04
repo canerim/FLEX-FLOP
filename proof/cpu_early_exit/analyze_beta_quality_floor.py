@@ -50,11 +50,16 @@ def main() -> None:
             selected = selected[0]
             feasible = [c for c in row['candidates'] if c['delta444_db'] <= .1]
             oracle = max(feasible,key=lambda c:c['mac_saved_pct']) if feasible else floor
+            fixable_by_all_deep = selected['delta444_db'] > .1 and floor['delta444_db'] <= .1
+            fallback = floor if fixable_by_all_deep else selected
             cases.append({'image':item['image'],'qp':qp,
                           'all_deep_floor_delta444_db':floor['delta444_db'],
                           'all_deep_mac_saved_pct':floor['mac_saved_pct'],
                           'selected_delta444_db':selected['delta444_db'],
                           'selected_mac_saved_pct':selected['mac_saved_pct'],
+                          'fixable_by_all_deep_tiled':fixable_by_all_deep,
+                          'source_informed_binary_fallback_delta444_db':fallback['delta444_db'],
+                          'source_informed_binary_fallback_mac_saved_pct':fallback['mac_saved_pct'],
                           'has_feasible_scalar_beta':bool(feasible),
                           'source_informed_candidate_oracle_delta444_db':oracle['delta444_db'],
                           'source_informed_candidate_oracle_mac_saved_pct':oracle['mac_saved_pct']})
@@ -85,6 +90,11 @@ def main() -> None:
              'primary_policy_sha256':sha(args.policy),'cases':len(cases),
              'all_deep_floor_over_0p1_count':sum(r['all_deep_floor_delta444_db']>.1 for r in cases),
              'primary_over_0p1_count':sum(r['selected_delta444_db']>.1 for r in cases),
+             'primary_violations_fixable_by_all_deep_count':sum(r['fixable_by_all_deep_tiled'] for r in cases),
+             'source_informed_binary_fallback_over_0p1_count':sum(
+                 r['source_informed_binary_fallback_delta444_db']>.1 for r in cases),
+             'source_informed_binary_fallback_mean_mac_saved_pct':float(np.mean(
+                 [r['source_informed_binary_fallback_mac_saved_pct'] for r in cases])),
              'no_feasible_beta_cases':[(r['image'],r['qp']) for r in cases
                                        if not r['has_feasible_scalar_beta']],
              'primary_mean_mac_saved_pct':float(np.mean([r['selected_mac_saved_pct'] for r in cases])),
@@ -95,7 +105,7 @@ def main() -> None:
              'per_qp_q90_beta_on_calibration':q90,
              'q90_rule_mean_mac_saved_pct_on_calibration':float(np.mean(
                  [x['calibration_mac_saved_pct'] for x in q90.values()])),
-             'metric_note':'Delta444 relative to e15 full frame; all-deep tiled floor includes seam repair. Candidate oracle consults source quality and is not deployable. Q90 rule is calibration-only exploratory.',
+             'metric_note':'Delta444 relative to e15 full frame; all-deep tiled floor includes seam repair. Binary fallback and candidate oracle consult source quality and are not deployable. Q90 rule is calibration-only exploratory.',
              'rows':cases}
     args.output.mkdir(parents=True,exist_ok=True)
     (args.output/'beta_quality_floor.json').write_text(json.dumps(summary,indent=2)+'\n')
