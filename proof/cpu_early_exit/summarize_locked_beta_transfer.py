@@ -97,6 +97,7 @@ def main() -> None:
                 raise RuntimeError('Expected one observation per image and QP')
             boot = rng.choice(values, size=(10000, len(values)), replace=True).mean(axis=1)
             return {'mean': float(values.mean()), 'median': float(np.median(values)),
+                    'p90': float(np.quantile(values, .9)), 'max': float(values.max()),
                     'bootstrap_image_95': [float(np.quantile(boot, .025)),
                                            float(np.quantile(boot, .975))],
                     'over_0p1_count': int((values > .1).sum()) if field == 'delta444_db' else None}
@@ -122,6 +123,9 @@ def main() -> None:
             old_by_qp = {str(qp): float(np.mean([
                 r['calibrated_mac_saved_pct'] for r in rows if r['qp'] == qp]))
                 for qp in qps}
+            old_delta_by_qp = {str(qp): float(np.mean([
+                r['calibrated_delta444_db'] for r in rows if r['qp'] == qp]))
+                for qp in qps}
             overall['old_ctc_calibrated_mac_saved_pct'] = float(np.mean(
                 [r['calibrated_mac_saved_pct'] for r in rows]))
             overall['old_ctc_calibrated_delta444_db'] = float(np.mean(
@@ -132,6 +136,7 @@ def main() -> None:
                   'equal_qp_mean': overall}
         if 'calibrated_mac_saved_pct' in rows[0]:
             output['old_ctc_per_qp_mac_saved_pct'] = old_by_qp
+            output['old_ctc_per_qp_delta444_db'] = old_delta_by_qp
         return output
 
     result = {'schema': 1, 'policy_sha256': policy_sha,

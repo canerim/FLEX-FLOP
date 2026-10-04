@@ -31,8 +31,8 @@ def main() -> None:
              'kodak_transfer': 'Kodak transfer (24)'}
 
     ax = axes[0]
-    ax.axvspan(-.05, .1, color='#E8F2EC', zorder=0)
-    ax.axhspan(22, 25, xmax=.72, color='#EFF2E8', zorder=0)
+    ax.axvspan(-.05, .1, color='#F1F6F2', zorder=0)
+    ax.fill_betweenx([22, 25], -.05, .1, color='#E6EEE7', zorder=0)
     ax.axvline(.1, color='#66836C', lw=.8, ls=(0, (3, 2)))
     for name in ['calibration', 'validation', 'kodak_transfer']:
         point = summary[name]['equal_qp_mean']
@@ -54,8 +54,8 @@ def main() -> None:
     ax.xaxis.set_major_locator(MultipleLocator(.05))
     ax.yaxis.set_major_locator(MultipleLocator(5))
     ax.legend(frameon=False, fontsize=7, loc='best', labelspacing=.4)
-    ax.text(.01, .99, 'a  Locked policy transfer', transform=ax.transAxes,
-            va='top', ha='left', color=ink, fontweight='bold')
+    ax.set_title('a  Locked policy transfer', loc='left', color=ink,
+                 fontweight='bold', pad=5)
 
     ax = axes[1]
     qps = [0, 16, 32, 48, 63]
@@ -75,8 +75,8 @@ def main() -> None:
     ax.set(xlabel='QP', ylabel='Analytical synthesis MAC saved (%)')
     ax.yaxis.set_major_locator(MultipleLocator(10))
     ax.legend(frameon=False, fontsize=7, loc='best')
-    ax.text(.01, .99, 'b  Rate dependence on Kodak', transform=ax.transAxes,
-            va='top', ha='left', color=ink, fontweight='bold')
+    ax.set_title('b  Rate dependence on Kodak', loc='left', color=ink,
+                 fontweight='bold', pad=5)
 
     for ax in axes:
         ax.spines[['top', 'right']].set_visible(False)
