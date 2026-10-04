@@ -18,6 +18,8 @@ def sha(path):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--cohort', type=Path, required=True)
+    parser.add_argument('--fixed-cohort', type=Path,
+                        help='Optional actual fixed-beta reconstructions on the same streams')
     parser.add_argument('--out-prefix', type=Path, required=True)
     args = parser.parse_args()
     import numpy as np
@@ -50,6 +52,21 @@ def main():
             cases.append(row)
     if len(cases) != 120:
         raise RuntimeError('Incomplete cohort')
+    fixed_cases = {}
+    if args.fixed_cohort:
+        for row in cases:
+            key = (row['image'], row['qp'])
+            source_path = args.cohort/f'{Path(row["image"]).stem}_qp{row["qp"]}.json'
+            path = args.fixed_cohort/f'{Path(row["image"]).stem}_qp{row["qp"]}.json'
+            fixed = json.loads(path.read_text())
+            if (fixed['scan_manifest_sha256'] != manifest_hash or
+                    fixed['scan_result_sha256'] != sha(source_path) or
+                    fixed['stream_sha256'] != row['stream_sha256'] or
+                    fixed['image'] != row['image'] or fixed['qp'] != row['qp']):
+                raise RuntimeError(f'Fixed-beta provenance mismatch: {path}')
+            fixed_cases[key] = fixed
+        if len(fixed_cases) != 120:
+            raise RuntimeError('Incomplete fixed-beta cohort')
     qps = manifest['qps']
     by_qp = {q: [r for r in cases if r['qp'] == q] for q in qps}
     rng = np.random.default_rng(20261004)
@@ -82,6 +99,13 @@ def main():
             'released_yuv611_db_mean': float(np.mean([r['released_yuv611_db'] for r in group])),
             'routed_yuv611_db_mean': float(np.mean([r['routed_yuv611_db'] for r in group])),
         }
+        if fixed_cases:
+            fixed_losses = [fixed_cases[(r['image'], qp)]['fixed_beta_loss_db'] for r in group]
+            per_qp[str(qp)].update({
+                'fixed_beta_quality_loss_db_mean': float(np.mean(fixed_losses)),
+                'fixed_beta_quality_loss_db_max': float(max(fixed_losses)),
+                'fixed_beta_quality_loss_over_0p1_count': sum(v > .1 for v in fixed_losses),
+            })
     per_image_mac = np.array([[next(r['mac_saved_pct'] for r in by_qp[q] if r['image'] == name)
                                for q in qps] for name in manifest['images']])
     per_image_fixed = np.array([[next(r['fixed_beta_mac_saved_pct'] for r in by_qp[q] if r['image'] == name)
@@ -100,12 +124,24 @@ def main():
         'calibrated_quality_loss_over_0p1_count': sum(r['quality_loss_db'] > .1 for r in cases),
         'fixed_beta_quality_status': 'Not measured: fixed-beta numbers are decision/MAC counterfactuals only',
     }
+    if fixed_cases:
+        fixed_losses = [fixed_cases[(r['image'], r['qp'])]['fixed_beta_loss_db'] for r in cases]
+        aggregate.update({
+            'fixed_beta_quality_status': 'Measured from the same FUFREF2 streams',
+            'fixed_beta_quality_loss_db_mean': float(np.mean(fixed_losses)),
+            'fixed_beta_quality_loss_db_max': float(max(fixed_losses)),
+            'fixed_beta_quality_loss_over_0p1_count': sum(v > .1 for v in fixed_losses),
+            'fixed_beta_vs_calibrated_quality_loss_db_mean': float(np.mean(fixed_losses)-np.mean([r['quality_loss_db'] for r in cases])),
+        })
     summary = {'schema': 1, 'manifest_sha256': manifest_hash,
                'calibration_sha256': manifest['calibration_sha256'],
                'scope': manifest['scope'], 'limitations': manifest['backend'],
                'interpretation_note': 'Holding beta at its QP16 value isolates the effect of QP-specific control calibration. It does not remove QP from the router head or erase QP-dependent latent statistics; causal decoder-capacity demand is not identified by this audit.',
                'per_qp': per_qp, 'aggregate': aggregate,
                'raw_result_sha256': {f'{r["image"]}:qp{r["qp"]}': sha(args.cohort/f'{Path(r["image"]).stem}_qp{r["qp"]}.json') for r in cases}}
+    if fixed_cases:
+        summary['fixed_result_sha256'] = {f'{image}:qp{qp}': sha(args.fixed_cohort/f'{Path(image).stem}_qp{qp}.json')
+                                          for image,qp in fixed_cases}
 
     plt.rcParams.update({'font.family': 'Liberation Sans', 'font.size': 8.2,
                          'axes.labelcolor': '#20313E', 'text.color': '#20313E',
@@ -152,7 +188,14 @@ def main():
         axes[2].scatter(np.full(24, j), values, s=7, color='#9FBFC1',
                         alpha=.55, linewidth=0, zorder=2)
     axes[2].plot(x, [per_qp[str(q)]['quality_loss_db_mean'] for q in qps],
-                 '-o', color='#20313E', lw=1.5, ms=4, zorder=4)
+                 '-o', color='#20313E', lw=1.5, ms=4, zorder=4,
+                 label='QP-calibrated β')
+    if fixed_cases:
+        axes[2].plot(x, [per_qp[str(q)]['fixed_beta_quality_loss_db_mean'] for q in qps],
+                     '--s', color='#9A694B', lw=1.2, ms=3.8, zorder=4,
+                     label='fixed β (QP16)')
+        axes[2].legend(loc='upper center', bbox_to_anchor=(.5, -.21), ncol=2,
+                       frameon=False, fontsize=6.7, columnspacing=.7)
     axes[2].axhline(.1, color='#BB7D56', lw=.8, linestyle=':', zorder=1)
     axes[2].set_ylabel('YUV PSNR loss (dB)')
     axes[2].set_title('c  Calibrated quality', loc='left', fontweight='bold', fontsize=9)
