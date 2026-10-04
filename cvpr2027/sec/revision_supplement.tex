@@ -329,6 +329,45 @@ no latency or new trained model is inferred.}
 \label{fig:beta-floor}
 \end{figure*}
 
+\paragraph{A context counterfactual separates the two failure mechanisms.}
+For image 0828 we replayed the same five research bitstreams with the fixed
+router maps and two \emph{diagnostic} suffix implementations: clipped feature
+windows wide enough to supply every depthwise layer, and a canvas that shares
+only one-pixel context at each depthwise layer. Both disable the originally
+trained seam-repair module. With all tiles at the deepest exit, each produces
+the full-frame e15 output exactly at every QP (maximum absolute difference
+zero). Thus the tiled all-deep floor is removable by restoring true context;
+it is not an inherent penalty of the checkpoint. For the frozen mixed map,
+QP0 still loses 0.720\,dB with exact context because its selected exits are
+mostly shallow. At QP16--63, the same intervention reduces the 0.153--0.172\,dB
+deployed losses to 0.011--0.016\,dB, isolating the tile boundary as the
+dominant cause (\cref{fig:context-counterfactual}).
+
+Exact windows compute the entire costly suffix over expanded areas. Their
+analytical synthesis cost is 1.315 times full-frame e15 for the QP16--63
+mixed maps, compared with 0.968 for the deployed zero-halo path; neither
+number measures latency. Depthwise-only coupling gives 0.056--0.099\,dB on
+these four QPs without haloing pointwise layers, but the mixed-depth boundary
+still differs from a true full-depth neighbour. Its PyTorch implementation
+also assembles and gathers halo buffers, so low arithmetic overhead is not
+evidence of low wall-clock overhead. Retaining the old seam-repair weights
+can worsen the coupled result (QP63: 0.149 versus 0.099\,dB); a coupled
+decoder is a new variant requiring broader quality and matched latency tests.
+
+\begin{figure*}[t]
+\centering
+\includegraphics[width=0.88\textwidth]{figs/div2k_beta_transfer/fig_context_counterfactual.pdf}
+\caption{\textbf{A targeted context ablation on the DIV2K 0828 outlier.}
+The hatched bars force all six tiles to the deepest exit; solid bars retain
+the frozen primary router map. \textbf{a}, At QP0, supplying exact context
+removes the all-deep seam floor but leaves a large mixed-map loss from early
+exit. \textbf{b}, At QP63, the fixed map is mostly deepest and tile context
+is the main loss. The same five-QP numerical audit is archived; this
+single-image counterfactual does not establish cohort-level performance or
+decoder latency. All losses use e15 full-frame YCbCr444 as reference.}
+\label{fig:context-counterfactual}
+\end{figure*}
+
 
 
 \section{Auditing the Scalar Control Search}

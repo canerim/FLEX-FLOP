@@ -1,0 +1,145 @@
+{
+  "scope": "Analytical synthesis MAC share only; context windows charge every pointwise and depthwise operation over their full area; no latency measurement",
+  "cases": {
+    "0": {
+      "all_deep": {
+        "quality_delta444_db": {
+          "zero_halo_deployed_delta444_db": 0.1148300636332754,
+          "exact_context_no_repair_delta444_db": 0.0,
+          "exact_context_with_repair_delta444_db": 0.005782670741909811,
+          "canvas_coupled_no_repair_delta444_db": 0.0,
+          "canvas_coupled_with_repair_delta444_db": 0.005782670741909811
+        },
+        "zero_halo_deployed_relative_mac": 1.0095071932454651,
+        "exact_context_no_repair_relative_mac": 1.3975111111111111,
+        "exact_context_with_repair_relative_mac": 1.4070182841068917,
+        "suffix_feature_cell_area_multiplier": 1.6666666666666667
+      },
+      "primary_route": {
+        "quality_delta444_db": {
+          "zero_halo_deployed_delta444_db": 0.7918083678455878,
+          "exact_context_no_repair_delta444_db": 0.7202127616650873,
+          "exact_context_with_repair_delta444_db": 0.7147118134733798,
+          "canvas_coupled_no_repair_delta444_db": 0.7337741974126444,
+          "canvas_coupled_with_repair_delta444_db": 0.7285022818607556
+        },
+        "zero_halo_deployed_relative_mac": 0.7329766592164583,
+        "exact_context_no_repair_relative_mac": 0.8200965387658227,
+        "exact_context_with_repair_relative_mac": 0.8296037117616033,
+        "suffix_feature_cell_area_multiplier": 1.3043323863636365
+      }
+    },
+    "16": {
+      "all_deep": {
+        "quality_delta444_db": {
+          "zero_halo_deployed_delta444_db": 0.16364698629252866,
+          "exact_context_no_repair_delta444_db": 0.0,
+          "exact_context_with_repair_delta444_db": 0.011615617334261865,
+          "canvas_coupled_no_repair_delta444_db": 0.0,
+          "canvas_coupled_with_repair_delta444_db": 0.011615617334261865
+        },
+        "zero_halo_deployed_relative_mac": 1.0095071932454651,
+        "exact_context_no_repair_relative_mac": 1.3975111111111111,
+        "exact_context_with_repair_relative_mac": 1.4070182841068917,
+        "suffix_feature_cell_area_multiplier": 1.6666666666666667
+      },
+      "primary_route": {
+        "quality_delta444_db": {
+          "zero_halo_deployed_delta444_db": 0.17224640716424625,
+          "exact_context_no_repair_delta444_db": 0.010746829435731676,
+          "exact_context_with_repair_delta444_db": 0.022283156537603325,
+          "canvas_coupled_no_repair_delta444_db": 0.05556410892173759,
+          "canvas_coupled_with_repair_delta444_db": 0.06799400885060841
+        },
+        "zero_halo_deployed_relative_mac": 0.9675595304151124,
+        "exact_context_no_repair_relative_mac": 1.3149183016877637,
+        "exact_context_with_repair_relative_mac": 1.3244254746835442,
+        "suffix_feature_cell_area_multiplier": 1.6491477272727273
+      }
+    },
+    "32": {
+      "all_deep": {
+        "quality_delta444_db": {
+          "zero_halo_deployed_delta444_db": 0.15166026470244331,
+          "exact_context_no_repair_delta444_db": 0.0,
+          "exact_context_with_repair_delta444_db": 0.016047569437031648,
+          "canvas_coupled_no_repair_delta444_db": 0.0,
+          "canvas_coupled_with_repair_delta444_db": 0.016047569437031648
+        },
+        "zero_halo_deployed_relative_mac": 1.0095071932454651,
+        "exact_context_no_repair_relative_mac": 1.3975111111111111,
+        "exact_context_with_repair_relative_mac": 1.4070182841068917,
+        "suffix_feature_cell_area_multiplier": 1.6666666666666667
+      },
+      "primary_route": {
+        "quality_delta444_db": {
+          "zero_halo_deployed_delta444_db": 0.16218691303970192,
+          "exact_context_no_repair_delta444_db": 0.013052852972375866,
+          "exact_context_with_repair_delta444_db": 0.028775962010786894,
+          "canvas_coupled_no_repair_delta444_db": 0.06674791863554728,
+          "canvas_coupled_with_repair_delta444_db": 0.08311343576861142
+        },
+        "zero_halo_deployed_relative_mac": 0.9675595304151124,
+        "exact_context_no_repair_relative_mac": 1.3149183016877637,
+        "exact_context_with_repair_relative_mac": 1.3244254746835442,
+        "suffix_feature_cell_area_multiplier": 1.6491477272727273
+      }
+    },
+    "48": {
+      "all_deep": {
+        "quality_delta444_db": {
+          "zero_halo_deployed_delta444_db": 0.14375507576778135,
+          "exact_context_no_repair_delta444_db": 0.0,
+          "exact_context_with_repair_delta444_db": 0.029933744221457528,
+          "canvas_coupled_no_repair_delta444_db": 0.0,
+          "canvas_coupled_with_repair_delta444_db": 0.029933744221457528
+        },
+        "zero_halo_deployed_relative_mac": 1.0095071932454651,
+        "exact_context_no_repair_relative_mac": 1.3975111111111111,
+        "exact_context_with_repair_relative_mac": 1.4070182841068917,
+        "suffix_feature_cell_area_multiplier": 1.6666666666666667
+      },
+      "primary_route": {
+        "quality_delta444_db": {
+          "zero_halo_deployed_delta444_db": 0.15275492058925527,
+          "exact_context_no_repair_delta444_db": 0.012412671253097753,
+          "exact_context_with_repair_delta444_db": 0.04204690155299717,
+          "canvas_coupled_no_repair_delta444_db": 0.08211029572957573,
+          "canvas_coupled_with_repair_delta444_db": 0.11205519349256773
+        },
+        "zero_halo_deployed_relative_mac": 0.9675595304151124,
+        "exact_context_no_repair_relative_mac": 1.3149183016877637,
+        "exact_context_with_repair_relative_mac": 1.3244254746835442,
+        "suffix_feature_cell_area_multiplier": 1.6491477272727273
+      }
+    },
+    "63": {
+      "all_deep": {
+        "quality_delta444_db": {
+          "zero_halo_deployed_delta444_db": 0.14516776894354005,
+          "exact_context_no_repair_delta444_db": 0.0,
+          "exact_context_with_repair_delta444_db": 0.050984746402127315,
+          "canvas_coupled_no_repair_delta444_db": 0.0,
+          "canvas_coupled_with_repair_delta444_db": 0.050984746402127315
+        },
+        "zero_halo_deployed_relative_mac": 1.0095071932454651,
+        "exact_context_no_repair_relative_mac": 1.3975111111111111,
+        "exact_context_with_repair_relative_mac": 1.4070182841068917,
+        "suffix_feature_cell_area_multiplier": 1.6666666666666667
+      },
+      "primary_route": {
+        "quality_delta444_db": {
+          "zero_halo_deployed_delta444_db": 0.1565408045038452,
+          "exact_context_no_repair_delta444_db": 0.015881781862401217,
+          "exact_context_with_repair_delta444_db": 0.06612573678212122,
+          "canvas_coupled_no_repair_delta444_db": 0.0991392370960203,
+          "canvas_coupled_with_repair_delta444_db": 0.1493432533237261
+        },
+        "zero_halo_deployed_relative_mac": 0.9675595304151124,
+        "exact_context_no_repair_relative_mac": 1.3149183016877637,
+        "exact_context_with_repair_relative_mac": 1.3244254746835442,
+        "suffix_feature_cell_area_multiplier": 1.6491477272727273
+      }
+    }
+  }
+}

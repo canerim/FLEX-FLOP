@@ -1,0 +1,158 @@
+{
+  "schema": 1,
+  "scope": "CPU FP32, DIV2K 0828 crop, released analysis/entropy stream, e15 synthesis; exact-context counterfactual; no latency measured",
+  "case_sha256": "73d5143283c604557a10c758d7edc1eca16a48aad41b292719e8ed48ba5e54f1",
+  "stream_sha256": "1e0c9d9320288751e353f12bcc106f853b936b7a87c01e15b0db42bd25f98807",
+  "source_sha256": "a62013e252fa503920f54b9b1eff9babd501c742d2c82c97d7c22394493ffa12",
+  "e15_sha256": "91556d30bca41988755ff43dee3bc6d0cd2a0a4eda1d18d2891b168dc0a04ce9",
+  "release_sha256": "b3b900de23f30e4fc437010ddffe6a5413a56d6cfd97fb6235adbcd2b6973302",
+  "policy_sha256": "80f0a2f1d9cdda4931a956878a07df05c646e9c6a621c48d0593d3a10a1c5e47",
+  "image": "0828.png",
+  "qp": 0,
+  "crop_xywh": [
+    636,
+    422,
+    768,
+    512
+  ],
+  "feature_patch": 32,
+  "split_depth": 2,
+  "blocks_per_exit": 2,
+  "zero_halo_cached_primary_delta444_db": 0.7918083678455878,
+  "controls": {
+    "all_deep": {
+      "exit_map": [
+        5,
+        5,
+        5,
+        5,
+        5,
+        5
+      ],
+      "zero_halo_deployed_delta444_db": 0.1148300636332754,
+      "exact_context_no_repair_delta444_db": 0.0,
+      "exact_context_with_repair_delta444_db": 0.005782670741909811,
+      "exact_context_vs_full_max_abs": 0.0,
+      "per_suffix_group_feature_cell_areas": [
+        10240,
+        10240,
+        10240,
+        10240
+      ],
+      "zero_halo_suffix_feature_cell_areas": [
+        6144,
+        6144,
+        6144,
+        6144
+      ],
+      "tile_windows_tlbr": [
+        [
+          0,
+          0,
+          40,
+          40
+        ],
+        [
+          0,
+          24,
+          40,
+          72
+        ],
+        [
+          0,
+          56,
+          40,
+          96
+        ],
+        [
+          24,
+          0,
+          64,
+          40
+        ],
+        [
+          24,
+          24,
+          64,
+          72
+        ],
+        [
+          24,
+          56,
+          64,
+          96
+        ]
+      ],
+      "canvas_coupled_no_repair_delta444_db": 0.0,
+      "canvas_coupled_with_repair_delta444_db": 0.005782670741909811,
+      "canvas_coupled_no_repair_vs_full_max_abs": 0.0
+    },
+    "primary_route": {
+      "exit_map": [
+        3,
+        3,
+        3,
+        2,
+        3,
+        3
+      ],
+      "zero_halo_deployed_delta444_db": 0.7918083678455878,
+      "exact_context_no_repair_delta444_db": 0.7202127616650873,
+      "exact_context_with_repair_delta444_db": 0.7147118134733798,
+      "exact_context_vs_full_max_abs": null,
+      "per_suffix_group_feature_cell_areas": [
+        7924,
+        6768,
+        0,
+        0
+      ],
+      "zero_halo_suffix_feature_cell_areas": [
+        6144,
+        5120,
+        0,
+        0
+      ],
+      "tile_windows_tlbr": [
+        [
+          0,
+          0,
+          36,
+          36
+        ],
+        [
+          0,
+          28,
+          36,
+          68
+        ],
+        [
+          0,
+          60,
+          36,
+          96
+        ],
+        [
+          30,
+          0,
+          64,
+          34
+        ],
+        [
+          28,
+          28,
+          64,
+          68
+        ],
+        [
+          28,
+          60,
+          64,
+          96
+        ]
+      ],
+      "canvas_coupled_no_repair_delta444_db": 0.7337741974126444,
+      "canvas_coupled_with_repair_delta444_db": 0.7285022818607556,
+      "canvas_coupled_no_repair_vs_full_max_abs": null
+    }
+  }
+}
