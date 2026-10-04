@@ -1,0 +1,224 @@
+{
+  "schema": 1,
+  "scope": "Optimistic cell-area cost for sharing overlapping exact-context windows.\n\nFor each suffix block, take the union of feature cells required by every\ntile's exact full-frame dependency cone. Charge each distinct cell only once,\nplus the shared stem, full-frame head, and core-only exit adapters. This is an\nanalytical optimistic cost for a hypothetical masked scheduler, not a measured\nkernel, a global lower bound for all algorithms, or a latency prediction.",
+  "e15_sha256": "91556d30bca41988755ff43dee3bc6d0cd2a0a4eda1d18d2891b168dc0a04ce9",
+  "full_frame_relative_mac": 1.0,
+  "rows": [
+    {
+      "image": "0828.png",
+      "qp": 0,
+      "map_kind": "all_deep",
+      "case_sha256": "657f029210c3ee704f0a17db11e740aa3a4f1fb52100290b98a6b6d5eb82595f",
+      "exit_map": [
+        5,
+        5,
+        5,
+        5,
+        5,
+        5
+      ],
+      "per_suffix_block_union_feature_cells": [
+        6144,
+        6144,
+        6144,
+        6144,
+        6144,
+        6144,
+        6144,
+        6144
+      ],
+      "ideal_shared_context_relative_mac": 1.0,
+      "exact_context_delta444_db": 0.0,
+      "deployed_zero_halo_delta444_db": 0.1148300636332754
+    },
+    {
+      "image": "0828.png",
+      "qp": 0,
+      "map_kind": "primary_route",
+      "case_sha256": "657f029210c3ee704f0a17db11e740aa3a4f1fb52100290b98a6b6d5eb82595f",
+      "exit_map": [
+        3,
+        3,
+        3,
+        2,
+        3,
+        3
+      ],
+      "per_suffix_block_union_feature_cells": [
+        6144,
+        6144,
+        5244,
+        5183,
+        0,
+        0,
+        0,
+        0
+      ],
+      "ideal_shared_context_relative_mac": 0.7257379908909107,
+      "exact_context_delta444_db": 0.7202127616650873,
+      "deployed_zero_halo_delta444_db": 0.7918083678455878
+    },
+    {
+      "image": "0828.png",
+      "qp": 63,
+      "map_kind": "all_deep",
+      "case_sha256": "642dcf37ed58c6336806c005ca99fcc14544f76cdc985213ebfd4294d8c33772",
+      "exit_map": [
+        5,
+        5,
+        5,
+        5,
+        5,
+        5
+      ],
+      "per_suffix_block_union_feature_cells": [
+        6144,
+        6144,
+        6144,
+        6144,
+        6144,
+        6144,
+        6144,
+        6144
+      ],
+      "ideal_shared_context_relative_mac": 1.0,
+      "exact_context_delta444_db": 0.0,
+      "deployed_zero_halo_delta444_db": 0.14516776894354005
+    },
+    {
+      "image": "0828.png",
+      "qp": 63,
+      "map_kind": "primary_route",
+      "case_sha256": "642dcf37ed58c6336806c005ca99fcc14544f76cdc985213ebfd4294d8c33772",
+      "exit_map": [
+        5,
+        5,
+        5,
+        3,
+        5,
+        5
+      ],
+      "per_suffix_block_union_feature_cells": [
+        6144,
+        6144,
+        6144,
+        6144,
+        5360,
+        5303,
+        5244,
+        5183
+      ],
+      "ideal_shared_context_relative_mac": 0.9654522772723277,
+      "exact_context_delta444_db": 0.015881781862401217,
+      "deployed_zero_halo_delta444_db": 0.1565408045038452
+    },
+    {
+      "image": "0844.png",
+      "qp": 48,
+      "map_kind": "all_deep",
+      "case_sha256": "a1bc96acae57c140beb86a6175f798cc40373aa847a8eaff6c136fafeecc8f74",
+      "exit_map": [
+        5,
+        5,
+        5,
+        5,
+        5,
+        5
+      ],
+      "per_suffix_block_union_feature_cells": [
+        6144,
+        6144,
+        6144,
+        6144,
+        6144,
+        6144,
+        6144,
+        6144
+      ],
+      "ideal_shared_context_relative_mac": 1.0,
+      "exact_context_delta444_db": 0.0,
+      "deployed_zero_halo_delta444_db": 0.08612584072595277
+    },
+    {
+      "image": "0844.png",
+      "qp": 48,
+      "map_kind": "primary_route",
+      "case_sha256": "a1bc96acae57c140beb86a6175f798cc40373aa847a8eaff6c136fafeecc8f74",
+      "exit_map": [
+        2,
+        2,
+        2,
+        2,
+        3,
+        3
+      ],
+      "per_suffix_block_union_feature_cells": [
+        6144,
+        6144,
+        2244,
+        2145,
+        0,
+        0,
+        0,
+        0
+      ],
+      "ideal_shared_context_relative_mac": 0.6524905516547996,
+      "exact_context_delta444_db": 0.46465230063386875,
+      "deployed_zero_halo_delta444_db": 0.49610332799045137
+    },
+    {
+      "image": "0898.png",
+      "qp": 48,
+      "map_kind": "all_deep",
+      "case_sha256": "45d251dae1825a15abe2e27c8ad3c9eede2245d698337a091e597fba5269013d",
+      "exit_map": [
+        5,
+        5,
+        5,
+        5,
+        5,
+        5
+      ],
+      "per_suffix_block_union_feature_cells": [
+        6144,
+        6144,
+        6144,
+        6144,
+        6144,
+        6144,
+        6144,
+        6144
+      ],
+      "ideal_shared_context_relative_mac": 1.0,
+      "exact_context_delta444_db": 0.0,
+      "deployed_zero_halo_delta444_db": 0.055903247592755
+    },
+    {
+      "image": "0898.png",
+      "qp": 48,
+      "map_kind": "primary_route",
+      "case_sha256": "45d251dae1825a15abe2e27c8ad3c9eede2245d698337a091e597fba5269013d",
+      "exit_map": [
+        3,
+        5,
+        5,
+        5,
+        5,
+        3
+      ],
+      "per_suffix_block_union_feature_cells": [
+        6144,
+        6144,
+        6144,
+        6144,
+        4576,
+        4462,
+        4344,
+        4222
+      ],
+      "ideal_shared_context_relative_mac": 0.9309045545446555,
+      "exact_context_delta444_db": 0.06132863480325963,
+      "deployed_zero_halo_delta444_db": 0.10799930861970353
+    }
+  ]
+}

@@ -367,7 +367,11 @@ mixed maps, compared with 0.968 for the deployed zero-halo path; neither
 number measures latency. Cropping one invalid context
 ring after each suffix block is output-identical to the full-window method
 on 0828/QP63, and lowers its mixed-map synthesis cost to 1.151 times full
-e15; this still exceeds the full decode. Depthwise-only coupling gives
+e15; this still exceeds the full decode. An optimistic union-of-required-cells
+estimate, which shares all overlapping tile context at zero scheduling cost,
+is 0.965 times full e15 on that same map: exact quality leaves only 3.5\%
+ideal synthesis saving there. This is an area calculation, not a kernel or
+latency result. Depthwise-only coupling gives
 0.056--0.099\,dB on these four QPs without haloing pointwise layers, but
 the mixed-depth boundary
 still differs from a true full-depth neighbour. Its PyTorch implementation
