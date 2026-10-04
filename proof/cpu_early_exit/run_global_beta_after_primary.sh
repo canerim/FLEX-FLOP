@@ -18,6 +18,10 @@ while tmux has-session -t reglic_div2k_beta_pipeline 2>/dev/null; do
 done
 
 echo "Exploratory global policy SHA256: $(sha256sum "$policy")"
+mkdir -p "$val_dir"
+for stream in /tmp/flexplus-div2k-beta-validation/*.fufref2; do
+    ln -s "$stream" "$val_dir/$(basename "$stream")"
+done
 echo 'Evaluating disjoint DIV2K validation cohort'
 "$python_bin" "$capture_script" capture --split validation \
     --source-dir "$root/data/DIV2K_valid_HR" --manifest "$manifest" \
