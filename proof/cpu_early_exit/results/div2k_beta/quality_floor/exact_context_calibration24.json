@@ -1,0 +1,2088 @@
+{
+  "schema": 1,
+  "scope": "Fixed first calibration images by SHA256 filename manifest; CPU FP32 released FUFREF2 stream + e15 synthesis; no retraining, no latency",
+  "images": [
+    "0807.png",
+    "0814.png",
+    "0816.png",
+    "0853.png",
+    "0808.png",
+    "0838.png",
+    "0840.png",
+    "0818.png",
+    "0895.png",
+    "0861.png",
+    "0828.png",
+    "0872.png",
+    "0887.png",
+    "0896.png",
+    "0836.png",
+    "0863.png",
+    "0877.png",
+    "0869.png",
+    "0810.png",
+    "0882.png",
+    "0850.png",
+    "0820.png",
+    "0876.png",
+    "0854.png"
+  ],
+  "qps": [
+    0,
+    16,
+    32,
+    48,
+    63
+  ],
+  "quality_unit": "Delta dB = 10log10(MSE_policy/MSE_e15_full), centred YCbCr444",
+  "ideal_cost_unit": "optimistic unique feature-cell MAC with zero overhead; not implemented sparse runtime",
+  "provenance": {
+    "manifest_sha256": "0468dc26738fcc16024abd224ba2c805ee25911553f68896f9ddafbaedadf922",
+    "policy_sha256": "80f0a2f1d9cdda4931a956878a07df05c646e9c6a621c48d0593d3a10a1c5e47",
+    "e15_sha256": "91556d30bca41988755ff43dee3bc6d0cd2a0a4eda1d18d2891b168dc0a04ce9",
+    "release_sha256": "b3b900de23f30e4fc437010ddffe6a5413a56d6cfd97fb6235adbcd2b6973302",
+    "ideal_sha256": "a6fe3d3fd07ceff106df3ebbb07f29930804e7c519775e3fe17ccc3699674ef2"
+  },
+  "rows": [
+    {
+      "image": "0807.png",
+      "qp": 0,
+      "case_sha256": "92958bb46e09d263e32b27eb019750c53d35b7354ee66185caa97af0f10de9a9",
+      "stream_sha256": "de8f3de8ef457213cfcf5b65fa01343e3385eb52647885e6b693a8aa00a8f0bf",
+      "exit_map": [
+        3,
+        2,
+        3,
+        3,
+        3,
+        3
+      ],
+      "deployed_delta444_db": 0.04349723068292245,
+      "exact_context_delta444_db": 0.04008929191845663,
+      "ideal_shared_saving_pct": 27.315808115770047
+    },
+    {
+      "image": "0807.png",
+      "qp": 16,
+      "case_sha256": "ac1d5c1505ae1791a9b2eac8797efe3754de9c20f8197ba7a62eca6210119ece",
+      "stream_sha256": "8e4d093fcf973416c0783ec65aaa8d96f3268e31e8668de8b90f2c67906964b3",
+      "exit_map": [
+        5,
+        5,
+        5,
+        5,
+        5,
+        5
+      ],
+      "deployed_delta444_db": 0.010024305632066468,
+      "exact_context_delta444_db": 0.0,
+      "ideal_shared_saving_pct": 0.0
+    },
+    {
+      "image": "0807.png",
+      "qp": 32,
+      "case_sha256": "79e13692eb8c1b08dbb13983b185e922e809b117fa6492c03757bf9bef401822",
+      "stream_sha256": "d0b1f376dee70ea26ee3c6577feca95db106119b05ecee11c9d5b85d635b93b5",
+      "exit_map": [
+        5,
+        5,
+        5,
+        5,
+        5,
+        5
+      ],
+      "deployed_delta444_db": 0.022295460122469052,
+      "exact_context_delta444_db": 0.0,
+      "ideal_shared_saving_pct": 0.0
+    },
+    {
+      "image": "0807.png",
+      "qp": 48,
+      "case_sha256": "eb079c8d73e54ccfad034f1ee6e813ef08ce22e26754a614be175b3802f29373",
+      "stream_sha256": "c414b3f4c3232245ae073abf791dc047f756e6891fc68c4fcca638478586afc3",
+      "exit_map": [
+        5,
+        5,
+        5,
+        5,
+        5,
+        5
+      ],
+      "deployed_delta444_db": 0.032426121707936274,
+      "exact_context_delta444_db": 0.0,
+      "ideal_shared_saving_pct": 0.0
+    },
+    {
+      "image": "0807.png",
+      "qp": 63,
+      "case_sha256": "c0098eac3d4a7bf4bc65752799b59951a68bbccd15c15a56682b99debb2d28e1",
+      "stream_sha256": "edeb5c1fafae6806219260235c2aba1d834d56752f1a402e87341fb9f789038a",
+      "exit_map": [
+        5,
+        5,
+        5,
+        5,
+        5,
+        5
+      ],
+      "deployed_delta444_db": 0.03701272819710791,
+      "exact_context_delta444_db": 0.0,
+      "ideal_shared_saving_pct": 0.0
+    },
+    {
+      "image": "0814.png",
+      "qp": 0,
+      "case_sha256": "90126f617bf388ac17c3879099eedee66b7e55ccd196b2df27bc7f62704f5152",
+      "stream_sha256": "d8038aa51bf025f7877b7e19311c7ec95e3b47d63db56070a13253f7f484252f",
+      "exit_map": [
+        2,
+        2,
+        2,
+        3,
+        3,
+        3
+      ],
+      "deployed_delta444_db": 0.0733175402069382,
+      "exact_context_delta444_db": 0.05497136236597491,
+      "ideal_shared_saving_pct": 32.27256592827003
+    },
+    {
+      "image": "0814.png",
+      "qp": 16,
+      "case_sha256": "b880b17fda167dc8e917341d5f525d66a8ac3e4c060e91a22a78d7e5bb568363",
+      "stream_sha256": "4f35960e83272651ebcf4927c46af68733d49e86e866e7f8d2e90d0161a30395",
+      "exit_map": [
+        2,
+        3,
+        3,
+        4,
+        4,
+        4
+      ],
+      "deployed_delta444_db": 0.05722011481796306,
+      "exact_context_delta444_db": 0.03538910795643878,
+      "ideal_shared_saving_pct": 21.33338374098981
+    },
+    {
+      "image": "0814.png",
+      "qp": 32,
+      "case_sha256": "4b05368aecf892975c8a4040fe4835436e7e49f6b29958a258f7ad4a97328e6a",
+      "stream_sha256": "e3e26e024b2ed7b153bf69b1601c304d18c94cbf00027dc5507328c6e76b4738",
+      "exit_map": [
+        2,
+        3,
+        3,
+        4,
+        4,
+        4
+      ],
+      "deployed_delta444_db": 0.08298832181260726,
+      "exact_context_delta444_db": 0.06425467895635134,
+      "ideal_shared_saving_pct": 21.33338374098981
+    },
+    {
+      "image": "0814.png",
+      "qp": 48,
+      "case_sha256": "b59623cbcc212bd08f6db6e24f856c83cd8a4110df6fe46bb2cb3fb0970e1ca9",
+      "stream_sha256": "0184cf722ef4769bdced3886275f13a81e64f7f07b983460d238f3185073d363",
+      "exit_map": [
+        2,
+        2,
+        3,
+        5,
+        5,
+        5
+      ],
+      "deployed_delta444_db": 0.09303620911201639,
+      "exact_context_delta444_db": 0.056579492677488886,
+      "ideal_shared_saving_pct": 15.438746071773913
+    },
+    {
+      "image": "0814.png",
+      "qp": 63,
+      "case_sha256": "f59d141de3126f9396631289dd613705bd0510e3c268d13d3951f27c70c8db35",
+      "stream_sha256": "33de003274cb33e7d83d19f9c74ed34af1523563ae8c33945ef6f3f4b22006dd",
+      "exit_map": [
+        2,
+        3,
+        5,
+        5,
+        5,
+        5
+      ],
+      "deployed_delta444_db": 0.08604959240474783,
+      "exact_context_delta444_db": 0.03399244396359939,
+      "ideal_shared_saving_pct": 9.222940812895574
+    },
+    {
+      "image": "0816.png",
+      "qp": 0,
+      "case_sha256": "cc3dd8f05e7c2e0f2b5e2b2d53b5f1fb6f4d463029ff966a76abe6f8f18eff64",
+      "stream_sha256": "aa0a440bfd8b8e2c6ed6337fa4b122f1bb981307d55ac8b17af542941ac4d1a2",
+      "exit_map": [
+        2,
+        2,
+        2,
+        2,
+        2,
+        2
+      ],
+      "deployed_delta444_db": 0.033408915056544,
+      "exact_context_delta444_db": 0.03159497998775689,
+      "ideal_shared_saving_pct": 40.075274261603376
+    },
+    {
+      "image": "0816.png",
+      "qp": 16,
+      "case_sha256": "460ac5d7aad98cba12c892b8e2c89812f4501bf551a3773e681e2fbfef58eb44",
+      "stream_sha256": "f60b32041f9e5294fba1cd1dd66bfc59e6633402e09af2bff855819e066f6f53",
+      "exit_map": [
+        2,
+        2,
+        3,
+        2,
+        2,
+        2
+      ],
+      "deployed_delta444_db": 0.0332380777008735,
+      "exact_context_delta444_db": 0.02869253006481952,
+      "ideal_shared_saving_pct": 37.35184761229782
+    },
+    {
+      "image": "0816.png",
+      "qp": 32,
+      "case_sha256": "d4e02eecc4bab166c6501b50ce9be4447d94b6518ab48de55923f50e3fdb7388",
+      "stream_sha256": "4d9880449fe74e5e2db6e2dde4d399d69e5077ede38d0006e69909e093eb936b",
+      "exit_map": [
+        2,
+        2,
+        2,
+        2,
+        2,
+        2
+      ],
+      "deployed_delta444_db": 0.04200784449896886,
+      "exact_context_delta444_db": 0.038845926670624205,
+      "ideal_shared_saving_pct": 40.075274261603376
+    },
+    {
+      "image": "0816.png",
+      "qp": 48,
+      "case_sha256": "57d4905f7e41921d0cb18a066a4c88396b30a0b753b9f37565a7e897c64661bb",
+      "stream_sha256": "9d84219cd5193af6fb2ea80b8a713d5e9809886cca9e4445ba8a3bd1bc9a645f",
+      "exit_map": [
+        2,
+        2,
+        2,
+        2,
+        2,
+        2
+      ],
+      "deployed_delta444_db": 0.05371435235867043,
+      "exact_context_delta444_db": 0.05080552171293023,
+      "ideal_shared_saving_pct": 40.075274261603376
+    },
+    {
+      "image": "0816.png",
+      "qp": 63,
+      "case_sha256": "b694bb0e75760217e06956577455914040525d60e8b9d4f57b7a5e2238bcbea7",
+      "stream_sha256": "eedd3cb70616bfa30fd6a62c26525dfdd313c7f67c9b6240f464e0426843fe4e",
+      "exit_map": [
+        2,
+        2,
+        2,
+        2,
+        2,
+        2
+      ],
+      "deployed_delta444_db": 0.08679908058913219,
+      "exact_context_delta444_db": 0.08598292156511633,
+      "ideal_shared_saving_pct": 40.075274261603376
+    },
+    {
+      "image": "0853.png",
+      "qp": 0,
+      "case_sha256": "b056efc5a112470f79aa746c40f759cdadd84d28c3212c6cb704b1be5a830590",
+      "stream_sha256": "6d174bab59bb1e611374b72091ec997eec0b15ef74ebaa24ce7b2a564b8f5b8d",
+      "exit_map": [
+        3,
+        3,
+        3,
+        2,
+        2,
+        3
+      ],
+      "deployed_delta444_db": 0.15459479211015614,
+      "exact_context_delta444_db": 0.13925441830245266,
+      "ideal_shared_saving_pct": 29.794187022020036
+    },
+    {
+      "image": "0853.png",
+      "qp": 16,
+      "case_sha256": "3c9971dac48163421fef21b773240b6ea089cfd90e5028abda0a35c7537f4ea4",
+      "stream_sha256": "c46b530a1ede8877bf69002d165dc06e0309d689107d4fc1bc407ed07dc94adf",
+      "exit_map": [
+        4,
+        3,
+        3,
+        4,
+        4,
+        4
+      ],
+      "deployed_delta444_db": 0.12098697281536774,
+      "exact_context_delta444_db": 0.10140456494112537,
+      "ideal_shared_saving_pct": 17.36470741583158
+    },
+    {
+      "image": "0853.png",
+      "qp": 32,
+      "case_sha256": "c6a6ca738a8a6a2e544185b33813e884e919a461e82534af6a36792160fee951",
+      "stream_sha256": "0a4ddfe8e48df24108b617676260ead4ebef70ae3b43a881e51a6144804fbc7c",
+      "exit_map": [
+        4,
+        3,
+        3,
+        4,
+        4,
+        4
+      ],
+      "deployed_delta444_db": 0.1549454161296467,
+      "exact_context_delta444_db": 0.13558548653457644,
+      "ideal_shared_saving_pct": 17.36470741583158
+    },
+    {
+      "image": "0853.png",
+      "qp": 48,
+      "case_sha256": "a55d1200ca701926d06653019bd05ec9153eecadef594f4cb24baf138a70f237",
+      "stream_sha256": "80ba333f50f29f6ea999bb19859f689eb871aecb05394df00694891d6490dea5",
+      "exit_map": [
+        4,
+        4,
+        5,
+        4,
+        4,
+        5
+      ],
+      "deployed_delta444_db": 0.0914290707565581,
+      "exact_context_delta444_db": 0.07196691261272899,
+      "ideal_shared_saving_pct": 9.085564345991571
+    },
+    {
+      "image": "0853.png",
+      "qp": 63,
+      "case_sha256": "0f65f57bcb8639ac160e5098c42d793d6170f477d756f95b03517a9f81f17947",
+      "stream_sha256": "162a64f8b6bc8449e29ca02ff00c1a064f54cd72d76271ff8aba3c86a11f4fb5",
+      "exit_map": [
+        5,
+        5,
+        5,
+        5,
+        5,
+        5
+      ],
+      "deployed_delta444_db": 0.04191478840324016,
+      "exact_context_delta444_db": 0.0,
+      "ideal_shared_saving_pct": 0.0
+    },
+    {
+      "image": "0808.png",
+      "qp": 0,
+      "case_sha256": "6502ce62c0100375bc49639a84f1c1fd11463d6fbaac916914425aded1fd0c22",
+      "stream_sha256": "f827f3711f435340f1c8fca44b84f44074cef853b663a2fa85848995982712de",
+      "exit_map": [
+        2,
+        3,
+        2,
+        2,
+        3,
+        3
+      ],
+      "deployed_delta444_db": 0.030872485206205644,
+      "exact_context_delta444_db": 0.02411616307009944,
+      "ideal_shared_saving_pct": 32.162173133131155
+    },
+    {
+      "image": "0808.png",
+      "qp": 16,
+      "case_sha256": "54143fc5920634a8b61bd8b50db79f03168b4a87e2ac017ebb575de8f79c9a0a",
+      "stream_sha256": "857edab2285cc03f37f90570d2a9de8d7bc30d6e00ff5e711e0d24c121b10a33",
+      "exit_map": [
+        3,
+        4,
+        4,
+        3,
+        4,
+        4
+      ],
+      "deployed_delta444_db": 0.020739082412366674,
+      "exact_context_delta444_db": 0.014187721480184694,
+      "ideal_shared_saving_pct": 17.475100210970474
+    },
+    {
+      "image": "0808.png",
+      "qp": 32,
+      "case_sha256": "819241c42e7e05cc112678c1620ca0fa6782bcdacec48a7f7725ace69bc999d8",
+      "stream_sha256": "119b42f612ba4acb83b925a4ea86392834834670f043772b998bc4c914fcb425",
+      "exit_map": [
+        3,
+        4,
+        4,
+        3,
+        4,
+        4
+      ],
+      "deployed_delta444_db": 0.04750744286818689,
+      "exact_context_delta444_db": 0.03814828411961324,
+      "ideal_shared_saving_pct": 17.475100210970474
+    },
+    {
+      "image": "0808.png",
+      "qp": 48,
+      "case_sha256": "2d8d1bd6397d9a177947f239128727c92f37c2c649a9ea867ea8436462e4883c",
+      "stream_sha256": "58792dcbea5be5bb582a7d956d63980f3a3fd66ecaec81ec4e4027e05ce4d90f",
+      "exit_map": [
+        4,
+        5,
+        5,
+        4,
+        5,
+        5
+      ],
+      "deployed_delta444_db": 0.04161810603183259,
+      "exact_context_delta444_db": 0.016918857724982403,
+      "ideal_shared_saving_pct": 4.426323839662438
+    },
+    {
+      "image": "0808.png",
+      "qp": 63,
+      "case_sha256": "26c43992f8b0e1628a5a652094da4ea3451e7c77f11ff4ce754a1f99c576b035",
+      "stream_sha256": "66b7f66f0442cb1d72374e14a561132694e76883243fc3034bc68c64d86d1234",
+      "exit_map": [
+        5,
+        5,
+        5,
+        5,
+        5,
+        5
+      ],
+      "deployed_delta444_db": 0.038643099334602374,
+      "exact_context_delta444_db": 0.0,
+      "ideal_shared_saving_pct": 0.0
+    },
+    {
+      "image": "0838.png",
+      "qp": 0,
+      "case_sha256": "32aeeb61602fdd4f0c9c8d159d2f4001c3687bdb2988baca129618d851987166",
+      "stream_sha256": "c75824715fa9abc0326699bd700951d5e23886abfdfa19a861452db00ffc2732",
+      "exit_map": [
+        2,
+        2,
+        2,
+        2,
+        2,
+        2
+      ],
+      "deployed_delta444_db": 0.14957235181351625,
+      "exact_context_delta444_db": 0.1419813969947978,
+      "ideal_shared_saving_pct": 40.075274261603376
+    },
+    {
+      "image": "0838.png",
+      "qp": 16,
+      "case_sha256": "db43efe6f5f095551b7e65169a5b458c26bcc8228a08db9b86b1c221de21da28",
+      "stream_sha256": "8b91c13fc4cf6dedd72a71a3d7dae9f3eb5204e374caadb4cd6875426180be85",
+      "exit_map": [
+        2,
+        2,
+        2,
+        2,
+        2,
+        2
+      ],
+      "deployed_delta444_db": 0.08960077929296484,
+      "exact_context_delta444_db": 0.08927199247943643,
+      "ideal_shared_saving_pct": 40.075274261603376
+    },
+    {
+      "image": "0838.png",
+      "qp": 32,
+      "case_sha256": "95bd90c2a36638771b0d1d59e141f80435c999e82bed1edeac7f44bebdc5ccfc",
+      "stream_sha256": "c7bfcba8554990aa931386069aaddb7743c67e0393dc91751a6fdaf2b26be946",
+      "exit_map": [
+        2,
+        2,
+        2,
+        2,
+        2,
+        2
+      ],
+      "deployed_delta444_db": 0.05871069897860255,
+      "exact_context_delta444_db": 0.05854079320124679,
+      "ideal_shared_saving_pct": 40.075274261603376
+    },
+    {
+      "image": "0838.png",
+      "qp": 48,
+      "case_sha256": "0877bbdc34ab35d84b47980964da4e2b4930a910149106b58af305323f8dfd10",
+      "stream_sha256": "5769f1e698b843c7c6e1e4e382188b2b972c33976dd1aa28b08c5c7eabc604f4",
+      "exit_map": [
+        2,
+        2,
+        2,
+        2,
+        2,
+        2
+      ],
+      "deployed_delta444_db": 0.048553085323170125,
+      "exact_context_delta444_db": 0.04990256321279955,
+      "ideal_shared_saving_pct": 40.075274261603376
+    },
+    {
+      "image": "0838.png",
+      "qp": 63,
+      "case_sha256": "892e1118f24f9e9bbd36c62f1b38d7362664e5c0a1b3ce23f82c3923de073f7d",
+      "stream_sha256": "e41d2df4e04e67be43ab7449b9f9bc5238d9b890a1f261b8cfe6e5d861c8161b",
+      "exit_map": [
+        2,
+        2,
+        2,
+        2,
+        2,
+        2
+      ],
+      "deployed_delta444_db": 0.05324131442363751,
+      "exact_context_delta444_db": 0.057618736302260526,
+      "ideal_shared_saving_pct": 40.075274261603376
+    },
+    {
+      "image": "0840.png",
+      "qp": 0,
+      "case_sha256": "30dae4f35441211e4428787b38773c3d3a3258799ff011ecc8a53a1b90e1094b",
+      "stream_sha256": "73ec970c18c9bef61105fee54518550a282805879688b16be40cfa7cb8a55214",
+      "exit_map": [
+        2,
+        2,
+        2,
+        2,
+        2,
+        2
+      ],
+      "deployed_delta444_db": 0.02861852197050299,
+      "exact_context_delta444_db": 0.026355192941339946,
+      "ideal_shared_saving_pct": 40.075274261603376
+    },
+    {
+      "image": "0840.png",
+      "qp": 16,
+      "case_sha256": "0b76b5770f774fd5950f7aa10df58ba4f0de6cf225ecbaecc78e0654b2be8f50",
+      "stream_sha256": "2280be0e1a7805a97bab152b95ebaeb8bbdf03d19a791b82fca40965c4160ddd",
+      "exit_map": [
+        2,
+        3,
+        3,
+        3,
+        3,
+        3
+      ],
+      "deployed_delta444_db": 0.026250968778939336,
+      "exact_context_delta444_db": 0.02138222792841735,
+      "ideal_shared_saving_pct": 27.426200910908925
+    },
+    {
+      "image": "0840.png",
+      "qp": 32,
+      "case_sha256": "7a63937a57ff94e85f994df71a337ba81c727fff6fa891c82c2106556bfcdc8d",
+      "stream_sha256": "55ac2affe568ab26dcc528815bcf5afae0442bb50136c96f30f50d95dbb3cd1f",
+      "exit_map": [
+        2,
+        2,
+        2,
+        3,
+        2,
+        3
+      ],
+      "deployed_delta444_db": 0.05378021922829444,
+      "exact_context_delta444_db": 0.049139991966407066,
+      "ideal_shared_saving_pct": 34.62842096299226
+    },
+    {
+      "image": "0840.png",
+      "qp": 48,
+      "case_sha256": "cf3a2350db9f7b505e7782a8f11f32e20bcaff04823e35cd692f225f3ae2cf2f",
+      "stream_sha256": "b7c19781a5b4f2c7ad3055e9ed51c3d5ad88c40c477743c327705dd3363e5be4",
+      "exit_map": [
+        2,
+        2,
+        2,
+        2,
+        2,
+        3
+      ],
+      "deployed_delta444_db": 0.11233353853896481,
+      "exact_context_delta444_db": 0.10576924483455122,
+      "ideal_shared_saving_pct": 37.35184761229782
+    },
+    {
+      "image": "0840.png",
+      "qp": 63,
+      "case_sha256": "fcb9a0b7e3a9978f57409ce8f51d995f05c74584dee213ac0bfe540089395e8a",
+      "stream_sha256": "bdb9d82a69e1e8fea1c5e7b735b3be12471023e2c90e31d3b304031a1bf196d1",
+      "exit_map": [
+        2,
+        2,
+        2,
+        2,
+        2,
+        3
+      ],
+      "deployed_delta444_db": 0.15549680002705843,
+      "exact_context_delta444_db": 0.15362064537251408,
+      "ideal_shared_saving_pct": 37.35184761229782
+    },
+    {
+      "image": "0818.png",
+      "qp": 0,
+      "case_sha256": "d7e68584f71cef54ddc661aa79099627af48e793e98257a2e9860b84c01ec782",
+      "stream_sha256": "76a7aec5612171d65bd2225ea676ab76141f307c21283719e1dd3aaa2009e628",
+      "exit_map": [
+        2,
+        3,
+        3,
+        3,
+        3,
+        3
+      ],
+      "deployed_delta444_db": 0.04619408324104386,
+      "exact_context_delta444_db": 0.03448711931744623,
+      "ideal_shared_saving_pct": 27.426200910908925
+    },
+    {
+      "image": "0818.png",
+      "qp": 16,
+      "case_sha256": "5402c2a2fdfa811f2409e772213dcce898c65b76f9ed4779b04dfe94cd7b9f86",
+      "stream_sha256": "c890fcd22d5fabc666c8dd5b0dc99d6aa19bb8a74ae688c52ed1c1e25a384c3a",
+      "exit_map": [
+        3,
+        3,
+        4,
+        3,
+        4,
+        4
+      ],
+      "deployed_delta444_db": 0.08713196212806465,
+      "exact_context_delta444_db": 0.06393552414681852,
+      "ideal_shared_saving_pct": 19.223789556962036
+    },
+    {
+      "image": "0818.png",
+      "qp": 32,
+      "case_sha256": "b65f664bab53f53026349ab395fe6ddfcc49f56cf06b32711888da28a1494e5d",
+      "stream_sha256": "2ef15ccaa77dadfe93e31015821f19706181e2bfb16e60626de63ba21990ec8a",
+      "exit_map": [
+        3,
+        3,
+        5,
+        5,
+        5,
+        4
+      ],
+      "deployed_delta444_db": 0.07931151871889425,
+      "exact_context_delta444_db": 0.05188773461817133,
+      "ideal_shared_saving_pct": 9.36411488550457
+    },
+    {
+      "image": "0818.png",
+      "qp": 48,
+      "case_sha256": "289e9f779dc4ad4b76e1d4006505256591db91608e50c6c83395fe64d43bc4c0",
+      "stream_sha256": "302b79b918eb4a6473e44791d029a2304f1faebf8b7d35d182852972a8dad1d3",
+      "exit_map": [
+        5,
+        5,
+        5,
+        5,
+        5,
+        5
+      ],
+      "deployed_delta444_db": 0.04407094256481774,
+      "exact_context_delta444_db": 0.0,
+      "ideal_shared_saving_pct": 0.0
+    },
+    {
+      "image": "0818.png",
+      "qp": 63,
+      "case_sha256": "9225543fbc6bb33653048213ee3bc61548514487580aed67875c0bb0623a8813",
+      "stream_sha256": "b29eba54ed27f31a236c2ec4615bf3f2817c2482c0780db008c7700754c58134",
+      "exit_map": [
+        5,
+        5,
+        5,
+        5,
+        5,
+        5
+      ],
+      "deployed_delta444_db": 0.046639184822829256,
+      "exact_context_delta444_db": 0.0,
+      "ideal_shared_saving_pct": 0.0
+    },
+    {
+      "image": "0895.png",
+      "qp": 0,
+      "case_sha256": "db12363a570eb76a5a4088744445758beb30c356e2a8c1fa14f472b2357b21f6",
+      "stream_sha256": "04485c83a197a190d9eaab8b8a0d5d91b374c96a9b5c53284ed6ec5b69992de3",
+      "exit_map": [
+        2,
+        2,
+        2,
+        3,
+        2,
+        2
+      ],
+      "deployed_delta444_db": 0.02028363935539851,
+      "exact_context_delta444_db": 0.01799757631685676,
+      "ideal_shared_saving_pct": 37.35184761229782
+    },
+    {
+      "image": "0895.png",
+      "qp": 16,
+      "case_sha256": "b70e02e87e7eea0a59ffd1bc4c259018c9bc0461af3990961c41cdf665a657d6",
+      "stream_sha256": "6d6244998d7b377de52f628798e2ca7c23d03422c2260038d967342b93e6c9fd",
+      "exit_map": [
+        3,
+        3,
+        3,
+        4,
+        3,
+        2
+      ],
+      "deployed_delta444_db": 0.021564325060178753,
+      "exact_context_delta444_db": 0.016838013052594063,
+      "ideal_shared_saving_pct": 25.322071026722924
+    },
+    {
+      "image": "0895.png",
+      "qp": 32,
+      "case_sha256": "60d3f3aa7a4a5b8d1b1cde505e90a5dbc1bfbeafa15cde2b16b49464b33fee4d",
+      "stream_sha256": "f81bcd381576d31b6a08efae6df8e5ca1799fa276dcddcd02b3e40b31d3b4651",
+      "exit_map": [
+        3,
+        3,
+        3,
+        4,
+        3,
+        3
+      ],
+      "deployed_delta444_db": 0.03994571966667618,
+      "exact_context_delta444_db": 0.03351805541270966,
+      "ideal_shared_saving_pct": 23.064477710750698
+    },
+    {
+      "image": "0895.png",
+      "qp": 48,
+      "case_sha256": "8575378cb58eda1fe795c97614b843527ed3d07c5098a4455a150f02c951d1a6",
+      "stream_sha256": "8a7885980cf7a8316be08b5fc82730bd82bb790827b1cbe030e025956dc21ccd",
+      "exit_map": [
+        5,
+        3,
+        4,
+        5,
+        3,
+        3
+      ],
+      "deployed_delta444_db": 0.04642744997084641,
+      "exact_context_delta444_db": 0.03230704437958673,
+      "ideal_shared_saving_pct": 13.898552956882915
+    },
+    {
+      "image": "0895.png",
+      "qp": 63,
+      "case_sha256": "d8d38340c36e4e394afabb3a0c9c4d8d8921118fc906455f6e8401b3a4faeda7",
+      "stream_sha256": "530db569d79060cf162896e3e58b8deb61b8b72e3f6a79a25690ade8cc9b63b3",
+      "exit_map": [
+        5,
+        5,
+        5,
+        5,
+        3,
+        3
+      ],
+      "deployed_delta444_db": 0.05619172787406493,
+      "exact_context_delta444_db": 0.027048405486415038,
+      "ideal_shared_saving_pct": 7.261345760812232
+    },
+    {
+      "image": "0861.png",
+      "qp": 0,
+      "case_sha256": "34e90ec12743f03203a2d1500b7b1bfeef1f148f958cc804c77e1fbe231a03b1",
+      "stream_sha256": "59454d50b103a92a3291ab0db027b4ebb9ba99533df8157d85f5a4fb45483e80",
+      "exit_map": [
+        3,
+        3,
+        3,
+        3,
+        3,
+        3
+      ],
+      "deployed_delta444_db": 0.04473897039682432,
+      "exact_context_delta444_db": 0.03356316182129845,
+      "ideal_shared_saving_pct": 25.16860759493671
+    },
+    {
+      "image": "0861.png",
+      "qp": 16,
+      "case_sha256": "1fc56af997bc862b3bbf89a37f5bd416e1d0699e33b2f4fcecd6a287e2c7c320",
+      "stream_sha256": "87807eb8c3f26fbe07913ceca1050e34859651d7a19ad7dbd18bf3f128a6c51d",
+      "exit_map": [
+        4,
+        4,
+        4,
+        5,
+        4,
+        4
+      ],
+      "deployed_delta444_db": 0.03449673640440096,
+      "exact_context_delta444_db": 0.021444869931181276,
+      "ideal_shared_saving_pct": 11.40911906096168
+    },
+    {
+      "image": "0861.png",
+      "qp": 32,
+      "case_sha256": "ebf3afa5689c30f09c77c22bfbe640e29f3ec7053bdb317432195d5449261423",
+      "stream_sha256": "bf3b8f7ea93620e5f33a9f52d5ee92bd9f2ebd0c396c54b4fb67d58eb53e950e",
+      "exit_map": [
+        4,
+        4,
+        4,
+        5,
+        5,
+        4
+      ],
+      "deployed_delta444_db": 0.06574965217105874,
+      "exact_context_delta444_db": 0.04679550390761482,
+      "ideal_shared_saving_pct": 8.96304047446378
+    },
+    {
+      "image": "0861.png",
+      "qp": 48,
+      "case_sha256": "651a82bff285a6f7faf22eff5cb44ba443058f54e87bcb3d02156f9c08e073c3",
+      "stream_sha256": "c1c27bd7e8166ad0e748d6faf500044e4eece616630df3e72b5bbc01d0fa5df8",
+      "exit_map": [
+        5,
+        5,
+        5,
+        5,
+        5,
+        5
+      ],
+      "deployed_delta444_db": 0.03675476768534489,
+      "exact_context_delta444_db": 0.0,
+      "ideal_shared_saving_pct": 0.0
+    },
+    {
+      "image": "0861.png",
+      "qp": 63,
+      "case_sha256": "fc64f5b9fd5af360831a9d4ccdf5f1d9bbbdcd32a6597ebbf16d18ff85e57235",
+      "stream_sha256": "a71a40727fc727c0f94c4c449491a7291c1f5961b6eb23eb2f681f188e4bc2ac",
+      "exit_map": [
+        5,
+        5,
+        5,
+        5,
+        5,
+        5
+      ],
+      "deployed_delta444_db": 0.05705986201718191,
+      "exact_context_delta444_db": 0.0,
+      "ideal_shared_saving_pct": 0.0
+    },
+    {
+      "image": "0828.png",
+      "qp": 0,
+      "case_sha256": "73d5143283c604557a10c758d7edc1eca16a48aad41b292719e8ed48ba5e54f1",
+      "stream_sha256": "1e0c9d9320288751e353f12bcc106f853b936b7a87c01e15b0db42bd25f98807",
+      "exit_map": [
+        3,
+        3,
+        3,
+        2,
+        3,
+        3
+      ],
+      "deployed_delta444_db": 0.7918083678455878,
+      "exact_context_delta444_db": 0.7202127616650873,
+      "ideal_shared_saving_pct": 27.426200910908925
+    },
+    {
+      "image": "0828.png",
+      "qp": 16,
+      "case_sha256": "15f5cf1546c2c1b6f59e67a117e62943779c3755ffd7c983563d698d738122e1",
+      "stream_sha256": "5da42cdc4366d9b87e981db1e79c4e3c9855f9589586363279d3f96c8274a6fe",
+      "exit_map": [
+        5,
+        5,
+        5,
+        3,
+        5,
+        5
+      ],
+      "deployed_delta444_db": 0.17224640716424625,
+      "exact_context_delta444_db": 0.010746829435731676,
+      "ideal_shared_saving_pct": 3.454772272767226
+    },
+    {
+      "image": "0828.png",
+      "qp": 32,
+      "case_sha256": "d2c8588a376fe3a648cc7535f81338fc8a0a85d255e4cf7d8b422d4d0004ac02",
+      "stream_sha256": "8849fef8291303f352054ec0c13bc6f2c59933a3c875c28b8ee448e810918b50",
+      "exit_map": [
+        5,
+        5,
+        5,
+        3,
+        5,
+        5
+      ],
+      "deployed_delta444_db": 0.16218691303970192,
+      "exact_context_delta444_db": 0.013052852972375866,
+      "ideal_shared_saving_pct": 3.454772272767226
+    },
+    {
+      "image": "0828.png",
+      "qp": 48,
+      "case_sha256": "4ebb58a5046af82e41862126a259339a980e46adf0129371cc48c0284bb0d5ff",
+      "stream_sha256": "50e2228e5c090b777cdd9e81c6b4d165a6ce6c8655aae09d2d55428a926f39c0",
+      "exit_map": [
+        5,
+        5,
+        5,
+        3,
+        5,
+        5
+      ],
+      "deployed_delta444_db": 0.15275492058925527,
+      "exact_context_delta444_db": 0.012412671253097753,
+      "ideal_shared_saving_pct": 3.454772272767226
+    },
+    {
+      "image": "0828.png",
+      "qp": 63,
+      "case_sha256": "897707703fceebe93a2b3e7e1367fefcf61524221a26da6c233d421ffef81cbc",
+      "stream_sha256": "ec4acbae7f2e09ea414d72c90743438f2f9e88fd9fcc9da925986c069cabd504",
+      "exit_map": [
+        5,
+        5,
+        5,
+        3,
+        5,
+        5
+      ],
+      "deployed_delta444_db": 0.1565408045038452,
+      "exact_context_delta444_db": 0.015881781862401217,
+      "ideal_shared_saving_pct": 3.454772272767226
+    },
+    {
+      "image": "0872.png",
+      "qp": 0,
+      "case_sha256": "cbd24c4352e07760754510d929d4155ed1bcb8fbc4dc15fcb684c3f5c832d8db",
+      "stream_sha256": "5cca7ef6eec6515063bdfe5c934b23fd195a336b281d321384735c8593173da9",
+      "exit_map": [
+        3,
+        3,
+        3,
+        3,
+        3,
+        3
+      ],
+      "deployed_delta444_db": 0.019117348651942926,
+      "exact_context_delta444_db": 0.01430871527383587,
+      "ideal_shared_saving_pct": 25.16860759493671
+    },
+    {
+      "image": "0872.png",
+      "qp": 16,
+      "case_sha256": "49635be06945be01d56afc7e41779743a7cce51a5b2605a3e9cc18294d6bf2da",
+      "stream_sha256": "06782af6eca8d84ee565d765bf80c3a8bc8245f807e67d11cb59728ba3fc43c6",
+      "exit_map": [
+        4,
+        3,
+        3,
+        4,
+        4,
+        4
+      ],
+      "deployed_delta444_db": 0.022914709943605543,
+      "exact_context_delta444_db": 0.018483258476675778,
+      "ideal_shared_saving_pct": 17.36470741583158
+    },
+    {
+      "image": "0872.png",
+      "qp": 32,
+      "case_sha256": "8602a2881fdd61a812fade363aa8abd15ebd2cb97251ec3c650a96ba03ef3f2f",
+      "stream_sha256": "d3d956dcdb44bf4f802bfc1d62b6362ea8705438f58dfbb8e9da0fc70e1e9ffb",
+      "exit_map": [
+        4,
+        3,
+        3,
+        4,
+        4,
+        4
+      ],
+      "deployed_delta444_db": 0.044378210281992424,
+      "exact_context_delta444_db": 0.03968760226297476,
+      "ideal_shared_saving_pct": 17.36470741583158
+    },
+    {
+      "image": "0872.png",
+      "qp": 48,
+      "case_sha256": "34b92c994892245585436fa316d8282cba81f681138b2fefa37788b88ef66516",
+      "stream_sha256": "a5795d71c912ed1127d8d0a6309b8c4c224897e9c4348ac5c0f089fea7fd2254",
+      "exit_map": [
+        4,
+        3,
+        5,
+        5,
+        5,
+        5
+      ],
+      "deployed_delta444_db": 0.03226976252475189,
+      "exact_context_delta444_db": 0.02092765104003169,
+      "ideal_shared_saving_pct": 5.564820043292896
+    },
+    {
+      "image": "0872.png",
+      "qp": 63,
+      "case_sha256": "bd25d97139da59d7d508507e2a1edfbe33946dafca83ead8b1dbed7ec49e2439",
+      "stream_sha256": "b0c35472a151cd7f6cc0cac9952523c11a5f211a5f75115609ae750b019941f5",
+      "exit_map": [
+        5,
+        3,
+        5,
+        5,
+        5,
+        5
+      ],
+      "deployed_delta444_db": 0.03663469136663307,
+      "exact_context_delta444_db": 0.017650539295757606,
+      "ideal_shared_saving_pct": 3.1029710574894454
+    },
+    {
+      "image": "0887.png",
+      "qp": 0,
+      "case_sha256": "5c1e795a4a494c5203da1df04a491187a888957f3112f15d7e5f630774dea493",
+      "stream_sha256": "b2a5b500c4cd2c67ce932dfb4b92a02ac7822b9e700a6a5c9c030735d8687897",
+      "exit_map": [
+        3,
+        3,
+        3,
+        3,
+        3,
+        3
+      ],
+      "deployed_delta444_db": 0.032176337658283996,
+      "exact_context_delta444_db": 0.023284944163047657,
+      "ideal_shared_saving_pct": 25.16860759493671
+    },
+    {
+      "image": "0887.png",
+      "qp": 16,
+      "case_sha256": "bcda81fb7e6d12b567487c72e4ffe3540519b1e821578c3c28d335fef6d0e749",
+      "stream_sha256": "bfcc3e33e028f27b0284cc1637c6a810dbaa2c2989eb31e9822c7c3f74341f7c",
+      "exit_map": [
+        4,
+        3,
+        3,
+        4,
+        4,
+        4
+      ],
+      "deployed_delta444_db": 0.04454393053989567,
+      "exact_context_delta444_db": 0.029410358736684045,
+      "ideal_shared_saving_pct": 17.36470741583158
+    },
+    {
+      "image": "0887.png",
+      "qp": 32,
+      "case_sha256": "bd293f090ce92a2d5a45ba2ba12b369e5d618f13a7058283f5b2c24a2b078995",
+      "stream_sha256": "1c81b77d3fc9194cf4c2bc53c35240f09ffd760134efc6cb4f8127eac6bac1cf",
+      "exit_map": [
+        4,
+        3,
+        3,
+        4,
+        4,
+        4
+      ],
+      "deployed_delta444_db": 0.08788590682288244,
+      "exact_context_delta444_db": 0.07076690513937034,
+      "ideal_shared_saving_pct": 17.36470741583158
+    },
+    {
+      "image": "0887.png",
+      "qp": 48,
+      "case_sha256": "4ee1fee184334b857c36b32aa7489f7967ad10ab1bfefff4574cb927b873c121",
+      "stream_sha256": "d2a6baf31fdb803a1ec08463c7d7ef2ff7eddc351703a68ee6be5c7bef7a1acc",
+      "exit_map": [
+        4,
+        4,
+        3,
+        5,
+        5,
+        5
+      ],
+      "deployed_delta444_db": 0.07532667461007189,
+      "exact_context_delta444_db": 0.047862827180601766,
+      "ideal_shared_saving_pct": 8.129783178401894
+    },
+    {
+      "image": "0887.png",
+      "qp": 63,
+      "case_sha256": "987ae0da55e7c3f7d4449dc4822726d8027cd78b00597ef63b3690cacd6ebf64",
+      "stream_sha256": "dd0c027d2dfa3c0f2b8728facc87f2273024100b436af466c94e4a1397d01ee8",
+      "exit_map": [
+        5,
+        5,
+        5,
+        5,
+        5,
+        5
+      ],
+      "deployed_delta444_db": 0.05134939441447686,
+      "exact_context_delta444_db": 0.0,
+      "ideal_shared_saving_pct": 0.0
+    },
+    {
+      "image": "0896.png",
+      "qp": 0,
+      "case_sha256": "e2dde320eada6e633b9a6ebeefa771a2f2f66ce29331f80102ec8708c3d797ea",
+      "stream_sha256": "acb85930e3510e9559d99ab6ba431f08086d3eff3d31e611378ad706c07dd7e9",
+      "exit_map": [
+        2,
+        2,
+        2,
+        2,
+        2,
+        2
+      ],
+      "deployed_delta444_db": 0.22054901878298272,
+      "exact_context_delta444_db": 0.2018988210467819,
+      "ideal_shared_saving_pct": 40.075274261603376
+    },
+    {
+      "image": "0896.png",
+      "qp": 16,
+      "case_sha256": "9614fb3e3f2b878117731997f7116d72dd548292a4d88e16c67591344dc9537c",
+      "stream_sha256": "966daa30cb927cbe5099fcd19258b74ebde21d29012ecc159d2c36ca3229e659",
+      "exit_map": [
+        3,
+        2,
+        2,
+        3,
+        2,
+        3
+      ],
+      "deployed_delta444_db": 0.11772257798355522,
+      "exact_context_delta444_db": 0.1013849006081196,
+      "ideal_shared_saving_pct": 32.150042056742265
+    },
+    {
+      "image": "0896.png",
+      "qp": 32,
+      "case_sha256": "c3f8902c6562ac140d680b37ab1083ea5e36edd16d2611f6d30ab4d36fdaf207",
+      "stream_sha256": "eb9938e38f934637818b7ece7399c9b9a62156fc502d5bf732f660d395932ddf",
+      "exit_map": [
+        2,
+        2,
+        2,
+        3,
+        2,
+        3
+      ],
+      "deployed_delta444_db": 0.15831682460133412,
+      "exact_context_delta444_db": 0.14314443557693793,
+      "ideal_shared_saving_pct": 34.62842096299226
+    },
+    {
+      "image": "0896.png",
+      "qp": 48,
+      "case_sha256": "e10e3e27e2243b0c8edd3a68a5bcedcbeb5f2a08cb9b6ce511b6fd6fec1706ab",
+      "stream_sha256": "597930194a2ff7a41e79c70ef57175654e0ac0bf3e2ede926f463c9949318bdf",
+      "exit_map": [
+        2,
+        2,
+        2,
+        2,
+        2,
+        2
+      ],
+      "deployed_delta444_db": 0.20195876329206103,
+      "exact_context_delta444_db": 0.19393224008539034,
+      "ideal_shared_saving_pct": 40.075274261603376
+    },
+    {
+      "image": "0896.png",
+      "qp": 63,
+      "case_sha256": "72d4a917db3fe950716e796b64bff46dfd0ea1e9f7f91d8882f13ddae416f392",
+      "stream_sha256": "0d3a8f1691dce6355cb1a0155855eb81f47a95632216c4de65d15a68c7e96f93",
+      "exit_map": [
+        2,
+        2,
+        2,
+        2,
+        2,
+        3
+      ],
+      "deployed_delta444_db": 0.16736874897593926,
+      "exact_context_delta444_db": 0.16256186433850484,
+      "ideal_shared_saving_pct": 37.35184761229782
+    },
+    {
+      "image": "0836.png",
+      "qp": 0,
+      "case_sha256": "109eddd823dbe2445fcb850ba0d16da5fbffcd721913d15ff62aa22ae9f8e020",
+      "stream_sha256": "5cdbf563efc62a6dc7440c85fcc6228344d397a297b0dd1255c627eb4b6e6ca5",
+      "exit_map": [
+        3,
+        3,
+        3,
+        3,
+        3,
+        3
+      ],
+      "deployed_delta444_db": 0.06905923344760627,
+      "exact_context_delta444_db": 0.05305671024515151,
+      "ideal_shared_saving_pct": 25.16860759493671
+    },
+    {
+      "image": "0836.png",
+      "qp": 16,
+      "case_sha256": "cd5d824ce32961cc01920248b480e2e378000f4b3cddfd00077c3318e4df636c",
+      "stream_sha256": "c1828c3f892b8fa6b7c60b7de9a2bf9bb1801f20459326f50e9d52f1de2889c1",
+      "exit_map": [
+        4,
+        4,
+        4,
+        3,
+        4,
+        4
+      ],
+      "deployed_delta444_db": 0.043795393269492874,
+      "exact_context_delta444_db": 0.032637620074273475,
+      "ideal_shared_saving_pct": 15.61601806984002
+    },
+    {
+      "image": "0836.png",
+      "qp": 32,
+      "case_sha256": "59c010373bc18403ccbfbad5a09b216247b9dbc0d79a50bde9992c173ba3784f",
+      "stream_sha256": "e63d1560c9c0b21279d2130cba655f3cf516c0bb4206ec6a9f33c70b9ad156fb",
+      "exit_map": [
+        4,
+        4,
+        4,
+        3,
+        3,
+        4
+      ],
+      "deployed_delta444_db": 0.08517859857785555,
+      "exact_context_delta444_db": 0.06969893346690476,
+      "ideal_shared_saving_pct": 17.36470741583158
+    },
+    {
+      "image": "0836.png",
+      "qp": 48,
+      "case_sha256": "63005dbbbc343abf5cc0eed95cbf00ffac74c18f0ed23181ff03394b65924c63",
+      "stream_sha256": "1b606d48e6d34064c42c7edb0bc47ceccf2249fc97ec5fed9cd92303ce5b7586",
+      "exit_map": [
+        5,
+        5,
+        4,
+        3,
+        3,
+        4
+      ],
+      "deployed_delta444_db": 0.08182363717156443,
+      "exact_context_delta444_db": 0.05761775928650695,
+      "ideal_shared_saving_pct": 12.046749461585794
+    },
+    {
+      "image": "0836.png",
+      "qp": 63,
+      "case_sha256": "87da79f66ad47152e740b2428a0280cbe9e44dd300334a9d2e0fd747d9d4c653",
+      "stream_sha256": "11cfdef25aca0819327eb682583c453599b2e23aa3230f2585d9ae7cefa22dc9",
+      "exit_map": [
+        5,
+        5,
+        5,
+        3,
+        4,
+        5
+      ],
+      "deployed_delta444_db": 0.0614018035182296,
+      "exact_context_delta444_db": 0.02963621418939502,
+      "ideal_shared_saving_pct": 5.8062284634317844
+    },
+    {
+      "image": "0863.png",
+      "qp": 0,
+      "case_sha256": "487e750719a9066101fc210fdd4d3af323a585cd3dd7142f46e27de5cd42fb74",
+      "stream_sha256": "c97987c9bb5d7c41ae1760ca695786751cc35a3ae07a579d30935f18a776010d",
+      "exit_map": [
+        2,
+        2,
+        2,
+        2,
+        2,
+        2
+      ],
+      "deployed_delta444_db": 0.07131919303803887,
+      "exact_context_delta444_db": 0.06417329348144576,
+      "ideal_shared_saving_pct": 40.075274261603376
+    },
+    {
+      "image": "0863.png",
+      "qp": 16,
+      "case_sha256": "f3516e7d8c1a61ef6df80866e6b692c600a71bc6c3d9b10dd92bcd00a2b2843b",
+      "stream_sha256": "0b373f575185658a56153a6295e38e59a54904b4d407390fc57440ade8977f1f",
+      "exit_map": [
+        3,
+        2,
+        2,
+        2,
+        2,
+        2
+      ],
+      "deployed_delta444_db": 0.038387472204254994,
+      "exact_context_delta444_db": 0.03562704700360365,
+      "ideal_shared_saving_pct": 37.35184761229782
+    },
+    {
+      "image": "0863.png",
+      "qp": 32,
+      "case_sha256": "0a0d0dca3c62ebae5e193b663250ca44202325adddcf29a150efd9dc046b74a4",
+      "stream_sha256": "4c8135de0fcc0143f7d21080a4339f5be75792e938c9861604392ca6efb1af8b",
+      "exit_map": [
+        2,
+        2,
+        2,
+        2,
+        2,
+        2
+      ],
+      "deployed_delta444_db": 0.054263855097375156,
+      "exact_context_delta444_db": 0.052047349627359935,
+      "ideal_shared_saving_pct": 40.075274261603376
+    },
+    {
+      "image": "0863.png",
+      "qp": 48,
+      "case_sha256": "9de20f2e58950b92f1eea10424a40f769b898860be04ebbc12b6c3a33d81485a",
+      "stream_sha256": "eb97e371b75e2e64c66562d0138ff2e524936b1fbc0bba5b4156e864d4f1c5a3",
+      "exit_map": [
+        2,
+        2,
+        2,
+        2,
+        2,
+        2
+      ],
+      "deployed_delta444_db": 0.11730848369884354,
+      "exact_context_delta444_db": 0.11571995185402248,
+      "ideal_shared_saving_pct": 40.075274261603376
+    },
+    {
+      "image": "0863.png",
+      "qp": 63,
+      "case_sha256": "a16b1f784f970ad3b6ab385d0464fa9dccc71230b3f1d9f4e08c98952b9c47bb",
+      "stream_sha256": "350e1a59d9d74899c1bd5b615da73e6878aef5fabc0d7b69b9c9b49e01fe8dbb",
+      "exit_map": [
+        2,
+        2,
+        2,
+        2,
+        2,
+        2
+      ],
+      "deployed_delta444_db": 0.18397659316143775,
+      "exact_context_delta444_db": 0.1855615044773668,
+      "ideal_shared_saving_pct": 40.075274261603376
+    },
+    {
+      "image": "0877.png",
+      "qp": 0,
+      "case_sha256": "1655ae8702097e7ca780f3570fdea3d700c6f2cd627eb5a92198d1265b00136f",
+      "stream_sha256": "f7a892948553a6320b813b56dd974751489af9ddd778674b4a7f60c0c122392f",
+      "exit_map": [
+        2,
+        2,
+        2,
+        2,
+        2,
+        2
+      ],
+      "deployed_delta444_db": 0.1713693113593095,
+      "exact_context_delta444_db": 0.16499858484381563,
+      "ideal_shared_saving_pct": 40.075274261603376
+    },
+    {
+      "image": "0877.png",
+      "qp": 16,
+      "case_sha256": "0c48c79f05dd61fea5d5c76eb1d16c7aadc78c573aaa659c855c5058918172a6",
+      "stream_sha256": "e019d0303e26a828993650493e9401922682e6d23f10486a0e40c0ab97d30096",
+      "exit_map": [
+        2,
+        3,
+        3,
+        2,
+        3,
+        2
+      ],
+      "deployed_delta444_db": 0.11537481774954726,
+      "exact_context_delta444_db": 0.09928192796164009,
+      "ideal_shared_saving_pct": 32.162173133131155
+    },
+    {
+      "image": "0877.png",
+      "qp": 32,
+      "case_sha256": "9445a99181d640654d1093794a3a570688f4c2a866730daeaa4b90508cdc6b73",
+      "stream_sha256": "d1be3acc8ac6e2702e87ad729b7b9557299dd68a3070a8fb0c9bdb3c262c83e8",
+      "exit_map": [
+        2,
+        3,
+        2,
+        2,
+        2,
+        2
+      ],
+      "deployed_delta444_db": 0.18523250465500438,
+      "exact_context_delta444_db": 0.17066112731198468,
+      "ideal_shared_saving_pct": 37.229323740770035
+    },
+    {
+      "image": "0877.png",
+      "qp": 48,
+      "case_sha256": "e9944c29a836fea920ab3f57bfca777fcba1f272f290e3d358bba1365b59a4c1",
+      "stream_sha256": "ffd688495b64d5d16f32442428de980fe54d53811f8c7d5ebd19804c07eacf8e",
+      "exit_map": [
+        2,
+        2,
+        2,
+        2,
+        2,
+        2
+      ],
+      "deployed_delta444_db": 0.2648497714738067,
+      "exact_context_delta444_db": 0.2567180361007581,
+      "ideal_shared_saving_pct": 40.075274261603376
+    },
+    {
+      "image": "0877.png",
+      "qp": 63,
+      "case_sha256": "ffb13b3777e7af2fcfe37475fde78a2d7e7f50cc04c5be49581919ed43ea5a06",
+      "stream_sha256": "e2ab38073c411081df34d725afe5f946358bf8a60ef910fb6237f219eefdd8ab",
+      "exit_map": [
+        2,
+        3,
+        2,
+        2,
+        2,
+        2
+      ],
+      "deployed_delta444_db": 0.26231170242190466,
+      "exact_context_delta444_db": 0.25669354601812433,
+      "ideal_shared_saving_pct": 37.229323740770035
+    },
+    {
+      "image": "0869.png",
+      "qp": 0,
+      "case_sha256": "b7a265b47a7b7ddb1dd0ef9f2b40e4cb8ff8b8f87714862ed182a0feaa12c25b",
+      "stream_sha256": "ade1b6dedec828e4ddc7e4a2a440e634461e7db8f5b4ff7298957c61e313b94a",
+      "exit_map": [
+        3,
+        3,
+        3,
+        3,
+        3,
+        2
+      ],
+      "deployed_delta444_db": 0.03246858220461144,
+      "exact_context_delta444_db": 0.026543019161346108,
+      "ideal_shared_saving_pct": 27.426200910908925
+    },
+    {
+      "image": "0869.png",
+      "qp": 16,
+      "case_sha256": "265ba5ce830b1b39a198e807d586622dc066ff61c6a105958426b1a975dac21f",
+      "stream_sha256": "068cf24965ee6b1bab7fede4fa0a02e6d4afa9830ffde615b3e3548d1c7b6a07",
+      "exit_map": [
+        4,
+        4,
+        4,
+        4,
+        3,
+        3
+      ],
+      "deployed_delta444_db": 0.04545855532584414,
+      "exact_context_delta444_db": 0.03694920954789681,
+      "ideal_shared_saving_pct": 17.36470741583158
+    },
+    {
+      "image": "0869.png",
+      "qp": 32,
+      "case_sha256": "187b6983ace8d48592aace894a7d1ddba7ac3608f14afaea42ca991dd4cecc8e",
+      "stream_sha256": "146b5f85d59de544b1872428897ba91ec7a204eb2cc6c5d716ddc79d0917e25c",
+      "exit_map": [
+        4,
+        4,
+        4,
+        4,
+        4,
+        3
+      ],
+      "deployed_delta444_db": 0.07958794343737205,
+      "exact_context_delta444_db": 0.06724876458250487,
+      "ideal_shared_saving_pct": 15.61601806984002
+    },
+    {
+      "image": "0869.png",
+      "qp": 48,
+      "case_sha256": "5c0d1cbcd5f6d39ddf239ac54971d04dcf56f9f0f59c85eab9568560a39e75c0",
+      "stream_sha256": "1ec635ff5d6170792f4565672ae6d3dac9076baca7d8cd0f57c309914c244af9",
+      "exit_map": [
+        5,
+        4,
+        5,
+        4,
+        4,
+        3
+      ],
+      "deployed_delta444_db": 0.07805295277163674,
+      "exact_context_delta444_db": 0.058547851480093976,
+      "ideal_shared_saving_pct": 10.330814021844237
+    },
+    {
+      "image": "0869.png",
+      "qp": 63,
+      "case_sha256": "719b9f6b6599e032ad127219c1351aa3222678dbc02836d93c1d3200ec1e60e9",
+      "stream_sha256": "7f05c8e3641a8dfbb0ee76c6d5ecf8998f25ad55ee368abdb1b0773790ee1114",
+      "exit_map": [
+        5,
+        5,
+        5,
+        5,
+        5,
+        5
+      ],
+      "deployed_delta444_db": 0.041605662899923825,
+      "exact_context_delta444_db": 0.0,
+      "ideal_shared_saving_pct": 0.0
+    },
+    {
+      "image": "0810.png",
+      "qp": 0,
+      "case_sha256": "3699c6eded22ea45de9ee0a939298c0ca3fc7a77f1575ecb2b348959d41d8961",
+      "stream_sha256": "84123aab1aa0fdc404b8624501d04885be547090a2f1619f83c4da350f8a15c7",
+      "exit_map": [
+        2,
+        2,
+        2,
+        2,
+        2,
+        2
+      ],
+      "deployed_delta444_db": 0.03221433687403365,
+      "exact_context_delta444_db": 0.03174747010680361,
+      "ideal_shared_saving_pct": 40.075274261603376
+    },
+    {
+      "image": "0810.png",
+      "qp": 16,
+      "case_sha256": "d18ac6ee32a6976e1a9c677e9c21219fdacf4805b312b23dfef8e11005bdfc20",
+      "stream_sha256": "6b282e474331589cc7bd283f73d8e077c52a8a74a826c65ea56714c5834f1fa6",
+      "exit_map": [
+        3,
+        4,
+        3,
+        3,
+        3,
+        3
+      ],
+      "deployed_delta444_db": 0.054943807713982794,
+      "exact_context_delta444_db": 0.045611336256622004,
+      "ideal_shared_saving_pct": 22.94195383922292
+    },
+    {
+      "image": "0810.png",
+      "qp": 32,
+      "case_sha256": "08a347838d959346e3a81b78fe1a714801e79df4d620321302c87e8e99654688",
+      "stream_sha256": "2bdf5e85d7436f76b5ff0efab86245bb55bad6a543bc2b0da74caa2aaa8ae118",
+      "exit_map": [
+        3,
+        4,
+        3,
+        3,
+        3,
+        2
+      ],
+      "deployed_delta444_db": 0.10487373834448238,
+      "exact_context_delta444_db": 0.09510671926310686,
+      "ideal_shared_saving_pct": 25.18984229408404
+    },
+    {
+      "image": "0810.png",
+      "qp": 48,
+      "case_sha256": "e38f5e6796e2e142083c93fc24285194c4bcb3cfcbfb69df9adcfb6de6c35841",
+      "stream_sha256": "4b10647b0f0eb1c199ab44a92e2654ed674107ac9523c031be87eaf65743d523",
+      "exit_map": [
+        3,
+        4,
+        3,
+        2,
+        3,
+        2
+      ],
+      "deployed_delta444_db": 0.15250065697156415,
+      "exact_context_delta444_db": 0.14216557478632347,
+      "ideal_shared_saving_pct": 27.437730748945143
+    },
+    {
+      "image": "0810.png",
+      "qp": 63,
+      "case_sha256": "f982a2fc9980c91e29e84b86fcc284832015906fa5c035d8e05aed63f900f71a",
+      "stream_sha256": "4c9a75d97acdb44fa74e7dbfb184920890ec2e35c3c213ee580013e468ee0b1f",
+      "exit_map": [
+        4,
+        5,
+        4,
+        2,
+        4,
+        2
+      ],
+      "deployed_delta444_db": 0.1430585813531602,
+      "exact_context_delta444_db": 0.12295820173680373,
+      "ideal_shared_saving_pct": 18.466968673083695
+    },
+    {
+      "image": "0882.png",
+      "qp": 0,
+      "case_sha256": "dca632c32d66d7bb35ca89ec4ad0bc46a50179feb64e842e05cd479c0bffa8be",
+      "stream_sha256": "77ecd8fb94edb6b1fbb4ddf33ace547df3e79b0773c2c3c557f05714b1ad98a7",
+      "exit_map": [
+        3,
+        3,
+        3,
+        2,
+        3,
+        3
+      ],
+      "deployed_delta444_db": 0.03940242969478766,
+      "exact_context_delta444_db": 0.030695885181176892,
+      "ideal_shared_saving_pct": 27.426200910908925
+    },
+    {
+      "image": "0882.png",
+      "qp": 16,
+      "case_sha256": "96e3f1ba6cde5a2e4c812d939ecb8cb7b17ededaf8c97b5757f6899ea68711c6",
+      "stream_sha256": "832c03fb9392bce8f21b04d80b34f8ec575e23caf49971f54c856b8b24e52def",
+      "exit_map": [
+        3,
+        3,
+        3,
+        3,
+        3,
+        3
+      ],
+      "deployed_delta444_db": 0.03490949272347775,
+      "exact_context_delta444_db": 0.02997162443571913,
+      "ideal_shared_saving_pct": 25.16860759493671
+    },
+    {
+      "image": "0882.png",
+      "qp": 32,
+      "case_sha256": "d96eca2e2c5254ec752868463b582a968f03502ce5a1d5bd2753da8eaf9584d8",
+      "stream_sha256": "76e3ceb2c72f4500fd48c74443860656fab45bdb854e15314d96b4a21a09fe4f",
+      "exit_map": [
+        3,
+        3,
+        3,
+        3,
+        3,
+        3
+      ],
+      "deployed_delta444_db": 0.09307215896016575,
+      "exact_context_delta444_db": 0.08452618063080536,
+      "ideal_shared_saving_pct": 25.16860759493671
+    },
+    {
+      "image": "0882.png",
+      "qp": 48,
+      "case_sha256": "0cf83d6c6707a3f4988e148a1516b6714aca92d7db92e8bdaac0d575c008d7c4",
+      "stream_sha256": "649e17d68be6f633c4b66d0034589b2743e2ce8f708898382a6c8e47453ba981",
+      "exit_map": [
+        3,
+        4,
+        4,
+        2,
+        3,
+        3
+      ],
+      "deployed_delta444_db": 0.12184730351357087,
+      "exact_context_delta444_db": 0.11680485566058608,
+      "ideal_shared_saving_pct": 23.3307601529536
+    },
+    {
+      "image": "0882.png",
+      "qp": 63,
+      "case_sha256": "c48d95e71e8a9d2d9950615de4e959932f1aaf91397e821a21a43859db358adf",
+      "stream_sha256": "613b06bf1e78408c9975d69a39e2b0c7627550f93947861cfe96ec6003475c86",
+      "exit_map": [
+        3,
+        5,
+        5,
+        2,
+        3,
+        5
+      ],
+      "deployed_delta444_db": 0.12599721962029858,
+      "exact_context_delta444_db": 0.10706359207232806,
+      "ideal_shared_saving_pct": 13.638494335662799
+    },
+    {
+      "image": "0850.png",
+      "qp": 0,
+      "case_sha256": "7acd4697cdb503ceec032db27c1fcd81b0ec97164dd6e21e3af5db55572c14f9",
+      "stream_sha256": "5244c298a6d690dc87a995b7cc619e9fe35dfbacfa038d5a84a8559f40989446",
+      "exit_map": [
+        2,
+        3,
+        3,
+        3,
+        2,
+        2
+      ],
+      "deployed_delta444_db": 0.12735916001482017,
+      "exact_context_delta444_db": 0.0979024363569011,
+      "ideal_shared_saving_pct": 32.05178033799226
+    },
+    {
+      "image": "0850.png",
+      "qp": 16,
+      "case_sha256": "bbe7ed1ca3c0e4a4f66396faf8fa8cafee205091bbaf086998b1d9eaaf25f16c",
+      "stream_sha256": "484590d5df453197e50fec0a8c28a5d8addd397ee5aa22dbd3df634a3691625e",
+      "exit_map": [
+        3,
+        4,
+        4,
+        4,
+        3,
+        3
+      ],
+      "deployed_delta444_db": 0.09197292625414812,
+      "exact_context_delta444_db": 0.056009404257511414,
+      "ideal_shared_saving_pct": 19.00300396668426
+    },
+    {
+      "image": "0850.png",
+      "qp": 32,
+      "case_sha256": "8d39a4323be82c702e0e936a897673608fd5257dec2ed2554bdcbbeff9838724",
+      "stream_sha256": "4393b60b4182f1e2d9fb0ddd14b9af38a35b0e83ca6f010d21fc2a894ad95be3",
+      "exit_map": [
+        3,
+        4,
+        4,
+        4,
+        3,
+        3
+      ],
+      "deployed_delta444_db": 0.12019393915865852,
+      "exact_context_delta444_db": 0.08243965240345293,
+      "ideal_shared_saving_pct": 19.00300396668426
+    },
+    {
+      "image": "0850.png",
+      "qp": 48,
+      "case_sha256": "92acce8120b63a18395e48cdb5717d51d5188c75dcef1c1aa082978c690cf76a",
+      "stream_sha256": "ba279889913b2034ff7f5dba1bf2edd7b810a1059a99f53e92dd69b1b2fb8664",
+      "exit_map": [
+        3,
+        5,
+        5,
+        5,
+        3,
+        3
+      ],
+      "deployed_delta444_db": 0.09605485593469501,
+      "exact_context_delta444_db": 0.048461014835182385,
+      "ideal_shared_saving_pct": 10.71611803357947
+    },
+    {
+      "image": "0850.png",
+      "qp": 63,
+      "case_sha256": "cd2d17766d6e9ee1e9fdfbab221196d6ab1629b3876cdc1bb11ce33338ef2783",
+      "stream_sha256": "3c0b2df1bbac24e93747bc962638b8c629d6df1552c1005b9967a3e45d0b7be2",
+      "exit_map": [
+        3,
+        5,
+        5,
+        5,
+        3,
+        5
+      ],
+      "deployed_delta444_db": 0.1128041055496952,
+      "exact_context_delta444_db": 0.046664580751651745,
+      "ideal_shared_saving_pct": 6.557743330256693
+    },
+    {
+      "image": "0820.png",
+      "qp": 0,
+      "case_sha256": "5e18d735ad52e0fd7a869fc6e4d4a4f76044ae3b2788400b76ec37916ef6d255",
+      "stream_sha256": "8803c50ac0a35d22e3d06b23efd3e4e322bc33ba225607148902bba7106fdfd7",
+      "exit_map": [
+        3,
+        3,
+        3,
+        3,
+        2,
+        2
+      ],
+      "deployed_delta444_db": 0.07311448106908078,
+      "exact_context_delta444_db": 0.054276605962437253,
+      "ideal_shared_saving_pct": 29.794187022020036
+    },
+    {
+      "image": "0820.png",
+      "qp": 16,
+      "case_sha256": "abe6dbdbbc6ea5f092a67857bc1c7c14eb6176637cc2d38a4aacf008dcb834d3",
+      "stream_sha256": "c47ced03ba960b4b693b175ea4cc0111a75fdcbeed71caaef2a78eee0aa80713",
+      "exit_map": [
+        4,
+        3,
+        3,
+        3,
+        3,
+        3
+      ],
+      "deployed_delta444_db": 0.0768282564948514,
+      "exact_context_delta444_db": 0.0496778617224656,
+      "ideal_shared_saving_pct": 23.064477710750698
+    },
+    {
+      "image": "0820.png",
+      "qp": 32,
+      "case_sha256": "794c89cd4ff04d9067ef9fb7b9c5ab3eeb2860b27a1f0d3937c3dbef8a117829",
+      "stream_sha256": "7a495aa3fed91da98a007477abf406260b3099a3790f2393dd7d71445fde2e78",
+      "exit_map": [
+        4,
+        3,
+        3,
+        3,
+        3,
+        3
+      ],
+      "deployed_delta444_db": 0.11143387441235247,
+      "exact_context_delta444_db": 0.0894530989635424,
+      "ideal_shared_saving_pct": 23.064477710750698
+    },
+    {
+      "image": "0820.png",
+      "qp": 48,
+      "case_sha256": "07b4b40fe70757f9f0618ccf7f6dfdf57f60cb2aa02c7cb801494aad8086b177",
+      "stream_sha256": "1b498eaf2621aafc2c2f34b2870f71642167a0a4e3e0857cb59475b6a70c40c3",
+      "exit_map": [
+        4,
+        3,
+        3,
+        3,
+        3,
+        3
+      ],
+      "deployed_delta444_db": 0.16555172216803912,
+      "exact_context_delta444_db": 0.1410489008706045,
+      "ideal_shared_saving_pct": 23.064477710750698
+    },
+    {
+      "image": "0820.png",
+      "qp": 63,
+      "case_sha256": "daa95c533490f7b87ccf91e64417a4c37ba616d9a9ffee204bb358c73701b501",
+      "stream_sha256": "117c8e0dcc90a3a3567dab502eb92de98e65e3ff043246b8d79ca108a64cd0ed",
+      "exit_map": [
+        5,
+        5,
+        4,
+        3,
+        3,
+        3
+      ],
+      "deployed_delta444_db": 0.13739668372054956,
+      "exact_context_delta444_db": 0.10649264821120184,
+      "ideal_shared_saving_pct": 13.88156944993847
+    },
+    {
+      "image": "0876.png",
+      "qp": 0,
+      "case_sha256": "5a06702d724b5cf6331bbb652f1b4430c6e465d17229318eecea71e83e90949e",
+      "stream_sha256": "4b5a52fefb9c713fe8c5dabe9e40e32ae908932e04f21c363ac31d23f183afbb",
+      "exit_map": [
+        2,
+        3,
+        2,
+        3,
+        3,
+        3
+      ],
+      "deployed_delta444_db": 0.01569365692530873,
+      "exact_context_delta444_db": 0.012555919317261546,
+      "ideal_shared_saving_pct": 29.683794226881155
+    },
+    {
+      "image": "0876.png",
+      "qp": 16,
+      "case_sha256": "c0c7d0ddd311eaa8dab44e7eb1e9205da7cafdbca0dd2ac6474f154f8b714fb5",
+      "stream_sha256": "1af89e1807a44d198b2c8cc1858c48de88b163c2f754dc889c0a6c6c543540f5",
+      "exit_map": [
+        3,
+        3,
+        3,
+        4,
+        3,
+        4
+      ],
+      "deployed_delta444_db": 0.02784464534696326,
+      "exact_context_delta444_db": 0.022520922030190724,
+      "ideal_shared_saving_pct": 20.960347826564707
+    },
+    {
+      "image": "0876.png",
+      "qp": 32,
+      "case_sha256": "5bacd2ccf13a9680cd86d03a5a634310f34b7bf0f2877ab8441c07d5b6430950",
+      "stream_sha256": "faf49d11508125b9b985006d71cd4cff1486e7ae5d41fb0beb44e37bd89d7c93",
+      "exit_map": [
+        4,
+        4,
+        3,
+        4,
+        3,
+        4
+      ],
+      "deployed_delta444_db": 0.05262028530998431,
+      "exact_context_delta444_db": 0.04690312472950421,
+      "ideal_shared_saving_pct": 17.14392182555381
+    },
+    {
+      "image": "0876.png",
+      "qp": 48,
+      "case_sha256": "0e1f40b98ab082de5a93b2ea7d325ac4c23795f525de4896d7bd1107db94eb55",
+      "stream_sha256": "2200380186cc1f8289d1e18c4d3291f07b63c973c9ac3870441d9362466f5f77",
+      "exit_map": [
+        5,
+        5,
+        5,
+        4,
+        4,
+        5
+      ],
+      "deployed_delta444_db": 0.03771549988617026,
+      "exact_context_delta444_db": 0.022283319984444584,
+      "ideal_shared_saving_pct": 4.315931044523547
+    },
+    {
+      "image": "0876.png",
+      "qp": 63,
+      "case_sha256": "45c57d85e96bf7f0a85f1fa65393a6afab0699d13b55fc3c92ca0180115ceb4c",
+      "stream_sha256": "2c476b1b019b00ae301c860eba6b947560acd58d94b025707cc1c2223ba2336f",
+      "exit_map": [
+        5,
+        5,
+        5,
+        5,
+        5,
+        5
+      ],
+      "deployed_delta444_db": 0.029507148301901272,
+      "exact_context_delta444_db": 0.0,
+      "ideal_shared_saving_pct": 0.0
+    },
+    {
+      "image": "0854.png",
+      "qp": 0,
+      "case_sha256": "750a6d133e57152763a71afee16e8906ef06256a99563e0d0716d751bbe62a28",
+      "stream_sha256": "c57d3e7abfafe41a757f0ffbf4820e051922943f0974743d789775bcce57d89c",
+      "exit_map": [
+        2,
+        3,
+        2,
+        3,
+        3,
+        3
+      ],
+      "deployed_delta444_db": 0.026583147891237162,
+      "exact_context_delta444_db": 0.020542433223980187,
+      "ideal_shared_saving_pct": 29.683794226881155
+    },
+    {
+      "image": "0854.png",
+      "qp": 16,
+      "case_sha256": "c27487854caa4496cca2794c448495166f0c86f30014549b4bc4ce3431695239",
+      "stream_sha256": "60f1ffba99bb0d8368d7dd5b4ead025ee87d03c856c0f9a3e2c75eab084b75c7",
+      "exit_map": [
+        3,
+        3,
+        3,
+        3,
+        4,
+        4
+      ],
+      "deployed_delta444_db": 0.025944050703988898,
+      "exact_context_delta444_db": 0.019891086084718408,
+      "ideal_shared_saving_pct": 21.082871698092486
+    },
+    {
+      "image": "0854.png",
+      "qp": 32,
+      "case_sha256": "a66b5e5a184ca9fa26d0f142665327e6bc0971f0f5ef5dd720ca6f614fa7e1a5",
+      "stream_sha256": "09ca8af76e4bc294ae6c6e580b7ae477619287488082158060fb4e6b5577bd44",
+      "exit_map": [
+        3,
+        3,
+        3,
+        4,
+        4,
+        4
+      ],
+      "deployed_delta444_db": 0.038123924827608534,
+      "exact_context_delta444_db": 0.031790114402363435,
+      "ideal_shared_saving_pct": 19.223789556962036
+    },
+    {
+      "image": "0854.png",
+      "qp": 48,
+      "case_sha256": "632b64a535499a8247e5d73d263bf126b55353f1f87b5309d6c5a1256125a142",
+      "stream_sha256": "a554dff2caab861e6f55b11f9972c11119cc2d1f56a0d6759f2976e67f80d942",
+      "exit_map": [
+        3,
+        4,
+        4,
+        4,
+        4,
+        4
+      ],
+      "deployed_delta444_db": 0.059016099957913,
+      "exact_context_delta444_db": 0.054543977812894245,
+      "ideal_shared_saving_pct": 15.61601806984002
+    },
+    {
+      "image": "0854.png",
+      "qp": 63,
+      "case_sha256": "e4796285c5ad0dd1565d002897cfbf7e32221b42c90e179c8fdcf6ad9cc7533f",
+      "stream_sha256": "ce2ae280f1198e97810e712802c59595c99cb97d4182f0d3632cd9138b79aefc",
+      "exit_map": [
+        5,
+        5,
+        5,
+        5,
+        5,
+        5
+      ],
+      "deployed_delta444_db": 0.02245666522799944,
+      "exact_context_delta444_db": 0.0,
+      "ideal_shared_saving_pct": 0.0
+    }
+  ]
+}

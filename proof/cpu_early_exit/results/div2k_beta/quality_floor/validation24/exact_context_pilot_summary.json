@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "scope": "Full 24-image disjoint DIV2K validation, fixed policy; paired image-cluster bootstrap for mean context effect; no latency",
+  "scope": "Full 24-image DIV2K validation, fixed policy; paired image-cluster bootstrap for mean context effect; no latency",
   "input": "proof/cpu_early_exit/results/div2k_beta/quality_floor/exact_context_validation24.json",
   "images": [
     "0844.png",

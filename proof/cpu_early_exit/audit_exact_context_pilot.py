@@ -49,6 +49,7 @@ def main() -> None:
     p.add_argument('--manifest', type=Path, default=HERE/'results/div2k_beta/manifest.json')
     p.add_argument('--policy', type=Path, default=HERE/'results/div2k_beta/locked_policy.json')
     p.add_argument('--cases', type=Path, default=Path('/tmp/flexplus-div2k-beta-validation'))
+    p.add_argument('--split', choices=['calibration','validation'], default='validation')
     p.add_argument('--source-dir', type=Path, default=ROOT/'data/DIV2K_valid_HR')
     p.add_argument('--upstream', type=Path, default=Path('/tmp/flexplus-proof-clean/proof/early_exit_vs_released/.local/DCVC'))
     p.add_argument('--extension', type=Path, default=Path('/tmp/flexplus-proof-clean/proof/early_exit_vs_released/.local/entropy'))
@@ -76,16 +77,16 @@ def main() -> None:
     manifest, policy = json.loads(args.manifest.read_text()), json.loads(args.policy.read_text())
     if policy['manifest_sha256'] != sha(args.manifest):
         raise RuntimeError('Policy / manifest mismatch')
-    fixed = manifest['rows']['validation'][:args.images]
+    fixed = manifest['rows'][args.split][:args.images]
     qps = manifest['qps']
     ideal = json.loads(args.ideal.read_text())
     if ideal['policy_sha256'] != sha(args.policy):
         raise RuntimeError('Ideal-cost / policy mismatch')
-    ideal_lookup = {(r['image'], r['qp']): r for r in ideal['rows']['validation']}
+    ideal_lookup = {(r['image'], r['qp']): r for r in ideal['rows'][args.split]}
     provenance = {'manifest_sha256': sha(args.manifest), 'policy_sha256': sha(args.policy),
                   'e15_sha256': sha(args.e15), 'release_sha256': sha(args.release),
                   'ideal_sha256': sha(args.ideal)}
-    result = {'schema': 1, 'scope': 'Fixed first validation images by SHA256 filename manifest; CPU FP32 released FUFREF2 stream + e15 synthesis; no retraining, no latency',
+    result = {'schema': 1, 'scope': f'Fixed first {args.split} images by SHA256 filename manifest; CPU FP32 released FUFREF2 stream + e15 synthesis; no retraining, no latency',
               'images': [r['image'] for r in fixed], 'qps': qps,
               'quality_unit': 'Delta dB = 10log10(MSE_policy/MSE_e15_full), centred YCbCr444',
               'ideal_cost_unit': 'optimistic unique feature-cell MAC with zero overhead; not implemented sparse runtime',
@@ -123,10 +124,10 @@ def main() -> None:
                 case_path = args.cases / f'{stemname}_qp{qp}.json'
                 stream_path = args.cases / f'{stemname}_qp{qp}.fufref2'
                 case = json.loads(case_path.read_text())
-                if (case['image'] != image['image'] or case['qp'] != qp or
+                if (case['split'] != args.split or case['image'] != image['image'] or case['qp'] != qp or
                     case['source_sha256'] != sha(source_path) or
                     case['stream_sha256'] != sha(stream_path) or
-                    case['policy_sha256'] != sha(args.policy)):
+                    case['policy_sha256'] != (sha(args.policy) if args.split=='validation' else None)):
                     raise RuntimeError(f'Case provenance mismatch: {case_path}')
                 selected = [c for c in case['candidates'] if c['beta'] == policy['beta'][str(qp)]]
                 if len(selected) != 1:

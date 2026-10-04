@@ -438,6 +438,9 @@ Two QP63 cases worsen slightly (at most 0.0035\,dB), consistent with the
 old learned repair occasionally helping. The 24 persistent violations
 are largely a depth-selection problem; e.g., image 0844/QP48 remains
 0.465\,dB behind full-frame e15 with route $[2,2,2,2,3,3]$.
+The separate beta-fitting 24-image calibration partition shows a similar
+0.0210\,dB mean recovery and 34-to-24 drop in violations; it is a mechanism
+check, not an independent evaluation set.
 
 For these maps the ideal union-of-required-cells model gives 20.55\%
 mean synthesis MAC saving; 67/120 cases satisfy both exact-context loss
@@ -457,6 +460,19 @@ ground-truth image error to choose when to stop, so they are \emph{oracle
 bounds}, not a trained router, a prospective held-out result, or measured
 runtime. They motivate a calibrated risk signal and targeted capacity
 increase rather than a blanket all-deep fallback.
+
+We tested whether inexpensive latent statistics provide that signal for
+the \emph{exact-context} failure label. A fixed L2 logistic model fitted on
+calibration QP and map geometry reaches 0.755 AUC on the disjoint validation
+images; adding stream length, latent moments, spatial variation, and
+tile-aligned energy gives 0.760 AUC (paired image-bootstrap difference
+95\% interval $[-0.088,0.080]$). At calibration-locked thresholds the
+expanded model misses 11/24 validation violations while flagging 37/120
+cases; the geometry-only model misses 9/24 while flagging 43/120.
+The richer descriptor improves calibration fit but does not establish a
+transferable guard. This validation set had already informed the mechanism
+analysis, so the comparison is exploratory; a new prospective cohort is
+needed before any risk-gated deployment claim.
 
 \begin{figure*}[t]
 \centering

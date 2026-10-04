@@ -49,7 +49,8 @@ def main() -> None:
         rng=np.random.default_rng(20261004)
         draws=rng.integers(0,len(image_effects),size=(10000,len(image_effects)))
         ci=np.quantile(image_effects[draws].mean(axis=1),[.025,.975])
-        summary['scope']='Full 24-image disjoint DIV2K validation, fixed policy; paired image-cluster bootstrap for mean context effect; no latency'
+        split='calibration' if 'calibration' in data['scope'] else 'validation'
+        summary['scope']=f'Full 24-image DIV2K {split}, fixed policy; paired image-cluster bootstrap for mean context effect; no latency'
         summary['all']['mean_context_improvement_cluster_bootstrap_95ci_db']=[float(v) for v in ci]
     args.out_dir.mkdir(parents=True,exist_ok=True)
     (args.out_dir/'exact_context_pilot_summary.json').write_text(json.dumps(summary,indent=2)+'\n')

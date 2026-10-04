@@ -55,6 +55,13 @@ recovery is **0.02077 dB**, with a 24-image cluster-bootstrap 95% interval of
 within an image). This interval describes uncertainty across images in this
 fixed DIV2K split; it does not cover new datasets or decoder variants.
 
+The separate 24-image beta-fitting calibration partition was also
+reconstructed with the locked policy as a consistency check: mean loss falls
+from 0.08512 to 0.06414 dB, a 0.02098 dB mean recovery; violations fall
+from 34/120 to 24/120. The calibration set is **not** an independent test,
+but the similar magnitude supports the mechanism measurement and reproduces
+the earlier five-QP 0828 outlier audit within the new bulk script.
+
 The count over 0.1 dB falls from **35/120 to 24/120**: 11 cases cross below
 the threshold, none cross above it, and 24 persist above it. Two cases show a
 small numerical degradation despite remaining on their original side of the
