@@ -1,0 +1,46 @@
+# Independent β calibration and Kodak transfer — 4 October 2026
+
+## Decision
+
+The frozen **per-QP mean-budget policy** transfers to Kodak24×QP5 at **25.88% analytical synthesis MAC saving with 0.0976 dB mean Δ444**. This is the useful average operating point between the earlier CTC-β policy (17.16%, 0.0565 dB) and fixed-QP16 β (26.82%, 0.1223 dB). It is **not** a per-image or per-QP quality guarantee: 47/120 Kodak cases exceed 0.10 dB, and QP48/63 means are 0.1275/0.1261 dB. The 24-image cluster-bootstrap 95% interval for mean Kodak Δ444 is [0.0832, 0.1128] dB. The exploratory global-budget rule reaches 23.09% at 0.09994 dB on calibration but fails transfer (23.07% at 0.1131 dB on held-out DIV2K; 28.64% at 0.1228 dB on Kodak).
+
+All MAC percentages are analytical **synthesis-stage** savings relative to e15 full-depth synthesis, including adapters and seam repair but excluding router, entropy recovery, transfer, and complete-codec latency. Δ444 is `10 log10(MSE_policy / MSE_e15_full)` in centred YCbCr444 from an actual assembled reconstruction and the same FUFREF2 bitstream. It is not the released-decoder YUV611 PSNR gap. No latency was measured on this loaded host.
+
+## Locked protocol
+
+The source is the original 100-image DIV2K validation PNG collection. Files are sorted by SHA256 of filename; the first 24 form calibration and the next disjoint 24 form internal validation. Each image is converted to RGB, centre-cropped to 768×512, then encoded at QP 0/16/32/48/63 using the released DCVC-UF analysis/entropy weights. The released model and e15 model have identical nondecoder tensors. Decoder-side stem/QP router scores, true research bitstreams, full e15 reference reconstructions, exact exit maps, patch assembly, and seam repair are used. A cache-versus-direct decoder check was pixel-exact on the first calibration image at every QP.
+
+The candidate grid was fixed before evaluation: β from −50 to 60 in steps of 5, plus the exact prior CTC β at each QP and the exact prior QP16 β. The primary rule chooses, independently for each QP, the candidate with maximum mean analytical MAC saving among those with mean calibration Δ444 ≤0.10 dB. The selected β for QP 0/16/32/48/63 is **40/15/15/10/−10**. Manifest SHA256: `0468dc26738fcc16024abd224ba2c805ee25911553f68896f9ddafbaedadf922`; primary policy SHA256: `80f0a2f1d9cdda4931a956878a07df05c646e9c6a621c48d0593d3a10a1c5e47`. That policy was committed and pushed before either Kodak transfer. Kodak records were never used to calculate the selected β values. Kodak had, however, already been inspected in earlier exploratory work; it should not be described as globally untouched.
+
+After seeing only the calibration aggregate, we added an **exploratory** alternative: maximize equal-QP mean saving subject to equal-QP mean calibration Δ444 ≤0.10 dB, with an exact Pareto search over the same candidates. Its β is **50/15/15/14.0229/5**, policy SHA256 `607e5a2da71b5eee106fd33388fa689bc3fc78283b848b1d58887fd093a91f7d`. This rule was also committed and pushed before the Kodak replay, but its rule itself was chosen after inspecting calibration, so it is an ablation rather than the predeclared primary outcome. No held-out DIV2K quality values were used to choose its β.
+
+## Measured results
+
+| Policy / cohort | MAC saved | Mean Δ444 | Cases above 0.10 dB |
+|:--|--:|--:|--:|
+| Prior CTC β → Kodak | 17.16% | 0.0565 dB | 14/120 |
+| Fixed QP16 β → Kodak | 26.82% | 0.1223 dB | 55/120 |
+| Primary β → DIV2K calibration | 20.73% | 0.0851 dB | 34/120 |
+| Primary β → disjoint DIV2K | 20.05% | 0.0889 dB | 35/120 |
+| **Primary β → Kodak** | **25.88%** | **0.0976 dB** | **47/120** |
+| Exploratory global β → DIV2K calibration | 23.09% | 0.09994 dB | 45/120 |
+| Exploratory global β → disjoint DIV2K | 23.07% | 0.1131 dB | 50/120 |
+| Exploratory global β → Kodak | 28.64% | 0.1228 dB | 60/120 |
+
+Kodak means give each of 24 images and five QPs equal weight. Both transferred policies replay the original 120 Kodak research streams and the archived router log probabilities; the output auditor checks stream, scan, policy, and checkpoint hashes. The 48 QP16/32 cases, where both β tables coincide, have identical exit counts, reconstructed quality, and MAC values across the two replays.
+
+| Kodak QP | Primary MAC saved | Primary mean Δ444 | Cases above 0.10 dB |
+|--:|--:|--:|--:|
+| 0 | 34.98% | 0.0910 dB | 9/24 |
+| 16 | 25.46% | 0.0610 dB | 1/24 |
+| 32 | 25.39% | 0.0825 dB | 5/24 |
+| 48 | 25.35% | 0.1275 dB | 17/24 |
+| 63 | 18.23% | 0.1261 dB | 15/24 |
+
+The worst primary-policy Kodak case is `kodim07` at QP63, 0.2989 dB; the worst held-out DIV2K case is `0844` at QP48, 0.4961 dB. The calibration outlier `0828` at QP0 is 0.7918 dB. Its source MSE and exit map were reconstructed with the independent direct decoder path; the direct and cached Δ444 values were exactly equal. These are real tail failures, not a cache artefact. The primary policy also loses 0.1382 dB YUV611 PSNR on average relative to the *released* decoder on Kodak; this is a different reference and metric from the 0.0976 dB Δ444 result.
+
+## Research implication and next ablation
+
+The primary policy improves the mean Kodak quality–compute tradeoff without fitting β on Kodak, but a mean-only calibration rule permits visible high-loss outliers and underprotects QP48/63. The global budget rule illustrates why fitting exactly to 0.10 dB on one cohort has no transfer margin. The next scientifically useful policy ablation is a **separately fitted, rate-aware Q90 or worst-case loss constraint**, with a fresh calibration/validation split and a new untouched image cohort for final selection. This should be compared with the present frozen primary rule on both mean MAC and the fraction of cases above 0.10 dB; it should not be retuned on these Kodak results and then presented as held out. A measured end-to-end decoder benchmark remains separate from these analytical MAC results.
+
+Reproduction entry points are `proof/cpu_early_exit/div2k_beta_transfer.py`, `run_locked_beta_after_calibration.sh`, `fit_global_beta_from_calibration.py`, `run_global_beta_after_primary.sh`, `kodak_locked_beta_transfer.py`, and `summarize_locked_beta_transfer.py`. Audited summaries and the vector comparison figure are in `proof/cpu_early_exit/results/div2k_beta/`.
