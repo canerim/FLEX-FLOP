@@ -82,7 +82,7 @@ def main() -> None:
         bx.plot([r['epoch'] for r in zoom],[r['psnr_yuv611_db'] for r in zoom],
                 color=COLORS[depth],lw=1.45,marker='o',ms=2.5,
                 label=f'D{depth}',zorder=3)
-    ax.set(xlim=(1,77),xlabel='Completed training epoch',
+    ax.set(xlim=(1,max(77,max(r['epoch'] for history in histories.values() for r in history)+2)),xlabel='Completed training epoch',
            ylabel='YUV611 PSNR at 0.2 estimated bpp (dB)')
     ax.set_title('a  Full training trajectory',loc='left',fontweight='bold',pad=5)
     ax.legend(frameon=False,ncol=3,loc='lower right',fontsize=7)

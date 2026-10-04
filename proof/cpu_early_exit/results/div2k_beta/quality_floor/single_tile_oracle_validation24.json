@@ -1,0 +1,6796 @@
+{
+  "schema": 1,
+  "scope": "Source-informed single-tile +1 exact-context oracle, DIV2K validation; no deployment or runtime",
+  "provenance": {
+    "base_sha256": "e5832a42cdf1f1399b62c580bef64320b91ac7869e5a842cf87422f5c48c9a9f",
+    "release_sha256": "b3b900de23f30e4fc437010ddffe6a5413a56d6cfd97fb6235adbcd2b6973302",
+    "e15_sha256": "91556d30bca41988755ff43dee3bc6d0cd2a0a4eda1d18d2891b168dc0a04ce9"
+  },
+  "rows": [
+    {
+      "image": "0892.png",
+      "qp": 16,
+      "base_exit_map": [
+        3,
+        3,
+        3,
+        4,
+        4,
+        4
+      ],
+      "base_exact_context_delta444_db": 0.10611551444113634,
+      "base_ideal_shared_saving_pct": 19.223789556962036,
+      "rescued_by_one_tile": true,
+      "best": {
+        "tile": 0,
+        "exit_map": [
+          4,
+          3,
+          3,
+          4,
+          4,
+          4
+        ],
+        "exact_context_delta444_db": 0.09411062056096997,
+        "ideal_shared_saving_pct": 17.36470741583158
+      },
+      "candidates": [
+        {
+          "tile": 0,
+          "exit_map": [
+            4,
+            3,
+            3,
+            4,
+            4,
+            4
+          ],
+          "exact_context_delta444_db": 0.09411062056096997,
+          "ideal_shared_saving_pct": 17.36470741583158
+        },
+        {
+          "tile": 1,
+          "exit_map": [
+            3,
+            4,
+            3,
+            4,
+            4,
+            4
+          ],
+          "exact_context_delta444_db": 0.10142460673037772,
+          "ideal_shared_saving_pct": 17.25431462069269
+        },
+        {
+          "tile": 2,
+          "exit_map": [
+            3,
+            3,
+            4,
+            4,
+            4,
+            4
+          ],
+          "exact_context_delta444_db": 0.10022135846273014,
+          "ideal_shared_saving_pct": 17.36470741583158
+        },
+        {
+          "tile": 3,
+          "exit_map": [
+            3,
+            3,
+            3,
+            5,
+            4,
+            4
+          ],
+          "exact_context_delta444_db": 0.09121275631063396,
+          "ideal_shared_saving_pct": 16.482925814214134
+        },
+        {
+          "tile": 4,
+          "exit_map": [
+            3,
+            3,
+            3,
+            4,
+            5,
+            4
+          ],
+          "exact_context_delta444_db": 0.08073150247515737,
+          "ideal_shared_saving_pct": 16.343418435741917
+        },
+        {
+          "tile": 5,
+          "exit_map": [
+            3,
+            3,
+            3,
+            4,
+            4,
+            5
+          ],
+          "exact_context_delta444_db": 0.09076640255220299,
+          "ideal_shared_saving_pct": 16.482925814214134
+        }
+      ],
+      "best_pair": null,
+      "rescued_by_two_tiles": false,
+      "minimum_upgraded_tiles": 1,
+      "best_subset": {
+        "tile": 0,
+        "exit_map": [
+          4,
+          3,
+          3,
+          4,
+          4,
+          4
+        ],
+        "exact_context_delta444_db": 0.09411062056096997,
+        "ideal_shared_saving_pct": 17.36470741583158,
+        "tiles": [
+          0
+        ]
+      }
+    },
+    {
+      "image": "0871.png",
+      "qp": 0,
+      "base_exit_map": [
+        2,
+        2,
+        2,
+        2,
+        2,
+        2
+      ],
+      "base_exact_context_delta444_db": 0.12113811234412046,
+      "base_ideal_shared_saving_pct": 40.075274261603376,
+      "rescued_by_one_tile": true,
+      "best": {
+        "tile": 1,
+        "exit_map": [
+          2,
+          3,
+          2,
+          2,
+          2,
+          2
+        ],
+        "exact_context_delta444_db": 0.09368793781702987,
+        "ideal_shared_saving_pct": 37.229323740770035
+      },
+      "candidates": [
+        {
+          "tile": 0,
+          "exit_map": [
+            3,
+            2,
+            2,
+            2,
+            2,
+            2
+          ],
+          "exact_context_delta444_db": 0.10830696172534711,
+          "ideal_shared_saving_pct": 37.35184761229782
+        },
+        {
+          "tile": 1,
+          "exit_map": [
+            2,
+            3,
+            2,
+            2,
+            2,
+            2
+          ],
+          "exact_context_delta444_db": 0.09368793781702987,
+          "ideal_shared_saving_pct": 37.229323740770035
+        },
+        {
+          "tile": 2,
+          "exit_map": [
+            2,
+            2,
+            3,
+            2,
+            2,
+            2
+          ],
+          "exact_context_delta444_db": 0.1033983667011742,
+          "ideal_shared_saving_pct": 37.35184761229782
+        },
+        {
+          "tile": 3,
+          "exit_map": [
+            2,
+            2,
+            2,
+            3,
+            2,
+            2
+          ],
+          "exact_context_delta444_db": 0.10851108267495392,
+          "ideal_shared_saving_pct": 37.35184761229782
+        },
+        {
+          "tile": 4,
+          "exit_map": [
+            2,
+            2,
+            2,
+            2,
+            3,
+            2
+          ],
+          "exact_context_delta444_db": 0.11243895008213371,
+          "ideal_shared_saving_pct": 37.229323740770035
+        },
+        {
+          "tile": 5,
+          "exit_map": [
+            2,
+            2,
+            2,
+            2,
+            2,
+            3
+          ],
+          "exact_context_delta444_db": 0.11297131495656848,
+          "ideal_shared_saving_pct": 37.35184761229782
+        }
+      ],
+      "best_pair": null,
+      "rescued_by_two_tiles": false,
+      "minimum_upgraded_tiles": 1,
+      "best_subset": {
+        "tile": 1,
+        "exit_map": [
+          2,
+          3,
+          2,
+          2,
+          2,
+          2
+        ],
+        "exact_context_delta444_db": 0.09368793781702987,
+        "ideal_shared_saving_pct": 37.229323740770035,
+        "tiles": [
+          1
+        ]
+      }
+    },
+    {
+      "image": "0833.png",
+      "qp": 0,
+      "base_exit_map": [
+        2,
+        2,
+        3,
+        2,
+        2,
+        2
+      ],
+      "base_exact_context_delta444_db": 0.13955047201403903,
+      "base_ideal_shared_saving_pct": 37.35184761229782,
+      "rescued_by_one_tile": true,
+      "best": {
+        "tile": 1,
+        "exit_map": [
+          2,
+          3,
+          3,
+          2,
+          2,
+          2
+        ],
+        "exact_context_delta444_db": 0.09128621705556864,
+        "ideal_shared_saving_pct": 34.750944834520034
+      },
+      "candidates": [
+        {
+          "tile": 0,
+          "exit_map": [
+            3,
+            2,
+            3,
+            2,
+            2,
+            2
+          ],
+          "exact_context_delta444_db": 0.09869353625505685,
+          "ideal_shared_saving_pct": 34.62842096299226
+        },
+        {
+          "tile": 1,
+          "exit_map": [
+            2,
+            3,
+            3,
+            2,
+            2,
+            2
+          ],
+          "exact_context_delta444_db": 0.09128621705556864,
+          "ideal_shared_saving_pct": 34.750944834520034
+        },
+        {
+          "tile": 2,
+          "exit_map": [
+            2,
+            2,
+            4,
+            2,
+            2,
+            2
+          ],
+          "exact_context_delta444_db": 0.12816161556987668,
+          "ideal_shared_saving_pct": 34.91290001977848
+        },
+        {
+          "tile": 3,
+          "exit_map": [
+            2,
+            2,
+            3,
+            3,
+            2,
+            2
+          ],
+          "exact_context_delta444_db": 0.14076118006807728,
+          "ideal_shared_saving_pct": 34.62842096299226
+        },
+        {
+          "tile": 4,
+          "exit_map": [
+            2,
+            2,
+            3,
+            2,
+            3,
+            2
+          ],
+          "exact_context_delta444_db": 0.14024066067392466,
+          "ideal_shared_saving_pct": 34.53015924424226
+        },
+        {
+          "tile": 5,
+          "exit_map": [
+            2,
+            2,
+            3,
+            2,
+            2,
+            3
+          ],
+          "exact_context_delta444_db": 0.14010691513837226,
+          "ideal_shared_saving_pct": 34.87346870604782
+        }
+      ],
+      "best_pair": null,
+      "rescued_by_two_tiles": false,
+      "minimum_upgraded_tiles": 1,
+      "best_subset": {
+        "tile": 1,
+        "exit_map": [
+          2,
+          3,
+          3,
+          2,
+          2,
+          2
+        ],
+        "exact_context_delta444_db": 0.09128621705556864,
+        "ideal_shared_saving_pct": 34.750944834520034,
+        "tiles": [
+          1
+        ]
+      }
+    },
+    {
+      "image": "0898.png",
+      "qp": 32,
+      "base_exit_map": [
+        3,
+        3,
+        5,
+        4,
+        4,
+        3
+      ],
+      "base_exact_context_delta444_db": 0.11530919440016421,
+      "base_ideal_shared_saving_pct": 16.138403244769695,
+      "rescued_by_one_tile": true,
+      "best": {
+        "tile": 1,
+        "exit_map": [
+          3,
+          4,
+          5,
+          4,
+          4,
+          3
+        ],
+        "exact_context_delta444_db": 0.09360850357299452,
+        "ideal_shared_saving_pct": 14.537713030722577
+      },
+      "candidates": [
+        {
+          "tile": 0,
+          "exit_map": [
+            4,
+            3,
+            5,
+            4,
+            4,
+            3
+          ],
+          "exact_context_delta444_db": 0.10739010789516377,
+          "ideal_shared_saving_pct": 14.279321103639253
+        },
+        {
+          "tile": 1,
+          "exit_map": [
+            3,
+            4,
+            5,
+            4,
+            4,
+            3
+          ],
+          "exact_context_delta444_db": 0.09360850357299452,
+          "ideal_shared_saving_pct": 14.537713030722577
+        },
+        {
+          "tile": 3,
+          "exit_map": [
+            3,
+            3,
+            5,
+            5,
+            4,
+            3
+          ],
+          "exact_context_delta444_db": 0.1028581908723228,
+          "ideal_shared_saving_pct": 13.397539502021804
+        },
+        {
+          "tile": 4,
+          "exit_map": [
+            3,
+            3,
+            5,
+            4,
+            5,
+            3
+          ],
+          "exact_context_delta444_db": 0.0912647864326816,
+          "ideal_shared_saving_pct": 13.177967019382908
+        },
+        {
+          "tile": 5,
+          "exit_map": [
+            3,
+            3,
+            5,
+            4,
+            4,
+            4
+          ],
+          "exact_context_delta444_db": 0.10207676024243711,
+          "ideal_shared_saving_pct": 14.648105825861467
+        }
+      ],
+      "best_pair": null,
+      "rescued_by_two_tiles": false,
+      "minimum_upgraded_tiles": 1,
+      "best_subset": {
+        "tile": 1,
+        "exit_map": [
+          3,
+          4,
+          5,
+          4,
+          4,
+          3
+        ],
+        "exact_context_delta444_db": 0.09360850357299452,
+        "ideal_shared_saving_pct": 14.537713030722577,
+        "tiles": [
+          1
+        ]
+      }
+    },
+    {
+      "image": "0827.png",
+      "qp": 0,
+      "base_exit_map": [
+        2,
+        2,
+        2,
+        2,
+        2,
+        2
+      ],
+      "base_exact_context_delta444_db": 0.10384204118517681,
+      "base_ideal_shared_saving_pct": 40.075274261603376,
+      "rescued_by_one_tile": true,
+      "best": {
+        "tile": 0,
+        "exit_map": [
+          3,
+          2,
+          2,
+          2,
+          2,
+          2
+        ],
+        "exact_context_delta444_db": 0.09589826384144856,
+        "ideal_shared_saving_pct": 37.35184761229782
+      },
+      "candidates": [
+        {
+          "tile": 0,
+          "exit_map": [
+            3,
+            2,
+            2,
+            2,
+            2,
+            2
+          ],
+          "exact_context_delta444_db": 0.09589826384144856,
+          "ideal_shared_saving_pct": 37.35184761229782
+        },
+        {
+          "tile": 1,
+          "exit_map": [
+            2,
+            3,
+            2,
+            2,
+            2,
+            2
+          ],
+          "exact_context_delta444_db": 0.08425258624826651,
+          "ideal_shared_saving_pct": 37.229323740770035
+        },
+        {
+          "tile": 2,
+          "exit_map": [
+            2,
+            2,
+            3,
+            2,
+            2,
+            2
+          ],
+          "exact_context_delta444_db": 0.09879641478750352,
+          "ideal_shared_saving_pct": 37.35184761229782
+        },
+        {
+          "tile": 3,
+          "exit_map": [
+            2,
+            2,
+            2,
+            3,
+            2,
+            2
+          ],
+          "exact_context_delta444_db": 0.09974011843790813,
+          "ideal_shared_saving_pct": 37.35184761229782
+        },
+        {
+          "tile": 4,
+          "exit_map": [
+            2,
+            2,
+            2,
+            2,
+            3,
+            2
+          ],
+          "exact_context_delta444_db": 0.07554526778760959,
+          "ideal_shared_saving_pct": 37.229323740770035
+        },
+        {
+          "tile": 5,
+          "exit_map": [
+            2,
+            2,
+            2,
+            2,
+            2,
+            3
+          ],
+          "exact_context_delta444_db": 0.09869811510603185,
+          "ideal_shared_saving_pct": 37.35184761229782
+        }
+      ],
+      "best_pair": null,
+      "rescued_by_two_tiles": false,
+      "minimum_upgraded_tiles": 1,
+      "best_subset": {
+        "tile": 0,
+        "exit_map": [
+          3,
+          2,
+          2,
+          2,
+          2,
+          2
+        ],
+        "exact_context_delta444_db": 0.09589826384144856,
+        "ideal_shared_saving_pct": 37.35184761229782,
+        "tiles": [
+          0
+        ]
+      }
+    },
+    {
+      "image": "0827.png",
+      "qp": 48,
+      "base_exit_map": [
+        2,
+        2,
+        2,
+        2,
+        3,
+        2
+      ],
+      "base_exact_context_delta444_db": 0.12049978626709887,
+      "base_ideal_shared_saving_pct": 37.229323740770035,
+      "rescued_by_one_tile": true,
+      "best": {
+        "tile": 1,
+        "exit_map": [
+          2,
+          3,
+          2,
+          2,
+          3,
+          2
+        ],
+        "exact_context_delta444_db": 0.09422671162194449,
+        "ideal_shared_saving_pct": 34.640552039381156
+      },
+      "candidates": [
+        {
+          "tile": 0,
+          "exit_map": [
+            3,
+            2,
+            2,
+            2,
+            3,
+            2
+          ],
+          "exact_context_delta444_db": 0.10968318873278615,
+          "ideal_shared_saving_pct": 34.53015924424226
+        },
+        {
+          "tile": 1,
+          "exit_map": [
+            2,
+            3,
+            2,
+            2,
+            3,
+            2
+          ],
+          "exact_context_delta444_db": 0.09422671162194449,
+          "ideal_shared_saving_pct": 34.640552039381156
+        },
+        {
+          "tile": 2,
+          "exit_map": [
+            2,
+            2,
+            3,
+            2,
+            3,
+            2
+          ],
+          "exact_context_delta444_db": 0.10874702735511624,
+          "ideal_shared_saving_pct": 34.53015924424226
+        },
+        {
+          "tile": 3,
+          "exit_map": [
+            2,
+            2,
+            2,
+            3,
+            3,
+            2
+          ],
+          "exact_context_delta444_db": 0.11163436591511576,
+          "ideal_shared_saving_pct": 34.750944834520034
+        },
+        {
+          "tile": 4,
+          "exit_map": [
+            2,
+            2,
+            2,
+            2,
+            4,
+            2
+          ],
+          "exact_context_delta444_db": 0.11001338445191089,
+          "ideal_shared_saving_pct": 34.48831234616737
+        },
+        {
+          "tile": 5,
+          "exit_map": [
+            2,
+            2,
+            2,
+            2,
+            3,
+            3
+          ],
+          "exact_context_delta444_db": 0.11591222378097568,
+          "ideal_shared_saving_pct": 34.750944834520034
+        }
+      ],
+      "best_pair": null,
+      "rescued_by_two_tiles": false,
+      "minimum_upgraded_tiles": 1,
+      "best_subset": {
+        "tile": 1,
+        "exit_map": [
+          2,
+          3,
+          2,
+          2,
+          3,
+          2
+        ],
+        "exact_context_delta444_db": 0.09422671162194449,
+        "ideal_shared_saving_pct": 34.640552039381156,
+        "tiles": [
+          1
+        ]
+      }
+    },
+    {
+      "image": "0827.png",
+      "qp": 63,
+      "base_exit_map": [
+        2,
+        3,
+        2,
+        2,
+        2,
+        2
+      ],
+      "base_exact_context_delta444_db": 0.12330187404672743,
+      "base_ideal_shared_saving_pct": 37.229323740770035,
+      "rescued_by_one_tile": true,
+      "best": {
+        "tile": 4,
+        "exit_map": [
+          2,
+          3,
+          2,
+          2,
+          3,
+          2
+        ],
+        "exact_context_delta444_db": 0.09570856469713002,
+        "ideal_shared_saving_pct": 34.640552039381156
+      },
+      "candidates": [
+        {
+          "tile": 0,
+          "exit_map": [
+            3,
+            3,
+            2,
+            2,
+            2,
+            2
+          ],
+          "exact_context_delta444_db": 0.11490105351566694,
+          "ideal_shared_saving_pct": 34.750944834520034
+        },
+        {
+          "tile": 1,
+          "exit_map": [
+            2,
+            4,
+            2,
+            2,
+            2,
+            2
+          ],
+          "exact_context_delta444_db": 0.11433087729143089,
+          "ideal_shared_saving_pct": 34.48831234616737
+        },
+        {
+          "tile": 2,
+          "exit_map": [
+            2,
+            3,
+            3,
+            2,
+            2,
+            2
+          ],
+          "exact_context_delta444_db": 0.11576174262841091,
+          "ideal_shared_saving_pct": 34.750944834520034
+        },
+        {
+          "tile": 3,
+          "exit_map": [
+            2,
+            3,
+            2,
+            3,
+            2,
+            2
+          ],
+          "exact_context_delta444_db": 0.11585038590602331,
+          "ideal_shared_saving_pct": 34.53015924424226
+        },
+        {
+          "tile": 4,
+          "exit_map": [
+            2,
+            3,
+            2,
+            2,
+            3,
+            2
+          ],
+          "exact_context_delta444_db": 0.09570856469713002,
+          "ideal_shared_saving_pct": 34.640552039381156
+        },
+        {
+          "tile": 5,
+          "exit_map": [
+            2,
+            3,
+            2,
+            2,
+            2,
+            3
+          ],
+          "exact_context_delta444_db": 0.11724498746681598,
+          "ideal_shared_saving_pct": 34.53015924424226
+        }
+      ],
+      "best_pair": null,
+      "rescued_by_two_tiles": false,
+      "minimum_upgraded_tiles": 1,
+      "best_subset": {
+        "tile": 4,
+        "exit_map": [
+          2,
+          3,
+          2,
+          2,
+          3,
+          2
+        ],
+        "exact_context_delta444_db": 0.09570856469713002,
+        "ideal_shared_saving_pct": 34.640552039381156,
+        "tiles": [
+          4
+        ]
+      }
+    },
+    {
+      "image": "0889.png",
+      "qp": 48,
+      "base_exit_map": [
+        4,
+        4,
+        4,
+        3,
+        3,
+        3
+      ],
+      "base_exact_context_delta444_db": 0.12569270882470157,
+      "base_ideal_shared_saving_pct": 19.223789556962036,
+      "rescued_by_one_tile": true,
+      "best": {
+        "tile": 2,
+        "exit_map": [
+          4,
+          4,
+          5,
+          3,
+          3,
+          3
+        ],
+        "exact_context_delta444_db": 0.09800099018231616,
+        "ideal_shared_saving_pct": 16.482925814214134
+      },
+      "candidates": [
+        {
+          "tile": 0,
+          "exit_map": [
+            5,
+            4,
+            4,
+            3,
+            3,
+            3
+          ],
+          "exact_context_delta444_db": 0.10561521364616289,
+          "ideal_shared_saving_pct": 16.482925814214134
+        },
+        {
+          "tile": 1,
+          "exit_map": [
+            4,
+            5,
+            4,
+            3,
+            3,
+            3
+          ],
+          "exact_context_delta444_db": 0.10034935371217105,
+          "ideal_shared_saving_pct": 16.343418435741917
+        },
+        {
+          "tile": 2,
+          "exit_map": [
+            4,
+            4,
+            5,
+            3,
+            3,
+            3
+          ],
+          "exact_context_delta444_db": 0.09800099018231616,
+          "ideal_shared_saving_pct": 16.482925814214134
+        },
+        {
+          "tile": 3,
+          "exit_map": [
+            4,
+            4,
+            4,
+            4,
+            3,
+            3
+          ],
+          "exact_context_delta444_db": 0.11635414860873922,
+          "ideal_shared_saving_pct": 17.36470741583158
+        },
+        {
+          "tile": 4,
+          "exit_map": [
+            4,
+            4,
+            4,
+            3,
+            4,
+            3
+          ],
+          "exact_context_delta444_db": 0.11731099904236822,
+          "ideal_shared_saving_pct": 17.25431462069269
+        },
+        {
+          "tile": 5,
+          "exit_map": [
+            4,
+            4,
+            4,
+            3,
+            3,
+            4
+          ],
+          "exact_context_delta444_db": 0.11838075002693182,
+          "ideal_shared_saving_pct": 17.36470741583158
+        }
+      ],
+      "best_pair": null,
+      "rescued_by_two_tiles": false,
+      "minimum_upgraded_tiles": 1,
+      "best_subset": {
+        "tile": 2,
+        "exit_map": [
+          4,
+          4,
+          5,
+          3,
+          3,
+          3
+        ],
+        "exact_context_delta444_db": 0.09800099018231616,
+        "ideal_shared_saving_pct": 16.482925814214134,
+        "tiles": [
+          2
+        ]
+      }
+    },
+    {
+      "image": "0844.png",
+      "qp": 63,
+      "base_exit_map": [
+        2,
+        2,
+        2,
+        2,
+        5,
+        5
+      ],
+      "base_exact_context_delta444_db": 0.15168538592801434,
+      "base_ideal_shared_saving_pct": 24.160831712596696,
+      "rescued_by_one_tile": false,
+      "best": {
+        "tile": 3,
+        "exit_map": [
+          2,
+          2,
+          2,
+          3,
+          5,
+          5
+        ],
+        "exact_context_delta444_db": 0.10626590702510572,
+        "ideal_shared_saving_pct": 22.007565653568918
+      },
+      "candidates": [
+        {
+          "tile": 0,
+          "exit_map": [
+            3,
+            2,
+            2,
+            2,
+            5,
+            5
+          ],
+          "exact_context_delta444_db": 0.13393029077608332,
+          "ideal_shared_saving_pct": 21.55871582718003
+        },
+        {
+          "tile": 1,
+          "exit_map": [
+            2,
+            3,
+            2,
+            2,
+            5,
+            5
+          ],
+          "exact_context_delta444_db": 0.143623641017558,
+          "ideal_shared_saving_pct": 21.911730150096698
+        },
+        {
+          "tile": 2,
+          "exit_map": [
+            2,
+            2,
+            3,
+            2,
+            5,
+            5
+          ],
+          "exact_context_delta444_db": 0.1408831768467482,
+          "ideal_shared_saving_pct": 22.007565653568918
+        },
+        {
+          "tile": 3,
+          "exit_map": [
+            2,
+            2,
+            2,
+            3,
+            5,
+            5
+          ],
+          "exact_context_delta444_db": 0.10626590702510572,
+          "ideal_shared_saving_pct": 22.007565653568918
+        }
+      ],
+      "rescued_by_two_tiles": true,
+      "best_pair": {
+        "tiles": [
+          2,
+          3
+        ],
+        "exit_map": [
+          2,
+          2,
+          3,
+          3,
+          5,
+          5
+        ],
+        "exact_context_delta444_db": 0.09534999040071568,
+        "ideal_shared_saving_pct": 19.854299594541146
+      },
+      "pair_candidates": [
+        {
+          "tiles": [
+            0,
+            1
+          ],
+          "exit_map": [
+            3,
+            3,
+            2,
+            2,
+            5,
+            5
+          ],
+          "exact_context_delta444_db": 0.125851013383545,
+          "ideal_shared_saving_pct": 19.50128527162448
+        },
+        {
+          "tiles": [
+            0,
+            2
+          ],
+          "exit_map": [
+            3,
+            2,
+            3,
+            2,
+            5,
+            5
+          ],
+          "exact_context_delta444_db": 0.12308444913223171,
+          "ideal_shared_saving_pct": 19.40544976815226
+        },
+        {
+          "tiles": [
+            0,
+            3
+          ],
+          "exit_map": [
+            3,
+            2,
+            2,
+            3,
+            5,
+            5
+          ],
+          "exact_context_delta444_db": 0.08833431746880291,
+          "ideal_shared_saving_pct": 19.5971207750967
+        },
+        {
+          "tiles": [
+            1,
+            2
+          ],
+          "exit_map": [
+            2,
+            3,
+            3,
+            2,
+            5,
+            5
+          ],
+          "exact_context_delta444_db": 0.13283401980241413,
+          "ideal_shared_saving_pct": 19.950135098013366
+        },
+        {
+          "tiles": [
+            1,
+            3
+          ],
+          "exit_map": [
+            2,
+            3,
+            2,
+            3,
+            5,
+            5
+          ],
+          "exact_context_delta444_db": 0.09811966829058227,
+          "ideal_shared_saving_pct": 19.758464091068916
+        },
+        {
+          "tiles": [
+            2,
+            3
+          ],
+          "exit_map": [
+            2,
+            2,
+            3,
+            3,
+            5,
+            5
+          ],
+          "exact_context_delta444_db": 0.09534999040071568,
+          "ideal_shared_saving_pct": 19.854299594541146
+        }
+      ],
+      "minimum_upgraded_tiles": 2,
+      "best_subset": {
+        "tiles": [
+          2,
+          3
+        ],
+        "exit_map": [
+          2,
+          2,
+          3,
+          3,
+          5,
+          5
+        ],
+        "exact_context_delta444_db": 0.09534999040071568,
+        "ideal_shared_saving_pct": 19.854299594541146
+      }
+    },
+    {
+      "image": "0891.png",
+      "qp": 0,
+      "base_exit_map": [
+        3,
+        3,
+        3,
+        3,
+        2,
+        3
+      ],
+      "base_exact_context_delta444_db": 0.12728953017702352,
+      "base_ideal_shared_saving_pct": 27.315808115770047,
+      "rescued_by_one_tile": false,
+      "best": {
+        "tile": 0,
+        "exit_map": [
+          4,
+          3,
+          3,
+          3,
+          2,
+          3
+        ],
+        "exact_context_delta444_db": 0.1040024686713866,
+        "ideal_shared_saving_pct": 25.20197337047293
+      },
+      "candidates": [
+        {
+          "tile": 0,
+          "exit_map": [
+            4,
+            3,
+            3,
+            3,
+            2,
+            3
+          ],
+          "exact_context_delta444_db": 0.1040024686713866,
+          "ideal_shared_saving_pct": 25.20197337047293
+        },
+        {
+          "tile": 1,
+          "exit_map": [
+            3,
+            4,
+            3,
+            3,
+            2,
+            3
+          ],
+          "exact_context_delta444_db": 0.11877247553591527,
+          "ideal_shared_saving_pct": 24.948433873945152
+        },
+        {
+          "tile": 2,
+          "exit_map": [
+            3,
+            3,
+            4,
+            3,
+            2,
+            3
+          ],
+          "exact_context_delta444_db": 0.11172555421146005,
+          "ideal_shared_saving_pct": 25.20197337047293
+        },
+        {
+          "tile": 3,
+          "exit_map": [
+            3,
+            3,
+            3,
+            4,
+            2,
+            3
+          ],
+          "exact_context_delta444_db": 0.12354407093309774,
+          "ideal_shared_saving_pct": 25.06367909963959
+        },
+        {
+          "tile": 4,
+          "exit_map": [
+            3,
+            3,
+            3,
+            3,
+            3,
+            3
+          ],
+          "exact_context_delta444_db": 0.10628239126062469,
+          "ideal_shared_saving_pct": 25.16860759493671
+        },
+        {
+          "tile": 5,
+          "exit_map": [
+            3,
+            3,
+            3,
+            3,
+            2,
+            4
+          ],
+          "exact_context_delta444_db": 0.11929923163159639,
+          "ideal_shared_saving_pct": 25.06367909963959
+        }
+      ],
+      "rescued_by_two_tiles": true,
+      "best_pair": {
+        "tiles": [
+          0,
+          1
+        ],
+        "exit_map": [
+          4,
+          4,
+          3,
+          3,
+          2,
+          3
+        ],
+        "exact_context_delta444_db": 0.09543666734378387,
+        "ideal_shared_saving_pct": 23.089351732814713
+      },
+      "pair_candidates": [
+        {
+          "tiles": [
+            0,
+            1
+          ],
+          "exit_map": [
+            4,
+            4,
+            3,
+            3,
+            2,
+            3
+          ],
+          "exact_context_delta444_db": 0.09543666734378387,
+          "ideal_shared_saving_pct": 23.089351732814713
+        },
+        {
+          "tiles": [
+            0,
+            2
+          ],
+          "exit_map": [
+            4,
+            3,
+            4,
+            3,
+            2,
+            3
+          ],
+          "exact_context_delta444_db": 0.08835498677133359,
+          "ideal_shared_saving_pct": 23.088138625175812
+        },
+        {
+          "tiles": [
+            0,
+            3
+          ],
+          "exit_map": [
+            4,
+            3,
+            3,
+            4,
+            2,
+            3
+          ],
+          "exact_context_delta444_db": 0.10023815535674092,
+          "ideal_shared_saving_pct": 23.20459695850915
+        },
+        {
+          "tiles": [
+            0,
+            4
+          ],
+          "exit_map": [
+            4,
+            3,
+            3,
+            3,
+            3,
+            3
+          ],
+          "exact_context_delta444_db": 0.08288243521424751,
+          "ideal_shared_saving_pct": 23.064477710750698
+        },
+        {
+          "tiles": [
+            0,
+            5
+          ],
+          "exit_map": [
+            4,
+            3,
+            3,
+            3,
+            2,
+            4
+          ],
+          "exact_context_delta444_db": 0.09596884766714511,
+          "ideal_shared_saving_pct": 22.949844354342485
+        },
+        {
+          "tiles": [
+            1,
+            2
+          ],
+          "exit_map": [
+            3,
+            4,
+            4,
+            3,
+            2,
+            3
+          ],
+          "exact_context_delta444_db": 0.10318176494361866,
+          "ideal_shared_saving_pct": 23.089351732814713
+        },
+        {
+          "tiles": [
+            1,
+            3
+          ],
+          "exit_map": [
+            3,
+            4,
+            3,
+            4,
+            2,
+            3
+          ],
+          "exact_context_delta444_db": 0.11501998247838603,
+          "ideal_shared_saving_pct": 22.7302718717036
+        },
+        {
+          "tiles": [
+            1,
+            4
+          ],
+          "exit_map": [
+            3,
+            4,
+            3,
+            3,
+            3,
+            3
+          ],
+          "exact_context_delta444_db": 0.09772335215831512,
+          "ideal_shared_saving_pct": 22.94195383922292
+        },
+        {
+          "tiles": [
+            1,
+            5
+          ],
+          "exit_map": [
+            3,
+            4,
+            3,
+            3,
+            2,
+            4
+          ],
+          "exact_context_delta444_db": 0.11076647717992846,
+          "ideal_shared_saving_pct": 22.7302718717036
+        },
+        {
+          "tiles": [
+            2,
+            3
+          ],
+          "exit_map": [
+            3,
+            3,
+            4,
+            4,
+            2,
+            3
+          ],
+          "exact_context_delta444_db": 0.10796631991615667,
+          "ideal_shared_saving_pct": 22.949844354342485
+        },
+        {
+          "tiles": [
+            2,
+            4
+          ],
+          "exit_map": [
+            3,
+            3,
+            4,
+            3,
+            3,
+            3
+          ],
+          "exact_context_delta444_db": 0.0906428127981354,
+          "ideal_shared_saving_pct": 23.064477710750698
+        },
+        {
+          "tiles": [
+            2,
+            5
+          ],
+          "exit_map": [
+            3,
+            3,
+            4,
+            3,
+            2,
+            4
+          ],
+          "exact_context_delta444_db": 0.10371493342269436,
+          "ideal_shared_saving_pct": 23.20459695850915
+        },
+        {
+          "tiles": [
+            3,
+            4
+          ],
+          "exit_map": [
+            3,
+            3,
+            3,
+            4,
+            3,
+            3
+          ],
+          "exact_context_delta444_db": 0.10252134568147739,
+          "ideal_shared_saving_pct": 23.064477710750698
+        },
+        {
+          "tiles": [
+            3,
+            5
+          ],
+          "exit_map": [
+            3,
+            3,
+            3,
+            4,
+            2,
+            4
+          ],
+          "exact_context_delta444_db": 0.11554622835312114,
+          "ideal_shared_saving_pct": 22.811550083509157
+        },
+        {
+          "tiles": [
+            4,
+            5
+          ],
+          "exit_map": [
+            3,
+            3,
+            3,
+            3,
+            3,
+            4
+          ],
+          "exact_context_delta444_db": 0.0982542829822165,
+          "ideal_shared_saving_pct": 23.064477710750698
+        }
+      ],
+      "minimum_upgraded_tiles": 2,
+      "best_subset": {
+        "tiles": [
+          0,
+          1
+        ],
+        "exit_map": [
+          4,
+          4,
+          3,
+          3,
+          2,
+          3
+        ],
+        "exact_context_delta444_db": 0.09543666734378387,
+        "ideal_shared_saving_pct": 23.089351732814713
+      }
+    },
+    {
+      "image": "0844.png",
+      "qp": 0,
+      "base_exit_map": [
+        2,
+        2,
+        2,
+        2,
+        3,
+        2
+      ],
+      "base_exact_context_delta444_db": 0.22832215226357852,
+      "base_ideal_shared_saving_pct": 37.229323740770035,
+      "rescued_by_one_tile": false,
+      "best": {
+        "tile": 5,
+        "exit_map": [
+          2,
+          2,
+          2,
+          2,
+          3,
+          3
+        ],
+        "exact_context_delta444_db": 0.17597663941734365,
+        "ideal_shared_saving_pct": 34.750944834520034
+      },
+      "candidates": [
+        {
+          "tile": 0,
+          "exit_map": [
+            3,
+            2,
+            2,
+            2,
+            3,
+            2
+          ],
+          "exact_context_delta444_db": 0.22225394899555923,
+          "ideal_shared_saving_pct": 34.53015924424226
+        },
+        {
+          "tile": 1,
+          "exit_map": [
+            2,
+            3,
+            2,
+            2,
+            3,
+            2
+          ],
+          "exact_context_delta444_db": 0.21497611779912684,
+          "ideal_shared_saving_pct": 34.640552039381156
+        },
+        {
+          "tile": 2,
+          "exit_map": [
+            2,
+            2,
+            3,
+            2,
+            3,
+            2
+          ],
+          "exact_context_delta444_db": 0.20240273984534451,
+          "ideal_shared_saving_pct": 34.53015924424226
+        },
+        {
+          "tile": 3,
+          "exit_map": [
+            2,
+            2,
+            2,
+            3,
+            3,
+            2
+          ],
+          "exact_context_delta444_db": 0.2076098289857558,
+          "ideal_shared_saving_pct": 34.750944834520034
+        },
+        {
+          "tile": 4,
+          "exit_map": [
+            2,
+            2,
+            2,
+            2,
+            4,
+            2
+          ],
+          "exact_context_delta444_db": 0.1935507284811514,
+          "ideal_shared_saving_pct": 34.48831234616737
+        },
+        {
+          "tile": 5,
+          "exit_map": [
+            2,
+            2,
+            2,
+            2,
+            3,
+            3
+          ],
+          "exact_context_delta444_db": 0.17597663941734365,
+          "ideal_shared_saving_pct": 34.750944834520034
+        }
+      ],
+      "rescued_by_two_tiles": false,
+      "best_pair": {
+        "tiles": [
+          4,
+          5
+        ],
+        "exit_map": [
+          2,
+          2,
+          2,
+          2,
+          4,
+          3
+        ],
+        "exact_context_delta444_db": 0.14077233175885945,
+        "ideal_shared_saving_pct": 32.17248986352848
+      },
+      "pair_candidates": [
+        {
+          "tiles": [
+            0,
+            1
+          ],
+          "exit_map": [
+            3,
+            3,
+            2,
+            2,
+            3,
+            2
+          ],
+          "exact_context_delta444_db": 0.20889635875500853,
+          "ideal_shared_saving_pct": 32.162173133131155
+        },
+        {
+          "tiles": [
+            0,
+            2
+          ],
+          "exit_map": [
+            3,
+            2,
+            3,
+            2,
+            3,
+            2
+          ],
+          "exact_context_delta444_db": 0.1962985632638549,
+          "ideal_shared_saving_pct": 31.83099474771449
+        },
+        {
+          "tiles": [
+            0,
+            3
+          ],
+          "exit_map": [
+            3,
+            2,
+            2,
+            3,
+            3,
+            2
+          ],
+          "exact_context_delta444_db": 0.20152162227420775,
+          "ideal_shared_saving_pct": 32.27256592827003
+        },
+        {
+          "tiles": [
+            0,
+            4
+          ],
+          "exit_map": [
+            3,
+            2,
+            2,
+            2,
+            4,
+            2
+          ],
+          "exact_context_delta444_db": 0.1874337112689575,
+          "ideal_shared_saving_pct": 31.827967294084036
+        },
+        {
+          "tiles": [
+            0,
+            5
+          ],
+          "exit_map": [
+            3,
+            2,
+            2,
+            2,
+            3,
+            3
+          ],
+          "exact_context_delta444_db": 0.16983480148700897,
+          "ideal_shared_saving_pct": 32.05178033799226
+        },
+        {
+          "tiles": [
+            1,
+            2
+          ],
+          "exit_map": [
+            2,
+            3,
+            3,
+            2,
+            3,
+            2
+          ],
+          "exact_context_delta444_db": 0.18898423605983045,
+          "ideal_shared_saving_pct": 32.162173133131155
+        },
+        {
+          "tiles": [
+            1,
+            3
+          ],
+          "exit_map": [
+            2,
+            3,
+            2,
+            3,
+            3,
+            2
+          ],
+          "exact_context_delta444_db": 0.19419951740451583,
+          "ideal_shared_saving_pct": 32.162173133131155
+        },
+        {
+          "tiles": [
+            1,
+            4
+          ],
+          "exit_map": [
+            2,
+            3,
+            2,
+            2,
+            4,
+            2
+          ],
+          "exact_context_delta444_db": 0.18010140244683723,
+          "ideal_shared_saving_pct": 32.06937571422293
+        },
+        {
+          "tiles": [
+            1,
+            5
+          ],
+          "exit_map": [
+            2,
+            3,
+            2,
+            2,
+            3,
+            3
+          ],
+          "exact_context_delta444_db": 0.16246851993580613,
+          "ideal_shared_saving_pct": 32.162173133131155
+        },
+        {
+          "tiles": [
+            2,
+            3
+          ],
+          "exit_map": [
+            2,
+            2,
+            3,
+            3,
+            3,
+            2
+          ],
+          "exact_context_delta444_db": 0.1815657566531963,
+          "ideal_shared_saving_pct": 32.05178033799226
+        },
+        {
+          "tiles": [
+            2,
+            4
+          ],
+          "exit_map": [
+            2,
+            2,
+            3,
+            2,
+            4,
+            2
+          ],
+          "exact_context_delta444_db": 0.16742233347148375,
+          "ideal_shared_saving_pct": 31.827967294084036
+        },
+        {
+          "tiles": [
+            2,
+            5
+          ],
+          "exit_map": [
+            2,
+            2,
+            3,
+            2,
+            3,
+            3
+          ],
+          "exact_context_delta444_db": 0.14975301658597745,
+          "ideal_shared_saving_pct": 32.27256592827003
+        },
+        {
+          "tiles": [
+            3,
+            4
+          ],
+          "exit_map": [
+            2,
+            2,
+            2,
+            3,
+            4,
+            2
+          ],
+          "exact_context_delta444_db": 0.17273435581949884,
+          "ideal_shared_saving_pct": 32.17248986352848
+        },
+        {
+          "tiles": [
+            3,
+            5
+          ],
+          "exit_map": [
+            2,
+            2,
+            2,
+            3,
+            3,
+            3
+          ],
+          "exact_context_delta444_db": 0.15501217265245285,
+          "ideal_shared_saving_pct": 32.27256592827003
+        },
+        {
+          "tiles": [
+            4,
+            5
+          ],
+          "exit_map": [
+            2,
+            2,
+            2,
+            2,
+            4,
+            3
+          ],
+          "exact_context_delta444_db": 0.14077233175885945,
+          "ideal_shared_saving_pct": 32.17248986352848
+        }
+      ],
+      "minimum_upgraded_tiles": 4,
+      "best_subset": {
+        "tiles": [
+          2,
+          3,
+          4,
+          5
+        ],
+        "exit_map": [
+          2,
+          2,
+          3,
+          3,
+          4,
+          3
+        ],
+        "exact_context_delta444_db": 0.09313529194787935,
+        "ideal_shared_saving_pct": 27.402550627417366
+      }
+    },
+    {
+      "image": "0844.png",
+      "qp": 16,
+      "base_exit_map": [
+        2,
+        2,
+        2,
+        2,
+        3,
+        3
+      ],
+      "base_exact_context_delta444_db": 0.1999695875554205,
+      "base_ideal_shared_saving_pct": 34.750944834520034,
+      "rescued_by_one_tile": false,
+      "best": {
+        "tile": 4,
+        "exit_map": [
+          2,
+          2,
+          2,
+          2,
+          4,
+          3
+        ],
+        "exact_context_delta444_db": 0.15843510398345487,
+        "ideal_shared_saving_pct": 32.17248986352848
+      },
+      "candidates": [
+        {
+          "tile": 0,
+          "exit_map": [
+            3,
+            2,
+            2,
+            2,
+            3,
+            3
+          ],
+          "exact_context_delta444_db": 0.19760329847980265,
+          "ideal_shared_saving_pct": 32.05178033799226
+        },
+        {
+          "tile": 1,
+          "exit_map": [
+            2,
+            3,
+            2,
+            2,
+            3,
+            3
+          ],
+          "exact_context_delta444_db": 0.1892983866397285,
+          "ideal_shared_saving_pct": 32.162173133131155
+        },
+        {
+          "tile": 2,
+          "exit_map": [
+            2,
+            2,
+            3,
+            2,
+            3,
+            3
+          ],
+          "exact_context_delta444_db": 0.18761125532313133,
+          "ideal_shared_saving_pct": 32.27256592827003
+        },
+        {
+          "tile": 3,
+          "exit_map": [
+            2,
+            2,
+            2,
+            3,
+            3,
+            3
+          ],
+          "exact_context_delta444_db": 0.18788078023108393,
+          "ideal_shared_saving_pct": 32.27256592827003
+        },
+        {
+          "tile": 4,
+          "exit_map": [
+            2,
+            2,
+            2,
+            2,
+            4,
+            3
+          ],
+          "exact_context_delta444_db": 0.15843510398345487,
+          "ideal_shared_saving_pct": 32.17248986352848
+        },
+        {
+          "tile": 5,
+          "exit_map": [
+            2,
+            2,
+            2,
+            2,
+            3,
+            4
+          ],
+          "exact_context_delta444_db": 0.17931518852714548,
+          "ideal_shared_saving_pct": 32.474553665611815
+        }
+      ],
+      "rescued_by_two_tiles": false,
+      "best_pair": {
+        "tiles": [
+          4,
+          5
+        ],
+        "exit_map": [
+          2,
+          2,
+          2,
+          2,
+          4,
+          4
+        ],
+        "exact_context_delta444_db": 0.13763702730078448,
+        "ideal_shared_saving_pct": 30.175113451564705
+      },
+      "pair_candidates": [
+        {
+          "tiles": [
+            0,
+            1
+          ],
+          "exit_map": [
+            3,
+            3,
+            2,
+            2,
+            3,
+            3
+          ],
+          "exact_context_delta444_db": 0.18693243860972242,
+          "ideal_shared_saving_pct": 29.683794226881155
+        },
+        {
+          "tiles": [
+            0,
+            2
+          ],
+          "exit_map": [
+            3,
+            2,
+            3,
+            2,
+            3,
+            3
+          ],
+          "exact_context_delta444_db": 0.18523822127671272,
+          "ideal_shared_saving_pct": 29.573401431742262
+        },
+        {
+          "tiles": [
+            0,
+            3
+          ],
+          "exit_map": [
+            3,
+            2,
+            2,
+            3,
+            3,
+            3
+          ],
+          "exact_context_delta444_db": 0.1855231031635958,
+          "ideal_shared_saving_pct": 29.794187022020036
+        },
+        {
+          "tiles": [
+            0,
+            4
+          ],
+          "exit_map": [
+            3,
+            2,
+            2,
+            2,
+            4,
+            3
+          ],
+          "exact_context_delta444_db": 0.1560460696879999,
+          "ideal_shared_saving_pct": 29.51214481144514
+        },
+        {
+          "tiles": [
+            0,
+            5
+          ],
+          "exit_map": [
+            3,
+            2,
+            2,
+            2,
+            3,
+            4
+          ],
+          "exact_context_delta444_db": 0.17693802772652967,
+          "ideal_shared_saving_pct": 29.775389169084033
+        },
+        {
+          "tiles": [
+            1,
+            2
+          ],
+          "exit_map": [
+            2,
+            3,
+            3,
+            2,
+            3,
+            3
+          ],
+          "exact_context_delta444_db": 0.17691290267521886,
+          "ideal_shared_saving_pct": 29.904579817158925
+        },
+        {
+          "tiles": [
+            1,
+            3
+          ],
+          "exit_map": [
+            2,
+            3,
+            2,
+            3,
+            3,
+            3
+          ],
+          "exact_context_delta444_db": 0.17717938556855178,
+          "ideal_shared_saving_pct": 29.683794226881155
+        },
+        {
+          "tiles": [
+            1,
+            4
+          ],
+          "exit_map": [
+            2,
+            3,
+            2,
+            2,
+            4,
+            3
+          ],
+          "exact_context_delta444_db": 0.14766371839242937,
+          "ideal_shared_saving_pct": 29.75355323158403
+        },
+        {
+          "tiles": [
+            1,
+            5
+          ],
+          "exit_map": [
+            2,
+            3,
+            2,
+            2,
+            3,
+            4
+          ],
+          "exact_context_delta444_db": 0.1685934659238068,
+          "ideal_shared_saving_pct": 29.9100441170007
+        },
+        {
+          "tiles": [
+            2,
+            3
+          ],
+          "exit_map": [
+            2,
+            2,
+            3,
+            3,
+            3,
+            3
+          ],
+          "exact_context_delta444_db": 0.17548753881345083,
+          "ideal_shared_saving_pct": 29.794187022020036
+        },
+        {
+          "tiles": [
+            2,
+            4
+          ],
+          "exit_map": [
+            2,
+            2,
+            3,
+            2,
+            4,
+            3
+          ],
+          "exact_context_delta444_db": 0.14595742819373714,
+          "ideal_shared_saving_pct": 29.718373110056262
+        },
+        {
+          "tiles": [
+            2,
+            5
+          ],
+          "exit_map": [
+            2,
+            2,
+            3,
+            2,
+            3,
+            4
+          ],
+          "exact_context_delta444_db": 0.16690033464811835,
+          "ideal_shared_saving_pct": 30.158731182972932
+        },
+        {
+          "tiles": [
+            3,
+            4
+          ],
+          "exit_map": [
+            2,
+            2,
+            2,
+            3,
+            4,
+            3
+          ],
+          "exact_context_delta444_db": 0.14628886759311854,
+          "ideal_shared_saving_pct": 29.85666738088959
+        },
+        {
+          "tiles": [
+            3,
+            5
+          ],
+          "exit_map": [
+            2,
+            2,
+            2,
+            3,
+            3,
+            4
+          ],
+          "exact_context_delta444_db": 0.1671686710395726,
+          "ideal_shared_saving_pct": 29.996174759361814
+        },
+        {
+          "tiles": [
+            4,
+            5
+          ],
+          "exit_map": [
+            2,
+            2,
+            2,
+            2,
+            4,
+            4
+          ],
+          "exact_context_delta444_db": 0.13763702730078448,
+          "ideal_shared_saving_pct": 30.175113451564705
+        }
+      ],
+      "minimum_upgraded_tiles": 6,
+      "best_subset": {
+        "tiles": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5
+        ],
+        "exit_map": [
+          3,
+          3,
+          3,
+          3,
+          4,
+          4
+        ],
+        "exact_context_delta444_db": 0.09958203460876244,
+        "ideal_shared_saving_pct": 21.082871698092486
+      }
+    },
+    {
+      "image": "0844.png",
+      "qp": 32,
+      "base_exit_map": [
+        2,
+        2,
+        2,
+        2,
+        3,
+        3
+      ],
+      "base_exact_context_delta444_db": 0.2630199460754156,
+      "base_ideal_shared_saving_pct": 34.750944834520034,
+      "rescued_by_one_tile": false,
+      "best": {
+        "tile": 5,
+        "exit_map": [
+          2,
+          2,
+          2,
+          2,
+          3,
+          4
+        ],
+        "exact_context_delta444_db": 0.2219604598505887,
+        "ideal_shared_saving_pct": 32.474553665611815
+      },
+      "candidates": [
+        {
+          "tile": 0,
+          "exit_map": [
+            3,
+            2,
+            2,
+            2,
+            3,
+            3
+          ],
+          "exact_context_delta444_db": 0.26328969098085414,
+          "ideal_shared_saving_pct": 32.05178033799226
+        },
+        {
+          "tile": 1,
+          "exit_map": [
+            2,
+            3,
+            2,
+            2,
+            3,
+            3
+          ],
+          "exact_context_delta444_db": 0.2693646372942979,
+          "ideal_shared_saving_pct": 32.162173133131155
+        },
+        {
+          "tile": 2,
+          "exit_map": [
+            2,
+            2,
+            3,
+            2,
+            3,
+            3
+          ],
+          "exact_context_delta444_db": 0.25350944531175024,
+          "ideal_shared_saving_pct": 32.27256592827003
+        },
+        {
+          "tile": 3,
+          "exit_map": [
+            2,
+            2,
+            2,
+            3,
+            3,
+            3
+          ],
+          "exact_context_delta444_db": 0.23938148133577739,
+          "ideal_shared_saving_pct": 32.27256592827003
+        },
+        {
+          "tile": 4,
+          "exit_map": [
+            2,
+            2,
+            2,
+            2,
+            4,
+            3
+          ],
+          "exact_context_delta444_db": 0.2258002124274353,
+          "ideal_shared_saving_pct": 32.17248986352848
+        },
+        {
+          "tile": 5,
+          "exit_map": [
+            2,
+            2,
+            2,
+            2,
+            3,
+            4
+          ],
+          "exact_context_delta444_db": 0.2219604598505887,
+          "ideal_shared_saving_pct": 32.474553665611815
+        }
+      ],
+      "rescued_by_two_tiles": false,
+      "best_pair": {
+        "tiles": [
+          4,
+          5
+        ],
+        "exit_map": [
+          2,
+          2,
+          2,
+          2,
+          4,
+          4
+        ],
+        "exact_context_delta444_db": 0.1843971854576319,
+        "ideal_shared_saving_pct": 30.175113451564705
+      },
+      "pair_candidates": [
+        {
+          "tiles": [
+            0,
+            1
+          ],
+          "exit_map": [
+            3,
+            3,
+            2,
+            2,
+            3,
+            3
+          ],
+          "exact_context_delta444_db": 0.26964490771222793,
+          "ideal_shared_saving_pct": 29.683794226881155
+        },
+        {
+          "tiles": [
+            0,
+            2
+          ],
+          "exit_map": [
+            3,
+            2,
+            3,
+            2,
+            3,
+            3
+          ],
+          "exact_context_delta444_db": 0.2537797815533254,
+          "ideal_shared_saving_pct": 29.573401431742262
+        },
+        {
+          "tiles": [
+            0,
+            3
+          ],
+          "exit_map": [
+            3,
+            2,
+            2,
+            3,
+            3,
+            3
+          ],
+          "exact_context_delta444_db": 0.23966695108933123,
+          "ideal_shared_saving_pct": 29.794187022020036
+        },
+        {
+          "tiles": [
+            0,
+            4
+          ],
+          "exit_map": [
+            3,
+            2,
+            2,
+            2,
+            4,
+            3
+          ],
+          "exact_context_delta444_db": 0.22607268744716102,
+          "ideal_shared_saving_pct": 29.51214481144514
+        },
+        {
+          "tiles": [
+            0,
+            5
+          ],
+          "exit_map": [
+            3,
+            2,
+            2,
+            2,
+            3,
+            4
+          ],
+          "exact_context_delta444_db": 0.22223276701738656,
+          "ideal_shared_saving_pct": 29.775389169084033
+        },
+        {
+          "tiles": [
+            1,
+            2
+          ],
+          "exit_map": [
+            2,
+            3,
+            3,
+            2,
+            3,
+            3
+          ],
+          "exact_context_delta444_db": 0.2598737102526108,
+          "ideal_shared_saving_pct": 29.904579817158925
+        },
+        {
+          "tiles": [
+            1,
+            3
+          ],
+          "exit_map": [
+            2,
+            3,
+            2,
+            3,
+            3,
+            3
+          ],
+          "exact_context_delta444_db": 0.24576077517435405,
+          "ideal_shared_saving_pct": 29.683794226881155
+        },
+        {
+          "tiles": [
+            1,
+            4
+          ],
+          "exit_map": [
+            2,
+            3,
+            2,
+            2,
+            4,
+            3
+          ],
+          "exact_context_delta444_db": 0.2321966166851637,
+          "ideal_shared_saving_pct": 29.75355323158403
+        },
+        {
+          "tiles": [
+            1,
+            5
+          ],
+          "exit_map": [
+            2,
+            3,
+            2,
+            2,
+            3,
+            4
+          ],
+          "exact_context_delta444_db": 0.22836537569037313,
+          "ideal_shared_saving_pct": 29.9100441170007
+        },
+        {
+          "tiles": [
+            2,
+            3
+          ],
+          "exit_map": [
+            2,
+            2,
+            3,
+            3,
+            3,
+            3
+          ],
+          "exact_context_delta444_db": 0.22981901699861304,
+          "ideal_shared_saving_pct": 29.794187022020036
+        },
+        {
+          "tiles": [
+            2,
+            4
+          ],
+          "exit_map": [
+            2,
+            2,
+            3,
+            2,
+            4,
+            3
+          ],
+          "exact_context_delta444_db": 0.21620694556954273,
+          "ideal_shared_saving_pct": 29.718373110056262
+        },
+        {
+          "tiles": [
+            2,
+            5
+          ],
+          "exit_map": [
+            2,
+            2,
+            3,
+            2,
+            3,
+            4
+          ],
+          "exact_context_delta444_db": 0.21235869810517452,
+          "ideal_shared_saving_pct": 30.158731182972932
+        },
+        {
+          "tiles": [
+            3,
+            4
+          ],
+          "exit_map": [
+            2,
+            2,
+            2,
+            3,
+            4,
+            3
+          ],
+          "exact_context_delta444_db": 0.2020193472392787,
+          "ideal_shared_saving_pct": 29.85666738088959
+        },
+        {
+          "tiles": [
+            3,
+            5
+          ],
+          "exit_map": [
+            2,
+            2,
+            2,
+            3,
+            3,
+            4
+          ],
+          "exact_context_delta444_db": 0.19809765451171332,
+          "ideal_shared_saving_pct": 29.996174759361814
+        },
+        {
+          "tiles": [
+            4,
+            5
+          ],
+          "exit_map": [
+            2,
+            2,
+            2,
+            2,
+            4,
+            4
+          ],
+          "exact_context_delta444_db": 0.1843971854576319,
+          "ideal_shared_saving_pct": 30.175113451564705
+        }
+      ],
+      "minimum_upgraded_tiles": null,
+      "best_subset": null
+    },
+    {
+      "image": "0844.png",
+      "qp": 48,
+      "base_exit_map": [
+        2,
+        2,
+        2,
+        2,
+        3,
+        3
+      ],
+      "base_exact_context_delta444_db": 0.46465230063386875,
+      "base_ideal_shared_saving_pct": 34.750944834520034,
+      "rescued_by_one_tile": false,
+      "best": {
+        "tile": 5,
+        "exit_map": [
+          2,
+          2,
+          2,
+          2,
+          3,
+          4
+        ],
+        "exact_context_delta444_db": 0.40030247333652463,
+        "ideal_shared_saving_pct": 32.474553665611815
+      },
+      "candidates": [
+        {
+          "tile": 0,
+          "exit_map": [
+            3,
+            2,
+            2,
+            2,
+            3,
+            3
+          ],
+          "exact_context_delta444_db": 0.45704421927845973,
+          "ideal_shared_saving_pct": 32.05178033799226
+        },
+        {
+          "tile": 1,
+          "exit_map": [
+            2,
+            3,
+            2,
+            2,
+            3,
+            3
+          ],
+          "exact_context_delta444_db": 0.45932758368386584,
+          "ideal_shared_saving_pct": 32.162173133131155
+        },
+        {
+          "tile": 2,
+          "exit_map": [
+            2,
+            2,
+            3,
+            2,
+            3,
+            3
+          ],
+          "exact_context_delta444_db": 0.44968160659903383,
+          "ideal_shared_saving_pct": 32.27256592827003
+        },
+        {
+          "tile": 3,
+          "exit_map": [
+            2,
+            2,
+            2,
+            3,
+            3,
+            3
+          ],
+          "exact_context_delta444_db": 0.4303552256701281,
+          "ideal_shared_saving_pct": 32.27256592827003
+        },
+        {
+          "tile": 4,
+          "exit_map": [
+            2,
+            2,
+            2,
+            2,
+            4,
+            3
+          ],
+          "exact_context_delta444_db": 0.40256423017758863,
+          "ideal_shared_saving_pct": 32.17248986352848
+        },
+        {
+          "tile": 5,
+          "exit_map": [
+            2,
+            2,
+            2,
+            2,
+            3,
+            4
+          ],
+          "exact_context_delta444_db": 0.40030247333652463,
+          "ideal_shared_saving_pct": 32.474553665611815
+        }
+      ],
+      "rescued_by_two_tiles": false,
+      "best_pair": {
+        "tiles": [
+          4,
+          5
+        ],
+        "exit_map": [
+          2,
+          2,
+          2,
+          2,
+          4,
+          4
+        ],
+        "exact_context_delta444_db": 0.33727295034343274,
+        "ideal_shared_saving_pct": 30.175113451564705
+      },
+      "pair_candidates": [
+        {
+          "tiles": [
+            0,
+            1
+          ],
+          "exit_map": [
+            3,
+            3,
+            2,
+            2,
+            3,
+            3
+          ],
+          "exact_context_delta444_db": 0.45172819972530504,
+          "ideal_shared_saving_pct": 29.683794226881155
+        },
+        {
+          "tiles": [
+            0,
+            2
+          ],
+          "exit_map": [
+            3,
+            2,
+            3,
+            2,
+            3,
+            3
+          ],
+          "exact_context_delta444_db": 0.4420468461715435,
+          "ideal_shared_saving_pct": 29.573401431742262
+        },
+        {
+          "tiles": [
+            0,
+            3
+          ],
+          "exit_map": [
+            3,
+            2,
+            2,
+            3,
+            3,
+            3
+          ],
+          "exact_context_delta444_db": 0.4226975895478826,
+          "ideal_shared_saving_pct": 29.794187022020036
+        },
+        {
+          "tiles": [
+            0,
+            4
+          ],
+          "exit_map": [
+            3,
+            2,
+            2,
+            2,
+            4,
+            3
+          ],
+          "exact_context_delta444_db": 0.3948465027588023,
+          "ideal_shared_saving_pct": 29.51214481144514
+        },
+        {
+          "tiles": [
+            0,
+            5
+          ],
+          "exit_map": [
+            3,
+            2,
+            2,
+            2,
+            3,
+            4
+          ],
+          "exact_context_delta444_db": 0.39258072198906035,
+          "ideal_shared_saving_pct": 29.775389169084033
+        },
+        {
+          "tiles": [
+            1,
+            2
+          ],
+          "exit_map": [
+            2,
+            3,
+            3,
+            2,
+            3,
+            3
+          ],
+          "exact_context_delta444_db": 0.4443596373248051,
+          "ideal_shared_saving_pct": 29.904579817158925
+        },
+        {
+          "tiles": [
+            1,
+            3
+          ],
+          "exit_map": [
+            2,
+            3,
+            2,
+            3,
+            3,
+            3
+          ],
+          "exact_context_delta444_db": 0.4249886520110773,
+          "ideal_shared_saving_pct": 29.683794226881155
+        },
+        {
+          "tiles": [
+            1,
+            4
+          ],
+          "exit_map": [
+            2,
+            3,
+            2,
+            2,
+            4,
+            3
+          ],
+          "exact_context_delta444_db": 0.39715696499617176,
+          "ideal_shared_saving_pct": 29.75355323158403
+        },
+        {
+          "tiles": [
+            1,
+            5
+          ],
+          "exit_map": [
+            2,
+            3,
+            2,
+            2,
+            3,
+            4
+          ],
+          "exact_context_delta444_db": 0.39489861153403616,
+          "ideal_shared_saving_pct": 29.9100441170007
+        },
+        {
+          "tiles": [
+            2,
+            3
+          ],
+          "exit_map": [
+            2,
+            2,
+            3,
+            3,
+            3,
+            3
+          ],
+          "exact_context_delta444_db": 0.4152652436195716,
+          "ideal_shared_saving_pct": 29.794187022020036
+        },
+        {
+          "tiles": [
+            2,
+            4
+          ],
+          "exit_map": [
+            2,
+            2,
+            3,
+            2,
+            4,
+            3
+          ],
+          "exact_context_delta444_db": 0.3873775959746439,
+          "ideal_shared_saving_pct": 29.718373110056262
+        },
+        {
+          "tiles": [
+            2,
+            5
+          ],
+          "exit_map": [
+            2,
+            2,
+            3,
+            2,
+            3,
+            4
+          ],
+          "exact_context_delta444_db": 0.38511181165607555,
+          "ideal_shared_saving_pct": 30.158731182972932
+        },
+        {
+          "tiles": [
+            3,
+            4
+          ],
+          "exit_map": [
+            2,
+            2,
+            2,
+            3,
+            4,
+            3
+          ],
+          "exact_context_delta444_db": 0.3677744590721227,
+          "ideal_shared_saving_pct": 29.85666738088959
+        },
+        {
+          "tiles": [
+            3,
+            5
+          ],
+          "exit_map": [
+            2,
+            2,
+            2,
+            3,
+            3,
+            4
+          ],
+          "exact_context_delta444_db": 0.36549098297091476,
+          "ideal_shared_saving_pct": 29.996174759361814
+        },
+        {
+          "tiles": [
+            4,
+            5
+          ],
+          "exit_map": [
+            2,
+            2,
+            2,
+            2,
+            4,
+            4
+          ],
+          "exact_context_delta444_db": 0.33727295034343274,
+          "ideal_shared_saving_pct": 30.175113451564705
+        }
+      ],
+      "minimum_upgraded_tiles": null,
+      "best_subset": null
+    },
+    {
+      "image": "0892.png",
+      "qp": 0,
+      "base_exit_map": [
+        3,
+        3,
+        2,
+        2,
+        3,
+        3
+      ],
+      "base_exact_context_delta444_db": 0.18742814210628772,
+      "base_ideal_shared_saving_pct": 29.683794226881155,
+      "rescued_by_one_tile": false,
+      "best": {
+        "tile": 3,
+        "exit_map": [
+          3,
+          3,
+          2,
+          3,
+          3,
+          3
+        ],
+        "exact_context_delta444_db": 0.14025623542940188,
+        "ideal_shared_saving_pct": 27.426200910908925
+      },
+      "candidates": [
+        {
+          "tile": 0,
+          "exit_map": [
+            4,
+            3,
+            2,
+            2,
+            3,
+            3
+          ],
+          "exact_context_delta444_db": 0.17826952544750332,
+          "ideal_shared_saving_pct": 27.4316652107507
+        },
+        {
+          "tile": 1,
+          "exit_map": [
+            3,
+            4,
+            2,
+            2,
+            3,
+            3
+          ],
+          "exact_context_delta444_db": 0.18254096765823913,
+          "ideal_shared_saving_pct": 27.299436478111815
+        },
+        {
+          "tile": 2,
+          "exit_map": [
+            3,
+            3,
+            3,
+            2,
+            3,
+            3
+          ],
+          "exact_context_delta444_db": 0.16025757457577175,
+          "ideal_shared_saving_pct": 27.426200910908925
+        },
+        {
+          "tile": 3,
+          "exit_map": [
+            3,
+            3,
+            2,
+            3,
+            3,
+            3
+          ],
+          "exact_context_delta444_db": 0.14025623542940188,
+          "ideal_shared_saving_pct": 27.426200910908925
+        },
+        {
+          "tile": 4,
+          "exit_map": [
+            3,
+            3,
+            2,
+            2,
+            4,
+            3
+          ],
+          "exact_context_delta444_db": 0.17064738433007076,
+          "ideal_shared_saving_pct": 27.299436478111815
+        },
+        {
+          "tile": 5,
+          "exit_map": [
+            3,
+            3,
+            2,
+            2,
+            3,
+            4
+          ],
+          "exact_context_delta444_db": 0.18044140151324034,
+          "ideal_shared_saving_pct": 27.4316652107507
+        }
+      ],
+      "rescued_by_two_tiles": false,
+      "best_pair": {
+        "tiles": [
+          2,
+          3
+        ],
+        "exit_map": [
+          3,
+          3,
+          3,
+          3,
+          3,
+          3
+        ],
+        "exact_context_delta444_db": 0.11278767497013219,
+        "ideal_shared_saving_pct": 25.16860759493671
+      },
+      "pair_candidates": [
+        {
+          "tiles": [
+            0,
+            1
+          ],
+          "exit_map": [
+            4,
+            4,
+            2,
+            2,
+            3,
+            3
+          ],
+          "exact_context_delta444_db": 0.17338643108161092,
+          "ideal_shared_saving_pct": 25.302060066148037
+        },
+        {
+          "tiles": [
+            0,
+            2
+          ],
+          "exit_map": [
+            4,
+            3,
+            3,
+            2,
+            3,
+            3
+          ],
+          "exact_context_delta444_db": 0.15104174035856294,
+          "ideal_shared_saving_pct": 25.174071894778482
+        },
+        {
+          "tiles": [
+            0,
+            3
+          ],
+          "exit_map": [
+            4,
+            3,
+            2,
+            3,
+            3,
+            3
+          ],
+          "exact_context_delta444_db": 0.1309978146219014,
+          "ideal_shared_saving_pct": 25.322071026722924
+        },
+        {
+          "tiles": [
+            0,
+            4
+          ],
+          "exit_map": [
+            4,
+            3,
+            2,
+            2,
+            4,
+            3
+          ],
+          "exact_context_delta444_db": 0.16145263166830473,
+          "ideal_shared_saving_pct": 25.081274475870263
+        },
+        {
+          "tiles": [
+            0,
+            5
+          ],
+          "exit_map": [
+            4,
+            3,
+            2,
+            2,
+            3,
+            4
+          ],
+          "exact_context_delta444_db": 0.1712683436524779,
+          "ideal_shared_saving_pct": 25.179536194620265
+        },
+        {
+          "tiles": [
+            1,
+            2
+          ],
+          "exit_map": [
+            3,
+            4,
+            3,
+            2,
+            3,
+            3
+          ],
+          "exact_context_delta444_db": 0.15534935352321544,
+          "ideal_shared_saving_pct": 25.18984229408404
+        },
+        {
+          "tiles": [
+            1,
+            3
+          ],
+          "exit_map": [
+            3,
+            4,
+            2,
+            3,
+            3,
+            3
+          ],
+          "exact_context_delta444_db": 0.1353150123209399,
+          "ideal_shared_saving_pct": 25.051548023250703
+        },
+        {
+          "tiles": [
+            1,
+            4
+          ],
+          "exit_map": [
+            3,
+            4,
+            2,
+            2,
+            4,
+            3
+          ],
+          "exact_context_delta444_db": 0.16574256157677492,
+          "ideal_shared_saving_pct": 25.191667271009155
+        },
+        {
+          "tiles": [
+            1,
+            5
+          ],
+          "exit_map": [
+            3,
+            4,
+            2,
+            2,
+            3,
+            4
+          ],
+          "exact_context_delta444_db": 0.17554699384591174,
+          "ideal_shared_saving_pct": 25.081274475870263
+        },
+        {
+          "tiles": [
+            2,
+            3
+          ],
+          "exit_map": [
+            3,
+            3,
+            3,
+            3,
+            3,
+            3
+          ],
+          "exact_context_delta444_db": 0.11278767497013219,
+          "ideal_shared_saving_pct": 25.16860759493671
+        },
+        {
+          "tiles": [
+            2,
+            4
+          ],
+          "exit_map": [
+            3,
+            3,
+            3,
+            2,
+            4,
+            3
+          ],
+          "exact_context_delta444_db": 0.1433706534372617,
+          "ideal_shared_saving_pct": 25.051548023250703
+        },
+        {
+          "tiles": [
+            2,
+            5
+          ],
+          "exit_map": [
+            3,
+            3,
+            3,
+            2,
+            3,
+            4
+          ],
+          "exact_context_delta444_db": 0.1532275937414545,
+          "ideal_shared_saving_pct": 25.322071026722924
+        },
+        {
+          "tiles": [
+            3,
+            4
+          ],
+          "exit_map": [
+            3,
+            3,
+            2,
+            3,
+            4,
+            3
+          ],
+          "exact_context_delta444_db": 0.1233073991663401,
+          "ideal_shared_saving_pct": 25.18984229408404
+        },
+        {
+          "tiles": [
+            3,
+            5
+          ],
+          "exit_map": [
+            3,
+            3,
+            2,
+            3,
+            3,
+            4
+          ],
+          "exact_context_delta444_db": 0.13319345405600988,
+          "ideal_shared_saving_pct": 25.174071894778482
+        },
+        {
+          "tiles": [
+            4,
+            5
+          ],
+          "exit_map": [
+            3,
+            3,
+            2,
+            2,
+            4,
+            4
+          ],
+          "exact_context_delta444_db": 0.16364255555616725,
+          "ideal_shared_saving_pct": 25.302060066148037
+        }
+      ],
+      "minimum_upgraded_tiles": 3,
+      "best_subset": {
+        "tiles": [
+          2,
+          3,
+          4
+        ],
+        "exit_map": [
+          3,
+          3,
+          3,
+          3,
+          4,
+          3
+        ],
+        "exact_context_delta444_db": 0.09573076250437575,
+        "ideal_shared_saving_pct": 22.94195383922292
+      }
+    },
+    {
+      "image": "0892.png",
+      "qp": 32,
+      "base_exit_map": [
+        3,
+        3,
+        3,
+        4,
+        4,
+        4
+      ],
+      "base_exact_context_delta444_db": 0.17653276171420118,
+      "base_ideal_shared_saving_pct": 19.223789556962036,
+      "rescued_by_one_tile": false,
+      "best": {
+        "tile": 4,
+        "exit_map": [
+          3,
+          3,
+          3,
+          4,
+          5,
+          4
+        ],
+        "exact_context_delta444_db": 0.13868127252339982,
+        "ideal_shared_saving_pct": 16.343418435741917
+      },
+      "candidates": [
+        {
+          "tile": 0,
+          "exit_map": [
+            4,
+            3,
+            3,
+            4,
+            4,
+            4
+          ],
+          "exact_context_delta444_db": 0.16319932762819644,
+          "ideal_shared_saving_pct": 17.36470741583158
+        },
+        {
+          "tile": 1,
+          "exit_map": [
+            3,
+            4,
+            3,
+            4,
+            4,
+            4
+          ],
+          "exact_context_delta444_db": 0.16267474858823938,
+          "ideal_shared_saving_pct": 17.25431462069269
+        },
+        {
+          "tile": 2,
+          "exit_map": [
+            3,
+            3,
+            4,
+            4,
+            4,
+            4
+          ],
+          "exact_context_delta444_db": 0.1668170022298267,
+          "ideal_shared_saving_pct": 17.36470741583158
+        },
+        {
+          "tile": 3,
+          "exit_map": [
+            3,
+            3,
+            3,
+            5,
+            4,
+            4
+          ],
+          "exact_context_delta444_db": 0.15259873407100186,
+          "ideal_shared_saving_pct": 16.482925814214134
+        },
+        {
+          "tile": 4,
+          "exit_map": [
+            3,
+            3,
+            3,
+            4,
+            5,
+            4
+          ],
+          "exact_context_delta444_db": 0.13868127252339982,
+          "ideal_shared_saving_pct": 16.343418435741917
+        },
+        {
+          "tile": 5,
+          "exit_map": [
+            3,
+            3,
+            3,
+            4,
+            4,
+            5
+          ],
+          "exact_context_delta444_db": 0.14767543351240014,
+          "ideal_shared_saving_pct": 16.482925814214134
+        }
+      ],
+      "rescued_by_two_tiles": false,
+      "best_pair": {
+        "tiles": [
+          4,
+          5
+        ],
+        "exit_map": [
+          3,
+          3,
+          3,
+          4,
+          5,
+          5
+        ],
+        "exact_context_delta444_db": 0.1096245801306556,
+        "ideal_shared_saving_pct": 13.88156944993847
+      },
+      "pair_candidates": [
+        {
+          "tiles": [
+            0,
+            1
+          ],
+          "exit_map": [
+            4,
+            4,
+            3,
+            4,
+            4,
+            4
+          ],
+          "exact_context_delta444_db": 0.14930567732743796,
+          "ideal_shared_saving_pct": 15.61601806984002
+        },
+        {
+          "tiles": [
+            0,
+            2
+          ],
+          "exit_map": [
+            4,
+            3,
+            4,
+            4,
+            4,
+            4
+          ],
+          "exact_context_delta444_db": 0.15345326917964858,
+          "ideal_shared_saving_pct": 15.50562527470113
+        },
+        {
+          "tiles": [
+            0,
+            3
+          ],
+          "exit_map": [
+            4,
+            3,
+            3,
+            5,
+            4,
+            4
+          ],
+          "exact_context_delta444_db": 0.1391969927834739,
+          "ideal_shared_saving_pct": 14.786400096694807
+        },
+        {
+          "tiles": [
+            0,
+            4
+          ],
+          "exit_map": [
+            4,
+            3,
+            3,
+            4,
+            5,
+            4
+          ],
+          "exact_context_delta444_db": 0.12523094037469934,
+          "ideal_shared_saving_pct": 14.508598447389254
+        },
+        {
+          "tiles": [
+            0,
+            5
+          ],
+          "exit_map": [
+            4,
+            3,
+            3,
+            4,
+            4,
+            5
+          ],
+          "exact_context_delta444_db": 0.1342529709820165,
+          "ideal_shared_saving_pct": 14.623843673083691
+        },
+        {
+          "tiles": [
+            1,
+            2
+          ],
+          "exit_map": [
+            3,
+            4,
+            4,
+            4,
+            4,
+            4
+          ],
+          "exact_context_delta444_db": 0.15295995789861022,
+          "ideal_shared_saving_pct": 15.61601806984002
+        },
+        {
+          "tiles": [
+            1,
+            3
+          ],
+          "exit_map": [
+            3,
+            4,
+            3,
+            5,
+            4,
+            4
+          ],
+          "exact_context_delta444_db": 0.13866323101020836,
+          "ideal_shared_saving_pct": 14.537713030722577
+        },
+        {
+          "tiles": [
+            1,
+            4
+          ],
+          "exit_map": [
+            3,
+            4,
+            3,
+            4,
+            5,
+            4
+          ],
+          "exact_context_delta444_db": 0.12470726337626235,
+          "ideal_shared_saving_pct": 14.54377856891702
+        },
+        {
+          "tiles": [
+            1,
+            5
+          ],
+          "exit_map": [
+            3,
+            4,
+            3,
+            4,
+            4,
+            5
+          ],
+          "exact_context_delta444_db": 0.1337248836555155,
+          "ideal_shared_saving_pct": 14.537713030722577
+        },
+        {
+          "tiles": [
+            2,
+            3
+          ],
+          "exit_map": [
+            3,
+            3,
+            4,
+            5,
+            4,
+            4
+          ],
+          "exact_context_delta444_db": 0.14282883082666664,
+          "ideal_shared_saving_pct": 14.623843673083691
+        },
+        {
+          "tiles": [
+            2,
+            4
+          ],
+          "exit_map": [
+            3,
+            3,
+            4,
+            4,
+            5,
+            4
+          ],
+          "exact_context_delta444_db": 0.12887997487837788,
+          "ideal_shared_saving_pct": 14.508598447389254
+        },
+        {
+          "tiles": [
+            2,
+            5
+          ],
+          "exit_map": [
+            3,
+            3,
+            4,
+            4,
+            4,
+            5
+          ],
+          "exact_context_delta444_db": 0.13788972869892244,
+          "ideal_shared_saving_pct": 14.786400096694807
+        },
+        {
+          "tiles": [
+            3,
+            4
+          ],
+          "exit_map": [
+            3,
+            3,
+            3,
+            5,
+            5,
+            4
+          ],
+          "exact_context_delta444_db": 0.11455450290451197,
+          "ideal_shared_saving_pct": 13.88156944993847
+        },
+        {
+          "tiles": [
+            3,
+            5
+          ],
+          "exit_map": [
+            3,
+            3,
+            3,
+            5,
+            4,
+            5
+          ],
+          "exact_context_delta444_db": 0.12358179335129534,
+          "ideal_shared_saving_pct": 13.742062071466254
+        },
+        {
+          "tiles": [
+            4,
+            5
+          ],
+          "exit_map": [
+            3,
+            3,
+            3,
+            4,
+            5,
+            5
+          ],
+          "exact_context_delta444_db": 0.1096245801306556,
+          "ideal_shared_saving_pct": 13.88156944993847
+        }
+      ],
+      "minimum_upgraded_tiles": 3,
+      "best_subset": {
+        "tiles": [
+          2,
+          4,
+          5
+        ],
+        "exit_map": [
+          3,
+          3,
+          4,
+          4,
+          5,
+          5
+        ],
+        "exact_context_delta444_db": 0.09975266290023403,
+        "ideal_shared_saving_pct": 12.185043732419132
+      }
+    },
+    {
+      "image": "0892.png",
+      "qp": 48,
+      "base_exit_map": [
+        3,
+        4,
+        3,
+        4,
+        4,
+        4
+      ],
+      "base_exact_context_delta444_db": 0.2747631579624197,
+      "base_ideal_shared_saving_pct": 17.25431462069269,
+      "rescued_by_one_tile": false,
+      "best": {
+        "tile": 4,
+        "exit_map": [
+          3,
+          4,
+          3,
+          4,
+          5,
+          4
+        ],
+        "exact_context_delta444_db": 0.2088695815884296,
+        "ideal_shared_saving_pct": 14.54377856891702
+      },
+      "candidates": [
+        {
+          "tile": 0,
+          "exit_map": [
+            4,
+            4,
+            3,
+            4,
+            4,
+            4
+          ],
+          "exact_context_delta444_db": 0.25916108757095385,
+          "ideal_shared_saving_pct": 15.61601806984002
+        },
+        {
+          "tile": 1,
+          "exit_map": [
+            3,
+            5,
+            3,
+            4,
+            4,
+            4
+          ],
+          "exact_context_delta444_db": 0.2405884998872067,
+          "ideal_shared_saving_pct": 14.267190027250365
+        },
+        {
+          "tile": 2,
+          "exit_map": [
+            3,
+            4,
+            4,
+            4,
+            4,
+            4
+          ],
+          "exact_context_delta444_db": 0.2598055274003809,
+          "ideal_shared_saving_pct": 15.61601806984002
+        },
+        {
+          "tile": 3,
+          "exit_map": [
+            3,
+            4,
+            3,
+            5,
+            4,
+            4
+          ],
+          "exact_context_delta444_db": 0.24145565307566827,
+          "ideal_shared_saving_pct": 14.537713030722577
+        },
+        {
+          "tile": 4,
+          "exit_map": [
+            3,
+            4,
+            3,
+            4,
+            5,
+            4
+          ],
+          "exact_context_delta444_db": 0.2088695815884296,
+          "ideal_shared_saving_pct": 14.54377856891702
+        },
+        {
+          "tile": 5,
+          "exit_map": [
+            3,
+            4,
+            3,
+            4,
+            4,
+            5
+          ],
+          "exact_context_delta444_db": 0.22318944340266483,
+          "ideal_shared_saving_pct": 14.537713030722577
+        }
+      ],
+      "rescued_by_two_tiles": false,
+      "best_pair": {
+        "tiles": [
+          4,
+          5
+        ],
+        "exit_map": [
+          3,
+          4,
+          3,
+          4,
+          5,
+          5
+        ],
+        "exact_context_delta444_db": 0.15655449929254162,
+        "ideal_shared_saving_pct": 12.08192958311357
+      },
+      "pair_candidates": [
+        {
+          "tiles": [
+            0,
+            1
+          ],
+          "exit_map": [
+            4,
+            5,
+            3,
+            4,
+            4,
+            4
+          ],
+          "exact_context_delta444_db": 0.2248659528901108,
+          "ideal_shared_saving_pct": 12.776892608342127
+        },
+        {
+          "tiles": [
+            0,
+            2
+          ],
+          "exit_map": [
+            4,
+            4,
+            4,
+            4,
+            4,
+            4
+          ],
+          "exact_context_delta444_db": 0.24414953179785842,
+          "ideal_shared_saving_pct": 13.977721518987341
+        },
+        {
+          "tiles": [
+            0,
+            3
+          ],
+          "exit_map": [
+            4,
+            4,
+            3,
+            5,
+            4,
+            4
+          ],
+          "exact_context_delta444_db": 0.2257632805202081,
+          "ideal_shared_saving_pct": 13.047415611814351
+        },
+        {
+          "tiles": [
+            0,
+            4
+          ],
+          "exit_map": [
+            4,
+            4,
+            3,
+            4,
+            5,
+            4
+          ],
+          "exact_context_delta444_db": 0.19302816913617873,
+          "ideal_shared_saving_pct": 12.915186879175467
+        },
+        {
+          "tiles": [
+            0,
+            5
+          ],
+          "exit_map": [
+            4,
+            4,
+            3,
+            4,
+            4,
+            5
+          ],
+          "exact_context_delta444_db": 0.20740027325419919,
+          "ideal_shared_saving_pct": 12.899416479869908
+        },
+        {
+          "tiles": [
+            1,
+            2
+          ],
+          "exit_map": [
+            3,
+            5,
+            4,
+            4,
+            4,
+            4
+          ],
+          "exact_context_delta444_db": 0.22554328345372948,
+          "ideal_shared_saving_pct": 12.776892608342127
+        },
+        {
+          "tiles": [
+            1,
+            3
+          ],
+          "exit_map": [
+            3,
+            5,
+            3,
+            5,
+            4,
+            4
+          ],
+          "exact_context_delta444_db": 0.20701759855405794,
+          "ideal_shared_saving_pct": 11.584555451169132
+        },
+        {
+          "tiles": [
+            1,
+            4
+          ],
+          "exit_map": [
+            3,
+            5,
+            3,
+            4,
+            5,
+            4
+          ],
+          "exact_context_delta444_db": 0.1741559240837018,
+          "ideal_shared_saving_pct": 11.83324251714135
+        },
+        {
+          "tiles": [
+            1,
+            5
+          ],
+          "exit_map": [
+            3,
+            5,
+            3,
+            4,
+            4,
+            5
+          ],
+          "exact_context_delta444_db": 0.18860565964304726,
+          "ideal_shared_saving_pct": 11.584555451169132
+        },
+        {
+          "tiles": [
+            2,
+            3
+          ],
+          "exit_map": [
+            3,
+            4,
+            4,
+            5,
+            4,
+            4
+          ],
+          "exact_context_delta444_db": 0.2263830416844994,
+          "ideal_shared_saving_pct": 12.899416479869908
+        },
+        {
+          "tiles": [
+            2,
+            4
+          ],
+          "exit_map": [
+            3,
+            4,
+            4,
+            4,
+            5,
+            4
+          ],
+          "exact_context_delta444_db": 0.19368287482912128,
+          "ideal_shared_saving_pct": 12.915186879175467
+        },
+        {
+          "tiles": [
+            2,
+            5
+          ],
+          "exit_map": [
+            3,
+            4,
+            4,
+            4,
+            4,
+            5
+          ],
+          "exact_context_delta444_db": 0.20805093134240868,
+          "ideal_shared_saving_pct": 13.047415611814351
+        },
+        {
+          "tiles": [
+            3,
+            4
+          ],
+          "exit_map": [
+            3,
+            4,
+            3,
+            5,
+            5,
+            4
+          ],
+          "exact_context_delta444_db": 0.1750812612923998,
+          "ideal_shared_saving_pct": 12.08192958311357
+        },
+        {
+          "tiles": [
+            3,
+            5
+          ],
+          "exit_map": [
+            3,
+            4,
+            3,
+            5,
+            4,
+            5
+          ],
+          "exact_context_delta444_db": 0.1894832535256766,
+          "ideal_shared_saving_pct": 11.821111440752464
+        },
+        {
+          "tiles": [
+            4,
+            5
+          ],
+          "exit_map": [
+            3,
+            4,
+            3,
+            4,
+            5,
+            5
+          ],
+          "exact_context_delta444_db": 0.15655449929254162,
+          "ideal_shared_saving_pct": 12.08192958311357
+        }
+      ],
+      "minimum_upgraded_tiles": 4,
+      "best_subset": {
+        "tiles": [
+          1,
+          3,
+          4,
+          5
+        ],
+        "exit_map": [
+          3,
+          5,
+          3,
+          5,
+          5,
+          5
+        ],
+        "exact_context_delta444_db": 0.0869405079148787,
+        "ideal_shared_saving_pct": 6.909544545534452
+      }
+    },
+    {
+      "image": "0819.png",
+      "qp": 48,
+      "base_exit_map": [
+        3,
+        3,
+        3,
+        3,
+        3,
+        3
+      ],
+      "base_exact_context_delta444_db": 0.14101902927887022,
+      "base_ideal_shared_saving_pct": 25.16860759493671,
+      "rescued_by_one_tile": false,
+      "best": {
+        "tile": 4,
+        "exit_map": [
+          3,
+          3,
+          3,
+          3,
+          4,
+          3
+        ],
+        "exact_context_delta444_db": 0.12587133388724173,
+        "ideal_shared_saving_pct": 22.94195383922292
+      },
+      "candidates": [
+        {
+          "tile": 0,
+          "exit_map": [
+            4,
+            3,
+            3,
+            3,
+            3,
+            3
+          ],
+          "exact_context_delta444_db": 0.12781374563437525,
+          "ideal_shared_saving_pct": 23.064477710750698
+        },
+        {
+          "tile": 1,
+          "exit_map": [
+            3,
+            4,
+            3,
+            3,
+            3,
+            3
+          ],
+          "exact_context_delta444_db": 0.13320152135714633,
+          "ideal_shared_saving_pct": 22.94195383922292
+        },
+        {
+          "tile": 2,
+          "exit_map": [
+            3,
+            3,
+            4,
+            3,
+            3,
+            3
+          ],
+          "exact_context_delta444_db": 0.13259518723948258,
+          "ideal_shared_saving_pct": 23.064477710750698
+        },
+        {
+          "tile": 3,
+          "exit_map": [
+            3,
+            3,
+            3,
+            4,
+            3,
+            3
+          ],
+          "exact_context_delta444_db": 0.13126377535022163,
+          "ideal_shared_saving_pct": 23.064477710750698
+        },
+        {
+          "tile": 4,
+          "exit_map": [
+            3,
+            3,
+            3,
+            3,
+            4,
+            3
+          ],
+          "exact_context_delta444_db": 0.12587133388724173,
+          "ideal_shared_saving_pct": 22.94195383922292
+        },
+        {
+          "tile": 5,
+          "exit_map": [
+            3,
+            3,
+            3,
+            3,
+            3,
+            4
+          ],
+          "exact_context_delta444_db": 0.12862852044653658,
+          "ideal_shared_saving_pct": 23.064477710750698
+        }
+      ],
+      "rescued_by_two_tiles": false,
+      "best_pair": {
+        "tiles": [
+          0,
+          4
+        ],
+        "exit_map": [
+          4,
+          3,
+          3,
+          3,
+          4,
+          3
+        ],
+        "exact_context_delta444_db": 0.11261984084238687,
+        "ideal_shared_saving_pct": 20.862086107814715
+      },
+      "pair_candidates": [
+        {
+          "tiles": [
+            0,
+            1
+          ],
+          "exit_map": [
+            4,
+            4,
+            3,
+            3,
+            3,
+            3
+          ],
+          "exact_context_delta444_db": 0.11996986418358854,
+          "ideal_shared_saving_pct": 21.082871698092486
+        },
+        {
+          "tiles": [
+            0,
+            2
+          ],
+          "exit_map": [
+            4,
+            3,
+            4,
+            3,
+            3,
+            3
+          ],
+          "exact_context_delta444_db": 0.11936479165803975,
+          "ideal_shared_saving_pct": 20.960347826564707
+        },
+        {
+          "tiles": [
+            0,
+            3
+          ],
+          "exit_map": [
+            4,
+            3,
+            3,
+            4,
+            3,
+            3
+          ],
+          "exact_context_delta444_db": 0.11803101482972837,
+          "ideal_shared_saving_pct": 21.205395569620265
+        },
+        {
+          "tiles": [
+            0,
+            4
+          ],
+          "exit_map": [
+            4,
+            3,
+            3,
+            3,
+            4,
+            3
+          ],
+          "exact_context_delta444_db": 0.11261984084238687,
+          "ideal_shared_saving_pct": 20.862086107814715
+        },
+        {
+          "tiles": [
+            0,
+            5
+          ],
+          "exit_map": [
+            4,
+            3,
+            3,
+            3,
+            3,
+            4
+          ],
+          "exact_context_delta444_db": 0.11538488417471646,
+          "ideal_shared_saving_pct": 20.960347826564707
+        },
+        {
+          "tiles": [
+            1,
+            2
+          ],
+          "exit_map": [
+            3,
+            4,
+            4,
+            3,
+            3,
+            3
+          ],
+          "exact_context_delta444_db": 0.12476248758937222,
+          "ideal_shared_saving_pct": 21.082871698092486
+        },
+        {
+          "tiles": [
+            1,
+            3
+          ],
+          "exit_map": [
+            3,
+            4,
+            3,
+            4,
+            3,
+            3
+          ],
+          "exact_context_delta444_db": 0.12342867190205656,
+          "ideal_shared_saving_pct": 20.862086107814715
+        },
+        {
+          "tiles": [
+            1,
+            4
+          ],
+          "exit_map": [
+            3,
+            4,
+            3,
+            3,
+            4,
+            3
+          ],
+          "exact_context_delta444_db": 0.11803129781267635,
+          "ideal_shared_saving_pct": 20.972478902953597
+        },
+        {
+          "tiles": [
+            1,
+            5
+          ],
+          "exit_map": [
+            3,
+            4,
+            3,
+            3,
+            3,
+            4
+          ],
+          "exact_context_delta444_db": 0.12078837419588427,
+          "ideal_shared_saving_pct": 20.862086107814715
+        },
+        {
+          "tiles": [
+            2,
+            3
+          ],
+          "exit_map": [
+            3,
+            3,
+            4,
+            4,
+            3,
+            3
+          ],
+          "exact_context_delta444_db": 0.1228206890588743,
+          "ideal_shared_saving_pct": 20.960347826564707
+        },
+        {
+          "tiles": [
+            2,
+            4
+          ],
+          "exit_map": [
+            3,
+            3,
+            4,
+            3,
+            4,
+            3
+          ],
+          "exact_context_delta444_db": 0.11741774746401547,
+          "ideal_shared_saving_pct": 20.862086107814715
+        },
+        {
+          "tiles": [
+            2,
+            5
+          ],
+          "exit_map": [
+            3,
+            3,
+            4,
+            3,
+            3,
+            4
+          ],
+          "exact_context_delta444_db": 0.12017860737558828,
+          "ideal_shared_saving_pct": 21.205395569620265
+        },
+        {
+          "tiles": [
+            3,
+            4
+          ],
+          "exit_map": [
+            3,
+            3,
+            3,
+            4,
+            4,
+            3
+          ],
+          "exact_context_delta444_db": 0.11609469682719753,
+          "ideal_shared_saving_pct": 21.082871698092486
+        },
+        {
+          "tiles": [
+            3,
+            5
+          ],
+          "exit_map": [
+            3,
+            3,
+            3,
+            4,
+            3,
+            4
+          ],
+          "exact_context_delta444_db": 0.11884479756607003,
+          "ideal_shared_saving_pct": 20.960347826564707
+        },
+        {
+          "tiles": [
+            4,
+            5
+          ],
+          "exit_map": [
+            3,
+            3,
+            3,
+            3,
+            4,
+            4
+          ],
+          "exact_context_delta444_db": 0.11343577119374154,
+          "ideal_shared_saving_pct": 21.082871698092486
+        }
+      ],
+      "minimum_upgraded_tiles": 4,
+      "best_subset": {
+        "tiles": [
+          0,
+          1,
+          3,
+          4
+        ],
+        "exit_map": [
+          4,
+          4,
+          3,
+          4,
+          4,
+          3
+        ],
+        "exact_context_delta444_db": 0.09493148346956463,
+        "ideal_shared_saving_pct": 17.475100210970474
+      }
+    },
+    {
+      "image": "0871.png",
+      "qp": 48,
+      "base_exit_map": [
+        3,
+        5,
+        3,
+        3,
+        3,
+        3
+      ],
+      "base_exact_context_delta444_db": 0.13674999076304875,
+      "base_ideal_shared_saving_pct": 19.736469870780592,
+      "rescued_by_one_tile": false,
+      "best": {
+        "tile": 2,
+        "exit_map": [
+          3,
+          5,
+          4,
+          3,
+          3,
+          3
+        ],
+        "exact_context_delta444_db": 0.12434555908405814,
+        "ideal_shared_saving_pct": 18.039944153261256
+      },
+      "candidates": [
+        {
+          "tile": 0,
+          "exit_map": [
+            4,
+            5,
+            3,
+            3,
+            3,
+            3
+          ],
+          "exact_context_delta444_db": 0.12639098734456167,
+          "ideal_shared_saving_pct": 18.039944153261256
+        },
+        {
+          "tile": 2,
+          "exit_map": [
+            3,
+            5,
+            4,
+            3,
+            3,
+            3
+          ],
+          "exact_context_delta444_db": 0.12434555908405814,
+          "ideal_shared_saving_pct": 18.039944153261256
+        },
+        {
+          "tile": 3,
+          "exit_map": [
+            3,
+            5,
+            3,
+            4,
+            3,
+            3
+          ],
+          "exact_context_delta444_db": 0.1281561178176469,
+          "ideal_shared_saving_pct": 17.695421583816806
+        },
+        {
+          "tile": 4,
+          "exit_map": [
+            3,
+            5,
+            3,
+            3,
+            4,
+            3
+          ],
+          "exact_context_delta444_db": 0.12733475153708848,
+          "ideal_shared_saving_pct": 17.936830003955695
+        },
+        {
+          "tile": 5,
+          "exit_map": [
+            3,
+            5,
+            3,
+            3,
+            3,
+            4
+          ],
+          "exact_context_delta444_db": 0.12458868600169473,
+          "ideal_shared_saving_pct": 17.695421583816806
+        }
+      ],
+      "rescued_by_two_tiles": false,
+      "best_pair": {
+        "tiles": [
+          2,
+          5
+        ],
+        "exit_map": [
+          3,
+          5,
+          4,
+          3,
+          3,
+          4
+        ],
+        "exact_context_delta444_db": 0.11215207374017788,
+        "ideal_shared_saving_pct": 16.20512416490858
+      },
+      "pair_candidates": [
+        {
+          "tiles": [
+            0,
+            2
+          ],
+          "exit_map": [
+            4,
+            5,
+            4,
+            3,
+            3,
+            3
+          ],
+          "exact_context_delta444_db": 0.11395747964743883,
+          "ideal_shared_saving_pct": 16.343418435741917
+        },
+        {
+          "tiles": [
+            0,
+            3
+          ],
+          "exit_map": [
+            4,
+            5,
+            3,
+            4,
+            3,
+            3
+          ],
+          "exact_context_delta444_db": 0.11779394295745271,
+          "ideal_shared_saving_pct": 16.20512416490858
+        },
+        {
+          "tiles": [
+            0,
+            4
+          ],
+          "exit_map": [
+            4,
+            5,
+            3,
+            3,
+            4,
+            3
+          ],
+          "exact_context_delta444_db": 0.11695412266521085,
+          "ideal_shared_saving_pct": 16.24030428643637
+        },
+        {
+          "tiles": [
+            0,
+            5
+          ],
+          "exit_map": [
+            4,
+            5,
+            3,
+            3,
+            3,
+            4
+          ],
+          "exact_context_delta444_db": 0.11420059942595734,
+          "ideal_shared_saving_pct": 15.998895866297481
+        },
+        {
+          "tiles": [
+            2,
+            3
+          ],
+          "exit_map": [
+            3,
+            5,
+            4,
+            4,
+            3,
+            3
+          ],
+          "exact_context_delta444_db": 0.11572737518019055,
+          "ideal_shared_saving_pct": 15.998895866297481
+        },
+        {
+          "tiles": [
+            2,
+            4
+          ],
+          "exit_map": [
+            3,
+            5,
+            4,
+            3,
+            4,
+            3
+          ],
+          "exact_context_delta444_db": 0.11490306543470616,
+          "ideal_shared_saving_pct": 16.24030428643637
+        },
+        {
+          "tiles": [
+            2,
+            5
+          ],
+          "exit_map": [
+            3,
+            5,
+            4,
+            3,
+            3,
+            4
+          ],
+          "exact_context_delta444_db": 0.11215207374017788,
+          "ideal_shared_saving_pct": 16.20512416490858
+        },
+        {
+          "tiles": [
+            3,
+            4
+          ],
+          "exit_map": [
+            3,
+            5,
+            3,
+            4,
+            4,
+            3
+          ],
+          "exact_context_delta444_db": 0.11871808762144732,
+          "ideal_shared_saving_pct": 16.102010015603028
+        },
+        {
+          "tiles": [
+            3,
+            5
+          ],
+          "exit_map": [
+            3,
+            5,
+            3,
+            4,
+            3,
+            4
+          ],
+          "exact_context_delta444_db": 0.11597039590221096,
+          "ideal_shared_saving_pct": 15.65437329685302
+        },
+        {
+          "tiles": [
+            4,
+            5
+          ],
+          "exit_map": [
+            3,
+            5,
+            3,
+            3,
+            4,
+            4
+          ],
+          "exact_context_delta444_db": 0.11514760537715982,
+          "ideal_shared_saving_pct": 16.102010015603028
+        }
+      ],
+      "minimum_upgraded_tiles": 4,
+      "best_subset": {
+        "tiles": [
+          0,
+          2,
+          3,
+          4
+        ],
+        "exit_map": [
+          4,
+          5,
+          4,
+          4,
+          4,
+          3
+        ],
+        "exact_context_delta444_db": 0.0958467711662038,
+        "ideal_shared_saving_pct": 12.915186879175467
+      }
+    },
+    {
+      "image": "0803.png",
+      "qp": 0,
+      "base_exit_map": [
+        2,
+        3,
+        3,
+        3,
+        3,
+        3
+      ],
+      "base_exact_context_delta444_db": 0.16945868655351842,
+      "base_ideal_shared_saving_pct": 27.426200910908925,
+      "rescued_by_one_tile": false,
+      "best": {
+        "tile": 0,
+        "exit_map": [
+          3,
+          3,
+          3,
+          3,
+          3,
+          3
+        ],
+        "exact_context_delta444_db": 0.11710155898832038,
+        "ideal_shared_saving_pct": 25.16860759493671
+      },
+      "candidates": [
+        {
+          "tile": 0,
+          "exit_map": [
+            3,
+            3,
+            3,
+            3,
+            3,
+            3
+          ],
+          "exact_context_delta444_db": 0.11710155898832038,
+          "ideal_shared_saving_pct": 25.16860759493671
+        },
+        {
+          "tile": 1,
+          "exit_map": [
+            2,
+            4,
+            3,
+            3,
+            3,
+            3
+          ],
+          "exact_context_delta444_db": 0.16336913829548774,
+          "ideal_shared_saving_pct": 25.051548023250703
+        },
+        {
+          "tile": 2,
+          "exit_map": [
+            2,
+            3,
+            4,
+            3,
+            3,
+            3
+          ],
+          "exact_context_delta444_db": 0.1578178553158407,
+          "ideal_shared_saving_pct": 25.322071026722924
+        },
+        {
+          "tile": 3,
+          "exit_map": [
+            2,
+            3,
+            3,
+            4,
+            3,
+            3
+          ],
+          "exact_context_delta444_db": 0.16175417062777542,
+          "ideal_shared_saving_pct": 25.174071894778482
+        },
+        {
+          "tile": 4,
+          "exit_map": [
+            2,
+            3,
+            3,
+            3,
+            4,
+            3
+          ],
+          "exact_context_delta444_db": 0.15545976750981816,
+          "ideal_shared_saving_pct": 25.18984229408404
+        },
+        {
+          "tile": 5,
+          "exit_map": [
+            2,
+            3,
+            3,
+            3,
+            3,
+            4
+          ],
+          "exact_context_delta444_db": 0.15609784604064034,
+          "ideal_shared_saving_pct": 25.322071026722924
+        }
+      ],
+      "rescued_by_two_tiles": false,
+      "best_pair": {
+        "tiles": [
+          0,
+          4
+        ],
+        "exit_map": [
+          3,
+          3,
+          3,
+          3,
+          4,
+          3
+        ],
+        "exact_context_delta444_db": 0.10293311221926697,
+        "ideal_shared_saving_pct": 22.94195383922292
+      },
+      "pair_candidates": [
+        {
+          "tiles": [
+            0,
+            1
+          ],
+          "exit_map": [
+            3,
+            4,
+            3,
+            3,
+            3,
+            3
+          ],
+          "exact_context_delta444_db": 0.1109386367347232,
+          "ideal_shared_saving_pct": 22.94195383922292
+        },
+        {
+          "tiles": [
+            0,
+            2
+          ],
+          "exit_map": [
+            3,
+            3,
+            4,
+            3,
+            3,
+            3
+          ],
+          "exact_context_delta444_db": 0.10531881159685816,
+          "ideal_shared_saving_pct": 23.064477710750698
+        },
+        {
+          "tiles": [
+            0,
+            3
+          ],
+          "exit_map": [
+            3,
+            3,
+            3,
+            4,
+            3,
+            3
+          ],
+          "exact_context_delta444_db": 0.10931692778983275,
+          "ideal_shared_saving_pct": 23.064477710750698
+        },
+        {
+          "tiles": [
+            0,
+            4
+          ],
+          "exit_map": [
+            3,
+            3,
+            3,
+            3,
+            4,
+            3
+          ],
+          "exact_context_delta444_db": 0.10293311221926697,
+          "ideal_shared_saving_pct": 22.94195383922292
+        },
+        {
+          "tiles": [
+            0,
+            5
+          ],
+          "exit_map": [
+            3,
+            3,
+            3,
+            3,
+            3,
+            4
+          ],
+          "exact_context_delta444_db": 0.10357841713920277,
+          "ideal_shared_saving_pct": 23.064477710750698
+        },
+        {
+          "tiles": [
+            1,
+            2
+          ],
+          "exit_map": [
+            2,
+            4,
+            4,
+            3,
+            3,
+            3
+          ],
+          "exact_context_delta444_db": 0.15174356613454035,
+          "ideal_shared_saving_pct": 23.19246588212026
+        },
+        {
+          "tiles": [
+            1,
+            3
+          ],
+          "exit_map": [
+            2,
+            4,
+            3,
+            4,
+            3,
+            3
+          ],
+          "exact_context_delta444_db": 0.15565433300318549,
+          "ideal_shared_saving_pct": 22.83338602100915
+        },
+        {
+          "tiles": [
+            1,
+            4
+          ],
+          "exit_map": [
+            2,
+            4,
+            3,
+            3,
+            4,
+            3
+          ],
+          "exact_context_delta444_db": 0.1493656964125346,
+          "ideal_shared_saving_pct": 23.08207308698137
+        },
+        {
+          "tiles": [
+            1,
+            5
+          ],
+          "exit_map": [
+            2,
+            4,
+            3,
+            3,
+            3,
+            4
+          ],
+          "exact_context_delta444_db": 0.14999005311610641,
+          "ideal_shared_saving_pct": 22.97168029184248
+        },
+        {
+          "tiles": [
+            2,
+            3
+          ],
+          "exit_map": [
+            2,
+            3,
+            4,
+            4,
+            3,
+            3
+          ],
+          "exact_context_delta444_db": 0.15009237632659653,
+          "ideal_shared_saving_pct": 23.06994201059248
+        },
+        {
+          "tiles": [
+            2,
+            4
+          ],
+          "exit_map": [
+            2,
+            3,
+            4,
+            3,
+            4,
+            3
+          ],
+          "exact_context_delta444_db": 0.14378130244627652,
+          "ideal_shared_saving_pct": 23.109974562675816
+        },
+        {
+          "tiles": [
+            2,
+            5
+          ],
+          "exit_map": [
+            2,
+            3,
+            4,
+            3,
+            3,
+            4
+          ],
+          "exact_context_delta444_db": 0.1444402595010732,
+          "ideal_shared_saving_pct": 23.462988885592484
+        },
+        {
+          "tiles": [
+            3,
+            4
+          ],
+          "exit_map": [
+            2,
+            3,
+            3,
+            4,
+            4,
+            3
+          ],
+          "exact_context_delta444_db": 0.1477375345866226,
+          "ideal_shared_saving_pct": 23.19246588212026
+        },
+        {
+          "tiles": [
+            3,
+            5
+          ],
+          "exit_map": [
+            2,
+            3,
+            3,
+            4,
+            3,
+            4
+          ],
+          "exact_context_delta444_db": 0.14836956994674483,
+          "ideal_shared_saving_pct": 23.06994201059248
+        },
+        {
+          "tiles": [
+            4,
+            5
+          ],
+          "exit_map": [
+            2,
+            3,
+            3,
+            3,
+            4,
+            4
+          ],
+          "exact_context_delta444_db": 0.14206690700133656,
+          "ideal_shared_saving_pct": 23.3307601529536
+        }
+      ],
+      "minimum_upgraded_tiles": 3,
+      "best_subset": {
+        "tiles": [
+          0,
+          2,
+          5
+        ],
+        "exit_map": [
+          3,
+          3,
+          4,
+          3,
+          3,
+          4
+        ],
+        "exact_context_delta444_db": 0.09177880616785711,
+        "ideal_shared_saving_pct": 21.205395569620265
+      }
+    },
+    {
+      "image": "0803.png",
+      "qp": 16,
+      "base_exit_map": [
+        3,
+        3,
+        4,
+        3,
+        3,
+        3
+      ],
+      "base_exact_context_delta444_db": 0.13327238858953092,
+      "base_ideal_shared_saving_pct": 23.064477710750698,
+      "rescued_by_one_tile": false,
+      "best": {
+        "tile": 2,
+        "exit_map": [
+          3,
+          3,
+          5,
+          3,
+          3,
+          3
+        ],
+        "exact_context_delta444_db": 0.11704548309908934,
+        "ideal_shared_saving_pct": 20.161057544391703
+      },
+      "candidates": [
+        {
+          "tile": 0,
+          "exit_map": [
+            4,
+            3,
+            4,
+            3,
+            3,
+            3
+          ],
+          "exact_context_delta444_db": 0.1260969007433751,
+          "ideal_shared_saving_pct": 20.960347826564707
+        },
+        {
+          "tile": 1,
+          "exit_map": [
+            3,
+            4,
+            4,
+            3,
+            3,
+            3
+          ],
+          "exact_context_delta444_db": 0.11759368325848311,
+          "ideal_shared_saving_pct": 21.082871698092486
+        },
+        {
+          "tile": 2,
+          "exit_map": [
+            3,
+            3,
+            5,
+            3,
+            3,
+            3
+          ],
+          "exact_context_delta444_db": 0.11704548309908934,
+          "ideal_shared_saving_pct": 20.161057544391703
+        },
+        {
+          "tile": 3,
+          "exit_map": [
+            3,
+            3,
+            4,
+            4,
+            3,
+            3
+          ],
+          "exact_context_delta444_db": 0.11777944491848456,
+          "ideal_shared_saving_pct": 20.960347826564707
+        },
+        {
+          "tile": 4,
+          "exit_map": [
+            3,
+            3,
+            4,
+            3,
+            4,
+            3
+          ],
+          "exact_context_delta444_db": 0.11784707046244328,
+          "ideal_shared_saving_pct": 20.862086107814715
+        },
+        {
+          "tile": 5,
+          "exit_map": [
+            3,
+            3,
+            4,
+            3,
+            3,
+            4
+          ],
+          "exact_context_delta444_db": 0.11793267090674864,
+          "ideal_shared_saving_pct": 21.205395569620265
+        }
+      ],
+      "rescued_by_two_tiles": false,
+      "best_pair": {
+        "tiles": [
+          1,
+          2
+        ],
+        "exit_map": [
+          3,
+          4,
+          5,
+          3,
+          3,
+          3
+        ],
+        "exact_context_delta444_db": 0.10130654794094646,
+        "ideal_shared_saving_pct": 18.342007955344585
+      },
+      "pair_candidates": [
+        {
+          "tiles": [
+            0,
+            1
+          ],
+          "exit_map": [
+            4,
+            4,
+            4,
+            3,
+            3,
+            3
+          ],
+          "exact_context_delta444_db": 0.1104330956312928,
+          "ideal_shared_saving_pct": 19.223789556962036
+        },
+        {
+          "tiles": [
+            0,
+            2
+          ],
+          "exit_map": [
+            4,
+            3,
+            5,
+            3,
+            3,
+            3
+          ],
+          "exact_context_delta444_db": 0.10984311244715259,
+          "ideal_shared_saving_pct": 18.05692766020569
+        },
+        {
+          "tiles": [
+            0,
+            3
+          ],
+          "exit_map": [
+            4,
+            3,
+            4,
+            4,
+            3,
+            3
+          ],
+          "exact_context_delta444_db": 0.1106200212572623,
+          "ideal_shared_saving_pct": 19.101265685434253
+        },
+        {
+          "tiles": [
+            0,
+            4
+          ],
+          "exit_map": [
+            4,
+            3,
+            4,
+            3,
+            4,
+            3
+          ],
+          "exact_context_delta444_db": 0.11064631595977217,
+          "ideal_shared_saving_pct": 18.78221837640648
+        },
+        {
+          "tiles": [
+            0,
+            5
+          ],
+          "exit_map": [
+            4,
+            3,
+            4,
+            3,
+            3,
+            4
+          ],
+          "exact_context_delta444_db": 0.11073177264344847,
+          "ideal_shared_saving_pct": 19.101265685434253
+        },
+        {
+          "tiles": [
+            1,
+            2
+          ],
+          "exit_map": [
+            3,
+            4,
+            5,
+            3,
+            3,
+            3
+          ],
+          "exact_context_delta444_db": 0.10130654794094646,
+          "ideal_shared_saving_pct": 18.342007955344585
+        },
+        {
+          "tiles": [
+            1,
+            3
+          ],
+          "exit_map": [
+            3,
+            4,
+            4,
+            4,
+            3,
+            3
+          ],
+          "exact_context_delta444_db": 0.10204431976629269,
+          "ideal_shared_saving_pct": 19.00300396668426
+        },
+        {
+          "tiles": [
+            1,
+            4
+          ],
+          "exit_map": [
+            3,
+            4,
+            4,
+            3,
+            4,
+            3
+          ],
+          "exact_context_delta444_db": 0.10214455083292656,
+          "ideal_shared_saving_pct": 19.113396761823143
+        },
+        {
+          "tiles": [
+            1,
+            5
+          ],
+          "exit_map": [
+            3,
+            4,
+            4,
+            3,
+            3,
+            4
+          ],
+          "exact_context_delta444_db": 0.10219810191183623,
+          "ideal_shared_saving_pct": 19.223789556962036
+        },
+        {
+          "tiles": [
+            2,
+            3
+          ],
+          "exit_map": [
+            3,
+            3,
+            5,
+            4,
+            3,
+            3
+          ],
+          "exact_context_delta444_db": 0.10149386678918171,
+          "ideal_shared_saving_pct": 18.05692766020569
+        },
+        {
+          "tiles": [
+            2,
+            4
+          ],
+          "exit_map": [
+            3,
+            3,
+            5,
+            3,
+            4,
+            3
+          ],
+          "exact_context_delta444_db": 0.1015626056244915,
+          "ideal_shared_saving_pct": 17.99748538590015
+        },
+        {
+          "tiles": [
+            2,
+            5
+          ],
+          "exit_map": [
+            3,
+            3,
+            5,
+            3,
+            3,
+            4
+          ],
+          "exact_context_delta444_db": 0.10164852763868801,
+          "ideal_shared_saving_pct": 18.464531826872367
+        },
+        {
+          "tiles": [
+            3,
+            4
+          ],
+          "exit_map": [
+            3,
+            3,
+            4,
+            4,
+            4,
+            3
+          ],
+          "exact_context_delta444_db": 0.10230949749529995,
+          "ideal_shared_saving_pct": 19.00300396668426
+        },
+        {
+          "tiles": [
+            3,
+            5
+          ],
+          "exit_map": [
+            3,
+            3,
+            4,
+            4,
+            3,
+            4
+          ],
+          "exact_context_delta444_db": 0.10238423688923844,
+          "ideal_shared_saving_pct": 19.101265685434253
+        },
+        {
+          "tiles": [
+            4,
+            5
+          ],
+          "exit_map": [
+            3,
+            3,
+            4,
+            3,
+            4,
+            4
+          ],
+          "exact_context_delta444_db": 0.10246871090100461,
+          "ideal_shared_saving_pct": 19.223789556962036
+        }
+      ],
+      "minimum_upgraded_tiles": 3,
+      "best_subset": {
+        "tiles": [
+          1,
+          4,
+          5
+        ],
+        "exit_map": [
+          3,
+          4,
+          4,
+          3,
+          4,
+          4
+        ],
+        "exact_context_delta444_db": 0.0867092393773656,
+        "ideal_shared_saving_pct": 17.475100210970474
+      }
+    },
+    {
+      "image": "0803.png",
+      "qp": 32,
+      "base_exit_map": [
+        3,
+        3,
+        3,
+        3,
+        3,
+        3
+      ],
+      "base_exact_context_delta444_db": 0.18481596028836333,
+      "base_ideal_shared_saving_pct": 25.16860759493671,
+      "rescued_by_one_tile": false,
+      "best": {
+        "tile": 2,
+        "exit_map": [
+          3,
+          3,
+          4,
+          3,
+          3,
+          3
+        ],
+        "exact_context_delta444_db": 0.1609048961445832,
+        "ideal_shared_saving_pct": 23.064477710750698
+      },
+      "candidates": [
+        {
+          "tile": 0,
+          "exit_map": [
+            4,
+            3,
+            3,
+            3,
+            3,
+            3
+          ],
+          "exact_context_delta444_db": 0.16899583390252848,
+          "ideal_shared_saving_pct": 23.064477710750698
+        },
+        {
+          "tile": 1,
+          "exit_map": [
+            3,
+            4,
+            3,
+            3,
+            3,
+            3
+          ],
+          "exact_context_delta444_db": 0.16218557097160455,
+          "ideal_shared_saving_pct": 22.94195383922292
+        },
+        {
+          "tile": 2,
+          "exit_map": [
+            3,
+            3,
+            4,
+            3,
+            3,
+            3
+          ],
+          "exact_context_delta444_db": 0.1609048961445832,
+          "ideal_shared_saving_pct": 23.064477710750698
+        },
+        {
+          "tile": 3,
+          "exit_map": [
+            3,
+            3,
+            3,
+            4,
+            3,
+            3
+          ],
+          "exact_context_delta444_db": 0.1683922331959511,
+          "ideal_shared_saving_pct": 23.064477710750698
+        },
+        {
+          "tile": 4,
+          "exit_map": [
+            3,
+            3,
+            3,
+            3,
+            4,
+            3
+          ],
+          "exact_context_delta444_db": 0.16763370190425775,
+          "ideal_shared_saving_pct": 22.94195383922292
+        },
+        {
+          "tile": 5,
+          "exit_map": [
+            3,
+            3,
+            3,
+            3,
+            3,
+            4
+          ],
+          "exact_context_delta444_db": 0.16718670214009915,
+          "ideal_shared_saving_pct": 23.064477710750698
+        }
+      ],
+      "rescued_by_two_tiles": false,
+      "best_pair": {
+        "tiles": [
+          1,
+          2
+        ],
+        "exit_map": [
+          3,
+          4,
+          4,
+          3,
+          3,
+          3
+        ],
+        "exact_context_delta444_db": 0.13821723886180132,
+        "ideal_shared_saving_pct": 21.082871698092486
+      },
+      "pair_candidates": [
+        {
+          "tiles": [
+            0,
+            1
+          ],
+          "exit_map": [
+            4,
+            4,
+            3,
+            3,
+            3,
+            3
+          ],
+          "exact_context_delta444_db": 0.14634334130407256,
+          "ideal_shared_saving_pct": 21.082871698092486
+        },
+        {
+          "tiles": [
+            0,
+            2
+          ],
+          "exit_map": [
+            4,
+            3,
+            4,
+            3,
+            3,
+            3
+          ],
+          "exact_context_delta444_db": 0.14499671612307713,
+          "ideal_shared_saving_pct": 20.960347826564707
+        },
+        {
+          "tiles": [
+            0,
+            3
+          ],
+          "exit_map": [
+            4,
+            3,
+            3,
+            4,
+            3,
+            3
+          ],
+          "exact_context_delta444_db": 0.1525897508852272,
+          "ideal_shared_saving_pct": 21.205395569620265
+        },
+        {
+          "tiles": [
+            0,
+            4
+          ],
+          "exit_map": [
+            4,
+            3,
+            3,
+            3,
+            4,
+            3
+          ],
+          "exact_context_delta444_db": 0.1517501954645035,
+          "ideal_shared_saving_pct": 20.862086107814715
+        },
+        {
+          "tiles": [
+            0,
+            5
+          ],
+          "exit_map": [
+            4,
+            3,
+            3,
+            3,
+            3,
+            4
+          ],
+          "exact_context_delta444_db": 0.15130210898509794,
+          "ideal_shared_saving_pct": 20.960347826564707
+        },
+        {
+          "tiles": [
+            1,
+            2
+          ],
+          "exit_map": [
+            3,
+            4,
+            4,
+            3,
+            3,
+            3
+          ],
+          "exact_context_delta444_db": 0.13821723886180132,
+          "ideal_shared_saving_pct": 21.082871698092486
+        },
+        {
+          "tiles": [
+            1,
+            3
+          ],
+          "exit_map": [
+            3,
+            4,
+            3,
+            4,
+            3,
+            3
+          ],
+          "exact_context_delta444_db": 0.14567532391207405,
+          "ideal_shared_saving_pct": 20.862086107814715
+        },
+        {
+          "tiles": [
+            1,
+            4
+          ],
+          "exit_map": [
+            3,
+            4,
+            3,
+            3,
+            4,
+            3
+          ],
+          "exact_context_delta444_db": 0.1449246819871121,
+          "ideal_shared_saving_pct": 20.972478902953597
+        },
+        {
+          "tiles": [
+            1,
+            5
+          ],
+          "exit_map": [
+            3,
+            4,
+            3,
+            3,
+            3,
+            4
+          ],
+          "exact_context_delta444_db": 0.14446346960742737,
+          "ideal_shared_saving_pct": 20.862086107814715
+        },
+        {
+          "tiles": [
+            2,
+            3
+          ],
+          "exit_map": [
+            3,
+            3,
+            4,
+            4,
+            3,
+            3
+          ],
+          "exact_context_delta444_db": 0.14438977045162676,
+          "ideal_shared_saving_pct": 20.960347826564707
+        },
+        {
+          "tiles": [
+            2,
+            4
+          ],
+          "exit_map": [
+            3,
+            3,
+            4,
+            3,
+            4,
+            3
+          ],
+          "exact_context_delta444_db": 0.14362675887804285,
+          "ideal_shared_saving_pct": 20.862086107814715
+        },
+        {
+          "tiles": [
+            2,
+            5
+          ],
+          "exit_map": [
+            3,
+            3,
+            4,
+            3,
+            3,
+            4
+          ],
+          "exact_context_delta444_db": 0.14319274313769315,
+          "ideal_shared_saving_pct": 21.205395569620265
+        },
+        {
+          "tiles": [
+            3,
+            4
+          ],
+          "exit_map": [
+            3,
+            3,
+            3,
+            4,
+            4,
+            3
+          ],
+          "exact_context_delta444_db": 0.15115604374538394,
+          "ideal_shared_saving_pct": 21.082871698092486
+        },
+        {
+          "tiles": [
+            3,
+            5
+          ],
+          "exit_map": [
+            3,
+            3,
+            3,
+            4,
+            3,
+            4
+          ],
+          "exact_context_delta444_db": 0.15069549268486143,
+          "ideal_shared_saving_pct": 20.960347826564707
+        },
+        {
+          "tiles": [
+            4,
+            5
+          ],
+          "exit_map": [
+            3,
+            3,
+            3,
+            3,
+            4,
+            4
+          ],
+          "exact_context_delta444_db": 0.14994516667538976,
+          "ideal_shared_saving_pct": 21.082871698092486
+        }
+      ],
+      "minimum_upgraded_tiles": 5,
+      "best_subset": {
+        "tiles": [
+          0,
+          1,
+          2,
+          3,
+          4
+        ],
+        "exit_map": [
+          4,
+          4,
+          4,
+          4,
+          4,
+          3
+        ],
+        "exact_context_delta444_db": 0.08822863735705369,
+        "ideal_shared_saving_pct": 15.61601806984002
+      }
+    },
+    {
+      "image": "0803.png",
+      "qp": 48,
+      "base_exit_map": [
+        3,
+        3,
+        3,
+        3,
+        3,
+        3
+      ],
+      "base_exact_context_delta444_db": 0.21958726014167537,
+      "base_ideal_shared_saving_pct": 25.16860759493671,
+      "rescued_by_one_tile": false,
+      "best": {
+        "tile": 2,
+        "exit_map": [
+          3,
+          3,
+          4,
+          3,
+          3,
+          3
+        ],
+        "exact_context_delta444_db": 0.18841981457365636,
+        "ideal_shared_saving_pct": 23.064477710750698
+      },
+      "candidates": [
+        {
+          "tile": 0,
+          "exit_map": [
+            4,
+            3,
+            3,
+            3,
+            3,
+            3
+          ],
+          "exact_context_delta444_db": 0.19516254312858747,
+          "ideal_shared_saving_pct": 23.064477710750698
+        },
+        {
+          "tile": 1,
+          "exit_map": [
+            3,
+            4,
+            3,
+            3,
+            3,
+            3
+          ],
+          "exact_context_delta444_db": 0.19331775190197562,
+          "ideal_shared_saving_pct": 22.94195383922292
+        },
+        {
+          "tile": 2,
+          "exit_map": [
+            3,
+            3,
+            4,
+            3,
+            3,
+            3
+          ],
+          "exact_context_delta444_db": 0.18841981457365636,
+          "ideal_shared_saving_pct": 23.064477710750698
+        },
+        {
+          "tile": 3,
+          "exit_map": [
+            3,
+            3,
+            3,
+            4,
+            3,
+            3
+          ],
+          "exact_context_delta444_db": 0.20180213784133327,
+          "ideal_shared_saving_pct": 23.064477710750698
+        },
+        {
+          "tile": 4,
+          "exit_map": [
+            3,
+            3,
+            3,
+            3,
+            4,
+            3
+          ],
+          "exact_context_delta444_db": 0.20093749787991766,
+          "ideal_shared_saving_pct": 22.94195383922292
+        },
+        {
+          "tile": 5,
+          "exit_map": [
+            3,
+            3,
+            3,
+            3,
+            3,
+            4
+          ],
+          "exact_context_delta444_db": 0.2005893725521936,
+          "ideal_shared_saving_pct": 23.064477710750698
+        }
+      ],
+      "rescued_by_two_tiles": false,
+      "best_pair": {
+        "tiles": [
+          1,
+          2
+        ],
+        "exit_map": [
+          3,
+          4,
+          4,
+          3,
+          3,
+          3
+        ],
+        "exact_context_delta444_db": 0.1620131398076271,
+        "ideal_shared_saving_pct": 21.082871698092486
+      },
+      "pair_candidates": [
+        {
+          "tiles": [
+            0,
+            1
+          ],
+          "exit_map": [
+            4,
+            4,
+            3,
+            3,
+            3,
+            3
+          ],
+          "exact_context_delta444_db": 0.16877993521586002,
+          "ideal_shared_saving_pct": 21.082871698092486
+        },
+        {
+          "tiles": [
+            0,
+            2
+          ],
+          "exit_map": [
+            4,
+            3,
+            4,
+            3,
+            3,
+            3
+          ],
+          "exact_context_delta444_db": 0.16381819524817015,
+          "ideal_shared_saving_pct": 20.960347826564707
+        },
+        {
+          "tiles": [
+            0,
+            3
+          ],
+          "exit_map": [
+            4,
+            3,
+            3,
+            4,
+            3,
+            3
+          ],
+          "exact_context_delta444_db": 0.17738079483258362,
+          "ideal_shared_saving_pct": 21.205395569620265
+        },
+        {
+          "tiles": [
+            0,
+            4
+          ],
+          "exit_map": [
+            4,
+            3,
+            3,
+            3,
+            4,
+            3
+          ],
+          "exact_context_delta444_db": 0.17640737168805942,
+          "ideal_shared_saving_pct": 20.862086107814715
+        },
+        {
+          "tiles": [
+            0,
+            5
+          ],
+          "exit_map": [
+            4,
+            3,
+            3,
+            3,
+            3,
+            4
+          ],
+          "exact_context_delta444_db": 0.17605727441132482,
+          "ideal_shared_saving_pct": 20.960347826564707
+        },
+        {
+          "tiles": [
+            1,
+            2
+          ],
+          "exit_map": [
+            3,
+            4,
+            4,
+            3,
+            3,
+            3
+          ],
+          "exact_context_delta444_db": 0.1620131398076271,
+          "ideal_shared_saving_pct": 21.082871698092486
+        },
+        {
+          "tiles": [
+            1,
+            3
+          ],
+          "exit_map": [
+            3,
+            4,
+            3,
+            4,
+            3,
+            3
+          ],
+          "exact_context_delta444_db": 0.1754245027416932,
+          "ideal_shared_saving_pct": 20.862086107814715
+        },
+        {
+          "tiles": [
+            1,
+            4
+          ],
+          "exit_map": [
+            3,
+            4,
+            3,
+            3,
+            4,
+            3
+          ],
+          "exact_context_delta444_db": 0.1745575092858166,
+          "ideal_shared_saving_pct": 20.972478902953597
+        },
+        {
+          "tiles": [
+            1,
+            5
+          ],
+          "exit_map": [
+            3,
+            4,
+            3,
+            3,
+            3,
+            4
+          ],
+          "exact_context_delta444_db": 0.1742058054534842,
+          "ideal_shared_saving_pct": 20.862086107814715
+        },
+        {
+          "tiles": [
+            2,
+            3
+          ],
+          "exit_map": [
+            3,
+            3,
+            4,
+            4,
+            3,
+            3
+          ],
+          "exact_context_delta444_db": 0.17050633247200153,
+          "ideal_shared_saving_pct": 20.960347826564707
+        },
+        {
+          "tiles": [
+            2,
+            4
+          ],
+          "exit_map": [
+            3,
+            3,
+            4,
+            3,
+            4,
+            3
+          ],
+          "exact_context_delta444_db": 0.1696349523658788,
+          "ideal_shared_saving_pct": 20.862086107814715
+        },
+        {
+          "tiles": [
+            2,
+            5
+          ],
+          "exit_map": [
+            3,
+            3,
+            4,
+            3,
+            3,
+            4
+          ],
+          "exact_context_delta444_db": 0.1693329433517845,
+          "ideal_shared_saving_pct": 21.205395569620265
+        },
+        {
+          "tiles": [
+            3,
+            4
+          ],
+          "exit_map": [
+            3,
+            3,
+            3,
+            4,
+            4,
+            3
+          ],
+          "exact_context_delta444_db": 0.18308925427759482,
+          "ideal_shared_saving_pct": 21.082871698092486
+        },
+        {
+          "tiles": [
+            3,
+            5
+          ],
+          "exit_map": [
+            3,
+            3,
+            3,
+            4,
+            3,
+            4
+          ],
+          "exact_context_delta444_db": 0.18272611957888135,
+          "ideal_shared_saving_pct": 20.960347826564707
+        },
+        {
+          "tiles": [
+            4,
+            5
+          ],
+          "exit_map": [
+            3,
+            3,
+            3,
+            3,
+            4,
+            4
+          ],
+          "exact_context_delta444_db": 0.18187125141599772,
+          "ideal_shared_saving_pct": 21.082871698092486
+        }
+      ],
+      "minimum_upgraded_tiles": 5,
+      "best_subset": {
+        "tiles": [
+          0,
+          1,
+          2,
+          4,
+          5
+        ],
+        "exit_map": [
+          4,
+          4,
+          4,
+          3,
+          4,
+          4
+        ],
+        "exact_context_delta444_db": 0.09890903529232511,
+        "ideal_shared_saving_pct": 15.61601806984002
+      }
+    },
+    {
+      "image": "0803.png",
+      "qp": 63,
+      "base_exit_map": [
+        3,
+        3,
+        5,
+        3,
+        3,
+        3
+      ],
+      "base_exact_context_delta444_db": 0.21062720229371887,
+      "base_ideal_shared_saving_pct": 20.161057544391703,
+      "rescued_by_one_tile": false,
+      "best": {
+        "tile": 0,
+        "exit_map": [
+          4,
+          3,
+          5,
+          3,
+          3,
+          3
+        ],
+        "exact_context_delta444_db": 0.17589504725308763,
+        "ideal_shared_saving_pct": 18.05692766020569
+      },
+      "candidates": [
+        {
+          "tile": 0,
+          "exit_map": [
+            4,
+            3,
+            5,
+            3,
+            3,
+            3
+          ],
+          "exact_context_delta444_db": 0.17589504725308763,
+          "ideal_shared_saving_pct": 18.05692766020569
+        },
+        {
+          "tile": 1,
+          "exit_map": [
+            3,
+            4,
+            5,
+            3,
+            3,
+            3
+          ],
+          "exact_context_delta444_db": 0.17792018427669334,
+          "ideal_shared_saving_pct": 18.342007955344585
+        },
+        {
+          "tile": 3,
+          "exit_map": [
+            3,
+            3,
+            5,
+            4,
+            3,
+            3
+          ],
+          "exact_context_delta444_db": 0.19082596162435456,
+          "ideal_shared_saving_pct": 18.05692766020569
+        },
+        {
+          "tile": 4,
+          "exit_map": [
+            3,
+            3,
+            5,
+            3,
+            4,
+            3
+          ],
+          "exact_context_delta444_db": 0.19225652799428727,
+          "ideal_shared_saving_pct": 17.99748538590015
+        },
+        {
+          "tile": 5,
+          "exit_map": [
+            3,
+            3,
+            5,
+            3,
+            3,
+            4
+          ],
+          "exact_context_delta444_db": 0.1878762816134835,
+          "ideal_shared_saving_pct": 18.464531826872367
+        }
+      ],
+      "rescued_by_two_tiles": false,
+      "best_pair": {
+        "tiles": [
+          0,
+          1
+        ],
+        "exit_map": [
+          4,
+          4,
+          5,
+          3,
+          3,
+          3
+        ],
+        "exact_context_delta444_db": 0.14296574410522217,
+        "ideal_shared_saving_pct": 16.482925814214134
+      },
+      "pair_candidates": [
+        {
+          "tiles": [
+            0,
+            1
+          ],
+          "exit_map": [
+            4,
+            4,
+            5,
+            3,
+            3,
+            3
+          ],
+          "exact_context_delta444_db": 0.14296574410522217,
+          "ideal_shared_saving_pct": 16.482925814214134
+        },
+        {
+          "tiles": [
+            0,
+            3
+          ],
+          "exit_map": [
+            4,
+            3,
+            5,
+            4,
+            3,
+            3
+          ],
+          "exact_context_delta444_db": 0.15603211396453764,
+          "ideal_shared_saving_pct": 16.19784551907526
+        },
+        {
+          "tiles": [
+            0,
+            4
+          ],
+          "exit_map": [
+            4,
+            3,
+            5,
+            3,
+            4,
+            3
+          ],
+          "exact_context_delta444_db": 0.1573773757418055,
+          "ideal_shared_saving_pct": 15.917617654491911
+        },
+        {
+          "tiles": [
+            0,
+            5
+          ],
+          "exit_map": [
+            4,
+            3,
+            5,
+            3,
+            3,
+            4
+          ],
+          "exact_context_delta444_db": 0.15296137864666517,
+          "ideal_shared_saving_pct": 16.36040194268635
+        },
+        {
+          "tiles": [
+            1,
+            3
+          ],
+          "exit_map": [
+            3,
+            4,
+            5,
+            4,
+            3,
+            3
+          ],
+          "exact_context_delta444_db": 0.15796891179403114,
+          "ideal_shared_saving_pct": 16.26214022393635
+        },
+        {
+          "tiles": [
+            1,
+            4
+          ],
+          "exit_map": [
+            3,
+            4,
+            5,
+            3,
+            4,
+            3
+          ],
+          "exact_context_delta444_db": 0.1594403995135479,
+          "ideal_shared_saving_pct": 16.396795171853018
+        },
+        {
+          "tiles": [
+            1,
+            5
+          ],
+          "exit_map": [
+            3,
+            4,
+            5,
+            3,
+            3,
+            4
+          ],
+          "exact_context_delta444_db": 0.15499805990237903,
+          "ideal_shared_saving_pct": 16.64548223782525
+        },
+        {
+          "tiles": [
+            3,
+            4
+          ],
+          "exit_map": [
+            3,
+            3,
+            5,
+            4,
+            4,
+            3
+          ],
+          "exact_context_delta444_db": 0.17238183220193004,
+          "ideal_shared_saving_pct": 16.138403244769695
+        },
+        {
+          "tiles": [
+            3,
+            5
+          ],
+          "exit_map": [
+            3,
+            3,
+            5,
+            4,
+            3,
+            4
+          ],
+          "exact_context_delta444_db": 0.16797038846054763,
+          "ideal_shared_saving_pct": 16.36040194268635
+        },
+        {
+          "tiles": [
+            4,
+            5
+          ],
+          "exit_map": [
+            3,
+            3,
+            5,
+            3,
+            4,
+            4
+          ],
+          "exact_context_delta444_db": 0.16939699903433042,
+          "ideal_shared_saving_pct": 16.50718796699191
+        }
+      ],
+      "minimum_upgraded_tiles": 4,
+      "best_subset": {
+        "tiles": [
+          0,
+          1,
+          3,
+          5
+        ],
+        "exit_map": [
+          4,
+          4,
+          5,
+          4,
+          3,
+          4
+        ],
+        "exact_context_delta444_db": 0.09973557222454034,
+        "ideal_shared_saving_pct": 12.927317955564355
+      }
+    }
+  ]
+}

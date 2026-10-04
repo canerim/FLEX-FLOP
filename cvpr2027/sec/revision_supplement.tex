@@ -461,6 +461,16 @@ bounds}, not a trained router, a prospective held-out result, or measured
 runtime. They motivate a calibrated risk signal and targeted capacity
 increase rather than a blanket all-deep fallback.
 
+A finer source-informed counterfactual advances only selected tiles by one
+exit group. Eight of the 24 failures cross the cap after one tile, and a
+further 14 after two to six tiles; 0844/QP32 and 0844/QP48 require the
+uniform two-group increment. Choosing the fewest upgraded tiles and then
+the highest ideal saving among ties yields 19.05\% mean ideal saving across
+all 120 cases, versus 17.89\% for the uniform fallback. This 1.17-point
+gap measures potential spatial targeting headroom under source feedback;
+it does not establish a decoder-visible tile selector or sparse-kernel
+latency. It also does not optimize arbitrary multi-group tile assignments.
+
 We tested whether inexpensive latent statistics provide that signal for
 the \emph{exact-context} failure label. A fixed L2 logistic model fitted on
 calibration QP and map geometry reaches 0.755 AUC on the disjoint validation

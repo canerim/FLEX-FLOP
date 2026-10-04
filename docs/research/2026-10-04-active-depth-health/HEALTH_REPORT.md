@@ -4,11 +4,11 @@ This is a CPU-only audit of the live official-recipe runs. The training jobs, ch
 
 | Model | Live epoch at audit | Latest monitor | Best monitor so far | Nonfinite skips |
 |:--|--:|--:|--:|--:|
-| D8 | 77/105 | 38.068 dB | 38.074 dB (epoch 76) | 0 |
-| D10 | 67/105 | 37.988 dB | 38.004 dB (epoch 65) | 0 |
-| Scratch D12 | 43/105 | 37.606 dB | 37.606 dB (epoch 43) | 0 |
+| D8 | 79/105 | 38.053 dB | 38.074 dB (epoch 76) | 0 |
+| D10 | 69/105 | 38.007 dB | 38.007 dB (epoch 69) | 0 |
+| Scratch D12 | 44/105 | 37.538 dB | 37.606 dB (epoch 43) | 0 |
 
-At the matched 40th epoch, D8/D10/D12 give 37.467/37.508/37.576 dB. At epoch 42 they give 37.441/37.478/37.369 dB. **D12 rebounds to 37.606 dB at epoch 43, a new best on this monitor**; its QP63 YUV611 PSNR likewise recovers from 40.631 to 41.219 dB. The dip was real on the fixed samples but was not a persistent collapse. D12 is still in the official **2×10⁻⁴ LR phase through epoch 44**. D8 and D10 also fluctuate in this phase and then rise sharply after the official LR reduction at epoch 45; by epoch 50 they reach 37.924 and 37.973 dB. D8 set a further monitor best of 38.074 dB at epoch 76 and remains within 0.006 dB at epoch 77; D10's epoch-67 reading is 0.016 dB below its epoch-65 best. These fluctuations do not establish deterioration. The 512-pixel crop phase begins at epoch 90 and has not started for any of these runs.
+At the matched 40th epoch, D8/D10/D12 give 37.467/37.508/37.576 dB. At epoch 42 they give 37.441/37.478/37.369 dB. **D12 rebounds to 37.606 dB at epoch 43, a new best on this monitor**; its QP63 YUV611 PSNR likewise recovers from 40.631 to 41.219 dB. Epoch 44 reads 37.538 dB, 0.067 dB below that best; the official learning-rate transition is only after epoch 44, so this is not evidence of post-transition behaviour. D8 and D10 also fluctuated before the official LR reduction at epoch 45 and then rose sharply; by epoch 50 they reached 37.924 and 37.973 dB. D8 set a monitor best of 38.074 dB at epoch 76 and is 0.021 dB below it at epoch 79; D10 sets a new monitor best of 38.007 dB at epoch 69. These small monitor fluctuations do not establish deterioration. The 512-pixel crop phase begins at epoch 90 and has not started for any of these runs.
 
 All three status files were fresh, their processes were alive and producing optimizer updates, and no nonfinite batches were skipped. A single instantaneous `nvidia-smi` sample can show low utilisation during data/checkpoint work; the status step counters are the more reliable liveness check. A concern would be **persistent deterioration after D12 crosses the 45-epoch LR transition**, ideally checked on a broader held-out image set and at actual bitstream rates. Stopping or changing LR now would violate the official recipe and invalidate the direct depth comparison.
 

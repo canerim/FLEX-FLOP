@@ -1,14 +1,14 @@
 {
-  "generated_at_utc": "2026-10-04T14:35:48.116083+00:00",
+  "generated_at_utc": "2026-10-04T16:39:34.446932+00:00",
   "protocol": "DIV2K first four central 512 crops; log-rate interpolation to 0.2 estimated bpp; diagnostic YUV611 PSNR, not actual bitstreams",
   "training_process_modified": false,
   "models": {
     "8": {
-      "status_epoch": 77,
-      "status_next_batch": 2601,
+      "status_epoch": 79,
+      "status_next_batch": 10601,
       "batches_per_epoch": 24049,
-      "latest_validation_epoch": 77,
-      "latest_psnr_yuv611_db": 38.0683582182551,
+      "latest_validation_epoch": 79,
+      "latest_psnr_yuv611_db": 38.05346618129626,
       "best_validation_epoch": 76,
       "best_psnr_yuv611_db": 38.07406736307307,
       "matched_epoch_40_db": 37.46672585873897,
@@ -16,31 +16,31 @@
       "epoch_50_db": 37.92392324632201,
       "learning_rate": 1e-05,
       "nonfinite_skips": 0,
-      "status_age_seconds": 9.72416,
-      "validation_records": 77
+      "status_age_seconds": 6.775394,
+      "validation_records": 79
     },
     "10": {
-      "status_epoch": 67,
-      "status_next_batch": 4601,
+      "status_epoch": 69,
+      "status_next_batch": 8601,
       "batches_per_epoch": 24049,
-      "latest_validation_epoch": 67,
-      "latest_psnr_yuv611_db": 37.98786972587432,
-      "best_validation_epoch": 65,
-      "best_psnr_yuv611_db": 38.003815809548655,
+      "latest_validation_epoch": 69,
+      "latest_psnr_yuv611_db": 38.00719310578801,
+      "best_validation_epoch": 69,
+      "best_psnr_yuv611_db": 38.00719310578801,
       "matched_epoch_40_db": 37.507588672142006,
       "matched_epoch_42_db": 37.47787895963482,
       "epoch_50_db": 37.972914587849544,
       "learning_rate": 5e-05,
       "nonfinite_skips": 0,
-      "status_age_seconds": 3.739472,
-      "validation_records": 67
+      "status_age_seconds": 15.934836,
+      "validation_records": 69
     },
     "12": {
-      "status_epoch": 43,
-      "status_next_batch": 20201,
+      "status_epoch": 44,
+      "status_next_batch": 23201,
       "batches_per_epoch": 24049,
-      "latest_validation_epoch": 43,
-      "latest_psnr_yuv611_db": 37.60573804455589,
+      "latest_validation_epoch": 44,
+      "latest_psnr_yuv611_db": 37.53837729480635,
       "best_validation_epoch": 43,
       "best_psnr_yuv611_db": 37.60573804455589,
       "matched_epoch_40_db": 37.57595244241638,
@@ -48,8 +48,8 @@
       "epoch_50_db": null,
       "learning_rate": 0.0002,
       "nonfinite_skips": 0,
-      "status_age_seconds": 8.485271,
-      "validation_records": 43
+      "status_age_seconds": 44.157342,
+      "validation_records": 44
     }
   },
   "common_validation_epochs": [

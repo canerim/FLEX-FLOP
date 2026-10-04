@@ -1,0 +1,23 @@
+{
+  "schema": 1,
+  "scope": "Source-informed exact-context spatial +1 subset diagnostic; ideal synthesis MAC only",
+  "cases": 120,
+  "failures": 24,
+  "minimum_upgraded_tiles_distribution": {
+    "1": 8,
+    "2": 2,
+    "3": 4,
+    "4": 5,
+    "5": 2,
+    "6": 1,
+    "None": 2
+  },
+  "spatial_subset_feasible_failures": 22,
+  "spatial_feasible_failure_mean_ideal_saving_pct": 21.531559966506446,
+  "spatial_fallback_full_cohort_mean_ideal_saving_pct": 19.05245208067789,
+  "uniform_fallback_full_cohort_mean_ideal_saving_pct": 17.887042526939023,
+  "baseline_full_cohort_mean_ideal_saving_pct": 20.551963339532424,
+  "spatial_vs_uniform_full_cohort_pct_points": 1.1654095537388685,
+  "source_feedback_required": true,
+  "latency_measured": false
+}
