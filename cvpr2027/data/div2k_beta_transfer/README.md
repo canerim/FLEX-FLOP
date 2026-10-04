@@ -6,7 +6,9 @@ are archived beside them. The figure is a vector PDF built from these summaries
 and the fixed-QP16 Kodak replay records.
 
 Full code, source/bitstream/result hashes, the direct outlier replay, and the
-research report are in [FLEX-FLOP proof commit `9ad3819`](https://github.com/canerim/FLEX-FLOP/tree/9ad3819/proof/cpu_early_exit).
+research report are in [FLEX-FLOP proof commit `c067781`](https://github.com/canerim/FLEX-FLOP/tree/c067781/proof/cpu_early_exit).
+`beta_quality_floor.json` and `worst_case_direct_replay.json` add the
+calibration-only all-deep tiled-floor audit and its direct decoder check.
 The per-QP rule was fixed before DIV2K validation and Kodak transfer. The
 global-budget rule was added after inspecting calibration aggregates, then
 frozen before its validation and Kodak replays. Kodak had already been used

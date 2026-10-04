@@ -292,6 +292,43 @@ Kodak had been examined in prior diagnostics; it is independent of these
 specific price fits, not globally untouched. A fresh cohort is needed for
 a final Q90 or maximum-loss-constrained policy comparison.
 
+\paragraph{The router is not the only source of tail loss.}
+On the 120 DIV2K calibration cases, forcing every tile to the deepest exit
+still exceeds 0.1\,dB in five cases: every QP of image 0828. Its all-deep
+tiled losses are 0.115/0.164/0.152/0.144/0.145\,dB at increasing QP.
+No scalar price on the frozen candidate grid can meet the threshold for
+those cases. This is a tiled-versus-full-frame floor, not proof that every
+possible spatial map or decoder architecture has the same floor.
+Direct uncached replay exactly reproduces the QP0 primary-map loss of
+0.7918\,dB and all-deep floor of 0.1148\,dB. A 16-pixel band at the internal
+tile boundaries occupies 13.64\% of pixels but contains 72.43\% of the
+all-deep/full-frame squared difference energy; its mean difference is
+16.6 times the interior. The structural floor and the router-dependent
+excess therefore require separate controls (\cref{fig:beta-floor}).
+
+An outcome-informed oracle restricted to the same finite scalar-price grid
+reduces the calibration threshold failures from 34 to those five cases,
+while saving 21.60\% mean synthesis MAC versus the fixed primary policy's
+20.73\%. It consults source reconstruction quality and is not deployable.
+Conversely, a fixed per-QP Q90 calibration rule reduces mean saving to
+11.20\% on these calibration cases. These are explanatory calibration
+ablations, not external transfer results. They show why simply tightening
+the scalar price may sacrifice much of the compute gain without repairing
+the tiled reconstruction floor.
+
+\begin{figure*}[t]
+\centering
+\includegraphics[width=\textwidth]{figs/div2k_beta_transfer/fig_beta_quality_floor.pdf}
+\caption{\textbf{Separate the routing tail from the tiled reference floor.}
+\textbf{a}, Primary-policy loss against all-deep tiled loss on the same
+24 DIV2K calibration images at five QPs; dashed lines mark 0.1\,dB.
+\textbf{b}, Image 0828 is above the threshold even when every tile takes
+the deepest exit. The large QP0 gap between bars is additionally caused by
+the chosen spatial exit map. Both bars compare with full-frame e15 output;
+no latency or new trained model is inferred.}
+\label{fig:beta-floor}
+\end{figure*}
+
 
 
 \section{Auditing the Scalar Control Search}
