@@ -108,9 +108,11 @@ def main():
                 'fixed_beta_quality_loss_db_max': float(max(fixed_losses)),
                 'fixed_beta_released_relative_yuv_loss_over_0p1_count': sum(v > .1 for v in fixed_losses),
                 'calibrated_delta444_db_mean': float(np.mean(calibrated_delta)),
+                'calibrated_delta444_db_image_bootstrap_95': interval(calibrated_delta),
                 'calibrated_delta444_db_max': float(max(calibrated_delta)),
                 'calibrated_delta444_over_0p1_count': sum(v > .1 for v in calibrated_delta),
                 'fixed_beta_delta444_db_mean': float(np.mean(fixed_delta)),
+                'fixed_beta_delta444_db_image_bootstrap_95': interval(fixed_delta),
                 'fixed_beta_delta444_db_max': float(max(fixed_delta)),
                 'fixed_beta_delta444_over_0p1_count': sum(v > .1 for v in fixed_delta),
             })
@@ -136,6 +138,10 @@ def main():
         fixed_losses = [fixed_cases[(r['image'], r['qp'])]['fixed_beta_loss_db'] for r in cases]
         calibrated_delta = [fixed_cases[(r['image'], r['qp'])]['calibrated_delta444_db'] for r in cases]
         fixed_delta = [fixed_cases[(r['image'], r['qp'])]['fixed_beta_delta444_db'] for r in cases]
+        calibrated_delta_by_image = np.array([[fixed_cases[(name, q)]['calibrated_delta444_db']
+                                               for q in qps] for name in manifest['images']])
+        fixed_delta_by_image = np.array([[fixed_cases[(name, q)]['fixed_beta_delta444_db']
+                                          for q in qps] for name in manifest['images']])
         aggregate.update({
             'fixed_beta_quality_status': 'Measured from the same FUFREF2 streams',
             'fixed_beta_quality_loss_db_mean': float(np.mean(fixed_losses)),
@@ -143,9 +149,12 @@ def main():
             'fixed_beta_released_relative_yuv_loss_over_0p1_count': sum(v > .1 for v in fixed_losses),
             'fixed_beta_vs_calibrated_quality_loss_db_mean': float(np.mean(fixed_losses)-np.mean([r['quality_loss_db'] for r in cases])),
             'calibrated_delta444_db_mean': float(np.mean(calibrated_delta)),
+            'calibrated_delta444_db_image_cluster_bootstrap_95': np.quantile(calibrated_delta_by_image[image_draws].mean(axis=(1, 2)), [.025, .975]).tolist(),
             'calibrated_delta444_db_max': float(max(calibrated_delta)),
             'calibrated_delta444_over_0p1_count': sum(v > .1 for v in calibrated_delta),
             'fixed_beta_delta444_db_mean': float(np.mean(fixed_delta)),
+            'fixed_beta_delta444_db_image_cluster_bootstrap_95': np.quantile(fixed_delta_by_image[image_draws].mean(axis=(1, 2)), [.025, .975]).tolist(),
+            'fixed_minus_calibrated_delta444_db_image_cluster_bootstrap_95': np.quantile((fixed_delta_by_image-calibrated_delta_by_image)[image_draws].mean(axis=(1, 2)), [.025, .975]).tolist(),
             'fixed_beta_delta444_db_max': float(max(fixed_delta)),
             'fixed_beta_delta444_over_0p1_count': sum(v > .1 for v in fixed_delta),
         })
