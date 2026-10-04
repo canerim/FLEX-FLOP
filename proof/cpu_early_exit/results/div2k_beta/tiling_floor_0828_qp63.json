@@ -1,0 +1,29 @@
+{
+  "schema": 1,
+  "case_sha256": "897707703fceebe93a2b3e7e1367fefcf61524221a26da6c233d421ffef81cbc",
+  "stream_sha256": "ec4acbae7f2e09ea414d72c90743438f2f9e88fd9fcc9da925986c069cabd504",
+  "source_sha256": "a62013e252fa503920f54b9b1eff9babd501c742d2c82c97d7c22394493ffa12",
+  "policy_sha256": "80f0a2f1d9cdda4931a956878a07df05c646e9c6a621c48d0593d3a10a1c5e47",
+  "release_sha256": "b3b900de23f30e4fc437010ddffe6a5413a56d6cfd97fb6235adbcd2b6973302",
+  "e15_sha256": "91556d30bca41988755ff43dee3bc6d0cd2a0a4eda1d18d2891b168dc0a04ce9",
+  "image": "0828.png",
+  "qp": 63,
+  "beta": -10.0,
+  "exit_map": [
+    5,
+    5,
+    5,
+    3,
+    5,
+    5
+  ],
+  "cached_delta444_db": 0.1565408045038452,
+  "direct_delta444_db": 0.1565408045038452,
+  "absolute_difference_db": 0.0,
+  "all_deep_delta444_db": 0.14516776894354005,
+  "seam_band_px": 16,
+  "seam_pixel_fraction": 0.1363881379365921,
+  "all_deep_vs_full_seam_energy_fraction": 0.5377901792526245,
+  "all_deep_vs_full_seam_mse": 2.461119402141776e-05,
+  "all_deep_vs_full_interior_mse": 3.340543116792105e-06
+}

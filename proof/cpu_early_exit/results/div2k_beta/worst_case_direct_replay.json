@@ -19,5 +19,11 @@
   ],
   "cached_delta444_db": 0.7918083678455878,
   "direct_delta444_db": 0.7918083678455878,
-  "absolute_difference_db": 0.0
+  "absolute_difference_db": 0.0,
+  "all_deep_delta444_db": 0.1148300636332754,
+  "seam_band_px": 16,
+  "seam_pixel_fraction": 0.1363881379365921,
+  "all_deep_vs_full_seam_energy_fraction": 0.7242980599403381,
+  "all_deep_vs_full_seam_mse": 0.00015908140630926937,
+  "all_deep_vs_full_interior_mse": 9.563127605360933e-06
 }

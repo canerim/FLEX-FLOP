@@ -79,8 +79,25 @@ def main() -> None:
             stem = group(stem)
         route = torch.tensor(candidate['exit_map'], dtype=torch.long)
         output = forward_from_stem_with_cpu_map(e15.dec,stem,q,route)[:,:,:height,:width]
+        deep_route = torch.full_like(route, cfg.num_exits-1)
+        deep_output = forward_from_stem_with_cpu_map(e15.dec,stem,q,deep_route)[:,:,:height,:width]
         delta = 10*math.log10(float((source-output).square().mean()) /
                               float((source-reference).square().mean()))
+        deep_delta = 10*math.log10(float((source-deep_output).square().mean()) /
+                                   float((source-reference).square().mean()))
+        if width % 256 or height % 256:
+            raise RuntimeError('Seam audit assumes 256-pixel output tiles')
+        yy = torch.arange(height)[:,None]
+        xx = torch.arange(width)[None,:]
+        seam = torch.zeros((height,width),dtype=torch.bool)
+        for yb in range(256,height,256):
+            seam |= (yy-yb).abs() < 16
+        for xb in range(256,width,256):
+            seam |= (xx-xb).abs() < 16
+        tile_error = (deep_output-reference).square().mean(dim=1)[0]
+        seam_energy_fraction = float(tile_error[seam].sum()/tile_error.sum())
+        seam_mse = float(tile_error[seam].mean())
+        interior_mse = float(tile_error[~seam].mean())
     result = {'schema':1, 'case_sha256':sha(args.case),
               'stream_sha256':sha(args.stream), 'source_sha256':sha(source_path),
               'policy_sha256':sha(args.policy), 'release_sha256':sha(args.release),
@@ -88,7 +105,17 @@ def main() -> None:
               'beta':candidate['beta'],'exit_map':candidate['exit_map'],
               'cached_delta444_db':candidate['delta444_db'],
               'direct_delta444_db':delta,
-              'absolute_difference_db':abs(delta-candidate['delta444_db'])}
+              'absolute_difference_db':abs(delta-candidate['delta444_db']),
+              'all_deep_delta444_db':deep_delta,
+              'seam_band_px':16,
+              'seam_pixel_fraction':float(seam.float().mean()),
+              'all_deep_vs_full_seam_energy_fraction':seam_energy_fraction,
+              'all_deep_vs_full_seam_mse':seam_mse,
+              'all_deep_vs_full_interior_mse':interior_mse}
+    deep_candidates = [c for c in row['candidates']
+                       if all(v==cfg.num_exits-1 for v in c['exit_map'])]
+    if deep_candidates and abs(deep_delta-deep_candidates[0]['delta444_db'])>1e-6:
+        raise RuntimeError('Direct all-deep output differs from cached candidate')
     if result['absolute_difference_db'] > 1e-6:
         raise RuntimeError(f'Cached/direct quality mismatch: {result}')
     args.output.parent.mkdir(parents=True, exist_ok=True)
