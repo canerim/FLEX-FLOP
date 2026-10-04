@@ -38,6 +38,19 @@ latency. The suffix feature-cell multiplier is 1.67× for all deep and 1.65× fo
 QP16–63's fixed map. Full halo therefore sacrifices the desired compute saving
 at the high-QP maps.
 
+We also implemented a **tapered exact-context control**: after each suffix
+3×3 depthwise block, discard one ring of internal-window pixels whose values
+will never be needed again, while preserving real global frame edges. On
+`0828/QP63` it reproduces the static full-window result **exactly** (maximum
+absolute difference 0) for both all-deep and the fixed mixed map. It reduces
+suffix feature-cell work by 18.3% and 17.9%, respectively. Yet its full
+synthesis MAC remains **1.2154** for all-deep and **1.1512** for the mixed map
+relative to the unit-cost full-frame decode. This is a correct improvement to
+the halo mechanism, not a net compute-saving solution at this operating point.
+The independent `0898/QP48` stress case also matches its static full-window
+output exactly for both all-deep and its mixed map, so the exactness check is
+not confined to image 0828.
+
 The existing depthwise-only `CanvasCoupler` avoids haloing the costly pointwise
 operations. In this narrow audit its **all-deep no-repair** output is also
 bit-for-bit the full-frame reference. For the mixed map it stays under 0.1 dB

@@ -61,6 +61,17 @@ def main():
                     sum(c['per_suffix_group_feature_cell_areas']) /
                     sum(c['zero_halo_suffix_feature_cell_areas'])),
             }
+            if 'tapered_suffix_block_feature_cell_areas' in c:
+                taper_adapter = sum(
+                    adapter_vs_block(cfg.adapter_kind, int(mode), cfg)*cfg.feature_patch**2
+                    for mode in c['exit_map'] if mode < k-1)
+                cases[name]['tapered_context_no_repair_relative_mac'] = (
+                    SHARE_UPSAMPLE + j*b*per_block + SHARE_HEAD +
+                    per_block*sum(c['tapered_suffix_block_feature_cell_areas'])/total +
+                    per_block*taper_adapter/total)
+                cases[name]['tapered_vs_static_suffix_area_ratio'] = (
+                    sum(c['tapered_suffix_block_feature_cell_areas']) /
+                    (b*sum(c['per_suffix_group_feature_cell_areas'])))
         result['cases'][str(qp)] = cases
     (args.output_dir/'context_counterfactual_summary.json').write_text(json.dumps(result,indent=2)+'\n')
 

@@ -346,8 +346,12 @@ dominant cause (\cref{fig:context-counterfactual}).
 Exact windows compute the entire costly suffix over expanded areas. Their
 analytical synthesis cost is 1.315 times full-frame e15 for the QP16--63
 mixed maps, compared with 0.968 for the deployed zero-halo path; neither
-number measures latency. Depthwise-only coupling gives 0.056--0.099\,dB on
-these four QPs without haloing pointwise layers, but the mixed-depth boundary
+number measures latency. Cropping one invalid context
+ring after each suffix block is output-identical to the full-window method
+on 0828/QP63, and lowers its mixed-map synthesis cost to 1.151 times full
+e15; this still exceeds the full decode. Depthwise-only coupling gives
+0.056--0.099\,dB on these four QPs without haloing pointwise layers, but
+the mixed-depth boundary
 still differs from a true full-depth neighbour. Its PyTorch implementation
 also assembles and gathers halo buffers, so low arithmetic overhead is not
 evidence of low wall-clock overhead. Retaining the old seam-repair weights

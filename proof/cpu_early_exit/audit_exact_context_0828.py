@@ -36,6 +36,8 @@ def main() -> None:
     parser.add_argument('--e15', type=Path, default=PROOF / 'artifacts/e15_epoch15.pth.tar')
     parser.add_argument('--release', type=Path, default=PROOF / 'artifacts/released_cvpr2026_image.pth.tar')
     parser.add_argument('--source-dir', type=Path, default=ROOT / 'data/DIV2K_valid_HR')
+    parser.add_argument('--tapered', action='store_true',
+                        help='also run exact-context windows cropped after every suffix block')
     args = parser.parse_args()
 
     import numpy as np
@@ -113,6 +115,41 @@ def main() -> None:
             canvas = dec.seam_repair(canvas)
         return dec._apply_head(canvas, q), group_areas, tile_windows
 
+    def tapered_reconstruct(stem, exit_map):
+        """Remove one non-global halo ring after each 3x3 suffix block.
+
+        After a block, the outermost value of a clipped window can depend on
+        missing neighbours. Discarding that ring leaves exactly the values
+        needed by the next block, until the core remains. Global image edges
+        stay in place and retain stock zero-padding semantics.
+        """
+        _, _, h, w = stem.shape
+        side = cfg.feature_patch
+        nw = w // side
+        canvas = torch.empty_like(stem)
+        block_areas = []
+        for tile, mode in enumerate(exit_map.tolist()):
+            top, left = (tile // nw) * side, (tile % nw) * side
+            halo = (mode - cfg.split_depth + 1) * cfg.blocks_per_exit
+            t, l = max(0, top - halo), max(0, left - halo)
+            bottom, right = min(h, top + side + halo), min(w, left + side + halo)
+            work = stem[:, :, t:bottom, l:right].contiguous()
+            for group in range(cfg.split_depth, mode + 1):
+                for block in dec.groups[group]:
+                    block_areas.append((bottom - t) * (right - l))
+                    work = block(work)
+                    ct = int(t < top)
+                    cl = int(l < left)
+                    cb = int(bottom > top + side)
+                    cr = int(right > left + side)
+                    work = work[:, :, ct:work.shape[-2]-cb,
+                                cl:work.shape[-1]-cr].contiguous()
+                    t, l, bottom, right = t+ct, l+cl, bottom-cb, right-cr
+            if (t,l,bottom,right) != (top,left,top+side,left+side):
+                raise RuntimeError('Taper did not end at the core')
+            canvas[:, :, top:top+side, left:left+side] = dec._at_exit(work, mode)
+        return dec._apply_head(canvas,q), block_areas
+
     with torch.inference_mode():
         reference = dec.forward_full(latent, q)
         ref_mse = float((source - reference[:, :, :height, :width]).square().mean())
@@ -133,6 +170,10 @@ def main() -> None:
                 dec.seam_repair = original_repair
             context, areas, windows = context_reconstruct(stem, em, repair=False)
             context_repair, _, _ = context_reconstruct(stem, em, repair=True)
+            if args.tapered:
+                tapered, block_areas = tapered_reconstruct(stem, em)
+                if not torch.allclose(tapered, context, atol=1e-4, rtol=1e-4):
+                    raise RuntimeError('Tapered context differs from full-window context')
             no_context_db = quality(no_context, ref_mse)
             context_db = quality(context, ref_mse)
             repaired_db = quality(context_repair, ref_mse)
@@ -152,6 +193,10 @@ def main() -> None:
                     for g in range(cfg.split_depth, cfg.num_exits)],
                 'tile_windows_tlbr': windows,
             }
+            if args.tapered:
+                controls[name]['tapered_context_no_repair_delta444_db'] = quality(tapered, ref_mse)
+                controls[name]['tapered_context_vs_full_window_max_abs'] = float((tapered-context).abs().max())
+                controls[name]['tapered_suffix_block_feature_cell_areas'] = block_areas
             if name == 'all_deep' and not torch.allclose(context, reference, atol=1e-4, rtol=1e-4):
                 raise RuntimeError('Sufficient-context all-deep output did not match full-frame')
         # Existing decoder's depthwise-only canvas coupling is a much cheaper

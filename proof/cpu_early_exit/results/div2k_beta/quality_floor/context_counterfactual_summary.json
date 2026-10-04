@@ -125,7 +125,9 @@
         "zero_halo_deployed_relative_mac": 1.0095071932454651,
         "exact_context_no_repair_relative_mac": 1.3975111111111111,
         "exact_context_with_repair_relative_mac": 1.4070182841068917,
-        "suffix_feature_cell_area_multiplier": 1.6666666666666667
+        "suffix_feature_cell_area_multiplier": 1.6666666666666667,
+        "tapered_context_no_repair_relative_mac": 1.2154479166666667,
+        "tapered_vs_static_suffix_area_ratio": 0.816796875
       },
       "primary_route": {
         "quality_delta444_db": {
@@ -138,7 +140,9 @@
         "zero_halo_deployed_relative_mac": 0.9675595304151124,
         "exact_context_no_repair_relative_mac": 1.3149183016877637,
         "exact_context_with_repair_relative_mac": 1.3244254746835442,
-        "suffix_feature_cell_area_multiplier": 1.6491477272727273
+        "suffix_feature_cell_area_multiplier": 1.6491477272727273,
+        "tapered_context_no_repair_relative_mac": 1.1512033189389943,
+        "tapered_vs_static_suffix_area_ratio": 0.820655684754522
       }
     }
   }

@@ -33,12 +33,15 @@ specific feature channel or convolution responsible.
 
 By contrast, depth-specific exact context reduces all three mixed-map losses,
 but the full-window implementation expands expensive pointwise operations and
-can erase compute savings. A promising next *implementation* ablation is to
-propagate only the dependency band across an early-exit boundary (or taper
-windows after each depthwise layer), charging pointwise work only on the band.
-This requires an exactness control against the full-window counterfactual,
-plus matched latency and full-cohort quality tests before it can be a paper
-claim. A policy fallback remains necessary for `0844`'s shallow-route loss:
+can erase compute savings. We implemented the simpler **blockwise taper**
+control: drop one invalid ring after every suffix block. It exactly matches
+full-window outputs on `0828/QP63` and `0898/QP48` (maximum absolute difference
+zero), but still costs 1.151 times full synthesis on the former mixed map. A
+promising next *implementation* ablation is to propagate only the dependency
+band across an early-exit boundary, charging pointwise work only on that band.
+It needs an exactness control against full windows, plus matched latency and
+full-cohort quality tests before any deployment claim. A policy fallback
+remains necessary for `0844`'s shallow-route loss:
 even perfect spatial context leaves 0.4647 dB.
 
 The results are archived as `exact_context_0828_qp63.json`,
