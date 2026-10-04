@@ -1,0 +1,107 @@
+{
+  "schema": 1,
+  "scope": "Kodak24 real FUFREF2, locked DIV2K beta; means over images, no BD-rate or latency",
+  "input_sha256": "755ab5961e7205f9f0c720945bc6e6c6365e78ba2919a0599b3ffec34b4be354",
+  "all": {
+    "cases": 120,
+    "mean_released_yuv611_db": 35.0261133990765,
+    "mean_deployed_yuv611_db": 34.88794970951077,
+    "mean_exact_yuv611_db": 34.9053497595262,
+    "mean_deployed_gap_to_released_yuv611_db": 0.13816368956572753,
+    "mean_exact_gap_to_released_yuv611_db": 0.12076363955029201,
+    "mean_yuv611_context_gain_db": 0.017400050015435504,
+    "mean_deployed_delta444_db": 0.09762602088624604,
+    "mean_exact_delta444_db": 0.08274774999140456,
+    "deployed_over_0p1_delta444_count": 47,
+    "exact_over_0p1_delta444_count": 34,
+    "mean_ideal_shared_saving_pct": 26.296163150492262,
+    "mean_bpp": 0.35447913275824655
+  },
+  "per_qp": {
+    "0": {
+      "cases": 24,
+      "mean_released_yuv611_db": 29.20534092734216,
+      "mean_deployed_yuv611_db": 29.073835973071365,
+      "mean_exact_yuv611_db": 29.088348299713005,
+      "mean_deployed_gap_to_released_yuv611_db": 0.1315049542707989,
+      "mean_exact_gap_to_released_yuv611_db": 0.11699262762915834,
+      "mean_yuv611_context_gain_db": 0.014512326641640557,
+      "mean_deployed_delta444_db": 0.09101610827790836,
+      "mean_exact_delta444_db": 0.08098196022581235,
+      "deployed_over_0p1_delta444_count": 9,
+      "exact_over_0p1_delta444_count": 7,
+      "mean_ideal_shared_saving_pct": 35.69908954661495,
+      "mean_bpp": 0.03357357449001736
+    },
+    "16": {
+      "cases": 24,
+      "mean_released_yuv611_db": 31.792357664864614,
+      "mean_deployed_yuv611_db": 31.69710969965846,
+      "mean_exact_yuv611_db": 31.714781762292414,
+      "mean_deployed_gap_to_released_yuv611_db": 0.09524796520615315,
+      "mean_exact_gap_to_released_yuv611_db": 0.07757590257219989,
+      "mean_yuv611_context_gain_db": 0.017672062633953267,
+      "mean_deployed_delta444_db": 0.06102167560425109,
+      "mean_exact_delta444_db": 0.0471306033330924,
+      "deployed_over_0p1_delta444_count": 1,
+      "exact_over_0p1_delta444_count": 0,
+      "mean_ideal_shared_saving_pct": 26.14652753398053,
+      "mean_bpp": 0.08667246500651042
+    },
+    "32": {
+      "cases": 24,
+      "mean_released_yuv611_db": 34.7731008566522,
+      "mean_deployed_yuv611_db": 34.64845804131827,
+      "mean_exact_yuv611_db": 34.665659961119985,
+      "mean_deployed_gap_to_released_yuv611_db": 0.12464281533392822,
+      "mean_exact_gap_to_released_yuv611_db": 0.10744089553221015,
+      "mean_yuv611_context_gain_db": 0.017201919801718073,
+      "mean_deployed_delta444_db": 0.08252862233103916,
+      "mean_exact_delta444_db": 0.06895693912137797,
+      "deployed_over_0p1_delta444_count": 5,
+      "exact_over_0p1_delta444_count": 2,
+      "mean_ideal_shared_saving_pct": 26.041783603501887,
+      "mean_bpp": 0.22211286756727433
+    },
+    "48": {
+      "cases": 24,
+      "mean_released_yuv611_db": 38.11830953394297,
+      "mean_deployed_yuv611_db": 37.94774565832622,
+      "mean_exact_yuv611_db": 37.96314424825981,
+      "mean_deployed_gap_to_released_yuv611_db": 0.1705638756167526,
+      "mean_exact_gap_to_released_yuv611_db": 0.15516528568316298,
+      "mean_yuv611_context_gain_db": 0.015398589933589632,
+      "mean_deployed_delta444_db": 0.1274558085184547,
+      "mean_exact_delta444_db": 0.11334886918741814,
+      "deployed_over_0p1_delta444_count": 17,
+      "exact_over_0p1_delta444_count": 14,
+      "mean_ideal_shared_saving_pct": 25.697630705084535,
+      "mean_bpp": 0.5025227864583334
+    },
+    "63": {
+      "cases": 24,
+      "mean_released_yuv611_db": 41.24145801258056,
+      "mean_deployed_yuv611_db": 41.07259917517955,
+      "mean_exact_yuv611_db": 41.09481452624583,
+      "mean_deployed_gap_to_released_yuv611_db": 0.1688588374010047,
+      "mean_exact_gap_to_released_yuv611_db": 0.1466434863347287,
+      "mean_yuv611_context_gain_db": 0.022215351066275996,
+      "mean_deployed_delta444_db": 0.1261078896995769,
+      "mean_exact_delta444_db": 0.10332037808932187,
+      "deployed_over_0p1_delta444_count": 15,
+      "exact_over_0p1_delta444_count": 11,
+      "mean_ideal_shared_saving_pct": 17.89578436327942,
+      "mean_bpp": 0.9275139702690972
+    }
+  },
+  "image_cluster_bootstrap_95ci": {
+    "mean_yuv611_context_gain_db": [
+      0.01404925413019586,
+      0.02090444756570864
+    ],
+    "mean_delta444_context_recovery_db": [
+      0.011661360200627044,
+      0.018274641882899584
+    ]
+  }
+}

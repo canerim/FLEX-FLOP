@@ -25,9 +25,11 @@ def sha(path):
     return hashlib.sha256(Path(path).read_bytes()).hexdigest()
 
 
-def ideal_cost(route,cfg):
+def ideal_cost_grid(route,cfg,nh,nw):
     patch=cfg.feature_patch
-    h,w=2*patch,3*patch
+    h,w=nh*patch,nw*patch
+    if len(route)!=nh*nw:
+        raise RuntimeError('Exit map does not match feature grid')
     cells=[]
     for block in range((cfg.num_exits-cfg.split_depth)*cfg.blocks_per_exit):
         mask=np.zeros((h,w),dtype=bool)
@@ -35,7 +37,7 @@ def ideal_cost(route,cfg):
             remaining=(mode-cfg.split_depth+1)*cfg.blocks_per_exit-block
             if remaining<=0:
                 continue
-            top,left=(tile//3)*patch,(tile%3)*patch
+            top,left=(tile//nw)*patch,(tile%nw)*patch
             mask[max(0,top-remaining):min(h,top+patch+remaining),
                  max(0,left-remaining):min(w,left+patch+remaining)]=True
         cells.append(int(mask.sum()))
@@ -44,6 +46,10 @@ def ideal_cost(route,cfg):
                  for mode in route if mode<cfg.num_exits-1)/len(route)*per
     return (SHARE_UPSAMPLE+cfg.split_depth*cfg.blocks_per_exit*per+
             SHARE_HEAD+per*sum(cells)/(h*w)+adapters),cells
+
+
+def ideal_cost(route,cfg):
+    return ideal_cost_grid(route,cfg,2,3)
 
 
 def aggregate(rows):

@@ -488,6 +488,36 @@ an analytical ceiling, not implemented sparse execution or wall-clock speed.}
 \label{fig:exact-context-validation}
 \end{figure*}
 
+\paragraph{The context effect transfers to Kodak, but most released gap remains.}
+We replayed all 24 Kodak images at five QPs from their archived real
+FUFREF2 streams, with the same DIV2K-locked beta and unchanged route maps.
+The deployed and diagnostic exact-context YUV611 PSNRs average 34.8879 and
+34.9053\,dB, respectively, against 35.0261\,dB from released D12 on
+the same streams. Exact context recovers 0.0174\,dB (24-image paired
+bootstrap 95\% interval 0.0140--0.0209\,dB) and lowers the mean gap to
+released from 0.1382 to 0.1208\,dB. Relative to full-frame e15, the
+count exceeding 0.1\,dB $\Delta_{444}$ falls from 47/120 to 34/120.
+Two image/QP pairs lose YUV611 quality, so this is an average effect rather
+than a per-case guarantee. The ideal shared-context synthesis arithmetic
+saves 26.30\% on these maps, but no sparse runtime has been measured.
+Kodak had appeared in earlier project diagnostics; this replay is an
+external-dataset mechanism check, not a pristine prospective test
+(\cref{fig:exact-context-kodak}).
+
+\begin{figure*}[t]
+\centering
+\includegraphics[width=0.91\textwidth]{figs/div2k_beta_transfer/fig_exact_context_kodak.pdf}
+\caption{\textbf{Kodak24 exact-context transfer at unchanged real bitrates.}
+\textbf{a}, Mean YUV611 deficit to released D12 versus actual FUFREF2 bitrate
+for the deployed and diagnostic exact-context synthesis paths. Error bars
+are paired 24-image bootstrap 95\% intervals; the released decoder is at
+zero deficit by definition. \textbf{b}, Per-image YUV611 gain from replacing
+zero-halo-plus-repair with clipped exact context and no repair, at each QP;
+dark bars mark medians. The exit maps remain fixed. No BD-rate or latency
+claim follows from this reconstruction-only counterfactual.}
+\label{fig:exact-context-kodak}
+\end{figure*}
+
 
 
 \section{Auditing the Scalar Control Search}
