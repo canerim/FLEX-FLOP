@@ -6,7 +6,7 @@ fixed L2-regularized logistic model for whether the locked primary β output
 loses more than 0.10 dB Δ444 versus full-frame e15. The disjoint next 24
 images (120 cases) evaluate it once. Labels require source reconstruction
 quality; inference inputs are decoder-known **QP and six tile exit indices
-only**. The seven predeclared features are normalized QP, mean and minimum
+only**. The seven features fixed for this fit are normalized QP, mean and minimum
 depth, fraction at deepest exit, fraction shallow, mean adjacent depth jump,
 and fraction of unequal adjacent tile boundaries. The image pixels, latent
 activations, reference MSE, and router logits are absent from the predictor.
@@ -15,6 +15,7 @@ activations, reference MSE, and router logits are absent from the predictor.
 |:--|--:|--:|--:|--:|--:|--:|
 | Calibration | 34/120 | 0.785 | 0.657 | 30/34 = 88.2% | 73/120 | 41.1% |
 | Disjoint validation | 35/120 | **0.646** | 0.397 | **28/35 = 80.0%** | **74/120** | **37.8%** |
+| Kodak24 diagnostic transfer | 47/120 | 0.779 | 0.722 | 44/47 = 93.6% | **97/120** | 45.4% |
 
 The threshold was selected on calibration to catch at least 80% of its
 violations and was not adjusted on validation. A simpler mean-exit-depth score
@@ -27,6 +28,17 @@ gain from this map-only model. It flags 61.7% of cases and still misses seven
 threshold violations. Sending every flagged case to all-deep would therefore
 be a large compute cost with no per-case quality guarantee; we have not
 reconstructed that policy and make no fallback-quality claim.
+
+The **unchanged** model and threshold were also replayed on the 24 Kodak images
+at five QPs, using archived per-tile router log probabilities to reproduce the
+locked map and previously measured true-bitstream e15-relative Δ444 labels.
+The Kodak AUC is 0.779 (versus 0.643 for mean depth alone), but the fixed
+threshold flags **80.8%** of cases to catch 44/47 violations. Thus good
+ranking on this cohort does not yield an economical fallback at the locked
+operating point. Kodak data were not used in this logistic fit, although Kodak
+had been inspected earlier in the broader project; this is a diagnostic third
+cohort, not a pristine external holdout. Different cohort behavior reinforces
+the need for a larger evaluation before trusting calibration.
 
 The result is consistent with the `0828`/`0844` mechanism audit: the same
 coarse exit histogram does not tell the decoder whether errors come from

@@ -324,6 +324,10 @@ mean exit depth alone. A calibration-locked threshold flags 74/120
 validation cases yet misses 7/35 violations. Map geometry alone is not a
 reliable quality guard in this pilot; additional decoder-available evidence
 and a fresh cohort are required before proposing a fallback policy.
+The unchanged score ranks Kodak24$\times$QP5 cases better (AUC 0.779), but
+the same threshold flags 97/120 cases to catch 44/47 violations. Kodak was
+not used in this fit, although it had been inspected in earlier project
+diagnostics; this is a transfer check, not a pristine external holdout.
 Conversely, a fixed per-QP Q90 calibration rule reduces mean saving to
 11.20\% on these calibration cases. These are explanatory calibration
 ablations, not external transfer results. They show why simply tightening

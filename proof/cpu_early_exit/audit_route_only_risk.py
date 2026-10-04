@@ -22,6 +22,19 @@ def sha(path):
     return hashlib.sha256(Path(path).read_bytes()).hexdigest()
 
 
+def route_features(qp, exit_map):
+    modes = np.asarray(exit_map,dtype=float)
+    if modes.size != 6 or not np.all((modes>=2)&(modes<=5)):
+        raise RuntimeError('Expected six reachable tile exits')
+    grid = modes.reshape(2,3)
+    edges = np.concatenate((np.abs(np.diff(grid,axis=0)).ravel(),
+                            np.abs(np.diff(grid,axis=1)).ravel()))
+    return [float(qp/63), float(modes.mean()-2),
+            float(modes.min()-2), float((modes==5).mean()),
+            float((modes<=3).mean()),float(edges.mean()),
+            float((edges>0).mean())]
+
+
 def extract(directory, items, qps, beta, manifest_sha):
     rows = []
     for item in items:
@@ -38,22 +51,45 @@ def extract(directory, items, qps, beta, manifest_sha):
                 raise RuntimeError(f'Frozen policy candidate missing: {path}')
             chosen = candidates[0]
             modes = np.asarray(chosen['exit_map'],dtype=float)
-            if modes.size != 6 or not np.all((modes>=2)&(modes<=5)):
-                raise RuntimeError(f'Unexpected six-tile geometry: {path}')
-            grid = modes.reshape(2,3)
-            edges = np.concatenate((np.abs(np.diff(grid,axis=0)).ravel(),
-                                    np.abs(np.diff(grid,axis=1)).ravel()))
             # Fixed, interpretable decoder-side features. No image pixels,
             # reconstruction quality, latent activations, or fitted router logits.
-            feat = [float(qp/63), float(modes.mean()-2),
-                    float(modes.min()-2), float((modes==5).mean()),
-                    float((modes<=3).mean()),float(edges.mean()),
-                    float((edges>0).mean())]
+            feat = route_features(qp,modes)
             rows.append({'image':item['image'],'qp':qp,
                          'case_sha256':sha(path),'exit_map':modes.astype(int).tolist(),
                          'features':feat,'loss_db':chosen['delta444_db'],
                          'over_budget':bool(chosen['delta444_db']>.1),
                          'mac_saved_pct':chosen['mac_saved_pct']})
+    return rows
+
+
+def extract_kodak(scan_dir,transfer_dir,policy,beta):
+    rows=[]
+    for image_no in range(1,25):
+        image=f'kodim{image_no:02d}.png'
+        for qp in (0,16,32,48,63):
+            name=f'kodim{image_no:02d}_qp{qp}.json'
+            scan_path,transfer_path=scan_dir/name,transfer_dir/name
+            scan=json.loads(scan_path.read_text())
+            transfer=json.loads(transfer_path.read_text())
+            if (transfer['policy_sha256']!=sha(policy) or
+                transfer['scan_result_sha256']!=sha(scan_path) or
+                scan['image']!=image or scan['qp']!=qp or
+                transfer['image']!=image or transfer['qp']!=qp):
+                raise RuntimeError(f'Kodak provenance mismatch: {name}')
+            scores=np.asarray(scan['route_log_probs'],dtype=float)
+            costs=np.asarray(scan['router_costs'],dtype=float)
+            if scores.shape!=(6,4) or costs.shape!=(6,):
+                raise RuntimeError(f'Unexpected Kodak router shape: {name}')
+            modes=np.argmax(scores-beta[str(qp)]*costs[2:][None,:],axis=1)+2
+            counts=np.bincount(modes,minlength=6).tolist()
+            if counts!=transfer['locked_exit_counts']:
+                raise RuntimeError(f'Kodak route replay mismatch: {name}')
+            loss=transfer['locked_beta_delta444_db']
+            rows.append({'image':image,'qp':qp,'scan_sha256':sha(scan_path),
+                         'transfer_sha256':sha(transfer_path),'exit_map':modes.tolist(),
+                         'features':route_features(qp,modes),'loss_db':loss,
+                         'over_budget':bool(loss>.1),
+                         'mac_saved_pct':transfer['locked_beta_mac_saved_pct']})
     return rows
 
 
@@ -87,6 +123,8 @@ def main():
     p.add_argument('--policy',type=Path,required=True)
     p.add_argument('--cal-dir',type=Path,required=True)
     p.add_argument('--val-dir',type=Path,required=True)
+    p.add_argument('--kodak-scan-dir',type=Path)
+    p.add_argument('--kodak-transfer-dir',type=Path)
     p.add_argument('--output',type=Path,required=True)
     args=p.parse_args()
     manifest=json.loads(args.manifest.read_text())
@@ -157,9 +195,23 @@ def main():
                 'recall_at_locked_threshold_95pct':interval(recall_samples)},
             'validation_rows':[{**r,'risk_probability':float(prob),'flagged':bool(prob>=threshold)}
                                for r,prob in zip(val,pv)]}
+    if bool(args.kodak_scan_dir) != bool(args.kodak_transfer_dir):
+        raise RuntimeError('Both Kodak directories must be provided together')
+    if args.kodak_scan_dir:
+        kodak=extract_kodak(args.kodak_scan_dir,args.kodak_transfer_dir,args.policy,policy['beta'])
+        xk=np.asarray([r['features'] for r in kodak]); yk=np.asarray([r['over_budget'] for r in kodak],dtype=float)
+        pk=expit(np.column_stack((np.ones(len(kodak)),(xk-mean)/std))@fit.x)
+        result['kodak_transfer']={
+            'scope':'Third diagnostic cohort: original Kodak24, same frozen policy, e15-full reference; not used for fitting or thresholding',
+            'metrics':metrics(yk,pk,threshold),
+            'mean_depth_auc':auc(yk,-xk[:,1]),
+            'scan_manifest_sha256':sha(args.kodak_scan_dir/'manifest.json'),
+            'rows':[{**r,'risk_probability':float(prob),'flagged':bool(prob>=threshold)}
+                    for r,prob in zip(kodak,pk)]}
     args.output.parent.mkdir(parents=True,exist_ok=True)
     args.output.write_text(json.dumps(result,indent=2)+'\n')
-    print(json.dumps({k:v for k,v in result.items() if k!='validation_rows'},indent=2))
+    print(json.dumps({k:({kk:vv for kk,vv in v.items() if kk!='rows'} if k=='kodak_transfer' else v)
+                      for k,v in result.items() if k!='validation_rows'},indent=2))
 
 
 if __name__=='__main__':

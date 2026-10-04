@@ -3328,5 +3328,3385 @@
       "risk_probability": 0.048229026604598414,
       "flagged": false
     }
-  ]
+  ],
+  "kodak_transfer": {
+    "scope": "Third diagnostic cohort: original Kodak24, same frozen policy, e15-full reference; not used for fitting or thresholding",
+    "metrics": {
+      "auc": 0.7789274264062955,
+      "average_precision": 0.7216588138762247,
+      "brier": 0.18390036968546647,
+      "threshold": 0.1990706677594344,
+      "tp": 44,
+      "fp": 53,
+      "fn": 3,
+      "tn": 20,
+      "recall": 0.9361702127659575,
+      "precision": 0.4536082474226804,
+      "flagged_fraction": 0.8083333333333333
+    },
+    "mean_depth_auc": 0.6425240454677936,
+    "scan_manifest_sha256": "e0db0156dff748377370acd6ee6b7efc1206ae41f5e617b0346d46068823f489",
+    "rows": [
+      {
+        "image": "kodim01.png",
+        "qp": 0,
+        "scan_sha256": "de4f4107897a1941f258abee2896ee4efca5a42fde9063a1e819a1ddb39c82e7",
+        "transfer_sha256": "534f6bf312f0bb5e2a8cc26e95f05fee49178b8248f9495fd7bebe5ee812bdff",
+        "exit_map": [
+          2,
+          2,
+          2,
+          2,
+          2,
+          3
+        ],
+        "features": [
+          0.0,
+          0.16666666666666652,
+          0.0,
+          0.0,
+          1.0,
+          0.2857142857142857,
+          0.2857142857142857
+        ],
+        "loss_db": 0.07955890759462451,
+        "over_budget": false,
+        "mac_saved_pct": 36.64011219362669,
+        "risk_probability": 0.2902838162535859,
+        "flagged": true
+      },
+      {
+        "image": "kodim01.png",
+        "qp": 16,
+        "scan_sha256": "398f4f1909017bec0505cf3d462c3458f53f70a674801b1d3fd760b37b1dcd40",
+        "transfer_sha256": "77e05855aa75ea2c1268c41ad082f374ea52342c8e0388dbdf713692c6dae369",
+        "exit_map": [
+          3,
+          3,
+          3,
+          3,
+          3,
+          3
+        ],
+        "features": [
+          0.25396825396825395,
+          1.0,
+          1.0,
+          0.0,
+          1.0,
+          0.0,
+          0.0
+        ],
+        "loss_db": 0.025616769964627133,
+        "over_budget": false,
+        "mac_saved_pct": 24.217887314361864,
+        "risk_probability": 0.11125621407973084,
+        "flagged": false
+      },
+      {
+        "image": "kodim01.png",
+        "qp": 32,
+        "scan_sha256": "4621c870fbf75de8e64fe88dc69cf7a37239c424a1cdef357518a3707bf764fa",
+        "transfer_sha256": "237d95fac368f67edd2c5f1db80d76a1d2bbd7f57c0841473580d19c24bdc873",
+        "exit_map": [
+          3,
+          3,
+          3,
+          3,
+          3,
+          3
+        ],
+        "features": [
+          0.5079365079365079,
+          1.0,
+          1.0,
+          0.0,
+          1.0,
+          0.0,
+          0.0
+        ],
+        "loss_db": 0.04130330991279476,
+        "over_budget": false,
+        "mac_saved_pct": 24.217887314361864,
+        "risk_probability": 0.16427029877884008,
+        "flagged": false
+      },
+      {
+        "image": "kodim01.png",
+        "qp": 48,
+        "scan_sha256": "962ffb438e22bc7890477e75446715f6ec4aba4c7c10872ec54d89ae5cd6e630",
+        "transfer_sha256": "44eb9d51773a4c1618c2110187b7cd08e904162680337fec6bfcb9b0e4c3dc0c",
+        "exit_map": [
+          3,
+          3,
+          3,
+          3,
+          3,
+          3
+        ],
+        "features": [
+          0.7619047619047619,
+          1.0,
+          1.0,
+          0.0,
+          1.0,
+          0.0,
+          0.0
+        ],
+        "loss_db": 0.08649791748014082,
+        "over_budget": false,
+        "mac_saved_pct": 24.217887314361864,
+        "risk_probability": 0.2358423050236513,
+        "flagged": true
+      },
+      {
+        "image": "kodim01.png",
+        "qp": 63,
+        "scan_sha256": "38d73fc6f186cda7b103d06de27b2f81100e09df91cfb2ea6626cdc074c9d2f7",
+        "transfer_sha256": "9940948ed301b0a87a7b37858a4fc3f95c4432cc28848394d5d56287e58a8875",
+        "exit_map": [
+          3,
+          5,
+          5,
+          3,
+          3,
+          3
+        ],
+        "features": [
+          1.0,
+          1.6666666666666665,
+          1.0,
+          0.3333333333333333,
+          0.6666666666666666,
+          0.8571428571428571,
+          0.42857142857142855
+        ],
+        "loss_db": 0.11610806141192259,
+        "over_budget": true,
+        "mac_saved_pct": 15.828351768059068,
+        "risk_probability": 0.41617007008235646,
+        "flagged": true
+      },
+      {
+        "image": "kodim02.png",
+        "qp": 0,
+        "scan_sha256": "fca1000f40c0180ffdbdc0b68d57ea198aaf30420782fe50841ef99905c1501b",
+        "transfer_sha256": "ca72afffb7bbb4a452287d3bee6ef729fc2549306c9ba848fbf638fc75d665aa",
+        "exit_map": [
+          2,
+          2,
+          2,
+          2,
+          2,
+          2
+        ],
+        "features": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          1.0,
+          0.0,
+          0.0
+        ],
+        "loss_db": 0.19212601327713041,
+        "over_budget": true,
+        "mac_saved_pct": 39.12455746750288,
+        "risk_probability": 0.1990706677594344,
+        "flagged": true
+      },
+      {
+        "image": "kodim02.png",
+        "qp": 16,
+        "scan_sha256": "4f35e0063fc336809ad9ea46763e7d288fdf827e8c8bc5995db65f5032b53450",
+        "transfer_sha256": "b46745875357e5ad91f1f5d9f12757039bf16cf6c1f9dd730a93a19fa0987333",
+        "exit_map": [
+          3,
+          3,
+          3,
+          3,
+          3,
+          3
+        ],
+        "features": [
+          0.25396825396825395,
+          1.0,
+          1.0,
+          0.0,
+          1.0,
+          0.0,
+          0.0
+        ],
+        "loss_db": 0.058131304490511806,
+        "over_budget": false,
+        "mac_saved_pct": 24.217887314361864,
+        "risk_probability": 0.11125621407973084,
+        "flagged": false
+      },
+      {
+        "image": "kodim02.png",
+        "qp": 32,
+        "scan_sha256": "6fc2f58a9d5ec58b37c1ff3cee2fd2baa2edfc2e5046dc11b579cac880a8d5a3",
+        "transfer_sha256": "fe172951f2941c3b1429856e7593906f27b357f768aa6d9bee298d29022ce4dc",
+        "exit_map": [
+          3,
+          3,
+          3,
+          3,
+          3,
+          3
+        ],
+        "features": [
+          0.5079365079365079,
+          1.0,
+          1.0,
+          0.0,
+          1.0,
+          0.0,
+          0.0
+        ],
+        "loss_db": 0.07074849733670045,
+        "over_budget": false,
+        "mac_saved_pct": 24.217887314361864,
+        "risk_probability": 0.16427029877884008,
+        "flagged": false
+      },
+      {
+        "image": "kodim02.png",
+        "qp": 48,
+        "scan_sha256": "c36679e80254ea7b76a1b1d2ac311cffee93a0078c37181b2253d4c4065cb466",
+        "transfer_sha256": "ba1e5c54acce1155f6bd95116be0f128195a8e48aa7aa02e6b8e8aaaf238ce99",
+        "exit_map": [
+          3,
+          3,
+          3,
+          3,
+          3,
+          2
+        ],
+        "features": [
+          0.7619047619047619,
+          0.8333333333333335,
+          0.0,
+          0.0,
+          1.0,
+          0.2857142857142857,
+          0.2857142857142857
+        ],
+        "loss_db": 0.11197052587520662,
+        "over_budget": true,
+        "mac_saved_pct": 26.702334078354173,
+        "risk_probability": 0.5629570618167593,
+        "flagged": true
+      },
+      {
+        "image": "kodim02.png",
+        "qp": 63,
+        "scan_sha256": "4f4a19daec77a45ece1e20ec3dedce06fe83d2ccac139268f37555458837881a",
+        "transfer_sha256": "ffdf467a18544e5d2f1271c8a19a7b074926592784809d51cae0c4fbaf94a8df",
+        "exit_map": [
+          3,
+          4,
+          3,
+          3,
+          3,
+          3
+        ],
+        "features": [
+          1.0,
+          1.1666666666666665,
+          1.0,
+          0.0,
+          0.8333333333333334,
+          0.42857142857142855,
+          0.42857142857142855
+        ],
+        "loss_db": 0.15106262371918103,
+        "over_budget": true,
+        "mac_saved_pct": 22.352744730514818,
+        "risk_probability": 0.45664530771300554,
+        "flagged": true
+      },
+      {
+        "image": "kodim03.png",
+        "qp": 0,
+        "scan_sha256": "fa5614006ec945da46a0185d11a6b17634524a9241d33a63deffaf96128ced0e",
+        "transfer_sha256": "32839b042195cbe7102045ea59d8d1be18372cbfa81e77cf1ccc313875de1646",
+        "exit_map": [
+          3,
+          2,
+          2,
+          2,
+          2,
+          2
+        ],
+        "features": [
+          0.0,
+          0.16666666666666652,
+          0.0,
+          0.0,
+          1.0,
+          0.2857142857142857,
+          0.2857142857142857
+        ],
+        "loss_db": 0.17493563798061973,
+        "over_budget": true,
+        "mac_saved_pct": 36.64011219362669,
+        "risk_probability": 0.2902838162535859,
+        "flagged": true
+      },
+      {
+        "image": "kodim03.png",
+        "qp": 16,
+        "scan_sha256": "e6a6739fbc43139e6e92b82597304fe7d96ccf62dd9141c686e70af5c4ffa341",
+        "transfer_sha256": "1785190653136eb73ae6740083360970d699d2fd68eb53f2546b087d146faf17",
+        "exit_map": [
+          3,
+          3,
+          2,
+          2,
+          3,
+          3
+        ],
+        "features": [
+          0.25396825396825395,
+          0.6666666666666665,
+          0.0,
+          0.0,
+          1.0,
+          0.5714285714285714,
+          0.5714285714285714
+        ],
+        "loss_db": 0.08967398997493636,
+        "over_budget": false,
+        "mac_saved_pct": 29.186777862114244,
+        "risk_probability": 0.48802707713613147,
+        "flagged": true
+      },
+      {
+        "image": "kodim03.png",
+        "qp": 32,
+        "scan_sha256": "6ebe01b6e4fe83174fbd6d4f9bf26e205f399f465cbb6fa02f3f08485deeb260",
+        "transfer_sha256": "cc4ab9c58ec50389626aca82c273dc1010865e90b6988a261562f3cd08783638",
+        "exit_map": [
+          3,
+          3,
+          2,
+          2,
+          3,
+          3
+        ],
+        "features": [
+          0.5079365079365079,
+          0.6666666666666665,
+          0.0,
+          0.0,
+          1.0,
+          0.5714285714285714,
+          0.5714285714285714
+        ],
+        "loss_db": 0.12820348724745498,
+        "over_budget": true,
+        "mac_saved_pct": 29.186777862114244,
+        "risk_probability": 0.5994755465364943,
+        "flagged": true
+      },
+      {
+        "image": "kodim03.png",
+        "qp": 48,
+        "scan_sha256": "223e7042004a4c22167c024918ddbc7b5c1d01bf0f5fda74107f763e77ddad5f",
+        "transfer_sha256": "b11a3ec28c0e08acbdae8b21142b16a123e57db859c3ec9a6e0411af3f004843",
+        "exit_map": [
+          3,
+          3,
+          2,
+          2,
+          3,
+          3
+        ],
+        "features": [
+          0.7619047619047619,
+          0.6666666666666665,
+          0.0,
+          0.0,
+          1.0,
+          0.5714285714285714,
+          0.5714285714285714
+        ],
+        "loss_db": 0.19600127247555382,
+        "over_budget": true,
+        "mac_saved_pct": 29.186777862114244,
+        "risk_probability": 0.7015022207487034,
+        "flagged": true
+      },
+      {
+        "image": "kodim03.png",
+        "qp": 63,
+        "scan_sha256": "262f775b1b1f8a586e6672032d9249724fc4ef3c17a9614cbc392c4a85fd5808",
+        "transfer_sha256": "a2e6946b1fe7e4ef8be235912e39af64211b22a2f95910bae2ee8bd77d38aae9",
+        "exit_map": [
+          5,
+          5,
+          2,
+          2,
+          3,
+          3
+        ],
+        "features": [
+          1.0,
+          1.3333333333333335,
+          0.0,
+          0.3333333333333333,
+          0.6666666666666666,
+          1.4285714285714286,
+          0.7142857142857143
+        ],
+        "loss_db": 0.13024303504915155,
+        "over_budget": true,
+        "mac_saved_pct": 20.79724231581145,
+        "risk_probability": 0.7302629855244146,
+        "flagged": true
+      },
+      {
+        "image": "kodim04.png",
+        "qp": 0,
+        "scan_sha256": "5b5e2b230777cc1d6a6addc7e5ea22fd857d8d00f35fe41aa4d04306f2aaedd5",
+        "transfer_sha256": "2589c14aa21daf509e073df55b16ccefa273f8545e59550386d4e6bc6776b5d6",
+        "exit_map": [
+          2,
+          2,
+          2,
+          2,
+          2,
+          3
+        ],
+        "features": [
+          0.0,
+          0.16666666666666652,
+          0.0,
+          0.0,
+          1.0,
+          0.2857142857142857,
+          0.2857142857142857
+        ],
+        "loss_db": 0.13618276622435063,
+        "over_budget": true,
+        "mac_saved_pct": 36.64011219362669,
+        "risk_probability": 0.2902838162535859,
+        "flagged": true
+      },
+      {
+        "image": "kodim04.png",
+        "qp": 16,
+        "scan_sha256": "9b01a5f04d89e6edca897113c2c9adef409b6ff3b8fed7a1c5803cd04f95c704",
+        "transfer_sha256": "119b3f359bdc371c83cb8a1bbf35d306c16aa149b4b7ee11502c4a406ac17762",
+        "exit_map": [
+          3,
+          3,
+          2,
+          3,
+          3,
+          3
+        ],
+        "features": [
+          0.25396825396825395,
+          0.8333333333333335,
+          0.0,
+          0.0,
+          1.0,
+          0.2857142857142857,
+          0.2857142857142857
+        ],
+        "loss_db": 0.08338610528465903,
+        "over_budget": false,
+        "mac_saved_pct": 26.702334078354173,
+        "risk_probability": 0.34317197744965344,
+        "flagged": true
+      },
+      {
+        "image": "kodim04.png",
+        "qp": 32,
+        "scan_sha256": "03dec7c3371d8fa2591b2f79a1115dc51aebacfddd43d4cb123264377d2eea2b",
+        "transfer_sha256": "e86397f01182a86463462314cd6cfec6c42bbe3dba7376361dd6325b4697afb6",
+        "exit_map": [
+          3,
+          3,
+          2,
+          3,
+          3,
+          3
+        ],
+        "features": [
+          0.5079365079365079,
+          0.8333333333333335,
+          0.0,
+          0.0,
+          1.0,
+          0.2857142857142857,
+          0.2857142857142857
+        ],
+        "loss_db": 0.07636458336253112,
+        "over_budget": false,
+        "mac_saved_pct": 26.702334078354173,
+        "risk_probability": 0.4506587829600444,
+        "flagged": true
+      },
+      {
+        "image": "kodim04.png",
+        "qp": 48,
+        "scan_sha256": "91522014d50452c6ac9daf1634370bbea533630dd25c7973c8f61554735abab5",
+        "transfer_sha256": "7e76316b4591a5158440f915fe2a74a6033002db0fed6f621d5a835c50fb9db0",
+        "exit_map": [
+          3,
+          3,
+          2,
+          2,
+          3,
+          3
+        ],
+        "features": [
+          0.7619047619047619,
+          0.6666666666666665,
+          0.0,
+          0.0,
+          1.0,
+          0.5714285714285714,
+          0.5714285714285714
+        ],
+        "loss_db": 0.1343701202070519,
+        "over_budget": true,
+        "mac_saved_pct": 29.186777862114244,
+        "risk_probability": 0.7015022207487034,
+        "flagged": true
+      },
+      {
+        "image": "kodim04.png",
+        "qp": 63,
+        "scan_sha256": "61ef7e6ad9e80991b1f0bec92076a3cd686a75bcf75f688fb1d98885267c697a",
+        "transfer_sha256": "de0d635aa758c8b5d4f9a4621c5e85d73295556af2c160b604d34fe166d74015",
+        "exit_map": [
+          3,
+          4,
+          2,
+          2,
+          4,
+          3
+        ],
+        "features": [
+          1.0,
+          1.0,
+          0.0,
+          0.0,
+          0.6666666666666666,
+          1.1428571428571428,
+          0.8571428571428571
+        ],
+        "loss_db": 0.15482935252386504,
+        "over_budget": true,
+        "mac_saved_pct": 25.456483753723436,
+        "risk_probability": 0.7666860527721333,
+        "flagged": true
+      },
+      {
+        "image": "kodim05.png",
+        "qp": 0,
+        "scan_sha256": "a3bf80eb33244d64b2cbeb8de1d5d9d157d93a809319a038971a6d3e086668f9",
+        "transfer_sha256": "062f4e84669941fba44eb0cddc7380dc66e64078dae411cb217a2f876facd172",
+        "exit_map": [
+          3,
+          3,
+          3,
+          3,
+          3,
+          3
+        ],
+        "features": [
+          0.0,
+          1.0,
+          1.0,
+          0.0,
+          1.0,
+          0.0,
+          0.0
+        ],
+        "loss_db": 0.044259502734545306,
+        "over_budget": false,
+        "mac_saved_pct": 24.217887314361864,
+        "risk_probability": 0.0738394523996159,
+        "flagged": false
+      },
+      {
+        "image": "kodim05.png",
+        "qp": 16,
+        "scan_sha256": "79207c5f19c82015f507fdf53f4089746ad70310450496ce1250360f1420f430",
+        "transfer_sha256": "2d198791381d506e3d40c9377e8df35fa0171f6403def744a0c04aa0dc5736e3",
+        "exit_map": [
+          4,
+          4,
+          4,
+          3,
+          4,
+          3
+        ],
+        "features": [
+          0.25396825396825395,
+          1.6666666666666665,
+          1.0,
+          0.0,
+          0.3333333333333333,
+          0.5714285714285714,
+          0.5714285714285714
+        ],
+        "loss_db": 0.05601939586144712,
+        "over_budget": false,
+        "mac_saved_pct": 16.757299097580248,
+        "risk_probability": 0.12328600042489057,
+        "flagged": false
+      },
+      {
+        "image": "kodim05.png",
+        "qp": 32,
+        "scan_sha256": "cad4fe3c463021fa535dc1524e72950bc39819b34d10197b24b5047d72b3001e",
+        "transfer_sha256": "e9451066e553faff1c69ba679d85cab50c3493d473b8c51d2168e0031aca7cf1",
+        "exit_map": [
+          4,
+          4,
+          4,
+          3,
+          4,
+          3
+        ],
+        "features": [
+          0.5079365079365079,
+          1.6666666666666665,
+          1.0,
+          0.0,
+          0.3333333333333333,
+          0.5714285714285714,
+          0.5714285714285714
+        ],
+        "loss_db": 0.09603349290382056,
+        "over_budget": false,
+        "mac_saved_pct": 16.757299097580248,
+        "risk_probability": 0.18086577855551966,
+        "flagged": false
+      },
+      {
+        "image": "kodim05.png",
+        "qp": 48,
+        "scan_sha256": "3c93176d56d77c65b2c37a1216ac65e224b1b3784f8683a3a8615a2592a988d9",
+        "transfer_sha256": "074bae5a2fcba024ed98dd1b74b9d68232e903fa0af894f78a8bedaaed94ae73",
+        "exit_map": [
+          5,
+          5,
+          4,
+          4,
+          4,
+          4
+        ],
+        "features": [
+          0.7619047619047619,
+          2.333333333333333,
+          2.0,
+          0.3333333333333333,
+          0.0,
+          0.42857142857142855,
+          0.42857142857142855
+        ],
+        "loss_db": 0.08643029300777394,
+        "over_budget": false,
+        "mac_saved_pct": 8.367763551277452,
+        "risk_probability": 0.08680884848058708,
+        "flagged": false
+      },
+      {
+        "image": "kodim05.png",
+        "qp": 63,
+        "scan_sha256": "206ef3b3dcc2a8822e94745171083c458c5a32ad03a09aedfd7be694a23c0054",
+        "transfer_sha256": "40020bef111c1f5e932f5bc5181aba9430e51dea92358ee16efad7cf7588d7e7",
+        "exit_map": [
+          5,
+          5,
+          5,
+          5,
+          5,
+          5
+        ],
+        "features": [
+          1.0,
+          3.0,
+          3.0,
+          1.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "loss_db": 0.07150429312934298,
+        "over_budget": false,
+        "mac_saved_pct": -0.9507193245465118,
+        "risk_probability": 0.048229026604598414,
+        "flagged": false
+      },
+      {
+        "image": "kodim06.png",
+        "qp": 0,
+        "scan_sha256": "67ca562420f97de0de56c69b2147a520b76d3b614988eb85af600feadde1bf29",
+        "transfer_sha256": "76c8f4b7c1f1c9617c2b7dd77bea9480eceafbbc7be6c7c73596782e7f98eb9e",
+        "exit_map": [
+          2,
+          2,
+          2,
+          3,
+          2,
+          2
+        ],
+        "features": [
+          0.0,
+          0.16666666666666652,
+          0.0,
+          0.0,
+          1.0,
+          0.2857142857142857,
+          0.2857142857142857
+        ],
+        "loss_db": 0.057335542534697186,
+        "over_budget": false,
+        "mac_saved_pct": 36.64011219362669,
+        "risk_probability": 0.2902838162535859,
+        "flagged": true
+      },
+      {
+        "image": "kodim06.png",
+        "qp": 16,
+        "scan_sha256": "e944d82394036d74de6cc1c022d9f52d49b9ab0e767be9b2e91eafdeee4ff288",
+        "transfer_sha256": "37028f41986e62ac1aa4a8021b5e0e36b3bd9814ea1e414ab99fd5dbdb785271",
+        "exit_map": [
+          3,
+          3,
+          2,
+          3,
+          3,
+          2
+        ],
+        "features": [
+          0.25396825396825395,
+          0.6666666666666665,
+          0.0,
+          0.0,
+          1.0,
+          0.2857142857142857,
+          0.2857142857142857
+        ],
+        "loss_db": 0.04743625861892927,
+        "over_budget": false,
+        "mac_saved_pct": 29.186777862114244,
+        "risk_probability": 0.35489317692287226,
+        "flagged": true
+      },
+      {
+        "image": "kodim06.png",
+        "qp": 32,
+        "scan_sha256": "ca4998a2d898d2159632fb3f8cf8af68803351b1be63acaa935ace6cfec24f3c",
+        "transfer_sha256": "fa604222264e7c4d83e8ba87b577129155dc485ee5272a8bf7d14d930bccebbb",
+        "exit_map": [
+          3,
+          3,
+          2,
+          3,
+          3,
+          3
+        ],
+        "features": [
+          0.5079365079365079,
+          0.8333333333333335,
+          0.0,
+          0.0,
+          1.0,
+          0.2857142857142857,
+          0.2857142857142857
+        ],
+        "loss_db": 0.06856564872364876,
+        "over_budget": false,
+        "mac_saved_pct": 26.702334078354173,
+        "risk_probability": 0.4506587829600444,
+        "flagged": true
+      },
+      {
+        "image": "kodim06.png",
+        "qp": 48,
+        "scan_sha256": "4466f93492808eb69935a94bb283a1dd0f6e59345156f361ba9121b90f82fa9d",
+        "transfer_sha256": "70ebe20451e533a5df163643d56e9a897c0d0a6f7954357d713bf41f5f005782",
+        "exit_map": [
+          3,
+          3,
+          2,
+          3,
+          3,
+          2
+        ],
+        "features": [
+          0.7619047619047619,
+          0.6666666666666665,
+          0.0,
+          0.0,
+          1.0,
+          0.2857142857142857,
+          0.2857142857142857
+        ],
+        "loss_db": 0.12070894806038157,
+        "over_budget": true,
+        "mac_saved_pct": 29.186777862114244,
+        "risk_probability": 0.575606538531091,
+        "flagged": true
+      },
+      {
+        "image": "kodim06.png",
+        "qp": 63,
+        "scan_sha256": "0134538a8bd4114b6754c4e947d1cff0e24d48c14754dde9e2b5ec2aec541ee1",
+        "transfer_sha256": "2700d197ebf499bf7ae205abd8ac8d636a082f1352eaee3361583ba6eb54cfc5",
+        "exit_map": [
+          5,
+          5,
+          2,
+          4,
+          3,
+          3
+        ],
+        "features": [
+          1.0,
+          1.6666666666666665,
+          0.0,
+          0.3333333333333333,
+          0.5,
+          1.1428571428571428,
+          0.7142857142857143
+        ],
+        "loss_db": 0.09406338914653227,
+        "over_budget": false,
+        "mac_saved_pct": 16.447647007507616,
+        "risk_probability": 0.699410580051429,
+        "flagged": true
+      },
+      {
+        "image": "kodim07.png",
+        "qp": 0,
+        "scan_sha256": "d8f75b570b3df774162a3781b0dfa4c2f5e9d91e09d3ae6aae225fa4eeaff53f",
+        "transfer_sha256": "6774174ed511f4c9ebe23f70eac926badcf7d570326510c963c55f501590a30e",
+        "exit_map": [
+          2,
+          3,
+          2,
+          2,
+          2,
+          3
+        ],
+        "features": [
+          0.0,
+          0.3333333333333335,
+          0.0,
+          0.0,
+          1.0,
+          0.7142857142857143,
+          0.7142857142857143
+        ],
+        "loss_db": 0.11361607396817272,
+        "over_budget": true,
+        "mac_saved_pct": 34.1556669197505,
+        "risk_probability": 0.4697743758137541,
+        "flagged": true
+      },
+      {
+        "image": "kodim07.png",
+        "qp": 16,
+        "scan_sha256": "ae5717e13046c6884b57f197d0b8a438dc4a74e248d8da8c111a344846d6a31a",
+        "transfer_sha256": "962c56d678b7202b14970f016ed4f87f13809af1d1ba841827c09d5f0b6b1ace",
+        "exit_map": [
+          3,
+          3,
+          3,
+          3,
+          3,
+          3
+        ],
+        "features": [
+          0.25396825396825395,
+          1.0,
+          1.0,
+          0.0,
+          1.0,
+          0.0,
+          0.0
+        ],
+        "loss_db": 0.08995774046091015,
+        "over_budget": false,
+        "mac_saved_pct": 24.217887314361864,
+        "risk_probability": 0.11125621407973084,
+        "flagged": false
+      },
+      {
+        "image": "kodim07.png",
+        "qp": 32,
+        "scan_sha256": "b3705cd49614c0cbd2916f5a3dcd8b2fc33b673255118d1476613bb03700db94",
+        "transfer_sha256": "d1999bcb32dae2d2e2b5dd552e8e535f6b7f45576812d7cc11d3b2732e046867",
+        "exit_map": [
+          3,
+          3,
+          3,
+          3,
+          3,
+          3
+        ],
+        "features": [
+          0.5079365079365079,
+          1.0,
+          1.0,
+          0.0,
+          1.0,
+          0.0,
+          0.0
+        ],
+        "loss_db": 0.12000892073927541,
+        "over_budget": true,
+        "mac_saved_pct": 24.217887314361864,
+        "risk_probability": 0.16427029877884008,
+        "flagged": false
+      },
+      {
+        "image": "kodim07.png",
+        "qp": 48,
+        "scan_sha256": "6f14b17d0e9e7090f0ce4373f83cd609d00be4069d80c8dc5b10921931e670ae",
+        "transfer_sha256": "977717bad4ddb524792d1ac6185c0b685f0405f43ded479288ec8d1006474490",
+        "exit_map": [
+          2,
+          3,
+          3,
+          2,
+          3,
+          3
+        ],
+        "features": [
+          0.7619047619047619,
+          0.6666666666666665,
+          0.0,
+          0.0,
+          1.0,
+          0.2857142857142857,
+          0.2857142857142857
+        ],
+        "loss_db": 0.2323220125425657,
+        "over_budget": true,
+        "mac_saved_pct": 29.186777862114244,
+        "risk_probability": 0.575606538531091,
+        "flagged": true
+      },
+      {
+        "image": "kodim07.png",
+        "qp": 63,
+        "scan_sha256": "598b0d9e2f8f330ef01ea89e2e5779035ed583471cf7f6964cd072648982b202",
+        "transfer_sha256": "1643e05415d7ac2b1a792a16b8735686784f90b518c5008360512a4f76e8579b",
+        "exit_map": [
+          2,
+          3,
+          3,
+          2,
+          3,
+          3
+        ],
+        "features": [
+          1.0,
+          0.6666666666666665,
+          0.0,
+          0.0,
+          1.0,
+          0.2857142857142857,
+          0.2857142857142857
+        ],
+        "loss_db": 0.2989315284665989,
+        "over_budget": true,
+        "mac_saved_pct": 29.186777862114244,
+        "risk_probability": 0.6743103913243058,
+        "flagged": true
+      },
+      {
+        "image": "kodim08.png",
+        "qp": 0,
+        "scan_sha256": "627df6a68e9c5a2cadc7fd1ec232652c15ebe797dc2e373d02d66e6369557466",
+        "transfer_sha256": "a19f486d871b4e22a7ff3df5c057a85a7ac3f8a8bd1354fdca650bb54ac16013",
+        "exit_map": [
+          3,
+          3,
+          3,
+          3,
+          3,
+          3
+        ],
+        "features": [
+          0.0,
+          1.0,
+          1.0,
+          0.0,
+          1.0,
+          0.0,
+          0.0
+        ],
+        "loss_db": 0.06742425395711624,
+        "over_budget": false,
+        "mac_saved_pct": 24.217887314361864,
+        "risk_probability": 0.0738394523996159,
+        "flagged": false
+      },
+      {
+        "image": "kodim08.png",
+        "qp": 16,
+        "scan_sha256": "5ef1c82672cea22ddfaf700b33d42b83a130e5d2d135b9bcaa612dde1db7cedb",
+        "transfer_sha256": "1755d52aee2482df9fc5c3d26b96dce692c010a95dd810e458ab239ce8457238",
+        "exit_map": [
+          4,
+          4,
+          4,
+          4,
+          4,
+          4
+        ],
+        "features": [
+          0.25396825396825395,
+          2.0,
+          2.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "loss_db": 0.057388897961532716,
+        "over_budget": false,
+        "mac_saved_pct": 13.0270020089572,
+        "risk_probability": 0.012369045294067503,
+        "flagged": false
+      },
+      {
+        "image": "kodim08.png",
+        "qp": 32,
+        "scan_sha256": "d7c9a17811f6e5a028296d59278c6be5b6908e2cda9c14d0bbbd41c77ac7dad1",
+        "transfer_sha256": "9d98df7ffe39654ed56cea2228a0a3afd269c3001f15bddd5d6256386c247bcf",
+        "exit_map": [
+          4,
+          4,
+          4,
+          4,
+          4,
+          4
+        ],
+        "features": [
+          0.5079365079365079,
+          2.0,
+          2.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "loss_db": 0.0869212938747708,
+        "over_budget": false,
+        "mac_saved_pct": 13.0270020089572,
+        "risk_probability": 0.019285442949796703,
+        "flagged": false
+      },
+      {
+        "image": "kodim08.png",
+        "qp": 48,
+        "scan_sha256": "1aaa3cfabf6911ed154b88ed79003f8166a82f81f1d833034d26631df5639534",
+        "transfer_sha256": "3e2b6302eaf2bff0d6ef8dbe7244ea225917afcadafb7027da8d2015a51d64ef",
+        "exit_map": [
+          4,
+          4,
+          5,
+          5,
+          4,
+          5
+        ],
+        "features": [
+          0.7619047619047619,
+          2.5,
+          2.0,
+          0.5,
+          0.0,
+          0.5714285714285714,
+          0.5714285714285714
+        ],
+        "loss_db": 0.06155218152358304,
+        "over_budget": false,
+        "mac_saved_pct": 6.03813985208922,
+        "risk_probability": 0.12692725830836837,
+        "flagged": false
+      },
+      {
+        "image": "kodim08.png",
+        "qp": 63,
+        "scan_sha256": "d1c73b237e3bdf9f46350ae4a4d54772c5d22fe6012bd88f2806497576ddd8b8",
+        "transfer_sha256": "62a358c136e452bb41d951a47abdd69abd11fe157751ad42c455269b02a4f2e3",
+        "exit_map": [
+          5,
+          5,
+          5,
+          5,
+          5,
+          5
+        ],
+        "features": [
+          1.0,
+          3.0,
+          3.0,
+          1.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "loss_db": 0.03693526111688887,
+        "over_budget": false,
+        "mac_saved_pct": -0.9507193245465118,
+        "risk_probability": 0.048229026604598414,
+        "flagged": false
+      },
+      {
+        "image": "kodim09.png",
+        "qp": 0,
+        "scan_sha256": "bbd8af262e4eff2c8ec91f3a3645fea00de6e142fa4d66576060dfec91798a24",
+        "transfer_sha256": "4ce8f1fd4706e6c2e4ed934f3039552d685ac5b1f3c044df648f0f4d539c1952",
+        "exit_map": [
+          2,
+          2,
+          2,
+          3,
+          2,
+          2
+        ],
+        "features": [
+          0.0,
+          0.16666666666666652,
+          0.0,
+          0.0,
+          1.0,
+          0.2857142857142857,
+          0.2857142857142857
+        ],
+        "loss_db": 0.1080770603563294,
+        "over_budget": true,
+        "mac_saved_pct": 36.64011219362669,
+        "risk_probability": 0.2902838162535859,
+        "flagged": true
+      },
+      {
+        "image": "kodim09.png",
+        "qp": 16,
+        "scan_sha256": "26731dd597c0ae9f70502c97bdca3e92526148fd35f5b8f00189a85984550571",
+        "transfer_sha256": "a1522d994f989cbb41c26466fafe60a20de9d008ddcf936b647b96e022099bca",
+        "exit_map": [
+          2,
+          2,
+          3,
+          3,
+          3,
+          3
+        ],
+        "features": [
+          0.25396825396825395,
+          0.6666666666666665,
+          0.0,
+          0.0,
+          1.0,
+          0.42857142857142855,
+          0.42857142857142855
+        ],
+        "loss_db": 0.07555855726803838,
+        "over_budget": false,
+        "mac_saved_pct": 29.186777862114244,
+        "risk_probability": 0.4200057063437377,
+        "flagged": true
+      },
+      {
+        "image": "kodim09.png",
+        "qp": 32,
+        "scan_sha256": "94e425a30501cd69c0407b4b58a1d16f1e7846b2767f7305c15e1e72397d3c83",
+        "transfer_sha256": "e109c7572998d0902d6e738a972f9e7665ffecfb9223c58474f27a0b56a8a972",
+        "exit_map": [
+          2,
+          2,
+          3,
+          3,
+          3,
+          3
+        ],
+        "features": [
+          0.5079365079365079,
+          0.6666666666666665,
+          0.0,
+          0.0,
+          1.0,
+          0.42857142857142855,
+          0.42857142857142855
+        ],
+        "loss_db": 0.09679275420756418,
+        "over_budget": false,
+        "mac_saved_pct": 29.186777862114244,
+        "risk_probability": 0.532063749676675,
+        "flagged": true
+      },
+      {
+        "image": "kodim09.png",
+        "qp": 48,
+        "scan_sha256": "a1e9ca1340fb58f52f23dd37fd0fbf511501d5b82b3862845c8c77d4d18858f2",
+        "transfer_sha256": "ee6d9e6e892b79e28537e699a596fc785625c591f01604e94314a654dd5e2670",
+        "exit_map": [
+          2,
+          2,
+          3,
+          3,
+          3,
+          3
+        ],
+        "features": [
+          0.7619047619047619,
+          0.6666666666666665,
+          0.0,
+          0.0,
+          1.0,
+          0.42857142857142855,
+          0.42857142857142855
+        ],
+        "loss_db": 0.1303665667454305,
+        "over_budget": true,
+        "mac_saved_pct": 29.186777862114244,
+        "risk_probability": 0.6409782269587533,
+        "flagged": true
+      },
+      {
+        "image": "kodim09.png",
+        "qp": 63,
+        "scan_sha256": "4e82f9d74c3a2aaf0cae035219441e5902773ea795a06134ab38be7516135cc5",
+        "transfer_sha256": "1044edf0a5e335e278a7c7045084f4f834b24163c5ce9ea008acb9f8ce5207c5",
+        "exit_map": [
+          2,
+          2,
+          3,
+          3,
+          3,
+          3
+        ],
+        "features": [
+          1.0,
+          0.6666666666666665,
+          0.0,
+          0.0,
+          1.0,
+          0.42857142857142855,
+          0.42857142857142855
+        ],
+        "loss_db": 0.17036223960376337,
+        "over_budget": true,
+        "mac_saved_pct": 29.186777862114244,
+        "risk_probability": 0.7315684487349133,
+        "flagged": true
+      },
+      {
+        "image": "kodim10.png",
+        "qp": 0,
+        "scan_sha256": "ee58ef8720cb740c29b410e875b88f48b8e6e4195653b431183057764bd5dfa8",
+        "transfer_sha256": "6fa3a6fe979feea8c2d79b3e7b94d657684efb45e75da5191497f05213fa5a79",
+        "exit_map": [
+          3,
+          2,
+          2,
+          2,
+          2,
+          3
+        ],
+        "features": [
+          0.0,
+          0.3333333333333335,
+          0.0,
+          0.0,
+          1.0,
+          0.5714285714285714,
+          0.5714285714285714
+        ],
+        "loss_db": 0.06302735657797578,
+        "over_budget": false,
+        "mac_saved_pct": 34.1556669197505,
+        "risk_probability": 0.40229799557031726,
+        "flagged": true
+      },
+      {
+        "image": "kodim10.png",
+        "qp": 16,
+        "scan_sha256": "9ad15adee5895230b377072c3fac94704f67dd1e5f7d204cc33710e41b89e18d",
+        "transfer_sha256": "6ba145597bf0ca94519ceb4b812e00ddbd8ef37c69831811adc6186ca838458e",
+        "exit_map": [
+          3,
+          3,
+          2,
+          3,
+          3,
+          3
+        ],
+        "features": [
+          0.25396825396825395,
+          0.8333333333333335,
+          0.0,
+          0.0,
+          1.0,
+          0.2857142857142857,
+          0.2857142857142857
+        ],
+        "loss_db": 0.07271782632402057,
+        "over_budget": false,
+        "mac_saved_pct": 26.702334078354173,
+        "risk_probability": 0.34317197744965344,
+        "flagged": true
+      },
+      {
+        "image": "kodim10.png",
+        "qp": 32,
+        "scan_sha256": "883e67047e78dbce8dcb8dbee29c7f7286dce4be2336340ecc40455acec8fd92",
+        "transfer_sha256": "3a62b6c3fcda4775bb9e6b7f8104635c92b4293e9e798cf6b33049139b44e0d2",
+        "exit_map": [
+          3,
+          3,
+          2,
+          3,
+          3,
+          3
+        ],
+        "features": [
+          0.5079365079365079,
+          0.8333333333333335,
+          0.0,
+          0.0,
+          1.0,
+          0.2857142857142857,
+          0.2857142857142857
+        ],
+        "loss_db": 0.10934975829574592,
+        "over_budget": true,
+        "mac_saved_pct": 26.702334078354173,
+        "risk_probability": 0.4506587829600444,
+        "flagged": true
+      },
+      {
+        "image": "kodim10.png",
+        "qp": 48,
+        "scan_sha256": "48ab36fa2f4d3f0c5b70e80d36cf4a596e04c27ccc0b333395967c180e73453a",
+        "transfer_sha256": "32a15cbb96d933104720429ddb60bbeab93707190ac8a16a33de357f08808e1e",
+        "exit_map": [
+          3,
+          2,
+          2,
+          3,
+          2,
+          4
+        ],
+        "features": [
+          0.7619047619047619,
+          0.6666666666666665,
+          0.0,
+          0.0,
+          0.8333333333333334,
+          0.8571428571428571,
+          0.5714285714285714
+        ],
+        "loss_db": 0.15985072850733753,
+        "over_budget": true,
+        "mac_saved_pct": 29.80607310156279,
+        "risk_probability": 0.6258321116153921,
+        "flagged": true
+      },
+      {
+        "image": "kodim10.png",
+        "qp": 63,
+        "scan_sha256": "d9793feb890199d344b615cca49cff22a1b7f7a7f50270773828b9a93872e5ba",
+        "transfer_sha256": "6e8d21e5d16cf4e3e3e531bdbb7cd3ae6c889b26c2f15ca244ac06bfc8c59033",
+        "exit_map": [
+          3,
+          2,
+          2,
+          3,
+          2,
+          5
+        ],
+        "features": [
+          1.0,
+          0.8333333333333335,
+          0.0,
+          0.16666666666666666,
+          0.8333333333333334,
+          1.1428571428571428,
+          0.5714285714285714
+        ],
+        "loss_db": 0.15973821367594765,
+        "over_budget": true,
+        "mac_saved_pct": 27.476455362839037,
+        "risk_probability": 0.7193907650027949,
+        "flagged": true
+      },
+      {
+        "image": "kodim11.png",
+        "qp": 0,
+        "scan_sha256": "e7a439286aa1e9ba78b91fe152c70f42fca9ea1cdecf2509e424fc58c127c606",
+        "transfer_sha256": "dac60a41834cfe9f35f87c18f33dd4f0476c84f89ad047c30b25b53b089b8546",
+        "exit_map": [
+          2,
+          2,
+          2,
+          2,
+          2,
+          2
+        ],
+        "features": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          1.0,
+          0.0,
+          0.0
+        ],
+        "loss_db": 0.0756079349245995,
+        "over_budget": false,
+        "mac_saved_pct": 39.12455746750288,
+        "risk_probability": 0.1990706677594344,
+        "flagged": true
+      },
+      {
+        "image": "kodim11.png",
+        "qp": 16,
+        "scan_sha256": "5e1428464b4e65d7536bf184fcfd85765805490cc2fcd88d0d578da5856e657d",
+        "transfer_sha256": "d32b08c59e2494d0c437e2ad336f287f8753858e1b09a90ddcf51d921b514f73",
+        "exit_map": [
+          3,
+          3,
+          3,
+          2,
+          3,
+          3
+        ],
+        "features": [
+          0.25396825396825395,
+          0.8333333333333335,
+          0.0,
+          0.0,
+          1.0,
+          0.2857142857142857,
+          0.2857142857142857
+        ],
+        "loss_db": 0.04136583622792436,
+        "over_budget": false,
+        "mac_saved_pct": 26.702334078354173,
+        "risk_probability": 0.34317197744965344,
+        "flagged": true
+      },
+      {
+        "image": "kodim11.png",
+        "qp": 32,
+        "scan_sha256": "94c7ce9b9d2259b145bb5727d57ef1f57827d7d5dea061f13c26a2f7f097b806",
+        "transfer_sha256": "0b7aee5c0972ef8652b39c2ca5d9e3f0c7343f7e7fd39909cb198e96b610ae9b",
+        "exit_map": [
+          3,
+          3,
+          3,
+          2,
+          3,
+          3
+        ],
+        "features": [
+          0.5079365079365079,
+          0.8333333333333335,
+          0.0,
+          0.0,
+          1.0,
+          0.2857142857142857,
+          0.2857142857142857
+        ],
+        "loss_db": 0.0686257705599692,
+        "over_budget": false,
+        "mac_saved_pct": 26.702334078354173,
+        "risk_probability": 0.4506587829600444,
+        "flagged": true
+      },
+      {
+        "image": "kodim11.png",
+        "qp": 48,
+        "scan_sha256": "8a389b671da8341e0364d96390c7475c9ed7ee68be7bedfb94351b39cf7ec396",
+        "transfer_sha256": "fb647c09a08d9180fd15d71ff28a9c257dc28009d21173ab833d8ddacfdd62ae",
+        "exit_map": [
+          3,
+          4,
+          2,
+          2,
+          4,
+          3
+        ],
+        "features": [
+          0.7619047619047619,
+          1.0,
+          0.0,
+          0.0,
+          0.6666666666666666,
+          1.1428571428571428,
+          0.8571428571428571
+        ],
+        "loss_db": 0.10121664104274672,
+        "over_budget": true,
+        "mac_saved_pct": 25.456483753723436,
+        "risk_probability": 0.6828087832389785,
+        "flagged": true
+      },
+      {
+        "image": "kodim11.png",
+        "qp": 63,
+        "scan_sha256": "0f203a7175e72fd0a135af2672da6d9447731c422ca31e64f88b75e43c004a5a",
+        "transfer_sha256": "8fcc0ae027f38146b90ddbf7b6c11e7400c6083738915ec6a0e4cc8475e105bd",
+        "exit_map": [
+          3,
+          5,
+          2,
+          3,
+          5,
+          3
+        ],
+        "features": [
+          1.0,
+          1.5,
+          0.0,
+          0.3333333333333333,
+          0.6666666666666666,
+          1.4285714285714286,
+          0.7142857142857143
+        ],
+        "loss_db": 0.10162966458752538,
+        "over_budget": true,
+        "mac_saved_pct": 18.31279555181914,
+        "risk_probability": 0.7199806919237756,
+        "flagged": true
+      },
+      {
+        "image": "kodim12.png",
+        "qp": 0,
+        "scan_sha256": "512512b3a32a51bab5a861530df75aa561fd0870cd1800778f51f6d034e44984",
+        "transfer_sha256": "c005e53214632fac5a8b5df417f2a22fe1227da6a90acdc9b31876ed27e3a772",
+        "exit_map": [
+          2,
+          2,
+          2,
+          2,
+          2,
+          2
+        ],
+        "features": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          1.0,
+          0.0,
+          0.0
+        ],
+        "loss_db": 0.12190818337269813,
+        "over_budget": true,
+        "mac_saved_pct": 39.12455746750288,
+        "risk_probability": 0.1990706677594344,
+        "flagged": true
+      },
+      {
+        "image": "kodim12.png",
+        "qp": 16,
+        "scan_sha256": "016d1174cc325060125b071b6deb7eb06779a3277938ec5e59b23d2f4a750e90",
+        "transfer_sha256": "66e503b48b0fe04814d6060163a360ad6d10fabae2082d2463b6f69276390d93",
+        "exit_map": [
+          3,
+          3,
+          3,
+          2,
+          3,
+          2
+        ],
+        "features": [
+          0.25396825396825395,
+          0.6666666666666665,
+          0.0,
+          0.0,
+          1.0,
+          0.5714285714285714,
+          0.5714285714285714
+        ],
+        "loss_db": 0.08711057785111306,
+        "over_budget": false,
+        "mac_saved_pct": 29.186777862114244,
+        "risk_probability": 0.48802707713613147,
+        "flagged": true
+      },
+      {
+        "image": "kodim12.png",
+        "qp": 32,
+        "scan_sha256": "3b7b13ac51ddc5a58b9025087ada81a36659cf28d320d8155515d96a63da7b57",
+        "transfer_sha256": "a0ba9cf6efb70690edc48af430d191be6d0bc8257211c45af299475495ad7ad8",
+        "exit_map": [
+          3,
+          3,
+          3,
+          2,
+          3,
+          2
+        ],
+        "features": [
+          0.5079365079365079,
+          0.6666666666666665,
+          0.0,
+          0.0,
+          1.0,
+          0.5714285714285714,
+          0.5714285714285714
+        ],
+        "loss_db": 0.09984217460819426,
+        "over_budget": false,
+        "mac_saved_pct": 29.186777862114244,
+        "risk_probability": 0.5994755465364943,
+        "flagged": true
+      },
+      {
+        "image": "kodim12.png",
+        "qp": 48,
+        "scan_sha256": "6caf1b76a0693b3f786aba7a6827c5668dd935ea7515d14ea9f6b422065f3295",
+        "transfer_sha256": "0764ca714475c96556ad96df8ccbd21f07e3c6312ca05557d20179b70231ee48",
+        "exit_map": [
+          2,
+          3,
+          2,
+          2,
+          2,
+          2
+        ],
+        "features": [
+          0.7619047619047619,
+          0.16666666666666652,
+          0.0,
+          0.0,
+          1.0,
+          0.42857142857142855,
+          0.42857142857142855
+        ],
+        "loss_db": 0.1730300530963957,
+        "over_budget": true,
+        "mac_saved_pct": 36.64011219362669,
+        "risk_probability": 0.6757671693514342,
+        "flagged": true
+      },
+      {
+        "image": "kodim12.png",
+        "qp": 63,
+        "scan_sha256": "1089b67671580820e314cbac6977fa5bb82cdf425d6e422913a22baa905d2dee",
+        "transfer_sha256": "c20983e254f7624f89751af72796e68218993301b3f25db3666da0ab01599dbb",
+        "exit_map": [
+          2,
+          5,
+          2,
+          2,
+          3,
+          2
+        ],
+        "features": [
+          1.0,
+          0.6666666666666665,
+          0.0,
+          0.16666666666666666,
+          0.8333333333333334,
+          1.4285714285714286,
+          0.7142857142857143
+        ],
+        "loss_db": 0.1983614616189756,
+        "over_budget": true,
+        "mac_saved_pct": 29.960899146599107,
+        "risk_probability": 0.7676219140137577,
+        "flagged": true
+      },
+      {
+        "image": "kodim13.png",
+        "qp": 0,
+        "scan_sha256": "7cc8b162a7e3f3300000080d4849bcd55058557e3adafbe57e99bb6997ac0b62",
+        "transfer_sha256": "f48c2fd8a616de933cbc4607b97dcb5ba75472230e0f7a4318ac3b00c1949888",
+        "exit_map": [
+          2,
+          3,
+          2,
+          3,
+          2,
+          2
+        ],
+        "features": [
+          0.0,
+          0.3333333333333335,
+          0.0,
+          0.0,
+          1.0,
+          0.7142857142857143,
+          0.7142857142857143
+        ],
+        "loss_db": 0.02543410364649913,
+        "over_budget": false,
+        "mac_saved_pct": 34.1556669197505,
+        "risk_probability": 0.4697743758137541,
+        "flagged": true
+      },
+      {
+        "image": "kodim13.png",
+        "qp": 16,
+        "scan_sha256": "42f10c598f943137c894e6cba7f46555c2606e4c3e70c29d36a439e24e41e540",
+        "transfer_sha256": "d169fda7db6110c70772efac9b1337402037b5f2e88192affbf5c2484fbd32db",
+        "exit_map": [
+          3,
+          3,
+          3,
+          4,
+          3,
+          4
+        ],
+        "features": [
+          0.25396825396825395,
+          1.3333333333333335,
+          1.0,
+          0.0,
+          0.6666666666666666,
+          0.5714285714285714,
+          0.5714285714285714
+        ],
+        "loss_db": 0.020921663329462256,
+        "over_budget": false,
+        "mac_saved_pct": 20.487596186203294,
+        "risk_probability": 0.18692356204151545,
+        "flagged": false
+      },
+      {
+        "image": "kodim13.png",
+        "qp": 32,
+        "scan_sha256": "afbc46661fd5e3eebcdc063cd2a20e036183be9de1ee83eab4d2b67a780df2a3",
+        "transfer_sha256": "5ddd0dda58d290eaa33e35fce2ef3e67359dd777c40faf736b32ef19fbbf4e7e",
+        "exit_map": [
+          3,
+          3,
+          3,
+          4,
+          3,
+          4
+        ],
+        "features": [
+          0.5079365079365079,
+          1.3333333333333335,
+          1.0,
+          0.0,
+          0.6666666666666666,
+          0.5714285714285714,
+          0.5714285714285714
+        ],
+        "loss_db": 0.044299317182209294,
+        "over_budget": false,
+        "mac_saved_pct": 20.487596186203294,
+        "risk_probability": 0.26523312021264506,
+        "flagged": true
+      },
+      {
+        "image": "kodim13.png",
+        "qp": 48,
+        "scan_sha256": "4c9a0200cfff12ee7ff5bc7ff0018647c97a0acace7161fec22ac41b786c4c28",
+        "transfer_sha256": "1970b531dba8a8a0630ff987d74cecb0199fa2ba3f42581e09930cf36bb914b8",
+        "exit_map": [
+          3,
+          5,
+          3,
+          5,
+          4,
+          4
+        ],
+        "features": [
+          0.7619047619047619,
+          2.0,
+          1.0,
+          0.3333333333333333,
+          0.3333333333333333,
+          1.2857142857142858,
+          0.8571428571428571
+        ],
+        "loss_db": 0.049264321166686616,
+        "over_budget": false,
+        "mac_saved_pct": 12.098054679436022,
+        "risk_probability": 0.39448472578917065,
+        "flagged": true
+      },
+      {
+        "image": "kodim13.png",
+        "qp": 63,
+        "scan_sha256": "f0ed8fd69b0a092265d09dc0f4748755ff3bce039da0813c24d061781a97cb4d",
+        "transfer_sha256": "b42f754bbba198cae170c810951f8cf63b571c3db5002bc13507afe2054af86f",
+        "exit_map": [
+          3,
+          5,
+          5,
+          5,
+          5,
+          5
+        ],
+        "features": [
+          1.0,
+          2.666666666666667,
+          1.0,
+          0.8333333333333334,
+          0.16666666666666666,
+          0.5714285714285714,
+          0.2857142857142857
+        ],
+        "loss_db": 0.04731021684571616,
+        "over_budget": false,
+        "mac_saved_pct": 3.2440469584887555,
+        "risk_probability": 0.3041128373127649,
+        "flagged": true
+      },
+      {
+        "image": "kodim14.png",
+        "qp": 0,
+        "scan_sha256": "042a35423bc802cd959467080c0b34cb51ff408b57e42ccadf0d1cccebfb7ce5",
+        "transfer_sha256": "21bc7e480e411d78d0c896c0f4fa5c386c24a583118b2707324850aa18e55e74",
+        "exit_map": [
+          3,
+          2,
+          2,
+          3,
+          3,
+          3
+        ],
+        "features": [
+          0.0,
+          0.6666666666666665,
+          0.0,
+          0.0,
+          1.0,
+          0.42857142857142855,
+          0.42857142857142855
+        ],
+        "loss_db": 0.056789712387919855,
+        "over_budget": false,
+        "mac_saved_pct": 29.186777862114244,
+        "risk_probability": 0.3156293277956848,
+        "flagged": true
+      },
+      {
+        "image": "kodim14.png",
+        "qp": 16,
+        "scan_sha256": "a7ef671372a982158d7336f2e4b6fbbe9f8be14773b0e66e85d472c164befc22",
+        "transfer_sha256": "441fadffff102eab8c79863ae8c90c52f7befb3ea8e152d5a532db3fd242b67b",
+        "exit_map": [
+          3,
+          3,
+          3,
+          3,
+          4,
+          3
+        ],
+        "features": [
+          0.25396825396825395,
+          1.1666666666666665,
+          1.0,
+          0.0,
+          0.8333333333333334,
+          0.42857142857142855,
+          0.42857142857142855
+        ],
+        "loss_db": 0.06064758167516776,
+        "over_budget": false,
+        "mac_saved_pct": 22.35273877005034,
+        "risk_probability": 0.18254484698943868,
+        "flagged": false
+      },
+      {
+        "image": "kodim14.png",
+        "qp": 32,
+        "scan_sha256": "14a4d0e0a9626bd046df65fd621a8b33c8af0cd59d26fb7b1b3518d8bb7a3665",
+        "transfer_sha256": "ca37c45c6b3112d7b921db778f9bd4b01ae070c8cc4cd3fd53d3dba6178e5388",
+        "exit_map": [
+          3,
+          3,
+          3,
+          3,
+          4,
+          3
+        ],
+        "features": [
+          0.5079365079365079,
+          1.1666666666666665,
+          1.0,
+          0.0,
+          0.8333333333333334,
+          0.42857142857142855,
+          0.42857142857142855
+        ],
+        "loss_db": 0.08005690685321909,
+        "over_budget": false,
+        "mac_saved_pct": 22.35273877005034,
+        "risk_probability": 0.2596056977189449,
+        "flagged": true
+      },
+      {
+        "image": "kodim14.png",
+        "qp": 48,
+        "scan_sha256": "f13a90a37fe58b473dbd5ec8fdf0c479e66c877d6248e85789c4697d2f866470",
+        "transfer_sha256": "26e3439ff3fc618f192c613c5811affb0a465acb85b08340749594654a1e7c70",
+        "exit_map": [
+          4,
+          3,
+          2,
+          3,
+          5,
+          4
+        ],
+        "features": [
+          0.7619047619047619,
+          1.5,
+          0.0,
+          0.16666666666666666,
+          0.5,
+          1.4285714285714286,
+          1.0
+        ],
+        "loss_db": 0.10340975865062735,
+        "over_budget": true,
+        "mac_saved_pct": 18.777270706695848,
+        "risk_probability": 0.6944964600471258,
+        "flagged": true
+      },
+      {
+        "image": "kodim14.png",
+        "qp": 63,
+        "scan_sha256": "8b8b706e3cc09f64caf142660e7570e0f5da4170ce897897a18a4106a25e6433",
+        "transfer_sha256": "03c670137724af3ea9ffc23eb02e819852f9086690edb197cc0d789f3a454d61",
+        "exit_map": [
+          5,
+          5,
+          2,
+          5,
+          5,
+          5
+        ],
+        "features": [
+          1.0,
+          2.5,
+          0.0,
+          0.8333333333333334,
+          0.16666666666666666,
+          0.8571428571428571,
+          0.2857142857142857
+        ],
+        "loss_db": 0.07746043564920502,
+        "over_budget": false,
+        "mac_saved_pct": 5.7284937224810655,
+        "risk_probability": 0.47636627646441365,
+        "flagged": true
+      },
+      {
+        "image": "kodim15.png",
+        "qp": 0,
+        "scan_sha256": "c9993b711693eca06e6667f0f8acd9ca74302895926d6569602fcd2b4184ca34",
+        "transfer_sha256": "0598bce6d3220456ad19683121dac1d0b6dd33655781a0a82e44d56acd27f3c0",
+        "exit_map": [
+          2,
+          2,
+          2,
+          2,
+          2,
+          2
+        ],
+        "features": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          1.0,
+          0.0,
+          0.0
+        ],
+        "loss_db": 0.22758301621391314,
+        "over_budget": true,
+        "mac_saved_pct": 39.12455746750288,
+        "risk_probability": 0.1990706677594344,
+        "flagged": true
+      },
+      {
+        "image": "kodim15.png",
+        "qp": 16,
+        "scan_sha256": "3ab25aca9e5b14baa4e63aac32d547d1f8aeb7f44706fbbf54bd49a4f36c5aae",
+        "transfer_sha256": "ebebb547f5358760a26b2f48159c0358876853feea70661c2521751ab2fc889a",
+        "exit_map": [
+          3,
+          3,
+          3,
+          3,
+          3,
+          3
+        ],
+        "features": [
+          0.25396825396825395,
+          1.0,
+          1.0,
+          0.0,
+          1.0,
+          0.0,
+          0.0
+        ],
+        "loss_db": 0.0777800064408653,
+        "over_budget": false,
+        "mac_saved_pct": 24.217887314361864,
+        "risk_probability": 0.11125621407973084,
+        "flagged": false
+      },
+      {
+        "image": "kodim15.png",
+        "qp": 32,
+        "scan_sha256": "18205239fd66710e141bacc81abd54f8b651f8beb208e5470844d539215feb28",
+        "transfer_sha256": "29ecb44e1e5bca30eb7b35e1b991c352c59c24e08fcd40fb183de6a6d6026d5b",
+        "exit_map": [
+          3,
+          3,
+          3,
+          3,
+          3,
+          3
+        ],
+        "features": [
+          0.5079365079365079,
+          1.0,
+          1.0,
+          0.0,
+          1.0,
+          0.0,
+          0.0
+        ],
+        "loss_db": 0.10523124516675657,
+        "over_budget": true,
+        "mac_saved_pct": 24.217887314361864,
+        "risk_probability": 0.16427029877884008,
+        "flagged": false
+      },
+      {
+        "image": "kodim15.png",
+        "qp": 48,
+        "scan_sha256": "245268cf9ede301b19e052ddcd9ac4c796589f2c7fbca1052482fce42800bfcd",
+        "transfer_sha256": "1852f932be06034c220a951c0b0d4374dc26ded9d2e48ca1879b1868e4177d7f",
+        "exit_map": [
+          3,
+          3,
+          2,
+          3,
+          3,
+          3
+        ],
+        "features": [
+          0.7619047619047619,
+          0.8333333333333335,
+          0.0,
+          0.0,
+          1.0,
+          0.2857142857142857,
+          0.2857142857142857
+        ],
+        "loss_db": 0.17918493852582779,
+        "over_budget": true,
+        "mac_saved_pct": 26.702334078354173,
+        "risk_probability": 0.5629570618167593,
+        "flagged": true
+      },
+      {
+        "image": "kodim15.png",
+        "qp": 63,
+        "scan_sha256": "e7469eee0247d68e64b73dbd58a206b8e1fccfca677bce2bcb8167a9ecb47c3a",
+        "transfer_sha256": "ccee45d7775c8bc9991de9fcd9b21104f8bf7eac289c5c07b1728567fbd28e74",
+        "exit_map": [
+          3,
+          5,
+          2,
+          5,
+          5,
+          3
+        ],
+        "features": [
+          1.0,
+          1.8333333333333335,
+          0.0,
+          0.5,
+          0.5,
+          1.4285714285714286,
+          0.7142857142857143
+        ],
+        "loss_db": 0.10887356233396135,
+        "over_budget": true,
+        "mac_saved_pct": 14.11802926878386,
+        "risk_probability": 0.7002679955452615,
+        "flagged": true
+      },
+      {
+        "image": "kodim16.png",
+        "qp": 0,
+        "scan_sha256": "425437e7b9f58a66285e035076777a365386b217cec4a62c6d9c14155d2fb999",
+        "transfer_sha256": "645752c978e388fa4f8c5f00c800833c3b20f906bd97b55460d52eca2bbc70c1",
+        "exit_map": [
+          2,
+          2,
+          2,
+          2,
+          2,
+          2
+        ],
+        "features": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          1.0,
+          0.0,
+          0.0
+        ],
+        "loss_db": 0.05280912760482344,
+        "over_budget": false,
+        "mac_saved_pct": 39.12455746750288,
+        "risk_probability": 0.1990706677594344,
+        "flagged": true
+      },
+      {
+        "image": "kodim16.png",
+        "qp": 16,
+        "scan_sha256": "0097b92ff0881bdda5543f9f04d9132e3379fe5e4d72ba5ed68aefa2a8f49f31",
+        "transfer_sha256": "47dcf54dbaf4fb22ef9621573a8329e9b9ae5afe5db0ccdc4ebc7c34e1b8a57f",
+        "exit_map": [
+          2,
+          2,
+          2,
+          3,
+          2,
+          3
+        ],
+        "features": [
+          0.25396825396825395,
+          0.3333333333333335,
+          0.0,
+          0.0,
+          1.0,
+          0.5714285714285714,
+          0.5714285714285714
+        ],
+        "loss_db": 0.04838410735418959,
+        "over_budget": false,
+        "mac_saved_pct": 34.1556669197505,
+        "risk_probability": 0.5138169806838089,
+        "flagged": true
+      },
+      {
+        "image": "kodim16.png",
+        "qp": 32,
+        "scan_sha256": "7f475c2323269843e48480f14c5699d3c210c088097bd872ee761627b7d02fd3",
+        "transfer_sha256": "68f134847752804835b2349708cf1011007045ec1bb9722bfd947f766af4e7ca",
+        "exit_map": [
+          2,
+          2,
+          2,
+          3,
+          2,
+          3
+        ],
+        "features": [
+          0.5079365079365079,
+          0.3333333333333335,
+          0.0,
+          0.0,
+          1.0,
+          0.5714285714285714,
+          0.5714285714285714
+        ],
+        "loss_db": 0.06605388301809495,
+        "over_budget": false,
+        "mac_saved_pct": 34.1556669197505,
+        "risk_probability": 0.6239770024965059,
+        "flagged": true
+      },
+      {
+        "image": "kodim16.png",
+        "qp": 48,
+        "scan_sha256": "434c8bb362ea513563494221415150ca0cd64a486888e9cb30b8502ffcccd4ee",
+        "transfer_sha256": "d72a04435b74108dd067997364144cdda0fefecb2c1fa78f0dd704aca465ab41",
+        "exit_map": [
+          2,
+          2,
+          2,
+          2,
+          2,
+          3
+        ],
+        "features": [
+          0.7619047619047619,
+          0.16666666666666652,
+          0.0,
+          0.0,
+          1.0,
+          0.2857142857142857,
+          0.2857142857142857
+        ],
+        "loss_db": 0.11356166812352211,
+        "over_budget": true,
+        "mac_saved_pct": 36.64011219362669,
+        "risk_probability": 0.6129044769787476,
+        "flagged": true
+      },
+      {
+        "image": "kodim16.png",
+        "qp": 63,
+        "scan_sha256": "3ff17734e0534576b7f30a6e7dc8065add6dd83960a00b06ba185795cc88b284",
+        "transfer_sha256": "b06524a160ea56c974b040796281af1d07eda08a471ff119d8304c7bd88f7dbe",
+        "exit_map": [
+          2,
+          2,
+          2,
+          2,
+          2,
+          3
+        ],
+        "features": [
+          1.0,
+          0.16666666666666652,
+          0.0,
+          0.0,
+          1.0,
+          0.2857142857142857,
+          0.2857142857142857
+        ],
+        "loss_db": 0.18570765477778736,
+        "over_budget": true,
+        "mac_saved_pct": 36.64011219362669,
+        "risk_probability": 0.7073441521308672,
+        "flagged": true
+      },
+      {
+        "image": "kodim17.png",
+        "qp": 0,
+        "scan_sha256": "457aea359fcc71bb16b690334514787cfb3aad5b2acc4fa8c60db5b9dc62313a",
+        "transfer_sha256": "400cfd9caa9d06a4a55050787957b36ad9426f63472769d8588b6985afdad98b",
+        "exit_map": [
+          2,
+          2,
+          2,
+          2,
+          2,
+          2
+        ],
+        "features": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          1.0,
+          0.0,
+          0.0
+        ],
+        "loss_db": 0.03091025429683488,
+        "over_budget": false,
+        "mac_saved_pct": 39.12455746750288,
+        "risk_probability": 0.1990706677594344,
+        "flagged": true
+      },
+      {
+        "image": "kodim17.png",
+        "qp": 16,
+        "scan_sha256": "0f04e3543cbd4ffb2af8d0b5d783090a91c240fd73050778e49817e9a19672ac",
+        "transfer_sha256": "4d1001737a420eb413c661720ea76ef738f42afba5974723e394cd4757152881",
+        "exit_map": [
+          2,
+          3,
+          2,
+          3,
+          2,
+          3
+        ],
+        "features": [
+          0.25396825396825395,
+          0.5,
+          0.0,
+          0.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "loss_db": 0.05037456042548596,
+        "over_budget": false,
+        "mac_saved_pct": 31.671221645874315,
+        "risk_probability": 0.6959822207790107,
+        "flagged": true
+      },
+      {
+        "image": "kodim17.png",
+        "qp": 32,
+        "scan_sha256": "ea9f8a4e99751565bcf0898eab6261dcc9c1fe6ba8664b5596c33f089884ed43",
+        "transfer_sha256": "e2f603a624591042bc798b1047a19b9eb973d1c1acf97d802e03fbbf05917ee1",
+        "exit_map": [
+          2,
+          3,
+          2,
+          3,
+          2,
+          3
+        ],
+        "features": [
+          0.5079365079365079,
+          0.5,
+          0.0,
+          0.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "loss_db": 0.0845950106130468,
+        "over_budget": false,
+        "mac_saved_pct": 31.671221645874315,
+        "risk_probability": 0.7823508852213439,
+        "flagged": true
+      },
+      {
+        "image": "kodim17.png",
+        "qp": 48,
+        "scan_sha256": "120c24fd1d448d742e2c4e2ee89fcd4737d6020508b61b6af70e2a583915ca5c",
+        "transfer_sha256": "fc3c41f305354e468f604972e75cf8b5ccd6f8929ccf032332ed7f3185d619f5",
+        "exit_map": [
+          2,
+          3,
+          2,
+          3,
+          2,
+          2
+        ],
+        "features": [
+          0.7619047619047619,
+          0.3333333333333335,
+          0.0,
+          0.0,
+          1.0,
+          0.7142857142857143,
+          0.7142857142857143
+        ],
+        "loss_db": 0.16296626366761632,
+        "over_budget": true,
+        "mac_saved_pct": 34.1556669197505,
+        "risk_probability": 0.7742547035182243,
+        "flagged": true
+      },
+      {
+        "image": "kodim17.png",
+        "qp": 63,
+        "scan_sha256": "402717b654105afaf8b249bab363d85c985745e353440d0894e4d4c1d861ec8a",
+        "transfer_sha256": "e31dcce06587933d12b62940ec54a0d5c2838883d95a3b917ada31ace4e5c17c",
+        "exit_map": [
+          2,
+          5,
+          2,
+          3,
+          2,
+          2
+        ],
+        "features": [
+          1.0,
+          0.6666666666666665,
+          0.0,
+          0.16666666666666666,
+          0.8333333333333334,
+          1.5714285714285714,
+          0.7142857142857143
+        ],
+        "loss_db": 0.18942595498022757,
+        "over_budget": true,
+        "mac_saved_pct": 29.960899146599107,
+        "risk_probability": 0.7543559895694284,
+        "flagged": true
+      },
+      {
+        "image": "kodim18.png",
+        "qp": 0,
+        "scan_sha256": "f6ad2211ff9a24ea34e5c0af5c5d0de060df981f62da6f3787309f6b76dc03e0",
+        "transfer_sha256": "20688e9a6440c8909a1e962dda08002f473a5b3947c5817ac705a05a1a114246",
+        "exit_map": [
+          2,
+          2,
+          2,
+          3,
+          2,
+          2
+        ],
+        "features": [
+          0.0,
+          0.16666666666666652,
+          0.0,
+          0.0,
+          1.0,
+          0.2857142857142857,
+          0.2857142857142857
+        ],
+        "loss_db": 0.02576082879084667,
+        "over_budget": false,
+        "mac_saved_pct": 36.64011219362669,
+        "risk_probability": 0.2902838162535859,
+        "flagged": true
+      },
+      {
+        "image": "kodim18.png",
+        "qp": 16,
+        "scan_sha256": "3f49698c52589ab8171fc277428c6ae478e276953c780a5636b00cdaf8877a6a",
+        "transfer_sha256": "2ce51171b6fda546a0c1189f9f4452eafe9f365353becabfb4aede8eba0f4311",
+        "exit_map": [
+          3,
+          3,
+          3,
+          3,
+          3,
+          3
+        ],
+        "features": [
+          0.25396825396825395,
+          1.0,
+          1.0,
+          0.0,
+          1.0,
+          0.0,
+          0.0
+        ],
+        "loss_db": 0.033224439733612984,
+        "over_budget": false,
+        "mac_saved_pct": 24.217887314361864,
+        "risk_probability": 0.11125621407973084,
+        "flagged": false
+      },
+      {
+        "image": "kodim18.png",
+        "qp": 32,
+        "scan_sha256": "b30aeae472ff0baf52a5715ac46b7834d58b00d0ff18b7a15d07046354e83967",
+        "transfer_sha256": "0cecf1c99034cb955ee62e18cb0d85f0d80d1943ea377bb3dcb78d890d10da01",
+        "exit_map": [
+          3,
+          3,
+          3,
+          4,
+          3,
+          3
+        ],
+        "features": [
+          0.5079365079365079,
+          1.1666666666666665,
+          1.0,
+          0.0,
+          0.8333333333333334,
+          0.2857142857142857,
+          0.2857142857142857
+        ],
+        "loss_db": 0.05765734592508062,
+        "over_budget": false,
+        "mac_saved_pct": 22.352744730514818,
+        "risk_probability": 0.21034151689270578,
+        "flagged": true
+      },
+      {
+        "image": "kodim18.png",
+        "qp": 48,
+        "scan_sha256": "88ab19455b8d6bfca10b7167cbce3f0ea68b0fd115f6e31a589002cc846b05f4",
+        "transfer_sha256": "9de858302dd9f4fedab24df41f4df9180d6a1ff4fb7d22ea1d00f14c426ad672",
+        "exit_map": [
+          3,
+          3,
+          3,
+          5,
+          3,
+          4
+        ],
+        "features": [
+          0.7619047619047619,
+          1.5,
+          1.0,
+          0.16666666666666666,
+          0.6666666666666666,
+          0.8571428571428571,
+          0.5714285714285714
+        ],
+        "loss_db": 0.06492055949502683,
+        "over_budget": false,
+        "mac_saved_pct": 18.157972487015062,
+        "risk_probability": 0.3626961190156426,
+        "flagged": true
+      },
+      {
+        "image": "kodim18.png",
+        "qp": 63,
+        "scan_sha256": "4b7856ac0b562aaa8a4b3667a64cc42fa0f7f7c17ada58761d7bc9f940591ade",
+        "transfer_sha256": "6d640832bf620dd499ffd5c5a24f1578cc94f5fc83621c9396da38b26c31e8e8",
+        "exit_map": [
+          3,
+          3,
+          5,
+          5,
+          5,
+          5
+        ],
+        "features": [
+          1.0,
+          2.333333333333333,
+          1.0,
+          0.6666666666666666,
+          0.3333333333333333,
+          0.8571428571428571,
+          0.42857142857142855
+        ],
+        "loss_db": 0.048497598018441904,
+        "over_budget": false,
+        "mac_saved_pct": 7.438813241524034,
+        "risk_probability": 0.37049387101597053,
+        "flagged": true
+      },
+      {
+        "image": "kodim19.png",
+        "qp": 0,
+        "scan_sha256": "3f0e8624d8e90299b85b8f250e1a0cfd3e8ca4f3eac9e13238e3a510a3267ba2",
+        "transfer_sha256": "9d2e466fb13273a0b016cfff80f30305686e07253566de7fda6ed50ed159a75c",
+        "exit_map": [
+          2,
+          2,
+          3,
+          3,
+          3,
+          2
+        ],
+        "features": [
+          0.0,
+          0.5,
+          0.0,
+          0.0,
+          1.0,
+          0.7142857142857143,
+          0.7142857142857143
+        ],
+        "loss_db": 0.08362489736219571,
+        "over_budget": false,
+        "mac_saved_pct": 31.671221645874315,
+        "risk_probability": 0.4569465021640863,
+        "flagged": true
+      },
+      {
+        "image": "kodim19.png",
+        "qp": 16,
+        "scan_sha256": "ad394f5a832ba4ebcf0a5bfd82f2aeafcc4b16e1d5de5d6c018a962ea293d653",
+        "transfer_sha256": "cc0dfc6659ef461a78c90864611bb8ebe730e55e5fad4a08581eb3ea69008767",
+        "exit_map": [
+          2,
+          2,
+          4,
+          3,
+          3,
+          3
+        ],
+        "features": [
+          0.25396825396825395,
+          0.8333333333333335,
+          0.0,
+          0.0,
+          0.8333333333333334,
+          0.7142857142857143,
+          0.5714285714285714
+        ],
+        "loss_db": 0.06973981920942662,
+        "over_budget": false,
+        "mac_saved_pct": 27.32163229803496,
+        "risk_probability": 0.4093566160860668,
+        "flagged": true
+      },
+      {
+        "image": "kodim19.png",
+        "qp": 32,
+        "scan_sha256": "fb22f34eb4473cc72ea2c569c0c01c77769cc597147d59780cea94c2abf32ff1",
+        "transfer_sha256": "bca58650fd37adf535b1fa57ad5c2044fb3e7ec93e9eac849463e83fb4ca36be",
+        "exit_map": [
+          2,
+          2,
+          3,
+          3,
+          3,
+          3
+        ],
+        "features": [
+          0.5079365079365079,
+          0.6666666666666665,
+          0.0,
+          0.0,
+          1.0,
+          0.42857142857142855,
+          0.42857142857142855
+        ],
+        "loss_db": 0.0791744791681605,
+        "over_budget": false,
+        "mac_saved_pct": 29.186777862114244,
+        "risk_probability": 0.532063749676675,
+        "flagged": true
+      },
+      {
+        "image": "kodim19.png",
+        "qp": 48,
+        "scan_sha256": "cf38067bcfa1ad2fdcd3cfe111f67940652e310259c39888b7a9aaedf95fee54",
+        "transfer_sha256": "87bab8b13634baa28eb06b23f9b26742b092ffd64c429aeb74cfd57b139a2b20",
+        "exit_map": [
+          2,
+          2,
+          4,
+          3,
+          3,
+          3
+        ],
+        "features": [
+          0.7619047619047619,
+          0.8333333333333335,
+          0.0,
+          0.0,
+          0.8333333333333334,
+          0.7142857142857143,
+          0.5714285714285714
+        ],
+        "loss_db": 0.10633984625351206,
+        "over_budget": true,
+        "mac_saved_pct": 27.32163229803496,
+        "risk_probability": 0.6308201081218641,
+        "flagged": true
+      },
+      {
+        "image": "kodim19.png",
+        "qp": 63,
+        "scan_sha256": "ba4255561b3133658feaa89a5ff66d4bb5ac2745aa6ecebf0cb71038e772cf5f",
+        "transfer_sha256": "07e490bef3993dddf232cac49bb0e5879356859d602062304c64245eb1e2a234",
+        "exit_map": [
+          2,
+          2,
+          5,
+          5,
+          5,
+          3
+        ],
+        "features": [
+          1.0,
+          1.6666666666666665,
+          0.0,
+          0.5,
+          0.5,
+          1.8571428571428572,
+          0.7142857142857143
+        ],
+        "loss_db": 0.07417114829640291,
+        "over_budget": false,
+        "mac_saved_pct": 16.60247305254393,
+        "risk_probability": 0.6640319202063935,
+        "flagged": true
+      },
+      {
+        "image": "kodim20.png",
+        "qp": 0,
+        "scan_sha256": "b0a133442b2c01b7da90638b758ac73ef8f3a76bb116d150df92d1f375d1fe5b",
+        "transfer_sha256": "e92a3f85bd962b32062f5fde1d0bb0ea1f556387843bd7f844d0929ab1677c9a",
+        "exit_map": [
+          3,
+          2,
+          2,
+          3,
+          3,
+          2
+        ],
+        "features": [
+          0.0,
+          0.5,
+          0.0,
+          0.0,
+          1.0,
+          0.42857142857142855,
+          0.42857142857142855
+        ],
+        "loss_db": 0.10165842612438669,
+        "over_budget": true,
+        "mac_saved_pct": 31.671221645874315,
+        "risk_probability": 0.32687796124067175,
+        "flagged": true
+      },
+      {
+        "image": "kodim20.png",
+        "qp": 16,
+        "scan_sha256": "b8de7a96dc38c48a398093548b1391006d30d27e0ad58f91db43a6f8ed7d3d22",
+        "transfer_sha256": "945163f62972872f190ba67efd333ac23cf266981ba1a41c61ab91877c116868",
+        "exit_map": [
+          3,
+          2,
+          2,
+          3,
+          3,
+          3
+        ],
+        "features": [
+          0.25396825396825395,
+          0.6666666666666665,
+          0.0,
+          0.0,
+          1.0,
+          0.42857142857142855,
+          0.42857142857142855
+        ],
+        "loss_db": 0.08957436821116985,
+        "over_budget": false,
+        "mac_saved_pct": 29.186777862114244,
+        "risk_probability": 0.4200057063437377,
+        "flagged": true
+      },
+      {
+        "image": "kodim20.png",
+        "qp": 32,
+        "scan_sha256": "aea4c01b1472a0602a86a6eaa9c4635b62812019cb5fb6722917bd848946a07a",
+        "transfer_sha256": "720f9ad9f6f03b6b7213718c747849b324f21d5e930f7c0af9b4c7a219c468d9",
+        "exit_map": [
+          3,
+          2,
+          2,
+          3,
+          3,
+          3
+        ],
+        "features": [
+          0.5079365079365079,
+          0.6666666666666665,
+          0.0,
+          0.0,
+          1.0,
+          0.42857142857142855,
+          0.42857142857142855
+        ],
+        "loss_db": 0.08107528546098171,
+        "over_budget": false,
+        "mac_saved_pct": 29.186777862114244,
+        "risk_probability": 0.532063749676675,
+        "flagged": true
+      },
+      {
+        "image": "kodim20.png",
+        "qp": 48,
+        "scan_sha256": "a99581f8450fb1e83e570e062351758d8893c1b9fa326681325882e89c2391a3",
+        "transfer_sha256": "84b77b185b7aa31d95bdc7ae99fdfe92b961db89b0f1583d85c9517c5c295dbe",
+        "exit_map": [
+          3,
+          2,
+          2,
+          3,
+          3,
+          2
+        ],
+        "features": [
+          0.7619047619047619,
+          0.5,
+          0.0,
+          0.0,
+          1.0,
+          0.42857142857142855,
+          0.42857142857142855
+        ],
+        "loss_db": 0.14609009441665968,
+        "over_budget": true,
+        "mac_saved_pct": 31.671221645874315,
+        "risk_probability": 0.6527623873114456,
+        "flagged": true
+      },
+      {
+        "image": "kodim20.png",
+        "qp": 63,
+        "scan_sha256": "e7e1f55618972153d50ff8dc2ddf77945f10f5dea2765c9915d637bd68624ab1",
+        "transfer_sha256": "2f02e12e8b97c0ee483ef1e6769fdca57e238bcef64a48d726af8190b53361be",
+        "exit_map": [
+          5,
+          2,
+          2,
+          5,
+          5,
+          2
+        ],
+        "features": [
+          1.0,
+          1.5,
+          0.0,
+          0.5,
+          0.5,
+          1.2857142857142858,
+          0.42857142857142855
+        ],
+        "loss_db": 0.08792563097889508,
+        "over_budget": false,
+        "mac_saved_pct": 19.086916836304002,
+        "risk_probability": 0.5815424192693416,
+        "flagged": true
+      },
+      {
+        "image": "kodim21.png",
+        "qp": 0,
+        "scan_sha256": "5955310cbe9b6bf392fc7c4e6479458d50e571cf2c41dcc9891284fbff8e5c63",
+        "transfer_sha256": "f7546e5d30403623108499f4163f244917cfc2fd67fdce14f4cf1a175c320974",
+        "exit_map": [
+          2,
+          2,
+          2,
+          3,
+          2,
+          2
+        ],
+        "features": [
+          0.0,
+          0.16666666666666652,
+          0.0,
+          0.0,
+          1.0,
+          0.2857142857142857,
+          0.2857142857142857
+        ],
+        "loss_db": 0.04925257033305475,
+        "over_budget": false,
+        "mac_saved_pct": 36.64011219362669,
+        "risk_probability": 0.2902838162535859,
+        "flagged": true
+      },
+      {
+        "image": "kodim21.png",
+        "qp": 16,
+        "scan_sha256": "40907e4ec98c0ad4c842935d4b804a82412a0cd933e4959c7ec0357d5429fb5f",
+        "transfer_sha256": "58af5348626194d8bee8daf69c5de55b1694cd7eeefcc5fa00521d985b101fca",
+        "exit_map": [
+          3,
+          3,
+          2,
+          3,
+          3,
+          3
+        ],
+        "features": [
+          0.25396825396825395,
+          0.8333333333333335,
+          0.0,
+          0.0,
+          1.0,
+          0.2857142857142857,
+          0.2857142857142857
+        ],
+        "loss_db": 0.03477714989372933,
+        "over_budget": false,
+        "mac_saved_pct": 26.702334078354173,
+        "risk_probability": 0.34317197744965344,
+        "flagged": true
+      },
+      {
+        "image": "kodim21.png",
+        "qp": 32,
+        "scan_sha256": "0ef0956b8a9b552f4c1b9e616bed1451202a5483d6dd5f2fbd065cd952353f4e",
+        "transfer_sha256": "f6994ecf083630fcb52d119e5fe078eb4a8741c4b9447eb7976831f9b45b2e18",
+        "exit_map": [
+          3,
+          2,
+          2,
+          3,
+          3,
+          3
+        ],
+        "features": [
+          0.5079365079365079,
+          0.6666666666666665,
+          0.0,
+          0.0,
+          1.0,
+          0.42857142857142855,
+          0.42857142857142855
+        ],
+        "loss_db": 0.055958270148552675,
+        "over_budget": false,
+        "mac_saved_pct": 29.186777862114244,
+        "risk_probability": 0.532063749676675,
+        "flagged": true
+      },
+      {
+        "image": "kodim21.png",
+        "qp": 48,
+        "scan_sha256": "fd85956a48c315758d3496dd14ac513e30a1ef491b05489cc6d62c6ef71082b2",
+        "transfer_sha256": "caddcce045af0e3889ffbe9e71bc6243e1cec056fa81a47f45abe76c5eccf3e3",
+        "exit_map": [
+          2,
+          2,
+          2,
+          3,
+          3,
+          3
+        ],
+        "features": [
+          0.7619047619047619,
+          0.5,
+          0.0,
+          0.0,
+          1.0,
+          0.42857142857142855,
+          0.42857142857142855
+        ],
+        "loss_db": 0.11040148621927151,
+        "over_budget": true,
+        "mac_saved_pct": 31.671221645874315,
+        "risk_probability": 0.6527623873114456,
+        "flagged": true
+      },
+      {
+        "image": "kodim21.png",
+        "qp": 63,
+        "scan_sha256": "1b45c22284c431b1b645f5bac766e804c7b4caea106affd629de7563e877c42f",
+        "transfer_sha256": "4f1cc46883797a58c9d06b6db0a8efe378d588be4f7a5a30dbe9e6a420280dd1",
+        "exit_map": [
+          2,
+          2,
+          2,
+          5,
+          5,
+          3
+        ],
+        "features": [
+          1.0,
+          1.1666666666666665,
+          0.0,
+          0.3333333333333333,
+          0.6666666666666666,
+          1.2857142857142858,
+          0.5714285714285714
+        ],
+        "loss_db": 0.11612658869144529,
+        "over_budget": true,
+        "mac_saved_pct": 23.28168609957152,
+        "risk_probability": 0.684104574011151,
+        "flagged": true
+      },
+      {
+        "image": "kodim22.png",
+        "qp": 0,
+        "scan_sha256": "4c3aa7adfa035fa27246d626c668a60c57a1dc5c0cd016df5a36f02ad58876f5",
+        "transfer_sha256": "15e337322042c40d2e99fd710d21f555cb246b33f77f05b24f6a39db8a41dc87",
+        "exit_map": [
+          2,
+          3,
+          2,
+          2,
+          2,
+          2
+        ],
+        "features": [
+          0.0,
+          0.16666666666666652,
+          0.0,
+          0.0,
+          1.0,
+          0.42857142857142855,
+          0.42857142857142855
+        ],
+        "loss_db": 0.07066020270951419,
+        "over_budget": false,
+        "mac_saved_pct": 36.64011219362669,
+        "risk_probability": 0.34997322361030725,
+        "flagged": true
+      },
+      {
+        "image": "kodim22.png",
+        "qp": 16,
+        "scan_sha256": "c0b7343b1ef2261915124b392301052b128a1476b0f627c7b00529bc67e8e829",
+        "transfer_sha256": "bd1a295d20205b78794663afa0f290bc8d83810ea424f868926c7b8743140b38",
+        "exit_map": [
+          3,
+          3,
+          3,
+          3,
+          3,
+          2
+        ],
+        "features": [
+          0.25396825396825395,
+          0.8333333333333335,
+          0.0,
+          0.0,
+          1.0,
+          0.2857142857142857,
+          0.2857142857142857
+        ],
+        "loss_db": 0.04662414585183232,
+        "over_budget": false,
+        "mac_saved_pct": 26.702334078354173,
+        "risk_probability": 0.34317197744965344,
+        "flagged": true
+      },
+      {
+        "image": "kodim22.png",
+        "qp": 32,
+        "scan_sha256": "2cecd42f74d9398609f4f174b982fbd7f019edfd32d8d31f14f233f5b995faff",
+        "transfer_sha256": "202053ab60850c2b5b3fc3f6964b1f0ab4a490777c00d619351d8f2614ade4e5",
+        "exit_map": [
+          3,
+          3,
+          3,
+          3,
+          3,
+          2
+        ],
+        "features": [
+          0.5079365079365079,
+          0.8333333333333335,
+          0.0,
+          0.0,
+          1.0,
+          0.2857142857142857,
+          0.2857142857142857
+        ],
+        "loss_db": 0.06676399609327607,
+        "over_budget": false,
+        "mac_saved_pct": 26.702334078354173,
+        "risk_probability": 0.4506587829600444,
+        "flagged": true
+      },
+      {
+        "image": "kodim22.png",
+        "qp": 48,
+        "scan_sha256": "9887c68136175fb833f843f01476b3c8dd5dd485485eb2490e03c3b204d49218",
+        "transfer_sha256": "10ad88533925e1efbf386c082da54c52eb4dd6f73e8ca8061a57f8ca558cb8a2",
+        "exit_map": [
+          3,
+          5,
+          3,
+          3,
+          3,
+          2
+        ],
+        "features": [
+          0.7619047619047619,
+          1.1666666666666665,
+          0.0,
+          0.16666666666666666,
+          0.8333333333333334,
+          1.1428571428571428,
+          0.7142857142857143
+        ],
+        "loss_db": 0.07763107779004463,
+        "over_budget": false,
+        "mac_saved_pct": 22.507564815086656,
+        "risk_probability": 0.6820212100187338,
+        "flagged": true
+      },
+      {
+        "image": "kodim22.png",
+        "qp": 63,
+        "scan_sha256": "0339e02321e0e911db53319a19aee64cafcf4a39fb1688a225dfa213cb768acf",
+        "transfer_sha256": "223f37f120dd7a8e39ac56b2daf5a593bd5030e180ff8e734c29b6e3b2113be6",
+        "exit_map": [
+          5,
+          5,
+          3,
+          3,
+          3,
+          3
+        ],
+        "features": [
+          1.0,
+          1.6666666666666665,
+          1.0,
+          0.3333333333333333,
+          0.6666666666666666,
+          0.8571428571428571,
+          0.42857142857142855
+        ],
+        "loss_db": 0.10586551526788439,
+        "over_budget": true,
+        "mac_saved_pct": 15.828351768059068,
+        "risk_probability": 0.41617007008235646,
+        "flagged": true
+      },
+      {
+        "image": "kodim23.png",
+        "qp": 0,
+        "scan_sha256": "91a455e7ea1d794c5505786860b6e4c5a186153f36ef51724868761df91f091a",
+        "transfer_sha256": "2595c952aba3bf125db0e607e9b4d8a476e5aa2c694eafb3819f06c8602a78e7",
+        "exit_map": [
+          3,
+          2,
+          2,
+          2,
+          2,
+          2
+        ],
+        "features": [
+          0.0,
+          0.16666666666666652,
+          0.0,
+          0.0,
+          1.0,
+          0.2857142857142857,
+          0.2857142857142857
+        ],
+        "loss_db": 0.18057973047580184,
+        "over_budget": true,
+        "mac_saved_pct": 36.64011219362669,
+        "risk_probability": 0.2902838162535859,
+        "flagged": true
+      },
+      {
+        "image": "kodim23.png",
+        "qp": 16,
+        "scan_sha256": "d154f151c336c4540fcf3b872eaee2a51f8601ce9caddf3177e37e6801485993",
+        "transfer_sha256": "630f6d0fa7a3c599b5bdbbbf296935892b645218a8ebd6c297b2efb45c4fa084",
+        "exit_map": [
+          3,
+          3,
+          3,
+          3,
+          3,
+          3
+        ],
+        "features": [
+          0.25396825396825395,
+          1.0,
+          1.0,
+          0.0,
+          1.0,
+          0.0,
+          0.0
+        ],
+        "loss_db": 0.10006740703602508,
+        "over_budget": true,
+        "mac_saved_pct": 24.217887314361864,
+        "risk_probability": 0.11125621407973084,
+        "flagged": false
+      },
+      {
+        "image": "kodim23.png",
+        "qp": 32,
+        "scan_sha256": "eccfab8a77460edc94adcb8cf2b7c7f8bf92f6fc3ebc9876d0959a9fd1797439",
+        "transfer_sha256": "4ac9524df816eb174fff4f93e19e11dd08181ecd05d28cf5632ee837b681d5dd",
+        "exit_map": [
+          3,
+          2,
+          2,
+          3,
+          3,
+          3
+        ],
+        "features": [
+          0.5079365079365079,
+          0.6666666666666665,
+          0.0,
+          0.0,
+          1.0,
+          0.42857142857142855,
+          0.42857142857142855
+        ],
+        "loss_db": 0.14350634820759547,
+        "over_budget": true,
+        "mac_saved_pct": 29.186777862114244,
+        "risk_probability": 0.532063749676675,
+        "flagged": true
+      },
+      {
+        "image": "kodim23.png",
+        "qp": 48,
+        "scan_sha256": "f6a05e2a97e88c96f314b0c7c740bc033ffe64d744b30b575de2c9314e879915",
+        "transfer_sha256": "572dddee7d8502c4d18723925943c6e4394611c1cc7b128af2cf43d76ff68f0c",
+        "exit_map": [
+          3,
+          2,
+          2,
+          3,
+          3,
+          2
+        ],
+        "features": [
+          0.7619047619047619,
+          0.5,
+          0.0,
+          0.0,
+          1.0,
+          0.42857142857142855,
+          0.42857142857142855
+        ],
+        "loss_db": 0.2539592547443172,
+        "over_budget": true,
+        "mac_saved_pct": 31.671221645874315,
+        "risk_probability": 0.6527623873114456,
+        "flagged": true
+      },
+      {
+        "image": "kodim23.png",
+        "qp": 63,
+        "scan_sha256": "4de96ba5d70232c939cd8b3bce359fe604273b9b0b651019a2246ca2fc44f945",
+        "transfer_sha256": "259bc89334c18b4951516bf91f1f21b0f0e7826f5ef43e55b55b27a01b6837ec",
+        "exit_map": [
+          3,
+          2,
+          2,
+          5,
+          3,
+          3
+        ],
+        "features": [
+          1.0,
+          1.0,
+          0.0,
+          0.16666666666666666,
+          0.8333333333333334,
+          1.0,
+          0.7142857142857143
+        ],
+        "loss_db": 0.24555327802414806,
+        "over_budget": true,
+        "mac_saved_pct": 24.992008598846727,
+        "risk_probability": 0.7876136160441529,
+        "flagged": true
+      },
+      {
+        "image": "kodim24.png",
+        "qp": 0,
+        "scan_sha256": "79f632f8e230606edc46870c4a6d4988e6b5bdd0a033709fb578c9af95e1fe12",
+        "transfer_sha256": "25a6ad155041aa135f2984e3a6311bbe3153321c19d2ec8709e206aff3159a8b",
+        "exit_map": [
+          3,
+          3,
+          3,
+          2,
+          2,
+          2
+        ],
+        "features": [
+          0.0,
+          0.5,
+          0.0,
+          0.0,
+          1.0,
+          0.42857142857142855,
+          0.42857142857142855
+        ],
+        "loss_db": 0.04526449522115092,
+        "over_budget": false,
+        "mac_saved_pct": 31.671221645874315,
+        "risk_probability": 0.32687796124067175,
+        "flagged": true
+      },
+      {
+        "image": "kodim24.png",
+        "qp": 16,
+        "scan_sha256": "0f74f24e69a9a37faf71ea761baec5ab061cd5cb7f0cf78b2fe9f0d027578122",
+        "transfer_sha256": "190d47f405475252dd67c22b4a8a196517b04215ecd4b92e2ef84918bb958e7e",
+        "exit_map": [
+          4,
+          4,
+          3,
+          3,
+          3,
+          3
+        ],
+        "features": [
+          0.25396825396825395,
+          1.3333333333333335,
+          1.0,
+          0.0,
+          0.6666666666666666,
+          0.42857142857142855,
+          0.42857142857142855
+        ],
+        "loss_db": 0.04804170505240915,
+        "over_budget": false,
+        "mac_saved_pct": 20.487596186203294,
+        "risk_probability": 0.14868218609905393,
+        "flagged": false
+      },
+      {
+        "image": "kodim24.png",
+        "qp": 32,
+        "scan_sha256": "37cb7896066f58ce7a7bb7bf048954e0df94228d92cc90fe81e919cf1091a590",
+        "transfer_sha256": "e8ae29ab0e30435b8e28793f143c9285c949217f3af05ee9aaef9e45932fba17",
+        "exit_map": [
+          5,
+          5,
+          4,
+          3,
+          3,
+          3
+        ],
+        "features": [
+          0.5079365079365079,
+          1.8333333333333335,
+          1.0,
+          0.3333333333333333,
+          0.5,
+          0.8571428571428571,
+          0.5714285714285714
+        ],
+        "loss_db": 0.05355515633549593,
+        "over_budget": false,
+        "mac_saved_pct": 13.963206203979784,
+        "risk_probability": 0.2477489945256726,
+        "flagged": true
+      },
+      {
+        "image": "kodim24.png",
+        "qp": 48,
+        "scan_sha256": "6556e83aeccb0ab7c70edc03d683966ab74f0a308aa18261ef6c0d05e3efff22",
+        "transfer_sha256": "fcceb4ac1c9ed71e0f3da7e4a0d3ea96868789d71ceb62b5ea487b97f08a5c74",
+        "exit_map": [
+          5,
+          5,
+          4,
+          3,
+          3,
+          3
+        ],
+        "features": [
+          0.7619047619047619,
+          1.8333333333333335,
+          1.0,
+          0.3333333333333333,
+          0.5,
+          0.8571428571428571,
+          0.5714285714285714
+        ],
+        "loss_db": 0.09689287482563246,
+        "over_budget": false,
+        "mac_saved_pct": 13.963206203979784,
+        "risk_probability": 0.34085806603548474,
+        "flagged": true
+      },
+      {
+        "image": "kodim24.png",
+        "qp": 63,
+        "scan_sha256": "08dd41850530b5e9b3abd25892a9bfc09db2facd6201f7704f7857e92a918782",
+        "transfer_sha256": "31f37f96c3659b480423fa7002cf18db6f67287993bb44c0cf35633f5c7b3e59",
+        "exit_map": [
+          5,
+          5,
+          5,
+          5,
+          3,
+          3
+        ],
+        "features": [
+          1.0,
+          2.333333333333333,
+          1.0,
+          0.6666666666666666,
+          0.3333333333333333,
+          0.8571428571428571,
+          0.42857142857142855
+        ],
+        "loss_db": 0.0559026448760354,
+        "over_budget": false,
+        "mac_saved_pct": 7.438813241524034,
+        "risk_probability": 0.37049387101597053,
+        "flagged": true
+      }
+    ]
+  }
 }
