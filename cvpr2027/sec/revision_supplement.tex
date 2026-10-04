@@ -316,6 +316,14 @@ would remove those 29 but lower mean saving to 13.48\%. The candidate-grid
 oracle retains 21.60\% because it chooses cheaper feasible maps rather
 than always sending a risky frame to all-deep. This gap is a motivation for
 a decoder-available risk signal, not a measured router result.
+As a first negative control, we fitted a fixed L2 logistic risk score from
+decoder-visible QP and six-tile exit-map summaries on the 24 calibration
+images, then evaluated once on the disjoint 24-image DIV2K set. Its
+violation AUC drops from 0.785 to 0.646, slightly below the 0.651 AUC of
+mean exit depth alone. A calibration-locked threshold flags 74/120
+validation cases yet misses 7/35 violations. Map geometry alone is not a
+reliable quality guard in this pilot; additional decoder-available evidence
+and a fresh cohort are required before proposing a fallback policy.
 Conversely, a fixed per-QP Q90 calibration rule reduces mean saving to
 11.20\% on these calibration cases. These are explanatory calibration
 ablations, not external transfer results. They show why simply tightening

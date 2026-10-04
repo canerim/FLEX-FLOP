@@ -1,0 +1,3332 @@
+{
+  "schema": 1,
+  "scope": "Post-hoc exploratory route/QP-only risk fit; source-quality labels, no source-quality input; no deployment claim",
+  "manifest_sha256": "0468dc26738fcc16024abd224ba2c805ee25911553f68896f9ddafbaedadf922",
+  "policy_sha256": "80f0a2f1d9cdda4931a956878a07df05c646e9c6a621c48d0593d3a10a1c5e47",
+  "feature_names": [
+    "qp_scaled",
+    "mean_depth_minus_2",
+    "min_depth_minus_2",
+    "fraction_deepest",
+    "fraction_shallow",
+    "mean_edge_jump",
+    "fraction_unequal_edges"
+  ],
+  "regularization_l2": 1.0,
+  "feature_mean_calibration": [
+    0.5047619047619043,
+    1.3486111111111114,
+    0.825,
+    0.23055555555555557,
+    0.5986111111111111,
+    0.3821428571428572,
+    0.3154761904761905
+  ],
+  "feature_std_calibration": [
+    0.3547041961514518,
+    1.0016180967456587,
+    0.9631761694172748,
+    0.3671608622462808,
+    0.3964517586208698,
+    0.36100883777600357,
+    0.2600992964060644
+  ],
+  "coefficients_intercept_first": [
+    -1.2114304081965472,
+    0.6301412322216751,
+    -0.3100494166827761,
+    -0.7970215794962432,
+    0.4440610493516631,
+    0.46190487471914354,
+    -0.184350605466138,
+    0.633237182055954
+  ],
+  "threshold_rule": "Calibration score cutoff for at least 80% violation recall, selected without validation labels",
+  "calibration": {
+    "auc": 0.7852257181942545,
+    "average_precision": 0.6567480689544449,
+    "brier": 0.1560424050559787,
+    "threshold": 0.1990706677594344,
+    "tp": 30,
+    "fp": 43,
+    "fn": 4,
+    "tn": 43,
+    "recall": 0.8823529411764706,
+    "precision": 0.410958904109589,
+    "flagged_fraction": 0.6083333333333333
+  },
+  "validation": {
+    "auc": 0.6463865546218487,
+    "average_precision": 0.39650262475081116,
+    "brier": 0.20851188530950443,
+    "threshold": 0.1990706677594344,
+    "tp": 28,
+    "fp": 46,
+    "fn": 7,
+    "tn": 39,
+    "recall": 0.8,
+    "precision": 0.3783783783783784,
+    "flagged_fraction": 0.6166666666666667
+  },
+  "baseline_validation_mean_depth_auc": 0.6505882352941177,
+  "baseline_validation_qp_auc": 0.45966386554621846,
+  "validation_image_cluster_bootstrap": {
+    "seed": 20261004,
+    "draws_requested": 2000,
+    "draws_valid": 2000,
+    "risk_auc_95pct": [
+      0.4748073757518202,
+      0.8029564854271886
+    ],
+    "risk_minus_mean_depth_auc_95pct": [
+      -0.13031854786308658,
+      0.11672530088564935
+    ],
+    "recall_at_locked_threshold_95pct": [
+      0.6486089030206678,
+      0.9428571428571428
+    ]
+  },
+  "validation_rows": [
+    {
+      "image": "0844.png",
+      "qp": 0,
+      "case_sha256": "d4c862309f85815dfa39fc3e686374dcdce8e23a748e50377e38d08f9ab03a6f",
+      "exit_map": [
+        2,
+        2,
+        2,
+        2,
+        3,
+        2
+      ],
+      "features": [
+        0.0,
+        0.16666666666666652,
+        0.0,
+        0.0,
+        1.0,
+        0.42857142857142855,
+        0.42857142857142855
+      ],
+      "loss_db": 0.25339288575537905,
+      "over_budget": true,
+      "mac_saved_pct": 36.64011219362669,
+      "risk_probability": 0.34997322361030725,
+      "flagged": true
+    },
+    {
+      "image": "0844.png",
+      "qp": 16,
+      "case_sha256": "221395dbcbe2db709735bcb67bfd6c58b4f68da7328d6d2f01ec46bc51fc3782",
+      "exit_map": [
+        2,
+        2,
+        2,
+        2,
+        3,
+        3
+      ],
+      "features": [
+        0.25396825396825395,
+        0.3333333333333335,
+        0.0,
+        0.0,
+        1.0,
+        0.42857142857142855,
+        0.42857142857142855
+      ],
+      "loss_db": 0.22342614134725772,
+      "over_budget": true,
+      "mac_saved_pct": 34.1556669197505,
+      "risk_probability": 0.44532768808100004,
+      "flagged": true
+    },
+    {
+      "image": "0844.png",
+      "qp": 32,
+      "case_sha256": "86f7433d1927a52945c3ac50d674113f7727c67e863cc8438d470fc39d94ac4a",
+      "exit_map": [
+        2,
+        2,
+        2,
+        2,
+        3,
+        3
+      ],
+      "features": [
+        0.5079365079365079,
+        0.3333333333333335,
+        0.0,
+        0.0,
+        1.0,
+        0.42857142857142855,
+        0.42857142857142855
+      ],
+      "loss_db": 0.2852866732880792,
+      "over_budget": true,
+      "mac_saved_pct": 34.1556669197505,
+      "risk_probability": 0.5576460500210256,
+      "flagged": true
+    },
+    {
+      "image": "0844.png",
+      "qp": 48,
+      "case_sha256": "d3f631cb406d5535814a236d29983f58d77fe498158cbcca8327016a7d3c0114",
+      "exit_map": [
+        2,
+        2,
+        2,
+        2,
+        3,
+        3
+      ],
+      "features": [
+        0.7619047619047619,
+        0.3333333333333335,
+        0.0,
+        0.0,
+        1.0,
+        0.42857142857142855,
+        0.42857142857142855
+      ],
+      "loss_db": 0.49610332799045137,
+      "over_budget": true,
+      "mac_saved_pct": 34.1556669197505,
+      "risk_probability": 0.6643622933507207,
+      "flagged": true
+    },
+    {
+      "image": "0844.png",
+      "qp": 63,
+      "case_sha256": "abd762aa51bddb599b2ae52c735f73adc077dda6ca1dffe5fffd035dff34baed",
+      "exit_map": [
+        2,
+        2,
+        2,
+        2,
+        5,
+        5
+      ],
+      "features": [
+        1.0,
+        1.0,
+        0.0,
+        0.3333333333333333,
+        0.6666666666666666,
+        1.2857142857142858,
+        0.42857142857142855
+      ],
+      "loss_db": 0.19283470414440892,
+      "over_budget": true,
+      "mac_saved_pct": 25.76612988333159,
+      "risk_probability": 0.6169190039849763,
+      "flagged": true
+    },
+    {
+      "image": "0892.png",
+      "qp": 0,
+      "case_sha256": "c73f7641ea517f555596bd40b260f03217c7b56970410ca288a27140c141fa56",
+      "exit_map": [
+        3,
+        3,
+        2,
+        2,
+        3,
+        3
+      ],
+      "features": [
+        0.0,
+        0.6666666666666665,
+        0.0,
+        0.0,
+        1.0,
+        0.5714285714285714,
+        0.5714285714285714
+      ],
+      "loss_db": 0.21475443480906609,
+      "over_budget": true,
+      "mac_saved_pct": 29.186777862114244,
+      "risk_probability": 0.37775641266862253,
+      "flagged": true
+    },
+    {
+      "image": "0892.png",
+      "qp": 16,
+      "case_sha256": "82cdef9ceb196052a4f49e92e01329c8b92d3cbd18dc61959ffd8084ada94b36",
+      "exit_map": [
+        3,
+        3,
+        3,
+        4,
+        4,
+        4
+      ],
+      "features": [
+        0.25396825396825395,
+        1.5,
+        1.0,
+        0.0,
+        0.5,
+        0.42857142857142855,
+        0.42857142857142855
+      ],
+      "loss_db": 0.13782537937560613,
+      "over_budget": true,
+      "mac_saved_pct": 18.62244764189177,
+      "risk_probability": 0.12017766810129706,
+      "flagged": false
+    },
+    {
+      "image": "0892.png",
+      "qp": 32,
+      "case_sha256": "e552c47dc20fdf86a7ea39c7f816680a48c6127a6a0c1ab8db62fe004322a587",
+      "exit_map": [
+        3,
+        3,
+        3,
+        4,
+        4,
+        4
+      ],
+      "features": [
+        0.5079365079365079,
+        1.5,
+        1.0,
+        0.0,
+        0.5,
+        0.42857142857142855,
+        0.42857142857142855
+      ],
+      "loss_db": 0.21954496042249638,
+      "over_budget": true,
+      "mac_saved_pct": 18.62244764189177,
+      "risk_probability": 0.17659814675975152,
+      "flagged": false
+    },
+    {
+      "image": "0892.png",
+      "qp": 48,
+      "case_sha256": "e6f658e8537b19e6f48c2ab13cde42d28727aa1c1695449cdf65361197bbefd1",
+      "exit_map": [
+        3,
+        4,
+        3,
+        4,
+        4,
+        4
+      ],
+      "features": [
+        0.7619047619047619,
+        1.6666666666666665,
+        1.0,
+        0.0,
+        0.3333333333333333,
+        0.5714285714285714,
+        0.5714285714285714
+      ],
+      "loss_db": 0.32963187125528376,
+      "over_budget": true,
+      "mac_saved_pct": 16.757299097580248,
+      "risk_probability": 0.2574410416122047,
+      "flagged": true
+    },
+    {
+      "image": "0892.png",
+      "qp": 63,
+      "case_sha256": "d9d2e165a0252ccdb0849c952a0b32a8b37b480a910f79f2e2d129771e447d0b",
+      "exit_map": [
+        5,
+        5,
+        5,
+        5,
+        5,
+        5
+      ],
+      "features": [
+        1.0,
+        3.0,
+        3.0,
+        1.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "loss_db": 0.08285816112332808,
+      "over_budget": false,
+      "mac_saved_pct": -0.9507193245465118,
+      "risk_probability": 0.048229026604598414,
+      "flagged": false
+    },
+    {
+      "image": "0891.png",
+      "qp": 0,
+      "case_sha256": "93e1afd248e092c29890f999ea5bc17789e5235ad9b2391d7c2edbb6f163cd04",
+      "exit_map": [
+        3,
+        3,
+        3,
+        3,
+        2,
+        3
+      ],
+      "features": [
+        0.0,
+        0.8333333333333335,
+        0.0,
+        0.0,
+        1.0,
+        0.42857142857142855,
+        0.42857142857142855
+      ],
+      "loss_db": 0.16160474192346685,
+      "over_budget": true,
+      "mac_saved_pct": 26.702334078354173,
+      "risk_probability": 0.30459262425214606,
+      "flagged": true
+    },
+    {
+      "image": "0891.png",
+      "qp": 16,
+      "case_sha256": "aa123a53478a01e25ccfe3bf4cc7a0b708bcdd787d981144c4a7e0e8c51aff53",
+      "exit_map": [
+        5,
+        4,
+        4,
+        3,
+        3,
+        4
+      ],
+      "features": [
+        0.25396825396825395,
+        1.8333333333333335,
+        1.0,
+        0.16666666666666666,
+        0.3333333333333333,
+        0.7142857142857143,
+        0.5714285714285714
+      ],
+      "loss_db": 0.12054509903845893,
+      "over_budget": true,
+      "mac_saved_pct": 14.427678378624254,
+      "risk_probability": 0.13185662642171683,
+      "flagged": false
+    },
+    {
+      "image": "0891.png",
+      "qp": 32,
+      "case_sha256": "2f8788c102cb0f88f5997304955a3904d9a5426043a457b9d571b7348b55f0a7",
+      "exit_map": [
+        5,
+        5,
+        5,
+        3,
+        3,
+        4
+      ],
+      "features": [
+        0.5079365079365079,
+        2.166666666666667,
+        1.0,
+        0.5,
+        0.3333333333333333,
+        0.8571428571428571,
+        0.5714285714285714
+      ],
+      "loss_db": 0.13384888497287284,
+      "over_budget": true,
+      "mac_saved_pct": 9.768433960480028,
+      "risk_probability": 0.23033059741806738,
+      "flagged": true
+    },
+    {
+      "image": "0891.png",
+      "qp": 48,
+      "case_sha256": "473c9ff0f5a60f4fd43f2ce3dd11eb80519086d55ee1e7c13e9095b2a407c07e",
+      "exit_map": [
+        5,
+        5,
+        5,
+        4,
+        3,
+        5
+      ],
+      "features": [
+        0.7619047619047619,
+        2.5,
+        1.0,
+        0.6666666666666666,
+        0.16666666666666666,
+        0.8571428571428571,
+        0.5714285714285714
+      ],
+      "loss_db": 0.10506860410038489,
+      "over_budget": true,
+      "mac_saved_pct": 5.573670657676988,
+      "risk_probability": 0.2992114495274476,
+      "flagged": true
+    },
+    {
+      "image": "0891.png",
+      "qp": 63,
+      "case_sha256": "398b0d5b829a556273c9c5483991d42018f622e59e8c9a099507707da61f6b0f",
+      "exit_map": [
+        5,
+        5,
+        5,
+        5,
+        5,
+        5
+      ],
+      "features": [
+        1.0,
+        3.0,
+        3.0,
+        1.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "loss_db": 0.08265387040060766,
+      "over_budget": false,
+      "mac_saved_pct": -0.9507193245465118,
+      "risk_probability": 0.048229026604598414,
+      "flagged": false
+    },
+    {
+      "image": "0819.png",
+      "qp": 0,
+      "case_sha256": "e042552766d5ccf82331709037b73d5dce20b4aca969246ade13aef73c02cb61",
+      "exit_map": [
+        2,
+        2,
+        2,
+        2,
+        2,
+        2
+      ],
+      "features": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        1.0,
+        0.0,
+        0.0
+      ],
+      "loss_db": 0.04980288574013557,
+      "over_budget": false,
+      "mac_saved_pct": 39.12455746750288,
+      "risk_probability": 0.1990706677594344,
+      "flagged": true
+    },
+    {
+      "image": "0819.png",
+      "qp": 16,
+      "case_sha256": "41bf746d257e86c0c8c5eeae82b889346a25db55313da1bea4c708183797656a",
+      "exit_map": [
+        3,
+        3,
+        3,
+        3,
+        3,
+        3
+      ],
+      "features": [
+        0.25396825396825395,
+        1.0,
+        1.0,
+        0.0,
+        1.0,
+        0.0,
+        0.0
+      ],
+      "loss_db": 0.0398914178460032,
+      "over_budget": false,
+      "mac_saved_pct": 24.217887314361864,
+      "risk_probability": 0.11125621407973084,
+      "flagged": false
+    },
+    {
+      "image": "0819.png",
+      "qp": 32,
+      "case_sha256": "a72c5c0a47356f353b965016c29d316ef904656aa848fec46b4096f4acdbed48",
+      "exit_map": [
+        3,
+        3,
+        3,
+        3,
+        3,
+        3
+      ],
+      "features": [
+        0.5079365079365079,
+        1.0,
+        1.0,
+        0.0,
+        1.0,
+        0.0,
+        0.0
+      ],
+      "loss_db": 0.07659237658624032,
+      "over_budget": false,
+      "mac_saved_pct": 24.217887314361864,
+      "risk_probability": 0.16427029877884008,
+      "flagged": false
+    },
+    {
+      "image": "0819.png",
+      "qp": 48,
+      "case_sha256": "862b1afc724969e306f6c08a916c035ab47304cb4eee743e02bd4f76a43268bd",
+      "exit_map": [
+        3,
+        3,
+        3,
+        3,
+        3,
+        3
+      ],
+      "features": [
+        0.7619047619047619,
+        1.0,
+        1.0,
+        0.0,
+        1.0,
+        0.0,
+        0.0
+      ],
+      "loss_db": 0.1500148217442574,
+      "over_budget": true,
+      "mac_saved_pct": 24.217887314361864,
+      "risk_probability": 0.2358423050236513,
+      "flagged": true
+    },
+    {
+      "image": "0819.png",
+      "qp": 63,
+      "case_sha256": "239c24b7cac23320aaffc24ef39396f6073a0201d8f60569c573b00b96a463a2",
+      "exit_map": [
+        5,
+        3,
+        3,
+        5,
+        5,
+        5
+      ],
+      "features": [
+        1.0,
+        2.333333333333333,
+        1.0,
+        0.6666666666666666,
+        0.3333333333333333,
+        0.8571428571428571,
+        0.42857142857142855
+      ],
+      "loss_db": 0.0799569074782276,
+      "over_budget": false,
+      "mac_saved_pct": 7.438813241524034,
+      "risk_probability": 0.37049387101597053,
+      "flagged": true
+    },
+    {
+      "image": "0871.png",
+      "qp": 0,
+      "case_sha256": "889a81258ab48ecfba4a59bc587e67b7ef575621a1f171c08858b1f92d221152",
+      "exit_map": [
+        2,
+        2,
+        2,
+        2,
+        2,
+        2
+      ],
+      "features": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        1.0,
+        0.0,
+        0.0
+      ],
+      "loss_db": 0.13458131739312273,
+      "over_budget": true,
+      "mac_saved_pct": 39.12455746750288,
+      "risk_probability": 0.1990706677594344,
+      "flagged": true
+    },
+    {
+      "image": "0871.png",
+      "qp": 16,
+      "case_sha256": "5840c9b2df5ad7512be050cb70e12779711671014fefd32e19f105adf0e70546",
+      "exit_map": [
+        3,
+        3,
+        3,
+        3,
+        3,
+        3
+      ],
+      "features": [
+        0.25396825396825395,
+        1.0,
+        1.0,
+        0.0,
+        1.0,
+        0.0,
+        0.0
+      ],
+      "loss_db": 0.07035554811679871,
+      "over_budget": false,
+      "mac_saved_pct": 24.217887314361864,
+      "risk_probability": 0.11125621407973084,
+      "flagged": false
+    },
+    {
+      "image": "0871.png",
+      "qp": 32,
+      "case_sha256": "08c53ccd97034e7cd700c3768b200db78df76f35a9aee9b4ccfab5eaa6e19a65",
+      "exit_map": [
+        3,
+        3,
+        3,
+        3,
+        3,
+        3
+      ],
+      "features": [
+        0.5079365079365079,
+        1.0,
+        1.0,
+        0.0,
+        1.0,
+        0.0,
+        0.0
+      ],
+      "loss_db": 0.1137904610741479,
+      "over_budget": true,
+      "mac_saved_pct": 24.217887314361864,
+      "risk_probability": 0.16427029877884008,
+      "flagged": false
+    },
+    {
+      "image": "0871.png",
+      "qp": 48,
+      "case_sha256": "9b15a827b12ee4dda6c6ab8a9da019dec20885bb43f42da75b3077983c19b350",
+      "exit_map": [
+        3,
+        5,
+        3,
+        3,
+        3,
+        3
+      ],
+      "features": [
+        0.7619047619047619,
+        1.3333333333333335,
+        1.0,
+        0.16666666666666666,
+        0.8333333333333334,
+        0.8571428571428571,
+        0.42857142857142855
+      ],
+      "loss_db": 0.16719693753412251,
+      "over_budget": true,
+      "mac_saved_pct": 20.023121031326585,
+      "risk_probability": 0.3394588639590206,
+      "flagged": true
+    },
+    {
+      "image": "0871.png",
+      "qp": 63,
+      "case_sha256": "d8bad15ec71f4d189ed1baa9d6456217b844e61960d44069bc258c79a593baa6",
+      "exit_map": [
+        5,
+        5,
+        5,
+        5,
+        5,
+        5
+      ],
+      "features": [
+        1.0,
+        3.0,
+        3.0,
+        1.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "loss_db": 0.07516297417523607,
+      "over_budget": false,
+      "mac_saved_pct": -0.9507193245465118,
+      "risk_probability": 0.048229026604598414,
+      "flagged": false
+    },
+    {
+      "image": "0897.png",
+      "qp": 0,
+      "case_sha256": "04f0eaa5e877770139139f2327d1d974417f9e29c66ff11174656619c4502a71",
+      "exit_map": [
+        3,
+        3,
+        3,
+        3,
+        3,
+        3
+      ],
+      "features": [
+        0.0,
+        1.0,
+        1.0,
+        0.0,
+        1.0,
+        0.0,
+        0.0
+      ],
+      "loss_db": 0.02440051444866021,
+      "over_budget": false,
+      "mac_saved_pct": 24.217887314361864,
+      "risk_probability": 0.0738394523996159,
+      "flagged": false
+    },
+    {
+      "image": "0897.png",
+      "qp": 16,
+      "case_sha256": "ff6480d9ac169768594d30385c2452fc6efcbcb9eb7486c5c108f4e5b399ec1b",
+      "exit_map": [
+        4,
+        4,
+        4,
+        4,
+        4,
+        4
+      ],
+      "features": [
+        0.25396825396825395,
+        2.0,
+        2.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "loss_db": 0.026579170521906628,
+      "over_budget": false,
+      "mac_saved_pct": 13.0270020089572,
+      "risk_probability": 0.012369045294067503,
+      "flagged": false
+    },
+    {
+      "image": "0897.png",
+      "qp": 32,
+      "case_sha256": "0f4f7525f035886a81bd97bbe8d30d908cca63c35cda96a6600a8420a96a74c1",
+      "exit_map": [
+        4,
+        4,
+        4,
+        4,
+        4,
+        4
+      ],
+      "features": [
+        0.5079365079365079,
+        2.0,
+        2.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "loss_db": 0.05552990304537108,
+      "over_budget": false,
+      "mac_saved_pct": 13.0270020089572,
+      "risk_probability": 0.019285442949796703,
+      "flagged": false
+    },
+    {
+      "image": "0897.png",
+      "qp": 48,
+      "case_sha256": "1f94b70d9aa5531ab723452334c944b6dbb4faf6e8e5bffc33644ecbf61604b3",
+      "exit_map": [
+        5,
+        5,
+        5,
+        5,
+        5,
+        5
+      ],
+      "features": [
+        0.7619047619047619,
+        3.0,
+        3.0,
+        1.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "loss_db": 0.024476934389970128,
+      "over_budget": false,
+      "mac_saved_pct": -0.9507193245465118,
+      "risk_probability": 0.032128813422313225,
+      "flagged": false
+    },
+    {
+      "image": "0897.png",
+      "qp": 63,
+      "case_sha256": "dc475c3869706a41e31c79e9771042e2f62479b64dd04a332e9828ccad376118",
+      "exit_map": [
+        5,
+        5,
+        5,
+        5,
+        5,
+        5
+      ],
+      "features": [
+        1.0,
+        3.0,
+        3.0,
+        1.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "loss_db": 0.04024433159604812,
+      "over_budget": false,
+      "mac_saved_pct": -0.9507193245465118,
+      "risk_probability": 0.048229026604598414,
+      "flagged": false
+    },
+    {
+      "image": "0839.png",
+      "qp": 0,
+      "case_sha256": "c277c6132b76f246f9ec69d2c61a2dd1cb6d268f8a1f0bcec884e7208801cbcb",
+      "exit_map": [
+        2,
+        2,
+        2,
+        2,
+        2,
+        2
+      ],
+      "features": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        1.0,
+        0.0,
+        0.0
+      ],
+      "loss_db": 0.06928406077958488,
+      "over_budget": false,
+      "mac_saved_pct": 39.12455746750288,
+      "risk_probability": 0.1990706677594344,
+      "flagged": true
+    },
+    {
+      "image": "0839.png",
+      "qp": 16,
+      "case_sha256": "02f080154b92f22da57398e04f48c7811794bae7bcd0ba93cfe8963853110a1e",
+      "exit_map": [
+        3,
+        2,
+        2,
+        2,
+        3,
+        2
+      ],
+      "features": [
+        0.25396825396825395,
+        0.3333333333333335,
+        0.0,
+        0.0,
+        1.0,
+        0.7142857142857143,
+        0.7142857142857143
+      ],
+      "loss_db": 0.03682373955295091,
+      "over_budget": false,
+      "mac_saved_pct": 34.1556669197505,
+      "risk_probability": 0.5817912791062491,
+      "flagged": true
+    },
+    {
+      "image": "0839.png",
+      "qp": 32,
+      "case_sha256": "bc776e6daa57b38bd94451ef7f79f71eabdbf336881ae105c9c076530f2e98c7",
+      "exit_map": [
+        2,
+        2,
+        2,
+        2,
+        2,
+        2
+      ],
+      "features": [
+        0.5079365079365079,
+        0.0,
+        0.0,
+        0.0,
+        1.0,
+        0.0,
+        0.0
+      ],
+      "loss_db": 0.0494927143308834,
+      "over_budget": false,
+      "mac_saved_pct": 39.12455746750288,
+      "risk_probability": 0.37995236357073053,
+      "flagged": true
+    },
+    {
+      "image": "0839.png",
+      "qp": 48,
+      "case_sha256": "29fd789e3e2566767bbf0bb4478fbeebd2bd92b754e6fb68b9945f88bc33cf7d",
+      "exit_map": [
+        2,
+        2,
+        3,
+        2,
+        2,
+        2
+      ],
+      "features": [
+        0.7619047619047619,
+        0.16666666666666652,
+        0.0,
+        0.0,
+        1.0,
+        0.2857142857142857,
+        0.2857142857142857
+      ],
+      "loss_db": 0.06021074715184046,
+      "over_budget": false,
+      "mac_saved_pct": 36.64011219362669,
+      "risk_probability": 0.6129044769787476,
+      "flagged": true
+    },
+    {
+      "image": "0839.png",
+      "qp": 63,
+      "case_sha256": "e31cb23c0851199a7f4743aabd3b324a320968dda74d8301ec3bd21fdb4c9b28",
+      "exit_map": [
+        2,
+        2,
+        3,
+        2,
+        2,
+        2
+      ],
+      "features": [
+        1.0,
+        0.16666666666666652,
+        0.0,
+        0.0,
+        1.0,
+        0.2857142857142857,
+        0.2857142857142857
+      ],
+      "loss_db": 0.08950589684670227,
+      "over_budget": false,
+      "mac_saved_pct": 36.64011219362669,
+      "risk_probability": 0.7073441521308672,
+      "flagged": true
+    },
+    {
+      "image": "0833.png",
+      "qp": 0,
+      "case_sha256": "6d15a86ed203262bca56a37798c4f96037df5b837333c5b326cd8fb84757c79b",
+      "exit_map": [
+        2,
+        2,
+        3,
+        2,
+        2,
+        2
+      ],
+      "features": [
+        0.0,
+        0.16666666666666652,
+        0.0,
+        0.0,
+        1.0,
+        0.2857142857142857,
+        0.2857142857142857
+      ],
+      "loss_db": 0.15543981004696814,
+      "over_budget": true,
+      "mac_saved_pct": 36.64011219362669,
+      "risk_probability": 0.2902838162535859,
+      "flagged": true
+    },
+    {
+      "image": "0833.png",
+      "qp": 16,
+      "case_sha256": "a4384dbc7947f9d28807806cc05ab8289164180e1d60b0939a9e849864a83a15",
+      "exit_map": [
+        3,
+        3,
+        3,
+        2,
+        2,
+        2
+      ],
+      "features": [
+        0.25396825396825395,
+        0.5,
+        0.0,
+        0.0,
+        1.0,
+        0.42857142857142855,
+        0.42857142857142855
+      ],
+      "loss_db": 0.08614055224213063,
+      "over_budget": false,
+      "mac_saved_pct": 31.671221645874315,
+      "risk_probability": 0.432622696215587,
+      "flagged": true
+    },
+    {
+      "image": "0833.png",
+      "qp": 32,
+      "case_sha256": "449dc2cc5f06192d875878a8b9fcf5063f3d03d40ac9d0bf54a02afe688ac0f8",
+      "exit_map": [
+        3,
+        3,
+        3,
+        2,
+        2,
+        2
+      ],
+      "features": [
+        0.5079365079365079,
+        0.5,
+        0.0,
+        0.0,
+        1.0,
+        0.42857142857142855,
+        0.42857142857142855
+      ],
+      "loss_db": 0.09216813031687492,
+      "over_budget": false,
+      "mac_saved_pct": 31.671221645874315,
+      "risk_probability": 0.5448845131830807,
+      "flagged": true
+    },
+    {
+      "image": "0833.png",
+      "qp": 48,
+      "case_sha256": "e129fe8aedcedf1e462dca54885b702ba6890f025db87a3ba410cfe5ad5245b8",
+      "exit_map": [
+        3,
+        3,
+        3,
+        2,
+        2,
+        2
+      ],
+      "features": [
+        0.7619047619047619,
+        0.5,
+        0.0,
+        0.0,
+        1.0,
+        0.42857142857142855,
+        0.42857142857142855
+      ],
+      "loss_db": 0.08816763565458774,
+      "over_budget": false,
+      "mac_saved_pct": 31.671221645874315,
+      "risk_probability": 0.6527623873114456,
+      "flagged": true
+    },
+    {
+      "image": "0833.png",
+      "qp": 63,
+      "case_sha256": "8f2ebf999e5895e4cb385f81e4fa42035657c99b410948d25d2c92cec0562f58",
+      "exit_map": [
+        3,
+        3,
+        3,
+        2,
+        2,
+        2
+      ],
+      "features": [
+        1.0,
+        0.5,
+        0.0,
+        0.0,
+        1.0,
+        0.42857142857142855,
+        0.42857142857142855
+      ],
+      "loss_db": 0.08638428491360887,
+      "over_budget": false,
+      "mac_saved_pct": 31.671221645874315,
+      "risk_probability": 0.7415779655255703,
+      "flagged": true
+    },
+    {
+      "image": "0849.png",
+      "qp": 0,
+      "case_sha256": "0c61c1dfaead90b734cbba2e642ac679723efeccee127153a229b48007799f0f",
+      "exit_map": [
+        3,
+        3,
+        3,
+        3,
+        3,
+        3
+      ],
+      "features": [
+        0.0,
+        1.0,
+        1.0,
+        0.0,
+        1.0,
+        0.0,
+        0.0
+      ],
+      "loss_db": 0.03361957513264643,
+      "over_budget": false,
+      "mac_saved_pct": 24.217887314361864,
+      "risk_probability": 0.0738394523996159,
+      "flagged": false
+    },
+    {
+      "image": "0849.png",
+      "qp": 16,
+      "case_sha256": "af1de254867a81596346baca3c54590c3e9aeef75d1efb43b90fc99625c8dd7f",
+      "exit_map": [
+        4,
+        4,
+        4,
+        4,
+        4,
+        4
+      ],
+      "features": [
+        0.25396825396825395,
+        2.0,
+        2.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "loss_db": 0.043296307316036294,
+      "over_budget": false,
+      "mac_saved_pct": 13.0270020089572,
+      "risk_probability": 0.012369045294067503,
+      "flagged": false
+    },
+    {
+      "image": "0849.png",
+      "qp": 32,
+      "case_sha256": "1785c6862a7a729862a48bc05ad322301698b6facc8f55f1a58ce4696bc9fc32",
+      "exit_map": [
+        5,
+        5,
+        5,
+        5,
+        5,
+        5
+      ],
+      "features": [
+        0.5079365079365079,
+        3.0,
+        3.0,
+        1.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "loss_db": 0.016354802848999307,
+      "over_budget": false,
+      "mac_saved_pct": -0.9507193245465118,
+      "risk_probability": 0.02070359556787263,
+      "flagged": false
+    },
+    {
+      "image": "0849.png",
+      "qp": 48,
+      "case_sha256": "c97b56087fbd68452362f9a72a849f612ae5e7bb1c2e8cfd70c9136931929834",
+      "exit_map": [
+        5,
+        5,
+        5,
+        5,
+        5,
+        5
+      ],
+      "features": [
+        0.7619047619047619,
+        3.0,
+        3.0,
+        1.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "loss_db": 0.026188862801792175,
+      "over_budget": false,
+      "mac_saved_pct": -0.9507193245465118,
+      "risk_probability": 0.032128813422313225,
+      "flagged": false
+    },
+    {
+      "image": "0849.png",
+      "qp": 63,
+      "case_sha256": "0b4be46a2b21193da50674f2c59a0e64f91019969fe60287ddcdbd8e1036e417",
+      "exit_map": [
+        5,
+        5,
+        5,
+        5,
+        5,
+        5
+      ],
+      "features": [
+        1.0,
+        3.0,
+        3.0,
+        1.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "loss_db": 0.0363772580738652,
+      "over_budget": false,
+      "mac_saved_pct": -0.9507193245465118,
+      "risk_probability": 0.048229026604598414,
+      "flagged": false
+    },
+    {
+      "image": "0881.png",
+      "qp": 0,
+      "case_sha256": "19213d30aef0dff6eac1a975bea7656d61a2f1096970dcdc2d91cf5abd1fabfc",
+      "exit_map": [
+        2,
+        3,
+        2,
+        2,
+        3,
+        3
+      ],
+      "features": [
+        0.0,
+        0.5,
+        0.0,
+        0.0,
+        1.0,
+        0.5714285714285714,
+        0.5714285714285714
+      ],
+      "loss_db": 0.029936950315611485,
+      "over_budget": false,
+      "mac_saved_pct": 31.671221645874315,
+      "risk_probability": 0.38995755526197606,
+      "flagged": true
+    },
+    {
+      "image": "0881.png",
+      "qp": 16,
+      "case_sha256": "4bcbb6d2b36cacad0730c50b7480833d34732c2532ff1160fb7ef14b72defa82",
+      "exit_map": [
+        3,
+        3,
+        3,
+        3,
+        3,
+        3
+      ],
+      "features": [
+        0.25396825396825395,
+        1.0,
+        1.0,
+        0.0,
+        1.0,
+        0.0,
+        0.0
+      ],
+      "loss_db": 0.027710564082038047,
+      "over_budget": false,
+      "mac_saved_pct": 24.217887314361864,
+      "risk_probability": 0.11125621407973084,
+      "flagged": false
+    },
+    {
+      "image": "0881.png",
+      "qp": 32,
+      "case_sha256": "fece8340500cb7d565961bc9352ce631e501b75d8d2843e76d2ecbac5f8ac07f",
+      "exit_map": [
+        3,
+        3,
+        3,
+        3,
+        4,
+        3
+      ],
+      "features": [
+        0.5079365079365079,
+        1.1666666666666665,
+        1.0,
+        0.0,
+        0.8333333333333334,
+        0.42857142857142855,
+        0.42857142857142855
+      ],
+      "loss_db": 0.040704588040620694,
+      "over_budget": false,
+      "mac_saved_pct": 22.35273877005034,
+      "risk_probability": 0.2596056977189449,
+      "flagged": true
+    },
+    {
+      "image": "0881.png",
+      "qp": 48,
+      "case_sha256": "3678a889809b210f29394a2b49f71eeb2b7446ea6b1c5fc85039796a43e9ea97",
+      "exit_map": [
+        3,
+        4,
+        4,
+        3,
+        4,
+        4
+      ],
+      "features": [
+        0.7619047619047619,
+        1.6666666666666665,
+        1.0,
+        0.0,
+        0.3333333333333333,
+        0.2857142857142857,
+        0.2857142857142857
+      ],
+      "loss_db": 0.05866620871016458,
+      "over_budget": false,
+      "mac_saved_pct": 16.757299097580248,
+      "risk_probability": 0.1667261378152756,
+      "flagged": false
+    },
+    {
+      "image": "0881.png",
+      "qp": 63,
+      "case_sha256": "aeb9d541dee8e8c8aa5e9009209b877ba2305d0b9b63a629d18746d44bb55077",
+      "exit_map": [
+        3,
+        5,
+        5,
+        3,
+        5,
+        5
+      ],
+      "features": [
+        1.0,
+        2.333333333333333,
+        1.0,
+        0.6666666666666666,
+        0.3333333333333333,
+        0.5714285714285714,
+        0.2857142857142857
+      ],
+      "loss_db": 0.05727063595891923,
+      "over_budget": false,
+      "mac_saved_pct": 7.438813241524034,
+      "risk_probability": 0.3247566009064074,
+      "flagged": true
+    },
+    {
+      "image": "0823.png",
+      "qp": 0,
+      "case_sha256": "603a50fd3294684780f1df15ab4c4dd8e8ff743dfcbec2f5bfda0444b4ddb851",
+      "exit_map": [
+        2,
+        2,
+        2,
+        3,
+        3,
+        2
+      ],
+      "features": [
+        0.0,
+        0.3333333333333335,
+        0.0,
+        0.0,
+        1.0,
+        0.42857142857142855,
+        0.42857142857142855
+      ],
+      "loss_db": 0.04633554409604486,
+      "over_budget": false,
+      "mac_saved_pct": 34.1556669197505,
+      "risk_probability": 0.3383292970518303,
+      "flagged": true
+    },
+    {
+      "image": "0823.png",
+      "qp": 16,
+      "case_sha256": "6e8c53fc89d444a6cc24d8b3d9729953d2d7c9986f1d97098362ca6a84d21373",
+      "exit_map": [
+        4,
+        3,
+        2,
+        4,
+        4,
+        3
+      ],
+      "features": [
+        0.25396825396825395,
+        1.3333333333333335,
+        0.0,
+        0.0,
+        0.5,
+        0.7142857142857143,
+        0.7142857142857143
+      ],
+      "loss_db": 0.04536640345979826,
+      "over_budget": false,
+      "mac_saved_pct": 21.106888445419603,
+      "risk_probability": 0.36309267065380385,
+      "flagged": true
+    },
+    {
+      "image": "0823.png",
+      "qp": 32,
+      "case_sha256": "ee3e0f9401703c10ae9bfbcca312c50467b6ba2f2e488f67139cd2124c99f0c0",
+      "exit_map": [
+        4,
+        3,
+        2,
+        4,
+        4,
+        4
+      ],
+      "features": [
+        0.5079365079365079,
+        1.5,
+        0.0,
+        0.0,
+        0.3333333333333333,
+        0.7142857142857143,
+        0.5714285714285714
+      ],
+      "loss_db": 0.08871006672095268,
+      "over_budget": false,
+      "mac_saved_pct": 19.241745861572557,
+      "risk_probability": 0.3308465222729206,
+      "flagged": true
+    },
+    {
+      "image": "0823.png",
+      "qp": 48,
+      "case_sha256": "62fc062813af03edb8b458365fbfbca771b73170ae031215a7368acc010fb445",
+      "exit_map": [
+        5,
+        5,
+        2,
+        5,
+        5,
+        5
+      ],
+      "features": [
+        0.7619047619047619,
+        2.5,
+        0.0,
+        0.8333333333333334,
+        0.16666666666666666,
+        0.8571428571428571,
+        0.2857142857142857
+      ],
+      "loss_db": 0.036812238778346364,
+      "over_budget": false,
+      "mac_saved_pct": 5.7284937224810655,
+      "risk_probability": 0.37341646489912167,
+      "flagged": true
+    },
+    {
+      "image": "0823.png",
+      "qp": 63,
+      "case_sha256": "50fbfe2d0da4554b47677dbe9159a051106aa642158e6c81645845dfcf928890",
+      "exit_map": [
+        5,
+        5,
+        3,
+        5,
+        5,
+        5
+      ],
+      "features": [
+        1.0,
+        2.666666666666667,
+        1.0,
+        0.8333333333333334,
+        0.16666666666666666,
+        0.5714285714285714,
+        0.2857142857142857
+      ],
+      "loss_db": 0.056898127502802404,
+      "over_budget": false,
+      "mac_saved_pct": 3.2440469584887555,
+      "risk_probability": 0.3041128373127649,
+      "flagged": true
+    },
+    {
+      "image": "0898.png",
+      "qp": 0,
+      "case_sha256": "7838984800e09c710aec267d9ebd9f2043005e010853f3469658903882db6b02",
+      "exit_map": [
+        2,
+        3,
+        3,
+        2,
+        3,
+        2
+      ],
+      "features": [
+        0.0,
+        0.5,
+        0.0,
+        0.0,
+        1.0,
+        0.5714285714285714,
+        0.5714285714285714
+      ],
+      "loss_db": 0.11004456176949823,
+      "over_budget": true,
+      "mac_saved_pct": 31.671221645874315,
+      "risk_probability": 0.38995755526197606,
+      "flagged": true
+    },
+    {
+      "image": "0898.png",
+      "qp": 16,
+      "case_sha256": "1f934e9421e7d242cb2ee25b456da9fdcdf7ae4fb394944af27213826ec1515e",
+      "exit_map": [
+        3,
+        3,
+        4,
+        4,
+        4,
+        3
+      ],
+      "features": [
+        0.25396825396825395,
+        1.5,
+        1.0,
+        0.0,
+        0.5,
+        0.7142857142857143,
+        0.7142857142857143
+      ],
+      "loss_db": 0.09295287359203722,
+      "over_budget": false,
+      "mac_saved_pct": 18.62244764189177,
+      "risk_probability": 0.19138271938562654,
+      "flagged": false
+    },
+    {
+      "image": "0898.png",
+      "qp": 32,
+      "case_sha256": "dbab392c5237bc7575163ed8180042a3ad9a56a509194bc1e9013732b544049c",
+      "exit_map": [
+        3,
+        3,
+        5,
+        4,
+        4,
+        3
+      ],
+      "features": [
+        0.5079365079365079,
+        1.6666666666666665,
+        1.0,
+        0.16666666666666666,
+        0.5,
+        1.0,
+        0.7142857142857143
+      ],
+      "loss_db": 0.14568396338392653,
+      "over_budget": true,
+      "mac_saved_pct": 16.292826922935777,
+      "risk_probability": 0.27174489925110384,
+      "flagged": true
+    },
+    {
+      "image": "0898.png",
+      "qp": 48,
+      "case_sha256": "2c660a5df3328f2f689bffa023aaae92ccdd9601c8890a0fe1d0b3d3e21ccf01",
+      "exit_map": [
+        3,
+        5,
+        5,
+        5,
+        5,
+        3
+      ],
+      "features": [
+        0.7619047619047619,
+        2.333333333333333,
+        1.0,
+        0.6666666666666666,
+        0.3333333333333333,
+        1.1428571428571428,
+        0.5714285714285714
+      ],
+      "loss_db": 0.10799930861970353,
+      "over_budget": true,
+      "mac_saved_pct": 7.438813241524034,
+      "risk_probability": 0.32056368935625396,
+      "flagged": true
+    },
+    {
+      "image": "0898.png",
+      "qp": 63,
+      "case_sha256": "3acc033749b37f3fbc8ae5bf8af352634ad5b176cbbe38b88a0a16c2d2871292",
+      "exit_map": [
+        5,
+        5,
+        5,
+        5,
+        5,
+        5
+      ],
+      "features": [
+        1.0,
+        3.0,
+        3.0,
+        1.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "loss_db": 0.07132593576701943,
+      "over_budget": false,
+      "mac_saved_pct": -0.9507193245465118,
+      "risk_probability": 0.048229026604598414,
+      "flagged": false
+    },
+    {
+      "image": "0830.png",
+      "qp": 0,
+      "case_sha256": "dba6326e2acbaf7e58852c7675b6a46e290f8deff125f36363ba34c5430339ee",
+      "exit_map": [
+        3,
+        3,
+        3,
+        2,
+        3,
+        3
+      ],
+      "features": [
+        0.0,
+        0.8333333333333335,
+        0.0,
+        0.0,
+        1.0,
+        0.2857142857142857,
+        0.2857142857142857
+      ],
+      "loss_db": 0.035996816611489395,
+      "over_budget": false,
+      "mac_saved_pct": 26.702334078354173,
+      "risk_probability": 0.2496702518916478,
+      "flagged": true
+    },
+    {
+      "image": "0830.png",
+      "qp": 16,
+      "case_sha256": "34702c21056e7c7efed5d7415ea2d3fd7326de8d26689161120446767a253e2d",
+      "exit_map": [
+        4,
+        4,
+        4,
+        3,
+        3,
+        3
+      ],
+      "features": [
+        0.25396825396825395,
+        1.5,
+        1.0,
+        0.0,
+        0.5,
+        0.42857142857142855,
+        0.42857142857142855
+      ],
+      "loss_db": 0.03971089225910666,
+      "over_budget": false,
+      "mac_saved_pct": 18.62244764189177,
+      "risk_probability": 0.12017766810129706,
+      "flagged": false
+    },
+    {
+      "image": "0830.png",
+      "qp": 32,
+      "case_sha256": "183b50c15457557b53e00005d739dca7e279e681eb6f555bbcefd913bbe427ee",
+      "exit_map": [
+        3,
+        4,
+        4,
+        3,
+        4,
+        4
+      ],
+      "features": [
+        0.5079365079365079,
+        1.6666666666666665,
+        1.0,
+        0.0,
+        0.3333333333333333,
+        0.2857142857142857,
+        0.2857142857142857
+      ],
+      "loss_db": 0.06692059611733986,
+      "over_budget": false,
+      "mac_saved_pct": 16.757299097580248,
+      "risk_probability": 0.11302668144212247,
+      "flagged": false
+    },
+    {
+      "image": "0830.png",
+      "qp": 48,
+      "case_sha256": "7d9ba864d79c058eeaa4f6b010cbea29e9287df53e8af80737a2b121a065fceb",
+      "exit_map": [
+        5,
+        5,
+        5,
+        5,
+        5,
+        5
+      ],
+      "features": [
+        0.7619047619047619,
+        3.0,
+        3.0,
+        1.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "loss_db": 0.0157815306506871,
+      "over_budget": false,
+      "mac_saved_pct": -0.9507193245465118,
+      "risk_probability": 0.032128813422313225,
+      "flagged": false
+    },
+    {
+      "image": "0830.png",
+      "qp": 63,
+      "case_sha256": "0142eb34d5e90a57f604ae4995e619054dbd8403af2f7e5cf41b3c825cbddc6e",
+      "exit_map": [
+        5,
+        5,
+        5,
+        5,
+        5,
+        5
+      ],
+      "features": [
+        1.0,
+        3.0,
+        3.0,
+        1.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "loss_db": 0.026374762853566748,
+      "over_budget": false,
+      "mac_saved_pct": -0.9507193245465118,
+      "risk_probability": 0.048229026604598414,
+      "flagged": false
+    },
+    {
+      "image": "0813.png",
+      "qp": 0,
+      "case_sha256": "d2de702090c66a069a9f4ae2c09760fa63b9be03911aa067df9819647736ae1d",
+      "exit_map": [
+        2,
+        3,
+        2,
+        2,
+        3,
+        2
+      ],
+      "features": [
+        0.0,
+        0.3333333333333335,
+        0.0,
+        0.0,
+        1.0,
+        0.5714285714285714,
+        0.5714285714285714
+      ],
+      "loss_db": 0.06667983402134997,
+      "over_budget": false,
+      "mac_saved_pct": 34.1556669197505,
+      "risk_probability": 0.40229799557031726,
+      "flagged": true
+    },
+    {
+      "image": "0813.png",
+      "qp": 16,
+      "case_sha256": "6507caa074a7fb8f3c4e154b324f3ac07a078ed50ea58b1ad9e58c7d7d77a57c",
+      "exit_map": [
+        3,
+        4,
+        3,
+        3,
+        3,
+        3
+      ],
+      "features": [
+        0.25396825396825395,
+        1.1666666666666665,
+        1.0,
+        0.0,
+        0.8333333333333334,
+        0.42857142857142855,
+        0.42857142857142855
+      ],
+      "loss_db": 0.04160474790904333,
+      "over_budget": false,
+      "mac_saved_pct": 22.352744730514818,
+      "risk_probability": 0.18254484698943868,
+      "flagged": false
+    },
+    {
+      "image": "0813.png",
+      "qp": 32,
+      "case_sha256": "2bd0b5e1b8046a062989733f97c6594199800ea09c8c37d1e8f84df06e53b5f5",
+      "exit_map": [
+        3,
+        4,
+        2,
+        2,
+        3,
+        3
+      ],
+      "features": [
+        0.5079365079365079,
+        0.8333333333333335,
+        0.0,
+        0.0,
+        0.8333333333333334,
+        1.0,
+        0.8571428571428571
+      ],
+      "loss_db": 0.0776329328774289,
+      "over_budget": false,
+      "mac_saved_pct": 27.32163229803496,
+      "risk_probability": 0.6534533541011963,
+      "flagged": true
+    },
+    {
+      "image": "0813.png",
+      "qp": 48,
+      "case_sha256": "347a87b147a6ebd7983ce349d709f10918810cc4712f12ba01daa887b1be4be1",
+      "exit_map": [
+        3,
+        4,
+        2,
+        2,
+        3,
+        2
+      ],
+      "features": [
+        0.7619047619047619,
+        0.6666666666666665,
+        0.0,
+        0.0,
+        0.8333333333333334,
+        1.0,
+        0.8571428571428571
+      ],
+      "loss_db": 0.09711781192505983,
+      "over_budget": false,
+      "mac_saved_pct": 29.80607310156279,
+      "risk_probability": 0.7571332559939487,
+      "flagged": true
+    },
+    {
+      "image": "0813.png",
+      "qp": 63,
+      "case_sha256": "d36352c585f1ca9063a580fdd98136727c0d7ab4cf96aa6ca49f6b288560278e",
+      "exit_map": [
+        5,
+        5,
+        2,
+        2,
+        5,
+        3
+      ],
+      "features": [
+        1.0,
+        1.6666666666666665,
+        0.0,
+        0.5,
+        0.5,
+        1.7142857142857142,
+        0.7142857142857143
+      ],
+      "loss_db": 0.05492999799304192,
+      "over_budget": false,
+      "mac_saved_pct": 16.60247305254393,
+      "risk_probability": 0.6801072312751371,
+      "flagged": true
+    },
+    {
+      "image": "0803.png",
+      "qp": 0,
+      "case_sha256": "16e69fbbb82807c844fc9e150c79e20e330846eb3bdd206737244e1332b0302d",
+      "exit_map": [
+        2,
+        3,
+        3,
+        3,
+        3,
+        3
+      ],
+      "features": [
+        0.0,
+        0.8333333333333335,
+        0.0,
+        0.0,
+        1.0,
+        0.2857142857142857,
+        0.2857142857142857
+      ],
+      "loss_db": 0.2164592882913743,
+      "over_budget": true,
+      "mac_saved_pct": 26.702334078354173,
+      "risk_probability": 0.2496702518916478,
+      "flagged": true
+    },
+    {
+      "image": "0803.png",
+      "qp": 16,
+      "case_sha256": "a6a0cf291a57c40c7b4f5d16c5b168ad4494a6bcd0d8a360236e015733252c3a",
+      "exit_map": [
+        3,
+        3,
+        4,
+        3,
+        3,
+        3
+      ],
+      "features": [
+        0.25396825396825395,
+        1.1666666666666665,
+        1.0,
+        0.0,
+        0.8333333333333334,
+        0.2857142857142857,
+        0.2857142857142857
+      ],
+      "loss_db": 0.1809572341987353,
+      "over_budget": true,
+      "mac_saved_pct": 22.352744730514818,
+      "risk_probability": 0.145039483660426,
+      "flagged": false
+    },
+    {
+      "image": "0803.png",
+      "qp": 32,
+      "case_sha256": "44048dfcf7d7b2eb50d29662462e5a479782d17de2a5b3221f95a00063dc0aeb",
+      "exit_map": [
+        3,
+        3,
+        3,
+        3,
+        3,
+        3
+      ],
+      "features": [
+        0.5079365079365079,
+        1.0,
+        1.0,
+        0.0,
+        1.0,
+        0.0,
+        0.0
+      ],
+      "loss_db": 0.22684985696374965,
+      "over_budget": true,
+      "mac_saved_pct": 24.217887314361864,
+      "risk_probability": 0.16427029877884008,
+      "flagged": false
+    },
+    {
+      "image": "0803.png",
+      "qp": 48,
+      "case_sha256": "f2ea504fc349777978c1a83a2d80dd36007a6cd047c3a25535032a806e67128b",
+      "exit_map": [
+        3,
+        3,
+        3,
+        3,
+        3,
+        3
+      ],
+      "features": [
+        0.7619047619047619,
+        1.0,
+        1.0,
+        0.0,
+        1.0,
+        0.0,
+        0.0
+      ],
+      "loss_db": 0.2545761558469226,
+      "over_budget": true,
+      "mac_saved_pct": 24.217887314361864,
+      "risk_probability": 0.2358423050236513,
+      "flagged": true
+    },
+    {
+      "image": "0803.png",
+      "qp": 63,
+      "case_sha256": "dfe95091d917fac2d51111b13704b6221d77c7a48716a01ec1d7298fdb771427",
+      "exit_map": [
+        3,
+        3,
+        5,
+        3,
+        3,
+        3
+      ],
+      "features": [
+        1.0,
+        1.3333333333333335,
+        1.0,
+        0.16666666666666666,
+        0.8333333333333334,
+        0.5714285714285714,
+        0.2857142857142857
+      ],
+      "loss_db": 0.2513354155113643,
+      "over_budget": true,
+      "mac_saved_pct": 20.023121031326585,
+      "risk_probability": 0.3906400032790301,
+      "flagged": true
+    },
+    {
+      "image": "0827.png",
+      "qp": 0,
+      "case_sha256": "8180cc51a57fe5c7084a0a5afa953d18bafcb38bf9f5ac0dc8d962c8218653c9",
+      "exit_map": [
+        2,
+        2,
+        2,
+        2,
+        2,
+        2
+      ],
+      "features": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        1.0,
+        0.0,
+        0.0
+      ],
+      "loss_db": 0.10908597583301372,
+      "over_budget": true,
+      "mac_saved_pct": 39.12455746750288,
+      "risk_probability": 0.1990706677594344,
+      "flagged": true
+    },
+    {
+      "image": "0827.png",
+      "qp": 16,
+      "case_sha256": "d9aec8f6d5effead8092eb927df4e5f93f5a20d4e6296ebb6088e2184863418b",
+      "exit_map": [
+        2,
+        3,
+        2,
+        2,
+        3,
+        2
+      ],
+      "features": [
+        0.25396825396825395,
+        0.3333333333333335,
+        0.0,
+        0.0,
+        1.0,
+        0.5714285714285714,
+        0.5714285714285714
+      ],
+      "loss_db": 0.10399028078028288,
+      "over_budget": true,
+      "mac_saved_pct": 34.1556669197505,
+      "risk_probability": 0.5138169806838089,
+      "flagged": true
+    },
+    {
+      "image": "0827.png",
+      "qp": 32,
+      "case_sha256": "cf81fe6b9f2944011bd0da9b541eeb02ffc77665988bab0ca3c1c2d9579f8be6",
+      "exit_map": [
+        2,
+        3,
+        2,
+        2,
+        3,
+        2
+      ],
+      "features": [
+        0.5079365079365079,
+        0.3333333333333335,
+        0.0,
+        0.0,
+        1.0,
+        0.5714285714285714,
+        0.5714285714285714
+      ],
+      "loss_db": 0.10132814092702677,
+      "over_budget": true,
+      "mac_saved_pct": 34.1556669197505,
+      "risk_probability": 0.6239770024965059,
+      "flagged": true
+    },
+    {
+      "image": "0827.png",
+      "qp": 48,
+      "case_sha256": "a7ffa66876451efa11059b993a80768c70e68105eebb2378a9a28f2f5d6bab2b",
+      "exit_map": [
+        2,
+        2,
+        2,
+        2,
+        3,
+        2
+      ],
+      "features": [
+        0.7619047619047619,
+        0.16666666666666652,
+        0.0,
+        0.0,
+        1.0,
+        0.42857142857142855,
+        0.42857142857142855
+      ],
+      "loss_db": 0.12412762597436944,
+      "over_budget": true,
+      "mac_saved_pct": 36.64011219362669,
+      "risk_probability": 0.6757671693514342,
+      "flagged": true
+    },
+    {
+      "image": "0827.png",
+      "qp": 63,
+      "case_sha256": "b3666be67ac001fc95fc6618f7c2a07dca126cacd706ae1bfa6ea285643dc199",
+      "exit_map": [
+        2,
+        3,
+        2,
+        2,
+        2,
+        2
+      ],
+      "features": [
+        1.0,
+        0.16666666666666652,
+        0.0,
+        0.0,
+        1.0,
+        0.42857142857142855,
+        0.42857142857142855
+      ],
+      "loss_db": 0.12181831500518292,
+      "over_budget": true,
+      "mac_saved_pct": 36.64011219362669,
+      "risk_probability": 0.760854339148814,
+      "flagged": true
+    },
+    {
+      "image": "0835.png",
+      "qp": 0,
+      "case_sha256": "9b32b5fde920d06d8bd7311be003a8094eb054c07f05acfc47c0fe40763f68a4",
+      "exit_map": [
+        2,
+        2,
+        2,
+        2,
+        2,
+        2
+      ],
+      "features": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        1.0,
+        0.0,
+        0.0
+      ],
+      "loss_db": 0.020026721785536307,
+      "over_budget": false,
+      "mac_saved_pct": 39.12455746750288,
+      "risk_probability": 0.1990706677594344,
+      "flagged": true
+    },
+    {
+      "image": "0835.png",
+      "qp": 16,
+      "case_sha256": "ef0d91897a62f4663fb64fcbb2daf4f85f92e53720eb35b02f7e895f2861a527",
+      "exit_map": [
+        3,
+        3,
+        3,
+        3,
+        3,
+        3
+      ],
+      "features": [
+        0.25396825396825395,
+        1.0,
+        1.0,
+        0.0,
+        1.0,
+        0.0,
+        0.0
+      ],
+      "loss_db": 0.019062767999726858,
+      "over_budget": false,
+      "mac_saved_pct": 24.217887314361864,
+      "risk_probability": 0.11125621407973084,
+      "flagged": false
+    },
+    {
+      "image": "0835.png",
+      "qp": 32,
+      "case_sha256": "8e33403879b1dec6613d3b6073fc0a00c150e64b0829ec384cac8e423da7ed3b",
+      "exit_map": [
+        3,
+        3,
+        3,
+        3,
+        3,
+        4
+      ],
+      "features": [
+        0.5079365079365079,
+        1.1666666666666665,
+        1.0,
+        0.0,
+        0.8333333333333334,
+        0.2857142857142857,
+        0.2857142857142857
+      ],
+      "loss_db": 0.037618110366634275,
+      "over_budget": false,
+      "mac_saved_pct": 22.35273877005034,
+      "risk_probability": 0.21034151689270578,
+      "flagged": true
+    },
+    {
+      "image": "0835.png",
+      "qp": 48,
+      "case_sha256": "48a25e7358966ee7233697ec6128ec092563c53c6466191d896c84ecf9fa878d",
+      "exit_map": [
+        5,
+        3,
+        4,
+        3,
+        3,
+        5
+      ],
+      "features": [
+        0.7619047619047619,
+        1.8333333333333335,
+        1.0,
+        0.3333333333333333,
+        0.5,
+        1.1428571428571428,
+        0.7142857142857143
+      ],
+      "loss_db": 0.04346083828040731,
+      "over_budget": false,
+      "mac_saved_pct": 13.963206203979784,
+      "risk_probability": 0.3875614535540188,
+      "flagged": true
+    },
+    {
+      "image": "0835.png",
+      "qp": 63,
+      "case_sha256": "d5dd22106a0f88f7eb21420382e4ca56bf3ba341f1f4a7f6cbda04f5feb70519",
+      "exit_map": [
+        5,
+        3,
+        5,
+        3,
+        5,
+        5
+      ],
+      "features": [
+        1.0,
+        2.333333333333333,
+        1.0,
+        0.6666666666666666,
+        0.3333333333333333,
+        1.4285714285714286,
+        0.7142857142857143
+      ],
+      "loss_db": 0.05288103124815074,
+      "over_budget": false,
+      "mac_saved_pct": 7.438813241524034,
+      "risk_probability": 0.4684665097693064,
+      "flagged": true
+    },
+    {
+      "image": "0889.png",
+      "qp": 0,
+      "case_sha256": "060fafeee41a2205907bebcc8a879e0e2fd75a4652983466a07d45f7b1faa102",
+      "exit_map": [
+        3,
+        3,
+        3,
+        2,
+        2,
+        2
+      ],
+      "features": [
+        0.0,
+        0.5,
+        0.0,
+        0.0,
+        1.0,
+        0.42857142857142855,
+        0.42857142857142855
+      ],
+      "loss_db": 0.09200529518274528,
+      "over_budget": false,
+      "mac_saved_pct": 31.671221645874315,
+      "risk_probability": 0.32687796124067175,
+      "flagged": true
+    },
+    {
+      "image": "0889.png",
+      "qp": 16,
+      "case_sha256": "9dab34f53bf94c9c55393f0b65f7f772c8ca17e753c1c736ef9f2385baa42f12",
+      "exit_map": [
+        4,
+        4,
+        4,
+        3,
+        3,
+        3
+      ],
+      "features": [
+        0.25396825396825395,
+        1.5,
+        1.0,
+        0.0,
+        0.5,
+        0.42857142857142855,
+        0.42857142857142855
+      ],
+      "loss_db": 0.0625534394114356,
+      "over_budget": false,
+      "mac_saved_pct": 18.62244764189177,
+      "risk_probability": 0.12017766810129706,
+      "flagged": false
+    },
+    {
+      "image": "0889.png",
+      "qp": 32,
+      "case_sha256": "35090f4bbd2c5481cde9489d946954c6302377510caa7a5374c939523055952f",
+      "exit_map": [
+        3,
+        4,
+        4,
+        3,
+        3,
+        3
+      ],
+      "features": [
+        0.5079365079365079,
+        1.3333333333333335,
+        1.0,
+        0.0,
+        0.6666666666666666,
+        0.42857142857142855,
+        0.42857142857142855
+      ],
+      "loss_db": 0.10684738570239599,
+      "over_budget": true,
+      "mac_saved_pct": 20.487596186203294,
+      "risk_probability": 0.2152114543923042,
+      "flagged": true
+    },
+    {
+      "image": "0889.png",
+      "qp": 48,
+      "case_sha256": "6df75a189cbb40e7d714e756548d58524fbf8b8b64cdb26b04e830a61e8e89e9",
+      "exit_map": [
+        4,
+        4,
+        4,
+        3,
+        3,
+        3
+      ],
+      "features": [
+        0.7619047619047619,
+        1.5,
+        1.0,
+        0.0,
+        0.5,
+        0.42857142857142855,
+        0.42857142857142855
+      ],
+      "loss_db": 0.14324671698646468,
+      "over_budget": true,
+      "mac_saved_pct": 18.62244764189177,
+      "risk_probability": 0.2519222599090695,
+      "flagged": true
+    },
+    {
+      "image": "0889.png",
+      "qp": 63,
+      "case_sha256": "f4bddda0753e9c39ade664e3374cc94323ec737f0d54b888a17000d2edc10bb8",
+      "exit_map": [
+        5,
+        5,
+        5,
+        3,
+        3,
+        3
+      ],
+      "features": [
+        1.0,
+        2.0,
+        1.0,
+        0.5,
+        0.5,
+        0.8571428571428571,
+        0.42857142857142855
+      ],
+      "loss_db": 0.11129642820914652,
+      "over_budget": true,
+      "mac_saved_pct": 11.633582504791551,
+      "risk_probability": 0.39309828081973747,
+      "flagged": true
+    },
+    {
+      "image": "0859.png",
+      "qp": 0,
+      "case_sha256": "75cf7c3e19a65782e348a3575110f180982f0749d0afb17798edbac4c33495cc",
+      "exit_map": [
+        3,
+        2,
+        2,
+        2,
+        2,
+        2
+      ],
+      "features": [
+        0.0,
+        0.16666666666666652,
+        0.0,
+        0.0,
+        1.0,
+        0.2857142857142857,
+        0.2857142857142857
+      ],
+      "loss_db": 0.02640222453475119,
+      "over_budget": false,
+      "mac_saved_pct": 36.64011219362669,
+      "risk_probability": 0.2902838162535859,
+      "flagged": true
+    },
+    {
+      "image": "0859.png",
+      "qp": 16,
+      "case_sha256": "d739a6a19861ec1bf8688b376677b381642353d6f71f57db614391ad983643f7",
+      "exit_map": [
+        3,
+        3,
+        3,
+        3,
+        3,
+        3
+      ],
+      "features": [
+        0.25396825396825395,
+        1.0,
+        1.0,
+        0.0,
+        1.0,
+        0.0,
+        0.0
+      ],
+      "loss_db": 0.02320245647235181,
+      "over_budget": false,
+      "mac_saved_pct": 24.217887314361864,
+      "risk_probability": 0.11125621407973084,
+      "flagged": false
+    },
+    {
+      "image": "0859.png",
+      "qp": 32,
+      "case_sha256": "aee478c10839824ce7ec7175fe3541e2b2210f1a3e86f3e496cc8bad111aff99",
+      "exit_map": [
+        3,
+        3,
+        3,
+        3,
+        3,
+        3
+      ],
+      "features": [
+        0.5079365079365079,
+        1.0,
+        1.0,
+        0.0,
+        1.0,
+        0.0,
+        0.0
+      ],
+      "loss_db": 0.03763898301941134,
+      "over_budget": false,
+      "mac_saved_pct": 24.217887314361864,
+      "risk_probability": 0.16427029877884008,
+      "flagged": false
+    },
+    {
+      "image": "0859.png",
+      "qp": 48,
+      "case_sha256": "737e6cc38dbd1ede95f7cf0d61ad1f4a36eab624781a6d6e7724629a8d49cfd8",
+      "exit_map": [
+        4,
+        4,
+        4,
+        3,
+        3,
+        3
+      ],
+      "features": [
+        0.7619047619047619,
+        1.5,
+        1.0,
+        0.0,
+        0.5,
+        0.42857142857142855,
+        0.42857142857142855
+      ],
+      "loss_db": 0.06893523458686894,
+      "over_budget": false,
+      "mac_saved_pct": 18.62244764189177,
+      "risk_probability": 0.2519222599090695,
+      "flagged": true
+    },
+    {
+      "image": "0859.png",
+      "qp": 63,
+      "case_sha256": "90afaef65152a333c005be3ed2e0fa2a3e107affd3667ee97995bf20b7889925",
+      "exit_map": [
+        5,
+        5,
+        5,
+        3,
+        5,
+        5
+      ],
+      "features": [
+        1.0,
+        2.666666666666667,
+        1.0,
+        0.8333333333333334,
+        0.16666666666666666,
+        0.5714285714285714,
+        0.2857142857142857
+      ],
+      "loss_db": 0.03904859088893564,
+      "over_budget": false,
+      "mac_saved_pct": 3.2440469584887555,
+      "risk_probability": 0.3041128373127649,
+      "flagged": true
+    },
+    {
+      "image": "0804.png",
+      "qp": 0,
+      "case_sha256": "78ac2d4969c64dde163d60134441292cdc368e40712f2a390c1a07d7d7e2ab3f",
+      "exit_map": [
+        3,
+        2,
+        3,
+        2,
+        2,
+        2
+      ],
+      "features": [
+        0.0,
+        0.3333333333333335,
+        0.0,
+        0.0,
+        1.0,
+        0.5714285714285714,
+        0.5714285714285714
+      ],
+      "loss_db": 0.05517707592895024,
+      "over_budget": false,
+      "mac_saved_pct": 34.1556669197505,
+      "risk_probability": 0.40229799557031726,
+      "flagged": true
+    },
+    {
+      "image": "0804.png",
+      "qp": 16,
+      "case_sha256": "f6a3474e732b96123c60d620f3dfd1c2b3d8c57b0523e78160a1562eba5139d9",
+      "exit_map": [
+        4,
+        3,
+        4,
+        3,
+        3,
+        3
+      ],
+      "features": [
+        0.25396825396825395,
+        1.3333333333333335,
+        1.0,
+        0.0,
+        0.6666666666666666,
+        0.5714285714285714,
+        0.5714285714285714
+      ],
+      "loss_db": 0.06509687670559919,
+      "over_budget": false,
+      "mac_saved_pct": 20.487596186203294,
+      "risk_probability": 0.18692356204151545,
+      "flagged": false
+    },
+    {
+      "image": "0804.png",
+      "qp": 32,
+      "case_sha256": "6eef97b33a2d6e47aaf227711f698a40df424e64fd12caecbcef57a60842cd0b",
+      "exit_map": [
+        4,
+        3,
+        4,
+        3,
+        3,
+        3
+      ],
+      "features": [
+        0.5079365079365079,
+        1.3333333333333335,
+        1.0,
+        0.0,
+        0.6666666666666666,
+        0.5714285714285714,
+        0.5714285714285714
+      ],
+      "loss_db": 0.0857529058834689,
+      "over_budget": false,
+      "mac_saved_pct": 20.487596186203294,
+      "risk_probability": 0.26523312021264506,
+      "flagged": true
+    },
+    {
+      "image": "0804.png",
+      "qp": 48,
+      "case_sha256": "dbb9d1a37770254b7fc6af7387722ebbe7e3a62cd1378d9193e053ccefb52735",
+      "exit_map": [
+        4,
+        3,
+        4,
+        3,
+        3,
+        3
+      ],
+      "features": [
+        0.7619047619047619,
+        1.3333333333333335,
+        1.0,
+        0.0,
+        0.6666666666666666,
+        0.5714285714285714,
+        0.5714285714285714
+      ],
+      "loss_db": 0.09550702461769812,
+      "over_budget": false,
+      "mac_saved_pct": 20.487596186203294,
+      "risk_probability": 0.36175317712765714,
+      "flagged": true
+    },
+    {
+      "image": "0804.png",
+      "qp": 63,
+      "case_sha256": "1563014187b6954308e534088c2f31f06122ddebb50511bae0b2f7720012d0dd",
+      "exit_map": [
+        5,
+        3,
+        5,
+        5,
+        3,
+        5
+      ],
+      "features": [
+        1.0,
+        2.333333333333333,
+        1.0,
+        0.6666666666666666,
+        0.3333333333333333,
+        1.1428571428571428,
+        0.5714285714285714
+      ],
+      "loss_db": 0.04276256061097359,
+      "over_budget": false,
+      "mac_saved_pct": 7.438813241524034,
+      "risk_probability": 0.41867862128094285,
+      "flagged": true
+    },
+    {
+      "image": "0852.png",
+      "qp": 0,
+      "case_sha256": "d2d7a29d1b22f08fcaba2d0e0a21e42b64a78d5866c447b39ceb097ce00ec907",
+      "exit_map": [
+        2,
+        2,
+        2,
+        2,
+        2,
+        2
+      ],
+      "features": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        1.0,
+        0.0,
+        0.0
+      ],
+      "loss_db": 0.03608665129959691,
+      "over_budget": false,
+      "mac_saved_pct": 39.12455746750288,
+      "risk_probability": 0.1990706677594344,
+      "flagged": true
+    },
+    {
+      "image": "0852.png",
+      "qp": 16,
+      "case_sha256": "8df908afab5791b8be80e2414825085efa7744fc9f871080a69291fb846004c3",
+      "exit_map": [
+        5,
+        3,
+        2,
+        5,
+        3,
+        3
+      ],
+      "features": [
+        0.25396825396825395,
+        1.5,
+        0.0,
+        0.3333333333333333,
+        0.6666666666666666,
+        0.8571428571428571,
+        0.5714285714285714
+      ],
+      "loss_db": 0.029574440238327955,
+      "over_budget": false,
+      "mac_saved_pct": 18.31279555181914,
+      "risk_probability": 0.39246167394641573,
+      "flagged": true
+    },
+    {
+      "image": "0852.png",
+      "qp": 32,
+      "case_sha256": "44ae97f24e1cd912079eafacb25399560c67115dd04a754bace96bb24b035cf0",
+      "exit_map": [
+        5,
+        5,
+        2,
+        5,
+        3,
+        3
+      ],
+      "features": [
+        0.5079365079365079,
+        1.8333333333333335,
+        0.0,
+        0.5,
+        0.5,
+        1.1428571428571428,
+        0.5714285714285714
+      ],
+      "loss_db": 0.03922487346376789,
+      "over_budget": false,
+      "mac_saved_pct": 14.11802926878386,
+      "risk_probability": 0.4433720540832011,
+      "flagged": true
+    },
+    {
+      "image": "0852.png",
+      "qp": 48,
+      "case_sha256": "9c92ecb99ecb6e55bfaea3b38cb7c1a1a9a852598d7f6b0674857947cc17c414",
+      "exit_map": [
+        5,
+        5,
+        2,
+        5,
+        3,
+        3
+      ],
+      "features": [
+        0.7619047619047619,
+        1.8333333333333335,
+        0.0,
+        0.5,
+        0.5,
+        1.1428571428571428,
+        0.5714285714285714
+      ],
+      "loss_db": 0.07410334855741184,
+      "over_budget": false,
+      "mac_saved_pct": 14.11802926878386,
+      "risk_probability": 0.5556913221745085,
+      "flagged": true
+    },
+    {
+      "image": "0852.png",
+      "qp": 63,
+      "case_sha256": "6cb339ed2806aed9078b019ba592eb2d91860620c645de9fa43435634b41cd11",
+      "exit_map": [
+        5,
+        5,
+        3,
+        5,
+        5,
+        5
+      ],
+      "features": [
+        1.0,
+        2.666666666666667,
+        1.0,
+        0.8333333333333334,
+        0.16666666666666666,
+        0.5714285714285714,
+        0.2857142857142857
+      ],
+      "loss_db": 0.07430341262888916,
+      "over_budget": false,
+      "mac_saved_pct": 3.2440469584887555,
+      "risk_probability": 0.3041128373127649,
+      "flagged": true
+    },
+    {
+      "image": "0900.png",
+      "qp": 0,
+      "case_sha256": "90618ffd1f217a9ee4aa84964e9285b73d81b9b7a5ca0ac068306625a47b2e71",
+      "exit_map": [
+        3,
+        3,
+        3,
+        3,
+        3,
+        3
+      ],
+      "features": [
+        0.0,
+        1.0,
+        1.0,
+        0.0,
+        1.0,
+        0.0,
+        0.0
+      ],
+      "loss_db": 0.09139109310917956,
+      "over_budget": false,
+      "mac_saved_pct": 24.217887314361864,
+      "risk_probability": 0.0738394523996159,
+      "flagged": false
+    },
+    {
+      "image": "0900.png",
+      "qp": 16,
+      "case_sha256": "2cb2d868ec219cf0f9d885703b9b5c85ba6d9618217f01705926521ed0b3454f",
+      "exit_map": [
+        4,
+        4,
+        3,
+        4,
+        3,
+        4
+      ],
+      "features": [
+        0.25396825396825395,
+        1.6666666666666665,
+        1.0,
+        0.0,
+        0.3333333333333333,
+        0.7142857142857143,
+        0.7142857142857143
+      ],
+      "loss_db": 0.11013028796831666,
+      "over_budget": true,
+      "mac_saved_pct": 16.757299097580248,
+      "risk_probability": 0.1561938604107966,
+      "flagged": false
+    },
+    {
+      "image": "0900.png",
+      "qp": 32,
+      "case_sha256": "96d174eaba9f2b8b03313bd402a4d0654ddf4e92d867a66ea1dc66959146279c",
+      "exit_map": [
+        5,
+        5,
+        3,
+        5,
+        3,
+        4
+      ],
+      "features": [
+        0.5079365079365079,
+        2.166666666666667,
+        1.0,
+        0.5,
+        0.3333333333333333,
+        1.1428571428571428,
+        0.7142857142857143
+      ],
+      "loss_db": 0.07566372605960581,
+      "over_budget": false,
+      "mac_saved_pct": 9.768433960480028,
+      "risk_probability": 0.268048392157336,
+      "flagged": true
+    },
+    {
+      "image": "0900.png",
+      "qp": 48,
+      "case_sha256": "59cd3ee70e0b1c4790dffd1d19eef747b7bab680e2f29a3ed4bd0990098959ec",
+      "exit_map": [
+        5,
+        5,
+        5,
+        5,
+        3,
+        5
+      ],
+      "features": [
+        0.7619047619047619,
+        2.666666666666667,
+        1.0,
+        0.8333333333333334,
+        0.16666666666666666,
+        0.8571428571428571,
+        0.42857142857142855
+      ],
+      "loss_db": 0.035685035904662404,
+      "over_budget": false,
+      "mac_saved_pct": 3.2440469584887555,
+      "risk_probability": 0.2594416603080522,
+      "flagged": true
+    },
+    {
+      "image": "0900.png",
+      "qp": 63,
+      "case_sha256": "d1b9140fc09aa0e4665b20856c5222470652632d504c1db42892c157abdd1667",
+      "exit_map": [
+        5,
+        5,
+        5,
+        5,
+        5,
+        5
+      ],
+      "features": [
+        1.0,
+        3.0,
+        3.0,
+        1.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "loss_db": 0.04133437999328611,
+      "over_budget": false,
+      "mac_saved_pct": -0.9507193245465118,
+      "risk_probability": 0.048229026604598414,
+      "flagged": false
+    },
+    {
+      "image": "0890.png",
+      "qp": 0,
+      "case_sha256": "efb3b8212e564ce52c874ec3f4bda161e1bc0ff539952877df4784babe7ec988",
+      "exit_map": [
+        2,
+        2,
+        2,
+        2,
+        2,
+        3
+      ],
+      "features": [
+        0.0,
+        0.16666666666666652,
+        0.0,
+        0.0,
+        1.0,
+        0.2857142857142857,
+        0.2857142857142857
+      ],
+      "loss_db": 0.04982620629277983,
+      "over_budget": false,
+      "mac_saved_pct": 36.64011219362669,
+      "risk_probability": 0.2902838162535859,
+      "flagged": true
+    },
+    {
+      "image": "0890.png",
+      "qp": 16,
+      "case_sha256": "758be4f1e6aa386c2a49b84e562e0b4baffbd855119e0f03b47036144c176e63",
+      "exit_map": [
+        3,
+        3,
+        3,
+        3,
+        3,
+        3
+      ],
+      "features": [
+        0.25396825396825395,
+        1.0,
+        1.0,
+        0.0,
+        1.0,
+        0.0,
+        0.0
+      ],
+      "loss_db": 0.0342642030113241,
+      "over_budget": false,
+      "mac_saved_pct": 24.217887314361864,
+      "risk_probability": 0.11125621407973084,
+      "flagged": false
+    },
+    {
+      "image": "0890.png",
+      "qp": 32,
+      "case_sha256": "4ebb4bbbd4fb1a01af7dfebc8b204c7d219b8c248a679213556dbb1e46a1b113",
+      "exit_map": [
+        3,
+        3,
+        3,
+        4,
+        4,
+        4
+      ],
+      "features": [
+        0.5079365079365079,
+        1.5,
+        1.0,
+        0.0,
+        0.5,
+        0.42857142857142855,
+        0.42857142857142855
+      ],
+      "loss_db": 0.05013378212875537,
+      "over_budget": false,
+      "mac_saved_pct": 18.62244764189177,
+      "risk_probability": 0.17659814675975152,
+      "flagged": false
+    },
+    {
+      "image": "0890.png",
+      "qp": 48,
+      "case_sha256": "c591373c1808a071d252390c0f51bc5907b18e2456a68fec589321f22618908e",
+      "exit_map": [
+        3,
+        4,
+        4,
+        5,
+        5,
+        5
+      ],
+      "features": [
+        0.7619047619047619,
+        2.333333333333333,
+        1.0,
+        0.5,
+        0.16666666666666666,
+        0.7142857142857143,
+        0.5714285714285714
+      ],
+      "loss_db": 0.049905452005916194,
+      "over_budget": false,
+      "mac_saved_pct": 7.903288396400743,
+      "risk_probability": 0.28331279016661226,
+      "flagged": true
+    },
+    {
+      "image": "0890.png",
+      "qp": 63,
+      "case_sha256": "e63da3c59311f5ed9bcfcfa9e7d2792fd3e95c43450bc680be2f34071d8f658c",
+      "exit_map": [
+        5,
+        5,
+        5,
+        5,
+        5,
+        5
+      ],
+      "features": [
+        1.0,
+        3.0,
+        3.0,
+        1.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "loss_db": 0.03130723699002227,
+      "over_budget": false,
+      "mac_saved_pct": -0.9507193245465118,
+      "risk_probability": 0.048229026604598414,
+      "flagged": false
+    },
+    {
+      "image": "0824.png",
+      "qp": 0,
+      "case_sha256": "51739b10830b922603e67de21ffba2bab814c9f32cae37bac9ae42d3399a97f5",
+      "exit_map": [
+        3,
+        3,
+        3,
+        3,
+        3,
+        3
+      ],
+      "features": [
+        0.0,
+        1.0,
+        1.0,
+        0.0,
+        1.0,
+        0.0,
+        0.0
+      ],
+      "loss_db": 0.05544874206848256,
+      "over_budget": false,
+      "mac_saved_pct": 24.217887314361864,
+      "risk_probability": 0.0738394523996159,
+      "flagged": false
+    },
+    {
+      "image": "0824.png",
+      "qp": 16,
+      "case_sha256": "85b7f68af6ae78070c863a55c0ddda3cda60305b2705e2c0fe0e47f8508b0f68",
+      "exit_map": [
+        3,
+        4,
+        4,
+        3,
+        4,
+        4
+      ],
+      "features": [
+        0.25396825396825395,
+        1.6666666666666665,
+        1.0,
+        0.0,
+        0.3333333333333333,
+        0.2857142857142857,
+        0.2857142857142857
+      ],
+      "loss_db": 0.053128041495110065,
+      "over_budget": false,
+      "mac_saved_pct": 16.757299097580248,
+      "risk_probability": 0.07506478186029215,
+      "flagged": false
+    },
+    {
+      "image": "0824.png",
+      "qp": 32,
+      "case_sha256": "2d8ea077e1cab1d0c39e82346c8006cd39d5142eae9bfcb0f5857d0f0479b9ce",
+      "exit_map": [
+        3,
+        4,
+        5,
+        3,
+        4,
+        5
+      ],
+      "features": [
+        0.5079365079365079,
+        2.0,
+        1.0,
+        0.3333333333333333,
+        0.3333333333333333,
+        0.5714285714285714,
+        0.5714285714285714
+      ],
+      "loss_db": 0.069359060669643,
+      "over_budget": false,
+      "mac_saved_pct": 12.09805765966826,
+      "risk_probability": 0.22960779953834567,
+      "flagged": true
+    },
+    {
+      "image": "0824.png",
+      "qp": 48,
+      "case_sha256": "be974225038834b82451690742a85c082d57b3101b5959cc7d071e1fa0f1e97c",
+      "exit_map": [
+        5,
+        5,
+        5,
+        5,
+        5,
+        5
+      ],
+      "features": [
+        0.7619047619047619,
+        3.0,
+        3.0,
+        1.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "loss_db": 0.029895557351993687,
+      "over_budget": false,
+      "mac_saved_pct": -0.9507193245465118,
+      "risk_probability": 0.032128813422313225,
+      "flagged": false
+    },
+    {
+      "image": "0824.png",
+      "qp": 63,
+      "case_sha256": "9c9284e2803604165851bf711f75f5d998ab7d93fe267c8652c7562fccfea3d3",
+      "exit_map": [
+        5,
+        5,
+        5,
+        5,
+        5,
+        5
+      ],
+      "features": [
+        1.0,
+        3.0,
+        3.0,
+        1.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "loss_db": 0.03929619339881615,
+      "over_budget": false,
+      "mac_saved_pct": -0.9507193245465118,
+      "risk_probability": 0.048229026604598414,
+      "flagged": false
+    }
+  ]
+}
