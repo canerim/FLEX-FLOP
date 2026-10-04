@@ -497,6 +497,14 @@ the same streams. Exact context recovers 0.0174\,dB (24-image paired
 bootstrap 95\% interval 0.0140--0.0209\,dB) and lowers the mean gap to
 released from 0.1382 to 0.1208\,dB. Relative to full-frame e15, the
 count exceeding 0.1\,dB $\Delta_{444}$ falls from 47/120 to 34/120.
+An independently replayed full-frame e15 output decomposes the original
+0.1382\,dB mean released-to-deployed gap exactly into 0.0194\,dB from
+released versus e15 training, 0.1014\,dB from the unchanged route under
+exact context, and 0.0174\,dB from the deployed tile-context/repair path.
+Thus routing accounts for 73.4\% of the \emph{mean} gap, although the signed
+shares vary by image and QP. The checkpoint component rises from nearly
+zero at QP0 to 0.0485\,dB at QP63; the route term remains the largest
+mean component at every QP.
 Two image/QP pairs lose YUV611 quality, so this is an average effect rather
 than a per-case guarantee. The ideal shared-context synthesis arithmetic
 saves 26.30\% on these maps, but no sparse runtime has been measured.
@@ -509,7 +517,8 @@ external-dataset mechanism check, not a pristine prospective test
 \includegraphics[width=0.91\textwidth]{figs/div2k_beta_transfer/fig_exact_context_kodak.pdf}
 \caption{\textbf{Kodak24 exact-context transfer at unchanged real bitrates.}
 \textbf{a}, Mean YUV611 deficit to released D12 versus actual FUFREF2 bitrate
-for the deployed and diagnostic exact-context synthesis paths. Error bars
+for full-frame e15, diagnostic exact-context routing, and the deployed path.
+Vertical separations add to the released-to-deployed gap. Error bars
 are paired 24-image bootstrap 95\% intervals; the released decoder is at
 zero deficit by definition. \textbf{b}, Per-image YUV611 gain from replacing
 zero-halo-plus-repair with clipped exact context and no repair, at each QP;

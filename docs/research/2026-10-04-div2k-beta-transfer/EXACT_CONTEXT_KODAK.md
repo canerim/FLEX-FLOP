@@ -38,6 +38,11 @@ corresponding e15-full Delta444 drops from **0.09763 to 0.08275 dB**;
 cases over 0.1 dB drop from **47/120 to 34/120**. The ideal shared-context
 arithmetic saving averages **26.30% synthesis MAC**, but this is not an
 executed sparse decoder or latency speedup.
+An additional full-frame e15 replay decomposes the original 0.13816 dB
+gap into **0.01937 dB checkpoint**, **0.10140 dB fixed route**, and
+**0.01740 dB context/repair** contributions; see
+[the gap decomposition](KODAK_GAP_DECOMPOSITION.md). Thus depth allocation
+dominates the released quality shortfall on this cohort.
 
 | QP | Actual stream bpp | Deployed / exact YUV611 gap to released (dB) | Delta444 >0.1 dB deployed / exact | Ideal shared MAC saving |
 |---:|---:|---:|---:|---:|
@@ -58,7 +63,8 @@ be repaired by changing tile context alone.
 ![Kodak released gap and per-image context effect](../../../proof/cpu_early_exit/results/div2k_beta/quality_floor/kodak24/exact_context_kodak.png)
 
 The left panel plots **actual bitstream bitrate** against the PSNR *deficit*
-to released D12, with image-cluster bootstrap intervals. It is intentionally
+to released D12 for full-frame e15, exact-context routing, and deployed
+routing, with image-cluster bootstrap intervals. It is intentionally
 not labelled BD-rate: no matched-quality interpolation or sparse runtime
 experiment has been performed for the exact-context variant.
 

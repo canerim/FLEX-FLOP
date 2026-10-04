@@ -19,6 +19,7 @@ def main():
     p=argparse.ArgumentParser(description=__doc__)
     p.add_argument('--input',type=Path,required=True)
     p.add_argument('--scan-dir',type=Path,required=True)
+    p.add_argument('--decomposition',type=Path)
     p.add_argument('--out-dir',type=Path,required=True)
     args=p.parse_args()
     data=json.loads(args.input.read_text());rows=data['rows']
@@ -32,9 +33,18 @@ def main():
         scan=json.loads(scan_path.read_text())
         h,w=scan['shape']
         row['bpp']=8*scan['stream_bytes']/(h*w)
+    if args.decomposition:
+        decomposition=json.loads(args.decomposition.read_text())
+        if decomposition['exact_sha256']!=sha(args.input) or len(decomposition['rows'])!=120:
+            raise RuntimeError('Gap decomposition does not match exact-context cohort')
+        by_key={(r['image'],r['qp']):r for r in decomposition['rows']}
+        for row in rows:
+            component=by_key[(row['image'],row['qp'])]
+            row['e15_full_gap_to_released_yuv611_db']=component['released_minus_e15_full_db']
+            row['e15_full_yuv611_db']=component['e15_full_yuv611_db']
     def avg(group,key):return float(np.mean([r[key] for r in group]))
     def stats(group):
-        return {'cases':len(group),
+        result={'cases':len(group),
                 'mean_released_yuv611_db':avg(group,'released_yuv611_db'),
                 'mean_deployed_yuv611_db':avg(group,'deployed_yuv611_db'),
                 'mean_exact_yuv611_db':avg(group,'exact_context_yuv611_db'),
@@ -47,9 +57,16 @@ def main():
                 'exact_over_0p1_delta444_count':sum(r['exact_context_delta444_db']>.1 for r in group),
                 'mean_ideal_shared_saving_pct':avg(group,'ideal_shared_saving_pct'),
                 'mean_bpp':avg(group,'bpp')}
+        if args.decomposition:
+            result.update({'mean_e15_full_yuv611_db':avg(group,'e15_full_yuv611_db'),
+                           'mean_checkpoint_component_db':avg(group,'e15_full_gap_to_released_yuv611_db'),
+                           'mean_route_component_db':float(np.mean([r['e15_full_yuv611_db']-r['exact_context_yuv611_db'] for r in group])),
+                           'mean_context_component_db':result['mean_yuv611_context_gain_db']})
+        return result
     out={'schema':1,'scope':'Kodak24 real FUFREF2, locked DIV2K beta; means over images, no BD-rate or latency',
          'input_sha256':sha(args.input),'all':stats(rows),
          'per_qp':{str(q):stats([r for r in rows if r['qp']==q]) for q in data['qps']}}
+    if args.decomposition:out['decomposition_sha256']=sha(args.decomposition)
     images=data['images']
     effects=np.array([[np.mean([r['exact_context_yuv611_db']-r['deployed_yuv611_db']
                                 for r in rows if r['image']==image]) for image in images],
@@ -60,6 +77,18 @@ def main():
     out['image_cluster_bootstrap_95ci']={
         'mean_yuv611_context_gain_db':[float(v) for v in np.quantile(effects[0,samples].mean(1),[.025,.975])],
         'mean_delta444_context_recovery_db':[float(v) for v in np.quantile(effects[1,samples].mean(1),[.025,.975])]}
+    if args.decomposition:
+        component_keys={'checkpoint':'e15_full_gap_to_released_yuv611_db',
+                        'route':'route_component_db','context':'exact_route_minus_deployed_db'}
+        for row in rows:
+            row['route_component_db']=row['e15_full_yuv611_db']-row['exact_context_yuv611_db']
+            row['exact_route_minus_deployed_db']=row['exact_context_yuv611_db']-row['deployed_yuv611_db']
+        out['image_cluster_bootstrap_95ci']['gap_components_db']={}
+        for name,key in component_keys.items():
+            per_image=np.asarray([np.mean([r[key] for r in rows if r['image']==image])
+                                  for image in images])
+            out['image_cluster_bootstrap_95ci']['gap_components_db'][name]=[
+                float(v) for v in np.quantile(per_image[samples].mean(1),[.025,.975])]
     args.out_dir.mkdir(parents=True,exist_ok=True)
     (args.out_dir/'exact_context_kodak_summary.json').write_text(json.dumps(out,indent=2)+'\n')
 
@@ -68,10 +97,15 @@ def main():
     fig,(ax,bx)=plt.subplots(1,2,figsize=(7.2,2.9),gridspec_kw={'width_ratios':[1.18,1]})
     qps=data['qps']
     x=[out['per_qp'][str(q)]['mean_bpp'] for q in qps]
-    for key,label,color,marker in [
+    series=[
         ('deployed_gap_to_released_yuv611_db','Deployed early exit','#B26749','s'),
-        ('exact_gap_to_released_yuv611_db','Exact context, fixed route','#257D81','D')]:
-        yy=[out['per_qp'][str(q)]['mean_'+key] for q in qps]
+        ('exact_gap_to_released_yuv611_db','Exact context, fixed route','#257D81','D')]
+    if args.decomposition:
+        series.insert(0,('e15_full_gap_to_released_yuv611_db','Full-frame e15','#505B69','o'))
+    for key,label,color,marker in series:
+        summary_key=('mean_checkpoint_component_db' if key=='e15_full_gap_to_released_yuv611_db'
+                     else 'mean_'+key)
+        yy=[out['per_qp'][str(q)][summary_key] for q in qps]
         lower=[];upper=[]
         for q,mean in zip(qps,yy):
             vals=np.asarray([r[key] for r in rows if r['qp']==q])
