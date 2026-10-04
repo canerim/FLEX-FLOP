@@ -29,6 +29,38 @@ this optimistic estimate, especially for narrow sparse regions on GPU/CPU.
 The current zero-halo decoder's deployed cost is a different implementation
 with seam-repair overhead and cannot be compared as measured latency.
 
+### Frozen policy across 48 disjoint DIV2K images
+
+We applied the same cell-union accounting to **all 240 fixed-map cases** in
+the 24-image calibration and 24-image validation cohorts. There was no new
+decoder execution. Mean ideal synthesis MAC saving is **21.30%** on calibration
+and **20.55%** on validation; 90/120 and 91/120 maps respectively leave at
+least 10% ideal arithmetic saving. Thus the `0828/QP63` map's 3.5% is an
+outlier, not a representative estimate of the whole policy.
+
+| QP | Calibration mean ideal saving | Validation mean ideal saving |
+|--:|--:|--:|
+| 0 | 32.13% | 33.45% |
+| 16 | 21.75% | 22.82% |
+| 32 | 21.84% | 21.18% |
+| 48 | 17.69% | 16.30% |
+| 63 | 13.06% | 9.00% |
+
+The decline with QP follows the frozen router's deeper decisions. On
+validation, maps whose **deployed zero-halo** reconstruction already meets
+the 0.1 dB target have 18.61% mean ideal saving (85 cases); the 35 maps that
+violate the target have 25.28%. This grouping is deliberately labelled by
+*deployed* quality. We did **not** measure exact-context quality across these
+240 cases, and perfect context can change distortion in either direction.
+The observed association says that the most aggressive maps tend to be the
+risky ones; it does not prove an exact-context decoder would retain the same
+quality classification.
+
+The vector figure `ideal_context_cohort.pdf` shows the QP trajectory with
+24-image cluster-bootstrap intervals and the validation quality groups.
+`analyze_ideal_context_cohort.py` verifies case/manifest/policy hashes and
+archives every per-block union count in `ideal_shared_context_cohort.json`.
+
 For reproducibility, `proof/cpu_early_exit/analyze_ideal_shared_context.py`
 reads the archived case-level exact-context JSONs and e15 config, constructs
 one 64×96 Boolean feature mask for each suffix block, and archives the eight

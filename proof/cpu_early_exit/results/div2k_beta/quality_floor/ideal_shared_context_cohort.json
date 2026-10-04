@@ -1,0 +1,6623 @@
+{
+  "schema": 1,
+  "scope": "Ideal shared-context cell-area proxy for the frozen DIV2K beta cohorts.\n\nThe proxy shares each exact-context suffix feature cell perfectly across\noverlapping tiles and charges adapters on tile cores. It is neither an\nimplemented decoder nor an exact-context quality measurement.",
+  "manifest_sha256": "0468dc26738fcc16024abd224ba2c805ee25911553f68896f9ddafbaedadf922",
+  "policy_sha256": "80f0a2f1d9cdda4931a956878a07df05c646e9c6a621c48d0593d3a10a1c5e47",
+  "e15_sha256": "91556d30bca41988755ff43dee3bc6d0cd2a0a4eda1d18d2891b168dc0a04ce9",
+  "summaries": {
+    "calibration": {
+      "all_qps": {
+        "cases": 120,
+        "mean_ideal_mac_saved_pct": 21.29517207095347,
+        "median_ideal_mac_saved_pct": 21.33338374098981,
+        "ideal_saving_at_least_10pct_count": 90,
+        "deployed_over_0p1_count": 34,
+        "mean_ideal_saving_on_deployed_within_budget_pct": 19.27887397261779,
+        "mean_ideal_saving_on_deployed_over_budget_pct": 26.395220202037834,
+        "interpretation": "Quality groups describe deployed zero-halo outputs, not exact-context outputs."
+      },
+      "per_qp": {
+        "0": {
+          "cases": 24,
+          "mean_ideal_mac_saved_pct": 32.12567881166124,
+          "median_ideal_mac_saved_pct": 29.794187022020036,
+          "ideal_saving_at_least_10pct_count": 24,
+          "deployed_over_0p1_count": 6,
+          "mean_ideal_saving_on_deployed_within_budget_pct": 31.195461134674353,
+          "mean_ideal_saving_on_deployed_over_budget_pct": 34.91633184262189,
+          "interpretation": "Quality groups describe deployed zero-halo outputs, not exact-context outputs."
+        },
+        "16": {
+          "cases": 24,
+          "mean_ideal_mac_saved_pct": 21.751322159407238,
+          "median_ideal_mac_saved_pct": 21.021609762328595,
+          "ideal_saving_at_least_10pct_count": 22,
+          "deployed_over_0p1_count": 4,
+          "mean_ideal_saving_on_deployed_within_budget_pct": 21.84500184736507,
+          "mean_ideal_saving_on_deployed_over_budget_pct": 21.282923719618054,
+          "interpretation": "Quality groups describe deployed zero-halo outputs, not exact-context outputs."
+        },
+        "32": {
+          "cases": 24,
+          "mean_ideal_mac_saved_pct": 21.843140351214547,
+          "median_ideal_mac_saved_pct": 19.113396761823147,
+          "ideal_saving_at_least_10pct_count": 20,
+          "deployed_over_0p1_count": 7,
+          "mean_ideal_saving_on_deployed_within_budget_pct": 21.429460003839356,
+          "mean_ideal_saving_on_deployed_over_budget_pct": 22.847792623411443,
+          "interpretation": "Quality groups describe deployed zero-halo outputs, not exact-context outputs."
+        },
+        "48": {
+          "cases": 24,
+          "mean_ideal_mac_saved_pct": 17.691057536379585,
+          "median_ideal_mac_saved_pct": 12.972651209234353,
+          "ideal_saving_at_least_10pct_count": 15,
+          "deployed_over_0p1_count": 8,
+          "mean_ideal_saving_on_deployed_within_budget_pct": 11.85749809941159,
+          "mean_ideal_saving_on_deployed_over_budget_pct": 29.358176410315576,
+          "interpretation": "Quality groups describe deployed zero-halo outputs, not exact-context outputs."
+        },
+        "63": {
+          "cases": 24,
+          "mean_ideal_mac_saved_pct": 13.064661496104739,
+          "median_ideal_mac_saved_pct": 6.181985896844239,
+          "ideal_saving_at_least_10pct_count": 9,
+          "deployed_over_0p1_count": 9,
+          "mean_ideal_saving_on_deployed_within_budget_pct": 7.036268974522385,
+          "mean_ideal_saving_on_deployed_over_budget_pct": 23.111982365408657,
+          "interpretation": "Quality groups describe deployed zero-halo outputs, not exact-context outputs."
+        }
+      }
+    },
+    "validation": {
+      "all_qps": {
+        "cases": 120,
+        "mean_ideal_mac_saved_pct": 20.551963339532428,
+        "median_ideal_mac_saved_pct": 21.021609762328595,
+        "ideal_saving_at_least_10pct_count": 91,
+        "deployed_over_0p1_count": 35,
+        "mean_ideal_saving_on_deployed_within_budget_pct": 18.606988796072226,
+        "mean_ideal_saving_on_deployed_over_budget_pct": 25.27547294507861,
+        "interpretation": "Quality groups describe deployed zero-halo outputs, not exact-context outputs."
+      },
+      "per_qp": {
+        "0": {
+          "cases": 24,
+          "mean_ideal_mac_saved_pct": 33.45332403012189,
+          "median_ideal_mac_saved_pct": 34.63448650118671,
+          "ideal_saving_at_least_10pct_count": 24,
+          "deployed_over_0p1_count": 8,
+          "mean_ideal_saving_on_deployed_within_budget_pct": 33.22250502874748,
+          "mean_ideal_saving_on_deployed_over_budget_pct": 33.91496203287073,
+          "interpretation": "Quality groups describe deployed zero-halo outputs, not exact-context outputs."
+        },
+        "16": {
+          "cases": 24,
+          "mean_ideal_mac_saved_pct": 22.824053439441226,
+          "median_ideal_mac_saved_pct": 22.20681592552303,
+          "ideal_saving_at_least_10pct_count": 24,
+          "deployed_over_0p1_count": 6,
+          "mean_ideal_saving_on_deployed_within_budget_pct": 22.462764050352106,
+          "mean_ideal_saving_on_deployed_over_budget_pct": 23.90792160670857,
+          "interpretation": "Quality groups describe deployed zero-halo outputs, not exact-context outputs."
+        },
+        "32": {
+          "cases": 24,
+          "mean_ideal_mac_saved_pct": 21.18092025678146,
+          "median_ideal_mac_saved_pct": 21.021609762328595,
+          "ideal_saving_at_least_10pct_count": 21,
+          "deployed_over_0p1_count": 8,
+          "mean_ideal_saving_on_deployed_within_budget_pct": 20.152819678283777,
+          "mean_ideal_saving_on_deployed_over_budget_pct": 23.237121413776812,
+          "interpretation": "Quality groups describe deployed zero-halo outputs, not exact-context outputs."
+        },
+        "48": {
+          "cases": 24,
+          "mean_ideal_mac_saved_pct": 16.303077783454935,
+          "median_ideal_mac_saved_pct": 17.36470741583158,
+          "ideal_saving_at_least_10pct_count": 15,
+          "deployed_over_0p1_count": 9,
+          "mean_ideal_saving_on_deployed_within_budget_pct": 13.35116296003282,
+          "mean_ideal_saving_on_deployed_over_budget_pct": 21.222935822491795,
+          "interpretation": "Quality groups describe deployed zero-halo outputs, not exact-context outputs."
+        },
+        "63": {
+          "cases": 24,
+          "mean_ideal_mac_saved_pct": 8.998441187862605,
+          "median_ideal_mac_saved_pct": 3.454772272767226,
+          "ideal_saving_at_least_10pct_count": 7,
+          "deployed_over_0p1_count": 4,
+          "mean_ideal_saving_on_deployed_within_budget_pct": 6.149582752340453,
+          "mean_ideal_saving_on_deployed_over_budget_pct": 23.242733365473363,
+          "interpretation": "Quality groups describe deployed zero-halo outputs, not exact-context outputs."
+        }
+      }
+    }
+  },
+  "rows": {
+    "calibration": [
+      {
+        "image": "0807.png",
+        "qp": 0,
+        "case_sha256": "92958bb46e09d263e32b27eb019750c53d35b7354ee66185caa97af0f10de9a9",
+        "exit_map": [
+          3,
+          2,
+          3,
+          3,
+          3,
+          3
+        ],
+        "per_suffix_block_union_feature_cells": [
+          6144,
+          6144,
+          5304,
+          5214,
+          0,
+          0,
+          0,
+          0
+        ],
+        "ideal_shared_context_relative_mac": 0.7268419188422995,
+        "ideal_shared_context_mac_saved_pct": 27.315808115770047,
+        "deployed_delta444_db": 0.04349723068292245,
+        "deployed_zero_halo_mac_saved_pct": 26.702334078354173
+      },
+      {
+        "image": "0807.png",
+        "qp": 16,
+        "case_sha256": "ac1d5c1505ae1791a9b2eac8797efe3754de9c20f8197ba7a62eca6210119ece",
+        "exit_map": [
+          5,
+          5,
+          5,
+          5,
+          5,
+          5
+        ],
+        "per_suffix_block_union_feature_cells": [
+          6144,
+          6144,
+          6144,
+          6144,
+          6144,
+          6144,
+          6144,
+          6144
+        ],
+        "ideal_shared_context_relative_mac": 1.0,
+        "ideal_shared_context_mac_saved_pct": 0.0,
+        "deployed_delta444_db": 0.010024305632066468,
+        "deployed_zero_halo_mac_saved_pct": -0.9507193245465118
+      },
+      {
+        "image": "0807.png",
+        "qp": 32,
+        "case_sha256": "79e13692eb8c1b08dbb13983b185e922e809b117fa6492c03757bf9bef401822",
+        "exit_map": [
+          5,
+          5,
+          5,
+          5,
+          5,
+          5
+        ],
+        "per_suffix_block_union_feature_cells": [
+          6144,
+          6144,
+          6144,
+          6144,
+          6144,
+          6144,
+          6144,
+          6144
+        ],
+        "ideal_shared_context_relative_mac": 1.0,
+        "ideal_shared_context_mac_saved_pct": 0.0,
+        "deployed_delta444_db": 0.022295460122469052,
+        "deployed_zero_halo_mac_saved_pct": -0.9507193245465118
+      },
+      {
+        "image": "0807.png",
+        "qp": 48,
+        "case_sha256": "eb079c8d73e54ccfad034f1ee6e813ef08ce22e26754a614be175b3802f29373",
+        "exit_map": [
+          5,
+          5,
+          5,
+          5,
+          5,
+          5
+        ],
+        "per_suffix_block_union_feature_cells": [
+          6144,
+          6144,
+          6144,
+          6144,
+          6144,
+          6144,
+          6144,
+          6144
+        ],
+        "ideal_shared_context_relative_mac": 1.0,
+        "ideal_shared_context_mac_saved_pct": 0.0,
+        "deployed_delta444_db": 0.032426121707936274,
+        "deployed_zero_halo_mac_saved_pct": -0.9507193245465118
+      },
+      {
+        "image": "0807.png",
+        "qp": 63,
+        "case_sha256": "c0098eac3d4a7bf4bc65752799b59951a68bbccd15c15a56682b99debb2d28e1",
+        "exit_map": [
+          5,
+          5,
+          5,
+          5,
+          5,
+          5
+        ],
+        "per_suffix_block_union_feature_cells": [
+          6144,
+          6144,
+          6144,
+          6144,
+          6144,
+          6144,
+          6144,
+          6144
+        ],
+        "ideal_shared_context_relative_mac": 1.0,
+        "ideal_shared_context_mac_saved_pct": 0.0,
+        "deployed_delta444_db": 0.03701272819710791,
+        "deployed_zero_halo_mac_saved_pct": -0.9507193245465118
+      },
+      {
+        "image": "0814.png",
+        "qp": 0,
+        "case_sha256": "90126f617bf388ac17c3879099eedee66b7e55ccd196b2df27bc7f62704f5152",
+        "exit_map": [
+          2,
+          2,
+          2,
+          3,
+          3,
+          3
+        ],
+        "per_suffix_block_union_feature_cells": [
+          6144,
+          6144,
+          3264,
+          3168,
+          0,
+          0,
+          0,
+          0
+        ],
+        "ideal_shared_context_relative_mac": 0.6772743407172996,
+        "ideal_shared_context_mac_saved_pct": 32.27256592827003,
+        "deployed_delta444_db": 0.0733175402069382,
+        "deployed_zero_halo_mac_saved_pct": 31.671221645874315
+      },
+      {
+        "image": "0814.png",
+        "qp": 16,
+        "case_sha256": "b880b17fda167dc8e917341d5f525d66a8ac3e4c060e91a22a78d7e5bb568363",
+        "exit_map": [
+          2,
+          3,
+          3,
+          4,
+          4,
+          4
+        ],
+        "per_suffix_block_union_feature_cells": [
+          6144,
+          6144,
+          5304,
+          5245,
+          3264,
+          3168,
+          0,
+          0
+        ],
+        "ideal_shared_context_relative_mac": 0.7866661625901019,
+        "ideal_shared_context_mac_saved_pct": 21.33338374098981,
+        "deployed_delta444_db": 0.05722011481796306,
+        "deployed_zero_halo_mac_saved_pct": 21.106888445419603
+      },
+      {
+        "image": "0814.png",
+        "qp": 32,
+        "case_sha256": "4b05368aecf892975c8a4040fe4835436e7e49f6b29958a258f7ad4a97328e6a",
+        "exit_map": [
+          2,
+          3,
+          3,
+          4,
+          4,
+          4
+        ],
+        "per_suffix_block_union_feature_cells": [
+          6144,
+          6144,
+          5304,
+          5245,
+          3264,
+          3168,
+          0,
+          0
+        ],
+        "ideal_shared_context_relative_mac": 0.7866661625901019,
+        "ideal_shared_context_mac_saved_pct": 21.33338374098981,
+        "deployed_delta444_db": 0.08298832181260726,
+        "deployed_zero_halo_mac_saved_pct": 21.106888445419603
+      },
+      {
+        "image": "0814.png",
+        "qp": 48,
+        "case_sha256": "b59623cbcc212bd08f6db6e24f856c83cd8a4110df6fe46bb2cb3fb0970e1ca9",
+        "exit_map": [
+          2,
+          2,
+          3,
+          5,
+          5,
+          5
+        ],
+        "per_suffix_block_union_feature_cells": [
+          6144,
+          6144,
+          4532,
+          4443,
+          3456,
+          3360,
+          3264,
+          3168
+        ],
+        "ideal_shared_context_relative_mac": 0.8456125392822609,
+        "ideal_shared_context_mac_saved_pct": 15.438746071773913,
+        "deployed_delta444_db": 0.09303620911201639,
+        "deployed_zero_halo_mac_saved_pct": 16.60247305254393
+      },
+      {
+        "image": "0814.png",
+        "qp": 63,
+        "case_sha256": "f59d141de3126f9396631289dd613705bd0510e3c268d13d3951f27c70c8db35",
+        "exit_map": [
+          2,
+          3,
+          5,
+          5,
+          5,
+          5
+        ],
+        "per_suffix_block_union_feature_cells": [
+          6144,
+          6144,
+          5364,
+          5307,
+          4464,
+          4375,
+          4284,
+          4191
+        ],
+        "ideal_shared_context_relative_mac": 0.9077705918710443,
+        "ideal_shared_context_mac_saved_pct": 9.222940812895574,
+        "deployed_delta444_db": 0.08604959240474783,
+        "deployed_zero_halo_mac_saved_pct": 9.923260005516344
+      },
+      {
+        "image": "0816.png",
+        "qp": 0,
+        "case_sha256": "cc3dd8f05e7c2e0f2b5e2b2d53b5f1fb6f4d463029ff966a76abe6f8f18eff64",
+        "exit_map": [
+          2,
+          2,
+          2,
+          2,
+          2,
+          2
+        ],
+        "per_suffix_block_union_feature_cells": [
+          6144,
+          6144,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "ideal_shared_context_relative_mac": 0.5992472573839662,
+        "ideal_shared_context_mac_saved_pct": 40.075274261603376,
+        "deployed_delta444_db": 0.033408915056544,
+        "deployed_zero_halo_mac_saved_pct": 39.12455746750288
+      },
+      {
+        "image": "0816.png",
+        "qp": 16,
+        "case_sha256": "460ac5d7aad98cba12c892b8e2c89812f4501bf551a3773e681e2fbfef58eb44",
+        "exit_map": [
+          2,
+          2,
+          3,
+          2,
+          2,
+          2
+        ],
+        "per_suffix_block_union_feature_cells": [
+          6144,
+          6144,
+          1156,
+          1089,
+          0,
+          0,
+          0,
+          0
+        ],
+        "ideal_shared_context_relative_mac": 0.6264815238770218,
+        "ideal_shared_context_mac_saved_pct": 37.35184761229782,
+        "deployed_delta444_db": 0.0332380777008735,
+        "deployed_zero_halo_mac_saved_pct": 36.64011219362669
+      },
+      {
+        "image": "0816.png",
+        "qp": 32,
+        "case_sha256": "d4e02eecc4bab166c6501b50ce9be4447d94b6518ab48de55923f50e3fdb7388",
+        "exit_map": [
+          2,
+          2,
+          2,
+          2,
+          2,
+          2
+        ],
+        "per_suffix_block_union_feature_cells": [
+          6144,
+          6144,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "ideal_shared_context_relative_mac": 0.5992472573839662,
+        "ideal_shared_context_mac_saved_pct": 40.075274261603376,
+        "deployed_delta444_db": 0.04200784449896886,
+        "deployed_zero_halo_mac_saved_pct": 39.12455746750288
+      },
+      {
+        "image": "0816.png",
+        "qp": 48,
+        "case_sha256": "57d4905f7e41921d0cb18a066a4c88396b30a0b753b9f37565a7e897c64661bb",
+        "exit_map": [
+          2,
+          2,
+          2,
+          2,
+          2,
+          2
+        ],
+        "per_suffix_block_union_feature_cells": [
+          6144,
+          6144,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "ideal_shared_context_relative_mac": 0.5992472573839662,
+        "ideal_shared_context_mac_saved_pct": 40.075274261603376,
+        "deployed_delta444_db": 0.05371435235867043,
+        "deployed_zero_halo_mac_saved_pct": 39.12455746750288
+      },
+      {
+        "image": "0816.png",
+        "qp": 63,
+        "case_sha256": "b694bb0e75760217e06956577455914040525d60e8b9d4f57b7a5e2238bcbea7",
+        "exit_map": [
+          2,
+          2,
+          2,
+          2,
+          2,
+          2
+        ],
+        "per_suffix_block_union_feature_cells": [
+          6144,
+          6144,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "ideal_shared_context_relative_mac": 0.5992472573839662,
+        "ideal_shared_context_mac_saved_pct": 40.075274261603376,
+        "deployed_delta444_db": 0.08679908058913219,
+        "deployed_zero_halo_mac_saved_pct": 39.12455746750288
+      },
+      {
+        "image": "0853.png",
+        "qp": 0,
+        "case_sha256": "b056efc5a112470f79aa746c40f759cdadd84d28c3212c6cb704b1be5a830590",
+        "exit_map": [
+          3,
+          3,
+          3,
+          2,
+          2,
+          3
+        ],
+        "per_suffix_block_union_feature_cells": [
+          6144,
+          6144,
+          4284,
+          4191,
+          0,
+          0,
+          0,
+          0
+        ],
+        "ideal_shared_context_relative_mac": 0.7020581297797996,
+        "ideal_shared_context_mac_saved_pct": 29.794187022020036,
+        "deployed_delta444_db": 0.15459479211015614,
+        "deployed_zero_halo_mac_saved_pct": 29.186777862114244
+      },
+      {
+        "image": "0853.png",
+        "qp": 16,
+        "case_sha256": "3c9971dac48163421fef21b773240b6ea089cfd90e5028abda0a35c7537f4ea4",
+        "exit_map": [
+          4,
+          3,
+          3,
+          4,
+          4,
+          4
+        ],
+        "per_suffix_block_union_feature_cells": [
+          6144,
+          6144,
+          6144,
+          6144,
+          4284,
+          4191,
+          0,
+          0
+        ],
+        "ideal_shared_context_relative_mac": 0.8263529258416842,
+        "ideal_shared_context_mac_saved_pct": 17.36470741583158,
+        "deployed_delta444_db": 0.12098697281536774,
+        "deployed_zero_halo_mac_saved_pct": 16.757299097580248
+      },
+      {
+        "image": "0853.png",
+        "qp": 32,
+        "case_sha256": "c6a6ca738a8a6a2e544185b33813e884e919a461e82534af6a36792160fee951",
+        "exit_map": [
+          4,
+          3,
+          3,
+          4,
+          4,
+          4
+        ],
+        "per_suffix_block_union_feature_cells": [
+          6144,
+          6144,
+          6144,
+          6144,
+          4284,
+          4191,
+          0,
+          0
+        ],
+        "ideal_shared_context_relative_mac": 0.8263529258416842,
+        "ideal_shared_context_mac_saved_pct": 17.36470741583158,
+        "deployed_delta444_db": 0.1549454161296467,
+        "deployed_zero_halo_mac_saved_pct": 16.757299097580248
+      },
+      {
+        "image": "0853.png",
+        "qp": 48,
+        "case_sha256": "a55d1200ca701926d06653019bd05ec9153eecadef594f4cb24baf138a70f237",
+        "exit_map": [
+          4,
+          4,
+          5,
+          4,
+          4,
+          5
+        ],
+        "per_suffix_block_union_feature_cells": [
+          6144,
+          6144,
+          6144,
+          6144,
+          6144,
+          6144,
+          2176,
+          2112
+        ],
+        "ideal_shared_context_relative_mac": 0.9091443565400843,
+        "ideal_shared_context_mac_saved_pct": 9.085564345991571,
+        "deployed_delta444_db": 0.0914290707565581,
+        "deployed_zero_halo_mac_saved_pct": 8.367763551277452
+      },
+      {
+        "image": "0853.png",
+        "qp": 63,
+        "case_sha256": "0f65f57bcb8639ac160e5098c42d793d6170f477d756f95b03517a9f81f17947",
+        "exit_map": [
+          5,
+          5,
+          5,
+          5,
+          5,
+          5
+        ],
+        "per_suffix_block_union_feature_cells": [
+          6144,
+          6144,
+          6144,
+          6144,
+          6144,
+          6144,
+          6144,
+          6144
+        ],
+        "ideal_shared_context_relative_mac": 1.0,
+        "ideal_shared_context_mac_saved_pct": 0.0,
+        "deployed_delta444_db": 0.04191478840324016,
+        "deployed_zero_halo_mac_saved_pct": -0.9507193245465118
+      },
+      {
+        "image": "0808.png",
+        "qp": 0,
+        "case_sha256": "6502ce62c0100375bc49639a84f1c1fd11463d6fbaac916914425aded1fd0c22",
+        "exit_map": [
+          2,
+          3,
+          2,
+          2,
+          3,
+          3
+        ],
+        "per_suffix_block_union_feature_cells": [
+          6144,
+          6144,
+          3324,
+          3199,
+          0,
+          0,
+          0,
+          0
+        ],
+        "ideal_shared_context_relative_mac": 0.6783782686686884,
+        "ideal_shared_context_mac_saved_pct": 32.162173133131155,
+        "deployed_delta444_db": 0.030872485206205644,
+        "deployed_zero_halo_mac_saved_pct": 31.671221645874315
+      },
+      {
+        "image": "0808.png",
+        "qp": 16,
+        "case_sha256": "54143fc5920634a8b61bd8b50db79f03168b4a87e2ac017ebb575de8f79c9a0a",
+        "exit_map": [
+          3,
+          4,
+          4,
+          3,
+          4,
+          4
+        ],
+        "per_suffix_block_union_feature_cells": [
+          6144,
+          6144,
+          6144,
+          6144,
+          4224,
+          4160,
+          0,
+          0
+        ],
+        "ideal_shared_context_relative_mac": 0.8252489978902953,
+        "ideal_shared_context_mac_saved_pct": 17.475100210970474,
+        "deployed_delta444_db": 0.020739082412366674,
+        "deployed_zero_halo_mac_saved_pct": 16.757299097580248
+      },
+      {
+        "image": "0808.png",
+        "qp": 32,
+        "case_sha256": "819241c42e7e05cc112678c1620ca0fa6782bcdacec48a7f7725ace69bc999d8",
+        "exit_map": [
+          3,
+          4,
+          4,
+          3,
+          4,
+          4
+        ],
+        "per_suffix_block_union_feature_cells": [
+          6144,
+          6144,
+          6144,
+          6144,
+          4224,
+          4160,
+          0,
+          0
+        ],
+        "ideal_shared_context_relative_mac": 0.8252489978902953,
+        "ideal_shared_context_mac_saved_pct": 17.475100210970474,
+        "deployed_delta444_db": 0.04750744286818689,
+        "deployed_zero_halo_mac_saved_pct": 16.757299097580248
+      },
+      {
+        "image": "0808.png",
+        "qp": 48,
+        "case_sha256": "2d8d1bd6397d9a177947f239128727c92f37c2c649a9ea867ea8436462e4883c",
+        "exit_map": [
+          4,
+          5,
+          5,
+          4,
+          5,
+          5
+        ],
+        "per_suffix_block_union_feature_cells": [
+          6144,
+          6144,
+          6144,
+          6144,
+          6144,
+          6144,
+          4224,
+          4160
+        ],
+        "ideal_shared_context_relative_mac": 0.9557367616033756,
+        "ideal_shared_context_mac_saved_pct": 4.426323839662438,
+        "deployed_delta444_db": 0.04161810603183259,
+        "deployed_zero_halo_mac_saved_pct": 3.7085221133654644
+      },
+      {
+        "image": "0808.png",
+        "qp": 63,
+        "case_sha256": "26c43992f8b0e1628a5a652094da4ea3451e7c77f11ff4ce754a1f99c576b035",
+        "exit_map": [
+          5,
+          5,
+          5,
+          5,
+          5,
+          5
+        ],
+        "per_suffix_block_union_feature_cells": [
+          6144,
+          6144,
+          6144,
+          6144,
+          6144,
+          6144,
+          6144,
+          6144
+        ],
+        "ideal_shared_context_relative_mac": 1.0,
+        "ideal_shared_context_mac_saved_pct": 0.0,
+        "deployed_delta444_db": 0.038643099334602374,
+        "deployed_zero_halo_mac_saved_pct": -0.9507193245465118
+      },
+      {
+        "image": "0838.png",
+        "qp": 0,
+        "case_sha256": "32aeeb61602fdd4f0c9c8d159d2f4001c3687bdb2988baca129618d851987166",
+        "exit_map": [
+          2,
+          2,
+          2,
+          2,
+          2,
+          2
+        ],
+        "per_suffix_block_union_feature_cells": [
+          6144,
+          6144,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "ideal_shared_context_relative_mac": 0.5992472573839662,
+        "ideal_shared_context_mac_saved_pct": 40.075274261603376,
+        "deployed_delta444_db": 0.14957235181351625,
+        "deployed_zero_halo_mac_saved_pct": 39.12455746750288
+      },
+      {
+        "image": "0838.png",
+        "qp": 16,
+        "case_sha256": "db43efe6f5f095551b7e65169a5b458c26bcc8228a08db9b86b1c221de21da28",
+        "exit_map": [
+          2,
+          2,
+          2,
+          2,
+          2,
+          2
+        ],
+        "per_suffix_block_union_feature_cells": [
+          6144,
+          6144,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "ideal_shared_context_relative_mac": 0.5992472573839662,
+        "ideal_shared_context_mac_saved_pct": 40.075274261603376,
+        "deployed_delta444_db": 0.08960077929296484,
+        "deployed_zero_halo_mac_saved_pct": 39.12455746750288
+      },
+      {
+        "image": "0838.png",
+        "qp": 32,
+        "case_sha256": "95bd90c2a36638771b0d1d59e141f80435c999e82bed1edeac7f44bebdc5ccfc",
+        "exit_map": [
+          2,
+          2,
+          2,
+          2,
+          2,
+          2
+        ],
+        "per_suffix_block_union_feature_cells": [
+          6144,
+          6144,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "ideal_shared_context_relative_mac": 0.5992472573839662,
+        "ideal_shared_context_mac_saved_pct": 40.075274261603376,
+        "deployed_delta444_db": 0.05871069897860255,
+        "deployed_zero_halo_mac_saved_pct": 39.12455746750288
+      },
+      {
+        "image": "0838.png",
+        "qp": 48,
+        "case_sha256": "0877bbdc34ab35d84b47980964da4e2b4930a910149106b58af305323f8dfd10",
+        "exit_map": [
+          2,
+          2,
+          2,
+          2,
+          2,
+          2
+        ],
+        "per_suffix_block_union_feature_cells": [
+          6144,
+          6144,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "ideal_shared_context_relative_mac": 0.5992472573839662,
+        "ideal_shared_context_mac_saved_pct": 40.075274261603376,
+        "deployed_delta444_db": 0.048553085323170125,
+        "deployed_zero_halo_mac_saved_pct": 39.12455746750288
+      },
+      {
+        "image": "0838.png",
+        "qp": 63,
+        "case_sha256": "892e1118f24f9e9bbd36c62f1b38d7362664e5c0a1b3ce23f82c3923de073f7d",
+        "exit_map": [
+          2,
+          2,
+          2,
+          2,
+          2,
+          2
+        ],
+        "per_suffix_block_union_feature_cells": [
+          6144,
+          6144,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "ideal_shared_context_relative_mac": 0.5992472573839662,
+        "ideal_shared_context_mac_saved_pct": 40.075274261603376,
+        "deployed_delta444_db": 0.05324131442363751,
+        "deployed_zero_halo_mac_saved_pct": 39.12455746750288
+      },
+      {
+        "image": "0840.png",
+        "qp": 0,
+        "case_sha256": "30dae4f35441211e4428787b38773c3d3a3258799ff011ecc8a53a1b90e1094b",
+        "exit_map": [
+          2,
+          2,
+          2,
+          2,
+          2,
+          2
+        ],
+        "per_suffix_block_union_feature_cells": [
+          6144,
+          6144,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "ideal_shared_context_relative_mac": 0.5992472573839662,
+        "ideal_shared_context_mac_saved_pct": 40.075274261603376,
+        "deployed_delta444_db": 0.02861852197050299,
+        "deployed_zero_halo_mac_saved_pct": 39.12455746750288
+      },
+      {
+        "image": "0840.png",
+        "qp": 16,
+        "case_sha256": "0b76b5770f774fd5950f7aa10df58ba4f0de6cf225ecbaecc78e0654b2be8f50",
+        "exit_map": [
+          2,
+          3,
+          3,
+          3,
+          3,
+          3
+        ],
+        "per_suffix_block_union_feature_cells": [
+          6144,
+          6144,
+          5244,
+          5183,
+          0,
+          0,
+          0,
+          0
+        ],
+        "ideal_shared_context_relative_mac": 0.7257379908909107,
+        "ideal_shared_context_mac_saved_pct": 27.426200910908925,
+        "deployed_delta444_db": 0.026250968778939336,
+        "deployed_zero_halo_mac_saved_pct": 26.702334078354173
+      },
+      {
+        "image": "0840.png",
+        "qp": 32,
+        "case_sha256": "7a63937a57ff94e85f994df71a337ba81c727fff6fa891c82c2106556bfcdc8d",
+        "exit_map": [
+          2,
+          2,
+          2,
+          3,
+          2,
+          3
+        ],
+        "per_suffix_block_union_feature_cells": [
+          6144,
+          6144,
+          2312,
+          2178,
+          0,
+          0,
+          0,
+          0
+        ],
+        "ideal_shared_context_relative_mac": 0.6537157903700774,
+        "ideal_shared_context_mac_saved_pct": 34.62842096299226,
+        "deployed_delta444_db": 0.05378021922829444,
+        "deployed_zero_halo_mac_saved_pct": 34.1556669197505
+      },
+      {
+        "image": "0840.png",
+        "qp": 48,
+        "case_sha256": "cf3a2350db9f7b505e7782a8f11f32e20bcaff04823e35cd692f225f3ae2cf2f",
+        "exit_map": [
+          2,
+          2,
+          2,
+          2,
+          2,
+          3
+        ],
+        "per_suffix_block_union_feature_cells": [
+          6144,
+          6144,
+          1156,
+          1089,
+          0,
+          0,
+          0,
+          0
+        ],
+        "ideal_shared_context_relative_mac": 0.6264815238770218,
+        "ideal_shared_context_mac_saved_pct": 37.35184761229782,
+        "deployed_delta444_db": 0.11233353853896481,
+        "deployed_zero_halo_mac_saved_pct": 36.64011219362669
+      },
+      {
+        "image": "0840.png",
+        "qp": 63,
+        "case_sha256": "fcb9a0b7e3a9978f57409ce8f51d995f05c74584dee213ac0bfe540089395e8a",
+        "exit_map": [
+          2,
+          2,
+          2,
+          2,
+          2,
+          3
+        ],
+        "per_suffix_block_union_feature_cells": [
+          6144,
+          6144,
+          1156,
+          1089,
+          0,
+          0,
+          0,
+          0
+        ],
+        "ideal_shared_context_relative_mac": 0.6264815238770218,
+        "ideal_shared_context_mac_saved_pct": 37.35184761229782,
+        "deployed_delta444_db": 0.15549680002705843,
+        "deployed_zero_halo_mac_saved_pct": 36.64011219362669
+      },
+      {
+        "image": "0818.png",
+        "qp": 0,
+        "case_sha256": "d7e68584f71cef54ddc661aa79099627af48e793e98257a2e9860b84c01ec782",
+        "exit_map": [
+          2,
+          3,
+          3,
+          3,
+          3,
+          3
+        ],
+        "per_suffix_block_union_feature_cells": [
+          6144,
+          6144,
+          5244,
+          5183,
+          0,
+          0,
+          0,
+          0
+        ],
+        "ideal_shared_context_relative_mac": 0.7257379908909107,
+        "ideal_shared_context_mac_saved_pct": 27.426200910908925,
+        "deployed_delta444_db": 0.04619408324104386,
+        "deployed_zero_halo_mac_saved_pct": 26.702334078354173
+      },
+      {
+        "image": "0818.png",
+        "qp": 16,
+        "case_sha256": "5402c2a2fdfa811f2409e772213dcce898c65b76f9ed4779b04dfe94cd7b9f86",
+        "exit_map": [
+          3,
+          3,
+          4,
+          3,
+          4,
+          4
+        ],
+        "per_suffix_block_union_feature_cells": [
+          6144,
+          6144,
+          6144,
+          6144,
+          3264,
+          3168,
+          0,
+          0
+        ],
+        "ideal_shared_context_relative_mac": 0.8077621044303797,
+        "ideal_shared_context_mac_saved_pct": 19.223789556962036,
+        "deployed_delta444_db": 0.08713196212806465,
+        "deployed_zero_halo_mac_saved_pct": 18.62244764189177
+      },
+      {
+        "image": "0818.png",
+        "qp": 32,
+        "case_sha256": "b65f664bab53f53026349ab395fe6ddfcc49f56cf06b32711888da28a1494e5d",
+        "exit_map": [
+          3,
+          3,
+          5,
+          5,
+          5,
+          4
+        ],
+        "per_suffix_block_union_feature_cells": [
+          6144,
+          6144,
+          6144,
+          6144,
+          4464,
+          4375,
+          3384,
+          3230
+        ],
+        "ideal_shared_context_relative_mac": 0.9063588511449543,
+        "ideal_shared_context_mac_saved_pct": 9.36411488550457,
+        "deployed_delta444_db": 0.07931151871889425,
+        "deployed_zero_halo_mac_saved_pct": 9.768433960480028
+      },
+      {
+        "image": "0818.png",
+        "qp": 48,
+        "case_sha256": "289e9f779dc4ad4b76e1d4006505256591db91608e50c6c83395fe64d43bc4c0",
+        "exit_map": [
+          5,
+          5,
+          5,
+          5,
+          5,
+          5
+        ],
+        "per_suffix_block_union_feature_cells": [
+          6144,
+          6144,
+          6144,
+          6144,
+          6144,
+          6144,
+          6144,
+          6144
+        ],
+        "ideal_shared_context_relative_mac": 1.0,
+        "ideal_shared_context_mac_saved_pct": 0.0,
+        "deployed_delta444_db": 0.04407094256481774,
+        "deployed_zero_halo_mac_saved_pct": -0.9507193245465118
+      },
+      {
+        "image": "0818.png",
+        "qp": 63,
+        "case_sha256": "9225543fbc6bb33653048213ee3bc61548514487580aed67875c0bb0623a8813",
+        "exit_map": [
+          5,
+          5,
+          5,
+          5,
+          5,
+          5
+        ],
+        "per_suffix_block_union_feature_cells": [
+          6144,
+          6144,
+          6144,
+          6144,
+          6144,
+          6144,
+          6144,
+          6144
+        ],
+        "ideal_shared_context_relative_mac": 1.0,
+        "ideal_shared_context_mac_saved_pct": 0.0,
+        "deployed_delta444_db": 0.046639184822829256,
+        "deployed_zero_halo_mac_saved_pct": -0.9507193245465118
+      },
+      {
+        "image": "0895.png",
+        "qp": 0,
+        "case_sha256": "db12363a570eb76a5a4088744445758beb30c356e2a8c1fa14f472b2357b21f6",
+        "exit_map": [
+          2,
+          2,
+          2,
+          3,
+          2,
+          2
+        ],
+        "per_suffix_block_union_feature_cells": [
+          6144,
+          6144,
+          1156,
+          1089,
+          0,
+          0,
+          0,
+          0
+        ],
+        "ideal_shared_context_relative_mac": 0.6264815238770218,
+        "ideal_shared_context_mac_saved_pct": 37.35184761229782,
+        "deployed_delta444_db": 0.02028363935539851,
+        "deployed_zero_halo_mac_saved_pct": 36.64011219362669
+      },
+      {
+        "image": "0895.png",
+        "qp": 16,
+        "case_sha256": "b70e02e87e7eea0a59ffd1bc4c259018c9bc0461af3990961c41cdf665a657d6",
+        "exit_map": [
+          3,
+          3,
+          3,
+          4,
+          3,
+          2
+        ],
+        "per_suffix_block_union_feature_cells": [
+          6144,
+          6144,
+          5244,
+          5183,
+          1156,
+          1089,
+          0,
+          0
+        ],
+        "ideal_shared_context_relative_mac": 0.7467792897327707,
+        "ideal_shared_context_mac_saved_pct": 25.322071026722924,
+        "deployed_delta444_db": 0.021564325060178753,
+        "deployed_zero_halo_mac_saved_pct": 24.83718553404265
+      },
+      {
+        "image": "0895.png",
+        "qp": 32,
+        "case_sha256": "60d3f3aa7a4a5b8d1b1cde505e90a5dbc1bfbeafa15cde2b16b49464b33fee4d",
+        "exit_map": [
+          3,
+          3,
+          3,
+          4,
+          3,
+          3
+        ],
+        "per_suffix_block_union_feature_cells": [
+          6144,
+          6144,
+          6144,
+          6144,
+          1156,
+          1089,
+          0,
+          0
+        ],
+        "ideal_shared_context_relative_mac": 0.769355222892493,
+        "ideal_shared_context_mac_saved_pct": 23.064477710750698,
+        "deployed_delta444_db": 0.03994571966667618,
+        "deployed_zero_halo_mac_saved_pct": 22.352744730514818
+      },
+      {
+        "image": "0895.png",
+        "qp": 48,
+        "case_sha256": "8575378cb58eda1fe795c97614b843527ed3d07c5098a4455a150f02c951d1a6",
+        "exit_map": [
+          5,
+          3,
+          4,
+          5,
+          3,
+          3
+        ],
+        "per_suffix_block_union_feature_cells": [
+          6144,
+          6144,
+          6144,
+          6144,
+          3460,
+          3329,
+          2176,
+          2112
+        ],
+        "ideal_shared_context_relative_mac": 0.8610144704311709,
+        "ideal_shared_context_mac_saved_pct": 13.898552956882915,
+        "deployed_delta444_db": 0.04642744997084641,
+        "deployed_zero_halo_mac_saved_pct": 13.963206203979784
+      },
+      {
+        "image": "0895.png",
+        "qp": 63,
+        "case_sha256": "d8d38340c36e4e394afabb3a0c9c4d8d8921118fc906455f6e8401b3a4faeda7",
+        "exit_map": [
+          5,
+          5,
+          5,
+          5,
+          3,
+          3
+        ],
+        "per_suffix_block_union_feature_cells": [
+          6144,
+          6144,
+          6144,
+          6144,
+          4464,
+          4375,
+          4284,
+          4191
+        ],
+        "ideal_shared_context_relative_mac": 0.9273865423918777,
+        "ideal_shared_context_mac_saved_pct": 7.261345760812232,
+        "deployed_delta444_db": 0.05619172787406493,
+        "deployed_zero_halo_mac_saved_pct": 7.438813241524034
+      },
+      {
+        "image": "0861.png",
+        "qp": 0,
+        "case_sha256": "34e90ec12743f03203a2d1500b7b1bfeef1f148f958cc804c77e1fbe231a03b1",
+        "exit_map": [
+          3,
+          3,
+          3,
+          3,
+          3,
+          3
+        ],
+        "per_suffix_block_union_feature_cells": [
+          6144,
+          6144,
+          6144,
+          6144,
+          0,
+          0,
+          0,
+          0
+        ],
+        "ideal_shared_context_relative_mac": 0.7483139240506329,
+        "ideal_shared_context_mac_saved_pct": 25.16860759493671,
+        "deployed_delta444_db": 0.04473897039682432,
+        "deployed_zero_halo_mac_saved_pct": 24.217887314361864
+      },
+      {
+        "image": "0861.png",
+        "qp": 16,
+        "case_sha256": "1fc56af997bc862b3bbf89a37f5bd416e1d0699e33b2f4fcecd6a287e2c7c320",
+        "exit_map": [
+          4,
+          4,
+          4,
+          5,
+          4,
+          4
+        ],
+        "per_suffix_block_union_feature_cells": [
+          6144,
+          6144,
+          6144,
+          6144,
+          6144,
+          6144,
+          1156,
+          1089
+        ],
+        "ideal_shared_context_relative_mac": 0.8859088093903832,
+        "ideal_shared_context_mac_saved_pct": 11.40911906096168,
+        "deployed_delta444_db": 0.03449673640440096,
+        "deployed_zero_halo_mac_saved_pct": 10.697381290001207
+      },
+      {
+        "image": "0861.png",
+        "qp": 32,
+        "case_sha256": "ebf3afa5689c30f09c77c22bfbe640e29f3ec7053bdb317432195d5449261423",
+        "exit_map": [
+          4,
+          4,
+          4,
+          5,
+          5,
+          4
+        ],
+        "per_suffix_block_union_feature_cells": [
+          6144,
+          6144,
+          6144,
+          6144,
+          6144,
+          6144,
+          2244,
+          2145
+        ],
+        "ideal_shared_context_relative_mac": 0.9103695952553622,
+        "ideal_shared_context_mac_saved_pct": 8.96304047446378,
+        "deployed_delta444_db": 0.06574965217105874,
+        "deployed_zero_halo_mac_saved_pct": 8.367763551277452
+      },
+      {
+        "image": "0861.png",
+        "qp": 48,
+        "case_sha256": "651a82bff285a6f7faf22eff5cb44ba443058f54e87bcb3d02156f9c08e073c3",
+        "exit_map": [
+          5,
+          5,
+          5,
+          5,
+          5,
+          5
+        ],
+        "per_suffix_block_union_feature_cells": [
+          6144,
+          6144,
+          6144,
+          6144,
+          6144,
+          6144,
+          6144,
+          6144
+        ],
+        "ideal_shared_context_relative_mac": 1.0,
+        "ideal_shared_context_mac_saved_pct": 0.0,
+        "deployed_delta444_db": 0.03675476768534489,
+        "deployed_zero_halo_mac_saved_pct": -0.9507193245465118
+      },
+      {
+        "image": "0861.png",
+        "qp": 63,
+        "case_sha256": "fc64f5b9fd5af360831a9d4ccdf5f1d9bbbdcd32a6597ebbf16d18ff85e57235",
+        "exit_map": [
+          5,
+          5,
+          5,
+          5,
+          5,
+          5
+        ],
+        "per_suffix_block_union_feature_cells": [
+          6144,
+          6144,
+          6144,
+          6144,
+          6144,
+          6144,
+          6144,
+          6144
+        ],
+        "ideal_shared_context_relative_mac": 1.0,
+        "ideal_shared_context_mac_saved_pct": 0.0,
+        "deployed_delta444_db": 0.05705986201718191,
+        "deployed_zero_halo_mac_saved_pct": -0.9507193245465118
+      },
+      {
+        "image": "0828.png",
+        "qp": 0,
+        "case_sha256": "73d5143283c604557a10c758d7edc1eca16a48aad41b292719e8ed48ba5e54f1",
+        "exit_map": [
+          3,
+          3,
+          3,
+          2,
+          3,
+          3
+        ],
+        "per_suffix_block_union_feature_cells": [
+          6144,
+          6144,
+          5244,
+          5183,
+          0,
+          0,
+          0,
+          0
+        ],
+        "ideal_shared_context_relative_mac": 0.7257379908909107,
+        "ideal_shared_context_mac_saved_pct": 27.426200910908925,
+        "deployed_delta444_db": 0.7918083678455878,
+        "deployed_zero_halo_mac_saved_pct": 26.702334078354173
+      },
+      {
+        "image": "0828.png",
+        "qp": 16,
+        "case_sha256": "15f5cf1546c2c1b6f59e67a117e62943779c3755ffd7c983563d698d738122e1",
+        "exit_map": [
+          5,
+          5,
+          5,
+          3,
+          5,
+          5
+        ],
+        "per_suffix_block_union_feature_cells": [
+          6144,
+          6144,
+          6144,
+          6144,
+          5360,
+          5303,
+          5244,
+          5183
+        ],
+        "ideal_shared_context_relative_mac": 0.9654522772723277,
+        "ideal_shared_context_mac_saved_pct": 3.454772272767226,
+        "deployed_delta444_db": 0.17224640716424625,
+        "deployed_zero_halo_mac_saved_pct": 3.2440469584887555
+      },
+      {
+        "image": "0828.png",
+        "qp": 32,
+        "case_sha256": "d2c8588a376fe3a648cc7535f81338fc8a0a85d255e4cf7d8b422d4d0004ac02",
+        "exit_map": [
+          5,
+          5,
+          5,
+          3,
+          5,
+          5
+        ],
+        "per_suffix_block_union_feature_cells": [
+          6144,
+          6144,
+          6144,
+          6144,
+          5360,
+          5303,
+          5244,
+          5183
+        ],
+        "ideal_shared_context_relative_mac": 0.9654522772723277,
+        "ideal_shared_context_mac_saved_pct": 3.454772272767226,
+        "deployed_delta444_db": 0.16218691303970192,
+        "deployed_zero_halo_mac_saved_pct": 3.2440469584887555
+      },
+      {
+        "image": "0828.png",
+        "qp": 48,
+        "case_sha256": "4ebb58a5046af82e41862126a259339a980e46adf0129371cc48c0284bb0d5ff",
+        "exit_map": [
+          5,
+          5,
+          5,
+          3,
+          5,
+          5
+        ],
+        "per_suffix_block_union_feature_cells": [
+          6144,
+          6144,
+          6144,
+          6144,
+          5360,
+          5303,
+          5244,
+          5183
+        ],
+        "ideal_shared_context_relative_mac": 0.9654522772723277,
+        "ideal_shared_context_mac_saved_pct": 3.454772272767226,
+        "deployed_delta444_db": 0.15275492058925527,
+        "deployed_zero_halo_mac_saved_pct": 3.2440469584887555
+      },
+      {
+        "image": "0828.png",
+        "qp": 63,
+        "case_sha256": "897707703fceebe93a2b3e7e1367fefcf61524221a26da6c233d421ffef81cbc",
+        "exit_map": [
+          5,
+          5,
+          5,
+          3,
+          5,
+          5
+        ],
+        "per_suffix_block_union_feature_cells": [
+          6144,
+          6144,
+          6144,
+          6144,
+          5360,
+          5303,
+          5244,
+          5183
+        ],
+        "ideal_shared_context_relative_mac": 0.9654522772723277,
+        "ideal_shared_context_mac_saved_pct": 3.454772272767226,
+        "deployed_delta444_db": 0.1565408045038452,
+        "deployed_zero_halo_mac_saved_pct": 3.2440469584887555
+      },
+      {
+        "image": "0872.png",
+        "qp": 0,
+        "case_sha256": "cbd24c4352e07760754510d929d4155ed1bcb8fbc4dc15fcb684c3f5c832d8db",
+        "exit_map": [
+          3,
+          3,
+          3,
+          3,
+          3,
+          3
+        ],
+        "per_suffix_block_union_feature_cells": [
+          6144,
+          6144,
+          6144,
+          6144,
+          0,
+          0,
+          0,
+          0
+        ],
+        "ideal_shared_context_relative_mac": 0.7483139240506329,
+        "ideal_shared_context_mac_saved_pct": 25.16860759493671,
+        "deployed_delta444_db": 0.019117348651942926,
+        "deployed_zero_halo_mac_saved_pct": 24.217887314361864
+      },
+      {
+        "image": "0872.png",
+        "qp": 16,
+        "case_sha256": "49635be06945be01d56afc7e41779743a7cce51a5b2605a3e9cc18294d6bf2da",
+        "exit_map": [
+          4,
+          3,
+          3,
+          4,
+          4,
+          4
+        ],
+        "per_suffix_block_union_feature_cells": [
+          6144,
+          6144,
+          6144,
+          6144,
+          4284,
+          4191,
+          0,
+          0
+        ],
+        "ideal_shared_context_relative_mac": 0.8263529258416842,
+        "ideal_shared_context_mac_saved_pct": 17.36470741583158,
+        "deployed_delta444_db": 0.022914709943605543,
+        "deployed_zero_halo_mac_saved_pct": 16.757299097580248
+      },
+      {
+        "image": "0872.png",
+        "qp": 32,
+        "case_sha256": "8602a2881fdd61a812fade363aa8abd15ebd2cb97251ec3c650a96ba03ef3f2f",
+        "exit_map": [
+          4,
+          3,
+          3,
+          4,
+          4,
+          4
+        ],
+        "per_suffix_block_union_feature_cells": [
+          6144,
+          6144,
+          6144,
+          6144,
+          4284,
+          4191,
+          0,
+          0
+        ],
+        "ideal_shared_context_relative_mac": 0.8263529258416842,
+        "ideal_shared_context_mac_saved_pct": 17.36470741583158,
+        "deployed_delta444_db": 0.044378210281992424,
+        "deployed_zero_halo_mac_saved_pct": 16.757299097580248
+      },
+      {
+        "image": "0872.png",
+        "qp": 48,
+        "case_sha256": "34b92c994892245585436fa316d8282cba81f681138b2fefa37788b88ef66516",
+        "exit_map": [
+          4,
+          3,
+          5,
+          5,
+          5,
+          5
+        ],
+        "per_suffix_block_union_feature_cells": [
+          6144,
+          6144,
+          6144,
+          6144,
+          5416,
+          5332,
+          4284,
+          4191
+        ],
+        "ideal_shared_context_relative_mac": 0.944351799567071,
+        "ideal_shared_context_mac_saved_pct": 5.564820043292896,
+        "deployed_delta444_db": 0.03226976252475189,
+        "deployed_zero_halo_mac_saved_pct": 5.573664697212511
+      },
+      {
+        "image": "0872.png",
+        "qp": 63,
+        "case_sha256": "bd25d97139da59d7d508507e2a1edfbe33946dafca83ead8b1dbed7ec49e2439",
+        "exit_map": [
+          5,
+          3,
+          5,
+          5,
+          5,
+          5
+        ],
+        "per_suffix_block_union_feature_cells": [
+          6144,
+          6144,
+          6144,
+          6144,
+          5472,
+          5390,
+          5304,
+          5214
+        ],
+        "ideal_shared_context_relative_mac": 0.9689702894251055,
+        "ideal_shared_context_mac_saved_pct": 3.1029710574894454,
+        "deployed_delta444_db": 0.03663469136663307,
+        "deployed_zero_halo_mac_saved_pct": 3.2440469584887555
+      },
+      {
+        "image": "0887.png",
+        "qp": 0,
+        "case_sha256": "5c1e795a4a494c5203da1df04a491187a888957f3112f15d7e5f630774dea493",
+        "exit_map": [
+          3,
+          3,
+          3,
+          3,
+          3,
+          3
+        ],
+        "per_suffix_block_union_feature_cells": [
+          6144,
+          6144,
+          6144,
+          6144,
+          0,
+          0,
+          0,
+          0
+        ],
+        "ideal_shared_context_relative_mac": 0.7483139240506329,
+        "ideal_shared_context_mac_saved_pct": 25.16860759493671,
+        "deployed_delta444_db": 0.032176337658283996,
+        "deployed_zero_halo_mac_saved_pct": 24.217887314361864
+      },
+      {
+        "image": "0887.png",
+        "qp": 16,
+        "case_sha256": "bcda81fb7e6d12b567487c72e4ffe3540519b1e821578c3c28d335fef6d0e749",
+        "exit_map": [
+          4,
+          3,
+          3,
+          4,
+          4,
+          4
+        ],
+        "per_suffix_block_union_feature_cells": [
+          6144,
+          6144,
+          6144,
+          6144,
+          4284,
+          4191,
+          0,
+          0
+        ],
+        "ideal_shared_context_relative_mac": 0.8263529258416842,
+        "ideal_shared_context_mac_saved_pct": 17.36470741583158,
+        "deployed_delta444_db": 0.04454393053989567,
+        "deployed_zero_halo_mac_saved_pct": 16.757299097580248
+      },
+      {
+        "image": "0887.png",
+        "qp": 32,
+        "case_sha256": "bd293f090ce92a2d5a45ba2ba12b369e5d618f13a7058283f5b2c24a2b078995",
+        "exit_map": [
+          4,
+          3,
+          3,
+          4,
+          4,
+          4
+        ],
+        "per_suffix_block_union_feature_cells": [
+          6144,
+          6144,
+          6144,
+          6144,
+          4284,
+          4191,
+          0,
+          0
+        ],
+        "ideal_shared_context_relative_mac": 0.8263529258416842,
+        "ideal_shared_context_mac_saved_pct": 17.36470741583158,
+        "deployed_delta444_db": 0.08788590682288244,
+        "deployed_zero_halo_mac_saved_pct": 16.757299097580248
+      },
+      {
+        "image": "0887.png",
+        "qp": 48,
+        "case_sha256": "4ee1fee184334b857c36b32aa7489f7967ad10ab1bfefff4574cb927b873c121",
+        "exit_map": [
+          4,
+          4,
+          3,
+          5,
+          5,
+          5
+        ],
+        "per_suffix_block_union_feature_cells": [
+          6144,
+          6144,
+          6144,
+          6144,
+          5304,
+          5245,
+          3264,
+          3168
+        ],
+        "ideal_shared_context_relative_mac": 0.918702168215981,
+        "ideal_shared_context_mac_saved_pct": 8.129783178401894,
+        "deployed_delta444_db": 0.07532667461007189,
+        "deployed_zero_halo_mac_saved_pct": 7.903288396400743
+      },
+      {
+        "image": "0887.png",
+        "qp": 63,
+        "case_sha256": "987ae0da55e7c3f7d4449dc4822726d8027cd78b00597ef63b3690cacd6ebf64",
+        "exit_map": [
+          5,
+          5,
+          5,
+          5,
+          5,
+          5
+        ],
+        "per_suffix_block_union_feature_cells": [
+          6144,
+          6144,
+          6144,
+          6144,
+          6144,
+          6144,
+          6144,
+          6144
+        ],
+        "ideal_shared_context_relative_mac": 1.0,
+        "ideal_shared_context_mac_saved_pct": 0.0,
+        "deployed_delta444_db": 0.05134939441447686,
+        "deployed_zero_halo_mac_saved_pct": -0.9507193245465118
+      },
+      {
+        "image": "0896.png",
+        "qp": 0,
+        "case_sha256": "e2dde320eada6e633b9a6ebeefa771a2f2f66ce29331f80102ec8708c3d797ea",
+        "exit_map": [
+          2,
+          2,
+          2,
+          2,
+          2,
+          2
+        ],
+        "per_suffix_block_union_feature_cells": [
+          6144,
+          6144,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "ideal_shared_context_relative_mac": 0.5992472573839662,
+        "ideal_shared_context_mac_saved_pct": 40.075274261603376,
+        "deployed_delta444_db": 0.22054901878298272,
+        "deployed_zero_halo_mac_saved_pct": 39.12455746750288
+      },
+      {
+        "image": "0896.png",
+        "qp": 16,
+        "case_sha256": "9614fb3e3f2b878117731997f7116d72dd548292a4d88e16c67591344dc9537c",
+        "exit_map": [
+          3,
+          2,
+          2,
+          3,
+          2,
+          3
+        ],
+        "per_suffix_block_union_feature_cells": [
+          6144,
+          6144,
+          3332,
+          3201,
+          0,
+          0,
+          0,
+          0
+        ],
+        "ideal_shared_context_relative_mac": 0.6784995794325773,
+        "ideal_shared_context_mac_saved_pct": 32.150042056742265,
+        "deployed_delta444_db": 0.11772257798355522,
+        "deployed_zero_halo_mac_saved_pct": 31.671221645874315
+      },
+      {
+        "image": "0896.png",
+        "qp": 32,
+        "case_sha256": "c3f8902c6562ac140d680b37ab1083ea5e36edd16d2611f6d30ab4d36fdaf207",
+        "exit_map": [
+          2,
+          2,
+          2,
+          3,
+          2,
+          3
+        ],
+        "per_suffix_block_union_feature_cells": [
+          6144,
+          6144,
+          2312,
+          2178,
+          0,
+          0,
+          0,
+          0
+        ],
+        "ideal_shared_context_relative_mac": 0.6537157903700774,
+        "ideal_shared_context_mac_saved_pct": 34.62842096299226,
+        "deployed_delta444_db": 0.15831682460133412,
+        "deployed_zero_halo_mac_saved_pct": 34.1556669197505
+      },
+      {
+        "image": "0896.png",
+        "qp": 48,
+        "case_sha256": "e10e3e27e2243b0c8edd3a68a5bcedcbeb5f2a08cb9b6ce511b6fd6fec1706ab",
+        "exit_map": [
+          2,
+          2,
+          2,
+          2,
+          2,
+          2
+        ],
+        "per_suffix_block_union_feature_cells": [
+          6144,
+          6144,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "ideal_shared_context_relative_mac": 0.5992472573839662,
+        "ideal_shared_context_mac_saved_pct": 40.075274261603376,
+        "deployed_delta444_db": 0.20195876329206103,
+        "deployed_zero_halo_mac_saved_pct": 39.12455746750288
+      },
+      {
+        "image": "0896.png",
+        "qp": 63,
+        "case_sha256": "72d4a917db3fe950716e796b64bff46dfd0ea1e9f7f91d8882f13ddae416f392",
+        "exit_map": [
+          2,
+          2,
+          2,
+          2,
+          2,
+          3
+        ],
+        "per_suffix_block_union_feature_cells": [
+          6144,
+          6144,
+          1156,
+          1089,
+          0,
+          0,
+          0,
+          0
+        ],
+        "ideal_shared_context_relative_mac": 0.6264815238770218,
+        "ideal_shared_context_mac_saved_pct": 37.35184761229782,
+        "deployed_delta444_db": 0.16736874897593926,
+        "deployed_zero_halo_mac_saved_pct": 36.64011219362669
+      },
+      {
+        "image": "0836.png",
+        "qp": 0,
+        "case_sha256": "109eddd823dbe2445fcb850ba0d16da5fbffcd721913d15ff62aa22ae9f8e020",
+        "exit_map": [
+          3,
+          3,
+          3,
+          3,
+          3,
+          3
+        ],
+        "per_suffix_block_union_feature_cells": [
+          6144,
+          6144,
+          6144,
+          6144,
+          0,
+          0,
+          0,
+          0
+        ],
+        "ideal_shared_context_relative_mac": 0.7483139240506329,
+        "ideal_shared_context_mac_saved_pct": 25.16860759493671,
+        "deployed_delta444_db": 0.06905923344760627,
+        "deployed_zero_halo_mac_saved_pct": 24.217887314361864
+      },
+      {
+        "image": "0836.png",
+        "qp": 16,
+        "case_sha256": "cd5d824ce32961cc01920248b480e2e378000f4b3cddfd00077c3318e4df636c",
+        "exit_map": [
+          4,
+          4,
+          4,
+          3,
+          4,
+          4
+        ],
+        "per_suffix_block_union_feature_cells": [
+          6144,
+          6144,
+          6144,
+          6144,
+          5244,
+          5183,
+          0,
+          0
+        ],
+        "ideal_shared_context_relative_mac": 0.8438398193015998,
+        "ideal_shared_context_mac_saved_pct": 15.61601806984002,
+        "deployed_delta444_db": 0.043795393269492874,
+        "deployed_zero_halo_mac_saved_pct": 14.892150553268724
+      },
+      {
+        "image": "0836.png",
+        "qp": 32,
+        "case_sha256": "59c010373bc18403ccbfbad5a09b216247b9dbc0d79a50bde9992c173ba3784f",
+        "exit_map": [
+          4,
+          4,
+          4,
+          3,
+          3,
+          4
+        ],
+        "per_suffix_block_union_feature_cells": [
+          6144,
+          6144,
+          6144,
+          6144,
+          4284,
+          4191,
+          0,
+          0
+        ],
+        "ideal_shared_context_relative_mac": 0.8263529258416842,
+        "ideal_shared_context_mac_saved_pct": 17.36470741583158,
+        "deployed_delta444_db": 0.08517859857785555,
+        "deployed_zero_halo_mac_saved_pct": 16.757299097580248
+      },
+      {
+        "image": "0836.png",
+        "qp": 48,
+        "case_sha256": "63005dbbbc343abf5cc0eed95cbf00ffac74c18f0ed23181ff03394b65924c63",
+        "exit_map": [
+          5,
+          5,
+          4,
+          3,
+          3,
+          4
+        ],
+        "per_suffix_block_union_feature_cells": [
+          6144,
+          6144,
+          6144,
+          6144,
+          4408,
+          4317,
+          2244,
+          2145
+        ],
+        "ideal_shared_context_relative_mac": 0.8795325053841421,
+        "ideal_shared_context_mac_saved_pct": 12.046749461585794,
+        "deployed_delta444_db": 0.08182363717156443,
+        "deployed_zero_halo_mac_saved_pct": 12.09805765966826
+      },
+      {
+        "image": "0836.png",
+        "qp": 63,
+        "case_sha256": "87da79f66ad47152e740b2428a0280cbe9e44dd300334a9d2e0fd747d9d4c653",
+        "exit_map": [
+          5,
+          5,
+          5,
+          3,
+          4,
+          5
+        ],
+        "per_suffix_block_union_feature_cells": [
+          6144,
+          6144,
+          6144,
+          6144,
+          5304,
+          5245,
+          4284,
+          4191
+        ],
+        "ideal_shared_context_relative_mac": 0.9419377153656822,
+        "ideal_shared_context_mac_saved_pct": 5.8062284634317844,
+        "deployed_delta444_db": 0.0614018035182296,
+        "deployed_zero_halo_mac_saved_pct": 5.573664697212511
+      },
+      {
+        "image": "0863.png",
+        "qp": 0,
+        "case_sha256": "487e750719a9066101fc210fdd4d3af323a585cd3dd7142f46e27de5cd42fb74",
+        "exit_map": [
+          2,
+          2,
+          2,
+          2,
+          2,
+          2
+        ],
+        "per_suffix_block_union_feature_cells": [
+          6144,
+          6144,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "ideal_shared_context_relative_mac": 0.5992472573839662,
+        "ideal_shared_context_mac_saved_pct": 40.075274261603376,
+        "deployed_delta444_db": 0.07131919303803887,
+        "deployed_zero_halo_mac_saved_pct": 39.12455746750288
+      },
+      {
+        "image": "0863.png",
+        "qp": 16,
+        "case_sha256": "f3516e7d8c1a61ef6df80866e6b692c600a71bc6c3d9b10dd92bcd00a2b2843b",
+        "exit_map": [
+          3,
+          2,
+          2,
+          2,
+          2,
+          2
+        ],
+        "per_suffix_block_union_feature_cells": [
+          6144,
+          6144,
+          1156,
+          1089,
+          0,
+          0,
+          0,
+          0
+        ],
+        "ideal_shared_context_relative_mac": 0.6264815238770218,
+        "ideal_shared_context_mac_saved_pct": 37.35184761229782,
+        "deployed_delta444_db": 0.038387472204254994,
+        "deployed_zero_halo_mac_saved_pct": 36.64011219362669
+      },
+      {
+        "image": "0863.png",
+        "qp": 32,
+        "case_sha256": "0a0d0dca3c62ebae5e193b663250ca44202325adddcf29a150efd9dc046b74a4",
+        "exit_map": [
+          2,
+          2,
+          2,
+          2,
+          2,
+          2
+        ],
+        "per_suffix_block_union_feature_cells": [
+          6144,
+          6144,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "ideal_shared_context_relative_mac": 0.5992472573839662,
+        "ideal_shared_context_mac_saved_pct": 40.075274261603376,
+        "deployed_delta444_db": 0.054263855097375156,
+        "deployed_zero_halo_mac_saved_pct": 39.12455746750288
+      },
+      {
+        "image": "0863.png",
+        "qp": 48,
+        "case_sha256": "9de20f2e58950b92f1eea10424a40f769b898860be04ebbc12b6c3a33d81485a",
+        "exit_map": [
+          2,
+          2,
+          2,
+          2,
+          2,
+          2
+        ],
+        "per_suffix_block_union_feature_cells": [
+          6144,
+          6144,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "ideal_shared_context_relative_mac": 0.5992472573839662,
+        "ideal_shared_context_mac_saved_pct": 40.075274261603376,
+        "deployed_delta444_db": 0.11730848369884354,
+        "deployed_zero_halo_mac_saved_pct": 39.12455746750288
+      },
+      {
+        "image": "0863.png",
+        "qp": 63,
+        "case_sha256": "a16b1f784f970ad3b6ab385d0464fa9dccc71230b3f1d9f4e08c98952b9c47bb",
+        "exit_map": [
+          2,
+          2,
+          2,
+          2,
+          2,
+          2
+        ],
+        "per_suffix_block_union_feature_cells": [
+          6144,
+          6144,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "ideal_shared_context_relative_mac": 0.5992472573839662,
+        "ideal_shared_context_mac_saved_pct": 40.075274261603376,
+        "deployed_delta444_db": 0.18397659316143775,
+        "deployed_zero_halo_mac_saved_pct": 39.12455746750288
+      },
+      {
+        "image": "0877.png",
+        "qp": 0,
+        "case_sha256": "1655ae8702097e7ca780f3570fdea3d700c6f2cd627eb5a92198d1265b00136f",
+        "exit_map": [
+          2,
+          2,
+          2,
+          2,
+          2,
+          2
+        ],
+        "per_suffix_block_union_feature_cells": [
+          6144,
+          6144,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "ideal_shared_context_relative_mac": 0.5992472573839662,
+        "ideal_shared_context_mac_saved_pct": 40.075274261603376,
+        "deployed_delta444_db": 0.1713693113593095,
+        "deployed_zero_halo_mac_saved_pct": 39.12455746750288
+      },
+      {
+        "image": "0877.png",
+        "qp": 16,
+        "case_sha256": "0c48c79f05dd61fea5d5c76eb1d16c7aadc78c573aaa659c855c5058918172a6",
+        "exit_map": [
+          2,
+          3,
+          3,
+          2,
+          3,
+          2
+        ],
+        "per_suffix_block_union_feature_cells": [
+          6144,
+          6144,
+          3324,
+          3199,
+          0,
+          0,
+          0,
+          0
+        ],
+        "ideal_shared_context_relative_mac": 0.6783782686686884,
+        "ideal_shared_context_mac_saved_pct": 32.162173133131155,
+        "deployed_delta444_db": 0.11537481774954726,
+        "deployed_zero_halo_mac_saved_pct": 31.671221645874315
+      },
+      {
+        "image": "0877.png",
+        "qp": 32,
+        "case_sha256": "9445a99181d640654d1093794a3a570688f4c2a866730daeaa4b90508cdc6b73",
+        "exit_map": [
+          2,
+          3,
+          2,
+          2,
+          2,
+          2
+        ],
+        "per_suffix_block_union_feature_cells": [
+          6144,
+          6144,
+          1224,
+          1122,
+          0,
+          0,
+          0,
+          0
+        ],
+        "ideal_shared_context_relative_mac": 0.6277067625922996,
+        "ideal_shared_context_mac_saved_pct": 37.229323740770035,
+        "deployed_delta444_db": 0.18523250465500438,
+        "deployed_zero_halo_mac_saved_pct": 36.64011219362669
+      },
+      {
+        "image": "0877.png",
+        "qp": 48,
+        "case_sha256": "e9944c29a836fea920ab3f57bfca777fcba1f272f290e3d358bba1365b59a4c1",
+        "exit_map": [
+          2,
+          2,
+          2,
+          2,
+          2,
+          2
+        ],
+        "per_suffix_block_union_feature_cells": [
+          6144,
+          6144,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "ideal_shared_context_relative_mac": 0.5992472573839662,
+        "ideal_shared_context_mac_saved_pct": 40.075274261603376,
+        "deployed_delta444_db": 0.2648497714738067,
+        "deployed_zero_halo_mac_saved_pct": 39.12455746750288
+      },
+      {
+        "image": "0877.png",
+        "qp": 63,
+        "case_sha256": "ffb13b3777e7af2fcfe37475fde78a2d7e7f50cc04c5be49581919ed43ea5a06",
+        "exit_map": [
+          2,
+          3,
+          2,
+          2,
+          2,
+          2
+        ],
+        "per_suffix_block_union_feature_cells": [
+          6144,
+          6144,
+          1224,
+          1122,
+          0,
+          0,
+          0,
+          0
+        ],
+        "ideal_shared_context_relative_mac": 0.6277067625922996,
+        "ideal_shared_context_mac_saved_pct": 37.229323740770035,
+        "deployed_delta444_db": 0.26231170242190466,
+        "deployed_zero_halo_mac_saved_pct": 36.64011219362669
+      },
+      {
+        "image": "0869.png",
+        "qp": 0,
+        "case_sha256": "b7a265b47a7b7ddb1dd0ef9f2b40e4cb8ff8b8f87714862ed182a0feaa12c25b",
+        "exit_map": [
+          3,
+          3,
+          3,
+          3,
+          3,
+          2
+        ],
+        "per_suffix_block_union_feature_cells": [
+          6144,
+          6144,
+          5244,
+          5183,
+          0,
+          0,
+          0,
+          0
+        ],
+        "ideal_shared_context_relative_mac": 0.7257379908909107,
+        "ideal_shared_context_mac_saved_pct": 27.426200910908925,
+        "deployed_delta444_db": 0.03246858220461144,
+        "deployed_zero_halo_mac_saved_pct": 26.702334078354173
+      },
+      {
+        "image": "0869.png",
+        "qp": 16,
+        "case_sha256": "265ba5ce830b1b39a198e807d586622dc066ff61c6a105958426b1a975dac21f",
+        "exit_map": [
+          4,
+          4,
+          4,
+          4,
+          3,
+          3
+        ],
+        "per_suffix_block_union_feature_cells": [
+          6144,
+          6144,
+          6144,
+          6144,
+          4284,
+          4191,
+          0,
+          0
+        ],
+        "ideal_shared_context_relative_mac": 0.8263529258416842,
+        "ideal_shared_context_mac_saved_pct": 17.36470741583158,
+        "deployed_delta444_db": 0.04545855532584414,
+        "deployed_zero_halo_mac_saved_pct": 16.757299097580248
+      },
+      {
+        "image": "0869.png",
+        "qp": 32,
+        "case_sha256": "187b6983ace8d48592aace894a7d1ddba7ac3608f14afaea42ca991dd4cecc8e",
+        "exit_map": [
+          4,
+          4,
+          4,
+          4,
+          4,
+          3
+        ],
+        "per_suffix_block_union_feature_cells": [
+          6144,
+          6144,
+          6144,
+          6144,
+          5244,
+          5183,
+          0,
+          0
+        ],
+        "ideal_shared_context_relative_mac": 0.8438398193015998,
+        "ideal_shared_context_mac_saved_pct": 15.61601806984002,
+        "deployed_delta444_db": 0.07958794343737205,
+        "deployed_zero_halo_mac_saved_pct": 14.892150553268724
+      },
+      {
+        "image": "0869.png",
+        "qp": 48,
+        "case_sha256": "5c0d1cbcd5f6d39ddf239ac54971d04dcf56f9f0f59c85eab9568560a39e75c0",
+        "exit_map": [
+          5,
+          4,
+          5,
+          4,
+          4,
+          3
+        ],
+        "per_suffix_block_union_feature_cells": [
+          6144,
+          6144,
+          6144,
+          6144,
+          5304,
+          5245,
+          2312,
+          2178
+        ],
+        "ideal_shared_context_relative_mac": 0.8966918597815576,
+        "ideal_shared_context_mac_saved_pct": 10.330814021844237,
+        "deployed_delta444_db": 0.07805295277163674,
+        "deployed_zero_halo_mac_saved_pct": 10.232909115356737
+      },
+      {
+        "image": "0869.png",
+        "qp": 63,
+        "case_sha256": "719b9f6b6599e032ad127219c1351aa3222678dbc02836d93c1d3200ec1e60e9",
+        "exit_map": [
+          5,
+          5,
+          5,
+          5,
+          5,
+          5
+        ],
+        "per_suffix_block_union_feature_cells": [
+          6144,
+          6144,
+          6144,
+          6144,
+          6144,
+          6144,
+          6144,
+          6144
+        ],
+        "ideal_shared_context_relative_mac": 1.0,
+        "ideal_shared_context_mac_saved_pct": 0.0,
+        "deployed_delta444_db": 0.041605662899923825,
+        "deployed_zero_halo_mac_saved_pct": -0.9507193245465118
+      },
+      {
+        "image": "0810.png",
+        "qp": 0,
+        "case_sha256": "3699c6eded22ea45de9ee0a939298c0ca3fc7a77f1575ecb2b348959d41d8961",
+        "exit_map": [
+          2,
+          2,
+          2,
+          2,
+          2,
+          2
+        ],
+        "per_suffix_block_union_feature_cells": [
+          6144,
+          6144,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "ideal_shared_context_relative_mac": 0.5992472573839662,
+        "ideal_shared_context_mac_saved_pct": 40.075274261603376,
+        "deployed_delta444_db": 0.03221433687403365,
+        "deployed_zero_halo_mac_saved_pct": 39.12455746750288
+      },
+      {
+        "image": "0810.png",
+        "qp": 16,
+        "case_sha256": "d18ac6ee32a6976e1a9c677e9c21219fdacf4805b312b23dfef8e11005bdfc20",
+        "exit_map": [
+          3,
+          4,
+          3,
+          3,
+          3,
+          3
+        ],
+        "per_suffix_block_union_feature_cells": [
+          6144,
+          6144,
+          6144,
+          6144,
+          1224,
+          1122,
+          0,
+          0
+        ],
+        "ideal_shared_context_relative_mac": 0.7705804616077708,
+        "ideal_shared_context_mac_saved_pct": 22.94195383922292,
+        "deployed_delta444_db": 0.054943807713982794,
+        "deployed_zero_halo_mac_saved_pct": 22.352744730514818
+      },
+      {
+        "image": "0810.png",
+        "qp": 32,
+        "case_sha256": "08a347838d959346e3a81b78fe1a714801e79df4d620321302c87e8e99654688",
+        "exit_map": [
+          3,
+          4,
+          3,
+          3,
+          3,
+          2
+        ],
+        "per_suffix_block_union_feature_cells": [
+          6144,
+          6144,
+          5248,
+          5187,
+          1224,
+          1122,
+          0,
+          0
+        ],
+        "ideal_shared_context_relative_mac": 0.7481015770591596,
+        "ideal_shared_context_mac_saved_pct": 25.18984229408404,
+        "deployed_delta444_db": 0.10487373834448238,
+        "deployed_zero_halo_mac_saved_pct": 24.83718553404265
+      },
+      {
+        "image": "0810.png",
+        "qp": 48,
+        "case_sha256": "e38f5e6796e2e142083c93fc24285194c4bcb3cfcbfb69df9adcfb6de6c35841",
+        "exit_map": [
+          3,
+          4,
+          3,
+          2,
+          3,
+          2
+        ],
+        "per_suffix_block_union_feature_cells": [
+          6144,
+          6144,
+          4352,
+          4230,
+          1224,
+          1122,
+          0,
+          0
+        ],
+        "ideal_shared_context_relative_mac": 0.7256226925105486,
+        "ideal_shared_context_mac_saved_pct": 27.437730748945143,
+        "deployed_delta444_db": 0.15250065697156415,
+        "deployed_zero_halo_mac_saved_pct": 27.32162931780272
+      },
+      {
+        "image": "0810.png",
+        "qp": 63,
+        "case_sha256": "f982a2fc9980c91e29e84b86fcc284832015906fa5c035d8e05aed63f900f71a",
+        "exit_map": [
+          4,
+          5,
+          4,
+          2,
+          4,
+          2
+        ],
+        "per_suffix_block_union_feature_cells": [
+          6144,
+          6144,
+          4584,
+          4470,
+          4352,
+          4230,
+          1224,
+          1122
+        ],
+        "ideal_shared_context_relative_mac": 0.815330313269163,
+        "ideal_shared_context_mac_saved_pct": 18.466968673083695,
+        "deployed_delta444_db": 0.1430585813531602,
+        "deployed_zero_halo_mac_saved_pct": 19.396562965912157
+      },
+      {
+        "image": "0882.png",
+        "qp": 0,
+        "case_sha256": "dca632c32d66d7bb35ca89ec4ad0bc46a50179feb64e842e05cd479c0bffa8be",
+        "exit_map": [
+          3,
+          3,
+          3,
+          2,
+          3,
+          3
+        ],
+        "per_suffix_block_union_feature_cells": [
+          6144,
+          6144,
+          5244,
+          5183,
+          0,
+          0,
+          0,
+          0
+        ],
+        "ideal_shared_context_relative_mac": 0.7257379908909107,
+        "ideal_shared_context_mac_saved_pct": 27.426200910908925,
+        "deployed_delta444_db": 0.03940242969478766,
+        "deployed_zero_halo_mac_saved_pct": 26.702334078354173
+      },
+      {
+        "image": "0882.png",
+        "qp": 16,
+        "case_sha256": "96e3f1ba6cde5a2e4c812d939ecb8cb7b17ededaf8c97b5757f6899ea68711c6",
+        "exit_map": [
+          3,
+          3,
+          3,
+          3,
+          3,
+          3
+        ],
+        "per_suffix_block_union_feature_cells": [
+          6144,
+          6144,
+          6144,
+          6144,
+          0,
+          0,
+          0,
+          0
+        ],
+        "ideal_shared_context_relative_mac": 0.7483139240506329,
+        "ideal_shared_context_mac_saved_pct": 25.16860759493671,
+        "deployed_delta444_db": 0.03490949272347775,
+        "deployed_zero_halo_mac_saved_pct": 24.217887314361864
+      },
+      {
+        "image": "0882.png",
+        "qp": 32,
+        "case_sha256": "d96eca2e2c5254ec752868463b582a968f03502ce5a1d5bd2753da8eaf9584d8",
+        "exit_map": [
+          3,
+          3,
+          3,
+          3,
+          3,
+          3
+        ],
+        "per_suffix_block_union_feature_cells": [
+          6144,
+          6144,
+          6144,
+          6144,
+          0,
+          0,
+          0,
+          0
+        ],
+        "ideal_shared_context_relative_mac": 0.7483139240506329,
+        "ideal_shared_context_mac_saved_pct": 25.16860759493671,
+        "deployed_delta444_db": 0.09307215896016575,
+        "deployed_zero_halo_mac_saved_pct": 24.217887314361864
+      },
+      {
+        "image": "0882.png",
+        "qp": 48,
+        "case_sha256": "0cf83d6c6707a3f4988e148a1516b6714aca92d7db92e8bdaac0d575c008d7c4",
+        "exit_map": [
+          3,
+          4,
+          4,
+          2,
+          3,
+          3
+        ],
+        "per_suffix_block_union_feature_cells": [
+          6144,
+          6144,
+          5248,
+          5187,
+          2244,
+          2145,
+          0,
+          0
+        ],
+        "ideal_shared_context_relative_mac": 0.766692398470464,
+        "ideal_shared_context_mac_saved_pct": 23.3307601529536,
+        "deployed_delta444_db": 0.12184730351357087,
+        "deployed_zero_halo_mac_saved_pct": 22.972039969963365
+      },
+      {
+        "image": "0882.png",
+        "qp": 63,
+        "case_sha256": "c48d95e71e8a9d2d9950615de4e959932f1aaf91397e821a21a43859db358adf",
+        "exit_map": [
+          3,
+          5,
+          5,
+          2,
+          3,
+          5
+        ],
+        "per_suffix_block_union_feature_cells": [
+          6144,
+          6144,
+          5260,
+          5199,
+          3456,
+          3360,
+          3264,
+          3168
+        ],
+        "ideal_shared_context_relative_mac": 0.863615056643372,
+        "ideal_shared_context_mac_saved_pct": 13.638494335662799,
+        "deployed_delta444_db": 0.12599721962029858,
+        "deployed_zero_halo_mac_saved_pct": 14.11802926878386
+      },
+      {
+        "image": "0850.png",
+        "qp": 0,
+        "case_sha256": "7acd4697cdb503ceec032db27c1fcd81b0ec97164dd6e21e3af5db55572c14f9",
+        "exit_map": [
+          2,
+          3,
+          3,
+          3,
+          2,
+          2
+        ],
+        "per_suffix_block_union_feature_cells": [
+          6144,
+          6144,
+          3384,
+          3230,
+          0,
+          0,
+          0,
+          0
+        ],
+        "ideal_shared_context_relative_mac": 0.6794821966200774,
+        "ideal_shared_context_mac_saved_pct": 32.05178033799226,
+        "deployed_delta444_db": 0.12735916001482017,
+        "deployed_zero_halo_mac_saved_pct": 31.671221645874315
+      },
+      {
+        "image": "0850.png",
+        "qp": 16,
+        "case_sha256": "bbe7ed1ca3c0e4a4f66396faf8fa8cafee205091bbaf086998b1d9eaaf25f16c",
+        "exit_map": [
+          3,
+          4,
+          4,
+          4,
+          3,
+          3
+        ],
+        "per_suffix_block_union_feature_cells": [
+          6144,
+          6144,
+          6144,
+          6144,
+          3384,
+          3230,
+          0,
+          0
+        ],
+        "ideal_shared_context_relative_mac": 0.8099699603331574,
+        "ideal_shared_context_mac_saved_pct": 19.00300396668426,
+        "deployed_delta444_db": 0.09197292625414812,
+        "deployed_zero_halo_mac_saved_pct": 18.62244764189177
+      },
+      {
+        "image": "0850.png",
+        "qp": 32,
+        "case_sha256": "8d39a4323be82c702e0e936a897673608fd5257dec2ed2554bdcbbeff9838724",
+        "exit_map": [
+          3,
+          4,
+          4,
+          4,
+          3,
+          3
+        ],
+        "per_suffix_block_union_feature_cells": [
+          6144,
+          6144,
+          6144,
+          6144,
+          3384,
+          3230,
+          0,
+          0
+        ],
+        "ideal_shared_context_relative_mac": 0.8099699603331574,
+        "ideal_shared_context_mac_saved_pct": 19.00300396668426,
+        "deployed_delta444_db": 0.12019393915865852,
+        "deployed_zero_halo_mac_saved_pct": 18.62244764189177
+      },
+      {
+        "image": "0850.png",
+        "qp": 48,
+        "case_sha256": "92acce8120b63a18395e48cdb5717d51d5188c75dcef1c1aa082978c690cf76a",
+        "exit_map": [
+          3,
+          5,
+          5,
+          5,
+          3,
+          3
+        ],
+        "per_suffix_block_union_feature_cells": [
+          6144,
+          6144,
+          6144,
+          6144,
+          3680,
+          3534,
+          3384,
+          3230
+        ],
+        "ideal_shared_context_relative_mac": 0.8928388196642053,
+        "ideal_shared_context_mac_saved_pct": 10.71611803357947,
+        "deployed_delta444_db": 0.09605485593469501,
+        "deployed_zero_halo_mac_saved_pct": 11.633582504791551
+      },
+      {
+        "image": "0850.png",
+        "qp": 63,
+        "case_sha256": "cd2d17766d6e9ee1e9fdfbab221196d6ab1629b3876cdc1bb11ce33338ef2783",
+        "exit_map": [
+          3,
+          5,
+          5,
+          5,
+          3,
+          5
+        ],
+        "per_suffix_block_union_feature_cells": [
+          6144,
+          6144,
+          6144,
+          6144,
+          4688,
+          4549,
+          4404,
+          4253
+        ],
+        "ideal_shared_context_relative_mac": 0.9344225666974331,
+        "ideal_shared_context_mac_saved_pct": 6.557743330256693,
+        "deployed_delta444_db": 0.1128041055496952,
+        "deployed_zero_halo_mac_saved_pct": 7.438813241524034
+      },
+      {
+        "image": "0820.png",
+        "qp": 0,
+        "case_sha256": "5e18d735ad52e0fd7a869fc6e4d4a4f76044ae3b2788400b76ec37916ef6d255",
+        "exit_map": [
+          3,
+          3,
+          3,
+          3,
+          2,
+          2
+        ],
+        "per_suffix_block_union_feature_cells": [
+          6144,
+          6144,
+          4284,
+          4191,
+          0,
+          0,
+          0,
+          0
+        ],
+        "ideal_shared_context_relative_mac": 0.7020581297797996,
+        "ideal_shared_context_mac_saved_pct": 29.794187022020036,
+        "deployed_delta444_db": 0.07311448106908078,
+        "deployed_zero_halo_mac_saved_pct": 29.186777862114244
+      },
+      {
+        "image": "0820.png",
+        "qp": 16,
+        "case_sha256": "abe6dbdbbc6ea5f092a67857bc1c7c14eb6176637cc2d38a4aacf008dcb834d3",
+        "exit_map": [
+          4,
+          3,
+          3,
+          3,
+          3,
+          3
+        ],
+        "per_suffix_block_union_feature_cells": [
+          6144,
+          6144,
+          6144,
+          6144,
+          1156,
+          1089,
+          0,
+          0
+        ],
+        "ideal_shared_context_relative_mac": 0.769355222892493,
+        "ideal_shared_context_mac_saved_pct": 23.064477710750698,
+        "deployed_delta444_db": 0.0768282564948514,
+        "deployed_zero_halo_mac_saved_pct": 22.35273877005034
+      },
+      {
+        "image": "0820.png",
+        "qp": 32,
+        "case_sha256": "794c89cd4ff04d9067ef9fb7b9c5ab3eeb2860b27a1f0d3937c3dbef8a117829",
+        "exit_map": [
+          4,
+          3,
+          3,
+          3,
+          3,
+          3
+        ],
+        "per_suffix_block_union_feature_cells": [
+          6144,
+          6144,
+          6144,
+          6144,
+          1156,
+          1089,
+          0,
+          0
+        ],
+        "ideal_shared_context_relative_mac": 0.769355222892493,
+        "ideal_shared_context_mac_saved_pct": 23.064477710750698,
+        "deployed_delta444_db": 0.11143387441235247,
+        "deployed_zero_halo_mac_saved_pct": 22.35273877005034
+      },
+      {
+        "image": "0820.png",
+        "qp": 48,
+        "case_sha256": "07b4b40fe70757f9f0618ccf7f6dfdf57f60cb2aa02c7cb801494aad8086b177",
+        "exit_map": [
+          4,
+          3,
+          3,
+          3,
+          3,
+          3
+        ],
+        "per_suffix_block_union_feature_cells": [
+          6144,
+          6144,
+          6144,
+          6144,
+          1156,
+          1089,
+          0,
+          0
+        ],
+        "ideal_shared_context_relative_mac": 0.769355222892493,
+        "ideal_shared_context_mac_saved_pct": 23.064477710750698,
+        "deployed_delta444_db": 0.16555172216803912,
+        "deployed_zero_halo_mac_saved_pct": 22.35273877005034
+      },
+      {
+        "image": "0820.png",
+        "qp": 63,
+        "case_sha256": "daa95c533490f7b87ccf91e64417a4c37ba616d9a9ffee204bb358c73701b501",
+        "exit_map": [
+          5,
+          5,
+          4,
+          3,
+          3,
+          3
+        ],
+        "per_suffix_block_union_feature_cells": [
+          6144,
+          6144,
+          6144,
+          6144,
+          3400,
+          3302,
+          2244,
+          2145
+        ],
+        "ideal_shared_context_relative_mac": 0.8611843055006153,
+        "ideal_shared_context_mac_saved_pct": 13.88156944993847,
+        "deployed_delta444_db": 0.13739668372054956,
+        "deployed_zero_halo_mac_saved_pct": 13.963206203979784
+      },
+      {
+        "image": "0876.png",
+        "qp": 0,
+        "case_sha256": "5a06702d724b5cf6331bbb652f1b4430c6e465d17229318eecea71e83e90949e",
+        "exit_map": [
+          2,
+          3,
+          2,
+          3,
+          3,
+          3
+        ],
+        "per_suffix_block_union_feature_cells": [
+          6144,
+          6144,
+          4344,
+          4222,
+          0,
+          0,
+          0,
+          0
+        ],
+        "ideal_shared_context_relative_mac": 0.7031620577311885,
+        "ideal_shared_context_mac_saved_pct": 29.683794226881155,
+        "deployed_delta444_db": 0.01569365692530873,
+        "deployed_zero_halo_mac_saved_pct": 29.186777862114244
+      },
+      {
+        "image": "0876.png",
+        "qp": 16,
+        "case_sha256": "c0c7d0ddd311eaa8dab44e7eb1e9205da7cafdbca0dd2ac6474f154f8b714fb5",
+        "exit_map": [
+          3,
+          3,
+          3,
+          4,
+          3,
+          4
+        ],
+        "per_suffix_block_union_feature_cells": [
+          6144,
+          6144,
+          6144,
+          6144,
+          2312,
+          2178,
+          0,
+          0
+        ],
+        "ideal_shared_context_relative_mac": 0.7903965217343529,
+        "ideal_shared_context_mac_saved_pct": 20.960347826564707,
+        "deployed_delta444_db": 0.02784464534696326,
+        "deployed_zero_halo_mac_saved_pct": 20.487596186203294
+      },
+      {
+        "image": "0876.png",
+        "qp": 32,
+        "case_sha256": "5bacd2ccf13a9680cd86d03a5a634310f34b7bf0f2877ab8441c07d5b6430950",
+        "exit_map": [
+          4,
+          4,
+          3,
+          4,
+          3,
+          4
+        ],
+        "per_suffix_block_union_feature_cells": [
+          6144,
+          6144,
+          6144,
+          6144,
+          4404,
+          4253,
+          0,
+          0
+        ],
+        "ideal_shared_context_relative_mac": 0.8285607817444619,
+        "ideal_shared_context_mac_saved_pct": 17.14392182555381,
+        "deployed_delta444_db": 0.05262028530998431,
+        "deployed_zero_halo_mac_saved_pct": 16.757299097580248
+      },
+      {
+        "image": "0876.png",
+        "qp": 48,
+        "case_sha256": "0e1f40b98ab082de5a93b2ea7d325ac4c23795f525de4896d7bd1107db94eb55",
+        "exit_map": [
+          5,
+          5,
+          5,
+          4,
+          4,
+          5
+        ],
+        "per_suffix_block_union_feature_cells": [
+          6144,
+          6144,
+          6144,
+          6144,
+          6144,
+          6144,
+          4284,
+          4191
+        ],
+        "ideal_shared_context_relative_mac": 0.9568406895547645,
+        "ideal_shared_context_mac_saved_pct": 4.315931044523547,
+        "deployed_delta444_db": 0.03771549988617026,
+        "deployed_zero_halo_mac_saved_pct": 3.7085221133654644
+      },
+      {
+        "image": "0876.png",
+        "qp": 63,
+        "case_sha256": "45c57d85e96bf7f0a85f1fa65393a6afab0699d13b55fc3c92ca0180115ceb4c",
+        "exit_map": [
+          5,
+          5,
+          5,
+          5,
+          5,
+          5
+        ],
+        "per_suffix_block_union_feature_cells": [
+          6144,
+          6144,
+          6144,
+          6144,
+          6144,
+          6144,
+          6144,
+          6144
+        ],
+        "ideal_shared_context_relative_mac": 1.0,
+        "ideal_shared_context_mac_saved_pct": 0.0,
+        "deployed_delta444_db": 0.029507148301901272,
+        "deployed_zero_halo_mac_saved_pct": -0.9507193245465118
+      },
+      {
+        "image": "0854.png",
+        "qp": 0,
+        "case_sha256": "750a6d133e57152763a71afee16e8906ef06256a99563e0d0716d751bbe62a28",
+        "exit_map": [
+          2,
+          3,
+          2,
+          3,
+          3,
+          3
+        ],
+        "per_suffix_block_union_feature_cells": [
+          6144,
+          6144,
+          4344,
+          4222,
+          0,
+          0,
+          0,
+          0
+        ],
+        "ideal_shared_context_relative_mac": 0.7031620577311885,
+        "ideal_shared_context_mac_saved_pct": 29.683794226881155,
+        "deployed_delta444_db": 0.026583147891237162,
+        "deployed_zero_halo_mac_saved_pct": 29.186777862114244
+      },
+      {
+        "image": "0854.png",
+        "qp": 16,
+        "case_sha256": "c27487854caa4496cca2794c448495166f0c86f30014549b4bc4ce3431695239",
+        "exit_map": [
+          3,
+          3,
+          3,
+          3,
+          4,
+          4
+        ],
+        "per_suffix_block_union_feature_cells": [
+          6144,
+          6144,
+          6144,
+          6144,
+          2244,
+          2145,
+          0,
+          0
+        ],
+        "ideal_shared_context_relative_mac": 0.7891712830190751,
+        "ideal_shared_context_mac_saved_pct": 21.082871698092486,
+        "deployed_delta444_db": 0.025944050703988898,
+        "deployed_zero_halo_mac_saved_pct": 20.487590225738817
+      },
+      {
+        "image": "0854.png",
+        "qp": 32,
+        "case_sha256": "a66b5e5a184ca9fa26d0f142665327e6bc0971f0f5ef5dd720ca6f614fa7e1a5",
+        "exit_map": [
+          3,
+          3,
+          3,
+          4,
+          4,
+          4
+        ],
+        "per_suffix_block_union_feature_cells": [
+          6144,
+          6144,
+          6144,
+          6144,
+          3264,
+          3168,
+          0,
+          0
+        ],
+        "ideal_shared_context_relative_mac": 0.8077621044303797,
+        "ideal_shared_context_mac_saved_pct": 19.223789556962036,
+        "deployed_delta444_db": 0.038123924827608534,
+        "deployed_zero_halo_mac_saved_pct": 18.62244764189177
+      },
+      {
+        "image": "0854.png",
+        "qp": 48,
+        "case_sha256": "632b64a535499a8247e5d73d263bf126b55353f1f87b5309d6c5a1256125a142",
+        "exit_map": [
+          3,
+          4,
+          4,
+          4,
+          4,
+          4
+        ],
+        "per_suffix_block_union_feature_cells": [
+          6144,
+          6144,
+          6144,
+          6144,
+          5244,
+          5183,
+          0,
+          0
+        ],
+        "ideal_shared_context_relative_mac": 0.8438398193015998,
+        "ideal_shared_context_mac_saved_pct": 15.61601806984002,
+        "deployed_delta444_db": 0.059016099957913,
+        "deployed_zero_halo_mac_saved_pct": 14.892150553268724
+      },
+      {
+        "image": "0854.png",
+        "qp": 63,
+        "case_sha256": "e4796285c5ad0dd1565d002897cfbf7e32221b42c90e179c8fdcf6ad9cc7533f",
+        "exit_map": [
+          5,
+          5,
+          5,
+          5,
+          5,
+          5
+        ],
+        "per_suffix_block_union_feature_cells": [
+          6144,
+          6144,
+          6144,
+          6144,
+          6144,
+          6144,
+          6144,
+          6144
+        ],
+        "ideal_shared_context_relative_mac": 1.0,
+        "ideal_shared_context_mac_saved_pct": 0.0,
+        "deployed_delta444_db": 0.02245666522799944,
+        "deployed_zero_halo_mac_saved_pct": -0.9507193245465118
+      }
+    ],
+    "validation": [
+      {
+        "image": "0844.png",
+        "qp": 0,
+        "case_sha256": "d4c862309f85815dfa39fc3e686374dcdce8e23a748e50377e38d08f9ab03a6f",
+        "exit_map": [
+          2,
+          2,
+          2,
+          2,
+          3,
+          2
+        ],
+        "per_suffix_block_union_feature_cells": [
+          6144,
+          6144,
+          1224,
+          1122,
+          0,
+          0,
+          0,
+          0
+        ],
+        "ideal_shared_context_relative_mac": 0.6277067625922996,
+        "ideal_shared_context_mac_saved_pct": 37.229323740770035,
+        "deployed_delta444_db": 0.25339288575537905,
+        "deployed_zero_halo_mac_saved_pct": 36.64011219362669
+      },
+      {
+        "image": "0844.png",
+        "qp": 16,
+        "case_sha256": "221395dbcbe2db709735bcb67bfd6c58b4f68da7328d6d2f01ec46bc51fc3782",
+        "exit_map": [
+          2,
+          2,
+          2,
+          2,
+          3,
+          3
+        ],
+        "per_suffix_block_union_feature_cells": [
+          6144,
+          6144,
+          2244,
+          2145,
+          0,
+          0,
+          0,
+          0
+        ],
+        "ideal_shared_context_relative_mac": 0.6524905516547996,
+        "ideal_shared_context_mac_saved_pct": 34.750944834520034,
+        "deployed_delta444_db": 0.22342614134725772,
+        "deployed_zero_halo_mac_saved_pct": 34.1556669197505
+      },
+      {
+        "image": "0844.png",
+        "qp": 32,
+        "case_sha256": "86f7433d1927a52945c3ac50d674113f7727c67e863cc8438d470fc39d94ac4a",
+        "exit_map": [
+          2,
+          2,
+          2,
+          2,
+          3,
+          3
+        ],
+        "per_suffix_block_union_feature_cells": [
+          6144,
+          6144,
+          2244,
+          2145,
+          0,
+          0,
+          0,
+          0
+        ],
+        "ideal_shared_context_relative_mac": 0.6524905516547996,
+        "ideal_shared_context_mac_saved_pct": 34.750944834520034,
+        "deployed_delta444_db": 0.2852866732880792,
+        "deployed_zero_halo_mac_saved_pct": 34.1556669197505
+      },
+      {
+        "image": "0844.png",
+        "qp": 48,
+        "case_sha256": "d3f631cb406d5535814a236d29983f58d77fe498158cbcca8327016a7d3c0114",
+        "exit_map": [
+          2,
+          2,
+          2,
+          2,
+          3,
+          3
+        ],
+        "per_suffix_block_union_feature_cells": [
+          6144,
+          6144,
+          2244,
+          2145,
+          0,
+          0,
+          0,
+          0
+        ],
+        "ideal_shared_context_relative_mac": 0.6524905516547996,
+        "ideal_shared_context_mac_saved_pct": 34.750944834520034,
+        "deployed_delta444_db": 0.49610332799045137,
+        "deployed_zero_halo_mac_saved_pct": 34.1556669197505
+      },
+      {
+        "image": "0844.png",
+        "qp": 63,
+        "case_sha256": "abd762aa51bddb599b2ae52c735f73adc077dda6ca1dffe5fffd035dff34baed",
+        "exit_map": [
+          2,
+          2,
+          2,
+          2,
+          5,
+          5
+        ],
+        "per_suffix_block_union_feature_cells": [
+          6144,
+          6144,
+          2660,
+          2553,
+          2448,
+          2345,
+          2244,
+          2145
+        ],
+        "ideal_shared_context_relative_mac": 0.758391682874033,
+        "ideal_shared_context_mac_saved_pct": 24.160831712596696,
+        "deployed_delta444_db": 0.19283470414440892,
+        "deployed_zero_halo_mac_saved_pct": 25.76612988333159
+      },
+      {
+        "image": "0892.png",
+        "qp": 0,
+        "case_sha256": "c73f7641ea517f555596bd40b260f03217c7b56970410ca288a27140c141fa56",
+        "exit_map": [
+          3,
+          3,
+          2,
+          2,
+          3,
+          3
+        ],
+        "per_suffix_block_union_feature_cells": [
+          6144,
+          6144,
+          4344,
+          4222,
+          0,
+          0,
+          0,
+          0
+        ],
+        "ideal_shared_context_relative_mac": 0.7031620577311885,
+        "ideal_shared_context_mac_saved_pct": 29.683794226881155,
+        "deployed_delta444_db": 0.21475443480906609,
+        "deployed_zero_halo_mac_saved_pct": 29.186777862114244
+      },
+      {
+        "image": "0892.png",
+        "qp": 16,
+        "case_sha256": "82cdef9ceb196052a4f49e92e01329c8b92d3cbd18dc61959ffd8084ada94b36",
+        "exit_map": [
+          3,
+          3,
+          3,
+          4,
+          4,
+          4
+        ],
+        "per_suffix_block_union_feature_cells": [
+          6144,
+          6144,
+          6144,
+          6144,
+          3264,
+          3168,
+          0,
+          0
+        ],
+        "ideal_shared_context_relative_mac": 0.8077621044303797,
+        "ideal_shared_context_mac_saved_pct": 19.223789556962036,
+        "deployed_delta444_db": 0.13782537937560613,
+        "deployed_zero_halo_mac_saved_pct": 18.62244764189177
+      },
+      {
+        "image": "0892.png",
+        "qp": 32,
+        "case_sha256": "e552c47dc20fdf86a7ea39c7f816680a48c6127a6a0c1ab8db62fe004322a587",
+        "exit_map": [
+          3,
+          3,
+          3,
+          4,
+          4,
+          4
+        ],
+        "per_suffix_block_union_feature_cells": [
+          6144,
+          6144,
+          6144,
+          6144,
+          3264,
+          3168,
+          0,
+          0
+        ],
+        "ideal_shared_context_relative_mac": 0.8077621044303797,
+        "ideal_shared_context_mac_saved_pct": 19.223789556962036,
+        "deployed_delta444_db": 0.21954496042249638,
+        "deployed_zero_halo_mac_saved_pct": 18.62244764189177
+      },
+      {
+        "image": "0892.png",
+        "qp": 48,
+        "case_sha256": "e6f658e8537b19e6f48c2ab13cde42d28727aa1c1695449cdf65361197bbefd1",
+        "exit_map": [
+          3,
+          4,
+          3,
+          4,
+          4,
+          4
+        ],
+        "per_suffix_block_union_feature_cells": [
+          6144,
+          6144,
+          6144,
+          6144,
+          4344,
+          4222,
+          0,
+          0
+        ],
+        "ideal_shared_context_relative_mac": 0.8274568537930731,
+        "ideal_shared_context_mac_saved_pct": 17.25431462069269,
+        "deployed_delta444_db": 0.32963187125528376,
+        "deployed_zero_halo_mac_saved_pct": 16.757299097580248
+      },
+      {
+        "image": "0892.png",
+        "qp": 63,
+        "case_sha256": "d9d2e165a0252ccdb0849c952a0b32a8b37b480a910f79f2e2d129771e447d0b",
+        "exit_map": [
+          5,
+          5,
+          5,
+          5,
+          5,
+          5
+        ],
+        "per_suffix_block_union_feature_cells": [
+          6144,
+          6144,
+          6144,
+          6144,
+          6144,
+          6144,
+          6144,
+          6144
+        ],
+        "ideal_shared_context_relative_mac": 1.0,
+        "ideal_shared_context_mac_saved_pct": 0.0,
+        "deployed_delta444_db": 0.08285816112332808,
+        "deployed_zero_halo_mac_saved_pct": -0.9507193245465118
+      },
+      {
+        "image": "0891.png",
+        "qp": 0,
+        "case_sha256": "93e1afd248e092c29890f999ea5bc17789e5235ad9b2391d7c2edbb6f163cd04",
+        "exit_map": [
+          3,
+          3,
+          3,
+          3,
+          2,
+          3
+        ],
+        "per_suffix_block_union_feature_cells": [
+          6144,
+          6144,
+          5304,
+          5214,
+          0,
+          0,
+          0,
+          0
+        ],
+        "ideal_shared_context_relative_mac": 0.7268419188422995,
+        "ideal_shared_context_mac_saved_pct": 27.315808115770047,
+        "deployed_delta444_db": 0.16160474192346685,
+        "deployed_zero_halo_mac_saved_pct": 26.702334078354173
+      },
+      {
+        "image": "0891.png",
+        "qp": 16,
+        "case_sha256": "aa123a53478a01e25ccfe3bf4cc7a0b708bcdd787d981144c4a7e0e8c51aff53",
+        "exit_map": [
+          5,
+          4,
+          4,
+          3,
+          3,
+          4
+        ],
+        "per_suffix_block_union_feature_cells": [
+          6144,
+          6144,
+          6144,
+          6144,
+          4356,
+          4261,
+          1156,
+          1089
+        ],
+        "ideal_shared_context_relative_mac": 0.8537615632691631,
+        "ideal_shared_context_mac_saved_pct": 14.623843673083691,
+        "deployed_delta444_db": 0.12054509903845893,
+        "deployed_zero_halo_mac_saved_pct": 14.427678378624254
+      },
+      {
+        "image": "0891.png",
+        "qp": 32,
+        "case_sha256": "2f8788c102cb0f88f5997304955a3904d9a5426043a457b9d571b7348b55f0a7",
+        "exit_map": [
+          5,
+          5,
+          5,
+          3,
+          3,
+          4
+        ],
+        "per_suffix_block_union_feature_cells": [
+          6144,
+          6144,
+          6144,
+          6144,
+          4408,
+          4317,
+          3264,
+          3168
+        ],
+        "ideal_shared_context_relative_mac": 0.9027680525338432,
+        "ideal_shared_context_mac_saved_pct": 9.723194746615683,
+        "deployed_delta444_db": 0.13384888497287284,
+        "deployed_zero_halo_mac_saved_pct": 9.768433960480028
+      },
+      {
+        "image": "0891.png",
+        "qp": 48,
+        "case_sha256": "473c9ff0f5a60f4fd43f2ce3dd11eb80519086d55ee1e7c13e9095b2a407c07e",
+        "exit_map": [
+          5,
+          5,
+          5,
+          4,
+          3,
+          5
+        ],
+        "per_suffix_block_union_feature_cells": [
+          6144,
+          6144,
+          6144,
+          6144,
+          5416,
+          5332,
+          4284,
+          4191
+        ],
+        "ideal_shared_context_relative_mac": 0.944351799567071,
+        "ideal_shared_context_mac_saved_pct": 5.564820043292896,
+        "deployed_delta444_db": 0.10506860410038489,
+        "deployed_zero_halo_mac_saved_pct": 5.573670657676988
+      },
+      {
+        "image": "0891.png",
+        "qp": 63,
+        "case_sha256": "398b0d5b829a556273c9c5483991d42018f622e59e8c9a099507707da61f6b0f",
+        "exit_map": [
+          5,
+          5,
+          5,
+          5,
+          5,
+          5
+        ],
+        "per_suffix_block_union_feature_cells": [
+          6144,
+          6144,
+          6144,
+          6144,
+          6144,
+          6144,
+          6144,
+          6144
+        ],
+        "ideal_shared_context_relative_mac": 1.0,
+        "ideal_shared_context_mac_saved_pct": 0.0,
+        "deployed_delta444_db": 0.08265387040060766,
+        "deployed_zero_halo_mac_saved_pct": -0.9507193245465118
+      },
+      {
+        "image": "0819.png",
+        "qp": 0,
+        "case_sha256": "e042552766d5ccf82331709037b73d5dce20b4aca969246ade13aef73c02cb61",
+        "exit_map": [
+          2,
+          2,
+          2,
+          2,
+          2,
+          2
+        ],
+        "per_suffix_block_union_feature_cells": [
+          6144,
+          6144,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "ideal_shared_context_relative_mac": 0.5992472573839662,
+        "ideal_shared_context_mac_saved_pct": 40.075274261603376,
+        "deployed_delta444_db": 0.04980288574013557,
+        "deployed_zero_halo_mac_saved_pct": 39.12455746750288
+      },
+      {
+        "image": "0819.png",
+        "qp": 16,
+        "case_sha256": "41bf746d257e86c0c8c5eeae82b889346a25db55313da1bea4c708183797656a",
+        "exit_map": [
+          3,
+          3,
+          3,
+          3,
+          3,
+          3
+        ],
+        "per_suffix_block_union_feature_cells": [
+          6144,
+          6144,
+          6144,
+          6144,
+          0,
+          0,
+          0,
+          0
+        ],
+        "ideal_shared_context_relative_mac": 0.7483139240506329,
+        "ideal_shared_context_mac_saved_pct": 25.16860759493671,
+        "deployed_delta444_db": 0.0398914178460032,
+        "deployed_zero_halo_mac_saved_pct": 24.217887314361864
+      },
+      {
+        "image": "0819.png",
+        "qp": 32,
+        "case_sha256": "a72c5c0a47356f353b965016c29d316ef904656aa848fec46b4096f4acdbed48",
+        "exit_map": [
+          3,
+          3,
+          3,
+          3,
+          3,
+          3
+        ],
+        "per_suffix_block_union_feature_cells": [
+          6144,
+          6144,
+          6144,
+          6144,
+          0,
+          0,
+          0,
+          0
+        ],
+        "ideal_shared_context_relative_mac": 0.7483139240506329,
+        "ideal_shared_context_mac_saved_pct": 25.16860759493671,
+        "deployed_delta444_db": 0.07659237658624032,
+        "deployed_zero_halo_mac_saved_pct": 24.217887314361864
+      },
+      {
+        "image": "0819.png",
+        "qp": 48,
+        "case_sha256": "862b1afc724969e306f6c08a916c035ab47304cb4eee743e02bd4f76a43268bd",
+        "exit_map": [
+          3,
+          3,
+          3,
+          3,
+          3,
+          3
+        ],
+        "per_suffix_block_union_feature_cells": [
+          6144,
+          6144,
+          6144,
+          6144,
+          0,
+          0,
+          0,
+          0
+        ],
+        "ideal_shared_context_relative_mac": 0.7483139240506329,
+        "ideal_shared_context_mac_saved_pct": 25.16860759493671,
+        "deployed_delta444_db": 0.1500148217442574,
+        "deployed_zero_halo_mac_saved_pct": 24.217887314361864
+      },
+      {
+        "image": "0819.png",
+        "qp": 63,
+        "case_sha256": "239c24b7cac23320aaffc24ef39396f6073a0201d8f60569c573b00b96a463a2",
+        "exit_map": [
+          5,
+          3,
+          3,
+          5,
+          5,
+          5
+        ],
+        "per_suffix_block_union_feature_cells": [
+          6144,
+          6144,
+          6144,
+          6144,
+          4464,
+          4375,
+          4284,
+          4191
+        ],
+        "ideal_shared_context_relative_mac": 0.9273865423918777,
+        "ideal_shared_context_mac_saved_pct": 7.261345760812232,
+        "deployed_delta444_db": 0.0799569074782276,
+        "deployed_zero_halo_mac_saved_pct": 7.438813241524034
+      },
+      {
+        "image": "0871.png",
+        "qp": 0,
+        "case_sha256": "889a81258ab48ecfba4a59bc587e67b7ef575621a1f171c08858b1f92d221152",
+        "exit_map": [
+          2,
+          2,
+          2,
+          2,
+          2,
+          2
+        ],
+        "per_suffix_block_union_feature_cells": [
+          6144,
+          6144,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "ideal_shared_context_relative_mac": 0.5992472573839662,
+        "ideal_shared_context_mac_saved_pct": 40.075274261603376,
+        "deployed_delta444_db": 0.13458131739312273,
+        "deployed_zero_halo_mac_saved_pct": 39.12455746750288
+      },
+      {
+        "image": "0871.png",
+        "qp": 16,
+        "case_sha256": "5840c9b2df5ad7512be050cb70e12779711671014fefd32e19f105adf0e70546",
+        "exit_map": [
+          3,
+          3,
+          3,
+          3,
+          3,
+          3
+        ],
+        "per_suffix_block_union_feature_cells": [
+          6144,
+          6144,
+          6144,
+          6144,
+          0,
+          0,
+          0,
+          0
+        ],
+        "ideal_shared_context_relative_mac": 0.7483139240506329,
+        "ideal_shared_context_mac_saved_pct": 25.16860759493671,
+        "deployed_delta444_db": 0.07035554811679871,
+        "deployed_zero_halo_mac_saved_pct": 24.217887314361864
+      },
+      {
+        "image": "0871.png",
+        "qp": 32,
+        "case_sha256": "08c53ccd97034e7cd700c3768b200db78df76f35a9aee9b4ccfab5eaa6e19a65",
+        "exit_map": [
+          3,
+          3,
+          3,
+          3,
+          3,
+          3
+        ],
+        "per_suffix_block_union_feature_cells": [
+          6144,
+          6144,
+          6144,
+          6144,
+          0,
+          0,
+          0,
+          0
+        ],
+        "ideal_shared_context_relative_mac": 0.7483139240506329,
+        "ideal_shared_context_mac_saved_pct": 25.16860759493671,
+        "deployed_delta444_db": 0.1137904610741479,
+        "deployed_zero_halo_mac_saved_pct": 24.217887314361864
+      },
+      {
+        "image": "0871.png",
+        "qp": 48,
+        "case_sha256": "9b15a827b12ee4dda6c6ab8a9da019dec20885bb43f42da75b3077983c19b350",
+        "exit_map": [
+          3,
+          5,
+          3,
+          3,
+          3,
+          3
+        ],
+        "per_suffix_block_union_feature_cells": [
+          6144,
+          6144,
+          6144,
+          6144,
+          1440,
+          1330,
+          1224,
+          1122
+        ],
+        "ideal_shared_context_relative_mac": 0.8026353012921941,
+        "ideal_shared_context_mac_saved_pct": 19.736469870780592,
+        "deployed_delta444_db": 0.16719693753412251,
+        "deployed_zero_halo_mac_saved_pct": 20.023121031326585
+      },
+      {
+        "image": "0871.png",
+        "qp": 63,
+        "case_sha256": "d8bad15ec71f4d189ed1baa9d6456217b844e61960d44069bc258c79a593baa6",
+        "exit_map": [
+          5,
+          5,
+          5,
+          5,
+          5,
+          5
+        ],
+        "per_suffix_block_union_feature_cells": [
+          6144,
+          6144,
+          6144,
+          6144,
+          6144,
+          6144,
+          6144,
+          6144
+        ],
+        "ideal_shared_context_relative_mac": 1.0,
+        "ideal_shared_context_mac_saved_pct": 0.0,
+        "deployed_delta444_db": 0.07516297417523607,
+        "deployed_zero_halo_mac_saved_pct": -0.9507193245465118
+      },
+      {
+        "image": "0897.png",
+        "qp": 0,
+        "case_sha256": "04f0eaa5e877770139139f2327d1d974417f9e29c66ff11174656619c4502a71",
+        "exit_map": [
+          3,
+          3,
+          3,
+          3,
+          3,
+          3
+        ],
+        "per_suffix_block_union_feature_cells": [
+          6144,
+          6144,
+          6144,
+          6144,
+          0,
+          0,
+          0,
+          0
+        ],
+        "ideal_shared_context_relative_mac": 0.7483139240506329,
+        "ideal_shared_context_mac_saved_pct": 25.16860759493671,
+        "deployed_delta444_db": 0.02440051444866021,
+        "deployed_zero_halo_mac_saved_pct": 24.217887314361864
+      },
+      {
+        "image": "0897.png",
+        "qp": 16,
+        "case_sha256": "ff6480d9ac169768594d30385c2452fc6efcbcb9eb7486c5c108f4e5b399ec1b",
+        "exit_map": [
+          4,
+          4,
+          4,
+          4,
+          4,
+          4
+        ],
+        "per_suffix_block_union_feature_cells": [
+          6144,
+          6144,
+          6144,
+          6144,
+          6144,
+          6144,
+          0,
+          0
+        ],
+        "ideal_shared_context_relative_mac": 0.8602227848101266,
+        "ideal_shared_context_mac_saved_pct": 13.977721518987341,
+        "deployed_delta444_db": 0.026579170521906628,
+        "deployed_zero_halo_mac_saved_pct": 13.0270020089572
+      },
+      {
+        "image": "0897.png",
+        "qp": 32,
+        "case_sha256": "0f4f7525f035886a81bd97bbe8d30d908cca63c35cda96a6600a8420a96a74c1",
+        "exit_map": [
+          4,
+          4,
+          4,
+          4,
+          4,
+          4
+        ],
+        "per_suffix_block_union_feature_cells": [
+          6144,
+          6144,
+          6144,
+          6144,
+          6144,
+          6144,
+          0,
+          0
+        ],
+        "ideal_shared_context_relative_mac": 0.8602227848101266,
+        "ideal_shared_context_mac_saved_pct": 13.977721518987341,
+        "deployed_delta444_db": 0.05552990304537108,
+        "deployed_zero_halo_mac_saved_pct": 13.0270020089572
+      },
+      {
+        "image": "0897.png",
+        "qp": 48,
+        "case_sha256": "1f94b70d9aa5531ab723452334c944b6dbb4faf6e8e5bffc33644ecbf61604b3",
+        "exit_map": [
+          5,
+          5,
+          5,
+          5,
+          5,
+          5
+        ],
+        "per_suffix_block_union_feature_cells": [
+          6144,
+          6144,
+          6144,
+          6144,
+          6144,
+          6144,
+          6144,
+          6144
+        ],
+        "ideal_shared_context_relative_mac": 1.0,
+        "ideal_shared_context_mac_saved_pct": 0.0,
+        "deployed_delta444_db": 0.024476934389970128,
+        "deployed_zero_halo_mac_saved_pct": -0.9507193245465118
+      },
+      {
+        "image": "0897.png",
+        "qp": 63,
+        "case_sha256": "dc475c3869706a41e31c79e9771042e2f62479b64dd04a332e9828ccad376118",
+        "exit_map": [
+          5,
+          5,
+          5,
+          5,
+          5,
+          5
+        ],
+        "per_suffix_block_union_feature_cells": [
+          6144,
+          6144,
+          6144,
+          6144,
+          6144,
+          6144,
+          6144,
+          6144
+        ],
+        "ideal_shared_context_relative_mac": 1.0,
+        "ideal_shared_context_mac_saved_pct": 0.0,
+        "deployed_delta444_db": 0.04024433159604812,
+        "deployed_zero_halo_mac_saved_pct": -0.9507193245465118
+      },
+      {
+        "image": "0839.png",
+        "qp": 0,
+        "case_sha256": "c277c6132b76f246f9ec69d2c61a2dd1cb6d268f8a1f0bcec884e7208801cbcb",
+        "exit_map": [
+          2,
+          2,
+          2,
+          2,
+          2,
+          2
+        ],
+        "per_suffix_block_union_feature_cells": [
+          6144,
+          6144,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "ideal_shared_context_relative_mac": 0.5992472573839662,
+        "ideal_shared_context_mac_saved_pct": 40.075274261603376,
+        "deployed_delta444_db": 0.06928406077958488,
+        "deployed_zero_halo_mac_saved_pct": 39.12455746750288
+      },
+      {
+        "image": "0839.png",
+        "qp": 16,
+        "case_sha256": "02f080154b92f22da57398e04f48c7811794bae7bcd0ba93cfe8963853110a1e",
+        "exit_map": [
+          3,
+          2,
+          2,
+          2,
+          3,
+          2
+        ],
+        "per_suffix_block_union_feature_cells": [
+          6144,
+          6144,
+          2364,
+          2207,
+          0,
+          0,
+          0,
+          0
+        ],
+        "ideal_shared_context_relative_mac": 0.6546984075575774,
+        "ideal_shared_context_mac_saved_pct": 34.53015924424226,
+        "deployed_delta444_db": 0.03682373955295091,
+        "deployed_zero_halo_mac_saved_pct": 34.1556669197505
+      },
+      {
+        "image": "0839.png",
+        "qp": 32,
+        "case_sha256": "bc776e6daa57b38bd94451ef7f79f71eabdbf336881ae105c9c076530f2e98c7",
+        "exit_map": [
+          2,
+          2,
+          2,
+          2,
+          2,
+          2
+        ],
+        "per_suffix_block_union_feature_cells": [
+          6144,
+          6144,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "ideal_shared_context_relative_mac": 0.5992472573839662,
+        "ideal_shared_context_mac_saved_pct": 40.075274261603376,
+        "deployed_delta444_db": 0.0494927143308834,
+        "deployed_zero_halo_mac_saved_pct": 39.12455746750288
+      },
+      {
+        "image": "0839.png",
+        "qp": 48,
+        "case_sha256": "29fd789e3e2566767bbf0bb4478fbeebd2bd92b754e6fb68b9945f88bc33cf7d",
+        "exit_map": [
+          2,
+          2,
+          3,
+          2,
+          2,
+          2
+        ],
+        "per_suffix_block_union_feature_cells": [
+          6144,
+          6144,
+          1156,
+          1089,
+          0,
+          0,
+          0,
+          0
+        ],
+        "ideal_shared_context_relative_mac": 0.6264815238770218,
+        "ideal_shared_context_mac_saved_pct": 37.35184761229782,
+        "deployed_delta444_db": 0.06021074715184046,
+        "deployed_zero_halo_mac_saved_pct": 36.64011219362669
+      },
+      {
+        "image": "0839.png",
+        "qp": 63,
+        "case_sha256": "e31cb23c0851199a7f4743aabd3b324a320968dda74d8301ec3bd21fdb4c9b28",
+        "exit_map": [
+          2,
+          2,
+          3,
+          2,
+          2,
+          2
+        ],
+        "per_suffix_block_union_feature_cells": [
+          6144,
+          6144,
+          1156,
+          1089,
+          0,
+          0,
+          0,
+          0
+        ],
+        "ideal_shared_context_relative_mac": 0.6264815238770218,
+        "ideal_shared_context_mac_saved_pct": 37.35184761229782,
+        "deployed_delta444_db": 0.08950589684670227,
+        "deployed_zero_halo_mac_saved_pct": 36.64011219362669
+      },
+      {
+        "image": "0833.png",
+        "qp": 0,
+        "case_sha256": "6d15a86ed203262bca56a37798c4f96037df5b837333c5b326cd8fb84757c79b",
+        "exit_map": [
+          2,
+          2,
+          3,
+          2,
+          2,
+          2
+        ],
+        "per_suffix_block_union_feature_cells": [
+          6144,
+          6144,
+          1156,
+          1089,
+          0,
+          0,
+          0,
+          0
+        ],
+        "ideal_shared_context_relative_mac": 0.6264815238770218,
+        "ideal_shared_context_mac_saved_pct": 37.35184761229782,
+        "deployed_delta444_db": 0.15543981004696814,
+        "deployed_zero_halo_mac_saved_pct": 36.64011219362669
+      },
+      {
+        "image": "0833.png",
+        "qp": 16,
+        "case_sha256": "a4384dbc7947f9d28807806cc05ab8289164180e1d60b0939a9e849864a83a15",
+        "exit_map": [
+          3,
+          3,
+          3,
+          2,
+          2,
+          2
+        ],
+        "per_suffix_block_union_feature_cells": [
+          6144,
+          6144,
+          3264,
+          3168,
+          0,
+          0,
+          0,
+          0
+        ],
+        "ideal_shared_context_relative_mac": 0.6772743407172996,
+        "ideal_shared_context_mac_saved_pct": 32.27256592827003,
+        "deployed_delta444_db": 0.08614055224213063,
+        "deployed_zero_halo_mac_saved_pct": 31.671221645874315
+      },
+      {
+        "image": "0833.png",
+        "qp": 32,
+        "case_sha256": "449dc2cc5f06192d875878a8b9fcf5063f3d03d40ac9d0bf54a02afe688ac0f8",
+        "exit_map": [
+          3,
+          3,
+          3,
+          2,
+          2,
+          2
+        ],
+        "per_suffix_block_union_feature_cells": [
+          6144,
+          6144,
+          3264,
+          3168,
+          0,
+          0,
+          0,
+          0
+        ],
+        "ideal_shared_context_relative_mac": 0.6772743407172996,
+        "ideal_shared_context_mac_saved_pct": 32.27256592827003,
+        "deployed_delta444_db": 0.09216813031687492,
+        "deployed_zero_halo_mac_saved_pct": 31.671221645874315
+      },
+      {
+        "image": "0833.png",
+        "qp": 48,
+        "case_sha256": "e129fe8aedcedf1e462dca54885b702ba6890f025db87a3ba410cfe5ad5245b8",
+        "exit_map": [
+          3,
+          3,
+          3,
+          2,
+          2,
+          2
+        ],
+        "per_suffix_block_union_feature_cells": [
+          6144,
+          6144,
+          3264,
+          3168,
+          0,
+          0,
+          0,
+          0
+        ],
+        "ideal_shared_context_relative_mac": 0.6772743407172996,
+        "ideal_shared_context_mac_saved_pct": 32.27256592827003,
+        "deployed_delta444_db": 0.08816763565458774,
+        "deployed_zero_halo_mac_saved_pct": 31.671221645874315
+      },
+      {
+        "image": "0833.png",
+        "qp": 63,
+        "case_sha256": "8f2ebf999e5895e4cb385f81e4fa42035657c99b410948d25d2c92cec0562f58",
+        "exit_map": [
+          3,
+          3,
+          3,
+          2,
+          2,
+          2
+        ],
+        "per_suffix_block_union_feature_cells": [
+          6144,
+          6144,
+          3264,
+          3168,
+          0,
+          0,
+          0,
+          0
+        ],
+        "ideal_shared_context_relative_mac": 0.6772743407172996,
+        "ideal_shared_context_mac_saved_pct": 32.27256592827003,
+        "deployed_delta444_db": 0.08638428491360887,
+        "deployed_zero_halo_mac_saved_pct": 31.671221645874315
+      },
+      {
+        "image": "0849.png",
+        "qp": 0,
+        "case_sha256": "0c61c1dfaead90b734cbba2e642ac679723efeccee127153a229b48007799f0f",
+        "exit_map": [
+          3,
+          3,
+          3,
+          3,
+          3,
+          3
+        ],
+        "per_suffix_block_union_feature_cells": [
+          6144,
+          6144,
+          6144,
+          6144,
+          0,
+          0,
+          0,
+          0
+        ],
+        "ideal_shared_context_relative_mac": 0.7483139240506329,
+        "ideal_shared_context_mac_saved_pct": 25.16860759493671,
+        "deployed_delta444_db": 0.03361957513264643,
+        "deployed_zero_halo_mac_saved_pct": 24.217887314361864
+      },
+      {
+        "image": "0849.png",
+        "qp": 16,
+        "case_sha256": "af1de254867a81596346baca3c54590c3e9aeef75d1efb43b90fc99625c8dd7f",
+        "exit_map": [
+          4,
+          4,
+          4,
+          4,
+          4,
+          4
+        ],
+        "per_suffix_block_union_feature_cells": [
+          6144,
+          6144,
+          6144,
+          6144,
+          6144,
+          6144,
+          0,
+          0
+        ],
+        "ideal_shared_context_relative_mac": 0.8602227848101266,
+        "ideal_shared_context_mac_saved_pct": 13.977721518987341,
+        "deployed_delta444_db": 0.043296307316036294,
+        "deployed_zero_halo_mac_saved_pct": 13.0270020089572
+      },
+      {
+        "image": "0849.png",
+        "qp": 32,
+        "case_sha256": "1785c6862a7a729862a48bc05ad322301698b6facc8f55f1a58ce4696bc9fc32",
+        "exit_map": [
+          5,
+          5,
+          5,
+          5,
+          5,
+          5
+        ],
+        "per_suffix_block_union_feature_cells": [
+          6144,
+          6144,
+          6144,
+          6144,
+          6144,
+          6144,
+          6144,
+          6144
+        ],
+        "ideal_shared_context_relative_mac": 1.0,
+        "ideal_shared_context_mac_saved_pct": 0.0,
+        "deployed_delta444_db": 0.016354802848999307,
+        "deployed_zero_halo_mac_saved_pct": -0.9507193245465118
+      },
+      {
+        "image": "0849.png",
+        "qp": 48,
+        "case_sha256": "c97b56087fbd68452362f9a72a849f612ae5e7bb1c2e8cfd70c9136931929834",
+        "exit_map": [
+          5,
+          5,
+          5,
+          5,
+          5,
+          5
+        ],
+        "per_suffix_block_union_feature_cells": [
+          6144,
+          6144,
+          6144,
+          6144,
+          6144,
+          6144,
+          6144,
+          6144
+        ],
+        "ideal_shared_context_relative_mac": 1.0,
+        "ideal_shared_context_mac_saved_pct": 0.0,
+        "deployed_delta444_db": 0.026188862801792175,
+        "deployed_zero_halo_mac_saved_pct": -0.9507193245465118
+      },
+      {
+        "image": "0849.png",
+        "qp": 63,
+        "case_sha256": "0b4be46a2b21193da50674f2c59a0e64f91019969fe60287ddcdbd8e1036e417",
+        "exit_map": [
+          5,
+          5,
+          5,
+          5,
+          5,
+          5
+        ],
+        "per_suffix_block_union_feature_cells": [
+          6144,
+          6144,
+          6144,
+          6144,
+          6144,
+          6144,
+          6144,
+          6144
+        ],
+        "ideal_shared_context_relative_mac": 1.0,
+        "ideal_shared_context_mac_saved_pct": 0.0,
+        "deployed_delta444_db": 0.0363772580738652,
+        "deployed_zero_halo_mac_saved_pct": -0.9507193245465118
+      },
+      {
+        "image": "0881.png",
+        "qp": 0,
+        "case_sha256": "19213d30aef0dff6eac1a975bea7656d61a2f1096970dcdc2d91cf5abd1fabfc",
+        "exit_map": [
+          2,
+          3,
+          2,
+          2,
+          3,
+          3
+        ],
+        "per_suffix_block_union_feature_cells": [
+          6144,
+          6144,
+          3324,
+          3199,
+          0,
+          0,
+          0,
+          0
+        ],
+        "ideal_shared_context_relative_mac": 0.6783782686686884,
+        "ideal_shared_context_mac_saved_pct": 32.162173133131155,
+        "deployed_delta444_db": 0.029936950315611485,
+        "deployed_zero_halo_mac_saved_pct": 31.671221645874315
+      },
+      {
+        "image": "0881.png",
+        "qp": 16,
+        "case_sha256": "4bcbb6d2b36cacad0730c50b7480833d34732c2532ff1160fb7ef14b72defa82",
+        "exit_map": [
+          3,
+          3,
+          3,
+          3,
+          3,
+          3
+        ],
+        "per_suffix_block_union_feature_cells": [
+          6144,
+          6144,
+          6144,
+          6144,
+          0,
+          0,
+          0,
+          0
+        ],
+        "ideal_shared_context_relative_mac": 0.7483139240506329,
+        "ideal_shared_context_mac_saved_pct": 25.16860759493671,
+        "deployed_delta444_db": 0.027710564082038047,
+        "deployed_zero_halo_mac_saved_pct": 24.217887314361864
+      },
+      {
+        "image": "0881.png",
+        "qp": 32,
+        "case_sha256": "fece8340500cb7d565961bc9352ce631e501b75d8d2843e76d2ecbac5f8ac07f",
+        "exit_map": [
+          3,
+          3,
+          3,
+          3,
+          4,
+          3
+        ],
+        "per_suffix_block_union_feature_cells": [
+          6144,
+          6144,
+          6144,
+          6144,
+          1224,
+          1122,
+          0,
+          0
+        ],
+        "ideal_shared_context_relative_mac": 0.7705804616077708,
+        "ideal_shared_context_mac_saved_pct": 22.94195383922292,
+        "deployed_delta444_db": 0.040704588040620694,
+        "deployed_zero_halo_mac_saved_pct": 22.35273877005034
+      },
+      {
+        "image": "0881.png",
+        "qp": 48,
+        "case_sha256": "3678a889809b210f29394a2b49f71eeb2b7446ea6b1c5fc85039796a43e9ea97",
+        "exit_map": [
+          3,
+          4,
+          4,
+          3,
+          4,
+          4
+        ],
+        "per_suffix_block_union_feature_cells": [
+          6144,
+          6144,
+          6144,
+          6144,
+          4224,
+          4160,
+          0,
+          0
+        ],
+        "ideal_shared_context_relative_mac": 0.8252489978902953,
+        "ideal_shared_context_mac_saved_pct": 17.475100210970474,
+        "deployed_delta444_db": 0.05866620871016458,
+        "deployed_zero_halo_mac_saved_pct": 16.757299097580248
+      },
+      {
+        "image": "0881.png",
+        "qp": 63,
+        "case_sha256": "aeb9d541dee8e8c8aa5e9009209b877ba2305d0b9b63a629d18746d44bb55077",
+        "exit_map": [
+          3,
+          5,
+          5,
+          3,
+          5,
+          5
+        ],
+        "per_suffix_block_union_feature_cells": [
+          6144,
+          6144,
+          6144,
+          6144,
+          4352,
+          4288,
+          4224,
+          4160
+        ],
+        "ideal_shared_context_relative_mac": 0.9238685302390999,
+        "ideal_shared_context_mac_saved_pct": 7.613146976090013,
+        "deployed_delta444_db": 0.05727063595891923,
+        "deployed_zero_halo_mac_saved_pct": 7.438813241524034
+      },
+      {
+        "image": "0823.png",
+        "qp": 0,
+        "case_sha256": "603a50fd3294684780f1df15ab4c4dd8e8ff743dfcbec2f5bfda0444b4ddb851",
+        "exit_map": [
+          2,
+          2,
+          2,
+          3,
+          3,
+          2
+        ],
+        "per_suffix_block_union_feature_cells": [
+          6144,
+          6144,
+          2244,
+          2145,
+          0,
+          0,
+          0,
+          0
+        ],
+        "ideal_shared_context_relative_mac": 0.6524905516547996,
+        "ideal_shared_context_mac_saved_pct": 34.750944834520034,
+        "deployed_delta444_db": 0.04633554409604486,
+        "deployed_zero_halo_mac_saved_pct": 34.1556669197505
+      },
+      {
+        "image": "0823.png",
+        "qp": 16,
+        "case_sha256": "6e8c53fc89d444a6cc24d8b3d9729953d2d7c9986f1d97098362ca6a84d21373",
+        "exit_map": [
+          4,
+          3,
+          2,
+          4,
+          4,
+          3
+        ],
+        "per_suffix_block_union_feature_cells": [
+          6144,
+          6144,
+          5248,
+          5187,
+          3264,
+          3168,
+          0,
+          0
+        ],
+        "ideal_shared_context_relative_mac": 0.7852832198817685,
+        "ideal_shared_context_mac_saved_pct": 21.471678011823148,
+        "deployed_delta444_db": 0.04536640345979826,
+        "deployed_zero_halo_mac_saved_pct": 21.106888445419603
+      },
+      {
+        "image": "0823.png",
+        "qp": 32,
+        "case_sha256": "ee3e0f9401703c10ae9bfbcca312c50467b6ba2f2e488f67139cd2124c99f0c0",
+        "exit_map": [
+          4,
+          3,
+          2,
+          4,
+          4,
+          4
+        ],
+        "per_suffix_block_union_feature_cells": [
+          6144,
+          6144,
+          5304,
+          5245,
+          4284,
+          4191,
+          0,
+          0
+        ],
+        "ideal_shared_context_relative_mac": 0.8052569840014064,
+        "ideal_shared_context_mac_saved_pct": 19.474301599859356,
+        "deployed_delta444_db": 0.08871006672095268,
+        "deployed_zero_halo_mac_saved_pct": 19.241745861572557
+      },
+      {
+        "image": "0823.png",
+        "qp": 48,
+        "case_sha256": "62fc062813af03edb8b458365fbfbca771b73170ae031215a7368acc010fb445",
+        "exit_map": [
+          5,
+          5,
+          2,
+          5,
+          5,
+          5
+        ],
+        "per_suffix_block_union_feature_cells": [
+          6144,
+          6144,
+          5468,
+          5415,
+          5360,
+          5303,
+          5244,
+          5183
+        ],
+        "ideal_shared_context_relative_mac": 0.9484081149459387,
+        "ideal_shared_context_mac_saved_pct": 5.1591885054061315,
+        "deployed_delta444_db": 0.036812238778346364,
+        "deployed_zero_halo_mac_saved_pct": 5.7284937224810655
+      },
+      {
+        "image": "0823.png",
+        "qp": 63,
+        "case_sha256": "50fbfe2d0da4554b47677dbe9159a051106aa642158e6c81645845dfcf928890",
+        "exit_map": [
+          5,
+          5,
+          3,
+          5,
+          5,
+          5
+        ],
+        "per_suffix_block_union_feature_cells": [
+          6144,
+          6144,
+          6144,
+          6144,
+          5360,
+          5303,
+          5244,
+          5183
+        ],
+        "ideal_shared_context_relative_mac": 0.9654522772723277,
+        "ideal_shared_context_mac_saved_pct": 3.454772272767226,
+        "deployed_delta444_db": 0.056898127502802404,
+        "deployed_zero_halo_mac_saved_pct": 3.2440469584887555
+      },
+      {
+        "image": "0898.png",
+        "qp": 0,
+        "case_sha256": "7838984800e09c710aec267d9ebd9f2043005e010853f3469658903882db6b02",
+        "exit_map": [
+          2,
+          3,
+          3,
+          2,
+          3,
+          2
+        ],
+        "per_suffix_block_union_feature_cells": [
+          6144,
+          6144,
+          3324,
+          3199,
+          0,
+          0,
+          0,
+          0
+        ],
+        "ideal_shared_context_relative_mac": 0.6783782686686884,
+        "ideal_shared_context_mac_saved_pct": 32.162173133131155,
+        "deployed_delta444_db": 0.11004456176949823,
+        "deployed_zero_halo_mac_saved_pct": 31.671221645874315
+      },
+      {
+        "image": "0898.png",
+        "qp": 16,
+        "case_sha256": "1f934e9421e7d242cb2ee25b456da9fdcdf7ae4fb394944af27213826ec1515e",
+        "exit_map": [
+          3,
+          3,
+          4,
+          4,
+          4,
+          3
+        ],
+        "per_suffix_block_union_feature_cells": [
+          6144,
+          6144,
+          6144,
+          6144,
+          3384,
+          3230,
+          0,
+          0
+        ],
+        "ideal_shared_context_relative_mac": 0.8099699603331574,
+        "ideal_shared_context_mac_saved_pct": 19.00300396668426,
+        "deployed_delta444_db": 0.09295287359203722,
+        "deployed_zero_halo_mac_saved_pct": 18.62244764189177
+      },
+      {
+        "image": "0898.png",
+        "qp": 32,
+        "case_sha256": "dbab392c5237bc7575163ed8180042a3ad9a56a509194bc1e9013732b544049c",
+        "exit_map": [
+          3,
+          3,
+          5,
+          4,
+          4,
+          3
+        ],
+        "per_suffix_block_union_feature_cells": [
+          6144,
+          6144,
+          6144,
+          6144,
+          3504,
+          3354,
+          1156,
+          1089
+        ],
+        "ideal_shared_context_relative_mac": 0.838615967552303,
+        "ideal_shared_context_mac_saved_pct": 16.138403244769695,
+        "deployed_delta444_db": 0.14568396338392653,
+        "deployed_zero_halo_mac_saved_pct": 16.292826922935777
+      },
+      {
+        "image": "0898.png",
+        "qp": 48,
+        "case_sha256": "2c660a5df3328f2f689bffa023aaae92ccdd9601c8890a0fe1d0b3d3e21ccf01",
+        "exit_map": [
+          3,
+          5,
+          5,
+          5,
+          5,
+          3
+        ],
+        "per_suffix_block_union_feature_cells": [
+          6144,
+          6144,
+          6144,
+          6144,
+          4576,
+          4462,
+          4344,
+          4222
+        ],
+        "ideal_shared_context_relative_mac": 0.9309045545446555,
+        "ideal_shared_context_mac_saved_pct": 6.909544545534452,
+        "deployed_delta444_db": 0.10799930861970353,
+        "deployed_zero_halo_mac_saved_pct": 7.438813241524034
+      },
+      {
+        "image": "0898.png",
+        "qp": 63,
+        "case_sha256": "3acc033749b37f3fbc8ae5bf8af352634ad5b176cbbe38b88a0a16c2d2871292",
+        "exit_map": [
+          5,
+          5,
+          5,
+          5,
+          5,
+          5
+        ],
+        "per_suffix_block_union_feature_cells": [
+          6144,
+          6144,
+          6144,
+          6144,
+          6144,
+          6144,
+          6144,
+          6144
+        ],
+        "ideal_shared_context_relative_mac": 1.0,
+        "ideal_shared_context_mac_saved_pct": 0.0,
+        "deployed_delta444_db": 0.07132593576701943,
+        "deployed_zero_halo_mac_saved_pct": -0.9507193245465118
+      },
+      {
+        "image": "0830.png",
+        "qp": 0,
+        "case_sha256": "dba6326e2acbaf7e58852c7675b6a46e290f8deff125f36363ba34c5430339ee",
+        "exit_map": [
+          3,
+          3,
+          3,
+          2,
+          3,
+          3
+        ],
+        "per_suffix_block_union_feature_cells": [
+          6144,
+          6144,
+          5244,
+          5183,
+          0,
+          0,
+          0,
+          0
+        ],
+        "ideal_shared_context_relative_mac": 0.7257379908909107,
+        "ideal_shared_context_mac_saved_pct": 27.426200910908925,
+        "deployed_delta444_db": 0.035996816611489395,
+        "deployed_zero_halo_mac_saved_pct": 26.702334078354173
+      },
+      {
+        "image": "0830.png",
+        "qp": 16,
+        "case_sha256": "34702c21056e7c7efed5d7415ea2d3fd7326de8d26689161120446767a253e2d",
+        "exit_map": [
+          4,
+          4,
+          4,
+          3,
+          3,
+          3
+        ],
+        "per_suffix_block_union_feature_cells": [
+          6144,
+          6144,
+          6144,
+          6144,
+          3264,
+          3168,
+          0,
+          0
+        ],
+        "ideal_shared_context_relative_mac": 0.8077621044303797,
+        "ideal_shared_context_mac_saved_pct": 19.223789556962036,
+        "deployed_delta444_db": 0.03971089225910666,
+        "deployed_zero_halo_mac_saved_pct": 18.62244764189177
+      },
+      {
+        "image": "0830.png",
+        "qp": 32,
+        "case_sha256": "183b50c15457557b53e00005d739dca7e279e681eb6f555bbcefd913bbe427ee",
+        "exit_map": [
+          3,
+          4,
+          4,
+          3,
+          4,
+          4
+        ],
+        "per_suffix_block_union_feature_cells": [
+          6144,
+          6144,
+          6144,
+          6144,
+          4224,
+          4160,
+          0,
+          0
+        ],
+        "ideal_shared_context_relative_mac": 0.8252489978902953,
+        "ideal_shared_context_mac_saved_pct": 17.475100210970474,
+        "deployed_delta444_db": 0.06692059611733986,
+        "deployed_zero_halo_mac_saved_pct": 16.757299097580248
+      },
+      {
+        "image": "0830.png",
+        "qp": 48,
+        "case_sha256": "7d9ba864d79c058eeaa4f6b010cbea29e9287df53e8af80737a2b121a065fceb",
+        "exit_map": [
+          5,
+          5,
+          5,
+          5,
+          5,
+          5
+        ],
+        "per_suffix_block_union_feature_cells": [
+          6144,
+          6144,
+          6144,
+          6144,
+          6144,
+          6144,
+          6144,
+          6144
+        ],
+        "ideal_shared_context_relative_mac": 1.0,
+        "ideal_shared_context_mac_saved_pct": 0.0,
+        "deployed_delta444_db": 0.0157815306506871,
+        "deployed_zero_halo_mac_saved_pct": -0.9507193245465118
+      },
+      {
+        "image": "0830.png",
+        "qp": 63,
+        "case_sha256": "0142eb34d5e90a57f604ae4995e619054dbd8403af2f7e5cf41b3c825cbddc6e",
+        "exit_map": [
+          5,
+          5,
+          5,
+          5,
+          5,
+          5
+        ],
+        "per_suffix_block_union_feature_cells": [
+          6144,
+          6144,
+          6144,
+          6144,
+          6144,
+          6144,
+          6144,
+          6144
+        ],
+        "ideal_shared_context_relative_mac": 1.0,
+        "ideal_shared_context_mac_saved_pct": 0.0,
+        "deployed_delta444_db": 0.026374762853566748,
+        "deployed_zero_halo_mac_saved_pct": -0.9507193245465118
+      },
+      {
+        "image": "0813.png",
+        "qp": 0,
+        "case_sha256": "d2de702090c66a069a9f4ae2c09760fa63b9be03911aa067df9819647736ae1d",
+        "exit_map": [
+          2,
+          3,
+          2,
+          2,
+          3,
+          2
+        ],
+        "per_suffix_block_union_feature_cells": [
+          6144,
+          6144,
+          2304,
+          2176,
+          0,
+          0,
+          0,
+          0
+        ],
+        "ideal_shared_context_relative_mac": 0.6535944796061884,
+        "ideal_shared_context_mac_saved_pct": 34.640552039381156,
+        "deployed_delta444_db": 0.06667983402134997,
+        "deployed_zero_halo_mac_saved_pct": 34.1556669197505
+      },
+      {
+        "image": "0813.png",
+        "qp": 16,
+        "case_sha256": "6507caa074a7fb8f3c4e154b324f3ac07a078ed50ea58b1ad9e58c7d7d77a57c",
+        "exit_map": [
+          3,
+          4,
+          3,
+          3,
+          3,
+          3
+        ],
+        "per_suffix_block_union_feature_cells": [
+          6144,
+          6144,
+          6144,
+          6144,
+          1224,
+          1122,
+          0,
+          0
+        ],
+        "ideal_shared_context_relative_mac": 0.7705804616077708,
+        "ideal_shared_context_mac_saved_pct": 22.94195383922292,
+        "deployed_delta444_db": 0.04160474790904333,
+        "deployed_zero_halo_mac_saved_pct": 22.352744730514818
+      },
+      {
+        "image": "0813.png",
+        "qp": 32,
+        "case_sha256": "2bd0b5e1b8046a062989733f97c6594199800ea09c8c37d1e8f84df06e53b5f5",
+        "exit_map": [
+          3,
+          4,
+          2,
+          2,
+          3,
+          3
+        ],
+        "per_suffix_block_union_feature_cells": [
+          6144,
+          6144,
+          4408,
+          4288,
+          1224,
+          1122,
+          0,
+          0
+        ],
+        "ideal_shared_context_relative_mac": 0.7270056352188818,
+        "ideal_shared_context_mac_saved_pct": 27.299436478111815,
+        "deployed_delta444_db": 0.0776329328774289,
+        "deployed_zero_halo_mac_saved_pct": 27.32163229803496
+      },
+      {
+        "image": "0813.png",
+        "qp": 48,
+        "case_sha256": "347a87b147a6ebd7983ce349d709f10918810cc4712f12ba01daa887b1be4be1",
+        "exit_map": [
+          3,
+          4,
+          2,
+          2,
+          3,
+          2
+        ],
+        "per_suffix_block_union_feature_cells": [
+          6144,
+          6144,
+          3400,
+          3273,
+          1224,
+          1122,
+          0,
+          0
+        ],
+        "ideal_shared_context_relative_mac": 0.7024644676841597,
+        "ideal_shared_context_mac_saved_pct": 29.75355323158403,
+        "deployed_delta444_db": 0.09711781192505983,
+        "deployed_zero_halo_mac_saved_pct": 29.80607310156279
+      },
+      {
+        "image": "0813.png",
+        "qp": 63,
+        "case_sha256": "d36352c585f1ca9063a580fdd98136727c0d7ab4cf96aa6ca49f6b288560278e",
+        "exit_map": [
+          5,
+          5,
+          2,
+          2,
+          5,
+          3
+        ],
+        "per_suffix_block_union_feature_cells": [
+          6144,
+          6144,
+          4688,
+          4578,
+          3568,
+          3447,
+          3324,
+          3199
+        ],
+        "ideal_shared_context_relative_mac": 0.8526606946642052,
+        "ideal_shared_context_mac_saved_pct": 14.733930533579475,
+        "deployed_delta444_db": 0.05492999799304192,
+        "deployed_zero_halo_mac_saved_pct": 16.60247305254393
+      },
+      {
+        "image": "0803.png",
+        "qp": 0,
+        "case_sha256": "16e69fbbb82807c844fc9e150c79e20e330846eb3bdd206737244e1332b0302d",
+        "exit_map": [
+          2,
+          3,
+          3,
+          3,
+          3,
+          3
+        ],
+        "per_suffix_block_union_feature_cells": [
+          6144,
+          6144,
+          5244,
+          5183,
+          0,
+          0,
+          0,
+          0
+        ],
+        "ideal_shared_context_relative_mac": 0.7257379908909107,
+        "ideal_shared_context_mac_saved_pct": 27.426200910908925,
+        "deployed_delta444_db": 0.2164592882913743,
+        "deployed_zero_halo_mac_saved_pct": 26.702334078354173
+      },
+      {
+        "image": "0803.png",
+        "qp": 16,
+        "case_sha256": "a6a0cf291a57c40c7b4f5d16c5b168ad4494a6bcd0d8a360236e015733252c3a",
+        "exit_map": [
+          3,
+          3,
+          4,
+          3,
+          3,
+          3
+        ],
+        "per_suffix_block_union_feature_cells": [
+          6144,
+          6144,
+          6144,
+          6144,
+          1156,
+          1089,
+          0,
+          0
+        ],
+        "ideal_shared_context_relative_mac": 0.769355222892493,
+        "ideal_shared_context_mac_saved_pct": 23.064477710750698,
+        "deployed_delta444_db": 0.1809572341987353,
+        "deployed_zero_halo_mac_saved_pct": 22.352744730514818
+      },
+      {
+        "image": "0803.png",
+        "qp": 32,
+        "case_sha256": "44048dfcf7d7b2eb50d29662462e5a479782d17de2a5b3221f95a00063dc0aeb",
+        "exit_map": [
+          3,
+          3,
+          3,
+          3,
+          3,
+          3
+        ],
+        "per_suffix_block_union_feature_cells": [
+          6144,
+          6144,
+          6144,
+          6144,
+          0,
+          0,
+          0,
+          0
+        ],
+        "ideal_shared_context_relative_mac": 0.7483139240506329,
+        "ideal_shared_context_mac_saved_pct": 25.16860759493671,
+        "deployed_delta444_db": 0.22684985696374965,
+        "deployed_zero_halo_mac_saved_pct": 24.217887314361864
+      },
+      {
+        "image": "0803.png",
+        "qp": 48,
+        "case_sha256": "f2ea504fc349777978c1a83a2d80dd36007a6cd047c3a25535032a806e67128b",
+        "exit_map": [
+          3,
+          3,
+          3,
+          3,
+          3,
+          3
+        ],
+        "per_suffix_block_union_feature_cells": [
+          6144,
+          6144,
+          6144,
+          6144,
+          0,
+          0,
+          0,
+          0
+        ],
+        "ideal_shared_context_relative_mac": 0.7483139240506329,
+        "ideal_shared_context_mac_saved_pct": 25.16860759493671,
+        "deployed_delta444_db": 0.2545761558469226,
+        "deployed_zero_halo_mac_saved_pct": 24.217887314361864
+      },
+      {
+        "image": "0803.png",
+        "qp": 63,
+        "case_sha256": "dfe95091d917fac2d51111b13704b6221d77c7a48716a01ec1d7298fdb771427",
+        "exit_map": [
+          3,
+          3,
+          5,
+          3,
+          3,
+          3
+        ],
+        "per_suffix_block_union_feature_cells": [
+          6144,
+          6144,
+          6144,
+          6144,
+          1296,
+          1225,
+          1156,
+          1089
+        ],
+        "ideal_shared_context_relative_mac": 0.798389424556083,
+        "ideal_shared_context_mac_saved_pct": 20.161057544391703,
+        "deployed_delta444_db": 0.2513354155113643,
+        "deployed_zero_halo_mac_saved_pct": 20.023121031326585
+      },
+      {
+        "image": "0827.png",
+        "qp": 0,
+        "case_sha256": "8180cc51a57fe5c7084a0a5afa953d18bafcb38bf9f5ac0dc8d962c8218653c9",
+        "exit_map": [
+          2,
+          2,
+          2,
+          2,
+          2,
+          2
+        ],
+        "per_suffix_block_union_feature_cells": [
+          6144,
+          6144,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "ideal_shared_context_relative_mac": 0.5992472573839662,
+        "ideal_shared_context_mac_saved_pct": 40.075274261603376,
+        "deployed_delta444_db": 0.10908597583301372,
+        "deployed_zero_halo_mac_saved_pct": 39.12455746750288
+      },
+      {
+        "image": "0827.png",
+        "qp": 16,
+        "case_sha256": "d9aec8f6d5effead8092eb927df4e5f93f5a20d4e6296ebb6088e2184863418b",
+        "exit_map": [
+          2,
+          3,
+          2,
+          2,
+          3,
+          2
+        ],
+        "per_suffix_block_union_feature_cells": [
+          6144,
+          6144,
+          2304,
+          2176,
+          0,
+          0,
+          0,
+          0
+        ],
+        "ideal_shared_context_relative_mac": 0.6535944796061884,
+        "ideal_shared_context_mac_saved_pct": 34.640552039381156,
+        "deployed_delta444_db": 0.10399028078028288,
+        "deployed_zero_halo_mac_saved_pct": 34.1556669197505
+      },
+      {
+        "image": "0827.png",
+        "qp": 32,
+        "case_sha256": "cf81fe6b9f2944011bd0da9b541eeb02ffc77665988bab0ca3c1c2d9579f8be6",
+        "exit_map": [
+          2,
+          3,
+          2,
+          2,
+          3,
+          2
+        ],
+        "per_suffix_block_union_feature_cells": [
+          6144,
+          6144,
+          2304,
+          2176,
+          0,
+          0,
+          0,
+          0
+        ],
+        "ideal_shared_context_relative_mac": 0.6535944796061884,
+        "ideal_shared_context_mac_saved_pct": 34.640552039381156,
+        "deployed_delta444_db": 0.10132814092702677,
+        "deployed_zero_halo_mac_saved_pct": 34.1556669197505
+      },
+      {
+        "image": "0827.png",
+        "qp": 48,
+        "case_sha256": "a7ffa66876451efa11059b993a80768c70e68105eebb2378a9a28f2f5d6bab2b",
+        "exit_map": [
+          2,
+          2,
+          2,
+          2,
+          3,
+          2
+        ],
+        "per_suffix_block_union_feature_cells": [
+          6144,
+          6144,
+          1224,
+          1122,
+          0,
+          0,
+          0,
+          0
+        ],
+        "ideal_shared_context_relative_mac": 0.6277067625922996,
+        "ideal_shared_context_mac_saved_pct": 37.229323740770035,
+        "deployed_delta444_db": 0.12412762597436944,
+        "deployed_zero_halo_mac_saved_pct": 36.64011219362669
+      },
+      {
+        "image": "0827.png",
+        "qp": 63,
+        "case_sha256": "b3666be67ac001fc95fc6618f7c2a07dca126cacd706ae1bfa6ea285643dc199",
+        "exit_map": [
+          2,
+          3,
+          2,
+          2,
+          2,
+          2
+        ],
+        "per_suffix_block_union_feature_cells": [
+          6144,
+          6144,
+          1224,
+          1122,
+          0,
+          0,
+          0,
+          0
+        ],
+        "ideal_shared_context_relative_mac": 0.6277067625922996,
+        "ideal_shared_context_mac_saved_pct": 37.229323740770035,
+        "deployed_delta444_db": 0.12181831500518292,
+        "deployed_zero_halo_mac_saved_pct": 36.64011219362669
+      },
+      {
+        "image": "0835.png",
+        "qp": 0,
+        "case_sha256": "9b32b5fde920d06d8bd7311be003a8094eb054c07f05acfc47c0fe40763f68a4",
+        "exit_map": [
+          2,
+          2,
+          2,
+          2,
+          2,
+          2
+        ],
+        "per_suffix_block_union_feature_cells": [
+          6144,
+          6144,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "ideal_shared_context_relative_mac": 0.5992472573839662,
+        "ideal_shared_context_mac_saved_pct": 40.075274261603376,
+        "deployed_delta444_db": 0.020026721785536307,
+        "deployed_zero_halo_mac_saved_pct": 39.12455746750288
+      },
+      {
+        "image": "0835.png",
+        "qp": 16,
+        "case_sha256": "ef0d91897a62f4663fb64fcbb2daf4f85f92e53720eb35b02f7e895f2861a527",
+        "exit_map": [
+          3,
+          3,
+          3,
+          3,
+          3,
+          3
+        ],
+        "per_suffix_block_union_feature_cells": [
+          6144,
+          6144,
+          6144,
+          6144,
+          0,
+          0,
+          0,
+          0
+        ],
+        "ideal_shared_context_relative_mac": 0.7483139240506329,
+        "ideal_shared_context_mac_saved_pct": 25.16860759493671,
+        "deployed_delta444_db": 0.019062767999726858,
+        "deployed_zero_halo_mac_saved_pct": 24.217887314361864
+      },
+      {
+        "image": "0835.png",
+        "qp": 32,
+        "case_sha256": "8e33403879b1dec6613d3b6073fc0a00c150e64b0829ec384cac8e423da7ed3b",
+        "exit_map": [
+          3,
+          3,
+          3,
+          3,
+          3,
+          4
+        ],
+        "per_suffix_block_union_feature_cells": [
+          6144,
+          6144,
+          6144,
+          6144,
+          1156,
+          1089,
+          0,
+          0
+        ],
+        "ideal_shared_context_relative_mac": 0.769355222892493,
+        "ideal_shared_context_mac_saved_pct": 23.064477710750698,
+        "deployed_delta444_db": 0.037618110366634275,
+        "deployed_zero_halo_mac_saved_pct": 22.35273877005034
+      },
+      {
+        "image": "0835.png",
+        "qp": 48,
+        "case_sha256": "48a25e7358966ee7233697ec6128ec092563c53c6466191d896c84ecf9fa878d",
+        "exit_map": [
+          5,
+          3,
+          4,
+          3,
+          3,
+          5
+        ],
+        "per_suffix_block_union_feature_cells": [
+          6144,
+          6144,
+          6144,
+          6144,
+          3544,
+          3407,
+          2312,
+          2178
+        ],
+        "ideal_shared_context_relative_mac": 0.8654301822367264,
+        "ideal_shared_context_mac_saved_pct": 13.456981776327359,
+        "deployed_delta444_db": 0.04346083828040731,
+        "deployed_zero_halo_mac_saved_pct": 13.963206203979784
+      },
+      {
+        "image": "0835.png",
+        "qp": 63,
+        "case_sha256": "d5dd22106a0f88f7eb21420382e4ca56bf3ba341f1f4a7f6cbda04f5feb70519",
+        "exit_map": [
+          5,
+          3,
+          5,
+          3,
+          5,
+          5
+        ],
+        "per_suffix_block_union_feature_cells": [
+          6144,
+          6144,
+          6144,
+          6144,
+          4688,
+          4549,
+          4404,
+          4253
+        ],
+        "ideal_shared_context_relative_mac": 0.9344225666974331,
+        "ideal_shared_context_mac_saved_pct": 6.557743330256693,
+        "deployed_delta444_db": 0.05288103124815074,
+        "deployed_zero_halo_mac_saved_pct": 7.438813241524034
+      },
+      {
+        "image": "0889.png",
+        "qp": 0,
+        "case_sha256": "060fafeee41a2205907bebcc8a879e0e2fd75a4652983466a07d45f7b1faa102",
+        "exit_map": [
+          3,
+          3,
+          3,
+          2,
+          2,
+          2
+        ],
+        "per_suffix_block_union_feature_cells": [
+          6144,
+          6144,
+          3264,
+          3168,
+          0,
+          0,
+          0,
+          0
+        ],
+        "ideal_shared_context_relative_mac": 0.6772743407172996,
+        "ideal_shared_context_mac_saved_pct": 32.27256592827003,
+        "deployed_delta444_db": 0.09200529518274528,
+        "deployed_zero_halo_mac_saved_pct": 31.671221645874315
+      },
+      {
+        "image": "0889.png",
+        "qp": 16,
+        "case_sha256": "9dab34f53bf94c9c55393f0b65f7f772c8ca17e753c1c736ef9f2385baa42f12",
+        "exit_map": [
+          4,
+          4,
+          4,
+          3,
+          3,
+          3
+        ],
+        "per_suffix_block_union_feature_cells": [
+          6144,
+          6144,
+          6144,
+          6144,
+          3264,
+          3168,
+          0,
+          0
+        ],
+        "ideal_shared_context_relative_mac": 0.8077621044303797,
+        "ideal_shared_context_mac_saved_pct": 19.223789556962036,
+        "deployed_delta444_db": 0.0625534394114356,
+        "deployed_zero_halo_mac_saved_pct": 18.62244764189177
+      },
+      {
+        "image": "0889.png",
+        "qp": 32,
+        "case_sha256": "35090f4bbd2c5481cde9489d946954c6302377510caa7a5374c939523055952f",
+        "exit_map": [
+          3,
+          4,
+          4,
+          3,
+          3,
+          3
+        ],
+        "per_suffix_block_union_feature_cells": [
+          6144,
+          6144,
+          6144,
+          6144,
+          2244,
+          2145,
+          0,
+          0
+        ],
+        "ideal_shared_context_relative_mac": 0.7891712830190751,
+        "ideal_shared_context_mac_saved_pct": 21.082871698092486,
+        "deployed_delta444_db": 0.10684738570239599,
+        "deployed_zero_halo_mac_saved_pct": 20.487596186203294
+      },
+      {
+        "image": "0889.png",
+        "qp": 48,
+        "case_sha256": "6df75a189cbb40e7d714e756548d58524fbf8b8b64cdb26b04e830a61e8e89e9",
+        "exit_map": [
+          4,
+          4,
+          4,
+          3,
+          3,
+          3
+        ],
+        "per_suffix_block_union_feature_cells": [
+          6144,
+          6144,
+          6144,
+          6144,
+          3264,
+          3168,
+          0,
+          0
+        ],
+        "ideal_shared_context_relative_mac": 0.8077621044303797,
+        "ideal_shared_context_mac_saved_pct": 19.223789556962036,
+        "deployed_delta444_db": 0.14324671698646468,
+        "deployed_zero_halo_mac_saved_pct": 18.62244764189177
+      },
+      {
+        "image": "0889.png",
+        "qp": 63,
+        "case_sha256": "f4bddda0753e9c39ade664e3374cc94323ec737f0d54b888a17000d2edc10bb8",
+        "exit_map": [
+          5,
+          5,
+          5,
+          3,
+          3,
+          3
+        ],
+        "per_suffix_block_union_feature_cells": [
+          6144,
+          6144,
+          6144,
+          6144,
+          3456,
+          3360,
+          3264,
+          3168
+        ],
+        "ideal_shared_context_relative_mac": 0.8858027953586498,
+        "ideal_shared_context_mac_saved_pct": 11.419720464135018,
+        "deployed_delta444_db": 0.11129642820914652,
+        "deployed_zero_halo_mac_saved_pct": 11.633582504791551
+      },
+      {
+        "image": "0859.png",
+        "qp": 0,
+        "case_sha256": "75cf7c3e19a65782e348a3575110f180982f0749d0afb17798edbac4c33495cc",
+        "exit_map": [
+          3,
+          2,
+          2,
+          2,
+          2,
+          2
+        ],
+        "per_suffix_block_union_feature_cells": [
+          6144,
+          6144,
+          1156,
+          1089,
+          0,
+          0,
+          0,
+          0
+        ],
+        "ideal_shared_context_relative_mac": 0.6264815238770218,
+        "ideal_shared_context_mac_saved_pct": 37.35184761229782,
+        "deployed_delta444_db": 0.02640222453475119,
+        "deployed_zero_halo_mac_saved_pct": 36.64011219362669
+      },
+      {
+        "image": "0859.png",
+        "qp": 16,
+        "case_sha256": "d739a6a19861ec1bf8688b376677b381642353d6f71f57db614391ad983643f7",
+        "exit_map": [
+          3,
+          3,
+          3,
+          3,
+          3,
+          3
+        ],
+        "per_suffix_block_union_feature_cells": [
+          6144,
+          6144,
+          6144,
+          6144,
+          0,
+          0,
+          0,
+          0
+        ],
+        "ideal_shared_context_relative_mac": 0.7483139240506329,
+        "ideal_shared_context_mac_saved_pct": 25.16860759493671,
+        "deployed_delta444_db": 0.02320245647235181,
+        "deployed_zero_halo_mac_saved_pct": 24.217887314361864
+      },
+      {
+        "image": "0859.png",
+        "qp": 32,
+        "case_sha256": "aee478c10839824ce7ec7175fe3541e2b2210f1a3e86f3e496cc8bad111aff99",
+        "exit_map": [
+          3,
+          3,
+          3,
+          3,
+          3,
+          3
+        ],
+        "per_suffix_block_union_feature_cells": [
+          6144,
+          6144,
+          6144,
+          6144,
+          0,
+          0,
+          0,
+          0
+        ],
+        "ideal_shared_context_relative_mac": 0.7483139240506329,
+        "ideal_shared_context_mac_saved_pct": 25.16860759493671,
+        "deployed_delta444_db": 0.03763898301941134,
+        "deployed_zero_halo_mac_saved_pct": 24.217887314361864
+      },
+      {
+        "image": "0859.png",
+        "qp": 48,
+        "case_sha256": "737e6cc38dbd1ede95f7cf0d61ad1f4a36eab624781a6d6e7724629a8d49cfd8",
+        "exit_map": [
+          4,
+          4,
+          4,
+          3,
+          3,
+          3
+        ],
+        "per_suffix_block_union_feature_cells": [
+          6144,
+          6144,
+          6144,
+          6144,
+          3264,
+          3168,
+          0,
+          0
+        ],
+        "ideal_shared_context_relative_mac": 0.8077621044303797,
+        "ideal_shared_context_mac_saved_pct": 19.223789556962036,
+        "deployed_delta444_db": 0.06893523458686894,
+        "deployed_zero_halo_mac_saved_pct": 18.62244764189177
+      },
+      {
+        "image": "0859.png",
+        "qp": 63,
+        "case_sha256": "90afaef65152a333c005be3ed2e0fa2a3e107affd3667ee97995bf20b7889925",
+        "exit_map": [
+          5,
+          5,
+          5,
+          3,
+          5,
+          5
+        ],
+        "per_suffix_block_union_feature_cells": [
+          6144,
+          6144,
+          6144,
+          6144,
+          5360,
+          5303,
+          5244,
+          5183
+        ],
+        "ideal_shared_context_relative_mac": 0.9654522772723277,
+        "ideal_shared_context_mac_saved_pct": 3.454772272767226,
+        "deployed_delta444_db": 0.03904859088893564,
+        "deployed_zero_halo_mac_saved_pct": 3.2440469584887555
+      },
+      {
+        "image": "0804.png",
+        "qp": 0,
+        "case_sha256": "78ac2d4969c64dde163d60134441292cdc368e40712f2a390c1a07d7d7e2ab3f",
+        "exit_map": [
+          3,
+          2,
+          3,
+          2,
+          2,
+          2
+        ],
+        "per_suffix_block_union_feature_cells": [
+          6144,
+          6144,
+          2312,
+          2178,
+          0,
+          0,
+          0,
+          0
+        ],
+        "ideal_shared_context_relative_mac": 0.6537157903700774,
+        "ideal_shared_context_mac_saved_pct": 34.62842096299226,
+        "deployed_delta444_db": 0.05517707592895024,
+        "deployed_zero_halo_mac_saved_pct": 34.1556669197505
+      },
+      {
+        "image": "0804.png",
+        "qp": 16,
+        "case_sha256": "f6a3474e732b96123c60d620f3dfd1c2b3d8c57b0523e78160a1562eba5139d9",
+        "exit_map": [
+          4,
+          3,
+          4,
+          3,
+          3,
+          3
+        ],
+        "per_suffix_block_union_feature_cells": [
+          6144,
+          6144,
+          6144,
+          6144,
+          2312,
+          2178,
+          0,
+          0
+        ],
+        "ideal_shared_context_relative_mac": 0.7903965217343529,
+        "ideal_shared_context_mac_saved_pct": 20.960347826564707,
+        "deployed_delta444_db": 0.06509687670559919,
+        "deployed_zero_halo_mac_saved_pct": 20.487596186203294
+      },
+      {
+        "image": "0804.png",
+        "qp": 32,
+        "case_sha256": "6eef97b33a2d6e47aaf227711f698a40df424e64fd12caecbcef57a60842cd0b",
+        "exit_map": [
+          4,
+          3,
+          4,
+          3,
+          3,
+          3
+        ],
+        "per_suffix_block_union_feature_cells": [
+          6144,
+          6144,
+          6144,
+          6144,
+          2312,
+          2178,
+          0,
+          0
+        ],
+        "ideal_shared_context_relative_mac": 0.7903965217343529,
+        "ideal_shared_context_mac_saved_pct": 20.960347826564707,
+        "deployed_delta444_db": 0.0857529058834689,
+        "deployed_zero_halo_mac_saved_pct": 20.487596186203294
+      },
+      {
+        "image": "0804.png",
+        "qp": 48,
+        "case_sha256": "dbb9d1a37770254b7fc6af7387722ebbe7e3a62cd1378d9193e053ccefb52735",
+        "exit_map": [
+          4,
+          3,
+          4,
+          3,
+          3,
+          3
+        ],
+        "per_suffix_block_union_feature_cells": [
+          6144,
+          6144,
+          6144,
+          6144,
+          2312,
+          2178,
+          0,
+          0
+        ],
+        "ideal_shared_context_relative_mac": 0.7903965217343529,
+        "ideal_shared_context_mac_saved_pct": 20.960347826564707,
+        "deployed_delta444_db": 0.09550702461769812,
+        "deployed_zero_halo_mac_saved_pct": 20.487596186203294
+      },
+      {
+        "image": "0804.png",
+        "qp": 63,
+        "case_sha256": "1563014187b6954308e534088c2f31f06122ddebb50511bae0b2f7720012d0dd",
+        "exit_map": [
+          5,
+          3,
+          5,
+          5,
+          3,
+          5
+        ],
+        "per_suffix_block_union_feature_cells": [
+          6144,
+          6144,
+          6144,
+          6144,
+          4608,
+          4480,
+          4352,
+          4224
+        ],
+        "ideal_shared_context_relative_mac": 0.9316324191279888,
+        "ideal_shared_context_mac_saved_pct": 6.836758087201122,
+        "deployed_delta444_db": 0.04276256061097359,
+        "deployed_zero_halo_mac_saved_pct": 7.438813241524034
+      },
+      {
+        "image": "0852.png",
+        "qp": 0,
+        "case_sha256": "d2d7a29d1b22f08fcaba2d0e0a21e42b64a78d5866c447b39ceb097ce00ec907",
+        "exit_map": [
+          2,
+          2,
+          2,
+          2,
+          2,
+          2
+        ],
+        "per_suffix_block_union_feature_cells": [
+          6144,
+          6144,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "ideal_shared_context_relative_mac": 0.5992472573839662,
+        "ideal_shared_context_mac_saved_pct": 40.075274261603376,
+        "deployed_delta444_db": 0.03608665129959691,
+        "deployed_zero_halo_mac_saved_pct": 39.12455746750288
+      },
+      {
+        "image": "0852.png",
+        "qp": 16,
+        "case_sha256": "8df908afab5791b8be80e2414825085efa7744fc9f871080a69291fb846004c3",
+        "exit_map": [
+          5,
+          3,
+          2,
+          5,
+          3,
+          3
+        ],
+        "per_suffix_block_union_feature_cells": [
+          6144,
+          6144,
+          5244,
+          5183,
+          2304,
+          2240,
+          2176,
+          2112
+        ],
+        "ideal_shared_context_relative_mac": 0.8173972384295886,
+        "ideal_shared_context_mac_saved_pct": 18.260276157041144,
+        "deployed_delta444_db": 0.029574440238327955,
+        "deployed_zero_halo_mac_saved_pct": 18.31279555181914
+      },
+      {
+        "image": "0852.png",
+        "qp": 32,
+        "case_sha256": "44ae97f24e1cd912079eafacb25399560c67115dd04a754bace96bb24b035cf0",
+        "exit_map": [
+          5,
+          5,
+          2,
+          5,
+          3,
+          3
+        ],
+        "per_suffix_block_union_feature_cells": [
+          6144,
+          6144,
+          5364,
+          5307,
+          3456,
+          3360,
+          3264,
+          3168
+        ],
+        "ideal_shared_context_relative_mac": 0.8661868448378164,
+        "ideal_shared_context_mac_saved_pct": 13.381315516218361,
+        "deployed_delta444_db": 0.03922487346376789,
+        "deployed_zero_halo_mac_saved_pct": 14.11802926878386
+      },
+      {
+        "image": "0852.png",
+        "qp": 48,
+        "case_sha256": "9c92ecb99ecb6e55bfaea3b38cb7c1a1a9a852598d7f6b0674857947cc17c414",
+        "exit_map": [
+          5,
+          5,
+          2,
+          5,
+          3,
+          3
+        ],
+        "per_suffix_block_union_feature_cells": [
+          6144,
+          6144,
+          5364,
+          5307,
+          3456,
+          3360,
+          3264,
+          3168
+        ],
+        "ideal_shared_context_relative_mac": 0.8661868448378164,
+        "ideal_shared_context_mac_saved_pct": 13.381315516218361,
+        "deployed_delta444_db": 0.07410334855741184,
+        "deployed_zero_halo_mac_saved_pct": 14.11802926878386
+      },
+      {
+        "image": "0852.png",
+        "qp": 63,
+        "case_sha256": "6cb339ed2806aed9078b019ba592eb2d91860620c645de9fa43435634b41cd11",
+        "exit_map": [
+          5,
+          5,
+          3,
+          5,
+          5,
+          5
+        ],
+        "per_suffix_block_union_feature_cells": [
+          6144,
+          6144,
+          6144,
+          6144,
+          5360,
+          5303,
+          5244,
+          5183
+        ],
+        "ideal_shared_context_relative_mac": 0.9654522772723277,
+        "ideal_shared_context_mac_saved_pct": 3.454772272767226,
+        "deployed_delta444_db": 0.07430341262888916,
+        "deployed_zero_halo_mac_saved_pct": 3.2440469584887555
+      },
+      {
+        "image": "0900.png",
+        "qp": 0,
+        "case_sha256": "90618ffd1f217a9ee4aa84964e9285b73d81b9b7a5ca0ac068306625a47b2e71",
+        "exit_map": [
+          3,
+          3,
+          3,
+          3,
+          3,
+          3
+        ],
+        "per_suffix_block_union_feature_cells": [
+          6144,
+          6144,
+          6144,
+          6144,
+          0,
+          0,
+          0,
+          0
+        ],
+        "ideal_shared_context_relative_mac": 0.7483139240506329,
+        "ideal_shared_context_mac_saved_pct": 25.16860759493671,
+        "deployed_delta444_db": 0.09139109310917956,
+        "deployed_zero_halo_mac_saved_pct": 24.217887314361864
+      },
+      {
+        "image": "0900.png",
+        "qp": 16,
+        "case_sha256": "2cb2d868ec219cf0f9d885703b9b5c85ba6d9618217f01705926521ed0b3454f",
+        "exit_map": [
+          4,
+          4,
+          3,
+          4,
+          3,
+          4
+        ],
+        "per_suffix_block_union_feature_cells": [
+          6144,
+          6144,
+          6144,
+          6144,
+          4404,
+          4253,
+          0,
+          0
+        ],
+        "ideal_shared_context_relative_mac": 0.8285607817444619,
+        "ideal_shared_context_mac_saved_pct": 17.14392182555381,
+        "deployed_delta444_db": 0.11013028796831666,
+        "deployed_zero_halo_mac_saved_pct": 16.757299097580248
+      },
+      {
+        "image": "0900.png",
+        "qp": 32,
+        "case_sha256": "96d174eaba9f2b8b03313bd402a4d0654ddf4e92d867a66ea1dc66959146279c",
+        "exit_map": [
+          5,
+          5,
+          3,
+          5,
+          3,
+          4
+        ],
+        "per_suffix_block_union_feature_cells": [
+          6144,
+          6144,
+          6144,
+          6144,
+          4576,
+          4433,
+          3264,
+          3168
+        ],
+        "ideal_shared_context_relative_mac": 0.9062132782282876,
+        "ideal_shared_context_mac_saved_pct": 9.378672177171243,
+        "deployed_delta444_db": 0.07566372605960581,
+        "deployed_zero_halo_mac_saved_pct": 9.768433960480028
+      },
+      {
+        "image": "0900.png",
+        "qp": 48,
+        "case_sha256": "59cd3ee70e0b1c4790dffd1d19eef747b7bab680e2f29a3ed4bd0990098959ec",
+        "exit_map": [
+          5,
+          5,
+          5,
+          5,
+          3,
+          5
+        ],
+        "per_suffix_block_union_feature_cells": [
+          6144,
+          6144,
+          6144,
+          6144,
+          5472,
+          5390,
+          5304,
+          5214
+        ],
+        "ideal_shared_context_relative_mac": 0.9689702894251055,
+        "ideal_shared_context_mac_saved_pct": 3.1029710574894454,
+        "deployed_delta444_db": 0.035685035904662404,
+        "deployed_zero_halo_mac_saved_pct": 3.2440469584887555
+      },
+      {
+        "image": "0900.png",
+        "qp": 63,
+        "case_sha256": "d1b9140fc09aa0e4665b20856c5222470652632d504c1db42892c157abdd1667",
+        "exit_map": [
+          5,
+          5,
+          5,
+          5,
+          5,
+          5
+        ],
+        "per_suffix_block_union_feature_cells": [
+          6144,
+          6144,
+          6144,
+          6144,
+          6144,
+          6144,
+          6144,
+          6144
+        ],
+        "ideal_shared_context_relative_mac": 1.0,
+        "ideal_shared_context_mac_saved_pct": 0.0,
+        "deployed_delta444_db": 0.04133437999328611,
+        "deployed_zero_halo_mac_saved_pct": -0.9507193245465118
+      },
+      {
+        "image": "0890.png",
+        "qp": 0,
+        "case_sha256": "efb3b8212e564ce52c874ec3f4bda161e1bc0ff539952877df4784babe7ec988",
+        "exit_map": [
+          2,
+          2,
+          2,
+          2,
+          2,
+          3
+        ],
+        "per_suffix_block_union_feature_cells": [
+          6144,
+          6144,
+          1156,
+          1089,
+          0,
+          0,
+          0,
+          0
+        ],
+        "ideal_shared_context_relative_mac": 0.6264815238770218,
+        "ideal_shared_context_mac_saved_pct": 37.35184761229782,
+        "deployed_delta444_db": 0.04982620629277983,
+        "deployed_zero_halo_mac_saved_pct": 36.64011219362669
+      },
+      {
+        "image": "0890.png",
+        "qp": 16,
+        "case_sha256": "758be4f1e6aa386c2a49b84e562e0b4baffbd855119e0f03b47036144c176e63",
+        "exit_map": [
+          3,
+          3,
+          3,
+          3,
+          3,
+          3
+        ],
+        "per_suffix_block_union_feature_cells": [
+          6144,
+          6144,
+          6144,
+          6144,
+          0,
+          0,
+          0,
+          0
+        ],
+        "ideal_shared_context_relative_mac": 0.7483139240506329,
+        "ideal_shared_context_mac_saved_pct": 25.16860759493671,
+        "deployed_delta444_db": 0.0342642030113241,
+        "deployed_zero_halo_mac_saved_pct": 24.217887314361864
+      },
+      {
+        "image": "0890.png",
+        "qp": 32,
+        "case_sha256": "4ebb4bbbd4fb1a01af7dfebc8b204c7d219b8c248a679213556dbb1e46a1b113",
+        "exit_map": [
+          3,
+          3,
+          3,
+          4,
+          4,
+          4
+        ],
+        "per_suffix_block_union_feature_cells": [
+          6144,
+          6144,
+          6144,
+          6144,
+          3264,
+          3168,
+          0,
+          0
+        ],
+        "ideal_shared_context_relative_mac": 0.8077621044303797,
+        "ideal_shared_context_mac_saved_pct": 19.223789556962036,
+        "deployed_delta444_db": 0.05013378212875537,
+        "deployed_zero_halo_mac_saved_pct": 18.62244764189177
+      },
+      {
+        "image": "0890.png",
+        "qp": 48,
+        "case_sha256": "c591373c1808a071d252390c0f51bc5907b18e2456a68fec589321f22618908e",
+        "exit_map": [
+          3,
+          4,
+          4,
+          5,
+          5,
+          5
+        ],
+        "per_suffix_block_union_feature_cells": [
+          6144,
+          6144,
+          6144,
+          6144,
+          5304,
+          5245,
+          3264,
+          3168
+        ],
+        "ideal_shared_context_relative_mac": 0.918702168215981,
+        "ideal_shared_context_mac_saved_pct": 8.129783178401894,
+        "deployed_delta444_db": 0.049905452005916194,
+        "deployed_zero_halo_mac_saved_pct": 7.903288396400743
+      },
+      {
+        "image": "0890.png",
+        "qp": 63,
+        "case_sha256": "e63da3c59311f5ed9bcfcfa9e7d2792fd3e95c43450bc680be2f34071d8f658c",
+        "exit_map": [
+          5,
+          5,
+          5,
+          5,
+          5,
+          5
+        ],
+        "per_suffix_block_union_feature_cells": [
+          6144,
+          6144,
+          6144,
+          6144,
+          6144,
+          6144,
+          6144,
+          6144
+        ],
+        "ideal_shared_context_relative_mac": 1.0,
+        "ideal_shared_context_mac_saved_pct": 0.0,
+        "deployed_delta444_db": 0.03130723699002227,
+        "deployed_zero_halo_mac_saved_pct": -0.9507193245465118
+      },
+      {
+        "image": "0824.png",
+        "qp": 0,
+        "case_sha256": "51739b10830b922603e67de21ffba2bab814c9f32cae37bac9ae42d3399a97f5",
+        "exit_map": [
+          3,
+          3,
+          3,
+          3,
+          3,
+          3
+        ],
+        "per_suffix_block_union_feature_cells": [
+          6144,
+          6144,
+          6144,
+          6144,
+          0,
+          0,
+          0,
+          0
+        ],
+        "ideal_shared_context_relative_mac": 0.7483139240506329,
+        "ideal_shared_context_mac_saved_pct": 25.16860759493671,
+        "deployed_delta444_db": 0.05544874206848256,
+        "deployed_zero_halo_mac_saved_pct": 24.217887314361864
+      },
+      {
+        "image": "0824.png",
+        "qp": 16,
+        "case_sha256": "85b7f68af6ae78070c863a55c0ddda3cda60305b2705e2c0fe0e47f8508b0f68",
+        "exit_map": [
+          3,
+          4,
+          4,
+          3,
+          4,
+          4
+        ],
+        "per_suffix_block_union_feature_cells": [
+          6144,
+          6144,
+          6144,
+          6144,
+          4224,
+          4160,
+          0,
+          0
+        ],
+        "ideal_shared_context_relative_mac": 0.8252489978902953,
+        "ideal_shared_context_mac_saved_pct": 17.475100210970474,
+        "deployed_delta444_db": 0.053128041495110065,
+        "deployed_zero_halo_mac_saved_pct": 16.757299097580248
+      },
+      {
+        "image": "0824.png",
+        "qp": 32,
+        "case_sha256": "2d8ea077e1cab1d0c39e82346c8006cd39d5142eae9bfcb0f5857d0f0479b9ce",
+        "exit_map": [
+          3,
+          4,
+          5,
+          3,
+          4,
+          5
+        ],
+        "per_suffix_block_union_feature_cells": [
+          6144,
+          6144,
+          6144,
+          6144,
+          4224,
+          4160,
+          2176,
+          2112
+        ],
+        "ideal_shared_context_relative_mac": 0.8741705696202532,
+        "ideal_shared_context_mac_saved_pct": 12.582943037974681,
+        "deployed_delta444_db": 0.069359060669643,
+        "deployed_zero_halo_mac_saved_pct": 12.09805765966826
+      },
+      {
+        "image": "0824.png",
+        "qp": 48,
+        "case_sha256": "be974225038834b82451690742a85c082d57b3101b5959cc7d071e1fa0f1e97c",
+        "exit_map": [
+          5,
+          5,
+          5,
+          5,
+          5,
+          5
+        ],
+        "per_suffix_block_union_feature_cells": [
+          6144,
+          6144,
+          6144,
+          6144,
+          6144,
+          6144,
+          6144,
+          6144
+        ],
+        "ideal_shared_context_relative_mac": 1.0,
+        "ideal_shared_context_mac_saved_pct": 0.0,
+        "deployed_delta444_db": 0.029895557351993687,
+        "deployed_zero_halo_mac_saved_pct": -0.9507193245465118
+      },
+      {
+        "image": "0824.png",
+        "qp": 63,
+        "case_sha256": "9c9284e2803604165851bf711f75f5d998ab7d93fe267c8652c7562fccfea3d3",
+        "exit_map": [
+          5,
+          5,
+          5,
+          5,
+          5,
+          5
+        ],
+        "per_suffix_block_union_feature_cells": [
+          6144,
+          6144,
+          6144,
+          6144,
+          6144,
+          6144,
+          6144,
+          6144
+        ],
+        "ideal_shared_context_relative_mac": 1.0,
+        "ideal_shared_context_mac_saved_pct": 0.0,
+        "deployed_delta444_db": 0.03929619339881615,
+        "deployed_zero_halo_mac_saved_pct": -0.9507193245465118
+      }
+    ]
+  }
+}

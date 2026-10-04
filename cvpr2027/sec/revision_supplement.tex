@@ -402,6 +402,30 @@ decoder latency. All losses use e15 full-frame YCbCr444 as reference.}
 \label{fig:context-counterfactual}
 \end{figure*}
 
+\paragraph{The single outlier is not the cohort's compute profile.}
+Applying the same optimistic union-of-required-cells calculation to all
+240 frozen maps in the 24-image calibration and 24-image disjoint DIV2K
+cohorts gives 21.30\% and 20.55\% mean \emph{ideal} synthesis MAC saving.
+On validation the QP0/QP63 means are 33.45\%/9.00\%, respectively
+(\cref{fig:ideal-context-cohort}). The 85 maps already within 0.1\,dB
+under the deployed zero-halo decoder retain 18.61\% mean ideal saving;
+the 35 violating maps retain 25.28\%. This grouping uses \emph{deployed}
+quality. We have not reconstructed 240 exact-context images and do not
+infer their quality or latency from the mask geometry.
+
+\begin{figure*}[t]
+\centering
+\includegraphics[width=0.9\textwidth]{figs/div2k_beta_transfer/fig_ideal_context_cohort.pdf}
+\caption{\textbf{Optimistic exact-context arithmetic across fixed maps.}
+\textbf{a}, Union-of-required-feature-cell MAC saving by QP, with 24-image
+cluster-bootstrap 95\% intervals for the disjoint calibration/validation
+sets. \textbf{b}, Validation maps grouped by \emph{deployed zero-halo}
+loss against e15 full-frame. These are geometry and cost calculations;
+neither exact-context reconstruction quality nor sparse-kernel latency
+was measured across this cohort.}
+\label{fig:ideal-context-cohort}
+\end{figure*}
+
 
 
 \section{Auditing the Scalar Control Search}
