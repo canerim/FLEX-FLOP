@@ -410,8 +410,7 @@ On validation the QP0/QP63 means are 33.45\%/9.00\%, respectively
 (\cref{fig:ideal-context-cohort}). The 85 maps already within 0.1\,dB
 under the deployed zero-halo decoder retain 18.61\% mean ideal saving;
 the 35 violating maps retain 25.28\%. This grouping uses \emph{deployed}
-quality. We have not reconstructed 240 exact-context images and do not
-infer their quality or latency from the mask geometry.
+quality; the mask geometry alone does not establish quality or latency.
 
 \begin{figure*}[t]
 \centering
@@ -421,9 +420,45 @@ infer their quality or latency from the mask geometry.
 cluster-bootstrap 95\% intervals for the disjoint calibration/validation
 sets. \textbf{b}, Validation maps grouped by \emph{deployed zero-halo}
 loss against e15 full-frame. These are geometry and cost calculations;
-neither exact-context reconstruction quality nor sparse-kernel latency
-was measured across this cohort.}
+the quality grouping is from the deployed path; the exact-context quality
+measurement on the disjoint validation cohort follows separately. No
+sparse-kernel latency was measured.}
 \label{fig:ideal-context-cohort}
+\end{figure*}
+
+\paragraph{Exact context recovers quality, but not every shallow exit.}
+We next reconstructed all 120 real bitstreams in the disjoint 24-image
+validation cohort under the same locked route maps, replacing the deployed
+zero-halo-plus-repair suffix with clipped sufficient-context windows and no
+repair. Mean loss relative to full-frame e15 falls from 0.0889 to
+0.0681\,dB; the paired improvement is 0.0208\,dB (24-image cluster-bootstrap
+95\% interval 0.0155--0.0266\,dB). The count above 0.1\,dB falls from
+35 to 24: 11 cases are rescued and no new threshold violation appears.
+Two QP63 cases worsen slightly (at most 0.0035\,dB), consistent with the
+old learned repair occasionally helping. The 24 persistent violations
+are largely a depth-selection problem; e.g., image 0844/QP48 remains
+0.465\,dB behind full-frame e15 with route $[2,2,2,2,3,3]$.
+
+For these maps the ideal union-of-required-cells model gives 20.55\%
+mean synthesis MAC saving; 67/120 cases satisfy both exact-context loss
+$\leq0.1$\,dB and ideal saving $\geq10$\%. These are \emph{potential}
+operating points, not a latency result: the direct per-tile exact-window
+code recomputes overlaps, while an efficient shared sparse implementation
+has not been built. All comparisons here use e15 full-frame centred
+YCbCr444, not released-decoder YUV611 or full-codec BD-rate.
+
+\begin{figure*}[t]
+\centering
+\includegraphics[width=0.91\textwidth]{figs/div2k_beta_transfer/fig_exact_context_validation.pdf}
+\caption{\textbf{Exact-context quality on all 120 disjoint DIV2K validation
+bitstreams.} \textbf{a}, Deployed zero-halo-plus-repair versus diagnostic
+exact-context-without-repair loss at the unchanged locked route, measured
+against full-frame e15 in centred YCbCr444; the diagonal denotes equality.
+\textbf{b}, Exact-context loss versus an \emph{ideal} shared-context synthesis
+MAC saving that charges each required feature cell once with zero overhead.
+Horizontal and vertical guides mark 0.1\,dB and 10\% saving. The latter is
+an analytical ceiling, not implemented sparse execution or wall-clock speed.}
+\label{fig:exact-context-validation}
 \end{figure*}
 
 

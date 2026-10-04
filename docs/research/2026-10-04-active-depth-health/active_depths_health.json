@@ -1,14 +1,14 @@
 {
-  "generated_at_utc": "2026-10-04T14:07:44.803404+00:00",
+  "generated_at_utc": "2026-10-04T14:35:48.116083+00:00",
   "protocol": "DIV2K first four central 512 crops; log-rate interpolation to 0.2 estimated bpp; diagnostic YUV611 PSNR, not actual bitstreams",
   "training_process_modified": false,
   "models": {
     "8": {
-      "status_epoch": 76,
-      "status_next_batch": 14001,
+      "status_epoch": 77,
+      "status_next_batch": 2601,
       "batches_per_epoch": 24049,
-      "latest_validation_epoch": 76,
-      "latest_psnr_yuv611_db": 38.07406736307307,
+      "latest_validation_epoch": 77,
+      "latest_psnr_yuv611_db": 38.0683582182551,
       "best_validation_epoch": 76,
       "best_psnr_yuv611_db": 38.07406736307307,
       "matched_epoch_40_db": 37.46672585873897,
@@ -16,15 +16,15 @@
       "epoch_50_db": 37.92392324632201,
       "learning_rate": 1e-05,
       "nonfinite_skips": 0,
-      "status_age_seconds": 13.463804,
-      "validation_records": 76
+      "status_age_seconds": 9.72416,
+      "validation_records": 77
     },
     "10": {
-      "status_epoch": 66,
-      "status_next_batch": 16801,
+      "status_epoch": 67,
+      "status_next_batch": 4601,
       "batches_per_epoch": 24049,
-      "latest_validation_epoch": 66,
-      "latest_psnr_yuv611_db": 37.97326483405298,
+      "latest_validation_epoch": 67,
+      "latest_psnr_yuv611_db": 37.98786972587432,
       "best_validation_epoch": 65,
       "best_psnr_yuv611_db": 38.003815809548655,
       "matched_epoch_40_db": 37.507588672142006,
@@ -32,12 +32,12 @@
       "epoch_50_db": 37.972914587849544,
       "learning_rate": 5e-05,
       "nonfinite_skips": 0,
-      "status_age_seconds": 19.465603,
-      "validation_records": 66
+      "status_age_seconds": 3.739472,
+      "validation_records": 67
     },
     "12": {
       "status_epoch": 43,
-      "status_next_batch": 13801,
+      "status_next_batch": 20201,
       "batches_per_epoch": 24049,
       "latest_validation_epoch": 43,
       "latest_psnr_yuv611_db": 37.60573804455589,
@@ -48,7 +48,7 @@
       "epoch_50_db": null,
       "learning_rate": 0.0002,
       "nonfinite_skips": 0,
-      "status_age_seconds": 25.787623,
+      "status_age_seconds": 8.485271,
       "validation_records": 43
     }
   },
