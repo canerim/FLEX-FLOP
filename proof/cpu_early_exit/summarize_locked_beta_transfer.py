@@ -119,14 +119,20 @@ def main() -> None:
                                                      float(np.quantile(boot, .975))]}
         overall['delta444_over_0p1_cases'] = sum(r['delta444_db'] > .1 for r in rows)
         if 'calibrated_mac_saved_pct' in rows[0]:
+            old_by_qp = {str(qp): float(np.mean([
+                r['calibrated_mac_saved_pct'] for r in rows if r['qp'] == qp]))
+                for qp in qps}
             overall['old_ctc_calibrated_mac_saved_pct'] = float(np.mean(
                 [r['calibrated_mac_saved_pct'] for r in rows]))
             overall['old_ctc_calibrated_delta444_db'] = float(np.mean(
                 [r['calibrated_delta444_db'] for r in rows]))
             overall['released_relative_yuv611_loss_db'] = float(np.mean(
                 [r['released_relative_yuv611_loss_db'] for r in rows]))
-        return {'cases': len(rows), 'images': len(images), 'per_qp': per_qp,
-                'equal_qp_mean': overall}
+        output = {'cases': len(rows), 'images': len(images), 'per_qp': per_qp,
+                  'equal_qp_mean': overall}
+        if 'calibrated_mac_saved_pct' in rows[0]:
+            output['old_ctc_per_qp_mac_saved_pct'] = old_by_qp
+        return output
 
     result = {'schema': 1, 'policy_sha256': policy_sha,
               'manifest_sha256': sha(args.manifest), 'kodak_scan_manifest_sha256': scan_sha,
