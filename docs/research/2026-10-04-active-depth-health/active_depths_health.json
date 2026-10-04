@@ -1,30 +1,30 @@
 {
-  "generated_at_utc": "2026-10-04T13:09:44.089649+00:00",
+  "generated_at_utc": "2026-10-04T14:07:44.803404+00:00",
   "protocol": "DIV2K first four central 512 crops; log-rate interpolation to 0.2 estimated bpp; diagnostic YUV611 PSNR, not actual bitstreams",
   "training_process_modified": false,
   "models": {
     "8": {
-      "status_epoch": 75,
-      "status_next_batch": 12001,
+      "status_epoch": 76,
+      "status_next_batch": 14001,
       "batches_per_epoch": 24049,
-      "latest_validation_epoch": 75,
-      "latest_psnr_yuv611_db": 38.060473836212665,
-      "best_validation_epoch": 72,
-      "best_psnr_yuv611_db": 38.06168390119828,
+      "latest_validation_epoch": 76,
+      "latest_psnr_yuv611_db": 38.07406736307307,
+      "best_validation_epoch": 76,
+      "best_psnr_yuv611_db": 38.07406736307307,
       "matched_epoch_40_db": 37.46672585873897,
       "matched_epoch_42_db": 37.44123216227387,
       "epoch_50_db": 37.92392324632201,
       "learning_rate": 1e-05,
       "nonfinite_skips": 0,
-      "status_age_seconds": 1.996712,
-      "validation_records": 75
+      "status_age_seconds": 13.463804,
+      "validation_records": 76
     },
     "10": {
-      "status_epoch": 65,
-      "status_next_batch": 16401,
+      "status_epoch": 66,
+      "status_next_batch": 16801,
       "batches_per_epoch": 24049,
-      "latest_validation_epoch": 65,
-      "latest_psnr_yuv611_db": 38.003815809548655,
+      "latest_validation_epoch": 66,
+      "latest_psnr_yuv611_db": 37.97326483405298,
       "best_validation_epoch": 65,
       "best_psnr_yuv611_db": 38.003815809548655,
       "matched_epoch_40_db": 37.507588672142006,
@@ -32,12 +32,12 @@
       "epoch_50_db": 37.972914587849544,
       "learning_rate": 5e-05,
       "nonfinite_skips": 0,
-      "status_age_seconds": 12.570678,
-      "validation_records": 65
+      "status_age_seconds": 19.465603,
+      "validation_records": 66
     },
     "12": {
       "status_epoch": 43,
-      "status_next_batch": 1,
+      "status_next_batch": 13801,
       "batches_per_epoch": 24049,
       "latest_validation_epoch": 43,
       "latest_psnr_yuv611_db": 37.60573804455589,
@@ -48,7 +48,7 @@
       "epoch_50_db": null,
       "learning_rate": 0.0002,
       "nonfinite_skips": 0,
-      "status_age_seconds": 44.930683,
+      "status_age_seconds": 25.787623,
       "validation_records": 43
     }
   },
