@@ -94,17 +94,25 @@ def main():
             'quality_loss_db_median': float(np.median(loss)),
             'quality_loss_db_image_bootstrap_95': interval(loss),
             'quality_loss_db_max': float(max(loss)),
-            'quality_loss_over_0p1_count': sum(v > .1 for v in loss),
+            'released_relative_yuv_loss_over_0p1_count': sum(v > .1 for v in loss),
             'stream_bpp_mean': float(np.mean([r['stream_bytes']*8/(512*768) for r in group])),
             'released_yuv611_db_mean': float(np.mean([r['released_yuv611_db'] for r in group])),
             'routed_yuv611_db_mean': float(np.mean([r['routed_yuv611_db'] for r in group])),
         }
         if fixed_cases:
             fixed_losses = [fixed_cases[(r['image'], qp)]['fixed_beta_loss_db'] for r in group]
+            calibrated_delta = [fixed_cases[(r['image'], qp)]['calibrated_delta444_db'] for r in group]
+            fixed_delta = [fixed_cases[(r['image'], qp)]['fixed_beta_delta444_db'] for r in group]
             per_qp[str(qp)].update({
                 'fixed_beta_quality_loss_db_mean': float(np.mean(fixed_losses)),
                 'fixed_beta_quality_loss_db_max': float(max(fixed_losses)),
-                'fixed_beta_quality_loss_over_0p1_count': sum(v > .1 for v in fixed_losses),
+                'fixed_beta_released_relative_yuv_loss_over_0p1_count': sum(v > .1 for v in fixed_losses),
+                'calibrated_delta444_db_mean': float(np.mean(calibrated_delta)),
+                'calibrated_delta444_db_max': float(max(calibrated_delta)),
+                'calibrated_delta444_over_0p1_count': sum(v > .1 for v in calibrated_delta),
+                'fixed_beta_delta444_db_mean': float(np.mean(fixed_delta)),
+                'fixed_beta_delta444_db_max': float(max(fixed_delta)),
+                'fixed_beta_delta444_over_0p1_count': sum(v > .1 for v in fixed_delta),
             })
     per_image_mac = np.array([[next(r['mac_saved_pct'] for r in by_qp[q] if r['image'] == name)
                                for q in qps] for name in manifest['images']])
@@ -121,22 +129,30 @@ def main():
         'fixed_minus_calibrated_mac_points_image_cluster_bootstrap_95': policy_gap_interval.tolist(),
         'calibrated_quality_loss_db_mean': float(np.mean([r['quality_loss_db'] for r in cases])),
         'calibrated_quality_loss_db_max': float(max(r['quality_loss_db'] for r in cases)),
-        'calibrated_quality_loss_over_0p1_count': sum(r['quality_loss_db'] > .1 for r in cases),
+        'released_relative_yuv_loss_over_0p1_count': sum(r['quality_loss_db'] > .1 for r in cases),
         'fixed_beta_quality_status': 'Not measured: fixed-beta numbers are decision/MAC counterfactuals only',
     }
     if fixed_cases:
         fixed_losses = [fixed_cases[(r['image'], r['qp'])]['fixed_beta_loss_db'] for r in cases]
+        calibrated_delta = [fixed_cases[(r['image'], r['qp'])]['calibrated_delta444_db'] for r in cases]
+        fixed_delta = [fixed_cases[(r['image'], r['qp'])]['fixed_beta_delta444_db'] for r in cases]
         aggregate.update({
             'fixed_beta_quality_status': 'Measured from the same FUFREF2 streams',
             'fixed_beta_quality_loss_db_mean': float(np.mean(fixed_losses)),
             'fixed_beta_quality_loss_db_max': float(max(fixed_losses)),
-            'fixed_beta_quality_loss_over_0p1_count': sum(v > .1 for v in fixed_losses),
+            'fixed_beta_released_relative_yuv_loss_over_0p1_count': sum(v > .1 for v in fixed_losses),
             'fixed_beta_vs_calibrated_quality_loss_db_mean': float(np.mean(fixed_losses)-np.mean([r['quality_loss_db'] for r in cases])),
+            'calibrated_delta444_db_mean': float(np.mean(calibrated_delta)),
+            'calibrated_delta444_db_max': float(max(calibrated_delta)),
+            'calibrated_delta444_over_0p1_count': sum(v > .1 for v in calibrated_delta),
+            'fixed_beta_delta444_db_mean': float(np.mean(fixed_delta)),
+            'fixed_beta_delta444_db_max': float(max(fixed_delta)),
+            'fixed_beta_delta444_over_0p1_count': sum(v > .1 for v in fixed_delta),
         })
     summary = {'schema': 1, 'manifest_sha256': manifest_hash,
                'calibration_sha256': manifest['calibration_sha256'],
                'scope': manifest['scope'], 'limitations': manifest['backend'],
-               'interpretation_note': 'Holding beta at its QP16 value isolates the effect of QP-specific control calibration. It does not remove QP from the router head or erase QP-dependent latent statistics; causal decoder-capacity demand is not identified by this audit.',
+               'interpretation_note': 'Holding beta at its QP16 value isolates the effect of QP-specific control calibration. It does not remove QP from the router head or erase QP-dependent latent statistics; causal decoder-capacity demand is not identified by this audit. Released-relative weighted YUV PSNR loss is not the same as e15-full-frame-referenced Delta444 used for the nominal 0.1 dB target.',
                'per_qp': per_qp, 'aggregate': aggregate,
                'raw_result_sha256': {f'{r["image"]}:qp{r["qp"]}': sha(args.cohort/f'{Path(r["image"]).stem}_qp{r["qp"]}.json') for r in cases}}
     if fixed_cases:
@@ -184,21 +200,23 @@ def main():
                    frameon=False, fontsize=6.7, columnspacing=.7)
 
     for j, qp in enumerate(qps):
-        values = np.array([r['quality_loss_db'] for r in by_qp[qp]])
+        values = np.array([fixed_cases[(r['image'], qp)]['calibrated_delta444_db']
+                           for r in by_qp[qp]]) if fixed_cases else np.array([r['quality_loss_db'] for r in by_qp[qp]])
         axes[2].scatter(np.full(24, j), values, s=7, color='#9FBFC1',
                         alpha=.55, linewidth=0, zorder=2)
-    axes[2].plot(x, [per_qp[str(q)]['quality_loss_db_mean'] for q in qps],
+    quality_key = 'calibrated_delta444_db_mean' if fixed_cases else 'quality_loss_db_mean'
+    axes[2].plot(x, [per_qp[str(q)][quality_key] for q in qps],
                  '-o', color='#20313E', lw=1.5, ms=4, zorder=4,
                  label='QP-calibrated β')
     if fixed_cases:
-        axes[2].plot(x, [per_qp[str(q)]['fixed_beta_quality_loss_db_mean'] for q in qps],
+        axes[2].plot(x, [per_qp[str(q)]['fixed_beta_delta444_db_mean'] for q in qps],
                      '--s', color='#9A694B', lw=1.2, ms=3.8, zorder=4,
                      label='fixed β (QP16)')
         axes[2].legend(loc='upper center', bbox_to_anchor=(.5, -.21), ncol=2,
                        frameon=False, fontsize=6.7, columnspacing=.7)
-    axes[2].axhline(.1, color='#BB7D56', lw=.8, linestyle=':', zorder=1)
-    axes[2].set_ylabel('YUV PSNR loss (dB)')
-    axes[2].set_title('c  Calibrated quality', loc='left', fontweight='bold', fontsize=9)
+        axes[2].axhline(.1, color='#BB7D56', lw=.8, linestyle=':', zorder=1)
+    axes[2].set_ylabel('Δ444 vs e15 full (dB)' if fixed_cases else 'YUV PSNR loss (dB)')
+    axes[2].set_title('c  Quality cost', loc='left', fontweight='bold', fontsize=9)
     for ax in axes:
         ax.set_xticks(x, [str(q) for q in qps])
         ax.set_xlabel('QP')

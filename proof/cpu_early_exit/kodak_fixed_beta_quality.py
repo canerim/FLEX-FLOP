@@ -8,6 +8,7 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import math
 from pathlib import Path
 import sys
 
@@ -104,22 +105,33 @@ def main():
                     torch.bincount(fixed, minlength=cfg.num_exits).tolist() != scan['fixed_beta_exit_counts']):
                 raise RuntimeError(f'Saved router scores disagree with decisions: {stem_name}')
             same_route = torch.equal(calibrated, fixed)
-            if same_route:
-                fixed_quality = scan['routed_yuv611_db']
-            else:
-                stream_path = args.scan_dir/f'{stem_name}.fufref2'
-                if not stream_path.exists():
-                    stream_path = args.pilot_stream_dir/f'{stem_name}.fufref2'
-                if digest(stream_path) != scan['stream_sha256']:
-                    raise RuntimeError(f'Stream hash mismatch: {stem_name}')
-                y, q, _ = codec.decode_latent(stream_path.read_bytes())
-                with torch.inference_mode():
-                    stem = e15.dec.upsample(y)
-                    for group in e15.dec.groups[:cfg.split_depth]:
-                        stem = group(stem)
-                    image = forward_from_stem_with_cpu_map(e15.dec, stem, q, fixed)
-                h,w = scan['shape']
-                fixed_quality = psnr(source, image[:, :, :h, :w])['yuv_6_1_1']
+            stream_path = args.scan_dir/f'{stem_name}.fufref2'
+            if not stream_path.exists():
+                stream_path = args.pilot_stream_dir/f'{stem_name}.fufref2'
+            if digest(stream_path) != scan['stream_sha256']:
+                raise RuntimeError(f'Stream hash mismatch: {stem_name}')
+            y, q, _ = codec.decode_latent(stream_path.read_bytes())
+            with torch.inference_mode():
+                reference = e15.dec.forward_full(y, q)
+                stem = e15.dec.upsample(y)
+                for group in e15.dec.groups[:cfg.split_depth]:
+                    stem = group(stem)
+                calibrated_image = forward_from_stem_with_cpu_map(e15.dec, stem, q, calibrated)
+                fixed_image = (calibrated_image if same_route else
+                               forward_from_stem_with_cpu_map(e15.dec, stem, q, fixed))
+            h,w = scan['shape']
+            reference = reference[:, :, :h, :w]
+            calibrated_image = calibrated_image[:, :, :h, :w]
+            fixed_image = fixed_image[:, :, :h, :w]
+            calibrated_quality = psnr(source, calibrated_image)['yuv_6_1_1']
+            if abs(calibrated_quality-scan['routed_yuv611_db']) > 1e-5:
+                raise RuntimeError(f'Calibrated replay differs from first pass: {stem_name}')
+            fixed_quality = psnr(source, fixed_image)['yuv_6_1_1']
+            dref = float((source-reference).square().mean())
+            dcal = float((source-calibrated_image).square().mean())
+            dfix = float((source-fixed_image).square().mean())
+            if min(dref,dcal,dfix) <= 0:
+                raise RuntimeError(f'Nonpositive source distortion: {stem_name}')
             row = {
                 'schema': 1, 'image': image_name, 'qp': qp,
                 'scan_manifest_sha256': manifest_hash,
@@ -132,6 +144,9 @@ def main():
                 'fixed_beta_yuv611_db': fixed_quality,
                 'calibrated_loss_db': scan['quality_loss_db'],
                 'fixed_beta_loss_db': scan['released_yuv611_db']-fixed_quality,
+                'e15_full_mse444': dref,
+                'calibrated_delta444_db': 10*math.log10(dcal/dref),
+                'fixed_beta_delta444_db': 10*math.log10(dfix/dref),
                 'calibrated_mac_saved_pct': scan['mac_saved_pct'],
                 'fixed_beta_mac_saved_pct': scan['fixed_beta_mac_saved_pct'],
                 'cpu_timing': None,
