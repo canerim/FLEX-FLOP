@@ -1,29 +1,20 @@
 \section{Discussion}
 
-\paragraph{Adaptation should pay for the decisions it changes.}
-RegLIC identifies a budget-dependent role for spatial allocation.
-Under source calibration, tight quality targets leave room for useful
-placement. Near the shallowest-exit ceiling, a blind mixture reaches
-nearly the same arithmetic saving. A budget-conditioned switch between fixed, blind and learned policies
-should therefore be chosen on validation data.
+Spatial placement matters most at tight quality targets. Near the cheapest
+exit's ceiling, blind mixing approaches learned routing; validation should
+choose when the added decision cost pays for itself.
 
-\paragraph{The remaining evidence gap.}
-The source-calibrated study measures available allocation value, while
-the fixed-control replay leaves the routing increment unresolved.
-Content-grouped calibration on untouched images is the next test of that
-increment. Native bitstreams and paired wall-clock measurements must then
-include entropy work, prediction, tile movement, grouping and fallback.
-The current confidence intervals cover sample variation at fixed weights,
-not independent training seeds. Results are confined to intra reconstruction:
-YCbCr-MSE and RGB diagnostics do not establish perceptual equivalence,
-temporal consistency or performance of DCVC-UF's chunk-based video path.
+Source calibration reveals allocation potential, but fixed-control replay
+does not yet resolve its gain over blind mixing. A content-grouped unseen
+cohort and paired native wall-clock tests must include prediction, tile
+movement, entropy and fallback. Intervals here vary images at fixed weights,
+not training seeds. Intra YCbCr/RGB results do not establish perceptual
+equivalence or performance on the video path.
 
 \section{Conclusion}
 RegLIC makes synthesis depth a spatial decision inside DCVC-UF.
 Aligned exits and a shrinking tile batch reuse a common representation
-while omitting later block evaluations. Most measured arithmetic saving
-comes from cheaper depth; learned placement adds a smaller,
-budget-dependent increment. Blind mixtures and fixed-control replay
-separate these effects. Matched training and complete execution measurements
-will determine when independent-depth experts justify giving up shared
-computation.
+while omitting later blocks. Shallower depth supplies most measured arithmetic
+saving; learned placement adds a smaller, budget-dependent increment.
+Matched training and complete execution measurements will decide when
+independent-depth experts justify losing shared computation.

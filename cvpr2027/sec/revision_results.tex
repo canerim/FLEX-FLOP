@@ -181,6 +181,13 @@ e15 full-frame loses 0.00908\,dB mean RGB PSNR against released D12.
 Using released D12 raises absolute policy losses by that same per-image
 offset without changing their paired differences. The supplement gives the split, predictor and metric audits.
 
+Fitting $\beta$ on 24 DIV2K crops, then freezing it, gives 20.05\% analytical
+synthesis MAC saving at 0.0889\,dB cropped $\Delta_{444}$ on 24 disjoint
+DIV2K crops and 25.88\% at 0.0976\,dB on Kodak24$\times$QP5.
+The Kodak mean hides 47/120 losses above 0.1\,dB and QP48/63 means of
+0.1275/0.1261\,dB. The supplement reports the full transfer protocol,
+uncertainty and a more aggressive calibration rule that fails transfer.
+
 \subsection{Checking the mechanism}
 \label{sec:mechanismchecks}
 

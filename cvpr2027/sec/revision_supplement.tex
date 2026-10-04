@@ -233,6 +233,65 @@ Kodak is an external control-transfer check, not a set on which we retune
 and re-evaluate $\beta$. Separate released-D12-relative YUV 6:1:1 PSNR
 records are archived and must not be read as this $\Delta_{444}$ target.
 
+\section{Independent-Image Calibration of the Decoder-Side Control}
+
+We next fit the scalar price without using Kodak records in the optimisation.
+The 100 original DIV2K validation PNGs are ordered by the SHA256 of their
+filenames. The first 24 supply calibration; the next, disjoint 24 supply an
+internal transfer check. Every image contributes a central $768\times512$
+RGB crop, encoded into actual FUFREF2 streams at QP 0/16/32/48/63.
+The released analysis and entropy tensors are shared with the e15 model.
+The same decoder-side stem--QP router, six-tile assembly, seam repair,
+full-frame e15 reconstruction and cropped YCbCr~4:4:4 metric are used at
+every candidate price. This is an untimed, single-core CPU replay.
+
+The candidate grid, fixed before evaluation, contains prices from $-50$ to
+$60$ in increments of five, plus the exact earlier CTC price at each QP
+and the exact QP16 price. For each QP separately, the primary rule maximises
+mean analytical synthesis MAC saving among candidates whose mean
+$\Delta_{444}$ on the 24 calibration images is at most 0.1\,dB.
+It selects $\beta=(40,15,15,10,-10)$ at increasing QP. Mean saving/loss
+is 20.73\%/0.0851\,dB on calibration, 20.05\%/0.0889\,dB on held-out
+DIV2K, and 25.88\%/0.0976\,dB on Kodak24$\times$QP5. On Kodak, the
+24-image cluster-bootstrap 95\% intervals are [23.29,28.21]\% MAC saving
+and [0.0832,0.1128]\,dB mean $\Delta_{444}$. The earlier CTC and fixed-QP16
+controls, evaluated on the same Kodak streams, yield 17.16\%/0.0565\,dB
+and 26.82\%/0.1223\,dB, respectively.
+
+\begin{figure*}[t]
+\centering
+\includegraphics[width=\textwidth]{figs/div2k_beta_transfer/fig_beta_policy_comparison.pdf}
+\caption{\textbf{A fixed price transfers in the mean, but leaves a quality tail.}
+\textbf{a}, Equal-image-and-QP mean Kodak operating points from actual
+assembled reconstructions on the same 120 bitstreams; bars are 95\% bootstrap
+intervals over 24 images. The green region marks mean $\Delta_{444}\leq0.1$\,dB
+and 22--25\% analytical synthesis MAC saving. \textbf{b}, Rate-specific
+mean loss exposes the QP48/63 failures hidden by the pooled mean.
+The global-QP price rule is exploratory and was frozen before Kodak transfer.
+MAC accounting excludes router/entropy work and is not measured latency.}
+\label{fig:beta-transfer}
+\end{figure*}
+
+The pooled target is not a hard guarantee. Under the primary policy,
+47/120 Kodak cases exceed 0.1\,dB; QP48/63 means are 0.1275/0.1261\,dB,
+with 17/24 and 15/24 cases above the threshold. The largest Kodak loss is
+0.2989\,dB at QP63. The worst DIV2K calibration loss, 0.7918\,dB at QP0,
+was recomputed with the direct, uncached decoder and matched the cached
+candidate exactly. These tails motivate a risk-aware control rather than
+an unqualified quality-preservation claim.
+
+After inspecting the calibration aggregate, we also explored a less
+conservative rule: maximise five-QP mean saving subject only to five-QP mean
+calibration loss $\leq0.1$\,dB. Its price vector
+$(50,15,15,14.0229,5)$ reaches 23.09\%/0.09994\,dB on calibration, but
+23.07\%/0.1131\,dB on held-out DIV2K and 28.64\%/0.1228\,dB on Kodak.
+Thus the apparent target hit does not transfer. The rule was selected using
+calibration alone and committed before Kodak replay, but it was introduced
+after inspecting that cohort and is therefore labelled exploratory.
+Kodak had been examined in prior diagnostics; it is independent of these
+specific price fits, not globally untouched. A fresh cohort is needed for
+a final Q90 or maximum-loss-constrained policy comparison.
+
 
 
 \section{Auditing the Scalar Control Search}
