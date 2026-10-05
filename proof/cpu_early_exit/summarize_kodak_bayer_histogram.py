@@ -8,6 +8,7 @@ from pathlib import Path
 import numpy as np
 
 BASE = Path(__file__).resolve().parent / "results/kodak24_qp5_bayer_histogram_20261005"
+RANDOM_SUMMARY = Path(__file__).resolve().parent / "results/kodak24_qp5_placement_20261005/summary.json"
 QPS = (0, 16, 32, 48, 63)
 
 
@@ -43,6 +44,13 @@ def main() -> None:
     rng = np.random.default_rng(20261005)
     draw = rng.integers(0, 24, size=(10_000, 24))
     boot = gain[draw].mean(1)
+    random_summary = json.loads(RANDOM_SUMMARY.read_text())
+    random_rows = {(r["image"], r["qp"]): r for r in random_summary["per_image_qp"]}
+    assert len(random_rows) == 120
+    random_gain = np.asarray([[random_rows[f"kodim{i+1:02d}.png", qp]["rgb_gain_db"]
+                               for qp in QPS] for i in range(24)])
+    random_minus_bayer = random_gain - gain[..., 0]
+    contrast_boot = random_minus_bayer[draw].mean((1, 2))
     def summary(v, ci_values, same_values):
         return {"n": int(np.prod(v.shape[:-1])),
                 "mean_router_gain_rgb_db": float(v[..., 0].mean()),
@@ -55,9 +63,15 @@ def main() -> None:
         "scope": "Actual Kodak24 x QP5 RGB and YCbCr444 reconstruction; fixed bitstream, e15 weights, routed depth counts and conv MAC. Positive gain means routed placement improves over the fixed Bayer-rank assignment of the same depths.",
         "limitations": "This is a deterministic matched-histogram placement control, not the archived scalar dithering policy; Kodak images are distinct from the CTC controller calibration but the codec and router were previously developed. No runtime inference.",
         "manifest_sha256": digest(manifest_path),
+        "random_control_summary_sha256": digest(RANDOM_SUMMARY),
         "case_sha256": {p.name: digest(p) for p in files},
         "bootstrap": "10,000 draws of 24 images with replacement, retaining five QPs from each image; fixed checkpoint and maps.",
         "overall": summary(gain, boot[..., 0].mean(1), same),
+        "random_minus_bayer_gain": {
+            "mean_db": float(random_minus_bayer.mean()),
+            "image_cluster_ci95_db": np.quantile(contrast_boot, [.025, .975]).tolist(),
+            "interpretation": "Positive means the frozen router's advantage over random permutations is larger than its advantage over fixed Bayer; the interval includes zero.",
+        },
         "per_qp": {str(qp): summary(gain[:, j], boot[:, j, 0], same[:, j])
                    for j, qp in enumerate(QPS)},
         "per_image_qp": per_case,

@@ -1,0 +1,13 @@
+{
+  "scope": "Kodak24 x QP5 fixed bitstreams; each Bayer-rank map uses the frozen router map's exact exit histogram and therefore its exact convolution MAC. Deeper exits fill lower Bayer ranks first. No tuning, timing, or new bitstreams.",
+  "limitation": "The matched-histogram Bayer control is distinct from the archived scalar ordered-dither policy, which chooses its own adjacent-depth histogram. Results isolate placement within the router's existing depth counts.",
+  "script_sha256": "d6bd80af5ecc76cfc81566c3fdcdcf0886dd915060bd5548ec8818800fb47b81",
+  "bayer_source_sha256": "c6a76e10fd3e92083e51ec9bf64fde1b08fd5954852c424f017710b565e06ee0",
+  "placement_manifest_sha256": "3074b1e06084012763484b9c5b7ea0f27c499d797a09379c1137e4e857402e2e",
+  "scan_manifest_sha256": "e0db0156dff748377370acd6ee6b7efc1206ae41f5e617b0346d46068823f489",
+  "release_sha256": "b3b900de23f30e4fc437010ddffe6a5413a56d6cfd97fb6235adbcd2b6973302",
+  "e15_sha256": "91556d30bca41988755ff43dee3bc6d0cd2a0a4eda1d18d2891b168dc0a04ce9",
+  "upstream_head": "cbdae87a5445114cdc7f48816da63ea80bdeac40",
+  "entropy_build_manifest_sha256": "2729dd9d0be76a025554cddfa47363da170aaf8c818c18aa70c60f18db23d6f1",
+  "python": "3.12.14 (main, Sep 24 2026, 17:57:43) [Clang 22.1.3 ]"
+}

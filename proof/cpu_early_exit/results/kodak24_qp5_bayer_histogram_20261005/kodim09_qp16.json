@@ -1,0 +1,43 @@
+{
+  "schema": 1,
+  "image": "kodim09.png",
+  "qp": 16,
+  "manifest_sha256": "b3eea28a1dfa72dce677bbba447c983884b8c944a41301b985e726a9ca013939",
+  "placement_result_sha256": "60e81c54c999a298f2d17218284fa160be7a2d4cc4a3450cfb43106c18dc8b26",
+  "stream_sha256": "6ba2beef00c2115e19809e8f82152669b17f077a445a8a6a27037d2dbdbf5de8",
+  "router_map": [
+    2,
+    2,
+    3,
+    3,
+    3,
+    3
+  ],
+  "bayer_map": [
+    3,
+    3,
+    2,
+    3,
+    3,
+    2
+  ],
+  "exit_counts": [
+    0,
+    0,
+    2,
+    4,
+    0,
+    0
+  ],
+  "mac_saved_pct": 29.186777862114244,
+  "same_map": false,
+  "router": {
+    "mse_rgb": 0.00089336495148018,
+    "mse_444": 0.000314774748403579
+  },
+  "bayer": {
+    "mse_rgb": 0.0008980216807685792,
+    "mse_444": 0.00031639065127819777
+  },
+  "cpu_timing": null
+}

@@ -1,0 +1,1053 @@
+{
+  "scope": "Actual Kodak24 x QP5 RGB and YCbCr444 reconstruction; fixed bitstream, e15 weights, routed depth counts and conv MAC. Positive gain means routed placement improves over the fixed Bayer-rank assignment of the same depths.",
+  "limitations": "This is a deterministic matched-histogram placement control, not the archived scalar dithering policy; Kodak images are distinct from the CTC controller calibration but the codec and router were previously developed. No runtime inference.",
+  "manifest_sha256": "b3eea28a1dfa72dce677bbba447c983884b8c944a41301b985e726a9ca013939",
+  "random_control_summary_sha256": "8dd48a3753daaa0700f5100036dda9afcbbdc22dbb42ed9166e418f92fe4d074",
+  "case_sha256": {
+    "kodim01_qp0.json": "44d24bb4ff3a2c728fad00484e1c9f48e7632ff478ca800be93a65c22a582b66",
+    "kodim01_qp16.json": "8dd047ab48016b95e498473575af2e386efeda06323b0ee7f697e0f843765e9f",
+    "kodim01_qp32.json": "60e154957419ed7b1382e8f48af60cbf0e15b1852bb20d040aabede10e7a25b5",
+    "kodim01_qp48.json": "bd4dbc3ed90b0412566a7488cfafcc016743d78256696f994e7589f3c8fdd6fd",
+    "kodim01_qp63.json": "440613078ea2cb202bdd7fc79302e8f9f436eca933cf75aa8bfb68d7ee374ebd",
+    "kodim02_qp0.json": "6dcbabd29a7b302f6194f9eaae0d4e3f80c4e8dc51de8edecdb3164a8d8e4887",
+    "kodim02_qp16.json": "9946a3b7c6095eeaa99630badc588f6ccd1c5d47acf3da6280785d794a59e3cb",
+    "kodim02_qp32.json": "f7844df90e733c24fc95bbf77eb4912daceb0d813bb56ef0a2a4f766eaf56836",
+    "kodim02_qp48.json": "94c9cb49917c74fbad64e2ef93b48a57d1d548d00a8a19b7388c86a03d5904ef",
+    "kodim02_qp63.json": "0e6f7c907b8ae4d4a7997e99c5d3556936d32234f85052e69c7dadaccc26b5e6",
+    "kodim03_qp0.json": "3cc04ab8422f0f308be71532c546d9661ec445db8c64ccc2fe042d5b8ec397ed",
+    "kodim03_qp16.json": "173dd7f1cd7735e2025cf2c00ca4af183c18a6e52e41b49843a205f4876c9578",
+    "kodim03_qp32.json": "eb552dd3caf6649596b91513ddb93ff749de762261fcb6d27ab40743d0e66f75",
+    "kodim03_qp48.json": "42f254ea3f2b7e4e178afd9d3a1aee9d2e189d885dae4cfc076be82f18cc56d7",
+    "kodim03_qp63.json": "5bf4dfbd9ff64136ea705da69914509381ab4d73d41dd2a049fec666afb4f374",
+    "kodim04_qp0.json": "d6ff2427e72e271a9398cfd3f7798125264315b440002fb1b255e5b23264fde4",
+    "kodim04_qp16.json": "1be624749d5d4974d73bdeb1b423a07f5b4078e84d9c82ebadc820ee422f0aa5",
+    "kodim04_qp32.json": "1284a58b01d5f17d790635ccc6747f10156170deb65389cee6e4eade3f133e28",
+    "kodim04_qp48.json": "25eb81333104648eb08b67076b0c90979d3b9d8904bc44b196a0c43a45259beb",
+    "kodim04_qp63.json": "aadd66f996fbea5297d2924b0f49bdd3194aca63fdf7a90894e541e64bd2c86a",
+    "kodim05_qp0.json": "8e7b9bdaf119b6404afda80a40942e7875a87aa0f26ccaffd02a091c1d2a8d78",
+    "kodim05_qp16.json": "5ad44cd79c37b579826b088015b7bb30f347dc72aa2efa841901add2170cc47e",
+    "kodim05_qp32.json": "00e1eb23b7e186f6ed00038961a857a9e995d18de8cc63c1af2e1b0ef90e2b74",
+    "kodim05_qp48.json": "042b7eba41b7951840ac4eb6b1a1f7501b8d6b1c7a86194c4d97059e2dceeeae",
+    "kodim05_qp63.json": "857782a65faa1a05fb132e1072b1192a1ee966ce9f70f686848e0656865c37e2",
+    "kodim06_qp0.json": "5e46f891c1b7bb36a96bfca494395c2529a4548075e9eb19bade97cd5d11aa3b",
+    "kodim06_qp16.json": "56bee5008104edf430c4771019267f2c35c40edaf0b8690ff79469b5a5320e7e",
+    "kodim06_qp32.json": "a6162134ac1bfb2b91851f21fbc551106f12db110c2d6da82533a5c157a1d296",
+    "kodim06_qp48.json": "270b07b43ac8a92df15359f5a3a70b56d74e60d7b29a4012f95368b54164ec45",
+    "kodim06_qp63.json": "afdcc92de4ec4f68d18a9075c27b394e493511e9a141ab5b8ed05d19c8bd6f8a",
+    "kodim07_qp0.json": "72b8b57b262c0422e8204517c26640a6e864302fc2b8064705a707822101c8e5",
+    "kodim07_qp16.json": "9e607927bf574390c36abbeeeb2725ff87a34972fb01fe104c93ba813b6a2016",
+    "kodim07_qp32.json": "a7d5d2bb6078730f57fcb7456cae792b7612f813eb17162da81b701b58ad70c9",
+    "kodim07_qp48.json": "e9e298d8cee521491c7cb23abb900ab61272d4f41f06b0323c5de76ad0144ee9",
+    "kodim07_qp63.json": "13b2bf2bb3c0ab4702ab5393417a158a624c37b2750eda1209e12d764f3be737",
+    "kodim08_qp0.json": "1671daf4c40e1ca895b15c57865917bb505b474578a2f5e4d727a2ae10085b50",
+    "kodim08_qp16.json": "dd695e2e0e42e84ee4b235e9a9cc6931eb63458a77de02d4e318427775f0b568",
+    "kodim08_qp32.json": "45753b3ce9531217237c2d326eb327c561b0464b4f109a856de9dea8a2db26cf",
+    "kodim08_qp48.json": "8de75b948287f3b30e4fc4fafec91ae2daed2fb3245ca44916e58f278a057fd5",
+    "kodim08_qp63.json": "1669f1faf4e350dfd0fbb0a8f098dbadbd1bcf3579dd41d5dc9b7725453d1d06",
+    "kodim09_qp0.json": "62109518f0ce0a2fb97700fdb40228e47d604666bd96aaae2d5ed42625ccf5d6",
+    "kodim09_qp16.json": "0bc6113603db1238f073cd28d5127477636b1bba0e5cd067a08ac02161780c34",
+    "kodim09_qp32.json": "9ef9424005d62f96be32a0f74d426d9d4a7585154c2c46bbeb83e0147c11eefa",
+    "kodim09_qp48.json": "95e4b72b1f2815e4e269cbfee0b665f80a1e4c739518640508601bf97b1762c1",
+    "kodim09_qp63.json": "1ed46f8078c1692490be592f9183a117cbc3a2ef4ce80515df4cd6d3aff48f82",
+    "kodim10_qp0.json": "7f3e786ba54a8604ec460b70cf1b1e9a8478555e60d0a54f22f18cd7321eb647",
+    "kodim10_qp16.json": "dca324bd675c7bd42816aaeb345cac162118889e1a9519c23a9ead0ce65805f2",
+    "kodim10_qp32.json": "e9b656af3db4be194544ed9344600592a34bd7751cc3608fcb3cced95b2dc42c",
+    "kodim10_qp48.json": "0d93ea7bbf8bd7b615a499baaf50c99ca12b1bbb5edaf92087dede84fe678be7",
+    "kodim10_qp63.json": "b76fa56a641c333225e6d0258b2340842a4c939f5a2cc964d13c1bd9ba302e48",
+    "kodim11_qp0.json": "69507a5c9b90bcfd48759c6707afb8d88d0bcb01d6c6464e7130cd4e45e93caf",
+    "kodim11_qp16.json": "b633c356f476c766589a6f66530b2da7d027ffafc99a4c24c46a067afc29eb45",
+    "kodim11_qp32.json": "70ec72dee10a7c82d43be9d521bcb08ccaaf09cfe84d53524991900b4cb10985",
+    "kodim11_qp48.json": "804c17b7a41fb21abbac7c04e0557fa9ed24a94c2b6e5ebe0a29840dc88fa79b",
+    "kodim11_qp63.json": "873042bc8a46376c43a702da06ffd428bc95f2f493c886bbcd3797237740dff0",
+    "kodim12_qp0.json": "b4a4c1947667fa1f68bb4e21f276ff787453d336188792c89da3125ac493664f",
+    "kodim12_qp16.json": "77888d49f026b12169de620a0a58b991046643e112c38a87a5147304c833ca04",
+    "kodim12_qp32.json": "863e010bd86883cf8d917355d3098b4a9fc2eb905a2701b0f0b6c5ef2477cfd2",
+    "kodim12_qp48.json": "3a5fecfc9405f72e08c282f1d3ac96ed66ead9e1c563d3f4f6ce5e179cbc456e",
+    "kodim12_qp63.json": "a8bc7894bd9d0ac0b25c50e38dfb1289eb5e30a42138bd6d9af4cae1ebc8f4c3",
+    "kodim13_qp0.json": "a22f0dd5aba77d4302cf672b68bbaddaa7862f19f00fae6e441e186cf3b35b9f",
+    "kodim13_qp16.json": "7a0bcbf01eb8363573516234347698190bf712879d91e265e2d5337a0d92b774",
+    "kodim13_qp32.json": "fc2ffd0d21067198a4d46acf6b8a272874c9088ccb379759a8f0c05f3a813f73",
+    "kodim13_qp48.json": "e211a79bb16e96473dba0c820d454c658d0549c784179c0bf4f5b7fdf10a1076",
+    "kodim13_qp63.json": "1e10ec9c443c70018bbb31fbc6986c7a8077360b96e42da3425b20fd813c3d98",
+    "kodim14_qp0.json": "13396a3c35a7507eebf25248180cb4555fa3eed29380db395d0d2d1d736c198c",
+    "kodim14_qp16.json": "f112a937450235a745cc48b32d4d9c626fd3b25420d2355bd5ef0c3976352839",
+    "kodim14_qp32.json": "9c8d14672999e93e3885df0eecae5a0a731a4106a71fdf54953add5380817736",
+    "kodim14_qp48.json": "dd43acb5e85924c2c5b972380c42a88c8af32659f72b93013845948a56668203",
+    "kodim14_qp63.json": "e8dd3b144181d8fd778554eecab55315f847e795058f491ac3ec0fbb6c81ed0e",
+    "kodim15_qp0.json": "62e6281a53375a06ead27deafb15f8b955a13d7aeb56229ba46a8c89c9bf6b93",
+    "kodim15_qp16.json": "31542f25c191de159ccd5fbf3687f49071bf90c83808091c2eb49d49da792de0",
+    "kodim15_qp32.json": "115090e23df26d0151491781d58c3d9ec62afcdac0b371a48d1ca6ef73dd539d",
+    "kodim15_qp48.json": "fbd25a2e59380d5ce3726a94914743e79f5920ecaeefa6e7d8b25fcd9426c608",
+    "kodim15_qp63.json": "d85563ffc61edce3593099d1e8672f504fe3310437441891deca012b9ef3f4fc",
+    "kodim16_qp0.json": "69707d424818aab021ef7bb17fc29608778cdb34ada81657af9db509423f5ce6",
+    "kodim16_qp16.json": "c21a1edcc92929dccae67b085c68bc1a1a1fdd9f5cd63899c39012f70fcc23fd",
+    "kodim16_qp32.json": "6258b0b5b4ae46d1732fe4b7ccd50c9ee9327df7f00c51e5e10e9954e12e0852",
+    "kodim16_qp48.json": "bcf7bf1aa6ea89f70ee59aa5b7044d36eb40824dfa3e24e83cb5b942f51f578a",
+    "kodim16_qp63.json": "8358bb89d2c5628108c099a0f79efe70bfe1dca9cf4fbe705a6c722a805c8f93",
+    "kodim17_qp0.json": "de87bcdeb21361cf76e2a895755e6915b211a4f87c20f1aa6d0ad96362450754",
+    "kodim17_qp16.json": "257c91fe2efc1b83afe4daeee419f6e4e105ebcc829a4f48608b16e7d56c75f6",
+    "kodim17_qp32.json": "427759e52f4c177ae528e76e4657dedd120d5480baf939142d912fa0d75c9b4c",
+    "kodim17_qp48.json": "89bec3b88f799cd65e0b5b28e9cb9fe729549bb132415fe6756fadd4b912a7b7",
+    "kodim17_qp63.json": "e39d6a3ebee90886a62f9d5abac47a4ae537df3770fae0669d91498da70956dc",
+    "kodim18_qp0.json": "5e618dcc13ff03e1450fef8a546bf4920954a04e1973542fed28d97857790195",
+    "kodim18_qp16.json": "6c083d0cf21f7d90eee1580c567b52750dd50725fb3cb1e0084c7a7548f26e00",
+    "kodim18_qp32.json": "765dad1b0436c12db8bab4fd8199053a4eb6553c3d9a80817c83e1c93b2e3dd0",
+    "kodim18_qp48.json": "f769351e3b8ab11618e295aad275b2688a5028845d5e3d12c964a22517021162",
+    "kodim18_qp63.json": "c3bf734bb57e4d55a5cc897e7830774060cff015ae0347530ec729e6e01b29f8",
+    "kodim19_qp0.json": "0daaa5db6427d00fffa877ef1ec9508d2d7aa72e6ad5cc5a02279325f7478720",
+    "kodim19_qp16.json": "8c6a4e2ea1a479d964e824ee8fc240ec8c634e812e67761e8a71ed393018a013",
+    "kodim19_qp32.json": "7b7784d5fa8af88137707cf38dc842150441b9041445643ef952d27adc7fe87d",
+    "kodim19_qp48.json": "9982d0e04b13bb1d1fe21e1780c437ff6ecc0d78f410d51927951fab620f64fa",
+    "kodim19_qp63.json": "7c6e103fd88275da5c62cdffd5c093335a60793de6dbfdf897ff24c70a2d29da",
+    "kodim20_qp0.json": "51f96320db859b885c31919ba118e3a61549fb86acac6ad1b92a8f89a0d50a57",
+    "kodim20_qp16.json": "1879d2cdc8fe1ec21bb7108906d76eacc6a0e976934b6234460272f214efc7d4",
+    "kodim20_qp32.json": "da17220bf344a73721f41f4133049348340c5fec94ed369fe36294b974e3e300",
+    "kodim20_qp48.json": "6d01a09cc6d8974ebd82fed15c922ca85d931161c22a2a81103e1ebda24871c3",
+    "kodim20_qp63.json": "58c1ace1820f0ad2c0d867d36df2cf9ab448b5cd8cc489a25da65d00955197fe",
+    "kodim21_qp0.json": "7840e817d2038a3565c12b590063e56f7ea3f56ad6ffcf3355f810ba156c2902",
+    "kodim21_qp16.json": "546886cd6a1f041ff7733776e0e7cf1ef62571522f26136a566e5a5ca01c8a05",
+    "kodim21_qp32.json": "4adf3895fb8ef822e6e01c8071ac50bc2466c788bfc8f5464ee1e0bd22c0ca3a",
+    "kodim21_qp48.json": "a733649b2a07da17fdfaea43fdc5cb5e96082c7d7cd29afc2502d881a26e8f32",
+    "kodim21_qp63.json": "90beb9cc69f7ff75c92a0bdbae081e55112b3ba925912b63ed5e90c441377019",
+    "kodim22_qp0.json": "cce637af47a5f14379ce8bb102e9afb1a08c68d8d2ba2927cc8f80cf91661905",
+    "kodim22_qp16.json": "46963682e008a3f73616d5eec6f717b7377ef6ea16ddb772e16619916cef609e",
+    "kodim22_qp32.json": "4dc358b2c210399368a709cf3eaad67ccf1885b9021914ab4cd724d5dae4463a",
+    "kodim22_qp48.json": "a5b4d03a316ff24779a7660a47944bb2c8832f911a84af18a58614c61b37192f",
+    "kodim22_qp63.json": "ebc48c2811dbe1be28c5a2b951a81b92c08bae6daedd2731074f55d4be2e2e52",
+    "kodim23_qp0.json": "2555f94ee52a9112599b5aeb832dd406e7dd5b917b3a97f7af7e536a9545acf7",
+    "kodim23_qp16.json": "4ac16912e25b21be5b064dabadc38cbc77f641e2f2e29b460765158a3450c227",
+    "kodim23_qp32.json": "cdf6b2a84f583c668767929e5536369e72ff6788e2f8638f63f6b5badd73fddf",
+    "kodim23_qp48.json": "2335a5752e24e92b8f89d616ea22bd83d399907d18fa09ba6c04a2d9c32c3392",
+    "kodim23_qp63.json": "ca8238a6cb1dbb7fa7a21706a2a890f96cecf9e7937db67522b48b1fda841b79",
+    "kodim24_qp0.json": "dbba43325027f3380113e43f9924c95adabf1695cb6c7ad44272e66d1953c999",
+    "kodim24_qp16.json": "858f94bb404eaddfb5310a26df4add82a28b4ae3d08db1ae1287e543d9583de6",
+    "kodim24_qp32.json": "aef58db3d76ec9590c7eb93c85b90f6b3cd5e9c16e9139f03f06f125094d220e",
+    "kodim24_qp48.json": "cf4cb793040916a6b705db26e1d6ada58b76bb54dfba9156059520ab8cc0bb29",
+    "kodim24_qp63.json": "62bdddac41fbf8ed2461fc0e5a0a7b9b9535b2f596dbfd18df0d6dd547ee56b8"
+  },
+  "bootstrap": "10,000 draws of 24 images with replacement, retaining five QPs from each image; fixed checkpoint and maps.",
+  "overall": {
+    "n": 120,
+    "mean_router_gain_rgb_db": 0.014248249612751108,
+    "mean_router_gain_444_db": 0.015155871168727257,
+    "rgb_image_cluster_ci95_db": [
+      0.008711847007921936,
+      0.020655030692866994
+    ],
+    "router_better_cases": 84,
+    "bayer_better_cases": 3,
+    "same_map_cases": 33
+  },
+  "random_minus_bayer_gain": {
+    "mean_db": 0.0018339891763072744,
+    "image_cluster_ci95_db": [
+      -0.002386439844766155,
+      0.005922083446233414
+    ],
+    "interpretation": "Positive means the frozen router's advantage over random permutations is larger than its advantage over fixed Bayer; the interval includes zero."
+  },
+  "per_qp": {
+    "0": {
+      "n": 24,
+      "mean_router_gain_rgb_db": 0.007696480800557816,
+      "mean_router_gain_444_db": 0.007833301309721855,
+      "rgb_image_cluster_ci95_db": [
+        0.004247752637115241,
+        0.011757106677735519
+      ],
+      "router_better_cases": 18,
+      "bayer_better_cases": 2,
+      "same_map_cases": 4
+    },
+    "16": {
+      "n": 24,
+      "mean_router_gain_rgb_db": 0.006152952220417708,
+      "mean_router_gain_444_db": 0.0062526967812371334,
+      "rgb_image_cluster_ci95_db": [
+        0.00291789466835587,
+        0.010520038235486013
+      ],
+      "router_better_cases": 15,
+      "bayer_better_cases": 0,
+      "same_map_cases": 9
+    },
+    "32": {
+      "n": 24,
+      "mean_router_gain_rgb_db": 0.01239669769382216,
+      "mean_router_gain_444_db": 0.013016737027469602,
+      "rgb_image_cluster_ci95_db": [
+        0.0078618113165299,
+        0.017614693257317106
+      ],
+      "router_better_cases": 20,
+      "bayer_better_cases": 0,
+      "same_map_cases": 4
+    },
+    "48": {
+      "n": 24,
+      "mean_router_gain_rgb_db": 0.01771660399604655,
+      "mean_router_gain_444_db": 0.019278971280285124,
+      "rgb_image_cluster_ci95_db": [
+        0.009998421525907564,
+        0.026409695110096196
+      ],
+      "router_better_cases": 16,
+      "bayer_better_cases": 1,
+      "same_map_cases": 7
+    },
+    "63": {
+      "n": 24,
+      "mean_router_gain_rgb_db": 0.027278513352911305,
+      "mean_router_gain_444_db": 0.02939764944492256,
+      "rgb_image_cluster_ci95_db": [
+        0.015612688630538352,
+        0.04030477284003481
+      ],
+      "router_better_cases": 15,
+      "bayer_better_cases": 0,
+      "same_map_cases": 9
+    }
+  },
+  "per_image_qp": [
+    {
+      "image": "kodim01.png",
+      "qp": 0,
+      "rgb_gain_db": 0.007553385563587498,
+      "ycbcr444_gain_db": 0.006829076910075103,
+      "same_map": false
+    },
+    {
+      "image": "kodim01.png",
+      "qp": 16,
+      "rgb_gain_db": 0.00014128708469629797,
+      "ycbcr444_gain_db": 0.00035368304686266586,
+      "same_map": false
+    },
+    {
+      "image": "kodim01.png",
+      "qp": 32,
+      "rgb_gain_db": 0.0,
+      "ycbcr444_gain_db": 0.0,
+      "same_map": true
+    },
+    {
+      "image": "kodim01.png",
+      "qp": 48,
+      "rgb_gain_db": 0.006391278677741965,
+      "ycbcr444_gain_db": 0.007293976941452897,
+      "same_map": false
+    },
+    {
+      "image": "kodim01.png",
+      "qp": 63,
+      "rgb_gain_db": 0.017836759058742394,
+      "ycbcr444_gain_db": 0.019424322697252756,
+      "same_map": false
+    },
+    {
+      "image": "kodim02.png",
+      "qp": 0,
+      "rgb_gain_db": 0.005723875027025423,
+      "ycbcr444_gain_db": 0.004468524903941019,
+      "same_map": false
+    },
+    {
+      "image": "kodim02.png",
+      "qp": 16,
+      "rgb_gain_db": 0.0,
+      "ycbcr444_gain_db": 0.0,
+      "same_map": true
+    },
+    {
+      "image": "kodim02.png",
+      "qp": 32,
+      "rgb_gain_db": 0.0031650989071828344,
+      "ycbcr444_gain_db": 0.0037919328545733683,
+      "same_map": false
+    },
+    {
+      "image": "kodim02.png",
+      "qp": 48,
+      "rgb_gain_db": 0.0,
+      "ycbcr444_gain_db": 0.0,
+      "same_map": true
+    },
+    {
+      "image": "kodim02.png",
+      "qp": 63,
+      "rgb_gain_db": 0.0,
+      "ycbcr444_gain_db": 0.0,
+      "same_map": true
+    },
+    {
+      "image": "kodim03.png",
+      "qp": 0,
+      "rgb_gain_db": 0.021105517284596677,
+      "ycbcr444_gain_db": 0.01648539596071877,
+      "same_map": false
+    },
+    {
+      "image": "kodim03.png",
+      "qp": 16,
+      "rgb_gain_db": 0.009477554070636848,
+      "ycbcr444_gain_db": 0.0110299359472146,
+      "same_map": false
+    },
+    {
+      "image": "kodim03.png",
+      "qp": 32,
+      "rgb_gain_db": 0.025740410878955004,
+      "ycbcr444_gain_db": 0.02698236594518391,
+      "same_map": false
+    },
+    {
+      "image": "kodim03.png",
+      "qp": 48,
+      "rgb_gain_db": 0.04626133847156374,
+      "ycbcr444_gain_db": 0.06086619833416114,
+      "same_map": false
+    },
+    {
+      "image": "kodim03.png",
+      "qp": 63,
+      "rgb_gain_db": 0.04825607221162033,
+      "ycbcr444_gain_db": 0.05053262780723585,
+      "same_map": false
+    },
+    {
+      "image": "kodim04.png",
+      "qp": 0,
+      "rgb_gain_db": 0.0026085623601028933,
+      "ycbcr444_gain_db": 0.007237161031963926,
+      "same_map": false
+    },
+    {
+      "image": "kodim04.png",
+      "qp": 16,
+      "rgb_gain_db": 0.0,
+      "ycbcr444_gain_db": 0.0,
+      "same_map": true
+    },
+    {
+      "image": "kodim04.png",
+      "qp": 32,
+      "rgb_gain_db": 0.0025923240637693266,
+      "ycbcr444_gain_db": -0.00014815084357930642,
+      "same_map": false
+    },
+    {
+      "image": "kodim04.png",
+      "qp": 48,
+      "rgb_gain_db": 0.003374576813859766,
+      "ycbcr444_gain_db": 0.004091780134562064,
+      "same_map": false
+    },
+    {
+      "image": "kodim04.png",
+      "qp": 63,
+      "rgb_gain_db": 0.01994673378888783,
+      "ycbcr444_gain_db": 0.024247497178281566,
+      "same_map": false
+    },
+    {
+      "image": "kodim05.png",
+      "qp": 0,
+      "rgb_gain_db": 0.0,
+      "ycbcr444_gain_db": 0.0,
+      "same_map": true
+    },
+    {
+      "image": "kodim05.png",
+      "qp": 16,
+      "rgb_gain_db": 0.0,
+      "ycbcr444_gain_db": 0.0,
+      "same_map": true
+    },
+    {
+      "image": "kodim05.png",
+      "qp": 32,
+      "rgb_gain_db": 0.0,
+      "ycbcr444_gain_db": 0.0,
+      "same_map": true
+    },
+    {
+      "image": "kodim05.png",
+      "qp": 48,
+      "rgb_gain_db": 0.0,
+      "ycbcr444_gain_db": 0.0,
+      "same_map": true
+    },
+    {
+      "image": "kodim05.png",
+      "qp": 63,
+      "rgb_gain_db": 0.0,
+      "ycbcr444_gain_db": 0.0,
+      "same_map": true
+    },
+    {
+      "image": "kodim06.png",
+      "qp": 0,
+      "rgb_gain_db": 0.01447462656372225,
+      "ycbcr444_gain_db": 0.013977614251702217,
+      "same_map": false
+    },
+    {
+      "image": "kodim06.png",
+      "qp": 16,
+      "rgb_gain_db": 0.009805043881482253,
+      "ycbcr444_gain_db": 0.009645031304868823,
+      "same_map": false
+    },
+    {
+      "image": "kodim06.png",
+      "qp": 32,
+      "rgb_gain_db": 0.010118781030401015,
+      "ycbcr444_gain_db": 0.008774732936796321,
+      "same_map": false
+    },
+    {
+      "image": "kodim06.png",
+      "qp": 48,
+      "rgb_gain_db": 0.01374015781632186,
+      "ycbcr444_gain_db": 0.013012447731411797,
+      "same_map": false
+    },
+    {
+      "image": "kodim06.png",
+      "qp": 63,
+      "rgb_gain_db": 0.02011983486903074,
+      "ycbcr444_gain_db": 0.020378139193458412,
+      "same_map": false
+    },
+    {
+      "image": "kodim07.png",
+      "qp": 0,
+      "rgb_gain_db": 0.014073534661834097,
+      "ycbcr444_gain_db": 0.012638675508328381,
+      "same_map": false
+    },
+    {
+      "image": "kodim07.png",
+      "qp": 16,
+      "rgb_gain_db": 0.007018402108601277,
+      "ycbcr444_gain_db": 0.0055160841461967935,
+      "same_map": false
+    },
+    {
+      "image": "kodim07.png",
+      "qp": 32,
+      "rgb_gain_db": 0.022639186676684176,
+      "ycbcr444_gain_db": 0.022311378356413693,
+      "same_map": false
+    },
+    {
+      "image": "kodim07.png",
+      "qp": 48,
+      "rgb_gain_db": 0.018367061175619925,
+      "ycbcr444_gain_db": 0.017376896869185275,
+      "same_map": false
+    },
+    {
+      "image": "kodim07.png",
+      "qp": 63,
+      "rgb_gain_db": 0.0256094923297906,
+      "ycbcr444_gain_db": 0.02661681392502535,
+      "same_map": false
+    },
+    {
+      "image": "kodim08.png",
+      "qp": 0,
+      "rgb_gain_db": 0.0,
+      "ycbcr444_gain_db": 0.0,
+      "same_map": true
+    },
+    {
+      "image": "kodim08.png",
+      "qp": 16,
+      "rgb_gain_db": 0.0,
+      "ycbcr444_gain_db": 0.0,
+      "same_map": true
+    },
+    {
+      "image": "kodim08.png",
+      "qp": 32,
+      "rgb_gain_db": 0.0,
+      "ycbcr444_gain_db": 0.0,
+      "same_map": true
+    },
+    {
+      "image": "kodim08.png",
+      "qp": 48,
+      "rgb_gain_db": 0.0,
+      "ycbcr444_gain_db": 0.0,
+      "same_map": true
+    },
+    {
+      "image": "kodim08.png",
+      "qp": 63,
+      "rgb_gain_db": 0.0,
+      "ycbcr444_gain_db": 0.0,
+      "same_map": true
+    },
+    {
+      "image": "kodim09.png",
+      "qp": 0,
+      "rgb_gain_db": 0.02107802217976651,
+      "ycbcr444_gain_db": 0.02174267140022866,
+      "same_map": false
+    },
+    {
+      "image": "kodim09.png",
+      "qp": 16,
+      "rgb_gain_db": 0.02257911667631181,
+      "ycbcr444_gain_db": 0.022237569910576495,
+      "same_map": false
+    },
+    {
+      "image": "kodim09.png",
+      "qp": 32,
+      "rgb_gain_db": 0.03688260532268636,
+      "ycbcr444_gain_db": 0.038454576650900484,
+      "same_map": false
+    },
+    {
+      "image": "kodim09.png",
+      "qp": 48,
+      "rgb_gain_db": 0.06440109462431799,
+      "ycbcr444_gain_db": 0.06448442494040822,
+      "same_map": false
+    },
+    {
+      "image": "kodim09.png",
+      "qp": 63,
+      "rgb_gain_db": 0.0920867445650542,
+      "ycbcr444_gain_db": 0.09216976890525218,
+      "same_map": false
+    },
+    {
+      "image": "kodim10.png",
+      "qp": 0,
+      "rgb_gain_db": 0.017113552442099507,
+      "ycbcr444_gain_db": 0.017582953825343164,
+      "same_map": false
+    },
+    {
+      "image": "kodim10.png",
+      "qp": 16,
+      "rgb_gain_db": 0.0,
+      "ycbcr444_gain_db": 0.0,
+      "same_map": true
+    },
+    {
+      "image": "kodim10.png",
+      "qp": 32,
+      "rgb_gain_db": 0.01870793947854026,
+      "ycbcr444_gain_db": 0.018963434502255804,
+      "same_map": false
+    },
+    {
+      "image": "kodim10.png",
+      "qp": 48,
+      "rgb_gain_db": 0.02363486459614759,
+      "ycbcr444_gain_db": 0.025460968777417298,
+      "same_map": false
+    },
+    {
+      "image": "kodim10.png",
+      "qp": 63,
+      "rgb_gain_db": 0.05106811645692905,
+      "ycbcr444_gain_db": 0.0548162890824437,
+      "same_map": false
+    },
+    {
+      "image": "kodim11.png",
+      "qp": 0,
+      "rgb_gain_db": 0.005881200014785734,
+      "ycbcr444_gain_db": 0.0064404800862256795,
+      "same_map": false
+    },
+    {
+      "image": "kodim11.png",
+      "qp": 16,
+      "rgb_gain_db": 0.0035891233893884412,
+      "ycbcr444_gain_db": 0.003771534418178463,
+      "same_map": false
+    },
+    {
+      "image": "kodim11.png",
+      "qp": 32,
+      "rgb_gain_db": 0.008737063100058994,
+      "ycbcr444_gain_db": 0.008647045889969333,
+      "same_map": false
+    },
+    {
+      "image": "kodim11.png",
+      "qp": 48,
+      "rgb_gain_db": 0.007375610937841961,
+      "ycbcr444_gain_db": 0.00726563794109634,
+      "same_map": false
+    },
+    {
+      "image": "kodim11.png",
+      "qp": 63,
+      "rgb_gain_db": 0.007736609116507975,
+      "ycbcr444_gain_db": 0.008087054842093235,
+      "same_map": false
+    },
+    {
+      "image": "kodim12.png",
+      "qp": 0,
+      "rgb_gain_db": -0.0040048155121161,
+      "ycbcr444_gain_db": -0.0042653134289496,
+      "same_map": false
+    },
+    {
+      "image": "kodim12.png",
+      "qp": 16,
+      "rgb_gain_db": 0.0,
+      "ycbcr444_gain_db": 0.0,
+      "same_map": true
+    },
+    {
+      "image": "kodim12.png",
+      "qp": 32,
+      "rgb_gain_db": 0.009223809574145455,
+      "ycbcr444_gain_db": 0.009401101507934504,
+      "same_map": false
+    },
+    {
+      "image": "kodim12.png",
+      "qp": 48,
+      "rgb_gain_db": 0.01124045602116474,
+      "ycbcr444_gain_db": 0.011024242860758045,
+      "same_map": false
+    },
+    {
+      "image": "kodim12.png",
+      "qp": 63,
+      "rgb_gain_db": 0.020430706679199183,
+      "ycbcr444_gain_db": 0.02193230228777549,
+      "same_map": false
+    },
+    {
+      "image": "kodim13.png",
+      "qp": 0,
+      "rgb_gain_db": 0.00417193415905685,
+      "ycbcr444_gain_db": 0.0028927852318062623,
+      "same_map": false
+    },
+    {
+      "image": "kodim13.png",
+      "qp": 16,
+      "rgb_gain_db": 0.0026277224576841617,
+      "ycbcr444_gain_db": 0.002673498551107432,
+      "same_map": false
+    },
+    {
+      "image": "kodim13.png",
+      "qp": 32,
+      "rgb_gain_db": 0.0064061473489819415,
+      "ycbcr444_gain_db": 0.005900352589099099,
+      "same_map": false
+    },
+    {
+      "image": "kodim13.png",
+      "qp": 48,
+      "rgb_gain_db": 0.0,
+      "ycbcr444_gain_db": 0.0,
+      "same_map": true
+    },
+    {
+      "image": "kodim13.png",
+      "qp": 63,
+      "rgb_gain_db": 0.0,
+      "ycbcr444_gain_db": 0.0,
+      "same_map": true
+    },
+    {
+      "image": "kodim14.png",
+      "qp": 0,
+      "rgb_gain_db": 0.0030974170129468613,
+      "ycbcr444_gain_db": 0.005565327938920081,
+      "same_map": false
+    },
+    {
+      "image": "kodim14.png",
+      "qp": 16,
+      "rgb_gain_db": 0.0077101169070957504,
+      "ycbcr444_gain_db": 0.007923294713161015,
+      "same_map": false
+    },
+    {
+      "image": "kodim14.png",
+      "qp": 32,
+      "rgb_gain_db": 0.009250012242523009,
+      "ycbcr444_gain_db": 0.010736352420442205,
+      "same_map": false
+    },
+    {
+      "image": "kodim14.png",
+      "qp": 48,
+      "rgb_gain_db": 0.020446499305493363,
+      "ycbcr444_gain_db": 0.02500873156701036,
+      "same_map": false
+    },
+    {
+      "image": "kodim14.png",
+      "qp": 63,
+      "rgb_gain_db": 0.044914738701034705,
+      "ycbcr444_gain_db": 0.05193433901123027,
+      "same_map": false
+    },
+    {
+      "image": "kodim15.png",
+      "qp": 0,
+      "rgb_gain_db": 0.006645888628394429,
+      "ycbcr444_gain_db": 0.004345863081686937,
+      "same_map": false
+    },
+    {
+      "image": "kodim15.png",
+      "qp": 16,
+      "rgb_gain_db": 0.0,
+      "ycbcr444_gain_db": 0.0,
+      "same_map": true
+    },
+    {
+      "image": "kodim15.png",
+      "qp": 32,
+      "rgb_gain_db": 0.013174659824870281,
+      "ycbcr444_gain_db": 0.019617876142767415,
+      "same_map": false
+    },
+    {
+      "image": "kodim15.png",
+      "qp": 48,
+      "rgb_gain_db": -0.0012200336886483958,
+      "ycbcr444_gain_db": 0.001899274236417884,
+      "same_map": false
+    },
+    {
+      "image": "kodim15.png",
+      "qp": 63,
+      "rgb_gain_db": 0.0,
+      "ycbcr444_gain_db": 0.0,
+      "same_map": true
+    },
+    {
+      "image": "kodim16.png",
+      "qp": 0,
+      "rgb_gain_db": 0.0,
+      "ycbcr444_gain_db": 0.0,
+      "same_map": true
+    },
+    {
+      "image": "kodim16.png",
+      "qp": 16,
+      "rgb_gain_db": 0.0015122296940510037,
+      "ycbcr444_gain_db": -4.173996974357033e-05,
+      "same_map": false
+    },
+    {
+      "image": "kodim16.png",
+      "qp": 32,
+      "rgb_gain_db": 0.0,
+      "ycbcr444_gain_db": 0.0,
+      "same_map": true
+    },
+    {
+      "image": "kodim16.png",
+      "qp": 48,
+      "rgb_gain_db": 0.0,
+      "ycbcr444_gain_db": 0.0,
+      "same_map": true
+    },
+    {
+      "image": "kodim16.png",
+      "qp": 63,
+      "rgb_gain_db": 0.0,
+      "ycbcr444_gain_db": 0.0,
+      "same_map": true
+    },
+    {
+      "image": "kodim17.png",
+      "qp": 0,
+      "rgb_gain_db": 0.0,
+      "ycbcr444_gain_db": 0.0,
+      "same_map": true
+    },
+    {
+      "image": "kodim17.png",
+      "qp": 16,
+      "rgb_gain_db": 0.008443919666323269,
+      "ycbcr444_gain_db": 0.011792865848511927,
+      "same_map": false
+    },
+    {
+      "image": "kodim17.png",
+      "qp": 32,
+      "rgb_gain_db": 0.016130733609247497,
+      "ycbcr444_gain_db": 0.018441257481418498,
+      "same_map": false
+    },
+    {
+      "image": "kodim17.png",
+      "qp": 48,
+      "rgb_gain_db": 0.04127744960408182,
+      "ycbcr444_gain_db": 0.04929337225792318,
+      "same_map": false
+    },
+    {
+      "image": "kodim17.png",
+      "qp": 63,
+      "rgb_gain_db": 0.07541203715667183,
+      "ycbcr444_gain_db": 0.0892538075565029,
+      "same_map": false
+    },
+    {
+      "image": "kodim18.png",
+      "qp": 0,
+      "rgb_gain_db": 0.0017850047210114601,
+      "ycbcr444_gain_db": 0.0008325066368966112,
+      "same_map": false
+    },
+    {
+      "image": "kodim18.png",
+      "qp": 16,
+      "rgb_gain_db": 0.008928641245162109,
+      "ycbcr444_gain_db": 0.012526267152184675,
+      "same_map": false
+    },
+    {
+      "image": "kodim18.png",
+      "qp": 32,
+      "rgb_gain_db": 0.003964397916468281,
+      "ycbcr444_gain_db": 0.006279238908136269,
+      "same_map": false
+    },
+    {
+      "image": "kodim18.png",
+      "qp": 48,
+      "rgb_gain_db": 0.0018078042803998094,
+      "ycbcr444_gain_db": 0.0028123678611153987,
+      "same_map": false
+    },
+    {
+      "image": "kodim18.png",
+      "qp": 63,
+      "rgb_gain_db": 0.012084823955808715,
+      "ycbcr444_gain_db": 0.0127636810806112,
+      "same_map": false
+    },
+    {
+      "image": "kodim19.png",
+      "qp": 0,
+      "rgb_gain_db": 0.038984634215939715,
+      "ycbcr444_gain_db": 0.038651807405572794,
+      "same_map": false
+    },
+    {
+      "image": "kodim19.png",
+      "qp": 16,
+      "rgb_gain_db": 0.04461639095331767,
+      "ycbcr444_gain_db": 0.043417519185834114,
+      "same_map": false
+    },
+    {
+      "image": "kodim19.png",
+      "qp": 32,
+      "rgb_gain_db": 0.04793545404543073,
+      "ycbcr444_gain_db": 0.047274945267492784,
+      "same_map": false
+    },
+    {
+      "image": "kodim19.png",
+      "qp": 48,
+      "rgb_gain_db": 0.06635712813597718,
+      "ycbcr444_gain_db": 0.06795401156713987,
+      "same_map": false
+    },
+    {
+      "image": "kodim19.png",
+      "qp": 63,
+      "rgb_gain_db": 0.09127532457258536,
+      "ycbcr444_gain_db": 0.09644642041727101,
+      "same_map": false
+    },
+    {
+      "image": "kodim20.png",
+      "qp": 0,
+      "rgb_gain_db": 0.01115835878143319,
+      "ycbcr444_gain_db": 0.010989257195725395,
+      "same_map": false
+    },
+    {
+      "image": "kodim20.png",
+      "qp": 16,
+      "rgb_gain_db": 0.011187857458778695,
+      "ycbcr444_gain_db": 0.009470109281057702,
+      "same_map": false
+    },
+    {
+      "image": "kodim20.png",
+      "qp": 32,
+      "rgb_gain_db": 0.022267127763504462,
+      "ycbcr444_gain_db": 0.02349674965574497,
+      "same_map": false
+    },
+    {
+      "image": "kodim20.png",
+      "qp": 48,
+      "rgb_gain_db": 0.026148769442587778,
+      "ycbcr444_gain_db": 0.02876177899272921,
+      "same_map": false
+    },
+    {
+      "image": "kodim20.png",
+      "qp": 63,
+      "rgb_gain_db": 0.0,
+      "ycbcr444_gain_db": 0.0,
+      "same_map": true
+    },
+    {
+      "image": "kodim21.png",
+      "qp": 0,
+      "rgb_gain_db": 0.0035065236736794734,
+      "ycbcr444_gain_db": 0.0057397208310994395,
+      "same_map": false
+    },
+    {
+      "image": "kodim21.png",
+      "qp": 16,
+      "rgb_gain_db": 0.005839817368825849,
+      "ycbcr444_gain_db": 0.005300368851304995,
+      "same_map": false
+    },
+    {
+      "image": "kodim21.png",
+      "qp": 32,
+      "rgb_gain_db": 0.025874816627326373,
+      "ycbcr444_gain_db": 0.026046053398704423,
+      "same_map": false
+    },
+    {
+      "image": "kodim21.png",
+      "qp": 48,
+      "rgb_gain_db": 0.03747614677221094,
+      "ycbcr444_gain_db": 0.039904739086732116,
+      "same_map": false
+    },
+    {
+      "image": "kodim21.png",
+      "qp": 63,
+      "rgb_gain_db": 0.08350016976532593,
+      "ycbcr444_gain_db": 0.08661967274567198,
+      "same_map": false
+    },
+    {
+      "image": "kodim22.png",
+      "qp": 0,
+      "rgb_gain_db": 0.009924009598324793,
+      "ycbcr444_gain_db": 0.011076550113338895,
+      "same_map": false
+    },
+    {
+      "image": "kodim22.png",
+      "qp": 16,
+      "rgb_gain_db": 0.0,
+      "ycbcr444_gain_db": 0.0,
+      "same_map": true
+    },
+    {
+      "image": "kodim22.png",
+      "qp": 32,
+      "rgb_gain_db": 0.009725446183307342,
+      "ycbcr444_gain_db": 0.01466654595022989,
+      "same_map": false
+    },
+    {
+      "image": "kodim22.png",
+      "qp": 48,
+      "rgb_gain_db": 0.0,
+      "ycbcr444_gain_db": 0.0,
+      "same_map": true
+    },
+    {
+      "image": "kodim22.png",
+      "qp": 63,
+      "rgb_gain_db": 0.0,
+      "ycbcr444_gain_db": 0.0,
+      "same_map": true
+    },
+    {
+      "image": "kodim23.png",
+      "qp": 0,
+      "rgb_gain_db": -0.0012052829136382837,
+      "ycbcr444_gain_db": 0.003408989272392919,
+      "same_map": false
+    },
+    {
+      "image": "kodim23.png",
+      "qp": 16,
+      "rgb_gain_db": 0.0,
+      "ycbcr444_gain_db": 0.0,
+      "same_map": true
+    },
+    {
+      "image": "kodim23.png",
+      "qp": 32,
+      "rgb_gain_db": 0.0031198626199319475,
+      "ycbcr444_gain_db": 0.0003179324512394091,
+      "same_map": false
+    },
+    {
+      "image": "kodim23.png",
+      "qp": 48,
+      "rgb_gain_db": 0.03811829291843518,
+      "ycbcr444_gain_db": 0.03618446062732193,
+      "same_map": false
+    },
+    {
+      "image": "kodim23.png",
+      "qp": 63,
+      "rgb_gain_db": 0.04440615724268251,
+      "ycbcr444_gain_db": 0.05032084994803555,
+      "same_map": false
+    },
+    {
+      "image": "kodim24.png",
+      "qp": 0,
+      "rgb_gain_db": 0.0010395907508346082,
+      "ycbcr444_gain_db": 0.0013591832763078955,
+      "same_map": false
+    },
+    {
+      "image": "kodim24.png",
+      "qp": 16,
+      "rgb_gain_db": 0.00419363032766957,
+      "ycbcr444_gain_db": 0.0044487003623750795,
+      "same_map": false
+    },
+    {
+      "image": "kodim24.png",
+      "qp": 32,
+      "rgb_gain_db": 0.0018648674377165692,
+      "ycbcr444_gain_db": 0.0024459665935473475,
+      "same_map": false
+    },
+    {
+      "image": "kodim24.png",
+      "qp": 48,
+      "rgb_gain_db": 0.0,
+      "ycbcr444_gain_db": 0.0,
+      "same_map": true
+    },
+    {
+      "image": "kodim24.png",
+      "qp": 63,
+      "rgb_gain_db": 0.0,
+      "ycbcr444_gain_db": 0.0,
+      "same_map": true
+    }
+  ]
+}
