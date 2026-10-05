@@ -44,12 +44,18 @@ def main() -> None:
     assert labels == [(0,8),(8,16),(16,32),(32,64),(64,None)]
     assert all([(b['lower_px'],b['upper_px']) for b in r['bins']] == labels
                for r in rows)
+    texture_labels = [(s['sobel_lower'],s['sobel_upper'])
+                      for s in rows[0]['bins'][0]['texture_strata']]
+    assert texture_labels == [(0,10),(10,25),(25,50),(50,100),(100,200),(200,None)]
     for r in rows:
         h,w = r['crop_hw']
         assert sum(b['pixels'] for b in r['bins']) == h*w
         iso = sum(b['isolated_mse444']*b['pixels'] for b in r['bins'])/(h*w)
         active = sum(b['active_mse444']*b['pixels'] for b in r['bins'])/(h*w)
         assert abs(10*np.log10(iso/active)-r['full_image_gain_db'])<1e-5
+        for b in r['bins']:
+            assert [(s['sobel_lower'],s['sobel_upper']) for s in b['texture_strata']] == texture_labels
+            assert sum(s['pixels'] for s in b['texture_strata']) == b['pixels']
     rng = np.random.default_rng(20261008)
     net_reduction = [sum((r['bins'][i]['isolated_mse444']-
                           r['bins'][i]['active_mse444'])*r['bins'][i]['pixels']
@@ -62,11 +68,28 @@ def main() -> None:
         values = stats(rows, key, rng)
         per_qp = {str(qp): stats([r for r in rows if r['qp']==qp], key, rng)
                   for qp in QPS}
+        texture_strata = []
+        for j, (sobel_lower, sobel_upper) in enumerate(texture_labels):
+            cells = [r['bins'][index]['texture_strata'][j] for r in rows]
+            pixels = sum(s['pixels'] for s in cells)
+            if pixels:
+                iso_mse = sum(s['isolated_mse444']*s['pixels'] for s in cells
+                              if s['pixels'])/pixels
+                active_mse = sum(s['active_mse444']*s['pixels'] for s in cells
+                                 if s['pixels'])/pixels
+                pooled_gain = float(10*np.log10(iso_mse/active_mse))
+            else:
+                pooled_gain = None
+            texture_strata.append({'sobel_lower': sobel_lower,
+                                   'sobel_upper': sobel_upper,
+                                   'pixels': pixels,
+                                   'pooled_active_gain_db': pooled_gain})
         aggregate.append({'lower_px': lower, 'upper_px': upper,
                           'mean_pixels_per_case': sum(r['bins'][index]['pixels'] for r in rows)/120,
                           'pixel_fraction': sum(r['bins'][index]['pixels'] for r in rows)/total_pixels,
                           'share_of_net_mse_reduction': net_reduction[index]/sum(net_reduction),
-                          'gain_db': values, 'per_qp_gain_db': per_qp})
+                          'gain_db': values, 'per_qp_gain_db': per_qp,
+                          'texture_strata': texture_strata})
     output = {
         'scope': 'Exploratory seam-distance localization at frozen original beta on DIV2K validation24 x QP5; no latency or native rate inference.',
         'raw_sha256': sha(RAW), 'script_sha256': sha(Path(__file__)),

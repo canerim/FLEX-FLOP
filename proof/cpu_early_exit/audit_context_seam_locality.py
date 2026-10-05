@@ -23,6 +23,8 @@ from audit_exact_context_pilot import sha
 from active_canvas_replicate import ActiveCanvasReplicateCoupler
 
 BINS = ((0, 8), (8, 16), (16, 32), (32, 64), (64, None))
+TEXTURE_BINS = ((0, 10), (10, 25), (25, 50), (50, 100),
+                (100, 200), (200, None))
 
 
 def masks_for_internal_seams(h: int, w: int, tile: int):
@@ -42,6 +44,19 @@ def masks_for_internal_seams(h: int, w: int, tile: int):
                      ((distance < upper) if upper is not None else True))
     assert torch.stack(masks).sum(dim=0).eq(1).all()
     return masks
+
+
+def source_sobel_magnitude(source):
+    """Luma Sobel magnitude on the 8-bit scale, with replicated outer border."""
+    import torch
+    import torch.nn.functional as F
+    y = source[:, :1]*255
+    kx = torch.tensor([[-1., 0., 1.], [-2., 0., 2.], [-1., 0., 1.]])
+    kx = kx[None, None]
+    yy = F.pad(y, (1, 1, 1, 1), mode='replicate')
+    gx = F.conv2d(yy, kx)
+    gy = F.conv2d(yy, kx.transpose(2, 3))
+    return torch.sqrt(gx.square()+gy.square())[0, 0]
 
 
 def main() -> None:
@@ -105,6 +120,8 @@ def main() -> None:
         'metric': 'YCbCr444 per-pixel channel-mean MSE; positive PSNR gain favours active-replicate',
         'distance_unit': 'RGB pixels to nearest internal tile boundary',
         'bins_lower_inclusive_upper_exclusive': [[lo, hi] for lo, hi in BINS],
+        'texture_metric': 'Sobel magnitude of source luma on 8-bit scale, replicated outer border',
+        'texture_bins_lower_inclusive_upper_exclusive': [[lo, hi] for lo, hi in TEXTURE_BINS],
         'provenance': provenance, 'rows': [],
     }
     if args.output.exists():
@@ -176,14 +193,32 @@ def main() -> None:
                 assert abs(gain-archived_gain) < 1e-5, (stem, gain, archived_gain)
                 if (h, w) not in mask_cache:
                     mask_cache[h, w] = masks_for_internal_seams(h, w, cfg.rgb_patch)
+                sobel = source_sobel_magnitude(source)
                 bins = []
                 for (lower, upper), mask in zip(BINS, mask_cache[h, w]):
                     a = float(iso_error[mask].mean())
                     b = float(active_error[mask].mean())
+                    strata = []
+                    for tex_lower, tex_upper in TEXTURE_BINS:
+                        textured = mask & (sobel >= tex_lower)
+                        if tex_upper is not None:
+                            textured &= sobel < tex_upper
+                        count = int(textured.sum())
+                        iso_tex = float(iso_error[textured].mean()) if count else None
+                        active_tex = float(active_error[textured].mean()) if count else None
+                        strata.append({'sobel_lower': tex_lower, 'sobel_upper': tex_upper,
+                                       'pixels': count, 'isolated_mse444': iso_tex,
+                                       'active_mse444': active_tex,
+                                       'active_gain_db': (10*math.log10(iso_tex/active_tex)
+                                                          if count and iso_tex > 0 and active_tex > 0
+                                                          else None)})
+                    assert sum(item['pixels'] for item in strata) == int(mask.sum())
                     bins.append({'lower_px': lower, 'upper_px': upper,
                                  'pixels': int(mask.sum()),
                                  'isolated_mse444': a, 'active_mse444': b,
-                                 'active_gain_db': 10*math.log10(a/b)})
+                                 'active_gain_db': 10*math.log10(a/b),
+                                 'mean_source_sobel': float(sobel[mask].mean()),
+                                 'texture_strata': strata})
                 assert sum(item['pixels'] for item in bins) == h*w
                 result['rows'].append({
                     'image': image, 'qp': qp, 'case_sha256': sha(case_path),
