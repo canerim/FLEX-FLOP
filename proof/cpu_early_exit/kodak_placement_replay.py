@@ -15,7 +15,7 @@ import random
 import sys
 
 os.environ["CUDA_VISIBLE_DEVICES"] = ""
-os.environ["OMP_NUM_THREADS"] = "2"
+os.environ["OMP_NUM_THREADS"] = "1"
 os.environ["OPENBLAS_NUM_THREADS"] = "1"
 
 HERE = Path(__file__).resolve().parent
@@ -56,7 +56,7 @@ def main() -> None:
     sys.path.insert(0, str((PROOF / ".local/DCVC").resolve()))
     from src.utils.transforms import rgb2ycbcr_np, ycbcr2rgb
 
-    torch.set_num_threads(2)
+    torch.set_num_threads(1)
     torch.set_num_interop_threads(1)
     scan_manifest_path = SCAN / "manifest.json"
     scan_manifest = json.loads(scan_manifest_path.read_text())
@@ -75,7 +75,7 @@ def main() -> None:
         "release_sha256": digest(release_path),
         "e15_sha256": digest(e15_path),
         "seeds": list(SEEDS),
-        "thread_count": 2,
+        "thread_count": 1,
         "metric": "Equal-image/quality-point mean of 10log10(mean shuffled RGB MSE / original RGB MSE), with matched YCbCr444 MSE also saved. Source RGB is ycbcr2rgb(centered YCbCr + .5, clamp=True).",
     }
     OUT.mkdir(parents=True, exist_ok=True)
