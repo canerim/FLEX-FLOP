@@ -12,6 +12,7 @@ import json
 import os
 from pathlib import Path
 import random
+import subprocess
 import sys
 
 os.environ["CUDA_VISIBLE_DEVICES"] = ""
@@ -21,6 +22,8 @@ os.environ["OPENBLAS_NUM_THREADS"] = "1"
 HERE = Path(__file__).resolve().parent
 ROOT = HERE.parents[1]
 PROOF = ROOT / "proof/early_exit_vs_released"
+UPSTREAM = Path("/home/can_karsal/DCVC")
+EXTENSION = Path("/data10/shareddata/can_karsal/dcvcuf_depth_20260927/research/reference_entropy_v1")
 SCAN = HERE / "results/kodak24_qp5"
 OUT = HERE / "results/kodak24_qp5_placement_20261005"
 SEEDS = (202610050, 202610051, 202610052)
@@ -53,7 +56,7 @@ def main() -> None:
     from flexuf.model import FlexUFIntra, load_flexuf_state
     from flexuf.kernels.planned_decoder import forward_from_stem_with_cpu_map
 
-    sys.path.insert(0, str((PROOF / ".local/DCVC").resolve()))
+    sys.path.insert(0, str(UPSTREAM.resolve()))
     from src.utils.transforms import rgb2ycbcr_np, ycbcr2rgb
 
     torch.set_num_threads(1)
@@ -74,6 +77,9 @@ def main() -> None:
         "script_sha256": digest(Path(__file__)),
         "release_sha256": digest(release_path),
         "e15_sha256": digest(e15_path),
+        "upstream_head": subprocess.check_output(
+            ["git", "-C", str(UPSTREAM), "rev-parse", "HEAD"], text=True).strip(),
+        "entropy_build_manifest_sha256": digest(EXTENSION / "build_manifest.json"),
         "seeds": list(SEEDS),
         "thread_count": 1,
         "metric": "Equal-image/quality-point mean of 10log10(mean shuffled RGB MSE / original RGB MSE), with matched YCbCr444 MSE also saved. Source RGB is ycbcr2rgb(centered YCbCr + .5, clamp=True).",
@@ -86,8 +92,8 @@ def main() -> None:
         write(path, manifest)
     manifest_hash = digest(path)
 
-    released, info = load_model(release_path, 12, PROOF / ".local/DCVC")
-    codec = ReferenceCodec(released, info["sha256"], PROOF / ".local/entropy")
+    released, info = load_model(release_path, 12, UPSTREAM)
+    codec = ReferenceCodec(released, info["sha256"], EXTENSION)
     checkpoint = torch.load(e15_path, map_location="cpu", weights_only=False)
     cfg = FlexUFConfig(**checkpoint["config"])
     e15 = FlexUFIntra(cfg).eval()
