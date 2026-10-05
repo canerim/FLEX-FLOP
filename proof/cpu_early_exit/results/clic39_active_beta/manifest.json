@@ -1,0 +1,588 @@
+{
+  "schema": 1,
+  "scope": "Local CLIC41 collection; all 39 images at least 768x512, fixed centred 768x512 crop, five QPs; no quality or router outcome used to select images.",
+  "selection_rule": "SHA256(filename) order; include every PNG >=768x512, exclude smaller sources by geometry only.",
+  "source_dir": "data/clic",
+  "crop_size_wh": [
+    768,
+    512
+  ],
+  "qps": [
+    0,
+    16,
+    32,
+    48,
+    63
+  ],
+  "expected_cases": 195,
+  "included": [
+    {
+      "image": "alexander-shustov-73.png",
+      "source_sha256": "0e02abbd66f589dd3cf32dfa4cc39fda5f04f5315332b86b27e23d066476e677",
+      "source_size_wh": [
+        2048,
+        1361
+      ],
+      "crop_xywh": [
+        640,
+        424,
+        768,
+        512
+      ]
+    },
+    {
+      "image": "casey-fyfe-999.png",
+      "source_sha256": "dffb8056780c1acce33e6f08ca5197d573362c6dad98c35c6e2c19efc154efdf",
+      "source_size_wh": [
+        2048,
+        1360
+      ],
+      "crop_xywh": [
+        640,
+        424,
+        768,
+        512
+      ]
+    },
+    {
+      "image": "amy-zhang-15940.png",
+      "source_sha256": "a33da2acf22c94f83856e795bdc91f1c08b95275b7893c1a77ee7f56b644bce2",
+      "source_size_wh": [
+        1632,
+        915
+      ],
+      "crop_xywh": [
+        432,
+        201,
+        768,
+        512
+      ]
+    },
+    {
+      "image": "thong-vo-428.png",
+      "source_sha256": "f25a83aef7ed712d99d839127b4245e164fdce6a34cf0dfeb6fddc7aeec65357",
+      "source_size_wh": [
+        1264,
+        790
+      ],
+      "crop_xywh": [
+        248,
+        139,
+        768,
+        512
+      ]
+    },
+    {
+      "image": "paul-itkin-46101.png",
+      "source_sha256": "f0a5cd1ea476b19e101f190212e9031dcbe956f44fac7d15fab24f243923a658",
+      "source_size_wh": [
+        960,
+        604
+      ],
+      "crop_xywh": [
+        96,
+        46,
+        768,
+        512
+      ]
+    },
+    {
+      "image": "juskteez-vu-1041.png",
+      "source_sha256": "4edde2170e30a9c4b13a61c253f7207c1997e2e8c78ed72c78a116236ef579eb",
+      "source_size_wh": [
+        1145,
+        1725
+      ],
+      "crop_xywh": [
+        188,
+        606,
+        768,
+        512
+      ]
+    },
+    {
+      "image": "davide-ragusa-716.png",
+      "source_sha256": "0ff2ac0468c93dc27a8bdadfbd60405a2a648fdf12c8c71d146700e4c3ff6c06",
+      "source_size_wh": [
+        1945,
+        1292
+      ],
+      "crop_xywh": [
+        588,
+        390,
+        768,
+        512
+      ]
+    },
+    {
+      "image": "clem-onojeghuo-33741.png",
+      "source_sha256": "eadc4679b1a6662a42d4213fe6e5922d9ada897afe7f6466dda350a0e412c97a",
+      "source_size_wh": [
+        2048,
+        1365
+      ],
+      "crop_xywh": [
+        640,
+        426,
+        768,
+        512
+      ]
+    },
+    {
+      "image": "jeremy-cai-1174.png",
+      "source_sha256": "bdf9508c13c1e70f0e727176ef52035be1638c5827237fe0fb18919b7c048821",
+      "source_size_wh": [
+        1936,
+        1220
+      ],
+      "crop_xywh": [
+        584,
+        354,
+        768,
+        512
+      ]
+    },
+    {
+      "image": "michael-durana-82941.png",
+      "source_sha256": "7a9ad3ffd2a85fcb0cb6da024c8779eda76ded233137dd20d24a1b2540411460",
+      "source_size_wh": [
+        2048,
+        1365
+      ],
+      "crop_xywh": [
+        640,
+        426,
+        768,
+        512
+      ]
+    },
+    {
+      "image": "zugr-108.png",
+      "source_sha256": "8dfb79901e629e69a28223c345a6859dd57c56d485b63c795679b05bf2cb4f37",
+      "source_size_wh": [
+        2048,
+        1365
+      ],
+      "crop_xywh": [
+        640,
+        426,
+        768,
+        512
+      ]
+    },
+    {
+      "image": "allef-vinicius-109434.png",
+      "source_sha256": "ace56cc5ab4a605e5b01a2a90cbad2fecb3090738e5a0bb8786740e24ddd46de",
+      "source_size_wh": [
+        2048,
+        1365
+      ],
+      "crop_xywh": [
+        640,
+        426,
+        768,
+        512
+      ]
+    },
+    {
+      "image": "benjamin-sloth-lindgreen-705.png",
+      "source_sha256": "670a3c78bc82789f95e4d46e5f73f5432e8a0f8537c362c1248d749ea989d73d",
+      "source_size_wh": [
+        2048,
+        1365
+      ],
+      "crop_xywh": [
+        640,
+        426,
+        768,
+        512
+      ]
+    },
+    {
+      "image": "philipp-reiner-207.png",
+      "source_sha256": "6bcd35982a9d17b0b927526efe4987587fa11c94859d8fb5ff2bdd810e47c98f",
+      "source_size_wh": [
+        1440,
+        900
+      ],
+      "crop_xywh": [
+        336,
+        194,
+        768,
+        512
+      ]
+    },
+    {
+      "image": "wojciech-szaturski-3611.png",
+      "source_sha256": "7ac37e0faae3b0802507574e576e724fc7b8dea5bf352fb95b53a75809dd81eb",
+      "source_size_wh": [
+        1988,
+        1325
+      ],
+      "crop_xywh": [
+        610,
+        406,
+        768,
+        512
+      ]
+    },
+    {
+      "image": "dogancan-ozturan-395.png",
+      "source_sha256": "4adb31af67d8143429340013c64b083f0b7a5fc219ec5d21304f4e87b2bb8b28",
+      "source_size_wh": [
+        2040,
+        1360
+      ],
+      "crop_xywh": [
+        636,
+        424,
+        768,
+        512
+      ]
+    },
+    {
+      "image": "martyn-seddon-220.png",
+      "source_sha256": "e6b7f57d316da84bd45eda2649e600eec4e8c903af18d48319a068b34cc3d9cc",
+      "source_size_wh": [
+        2048,
+        1365
+      ],
+      "crop_xywh": [
+        640,
+        426,
+        768,
+        512
+      ]
+    },
+    {
+      "image": "gian-reto-tarnutzer-45212.png",
+      "source_sha256": "f1368c5904dda6ad0ea6a0968e1f455064290d624744723533dd9e93689e532c",
+      "source_size_wh": [
+        2048,
+        1370
+      ],
+      "crop_xywh": [
+        640,
+        429,
+        768,
+        512
+      ]
+    },
+    {
+      "image": "ales-krivec-15949.png",
+      "source_sha256": "124feb56d7fe3d4b53eb0eb87957b91f2f6185115b24c00554e99511d442c13e",
+      "source_size_wh": [
+        2048,
+        1188
+      ],
+      "crop_xywh": [
+        640,
+        338,
+        768,
+        512
+      ]
+    },
+    {
+      "image": "nomao-saeki-33553.png",
+      "source_sha256": "a54f6c700580db71d75bae9298298b6315f8f51b6a474dcc0ab447e497eb17ff",
+      "source_size_wh": [
+        2048,
+        1366
+      ],
+      "crop_xywh": [
+        640,
+        427,
+        768,
+        512
+      ]
+    },
+    {
+      "image": "stefan-kunze-26931.png",
+      "source_sha256": "7bc5878cdb8b763f2fedb2ec3674c5d2dfae95967f4d708f9f96d6607e0c88b7",
+      "source_size_wh": [
+        2048,
+        1367
+      ],
+      "crop_xywh": [
+        640,
+        427,
+        768,
+        512
+      ]
+    },
+    {
+      "image": "sergey-zolkin-21232.png",
+      "source_sha256": "eb787c6f7cf15ba7c03107cb5d32e11b11b20451b5a18a5a1ae968a8a5be13a7",
+      "source_size_wh": [
+        1542,
+        1028
+      ],
+      "crop_xywh": [
+        387,
+        258,
+        768,
+        512
+      ]
+    },
+    {
+      "image": "todd-quackenbush-27493.png",
+      "source_sha256": "8bcdb4fbc5da81d33f7bdc9446d05f587bc6c317d5e27ec41e239e9e4e63d4a7",
+      "source_size_wh": [
+        2048,
+        1033
+      ],
+      "crop_xywh": [
+        640,
+        260,
+        768,
+        512
+      ]
+    },
+    {
+      "image": "alberto-montalesi-176097.png",
+      "source_sha256": "a420533b06d04d4c5052a2b93c3e6080ab441865c0eb24347d951e810e7f4882",
+      "source_size_wh": [
+        2048,
+        1363
+      ],
+      "crop_xywh": [
+        640,
+        425,
+        768,
+        512
+      ]
+    },
+    {
+      "image": "lobostudio-hamburg-75377.png",
+      "source_sha256": "02af14dc4d1bba8968064fe57b8e3b5bd1b19cb54b8bf8d222f310f5d3520ec6",
+      "source_size_wh": [
+        2048,
+        1365
+      ],
+      "crop_xywh": [
+        640,
+        426,
+        768,
+        512
+      ]
+    },
+    {
+      "image": "martin-wessely-211.png",
+      "source_sha256": "8c4791c5cb645198b3b12a884d33dac544a33763e1da0f59b86101c2af32e015",
+      "source_size_wh": [
+        960,
+        640
+      ],
+      "crop_xywh": [
+        96,
+        64,
+        768,
+        512
+      ]
+    },
+    {
+      "image": "jared-erondu-21325.png",
+      "source_sha256": "5a241642973a6be08e1a407ea21f10bf6fbab7915cc5dc1ff6e68ee0c178cf0b",
+      "source_size_wh": [
+        2048,
+        1365
+      ],
+      "crop_xywh": [
+        640,
+        426,
+        768,
+        512
+      ]
+    },
+    {
+      "image": "andrew-ruiz-376.png",
+      "source_sha256": "fa6a620064b2c9451fac4ca4bdcf00295bffe0bc82979f5fae7abaaa9bdf2812",
+      "source_size_wh": [
+        2048,
+        1361
+      ],
+      "crop_xywh": [
+        640,
+        424,
+        768,
+        512
+      ]
+    },
+    {
+      "image": "felix-russell-saw-140699.png",
+      "source_sha256": "bd60b033817e1eee9ad2fef12445d903d167a577e7832c0e6d25b8676515f2ac",
+      "source_size_wh": [
+        1750,
+        1166
+      ],
+      "crop_xywh": [
+        491,
+        327,
+        768,
+        512
+      ]
+    },
+    {
+      "image": "sergey-zolkin-1045.png",
+      "source_sha256": "c189a3366d2c4f5953910a8faecf7ed4ca54252f5075561ff5ae3e85f66b83b7",
+      "source_size_wh": [
+        2048,
+        1365
+      ],
+      "crop_xywh": [
+        640,
+        426,
+        768,
+        512
+      ]
+    },
+    {
+      "image": "alejandro-escamilla-6.png",
+      "source_sha256": "9be685bf7c0a48b55cb8bc7dd35bd63fa4954944d8dbabe1efe6d7ee92f5e1ca",
+      "source_size_wh": [
+        2048,
+        1339
+      ],
+      "crop_xywh": [
+        640,
+        413,
+        768,
+        512
+      ]
+    },
+    {
+      "image": "veeterzy-82537.png",
+      "source_sha256": "bd71d3a9840a4acff75b0af0cfd227c49ea556d5e1ef68058f845934833b84de",
+      "source_size_wh": [
+        2048,
+        1366
+      ],
+      "crop_xywh": [
+        640,
+        427,
+        768,
+        512
+      ]
+    },
+    {
+      "image": "kazuend-28556.png",
+      "source_sha256": "2e33c59f966c074df6b8d3f75cc13d16d74b1be3f8ad6963c20f2c799bce32a1",
+      "source_size_wh": [
+        2048,
+        1365
+      ],
+      "crop_xywh": [
+        640,
+        426,
+        768,
+        512
+      ]
+    },
+    {
+      "image": "jason-briscoe-149782.png",
+      "source_sha256": "2114abc66efd0e1d196995edaa9df03eb80370bda92003ceacb10c2bc4b73e69",
+      "source_size_wh": [
+        2048,
+        1365
+      ],
+      "crop_xywh": [
+        640,
+        426,
+        768,
+        512
+      ]
+    },
+    {
+      "image": "vita-vilcina-3055.png",
+      "source_sha256": "09f5c520e91fdd124df876a06b1ab7034ad87c4ad8087f0574bb16546a87e95f",
+      "source_size_wh": [
+        1848,
+        1224
+      ],
+      "crop_xywh": [
+        540,
+        356,
+        768,
+        512
+      ]
+    },
+    {
+      "image": "mullermarc-184.png",
+      "source_sha256": "9d7122af54918cd9b300444aa021a4825336b20e0a93c13d7b72a3d602025349",
+      "source_size_wh": [
+        1158,
+        772
+      ],
+      "crop_xywh": [
+        195,
+        130,
+        768,
+        512
+      ]
+    },
+    {
+      "image": "daniel-robert-405.png",
+      "source_sha256": "8cdfcf1fdec42592bf35d506006b301c1553bd7dcc37f800fa4e9040467faad9",
+      "source_size_wh": [
+        1500,
+        844
+      ],
+      "crop_xywh": [
+        366,
+        166,
+        768,
+        512
+      ]
+    },
+    {
+      "image": "philippe-wuyts-45997.png",
+      "source_sha256": "91ae1c5626f019ad1e543dfecced90f30b0e0d8013ea264399badf88603fe8a4",
+      "source_size_wh": [
+        1922,
+        1281
+      ],
+      "crop_xywh": [
+        577,
+        384,
+        768,
+        512
+      ]
+    },
+    {
+      "image": "roberto-nickson-48063.png",
+      "source_sha256": "c1f1ce1aad5699ded11843c82fd758e76bfcc00e58b006ac26503c3afa811386",
+      "source_size_wh": [
+        2048,
+        1365
+      ],
+      "crop_xywh": [
+        640,
+        426,
+        768,
+        512
+      ]
+    }
+  ],
+  "excluded": [
+    {
+      "image": "schicka-307.png",
+      "source_sha256": "04e0611bcd155a7613591504c51033a869360179b44aa51c4c0cea671563ebd5",
+      "source_size_wh": [
+        512,
+        384
+      ],
+      "reason": "smaller than fixed 768x512 crop"
+    },
+    {
+      "image": "todd-quackenbush-222.png",
+      "source_sha256": "0c63d9210463f36d2c564dd4d12ade884b1ee819dbdebbd210839eca5f2ab508",
+      "source_size_wh": [
+        720,
+        439
+      ],
+      "reason": "smaller than fixed 768x512 crop"
+    }
+  ],
+  "script_sha256": "d536e0a257b0977b2785f0e107b20a840137508f4a43b9c146d9156d2620fcc1",
+  "status": "selection frozen before active beta validation results"
+}
