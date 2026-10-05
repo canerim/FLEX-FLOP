@@ -68,6 +68,8 @@ def main() -> None:
     assert len(exact['rows']) == 120 and len(exact['images']) == 24
     assert exact['qps'] == manifest['qps'] == [0, 16, 32, 48, 63]
     assert frontier['complete'] and policy['source_sha256']['frontier'] == sha(frontier_path)
+    assert frontier['provenance']['manifest_sha256'] == sha(manifest_path)
+    assert policy['source_sha256']['script'] == sha(HERE / 'select_active_replicate_beta.py')
     assert policy['source_sha256']['manifest'] == sha(manifest_path)
     assert policy['source_sha256']['old_locked_policy'] == sha(old_policy_path)
     assert policy['validation_status'] == 'not evaluated by this selector'

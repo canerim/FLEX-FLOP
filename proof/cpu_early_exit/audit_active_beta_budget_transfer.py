@@ -45,6 +45,7 @@ def main() -> None:
     base = HERE / 'results/div2k_beta'
     exact_path = base / 'quality_floor/exact_context_validation24.json'
     manifest_path = base / 'manifest.json'
+    frontier_path = base / 'quality_floor/active_replicate_beta_calibration24.json'
     policy_path = base / 'quality_floor/active_replicate_budget_sweep_policy.json'
     primary_path = base / 'quality_floor/active_replicate_beta_validation24.json'
     cases = Path('/tmp/flexplus-div2k-beta-validation')
@@ -66,7 +67,17 @@ def main() -> None:
     assert policy['targets'] == [0.075, 0.1, 0.125, 0.15]
     assert policy['qps'] == exact['qps'] == manifest['qps'] == [0, 16, 32, 48, 63]
     assert policy['source_sha256']['manifest'] == sha(manifest_path)
+    assert policy['source_sha256']['frontier'] == sha(frontier_path)
+    assert policy['source_sha256']['selector'] == sha(HERE/'select_active_beta_budget_sweep.py')
     assert primary['provenance']['policy_sha256'] == policy['source_sha256']['primary_policy']
+    assert primary['provenance']['frontier_sha256'] == sha(frontier_path)
+    assert primary['provenance']['exact_sha256'] == sha(exact_path)
+    assert primary['provenance']['manifest_sha256'] == sha(manifest_path)
+    assert primary['provenance']['released_sha256'] == sha(released_path)
+    assert primary['provenance']['e15_sha256'] == sha(e15_path)
+    assert exact['provenance']['manifest_sha256'] == sha(manifest_path)
+    assert exact['provenance']['release_sha256'] == sha(released_path)
+    assert exact['provenance']['e15_sha256'] == sha(e15_path)
     assert policy['validation_status'] == 'not evaluated by this selector'
     primary_by_key = {(r['image'], r['qp']): r for r in primary['rows']}
     assert len(primary_by_key) == 120
@@ -78,6 +89,7 @@ def main() -> None:
                 ROOT / 'flexuf/model.py', ROOT / 'flexuf/config.py']
     provenance = {
         'exact_sha256': sha(exact_path), 'manifest_sha256': sha(manifest_path),
+        'frontier_sha256': sha(frontier_path),
         'policy_sha256': sha(policy_path), 'primary_sha256': sha(primary_path),
         'released_sha256': sha(released_path), 'e15_sha256': sha(e15_path),
         'source_code_sha256': {str(p.relative_to(ROOT)): sha(p) for p in critical},
