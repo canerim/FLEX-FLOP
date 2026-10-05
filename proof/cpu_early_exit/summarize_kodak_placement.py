@@ -56,7 +56,10 @@ def main() -> None:
         return {"scope": scope,
                 "n_image_qp": int(np.prod(v.shape[:-1])),
                 "mean_rgb_gain_db": float(v[..., 0].mean()),
-                "mean_444_gain_db": float(v[..., 1].mean())}
+                "mean_444_gain_db": float(v[..., 1].mean()),
+                "positive_rgb_cases": int((v[..., 0] > 1e-9).sum()),
+                "negative_rgb_cases": int((v[..., 0] < -1e-9).sum()),
+                "unchanged_rgb_cases": int((abs(v[..., 0]) <= 1e-9).sum())}
 
     result = {
         "scope": manifest["scope"], "limitations": manifest["limitation"],
