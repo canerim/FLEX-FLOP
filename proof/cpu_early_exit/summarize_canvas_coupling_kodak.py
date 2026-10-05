@@ -22,8 +22,10 @@ def describe(rows: list[dict], rng: np.random.Generator) -> dict:
                for im in images)
     result = {'cases': len(rows), 'images': len(images), 'per_variant': {}}
     for key in ('no_repair', 'with_repair'):
-        rgb_yuv_gain = np.asarray([r['coupled'][key]['yuv611_db']-r['deployed_yuv611_db']
-                                   for r in rows])
+        has_yuv=all('yuv611_db' in r['coupled'][key] and 'deployed_yuv611_db' in r
+                    for r in rows)
+        yuv_gain=(np.asarray([r['coupled'][key]['yuv611_db']-r['deployed_yuv611_db']
+                              for r in rows]) if has_yuv else None)
         d444_gain = np.asarray([r['deployed_delta444_db']-r['coupled'][key]['delta444_db']
                                 for r in rows])
         case_values = {(r['image'],r['qp']):r['deployed_delta444_db']-r['coupled'][key]['delta444_db']
@@ -35,7 +37,7 @@ def describe(rows: list[dict], rng: np.random.Generator) -> dict:
         result['per_variant'][key] = {
             'mean_delta444_gain_db': float(d444_gain.mean()),
             'image_cluster_ci95_delta444_db': np.quantile(means,[.025,.975]).tolist(),
-            'mean_yuv611_gain_db': float(rgb_yuv_gain.mean()),
+            'mean_yuv611_gain_db': float(yuv_gain.mean()) if has_yuv else None,
             'better_cases': int((d444_gain>1e-7).sum()),
             'worse_cases': int((d444_gain<-1e-7).sum()),
             'nearly_equal_cases': int((abs(d444_gain)<=1e-7).sum()),
