@@ -1,0 +1,274 @@
+{
+  "scope": "Frozen Kodak24 x QP5 paired bitstream reconstruction; no retraining or GPU/runtime measurement",
+  "source_sha256": "094618ffcf979c0b372a59112dbe2fe7313825059af681e791febd6b7b39818d",
+  "bootstrap": "10000 resamples of 24 images retaining all five QPs",
+  "all": {
+    "cases": 120,
+    "images": 24,
+    "per_variant": {
+      "no_repair": {
+        "mean_delta444_gain_db": 0.011795607575091764,
+        "image_cluster_ci95_delta444_db": [
+          0.008714540851703732,
+          0.015134916239126385
+        ],
+        "mean_yuv611_gain_db": 0.014079580275047802,
+        "better_cases": 112,
+        "worse_cases": 8,
+        "nearly_equal_cases": 0,
+        "delta444_over_0p1_count": 35,
+        "per_qp_delta444_gain_db": {
+          "0": 0.009093939311698784,
+          "16": 0.012972484054190913,
+          "32": 0.011837443879699061,
+          "48": 0.01090376320187923,
+          "63": 0.014170407427990831
+        }
+      },
+      "with_repair": {
+        "mean_delta444_gain_db": 0.00939686108201293,
+        "image_cluster_ci95_delta444_db": [
+          0.005736254512183201,
+          0.01314572484244982
+        ],
+        "mean_yuv611_gain_db": 0.009693185147003696,
+        "better_cases": 105,
+        "worse_cases": 15,
+        "nearly_equal_cases": 0,
+        "delta444_over_0p1_count": 36,
+        "per_qp_delta444_gain_db": {
+          "0": 0.006083500611484133,
+          "16": 0.01068973759516986,
+          "32": 0.010358733374575433,
+          "48": 0.009735750083575204,
+          "63": 0.010116583745260026
+        }
+      }
+    },
+    "reference": {
+      "mean_deployed_delta444_db": 0.09762602088624604,
+      "mean_exact_context_delta444_db": 0.08274774999140456,
+      "deployed_over_0p1_count": 47,
+      "exact_context_over_0p1_count": 34,
+      "mean_deployed_minus_exact_db": 0.014878270894841497
+    }
+  },
+  "by_qp": {
+    "0": {
+      "cases": 24,
+      "images": 24,
+      "per_variant": {
+        "no_repair": {
+          "mean_delta444_gain_db": 0.009093939311698784,
+          "image_cluster_ci95_delta444_db": [
+            0.006320860180293525,
+            0.011883872022957006
+          ],
+          "mean_yuv611_gain_db": 0.013033188680607655,
+          "better_cases": 22,
+          "worse_cases": 2,
+          "nearly_equal_cases": 0,
+          "delta444_over_0p1_count": 7,
+          "per_qp_delta444_gain_db": {
+            "0": 0.009093939311698784
+          }
+        },
+        "with_repair": {
+          "mean_delta444_gain_db": 0.006083500611484133,
+          "image_cluster_ci95_delta444_db": [
+            0.0020223586382903226,
+            0.009771949331078712
+          ],
+          "mean_yuv611_gain_db": 0.006453378401045207,
+          "better_cases": 19,
+          "worse_cases": 5,
+          "nearly_equal_cases": 0,
+          "delta444_over_0p1_count": 7,
+          "per_qp_delta444_gain_db": {
+            "0": 0.006083500611484133
+          }
+        }
+      },
+      "reference": {
+        "mean_deployed_delta444_db": 0.09101610827790836,
+        "mean_exact_context_delta444_db": 0.08098196022581235,
+        "deployed_over_0p1_count": 9,
+        "exact_context_over_0p1_count": 7,
+        "mean_deployed_minus_exact_db": 0.010034148052096022
+      }
+    },
+    "16": {
+      "cases": 24,
+      "images": 24,
+      "per_variant": {
+        "no_repair": {
+          "mean_delta444_gain_db": 0.012972484054190913,
+          "image_cluster_ci95_delta444_db": [
+            0.010012205680268359,
+            0.016096054104520214
+          ],
+          "mean_yuv611_gain_db": 0.016145928032598178,
+          "better_cases": 24,
+          "worse_cases": 0,
+          "nearly_equal_cases": 0,
+          "delta444_over_0p1_count": 0,
+          "per_qp_delta444_gain_db": {
+            "16": 0.012972484054190913
+          }
+        },
+        "with_repair": {
+          "mean_delta444_gain_db": 0.01068973759516986,
+          "image_cluster_ci95_delta444_db": [
+            0.007706865399331919,
+            0.013914838153214183
+          ],
+          "mean_yuv611_gain_db": 0.009976129299982262,
+          "better_cases": 24,
+          "worse_cases": 0,
+          "nearly_equal_cases": 0,
+          "delta444_over_0p1_count": 0,
+          "per_qp_delta444_gain_db": {
+            "16": 0.01068973759516986
+          }
+        }
+      },
+      "reference": {
+        "mean_deployed_delta444_db": 0.06102167560425109,
+        "mean_exact_context_delta444_db": 0.0471306033330924,
+        "deployed_over_0p1_count": 1,
+        "exact_context_over_0p1_count": 0,
+        "mean_deployed_minus_exact_db": 0.01389107227115869
+      }
+    },
+    "32": {
+      "cases": 24,
+      "images": 24,
+      "per_variant": {
+        "no_repair": {
+          "mean_delta444_gain_db": 0.011837443879699061,
+          "image_cluster_ci95_delta444_db": [
+            0.009147884661204263,
+            0.014871340345518265
+          ],
+          "mean_yuv611_gain_db": 0.014530039675691478,
+          "better_cases": 24,
+          "worse_cases": 0,
+          "nearly_equal_cases": 0,
+          "delta444_over_0p1_count": 2,
+          "per_qp_delta444_gain_db": {
+            "32": 0.011837443879699061
+          }
+        },
+        "with_repair": {
+          "mean_delta444_gain_db": 0.010358733374575433,
+          "image_cluster_ci95_delta444_db": [
+            0.007486238440005307,
+            0.013414100676204419
+          ],
+          "mean_yuv611_gain_db": 0.010412331172232836,
+          "better_cases": 22,
+          "worse_cases": 2,
+          "nearly_equal_cases": 0,
+          "delta444_over_0p1_count": 3,
+          "per_qp_delta444_gain_db": {
+            "32": 0.010358733374575433
+          }
+        }
+      },
+      "reference": {
+        "mean_deployed_delta444_db": 0.08252862233103916,
+        "mean_exact_context_delta444_db": 0.06895693912137797,
+        "deployed_over_0p1_count": 5,
+        "exact_context_over_0p1_count": 2,
+        "mean_deployed_minus_exact_db": 0.013571683209661201
+      }
+    },
+    "48": {
+      "cases": 24,
+      "images": 24,
+      "per_variant": {
+        "no_repair": {
+          "mean_delta444_gain_db": 0.01090376320187923,
+          "image_cluster_ci95_delta444_db": [
+            0.007816209573218045,
+            0.01454560036281358
+          ],
+          "mean_yuv611_gain_db": 0.011698661681954547,
+          "better_cases": 24,
+          "worse_cases": 0,
+          "nearly_equal_cases": 0,
+          "delta444_over_0p1_count": 14,
+          "per_qp_delta444_gain_db": {
+            "48": 0.01090376320187923
+          }
+        },
+        "with_repair": {
+          "mean_delta444_gain_db": 0.009735750083575204,
+          "image_cluster_ci95_delta444_db": [
+            0.005816621412223355,
+            0.013818465633201635
+          ],
+          "mean_yuv611_gain_db": 0.009603090699140893,
+          "better_cases": 21,
+          "worse_cases": 3,
+          "nearly_equal_cases": 0,
+          "delta444_over_0p1_count": 14,
+          "per_qp_delta444_gain_db": {
+            "48": 0.009735750083575204
+          }
+        }
+      },
+      "reference": {
+        "mean_deployed_delta444_db": 0.1274558085184547,
+        "mean_exact_context_delta444_db": 0.11334886918741814,
+        "deployed_over_0p1_count": 17,
+        "exact_context_over_0p1_count": 14,
+        "mean_deployed_minus_exact_db": 0.014106939331036537
+      }
+    },
+    "63": {
+      "cases": 24,
+      "images": 24,
+      "per_variant": {
+        "no_repair": {
+          "mean_delta444_gain_db": 0.014170407427990831,
+          "image_cluster_ci95_delta444_db": [
+            0.006346081317944039,
+            0.02239067128451608
+          ],
+          "mean_yuv611_gain_db": 0.01499008330438715,
+          "better_cases": 18,
+          "worse_cases": 6,
+          "nearly_equal_cases": 0,
+          "delta444_over_0p1_count": 12,
+          "per_qp_delta444_gain_db": {
+            "63": 0.014170407427990831
+          }
+        },
+        "with_repair": {
+          "mean_delta444_gain_db": 0.010116583745260026,
+          "image_cluster_ci95_delta444_db": [
+            0.0019220290673885331,
+            0.018518605126185778
+          ],
+          "mean_yuv611_gain_db": 0.012020996162617278,
+          "better_cases": 19,
+          "worse_cases": 5,
+          "nearly_equal_cases": 0,
+          "delta444_over_0p1_count": 12,
+          "per_qp_delta444_gain_db": {
+            "63": 0.010116583745260026
+          }
+        }
+      },
+      "reference": {
+        "mean_deployed_delta444_db": 0.1261078896995769,
+        "mean_exact_context_delta444_db": 0.10332037808932187,
+        "deployed_over_0p1_count": 15,
+        "exact_context_over_0p1_count": 11,
+        "mean_deployed_minus_exact_db": 0.022787511610255034
+      }
+    }
+  },
+  "mixed_map_cases": 97
+}
