@@ -1,0 +1,108 @@
+{
+  "scope": "Exploratory calibration-only active-replicate/no-repair policies on 24 disjoint DIV2K validation images x five QPs; exact synthesis-conv MAC, not full-codec latency.",
+  "source_sha256": {
+    "budget": "c8ea676bcc5222e06dab576e43761e9b292964ad964ad841eeaed92aede952ea",
+    "primary": "d31fb369042a39a73b0bfcb410fc7d205dc1a5a728c23cc126c707d517dcc131",
+    "tail": "f0c5f9786f8e1779623c361ad50414670be07051504d8e91ed71a4b7756b5e41"
+  },
+  "script_sha256": "d9a624f41e1ac64438bbc8816273265c2fb78bec8c53fdd5dc1a0772cb77bef9",
+  "figure_sha256": "d67a4aef981c8f5c54db92d5cb14e8ca4cea4e80494aa5a01b9fd2a8f906d20e",
+  "points": [
+    {
+      "label": "B=0.075",
+      "kind": "budget",
+      "budget": 0.075,
+      "loss": 0.0692737694813749,
+      "loss_ci": [
+        0.047187310215638247,
+        0.09702068557481958
+      ],
+      "saving": 20.081017718883718,
+      "saving_ci": [
+        16.87599026774076,
+        23.443585252840684
+      ],
+      "violations": 23
+    },
+    {
+      "label": "B=0.100",
+      "kind": "budget",
+      "budget": 0.1,
+      "loss": 0.08892315879210419,
+      "loss_ci": [
+        0.06221411899842138,
+        0.12067419578757888
+      ],
+      "saving": 22.564448006337717,
+      "saving_ci": [
+        19.303282737560625,
+        25.843424276759105
+      ],
+      "violations": 34
+    },
+    {
+      "label": "B=0.125",
+      "kind": "budget",
+      "budget": 0.125,
+      "loss": 0.11554297715322838,
+      "loss_ci": [
+        0.08234930720250223,
+        0.15501216006695617
+      ],
+      "saving": 25.816625443893273,
+      "saving_ci": [
+        22.66812385716194,
+        28.859897841216323
+      ],
+      "violations": 47
+    },
+    {
+      "label": "B=0.150",
+      "kind": "budget",
+      "budget": 0.15,
+      "loss": 0.1349226072484674,
+      "loss_ci": [
+        0.10062259595664945,
+        0.1759462702023576
+      ],
+      "saving": 28.271061613077062,
+      "saving_ci": [
+        25.926421379650225,
+        30.62931860367643
+      ],
+      "violations": 59
+    },
+    {
+      "label": "Original \u03b2",
+      "kind": "old",
+      "budget": null,
+      "loss": 0.0691859628610063,
+      "loss_ci": [
+        0.047799707258454574,
+        0.09512621102412637
+      ],
+      "saving": 20.56429140585778,
+      "saving_ci": [
+        17.380167815837833,
+        23.88673524846509
+      ],
+      "violations": 24
+    },
+    {
+      "label": "Tail rule",
+      "kind": "tail",
+      "budget": null,
+      "loss": 0.032679019399412125,
+      "loss_ci": [
+        0.02043800040779195,
+        0.04809568773477961
+      ],
+      "saving": 13.557663520839379,
+      "saving_ci": [
+        10.303656966648704,
+        17.040675247451787
+      ],
+      "violations": 8
+    }
+  ]
+}

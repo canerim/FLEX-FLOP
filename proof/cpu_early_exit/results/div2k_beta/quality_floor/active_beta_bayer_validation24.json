@@ -1,0 +1,4704 @@
+{
+  "scope": "DIV2K validation24 x QP5 frozen active-replicate/no-repair beta: routed versus deterministic Bayer-rank maps at identical exit histogram, FUFREF2 stream and analytical synthesis-conv MAC. CPU FP32 untimed.",
+  "expected_cases": 120,
+  "complete": true,
+  "provenance": {
+    "validation_sha256": "35d767f4edc13585946265c287f93c64d7cc6de9e31dbae4e8c93472d9da14a9",
+    "policy_sha256": "5704033849f9e9f63ca3814ab92b55ba274643758a313ad11d7515e9e4ee321d",
+    "manifest_sha256": "0468dc26738fcc16024abd224ba2c805ee25911553f68896f9ddafbaedadf922",
+    "exact_sha256": "e5832a42cdf1f1399b62c580bef64320b91ac7869e5a842cf87422f5c48c9a9f",
+    "released_sha256": "b3b900de23f30e4fc437010ddffe6a5413a56d6cfd97fb6235adbcd2b6973302",
+    "e15_sha256": "91556d30bca41988755ff43dee3bc6d0cd2a0a4eda1d18d2891b168dc0a04ce9",
+    "source_code_sha256": {
+      "proof/cpu_early_exit/audit_active_beta_bayer_validation.py": "2483da871032c2c28d255dfede1a0a4f27df05a2ee198d3a9ba7c473b2c91fbd",
+      "proof/cpu_early_exit/active_canvas_replicate.py": "956a925b3fadd66f77d5f484abc4f6f1f6d6582afafa85b72bb1f45f14b16c25",
+      "flexplus/null_models_uf.py": "c6a76e10fd3e92083e51ec9bf64fde1b08fd5954852c424f017710b565e06ee0",
+      "flexuf/backbone/decoder.py": "eba774cadc62e4542cfb5424a07cdf6dff432f2c4abad889a22e084e52bc9b90",
+      "flexuf/backbone/coupling.py": "c5265a7580db05636a7d7cd45c3ae0a8c91b90b1f2528d9ea17f493563a23dce",
+      "flexuf/model.py": "437b0506e688d8ed3921b90f6cc2638e30aff584815f9909b972a3465ef5ebca",
+      "flexuf/config.py": "387fe63143c584acbc167c72a7181ad7e781594e52738e815f936b885345a6da"
+    }
+  },
+  "rows": [
+    {
+      "image": "0803.png",
+      "qp": 0,
+      "case_sha256": "16e69fbbb82807c844fc9e150c79e20e330846eb3bdd206737244e1332b0302d",
+      "stream_sha256": "9f1b5aeffcdffedb8d9e9cc120cf66dbd858ed5195d96b548a5f3e99fa5dd747",
+      "source_sha256": "4b0148a9a1ff877ad9f76e65736a50cc36e10822b5d8ccd2abb2988ff4e1782b",
+      "selected_beta": 45.0,
+      "router_map": [
+        2,
+        2,
+        2,
+        2,
+        3,
+        2
+      ],
+      "bayer_map": [
+        3,
+        2,
+        2,
+        2,
+        2,
+        2
+      ],
+      "exit_counts": [
+        0,
+        0,
+        5,
+        1,
+        0,
+        0
+      ],
+      "same_map": false,
+      "conv_mac_saving_pct": 37.584280838364506,
+      "router_mse444": 0.000495168671477586,
+      "bayer_mse444": 0.000493219296913594,
+      "router_delta444_db": 0.32536246779033023,
+      "bayer_delta444_db": 0.3082314677962466,
+      "placement_gain_db": -0.01713099999408353
+    },
+    {
+      "image": "0803.png",
+      "qp": 16,
+      "case_sha256": "a6a0cf291a57c40c7b4f5d16c5b168ad4494a6bcd0d8a360236e015733252c3a",
+      "stream_sha256": "e36280a93f50ac2ced91e0a5a5d4c5ff1e22d5f2005c919fe6a698e0cbf386c7",
+      "source_sha256": "4b0148a9a1ff877ad9f76e65736a50cc36e10822b5d8ccd2abb2988ff4e1782b",
+      "selected_beta": 15.0,
+      "router_map": [
+        3,
+        3,
+        4,
+        3,
+        3,
+        3
+      ],
+      "bayer_map": [
+        4,
+        3,
+        3,
+        3,
+        3,
+        3
+      ],
+      "exit_counts": [
+        0,
+        0,
+        0,
+        5,
+        1,
+        0
+      ],
+      "same_map": false,
+      "conv_mac_saving_pct": 23.2913002416721,
+      "router_mse444": 0.00022244875435717404,
+      "bayer_mse444": 0.00022300162527244538,
+      "router_delta444_db": 0.13669262004419697,
+      "bayer_delta444_db": 0.14747312094753454,
+      "placement_gain_db": 0.01078050090333756
+    },
+    {
+      "image": "0803.png",
+      "qp": 32,
+      "case_sha256": "44048dfcf7d7b2eb50d29662462e5a479782d17de2a5b3221f95a00063dc0aeb",
+      "stream_sha256": "460440580df6165c9b10c4cc3f1ab80bf3d393b43c44ffb0304749ab9ae96ea9",
+      "source_sha256": "4b0148a9a1ff877ad9f76e65736a50cc36e10822b5d8ccd2abb2988ff4e1782b",
+      "selected_beta": 15.0,
+      "router_map": [
+        3,
+        3,
+        3,
+        3,
+        3,
+        3
+      ],
+      "bayer_map": [
+        3,
+        3,
+        3,
+        3,
+        3,
+        3
+      ],
+      "exit_counts": [
+        0,
+        0,
+        0,
+        6,
+        0,
+        0
+      ],
+      "same_map": true,
+      "conv_mac_saving_pct": 25.15737834811714,
+      "router_mse444": 0.00011554792581591755,
+      "bayer_mse444": 0.00011554792581591755,
+      "router_delta444_db": 0.18481596028836333,
+      "bayer_delta444_db": 0.18481596028836333,
+      "placement_gain_db": 0.0
+    },
+    {
+      "image": "0803.png",
+      "qp": 48,
+      "case_sha256": "f2ea504fc349777978c1a83a2d80dd36007a6cd047c3a25535032a806e67128b",
+      "stream_sha256": "bf72d6cd690b890c11797160d92c0cf2875c7d35cff7741f606e1a4eb2281bfb",
+      "source_sha256": "4b0148a9a1ff877ad9f76e65736a50cc36e10822b5d8ccd2abb2988ff4e1782b",
+      "selected_beta": 10.0,
+      "router_map": [
+        3,
+        3,
+        3,
+        3,
+        3,
+        3
+      ],
+      "bayer_map": [
+        3,
+        3,
+        3,
+        3,
+        3,
+        3
+      ],
+      "exit_counts": [
+        0,
+        0,
+        0,
+        6,
+        0,
+        0
+      ],
+      "same_map": true,
+      "conv_mac_saving_pct": 25.15737834811714,
+      "router_mse444": 6.572892016265541e-05,
+      "bayer_mse444": 6.572892016265541e-05,
+      "router_delta444_db": 0.21958726014167537,
+      "bayer_delta444_db": 0.21958726014167537,
+      "placement_gain_db": 0.0
+    },
+    {
+      "image": "0803.png",
+      "qp": 63,
+      "case_sha256": "dfe95091d917fac2d51111b13704b6221d77c7a48716a01ec1d7298fdb771427",
+      "stream_sha256": "a5fcd580bfb27947cf680c8139b557c193bd9f0c5216ef625d2fcaee011cef11",
+      "source_sha256": "4b0148a9a1ff877ad9f76e65736a50cc36e10822b5d8ccd2abb2988ff4e1782b",
+      "selected_beta": 5.0,
+      "router_map": [
+        3,
+        3,
+        3,
+        3,
+        3,
+        3
+      ],
+      "bayer_map": [
+        3,
+        3,
+        3,
+        3,
+        3,
+        3
+      ],
+      "exit_counts": [
+        0,
+        0,
+        0,
+        6,
+        0,
+        0
+      ],
+      "same_map": true,
+      "conv_mac_saving_pct": 25.15737834811714,
+      "router_mse444": 3.9330319850705564e-05,
+      "bayer_mse444": 3.9330319850705564e-05,
+      "router_delta444_db": 0.2667709565304436,
+      "bayer_delta444_db": 0.2667709565304436,
+      "placement_gain_db": 0.0
+    },
+    {
+      "image": "0804.png",
+      "qp": 0,
+      "case_sha256": "78ac2d4969c64dde163d60134441292cdc368e40712f2a390c1a07d7d7e2ab3f",
+      "stream_sha256": "ff05c7d14fa42ac74b1e4d7e11886cd85899d93c1d7fb60e14fb65afae4792fb",
+      "source_sha256": "16b5fdbe808b868bed0be32f235208a1716d44e271a37b79cbc77ab53d2f6bdb",
+      "selected_beta": 45.0,
+      "router_map": [
+        3,
+        2,
+        3,
+        2,
+        2,
+        2
+      ],
+      "bayer_map": [
+        3,
+        2,
+        3,
+        2,
+        2,
+        2
+      ],
+      "exit_counts": [
+        0,
+        0,
+        4,
+        2,
+        0,
+        0
+      ],
+      "same_map": true,
+      "conv_mac_saving_pct": 35.098900041890325,
+      "router_mse444": 0.0013539758510887623,
+      "bayer_mse444": 0.0013539758510887623,
+      "router_delta444_db": 0.04886658795812067,
+      "bayer_delta444_db": 0.04886658795812067,
+      "placement_gain_db": 0.0
+    },
+    {
+      "image": "0804.png",
+      "qp": 16,
+      "case_sha256": "f6a3474e732b96123c60d620f3dfd1c2b3d8c57b0523e78160a1562eba5139d9",
+      "stream_sha256": "04453d895c71527b1f4e775a6890993f58197994b68fd843d2127ff043e8f1fd",
+      "source_sha256": "16b5fdbe808b868bed0be32f235208a1716d44e271a37b79cbc77ab53d2f6bdb",
+      "selected_beta": 15.0,
+      "router_map": [
+        4,
+        3,
+        4,
+        3,
+        3,
+        3
+      ],
+      "bayer_map": [
+        4,
+        3,
+        4,
+        3,
+        3,
+        3
+      ],
+      "exit_counts": [
+        0,
+        0,
+        0,
+        4,
+        2,
+        0
+      ],
+      "same_map": true,
+      "conv_mac_saving_pct": 21.42521617610086,
+      "router_mse444": 0.000631405389867723,
+      "bayer_mse444": 0.000631405389867723,
+      "router_delta444_db": 0.04847872979495085,
+      "bayer_delta444_db": 0.04847872979495085,
+      "placement_gain_db": 0.0
+    },
+    {
+      "image": "0804.png",
+      "qp": 32,
+      "case_sha256": "6eef97b33a2d6e47aaf227711f698a40df424e64fd12caecbcef57a60842cd0b",
+      "stream_sha256": "9442c87a31aaf90ec327610207dbb6ad8834acd3ada352ffcc761640b89122fa",
+      "source_sha256": "16b5fdbe808b868bed0be32f235208a1716d44e271a37b79cbc77ab53d2f6bdb",
+      "selected_beta": 15.0,
+      "router_map": [
+        4,
+        3,
+        4,
+        3,
+        3,
+        3
+      ],
+      "bayer_map": [
+        4,
+        3,
+        4,
+        3,
+        3,
+        3
+      ],
+      "exit_counts": [
+        0,
+        0,
+        0,
+        4,
+        2,
+        0
+      ],
+      "same_map": true,
+      "conv_mac_saving_pct": 21.42521617610086,
+      "router_mse444": 0.00032354003633372486,
+      "bayer_mse444": 0.00032354003633372486,
+      "router_delta444_db": 0.07001804195962606,
+      "bayer_delta444_db": 0.07001804195962606,
+      "placement_gain_db": 0.0
+    },
+    {
+      "image": "0804.png",
+      "qp": 48,
+      "case_sha256": "dbb9d1a37770254b7fc6af7387722ebbe7e3a62cd1378d9193e053ccefb52735",
+      "stream_sha256": "98f64735e249cc6da7efc6da65c7b1e0bf3ac326897cf01cf53ebd0a9c4ec32d",
+      "source_sha256": "16b5fdbe808b868bed0be32f235208a1716d44e271a37b79cbc77ab53d2f6bdb",
+      "selected_beta": 10.0,
+      "router_map": [
+        4,
+        3,
+        4,
+        3,
+        3,
+        3
+      ],
+      "bayer_map": [
+        4,
+        3,
+        4,
+        3,
+        3,
+        3
+      ],
+      "exit_counts": [
+        0,
+        0,
+        0,
+        4,
+        2,
+        0
+      ],
+      "same_map": true,
+      "conv_mac_saving_pct": 21.42521617610086,
+      "router_mse444": 0.0001729530922602862,
+      "bayer_mse444": 0.0001729530922602862,
+      "router_delta444_db": 0.07790457883158447,
+      "bayer_delta444_db": 0.07790457883158447,
+      "placement_gain_db": 0.0
+    },
+    {
+      "image": "0804.png",
+      "qp": 63,
+      "case_sha256": "1563014187b6954308e534088c2f31f06122ddebb50511bae0b2f7720012d0dd",
+      "stream_sha256": "06bad863c7c6b80865c373df6972a8ddf9052eabfd75b73323f0d93db23642fb",
+      "source_sha256": "16b5fdbe808b868bed0be32f235208a1716d44e271a37b79cbc77ab53d2f6bdb",
+      "selected_beta": 5.0,
+      "router_map": [
+        5,
+        3,
+        4,
+        3,
+        3,
+        3
+      ],
+      "bayer_map": [
+        5,
+        3,
+        4,
+        3,
+        3,
+        3
+      ],
+      "exit_counts": [
+        0,
+        0,
+        0,
+        4,
+        1,
+        1
+      ],
+      "same_map": true,
+      "conv_mac_saving_pct": 19.094659934546875,
+      "router_mse444": 9.409955237060785e-05,
+      "bayer_mse444": 9.409955237060785e-05,
+      "router_delta444_db": 0.06460137161771475,
+      "bayer_delta444_db": 0.06460137161771475,
+      "placement_gain_db": 0.0
+    },
+    {
+      "image": "0813.png",
+      "qp": 0,
+      "case_sha256": "d2de702090c66a069a9f4ae2c09760fa63b9be03911aa067df9819647736ae1d",
+      "stream_sha256": "73e7b13492c32639da61081aff0f92f9023938f714d94b421e5106a9f971267e",
+      "source_sha256": "71c06a2c36979345c99c887e7bd6aebfd0bd1648d93b7bd15f56c65e1291b37e",
+      "selected_beta": 45.0,
+      "router_map": [
+        2,
+        2,
+        2,
+        2,
+        3,
+        2
+      ],
+      "bayer_map": [
+        3,
+        2,
+        2,
+        2,
+        2,
+        2
+      ],
+      "exit_counts": [
+        0,
+        0,
+        5,
+        1,
+        0,
+        0
+      ],
+      "same_map": false,
+      "conv_mac_saving_pct": 37.584280838364506,
+      "router_mse444": 0.0011239279992878437,
+      "bayer_mse444": 0.0011265212669968605,
+      "router_delta444_db": 0.08083588472588199,
+      "bayer_delta444_db": 0.09084492933309793,
+      "placement_gain_db": 0.010009044607216338
+    },
+    {
+      "image": "0813.png",
+      "qp": 16,
+      "case_sha256": "6507caa074a7fb8f3c4e154b324f3ac07a078ed50ea58b1ad9e58c7d7d77a57c",
+      "stream_sha256": "15746215766fbf3d874f87dd6b6b358cda5c82b0ee0e2ffb1c56e61dda5ca889",
+      "source_sha256": "71c06a2c36979345c99c887e7bd6aebfd0bd1648d93b7bd15f56c65e1291b37e",
+      "selected_beta": 15.0,
+      "router_map": [
+        3,
+        4,
+        3,
+        3,
+        3,
+        3
+      ],
+      "bayer_map": [
+        4,
+        3,
+        3,
+        3,
+        3,
+        3
+      ],
+      "exit_counts": [
+        0,
+        0,
+        0,
+        5,
+        1,
+        0
+      ],
+      "same_map": false,
+      "conv_mac_saving_pct": 23.2913002416721,
+      "router_mse444": 0.0005277912132441998,
+      "bayer_mse444": 0.000527909433003515,
+      "router_delta444_db": 0.030837598469201165,
+      "bayer_delta444_db": 0.03181026414899703,
+      "placement_gain_db": 0.0009726656797960007
+    },
+    {
+      "image": "0813.png",
+      "qp": 32,
+      "case_sha256": "2bd0b5e1b8046a062989733f97c6594199800ea09c8c37d1e8f84df06e53b5f5",
+      "stream_sha256": "89d2f56aa89989124aa6fe9d49895462f404b4bfdc206f1b2499b17db11269be",
+      "source_sha256": "71c06a2c36979345c99c887e7bd6aebfd0bd1648d93b7bd15f56c65e1291b37e",
+      "selected_beta": 15.0,
+      "router_map": [
+        3,
+        4,
+        2,
+        2,
+        3,
+        3
+      ],
+      "bayer_map": [
+        4,
+        3,
+        3,
+        2,
+        3,
+        2
+      ],
+      "exit_counts": [
+        0,
+        0,
+        2,
+        3,
+        1,
+        0
+      ],
+      "same_map": false,
+      "conv_mac_saving_pct": 28.262058853719086,
+      "router_mse444": 0.0002611777454148978,
+      "bayer_mse444": 0.0002617164282128215,
+      "router_delta444_db": 0.0698478752181756,
+      "bayer_delta444_db": 0.07879603571398568,
+      "placement_gain_db": 0.008948160495809725
+    },
+    {
+      "image": "0813.png",
+      "qp": 48,
+      "case_sha256": "347a87b147a6ebd7983ce349d709f10918810cc4712f12ba01daa887b1be4be1",
+      "stream_sha256": "4747160b1a418bb4f16875164e01e336059b4f9e7018ea93bcb133f2cf93ac11",
+      "source_sha256": "71c06a2c36979345c99c887e7bd6aebfd0bd1648d93b7bd15f56c65e1291b37e",
+      "selected_beta": 10.0,
+      "router_map": [
+        3,
+        4,
+        2,
+        2,
+        3,
+        2
+      ],
+      "bayer_map": [
+        4,
+        2,
+        3,
+        2,
+        3,
+        2
+      ],
+      "exit_counts": [
+        0,
+        0,
+        3,
+        2,
+        1,
+        0
+      ],
+      "same_map": false,
+      "conv_mac_saving_pct": 30.747435179844906,
+      "router_mse444": 0.00013949029380455613,
+      "bayer_mse444": 0.00014128083421383053,
+      "router_delta444_db": 0.09124960329787363,
+      "bayer_delta444_db": 0.14664221911386466,
+      "placement_gain_db": 0.05539261581599086
+    },
+    {
+      "image": "0813.png",
+      "qp": 63,
+      "case_sha256": "d36352c585f1ca9063a580fdd98136727c0d7ab4cf96aa6ca49f6b288560278e",
+      "stream_sha256": "846e09cfedcc2de1c9cd3ffc4ccbdfe0c8d5caa367e86de27ee81f3249b60ada",
+      "source_sha256": "71c06a2c36979345c99c887e7bd6aebfd0bd1648d93b7bd15f56c65e1291b37e",
+      "selected_beta": 5.0,
+      "router_map": [
+        3,
+        4,
+        2,
+        2,
+        3,
+        2
+      ],
+      "bayer_map": [
+        4,
+        2,
+        3,
+        2,
+        3,
+        2
+      ],
+      "exit_counts": [
+        0,
+        0,
+        3,
+        2,
+        1,
+        0
+      ],
+      "same_map": false,
+      "conv_mac_saving_pct": 30.747435179844906,
+      "router_mse444": 7.550606824224815e-05,
+      "bayer_mse444": 7.682613068027422e-05,
+      "router_delta444_db": 0.11679430692770014,
+      "bayer_delta444_db": 0.19206535108944392,
+      "placement_gain_db": 0.07527104416174311
+    },
+    {
+      "image": "0819.png",
+      "qp": 0,
+      "case_sha256": "e042552766d5ccf82331709037b73d5dce20b4aca969246ade13aef73c02cb61",
+      "stream_sha256": "ced3d8fcebb1af145ac4412e170081876c309dc328d0eb273a4f427591a45d80",
+      "source_sha256": "fcbc6cb7e7cdb717e94d8c8eaf659d6b2bfa513aa133c0d2c4a8e2aa96092529",
+      "selected_beta": 45.0,
+      "router_map": [
+        2,
+        2,
+        2,
+        2,
+        2,
+        2
+      ],
+      "bayer_map": [
+        2,
+        2,
+        2,
+        2,
+        2,
+        2
+      ],
+      "exit_counts": [
+        0,
+        0,
+        6,
+        0,
+        0,
+        0
+      ],
+      "same_map": true,
+      "conv_mac_saving_pct": 40.06966163416955,
+      "router_mse444": 0.0011257329024374485,
+      "bayer_mse444": 0.0011257329024374485,
+      "router_delta444_db": 0.0488724158553567,
+      "bayer_delta444_db": 0.0488724158553567,
+      "placement_gain_db": 0.0
+    },
+    {
+      "image": "0819.png",
+      "qp": 16,
+      "case_sha256": "41bf746d257e86c0c8c5eeae82b889346a25db55313da1bea4c708183797656a",
+      "stream_sha256": "2d1abaec6e90fc65ace5832a07ae902f75578173fe672093cd999b3b6e12b72f",
+      "source_sha256": "fcbc6cb7e7cdb717e94d8c8eaf659d6b2bfa513aa133c0d2c4a8e2aa96092529",
+      "selected_beta": 15.0,
+      "router_map": [
+        3,
+        3,
+        3,
+        3,
+        3,
+        3
+      ],
+      "bayer_map": [
+        3,
+        3,
+        3,
+        3,
+        3,
+        3
+      ],
+      "exit_counts": [
+        0,
+        0,
+        0,
+        6,
+        0,
+        0
+      ],
+      "same_map": true,
+      "conv_mac_saving_pct": 25.15737834811714,
+      "router_mse444": 0.0005470956675708294,
+      "bayer_mse444": 0.0005470956675708294,
+      "router_delta444_db": 0.030602802507051007,
+      "bayer_delta444_db": 0.030602802507051007,
+      "placement_gain_db": 0.0
+    },
+    {
+      "image": "0819.png",
+      "qp": 32,
+      "case_sha256": "a72c5c0a47356f353b965016c29d316ef904656aa848fec46b4096f4acdbed48",
+      "stream_sha256": "8d74ca035ad46b5f20777016de849b56ddc09e040df849829b1ce0b50e9b6c45",
+      "source_sha256": "fcbc6cb7e7cdb717e94d8c8eaf659d6b2bfa513aa133c0d2c4a8e2aa96092529",
+      "selected_beta": 15.0,
+      "router_map": [
+        3,
+        3,
+        3,
+        3,
+        3,
+        3
+      ],
+      "bayer_map": [
+        3,
+        3,
+        3,
+        3,
+        3,
+        3
+      ],
+      "exit_counts": [
+        0,
+        0,
+        0,
+        6,
+        0,
+        0
+      ],
+      "same_map": true,
+      "conv_mac_saving_pct": 25.15737834811714,
+      "router_mse444": 0.00024965385091491044,
+      "bayer_mse444": 0.00024965385091491044,
+      "router_delta444_db": 0.06425854594236297,
+      "bayer_delta444_db": 0.06425854594236297,
+      "placement_gain_db": 0.0
+    },
+    {
+      "image": "0819.png",
+      "qp": 48,
+      "case_sha256": "862b1afc724969e306f6c08a916c035ab47304cb4eee743e02bd4f76a43268bd",
+      "stream_sha256": "f2469f6ffa381157e09f4ae7d0f722c7ff047cd78dd60f654e167c8c8639f8cd",
+      "source_sha256": "fcbc6cb7e7cdb717e94d8c8eaf659d6b2bfa513aa133c0d2c4a8e2aa96092529",
+      "selected_beta": 10.0,
+      "router_map": [
+        3,
+        3,
+        3,
+        3,
+        3,
+        3
+      ],
+      "bayer_map": [
+        3,
+        3,
+        3,
+        3,
+        3,
+        3
+      ],
+      "exit_counts": [
+        0,
+        0,
+        0,
+        6,
+        0,
+        0
+      ],
+      "same_map": true,
+      "conv_mac_saving_pct": 25.15737834811714,
+      "router_mse444": 0.00011225688649574295,
+      "bayer_mse444": 0.00011225688649574295,
+      "router_delta444_db": 0.14101902927887022,
+      "bayer_delta444_db": 0.14101902927887022,
+      "placement_gain_db": 0.0
+    },
+    {
+      "image": "0819.png",
+      "qp": 63,
+      "case_sha256": "239c24b7cac23320aaffc24ef39396f6073a0201d8f60569c573b00b96a463a2",
+      "stream_sha256": "46c374e8918411feecf2886cc69b2caff6de5a1471a1306efb9999e99b25e31b",
+      "source_sha256": "fcbc6cb7e7cdb717e94d8c8eaf659d6b2bfa513aa133c0d2c4a8e2aa96092529",
+      "selected_beta": 5.0,
+      "router_map": [
+        3,
+        3,
+        3,
+        3,
+        3,
+        3
+      ],
+      "bayer_map": [
+        3,
+        3,
+        3,
+        3,
+        3,
+        3
+      ],
+      "exit_counts": [
+        0,
+        0,
+        0,
+        6,
+        0,
+        0
+      ],
+      "same_map": true,
+      "conv_mac_saving_pct": 25.15737834811714,
+      "router_mse444": 5.8244604588253424e-05,
+      "bayer_mse444": 5.8244604588253424e-05,
+      "router_delta444_db": 0.2469532930211023,
+      "bayer_delta444_db": 0.2469532930211023,
+      "placement_gain_db": 0.0
+    },
+    {
+      "image": "0823.png",
+      "qp": 0,
+      "case_sha256": "603a50fd3294684780f1df15ab4c4dd8e8ff743dfcbec2f5bfda0444b4ddb851",
+      "stream_sha256": "a541836352405c0e318c2723a7055ead9296e458738ad188010f61b5e0df4548",
+      "source_sha256": "8db26bddf2ac9975e5227be3eb1180f6377145eee5dca1e421100014cbd7ef6e",
+      "selected_beta": 45.0,
+      "router_map": [
+        2,
+        2,
+        2,
+        2,
+        3,
+        2
+      ],
+      "bayer_map": [
+        3,
+        2,
+        2,
+        2,
+        2,
+        2
+      ],
+      "exit_counts": [
+        0,
+        0,
+        5,
+        1,
+        0,
+        0
+      ],
+      "same_map": false,
+      "conv_mac_saving_pct": 37.584280838364506,
+      "router_mse444": 0.0018785647116601467,
+      "bayer_mse444": 0.0018792477203533053,
+      "router_delta444_db": 0.050985704900358635,
+      "bayer_delta444_db": 0.05256442611204098,
+      "placement_gain_db": 0.0015787212116821216
+    },
+    {
+      "image": "0823.png",
+      "qp": 16,
+      "case_sha256": "6e8c53fc89d444a6cc24d8b3d9729953d2d7c9986f1d97098362ca6a84d21373",
+      "stream_sha256": "8e47caf68dd1dc71b780b210c71e63da9bf401d2a76d95b9fb2c8db972b9981d",
+      "source_sha256": "8db26bddf2ac9975e5227be3eb1180f6377145eee5dca1e421100014cbd7ef6e",
+      "selected_beta": 15.0,
+      "router_map": [
+        4,
+        3,
+        2,
+        4,
+        4,
+        3
+      ],
+      "bayer_map": [
+        4,
+        3,
+        4,
+        3,
+        4,
+        2
+      ],
+      "exit_counts": [
+        0,
+        0,
+        1,
+        2,
+        3,
+        0
+      ],
+      "same_map": false,
+      "conv_mac_saving_pct": 22.04450843531717,
+      "router_mse444": 0.0008782293298281729,
+      "bayer_mse444": 0.0008806114201433957,
+      "router_delta444_db": 0.03619417426717507,
+      "bayer_delta444_db": 0.04795793755101997,
+      "placement_gain_db": 0.011763763283845216
+    },
+    {
+      "image": "0823.png",
+      "qp": 32,
+      "case_sha256": "ee3e0f9401703c10ae9bfbcca312c50467b6ba2f2e488f67139cd2124c99f0c0",
+      "stream_sha256": "a671abb24af62c53e36d4da61ea43472b8f78545f318a91909b0c1ef9486c463",
+      "source_sha256": "8db26bddf2ac9975e5227be3eb1180f6377145eee5dca1e421100014cbd7ef6e",
+      "selected_beta": 15.0,
+      "router_map": [
+        4,
+        3,
+        2,
+        4,
+        4,
+        4
+      ],
+      "bayer_map": [
+        4,
+        4,
+        4,
+        3,
+        4,
+        2
+      ],
+      "exit_counts": [
+        0,
+        0,
+        1,
+        1,
+        4,
+        0
+      ],
+      "same_map": false,
+      "conv_mac_saving_pct": 20.178430328872132,
+      "router_mse444": 0.00038531533209607005,
+      "bayer_mse444": 0.0003870967775583267,
+      "router_delta444_db": 0.07461309734549025,
+      "bayer_delta444_db": 0.09464575338952923,
+      "placement_gain_db": 0.02003265604403824
+    },
+    {
+      "image": "0823.png",
+      "qp": 48,
+      "case_sha256": "62fc062813af03edb8b458365fbfbca771b73170ae031215a7368acc010fb445",
+      "stream_sha256": "d097a8475b165c3ad22d0d4c43cc3138d3bf1cd2b8f92ce732274f73b7558707",
+      "source_sha256": "8db26bddf2ac9975e5227be3eb1180f6377145eee5dca1e421100014cbd7ef6e",
+      "selected_beta": 10.0,
+      "router_map": [
+        5,
+        5,
+        2,
+        5,
+        5,
+        5
+      ],
+      "bayer_map": [
+        5,
+        5,
+        5,
+        5,
+        5,
+        2
+      ],
+      "exit_counts": [
+        0,
+        0,
+        1,
+        0,
+        0,
+        5
+      ],
+      "same_map": false,
+      "conv_mac_saving_pct": 6.65956505686925,
+      "router_mse444": 0.00016528001287952065,
+      "bayer_mse444": 0.00016820739256218076,
+      "router_delta444_db": 0.012819895098293947,
+      "bayer_delta444_db": 0.08906730221182901,
+      "placement_gain_db": 0.07624740711353459
+    },
+    {
+      "image": "0823.png",
+      "qp": 63,
+      "case_sha256": "50fbfe2d0da4554b47677dbe9159a051106aa642158e6c81645845dfcf928890",
+      "stream_sha256": "f83b22227d715c2c5365a69a9101548fbaf4645eaebee838d27594ad40c2bd94",
+      "source_sha256": "8db26bddf2ac9975e5227be3eb1180f6377145eee5dca1e421100014cbd7ef6e",
+      "selected_beta": 5.0,
+      "router_map": [
+        5,
+        5,
+        2,
+        5,
+        5,
+        5
+      ],
+      "bayer_map": [
+        5,
+        5,
+        5,
+        5,
+        5,
+        2
+      ],
+      "exit_counts": [
+        0,
+        0,
+        1,
+        0,
+        0,
+        5
+      ],
+      "same_map": false,
+      "conv_mac_saving_pct": 6.65956505686925,
+      "router_mse444": 9.118701564148068e-05,
+      "bayer_mse444": 9.442539158044383e-05,
+      "router_delta444_db": 0.024638772111354488,
+      "bayer_delta444_db": 0.17619669326518123,
+      "placement_gain_db": 0.15155792115382688
+    },
+    {
+      "image": "0824.png",
+      "qp": 0,
+      "case_sha256": "51739b10830b922603e67de21ffba2bab814c9f32cae37bac9ae42d3399a97f5",
+      "stream_sha256": "f3c7610c86ee861509c89f33012bc44caabea812788166f5a7716dae52267049",
+      "source_sha256": "484316545f6b08655d30faa1bc5f29eb6821d049b62bb528319b504790c188e2",
+      "selected_beta": 45.0,
+      "router_map": [
+        2,
+        3,
+        3,
+        3,
+        3,
+        3
+      ],
+      "bayer_map": [
+        3,
+        3,
+        3,
+        3,
+        3,
+        2
+      ],
+      "exit_counts": [
+        0,
+        0,
+        1,
+        5,
+        0,
+        0
+      ],
+      "same_map": false,
+      "conv_mac_saving_pct": 27.6427606340383,
+      "router_mse444": 0.0017524049617350101,
+      "bayer_mse444": 0.001758446334861219,
+      "router_delta444_db": 0.048534351022201605,
+      "bayer_delta444_db": 0.06348079779454911,
+      "placement_gain_db": 0.014946446772347464
+    },
+    {
+      "image": "0824.png",
+      "qp": 16,
+      "case_sha256": "85b7f68af6ae78070c863a55c0ddda3cda60305b2705e2c0fe0e47f8508b0f68",
+      "stream_sha256": "547923f3448533e9455423be5705543657154f5b3cb731ff8cd91f8d0d25de93",
+      "source_sha256": "484316545f6b08655d30faa1bc5f29eb6821d049b62bb528319b504790c188e2",
+      "selected_beta": 15.0,
+      "router_map": [
+        3,
+        4,
+        4,
+        3,
+        4,
+        4
+      ],
+      "bayer_map": [
+        4,
+        4,
+        4,
+        3,
+        4,
+        3
+      ],
+      "exit_counts": [
+        0,
+        0,
+        0,
+        2,
+        4,
+        0
+      ],
+      "same_map": false,
+      "conv_mac_saving_pct": 17.693048042281834,
+      "router_mse444": 0.0009356226073578,
+      "bayer_mse444": 0.0009370480547659099,
+      "router_delta444_db": 0.03803923652522448,
+      "bayer_delta444_db": 0.0446508001671265,
+      "placement_gain_db": 0.0066115636419017305
+    },
+    {
+      "image": "0824.png",
+      "qp": 32,
+      "case_sha256": "2d8ea077e1cab1d0c39e82346c8006cd39d5142eae9bfcb0f5857d0f0479b9ce",
+      "stream_sha256": "a68dba2dfcfd0238b2e144ab0d105eee228362b9a3557a7801dc9c3f747df632",
+      "source_sha256": "484316545f6b08655d30faa1bc5f29eb6821d049b62bb528319b504790c188e2",
+      "selected_beta": 15.0,
+      "router_map": [
+        3,
+        4,
+        5,
+        3,
+        4,
+        5
+      ],
+      "bayer_map": [
+        5,
+        4,
+        5,
+        3,
+        4,
+        3
+      ],
+      "exit_counts": [
+        0,
+        0,
+        0,
+        2,
+        2,
+        2
+      ],
+      "same_map": false,
+      "conv_mac_saving_pct": 13.031935560512139,
+      "router_mse444": 0.00040457729483023286,
+      "bayer_mse444": 0.0004066768742632121,
+      "router_delta444_db": 0.05533084193009915,
+      "bayer_delta444_db": 0.07781054884954944,
+      "placement_gain_db": 0.022479706919450372
+    },
+    {
+      "image": "0824.png",
+      "qp": 48,
+      "case_sha256": "be974225038834b82451690742a85c082d57b3101b5959cc7d071e1fa0f1e97c",
+      "stream_sha256": "b3f53977f1950ba6089dba54003e17ab503ae964b0339b50bf7476d644555ae2",
+      "source_sha256": "484316545f6b08655d30faa1bc5f29eb6821d049b62bb528319b504790c188e2",
+      "selected_beta": 10.0,
+      "router_map": [
+        5,
+        5,
+        5,
+        5,
+        5,
+        5
+      ],
+      "bayer_map": [
+        5,
+        5,
+        5,
+        5,
+        5,
+        5
+      ],
+      "exit_counts": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        6
+      ],
+      "same_map": true,
+      "conv_mac_saving_pct": -0.02245455661402243,
+      "router_mse444": 0.00017529197793919593,
+      "bayer_mse444": 0.00017529197793919593,
+      "router_delta444_db": 0.0,
+      "bayer_delta444_db": 0.0,
+      "placement_gain_db": 0.0
+    },
+    {
+      "image": "0824.png",
+      "qp": 63,
+      "case_sha256": "9c9284e2803604165851bf711f75f5d998ab7d93fe267c8652c7562fccfea3d3",
+      "stream_sha256": "afcfda8694e2f91a2c48ecb709d8c9dbeea820f20e6a0a1daa498e5ce4f162c4",
+      "source_sha256": "484316545f6b08655d30faa1bc5f29eb6821d049b62bb528319b504790c188e2",
+      "selected_beta": 5.0,
+      "router_map": [
+        5,
+        5,
+        5,
+        5,
+        5,
+        5
+      ],
+      "bayer_map": [
+        5,
+        5,
+        5,
+        5,
+        5,
+        5
+      ],
+      "exit_counts": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        6
+      ],
+      "same_map": true,
+      "conv_mac_saving_pct": -0.02245455661402243,
+      "router_mse444": 0.0001031827850965783,
+      "bayer_mse444": 0.0001031827850965783,
+      "router_delta444_db": 0.0,
+      "bayer_delta444_db": 0.0,
+      "placement_gain_db": 0.0
+    },
+    {
+      "image": "0827.png",
+      "qp": 0,
+      "case_sha256": "8180cc51a57fe5c7084a0a5afa953d18bafcb38bf9f5ac0dc8d962c8218653c9",
+      "stream_sha256": "fbed0332beaf2b1b6e1f386405b60e19c31caf22e995ef4170e2503dfa4752ec",
+      "source_sha256": "e8cfa94ed77a021b63da63406940de3a830fe1217e752b5929d50602a1aaa407",
+      "selected_beta": 45.0,
+      "router_map": [
+        2,
+        2,
+        2,
+        2,
+        2,
+        2
+      ],
+      "bayer_map": [
+        2,
+        2,
+        2,
+        2,
+        2,
+        2
+      ],
+      "exit_counts": [
+        0,
+        0,
+        6,
+        0,
+        0,
+        0
+      ],
+      "same_map": true,
+      "conv_mac_saving_pct": 40.06966163416955,
+      "router_mse444": 0.0003617413458414376,
+      "bayer_mse444": 0.0003617413458414376,
+      "router_delta444_db": 0.10384204118517681,
+      "bayer_delta444_db": 0.10384204118517681,
+      "placement_gain_db": 0.0
+    },
+    {
+      "image": "0827.png",
+      "qp": 16,
+      "case_sha256": "d9aec8f6d5effead8092eb927df4e5f93f5a20d4e6296ebb6088e2184863418b",
+      "stream_sha256": "12ad2719a9681cc27ee7dde7bed8231ea2e7db217c8416fb2f0b7a5aa447d80f",
+      "source_sha256": "e8cfa94ed77a021b63da63406940de3a830fe1217e752b5929d50602a1aaa407",
+      "selected_beta": 15.0,
+      "router_map": [
+        2,
+        3,
+        2,
+        2,
+        3,
+        2
+      ],
+      "bayer_map": [
+        3,
+        2,
+        3,
+        2,
+        2,
+        2
+      ],
+      "exit_counts": [
+        0,
+        0,
+        4,
+        2,
+        0,
+        0
+      ],
+      "same_map": false,
+      "conv_mac_saving_pct": 35.098900041890325,
+      "router_mse444": 0.0001917583285830915,
+      "bayer_mse444": 0.00019336843979544938,
+      "router_delta444_db": 0.09445470551091245,
+      "bayer_delta444_db": 0.13076828048184483,
+      "placement_gain_db": 0.03631357497093217
+    },
+    {
+      "image": "0827.png",
+      "qp": 32,
+      "case_sha256": "cf81fe6b9f2944011bd0da9b541eeb02ffc77665988bab0ca3c1c2d9579f8be6",
+      "stream_sha256": "38a028f17121d6934d1d209b3abe3cc5ce7e917c8636ff3f9f0f09e2b2c670f0",
+      "source_sha256": "e8cfa94ed77a021b63da63406940de3a830fe1217e752b5929d50602a1aaa407",
+      "selected_beta": 15.0,
+      "router_map": [
+        2,
+        3,
+        2,
+        2,
+        3,
+        2
+      ],
+      "bayer_map": [
+        3,
+        2,
+        3,
+        2,
+        2,
+        2
+      ],
+      "exit_counts": [
+        0,
+        0,
+        4,
+        2,
+        0,
+        0
+      ],
+      "same_map": false,
+      "conv_mac_saving_pct": 35.098900041890325,
+      "router_mse444": 0.00011394430475775152,
+      "bayer_mse444": 0.00011451110185589641,
+      "router_delta444_db": 0.09439955091303616,
+      "bayer_delta444_db": 0.11594925820985862,
+      "placement_gain_db": 0.02154970729682268
+    },
+    {
+      "image": "0827.png",
+      "qp": 48,
+      "case_sha256": "a7ffa66876451efa11059b993a80768c70e68105eebb2378a9a28f2f5d6bab2b",
+      "stream_sha256": "99ae79c3839974e5f3c041391af4f4115752264bd6dd519e62797a1411a289a9",
+      "source_sha256": "e8cfa94ed77a021b63da63406940de3a830fe1217e752b5929d50602a1aaa407",
+      "selected_beta": 10.0,
+      "router_map": [
+        2,
+        2,
+        2,
+        2,
+        3,
+        2
+      ],
+      "bayer_map": [
+        3,
+        2,
+        2,
+        2,
+        2,
+        2
+      ],
+      "exit_counts": [
+        0,
+        0,
+        5,
+        1,
+        0,
+        0
+      ],
+      "same_map": false,
+      "conv_mac_saving_pct": 37.584280838364506,
+      "router_mse444": 6.735846545780078e-05,
+      "bayer_mse444": 6.752420449629426e-05,
+      "router_delta444_db": 0.12136868009730738,
+      "bayer_delta444_db": 0.13204159843508953,
+      "placement_gain_db": 0.010672918337782621
+    },
+    {
+      "image": "0827.png",
+      "qp": 63,
+      "case_sha256": "b3666be67ac001fc95fc6618f7c2a07dca126cacd706ae1bfa6ea285643dc199",
+      "stream_sha256": "0081496067d1050a8e725b797a8e2e446a40cfe684f2cc8858d5ff81884c1399",
+      "source_sha256": "e8cfa94ed77a021b63da63406940de3a830fe1217e752b5929d50602a1aaa407",
+      "selected_beta": 5.0,
+      "router_map": [
+        2,
+        2,
+        2,
+        2,
+        2,
+        2
+      ],
+      "bayer_map": [
+        2,
+        2,
+        2,
+        2,
+        2,
+        2
+      ],
+      "exit_counts": [
+        0,
+        0,
+        6,
+        0,
+        0,
+        0
+      ],
+      "same_map": true,
+      "conv_mac_saving_pct": 40.06966163416955,
+      "router_mse444": 4.009463737020269e-05,
+      "bayer_mse444": 4.009463737020269e-05,
+      "router_delta444_db": 0.15363363087696558,
+      "bayer_delta444_db": 0.15363363087696558,
+      "placement_gain_db": 0.0
+    },
+    {
+      "image": "0830.png",
+      "qp": 0,
+      "case_sha256": "dba6326e2acbaf7e58852c7675b6a46e290f8deff125f36363ba34c5430339ee",
+      "stream_sha256": "5de979f113f9e0af60621f826fb6278044e21854d2ec1a261f049bad808a7f3e",
+      "source_sha256": "4eb18566ab01447a06daf0314a3711aa78cea5ca0eaa47cfedafbceeb6dd0a3e",
+      "selected_beta": 45.0,
+      "router_map": [
+        3,
+        2,
+        3,
+        2,
+        2,
+        2
+      ],
+      "bayer_map": [
+        3,
+        2,
+        3,
+        2,
+        2,
+        2
+      ],
+      "exit_counts": [
+        0,
+        0,
+        4,
+        2,
+        0,
+        0
+      ],
+      "same_map": true,
+      "conv_mac_saving_pct": 35.098900041890325,
+      "router_mse444": 0.002216479741036892,
+      "bayer_mse444": 0.002216479741036892,
+      "router_delta444_db": 0.04859951825572088,
+      "bayer_delta444_db": 0.04859951825572088,
+      "placement_gain_db": 0.0
+    },
+    {
+      "image": "0830.png",
+      "qp": 16,
+      "case_sha256": "34702c21056e7c7efed5d7415ea2d3fd7326de8d26689161120446767a253e2d",
+      "stream_sha256": "d30330a6d703abcb5dc2050cdff6194137dd688a9be6804f224bdecf0971ff24",
+      "source_sha256": "4eb18566ab01447a06daf0314a3711aa78cea5ca0eaa47cfedafbceeb6dd0a3e",
+      "selected_beta": 15.0,
+      "router_map": [
+        4,
+        4,
+        4,
+        3,
+        3,
+        3
+      ],
+      "bayer_map": [
+        4,
+        3,
+        4,
+        3,
+        4,
+        3
+      ],
+      "exit_counts": [
+        0,
+        0,
+        0,
+        3,
+        3,
+        0
+      ],
+      "same_map": false,
+      "conv_mac_saving_pct": 19.559132109191346,
+      "router_mse444": 0.0011054093483835459,
+      "bayer_mse444": 0.0011053945636376739,
+      "router_delta444_db": 0.026814279948968532,
+      "bayer_delta444_db": 0.026756193082795636,
+      "placement_gain_db": -5.808686617350699e-05
+    },
+    {
+      "image": "0830.png",
+      "qp": 32,
+      "case_sha256": "183b50c15457557b53e00005d739dca7e279e681eb6f555bbcefd913bbe427ee",
+      "stream_sha256": "19b53eeae5f7f4c9adfd648fc0286b4afe84ecd1fab999203fb28a8ac4861602",
+      "source_sha256": "4eb18566ab01447a06daf0314a3711aa78cea5ca0eaa47cfedafbceeb6dd0a3e",
+      "selected_beta": 15.0,
+      "router_map": [
+        3,
+        4,
+        4,
+        3,
+        4,
+        4
+      ],
+      "bayer_map": [
+        4,
+        4,
+        4,
+        3,
+        4,
+        3
+      ],
+      "exit_counts": [
+        0,
+        0,
+        0,
+        2,
+        4,
+        0
+      ],
+      "same_map": false,
+      "conv_mac_saving_pct": 17.693048042281834,
+      "router_mse444": 0.0004864890652243048,
+      "bayer_mse444": 0.0004864330985583365,
+      "router_delta444_db": 0.057255651332303356,
+      "bayer_delta444_db": 0.05675600161453232,
+      "placement_gain_db": -0.0004996497177713056
+    },
+    {
+      "image": "0830.png",
+      "qp": 48,
+      "case_sha256": "7d9ba864d79c058eeaa4f6b010cbea29e9287df53e8af80737a2b121a065fceb",
+      "stream_sha256": "7dfe7307c29ef4268751904ef17d0527d7265f2bc9b9a93aedf8e16ab51f4a04",
+      "source_sha256": "4eb18566ab01447a06daf0314a3711aa78cea5ca0eaa47cfedafbceeb6dd0a3e",
+      "selected_beta": 10.0,
+      "router_map": [
+        5,
+        5,
+        5,
+        5,
+        5,
+        5
+      ],
+      "bayer_map": [
+        5,
+        5,
+        5,
+        5,
+        5,
+        5
+      ],
+      "exit_counts": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        6
+      ],
+      "same_map": true,
+      "conv_mac_saving_pct": -0.02245455661402243,
+      "router_mse444": 0.00021227626712061465,
+      "bayer_mse444": 0.00021227626712061465,
+      "router_delta444_db": 0.0,
+      "bayer_delta444_db": 0.0,
+      "placement_gain_db": 0.0
+    },
+    {
+      "image": "0830.png",
+      "qp": 63,
+      "case_sha256": "0142eb34d5e90a57f604ae4995e619054dbd8403af2f7e5cf41b3c825cbddc6e",
+      "stream_sha256": "e7bd1e8b3f090288f9bd3f153b65fc44c27763dfe02c9a1b5c8396548330ec94",
+      "source_sha256": "4eb18566ab01447a06daf0314a3711aa78cea5ca0eaa47cfedafbceeb6dd0a3e",
+      "selected_beta": 5.0,
+      "router_map": [
+        5,
+        5,
+        5,
+        5,
+        5,
+        5
+      ],
+      "bayer_map": [
+        5,
+        5,
+        5,
+        5,
+        5,
+        5
+      ],
+      "exit_counts": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        6
+      ],
+      "same_map": true,
+      "conv_mac_saving_pct": -0.02245455661402243,
+      "router_mse444": 0.00011968467879341915,
+      "bayer_mse444": 0.00011968467879341915,
+      "router_delta444_db": 0.0,
+      "bayer_delta444_db": 0.0,
+      "placement_gain_db": 0.0
+    },
+    {
+      "image": "0833.png",
+      "qp": 0,
+      "case_sha256": "6d15a86ed203262bca56a37798c4f96037df5b837333c5b326cd8fb84757c79b",
+      "stream_sha256": "4a324bf28bf95b3b4161ccfac66db65c92c36b6f0fb173675e50314428ad9ad6",
+      "source_sha256": "2e9668b3a318284ec90c9bbdd940317ecd2f7b95314e68c48c94d2380fad679a",
+      "selected_beta": 45.0,
+      "router_map": [
+        2,
+        2,
+        2,
+        2,
+        2,
+        2
+      ],
+      "bayer_map": [
+        2,
+        2,
+        2,
+        2,
+        2,
+        2
+      ],
+      "exit_counts": [
+        0,
+        0,
+        6,
+        0,
+        0,
+        0
+      ],
+      "same_map": true,
+      "conv_mac_saving_pct": 40.06966163416955,
+      "router_mse444": 0.0002918135141953826,
+      "bayer_mse444": 0.0002918135141953826,
+      "router_delta444_db": 0.1794618404389811,
+      "bayer_delta444_db": 0.1794618404389811,
+      "placement_gain_db": 0.0
+    },
+    {
+      "image": "0833.png",
+      "qp": 16,
+      "case_sha256": "a4384dbc7947f9d28807806cc05ab8289164180e1d60b0939a9e849864a83a15",
+      "stream_sha256": "11066e3c5865eb29de9f833986c11bbda8449acef9765cfa19e01c189f9c9bc4",
+      "source_sha256": "2e9668b3a318284ec90c9bbdd940317ecd2f7b95314e68c48c94d2380fad679a",
+      "selected_beta": 15.0,
+      "router_map": [
+        3,
+        3,
+        3,
+        2,
+        2,
+        2
+      ],
+      "bayer_map": [
+        3,
+        2,
+        3,
+        2,
+        3,
+        2
+      ],
+      "exit_counts": [
+        0,
+        0,
+        3,
+        3,
+        0,
+        0
+      ],
+      "same_map": false,
+      "conv_mac_saving_pct": 32.61351924608528,
+      "router_mse444": 0.0001529269211459905,
+      "bayer_mse444": 0.00015497603453695774,
+      "router_delta444_db": 0.07563875462569762,
+      "bayer_delta444_db": 0.13344474580165788,
+      "placement_gain_db": 0.057805991175960095
+    },
+    {
+      "image": "0833.png",
+      "qp": 32,
+      "case_sha256": "449dc2cc5f06192d875878a8b9fcf5063f3d03d40ac9d0bf54a02afe688ac0f8",
+      "stream_sha256": "6f484574ab7fbf1972ab9a8703cfd83fea519c34eb376b70ca95bc0317c5f907",
+      "source_sha256": "2e9668b3a318284ec90c9bbdd940317ecd2f7b95314e68c48c94d2380fad679a",
+      "selected_beta": 15.0,
+      "router_map": [
+        3,
+        3,
+        3,
+        2,
+        2,
+        2
+      ],
+      "bayer_map": [
+        3,
+        2,
+        3,
+        2,
+        3,
+        2
+      ],
+      "exit_counts": [
+        0,
+        0,
+        3,
+        3,
+        0,
+        0
+      ],
+      "same_map": false,
+      "conv_mac_saving_pct": 32.61351924608528,
+      "router_mse444": 9.618326294003054e-05,
+      "bayer_mse444": 9.695663902675733e-05,
+      "router_delta444_db": 0.08441681699398705,
+      "bayer_delta444_db": 0.119197280130724,
+      "placement_gain_db": 0.03478046313673736
+    },
+    {
+      "image": "0833.png",
+      "qp": 48,
+      "case_sha256": "e129fe8aedcedf1e462dca54885b702ba6890f025db87a3ba410cfe5ad5245b8",
+      "stream_sha256": "d89d3f25f090f2a1aecb9a9eee8efbdf6680e3d9e95d75eeae400dc623de541e",
+      "source_sha256": "2e9668b3a318284ec90c9bbdd940317ecd2f7b95314e68c48c94d2380fad679a",
+      "selected_beta": 10.0,
+      "router_map": [
+        3,
+        3,
+        3,
+        2,
+        2,
+        2
+      ],
+      "bayer_map": [
+        3,
+        2,
+        3,
+        2,
+        3,
+        2
+      ],
+      "exit_counts": [
+        0,
+        0,
+        3,
+        3,
+        0,
+        0
+      ],
+      "same_map": false,
+      "conv_mac_saving_pct": 32.61351924608528,
+      "router_mse444": 6.454682443290949e-05,
+      "bayer_mse444": 6.489548832178116e-05,
+      "router_delta444_db": 0.08202075609603365,
+      "bayer_delta444_db": 0.10541699585196196,
+      "placement_gain_db": 0.02339623975592921
+    },
+    {
+      "image": "0833.png",
+      "qp": 63,
+      "case_sha256": "8f2ebf999e5895e4cb385f81e4fa42035657c99b410948d25d2c92cec0562f58",
+      "stream_sha256": "23a2c736fb71c8d94fcc0fcc9512ce2ff1f21caf7ea63ff778e583fd588531c1",
+      "source_sha256": "2e9668b3a318284ec90c9bbdd940317ecd2f7b95314e68c48c94d2380fad679a",
+      "selected_beta": 5.0,
+      "router_map": [
+        2,
+        2,
+        2,
+        2,
+        2,
+        2
+      ],
+      "bayer_map": [
+        2,
+        2,
+        2,
+        2,
+        2,
+        2
+      ],
+      "exit_counts": [
+        0,
+        0,
+        6,
+        0,
+        0,
+        0
+      ],
+      "same_map": true,
+      "conv_mac_saving_pct": 40.06966163416955,
+      "router_mse444": 4.340668601798825e-05,
+      "bayer_mse444": 4.340668601798825e-05,
+      "router_delta444_db": 0.1741893510071034,
+      "bayer_delta444_db": 0.1741893510071034,
+      "placement_gain_db": 0.0
+    },
+    {
+      "image": "0835.png",
+      "qp": 0,
+      "case_sha256": "9b32b5fde920d06d8bd7311be003a8094eb054c07f05acfc47c0fe40763f68a4",
+      "stream_sha256": "826dc9aa0f001a05ecf4ee3cab0e52221f5799534154d36806bca6956ca098cd",
+      "source_sha256": "263cfd9c7d2eee15b29250e6d0dc366ed680feb222de3f8c2fb5c6bd304608e4",
+      "selected_beta": 45.0,
+      "router_map": [
+        2,
+        2,
+        2,
+        2,
+        2,
+        2
+      ],
+      "bayer_map": [
+        2,
+        2,
+        2,
+        2,
+        2,
+        2
+      ],
+      "exit_counts": [
+        0,
+        0,
+        6,
+        0,
+        0,
+        0
+      ],
+      "same_map": true,
+      "conv_mac_saving_pct": 40.06966163416955,
+      "router_mse444": 0.0024366313591599464,
+      "bayer_mse444": 0.0024366313591599464,
+      "router_delta444_db": 0.017822869461483915,
+      "bayer_delta444_db": 0.017822869461483915,
+      "placement_gain_db": 0.0
+    },
+    {
+      "image": "0835.png",
+      "qp": 16,
+      "case_sha256": "ef0d91897a62f4663fb64fcbb2daf4f85f92e53720eb35b02f7e895f2861a527",
+      "stream_sha256": "274b8b53c10dde75a69b392ad0172c6b0202561a9c035ee2e4966c78b1bafd09",
+      "source_sha256": "263cfd9c7d2eee15b29250e6d0dc366ed680feb222de3f8c2fb5c6bd304608e4",
+      "selected_beta": 15.0,
+      "router_map": [
+        3,
+        3,
+        3,
+        3,
+        3,
+        3
+      ],
+      "bayer_map": [
+        3,
+        3,
+        3,
+        3,
+        3,
+        3
+      ],
+      "exit_counts": [
+        0,
+        0,
+        0,
+        6,
+        0,
+        0
+      ],
+      "same_map": true,
+      "conv_mac_saving_pct": 25.15737834811714,
+      "router_mse444": 0.0012628466356545687,
+      "bayer_mse444": 0.0012628466356545687,
+      "router_delta444_db": 0.016455646719800453,
+      "bayer_delta444_db": 0.016455646719800453,
+      "placement_gain_db": 0.0
+    },
+    {
+      "image": "0835.png",
+      "qp": 32,
+      "case_sha256": "8e33403879b1dec6613d3b6073fc0a00c150e64b0829ec384cac8e423da7ed3b",
+      "stream_sha256": "efc13768a87d8af0c71740130e5b9b9192e6fac4df0d21b7505657a45142a7a4",
+      "source_sha256": "263cfd9c7d2eee15b29250e6d0dc366ed680feb222de3f8c2fb5c6bd304608e4",
+      "selected_beta": 15.0,
+      "router_map": [
+        3,
+        3,
+        3,
+        3,
+        3,
+        4
+      ],
+      "bayer_map": [
+        4,
+        3,
+        3,
+        3,
+        3,
+        3
+      ],
+      "exit_counts": [
+        0,
+        0,
+        0,
+        5,
+        1,
+        0
+      ],
+      "same_map": false,
+      "conv_mac_saving_pct": 23.291294281207623,
+      "router_mse444": 0.0005464436835609376,
+      "bayer_mse444": 0.0005467206356115639,
+      "router_delta444_db": 0.03543003343198611,
+      "bayer_delta444_db": 0.03763059464319075,
+      "placement_gain_db": 0.0022005612112044105
+    },
+    {
+      "image": "0835.png",
+      "qp": 48,
+      "case_sha256": "48a25e7358966ee7233697ec6128ec092563c53c6466191d896c84ecf9fa878d",
+      "stream_sha256": "718eb0e6b53d3ef2bb21091c1906852d88799971dd4b1a719d10d3d5dab05605",
+      "source_sha256": "263cfd9c7d2eee15b29250e6d0dc366ed680feb222de3f8c2fb5c6bd304608e4",
+      "selected_beta": 10.0,
+      "router_map": [
+        5,
+        3,
+        4,
+        3,
+        3,
+        5
+      ],
+      "bayer_map": [
+        5,
+        3,
+        5,
+        3,
+        4,
+        3
+      ],
+      "exit_counts": [
+        0,
+        0,
+        0,
+        3,
+        1,
+        2
+      ],
+      "same_map": false,
+      "conv_mac_saving_pct": 14.898019627421654,
+      "router_mse444": 0.00020652198872994632,
+      "bayer_mse444": 0.0002075818629236892,
+      "router_delta444_db": 0.039072704674986976,
+      "bayer_delta444_db": 0.06130377145284252,
+      "placement_gain_db": 0.022231066777855732
+    },
+    {
+      "image": "0835.png",
+      "qp": 63,
+      "case_sha256": "d5dd22106a0f88f7eb21420382e4ca56bf3ba341f1f4a7f6cbda04f5feb70519",
+      "stream_sha256": "729f55007a604902421112749ba70aafc1572b17f3e9b17e42fea12fb58312fe",
+      "source_sha256": "263cfd9c7d2eee15b29250e6d0dc366ed680feb222de3f8c2fb5c6bd304608e4",
+      "selected_beta": 5.0,
+      "router_map": [
+        5,
+        3,
+        5,
+        3,
+        3,
+        5
+      ],
+      "bayer_map": [
+        5,
+        3,
+        5,
+        3,
+        5,
+        3
+      ],
+      "exit_counts": [
+        0,
+        0,
+        0,
+        3,
+        0,
+        3
+      ],
+      "same_map": false,
+      "conv_mac_saving_pct": 12.56746040563543,
+      "router_mse444": 9.247981506632641e-05,
+      "bayer_mse444": 9.351016342407092e-05,
+      "router_delta444_db": 0.06728818501915046,
+      "bayer_delta444_db": 0.11540681888380395,
+      "placement_gain_db": 0.04811863386465342
+    },
+    {
+      "image": "0839.png",
+      "qp": 0,
+      "case_sha256": "c277c6132b76f246f9ec69d2c61a2dd1cb6d268f8a1f0bcec884e7208801cbcb",
+      "stream_sha256": "e7c08566df1f9abad57f26337ad605405f6dc05317578a55d8a6a3bc81c097bd",
+      "source_sha256": "818abf16ba0aacc3fb6737c5ddd7c2188ca7321b6b28b7f4ba1898627387dee7",
+      "selected_beta": 45.0,
+      "router_map": [
+        2,
+        2,
+        2,
+        2,
+        2,
+        2
+      ],
+      "bayer_map": [
+        2,
+        2,
+        2,
+        2,
+        2,
+        2
+      ],
+      "exit_counts": [
+        0,
+        0,
+        6,
+        0,
+        0,
+        0
+      ],
+      "same_map": true,
+      "conv_mac_saving_pct": 40.06966163416955,
+      "router_mse444": 0.0007479062769562006,
+      "bayer_mse444": 0.0007479062769562006,
+      "router_delta444_db": 0.06428419527624336,
+      "bayer_delta444_db": 0.06428419527624336,
+      "placement_gain_db": 0.0
+    },
+    {
+      "image": "0839.png",
+      "qp": 16,
+      "case_sha256": "02f080154b92f22da57398e04f48c7811794bae7bcd0ba93cfe8963853110a1e",
+      "stream_sha256": "39a984d3b26ac585a06e4d0e92b597aea3bad0eb4439587823690072fdbff860",
+      "source_sha256": "818abf16ba0aacc3fb6737c5ddd7c2188ca7321b6b28b7f4ba1898627387dee7",
+      "selected_beta": 15.0,
+      "router_map": [
+        3,
+        2,
+        2,
+        2,
+        3,
+        2
+      ],
+      "bayer_map": [
+        3,
+        2,
+        3,
+        2,
+        2,
+        2
+      ],
+      "exit_counts": [
+        0,
+        0,
+        4,
+        2,
+        0,
+        0
+      ],
+      "same_map": false,
+      "conv_mac_saving_pct": 35.098900041890325,
+      "router_mse444": 0.0004729214124381542,
+      "bayer_mse444": 0.00047291768714785576,
+      "router_delta444_db": 0.03344866619608012,
+      "bayer_delta444_db": 0.03341445587382087,
+      "placement_gain_db": -3.4210322259204835e-05
+    },
+    {
+      "image": "0839.png",
+      "qp": 32,
+      "case_sha256": "bc776e6daa57b38bd94451ef7f79f71eabdbf336881ae105c9c076530f2e98c7",
+      "stream_sha256": "6937ccd35f2117ae90f1a1ba01d06931c86f69e7f980b6283383b507899192d4",
+      "source_sha256": "818abf16ba0aacc3fb6737c5ddd7c2188ca7321b6b28b7f4ba1898627387dee7",
+      "selected_beta": 15.0,
+      "router_map": [
+        2,
+        2,
+        2,
+        2,
+        2,
+        2
+      ],
+      "bayer_map": [
+        2,
+        2,
+        2,
+        2,
+        2,
+        2
+      ],
+      "exit_counts": [
+        0,
+        0,
+        6,
+        0,
+        0,
+        0
+      ],
+      "same_map": true,
+      "conv_mac_saving_pct": 40.06966163416955,
+      "router_mse444": 0.0002742754004430026,
+      "bayer_mse444": 0.0002742754004430026,
+      "router_delta444_db": 0.04773359390938978,
+      "bayer_delta444_db": 0.04773359390938978,
+      "placement_gain_db": 0.0
+    },
+    {
+      "image": "0839.png",
+      "qp": 48,
+      "case_sha256": "29fd789e3e2566767bbf0bb4478fbeebd2bd92b754e6fb68b9945f88bc33cf7d",
+      "stream_sha256": "05e41f17546531aa57283b9ddd06c9f03ef281f8e5346130c9a11725cb6f166d",
+      "source_sha256": "818abf16ba0aacc3fb6737c5ddd7c2188ca7321b6b28b7f4ba1898627387dee7",
+      "selected_beta": 10.0,
+      "router_map": [
+        2,
+        2,
+        3,
+        2,
+        2,
+        2
+      ],
+      "bayer_map": [
+        3,
+        2,
+        2,
+        2,
+        2,
+        2
+      ],
+      "exit_counts": [
+        0,
+        0,
+        5,
+        1,
+        0,
+        0
+      ],
+      "same_map": false,
+      "conv_mac_saving_pct": 37.584280838364506,
+      "router_mse444": 0.00014816876500844955,
+      "bayer_mse444": 0.0001481248182244599,
+      "router_delta444_db": 0.06044875644014066,
+      "bayer_delta444_db": 0.059160450043773696,
+      "placement_gain_db": -0.001288306396366597
+    },
+    {
+      "image": "0839.png",
+      "qp": 63,
+      "case_sha256": "e31cb23c0851199a7f4743aabd3b324a320968dda74d8301ec3bd21fdb4c9b28",
+      "stream_sha256": "cbd1381926a850f28e17ab638f0c648c314081ca6b3986ee97861c957ba717fc",
+      "source_sha256": "818abf16ba0aacc3fb6737c5ddd7c2188ca7321b6b28b7f4ba1898627387dee7",
+      "selected_beta": 5.0,
+      "router_map": [
+        2,
+        2,
+        3,
+        2,
+        2,
+        2
+      ],
+      "bayer_map": [
+        3,
+        2,
+        2,
+        2,
+        2,
+        2
+      ],
+      "exit_counts": [
+        0,
+        0,
+        5,
+        1,
+        0,
+        0
+      ],
+      "same_map": false,
+      "conv_mac_saving_pct": 37.584280838364506,
+      "router_mse444": 7.075177563820034e-05,
+      "bayer_mse444": 7.088595884852111e-05,
+      "router_delta444_db": 0.09317955101585315,
+      "bayer_delta444_db": 0.1014082967595876,
+      "placement_gain_db": 0.008228745743734072
+    },
+    {
+      "image": "0844.png",
+      "qp": 0,
+      "case_sha256": "d4c862309f85815dfa39fc3e686374dcdce8e23a748e50377e38d08f9ab03a6f",
+      "stream_sha256": "f50cca8b9974201cd9e2305d47986ce823a9855c80e91de6b222235d27039f83",
+      "source_sha256": "93da0f98885573c518891c5eb6004818436ae36cf1ed894cfef853e131d9d86d",
+      "selected_beta": 45.0,
+      "router_map": [
+        2,
+        2,
+        2,
+        2,
+        2,
+        2
+      ],
+      "bayer_map": [
+        2,
+        2,
+        2,
+        2,
+        2,
+        2
+      ],
+      "exit_counts": [
+        0,
+        0,
+        6,
+        0,
+        0,
+        0
+      ],
+      "same_map": true,
+      "conv_mac_saving_pct": 40.06966163416955,
+      "router_mse444": 0.00017320104234386235,
+      "bayer_mse444": 0.00017320104234386235,
+      "router_delta444_db": 0.3330382615543767,
+      "bayer_delta444_db": 0.3330382615543767,
+      "placement_gain_db": 0.0
+    },
+    {
+      "image": "0844.png",
+      "qp": 16,
+      "case_sha256": "221395dbcbe2db709735bcb67bfd6c58b4f68da7328d6d2f01ec46bc51fc3782",
+      "stream_sha256": "7326b84dddf77b6e5740a2e8a1f0d1f62d66bdd035546edb4ec69cdf55337c1a",
+      "source_sha256": "93da0f98885573c518891c5eb6004818436ae36cf1ed894cfef853e131d9d86d",
+      "selected_beta": 15.0,
+      "router_map": [
+        2,
+        2,
+        2,
+        2,
+        3,
+        3
+      ],
+      "bayer_map": [
+        3,
+        2,
+        3,
+        2,
+        2,
+        2
+      ],
+      "exit_counts": [
+        0,
+        0,
+        4,
+        2,
+        0,
+        0
+      ],
+      "same_map": false,
+      "conv_mac_saving_pct": 35.098900041890325,
+      "router_mse444": 7.721402653260157e-05,
+      "bayer_mse444": 8.059642277657986e-05,
+      "router_delta444_db": 0.2049139762717247,
+      "bayer_delta444_db": 0.39110963466357623,
+      "placement_gain_db": 0.18619565839185168
+    },
+    {
+      "image": "0844.png",
+      "qp": 32,
+      "case_sha256": "86f7433d1927a52945c3ac50d674113f7727c67e863cc8438d470fc39d94ac4a",
+      "stream_sha256": "3cf45327a6eacf4571ffd94bfb52d9e68009e0a8dad87f29144b00aa24461886",
+      "source_sha256": "93da0f98885573c518891c5eb6004818436ae36cf1ed894cfef853e131d9d86d",
+      "selected_beta": 15.0,
+      "router_map": [
+        2,
+        2,
+        2,
+        2,
+        3,
+        3
+      ],
+      "bayer_map": [
+        3,
+        2,
+        3,
+        2,
+        2,
+        2
+      ],
+      "exit_counts": [
+        0,
+        0,
+        4,
+        2,
+        0,
+        0
+      ],
+      "same_map": false,
+      "conv_mac_saving_pct": 35.098900041890325,
+      "router_mse444": 3.905004632542841e-05,
+      "bayer_mse444": 4.177541268290952e-05,
+      "router_delta444_db": 0.26771581195117483,
+      "bayer_delta444_db": 0.5607077658535479,
+      "placement_gain_db": 0.29299195390237315
+    },
+    {
+      "image": "0844.png",
+      "qp": 48,
+      "case_sha256": "d3f631cb406d5535814a236d29983f58d77fe498158cbcca8327016a7d3c0114",
+      "stream_sha256": "15b4de89f1963a6e609845ee16dcb64e5a36d6840bf867e1744a4a26008a14d5",
+      "source_sha256": "93da0f98885573c518891c5eb6004818436ae36cf1ed894cfef853e131d9d86d",
+      "selected_beta": 10.0,
+      "router_map": [
+        2,
+        2,
+        2,
+        2,
+        3,
+        3
+      ],
+      "bayer_map": [
+        3,
+        2,
+        3,
+        2,
+        2,
+        2
+      ],
+      "exit_counts": [
+        0,
+        0,
+        4,
+        2,
+        0,
+        0
+      ],
+      "same_map": false,
+      "conv_mac_saving_pct": 35.098900041890325,
+      "router_mse444": 2.0701401808764786e-05,
+      "bayer_mse444": 2.2432810510508716e-05,
+      "router_delta444_db": 0.47678597551124974,
+      "bayer_delta444_db": 0.8256253045033015,
+      "placement_gain_db": 0.3488393289920516
+    },
+    {
+      "image": "0844.png",
+      "qp": 63,
+      "case_sha256": "abd762aa51bddb599b2ae52c735f73adc077dda6ca1dffe5fffd035dff34baed",
+      "stream_sha256": "fe4f4c53fb1cc021c9604ad992147c804afc32d036b4e4a8ddb06ce2ce68b55c",
+      "source_sha256": "93da0f98885573c518891c5eb6004818436ae36cf1ed894cfef853e131d9d86d",
+      "selected_beta": 5.0,
+      "router_map": [
+        2,
+        2,
+        2,
+        2,
+        5,
+        3
+      ],
+      "bayer_map": [
+        5,
+        2,
+        3,
+        2,
+        2,
+        2
+      ],
+      "exit_counts": [
+        0,
+        0,
+        4,
+        1,
+        0,
+        1
+      ],
+      "same_map": false,
+      "conv_mac_saving_pct": 30.902261224881222,
+      "router_mse444": 1.2405020243022591e-05,
+      "bayer_mse444": 1.4521285265800543e-05,
+      "router_delta444_db": 0.3785157594999281,
+      "bayer_delta444_db": 1.0625915571791416,
+      "placement_gain_db": 0.6840757976792136
+    },
+    {
+      "image": "0849.png",
+      "qp": 0,
+      "case_sha256": "0c61c1dfaead90b734cbba2e642ac679723efeccee127153a229b48007799f0f",
+      "stream_sha256": "4845b6a4bbe59c0dccf37fd2d9196366bd7f30165a4d0a695387e13e15dd4ae1",
+      "source_sha256": "1d576e20f4720050d0b7af5295b323c342a5284ed75a8ce3bae6e0cb46c89eb6",
+      "selected_beta": 45.0,
+      "router_map": [
+        3,
+        3,
+        3,
+        3,
+        3,
+        3
+      ],
+      "bayer_map": [
+        3,
+        3,
+        3,
+        3,
+        3,
+        3
+      ],
+      "exit_counts": [
+        0,
+        0,
+        0,
+        6,
+        0,
+        0
+      ],
+      "same_map": true,
+      "conv_mac_saving_pct": 25.15737834811714,
+      "router_mse444": 0.002687887754291296,
+      "bayer_mse444": 0.002687887754291296,
+      "router_delta444_db": 0.025886246940474703,
+      "bayer_delta444_db": 0.025886246940474703,
+      "placement_gain_db": 0.0
+    },
+    {
+      "image": "0849.png",
+      "qp": 16,
+      "case_sha256": "af1de254867a81596346baca3c54590c3e9aeef75d1efb43b90fc99625c8dd7f",
+      "stream_sha256": "2cb1c1bcade577689c5eabe9b755600632dff309f7e3dabe8941d488fb3ed97a",
+      "source_sha256": "1d576e20f4720050d0b7af5295b323c342a5284ed75a8ce3bae6e0cb46c89eb6",
+      "selected_beta": 15.0,
+      "router_map": [
+        4,
+        4,
+        4,
+        4,
+        4,
+        4
+      ],
+      "bayer_map": [
+        4,
+        4,
+        4,
+        4,
+        4,
+        4
+      ],
+      "exit_counts": [
+        0,
+        0,
+        0,
+        0,
+        6,
+        0
+      ],
+      "same_map": true,
+      "conv_mac_saving_pct": 13.96087990980108,
+      "router_mse444": 0.0011428545694798231,
+      "bayer_mse444": 0.0011428545694798231,
+      "router_delta444_db": 0.033374707926915735,
+      "bayer_delta444_db": 0.033374707926915735,
+      "placement_gain_db": 0.0
+    },
+    {
+      "image": "0849.png",
+      "qp": 32,
+      "case_sha256": "1785c6862a7a729862a48bc05ad322301698b6facc8f55f1a58ce4696bc9fc32",
+      "stream_sha256": "7dad305dd6c4ca9df465cda8dfeb833abe43569a156ae32d318dcf232c1c5334",
+      "source_sha256": "1d576e20f4720050d0b7af5295b323c342a5284ed75a8ce3bae6e0cb46c89eb6",
+      "selected_beta": 15.0,
+      "router_map": [
+        5,
+        5,
+        5,
+        5,
+        5,
+        5
+      ],
+      "bayer_map": [
+        5,
+        5,
+        5,
+        5,
+        5,
+        5
+      ],
+      "exit_counts": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        6
+      ],
+      "same_map": true,
+      "conv_mac_saving_pct": -0.02245455661402243,
+      "router_mse444": 0.00046270753955468535,
+      "bayer_mse444": 0.00046270753955468535,
+      "router_delta444_db": 0.0,
+      "bayer_delta444_db": 0.0,
+      "placement_gain_db": 0.0
+    },
+    {
+      "image": "0849.png",
+      "qp": 48,
+      "case_sha256": "c97b56087fbd68452362f9a72a849f612ae5e7bb1c2e8cfd70c9136931929834",
+      "stream_sha256": "1491bf6c9167a9475d870d3ee1f98d81885ce4153737f3da0d3f48b9d6a63b15",
+      "source_sha256": "1d576e20f4720050d0b7af5295b323c342a5284ed75a8ce3bae6e0cb46c89eb6",
+      "selected_beta": 10.0,
+      "router_map": [
+        5,
+        5,
+        5,
+        5,
+        5,
+        5
+      ],
+      "bayer_map": [
+        5,
+        5,
+        5,
+        5,
+        5,
+        5
+      ],
+      "exit_counts": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        6
+      ],
+      "same_map": true,
+      "conv_mac_saving_pct": -0.02245455661402243,
+      "router_mse444": 0.00019351622904650867,
+      "bayer_mse444": 0.00019351622904650867,
+      "router_delta444_db": 0.0,
+      "bayer_delta444_db": 0.0,
+      "placement_gain_db": 0.0
+    },
+    {
+      "image": "0849.png",
+      "qp": 63,
+      "case_sha256": "0b4be46a2b21193da50674f2c59a0e64f91019969fe60287ddcdbd8e1036e417",
+      "stream_sha256": "5293687821c360ff4f8672e73dbb9f48eee65b21e9d09fc0a31fca8830c39d3b",
+      "source_sha256": "1d576e20f4720050d0b7af5295b323c342a5284ed75a8ce3bae6e0cb46c89eb6",
+      "selected_beta": 5.0,
+      "router_map": [
+        5,
+        5,
+        5,
+        5,
+        5,
+        5
+      ],
+      "bayer_map": [
+        5,
+        5,
+        5,
+        5,
+        5,
+        5
+      ],
+      "exit_counts": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        6
+      ],
+      "same_map": true,
+      "conv_mac_saving_pct": -0.02245455661402243,
+      "router_mse444": 0.00010243265569442883,
+      "bayer_mse444": 0.00010243265569442883,
+      "router_delta444_db": 0.0,
+      "bayer_delta444_db": 0.0,
+      "placement_gain_db": 0.0
+    },
+    {
+      "image": "0852.png",
+      "qp": 0,
+      "case_sha256": "d2d7a29d1b22f08fcaba2d0e0a21e42b64a78d5866c447b39ceb097ce00ec907",
+      "stream_sha256": "99f3624cbf3626aec4621055092b26cf904f3d1dad8da8af64a13a4bd8c8a312",
+      "source_sha256": "47f4db4100055a954606d789dfe183612ea7e196a06b2e7bc4bd39c3522628ee",
+      "selected_beta": 45.0,
+      "router_map": [
+        2,
+        2,
+        2,
+        2,
+        2,
+        2
+      ],
+      "bayer_map": [
+        2,
+        2,
+        2,
+        2,
+        2,
+        2
+      ],
+      "exit_counts": [
+        0,
+        0,
+        6,
+        0,
+        0,
+        0
+      ],
+      "same_map": true,
+      "conv_mac_saving_pct": 40.06966163416955,
+      "router_mse444": 0.0017415876500308514,
+      "bayer_mse444": 0.0017415876500308514,
+      "router_delta444_db": 0.03473666936542413,
+      "bayer_delta444_db": 0.03473666936542413,
+      "placement_gain_db": 0.0
+    },
+    {
+      "image": "0852.png",
+      "qp": 16,
+      "case_sha256": "8df908afab5791b8be80e2414825085efa7744fc9f871080a69291fb846004c3",
+      "stream_sha256": "df0cb15473db97bdc24ddf4caf454646b9afa69dfde11655651da44f90cee379",
+      "source_sha256": "47f4db4100055a954606d789dfe183612ea7e196a06b2e7bc4bd39c3522628ee",
+      "selected_beta": 15.0,
+      "router_map": [
+        5,
+        3,
+        2,
+        5,
+        3,
+        3
+      ],
+      "bayer_map": [
+        5,
+        3,
+        5,
+        3,
+        3,
+        2
+      ],
+      "exit_counts": [
+        0,
+        0,
+        1,
+        3,
+        0,
+        2
+      ],
+      "same_map": false,
+      "conv_mac_saving_pct": 19.249480019118714,
+      "router_mse444": 0.0008381035877391696,
+      "bayer_mse444": 0.0008418744546361268,
+      "router_delta444_db": 0.02111156429468515,
+      "bayer_delta444_db": 0.04060788382192196,
+      "placement_gain_db": 0.019496319527236846
+    },
+    {
+      "image": "0852.png",
+      "qp": 32,
+      "case_sha256": "44ae97f24e1cd912079eafacb25399560c67115dd04a754bace96bb24b035cf0",
+      "stream_sha256": "df58009c645b6c6e541e8b3338995aee27f2717a4e675e4fc30f244128698a0f",
+      "source_sha256": "47f4db4100055a954606d789dfe183612ea7e196a06b2e7bc4bd39c3522628ee",
+      "selected_beta": 15.0,
+      "router_map": [
+        5,
+        5,
+        2,
+        5,
+        3,
+        3
+      ],
+      "bayer_map": [
+        5,
+        3,
+        5,
+        3,
+        5,
+        2
+      ],
+      "exit_counts": [
+        0,
+        0,
+        1,
+        2,
+        0,
+        3
+      ],
+      "same_map": false,
+      "conv_mac_saving_pct": 15.052842692225731,
+      "router_mse444": 0.0003979107132181525,
+      "bayer_mse444": 0.0004077735065948218,
+      "router_delta444_db": 0.021406371611104796,
+      "bayer_delta444_db": 0.12774010916768344,
+      "placement_gain_db": 0.1063337375565788
+    },
+    {
+      "image": "0852.png",
+      "qp": 48,
+      "case_sha256": "9c92ecb99ecb6e55bfaea3b38cb7c1a1a9a852598d7f6b0674857947cc17c414",
+      "stream_sha256": "288aef3bdd739147597efc7117ee633df3e7902141e0bae2f784a22bcbed31d7",
+      "source_sha256": "47f4db4100055a954606d789dfe183612ea7e196a06b2e7bc4bd39c3522628ee",
+      "selected_beta": 10.0,
+      "router_map": [
+        5,
+        5,
+        2,
+        5,
+        3,
+        3
+      ],
+      "bayer_map": [
+        5,
+        3,
+        5,
+        3,
+        5,
+        2
+      ],
+      "exit_counts": [
+        0,
+        0,
+        1,
+        2,
+        0,
+        3
+      ],
+      "same_map": false,
+      "conv_mac_saving_pct": 15.052842692225731,
+      "router_mse444": 0.00020786783716175705,
+      "bayer_mse444": 0.0002195776323787868,
+      "router_delta444_db": 0.04160671100291891,
+      "bayer_delta444_db": 0.279614717422817,
+      "placement_gain_db": 0.23800800641989808
+    },
+    {
+      "image": "0852.png",
+      "qp": 63,
+      "case_sha256": "6cb339ed2806aed9078b019ba592eb2d91860620c645de9fa43435634b41cd11",
+      "stream_sha256": "ad69025c512d29c055da6b48930710c4b35f173b8098062c180514ad84e747a3",
+      "source_sha256": "47f4db4100055a954606d789dfe183612ea7e196a06b2e7bc4bd39c3522628ee",
+      "selected_beta": 5.0,
+      "router_map": [
+        5,
+        5,
+        2,
+        5,
+        3,
+        3
+      ],
+      "bayer_map": [
+        5,
+        3,
+        5,
+        3,
+        5,
+        2
+      ],
+      "exit_counts": [
+        0,
+        0,
+        1,
+        2,
+        0,
+        3
+      ],
+      "same_map": false,
+      "conv_mac_saving_pct": 15.052842692225731,
+      "router_mse444": 0.0001395493163727224,
+      "bayer_mse444": 0.0001516748161520809,
+      "router_delta444_db": 0.06954043925115799,
+      "bayer_delta444_db": 0.431398078265014,
+      "placement_gain_db": 0.3618576390138556
+    },
+    {
+      "image": "0859.png",
+      "qp": 0,
+      "case_sha256": "75cf7c3e19a65782e348a3575110f180982f0749d0afb17798edbac4c33495cc",
+      "stream_sha256": "444a158dc5c8a4f85edf9069cc4ea7adaf195c644cbd275f4a195210fddc40ba",
+      "source_sha256": "3ada872de7c5def1d408920385db278b1ff3a5a0cfcab83105a789ff540a1827",
+      "selected_beta": 45.0,
+      "router_map": [
+        2,
+        2,
+        2,
+        2,
+        2,
+        2
+      ],
+      "bayer_map": [
+        2,
+        2,
+        2,
+        2,
+        2,
+        2
+      ],
+      "exit_counts": [
+        0,
+        0,
+        6,
+        0,
+        0,
+        0
+      ],
+      "same_map": true,
+      "conv_mac_saving_pct": 40.06966163416955,
+      "router_mse444": 0.00233857287093997,
+      "bayer_mse444": 0.00233857287093997,
+      "router_delta444_db": 0.02634514970558496,
+      "bayer_delta444_db": 0.02634514970558496,
+      "placement_gain_db": 0.0
+    },
+    {
+      "image": "0859.png",
+      "qp": 16,
+      "case_sha256": "d739a6a19861ec1bf8688b376677b381642353d6f71f57db614391ad983643f7",
+      "stream_sha256": "77b9bda5586202afa9da8d6fd0bc196850bd518d0a70a7a9ce32a0007fefd8a6",
+      "source_sha256": "3ada872de7c5def1d408920385db278b1ff3a5a0cfcab83105a789ff540a1827",
+      "selected_beta": 15.0,
+      "router_map": [
+        3,
+        3,
+        3,
+        3,
+        3,
+        3
+      ],
+      "bayer_map": [
+        3,
+        3,
+        3,
+        3,
+        3,
+        3
+      ],
+      "exit_counts": [
+        0,
+        0,
+        0,
+        6,
+        0,
+        0
+      ],
+      "same_map": true,
+      "conv_mac_saving_pct": 25.15737834811714,
+      "router_mse444": 0.001179198850877583,
+      "bayer_mse444": 0.001179198850877583,
+      "router_delta444_db": 0.017879318680390208,
+      "bayer_delta444_db": 0.017879318680390208,
+      "placement_gain_db": 0.0
+    },
+    {
+      "image": "0859.png",
+      "qp": 32,
+      "case_sha256": "aee478c10839824ce7ec7175fe3541e2b2210f1a3e86f3e496cc8bad111aff99",
+      "stream_sha256": "724734cc9c55a1e530b36e5ca856f47590e1ae5855f15b62c6f81281b4867a50",
+      "source_sha256": "3ada872de7c5def1d408920385db278b1ff3a5a0cfcab83105a789ff540a1827",
+      "selected_beta": 15.0,
+      "router_map": [
+        3,
+        3,
+        3,
+        3,
+        3,
+        3
+      ],
+      "bayer_map": [
+        3,
+        3,
+        3,
+        3,
+        3,
+        3
+      ],
+      "exit_counts": [
+        0,
+        0,
+        0,
+        6,
+        0,
+        0
+      ],
+      "same_map": true,
+      "conv_mac_saving_pct": 25.15737834811714,
+      "router_mse444": 0.0005214858101680875,
+      "bayer_mse444": 0.0005214858101680875,
+      "router_delta444_db": 0.034154026352055285,
+      "bayer_delta444_db": 0.034154026352055285,
+      "placement_gain_db": 0.0
+    },
+    {
+      "image": "0859.png",
+      "qp": 48,
+      "case_sha256": "737e6cc38dbd1ede95f7cf0d61ad1f4a36eab624781a6d6e7724629a8d49cfd8",
+      "stream_sha256": "763f49fdd5e4e51d5cea8499a07029e96aab7dda39484c6b6286aa0fbd1ffa04",
+      "source_sha256": "3ada872de7c5def1d408920385db278b1ff3a5a0cfcab83105a789ff540a1827",
+      "selected_beta": 10.0,
+      "router_map": [
+        4,
+        4,
+        4,
+        3,
+        3,
+        3
+      ],
+      "bayer_map": [
+        4,
+        3,
+        4,
+        3,
+        4,
+        3
+      ],
+      "exit_counts": [
+        0,
+        0,
+        0,
+        3,
+        3,
+        0
+      ],
+      "same_map": false,
+      "conv_mac_saving_pct": 19.559132109191346,
+      "router_mse444": 0.0002019127714447677,
+      "bayer_mse444": 0.00020189113274682313,
+      "router_delta444_db": 0.061775690637735914,
+      "bayer_delta444_db": 0.06131023861885518,
+      "placement_gain_db": -0.0004654520188810035
+    },
+    {
+      "image": "0859.png",
+      "qp": 63,
+      "case_sha256": "90afaef65152a333c005be3ed2e0fa2a3e107affd3667ee97995bf20b7889925",
+      "stream_sha256": "e922948641066a704e589798fb194e242a7905dd85b625571e2890143b4f9e52",
+      "source_sha256": "3ada872de7c5def1d408920385db278b1ff3a5a0cfcab83105a789ff540a1827",
+      "selected_beta": 5.0,
+      "router_map": [
+        4,
+        4,
+        4,
+        3,
+        3,
+        3
+      ],
+      "bayer_map": [
+        4,
+        3,
+        4,
+        3,
+        4,
+        3
+      ],
+      "exit_counts": [
+        0,
+        0,
+        0,
+        3,
+        3,
+        0
+      ],
+      "same_map": false,
+      "conv_mac_saving_pct": 19.559132109191346,
+      "router_mse444": 8.901921682991087e-05,
+      "bayer_mse444": 8.898734813556075e-05,
+      "router_delta444_db": 0.132750641774119,
+      "bayer_delta444_db": 0.13119559820004903,
+      "placement_gain_db": -0.0015550435740697532
+    },
+    {
+      "image": "0871.png",
+      "qp": 0,
+      "case_sha256": "889a81258ab48ecfba4a59bc587e67b7ef575621a1f171c08858b1f92d221152",
+      "stream_sha256": "17ad34279dcacbe19df0615ed78f4cffdc4415b3aac6890aef090314e87d71cd",
+      "source_sha256": "777df9ed736ff3ccc73388e90de36e131c002dfac64767f3b8ebccdd2cd5f058",
+      "selected_beta": 45.0,
+      "router_map": [
+        2,
+        2,
+        2,
+        2,
+        2,
+        2
+      ],
+      "bayer_map": [
+        2,
+        2,
+        2,
+        2,
+        2,
+        2
+      ],
+      "exit_counts": [
+        0,
+        0,
+        6,
+        0,
+        0,
+        0
+      ],
+      "same_map": true,
+      "conv_mac_saving_pct": 40.06966163416955,
+      "router_mse444": 0.0009315604693256319,
+      "bayer_mse444": 0.0009315604693256319,
+      "router_delta444_db": 0.12113811234412046,
+      "bayer_delta444_db": 0.12113811234412046,
+      "placement_gain_db": 0.0
+    },
+    {
+      "image": "0871.png",
+      "qp": 16,
+      "case_sha256": "5840c9b2df5ad7512be050cb70e12779711671014fefd32e19f105adf0e70546",
+      "stream_sha256": "783e5839d15a15c4598fcecca01148329660d3e37fdd0d9891b7b0eddad3b55d",
+      "source_sha256": "777df9ed736ff3ccc73388e90de36e131c002dfac64767f3b8ebccdd2cd5f058",
+      "selected_beta": 15.0,
+      "router_map": [
+        3,
+        3,
+        3,
+        3,
+        3,
+        3
+      ],
+      "bayer_map": [
+        3,
+        3,
+        3,
+        3,
+        3,
+        3
+      ],
+      "exit_counts": [
+        0,
+        0,
+        0,
+        6,
+        0,
+        0
+      ],
+      "same_map": true,
+      "conv_mac_saving_pct": 25.15737834811714,
+      "router_mse444": 0.00048049690667539835,
+      "bayer_mse444": 0.00048049690667539835,
+      "router_delta444_db": 0.04534216112607369,
+      "bayer_delta444_db": 0.04534216112607369,
+      "placement_gain_db": 0.0
+    },
+    {
+      "image": "0871.png",
+      "qp": 32,
+      "case_sha256": "08c53ccd97034e7cd700c3768b200db78df76f35a9aee9b4ccfab5eaa6e19a65",
+      "stream_sha256": "b3f9541428bbe93af68b45e43aa17476bfb2aacb6fa08d8ea321e542445ae8de",
+      "source_sha256": "777df9ed736ff3ccc73388e90de36e131c002dfac64767f3b8ebccdd2cd5f058",
+      "selected_beta": 15.0,
+      "router_map": [
+        3,
+        3,
+        3,
+        3,
+        3,
+        3
+      ],
+      "bayer_map": [
+        3,
+        3,
+        3,
+        3,
+        3,
+        3
+      ],
+      "exit_counts": [
+        0,
+        0,
+        0,
+        6,
+        0,
+        0
+      ],
+      "same_map": true,
+      "conv_mac_saving_pct": 25.15737834811714,
+      "router_mse444": 0.00023238619905896485,
+      "bayer_mse444": 0.00023238619905896485,
+      "router_delta444_db": 0.08886906131561237,
+      "bayer_delta444_db": 0.08886906131561237,
+      "placement_gain_db": 0.0
+    },
+    {
+      "image": "0871.png",
+      "qp": 48,
+      "case_sha256": "9b15a827b12ee4dda6c6ab8a9da019dec20885bb43f42da75b3077983c19b350",
+      "stream_sha256": "f5ec3fb0d5d7eedb7b7b61ca1d564405f641f1761b5abf01eff868903fa9591f",
+      "source_sha256": "777df9ed736ff3ccc73388e90de36e131c002dfac64767f3b8ebccdd2cd5f058",
+      "selected_beta": 10.0,
+      "router_map": [
+        3,
+        5,
+        3,
+        3,
+        3,
+        3
+      ],
+      "bayer_map": [
+        5,
+        3,
+        3,
+        3,
+        3,
+        3
+      ],
+      "exit_counts": [
+        0,
+        0,
+        0,
+        5,
+        0,
+        1
+      ],
+      "same_map": false,
+      "conv_mac_saving_pct": 20.960741021224152,
+      "router_mse444": 0.0001078838249668479,
+      "bayer_mse444": 0.00010827430378412828,
+      "router_delta444_db": 0.1405611090439733,
+      "bayer_delta444_db": 0.1562517500658535,
+      "placement_gain_db": 0.015690641021880485
+    },
+    {
+      "image": "0871.png",
+      "qp": 63,
+      "case_sha256": "d8bad15ec71f4d189ed1baa9d6456217b844e61960d44069bc258c79a593baa6",
+      "stream_sha256": "4b87b04e4c49de7a4d3f802d0ba965561ee53d0978b196ac113df1ae4fd70344",
+      "source_sha256": "777df9ed736ff3ccc73388e90de36e131c002dfac64767f3b8ebccdd2cd5f058",
+      "selected_beta": 5.0,
+      "router_map": [
+        3,
+        5,
+        3,
+        3,
+        3,
+        3
+      ],
+      "bayer_map": [
+        5,
+        3,
+        3,
+        3,
+        3,
+        3
+      ],
+      "exit_counts": [
+        0,
+        0,
+        0,
+        5,
+        0,
+        1
+      ],
+      "same_map": false,
+      "conv_mac_saving_pct": 20.960741021224152,
+      "router_mse444": 5.4479492973769084e-05,
+      "bayer_mse444": 5.486986628966406e-05,
+      "router_delta444_db": 0.26101575032430496,
+      "bayer_delta444_db": 0.29202419854064965,
+      "placement_gain_db": 0.03100844821634441
+    },
+    {
+      "image": "0881.png",
+      "qp": 0,
+      "case_sha256": "19213d30aef0dff6eac1a975bea7656d61a2f1096970dcdc2d91cf5abd1fabfc",
+      "stream_sha256": "1fdbb2b6b6ad5966cc274ef2d00e5cbf69b09cdb462539b6f94abef8e76661d4",
+      "source_sha256": "d2fba016ee3cee2395b677524d7ae2b2f6750cea1a6df4edc41f2977bd5d1b7c",
+      "selected_beta": 45.0,
+      "router_map": [
+        2,
+        2,
+        2,
+        2,
+        2,
+        2
+      ],
+      "bayer_map": [
+        2,
+        2,
+        2,
+        2,
+        2,
+        2
+      ],
+      "exit_counts": [
+        0,
+        0,
+        6,
+        0,
+        0,
+        0
+      ],
+      "same_map": true,
+      "conv_mac_saving_pct": 40.06966163416955,
+      "router_mse444": 0.0022944079246371984,
+      "bayer_mse444": 0.0022944079246371984,
+      "router_delta444_db": 0.048400060960051894,
+      "bayer_delta444_db": 0.048400060960051894,
+      "placement_gain_db": 0.0
+    },
+    {
+      "image": "0881.png",
+      "qp": 16,
+      "case_sha256": "4bcbb6d2b36cacad0730c50b7480833d34732c2532ff1160fb7ef14b72defa82",
+      "stream_sha256": "f6725ed180a7bc419bcd7ebce1453b240f89af1b626db144a25637dbb30fdcca",
+      "source_sha256": "d2fba016ee3cee2395b677524d7ae2b2f6750cea1a6df4edc41f2977bd5d1b7c",
+      "selected_beta": 15.0,
+      "router_map": [
+        3,
+        3,
+        3,
+        3,
+        3,
+        3
+      ],
+      "bayer_map": [
+        3,
+        3,
+        3,
+        3,
+        3,
+        3
+      ],
+      "exit_counts": [
+        0,
+        0,
+        0,
+        6,
+        0,
+        0
+      ],
+      "same_map": true,
+      "conv_mac_saving_pct": 25.15737834811714,
+      "router_mse444": 0.0012555434368550777,
+      "bayer_mse444": 0.0012555434368550777,
+      "router_delta444_db": 0.0209953907843643,
+      "bayer_delta444_db": 0.0209953907843643,
+      "placement_gain_db": 0.0
+    },
+    {
+      "image": "0881.png",
+      "qp": 32,
+      "case_sha256": "fece8340500cb7d565961bc9352ce631e501b75d8d2843e76d2ecbac5f8ac07f",
+      "stream_sha256": "e744f57e0283a68420ddf1f85212f723f0710af3133e185e3203add22b86c178",
+      "source_sha256": "d2fba016ee3cee2395b677524d7ae2b2f6750cea1a6df4edc41f2977bd5d1b7c",
+      "selected_beta": 15.0,
+      "router_map": [
+        3,
+        3,
+        3,
+        3,
+        4,
+        3
+      ],
+      "bayer_map": [
+        4,
+        3,
+        3,
+        3,
+        3,
+        3
+      ],
+      "exit_counts": [
+        0,
+        0,
+        0,
+        5,
+        1,
+        0
+      ],
+      "same_map": false,
+      "conv_mac_saving_pct": 23.291294281207623,
+      "router_mse444": 0.0005629880470223725,
+      "bayer_mse444": 0.0005634420667774975,
+      "router_delta444_db": 0.03525197539891835,
+      "bayer_delta444_db": 0.03875291669279854,
+      "placement_gain_db": 0.0035009412938798684
+    },
+    {
+      "image": "0881.png",
+      "qp": 48,
+      "case_sha256": "3678a889809b210f29394a2b49f71eeb2b7446ea6b1c5fc85039796a43e9ea97",
+      "stream_sha256": "3af7a1c0eb5c13f62cb0e2bfd5855a7f6f7cec3f1f6221398182ba876fdc8c16",
+      "source_sha256": "d2fba016ee3cee2395b677524d7ae2b2f6750cea1a6df4edc41f2977bd5d1b7c",
+      "selected_beta": 10.0,
+      "router_map": [
+        3,
+        4,
+        4,
+        3,
+        4,
+        4
+      ],
+      "bayer_map": [
+        4,
+        4,
+        4,
+        3,
+        4,
+        3
+      ],
+      "exit_counts": [
+        0,
+        0,
+        0,
+        2,
+        4,
+        0
+      ],
+      "same_map": false,
+      "conv_mac_saving_pct": 17.693048042281834,
+      "router_mse444": 0.00020034925546497107,
+      "bayer_mse444": 0.00020035805937368423,
+      "router_delta444_db": 0.05142281094740517,
+      "bayer_delta444_db": 0.05161364794150664,
+      "placement_gain_db": 0.00019083699410145518
+    },
+    {
+      "image": "0881.png",
+      "qp": 63,
+      "case_sha256": "aeb9d541dee8e8c8aa5e9009209b877ba2305d0b9b63a629d18746d44bb55077",
+      "stream_sha256": "434c9a7b3e69ad9202daf64a3478d983514d959f844f8de6f4d87fc00b26b1c7",
+      "source_sha256": "d2fba016ee3cee2395b677524d7ae2b2f6750cea1a6df4edc41f2977bd5d1b7c",
+      "selected_beta": 5.0,
+      "router_map": [
+        2,
+        4,
+        4,
+        3,
+        4,
+        4
+      ],
+      "bayer_map": [
+        4,
+        4,
+        4,
+        3,
+        4,
+        2
+      ],
+      "exit_counts": [
+        0,
+        0,
+        1,
+        1,
+        4,
+        0
+      ],
+      "same_map": false,
+      "conv_mac_saving_pct": 20.178427348639893,
+      "router_mse444": 8.088743197731674e-05,
+      "bayer_mse444": 8.139723649946973e-05,
+      "router_delta444_db": 0.1328672615976373,
+      "bayer_delta444_db": 0.16015339049910243,
+      "placement_gain_db": 0.027286128901465364
+    },
+    {
+      "image": "0889.png",
+      "qp": 0,
+      "case_sha256": "060fafeee41a2205907bebcc8a879e0e2fd75a4652983466a07d45f7b1faa102",
+      "stream_sha256": "e497b281b2d8e824100ebd91103ba63a99bfbfb734ff56bd08a150a2e276bb34",
+      "source_sha256": "a8f73c42065e3193c4deb883dcb3bc432a3f838e9be5bacea708ee39eb2c6e04",
+      "selected_beta": 45.0,
+      "router_map": [
+        2,
+        3,
+        3,
+        2,
+        2,
+        2
+      ],
+      "bayer_map": [
+        3,
+        2,
+        3,
+        2,
+        2,
+        2
+      ],
+      "exit_counts": [
+        0,
+        0,
+        4,
+        2,
+        0,
+        0
+      ],
+      "same_map": false,
+      "conv_mac_saving_pct": 35.098900041890325,
+      "router_mse444": 0.0009737755754031241,
+      "bayer_mse444": 0.0009752602782100439,
+      "router_delta444_db": 0.10166720387170047,
+      "bayer_delta444_db": 0.1082837918614789,
+      "placement_gain_db": 0.0066165879897792795
+    },
+    {
+      "image": "0889.png",
+      "qp": 16,
+      "case_sha256": "9dab34f53bf94c9c55393f0b65f7f772c8ca17e753c1c736ef9f2385baa42f12",
+      "stream_sha256": "0edf30349c93b37a5d95c023c400fc755c0d210fc5bebcb5e1530054b2bec0a6",
+      "source_sha256": "a8f73c42065e3193c4deb883dcb3bc432a3f838e9be5bacea708ee39eb2c6e04",
+      "selected_beta": 15.0,
+      "router_map": [
+        4,
+        4,
+        4,
+        3,
+        3,
+        3
+      ],
+      "bayer_map": [
+        4,
+        3,
+        4,
+        3,
+        4,
+        3
+      ],
+      "exit_counts": [
+        0,
+        0,
+        0,
+        3,
+        3,
+        0
+      ],
+      "same_map": false,
+      "conv_mac_saving_pct": 19.559132109191346,
+      "router_mse444": 0.00046086296788416803,
+      "bayer_mse444": 0.00046096608275547624,
+      "router_delta444_db": 0.04664480876245749,
+      "bayer_delta444_db": 0.047616403653441164,
+      "placement_gain_db": 0.0009715948909841559
+    },
+    {
+      "image": "0889.png",
+      "qp": 32,
+      "case_sha256": "35090f4bbd2c5481cde9489d946954c6302377510caa7a5374c939523055952f",
+      "stream_sha256": "b059be8a5b898dc3ba5540f676faeaef1afb7cceb194b8474e0cadf14d90ab7c",
+      "source_sha256": "a8f73c42065e3193c4deb883dcb3bc432a3f838e9be5bacea708ee39eb2c6e04",
+      "selected_beta": 15.0,
+      "router_map": [
+        3,
+        4,
+        4,
+        3,
+        3,
+        3
+      ],
+      "bayer_map": [
+        4,
+        3,
+        4,
+        3,
+        3,
+        3
+      ],
+      "exit_counts": [
+        0,
+        0,
+        0,
+        4,
+        2,
+        0
+      ],
+      "same_map": false,
+      "conv_mac_saving_pct": 21.42521617610086,
+      "router_mse444": 0.00021772878244519234,
+      "bayer_mse444": 0.00021781570103485137,
+      "router_delta444_db": 0.08988143513244981,
+      "bayer_delta444_db": 0.09161481786586113,
+      "placement_gain_db": 0.0017333827334112682
+    },
+    {
+      "image": "0889.png",
+      "qp": 48,
+      "case_sha256": "6df75a189cbb40e7d714e756548d58524fbf8b8b64cdb26b04e830a61e8e89e9",
+      "stream_sha256": "51f69b574968a5f66ef02b8072e00266a0decfd46c511c07927a8c506b67b3f2",
+      "source_sha256": "a8f73c42065e3193c4deb883dcb3bc432a3f838e9be5bacea708ee39eb2c6e04",
+      "selected_beta": 10.0,
+      "router_map": [
+        4,
+        4,
+        4,
+        3,
+        3,
+        3
+      ],
+      "bayer_map": [
+        4,
+        3,
+        4,
+        3,
+        4,
+        3
+      ],
+      "exit_counts": [
+        0,
+        0,
+        0,
+        3,
+        3,
+        0
+      ],
+      "same_map": false,
+      "conv_mac_saving_pct": 19.559132109191346,
+      "router_mse444": 0.00010606536670820788,
+      "bayer_mse444": 0.0001063332601916045,
+      "router_delta444_db": 0.12598408517385207,
+      "bayer_delta444_db": 0.13693940300897026,
+      "placement_gain_db": 0.010955317835117426
+    },
+    {
+      "image": "0889.png",
+      "qp": 63,
+      "case_sha256": "f4bddda0753e9c39ade664e3374cc94323ec737f0d54b888a17000d2edc10bb8",
+      "stream_sha256": "6f773b5f6b5a289e489686ffc308122bbab7d46630961ebfd0b3b64911813be6",
+      "source_sha256": "a8f73c42065e3193c4deb883dcb3bc432a3f838e9be5bacea708ee39eb2c6e04",
+      "selected_beta": 5.0,
+      "router_map": [
+        3,
+        4,
+        5,
+        3,
+        3,
+        3
+      ],
+      "bayer_map": [
+        5,
+        3,
+        4,
+        3,
+        3,
+        3
+      ],
+      "exit_counts": [
+        0,
+        0,
+        0,
+        4,
+        1,
+        1
+      ],
+      "same_map": false,
+      "conv_mac_saving_pct": 19.094659934546875,
+      "router_mse444": 5.661953764501959e-05,
+      "bayer_mse444": 5.67707720620092e-05,
+      "router_delta444_db": 0.1826500281386602,
+      "bayer_delta444_db": 0.19423484731557383,
+      "placement_gain_db": 0.011584819176913144
+    },
+    {
+      "image": "0890.png",
+      "qp": 0,
+      "case_sha256": "efb3b8212e564ce52c874ec3f4bda161e1bc0ff539952877df4784babe7ec988",
+      "stream_sha256": "24965d72e54be1e92b380da4ddfbc89be83318792095f2cd9c5e28ccd452d49c",
+      "source_sha256": "67069da53af2b4f5237030631b0b5e087b8014d7b0f59917d96924aca1ab433c",
+      "selected_beta": 45.0,
+      "router_map": [
+        2,
+        2,
+        2,
+        2,
+        2,
+        2
+      ],
+      "bayer_map": [
+        2,
+        2,
+        2,
+        2,
+        2,
+        2
+      ],
+      "exit_counts": [
+        0,
+        0,
+        6,
+        0,
+        0,
+        0
+      ],
+      "same_map": true,
+      "conv_mac_saving_pct": 40.06966163416955,
+      "router_mse444": 0.001700808061286807,
+      "bayer_mse444": 0.001700808061286807,
+      "router_delta444_db": 0.052520828786481066,
+      "bayer_delta444_db": 0.052520828786481066,
+      "placement_gain_db": 0.0
+    },
+    {
+      "image": "0890.png",
+      "qp": 16,
+      "case_sha256": "758be4f1e6aa386c2a49b84e562e0b4baffbd855119e0f03b47036144c176e63",
+      "stream_sha256": "55085a6d7be066a0e01a69d8edb12fb8094a3ba5fee7dbe128c58b1b228225c5",
+      "source_sha256": "67069da53af2b4f5237030631b0b5e087b8014d7b0f59917d96924aca1ab433c",
+      "selected_beta": 15.0,
+      "router_map": [
+        3,
+        3,
+        3,
+        3,
+        3,
+        3
+      ],
+      "bayer_map": [
+        3,
+        3,
+        3,
+        3,
+        3,
+        3
+      ],
+      "exit_counts": [
+        0,
+        0,
+        0,
+        6,
+        0,
+        0
+      ],
+      "same_map": true,
+      "conv_mac_saving_pct": 25.15737834811714,
+      "router_mse444": 0.000979448901489377,
+      "bayer_mse444": 0.000979448901489377,
+      "router_delta444_db": 0.029925698233232968,
+      "bayer_delta444_db": 0.029925698233232968,
+      "placement_gain_db": 0.0
+    },
+    {
+      "image": "0890.png",
+      "qp": 32,
+      "case_sha256": "4ebb4bbbd4fb1a01af7dfebc8b204c7d219b8c248a679213556dbb1e46a1b113",
+      "stream_sha256": "a7cf845dd6763f768f6dc46b91c358cdd31bcae9c452d4e4ad5f4c4eb02ec7b4",
+      "source_sha256": "67069da53af2b4f5237030631b0b5e087b8014d7b0f59917d96924aca1ab433c",
+      "selected_beta": 15.0,
+      "router_map": [
+        3,
+        3,
+        3,
+        4,
+        4,
+        4
+      ],
+      "bayer_map": [
+        4,
+        3,
+        4,
+        3,
+        4,
+        3
+      ],
+      "exit_counts": [
+        0,
+        0,
+        0,
+        3,
+        3,
+        0
+      ],
+      "same_map": false,
+      "conv_mac_saving_pct": 19.559132109191346,
+      "router_mse444": 0.0004300971340853721,
+      "bayer_mse444": 0.0004303185851313174,
+      "router_delta444_db": 0.04357525289862357,
+      "bayer_delta444_db": 0.045810799442960334,
+      "placement_gain_db": 0.0022355465443361653
+    },
+    {
+      "image": "0890.png",
+      "qp": 48,
+      "case_sha256": "c591373c1808a071d252390c0f51bc5907b18e2456a68fec589321f22618908e",
+      "stream_sha256": "f802ee995c29b039234cd6fdc25aee6d06c7712cae7ded87137b1c3370ca04d2",
+      "source_sha256": "67069da53af2b4f5237030631b0b5e087b8014d7b0f59917d96924aca1ab433c",
+      "selected_beta": 10.0,
+      "router_map": [
+        3,
+        4,
+        4,
+        5,
+        5,
+        5
+      ],
+      "bayer_map": [
+        5,
+        4,
+        5,
+        4,
+        5,
+        3
+      ],
+      "exit_counts": [
+        0,
+        0,
+        0,
+        1,
+        2,
+        3
+      ],
+      "same_map": false,
+      "conv_mac_saving_pct": 8.835295253386919,
+      "router_mse444": 0.0001791849354049191,
+      "bayer_mse444": 0.00017985643353313208,
+      "router_delta444_db": 0.03401834435290498,
+      "bayer_delta444_db": 0.05026317277352311,
+      "placement_gain_db": 0.01624482842061821
+    },
+    {
+      "image": "0890.png",
+      "qp": 63,
+      "case_sha256": "e63da3c59311f5ed9bcfcfa9e7d2792fd3e95c43450bc680be2f34071d8f658c",
+      "stream_sha256": "2b4961d16f384af57e108e4d7b30148aec3d9bbdddc849205f534b2f09c217f8",
+      "source_sha256": "67069da53af2b4f5237030631b0b5e087b8014d7b0f59917d96924aca1ab433c",
+      "selected_beta": 5.0,
+      "router_map": [
+        3,
+        3,
+        5,
+        5,
+        5,
+        5
+      ],
+      "bayer_map": [
+        5,
+        5,
+        5,
+        3,
+        5,
+        3
+      ],
+      "exit_counts": [
+        0,
+        0,
+        0,
+        2,
+        0,
+        4
+      ],
+      "same_map": false,
+      "conv_mac_saving_pct": 8.37082009851021,
+      "router_mse444": 9.428382327314466e-05,
+      "bayer_mse444": 9.528763621347025e-05,
+      "router_delta444_db": 0.049408742530619276,
+      "bayer_delta444_db": 0.09540242708702709,
+      "placement_gain_db": 0.045993684556407226
+    },
+    {
+      "image": "0891.png",
+      "qp": 0,
+      "case_sha256": "93e1afd248e092c29890f999ea5bc17789e5235ad9b2391d7c2edbb6f163cd04",
+      "stream_sha256": "360d4beb3923c0eee1d8680e756f30c460387a4c232a4567596b01cfeff0804c",
+      "source_sha256": "8e36e76f3675831c87b2e645e70ef33513b898dc09beb20b0bdcc61cc6d63bed",
+      "selected_beta": 45.0,
+      "router_map": [
+        3,
+        3,
+        3,
+        2,
+        2,
+        3
+      ],
+      "bayer_map": [
+        3,
+        3,
+        3,
+        2,
+        3,
+        2
+      ],
+      "exit_counts": [
+        0,
+        0,
+        2,
+        4,
+        0,
+        0
+      ],
+      "same_map": false,
+      "conv_mac_saving_pct": 30.12813994039636,
+      "router_mse444": 0.0007904702797532082,
+      "bayer_mse444": 0.0007934411987662315,
+      "router_delta444_db": 0.14320345380593466,
+      "bayer_delta444_db": 0.1594954658805983,
+      "placement_gain_db": 0.016292012074662358
+    },
+    {
+      "image": "0891.png",
+      "qp": 16,
+      "case_sha256": "aa123a53478a01e25ccfe3bf4cc7a0b708bcdd787d981144c4a7e0e8c51aff53",
+      "stream_sha256": "8978b4a5e36fade3547ccc0cdd03a11f39393510374bb5c2ed805de4361f88fc",
+      "source_sha256": "8e36e76f3675831c87b2e645e70ef33513b898dc09beb20b0bdcc61cc6d63bed",
+      "selected_beta": 15.0,
+      "router_map": [
+        5,
+        4,
+        4,
+        3,
+        3,
+        4
+      ],
+      "bayer_map": [
+        5,
+        4,
+        4,
+        3,
+        4,
+        3
+      ],
+      "exit_counts": [
+        0,
+        0,
+        0,
+        2,
+        3,
+        1
+      ],
+      "same_map": false,
+      "conv_mac_saving_pct": 15.362491802066124,
+      "router_mse444": 0.0003622156218625605,
+      "bayer_mse444": 0.0003629969141911715,
+      "router_delta444_db": 0.07761514205550568,
+      "bayer_delta444_db": 0.08697270446577199,
+      "placement_gain_db": 0.009357562410266206
+    },
+    {
+      "image": "0891.png",
+      "qp": 32,
+      "case_sha256": "2f8788c102cb0f88f5997304955a3904d9a5426043a457b9d571b7348b55f0a7",
+      "stream_sha256": "8989b165359f6c543613fb07458bd2ea6f36292e3cfc5ac7995573269bb7c12d",
+      "source_sha256": "8e36e76f3675831c87b2e645e70ef33513b898dc09beb20b0bdcc61cc6d63bed",
+      "selected_beta": 15.0,
+      "router_map": [
+        5,
+        5,
+        5,
+        3,
+        3,
+        4
+      ],
+      "bayer_map": [
+        5,
+        4,
+        5,
+        3,
+        5,
+        3
+      ],
+      "exit_counts": [
+        0,
+        0,
+        0,
+        2,
+        1,
+        3
+      ],
+      "same_map": false,
+      "conv_mac_saving_pct": 10.70137633872592,
+      "router_mse444": 0.00017474638298153877,
+      "bayer_mse444": 0.00017537215899210423,
+      "router_delta444_db": 0.08094740729092204,
+      "bayer_delta444_db": 0.09647194113357926,
+      "placement_gain_db": 0.015524533842658228
+    },
+    {
+      "image": "0891.png",
+      "qp": 48,
+      "case_sha256": "473c9ff0f5a60f4fd43f2ce3dd11eb80519086d55ee1e7c13e9095b2a407c07e",
+      "stream_sha256": "75789c21db823d75e73b00d2576301f3b556ef7c061679166a71d7c79ef9bc38",
+      "source_sha256": "8e36e76f3675831c87b2e645e70ef33513b898dc09beb20b0bdcc61cc6d63bed",
+      "selected_beta": 10.0,
+      "router_map": [
+        5,
+        5,
+        5,
+        4,
+        3,
+        5
+      ],
+      "bayer_map": [
+        5,
+        5,
+        5,
+        4,
+        5,
+        3
+      ],
+      "exit_counts": [
+        0,
+        0,
+        0,
+        1,
+        1,
+        4
+      ],
+      "same_map": false,
+      "conv_mac_saving_pct": 6.504741992065173,
+      "router_mse444": 8.98574580787681e-05,
+      "bayer_mse444": 9.073919500224292e-05,
+      "router_delta444_db": 0.046332796946385674,
+      "bayer_delta444_db": 0.08874072827593109,
+      "placement_gain_db": 0.04240793132954516
+    },
+    {
+      "image": "0891.png",
+      "qp": 63,
+      "case_sha256": "398b0d5b829a556273c9c5483991d42018f622e59e8c9a099507707da61f6b0f",
+      "stream_sha256": "875897aa1913953180e9cd0d0d06008f3ee31e648a7091b728df1982a990911a",
+      "source_sha256": "8e36e76f3675831c87b2e645e70ef33513b898dc09beb20b0bdcc61cc6d63bed",
+      "selected_beta": 5.0,
+      "router_map": [
+        5,
+        5,
+        5,
+        5,
+        3,
+        5
+      ],
+      "bayer_map": [
+        5,
+        5,
+        5,
+        5,
+        5,
+        3
+      ],
+      "exit_counts": [
+        0,
+        0,
+        0,
+        1,
+        0,
+        5
+      ],
+      "same_map": false,
+      "conv_mac_saving_pct": 4.174182770278951,
+      "router_mse444": 5.17890730407089e-05,
+      "bayer_mse444": 5.23836788488552e-05,
+      "router_delta444_db": 0.038409561151210136,
+      "bayer_delta444_db": 0.08798813542728894,
+      "placement_gain_db": 0.04957857427607896
+    },
+    {
+      "image": "0892.png",
+      "qp": 0,
+      "case_sha256": "c73f7641ea517f555596bd40b260f03217c7b56970410ca288a27140c141fa56",
+      "stream_sha256": "5b8ded59a654d3deef399dba48fca1445b5969c56e18bb726c997643a5f0f98f",
+      "source_sha256": "7fb05e491f00963e64b53a0f3f7a3d1af51f1434e7fd4898d4b84c479e1f66f9",
+      "selected_beta": 45.0,
+      "router_map": [
+        2,
+        2,
+        2,
+        2,
+        2,
+        2
+      ],
+      "bayer_map": [
+        2,
+        2,
+        2,
+        2,
+        2,
+        2
+      ],
+      "exit_counts": [
+        0,
+        0,
+        6,
+        0,
+        0,
+        0
+      ],
+      "same_map": true,
+      "conv_mac_saving_pct": 40.06966163416955,
+      "router_mse444": 0.0008195061236619949,
+      "bayer_mse444": 0.0008195061236619949,
+      "router_delta444_db": 0.333688735903233,
+      "bayer_delta444_db": 0.333688735903233,
+      "placement_gain_db": 0.0
+    },
+    {
+      "image": "0892.png",
+      "qp": 16,
+      "case_sha256": "82cdef9ceb196052a4f49e92e01329c8b92d3cbd18dc61959ffd8084ada94b36",
+      "stream_sha256": "b194b07a71c55c9556b91460786d3ad75ed0b16b12fa7b42fe40accc5aa55419",
+      "source_sha256": "7fb05e491f00963e64b53a0f3f7a3d1af51f1434e7fd4898d4b84c479e1f66f9",
+      "selected_beta": 15.0,
+      "router_map": [
+        3,
+        3,
+        3,
+        4,
+        4,
+        4
+      ],
+      "bayer_map": [
+        4,
+        3,
+        4,
+        3,
+        4,
+        3
+      ],
+      "exit_counts": [
+        0,
+        0,
+        0,
+        3,
+        3,
+        0
+      ],
+      "same_map": false,
+      "conv_mac_saving_pct": 19.559132109191346,
+      "router_mse444": 0.0003555803559720516,
+      "bayer_mse444": 0.0003568741958588362,
+      "router_delta444_db": 0.10724141765807713,
+      "bayer_delta444_db": 0.12301528392287026,
+      "placement_gain_db": 0.01577386626479341
+    },
+    {
+      "image": "0892.png",
+      "qp": 32,
+      "case_sha256": "e552c47dc20fdf86a7ea39c7f816680a48c6127a6a0c1ab8db62fe004322a587",
+      "stream_sha256": "538dba3a4b9370032ee205abce42a61839e3bc94bd1b02eab174a3d7b5cfb5e5",
+      "source_sha256": "7fb05e491f00963e64b53a0f3f7a3d1af51f1434e7fd4898d4b84c479e1f66f9",
+      "selected_beta": 15.0,
+      "router_map": [
+        3,
+        3,
+        3,
+        4,
+        4,
+        4
+      ],
+      "bayer_map": [
+        4,
+        3,
+        4,
+        3,
+        4,
+        3
+      ],
+      "exit_counts": [
+        0,
+        0,
+        0,
+        3,
+        3,
+        0
+      ],
+      "same_map": false,
+      "conv_mac_saving_pct": 19.559132109191346,
+      "router_mse444": 0.0001625785225769505,
+      "bayer_mse444": 0.000163458869792521,
+      "router_delta444_db": 0.17741058909493507,
+      "bayer_delta444_db": 0.2008637804154792,
+      "placement_gain_db": 0.02345319132054376
+    },
+    {
+      "image": "0892.png",
+      "qp": 48,
+      "case_sha256": "e6f658e8537b19e6f48c2ab13cde42d28727aa1c1695449cdf65361197bbefd1",
+      "stream_sha256": "21eab9914325190d1b2563f6c245b3f8241650d963d257abf767b425d3c1e849",
+      "source_sha256": "7fb05e491f00963e64b53a0f3f7a3d1af51f1434e7fd4898d4b84c479e1f66f9",
+      "selected_beta": 10.0,
+      "router_map": [
+        3,
+        4,
+        3,
+        4,
+        4,
+        4
+      ],
+      "bayer_map": [
+        4,
+        4,
+        4,
+        3,
+        4,
+        3
+      ],
+      "exit_counts": [
+        0,
+        0,
+        0,
+        2,
+        4,
+        0
+      ],
+      "same_map": false,
+      "conv_mac_saving_pct": 17.693048042281834,
+      "router_mse444": 8.518718095729128e-05,
+      "bayer_mse444": 8.575485117034987e-05,
+      "router_delta444_db": 0.27784376976942066,
+      "bayer_delta444_db": 0.306688278550719,
+      "placement_gain_db": 0.028844508781298177
+    },
+    {
+      "image": "0892.png",
+      "qp": 63,
+      "case_sha256": "d9d2e165a0252ccdb0849c952a0b32a8b37b480a910f79f2e2d129771e447d0b",
+      "stream_sha256": "eb05c9b516aec586e9801cbb9b8ef47c2112a15c0c98239649e3ddf9cd36e5e3",
+      "source_sha256": "7fb05e491f00963e64b53a0f3f7a3d1af51f1434e7fd4898d4b84c479e1f66f9",
+      "selected_beta": 5.0,
+      "router_map": [
+        3,
+        3,
+        3,
+        5,
+        5,
+        5
+      ],
+      "bayer_map": [
+        5,
+        3,
+        5,
+        3,
+        5,
+        3
+      ],
+      "exit_counts": [
+        0,
+        0,
+        0,
+        3,
+        0,
+        3
+      ],
+      "same_map": false,
+      "conv_mac_saving_pct": 12.56746040563543,
+      "router_mse444": 5.0517199269961566e-05,
+      "bayer_mse444": 5.158655039849691e-05,
+      "router_delta444_db": 0.19946466284056158,
+      "bayer_delta444_db": 0.29043689002756107,
+      "placement_gain_db": 0.09097222718700004
+    },
+    {
+      "image": "0897.png",
+      "qp": 0,
+      "case_sha256": "04f0eaa5e877770139139f2327d1d974417f9e29c66ff11174656619c4502a71",
+      "stream_sha256": "4f6aad27938252c7fffe72d6c31cf1a4fba702c64334b4d7f484858dfe0a258d",
+      "source_sha256": "dca63f56dba4a2a2c6b920c4b0406c6c6459d8f7ffb0d20322f51fbbc8f14b38",
+      "selected_beta": 45.0,
+      "router_map": [
+        2,
+        2,
+        2,
+        2,
+        2,
+        2
+      ],
+      "bayer_map": [
+        2,
+        2,
+        2,
+        2,
+        2,
+        2
+      ],
+      "exit_counts": [
+        0,
+        0,
+        6,
+        0,
+        0,
+        0
+      ],
+      "same_map": true,
+      "conv_mac_saving_pct": 40.06966163416955,
+      "router_mse444": 0.003631607163697481,
+      "bayer_mse444": 0.003631607163697481,
+      "router_delta444_db": 0.04779272758634865,
+      "bayer_delta444_db": 0.04779272758634865,
+      "placement_gain_db": 0.0
+    },
+    {
+      "image": "0897.png",
+      "qp": 16,
+      "case_sha256": "ff6480d9ac169768594d30385c2452fc6efcbcb9eb7486c5c108f4e5b399ec1b",
+      "stream_sha256": "3352059b6c90de6250f55465036bef050cfbd0f13fb7903579bf5275fcd5e0c1",
+      "source_sha256": "dca63f56dba4a2a2c6b920c4b0406c6c6459d8f7ffb0d20322f51fbbc8f14b38",
+      "selected_beta": 15.0,
+      "router_map": [
+        4,
+        4,
+        4,
+        4,
+        4,
+        4
+      ],
+      "bayer_map": [
+        4,
+        4,
+        4,
+        4,
+        4,
+        4
+      ],
+      "exit_counts": [
+        0,
+        0,
+        0,
+        0,
+        6,
+        0
+      ],
+      "same_map": true,
+      "conv_mac_saving_pct": 13.96087990980108,
+      "router_mse444": 0.0016575916670262814,
+      "bayer_mse444": 0.0016575916670262814,
+      "router_delta444_db": 0.018702063767839193,
+      "bayer_delta444_db": 0.018702063767839193,
+      "placement_gain_db": 0.0
+    },
+    {
+      "image": "0897.png",
+      "qp": 32,
+      "case_sha256": "0f4f7525f035886a81bd97bbe8d30d908cca63c35cda96a6600a8420a96a74c1",
+      "stream_sha256": "3f7957fe29a77a88ea508ad4acd1c40cde5c7165e5ce6da869e22d5e50b748f0",
+      "source_sha256": "dca63f56dba4a2a2c6b920c4b0406c6c6459d8f7ffb0d20322f51fbbc8f14b38",
+      "selected_beta": 15.0,
+      "router_map": [
+        4,
+        4,
+        4,
+        4,
+        4,
+        4
+      ],
+      "bayer_map": [
+        4,
+        4,
+        4,
+        4,
+        4,
+        4
+      ],
+      "exit_counts": [
+        0,
+        0,
+        0,
+        0,
+        6,
+        0
+      ],
+      "same_map": true,
+      "conv_mac_saving_pct": 13.96087990980108,
+      "router_mse444": 0.0006478179711848497,
+      "bayer_mse444": 0.0006478179711848497,
+      "router_delta444_db": 0.048979120721099535,
+      "bayer_delta444_db": 0.048979120721099535,
+      "placement_gain_db": 0.0
+    },
+    {
+      "image": "0897.png",
+      "qp": 48,
+      "case_sha256": "1f94b70d9aa5531ab723452334c944b6dbb4faf6e8e5bffc33644ecbf61604b3",
+      "stream_sha256": "a65bec51631fbfbf1b14ebf596c3893f5dd5b41a5a6569c3e8630dd1b4476d6c",
+      "source_sha256": "dca63f56dba4a2a2c6b920c4b0406c6c6459d8f7ffb0d20322f51fbbc8f14b38",
+      "selected_beta": 10.0,
+      "router_map": [
+        5,
+        5,
+        5,
+        5,
+        5,
+        5
+      ],
+      "bayer_map": [
+        5,
+        5,
+        5,
+        5,
+        5,
+        5
+      ],
+      "exit_counts": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        6
+      ],
+      "same_map": true,
+      "conv_mac_saving_pct": -0.02245455661402243,
+      "router_mse444": 0.0002541516732890159,
+      "bayer_mse444": 0.0002541516732890159,
+      "router_delta444_db": 0.0,
+      "bayer_delta444_db": 0.0,
+      "placement_gain_db": 0.0
+    },
+    {
+      "image": "0897.png",
+      "qp": 63,
+      "case_sha256": "dc475c3869706a41e31c79e9771042e2f62479b64dd04a332e9828ccad376118",
+      "stream_sha256": "4bcefbf7ac5c8ad102e4a995934273783d49275ec984ad77bd743c9e3132f7eb",
+      "source_sha256": "dca63f56dba4a2a2c6b920c4b0406c6c6459d8f7ffb0d20322f51fbbc8f14b38",
+      "selected_beta": 5.0,
+      "router_map": [
+        5,
+        5,
+        5,
+        5,
+        5,
+        5
+      ],
+      "bayer_map": [
+        5,
+        5,
+        5,
+        5,
+        5,
+        5
+      ],
+      "exit_counts": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        6
+      ],
+      "same_map": true,
+      "conv_mac_saving_pct": -0.02245455661402243,
+      "router_mse444": 0.00013757756096310914,
+      "bayer_mse444": 0.00013757756096310914,
+      "router_delta444_db": 0.0,
+      "bayer_delta444_db": 0.0,
+      "placement_gain_db": 0.0
+    },
+    {
+      "image": "0898.png",
+      "qp": 0,
+      "case_sha256": "7838984800e09c710aec267d9ebd9f2043005e010853f3469658903882db6b02",
+      "stream_sha256": "c6b511aa66ef4c870a7b01876b79f8714f9a28bd230d96713b6bfdb56d15e66a",
+      "source_sha256": "4cd6696b8e59615ceacff729181dd9b0cc5ea936ea9a57e089bb1fe4fe87c347",
+      "selected_beta": 45.0,
+      "router_map": [
+        2,
+        3,
+        2,
+        2,
+        3,
+        2
+      ],
+      "bayer_map": [
+        3,
+        2,
+        3,
+        2,
+        2,
+        2
+      ],
+      "exit_counts": [
+        0,
+        0,
+        4,
+        2,
+        0,
+        0
+      ],
+      "same_map": false,
+      "conv_mac_saving_pct": 35.098900041890325,
+      "router_mse444": 0.0010921614011749625,
+      "bayer_mse444": 0.0010949387215077877,
+      "router_delta444_db": 0.11843293089268495,
+      "bayer_delta444_db": 0.12946283785356102,
+      "placement_gain_db": 0.011029906960876062
+    },
+    {
+      "image": "0898.png",
+      "qp": 16,
+      "case_sha256": "1f934e9421e7d242cb2ee25b456da9fdcdf7ae4fb394944af27213826ec1515e",
+      "stream_sha256": "3a308fa948a8dfaa7ff56d61ebe0c4709bab60e3f1dce2c6818405cbb6674cc8",
+      "source_sha256": "4cd6696b8e59615ceacff729181dd9b0cc5ea936ea9a57e089bb1fe4fe87c347",
+      "selected_beta": 15.0,
+      "router_map": [
+        3,
+        3,
+        4,
+        4,
+        4,
+        3
+      ],
+      "bayer_map": [
+        4,
+        3,
+        4,
+        3,
+        4,
+        3
+      ],
+      "exit_counts": [
+        0,
+        0,
+        0,
+        3,
+        3,
+        0
+      ],
+      "same_map": false,
+      "conv_mac_saving_pct": 19.559132109191346,
+      "router_mse444": 0.0004911105497740209,
+      "bayer_mse444": 0.0004917575279250741,
+      "router_delta444_db": 0.06641706858699593,
+      "bayer_delta444_db": 0.07213460256479805,
+      "placement_gain_db": 0.005717533977803352
+    },
+    {
+      "image": "0898.png",
+      "qp": 32,
+      "case_sha256": "dbab392c5237bc7575163ed8180042a3ad9a56a509194bc1e9013732b544049c",
+      "stream_sha256": "d7403c950211ca688bd9d12bd204d20d9c81442ea690acb359338cb61ee13afa",
+      "source_sha256": "4cd6696b8e59615ceacff729181dd9b0cc5ea936ea9a57e089bb1fe4fe87c347",
+      "selected_beta": 15.0,
+      "router_map": [
+        3,
+        3,
+        5,
+        4,
+        4,
+        3
+      ],
+      "bayer_map": [
+        5,
+        3,
+        4,
+        3,
+        4,
+        3
+      ],
+      "exit_counts": [
+        0,
+        0,
+        0,
+        3,
+        2,
+        1
+      ],
+      "same_map": false,
+      "conv_mac_saving_pct": 17.228575867637364,
+      "router_mse444": 0.0002333316660951823,
+      "bayer_mse444": 0.0002346223482163623,
+      "router_delta444_db": 0.11919629408568469,
+      "bayer_delta444_db": 0.14315324401569643,
+      "placement_gain_db": 0.023956949930012125
+    },
+    {
+      "image": "0898.png",
+      "qp": 48,
+      "case_sha256": "2c660a5df3328f2f689bffa023aaae92ccdd9601c8890a0fe1d0b3d3e21ccf01",
+      "stream_sha256": "3999125a07cfac43ff6d29949f26aacf20f4eb687ff51541dfdecc183897b910",
+      "source_sha256": "4cd6696b8e59615ceacff729181dd9b0cc5ea936ea9a57e089bb1fe4fe87c347",
+      "selected_beta": 10.0,
+      "router_map": [
+        3,
+        5,
+        5,
+        5,
+        5,
+        3
+      ],
+      "bayer_map": [
+        5,
+        5,
+        5,
+        3,
+        5,
+        3
+      ],
+      "exit_counts": [
+        0,
+        0,
+        0,
+        2,
+        0,
+        4
+      ],
+      "same_map": false,
+      "conv_mac_saving_pct": 8.37082009851021,
+      "router_mse444": 0.00011746924428734928,
+      "bayer_mse444": 0.00011807676492026076,
+      "router_delta444_db": 0.06676715880468588,
+      "bayer_delta444_db": 0.08916986853073819,
+      "placement_gain_db": 0.022402709726052322
+    },
+    {
+      "image": "0898.png",
+      "qp": 63,
+      "case_sha256": "3acc033749b37f3fbc8ae5bf8af352634ad5b176cbbe38b88a0a16c2d2871292",
+      "stream_sha256": "f28c29e5d5899d943f9e04ca61ac6d9d3b800a326520b3cc97f73a8b7374ccb3",
+      "source_sha256": "4cd6696b8e59615ceacff729181dd9b0cc5ea936ea9a57e089bb1fe4fe87c347",
+      "selected_beta": 5.0,
+      "router_map": [
+        3,
+        5,
+        5,
+        5,
+        5,
+        3
+      ],
+      "bayer_map": [
+        5,
+        5,
+        5,
+        3,
+        5,
+        3
+      ],
+      "exit_counts": [
+        0,
+        0,
+        0,
+        2,
+        0,
+        4
+      ],
+      "same_map": false,
+      "conv_mac_saving_pct": 8.37082009851021,
+      "router_mse444": 7.139543595258147e-05,
+      "bayer_mse444": 7.211829506559297e-05,
+      "router_delta444_db": 0.08416236535304428,
+      "bayer_delta444_db": 0.12791237820826723,
+      "placement_gain_db": 0.04375001285522217
+    },
+    {
+      "image": "0900.png",
+      "qp": 0,
+      "case_sha256": "90618ffd1f217a9ee4aa84964e9285b73d81b9b7a5ca0ac068306625a47b2e71",
+      "stream_sha256": "7bf3c54f7135dab51e45b28f3fd42af9fcb965666ec22ea5d8cb69ada07c66aa",
+      "source_sha256": "06717f2a8f5d21fcec9a9229a7ecaab44dec0343406a59464382f5c4fdea3023",
+      "selected_beta": 45.0,
+      "router_map": [
+        3,
+        3,
+        3,
+        3,
+        3,
+        3
+      ],
+      "bayer_map": [
+        3,
+        3,
+        3,
+        3,
+        3,
+        3
+      ],
+      "exit_counts": [
+        0,
+        0,
+        0,
+        6,
+        0,
+        0
+      ],
+      "same_map": true,
+      "conv_mac_saving_pct": 25.15737834811714,
+      "router_mse444": 0.001050605671480298,
+      "bayer_mse444": 0.001050605671480298,
+      "router_delta444_db": 0.06800516737090366,
+      "bayer_delta444_db": 0.06800516737090366,
+      "placement_gain_db": 0.0
+    },
+    {
+      "image": "0900.png",
+      "qp": 16,
+      "case_sha256": "2cb2d868ec219cf0f9d885703b9b5c85ba6d9618217f01705926521ed0b3454f",
+      "stream_sha256": "011b59743b4f25b2840a018b9a8da3ff3fea0db97e0c0c9a7d63165ac980a10c",
+      "source_sha256": "06717f2a8f5d21fcec9a9229a7ecaab44dec0343406a59464382f5c4fdea3023",
+      "selected_beta": 15.0,
+      "router_map": [
+        4,
+        4,
+        3,
+        4,
+        3,
+        4
+      ],
+      "bayer_map": [
+        4,
+        4,
+        4,
+        3,
+        4,
+        3
+      ],
+      "exit_counts": [
+        0,
+        0,
+        0,
+        2,
+        4,
+        0
+      ],
+      "same_map": false,
+      "conv_mac_saving_pct": 17.693048042281834,
+      "router_mse444": 0.0005507827154360712,
+      "bayer_mse444": 0.0005515872035175562,
+      "router_delta444_db": 0.0904009128191584,
+      "bayer_delta444_db": 0.09673970691293399,
+      "placement_gain_db": 0.006338794093775703
+    },
+    {
+      "image": "0900.png",
+      "qp": 32,
+      "case_sha256": "96d174eaba9f2b8b03313bd402a4d0654ddf4e92d867a66ea1dc66959146279c",
+      "stream_sha256": "98ce3ba0f29c05f9766088e47ee71806ebbe21a390de37bf5621c5d1172163e7",
+      "source_sha256": "06717f2a8f5d21fcec9a9229a7ecaab44dec0343406a59464382f5c4fdea3023",
+      "selected_beta": 15.0,
+      "router_map": [
+        5,
+        5,
+        3,
+        5,
+        3,
+        4
+      ],
+      "bayer_map": [
+        5,
+        4,
+        5,
+        3,
+        5,
+        3
+      ],
+      "exit_counts": [
+        0,
+        0,
+        0,
+        2,
+        1,
+        3
+      ],
+      "same_map": false,
+      "conv_mac_saving_pct": 10.70137633872592,
+      "router_mse444": 0.00031260206014849246,
+      "bayer_mse444": 0.0003162971988786012,
+      "router_delta444_db": 0.05637007569469026,
+      "bayer_delta444_db": 0.10740517565908439,
+      "placement_gain_db": 0.05103509996439401
+    },
+    {
+      "image": "0900.png",
+      "qp": 48,
+      "case_sha256": "59cd3ee70e0b1c4790dffd1d19eef747b7bab680e2f29a3ed4bd0990098959ec",
+      "stream_sha256": "f89d5b46aa8ce8f57a8bdf60102cb0f3d6600d93ac52331b1ec26622aec8c037",
+      "source_sha256": "06717f2a8f5d21fcec9a9229a7ecaab44dec0343406a59464382f5c4fdea3023",
+      "selected_beta": 10.0,
+      "router_map": [
+        5,
+        5,
+        5,
+        5,
+        3,
+        5
+      ],
+      "bayer_map": [
+        5,
+        5,
+        5,
+        5,
+        5,
+        3
+      ],
+      "exit_counts": [
+        0,
+        0,
+        0,
+        1,
+        0,
+        5
+      ],
+      "same_map": false,
+      "conv_mac_saving_pct": 4.174182770278951,
+      "router_mse444": 0.00018421415006741881,
+      "bayer_mse444": 0.00018594114226289093,
+      "router_delta444_db": 0.014978118331162228,
+      "bayer_delta444_db": 0.05550319731784923,
+      "placement_gain_db": 0.040525078986688
+    },
+    {
+      "image": "0900.png",
+      "qp": 63,
+      "case_sha256": "d1b9140fc09aa0e4665b20856c5222470652632d504c1db42892c157abdd1667",
+      "stream_sha256": "e61d09c62ef36ad8699ff7722e5bf3cb0f9071287ec7b699a0ec04988b3805d3",
+      "source_sha256": "06717f2a8f5d21fcec9a9229a7ecaab44dec0343406a59464382f5c4fdea3023",
+      "selected_beta": 5.0,
+      "router_map": [
+        5,
+        5,
+        5,
+        5,
+        3,
+        5
+      ],
+      "bayer_map": [
+        5,
+        5,
+        5,
+        5,
+        5,
+        3
+      ],
+      "exit_counts": [
+        0,
+        0,
+        0,
+        1,
+        0,
+        5
+      ],
+      "same_map": false,
+      "conv_mac_saving_pct": 4.174182770278951,
+      "router_mse444": 0.00010638411185937002,
+      "bayer_mse444": 0.0001083385941456072,
+      "router_delta444_db": 0.027954287639466717,
+      "bayer_delta444_db": 0.10701852181040807,
+      "placement_gain_db": 0.07906423417094133
+    }
+  ]
+}

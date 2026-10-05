@@ -1,0 +1,131 @@
+{
+  "scope": "Exploratory DIV2K validation24 x five-QP frozen e15/FUFREF2 beta budget transfer; exact architecture-level synthesis convolution MAC, no YUV BD-rate or latency claim.",
+  "source_sha256": {
+    "budget_analysis": "c8ea676bcc5222e06dab576e43761e9b292964ad964ad841eeaed92aede952ea",
+    "primary_analysis": "d31fb369042a39a73b0bfcb410fc7d205dc1a5a728c23cc126c707d517dcc131"
+  },
+  "script_sha256": "3c87392540634bf7335db9118aef23c0d4d90913f559fbe1d4211aaa4f9df20e",
+  "canvas_mm": [
+    90.17,
+    72.9
+  ],
+  "feasible_targets": [
+    "0.075",
+    "0.1",
+    "0.125",
+    "0.15"
+  ],
+  "points": {
+    "original_beta": {
+      "loss": {
+        "mean": 0.0691859628610063,
+        "image_cluster_ci95": [
+          0.047799707258454574,
+          0.09512621102412637
+        ],
+        "min": 0.0,
+        "max": 0.47678597551124974,
+        "higher": 105,
+        "lower": 0,
+        "equal": 15
+      },
+      "mac": {
+        "mean": 20.56429140585778,
+        "image_cluster_ci95": [
+          17.380167815837833,
+          23.88673524846509
+        ],
+        "min": 0.0,
+        "max": 39.413577261610314,
+        "higher": 105,
+        "lower": 0,
+        "equal": 15
+      }
+    },
+    "0.075": {
+      "loss": {
+        "mean": 0.0692737694813749,
+        "image_cluster_ci95": [
+          0.047187310215638247,
+          0.09702068557481958
+        ],
+        "min": 0.0,
+        "max": 0.47678597551124974
+      },
+      "mac": {
+        "mean": 20.081017718883718,
+        "image_cluster_ci95": [
+          16.87599026774076,
+          23.443585252840684
+        ],
+        "min": 0.0,
+        "max": 39.413577261610314
+      }
+    },
+    "0.1": {
+      "loss": {
+        "mean": 0.08892315879210419,
+        "image_cluster_ci95": [
+          0.06221411899842138,
+          0.12067419578757888
+        ],
+        "min": 0.0,
+        "max": 0.47678597551124974
+      },
+      "mac": {
+        "mean": 22.564448006337717,
+        "image_cluster_ci95": [
+          19.303282737560625,
+          25.843424276759105
+        ],
+        "min": 0.0,
+        "max": 39.413577261610314
+      }
+    },
+    "0.125": {
+      "loss": {
+        "mean": 0.11554297715322838,
+        "image_cluster_ci95": [
+          0.08234930720250223,
+          0.15501216006695617
+        ],
+        "min": 0.0,
+        "max": 0.6091821569263333
+      },
+      "mac": {
+        "mean": 25.816625443893273,
+        "image_cluster_ci95": [
+          22.66812385716194,
+          28.859897841216323
+        ],
+        "min": 0.0,
+        "max": 39.413577261610314
+      }
+    },
+    "0.15": {
+      "loss": {
+        "mean": 0.1349226072484674,
+        "image_cluster_ci95": [
+          0.10062259595664945,
+          0.1759462702023576
+        ],
+        "min": 0.0,
+        "max": 0.6091821569263333
+      },
+      "mac": {
+        "mean": 28.271061613077062,
+        "image_cluster_ci95": [
+          25.926421379650225,
+          30.62931860367643
+        ],
+        "min": 0.0,
+        "max": 39.413577261610314
+      }
+    }
+  },
+  "artifacts": {
+    "active_beta_budget_transfer.pdf": "429bae46513a145f59a965eef7da9330dcaba0dd7b15d0ff3c8e388ac8b0be89",
+    "active_beta_budget_transfer.svg": "f18fde0e12ac62ffdfe4a0994d072e45ffa350a27d4151d1c08b633c90713e8c",
+    "active_beta_budget_transfer.png": "fc7fd5c886ad430af6450b4a98155cb00d2e128deaee7ec1417ff2a8e8fbcacd"
+  }
+}

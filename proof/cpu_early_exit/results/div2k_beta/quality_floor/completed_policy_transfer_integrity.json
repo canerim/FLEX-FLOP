@@ -1,0 +1,21 @@
+{
+  "scope": "Read-only cross-file integrity; not independent model evaluation or native codec reproduction.",
+  "source_sha256": {
+    "primary_raw": "35d767f4edc13585946265c287f93c64d7cc6de9e31dbae4e8c93472d9da14a9",
+    "budget_raw": "036bab596f627fccd9c41548b4ebd5f9fa28c0fce62b9f307850cb8dc61c081c",
+    "budget_analysis": "c8ea676bcc5222e06dab576e43761e9b292964ad964ad841eeaed92aede952ea",
+    "tail_raw": "e713288b26a4c4c783b5e4d738943ac8ba34368a74c761de3eaeebf0903881a0",
+    "tail_analysis": "f0c5f9786f8e1779623c361ad50414670be07051504d8e91ed71a4b7756b5e41",
+    "bayer_raw": "e4b5cbe7387abdd782e8e5ed4c1946d21883b961b115fe6268c8e283b9789c6b",
+    "bayer_analysis": "b502166c1c7debcd57d0fc2c8d8c3fef08ffe58466e81d80c5900a859be9660a",
+    "clic_raw": "7972e8d2f878ccf06dd1f25bcd04f4b75f39c6a99e3496988a2a7656ddea8806",
+    "clic_summary": "bbf20170eb4fbf0bfad9107c7d3d2ca991a1807c1eabbb5bcba33b8835a3b851"
+  },
+  "script_sha256": "f43839c100886247816906093c8913a618d8898376c0a7dec8d66c5eb3139e51",
+  "matched_div2k_cases": 120,
+  "matched_clic_cases": 195,
+  "same_stream_and_case_hash_across_div2k_arms": true,
+  "budget_0p1_equals_primary_route_and_quality": true,
+  "bayer_histograms_and_exact_macs_match_router": true,
+  "clic_all_bd_rate_curves_available": true
+}
