@@ -1,0 +1,171 @@
+{
+  "scope": "Read-only calibration candidate audit; no validation outcome or policy revision.",
+  "source_sha256": {
+    "policy": "9759f26d5f2e0d6ce6284379a7f7ce47db681ae7b76cc1f07921b2329b790efd",
+    "exact_candidate_audit": "64f83d27749cb985f571b20dad96ace4a66dac3032782efc6d9f8a96bf760a66",
+    "script": "ad2a734dfc11da9e8977cc86c6583d02bc104ef4a50932cb804229505e9d930a"
+  },
+  "all_match": true,
+  "comparisons": [
+    {
+      "target_db": 0.075,
+      "qp": 0,
+      "selected_beta": 25.0,
+      "exact_optimum_beta": 25.0,
+      "same_beta": true,
+      "selected_exact_conv_mac_saving_pct": 28.544237332633244
+    },
+    {
+      "target_db": 0.075,
+      "qp": 16,
+      "selected_beta": 15.0,
+      "exact_optimum_beta": 15.0,
+      "same_beta": true,
+      "selected_exact_conv_mac_saving_pct": 21.64690737081612
+    },
+    {
+      "target_db": 0.075,
+      "qp": 32,
+      "selected_beta": 15.0,
+      "exact_optimum_beta": 15.0,
+      "same_beta": true,
+      "selected_exact_conv_mac_saving_pct": 21.794296057813217
+    },
+    {
+      "target_db": 0.075,
+      "qp": 48,
+      "selected_beta": 10.0,
+      "exact_optimum_beta": 10.0,
+      "same_beta": true,
+      "selected_exact_conv_mac_saving_pct": 17.872950951808505
+    },
+    {
+      "target_db": 0.075,
+      "qp": 63,
+      "selected_beta": -5.0,
+      "exact_optimum_beta": -5.0,
+      "same_beta": true,
+      "selected_exact_conv_mac_saving_pct": 14.736565751475041
+    },
+    {
+      "target_db": 0.1,
+      "qp": 0,
+      "selected_beta": 45.0,
+      "exact_optimum_beta": 45.0,
+      "same_beta": true,
+      "selected_exact_conv_mac_saving_pct": 33.513078443022756
+    },
+    {
+      "target_db": 0.1,
+      "qp": 16,
+      "selected_beta": 15.0,
+      "exact_optimum_beta": 15.0,
+      "same_beta": true,
+      "selected_exact_conv_mac_saving_pct": 21.64690737081612
+    },
+    {
+      "target_db": 0.1,
+      "qp": 32,
+      "selected_beta": 15.0,
+      "exact_optimum_beta": 15.0,
+      "same_beta": true,
+      "selected_exact_conv_mac_saving_pct": 21.794296057813217
+    },
+    {
+      "target_db": 0.1,
+      "qp": 48,
+      "selected_beta": 10.0,
+      "exact_optimum_beta": 10.0,
+      "same_beta": true,
+      "selected_exact_conv_mac_saving_pct": 17.872950951808505
+    },
+    {
+      "target_db": 0.1,
+      "qp": 63,
+      "selected_beta": 5.0,
+      "exact_optimum_beta": 5.0,
+      "same_beta": true,
+      "selected_exact_conv_mac_saving_pct": 17.436772556226487
+    },
+    {
+      "target_db": 0.125,
+      "qp": 0,
+      "selected_beta": 50.0,
+      "exact_optimum_beta": 50.0,
+      "same_beta": true,
+      "selected_exact_conv_mac_saving_pct": 35.68694642881817
+    },
+    {
+      "target_db": 0.125,
+      "qp": 16,
+      "selected_beta": 45.0,
+      "exact_optimum_beta": 45.0,
+      "same_beta": true,
+      "selected_exact_conv_mac_saving_pct": 30.718105318428655
+    },
+    {
+      "target_db": 0.125,
+      "qp": 32,
+      "selected_beta": 15.0,
+      "exact_optimum_beta": 15.0,
+      "same_beta": true,
+      "selected_exact_conv_mac_saving_pct": 21.794296057813217
+    },
+    {
+      "target_db": 0.125,
+      "qp": 48,
+      "selected_beta": 15.0,
+      "exact_optimum_beta": 15.0,
+      "same_beta": true,
+      "selected_exact_conv_mac_saving_pct": 22.259952190794653
+    },
+    {
+      "target_db": 0.125,
+      "qp": 63,
+      "selected_beta": 10.0,
+      "exact_optimum_beta": 10.0,
+      "same_beta": true,
+      "selected_exact_conv_mac_saving_pct": 19.530267648643797
+    },
+    {
+      "target_db": 0.15,
+      "qp": 0,
+      "selected_beta": 60.0,
+      "exact_optimum_beta": 60.0,
+      "same_beta": true,
+      "selected_exact_conv_mac_saving_pct": 38.89598964594473
+    },
+    {
+      "target_db": 0.15,
+      "qp": 16,
+      "selected_beta": 55.0,
+      "exact_optimum_beta": 55.0,
+      "same_beta": true,
+      "selected_exact_conv_mac_saving_pct": 33.720113489288984
+    },
+    {
+      "target_db": 0.15,
+      "qp": 32,
+      "selected_beta": 20.0,
+      "exact_optimum_beta": 20.0,
+      "same_beta": true,
+      "selected_exact_conv_mac_saving_pct": 26.79814198136455
+    },
+    {
+      "target_db": 0.15,
+      "qp": 48,
+      "selected_beta": 15.0,
+      "exact_optimum_beta": 15.0,
+      "same_beta": true,
+      "selected_exact_conv_mac_saving_pct": 22.259952190794653
+    },
+    {
+      "target_db": 0.15,
+      "qp": 63,
+      "selected_beta": 10.0,
+      "exact_optimum_beta": 10.0,
+      "same_beta": true,
+      "selected_exact_conv_mac_saving_pct": 19.530267648643797
+    }
+  ]
+}
