@@ -10,6 +10,7 @@ import json
 from pathlib import Path
 
 import numpy as np
+from exact_active_conv_mac import exact_active_no_repair_saving_pct
 
 HERE = Path(__file__).resolve().parent
 BASE = HERE / 'results/div2k_beta/quality_floor'
@@ -60,12 +61,19 @@ def main() -> None:
                         r['new_delta444_db'])
         saving_gain = (r['new_conv_mac_saving_pct']-
                        r['old_active_no_repair_conv_mac_saving_pct'])
+        new_exact = exact_active_no_repair_saving_pct(r['exit_map'])
+        old_exact = exact_active_no_repair_saving_pct(r['old_exit_map'])
         rows.append({**r, 'new_vs_old_quality_gain_db': quality_gain,
-                     'new_vs_old_conv_mac_saving_points': saving_gain})
+                     'new_vs_old_conv_mac_saving_points': saving_gain,
+                     'new_exact_conv_mac_saving_pct':new_exact,
+                     'old_exact_conv_mac_saving_pct':old_exact,
+                     'new_vs_old_exact_conv_mac_saving_points':new_exact-old_exact})
     rng = np.random.default_rng(20261007)
     fields = ('new_delta444_db', 'old_active_no_repair_delta444_db',
               'new_conv_mac_saving_pct',
               'old_active_no_repair_conv_mac_saving_pct',
+              'new_exact_conv_mac_saving_pct','old_exact_conv_mac_saving_pct',
+              'new_vs_old_exact_conv_mac_saving_points',
               'new_vs_old_quality_gain_db',
               'new_vs_old_conv_mac_saving_points')
     all_stats = {field: summarize(rows, field, rng) for field in fields}
@@ -86,7 +94,8 @@ def main() -> None:
     output = {
         'scope': 'Exploratory disjoint DIV2K validation24 x 5QP of calibration-locked beta with active-replicate/no-repair; same streams and e15, untimed CPU FP32. Analytical synthesis-conv MAC only.',
         'source_sha256': {'raw': sha(RAW), 'policy': sha(POLICY),
-                          'frontier': sha(FRONTIER), 'script': sha(Path(__file__))},
+                          'frontier': sha(FRONTIER), 'script': sha(Path(__file__)),
+                          'exact_conv_formula':sha(HERE/'exact_active_conv_mac.py')},
         'bootstrap': '10000 image-cluster draws, retaining five QPs per sampled image',
         'selected_beta': policy['beta'], 'all': all_stats, 'per_qp': per_qp,
         'validation_mean_delta444_within_0p1_by_qp': per_qp_target,
@@ -95,7 +104,8 @@ def main() -> None:
     OUT.write_text(json.dumps(output, indent=2)+'\n')
     print(json.dumps({'selected_beta': output['selected_beta'],
                       'mean_loss': all_stats['new_delta444_db']['mean'],
-                      'mean_saving_pct': all_stats['new_conv_mac_saving_pct']['mean'],
+                      'mean_legacy_saving_pct': all_stats['new_conv_mac_saving_pct']['mean'],
+                      'mean_exact_saving_pct': all_stats['new_exact_conv_mac_saving_pct']['mean'],
                       'saving_change_points': all_stats['new_vs_old_conv_mac_saving_points']['mean'],
                       'quality_change_db': all_stats['new_vs_old_quality_gain_db']['mean'],
                       'per_qp_target': per_qp_target, 'thresholds': thresholds}, indent=2))

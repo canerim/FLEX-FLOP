@@ -30,3 +30,15 @@ def exact_active_no_repair_saving_pct(exit_map:list[int],
     active=measured['e15_routed_conv_macs']-repair
     assert active>0
     return 100*(1-active/measured['released_conv_macs'])
+
+
+def exact_deployed_saving_pct(exit_map:list[int],
+                              shape_hw:tuple[int,int]=(512,768))->float:
+    height,width=shape_hw
+    if len(exit_map)!=(height//256)*(width//256):
+        raise ValueError('Exit map does not match equal 256-pixel tile grid')
+    if any(k not in (2,3,4,5) for k in exit_map):
+        raise ValueError('Only the frozen e15 four-exit decoder is supported')
+    counts=[exit_map.count(k) for k in range(6)]
+    measured=case_macs({'padded_shape':[height,width],'tile_counts':counts})
+    return 100*measured['e15_routed_conv_mac_saving_fraction']

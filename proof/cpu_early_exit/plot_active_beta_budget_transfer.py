@@ -25,7 +25,7 @@ def main() -> None:
     primary = json.loads(PRIMARY.read_text())
     assert '0.1' in budget['feasible_targets']
     old_loss = primary['all']['old_active_no_repair_delta444_db']
-    old_mac = primary['all']['old_active_no_repair_conv_mac_saving_pct']
+    old_mac = primary['all']['old_exact_conv_mac_saving_pct']
     colours = {'0.075':'#2B5D76', '0.1':'#16697A',
                '0.125':'#B77742', '0.15':'#A34E37'}
     plt.rcParams.update({
@@ -43,7 +43,7 @@ def main() -> None:
     for target in budget['feasible_targets']:
         row = budget['policies'][target]
         q = row['mean_delta444_db']
-        mac = row['mean_conv_mac_saving_pct']
+        mac = row['mean_exact_conv_mac_saving_pct']
         x, y = q['mean'], mac['mean']
         color = colours[target]
         ax.errorbar(x, y,
@@ -86,13 +86,13 @@ def main() -> None:
     svg = OUT/'active_beta_budget_transfer.svg'
     svg.write_text('\n'.join(line.rstrip() for line in svg.read_text().splitlines())+'\n')
     evidence = {
-        'scope':'Exploratory DIV2K validation24 x five-QP frozen e15/FUFREF2 beta budget transfer; analytical synthesis conv. MAC, no YUV BD-rate or latency claim.',
+        'scope':'Exploratory DIV2K validation24 x five-QP frozen e15/FUFREF2 beta budget transfer; exact architecture-level synthesis convolution MAC, no YUV BD-rate or latency claim.',
         'source_sha256':{'budget_analysis':sha(BUDGET),'primary_analysis':sha(PRIMARY)},
         'script_sha256':sha(Path(__file__)), 'canvas_mm':[90.17,72.90],
         'feasible_targets':budget['feasible_targets'],
         'points':{'original_beta':{'loss':old_loss,'mac':old_mac},
                   **{target:{'loss':budget['policies'][target]['mean_delta444_db'],
-                             'mac':budget['policies'][target]['mean_conv_mac_saving_pct']}
+                             'mac':budget['policies'][target]['mean_exact_conv_mac_saving_pct']}
                      for target in budget['feasible_targets']}},
         'artifacts':{f'active_beta_budget_transfer.{ext}':sha(OUT/f'active_beta_budget_transfer.{ext}')
                      for ext in ('pdf','svg','png')},

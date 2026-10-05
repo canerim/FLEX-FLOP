@@ -6,6 +6,7 @@ import json
 from pathlib import Path
 
 import numpy as np
+from exact_active_conv_mac import exact_active_no_repair_saving_pct
 
 HERE = Path(__file__).resolve().parent
 BASE = HERE/'results/div2k_beta/quality_floor'
@@ -45,7 +46,12 @@ def main()->None:
     assert all(r['tail_beta']==policy['beta'][str(r['qp'])] for r in rows)
     extended=[]
     for r in rows:
+        tail_exact=exact_active_no_repair_saving_pct(r['tail_exit_map'])
+        primary_exact=exact_active_no_repair_saving_pct(r['primary_exit_map'])
         extended.append({**r,
+                         'tail_exact_conv_mac_saving_pct':tail_exact,
+                         'primary_exact_conv_mac_saving_pct':primary_exact,
+                         'tail_minus_primary_exact_saving_points':tail_exact-primary_exact,
                          'tail_minus_primary_saving_points':
                              r['tail_conv_mac_saving_pct']-r['primary_conv_mac_saving_pct'],
                          'tail_minus_primary_quality_gain_db':
@@ -53,6 +59,8 @@ def main()->None:
     rng=np.random.default_rng(20261010)
     fields=('tail_delta444_db','primary_delta444_db',
             'tail_conv_mac_saving_pct','primary_conv_mac_saving_pct',
+            'tail_exact_conv_mac_saving_pct','primary_exact_conv_mac_saving_pct',
+            'tail_minus_primary_exact_saving_points',
             'tail_minus_primary_saving_points',
             'tail_minus_primary_quality_gain_db')
     all_stats={field:summary(extended,field,rng) for field in fields}
@@ -73,14 +81,15 @@ def main()->None:
     output={
         'scope':'Exploratory calibration-only tail-vs-mean beta transfer on DIV2K validation24 x five-QP, same e15/FUFREF2 and active-replicate/no-repair; untimed analytical MAC.',
         'source_sha256':{'raw':sha(RAW),'policy':sha(POLICY),
-                         'script':sha(Path(__file__))},
+                         'script':sha(Path(__file__)),
+                         'exact_conv_formula':sha(HERE/'exact_active_conv_mac.py')},
         'bootstrap':'10000 image-cluster draws retaining all five QPs per image',
         'beta':policy['beta'],'all':all_stats,'per_qp':by_qp,
         'thresholds':thresholds,'rows':extended,
     }
     OUT.write_text(json.dumps(output,indent=2)+'\n')
     print(json.dumps({'mean_quality_gain_db':all_stats['tail_minus_primary_quality_gain_db']['mean'],
-                      'mean_saving_change_points':all_stats['tail_minus_primary_saving_points']['mean'],
+                      'mean_exact_saving_change_points':all_stats['tail_minus_primary_exact_saving_points']['mean'],
                       'thresholds':thresholds},indent=2))
 
 

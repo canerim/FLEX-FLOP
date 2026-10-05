@@ -6,6 +6,7 @@ import json
 from pathlib import Path
 
 import numpy as np
+from exact_active_conv_mac import exact_active_no_repair_saving_pct
 
 HERE = Path(__file__).resolve().parent
 BASE = HERE / 'results/div2k_beta/quality_floor'
@@ -40,7 +41,9 @@ def main() -> None:
     assert raw['targets'] == policy['targets']
     assert raw['feasible_targets'] == [str(t) for t in policy['targets']
                                      if policy['policies'][str(t)]['complete_five_qp_policy']]
-    rows = raw['rows']
+    rows = [{**r, 'targets': {target: {**record,
+              'exact_conv_mac_saving_pct':exact_active_no_repair_saving_pct(record['exit_map'])}
+              for target,record in r['targets'].items()}} for r in raw['rows']]
     keys = {(r['image'],r['qp']) for r in rows}
     assert len(keys) == 120 and len({im for im,_ in keys}) == 24
     assert all({qp for im,qp in keys if im==image} == set(QPS)
@@ -53,12 +56,14 @@ def main() -> None:
                    for r in rows)
         loss = lambda r: r['targets'][target]['delta444_db']
         saving = lambda r: r['targets'][target]['conv_mac_saving_pct']
+        exact_saving = lambda r: r['targets'][target]['exact_conv_mac_saving_pct']
         qps = {}
         for qp in QPS:
             subset = [r for r in rows if r['qp']==qp]
             qps[str(qp)] = {
                 'mean_delta444_db': summary(subset, loss, rng),
                 'mean_conv_mac_saving_pct': summary(subset, saving, rng),
+                'mean_exact_conv_mac_saving_pct':summary(subset,exact_saving,rng),
                 'over_0p1_count': sum(loss(r) > .1 for r in subset),
                 'validation_mean_within_calibration_target':
                     sum(loss(r) for r in subset)/24 <= float(target),
@@ -66,18 +71,22 @@ def main() -> None:
         policies[target] = {
             'mean_delta444_db': summary(rows, loss, rng),
             'mean_conv_mac_saving_pct': summary(rows, saving, rng),
+            'mean_exact_conv_mac_saving_pct':summary(rows,exact_saving,rng),
             'over_0p1_count': sum(loss(r) > .1 for r in rows),
             'per_qp': qps,
         }
         if target != '0.1':
             policies[target]['saving_change_vs_0p1_points'] = summary(
                 rows, lambda r: saving(r)-r['targets']['0.1']['conv_mac_saving_pct'], rng)
+            policies[target]['exact_saving_change_vs_0p1_points'] = summary(
+                rows, lambda r: exact_saving(r)-r['targets']['0.1']['exact_conv_mac_saving_pct'], rng)
             policies[target]['quality_change_vs_0p1_db'] = summary(
                 rows, lambda r: r['targets']['0.1']['delta444_db']-loss(r), rng)
     output = {
         'scope': 'Exploratory validation transfer of predeclared calibration-only quality budgets; frozen e15/FUFREF2, untimed analytical synthesis-conv MAC.',
         'source_sha256': {'raw': sha(RAW), 'policy': sha(POLICY),
-                          'script': sha(Path(__file__))},
+                          'script': sha(Path(__file__)),
+                          'exact_conv_formula':sha(HERE/'exact_active_conv_mac.py')},
         'bootstrap': '10000 image-cluster draws retaining five QPs per image',
         'all_targets': raw['targets'], 'feasible_targets': raw['feasible_targets'],
         'policies': policies,
@@ -85,7 +94,7 @@ def main() -> None:
     OUT.write_text(json.dumps(output, indent=2)+'\n')
     print(json.dumps({'feasible_targets': output['feasible_targets'],
                       'policies': {target: {'mean_loss': p['mean_delta444_db']['mean'],
-                                           'mean_saving': p['mean_conv_mac_saving_pct']['mean'],
+                                           'mean_exact_saving': p['mean_exact_conv_mac_saving_pct']['mean'],
                                            'over_0p1': p['over_0p1_count']}
                                    for target,p in policies.items()}}, indent=2))
 

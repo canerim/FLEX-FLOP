@@ -25,12 +25,13 @@ change. On the Kodak old-β maps, active-replicate/no-repair has **26.27%**
 exact saving, versus **26.82%** under the legacy formula; the mean
 overstatement is 0.549 percentage points across 120 cases.
 
-The active-replicate β calibration currently running was intentionally
-left untouched to preserve its provenance. Its stored MAC fields and the
-queued selector still use the historical proxy. After the policy is
-locked, we must recompute exact savings for every candidate and check
-whether the selected β would change under exact arithmetic. The
-calibration-only choice cannot be revised using validation outcomes.
+The active-replicate β calibration was left untouched to preserve its
+provenance. Its stored MAC fields and locked selector use the historical
+proxy. A read-only recalculation over all 120 completed calibration cases
+finds the **same selected beta at all five QPs** under exact arithmetic:
+45/15/15/10/5. The reproducible selector audit is queued behind the
+ongoing validation and will record both rankings and held-out exact MAC.
+The calibration-only choice cannot be revised using validation outcomes.
 Future paper claims should use exact arithmetic for reported savings and
 label the original policy's selection cost as the legacy proxy.
 

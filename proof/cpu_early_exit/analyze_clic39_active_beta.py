@@ -9,6 +9,8 @@ from pathlib import Path
 
 import numpy as np
 from scipy.interpolate import PchipInterpolator
+from exact_active_conv_mac import (exact_active_no_repair_saving_pct,
+                                   exact_deployed_saving_pct)
 
 HERE = Path(__file__).resolve().parent
 RAW = HERE / 'results/clic39_active_beta/raw.json'
@@ -80,6 +82,12 @@ def main() -> None:
         assert row['old_beta'] == old_policy['beta'][str(row['qp'])]
         assert row['new_beta'] == new_policy['beta'][str(row['qp'])]
         assert row['stream_bytes'] > 0 and row['rate_bpp'] > 0
+        old_map,new_map=row['old_exit_map'],row['new_exit_map']
+        row['exact_conv_mac_saving_pct']={
+            'deployed_old_beta':exact_deployed_saving_pct(old_map),
+            'active_old_beta':exact_active_no_repair_saving_pct(old_map),
+            'active_new_beta':exact_active_no_repair_saving_pct(new_map),
+        }
     rng = np.random.default_rng(20261005)
     per_qp = {}
     for qp in QPS:
@@ -97,6 +105,11 @@ def main() -> None:
                           x['yuv611_psnr_db']['active_old_beta']),
             'new_conv_mac_saving_pct': metric(
                 lambda x: x['conv_mac_saving_pct']['active_new_beta']),
+            'new_exact_conv_mac_saving_pct':metric(
+                lambda x: x['exact_conv_mac_saving_pct']['active_new_beta']),
+            'new_minus_deployed_exact_conv_mac_saving_pp':metric(
+                lambda x: x['exact_conv_mac_saving_pct']['active_new_beta']-
+                          x['exact_conv_mac_saving_pct']['deployed_old_beta']),
             'new_minus_deployed_conv_mac_saving_pp': metric(
                 lambda x: x['conv_mac_saving_pct']['active_new_beta'] -
                           x['conv_mac_saving_pct']['deployed_old_beta']),
@@ -118,6 +131,11 @@ def main() -> None:
                       x['yuv611_psnr_db']['deployed_old_beta']),
         'new_conv_mac_saving_pct': image_means(
             lambda x: x['conv_mac_saving_pct']['active_new_beta']),
+        'new_exact_conv_mac_saving_pct':image_means(
+            lambda x: x['exact_conv_mac_saving_pct']['active_new_beta']),
+        'new_minus_deployed_exact_conv_mac_saving_pp':image_means(
+            lambda x: x['exact_conv_mac_saving_pct']['active_new_beta']-
+                      x['exact_conv_mac_saving_pct']['deployed_old_beta']),
         'new_minus_deployed_conv_mac_saving_pp': image_means(
             lambda x: x['conv_mac_saving_pct']['active_new_beta'] -
                       x['conv_mac_saving_pct']['deployed_old_beta']),
@@ -134,7 +152,10 @@ def main() -> None:
         rate = [x['rate_bpp'] for x in r]
         qualities = {arm: [x['yuv611_psnr_db'][arm] for x in r] for arm in ARMS}
         report = {'image': image, 'qps': list(QPS), 'rate_bpp': rate,
-                  'yuv611_psnr_db': qualities, 'bd_rate_pct': {},
+                  'yuv611_psnr_db': qualities,
+                  'exact_conv_mac_saving_pct':{arm:[x['exact_conv_mac_saving_pct'][arm] for x in r]
+                                               for arm in ARMS[2:]},
+                  'bd_rate_pct': {},
                   'bd_rate_unavailable_reason': {}}
         for anchor_name in ('released_d12', 'deployed_old_beta'):
             for arm in ARMS:
@@ -158,6 +179,7 @@ def main() -> None:
         'limitations': 'Not blind external data; local CLIC files appeared in prior other-decoder work. Analytical synthesis-conv MAC excludes router/control/memory/entropy. BD-rate is within FUFREF2 research streams, not native codec bitrate or measured latency.',
         'bd_rate_method': 'PCHIP log(rate) versus YUV 6:1:1 PSNR, integral on measured common support only; per-image then image-bootstrap mean. Missing/nonmonotonic curves excluded with explicit reason.',
         'script_sha256': sha(Path(__file__)), 'input_sha256': sha(RAW),
+        'exact_conv_formula_sha256':sha(HERE/'exact_active_conv_mac.py'),
         'manifest_sha256': sha(manifest_path),
         'n_images': 39, 'n_cases': 195, 'geometry_excluded_images': manifest['excluded'],
         'per_qp': per_qp, 'all_qp_image_cluster': all_qp_image_cluster,
@@ -166,7 +188,7 @@ def main() -> None:
     OUT.write_text(json.dumps(result, indent=2) + '\n')
     print(json.dumps({'cases': result['n_cases'], 'per_qp': {
         q: {'loss_db': v['new_delta444_db']['mean'],
-            'mac_saving_pct': v['new_conv_mac_saving_pct']['mean']}
+            'exact_mac_saving_pct': v['new_exact_conv_mac_saving_pct']['mean']}
         for q, v in per_qp.items()},
         'bd_rate_availability': {k: v['available']['n'] for k, v in bd_summary.items()}}, indent=2))
 
