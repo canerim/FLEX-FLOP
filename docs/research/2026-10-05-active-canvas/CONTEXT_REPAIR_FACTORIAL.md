@@ -37,6 +37,12 @@ This is a description of fixed routes and inputs, not evidence for a
 general bitrate law; the decoder output and the old repair response both
 change with QP.
 
+The interaction is present in both route geometries: mean +0.02158 dB
+across 41 uniform-depth maps and +0.02211 dB across 79 mixed-depth maps.
+This rules out an explanation confined to seams between *different* exit
+depths on this cohort. Tile isolation itself remains a plausible source;
+the planned pixel-distance audit will test where the error reduction falls.
+
 The four arms share the *original*, independently calibrated beta and route
 maps. The repair-off arms were prompted by earlier exploratory results and
 are therefore hypothesis-generating. DIV2K validation is disjoint from
