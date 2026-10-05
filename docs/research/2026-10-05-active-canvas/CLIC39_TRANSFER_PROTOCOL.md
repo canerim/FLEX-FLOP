@@ -14,13 +14,27 @@ released D12 analysis/entropy path, decode its latent, then run the same
 e15 checkpoint under: (a) full-frame e15, (b) deployed isolated tiles
 with their trained repair at the original DIV2K-locked β, and (c)
 active-replicate/no-repair with the newly locked calibration-only β.
+Also replay active-replicate/no-repair at the original β. This fourth arm
+separates the context intervention from β retuning on each CLIC image.
 The streams, source crop, checkpoint, router scores and rate remain fixed
 between decoder arms. Record actual Δ444, YUV 6:1:1 reconstruction PSNR,
 analytical synthesis-conv MAC, exit maps and stream/source hashes. If
 the quality curves have sufficient common rate support, calculate
 per-image BD-rate against the released D12 reconstruction; otherwise
-report the exact QP points without extrapolation. No CLIC outcome may
-change either β policy.
+report the exact QP points without extrapolation. Compute the same
+per-image BD-rate against the deployed old-β arm as a paired operational
+comparison. PCHIP fits log-rate as a function of YUV 6:1:1 PSNR only on
+strictly monotone five-QP curves with measured common quality support;
+record every exclusion reason. Summarize by QP and bootstrap over images,
+preserving the paired arms. No CLIC outcome may change either β policy.
+
+The frozen manifest and runner live at
+`proof/cpu_early_exit/results/clic39_active_beta/manifest.json` and
+`proof/cpu_early_exit/run_clic39_active_beta.sh`. The runner waits for the
+DIV2K tail-risk chain to finish, checks its completed raw output, then
+runs a one-case smoke, the remaining 194 cases and the analysis on one
+low-priority CPU thread with CUDA hidden. This sequencing protects the
+ongoing training and the higher-priority validation chain.
 
 This cohort is separate from the DIV2K β-fitting and β-validation images.
 It is **not** a previously untouched project dataset: some of these CLIC
