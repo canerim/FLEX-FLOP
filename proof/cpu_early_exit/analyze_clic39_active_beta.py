@@ -106,6 +106,24 @@ def main() -> None:
                 x['new_exit_map'].count(exit_idx) for x in r)
                 for exit_idx in range(2, 6)},
         }
+    def image_means(fn):
+        return paired_summary([
+            float(np.mean([fn(rows[item['image'], qp]) for qp in QPS]))
+            for item in manifest['included']], rng)
+    all_qp_image_cluster = {
+        'new_delta444_db': image_means(
+            lambda x: x['delta444_db']['active_new_beta']),
+        'new_minus_deployed_yuv611_db': image_means(
+            lambda x: x['yuv611_psnr_db']['active_new_beta'] -
+                      x['yuv611_psnr_db']['deployed_old_beta']),
+        'new_conv_mac_saving_pct': image_means(
+            lambda x: x['conv_mac_saving_pct']['active_new_beta']),
+        'new_minus_deployed_conv_mac_saving_pp': image_means(
+            lambda x: x['conv_mac_saving_pct']['active_new_beta'] -
+                      x['conv_mac_saving_pct']['deployed_old_beta']),
+        'new_above_0p1db_delta444_count': sum(
+            r['delta444_db']['active_new_beta'] > .1 for r in rows.values()),
+    }
     per_image = []
     reasons: dict[str, dict[str, int]] = defaultdict(lambda: defaultdict(int))
     for item in manifest['included']:
@@ -142,7 +160,8 @@ def main() -> None:
         'script_sha256': sha(Path(__file__)), 'input_sha256': sha(RAW),
         'manifest_sha256': sha(manifest_path),
         'n_images': 39, 'n_cases': 195, 'geometry_excluded_images': manifest['excluded'],
-        'per_qp': per_qp, 'bd_rate_summary': bd_summary, 'per_image': per_image,
+        'per_qp': per_qp, 'all_qp_image_cluster': all_qp_image_cluster,
+        'bd_rate_summary': bd_summary, 'per_image': per_image,
     }
     OUT.write_text(json.dumps(result, indent=2) + '\n')
     print(json.dumps({'cases': result['n_cases'], 'per_qp': {
