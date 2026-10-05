@@ -1,0 +1,2139 @@
+{
+  "scope": "Frozen CTC shared-exit maps; exact synthesis convolution MAC plus measured router Conv2d/Linear MAC, relative to released D12 synthesis convolutions. No latency, control dispatch, entropy or memory estimate.",
+  "inputs_sha256": {
+    "docs/research/2026-10-05-ctc-exact-mac/analysis.json": "ac3ebe170df8bd0d4dd009cda433f90e3cd8bd17bcf789b960ec88b5677dbd36",
+    "cvpr2027/data/research20260927/shared_crossfit_qp32/router_logit_audit.json": "767bd6745d2d4d54ed80186984dc5ba105f24e65126a9e571ebc76c0d42584cc",
+    "cvpr2027/data/research20260927/shared_crossfit_qp32/analysis.json": "5fc1cb221d6ef89c9c5f0754aeea942529ac42614595ec38cd4d7f3731a88253"
+  },
+  "nominal_0p1_all_feasible_263": {
+    "n": 263,
+    "mean_controller_cost_pct_points": 0.13343965757462686,
+    "mean_router_included_saving_pct": 27.155256479509042,
+    "mean_dither_saving_pct": 24.775306244392475,
+    "router_minus_dither_included_points": 2.379950235116567
+  },
+  "fixed_qp32_mean_53": {
+    "n": 106,
+    "mean_controller_cost_pct_points": 0.1334396575746269,
+    "mean_router_included_saving_pct": 24.922744892527938,
+    "mean_dither_saving_pct": 23.036439854074786,
+    "router_minus_dither_included_points": 1.886305038453152
+  },
+  "fixed_qp32_q90_53": {
+    "n": 106,
+    "mean_controller_cost_pct_points": 0.1334396575746269,
+    "mean_router_included_saving_pct": 16.12680270469755,
+    "mean_dither_saving_pct": 13.880747604781757,
+    "router_minus_dither_included_points": 2.246055099915793
+  },
+  "controller_cost_range_pct_points": [
+    0.13343965757462703,
+    0.13343965757462703
+  ],
+  "cases_nominal": [
+    {
+      "sequence": "BQMall_832x480_60.yuv",
+      "qp": 0,
+      "router_excluded_saving_pct": 34.60087604150834,
+      "dither_saving_pct": 32.73756062511227,
+      "router_included_saving_pct": 34.467436383933716,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "BQMall_832x480_60.yuv",
+      "qp": 16,
+      "router_excluded_saving_pct": 27.147614375924057,
+      "dither_saving_pct": 25.284298959527984,
+      "router_included_saving_pct": 27.01417471834943,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "BQMall_832x480_60.yuv",
+      "qp": 32,
+      "router_excluded_saving_pct": 20.755551256718853,
+      "dither_saving_pct": 19.422835113512317,
+      "router_included_saving_pct": 20.622111599144226,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "BQMall_832x480_60.yuv",
+      "qp": 48,
+      "router_excluded_saving_pct": 14.62878777410841,
+      "dither_saving_pct": 14.091970540686184,
+      "router_included_saving_pct": 14.495348116533783,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "BQMall_832x480_60.yuv",
+      "qp": 63,
+      "router_excluded_saving_pct": 11.16745657791104,
+      "dither_saving_pct": 9.297923201282277,
+      "router_included_saving_pct": 11.034016920336413,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "BQSquare_416x240_60.yuv",
+      "qp": 0,
+      "router_excluded_saving_pct": 30.8742452087162,
+      "dither_saving_pct": 30.8742452087162,
+      "router_included_saving_pct": 30.740805551141573,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "BQSquare_416x240_60.yuv",
+      "qp": 16,
+      "router_excluded_saving_pct": 18.09011897030579,
+      "dither_saving_pct": 18.09011897030579,
+      "router_included_saving_pct": 17.956679312731165,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "BQSquare_416x240_60.yuv",
+      "qp": 32,
+      "router_excluded_saving_pct": 5.836592005084906,
+      "dither_saving_pct": 5.836592005084906,
+      "router_included_saving_pct": 5.703152347510279,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "BQSquare_416x240_60.yuv",
+      "qp": 48,
+      "router_excluded_saving_pct": -1.0860703873098343,
+      "dither_saving_pct": -1.0860703873098343,
+      "router_included_saving_pct": -1.2195100448844614,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "BQTerrace_1920x1080_60.yuv",
+      "qp": 0,
+      "router_excluded_saving_pct": 37.20951762446284,
+      "dither_saving_pct": 34.60087604150834,
+      "router_included_saving_pct": 37.076077966888214,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "BQTerrace_1920x1080_60.yuv",
+      "qp": 16,
+      "router_excluded_saving_pct": 26.402288209365633,
+      "dither_saving_pct": 25.284298959527984,
+      "router_included_saving_pct": 26.268848551791006,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "BQTerrace_1920x1080_60.yuv",
+      "qp": 32,
+      "router_excluded_saving_pct": 23.097649611032047,
+      "dither_saving_pct": 20.222464799436235,
+      "router_included_saving_pct": 22.96420995345742,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "BQTerrace_1920x1080_60.yuv",
+      "qp": 48,
+      "router_excluded_saving_pct": 21.10044078429205,
+      "dither_saving_pct": 17.02394605574056,
+      "router_included_saving_pct": 20.967001126717424,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "BQTerrace_1920x1080_60.yuv",
+      "qp": 63,
+      "router_excluded_saving_pct": 15.266750493982395,
+      "dither_saving_pct": 14.891600226610102,
+      "router_included_saving_pct": 15.133310836407768,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "BasketballDrill_832x480_50.yuv",
+      "qp": 0,
+      "router_excluded_saving_pct": 23.95158281632146,
+      "dither_saving_pct": 22.08826739992539,
+      "router_included_saving_pct": 23.81814315874683,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "BasketballDrill_832x480_50.yuv",
+      "qp": 16,
+      "router_excluded_saving_pct": 16.3594533722071,
+      "dither_saving_pct": 16.757402827099256,
+      "router_included_saving_pct": 16.226013714632472,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "BasketballDrill_832x480_50.yuv",
+      "qp": 32,
+      "router_excluded_saving_pct": 17.294220060521482,
+      "dither_saving_pct": 18.09011897030579,
+      "router_included_saving_pct": 17.160780402946855,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "BasketballDrill_832x480_50.yuv",
+      "qp": 48,
+      "router_excluded_saving_pct": 14.230838319216266,
+      "dither_saving_pct": 20.755551256718853,
+      "router_included_saving_pct": 14.09739866164164,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "BasketballDrill_832x480_50.yuv",
+      "qp": 63,
+      "router_excluded_saving_pct": 5.0406930953006075,
+      "dither_saving_pct": 22.08826739992539,
+      "router_included_saving_pct": 4.907253437725981,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "BasketballDrive_1920x1080_50.yuv",
+      "qp": 0,
+      "router_excluded_saving_pct": 29.593345400782077,
+      "dither_saving_pct": 25.656962042807198,
+      "router_included_saving_pct": 29.45990574320745,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "BasketballDrive_1920x1080_50.yuv",
+      "qp": 16,
+      "router_excluded_saving_pct": 29.38110569150627,
+      "dither_saving_pct": 25.284298959527984,
+      "router_included_saving_pct": 29.247666033931644,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "BasketballDrive_1920x1080_50.yuv",
+      "qp": 32,
+      "router_excluded_saving_pct": 27.41042682842575,
+      "dither_saving_pct": 25.656962042807198,
+      "router_included_saving_pct": 27.276987170851122,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "BasketballDrive_1920x1080_50.yuv",
+      "qp": 48,
+      "router_excluded_saving_pct": 28.79620289895124,
+      "dither_saving_pct": 26.774951292644843,
+      "router_included_saving_pct": 28.662763241376613,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "BasketballDrive_1920x1080_50.yuv",
+      "qp": 63,
+      "router_excluded_saving_pct": 31.777507565184948,
+      "dither_saving_pct": 29.75625595887855,
+      "router_included_saving_pct": 31.64406790761032,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "BasketballPass_416x240_50.yuv",
+      "qp": 0,
+      "router_excluded_saving_pct": 30.8742452087162,
+      "dither_saving_pct": 30.8742452087162,
+      "router_included_saving_pct": 30.740805551141573,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "BasketballPass_416x240_50.yuv",
+      "qp": 16,
+      "router_excluded_saving_pct": 23.42098354313191,
+      "dither_saving_pct": 23.42098354313191,
+      "router_included_saving_pct": 23.287543885557284,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "BasketballPass_416x240_50.yuv",
+      "qp": 32,
+      "router_excluded_saving_pct": 23.42098354313191,
+      "dither_saving_pct": 23.42098354313191,
+      "router_included_saving_pct": 23.287543885557284,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "BasketballPass_416x240_50.yuv",
+      "qp": 48,
+      "router_excluded_saving_pct": 11.16745657791104,
+      "dither_saving_pct": 18.09011897030579,
+      "router_included_saving_pct": 11.034016920336413,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "BasketballPass_416x240_50.yuv",
+      "qp": 63,
+      "router_excluded_saving_pct": 23.42098354313191,
+      "dither_saving_pct": 23.42098354313191,
+      "router_included_saving_pct": 23.287543885557284,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "Beauty_1920x1080_120fps_420_8bit_YUV.yuv",
+      "qp": 0,
+      "router_excluded_saving_pct": 38.327506874300475,
+      "dither_saving_pct": 38.327506874300475,
+      "router_included_saving_pct": 38.19406721672585,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "Beauty_1920x1080_120fps_420_8bit_YUV.yuv",
+      "qp": 16,
+      "router_excluded_saving_pct": 38.327506874300475,
+      "dither_saving_pct": 38.327506874300475,
+      "router_included_saving_pct": 38.19406721672585,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "Beauty_1920x1080_120fps_420_8bit_YUV.yuv",
+      "qp": 32,
+      "router_excluded_saving_pct": 38.327506874300475,
+      "dither_saving_pct": 38.327506874300475,
+      "router_included_saving_pct": 38.19406721672585,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "Beauty_1920x1080_120fps_420_8bit_YUV.yuv",
+      "qp": 48,
+      "router_excluded_saving_pct": 38.327506874300475,
+      "dither_saving_pct": 38.327506874300475,
+      "router_included_saving_pct": 38.19406721672585,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "Beauty_1920x1080_120fps_420_8bit_YUV.yuv",
+      "qp": 63,
+      "router_excluded_saving_pct": 38.327506874300475,
+      "dither_saving_pct": 38.327506874300475,
+      "router_included_saving_pct": 38.19406721672585,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "BlowingBubbles_416x240_50.yuv",
+      "qp": 0,
+      "router_excluded_saving_pct": 30.8742452087162,
+      "dither_saving_pct": 30.8742452087162,
+      "router_included_saving_pct": 30.740805551141573,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "BlowingBubbles_416x240_50.yuv",
+      "qp": 16,
+      "router_excluded_saving_pct": 23.42098354313191,
+      "dither_saving_pct": 23.42098354313191,
+      "router_included_saving_pct": 23.287543885557284,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "BlowingBubbles_416x240_50.yuv",
+      "qp": 32,
+      "router_excluded_saving_pct": 23.42098354313191,
+      "dither_saving_pct": 23.42098354313191,
+      "router_included_saving_pct": 23.287543885557284,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "BlowingBubbles_416x240_50.yuv",
+      "qp": 48,
+      "router_excluded_saving_pct": 12.759254397479658,
+      "dither_saving_pct": 12.759254397479658,
+      "router_included_saving_pct": 12.625814739905032,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "BlowingBubbles_416x240_50.yuv",
+      "qp": 63,
+      "router_excluded_saving_pct": 12.759254397479658,
+      "dither_saving_pct": 12.759254397479658,
+      "router_included_saving_pct": 12.625814739905032,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "Bosphorus_1920x1080_120fps_420_8bit_YUV.yuv",
+      "qp": 0,
+      "router_excluded_saving_pct": 38.327506874300475,
+      "dither_saving_pct": 38.327506874300475,
+      "router_included_saving_pct": 38.19406721672585,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "Bosphorus_1920x1080_120fps_420_8bit_YUV.yuv",
+      "qp": 16,
+      "router_excluded_saving_pct": 33.482886791670694,
+      "dither_saving_pct": 29.38359287559934,
+      "router_included_saving_pct": 33.34944713409607,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "Bosphorus_1920x1080_120fps_420_8bit_YUV.yuv",
+      "qp": 32,
+      "router_excluded_saving_pct": 33.11022370839149,
+      "dither_saving_pct": 28.638266709040916,
+      "router_included_saving_pct": 32.97678405081686,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "Bosphorus_1920x1080_120fps_420_8bit_YUV.yuv",
+      "qp": 48,
+      "router_excluded_saving_pct": 27.999060397120388,
+      "dither_saving_pct": 24.53897279296956,
+      "router_included_saving_pct": 27.86562073954576,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "Bosphorus_1920x1080_120fps_420_8bit_YUV.yuv",
+      "qp": 63,
+      "router_excluded_saving_pct": 23.95033922427492,
+      "dither_saving_pct": 22.08826739992539,
+      "router_included_saving_pct": 23.816899566700293,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "Cactus_1920x1080_50.yuv",
+      "qp": 0,
+      "router_excluded_saving_pct": 34.60087604150834,
+      "dither_saving_pct": 32.36489754183306,
+      "router_included_saving_pct": 34.467436383933716,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "Cactus_1920x1080_50.yuv",
+      "qp": 16,
+      "router_excluded_saving_pct": 32.73756062511227,
+      "dither_saving_pct": 28.265603625761702,
+      "router_included_saving_pct": 32.604120967537646,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "Cactus_1920x1080_50.yuv",
+      "qp": 32,
+      "router_excluded_saving_pct": 29.96849566815437,
+      "dither_saving_pct": 24.911635876248774,
+      "router_included_saving_pct": 29.835056010579745,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "Cactus_1920x1080_50.yuv",
+      "qp": 48,
+      "router_excluded_saving_pct": 29.48846913819071,
+      "dither_saving_pct": 24.53897279296956,
+      "router_included_saving_pct": 29.355029480616082,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "Cactus_1920x1080_50.yuv",
+      "qp": 63,
+      "router_excluded_saving_pct": 28.92885271724862,
+      "dither_saving_pct": 26.02962512608642,
+      "router_included_saving_pct": 28.795413059673994,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "FourPeople_1280x720_60.yuv",
+      "qp": 0,
+      "router_excluded_saving_pct": 34.35243398598886,
+      "dither_saving_pct": 29.38359287559934,
+      "router_included_saving_pct": 34.21899432841423,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "FourPeople_1280x720_60.yuv",
+      "qp": 16,
+      "router_excluded_saving_pct": 28.955797211590273,
+      "dither_saving_pct": 23.42098354313191,
+      "router_included_saving_pct": 28.822357554015646,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "FourPeople_1280x720_60.yuv",
+      "qp": 32,
+      "router_excluded_saving_pct": 19.58077130342264,
+      "dither_saving_pct": 13.470036340523139,
+      "router_included_saving_pct": 19.447331645848013,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "FourPeople_1280x720_60.yuv",
+      "qp": 48,
+      "router_excluded_saving_pct": 14.541183623274511,
+      "dither_saving_pct": 9.067167788202458,
+      "router_included_saving_pct": 14.407743965699884,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "FourPeople_1280x720_60.yuv",
+      "qp": 63,
+      "router_excluded_saving_pct": 12.122535269652213,
+      "dither_saving_pct": 9.067167788202458,
+      "router_included_saving_pct": 11.989095612077586,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "HoneyBee_1920x1080_120fps_420_8bit_YUV.yuv",
+      "qp": 0,
+      "router_excluded_saving_pct": 18.035815450940294,
+      "dither_saving_pct": 18.35666219894709,
+      "router_included_saving_pct": 17.902375793365668,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "HoneyBee_1920x1080_120fps_420_8bit_YUV.yuv",
+      "qp": 16,
+      "router_excluded_saving_pct": 17.50272899365768,
+      "dither_saving_pct": 15.691229912534022,
+      "router_included_saving_pct": 17.369289336083053,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "HoneyBee_1920x1080_120fps_420_8bit_YUV.yuv",
+      "qp": 32,
+      "router_excluded_saving_pct": 14.997720081248012,
+      "dither_saving_pct": 13.82542731204488,
+      "router_included_saving_pct": 14.864280423673385,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "HoneyBee_1920x1080_120fps_420_8bit_YUV.yuv",
+      "qp": 48,
+      "router_excluded_saving_pct": 17.15783946608448,
+      "dither_saving_pct": 14.891600226610102,
+      "router_included_saving_pct": 17.024399808509852,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "HoneyBee_1920x1080_120fps_420_8bit_YUV.yuv",
+      "qp": 63,
+      "router_excluded_saving_pct": 15.401887496372858,
+      "dither_saving_pct": 15.691229912534022,
+      "router_included_saving_pct": 15.268447838798231,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "Jockey_1920x1080_120fps_420_8bit_YUV.yuv",
+      "qp": 0,
+      "router_excluded_saving_pct": 24.585814760055825,
+      "dither_saving_pct": 19.95592157079493,
+      "router_included_saving_pct": 24.4523751024812,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "Jockey_1920x1080_120fps_420_8bit_YUV.yuv",
+      "qp": 16,
+      "router_excluded_saving_pct": 26.47814732420445,
+      "dither_saving_pct": 24.16630970969035,
+      "router_included_saving_pct": 26.344707666629823,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "Jockey_1920x1080_120fps_420_8bit_YUV.yuv",
+      "qp": 32,
+      "router_excluded_saving_pct": 30.126431858064695,
+      "dither_saving_pct": 26.02962512608642,
+      "router_included_saving_pct": 29.992992200490068,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "Jockey_1920x1080_120fps_420_8bit_YUV.yuv",
+      "qp": 48,
+      "router_excluded_saving_pct": 30.341158751433582,
+      "dither_saving_pct": 26.02962512608642,
+      "router_included_saving_pct": 30.207719093858955,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "Jockey_1920x1080_120fps_420_8bit_YUV.yuv",
+      "qp": 63,
+      "router_excluded_saving_pct": 31.99223445855384,
+      "dither_saving_pct": 28.265603625761702,
+      "router_included_saving_pct": 31.85879480097921,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "Johnny_1280x720_60.yuv",
+      "qp": 0,
+      "router_excluded_saving_pct": 29.666579154633766,
+      "dither_saving_pct": 24.414751765209818,
+      "router_included_saving_pct": 29.53313949705914,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "Johnny_1280x720_60.yuv",
+      "qp": 16,
+      "router_excluded_saving_pct": 27.32199361622749,
+      "dither_saving_pct": 21.288637714001467,
+      "router_included_saving_pct": 27.188553958652864,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "Johnny_1280x720_60.yuv",
+      "qp": 32,
+      "router_excluded_saving_pct": 20.15006010694892,
+      "dither_saving_pct": 12.759254397479658,
+      "router_included_saving_pct": 20.016620449374294,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "Johnny_1280x720_60.yuv",
+      "qp": 48,
+      "router_excluded_saving_pct": 17.31024858023241,
+      "dither_saving_pct": 16.313164112697077,
+      "router_included_saving_pct": 17.176808922657784,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "Johnny_1280x720_60.yuv",
+      "qp": 63,
+      "router_excluded_saving_pct": 22.282405936079364,
+      "dither_saving_pct": 21.288637714001467,
+      "router_included_saving_pct": 22.148966278504737,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "Kimono1_1920x1080_24.yuv",
+      "qp": 0,
+      "router_excluded_saving_pct": 38.327506874300475,
+      "dither_saving_pct": 38.327506874300475,
+      "router_included_saving_pct": 38.19406721672585,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "Kimono1_1920x1080_24.yuv",
+      "qp": 16,
+      "router_excluded_saving_pct": 38.327506874300475,
+      "dither_saving_pct": 38.327506874300475,
+      "router_included_saving_pct": 38.19406721672585,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "Kimono1_1920x1080_24.yuv",
+      "qp": 32,
+      "router_excluded_saving_pct": 31.56526785590914,
+      "dither_saving_pct": 26.402288209365633,
+      "router_included_saving_pct": 31.431828198334514,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "Kimono1_1920x1080_24.yuv",
+      "qp": 48,
+      "router_excluded_saving_pct": 22.991529756394137,
+      "dither_saving_pct": 17.823575741664477,
+      "router_included_saving_pct": 22.85809009881951,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "Kimono1_1920x1080_24.yuv",
+      "qp": 63,
+      "router_excluded_saving_pct": 21.79270702353152,
+      "dither_saving_pct": 16.757402827099256,
+      "router_included_saving_pct": 21.659267365956893,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "KristenAndSara_1280x720_60.yuv",
+      "qp": 0,
+      "router_excluded_saving_pct": 28.598748117339824,
+      "dither_saving_pct": 23.42098354313191,
+      "router_included_saving_pct": 28.465308459765197,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "KristenAndSara_1280x720_60.yuv",
+      "qp": 16,
+      "router_excluded_saving_pct": 25.048154647579835,
+      "dither_saving_pct": 15.602382169653595,
+      "router_included_saving_pct": 24.91471499000521,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "KristenAndSara_1280x720_60.yuv",
+      "qp": 32,
+      "router_excluded_saving_pct": 23.13136477318263,
+      "dither_saving_pct": 9.067167788202458,
+      "router_included_saving_pct": 22.997925115608002,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "KristenAndSara_1280x720_60.yuv",
+      "qp": 48,
+      "router_excluded_saving_pct": 22.49464564535518,
+      "dither_saving_pct": 12.759254397479658,
+      "router_included_saving_pct": 22.361205987780554,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "KristenAndSara_1280x720_60.yuv",
+      "qp": 63,
+      "router_excluded_saving_pct": 19.36853159414683,
+      "dither_saving_pct": 9.067167788202458,
+      "router_included_saving_pct": 19.235091936572204,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "ParkScene_1920x1080_24.yuv",
+      "qp": 0,
+      "router_excluded_saving_pct": 38.327506874300475,
+      "dither_saving_pct": 38.327506874300475,
+      "router_included_saving_pct": 38.19406721672585,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "ParkScene_1920x1080_24.yuv",
+      "qp": 16,
+      "router_excluded_saving_pct": 38.327506874300475,
+      "dither_saving_pct": 38.327506874300475,
+      "router_included_saving_pct": 38.19406721672585,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "ParkScene_1920x1080_24.yuv",
+      "qp": 32,
+      "router_excluded_saving_pct": 32.843680479750184,
+      "dither_saving_pct": 26.02962512608642,
+      "router_included_saving_pct": 32.71024082217556,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "ParkScene_1920x1080_24.yuv",
+      "qp": 48,
+      "router_excluded_saving_pct": 19.184065440577026,
+      "dither_saving_pct": 13.292340854762264,
+      "router_included_saving_pct": 19.0506257830024,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "ParkScene_1920x1080_24.yuv",
+      "qp": 63,
+      "router_excluded_saving_pct": 12.44462560970554,
+      "dither_saving_pct": 9.644056320902017,
+      "router_included_saving_pct": 12.311185952130913,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "PartyScene_832x480_50.yuv",
+      "qp": 0,
+      "router_excluded_saving_pct": 38.327506874300475,
+      "dither_saving_pct": 38.327506874300475,
+      "router_included_saving_pct": 38.19406721672585,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "PartyScene_832x480_50.yuv",
+      "qp": 16,
+      "router_excluded_saving_pct": 30.8742452087162,
+      "dither_saving_pct": 29.010929792320127,
+      "router_included_saving_pct": 30.740805551141573,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "PartyScene_832x480_50.yuv",
+      "qp": 32,
+      "router_excluded_saving_pct": 18.09011897030579,
+      "dither_saving_pct": 15.42468668389272,
+      "router_included_saving_pct": 17.956679312731165,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "PartyScene_832x480_50.yuv",
+      "qp": 48,
+      "router_excluded_saving_pct": 13.694021085794027,
+      "dither_saving_pct": 12.759254397479658,
+      "router_included_saving_pct": 13.5605814282194,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "RaceHorses_416x240_30.yuv",
+      "qp": 0,
+      "router_excluded_saving_pct": 23.42098354313191,
+      "dither_saving_pct": 23.42098354313191,
+      "router_included_saving_pct": 23.287543885557284,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "RaceHorses_416x240_30.yuv",
+      "qp": 16,
+      "router_excluded_saving_pct": 23.42098354313191,
+      "dither_saving_pct": 23.42098354313191,
+      "router_included_saving_pct": 23.287543885557284,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "RaceHorses_416x240_30.yuv",
+      "qp": 32,
+      "router_excluded_saving_pct": 18.09011897030579,
+      "dither_saving_pct": 18.09011897030579,
+      "router_included_saving_pct": 17.956679312731165,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "RaceHorses_416x240_30.yuv",
+      "qp": 48,
+      "router_excluded_saving_pct": 12.759254397479658,
+      "dither_saving_pct": 12.759254397479658,
+      "router_included_saving_pct": 12.625814739905032,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "RaceHorses_416x240_30.yuv",
+      "qp": 63,
+      "router_excluded_saving_pct": 5.836592005084906,
+      "dither_saving_pct": 5.836592005084906,
+      "router_included_saving_pct": 5.703152347510279,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "RaceHorses_832x480_30.yuv",
+      "qp": 0,
+      "router_excluded_saving_pct": 30.8742452087162,
+      "dither_saving_pct": 32.73756062511227,
+      "router_included_saving_pct": 30.740805551141573,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "RaceHorses_832x480_30.yuv",
+      "qp": 16,
+      "router_excluded_saving_pct": 30.8742452087162,
+      "dither_saving_pct": 30.8742452087162,
+      "router_included_saving_pct": 30.740805551141573,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "RaceHorses_832x480_30.yuv",
+      "qp": 32,
+      "router_excluded_saving_pct": 20.755551256718853,
+      "dither_saving_pct": 20.755551256718853,
+      "router_included_saving_pct": 20.622111599144226,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "RaceHorses_832x480_30.yuv",
+      "qp": 48,
+      "router_excluded_saving_pct": 13.82667090409142,
+      "dither_saving_pct": 14.091970540686184,
+      "router_included_saving_pct": 13.693231246516794,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "RaceHorses_832x480_30.yuv",
+      "qp": 63,
+      "router_excluded_saving_pct": 7.301957966588823,
+      "dither_saving_pct": 4.105926406986226,
+      "router_included_saving_pct": 7.168518309014196,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "ReadySteadyGo_1920x1080_120fps_420_8bit_YUV.yuv",
+      "qp": 0,
+      "router_excluded_saving_pct": 33.11022370839149,
+      "dither_saving_pct": 30.50158212543699,
+      "router_included_saving_pct": 32.97678405081686,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "ReadySteadyGo_1920x1080_120fps_420_8bit_YUV.yuv",
+      "qp": 16,
+      "router_excluded_saving_pct": 24.909148692155703,
+      "dither_saving_pct": 19.68937834215363,
+      "router_included_saving_pct": 24.775709034581077,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "ReadySteadyGo_1920x1080_120fps_420_8bit_YUV.yuv",
+      "qp": 32,
+      "router_excluded_saving_pct": 20.221221207389707,
+      "dither_saving_pct": 14.6250569979688,
+      "router_included_saving_pct": 20.08778154981508,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "ReadySteadyGo_1920x1080_120fps_420_8bit_YUV.yuv",
+      "qp": 48,
+      "router_excluded_saving_pct": 12.551989056389989,
+      "dither_saving_pct": 10.682455679761226,
+      "router_included_saving_pct": 12.418549398815362,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "ReadySteadyGo_1920x1080_120fps_420_8bit_YUV.yuv",
+      "qp": 63,
+      "router_excluded_saving_pct": 9.5681972060632,
+      "dither_saving_pct": 13.02579762612096,
+      "router_included_saving_pct": 9.434757548488573,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "ShakeNDry_1920x1080_120fps_420_8bit_YUV.yuv",
+      "qp": 0,
+      "router_excluded_saving_pct": 38.327506874300475,
+      "dither_saving_pct": 38.327506874300475,
+      "router_included_saving_pct": 38.19406721672585,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "ShakeNDry_1920x1080_120fps_420_8bit_YUV.yuv",
+      "qp": 16,
+      "router_excluded_saving_pct": 38.327506874300475,
+      "dither_saving_pct": 38.327506874300475,
+      "router_included_saving_pct": 38.19406721672585,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "ShakeNDry_1920x1080_120fps_420_8bit_YUV.yuv",
+      "qp": 32,
+      "router_excluded_saving_pct": 36.464191457904406,
+      "dither_saving_pct": 35.34620220806677,
+      "router_included_saving_pct": 36.33075180032978,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "ShakeNDry_1920x1080_120fps_420_8bit_YUV.yuv",
+      "qp": 48,
+      "router_excluded_saving_pct": 28.638266709040916,
+      "dither_saving_pct": 26.774951292644843,
+      "router_included_saving_pct": 28.50482705146629,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "ShakeNDry_1920x1080_120fps_420_8bit_YUV.yuv",
+      "qp": 63,
+      "router_excluded_saving_pct": 21.74213428030565,
+      "dither_saving_pct": 21.022094485360153,
+      "router_included_saving_pct": 21.608694622731022,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "YachtRide_1920x1080_120fps_420_8bit_YUV.yuv",
+      "qp": 0,
+      "router_excluded_saving_pct": 35.71886529134598,
+      "dither_saving_pct": 31.99223445855384,
+      "router_included_saving_pct": 35.58542563377135,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "YachtRide_1920x1080_120fps_420_8bit_YUV.yuv",
+      "qp": 16,
+      "router_excluded_saving_pct": 28.371723480399602,
+      "dither_saving_pct": 24.911635876248774,
+      "router_included_saving_pct": 28.238283822824975,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "YachtRide_1920x1080_120fps_420_8bit_YUV.yuv",
+      "qp": 32,
+      "router_excluded_saving_pct": 18.677508946953893,
+      "dither_saving_pct": 18.09011897030579,
+      "router_included_saving_pct": 18.544069289379266,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "YachtRide_1920x1080_120fps_420_8bit_YUV.yuv",
+      "qp": 48,
+      "router_excluded_saving_pct": 12.949938511282145,
+      "dither_saving_pct": 13.82542731204488,
+      "router_included_saving_pct": 12.816498853707518,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "YachtRide_1920x1080_120fps_420_8bit_YUV.yuv",
+      "qp": 63,
+      "router_excluded_saving_pct": 11.991129043401362,
+      "dither_saving_pct": 15.158143455251416,
+      "router_included_saving_pct": 11.857689385826735,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "videoSRC01_1920x1080_30.yuv",
+      "qp": 0,
+      "router_excluded_saving_pct": 37.95484379102126,
+      "dither_saving_pct": 37.20951762446284,
+      "router_included_saving_pct": 37.821404133446634,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "videoSRC01_1920x1080_30.yuv",
+      "qp": 16,
+      "router_excluded_saving_pct": 38.327506874300475,
+      "dither_saving_pct": 38.327506874300475,
+      "router_included_saving_pct": 38.19406721672585,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "videoSRC01_1920x1080_30.yuv",
+      "qp": 32,
+      "router_excluded_saving_pct": 38.327506874300475,
+      "dither_saving_pct": 38.327506874300475,
+      "router_included_saving_pct": 38.19406721672585,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "videoSRC01_1920x1080_30.yuv",
+      "qp": 48,
+      "router_excluded_saving_pct": 38.327506874300475,
+      "dither_saving_pct": 38.327506874300475,
+      "router_included_saving_pct": 38.19406721672585,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "videoSRC01_1920x1080_30.yuv",
+      "qp": 63,
+      "router_excluded_saving_pct": 38.327506874300475,
+      "dither_saving_pct": 38.327506874300475,
+      "router_included_saving_pct": 38.19406721672585,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "videoSRC02_1920x1080_30.yuv",
+      "qp": 0,
+      "router_excluded_saving_pct": 30.235038896795675,
+      "dither_saving_pct": 29.010929792320127,
+      "router_included_saving_pct": 30.10159923922105,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "videoSRC02_1920x1080_30.yuv",
+      "qp": 16,
+      "router_excluded_saving_pct": 23.312376504400934,
+      "dither_saving_pct": 20.222464799436235,
+      "router_included_saving_pct": 23.178936846826307,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "videoSRC02_1920x1080_30.yuv",
+      "qp": 32,
+      "router_excluded_saving_pct": 14.278923878349058,
+      "dither_saving_pct": 14.891600226610102,
+      "router_included_saving_pct": 14.145484220774431,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "videoSRC02_1920x1080_30.yuv",
+      "qp": 48,
+      "router_excluded_saving_pct": 12.600074615522793,
+      "dither_saving_pct": 13.82542731204488,
+      "router_included_saving_pct": 12.466634957948166,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "videoSRC02_1920x1080_30.yuv",
+      "qp": 63,
+      "router_excluded_saving_pct": 17.874148484890362,
+      "dither_saving_pct": 18.09011897030579,
+      "router_included_saving_pct": 17.740708827315736,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "videoSRC03_1920x1080_30.yuv",
+      "qp": 0,
+      "router_excluded_saving_pct": 34.97353912478756,
+      "dither_saving_pct": 29.38359287559934,
+      "router_included_saving_pct": 34.84009946721293,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "videoSRC03_1920x1080_30.yuv",
+      "qp": 16,
+      "router_excluded_saving_pct": 31.45914800127123,
+      "dither_saving_pct": 26.02962512608642,
+      "router_included_saving_pct": 31.325708343696604,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "videoSRC03_1920x1080_30.yuv",
+      "qp": 32,
+      "router_excluded_saving_pct": 27.837393431070456,
+      "dither_saving_pct": 20.222464799436235,
+      "router_included_saving_pct": 27.70395377349583,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "videoSRC03_1920x1080_30.yuv",
+      "qp": 48,
+      "router_excluded_saving_pct": 21.2078042309765,
+      "dither_saving_pct": 16.224316369816638,
+      "router_included_saving_pct": 21.074364573401873,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "videoSRC03_1920x1080_30.yuv",
+      "qp": 63,
+      "router_excluded_saving_pct": 17.584806068729186,
+      "dither_saving_pct": 15.691229912534022,
+      "router_included_saving_pct": 17.45136641115456,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "videoSRC04_1920x1080_30.yuv",
+      "qp": 0,
+      "router_excluded_saving_pct": 38.327506874300475,
+      "dither_saving_pct": 38.327506874300475,
+      "router_included_saving_pct": 38.19406721672585,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "videoSRC04_1920x1080_30.yuv",
+      "qp": 16,
+      "router_excluded_saving_pct": 38.327506874300475,
+      "dither_saving_pct": 38.327506874300475,
+      "router_included_saving_pct": 38.19406721672585,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "videoSRC04_1920x1080_30.yuv",
+      "qp": 32,
+      "router_excluded_saving_pct": 37.20951762446284,
+      "dither_saving_pct": 34.97353912478756,
+      "router_included_saving_pct": 37.076077966888214,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "videoSRC04_1920x1080_30.yuv",
+      "qp": 48,
+      "router_excluded_saving_pct": 32.20447416782966,
+      "dither_saving_pct": 26.02962512608642,
+      "router_included_saving_pct": 32.07103451025503,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "videoSRC04_1920x1080_30.yuv",
+      "qp": 63,
+      "router_excluded_saving_pct": 23.14946594630446,
+      "dither_saving_pct": 14.6250569979688,
+      "router_included_saving_pct": 23.016026288729833,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "videoSRC05_1920x1080_25.yuv",
+      "qp": 0,
+      "router_excluded_saving_pct": 25.386688038026286,
+      "dither_saving_pct": 23.793646626411135,
+      "router_included_saving_pct": 25.25324838045166,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "videoSRC05_1920x1080_25.yuv",
+      "qp": 16,
+      "router_excluded_saving_pct": 27.944756877754905,
+      "dither_saving_pct": 25.284298959527984,
+      "router_included_saving_pct": 27.81131722018028,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "videoSRC05_1920x1080_25.yuv",
+      "qp": 32,
+      "router_excluded_saving_pct": 25.361401666413343,
+      "dither_saving_pct": 24.53897279296956,
+      "router_included_saving_pct": 25.227962008838716,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "videoSRC05_1920x1080_25.yuv",
+      "qp": 48,
+      "router_excluded_saving_pct": 24.349532271213604,
+      "dither_saving_pct": 24.911635876248774,
+      "router_included_saving_pct": 24.216092613638978,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "videoSRC05_1920x1080_25.yuv",
+      "qp": 63,
+      "router_excluded_saving_pct": 29.408879247212283,
+      "dither_saving_pct": 26.774951292644843,
+      "router_included_saving_pct": 29.275439589637656,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "videoSRC06_1920x1080_25.yuv",
+      "qp": 0,
+      "router_excluded_saving_pct": 38.327506874300475,
+      "dither_saving_pct": 38.327506874300475,
+      "router_included_saving_pct": 38.19406721672585,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "videoSRC06_1920x1080_25.yuv",
+      "qp": 16,
+      "router_excluded_saving_pct": 38.327506874300475,
+      "dither_saving_pct": 38.327506874300475,
+      "router_included_saving_pct": 38.19406721672585,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "videoSRC06_1920x1080_25.yuv",
+      "qp": 32,
+      "router_excluded_saving_pct": 38.327506874300475,
+      "dither_saving_pct": 38.327506874300475,
+      "router_included_saving_pct": 38.19406721672585,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "videoSRC06_1920x1080_25.yuv",
+      "qp": 48,
+      "router_excluded_saving_pct": 38.327506874300475,
+      "dither_saving_pct": 38.327506874300475,
+      "router_included_saving_pct": 38.19406721672585,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "videoSRC06_1920x1080_25.yuv",
+      "qp": 63,
+      "router_excluded_saving_pct": 38.327506874300475,
+      "dither_saving_pct": 38.327506874300475,
+      "router_included_saving_pct": 38.19406721672585,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "videoSRC07_1920x1080_25.yuv",
+      "qp": 0,
+      "router_excluded_saving_pct": 34.60087604150834,
+      "dither_saving_pct": 31.99223445855384,
+      "router_included_saving_pct": 34.467436383933716,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "videoSRC07_1920x1080_25.yuv",
+      "qp": 16,
+      "router_excluded_saving_pct": 33.21634356302939,
+      "dither_saving_pct": 29.010929792320127,
+      "router_included_saving_pct": 33.082903905454764,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "videoSRC07_1920x1080_25.yuv",
+      "qp": 32,
+      "router_excluded_saving_pct": 32.09835431319175,
+      "dither_saving_pct": 27.89294054248248,
+      "router_included_saving_pct": 31.96491465561712,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "videoSRC07_1920x1080_25.yuv",
+      "qp": 48,
+      "router_excluded_saving_pct": 30.819941689350706,
+      "dither_saving_pct": 27.89294054248248,
+      "router_included_saving_pct": 30.68650203177608,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "videoSRC07_1920x1080_25.yuv",
+      "qp": 63,
+      "router_excluded_saving_pct": 29.541529065509664,
+      "dither_saving_pct": 27.520277459203268,
+      "router_included_saving_pct": 29.408089407935037,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "videoSRC08_1920x1080_25.yuv",
+      "qp": 0,
+      "router_excluded_saving_pct": 37.582180707742054,
+      "dither_saving_pct": 37.20951762446284,
+      "router_included_saving_pct": 37.44874105016743,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "videoSRC08_1920x1080_25.yuv",
+      "qp": 16,
+      "router_excluded_saving_pct": 38.327506874300475,
+      "dither_saving_pct": 38.327506874300475,
+      "router_included_saving_pct": 38.19406721672585,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "videoSRC08_1920x1080_25.yuv",
+      "qp": 32,
+      "router_excluded_saving_pct": 38.327506874300475,
+      "dither_saving_pct": 38.327506874300475,
+      "router_included_saving_pct": 38.19406721672585,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "videoSRC08_1920x1080_25.yuv",
+      "qp": 48,
+      "router_excluded_saving_pct": 38.327506874300475,
+      "dither_saving_pct": 38.327506874300475,
+      "router_included_saving_pct": 38.19406721672585,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "videoSRC08_1920x1080_25.yuv",
+      "qp": 63,
+      "router_excluded_saving_pct": 38.327506874300475,
+      "dither_saving_pct": 38.327506874300475,
+      "router_included_saving_pct": 38.19406721672585,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "videoSRC09_1920x1080_25.yuv",
+      "qp": 0,
+      "router_excluded_saving_pct": 35.71886529134598,
+      "dither_saving_pct": 34.22821295822912,
+      "router_included_saving_pct": 35.58542563377135,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "videoSRC09_1920x1080_25.yuv",
+      "qp": 16,
+      "router_excluded_saving_pct": 28.638266709040916,
+      "dither_saving_pct": 26.774951292644843,
+      "router_included_saving_pct": 28.50482705146629,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "videoSRC09_1920x1080_25.yuv",
+      "qp": 32,
+      "router_excluded_saving_pct": 22.887897085849307,
+      "dither_saving_pct": 22.35481062856669,
+      "router_included_saving_pct": 22.75445742827468,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "videoSRC09_1920x1080_25.yuv",
+      "qp": 48,
+      "router_excluded_saving_pct": 21.182517859363557,
+      "dither_saving_pct": 20.755551256718853,
+      "router_included_saving_pct": 21.04907820178893,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "videoSRC09_1920x1080_25.yuv",
+      "qp": 63,
+      "router_excluded_saving_pct": 24.936922247861716,
+      "dither_saving_pct": 25.284298959527984,
+      "router_included_saving_pct": 24.80348259028709,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "videoSRC10_1920x1080_30.yuv",
+      "qp": 0,
+      "router_excluded_saving_pct": 20.352627433640546,
+      "dither_saving_pct": 11.028588799380968,
+      "router_included_saving_pct": 20.21918777606592,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "videoSRC10_1920x1080_30.yuv",
+      "qp": 16,
+      "router_excluded_saving_pct": 16.7043428997803,
+      "dither_saving_pct": 4.105926406986226,
+      "router_included_saving_pct": 16.570903242205674,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "videoSRC10_1920x1080_30.yuv",
+      "qp": 32,
+      "router_excluded_saving_pct": 4.798192646225696,
+      "dither_saving_pct": -0.04767102845062432,
+      "router_included_saving_pct": 4.6647529886510695,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "videoSRC10_1920x1080_30.yuv",
+      "qp": 48,
+      "router_excluded_saving_pct": 5.597822332149615,
+      "dither_saving_pct": 1.6829945696480664,
+      "router_included_saving_pct": 5.464382674574988,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "videoSRC10_1920x1080_30.yuv",
+      "qp": 63,
+      "router_excluded_saving_pct": 5.75700211410648,
+      "dither_saving_pct": 0.9907283304085857,
+      "router_included_saving_pct": 5.623562456531853,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "videoSRC11_1920x1080_30.yuv",
+      "qp": 0,
+      "router_excluded_saving_pct": 38.327506874300475,
+      "dither_saving_pct": 38.327506874300475,
+      "router_included_saving_pct": 38.19406721672585,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "videoSRC11_1920x1080_30.yuv",
+      "qp": 16,
+      "router_excluded_saving_pct": 37.95484379102126,
+      "dither_saving_pct": 37.95484379102126,
+      "router_included_saving_pct": 37.821404133446634,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "videoSRC11_1920x1080_30.yuv",
+      "qp": 32,
+      "router_excluded_saving_pct": 37.20951762446284,
+      "dither_saving_pct": 33.85554987494991,
+      "router_included_saving_pct": 37.076077966888214,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "videoSRC11_1920x1080_30.yuv",
+      "qp": 48,
+      "router_excluded_saving_pct": 35.71886529134598,
+      "dither_saving_pct": 30.8742452087162,
+      "router_included_saving_pct": 35.58542563377135,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "videoSRC11_1920x1080_30.yuv",
+      "qp": 63,
+      "router_excluded_saving_pct": 24.1070318221387,
+      "dither_saving_pct": 23.42098354313191,
+      "router_included_saving_pct": 23.973592164564074,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "videoSRC12_1920x1080_30.yuv",
+      "qp": 0,
+      "router_excluded_saving_pct": 37.95484379102126,
+      "dither_saving_pct": 36.464191457904406,
+      "router_included_saving_pct": 37.821404133446634,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "videoSRC12_1920x1080_30.yuv",
+      "qp": 16,
+      "router_excluded_saving_pct": 36.09152837462519,
+      "dither_saving_pct": 30.8742452087162,
+      "router_included_saving_pct": 35.958088717050565,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "videoSRC12_1920x1080_30.yuv",
+      "qp": 32,
+      "router_excluded_saving_pct": 30.686048279006783,
+      "dither_saving_pct": 23.15444031449061,
+      "router_included_saving_pct": 30.552608621432157,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "videoSRC12_1920x1080_30.yuv",
+      "qp": 48,
+      "router_excluded_saving_pct": 21.366984012933354,
+      "dither_saving_pct": 13.82542731204488,
+      "router_included_saving_pct": 21.233544355358728,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "videoSRC12_1920x1080_30.yuv",
+      "qp": 63,
+      "router_excluded_saving_pct": 4.4520595266059555,
+      "dither_saving_pct": 1.6829945696480664,
+      "router_included_saving_pct": 4.318619869031329,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "videoSRC13_1920x1080_30.yuv",
+      "qp": 0,
+      "router_excluded_saving_pct": 38.327506874300475,
+      "dither_saving_pct": 38.327506874300475,
+      "router_included_saving_pct": 38.19406721672585,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "videoSRC13_1920x1080_30.yuv",
+      "qp": 16,
+      "router_excluded_saving_pct": 32.36489754183306,
+      "dither_saving_pct": 26.774951292644843,
+      "router_included_saving_pct": 32.23145788425843,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "videoSRC13_1920x1080_30.yuv",
+      "qp": 32,
+      "router_excluded_saving_pct": 26.053667905652823,
+      "dither_saving_pct": 18.35666219894709,
+      "router_included_saving_pct": 25.920228248078196,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "videoSRC13_1920x1080_30.yuv",
+      "qp": 48,
+      "router_excluded_saving_pct": 23.38947921128629,
+      "dither_saving_pct": 14.891600226610102,
+      "router_included_saving_pct": 23.256039553711663,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "videoSRC13_1920x1080_30.yuv",
+      "qp": 63,
+      "router_excluded_saving_pct": 21.418800348205767,
+      "dither_saving_pct": 14.091970540686184,
+      "router_included_saving_pct": 21.28536069063114,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "videoSRC14_1920x1080_30.yuv",
+      "qp": 0,
+      "router_excluded_saving_pct": 35.71886529134598,
+      "dither_saving_pct": 34.22821295822912,
+      "router_included_saving_pct": 35.58542563377135,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "videoSRC14_1920x1080_30.yuv",
+      "qp": 16,
+      "router_excluded_saving_pct": 30.713821834712796,
+      "dither_saving_pct": 26.774951292644843,
+      "router_included_saving_pct": 30.58038217713817,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "videoSRC14_1920x1080_30.yuv",
+      "qp": 32,
+      "router_excluded_saving_pct": 26.585510770888888,
+      "dither_saving_pct": 22.08826739992539,
+      "router_included_saving_pct": 26.45207111331426,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "videoSRC14_1920x1080_30.yuv",
+      "qp": 48,
+      "router_excluded_saving_pct": 25.069572066159097,
+      "dither_saving_pct": 21.022094485360153,
+      "router_included_saving_pct": 24.93613240858447,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "videoSRC14_1920x1080_30.yuv",
+      "qp": 63,
+      "router_excluded_saving_pct": 24.349532271213604,
+      "dither_saving_pct": 21.55518094264277,
+      "router_included_saving_pct": 24.216092613638978,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "videoSRC15_1920x1080_30.yuv",
+      "qp": 0,
+      "router_excluded_saving_pct": 38.327506874300475,
+      "dither_saving_pct": 38.327506874300475,
+      "router_included_saving_pct": 38.19406721672585,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "videoSRC15_1920x1080_30.yuv",
+      "qp": 16,
+      "router_excluded_saving_pct": 37.20951762446284,
+      "dither_saving_pct": 35.34620220806677,
+      "router_included_saving_pct": 37.076077966888214,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "videoSRC15_1920x1080_30.yuv",
+      "qp": 32,
+      "router_excluded_saving_pct": 34.22821295822912,
+      "dither_saving_pct": 30.8742452087162,
+      "router_included_saving_pct": 34.094773300654495,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "videoSRC15_1920x1080_30.yuv",
+      "qp": 48,
+      "router_excluded_saving_pct": 32.20447416782966,
+      "dither_saving_pct": 28.265603625761702,
+      "router_included_saving_pct": 32.07103451025503,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "videoSRC15_1920x1080_30.yuv",
+      "qp": 63,
+      "router_excluded_saving_pct": 26.320211134294127,
+      "dither_saving_pct": 23.42098354313191,
+      "router_included_saving_pct": 26.1867714767195,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "videoSRC16_1920x1080_30.yuv",
+      "qp": 0,
+      "router_excluded_saving_pct": 30.392975086706,
+      "dither_saving_pct": 24.53897279296956,
+      "router_included_saving_pct": 30.259535429131372,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "videoSRC16_1920x1080_30.yuv",
+      "qp": 16,
+      "router_excluded_saving_pct": 36.09152837462519,
+      "dither_saving_pct": 31.99223445855384,
+      "router_included_saving_pct": 35.958088717050565,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "videoSRC16_1920x1080_30.yuv",
+      "qp": 32,
+      "router_excluded_saving_pct": 36.83685454118363,
+      "dither_saving_pct": 33.85554987494991,
+      "router_included_saving_pct": 36.703414883609,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "videoSRC16_1920x1080_30.yuv",
+      "qp": 48,
+      "router_excluded_saving_pct": 36.83685454118363,
+      "dither_saving_pct": 33.482886791670694,
+      "router_included_saving_pct": 36.703414883609,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "videoSRC16_1920x1080_30.yuv",
+      "qp": 63,
+      "router_excluded_saving_pct": 37.20951762446284,
+      "dither_saving_pct": 33.85554987494991,
+      "router_included_saving_pct": 37.076077966888214,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "videoSRC17_1920x1080_24.yuv",
+      "qp": 0,
+      "router_excluded_saving_pct": 38.327506874300475,
+      "dither_saving_pct": 38.327506874300475,
+      "router_included_saving_pct": 38.19406721672585,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "videoSRC17_1920x1080_24.yuv",
+      "qp": 16,
+      "router_excluded_saving_pct": 37.95484379102126,
+      "dither_saving_pct": 37.95484379102126,
+      "router_included_saving_pct": 37.821404133446634,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "videoSRC17_1920x1080_24.yuv",
+      "qp": 32,
+      "router_excluded_saving_pct": 30.074615522792282,
+      "dither_saving_pct": 24.16630970969035,
+      "router_included_saving_pct": 29.941175865217655,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "videoSRC17_1920x1080_24.yuv",
+      "qp": 48,
+      "router_excluded_saving_pct": 23.25807298503544,
+      "dither_saving_pct": 18.35666219894709,
+      "router_included_saving_pct": 23.124633327460813,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "videoSRC17_1920x1080_24.yuv",
+      "qp": 63,
+      "router_excluded_saving_pct": 21.79270702353152,
+      "dither_saving_pct": 16.224316369816638,
+      "router_included_saving_pct": 21.659267365956893,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "videoSRC18_1920x1080_25.yuv",
+      "qp": 0,
+      "router_excluded_saving_pct": 31.99223445855384,
+      "dither_saving_pct": 29.75625595887855,
+      "router_included_saving_pct": 31.85879480097921,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "videoSRC18_1920x1080_25.yuv",
+      "qp": 16,
+      "router_excluded_saving_pct": 31.619571375274624,
+      "dither_saving_pct": 28.638266709040916,
+      "router_included_saving_pct": 31.486131717699998,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "videoSRC18_1920x1080_25.yuv",
+      "qp": 32,
+      "router_excluded_saving_pct": 25.974078014674383,
+      "dither_saving_pct": 23.42098354313191,
+      "router_included_saving_pct": 25.840638357099756,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "videoSRC18_1920x1080_25.yuv",
+      "qp": 48,
+      "router_excluded_saving_pct": 18.624449019634937,
+      "dither_saving_pct": 18.35666219894709,
+      "router_included_saving_pct": 18.49100936206031,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "videoSRC18_1920x1080_25.yuv",
+      "qp": 63,
+      "router_excluded_saving_pct": 10.873139793563723,
+      "dither_saving_pct": 15.957773141175336,
+      "router_included_saving_pct": 10.739700135989096,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "videoSRC19_1920x1080_30.yuv",
+      "qp": 0,
+      "router_excluded_saving_pct": 38.327506874300475,
+      "dither_saving_pct": 38.327506874300475,
+      "router_included_saving_pct": 38.19406721672585,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "videoSRC19_1920x1080_30.yuv",
+      "qp": 16,
+      "router_excluded_saving_pct": 35.71886529134598,
+      "dither_saving_pct": 32.73756062511227,
+      "router_included_saving_pct": 35.58542563377135,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "videoSRC19_1920x1080_30.yuv",
+      "qp": 32,
+      "router_excluded_saving_pct": 30.740351798372277,
+      "dither_saving_pct": 25.656962042807198,
+      "router_included_saving_pct": 30.60691214079765,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "videoSRC19_1920x1080_30.yuv",
+      "qp": 48,
+      "router_excluded_saving_pct": 19.902861643475976,
+      "dither_saving_pct": 19.68937834215363,
+      "router_included_saving_pct": 19.76942198590135,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "videoSRC19_1920x1080_30.yuv",
+      "qp": 63,
+      "router_excluded_saving_pct": 13.001754846554558,
+      "dither_saving_pct": 13.82542731204488,
+      "router_included_saving_pct": 12.868315188979931,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "videoSRC20_1920x1080_25.yuv",
+      "qp": 0,
+      "router_excluded_saving_pct": 33.05592018902599,
+      "dither_saving_pct": 27.147614375924057,
+      "router_included_saving_pct": 32.92248053145136,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "videoSRC20_1920x1080_25.yuv",
+      "qp": 16,
+      "router_excluded_saving_pct": 31.192604772629917,
+      "dither_saving_pct": 26.02962512608642,
+      "router_included_saving_pct": 31.05916511505529,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "videoSRC20_1920x1080_25.yuv",
+      "qp": 32,
+      "router_excluded_saving_pct": 27.145127191830987,
+      "dither_saving_pct": 22.621353857207993,
+      "router_included_saving_pct": 27.01168753425636,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "videoSRC20_1920x1080_25.yuv",
+      "qp": 48,
+      "router_excluded_saving_pct": 20.96779096599467,
+      "dither_saving_pct": 15.42468668389272,
+      "router_included_saving_pct": 20.834351308420043,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "videoSRC20_1920x1080_25.yuv",
+      "qp": 63,
+      "router_excluded_saving_pct": 12.631578947368416,
+      "dither_saving_pct": 12.759254397479658,
+      "router_included_saving_pct": 12.498139289793789,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "videoSRC21_1920x1080_24.yuv",
+      "qp": 0,
+      "router_excluded_saving_pct": 38.327506874300475,
+      "dither_saving_pct": 38.327506874300475,
+      "router_included_saving_pct": 38.19406721672585,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "videoSRC21_1920x1080_24.yuv",
+      "qp": 16,
+      "router_excluded_saving_pct": 37.95484379102126,
+      "dither_saving_pct": 36.09152837462519,
+      "router_included_saving_pct": 37.821404133446634,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "videoSRC21_1920x1080_24.yuv",
+      "qp": 32,
+      "router_excluded_saving_pct": 20.644457033894792,
+      "dither_saving_pct": 21.55518094264277,
+      "router_included_saving_pct": 20.511017376320165,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "videoSRC21_1920x1080_24.yuv",
+      "qp": 48,
+      "router_excluded_saving_pct": 24.319271531414522,
+      "dither_saving_pct": 26.02962512608642,
+      "router_included_saving_pct": 24.185831873839895,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "videoSRC21_1920x1080_24.yuv",
+      "qp": 63,
+      "router_excluded_saving_pct": 37.688300562379965,
+      "dither_saving_pct": 36.83685454118363,
+      "router_included_saving_pct": 37.55486090480534,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "videoSRC22_1920x1080_24.yuv",
+      "qp": 0,
+      "router_excluded_saving_pct": 37.95484379102126,
+      "dither_saving_pct": 37.20951762446284,
+      "router_included_saving_pct": 37.821404133446634,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "videoSRC22_1920x1080_24.yuv",
+      "qp": 16,
+      "router_excluded_saving_pct": 35.85151510964336,
+      "dither_saving_pct": 32.36489754183306,
+      "router_included_saving_pct": 35.71807545206873,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "videoSRC22_1920x1080_24.yuv",
+      "qp": 32,
+      "router_excluded_saving_pct": 31.512207928590186,
+      "dither_saving_pct": 25.656962042807198,
+      "router_included_saving_pct": 31.37876827101556,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "videoSRC22_1920x1080_24.yuv",
+      "qp": 48,
+      "router_excluded_saving_pct": 29.276229428914903,
+      "dither_saving_pct": 25.656962042807198,
+      "router_included_saving_pct": 29.142789771340276,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "videoSRC22_1920x1080_24.yuv",
+      "qp": 63,
+      "router_excluded_saving_pct": 29.143579610617508,
+      "dither_saving_pct": 25.656962042807198,
+      "router_included_saving_pct": 29.01013995304288,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "videoSRC23_1920x1080_24.yuv",
+      "qp": 0,
+      "router_excluded_saving_pct": 36.464191457904406,
+      "dither_saving_pct": 33.85554987494991,
+      "router_included_saving_pct": 36.33075180032978,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "videoSRC23_1920x1080_24.yuv",
+      "qp": 16,
+      "router_excluded_saving_pct": 33.85554987494991,
+      "dither_saving_pct": 29.010929792320127,
+      "router_included_saving_pct": 33.72211021737528,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "videoSRC23_1920x1080_24.yuv",
+      "qp": 32,
+      "router_excluded_saving_pct": 29.701952439513068,
+      "dither_saving_pct": 25.284298959527984,
+      "router_included_saving_pct": 29.56851278193844,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "videoSRC23_1920x1080_24.yuv",
+      "qp": 48,
+      "router_excluded_saving_pct": 25.975321606720925,
+      "dither_saving_pct": 24.16630970969035,
+      "router_included_saving_pct": 25.8418819491463,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "videoSRC23_1920x1080_24.yuv",
+      "qp": 63,
+      "router_excluded_saving_pct": 25.81489823271752,
+      "dither_saving_pct": 23.793646626411135,
+      "router_included_saving_pct": 25.681458575142894,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "videoSRC24_1920x1080_24.yuv",
+      "qp": 0,
+      "router_excluded_saving_pct": 24.160091749457656,
+      "dither_saving_pct": 14.091970540686184,
+      "router_included_saving_pct": 24.02665209188303,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "videoSRC24_1920x1080_24.yuv",
+      "qp": 16,
+      "router_excluded_saving_pct": 23.707838775200006,
+      "dither_saving_pct": 13.02579762612096,
+      "router_included_saving_pct": 23.57439911762538,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "videoSRC24_1920x1080_24.yuv",
+      "qp": 32,
+      "router_excluded_saving_pct": 20.006494314020806,
+      "dither_saving_pct": 6.874991363944116,
+      "router_included_saving_pct": 19.87305465644618,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "videoSRC24_1920x1080_24.yuv",
+      "qp": 48,
+      "router_excluded_saving_pct": 12.495198352931425,
+      "dither_saving_pct": 0.9907283304085857,
+      "router_included_saving_pct": 12.361758695356798,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "videoSRC24_1920x1080_24.yuv",
+      "qp": 63,
+      "router_excluded_saving_pct": 8.580370590429865,
+      "dither_saving_pct": 6.182725124704646,
+      "router_included_saving_pct": 8.446930932855238,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "videoSRC25_1920x1080_24.yuv",
+      "qp": 0,
+      "router_excluded_saving_pct": 32.36489754183306,
+      "dither_saving_pct": 26.02962512608642,
+      "router_included_saving_pct": 32.23145788425843,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "videoSRC25_1920x1080_24.yuv",
+      "qp": 16,
+      "router_excluded_saving_pct": 29.010929792320127,
+      "dither_saving_pct": 24.911635876248774,
+      "router_included_saving_pct": 28.8774901347455,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "videoSRC25_1920x1080_24.yuv",
+      "qp": 32,
+      "router_excluded_saving_pct": 23.577676140995706,
+      "dither_saving_pct": 17.823575741664477,
+      "router_included_saving_pct": 23.44423648342108,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "videoSRC25_1920x1080_24.yuv",
+      "qp": 48,
+      "router_excluded_saving_pct": 18.277072307968666,
+      "dither_saving_pct": 8.259523842423066,
+      "router_included_saving_pct": 18.14363265039404,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "videoSRC25_1920x1080_24.yuv",
+      "qp": 63,
+      "router_excluded_saving_pct": 15.480233795304754,
+      "dither_saving_pct": 5.836592005084906,
+      "router_included_saving_pct": 15.346794137730127,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "videoSRC26_1920x1080_30.yuv",
+      "qp": 0,
+      "router_excluded_saving_pct": 33.85554987494991,
+      "dither_saving_pct": 31.619571375274624,
+      "router_included_saving_pct": 33.72211021737528,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "videoSRC26_1920x1080_30.yuv",
+      "qp": 16,
+      "router_excluded_saving_pct": 28.583963189675423,
+      "dither_saving_pct": 24.16630970969035,
+      "router_included_saving_pct": 28.450523532100796,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "videoSRC26_1920x1080_30.yuv",
+      "qp": 32,
+      "router_excluded_saving_pct": 20.27552472675519,
+      "dither_saving_pct": 15.158143455251416,
+      "router_included_saving_pct": 20.142085069180563,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "videoSRC26_1920x1080_30.yuv",
+      "qp": 48,
+      "router_excluded_saving_pct": 14.573240662696385,
+      "dither_saving_pct": 13.292340854762264,
+      "router_included_saving_pct": 14.439801005121758,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "videoSRC26_1920x1080_30.yuv",
+      "qp": 63,
+      "router_excluded_saving_pct": 17.343549211700815,
+      "dither_saving_pct": 14.6250569979688,
+      "router_included_saving_pct": 17.210109554126188,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "videoSRC27_1920x1080_30.yuv",
+      "qp": 0,
+      "router_excluded_saving_pct": 36.83685454118363,
+      "dither_saving_pct": 34.97353912478756,
+      "router_included_saving_pct": 36.703414883609,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "videoSRC27_1920x1080_30.yuv",
+      "qp": 16,
+      "router_excluded_saving_pct": 38.327506874300475,
+      "dither_saving_pct": 38.327506874300475,
+      "router_included_saving_pct": 38.19406721672585,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "videoSRC27_1920x1080_30.yuv",
+      "qp": 32,
+      "router_excluded_saving_pct": 38.327506874300475,
+      "dither_saving_pct": 38.327506874300475,
+      "router_included_saving_pct": 38.19406721672585,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "videoSRC27_1920x1080_30.yuv",
+      "qp": 48,
+      "router_excluded_saving_pct": 37.582180707742054,
+      "dither_saving_pct": 34.97353912478756,
+      "router_included_saving_pct": 37.44874105016743,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "videoSRC27_1920x1080_30.yuv",
+      "qp": 63,
+      "router_excluded_saving_pct": 33.00161666966049,
+      "dither_saving_pct": 31.24690829199541,
+      "router_included_saving_pct": 32.868177012085866,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "videoSRC28_1920x1080_30.yuv",
+      "qp": 0,
+      "router_excluded_saving_pct": 38.327506874300475,
+      "dither_saving_pct": 38.327506874300475,
+      "router_included_saving_pct": 38.19406721672585,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "videoSRC28_1920x1080_30.yuv",
+      "qp": 16,
+      "router_excluded_saving_pct": 38.327506874300475,
+      "dither_saving_pct": 38.327506874300475,
+      "router_included_saving_pct": 38.19406721672585,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "videoSRC28_1920x1080_30.yuv",
+      "qp": 32,
+      "router_excluded_saving_pct": 37.95484379102126,
+      "dither_saving_pct": 37.95484379102126,
+      "router_included_saving_pct": 37.821404133446634,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "videoSRC28_1920x1080_30.yuv",
+      "qp": 48,
+      "router_excluded_saving_pct": 35.71886529134598,
+      "dither_saving_pct": 30.128919042157776,
+      "router_included_saving_pct": 35.58542563377135,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "videoSRC28_1920x1080_30.yuv",
+      "qp": 63,
+      "router_excluded_saving_pct": 29.808072294150968,
+      "dither_saving_pct": 24.53897279296956,
+      "router_included_saving_pct": 29.67463263657634,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "videoSRC29_1920x1080_24.yuv",
+      "qp": 0,
+      "router_excluded_saving_pct": 38.327506874300475,
+      "dither_saving_pct": 38.327506874300475,
+      "router_included_saving_pct": 38.19406721672585,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "videoSRC29_1920x1080_24.yuv",
+      "qp": 16,
+      "router_excluded_saving_pct": 38.327506874300475,
+      "dither_saving_pct": 38.327506874300475,
+      "router_included_saving_pct": 38.19406721672585,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "videoSRC29_1920x1080_24.yuv",
+      "qp": 32,
+      "router_excluded_saving_pct": 22.722499343659752,
+      "dither_saving_pct": 22.35481062856669,
+      "router_included_saving_pct": 22.589059686085125,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "videoSRC29_1920x1080_24.yuv",
+      "qp": 48,
+      "router_excluded_saving_pct": 33.90736621022232,
+      "dither_saving_pct": 31.24690829199541,
+      "router_included_saving_pct": 33.773926552647694,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "videoSRC29_1920x1080_24.yuv",
+      "qp": 63,
+      "router_excluded_saving_pct": 38.327506874300475,
+      "dither_saving_pct": 38.327506874300475,
+      "router_included_saving_pct": 38.19406721672585,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "videoSRC30_1920x1080_30.yuv",
+      "qp": 0,
+      "router_excluded_saving_pct": 34.06778958422573,
+      "dither_saving_pct": 29.010929792320127,
+      "router_included_saving_pct": 33.9343499266511,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "videoSRC30_1920x1080_30.yuv",
+      "qp": 16,
+      "router_excluded_saving_pct": 35.71886529134598,
+      "dither_saving_pct": 30.8742452087162,
+      "router_included_saving_pct": 35.58542563377135,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "videoSRC30_1920x1080_30.yuv",
+      "qp": 32,
+      "router_excluded_saving_pct": 34.70699589614624,
+      "dither_saving_pct": 29.010929792320127,
+      "router_included_saving_pct": 34.57355623857161,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "videoSRC30_1920x1080_30.yuv",
+      "qp": 48,
+      "router_excluded_saving_pct": 33.96166972958782,
+      "dither_saving_pct": 26.402288209365633,
+      "router_included_saving_pct": 33.82823007201319,
+      "controller_cost_pct_points": 0.13343965757462703
+    },
+    {
+      "sequence": "videoSRC30_1920x1080_30.yuv",
+      "qp": 63,
+      "router_excluded_saving_pct": 31.404844481905737,
+      "dither_saving_pct": 24.16630970969035,
+      "router_included_saving_pct": 31.27140482433111,
+      "controller_cost_pct_points": 0.13343965757462703
+    }
+  ]
+}
