@@ -3,9 +3,10 @@
 We replayed all 24 Kodak images at QP 0, 16, 32, 48 and 63 (120 cases)
 through the same frozen FUFREF2 streams and DIV2K-calibrated exit maps.
 Checkpoint e15, full-frame e15 reference and trained seam repair are fixed.
-Only the one-pixel depthwise context supplied by a neighbour that has
+Only the one-pixel depthwise context supplied when a neighbour has
 already exited changes. The stage-synchronous active-zero rule supplies zero;
-the active-replicate rule replicates the nearest still-active feature.
+the active-replicate rule repeats the still-active tile's own edge value.
+Both read a neighbour's actual feature while that neighbour remains active.
 Neither arm trains new weights or measures execution time.
 
 | Decoder path, with identical seam repair | Mean 4:4:4 PSNR gain versus deployed | Cases >0.1 dB below full-frame e15 | Mean YUV 6:1:1 BD-rate versus deployed | Mean BD-rate versus released D12 |
