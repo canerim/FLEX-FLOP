@@ -1,0 +1,45 @@
+{
+  "scope": "Frozen original-beta isolated/no-repair vs active-replicate/no-repair; DIV2K validation24 x QP5, FUFREF2 research streams; no latency or native BD-rate.",
+  "raw_sha256": "d45a5b4cfdf9214b2db1f807c440dfb7d84ae320c4e10398506e488acad0b8e5",
+  "analysis_sha256": "8814694485aac47c52eefd6e4c8fabeab0b1eed180e1e67ecbf6a595f20678a4",
+  "plot_script_sha256": "a8ac7c01eb7ffa0d3dfdcfd69bd1e579ebfc3e8d59b3fae8d522818552b05fad",
+  "figure_sha256": "9bc10ba39525338bec733d3065d51bda0ab58bc79b66f191103df719285ed60f",
+  "bootstrap": "10000 image-cluster draws retaining all five QPs per image",
+  "all_images_positive": true,
+  "first_8px_pixel_fraction": 0.0672149658203125,
+  "first_8px_net_gain_fraction": 0.6239872575722204,
+  "first_8px_net_gain_fraction_ci95": [
+    0.5599012399884558,
+    0.6874750168148965
+  ],
+  "cumulative_pixel_fraction": [
+    0.0672149658203125,
+    0.13638814290364581,
+    0.2669219970703125,
+    0.49673970540364587,
+    1.0
+  ],
+  "cumulative_gain_fraction": [
+    0.6239872575722204,
+    0.7009455970887458,
+    0.7415682337688123,
+    0.7979170528343923,
+    1.0
+  ],
+  "cumulative_gain_fraction_ci95": [
+    [
+      0.5599012399884558,
+      0.6340090294639128,
+      0.6798038262539065,
+      0.7505383815598473,
+      1.0
+    ],
+    [
+      0.6874750168148965,
+      0.7651351840539645,
+      0.8017614682631118,
+      0.8461858437668733,
+      1.0
+    ]
+  ]
+}
