@@ -1,0 +1,20 @@
+{
+  "scope": "Exploratory same-stream 2x2 interaction on DIV2K validation24 x 5QP; 24-image clustered intervals, CPU FP32, untimed.",
+  "source_sha256": "a02b9809876515953945cb631aa5712387bbf9fca9d7bae37b925bb1b2f41ddf",
+  "script_sha256": "b1a3b9f7174a4bd2152f0d1b2b86f4255948ed6c3dc7c0d69886688bf6eaf69c",
+  "canvas_mm": [
+    89.41,
+    67.31
+  ],
+  "cases": 120,
+  "interaction_mean_db": 0.021927698361076917,
+  "interaction_ci95_db": [
+    0.010833755403121006,
+    0.03513655956446902
+  ],
+  "artifacts": {
+    "context_repair_interaction.pdf": "3203a9f371a5010eefb4a395f8e4287bab7c236da663808434c8a37e90315b7c",
+    "context_repair_interaction.svg": "51569b32a58f022560001c85b6196f6055e90d512a7a8b34ca23eee0a647fce3",
+    "context_repair_interaction.png": "0c809702eac4a2fac47dd9f5e02eeca1db42ede37565a0df2c04aad710449d2c"
+  }
+}

@@ -1,0 +1,2059 @@
+{
+  "scope": "DIV2K validation24 x QP5, isolated tiles with frozen replicate padding, repair on/off; exact frozen FUFREF2 streams/maps, untimed CPU FP32.",
+  "expected_cases": 120,
+  "complete": true,
+  "provenance": {
+    "exact_sha256": "e5832a42cdf1f1399b62c580bef64320b91ac7869e5a842cf87422f5c48c9a9f",
+    "manifest_sha256": "0468dc26738fcc16024abd224ba2c805ee25911553f68896f9ddafbaedadf922",
+    "released_sha256": "b3b900de23f30e4fc437010ddffe6a5413a56d6cfd97fb6235adbcd2b6973302",
+    "e15_sha256": "91556d30bca41988755ff43dee3bc6d0cd2a0a4eda1d18d2891b168dc0a04ce9",
+    "source_code_sha256": {
+      "proof/cpu_early_exit/audit_isolated_no_repair_div2k.py": "31920850260a46f0a9c6c33cdf420c35d15dfed78786b1b8bd0ecc8512d4e5fd",
+      "flexuf/backbone/decoder.py": "eba774cadc62e4542cfb5424a07cdf6dff432f2c4abad889a22e084e52bc9b90",
+      "flexuf/model.py": "437b0506e688d8ed3921b90f6cc2638e30aff584815f9909b972a3465ef5ebca",
+      "flexuf/config.py": "387fe63143c584acbc167c72a7181ad7e781594e52738e815f936b885345a6da"
+    }
+  },
+  "rows": [
+    {
+      "image": "0844.png",
+      "qp": 0,
+      "case_sha256": "d4c862309f85815dfa39fc3e686374dcdce8e23a748e50377e38d08f9ab03a6f",
+      "stream_sha256": "f50cca8b9974201cd9e2305d47986ce823a9855c80e91de6b222235d27039f83",
+      "exit_map": [
+        2,
+        2,
+        2,
+        2,
+        3,
+        2
+      ],
+      "isolated_with_repair_delta444_db": 0.25339288575537905,
+      "isolated_no_repair_delta444_db": 0.25018410496217736,
+      "exact_context_delta444_db": 0.22832215226357852
+    },
+    {
+      "image": "0844.png",
+      "qp": 16,
+      "case_sha256": "221395dbcbe2db709735bcb67bfd6c58b4f68da7328d6d2f01ec46bc51fc3782",
+      "stream_sha256": "7326b84dddf77b6e5740a2e8a1f0d1f62d66bdd035546edb4ec69cdf55337c1a",
+      "exit_map": [
+        2,
+        2,
+        2,
+        2,
+        3,
+        3
+      ],
+      "isolated_with_repair_delta444_db": 0.22342614134725772,
+      "isolated_no_repair_delta444_db": 0.23643317972177696,
+      "exact_context_delta444_db": 0.1999695875554205
+    },
+    {
+      "image": "0844.png",
+      "qp": 32,
+      "case_sha256": "86f7433d1927a52945c3ac50d674113f7727c67e863cc8438d470fc39d94ac4a",
+      "stream_sha256": "3cf45327a6eacf4571ffd94bfb52d9e68009e0a8dad87f29144b00aa24461886",
+      "exit_map": [
+        2,
+        2,
+        2,
+        2,
+        3,
+        3
+      ],
+      "isolated_with_repair_delta444_db": 0.2852866732880792,
+      "isolated_no_repair_delta444_db": 0.3133668845948261,
+      "exact_context_delta444_db": 0.2630199460754156
+    },
+    {
+      "image": "0844.png",
+      "qp": 48,
+      "case_sha256": "d3f631cb406d5535814a236d29983f58d77fe498158cbcca8327016a7d3c0114",
+      "stream_sha256": "15b4de89f1963a6e609845ee16dcb64e5a36d6840bf867e1744a4a26008a14d5",
+      "exit_map": [
+        2,
+        2,
+        2,
+        2,
+        3,
+        3
+      ],
+      "isolated_with_repair_delta444_db": 0.49610332799045137,
+      "isolated_no_repair_delta444_db": 0.5364184235051519,
+      "exact_context_delta444_db": 0.46465230063386875
+    },
+    {
+      "image": "0844.png",
+      "qp": 63,
+      "case_sha256": "abd762aa51bddb599b2ae52c735f73adc077dda6ca1dffe5fffd035dff34baed",
+      "stream_sha256": "fe4f4c53fb1cc021c9604ad992147c804afc32d036b4e4a8ddb06ce2ce68b55c",
+      "exit_map": [
+        2,
+        2,
+        2,
+        2,
+        5,
+        5
+      ],
+      "isolated_with_repair_delta444_db": 0.19283470414440892,
+      "isolated_no_repair_delta444_db": 0.26913390687021305,
+      "exact_context_delta444_db": 0.15168538592801434
+    },
+    {
+      "image": "0892.png",
+      "qp": 0,
+      "case_sha256": "c73f7641ea517f555596bd40b260f03217c7b56970410ca288a27140c141fa56",
+      "stream_sha256": "5b8ded59a654d3deef399dba48fca1445b5969c56e18bb726c997643a5f0f98f",
+      "exit_map": [
+        3,
+        3,
+        2,
+        2,
+        3,
+        3
+      ],
+      "isolated_with_repair_delta444_db": 0.21475443480906609,
+      "isolated_no_repair_delta444_db": 0.21905223815418157,
+      "exact_context_delta444_db": 0.18742814210628772
+    },
+    {
+      "image": "0892.png",
+      "qp": 16,
+      "case_sha256": "82cdef9ceb196052a4f49e92e01329c8b92d3cbd18dc61959ffd8084ada94b36",
+      "stream_sha256": "b194b07a71c55c9556b91460786d3ad75ed0b16b12fa7b42fe40accc5aa55419",
+      "exit_map": [
+        3,
+        3,
+        3,
+        4,
+        4,
+        4
+      ],
+      "isolated_with_repair_delta444_db": 0.13782537937560613,
+      "isolated_no_repair_delta444_db": 0.14249231655751063,
+      "exact_context_delta444_db": 0.10611551444113634
+    },
+    {
+      "image": "0892.png",
+      "qp": 32,
+      "case_sha256": "e552c47dc20fdf86a7ea39c7f816680a48c6127a6a0c1ab8db62fe004322a587",
+      "stream_sha256": "538dba3a4b9370032ee205abce42a61839e3bc94bd1b02eab174a3d7b5cfb5e5",
+      "exit_map": [
+        3,
+        3,
+        3,
+        4,
+        4,
+        4
+      ],
+      "isolated_with_repair_delta444_db": 0.21954496042249638,
+      "isolated_no_repair_delta444_db": 0.22969247708819185,
+      "exact_context_delta444_db": 0.17653276171420118
+    },
+    {
+      "image": "0892.png",
+      "qp": 48,
+      "case_sha256": "e6f658e8537b19e6f48c2ab13cde42d28727aa1c1695449cdf65361197bbefd1",
+      "stream_sha256": "21eab9914325190d1b2563f6c245b3f8241650d963d257abf767b425d3c1e849",
+      "exit_map": [
+        3,
+        4,
+        3,
+        4,
+        4,
+        4
+      ],
+      "isolated_with_repair_delta444_db": 0.32963187125528376,
+      "isolated_no_repair_delta444_db": 0.35086303767348276,
+      "exact_context_delta444_db": 0.2747631579624197
+    },
+    {
+      "image": "0892.png",
+      "qp": 63,
+      "case_sha256": "d9d2e165a0252ccdb0849c952a0b32a8b37b480a910f79f2e2d129771e447d0b",
+      "stream_sha256": "eb05c9b516aec586e9801cbb9b8ef47c2112a15c0c98239649e3ddf9cd36e5e3",
+      "exit_map": [
+        5,
+        5,
+        5,
+        5,
+        5,
+        5
+      ],
+      "isolated_with_repair_delta444_db": 0.08285816112332808,
+      "isolated_no_repair_delta444_db": 0.1117746434015564,
+      "exact_context_delta444_db": 0.0
+    },
+    {
+      "image": "0891.png",
+      "qp": 0,
+      "case_sha256": "93e1afd248e092c29890f999ea5bc17789e5235ad9b2391d7c2edbb6f163cd04",
+      "stream_sha256": "360d4beb3923c0eee1d8680e756f30c460387a4c232a4567596b01cfeff0804c",
+      "exit_map": [
+        3,
+        3,
+        3,
+        3,
+        2,
+        3
+      ],
+      "isolated_with_repair_delta444_db": 0.16160474192346685,
+      "isolated_no_repair_delta444_db": 0.17121442215971158,
+      "exact_context_delta444_db": 0.12728953017702352
+    },
+    {
+      "image": "0891.png",
+      "qp": 16,
+      "case_sha256": "aa123a53478a01e25ccfe3bf4cc7a0b708bcdd787d981144c4a7e0e8c51aff53",
+      "stream_sha256": "8978b4a5e36fade3547ccc0cdd03a11f39393510374bb5c2ed805de4361f88fc",
+      "exit_map": [
+        5,
+        4,
+        4,
+        3,
+        3,
+        4
+      ],
+      "isolated_with_repair_delta444_db": 0.12054509903845893,
+      "isolated_no_repair_delta444_db": 0.14345548173521874,
+      "exact_context_delta444_db": 0.07731224004473439
+    },
+    {
+      "image": "0891.png",
+      "qp": 32,
+      "case_sha256": "2f8788c102cb0f88f5997304955a3904d9a5426043a457b9d571b7348b55f0a7",
+      "stream_sha256": "8989b165359f6c543613fb07458bd2ea6f36292e3cfc5ac7995573269bb7c12d",
+      "exit_map": [
+        5,
+        5,
+        5,
+        3,
+        3,
+        4
+      ],
+      "isolated_with_repair_delta444_db": 0.13384888497287284,
+      "isolated_no_repair_delta444_db": 0.18118121515207908,
+      "exact_context_delta444_db": 0.0800395545992747
+    },
+    {
+      "image": "0891.png",
+      "qp": 48,
+      "case_sha256": "473c9ff0f5a60f4fd43f2ce3dd11eb80519086d55ee1e7c13e9095b2a407c07e",
+      "stream_sha256": "75789c21db823d75e73b00d2576301f3b556ef7c061679166a71d7c79ef9bc38",
+      "exit_map": [
+        5,
+        5,
+        5,
+        4,
+        3,
+        5
+      ],
+      "isolated_with_repair_delta444_db": 0.10506860410038489,
+      "isolated_no_repair_delta444_db": 0.18775056226376102,
+      "exact_context_delta444_db": 0.044824977934168134
+    },
+    {
+      "image": "0891.png",
+      "qp": 63,
+      "case_sha256": "398b0d5b829a556273c9c5483991d42018f622e59e8c9a099507707da61f6b0f",
+      "stream_sha256": "875897aa1913953180e9cd0d0d06008f3ee31e648a7091b728df1982a990911a",
+      "exit_map": [
+        5,
+        5,
+        5,
+        5,
+        5,
+        5
+      ],
+      "isolated_with_repair_delta444_db": 0.08265387040060766,
+      "isolated_no_repair_delta444_db": 0.214507715447929,
+      "exact_context_delta444_db": 0.0
+    },
+    {
+      "image": "0819.png",
+      "qp": 0,
+      "case_sha256": "e042552766d5ccf82331709037b73d5dce20b4aca969246ade13aef73c02cb61",
+      "stream_sha256": "ced3d8fcebb1af145ac4412e170081876c309dc328d0eb273a4f427591a45d80",
+      "exit_map": [
+        2,
+        2,
+        2,
+        2,
+        2,
+        2
+      ],
+      "isolated_with_repair_delta444_db": 0.04980288574013557,
+      "isolated_no_repair_delta444_db": 0.05042069383003961,
+      "exact_context_delta444_db": 0.0488724158553567
+    },
+    {
+      "image": "0819.png",
+      "qp": 16,
+      "case_sha256": "41bf746d257e86c0c8c5eeae82b889346a25db55313da1bea4c708183797656a",
+      "stream_sha256": "2d1abaec6e90fc65ace5832a07ae902f75578173fe672093cd999b3b6e12b72f",
+      "exit_map": [
+        3,
+        3,
+        3,
+        3,
+        3,
+        3
+      ],
+      "isolated_with_repair_delta444_db": 0.0398914178460032,
+      "isolated_no_repair_delta444_db": 0.04059911152440394,
+      "exact_context_delta444_db": 0.030602802507051007
+    },
+    {
+      "image": "0819.png",
+      "qp": 32,
+      "case_sha256": "a72c5c0a47356f353b965016c29d316ef904656aa848fec46b4096f4acdbed48",
+      "stream_sha256": "8d74ca035ad46b5f20777016de849b56ddc09e040df849829b1ce0b50e9b6c45",
+      "exit_map": [
+        3,
+        3,
+        3,
+        3,
+        3,
+        3
+      ],
+      "isolated_with_repair_delta444_db": 0.07659237658624032,
+      "isolated_no_repair_delta444_db": 0.07813442113576556,
+      "exact_context_delta444_db": 0.06425854594236297
+    },
+    {
+      "image": "0819.png",
+      "qp": 48,
+      "case_sha256": "862b1afc724969e306f6c08a916c035ab47304cb4eee743e02bd4f76a43268bd",
+      "stream_sha256": "f2469f6ffa381157e09f4ae7d0f722c7ff047cd78dd60f654e167c8c8639f8cd",
+      "exit_map": [
+        3,
+        3,
+        3,
+        3,
+        3,
+        3
+      ],
+      "isolated_with_repair_delta444_db": 0.1500148217442574,
+      "isolated_no_repair_delta444_db": 0.15405659052418946,
+      "exact_context_delta444_db": 0.14101902927887022
+    },
+    {
+      "image": "0819.png",
+      "qp": 63,
+      "case_sha256": "239c24b7cac23320aaffc24ef39396f6073a0201d8f60569c573b00b96a463a2",
+      "stream_sha256": "46c374e8918411feecf2886cc69b2caff6de5a1471a1306efb9999e99b25e31b",
+      "exit_map": [
+        5,
+        3,
+        3,
+        5,
+        5,
+        5
+      ],
+      "isolated_with_repair_delta444_db": 0.0799569074782276,
+      "isolated_no_repair_delta444_db": 0.08220500732267108,
+      "exact_context_delta444_db": 0.05629819637310869
+    },
+    {
+      "image": "0871.png",
+      "qp": 0,
+      "case_sha256": "889a81258ab48ecfba4a59bc587e67b7ef575621a1f171c08858b1f92d221152",
+      "stream_sha256": "17ad34279dcacbe19df0615ed78f4cffdc4415b3aac6890aef090314e87d71cd",
+      "exit_map": [
+        2,
+        2,
+        2,
+        2,
+        2,
+        2
+      ],
+      "isolated_with_repair_delta444_db": 0.13458131739312273,
+      "isolated_no_repair_delta444_db": 0.1368425968732172,
+      "exact_context_delta444_db": 0.12113811234412046
+    },
+    {
+      "image": "0871.png",
+      "qp": 16,
+      "case_sha256": "5840c9b2df5ad7512be050cb70e12779711671014fefd32e19f105adf0e70546",
+      "stream_sha256": "783e5839d15a15c4598fcecca01148329660d3e37fdd0d9891b7b0eddad3b55d",
+      "exit_map": [
+        3,
+        3,
+        3,
+        3,
+        3,
+        3
+      ],
+      "isolated_with_repair_delta444_db": 0.07035554811679871,
+      "isolated_no_repair_delta444_db": 0.07316961980809296,
+      "exact_context_delta444_db": 0.04534216112607369
+    },
+    {
+      "image": "0871.png",
+      "qp": 32,
+      "case_sha256": "08c53ccd97034e7cd700c3768b200db78df76f35a9aee9b4ccfab5eaa6e19a65",
+      "stream_sha256": "b3f9541428bbe93af68b45e43aa17476bfb2aacb6fa08d8ea321e542445ae8de",
+      "exit_map": [
+        3,
+        3,
+        3,
+        3,
+        3,
+        3
+      ],
+      "isolated_with_repair_delta444_db": 0.1137904610741479,
+      "isolated_no_repair_delta444_db": 0.11882287866699734,
+      "exact_context_delta444_db": 0.08886906131561237
+    },
+    {
+      "image": "0871.png",
+      "qp": 48,
+      "case_sha256": "9b15a827b12ee4dda6c6ab8a9da019dec20885bb43f42da75b3077983c19b350",
+      "stream_sha256": "f5ec3fb0d5d7eedb7b7b61ca1d564405f641f1761b5abf01eff868903fa9591f",
+      "exit_map": [
+        3,
+        5,
+        3,
+        3,
+        3,
+        3
+      ],
+      "isolated_with_repair_delta444_db": 0.16719693753412251,
+      "isolated_no_repair_delta444_db": 0.17688236399100846,
+      "exact_context_delta444_db": 0.13674999076304875
+    },
+    {
+      "image": "0871.png",
+      "qp": 63,
+      "case_sha256": "d8bad15ec71f4d189ed1baa9d6456217b844e61960d44069bc258c79a593baa6",
+      "stream_sha256": "4b87b04e4c49de7a4d3f802d0ba965561ee53d0978b196ac113df1ae4fd70344",
+      "exit_map": [
+        5,
+        5,
+        5,
+        5,
+        5,
+        5
+      ],
+      "isolated_with_repair_delta444_db": 0.07516297417523607,
+      "isolated_no_repair_delta444_db": 0.08235858750195818,
+      "exact_context_delta444_db": 0.0
+    },
+    {
+      "image": "0897.png",
+      "qp": 0,
+      "case_sha256": "04f0eaa5e877770139139f2327d1d974417f9e29c66ff11174656619c4502a71",
+      "stream_sha256": "4f6aad27938252c7fffe72d6c31cf1a4fba702c64334b4d7f484858dfe0a258d",
+      "exit_map": [
+        3,
+        3,
+        3,
+        3,
+        3,
+        3
+      ],
+      "isolated_with_repair_delta444_db": 0.02440051444866021,
+      "isolated_no_repair_delta444_db": 0.02462586022385234,
+      "exact_context_delta444_db": 0.017882543975162545
+    },
+    {
+      "image": "0897.png",
+      "qp": 16,
+      "case_sha256": "ff6480d9ac169768594d30385c2452fc6efcbcb9eb7486c5c108f4e5b399ec1b",
+      "stream_sha256": "3352059b6c90de6250f55465036bef050cfbd0f13fb7903579bf5275fcd5e0c1",
+      "exit_map": [
+        4,
+        4,
+        4,
+        4,
+        4,
+        4
+      ],
+      "isolated_with_repair_delta444_db": 0.026579170521906628,
+      "isolated_no_repair_delta444_db": 0.02749884456616715,
+      "exact_context_delta444_db": 0.018702063767839193
+    },
+    {
+      "image": "0897.png",
+      "qp": 32,
+      "case_sha256": "0f4f7525f035886a81bd97bbe8d30d908cca63c35cda96a6600a8420a96a74c1",
+      "stream_sha256": "3f7957fe29a77a88ea508ad4acd1c40cde5c7165e5ce6da869e22d5e50b748f0",
+      "exit_map": [
+        4,
+        4,
+        4,
+        4,
+        4,
+        4
+      ],
+      "isolated_with_repair_delta444_db": 0.05552990304537108,
+      "isolated_no_repair_delta444_db": 0.05846207464151148,
+      "exact_context_delta444_db": 0.048979120721099535
+    },
+    {
+      "image": "0897.png",
+      "qp": 48,
+      "case_sha256": "1f94b70d9aa5531ab723452334c944b6dbb4faf6e8e5bffc33644ecbf61604b3",
+      "stream_sha256": "a65bec51631fbfbf1b14ebf596c3893f5dd5b41a5a6569c3e8630dd1b4476d6c",
+      "exit_map": [
+        5,
+        5,
+        5,
+        5,
+        5,
+        5
+      ],
+      "isolated_with_repair_delta444_db": 0.024476934389970128,
+      "isolated_no_repair_delta444_db": 0.027239496546604406,
+      "exact_context_delta444_db": 0.0
+    },
+    {
+      "image": "0897.png",
+      "qp": 63,
+      "case_sha256": "dc475c3869706a41e31c79e9771042e2f62479b64dd04a332e9828ccad376118",
+      "stream_sha256": "4bcefbf7ac5c8ad102e4a995934273783d49275ec984ad77bd743c9e3132f7eb",
+      "exit_map": [
+        5,
+        5,
+        5,
+        5,
+        5,
+        5
+      ],
+      "isolated_with_repair_delta444_db": 0.04024433159604812,
+      "isolated_no_repair_delta444_db": 0.043125693702679845,
+      "exact_context_delta444_db": 0.0
+    },
+    {
+      "image": "0839.png",
+      "qp": 0,
+      "case_sha256": "c277c6132b76f246f9ec69d2c61a2dd1cb6d268f8a1f0bcec884e7208801cbcb",
+      "stream_sha256": "e7c08566df1f9abad57f26337ad605405f6dc05317578a55d8a6a3bc81c097bd",
+      "exit_map": [
+        2,
+        2,
+        2,
+        2,
+        2,
+        2
+      ],
+      "isolated_with_repair_delta444_db": 0.06928406077958488,
+      "isolated_no_repair_delta444_db": 0.06826469189139357,
+      "exact_context_delta444_db": 0.06428419527624336
+    },
+    {
+      "image": "0839.png",
+      "qp": 16,
+      "case_sha256": "02f080154b92f22da57398e04f48c7811794bae7bcd0ba93cfe8963853110a1e",
+      "stream_sha256": "39a984d3b26ac585a06e4d0e92b597aea3bad0eb4439587823690072fdbff860",
+      "exit_map": [
+        3,
+        2,
+        2,
+        2,
+        3,
+        2
+      ],
+      "isolated_with_repair_delta444_db": 0.03682373955295091,
+      "isolated_no_repair_delta444_db": 0.03760802238702122,
+      "exact_context_delta444_db": 0.03305202372234813
+    },
+    {
+      "image": "0839.png",
+      "qp": 32,
+      "case_sha256": "bc776e6daa57b38bd94451ef7f79f71eabdbf336881ae105c9c076530f2e98c7",
+      "stream_sha256": "6937ccd35f2117ae90f1a1ba01d06931c86f69e7f980b6283383b507899192d4",
+      "exit_map": [
+        2,
+        2,
+        2,
+        2,
+        2,
+        2
+      ],
+      "isolated_with_repair_delta444_db": 0.0494927143308834,
+      "isolated_no_repair_delta444_db": 0.05190355124032633,
+      "exact_context_delta444_db": 0.04773359390938978
+    },
+    {
+      "image": "0839.png",
+      "qp": 48,
+      "case_sha256": "29fd789e3e2566767bbf0bb4478fbeebd2bd92b754e6fb68b9945f88bc33cf7d",
+      "stream_sha256": "05e41f17546531aa57283b9ddd06c9f03ef281f8e5346130c9a11725cb6f166d",
+      "exit_map": [
+        2,
+        2,
+        3,
+        2,
+        2,
+        2
+      ],
+      "isolated_with_repair_delta444_db": 0.06021074715184046,
+      "isolated_no_repair_delta444_db": 0.06603396322741203,
+      "exact_context_delta444_db": 0.060211600255018934
+    },
+    {
+      "image": "0839.png",
+      "qp": 63,
+      "case_sha256": "e31cb23c0851199a7f4743aabd3b324a320968dda74d8301ec3bd21fdb4c9b28",
+      "stream_sha256": "cbd1381926a850f28e17ab638f0c648c314081ca6b3986ee97861c957ba717fc",
+      "exit_map": [
+        2,
+        2,
+        3,
+        2,
+        2,
+        2
+      ],
+      "isolated_with_repair_delta444_db": 0.08950589684670227,
+      "isolated_no_repair_delta444_db": 0.1023723978342237,
+      "exact_context_delta444_db": 0.09301161905094471
+    },
+    {
+      "image": "0833.png",
+      "qp": 0,
+      "case_sha256": "6d15a86ed203262bca56a37798c4f96037df5b837333c5b326cd8fb84757c79b",
+      "stream_sha256": "4a324bf28bf95b3b4161ccfac66db65c92c36b6f0fb173675e50314428ad9ad6",
+      "exit_map": [
+        2,
+        2,
+        3,
+        2,
+        2,
+        2
+      ],
+      "isolated_with_repair_delta444_db": 0.15543981004696814,
+      "isolated_no_repair_delta444_db": 0.16430277579213326,
+      "exact_context_delta444_db": 0.13955047201403903
+    },
+    {
+      "image": "0833.png",
+      "qp": 16,
+      "case_sha256": "a4384dbc7947f9d28807806cc05ab8289164180e1d60b0939a9e849864a83a15",
+      "stream_sha256": "11066e3c5865eb29de9f833986c11bbda8449acef9765cfa19e01c189f9c9bc4",
+      "exit_map": [
+        3,
+        3,
+        3,
+        2,
+        2,
+        2
+      ],
+      "isolated_with_repair_delta444_db": 0.08614055224213063,
+      "isolated_no_repair_delta444_db": 0.1006196673532867,
+      "exact_context_delta444_db": 0.07562759666456095
+    },
+    {
+      "image": "0833.png",
+      "qp": 32,
+      "case_sha256": "449dc2cc5f06192d875878a8b9fcf5063f3d03d40ac9d0bf54a02afe688ac0f8",
+      "stream_sha256": "6f484574ab7fbf1972ab9a8703cfd83fea519c34eb376b70ca95bc0317c5f907",
+      "exit_map": [
+        3,
+        3,
+        3,
+        2,
+        2,
+        2
+      ],
+      "isolated_with_repair_delta444_db": 0.09216813031687492,
+      "isolated_no_repair_delta444_db": 0.1043747485298093,
+      "exact_context_delta444_db": 0.08461623009449815
+    },
+    {
+      "image": "0833.png",
+      "qp": 48,
+      "case_sha256": "e129fe8aedcedf1e462dca54885b702ba6890f025db87a3ba410cfe5ad5245b8",
+      "stream_sha256": "d89d3f25f090f2a1aecb9a9eee8efbdf6680e3d9e95d75eeae400dc623de541e",
+      "exit_map": [
+        3,
+        3,
+        3,
+        2,
+        2,
+        2
+      ],
+      "isolated_with_repair_delta444_db": 0.08816763565458774,
+      "isolated_no_repair_delta444_db": 0.1002803339482883,
+      "exact_context_delta444_db": 0.0819835499193957
+    },
+    {
+      "image": "0833.png",
+      "qp": 63,
+      "case_sha256": "8f2ebf999e5895e4cb385f81e4fa42035657c99b410948d25d2c92cec0562f58",
+      "stream_sha256": "23a2c736fb71c8d94fcc0fcc9512ce2ff1f21caf7ea63ff778e583fd588531c1",
+      "exit_map": [
+        3,
+        3,
+        3,
+        2,
+        2,
+        2
+      ],
+      "isolated_with_repair_delta444_db": 0.08638428491360887,
+      "isolated_no_repair_delta444_db": 0.10569057037113984,
+      "exact_context_delta444_db": 0.08465496835069389
+    },
+    {
+      "image": "0849.png",
+      "qp": 0,
+      "case_sha256": "0c61c1dfaead90b734cbba2e642ac679723efeccee127153a229b48007799f0f",
+      "stream_sha256": "4845b6a4bbe59c0dccf37fd2d9196366bd7f30165a4d0a695387e13e15dd4ae1",
+      "exit_map": [
+        3,
+        3,
+        3,
+        3,
+        3,
+        3
+      ],
+      "isolated_with_repair_delta444_db": 0.03361957513264643,
+      "isolated_no_repair_delta444_db": 0.03419446735650054,
+      "exact_context_delta444_db": 0.025886246940474703
+    },
+    {
+      "image": "0849.png",
+      "qp": 16,
+      "case_sha256": "af1de254867a81596346baca3c54590c3e9aeef75d1efb43b90fc99625c8dd7f",
+      "stream_sha256": "2cb1c1bcade577689c5eabe9b755600632dff309f7e3dabe8941d488fb3ed97a",
+      "exit_map": [
+        4,
+        4,
+        4,
+        4,
+        4,
+        4
+      ],
+      "isolated_with_repair_delta444_db": 0.043296307316036294,
+      "isolated_no_repair_delta444_db": 0.04476320219924325,
+      "exact_context_delta444_db": 0.033374707926915735
+    },
+    {
+      "image": "0849.png",
+      "qp": 32,
+      "case_sha256": "1785c6862a7a729862a48bc05ad322301698b6facc8f55f1a58ce4696bc9fc32",
+      "stream_sha256": "7dad305dd6c4ca9df465cda8dfeb833abe43569a156ae32d318dcf232c1c5334",
+      "exit_map": [
+        5,
+        5,
+        5,
+        5,
+        5,
+        5
+      ],
+      "isolated_with_repair_delta444_db": 0.016354802848999307,
+      "isolated_no_repair_delta444_db": 0.01869974446935131,
+      "exact_context_delta444_db": 0.0
+    },
+    {
+      "image": "0849.png",
+      "qp": 48,
+      "case_sha256": "c97b56087fbd68452362f9a72a849f612ae5e7bb1c2e8cfd70c9136931929834",
+      "stream_sha256": "1491bf6c9167a9475d870d3ee1f98d81885ce4153737f3da0d3f48b9d6a63b15",
+      "exit_map": [
+        5,
+        5,
+        5,
+        5,
+        5,
+        5
+      ],
+      "isolated_with_repair_delta444_db": 0.026188862801792175,
+      "isolated_no_repair_delta444_db": 0.029289773610768136,
+      "exact_context_delta444_db": 0.0
+    },
+    {
+      "image": "0849.png",
+      "qp": 63,
+      "case_sha256": "0b4be46a2b21193da50674f2c59a0e64f91019969fe60287ddcdbd8e1036e417",
+      "stream_sha256": "5293687821c360ff4f8672e73dbb9f48eee65b21e9d09fc0a31fca8830c39d3b",
+      "exit_map": [
+        5,
+        5,
+        5,
+        5,
+        5,
+        5
+      ],
+      "isolated_with_repair_delta444_db": 0.0363772580738652,
+      "isolated_no_repair_delta444_db": 0.040718749822563946,
+      "exact_context_delta444_db": 0.0
+    },
+    {
+      "image": "0881.png",
+      "qp": 0,
+      "case_sha256": "19213d30aef0dff6eac1a975bea7656d61a2f1096970dcdc2d91cf5abd1fabfc",
+      "stream_sha256": "1fdbb2b6b6ad5966cc274ef2d00e5cbf69b09cdb462539b6f94abef8e76661d4",
+      "exit_map": [
+        2,
+        3,
+        2,
+        2,
+        3,
+        3
+      ],
+      "isolated_with_repair_delta444_db": 0.029936950315611485,
+      "isolated_no_repair_delta444_db": 0.02969086413663589,
+      "exact_context_delta444_db": 0.02468423283873563
+    },
+    {
+      "image": "0881.png",
+      "qp": 16,
+      "case_sha256": "4bcbb6d2b36cacad0730c50b7480833d34732c2532ff1160fb7ef14b72defa82",
+      "stream_sha256": "f6725ed180a7bc419bcd7ebce1453b240f89af1b626db144a25637dbb30fdcca",
+      "exit_map": [
+        3,
+        3,
+        3,
+        3,
+        3,
+        3
+      ],
+      "isolated_with_repair_delta444_db": 0.027710564082038047,
+      "isolated_no_repair_delta444_db": 0.02813150081841104,
+      "exact_context_delta444_db": 0.0209953907843643
+    },
+    {
+      "image": "0881.png",
+      "qp": 32,
+      "case_sha256": "fece8340500cb7d565961bc9352ce631e501b75d8d2843e76d2ecbac5f8ac07f",
+      "stream_sha256": "e744f57e0283a68420ddf1f85212f723f0710af3133e185e3203add22b86c178",
+      "exit_map": [
+        3,
+        3,
+        3,
+        3,
+        4,
+        3
+      ],
+      "isolated_with_repair_delta444_db": 0.040704588040620694,
+      "isolated_no_repair_delta444_db": 0.04247249091567162,
+      "exact_context_delta444_db": 0.03515678220357458
+    },
+    {
+      "image": "0881.png",
+      "qp": 48,
+      "case_sha256": "3678a889809b210f29394a2b49f71eeb2b7446ea6b1c5fc85039796a43e9ea97",
+      "stream_sha256": "3af7a1c0eb5c13f62cb0e2bfd5855a7f6f7cec3f1f6221398182ba876fdc8c16",
+      "exit_map": [
+        3,
+        4,
+        4,
+        3,
+        4,
+        4
+      ],
+      "isolated_with_repair_delta444_db": 0.05866620871016458,
+      "isolated_no_repair_delta444_db": 0.06458539636058727,
+      "exact_context_delta444_db": 0.051194426397949494
+    },
+    {
+      "image": "0881.png",
+      "qp": 63,
+      "case_sha256": "aeb9d541dee8e8c8aa5e9009209b877ba2305d0b9b63a629d18746d44bb55077",
+      "stream_sha256": "434c9a7b3e69ad9202daf64a3478d983514d959f844f8de6f4d87fc00b26b1c7",
+      "exit_map": [
+        3,
+        5,
+        5,
+        3,
+        5,
+        5
+      ],
+      "isolated_with_repair_delta444_db": 0.05727063595891923,
+      "isolated_no_repair_delta444_db": 0.06550528944240594,
+      "exact_context_delta444_db": 0.03658767302383022
+    },
+    {
+      "image": "0823.png",
+      "qp": 0,
+      "case_sha256": "603a50fd3294684780f1df15ab4c4dd8e8ff743dfcbec2f5bfda0444b4ddb851",
+      "stream_sha256": "a541836352405c0e318c2723a7055ead9296e458738ad188010f61b5e0df4548",
+      "exit_map": [
+        2,
+        2,
+        2,
+        3,
+        3,
+        2
+      ],
+      "isolated_with_repair_delta444_db": 0.04633554409604486,
+      "isolated_no_repair_delta444_db": 0.048530241203968004,
+      "exact_context_delta444_db": 0.04279605036698807
+    },
+    {
+      "image": "0823.png",
+      "qp": 16,
+      "case_sha256": "6e8c53fc89d444a6cc24d8b3d9729953d2d7c9986f1d97098362ca6a84d21373",
+      "stream_sha256": "8e47caf68dd1dc71b780b210c71e63da9bf401d2a76d95b9fb2c8db972b9981d",
+      "exit_map": [
+        4,
+        3,
+        2,
+        4,
+        4,
+        3
+      ],
+      "isolated_with_repair_delta444_db": 0.04536640345979826,
+      "isolated_no_repair_delta444_db": 0.050889029456593335,
+      "exact_context_delta444_db": 0.03548343035506542
+    },
+    {
+      "image": "0823.png",
+      "qp": 32,
+      "case_sha256": "ee3e0f9401703c10ae9bfbcca312c50467b6ba2f2e488f67139cd2124c99f0c0",
+      "stream_sha256": "a671abb24af62c53e36d4da61ea43472b8f78545f318a91909b0c1ef9486c463",
+      "exit_map": [
+        4,
+        3,
+        2,
+        4,
+        4,
+        4
+      ],
+      "isolated_with_repair_delta444_db": 0.08871006672095268,
+      "isolated_no_repair_delta444_db": 0.1013969347374328,
+      "exact_context_delta444_db": 0.07374733069933812
+    },
+    {
+      "image": "0823.png",
+      "qp": 48,
+      "case_sha256": "62fc062813af03edb8b458365fbfbca771b73170ae031215a7368acc010fb445",
+      "stream_sha256": "d097a8475b165c3ad22d0d4c43cc3138d3bf1cd2b8f92ce732274f73b7558707",
+      "exit_map": [
+        5,
+        5,
+        2,
+        5,
+        5,
+        5
+      ],
+      "isolated_with_repair_delta444_db": 0.036812238778346364,
+      "isolated_no_repair_delta444_db": 0.05972380813200832,
+      "exact_context_delta444_db": 0.012128897033034831
+    },
+    {
+      "image": "0823.png",
+      "qp": 63,
+      "case_sha256": "50fbfe2d0da4554b47677dbe9159a051106aa642158e6c81645845dfcf928890",
+      "stream_sha256": "f83b22227d715c2c5365a69a9101548fbaf4645eaebee838d27594ad40c2bd94",
+      "exit_map": [
+        5,
+        5,
+        3,
+        5,
+        5,
+        5
+      ],
+      "isolated_with_repair_delta444_db": 0.056898127502802404,
+      "isolated_no_repair_delta444_db": 0.09425065776710798,
+      "exact_context_delta444_db": 0.017843540087530686
+    },
+    {
+      "image": "0898.png",
+      "qp": 0,
+      "case_sha256": "7838984800e09c710aec267d9ebd9f2043005e010853f3469658903882db6b02",
+      "stream_sha256": "c6b511aa66ef4c870a7b01876b79f8714f9a28bd230d96713b6bfdb56d15e66a",
+      "exit_map": [
+        2,
+        3,
+        3,
+        2,
+        3,
+        2
+      ],
+      "isolated_with_repair_delta444_db": 0.11004456176949823,
+      "isolated_no_repair_delta444_db": 0.11647386697651489,
+      "exact_context_delta444_db": 0.08913134615824717
+    },
+    {
+      "image": "0898.png",
+      "qp": 16,
+      "case_sha256": "1f934e9421e7d242cb2ee25b456da9fdcdf7ae4fb394944af27213826ec1515e",
+      "stream_sha256": "3a308fa948a8dfaa7ff56d61ebe0c4709bab60e3f1dce2c6818405cbb6674cc8",
+      "exit_map": [
+        3,
+        3,
+        4,
+        4,
+        4,
+        3
+      ],
+      "isolated_with_repair_delta444_db": 0.09295287359203722,
+      "isolated_no_repair_delta444_db": 0.10895693312154364,
+      "exact_context_delta444_db": 0.0647932852858629
+    },
+    {
+      "image": "0898.png",
+      "qp": 32,
+      "case_sha256": "dbab392c5237bc7575163ed8180042a3ad9a56a509194bc1e9013732b544049c",
+      "stream_sha256": "d7403c950211ca688bd9d12bd204d20d9c81442ea690acb359338cb61ee13afa",
+      "exit_map": [
+        3,
+        3,
+        5,
+        4,
+        4,
+        3
+      ],
+      "isolated_with_repair_delta444_db": 0.14568396338392653,
+      "isolated_no_repair_delta444_db": 0.17414152608831734,
+      "exact_context_delta444_db": 0.11530919440016421
+    },
+    {
+      "image": "0898.png",
+      "qp": 48,
+      "case_sha256": "2c660a5df3328f2f689bffa023aaae92ccdd9601c8890a0fe1d0b3d3e21ccf01",
+      "stream_sha256": "3999125a07cfac43ff6d29949f26aacf20f4eb687ff51541dfdecc183897b910",
+      "exit_map": [
+        3,
+        5,
+        5,
+        5,
+        5,
+        3
+      ],
+      "isolated_with_repair_delta444_db": 0.10799930861970353,
+      "isolated_no_repair_delta444_db": 0.16510260946779207,
+      "exact_context_delta444_db": 0.06132863480325963
+    },
+    {
+      "image": "0898.png",
+      "qp": 63,
+      "case_sha256": "3acc033749b37f3fbc8ae5bf8af352634ad5b176cbbe38b88a0a16c2d2871292",
+      "stream_sha256": "f28c29e5d5899d943f9e04ca61ac6d9d3b800a326520b3cc97f73a8b7374ccb3",
+      "exit_map": [
+        5,
+        5,
+        5,
+        5,
+        5,
+        5
+      ],
+      "isolated_with_repair_delta444_db": 0.07132593576701943,
+      "isolated_no_repair_delta444_db": 0.17030498130153018,
+      "exact_context_delta444_db": 0.0
+    },
+    {
+      "image": "0830.png",
+      "qp": 0,
+      "case_sha256": "dba6326e2acbaf7e58852c7675b6a46e290f8deff125f36363ba34c5430339ee",
+      "stream_sha256": "5de979f113f9e0af60621f826fb6278044e21854d2ec1a261f049bad808a7f3e",
+      "exit_map": [
+        3,
+        3,
+        3,
+        2,
+        3,
+        3
+      ],
+      "isolated_with_repair_delta444_db": 0.035996816611489395,
+      "isolated_no_repair_delta444_db": 0.03634361160553519,
+      "exact_context_delta444_db": 0.02531818312816125
+    },
+    {
+      "image": "0830.png",
+      "qp": 16,
+      "case_sha256": "34702c21056e7c7efed5d7415ea2d3fd7326de8d26689161120446767a253e2d",
+      "stream_sha256": "d30330a6d703abcb5dc2050cdff6194137dd688a9be6804f224bdecf0971ff24",
+      "exit_map": [
+        4,
+        4,
+        4,
+        3,
+        3,
+        3
+      ],
+      "isolated_with_repair_delta444_db": 0.03971089225910666,
+      "isolated_no_repair_delta444_db": 0.04084303652481081,
+      "exact_context_delta444_db": 0.0263847846761628
+    },
+    {
+      "image": "0830.png",
+      "qp": 32,
+      "case_sha256": "183b50c15457557b53e00005d739dca7e279e681eb6f555bbcefd913bbe427ee",
+      "stream_sha256": "19b53eeae5f7f4c9adfd648fc0286b4afe84ecd1fab999203fb28a8ac4861602",
+      "exit_map": [
+        3,
+        4,
+        4,
+        3,
+        4,
+        4
+      ],
+      "isolated_with_repair_delta444_db": 0.06692059611733986,
+      "isolated_no_repair_delta444_db": 0.07071052398595702,
+      "exact_context_delta444_db": 0.05700908151077884
+    },
+    {
+      "image": "0830.png",
+      "qp": 48,
+      "case_sha256": "7d9ba864d79c058eeaa4f6b010cbea29e9287df53e8af80737a2b121a065fceb",
+      "stream_sha256": "7dfe7307c29ef4268751904ef17d0527d7265f2bc9b9a93aedf8e16ab51f4a04",
+      "exit_map": [
+        5,
+        5,
+        5,
+        5,
+        5,
+        5
+      ],
+      "isolated_with_repair_delta444_db": 0.0157815306506871,
+      "isolated_no_repair_delta444_db": 0.02001514181937031,
+      "exact_context_delta444_db": 0.0
+    },
+    {
+      "image": "0830.png",
+      "qp": 63,
+      "case_sha256": "0142eb34d5e90a57f604ae4995e619054dbd8403af2f7e5cf41b3c825cbddc6e",
+      "stream_sha256": "e7bd1e8b3f090288f9bd3f153b65fc44c27763dfe02c9a1b5c8396548330ec94",
+      "exit_map": [
+        5,
+        5,
+        5,
+        5,
+        5,
+        5
+      ],
+      "isolated_with_repair_delta444_db": 0.026374762853566748,
+      "isolated_no_repair_delta444_db": 0.034274578048270665,
+      "exact_context_delta444_db": 0.0
+    },
+    {
+      "image": "0813.png",
+      "qp": 0,
+      "case_sha256": "d2de702090c66a069a9f4ae2c09760fa63b9be03911aa067df9819647736ae1d",
+      "stream_sha256": "73e7b13492c32639da61081aff0f92f9023938f714d94b421e5106a9f971267e",
+      "exit_map": [
+        2,
+        3,
+        2,
+        2,
+        3,
+        2
+      ],
+      "isolated_with_repair_delta444_db": 0.06667983402134997,
+      "isolated_no_repair_delta444_db": 0.06757378014687646,
+      "exact_context_delta444_db": 0.054309070881984875
+    },
+    {
+      "image": "0813.png",
+      "qp": 16,
+      "case_sha256": "6507caa074a7fb8f3c4e154b324f3ac07a078ed50ea58b1ad9e58c7d7d77a57c",
+      "stream_sha256": "15746215766fbf3d874f87dd6b6b358cda5c82b0ee0e2ffb1c56e61dda5ca889",
+      "exit_map": [
+        3,
+        4,
+        3,
+        3,
+        3,
+        3
+      ],
+      "isolated_with_repair_delta444_db": 0.04160474790904333,
+      "isolated_no_repair_delta444_db": 0.042892167118823016,
+      "exact_context_delta444_db": 0.030720729833894744
+    },
+    {
+      "image": "0813.png",
+      "qp": 32,
+      "case_sha256": "2bd0b5e1b8046a062989733f97c6594199800ea09c8c37d1e8f84df06e53b5f5",
+      "stream_sha256": "89d2f56aa89989124aa6fe9d49895462f404b4bfdc206f1b2499b17db11269be",
+      "exit_map": [
+        3,
+        4,
+        2,
+        2,
+        3,
+        3
+      ],
+      "isolated_with_repair_delta444_db": 0.0776329328774289,
+      "isolated_no_repair_delta444_db": 0.08001386851638145,
+      "exact_context_delta444_db": 0.06740809439011093
+    },
+    {
+      "image": "0813.png",
+      "qp": 48,
+      "case_sha256": "347a87b147a6ebd7983ce349d709f10918810cc4712f12ba01daa887b1be4be1",
+      "stream_sha256": "4747160b1a418bb4f16875164e01e336059b4f9e7018ea93bcb133f2cf93ac11",
+      "exit_map": [
+        3,
+        4,
+        2,
+        2,
+        3,
+        2
+      ],
+      "isolated_with_repair_delta444_db": 0.09711781192505983,
+      "isolated_no_repair_delta444_db": 0.10106593316114675,
+      "exact_context_delta444_db": 0.08835355279521476
+    },
+    {
+      "image": "0813.png",
+      "qp": 63,
+      "case_sha256": "d36352c585f1ca9063a580fdd98136727c0d7ab4cf96aa6ca49f6b288560278e",
+      "stream_sha256": "846e09cfedcc2de1c9cd3ffc4ccbdfe0c8d5caa367e86de27ee81f3249b60ada",
+      "exit_map": [
+        5,
+        5,
+        2,
+        2,
+        5,
+        3
+      ],
+      "isolated_with_repair_delta444_db": 0.05492999799304192,
+      "isolated_no_repair_delta444_db": 0.05761371497857172,
+      "exact_context_delta444_db": 0.0371857251857855
+    },
+    {
+      "image": "0803.png",
+      "qp": 0,
+      "case_sha256": "16e69fbbb82807c844fc9e150c79e20e330846eb3bdd206737244e1332b0302d",
+      "stream_sha256": "9f1b5aeffcdffedb8d9e9cc120cf66dbd858ed5195d96b548a5f3e99fa5dd747",
+      "exit_map": [
+        2,
+        3,
+        3,
+        3,
+        3,
+        3
+      ],
+      "isolated_with_repair_delta444_db": 0.2164592882913743,
+      "isolated_no_repair_delta444_db": 0.2257043382175048,
+      "exact_context_delta444_db": 0.16945868655351842
+    },
+    {
+      "image": "0803.png",
+      "qp": 16,
+      "case_sha256": "a6a0cf291a57c40c7b4f5d16c5b168ad4494a6bcd0d8a360236e015733252c3a",
+      "stream_sha256": "e36280a93f50ac2ced91e0a5a5d4c5ff1e22d5f2005c919fe6a698e0cbf386c7",
+      "exit_map": [
+        3,
+        3,
+        4,
+        3,
+        3,
+        3
+      ],
+      "isolated_with_repair_delta444_db": 0.1809572341987353,
+      "isolated_no_repair_delta444_db": 0.20133976668961323,
+      "exact_context_delta444_db": 0.13327238858953092
+    },
+    {
+      "image": "0803.png",
+      "qp": 32,
+      "case_sha256": "44048dfcf7d7b2eb50d29662462e5a479782d17de2a5b3221f95a00063dc0aeb",
+      "stream_sha256": "460440580df6165c9b10c4cc3f1ab80bf3d393b43c44ffb0304749ab9ae96ea9",
+      "exit_map": [
+        3,
+        3,
+        3,
+        3,
+        3,
+        3
+      ],
+      "isolated_with_repair_delta444_db": 0.22684985696374965,
+      "isolated_no_repair_delta444_db": 0.2579699983476049,
+      "exact_context_delta444_db": 0.18481596028836333
+    },
+    {
+      "image": "0803.png",
+      "qp": 48,
+      "case_sha256": "f2ea504fc349777978c1a83a2d80dd36007a6cd047c3a25535032a806e67128b",
+      "stream_sha256": "bf72d6cd690b890c11797160d92c0cf2875c7d35cff7741f606e1a4eb2281bfb",
+      "exit_map": [
+        3,
+        3,
+        3,
+        3,
+        3,
+        3
+      ],
+      "isolated_with_repair_delta444_db": 0.2545761558469226,
+      "isolated_no_repair_delta444_db": 0.3016010443942649,
+      "exact_context_delta444_db": 0.21958726014167537
+    },
+    {
+      "image": "0803.png",
+      "qp": 63,
+      "case_sha256": "dfe95091d917fac2d51111b13704b6221d77c7a48716a01ec1d7298fdb771427",
+      "stream_sha256": "a5fcd580bfb27947cf680c8139b557c193bd9f0c5216ef625d2fcaee011cef11",
+      "exit_map": [
+        3,
+        3,
+        5,
+        3,
+        3,
+        3
+      ],
+      "isolated_with_repair_delta444_db": 0.2513354155113643,
+      "isolated_no_repair_delta444_db": 0.3323093065389354,
+      "exact_context_delta444_db": 0.21062720229371887
+    },
+    {
+      "image": "0827.png",
+      "qp": 0,
+      "case_sha256": "8180cc51a57fe5c7084a0a5afa953d18bafcb38bf9f5ac0dc8d962c8218653c9",
+      "stream_sha256": "fbed0332beaf2b1b6e1f386405b60e19c31caf22e995ef4170e2503dfa4752ec",
+      "exit_map": [
+        2,
+        2,
+        2,
+        2,
+        2,
+        2
+      ],
+      "isolated_with_repair_delta444_db": 0.10908597583301372,
+      "isolated_no_repair_delta444_db": 0.11065753856319208,
+      "exact_context_delta444_db": 0.10384204118517681
+    },
+    {
+      "image": "0827.png",
+      "qp": 16,
+      "case_sha256": "d9aec8f6d5effead8092eb927df4e5f93f5a20d4e6296ebb6088e2184863418b",
+      "stream_sha256": "12ad2719a9681cc27ee7dde7bed8231ea2e7db217c8416fb2f0b7a5aa447d80f",
+      "exit_map": [
+        2,
+        3,
+        2,
+        2,
+        3,
+        2
+      ],
+      "isolated_with_repair_delta444_db": 0.10399028078028288,
+      "isolated_no_repair_delta444_db": 0.10463313321484283,
+      "exact_context_delta444_db": 0.09452852899859243
+    },
+    {
+      "image": "0827.png",
+      "qp": 32,
+      "case_sha256": "cf81fe6b9f2944011bd0da9b541eeb02ffc77665988bab0ca3c1c2d9579f8be6",
+      "stream_sha256": "38a028f17121d6934d1d209b3abe3cc5ce7e917c8636ff3f9f0f09e2b2c670f0",
+      "exit_map": [
+        2,
+        3,
+        2,
+        2,
+        3,
+        2
+      ],
+      "isolated_with_repair_delta444_db": 0.10132814092702677,
+      "isolated_no_repair_delta444_db": 0.10351852680966896,
+      "exact_context_delta444_db": 0.09385513680770191
+    },
+    {
+      "image": "0827.png",
+      "qp": 48,
+      "case_sha256": "a7ffa66876451efa11059b993a80768c70e68105eebb2378a9a28f2f5d6bab2b",
+      "stream_sha256": "99ae79c3839974e5f3c041391af4f4115752264bd6dd519e62797a1411a289a9",
+      "exit_map": [
+        2,
+        2,
+        2,
+        2,
+        3,
+        2
+      ],
+      "isolated_with_repair_delta444_db": 0.12412762597436944,
+      "isolated_no_repair_delta444_db": 0.12749292022592743,
+      "exact_context_delta444_db": 0.12049978626709887
+    },
+    {
+      "image": "0827.png",
+      "qp": 63,
+      "case_sha256": "b3666be67ac001fc95fc6618f7c2a07dca126cacd706ae1bfa6ea285643dc199",
+      "stream_sha256": "0081496067d1050a8e725b797a8e2e446a40cfe684f2cc8858d5ff81884c1399",
+      "exit_map": [
+        2,
+        3,
+        2,
+        2,
+        2,
+        2
+      ],
+      "isolated_with_repair_delta444_db": 0.12181831500518292,
+      "isolated_no_repair_delta444_db": 0.1279849751108361,
+      "exact_context_delta444_db": 0.12330187404672743
+    },
+    {
+      "image": "0835.png",
+      "qp": 0,
+      "case_sha256": "9b32b5fde920d06d8bd7311be003a8094eb054c07f05acfc47c0fe40763f68a4",
+      "stream_sha256": "826dc9aa0f001a05ecf4ee3cab0e52221f5799534154d36806bca6956ca098cd",
+      "exit_map": [
+        2,
+        2,
+        2,
+        2,
+        2,
+        2
+      ],
+      "isolated_with_repair_delta444_db": 0.020026721785536307,
+      "isolated_no_repair_delta444_db": 0.019847534602636885,
+      "exact_context_delta444_db": 0.017822869461483915
+    },
+    {
+      "image": "0835.png",
+      "qp": 16,
+      "case_sha256": "ef0d91897a62f4663fb64fcbb2daf4f85f92e53720eb35b02f7e895f2861a527",
+      "stream_sha256": "274b8b53c10dde75a69b392ad0172c6b0202561a9c035ee2e4966c78b1bafd09",
+      "exit_map": [
+        3,
+        3,
+        3,
+        3,
+        3,
+        3
+      ],
+      "isolated_with_repair_delta444_db": 0.019062767999726858,
+      "isolated_no_repair_delta444_db": 0.01941085273546045,
+      "exact_context_delta444_db": 0.016455646719800453
+    },
+    {
+      "image": "0835.png",
+      "qp": 32,
+      "case_sha256": "8e33403879b1dec6613d3b6073fc0a00c150e64b0829ec384cac8e423da7ed3b",
+      "stream_sha256": "efc13768a87d8af0c71740130e5b9b9192e6fac4df0d21b7505657a45142a7a4",
+      "exit_map": [
+        3,
+        3,
+        3,
+        3,
+        3,
+        4
+      ],
+      "isolated_with_repair_delta444_db": 0.037618110366634275,
+      "isolated_no_repair_delta444_db": 0.038895019719457184,
+      "exact_context_delta444_db": 0.035302812637514884
+    },
+    {
+      "image": "0835.png",
+      "qp": 48,
+      "case_sha256": "48a25e7358966ee7233697ec6128ec092563c53c6466191d896c84ecf9fa878d",
+      "stream_sha256": "718eb0e6b53d3ef2bb21091c1906852d88799971dd4b1a719d10d3d5dab05605",
+      "exit_map": [
+        5,
+        3,
+        4,
+        3,
+        3,
+        5
+      ],
+      "isolated_with_repair_delta444_db": 0.04346083828040731,
+      "isolated_no_repair_delta444_db": 0.04456031191271019,
+      "exact_context_delta444_db": 0.03799112431625566
+    },
+    {
+      "image": "0835.png",
+      "qp": 63,
+      "case_sha256": "d5dd22106a0f88f7eb21420382e4ca56bf3ba341f1f4a7f6cbda04f5feb70519",
+      "stream_sha256": "729f55007a604902421112749ba70aafc1572b17f3e9b17e42fea12fb58312fe",
+      "exit_map": [
+        5,
+        3,
+        5,
+        3,
+        5,
+        5
+      ],
+      "isolated_with_repair_delta444_db": 0.05288103124815074,
+      "isolated_no_repair_delta444_db": 0.053637915481935625,
+      "exact_context_delta444_db": 0.03612281490977993
+    },
+    {
+      "image": "0889.png",
+      "qp": 0,
+      "case_sha256": "060fafeee41a2205907bebcc8a879e0e2fd75a4652983466a07d45f7b1faa102",
+      "stream_sha256": "e497b281b2d8e824100ebd91103ba63a99bfbfb734ff56bd08a150a2e276bb34",
+      "exit_map": [
+        3,
+        3,
+        3,
+        2,
+        2,
+        2
+      ],
+      "isolated_with_repair_delta444_db": 0.09200529518274528,
+      "isolated_no_repair_delta444_db": 0.09445366719699498,
+      "exact_context_delta444_db": 0.08230150406670442
+    },
+    {
+      "image": "0889.png",
+      "qp": 16,
+      "case_sha256": "9dab34f53bf94c9c55393f0b65f7f772c8ca17e753c1c736ef9f2385baa42f12",
+      "stream_sha256": "0edf30349c93b37a5d95c023c400fc755c0d210fc5bebcb5e1530054b2bec0a6",
+      "exit_map": [
+        4,
+        4,
+        4,
+        3,
+        3,
+        3
+      ],
+      "isolated_with_repair_delta444_db": 0.0625534394114356,
+      "isolated_no_repair_delta444_db": 0.06875004470566325,
+      "exact_context_delta444_db": 0.0461752500654275
+    },
+    {
+      "image": "0889.png",
+      "qp": 32,
+      "case_sha256": "35090f4bbd2c5481cde9489d946954c6302377510caa7a5374c939523055952f",
+      "stream_sha256": "b059be8a5b898dc3ba5540f676faeaef1afb7cceb194b8474e0cadf14d90ab7c",
+      "exit_map": [
+        3,
+        4,
+        4,
+        3,
+        3,
+        3
+      ],
+      "isolated_with_repair_delta444_db": 0.10684738570239599,
+      "isolated_no_repair_delta444_db": 0.11987651415253728,
+      "exact_context_delta444_db": 0.08881924040441873
+    },
+    {
+      "image": "0889.png",
+      "qp": 48,
+      "case_sha256": "6df75a189cbb40e7d714e756548d58524fbf8b8b64cdb26b04e830a61e8e89e9",
+      "stream_sha256": "51f69b574968a5f66ef02b8072e00266a0decfd46c511c07927a8c506b67b3f2",
+      "exit_map": [
+        4,
+        4,
+        4,
+        3,
+        3,
+        3
+      ],
+      "isolated_with_repair_delta444_db": 0.14324671698646468,
+      "isolated_no_repair_delta444_db": 0.16656909151921145,
+      "exact_context_delta444_db": 0.12569270882470157
+    },
+    {
+      "image": "0889.png",
+      "qp": 63,
+      "case_sha256": "f4bddda0753e9c39ade664e3374cc94323ec737f0d54b888a17000d2edc10bb8",
+      "stream_sha256": "6f773b5f6b5a289e489686ffc308122bbab7d46630961ebfd0b3b64911813be6",
+      "exit_map": [
+        5,
+        5,
+        5,
+        3,
+        3,
+        3
+      ],
+      "isolated_with_repair_delta444_db": 0.11129642820914652,
+      "isolated_no_repair_delta444_db": 0.16183939122756513,
+      "exact_context_delta444_db": 0.07923142377860835
+    },
+    {
+      "image": "0859.png",
+      "qp": 0,
+      "case_sha256": "75cf7c3e19a65782e348a3575110f180982f0749d0afb17798edbac4c33495cc",
+      "stream_sha256": "444a158dc5c8a4f85edf9069cc4ea7adaf195c644cbd275f4a195210fddc40ba",
+      "exit_map": [
+        3,
+        2,
+        2,
+        2,
+        2,
+        2
+      ],
+      "isolated_with_repair_delta444_db": 0.02640222453475119,
+      "isolated_no_repair_delta444_db": 0.026400495005494115,
+      "exact_context_delta444_db": 0.02190138840353947
+    },
+    {
+      "image": "0859.png",
+      "qp": 16,
+      "case_sha256": "d739a6a19861ec1bf8688b376677b381642353d6f71f57db614391ad983643f7",
+      "stream_sha256": "77b9bda5586202afa9da8d6fd0bc196850bd518d0a70a7a9ce32a0007fefd8a6",
+      "exit_map": [
+        3,
+        3,
+        3,
+        3,
+        3,
+        3
+      ],
+      "isolated_with_repair_delta444_db": 0.02320245647235181,
+      "isolated_no_repair_delta444_db": 0.023458101083314788,
+      "exact_context_delta444_db": 0.017879318680390208
+    },
+    {
+      "image": "0859.png",
+      "qp": 32,
+      "case_sha256": "aee478c10839824ce7ec7175fe3541e2b2210f1a3e86f3e496cc8bad111aff99",
+      "stream_sha256": "724734cc9c55a1e530b36e5ca856f47590e1ae5855f15b62c6f81281b4867a50",
+      "exit_map": [
+        3,
+        3,
+        3,
+        3,
+        3,
+        3
+      ],
+      "isolated_with_repair_delta444_db": 0.03763898301941134,
+      "isolated_no_repair_delta444_db": 0.03908166907589941,
+      "exact_context_delta444_db": 0.034154026352055285
+    },
+    {
+      "image": "0859.png",
+      "qp": 48,
+      "case_sha256": "737e6cc38dbd1ede95f7cf0d61ad1f4a36eab624781a6d6e7724629a8d49cfd8",
+      "stream_sha256": "763f49fdd5e4e51d5cea8499a07029e96aab7dda39484c6b6286aa0fbd1ffa04",
+      "exit_map": [
+        4,
+        4,
+        4,
+        3,
+        3,
+        3
+      ],
+      "isolated_with_repair_delta444_db": 0.06893523458686894,
+      "isolated_no_repair_delta444_db": 0.07270213095535116,
+      "exact_context_delta444_db": 0.061634839540736515
+    },
+    {
+      "image": "0859.png",
+      "qp": 63,
+      "case_sha256": "90afaef65152a333c005be3ed2e0fa2a3e107affd3667ee97995bf20b7889925",
+      "stream_sha256": "e922948641066a704e589798fb194e242a7905dd85b625571e2890143b4f9e52",
+      "exit_map": [
+        5,
+        5,
+        5,
+        3,
+        5,
+        5
+      ],
+      "isolated_with_repair_delta444_db": 0.03904859088893564,
+      "isolated_no_repair_delta444_db": 0.04273652242060025,
+      "exact_context_delta444_db": 0.02060552160742583
+    },
+    {
+      "image": "0804.png",
+      "qp": 0,
+      "case_sha256": "78ac2d4969c64dde163d60134441292cdc368e40712f2a390c1a07d7d7e2ab3f",
+      "stream_sha256": "ff05c7d14fa42ac74b1e4d7e11886cd85899d93c1d7fb60e14fb65afae4792fb",
+      "exit_map": [
+        3,
+        2,
+        3,
+        2,
+        2,
+        2
+      ],
+      "isolated_with_repair_delta444_db": 0.05517707592895024,
+      "isolated_no_repair_delta444_db": 0.055459326126114504,
+      "exact_context_delta444_db": 0.04729948558551382
+    },
+    {
+      "image": "0804.png",
+      "qp": 16,
+      "case_sha256": "f6a3474e732b96123c60d620f3dfd1c2b3d8c57b0523e78160a1562eba5139d9",
+      "stream_sha256": "04453d895c71527b1f4e775a6890993f58197994b68fd843d2127ff043e8f1fd",
+      "exit_map": [
+        4,
+        3,
+        4,
+        3,
+        3,
+        3
+      ],
+      "isolated_with_repair_delta444_db": 0.06509687670559919,
+      "isolated_no_repair_delta444_db": 0.06644991648512279,
+      "exact_context_delta444_db": 0.04751053915658831
+    },
+    {
+      "image": "0804.png",
+      "qp": 32,
+      "case_sha256": "6eef97b33a2d6e47aaf227711f698a40df424e64fd12caecbcef57a60842cd0b",
+      "stream_sha256": "9442c87a31aaf90ec327610207dbb6ad8834acd3ada352ffcc761640b89122fa",
+      "exit_map": [
+        4,
+        3,
+        4,
+        3,
+        3,
+        3
+      ],
+      "isolated_with_repair_delta444_db": 0.0857529058834689,
+      "isolated_no_repair_delta444_db": 0.08731547906182988,
+      "exact_context_delta444_db": 0.06845274896932303
+    },
+    {
+      "image": "0804.png",
+      "qp": 48,
+      "case_sha256": "dbb9d1a37770254b7fc6af7387722ebbe7e3a62cd1378d9193e053ccefb52735",
+      "stream_sha256": "98f64735e249cc6da7efc6da65c7b1e0bf3ac326897cf01cf53ebd0a9c4ec32d",
+      "exit_map": [
+        4,
+        3,
+        4,
+        3,
+        3,
+        3
+      ],
+      "isolated_with_repair_delta444_db": 0.09550702461769812,
+      "isolated_no_repair_delta444_db": 0.09909133117450855,
+      "exact_context_delta444_db": 0.07643722432091826
+    },
+    {
+      "image": "0804.png",
+      "qp": 63,
+      "case_sha256": "1563014187b6954308e534088c2f31f06122ddebb50511bae0b2f7720012d0dd",
+      "stream_sha256": "06bad863c7c6b80865c373df6972a8ddf9052eabfd75b73323f0d93db23642fb",
+      "exit_map": [
+        5,
+        3,
+        5,
+        5,
+        3,
+        5
+      ],
+      "isolated_with_repair_delta444_db": 0.04276256061097359,
+      "isolated_no_repair_delta444_db": 0.04594568444118915,
+      "exact_context_delta444_db": 0.01872097840387415
+    },
+    {
+      "image": "0852.png",
+      "qp": 0,
+      "case_sha256": "d2d7a29d1b22f08fcaba2d0e0a21e42b64a78d5866c447b39ceb097ce00ec907",
+      "stream_sha256": "99f3624cbf3626aec4621055092b26cf904f3d1dad8da8af64a13a4bd8c8a312",
+      "exit_map": [
+        2,
+        2,
+        2,
+        2,
+        2,
+        2
+      ],
+      "isolated_with_repair_delta444_db": 0.03608665129959691,
+      "isolated_no_repair_delta444_db": 0.03629937087548485,
+      "exact_context_delta444_db": 0.03473666936542413
+    },
+    {
+      "image": "0852.png",
+      "qp": 16,
+      "case_sha256": "8df908afab5791b8be80e2414825085efa7744fc9f871080a69291fb846004c3",
+      "stream_sha256": "df0cb15473db97bdc24ddf4caf454646b9afa69dfde11655651da44f90cee379",
+      "exit_map": [
+        5,
+        3,
+        2,
+        5,
+        3,
+        3
+      ],
+      "isolated_with_repair_delta444_db": 0.029574440238327955,
+      "isolated_no_repair_delta444_db": 0.028687192361337554,
+      "exact_context_delta444_db": 0.020486553151718778
+    },
+    {
+      "image": "0852.png",
+      "qp": 32,
+      "case_sha256": "44ae97f24e1cd912079eafacb25399560c67115dd04a754bace96bb24b035cf0",
+      "stream_sha256": "df58009c645b6c6e541e8b3338995aee27f2717a4e675e4fc30f244128698a0f",
+      "exit_map": [
+        5,
+        5,
+        2,
+        5,
+        3,
+        3
+      ],
+      "isolated_with_repair_delta444_db": 0.03922487346376789,
+      "isolated_no_repair_delta444_db": 0.03500303776355108,
+      "exact_context_delta444_db": 0.020696048171689532
+    },
+    {
+      "image": "0852.png",
+      "qp": 48,
+      "case_sha256": "9c92ecb99ecb6e55bfaea3b38cb7c1a1a9a852598d7f6b0674857947cc17c414",
+      "stream_sha256": "288aef3bdd739147597efc7117ee633df3e7902141e0bae2f784a22bcbed31d7",
+      "exit_map": [
+        5,
+        5,
+        2,
+        5,
+        3,
+        3
+      ],
+      "isolated_with_repair_delta444_db": 0.07410334855741184,
+      "isolated_no_repair_delta444_db": 0.06072427043081208,
+      "exact_context_delta444_db": 0.04129415639038874
+    },
+    {
+      "image": "0852.png",
+      "qp": 63,
+      "case_sha256": "6cb339ed2806aed9078b019ba592eb2d91860620c645de9fa43435634b41cd11",
+      "stream_sha256": "ad69025c512d29c055da6b48930710c4b35f173b8098062c180514ad84e747a3",
+      "exit_map": [
+        5,
+        5,
+        3,
+        5,
+        5,
+        5
+      ],
+      "isolated_with_repair_delta444_db": 0.07430341262888916,
+      "isolated_no_repair_delta444_db": 0.04982565869920706,
+      "exact_context_delta444_db": 0.01823828788108055
+    },
+    {
+      "image": "0900.png",
+      "qp": 0,
+      "case_sha256": "90618ffd1f217a9ee4aa84964e9285b73d81b9b7a5ca0ac068306625a47b2e71",
+      "stream_sha256": "7bf3c54f7135dab51e45b28f3fd42af9fcb965666ec22ea5d8cb69ada07c66aa",
+      "exit_map": [
+        3,
+        3,
+        3,
+        3,
+        3,
+        3
+      ],
+      "isolated_with_repair_delta444_db": 0.09139109310917956,
+      "isolated_no_repair_delta444_db": 0.0935631325002157,
+      "exact_context_delta444_db": 0.06800516737090366
+    },
+    {
+      "image": "0900.png",
+      "qp": 16,
+      "case_sha256": "2cb2d868ec219cf0f9d885703b9b5c85ba6d9618217f01705926521ed0b3454f",
+      "stream_sha256": "011b59743b4f25b2840a018b9a8da3ff3fea0db97e0c0c9a7d63165ac980a10c",
+      "exit_map": [
+        4,
+        4,
+        3,
+        4,
+        3,
+        4
+      ],
+      "isolated_with_repair_delta444_db": 0.11013028796831666,
+      "isolated_no_repair_delta444_db": 0.11460686820210376,
+      "exact_context_delta444_db": 0.09001903311625951
+    },
+    {
+      "image": "0900.png",
+      "qp": 32,
+      "case_sha256": "96d174eaba9f2b8b03313bd402a4d0654ddf4e92d867a66ea1dc66959146279c",
+      "stream_sha256": "98ce3ba0f29c05f9766088e47ee71806ebbe21a390de37bf5621c5d1172163e7",
+      "exit_map": [
+        5,
+        5,
+        3,
+        5,
+        3,
+        4
+      ],
+      "isolated_with_repair_delta444_db": 0.07566372605960581,
+      "isolated_no_repair_delta444_db": 0.08045296710983514,
+      "exact_context_delta444_db": 0.05604740341893953
+    },
+    {
+      "image": "0900.png",
+      "qp": 48,
+      "case_sha256": "59cd3ee70e0b1c4790dffd1d19eef747b7bab680e2f29a3ed4bd0990098959ec",
+      "stream_sha256": "f89d5b46aa8ce8f57a8bdf60102cb0f3d6600d93ac52331b1ec26622aec8c037",
+      "exit_map": [
+        5,
+        5,
+        5,
+        5,
+        3,
+        5
+      ],
+      "isolated_with_repair_delta444_db": 0.035685035904662404,
+      "isolated_no_repair_delta444_db": 0.04155822069441634,
+      "exact_context_delta444_db": 0.013666024277230304
+    },
+    {
+      "image": "0900.png",
+      "qp": 63,
+      "case_sha256": "d1b9140fc09aa0e4665b20856c5222470652632d504c1db42892c157abdd1667",
+      "stream_sha256": "e61d09c62ef36ad8699ff7722e5bf3cb0f9071287ec7b699a0ec04988b3805d3",
+      "exit_map": [
+        5,
+        5,
+        5,
+        5,
+        5,
+        5
+      ],
+      "isolated_with_repair_delta444_db": 0.04133437999328611,
+      "isolated_no_repair_delta444_db": 0.043685780878972076,
+      "exact_context_delta444_db": 0.0
+    },
+    {
+      "image": "0890.png",
+      "qp": 0,
+      "case_sha256": "efb3b8212e564ce52c874ec3f4bda161e1bc0ff539952877df4784babe7ec988",
+      "stream_sha256": "24965d72e54be1e92b380da4ddfbc89be83318792095f2cd9c5e28ccd452d49c",
+      "exit_map": [
+        2,
+        2,
+        2,
+        2,
+        2,
+        3
+      ],
+      "isolated_with_repair_delta444_db": 0.04982620629277983,
+      "isolated_no_repair_delta444_db": 0.051136854468921834,
+      "exact_context_delta444_db": 0.046886739478332204
+    },
+    {
+      "image": "0890.png",
+      "qp": 16,
+      "case_sha256": "758be4f1e6aa386c2a49b84e562e0b4baffbd855119e0f03b47036144c176e63",
+      "stream_sha256": "55085a6d7be066a0e01a69d8edb12fb8094a3ba5fee7dbe128c58b1b228225c5",
+      "exit_map": [
+        3,
+        3,
+        3,
+        3,
+        3,
+        3
+      ],
+      "isolated_with_repair_delta444_db": 0.0342642030113241,
+      "isolated_no_repair_delta444_db": 0.036821729643667186,
+      "exact_context_delta444_db": 0.029925698233232968
+    },
+    {
+      "image": "0890.png",
+      "qp": 32,
+      "case_sha256": "4ebb4bbbd4fb1a01af7dfebc8b204c7d219b8c248a679213556dbb1e46a1b113",
+      "stream_sha256": "a7cf845dd6763f768f6dc46b91c358cdd31bcae9c452d4e4ad5f4c4eb02ec7b4",
+      "exit_map": [
+        3,
+        3,
+        3,
+        4,
+        4,
+        4
+      ],
+      "isolated_with_repair_delta444_db": 0.05013378212875537,
+      "isolated_no_repair_delta444_db": 0.056069437334477217,
+      "exact_context_delta444_db": 0.04306269843206447
+    },
+    {
+      "image": "0890.png",
+      "qp": 48,
+      "case_sha256": "c591373c1808a071d252390c0f51bc5907b18e2456a68fec589321f22618908e",
+      "stream_sha256": "f802ee995c29b039234cd6fdc25aee6d06c7712cae7ded87137b1c3370ca04d2",
+      "exit_map": [
+        3,
+        4,
+        4,
+        5,
+        5,
+        5
+      ],
+      "isolated_with_repair_delta444_db": 0.049905452005916194,
+      "isolated_no_repair_delta444_db": 0.06319055296790528,
+      "exact_context_delta444_db": 0.033116754736891095
+    },
+    {
+      "image": "0890.png",
+      "qp": 63,
+      "case_sha256": "e63da3c59311f5ed9bcfcfa9e7d2792fd3e95c43450bc680be2f34071d8f658c",
+      "stream_sha256": "2b4961d16f384af57e108e4d7b30148aec3d9bbdddc849205f534b2f09c217f8",
+      "exit_map": [
+        5,
+        5,
+        5,
+        5,
+        5,
+        5
+      ],
+      "isolated_with_repair_delta444_db": 0.03130723699002227,
+      "isolated_no_repair_delta444_db": 0.05626816947573083,
+      "exact_context_delta444_db": 0.0
+    },
+    {
+      "image": "0824.png",
+      "qp": 0,
+      "case_sha256": "51739b10830b922603e67de21ffba2bab814c9f32cae37bac9ae42d3399a97f5",
+      "stream_sha256": "f3c7610c86ee861509c89f33012bc44caabea812788166f5a7716dae52267049",
+      "exit_map": [
+        3,
+        3,
+        3,
+        3,
+        3,
+        3
+      ],
+      "isolated_with_repair_delta444_db": 0.05544874206848256,
+      "isolated_no_repair_delta444_db": 0.05651526187714502,
+      "exact_context_delta444_db": 0.038865454897505626
+    },
+    {
+      "image": "0824.png",
+      "qp": 16,
+      "case_sha256": "85b7f68af6ae78070c863a55c0ddda3cda60305b2705e2c0fe0e47f8508b0f68",
+      "stream_sha256": "547923f3448533e9455423be5705543657154f5b3cb731ff8cd91f8d0d25de93",
+      "exit_map": [
+        3,
+        4,
+        4,
+        3,
+        4,
+        4
+      ],
+      "isolated_with_repair_delta444_db": 0.053128041495110065,
+      "isolated_no_repair_delta444_db": 0.054619158346641265,
+      "exact_context_delta444_db": 0.03783443027907607
+    },
+    {
+      "image": "0824.png",
+      "qp": 32,
+      "case_sha256": "2d8ea077e1cab1d0c39e82346c8006cd39d5142eae9bfcb0f5857d0f0479b9ce",
+      "stream_sha256": "a68dba2dfcfd0238b2e144ab0d105eee228362b9a3557a7801dc9c3f747df632",
+      "exit_map": [
+        3,
+        4,
+        5,
+        3,
+        4,
+        5
+      ],
+      "isolated_with_repair_delta444_db": 0.069359060669643,
+      "isolated_no_repair_delta444_db": 0.0718393419311149,
+      "exact_context_delta444_db": 0.05411662450083555
+    },
+    {
+      "image": "0824.png",
+      "qp": 48,
+      "case_sha256": "be974225038834b82451690742a85c082d57b3101b5959cc7d071e1fa0f1e97c",
+      "stream_sha256": "b3f53977f1950ba6089dba54003e17ab503ae964b0339b50bf7476d644555ae2",
+      "exit_map": [
+        5,
+        5,
+        5,
+        5,
+        5,
+        5
+      ],
+      "isolated_with_repair_delta444_db": 0.029895557351993687,
+      "isolated_no_repair_delta444_db": 0.034274899174838974,
+      "exact_context_delta444_db": 0.0
+    },
+    {
+      "image": "0824.png",
+      "qp": 63,
+      "case_sha256": "9c9284e2803604165851bf711f75f5d998ab7d93fe267c8652c7562fccfea3d3",
+      "stream_sha256": "afcfda8694e2f91a2c48ecb709d8c9dbeea820f20e6a0a1daa498e5ce4f162c4",
+      "exit_map": [
+        5,
+        5,
+        5,
+        5,
+        5,
+        5
+      ],
+      "isolated_with_repair_delta444_db": 0.03929619339881615,
+      "isolated_no_repair_delta444_db": 0.045490763450146555,
+      "exact_context_delta444_db": 0.0
+    }
+  ]
+}
