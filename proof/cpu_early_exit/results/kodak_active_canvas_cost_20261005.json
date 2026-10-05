@@ -1,0 +1,2181 @@
+{
+  "scope": "Frozen Kodak24 x QP5 convolution arithmetic only; active-neighbour and stale-neighbour coupling have the same conv count. Excludes tile packing, memory, router, entropy and latency.",
+  "source_sha256": {
+    "exact": "755ab5961e7205f9f0c720945bc6e6c6365e78ba2919a0599b3ffec34b4be354",
+    "checkpoint": "91556d30bca41988755ff43dee3bc6d0cd2a0a4eda1d18d2891b168dc0a04ce9",
+    "cost_model": "bdfdd84cef1c71e0da219784276eab29549edca871c8e9ad6d67f1c7171a6e56",
+    "locked_policy_summary": "be0ba5ea818995594ec9e8989596b47f8222efd2d7d7bcaf3e5b6e2eb1ac73f7"
+  },
+  "formula": "Deployed frame_relative_cost + mean executed suffix blocks per tile \u00d7 [(9C)/(block MAC per feature pixel)] \u00d7 [trunk share/12] \u00d7 [((P+2)^2/P^2)-1]; no-repair subtracts grid seam-repair share.",
+  "per_block_extra_fraction": 2.806566455696202e-05,
+  "grid_repair_fraction": 0.00950717299578059,
+  "mean": {
+    "deployed_conv_saving_pct": 25.88374077499172,
+    "coupled_with_repair_conv_saving_pct": 25.872873126008646,
+    "coupled_no_repair_conv_saving_pct": 26.823590425586698,
+    "extra_depthwise_halo_pct_points": 0.010867648983020572,
+    "removed_grid_repair_pct_points": 0.9507172995780592
+  },
+  "rows": [
+    {
+      "image": "kodim01.png",
+      "qp": 0,
+      "exit_map": [
+        2,
+        2,
+        2,
+        2,
+        2,
+        3
+      ],
+      "mean_executed_suffix_blocks_per_tile": 2.3333332538604736,
+      "deployed_conv_saving_pct": 36.64011219362669,
+      "coupled_with_repair_conv_saving_pct": 36.633563538786454,
+      "coupled_no_repair_conv_saving_pct": 37.584280838364506,
+      "extra_depthwise_halo_pct_points": 0.006548654840245276,
+      "removed_grid_repair_pct_points": 0.950717299578059
+    },
+    {
+      "image": "kodim01.png",
+      "qp": 16,
+      "exit_map": [
+        3,
+        3,
+        3,
+        3,
+        3,
+        3
+      ],
+      "mean_executed_suffix_blocks_per_tile": 4.0,
+      "deployed_conv_saving_pct": 24.217887314361864,
+      "coupled_with_repair_conv_saving_pct": 24.20666104853908,
+      "coupled_no_repair_conv_saving_pct": 25.15737834811714,
+      "extra_depthwise_halo_pct_points": 0.011226265822784808,
+      "removed_grid_repair_pct_points": 0.950717299578059
+    },
+    {
+      "image": "kodim01.png",
+      "qp": 32,
+      "exit_map": [
+        3,
+        3,
+        3,
+        3,
+        3,
+        3
+      ],
+      "mean_executed_suffix_blocks_per_tile": 4.0,
+      "deployed_conv_saving_pct": 24.217887314361864,
+      "coupled_with_repair_conv_saving_pct": 24.20666104853908,
+      "coupled_no_repair_conv_saving_pct": 25.15737834811714,
+      "extra_depthwise_halo_pct_points": 0.011226265822784808,
+      "removed_grid_repair_pct_points": 0.950717299578059
+    },
+    {
+      "image": "kodim01.png",
+      "qp": 48,
+      "exit_map": [
+        3,
+        3,
+        3,
+        3,
+        3,
+        3
+      ],
+      "mean_executed_suffix_blocks_per_tile": 4.0,
+      "deployed_conv_saving_pct": 24.217887314361864,
+      "coupled_with_repair_conv_saving_pct": 24.20666104853908,
+      "coupled_no_repair_conv_saving_pct": 25.15737834811714,
+      "extra_depthwise_halo_pct_points": 0.011226265822784808,
+      "removed_grid_repair_pct_points": 0.950717299578059
+    },
+    {
+      "image": "kodim01.png",
+      "qp": 63,
+      "exit_map": [
+        3,
+        5,
+        5,
+        3,
+        3,
+        3
+      ],
+      "mean_executed_suffix_blocks_per_tile": 5.333333492279053,
+      "deployed_conv_saving_pct": 15.828351768059068,
+      "coupled_with_repair_conv_saving_pct": 15.813383413182597,
+      "coupled_no_repair_conv_saving_pct": 16.764100712760655,
+      "extra_depthwise_halo_pct_points": 0.01496835487647147,
+      "removed_grid_repair_pct_points": 0.950717299578059
+    },
+    {
+      "image": "kodim02.png",
+      "qp": 0,
+      "exit_map": [
+        2,
+        2,
+        2,
+        2,
+        2,
+        2
+      ],
+      "mean_executed_suffix_blocks_per_tile": 2.0,
+      "deployed_conv_saving_pct": 39.12455746750288,
+      "coupled_with_repair_conv_saving_pct": 39.1189443345915,
+      "coupled_no_repair_conv_saving_pct": 40.06966163416955,
+      "extra_depthwise_halo_pct_points": 0.005613132911392404,
+      "removed_grid_repair_pct_points": 0.950717299578059
+    },
+    {
+      "image": "kodim02.png",
+      "qp": 16,
+      "exit_map": [
+        3,
+        3,
+        3,
+        3,
+        3,
+        3
+      ],
+      "mean_executed_suffix_blocks_per_tile": 4.0,
+      "deployed_conv_saving_pct": 24.217887314361864,
+      "coupled_with_repair_conv_saving_pct": 24.20666104853908,
+      "coupled_no_repair_conv_saving_pct": 25.15737834811714,
+      "extra_depthwise_halo_pct_points": 0.011226265822784808,
+      "removed_grid_repair_pct_points": 0.950717299578059
+    },
+    {
+      "image": "kodim02.png",
+      "qp": 32,
+      "exit_map": [
+        3,
+        3,
+        3,
+        3,
+        3,
+        3
+      ],
+      "mean_executed_suffix_blocks_per_tile": 4.0,
+      "deployed_conv_saving_pct": 24.217887314361864,
+      "coupled_with_repair_conv_saving_pct": 24.20666104853908,
+      "coupled_no_repair_conv_saving_pct": 25.15737834811714,
+      "extra_depthwise_halo_pct_points": 0.011226265822784808,
+      "removed_grid_repair_pct_points": 0.950717299578059
+    },
+    {
+      "image": "kodim02.png",
+      "qp": 48,
+      "exit_map": [
+        3,
+        3,
+        3,
+        3,
+        3,
+        2
+      ],
+      "mean_executed_suffix_blocks_per_tile": 3.6666667461395264,
+      "deployed_conv_saving_pct": 26.702334078354173,
+      "coupled_with_repair_conv_saving_pct": 26.69204333446024,
+      "coupled_no_repair_conv_saving_pct": 27.6427606340383,
+      "extra_depthwise_halo_pct_points": 0.010290743893931937,
+      "removed_grid_repair_pct_points": 0.950717299578059
+    },
+    {
+      "image": "kodim02.png",
+      "qp": 63,
+      "exit_map": [
+        3,
+        4,
+        3,
+        3,
+        3,
+        3
+      ],
+      "mean_executed_suffix_blocks_per_tile": 4.333333492279053,
+      "deployed_conv_saving_pct": 22.352744730514818,
+      "coupled_with_repair_conv_saving_pct": 22.34058294209404,
+      "coupled_no_repair_conv_saving_pct": 23.2913002416721,
+      "extra_depthwise_halo_pct_points": 0.012161788420775267,
+      "removed_grid_repair_pct_points": 0.950717299578059
+    },
+    {
+      "image": "kodim03.png",
+      "qp": 0,
+      "exit_map": [
+        3,
+        2,
+        2,
+        2,
+        2,
+        2
+      ],
+      "mean_executed_suffix_blocks_per_tile": 2.3333332538604736,
+      "deployed_conv_saving_pct": 36.64011219362669,
+      "coupled_with_repair_conv_saving_pct": 36.633563538786454,
+      "coupled_no_repair_conv_saving_pct": 37.584280838364506,
+      "extra_depthwise_halo_pct_points": 0.006548654840245276,
+      "removed_grid_repair_pct_points": 0.950717299578059
+    },
+    {
+      "image": "kodim03.png",
+      "qp": 16,
+      "exit_map": [
+        3,
+        3,
+        2,
+        2,
+        3,
+        3
+      ],
+      "mean_executed_suffix_blocks_per_tile": 3.3333332538604736,
+      "deployed_conv_saving_pct": 29.186777862114244,
+      "coupled_with_repair_conv_saving_pct": 29.1774226408183,
+      "coupled_no_repair_conv_saving_pct": 30.12813994039636,
+      "extra_depthwise_halo_pct_points": 0.009355221295941478,
+      "removed_grid_repair_pct_points": 0.950717299578059
+    },
+    {
+      "image": "kodim03.png",
+      "qp": 32,
+      "exit_map": [
+        3,
+        3,
+        2,
+        2,
+        3,
+        3
+      ],
+      "mean_executed_suffix_blocks_per_tile": 3.3333332538604736,
+      "deployed_conv_saving_pct": 29.186777862114244,
+      "coupled_with_repair_conv_saving_pct": 29.1774226408183,
+      "coupled_no_repair_conv_saving_pct": 30.12813994039636,
+      "extra_depthwise_halo_pct_points": 0.009355221295941478,
+      "removed_grid_repair_pct_points": 0.950717299578059
+    },
+    {
+      "image": "kodim03.png",
+      "qp": 48,
+      "exit_map": [
+        3,
+        3,
+        2,
+        2,
+        3,
+        3
+      ],
+      "mean_executed_suffix_blocks_per_tile": 3.3333332538604736,
+      "deployed_conv_saving_pct": 29.186777862114244,
+      "coupled_with_repair_conv_saving_pct": 29.1774226408183,
+      "coupled_no_repair_conv_saving_pct": 30.12813994039636,
+      "extra_depthwise_halo_pct_points": 0.009355221295941478,
+      "removed_grid_repair_pct_points": 0.950717299578059
+    },
+    {
+      "image": "kodim03.png",
+      "qp": 63,
+      "exit_map": [
+        5,
+        5,
+        2,
+        2,
+        3,
+        3
+      ],
+      "mean_executed_suffix_blocks_per_tile": 4.666666507720947,
+      "deployed_conv_saving_pct": 20.79724231581145,
+      "coupled_with_repair_conv_saving_pct": 20.78414500613096,
+      "coupled_no_repair_conv_saving_pct": 21.734862305709015,
+      "extra_depthwise_halo_pct_points": 0.013097309680490552,
+      "removed_grid_repair_pct_points": 0.950717299578059
+    },
+    {
+      "image": "kodim04.png",
+      "qp": 0,
+      "exit_map": [
+        2,
+        2,
+        2,
+        2,
+        2,
+        3
+      ],
+      "mean_executed_suffix_blocks_per_tile": 2.3333332538604736,
+      "deployed_conv_saving_pct": 36.64011219362669,
+      "coupled_with_repair_conv_saving_pct": 36.633563538786454,
+      "coupled_no_repair_conv_saving_pct": 37.584280838364506,
+      "extra_depthwise_halo_pct_points": 0.006548654840245276,
+      "removed_grid_repair_pct_points": 0.950717299578059
+    },
+    {
+      "image": "kodim04.png",
+      "qp": 16,
+      "exit_map": [
+        3,
+        3,
+        2,
+        3,
+        3,
+        3
+      ],
+      "mean_executed_suffix_blocks_per_tile": 3.6666667461395264,
+      "deployed_conv_saving_pct": 26.702334078354173,
+      "coupled_with_repair_conv_saving_pct": 26.69204333446024,
+      "coupled_no_repair_conv_saving_pct": 27.6427606340383,
+      "extra_depthwise_halo_pct_points": 0.010290743893931937,
+      "removed_grid_repair_pct_points": 0.950717299578059
+    },
+    {
+      "image": "kodim04.png",
+      "qp": 32,
+      "exit_map": [
+        3,
+        3,
+        2,
+        3,
+        3,
+        3
+      ],
+      "mean_executed_suffix_blocks_per_tile": 3.6666667461395264,
+      "deployed_conv_saving_pct": 26.702334078354173,
+      "coupled_with_repair_conv_saving_pct": 26.69204333446024,
+      "coupled_no_repair_conv_saving_pct": 27.6427606340383,
+      "extra_depthwise_halo_pct_points": 0.010290743893931937,
+      "removed_grid_repair_pct_points": 0.950717299578059
+    },
+    {
+      "image": "kodim04.png",
+      "qp": 48,
+      "exit_map": [
+        3,
+        3,
+        2,
+        2,
+        3,
+        3
+      ],
+      "mean_executed_suffix_blocks_per_tile": 3.3333332538604736,
+      "deployed_conv_saving_pct": 29.186777862114244,
+      "coupled_with_repair_conv_saving_pct": 29.1774226408183,
+      "coupled_no_repair_conv_saving_pct": 30.12813994039636,
+      "extra_depthwise_halo_pct_points": 0.009355221295941478,
+      "removed_grid_repair_pct_points": 0.950717299578059
+    },
+    {
+      "image": "kodim04.png",
+      "qp": 63,
+      "exit_map": [
+        3,
+        4,
+        2,
+        2,
+        4,
+        3
+      ],
+      "mean_executed_suffix_blocks_per_tile": 4.0,
+      "deployed_conv_saving_pct": 25.456483753723436,
+      "coupled_with_repair_conv_saving_pct": 25.44525748790065,
+      "coupled_no_repair_conv_saving_pct": 26.39597478747871,
+      "extra_depthwise_halo_pct_points": 0.011226265822784808,
+      "removed_grid_repair_pct_points": 0.950717299578059
+    },
+    {
+      "image": "kodim05.png",
+      "qp": 0,
+      "exit_map": [
+        3,
+        3,
+        3,
+        3,
+        3,
+        3
+      ],
+      "mean_executed_suffix_blocks_per_tile": 4.0,
+      "deployed_conv_saving_pct": 24.217887314361864,
+      "coupled_with_repair_conv_saving_pct": 24.20666104853908,
+      "coupled_no_repair_conv_saving_pct": 25.15737834811714,
+      "extra_depthwise_halo_pct_points": 0.011226265822784808,
+      "removed_grid_repair_pct_points": 0.950717299578059
+    },
+    {
+      "image": "kodim05.png",
+      "qp": 16,
+      "exit_map": [
+        4,
+        4,
+        4,
+        3,
+        4,
+        3
+      ],
+      "mean_executed_suffix_blocks_per_tile": 5.333333492279053,
+      "deployed_conv_saving_pct": 16.757299097580248,
+      "coupled_with_repair_conv_saving_pct": 16.742330742703775,
+      "coupled_no_repair_conv_saving_pct": 17.693048042281834,
+      "extra_depthwise_halo_pct_points": 0.01496835487647147,
+      "removed_grid_repair_pct_points": 0.950717299578059
+    },
+    {
+      "image": "kodim05.png",
+      "qp": 32,
+      "exit_map": [
+        4,
+        4,
+        4,
+        3,
+        4,
+        3
+      ],
+      "mean_executed_suffix_blocks_per_tile": 5.333333492279053,
+      "deployed_conv_saving_pct": 16.757299097580248,
+      "coupled_with_repair_conv_saving_pct": 16.742330742703775,
+      "coupled_no_repair_conv_saving_pct": 17.693048042281834,
+      "extra_depthwise_halo_pct_points": 0.01496835487647147,
+      "removed_grid_repair_pct_points": 0.950717299578059
+    },
+    {
+      "image": "kodim05.png",
+      "qp": 48,
+      "exit_map": [
+        5,
+        5,
+        4,
+        4,
+        4,
+        4
+      ],
+      "mean_executed_suffix_blocks_per_tile": 6.666666507720947,
+      "deployed_conv_saving_pct": 8.367763551277452,
+      "coupled_with_repair_conv_saving_pct": 8.349053108685569,
+      "coupled_no_repair_conv_saving_pct": 9.299770408263628,
+      "extra_depthwise_halo_pct_points": 0.018710442591882957,
+      "removed_grid_repair_pct_points": 0.950717299578059
+    },
+    {
+      "image": "kodim05.png",
+      "qp": 63,
+      "exit_map": [
+        5,
+        5,
+        5,
+        5,
+        5,
+        5
+      ],
+      "mean_executed_suffix_blocks_per_tile": 8.0,
+      "deployed_conv_saving_pct": -0.9507193245465118,
+      "coupled_with_repair_conv_saving_pct": -0.9731718561920814,
+      "coupled_no_repair_conv_saving_pct": -0.02245455661402243,
+      "extra_depthwise_halo_pct_points": 0.022452531645569616,
+      "removed_grid_repair_pct_points": 0.950717299578059
+    },
+    {
+      "image": "kodim06.png",
+      "qp": 0,
+      "exit_map": [
+        2,
+        2,
+        2,
+        3,
+        2,
+        2
+      ],
+      "mean_executed_suffix_blocks_per_tile": 2.3333332538604736,
+      "deployed_conv_saving_pct": 36.64011219362669,
+      "coupled_with_repair_conv_saving_pct": 36.633563538786454,
+      "coupled_no_repair_conv_saving_pct": 37.584280838364506,
+      "extra_depthwise_halo_pct_points": 0.006548654840245276,
+      "removed_grid_repair_pct_points": 0.950717299578059
+    },
+    {
+      "image": "kodim06.png",
+      "qp": 16,
+      "exit_map": [
+        3,
+        3,
+        2,
+        3,
+        3,
+        2
+      ],
+      "mean_executed_suffix_blocks_per_tile": 3.3333332538604736,
+      "deployed_conv_saving_pct": 29.186777862114244,
+      "coupled_with_repair_conv_saving_pct": 29.1774226408183,
+      "coupled_no_repair_conv_saving_pct": 30.12813994039636,
+      "extra_depthwise_halo_pct_points": 0.009355221295941478,
+      "removed_grid_repair_pct_points": 0.950717299578059
+    },
+    {
+      "image": "kodim06.png",
+      "qp": 32,
+      "exit_map": [
+        3,
+        3,
+        2,
+        3,
+        3,
+        3
+      ],
+      "mean_executed_suffix_blocks_per_tile": 3.6666667461395264,
+      "deployed_conv_saving_pct": 26.702334078354173,
+      "coupled_with_repair_conv_saving_pct": 26.69204333446024,
+      "coupled_no_repair_conv_saving_pct": 27.6427606340383,
+      "extra_depthwise_halo_pct_points": 0.010290743893931937,
+      "removed_grid_repair_pct_points": 0.950717299578059
+    },
+    {
+      "image": "kodim06.png",
+      "qp": 48,
+      "exit_map": [
+        3,
+        3,
+        2,
+        3,
+        3,
+        2
+      ],
+      "mean_executed_suffix_blocks_per_tile": 3.3333332538604736,
+      "deployed_conv_saving_pct": 29.186777862114244,
+      "coupled_with_repair_conv_saving_pct": 29.1774226408183,
+      "coupled_no_repair_conv_saving_pct": 30.12813994039636,
+      "extra_depthwise_halo_pct_points": 0.009355221295941478,
+      "removed_grid_repair_pct_points": 0.950717299578059
+    },
+    {
+      "image": "kodim06.png",
+      "qp": 63,
+      "exit_map": [
+        5,
+        5,
+        2,
+        4,
+        3,
+        3
+      ],
+      "mean_executed_suffix_blocks_per_tile": 5.333333492279053,
+      "deployed_conv_saving_pct": 16.447647007507616,
+      "coupled_with_repair_conv_saving_pct": 16.432678652631143,
+      "coupled_no_repair_conv_saving_pct": 17.383395952209202,
+      "extra_depthwise_halo_pct_points": 0.01496835487647147,
+      "removed_grid_repair_pct_points": 0.950717299578059
+    },
+    {
+      "image": "kodim07.png",
+      "qp": 0,
+      "exit_map": [
+        2,
+        3,
+        2,
+        2,
+        2,
+        3
+      ],
+      "mean_executed_suffix_blocks_per_tile": 2.6666667461395264,
+      "deployed_conv_saving_pct": 34.1556669197505,
+      "coupled_with_repair_conv_saving_pct": 34.148182742312265,
+      "coupled_no_repair_conv_saving_pct": 35.098900041890325,
+      "extra_depthwise_halo_pct_points": 0.007484177438235735,
+      "removed_grid_repair_pct_points": 0.950717299578059
+    },
+    {
+      "image": "kodim07.png",
+      "qp": 16,
+      "exit_map": [
+        3,
+        3,
+        3,
+        3,
+        3,
+        3
+      ],
+      "mean_executed_suffix_blocks_per_tile": 4.0,
+      "deployed_conv_saving_pct": 24.217887314361864,
+      "coupled_with_repair_conv_saving_pct": 24.20666104853908,
+      "coupled_no_repair_conv_saving_pct": 25.15737834811714,
+      "extra_depthwise_halo_pct_points": 0.011226265822784808,
+      "removed_grid_repair_pct_points": 0.950717299578059
+    },
+    {
+      "image": "kodim07.png",
+      "qp": 32,
+      "exit_map": [
+        3,
+        3,
+        3,
+        3,
+        3,
+        3
+      ],
+      "mean_executed_suffix_blocks_per_tile": 4.0,
+      "deployed_conv_saving_pct": 24.217887314361864,
+      "coupled_with_repair_conv_saving_pct": 24.20666104853908,
+      "coupled_no_repair_conv_saving_pct": 25.15737834811714,
+      "extra_depthwise_halo_pct_points": 0.011226265822784808,
+      "removed_grid_repair_pct_points": 0.950717299578059
+    },
+    {
+      "image": "kodim07.png",
+      "qp": 48,
+      "exit_map": [
+        2,
+        3,
+        3,
+        2,
+        3,
+        3
+      ],
+      "mean_executed_suffix_blocks_per_tile": 3.3333332538604736,
+      "deployed_conv_saving_pct": 29.186777862114244,
+      "coupled_with_repair_conv_saving_pct": 29.1774226408183,
+      "coupled_no_repair_conv_saving_pct": 30.12813994039636,
+      "extra_depthwise_halo_pct_points": 0.009355221295941478,
+      "removed_grid_repair_pct_points": 0.950717299578059
+    },
+    {
+      "image": "kodim07.png",
+      "qp": 63,
+      "exit_map": [
+        2,
+        3,
+        3,
+        2,
+        3,
+        3
+      ],
+      "mean_executed_suffix_blocks_per_tile": 3.3333332538604736,
+      "deployed_conv_saving_pct": 29.186777862114244,
+      "coupled_with_repair_conv_saving_pct": 29.1774226408183,
+      "coupled_no_repair_conv_saving_pct": 30.12813994039636,
+      "extra_depthwise_halo_pct_points": 0.009355221295941478,
+      "removed_grid_repair_pct_points": 0.950717299578059
+    },
+    {
+      "image": "kodim08.png",
+      "qp": 0,
+      "exit_map": [
+        3,
+        3,
+        3,
+        3,
+        3,
+        3
+      ],
+      "mean_executed_suffix_blocks_per_tile": 4.0,
+      "deployed_conv_saving_pct": 24.217887314361864,
+      "coupled_with_repair_conv_saving_pct": 24.20666104853908,
+      "coupled_no_repair_conv_saving_pct": 25.15737834811714,
+      "extra_depthwise_halo_pct_points": 0.011226265822784808,
+      "removed_grid_repair_pct_points": 0.950717299578059
+    },
+    {
+      "image": "kodim08.png",
+      "qp": 16,
+      "exit_map": [
+        4,
+        4,
+        4,
+        4,
+        4,
+        4
+      ],
+      "mean_executed_suffix_blocks_per_tile": 6.0,
+      "deployed_conv_saving_pct": 13.0270020089572,
+      "coupled_with_repair_conv_saving_pct": 13.010162610223022,
+      "coupled_no_repair_conv_saving_pct": 13.96087990980108,
+      "extra_depthwise_halo_pct_points": 0.01683939873417721,
+      "removed_grid_repair_pct_points": 0.950717299578059
+    },
+    {
+      "image": "kodim08.png",
+      "qp": 32,
+      "exit_map": [
+        4,
+        4,
+        4,
+        4,
+        4,
+        4
+      ],
+      "mean_executed_suffix_blocks_per_tile": 6.0,
+      "deployed_conv_saving_pct": 13.0270020089572,
+      "coupled_with_repair_conv_saving_pct": 13.010162610223022,
+      "coupled_no_repair_conv_saving_pct": 13.96087990980108,
+      "extra_depthwise_halo_pct_points": 0.01683939873417721,
+      "removed_grid_repair_pct_points": 0.950717299578059
+    },
+    {
+      "image": "kodim08.png",
+      "qp": 48,
+      "exit_map": [
+        4,
+        4,
+        5,
+        5,
+        4,
+        5
+      ],
+      "mean_executed_suffix_blocks_per_tile": 7.0,
+      "deployed_conv_saving_pct": 6.03813985208922,
+      "coupled_with_repair_conv_saving_pct": 6.018493886899346,
+      "coupled_no_repair_conv_saving_pct": 6.969211186477405,
+      "extra_depthwise_halo_pct_points": 0.019645965189873413,
+      "removed_grid_repair_pct_points": 0.950717299578059
+    },
+    {
+      "image": "kodim08.png",
+      "qp": 63,
+      "exit_map": [
+        5,
+        5,
+        5,
+        5,
+        5,
+        5
+      ],
+      "mean_executed_suffix_blocks_per_tile": 8.0,
+      "deployed_conv_saving_pct": -0.9507193245465118,
+      "coupled_with_repair_conv_saving_pct": -0.9731718561920814,
+      "coupled_no_repair_conv_saving_pct": -0.02245455661402243,
+      "extra_depthwise_halo_pct_points": 0.022452531645569616,
+      "removed_grid_repair_pct_points": 0.950717299578059
+    },
+    {
+      "image": "kodim09.png",
+      "qp": 0,
+      "exit_map": [
+        2,
+        2,
+        2,
+        3,
+        2,
+        2
+      ],
+      "mean_executed_suffix_blocks_per_tile": 2.3333332538604736,
+      "deployed_conv_saving_pct": 36.64011219362669,
+      "coupled_with_repair_conv_saving_pct": 36.633563538786454,
+      "coupled_no_repair_conv_saving_pct": 37.584280838364506,
+      "extra_depthwise_halo_pct_points": 0.006548654840245276,
+      "removed_grid_repair_pct_points": 0.950717299578059
+    },
+    {
+      "image": "kodim09.png",
+      "qp": 16,
+      "exit_map": [
+        2,
+        2,
+        3,
+        3,
+        3,
+        3
+      ],
+      "mean_executed_suffix_blocks_per_tile": 3.3333332538604736,
+      "deployed_conv_saving_pct": 29.186777862114244,
+      "coupled_with_repair_conv_saving_pct": 29.1774226408183,
+      "coupled_no_repair_conv_saving_pct": 30.12813994039636,
+      "extra_depthwise_halo_pct_points": 0.009355221295941478,
+      "removed_grid_repair_pct_points": 0.950717299578059
+    },
+    {
+      "image": "kodim09.png",
+      "qp": 32,
+      "exit_map": [
+        2,
+        2,
+        3,
+        3,
+        3,
+        3
+      ],
+      "mean_executed_suffix_blocks_per_tile": 3.3333332538604736,
+      "deployed_conv_saving_pct": 29.186777862114244,
+      "coupled_with_repair_conv_saving_pct": 29.1774226408183,
+      "coupled_no_repair_conv_saving_pct": 30.12813994039636,
+      "extra_depthwise_halo_pct_points": 0.009355221295941478,
+      "removed_grid_repair_pct_points": 0.950717299578059
+    },
+    {
+      "image": "kodim09.png",
+      "qp": 48,
+      "exit_map": [
+        2,
+        2,
+        3,
+        3,
+        3,
+        3
+      ],
+      "mean_executed_suffix_blocks_per_tile": 3.3333332538604736,
+      "deployed_conv_saving_pct": 29.186777862114244,
+      "coupled_with_repair_conv_saving_pct": 29.1774226408183,
+      "coupled_no_repair_conv_saving_pct": 30.12813994039636,
+      "extra_depthwise_halo_pct_points": 0.009355221295941478,
+      "removed_grid_repair_pct_points": 0.950717299578059
+    },
+    {
+      "image": "kodim09.png",
+      "qp": 63,
+      "exit_map": [
+        2,
+        2,
+        3,
+        3,
+        3,
+        3
+      ],
+      "mean_executed_suffix_blocks_per_tile": 3.3333332538604736,
+      "deployed_conv_saving_pct": 29.186777862114244,
+      "coupled_with_repair_conv_saving_pct": 29.1774226408183,
+      "coupled_no_repair_conv_saving_pct": 30.12813994039636,
+      "extra_depthwise_halo_pct_points": 0.009355221295941478,
+      "removed_grid_repair_pct_points": 0.950717299578059
+    },
+    {
+      "image": "kodim10.png",
+      "qp": 0,
+      "exit_map": [
+        3,
+        2,
+        2,
+        2,
+        2,
+        3
+      ],
+      "mean_executed_suffix_blocks_per_tile": 2.6666667461395264,
+      "deployed_conv_saving_pct": 34.1556669197505,
+      "coupled_with_repair_conv_saving_pct": 34.148182742312265,
+      "coupled_no_repair_conv_saving_pct": 35.098900041890325,
+      "extra_depthwise_halo_pct_points": 0.007484177438235735,
+      "removed_grid_repair_pct_points": 0.950717299578059
+    },
+    {
+      "image": "kodim10.png",
+      "qp": 16,
+      "exit_map": [
+        3,
+        3,
+        2,
+        3,
+        3,
+        3
+      ],
+      "mean_executed_suffix_blocks_per_tile": 3.6666667461395264,
+      "deployed_conv_saving_pct": 26.702334078354173,
+      "coupled_with_repair_conv_saving_pct": 26.69204333446024,
+      "coupled_no_repair_conv_saving_pct": 27.6427606340383,
+      "extra_depthwise_halo_pct_points": 0.010290743893931937,
+      "removed_grid_repair_pct_points": 0.950717299578059
+    },
+    {
+      "image": "kodim10.png",
+      "qp": 32,
+      "exit_map": [
+        3,
+        3,
+        2,
+        3,
+        3,
+        3
+      ],
+      "mean_executed_suffix_blocks_per_tile": 3.6666667461395264,
+      "deployed_conv_saving_pct": 26.702334078354173,
+      "coupled_with_repair_conv_saving_pct": 26.69204333446024,
+      "coupled_no_repair_conv_saving_pct": 27.6427606340383,
+      "extra_depthwise_halo_pct_points": 0.010290743893931937,
+      "removed_grid_repair_pct_points": 0.950717299578059
+    },
+    {
+      "image": "kodim10.png",
+      "qp": 48,
+      "exit_map": [
+        3,
+        2,
+        2,
+        3,
+        2,
+        4
+      ],
+      "mean_executed_suffix_blocks_per_tile": 3.3333332538604736,
+      "deployed_conv_saving_pct": 29.80607310156279,
+      "coupled_with_repair_conv_saving_pct": 29.796717880266847,
+      "coupled_no_repair_conv_saving_pct": 30.747435179844906,
+      "extra_depthwise_halo_pct_points": 0.009355221295941478,
+      "removed_grid_repair_pct_points": 0.950717299578059
+    },
+    {
+      "image": "kodim10.png",
+      "qp": 63,
+      "exit_map": [
+        3,
+        2,
+        2,
+        3,
+        2,
+        5
+      ],
+      "mean_executed_suffix_blocks_per_tile": 3.6666667461395264,
+      "deployed_conv_saving_pct": 27.476455362839037,
+      "coupled_with_repair_conv_saving_pct": 27.466164618945104,
+      "coupled_no_repair_conv_saving_pct": 28.416881918523163,
+      "extra_depthwise_halo_pct_points": 0.010290743893931937,
+      "removed_grid_repair_pct_points": 0.950717299578059
+    },
+    {
+      "image": "kodim11.png",
+      "qp": 0,
+      "exit_map": [
+        2,
+        2,
+        2,
+        2,
+        2,
+        2
+      ],
+      "mean_executed_suffix_blocks_per_tile": 2.0,
+      "deployed_conv_saving_pct": 39.12455746750288,
+      "coupled_with_repair_conv_saving_pct": 39.1189443345915,
+      "coupled_no_repair_conv_saving_pct": 40.06966163416955,
+      "extra_depthwise_halo_pct_points": 0.005613132911392404,
+      "removed_grid_repair_pct_points": 0.950717299578059
+    },
+    {
+      "image": "kodim11.png",
+      "qp": 16,
+      "exit_map": [
+        3,
+        3,
+        3,
+        2,
+        3,
+        3
+      ],
+      "mean_executed_suffix_blocks_per_tile": 3.6666667461395264,
+      "deployed_conv_saving_pct": 26.702334078354173,
+      "coupled_with_repair_conv_saving_pct": 26.69204333446024,
+      "coupled_no_repair_conv_saving_pct": 27.6427606340383,
+      "extra_depthwise_halo_pct_points": 0.010290743893931937,
+      "removed_grid_repair_pct_points": 0.950717299578059
+    },
+    {
+      "image": "kodim11.png",
+      "qp": 32,
+      "exit_map": [
+        3,
+        3,
+        3,
+        2,
+        3,
+        3
+      ],
+      "mean_executed_suffix_blocks_per_tile": 3.6666667461395264,
+      "deployed_conv_saving_pct": 26.702334078354173,
+      "coupled_with_repair_conv_saving_pct": 26.69204333446024,
+      "coupled_no_repair_conv_saving_pct": 27.6427606340383,
+      "extra_depthwise_halo_pct_points": 0.010290743893931937,
+      "removed_grid_repair_pct_points": 0.950717299578059
+    },
+    {
+      "image": "kodim11.png",
+      "qp": 48,
+      "exit_map": [
+        3,
+        4,
+        2,
+        2,
+        4,
+        3
+      ],
+      "mean_executed_suffix_blocks_per_tile": 4.0,
+      "deployed_conv_saving_pct": 25.456483753723436,
+      "coupled_with_repair_conv_saving_pct": 25.44525748790065,
+      "coupled_no_repair_conv_saving_pct": 26.39597478747871,
+      "extra_depthwise_halo_pct_points": 0.011226265822784808,
+      "removed_grid_repair_pct_points": 0.950717299578059
+    },
+    {
+      "image": "kodim11.png",
+      "qp": 63,
+      "exit_map": [
+        3,
+        5,
+        2,
+        3,
+        5,
+        3
+      ],
+      "mean_executed_suffix_blocks_per_tile": 5.0,
+      "deployed_conv_saving_pct": 18.31279555181914,
+      "coupled_with_repair_conv_saving_pct": 18.298762719540658,
+      "coupled_no_repair_conv_saving_pct": 19.249480019118714,
+      "extra_depthwise_halo_pct_points": 0.014032832278481011,
+      "removed_grid_repair_pct_points": 0.950717299578059
+    },
+    {
+      "image": "kodim12.png",
+      "qp": 0,
+      "exit_map": [
+        2,
+        2,
+        2,
+        2,
+        2,
+        2
+      ],
+      "mean_executed_suffix_blocks_per_tile": 2.0,
+      "deployed_conv_saving_pct": 39.12455746750288,
+      "coupled_with_repair_conv_saving_pct": 39.1189443345915,
+      "coupled_no_repair_conv_saving_pct": 40.06966163416955,
+      "extra_depthwise_halo_pct_points": 0.005613132911392404,
+      "removed_grid_repair_pct_points": 0.950717299578059
+    },
+    {
+      "image": "kodim12.png",
+      "qp": 16,
+      "exit_map": [
+        3,
+        3,
+        3,
+        2,
+        3,
+        2
+      ],
+      "mean_executed_suffix_blocks_per_tile": 3.3333332538604736,
+      "deployed_conv_saving_pct": 29.186777862114244,
+      "coupled_with_repair_conv_saving_pct": 29.1774226408183,
+      "coupled_no_repair_conv_saving_pct": 30.12813994039636,
+      "extra_depthwise_halo_pct_points": 0.009355221295941478,
+      "removed_grid_repair_pct_points": 0.950717299578059
+    },
+    {
+      "image": "kodim12.png",
+      "qp": 32,
+      "exit_map": [
+        3,
+        3,
+        3,
+        2,
+        3,
+        2
+      ],
+      "mean_executed_suffix_blocks_per_tile": 3.3333332538604736,
+      "deployed_conv_saving_pct": 29.186777862114244,
+      "coupled_with_repair_conv_saving_pct": 29.1774226408183,
+      "coupled_no_repair_conv_saving_pct": 30.12813994039636,
+      "extra_depthwise_halo_pct_points": 0.009355221295941478,
+      "removed_grid_repair_pct_points": 0.950717299578059
+    },
+    {
+      "image": "kodim12.png",
+      "qp": 48,
+      "exit_map": [
+        2,
+        3,
+        2,
+        2,
+        2,
+        2
+      ],
+      "mean_executed_suffix_blocks_per_tile": 2.3333332538604736,
+      "deployed_conv_saving_pct": 36.64011219362669,
+      "coupled_with_repair_conv_saving_pct": 36.633563538786454,
+      "coupled_no_repair_conv_saving_pct": 37.584280838364506,
+      "extra_depthwise_halo_pct_points": 0.006548654840245276,
+      "removed_grid_repair_pct_points": 0.950717299578059
+    },
+    {
+      "image": "kodim12.png",
+      "qp": 63,
+      "exit_map": [
+        2,
+        5,
+        2,
+        2,
+        3,
+        2
+      ],
+      "mean_executed_suffix_blocks_per_tile": 3.3333332538604736,
+      "deployed_conv_saving_pct": 29.960899146599107,
+      "coupled_with_repair_conv_saving_pct": 29.951543925303163,
+      "coupled_no_repair_conv_saving_pct": 30.902261224881222,
+      "extra_depthwise_halo_pct_points": 0.009355221295941478,
+      "removed_grid_repair_pct_points": 0.950717299578059
+    },
+    {
+      "image": "kodim13.png",
+      "qp": 0,
+      "exit_map": [
+        2,
+        3,
+        2,
+        3,
+        2,
+        2
+      ],
+      "mean_executed_suffix_blocks_per_tile": 2.6666667461395264,
+      "deployed_conv_saving_pct": 34.1556669197505,
+      "coupled_with_repair_conv_saving_pct": 34.148182742312265,
+      "coupled_no_repair_conv_saving_pct": 35.098900041890325,
+      "extra_depthwise_halo_pct_points": 0.007484177438235735,
+      "removed_grid_repair_pct_points": 0.950717299578059
+    },
+    {
+      "image": "kodim13.png",
+      "qp": 16,
+      "exit_map": [
+        3,
+        3,
+        3,
+        4,
+        3,
+        4
+      ],
+      "mean_executed_suffix_blocks_per_tile": 4.666666507720947,
+      "deployed_conv_saving_pct": 20.487596186203294,
+      "coupled_with_repair_conv_saving_pct": 20.474498876522805,
+      "coupled_no_repair_conv_saving_pct": 21.42521617610086,
+      "extra_depthwise_halo_pct_points": 0.013097309680490552,
+      "removed_grid_repair_pct_points": 0.950717299578059
+    },
+    {
+      "image": "kodim13.png",
+      "qp": 32,
+      "exit_map": [
+        3,
+        3,
+        3,
+        4,
+        3,
+        4
+      ],
+      "mean_executed_suffix_blocks_per_tile": 4.666666507720947,
+      "deployed_conv_saving_pct": 20.487596186203294,
+      "coupled_with_repair_conv_saving_pct": 20.474498876522805,
+      "coupled_no_repair_conv_saving_pct": 21.42521617610086,
+      "extra_depthwise_halo_pct_points": 0.013097309680490552,
+      "removed_grid_repair_pct_points": 0.950717299578059
+    },
+    {
+      "image": "kodim13.png",
+      "qp": 48,
+      "exit_map": [
+        3,
+        5,
+        3,
+        5,
+        4,
+        4
+      ],
+      "mean_executed_suffix_blocks_per_tile": 6.0,
+      "deployed_conv_saving_pct": 12.098054679436022,
+      "coupled_with_repair_conv_saving_pct": 12.081215280701844,
+      "coupled_no_repair_conv_saving_pct": 13.0319325802799,
+      "extra_depthwise_halo_pct_points": 0.01683939873417721,
+      "removed_grid_repair_pct_points": 0.950717299578059
+    },
+    {
+      "image": "kodim13.png",
+      "qp": 63,
+      "exit_map": [
+        3,
+        5,
+        5,
+        5,
+        5,
+        5
+      ],
+      "mean_executed_suffix_blocks_per_tile": 7.333333492279053,
+      "deployed_conv_saving_pct": 3.2440469584887555,
+      "coupled_with_repair_conv_saving_pct": 3.2234654707008916,
+      "coupled_no_repair_conv_saving_pct": 4.174182770278951,
+      "extra_depthwise_halo_pct_points": 0.020581487787863874,
+      "removed_grid_repair_pct_points": 0.950717299578059
+    },
+    {
+      "image": "kodim14.png",
+      "qp": 0,
+      "exit_map": [
+        3,
+        2,
+        2,
+        3,
+        3,
+        3
+      ],
+      "mean_executed_suffix_blocks_per_tile": 3.3333332538604736,
+      "deployed_conv_saving_pct": 29.186777862114244,
+      "coupled_with_repair_conv_saving_pct": 29.1774226408183,
+      "coupled_no_repair_conv_saving_pct": 30.12813994039636,
+      "extra_depthwise_halo_pct_points": 0.009355221295941478,
+      "removed_grid_repair_pct_points": 0.950717299578059
+    },
+    {
+      "image": "kodim14.png",
+      "qp": 16,
+      "exit_map": [
+        3,
+        3,
+        3,
+        3,
+        4,
+        3
+      ],
+      "mean_executed_suffix_blocks_per_tile": 4.333333492279053,
+      "deployed_conv_saving_pct": 22.35273877005034,
+      "coupled_with_repair_conv_saving_pct": 22.340576981629564,
+      "coupled_no_repair_conv_saving_pct": 23.291294281207623,
+      "extra_depthwise_halo_pct_points": 0.012161788420775267,
+      "removed_grid_repair_pct_points": 0.950717299578059
+    },
+    {
+      "image": "kodim14.png",
+      "qp": 32,
+      "exit_map": [
+        3,
+        3,
+        3,
+        3,
+        4,
+        3
+      ],
+      "mean_executed_suffix_blocks_per_tile": 4.333333492279053,
+      "deployed_conv_saving_pct": 22.35273877005034,
+      "coupled_with_repair_conv_saving_pct": 22.340576981629564,
+      "coupled_no_repair_conv_saving_pct": 23.291294281207623,
+      "extra_depthwise_halo_pct_points": 0.012161788420775267,
+      "removed_grid_repair_pct_points": 0.950717299578059
+    },
+    {
+      "image": "kodim14.png",
+      "qp": 48,
+      "exit_map": [
+        4,
+        3,
+        2,
+        3,
+        5,
+        4
+      ],
+      "mean_executed_suffix_blocks_per_tile": 5.0,
+      "deployed_conv_saving_pct": 18.777270706695848,
+      "coupled_with_repair_conv_saving_pct": 18.763237874417367,
+      "coupled_no_repair_conv_saving_pct": 19.713955173995423,
+      "extra_depthwise_halo_pct_points": 0.014032832278481011,
+      "removed_grid_repair_pct_points": 0.950717299578059
+    },
+    {
+      "image": "kodim14.png",
+      "qp": 63,
+      "exit_map": [
+        5,
+        5,
+        2,
+        5,
+        5,
+        5
+      ],
+      "mean_executed_suffix_blocks_per_tile": 7.0,
+      "deployed_conv_saving_pct": 5.7284937224810655,
+      "coupled_with_repair_conv_saving_pct": 5.708847757291192,
+      "coupled_no_repair_conv_saving_pct": 6.65956505686925,
+      "extra_depthwise_halo_pct_points": 0.019645965189873413,
+      "removed_grid_repair_pct_points": 0.950717299578059
+    },
+    {
+      "image": "kodim15.png",
+      "qp": 0,
+      "exit_map": [
+        2,
+        2,
+        2,
+        2,
+        2,
+        2
+      ],
+      "mean_executed_suffix_blocks_per_tile": 2.0,
+      "deployed_conv_saving_pct": 39.12455746750288,
+      "coupled_with_repair_conv_saving_pct": 39.1189443345915,
+      "coupled_no_repair_conv_saving_pct": 40.06966163416955,
+      "extra_depthwise_halo_pct_points": 0.005613132911392404,
+      "removed_grid_repair_pct_points": 0.950717299578059
+    },
+    {
+      "image": "kodim15.png",
+      "qp": 16,
+      "exit_map": [
+        3,
+        3,
+        3,
+        3,
+        3,
+        3
+      ],
+      "mean_executed_suffix_blocks_per_tile": 4.0,
+      "deployed_conv_saving_pct": 24.217887314361864,
+      "coupled_with_repair_conv_saving_pct": 24.20666104853908,
+      "coupled_no_repair_conv_saving_pct": 25.15737834811714,
+      "extra_depthwise_halo_pct_points": 0.011226265822784808,
+      "removed_grid_repair_pct_points": 0.950717299578059
+    },
+    {
+      "image": "kodim15.png",
+      "qp": 32,
+      "exit_map": [
+        3,
+        3,
+        3,
+        3,
+        3,
+        3
+      ],
+      "mean_executed_suffix_blocks_per_tile": 4.0,
+      "deployed_conv_saving_pct": 24.217887314361864,
+      "coupled_with_repair_conv_saving_pct": 24.20666104853908,
+      "coupled_no_repair_conv_saving_pct": 25.15737834811714,
+      "extra_depthwise_halo_pct_points": 0.011226265822784808,
+      "removed_grid_repair_pct_points": 0.950717299578059
+    },
+    {
+      "image": "kodim15.png",
+      "qp": 48,
+      "exit_map": [
+        3,
+        3,
+        2,
+        3,
+        3,
+        3
+      ],
+      "mean_executed_suffix_blocks_per_tile": 3.6666667461395264,
+      "deployed_conv_saving_pct": 26.702334078354173,
+      "coupled_with_repair_conv_saving_pct": 26.69204333446024,
+      "coupled_no_repair_conv_saving_pct": 27.6427606340383,
+      "extra_depthwise_halo_pct_points": 0.010290743893931937,
+      "removed_grid_repair_pct_points": 0.950717299578059
+    },
+    {
+      "image": "kodim15.png",
+      "qp": 63,
+      "exit_map": [
+        3,
+        5,
+        2,
+        5,
+        5,
+        3
+      ],
+      "mean_executed_suffix_blocks_per_tile": 5.666666507720947,
+      "deployed_conv_saving_pct": 14.11802926878386,
+      "coupled_with_repair_conv_saving_pct": 14.102125392647674,
+      "coupled_no_repair_conv_saving_pct": 15.052842692225731,
+      "extra_depthwise_halo_pct_points": 0.015903876136186754,
+      "removed_grid_repair_pct_points": 0.950717299578059
+    },
+    {
+      "image": "kodim16.png",
+      "qp": 0,
+      "exit_map": [
+        2,
+        2,
+        2,
+        2,
+        2,
+        2
+      ],
+      "mean_executed_suffix_blocks_per_tile": 2.0,
+      "deployed_conv_saving_pct": 39.12455746750288,
+      "coupled_with_repair_conv_saving_pct": 39.1189443345915,
+      "coupled_no_repair_conv_saving_pct": 40.06966163416955,
+      "extra_depthwise_halo_pct_points": 0.005613132911392404,
+      "removed_grid_repair_pct_points": 0.950717299578059
+    },
+    {
+      "image": "kodim16.png",
+      "qp": 16,
+      "exit_map": [
+        2,
+        2,
+        2,
+        3,
+        2,
+        3
+      ],
+      "mean_executed_suffix_blocks_per_tile": 2.6666667461395264,
+      "deployed_conv_saving_pct": 34.1556669197505,
+      "coupled_with_repair_conv_saving_pct": 34.148182742312265,
+      "coupled_no_repair_conv_saving_pct": 35.098900041890325,
+      "extra_depthwise_halo_pct_points": 0.007484177438235735,
+      "removed_grid_repair_pct_points": 0.950717299578059
+    },
+    {
+      "image": "kodim16.png",
+      "qp": 32,
+      "exit_map": [
+        2,
+        2,
+        2,
+        3,
+        2,
+        3
+      ],
+      "mean_executed_suffix_blocks_per_tile": 2.6666667461395264,
+      "deployed_conv_saving_pct": 34.1556669197505,
+      "coupled_with_repair_conv_saving_pct": 34.148182742312265,
+      "coupled_no_repair_conv_saving_pct": 35.098900041890325,
+      "extra_depthwise_halo_pct_points": 0.007484177438235735,
+      "removed_grid_repair_pct_points": 0.950717299578059
+    },
+    {
+      "image": "kodim16.png",
+      "qp": 48,
+      "exit_map": [
+        2,
+        2,
+        2,
+        2,
+        2,
+        3
+      ],
+      "mean_executed_suffix_blocks_per_tile": 2.3333332538604736,
+      "deployed_conv_saving_pct": 36.64011219362669,
+      "coupled_with_repair_conv_saving_pct": 36.633563538786454,
+      "coupled_no_repair_conv_saving_pct": 37.584280838364506,
+      "extra_depthwise_halo_pct_points": 0.006548654840245276,
+      "removed_grid_repair_pct_points": 0.950717299578059
+    },
+    {
+      "image": "kodim16.png",
+      "qp": 63,
+      "exit_map": [
+        2,
+        2,
+        2,
+        2,
+        2,
+        3
+      ],
+      "mean_executed_suffix_blocks_per_tile": 2.3333332538604736,
+      "deployed_conv_saving_pct": 36.64011219362669,
+      "coupled_with_repair_conv_saving_pct": 36.633563538786454,
+      "coupled_no_repair_conv_saving_pct": 37.584280838364506,
+      "extra_depthwise_halo_pct_points": 0.006548654840245276,
+      "removed_grid_repair_pct_points": 0.950717299578059
+    },
+    {
+      "image": "kodim17.png",
+      "qp": 0,
+      "exit_map": [
+        2,
+        2,
+        2,
+        2,
+        2,
+        2
+      ],
+      "mean_executed_suffix_blocks_per_tile": 2.0,
+      "deployed_conv_saving_pct": 39.12455746750288,
+      "coupled_with_repair_conv_saving_pct": 39.1189443345915,
+      "coupled_no_repair_conv_saving_pct": 40.06966163416955,
+      "extra_depthwise_halo_pct_points": 0.005613132911392404,
+      "removed_grid_repair_pct_points": 0.950717299578059
+    },
+    {
+      "image": "kodim17.png",
+      "qp": 16,
+      "exit_map": [
+        2,
+        3,
+        2,
+        3,
+        2,
+        3
+      ],
+      "mean_executed_suffix_blocks_per_tile": 3.0,
+      "deployed_conv_saving_pct": 31.671221645874315,
+      "coupled_with_repair_conv_saving_pct": 31.662801946507223,
+      "coupled_no_repair_conv_saving_pct": 32.61351924608528,
+      "extra_depthwise_halo_pct_points": 0.008419699367088605,
+      "removed_grid_repair_pct_points": 0.950717299578059
+    },
+    {
+      "image": "kodim17.png",
+      "qp": 32,
+      "exit_map": [
+        2,
+        3,
+        2,
+        3,
+        2,
+        3
+      ],
+      "mean_executed_suffix_blocks_per_tile": 3.0,
+      "deployed_conv_saving_pct": 31.671221645874315,
+      "coupled_with_repair_conv_saving_pct": 31.662801946507223,
+      "coupled_no_repair_conv_saving_pct": 32.61351924608528,
+      "extra_depthwise_halo_pct_points": 0.008419699367088605,
+      "removed_grid_repair_pct_points": 0.950717299578059
+    },
+    {
+      "image": "kodim17.png",
+      "qp": 48,
+      "exit_map": [
+        2,
+        3,
+        2,
+        3,
+        2,
+        2
+      ],
+      "mean_executed_suffix_blocks_per_tile": 2.6666667461395264,
+      "deployed_conv_saving_pct": 34.1556669197505,
+      "coupled_with_repair_conv_saving_pct": 34.148182742312265,
+      "coupled_no_repair_conv_saving_pct": 35.098900041890325,
+      "extra_depthwise_halo_pct_points": 0.007484177438235735,
+      "removed_grid_repair_pct_points": 0.950717299578059
+    },
+    {
+      "image": "kodim17.png",
+      "qp": 63,
+      "exit_map": [
+        2,
+        5,
+        2,
+        3,
+        2,
+        2
+      ],
+      "mean_executed_suffix_blocks_per_tile": 3.3333332538604736,
+      "deployed_conv_saving_pct": 29.960899146599107,
+      "coupled_with_repair_conv_saving_pct": 29.951543925303163,
+      "coupled_no_repair_conv_saving_pct": 30.902261224881222,
+      "extra_depthwise_halo_pct_points": 0.009355221295941478,
+      "removed_grid_repair_pct_points": 0.950717299578059
+    },
+    {
+      "image": "kodim18.png",
+      "qp": 0,
+      "exit_map": [
+        2,
+        2,
+        2,
+        3,
+        2,
+        2
+      ],
+      "mean_executed_suffix_blocks_per_tile": 2.3333332538604736,
+      "deployed_conv_saving_pct": 36.64011219362669,
+      "coupled_with_repair_conv_saving_pct": 36.633563538786454,
+      "coupled_no_repair_conv_saving_pct": 37.584280838364506,
+      "extra_depthwise_halo_pct_points": 0.006548654840245276,
+      "removed_grid_repair_pct_points": 0.950717299578059
+    },
+    {
+      "image": "kodim18.png",
+      "qp": 16,
+      "exit_map": [
+        3,
+        3,
+        3,
+        3,
+        3,
+        3
+      ],
+      "mean_executed_suffix_blocks_per_tile": 4.0,
+      "deployed_conv_saving_pct": 24.217887314361864,
+      "coupled_with_repair_conv_saving_pct": 24.20666104853908,
+      "coupled_no_repair_conv_saving_pct": 25.15737834811714,
+      "extra_depthwise_halo_pct_points": 0.011226265822784808,
+      "removed_grid_repair_pct_points": 0.950717299578059
+    },
+    {
+      "image": "kodim18.png",
+      "qp": 32,
+      "exit_map": [
+        3,
+        3,
+        3,
+        4,
+        3,
+        3
+      ],
+      "mean_executed_suffix_blocks_per_tile": 4.333333492279053,
+      "deployed_conv_saving_pct": 22.352744730514818,
+      "coupled_with_repair_conv_saving_pct": 22.34058294209404,
+      "coupled_no_repair_conv_saving_pct": 23.2913002416721,
+      "extra_depthwise_halo_pct_points": 0.012161788420775267,
+      "removed_grid_repair_pct_points": 0.950717299578059
+    },
+    {
+      "image": "kodim18.png",
+      "qp": 48,
+      "exit_map": [
+        3,
+        3,
+        3,
+        5,
+        3,
+        4
+      ],
+      "mean_executed_suffix_blocks_per_tile": 5.0,
+      "deployed_conv_saving_pct": 18.157972487015062,
+      "coupled_with_repair_conv_saving_pct": 18.14393965473658,
+      "coupled_no_repair_conv_saving_pct": 19.094656954314637,
+      "extra_depthwise_halo_pct_points": 0.014032832278481011,
+      "removed_grid_repair_pct_points": 0.950717299578059
+    },
+    {
+      "image": "kodim18.png",
+      "qp": 63,
+      "exit_map": [
+        3,
+        3,
+        5,
+        5,
+        5,
+        5
+      ],
+      "mean_executed_suffix_blocks_per_tile": 6.666666507720947,
+      "deployed_conv_saving_pct": 7.438813241524034,
+      "coupled_with_repair_conv_saving_pct": 7.420102798932151,
+      "coupled_no_repair_conv_saving_pct": 8.37082009851021,
+      "extra_depthwise_halo_pct_points": 0.018710442591882957,
+      "removed_grid_repair_pct_points": 0.950717299578059
+    },
+    {
+      "image": "kodim19.png",
+      "qp": 0,
+      "exit_map": [
+        2,
+        2,
+        3,
+        3,
+        3,
+        2
+      ],
+      "mean_executed_suffix_blocks_per_tile": 3.0,
+      "deployed_conv_saving_pct": 31.671221645874315,
+      "coupled_with_repair_conv_saving_pct": 31.662801946507223,
+      "coupled_no_repair_conv_saving_pct": 32.61351924608528,
+      "extra_depthwise_halo_pct_points": 0.008419699367088605,
+      "removed_grid_repair_pct_points": 0.950717299578059
+    },
+    {
+      "image": "kodim19.png",
+      "qp": 16,
+      "exit_map": [
+        2,
+        2,
+        4,
+        3,
+        3,
+        3
+      ],
+      "mean_executed_suffix_blocks_per_tile": 3.6666667461395264,
+      "deployed_conv_saving_pct": 27.32163229803496,
+      "coupled_with_repair_conv_saving_pct": 27.311341554141027,
+      "coupled_no_repair_conv_saving_pct": 28.262058853719086,
+      "extra_depthwise_halo_pct_points": 0.010290743893931937,
+      "removed_grid_repair_pct_points": 0.950717299578059
+    },
+    {
+      "image": "kodim19.png",
+      "qp": 32,
+      "exit_map": [
+        2,
+        2,
+        3,
+        3,
+        3,
+        3
+      ],
+      "mean_executed_suffix_blocks_per_tile": 3.3333332538604736,
+      "deployed_conv_saving_pct": 29.186777862114244,
+      "coupled_with_repair_conv_saving_pct": 29.1774226408183,
+      "coupled_no_repair_conv_saving_pct": 30.12813994039636,
+      "extra_depthwise_halo_pct_points": 0.009355221295941478,
+      "removed_grid_repair_pct_points": 0.950717299578059
+    },
+    {
+      "image": "kodim19.png",
+      "qp": 48,
+      "exit_map": [
+        2,
+        2,
+        4,
+        3,
+        3,
+        3
+      ],
+      "mean_executed_suffix_blocks_per_tile": 3.6666667461395264,
+      "deployed_conv_saving_pct": 27.32163229803496,
+      "coupled_with_repair_conv_saving_pct": 27.311341554141027,
+      "coupled_no_repair_conv_saving_pct": 28.262058853719086,
+      "extra_depthwise_halo_pct_points": 0.010290743893931937,
+      "removed_grid_repair_pct_points": 0.950717299578059
+    },
+    {
+      "image": "kodim19.png",
+      "qp": 63,
+      "exit_map": [
+        2,
+        2,
+        5,
+        5,
+        5,
+        3
+      ],
+      "mean_executed_suffix_blocks_per_tile": 5.333333492279053,
+      "deployed_conv_saving_pct": 16.60247305254393,
+      "coupled_with_repair_conv_saving_pct": 16.58750469766746,
+      "coupled_no_repair_conv_saving_pct": 17.53822199724552,
+      "extra_depthwise_halo_pct_points": 0.01496835487647147,
+      "removed_grid_repair_pct_points": 0.950717299578059
+    },
+    {
+      "image": "kodim20.png",
+      "qp": 0,
+      "exit_map": [
+        3,
+        2,
+        2,
+        3,
+        3,
+        2
+      ],
+      "mean_executed_suffix_blocks_per_tile": 3.0,
+      "deployed_conv_saving_pct": 31.671221645874315,
+      "coupled_with_repair_conv_saving_pct": 31.662801946507223,
+      "coupled_no_repair_conv_saving_pct": 32.61351924608528,
+      "extra_depthwise_halo_pct_points": 0.008419699367088605,
+      "removed_grid_repair_pct_points": 0.950717299578059
+    },
+    {
+      "image": "kodim20.png",
+      "qp": 16,
+      "exit_map": [
+        3,
+        2,
+        2,
+        3,
+        3,
+        3
+      ],
+      "mean_executed_suffix_blocks_per_tile": 3.3333332538604736,
+      "deployed_conv_saving_pct": 29.186777862114244,
+      "coupled_with_repair_conv_saving_pct": 29.1774226408183,
+      "coupled_no_repair_conv_saving_pct": 30.12813994039636,
+      "extra_depthwise_halo_pct_points": 0.009355221295941478,
+      "removed_grid_repair_pct_points": 0.950717299578059
+    },
+    {
+      "image": "kodim20.png",
+      "qp": 32,
+      "exit_map": [
+        3,
+        2,
+        2,
+        3,
+        3,
+        3
+      ],
+      "mean_executed_suffix_blocks_per_tile": 3.3333332538604736,
+      "deployed_conv_saving_pct": 29.186777862114244,
+      "coupled_with_repair_conv_saving_pct": 29.1774226408183,
+      "coupled_no_repair_conv_saving_pct": 30.12813994039636,
+      "extra_depthwise_halo_pct_points": 0.009355221295941478,
+      "removed_grid_repair_pct_points": 0.950717299578059
+    },
+    {
+      "image": "kodim20.png",
+      "qp": 48,
+      "exit_map": [
+        3,
+        2,
+        2,
+        3,
+        3,
+        2
+      ],
+      "mean_executed_suffix_blocks_per_tile": 3.0,
+      "deployed_conv_saving_pct": 31.671221645874315,
+      "coupled_with_repair_conv_saving_pct": 31.662801946507223,
+      "coupled_no_repair_conv_saving_pct": 32.61351924608528,
+      "extra_depthwise_halo_pct_points": 0.008419699367088605,
+      "removed_grid_repair_pct_points": 0.950717299578059
+    },
+    {
+      "image": "kodim20.png",
+      "qp": 63,
+      "exit_map": [
+        5,
+        2,
+        2,
+        5,
+        5,
+        2
+      ],
+      "mean_executed_suffix_blocks_per_tile": 5.0,
+      "deployed_conv_saving_pct": 19.086916836304002,
+      "coupled_with_repair_conv_saving_pct": 19.07288400402552,
+      "coupled_no_repair_conv_saving_pct": 20.023601303603577,
+      "extra_depthwise_halo_pct_points": 0.014032832278481011,
+      "removed_grid_repair_pct_points": 0.950717299578059
+    },
+    {
+      "image": "kodim21.png",
+      "qp": 0,
+      "exit_map": [
+        2,
+        2,
+        2,
+        3,
+        2,
+        2
+      ],
+      "mean_executed_suffix_blocks_per_tile": 2.3333332538604736,
+      "deployed_conv_saving_pct": 36.64011219362669,
+      "coupled_with_repair_conv_saving_pct": 36.633563538786454,
+      "coupled_no_repair_conv_saving_pct": 37.584280838364506,
+      "extra_depthwise_halo_pct_points": 0.006548654840245276,
+      "removed_grid_repair_pct_points": 0.950717299578059
+    },
+    {
+      "image": "kodim21.png",
+      "qp": 16,
+      "exit_map": [
+        3,
+        3,
+        2,
+        3,
+        3,
+        3
+      ],
+      "mean_executed_suffix_blocks_per_tile": 3.6666667461395264,
+      "deployed_conv_saving_pct": 26.702334078354173,
+      "coupled_with_repair_conv_saving_pct": 26.69204333446024,
+      "coupled_no_repair_conv_saving_pct": 27.6427606340383,
+      "extra_depthwise_halo_pct_points": 0.010290743893931937,
+      "removed_grid_repair_pct_points": 0.950717299578059
+    },
+    {
+      "image": "kodim21.png",
+      "qp": 32,
+      "exit_map": [
+        3,
+        2,
+        2,
+        3,
+        3,
+        3
+      ],
+      "mean_executed_suffix_blocks_per_tile": 3.3333332538604736,
+      "deployed_conv_saving_pct": 29.186777862114244,
+      "coupled_with_repair_conv_saving_pct": 29.1774226408183,
+      "coupled_no_repair_conv_saving_pct": 30.12813994039636,
+      "extra_depthwise_halo_pct_points": 0.009355221295941478,
+      "removed_grid_repair_pct_points": 0.950717299578059
+    },
+    {
+      "image": "kodim21.png",
+      "qp": 48,
+      "exit_map": [
+        2,
+        2,
+        2,
+        3,
+        3,
+        3
+      ],
+      "mean_executed_suffix_blocks_per_tile": 3.0,
+      "deployed_conv_saving_pct": 31.671221645874315,
+      "coupled_with_repair_conv_saving_pct": 31.662801946507223,
+      "coupled_no_repair_conv_saving_pct": 32.61351924608528,
+      "extra_depthwise_halo_pct_points": 0.008419699367088605,
+      "removed_grid_repair_pct_points": 0.950717299578059
+    },
+    {
+      "image": "kodim21.png",
+      "qp": 63,
+      "exit_map": [
+        2,
+        2,
+        2,
+        5,
+        5,
+        3
+      ],
+      "mean_executed_suffix_blocks_per_tile": 4.333333492279053,
+      "deployed_conv_saving_pct": 23.28168609957152,
+      "coupled_with_repair_conv_saving_pct": 23.269524311150743,
+      "coupled_no_repair_conv_saving_pct": 24.220241610728802,
+      "extra_depthwise_halo_pct_points": 0.012161788420775267,
+      "removed_grid_repair_pct_points": 0.950717299578059
+    },
+    {
+      "image": "kodim22.png",
+      "qp": 0,
+      "exit_map": [
+        2,
+        3,
+        2,
+        2,
+        2,
+        2
+      ],
+      "mean_executed_suffix_blocks_per_tile": 2.3333332538604736,
+      "deployed_conv_saving_pct": 36.64011219362669,
+      "coupled_with_repair_conv_saving_pct": 36.633563538786454,
+      "coupled_no_repair_conv_saving_pct": 37.584280838364506,
+      "extra_depthwise_halo_pct_points": 0.006548654840245276,
+      "removed_grid_repair_pct_points": 0.950717299578059
+    },
+    {
+      "image": "kodim22.png",
+      "qp": 16,
+      "exit_map": [
+        3,
+        3,
+        3,
+        3,
+        3,
+        2
+      ],
+      "mean_executed_suffix_blocks_per_tile": 3.6666667461395264,
+      "deployed_conv_saving_pct": 26.702334078354173,
+      "coupled_with_repair_conv_saving_pct": 26.69204333446024,
+      "coupled_no_repair_conv_saving_pct": 27.6427606340383,
+      "extra_depthwise_halo_pct_points": 0.010290743893931937,
+      "removed_grid_repair_pct_points": 0.950717299578059
+    },
+    {
+      "image": "kodim22.png",
+      "qp": 32,
+      "exit_map": [
+        3,
+        3,
+        3,
+        3,
+        3,
+        2
+      ],
+      "mean_executed_suffix_blocks_per_tile": 3.6666667461395264,
+      "deployed_conv_saving_pct": 26.702334078354173,
+      "coupled_with_repair_conv_saving_pct": 26.69204333446024,
+      "coupled_no_repair_conv_saving_pct": 27.6427606340383,
+      "extra_depthwise_halo_pct_points": 0.010290743893931937,
+      "removed_grid_repair_pct_points": 0.950717299578059
+    },
+    {
+      "image": "kodim22.png",
+      "qp": 48,
+      "exit_map": [
+        3,
+        5,
+        3,
+        3,
+        3,
+        2
+      ],
+      "mean_executed_suffix_blocks_per_tile": 4.333333492279053,
+      "deployed_conv_saving_pct": 22.507564815086656,
+      "coupled_with_repair_conv_saving_pct": 22.49540302666588,
+      "coupled_no_repair_conv_saving_pct": 23.44612032624394,
+      "extra_depthwise_halo_pct_points": 0.012161788420775267,
+      "removed_grid_repair_pct_points": 0.950717299578059
+    },
+    {
+      "image": "kodim22.png",
+      "qp": 63,
+      "exit_map": [
+        5,
+        5,
+        3,
+        3,
+        3,
+        3
+      ],
+      "mean_executed_suffix_blocks_per_tile": 5.333333492279053,
+      "deployed_conv_saving_pct": 15.828351768059068,
+      "coupled_with_repair_conv_saving_pct": 15.813383413182597,
+      "coupled_no_repair_conv_saving_pct": 16.764100712760655,
+      "extra_depthwise_halo_pct_points": 0.01496835487647147,
+      "removed_grid_repair_pct_points": 0.950717299578059
+    },
+    {
+      "image": "kodim23.png",
+      "qp": 0,
+      "exit_map": [
+        3,
+        2,
+        2,
+        2,
+        2,
+        2
+      ],
+      "mean_executed_suffix_blocks_per_tile": 2.3333332538604736,
+      "deployed_conv_saving_pct": 36.64011219362669,
+      "coupled_with_repair_conv_saving_pct": 36.633563538786454,
+      "coupled_no_repair_conv_saving_pct": 37.584280838364506,
+      "extra_depthwise_halo_pct_points": 0.006548654840245276,
+      "removed_grid_repair_pct_points": 0.950717299578059
+    },
+    {
+      "image": "kodim23.png",
+      "qp": 16,
+      "exit_map": [
+        3,
+        3,
+        3,
+        3,
+        3,
+        3
+      ],
+      "mean_executed_suffix_blocks_per_tile": 4.0,
+      "deployed_conv_saving_pct": 24.217887314361864,
+      "coupled_with_repair_conv_saving_pct": 24.20666104853908,
+      "coupled_no_repair_conv_saving_pct": 25.15737834811714,
+      "extra_depthwise_halo_pct_points": 0.011226265822784808,
+      "removed_grid_repair_pct_points": 0.950717299578059
+    },
+    {
+      "image": "kodim23.png",
+      "qp": 32,
+      "exit_map": [
+        3,
+        2,
+        2,
+        3,
+        3,
+        3
+      ],
+      "mean_executed_suffix_blocks_per_tile": 3.3333332538604736,
+      "deployed_conv_saving_pct": 29.186777862114244,
+      "coupled_with_repair_conv_saving_pct": 29.1774226408183,
+      "coupled_no_repair_conv_saving_pct": 30.12813994039636,
+      "extra_depthwise_halo_pct_points": 0.009355221295941478,
+      "removed_grid_repair_pct_points": 0.950717299578059
+    },
+    {
+      "image": "kodim23.png",
+      "qp": 48,
+      "exit_map": [
+        3,
+        2,
+        2,
+        3,
+        3,
+        2
+      ],
+      "mean_executed_suffix_blocks_per_tile": 3.0,
+      "deployed_conv_saving_pct": 31.671221645874315,
+      "coupled_with_repair_conv_saving_pct": 31.662801946507223,
+      "coupled_no_repair_conv_saving_pct": 32.61351924608528,
+      "extra_depthwise_halo_pct_points": 0.008419699367088605,
+      "removed_grid_repair_pct_points": 0.950717299578059
+    },
+    {
+      "image": "kodim23.png",
+      "qp": 63,
+      "exit_map": [
+        3,
+        2,
+        2,
+        5,
+        3,
+        3
+      ],
+      "mean_executed_suffix_blocks_per_tile": 4.0,
+      "deployed_conv_saving_pct": 24.992008598846727,
+      "coupled_with_repair_conv_saving_pct": 24.980782333023942,
+      "coupled_no_repair_conv_saving_pct": 25.931499632602,
+      "extra_depthwise_halo_pct_points": 0.011226265822784808,
+      "removed_grid_repair_pct_points": 0.950717299578059
+    },
+    {
+      "image": "kodim24.png",
+      "qp": 0,
+      "exit_map": [
+        3,
+        3,
+        3,
+        2,
+        2,
+        2
+      ],
+      "mean_executed_suffix_blocks_per_tile": 3.0,
+      "deployed_conv_saving_pct": 31.671221645874315,
+      "coupled_with_repair_conv_saving_pct": 31.662801946507223,
+      "coupled_no_repair_conv_saving_pct": 32.61351924608528,
+      "extra_depthwise_halo_pct_points": 0.008419699367088605,
+      "removed_grid_repair_pct_points": 0.950717299578059
+    },
+    {
+      "image": "kodim24.png",
+      "qp": 16,
+      "exit_map": [
+        4,
+        4,
+        3,
+        3,
+        3,
+        3
+      ],
+      "mean_executed_suffix_blocks_per_tile": 4.666666507720947,
+      "deployed_conv_saving_pct": 20.487596186203294,
+      "coupled_with_repair_conv_saving_pct": 20.474498876522805,
+      "coupled_no_repair_conv_saving_pct": 21.42521617610086,
+      "extra_depthwise_halo_pct_points": 0.013097309680490552,
+      "removed_grid_repair_pct_points": 0.950717299578059
+    },
+    {
+      "image": "kodim24.png",
+      "qp": 32,
+      "exit_map": [
+        5,
+        5,
+        4,
+        3,
+        3,
+        3
+      ],
+      "mean_executed_suffix_blocks_per_tile": 5.666666507720947,
+      "deployed_conv_saving_pct": 13.963206203979784,
+      "coupled_with_repair_conv_saving_pct": 13.947302327843596,
+      "coupled_no_repair_conv_saving_pct": 14.898019627421654,
+      "extra_depthwise_halo_pct_points": 0.015903876136186754,
+      "removed_grid_repair_pct_points": 0.950717299578059
+    },
+    {
+      "image": "kodim24.png",
+      "qp": 48,
+      "exit_map": [
+        5,
+        5,
+        4,
+        3,
+        3,
+        3
+      ],
+      "mean_executed_suffix_blocks_per_tile": 5.666666507720947,
+      "deployed_conv_saving_pct": 13.963206203979784,
+      "coupled_with_repair_conv_saving_pct": 13.947302327843596,
+      "coupled_no_repair_conv_saving_pct": 14.898019627421654,
+      "extra_depthwise_halo_pct_points": 0.015903876136186754,
+      "removed_grid_repair_pct_points": 0.950717299578059
+    },
+    {
+      "image": "kodim24.png",
+      "qp": 63,
+      "exit_map": [
+        5,
+        5,
+        5,
+        5,
+        3,
+        3
+      ],
+      "mean_executed_suffix_blocks_per_tile": 6.666666507720947,
+      "deployed_conv_saving_pct": 7.438813241524034,
+      "coupled_with_repair_conv_saving_pct": 7.420102798932151,
+      "coupled_no_repair_conv_saving_pct": 8.37082009851021,
+      "extra_depthwise_halo_pct_points": 0.018710442591882957,
+      "removed_grid_repair_pct_points": 0.950717299578059
+    }
+  ]
+}
