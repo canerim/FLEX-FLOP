@@ -21,6 +21,7 @@ sys.path[:0] = [str(ROOT), str(ROOT / 'proof/depth_bitstream'),
                 str(PROOF), str(HERE)]
 from audit_exact_context_pilot import sha
 from active_canvas_replicate import ActiveCanvasReplicateCoupler
+from frozen_beta_router import FrozenBetaRouter
 
 
 def main() -> None:
@@ -54,6 +55,8 @@ def main() -> None:
     extension = Path('/tmp/flexplus-proof-clean/proof/early_exit_vs_released/.local/entropy')
     released_path = PROOF / 'artifacts/released_cvpr2026_image.pth.tar'
     e15_path = PROOF / 'artifacts/e15_epoch15.pth.tar'
+    router_path = PROOF / 'artifacts/router_stem_qp.pth'
+    calibration_path = PROOF / 'router_calibration.json'
     sys.path.insert(0, str(upstream.resolve()))
     from src.utils.transforms import rgb2ycbcr_np
     torch.set_num_threads(1)
@@ -84,6 +87,7 @@ def main() -> None:
     manifest_images = {r['image']: r for r in manifest['rows']['validation']}
     assert set(exact['images']) == set(manifest_images)
     critical = [Path(__file__), HERE / 'active_canvas_replicate.py',
+                HERE / 'frozen_beta_router.py', ROOT / 'flexuf/router/head2.py',
                 ROOT / 'flexuf/backbone/decoder.py',
                 ROOT / 'flexuf/backbone/coupling.py', ROOT / 'flexuf/cost.py',
                 ROOT / 'flexuf/model.py', ROOT / 'flexuf/config.py']
@@ -92,6 +96,7 @@ def main() -> None:
         'frontier_sha256': sha(frontier_path),
         'policy_sha256': sha(policy_path), 'primary_sha256': sha(primary_path),
         'released_sha256': sha(released_path), 'e15_sha256': sha(e15_path),
+        'router_sha256': sha(router_path), 'calibration_sha256': sha(calibration_path),
         'source_code_sha256': {str(p.relative_to(ROOT)): sha(p) for p in critical},
     }
     result = {
@@ -121,6 +126,7 @@ def main() -> None:
     model = FlexUFIntra(cfg).eval()
     load_flexuf_state(model, checkpoint)
     dec = model.dec
+    router = FrozenBetaRouter(cfg, router_path, calibration_path)
     original_cfg, original_repair = dec.cfg, dec.seam_repair
     original_class = coupling_module.CanvasCoupler
     coupling_module.CanvasCoupler = ActiveCanvasReplicateCoupler
@@ -164,19 +170,21 @@ def main() -> None:
                 assert math.isclose(full_mse, case['e15_full_mse444'], abs_tol=1e-11)
                 primary_row = primary_by_key[image, qp]
                 assert primary_row['stream_sha256'] == archived['stream_sha256']
+                scores = router.scores(dec, latent, qp)
+                old_route = router.route(scores, primary_row['old_beta'])
+                assert len(case['candidates'])==1
+                assert old_route.tolist() == primary_row['old_exit_map'] == case['candidates'][0]['exit_map']
+                assert abs(100*(1-frame_relative_cost(old_route,cfg))-
+                           case['candidates'][0]['mac_saved_pct'])<1e-4
                 target_rows = {}
                 decoded_maps = {}
                 for target in result['feasible_targets']:
                     beta = policy['policies'][target]['beta'][str(qp)]
-                    selected = [c for c in case['candidates'] if c['beta'] == beta]
-                    assert len(selected) == 1
-                    candidate = selected[0]
-                    route_map = tuple(candidate['exit_map'])
-                    route = torch.tensor(route_map, dtype=torch.long)
+                    route = router.route(scores, beta)
+                    route_map = tuple(route.tolist())
                     blocks = float(((route-cfg.split_depth+1)*cfg.blocks_per_exit).float().mean())
                     cost = frame_relative_cost(route, cfg)
                     saving = 100*(1-cost+repair_share-blocks*per_block_extra)
-                    assert abs(100*(1-cost)-candidate['mac_saved_pct'])<1e-4
                     if target == '0.1':
                         assert route_map == tuple(primary_row['exit_map'])
                         delta = primary_row['new_delta444_db']

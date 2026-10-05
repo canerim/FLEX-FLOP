@@ -2,7 +2,7 @@
 # Run only after the calibration, validation and analysis CPU chain ends.
 set -euo pipefail
 cd /home/can_karsal/FLEX-PLUS
-while tmux has-session -t reglic_active_beta_analysis_20261005 2>/dev/null; do
+while tmux has-session -t reglic_active_beta_exact_selector_20261005 2>/dev/null; do
     sleep 20
 done
 export OMP_NUM_THREADS=1

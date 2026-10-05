@@ -21,6 +21,7 @@ PROOF = ROOT / 'proof/early_exit_vs_released'
 sys.path[:0] = [str(ROOT), str(ROOT / 'proof/depth_bitstream'), str(PROOF), str(HERE)]
 from audit_exact_context_pilot import sha
 from active_canvas_replicate import ActiveCanvasReplicateCoupler
+from frozen_beta_router import FrozenBetaRouter
 
 
 def main() -> None:
@@ -54,6 +55,8 @@ def main() -> None:
     extension = Path('/tmp/flexplus-proof-clean/proof/early_exit_vs_released/.local/entropy')
     released_path = PROOF / 'artifacts/released_cvpr2026_image.pth.tar'
     e15_path = PROOF / 'artifacts/e15_epoch15.pth.tar'
+    router_path = PROOF / 'artifacts/router_stem_qp.pth'
+    calibration_path = PROOF / 'router_calibration.json'
     sys.path.insert(0, str(upstream.resolve()))
     from src.utils.transforms import rgb2ycbcr_np
 
@@ -80,6 +83,7 @@ def main() -> None:
     manifest_images = {r['image']: r for r in manifest['rows']['validation']}
     assert set(exact['images']) == set(manifest_images)
     critical = [Path(__file__), HERE / 'active_canvas_replicate.py',
+                HERE / 'frozen_beta_router.py', ROOT / 'flexuf/router/head2.py',
                 ROOT / 'flexuf/backbone/decoder.py',
                 ROOT / 'flexuf/backbone/coupling.py', ROOT / 'flexuf/cost.py',
                 ROOT / 'flexuf/model.py', ROOT / 'flexuf/config.py']
@@ -88,6 +92,7 @@ def main() -> None:
         'frontier_sha256': sha(frontier_path), 'policy_sha256': sha(policy_path),
         'old_policy_sha256': sha(old_policy_path), 'old_raw_sha256': sha(old_raw_path),
         'released_sha256': sha(released_path), 'e15_sha256': sha(e15_path),
+        'router_sha256': sha(router_path), 'calibration_sha256': sha(calibration_path),
         'source_code_sha256': {str(p.relative_to(ROOT)): sha(p) for p in critical},
     }
     assert exact['provenance']['manifest_sha256'] == provenance['manifest_sha256']
@@ -116,6 +121,7 @@ def main() -> None:
     model = FlexUFIntra(cfg).eval()
     load_flexuf_state(model, checkpoint)
     dec = model.dec
+    router = FrozenBetaRouter(cfg, router_path, calibration_path)
     original_cfg, original_repair = dec.cfg, dec.seam_repair
     original_class = coupling_module.CanvasCoupler
     coupling_module.CanvasCoupler = ActiveCanvasReplicateCoupler
@@ -152,16 +158,19 @@ def main() -> None:
                 assert sha(case_path) == archived['case_sha256']
                 assert sha(stream_path) == archived['stream_sha256'] == case['stream_sha256']
                 assert case['split'] == 'validation' and case['qp'] == qp
-                selected = [c for c in case['candidates']
-                            if c['beta'] == policy['beta'][str(qp)]]
                 original = [c for c in case['candidates']
                             if c['beta'] == old_policy['beta'][str(qp)]]
-                assert len(selected) == len(original) == 1
-                route = torch.tensor(selected[0]['exit_map'], dtype=torch.long)
+                assert len(original) == 1
                 old_case = old_by_key[image,qp]
                 assert old_case['exit_map'] == original[0]['exit_map']
                 assert old_case['stream_sha256'] == archived['stream_sha256']
                 latent, quant_step, _ = codec.decode_latent(stream_path.read_bytes())
+                scores = router.scores(dec, latent, qp)
+                old_route = router.route(scores, old_policy['beta'][str(qp)])
+                route = router.route(scores, policy['beta'][str(qp)])
+                assert old_route.tolist() == original[0]['exit_map']
+                assert abs(100*(1-frame_relative_cost(old_route,cfg))-
+                           original[0]['mac_saved_pct'])<1e-4
                 full = dec.forward_full(latent, quant_step)
                 h, w = source.shape[-2:]
                 full_mse = float((source-full[:, :, :h, :w]).square().mean())
@@ -169,19 +178,17 @@ def main() -> None:
                 output = dec(latent, quant_step, exit_map=route)
                 mse = float((source-output[:, :, :h, :w]).square().mean())
                 active_delta = 10*math.log10(mse/full_mse)
-                if selected[0]['exit_map'] == original[0]['exit_map']:
+                if torch.equal(route,old_route):
                     assert abs(active_delta-old_case['coupled']['no_repair']['delta444_db']) < 1e-7
                 blocks = float(((route-cfg.split_depth+1)*cfg.blocks_per_exit).float().mean())
                 cost = frame_relative_cost(route, cfg)
                 saving = 100*(1-cost+repair_share-blocks*per_block_extra)
-                old_route = torch.tensor(original[0]['exit_map'], dtype=torch.long)
                 old_blocks = float(((old_route-cfg.split_depth+1)*cfg.blocks_per_exit).float().mean())
                 old_saving = 100*(1-frame_relative_cost(old_route,cfg)+repair_share-old_blocks*per_block_extra)
-                assert abs(100*(1-cost)-selected[0]['mac_saved_pct']) < 1e-4
                 result['rows'].append({
                     'image': image, 'qp': qp,
                     'case_sha256': sha(case_path), 'stream_sha256': sha(stream_path),
-                    'selected_beta': selected[0]['beta'], 'exit_map': route.tolist(),
+                    'selected_beta': policy['beta'][str(qp)], 'exit_map': route.tolist(),
                     'new_delta444_db': active_delta, 'new_conv_mac_saving_pct': saving,
                     'old_beta': original[0]['beta'],
                     'old_exit_map': original[0]['exit_map'],
@@ -192,7 +199,7 @@ def main() -> None:
                 added += 1
                 result['complete'] = len(result['rows']) == 120
                 args.output.write_text(json.dumps(result, indent=2) + '\n')
-                print(f'{stem}: beta {selected[0]["beta"]} loss {active_delta:.6f} dB saving {saving:.3f}%', flush=True)
+                print(f'{stem}: beta {policy["beta"][str(qp)]} loss {active_delta:.6f} dB saving {saving:.3f}%', flush=True)
     finally:
         dec.cfg, dec.seam_repair = original_cfg, original_repair
         coupling_module.CanvasCoupler = original_class
