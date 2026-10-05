@@ -90,6 +90,9 @@ def main() -> None:
         positions = torch.argsort(rank, stable=True)
         for qp in scan_manifest["qps"]:
             stem_name = f"{Path(image).stem}_qp{qp}"
+            scan_row = json.loads((SCAN / f"{stem_name}.json").read_text())
+            assert scan_row["source_sha256"] == digest(path)
+            assert scan_row["manifest_sha256"] == digest(scan_manifest_path)
             placement_path = PLACEMENT / f"{stem_name}.json"
             placement = json.loads(placement_path.read_text())
             assert placement["manifest_sha256"] == digest(placement_manifest_path)
