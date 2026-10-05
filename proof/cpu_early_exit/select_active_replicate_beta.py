@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+import math
 from pathlib import Path
 
 
@@ -38,6 +39,18 @@ def main() -> None:
     images = sorted({image for image, _ in by_key})
     assert len(images) == 24
     assert all({qp for image, qp in by_key if image == im} == set(QPS) for im in images)
+    calibration_images = {r['image']:r for r in manifest['rows']['calibration']}
+    assert set(images) == set(calibration_images)
+    for (image, qp), case in by_key.items():
+        assert case['source_sha256'] == calibration_images[image]['source_sha256']
+        assert [c['beta'] for c in case['candidates']] == manifest['candidates'][str(qp)]
+        assert len({tuple(m['exit_map']) for m in case['maps']}) == len(case['maps'])
+        for m in case['maps']:
+            assert len(m['exit_map']) == 6 and all(2 <= depth <= 5 for depth in m['exit_map'])
+            assert math.isfinite(m['active_delta444_db'])
+            assert math.isfinite(m['active_no_repair_conv_saving_pct'])
+        assert all(isinstance(c['map_id'], int) and 0 <= c['map_id'] < len(case['maps'])
+                   for c in case['candidates'])
 
     tables = {}
     selected = {}
