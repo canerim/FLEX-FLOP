@@ -49,9 +49,19 @@ def main():
     assert select({},.1)["fallback"]
     rawpath=ROOT/"flexplus/results/eval_rules_ctc_e15.json"
     raw=json.loads(rawpath.read_text()); rows=[]
+    exactpath=ROOT/"cvpr2027/data/bd_rate_budget_20261005/exact_mac_by_case.json"
+    exact=json.loads(exactpath.read_text())
+    assert exact["input_sha256"]==hashlib.sha256(rawpath.read_bytes()).hexdigest()
+    exact_lookup={(r["seq"],r["qp"],r["budget"],r["policy"]):r["exact_conv_saving_pct"]
+                  for r in exact["rows"]}
+    assert len(exact_lookup)==len(exact["rows"])
     assert len(raw["rows"])==265
     duplicate_comparisons=0
     for frame in raw["rows"]:
+        for rule,candidates in frame["rules"].items():
+            for budget,value in candidates.items():
+                if value is not None:
+                    value["saving"]=exact_lookup[(frame["seq"],frame["qp"],budget,rule)]
         # Deduplication requires the same measured output and cost, including
         # repeated maps under different policy labels.
         seen_maps={}
@@ -91,12 +101,12 @@ def main():
         anchor="Fine-tuned e15 full-frame reconstruction, cropped to original pixels; not released D12",
         candidates="Up to six distinct nominal-budget plans per policy; maps deduplicated. No interpolation or newly reconstructed maps.",
         information="Retrospective source-aware choice after observing candidate final quality. This is a limited-pool diagnostic, not a trained held-out policy, a global oracle or an encoder-time claim.",
-        accounting="Decoder MAC model only; fallback count explicit. The cost of obtaining/rejecting candidates is not included.",
+        accounting="Exact padded-frame convolution MAC against released D12 full synthesis, including adapters and seam repair; router, entropy, signalling, memory and runtime omitted. Fallback count explicit. The cost of obtaining/rejecting candidates is not included.",
         tolerance_db=1e-4,bootstrap="5000 paired sequence-cluster draws, seed 20260927",
         checks="Independent cap/fallback examples; all 265 pairs included; every selected loss satisfies cap; saving monotone as cap relaxes; repeated maps have exactly equal measured RGB loss and MAC saving.",
         identical_duplicate_map_comparisons=duplicate_comparisons,
         rows=rows,summary=summary,contrasts=contrasts,
-        hashes={str(p.relative_to(ROOT)):hashlib.sha256(p.read_bytes()).hexdigest() for p in [rawpath,Path(__file__)]})
+        hashes={str(p.relative_to(ROOT)):hashlib.sha256(p.read_bytes()).hexdigest() for p in [rawpath,exactpath,Path(__file__)]})
     (OUT/"delivered_frontier_audit.json").write_text(json.dumps(result,indent=2)+"\n")
     print(json.dumps(dict(summary=[r for r in summary if r["cap"]==.1],contrasts=contrasts),indent=2))
 

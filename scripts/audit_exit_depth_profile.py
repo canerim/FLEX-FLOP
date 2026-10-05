@@ -5,10 +5,12 @@ Their mean is exactly that uniform output's padded RGB MSE. Mixed-map quality
 is not inferred by recombining columns; independent codec depths are unrelated.
 """
 from pathlib import Path
-import hashlib,json
+import hashlib,json,sys
 import numpy as np
 import torch
 ROOT=Path(__file__).resolve().parents[1];OUT=ROOT/'paper/data/refresh20260927'
+sys.path.insert(0,str(ROOT/'proof/early_exit_vs_released'))
+from mac_latency_audit import case_macs
 
 def ci(values,names):
     _,idx=np.unique(names,return_inverse=True);sums=np.bincount(idx,weights=values);n=np.bincount(idx)
@@ -20,6 +22,9 @@ def main():
     torch.set_num_threads(2)
     p=ROOT/'flexplus/results/router_dump_e15_ce_soft.pt'
     d=torch.load(p,map_location='cpu',weights_only=False)
+    exact_cost={k:1-case_macs({'padded_shape':[256,256],
+                               'tile_counts':[int(j==k) for j in range(6)]})
+                       ['e15_routed_conv_mac_saving_fraction'] for k in range(2,6)}
     uniform=[];incremental=[]
     for qp,frames in d['frames'].items():
         for i,e in enumerate(frames):
@@ -29,7 +34,7 @@ def main():
             for k in range(2,6):
                 loss=10*np.log10(M[:,k].mean()/ref)
                 uniform.append(dict(sequence=name,qp=int(qp),depth=(k+1)*2,padded_rgb_loss_db=float(loss),
-                    mac_saving=100*(1-float(d['cost'][k])),tiles=len(M)))
+                    mac_saving=100*(1-exact_cost[k]),tiles=len(M)))
             for k in range(2,5):
                 gain=10*np.log10(M[:,k]/M[:,k+1])
                 incremental.append(dict(sequence=name,qp=int(qp),from_depth=(k+1)*2,to_depth=(k+2)*2,
@@ -50,7 +55,8 @@ def main():
             mean_negative_tile_fraction=ci([r['negative_fraction'] for r in rr],[r['sequence'] for r in rr]),
             mean_within_frame_iqr=ci([r['iqr'] for r in rr],[r['sequence'] for r in rr]),
             mean_within_frame_median=ci([r['median'] for r in rr],[r['sequence'] for r in rr])))
-    sources=[p,ROOT/'flexuf/eval.py',ROOT/'flexplus/dump_router_lp.py',Path(__file__)]
+    sources=[p,ROOT/'flexuf/eval.py',ROOT/'flexplus/dump_router_lp.py',
+             ROOT/'proof/early_exit_vs_released/mac_latency_audit.py',Path(__file__)]
     result=dict(scope='Archived uniform-map reconstructions, padded RGB support, released-weight full-frame reference; not cropped mixed-output or independent D2/D4/D6 quality.',
         interpretation='Mean of equal-area tile MSEs equals the padded full-frame MSE of that uniform-depth reconstruction. Adjacent tile gains compare two different uniform-depth contexts, not a causal one-tile intervention in a mixed map.',
         bootstrap='5000 sequence-cluster draws; QPs grouped by sequence. Frame–QP weighting, not pooled tile weighting.',
