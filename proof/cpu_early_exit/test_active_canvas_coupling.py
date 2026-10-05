@@ -56,6 +56,37 @@ class ActiveCanvasBoundaryTest(unittest.TestCase):
                     .reshape(18, 4, p, p))[active]
         torch.testing.assert_close(actual, expected, rtol=0, atol=1e-6)
 
+    def test_partial_replicate_matches_per_tile_reference(self) -> None:
+        active = torch.tensor([0, 1, 4, 5, 8])
+        actual = self.run_coupler(ActiveCanvasReplicateCoupler, active)
+        live = set(active.tolist())
+        expected = []
+        for tile in active.tolist():
+            row, col = divmod(tile, 3)
+            pad = F.pad(self.tiles[tile:tile+1], (1, 1, 1, 1), mode='replicate')
+            if row == 0: pad[..., 0, :] = 0
+            if row == 2: pad[..., -1, :] = 0
+            if col == 0: pad[..., :, 0] = 0
+            if col == 2: pad[..., :, -1] = 0
+            neighbours = [
+                (-1, 0, (0, slice(1, -1)), (-1, slice(None))),
+                (1, 0, (-1, slice(1, -1)), (0, slice(None))),
+                (0, -1, (slice(1, -1), 0), (slice(None), -1)),
+                (0, 1, (slice(1, -1), -1), (slice(None), 0)),
+                (-1, -1, (0, 0), (-1, -1)),
+                (-1, 1, (0, -1), (-1, 0)),
+                (1, -1, (-1, 0), (0, -1)),
+                (1, 1, (-1, -1), (0, 0)),
+            ]
+            for dr, dc, target, source in neighbours:
+                nr, nc = row + dr, col + dc
+                if 0 <= nr < 3 and 0 <= nc < 3 and 3*nr+nc in live:
+                    neighbour = self.tiles[3*nr+nc:3*nr+nc+1]
+                    pad[..., target[0], target[1]] = neighbour[..., source[0], source[1]]
+            expected.append(F.conv2d(pad, self.conv.weight, self.conv.bias,
+                                     groups=4))
+        torch.testing.assert_close(actual, torch.cat(expected), rtol=0, atol=1e-6)
+
 
 if __name__ == '__main__':
     unittest.main()
