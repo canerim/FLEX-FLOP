@@ -1,0 +1,236 @@
+{
+  "scope": "Three geometry-stratified QP32 frames from the frozen 53-frame intervention cohort; no outcome-based image selection. CPU-only gate truncation with dense computation for quality.",
+  "limitations": "Projected MAC savings require an unimplemented sparse 1x1 kernel; no actual operation skipping, runtime, memory or full-codec result is measured. This is a development-cohort pilot, not a held-out result.",
+  "thresholds": [
+    0.0,
+    0.24,
+    0.25,
+    0.3,
+    0.4,
+    1.0
+  ],
+  "selected_sequences": [
+    "BQSquare_416x240_60.yuv",
+    "videoSRC04_1920x1080_30.yuv",
+    "videoSRC30_1920x1080_30.yuv"
+  ],
+  "gate_shape": [
+    1,
+    1,
+    32,
+    32
+  ],
+  "gate_quantiles": [
+    0.2227022796869278,
+    0.22784654945135116,
+    0.22984961420297623,
+    0.23203568905591965,
+    0.2358267866075039,
+    0.3666028082370758,
+    0.5307111740112305
+  ],
+  "source_sha256": "fd48d1604d90ef5a05bc5e378427f93db68133386de72a39c9ba89ea7e07fcff",
+  "checkpoint_sha256": "91556d30bca41988755ff43dee3bc6d0cd2a0a4eda1d18d2891b168dc0a04ce9",
+  "snapshot_decoder_sha256": "97ac8be7f6b6001d3d9650f17c25a7da98198ee3d25e413b00f1a6250788d6b9",
+  "script_sha256": "2c6fa7fcd1b413250eaa5a5fb4bb5a235627aad5251e95868bf722ad7160d38d",
+  "rows": [
+    {
+      "sequence": "BQSquare_416x240_60.yuv",
+      "height": 240,
+      "width": 416,
+      "threshold": 0.0,
+      "active_pointwise_fraction": 1.0,
+      "rgb_mse": 0.0011427238350734115,
+      "rgb_psnr_loss_vs_dense_repair_db": 0.0,
+      "rgb_loss_vs_e15_dense_db": 0.017043843568144992,
+      "projected_exact_conv_mac_saving_pct": -1.0860703873098343
+    },
+    {
+      "sequence": "BQSquare_416x240_60.yuv",
+      "height": 240,
+      "width": 416,
+      "threshold": 0.24,
+      "active_pointwise_fraction": 0.1953125,
+      "rgb_mse": 0.0011429529404267669,
+      "rgb_psnr_loss_vs_dense_repair_db": 0.0008706322095626134,
+      "rgb_loss_vs_e15_dense_db": 0.017914475777707637,
+      "projected_exact_conv_mac_saving_pct": -0.23213718202041989
+    },
+    {
+      "sequence": "BQSquare_416x240_60.yuv",
+      "height": 240,
+      "width": 416,
+      "threshold": 0.25,
+      "active_pointwise_fraction": 0.1357421875,
+      "rgb_mse": 0.0011429103324189782,
+      "rgb_psnr_loss_vs_dense_repair_db": 0.0007087290643524882,
+      "rgb_loss_vs_e15_dense_db": 0.017752572632498673,
+      "projected_exact_conv_mac_saving_pct": -0.1689212529880857
+    },
+    {
+      "sequence": "BQSquare_416x240_60.yuv",
+      "height": 240,
+      "width": 416,
+      "threshold": 0.3,
+      "active_pointwise_fraction": 0.12109375,
+      "rgb_mse": 0.0011429078876972198,
+      "rgb_psnr_loss_vs_dense_repair_db": 0.0006994393565350374,
+      "rgb_loss_vs_e15_dense_db": 0.017743282924681105,
+      "projected_exact_conv_mac_saving_pct": -0.1533763524063536
+    },
+    {
+      "sequence": "BQSquare_416x240_60.yuv",
+      "height": 240,
+      "width": 416,
+      "threshold": 0.4,
+      "active_pointwise_fraction": 0.0625,
+      "rgb_mse": 0.0011431074235588312,
+      "rgb_psnr_loss_vs_dense_repair_db": 0.0014575910927292763,
+      "rgb_loss_vs_e15_dense_db": 0.018501434660873943,
+      "projected_exact_conv_mac_saving_pct": -0.0911967500794475
+    },
+    {
+      "sequence": "BQSquare_416x240_60.yuv",
+      "height": 240,
+      "width": 416,
+      "threshold": 1.0,
+      "active_pointwise_fraction": 0.0,
+      "rgb_mse": 0.0011431529419496655,
+      "rgb_psnr_loss_vs_dense_repair_db": 0.0016305231547579862,
+      "rgb_loss_vs_e15_dense_db": 0.018674366722902683,
+      "projected_exact_conv_mac_saving_pct": -0.024871840930762446
+    },
+    {
+      "sequence": "videoSRC04_1920x1080_30.yuv",
+      "height": 1080,
+      "width": 1920,
+      "threshold": 0.0,
+      "active_pointwise_fraction": 1.0,
+      "rgb_mse": 0.001097079017199576,
+      "rgb_psnr_loss_vs_dense_repair_db": 0.0,
+      "rgb_loss_vs_e15_dense_db": 0.01346097476383117,
+      "projected_exact_conv_mac_saving_pct": 9.940860289342412
+    },
+    {
+      "sequence": "videoSRC04_1920x1080_30.yuv",
+      "height": 1080,
+      "width": 1920,
+      "threshold": 0.24,
+      "active_pointwise_fraction": 0.1953125,
+      "rgb_mse": 0.0010970510775223374,
+      "rgb_psnr_loss_vs_dense_repair_db": -0.00011060463261206096,
+      "rgb_loss_vs_e15_dense_db": 0.013350370131219045,
+      "projected_exact_conv_mac_saving_pct": 10.794793494631827
+    },
+    {
+      "sequence": "videoSRC04_1920x1080_30.yuv",
+      "height": 1080,
+      "width": 1920,
+      "threshold": 0.25,
+      "active_pointwise_fraction": 0.1357421875,
+      "rgb_mse": 0.0010970461880788207,
+      "rgb_psnr_loss_vs_dense_repair_db": -0.00012996073292862408,
+      "rgb_loss_vs_e15_dense_db": 0.013331014030902864,
+      "projected_exact_conv_mac_saving_pct": 10.858009423664171
+    },
+    {
+      "sequence": "videoSRC04_1920x1080_30.yuv",
+      "height": 1080,
+      "width": 1920,
+      "threshold": 0.3,
+      "active_pointwise_fraction": 0.12109375,
+      "rgb_mse": 0.001097043976187706,
+      "rgb_psnr_loss_vs_dense_repair_db": -0.00013871709236494163,
+      "rgb_loss_vs_e15_dense_db": 0.013322257671466265,
+      "projected_exact_conv_mac_saving_pct": 10.873554324245905
+    },
+    {
+      "sequence": "videoSRC04_1920x1080_30.yuv",
+      "height": 1080,
+      "width": 1920,
+      "threshold": 0.4,
+      "active_pointwise_fraction": 0.0625,
+      "rgb_mse": 0.0010970705188810825,
+      "rgb_psnr_loss_vs_dense_repair_db": -3.364194432901168e-05,
+      "rgb_loss_vs_e15_dense_db": 0.013427332819501751,
+      "projected_exact_conv_mac_saving_pct": 10.9357339265728
+    },
+    {
+      "sequence": "videoSRC04_1920x1080_30.yuv",
+      "height": 1080,
+      "width": 1920,
+      "threshold": 1.0,
+      "active_pointwise_fraction": 0.0,
+      "rgb_mse": 0.001097172498703003,
+      "rgb_psnr_loss_vs_dense_repair_db": 0.0003700441889066728,
+      "rgb_loss_vs_e15_dense_db": 0.013831018952737511,
+      "projected_exact_conv_mac_saving_pct": 11.002058835721495
+    },
+    {
+      "sequence": "videoSRC30_1920x1080_30.yuv",
+      "height": 1080,
+      "width": 1920,
+      "threshold": 0.0,
+      "active_pointwise_fraction": 1.0,
+      "rgb_mse": 0.00022104090021457523,
+      "rgb_psnr_loss_vs_dense_repair_db": 2.8591164267636404e-07,
+      "rgb_loss_vs_e15_dense_db": 0.03729069899096765,
+      "projected_exact_conv_mac_saving_pct": 12.813557916845141
+    },
+    {
+      "sequence": "videoSRC30_1920x1080_30.yuv",
+      "height": 1080,
+      "width": 1920,
+      "threshold": 0.24,
+      "active_pointwise_fraction": 0.1953125,
+      "rgb_mse": 0.00022103289666119963,
+      "rgb_psnr_loss_vs_dense_repair_db": -0.00015696833376077927,
+      "rgb_loss_vs_e15_dense_db": 0.03713344474556385,
+      "projected_exact_conv_mac_saving_pct": 13.667491122134557
+    },
+    {
+      "sequence": "videoSRC30_1920x1080_30.yuv",
+      "height": 1080,
+      "width": 1920,
+      "threshold": 0.25,
+      "active_pointwise_fraction": 0.1357421875,
+      "rgb_mse": 0.00022103740775492042,
+      "rgb_psnr_loss_vs_dense_repair_db": -6.833342249071248e-05,
+      "rgb_loss_vs_e15_dense_db": 0.03722207965683459,
+      "projected_exact_conv_mac_saving_pct": 13.730707051166902
+    },
+    {
+      "sequence": "videoSRC30_1920x1080_30.yuv",
+      "height": 1080,
+      "width": 1920,
+      "threshold": 0.3,
+      "active_pointwise_fraction": 0.12109375,
+      "rgb_mse": 0.00022103886294644326,
+      "rgb_psnr_loss_vs_dense_repair_db": -3.974190150779021e-05,
+      "rgb_loss_vs_e15_dense_db": 0.037250671177817093,
+      "projected_exact_conv_mac_saving_pct": 13.746251951748633
+    },
+    {
+      "sequence": "videoSRC30_1920x1080_30.yuv",
+      "height": 1080,
+      "width": 1920,
+      "threshold": 0.4,
+      "active_pointwise_fraction": 0.0625,
+      "rgb_mse": 0.00022104015806689858,
+      "rgb_psnr_loss_vs_dense_repair_db": -1.4295606143762767e-05,
+      "rgb_loss_vs_e15_dense_db": 0.03727611747318166,
+      "projected_exact_conv_mac_saving_pct": 13.80843155407553
+    },
+    {
+      "sequence": "videoSRC30_1920x1080_30.yuv",
+      "height": 1080,
+      "width": 1920,
+      "threshold": 1.0,
+      "active_pointwise_fraction": 0.0,
+      "rgb_mse": 0.00022118556080386043,
+      "rgb_psnr_loss_vs_dense_repair_db": 0.0028416038088878268,
+      "rgb_loss_vs_e15_dense_db": 0.040132016888212406,
+      "projected_exact_conv_mac_saving_pct": 13.874756463224225
+    }
+  ]
+}

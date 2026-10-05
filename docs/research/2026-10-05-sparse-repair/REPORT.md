@@ -1,0 +1,18 @@
+# Sparse grid-repair gate: quality pilot and locked full-cohort scan
+
+The e15 `GridSeamRepair` gate is learned on a 32×32 feature-cell period. Its minimum is 0.223, not zero, so computing correction only at the tile boundary is **not** equivalent to the trained network. Nevertheless, the gate is nearly flat over the interior: a threshold of 0.25 retains 13.57% of feature positions. A sparse 1×1 pointwise implementation could omit the other positions while leaving the full 3×3 depthwise pass. No such kernel is implemented or timed here.
+
+The quality pilot reconstructs the smallest, middle-size and largest frame of the frozen 53-frame QP32 intervention cohort. It keeps the e15 checkpoint, encoded representation and Q90 route fixed. The pointwise convolution still runs densely; only the gate is thresholded before the existing head. Baseline output matches the saved trained path and the all-off limit matches the saved repair-identity path within numerical tolerance.
+
+| Gate threshold | Pointwise positions retained | Projected extra conv-MAC saving vs released D12 | Mean additional RGB PSNR loss |
+|---:|---:|---:|---:|
+| 0 (trained) | 100% | 0 | 0 |
+| 0.25 | 13.57% | +0.917 pp | 0.00017 dB |
+| 0.30 | 12.11% | +0.933 pp | 0.00017 dB |
+| 1.00 (repair identity) | 0% | +1.061 pp | 0.00161 dB |
+
+The largest additional loss among the three frames at threshold 0.25 is 0.00071 dB. These are selected pilot images and projected MACs, not a validated cohort result or actual speedup. The case with all tiles at the deepest exit has negative net routed-vs-released MAC saving even after gate truncation; the projection must therefore be interpreted per map rather than as a universal win.
+
+Thresholds 0.25 and 0.30 were locked after this pilot. A one-thread, low-priority CPU replay of **all 53** frozen maps is running in the `reglic-gate-20261005` tmux session, with per-case resumable records in `proof/cpu_early_exit/results/sparse_repair_gate_full_cases/`. The 50 frames unused in the three-frame threshold pilot are the threshold-selection extension cohort, though the codec and router themselves were developed on this CTC corpus. The complete scan will decide whether a sparse pointwise CUDA/CPU kernel is justified. The kernel must be implemented and measured before any latency claim enters the paper.
+
+Reproduce the pilot with `python3 proof/cpu_early_exit/audit_sparse_repair_gate_pilot.py`; the [pilot JSON](../../../proof/cpu_early_exit/results/sparse_repair_gate_pilot_20261005.json) contains all 18 measured outputs. The full scan uses `proof/cpu_early_exit/audit_sparse_repair_gate_full.py` and writes one case record atomically before moving to the next.
