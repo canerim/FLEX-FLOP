@@ -75,6 +75,8 @@ def main() -> None:
 
     import torch
     from flexuf.backbone.decoder import GridSeamRepair
+    from flexuf.kernels.depthwise3x3 import depthwise3x3
+    from flexuf.kernels.fused_seam import FusedGridSeamRepair, gated_projection
     from proof.cpu_early_exit.sparse_grid_repair import SparseGridRepairWrapper
 
     torch.manual_seed(20261005)
@@ -97,8 +99,17 @@ def main() -> None:
         gate = module.gate.repeat(1, 1, -(-H // 32), -(-W // 32))[:, :, :H, :W]
         return x + gate * (gate >= .25) * correction
 
+    fused = FusedGridSeamRepair(module).eval()
+
+    def fused_thresholded():
+        activated = depthwise3x3(x, module.dw, activate=True)
+        return gated_projection(activated, module.pw, module.gate, x,
+                                module.patch, threshold=.25)
+
     arms = {"trained_dense": lambda: module(x),
             "thresholded_dense": dense_thresholded,
+            "trained_fused": lambda: fused(x),
+            "thresholded_fused": fused_thresholded,
             "thresholded_packed": lambda: sparse(x)}
     with torch.inference_mode():
         for _ in range(10):
@@ -110,6 +121,13 @@ def main() -> None:
         max_abs = float((reference - candidate).abs().max().item())
         if max_abs > 2e-5:
             raise RuntimeError(f"Packed and dense thresholded paths differ: {max_abs}")
+        fused_candidate = fused_thresholded()
+        fused_max_abs = float((reference - fused_candidate).abs().max().item())
+        if fused_max_abs > 2e-5:
+            raise RuntimeError(f"Fused and dense thresholded paths differ: {fused_max_abs}")
+        trained_fused_max_abs = float((module(x) - fused(x)).abs().max().item())
+        if trained_fused_max_abs > 2e-5:
+            raise RuntimeError(f"Fused and trained dense paths differ: {trained_fused_max_abs}")
         measurements = {name: [] for name in arms}
         rng = random.Random(20261005)
         for _ in range(args.trials):
@@ -122,29 +140,38 @@ def main() -> None:
                 stop.record()
                 stop.synchronize()
                 measurements[name].append(start.elapsed_time(stop))
-        ratios = [a / b for a, b in zip(measurements["thresholded_dense"],
-                                         measurements["thresholded_packed"])]
+        ratios_raw = [a / b for a, b in zip(measurements["thresholded_dense"],
+                                             measurements["thresholded_packed"])]
+        ratios_fused = [a / b for a, b in zip(measurements["thresholded_fused"],
+                                               measurements["thresholded_packed"])]
     contention = other_compute_pids(uuid)
     if contention:
         raise RuntimeError(f"GPU acquired other compute processes during benchmark: {contention}")
     result = {
-        "scope": "Repair stage only, FP32 CUDA events, same frozen checkpoint and random feature tensor; no full decoder or codec latency.",
+        "scope": "Repair stage only, FP32 CUDA events, same frozen checkpoint and random feature tensor; includes a matched thresholded fused dense baseline. No full decoder or codec latency.",
         "gpu_index": args.gpu, "gpu_uuid": uuid,
         "device_name": torch.cuda.get_device_name(device),
         "feature_shape": list(x.shape), "threshold": .25,
         "active_pointwise_fraction": next(iter(sparse._plans.values())).active_fraction,
         "max_abs_packed_vs_dense_thresholded": max_abs,
+        "max_abs_fused_vs_dense_thresholded": fused_max_abs,
+        "max_abs_trained_fused_vs_dense": trained_fused_max_abs,
         "trials": args.trials,
         "timings_ms": measurements,
         "medians_ms": {name: statistics.median(values) for name, values in measurements.items()},
-        "paired_dense_thresholded_over_packed_mean_ratio": statistics.mean(ratios),
-        "paired_ratio_mean_ci95": ci(ratios),
+        "paired_dense_thresholded_over_packed_mean_ratio": statistics.mean(ratios_raw),
+        "paired_fused_thresholded_over_packed_mean_ratio": statistics.mean(ratios_fused),
+        "paired_raw_ratio_mean_ci95": ci(ratios_raw),
+        "paired_fused_ratio_mean_ci95": ci(ratios_fused),
         "checkpoint_sha256": sha(CHECKPOINT), "script_sha256": sha(Path(__file__)),
     }
     args.out.parent.mkdir(parents=True, exist_ok=True)
     args.out.write_text(json.dumps(result, indent=2) + "\n")
     print(json.dumps({k: result[k] for k in ("medians_ms", "paired_dense_thresholded_over_packed_mean_ratio",
-                                              "paired_ratio_mean_ci95", "max_abs_packed_vs_dense_thresholded")}, indent=2))
+                                              "paired_fused_thresholded_over_packed_mean_ratio",
+                                              "paired_fused_ratio_mean_ci95",
+                                              "max_abs_packed_vs_dense_thresholded",
+                                              "max_abs_fused_vs_dense_thresholded")}, indent=2))
 
 
 if __name__ == "__main__":

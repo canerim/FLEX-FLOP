@@ -19,7 +19,7 @@ if triton is not None:
     @triton.jit
     def _gated_projection(X,W,B,Gate,Residual,Y,
                           C:tl.constexpr,HW:tl.constexpr,WIDTH:tl.constexpr,
-                          M:tl.constexpr,P:tl.constexpr,
+                          M:tl.constexpr,P:tl.constexpr,THRESHOLD:tl.constexpr,
                           BM:tl.constexpr,BN:tl.constexpr,BK:tl.constexpr):
         rows=tl.program_id(0)*BM+tl.arange(0,BM)
         cols=tl.program_id(1)*BN+tl.arange(0,BN)
@@ -39,13 +39,15 @@ if triton is not None:
         gy=(pix//WIDTH)%P
         gx=(pix%WIDTH)%P
         gate=tl.load(Gate+gy*P+gx,rows<M,0)
+        gate=tl.where(gate>=THRESHOLD,gate,0.)
         residual=tl.load(Residual+offset,(rows[:,None]<M)&(cols[None,:]<C),0)
         out=residual+gate[:,None]*(acc+bias[None,:])
         tl.store(Y+offset,out,(rows[:,None]<M)&(cols[None,:]<C))
 
 
 def gated_projection(x:torch.Tensor,conv:nn.Conv2d,
-                     gate:torch.Tensor,residual:torch.Tensor,patch:int) -> torch.Tensor:
+                     gate:torch.Tensor,residual:torch.Tensor,patch:int,
+                     threshold:float=float('-inf')) -> torch.Tensor:
     if triton is None:
         raise RuntimeError('Triton unavailable')
     if (not x.is_cuda or x.ndim!=4 or x.dtype!=torch.float32 or
@@ -68,7 +70,7 @@ def gated_projection(x:torch.Tensor,conv:nn.Conv2d,
     m=n*h*w
     _gated_projection[(triton.cdiv(m,64),triton.cdiv(c,64))](
         x,conv.weight,conv.bias,gate,residual,y,c,h*w,w,m,patch,
-        64,64,32,num_warps=4)
+        threshold,64,64,32,num_warps=4)
     return y
 
 
