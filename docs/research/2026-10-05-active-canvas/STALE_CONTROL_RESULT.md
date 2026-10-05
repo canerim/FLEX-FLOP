@@ -25,6 +25,21 @@ checkpoint, exit map, and bitstream, so the regression is attributable to the
 changed inference path, though this cohort alone does not isolate which
 individual halo reads cause each failure.
 
+The uniform/mixed comparison is also visible **within each QP**, rather than
+only in an aggregate where the QP mix differs:
+
+| QP | Uniform maps: count, mean gain | Mixed maps: count, mean gain |
+|---:|---:|---:|
+| 0 | 8, +0.0078 dB | 16, +0.0023 dB |
+| 16 | 7, +0.0169 dB | 17, +0.0039 dB |
+| 32 | 5, +0.0176 dB | 19, −0.0005 dB |
+| 48 | 1, +0.0071 dB | 23, −0.0415 dB |
+| 63 | 2, +0.0542 dB | 22, −0.3172 dB |
+
+The uniform strata at QP48/63 contain just one/two cases and should not be
+interpreted as precise population effects. The pattern nonetheless identifies
+mixed-depth boundaries, particularly at high QP, as the relevant stress test.
+
 This confirms that unconditionally sharing a cached neighbour feature is
 unsafe in a tile-adaptive early-exit decoder. The predeclared active-neighbour
 arms must be assessed on the full Kodak cohort and then transferred unchanged
