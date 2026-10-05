@@ -1,0 +1,29 @@
+{
+  "scope": "One actual mixed-depth Kodak QP63 bitstream; full-decoder pixel equality and exact recorded metrics for NaN-safe versus frozen finite-input active-zero implementations. Not a whole-cohort proof or latency result.",
+  "image": "kodim01.png",
+  "qp": 63,
+  "source_sha256": "094618ffcf979c0b372a59112dbe2fe7313825059af681e791febd6b7b39818d",
+  "safe_implementation_sha256": "fb54eb0fe4839e1e820f28370468b3b83fcabd29b40d03cdcff977f187513e26",
+  "reference_implementation_sha256": "ac529e0732f7f36fbce825083951fdd5dfdf4f8910730234a66d67e094187f7e",
+  "recorded_metrics": {
+    "no_repair": {
+      "delta444_db": 0.09836378773768333,
+      "yuv611_db": 40.09377448400167
+    },
+    "with_repair": {
+      "delta444_db": 0.09748411521502069,
+      "yuv611_db": 40.09381904087656
+    }
+  },
+  "metrics_exact": true,
+  "full_decoder_pixel_checks": {
+    "no_repair": {
+      "pixel_exact": true,
+      "max_abs_difference": 0.0
+    },
+    "with_repair": {
+      "pixel_exact": true,
+      "max_abs_difference": 0.0
+    }
+  }
+}
