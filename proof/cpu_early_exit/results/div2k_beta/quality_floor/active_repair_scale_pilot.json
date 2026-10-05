@@ -1,0 +1,179 @@
+{
+  "scope": "Exploratory DIV2K calibration 3 images x QP16/63; frozen streams/maps, active-zero context, scaled trained seam repair, CPU FP32; no GPU, training or latency.",
+  "selection": {
+    "image_indices_sorted": [
+      0,
+      8,
+      16
+    ],
+    "images": [
+      "0807.png",
+      "0836.png",
+      "0869.png"
+    ],
+    "qps": [
+      16,
+      63
+    ]
+  },
+  "alphas": [
+    0.0,
+    0.25,
+    0.5,
+    0.75,
+    1.0
+  ],
+  "provenance": {
+    "exact_sha256": "be3dc462c0f8c55db7da21806fac640f2a86711093beae66d0365cb2ae56394b",
+    "manifest_sha256": "0468dc26738fcc16024abd224ba2c805ee25911553f68896f9ddafbaedadf922",
+    "released_sha256": "b3b900de23f30e4fc437010ddffe6a5413a56d6cfd97fb6235adbcd2b6973302",
+    "e15_sha256": "91556d30bca41988755ff43dee3bc6d0cd2a0a4eda1d18d2891b168dc0a04ce9",
+    "source_sha256": {
+      "proof/cpu_early_exit/audit_active_repair_scale_pilot.py": "bf7cf6ee0b27ec142f44fb712a502b76ba8ecafb7b59ad636d14f3984aaf8e43",
+      "proof/cpu_early_exit/active_canvas_coupling.py": "ac529e0732f7f36fbce825083951fdd5dfdf4f8910730234a66d67e094187f7e",
+      "flexuf/backbone/decoder.py": "eba774cadc62e4542cfb5424a07cdf6dff432f2c4abad889a22e084e52bc9b90",
+      "flexuf/backbone/coupling.py": "c5265a7580db05636a7d7cd45c3ae0a8c91b90b1f2528d9ea17f493563a23dce"
+    }
+  },
+  "complete": true,
+  "rows": [
+    {
+      "image": "0807.png",
+      "qp": 16,
+      "case_sha256": "ac1d5c1505ae1791a9b2eac8797efe3754de9c20f8197ba7a62eca6210119ece",
+      "stream_sha256": "8e4d093fcf973416c0783ec65aaa8d96f3268e31e8668de8b90f2c67906964b3",
+      "exit_map": [
+        5,
+        5,
+        5,
+        5,
+        5,
+        5
+      ],
+      "deployed_delta444_db": 0.010024305632066468,
+      "exact_context_delta444_db": 0.0,
+      "alpha_delta444_db": {
+        "0.0": 0.0,
+        "0.25": 0.0004733181784029872,
+        "0.5": 0.001364305008058588,
+        "0.75": 0.002674189508960872,
+        "1.0": 0.004402097571973887
+      }
+    },
+    {
+      "image": "0807.png",
+      "qp": 63,
+      "case_sha256": "c0098eac3d4a7bf4bc65752799b59951a68bbccd15c15a56682b99debb2d28e1",
+      "stream_sha256": "edeb5c1fafae6806219260235c2aba1d834d56752f1a402e87341fb9f789038a",
+      "exit_map": [
+        5,
+        5,
+        5,
+        5,
+        5,
+        5
+      ],
+      "deployed_delta444_db": 0.03701272819710791,
+      "exact_context_delta444_db": 0.0,
+      "alpha_delta444_db": {
+        "0.0": 0.0,
+        "0.25": 0.0008172789554677391,
+        "0.5": 0.003417325270328195,
+        "0.75": 0.007798043154306828,
+        "1.0": 0.013953681597593007
+      }
+    },
+    {
+      "image": "0836.png",
+      "qp": 16,
+      "case_sha256": "cd5d824ce32961cc01920248b480e2e378000f4b3cddfd00077c3318e4df636c",
+      "stream_sha256": "c1828c3f892b8fa6b7c60b7de9a2bf9bb1801f20459326f50e9d52f1de2889c1",
+      "exit_map": [
+        4,
+        4,
+        4,
+        3,
+        4,
+        4
+      ],
+      "deployed_delta444_db": 0.043795393269492874,
+      "exact_context_delta444_db": 0.032637620074273475,
+      "alpha_delta444_db": {
+        "0.0": 0.03318297333604023,
+        "0.25": 0.03273276451559324,
+        "0.5": 0.03243169318140797,
+        "0.75": 0.03227843102074802,
+        "1.0": 0.03227503268538247
+      }
+    },
+    {
+      "image": "0836.png",
+      "qp": 63,
+      "case_sha256": "87da79f66ad47152e740b2428a0280cbe9e44dd300334a9d2e0fd747d9d4c653",
+      "stream_sha256": "11cfdef25aca0819327eb682583c453599b2e23aa3230f2585d9ae7cefa22dc9",
+      "exit_map": [
+        5,
+        5,
+        5,
+        3,
+        4,
+        5
+      ],
+      "deployed_delta444_db": 0.0614018035182296,
+      "exact_context_delta444_db": 0.02963621418939502,
+      "alpha_delta444_db": {
+        "0.0": 0.03178323470551814,
+        "0.25": 0.030776229562732123,
+        "0.5": 0.03141104510695333,
+        "0.75": 0.03368732213069224,
+        "1.0": 0.037601761194791125
+      }
+    },
+    {
+      "image": "0869.png",
+      "qp": 16,
+      "case_sha256": "265ba5ce830b1b39a198e807d586622dc066ff61c6a105958426b1a975dac21f",
+      "stream_sha256": "068cf24965ee6b1bab7fede4fa0a02e6d4afa9830ffde615b3e3548d1c7b6a07",
+      "exit_map": [
+        4,
+        4,
+        4,
+        4,
+        3,
+        3
+      ],
+      "deployed_delta444_db": 0.04545855532584414,
+      "exact_context_delta444_db": 0.03694920954789681,
+      "alpha_delta444_db": {
+        "0.0": 0.03729153211685615,
+        "0.25": 0.037122918723077436,
+        "0.5": 0.037029618760284176,
+        "0.75": 0.03701197636016086,
+        "1.0": 0.03707134953685745
+      }
+    },
+    {
+      "image": "0869.png",
+      "qp": 63,
+      "case_sha256": "719b9f6b6599e032ad127219c1351aa3222678dbc02836d93c1d3200ec1e60e9",
+      "stream_sha256": "7f05c8e3641a8dfbb0ee76c6d5ecf8998f25ad55ee368abdb1b0773790ee1114",
+      "exit_map": [
+        5,
+        5,
+        5,
+        5,
+        5,
+        5
+      ],
+      "deployed_delta444_db": 0.041605662899923825,
+      "exact_context_delta444_db": 0.0,
+      "alpha_delta444_db": {
+        "0.0": 0.0,
+        "0.25": -0.0012392710428495092,
+        "0.5": -0.0004475436455121171,
+        "0.75": 0.0023743862828722656,
+        "1.0": 0.007222878783137766
+      }
+    }
+  ]
+}
