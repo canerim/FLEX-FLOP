@@ -30,6 +30,13 @@ context and overcorrects after neighbours are supplied. That mechanism is
 an inference from the factorial measurements, not a directly observed
 feature attribution.
 
+The interaction grows across these five tested QPs: **+0.00382, +0.00852,
++0.01606, +0.02952, +0.05173 dB** at QP 0/16/32/48/63. It is positive
+for all 24 images at every QP, with the largest absolute effect at QP63.
+This is a description of fixed routes and inputs, not evidence for a
+general bitrate law; the decoder output and the old repair response both
+change with QP.
+
 The four arms share the *original*, independently calibrated beta and route
 maps. The repair-off arms were prompted by earlier exploratory results and
 are therefore hypothesis-generating. DIV2K validation is disjoint from
