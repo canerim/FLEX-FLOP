@@ -14,7 +14,7 @@ from pathlib import Path
 import sys
 
 os.environ["CUDA_VISIBLE_DEVICES"] = ""
-os.environ["OMP_NUM_THREADS"] = "1"
+os.environ["OMP_NUM_THREADS"] = "2"
 os.environ["OPENBLAS_NUM_THREADS"] = "1"
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -24,7 +24,7 @@ UPSTREAM = Path("/home/can_karsal/DCVC")
 SOURCE = ROOT / "cvpr2027/data/research20260927/component_interventions/analysis.json"
 CHECKPOINT = ROOT / "runs/RECIPE512/ckpt_PIN_e15.pth.tar"
 OUT = ROOT / "proof/cpu_early_exit/results/sparse_repair_gate_full_20261005.json"
-CASE_DIR = ROOT / "proof/cpu_early_exit/results/sparse_repair_gate_full_cases"
+CASE_DIR = ROOT / "proof/cpu_early_exit/results/sparse_repair_gate_full_cases_threads2"
 sys.path[:0] = [str(SNAPSHOT), str(UPSTREAM), str(ROOT / "proof/early_exit_vs_released")]
 
 
@@ -42,7 +42,10 @@ def main() -> None:
     from mac_latency_audit import case_macs, CHANNELS, FEATURE_STRIDE
     import ctc_intra as C
 
-    torch.set_num_threads(1)
+    # Match the original 53-frame intervention's CPU reduction order and seed.
+    # One thread reproduced most, but not all, archived RGB MSEs exactly.
+    torch.set_num_threads(2)
+    torch.manual_seed(42)
     source = json.loads(SOURCE.read_text())
     cases = sorted(source["cases"], key=lambda r: (r["height"] * r["width"], r["sequence"]))
     assert len(cases) == len({r["sequence"] for r in cases}) == 53
@@ -61,6 +64,7 @@ def main() -> None:
         "snapshot_decoder_sha256": digest(SNAPSHOT / "flexuf/backbone/decoder.py"),
         "script_sha256": digest(Path(__file__)), "thresholds": thresholds,
         "pilot_sequences": pilot_names,
+        "torch_threads": 2, "torch_seed": 42,
     }
     CASE_DIR.mkdir(parents=True, exist_ok=True)
     manifest_path = CASE_DIR / "manifest.json"
@@ -117,7 +121,7 @@ def main() -> None:
                 rgb = ycbcr2rgb(out[:, :, :h, :w].clamp(-.5, .5) + .5, clamp=True)
                 mse = float((rgb - target).square().mean())
                 if threshold == 0:
-                    assert abs(mse - variants["trained"]["mse_rgb"]) < 1e-9, (
+                    assert abs(mse - variants["trained"]["mse_rgb"]) < 1e-12, (
                         case["sequence"], mse, variants["trained"]["mse_rgb"])
                 if threshold == 1.0:
                     assert abs(mse - variants["repair_identity"]["mse_rgb"]) < 1e-9, (
