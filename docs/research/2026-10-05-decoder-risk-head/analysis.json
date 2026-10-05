@@ -1,0 +1,2940 @@
+{
+  "scope": "Exploratory five-fold sequence-disjoint QP-specific ridge risk head on frozen CTC tile tables; labels never enter held-out decisions. The cohort influenced prior development, and tile-table quality is not mixed-image replay.",
+  "target_db": 0.1,
+  "folds": [
+    1,
+    0,
+    1,
+    0,
+    0,
+    3,
+    4,
+    3,
+    4,
+    1,
+    1,
+    3,
+    0,
+    1,
+    3,
+    0,
+    2,
+    2,
+    2,
+    2,
+    0,
+    1,
+    1,
+    0,
+    3,
+    4,
+    4,
+    4,
+    3,
+    2,
+    0,
+    2,
+    4,
+    3,
+    1,
+    0,
+    1,
+    1,
+    3,
+    2,
+    2,
+    3,
+    4,
+    0,
+    2,
+    2,
+    4,
+    2,
+    0,
+    3,
+    4,
+    4,
+    1
+  ],
+  "features": "Four frozen router log-probabilities, their entropy and top-two margin; separate regression for each reachable exit's MSE difference from D12, normalized by released reference MSE.",
+  "selection": "Training-fold Q90 table loss <= 0.1 dB; among feasible prices maximize training mean nominal MAC saving. All held-out cases retained.",
+  "input_sha256": {
+    "flexplus/results/router_dump_e15_ce_soft.pt": "7437d9e6e504419ce3cde8c5da9724197cfd89402bcced9f3992dc43d2d1198d",
+    "docs/research/2026-09-27-six-hour/crossfit_control/analysis.json": "d7db27b5b950d6bee529075066b871cd040cde7d05530f92695e3c23f3d6ca6a"
+  },
+  "all_qp": {
+    "risk_head": {
+      "n": 265,
+      "mean_loss_db": 0.06724442698571621,
+      "q90_loss_db": 0.11348426116862581,
+      "mean_saving_points": 19.405662750298124,
+      "over_0p1_db": 33
+    },
+    "baseline_logit": {
+      "n": 265,
+      "mean_loss_db": 0.06627166864967758,
+      "q90_loss_db": 0.10352807214038126,
+      "mean_saving_points": 17.58586245718992,
+      "over_0p1_db": 32
+    },
+    "paired_saving_delta_points": 1.8198002931082018
+  },
+  "qp32": {
+    "risk_head": {
+      "n": 53,
+      "mean_loss_db": 0.06785398305411278,
+      "q90_loss_db": 0.11392543849281843,
+      "mean_saving_points": 16.885139805340916,
+      "over_0p1_db": 7
+    },
+    "baseline_logit": {
+      "n": 53,
+      "mean_loss_db": 0.0691952835323587,
+      "q90_loss_db": 0.11112745052778926,
+      "mean_saving_points": 16.74106181886211,
+      "over_0p1_db": 6
+    },
+    "paired_saving_delta_points": 0.14407798647880535
+  },
+  "per_qp": {
+    "0": {
+      "risk_head": {
+        "n": 53,
+        "mean_loss_db": 0.06128225517288206,
+        "q90_loss_db": 0.11019372932974121,
+        "mean_saving_points": 26.933868302489227,
+        "over_0p1_db": 6
+      },
+      "baseline_logit": {
+        "n": 53,
+        "mean_loss_db": 0.06252250002305533,
+        "q90_loss_db": 0.09894731315337524,
+        "mean_saving_points": 27.316459619774008,
+        "over_0p1_db": 5
+      },
+      "paired_saving_delta_points": -0.382591317284782
+    },
+    "16": {
+      "risk_head": {
+        "n": 53,
+        "mean_loss_db": 0.07011356170236431,
+        "q90_loss_db": 0.10178738624509877,
+        "mean_saving_points": 25.271477769568282,
+        "over_0p1_db": 6
+      },
+      "baseline_logit": {
+        "n": 53,
+        "mean_loss_db": 0.06630602448992395,
+        "q90_loss_db": 0.10203236377977579,
+        "mean_saving_points": 23.42804429478615,
+        "over_0p1_db": 7
+      },
+      "paired_saving_delta_points": 1.8434334747821262
+    },
+    "32": {
+      "risk_head": {
+        "n": 53,
+        "mean_loss_db": 0.06785398305411278,
+        "q90_loss_db": 0.11392543849281843,
+        "mean_saving_points": 16.885139805340916,
+        "over_0p1_db": 7
+      },
+      "baseline_logit": {
+        "n": 53,
+        "mean_loss_db": 0.0691952835323587,
+        "q90_loss_db": 0.11112745052778926,
+        "mean_saving_points": 16.74106181886211,
+        "over_0p1_db": 6
+      },
+      "paired_saving_delta_points": 0.14407798647880535
+    },
+    "48": {
+      "risk_head": {
+        "n": 53,
+        "mean_loss_db": 0.07063851214377666,
+        "q90_loss_db": 0.11281116719223469,
+        "mean_saving_points": 15.50337013583513,
+        "over_0p1_db": 7
+      },
+      "baseline_logit": {
+        "n": 53,
+        "mean_loss_db": 0.06591489496632212,
+        "q90_loss_db": 0.09794066948491291,
+        "mean_saving_points": 11.442359894888957,
+        "over_0p1_db": 5
+      },
+      "paired_saving_delta_points": 4.061010240946175
+    },
+    "63": {
+      "risk_head": {
+        "n": 53,
+        "mean_loss_db": 0.06633382285544531,
+        "q90_loss_db": 0.10279293428874528,
+        "mean_saving_points": 12.434457738257056,
+        "over_0p1_db": 7
+      },
+      "baseline_logit": {
+        "n": 53,
+        "mean_loss_db": 0.06741964023672785,
+        "q90_loss_db": 0.10618457791704995,
+        "mean_saving_points": 9.00138665763837,
+        "over_0p1_db": 9
+      },
+      "paired_saving_delta_points": 3.4330710806186846
+    }
+  },
+  "heldout_tile_excess_error_diagnostics": {
+    "0": {
+      "6": {
+        "tiles": 1765,
+        "pearson": 0.5430360718470754,
+        "r2": 0.27541037561309034,
+        "mean_bias_pred_minus_true": -0.0026553524720652946
+      },
+      "8": {
+        "tiles": 1765,
+        "pearson": 0.433470703742744,
+        "r2": 0.16813142756704658,
+        "mean_bias_pred_minus_true": -0.0010024352271977084
+      },
+      "10": {
+        "tiles": 1765,
+        "pearson": 0.3514839551228877,
+        "r2": 0.11046026243296947,
+        "mean_bias_pred_minus_true": -0.0003939446317628674
+      }
+    },
+    "16": {
+      "6": {
+        "tiles": 1765,
+        "pearson": 0.6196196317897409,
+        "r2": 0.37004231791129627,
+        "mean_bias_pred_minus_true": -0.0022176106980002813
+      },
+      "8": {
+        "tiles": 1765,
+        "pearson": 0.5418469189437367,
+        "r2": 0.28321448987979314,
+        "mean_bias_pred_minus_true": -0.0007172886280544796
+      },
+      "10": {
+        "tiles": 1765,
+        "pearson": 0.4186120783181362,
+        "r2": 0.16525313658972918,
+        "mean_bias_pred_minus_true": -0.00037409152853791104
+      }
+    },
+    "32": {
+      "6": {
+        "tiles": 1765,
+        "pearson": 0.5785254226699645,
+        "r2": 0.32312442259927354,
+        "mean_bias_pred_minus_true": -0.0027572719694273873
+      },
+      "8": {
+        "tiles": 1765,
+        "pearson": 0.537765617476237,
+        "r2": 0.28234219019849327,
+        "mean_bias_pred_minus_true": -0.0009616691022134043
+      },
+      "10": {
+        "tiles": 1765,
+        "pearson": 0.5613155016159694,
+        "r2": 0.3040173626204833,
+        "mean_bias_pred_minus_true": -0.0004899396811516985
+      }
+    },
+    "48": {
+      "6": {
+        "tiles": 1765,
+        "pearson": 0.5865337965260198,
+        "r2": 0.3389727086379245,
+        "mean_bias_pred_minus_true": -0.0023760449525817235
+      },
+      "8": {
+        "tiles": 1765,
+        "pearson": 0.5199569556575213,
+        "r2": 0.26913447661094037,
+        "mean_bias_pred_minus_true": -0.0006628518748532207
+      },
+      "10": {
+        "tiles": 1765,
+        "pearson": 0.41335713237986155,
+        "r2": 0.16706388012959705,
+        "mean_bias_pred_minus_true": -0.0002644432750257296
+      }
+    },
+    "63": {
+      "6": {
+        "tiles": 1765,
+        "pearson": 0.5768901025956918,
+        "r2": 0.32948187265568174,
+        "mean_bias_pred_minus_true": -0.002255117308208204
+      },
+      "8": {
+        "tiles": 1765,
+        "pearson": 0.4799874673820161,
+        "r2": 0.2282508033115177,
+        "mean_bias_pred_minus_true": -0.000423747696548507
+      },
+      "10": {
+        "tiles": 1765,
+        "pearson": 0.27662202746650255,
+        "r2": 0.027471471180648965,
+        "mean_bias_pred_minus_true": 7.033332963110936e-05
+      }
+    }
+  },
+  "rows": [
+    {
+      "qp": 0,
+      "sequence": "Bosphorus_1920x1080_120fps_420_8bit_YUV.yuv",
+      "fold": 0,
+      "price": 0.07168391013988566,
+      "training_feasible": true,
+      "loss_db": 0.054335268716531264,
+      "saving_points": 30.925889909267422,
+      "exceeds_0p1_db": false
+    },
+    {
+      "qp": 0,
+      "sequence": "Jockey_1920x1080_120fps_420_8bit_YUV.yuv",
+      "fold": 0,
+      "price": 0.07168391013988566,
+      "training_feasible": true,
+      "loss_db": 0.13177912148651186,
+      "saving_points": 30.925889909267422,
+      "exceeds_0p1_db": true
+    },
+    {
+      "qp": 0,
+      "sequence": "ReadySteadyGo_1920x1080_120fps_420_8bit_YUV.yuv",
+      "fold": 0,
+      "price": 0.07168391013988566,
+      "training_feasible": true,
+      "loss_db": 0.06663302966226498,
+      "saving_points": 24.59055826067924,
+      "exceeds_0p1_db": false
+    },
+    {
+      "qp": 0,
+      "sequence": "videoSRC06_1920x1080_25.yuv",
+      "fold": 0,
+      "price": 0.07168391013988566,
+      "training_feasible": true,
+      "loss_db": 0.03578054968514674,
+      "saving_points": 39.12455439567566,
+      "exceeds_0p1_db": false
+    },
+    {
+      "qp": 0,
+      "sequence": "videoSRC09_1920x1080_25.yuv",
+      "fold": 0,
+      "price": 0.07168391013988566,
+      "training_feasible": true,
+      "loss_db": 0.05284989380836616,
+      "saving_points": 23.37857529520988,
+      "exceeds_0p1_db": false
+    },
+    {
+      "qp": 0,
+      "sequence": "videoSRC14_1920x1080_30.yuv",
+      "fold": 0,
+      "price": 0.07168391013988566,
+      "training_feasible": true,
+      "loss_db": 0.06009200640751388,
+      "saving_points": 27.199224233627316,
+      "exceeds_0p1_db": false
+    },
+    {
+      "qp": 0,
+      "sequence": "videoSRC17_1920x1080_24.yuv",
+      "fold": 0,
+      "price": 0.07168391013988566,
+      "training_feasible": true,
+      "loss_db": 0.05347586526023847,
+      "saving_points": 31.29855647683144,
+      "exceeds_0p1_db": false
+    },
+    {
+      "qp": 0,
+      "sequence": "videoSRC24_1920x1080_24.yuv",
+      "fold": 0,
+      "price": 0.07168391013988566,
+      "training_feasible": true,
+      "loss_db": 0.12942447866842896,
+      "saving_points": 28.96857380867004,
+      "exceeds_0p1_db": true
+    },
+    {
+      "qp": 0,
+      "sequence": "videoSRC29_1920x1080_24.yuv",
+      "fold": 0,
+      "price": 0.07168391013988566,
+      "training_feasible": true,
+      "loss_db": -0.01597506629942701,
+      "saving_points": 38.37922126054764,
+      "exceeds_0p1_db": false
+    },
+    {
+      "qp": 0,
+      "sequence": "Johnny_1280x720_60.yuv",
+      "fold": 0,
+      "price": 0.07168391013988566,
+      "training_feasible": true,
+      "loss_db": 0.08930261881058978,
+      "saving_points": 28.19300174713135,
+      "exceeds_0p1_db": false
+    },
+    {
+      "qp": 0,
+      "sequence": "RaceHorses_832x480_30.yuv",
+      "fold": 0,
+      "price": 0.07168391013988566,
+      "training_feasible": true,
+      "loss_db": 0.04556588044482914,
+      "saving_points": 20.021309703588486,
+      "exceeds_0p1_db": false
+    },
+    {
+      "qp": 0,
+      "sequence": "Beauty_1920x1080_120fps_420_8bit_YUV.yuv",
+      "fold": 1,
+      "price": 0.07507615253815839,
+      "training_feasible": true,
+      "loss_db": 0.0428571468350199,
+      "saving_points": 34.27988901734352,
+      "exceeds_0p1_db": false
+    },
+    {
+      "qp": 0,
+      "sequence": "HoneyBee_1920x1080_120fps_420_8bit_YUV.yuv",
+      "fold": 1,
+      "price": 0.07507615253815839,
+      "training_feasible": true,
+      "loss_db": 0.1257364181561234,
+      "saving_points": 24.96322482824326,
+      "exceeds_0p1_db": true
+    },
+    {
+      "qp": 0,
+      "sequence": "videoSRC03_1920x1080_30.yuv",
+      "fold": 1,
+      "price": 0.07507615253815839,
+      "training_feasible": true,
+      "loss_db": 0.08000391372125795,
+      "saving_points": 31.671223044395447,
+      "exceeds_0p1_db": false
+    },
+    {
+      "qp": 0,
+      "sequence": "videoSRC04_1920x1080_30.yuv",
+      "fold": 1,
+      "price": 0.07507615253815839,
+      "training_feasible": true,
+      "loss_db": 0.014147816076245412,
+      "saving_points": 29.807890206575394,
+      "exceeds_0p1_db": false
+    },
+    {
+      "qp": 0,
+      "sequence": "videoSRC07_1920x1080_25.yuv",
+      "fold": 1,
+      "price": 0.07507615253815839,
+      "training_feasible": true,
+      "loss_db": 0.07465075626127912,
+      "saving_points": 31.671223044395447,
+      "exceeds_0p1_db": false
+    },
+    {
+      "qp": 0,
+      "sequence": "videoSRC15_1920x1080_30.yuv",
+      "fold": 1,
+      "price": 0.07507615253815839,
+      "training_feasible": true,
+      "loss_db": 0.04527515184848042,
+      "saving_points": 27.571890801191334,
+      "exceeds_0p1_db": false
+    },
+    {
+      "qp": 0,
+      "sequence": "videoSRC16_1920x1080_30.yuv",
+      "fold": 1,
+      "price": 0.07507615253815839,
+      "training_feasible": true,
+      "loss_db": 0.12423680759615904,
+      "saving_points": 35.02522215247155,
+      "exceeds_0p1_db": true
+    },
+    {
+      "qp": 0,
+      "sequence": "videoSRC28_1920x1080_30.yuv",
+      "fold": 1,
+      "price": 0.07507615253815839,
+      "training_feasible": true,
+      "loss_db": 0.05687795848107384,
+      "saving_points": 33.5345558822155,
+      "exceeds_0p1_db": false
+    },
+    {
+      "qp": 0,
+      "sequence": "videoSRC30_1920x1080_30.yuv",
+      "fold": 1,
+      "price": 0.07507615253815839,
+      "training_feasible": true,
+      "loss_db": 0.0963018269818526,
+      "saving_points": 33.5345558822155,
+      "exceeds_0p1_db": false
+    },
+    {
+      "qp": 0,
+      "sequence": "BQTerrace_1920x1080_60.yuv",
+      "fold": 1,
+      "price": 0.07507615253815839,
+      "training_feasible": true,
+      "loss_db": 0.03857806481245815,
+      "saving_points": 23.492515534162518,
+      "exceeds_0p1_db": false
+    },
+    {
+      "qp": 0,
+      "sequence": "RaceHorses_416x240_30.yuv",
+      "fold": 1,
+      "price": 0.07507615253815839,
+      "training_feasible": true,
+      "loss_db": 0.040571424172741746,
+      "saving_points": 13.027006387710571,
+      "exceeds_0p1_db": false
+    },
+    {
+      "qp": 0,
+      "sequence": "videoSRC10_1920x1080_30.yuv",
+      "fold": 2,
+      "price": 0.06844494289090605,
+      "training_feasible": true,
+      "loss_db": 0.13326195539026206,
+      "saving_points": 24.214625209569927,
+      "exceeds_0p1_db": true
+    },
+    {
+      "qp": 0,
+      "sequence": "videoSRC11_1920x1080_30.yuv",
+      "fold": 2,
+      "price": 0.06844494289090605,
+      "training_feasible": true,
+      "loss_db": 0.06675607571010211,
+      "saving_points": 35.02522215247155,
+      "exceeds_0p1_db": false
+    },
+    {
+      "qp": 0,
+      "sequence": "videoSRC12_1920x1080_30.yuv",
+      "fold": 2,
+      "price": 0.06844494289090605,
+      "training_feasible": true,
+      "loss_db": 0.045877367085373655,
+      "saving_points": 26.08013570308685,
+      "exceeds_0p1_db": false
+    },
+    {
+      "qp": 0,
+      "sequence": "videoSRC13_1920x1080_30.yuv",
+      "fold": 2,
+      "price": 0.06844494289090605,
+      "training_feasible": true,
+      "loss_db": 0.035498524669194176,
+      "saving_points": 27.757679671049118,
+      "exceeds_0p1_db": false
+    },
+    {
+      "qp": 0,
+      "sequence": "videoSRC23_1920x1080_24.yuv",
+      "fold": 2,
+      "price": 0.06844494289090605,
+      "training_feasible": true,
+      "loss_db": 0.055805259413633373,
+      "saving_points": 27.38501310348511,
+      "exceeds_0p1_db": false
+    },
+    {
+      "qp": 0,
+      "sequence": "videoSRC25_1920x1080_24.yuv",
+      "fold": 2,
+      "price": 0.06844494289090605,
+      "training_feasible": true,
+      "loss_db": 0.05750160600333649,
+      "saving_points": 23.282414376735684,
+      "exceeds_0p1_db": false
+    },
+    {
+      "qp": 0,
+      "sequence": "Cactus_1920x1080_50.yuv",
+      "fold": 2,
+      "price": 0.06844494289090605,
+      "training_feasible": true,
+      "loss_db": 0.052838119145611415,
+      "saving_points": 22.351292371749874,
+      "exceeds_0p1_db": false
+    },
+    {
+      "qp": 0,
+      "sequence": "Kimono1_1920x1080_24.yuv",
+      "fold": 2,
+      "price": 0.06844494289090605,
+      "training_feasible": true,
+      "loss_db": 0.04011282228399749,
+      "saving_points": 29.900784641504284,
+      "exceeds_0p1_db": false
+    },
+    {
+      "qp": 0,
+      "sequence": "KristenAndSara_1280x720_60.yuv",
+      "fold": 2,
+      "price": 0.06844494289090605,
+      "training_feasible": true,
+      "loss_db": 0.08775924550613719,
+      "saving_points": 22.973492145538334,
+      "exceeds_0p1_db": false
+    },
+    {
+      "qp": 0,
+      "sequence": "BQMall_832x480_60.yuv",
+      "fold": 2,
+      "price": 0.06844494289090605,
+      "training_feasible": true,
+      "loss_db": 0.04511863886053145,
+      "saving_points": 18.622449040412903,
+      "exceeds_0p1_db": false
+    },
+    {
+      "qp": 0,
+      "sequence": "PartyScene_832x480_50.yuv",
+      "fold": 2,
+      "price": 0.06844494289090605,
+      "training_feasible": true,
+      "loss_db": 0.02401893289413629,
+      "saving_points": 14.425867050886154,
+      "exceeds_0p1_db": false
+    },
+    {
+      "qp": 0,
+      "sequence": "ShakeNDry_1920x1080_120fps_420_8bit_YUV.yuv",
+      "fold": 3,
+      "price": 0.05957998665536622,
+      "training_feasible": true,
+      "loss_db": 0.03994274783870676,
+      "saving_points": 23.470380902290344,
+      "exceeds_0p1_db": false
+    },
+    {
+      "qp": 0,
+      "sequence": "videoSRC01_1920x1080_30.yuv",
+      "fold": 3,
+      "price": 0.05957998665536622,
+      "training_feasible": true,
+      "loss_db": 0.07336069893809012,
+      "saving_points": 35.39788872003555,
+      "exceeds_0p1_db": false
+    },
+    {
+      "qp": 0,
+      "sequence": "videoSRC05_1920x1080_25.yuv",
+      "fold": 3,
+      "price": 0.05957998665536622,
+      "training_feasible": true,
+      "loss_db": 0.09677063662399821,
+      "saving_points": 23.562186509370807,
+      "exceeds_0p1_db": false
+    },
+    {
+      "qp": 0,
+      "sequence": "videoSRC08_1920x1080_25.yuv",
+      "fold": 3,
+      "price": 0.05957998665536622,
+      "training_feasible": true,
+      "loss_db": 0.06444059264213386,
+      "saving_points": 34.27988901734352,
+      "exceeds_0p1_db": false
+    },
+    {
+      "qp": 0,
+      "sequence": "videoSRC18_1920x1080_25.yuv",
+      "fold": 3,
+      "price": 0.05957998665536622,
+      "training_feasible": true,
+      "loss_db": 0.061018316756849274,
+      "saving_points": 23.564364165067676,
+      "exceeds_0p1_db": false
+    },
+    {
+      "qp": 0,
+      "sequence": "videoSRC22_1920x1080_24.yuv",
+      "fold": 3,
+      "price": 0.05957998665536622,
+      "training_feasible": true,
+      "loss_db": 0.049001589572098166,
+      "saving_points": 28.43334183096886,
+      "exceeds_0p1_db": false
+    },
+    {
+      "qp": 0,
+      "sequence": "videoSRC27_1920x1080_30.yuv",
+      "fold": 3,
+      "price": 0.05957998665536622,
+      "training_feasible": true,
+      "loss_db": 0.09291739294705303,
+      "saving_points": 36.515888422727585,
+      "exceeds_0p1_db": false
+    },
+    {
+      "qp": 0,
+      "sequence": "BasketballDrive_1920x1080_50.yuv",
+      "fold": 3,
+      "price": 0.05957998665536622,
+      "training_feasible": true,
+      "loss_db": 0.08399813936209428,
+      "saving_points": 25.519502609968182,
+      "exceeds_0p1_db": false
+    },
+    {
+      "qp": 0,
+      "sequence": "ParkScene_1920x1080_24.yuv",
+      "fold": 3,
+      "price": 0.05957998665536622,
+      "training_feasible": true,
+      "loss_db": 0.03015485634673431,
+      "saving_points": 28.03745180368423,
+      "exceeds_0p1_db": false
+    },
+    {
+      "qp": 0,
+      "sequence": "BasketballPass_416x240_50.yuv",
+      "fold": 3,
+      "price": 0.05957998665536622,
+      "training_feasible": true,
+      "loss_db": 0.01838436802546388,
+      "saving_points": 13.027006387710571,
+      "exceeds_0p1_db": false
+    },
+    {
+      "qp": 0,
+      "sequence": "YachtRide_1920x1080_120fps_420_8bit_YUV.yuv",
+      "fold": 4,
+      "price": 0.06535232520376653,
+      "training_feasible": true,
+      "loss_db": 0.05675972601338123,
+      "saving_points": 25.521680265665058,
+      "exceeds_0p1_db": false
+    },
+    {
+      "qp": 0,
+      "sequence": "videoSRC02_1920x1080_30.yuv",
+      "fold": 4,
+      "price": 0.06535232520376653,
+      "training_feasible": true,
+      "loss_db": 0.11354950250617687,
+      "saving_points": 32.78922274708748,
+      "exceeds_0p1_db": true
+    },
+    {
+      "qp": 0,
+      "sequence": "videoSRC19_1920x1080_30.yuv",
+      "fold": 4,
+      "price": 0.06535232520376653,
+      "training_feasible": true,
+      "loss_db": 0.042143548605483167,
+      "saving_points": 31.29855647683144,
+      "exceeds_0p1_db": false
+    },
+    {
+      "qp": 0,
+      "sequence": "videoSRC20_1920x1080_25.yuv",
+      "fold": 4,
+      "price": 0.06535232520376653,
+      "training_feasible": true,
+      "loss_db": 0.06184269354592569,
+      "saving_points": 23.63403454422951,
+      "exceeds_0p1_db": false
+    },
+    {
+      "qp": 0,
+      "sequence": "videoSRC21_1920x1080_24.yuv",
+      "fold": 4,
+      "price": 0.06535232520376653,
+      "training_feasible": true,
+      "loss_db": 0.026580679784043822,
+      "saving_points": 36.515888422727585,
+      "exceeds_0p1_db": false
+    },
+    {
+      "qp": 0,
+      "sequence": "videoSRC26_1920x1080_30.yuv",
+      "fold": 4,
+      "price": 0.06535232520376653,
+      "training_feasible": true,
+      "loss_db": 0.0846538911221047,
+      "saving_points": 32.41655617952347,
+      "exceeds_0p1_db": false
+    },
+    {
+      "qp": 0,
+      "sequence": "FourPeople_1280x720_60.yuv",
+      "fold": 4,
+      "price": 0.06535232520376653,
+      "training_feasible": true,
+      "loss_db": 0.05895933370059663,
+      "saving_points": 23.967269659042355,
+      "exceeds_0p1_db": false
+    },
+    {
+      "qp": 0,
+      "sequence": "BasketballDrill_832x480_50.yuv",
+      "fold": 4,
+      "price": 0.06535232520376653,
+      "training_feasible": true,
+      "loss_db": 0.07310777007730156,
+      "saving_points": 16.875233501195908,
+      "exceeds_0p1_db": false
+    },
+    {
+      "qp": 0,
+      "sequence": "BlowingBubbles_416x240_50.yuv",
+      "fold": 4,
+      "price": 0.06535232520376653,
+      "training_feasible": true,
+      "loss_db": 0.017426979881818693,
+      "saving_points": 13.027006387710571,
+      "exceeds_0p1_db": false
+    },
+    {
+      "qp": 0,
+      "sequence": "BQSquare_416x240_60.yuv",
+      "fold": 4,
+      "price": 0.06535232520376653,
+      "training_feasible": true,
+      "loss_db": 0.01589658131669296,
+      "saving_points": 6.03814423084259,
+      "exceeds_0p1_db": false
+    },
+    {
+      "qp": 16,
+      "sequence": "Bosphorus_1920x1080_120fps_420_8bit_YUV.yuv",
+      "fold": 0,
+      "price": 0.07862892340741143,
+      "training_feasible": true,
+      "loss_db": 0.07746559337109381,
+      "saving_points": 29.993679076433178,
+      "exceeds_0p1_db": false
+    },
+    {
+      "qp": 16,
+      "sequence": "Jockey_1920x1080_120fps_420_8bit_YUV.yuv",
+      "fold": 0,
+      "price": 0.07862892340741143,
+      "training_feasible": true,
+      "loss_db": 0.11182648276275808,
+      "saving_points": 29.619923681020733,
+      "exceeds_0p1_db": true
+    },
+    {
+      "qp": 16,
+      "sequence": "ReadySteadyGo_1920x1080_120fps_420_8bit_YUV.yuv",
+      "fold": 0,
+      "price": 0.07862892340741143,
+      "training_feasible": true,
+      "loss_db": 0.08393022203006811,
+      "saving_points": 20.8595372736454,
+      "exceeds_0p1_db": false
+    },
+    {
+      "qp": 16,
+      "sequence": "videoSRC06_1920x1080_25.yuv",
+      "fold": 0,
+      "price": 0.07862892340741143,
+      "training_feasible": true,
+      "loss_db": 0.0442385805399446,
+      "saving_points": 39.12455439567566,
+      "exceeds_0p1_db": false
+    },
+    {
+      "qp": 16,
+      "sequence": "videoSRC09_1920x1080_25.yuv",
+      "fold": 0,
+      "price": 0.07862892340741143,
+      "training_feasible": true,
+      "loss_db": 0.06396153654855981,
+      "saving_points": 17.713461667299267,
+      "exceeds_0p1_db": false
+    },
+    {
+      "qp": 16,
+      "sequence": "videoSRC14_1920x1080_30.yuv",
+      "fold": 0,
+      "price": 0.07862892340741143,
+      "training_feasible": true,
+      "loss_db": 0.07287245281902245,
+      "saving_points": 25.8921691775322,
+      "exceeds_0p1_db": false
+    },
+    {
+      "qp": 16,
+      "sequence": "videoSRC17_1920x1080_24.yuv",
+      "fold": 0,
+      "price": 0.07862892340741143,
+      "training_feasible": true,
+      "loss_db": 0.06745403437467709,
+      "saving_points": 32.04388961195945,
+      "exceeds_0p1_db": false
+    },
+    {
+      "qp": 16,
+      "sequence": "videoSRC24_1920x1080_24.yuv",
+      "fold": 0,
+      "price": 0.07862892340741143,
+      "training_feasible": true,
+      "loss_db": 0.11785201513439794,
+      "saving_points": 27.382835447788235,
+      "exceeds_0p1_db": true
+    },
+    {
+      "qp": 16,
+      "sequence": "videoSRC29_1920x1080_24.yuv",
+      "fold": 0,
+      "price": 0.07862892340741143,
+      "training_feasible": true,
+      "loss_db": 0.06019561877529922,
+      "saving_points": 38.751887828111656,
+      "exceeds_0p1_db": false
+    },
+    {
+      "qp": 16,
+      "sequence": "Johnny_1280x720_60.yuv",
+      "fold": 0,
+      "price": 0.07862892340741143,
+      "training_feasible": true,
+      "loss_db": 0.10356497477682125,
+      "saving_points": 27.69466121991475,
+      "exceeds_0p1_db": true
+    },
+    {
+      "qp": 16,
+      "sequence": "RaceHorses_832x480_30.yuv",
+      "fold": 0,
+      "price": 0.07862892340741143,
+      "training_feasible": true,
+      "loss_db": 0.0409202021946698,
+      "saving_points": 13.027006387710571,
+      "exceeds_0p1_db": false
+    },
+    {
+      "qp": 16,
+      "sequence": "Beauty_1920x1080_120fps_420_8bit_YUV.yuv",
+      "fold": 1,
+      "price": 0.07507615253815839,
+      "training_feasible": true,
+      "loss_db": 0.03144469068250971,
+      "saving_points": 35.77055528759956,
+      "exceeds_0p1_db": false
+    },
+    {
+      "qp": 16,
+      "sequence": "HoneyBee_1920x1080_120fps_420_8bit_YUV.yuv",
+      "fold": 1,
+      "price": 0.07507615253815839,
+      "training_feasible": true,
+      "loss_db": 0.08490142198983017,
+      "saving_points": 13.586550652980801,
+      "exceeds_0p1_db": false
+    },
+    {
+      "qp": 16,
+      "sequence": "videoSRC03_1920x1080_30.yuv",
+      "fold": 1,
+      "price": 0.07507615253815839,
+      "training_feasible": true,
+      "loss_db": 0.0844929933861395,
+      "saving_points": 27.382835447788235,
+      "exceeds_0p1_db": false
+    },
+    {
+      "qp": 16,
+      "sequence": "videoSRC04_1920x1080_30.yuv",
+      "fold": 1,
+      "price": 0.07507615253815839,
+      "training_feasible": true,
+      "loss_db": 0.026541456429099403,
+      "saving_points": 23.281325548887256,
+      "exceeds_0p1_db": false
+    },
+    {
+      "qp": 16,
+      "sequence": "videoSRC07_1920x1080_25.yuv",
+      "fold": 1,
+      "price": 0.07507615253815839,
+      "training_feasible": true,
+      "loss_db": 0.06692845344143238,
+      "saving_points": 28.594818413257595,
+      "exceeds_0p1_db": false
+    },
+    {
+      "qp": 16,
+      "sequence": "videoSRC15_1920x1080_30.yuv",
+      "fold": 1,
+      "price": 0.07507615253815839,
+      "training_feasible": true,
+      "loss_db": 0.04428107266904047,
+      "saving_points": 22.44309797883034,
+      "exceeds_0p1_db": false
+    },
+    {
+      "qp": 16,
+      "sequence": "videoSRC16_1920x1080_30.yuv",
+      "fold": 1,
+      "price": 0.07507615253815839,
+      "training_feasible": true,
+      "loss_db": 0.089377386969198,
+      "saving_points": 34.65255558490753,
+      "exceeds_0p1_db": false
+    },
+    {
+      "qp": 16,
+      "sequence": "videoSRC28_1920x1080_30.yuv",
+      "fold": 1,
+      "price": 0.07507615253815839,
+      "training_feasible": true,
+      "loss_db": 0.0559346532173403,
+      "saving_points": 32.50945061445236,
+      "exceeds_0p1_db": false
+    },
+    {
+      "qp": 16,
+      "sequence": "videoSRC30_1920x1080_30.yuv",
+      "fold": 1,
+      "price": 0.07507615253815839,
+      "training_feasible": true,
+      "loss_db": 0.07656016205793761,
+      "saving_points": 32.78813391923905,
+      "exceeds_0p1_db": false
+    },
+    {
+      "qp": 16,
+      "sequence": "BQTerrace_1920x1080_60.yuv",
+      "fold": 1,
+      "price": 0.07507615253815839,
+      "training_feasible": true,
+      "loss_db": 0.05601231111799102,
+      "saving_points": 14.496625661849972,
+      "exceeds_0p1_db": false
+    },
+    {
+      "qp": 16,
+      "sequence": "RaceHorses_416x240_30.yuv",
+      "fold": 1,
+      "price": 0.07507615253815839,
+      "training_feasible": true,
+      "loss_db": 0.04433631162214345,
+      "saving_points": 13.027006387710571,
+      "exceeds_0p1_db": false
+    },
+    {
+      "qp": 16,
+      "sequence": "videoSRC10_1920x1080_30.yuv",
+      "fold": 2,
+      "price": 0.08234981931268026,
+      "training_feasible": true,
+      "loss_db": 0.14280933879169322,
+      "saving_points": 21.976448148489002,
+      "exceeds_0p1_db": true
+    },
+    {
+      "qp": 16,
+      "sequence": "videoSRC11_1920x1080_30.yuv",
+      "fold": 2,
+      "price": 0.08234981931268026,
+      "training_feasible": true,
+      "loss_db": 0.07743414083366816,
+      "saving_points": 35.21101102232933,
+      "exceeds_0p1_db": false
+    },
+    {
+      "qp": 16,
+      "sequence": "videoSRC12_1920x1080_30.yuv",
+      "fold": 2,
+      "price": 0.08234981931268026,
+      "training_feasible": true,
+      "loss_db": 0.05664561483703266,
+      "saving_points": 26.917274445295337,
+      "exceeds_0p1_db": false
+    },
+    {
+      "qp": 16,
+      "sequence": "videoSRC13_1920x1080_30.yuv",
+      "fold": 2,
+      "price": 0.08234981931268026,
+      "training_feasible": true,
+      "loss_db": 0.06626962888231827,
+      "saving_points": 23.65399211645126,
+      "exceeds_0p1_db": false
+    },
+    {
+      "qp": 16,
+      "sequence": "videoSRC23_1920x1080_24.yuv",
+      "fold": 2,
+      "price": 0.08234981931268026,
+      "training_feasible": true,
+      "loss_db": 0.07424660983726476,
+      "saving_points": 28.96857380867004,
+      "exceeds_0p1_db": false
+    },
+    {
+      "qp": 16,
+      "sequence": "videoSRC25_1920x1080_24.yuv",
+      "fold": 2,
+      "price": 0.08234981931268026,
+      "training_feasible": true,
+      "loss_db": 0.06048689531498379,
+      "saving_points": 19.085832387208935,
+      "exceeds_0p1_db": false
+    },
+    {
+      "qp": 16,
+      "sequence": "Cactus_1920x1080_50.yuv",
+      "fold": 2,
+      "price": 0.08234981931268026,
+      "training_feasible": true,
+      "loss_db": 0.06186073733287771,
+      "saving_points": 20.76555401086807,
+      "exceeds_0p1_db": false
+    },
+    {
+      "qp": 16,
+      "sequence": "Kimono1_1920x1080_24.yuv",
+      "fold": 2,
+      "price": 0.08234981931268026,
+      "training_feasible": true,
+      "loss_db": 0.06213521425887791,
+      "saving_points": 32.04388961195945,
+      "exceeds_0p1_db": false
+    },
+    {
+      "qp": 16,
+      "sequence": "KristenAndSara_1280x720_60.yuv",
+      "fold": 2,
+      "price": 0.08234981931268026,
+      "training_feasible": true,
+      "loss_db": 0.1209191405981355,
+      "saving_points": 28.190098206202187,
+      "exceeds_0p1_db": true
+    },
+    {
+      "qp": 16,
+      "sequence": "BQMall_832x480_60.yuv",
+      "fold": 2,
+      "price": 0.08234981931268026,
+      "training_feasible": true,
+      "loss_db": 0.054557106125626004,
+      "saving_points": 13.027006387710571,
+      "exceeds_0p1_db": false
+    },
+    {
+      "qp": 16,
+      "sequence": "PartyScene_832x480_50.yuv",
+      "fold": 2,
+      "price": 0.08234981931268026,
+      "training_feasible": true,
+      "loss_db": 0.04238457122853817,
+      "saving_points": 13.027006387710571,
+      "exceeds_0p1_db": false
+    },
+    {
+      "qp": 16,
+      "sequence": "ShakeNDry_1920x1080_120fps_420_8bit_YUV.yuv",
+      "fold": 3,
+      "price": 0.07862892340741143,
+      "training_feasible": true,
+      "loss_db": 0.037389677376523676,
+      "saving_points": 22.352381199598316,
+      "exceeds_0p1_db": false
+    },
+    {
+      "qp": 16,
+      "sequence": "videoSRC01_1920x1080_30.yuv",
+      "fold": 3,
+      "price": 0.07862892340741143,
+      "training_feasible": true,
+      "loss_db": 0.08113627060639136,
+      "saving_points": 37.261221557855606,
+      "exceeds_0p1_db": false
+    },
+    {
+      "qp": 16,
+      "sequence": "videoSRC05_1920x1080_25.yuv",
+      "fold": 3,
+      "price": 0.07862892340741143,
+      "training_feasible": true,
+      "loss_db": 0.08322255678151586,
+      "saving_points": 23.376397639513012,
+      "exceeds_0p1_db": false
+    },
+    {
+      "qp": 16,
+      "sequence": "videoSRC08_1920x1080_25.yuv",
+      "fold": 3,
+      "price": 0.07862892340741143,
+      "training_feasible": true,
+      "loss_db": 0.06275399462767231,
+      "saving_points": 34.74545001983642,
+      "exceeds_0p1_db": false
+    },
+    {
+      "qp": 16,
+      "sequence": "videoSRC18_1920x1080_25.yuv",
+      "fold": 3,
+      "price": 0.07862892340741143,
+      "training_feasible": true,
+      "loss_db": 0.05512501420135241,
+      "saving_points": 20.486870706081394,
+      "exceeds_0p1_db": false
+    },
+    {
+      "qp": 16,
+      "sequence": "videoSRC22_1920x1080_24.yuv",
+      "fold": 3,
+      "price": 0.07862892340741143,
+      "training_feasible": true,
+      "loss_db": 0.056647262637704546,
+      "saving_points": 29.271569401025776,
+      "exceeds_0p1_db": false
+    },
+    {
+      "qp": 16,
+      "sequence": "videoSRC27_1920x1080_30.yuv",
+      "fold": 3,
+      "price": 0.07862892340741143,
+      "training_feasible": true,
+      "loss_db": 0.08288377427759973,
+      "saving_points": 37.63388812541961,
+      "exceeds_0p1_db": false
+    },
+    {
+      "qp": 16,
+      "sequence": "BasketballDrive_1920x1080_50.yuv",
+      "fold": 3,
+      "price": 0.07862892340741143,
+      "training_feasible": true,
+      "loss_db": 0.08904610417416065,
+      "saving_points": 26.079046875238422,
+      "exceeds_0p1_db": false
+    },
+    {
+      "qp": 16,
+      "sequence": "ParkScene_1920x1080_24.yuv",
+      "fold": 3,
+      "price": 0.07862892340741143,
+      "training_feasible": true,
+      "loss_db": 0.03873893355798736,
+      "saving_points": 27.105240970849987,
+      "exceeds_0p1_db": false
+    },
+    {
+      "qp": 16,
+      "sequence": "BasketballPass_416x240_50.yuv",
+      "fold": 3,
+      "price": 0.07862892340741143,
+      "training_feasible": true,
+      "loss_db": 0.05141002105346259,
+      "saving_points": 13.027006387710571,
+      "exceeds_0p1_db": false
+    },
+    {
+      "qp": 16,
+      "sequence": "YachtRide_1920x1080_120fps_420_8bit_YUV.yuv",
+      "fold": 4,
+      "price": 0.07168391013988566,
+      "training_feasible": true,
+      "loss_db": 0.08516617533921987,
+      "saving_points": 24.40150290727615,
+      "exceeds_0p1_db": false
+    },
+    {
+      "qp": 16,
+      "sequence": "videoSRC02_1920x1080_30.yuv",
+      "fold": 4,
+      "price": 0.07168391013988566,
+      "training_feasible": true,
+      "loss_db": 0.16418753229543426,
+      "saving_points": 34.65255558490753,
+      "exceeds_0p1_db": true
+    },
+    {
+      "qp": 16,
+      "sequence": "videoSRC19_1920x1080_30.yuv",
+      "fold": 4,
+      "price": 0.07168391013988566,
+      "training_feasible": true,
+      "loss_db": 0.06946545471732662,
+      "saving_points": 31.297467648983,
+      "exceeds_0p1_db": false
+    },
+    {
+      "qp": 16,
+      "sequence": "videoSRC20_1920x1080_25.yuv",
+      "fold": 4,
+      "price": 0.07168391013988566,
+      "training_feasible": true,
+      "loss_db": 0.056801846256465435,
+      "saving_points": 21.76852405071259,
+      "exceeds_0p1_db": false
+    },
+    {
+      "qp": 16,
+      "sequence": "videoSRC21_1920x1080_24.yuv",
+      "fold": 4,
+      "price": 0.07168391013988566,
+      "training_feasible": true,
+      "loss_db": 0.08306888212251459,
+      "saving_points": 38.00655469298363,
+      "exceeds_0p1_db": false
+    },
+    {
+      "qp": 16,
+      "sequence": "videoSRC26_1920x1080_30.yuv",
+      "fold": 4,
+      "price": 0.07168391013988566,
+      "training_feasible": true,
+      "loss_db": 0.09467703211820863,
+      "saving_points": 28.688801676034924,
+      "exceeds_0p1_db": false
+    },
+    {
+      "qp": 16,
+      "sequence": "FourPeople_1280x720_60.yuv",
+      "fold": 4,
+      "price": 0.07168391013988566,
+      "training_feasible": true,
+      "loss_db": 0.07596558045590572,
+      "saving_points": 22.722870111465454,
+      "exceeds_0p1_db": false
+    },
+    {
+      "qp": 16,
+      "sequence": "BasketballDrill_832x480_50.yuv",
+      "fold": 4,
+      "price": 0.07168391013988566,
+      "training_feasible": true,
+      "loss_db": 0.07287239847918951,
+      "saving_points": 10.931435972452164,
+      "exceeds_0p1_db": false
+    },
+    {
+      "qp": 16,
+      "sequence": "BlowingBubbles_416x240_50.yuv",
+      "fold": 4,
+      "price": 0.07168391013988566,
+      "training_feasible": true,
+      "loss_db": 0.03409749739980396,
+      "saving_points": 13.027006387710571,
+      "exceeds_0p1_db": false
+    },
+    {
+      "qp": 16,
+      "sequence": "BQSquare_416x240_60.yuv",
+      "fold": 4,
+      "price": 0.07168391013988566,
+      "training_feasible": true,
+      "loss_db": 0.01652113679587976,
+      "saving_points": -0.9507179260253906,
+      "exceeds_0p1_db": false
+    },
+    {
+      "qp": 32,
+      "sequence": "Bosphorus_1920x1080_120fps_420_8bit_YUV.yuv",
+      "fold": 0,
+      "price": 0.06535232520376653,
+      "training_feasible": true,
+      "loss_db": 0.05568797952396948,
+      "saving_points": 21.97753697633743,
+      "exceeds_0p1_db": false
+    },
+    {
+      "qp": 32,
+      "sequence": "Jockey_1920x1080_120fps_420_8bit_YUV.yuv",
+      "fold": 0,
+      "price": 0.06535232520376653,
+      "training_feasible": true,
+      "loss_db": 0.06541491607314694,
+      "saving_points": 20.673748403787616,
+      "exceeds_0p1_db": false
+    },
+    {
+      "qp": 32,
+      "sequence": "ReadySteadyGo_1920x1080_120fps_420_8bit_YUV.yuv",
+      "fold": 0,
+      "price": 0.06535232520376653,
+      "training_feasible": true,
+      "loss_db": 0.08725159862708776,
+      "saving_points": 15.078305751085285,
+      "exceeds_0p1_db": false
+    },
+    {
+      "qp": 32,
+      "sequence": "videoSRC06_1920x1080_25.yuv",
+      "fold": 0,
+      "price": 0.06535232520376653,
+      "training_feasible": true,
+      "loss_db": 0.01878190133102721,
+      "saving_points": 31.854834258556362,
+      "exceeds_0p1_db": false
+    },
+    {
+      "qp": 32,
+      "sequence": "videoSRC09_1920x1080_25.yuv",
+      "fold": 0,
+      "price": 0.06535232520376653,
+      "training_feasible": true,
+      "loss_db": 0.05758287981207707,
+      "saving_points": 7.086473554372786,
+      "exceeds_0p1_db": false
+    },
+    {
+      "qp": 32,
+      "sequence": "videoSRC14_1920x1080_30.yuv",
+      "fold": 0,
+      "price": 0.06535232520376653,
+      "training_feasible": true,
+      "loss_db": 0.07509676669219754,
+      "saving_points": 21.417992711067203,
+      "exceeds_0p1_db": false
+    },
+    {
+      "qp": 32,
+      "sequence": "videoSRC17_1920x1080_24.yuv",
+      "fold": 0,
+      "price": 0.06535232520376653,
+      "training_feasible": true,
+      "loss_db": 0.06997565956926867,
+      "saving_points": 21.979714632034298,
+      "exceeds_0p1_db": false
+    },
+    {
+      "qp": 32,
+      "sequence": "videoSRC24_1920x1080_24.yuv",
+      "fold": 0,
+      "price": 0.06535232520376653,
+      "training_feasible": true,
+      "loss_db": 0.12190649909597123,
+      "saving_points": 23.863004446029667,
+      "exceeds_0p1_db": true
+    },
+    {
+      "qp": 32,
+      "sequence": "videoSRC29_1920x1080_24.yuv",
+      "fold": 0,
+      "price": 0.06535232520376653,
+      "training_feasible": true,
+      "loss_db": 0.22888160714862518,
+      "saving_points": 36.515888422727585,
+      "exceeds_0p1_db": true
+    },
+    {
+      "qp": 32,
+      "sequence": "Johnny_1280x720_60.yuv",
+      "fold": 0,
+      "price": 0.06535232520376653,
+      "training_feasible": true,
+      "loss_db": 0.11406019832544823,
+      "saving_points": 22.722870111465454,
+      "exceeds_0p1_db": true
+    },
+    {
+      "qp": 32,
+      "sequence": "RaceHorses_832x480_30.yuv",
+      "fold": 0,
+      "price": 0.06535232520376653,
+      "training_feasible": true,
+      "loss_db": 0.04900914750682139,
+      "saving_points": 4.290928691625595,
+      "exceeds_0p1_db": false
+    },
+    {
+      "qp": 32,
+      "sequence": "Beauty_1920x1080_120fps_420_8bit_YUV.yuv",
+      "fold": 1,
+      "price": 0.05957998665536622,
+      "training_feasible": true,
+      "loss_db": 0.017226711320554658,
+      "saving_points": 23.750153034925457,
+      "exceeds_0p1_db": false
+    },
+    {
+      "qp": 32,
+      "sequence": "HoneyBee_1920x1080_120fps_420_8bit_YUV.yuv",
+      "fold": 1,
+      "price": 0.05957998665536622,
+      "training_feasible": true,
+      "loss_db": 0.09180452382462741,
+      "saving_points": 12.328120172023771,
+      "exceeds_0p1_db": false
+    },
+    {
+      "qp": 32,
+      "sequence": "videoSRC03_1920x1080_30.yuv",
+      "fold": 1,
+      "price": 0.05957998665536622,
+      "training_feasible": true,
+      "loss_db": 0.0646660769474724,
+      "saving_points": 18.0407689511776,
+      "exceeds_0p1_db": false
+    },
+    {
+      "qp": 32,
+      "sequence": "videoSRC04_1920x1080_30.yuv",
+      "fold": 1,
+      "price": 0.05957998665536622,
+      "training_feasible": true,
+      "loss_db": 0.0225102889838473,
+      "saving_points": 13.09994205832481,
+      "exceeds_0p1_db": false
+    },
+    {
+      "qp": 32,
+      "sequence": "videoSRC07_1920x1080_25.yuv",
+      "fold": 1,
+      "price": 0.05957998665536622,
+      "training_feasible": true,
+      "loss_db": 0.051381386056739614,
+      "saving_points": 18.273005932569507,
+      "exceeds_0p1_db": false
+    },
+    {
+      "qp": 32,
+      "sequence": "videoSRC15_1920x1080_30.yuv",
+      "fold": 1,
+      "price": 0.05957998665536622,
+      "training_feasible": true,
+      "loss_db": 0.0365423381295493,
+      "saving_points": 12.214178144931797,
+      "exceeds_0p1_db": false
+    },
+    {
+      "qp": 32,
+      "sequence": "videoSRC16_1920x1080_30.yuv",
+      "fold": 1,
+      "price": 0.05957998665536622,
+      "training_feasible": true,
+      "loss_db": 0.058718001351999366,
+      "saving_points": 25.05503043532371,
+      "exceeds_0p1_db": false
+    },
+    {
+      "qp": 32,
+      "sequence": "videoSRC28_1920x1080_30.yuv",
+      "fold": 1,
+      "price": 0.05957998665536622,
+      "training_feasible": true,
+      "loss_db": 0.04460760028904766,
+      "saving_points": 24.49657499790192,
+      "exceeds_0p1_db": false
+    },
+    {
+      "qp": 32,
+      "sequence": "videoSRC30_1920x1080_30.yuv",
+      "fold": 1,
+      "price": 0.05957998665536622,
+      "training_feasible": true,
+      "loss_db": 0.05299479278972452,
+      "saving_points": 21.140398234128956,
+      "exceeds_0p1_db": false
+    },
+    {
+      "qp": 32,
+      "sequence": "BQTerrace_1920x1080_60.yuv",
+      "fold": 1,
+      "price": 0.05957998665536622,
+      "training_feasible": true,
+      "loss_db": 0.04576679289646342,
+      "saving_points": 5.130245089530949,
+      "exceeds_0p1_db": false
+    },
+    {
+      "qp": 32,
+      "sequence": "RaceHorses_416x240_30.yuv",
+      "fold": 1,
+      "price": 0.05957998665536622,
+      "training_feasible": true,
+      "loss_db": 0.04746211763883065,
+      "saving_points": -0.9507179260253906,
+      "exceeds_0p1_db": false
+    },
+    {
+      "qp": 32,
+      "sequence": "videoSRC10_1920x1080_30.yuv",
+      "fold": 2,
+      "price": 0.056887923330489094,
+      "training_feasible": true,
+      "loss_db": 0.11338639916229923,
+      "saving_points": 13.053494542837141,
+      "exceeds_0p1_db": true
+    },
+    {
+      "qp": 32,
+      "sequence": "videoSRC11_1920x1080_30.yuv",
+      "fold": 2,
+      "price": 0.056887923330489094,
+      "training_feasible": true,
+      "loss_db": 0.04798173619554211,
+      "saving_points": 22.81903102993965,
+      "exceeds_0p1_db": false
+    },
+    {
+      "qp": 32,
+      "sequence": "videoSRC12_1920x1080_30.yuv",
+      "fold": 2,
+      "price": 0.056887923330489094,
+      "training_feasible": true,
+      "loss_db": 0.04967484478452348,
+      "saving_points": 15.406701862812044,
+      "exceeds_0p1_db": false
+    },
+    {
+      "qp": 32,
+      "sequence": "videoSRC13_1920x1080_30.yuv",
+      "fold": 2,
+      "price": 0.056887923330489094,
+      "training_feasible": true,
+      "loss_db": 0.050568385552585415,
+      "saving_points": 12.611157000064853,
+      "exceeds_0p1_db": false
+    },
+    {
+      "qp": 32,
+      "sequence": "videoSRC23_1920x1080_24.yuv",
+      "fold": 2,
+      "price": 0.056887923330489094,
+      "training_feasible": true,
+      "loss_db": 0.06761609136235339,
+      "saving_points": 19.951638728380207,
+      "exceeds_0p1_db": false
+    },
+    {
+      "qp": 32,
+      "sequence": "videoSRC25_1920x1080_24.yuv",
+      "fold": 2,
+      "price": 0.056887923330489094,
+      "training_feasible": true,
+      "loss_db": 0.047057745342452724,
+      "saving_points": 8.811552077531815,
+      "exceeds_0p1_db": false
+    },
+    {
+      "qp": 32,
+      "sequence": "Cactus_1920x1080_50.yuv",
+      "fold": 2,
+      "price": 0.056887923330489094,
+      "training_feasible": true,
+      "loss_db": 0.042831669428358546,
+      "saving_points": 9.884194880723951,
+      "exceeds_0p1_db": false
+    },
+    {
+      "qp": 32,
+      "sequence": "Kimono1_1920x1080_24.yuv",
+      "fold": 2,
+      "price": 0.056887923330489094,
+      "training_feasible": true,
+      "loss_db": 0.05271338868692591,
+      "saving_points": 17.713461667299267,
+      "exceeds_0p1_db": false
+    },
+    {
+      "qp": 32,
+      "sequence": "KristenAndSara_1280x720_60.yuv",
+      "fold": 2,
+      "price": 0.056887923330489094,
+      "training_feasible": true,
+      "loss_db": 0.09815288200702296,
+      "saving_points": 18.809689283370968,
+      "exceeds_0p1_db": false
+    },
+    {
+      "qp": 32,
+      "sequence": "BQMall_832x480_60.yuv",
+      "fold": 2,
+      "price": 0.056887923330489094,
+      "training_feasible": true,
+      "loss_db": 0.05098051376519329,
+      "saving_points": 4.290928691625595,
+      "exceeds_0p1_db": false
+    },
+    {
+      "qp": 32,
+      "sequence": "PartyScene_832x480_50.yuv",
+      "fold": 2,
+      "price": 0.056887923330489094,
+      "training_feasible": true,
+      "loss_db": 0.04473907062181684,
+      "saving_points": -0.9507179260253906,
+      "exceeds_0p1_db": false
+    },
+    {
+      "qp": 32,
+      "sequence": "ShakeNDry_1920x1080_120fps_420_8bit_YUV.yuv",
+      "fold": 3,
+      "price": 0.0623994444168982,
+      "training_feasible": true,
+      "loss_db": 0.04196076380699013,
+      "saving_points": 13.306778520345686,
+      "exceeds_0p1_db": false
+    },
+    {
+      "qp": 32,
+      "sequence": "videoSRC01_1920x1080_30.yuv",
+      "fold": 3,
+      "price": 0.0623994444168982,
+      "training_feasible": true,
+      "loss_db": 0.048285909784918465,
+      "saving_points": 29.435223639011387,
+      "exceeds_0p1_db": false
+    },
+    {
+      "qp": 32,
+      "sequence": "videoSRC05_1920x1080_25.yuv",
+      "fold": 3,
+      "price": 0.0623994444168982,
+      "training_feasible": true,
+      "loss_db": 0.05417651076432235,
+      "saving_points": 10.372979938983917,
+      "exceeds_0p1_db": false
+    },
+    {
+      "qp": 32,
+      "sequence": "videoSRC08_1920x1080_25.yuv",
+      "fold": 3,
+      "price": 0.0623994444168982,
+      "training_feasible": true,
+      "loss_db": 0.03703002370302732,
+      "saving_points": 24.21571403741837,
+      "exceeds_0p1_db": false
+    },
+    {
+      "qp": 32,
+      "sequence": "videoSRC18_1920x1080_25.yuv",
+      "fold": 3,
+      "price": 0.0623994444168982,
+      "training_feasible": true,
+      "loss_db": 0.053213127388783435,
+      "saving_points": 11.979765295982359,
+      "exceeds_0p1_db": false
+    },
+    {
+      "qp": 32,
+      "sequence": "videoSRC22_1920x1080_24.yuv",
+      "fold": 3,
+      "price": 0.0623994444168982,
+      "training_feasible": true,
+      "loss_db": 0.06157528119596089,
+      "saving_points": 21.117174178361896,
+      "exceeds_0p1_db": false
+    },
+    {
+      "qp": 32,
+      "sequence": "videoSRC27_1920x1080_30.yuv",
+      "fold": 3,
+      "price": 0.0623994444168982,
+      "training_feasible": true,
+      "loss_db": 0.05613608963172109,
+      "saving_points": 29.900784641504284,
+      "exceeds_0p1_db": false
+    },
+    {
+      "qp": 32,
+      "sequence": "BasketballDrive_1920x1080_50.yuv",
+      "fold": 3,
+      "price": 0.0623994444168982,
+      "training_feasible": true,
+      "loss_db": 0.05640771500745934,
+      "saving_points": 14.917916804552078,
+      "exceeds_0p1_db": false
+    },
+    {
+      "qp": 32,
+      "sequence": "ParkScene_1920x1080_24.yuv",
+      "fold": 3,
+      "price": 0.0623994444168982,
+      "training_feasible": true,
+      "loss_db": 0.04246437734344067,
+      "saving_points": 16.804474294185635,
+      "exceeds_0p1_db": false
+    },
+    {
+      "qp": 32,
+      "sequence": "BasketballPass_416x240_50.yuv",
+      "fold": 3,
+      "price": 0.0623994444168982,
+      "training_feasible": true,
+      "loss_db": 0.032154122133188016,
+      "saving_points": -0.9507179260253906,
+      "exceeds_0p1_db": false
+    },
+    {
+      "qp": 32,
+      "sequence": "YachtRide_1920x1080_120fps_420_8bit_YUV.yuv",
+      "fold": 4,
+      "price": 0.06844494289090605,
+      "training_feasible": true,
+      "loss_db": 0.09205019492472417,
+      "saving_points": 18.715343475341793,
+      "exceeds_0p1_db": false
+    },
+    {
+      "qp": 32,
+      "sequence": "videoSRC02_1920x1080_30.yuv",
+      "fold": 4,
+      "price": 0.06844494289090605,
+      "training_feasible": true,
+      "loss_db": 0.1713682437096216,
+      "saving_points": 32.04388961195945,
+      "exceeds_0p1_db": true
+    },
+    {
+      "qp": 32,
+      "sequence": "videoSRC19_1920x1080_30.yuv",
+      "fold": 4,
+      "price": 0.06844494289090605,
+      "training_feasible": true,
+      "loss_db": 0.07696425359784183,
+      "saving_points": 26.824380010366443,
+      "exceeds_0p1_db": false
+    },
+    {
+      "qp": 32,
+      "sequence": "videoSRC20_1920x1080_25.yuv",
+      "fold": 4,
+      "price": 0.06844494289090605,
+      "training_feasible": true,
+      "loss_db": 0.062285342843871126,
+      "saving_points": 16.47825464606285,
+      "exceeds_0p1_db": false
+    },
+    {
+      "qp": 32,
+      "sequence": "videoSRC21_1920x1080_24.yuv",
+      "fold": 4,
+      "price": 0.06844494289090605,
+      "training_feasible": true,
+      "loss_db": 0.23705989147026157,
+      "saving_points": 36.8885549902916,
+      "exceeds_0p1_db": true
+    },
+    {
+      "qp": 32,
+      "sequence": "videoSRC26_1920x1080_30.yuv",
+      "fold": 4,
+      "price": 0.06844494289090605,
+      "training_feasible": true,
+      "loss_db": 0.1195855143721807,
+      "saving_points": 25.986152440309528,
+      "exceeds_0p1_db": true
+    },
+    {
+      "qp": 32,
+      "sequence": "FourPeople_1280x720_60.yuv",
+      "fold": 4,
+      "price": 0.06844494289090605,
+      "training_feasible": true,
+      "loss_db": 0.09940203247898824,
+      "saving_points": 20.298903783162437,
+      "exceeds_0p1_db": false
+    },
+    {
+      "qp": 32,
+      "sequence": "BasketballDrill_832x480_50.yuv",
+      "fold": 4,
+      "price": 0.06844494289090605,
+      "training_feasible": true,
+      "loss_db": 0.05115653431266743,
+      "saving_points": 6.03814423084259,
+      "exceeds_0p1_db": false
+    },
+    {
+      "qp": 32,
+      "sequence": "BlowingBubbles_416x240_50.yuv",
+      "fold": 4,
+      "price": 0.06844494289090605,
+      "training_feasible": true,
+      "loss_db": 0.018916663270283938,
+      "saving_points": -0.9507179260253906,
+      "exceeds_0p1_db": false
+    },
+    {
+      "qp": 32,
+      "sequence": "BQSquare_416x240_60.yuv",
+      "fold": 4,
+      "price": 0.06844494289090605,
+      "training_feasible": true,
+      "loss_db": 0.041035999284153545,
+      "saving_points": -0.9507179260253906,
+      "exceeds_0p1_db": false
+    },
+    {
+      "qp": 48,
+      "sequence": "Bosphorus_1920x1080_120fps_420_8bit_YUV.yuv",
+      "fold": 0,
+      "price": 0.0623994444168982,
+      "training_feasible": true,
+      "loss_db": 0.06226444374522327,
+      "saving_points": 16.850921213626858,
+      "exceeds_0p1_db": false
+    },
+    {
+      "qp": 48,
+      "sequence": "Jockey_1920x1080_120fps_420_8bit_YUV.yuv",
+      "fold": 0,
+      "price": 0.0623994444168982,
+      "training_feasible": true,
+      "loss_db": 0.05221141269688305,
+      "saving_points": 14.777486622333525,
+      "exceeds_0p1_db": false
+    },
+    {
+      "qp": 48,
+      "sequence": "ReadySteadyGo_1920x1080_120fps_420_8bit_YUV.yuv",
+      "fold": 0,
+      "price": 0.0623994444168982,
+      "training_feasible": true,
+      "loss_db": 0.07657117734240522,
+      "saving_points": 6.317916363477705,
+      "exceeds_0p1_db": false
+    },
+    {
+      "qp": 48,
+      "sequence": "videoSRC06_1920x1080_25.yuv",
+      "fold": 0,
+      "price": 0.0623994444168982,
+      "training_feasible": true,
+      "loss_db": 0.009788108597352685,
+      "saving_points": 28.430074155330654,
+      "exceeds_0p1_db": false
+    },
+    {
+      "qp": 48,
+      "sequence": "videoSRC09_1920x1080_25.yuv",
+      "fold": 0,
+      "price": 0.0623994444168982,
+      "training_feasible": true,
+      "loss_db": 0.054992836941141196,
+      "saving_points": 3.5920424759387948,
+      "exceeds_0p1_db": false
+    },
+    {
+      "qp": 48,
+      "sequence": "videoSRC14_1920x1080_30.yuv",
+      "fold": 0,
+      "price": 0.0623994444168982,
+      "training_feasible": true,
+      "loss_db": 0.0649585215382016,
+      "saving_points": 17.828490138053898,
+      "exceeds_0p1_db": false
+    },
+    {
+      "qp": 48,
+      "sequence": "videoSRC17_1920x1080_24.yuv",
+      "fold": 0,
+      "price": 0.0623994444168982,
+      "training_feasible": true,
+      "loss_db": 0.059750706747302734,
+      "saving_points": 14.077512174844742,
+      "exceeds_0p1_db": false
+    },
+    {
+      "qp": 48,
+      "sequence": "videoSRC24_1920x1080_24.yuv",
+      "fold": 0,
+      "price": 0.0623994444168982,
+      "training_feasible": true,
+      "loss_db": 0.11470198007864439,
+      "saving_points": 20.43824434280396,
+      "exceeds_0p1_db": true
+    },
+    {
+      "qp": 48,
+      "sequence": "videoSRC29_1920x1080_24.yuv",
+      "fold": 0,
+      "price": 0.0623994444168982,
+      "training_feasible": true,
+      "loss_db": 0.0986849276793044,
+      "saving_points": 35.77055528759956,
+      "exceeds_0p1_db": false
+    },
+    {
+      "qp": 48,
+      "sequence": "Johnny_1280x720_60.yuv",
+      "fold": 0,
+      "price": 0.0623994444168982,
+      "training_feasible": true,
+      "loss_db": 0.07815507060728961,
+      "saving_points": 15.7635223865509,
+      "exceeds_0p1_db": false
+    },
+    {
+      "qp": 48,
+      "sequence": "RaceHorses_832x480_30.yuv",
+      "fold": 0,
+      "price": 0.0623994444168982,
+      "training_feasible": true,
+      "loss_db": 0.04803987706289639,
+      "saving_points": -0.9507179260253906,
+      "exceeds_0p1_db": false
+    },
+    {
+      "qp": 48,
+      "sequence": "Beauty_1920x1080_120fps_420_8bit_YUV.yuv",
+      "fold": 1,
+      "price": 0.05957998665536622,
+      "training_feasible": true,
+      "loss_db": 0.015581956635587656,
+      "saving_points": 22.047207355499264,
+      "exceeds_0p1_db": false
+    },
+    {
+      "qp": 48,
+      "sequence": "HoneyBee_1920x1080_120fps_420_8bit_YUV.yuv",
+      "fold": 1,
+      "price": 0.05957998665536622,
+      "training_feasible": true,
+      "loss_db": 0.06017037274897512,
+      "saving_points": 0.0976113975048043,
+      "exceeds_0p1_db": false
+    },
+    {
+      "qp": 48,
+      "sequence": "videoSRC03_1920x1080_30.yuv",
+      "fold": 1,
+      "price": 0.05957998665536622,
+      "training_feasible": true,
+      "loss_db": 0.07093984016968767,
+      "saving_points": 18.342675715684887,
+      "exceeds_0p1_db": false
+    },
+    {
+      "qp": 48,
+      "sequence": "videoSRC04_1920x1080_30.yuv",
+      "fold": 1,
+      "price": 0.05957998665536622,
+      "training_feasible": true,
+      "loss_db": 0.03176156579825963,
+      "saving_points": 8.859089016914368,
+      "exceeds_0p1_db": false
+    },
+    {
+      "qp": 48,
+      "sequence": "videoSRC07_1920x1080_25.yuv",
+      "fold": 1,
+      "price": 0.05957998665536622,
+      "training_feasible": true,
+      "loss_db": 0.04349567372700741,
+      "saving_points": 12.610068768262861,
+      "exceeds_0p1_db": false
+    },
+    {
+      "qp": 48,
+      "sequence": "videoSRC15_1920x1080_30.yuv",
+      "fold": 1,
+      "price": 0.05957998665536622,
+      "training_feasible": true,
+      "loss_db": 0.040784709895624646,
+      "saving_points": 10.745646506547924,
+      "exceeds_0p1_db": false
+    },
+    {
+      "qp": 48,
+      "sequence": "videoSRC16_1920x1080_30.yuv",
+      "fold": 1,
+      "price": 0.05957998665536622,
+      "training_feasible": true,
+      "loss_db": 0.061006898334282605,
+      "saving_points": 26.917274445295337,
+      "exceeds_0p1_db": false
+    },
+    {
+      "qp": 48,
+      "sequence": "videoSRC28_1920x1080_30.yuv",
+      "fold": 1,
+      "price": 0.05957998665536622,
+      "training_feasible": true,
+      "loss_db": 0.06034016092220929,
+      "saving_points": 26.638591140508648,
+      "exceeds_0p1_db": false
+    },
+    {
+      "qp": 48,
+      "sequence": "videoSRC30_1920x1080_30.yuv",
+      "fold": 1,
+      "price": 0.05957998665536622,
+      "training_feasible": true,
+      "loss_db": 0.04745989174166153,
+      "saving_points": 20.301081240177155,
+      "exceeds_0p1_db": false
+    },
+    {
+      "qp": 48,
+      "sequence": "BQTerrace_1920x1080_60.yuv",
+      "fold": 1,
+      "price": 0.05957998665536622,
+      "training_feasible": true,
+      "loss_db": 0.05182551336020857,
+      "saving_points": 1.4257128536701247,
+      "exceeds_0p1_db": false
+    },
+    {
+      "qp": 48,
+      "sequence": "RaceHorses_416x240_30.yuv",
+      "fold": 1,
+      "price": 0.05957998665536622,
+      "training_feasible": true,
+      "loss_db": 0.04789926454845969,
+      "saving_points": -0.9507179260253906,
+      "exceeds_0p1_db": false
+    },
+    {
+      "qp": 48,
+      "sequence": "videoSRC10_1920x1080_30.yuv",
+      "fold": 2,
+      "price": 0.06535232520376653,
+      "training_feasible": true,
+      "loss_db": 0.12201168156680048,
+      "saving_points": 16.500388681888577,
+      "exceeds_0p1_db": true
+    },
+    {
+      "qp": 48,
+      "sequence": "videoSRC11_1920x1080_30.yuv",
+      "fold": 2,
+      "price": 0.06535232520376653,
+      "training_feasible": true,
+      "loss_db": 0.06399089150755718,
+      "saving_points": 28.22215184569359,
+      "exceeds_0p1_db": false
+    },
+    {
+      "qp": 48,
+      "sequence": "videoSRC12_1920x1080_30.yuv",
+      "fold": 2,
+      "price": 0.06535232520376653,
+      "training_feasible": true,
+      "loss_db": 0.06558274469529336,
+      "saving_points": 13.891722708940502,
+      "exceeds_0p1_db": false
+    },
+    {
+      "qp": 48,
+      "sequence": "videoSRC13_1920x1080_30.yuv",
+      "fold": 2,
+      "price": 0.06535232520376653,
+      "training_feasible": true,
+      "loss_db": 0.0869191552213878,
+      "saving_points": 18.247604221105572,
+      "exceeds_0p1_db": false
+    },
+    {
+      "qp": 48,
+      "sequence": "videoSRC23_1920x1080_24.yuv",
+      "fold": 2,
+      "price": 0.06535232520376653,
+      "training_feasible": true,
+      "loss_db": 0.08487443005937609,
+      "saving_points": 22.350203543901447,
+      "exceeds_0p1_db": false
+    },
+    {
+      "qp": 48,
+      "sequence": "videoSRC25_1920x1080_24.yuv",
+      "fold": 2,
+      "price": 0.06535232520376653,
+      "training_feasible": true,
+      "loss_db": 0.09089936616956412,
+      "saving_points": 12.305983155965805,
+      "exceeds_0p1_db": false
+    },
+    {
+      "qp": 48,
+      "sequence": "Cactus_1920x1080_50.yuv",
+      "fold": 2,
+      "price": 0.06535232520376653,
+      "training_feasible": true,
+      "loss_db": 0.04160010852496013,
+      "saving_points": 7.786448001861568,
+      "exceeds_0p1_db": false
+    },
+    {
+      "qp": 48,
+      "sequence": "Kimono1_1920x1080_24.yuv",
+      "fold": 2,
+      "price": 0.06535232520376653,
+      "training_feasible": true,
+      "loss_db": 0.07610096145146601,
+      "saving_points": 16.52470216155052,
+      "exceeds_0p1_db": false
+    },
+    {
+      "qp": 48,
+      "sequence": "KristenAndSara_1280x720_60.yuv",
+      "fold": 2,
+      "price": 0.06535232520376653,
+      "training_feasible": true,
+      "loss_db": 0.0907925051607707,
+      "saving_points": 19.803466796875004,
+      "exceeds_0p1_db": false
+    },
+    {
+      "qp": 48,
+      "sequence": "BQMall_832x480_60.yuv",
+      "fold": 2,
+      "price": 0.06535232520376653,
+      "training_feasible": true,
+      "loss_db": 0.08215866235800814,
+      "saving_points": 11.279790848493576,
+      "exceeds_0p1_db": false
+    },
+    {
+      "qp": 48,
+      "sequence": "PartyScene_832x480_50.yuv",
+      "fold": 2,
+      "price": 0.06535232520376653,
+      "training_feasible": true,
+      "loss_db": 0.06966455482009629,
+      "saving_points": -0.9507179260253906,
+      "exceeds_0p1_db": false
+    },
+    {
+      "qp": 48,
+      "sequence": "ShakeNDry_1920x1080_120fps_420_8bit_YUV.yuv",
+      "fold": 3,
+      "price": 0.06535232520376653,
+      "training_feasible": true,
+      "loss_db": 0.049454409436295185,
+      "saving_points": 11.978677064180376,
+      "exceeds_0p1_db": false
+    },
+    {
+      "qp": 48,
+      "sequence": "videoSRC01_1920x1080_30.yuv",
+      "fold": 3,
+      "price": 0.06535232520376653,
+      "training_feasible": true,
+      "loss_db": 0.039017924079371984,
+      "saving_points": 29.62101250886917,
+      "exceeds_0p1_db": false
+    },
+    {
+      "qp": 48,
+      "sequence": "videoSRC05_1920x1080_25.yuv",
+      "fold": 3,
+      "price": 0.06535232520376653,
+      "training_feasible": true,
+      "loss_db": 0.04924548276488473,
+      "saving_points": 8.55500519275665,
+      "exceeds_0p1_db": false
+    },
+    {
+      "qp": 48,
+      "sequence": "videoSRC08_1920x1080_25.yuv",
+      "fold": 3,
+      "price": 0.06535232520376653,
+      "training_feasible": true,
+      "loss_db": 0.031192287460377683,
+      "saving_points": 25.33262491226196,
+      "exceeds_0p1_db": false
+    },
+    {
+      "qp": 48,
+      "sequence": "videoSRC18_1920x1080_25.yuv",
+      "fold": 3,
+      "price": 0.06535232520376653,
+      "training_feasible": true,
+      "loss_db": 0.0658076358481544,
+      "saving_points": 9.533663541078564,
+      "exceeds_0p1_db": false
+    },
+    {
+      "qp": 48,
+      "sequence": "videoSRC22_1920x1080_24.yuv",
+      "fold": 3,
+      "price": 0.06535232520376653,
+      "training_feasible": true,
+      "loss_db": 0.07046292823868085,
+      "saving_points": 19.880878925323486,
+      "exceeds_0p1_db": false
+    },
+    {
+      "qp": 48,
+      "sequence": "videoSRC27_1920x1080_30.yuv",
+      "fold": 3,
+      "price": 0.06535232520376653,
+      "training_feasible": true,
+      "loss_db": 0.07128461113317913,
+      "saving_points": 32.602345049381256,
+      "exceeds_0p1_db": false
+    },
+    {
+      "qp": 48,
+      "sequence": "BasketballDrive_1920x1080_50.yuv",
+      "fold": 3,
+      "price": 0.06535232520376653,
+      "training_feasible": true,
+      "loss_db": 0.04303500272802563,
+      "saving_points": 11.631410419940947,
+      "exceeds_0p1_db": false
+    },
+    {
+      "qp": 48,
+      "sequence": "ParkScene_1920x1080_24.yuv",
+      "fold": 3,
+      "price": 0.06535232520376653,
+      "training_feasible": true,
+      "loss_db": 0.06130448960855899,
+      "saving_points": 9.184220433235168,
+      "exceeds_0p1_db": false
+    },
+    {
+      "qp": 48,
+      "sequence": "BasketballPass_416x240_50.yuv",
+      "fold": 3,
+      "price": 0.06535232520376653,
+      "training_feasible": true,
+      "loss_db": 0.057970467172859516,
+      "saving_points": -0.9507179260253906,
+      "exceeds_0p1_db": false
+    },
+    {
+      "qp": 48,
+      "sequence": "YachtRide_1920x1080_120fps_420_8bit_YUV.yuv",
+      "fold": 4,
+      "price": 0.06844494289090605,
+      "training_feasible": true,
+      "loss_db": 0.10524791564659568,
+      "saving_points": 17.87602707743645,
+      "exceeds_0p1_db": true
+    },
+    {
+      "qp": 48,
+      "sequence": "videoSRC02_1920x1080_30.yuv",
+      "fold": 4,
+      "price": 0.06844494289090605,
+      "training_feasible": true,
+      "loss_db": 0.20533120249128795,
+      "saving_points": 32.882117182016366,
+      "exceeds_0p1_db": true
+    },
+    {
+      "qp": 48,
+      "sequence": "videoSRC19_1920x1080_30.yuv",
+      "fold": 4,
+      "price": 0.06844494289090605,
+      "training_feasible": true,
+      "loss_db": 0.09306132232177333,
+      "saving_points": 24.330743104219433,
+      "exceeds_0p1_db": false
+    },
+    {
+      "qp": 48,
+      "sequence": "videoSRC20_1920x1080_25.yuv",
+      "fold": 4,
+      "price": 0.06844494289090605,
+      "training_feasible": true,
+      "loss_db": 0.0842351079277743,
+      "saving_points": 15.056170523166656,
+      "exceeds_0p1_db": false
+    },
+    {
+      "qp": 48,
+      "sequence": "videoSRC21_1920x1080_24.yuv",
+      "fold": 4,
+      "price": 0.06844494289090605,
+      "training_feasible": true,
+      "loss_db": 0.15764113728483953,
+      "saving_points": 37.63388812541961,
+      "exceeds_0p1_db": true
+    },
+    {
+      "qp": 48,
+      "sequence": "videoSRC26_1920x1080_30.yuv",
+      "fold": 4,
+      "price": 0.06844494289090605,
+      "training_feasible": true,
+      "loss_db": 0.1328842985418698,
+      "saving_points": 24.517620801925656,
+      "exceeds_0p1_db": true
+    },
+    {
+      "qp": 48,
+      "sequence": "FourPeople_1280x720_60.yuv",
+      "fold": 4,
+      "price": 0.06844494289090605,
+      "training_feasible": true,
+      "loss_db": 0.12541220326003802,
+      "saving_points": 20.236974557240806,
+      "exceeds_0p1_db": true
+    },
+    {
+      "qp": 48,
+      "sequence": "BasketballDrill_832x480_50.yuv",
+      "fold": 4,
+      "price": 0.06844494289090605,
+      "training_feasible": true,
+      "loss_db": 0.06581322063329192,
+      "saving_points": 7.785359770059586,
+      "exceeds_0p1_db": false
+    },
+    {
+      "qp": 48,
+      "sequence": "BlowingBubbles_416x240_50.yuv",
+      "fold": 4,
+      "price": 0.06844494289090605,
+      "training_feasible": true,
+      "loss_db": 0.0388846972941885,
+      "saving_points": -0.9507179260253906,
+      "exceeds_0p1_db": false
+    },
+    {
+      "qp": 48,
+      "sequence": "BQSquare_416x240_60.yuv",
+      "fold": 4,
+      "price": 0.06844494289090605,
+      "training_feasible": true,
+      "loss_db": 0.07057482729422666,
+      "saving_points": -0.9507179260253906,
+      "exceeds_0p1_db": false
+    },
+    {
+      "qp": 63,
+      "sequence": "Bosphorus_1920x1080_120fps_420_8bit_YUV.yuv",
+      "fold": 0,
+      "price": 0.045145916490051105,
+      "training_feasible": true,
+      "loss_db": 0.051559136364281,
+      "saving_points": 9.674093723297117,
+      "exceeds_0p1_db": false
+    },
+    {
+      "qp": 63,
+      "sequence": "Jockey_1920x1080_120fps_420_8bit_YUV.yuv",
+      "fold": 0,
+      "price": 0.045145916490051105,
+      "training_feasible": true,
+      "loss_db": 0.037234728323976105,
+      "saving_points": 6.387587338685985,
+      "exceeds_0p1_db": false
+    },
+    {
+      "qp": 63,
+      "sequence": "ReadySteadyGo_1920x1080_120fps_420_8bit_YUV.yuv",
+      "fold": 0,
+      "price": 0.045145916490051105,
+      "training_feasible": true,
+      "loss_db": 0.07321876247326188,
+      "saving_points": 3.2425993680954,
+      "exceeds_0p1_db": false
+    },
+    {
+      "qp": 63,
+      "sequence": "videoSRC06_1920x1080_25.yuv",
+      "fold": 0,
+      "price": 0.045145916490051105,
+      "training_feasible": true,
+      "loss_db": 0.00669427450487475,
+      "saving_points": 1.495383828878405,
+      "exceeds_0p1_db": false
+    },
+    {
+      "qp": 63,
+      "sequence": "videoSRC09_1920x1080_25.yuv",
+      "fold": 0,
+      "price": 0.045145916490051105,
+      "training_feasible": true,
+      "loss_db": 0.04449678806195806,
+      "saving_points": 1.1459407210349992,
+      "exceeds_0p1_db": false
+    },
+    {
+      "qp": 63,
+      "sequence": "videoSRC14_1920x1080_30.yuv",
+      "fold": 0,
+      "price": 0.045145916490051105,
+      "training_feasible": true,
+      "loss_db": 0.05878669249959445,
+      "saving_points": 13.122077286243439,
+      "exceeds_0p1_db": false
+    },
+    {
+      "qp": 63,
+      "sequence": "videoSRC17_1920x1080_24.yuv",
+      "fold": 0,
+      "price": 0.045145916490051105,
+      "training_feasible": true,
+      "loss_db": 0.04880952801293519,
+      "saving_points": 4.151586741209035,
+      "exceeds_0p1_db": false
+    },
+    {
+      "qp": 63,
+      "sequence": "videoSRC24_1920x1080_24.yuv",
+      "fold": 0,
+      "price": 0.045145916490051105,
+      "training_feasible": true,
+      "loss_db": 0.11744716950375884,
+      "saving_points": 20.34426167607307,
+      "exceeds_0p1_db": true
+    },
+    {
+      "qp": 63,
+      "sequence": "videoSRC29_1920x1080_24.yuv",
+      "fold": 0,
+      "price": 0.045145916490051105,
+      "training_feasible": true,
+      "loss_db": 0.07752196762092321,
+      "saving_points": 35.118116587400436,
+      "exceeds_0p1_db": false
+    },
+    {
+      "qp": 63,
+      "sequence": "Johnny_1280x720_60.yuv",
+      "fold": 0,
+      "price": 0.045145916490051105,
+      "training_feasible": true,
+      "loss_db": 0.06135938470388205,
+      "saving_points": 13.339556058247881,
+      "exceeds_0p1_db": false
+    },
+    {
+      "qp": 63,
+      "sequence": "RaceHorses_832x480_30.yuv",
+      "fold": 0,
+      "price": 0.045145916490051105,
+      "training_feasible": true,
+      "loss_db": 0.06990080048047792,
+      "saving_points": 0.7964976131916046,
+      "exceeds_0p1_db": false
+    },
+    {
+      "qp": 63,
+      "sequence": "Beauty_1920x1080_120fps_420_8bit_YUV.yuv",
+      "fold": 1,
+      "price": 0.047282321880432,
+      "training_feasible": true,
+      "loss_db": 0.01606695074764931,
+      "saving_points": 4.221257716417314,
+      "exceeds_0p1_db": false
+    },
+    {
+      "qp": 63,
+      "sequence": "HoneyBee_1920x1080_120fps_420_8bit_YUV.yuv",
+      "fold": 1,
+      "price": 0.047282321880432,
+      "training_feasible": true,
+      "loss_db": 0.058435329255658364,
+      "saving_points": -0.9507179260253906,
+      "exceeds_0p1_db": false
+    },
+    {
+      "qp": 63,
+      "sequence": "videoSRC03_1920x1080_30.yuv",
+      "fold": 1,
+      "price": 0.047282321880432,
+      "training_feasible": true,
+      "loss_db": 0.08312587968792112,
+      "saving_points": 16.034828275442127,
+      "exceeds_0p1_db": false
+    },
+    {
+      "qp": 63,
+      "sequence": "videoSRC04_1920x1080_30.yuv",
+      "fold": 1,
+      "price": 0.047282321880432,
+      "training_feasible": true,
+      "loss_db": 0.05310584296227324,
+      "saving_points": 6.878548860549927,
+      "exceeds_0p1_db": false
+    },
+    {
+      "qp": 63,
+      "sequence": "videoSRC07_1920x1080_25.yuv",
+      "fold": 1,
+      "price": 0.047282321880432,
+      "training_feasible": true,
+      "loss_db": 0.033482694121604255,
+      "saving_points": 7.226903736591339,
+      "exceeds_0p1_db": false
+    },
+    {
+      "qp": 63,
+      "sequence": "videoSRC15_1920x1080_30.yuv",
+      "fold": 1,
+      "price": 0.047282321880432,
+      "training_feasible": true,
+      "loss_db": 0.043570410935844864,
+      "saving_points": 7.437004894018173,
+      "exceeds_0p1_db": false
+    },
+    {
+      "qp": 63,
+      "sequence": "videoSRC16_1920x1080_30.yuv",
+      "fold": 1,
+      "price": 0.047282321880432,
+      "training_feasible": true,
+      "loss_db": 0.05181646612030941,
+      "saving_points": 23.374219983816147,
+      "exceeds_0p1_db": false
+    },
+    {
+      "qp": 63,
+      "sequence": "videoSRC28_1920x1080_30.yuv",
+      "fold": 1,
+      "price": 0.047282321880432,
+      "training_feasible": true,
+      "loss_db": 0.06179841541405634,
+      "saving_points": 22.070431411266323,
+      "exceeds_0p1_db": false
+    },
+    {
+      "qp": 63,
+      "sequence": "videoSRC30_1920x1080_30.yuv",
+      "fold": 1,
+      "price": 0.047282321880432,
+      "training_feasible": true,
+      "loss_db": 0.04967010834528318,
+      "saving_points": 16.035917103290554,
+      "exceeds_0p1_db": false
+    },
+    {
+      "qp": 63,
+      "sequence": "BQTerrace_1920x1080_60.yuv",
+      "fold": 1,
+      "price": 0.047282321880432,
+      "training_feasible": true,
+      "loss_db": 0.06305618530198567,
+      "saving_points": 2.4740421772003196,
+      "exceeds_0p1_db": false
+    },
+    {
+      "qp": 63,
+      "sequence": "RaceHorses_416x240_30.yuv",
+      "fold": 1,
+      "price": 0.047282321880432,
+      "training_feasible": true,
+      "loss_db": 0.06185053581757623,
+      "saving_points": -0.9507179260253906,
+      "exceeds_0p1_db": false
+    },
+    {
+      "qp": 63,
+      "sequence": "videoSRC10_1920x1080_30.yuv",
+      "fold": 2,
+      "price": 0.05431749824945828,
+      "training_feasible": true,
+      "loss_db": 0.1192995081604261,
+      "saving_points": 13.56441423296928,
+      "exceeds_0p1_db": true
+    },
+    {
+      "qp": 63,
+      "sequence": "videoSRC11_1920x1080_30.yuv",
+      "fold": 2,
+      "price": 0.05431749824945828,
+      "training_feasible": true,
+      "loss_db": 0.08130268072258369,
+      "saving_points": 24.121730774641037,
+      "exceeds_0p1_db": false
+    },
+    {
+      "qp": 63,
+      "sequence": "videoSRC12_1920x1080_30.yuv",
+      "fold": 2,
+      "price": 0.05431749824945828,
+      "training_feasible": true,
+      "loss_db": 0.09149040681862317,
+      "saving_points": 10.023536831140522,
+      "exceeds_0p1_db": false
+    },
+    {
+      "qp": 63,
+      "sequence": "videoSRC13_1920x1080_30.yuv",
+      "fold": 2,
+      "price": 0.05431749824945828,
+      "training_feasible": true,
+      "loss_db": 0.08332365493967214,
+      "saving_points": 14.216852933168411,
+      "exceeds_0p1_db": false
+    },
+    {
+      "qp": 63,
+      "sequence": "videoSRC23_1920x1080_24.yuv",
+      "fold": 2,
+      "price": 0.05431749824945828,
+      "training_feasible": true,
+      "loss_db": 0.07406357630375197,
+      "saving_points": 18.598136156797406,
+      "exceeds_0p1_db": false
+    },
+    {
+      "qp": 63,
+      "sequence": "videoSRC25_1920x1080_24.yuv",
+      "fold": 2,
+      "price": 0.05431749824945828,
+      "training_feasible": true,
+      "loss_db": 0.11891179130341269,
+      "saving_points": 14.0531986951828,
+      "exceeds_0p1_db": true
+    },
+    {
+      "qp": 63,
+      "sequence": "Cactus_1920x1080_50.yuv",
+      "fold": 2,
+      "price": 0.05431749824945828,
+      "training_feasible": true,
+      "loss_db": 0.03558607185452047,
+      "saving_points": 6.73703044652939,
+      "exceeds_0p1_db": false
+    },
+    {
+      "qp": 63,
+      "sequence": "Kimono1_1920x1080_24.yuv",
+      "fold": 2,
+      "price": 0.05431749824945828,
+      "training_feasible": true,
+      "loss_db": 0.053159405616092364,
+      "saving_points": 8.275233060121534,
+      "exceeds_0p1_db": false
+    },
+    {
+      "qp": 63,
+      "sequence": "KristenAndSara_1280x720_60.yuv",
+      "fold": 2,
+      "price": 0.05431749824945828,
+      "training_feasible": true,
+      "loss_db": 0.09900293238652423,
+      "saving_points": 18.125559488932296,
+      "exceeds_0p1_db": false
+    },
+    {
+      "qp": 63,
+      "sequence": "BQMall_832x480_60.yuv",
+      "fold": 2,
+      "price": 0.05431749824945828,
+      "training_feasible": true,
+      "loss_db": 0.09751533245969181,
+      "saving_points": 11.279790848493576,
+      "exceeds_0p1_db": false
+    },
+    {
+      "qp": 63,
+      "sequence": "PartyScene_832x480_50.yuv",
+      "fold": 2,
+      "price": 0.05431749824945828,
+      "training_feasible": true,
+      "loss_db": 0.1175344384993652,
+      "saving_points": 4.290928691625595,
+      "exceeds_0p1_db": true
+    },
+    {
+      "qp": 63,
+      "sequence": "ShakeNDry_1920x1080_120fps_420_8bit_YUV.yuv",
+      "fold": 3,
+      "price": 0.05957998665536622,
+      "training_feasible": true,
+      "loss_db": 0.05003326889784178,
+      "saving_points": 6.73703044652939,
+      "exceeds_0p1_db": false
+    },
+    {
+      "qp": 63,
+      "sequence": "videoSRC01_1920x1080_30.yuv",
+      "fold": 3,
+      "price": 0.05957998665536622,
+      "training_feasible": true,
+      "loss_db": 0.033467148241017215,
+      "saving_points": 27.19704657793045,
+      "exceeds_0p1_db": false
+    },
+    {
+      "qp": 63,
+      "sequence": "videoSRC05_1920x1080_25.yuv",
+      "fold": 3,
+      "price": 0.05957998665536622,
+      "training_feasible": true,
+      "loss_db": 0.038302580076587364,
+      "saving_points": 10.580904632806776,
+      "exceeds_0p1_db": false
+    },
+    {
+      "qp": 63,
+      "sequence": "videoSRC08_1920x1080_25.yuv",
+      "fold": 3,
+      "price": 0.05957998665536622,
+      "training_feasible": true,
+      "loss_db": 0.02524327275827494,
+      "saving_points": 22.34911471605301,
+      "exceeds_0p1_db": false
+    },
+    {
+      "qp": 63,
+      "sequence": "videoSRC18_1920x1080_25.yuv",
+      "fold": 3,
+      "price": 0.05957998665536622,
+      "training_feasible": true,
+      "loss_db": 0.0814872286056505,
+      "saving_points": 11.909006088972095,
+      "exceeds_0p1_db": false
+    },
+    {
+      "qp": 63,
+      "sequence": "videoSRC22_1920x1080_24.yuv",
+      "fold": 3,
+      "price": 0.05957998665536622,
+      "training_feasible": true,
+      "loss_db": 0.07079785809280062,
+      "saving_points": 19.50821235775948,
+      "exceeds_0p1_db": false
+    },
+    {
+      "qp": 63,
+      "sequence": "videoSRC27_1920x1080_30.yuv",
+      "fold": 3,
+      "price": 0.05957998665536622,
+      "training_feasible": true,
+      "loss_db": 0.08148317044111571,
+      "saving_points": 30.64502894878387,
+      "exceeds_0p1_db": false
+    },
+    {
+      "qp": 63,
+      "sequence": "BasketballDrive_1920x1080_50.yuv",
+      "fold": 3,
+      "price": 0.05957998665536622,
+      "training_feasible": true,
+      "loss_db": 0.028295443823328163,
+      "saving_points": 11.279790848493576,
+      "exceeds_0p1_db": false
+    },
+    {
+      "qp": 63,
+      "sequence": "ParkScene_1920x1080_24.yuv",
+      "fold": 3,
+      "price": 0.05957998665536622,
+      "training_feasible": true,
+      "loss_db": 0.07116845897978727,
+      "saving_points": 6.947131603956224,
+      "exceeds_0p1_db": false
+    },
+    {
+      "qp": 63,
+      "sequence": "BasketballPass_416x240_50.yuv",
+      "fold": 3,
+      "price": 0.05957998665536622,
+      "training_feasible": true,
+      "loss_db": -0.008052347606534617,
+      "saving_points": 13.027006387710571,
+      "exceeds_0p1_db": false
+    },
+    {
+      "qp": 63,
+      "sequence": "YachtRide_1920x1080_120fps_420_8bit_YUV.yuv",
+      "fold": 4,
+      "price": 0.051863215307398,
+      "training_feasible": true,
+      "loss_db": 0.0738055792122917,
+      "saving_points": 10.581992864608768,
+      "exceeds_0p1_db": false
+    },
+    {
+      "qp": 63,
+      "sequence": "videoSRC02_1920x1080_30.yuv",
+      "fold": 4,
+      "price": 0.051863215307398,
+      "training_feasible": true,
+      "loss_db": 0.10210524991586768,
+      "saving_points": 23.28350320458412,
+      "exceeds_0p1_db": true
+    },
+    {
+      "qp": 63,
+      "sequence": "videoSRC19_1920x1080_30.yuv",
+      "fold": 4,
+      "price": 0.051863215307398,
+      "training_feasible": true,
+      "loss_db": 0.10296485538196468,
+      "saving_points": 17.75990858674049,
+      "exceeds_0p1_db": true
+    },
+    {
+      "qp": 63,
+      "sequence": "videoSRC20_1920x1080_25.yuv",
+      "fold": 4,
+      "price": 0.051863215307398,
+      "training_feasible": true,
+      "loss_db": 0.09593386524746259,
+      "saving_points": 11.839335113763806,
+      "exceeds_0p1_db": false
+    },
+    {
+      "qp": 63,
+      "sequence": "videoSRC21_1920x1080_24.yuv",
+      "fold": 4,
+      "price": 0.051863215307398,
+      "training_feasible": true,
+      "loss_db": 0.05965190451926095,
+      "saving_points": 34.27988901734352,
+      "exceeds_0p1_db": false
+    },
+    {
+      "qp": 63,
+      "sequence": "videoSRC26_1920x1080_30.yuv",
+      "fold": 4,
+      "price": 0.051863215307398,
+      "training_feasible": true,
+      "loss_db": 0.09247908272538147,
+      "saving_points": 18.504152894020077,
+      "exceeds_0p1_db": false
+    },
+    {
+      "qp": 63,
+      "sequence": "FourPeople_1280x720_60.yuv",
+      "fold": 4,
+      "price": 0.051863215307398,
+      "training_feasible": true,
+      "loss_db": 0.09443724403169101,
+      "saving_points": 15.515803893407188,
+      "exceeds_0p1_db": false
+    },
+    {
+      "qp": 63,
+      "sequence": "BasketballDrill_832x480_50.yuv",
+      "fold": 4,
+      "price": 0.051863215307398,
+      "training_feasible": true,
+      "loss_db": 0.03135347221512316,
+      "saving_points": 13.027006387710571,
+      "exceeds_0p1_db": false
+    },
+    {
+      "qp": 63,
+      "sequence": "BlowingBubbles_416x240_50.yuv",
+      "fold": 4,
+      "price": 0.051863215307398,
+      "training_feasible": true,
+      "loss_db": 0.057474245426901195,
+      "saving_points": -0.9507179260253906,
+      "exceeds_0p1_db": false
+    },
+    {
+      "qp": 63,
+      "sequence": "BQSquare_416x240_60.yuv",
+      "fold": 4,
+      "price": 0.051863215307398,
+      "training_feasible": true,
+      "loss_db": 0.1390631800280379,
+      "saving_points": -0.9507179260253906,
+      "exceeds_0p1_db": true
+    }
+  ]
+}
