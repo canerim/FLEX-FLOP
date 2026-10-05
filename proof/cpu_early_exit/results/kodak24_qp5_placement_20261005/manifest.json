@@ -1,0 +1,18 @@
+{
+  "scope": "All 24 Kodak images x QP 0/16/32/48/63, fixed released bitstreams and calibrated decoder-side router maps. Original versus three fixed spatial permutations with exactly the same exit histogram; no retuning, timing or new bitstreams.",
+  "limitation": "Kodak has six equal-size 256x256 tiles; three permutations sample assignment uncertainty but do not exhaust the 6! possibilities. Quality gain is relative to the frozen map and e15 weights, not an end-to-end codec speedup.",
+  "scan_manifest_sha256": "e0db0156dff748377370acd6ee6b7efc1206ae41f5e617b0346d46068823f489",
+  "script_sha256": "c6f67e90706ad151286c2e1c3bab0e896696c3dd3927fe25fddbe3eecfcbdef0",
+  "release_sha256": "b3b900de23f30e4fc437010ddffe6a5413a56d6cfd97fb6235adbcd2b6973302",
+  "e15_sha256": "91556d30bca41988755ff43dee3bc6d0cd2a0a4eda1d18d2891b168dc0a04ce9",
+  "upstream_head": "cbdae87a5445114cdc7f48816da63ea80bdeac40",
+  "entropy_build_manifest_sha256": "2729dd9d0be76a025554cddfa47363da170aaf8c818c18aa70c60f18db23d6f1",
+  "seeds": [
+    202610050,
+    202610051,
+    202610052
+  ],
+  "thread_count": 1,
+  "python": "3.12.14 (main, Sep 24 2026, 17:57:43) [Clang 22.1.3 ]",
+  "metric": "Equal-image/quality-point mean of 10log10(mean shuffled RGB MSE / original RGB MSE), with matched YCbCr444 MSE also saved. Source RGB is ycbcr2rgb(centered YCbCr + .5, clamp=True)."
+}

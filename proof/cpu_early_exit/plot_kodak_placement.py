@@ -56,8 +56,6 @@ def main() -> None:
     ax.yaxis.grid(True, color="#e6ecef", linewidth=.55, zorder=0)
     ax.set_axisbelow(True)
     ax.tick_params(length=3, color=navy)
-    ax.text(.98, .02, "24 images / QP", transform=ax.transAxes,
-            ha="right", va="bottom", fontsize=6.8, color="#5e717e")
     OUT.mkdir(parents=True, exist_ok=True)
     for suffix in ("pdf", "svg", "png"):
         fig.savefig(OUT / f"kodak_placement.{suffix}", dpi=350,

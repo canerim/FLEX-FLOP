@@ -69,7 +69,10 @@ def main() -> None:
         "overall": {**describe(gain, "24 images x 5 QPs, equal image-QP weight"),
                     "rgb_image_cluster_ci95_db": ci(image_means[..., 0].mean(1)),
                     "rgb_nested_ci95_db": ci(nested_means[..., 0].mean(1)),
-                    "nonuniform_map_cases": int(map_changed.sum())},
+                    "nonuniform_map_cases": int(map_changed.sum()),
+                    "qp63_minus_qp0_mean_rgb_gain_db": float((gain[:, 4, 0] - gain[:, 0, 0]).mean()),
+                    "qp63_minus_qp0_image_cluster_ci95_db": ci(image_means[:, 4, 0] -
+                                                                  image_means[:, 0, 0])},
         "per_qp": {str(qp): {**describe(gain[:, j], f"24 Kodak images at QP {qp}"),
                               "rgb_image_cluster_ci95_db": ci(image_means[:, j, 0]),
                               "rgb_nested_ci95_db": ci(nested_means[:, j, 0]),
