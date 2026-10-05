@@ -9,9 +9,9 @@ python3 - <<'PY'
 import json
 from pathlib import Path
 base=Path('proof/cpu_early_exit/results/div2k_beta/quality_floor')
-raw=json.loads((base/'active_replicate_tail_validation24.json').read_text())
-assert raw['complete'] and len(raw['rows'])==120, 'Preceding CPU queue did not finish cleanly'
-assert (base/'active_replicate_tail_validation24_analysis.json').exists(), 'Preceding analysis did not finish'
+raw=json.loads((base/'active_replicate_beta_validation24.json').read_text())
+assert raw['complete'] and len(raw['rows'])==120, 'Primary beta validation did not finish'
+assert (base/'active_replicate_beta_validation24_analysis.json').exists(), 'Primary beta analysis did not finish'
 PY
 export OMP_NUM_THREADS=1
 export OPENBLAS_NUM_THREADS=1

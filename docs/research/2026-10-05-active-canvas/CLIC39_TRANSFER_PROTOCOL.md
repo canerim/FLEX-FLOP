@@ -31,7 +31,9 @@ preserving the paired arms. No CLIC outcome may change either β policy.
 The frozen manifest and runner live at
 `proof/cpu_early_exit/results/clic39_active_beta/manifest.json` and
 `proof/cpu_early_exit/run_clic39_active_beta.sh`. The runner waits for the
-DIV2K tail-risk chain to finish, checks its completed raw output, then
+DIV2K tail-risk chain to release the CPU, checks that the primary DIV2K
+beta validation and analysis completed (the optional tail policy need not
+be feasible), then
 runs a one-case smoke, the remaining 194 cases and the analysis on one
 low-priority CPU thread with CUDA hidden. This sequencing protects the
 ongoing training and the higher-priority validation chain.
