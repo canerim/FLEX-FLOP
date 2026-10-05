@@ -1,0 +1,3982 @@
+{
+  "scope": "Pre-quality frozen Kodak24 x QP5 map plan. Exact six-depth multiset and conv MAC per image/QP. Decoder-visible router scores, QP and tile geometry only; no source distortion is used in plan selection.",
+  "lambda_tv": 0.5,
+  "score": "Sum over tiles of log_softmax_router_score minus calibrated_beta[QP] times per-exit synthesis cost; same scores as archived decision.",
+  "variation": "Sum of absolute differences in exit index across the seven 4-neighbor edges of the 2x3 or 3x2 tile grid.",
+  "selection": "Exact enumeration of unique permutations of the router's six selected exits. Maximize score minus lambda_tv*variation; prefer original on exact tie, then lexicographic order.",
+  "script_sha256": "7bc85450563c07c308362c02d3bf49e628bb66b2dcc64f14da97b20e5b614fd5",
+  "scan_manifest_sha256": "e0db0156dff748377370acd6ee6b7efc1206ae41f5e617b0346d46068823f489",
+  "scan_case_sha256": {
+    "kodim01_qp0.json": "de4f4107897a1941f258abee2896ee4efca5a42fde9063a1e819a1ddb39c82e7",
+    "kodim01_qp16.json": "398f4f1909017bec0505cf3d462c3458f53f70a674801b1d3fd760b37b1dcd40",
+    "kodim01_qp32.json": "4621c870fbf75de8e64fe88dc69cf7a37239c424a1cdef357518a3707bf764fa",
+    "kodim01_qp48.json": "962ffb438e22bc7890477e75446715f6ec4aba4c7c10872ec54d89ae5cd6e630",
+    "kodim01_qp63.json": "38d73fc6f186cda7b103d06de27b2f81100e09df91cfb2ea6626cdc074c9d2f7",
+    "kodim02_qp0.json": "fca1000f40c0180ffdbdc0b68d57ea198aaf30420782fe50841ef99905c1501b",
+    "kodim02_qp16.json": "4f35e0063fc336809ad9ea46763e7d288fdf827e8c8bc5995db65f5032b53450",
+    "kodim02_qp32.json": "6fc2f58a9d5ec58b37c1ff3cee2fd2baa2edfc2e5046dc11b579cac880a8d5a3",
+    "kodim02_qp48.json": "c36679e80254ea7b76a1b1d2ac311cffee93a0078c37181b2253d4c4065cb466",
+    "kodim02_qp63.json": "4f4a19daec77a45ece1e20ec3dedce06fe83d2ccac139268f37555458837881a",
+    "kodim03_qp0.json": "fa5614006ec945da46a0185d11a6b17634524a9241d33a63deffaf96128ced0e",
+    "kodim03_qp16.json": "e6a6739fbc43139e6e92b82597304fe7d96ccf62dd9141c686e70af5c4ffa341",
+    "kodim03_qp32.json": "6ebe01b6e4fe83174fbd6d4f9bf26e205f399f465cbb6fa02f3f08485deeb260",
+    "kodim03_qp48.json": "223e7042004a4c22167c024918ddbc7b5c1d01bf0f5fda74107f763e77ddad5f",
+    "kodim03_qp63.json": "262f775b1b1f8a586e6672032d9249724fc4ef3c17a9614cbc392c4a85fd5808",
+    "kodim04_qp0.json": "5b5e2b230777cc1d6a6addc7e5ea22fd857d8d00f35fe41aa4d04306f2aaedd5",
+    "kodim04_qp16.json": "9b01a5f04d89e6edca897113c2c9adef409b6ff3b8fed7a1c5803cd04f95c704",
+    "kodim04_qp32.json": "03dec7c3371d8fa2591b2f79a1115dc51aebacfddd43d4cb123264377d2eea2b",
+    "kodim04_qp48.json": "91522014d50452c6ac9daf1634370bbea533630dd25c7973c8f61554735abab5",
+    "kodim04_qp63.json": "61ef7e6ad9e80991b1f0bec92076a3cd686a75bcf75f688fb1d98885267c697a",
+    "kodim05_qp0.json": "a3bf80eb33244d64b2cbeb8de1d5d9d157d93a809319a038971a6d3e086668f9",
+    "kodim05_qp16.json": "79207c5f19c82015f507fdf53f4089746ad70310450496ce1250360f1420f430",
+    "kodim05_qp32.json": "cad4fe3c463021fa535dc1524e72950bc39819b34d10197b24b5047d72b3001e",
+    "kodim05_qp48.json": "3c93176d56d77c65b2c37a1216ac65e224b1b3784f8683a3a8615a2592a988d9",
+    "kodim05_qp63.json": "206ef3b3dcc2a8822e94745171083c458c5a32ad03a09aedfd7be694a23c0054",
+    "kodim06_qp0.json": "67ca562420f97de0de56c69b2147a520b76d3b614988eb85af600feadde1bf29",
+    "kodim06_qp16.json": "e944d82394036d74de6cc1c022d9f52d49b9ab0e767be9b2e91eafdeee4ff288",
+    "kodim06_qp32.json": "ca4998a2d898d2159632fb3f8cf8af68803351b1be63acaa935ace6cfec24f3c",
+    "kodim06_qp48.json": "4466f93492808eb69935a94bb283a1dd0f6e59345156f361ba9121b90f82fa9d",
+    "kodim06_qp63.json": "0134538a8bd4114b6754c4e947d1cff0e24d48c14754dde9e2b5ec2aec541ee1",
+    "kodim07_qp0.json": "d8f75b570b3df774162a3781b0dfa4c2f5e9d91e09d3ae6aae225fa4eeaff53f",
+    "kodim07_qp16.json": "ae5717e13046c6884b57f197d0b8a438dc4a74e248d8da8c111a344846d6a31a",
+    "kodim07_qp32.json": "b3705cd49614c0cbd2916f5a3dcd8b2fc33b673255118d1476613bb03700db94",
+    "kodim07_qp48.json": "6f14b17d0e9e7090f0ce4373f83cd609d00be4069d80c8dc5b10921931e670ae",
+    "kodim07_qp63.json": "598b0d9e2f8f330ef01ea89e2e5779035ed583471cf7f6964cd072648982b202",
+    "kodim08_qp0.json": "627df6a68e9c5a2cadc7fd1ec232652c15ebe797dc2e373d02d66e6369557466",
+    "kodim08_qp16.json": "5ef1c82672cea22ddfaf700b33d42b83a130e5d2d135b9bcaa612dde1db7cedb",
+    "kodim08_qp32.json": "d7c9a17811f6e5a028296d59278c6be5b6908e2cda9c14d0bbbd41c77ac7dad1",
+    "kodim08_qp48.json": "1aaa3cfabf6911ed154b88ed79003f8166a82f81f1d833034d26631df5639534",
+    "kodim08_qp63.json": "d1c73b237e3bdf9f46350ae4a4d54772c5d22fe6012bd88f2806497576ddd8b8",
+    "kodim09_qp0.json": "bbd8af262e4eff2c8ec91f3a3645fea00de6e142fa4d66576060dfec91798a24",
+    "kodim09_qp16.json": "26731dd597c0ae9f70502c97bdca3e92526148fd35f5b8f00189a85984550571",
+    "kodim09_qp32.json": "94e425a30501cd69c0407b4b58a1d16f1e7846b2767f7305c15e1e72397d3c83",
+    "kodim09_qp48.json": "a1e9ca1340fb58f52f23dd37fd0fbf511501d5b82b3862845c8c77d4d18858f2",
+    "kodim09_qp63.json": "4e82f9d74c3a2aaf0cae035219441e5902773ea795a06134ab38be7516135cc5",
+    "kodim10_qp0.json": "ee58ef8720cb740c29b410e875b88f48b8e6e4195653b431183057764bd5dfa8",
+    "kodim10_qp16.json": "9ad15adee5895230b377072c3fac94704f67dd1e5f7d204cc33710e41b89e18d",
+    "kodim10_qp32.json": "883e67047e78dbce8dcb8dbee29c7f7286dce4be2336340ecc40455acec8fd92",
+    "kodim10_qp48.json": "48ab36fa2f4d3f0c5b70e80d36cf4a596e04c27ccc0b333395967c180e73453a",
+    "kodim10_qp63.json": "d9793feb890199d344b615cca49cff22a1b7f7a7f50270773828b9a93872e5ba",
+    "kodim11_qp0.json": "e7a439286aa1e9ba78b91fe152c70f42fca9ea1cdecf2509e424fc58c127c606",
+    "kodim11_qp16.json": "5e1428464b4e65d7536bf184fcfd85765805490cc2fcd88d0d578da5856e657d",
+    "kodim11_qp32.json": "94c7ce9b9d2259b145bb5727d57ef1f57827d7d5dea061f13c26a2f7f097b806",
+    "kodim11_qp48.json": "8a389b671da8341e0364d96390c7475c9ed7ee68be7bedfb94351b39cf7ec396",
+    "kodim11_qp63.json": "0f203a7175e72fd0a135af2672da6d9447731c422ca31e64f88b75e43c004a5a",
+    "kodim12_qp0.json": "512512b3a32a51bab5a861530df75aa561fd0870cd1800778f51f6d034e44984",
+    "kodim12_qp16.json": "016d1174cc325060125b071b6deb7eb06779a3277938ec5e59b23d2f4a750e90",
+    "kodim12_qp32.json": "3b7b13ac51ddc5a58b9025087ada81a36659cf28d320d8155515d96a63da7b57",
+    "kodim12_qp48.json": "6caf1b76a0693b3f786aba7a6827c5668dd935ea7515d14ea9f6b422065f3295",
+    "kodim12_qp63.json": "1089b67671580820e314cbac6977fa5bb82cdf425d6e422913a22baa905d2dee",
+    "kodim13_qp0.json": "7cc8b162a7e3f3300000080d4849bcd55058557e3adafbe57e99bb6997ac0b62",
+    "kodim13_qp16.json": "42f10c598f943137c894e6cba7f46555c2606e4c3e70c29d36a439e24e41e540",
+    "kodim13_qp32.json": "afbc46661fd5e3eebcdc063cd2a20e036183be9de1ee83eab4d2b67a780df2a3",
+    "kodim13_qp48.json": "4c9a0200cfff12ee7ff5bc7ff0018647c97a0acace7161fec22ac41b786c4c28",
+    "kodim13_qp63.json": "f0ed8fd69b0a092265d09dc0f4748755ff3bce039da0813c24d061781a97cb4d",
+    "kodim14_qp0.json": "042a35423bc802cd959467080c0b34cb51ff408b57e42ccadf0d1cccebfb7ce5",
+    "kodim14_qp16.json": "a7ef671372a982158d7336f2e4b6fbbe9f8be14773b0e66e85d472c164befc22",
+    "kodim14_qp32.json": "14a4d0e0a9626bd046df65fd621a8b33c8af0cd59d26fb7b1b3518d8bb7a3665",
+    "kodim14_qp48.json": "f13a90a37fe58b473dbd5ec8fdf0c479e66c877d6248e85789c4697d2f866470",
+    "kodim14_qp63.json": "8b8b706e3cc09f64caf142660e7570e0f5da4170ce897897a18a4106a25e6433",
+    "kodim15_qp0.json": "c9993b711693eca06e6667f0f8acd9ca74302895926d6569602fcd2b4184ca34",
+    "kodim15_qp16.json": "3ab25aca9e5b14baa4e63aac32d547d1f8aeb7f44706fbbf54bd49a4f36c5aae",
+    "kodim15_qp32.json": "18205239fd66710e141bacc81abd54f8b651f8beb208e5470844d539215feb28",
+    "kodim15_qp48.json": "245268cf9ede301b19e052ddcd9ac4c796589f2c7fbca1052482fce42800bfcd",
+    "kodim15_qp63.json": "e7469eee0247d68e64b73dbd58a206b8e1fccfca677bce2bcb8167a9ecb47c3a",
+    "kodim16_qp0.json": "425437e7b9f58a66285e035076777a365386b217cec4a62c6d9c14155d2fb999",
+    "kodim16_qp16.json": "0097b92ff0881bdda5543f9f04d9132e3379fe5e4d72ba5ed68aefa2a8f49f31",
+    "kodim16_qp32.json": "7f475c2323269843e48480f14c5699d3c210c088097bd872ee761627b7d02fd3",
+    "kodim16_qp48.json": "434c8bb362ea513563494221415150ca0cd64a486888e9cb30b8502ffcccd4ee",
+    "kodim16_qp63.json": "3ff17734e0534576b7f30a6e7dc8065add6dd83960a00b06ba185795cc88b284",
+    "kodim17_qp0.json": "457aea359fcc71bb16b690334514787cfb3aad5b2acc4fa8c60db5b9dc62313a",
+    "kodim17_qp16.json": "0f04e3543cbd4ffb2af8d0b5d783090a91c240fd73050778e49817e9a19672ac",
+    "kodim17_qp32.json": "ea9f8a4e99751565bcf0898eab6261dcc9c1fe6ba8664b5596c33f089884ed43",
+    "kodim17_qp48.json": "120c24fd1d448d742e2c4e2ee89fcd4737d6020508b61b6af70e2a583915ca5c",
+    "kodim17_qp63.json": "402717b654105afaf8b249bab363d85c985745e353440d0894e4d4c1d861ec8a",
+    "kodim18_qp0.json": "f6ad2211ff9a24ea34e5c0af5c5d0de060df981f62da6f3787309f6b76dc03e0",
+    "kodim18_qp16.json": "3f49698c52589ab8171fc277428c6ae478e276953c780a5636b00cdaf8877a6a",
+    "kodim18_qp32.json": "b30aeae472ff0baf52a5715ac46b7834d58b00d0ff18b7a15d07046354e83967",
+    "kodim18_qp48.json": "88ab19455b8d6bfca10b7167cbce3f0ea68b0fd115f6e31a589002cc846b05f4",
+    "kodim18_qp63.json": "4b7856ac0b562aaa8a4b3667a64cc42fa0f7f7c17ada58761d7bc9f940591ade",
+    "kodim19_qp0.json": "3f0e8624d8e90299b85b8f250e1a0cfd3e8ca4f3eac9e13238e3a510a3267ba2",
+    "kodim19_qp16.json": "ad394f5a832ba4ebcf0a5bfd82f2aeafcc4b16e1d5de5d6c018a962ea293d653",
+    "kodim19_qp32.json": "fb22f34eb4473cc72ea2c569c0c01c77769cc597147d59780cea94c2abf32ff1",
+    "kodim19_qp48.json": "cf38067bcfa1ad2fdcd3cfe111f67940652e310259c39888b7a9aaedf95fee54",
+    "kodim19_qp63.json": "ba4255561b3133658feaa89a5ff66d4bb5ac2745aa6ecebf0cb71038e772cf5f",
+    "kodim20_qp0.json": "b0a133442b2c01b7da90638b758ac73ef8f3a76bb116d150df92d1f375d1fe5b",
+    "kodim20_qp16.json": "b8de7a96dc38c48a398093548b1391006d30d27e0ad58f91db43a6f8ed7d3d22",
+    "kodim20_qp32.json": "aea4c01b1472a0602a86a6eaa9c4635b62812019cb5fb6722917bd848946a07a",
+    "kodim20_qp48.json": "a99581f8450fb1e83e570e062351758d8893c1b9fa326681325882e89c2391a3",
+    "kodim20_qp63.json": "e7e1f55618972153d50ff8dc2ddf77945f10f5dea2765c9915d637bd68624ab1",
+    "kodim21_qp0.json": "5955310cbe9b6bf392fc7c4e6479458d50e571cf2c41dcc9891284fbff8e5c63",
+    "kodim21_qp16.json": "40907e4ec98c0ad4c842935d4b804a82412a0cd933e4959c7ec0357d5429fb5f",
+    "kodim21_qp32.json": "0ef0956b8a9b552f4c1b9e616bed1451202a5483d6dd5f2fbd065cd952353f4e",
+    "kodim21_qp48.json": "fd85956a48c315758d3496dd14ac513e30a1ef491b05489cc6d62c6ef71082b2",
+    "kodim21_qp63.json": "1b45c22284c431b1b645f5bac766e804c7b4caea106affd629de7563e877c42f",
+    "kodim22_qp0.json": "4c3aa7adfa035fa27246d626c668a60c57a1dc5c0cd016df5a36f02ad58876f5",
+    "kodim22_qp16.json": "c0b7343b1ef2261915124b392301052b128a1476b0f627c7b00529bc67e8e829",
+    "kodim22_qp32.json": "2cecd42f74d9398609f4f174b982fbd7f019edfd32d8d31f14f233f5b995faff",
+    "kodim22_qp48.json": "9887c68136175fb833f843f01476b3c8dd5dd485485eb2490e03c3b204d49218",
+    "kodim22_qp63.json": "0339e02321e0e911db53319a19aee64cafcf4a39fb1688a225dfa213cb768acf",
+    "kodim23_qp0.json": "91a455e7ea1d794c5505786860b6e4c5a186153f36ef51724868761df91f091a",
+    "kodim23_qp16.json": "d154f151c336c4540fcf3b872eaee2a51f8601ce9caddf3177e37e6801485993",
+    "kodim23_qp32.json": "eccfab8a77460edc94adcb8cf2b7c7f8bf92f6fc3ebc9876d0959a9fd1797439",
+    "kodim23_qp48.json": "f6a05e2a97e88c96f314b0c7c740bc033ffe64d744b30b575de2c9314e879915",
+    "kodim23_qp63.json": "4de96ba5d70232c939cd8b3bce359fe604273b9b0b651019a2246ca2fc44f945",
+    "kodim24_qp0.json": "79f632f8e230606edc46870c4a6d4988e6b5bdd0a033709fb578c9af95e1fe12",
+    "kodim24_qp16.json": "0f74f24e69a9a37faf71ea761baec5ab061cd5cb7f0cf78b2fe9f0d027578122",
+    "kodim24_qp32.json": "37cb7896066f58ce7a7bb7bf048954e0df94228d92cc90fe81e919cf1091a590",
+    "kodim24_qp48.json": "6556e83aeccb0ab7c70edc03d683966ab74f0a308aa18261ef6c0d05e3efff22",
+    "kodim24_qp63.json": "08dd41850530b5e9b3abd25892a9bfc09db2facd6201f7704f7857e92a918782"
+  },
+  "n_cases": 120,
+  "changed_cases": 14,
+  "changed_by_qp": {
+    "0": 1,
+    "16": 4,
+    "32": 3,
+    "48": 2,
+    "63": 4
+  },
+  "rows": [
+    {
+      "image": "kodim01.png",
+      "qp": 0,
+      "shape": [
+        512,
+        768
+      ],
+      "scan_result_sha256": "de4f4107897a1941f258abee2896ee4efca5a42fde9063a1e819a1ddb39c82e7",
+      "original": [
+        3,
+        3,
+        3,
+        2,
+        3,
+        3
+      ],
+      "selected": [
+        3,
+        3,
+        3,
+        2,
+        3,
+        3
+      ],
+      "changed": false,
+      "candidate_count": 6,
+      "original_score": -153.03021038403114,
+      "selected_score": -153.03021038403114,
+      "original_tv": 2,
+      "selected_tv": 2,
+      "mac_saved_pct": 26.702334078354173
+    },
+    {
+      "image": "kodim01.png",
+      "qp": 16,
+      "shape": [
+        512,
+        768
+      ],
+      "scan_result_sha256": "398f4f1909017bec0505cf3d462c3458f53f70a674801b1d3fd760b37b1dcd40",
+      "original": [
+        3,
+        4,
+        3,
+        3,
+        3,
+        3
+      ],
+      "selected": [
+        3,
+        3,
+        4,
+        3,
+        3,
+        3
+      ],
+      "changed": true,
+      "candidate_count": 6,
+      "original_score": -78.23452034038887,
+      "selected_score": -78.26867189449653,
+      "original_tv": 3,
+      "selected_tv": 2,
+      "mac_saved_pct": 22.352744730514818
+    },
+    {
+      "image": "kodim01.png",
+      "qp": 32,
+      "shape": [
+        512,
+        768
+      ],
+      "scan_result_sha256": "4621c870fbf75de8e64fe88dc69cf7a37239c424a1cdef357518a3707bf764fa",
+      "original": [
+        5,
+        5,
+        5,
+        5,
+        5,
+        5
+      ],
+      "selected": [
+        5,
+        5,
+        5,
+        5,
+        5,
+        5
+      ],
+      "changed": false,
+      "candidate_count": 1,
+      "original_score": 18.32496613336736,
+      "selected_score": 18.32496613336736,
+      "original_tv": 0,
+      "selected_tv": 0,
+      "mac_saved_pct": -0.9507193245465118
+    },
+    {
+      "image": "kodim01.png",
+      "qp": 48,
+      "shape": [
+        512,
+        768
+      ],
+      "scan_result_sha256": "962ffb438e22bc7890477e75446715f6ec4aba4c7c10872ec54d89ae5cd6e630",
+      "original": [
+        5,
+        5,
+        5,
+        4,
+        5,
+        5
+      ],
+      "selected": [
+        5,
+        5,
+        5,
+        4,
+        5,
+        5
+      ],
+      "changed": false,
+      "candidate_count": 6,
+      "original_score": 99.54958376737707,
+      "selected_score": 99.54958376737707,
+      "original_tv": 2,
+      "selected_tv": 2,
+      "mac_saved_pct": 1.3789043746417096
+    },
+    {
+      "image": "kodim01.png",
+      "qp": 63,
+      "shape": [
+        512,
+        768
+      ],
+      "scan_result_sha256": "38d73fc6f186cda7b103d06de27b2f81100e09df91cfb2ea6626cdc074c9d2f7",
+      "original": [
+        5,
+        5,
+        5,
+        4,
+        5,
+        5
+      ],
+      "selected": [
+        5,
+        5,
+        5,
+        4,
+        5,
+        5
+      ],
+      "changed": false,
+      "candidate_count": 6,
+      "original_score": 119.22269269085521,
+      "selected_score": 119.22269269085521,
+      "original_tv": 2,
+      "selected_tv": 2,
+      "mac_saved_pct": 1.3789043746417096
+    },
+    {
+      "image": "kodim02.png",
+      "qp": 0,
+      "shape": [
+        512,
+        768
+      ],
+      "scan_result_sha256": "fca1000f40c0180ffdbdc0b68d57ea198aaf30420782fe50841ef99905c1501b",
+      "original": [
+        2,
+        2,
+        3,
+        2,
+        2,
+        2
+      ],
+      "selected": [
+        2,
+        2,
+        3,
+        2,
+        2,
+        2
+      ],
+      "changed": false,
+      "candidate_count": 6,
+      "original_score": -142.8721773065714,
+      "selected_score": -142.8721773065714,
+      "original_tv": 2,
+      "selected_tv": 2,
+      "mac_saved_pct": 36.64011219362669
+    },
+    {
+      "image": "kodim02.png",
+      "qp": 16,
+      "shape": [
+        512,
+        768
+      ],
+      "scan_result_sha256": "4f35e0063fc336809ad9ea46763e7d288fdf827e8c8bc5995db65f5032b53450",
+      "original": [
+        3,
+        3,
+        3,
+        3,
+        3,
+        3
+      ],
+      "selected": [
+        3,
+        3,
+        3,
+        3,
+        3,
+        3
+      ],
+      "changed": false,
+      "candidate_count": 1,
+      "original_score": -72.37185424196004,
+      "selected_score": -72.37185424196004,
+      "original_tv": 0,
+      "selected_tv": 0,
+      "mac_saved_pct": 24.217887314361864
+    },
+    {
+      "image": "kodim02.png",
+      "qp": 32,
+      "shape": [
+        512,
+        768
+      ],
+      "scan_result_sha256": "6fc2f58a9d5ec58b37c1ff3cee2fd2baa2edfc2e5046dc11b579cac880a8d5a3",
+      "original": [
+        4,
+        5,
+        4,
+        4,
+        3,
+        3
+      ],
+      "selected": [
+        5,
+        4,
+        4,
+        4,
+        3,
+        3
+      ],
+      "changed": true,
+      "candidate_count": 60,
+      "original_score": 14.920405992622225,
+      "selected_score": 14.571970769519655,
+      "original_tv": 6,
+      "selected_tv": 5,
+      "mac_saved_pct": 14.427678378624254
+    },
+    {
+      "image": "kodim02.png",
+      "qp": 48,
+      "shape": [
+        512,
+        768
+      ],
+      "scan_result_sha256": "c36679e80254ea7b76a1b1d2ac311cffee93a0078c37181b2253d4c4065cb466",
+      "original": [
+        5,
+        5,
+        5,
+        4,
+        5,
+        3
+      ],
+      "selected": [
+        5,
+        5,
+        5,
+        5,
+        4,
+        3
+      ],
+      "changed": true,
+      "candidate_count": 30,
+      "original_score": 92.20240305012342,
+      "selected_score": 91.81538389271375,
+      "original_tv": 6,
+      "selected_tv": 5,
+      "mac_saved_pct": 5.573670657676988
+    },
+    {
+      "image": "kodim02.png",
+      "qp": 63,
+      "shape": [
+        512,
+        768
+      ],
+      "scan_result_sha256": "4f4a19daec77a45ece1e20ec3dedce06fe83d2ccac139268f37555458837881a",
+      "original": [
+        5,
+        5,
+        5,
+        5,
+        5,
+        3
+      ],
+      "selected": [
+        5,
+        5,
+        5,
+        5,
+        5,
+        3
+      ],
+      "changed": false,
+      "candidate_count": 6,
+      "original_score": 113.96809149018199,
+      "selected_score": 113.96809149018199,
+      "original_tv": 4,
+      "selected_tv": 4,
+      "mac_saved_pct": 3.2440469584887555
+    },
+    {
+      "image": "kodim03.png",
+      "qp": 0,
+      "shape": [
+        512,
+        768
+      ],
+      "scan_result_sha256": "fa5614006ec945da46a0185d11a6b17634524a9241d33a63deffaf96128ced0e",
+      "original": [
+        3,
+        3,
+        2,
+        2,
+        2,
+        3
+      ],
+      "selected": [
+        3,
+        3,
+        2,
+        2,
+        2,
+        3
+      ],
+      "changed": false,
+      "candidate_count": 20,
+      "original_score": -141.29665652516422,
+      "selected_score": -141.29665652516422,
+      "original_tv": 5,
+      "selected_tv": 5,
+      "mac_saved_pct": 31.671221645874315
+    },
+    {
+      "image": "kodim03.png",
+      "qp": 16,
+      "shape": [
+        512,
+        768
+      ],
+      "scan_result_sha256": "e6a6739fbc43139e6e92b82597304fe7d96ccf62dd9141c686e70af5c4ffa341",
+      "original": [
+        3,
+        3,
+        2,
+        2,
+        3,
+        3
+      ],
+      "selected": [
+        3,
+        3,
+        2,
+        2,
+        3,
+        3
+      ],
+      "changed": false,
+      "candidate_count": 15,
+      "original_score": -67.16676728292198,
+      "selected_score": -67.16676728292198,
+      "original_tv": 4,
+      "selected_tv": 4,
+      "mac_saved_pct": 29.186777862114244
+    },
+    {
+      "image": "kodim03.png",
+      "qp": 32,
+      "shape": [
+        512,
+        768
+      ],
+      "scan_result_sha256": "6ebe01b6e4fe83174fbd6d4f9bf26e205f399f465cbb6fa02f3f08485deeb260",
+      "original": [
+        5,
+        5,
+        2,
+        2,
+        4,
+        3
+      ],
+      "selected": [
+        5,
+        5,
+        2,
+        2,
+        4,
+        3
+      ],
+      "changed": false,
+      "candidate_count": 180,
+      "original_score": 14.467447957691494,
+      "selected_score": 14.467447957691494,
+      "original_tv": 11,
+      "selected_tv": 11,
+      "mac_saved_pct": 18.932093771499925
+    },
+    {
+      "image": "kodim03.png",
+      "qp": 48,
+      "shape": [
+        512,
+        768
+      ],
+      "scan_result_sha256": "223e7042004a4c22167c024918ddbc7b5c1d01bf0f5fda74107f763e77ddad5f",
+      "original": [
+        5,
+        5,
+        2,
+        3,
+        5,
+        3
+      ],
+      "selected": [
+        5,
+        5,
+        2,
+        3,
+        5,
+        3
+      ],
+      "changed": false,
+      "candidate_count": 60,
+      "original_score": 87.27292805244487,
+      "selected_score": 87.27292805244487,
+      "original_tv": 10,
+      "selected_tv": 10,
+      "mac_saved_pct": 14.11802926878386
+    },
+    {
+      "image": "kodim03.png",
+      "qp": 63,
+      "shape": [
+        512,
+        768
+      ],
+      "scan_result_sha256": "262f775b1b1f8a586e6672032d9249724fc4ef3c17a9614cbc392c4a85fd5808",
+      "original": [
+        5,
+        5,
+        2,
+        3,
+        5,
+        5
+      ],
+      "selected": [
+        5,
+        5,
+        2,
+        5,
+        5,
+        3
+      ],
+      "changed": true,
+      "candidate_count": 30,
+      "original_score": 107.05646606165591,
+      "selected_score": 105.7465959377927,
+      "original_tv": 10,
+      "selected_tv": 6,
+      "mac_saved_pct": 9.923260005516344
+    },
+    {
+      "image": "kodim04.png",
+      "qp": 0,
+      "shape": [
+        768,
+        512
+      ],
+      "scan_result_sha256": "5b5e2b230777cc1d6a6addc7e5ea22fd857d8d00f35fe41aa4d04306f2aaedd5",
+      "original": [
+        2,
+        2,
+        2,
+        2,
+        2,
+        3
+      ],
+      "selected": [
+        2,
+        2,
+        2,
+        2,
+        2,
+        3
+      ],
+      "changed": false,
+      "candidate_count": 6,
+      "original_score": -143.6788396276621,
+      "selected_score": -143.6788396276621,
+      "original_tv": 2,
+      "selected_tv": 2,
+      "mac_saved_pct": 36.64011219362669
+    },
+    {
+      "image": "kodim04.png",
+      "qp": 16,
+      "shape": [
+        768,
+        512
+      ],
+      "scan_result_sha256": "9b01a5f04d89e6edca897113c2c9adef409b6ff3b8fed7a1c5803cd04f95c704",
+      "original": [
+        3,
+        3,
+        2,
+        3,
+        3,
+        3
+      ],
+      "selected": [
+        3,
+        3,
+        2,
+        3,
+        3,
+        3
+      ],
+      "changed": false,
+      "candidate_count": 6,
+      "original_score": -72.59523468211874,
+      "selected_score": -72.59523468211874,
+      "original_tv": 3,
+      "selected_tv": 3,
+      "mac_saved_pct": 26.702334078354173
+    },
+    {
+      "image": "kodim04.png",
+      "qp": 32,
+      "shape": [
+        768,
+        512
+      ],
+      "scan_result_sha256": "03dec7c3371d8fa2591b2f79a1115dc51aebacfddd43d4cb123264377d2eea2b",
+      "original": [
+        4,
+        5,
+        3,
+        3,
+        5,
+        4
+      ],
+      "selected": [
+        4,
+        4,
+        3,
+        3,
+        5,
+        5
+      ],
+      "changed": true,
+      "candidate_count": 90,
+      "original_score": 15.788349435852224,
+      "selected_score": 14.815067098663505,
+      "original_tv": 8,
+      "selected_tv": 6,
+      "mac_saved_pct": 12.09805765966826
+    },
+    {
+      "image": "kodim04.png",
+      "qp": 48,
+      "shape": [
+        768,
+        512
+      ],
+      "scan_result_sha256": "91522014d50452c6ac9daf1634370bbea533630dd25c7973c8f61554735abab5",
+      "original": [
+        5,
+        5,
+        3,
+        3,
+        5,
+        5
+      ],
+      "selected": [
+        5,
+        5,
+        3,
+        3,
+        5,
+        5
+      ],
+      "changed": false,
+      "candidate_count": 15,
+      "original_score": 89.92787616326504,
+      "selected_score": 89.92787616326504,
+      "original_tv": 8,
+      "selected_tv": 8,
+      "mac_saved_pct": 7.438813241524034
+    },
+    {
+      "image": "kodim04.png",
+      "qp": 63,
+      "shape": [
+        768,
+        512
+      ],
+      "scan_result_sha256": "61ef7e6ad9e80991b1f0bec92076a3cd686a75bcf75f688fb1d98885267c697a",
+      "original": [
+        3,
+        5,
+        3,
+        3,
+        5,
+        5
+      ],
+      "selected": [
+        3,
+        5,
+        3,
+        3,
+        5,
+        5
+      ],
+      "changed": false,
+      "candidate_count": 20,
+      "original_score": 109.00721455017455,
+      "selected_score": 109.00721455017455,
+      "original_tv": 8,
+      "selected_tv": 8,
+      "mac_saved_pct": 11.633582504791551
+    },
+    {
+      "image": "kodim05.png",
+      "qp": 0,
+      "shape": [
+        512,
+        768
+      ],
+      "scan_result_sha256": "a3bf80eb33244d64b2cbeb8de1d5d9d157d93a809319a038971a6d3e086668f9",
+      "original": [
+        3,
+        3,
+        3,
+        3,
+        3,
+        3
+      ],
+      "selected": [
+        3,
+        3,
+        3,
+        3,
+        3,
+        3
+      ],
+      "changed": false,
+      "candidate_count": 1,
+      "original_score": -156.87137889309258,
+      "selected_score": -156.87137889309258,
+      "original_tv": 0,
+      "selected_tv": 0,
+      "mac_saved_pct": 24.217887314361864
+    },
+    {
+      "image": "kodim05.png",
+      "qp": 16,
+      "shape": [
+        512,
+        768
+      ],
+      "scan_result_sha256": "79207c5f19c82015f507fdf53f4089746ad70310450496ce1250360f1420f430",
+      "original": [
+        4,
+        4,
+        4,
+        4,
+        4,
+        3
+      ],
+      "selected": [
+        4,
+        4,
+        4,
+        4,
+        4,
+        3
+      ],
+      "changed": false,
+      "candidate_count": 6,
+      "original_score": -82.23844184183886,
+      "selected_score": -82.23844184183886,
+      "original_tv": 2,
+      "selected_tv": 2,
+      "mac_saved_pct": 14.892150553268724
+    },
+    {
+      "image": "kodim05.png",
+      "qp": 32,
+      "shape": [
+        512,
+        768
+      ],
+      "scan_result_sha256": "cad4fe3c463021fa535dc1524e72950bc39819b34d10197b24b5047d72b3001e",
+      "original": [
+        5,
+        5,
+        5,
+        5,
+        5,
+        5
+      ],
+      "selected": [
+        5,
+        5,
+        5,
+        5,
+        5,
+        5
+      ],
+      "changed": false,
+      "candidate_count": 1,
+      "original_score": 21.176753134261908,
+      "selected_score": 21.176753134261908,
+      "original_tv": 0,
+      "selected_tv": 0,
+      "mac_saved_pct": -0.9507193245465118
+    },
+    {
+      "image": "kodim05.png",
+      "qp": 48,
+      "shape": [
+        512,
+        768
+      ],
+      "scan_result_sha256": "3c93176d56d77c65b2c37a1216ac65e224b1b3784f8683a3a8615a2592a988d9",
+      "original": [
+        5,
+        5,
+        5,
+        5,
+        5,
+        5
+      ],
+      "selected": [
+        5,
+        5,
+        5,
+        5,
+        5,
+        5
+      ],
+      "changed": false,
+      "candidate_count": 1,
+      "original_score": 109.45970182604478,
+      "selected_score": 109.45970182604478,
+      "original_tv": 0,
+      "selected_tv": 0,
+      "mac_saved_pct": -0.9507193245465118
+    },
+    {
+      "image": "kodim05.png",
+      "qp": 63,
+      "shape": [
+        512,
+        768
+      ],
+      "scan_result_sha256": "206ef3b3dcc2a8822e94745171083c458c5a32ad03a09aedfd7be694a23c0054",
+      "original": [
+        5,
+        5,
+        5,
+        5,
+        5,
+        5
+      ],
+      "selected": [
+        5,
+        5,
+        5,
+        5,
+        5,
+        5
+      ],
+      "changed": false,
+      "candidate_count": 1,
+      "original_score": 137.05342045572442,
+      "selected_score": 137.05342045572442,
+      "original_tv": 0,
+      "selected_tv": 0,
+      "mac_saved_pct": -0.9507193245465118
+    },
+    {
+      "image": "kodim06.png",
+      "qp": 0,
+      "shape": [
+        512,
+        768
+      ],
+      "scan_result_sha256": "67ca562420f97de0de56c69b2147a520b76d3b614988eb85af600feadde1bf29",
+      "original": [
+        3,
+        3,
+        2,
+        3,
+        2,
+        2
+      ],
+      "selected": [
+        3,
+        3,
+        2,
+        3,
+        2,
+        2
+      ],
+      "changed": false,
+      "candidate_count": 20,
+      "original_score": -140.4542495370203,
+      "selected_score": -140.4542495370203,
+      "original_tv": 3,
+      "selected_tv": 3,
+      "mac_saved_pct": 31.671221645874315
+    },
+    {
+      "image": "kodim06.png",
+      "qp": 16,
+      "shape": [
+        512,
+        768
+      ],
+      "scan_result_sha256": "e944d82394036d74de6cc1c022d9f52d49b9ab0e767be9b2e91eafdeee4ff288",
+      "original": [
+        3,
+        3,
+        2,
+        3,
+        3,
+        2
+      ],
+      "selected": [
+        3,
+        3,
+        2,
+        3,
+        3,
+        2
+      ],
+      "changed": false,
+      "candidate_count": 15,
+      "original_score": -72.7040710286686,
+      "selected_score": -72.7040710286686,
+      "original_tv": 2,
+      "selected_tv": 2,
+      "mac_saved_pct": 29.186777862114244
+    },
+    {
+      "image": "kodim06.png",
+      "qp": 32,
+      "shape": [
+        512,
+        768
+      ],
+      "scan_result_sha256": "ca4998a2d898d2159632fb3f8cf8af68803351b1be63acaa935ace6cfec24f3c",
+      "original": [
+        5,
+        5,
+        3,
+        5,
+        5,
+        3
+      ],
+      "selected": [
+        5,
+        5,
+        3,
+        5,
+        5,
+        3
+      ],
+      "changed": false,
+      "candidate_count": 15,
+      "original_score": 17.692537398009165,
+      "selected_score": 17.692537398009165,
+      "original_tv": 4,
+      "selected_tv": 4,
+      "mac_saved_pct": 7.438813241524034
+    },
+    {
+      "image": "kodim06.png",
+      "qp": 48,
+      "shape": [
+        512,
+        768
+      ],
+      "scan_result_sha256": "4466f93492808eb69935a94bb283a1dd0f6e59345156f361ba9121b90f82fa9d",
+      "original": [
+        5,
+        5,
+        3,
+        5,
+        5,
+        3
+      ],
+      "selected": [
+        5,
+        5,
+        3,
+        5,
+        5,
+        3
+      ],
+      "changed": false,
+      "candidate_count": 15,
+      "original_score": 95.62454210593395,
+      "selected_score": 95.62454210593395,
+      "original_tv": 4,
+      "selected_tv": 4,
+      "mac_saved_pct": 7.438813241524034
+    },
+    {
+      "image": "kodim06.png",
+      "qp": 63,
+      "shape": [
+        512,
+        768
+      ],
+      "scan_result_sha256": "0134538a8bd4114b6754c4e947d1cff0e24d48c14754dde9e2b5ec2aec541ee1",
+      "original": [
+        5,
+        5,
+        3,
+        5,
+        5,
+        3
+      ],
+      "selected": [
+        5,
+        5,
+        3,
+        5,
+        5,
+        3
+      ],
+      "changed": false,
+      "candidate_count": 15,
+      "original_score": 116.14534691289563,
+      "selected_score": 116.14534691289563,
+      "original_tv": 4,
+      "selected_tv": 4,
+      "mac_saved_pct": 7.438813241524034
+    },
+    {
+      "image": "kodim07.png",
+      "qp": 0,
+      "shape": [
+        512,
+        768
+      ],
+      "scan_result_sha256": "d8f75b570b3df774162a3781b0dfa4c2f5e9d91e09d3ae6aae225fa4eeaff53f",
+      "original": [
+        2,
+        3,
+        3,
+        3,
+        3,
+        3
+      ],
+      "selected": [
+        2,
+        3,
+        3,
+        3,
+        3,
+        3
+      ],
+      "changed": false,
+      "candidate_count": 6,
+      "original_score": -152.27176607479655,
+      "selected_score": -152.27176607479655,
+      "original_tv": 2,
+      "selected_tv": 2,
+      "mac_saved_pct": 26.702334078354173
+    },
+    {
+      "image": "kodim07.png",
+      "qp": 16,
+      "shape": [
+        512,
+        768
+      ],
+      "scan_result_sha256": "ae5717e13046c6884b57f197d0b8a438dc4a74e248d8da8c111a344846d6a31a",
+      "original": [
+        3,
+        3,
+        3,
+        3,
+        3,
+        4
+      ],
+      "selected": [
+        3,
+        3,
+        3,
+        3,
+        3,
+        4
+      ],
+      "changed": false,
+      "candidate_count": 6,
+      "original_score": -75.76619949383125,
+      "selected_score": -75.76619949383125,
+      "original_tv": 2,
+      "selected_tv": 2,
+      "mac_saved_pct": 22.35273877005034
+    },
+    {
+      "image": "kodim07.png",
+      "qp": 32,
+      "shape": [
+        512,
+        768
+      ],
+      "scan_result_sha256": "b3705cd49614c0cbd2916f5a3dcd8b2fc33b673255118d1476613bb03700db94",
+      "original": [
+        3,
+        5,
+        5,
+        3,
+        4,
+        5
+      ],
+      "selected": [
+        3,
+        5,
+        5,
+        3,
+        4,
+        5
+      ],
+      "changed": false,
+      "candidate_count": 60,
+      "original_score": 17.221538120008965,
+      "selected_score": 17.221538120008965,
+      "original_tv": 5,
+      "selected_tv": 5,
+      "mac_saved_pct": 9.768433960480028
+    },
+    {
+      "image": "kodim07.png",
+      "qp": 48,
+      "shape": [
+        512,
+        768
+      ],
+      "scan_result_sha256": "6f14b17d0e9e7090f0ce4373f83cd609d00be4069d80c8dc5b10921931e670ae",
+      "original": [
+        3,
+        5,
+        5,
+        3,
+        5,
+        5
+      ],
+      "selected": [
+        3,
+        5,
+        5,
+        3,
+        5,
+        5
+      ],
+      "changed": false,
+      "candidate_count": 15,
+      "original_score": 94.17744203283482,
+      "selected_score": 94.17744203283482,
+      "original_tv": 4,
+      "selected_tv": 4,
+      "mac_saved_pct": 7.438813241524034
+    },
+    {
+      "image": "kodim07.png",
+      "qp": 63,
+      "shape": [
+        512,
+        768
+      ],
+      "scan_result_sha256": "598b0d9e2f8f330ef01ea89e2e5779035ed583471cf7f6964cd072648982b202",
+      "original": [
+        3,
+        5,
+        5,
+        3,
+        5,
+        5
+      ],
+      "selected": [
+        3,
+        5,
+        5,
+        3,
+        5,
+        5
+      ],
+      "changed": false,
+      "candidate_count": 15,
+      "original_score": 110.35706147864957,
+      "selected_score": 110.35706147864957,
+      "original_tv": 4,
+      "selected_tv": 4,
+      "mac_saved_pct": 7.438813241524034
+    },
+    {
+      "image": "kodim08.png",
+      "qp": 0,
+      "shape": [
+        512,
+        768
+      ],
+      "scan_result_sha256": "627df6a68e9c5a2cadc7fd1ec232652c15ebe797dc2e373d02d66e6369557466",
+      "original": [
+        3,
+        3,
+        3,
+        3,
+        3,
+        3
+      ],
+      "selected": [
+        3,
+        3,
+        3,
+        3,
+        3,
+        3
+      ],
+      "changed": false,
+      "candidate_count": 1,
+      "original_score": -159.51260399265618,
+      "selected_score": -159.51260399265618,
+      "original_tv": 0,
+      "selected_tv": 0,
+      "mac_saved_pct": 24.217887314361864
+    },
+    {
+      "image": "kodim08.png",
+      "qp": 16,
+      "shape": [
+        512,
+        768
+      ],
+      "scan_result_sha256": "5ef1c82672cea22ddfaf700b33d42b83a130e5d2d135b9bcaa612dde1db7cedb",
+      "original": [
+        4,
+        4,
+        4,
+        4,
+        4,
+        4
+      ],
+      "selected": [
+        4,
+        4,
+        4,
+        4,
+        4,
+        4
+      ],
+      "changed": false,
+      "candidate_count": 1,
+      "original_score": -82.82978980262197,
+      "selected_score": -82.82978980262197,
+      "original_tv": 0,
+      "selected_tv": 0,
+      "mac_saved_pct": 13.0270020089572
+    },
+    {
+      "image": "kodim08.png",
+      "qp": 32,
+      "shape": [
+        512,
+        768
+      ],
+      "scan_result_sha256": "d7c9a17811f6e5a028296d59278c6be5b6908e2cda9c14d0bbbd41c77ac7dad1",
+      "original": [
+        5,
+        5,
+        5,
+        5,
+        5,
+        5
+      ],
+      "selected": [
+        5,
+        5,
+        5,
+        5,
+        5,
+        5
+      ],
+      "changed": false,
+      "candidate_count": 1,
+      "original_score": 21.354107425343337,
+      "selected_score": 21.354107425343337,
+      "original_tv": 0,
+      "selected_tv": 0,
+      "mac_saved_pct": -0.9507193245465118
+    },
+    {
+      "image": "kodim08.png",
+      "qp": 48,
+      "shape": [
+        512,
+        768
+      ],
+      "scan_result_sha256": "1aaa3cfabf6911ed154b88ed79003f8166a82f81f1d833034d26631df5639534",
+      "original": [
+        5,
+        5,
+        5,
+        5,
+        5,
+        5
+      ],
+      "selected": [
+        5,
+        5,
+        5,
+        5,
+        5,
+        5
+      ],
+      "changed": false,
+      "candidate_count": 1,
+      "original_score": 110.01049349195645,
+      "selected_score": 110.01049349195645,
+      "original_tv": 0,
+      "selected_tv": 0,
+      "mac_saved_pct": -0.9507193245465118
+    },
+    {
+      "image": "kodim08.png",
+      "qp": 63,
+      "shape": [
+        512,
+        768
+      ],
+      "scan_result_sha256": "d1c73b237e3bdf9f46350ae4a4d54772c5d22fe6012bd88f2806497576ddd8b8",
+      "original": [
+        5,
+        5,
+        5,
+        5,
+        5,
+        5
+      ],
+      "selected": [
+        5,
+        5,
+        5,
+        5,
+        5,
+        5
+      ],
+      "changed": false,
+      "candidate_count": 1,
+      "original_score": 139.41480332759065,
+      "selected_score": 139.41480332759065,
+      "original_tv": 0,
+      "selected_tv": 0,
+      "mac_saved_pct": -0.9507193245465118
+    },
+    {
+      "image": "kodim09.png",
+      "qp": 0,
+      "shape": [
+        768,
+        512
+      ],
+      "scan_result_sha256": "bbd8af262e4eff2c8ec91f3a3645fea00de6e142fa4d66576060dfec91798a24",
+      "original": [
+        2,
+        2,
+        3,
+        3,
+        3,
+        2
+      ],
+      "selected": [
+        2,
+        2,
+        3,
+        3,
+        3,
+        2
+      ],
+      "changed": false,
+      "candidate_count": 20,
+      "original_score": -139.9629452586466,
+      "selected_score": -139.9629452586466,
+      "original_tv": 4,
+      "selected_tv": 4,
+      "mac_saved_pct": 31.671221645874315
+    },
+    {
+      "image": "kodim09.png",
+      "qp": 16,
+      "shape": [
+        768,
+        512
+      ],
+      "scan_result_sha256": "26731dd597c0ae9f70502c97bdca3e92526148fd35f5b8f00189a85984550571",
+      "original": [
+        2,
+        2,
+        3,
+        3,
+        3,
+        3
+      ],
+      "selected": [
+        2,
+        2,
+        3,
+        3,
+        3,
+        3
+      ],
+      "changed": false,
+      "candidate_count": 15,
+      "original_score": -66.89310800893993,
+      "selected_score": -66.89310800893993,
+      "original_tv": 2,
+      "selected_tv": 2,
+      "mac_saved_pct": 29.186777862114244
+    },
+    {
+      "image": "kodim09.png",
+      "qp": 32,
+      "shape": [
+        768,
+        512
+      ],
+      "scan_result_sha256": "94e425a30501cd69c0407b4b58a1d16f1e7846b2767f7305c15e1e72397d3c83",
+      "original": [
+        2,
+        2,
+        4,
+        3,
+        5,
+        3
+      ],
+      "selected": [
+        2,
+        2,
+        4,
+        3,
+        5,
+        3
+      ],
+      "changed": false,
+      "candidate_count": 180,
+      "original_score": 14.525520953154171,
+      "selected_score": 14.525520953154171,
+      "original_tv": 7,
+      "selected_tv": 7,
+      "mac_saved_pct": 23.12686601499968
+    },
+    {
+      "image": "kodim09.png",
+      "qp": 48,
+      "shape": [
+        768,
+        512
+      ],
+      "scan_result_sha256": "a1e9ca1340fb58f52f23dd37fd0fbf511501d5b82b3862845c8c77d4d18858f2",
+      "original": [
+        2,
+        2,
+        3,
+        3,
+        5,
+        3
+      ],
+      "selected": [
+        2,
+        2,
+        3,
+        3,
+        5,
+        3
+      ],
+      "changed": false,
+      "candidate_count": 60,
+      "original_score": 80.30454546689425,
+      "selected_score": 80.30454546689425,
+      "original_tv": 6,
+      "selected_tv": 6,
+      "mac_saved_pct": 24.992008598846727
+    },
+    {
+      "image": "kodim09.png",
+      "qp": 63,
+      "shape": [
+        768,
+        512
+      ],
+      "scan_result_sha256": "4e82f9d74c3a2aaf0cae035219441e5902773ea795a06134ab38be7516135cc5",
+      "original": [
+        2,
+        2,
+        3,
+        3,
+        5,
+        3
+      ],
+      "selected": [
+        2,
+        2,
+        3,
+        3,
+        5,
+        3
+      ],
+      "changed": false,
+      "candidate_count": 60,
+      "original_score": 98.0251747755362,
+      "selected_score": 98.0251747755362,
+      "original_tv": 6,
+      "selected_tv": 6,
+      "mac_saved_pct": 24.992008598846727
+    },
+    {
+      "image": "kodim10.png",
+      "qp": 0,
+      "shape": [
+        768,
+        512
+      ],
+      "scan_result_sha256": "ee58ef8720cb740c29b410e875b88f48b8e6e4195653b431183057764bd5dfa8",
+      "original": [
+        3,
+        2,
+        2,
+        2,
+        2,
+        3
+      ],
+      "selected": [
+        3,
+        2,
+        2,
+        2,
+        2,
+        3
+      ],
+      "changed": false,
+      "candidate_count": 15,
+      "original_score": -140.87538587043096,
+      "selected_score": -140.87538587043096,
+      "original_tv": 4,
+      "selected_tv": 4,
+      "mac_saved_pct": 34.1556669197505
+    },
+    {
+      "image": "kodim10.png",
+      "qp": 16,
+      "shape": [
+        768,
+        512
+      ],
+      "scan_result_sha256": "9ad15adee5895230b377072c3fac94704f67dd1e5f7d204cc33710e41b89e18d",
+      "original": [
+        3,
+        3,
+        2,
+        3,
+        3,
+        3
+      ],
+      "selected": [
+        3,
+        3,
+        2,
+        3,
+        3,
+        3
+      ],
+      "changed": false,
+      "candidate_count": 6,
+      "original_score": -70.42628367737517,
+      "selected_score": -70.42628367737517,
+      "original_tv": 3,
+      "selected_tv": 3,
+      "mac_saved_pct": 26.702334078354173
+    },
+    {
+      "image": "kodim10.png",
+      "qp": 32,
+      "shape": [
+        768,
+        512
+      ],
+      "scan_result_sha256": "883e67047e78dbce8dcb8dbee29c7f7286dce4be2336340ecc40455acec8fd92",
+      "original": [
+        5,
+        3,
+        2,
+        4,
+        3,
+        5
+      ],
+      "selected": [
+        5,
+        3,
+        2,
+        4,
+        3,
+        5
+      ],
+      "changed": false,
+      "candidate_count": 180,
+      "original_score": 15.60639809810274,
+      "selected_score": 15.60639809810274,
+      "original_tv": 12,
+      "selected_tv": 12,
+      "mac_saved_pct": 16.447647007507616
+    },
+    {
+      "image": "kodim10.png",
+      "qp": 48,
+      "shape": [
+        768,
+        512
+      ],
+      "scan_result_sha256": "48ab36fa2f4d3f0c5b70e80d36cf4a596e04c27ccc0b333395967c180e73453a",
+      "original": [
+        5,
+        3,
+        2,
+        4,
+        3,
+        5
+      ],
+      "selected": [
+        5,
+        3,
+        2,
+        4,
+        3,
+        5
+      ],
+      "changed": false,
+      "candidate_count": 180,
+      "original_score": 85.60624353260148,
+      "selected_score": 85.60624353260148,
+      "original_tv": 12,
+      "selected_tv": 12,
+      "mac_saved_pct": 16.447647007507616
+    },
+    {
+      "image": "kodim10.png",
+      "qp": 63,
+      "shape": [
+        768,
+        512
+      ],
+      "scan_result_sha256": "d9793feb890199d344b615cca49cff22a1b7f7a7f50270773828b9a93872e5ba",
+      "original": [
+        5,
+        3,
+        2,
+        3,
+        3,
+        5
+      ],
+      "selected": [
+        3,
+        3,
+        2,
+        3,
+        5,
+        5
+      ],
+      "changed": true,
+      "candidate_count": 60,
+      "original_score": 102.43199418469648,
+      "selected_score": 100.96760688706617,
+      "original_tv": 11,
+      "selected_tv": 7,
+      "mac_saved_pct": 18.31279555181914
+    },
+    {
+      "image": "kodim11.png",
+      "qp": 0,
+      "shape": [
+        512,
+        768
+      ],
+      "scan_result_sha256": "e7a439286aa1e9ba78b91fe152c70f42fca9ea1cdecf2509e424fc58c127c606",
+      "original": [
+        3,
+        3,
+        2,
+        2,
+        3,
+        2
+      ],
+      "selected": [
+        3,
+        3,
+        2,
+        2,
+        3,
+        2
+      ],
+      "changed": false,
+      "candidate_count": 20,
+      "original_score": -144.25451699498234,
+      "selected_score": -144.25451699498234,
+      "original_tv": 4,
+      "selected_tv": 4,
+      "mac_saved_pct": 31.671221645874315
+    },
+    {
+      "image": "kodim11.png",
+      "qp": 16,
+      "shape": [
+        512,
+        768
+      ],
+      "scan_result_sha256": "5e1428464b4e65d7536bf184fcfd85765805490cc2fcd88d0d578da5856e657d",
+      "original": [
+        3,
+        3,
+        3,
+        2,
+        3,
+        3
+      ],
+      "selected": [
+        3,
+        3,
+        3,
+        2,
+        3,
+        3
+      ],
+      "changed": false,
+      "candidate_count": 6,
+      "original_score": -72.17883544162497,
+      "selected_score": -72.17883544162497,
+      "original_tv": 2,
+      "selected_tv": 2,
+      "mac_saved_pct": 26.702334078354173
+    },
+    {
+      "image": "kodim11.png",
+      "qp": 32,
+      "shape": [
+        512,
+        768
+      ],
+      "scan_result_sha256": "94c7ce9b9d2259b145bb5727d57ef1f57827d7d5dea061f13c26a2f7f097b806",
+      "original": [
+        4,
+        5,
+        3,
+        3,
+        5,
+        5
+      ],
+      "selected": [
+        4,
+        5,
+        3,
+        3,
+        5,
+        5
+      ],
+      "changed": false,
+      "candidate_count": 60,
+      "original_score": 16.876597845055123,
+      "selected_score": 16.876597845055123,
+      "original_tv": 8,
+      "selected_tv": 8,
+      "mac_saved_pct": 9.768433960480028
+    },
+    {
+      "image": "kodim11.png",
+      "qp": 48,
+      "shape": [
+        512,
+        768
+      ],
+      "scan_result_sha256": "8a389b671da8341e0364d96390c7475c9ed7ee68be7bedfb94351b39cf7ec396",
+      "original": [
+        5,
+        5,
+        3,
+        3,
+        5,
+        5
+      ],
+      "selected": [
+        5,
+        5,
+        3,
+        3,
+        5,
+        5
+      ],
+      "changed": false,
+      "candidate_count": 15,
+      "original_score": 92.72431506588154,
+      "selected_score": 92.72431506588154,
+      "original_tv": 8,
+      "selected_tv": 8,
+      "mac_saved_pct": 7.438813241524034
+    },
+    {
+      "image": "kodim11.png",
+      "qp": 63,
+      "shape": [
+        512,
+        768
+      ],
+      "scan_result_sha256": "0f203a7175e72fd0a135af2672da6d9447731c422ca31e64f88b75e43c004a5a",
+      "original": [
+        5,
+        5,
+        3,
+        3,
+        5,
+        5
+      ],
+      "selected": [
+        3,
+        5,
+        5,
+        3,
+        5,
+        5
+      ],
+      "changed": true,
+      "candidate_count": 15,
+      "original_score": 113.07451793864865,
+      "selected_score": 111.4422359795918,
+      "original_tv": 8,
+      "selected_tv": 4,
+      "mac_saved_pct": 7.438813241524034
+    },
+    {
+      "image": "kodim12.png",
+      "qp": 0,
+      "shape": [
+        512,
+        768
+      ],
+      "scan_result_sha256": "512512b3a32a51bab5a861530df75aa561fd0870cd1800778f51f6d034e44984",
+      "original": [
+        2,
+        3,
+        2,
+        2,
+        2,
+        2
+      ],
+      "selected": [
+        2,
+        3,
+        2,
+        2,
+        2,
+        2
+      ],
+      "changed": false,
+      "candidate_count": 6,
+      "original_score": -134.10355747119465,
+      "selected_score": -134.10355747119465,
+      "original_tv": 3,
+      "selected_tv": 3,
+      "mac_saved_pct": 36.64011219362669
+    },
+    {
+      "image": "kodim12.png",
+      "qp": 16,
+      "shape": [
+        512,
+        768
+      ],
+      "scan_result_sha256": "016d1174cc325060125b071b6deb7eb06779a3277938ec5e59b23d2f4a750e90",
+      "original": [
+        3,
+        3,
+        3,
+        2,
+        3,
+        2
+      ],
+      "selected": [
+        3,
+        3,
+        3,
+        2,
+        3,
+        2
+      ],
+      "changed": false,
+      "candidate_count": 15,
+      "original_score": -64.97806069119663,
+      "selected_score": -64.97806069119663,
+      "original_tv": 4,
+      "selected_tv": 4,
+      "mac_saved_pct": 29.186777862114244
+    },
+    {
+      "image": "kodim12.png",
+      "qp": 32,
+      "shape": [
+        512,
+        768
+      ],
+      "scan_result_sha256": "3b7b13ac51ddc5a58b9025087ada81a36659cf28d320d8155515d96a63da7b57",
+      "original": [
+        3,
+        5,
+        3,
+        2,
+        3,
+        2
+      ],
+      "selected": [
+        3,
+        5,
+        3,
+        2,
+        3,
+        2
+      ],
+      "changed": false,
+      "candidate_count": 60,
+      "original_score": 14.79475245506115,
+      "selected_score": 14.79475245506115,
+      "original_tv": 10,
+      "selected_tv": 10,
+      "mac_saved_pct": 24.992008598846727
+    },
+    {
+      "image": "kodim12.png",
+      "qp": 48,
+      "shape": [
+        512,
+        768
+      ],
+      "scan_result_sha256": "6caf1b76a0693b3f786aba7a6827c5668dd935ea7515d14ea9f6b422065f3295",
+      "original": [
+        3,
+        5,
+        3,
+        3,
+        3,
+        2
+      ],
+      "selected": [
+        3,
+        5,
+        3,
+        3,
+        3,
+        2
+      ],
+      "changed": false,
+      "candidate_count": 30,
+      "original_score": 80.19878298384118,
+      "selected_score": 80.19878298384118,
+      "original_tv": 8,
+      "selected_tv": 8,
+      "mac_saved_pct": 22.507564815086656
+    },
+    {
+      "image": "kodim12.png",
+      "qp": 63,
+      "shape": [
+        512,
+        768
+      ],
+      "scan_result_sha256": "1089b67671580820e314cbac6977fa5bb82cdf425d6e422913a22baa905d2dee",
+      "original": [
+        3,
+        5,
+        3,
+        3,
+        3,
+        2
+      ],
+      "selected": [
+        3,
+        5,
+        3,
+        3,
+        3,
+        2
+      ],
+      "changed": false,
+      "candidate_count": 30,
+      "original_score": 97.91900653087706,
+      "selected_score": 97.91900653087706,
+      "original_tv": 8,
+      "selected_tv": 8,
+      "mac_saved_pct": 22.507564815086656
+    },
+    {
+      "image": "kodim13.png",
+      "qp": 0,
+      "shape": [
+        512,
+        768
+      ],
+      "scan_result_sha256": "7cc8b162a7e3f3300000080d4849bcd55058557e3adafbe57e99bb6997ac0b62",
+      "original": [
+        2,
+        3,
+        2,
+        3,
+        2,
+        3
+      ],
+      "selected": [
+        2,
+        3,
+        2,
+        3,
+        3,
+        2
+      ],
+      "changed": true,
+      "candidate_count": 20,
+      "original_score": -146.72835437062324,
+      "selected_score": -147.85665837529243,
+      "original_tv": 7,
+      "selected_tv": 4,
+      "mac_saved_pct": 31.671221645874315
+    },
+    {
+      "image": "kodim13.png",
+      "qp": 16,
+      "shape": [
+        512,
+        768
+      ],
+      "scan_result_sha256": "42f10c598f943137c894e6cba7f46555c2606e4c3e70c29d36a439e24e41e540",
+      "original": [
+        3,
+        3,
+        3,
+        4,
+        3,
+        4
+      ],
+      "selected": [
+        3,
+        3,
+        3,
+        3,
+        4,
+        4
+      ],
+      "changed": true,
+      "candidate_count": 15,
+      "original_score": -77.80561756350488,
+      "selected_score": -78.0868515894601,
+      "original_tv": 4,
+      "selected_tv": 3,
+      "mac_saved_pct": 20.487596186203294
+    },
+    {
+      "image": "kodim13.png",
+      "qp": 32,
+      "shape": [
+        512,
+        768
+      ],
+      "scan_result_sha256": "afbc46661fd5e3eebcdc063cd2a20e036183be9de1ee83eab4d2b67a780df2a3",
+      "original": [
+        3,
+        5,
+        5,
+        5,
+        5,
+        5
+      ],
+      "selected": [
+        3,
+        5,
+        5,
+        5,
+        5,
+        5
+      ],
+      "changed": false,
+      "candidate_count": 6,
+      "original_score": 19.51079209228357,
+      "selected_score": 19.51079209228357,
+      "original_tv": 4,
+      "selected_tv": 4,
+      "mac_saved_pct": 3.2440469584887555
+    },
+    {
+      "image": "kodim13.png",
+      "qp": 48,
+      "shape": [
+        512,
+        768
+      ],
+      "scan_result_sha256": "4c9a0200cfff12ee7ff5bc7ff0018647c97a0acace7161fec22ac41b786c4c28",
+      "original": [
+        5,
+        5,
+        5,
+        5,
+        5,
+        5
+      ],
+      "selected": [
+        5,
+        5,
+        5,
+        5,
+        5,
+        5
+      ],
+      "changed": false,
+      "candidate_count": 1,
+      "original_score": 105.58260612673448,
+      "selected_score": 105.58260612673448,
+      "original_tv": 0,
+      "selected_tv": 0,
+      "mac_saved_pct": -0.9507193245465118
+    },
+    {
+      "image": "kodim13.png",
+      "qp": 63,
+      "shape": [
+        512,
+        768
+      ],
+      "scan_result_sha256": "f0ed8fd69b0a092265d09dc0f4748755ff3bce039da0813c24d061781a97cb4d",
+      "original": [
+        5,
+        5,
+        5,
+        5,
+        5,
+        5
+      ],
+      "selected": [
+        5,
+        5,
+        5,
+        5,
+        5,
+        5
+      ],
+      "changed": false,
+      "candidate_count": 1,
+      "original_score": 134.31040975597543,
+      "selected_score": 134.31040975597543,
+      "original_tv": 0,
+      "selected_tv": 0,
+      "mac_saved_pct": -0.9507193245465118
+    },
+    {
+      "image": "kodim14.png",
+      "qp": 0,
+      "shape": [
+        512,
+        768
+      ],
+      "scan_result_sha256": "042a35423bc802cd959467080c0b34cb51ff408b57e42ccadf0d1cccebfb7ce5",
+      "original": [
+        3,
+        3,
+        2,
+        3,
+        3,
+        3
+      ],
+      "selected": [
+        3,
+        3,
+        2,
+        3,
+        3,
+        3
+      ],
+      "changed": false,
+      "candidate_count": 6,
+      "original_score": -151.06876719822486,
+      "selected_score": -151.06876719822486,
+      "original_tv": 2,
+      "selected_tv": 2,
+      "mac_saved_pct": 26.702334078354173
+    },
+    {
+      "image": "kodim14.png",
+      "qp": 16,
+      "shape": [
+        512,
+        768
+      ],
+      "scan_result_sha256": "a7ef671372a982158d7336f2e4b6fbbe9f8be14773b0e66e85d472c164befc22",
+      "original": [
+        4,
+        3,
+        3,
+        3,
+        4,
+        3
+      ],
+      "selected": [
+        3,
+        3,
+        3,
+        3,
+        4,
+        4
+      ],
+      "changed": true,
+      "candidate_count": 15,
+      "original_score": -78.09316255905124,
+      "selected_score": -78.25325133659335,
+      "original_tv": 5,
+      "selected_tv": 3,
+      "mac_saved_pct": 20.487590225738817
+    },
+    {
+      "image": "kodim14.png",
+      "qp": 32,
+      "shape": [
+        512,
+        768
+      ],
+      "scan_result_sha256": "14a4d0e0a9626bd046df65fd621a8b33c8af0cd59d26fb7b1b3518d8bb7a3665",
+      "original": [
+        5,
+        5,
+        3,
+        5,
+        5,
+        5
+      ],
+      "selected": [
+        5,
+        5,
+        3,
+        5,
+        5,
+        5
+      ],
+      "changed": false,
+      "candidate_count": 6,
+      "original_score": 19.971861974199616,
+      "selected_score": 19.971861974199616,
+      "original_tv": 4,
+      "selected_tv": 4,
+      "mac_saved_pct": 3.2440469584887555
+    },
+    {
+      "image": "kodim14.png",
+      "qp": 48,
+      "shape": [
+        512,
+        768
+      ],
+      "scan_result_sha256": "f13a90a37fe58b473dbd5ec8fdf0c479e66c877d6248e85789c4697d2f866470",
+      "original": [
+        5,
+        5,
+        3,
+        5,
+        5,
+        5
+      ],
+      "selected": [
+        5,
+        5,
+        3,
+        5,
+        5,
+        5
+      ],
+      "changed": false,
+      "candidate_count": 6,
+      "original_score": 104.35642479042698,
+      "selected_score": 104.35642479042698,
+      "original_tv": 4,
+      "selected_tv": 4,
+      "mac_saved_pct": 3.2440469584887555
+    },
+    {
+      "image": "kodim14.png",
+      "qp": 63,
+      "shape": [
+        512,
+        768
+      ],
+      "scan_result_sha256": "8b8b706e3cc09f64caf142660e7570e0f5da4170ce897897a18a4106a25e6433",
+      "original": [
+        5,
+        5,
+        3,
+        5,
+        5,
+        5
+      ],
+      "selected": [
+        5,
+        5,
+        3,
+        5,
+        5,
+        5
+      ],
+      "changed": false,
+      "candidate_count": 6,
+      "original_score": 130.9678988777724,
+      "selected_score": 130.9678988777724,
+      "original_tv": 4,
+      "selected_tv": 4,
+      "mac_saved_pct": 3.2440469584887555
+    },
+    {
+      "image": "kodim15.png",
+      "qp": 0,
+      "shape": [
+        512,
+        768
+      ],
+      "scan_result_sha256": "c9993b711693eca06e6667f0f8acd9ca74302895926d6569602fcd2b4184ca34",
+      "original": [
+        3,
+        3,
+        2,
+        3,
+        3,
+        3
+      ],
+      "selected": [
+        3,
+        3,
+        2,
+        3,
+        3,
+        3
+      ],
+      "changed": false,
+      "candidate_count": 6,
+      "original_score": -150.52490735878547,
+      "selected_score": -150.52490735878547,
+      "original_tv": 2,
+      "selected_tv": 2,
+      "mac_saved_pct": 26.702334078354173
+    },
+    {
+      "image": "kodim15.png",
+      "qp": 16,
+      "shape": [
+        512,
+        768
+      ],
+      "scan_result_sha256": "3ab25aca9e5b14baa4e63aac32d547d1f8aeb7f44706fbbf54bd49a4f36c5aae",
+      "original": [
+        3,
+        3,
+        3,
+        3,
+        3,
+        3
+      ],
+      "selected": [
+        3,
+        3,
+        3,
+        3,
+        3,
+        3
+      ],
+      "changed": false,
+      "candidate_count": 1,
+      "original_score": -72.72324680911778,
+      "selected_score": -72.72324680911778,
+      "original_tv": 0,
+      "selected_tv": 0,
+      "mac_saved_pct": 24.217887314361864
+    },
+    {
+      "image": "kodim15.png",
+      "qp": 32,
+      "shape": [
+        512,
+        768
+      ],
+      "scan_result_sha256": "18205239fd66710e141bacc81abd54f8b651f8beb208e5470844d539215feb28",
+      "original": [
+        5,
+        4,
+        3,
+        5,
+        5,
+        3
+      ],
+      "selected": [
+        5,
+        4,
+        3,
+        5,
+        5,
+        3
+      ],
+      "changed": false,
+      "candidate_count": 60,
+      "original_score": 16.668041207887192,
+      "selected_score": 16.668041207887192,
+      "original_tv": 5,
+      "selected_tv": 5,
+      "mac_saved_pct": 9.768439920944505
+    },
+    {
+      "image": "kodim15.png",
+      "qp": 48,
+      "shape": [
+        512,
+        768
+      ],
+      "scan_result_sha256": "245268cf9ede301b19e052ddcd9ac4c796589f2c7fbca1052482fce42800bfcd",
+      "original": [
+        5,
+        5,
+        3,
+        5,
+        5,
+        5
+      ],
+      "selected": [
+        5,
+        5,
+        3,
+        5,
+        5,
+        5
+      ],
+      "changed": false,
+      "candidate_count": 6,
+      "original_score": 97.07044304589917,
+      "selected_score": 97.07044304589917,
+      "original_tv": 4,
+      "selected_tv": 4,
+      "mac_saved_pct": 3.2440469584887555
+    },
+    {
+      "image": "kodim15.png",
+      "qp": 63,
+      "shape": [
+        512,
+        768
+      ],
+      "scan_result_sha256": "e7469eee0247d68e64b73dbd58a206b8e1fccfca677bce2bcb8167a9ecb47c3a",
+      "original": [
+        5,
+        5,
+        5,
+        5,
+        5,
+        5
+      ],
+      "selected": [
+        5,
+        5,
+        5,
+        5,
+        5,
+        5
+      ],
+      "changed": false,
+      "candidate_count": 1,
+      "original_score": 120.91623476293725,
+      "selected_score": 120.91623476293725,
+      "original_tv": 0,
+      "selected_tv": 0,
+      "mac_saved_pct": -0.9507193245465118
+    },
+    {
+      "image": "kodim16.png",
+      "qp": 0,
+      "shape": [
+        512,
+        768
+      ],
+      "scan_result_sha256": "425437e7b9f58a66285e035076777a365386b217cec4a62c6d9c14155d2fb999",
+      "original": [
+        2,
+        2,
+        2,
+        2,
+        2,
+        2
+      ],
+      "selected": [
+        2,
+        2,
+        2,
+        2,
+        2,
+        2
+      ],
+      "changed": false,
+      "candidate_count": 1,
+      "original_score": -122.14128585420397,
+      "selected_score": -122.14128585420397,
+      "original_tv": 0,
+      "selected_tv": 0,
+      "mac_saved_pct": 39.12455746750288
+    },
+    {
+      "image": "kodim16.png",
+      "qp": 16,
+      "shape": [
+        512,
+        768
+      ],
+      "scan_result_sha256": "0097b92ff0881bdda5543f9f04d9132e3379fe5e4d72ba5ed68aefa2a8f49f31",
+      "original": [
+        2,
+        2,
+        2,
+        3,
+        2,
+        3
+      ],
+      "selected": [
+        2,
+        2,
+        2,
+        3,
+        2,
+        3
+      ],
+      "changed": false,
+      "candidate_count": 15,
+      "original_score": -62.34400579433148,
+      "selected_score": -62.34400579433148,
+      "original_tv": 4,
+      "selected_tv": 4,
+      "mac_saved_pct": 34.1556669197505
+    },
+    {
+      "image": "kodim16.png",
+      "qp": 32,
+      "shape": [
+        512,
+        768
+      ],
+      "scan_result_sha256": "7f475c2323269843e48480f14c5699d3c210c088097bd872ee761627b7d02fd3",
+      "original": [
+        3,
+        3,
+        3,
+        3,
+        3,
+        3
+      ],
+      "selected": [
+        3,
+        3,
+        3,
+        3,
+        3,
+        3
+      ],
+      "changed": false,
+      "candidate_count": 1,
+      "original_score": 13.470536262932729,
+      "selected_score": 13.470536262932729,
+      "original_tv": 0,
+      "selected_tv": 0,
+      "mac_saved_pct": 24.217887314361864
+    },
+    {
+      "image": "kodim16.png",
+      "qp": 48,
+      "shape": [
+        512,
+        768
+      ],
+      "scan_result_sha256": "434c8bb362ea513563494221415150ca0cd64a486888e9cb30b8502ffcccd4ee",
+      "original": [
+        3,
+        3,
+        3,
+        3,
+        3,
+        3
+      ],
+      "selected": [
+        3,
+        3,
+        3,
+        3,
+        3,
+        3
+      ],
+      "changed": false,
+      "candidate_count": 1,
+      "original_score": 75.6461691871137,
+      "selected_score": 75.6461691871137,
+      "original_tv": 0,
+      "selected_tv": 0,
+      "mac_saved_pct": 24.217887314361864
+    },
+    {
+      "image": "kodim16.png",
+      "qp": 63,
+      "shape": [
+        512,
+        768
+      ],
+      "scan_result_sha256": "3ff17734e0534576b7f30a6e7dc8065add6dd83960a00b06ba185795cc88b284",
+      "original": [
+        3,
+        3,
+        3,
+        3,
+        3,
+        3
+      ],
+      "selected": [
+        3,
+        3,
+        3,
+        3,
+        3,
+        3
+      ],
+      "changed": false,
+      "candidate_count": 1,
+      "original_score": 92.72985181860538,
+      "selected_score": 92.72985181860538,
+      "original_tv": 0,
+      "selected_tv": 0,
+      "mac_saved_pct": 24.217887314361864
+    },
+    {
+      "image": "kodim17.png",
+      "qp": 0,
+      "shape": [
+        768,
+        512
+      ],
+      "scan_result_sha256": "457aea359fcc71bb16b690334514787cfb3aad5b2acc4fa8c60db5b9dc62313a",
+      "original": [
+        2,
+        2,
+        2,
+        2,
+        2,
+        2
+      ],
+      "selected": [
+        2,
+        2,
+        2,
+        2,
+        2,
+        2
+      ],
+      "changed": false,
+      "candidate_count": 1,
+      "original_score": -133.54143937192705,
+      "selected_score": -133.54143937192705,
+      "original_tv": 0,
+      "selected_tv": 0,
+      "mac_saved_pct": 39.12455746750288
+    },
+    {
+      "image": "kodim17.png",
+      "qp": 16,
+      "shape": [
+        768,
+        512
+      ],
+      "scan_result_sha256": "0f04e3543cbd4ffb2af8d0b5d783090a91c240fd73050778e49817e9a19672ac",
+      "original": [
+        2,
+        3,
+        2,
+        3,
+        2,
+        3
+      ],
+      "selected": [
+        2,
+        3,
+        2,
+        3,
+        2,
+        3
+      ],
+      "changed": false,
+      "candidate_count": 20,
+      "original_score": -67.21140000951488,
+      "selected_score": -67.21140000951488,
+      "original_tv": 3,
+      "selected_tv": 3,
+      "mac_saved_pct": 31.671221645874315
+    },
+    {
+      "image": "kodim17.png",
+      "qp": 32,
+      "shape": [
+        768,
+        512
+      ],
+      "scan_result_sha256": "ea9f8a4e99751565bcf0898eab6261dcc9c1fe6ba8664b5596c33f089884ed43",
+      "original": [
+        3,
+        5,
+        3,
+        4,
+        3,
+        3
+      ],
+      "selected": [
+        3,
+        5,
+        3,
+        4,
+        3,
+        3
+      ],
+      "changed": false,
+      "candidate_count": 30,
+      "original_score": 14.245631420249524,
+      "selected_score": 14.245631420249524,
+      "original_tv": 5,
+      "selected_tv": 5,
+      "mac_saved_pct": 18.1579754672473
+    },
+    {
+      "image": "kodim17.png",
+      "qp": 48,
+      "shape": [
+        768,
+        512
+      ],
+      "scan_result_sha256": "120c24fd1d448d742e2c4e2ee89fcd4737d6020508b61b6af70e2a583915ca5c",
+      "original": [
+        3,
+        5,
+        3,
+        5,
+        3,
+        3
+      ],
+      "selected": [
+        3,
+        5,
+        3,
+        5,
+        3,
+        3
+      ],
+      "changed": false,
+      "candidate_count": 15,
+      "original_score": 81.27063158414065,
+      "selected_score": 81.27063158414065,
+      "original_tv": 6,
+      "selected_tv": 6,
+      "mac_saved_pct": 15.828351768059068
+    },
+    {
+      "image": "kodim17.png",
+      "qp": 63,
+      "shape": [
+        768,
+        512
+      ],
+      "scan_result_sha256": "402717b654105afaf8b249bab363d85c985745e353440d0894e4d4c1d861ec8a",
+      "original": [
+        3,
+        5,
+        3,
+        5,
+        3,
+        3
+      ],
+      "selected": [
+        3,
+        5,
+        3,
+        5,
+        3,
+        3
+      ],
+      "changed": false,
+      "candidate_count": 15,
+      "original_score": 101.0179489005005,
+      "selected_score": 101.0179489005005,
+      "original_tv": 6,
+      "selected_tv": 6,
+      "mac_saved_pct": 15.828351768059068
+    },
+    {
+      "image": "kodim18.png",
+      "qp": 0,
+      "shape": [
+        768,
+        512
+      ],
+      "scan_result_sha256": "f6ad2211ff9a24ea34e5c0af5c5d0de060df981f62da6f3787309f6b76dc03e0",
+      "original": [
+        2,
+        2,
+        2,
+        3,
+        2,
+        2
+      ],
+      "selected": [
+        2,
+        2,
+        2,
+        3,
+        2,
+        2
+      ],
+      "changed": false,
+      "candidate_count": 6,
+      "original_score": -140.43853682652988,
+      "selected_score": -140.43853682652988,
+      "original_tv": 3,
+      "selected_tv": 3,
+      "mac_saved_pct": 36.64011219362669
+    },
+    {
+      "image": "kodim18.png",
+      "qp": 16,
+      "shape": [
+        768,
+        512
+      ],
+      "scan_result_sha256": "3f49698c52589ab8171fc277428c6ae478e276953c780a5636b00cdaf8877a6a",
+      "original": [
+        3,
+        3,
+        3,
+        4,
+        3,
+        3
+      ],
+      "selected": [
+        3,
+        3,
+        3,
+        4,
+        3,
+        3
+      ],
+      "changed": false,
+      "candidate_count": 6,
+      "original_score": -74.55236318153723,
+      "selected_score": -74.55236318153723,
+      "original_tv": 3,
+      "selected_tv": 3,
+      "mac_saved_pct": 22.352744730514818
+    },
+    {
+      "image": "kodim18.png",
+      "qp": 32,
+      "shape": [
+        768,
+        512
+      ],
+      "scan_result_sha256": "b30aeae472ff0baf52a5715ac46b7834d58b00d0ff18b7a15d07046354e83967",
+      "original": [
+        4,
+        3,
+        5,
+        5,
+        5,
+        5
+      ],
+      "selected": [
+        4,
+        3,
+        5,
+        5,
+        5,
+        5
+      ],
+      "changed": false,
+      "candidate_count": 30,
+      "original_score": 18.00318794789791,
+      "selected_score": 18.00318794789791,
+      "original_tv": 4,
+      "selected_tv": 4,
+      "mac_saved_pct": 5.573664697212511
+    },
+    {
+      "image": "kodim18.png",
+      "qp": 48,
+      "shape": [
+        768,
+        512
+      ],
+      "scan_result_sha256": "88ab19455b8d6bfca10b7167cbce3f0ea68b0fd115f6e31a589002cc846b05f4",
+      "original": [
+        5,
+        4,
+        5,
+        5,
+        5,
+        5
+      ],
+      "selected": [
+        5,
+        4,
+        5,
+        5,
+        5,
+        5
+      ],
+      "changed": false,
+      "candidate_count": 6,
+      "original_score": 101.5989919349777,
+      "selected_score": 101.5989919349777,
+      "original_tv": 2,
+      "selected_tv": 2,
+      "mac_saved_pct": 1.3789043746417096
+    },
+    {
+      "image": "kodim18.png",
+      "qp": 63,
+      "shape": [
+        768,
+        512
+      ],
+      "scan_result_sha256": "4b7856ac0b562aaa8a4b3667a64cc42fa0f7f7c17ada58761d7bc9f940591ade",
+      "original": [
+        5,
+        3,
+        5,
+        5,
+        5,
+        5
+      ],
+      "selected": [
+        5,
+        3,
+        5,
+        5,
+        5,
+        5
+      ],
+      "changed": false,
+      "candidate_count": 6,
+      "original_score": 126.29099561503799,
+      "selected_score": 126.29099561503799,
+      "original_tv": 4,
+      "selected_tv": 4,
+      "mac_saved_pct": 3.2440469584887555
+    },
+    {
+      "image": "kodim19.png",
+      "qp": 0,
+      "shape": [
+        768,
+        512
+      ],
+      "scan_result_sha256": "3f0e8624d8e90299b85b8f250e1a0cfd3e8ca4f3eac9e13238e3a510a3267ba2",
+      "original": [
+        2,
+        2,
+        3,
+        3,
+        3,
+        2
+      ],
+      "selected": [
+        2,
+        2,
+        3,
+        3,
+        3,
+        2
+      ],
+      "changed": false,
+      "candidate_count": 20,
+      "original_score": -143.4511244058901,
+      "selected_score": -143.4511244058901,
+      "original_tv": 4,
+      "selected_tv": 4,
+      "mac_saved_pct": 31.671221645874315
+    },
+    {
+      "image": "kodim19.png",
+      "qp": 16,
+      "shape": [
+        768,
+        512
+      ],
+      "scan_result_sha256": "ad394f5a832ba4ebcf0a5bfd82f2aeafcc4b16e1d5de5d6c018a962ea293d653",
+      "original": [
+        2,
+        2,
+        4,
+        4,
+        3,
+        3
+      ],
+      "selected": [
+        2,
+        2,
+        4,
+        3,
+        4,
+        3
+      ],
+      "changed": true,
+      "candidate_count": 90,
+      "original_score": -72.26364839319889,
+      "selected_score": -72.34794223551455,
+      "original_tv": 6,
+      "selected_tv": 5,
+      "mac_saved_pct": 25.456483753723436
+    },
+    {
+      "image": "kodim19.png",
+      "qp": 32,
+      "shape": [
+        768,
+        512
+      ],
+      "scan_result_sha256": "fb22f34eb4473cc72ea2c569c0c01c77769cc597147d59780cea94c2abf32ff1",
+      "original": [
+        2,
+        3,
+        5,
+        5,
+        5,
+        3
+      ],
+      "selected": [
+        2,
+        3,
+        5,
+        5,
+        5,
+        3
+      ],
+      "changed": false,
+      "candidate_count": 60,
+      "original_score": 17.267213277322785,
+      "selected_score": 17.267213277322785,
+      "original_tv": 10,
+      "selected_tv": 10,
+      "mac_saved_pct": 14.11802926878386
+    },
+    {
+      "image": "kodim19.png",
+      "qp": 48,
+      "shape": [
+        768,
+        512
+      ],
+      "scan_result_sha256": "cf38067bcfa1ad2fdcd3cfe111f67940652e310259c39888b7a9aaedf95fee54",
+      "original": [
+        2,
+        3,
+        5,
+        5,
+        5,
+        4
+      ],
+      "selected": [
+        2,
+        3,
+        5,
+        5,
+        5,
+        4
+      ],
+      "changed": false,
+      "candidate_count": 120,
+      "original_score": 90.51160665702567,
+      "selected_score": 90.51160665702567,
+      "original_tv": 8,
+      "selected_tv": 8,
+      "mac_saved_pct": 12.252880724472337
+    },
+    {
+      "image": "kodim19.png",
+      "qp": 63,
+      "shape": [
+        768,
+        512
+      ],
+      "scan_result_sha256": "ba4255561b3133658feaa89a5ff66d4bb5ac2745aa6ecebf0cb71038e772cf5f",
+      "original": [
+        2,
+        4,
+        5,
+        5,
+        5,
+        4
+      ],
+      "selected": [
+        2,
+        4,
+        5,
+        5,
+        5,
+        4
+      ],
+      "changed": false,
+      "candidate_count": 60,
+      "original_score": 113.08424178710382,
+      "selected_score": 113.08424178710382,
+      "original_tv": 8,
+      "selected_tv": 8,
+      "mac_saved_pct": 10.387735160393053
+    },
+    {
+      "image": "kodim20.png",
+      "qp": 0,
+      "shape": [
+        512,
+        768
+      ],
+      "scan_result_sha256": "b0a133442b2c01b7da90638b758ac73ef8f3a76bb116d150df92d1f375d1fe5b",
+      "original": [
+        3,
+        2,
+        2,
+        3,
+        3,
+        2
+      ],
+      "selected": [
+        3,
+        2,
+        2,
+        3,
+        3,
+        2
+      ],
+      "changed": false,
+      "candidate_count": 20,
+      "original_score": -142.26649633648933,
+      "selected_score": -142.26649633648933,
+      "original_tv": 3,
+      "selected_tv": 3,
+      "mac_saved_pct": 31.671221645874315
+    },
+    {
+      "image": "kodim20.png",
+      "qp": 16,
+      "shape": [
+        512,
+        768
+      ],
+      "scan_result_sha256": "b8de7a96dc38c48a398093548b1391006d30d27e0ad58f91db43a6f8ed7d3d22",
+      "original": [
+        3,
+        2,
+        2,
+        3,
+        3,
+        3
+      ],
+      "selected": [
+        3,
+        2,
+        2,
+        3,
+        3,
+        3
+      ],
+      "changed": false,
+      "candidate_count": 15,
+      "original_score": -69.65009616180154,
+      "selected_score": -69.65009616180154,
+      "original_tv": 3,
+      "selected_tv": 3,
+      "mac_saved_pct": 29.186777862114244
+    },
+    {
+      "image": "kodim20.png",
+      "qp": 32,
+      "shape": [
+        512,
+        768
+      ],
+      "scan_result_sha256": "aea4c01b1472a0602a86a6eaa9c4635b62812019cb5fb6722917bd848946a07a",
+      "original": [
+        5,
+        2,
+        3,
+        5,
+        5,
+        3
+      ],
+      "selected": [
+        5,
+        3,
+        2,
+        5,
+        5,
+        3
+      ],
+      "changed": true,
+      "candidate_count": 60,
+      "original_score": 16.314606159729497,
+      "selected_score": 16.293757468266026,
+      "original_tv": 9,
+      "selected_tv": 8,
+      "mac_saved_pct": 14.11802926878386
+    },
+    {
+      "image": "kodim20.png",
+      "qp": 48,
+      "shape": [
+        512,
+        768
+      ],
+      "scan_result_sha256": "a99581f8450fb1e83e570e062351758d8893c1b9fa326681325882e89c2391a3",
+      "original": [
+        5,
+        3,
+        3,
+        5,
+        5,
+        3
+      ],
+      "selected": [
+        5,
+        3,
+        3,
+        5,
+        5,
+        3
+      ],
+      "changed": false,
+      "candidate_count": 20,
+      "original_score": 90.03941145109827,
+      "selected_score": 90.03941145109827,
+      "original_tv": 6,
+      "selected_tv": 6,
+      "mac_saved_pct": 11.633582504791551
+    },
+    {
+      "image": "kodim20.png",
+      "qp": 63,
+      "shape": [
+        512,
+        768
+      ],
+      "scan_result_sha256": "e7e1f55618972153d50ff8dc2ddf77945f10f5dea2765c9915d637bd68624ab1",
+      "original": [
+        5,
+        5,
+        5,
+        5,
+        5,
+        3
+      ],
+      "selected": [
+        5,
+        5,
+        5,
+        5,
+        5,
+        3
+      ],
+      "changed": false,
+      "candidate_count": 6,
+      "original_score": 113.15605163803966,
+      "selected_score": 113.15605163803966,
+      "original_tv": 4,
+      "selected_tv": 4,
+      "mac_saved_pct": 3.2440469584887555
+    },
+    {
+      "image": "kodim21.png",
+      "qp": 0,
+      "shape": [
+        512,
+        768
+      ],
+      "scan_result_sha256": "5955310cbe9b6bf392fc7c4e6479458d50e571cf2c41dcc9891284fbff8e5c63",
+      "original": [
+        2,
+        2,
+        2,
+        3,
+        3,
+        2
+      ],
+      "selected": [
+        2,
+        2,
+        2,
+        3,
+        3,
+        2
+      ],
+      "changed": false,
+      "candidate_count": 15,
+      "original_score": -140.82199506947805,
+      "selected_score": -140.82199506947805,
+      "original_tv": 3,
+      "selected_tv": 3,
+      "mac_saved_pct": 34.1556669197505
+    },
+    {
+      "image": "kodim21.png",
+      "qp": 16,
+      "shape": [
+        512,
+        768
+      ],
+      "scan_result_sha256": "40907e4ec98c0ad4c842935d4b804a82412a0cd933e4959c7ec0357d5429fb5f",
+      "original": [
+        3,
+        3,
+        2,
+        3,
+        3,
+        3
+      ],
+      "selected": [
+        3,
+        3,
+        2,
+        3,
+        3,
+        3
+      ],
+      "changed": false,
+      "candidate_count": 6,
+      "original_score": -69.55586424962267,
+      "selected_score": -69.55586424962267,
+      "original_tv": 2,
+      "selected_tv": 2,
+      "mac_saved_pct": 26.702334078354173
+    },
+    {
+      "image": "kodim21.png",
+      "qp": 32,
+      "shape": [
+        512,
+        768
+      ],
+      "scan_result_sha256": "0ef0956b8a9b552f4c1b9e616bed1451202a5483d6dd5f2fbd065cd952353f4e",
+      "original": [
+        3,
+        3,
+        2,
+        5,
+        5,
+        4
+      ],
+      "selected": [
+        3,
+        3,
+        2,
+        5,
+        5,
+        4
+      ],
+      "changed": false,
+      "candidate_count": 180,
+      "original_score": 16.56814005219095,
+      "selected_score": 16.56814005219095,
+      "original_tv": 8,
+      "selected_tv": 8,
+      "mac_saved_pct": 16.447647007507616
+    },
+    {
+      "image": "kodim21.png",
+      "qp": 48,
+      "shape": [
+        512,
+        768
+      ],
+      "scan_result_sha256": "fd85956a48c315758d3496dd14ac513e30a1ef491b05489cc6d62c6ef71082b2",
+      "original": [
+        3,
+        3,
+        2,
+        5,
+        5,
+        5
+      ],
+      "selected": [
+        3,
+        3,
+        2,
+        5,
+        5,
+        5
+      ],
+      "changed": false,
+      "candidate_count": 60,
+      "original_score": 89.18557059099238,
+      "selected_score": 89.18557059099238,
+      "original_tv": 8,
+      "selected_tv": 8,
+      "mac_saved_pct": 14.11802926878386
+    },
+    {
+      "image": "kodim21.png",
+      "qp": 63,
+      "shape": [
+        512,
+        768
+      ],
+      "scan_result_sha256": "1b45c22284c431b1b645f5bac766e804c7b4caea106affd629de7563e877c42f",
+      "original": [
+        3,
+        5,
+        2,
+        5,
+        5,
+        5
+      ],
+      "selected": [
+        5,
+        3,
+        2,
+        5,
+        5,
+        5
+      ],
+      "changed": true,
+      "candidate_count": 30,
+      "original_score": 110.33087238859062,
+      "selected_score": 109.63259777616386,
+      "original_tv": 10,
+      "selected_tv": 8,
+      "mac_saved_pct": 9.923260005516344
+    },
+    {
+      "image": "kodim22.png",
+      "qp": 0,
+      "shape": [
+        512,
+        768
+      ],
+      "scan_result_sha256": "4c3aa7adfa035fa27246d626c668a60c57a1dc5c0cd016df5a36f02ad58876f5",
+      "original": [
+        2,
+        3,
+        2,
+        2,
+        2,
+        2
+      ],
+      "selected": [
+        2,
+        3,
+        2,
+        2,
+        2,
+        2
+      ],
+      "changed": false,
+      "candidate_count": 6,
+      "original_score": -140.64419407025852,
+      "selected_score": -140.64419407025852,
+      "original_tv": 3,
+      "selected_tv": 3,
+      "mac_saved_pct": 36.64011219362669
+    },
+    {
+      "image": "kodim22.png",
+      "qp": 16,
+      "shape": [
+        512,
+        768
+      ],
+      "scan_result_sha256": "c0b7343b1ef2261915124b392301052b128a1476b0f627c7b00529bc67e8e829",
+      "original": [
+        3,
+        3,
+        3,
+        3,
+        3,
+        3
+      ],
+      "selected": [
+        3,
+        3,
+        3,
+        3,
+        3,
+        3
+      ],
+      "changed": false,
+      "candidate_count": 1,
+      "original_score": -72.46995713936566,
+      "selected_score": -72.46995713936566,
+      "original_tv": 0,
+      "selected_tv": 0,
+      "mac_saved_pct": 24.217887314361864
+    },
+    {
+      "image": "kodim22.png",
+      "qp": 32,
+      "shape": [
+        512,
+        768
+      ],
+      "scan_result_sha256": "2cecd42f74d9398609f4f174b982fbd7f019edfd32d8d31f14f233f5b995faff",
+      "original": [
+        5,
+        5,
+        4,
+        4,
+        4,
+        3
+      ],
+      "selected": [
+        5,
+        5,
+        4,
+        4,
+        4,
+        3
+      ],
+      "changed": false,
+      "candidate_count": 60,
+      "original_score": 16.107739129350968,
+      "selected_score": 16.107739129350968,
+      "original_tv": 5,
+      "selected_tv": 5,
+      "mac_saved_pct": 10.232909115356737
+    },
+    {
+      "image": "kodim22.png",
+      "qp": 48,
+      "shape": [
+        512,
+        768
+      ],
+      "scan_result_sha256": "9887c68136175fb833f843f01476b3c8dd5dd485485eb2490e03c3b204d49218",
+      "original": [
+        5,
+        5,
+        5,
+        4,
+        5,
+        3
+      ],
+      "selected": [
+        5,
+        5,
+        5,
+        5,
+        4,
+        3
+      ],
+      "changed": true,
+      "candidate_count": 30,
+      "original_score": 94.43862065321085,
+      "selected_score": 94.348981585561,
+      "original_tv": 6,
+      "selected_tv": 5,
+      "mac_saved_pct": 5.573670657676988
+    },
+    {
+      "image": "kodim22.png",
+      "qp": 63,
+      "shape": [
+        512,
+        768
+      ],
+      "scan_result_sha256": "0339e02321e0e911db53319a19aee64cafcf4a39fb1688a225dfa213cb768acf",
+      "original": [
+        5,
+        5,
+        5,
+        5,
+        5,
+        3
+      ],
+      "selected": [
+        5,
+        5,
+        5,
+        5,
+        5,
+        3
+      ],
+      "changed": false,
+      "candidate_count": 6,
+      "original_score": 116.95539440444381,
+      "selected_score": 116.95539440444381,
+      "original_tv": 4,
+      "selected_tv": 4,
+      "mac_saved_pct": 3.2440469584887555
+    },
+    {
+      "image": "kodim23.png",
+      "qp": 0,
+      "shape": [
+        512,
+        768
+      ],
+      "scan_result_sha256": "91a455e7ea1d794c5505786860b6e4c5a186153f36ef51724868761df91f091a",
+      "original": [
+        3,
+        3,
+        2,
+        3,
+        3,
+        2
+      ],
+      "selected": [
+        3,
+        3,
+        2,
+        3,
+        3,
+        2
+      ],
+      "changed": false,
+      "candidate_count": 15,
+      "original_score": -147.99794652279684,
+      "selected_score": -147.99794652279684,
+      "original_tv": 2,
+      "selected_tv": 2,
+      "mac_saved_pct": 29.186777862114244
+    },
+    {
+      "image": "kodim23.png",
+      "qp": 16,
+      "shape": [
+        512,
+        768
+      ],
+      "scan_result_sha256": "d154f151c336c4540fcf3b872eaee2a51f8601ce9caddf3177e37e6801485993",
+      "original": [
+        3,
+        3,
+        3,
+        3,
+        3,
+        3
+      ],
+      "selected": [
+        3,
+        3,
+        3,
+        3,
+        3,
+        3
+      ],
+      "changed": false,
+      "candidate_count": 1,
+      "original_score": -71.627630230062,
+      "selected_score": -71.627630230062,
+      "original_tv": 0,
+      "selected_tv": 0,
+      "mac_saved_pct": 24.217887314361864
+    },
+    {
+      "image": "kodim23.png",
+      "qp": 32,
+      "shape": [
+        512,
+        768
+      ],
+      "scan_result_sha256": "eccfab8a77460edc94adcb8cf2b7c7f8bf92f6fc3ebc9876d0959a9fd1797439",
+      "original": [
+        4,
+        3,
+        3,
+        4,
+        4,
+        3
+      ],
+      "selected": [
+        4,
+        3,
+        3,
+        4,
+        4,
+        3
+      ],
+      "changed": false,
+      "candidate_count": 20,
+      "original_score": 15.090930083218925,
+      "selected_score": 15.090930083218925,
+      "original_tv": 3,
+      "selected_tv": 3,
+      "mac_saved_pct": 18.62244764189177
+    },
+    {
+      "image": "kodim23.png",
+      "qp": 48,
+      "shape": [
+        512,
+        768
+      ],
+      "scan_result_sha256": "f6a05e2a97e88c96f314b0c7c740bc033ffe64d744b30b575de2c9314e879915",
+      "original": [
+        4,
+        3,
+        3,
+        5,
+        4,
+        3
+      ],
+      "selected": [
+        4,
+        3,
+        3,
+        5,
+        4,
+        3
+      ],
+      "changed": false,
+      "candidate_count": 60,
+      "original_score": 82.17283331849644,
+      "selected_score": 82.17283331849644,
+      "original_tv": 5,
+      "selected_tv": 5,
+      "mac_saved_pct": 16.29282394270354
+    },
+    {
+      "image": "kodim23.png",
+      "qp": 63,
+      "shape": [
+        512,
+        768
+      ],
+      "scan_result_sha256": "4de96ba5d70232c939cd8b3bce359fe604273b9b0b651019a2246ca2fc44f945",
+      "original": [
+        5,
+        3,
+        3,
+        5,
+        5,
+        3
+      ],
+      "selected": [
+        5,
+        3,
+        3,
+        5,
+        5,
+        3
+      ],
+      "changed": false,
+      "candidate_count": 20,
+      "original_score": 105.59363526502975,
+      "selected_score": 105.59363526502975,
+      "original_tv": 6,
+      "selected_tv": 6,
+      "mac_saved_pct": 11.633582504791551
+    },
+    {
+      "image": "kodim24.png",
+      "qp": 0,
+      "shape": [
+        512,
+        768
+      ],
+      "scan_result_sha256": "79f632f8e230606edc46870c4a6d4988e6b5bdd0a033709fb578c9af95e1fe12",
+      "original": [
+        3,
+        3,
+        3,
+        3,
+        2,
+        2
+      ],
+      "selected": [
+        3,
+        3,
+        3,
+        3,
+        2,
+        2
+      ],
+      "changed": false,
+      "candidate_count": 15,
+      "original_score": -149.95589473065206,
+      "selected_score": -149.95589473065206,
+      "original_tv": 3,
+      "selected_tv": 3,
+      "mac_saved_pct": 29.186777862114244
+    },
+    {
+      "image": "kodim24.png",
+      "qp": 16,
+      "shape": [
+        512,
+        768
+      ],
+      "scan_result_sha256": "0f74f24e69a9a37faf71ea761baec5ab061cd5cb7f0cf78b2fe9f0d027578122",
+      "original": [
+        4,
+        4,
+        4,
+        3,
+        3,
+        3
+      ],
+      "selected": [
+        4,
+        4,
+        4,
+        3,
+        3,
+        3
+      ],
+      "changed": false,
+      "candidate_count": 20,
+      "original_score": -78.25413890752394,
+      "selected_score": -78.25413890752394,
+      "original_tv": 3,
+      "selected_tv": 3,
+      "mac_saved_pct": 18.62244764189177
+    },
+    {
+      "image": "kodim24.png",
+      "qp": 32,
+      "shape": [
+        512,
+        768
+      ],
+      "scan_result_sha256": "37cb7896066f58ce7a7bb7bf048954e0df94228d92cc90fe81e919cf1091a590",
+      "original": [
+        5,
+        5,
+        5,
+        5,
+        4,
+        3
+      ],
+      "selected": [
+        5,
+        5,
+        5,
+        5,
+        4,
+        3
+      ],
+      "changed": false,
+      "candidate_count": 30,
+      "original_score": 19.04873901697874,
+      "selected_score": 19.04873901697874,
+      "original_tv": 5,
+      "selected_tv": 5,
+      "mac_saved_pct": 5.573664697212511
+    },
+    {
+      "image": "kodim24.png",
+      "qp": 48,
+      "shape": [
+        512,
+        768
+      ],
+      "scan_result_sha256": "6556e83aeccb0ab7c70edc03d683966ab74f0a308aa18261ef6c0d05e3efff22",
+      "original": [
+        5,
+        5,
+        5,
+        5,
+        5,
+        3
+      ],
+      "selected": [
+        5,
+        5,
+        5,
+        5,
+        5,
+        3
+      ],
+      "changed": false,
+      "candidate_count": 6,
+      "original_score": 102.15201262812306,
+      "selected_score": 102.15201262812306,
+      "original_tv": 4,
+      "selected_tv": 4,
+      "mac_saved_pct": 3.2440469584887555
+    },
+    {
+      "image": "kodim24.png",
+      "qp": 63,
+      "shape": [
+        512,
+        768
+      ],
+      "scan_result_sha256": "08dd41850530b5e9b3abd25892a9bfc09db2facd6201f7704f7857e92a918782",
+      "original": [
+        5,
+        5,
+        5,
+        5,
+        5,
+        3
+      ],
+      "selected": [
+        5,
+        5,
+        5,
+        5,
+        5,
+        3
+      ],
+      "changed": false,
+      "candidate_count": 6,
+      "original_score": 126.59414913735063,
+      "selected_score": 126.59414913735063,
+      "original_tv": 4,
+      "selected_tv": 4,
+      "mac_saved_pct": 3.2440469584887555
+    }
+  ]
+}
