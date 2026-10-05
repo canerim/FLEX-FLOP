@@ -19,21 +19,28 @@ paired by sequence. All policies reuse the same five actual round-tripped
 latent payloads. Mode-map/container bytes are absent, and policy parameters
 were calibrated with source-side quality feedback. The number is a **BD-rate
 equivalent proxy**, not full-codec BD-rate or deployable inference performance.
-The MAC model excludes the router, map signalling and execution overhead.
+The MAC count is now the exact convolution geometry of the padded frame,
+including exit adapters and seam repair, divided by released D12 full
+synthesis convolutions. The [per-map audit](exact_mac_by_case.json) is
+SHA256-locked to the archived evaluation records. It excludes router,
+map signalling, memory movement and execution overhead. Earlier versions
+of this figure used a normalized block-cost model that slightly overcounted
+the repeated convolution block.
 
 | Nominal target | Complete sequences | Router BD proxy | Router MAC saved | Router − dither BD proxy | Router − dither MAC saved |
 |--:|--:|--:|--:|--:|--:|
-| 0.05 dB | 25 | +1.30% | 19.21% | −0.050 points [−0.116, +0.009] | +2.12 points [1.24, 3.05] |
-| 0.10 dB | 25 | +2.47% | 33.45% | −0.085 [−0.153, −0.028] | +2.39 [1.76, 3.05] |
-| 0.15 dB | 25 | +3.30% | 37.56% | −0.036 [−0.066, −0.010] | +1.28 [0.88, 1.72] |
-| 0.20 dB | 25 | +3.72% | 38.81% | −0.015 [−0.028, −0.005] | +0.32 [0.11, 0.56] |
-| 0.30 dB | 25 | +3.84% | 39.12% | 0.000 | 0.00 |
-| 0.50 dB | 25 | +3.84% | 39.12% | 0.000 | 0.00 |
+| 0.05 dB | 25 | +1.30% | 18.72% | −0.050 points [−0.116, +0.009] | +2.10 points [1.23, 3.04] |
+| 0.10 dB | 25 | +2.47% | 32.69% | −0.085 [−0.153, −0.028] | +2.40 [1.75, 3.06] |
+| 0.15 dB | 25 | +3.30% | 36.77% | −0.036 [−0.066, −0.010] | +1.28 [0.87, 1.71] |
+| 0.20 dB | 25 | +3.72% | 38.02% | −0.015 [−0.028, −0.005] | +0.32 [0.11, 0.57] |
+| 0.30 dB | 25 | +3.84% | 38.33% | 0.000 | 0.00 |
+| 0.50 dB | 25 | +3.84% | 38.33% | 0.000 | 0.00 |
 
-On the *per-budget complete* cohort, the router–dither MAC margin is 2.12,
-2.60, 2.02, 1.31, 0.38 and 0.02 percentage points respectively. The
+On the *per-budget complete* cohort, the router–dither MAC margin is 2.10,
+2.57, 2.02, 1.31, 0.38 and 0.02 percentage points respectively. The
 0.10-dB cohort reproduces the earlier 51-sequence BD analysis to rounding:
-router +2.26% proxy and 28.22% MAC saved; dither +2.38% and 25.63%.
+router +2.26% proxy and 27.54% exact conv-MAC saved; dither +2.38% and
+24.97%. The BD-proxy percentages are unchanged by the MAC recount.
 The fixed-cohort gap vanishes at the loose targets because the archived
 maps saturate at the shallowest available route on those 25 sequences. It
 is not evidence that spatial routing never helps on other content or budgets.

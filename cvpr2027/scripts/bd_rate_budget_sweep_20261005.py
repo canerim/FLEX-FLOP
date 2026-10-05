@@ -62,9 +62,15 @@ def summary(values: list[float], rng: np.random.Generator) -> dict:
 def main() -> None:
     archive_path = SRC/'eval_rules_ctc_e15.json'
     payload_path = SRC/'real_bitstream_ctc.json'
+    exact_mac_path = DEST/'exact_mac_by_case.json'
     archive = json.loads(archive_path.read_text())
     payload = json.loads(payload_path.read_text())
+    exact_mac = json.loads(exact_mac_path.read_text())
     assert len(archive['rows']) == len(payload) == 265
+    assert exact_mac['input_sha256'] == digest(archive_path)
+    exact_by_key = {(r['seq'], r['qp'], r['budget'], r['policy']):r['exact_conv_saving_pct']
+                    for r in exact_mac['rows']}
+    assert len(exact_by_key) == len(exact_mac['rows'])
     assert {str(x) for x in archive['budgets']} == set(BUDGETS)
     payload_by_key = {(r['seq'], r['qp']): r for r in payload}
     assert len(payload_by_key) == 265 and all(r['roundtrip_ok'] for r in payload)
@@ -83,7 +89,9 @@ def main() -> None:
     result = {'schema': 1,
               'scope': 'CTC first-frame, five QPs, source-calibrated nominal maps; latent-payload BD-rate proxy',
               'source_sha256': {str(archive_path.relative_to(ROOT)): digest(archive_path),
-                                str(payload_path.relative_to(ROOT)): digest(payload_path)},
+                                str(payload_path.relative_to(ROOT)): digest(payload_path),
+                                str(exact_mac_path.relative_to(ROOT)): digest(exact_mac_path)},
+              'mac_accounting': exact_mac['accounting'],
               'rate_includes_map_or_container_bits': False,
               'bootstrap': f'{BOOT} sequence-cluster draws, seed 20261005',
               'fixed_cohort_sequences': fixed, 'rows': []}
@@ -94,7 +102,8 @@ def main() -> None:
             for seq in sequences:
                 rows = sorted(grouped[seq], key=lambda r: r['qp'])
                 rates = bd(rows, budget)
-                savings = {p: float(np.mean([r['rules'][p][budget]['saving'] for r in rows]))
+                savings = {p: float(np.mean([exact_by_key[(seq, r['qp'], budget, p)]
+                                             for r in rows]))
                            for p in POLICIES}
                 losses = {p: float(np.mean([r['psnr_release'] - r['rules'][p][budget]['psnr']
                                             for r in rows])) for p in POLICIES}
@@ -134,7 +143,7 @@ def main() -> None:
             ax.plot(x, y, marker='o', ms=3.2, lw=1.5, color=colors[p], label=p.title())
             ax.fill_between(x, lo, hi, color=colors[p], alpha=.10, linewidth=0)
     axes[0].set(ylabel='Latent-payload BD proxy (%)', title='a  Quality cost')
-    axes[1].set(ylabel='Analytical synthesis MAC saved (%)', title='b  Compute saving')
+    axes[1].set(ylabel='Exact conv-MAC saved vs released (%)', title='b  Compute saving')
     for metric, color, label in [('mac_saving_pct_points','#087F87','MAC saving'),
                                  ('bd_proxy_pct_points','#AE6172','BD proxy')]:
         vals = [r['paired_router_minus_dither'][metric] for r in fixed_rows]
