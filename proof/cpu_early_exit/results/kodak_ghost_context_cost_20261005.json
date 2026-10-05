@@ -1,0 +1,976 @@
+{
+  "scope": "Kodak24 x QP5 frozen routes; hypothetical one full-tile 3x3 DW per skipped suffix block. No trained ghost path, quality result, memory accounting, kernel, or latency.",
+  "source_sha256": "f8665d02f31c327bafb58245a45626c0f7f4cc8e86f71f48848f17b350fe36ef",
+  "script_sha256": "0ccdec9d3fc24c41bd0502c48274a74d2541cd66389a8fd6647a356c6b28421e",
+  "feature_patch": 32,
+  "full_suffix_blocks": 8,
+  "per_full_tile_depthwise_block_fraction": 0.00021772151898734175,
+  "mean": {
+    "mean_skipped_suffix_blocks_per_tile": 4.1277777830759685,
+    "ghost_depthwise_cost_pct_points": 0.08987060489735016,
+    "ghost_plus_active_halo_cost_pct_points": 0.1007382538803709,
+    "hypothetical_with_repair_saving_pct": 25.783002521111275
+  },
+  "rows": [
+    {
+      "image": "kodim01.png",
+      "qp": 0,
+      "mean_skipped_suffix_blocks_per_tile": 5.666666746139526,
+      "ghost_depthwise_cost_pct_points": 0.1233755291564555,
+      "ghost_plus_active_halo_cost_pct_points": 0.12992418399670078,
+      "hypothetical_with_repair_saving_pct": 36.51018800963
+    },
+    {
+      "image": "kodim01.png",
+      "qp": 16,
+      "mean_skipped_suffix_blocks_per_tile": 4.0,
+      "ghost_depthwise_cost_pct_points": 0.0870886075949367,
+      "ghost_plus_active_halo_cost_pct_points": 0.09831487341772151,
+      "hypothetical_with_repair_saving_pct": 24.119572440944143
+    },
+    {
+      "image": "kodim01.png",
+      "qp": 32,
+      "mean_skipped_suffix_blocks_per_tile": 4.0,
+      "ghost_depthwise_cost_pct_points": 0.0870886075949367,
+      "ghost_plus_active_halo_cost_pct_points": 0.09831487341772151,
+      "hypothetical_with_repair_saving_pct": 24.119572440944143
+    },
+    {
+      "image": "kodim01.png",
+      "qp": 48,
+      "mean_skipped_suffix_blocks_per_tile": 4.0,
+      "ghost_depthwise_cost_pct_points": 0.0870886075949367,
+      "ghost_plus_active_halo_cost_pct_points": 0.09831487341772151,
+      "hypothetical_with_repair_saving_pct": 24.119572440944143
+    },
+    {
+      "image": "kodim01.png",
+      "qp": 63,
+      "mean_skipped_suffix_blocks_per_tile": 2.6666665077209473,
+      "ghost_depthwise_cost_pct_points": 0.05805906826936745,
+      "ghost_plus_active_halo_cost_pct_points": 0.07302742314583892,
+      "hypothetical_with_repair_saving_pct": 15.75532434491323
+    },
+    {
+      "image": "kodim02.png",
+      "qp": 0,
+      "mean_skipped_suffix_blocks_per_tile": 6.0,
+      "ghost_depthwise_cost_pct_points": 0.13063291139240504,
+      "ghost_plus_active_halo_cost_pct_points": 0.13624604430379744,
+      "hypothetical_with_repair_saving_pct": 38.98831142319909
+    },
+    {
+      "image": "kodim02.png",
+      "qp": 16,
+      "mean_skipped_suffix_blocks_per_tile": 4.0,
+      "ghost_depthwise_cost_pct_points": 0.0870886075949367,
+      "ghost_plus_active_halo_cost_pct_points": 0.09831487341772151,
+      "hypothetical_with_repair_saving_pct": 24.119572440944143
+    },
+    {
+      "image": "kodim02.png",
+      "qp": 32,
+      "mean_skipped_suffix_blocks_per_tile": 4.0,
+      "ghost_depthwise_cost_pct_points": 0.0870886075949367,
+      "ghost_plus_active_halo_cost_pct_points": 0.09831487341772151,
+      "hypothetical_with_repair_saving_pct": 24.119572440944143
+    },
+    {
+      "image": "kodim02.png",
+      "qp": 48,
+      "mean_skipped_suffix_blocks_per_tile": 4.333333253860474,
+      "ghost_depthwise_cost_pct_points": 0.09434598983088625,
+      "ghost_plus_active_halo_cost_pct_points": 0.10463673372481819,
+      "hypothetical_with_repair_saving_pct": 26.597697344629356
+    },
+    {
+      "image": "kodim02.png",
+      "qp": 63,
+      "mean_skipped_suffix_blocks_per_tile": 3.6666665077209473,
+      "ghost_depthwise_cost_pct_points": 0.07983122016810162,
+      "ghost_plus_active_halo_cost_pct_points": 0.09199300858887689,
+      "hypothetical_with_repair_saving_pct": 22.26075172192594
+    },
+    {
+      "image": "kodim03.png",
+      "qp": 0,
+      "mean_skipped_suffix_blocks_per_tile": 5.666666746139526,
+      "ghost_depthwise_cost_pct_points": 0.1233755291564555,
+      "ghost_plus_active_halo_cost_pct_points": 0.12992418399670078,
+      "hypothetical_with_repair_saving_pct": 36.51018800963
+    },
+    {
+      "image": "kodim03.png",
+      "qp": 16,
+      "mean_skipped_suffix_blocks_per_tile": 4.666666746139526,
+      "ghost_depthwise_cost_pct_points": 0.10160337725772133,
+      "ghost_plus_active_halo_cost_pct_points": 0.1109585985536628,
+      "hypothetical_with_repair_saving_pct": 29.07581926356058
+    },
+    {
+      "image": "kodim03.png",
+      "qp": 32,
+      "mean_skipped_suffix_blocks_per_tile": 4.666666746139526,
+      "ghost_depthwise_cost_pct_points": 0.10160337725772133,
+      "ghost_plus_active_halo_cost_pct_points": 0.1109585985536628,
+      "hypothetical_with_repair_saving_pct": 29.07581926356058
+    },
+    {
+      "image": "kodim03.png",
+      "qp": 48,
+      "mean_skipped_suffix_blocks_per_tile": 4.666666746139526,
+      "ghost_depthwise_cost_pct_points": 0.10160337725772133,
+      "ghost_plus_active_halo_cost_pct_points": 0.1109585985536628,
+      "hypothetical_with_repair_saving_pct": 29.07581926356058
+    },
+    {
+      "image": "kodim03.png",
+      "qp": 63,
+      "mean_skipped_suffix_blocks_per_tile": 3.3333334922790527,
+      "ghost_depthwise_cost_pct_points": 0.07257384312303759,
+      "ghost_plus_active_halo_cost_pct_points": 0.08567115280352815,
+      "hypothetical_with_repair_saving_pct": 20.71157116300792
+    },
+    {
+      "image": "kodim04.png",
+      "qp": 0,
+      "mean_skipped_suffix_blocks_per_tile": 5.666666746139526,
+      "ghost_depthwise_cost_pct_points": 0.1233755291564555,
+      "ghost_plus_active_halo_cost_pct_points": 0.12992418399670078,
+      "hypothetical_with_repair_saving_pct": 36.51018800963
+    },
+    {
+      "image": "kodim04.png",
+      "qp": 16,
+      "mean_skipped_suffix_blocks_per_tile": 4.333333253860474,
+      "ghost_depthwise_cost_pct_points": 0.09434598983088625,
+      "ghost_plus_active_halo_cost_pct_points": 0.10463673372481819,
+      "hypothetical_with_repair_saving_pct": 26.597697344629356
+    },
+    {
+      "image": "kodim04.png",
+      "qp": 32,
+      "mean_skipped_suffix_blocks_per_tile": 4.333333253860474,
+      "ghost_depthwise_cost_pct_points": 0.09434598983088625,
+      "ghost_plus_active_halo_cost_pct_points": 0.10463673372481819,
+      "hypothetical_with_repair_saving_pct": 26.597697344629356
+    },
+    {
+      "image": "kodim04.png",
+      "qp": 48,
+      "mean_skipped_suffix_blocks_per_tile": 4.666666746139526,
+      "ghost_depthwise_cost_pct_points": 0.10160337725772133,
+      "ghost_plus_active_halo_cost_pct_points": 0.1109585985536628,
+      "hypothetical_with_repair_saving_pct": 29.07581926356058
+    },
+    {
+      "image": "kodim04.png",
+      "qp": 63,
+      "mean_skipped_suffix_blocks_per_tile": 4.0,
+      "ghost_depthwise_cost_pct_points": 0.0870886075949367,
+      "ghost_plus_active_halo_cost_pct_points": 0.09831487341772151,
+      "hypothetical_with_repair_saving_pct": 25.358168880305715
+    },
+    {
+      "image": "kodim05.png",
+      "qp": 0,
+      "mean_skipped_suffix_blocks_per_tile": 4.0,
+      "ghost_depthwise_cost_pct_points": 0.0870886075949367,
+      "ghost_plus_active_halo_cost_pct_points": 0.09831487341772151,
+      "hypothetical_with_repair_saving_pct": 24.119572440944143
+    },
+    {
+      "image": "kodim05.png",
+      "qp": 16,
+      "mean_skipped_suffix_blocks_per_tile": 2.6666665077209473,
+      "ghost_depthwise_cost_pct_points": 0.05805906826936745,
+      "ghost_plus_active_halo_cost_pct_points": 0.07302742314583892,
+      "hypothetical_with_repair_saving_pct": 16.684271674434406
+    },
+    {
+      "image": "kodim05.png",
+      "qp": 32,
+      "mean_skipped_suffix_blocks_per_tile": 2.6666665077209473,
+      "ghost_depthwise_cost_pct_points": 0.05805906826936745,
+      "ghost_plus_active_halo_cost_pct_points": 0.07302742314583892,
+      "hypothetical_with_repair_saving_pct": 16.684271674434406
+    },
+    {
+      "image": "kodim05.png",
+      "qp": 48,
+      "mean_skipped_suffix_blocks_per_tile": 1.3333334922790527,
+      "ghost_depthwise_cost_pct_points": 0.029029539325569245,
+      "ghost_plus_active_halo_cost_pct_points": 0.0477399819174522,
+      "hypothetical_with_repair_saving_pct": 8.32002356936
+    },
+    {
+      "image": "kodim05.png",
+      "qp": 63,
+      "mean_skipped_suffix_blocks_per_tile": 0.0,
+      "ghost_depthwise_cost_pct_points": 0.0,
+      "ghost_plus_active_halo_cost_pct_points": 0.022452531645569616,
+      "hypothetical_with_repair_saving_pct": -0.9731718561920814
+    },
+    {
+      "image": "kodim06.png",
+      "qp": 0,
+      "mean_skipped_suffix_blocks_per_tile": 5.666666746139526,
+      "ghost_depthwise_cost_pct_points": 0.1233755291564555,
+      "ghost_plus_active_halo_cost_pct_points": 0.12992418399670078,
+      "hypothetical_with_repair_saving_pct": 36.51018800963
+    },
+    {
+      "image": "kodim06.png",
+      "qp": 16,
+      "mean_skipped_suffix_blocks_per_tile": 4.666666746139526,
+      "ghost_depthwise_cost_pct_points": 0.10160337725772133,
+      "ghost_plus_active_halo_cost_pct_points": 0.1109585985536628,
+      "hypothetical_with_repair_saving_pct": 29.07581926356058
+    },
+    {
+      "image": "kodim06.png",
+      "qp": 32,
+      "mean_skipped_suffix_blocks_per_tile": 4.333333253860474,
+      "ghost_depthwise_cost_pct_points": 0.09434598983088625,
+      "ghost_plus_active_halo_cost_pct_points": 0.10463673372481819,
+      "hypothetical_with_repair_saving_pct": 26.597697344629356
+    },
+    {
+      "image": "kodim06.png",
+      "qp": 48,
+      "mean_skipped_suffix_blocks_per_tile": 4.666666746139526,
+      "ghost_depthwise_cost_pct_points": 0.10160337725772133,
+      "ghost_plus_active_halo_cost_pct_points": 0.1109585985536628,
+      "hypothetical_with_repair_saving_pct": 29.07581926356058
+    },
+    {
+      "image": "kodim06.png",
+      "qp": 63,
+      "mean_skipped_suffix_blocks_per_tile": 2.6666665077209473,
+      "ghost_depthwise_cost_pct_points": 0.05805906826936745,
+      "ghost_plus_active_halo_cost_pct_points": 0.07302742314583892,
+      "hypothetical_with_repair_saving_pct": 16.374619584361774
+    },
+    {
+      "image": "kodim07.png",
+      "qp": 0,
+      "mean_skipped_suffix_blocks_per_tile": 5.333333253860474,
+      "ghost_depthwise_cost_pct_points": 0.11611814172962043,
+      "ghost_plus_active_halo_cost_pct_points": 0.12360231916785616,
+      "hypothetical_with_repair_saving_pct": 34.03206460058264
+    },
+    {
+      "image": "kodim07.png",
+      "qp": 16,
+      "mean_skipped_suffix_blocks_per_tile": 4.0,
+      "ghost_depthwise_cost_pct_points": 0.0870886075949367,
+      "ghost_plus_active_halo_cost_pct_points": 0.09831487341772151,
+      "hypothetical_with_repair_saving_pct": 24.119572440944143
+    },
+    {
+      "image": "kodim07.png",
+      "qp": 32,
+      "mean_skipped_suffix_blocks_per_tile": 4.0,
+      "ghost_depthwise_cost_pct_points": 0.0870886075949367,
+      "ghost_plus_active_halo_cost_pct_points": 0.09831487341772151,
+      "hypothetical_with_repair_saving_pct": 24.119572440944143
+    },
+    {
+      "image": "kodim07.png",
+      "qp": 48,
+      "mean_skipped_suffix_blocks_per_tile": 4.666666746139526,
+      "ghost_depthwise_cost_pct_points": 0.10160337725772133,
+      "ghost_plus_active_halo_cost_pct_points": 0.1109585985536628,
+      "hypothetical_with_repair_saving_pct": 29.07581926356058
+    },
+    {
+      "image": "kodim07.png",
+      "qp": 63,
+      "mean_skipped_suffix_blocks_per_tile": 4.666666746139526,
+      "ghost_depthwise_cost_pct_points": 0.10160337725772133,
+      "ghost_plus_active_halo_cost_pct_points": 0.1109585985536628,
+      "hypothetical_with_repair_saving_pct": 29.07581926356058
+    },
+    {
+      "image": "kodim08.png",
+      "qp": 0,
+      "mean_skipped_suffix_blocks_per_tile": 4.0,
+      "ghost_depthwise_cost_pct_points": 0.0870886075949367,
+      "ghost_plus_active_halo_cost_pct_points": 0.09831487341772151,
+      "hypothetical_with_repair_saving_pct": 24.119572440944143
+    },
+    {
+      "image": "kodim08.png",
+      "qp": 16,
+      "mean_skipped_suffix_blocks_per_tile": 2.0,
+      "ghost_depthwise_cost_pct_points": 0.04354430379746835,
+      "ghost_plus_active_halo_cost_pct_points": 0.06038370253164556,
+      "hypothetical_with_repair_saving_pct": 12.966618306425554
+    },
+    {
+      "image": "kodim08.png",
+      "qp": 32,
+      "mean_skipped_suffix_blocks_per_tile": 2.0,
+      "ghost_depthwise_cost_pct_points": 0.04354430379746835,
+      "ghost_plus_active_halo_cost_pct_points": 0.06038370253164556,
+      "hypothetical_with_repair_saving_pct": 12.966618306425554
+    },
+    {
+      "image": "kodim08.png",
+      "qp": 48,
+      "mean_skipped_suffix_blocks_per_tile": 1.0,
+      "ghost_depthwise_cost_pct_points": 0.021772151898734174,
+      "ghost_plus_active_halo_cost_pct_points": 0.041418117088607584,
+      "hypothetical_with_repair_saving_pct": 5.996721735000612
+    },
+    {
+      "image": "kodim08.png",
+      "qp": 63,
+      "mean_skipped_suffix_blocks_per_tile": 0.0,
+      "ghost_depthwise_cost_pct_points": 0.0,
+      "ghost_plus_active_halo_cost_pct_points": 0.022452531645569616,
+      "hypothetical_with_repair_saving_pct": -0.9731718561920814
+    },
+    {
+      "image": "kodim09.png",
+      "qp": 0,
+      "mean_skipped_suffix_blocks_per_tile": 5.666666746139526,
+      "ghost_depthwise_cost_pct_points": 0.1233755291564555,
+      "ghost_plus_active_halo_cost_pct_points": 0.12992418399670078,
+      "hypothetical_with_repair_saving_pct": 36.51018800963
+    },
+    {
+      "image": "kodim09.png",
+      "qp": 16,
+      "mean_skipped_suffix_blocks_per_tile": 4.666666746139526,
+      "ghost_depthwise_cost_pct_points": 0.10160337725772133,
+      "ghost_plus_active_halo_cost_pct_points": 0.1109585985536628,
+      "hypothetical_with_repair_saving_pct": 29.07581926356058
+    },
+    {
+      "image": "kodim09.png",
+      "qp": 32,
+      "mean_skipped_suffix_blocks_per_tile": 4.666666746139526,
+      "ghost_depthwise_cost_pct_points": 0.10160337725772133,
+      "ghost_plus_active_halo_cost_pct_points": 0.1109585985536628,
+      "hypothetical_with_repair_saving_pct": 29.07581926356058
+    },
+    {
+      "image": "kodim09.png",
+      "qp": 48,
+      "mean_skipped_suffix_blocks_per_tile": 4.666666746139526,
+      "ghost_depthwise_cost_pct_points": 0.10160337725772133,
+      "ghost_plus_active_halo_cost_pct_points": 0.1109585985536628,
+      "hypothetical_with_repair_saving_pct": 29.07581926356058
+    },
+    {
+      "image": "kodim09.png",
+      "qp": 63,
+      "mean_skipped_suffix_blocks_per_tile": 4.666666746139526,
+      "ghost_depthwise_cost_pct_points": 0.10160337725772133,
+      "ghost_plus_active_halo_cost_pct_points": 0.1109585985536628,
+      "hypothetical_with_repair_saving_pct": 29.07581926356058
+    },
+    {
+      "image": "kodim10.png",
+      "qp": 0,
+      "mean_skipped_suffix_blocks_per_tile": 5.333333253860474,
+      "ghost_depthwise_cost_pct_points": 0.11611814172962043,
+      "ghost_plus_active_halo_cost_pct_points": 0.12360231916785616,
+      "hypothetical_with_repair_saving_pct": 34.03206460058264
+    },
+    {
+      "image": "kodim10.png",
+      "qp": 16,
+      "mean_skipped_suffix_blocks_per_tile": 4.333333253860474,
+      "ghost_depthwise_cost_pct_points": 0.09434598983088625,
+      "ghost_plus_active_halo_cost_pct_points": 0.10463673372481819,
+      "hypothetical_with_repair_saving_pct": 26.597697344629356
+    },
+    {
+      "image": "kodim10.png",
+      "qp": 32,
+      "mean_skipped_suffix_blocks_per_tile": 4.333333253860474,
+      "ghost_depthwise_cost_pct_points": 0.09434598983088625,
+      "ghost_plus_active_halo_cost_pct_points": 0.10463673372481819,
+      "hypothetical_with_repair_saving_pct": 26.597697344629356
+    },
+    {
+      "image": "kodim10.png",
+      "qp": 48,
+      "mean_skipped_suffix_blocks_per_tile": 4.666666746139526,
+      "ghost_depthwise_cost_pct_points": 0.10160337725772133,
+      "ghost_plus_active_halo_cost_pct_points": 0.1109585985536628,
+      "hypothetical_with_repair_saving_pct": 29.695114503009126
+    },
+    {
+      "image": "kodim10.png",
+      "qp": 63,
+      "mean_skipped_suffix_blocks_per_tile": 4.333333253860474,
+      "ghost_depthwise_cost_pct_points": 0.09434598983088625,
+      "ghost_plus_active_halo_cost_pct_points": 0.10463673372481819,
+      "hypothetical_with_repair_saving_pct": 27.37181862911422
+    },
+    {
+      "image": "kodim11.png",
+      "qp": 0,
+      "mean_skipped_suffix_blocks_per_tile": 6.0,
+      "ghost_depthwise_cost_pct_points": 0.13063291139240504,
+      "ghost_plus_active_halo_cost_pct_points": 0.13624604430379744,
+      "hypothetical_with_repair_saving_pct": 38.98831142319909
+    },
+    {
+      "image": "kodim11.png",
+      "qp": 16,
+      "mean_skipped_suffix_blocks_per_tile": 4.333333253860474,
+      "ghost_depthwise_cost_pct_points": 0.09434598983088625,
+      "ghost_plus_active_halo_cost_pct_points": 0.10463673372481819,
+      "hypothetical_with_repair_saving_pct": 26.597697344629356
+    },
+    {
+      "image": "kodim11.png",
+      "qp": 32,
+      "mean_skipped_suffix_blocks_per_tile": 4.333333253860474,
+      "ghost_depthwise_cost_pct_points": 0.09434598983088625,
+      "ghost_plus_active_halo_cost_pct_points": 0.10463673372481819,
+      "hypothetical_with_repair_saving_pct": 26.597697344629356
+    },
+    {
+      "image": "kodim11.png",
+      "qp": 48,
+      "mean_skipped_suffix_blocks_per_tile": 4.0,
+      "ghost_depthwise_cost_pct_points": 0.0870886075949367,
+      "ghost_plus_active_halo_cost_pct_points": 0.09831487341772151,
+      "hypothetical_with_repair_saving_pct": 25.358168880305715
+    },
+    {
+      "image": "kodim11.png",
+      "qp": 63,
+      "mean_skipped_suffix_blocks_per_tile": 3.0,
+      "ghost_depthwise_cost_pct_points": 0.06531645569620252,
+      "ghost_plus_active_halo_cost_pct_points": 0.07934928797468353,
+      "hypothetical_with_repair_saving_pct": 18.233446263844456
+    },
+    {
+      "image": "kodim12.png",
+      "qp": 0,
+      "mean_skipped_suffix_blocks_per_tile": 6.0,
+      "ghost_depthwise_cost_pct_points": 0.13063291139240504,
+      "ghost_plus_active_halo_cost_pct_points": 0.13624604430379744,
+      "hypothetical_with_repair_saving_pct": 38.98831142319909
+    },
+    {
+      "image": "kodim12.png",
+      "qp": 16,
+      "mean_skipped_suffix_blocks_per_tile": 4.666666746139526,
+      "ghost_depthwise_cost_pct_points": 0.10160337725772133,
+      "ghost_plus_active_halo_cost_pct_points": 0.1109585985536628,
+      "hypothetical_with_repair_saving_pct": 29.07581926356058
+    },
+    {
+      "image": "kodim12.png",
+      "qp": 32,
+      "mean_skipped_suffix_blocks_per_tile": 4.666666746139526,
+      "ghost_depthwise_cost_pct_points": 0.10160337725772133,
+      "ghost_plus_active_halo_cost_pct_points": 0.1109585985536628,
+      "hypothetical_with_repair_saving_pct": 29.07581926356058
+    },
+    {
+      "image": "kodim12.png",
+      "qp": 48,
+      "mean_skipped_suffix_blocks_per_tile": 5.666666746139526,
+      "ghost_depthwise_cost_pct_points": 0.1233755291564555,
+      "ghost_plus_active_halo_cost_pct_points": 0.12992418399670078,
+      "hypothetical_with_repair_saving_pct": 36.51018800963
+    },
+    {
+      "image": "kodim12.png",
+      "qp": 63,
+      "mean_skipped_suffix_blocks_per_tile": 4.666666746139526,
+      "ghost_depthwise_cost_pct_points": 0.10160337725772133,
+      "ghost_plus_active_halo_cost_pct_points": 0.1109585985536628,
+      "hypothetical_with_repair_saving_pct": 29.849940548045442
+    },
+    {
+      "image": "kodim13.png",
+      "qp": 0,
+      "mean_skipped_suffix_blocks_per_tile": 5.333333253860474,
+      "ghost_depthwise_cost_pct_points": 0.11611814172962043,
+      "ghost_plus_active_halo_cost_pct_points": 0.12360231916785616,
+      "hypothetical_with_repair_saving_pct": 34.03206460058264
+    },
+    {
+      "image": "kodim13.png",
+      "qp": 16,
+      "mean_skipped_suffix_blocks_per_tile": 3.3333334922790527,
+      "ghost_depthwise_cost_pct_points": 0.07257384312303759,
+      "ghost_plus_active_halo_cost_pct_points": 0.08567115280352815,
+      "hypothetical_with_repair_saving_pct": 20.401925033399767
+    },
+    {
+      "image": "kodim13.png",
+      "qp": 32,
+      "mean_skipped_suffix_blocks_per_tile": 3.3333334922790527,
+      "ghost_depthwise_cost_pct_points": 0.07257384312303759,
+      "ghost_plus_active_halo_cost_pct_points": 0.08567115280352815,
+      "hypothetical_with_repair_saving_pct": 20.401925033399767
+    },
+    {
+      "image": "kodim13.png",
+      "qp": 48,
+      "mean_skipped_suffix_blocks_per_tile": 2.0,
+      "ghost_depthwise_cost_pct_points": 0.04354430379746835,
+      "ghost_plus_active_halo_cost_pct_points": 0.06038370253164556,
+      "hypothetical_with_repair_saving_pct": 12.037670976904376
+    },
+    {
+      "image": "kodim13.png",
+      "qp": 63,
+      "mean_skipped_suffix_blocks_per_tile": 0.6666665077209473,
+      "ghost_depthwise_cost_pct_points": 0.014514764471899103,
+      "ghost_plus_active_halo_cost_pct_points": 0.035096252259762976,
+      "hypothetical_with_repair_saving_pct": 3.2089507062289924
+    },
+    {
+      "image": "kodim14.png",
+      "qp": 0,
+      "mean_skipped_suffix_blocks_per_tile": 4.666666746139526,
+      "ghost_depthwise_cost_pct_points": 0.10160337725772133,
+      "ghost_plus_active_halo_cost_pct_points": 0.1109585985536628,
+      "hypothetical_with_repair_saving_pct": 29.07581926356058
+    },
+    {
+      "image": "kodim14.png",
+      "qp": 16,
+      "mean_skipped_suffix_blocks_per_tile": 3.6666665077209473,
+      "ghost_depthwise_cost_pct_points": 0.07983122016810162,
+      "ghost_plus_active_halo_cost_pct_points": 0.09199300858887689,
+      "hypothetical_with_repair_saving_pct": 22.26074576146146
+    },
+    {
+      "image": "kodim14.png",
+      "qp": 32,
+      "mean_skipped_suffix_blocks_per_tile": 3.6666665077209473,
+      "ghost_depthwise_cost_pct_points": 0.07983122016810162,
+      "ghost_plus_active_halo_cost_pct_points": 0.09199300858887689,
+      "hypothetical_with_repair_saving_pct": 22.26074576146146
+    },
+    {
+      "image": "kodim14.png",
+      "qp": 48,
+      "mean_skipped_suffix_blocks_per_tile": 3.0,
+      "ghost_depthwise_cost_pct_points": 0.06531645569620252,
+      "ghost_plus_active_halo_cost_pct_points": 0.07934928797468353,
+      "hypothetical_with_repair_saving_pct": 18.697921418721165
+    },
+    {
+      "image": "kodim14.png",
+      "qp": 63,
+      "mean_skipped_suffix_blocks_per_tile": 1.0,
+      "ghost_depthwise_cost_pct_points": 0.021772151898734174,
+      "ghost_plus_active_halo_cost_pct_points": 0.041418117088607584,
+      "hypothetical_with_repair_saving_pct": 5.687075605392458
+    },
+    {
+      "image": "kodim15.png",
+      "qp": 0,
+      "mean_skipped_suffix_blocks_per_tile": 6.0,
+      "ghost_depthwise_cost_pct_points": 0.13063291139240504,
+      "ghost_plus_active_halo_cost_pct_points": 0.13624604430379744,
+      "hypothetical_with_repair_saving_pct": 38.98831142319909
+    },
+    {
+      "image": "kodim15.png",
+      "qp": 16,
+      "mean_skipped_suffix_blocks_per_tile": 4.0,
+      "ghost_depthwise_cost_pct_points": 0.0870886075949367,
+      "ghost_plus_active_halo_cost_pct_points": 0.09831487341772151,
+      "hypothetical_with_repair_saving_pct": 24.119572440944143
+    },
+    {
+      "image": "kodim15.png",
+      "qp": 32,
+      "mean_skipped_suffix_blocks_per_tile": 4.0,
+      "ghost_depthwise_cost_pct_points": 0.0870886075949367,
+      "ghost_plus_active_halo_cost_pct_points": 0.09831487341772151,
+      "hypothetical_with_repair_saving_pct": 24.119572440944143
+    },
+    {
+      "image": "kodim15.png",
+      "qp": 48,
+      "mean_skipped_suffix_blocks_per_tile": 4.333333253860474,
+      "ghost_depthwise_cost_pct_points": 0.09434598983088625,
+      "ghost_plus_active_halo_cost_pct_points": 0.10463673372481819,
+      "hypothetical_with_repair_saving_pct": 26.597697344629356
+    },
+    {
+      "image": "kodim15.png",
+      "qp": 63,
+      "mean_skipped_suffix_blocks_per_tile": 2.3333334922790527,
+      "ghost_depthwise_cost_pct_points": 0.05080169122430342,
+      "ghost_plus_active_halo_cost_pct_points": 0.06670556736049017,
+      "hypothetical_with_repair_saving_pct": 14.051323701423371
+    },
+    {
+      "image": "kodim16.png",
+      "qp": 0,
+      "mean_skipped_suffix_blocks_per_tile": 6.0,
+      "ghost_depthwise_cost_pct_points": 0.13063291139240504,
+      "ghost_plus_active_halo_cost_pct_points": 0.13624604430379744,
+      "hypothetical_with_repair_saving_pct": 38.98831142319909
+    },
+    {
+      "image": "kodim16.png",
+      "qp": 16,
+      "mean_skipped_suffix_blocks_per_tile": 5.333333253860474,
+      "ghost_depthwise_cost_pct_points": 0.11611814172962043,
+      "ghost_plus_active_halo_cost_pct_points": 0.12360231916785616,
+      "hypothetical_with_repair_saving_pct": 34.03206460058264
+    },
+    {
+      "image": "kodim16.png",
+      "qp": 32,
+      "mean_skipped_suffix_blocks_per_tile": 5.333333253860474,
+      "ghost_depthwise_cost_pct_points": 0.11611814172962043,
+      "ghost_plus_active_halo_cost_pct_points": 0.12360231916785616,
+      "hypothetical_with_repair_saving_pct": 34.03206460058264
+    },
+    {
+      "image": "kodim16.png",
+      "qp": 48,
+      "mean_skipped_suffix_blocks_per_tile": 5.666666746139526,
+      "ghost_depthwise_cost_pct_points": 0.1233755291564555,
+      "ghost_plus_active_halo_cost_pct_points": 0.12992418399670078,
+      "hypothetical_with_repair_saving_pct": 36.51018800963
+    },
+    {
+      "image": "kodim16.png",
+      "qp": 63,
+      "mean_skipped_suffix_blocks_per_tile": 5.666666746139526,
+      "ghost_depthwise_cost_pct_points": 0.1233755291564555,
+      "ghost_plus_active_halo_cost_pct_points": 0.12992418399670078,
+      "hypothetical_with_repair_saving_pct": 36.51018800963
+    },
+    {
+      "image": "kodim17.png",
+      "qp": 0,
+      "mean_skipped_suffix_blocks_per_tile": 6.0,
+      "ghost_depthwise_cost_pct_points": 0.13063291139240504,
+      "ghost_plus_active_halo_cost_pct_points": 0.13624604430379744,
+      "hypothetical_with_repair_saving_pct": 38.98831142319909
+    },
+    {
+      "image": "kodim17.png",
+      "qp": 16,
+      "mean_skipped_suffix_blocks_per_tile": 5.0,
+      "ghost_depthwise_cost_pct_points": 0.10886075949367087,
+      "ghost_plus_active_halo_cost_pct_points": 0.11728045886075947,
+      "hypothetical_with_repair_saving_pct": 31.553941187013553
+    },
+    {
+      "image": "kodim17.png",
+      "qp": 32,
+      "mean_skipped_suffix_blocks_per_tile": 5.0,
+      "ghost_depthwise_cost_pct_points": 0.10886075949367087,
+      "ghost_plus_active_halo_cost_pct_points": 0.11728045886075947,
+      "hypothetical_with_repair_saving_pct": 31.553941187013553
+    },
+    {
+      "image": "kodim17.png",
+      "qp": 48,
+      "mean_skipped_suffix_blocks_per_tile": 5.333333253860474,
+      "ghost_depthwise_cost_pct_points": 0.11611814172962043,
+      "ghost_plus_active_halo_cost_pct_points": 0.12360231916785616,
+      "hypothetical_with_repair_saving_pct": 34.03206460058264
+    },
+    {
+      "image": "kodim17.png",
+      "qp": 63,
+      "mean_skipped_suffix_blocks_per_tile": 4.666666746139526,
+      "ghost_depthwise_cost_pct_points": 0.10160337725772133,
+      "ghost_plus_active_halo_cost_pct_points": 0.1109585985536628,
+      "hypothetical_with_repair_saving_pct": 29.849940548045442
+    },
+    {
+      "image": "kodim18.png",
+      "qp": 0,
+      "mean_skipped_suffix_blocks_per_tile": 5.666666746139526,
+      "ghost_depthwise_cost_pct_points": 0.1233755291564555,
+      "ghost_plus_active_halo_cost_pct_points": 0.12992418399670078,
+      "hypothetical_with_repair_saving_pct": 36.51018800963
+    },
+    {
+      "image": "kodim18.png",
+      "qp": 16,
+      "mean_skipped_suffix_blocks_per_tile": 4.0,
+      "ghost_depthwise_cost_pct_points": 0.0870886075949367,
+      "ghost_plus_active_halo_cost_pct_points": 0.09831487341772151,
+      "hypothetical_with_repair_saving_pct": 24.119572440944143
+    },
+    {
+      "image": "kodim18.png",
+      "qp": 32,
+      "mean_skipped_suffix_blocks_per_tile": 3.6666665077209473,
+      "ghost_depthwise_cost_pct_points": 0.07983122016810162,
+      "ghost_plus_active_halo_cost_pct_points": 0.09199300858887689,
+      "hypothetical_with_repair_saving_pct": 22.26075172192594
+    },
+    {
+      "image": "kodim18.png",
+      "qp": 48,
+      "mean_skipped_suffix_blocks_per_tile": 3.0,
+      "ghost_depthwise_cost_pct_points": 0.06531645569620252,
+      "ghost_plus_active_halo_cost_pct_points": 0.07934928797468353,
+      "hypothetical_with_repair_saving_pct": 18.07862319904038
+    },
+    {
+      "image": "kodim18.png",
+      "qp": 63,
+      "mean_skipped_suffix_blocks_per_tile": 1.3333334922790527,
+      "ghost_depthwise_cost_pct_points": 0.029029539325569245,
+      "ghost_plus_active_halo_cost_pct_points": 0.0477399819174522,
+      "hypothetical_with_repair_saving_pct": 7.391073259606581
+    },
+    {
+      "image": "kodim19.png",
+      "qp": 0,
+      "mean_skipped_suffix_blocks_per_tile": 5.0,
+      "ghost_depthwise_cost_pct_points": 0.10886075949367087,
+      "ghost_plus_active_halo_cost_pct_points": 0.11728045886075947,
+      "hypothetical_with_repair_saving_pct": 31.553941187013553
+    },
+    {
+      "image": "kodim19.png",
+      "qp": 16,
+      "mean_skipped_suffix_blocks_per_tile": 4.333333253860474,
+      "ghost_depthwise_cost_pct_points": 0.09434598983088625,
+      "ghost_plus_active_halo_cost_pct_points": 0.10463673372481819,
+      "hypothetical_with_repair_saving_pct": 27.216995564310142
+    },
+    {
+      "image": "kodim19.png",
+      "qp": 32,
+      "mean_skipped_suffix_blocks_per_tile": 4.666666746139526,
+      "ghost_depthwise_cost_pct_points": 0.10160337725772133,
+      "ghost_plus_active_halo_cost_pct_points": 0.1109585985536628,
+      "hypothetical_with_repair_saving_pct": 29.07581926356058
+    },
+    {
+      "image": "kodim19.png",
+      "qp": 48,
+      "mean_skipped_suffix_blocks_per_tile": 4.333333253860474,
+      "ghost_depthwise_cost_pct_points": 0.09434598983088625,
+      "ghost_plus_active_halo_cost_pct_points": 0.10463673372481819,
+      "hypothetical_with_repair_saving_pct": 27.216995564310142
+    },
+    {
+      "image": "kodim19.png",
+      "qp": 63,
+      "mean_skipped_suffix_blocks_per_tile": 2.6666665077209473,
+      "ghost_depthwise_cost_pct_points": 0.05805906826936745,
+      "ghost_plus_active_halo_cost_pct_points": 0.07302742314583892,
+      "hypothetical_with_repair_saving_pct": 16.52944562939809
+    },
+    {
+      "image": "kodim20.png",
+      "qp": 0,
+      "mean_skipped_suffix_blocks_per_tile": 5.0,
+      "ghost_depthwise_cost_pct_points": 0.10886075949367087,
+      "ghost_plus_active_halo_cost_pct_points": 0.11728045886075947,
+      "hypothetical_with_repair_saving_pct": 31.553941187013553
+    },
+    {
+      "image": "kodim20.png",
+      "qp": 16,
+      "mean_skipped_suffix_blocks_per_tile": 4.666666746139526,
+      "ghost_depthwise_cost_pct_points": 0.10160337725772133,
+      "ghost_plus_active_halo_cost_pct_points": 0.1109585985536628,
+      "hypothetical_with_repair_saving_pct": 29.07581926356058
+    },
+    {
+      "image": "kodim20.png",
+      "qp": 32,
+      "mean_skipped_suffix_blocks_per_tile": 4.666666746139526,
+      "ghost_depthwise_cost_pct_points": 0.10160337725772133,
+      "ghost_plus_active_halo_cost_pct_points": 0.1109585985536628,
+      "hypothetical_with_repair_saving_pct": 29.07581926356058
+    },
+    {
+      "image": "kodim20.png",
+      "qp": 48,
+      "mean_skipped_suffix_blocks_per_tile": 5.0,
+      "ghost_depthwise_cost_pct_points": 0.10886075949367087,
+      "ghost_plus_active_halo_cost_pct_points": 0.11728045886075947,
+      "hypothetical_with_repair_saving_pct": 31.553941187013553
+    },
+    {
+      "image": "kodim20.png",
+      "qp": 63,
+      "mean_skipped_suffix_blocks_per_tile": 3.0,
+      "ghost_depthwise_cost_pct_points": 0.06531645569620252,
+      "ghost_plus_active_halo_cost_pct_points": 0.07934928797468353,
+      "hypothetical_with_repair_saving_pct": 19.00756754832932
+    },
+    {
+      "image": "kodim21.png",
+      "qp": 0,
+      "mean_skipped_suffix_blocks_per_tile": 5.666666746139526,
+      "ghost_depthwise_cost_pct_points": 0.1233755291564555,
+      "ghost_plus_active_halo_cost_pct_points": 0.12992418399670078,
+      "hypothetical_with_repair_saving_pct": 36.51018800963
+    },
+    {
+      "image": "kodim21.png",
+      "qp": 16,
+      "mean_skipped_suffix_blocks_per_tile": 4.333333253860474,
+      "ghost_depthwise_cost_pct_points": 0.09434598983088625,
+      "ghost_plus_active_halo_cost_pct_points": 0.10463673372481819,
+      "hypothetical_with_repair_saving_pct": 26.597697344629356
+    },
+    {
+      "image": "kodim21.png",
+      "qp": 32,
+      "mean_skipped_suffix_blocks_per_tile": 4.666666746139526,
+      "ghost_depthwise_cost_pct_points": 0.10160337725772133,
+      "ghost_plus_active_halo_cost_pct_points": 0.1109585985536628,
+      "hypothetical_with_repair_saving_pct": 29.07581926356058
+    },
+    {
+      "image": "kodim21.png",
+      "qp": 48,
+      "mean_skipped_suffix_blocks_per_tile": 5.0,
+      "ghost_depthwise_cost_pct_points": 0.10886075949367087,
+      "ghost_plus_active_halo_cost_pct_points": 0.11728045886075947,
+      "hypothetical_with_repair_saving_pct": 31.553941187013553
+    },
+    {
+      "image": "kodim21.png",
+      "qp": 63,
+      "mean_skipped_suffix_blocks_per_tile": 3.6666665077209473,
+      "ghost_depthwise_cost_pct_points": 0.07983122016810162,
+      "ghost_plus_active_halo_cost_pct_points": 0.09199300858887689,
+      "hypothetical_with_repair_saving_pct": 23.18969309098264
+    },
+    {
+      "image": "kodim22.png",
+      "qp": 0,
+      "mean_skipped_suffix_blocks_per_tile": 5.666666746139526,
+      "ghost_depthwise_cost_pct_points": 0.1233755291564555,
+      "ghost_plus_active_halo_cost_pct_points": 0.12992418399670078,
+      "hypothetical_with_repair_saving_pct": 36.51018800963
+    },
+    {
+      "image": "kodim22.png",
+      "qp": 16,
+      "mean_skipped_suffix_blocks_per_tile": 4.333333253860474,
+      "ghost_depthwise_cost_pct_points": 0.09434598983088625,
+      "ghost_plus_active_halo_cost_pct_points": 0.10463673372481819,
+      "hypothetical_with_repair_saving_pct": 26.597697344629356
+    },
+    {
+      "image": "kodim22.png",
+      "qp": 32,
+      "mean_skipped_suffix_blocks_per_tile": 4.333333253860474,
+      "ghost_depthwise_cost_pct_points": 0.09434598983088625,
+      "ghost_plus_active_halo_cost_pct_points": 0.10463673372481819,
+      "hypothetical_with_repair_saving_pct": 26.597697344629356
+    },
+    {
+      "image": "kodim22.png",
+      "qp": 48,
+      "mean_skipped_suffix_blocks_per_tile": 3.6666665077209473,
+      "ghost_depthwise_cost_pct_points": 0.07983122016810162,
+      "ghost_plus_active_halo_cost_pct_points": 0.09199300858887689,
+      "hypothetical_with_repair_saving_pct": 22.415571806497777
+    },
+    {
+      "image": "kodim22.png",
+      "qp": 63,
+      "mean_skipped_suffix_blocks_per_tile": 2.6666665077209473,
+      "ghost_depthwise_cost_pct_points": 0.05805906826936745,
+      "ghost_plus_active_halo_cost_pct_points": 0.07302742314583892,
+      "hypothetical_with_repair_saving_pct": 15.75532434491323
+    },
+    {
+      "image": "kodim23.png",
+      "qp": 0,
+      "mean_skipped_suffix_blocks_per_tile": 5.666666746139526,
+      "ghost_depthwise_cost_pct_points": 0.1233755291564555,
+      "ghost_plus_active_halo_cost_pct_points": 0.12992418399670078,
+      "hypothetical_with_repair_saving_pct": 36.51018800963
+    },
+    {
+      "image": "kodim23.png",
+      "qp": 16,
+      "mean_skipped_suffix_blocks_per_tile": 4.0,
+      "ghost_depthwise_cost_pct_points": 0.0870886075949367,
+      "ghost_plus_active_halo_cost_pct_points": 0.09831487341772151,
+      "hypothetical_with_repair_saving_pct": 24.119572440944143
+    },
+    {
+      "image": "kodim23.png",
+      "qp": 32,
+      "mean_skipped_suffix_blocks_per_tile": 4.666666746139526,
+      "ghost_depthwise_cost_pct_points": 0.10160337725772133,
+      "ghost_plus_active_halo_cost_pct_points": 0.1109585985536628,
+      "hypothetical_with_repair_saving_pct": 29.07581926356058
+    },
+    {
+      "image": "kodim23.png",
+      "qp": 48,
+      "mean_skipped_suffix_blocks_per_tile": 5.0,
+      "ghost_depthwise_cost_pct_points": 0.10886075949367087,
+      "ghost_plus_active_halo_cost_pct_points": 0.11728045886075947,
+      "hypothetical_with_repair_saving_pct": 31.553941187013553
+    },
+    {
+      "image": "kodim23.png",
+      "qp": 63,
+      "mean_skipped_suffix_blocks_per_tile": 4.0,
+      "ghost_depthwise_cost_pct_points": 0.0870886075949367,
+      "ghost_plus_active_halo_cost_pct_points": 0.09831487341772151,
+      "hypothetical_with_repair_saving_pct": 24.893693725429006
+    },
+    {
+      "image": "kodim24.png",
+      "qp": 0,
+      "mean_skipped_suffix_blocks_per_tile": 5.0,
+      "ghost_depthwise_cost_pct_points": 0.10886075949367087,
+      "ghost_plus_active_halo_cost_pct_points": 0.11728045886075947,
+      "hypothetical_with_repair_saving_pct": 31.553941187013553
+    },
+    {
+      "image": "kodim24.png",
+      "qp": 16,
+      "mean_skipped_suffix_blocks_per_tile": 3.3333334922790527,
+      "ghost_depthwise_cost_pct_points": 0.07257384312303759,
+      "ghost_plus_active_halo_cost_pct_points": 0.08567115280352815,
+      "hypothetical_with_repair_saving_pct": 20.401925033399767
+    },
+    {
+      "image": "kodim24.png",
+      "qp": 32,
+      "mean_skipped_suffix_blocks_per_tile": 2.3333334922790527,
+      "ghost_depthwise_cost_pct_points": 0.05080169122430342,
+      "ghost_plus_active_halo_cost_pct_points": 0.06670556736049017,
+      "hypothetical_with_repair_saving_pct": 13.896500636619294
+    },
+    {
+      "image": "kodim24.png",
+      "qp": 48,
+      "mean_skipped_suffix_blocks_per_tile": 2.3333334922790527,
+      "ghost_depthwise_cost_pct_points": 0.05080169122430342,
+      "ghost_plus_active_halo_cost_pct_points": 0.06670556736049017,
+      "hypothetical_with_repair_saving_pct": 13.896500636619294
+    },
+    {
+      "image": "kodim24.png",
+      "qp": 63,
+      "mean_skipped_suffix_blocks_per_tile": 1.3333334922790527,
+      "ghost_depthwise_cost_pct_points": 0.029029539325569245,
+      "ghost_plus_active_halo_cost_pct_points": 0.0477399819174522,
+      "hypothetical_with_repair_saving_pct": 7.391073259606581
+    }
+  ]
+}
