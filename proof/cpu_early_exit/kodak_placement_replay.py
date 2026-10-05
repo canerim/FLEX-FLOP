@@ -82,6 +82,7 @@ def main() -> None:
         "entropy_build_manifest_sha256": digest(EXTENSION / "build_manifest.json"),
         "seeds": list(SEEDS),
         "thread_count": 1,
+        "python": sys.version,
         "metric": "Equal-image/quality-point mean of 10log10(mean shuffled RGB MSE / original RGB MSE), with matched YCbCr444 MSE also saved. Source RGB is ycbcr2rgb(centered YCbCr + .5, clamp=True).",
     }
     OUT.mkdir(parents=True, exist_ok=True)
