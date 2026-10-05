@@ -104,6 +104,12 @@ def main()->None:
             row[f'{arm}_bdrate_vs_released_pct']=bd(rates,released,rates,quality)
             if arm!='deployed':
                 row[f'{arm}_bdrate_vs_deployed_pct']=bd(rates,deployed,rates,quality)
+        if 'active_zero' in selected and 'active_replicate' in selected:
+            for repair in ('no_repair','with_repair'):
+                zero=curves[f'active_zero_{repair}']
+                replicate=curves[f'active_replicate_{repair}']
+                row[f'active_replicate_{repair}_bdrate_vs_active_zero_pct']=(
+                    bd(rates,zero,rates,replicate))
         rows.append(row)
     rng=np.random.default_rng(20261005)
     keys=sorted(k for k in rows[0] if k.endswith('_pct'))

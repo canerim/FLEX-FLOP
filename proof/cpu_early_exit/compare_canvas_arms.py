@@ -78,6 +78,8 @@ def main()->None:
                 row[f'{arm}_{repair}_delta444_db']=rec['coupled'][repair]['delta444_db']
         row['replicate_minus_zero_no_repair_db']=(row['active_replicate_no_repair_gain_db']-
                                                   row['active_zero_no_repair_gain_db'])
+        row['replicate_minus_zero_with_repair_db']=(row['active_replicate_with_repair_gain_db']-
+                                                    row['active_zero_with_repair_gain_db'])
         for repair in ('no_repair','with_repair'):
             for arm in ('active_zero','active_replicate'):
                 row[f'{arm}_minus_stale_{repair}_db']=(
@@ -95,7 +97,8 @@ def main()->None:
                      'active_replicate_minus_stale_no_repair_db',
                      'active_zero_minus_stale_with_repair_db',
                      'active_replicate_minus_stale_with_repair_db',
-                     'replicate_minus_zero_no_repair_db')}
+                     'replicate_minus_zero_no_repair_db',
+                     'replicate_minus_zero_with_repair_db')}
              for group,subset in groups.items()}
     result={'scope':'Kodak24 x QP5 paired actual bitstream reconstruction, unchanged exit maps; exploratory because pilot preceded full cohort. No latency or native CUDA stream.',
             'input_sha256':{name:sha(path) for name,path in FILES.items()},

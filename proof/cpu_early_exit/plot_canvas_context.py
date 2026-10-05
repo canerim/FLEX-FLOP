@@ -36,7 +36,7 @@ def main()->None:
     names={'stale':'Stale context','active_zero':'Active / zero',
            'active_replicate':'Active / replicate'}
     markers={'stale':'s','active_zero':'o','active_replicate':'D'}
-    fig,axes=plt.subplots(1,2,figsize=(7.18,2.64),gridspec_kw={'width_ratios':[1.24,1]})
+    fig,axes=plt.subplots(1,2,figsize=(7.18,2.64))
     fig.patch.set_facecolor('white')
     for ax in axes:
         ax.set_facecolor('white')
@@ -47,8 +47,8 @@ def main()->None:
         ax.tick_params(length=2.5,color='#667582')
 
     ax=axes[0]
-    offsets={'stale':-.17,'active_zero':0,'active_replicate':.17}
-    for arm in ('stale','active_zero','active_replicate'):
+    offsets={'active_zero':-.10,'active_replicate':.10}
+    for arm in ('active_zero','active_replicate'):
         stats=[data['per_qp'][str(q)][f'{arm}_with_repair_gain_db']
                for q in (0,16,32,48,63)]
         x=np.arange(5)+offsets[arm]
@@ -63,46 +63,44 @@ def main()->None:
     ax.set_xlim(-.45,4.45)
     ax.set_xlabel('Quality index (QP)')
     ax.set_ylabel('Gain over deployed  $\Delta$444 (dB)')
-    ax.set_title('a   Matched repair, changing context',loc='left',pad=8,
+    ax.set_title('a   Active context recovers quality',loc='left',pad=8,
                  color='#183B5B',fontweight='bold')
-    ax.legend(frameon=False,ncol=1,loc='lower left',fontsize=7.2,
+    ax.legend(frameon=False,ncol=1,loc='upper left',fontsize=7.2,
               handletextpad=.35,labelspacing=.32)
 
     ax=axes[1]
-    groups=('uniform','mixed')
-    for arm in ('active_zero','active_replicate'):
-        stats=[data['by_edge_class'][group][f'{arm}_minus_stale_with_repair_db']
-               for group in groups]
-        x=np.arange(2)+offsets[arm]*1.25
-        y=np.asarray([s['mean_gain_db'] for s in stats])
-        lo=np.asarray([s['image_cluster_ci95_db'][0] for s in stats])
-        hi=np.asarray([s['image_cluster_ci95_db'][1] for s in stats])
-        ax.errorbar(x,y,yerr=[y-lo,hi-y],fmt=markers[arm],
-                    ms=5,elinewidth=1.15,capsize=2.5,lw=1.2,
-                    color=colors[arm],mfc='white' if arm=='active_zero' else colors[arm],
-                    mec=colors[arm],zorder=3)
-    counts=[data['by_edge_class'][group]['stale_no_repair_gain_db']['cases']
-            for group in groups]
-    ax.set_xticks(range(2),[f'Uniform\n(n={counts[0]})',f'Mixed depth\n(n={counts[1]})'])
-    ax.set_xlim(-.48,1.48)
-    ax.set_xlabel('Neighbouring exit depths')
-    ax.set_ylabel('Gain over stale canvas (dB)')
-    ax.set_title('b   Paired active-only effect',loc='left',pad=8,
+    stats=[data['per_qp'][str(q)]['stale_with_repair_gain_db']
+           for q in (0,16,32,48,63)]
+    x=np.arange(5)
+    y=np.asarray([s['mean_gain_db'] for s in stats])
+    lo=np.asarray([s['image_cluster_ci95_db'][0] for s in stats])
+    hi=np.asarray([s['image_cluster_ci95_db'][1] for s in stats])
+    ax.errorbar(x,y,yerr=[y-lo,hi-y],fmt=markers['stale'],
+                ms=5,elinewidth=1.15,capsize=2.5,lw=1.2,
+                color=colors['stale'],mfc=colors['stale'],
+                mec=colors['stale'],zorder=3)
+    ax.set_xticks(range(5),['0','16','32','48','63'])
+    ax.set_xlim(-.45,4.45)
+    ax.set_xlabel('Quality index (QP)')
+    ax.set_ylabel('Gain over deployed (dB)')
+    ax.set_title('b   Stale context fails at high QP',loc='left',pad=8,
                  color='#183B5B',fontweight='bold')
 
-    # The QP63 stale-context tail is much larger than the edge-stratified
-    # means. Label each panel's scale rather than flattening panel b.
+    # The QP63 stale-context tail is much larger than the active-context
+    # gains. Label independent scales rather than flattening the small gain.
     for ax in axes: ax.margins(y=.13)
-    fig.subplots_adjust(left=.105,right=.985,bottom=.235,top=.88,wspace=.35)
+    fig.subplots_adjust(left=.105,right=.985,bottom=.235,top=.88,wspace=.29)
     OUT.mkdir(parents=True,exist_ok=True)
     for ext in ('pdf','svg','png'):
         fig.savefig(OUT/f'canvas_context.{ext}',dpi=300,facecolor='white')
     plt.close(fig)
+    svg=OUT/'canvas_context.svg'
+    svg.write_text('\n'.join(line.rstrip() for line in svg.read_text().splitlines())+'\n')
     evidence={'data_sha256':sha(SOURCE),'cost_sha256':sha(COST),
               'script_sha256':sha(Path(__file__)),
               'canvas_mm':[182.37,67.06],
               'n_cases':len(data['rows']),
-              'scope':'Paired bitstream quality with matched seam repair, no runtime claim; panel b contrasts active-only vs stale context in the same cases and stratifies by frozen exit-map boundaries; panels use independently labelled vertical scales',
+              'scope':'Paired bitstream quality with matched seam repair, no runtime claim; panel a resolves active gains over deployed and panel b exposes stale QP dependence; panels use independently labelled vertical scales',
               'artifacts':{f'canvas_context.{ext}':sha(OUT/f'canvas_context.{ext}')
                            for ext in ('pdf','svg','png')}}
     (OUT/'figure_evidence.json').write_text(json.dumps(evidence,indent=2)+'\n')

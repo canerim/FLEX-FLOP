@@ -1,0 +1,2705 @@
+{
+  "scope": "Kodak24 five-QP YUV 6:1:1 PCHIP BD-rate from frozen research FUFREF2 streams; same rate per arm, no latency or native CUDA stream.",
+  "metric": "Positive BD-rate means more bits would be required at equal quality than the named anchor.",
+  "method": "bjontegaard Python package, method=pchip, independently cross-checked by log-rate PCHIP integration over common PSNR support for each image; then image-bootstrap 24 paired values.",
+  "script_sha256": "30c053738e4327c2c27b4a1786099ee4924acd3d960e4f046861e54ed36a42db",
+  "input_sha256": {
+    "scan_cases": {
+      "kodim01_qp0.json": "de4f4107897a1941f258abee2896ee4efca5a42fde9063a1e819a1ddb39c82e7",
+      "kodim01_qp16.json": "398f4f1909017bec0505cf3d462c3458f53f70a674801b1d3fd760b37b1dcd40",
+      "kodim01_qp32.json": "4621c870fbf75de8e64fe88dc69cf7a37239c424a1cdef357518a3707bf764fa",
+      "kodim01_qp48.json": "962ffb438e22bc7890477e75446715f6ec4aba4c7c10872ec54d89ae5cd6e630",
+      "kodim01_qp63.json": "38d73fc6f186cda7b103d06de27b2f81100e09df91cfb2ea6626cdc074c9d2f7",
+      "kodim02_qp0.json": "fca1000f40c0180ffdbdc0b68d57ea198aaf30420782fe50841ef99905c1501b",
+      "kodim02_qp16.json": "4f35e0063fc336809ad9ea46763e7d288fdf827e8c8bc5995db65f5032b53450",
+      "kodim02_qp32.json": "6fc2f58a9d5ec58b37c1ff3cee2fd2baa2edfc2e5046dc11b579cac880a8d5a3",
+      "kodim02_qp48.json": "c36679e80254ea7b76a1b1d2ac311cffee93a0078c37181b2253d4c4065cb466",
+      "kodim02_qp63.json": "4f4a19daec77a45ece1e20ec3dedce06fe83d2ccac139268f37555458837881a",
+      "kodim03_qp0.json": "fa5614006ec945da46a0185d11a6b17634524a9241d33a63deffaf96128ced0e",
+      "kodim03_qp16.json": "e6a6739fbc43139e6e92b82597304fe7d96ccf62dd9141c686e70af5c4ffa341",
+      "kodim03_qp32.json": "6ebe01b6e4fe83174fbd6d4f9bf26e205f399f465cbb6fa02f3f08485deeb260",
+      "kodim03_qp48.json": "223e7042004a4c22167c024918ddbc7b5c1d01bf0f5fda74107f763e77ddad5f",
+      "kodim03_qp63.json": "262f775b1b1f8a586e6672032d9249724fc4ef3c17a9614cbc392c4a85fd5808",
+      "kodim04_qp0.json": "5b5e2b230777cc1d6a6addc7e5ea22fd857d8d00f35fe41aa4d04306f2aaedd5",
+      "kodim04_qp16.json": "9b01a5f04d89e6edca897113c2c9adef409b6ff3b8fed7a1c5803cd04f95c704",
+      "kodim04_qp32.json": "03dec7c3371d8fa2591b2f79a1115dc51aebacfddd43d4cb123264377d2eea2b",
+      "kodim04_qp48.json": "91522014d50452c6ac9daf1634370bbea533630dd25c7973c8f61554735abab5",
+      "kodim04_qp63.json": "61ef7e6ad9e80991b1f0bec92076a3cd686a75bcf75f688fb1d98885267c697a",
+      "kodim05_qp0.json": "a3bf80eb33244d64b2cbeb8de1d5d9d157d93a809319a038971a6d3e086668f9",
+      "kodim05_qp16.json": "79207c5f19c82015f507fdf53f4089746ad70310450496ce1250360f1420f430",
+      "kodim05_qp32.json": "cad4fe3c463021fa535dc1524e72950bc39819b34d10197b24b5047d72b3001e",
+      "kodim05_qp48.json": "3c93176d56d77c65b2c37a1216ac65e224b1b3784f8683a3a8615a2592a988d9",
+      "kodim05_qp63.json": "206ef3b3dcc2a8822e94745171083c458c5a32ad03a09aedfd7be694a23c0054",
+      "kodim06_qp0.json": "67ca562420f97de0de56c69b2147a520b76d3b614988eb85af600feadde1bf29",
+      "kodim06_qp16.json": "e944d82394036d74de6cc1c022d9f52d49b9ab0e767be9b2e91eafdeee4ff288",
+      "kodim06_qp32.json": "ca4998a2d898d2159632fb3f8cf8af68803351b1be63acaa935ace6cfec24f3c",
+      "kodim06_qp48.json": "4466f93492808eb69935a94bb283a1dd0f6e59345156f361ba9121b90f82fa9d",
+      "kodim06_qp63.json": "0134538a8bd4114b6754c4e947d1cff0e24d48c14754dde9e2b5ec2aec541ee1",
+      "kodim07_qp0.json": "d8f75b570b3df774162a3781b0dfa4c2f5e9d91e09d3ae6aae225fa4eeaff53f",
+      "kodim07_qp16.json": "ae5717e13046c6884b57f197d0b8a438dc4a74e248d8da8c111a344846d6a31a",
+      "kodim07_qp32.json": "b3705cd49614c0cbd2916f5a3dcd8b2fc33b673255118d1476613bb03700db94",
+      "kodim07_qp48.json": "6f14b17d0e9e7090f0ce4373f83cd609d00be4069d80c8dc5b10921931e670ae",
+      "kodim07_qp63.json": "598b0d9e2f8f330ef01ea89e2e5779035ed583471cf7f6964cd072648982b202",
+      "kodim08_qp0.json": "627df6a68e9c5a2cadc7fd1ec232652c15ebe797dc2e373d02d66e6369557466",
+      "kodim08_qp16.json": "5ef1c82672cea22ddfaf700b33d42b83a130e5d2d135b9bcaa612dde1db7cedb",
+      "kodim08_qp32.json": "d7c9a17811f6e5a028296d59278c6be5b6908e2cda9c14d0bbbd41c77ac7dad1",
+      "kodim08_qp48.json": "1aaa3cfabf6911ed154b88ed79003f8166a82f81f1d833034d26631df5639534",
+      "kodim08_qp63.json": "d1c73b237e3bdf9f46350ae4a4d54772c5d22fe6012bd88f2806497576ddd8b8",
+      "kodim09_qp0.json": "bbd8af262e4eff2c8ec91f3a3645fea00de6e142fa4d66576060dfec91798a24",
+      "kodim09_qp16.json": "26731dd597c0ae9f70502c97bdca3e92526148fd35f5b8f00189a85984550571",
+      "kodim09_qp32.json": "94e425a30501cd69c0407b4b58a1d16f1e7846b2767f7305c15e1e72397d3c83",
+      "kodim09_qp48.json": "a1e9ca1340fb58f52f23dd37fd0fbf511501d5b82b3862845c8c77d4d18858f2",
+      "kodim09_qp63.json": "4e82f9d74c3a2aaf0cae035219441e5902773ea795a06134ab38be7516135cc5",
+      "kodim10_qp0.json": "ee58ef8720cb740c29b410e875b88f48b8e6e4195653b431183057764bd5dfa8",
+      "kodim10_qp16.json": "9ad15adee5895230b377072c3fac94704f67dd1e5f7d204cc33710e41b89e18d",
+      "kodim10_qp32.json": "883e67047e78dbce8dcb8dbee29c7f7286dce4be2336340ecc40455acec8fd92",
+      "kodim10_qp48.json": "48ab36fa2f4d3f0c5b70e80d36cf4a596e04c27ccc0b333395967c180e73453a",
+      "kodim10_qp63.json": "d9793feb890199d344b615cca49cff22a1b7f7a7f50270773828b9a93872e5ba",
+      "kodim11_qp0.json": "e7a439286aa1e9ba78b91fe152c70f42fca9ea1cdecf2509e424fc58c127c606",
+      "kodim11_qp16.json": "5e1428464b4e65d7536bf184fcfd85765805490cc2fcd88d0d578da5856e657d",
+      "kodim11_qp32.json": "94c7ce9b9d2259b145bb5727d57ef1f57827d7d5dea061f13c26a2f7f097b806",
+      "kodim11_qp48.json": "8a389b671da8341e0364d96390c7475c9ed7ee68be7bedfb94351b39cf7ec396",
+      "kodim11_qp63.json": "0f203a7175e72fd0a135af2672da6d9447731c422ca31e64f88b75e43c004a5a",
+      "kodim12_qp0.json": "512512b3a32a51bab5a861530df75aa561fd0870cd1800778f51f6d034e44984",
+      "kodim12_qp16.json": "016d1174cc325060125b071b6deb7eb06779a3277938ec5e59b23d2f4a750e90",
+      "kodim12_qp32.json": "3b7b13ac51ddc5a58b9025087ada81a36659cf28d320d8155515d96a63da7b57",
+      "kodim12_qp48.json": "6caf1b76a0693b3f786aba7a6827c5668dd935ea7515d14ea9f6b422065f3295",
+      "kodim12_qp63.json": "1089b67671580820e314cbac6977fa5bb82cdf425d6e422913a22baa905d2dee",
+      "kodim13_qp0.json": "7cc8b162a7e3f3300000080d4849bcd55058557e3adafbe57e99bb6997ac0b62",
+      "kodim13_qp16.json": "42f10c598f943137c894e6cba7f46555c2606e4c3e70c29d36a439e24e41e540",
+      "kodim13_qp32.json": "afbc46661fd5e3eebcdc063cd2a20e036183be9de1ee83eab4d2b67a780df2a3",
+      "kodim13_qp48.json": "4c9a0200cfff12ee7ff5bc7ff0018647c97a0acace7161fec22ac41b786c4c28",
+      "kodim13_qp63.json": "f0ed8fd69b0a092265d09dc0f4748755ff3bce039da0813c24d061781a97cb4d",
+      "kodim14_qp0.json": "042a35423bc802cd959467080c0b34cb51ff408b57e42ccadf0d1cccebfb7ce5",
+      "kodim14_qp16.json": "a7ef671372a982158d7336f2e4b6fbbe9f8be14773b0e66e85d472c164befc22",
+      "kodim14_qp32.json": "14a4d0e0a9626bd046df65fd621a8b33c8af0cd59d26fb7b1b3518d8bb7a3665",
+      "kodim14_qp48.json": "f13a90a37fe58b473dbd5ec8fdf0c479e66c877d6248e85789c4697d2f866470",
+      "kodim14_qp63.json": "8b8b706e3cc09f64caf142660e7570e0f5da4170ce897897a18a4106a25e6433",
+      "kodim15_qp0.json": "c9993b711693eca06e6667f0f8acd9ca74302895926d6569602fcd2b4184ca34",
+      "kodim15_qp16.json": "3ab25aca9e5b14baa4e63aac32d547d1f8aeb7f44706fbbf54bd49a4f36c5aae",
+      "kodim15_qp32.json": "18205239fd66710e141bacc81abd54f8b651f8beb208e5470844d539215feb28",
+      "kodim15_qp48.json": "245268cf9ede301b19e052ddcd9ac4c796589f2c7fbca1052482fce42800bfcd",
+      "kodim15_qp63.json": "e7469eee0247d68e64b73dbd58a206b8e1fccfca677bce2bcb8167a9ecb47c3a",
+      "kodim16_qp0.json": "425437e7b9f58a66285e035076777a365386b217cec4a62c6d9c14155d2fb999",
+      "kodim16_qp16.json": "0097b92ff0881bdda5543f9f04d9132e3379fe5e4d72ba5ed68aefa2a8f49f31",
+      "kodim16_qp32.json": "7f475c2323269843e48480f14c5699d3c210c088097bd872ee761627b7d02fd3",
+      "kodim16_qp48.json": "434c8bb362ea513563494221415150ca0cd64a486888e9cb30b8502ffcccd4ee",
+      "kodim16_qp63.json": "3ff17734e0534576b7f30a6e7dc8065add6dd83960a00b06ba185795cc88b284",
+      "kodim17_qp0.json": "457aea359fcc71bb16b690334514787cfb3aad5b2acc4fa8c60db5b9dc62313a",
+      "kodim17_qp16.json": "0f04e3543cbd4ffb2af8d0b5d783090a91c240fd73050778e49817e9a19672ac",
+      "kodim17_qp32.json": "ea9f8a4e99751565bcf0898eab6261dcc9c1fe6ba8664b5596c33f089884ed43",
+      "kodim17_qp48.json": "120c24fd1d448d742e2c4e2ee89fcd4737d6020508b61b6af70e2a583915ca5c",
+      "kodim17_qp63.json": "402717b654105afaf8b249bab363d85c985745e353440d0894e4d4c1d861ec8a",
+      "kodim18_qp0.json": "f6ad2211ff9a24ea34e5c0af5c5d0de060df981f62da6f3787309f6b76dc03e0",
+      "kodim18_qp16.json": "3f49698c52589ab8171fc277428c6ae478e276953c780a5636b00cdaf8877a6a",
+      "kodim18_qp32.json": "b30aeae472ff0baf52a5715ac46b7834d58b00d0ff18b7a15d07046354e83967",
+      "kodim18_qp48.json": "88ab19455b8d6bfca10b7167cbce3f0ea68b0fd115f6e31a589002cc846b05f4",
+      "kodim18_qp63.json": "4b7856ac0b562aaa8a4b3667a64cc42fa0f7f7c17ada58761d7bc9f940591ade",
+      "kodim19_qp0.json": "3f0e8624d8e90299b85b8f250e1a0cfd3e8ca4f3eac9e13238e3a510a3267ba2",
+      "kodim19_qp16.json": "ad394f5a832ba4ebcf0a5bfd82f2aeafcc4b16e1d5de5d6c018a962ea293d653",
+      "kodim19_qp32.json": "fb22f34eb4473cc72ea2c569c0c01c77769cc597147d59780cea94c2abf32ff1",
+      "kodim19_qp48.json": "cf38067bcfa1ad2fdcd3cfe111f67940652e310259c39888b7a9aaedf95fee54",
+      "kodim19_qp63.json": "ba4255561b3133658feaa89a5ff66d4bb5ac2745aa6ecebf0cb71038e772cf5f",
+      "kodim20_qp0.json": "b0a133442b2c01b7da90638b758ac73ef8f3a76bb116d150df92d1f375d1fe5b",
+      "kodim20_qp16.json": "b8de7a96dc38c48a398093548b1391006d30d27e0ad58f91db43a6f8ed7d3d22",
+      "kodim20_qp32.json": "aea4c01b1472a0602a86a6eaa9c4635b62812019cb5fb6722917bd848946a07a",
+      "kodim20_qp48.json": "a99581f8450fb1e83e570e062351758d8893c1b9fa326681325882e89c2391a3",
+      "kodim20_qp63.json": "e7e1f55618972153d50ff8dc2ddf77945f10f5dea2765c9915d637bd68624ab1",
+      "kodim21_qp0.json": "5955310cbe9b6bf392fc7c4e6479458d50e571cf2c41dcc9891284fbff8e5c63",
+      "kodim21_qp16.json": "40907e4ec98c0ad4c842935d4b804a82412a0cd933e4959c7ec0357d5429fb5f",
+      "kodim21_qp32.json": "0ef0956b8a9b552f4c1b9e616bed1451202a5483d6dd5f2fbd065cd952353f4e",
+      "kodim21_qp48.json": "fd85956a48c315758d3496dd14ac513e30a1ef491b05489cc6d62c6ef71082b2",
+      "kodim21_qp63.json": "1b45c22284c431b1b645f5bac766e804c7b4caea106affd629de7563e877c42f",
+      "kodim22_qp0.json": "4c3aa7adfa035fa27246d626c668a60c57a1dc5c0cd016df5a36f02ad58876f5",
+      "kodim22_qp16.json": "c0b7343b1ef2261915124b392301052b128a1476b0f627c7b00529bc67e8e829",
+      "kodim22_qp32.json": "2cecd42f74d9398609f4f174b982fbd7f019edfd32d8d31f14f233f5b995faff",
+      "kodim22_qp48.json": "9887c68136175fb833f843f01476b3c8dd5dd485485eb2490e03c3b204d49218",
+      "kodim22_qp63.json": "0339e02321e0e911db53319a19aee64cafcf4a39fb1688a225dfa213cb768acf",
+      "kodim23_qp0.json": "91a455e7ea1d794c5505786860b6e4c5a186153f36ef51724868761df91f091a",
+      "kodim23_qp16.json": "d154f151c336c4540fcf3b872eaee2a51f8601ce9caddf3177e37e6801485993",
+      "kodim23_qp32.json": "eccfab8a77460edc94adcb8cf2b7c7f8bf92f6fc3ebc9876d0959a9fd1797439",
+      "kodim23_qp48.json": "f6a05e2a97e88c96f314b0c7c740bc033ffe64d744b30b575de2c9314e879915",
+      "kodim23_qp63.json": "4de96ba5d70232c939cd8b3bce359fe604273b9b0b651019a2246ca2fc44f945",
+      "kodim24_qp0.json": "79f632f8e230606edc46870c4a6d4988e6b5bdd0a033709fb578c9af95e1fe12",
+      "kodim24_qp16.json": "0f74f24e69a9a37faf71ea761baec5ab061cd5cb7f0cf78b2fe9f0d027578122",
+      "kodim24_qp32.json": "37cb7896066f58ce7a7bb7bf048954e0df94228d92cc90fe81e919cf1091a590",
+      "kodim24_qp48.json": "6556e83aeccb0ab7c70edc03d683966ab74f0a308aa18261ef6c0d05e3efff22",
+      "kodim24_qp63.json": "08dd41850530b5e9b3abd25892a9bfc09db2facd6201f7704f7857e92a918782"
+    },
+    "stale": "a416e2df4a269d69c926b9696244a11d11f2dfbbae3fae96e30152c4b7a71168",
+    "active_zero": "094618ffcf979c0b372a59112dbe2fe7313825059af681e791febd6b7b39818d",
+    "active_replicate": "a1b24caa06853d35489db49eea3a31ff5bb3ce32fbfdf12f32209812490ac579"
+  },
+  "selected_arms": [
+    "stale",
+    "active_zero",
+    "active_replicate"
+  ],
+  "summary": {
+    "active_replicate_no_repair_bdrate_vs_active_zero_pct": {
+      "n_images": 24,
+      "mean_pct": -0.041399533872819395,
+      "median_pct": -0.018808737089903715,
+      "image_bootstrap_ci95_pct": [
+        -0.0686003596253809,
+        -0.02109731278198143
+      ],
+      "minimum_pct": -0.2809093695943954,
+      "maximum_pct": 0.013644834498016678
+    },
+    "active_replicate_no_repair_bdrate_vs_deployed_pct": {
+      "n_images": 24,
+      "mean_pct": -0.40826255817043533,
+      "median_pct": -0.40046696584456476,
+      "image_bootstrap_ci95_pct": [
+        -0.48267322470702995,
+        -0.33643099411988475
+      ],
+      "minimum_pct": -0.739655594334554,
+      "maximum_pct": -0.10216795059571071
+    },
+    "active_replicate_no_repair_bdrate_vs_released_pct": {
+      "n_images": 24,
+      "mean_pct": 3.241364952186681,
+      "median_pct": 3.31620099913974,
+      "image_bootstrap_ci95_pct": [
+        2.839616052665884,
+        3.6470648237737593
+      ],
+      "minimum_pct": 1.579003822810554,
+      "maximum_pct": 5.247784503040487
+    },
+    "active_replicate_with_repair_bdrate_vs_active_zero_pct": {
+      "n_images": 24,
+      "mean_pct": -0.04097433111653892,
+      "median_pct": -0.019517644668282097,
+      "image_bootstrap_ci95_pct": [
+        -0.06762116101451823,
+        -0.020349782408141504
+      ],
+      "minimum_pct": -0.2800810976460899,
+      "maximum_pct": 0.013453253142148291
+    },
+    "active_replicate_with_repair_bdrate_vs_deployed_pct": {
+      "n_images": 24,
+      "mean_pct": -0.28518940808283794,
+      "median_pct": -0.2973507890076388,
+      "image_bootstrap_ci95_pct": [
+        -0.381696637595518,
+        -0.18056732554979188
+      ],
+      "minimum_pct": -0.680784342729035,
+      "maximum_pct": 0.4089299149551806
+    },
+    "active_replicate_with_repair_bdrate_vs_released_pct": {
+      "n_images": 24,
+      "mean_pct": 3.3678184444038686,
+      "median_pct": 3.3674129382478046,
+      "image_bootstrap_ci95_pct": [
+        2.954559215993752,
+        3.8065354998782612
+      ],
+      "minimum_pct": 1.6396838733439445,
+      "maximum_pct": 5.616323505348042
+    },
+    "active_zero_no_repair_bdrate_vs_deployed_pct": {
+      "n_images": 24,
+      "mean_pct": -0.3670315661405299,
+      "median_pct": -0.35081246866810467,
+      "image_bootstrap_ci95_pct": [
+        -0.43984993354477425,
+        -0.2950600900539916
+      ],
+      "minimum_pct": -0.7363186929284504,
+      "maximum_pct": -0.06182492358576264
+    },
+    "active_zero_no_repair_bdrate_vs_released_pct": {
+      "n_images": 24,
+      "mean_pct": 3.2849141759037455,
+      "median_pct": 3.354393253020438,
+      "image_bootstrap_ci95_pct": [
+        2.879073915822054,
+        3.704550979761924
+      ],
+      "minimum_pct": 1.5824136980020942,
+      "maximum_pct": 5.401923546303222
+    },
+    "active_zero_with_repair_bdrate_vs_deployed_pct": {
+      "n_images": 24,
+      "mean_pct": -0.24432985347670375,
+      "median_pct": -0.25148263043728303,
+      "image_bootstrap_ci95_pct": [
+        -0.3418347749588106,
+        -0.14033937992918852
+      ],
+      "minimum_pct": -0.6770610320336323,
+      "maximum_pct": 0.39539765625553613
+    },
+    "active_zero_with_repair_bdrate_vs_released_pct": {
+      "n_images": 24,
+      "mean_pct": 3.411052466320901,
+      "median_pct": 3.4288850430407747,
+      "image_bootstrap_ci95_pct": [
+        2.9701541410522743,
+        3.8621860511558106
+      ],
+      "minimum_pct": 1.643491182832979,
+      "maximum_pct": 5.777358573565006
+    },
+    "deployed_bdrate_vs_released_pct": {
+      "n_images": 24,
+      "mean_pct": 3.664936462227246,
+      "median_pct": 3.708208995033979,
+      "image_bootstrap_ci95_pct": [
+        3.275265993607267,
+        4.078007525455134
+      ],
+      "minimum_pct": 1.9518748651677686,
+      "maximum_pct": 6.038017443675003
+    },
+    "exact_context_bdrate_vs_deployed_pct": {
+      "n_images": 24,
+      "mean_pct": -0.44489674259569295,
+      "median_pct": -0.4142549336404844,
+      "image_bootstrap_ci95_pct": [
+        -0.5198784992822506,
+        -0.3709062961525646
+      ],
+      "minimum_pct": -0.8210690491235018,
+      "maximum_pct": -0.1506493909694373
+    },
+    "exact_context_bdrate_vs_released_pct": {
+      "n_images": 24,
+      "mean_pct": 3.2032147050360416,
+      "median_pct": 3.294417465833277,
+      "image_bootstrap_ci95_pct": [
+        2.8076249159572306,
+        3.601900098495248
+      ],
+      "minimum_pct": 1.5542336723464834,
+      "maximum_pct": 5.159360366802845
+    },
+    "stale_no_repair_bdrate_vs_deployed_pct": {
+      "n_images": 24,
+      "mean_pct": 0.524287094088897,
+      "median_pct": 0.5559140553690445,
+      "image_bootstrap_ci95_pct": [
+        0.3099822099936791,
+        0.7425093296261877
+      ],
+      "minimum_pct": -0.3685873909722748,
+      "maximum_pct": 1.665470838036942
+    },
+    "stale_no_repair_bdrate_vs_released_pct": {
+      "n_images": 24,
+      "mean_pct": 4.213135367103171,
+      "median_pct": 4.123167632298996,
+      "image_bootstrap_ci95_pct": [
+        3.7629333814192014,
+        4.696437550054185
+      ],
+      "minimum_pct": 2.3109363009925055,
+      "maximum_pct": 6.8799172496012195
+    },
+    "stale_with_repair_bdrate_vs_deployed_pct": {
+      "n_images": 24,
+      "mean_pct": 0.6616383766394853,
+      "median_pct": 0.6833330898474044,
+      "image_bootstrap_ci95_pct": [
+        0.4324924017498132,
+        0.8901386835013986
+      ],
+      "minimum_pct": -0.31224035515987625,
+      "maximum_pct": 1.8029788761049659
+    },
+    "stale_with_repair_bdrate_vs_released_pct": {
+      "n_images": 24,
+      "mean_pct": 4.354787192729196,
+      "median_pct": 4.287804978482745,
+      "image_bootstrap_ci95_pct": [
+        3.8716438275820475,
+        4.876381920941463
+      ],
+      "minimum_pct": 2.3996776983061574,
+      "maximum_pct": 7.330817341075013
+    }
+  },
+  "per_image": [
+    {
+      "image": "kodim01.png",
+      "qps": [
+        0,
+        16,
+        32,
+        48,
+        63
+      ],
+      "rate_bpp": [
+        0.036783854166666664,
+        0.10245768229166667,
+        0.3382771809895833,
+        0.86895751953125,
+        1.57232666015625
+      ],
+      "quality_yuv611_db": {
+        "released": [
+          27.207571648115962,
+          29.589006305843455,
+          32.63550268441956,
+          36.54644691529084,
+          40.25770281774342
+        ],
+        "deployed": [
+          27.026460608883554,
+          29.500161648617727,
+          32.52754336733321,
+          36.383938317502974,
+          40.07368808772329
+        ],
+        "exact_context": [
+          27.055050889768854,
+          29.526937769210853,
+          32.54483634029133,
+          36.39901572473284,
+          40.09612979053316
+        ],
+        "stale_no_repair": [
+          27.04906860895828,
+          29.526937769210853,
+          32.54483634029133,
+          36.39901572473284,
+          39.73595143306886
+        ],
+        "stale_with_repair": [
+          27.03697130114596,
+          29.51582487133943,
+          32.540266659252644,
+          36.396907484290956,
+          39.726439821245954
+        ],
+        "active_zero_no_repair": [
+          27.055453362364553,
+          29.526937769210853,
+          32.54483634029133,
+          36.39901572473284,
+          40.09377448400167
+        ],
+        "active_zero_with_repair": [
+          27.04343304832685,
+          29.51582487133943,
+          32.540266659252644,
+          36.396907484290956,
+          40.09381904087656
+        ],
+        "active_replicate_no_repair": [
+          27.052551787812178,
+          29.526937769210853,
+          32.54483634029133,
+          36.39901572473284,
+          40.09457016676312
+        ],
+        "active_replicate_with_repair": [
+          27.04066565618027,
+          29.51582487133943,
+          32.540266659252644,
+          36.396907484290956,
+          40.09473907862378
+        ]
+      },
+      "deployed_bdrate_vs_released_pct": 3.6445067743338333,
+      "exact_context_bdrate_vs_released_pct": 3.014297949015976,
+      "exact_context_bdrate_vs_deployed_pct": -0.6133183762434324,
+      "stale_no_repair_bdrate_vs_released_pct": 3.501956344387591,
+      "stale_no_repair_bdrate_vs_deployed_pct": -0.1809422636132041,
+      "stale_with_repair_bdrate_vs_released_pct": 3.7171270243582466,
+      "stale_with_repair_bdrate_vs_deployed_pct": 0.028998886622400022,
+      "active_zero_no_repair_bdrate_vs_released_pct": 3.016627456530596,
+      "active_zero_no_repair_bdrate_vs_deployed_pct": -0.6114861865053389,
+      "active_zero_with_repair_bdrate_vs_released_pct": 3.2136716666932186,
+      "active_zero_with_repair_bdrate_vs_deployed_pct": -0.4176589638436812,
+      "active_replicate_no_repair_bdrate_vs_released_pct": 3.0227762147558845,
+      "active_replicate_no_repair_bdrate_vs_deployed_pct": -0.6042898367309868,
+      "active_replicate_with_repair_bdrate_vs_released_pct": 3.2192050425420504,
+      "active_replicate_with_repair_bdrate_vs_deployed_pct": -0.4109228448508362,
+      "active_replicate_no_repair_bdrate_vs_active_zero_pct": 0.007325560081294924,
+      "active_replicate_with_repair_bdrate_vs_active_zero_pct": 0.006777165229232551
+    },
+    {
+      "image": "kodim02.png",
+      "qps": [
+        0,
+        16,
+        32,
+        48,
+        63
+      ],
+      "rate_bpp": [
+        0.01776123046875,
+        0.037943522135416664,
+        0.09578450520833333,
+        0.2873331705729167,
+        0.6896565755208334
+      ],
+      "quality_yuv611_db": {
+        "released": [
+          31.132152691937712,
+          33.040863892728986,
+          35.1400710177647,
+          38.0508301859407,
+          41.29788056386293
+        ],
+        "deployed": [
+          30.923269083913194,
+          32.96727728671118,
+          35.030545864573384,
+          37.89364489010636,
+          41.1263663731134
+        ],
+        "exact_context": [
+          30.924655276279484,
+          32.97453404736946,
+          35.04484775272166,
+          37.90096038156414,
+          41.11341106015042
+        ],
+        "stale_no_repair": [
+          30.924655276279484,
+          32.97453404736946,
+          35.04484775272166,
+          37.872237213818444,
+          41.0713961771349
+        ],
+        "stale_with_repair": [
+          30.89826692882914,
+          32.96696392300924,
+          35.04408744615441,
+          37.87414573463035,
+          41.07039892995062
+        ],
+        "active_zero_no_repair": [
+          30.924655276279484,
+          32.97453404736946,
+          35.04484775272166,
+          37.90030050813497,
+          41.108587796048134
+        ],
+        "active_zero_with_repair": [
+          30.89826692882914,
+          32.96696392300924,
+          35.04408744615441,
+          37.902071007075534,
+          41.107977877069885
+        ],
+        "active_replicate_no_repair": [
+          30.924655276279484,
+          32.97453404736946,
+          35.04484775272166,
+          37.90089400078163,
+          41.11269720148686
+        ],
+        "active_replicate_with_repair": [
+          30.89826692882914,
+          32.96696392300924,
+          35.04408744615441,
+          37.90271881530855,
+          41.11244502747145
+        ]
+      },
+      "deployed_bdrate_vs_released_pct": 4.668676186733056,
+      "exact_context_bdrate_vs_released_pct": 4.394947845524388,
+      "exact_context_bdrate_vs_deployed_pct": -0.2584010334678144,
+      "stale_no_repair_bdrate_vs_released_pct": 4.8804292867362875,
+      "stale_no_repair_bdrate_vs_deployed_pct": 0.19253634759097693,
+      "stale_with_repair_bdrate_vs_released_pct": 4.995871039037647,
+      "stale_with_repair_bdrate_vs_deployed_pct": 0.3176158699099263,
+      "active_zero_no_repair_bdrate_vs_released_pct": 4.417132408577973,
+      "active_zero_no_repair_bdrate_vs_deployed_pct": -0.23803183798730698,
+      "active_zero_with_repair_bdrate_vs_released_pct": 4.532359443590384,
+      "active_zero_with_repair_bdrate_vs_deployed_pct": -0.11317968503162801,
+      "active_replicate_no_repair_bdrate_vs_released_pct": 4.397836497391072,
+      "active_replicate_no_repair_bdrate_vs_deployed_pct": -0.25575584688668496,
+      "active_replicate_with_repair_bdrate_vs_released_pct": 4.511270526525291,
+      "active_replicate_with_repair_bdrate_vs_deployed_pct": -0.1325590612548666,
+      "active_replicate_no_repair_bdrate_vs_active_zero_pct": -0.017985999411895826,
+      "active_replicate_with_repair_bdrate_vs_active_zero_pct": -0.019540324238143114
+    },
+    {
+      "image": "kodim03.png",
+      "qps": [
+        0,
+        16,
+        32,
+        48,
+        63
+      ],
+      "rate_bpp": [
+        0.01995849609375,
+        0.040201822916666664,
+        0.10009765625,
+        0.21624755859375,
+        0.4275919596354167
+      ],
+      "quality_yuv611_db": {
+        "released": [
+          32.13991161692611,
+          34.3382473205811,
+          37.429354145944885,
+          40.508430769408854,
+          43.495285974010486
+        ],
+        "deployed": [
+          31.926649852340798,
+          34.21771912020767,
+          37.253891025235944,
+          40.26326563037776,
+          43.311507005377045
+        ],
+        "exact_context": [
+          31.95140294944242,
+          34.24475284810559,
+          37.275950115871204,
+          40.28582181716063,
+          43.33177687412032
+        ],
+        "stale_no_repair": [
+          31.937945734587654,
+          34.222963211647766,
+          37.24764038024556,
+          40.2435912278044,
+          43.14062695875878
+        ],
+        "stale_with_repair": [
+          31.9358961092654,
+          34.214912190798366,
+          37.241229928204646,
+          40.241019945161014,
+          43.13787997713142
+        ],
+        "active_zero_no_repair": [
+          31.949193667596752,
+          34.23358381423001,
+          37.26059169406289,
+          40.27144450683852,
+          43.31048490653753
+        ],
+        "active_zero_with_repair": [
+          31.947223154438632,
+          34.22558422563957,
+          37.25445454900402,
+          40.26957587974952,
+          43.30978680532089
+        ],
+        "active_replicate_no_repair": [
+          31.950048922211902,
+          34.24433378972798,
+          37.27225529515432,
+          40.28198064281194,
+          43.32505401690153
+        ],
+        "active_replicate_with_repair": [
+          31.94807661684872,
+          34.23629653333401,
+          37.26609808267124,
+          40.28009266139733,
+          43.324262121752284
+        ]
+      },
+      "deployed_bdrate_vs_released_pct": 5.010301289903407,
+      "exact_context_bdrate_vs_released_pct": 4.341096935515387,
+      "exact_context_bdrate_vs_deployed_pct": -0.6381965627888286,
+      "stale_no_repair_bdrate_vs_released_pct": 5.527609636020947,
+      "stale_no_repair_bdrate_vs_deployed_pct": 0.4655350234564759,
+      "stale_with_repair_bdrate_vs_released_pct": 5.679070456482349,
+      "stale_with_repair_bdrate_vs_deployed_pct": 0.6081584141785834,
+      "active_zero_no_repair_bdrate_vs_released_pct": 4.7198437489499145,
+      "active_zero_no_repair_bdrate_vs_deployed_pct": -0.28351140787237217,
+      "active_zero_with_repair_bdrate_vs_released_pct": 4.855607976224685,
+      "active_zero_with_repair_bdrate_vs_deployed_pct": -0.15532520738512634,
+      "active_replicate_no_repair_bdrate_vs_released_pct": 4.420634218962238,
+      "active_replicate_no_repair_bdrate_vs_deployed_pct": -0.5635683287721349,
+      "active_replicate_with_repair_bdrate_vs_released_pct": 4.556706043273806,
+      "active_replicate_with_repair_bdrate_vs_deployed_pct": -0.4349098577156818,
+      "active_replicate_no_repair_bdrate_vs_active_zero_pct": -0.2809093695943954,
+      "active_replicate_with_repair_bdrate_vs_active_zero_pct": -0.2800810976460899
+    },
+    {
+      "image": "kodim04.png",
+      "qps": [
+        0,
+        16,
+        32,
+        48,
+        63
+      ],
+      "rate_bpp": [
+        0.023111979166666668,
+        0.04840087890625,
+        0.12369791666666667,
+        0.3224283854166667,
+        0.6866251627604166
+      ],
+      "quality_yuv611_db": {
+        "released": [
+          31.00081071701118,
+          33.12476151822164,
+          35.54900188218861,
+          38.56906157686476,
+          41.65871394826078
+        ],
+        "deployed": [
+          30.829540777529886,
+          33.00223297374957,
+          35.426388197878865,
+          38.39843714497837,
+          41.47165012826252
+        ],
+        "exact_context": [
+          30.849720999183827,
+          33.012958050804585,
+          35.42995206885157,
+          38.40028771603118,
+          41.48730790042811
+        ],
+        "stale_no_repair": [
+          30.83495819810009,
+          32.99944279671838,
+          35.41143295190909,
+          38.357415062858514,
+          41.38623891712964
+        ],
+        "stale_with_repair": [
+          30.827163258084344,
+          32.99745308103147,
+          35.409726130856484,
+          38.3550562113177,
+          41.388097455830106
+        ],
+        "active_zero_no_repair": [
+          30.847177534449443,
+          33.01206097642659,
+          35.42617501359217,
+          38.394899301827124,
+          41.47668479888668
+        ],
+        "active_zero_with_repair": [
+          30.83983537347317,
+          33.010456485290774,
+          35.42470541226686,
+          38.392273565257916,
+          41.47863668487786
+        ],
+        "active_replicate_no_repair": [
+          30.849129525330994,
+          33.01200705239405,
+          35.42905153556212,
+          38.398503387084354,
+          41.48404631552009
+        ],
+        "active_replicate_with_repair": [
+          30.841756623674993,
+          33.01036130072286,
+          35.427593245435645,
+          38.395776238214,
+          41.48560524161927
+        ]
+      },
+      "deployed_bdrate_vs_released_pct": 4.734877840606577,
+      "exact_context_bdrate_vs_released_pct": 4.5003187766445185,
+      "exact_context_bdrate_vs_deployed_pct": -0.2285903472364681,
+      "stale_no_repair_bdrate_vs_released_pct": 5.521153358778297,
+      "stale_no_repair_bdrate_vs_deployed_pct": 0.7308514225875529,
+      "stale_with_repair_bdrate_vs_released_pct": 5.5922290177176315,
+      "stale_with_repair_bdrate_vs_deployed_pct": 0.8011481834490297,
+      "active_zero_no_repair_bdrate_vs_released_pct": 4.629875709155606,
+      "active_zero_no_repair_bdrate_vs_deployed_pct": -0.1065095181845166,
+      "active_zero_with_repair_bdrate_vs_released_pct": 4.695587774499921,
+      "active_zero_with_repair_bdrate_vs_deployed_pct": -0.04143888265977225,
+      "active_replicate_no_repair_bdrate_vs_released_pct": 4.545153043299832,
+      "active_replicate_no_repair_bdrate_vs_deployed_pct": -0.18641115010992193,
+      "active_replicate_with_repair_bdrate_vs_released_pct": 4.6131797317669365,
+      "active_replicate_with_repair_bdrate_vs_deployed_pct": -0.1191144699879576,
+      "active_replicate_no_repair_bdrate_vs_active_zero_pct": -0.08010397891757837,
+      "active_replicate_with_repair_bdrate_vs_active_zero_pct": -0.07780207919622084
+    },
+    {
+      "image": "kodim05.png",
+      "qps": [
+        0,
+        16,
+        32,
+        48,
+        63
+      ],
+      "rate_bpp": [
+        0.07010904947916667,
+        0.18204752604166666,
+        0.42327880859375,
+        0.8362019856770834,
+        1.4284871419270833
+      ],
+      "quality_yuv611_db": {
+        "released": [
+          25.72659577286019,
+          28.99110700711984,
+          32.69705764053393,
+          36.575498929034794,
+          40.18785697393306
+        ],
+        "deployed": [
+          25.65996450421295,
+          28.905004806145225,
+          32.55671850439824,
+          36.441655821196626,
+          40.050824414339
+        ],
+        "exact_context": [
+          25.678891093422173,
+          28.93924312621588,
+          32.59464917438035,
+          36.483517041188975,
+          40.11479513235634
+        ],
+        "stale_no_repair": [
+          25.678891093422173,
+          28.9196576893187,
+          32.56898330153794,
+          36.38597387145485,
+          40.11479513235634
+        ],
+        "stale_with_repair": [
+          25.67739077407139,
+          28.915401005827242,
+          32.56538312549062,
+          36.380790332193115,
+          40.10789599725995
+        ],
+        "active_zero_no_repair": [
+          25.678891093422173,
+          28.93796372885303,
+          32.59242458000306,
+          36.481965417025606,
+          40.11479513235634
+        ],
+        "active_zero_with_repair": [
+          25.67739077407139,
+          28.934381132078315,
+          32.589381262722696,
+          36.48063188085265,
+          40.10789599725995
+        ],
+        "active_replicate_no_repair": [
+          25.678891093422173,
+          28.938300875326767,
+          32.59309968908508,
+          36.48146701144191,
+          40.11479513235634
+        ],
+        "active_replicate_with_repair": [
+          25.67739077407139,
+          28.93473240603285,
+          32.59004144573723,
+          36.480207505854096,
+          40.10789599725995
+        ]
+      },
+      "deployed_bdrate_vs_released_pct": 2.338984998873106,
+      "exact_context_bdrate_vs_released_pct": 1.5542336723464834,
+      "exact_context_bdrate_vs_deployed_pct": -0.7638865932743433,
+      "stale_no_repair_bdrate_vs_released_pct": 2.3109363009925055,
+      "stale_no_repair_bdrate_vs_deployed_pct": -0.023707164566000305,
+      "stale_with_repair_bdrate_vs_released_pct": 2.3996776983061574,
+      "stale_with_repair_bdrate_vs_deployed_pct": 0.06219723409310873,
+      "active_zero_no_repair_bdrate_vs_released_pct": 1.5824136980020942,
+      "active_zero_no_repair_bdrate_vs_deployed_pct": -0.7363186929284504,
+      "active_zero_with_repair_bdrate_vs_released_pct": 1.643491182832979,
+      "active_zero_with_repair_bdrate_vs_deployed_pct": -0.6770610320336323,
+      "active_replicate_no_repair_bdrate_vs_released_pct": 1.579003822810554,
+      "active_replicate_no_repair_bdrate_vs_deployed_pct": -0.739655594334554,
+      "active_replicate_with_repair_bdrate_vs_released_pct": 1.6396838733439445,
+      "active_replicate_with_repair_bdrate_vs_deployed_pct": -0.680784342729035,
+      "active_replicate_no_repair_bdrate_vs_active_zero_pct": -0.003345935038634451,
+      "active_replicate_with_repair_bdrate_vs_active_zero_pct": -0.003733285697438138
+    },
+    {
+      "image": "kodim06.png",
+      "qps": [
+        0,
+        16,
+        32,
+        48,
+        63
+      ],
+      "rate_bpp": [
+        0.030619303385416668,
+        0.09698486328125,
+        0.2754313151041667,
+        0.6298014322916666,
+        1.1542765299479167
+      ],
+      "quality_yuv611_db": {
+        "released": [
+          28.081163156622527,
+          30.71757457223529,
+          33.97750941878398,
+          37.54993105515164,
+          41.0575500783733
+        ],
+        "deployed": [
+          27.95009932828368,
+          30.620573698463208,
+          33.83869067467279,
+          37.37046019609241,
+          40.92282044517245
+        ],
+        "exact_context": [
+          27.968797496736087,
+          30.633494577858315,
+          33.85852479005621,
+          37.381941249774755,
+          40.935540120266666
+        ],
+        "stale_no_repair": [
+          27.9604054211805,
+          30.62632098337138,
+          33.84971044169958,
+          37.368804938394355,
+          40.6264449847885
+        ],
+        "stale_with_repair": [
+          27.938054406460154,
+          30.610579950022817,
+          33.8421777294784,
+          37.37097632996515,
+          40.61969264226473
+        ],
+        "active_zero_no_repair": [
+          27.9684693498657,
+          30.63269895064822,
+          33.85728761813249,
+          37.38040290137036,
+          40.93119379461046
+        ],
+        "active_zero_with_repair": [
+          27.945834800476753,
+          30.61653902389557,
+          33.849525843413375,
+          37.38229476351519,
+          40.933081090039316
+        ],
+        "active_replicate_no_repair": [
+          27.96838693262409,
+          30.633505802445406,
+          33.85842558636673,
+          37.38091942103089,
+          40.93312362983144
+        ],
+        "active_replicate_with_repair": [
+          27.945823607142323,
+          30.617235852352543,
+          33.85065318860627,
+          37.38281380305301,
+          40.935218483962814
+        ]
+      },
+      "deployed_bdrate_vs_released_pct": 3.771911215734125,
+      "exact_context_bdrate_vs_released_pct": 3.3398370771648977,
+      "exact_context_bdrate_vs_deployed_pct": -0.4189382371871275,
+      "stale_no_repair_bdrate_vs_released_pct": 4.067378583804637,
+      "stale_no_repair_bdrate_vs_deployed_pct": 0.23882135598853882,
+      "stale_with_repair_bdrate_vs_released_pct": 4.358052800280943,
+      "stale_with_repair_bdrate_vs_deployed_pct": 0.5255089422113501,
+      "active_zero_no_repair_bdrate_vs_released_pct": 3.375132097035105,
+      "active_zero_no_repair_bdrate_vs_deployed_pct": -0.3856179620904232,
+      "active_zero_with_repair_bdrate_vs_released_pct": 3.6530471419795374,
+      "active_zero_with_repair_bdrate_vs_deployed_pct": -0.10988475131847864,
+      "active_replicate_no_repair_bdrate_vs_released_pct": 3.3526176042593114,
+      "active_replicate_no_repair_bdrate_vs_deployed_pct": -0.40687746185190665,
+      "active_replicate_with_repair_bdrate_vs_released_pct": 3.631009232443172,
+      "active_replicate_with_repair_bdrate_vs_deployed_pct": -0.1306107142616031,
+      "active_replicate_no_repair_bdrate_vs_active_zero_pct": -0.021342236346144627,
+      "active_replicate_with_repair_bdrate_vs_active_zero_pct": -0.020748761922773085
+    },
+    {
+      "image": "kodim07.png",
+      "qps": [
+        0,
+        16,
+        32,
+        48,
+        63
+      ],
+      "rate_bpp": [
+        0.038106282552083336,
+        0.08133951822916667,
+        0.16379801432291666,
+        0.3036295572916667,
+        0.5331624348958334
+      ],
+      "quality_yuv611_db": {
+        "released": [
+          29.673543953359623,
+          33.08991594043952,
+          36.62166036839119,
+          40.118298099513034,
+          43.21262786497135
+        ],
+        "deployed": [
+          29.546066052387918,
+          32.989187081992256,
+          36.485742256945386,
+          39.86935764634814,
+          42.908015860672975
+        ],
+        "exact_context": [
+          29.558807340784405,
+          33.020459232516004,
+          36.51045245822324,
+          39.89223723030386,
+          42.92931350436011
+        ],
+        "stale_no_repair": [
+          29.533471447480533,
+          33.020459232516004,
+          36.51045245822324,
+          39.84856294342687,
+          42.86892823050593
+        ],
+        "stale_with_repair": [
+          29.53023027843718,
+          33.01529222215701,
+          36.5066103994892,
+          39.84697725776537,
+          42.869542595904235
+        ],
+        "active_zero_no_repair": [
+          29.555162488413295,
+          33.020459232516004,
+          36.51045245822324,
+          39.88955682666531,
+          42.926464954394675
+        ],
+        "active_zero_with_repair": [
+          29.552162457806247,
+          33.01529222215701,
+          36.5066103994892,
+          39.88850104738443,
+          42.92745697232169
+        ],
+        "active_replicate_no_repair": [
+          29.55749955943046,
+          33.020459232516004,
+          36.51045245822324,
+          39.89174735490309,
+          42.92868166319824
+        ],
+        "active_replicate_with_repair": [
+          29.554548592234703,
+          33.01529222215701,
+          36.5066103994892,
+          39.89066243192578,
+          42.929613057347495
+        ]
+      },
+      "deployed_bdrate_vs_released_pct": 3.278283553580774,
+      "exact_context_bdrate_vs_released_pct": 2.7773307783813372,
+      "exact_context_bdrate_vs_deployed_pct": -0.48742581180932776,
+      "stale_no_repair_bdrate_vs_released_pct": 3.143121168045715,
+      "stale_no_repair_bdrate_vs_deployed_pct": -0.1201832198490127,
+      "stale_with_repair_bdrate_vs_released_pct": 3.2100373757964817,
+      "stale_with_repair_bdrate_vs_deployed_pct": -0.05539927559632396,
+      "active_zero_no_repair_bdrate_vs_released_pct": 2.8029884326613796,
+      "active_zero_no_repair_bdrate_vs_deployed_pct": -0.4615467413306873,
+      "active_zero_with_repair_bdrate_vs_released_pct": 2.8656590368021817,
+      "active_zero_with_repair_bdrate_vs_deployed_pct": -0.4008007014338011,
+      "active_replicate_no_repair_bdrate_vs_released_pct": 2.7835249558269437,
+      "active_replicate_no_repair_bdrate_vs_deployed_pct": -0.4811016929783918,
+      "active_replicate_with_repair_bdrate_vs_released_pct": 2.8463181972673945,
+      "active_replicate_with_repair_bdrate_vs_deployed_pct": -0.42023383722457064,
+      "active_replicate_no_repair_bdrate_vs_active_zero_pct": -0.019631474767911605,
+      "active_replicate_with_repair_bdrate_vs_active_zero_pct": -0.01949496509842108
+    },
+    {
+      "image": "kodim08.png",
+      "qps": [
+        0,
+        16,
+        32,
+        48,
+        63
+      ],
+      "rate_bpp": [
+        0.08046468098958333,
+        0.17974853515625,
+        0.3999430338541667,
+        0.8365275065104166,
+        1.53558349609375
+      ],
+      "quality_yuv611_db": {
+        "released": [
+          26.526260886815887,
+          29.39871746153304,
+          32.626403914558935,
+          35.996853285415675,
+          39.25236668604133
+        ],
+        "deployed": [
+          26.413921843539892,
+          29.305882149047765,
+          32.48339490171328,
+          35.87161741361285,
+          39.12773930289426
+        ],
+        "exact_context": [
+          26.439703573777052,
+          29.328639798822174,
+          32.51625508476161,
+          35.89857101456865,
+          39.16411759940465
+        ],
+        "stale_no_repair": [
+          26.439703573777052,
+          29.328639798822174,
+          32.51625508476161,
+          35.85472371585623,
+          39.16411759940465
+        ],
+        "stale_with_repair": [
+          26.434415023249905,
+          29.325534277228698,
+          32.51435564504896,
+          35.85070203813743,
+          39.15683609655753
+        ],
+        "active_zero_no_repair": [
+          26.439703573777052,
+          29.328639798822174,
+          32.51625508476161,
+          35.896820159289945,
+          39.16411759940465
+        ],
+        "active_zero_with_repair": [
+          26.434415023249905,
+          29.325534277228698,
+          32.51435564504896,
+          35.894265471585214,
+          39.15683609655753
+        ],
+        "active_replicate_no_repair": [
+          26.439703573777052,
+          29.328639798822174,
+          32.51625508476161,
+          35.89694226533809,
+          39.16411759940465
+        ],
+        "active_replicate_with_repair": [
+          26.434415023249905,
+          29.325534277228698,
+          32.51435564504896,
+          35.894474544479216,
+          39.15683609655753
+        ]
+      },
+      "deployed_bdrate_vs_released_pct": 2.775636918766966,
+      "exact_context_bdrate_vs_released_pct": 2.118458317389038,
+      "exact_context_bdrate_vs_deployed_pct": -0.6384645930935684,
+      "stale_no_repair_bdrate_vs_released_pct": 2.3969548715526034,
+      "stale_no_repair_bdrate_vs_deployed_pct": -0.3685873909722748,
+      "stale_with_repair_bdrate_vs_released_pct": 2.481830370560667,
+      "stale_with_repair_bdrate_vs_deployed_pct": -0.2862328781531698,
+      "active_zero_no_repair_bdrate_vs_released_pct": 2.1295350923282053,
+      "active_zero_no_repair_bdrate_vs_deployed_pct": -0.6277305849122672,
+      "active_zero_with_repair_bdrate_vs_released_pct": 2.204761650582854,
+      "active_zero_with_repair_bdrate_vs_deployed_pct": -0.5544694747145473,
+      "active_replicate_no_repair_bdrate_vs_released_pct": 2.12876247306657,
+      "active_replicate_no_repair_bdrate_vs_deployed_pct": -0.6284792956057328,
+      "active_replicate_with_repair_bdrate_vs_released_pct": 2.203437363832972,
+      "active_replicate_with_repair_bdrate_vs_deployed_pct": -0.5557515557235826,
+      "active_replicate_no_repair_bdrate_vs_active_zero_pct": -0.000751363030615515,
+      "active_replicate_with_repair_bdrate_vs_active_zero_pct": -0.0012863652166794637
+    },
+    {
+      "image": "kodim09.png",
+      "qps": [
+        0,
+        16,
+        32,
+        48,
+        63
+      ],
+      "rate_bpp": [
+        0.025370279947916668,
+        0.054361979166666664,
+        0.12263997395833333,
+        0.25067138671875,
+        0.4554036458333333
+      ],
+      "quality_yuv611_db": {
+        "released": [
+          31.33806052118079,
+          34.01291736044064,
+          37.092636286156534,
+          40.04762893437733,
+          42.36901146776571
+        ],
+        "deployed": [
+          31.148511164689477,
+          33.90221219075544,
+          36.951344243608,
+          39.873632299941555,
+          42.16025912422747
+        ],
+        "exact_context": [
+          31.166939898316258,
+          33.92786463215814,
+          36.96614973282279,
+          39.886969038689315,
+          42.170802768709656
+        ],
+        "stale_no_repair": [
+          31.13517863287782,
+          33.926073742696865,
+          36.96172002478413,
+          39.882809415757094,
+          42.165388974712585
+        ],
+        "stale_with_repair": [
+          31.13245099621833,
+          33.925806397617606,
+          36.96344526658744,
+          39.883016720201425,
+          42.16759298431222
+        ],
+        "active_zero_no_repair": [
+          31.160922442169216,
+          33.926588099594014,
+          36.965049420445816,
+          39.88550136047374,
+          42.168651466952866
+        ],
+        "active_zero_with_repair": [
+          31.158762014520416,
+          33.92669328168881,
+          36.96691790592359,
+          39.885907272594025,
+          42.170979815160536
+        ],
+        "active_replicate_no_repair": [
+          31.158185399887387,
+          33.92712279894647,
+          36.96566223058906,
+          39.88633786888093,
+          42.17013024906141
+        ],
+        "active_replicate_with_repair": [
+          31.155955183882767,
+          33.92714261919974,
+          36.967586573600514,
+          39.88676344576015,
+          42.17246012077544
+        ]
+      },
+      "deployed_bdrate_vs_released_pct": 3.9759849201941977,
+      "exact_context_bdrate_vs_released_pct": 3.4916021204373093,
+      "exact_context_bdrate_vs_deployed_pct": -0.46855361862602196,
+      "stale_no_repair_bdrate_vs_released_pct": 3.6493526023017697,
+      "stale_no_repair_bdrate_vs_deployed_pct": -0.3042255902896085,
+      "stale_with_repair_bdrate_vs_released_pct": 3.6399056915615846,
+      "stale_with_repair_bdrate_vs_deployed_pct": -0.31224035515987625,
+      "active_zero_no_repair_bdrate_vs_released_pct": 3.538595872428396,
+      "active_zero_no_repair_bdrate_vs_deployed_pct": -0.4211708938700709,
+      "active_zero_with_repair_bdrate_vs_released_pct": 3.522154584985615,
+      "active_zero_with_repair_bdrate_vs_deployed_pct": -0.4361049385250726,
+      "active_replicate_no_repair_bdrate_vs_released_pct": 3.527122313017439,
+      "active_replicate_no_repair_bdrate_vs_deployed_pct": -0.43104795388269057,
+      "active_replicate_with_repair_bdrate_vs_released_pct": 3.511034252235734,
+      "active_replicate_with_repair_bdrate_vs_deployed_pct": -0.445568331728452,
+      "active_replicate_no_repair_bdrate_vs_active_zero_pct": -0.00998115075543371,
+      "active_replicate_with_repair_bdrate_vs_active_zero_pct": -0.009594520827205244
+    },
+    {
+      "image": "kodim10.png",
+      "qps": [
+        0,
+        16,
+        32,
+        48,
+        63
+      ],
+      "rate_bpp": [
+        0.025919596354166668,
+        0.059529622395833336,
+        0.12831624348958334,
+        0.2557779947916667,
+        0.4745890299479167
+      ],
+      "quality_yuv611_db": {
+        "released": [
+          30.615096240961236,
+          33.75642918962572,
+          36.84723142887816,
+          39.7753293236135,
+          42.17876237273231
+        ],
+        "deployed": [
+          30.520828512121078,
+          33.65613945170572,
+          36.70464930081931,
+          39.57612339645432,
+          41.98396814602037
+        ],
+        "exact_context": [
+          30.519856902205998,
+          33.663441223149235,
+          36.720066345202355,
+          39.585165813032575,
+          41.997167088942994
+        ],
+        "stale_no_repair": [
+          30.49850574842001,
+          33.63982954945541,
+          36.696129191409476,
+          39.50209533379539,
+          41.82988494030449
+        ],
+        "stale_with_repair": [
+          30.486039147148198,
+          33.62848731096603,
+          36.68614209587414,
+          39.49487356145772,
+          41.83298528129625
+        ],
+        "active_zero_no_repair": [
+          30.51351184126428,
+          33.66017788332677,
+          36.718344159452315,
+          39.576242696915315,
+          41.984364394403975
+        ],
+        "active_zero_with_repair": [
+          30.501083445805627,
+          33.64884009087318,
+          36.708276999872105,
+          39.57055214121483,
+          41.985345429595164
+        ],
+        "active_replicate_no_repair": [
+          30.51706677168312,
+          33.66159285027489,
+          36.719283188889705,
+          39.58110387318379,
+          41.99137689000847
+        ],
+        "active_replicate_with_repair": [
+          30.504643627371912,
+          33.65020697243756,
+          36.70927152031877,
+          39.57505266380374,
+          41.99197612154845
+        ]
+      },
+      "deployed_bdrate_vs_released_pct": 3.643970263991081,
+      "exact_context_bdrate_vs_released_pct": 3.4025026279137283,
+      "exact_context_bdrate_vs_deployed_pct": -0.2325886451513881,
+      "stale_no_repair_bdrate_vs_released_pct": 4.686365972799433,
+      "stale_no_repair_bdrate_vs_deployed_pct": 1.0246420861643513,
+      "stale_with_repair_bdrate_vs_released_pct": 4.927141016000824,
+      "stale_with_repair_bdrate_vs_deployed_pct": 1.2574472523021907,
+      "active_zero_no_repair_bdrate_vs_released_pct": 3.5429767921131505,
+      "active_zero_no_repair_bdrate_vs_deployed_pct": -0.09511329046067996,
+      "active_zero_with_repair_bdrate_vs_released_pct": 3.771763626974467,
+      "active_zero_with_repair_bdrate_vs_deployed_pct": 0.12646684832944288,
+      "active_replicate_no_repair_bdrate_vs_released_pct": 3.4692024827104095,
+      "active_replicate_no_repair_bdrate_vs_deployed_pct": -0.16745066128343034,
+      "active_replicate_with_repair_bdrate_vs_released_pct": 3.7010194922321604,
+      "active_replicate_with_repair_bdrate_vs_deployed_pct": 0.05722702906578725,
+      "active_replicate_no_repair_bdrate_vs_active_zero_pct": -0.07241792355997534,
+      "active_replicate_with_repair_bdrate_vs_active_zero_pct": -0.06920299353562198
+    },
+    {
+      "image": "kodim11.png",
+      "qps": [
+        0,
+        16,
+        32,
+        48,
+        63
+      ],
+      "rate_bpp": [
+        0.03082275390625,
+        0.07843017578125,
+        0.21116129557291666,
+        0.50775146484375,
+        1.0059407552083333
+      ],
+      "quality_yuv611_db": {
+        "released": [
+          28.72351066382737,
+          31.260605472319675,
+          34.1909633004842,
+          37.57580065449109,
+          40.99557934074521
+        ],
+        "deployed": [
+          28.57665224063563,
+          31.180976118835062,
+          34.085869739986926,
+          37.440746645944344,
+          40.85683923400939
+        ],
+        "exact_context": [
+          28.586086312735603,
+          31.1951164991734,
+          34.09634282283688,
+          37.457043936971964,
+          40.877394009693965
+        ],
+        "stale_no_repair": [
+          28.586086312735603,
+          31.1852972223934,
+          34.07837382441431,
+          37.40862040730674,
+          40.61114617013162
+        ],
+        "stale_with_repair": [
+          28.5817687759709,
+          31.18197180409811,
+          34.07606926884973,
+          37.41004922840992,
+          40.60623460279602
+        ],
+        "active_zero_no_repair": [
+          28.586086312735603,
+          31.19255900016726,
+          34.093895673018025,
+          37.45007444763753,
+          40.872247831046444
+        ],
+        "active_zero_with_repair": [
+          28.5817687759709,
+          31.189270002671766,
+          34.09164510650828,
+          37.45167473342455,
+          40.87135545217867
+        ],
+        "active_replicate_no_repair": [
+          28.586086312735603,
+          31.19394421595104,
+          34.095019847001744,
+          37.45337021877954,
+          40.87385434327507
+        ],
+        "active_replicate_with_repair": [
+          28.5817687759709,
+          31.19066325600939,
+          34.09280348188158,
+          37.454961868289814,
+          40.87325447798423
+        ]
+      },
+      "deployed_bdrate_vs_released_pct": 3.198790194636092,
+      "exact_context_bdrate_vs_released_pct": 2.796400369370744,
+      "exact_context_bdrate_vs_deployed_pct": -0.3882844948036146,
+      "stale_no_repair_bdrate_vs_released_pct": 3.8931885844100123,
+      "stale_no_repair_bdrate_vs_deployed_pct": 0.646293087281613,
+      "stale_with_repair_bdrate_vs_released_pct": 3.9519719311547075,
+      "stale_with_repair_bdrate_vs_deployed_pct": 0.7037869911788341,
+      "active_zero_no_repair_bdrate_vs_released_pct": 2.9028041378394986,
+      "active_zero_no_repair_bdrate_vs_deployed_pct": -0.28657936483295066,
+      "active_zero_with_repair_bdrate_vs_released_pct": 2.9509433762837656,
+      "active_zero_with_repair_bdrate_vs_deployed_pct": -0.23870032984778522,
+      "active_replicate_no_repair_bdrate_vs_released_pct": 2.8526499897130186,
+      "active_replicate_no_repair_bdrate_vs_deployed_pct": -0.3345889506635169,
+      "active_replicate_with_repair_bdrate_vs_released_pct": 2.8999370717303963,
+      "active_replicate_with_repair_bdrate_vs_deployed_pct": -0.28748199326210644,
+      "active_replicate_no_repair_bdrate_vs_active_zero_pct": -0.04812149116665276,
+      "active_replicate_with_repair_bdrate_vs_active_zero_pct": -0.04887882030023549
+    },
+    {
+      "image": "kodim12.png",
+      "qps": [
+        0,
+        16,
+        32,
+        48,
+        63
+      ],
+      "rate_bpp": [
+        0.019816080729166668,
+        0.040181477864583336,
+        0.09804280598958333,
+        0.24727376302083334,
+        0.5440266927083334
+      ],
+      "quality_yuv611_db": {
+        "released": [
+          31.62909831598833,
+          33.8877412313601,
+          36.50896150659997,
+          39.379385807308196,
+          42.389750462813105
+        ],
+        "deployed": [
+          31.46104008756243,
+          33.742828342339216,
+          36.3466404833406,
+          39.13477562130677,
+          42.15131018000449
+        ],
+        "exact_context": [
+          31.47201263696185,
+          33.772648913772024,
+          36.37857286535417,
+          39.15649303437444,
+          42.18321891048371
+        ],
+        "stale_no_repair": [
+          31.47201263696185,
+          33.74516147247215,
+          36.339169967533515,
+          39.107632859250494,
+          41.93852232872016
+        ],
+        "stale_with_repair": [
+          31.461740959659018,
+          33.71749540684212,
+          36.3264485744313,
+          39.104709826073126,
+          41.929556807381985
+        ],
+        "active_zero_no_repair": [
+          31.47201263696185,
+          33.77473851557604,
+          36.366328122279214,
+          39.147278727440714,
+          42.15949253162603
+        ],
+        "active_zero_with_repair": [
+          31.461740959659018,
+          33.747854109281825,
+          36.354623371238546,
+          39.146312732573364,
+          42.160491847232976
+        ],
+        "active_replicate_no_repair": [
+          31.47201263696185,
+          33.771383884083974,
+          36.37555965816179,
+          39.15345963998094,
+          42.17561671985411
+        ],
+        "active_replicate_with_repair": [
+          31.461740959659018,
+          33.74476635666315,
+          36.363914302045224,
+          39.152680429245315,
+          42.17685918285929
+        ]
+      },
+      "deployed_bdrate_vs_released_pct": 6.038017443675003,
+      "exact_context_bdrate_vs_released_pct": 5.159360366802845,
+      "exact_context_bdrate_vs_deployed_pct": -0.8210690491235018,
+      "stale_no_repair_bdrate_vs_released_pct": 6.8799172496012195,
+      "stale_no_repair_bdrate_vs_deployed_pct": 0.7737492253674594,
+      "stale_with_repair_bdrate_vs_released_pct": 7.330817341075013,
+      "stale_with_repair_bdrate_vs_deployed_pct": 1.1964605986513943,
+      "active_zero_no_repair_bdrate_vs_released_pct": 5.401923546303222,
+      "active_zero_no_repair_bdrate_vs_deployed_pct": -0.5964772514182148,
+      "active_zero_with_repair_bdrate_vs_released_pct": 5.777358573565006,
+      "active_zero_with_repair_bdrate_vs_deployed_pct": -0.24216640178479354,
+      "active_replicate_no_repair_bdrate_vs_released_pct": 5.247784503040487,
+      "active_replicate_no_repair_bdrate_vs_deployed_pct": -0.739221583282712,
+      "active_replicate_with_repair_bdrate_vs_released_pct": 5.616323505348042,
+      "active_replicate_with_repair_bdrate_vs_deployed_pct": -0.39056169665220297,
+      "active_replicate_no_repair_bdrate_vs_active_zero_pct": -0.14376625083866168,
+      "active_replicate_with_repair_bdrate_vs_active_zero_pct": -0.1489417383898628
+    },
+    {
+      "image": "kodim13.png",
+      "qps": [
+        0,
+        16,
+        32,
+        48,
+        63
+      ],
+      "rate_bpp": [
+        0.056009928385416664,
+        0.21378580729166666,
+        0.6153767903645834,
+        1.3327840169270833,
+        2.14141845703125
+      ],
+      "quality_yuv611_db": {
+        "released": [
+          24.996586098440748,
+          27.70028637739992,
+          31.123260749453497,
+          35.021655185935415,
+          38.191446097202906
+        ],
+        "deployed": [
+          24.930617566369307,
+          27.644610187922797,
+          31.031482377377166,
+          34.933709381159375,
+          38.08666874250736
+        ],
+        "exact_context": [
+          24.943054717189565,
+          27.655144055128325,
+          31.048002842667067,
+          34.95261921724537,
+          38.122085556243725
+        ],
+        "stale_no_repair": [
+          24.935305590312844,
+          27.641254870680743,
+          31.029490106711712,
+          34.68847377116196,
+          38.064097635734754
+        ],
+        "stale_with_repair": [
+          24.928792856753738,
+          27.636468465731948,
+          31.02823061195638,
+          34.68328978720332,
+          38.060122510297596
+        ],
+        "active_zero_no_repair": [
+          24.941453966736177,
+          27.653321497126967,
+          31.045641602793047,
+          34.950373713502714,
+          38.12091167746191
+        ],
+        "active_zero_with_repair": [
+          24.934969206817414,
+          27.64825946968967,
+          31.04381743334309,
+          34.950786379499526,
+          38.11701573823574
+        ],
+        "active_replicate_no_repair": [
+          24.94317172632372,
+          27.655178611972072,
+          31.0466703204249,
+          34.95133654956402,
+          38.12130811128628
+        ],
+        "active_replicate_with_repair": [
+          24.93672315533939,
+          27.649709949761036,
+          31.044610567514955,
+          34.951646726560696,
+          38.11743188065726
+        ]
+      },
+      "deployed_bdrate_vs_released_pct": 2.067239722155345,
+      "exact_context_bdrate_vs_released_pct": 1.6484051063565985,
+      "exact_context_bdrate_vs_deployed_pct": -0.40957163009384123,
+      "stale_no_repair_bdrate_vs_released_pct": 3.474345732513262,
+      "stale_no_repair_bdrate_vs_deployed_pct": 1.3696686719271822,
+      "stale_with_repair_bdrate_vs_released_pct": 3.5962996439798722,
+      "stale_with_repair_bdrate_vs_deployed_pct": 1.4896370285340188,
+      "active_zero_no_repair_bdrate_vs_released_pct": 1.7037419522811126,
+      "active_zero_no_repair_bdrate_vs_deployed_pct": -0.3551995327518376,
+      "active_zero_with_repair_bdrate_vs_released_pct": 1.7990352980812085,
+      "active_zero_with_repair_bdrate_vs_deployed_pct": -0.2607988590897725,
+      "active_replicate_no_repair_bdrate_vs_released_pct": 1.6643605332813394,
+      "active_replicate_no_repair_bdrate_vs_deployed_pct": -0.39405646983722287,
+      "active_replicate_with_repair_bdrate_vs_released_pct": 1.7658844500016535,
+      "active_replicate_with_repair_bdrate_vs_deployed_pct": -0.2936255807329702,
+      "active_replicate_no_repair_bdrate_vs_active_zero_pct": -0.03894218288429396,
+      "active_replicate_with_repair_bdrate_vs_active_zero_pct": -0.03284770857908681
+    },
+    {
+      "image": "kodim14.png",
+      "qps": [
+        0,
+        16,
+        32,
+        48,
+        63
+      ],
+      "rate_bpp": [
+        0.045206705729166664,
+        0.11228434244791667,
+        0.2910563151041667,
+        0.6787516276041666,
+        1.2812906901041667
+      ],
+      "quality_yuv611_db": {
+        "released": [
+          27.00293725463274,
+          29.80837666790261,
+          32.9539857042521,
+          36.556968505886886,
+          40.10739240227544
+        ],
+        "deployed": [
+          26.922394453831263,
+          29.709605739267616,
+          32.822886953694706,
+          36.41037938557659,
+          39.98541870038586
+        ],
+        "exact_context": [
+          26.94163961530822,
+          29.739364033001088,
+          32.84765447765187,
+          36.434364255947315,
+          40.03116866364113
+        ],
+        "stale_no_repair": [
+          26.92948731843836,
+          29.725508289067164,
+          32.83200135681536,
+          36.27807381548062,
+          39.95877107836488
+        ],
+        "stale_with_repair": [
+          26.929561228092894,
+          29.72648137047589,
+          32.832967042441595,
+          36.28000089095923,
+          39.955158502682394
+        ],
+        "active_zero_no_repair": [
+          26.938826161836975,
+          29.7356812635103,
+          32.842773723215664,
+          36.42832127882212,
+          40.028897758916
+        ],
+        "active_zero_with_repair": [
+          26.938971126284144,
+          29.736908180873076,
+          32.843841150603296,
+          36.42993713023995,
+          40.02404067936286
+        ],
+        "active_replicate_no_repair": [
+          26.939147389635078,
+          29.736377226657943,
+          32.84475911700468,
+          36.42789185750042,
+          40.02889101524808
+        ],
+        "active_replicate_with_repair": [
+          26.939294787128645,
+          29.737166159725128,
+          32.84553832121199,
+          36.42947774359772,
+          40.02415258335613
+        ]
+      },
+      "deployed_bdrate_vs_released_pct": 3.093912089195716,
+      "exact_context_bdrate_vs_released_pct": 2.3834806991724244,
+      "exact_context_bdrate_vs_deployed_pct": -0.6847986568236486,
+      "stale_no_repair_bdrate_vs_released_pct": 3.8466190069428086,
+      "stale_no_repair_bdrate_vs_deployed_pct": 0.7221574637801709,
+      "stale_with_repair_bdrate_vs_released_pct": 3.8238948809185658,
+      "stale_with_repair_bdrate_vs_deployed_pct": 0.6998985011178682,
+      "active_zero_no_repair_bdrate_vs_released_pct": 2.499675768099574,
+      "active_zero_no_repair_bdrate_vs_deployed_pct": -0.5721155133398215,
+      "active_zero_with_repair_bdrate_vs_released_pct": 2.478836092584724,
+      "active_zero_with_repair_bdrate_vs_deployed_pct": -0.5929974041409269,
+      "active_replicate_no_repair_bdrate_vs_released_pct": 2.482600495266518,
+      "active_replicate_no_repair_bdrate_vs_deployed_pct": -0.5887078931315237,
+      "active_replicate_with_repair_bdrate_vs_released_pct": 2.467399657612601,
+      "active_replicate_with_repair_bdrate_vs_deployed_pct": -0.6041077540351214,
+      "active_replicate_no_repair_bdrate_vs_active_zero_pct": -0.01663070006377998,
+      "active_replicate_with_repair_bdrate_vs_active_zero_pct": -0.011146867076505806
+    },
+    {
+      "image": "kodim15.png",
+      "qps": [
+        0,
+        16,
+        32,
+        48,
+        63
+      ],
+      "rate_bpp": [
+        0.025410970052083332,
+        0.047810872395833336,
+        0.11673990885416667,
+        0.30224609375,
+        0.6348673502604166
+      ],
+      "quality_yuv611_db": {
+        "released": [
+          30.973349954618467,
+          33.016144078127546,
+          35.57221707336443,
+          38.75912685327749,
+          41.79281097272306
+        ],
+        "deployed": [
+          30.71964965010101,
+          32.904669701326,
+          35.438746166702046,
+          38.56322328656172,
+          41.6434556774961
+        ],
+        "exact_context": [
+          30.740898567318006,
+          32.92545672733411,
+          35.459803619864736,
+          38.574820402379245,
+          41.65713764875679
+        ],
+        "stale_no_repair": [
+          30.740898567318006,
+          32.92545672733411,
+          35.459803619864736,
+          38.56403056864637,
+          41.346944060995135
+        ],
+        "stale_with_repair": [
+          30.732057805568335,
+          32.92126846248095,
+          35.45754117363036,
+          38.56259343311844,
+          41.34993205385179
+        ],
+        "active_zero_no_repair": [
+          30.740898567318006,
+          32.92545672733411,
+          35.459803619864736,
+          38.57348557070225,
+          41.6455063012583
+        ],
+        "active_zero_with_repair": [
+          30.732057805568335,
+          32.92126846248095,
+          35.45754117363036,
+          38.572042511055116,
+          41.64438901134555
+        ],
+        "active_replicate_no_repair": [
+          30.740898567318006,
+          32.92545672733411,
+          35.459803619864736,
+          38.57346145510367,
+          41.652865771261915
+        ],
+        "active_replicate_with_repair": [
+          30.732057805568335,
+          32.92126846248095,
+          35.45754117363036,
+          38.57206601599631,
+          41.651494074894124
+        ]
+      },
+      "deployed_bdrate_vs_released_pct": 4.705015708916127,
+      "exact_context_bdrate_vs_released_pct": 4.165883633459844,
+      "exact_context_bdrate_vs_deployed_pct": -0.5144475434301077,
+      "stale_no_repair_bdrate_vs_released_pct": 4.973488918049562,
+      "stale_no_repair_bdrate_vs_deployed_pct": 0.20636312570538884,
+      "stale_with_repair_bdrate_vs_released_pct": 5.052361112818238,
+      "stale_with_repair_bdrate_vs_deployed_pct": 0.28469243051649773,
+      "active_zero_no_repair_bdrate_vs_released_pct": 4.207580866040916,
+      "active_zero_no_repair_bdrate_vs_deployed_pct": -0.47667287466582886,
+      "active_zero_with_repair_bdrate_vs_released_pct": 4.292465251271849,
+      "active_zero_with_repair_bdrate_vs_deployed_pct": -0.3926219770993833,
+      "active_replicate_no_repair_bdrate_vs_released_pct": 4.189702299877185,
+      "active_replicate_no_repair_bdrate_vs_deployed_pct": -0.49266941960713906,
+      "active_replicate_with_repair_bdrate_vs_released_pct": 4.274691963106325,
+      "active_replicate_with_repair_bdrate_vs_deployed_pct": -0.40851198880104134,
+      "active_replicate_no_repair_bdrate_vs_active_zero_pct": -0.016099047775264275,
+      "active_replicate_with_repair_bdrate_vs_active_zero_pct": -0.015963980773781028
+    },
+    {
+      "image": "kodim16.png",
+      "qps": [
+        0,
+        16,
+        32,
+        48,
+        63
+      ],
+      "rate_bpp": [
+        0.01629638671875,
+        0.049072265625,
+        0.1512451171875,
+        0.3871053059895833,
+        0.7789713541666666
+      ],
+      "quality_yuv611_db": {
+        "released": [
+          30.529693685171196,
+          32.75919706901074,
+          35.62225118426356,
+          38.99793562707797,
+          42.36705217035886
+        ],
+        "deployed": [
+          30.40386934399532,
+          32.640768279193736,
+          35.488047359972825,
+          38.797705670740676,
+          42.12715620446955
+        ],
+        "exact_context": [
+          30.40929413000494,
+          32.64933236654055,
+          35.496940665198224,
+          38.8040702413144,
+          42.13040666249836
+        ],
+        "stale_no_repair": [
+          30.40929413000494,
+          32.608096478517886,
+          35.44482577350353,
+          38.75352626999307,
+          42.0495593287309
+        ],
+        "stale_with_repair": [
+          30.392742692068673,
+          32.58525650796887,
+          35.42137282449363,
+          38.74357691941614,
+          42.055093621177534
+        ],
+        "active_zero_no_repair": [
+          30.40929413000494,
+          32.647680005856074,
+          35.49387737647125,
+          38.80234270183621,
+          42.126097980444456
+        ],
+        "active_zero_with_repair": [
+          30.392742692068673,
+          32.624837432219536,
+          35.470806048058705,
+          38.79236233731812,
+          42.13114677177262
+        ],
+        "active_replicate_no_repair": [
+          30.40929413000494,
+          32.647091997450175,
+          35.49358015599998,
+          38.801486306585126,
+          42.127290868732445
+        ],
+        "active_replicate_with_repair": [
+          30.392742692068673,
+          32.62419205585658,
+          35.47044602297528,
+          38.791608993485966,
+          42.13259302122158
+        ]
+      },
+      "deployed_bdrate_vs_released_pct": 5.060127281079119,
+      "exact_context_bdrate_vs_released_pct": 4.802635682177381,
+      "exact_context_bdrate_vs_deployed_pct": -0.24544831012797141,
+      "stale_no_repair_bdrate_vs_released_pct": 6.357449033871676,
+      "stale_no_repair_bdrate_vs_deployed_pct": 1.2148141532724033,
+      "stale_with_repair_bdrate_vs_released_pct": 6.971950294422524,
+      "stale_with_repair_bdrate_vs_deployed_pct": 1.8029788761049659,
+      "active_zero_no_repair_bdrate_vs_released_pct": 4.872564360430842,
+      "active_zero_no_repair_bdrate_vs_deployed_pct": -0.17976419184074777,
+      "active_zero_with_repair_bdrate_vs_released_pct": 5.472700795883778,
+      "active_zero_with_repair_bdrate_vs_deployed_pct": 0.39539765625553613,
+      "active_replicate_no_repair_bdrate_vs_released_pct": 4.886947929023666,
+      "active_replicate_no_repair_bdrate_vs_deployed_pct": -0.16612910579774098,
+      "active_replicate_with_repair_bdrate_vs_released_pct": 5.486876833735077,
+      "active_replicate_with_repair_bdrate_vs_deployed_pct": 0.4089299149551806,
+      "active_replicate_no_repair_bdrate_vs_active_zero_pct": 0.013644834498016678,
+      "active_replicate_with_repair_bdrate_vs_active_zero_pct": 0.013453253142148291
+    },
+    {
+      "image": "kodim17.png",
+      "qps": [
+        0,
+        16,
+        32,
+        48,
+        63
+      ],
+      "rate_bpp": [
+        0.02801513671875,
+        0.06907145182291667,
+        0.15602620442708334,
+        0.32891845703125,
+        0.6301676432291666
+      ],
+      "quality_yuv611_db": {
+        "released": [
+          30.292065456582993,
+          33.12867303291662,
+          36.0593937722605,
+          39.082388033746966,
+          41.863409217360235
+        ],
+        "deployed": [
+          30.2163068585574,
+          33.042513374089566,
+          35.917588521349465,
+          38.85825344567499,
+          41.63172556871203
+        ],
+        "exact_context": [
+          30.218709396594306,
+          33.04650298404531,
+          35.92463716908735,
+          38.86415472576581,
+          41.642700273353206
+        ],
+        "stale_no_repair": [
+          30.218709396594306,
+          33.03051662131801,
+          35.902015407384404,
+          38.81604502060639,
+          41.492151832058866
+        ],
+        "stale_with_repair": [
+          30.21514716642525,
+          33.03190179757671,
+          35.902458759334735,
+          38.81502997447113,
+          41.48828343200226
+        ],
+        "active_zero_no_repair": [
+          30.218709396594306,
+          33.04356528350744,
+          35.92058341657885,
+          38.86001193102127,
+          41.63854472289459
+        ],
+        "active_zero_with_repair": [
+          30.21514716642525,
+          33.04551096878543,
+          35.92177674842807,
+          38.859263608280614,
+          41.63720660076674
+        ],
+        "active_replicate_no_repair": [
+          30.218709396594306,
+          33.04574635567326,
+          35.923256015125325,
+          38.86089751760523,
+          41.637632354967856
+        ],
+        "active_replicate_with_repair": [
+          30.21514716642525,
+          33.0477466274851,
+          35.92455212436449,
+          38.860137636970606,
+          41.63647116788025
+        ]
+      },
+      "deployed_bdrate_vs_released_pct": 3.979363423617399,
+      "exact_context_bdrate_vs_released_pct": 3.823543247412342,
+      "exact_context_bdrate_vs_deployed_pct": -0.1506493909694373,
+      "stale_no_repair_bdrate_vs_released_pct": 4.768005043549373,
+      "stale_no_repair_bdrate_vs_deployed_pct": 0.770577312898646,
+      "stale_with_repair_bdrate_vs_released_pct": 4.777842635429952,
+      "stale_with_repair_bdrate_vs_deployed_pct": 0.781087197294128,
+      "active_zero_no_repair_bdrate_vs_released_pct": 3.9160042761158254,
+      "active_zero_no_repair_bdrate_vs_deployed_pct": -0.06182492358576264,
+      "active_zero_with_repair_bdrate_vs_released_pct": 3.9094000340445856,
+      "active_zero_with_repair_bdrate_vs_deployed_pct": -0.06723314259240443,
+      "active_replicate_no_repair_bdrate_vs_released_pct": 3.8737179122002807,
+      "active_replicate_no_repair_bdrate_vs_deployed_pct": -0.10216795059571071,
+      "active_replicate_with_repair_bdrate_vs_released_pct": 3.865661316888902,
+      "active_replicate_with_repair_bdrate_vs_deployed_pct": -0.1089667982342557,
+      "active_replicate_no_repair_bdrate_vs_active_zero_pct": -0.04033654181156976,
+      "active_replicate_with_repair_bdrate_vs_active_zero_pct": -0.041733304260960224
+    },
+    {
+      "image": "kodim18.png",
+      "qps": [
+        0,
+        16,
+        32,
+        48,
+        63
+      ],
+      "rate_bpp": [
+        0.033976236979166664,
+        0.12430826822916667,
+        0.3531494140625,
+        0.7389729817708334,
+        1.2713419596354167
+      ],
+      "quality_yuv611_db": {
+        "released": [
+          26.56117375393927,
+          29.27056851729375,
+          32.78453746958007,
+          36.303876740880014,
+          39.21668575230532
+        ],
+        "deployed": [
+          26.5126518069858,
+          29.218581071815247,
+          32.7034127424311,
+          36.21457665309524,
+          39.127900671928785
+        ],
+        "exact_context": [
+          26.51558366297114,
+          29.226670847508153,
+          32.71061284447782,
+          36.22347370530803,
+          39.144694960388335
+        ],
+        "stale_no_repair": [
+          26.51097897031537,
+          29.226670847508153,
+          32.70272480509878,
+          36.143854710459586,
+          39.05697919597202
+        ],
+        "stale_with_repair": [
+          26.510157342186435,
+          29.225540489612655,
+          32.702729287594266,
+          36.14104327188783,
+          39.05503864539003
+        ],
+        "active_zero_no_repair": [
+          26.514796964096256,
+          29.226670847508153,
+          32.70970656760234,
+          36.22144286086788,
+          39.141410062647225
+        ],
+        "active_zero_with_repair": [
+          26.51403894117686,
+          29.225540489612655,
+          32.7098043444754,
+          36.21931357843454,
+          39.13529075146377
+        ],
+        "active_replicate_no_repair": [
+          26.51487790044941,
+          29.226670847508153,
+          32.710334892660555,
+          36.22265278156504,
+          39.143120488306074
+        ],
+        "active_replicate_with_repair": [
+          26.514093950301277,
+          29.225540489612655,
+          32.71039479503791,
+          36.22025875372082,
+          39.13663858213083
+        ]
+      },
+      "deployed_bdrate_vs_released_pct": 1.9518748651677686,
+      "exact_context_bdrate_vs_released_pct": 1.7267344435068832,
+      "exact_context_bdrate_vs_deployed_pct": -0.22004128622856722,
+      "stale_no_repair_bdrate_vs_released_pct": 2.3932298689570253,
+      "stale_no_repair_bdrate_vs_deployed_pct": 0.4294754897375741,
+      "stale_with_repair_bdrate_vs_released_pct": 2.4283080136348945,
+      "stale_with_repair_bdrate_vs_deployed_pct": 0.4638686883174925,
+      "active_zero_no_repair_bdrate_vs_released_pct": 1.7529955837187527,
+      "active_zero_no_repair_bdrate_vs_deployed_pct": -0.19436473826356382,
+      "active_zero_with_repair_bdrate_vs_released_pct": 1.789176216792776,
+      "active_zero_with_repair_bdrate_vs_deployed_pct": -0.15908841204596014,
+      "active_replicate_no_repair_bdrate_vs_released_pct": 1.7388007226692315,
+      "active_replicate_no_repair_bdrate_vs_deployed_pct": -0.20817830493379264,
+      "active_replicate_with_repair_bdrate_vs_released_pct": 1.7774233351356195,
+      "active_replicate_with_repair_bdrate_vs_deployed_pct": -0.17054005321244237,
+      "active_replicate_no_repair_bdrate_vs_active_zero_pct": -0.01385713223420737,
+      "active_replicate_with_repair_bdrate_vs_active_zero_pct": -0.01147662217707568
+    },
+    {
+      "image": "kodim19.png",
+      "qps": [
+        0,
+        16,
+        32,
+        48,
+        63
+      ],
+      "rate_bpp": [
+        0.029927571614583332,
+        0.064208984375,
+        0.1585693359375,
+        0.442138671875,
+        0.8884073893229166
+      ],
+      "quality_yuv611_db": {
+        "released": [
+          30.015413548185403,
+          32.26906352874934,
+          34.62835599833917,
+          37.90372780829162,
+          41.09391831186998
+        ],
+        "deployed": [
+          29.894404102464563,
+          32.168602105828846,
+          34.504434097869314,
+          37.74952309441693,
+          40.98047502291145
+        ],
+        "exact_context": [
+          29.924894217577503,
+          32.18977563709632,
+          34.52423343821367,
+          37.76799429912187,
+          41.011841914183385
+        ],
+        "stale_no_repair": [
+          29.91309228647015,
+          32.13801808457576,
+          34.521120423392375,
+          37.70449967358676,
+          40.53237789610184
+        ],
+        "stale_with_repair": [
+          29.911498661054,
+          32.13512784785186,
+          34.51967942502718,
+          37.70214723920871,
+          40.51768968461277
+        ],
+        "active_zero_no_repair": [
+          29.923733285707232,
+          32.186887701847965,
+          34.52365676163677,
+          37.764175272116816,
+          41.005081795667316
+        ],
+        "active_zero_with_repair": [
+          29.922355819758476,
+          32.185478064402,
+          34.52240459793762,
+          37.76368227273411,
+          41.000915324048975
+        ],
+        "active_replicate_no_repair": [
+          29.925028979723802,
+          32.18900917721565,
+          34.52400466386132,
+          37.766281478999375,
+          41.00914047608574
+        ],
+        "active_replicate_with_repair": [
+          29.923601299964147,
+          32.18752808125923,
+          34.52269569780637,
+          37.7657380014077,
+          41.004745445781985
+        ]
+      },
+      "deployed_bdrate_vs_released_pct": 3.926933268107735,
+      "exact_context_bdrate_vs_released_pct": 3.2489978545016562,
+      "exact_context_bdrate_vs_deployed_pct": -0.6497039437133534,
+      "stale_no_repair_bdrate_vs_released_pct": 5.319873787791707,
+      "stale_no_repair_bdrate_vs_deployed_pct": 1.251278583954596,
+      "stale_with_repair_bdrate_vs_released_pct": 5.413126458012929,
+      "stale_with_repair_bdrate_vs_deployed_pct": 1.3381467887257248,
+      "active_zero_no_repair_bdrate_vs_released_pct": 3.3336544090057707,
+      "active_zero_no_repair_bdrate_vs_deployed_pct": -0.5697694787977436,
+      "active_zero_with_repair_bdrate_vs_released_pct": 3.3739206963782298,
+      "active_zero_with_repair_bdrate_vs_deployed_pct": -0.5317336647777449,
+      "active_replicate_no_repair_bdrate_vs_released_pct": 3.2797843940201687,
+      "active_replicate_no_repair_bdrate_vs_deployed_pct": -0.6208119439691018,
+      "active_replicate_with_repair_bdrate_vs_released_pct": 3.3222486952354524,
+      "active_replicate_with_repair_bdrate_vs_deployed_pct": -0.5807225555704121,
+      "active_replicate_no_repair_bdrate_vs_active_zero_pct": -0.05140917226812425,
+      "active_replicate_with_repair_bdrate_vs_active_zero_pct": -0.049314334570094154
+    },
+    {
+      "image": "kodim20.png",
+      "qps": [
+        0,
+        16,
+        32,
+        48,
+        63
+      ],
+      "rate_bpp": [
+        0.024800618489583332,
+        0.050923665364583336,
+        0.11297607421875,
+        0.2942097981770833,
+        0.5724283854166666
+      ],
+      "quality_yuv611_db": {
+        "released": [
+          31.26988505671264,
+          33.77301740078383,
+          36.18087505103903,
+          39.51205584177859,
+          42.63537611988313
+        ],
+        "deployed": [
+          31.132713274168253,
+          33.63501079881983,
+          36.071333071564936,
+          39.337137816146324,
+          42.50455492236335
+        ],
+        "exact_context": [
+          31.149580374944478,
+          33.64527185048681,
+          36.08195058991513,
+          39.35149839080125,
+          42.53255408817324
+        ],
+        "stale_no_repair": [
+          31.13998459782449,
+          33.6356496324176,
+          36.0735402992844,
+          39.336593019500995,
+          42.38874380460264
+        ],
+        "stale_with_repair": [
+          31.134557223945894,
+          33.63385633665078,
+          36.072543114911745,
+          39.337581632028666,
+          42.381503114986316
+        ],
+        "active_zero_no_repair": [
+          31.148684004937493,
+          33.64109295406073,
+          36.08100218057122,
+          39.34925692030901,
+          42.52592534179822
+        ],
+        "active_zero_with_repair": [
+          31.143452341001254,
+          33.63938524580413,
+          36.080202042558014,
+          39.3502672344131,
+          42.52024746939153
+        ],
+        "active_replicate_no_repair": [
+          31.148436943276177,
+          33.64432083089337,
+          36.081380296982346,
+          39.35017600944935,
+          42.52840379577318
+        ],
+        "active_replicate_with_repair": [
+          31.143219543681525,
+          33.64259529970827,
+          36.08055258659543,
+          39.35117308506106,
+          42.52276842691421
+        ]
+      },
+      "deployed_bdrate_vs_released_pct": 3.984493618136331,
+      "exact_context_bdrate_vs_released_pct": 3.600538977425649,
+      "exact_context_bdrate_vs_deployed_pct": -0.36590546182533323,
+      "stale_no_repair_bdrate_vs_released_pct": 4.178956680793355,
+      "stale_no_repair_bdrate_vs_deployed_pct": 0.16718763926328872,
+      "stale_with_repair_bdrate_vs_released_pct": 4.217557156684548,
+      "stale_with_repair_bdrate_vs_deployed_pct": 0.20445961727331152,
+      "active_zero_no_repair_bdrate_vs_released_pct": 3.6766503668868245,
+      "active_zero_no_repair_bdrate_vs_deployed_pct": -0.29424645358980817,
+      "active_zero_with_repair_bdrate_vs_released_pct": 3.7097443610699887,
+      "active_zero_with_repair_bdrate_vs_deployed_pct": -0.2622146944167181,
+      "active_replicate_no_repair_bdrate_vs_released_pct": 3.6350629746444207,
+      "active_replicate_no_repair_bdrate_vs_deployed_pct": -0.3334336021861173,
+      "active_replicate_with_repair_bdrate_vs_released_pct": 3.6684924415817832,
+      "active_replicate_with_repair_bdrate_vs_deployed_pct": -0.3010759972823074,
+      "active_replicate_no_repair_bdrate_vs_active_zero_pct": -0.03930532290541411,
+      "active_replicate_with_repair_bdrate_vs_active_zero_pct": -0.03896887558536566
+    },
+    {
+      "image": "kodim21.png",
+      "qps": [
+        0,
+        16,
+        32,
+        48,
+        63
+      ],
+      "rate_bpp": [
+        0.03411865234375,
+        0.09853108723958333,
+        0.2601114908854167,
+        0.5691324869791666,
+        0.9798177083333334
+      ],
+      "quality_yuv611_db": {
+        "released": [
+          28.197550492628363,
+          31.004177339364233,
+          34.25795683009835,
+          37.84031358642032,
+          40.94849044610538
+        ],
+        "deployed": [
+          28.108597526207276,
+          30.946010587856335,
+          34.16237425539396,
+          37.68321538302881,
+          40.79269979325069
+        ],
+        "exact_context": [
+          28.12769020378194,
+          30.961312002304865,
+          34.17281873863552,
+          37.68997918208166,
+          40.80901960362254
+        ],
+        "stale_no_repair": [
+          28.113406468828007,
+          30.958599429453983,
+          34.16276952454381,
+          37.674257134849505,
+          40.57871719378631
+        ],
+        "stale_with_repair": [
+          28.1055764512486,
+          30.94218220964767,
+          34.14464345501295,
+          37.65104864500198,
+          40.54827831870157
+        ],
+        "active_zero_no_repair": [
+          28.123742111828236,
+          30.96178413345727,
+          34.17024929446715,
+          37.68574450476025,
+          40.79614225283265
+        ],
+        "active_zero_with_repair": [
+          28.11607929505318,
+          30.945144796649988,
+          34.151703011446244,
+          37.662102120771095,
+          40.766346190412264
+        ],
+        "active_replicate_no_repair": [
+          28.12294839776963,
+          30.961268306491533,
+          34.17137706274091,
+          37.68763187905528,
+          40.80086734572615
+        ],
+        "active_replicate_with_repair": [
+          28.115183554559444,
+          30.944734726281016,
+          34.15289496022933,
+          37.66397876961988,
+          40.77072460431053
+        ]
+      },
+      "deployed_bdrate_vs_released_pct": 2.635658259998963,
+      "exact_context_bdrate_vs_released_pct": 2.2934924590021,
+      "exact_context_bdrate_vs_deployed_pct": -0.335677668162071,
+      "stale_no_repair_bdrate_vs_released_pct": 2.8330724848056654,
+      "stale_no_repair_bdrate_vs_deployed_pct": 0.18735824098257137,
+      "stale_with_repair_bdrate_vs_released_pct": 3.326666340559825,
+      "stale_with_repair_bdrate_vs_deployed_pct": 0.6667676785769405,
+      "active_zero_no_repair_bdrate_vs_released_pct": 2.36316071359437,
+      "active_zero_no_repair_bdrate_vs_deployed_pct": -0.2675512759131582,
+      "active_zero_with_repair_bdrate_vs_released_pct": 2.859793814779432,
+      "active_zero_with_repair_bdrate_vs_deployed_pct": 0.21467847242044868,
+      "active_replicate_no_repair_bdrate_vs_released_pct": 2.3448212625065246,
+      "active_replicate_no_repair_bdrate_vs_deployed_pct": -0.28512378532843385,
+      "active_replicate_with_repair_bdrate_vs_released_pct": 2.840727796159115,
+      "active_replicate_with_repair_bdrate_vs_deployed_pct": 0.1964838829956017,
+      "active_replicate_no_repair_bdrate_vs_active_zero_pct": -0.0176156260670024,
+      "active_replicate_with_repair_bdrate_vs_active_zero_pct": -0.018170812373008438
+    },
+    {
+      "image": "kodim22.png",
+      "qps": [
+        0,
+        16,
+        32,
+        48,
+        63
+      ],
+      "rate_bpp": [
+        0.025980631510416668,
+        0.06526692708333333,
+        0.20090738932291666,
+        0.5305379231770834,
+        1.0273234049479167
+      ],
+      "quality_yuv611_db": {
+        "released": [
+          28.60706476093294,
+          30.677865695877085,
+          33.38728469505904,
+          36.90889977060735,
+          40.2735374380998
+        ],
+        "deployed": [
+          28.515933423882565,
+          30.6094093081646,
+          33.29954925033415,
+          36.80699090838198,
+          40.14748666082565
+        ],
+        "exact_context": [
+          28.520592292024077,
+          30.617253056431196,
+          33.307101318046016,
+          36.81685118203805,
+          40.166719822105875
+        ],
+        "stale_no_repair": [
+          28.50716232436843,
+          30.61036241019778,
+          33.29839255791862,
+          36.65230664593863,
+          39.9323929235003
+        ],
+        "stale_with_repair": [
+          28.50782857160637,
+          30.609730539120505,
+          33.29864325160334,
+          36.64742511441338,
+          39.924492699026025
+        ],
+        "active_zero_no_repair": [
+          28.51962877030752,
+          30.616470396072856,
+          33.30632544817095,
+          36.814153846658435,
+          40.1649232803139
+        ],
+        "active_zero_with_repair": [
+          28.520714306158016,
+          30.615782553785138,
+          33.30649608833999,
+          36.81438517350526,
+          40.16469337145582
+        ],
+        "active_replicate_no_repair": [
+          28.519412024286396,
+          30.616892077204955,
+          33.30669589108652,
+          36.81527085623401,
+          40.164915583532235
+        ],
+        "active_replicate_with_repair": [
+          28.520574241307862,
+          30.616218432097625,
+          33.30685316464562,
+          36.81551805090442,
+          40.16474902272962
+        ]
+      },
+      "deployed_bdrate_vs_released_pct": 2.803513250151002,
+      "exact_context_bdrate_vs_released_pct": 2.5224326494683424,
+      "exact_context_bdrate_vs_deployed_pct": -0.2716643859835055,
+      "stale_no_repair_bdrate_vs_released_pct": 4.54106019798286,
+      "stale_no_repair_bdrate_vs_deployed_pct": 1.665470838036942,
+      "stale_with_repair_bdrate_vs_released_pct": 4.600189402965538,
+      "stale_with_repair_bdrate_vs_deployed_pct": 1.7217671038041393,
+      "active_zero_no_repair_bdrate_vs_released_pct": 2.5660942728439773,
+      "active_zero_no_repair_bdrate_vs_deployed_pct": -0.2292858845674539,
+      "active_zero_with_repair_bdrate_vs_released_pct": 2.567331862657607,
+      "active_zero_with_repair_bdrate_vs_deployed_pct": -0.22845827983224432,
+      "active_replicate_no_repair_bdrate_vs_released_pct": 2.5495440291890104,
+      "active_replicate_no_repair_bdrate_vs_deployed_pct": -0.2452204845381334,
+      "active_replicate_with_repair_bdrate_vs_released_pct": 2.550305623437943,
+      "active_replicate_with_repair_bdrate_vs_deployed_pct": -0.2448753280851368,
+      "active_replicate_no_repair_bdrate_vs_active_zero_pct": -0.015948973629620333,
+      "active_replicate_with_repair_bdrate_vs_active_zero_pct": -0.016432242247088613
+    },
+    {
+      "image": "kodim23.png",
+      "qps": [
+        0,
+        16,
+        32,
+        48,
+        63
+      ],
+      "rate_bpp": [
+        0.026509602864583332,
+        0.049784342447916664,
+        0.09637451171875,
+        0.1927490234375,
+        0.3638509114583333
+      ],
+      "quality_yuv611_db": {
+        "released": [
+          31.871432061060123,
+          34.7143358838648,
+          37.61060847718173,
+          40.53611384257208,
+          43.07272965951984
+        ],
+        "deployed": [
+          31.695059493568372,
+          34.61684653296072,
+          37.470737505672744,
+          40.30589310066286,
+          42.84405159659034
+        ],
+        "exact_context": [
+          31.709570308302634,
+          34.64004271484748,
+          37.491082912828254,
+          40.32679280928512,
+          42.877158055048675
+        ],
+        "stale_no_repair": [
+          31.696682038123186,
+          34.64004271484748,
+          37.48020022138508,
+          40.298026705706334,
+          41.52786602476341
+        ],
+        "stale_with_repair": [
+          31.697103609080337,
+          34.640554477932994,
+          37.48120545740277,
+          40.299743852241505,
+          41.51186387396851
+        ],
+        "active_zero_no_repair": [
+          31.708585430225522,
+          34.64004271484748,
+          37.487680115471726,
+          40.32312623148943,
+          42.84989655089214
+        ],
+        "active_zero_with_repair": [
+          31.70906957713252,
+          34.640554477932994,
+          37.488683137924305,
+          40.32471581692305,
+          42.84799165265286
+        ],
+        "active_replicate_no_repair": [
+          31.707881684824684,
+          34.64004271484748,
+          37.490207514941325,
+          40.32433550097354,
+          42.87335085928715
+        ],
+        "active_replicate_with_repair": [
+          31.708365528595657,
+          34.640554477932994,
+          37.49112046122959,
+          40.32591672556905,
+          42.872359236294166
+        ]
+      },
+      "deployed_bdrate_vs_released_pct": 3.9302156033206748,
+      "exact_context_bdrate_vs_released_pct": 3.398053256423572,
+      "exact_context_bdrate_vs_deployed_pct": -0.5140750651165371,
+      "stale_no_repair_bdrate_vs_released_pct": 4.550212371697748,
+      "stale_no_repair_bdrate_vs_deployed_pct": 0.8679278303988402,
+      "stale_with_repair_bdrate_vs_released_pct": 4.505103359943874,
+      "stale_with_repair_bdrate_vs_deployed_pct": 0.8289793054571115,
+      "active_zero_no_repair_bdrate_vs_released_pct": 3.502010842990533,
+      "active_zero_no_repair_bdrate_vs_deployed_pct": -0.4114435830793406,
+      "active_zero_with_repair_bdrate_vs_released_pct": 3.4838493897033196,
+      "active_zero_with_repair_bdrate_vs_deployed_pct": -0.42844952402729675,
+      "active_replicate_no_repair_bdrate_vs_released_pct": 3.4318880508108496,
+      "active_replicate_no_repair_bdrate_vs_deployed_pct": -0.48107725045872796,
+      "active_replicate_with_repair_bdrate_vs_released_pct": 3.412577181260157,
+      "active_replicate_with_repair_bdrate_vs_deployed_pct": -0.4994941578253531,
+      "active_replicate_no_repair_bdrate_vs_active_zero_pct": -0.07020698690539673,
+      "active_replicate_with_repair_bdrate_vs_active_zero_pct": -0.07155594980048363
+    },
+    {
+      "image": "kodim24.png",
+      "qps": [
+        0,
+        16,
+        32,
+        48,
+        63
+      ],
+      "rate_bpp": [
+        0.040669759114583336,
+        0.13346354166666666,
+        0.33770751953125,
+        0.7003987630208334,
+        1.1827799479166667
+      ],
+      "quality_yuv611_db": {
+        "released": [
+          26.81725394770006,
+          29.686991093011212,
+          33.05733996005663,
+          36.722871481746225,
+          39.87905516297636
+        ],
+        "deployed": [
+          26.736861797481062,
+          29.603810235987677,
+          32.96098212877012,
+          36.567632650521304,
+          39.725798341051366
+        ],
+        "exact_context": [
+          26.74692633748124,
+          29.618545301138028,
+          32.97440089892067,
+          36.58081954855399,
+          39.74908662243444
+        ],
+        "stale_no_repair": [
+          26.736236061682593,
+          29.60408365902762,
+          32.91832493630603,
+          36.51527510463879,
+          39.6411923551799
+        ],
+        "stale_with_repair": [
+          26.73623047439699,
+          29.603102591749558,
+          32.9129221061072,
+          36.50877877196425,
+          39.62896977187381
+        ],
+        "active_zero_no_repair": [
+          26.745267513155206,
+          29.618539722715596,
+          32.97392592002755,
+          36.58072626975782,
+          39.7479447882183
+        ],
+        "active_zero_with_repair": [
+          26.745429401265596,
+          29.618156107612833,
+          32.97096256213228,
+          36.576543833916006,
+          39.73793744281223
+        ],
+        "active_replicate_no_repair": [
+          26.74615926222542,
+          29.61816518241782,
+          32.973902910125624,
+          36.57995299634858,
+          39.748050544970724
+        ],
+        "active_replicate_with_repair": [
+          26.746321409140222,
+          29.617766817980023,
+          32.970995945720375,
+          36.57587030308149,
+          39.738120699457745
+        ]
+      },
+      "deployed_bdrate_vs_released_pct": 2.740186402579492,
+      "exact_context_bdrate_vs_released_pct": 2.3725680754515643,
+      "exact_context_bdrate_vs_deployed_pct": -0.35782111701682107,
+      "stale_no_repair_bdrate_vs_released_pct": 3.420571724090049,
+      "stale_no_repair_bdrate_vs_deployed_pct": 0.6558279890290564,
+      "stale_with_repair_bdrate_vs_released_pct": 3.5178615637976973,
+      "stale_with_repair_bdrate_vs_deployed_pct": 0.7495879599380029,
+      "active_zero_no_repair_bdrate_vs_released_pct": 2.3839578177562437,
+      "active_zero_no_repair_bdrate_vs_deployed_pct": -0.34642540458437177,
+      "active_zero_with_repair_bdrate_vs_released_pct": 2.442599343439511,
+      "active_zero_with_repair_bdrate_vs_deployed_pct": -0.29007313384554756,
+      "active_replicate_no_repair_bdrate_vs_released_pct": 2.388460130137404,
+      "active_replicate_no_repair_bdrate_vs_deployed_pct": -0.3422768293241396,
+      "active_replicate_with_repair_bdrate_vs_released_pct": 2.446229038996317,
+      "active_replicate_with_repair_bdrate_vs_deployed_pct": -0.28676770183474476,
+      "active_replicate_no_repair_bdrate_vs_active_zero_pct": 0.0041496524455952866,
+      "active_replicate_with_repair_bdrate_vs_active_zero_pct": 0.0033012843438262607
+    }
+  ]
+}
