@@ -33,5 +33,14 @@ repair retraining or spatial residual analysis; the scalar data alone do
 not prove it. Active-replicate transfer is still running, so this note does
 not choose a deployment fallback. The PyTorch halo path is not timed.
 
+There is a separate arithmetic consequence on the frozen Kodak maps:
+the audited active-zero halo adds only 0.01087 percentage points of
+full-synthesis convolution MAC, while removing grid repair saves 0.95072
+points. Thus active-zero **without** repair has 26.82359% analytical
+synthesis-convolution saving versus 25.88374% for deployed isolated tiles.
+This is a +0.93985-point cost-model improvement, not a measured latency gain
+or a DIV2K-specific MAC measurement. The [120-case cost audit](../../../proof/cpu_early_exit/results/kodak_active_canvas_cost_20261005.json)
+contains the fixed-map calculation.
+
 Source: [`active_canvas_validation24_zero.json`](../../../proof/cpu_early_exit/results/div2k_beta/quality_floor/active_canvas_validation24_zero.json)
 and its [hash-linked clustered summary](../../../proof/cpu_early_exit/results/div2k_beta/quality_floor/active_canvas_validation24_zero_summary.json).
