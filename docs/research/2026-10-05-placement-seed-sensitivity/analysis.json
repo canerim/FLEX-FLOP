@@ -1,0 +1,172 @@
+{
+  "scope": "Sensitivity of frozen 53-image QP32 Q90 actual RGB reconstruction placement gains to the three recorded stratified permutations. No new codec evaluation or external-test claim.",
+  "estimand": "Equal-image mean of 10log10(mean of three shuffled RGB MSE / original RGB MSE), paired router and dither.",
+  "limitations": "Resampling three observed permutations is an approximate Monte Carlo sensitivity check. It cannot measure bias from their finite draw, unobserved permutation tails, training seeds or development-cohort reuse.",
+  "bootstrap": {
+    "draws": 20000,
+    "seed": 20261005,
+    "nested": "sample 53 images with replacement, then three of each sampled image's recorded permutation indices with replacement; same indices for both policies"
+  },
+  "published_sha256": "ac7205b0ace2587d72e2d9ae7c4fd1d1fd78db0dd04b55e3a346910981adbcd6",
+  "case_sha256": {
+    "00.json": "bd89e1142b152ceddffdd23a988ab6d68afaf5b857cd40bda7c8dfb8d26b77af",
+    "01.json": "5ba6d72011583037208b9431b4c02cef5ee5e41419bd85324843ab39a26b28be",
+    "02.json": "f66b7a995da2bfae07cbfcd757713ab0b89e5f0fca3f85a4dd6d09a249f7692e",
+    "03.json": "122a5ce8a8d33392ae16fbea0ff3ff00ce576c38344ead27e148a36426aecb00",
+    "04.json": "1a250c94d865cdbb91184e2c892d84f87471bd1c61a70485ec4ae7d72f890d0f",
+    "05.json": "44ae4fe0f9be15e1ad79e904f37e1f6232948344cac7b3b0a00e1a6c65a0aed0",
+    "06.json": "c6c57a956077a1a186fe45d368f5fa8f4c00e0bbaf6f3e74c831e500542ea329",
+    "07.json": "263c68c04763b7dfcb8c86c877598ee5b5b19e2a80b549a1cb75ce9df0b1545e",
+    "08.json": "49e531738f9e7f39a234bc3fc7c9d5e6ab758c6c2ccda852e2909a18a0821a84",
+    "09.json": "d231c6d8699478df7f9b7e1352a7dbd94e8eca54122b0b892dc3ad16ed7f6bee",
+    "10.json": "79d926f6b5db38d6898e9b5c4a5b370bd534f2d616b36ed53839abc9654cefe8",
+    "11.json": "56736083a61e157dd836da02735b4c096b4d77d4d39597094558b83c14f86036",
+    "12.json": "d9347a591ba257a1c2a7828433e010f85eda0dae1ad997d3717b2347f47c0930",
+    "13.json": "8cc5deaffb0f259822106e224f9ca8b239ddbb9d1eedb57407b7f0668056e2b3",
+    "14.json": "5d1551ce55b547a7e98eb2d2d71de5512926076aae9b60bd0ab9fbfd55c1502f",
+    "15.json": "bf44bc5938a49b16d616eb5ccb387d43cafbdaa361b65069ac29cac120f07e38",
+    "16.json": "a0cd627aa0ce8d42ff2732401778efc61450c804ce5b8b8ec0e25fcbc98867d0",
+    "17.json": "aa6f8aef1ad8c3499b0a0293cb2a4121e0fd99172e501a56dab9b98ec98278ed",
+    "18.json": "1e43bb117692c4b53e5ee097e3e30f59098b6aad1be853f3bc3a4df457a5d902",
+    "19.json": "3532dd4c5832a694680c4b8596bf79bcbd487c52f32b963b6cbaaa1545c1d50c",
+    "20.json": "eff8f7efaa00dd667c3522134bc6750fa04a1438164ec159ee5adee0831419e9",
+    "21.json": "83a324898e17a9b7a9674ea6092b04b882b0715515b200a37dce7cb76d3c633f",
+    "22.json": "e576bcdf3ba20deb5138fcad0d8e11c38d46b25b9d5d4e3ed8fc2bc2d8a96be0",
+    "23.json": "15ccc85992f78a7ed37d23aad1a199b14fd859b8c248c9edc1c1e5be2f4a4438",
+    "24.json": "bace0e3e94fd28c6ffabcc09d42a85f21942f577adfddc43d7a984c9cf2d975a",
+    "25.json": "8640b18acce703911f273c41281c1904bdf06bd6fc0294bb7832a31b19d5c43f",
+    "26.json": "f879600c664b1244015b02b8c3b2a9a82822db8578338453a2ca3d524f1a0da6",
+    "27.json": "08c3eb3b749af8af63cb77e31732badf8bf4c62c33f3cc1bdd9650364d964b11",
+    "28.json": "bb97b458c88a17f2c02b0a8bb8e40eb99a6b76fb7bde48bf846c62592aef9236",
+    "29.json": "688fce1dfbeb7b81f75f8cfd7799a3d1e1b93491b1ec2a716b96292933617a7c",
+    "30.json": "4552f49ed932821fe590efdba40451e2c7596a8ef3220ca746af82cb40fbdab3",
+    "31.json": "8182d2b12a87e04155729a4b580769908a063c88069e8e09157969ed10aafc85",
+    "32.json": "cea5d4a268f0aaab89ae8c12b0ef0124dea7d8ed7200655b7af241aa29ac238e",
+    "33.json": "5488d906f1f178c934f2748b579eaca93ce6fc5a1bded00266105989ff42c017",
+    "34.json": "59d45b41b4a108829a08581b2c066f03ef71506cdfe9c9f639b68ee94f88d392",
+    "35.json": "9cfa7a37ac057d017579d15b2ef3b282f357daef0361382c853dacdea970219b",
+    "36.json": "3ab0fe9dc7e274cfe5207cc12d442c47b884a9c928a5b25db5c9dd13d0dd3802",
+    "37.json": "8384d7eb40e5d194ae249293ab92eac5674180f449c0676a086d5eb1bf182980",
+    "38.json": "27f4aad424790ac3e211697cdf940a2aa5f87a9b9a29f1af3c54bdda425d1589",
+    "39.json": "54112315f43e283596a89e0a11d9713b15b5b72a86a798ea193951b9e3769633",
+    "40.json": "c60d13c074ac42090e2038cbe040df7d56e409382ba6c08e9b9e6362f3e15865",
+    "41.json": "f85d92e1e0e8af4a0e08d24990fe355b795a97a8e032ee53bb572d516719d869",
+    "42.json": "c8854b81d458e74411c6324dc60589e791cdc81fb8787d435fbcdb7082b5ecd8",
+    "43.json": "9e0de6376a15a9ccdbf8a6dc95c31541ab8a78c09c61b724ecf92c1a8ea2f10e",
+    "44.json": "2a55d4a3a94c614abb2beabb516a62a7cc88251fce4ad0b059a60053e1967cb4",
+    "45.json": "155f5f2794ff2aa6d87ec1ba4320cd37ebe329b9ea07b8f230fa34809eda8bca",
+    "46.json": "0843fe4efc581563122b96a73de51851e9d4682c98f4713fb59ef0765f8a16fb",
+    "47.json": "9318dc58f1857cf3c9b4de3bd27f486aee02795597fe1780f253bc596b12584d",
+    "48.json": "f8fdcba7aff3731ea4568d2e41641f523ffe2d009bc3c72e0399dd864b5d0d32",
+    "49.json": "bc25f743146a34abc8a3188e0cede12a901ab0cdfab6f8a8968dc3a21bed6593",
+    "50.json": "aa086522dae8b0d7ec09fae1f49794032138db9b0f4d8c5edb049a56e58f1778",
+    "51.json": "8f27b5a8790c6bb99967769657bdaf4c8967df1d024160609eacd4da9202efb4",
+    "52.json": "0339d902d1ea3c0db972a9bbecf689a5af331961341078318e61e8e75703cd70"
+  },
+  "n_images": 53,
+  "names": [
+    "Beauty_1920x1080_120fps_420_8bit_YUV.yuv",
+    "Bosphorus_1920x1080_120fps_420_8bit_YUV.yuv",
+    "HoneyBee_1920x1080_120fps_420_8bit_YUV.yuv",
+    "Jockey_1920x1080_120fps_420_8bit_YUV.yuv",
+    "ReadySteadyGo_1920x1080_120fps_420_8bit_YUV.yuv",
+    "ShakeNDry_1920x1080_120fps_420_8bit_YUV.yuv",
+    "YachtRide_1920x1080_120fps_420_8bit_YUV.yuv",
+    "videoSRC01_1920x1080_30.yuv",
+    "videoSRC02_1920x1080_30.yuv",
+    "videoSRC03_1920x1080_30.yuv",
+    "videoSRC04_1920x1080_30.yuv",
+    "videoSRC05_1920x1080_25.yuv",
+    "videoSRC06_1920x1080_25.yuv",
+    "videoSRC07_1920x1080_25.yuv",
+    "videoSRC08_1920x1080_25.yuv",
+    "videoSRC09_1920x1080_25.yuv",
+    "videoSRC10_1920x1080_30.yuv",
+    "videoSRC11_1920x1080_30.yuv",
+    "videoSRC12_1920x1080_30.yuv",
+    "videoSRC13_1920x1080_30.yuv",
+    "videoSRC14_1920x1080_30.yuv",
+    "videoSRC15_1920x1080_30.yuv",
+    "videoSRC16_1920x1080_30.yuv",
+    "videoSRC17_1920x1080_24.yuv",
+    "videoSRC18_1920x1080_25.yuv",
+    "videoSRC19_1920x1080_30.yuv",
+    "videoSRC20_1920x1080_25.yuv",
+    "videoSRC21_1920x1080_24.yuv",
+    "videoSRC22_1920x1080_24.yuv",
+    "videoSRC23_1920x1080_24.yuv",
+    "videoSRC24_1920x1080_24.yuv",
+    "videoSRC25_1920x1080_24.yuv",
+    "videoSRC26_1920x1080_30.yuv",
+    "videoSRC27_1920x1080_30.yuv",
+    "videoSRC28_1920x1080_30.yuv",
+    "videoSRC29_1920x1080_24.yuv",
+    "videoSRC30_1920x1080_30.yuv",
+    "BQTerrace_1920x1080_60.yuv",
+    "BasketballDrive_1920x1080_50.yuv",
+    "Cactus_1920x1080_50.yuv",
+    "Kimono1_1920x1080_24.yuv",
+    "ParkScene_1920x1080_24.yuv",
+    "FourPeople_1280x720_60.yuv",
+    "Johnny_1280x720_60.yuv",
+    "KristenAndSara_1280x720_60.yuv",
+    "BQMall_832x480_60.yuv",
+    "BasketballDrill_832x480_50.yuv",
+    "PartyScene_832x480_50.yuv",
+    "RaceHorses_832x480_30.yuv",
+    "BasketballPass_416x240_50.yuv",
+    "BlowingBubbles_416x240_50.yuv",
+    "BQSquare_416x240_60.yuv",
+    "RaceHorses_416x240_30.yuv"
+  ],
+  "point_estimate_db": {
+    "router": 0.013925386006093513,
+    "dither": 0.0003581745408211768,
+    "router_minus_dither": 0.013567211465272335
+  },
+  "image_only_conditional": {
+    "router_ci95_db": [
+      0.009456813659164015,
+      0.019180698689946193
+    ],
+    "dither_ci95_db": [
+      -0.00029422329082488694,
+      0.0010230147359592638
+    ],
+    "router_minus_dither_ci95_db": [
+      0.009144565791769388,
+      0.018762984980686764
+    ],
+    "paired_positive_fraction": 1.0
+  },
+  "permutation_only": {
+    "router_ci95_db": [
+      0.012738829956330222,
+      0.015004725569367277
+    ],
+    "dither_ci95_db": [
+      2.28087703804896e-05,
+      0.0007052231795024304
+    ],
+    "router_minus_dither_ci95_db": [
+      0.012241187747231302,
+      0.014745476356257692
+    ],
+    "paired_positive_fraction": 1.0
+  },
+  "nested_images_and_permutations": {
+    "router_ci95_db": [
+      0.009395377351592689,
+      0.01936694560726551
+    ],
+    "dither_ci95_db": [
+      -0.00037432393373115313,
+      0.0011283276866042666
+    ],
+    "router_minus_dither_ci95_db": [
+      0.009073295556586185,
+      0.019035278157571445
+    ],
+    "paired_positive_fraction": 1.0
+  }
+}
