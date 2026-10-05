@@ -49,10 +49,10 @@ def main() -> None:
                             "rgb_improvement_db": float(gain[i, j, 0]),
                             "ycbcr444_improvement_db": float(gain[i, j, 1])})
     assert changed.sum() == plan["changed_cases"] == 14
-    assert all(gain[~changed] == 0)
+    assert (gain[~changed] == 0).all()
     rng = np.random.default_rng(20261005)
     draws = rng.integers(0, 24, (10_000, 24))
-    boot = gain[draw].mean(1)
+    boot = gain[draws].mean(1)
     def describe(a, mask, ci):
         rgb = a[..., 0]
         return {"n": int(rgb.size), "changed": int(mask.sum()),

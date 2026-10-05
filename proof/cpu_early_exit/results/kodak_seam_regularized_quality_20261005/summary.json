@@ -1,0 +1,1063 @@
+{
+  "scope": "Frozen decoder-visible 0.5-TV regularization of router placement at exactly the same exit histogram and analytical synthesis MAC, Kodak24 x QP5. Positive improvement means regularized map has lower RGB distortion.",
+  "limitations": "The 0.5 score-space penalty was chosen after inspecting router-score margins and map-change counts on Kodak but before quality replay. This is exploratory on a cohort used elsewhere in the project, not held-out validation. No bit-rate or runtime change measured.",
+  "plan_sha256": "7a4b5a8600c7faeef4fef07ac321e511f494bc67563914b6568adc01c2b3be57",
+  "manifest_sha256": "5f4be04f40ff65695540a0db37bdff948177e7f4d73ecf8e8514bdfef16a23a8",
+  "case_sha256": {
+    "kodim01_qp0.json": "33ecd51bb213a4b5fa3d21790b07b429634944872a5763c950521dbcb69d4f1a",
+    "kodim01_qp16.json": "3c491d0eeda60a4038bd8bde72c993d310e9b1ab51d40b4d9fe5cdc1bde05ea7",
+    "kodim01_qp32.json": "7c354b290681659740ef8a28f57dfaa46ac702019636b6a7acbfe0c843d8c626",
+    "kodim01_qp48.json": "f066ba5c0bf28f818b9d86868d17ed0a1c8a2b835b7e5a3a1c38e24dd16e0f80",
+    "kodim01_qp63.json": "ec5383545327818c8ce31b8a3e499e46227f3be917725a68422566c0683476c4",
+    "kodim02_qp0.json": "49e5c5fb98274a808b562c749eaabef6f81284e11191d4e7b9336dcabfed801e",
+    "kodim02_qp16.json": "8b994948c8dfb2f4f32514be4a03bdb0a913a3d36a0c942dacf13e8317ee36be",
+    "kodim02_qp32.json": "4607ca45c9142e3276d7fd6d5cb5c38c66301bf7e4f18cf64f0e7e5bec1ef217",
+    "kodim02_qp48.json": "1bfa610a4d386f08af601678f5583d3f9a92f974d5f07fbbee1c3c598d1bbaa7",
+    "kodim02_qp63.json": "441d1b90429c6c11dcbf34110fde8b8edf99cc38e2dca070cb486f19978b7719",
+    "kodim03_qp0.json": "e4fa49db6edeb14ec429760b01006911c1f2e95d5e50afad459f28b2a1b95fb6",
+    "kodim03_qp16.json": "ac0ef4c2aed6083b5565b4cfaf9456cd665c2b6c445213b94978c3bf416b2a1a",
+    "kodim03_qp32.json": "397aeeb9a6820c0dd035fdb3e7771bd60e762310749eeb51a2a4b7b221cde296",
+    "kodim03_qp48.json": "2ab7250f493a850e376d7104e3ee29d4cc365d95b6ed6298edca0eeba3e3415d",
+    "kodim03_qp63.json": "4fc2b6f7b513e47dec402fe18e3ea54ea05f246759149acce20acbda5c58b6ab",
+    "kodim04_qp0.json": "86911e7499e34234ef0e00805f5e600595de5d9d810203d8744a01ff0eefd413",
+    "kodim04_qp16.json": "e457c7d8314e149b37ba28d690584d0d5c2972668e3831c6ab3cd1fb8f383fa7",
+    "kodim04_qp32.json": "d0beabf600313446e402998e57956d86f459329af0410869b1e6ae5c18716f10",
+    "kodim04_qp48.json": "9aadf4e19633ae4f28f727df6e3176740ef82830a3e0b1fd40ea5a6faf21ef22",
+    "kodim04_qp63.json": "4717f4c1597b126b560f0333c1df4eb7d6ec12bf63e2d50224e2e4988d9e7fb0",
+    "kodim05_qp0.json": "8dcb260b8f3ddc098c61b126e11223f939c19a110385547ffe64a6902f9947ef",
+    "kodim05_qp16.json": "9bacb1c015761b23e4f075c66c9622aac33eb1c28f19fc2b5541ac61c7ff9616",
+    "kodim05_qp32.json": "5d2ed8d945990a9aea3fa854dad3c9c88a386b97cda69c7750193fbf0927f07c",
+    "kodim05_qp48.json": "9e52e16608fd4d5d1aa27918e92ea59dd67af2fb54aefc319f43c9d0b03a729f",
+    "kodim05_qp63.json": "1270383caf75c9225b882361ce844c3e9324843a687966dc1568976b1adb2554",
+    "kodim06_qp0.json": "5c374d192c034803809d863d6869ea3e0fd13db6392bf0743abe3d360255a9f8",
+    "kodim06_qp16.json": "2d872ee7d76a1ee021d66fb9af10d53ecb8eb8809b03e354f2b90326acb060fa",
+    "kodim06_qp32.json": "109a0cfdd07a835bc89a055abc766151eeb7c7da060c7e76eb7838aa127ba1d6",
+    "kodim06_qp48.json": "cacad540b7bc0d629583effe25226041b290b2c9613b479839789e213f597925",
+    "kodim06_qp63.json": "3da85fe9c02498dbfc201297049c1b9ef91aab5907b14a0108af177fbc11f206",
+    "kodim07_qp0.json": "66c1b7db4e1c586f96f43eb53a77830f65cc32888b2fff8ff12e33d7527fc889",
+    "kodim07_qp16.json": "3b3dc06c1a2c6058cd9be61c87b2a61443d54ec9996f2c2d27dc8bd34d26ea3a",
+    "kodim07_qp32.json": "9ce8889e37e6d60b38dbd3300278c5b73c88fcbd20653eeea865b5c1188c65e6",
+    "kodim07_qp48.json": "928750f8556a23d3f3bba77a5bb8333fc194860767e9ecaf3ab75f4a1b795256",
+    "kodim07_qp63.json": "17c55ba08518d678ff41ed7581b858acdfd15e8d181a5100039c331726a554b1",
+    "kodim08_qp0.json": "6d3a75e789821f0bcfe94e33ee7ba7b9a65559c33b31a999231a9669ce9f6b06",
+    "kodim08_qp16.json": "3e9dcf9bef86b12d5169a2c07b8886921cb9f516898e79baf98ad22db5c4cfce",
+    "kodim08_qp32.json": "7a26e63797409a4a5bda3171de7293abd23bbe82b63a93c56a1d28895fdcefcd",
+    "kodim08_qp48.json": "3f654523ce8b060051978be5ad07e779893447e20c427c7c6090a977d75dcccf",
+    "kodim08_qp63.json": "334e4d8058f6a251675872aa9ff5cfcb288424ceb4f23bc4fc82e85ddf9a8ec6",
+    "kodim09_qp0.json": "9c3bf2aa40e6ba448cb3ae4a70db9b7720e45cf08323d8114d6a47decad00aa2",
+    "kodim09_qp16.json": "d396c5674294dca090c014c807b6bd7ac5fb17cd0cd20c5ae2288ff1147863e6",
+    "kodim09_qp32.json": "707a7ff747966e1bca5b79d59105c84fcc1d1871cc2728aef985b2d82194f544",
+    "kodim09_qp48.json": "58758d495cb9876e18476878e7f1dd1aee488ff1cc625c459d0ca4d65906048c",
+    "kodim09_qp63.json": "e1d4cb6e7bfef7182dafe5da2c16dc083562bed779eda7ef8373ad42ed2ab617",
+    "kodim10_qp0.json": "7714f5c4cea35dc25db7a66a5bf899b2f2cb69b56f2c58e64032b0c6c7b23a19",
+    "kodim10_qp16.json": "ddff6596d9600cda02d79f784e8becdb2757ef1daa1389123287c45b836cc4c4",
+    "kodim10_qp32.json": "aa4731658f70b461455b0a939a4d9e87460eda68c9b3d29066297cedba0f036e",
+    "kodim10_qp48.json": "9dc0d47e63c3077bcaf431cee2042f42f96c771167578363d3701f816680fbdc",
+    "kodim10_qp63.json": "21a8941c0c94b9b6ab936bc204b4b1b5d333600188f15e56a763a13c6f97dc7a",
+    "kodim11_qp0.json": "019ad1c61b9587c4e46b3ebdd326671e2fdb41307e83b73eea19255d12402aa0",
+    "kodim11_qp16.json": "831b3408e6cdafb98f0854901f3eecffa7d97fd50961fb14a71c31ec08ed0e89",
+    "kodim11_qp32.json": "80f5d800fee4fa461fbfa5d05017205279e2315efb8a20e07777c1e0c996ed24",
+    "kodim11_qp48.json": "f90a4046673e91124deb3ba2713b21f521f23b0f3a7dc95f246d82f1232780ae",
+    "kodim11_qp63.json": "6f64b6682b345cb74f2f36b90275384419443dabad1566bc040bb2d74aa18adb",
+    "kodim12_qp0.json": "ed632473895e2fdff46033a7f7c2b22ad9436fc642636b2a184abee8704e7b2e",
+    "kodim12_qp16.json": "ea06ae4eeb58f0bafeb96135c375178fb9fd47a76215a97b813985c401851a0c",
+    "kodim12_qp32.json": "1c6adef8cca6a10949b7c2ef52e716eb66b06a6ff2d08a429825f0ad743bd3b0",
+    "kodim12_qp48.json": "56d448491b072fe60a55165fc74cefcd814067752bb66fdc9db76971924cf4b3",
+    "kodim12_qp63.json": "9e087ddb94fbfc7228938062735eacd4a8d816e0927d835dc3fff45cec6d1b89",
+    "kodim13_qp0.json": "5457e99f4a82c32fd6b039f60421969900ff7ddcf401a754bdf508bc0b889a38",
+    "kodim13_qp16.json": "e787a8dc51f06d6e85f377a77eee9bdbc0d7ca500b53b978b36e2ed02b4c9391",
+    "kodim13_qp32.json": "d07bdb332a3a973184b4d38aa5bd2e10636f8343359abcad3b775af57e546e5a",
+    "kodim13_qp48.json": "4a49dfa6a33e907a17ba139b16d195bc9057d74e99c52988a7c64696c2d3becf",
+    "kodim13_qp63.json": "8add474925d7313d929a1f6e5167fcd5726f1f30e9e8806110386a16ff98c6e5",
+    "kodim14_qp0.json": "88cbb5153d67f044005b3b2934eb642391ba63d07a33f852eb6396ddd7fe102a",
+    "kodim14_qp16.json": "19118164a46bdb7d7131428d51548ffca6de45dc92b05eb884a9255ef8a02d90",
+    "kodim14_qp32.json": "c474ab6d2c9567513fa51b217d97fa2ca4e01a4cb4a5fec6bd45b8c357d550c6",
+    "kodim14_qp48.json": "999cabb32424c087c9470424ebd9f5a5f0cb9b0bd4e40d9fb3145ea20c1c28d0",
+    "kodim14_qp63.json": "a6d6d1204b47821a6079c11b3de8db6a1720452d284d32f37a24c4cd43ba68c3",
+    "kodim15_qp0.json": "fa2076cc8e5e1bf422c007c73cdd2925b83c033d27a5fba2290ce9f8301d66ab",
+    "kodim15_qp16.json": "3b11d40bc18e48ebad068c4c21fcd7c943b3cf68ab55c40219eb9b3452b41be8",
+    "kodim15_qp32.json": "cbf7eb9b69ba1ba9b6ed0ead81146113c48780cd905321f400a9cc61769434c9",
+    "kodim15_qp48.json": "dcdf88572e943aed8b48738e575a71a323e5d85fd647c072bb51b0dca6478325",
+    "kodim15_qp63.json": "8a8c5b24145b966ff6cacea9eb5ee13f7ec1cfccd710a7eed606e9971ae1cf32",
+    "kodim16_qp0.json": "f0eec806973a36301bc3945a9d90b16a6a7e00790b38347bfa916da080163ffb",
+    "kodim16_qp16.json": "ab35ba22577ad5c6a00edf37f1a0e9793a0f41ea78f900cdcba918f65d4fbda4",
+    "kodim16_qp32.json": "7fda7a67c910a25f8c440db06f439939c87db85545c2dda638d32ece63f5c998",
+    "kodim16_qp48.json": "47f531526f8f6301aa06c531d3ed278ea35e35a4954ce614f9221cf22289fe7c",
+    "kodim16_qp63.json": "f7cb6dc9496f20f299de7ada6a0e7326b9a676efdb3aae3ca37adb379549985e",
+    "kodim17_qp0.json": "34de2ab2e25357ecd5a726fa3f5a341c150116ba0b5e6ac15b8377343d3cfb11",
+    "kodim17_qp16.json": "abcb1056e8dc56f71fa50229da6f4cc7ed2088320cb733c484c26a89b02bf528",
+    "kodim17_qp32.json": "4c3a4cb973a482073d5bdd992df82259015c19de35170424d15eae457a99b90b",
+    "kodim17_qp48.json": "2da65f827df6f445c8ffbee0f1e50994e1fb4bd59df5895f220e5ee95fe9cf8b",
+    "kodim17_qp63.json": "bffda8dca02987dd2eed28f79cd3725c35554674f385522a105249c12ff652f2",
+    "kodim18_qp0.json": "5bd5c922cd44fbe224788607c1001f5b49c936546bf914eec879219f3b54b943",
+    "kodim18_qp16.json": "1e9b3f8e96e460b3bdeb003fe6dfb08d5df4924aeb77d13513d9fde404be2828",
+    "kodim18_qp32.json": "fa8809f45c95b820d073f673939a7eeb4b3619f15e0e8ded76d1c36bb9d0e06c",
+    "kodim18_qp48.json": "24a015f4e12222f80e0f814ee921b03de33007dc9b19d98039eaca1fa2434ab0",
+    "kodim18_qp63.json": "b5662dccfa77ea8a015feb45eda1f07034f20a6850fed44bbe70a10fb220215d",
+    "kodim19_qp0.json": "11401e79f5dc30c7a7204a6e530d9b93cc4d9577e87536952471a054f487a912",
+    "kodim19_qp16.json": "ab5a8f0c6d14d5c836dea9c755ef15ed4d312c340d6166acc5277c36a38436b9",
+    "kodim19_qp32.json": "17071e220e9f478e655c534fcd2ee666bd29ed5e816f346c0e35d2c102c7d0f2",
+    "kodim19_qp48.json": "e151473aacde8e32ed145231a89aecdca1895429ae136640ce05aedcd627d0e2",
+    "kodim19_qp63.json": "ac0c7262529517a330d0a95a42f5d10ffbaea9dc4a2dcd7fea17ca8e141550f3",
+    "kodim20_qp0.json": "46c2646b15f9d392894519f341a868a19212244d10d5c6b1da9114d711692873",
+    "kodim20_qp16.json": "248c6fdcb14e8a6d421825f3f5f81897634982deabf03594acc935fe176f4532",
+    "kodim20_qp32.json": "81d9e8b6645e83e4ae9ea7e4ceeeee0342379ecaddd23c0cda908426a91e5237",
+    "kodim20_qp48.json": "d15123fedb141098df2cb0a14490a99589200e79a08f2cb41378c7cbb4cfe67a",
+    "kodim20_qp63.json": "a136e12a8f71261d85161e2ac2fbcada93496dc77e04d6507855b184fdf0bf46",
+    "kodim21_qp0.json": "110e5fe02a80bf309d80786934d8b59461213e98f7427f9acae2a2f3a1889968",
+    "kodim21_qp16.json": "3e1d56feec4c3ee7938f39d7fe4aec636674dc32e46442c5b3718b18a90d4f9c",
+    "kodim21_qp32.json": "731ca91de41933443bbe41323000f1d281fea9b116647580090ba1d7abdff2c9",
+    "kodim21_qp48.json": "1aa9ba56f104b128318f78a70be780e6a97850e855d69bd4ee55b1521ea800bd",
+    "kodim21_qp63.json": "c904fa63eb32f29d4b10bb19b3fab02e9df1c0684f5cadefa42efd97d015d248",
+    "kodim22_qp0.json": "9afae01ac3186908518f3653d08a5d3b84b5911fdbc57b7ffb4bf655031608a1",
+    "kodim22_qp16.json": "aff6865f9719f1c096b931c1f4eb62b58858f0e42ba146fd46d7a1fcd9f60219",
+    "kodim22_qp32.json": "3b6aa4687167f143f9ae7af57a6420a5243fffa51acb35a37eb12cb54cae56d3",
+    "kodim22_qp48.json": "7e85d9b494c083f5ddbd809dd248b08d63a33131b1b58e2ebc0b1ede82c698bf",
+    "kodim22_qp63.json": "2baa070391b4938257ec645802c3841fefe84d7e7bbb0ed328f1664218c9a259",
+    "kodim23_qp0.json": "81228868d15bb48f8558e279c026346fca7b2c25cf64e5d7e382f86e400856f3",
+    "kodim23_qp16.json": "b44a571ff935dc07b06045ff4360d1bcec5e4a35c7f2f6ce00a1a409a53749e7",
+    "kodim23_qp32.json": "c67d5b4150ca73047cde0895c6e191d004b3da5d222b04b0433d14d27b8ad9d6",
+    "kodim23_qp48.json": "11075fc5736b8e7c09440926c49a514b931c3e35d0bd253dedd676d8295d939c",
+    "kodim23_qp63.json": "d3f1771dc2803d6701acc2180692689302bfa930e6805e59c6b95b2fe8898c40",
+    "kodim24_qp0.json": "b02b4a97e1b46a3942a748155fc255a95a67feae1eeb59ec1ece8eddeaa5fc7b",
+    "kodim24_qp16.json": "f9ea526c6bed7f1d6993c41877d0fddee8807c48c06dc77a8be3fb4fd30f8dd3",
+    "kodim24_qp32.json": "1367038985232a1ce8d679f7c45963ec32809247a80b06cb6fa265b5cb772e3a",
+    "kodim24_qp48.json": "1f01df9f877ab2f98a7d0ae0392405a4e74f5e98d6955bb247850e3e4bd0454d",
+    "kodim24_qp63.json": "6454d05563a5803b425f7ea4ede25f223402171f277be4127ce7c90e26cae602"
+  },
+  "bootstrap": "10,000 paired image-cluster draws, seed 20261005; fixed weights, plan and codec.",
+  "overall": {
+    "n": 120,
+    "changed": 14,
+    "mean_rgb_improvement_db": -0.00021069040543153405,
+    "rgb_image_cluster_ci95_db": [
+      -0.0005474441534095506,
+      5.555768941656882e-05
+    ],
+    "mean_444_improvement_db": -0.00022145092931505188,
+    "improved": 6,
+    "worsened": 8,
+    "unchanged": 106,
+    "changed_only_mean_rgb_improvement_db": -0.0018059177608417201,
+    "worst_changed_rgb_improvement_db": -0.015023895239300717
+  },
+  "per_qp": {
+    "0": {
+      "n": 24,
+      "changed": 1,
+      "mean_rgb_improvement_db": 4.0090820356078855e-05,
+      "rgb_image_cluster_ci95_db": [
+        0.0,
+        0.00012027246106823654
+      ],
+      "mean_444_improvement_db": 5.1792267877063306e-05,
+      "improved": 1,
+      "worsened": 0,
+      "unchanged": 23,
+      "changed_only_mean_rgb_improvement_db": 0.0009621796885458925,
+      "worst_changed_rgb_improvement_db": 0.0009621796885458925
+    },
+    "16": {
+      "n": 24,
+      "changed": 4,
+      "mean_rgb_improvement_db": 1.054339615309064e-05,
+      "rgb_image_cluster_ci95_db": [
+        -0.0004079466088008178,
+        0.0004310133182133131
+      ],
+      "mean_444_improvement_db": -1.5546345342818595e-05,
+      "improved": 2,
+      "worsened": 2,
+      "unchanged": 20,
+      "changed_only_mean_rgb_improvement_db": 6.326037691854378e-05,
+      "worst_changed_rgb_improvement_db": -0.003263572870406542
+    },
+    "32": {
+      "n": 24,
+      "changed": 3,
+      "mean_rgb_improvement_db": 0.00011716068326896916,
+      "rgb_image_cluster_ci95_db": [
+        -6.78771669277966e-05,
+        0.0004292504063881104
+      ],
+      "mean_444_improvement_db": -7.975491084489323e-06,
+      "improved": 1,
+      "worsened": 2,
+      "unchanged": 21,
+      "changed_only_mean_rgb_improvement_db": 0.0009372854661517533,
+      "worst_changed_rgb_improvement_db": -0.0005430173354223728
+    },
+    "48": {
+      "n": 24,
+      "changed": 2,
+      "mean_rgb_improvement_db": 0.00011835086393676703,
+      "rgb_image_cluster_ci95_db": [
+        0.0,
+        0.0003116255074894846
+      ],
+      "mean_444_improvement_db": 0.00015015225149943786,
+      "improved": 2,
+      "worsened": 0,
+      "unchanged": 22,
+      "changed_only_mean_rgb_improvement_db": 0.0014202103672412043,
+      "worst_changed_rgb_improvement_db": 0.0010422500236995952
+    },
+    "63": {
+      "n": 24,
+      "changed": 4,
+      "mean_rgb_improvement_db": -0.0013395977908725756,
+      "rgb_image_cluster_ci95_db": [
+        -0.002920378157040323,
+        -0.00015747319353551353
+      ],
+      "mean_444_improvement_db": -0.0012856773295244527,
+      "improved": 0,
+      "worsened": 4,
+      "unchanged": 20,
+      "changed_only_mean_rgb_improvement_db": -0.008037586745235454,
+      "worst_changed_rgb_improvement_db": -0.015023895239300717
+    }
+  },
+  "rows": [
+    {
+      "image": "kodim01.png",
+      "qp": 0,
+      "changed": false,
+      "rgb_improvement_db": 0.0,
+      "ycbcr444_improvement_db": 0.0
+    },
+    {
+      "image": "kodim01.png",
+      "qp": 16,
+      "changed": true,
+      "rgb_improvement_db": 0.0015426006916636006,
+      "ycbcr444_improvement_db": 0.0012697833176545474
+    },
+    {
+      "image": "kodim01.png",
+      "qp": 32,
+      "changed": false,
+      "rgb_improvement_db": 0.0,
+      "ycbcr444_improvement_db": 0.0
+    },
+    {
+      "image": "kodim01.png",
+      "qp": 48,
+      "changed": false,
+      "rgb_improvement_db": 0.0,
+      "ycbcr444_improvement_db": 0.0
+    },
+    {
+      "image": "kodim01.png",
+      "qp": 63,
+      "changed": false,
+      "rgb_improvement_db": 0.0,
+      "ycbcr444_improvement_db": 0.0
+    },
+    {
+      "image": "kodim02.png",
+      "qp": 0,
+      "changed": false,
+      "rgb_improvement_db": 0.0,
+      "ycbcr444_improvement_db": 0.0
+    },
+    {
+      "image": "kodim02.png",
+      "qp": 16,
+      "changed": false,
+      "rgb_improvement_db": 0.0,
+      "ycbcr444_improvement_db": 0.0
+    },
+    {
+      "image": "kodim02.png",
+      "qp": 32,
+      "changed": true,
+      "rgb_improvement_db": -0.0005430173354223728,
+      "ycbcr444_improvement_db": -0.000536383749699432
+    },
+    {
+      "image": "kodim02.png",
+      "qp": 48,
+      "changed": true,
+      "rgb_improvement_db": 0.0017981707107828134,
+      "ycbcr444_improvement_db": 0.0021059911581932894
+    },
+    {
+      "image": "kodim02.png",
+      "qp": 63,
+      "changed": false,
+      "rgb_improvement_db": 0.0,
+      "ycbcr444_improvement_db": 0.0
+    },
+    {
+      "image": "kodim03.png",
+      "qp": 0,
+      "changed": false,
+      "rgb_improvement_db": 0.0,
+      "ycbcr444_improvement_db": 0.0
+    },
+    {
+      "image": "kodim03.png",
+      "qp": 16,
+      "changed": false,
+      "rgb_improvement_db": 0.0,
+      "ycbcr444_improvement_db": 0.0
+    },
+    {
+      "image": "kodim03.png",
+      "qp": 32,
+      "changed": false,
+      "rgb_improvement_db": 0.0,
+      "ycbcr444_improvement_db": 0.0
+    },
+    {
+      "image": "kodim03.png",
+      "qp": 48,
+      "changed": false,
+      "rgb_improvement_db": 0.0,
+      "ycbcr444_improvement_db": 0.0
+    },
+    {
+      "image": "kodim03.png",
+      "qp": 63,
+      "changed": true,
+      "rgb_improvement_db": -0.015023895239300717,
+      "ycbcr444_improvement_db": -0.015329769357989574
+    },
+    {
+      "image": "kodim04.png",
+      "qp": 0,
+      "changed": false,
+      "rgb_improvement_db": 0.0,
+      "ycbcr444_improvement_db": 0.0
+    },
+    {
+      "image": "kodim04.png",
+      "qp": 16,
+      "changed": false,
+      "rgb_improvement_db": 0.0,
+      "ycbcr444_improvement_db": 0.0
+    },
+    {
+      "image": "kodim04.png",
+      "qp": 32,
+      "changed": true,
+      "rgb_improvement_db": -7.912951722725059e-05,
+      "ycbcr444_improvement_db": -0.0001580804352203906
+    },
+    {
+      "image": "kodim04.png",
+      "qp": 48,
+      "changed": false,
+      "rgb_improvement_db": 0.0,
+      "ycbcr444_improvement_db": 0.0
+    },
+    {
+      "image": "kodim04.png",
+      "qp": 63,
+      "changed": false,
+      "rgb_improvement_db": 0.0,
+      "ycbcr444_improvement_db": 0.0
+    },
+    {
+      "image": "kodim05.png",
+      "qp": 0,
+      "changed": false,
+      "rgb_improvement_db": 0.0,
+      "ycbcr444_improvement_db": 0.0
+    },
+    {
+      "image": "kodim05.png",
+      "qp": 16,
+      "changed": false,
+      "rgb_improvement_db": 0.0,
+      "ycbcr444_improvement_db": 0.0
+    },
+    {
+      "image": "kodim05.png",
+      "qp": 32,
+      "changed": false,
+      "rgb_improvement_db": 0.0,
+      "ycbcr444_improvement_db": 0.0
+    },
+    {
+      "image": "kodim05.png",
+      "qp": 48,
+      "changed": false,
+      "rgb_improvement_db": 0.0,
+      "ycbcr444_improvement_db": 0.0
+    },
+    {
+      "image": "kodim05.png",
+      "qp": 63,
+      "changed": false,
+      "rgb_improvement_db": 0.0,
+      "ycbcr444_improvement_db": 0.0
+    },
+    {
+      "image": "kodim06.png",
+      "qp": 0,
+      "changed": false,
+      "rgb_improvement_db": 0.0,
+      "ycbcr444_improvement_db": 0.0
+    },
+    {
+      "image": "kodim06.png",
+      "qp": 16,
+      "changed": false,
+      "rgb_improvement_db": 0.0,
+      "ycbcr444_improvement_db": 0.0
+    },
+    {
+      "image": "kodim06.png",
+      "qp": 32,
+      "changed": false,
+      "rgb_improvement_db": 0.0,
+      "ycbcr444_improvement_db": 0.0
+    },
+    {
+      "image": "kodim06.png",
+      "qp": 48,
+      "changed": false,
+      "rgb_improvement_db": 0.0,
+      "ycbcr444_improvement_db": 0.0
+    },
+    {
+      "image": "kodim06.png",
+      "qp": 63,
+      "changed": false,
+      "rgb_improvement_db": 0.0,
+      "ycbcr444_improvement_db": 0.0
+    },
+    {
+      "image": "kodim07.png",
+      "qp": 0,
+      "changed": false,
+      "rgb_improvement_db": 0.0,
+      "ycbcr444_improvement_db": 0.0
+    },
+    {
+      "image": "kodim07.png",
+      "qp": 16,
+      "changed": false,
+      "rgb_improvement_db": 0.0,
+      "ycbcr444_improvement_db": 0.0
+    },
+    {
+      "image": "kodim07.png",
+      "qp": 32,
+      "changed": false,
+      "rgb_improvement_db": 0.0,
+      "ycbcr444_improvement_db": 0.0
+    },
+    {
+      "image": "kodim07.png",
+      "qp": 48,
+      "changed": false,
+      "rgb_improvement_db": 0.0,
+      "ycbcr444_improvement_db": 0.0
+    },
+    {
+      "image": "kodim07.png",
+      "qp": 63,
+      "changed": false,
+      "rgb_improvement_db": 0.0,
+      "ycbcr444_improvement_db": 0.0
+    },
+    {
+      "image": "kodim08.png",
+      "qp": 0,
+      "changed": false,
+      "rgb_improvement_db": 0.0,
+      "ycbcr444_improvement_db": 0.0
+    },
+    {
+      "image": "kodim08.png",
+      "qp": 16,
+      "changed": false,
+      "rgb_improvement_db": 0.0,
+      "ycbcr444_improvement_db": 0.0
+    },
+    {
+      "image": "kodim08.png",
+      "qp": 32,
+      "changed": false,
+      "rgb_improvement_db": 0.0,
+      "ycbcr444_improvement_db": 0.0
+    },
+    {
+      "image": "kodim08.png",
+      "qp": 48,
+      "changed": false,
+      "rgb_improvement_db": 0.0,
+      "ycbcr444_improvement_db": 0.0
+    },
+    {
+      "image": "kodim08.png",
+      "qp": 63,
+      "changed": false,
+      "rgb_improvement_db": 0.0,
+      "ycbcr444_improvement_db": 0.0
+    },
+    {
+      "image": "kodim09.png",
+      "qp": 0,
+      "changed": false,
+      "rgb_improvement_db": 0.0,
+      "ycbcr444_improvement_db": 0.0
+    },
+    {
+      "image": "kodim09.png",
+      "qp": 16,
+      "changed": false,
+      "rgb_improvement_db": 0.0,
+      "ycbcr444_improvement_db": 0.0
+    },
+    {
+      "image": "kodim09.png",
+      "qp": 32,
+      "changed": false,
+      "rgb_improvement_db": 0.0,
+      "ycbcr444_improvement_db": 0.0
+    },
+    {
+      "image": "kodim09.png",
+      "qp": 48,
+      "changed": false,
+      "rgb_improvement_db": 0.0,
+      "ycbcr444_improvement_db": 0.0
+    },
+    {
+      "image": "kodim09.png",
+      "qp": 63,
+      "changed": false,
+      "rgb_improvement_db": 0.0,
+      "ycbcr444_improvement_db": 0.0
+    },
+    {
+      "image": "kodim10.png",
+      "qp": 0,
+      "changed": false,
+      "rgb_improvement_db": 0.0,
+      "ycbcr444_improvement_db": 0.0
+    },
+    {
+      "image": "kodim10.png",
+      "qp": 16,
+      "changed": false,
+      "rgb_improvement_db": 0.0,
+      "ycbcr444_improvement_db": 0.0
+    },
+    {
+      "image": "kodim10.png",
+      "qp": 32,
+      "changed": false,
+      "rgb_improvement_db": 0.0,
+      "ycbcr444_improvement_db": 0.0
+    },
+    {
+      "image": "kodim10.png",
+      "qp": 48,
+      "changed": false,
+      "rgb_improvement_db": 0.0,
+      "ycbcr444_improvement_db": 0.0
+    },
+    {
+      "image": "kodim10.png",
+      "qp": 63,
+      "changed": true,
+      "rgb_improvement_db": -0.00486361004237,
+      "ycbcr444_improvement_db": -0.0023707373751851155
+    },
+    {
+      "image": "kodim11.png",
+      "qp": 0,
+      "changed": false,
+      "rgb_improvement_db": 0.0,
+      "ycbcr444_improvement_db": 0.0
+    },
+    {
+      "image": "kodim11.png",
+      "qp": 16,
+      "changed": false,
+      "rgb_improvement_db": 0.0,
+      "ycbcr444_improvement_db": 0.0
+    },
+    {
+      "image": "kodim11.png",
+      "qp": 32,
+      "changed": false,
+      "rgb_improvement_db": 0.0,
+      "ycbcr444_improvement_db": 0.0
+    },
+    {
+      "image": "kodim11.png",
+      "qp": 48,
+      "changed": false,
+      "rgb_improvement_db": 0.0,
+      "ycbcr444_improvement_db": 0.0
+    },
+    {
+      "image": "kodim11.png",
+      "qp": 63,
+      "changed": true,
+      "rgb_improvement_db": -0.008483485054418776,
+      "ycbcr444_improvement_db": -0.008902806866602721
+    },
+    {
+      "image": "kodim12.png",
+      "qp": 0,
+      "changed": false,
+      "rgb_improvement_db": 0.0,
+      "ycbcr444_improvement_db": 0.0
+    },
+    {
+      "image": "kodim12.png",
+      "qp": 16,
+      "changed": false,
+      "rgb_improvement_db": 0.0,
+      "ycbcr444_improvement_db": 0.0
+    },
+    {
+      "image": "kodim12.png",
+      "qp": 32,
+      "changed": false,
+      "rgb_improvement_db": 0.0,
+      "ycbcr444_improvement_db": 0.0
+    },
+    {
+      "image": "kodim12.png",
+      "qp": 48,
+      "changed": false,
+      "rgb_improvement_db": 0.0,
+      "ycbcr444_improvement_db": 0.0
+    },
+    {
+      "image": "kodim12.png",
+      "qp": 63,
+      "changed": false,
+      "rgb_improvement_db": 0.0,
+      "ycbcr444_improvement_db": 0.0
+    },
+    {
+      "image": "kodim13.png",
+      "qp": 0,
+      "changed": true,
+      "rgb_improvement_db": 0.0009621796885458925,
+      "ycbcr444_improvement_db": 0.0012430144290495194
+    },
+    {
+      "image": "kodim13.png",
+      "qp": 16,
+      "changed": true,
+      "rgb_improvement_db": -0.001389745690064663,
+      "ycbcr444_improvement_db": -0.001352884132228813
+    },
+    {
+      "image": "kodim13.png",
+      "qp": 32,
+      "changed": false,
+      "rgb_improvement_db": 0.0,
+      "ycbcr444_improvement_db": 0.0
+    },
+    {
+      "image": "kodim13.png",
+      "qp": 48,
+      "changed": false,
+      "rgb_improvement_db": 0.0,
+      "ycbcr444_improvement_db": 0.0
+    },
+    {
+      "image": "kodim13.png",
+      "qp": 63,
+      "changed": false,
+      "rgb_improvement_db": 0.0,
+      "ycbcr444_improvement_db": 0.0
+    },
+    {
+      "image": "kodim14.png",
+      "qp": 0,
+      "changed": false,
+      "rgb_improvement_db": 0.0,
+      "ycbcr444_improvement_db": 0.0
+    },
+    {
+      "image": "kodim14.png",
+      "qp": 16,
+      "changed": true,
+      "rgb_improvement_db": 0.00336375937648178,
+      "ycbcr444_improvement_db": 0.003210866416116148
+    },
+    {
+      "image": "kodim14.png",
+      "qp": 32,
+      "changed": false,
+      "rgb_improvement_db": 0.0,
+      "ycbcr444_improvement_db": 0.0
+    },
+    {
+      "image": "kodim14.png",
+      "qp": 48,
+      "changed": false,
+      "rgb_improvement_db": 0.0,
+      "ycbcr444_improvement_db": 0.0
+    },
+    {
+      "image": "kodim14.png",
+      "qp": 63,
+      "changed": false,
+      "rgb_improvement_db": 0.0,
+      "ycbcr444_improvement_db": 0.0
+    },
+    {
+      "image": "kodim15.png",
+      "qp": 0,
+      "changed": false,
+      "rgb_improvement_db": 0.0,
+      "ycbcr444_improvement_db": 0.0
+    },
+    {
+      "image": "kodim15.png",
+      "qp": 16,
+      "changed": false,
+      "rgb_improvement_db": 0.0,
+      "ycbcr444_improvement_db": 0.0
+    },
+    {
+      "image": "kodim15.png",
+      "qp": 32,
+      "changed": false,
+      "rgb_improvement_db": 0.0,
+      "ycbcr444_improvement_db": 0.0
+    },
+    {
+      "image": "kodim15.png",
+      "qp": 48,
+      "changed": false,
+      "rgb_improvement_db": 0.0,
+      "ycbcr444_improvement_db": 0.0
+    },
+    {
+      "image": "kodim15.png",
+      "qp": 63,
+      "changed": false,
+      "rgb_improvement_db": 0.0,
+      "ycbcr444_improvement_db": 0.0
+    },
+    {
+      "image": "kodim16.png",
+      "qp": 0,
+      "changed": false,
+      "rgb_improvement_db": 0.0,
+      "ycbcr444_improvement_db": 0.0
+    },
+    {
+      "image": "kodim16.png",
+      "qp": 16,
+      "changed": false,
+      "rgb_improvement_db": 0.0,
+      "ycbcr444_improvement_db": 0.0
+    },
+    {
+      "image": "kodim16.png",
+      "qp": 32,
+      "changed": false,
+      "rgb_improvement_db": 0.0,
+      "ycbcr444_improvement_db": 0.0
+    },
+    {
+      "image": "kodim16.png",
+      "qp": 48,
+      "changed": false,
+      "rgb_improvement_db": 0.0,
+      "ycbcr444_improvement_db": 0.0
+    },
+    {
+      "image": "kodim16.png",
+      "qp": 63,
+      "changed": false,
+      "rgb_improvement_db": 0.0,
+      "ycbcr444_improvement_db": 0.0
+    },
+    {
+      "image": "kodim17.png",
+      "qp": 0,
+      "changed": false,
+      "rgb_improvement_db": 0.0,
+      "ycbcr444_improvement_db": 0.0
+    },
+    {
+      "image": "kodim17.png",
+      "qp": 16,
+      "changed": false,
+      "rgb_improvement_db": 0.0,
+      "ycbcr444_improvement_db": 0.0
+    },
+    {
+      "image": "kodim17.png",
+      "qp": 32,
+      "changed": false,
+      "rgb_improvement_db": 0.0,
+      "ycbcr444_improvement_db": 0.0
+    },
+    {
+      "image": "kodim17.png",
+      "qp": 48,
+      "changed": false,
+      "rgb_improvement_db": 0.0,
+      "ycbcr444_improvement_db": 0.0
+    },
+    {
+      "image": "kodim17.png",
+      "qp": 63,
+      "changed": false,
+      "rgb_improvement_db": 0.0,
+      "ycbcr444_improvement_db": 0.0
+    },
+    {
+      "image": "kodim18.png",
+      "qp": 0,
+      "changed": false,
+      "rgb_improvement_db": 0.0,
+      "ycbcr444_improvement_db": 0.0
+    },
+    {
+      "image": "kodim18.png",
+      "qp": 16,
+      "changed": false,
+      "rgb_improvement_db": 0.0,
+      "ycbcr444_improvement_db": 0.0
+    },
+    {
+      "image": "kodim18.png",
+      "qp": 32,
+      "changed": false,
+      "rgb_improvement_db": 0.0,
+      "ycbcr444_improvement_db": 0.0
+    },
+    {
+      "image": "kodim18.png",
+      "qp": 48,
+      "changed": false,
+      "rgb_improvement_db": 0.0,
+      "ycbcr444_improvement_db": 0.0
+    },
+    {
+      "image": "kodim18.png",
+      "qp": 63,
+      "changed": false,
+      "rgb_improvement_db": 0.0,
+      "ycbcr444_improvement_db": 0.0
+    },
+    {
+      "image": "kodim19.png",
+      "qp": 0,
+      "changed": false,
+      "rgb_improvement_db": 0.0,
+      "ycbcr444_improvement_db": 0.0
+    },
+    {
+      "image": "kodim19.png",
+      "qp": 16,
+      "changed": true,
+      "rgb_improvement_db": -0.003263572870406542,
+      "ycbcr444_improvement_db": -0.0035008778897695292
+    },
+    {
+      "image": "kodim19.png",
+      "qp": 32,
+      "changed": false,
+      "rgb_improvement_db": 0.0,
+      "ycbcr444_improvement_db": 0.0
+    },
+    {
+      "image": "kodim19.png",
+      "qp": 48,
+      "changed": false,
+      "rgb_improvement_db": 0.0,
+      "ycbcr444_improvement_db": 0.0
+    },
+    {
+      "image": "kodim19.png",
+      "qp": 63,
+      "changed": false,
+      "rgb_improvement_db": 0.0,
+      "ycbcr444_improvement_db": 0.0
+    },
+    {
+      "image": "kodim20.png",
+      "qp": 0,
+      "changed": false,
+      "rgb_improvement_db": 0.0,
+      "ycbcr444_improvement_db": 0.0
+    },
+    {
+      "image": "kodim20.png",
+      "qp": 16,
+      "changed": false,
+      "rgb_improvement_db": 0.0,
+      "ycbcr444_improvement_db": 0.0
+    },
+    {
+      "image": "kodim20.png",
+      "qp": 32,
+      "changed": true,
+      "rgb_improvement_db": 0.003434003251104883,
+      "ycbcr444_improvement_db": 0.0005030523988920788
+    },
+    {
+      "image": "kodim20.png",
+      "qp": 48,
+      "changed": false,
+      "rgb_improvement_db": 0.0,
+      "ycbcr444_improvement_db": 0.0
+    },
+    {
+      "image": "kodim20.png",
+      "qp": 63,
+      "changed": false,
+      "rgb_improvement_db": 0.0,
+      "ycbcr444_improvement_db": 0.0
+    },
+    {
+      "image": "kodim21.png",
+      "qp": 0,
+      "changed": false,
+      "rgb_improvement_db": 0.0,
+      "ycbcr444_improvement_db": 0.0
+    },
+    {
+      "image": "kodim21.png",
+      "qp": 16,
+      "changed": false,
+      "rgb_improvement_db": 0.0,
+      "ycbcr444_improvement_db": 0.0
+    },
+    {
+      "image": "kodim21.png",
+      "qp": 32,
+      "changed": false,
+      "rgb_improvement_db": 0.0,
+      "ycbcr444_improvement_db": 0.0
+    },
+    {
+      "image": "kodim21.png",
+      "qp": 48,
+      "changed": false,
+      "rgb_improvement_db": 0.0,
+      "ycbcr444_improvement_db": 0.0
+    },
+    {
+      "image": "kodim21.png",
+      "qp": 63,
+      "changed": true,
+      "rgb_improvement_db": -0.003779356644852325,
+      "ycbcr444_improvement_db": -0.004252942308809454
+    },
+    {
+      "image": "kodim22.png",
+      "qp": 0,
+      "changed": false,
+      "rgb_improvement_db": 0.0,
+      "ycbcr444_improvement_db": 0.0
+    },
+    {
+      "image": "kodim22.png",
+      "qp": 16,
+      "changed": false,
+      "rgb_improvement_db": 0.0,
+      "ycbcr444_improvement_db": 0.0
+    },
+    {
+      "image": "kodim22.png",
+      "qp": 32,
+      "changed": false,
+      "rgb_improvement_db": 0.0,
+      "ycbcr444_improvement_db": 0.0
+    },
+    {
+      "image": "kodim22.png",
+      "qp": 48,
+      "changed": true,
+      "rgb_improvement_db": 0.0010422500236995952,
+      "ycbcr444_improvement_db": 0.001497662877793219
+    },
+    {
+      "image": "kodim22.png",
+      "qp": 63,
+      "changed": false,
+      "rgb_improvement_db": 0.0,
+      "ycbcr444_improvement_db": 0.0
+    },
+    {
+      "image": "kodim23.png",
+      "qp": 0,
+      "changed": false,
+      "rgb_improvement_db": 0.0,
+      "ycbcr444_improvement_db": 0.0
+    },
+    {
+      "image": "kodim23.png",
+      "qp": 16,
+      "changed": false,
+      "rgb_improvement_db": 0.0,
+      "ycbcr444_improvement_db": 0.0
+    },
+    {
+      "image": "kodim23.png",
+      "qp": 32,
+      "changed": false,
+      "rgb_improvement_db": 0.0,
+      "ycbcr444_improvement_db": 0.0
+    },
+    {
+      "image": "kodim23.png",
+      "qp": 48,
+      "changed": false,
+      "rgb_improvement_db": 0.0,
+      "ycbcr444_improvement_db": 0.0
+    },
+    {
+      "image": "kodim23.png",
+      "qp": 63,
+      "changed": false,
+      "rgb_improvement_db": 0.0,
+      "ycbcr444_improvement_db": 0.0
+    },
+    {
+      "image": "kodim24.png",
+      "qp": 0,
+      "changed": false,
+      "rgb_improvement_db": 0.0,
+      "ycbcr444_improvement_db": 0.0
+    },
+    {
+      "image": "kodim24.png",
+      "qp": 16,
+      "changed": false,
+      "rgb_improvement_db": 0.0,
+      "ycbcr444_improvement_db": 0.0
+    },
+    {
+      "image": "kodim24.png",
+      "qp": 32,
+      "changed": false,
+      "rgb_improvement_db": 0.0,
+      "ycbcr444_improvement_db": 0.0
+    },
+    {
+      "image": "kodim24.png",
+      "qp": 48,
+      "changed": false,
+      "rgb_improvement_db": 0.0,
+      "ycbcr444_improvement_db": 0.0
+    },
+    {
+      "image": "kodim24.png",
+      "qp": 63,
+      "changed": false,
+      "rgb_improvement_db": 0.0,
+      "ycbcr444_improvement_db": 0.0
+    }
+  ]
+}

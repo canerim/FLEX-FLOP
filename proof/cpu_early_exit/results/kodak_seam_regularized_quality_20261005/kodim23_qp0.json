@@ -1,0 +1,43 @@
+{
+  "schema": 1,
+  "image": "kodim23.png",
+  "qp": 0,
+  "manifest_sha256": "5f4be04f40ff65695540a0db37bdff948177e7f4d73ecf8e8514bdfef16a23a8",
+  "placement_result_sha256": "f06a77d1f1950c7576a2bd66dd77ad3758309a1474169a658a3c8ce21ae4bbed",
+  "plan_sha256": "7a4b5a8600c7faeef4fef07ac321e511f494bc67563914b6568adc01c2b3be57",
+  "changed": false,
+  "original_map": [
+    3,
+    3,
+    2,
+    3,
+    3,
+    2
+  ],
+  "selected_map": [
+    3,
+    3,
+    2,
+    3,
+    3,
+    2
+  ],
+  "exit_counts": [
+    0,
+    0,
+    2,
+    4,
+    0,
+    0
+  ],
+  "mac_saved_pct": 29.186777862114244,
+  "original": {
+    "mse_rgb": 0.001334533211775124,
+    "mse_444": 0.00046751031186431646
+  },
+  "seam_regularized": {
+    "mse_rgb": 0.001334533211775124,
+    "mse_444": 0.00046751031186431646
+  },
+  "cpu_timing": null
+}
