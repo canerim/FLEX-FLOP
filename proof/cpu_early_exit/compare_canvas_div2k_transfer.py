@@ -62,6 +62,8 @@ def main() -> None:
         assert data['provenance']['exact_sha256'] == sha(EXACT)
         by_arm[name] = {(r['image'], r['qp']): r for r in data['rows']}
         assert set(by_arm[name]) == set(exact_by_key)
+    for key in ('manifest_sha256', 'released_sha256', 'e15_sha256'):
+        assert arms['zero']['provenance'][key] == arms['replicate']['provenance'][key]
     images = {image for image, _ in exact_by_key}
     assert len(images) == 24
     assert all({qp for image, qp in exact_by_key if image == im} == set(QPS)
@@ -93,6 +95,12 @@ def main() -> None:
             row[f'replicate_minus_zero_{repair}_db'] = (
                 row[f'replicate_{repair}_gain_db'] -
                 row[f'zero_{repair}_gain_db'])
+            if len(set(reference['exit_map'])) == 1:
+                assert abs(row[f'replicate_minus_zero_{repair}_db']) < 1e-10
+        for name in ARMS:
+            row[f'{name}_no_repair_minus_with_repair_db'] = (
+                row[f'{name}_no_repair_gain_db'] -
+                row[f'{name}_with_repair_gain_db'])
         paired.append(row)
 
     rng = np.random.default_rng(20261006)
@@ -100,6 +108,9 @@ def main() -> None:
             for repair in ('no_repair', 'with_repair')]
     keys += [f'replicate_minus_zero_{repair}_db'
              for repair in ('no_repair', 'with_repair')]
+    # Exploratory after inspecting the complete zero arm; the originally
+    # specified primary comparison remains replicate-minus-zero with repair.
+    keys += [f'{name}_no_repair_minus_with_repair_db' for name in ARMS]
     summary = {key: describe(paired, key, rng) for key in keys}
     per_qp = {str(qp): {key: describe([r for r in paired if r['qp'] == qp],
                                        key, rng) for key in keys}
@@ -122,6 +133,7 @@ def main() -> None:
         'input_sha256': {'exact': sha(EXACT),
                          **{name: sha(path) for name, path in ARMS.items()}},
         'bootstrap': '10000 image-cluster draws, preserving five QPs per image',
+        'exploratory_secondary': 'Within-arm removal of the previously trained seam repair was added after inspecting the complete active-zero transfer; do not call it a preregistered primary endpoint.',
         'summary': summary, 'per_qp': per_qp,
         'over_0p1_delta444': threshold,
         'threshold_transitions_vs_deployed': transitions,
