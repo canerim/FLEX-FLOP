@@ -86,14 +86,14 @@ def main()->None:
     ax.set_xticks(range(2),[f'Uniform\n(n={counts[0]})',f'Mixed depth\n(n={counts[1]})'])
     ax.set_xlim(-.48,1.48)
     ax.set_xlabel('Neighbouring exit depths')
+    ax.set_ylabel('Gain over deployed (dB)')
     ax.set_title('b   Context must match stage',loc='left',pad=8,
                  color='#183B5B',fontweight='bold')
 
-    ymin=min(ax_.get_ylim()[0] for ax_ in axes)
-    ymax=max(ax_.get_ylim()[1] for ax_ in axes)
-    pad=.04*(ymax-ymin)
-    for ax in axes: ax.set_ylim(ymin-pad,ymax+pad)
-    fig.subplots_adjust(left=.105,right=.985,bottom=.235,top=.88,wspace=.26)
+    # The QP63 stale-context tail is much larger than the edge-stratified
+    # means. Label each panel's scale rather than flattening panel b.
+    for ax in axes: ax.margins(y=.13)
+    fig.subplots_adjust(left=.105,right=.985,bottom=.235,top=.88,wspace=.35)
     OUT.mkdir(parents=True,exist_ok=True)
     for ext in ('pdf','svg','png'):
         fig.savefig(OUT/f'canvas_context.{ext}',dpi=300,facecolor='white')
@@ -102,7 +102,7 @@ def main()->None:
               'script_sha256':sha(Path(__file__)),
               'canvas_mm':[182.37,67.06],
               'n_cases':len(data['rows']),
-              'scope':'Paired bitstream quality, no runtime claim; panel b stratifies by frozen exit-map boundaries',
+              'scope':'Paired bitstream quality, no runtime claim; panel b stratifies by frozen exit-map boundaries; panels use independently labelled vertical scales',
               'artifacts':{f'canvas_context.{ext}':sha(OUT/f'canvas_context.{ext}')
                            for ext in ('pdf','svg','png')}}
     (OUT/'figure_evidence.json').write_text(json.dumps(evidence,indent=2)+'\n')
