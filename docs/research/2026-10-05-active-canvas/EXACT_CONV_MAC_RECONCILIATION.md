@@ -18,7 +18,8 @@ may still add runtime; this correction says nothing about latency.
 For the frozen deployed old-β policy, mean exact synthesis-convolution
 savings versus released D12 are **20.17%** on DIV2K calibration24,
 **19.48%** on DIV2K validation24 and **25.19%** on Kodak24, each at five
-QPs. The previously reported legacy cost-model means were 20.73%,
+QPs. Kodak's 24-image clustered 95% interval is **[22.74%, 27.49%]**.
+The previously reported legacy cost-model means were 20.73%,
 20.05% and 25.88%, respectively. Quality numbers and exit maps do not
 change. On the Kodak old-β maps, active-replicate/no-repair has **26.27%**
 exact saving, versus **26.82%** under the legacy formula; the mean

@@ -7,7 +7,7 @@
     "formula": "e0ceb2a3e4d5f8f7ce586f3af4663de32aabcb4e01cea3bf0b4d69a9008bf079",
     "mac_latency_audit": "7b5e431adcf3483bc16bc9d108f07cb3ccb30630ff167caad202767256a7ffc0",
     "coupler": "956a925b3fadd66f77d5f484abc4f6f1f6d6582afafa85b72bb1f45f14b16c25",
-    "script": "dfa3825bbb7a4c5477a85050c6ea7028ed7b76fe72069399d3764906783045b5"
+    "script": "68037153b2532e2226f7e1ee986f677926853f8c42e30da56e8a3dc46b9615d8"
   },
   "overall": {
     "n": 120,
@@ -1859,6 +1859,10 @@
     "calibration24": {
       "n": 120,
       "exact_mean_saving_pct": 20.172882323951125,
+      "image_cluster_ci95_pct": [
+        16.114949358168325,
+        24.47366405972926
+      ],
       "min_saving_pct": -1.0860703873098343,
       "max_saving_pct": 38.327506874300475,
       "source_sha256": "be3dc462c0f8c55db7da21806fac640f2a86711093beae66d0365cb2ae56394b"
@@ -1866,6 +1870,10 @@
     "validation24": {
       "n": 120,
       "exact_mean_saving_pct": 19.478221018547938,
+      "image_cluster_ci95_pct": [
+        16.310397120393528,
+        22.723028446016592
+      ],
       "min_saving_pct": -1.0860703873098343,
       "max_saving_pct": 38.327506874300475,
       "source_sha256": "e5832a42cdf1f1399b62c580bef64320b91ac7869e5a842cf87422f5c48c9a9f"
@@ -1873,6 +1881,10 @@
     "kodak24": {
       "n": 120,
       "exact_mean_saving_pct": 25.188404195050506,
+      "image_cluster_ci95_pct": [
+        22.742373786922016,
+        27.48591919875825
+      ],
       "min_saving_pct": -1.0860703873098343,
       "max_saving_pct": 38.327506874300475,
       "source_sha256": "755ab5961e7205f9f0c720945bc6e6c6365e78ba2919a0599b3ffec34b4be354"

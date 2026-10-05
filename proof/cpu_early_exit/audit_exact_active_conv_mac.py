@@ -65,12 +65,22 @@ def main()->None:
         data=json.loads(source.read_text())
         assert len(data['rows'])==120
         savings=[]
+        by_image={}
         for row in data['rows']:
             route=row['exit_map']
             count=[route.count(k) for k in range(6)]
             accounting=case_macs({'padded_shape':[512,768],'tile_counts':count})
-            savings.append(100*accounting['e15_routed_conv_mac_saving_fraction'])
+            saving=100*accounting['e15_routed_conv_mac_saving_fraction']
+            savings.append(saving)
+            by_image.setdefault(row['image'],{})[row['qp']]=saving
+        assert len(by_image)==24 and all(set(v)=={0,16,32,48,63} for v in by_image.values())
+        matrix=np.asarray([[by_image[image][qp] for qp in (0,16,32,48,63)]
+                           for image in sorted(by_image)])
+        rng=np.random.default_rng(20261005)
+        draw=rng.integers(0,24,size=(10000,24))
+        boot=matrix[draw].mean(axis=(1,2))
         deployed[cohort]={'n':len(savings),'exact_mean_saving_pct':float(np.mean(savings)),
+                          'image_cluster_ci95_pct':np.quantile(boot,[.025,.975]).tolist(),
                           'min_saving_pct':float(np.min(savings)),
                           'max_saving_pct':float(np.max(savings)),
                           'source_sha256':sha(source)}
