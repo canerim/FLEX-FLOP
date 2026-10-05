@@ -1,0 +1,1881 @@
+{
+  "scope": "Kodak24 x QP5 frozen old-beta maps, corrected exact synthesis Conv2d MAC for active-replicate/no-repair. Same FUFREF2/e15; no new reconstruction, quality, latency or native bitrate result.",
+  "reason": "Active depthwise F.conv2d takes (P+2)^2 input but emits P^2 outputs; input halo does not add convolution MAC. Historical frame_relative_cost also normalizes using rounded shares and an 8C^2 block proxy, while the real DepthConvBlock costs 7C^2+9C. Exact arithmetic follows mac_latency_audit.case_macs and removes GridSeamRepair.",
+  "source_sha256": {
+    "old": "f8665d02f31c327bafb58245a45626c0f7f4cc8e86f71f48848f17b350fe36ef",
+    "maps": "755ab5961e7205f9f0c720945bc6e6c6365e78ba2919a0599b3ffec34b4be354",
+    "formula": "e0ceb2a3e4d5f8f7ce586f3af4663de32aabcb4e01cea3bf0b4d69a9008bf079",
+    "mac_latency_audit": "7b5e431adcf3483bc16bc9d108f07cb3ccb30630ff167caad202767256a7ffc0",
+    "coupler": "956a925b3fadd66f77d5f484abc4f6f1f6d6582afafa85b72bb1f45f14b16c25",
+    "script": "dfa3825bbb7a4c5477a85050c6ea7028ed7b76fe72069399d3764906783045b5"
+  },
+  "overall": {
+    "n": 120,
+    "exact_mean_saving_pct": 26.274474582360334,
+    "legacy_minus_exact_mean_points": 0.549115843226345,
+    "legacy_minus_exact_min_points": -0.02245455661402243,
+    "legacy_minus_exact_max_points": 0.6560843725592349
+  },
+  "per_qp": {
+    "0": {
+      "n": 24,
+      "exact_mean_saving_pct": 35.27287633628571,
+      "legacy_minus_exact_mean_points": 0.6544841574999252,
+      "legacy_minus_exact_min_points": 0.6503244176753924,
+      "legacy_minus_exact_max_points": 0.6560843725592349
+    },
+    "16": {
+      "n": 24,
+      "exact_mean_saving_pct": 25.80683791389737,
+      "legacy_minus_exact_mean_points": 0.5918664897719254,
+      "legacy_minus_exact_min_points": 0.11555512501158738,
+      "legacy_minus_exact_max_points": 0.6541638906695368
+    },
+    "32": {
+      "n": 24,
+      "exact_mean_saving_pct": 25.747536996863385,
+      "legacy_minus_exact_mean_points": 0.5863160744655891,
+      "legacy_minus_exact_min_points": 0.11555512501158738,
+      "legacy_minus_exact_max_points": 0.6541638906695368
+    },
+    "48": {
+      "n": 24,
+      "exact_mean_saving_pct": 25.760894096622497,
+      "legacy_minus_exact_mean_points": 0.5328873139229221,
+      "legacy_minus_exact_min_points": 0.0465487940826641,
+      "legacy_minus_exact_max_points": 0.655124131948952
+    },
+    "63": {
+      "n": 24,
+      "exact_mean_saving_pct": 18.784227568132724,
+      "legacy_minus_exact_mean_points": 0.3800251804713635,
+      "legacy_minus_exact_min_points": -0.02245455661402243,
+      "legacy_minus_exact_max_points": 0.655124131948952
+    }
+  },
+  "rows": [
+    {
+      "image": "kodim01.png",
+      "qp": 0,
+      "exit_map": [
+        2,
+        2,
+        2,
+        2,
+        2,
+        3
+      ],
+      "legacy_active_no_repair_saving_pct": 37.584280838364506,
+      "exact_active_no_repair_saving_pct": 36.929156706415554,
+      "legacy_minus_exact_points": 0.655124131948952
+    },
+    {
+      "image": "kodim01.png",
+      "qp": 16,
+      "exit_map": [
+        3,
+        3,
+        3,
+        3,
+        3,
+        3
+      ],
+      "legacy_active_no_repair_saving_pct": 25.15737834811714,
+      "exact_active_no_repair_saving_pct": 24.507053930441746,
+      "legacy_minus_exact_points": 0.6503244176753924
+    },
+    {
+      "image": "kodim01.png",
+      "qp": 32,
+      "exit_map": [
+        3,
+        3,
+        3,
+        3,
+        3,
+        3
+      ],
+      "legacy_active_no_repair_saving_pct": 25.15737834811714,
+      "exact_active_no_repair_saving_pct": 24.507053930441746,
+      "legacy_minus_exact_points": 0.6503244176753924
+    },
+    {
+      "image": "kodim01.png",
+      "qp": 48,
+      "exit_map": [
+        3,
+        3,
+        3,
+        3,
+        3,
+        3
+      ],
+      "legacy_active_no_repair_saving_pct": 25.15737834811714,
+      "exact_active_no_repair_saving_pct": 24.507053930441746,
+      "legacy_minus_exact_points": 0.6503244176753924
+    },
+    {
+      "image": "kodim01.png",
+      "qp": 63,
+      "exit_map": [
+        3,
+        5,
+        5,
+        3,
+        3,
+        3
+      ],
+      "legacy_active_no_repair_saving_pct": 16.764100712760655,
+      "exact_active_no_repair_saving_pct": 16.338035953627838,
+      "legacy_minus_exact_points": 0.4260647591328173
+    },
+    {
+      "image": "kodim02.png",
+      "qp": 0,
+      "exit_map": [
+        2,
+        2,
+        2,
+        2,
+        2,
+        2
+      ],
+      "legacy_active_no_repair_saving_pct": 40.06966163416955,
+      "exact_active_no_repair_saving_pct": 39.413577261610314,
+      "legacy_minus_exact_points": 0.6560843725592349
+    },
+    {
+      "image": "kodim02.png",
+      "qp": 16,
+      "exit_map": [
+        3,
+        3,
+        3,
+        3,
+        3,
+        3
+      ],
+      "legacy_active_no_repair_saving_pct": 25.15737834811714,
+      "exact_active_no_repair_saving_pct": 24.507053930441746,
+      "legacy_minus_exact_points": 0.6503244176753924
+    },
+    {
+      "image": "kodim02.png",
+      "qp": 32,
+      "exit_map": [
+        3,
+        3,
+        3,
+        3,
+        3,
+        3
+      ],
+      "legacy_active_no_repair_saving_pct": 25.15737834811714,
+      "exact_active_no_repair_saving_pct": 24.507053930441746,
+      "legacy_minus_exact_points": 0.6503244176753924
+    },
+    {
+      "image": "kodim02.png",
+      "qp": 48,
+      "exit_map": [
+        3,
+        3,
+        3,
+        3,
+        3,
+        2
+      ],
+      "legacy_active_no_repair_saving_pct": 27.6427606340383,
+      "exact_active_no_repair_saving_pct": 26.991474485636513,
+      "legacy_minus_exact_points": 0.6512861484017876
+    },
+    {
+      "image": "kodim02.png",
+      "qp": 63,
+      "exit_map": [
+        3,
+        4,
+        3,
+        3,
+        3,
+        3
+      ],
+      "legacy_active_no_repair_saving_pct": 23.2913002416721,
+      "exact_active_no_repair_saving_pct": 22.730099072833042,
+      "legacy_minus_exact_points": 0.5612011688390588
+    },
+    {
+      "image": "kodim03.png",
+      "qp": 0,
+      "exit_map": [
+        3,
+        2,
+        2,
+        2,
+        2,
+        2
+      ],
+      "legacy_active_no_repair_saving_pct": 37.584280838364506,
+      "exact_active_no_repair_saving_pct": 36.929156706415554,
+      "legacy_minus_exact_points": 0.655124131948952
+    },
+    {
+      "image": "kodim03.png",
+      "qp": 16,
+      "exit_map": [
+        3,
+        3,
+        2,
+        2,
+        3,
+        3
+      ],
+      "legacy_active_no_repair_saving_pct": 30.12813994039636,
+      "exact_active_no_repair_saving_pct": 29.47589504083127,
+      "legacy_minus_exact_points": 0.6522448995650905
+    },
+    {
+      "image": "kodim03.png",
+      "qp": 32,
+      "exit_map": [
+        3,
+        3,
+        2,
+        2,
+        3,
+        3
+      ],
+      "legacy_active_no_repair_saving_pct": 30.12813994039636,
+      "exact_active_no_repair_saving_pct": 29.47589504083127,
+      "legacy_minus_exact_points": 0.6522448995650905
+    },
+    {
+      "image": "kodim03.png",
+      "qp": 48,
+      "exit_map": [
+        3,
+        3,
+        2,
+        2,
+        3,
+        3
+      ],
+      "legacy_active_no_repair_saving_pct": 30.12813994039636,
+      "exact_active_no_repair_saving_pct": 29.47589504083127,
+      "legacy_minus_exact_points": 0.6522448995650905
+    },
+    {
+      "image": "kodim03.png",
+      "qp": 63,
+      "exit_map": [
+        5,
+        5,
+        2,
+        2,
+        3,
+        3
+      ],
+      "legacy_active_no_repair_saving_pct": 21.734862305709015,
+      "exact_active_no_repair_saving_pct": 21.30687706401736,
+      "legacy_minus_exact_points": 0.42798524169165475
+    },
+    {
+      "image": "kodim04.png",
+      "qp": 0,
+      "exit_map": [
+        2,
+        2,
+        2,
+        2,
+        2,
+        3
+      ],
+      "legacy_active_no_repair_saving_pct": 37.584280838364506,
+      "exact_active_no_repair_saving_pct": 36.929156706415554,
+      "legacy_minus_exact_points": 0.655124131948952
+    },
+    {
+      "image": "kodim04.png",
+      "qp": 16,
+      "exit_map": [
+        3,
+        3,
+        2,
+        3,
+        3,
+        3
+      ],
+      "legacy_active_no_repair_saving_pct": 27.6427606340383,
+      "exact_active_no_repair_saving_pct": 26.991474485636513,
+      "legacy_minus_exact_points": 0.6512861484017876
+    },
+    {
+      "image": "kodim04.png",
+      "qp": 32,
+      "exit_map": [
+        3,
+        3,
+        2,
+        3,
+        3,
+        3
+      ],
+      "legacy_active_no_repair_saving_pct": 27.6427606340383,
+      "exact_active_no_repair_saving_pct": 26.991474485636513,
+      "legacy_minus_exact_points": 0.6512861484017876
+    },
+    {
+      "image": "kodim04.png",
+      "qp": 48,
+      "exit_map": [
+        3,
+        3,
+        2,
+        2,
+        3,
+        3
+      ],
+      "legacy_active_no_repair_saving_pct": 30.12813994039636,
+      "exact_active_no_repair_saving_pct": 29.47589504083127,
+      "legacy_minus_exact_points": 0.6522448995650905
+    },
+    {
+      "image": "kodim04.png",
+      "qp": 63,
+      "exit_map": [
+        3,
+        4,
+        2,
+        2,
+        4,
+        3
+      ],
+      "legacy_active_no_repair_saving_pct": 26.39597478747871,
+      "exact_active_no_repair_saving_pct": 25.92198532561385,
+      "legacy_minus_exact_points": 0.4739894618648606
+    },
+    {
+      "image": "kodim05.png",
+      "qp": 0,
+      "exit_map": [
+        3,
+        3,
+        3,
+        3,
+        3,
+        3
+      ],
+      "legacy_active_no_repair_saving_pct": 25.15737834811714,
+      "exact_active_no_repair_saving_pct": 24.507053930441746,
+      "legacy_minus_exact_points": 0.6503244176753924
+    },
+    {
+      "image": "kodim05.png",
+      "qp": 16,
+      "exit_map": [
+        4,
+        4,
+        4,
+        3,
+        4,
+        3
+      ],
+      "legacy_active_no_repair_saving_pct": 17.693048042281834,
+      "exact_active_no_repair_saving_pct": 17.399234500006912,
+      "legacy_minus_exact_points": 0.29381354227492196
+    },
+    {
+      "image": "kodim05.png",
+      "qp": 32,
+      "exit_map": [
+        4,
+        4,
+        4,
+        3,
+        4,
+        3
+      ],
+      "legacy_active_no_repair_saving_pct": 17.693048042281834,
+      "exact_active_no_repair_saving_pct": 17.399234500006912,
+      "legacy_minus_exact_points": 0.29381354227492196
+    },
+    {
+      "image": "kodim05.png",
+      "qp": 48,
+      "exit_map": [
+        5,
+        5,
+        4,
+        4,
+        4,
+        4
+      ],
+      "legacy_active_no_repair_saving_pct": 9.299770408263628,
+      "exact_active_no_repair_saving_pct": 9.230216523192992,
+      "legacy_minus_exact_points": 0.06955388507063631
+    },
+    {
+      "image": "kodim05.png",
+      "qp": 63,
+      "exit_map": [
+        5,
+        5,
+        5,
+        5,
+        5,
+        5
+      ],
+      "legacy_active_no_repair_saving_pct": -0.02245455661402243,
+      "exact_active_no_repair_saving_pct": 0.0,
+      "legacy_minus_exact_points": -0.02245455661402243
+    },
+    {
+      "image": "kodim06.png",
+      "qp": 0,
+      "exit_map": [
+        2,
+        2,
+        2,
+        3,
+        2,
+        2
+      ],
+      "legacy_active_no_repair_saving_pct": 37.584280838364506,
+      "exact_active_no_repair_saving_pct": 36.929156706415554,
+      "legacy_minus_exact_points": 0.655124131948952
+    },
+    {
+      "image": "kodim06.png",
+      "qp": 16,
+      "exit_map": [
+        3,
+        3,
+        2,
+        3,
+        3,
+        2
+      ],
+      "legacy_active_no_repair_saving_pct": 30.12813994039636,
+      "exact_active_no_repair_saving_pct": 29.47589504083127,
+      "legacy_minus_exact_points": 0.6522448995650905
+    },
+    {
+      "image": "kodim06.png",
+      "qp": 32,
+      "exit_map": [
+        3,
+        3,
+        2,
+        3,
+        3,
+        3
+      ],
+      "legacy_active_no_repair_saving_pct": 27.6427606340383,
+      "exact_active_no_repair_saving_pct": 26.991474485636513,
+      "legacy_minus_exact_points": 0.6512861484017876
+    },
+    {
+      "image": "kodim06.png",
+      "qp": 48,
+      "exit_map": [
+        3,
+        3,
+        2,
+        3,
+        3,
+        2
+      ],
+      "legacy_active_no_repair_saving_pct": 30.12813994039636,
+      "exact_active_no_repair_saving_pct": 29.47589504083127,
+      "legacy_minus_exact_points": 0.6522448995650905
+    },
+    {
+      "image": "kodim06.png",
+      "qp": 63,
+      "exit_map": [
+        5,
+        5,
+        2,
+        4,
+        3,
+        3
+      ],
+      "legacy_active_no_repair_saving_pct": 17.383395952209202,
+      "exact_active_no_repair_saving_pct": 17.04550165121388,
+      "legacy_minus_exact_points": 0.33789430099532325
+    },
+    {
+      "image": "kodim07.png",
+      "qp": 0,
+      "exit_map": [
+        2,
+        3,
+        2,
+        2,
+        2,
+        3
+      ],
+      "legacy_active_no_repair_saving_pct": 35.098900041890325,
+      "exact_active_no_repair_saving_pct": 34.44473615122079,
+      "legacy_minus_exact_points": 0.6541638906695368
+    },
+    {
+      "image": "kodim07.png",
+      "qp": 16,
+      "exit_map": [
+        3,
+        3,
+        3,
+        3,
+        3,
+        3
+      ],
+      "legacy_active_no_repair_saving_pct": 25.15737834811714,
+      "exact_active_no_repair_saving_pct": 24.507053930441746,
+      "legacy_minus_exact_points": 0.6503244176753924
+    },
+    {
+      "image": "kodim07.png",
+      "qp": 32,
+      "exit_map": [
+        3,
+        3,
+        3,
+        3,
+        3,
+        3
+      ],
+      "legacy_active_no_repair_saving_pct": 25.15737834811714,
+      "exact_active_no_repair_saving_pct": 24.507053930441746,
+      "legacy_minus_exact_points": 0.6503244176753924
+    },
+    {
+      "image": "kodim07.png",
+      "qp": 48,
+      "exit_map": [
+        2,
+        3,
+        3,
+        2,
+        3,
+        3
+      ],
+      "legacy_active_no_repair_saving_pct": 30.12813994039636,
+      "exact_active_no_repair_saving_pct": 29.47589504083127,
+      "legacy_minus_exact_points": 0.6522448995650905
+    },
+    {
+      "image": "kodim07.png",
+      "qp": 63,
+      "exit_map": [
+        2,
+        3,
+        3,
+        2,
+        3,
+        3
+      ],
+      "legacy_active_no_repair_saving_pct": 30.12813994039636,
+      "exact_active_no_repair_saving_pct": 29.47589504083127,
+      "legacy_minus_exact_points": 0.6522448995650905
+    },
+    {
+      "image": "kodim08.png",
+      "qp": 0,
+      "exit_map": [
+        3,
+        3,
+        3,
+        3,
+        3,
+        3
+      ],
+      "legacy_active_no_repair_saving_pct": 25.15737834811714,
+      "exact_active_no_repair_saving_pct": 24.507053930441746,
+      "legacy_minus_exact_points": 0.6503244176753924
+    },
+    {
+      "image": "kodim08.png",
+      "qp": 16,
+      "exit_map": [
+        4,
+        4,
+        4,
+        4,
+        4,
+        4
+      ],
+      "legacy_active_no_repair_saving_pct": 13.96087990980108,
+      "exact_active_no_repair_saving_pct": 13.845324784789492,
+      "legacy_minus_exact_points": 0.11555512501158738
+    },
+    {
+      "image": "kodim08.png",
+      "qp": 32,
+      "exit_map": [
+        4,
+        4,
+        4,
+        4,
+        4,
+        4
+      ],
+      "legacy_active_no_repair_saving_pct": 13.96087990980108,
+      "exact_active_no_repair_saving_pct": 13.845324784789492,
+      "legacy_minus_exact_points": 0.11555512501158738
+    },
+    {
+      "image": "kodim08.png",
+      "qp": 48,
+      "exit_map": [
+        4,
+        4,
+        5,
+        5,
+        4,
+        5
+      ],
+      "legacy_active_no_repair_saving_pct": 6.969211186477405,
+      "exact_active_no_repair_saving_pct": 6.922662392394741,
+      "legacy_minus_exact_points": 0.0465487940826641
+    },
+    {
+      "image": "kodim08.png",
+      "qp": 63,
+      "exit_map": [
+        5,
+        5,
+        5,
+        5,
+        5,
+        5
+      ],
+      "legacy_active_no_repair_saving_pct": -0.02245455661402243,
+      "exact_active_no_repair_saving_pct": 0.0,
+      "legacy_minus_exact_points": -0.02245455661402243
+    },
+    {
+      "image": "kodim09.png",
+      "qp": 0,
+      "exit_map": [
+        2,
+        2,
+        2,
+        3,
+        2,
+        2
+      ],
+      "legacy_active_no_repair_saving_pct": 37.584280838364506,
+      "exact_active_no_repair_saving_pct": 36.929156706415554,
+      "legacy_minus_exact_points": 0.655124131948952
+    },
+    {
+      "image": "kodim09.png",
+      "qp": 16,
+      "exit_map": [
+        2,
+        2,
+        3,
+        3,
+        3,
+        3
+      ],
+      "legacy_active_no_repair_saving_pct": 30.12813994039636,
+      "exact_active_no_repair_saving_pct": 29.47589504083127,
+      "legacy_minus_exact_points": 0.6522448995650905
+    },
+    {
+      "image": "kodim09.png",
+      "qp": 32,
+      "exit_map": [
+        2,
+        2,
+        3,
+        3,
+        3,
+        3
+      ],
+      "legacy_active_no_repair_saving_pct": 30.12813994039636,
+      "exact_active_no_repair_saving_pct": 29.47589504083127,
+      "legacy_minus_exact_points": 0.6522448995650905
+    },
+    {
+      "image": "kodim09.png",
+      "qp": 48,
+      "exit_map": [
+        2,
+        2,
+        3,
+        3,
+        3,
+        3
+      ],
+      "legacy_active_no_repair_saving_pct": 30.12813994039636,
+      "exact_active_no_repair_saving_pct": 29.47589504083127,
+      "legacy_minus_exact_points": 0.6522448995650905
+    },
+    {
+      "image": "kodim09.png",
+      "qp": 63,
+      "exit_map": [
+        2,
+        2,
+        3,
+        3,
+        3,
+        3
+      ],
+      "legacy_active_no_repair_saving_pct": 30.12813994039636,
+      "exact_active_no_repair_saving_pct": 29.47589504083127,
+      "legacy_minus_exact_points": 0.6522448995650905
+    },
+    {
+      "image": "kodim10.png",
+      "qp": 0,
+      "exit_map": [
+        3,
+        2,
+        2,
+        2,
+        2,
+        3
+      ],
+      "legacy_active_no_repair_saving_pct": 35.098900041890325,
+      "exact_active_no_repair_saving_pct": 34.44473615122079,
+      "legacy_minus_exact_points": 0.6541638906695368
+    },
+    {
+      "image": "kodim10.png",
+      "qp": 16,
+      "exit_map": [
+        3,
+        3,
+        2,
+        3,
+        3,
+        3
+      ],
+      "legacy_active_no_repair_saving_pct": 27.6427606340383,
+      "exact_active_no_repair_saving_pct": 26.991474485636513,
+      "legacy_minus_exact_points": 0.6512861484017876
+    },
+    {
+      "image": "kodim10.png",
+      "qp": 32,
+      "exit_map": [
+        3,
+        3,
+        2,
+        3,
+        3,
+        3
+      ],
+      "legacy_active_no_repair_saving_pct": 27.6427606340383,
+      "exact_active_no_repair_saving_pct": 26.991474485636513,
+      "legacy_minus_exact_points": 0.6512861484017876
+    },
+    {
+      "image": "kodim10.png",
+      "qp": 48,
+      "exit_map": [
+        3,
+        2,
+        2,
+        3,
+        2,
+        4
+      ],
+      "legacy_active_no_repair_saving_pct": 30.747435179844906,
+      "exact_active_no_repair_saving_pct": 30.18336073841732,
+      "legacy_minus_exact_points": 0.5640744414275858
+    },
+    {
+      "image": "kodim10.png",
+      "qp": 63,
+      "exit_map": [
+        3,
+        2,
+        2,
+        3,
+        2,
+        5
+      ],
+      "legacy_active_no_repair_saving_pct": 28.416881918523163,
+      "exact_active_no_repair_saving_pct": 27.87580660761907,
+      "legacy_minus_exact_points": 0.5410753109040947
+    },
+    {
+      "image": "kodim11.png",
+      "qp": 0,
+      "exit_map": [
+        2,
+        2,
+        2,
+        2,
+        2,
+        2
+      ],
+      "legacy_active_no_repair_saving_pct": 40.06966163416955,
+      "exact_active_no_repair_saving_pct": 39.413577261610314,
+      "legacy_minus_exact_points": 0.6560843725592349
+    },
+    {
+      "image": "kodim11.png",
+      "qp": 16,
+      "exit_map": [
+        3,
+        3,
+        3,
+        2,
+        3,
+        3
+      ],
+      "legacy_active_no_repair_saving_pct": 27.6427606340383,
+      "exact_active_no_repair_saving_pct": 26.991474485636513,
+      "legacy_minus_exact_points": 0.6512861484017876
+    },
+    {
+      "image": "kodim11.png",
+      "qp": 32,
+      "exit_map": [
+        3,
+        3,
+        3,
+        2,
+        3,
+        3
+      ],
+      "legacy_active_no_repair_saving_pct": 27.6427606340383,
+      "exact_active_no_repair_saving_pct": 26.991474485636513,
+      "legacy_minus_exact_points": 0.6512861484017876
+    },
+    {
+      "image": "kodim11.png",
+      "qp": 48,
+      "exit_map": [
+        3,
+        4,
+        2,
+        2,
+        4,
+        3
+      ],
+      "legacy_active_no_repair_saving_pct": 26.39597478747871,
+      "exact_active_no_repair_saving_pct": 25.92198532561385,
+      "legacy_minus_exact_points": 0.4739894618648606
+    },
+    {
+      "image": "kodim11.png",
+      "qp": 63,
+      "exit_map": [
+        3,
+        5,
+        2,
+        3,
+        5,
+        3
+      ],
+      "legacy_active_no_repair_saving_pct": 19.249480019118714,
+      "exact_active_no_repair_saving_pct": 18.822456508822594,
+      "legacy_minus_exact_points": 0.4270235102961202
+    },
+    {
+      "image": "kodim12.png",
+      "qp": 0,
+      "exit_map": [
+        2,
+        2,
+        2,
+        2,
+        2,
+        2
+      ],
+      "legacy_active_no_repair_saving_pct": 40.06966163416955,
+      "exact_active_no_repair_saving_pct": 39.413577261610314,
+      "legacy_minus_exact_points": 0.6560843725592349
+    },
+    {
+      "image": "kodim12.png",
+      "qp": 16,
+      "exit_map": [
+        3,
+        3,
+        3,
+        2,
+        3,
+        2
+      ],
+      "legacy_active_no_repair_saving_pct": 30.12813994039636,
+      "exact_active_no_repair_saving_pct": 29.47589504083127,
+      "legacy_minus_exact_points": 0.6522448995650905
+    },
+    {
+      "image": "kodim12.png",
+      "qp": 32,
+      "exit_map": [
+        3,
+        3,
+        3,
+        2,
+        3,
+        2
+      ],
+      "legacy_active_no_repair_saving_pct": 30.12813994039636,
+      "exact_active_no_repair_saving_pct": 29.47589504083127,
+      "legacy_minus_exact_points": 0.6522448995650905
+    },
+    {
+      "image": "kodim12.png",
+      "qp": 48,
+      "exit_map": [
+        2,
+        3,
+        2,
+        2,
+        2,
+        2
+      ],
+      "legacy_active_no_repair_saving_pct": 37.584280838364506,
+      "exact_active_no_repair_saving_pct": 36.929156706415554,
+      "legacy_minus_exact_points": 0.655124131948952
+    },
+    {
+      "image": "kodim12.png",
+      "qp": 63,
+      "exit_map": [
+        2,
+        5,
+        2,
+        2,
+        3,
+        2
+      ],
+      "legacy_active_no_repair_saving_pct": 30.902261224881222,
+      "exact_active_no_repair_saving_pct": 30.360227162813835,
+      "legacy_minus_exact_points": 0.5420340620673869
+    },
+    {
+      "image": "kodim13.png",
+      "qp": 0,
+      "exit_map": [
+        2,
+        3,
+        2,
+        3,
+        2,
+        2
+      ],
+      "legacy_active_no_repair_saving_pct": 35.098900041890325,
+      "exact_active_no_repair_saving_pct": 34.44473615122079,
+      "legacy_minus_exact_points": 0.6541638906695368
+    },
+    {
+      "image": "kodim13.png",
+      "qp": 16,
+      "exit_map": [
+        3,
+        3,
+        3,
+        4,
+        3,
+        4
+      ],
+      "legacy_active_no_repair_saving_pct": 21.42521617610086,
+      "exact_active_no_repair_saving_pct": 20.953144215224327,
+      "legacy_minus_exact_points": 0.4720719608765336
+    },
+    {
+      "image": "kodim13.png",
+      "qp": 32,
+      "exit_map": [
+        3,
+        3,
+        3,
+        4,
+        3,
+        4
+      ],
+      "legacy_active_no_repair_saving_pct": 21.42521617610086,
+      "exact_active_no_repair_saving_pct": 20.953144215224327,
+      "legacy_minus_exact_points": 0.4720719608765336
+    },
+    {
+      "image": "kodim13.png",
+      "qp": 48,
+      "exit_map": [
+        3,
+        5,
+        3,
+        5,
+        4,
+        4
+      ],
+      "legacy_active_no_repair_saving_pct": 13.0319325802799,
+      "exact_active_no_repair_saving_pct": 12.784126238410408,
+      "legacy_minus_exact_points": 0.24780634186949158
+    },
+    {
+      "image": "kodim13.png",
+      "qp": 63,
+      "exit_map": [
+        3,
+        5,
+        5,
+        5,
+        5,
+        5
+      ],
+      "legacy_active_no_repair_saving_pct": 4.174182770278951,
+      "exact_active_no_repair_saving_pct": 4.084508988406954,
+      "legacy_minus_exact_points": 0.08967378187199682
+    },
+    {
+      "image": "kodim14.png",
+      "qp": 0,
+      "exit_map": [
+        3,
+        2,
+        2,
+        3,
+        3,
+        3
+      ],
+      "legacy_active_no_repair_saving_pct": 30.12813994039636,
+      "exact_active_no_repair_saving_pct": 29.47589504083127,
+      "legacy_minus_exact_points": 0.6522448995650905
+    },
+    {
+      "image": "kodim14.png",
+      "qp": 16,
+      "exit_map": [
+        3,
+        3,
+        3,
+        3,
+        4,
+        3
+      ],
+      "legacy_active_no_repair_saving_pct": 23.291294281207623,
+      "exact_active_no_repair_saving_pct": 22.730099072833042,
+      "legacy_minus_exact_points": 0.5611952083745813
+    },
+    {
+      "image": "kodim14.png",
+      "qp": 32,
+      "exit_map": [
+        3,
+        3,
+        3,
+        3,
+        4,
+        3
+      ],
+      "legacy_active_no_repair_saving_pct": 23.291294281207623,
+      "exact_active_no_repair_saving_pct": 22.730099072833042,
+      "legacy_minus_exact_points": 0.5611952083745813
+    },
+    {
+      "image": "kodim14.png",
+      "qp": 48,
+      "exit_map": [
+        4,
+        3,
+        2,
+        3,
+        5,
+        4
+      ],
+      "legacy_active_no_repair_saving_pct": 19.713955173995423,
+      "exact_active_no_repair_saving_pct": 19.35305578201213,
+      "legacy_minus_exact_points": 0.3608993919832919
+    },
+    {
+      "image": "kodim14.png",
+      "qp": 63,
+      "exit_map": [
+        5,
+        5,
+        2,
+        5,
+        5,
+        5
+      ],
+      "legacy_active_no_repair_saving_pct": 6.65956505686925,
+      "exact_active_no_repair_saving_pct": 6.568929543601721,
+      "legacy_minus_exact_points": 0.09063551326752961
+    },
+    {
+      "image": "kodim15.png",
+      "qp": 0,
+      "exit_map": [
+        2,
+        2,
+        2,
+        2,
+        2,
+        2
+      ],
+      "legacy_active_no_repair_saving_pct": 40.06966163416955,
+      "exact_active_no_repair_saving_pct": 39.413577261610314,
+      "legacy_minus_exact_points": 0.6560843725592349
+    },
+    {
+      "image": "kodim15.png",
+      "qp": 16,
+      "exit_map": [
+        3,
+        3,
+        3,
+        3,
+        3,
+        3
+      ],
+      "legacy_active_no_repair_saving_pct": 25.15737834811714,
+      "exact_active_no_repair_saving_pct": 24.507053930441746,
+      "legacy_minus_exact_points": 0.6503244176753924
+    },
+    {
+      "image": "kodim15.png",
+      "qp": 32,
+      "exit_map": [
+        3,
+        3,
+        3,
+        3,
+        3,
+        3
+      ],
+      "legacy_active_no_repair_saving_pct": 25.15737834811714,
+      "exact_active_no_repair_saving_pct": 24.507053930441746,
+      "legacy_minus_exact_points": 0.6503244176753924
+    },
+    {
+      "image": "kodim15.png",
+      "qp": 48,
+      "exit_map": [
+        3,
+        3,
+        2,
+        3,
+        3,
+        3
+      ],
+      "legacy_active_no_repair_saving_pct": 27.6427606340383,
+      "exact_active_no_repair_saving_pct": 26.991474485636513,
+      "legacy_minus_exact_points": 0.6512861484017876
+    },
+    {
+      "image": "kodim15.png",
+      "qp": 63,
+      "exit_map": [
+        3,
+        5,
+        2,
+        5,
+        5,
+        3
+      ],
+      "legacy_active_no_repair_saving_pct": 15.052842692225731,
+      "exact_active_no_repair_saving_pct": 14.73794752041564,
+      "legacy_minus_exact_points": 0.3148951718100914
+    },
+    {
+      "image": "kodim16.png",
+      "qp": 0,
+      "exit_map": [
+        2,
+        2,
+        2,
+        2,
+        2,
+        2
+      ],
+      "legacy_active_no_repair_saving_pct": 40.06966163416955,
+      "exact_active_no_repair_saving_pct": 39.413577261610314,
+      "legacy_minus_exact_points": 0.6560843725592349
+    },
+    {
+      "image": "kodim16.png",
+      "qp": 16,
+      "exit_map": [
+        2,
+        2,
+        2,
+        3,
+        2,
+        3
+      ],
+      "legacy_active_no_repair_saving_pct": 35.098900041890325,
+      "exact_active_no_repair_saving_pct": 34.44473615122079,
+      "legacy_minus_exact_points": 0.6541638906695368
+    },
+    {
+      "image": "kodim16.png",
+      "qp": 32,
+      "exit_map": [
+        2,
+        2,
+        2,
+        3,
+        2,
+        3
+      ],
+      "legacy_active_no_repair_saving_pct": 35.098900041890325,
+      "exact_active_no_repair_saving_pct": 34.44473615122079,
+      "legacy_minus_exact_points": 0.6541638906695368
+    },
+    {
+      "image": "kodim16.png",
+      "qp": 48,
+      "exit_map": [
+        2,
+        2,
+        2,
+        2,
+        2,
+        3
+      ],
+      "legacy_active_no_repair_saving_pct": 37.584280838364506,
+      "exact_active_no_repair_saving_pct": 36.929156706415554,
+      "legacy_minus_exact_points": 0.655124131948952
+    },
+    {
+      "image": "kodim16.png",
+      "qp": 63,
+      "exit_map": [
+        2,
+        2,
+        2,
+        2,
+        2,
+        3
+      ],
+      "legacy_active_no_repair_saving_pct": 37.584280838364506,
+      "exact_active_no_repair_saving_pct": 36.929156706415554,
+      "legacy_minus_exact_points": 0.655124131948952
+    },
+    {
+      "image": "kodim17.png",
+      "qp": 0,
+      "exit_map": [
+        2,
+        2,
+        2,
+        2,
+        2,
+        2
+      ],
+      "legacy_active_no_repair_saving_pct": 40.06966163416955,
+      "exact_active_no_repair_saving_pct": 39.413577261610314,
+      "legacy_minus_exact_points": 0.6560843725592349
+    },
+    {
+      "image": "kodim17.png",
+      "qp": 16,
+      "exit_map": [
+        2,
+        3,
+        2,
+        3,
+        2,
+        3
+      ],
+      "legacy_active_no_repair_saving_pct": 32.61351924608528,
+      "exact_active_no_repair_saving_pct": 31.960315596026035,
+      "legacy_minus_exact_points": 0.6532036500592469
+    },
+    {
+      "image": "kodim17.png",
+      "qp": 32,
+      "exit_map": [
+        2,
+        3,
+        2,
+        3,
+        2,
+        3
+      ],
+      "legacy_active_no_repair_saving_pct": 32.61351924608528,
+      "exact_active_no_repair_saving_pct": 31.960315596026035,
+      "legacy_minus_exact_points": 0.6532036500592469
+    },
+    {
+      "image": "kodim17.png",
+      "qp": 48,
+      "exit_map": [
+        2,
+        3,
+        2,
+        3,
+        2,
+        2
+      ],
+      "legacy_active_no_repair_saving_pct": 35.098900041890325,
+      "exact_active_no_repair_saving_pct": 34.44473615122079,
+      "legacy_minus_exact_points": 0.6541638906695368
+    },
+    {
+      "image": "kodim17.png",
+      "qp": 63,
+      "exit_map": [
+        2,
+        5,
+        2,
+        3,
+        2,
+        2
+      ],
+      "legacy_active_no_repair_saving_pct": 30.902261224881222,
+      "exact_active_no_repair_saving_pct": 30.360227162813835,
+      "legacy_minus_exact_points": 0.5420340620673869
+    },
+    {
+      "image": "kodim18.png",
+      "qp": 0,
+      "exit_map": [
+        2,
+        2,
+        2,
+        3,
+        2,
+        2
+      ],
+      "legacy_active_no_repair_saving_pct": 37.584280838364506,
+      "exact_active_no_repair_saving_pct": 36.929156706415554,
+      "legacy_minus_exact_points": 0.655124131948952
+    },
+    {
+      "image": "kodim18.png",
+      "qp": 16,
+      "exit_map": [
+        3,
+        3,
+        3,
+        3,
+        3,
+        3
+      ],
+      "legacy_active_no_repair_saving_pct": 25.15737834811714,
+      "exact_active_no_repair_saving_pct": 24.507053930441746,
+      "legacy_minus_exact_points": 0.6503244176753924
+    },
+    {
+      "image": "kodim18.png",
+      "qp": 32,
+      "exit_map": [
+        3,
+        3,
+        3,
+        4,
+        3,
+        3
+      ],
+      "legacy_active_no_repair_saving_pct": 23.2913002416721,
+      "exact_active_no_repair_saving_pct": 22.730099072833042,
+      "legacy_minus_exact_points": 0.5612011688390588
+    },
+    {
+      "image": "kodim18.png",
+      "qp": 48,
+      "exit_map": [
+        3,
+        3,
+        3,
+        5,
+        3,
+        4
+      ],
+      "legacy_active_no_repair_saving_pct": 19.094656954314637,
+      "exact_active_no_repair_saving_pct": 18.64559008442608,
+      "legacy_minus_exact_points": 0.4490668698885578
+    },
+    {
+      "image": "kodim18.png",
+      "qp": 63,
+      "exit_map": [
+        3,
+        3,
+        5,
+        5,
+        5,
+        5
+      ],
+      "legacy_active_no_repair_saving_pct": 8.37082009851021,
+      "exact_active_no_repair_saving_pct": 8.169017976813919,
+      "legacy_minus_exact_points": 0.20180212169629108
+    },
+    {
+      "image": "kodim19.png",
+      "qp": 0,
+      "exit_map": [
+        2,
+        2,
+        3,
+        3,
+        3,
+        2
+      ],
+      "legacy_active_no_repair_saving_pct": 32.61351924608528,
+      "exact_active_no_repair_saving_pct": 31.960315596026035,
+      "legacy_minus_exact_points": 0.6532036500592469
+    },
+    {
+      "image": "kodim19.png",
+      "qp": 16,
+      "exit_map": [
+        2,
+        2,
+        4,
+        3,
+        3,
+        3
+      ],
+      "legacy_active_no_repair_saving_pct": 28.262058853719086,
+      "exact_active_no_repair_saving_pct": 27.698940183222565,
+      "legacy_minus_exact_points": 0.5631186704965216
+    },
+    {
+      "image": "kodim19.png",
+      "qp": 32,
+      "exit_map": [
+        2,
+        2,
+        3,
+        3,
+        3,
+        3
+      ],
+      "legacy_active_no_repair_saving_pct": 30.12813994039636,
+      "exact_active_no_repair_saving_pct": 29.47589504083127,
+      "legacy_minus_exact_points": 0.6522448995650905
+    },
+    {
+      "image": "kodim19.png",
+      "qp": 48,
+      "exit_map": [
+        2,
+        2,
+        4,
+        3,
+        3,
+        3
+      ],
+      "legacy_active_no_repair_saving_pct": 28.262058853719086,
+      "exact_active_no_repair_saving_pct": 27.698940183222565,
+      "legacy_minus_exact_points": 0.5631186704965216
+    },
+    {
+      "image": "kodim19.png",
+      "qp": 63,
+      "exit_map": [
+        2,
+        2,
+        5,
+        5,
+        5,
+        3
+      ],
+      "legacy_active_no_repair_saving_pct": 17.53822199724552,
+      "exact_active_no_repair_saving_pct": 17.222368075610394,
+      "legacy_minus_exact_points": 0.3158539216351244
+    },
+    {
+      "image": "kodim20.png",
+      "qp": 0,
+      "exit_map": [
+        3,
+        2,
+        2,
+        3,
+        3,
+        2
+      ],
+      "legacy_active_no_repair_saving_pct": 32.61351924608528,
+      "exact_active_no_repair_saving_pct": 31.960315596026035,
+      "legacy_minus_exact_points": 0.6532036500592469
+    },
+    {
+      "image": "kodim20.png",
+      "qp": 16,
+      "exit_map": [
+        3,
+        2,
+        2,
+        3,
+        3,
+        3
+      ],
+      "legacy_active_no_repair_saving_pct": 30.12813994039636,
+      "exact_active_no_repair_saving_pct": 29.47589504083127,
+      "legacy_minus_exact_points": 0.6522448995650905
+    },
+    {
+      "image": "kodim20.png",
+      "qp": 32,
+      "exit_map": [
+        3,
+        2,
+        2,
+        3,
+        3,
+        3
+      ],
+      "legacy_active_no_repair_saving_pct": 30.12813994039636,
+      "exact_active_no_repair_saving_pct": 29.47589504083127,
+      "legacy_minus_exact_points": 0.6522448995650905
+    },
+    {
+      "image": "kodim20.png",
+      "qp": 48,
+      "exit_map": [
+        3,
+        2,
+        2,
+        3,
+        3,
+        2
+      ],
+      "legacy_active_no_repair_saving_pct": 32.61351924608528,
+      "exact_active_no_repair_saving_pct": 31.960315596026035,
+      "legacy_minus_exact_points": 0.6532036500592469
+    },
+    {
+      "image": "kodim20.png",
+      "qp": 63,
+      "exit_map": [
+        5,
+        2,
+        2,
+        5,
+        5,
+        2
+      ],
+      "legacy_active_no_repair_saving_pct": 20.023601303603577,
+      "exact_active_no_repair_saving_pct": 19.70678863080516,
+      "legacy_minus_exact_points": 0.31681267279841663
+    },
+    {
+      "image": "kodim21.png",
+      "qp": 0,
+      "exit_map": [
+        2,
+        2,
+        2,
+        3,
+        2,
+        2
+      ],
+      "legacy_active_no_repair_saving_pct": 37.584280838364506,
+      "exact_active_no_repair_saving_pct": 36.929156706415554,
+      "legacy_minus_exact_points": 0.655124131948952
+    },
+    {
+      "image": "kodim21.png",
+      "qp": 16,
+      "exit_map": [
+        3,
+        3,
+        2,
+        3,
+        3,
+        3
+      ],
+      "legacy_active_no_repair_saving_pct": 27.6427606340383,
+      "exact_active_no_repair_saving_pct": 26.991474485636513,
+      "legacy_minus_exact_points": 0.6512861484017876
+    },
+    {
+      "image": "kodim21.png",
+      "qp": 32,
+      "exit_map": [
+        3,
+        2,
+        2,
+        3,
+        3,
+        3
+      ],
+      "legacy_active_no_repair_saving_pct": 30.12813994039636,
+      "exact_active_no_repair_saving_pct": 29.47589504083127,
+      "legacy_minus_exact_points": 0.6522448995650905
+    },
+    {
+      "image": "kodim21.png",
+      "qp": 48,
+      "exit_map": [
+        2,
+        2,
+        2,
+        3,
+        3,
+        3
+      ],
+      "legacy_active_no_repair_saving_pct": 32.61351924608528,
+      "exact_active_no_repair_saving_pct": 31.960315596026035,
+      "legacy_minus_exact_points": 0.6532036500592469
+    },
+    {
+      "image": "kodim21.png",
+      "qp": 63,
+      "exit_map": [
+        2,
+        2,
+        2,
+        5,
+        5,
+        3
+      ],
+      "legacy_active_no_repair_saving_pct": 24.220241610728802,
+      "exact_active_no_repair_saving_pct": 23.791297619212116,
+      "legacy_minus_exact_points": 0.42894399151668594
+    },
+    {
+      "image": "kodim22.png",
+      "qp": 0,
+      "exit_map": [
+        2,
+        3,
+        2,
+        2,
+        2,
+        2
+      ],
+      "legacy_active_no_repair_saving_pct": 37.584280838364506,
+      "exact_active_no_repair_saving_pct": 36.929156706415554,
+      "legacy_minus_exact_points": 0.655124131948952
+    },
+    {
+      "image": "kodim22.png",
+      "qp": 16,
+      "exit_map": [
+        3,
+        3,
+        3,
+        3,
+        3,
+        2
+      ],
+      "legacy_active_no_repair_saving_pct": 27.6427606340383,
+      "exact_active_no_repair_saving_pct": 26.991474485636513,
+      "legacy_minus_exact_points": 0.6512861484017876
+    },
+    {
+      "image": "kodim22.png",
+      "qp": 32,
+      "exit_map": [
+        3,
+        3,
+        3,
+        3,
+        3,
+        2
+      ],
+      "legacy_active_no_repair_saving_pct": 27.6427606340383,
+      "exact_active_no_repair_saving_pct": 26.991474485636513,
+      "legacy_minus_exact_points": 0.6512861484017876
+    },
+    {
+      "image": "kodim22.png",
+      "qp": 48,
+      "exit_map": [
+        3,
+        5,
+        3,
+        3,
+        3,
+        2
+      ],
+      "legacy_active_no_repair_saving_pct": 23.44612032624394,
+      "exact_active_no_repair_saving_pct": 22.90696549722955,
+      "legacy_minus_exact_points": 0.5391548290143895
+    },
+    {
+      "image": "kodim22.png",
+      "qp": 63,
+      "exit_map": [
+        5,
+        5,
+        3,
+        3,
+        3,
+        3
+      ],
+      "legacy_active_no_repair_saving_pct": 16.764100712760655,
+      "exact_active_no_repair_saving_pct": 16.338035953627838,
+      "legacy_minus_exact_points": 0.4260647591328173
+    },
+    {
+      "image": "kodim23.png",
+      "qp": 0,
+      "exit_map": [
+        3,
+        2,
+        2,
+        2,
+        2,
+        2
+      ],
+      "legacy_active_no_repair_saving_pct": 37.584280838364506,
+      "exact_active_no_repair_saving_pct": 36.929156706415554,
+      "legacy_minus_exact_points": 0.655124131948952
+    },
+    {
+      "image": "kodim23.png",
+      "qp": 16,
+      "exit_map": [
+        3,
+        3,
+        3,
+        3,
+        3,
+        3
+      ],
+      "legacy_active_no_repair_saving_pct": 25.15737834811714,
+      "exact_active_no_repair_saving_pct": 24.507053930441746,
+      "legacy_minus_exact_points": 0.6503244176753924
+    },
+    {
+      "image": "kodim23.png",
+      "qp": 32,
+      "exit_map": [
+        3,
+        2,
+        2,
+        3,
+        3,
+        3
+      ],
+      "legacy_active_no_repair_saving_pct": 30.12813994039636,
+      "exact_active_no_repair_saving_pct": 29.47589504083127,
+      "legacy_minus_exact_points": 0.6522448995650905
+    },
+    {
+      "image": "kodim23.png",
+      "qp": 48,
+      "exit_map": [
+        3,
+        2,
+        2,
+        3,
+        3,
+        2
+      ],
+      "legacy_active_no_repair_saving_pct": 32.61351924608528,
+      "exact_active_no_repair_saving_pct": 31.960315596026035,
+      "legacy_minus_exact_points": 0.6532036500592469
+    },
+    {
+      "image": "kodim23.png",
+      "qp": 63,
+      "exit_map": [
+        3,
+        2,
+        2,
+        5,
+        3,
+        3
+      ],
+      "legacy_active_no_repair_saving_pct": 25.931499632602,
+      "exact_active_no_repair_saving_pct": 25.391386052424313,
+      "legacy_minus_exact_points": 0.5401135801776888
+    },
+    {
+      "image": "kodim24.png",
+      "qp": 0,
+      "exit_map": [
+        3,
+        3,
+        3,
+        2,
+        2,
+        2
+      ],
+      "legacy_active_no_repair_saving_pct": 32.61351924608528,
+      "exact_active_no_repair_saving_pct": 31.960315596026035,
+      "legacy_minus_exact_points": 0.6532036500592469
+    },
+    {
+      "image": "kodim24.png",
+      "qp": 16,
+      "exit_map": [
+        4,
+        4,
+        3,
+        3,
+        3,
+        3
+      ],
+      "legacy_active_no_repair_saving_pct": 21.42521617610086,
+      "exact_active_no_repair_saving_pct": 20.953144215224327,
+      "legacy_minus_exact_points": 0.4720719608765336
+    },
+    {
+      "image": "kodim24.png",
+      "qp": 32,
+      "exit_map": [
+        5,
+        5,
+        4,
+        3,
+        3,
+        3
+      ],
+      "legacy_active_no_repair_saving_pct": 14.898019627421654,
+      "exact_active_no_repair_saving_pct": 14.561081096019123,
+      "legacy_minus_exact_points": 0.3369385314025308
+    },
+    {
+      "image": "kodim24.png",
+      "qp": 48,
+      "exit_map": [
+        5,
+        5,
+        4,
+        3,
+        3,
+        3
+      ],
+      "legacy_active_no_repair_saving_pct": 14.898019627421654,
+      "exact_active_no_repair_saving_pct": 14.561081096019123,
+      "legacy_minus_exact_points": 0.3369385314025308
+    },
+    {
+      "image": "kodim24.png",
+      "qp": 63,
+      "exit_map": [
+        5,
+        5,
+        5,
+        5,
+        3,
+        3
+      ],
+      "legacy_active_no_repair_saving_pct": 8.37082009851021,
+      "exact_active_no_repair_saving_pct": 8.169017976813919,
+      "legacy_minus_exact_points": 0.20180212169629108
+    }
+  ],
+  "deployed_exact_conv_by_cohort": {
+    "calibration24": {
+      "n": 120,
+      "exact_mean_saving_pct": 20.172882323951125,
+      "min_saving_pct": -1.0860703873098343,
+      "max_saving_pct": 38.327506874300475,
+      "source_sha256": "be3dc462c0f8c55db7da21806fac640f2a86711093beae66d0365cb2ae56394b"
+    },
+    "validation24": {
+      "n": 120,
+      "exact_mean_saving_pct": 19.478221018547938,
+      "min_saving_pct": -1.0860703873098343,
+      "max_saving_pct": 38.327506874300475,
+      "source_sha256": "e5832a42cdf1f1399b62c580bef64320b91ac7869e5a842cf87422f5c48c9a9f"
+    },
+    "kodak24": {
+      "n": 120,
+      "exact_mean_saving_pct": 25.188404195050506,
+      "min_saving_pct": -1.0860703873098343,
+      "max_saving_pct": 38.327506874300475,
+      "source_sha256": "755ab5961e7205f9f0c720945bc6e6c6365e78ba2919a0599b3ffec34b4be354"
+    }
+  }
+}
