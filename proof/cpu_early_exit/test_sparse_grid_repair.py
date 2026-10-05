@@ -10,7 +10,8 @@ import torch
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT))
 from flexuf.backbone.decoder import GridSeamRepair
-from proof.cpu_early_exit.sparse_grid_repair import apply_sparse_repair, make_plan
+from proof.cpu_early_exit.sparse_grid_repair import (
+    SparseGridRepairWrapper, apply_sparse_repair, make_plan)
 
 
 class SparseRepairTest(unittest.TestCase):
@@ -35,6 +36,10 @@ class SparseRepairTest(unittest.TestCase):
             dense = x + g * (g >= .25) * module.pw(module.act(module.dw(x)))
             self.assertEqual(plan.active_fraction, 139 / 1024)
             self.assertTrue(torch.equal(sparse, dense))
+            wrapped = SparseGridRepairWrapper(module, threshold=.25)
+            self.assertTrue(torch.equal(wrapped(x), dense))
+            self.assertTrue(torch.equal(wrapped(x), dense))
+            self.assertEqual(len(wrapped._plans), 1)
 
     def test_dense_threshold_equivalence(self):
         torch.manual_seed(1941)

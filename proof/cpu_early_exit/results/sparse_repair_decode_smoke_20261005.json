@@ -1,0 +1,15 @@
+{
+  "scope": "Frozen e15 checkpoint, archived QP32 Q90 route, source-derived latent, CPU FP32; sparse wrapper installed after strict checkpoint load.",
+  "sequence": "BQSquare_416x240_60.yuv",
+  "threshold": 0.25,
+  "dense_thresholded_vs_sparse_max_abs": 0.0,
+  "cropped_rgb_mse": 0.0011429103324189782,
+  "pilot_cropped_rgb_mse": 0.0011429103324189782,
+  "active_pointwise_fraction": 0.1357421875,
+  "cuda_initialized": false,
+  "runtime_measured": false,
+  "source_sha256": "fd48d1604d90ef5a05bc5e378427f93db68133386de72a39c9ba89ea7e07fcff",
+  "pilot_sha256": "00d6840fef1f38f50d26c407755a9a6f465301788eadccb9cbcc0005f51b0de2",
+  "checkpoint_sha256": "91556d30bca41988755ff43dee3bc6d0cd2a0a4eda1d18d2891b168dc0a04ce9",
+  "script_sha256": "d4ab1965d1d6708e9e31ce5713dbad436a2185d069aec292164b16f7d5eb3343"
+}

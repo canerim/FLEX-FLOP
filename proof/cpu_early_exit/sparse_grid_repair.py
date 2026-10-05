@@ -12,6 +12,7 @@ import math
 
 import torch
 import torch.nn.functional as F
+from torch import nn
 
 
 @dataclass(frozen=True)
@@ -86,3 +87,26 @@ def apply_sparse_repair(x: torch.Tensor, module, plan: SparseRepairPlan) -> torc
     flat_output = x.permute(0, 2, 3, 1).contiguous().reshape(-1, channels)
     flat_output.index_add_(0, plan.gate_indices, contribution)
     return flat_output.reshape(n, height, width, channels).permute(0, 3, 1, 2).contiguous()
+
+
+class SparseGridRepairWrapper(nn.Module):
+    """Drop-in inference wrapper installed only after checkpoint loading."""
+
+    def __init__(self, trained_repair: nn.Module, threshold: float = .25):
+        super().__init__()
+        if trained_repair.training:
+            raise ValueError("Freeze the trained repair before wrapping it")
+        self.trained_repair = trained_repair
+        self.threshold = float(threshold)
+        self._plans: dict[tuple, SparseRepairPlan] = {}
+
+    def forward(self, x: torch.Tensor) -> torch.Tensor:
+        n, channels, height, width = x.shape
+        key = (n, channels, height, width, x.device, x.dtype,
+               id(self.trained_repair.gate), self.trained_repair.gate._version)
+        plan = self._plans.get(key)
+        if plan is None:
+            plan = make_plan(self.trained_repair, batch=n, height=height, width=width,
+                             threshold=self.threshold, device=x.device, dtype=x.dtype)
+            self._plans = {key: plan}
+        return apply_sparse_repair(x, self.trained_repair, plan)
