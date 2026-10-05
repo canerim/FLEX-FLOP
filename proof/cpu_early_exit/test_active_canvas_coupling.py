@@ -40,6 +40,22 @@ class ActiveCanvasBoundaryTest(unittest.TestCase):
         torch.testing.assert_close(self.run_coupler(ActiveCanvasReplicateCoupler, active),
                                    replicate, rtol=0, atol=0)
 
+    def test_partial_active_matches_masked_full_canvas_across_batch(self) -> None:
+        tiles = torch.cat((self.tiles, self.tiles.flip(-1)), dim=0)
+        active = torch.tensor([0, 4, 5, 8, 9, 10, 13, 17])
+        coupler = ActiveCanvasCoupler()
+        coupler.begin(tiles, 3, 3, 2)
+        actual = coupler.apply(self.conv, tiles[active], active)
+        canvas = torch.zeros_like(tiles)
+        canvas[active] = tiles[active]
+        p = tiles.shape[-1]
+        whole = (canvas.view(2, 3, 3, 4, p, p).permute(0, 3, 1, 4, 2, 5)
+                 .reshape(2, 4, 3*p, 3*p))
+        output = self.conv(whole)
+        expected = (output.view(2, 4, 3, p, 3, p).permute(0, 2, 4, 1, 3, 5)
+                    .reshape(18, 4, p, p))[active]
+        torch.testing.assert_close(actual, expected, rtol=0, atol=1e-6)
+
 
 if __name__ == '__main__':
     unittest.main()
