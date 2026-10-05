@@ -78,6 +78,10 @@ def main()->None:
                 row[f'{arm}_{repair}_delta444_db']=rec['coupled'][repair]['delta444_db']
         row['replicate_minus_zero_no_repair_db']=(row['active_replicate_no_repair_gain_db']-
                                                   row['active_zero_no_repair_gain_db'])
+        for repair in ('no_repair','with_repair'):
+            for arm in ('active_zero','active_replicate'):
+                row[f'{arm}_minus_stale_{repair}_db']=(
+                    row[f'{arm}_{repair}_gain_db']-row[f'stale_{repair}_gain_db'])
         rows.append(row)
     rng=np.random.default_rng(20261005)
     groups={'all':rows,'uniform':[r for r in rows if r['mixed_edge_count']==0],
@@ -86,6 +90,11 @@ def main()->None:
                     ('stale_no_repair_gain_db','active_zero_no_repair_gain_db',
                      'active_replicate_no_repair_gain_db','active_zero_with_repair_gain_db',
                      'active_replicate_with_repair_gain_db',
+                     'stale_with_repair_gain_db',
+                     'active_zero_minus_stale_no_repair_db',
+                     'active_replicate_minus_stale_no_repair_db',
+                     'active_zero_minus_stale_with_repair_db',
+                     'active_replicate_minus_stale_with_repair_db',
                      'replicate_minus_zero_no_repair_db')}
              for group,subset in groups.items()}
     result={'scope':'Kodak24 x QP5 paired actual bitstream reconstruction, unchanged exit maps; exploratory because pilot preceded full cohort. No latency or native CUDA stream.',
@@ -94,8 +103,19 @@ def main()->None:
             'overall':summary['all'],'by_edge_class':{k:v for k,v in summary.items() if k!='all'},
             'per_qp':{str(q):{key:describe([r for r in rows if r['qp']==q],key,rng)
                                for key in ('stale_no_repair_gain_db','active_zero_no_repair_gain_db',
-                                           'active_replicate_no_repair_gain_db')}
+                                           'active_replicate_no_repair_gain_db',
+                                           'stale_with_repair_gain_db',
+                                           'active_zero_with_repair_gain_db',
+                                           'active_replicate_with_repair_gain_db')}
                       for q in (0,16,32,48,63)},
+            'by_qp_edge_class':{
+                str(q):{group:{key:describe(subset,key,rng) for key in
+                               ('active_zero_minus_stale_with_repair_db',
+                                'active_replicate_minus_stale_with_repair_db')}
+                        for group,subset in (
+                            ('uniform',[r for r in rows if r['qp']==q and r['mixed_edge_count']==0]),
+                            ('mixed',[r for r in rows if r['qp']==q and r['mixed_edge_count']>0]))}
+                for q in (0,16,32,48,63)},
             'over_0p1_delta444':{'deployed':sum(r['deployed_delta444_db']>0.1 for r in rows),
                                 'exact_context':sum(r['exact_context_delta444_db']>0.1 for r in rows),
                                 **{f'{arm}_{repair}':sum(r[f'{arm}_{repair}_delta444_db']>0.1 for r in rows)
