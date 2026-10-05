@@ -1,0 +1,1941 @@
+{
+  "scope": "Post-lock exact-convolution audit of calibration-only active-replicate/no-repair beta. Does not revise the frozen policy or use validation to select beta.",
+  "source_sha256": {
+    "frontier": "869cc95ba38d25b0f354cff0262ae355255128aac1620730ab4b9868655a5960",
+    "manifest": "0468dc26738fcc16024abd224ba2c805ee25911553f68896f9ddafbaedadf922",
+    "policy": "5704033849f9e9f63ca3814ab92b55ba274643758a313ad11d7515e9e4ee321d",
+    "validation": "35d767f4edc13585946265c287f93c64d7cc6de9e31dbae4e8c93472d9da14a9",
+    "formula": "eed3328fb1d5f907b0f16ecbd40daaef7f567b798b590d12ec6ebcb7dc1813ab",
+    "script": "48324b8ab2d67ddf9d438396f2abe475044680fdb3716098b7a2562c252a6903"
+  },
+  "same_beta_at_all_qps": true,
+  "per_qp": {
+    "0": {
+      "selected": {
+        "beta": 45.0,
+        "mean_delta444_db": 0.09167780387638547,
+        "legacy_mean_saving_pct": 34.16688311280936,
+        "exact_mean_saving_pct": 33.513078443022756,
+        "eligible": true
+      },
+      "exact_optimum": {
+        "beta": 45.0,
+        "mean_delta444_db": 0.09167780387638547,
+        "legacy_mean_saving_pct": 34.16688311280936,
+        "exact_mean_saving_pct": 33.513078443022756,
+        "eligible": true
+      },
+      "same_beta": true,
+      "candidates": [
+        {
+          "beta": -50.0,
+          "mean_delta444_db": 0.0,
+          "legacy_mean_saving_pct": -0.022454556614022417,
+          "exact_mean_saving_pct": 0.0,
+          "eligible": true
+        },
+        {
+          "beta": -45.0,
+          "mean_delta444_db": 0.0,
+          "legacy_mean_saving_pct": -0.022454556614022417,
+          "exact_mean_saving_pct": 0.0,
+          "eligible": true
+        },
+        {
+          "beta": -40.0,
+          "mean_delta444_db": 0.0,
+          "legacy_mean_saving_pct": -0.022454556614022417,
+          "exact_mean_saving_pct": 0.0,
+          "eligible": true
+        },
+        {
+          "beta": -35.0,
+          "mean_delta444_db": 0.0,
+          "legacy_mean_saving_pct": -0.022454556614022417,
+          "exact_mean_saving_pct": 0.0,
+          "eligible": true
+        },
+        {
+          "beta": -30.0,
+          "mean_delta444_db": 0.0,
+          "legacy_mean_saving_pct": -0.022454556614022417,
+          "exact_mean_saving_pct": 0.0,
+          "eligible": true
+        },
+        {
+          "beta": -25.0,
+          "mean_delta444_db": 0.0,
+          "legacy_mean_saving_pct": -0.022454556614022417,
+          "exact_mean_saving_pct": 0.0,
+          "eligible": true
+        },
+        {
+          "beta": -20.0,
+          "mean_delta444_db": 0.0006371337017721546,
+          "legacy_mean_saving_pct": 0.7543972754397611,
+          "exact_mean_saving_pct": 0.769184710266083,
+          "eligible": true
+        },
+        {
+          "beta": -15.0,
+          "mean_delta444_db": 0.0013501612043480273,
+          "legacy_mean_saving_pct": 1.4341428458372434,
+          "exact_mean_saving_pct": 1.4422213317489059,
+          "eligible": true
+        },
+        {
+          "beta": -10.0,
+          "mean_delta444_db": 0.001860437523604168,
+          "legacy_mean_saving_pct": 2.7742806065475207,
+          "exact_mean_saving_pct": 2.7661862716649863,
+          "eligible": true
+        },
+        {
+          "beta": -5.0,
+          "mean_delta444_db": 0.0024931408391802284,
+          "legacy_mean_saving_pct": 4.121211050491756,
+          "exact_mean_saving_pct": 4.083127219466361,
+          "eligible": true
+        },
+        {
+          "beta": 0.0,
+          "mean_delta444_db": 0.005926177390893236,
+          "legacy_mean_saving_pct": 7.003516075379743,
+          "exact_mean_saving_pct": 6.873149005356658,
+          "eligible": true
+        },
+        {
+          "beta": 5.0,
+          "mean_delta444_db": 0.01289708296848127,
+          "legacy_mean_saving_pct": 10.849752478673741,
+          "exact_mean_saving_pct": 10.646069097658822,
+          "eligible": true
+        },
+        {
+          "beta": 10.0,
+          "mean_delta444_db": 0.022237303804251925,
+          "legacy_mean_saving_pct": 19.03386732282699,
+          "exact_mean_saving_pct": 18.694412586993874,
+          "eligible": true
+        },
+        {
+          "beta": 14.022931575775123,
+          "mean_delta444_db": 0.03853229991306193,
+          "legacy_mean_saving_pct": 23.159886546000283,
+          "exact_mean_saving_pct": 22.68346437108787,
+          "eligible": true
+        },
+        {
+          "beta": 15.0,
+          "mean_delta444_db": 0.04568284223153846,
+          "legacy_mean_saving_pct": 24.701371421359642,
+          "exact_mean_saving_pct": 24.178308069991203,
+          "eligible": true
+        },
+        {
+          "beta": 20.0,
+          "mean_delta444_db": 0.07206204392903869,
+          "legacy_mean_saving_pct": 28.781891698587756,
+          "exact_mean_saving_pct": 28.130167240100786,
+          "eligible": true
+        },
+        {
+          "beta": 25.0,
+          "mean_delta444_db": 0.07292484585514244,
+          "legacy_mean_saving_pct": 29.19612170710135,
+          "exact_mean_saving_pct": 28.544237332633244,
+          "eligible": true
+        },
+        {
+          "beta": 30.0,
+          "mean_delta444_db": 0.07576665894761138,
+          "legacy_mean_saving_pct": 30.23169710083072,
+          "exact_mean_saving_pct": 29.579412563964386,
+          "eligible": true
+        },
+        {
+          "beta": 30.677844047546365,
+          "mean_delta444_db": 0.07576665894761138,
+          "legacy_mean_saving_pct": 30.23169710083072,
+          "exact_mean_saving_pct": 29.579412563964386,
+          "eligible": true
+        },
+        {
+          "beta": 35.0,
+          "mean_delta444_db": 0.0797412904067158,
+          "legacy_mean_saving_pct": 31.060157490303286,
+          "exact_mean_saving_pct": 30.40755274902931,
+          "eligible": true
+        },
+        {
+          "beta": 40.0,
+          "mean_delta444_db": 0.08640757463539644,
+          "legacy_mean_saving_pct": 32.30284776416886,
+          "exact_mean_saving_pct": 31.64976302662669,
+          "eligible": true
+        },
+        {
+          "beta": 45.0,
+          "mean_delta444_db": 0.09167780387638547,
+          "legacy_mean_saving_pct": 34.16688311280936,
+          "exact_mean_saving_pct": 33.513078443022756,
+          "eligible": true
+        },
+        {
+          "beta": 50.0,
+          "mean_delta444_db": 0.1016838792983174,
+          "legacy_mean_saving_pct": 36.34159075054039,
+          "exact_mean_saving_pct": 35.68694642881817,
+          "eligible": false
+        },
+        {
+          "beta": 55.0,
+          "mean_delta444_db": 0.14244788562411292,
+          "legacy_mean_saving_pct": 39.13764383568689,
+          "exact_mean_saving_pct": 38.48191955341227,
+          "eligible": false
+        },
+        {
+          "beta": 60.0,
+          "mean_delta444_db": 0.14565682888875792,
+          "legacy_mean_saving_pct": 39.551873968321054,
+          "exact_mean_saving_pct": 38.89598964594473,
+          "eligible": false
+        }
+      ]
+    },
+    "16": {
+      "selected": {
+        "beta": 15.0,
+        "mean_delta444_db": 0.04152053806385915,
+        "legacy_mean_saving_pct": 22.071338624640465,
+        "exact_mean_saving_pct": 21.64690737081612,
+        "eligible": true
+      },
+      "exact_optimum": {
+        "beta": 15.0,
+        "mean_delta444_db": 0.04152053806385915,
+        "legacy_mean_saving_pct": 22.071338624640465,
+        "exact_mean_saving_pct": 21.64690737081612,
+        "eligible": true
+      },
+      "same_beta": true,
+      "candidates": [
+        {
+          "beta": -50.0,
+          "mean_delta444_db": 0.0,
+          "legacy_mean_saving_pct": -0.022454556614022417,
+          "exact_mean_saving_pct": 0.0,
+          "eligible": true
+        },
+        {
+          "beta": -45.0,
+          "mean_delta444_db": 0.0,
+          "legacy_mean_saving_pct": -0.022454556614022417,
+          "exact_mean_saving_pct": 0.0,
+          "eligible": true
+        },
+        {
+          "beta": -40.0,
+          "mean_delta444_db": 0.0,
+          "legacy_mean_saving_pct": -0.022454556614022417,
+          "exact_mean_saving_pct": 0.0,
+          "eligible": true
+        },
+        {
+          "beta": -35.0,
+          "mean_delta444_db": 0.0,
+          "legacy_mean_saving_pct": -0.022454556614022417,
+          "exact_mean_saving_pct": 0.0,
+          "eligible": true
+        },
+        {
+          "beta": -30.0,
+          "mean_delta444_db": 0.0009503826775197464,
+          "legacy_mean_saving_pct": 0.7543976479687912,
+          "exact_mean_saving_pct": 0.769184710266083,
+          "eligible": true
+        },
+        {
+          "beta": -25.0,
+          "mean_delta444_db": 0.0013143642705556074,
+          "legacy_mean_saving_pct": 1.5312492316698885,
+          "exact_mean_saving_pct": 1.5383694205321659,
+          "eligible": true
+        },
+        {
+          "beta": -20.0,
+          "mean_delta444_db": 0.002221424200081247,
+          "legacy_mean_saving_pct": 2.444254937734747,
+          "exact_mean_saving_pct": 2.433525399216076,
+          "eligible": true
+        },
+        {
+          "beta": -15.0,
+          "mean_delta444_db": 0.005077886433639601,
+          "legacy_mean_saving_pct": 4.251255064620782,
+          "exact_mean_saving_pct": 4.187335627069775,
+          "eligible": true
+        },
+        {
+          "beta": -10.0,
+          "mean_delta444_db": 0.006965516664495533,
+          "legacy_mean_saving_pct": 5.980501937155251,
+          "exact_mean_saving_pct": 5.867106069189776,
+          "eligible": true
+        },
+        {
+          "beta": -5.0,
+          "mean_delta444_db": 0.009156402802914501,
+          "legacy_mean_saving_pct": 7.107415144306944,
+          "exact_mean_saving_pct": 6.962273102025212,
+          "eligible": true
+        },
+        {
+          "beta": 0.0,
+          "mean_delta444_db": 0.011153236198499337,
+          "legacy_mean_saving_pct": 8.454004300807327,
+          "exact_mean_saving_pct": 8.293607476291148,
+          "eligible": true
+        },
+        {
+          "beta": 5.0,
+          "mean_delta444_db": 0.015566017057481915,
+          "legacy_mean_saving_pct": 10.914603935190407,
+          "exact_mean_saving_pct": 10.705370014692809,
+          "eligible": true
+        },
+        {
+          "beta": 10.0,
+          "mean_delta444_db": 0.02805056756521403,
+          "legacy_mean_saving_pct": 16.90974382161269,
+          "exact_mean_saving_pct": 16.622680355390973,
+          "eligible": true
+        },
+        {
+          "beta": 14.022931575775123,
+          "mean_delta444_db": 0.03867461028803299,
+          "legacy_mean_saving_pct": 21.00893527628801,
+          "exact_mean_saving_pct": 20.62543468147923,
+          "eligible": true
+        },
+        {
+          "beta": 15.0,
+          "mean_delta444_db": 0.04152053806385915,
+          "legacy_mean_saving_pct": 22.071338624640465,
+          "exact_mean_saving_pct": 21.64690737081612,
+          "eligible": true
+        },
+        {
+          "beta": 20.0,
+          "mean_delta444_db": 0.10482809779444852,
+          "legacy_mean_saving_pct": 28.017941912805203,
+          "exact_mean_saving_pct": 27.37572139853441,
+          "eligible": false
+        },
+        {
+          "beta": 25.0,
+          "mean_delta444_db": 0.11087397982448623,
+          "legacy_mean_saving_pct": 28.88544923171842,
+          "exact_mean_saving_pct": 28.2336847632339,
+          "eligible": false
+        },
+        {
+          "beta": 30.0,
+          "mean_delta444_db": 0.11276337540285176,
+          "legacy_mean_saving_pct": 29.196121893310103,
+          "exact_mean_saving_pct": 28.54423733263324,
+          "eligible": false
+        },
+        {
+          "beta": 35.0,
+          "mean_delta444_db": 0.11465058002245472,
+          "legacy_mean_saving_pct": 29.71390955915858,
+          "exact_mean_saving_pct": 29.061824948298817,
+          "eligible": false
+        },
+        {
+          "beta": 40.0,
+          "mean_delta444_db": 0.11802984310690147,
+          "legacy_mean_saving_pct": 30.33525475813772,
+          "exact_mean_saving_pct": 29.682930087097503,
+          "eligible": false
+        },
+        {
+          "beta": 45.0,
+          "mean_delta444_db": 0.12362439496483509,
+          "legacy_mean_saving_pct": 31.37082977939382,
+          "exact_mean_saving_pct": 30.718105318428655,
+          "eligible": false
+        },
+        {
+          "beta": 50.0,
+          "mean_delta444_db": 0.12905657664513182,
+          "legacy_mean_saving_pct": 32.820635305813106,
+          "exact_mean_saving_pct": 32.16735064229227,
+          "eligible": false
+        },
+        {
+          "beta": 55.0,
+          "mean_delta444_db": 0.1401407090747406,
+          "legacy_mean_saving_pct": 34.37399805497798,
+          "exact_mean_saving_pct": 33.720113489288984,
+          "eligible": false
+        },
+        {
+          "beta": 60.0,
+          "mean_delta444_db": 0.18051527802553657,
+          "legacy_mean_saving_pct": 36.65226335009966,
+          "exact_mean_saving_pct": 35.99749899821751,
+          "eligible": false
+        }
+      ]
+    },
+    "32": {
+      "selected": {
+        "beta": 15.0,
+        "mean_delta444_db": 0.06651364046568777,
+        "legacy_mean_saving_pct": 22.200358962841857,
+        "exact_mean_saving_pct": 21.794296057813217,
+        "eligible": true
+      },
+      "exact_optimum": {
+        "beta": 15.0,
+        "mean_delta444_db": 0.06651364046568777,
+        "legacy_mean_saving_pct": 22.200358962841857,
+        "exact_mean_saving_pct": 21.794296057813217,
+        "eligible": true
+      },
+      "same_beta": true,
+      "candidates": [
+        {
+          "beta": -50.0,
+          "mean_delta444_db": 0.0,
+          "legacy_mean_saving_pct": -0.022454556614022417,
+          "exact_mean_saving_pct": 0.0,
+          "eligible": true
+        },
+        {
+          "beta": -45.0,
+          "mean_delta444_db": 0.0,
+          "legacy_mean_saving_pct": -0.022454556614022417,
+          "exact_mean_saving_pct": 0.0,
+          "eligible": true
+        },
+        {
+          "beta": -40.0,
+          "mean_delta444_db": 0.0,
+          "legacy_mean_saving_pct": -0.022454556614022417,
+          "exact_mean_saving_pct": 0.0,
+          "eligible": true
+        },
+        {
+          "beta": -35.0,
+          "mean_delta444_db": 0.0005613935871542727,
+          "legacy_mean_saving_pct": 0.8515039095693312,
+          "exact_mean_saving_pct": 0.8653327990493435,
+          "eligible": true
+        },
+        {
+          "beta": -30.0,
+          "mean_delta444_db": 0.001818695761849918,
+          "legacy_mean_saving_pct": 1.822568885928958,
+          "exact_mean_saving_pct": 1.8268136868819467,
+          "eligible": true
+        },
+        {
+          "beta": -25.0,
+          "mean_delta444_db": 0.00495973464342734,
+          "legacy_mean_saving_pct": 3.4740618831186176,
+          "exact_mean_saving_pct": 3.4325443432682525,
+          "eligible": true
+        },
+        {
+          "beta": -20.0,
+          "mean_delta444_db": 0.008383521273473136,
+          "legacy_mean_saving_pct": 5.987294247637134,
+          "exact_mean_saving_pct": 5.860082077075071,
+          "eligible": true
+        },
+        {
+          "beta": -15.0,
+          "mean_delta444_db": 0.010064651530503123,
+          "legacy_mean_saving_pct": 6.939006030427511,
+          "exact_mean_saving_pct": 6.79945466185811,
+          "eligible": true
+        },
+        {
+          "beta": -10.0,
+          "mean_delta444_db": 0.013012140747898448,
+          "legacy_mean_saving_pct": 7.949118494909803,
+          "exact_mean_saving_pct": 7.7907587293252805,
+          "eligible": true
+        },
+        {
+          "beta": -5.0,
+          "mean_delta444_db": 0.016879166041832754,
+          "legacy_mean_saving_pct": 8.991485578295098,
+          "exact_mean_saving_pct": 8.818909968541725,
+          "eligible": true
+        },
+        {
+          "beta": -3.7646704912185776,
+          "mean_delta444_db": 0.01812807992837874,
+          "legacy_mean_saving_pct": 9.748983968426947,
+          "exact_mean_saving_pct": 9.565986375758245,
+          "eligible": true
+        },
+        {
+          "beta": 0.0,
+          "mean_delta444_db": 0.021544157358053966,
+          "legacy_mean_saving_pct": 10.635844605085754,
+          "exact_mean_saving_pct": 10.446058043507298,
+          "eligible": true
+        },
+        {
+          "beta": 5.0,
+          "mean_delta444_db": 0.02913169159797152,
+          "legacy_mean_saving_pct": 12.80478447752482,
+          "exact_mean_saving_pct": 12.58376974202374,
+          "eligible": true
+        },
+        {
+          "beta": 10.0,
+          "mean_delta444_db": 0.04274350417463448,
+          "legacy_mean_saving_pct": 16.79328430438261,
+          "exact_mean_saving_pct": 16.504423963558146,
+          "eligible": true
+        },
+        {
+          "beta": 14.022931575775123,
+          "mean_delta444_db": 0.06363676269744171,
+          "legacy_mean_saving_pct": 21.299913519038405,
+          "exact_mean_saving_pct": 20.928272374293574,
+          "eligible": true
+        },
+        {
+          "beta": 15.0,
+          "mean_delta444_db": 0.06651364046568777,
+          "legacy_mean_saving_pct": 22.200358962841857,
+          "exact_mean_saving_pct": 21.794296057813217,
+          "eligible": true
+        },
+        {
+          "beta": 20.0,
+          "mean_delta444_db": 0.13142518211043322,
+          "legacy_mean_saving_pct": 27.408816495594692,
+          "exact_mean_saving_pct": 26.79814198136455,
+          "eligible": false
+        },
+        {
+          "beta": 25.0,
+          "mean_delta444_db": 0.1741127170623766,
+          "legacy_mean_saving_pct": 29.403237021743237,
+          "exact_mean_saving_pct": 28.751272378899472,
+          "eligible": false
+        },
+        {
+          "beta": 30.0,
+          "mean_delta444_db": 0.17626959981815063,
+          "legacy_mean_saving_pct": 29.610352150148497,
+          "exact_mean_saving_pct": 28.9583074251657,
+          "eligible": false
+        },
+        {
+          "beta": 35.0,
+          "mean_delta444_db": 0.17697199348147866,
+          "legacy_mean_saving_pct": 29.713909621246753,
+          "exact_mean_saving_pct": 29.06182494829881,
+          "eligible": false
+        },
+        {
+          "beta": 40.0,
+          "mean_delta444_db": 0.17937372341985336,
+          "legacy_mean_saving_pct": 30.128139691820635,
+          "exact_mean_saving_pct": 29.475895040831272,
+          "eligible": false
+        },
+        {
+          "beta": 45.0,
+          "mean_delta444_db": 0.18565588018276577,
+          "legacy_mean_saving_pct": 30.853042237721684,
+          "exact_mean_saving_pct": 30.200517702763076,
+          "eligible": false
+        },
+        {
+          "beta": 50.0,
+          "mean_delta444_db": 0.19455521556903518,
+          "legacy_mean_saving_pct": 32.19929023095455,
+          "exact_mean_saving_pct": 31.54624550349358,
+          "eligible": false
+        },
+        {
+          "beta": 55.0,
+          "mean_delta444_db": 0.20163304766227094,
+          "legacy_mean_saving_pct": 33.027750247953854,
+          "exact_mean_saving_pct": 32.3743856885585,
+          "eligible": false
+        },
+        {
+          "beta": 60.0,
+          "mean_delta444_db": 0.21827633558189963,
+          "legacy_mean_saving_pct": 34.37399811706616,
+          "exact_mean_saving_pct": 33.720113489288984,
+          "eligible": false
+        }
+      ]
+    },
+    "48": {
+      "selected": {
+        "beta": 10.0,
+        "mean_delta444_db": 0.07129846929673955,
+        "legacy_mean_saving_pct": 18.18537184792312,
+        "exact_mean_saving_pct": 17.872950951808505,
+        "eligible": true
+      },
+      "exact_optimum": {
+        "beta": 10.0,
+        "mean_delta444_db": 0.07129846929673955,
+        "legacy_mean_saving_pct": 18.18537184792312,
+        "exact_mean_saving_pct": 17.872950951808505,
+        "eligible": true
+      },
+      "same_beta": true,
+      "candidates": [
+        {
+          "beta": -50.0,
+          "mean_delta444_db": 0.0,
+          "legacy_mean_saving_pct": -0.022454556614022417,
+          "exact_mean_saving_pct": 0.0,
+          "eligible": true
+        },
+        {
+          "beta": -45.0,
+          "mean_delta444_db": 0.0,
+          "legacy_mean_saving_pct": -0.022454556614022417,
+          "exact_mean_saving_pct": 0.0,
+          "eligible": true
+        },
+        {
+          "beta": -40.0,
+          "mean_delta444_db": 0.0,
+          "legacy_mean_saving_pct": -0.022454556614022417,
+          "exact_mean_saving_pct": 0.0,
+          "eligible": true
+        },
+        {
+          "beta": -35.0,
+          "mean_delta444_db": 0.0005113332159828156,
+          "legacy_mean_saving_pct": 0.36597123523652564,
+          "exact_mean_saving_pct": 0.38459235513304174,
+          "eligible": true
+        },
+        {
+          "beta": -30.0,
+          "mean_delta444_db": 0.0024519371616279336,
+          "legacy_mean_saving_pct": 1.919675395993706,
+          "exact_mean_saving_pct": 1.9229617756652075,
+          "eligible": true
+        },
+        {
+          "beta": -25.0,
+          "mean_delta444_db": 0.010438662079949089,
+          "legacy_mean_saving_pct": 5.339803358314465,
+          "exact_mean_saving_pct": 5.223892627341521,
+          "eligible": true
+        },
+        {
+          "beta": -20.0,
+          "mean_delta444_db": 0.015339118404254615,
+          "legacy_mean_saving_pct": 7.347126303207517,
+          "exact_mean_saving_pct": 7.191761893576156,
+          "eligible": true
+        },
+        {
+          "beta": -18.459519386291518,
+          "mean_delta444_db": 0.01707832515788173,
+          "legacy_mean_saving_pct": 7.923314029949835,
+          "exact_mean_saving_pct": 7.7612809919258625,
+          "eligible": true
+        },
+        {
+          "beta": -15.0,
+          "mean_delta444_db": 0.02069987606228366,
+          "legacy_mean_saving_pct": 8.816625255113117,
+          "exact_mean_saving_pct": 8.64872209402477,
+          "eligible": true
+        },
+        {
+          "beta": -10.0,
+          "mean_delta444_db": 0.030549744561915487,
+          "legacy_mean_saving_pct": 10.992015715945135,
+          "exact_mean_saving_pct": 10.793803226891065,
+          "eligible": true
+        },
+        {
+          "beta": -5.0,
+          "mean_delta444_db": 0.03616864850434887,
+          "legacy_mean_saving_pct": 12.319251678848387,
+          "exact_mean_saving_pct": 12.103029298107439,
+          "eligible": true
+        },
+        {
+          "beta": 0.0,
+          "mean_delta444_db": 0.04362068155470275,
+          "legacy_mean_saving_pct": 13.581636185207097,
+          "exact_mean_saving_pct": 13.352954452289824,
+          "eligible": true
+        },
+        {
+          "beta": 5.0,
+          "mean_delta444_db": 0.05508212260715717,
+          "legacy_mean_saving_pct": 15.601861238515314,
+          "exact_mean_saving_pct": 15.335562587224162,
+          "eligible": true
+        },
+        {
+          "beta": 10.0,
+          "mean_delta444_db": 0.07129846929673955,
+          "legacy_mean_saving_pct": 18.18537184792312,
+          "exact_mean_saving_pct": 17.872950951808505,
+          "eligible": true
+        },
+        {
+          "beta": 14.022931575775123,
+          "mean_delta444_db": 0.10131829644013281,
+          "legacy_mean_saving_pct": 21.766093620767325,
+          "exact_mean_saving_pct": 21.386904515160307,
+          "eligible": false
+        },
+        {
+          "beta": 15.0,
+          "mean_delta444_db": 0.10957173125099773,
+          "legacy_mean_saving_pct": 22.65974631963897,
+          "exact_mean_saving_pct": 22.259952190794653,
+          "eligible": false
+        },
+        {
+          "beta": 20.0,
+          "mean_delta444_db": 0.1597183614681701,
+          "legacy_mean_saving_pct": 27.790450225316036,
+          "exact_mean_saving_pct": 27.189758328612296,
+          "eligible": false
+        },
+        {
+          "beta": 25.0,
+          "mean_delta444_db": 0.25310527414454737,
+          "legacy_mean_saving_pct": 29.6426072036687,
+          "exact_mean_saving_pct": 28.99515459691497,
+          "eligible": false
+        },
+        {
+          "beta": 30.0,
+          "mean_delta444_db": 0.2631440945971867,
+          "legacy_mean_saving_pct": 30.335254633989262,
+          "exact_mean_saving_pct": 29.682930087097503,
+          "eligible": false
+        },
+        {
+          "beta": 35.0,
+          "mean_delta444_db": 0.2641699695205923,
+          "legacy_mean_saving_pct": 30.43881210508751,
+          "exact_mean_saving_pct": 29.78644761023062,
+          "eligible": false
+        },
+        {
+          "beta": 40.0,
+          "mean_delta444_db": 0.2733236041602429,
+          "legacy_mean_saving_pct": 31.37082977936593,
+          "exact_mean_saving_pct": 30.718105318428655,
+          "eligible": false
+        },
+        {
+          "beta": 45.0,
+          "mean_delta444_db": 0.28515539681771335,
+          "legacy_mean_saving_pct": 32.199290168894265,
+          "exact_mean_saving_pct": 31.546245503493576,
+          "eligible": false
+        },
+        {
+          "beta": 50.0,
+          "mean_delta444_db": 0.2988433087580191,
+          "legacy_mean_saving_pct": 33.23486531427094,
+          "exact_mean_saving_pct": 32.581420734824725,
+          "eligible": false
+        },
+        {
+          "beta": 55.0,
+          "mean_delta444_db": 0.30337392459284235,
+          "legacy_mean_saving_pct": 33.649095446932996,
+          "exact_mean_saving_pct": 32.99549082735718,
+          "eligible": false
+        },
+        {
+          "beta": 60.0,
+          "mean_delta444_db": 0.3165144090957593,
+          "legacy_mean_saving_pct": 34.788228001403404,
+          "exact_mean_saving_pct": 34.134183581821446,
+          "eligible": false
+        }
+      ]
+    },
+    "63": {
+      "selected": {
+        "beta": 5.0,
+        "mean_delta444_db": 0.09825753748037329,
+        "legacy_mean_saving_pct": 17.75178870801209,
+        "exact_mean_saving_pct": 17.436772556226487,
+        "eligible": true
+      },
+      "exact_optimum": {
+        "beta": 5.0,
+        "mean_delta444_db": 0.09825753748037329,
+        "legacy_mean_saving_pct": 17.75178870801209,
+        "exact_mean_saving_pct": 17.436772556226487,
+        "eligible": true
+      },
+      "same_beta": true,
+      "candidates": [
+        {
+          "beta": -50.0,
+          "mean_delta444_db": 0.0,
+          "legacy_mean_saving_pct": -0.022454556614022417,
+          "exact_mean_saving_pct": 0.0,
+          "eligible": true
+        },
+        {
+          "beta": -45.0,
+          "mean_delta444_db": 0.0,
+          "legacy_mean_saving_pct": -0.022454556614022417,
+          "exact_mean_saving_pct": 0.0,
+          "eligible": true
+        },
+        {
+          "beta": -40.0,
+          "mean_delta444_db": 0.0,
+          "legacy_mean_saving_pct": -0.022454556614022417,
+          "exact_mean_saving_pct": 0.0,
+          "eligible": true
+        },
+        {
+          "beta": -35.0,
+          "mean_delta444_db": 0.0,
+          "legacy_mean_saving_pct": -0.022454556614022417,
+          "exact_mean_saving_pct": 0.0,
+          "eligible": true
+        },
+        {
+          "beta": -30.0,
+          "mean_delta444_db": 0.003607253873887887,
+          "legacy_mean_saving_pct": 1.9196752718173633,
+          "exact_mean_saving_pct": 1.9229617756652069,
+          "eligible": true
+        },
+        {
+          "beta": -25.0,
+          "mean_delta444_db": 0.012415225723109944,
+          "legacy_mean_saving_pct": 4.750031010580496,
+          "exact_mean_saving_pct": 4.668421513221225,
+          "eligible": true
+        },
+        {
+          "beta": -23.517197608947768,
+          "mean_delta444_db": 0.01665502231945439,
+          "legacy_mean_saving_pct": 6.175055810055635,
+          "exact_mean_saving_pct": 6.045008820291737,
+          "eligible": true
+        },
+        {
+          "beta": -20.0,
+          "mean_delta444_db": 0.029671851852291042,
+          "legacy_mean_saving_pct": 9.069239143171165,
+          "exact_mean_saving_pct": 8.892949754275422,
+          "eligible": true
+        },
+        {
+          "beta": -15.0,
+          "mean_delta444_db": 0.043857056778088384,
+          "legacy_mean_saving_pct": 11.322041384813668,
+          "exact_mean_saving_pct": 11.126464099339977,
+          "eligible": true
+        },
+        {
+          "beta": -10.0,
+          "mean_delta444_db": 0.06077625252720931,
+          "legacy_mean_saving_pct": 13.562282929744844,
+          "exact_mean_saving_pct": 13.330846149240257,
+          "eligible": true
+        },
+        {
+          "beta": -5.0,
+          "mean_delta444_db": 0.07393766952451462,
+          "legacy_mean_saving_pct": 14.999868674311877,
+          "exact_mean_saving_pct": 14.736565751475041,
+          "eligible": true
+        },
+        {
+          "beta": 0.0,
+          "mean_delta444_db": 0.08463595158427346,
+          "legacy_mean_saving_pct": 16.204194655461762,
+          "exact_mean_saving_pct": 15.920165996508736,
+          "eligible": true
+        },
+        {
+          "beta": 5.0,
+          "mean_delta444_db": 0.09825753748037329,
+          "legacy_mean_saving_pct": 17.75178870801209,
+          "exact_mean_saving_pct": 17.436772556226487,
+          "eligible": true
+        },
+        {
+          "beta": 10.0,
+          "mean_delta444_db": 0.11890690436845974,
+          "legacy_mean_saving_pct": 19.882022193256898,
+          "exact_mean_saving_pct": 19.530267648643797,
+          "eligible": false
+        },
+        {
+          "beta": 14.022931575775123,
+          "mean_delta444_db": 0.16205191659606655,
+          "legacy_mean_saving_pct": 23.067524932418213,
+          "exact_mean_saving_pct": 22.666652848977265,
+          "eligible": false
+        },
+        {
+          "beta": 15.0,
+          "mean_delta444_db": 0.16944390448570953,
+          "legacy_mean_saving_pct": 23.514351468132492,
+          "exact_mean_saving_pct": 23.103176686794438,
+          "eligible": false
+        },
+        {
+          "beta": 20.0,
+          "mean_delta444_db": 0.2514656024989063,
+          "legacy_mean_saving_pct": 28.31434762695386,
+          "exact_mean_saving_pct": 27.729108805092277,
+          "eligible": false
+        },
+        {
+          "beta": 25.0,
+          "mean_delta444_db": 0.3454998363553348,
+          "legacy_mean_saving_pct": 30.43201991872621,
+          "exact_mean_saving_pct": 29.793471602345324,
+          "eligible": false
+        },
+        {
+          "beta": 30.0,
+          "mean_delta444_db": 0.3948575911351266,
+          "legacy_mean_saving_pct": 31.888617507302584,
+          "exact_mean_saving_pct": 31.23569293409423,
+          "eligible": false
+        },
+        {
+          "beta": 35.0,
+          "mean_delta444_db": 0.39919410359488267,
+          "legacy_mean_saving_pct": 32.09573263570784,
+          "exact_mean_saving_pct": 31.442727980360463,
+          "eligible": false
+        },
+        {
+          "beta": 40.0,
+          "mean_delta444_db": 0.4121467621205877,
+          "legacy_mean_saving_pct": 32.71707771056639,
+          "exact_mean_saving_pct": 32.06383311915915,
+          "eligible": false
+        },
+        {
+          "beta": 45.0,
+          "mean_delta444_db": 0.4273631879574491,
+          "legacy_mean_saving_pct": 33.64909538484482,
+          "exact_mean_saving_pct": 32.99549082735718,
+          "eligible": false
+        },
+        {
+          "beta": 50.0,
+          "mean_delta444_db": 0.4359474147368352,
+          "legacy_mean_saving_pct": 34.166882864484556,
+          "exact_mean_saving_pct": 33.51307844302275,
+          "eligible": false
+        },
+        {
+          "beta": 55.0,
+          "mean_delta444_db": 0.45693030814443064,
+          "legacy_mean_saving_pct": 35.09890053881875,
+          "exact_mean_saving_pct": 34.44473615122079,
+          "eligible": false
+        },
+        {
+          "beta": 60.0,
+          "mean_delta444_db": 0.500029451660872,
+          "legacy_mean_saving_pct": 36.54870575482507,
+          "exact_mean_saving_pct": 35.8939814750844,
+          "eligible": false
+        }
+      ]
+    }
+  },
+  "validation_mean_exact_saving_pct": 22.56444800633772,
+  "validation_mean_legacy_saving_pct": 23.014292116774307,
+  "validation_rows": [
+    {
+      "image": "0844.png",
+      "qp": 0,
+      "selected_beta": 45.0,
+      "exact_saving_pct": 39.413577261610314,
+      "legacy_saving_pct": 40.06966163416955,
+      "delta444_db": 0.3330382615543767
+    },
+    {
+      "image": "0844.png",
+      "qp": 16,
+      "selected_beta": 15.0,
+      "exact_saving_pct": 34.44473615122079,
+      "legacy_saving_pct": 35.098900041890325,
+      "delta444_db": 0.2049139762717247
+    },
+    {
+      "image": "0844.png",
+      "qp": 32,
+      "selected_beta": 15.0,
+      "exact_saving_pct": 34.44473615122079,
+      "legacy_saving_pct": 35.098900041890325,
+      "delta444_db": 0.26771581195117483
+    },
+    {
+      "image": "0844.png",
+      "qp": 48,
+      "selected_beta": 10.0,
+      "exact_saving_pct": 34.44473615122079,
+      "legacy_saving_pct": 35.098900041890325,
+      "delta444_db": 0.47678597551124974
+    },
+    {
+      "image": "0844.png",
+      "qp": 63,
+      "selected_beta": 5.0,
+      "exact_saving_pct": 30.360227162813835,
+      "legacy_saving_pct": 30.902261224881222,
+      "delta444_db": 0.3785157594999281
+    },
+    {
+      "image": "0892.png",
+      "qp": 0,
+      "selected_beta": 45.0,
+      "exact_saving_pct": 39.413577261610314,
+      "legacy_saving_pct": 40.06966163416955,
+      "delta444_db": 0.333688735903233
+    },
+    {
+      "image": "0892.png",
+      "qp": 16,
+      "selected_beta": 15.0,
+      "exact_saving_pct": 19.176189357615627,
+      "legacy_saving_pct": 19.559132109191346,
+      "delta444_db": 0.10724141765807713
+    },
+    {
+      "image": "0892.png",
+      "qp": 32,
+      "selected_beta": 15.0,
+      "exact_saving_pct": 19.176189357615627,
+      "legacy_saving_pct": 19.559132109191346,
+      "delta444_db": 0.17741058909493507
+    },
+    {
+      "image": "0892.png",
+      "qp": 48,
+      "selected_beta": 10.0,
+      "exact_saving_pct": 17.399234500006912,
+      "legacy_saving_pct": 17.693048042281834,
+      "delta444_db": 0.27784376976942066
+    },
+    {
+      "image": "0892.png",
+      "qp": 63,
+      "selected_beta": 5.0,
+      "exact_saving_pct": 12.253526965220873,
+      "legacy_saving_pct": 12.56746040563543,
+      "delta444_db": 0.19946466284056158
+    },
+    {
+      "image": "0891.png",
+      "qp": 0,
+      "selected_beta": 45.0,
+      "exact_saving_pct": 29.47589504083127,
+      "legacy_saving_pct": 30.12813994039636,
+      "delta444_db": 0.14320345380593466
+    },
+    {
+      "image": "0891.png",
+      "qp": 16,
+      "selected_beta": 15.0,
+      "exact_saving_pct": 15.09168036920866,
+      "legacy_saving_pct": 15.362491802066124,
+      "delta444_db": 0.07761514205550568
+    },
+    {
+      "image": "0891.png",
+      "qp": 32,
+      "selected_beta": 15.0,
+      "exact_saving_pct": 10.47657210761217,
+      "legacy_saving_pct": 10.70137633872592,
+      "delta444_db": 0.08094740729092204
+    },
+    {
+      "image": "0891.png",
+      "qp": 48,
+      "selected_beta": 10.0,
+      "exact_saving_pct": 6.392063119205204,
+      "legacy_saving_pct": 6.504741992065173,
+      "delta444_db": 0.046332796946385674
+    },
+    {
+      "image": "0891.png",
+      "qp": 63,
+      "selected_beta": 5.0,
+      "exact_saving_pct": 4.084508988406954,
+      "legacy_saving_pct": 4.174182770278951,
+      "delta444_db": 0.038409561151210136
+    },
+    {
+      "image": "0819.png",
+      "qp": 0,
+      "selected_beta": 45.0,
+      "exact_saving_pct": 39.413577261610314,
+      "legacy_saving_pct": 40.06966163416955,
+      "delta444_db": 0.0488724158553567
+    },
+    {
+      "image": "0819.png",
+      "qp": 16,
+      "selected_beta": 15.0,
+      "exact_saving_pct": 24.507053930441746,
+      "legacy_saving_pct": 25.15737834811714,
+      "delta444_db": 0.030602802507051007
+    },
+    {
+      "image": "0819.png",
+      "qp": 32,
+      "selected_beta": 15.0,
+      "exact_saving_pct": 24.507053930441746,
+      "legacy_saving_pct": 25.15737834811714,
+      "delta444_db": 0.06425854594236297
+    },
+    {
+      "image": "0819.png",
+      "qp": 48,
+      "selected_beta": 10.0,
+      "exact_saving_pct": 24.507053930441746,
+      "legacy_saving_pct": 25.15737834811714,
+      "delta444_db": 0.14101902927887022
+    },
+    {
+      "image": "0819.png",
+      "qp": 63,
+      "selected_beta": 5.0,
+      "exact_saving_pct": 24.507053930441746,
+      "legacy_saving_pct": 25.15737834811714,
+      "delta444_db": 0.2469532930211023
+    },
+    {
+      "image": "0871.png",
+      "qp": 0,
+      "selected_beta": 45.0,
+      "exact_saving_pct": 39.413577261610314,
+      "legacy_saving_pct": 40.06966163416955,
+      "delta444_db": 0.12113811234412046
+    },
+    {
+      "image": "0871.png",
+      "qp": 16,
+      "selected_beta": 15.0,
+      "exact_saving_pct": 24.507053930441746,
+      "legacy_saving_pct": 25.15737834811714,
+      "delta444_db": 0.04534216112607369
+    },
+    {
+      "image": "0871.png",
+      "qp": 32,
+      "selected_beta": 15.0,
+      "exact_saving_pct": 24.507053930441746,
+      "legacy_saving_pct": 25.15737834811714,
+      "delta444_db": 0.08886906131561237
+    },
+    {
+      "image": "0871.png",
+      "qp": 48,
+      "selected_beta": 10.0,
+      "exact_saving_pct": 20.422544942034794,
+      "legacy_saving_pct": 20.960741021224152,
+      "delta444_db": 0.1405611090439733
+    },
+    {
+      "image": "0871.png",
+      "qp": 63,
+      "selected_beta": 5.0,
+      "exact_saving_pct": 20.422544942034794,
+      "legacy_saving_pct": 20.960741021224152,
+      "delta444_db": 0.26101575032430496
+    },
+    {
+      "image": "0897.png",
+      "qp": 0,
+      "selected_beta": 45.0,
+      "exact_saving_pct": 39.413577261610314,
+      "legacy_saving_pct": 40.06966163416955,
+      "delta444_db": 0.04779272758634865
+    },
+    {
+      "image": "0897.png",
+      "qp": 16,
+      "selected_beta": 15.0,
+      "exact_saving_pct": 13.845324784789492,
+      "legacy_saving_pct": 13.96087990980108,
+      "delta444_db": 0.018702063767839193
+    },
+    {
+      "image": "0897.png",
+      "qp": 32,
+      "selected_beta": 15.0,
+      "exact_saving_pct": 13.845324784789492,
+      "legacy_saving_pct": 13.96087990980108,
+      "delta444_db": 0.048979120721099535
+    },
+    {
+      "image": "0897.png",
+      "qp": 48,
+      "selected_beta": 10.0,
+      "exact_saving_pct": 0.0,
+      "legacy_saving_pct": -0.02245455661402243,
+      "delta444_db": 0.0
+    },
+    {
+      "image": "0897.png",
+      "qp": 63,
+      "selected_beta": 5.0,
+      "exact_saving_pct": 0.0,
+      "legacy_saving_pct": -0.02245455661402243,
+      "delta444_db": 0.0
+    },
+    {
+      "image": "0839.png",
+      "qp": 0,
+      "selected_beta": 45.0,
+      "exact_saving_pct": 39.413577261610314,
+      "legacy_saving_pct": 40.06966163416955,
+      "delta444_db": 0.06428419527624336
+    },
+    {
+      "image": "0839.png",
+      "qp": 16,
+      "selected_beta": 15.0,
+      "exact_saving_pct": 34.44473615122079,
+      "legacy_saving_pct": 35.098900041890325,
+      "delta444_db": 0.03344866619608012
+    },
+    {
+      "image": "0839.png",
+      "qp": 32,
+      "selected_beta": 15.0,
+      "exact_saving_pct": 39.413577261610314,
+      "legacy_saving_pct": 40.06966163416955,
+      "delta444_db": 0.04773359390938978
+    },
+    {
+      "image": "0839.png",
+      "qp": 48,
+      "selected_beta": 10.0,
+      "exact_saving_pct": 36.929156706415554,
+      "legacy_saving_pct": 37.584280838364506,
+      "delta444_db": 0.06044875644014066
+    },
+    {
+      "image": "0839.png",
+      "qp": 63,
+      "selected_beta": 5.0,
+      "exact_saving_pct": 36.929156706415554,
+      "legacy_saving_pct": 37.584280838364506,
+      "delta444_db": 0.09317955101585315
+    },
+    {
+      "image": "0833.png",
+      "qp": 0,
+      "selected_beta": 45.0,
+      "exact_saving_pct": 39.413577261610314,
+      "legacy_saving_pct": 40.06966163416955,
+      "delta444_db": 0.1794618404389811
+    },
+    {
+      "image": "0833.png",
+      "qp": 16,
+      "selected_beta": 15.0,
+      "exact_saving_pct": 31.960315596026035,
+      "legacy_saving_pct": 32.61351924608528,
+      "delta444_db": 0.07563875462569762
+    },
+    {
+      "image": "0833.png",
+      "qp": 32,
+      "selected_beta": 15.0,
+      "exact_saving_pct": 31.960315596026035,
+      "legacy_saving_pct": 32.61351924608528,
+      "delta444_db": 0.08441681699398705
+    },
+    {
+      "image": "0833.png",
+      "qp": 48,
+      "selected_beta": 10.0,
+      "exact_saving_pct": 31.960315596026035,
+      "legacy_saving_pct": 32.61351924608528,
+      "delta444_db": 0.08202075609603365
+    },
+    {
+      "image": "0833.png",
+      "qp": 63,
+      "selected_beta": 5.0,
+      "exact_saving_pct": 39.413577261610314,
+      "legacy_saving_pct": 40.06966163416955,
+      "delta444_db": 0.1741893510071034
+    },
+    {
+      "image": "0849.png",
+      "qp": 0,
+      "selected_beta": 45.0,
+      "exact_saving_pct": 24.507053930441746,
+      "legacy_saving_pct": 25.15737834811714,
+      "delta444_db": 0.025886246940474703
+    },
+    {
+      "image": "0849.png",
+      "qp": 16,
+      "selected_beta": 15.0,
+      "exact_saving_pct": 13.845324784789492,
+      "legacy_saving_pct": 13.96087990980108,
+      "delta444_db": 0.033374707926915735
+    },
+    {
+      "image": "0849.png",
+      "qp": 32,
+      "selected_beta": 15.0,
+      "exact_saving_pct": 0.0,
+      "legacy_saving_pct": -0.02245455661402243,
+      "delta444_db": 0.0
+    },
+    {
+      "image": "0849.png",
+      "qp": 48,
+      "selected_beta": 10.0,
+      "exact_saving_pct": 0.0,
+      "legacy_saving_pct": -0.02245455661402243,
+      "delta444_db": 0.0
+    },
+    {
+      "image": "0849.png",
+      "qp": 63,
+      "selected_beta": 5.0,
+      "exact_saving_pct": 0.0,
+      "legacy_saving_pct": -0.02245455661402243,
+      "delta444_db": 0.0
+    },
+    {
+      "image": "0881.png",
+      "qp": 0,
+      "selected_beta": 45.0,
+      "exact_saving_pct": 39.413577261610314,
+      "legacy_saving_pct": 40.06966163416955,
+      "delta444_db": 0.048400060960051894
+    },
+    {
+      "image": "0881.png",
+      "qp": 16,
+      "selected_beta": 15.0,
+      "exact_saving_pct": 24.507053930441746,
+      "legacy_saving_pct": 25.15737834811714,
+      "delta444_db": 0.0209953907843643
+    },
+    {
+      "image": "0881.png",
+      "qp": 32,
+      "selected_beta": 15.0,
+      "exact_saving_pct": 22.730099072833042,
+      "legacy_saving_pct": 23.291294281207623,
+      "delta444_db": 0.03525197539891835
+    },
+    {
+      "image": "0881.png",
+      "qp": 48,
+      "selected_beta": 10.0,
+      "exact_saving_pct": 17.399234500006912,
+      "legacy_saving_pct": 17.693048042281834,
+      "delta444_db": 0.05142281094740517
+    },
+    {
+      "image": "0881.png",
+      "qp": 63,
+      "selected_beta": 5.0,
+      "exact_saving_pct": 19.883655055201665,
+      "legacy_saving_pct": 20.178427348639893,
+      "delta444_db": 0.1328672615976373
+    },
+    {
+      "image": "0823.png",
+      "qp": 0,
+      "selected_beta": 45.0,
+      "exact_saving_pct": 36.929156706415554,
+      "legacy_saving_pct": 37.584280838364506,
+      "delta444_db": 0.050985704900358635
+    },
+    {
+      "image": "0823.png",
+      "qp": 16,
+      "selected_beta": 15.0,
+      "exact_saving_pct": 21.66060991281038,
+      "legacy_saving_pct": 22.04450843531717,
+      "delta444_db": 0.03619417426717507
+    },
+    {
+      "image": "0823.png",
+      "qp": 32,
+      "selected_beta": 15.0,
+      "exact_saving_pct": 19.883655055201665,
+      "legacy_saving_pct": 20.178430328872132,
+      "delta444_db": 0.07461309734549025
+    },
+    {
+      "image": "0823.png",
+      "qp": 48,
+      "selected_beta": 10.0,
+      "exact_saving_pct": 6.568929543601721,
+      "legacy_saving_pct": 6.65956505686925,
+      "delta444_db": 0.012819895098293947
+    },
+    {
+      "image": "0823.png",
+      "qp": 63,
+      "selected_beta": 5.0,
+      "exact_saving_pct": 6.568929543601721,
+      "legacy_saving_pct": 6.65956505686925,
+      "delta444_db": 0.024638772111354488
+    },
+    {
+      "image": "0898.png",
+      "qp": 0,
+      "selected_beta": 45.0,
+      "exact_saving_pct": 34.44473615122079,
+      "legacy_saving_pct": 35.098900041890325,
+      "delta444_db": 0.11843293089268495
+    },
+    {
+      "image": "0898.png",
+      "qp": 16,
+      "selected_beta": 15.0,
+      "exact_saving_pct": 19.176189357615627,
+      "legacy_saving_pct": 19.559132109191346,
+      "delta444_db": 0.06641706858699593
+    },
+    {
+      "image": "0898.png",
+      "qp": 32,
+      "selected_beta": 15.0,
+      "exact_saving_pct": 16.868635226817375,
+      "legacy_saving_pct": 17.228575867637364,
+      "delta444_db": 0.11919629408568469
+    },
+    {
+      "image": "0898.png",
+      "qp": 48,
+      "selected_beta": 10.0,
+      "exact_saving_pct": 8.169017976813919,
+      "legacy_saving_pct": 8.37082009851021,
+      "delta444_db": 0.06676715880468588
+    },
+    {
+      "image": "0898.png",
+      "qp": 63,
+      "selected_beta": 5.0,
+      "exact_saving_pct": 8.169017976813919,
+      "legacy_saving_pct": 8.37082009851021,
+      "delta444_db": 0.08416236535304428
+    },
+    {
+      "image": "0830.png",
+      "qp": 0,
+      "selected_beta": 45.0,
+      "exact_saving_pct": 34.44473615122079,
+      "legacy_saving_pct": 35.098900041890325,
+      "delta444_db": 0.04859951825572088
+    },
+    {
+      "image": "0830.png",
+      "qp": 16,
+      "selected_beta": 15.0,
+      "exact_saving_pct": 19.176189357615627,
+      "legacy_saving_pct": 19.559132109191346,
+      "delta444_db": 0.026814279948968532
+    },
+    {
+      "image": "0830.png",
+      "qp": 32,
+      "selected_beta": 15.0,
+      "exact_saving_pct": 17.399234500006912,
+      "legacy_saving_pct": 17.693048042281834,
+      "delta444_db": 0.057255651332303356
+    },
+    {
+      "image": "0830.png",
+      "qp": 48,
+      "selected_beta": 10.0,
+      "exact_saving_pct": 0.0,
+      "legacy_saving_pct": -0.02245455661402243,
+      "delta444_db": 0.0
+    },
+    {
+      "image": "0830.png",
+      "qp": 63,
+      "selected_beta": 5.0,
+      "exact_saving_pct": 0.0,
+      "legacy_saving_pct": -0.02245455661402243,
+      "delta444_db": 0.0
+    },
+    {
+      "image": "0813.png",
+      "qp": 0,
+      "selected_beta": 45.0,
+      "exact_saving_pct": 36.929156706415554,
+      "legacy_saving_pct": 37.584280838364506,
+      "delta444_db": 0.08083588472588199
+    },
+    {
+      "image": "0813.png",
+      "qp": 16,
+      "selected_beta": 15.0,
+      "exact_saving_pct": 22.730099072833042,
+      "legacy_saving_pct": 23.2913002416721,
+      "delta444_db": 0.030837598469201165
+    },
+    {
+      "image": "0813.png",
+      "qp": 32,
+      "selected_beta": 15.0,
+      "exact_saving_pct": 27.698940183222565,
+      "legacy_saving_pct": 28.262058853719086,
+      "delta444_db": 0.0698478752181756
+    },
+    {
+      "image": "0813.png",
+      "qp": 48,
+      "selected_beta": 10.0,
+      "exact_saving_pct": 30.18336073841732,
+      "legacy_saving_pct": 30.747435179844906,
+      "delta444_db": 0.09124960329787363
+    },
+    {
+      "image": "0813.png",
+      "qp": 63,
+      "selected_beta": 5.0,
+      "exact_saving_pct": 30.18336073841732,
+      "legacy_saving_pct": 30.747435179844906,
+      "delta444_db": 0.11679430692770014
+    },
+    {
+      "image": "0803.png",
+      "qp": 0,
+      "selected_beta": 45.0,
+      "exact_saving_pct": 36.929156706415554,
+      "legacy_saving_pct": 37.584280838364506,
+      "delta444_db": 0.32536246779033023
+    },
+    {
+      "image": "0803.png",
+      "qp": 16,
+      "selected_beta": 15.0,
+      "exact_saving_pct": 22.730099072833042,
+      "legacy_saving_pct": 23.2913002416721,
+      "delta444_db": 0.13669262004419697
+    },
+    {
+      "image": "0803.png",
+      "qp": 32,
+      "selected_beta": 15.0,
+      "exact_saving_pct": 24.507053930441746,
+      "legacy_saving_pct": 25.15737834811714,
+      "delta444_db": 0.18481596028836333
+    },
+    {
+      "image": "0803.png",
+      "qp": 48,
+      "selected_beta": 10.0,
+      "exact_saving_pct": 24.507053930441746,
+      "legacy_saving_pct": 25.15737834811714,
+      "delta444_db": 0.21958726014167537
+    },
+    {
+      "image": "0803.png",
+      "qp": 63,
+      "selected_beta": 5.0,
+      "exact_saving_pct": 24.507053930441746,
+      "legacy_saving_pct": 25.15737834811714,
+      "delta444_db": 0.2667709565304436
+    },
+    {
+      "image": "0827.png",
+      "qp": 0,
+      "selected_beta": 45.0,
+      "exact_saving_pct": 39.413577261610314,
+      "legacy_saving_pct": 40.06966163416955,
+      "delta444_db": 0.10384204118517681
+    },
+    {
+      "image": "0827.png",
+      "qp": 16,
+      "selected_beta": 15.0,
+      "exact_saving_pct": 34.44473615122079,
+      "legacy_saving_pct": 35.098900041890325,
+      "delta444_db": 0.09445470551091245
+    },
+    {
+      "image": "0827.png",
+      "qp": 32,
+      "selected_beta": 15.0,
+      "exact_saving_pct": 34.44473615122079,
+      "legacy_saving_pct": 35.098900041890325,
+      "delta444_db": 0.09439955091303616
+    },
+    {
+      "image": "0827.png",
+      "qp": 48,
+      "selected_beta": 10.0,
+      "exact_saving_pct": 36.929156706415554,
+      "legacy_saving_pct": 37.584280838364506,
+      "delta444_db": 0.12136868009730738
+    },
+    {
+      "image": "0827.png",
+      "qp": 63,
+      "selected_beta": 5.0,
+      "exact_saving_pct": 39.413577261610314,
+      "legacy_saving_pct": 40.06966163416955,
+      "delta444_db": 0.15363363087696558
+    },
+    {
+      "image": "0835.png",
+      "qp": 0,
+      "selected_beta": 45.0,
+      "exact_saving_pct": 39.413577261610314,
+      "legacy_saving_pct": 40.06966163416955,
+      "delta444_db": 0.017822869461483915
+    },
+    {
+      "image": "0835.png",
+      "qp": 16,
+      "selected_beta": 15.0,
+      "exact_saving_pct": 24.507053930441746,
+      "legacy_saving_pct": 25.15737834811714,
+      "delta444_db": 0.016455646719800453
+    },
+    {
+      "image": "0835.png",
+      "qp": 32,
+      "selected_beta": 15.0,
+      "exact_saving_pct": 22.730099072833042,
+      "legacy_saving_pct": 23.291294281207623,
+      "delta444_db": 0.03543003343198611
+    },
+    {
+      "image": "0835.png",
+      "qp": 48,
+      "selected_beta": 10.0,
+      "exact_saving_pct": 14.561081096019123,
+      "legacy_saving_pct": 14.898019627421654,
+      "delta444_db": 0.039072704674986976
+    },
+    {
+      "image": "0835.png",
+      "qp": 63,
+      "selected_beta": 5.0,
+      "exact_saving_pct": 12.253526965220873,
+      "legacy_saving_pct": 12.56746040563543,
+      "delta444_db": 0.06728818501915046
+    },
+    {
+      "image": "0889.png",
+      "qp": 0,
+      "selected_beta": 45.0,
+      "exact_saving_pct": 34.44473615122079,
+      "legacy_saving_pct": 35.098900041890325,
+      "delta444_db": 0.10166720387170047
+    },
+    {
+      "image": "0889.png",
+      "qp": 16,
+      "selected_beta": 15.0,
+      "exact_saving_pct": 19.176189357615627,
+      "legacy_saving_pct": 19.559132109191346,
+      "delta444_db": 0.04664480876245749
+    },
+    {
+      "image": "0889.png",
+      "qp": 32,
+      "selected_beta": 15.0,
+      "exact_saving_pct": 20.953144215224327,
+      "legacy_saving_pct": 21.42521617610086,
+      "delta444_db": 0.08988143513244981
+    },
+    {
+      "image": "0889.png",
+      "qp": 48,
+      "selected_beta": 10.0,
+      "exact_saving_pct": 19.176189357615627,
+      "legacy_saving_pct": 19.559132109191346,
+      "delta444_db": 0.12598408517385207
+    },
+    {
+      "image": "0889.png",
+      "qp": 63,
+      "selected_beta": 5.0,
+      "exact_saving_pct": 18.64559008442608,
+      "legacy_saving_pct": 19.094659934546875,
+      "delta444_db": 0.1826500281386602
+    },
+    {
+      "image": "0859.png",
+      "qp": 0,
+      "selected_beta": 45.0,
+      "exact_saving_pct": 39.413577261610314,
+      "legacy_saving_pct": 40.06966163416955,
+      "delta444_db": 0.02634514970558496
+    },
+    {
+      "image": "0859.png",
+      "qp": 16,
+      "selected_beta": 15.0,
+      "exact_saving_pct": 24.507053930441746,
+      "legacy_saving_pct": 25.15737834811714,
+      "delta444_db": 0.017879318680390208
+    },
+    {
+      "image": "0859.png",
+      "qp": 32,
+      "selected_beta": 15.0,
+      "exact_saving_pct": 24.507053930441746,
+      "legacy_saving_pct": 25.15737834811714,
+      "delta444_db": 0.034154026352055285
+    },
+    {
+      "image": "0859.png",
+      "qp": 48,
+      "selected_beta": 10.0,
+      "exact_saving_pct": 19.176189357615627,
+      "legacy_saving_pct": 19.559132109191346,
+      "delta444_db": 0.061775690637735914
+    },
+    {
+      "image": "0859.png",
+      "qp": 63,
+      "selected_beta": 5.0,
+      "exact_saving_pct": 19.176189357615627,
+      "legacy_saving_pct": 19.559132109191346,
+      "delta444_db": 0.132750641774119
+    },
+    {
+      "image": "0804.png",
+      "qp": 0,
+      "selected_beta": 45.0,
+      "exact_saving_pct": 34.44473615122079,
+      "legacy_saving_pct": 35.098900041890325,
+      "delta444_db": 0.04886658795812067
+    },
+    {
+      "image": "0804.png",
+      "qp": 16,
+      "selected_beta": 15.0,
+      "exact_saving_pct": 20.953144215224327,
+      "legacy_saving_pct": 21.42521617610086,
+      "delta444_db": 0.04847872979495085
+    },
+    {
+      "image": "0804.png",
+      "qp": 32,
+      "selected_beta": 15.0,
+      "exact_saving_pct": 20.953144215224327,
+      "legacy_saving_pct": 21.42521617610086,
+      "delta444_db": 0.07001804195962606
+    },
+    {
+      "image": "0804.png",
+      "qp": 48,
+      "selected_beta": 10.0,
+      "exact_saving_pct": 20.953144215224327,
+      "legacy_saving_pct": 21.42521617610086,
+      "delta444_db": 0.07790457883158447
+    },
+    {
+      "image": "0804.png",
+      "qp": 63,
+      "selected_beta": 5.0,
+      "exact_saving_pct": 18.64559008442608,
+      "legacy_saving_pct": 19.094659934546875,
+      "delta444_db": 0.06460137161771475
+    },
+    {
+      "image": "0852.png",
+      "qp": 0,
+      "selected_beta": 45.0,
+      "exact_saving_pct": 39.413577261610314,
+      "legacy_saving_pct": 40.06966163416955,
+      "delta444_db": 0.03473666936542413
+    },
+    {
+      "image": "0852.png",
+      "qp": 16,
+      "selected_beta": 15.0,
+      "exact_saving_pct": 18.822456508822594,
+      "legacy_saving_pct": 19.249480019118714,
+      "delta444_db": 0.02111156429468515
+    },
+    {
+      "image": "0852.png",
+      "qp": 32,
+      "selected_beta": 15.0,
+      "exact_saving_pct": 14.73794752041564,
+      "legacy_saving_pct": 15.052842692225731,
+      "delta444_db": 0.021406371611104796
+    },
+    {
+      "image": "0852.png",
+      "qp": 48,
+      "selected_beta": 10.0,
+      "exact_saving_pct": 14.73794752041564,
+      "legacy_saving_pct": 15.052842692225731,
+      "delta444_db": 0.04160671100291891
+    },
+    {
+      "image": "0852.png",
+      "qp": 63,
+      "selected_beta": 5.0,
+      "exact_saving_pct": 14.73794752041564,
+      "legacy_saving_pct": 15.052842692225731,
+      "delta444_db": 0.06954043925115799
+    },
+    {
+      "image": "0900.png",
+      "qp": 0,
+      "selected_beta": 45.0,
+      "exact_saving_pct": 24.507053930441746,
+      "legacy_saving_pct": 25.15737834811714,
+      "delta444_db": 0.06800516737090366
+    },
+    {
+      "image": "0900.png",
+      "qp": 16,
+      "selected_beta": 15.0,
+      "exact_saving_pct": 17.399234500006912,
+      "legacy_saving_pct": 17.693048042281834,
+      "delta444_db": 0.0904009128191584
+    },
+    {
+      "image": "0900.png",
+      "qp": 32,
+      "selected_beta": 15.0,
+      "exact_saving_pct": 10.47657210761217,
+      "legacy_saving_pct": 10.70137633872592,
+      "delta444_db": 0.05637007569469026
+    },
+    {
+      "image": "0900.png",
+      "qp": 48,
+      "selected_beta": 10.0,
+      "exact_saving_pct": 4.084508988406954,
+      "legacy_saving_pct": 4.174182770278951,
+      "delta444_db": 0.014978118331162228
+    },
+    {
+      "image": "0900.png",
+      "qp": 63,
+      "selected_beta": 5.0,
+      "exact_saving_pct": 4.084508988406954,
+      "legacy_saving_pct": 4.174182770278951,
+      "delta444_db": 0.027954287639466717
+    },
+    {
+      "image": "0890.png",
+      "qp": 0,
+      "selected_beta": 45.0,
+      "exact_saving_pct": 39.413577261610314,
+      "legacy_saving_pct": 40.06966163416955,
+      "delta444_db": 0.052520828786481066
+    },
+    {
+      "image": "0890.png",
+      "qp": 16,
+      "selected_beta": 15.0,
+      "exact_saving_pct": 24.507053930441746,
+      "legacy_saving_pct": 25.15737834811714,
+      "delta444_db": 0.029925698233232968
+    },
+    {
+      "image": "0890.png",
+      "qp": 32,
+      "selected_beta": 15.0,
+      "exact_saving_pct": 19.176189357615627,
+      "legacy_saving_pct": 19.559132109191346,
+      "delta444_db": 0.04357525289862357
+    },
+    {
+      "image": "0890.png",
+      "qp": 48,
+      "selected_beta": 10.0,
+      "exact_saving_pct": 8.699617250003456,
+      "legacy_saving_pct": 8.835295253386919,
+      "delta444_db": 0.03401834435290498
+    },
+    {
+      "image": "0890.png",
+      "qp": 63,
+      "selected_beta": 5.0,
+      "exact_saving_pct": 8.169017976813919,
+      "legacy_saving_pct": 8.37082009851021,
+      "delta444_db": 0.049408742530619276
+    },
+    {
+      "image": "0824.png",
+      "qp": 0,
+      "selected_beta": 45.0,
+      "exact_saving_pct": 26.991474485636513,
+      "legacy_saving_pct": 27.6427606340383,
+      "delta444_db": 0.048534351022201605
+    },
+    {
+      "image": "0824.png",
+      "qp": 16,
+      "selected_beta": 15.0,
+      "exact_saving_pct": 17.399234500006912,
+      "legacy_saving_pct": 17.693048042281834,
+      "delta444_db": 0.03803923652522448
+    },
+    {
+      "image": "0824.png",
+      "qp": 32,
+      "selected_beta": 15.0,
+      "exact_saving_pct": 12.784126238410408,
+      "legacy_saving_pct": 13.031935560512139,
+      "delta444_db": 0.05533084193009915
+    },
+    {
+      "image": "0824.png",
+      "qp": 48,
+      "selected_beta": 10.0,
+      "exact_saving_pct": 0.0,
+      "legacy_saving_pct": -0.02245455661402243,
+      "delta444_db": 0.0
+    },
+    {
+      "image": "0824.png",
+      "qp": 63,
+      "selected_beta": 5.0,
+      "exact_saving_pct": 0.0,
+      "legacy_saving_pct": -0.02245455661402243,
+      "delta444_db": 0.0
+    }
+  ]
+}
