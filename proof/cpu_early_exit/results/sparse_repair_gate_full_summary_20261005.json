@@ -1,0 +1,124 @@
+{
+  "scope": "Locked thresholds 0.25 and 0.30 chosen on three geometry-stratified pilot frames; primary extension has the other 50 QP32 CTC frames. Same frozen checkpoint, latent and Q90 map per frame.",
+  "limitations": "The 50 extension frames were unused for threshold selection, but the codec and router were developed on CTC. MACs are projected for a sparse pointwise kernel; no runtime or other-QP quality is measured.",
+  "bootstrap": "5000 paired image draws, seed 20261005; fixed checkpoint/cohort",
+  "source_sha256": "9624d29424ba301d7aebf2b9f32ed67c2ee9aad480f487c62b7ba0f22669aa6e",
+  "extension_50": [
+    {
+      "n_frames": 50,
+      "threshold": 0.25,
+      "pointwise_active_fraction": 0.1357421875,
+      "trained_mean_exact_conv_mac_saving_pct": 16.802489947630953,
+      "sparse_mean_projected_exact_conv_mac_saving_pct": 17.71963908195271,
+      "extra_projected_conv_mac_saving_points": 0.917149134321757,
+      "mean_additional_rgb_psnr_loss_db": -0.0005955270160546988,
+      "mean_additional_rgb_psnr_loss_ci95_db": [
+        -0.0013883877804923206,
+        2.8510601832860694e-05
+      ],
+      "worst_additional_rgb_psnr_loss_db": 0.002869315668195523,
+      "quality_improved_count": 25,
+      "quality_worsened_count": 25,
+      "near_equal_count": 0,
+      "trained_over_0p1_db_count": 4,
+      "sparse_over_0p1_db_count": 5
+    },
+    {
+      "n_frames": 50,
+      "threshold": 0.3,
+      "pointwise_active_fraction": 0.12109375,
+      "trained_mean_exact_conv_mac_saving_pct": 16.802489947630953,
+      "sparse_mean_projected_exact_conv_mac_saving_pct": 17.73518398253444,
+      "extra_projected_conv_mac_saving_points": 0.932694034903482,
+      "mean_additional_rgb_psnr_loss_db": -0.0005982928710943109,
+      "mean_additional_rgb_psnr_loss_ci95_db": [
+        -0.001399407231385221,
+        3.536036928992953e-05
+      ],
+      "worst_additional_rgb_psnr_loss_db": 0.002847246019155368,
+      "quality_improved_count": 25,
+      "quality_worsened_count": 25,
+      "near_equal_count": 0,
+      "trained_over_0p1_db_count": 4,
+      "sparse_over_0p1_db_count": 5
+    },
+    {
+      "n_frames": 50,
+      "threshold": 1.0,
+      "pointwise_active_fraction": 0.0,
+      "trained_mean_exact_conv_mac_saving_pct": 16.802489947630953,
+      "sparse_mean_projected_exact_conv_mac_saving_pct": 17.863688494010038,
+      "extra_projected_conv_mac_saving_points": 1.061198546379074,
+      "mean_additional_rgb_psnr_loss_db": 0.002111878004514805,
+      "mean_additional_rgb_psnr_loss_ci95_db": [
+        0.0005714791220490487,
+        0.0037872581881185402
+      ],
+      "worst_additional_rgb_psnr_loss_db": 0.022397929347856844,
+      "quality_improved_count": 10,
+      "quality_worsened_count": 40,
+      "near_equal_count": 0,
+      "trained_over_0p1_db_count": 4,
+      "sparse_over_0p1_db_count": 6
+    }
+  ],
+  "all_53": [
+    {
+      "n_frames": 53,
+      "threshold": 0.25,
+      "pointwise_active_fraction": 0.1357421875,
+      "trained_mean_exact_conv_mac_saving_pct": 16.26024236227218,
+      "sparse_mean_projected_exact_conv_mac_saving_pct": 17.177391496593934,
+      "extra_projected_conv_mac_saving_points": 0.9171491343217573,
+      "mean_additional_rgb_psnr_loss_db": -0.000552197881625301,
+      "mean_additional_rgb_psnr_loss_ci95_db": [
+        -0.0013022529979412447,
+        2.855658015428974e-05
+      ],
+      "worst_additional_rgb_psnr_loss_db": 0.002869315668195523,
+      "quality_improved_count": 27,
+      "quality_worsened_count": 26,
+      "near_equal_count": 0,
+      "trained_over_0p1_db_count": 4,
+      "sparse_over_0p1_db_count": 5
+    },
+    {
+      "n_frames": 53,
+      "threshold": 0.3,
+      "pointwise_active_fraction": 0.12109375,
+      "trained_mean_exact_conv_mac_saving_pct": 16.26024236227218,
+      "sparse_mean_projected_exact_conv_mac_saving_pct": 17.192936397175664,
+      "extra_projected_conv_mac_saving_points": 0.9326940349034822,
+      "mean_additional_rgb_psnr_loss_db": -0.0005545977676618139,
+      "mean_additional_rgb_psnr_loss_ci95_db": [
+        -0.0013157329767551746,
+        3.318510410943978e-05
+      ],
+      "worst_additional_rgb_psnr_loss_db": 0.002847246019155368,
+      "quality_improved_count": 27,
+      "quality_worsened_count": 26,
+      "near_equal_count": 0,
+      "trained_over_0p1_db_count": 4,
+      "sparse_over_0p1_db_count": 5
+    },
+    {
+      "n_frames": 53,
+      "threshold": 1.0,
+      "pointwise_active_fraction": 0.0,
+      "trained_mean_exact_conv_mac_saving_pct": 16.26024236227218,
+      "sparse_mean_projected_exact_conv_mac_saving_pct": 17.32144090865126,
+      "extra_projected_conv_mac_saving_points": 1.0611985463790745,
+      "mean_additional_rgb_psnr_loss_db": 0.0020837024137038223,
+      "mean_additional_rgb_psnr_loss_ci95_db": [
+        0.0006132686165230159,
+        0.0035929295222070995
+      ],
+      "worst_additional_rgb_psnr_loss_db": 0.022397929347856844,
+      "quality_improved_count": 10,
+      "quality_worsened_count": 43,
+      "near_equal_count": 0,
+      "trained_over_0p1_db_count": 4,
+      "sparse_over_0p1_db_count": 6
+    }
+  ]
+}
