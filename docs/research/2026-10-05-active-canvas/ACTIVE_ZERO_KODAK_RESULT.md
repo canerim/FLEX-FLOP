@@ -21,6 +21,10 @@ counterfactual has 34/120. The active-zero arm with existing repair recovers
 0.00940/0.01488 = **63.2% of the mean deployed-to-exact Δ444 gap**. This is a
 ratio of cohort means, not a per-image guarantee. Fifteen cases still lose
 quality relative to deployed; the worst paired loss is 0.03776 dB.
+The 47→36 threshold change consists of **11 previously failing cases rescued
+and zero newly failing cases** on this frozen cohort. Without repair it is
+12 rescued and zero newly failing. This is a descriptive paired count, not a
+guarantee that the rule never creates threshold violations on new images.
 
 On identical maps and streams, the active-zero arm with repair is +0.07513 dB
 better than the legacy stale canvas on average. The 23 uniform-depth maps
